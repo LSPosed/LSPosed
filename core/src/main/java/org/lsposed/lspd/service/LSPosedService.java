@@ -84,6 +84,23 @@ public class LSPosedService extends ILSPosedService.Stub {
             return;
         }
 
+        if (intent.getAction().equals(Intent.ACTION_PACKAGE_CHANGED)) {
+            // make sure that the change is for the complete package, not only a
+            // component
+            String[] components = intent.getStringArrayExtra(Intent.EXTRA_CHANGED_COMPONENT_NAME_LIST);
+            if (components != null) {
+                boolean isForPackage = false;
+                for (String component : components) {
+                    if (packageName.equals(component)) {
+                        isForPackage = true;
+                        break;
+                    }
+                }
+                if (!isForPackage)
+                    return;
+            }
+        }
+
         ApplicationInfo applicationInfo = PackageService.getApplicationInfo(packageName, PackageManager.GET_META_DATA, 0);
         boolean isXposedModule = (userId == 0 || userId == -1) &&
                 applicationInfo != null &&
