@@ -14,6 +14,7 @@ A Riru module trying to provide a ART hooking framework (mainly for Android Pie)
 - resources hooking is not supported yet
 - may not be compatible with all ART devices
 - only a few Xposed modules has been tested for working
+- file access services are not implemented yet, now simply use magiskpolicy to enable needed SELinux policies
 
 ## Build
 
