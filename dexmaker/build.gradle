@@ -1,0 +1,30 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "net.ltgt.gradle:gradle-errorprone-plugin:0.0.13"
+    }
+}
+
+apply plugin: "net.ltgt.errorprone"
+apply plugin: 'java'
+
+description = "A utility for doing compile or runtime code generation targeting Android's Dalvik VM"
+
+targetCompatibility = '1.7'
+sourceCompatibility = '1.7'
+
+repositories {
+    jcenter()
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs += ["-Xep:StringSplitter:OFF"]
+}
+
+dependencies {
+    compileOnly project(':dalvikdx')
+}

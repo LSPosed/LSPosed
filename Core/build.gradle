@@ -1,0 +1,57 @@
+apply plugin: 'com.android.library'
+version "v0.2.6_beta"
+extensions["module_name"] = "EdXposed"
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+
+        externalNativeBuild {
+            ndkBuild {
+                abiFilters 'arm64-v8a', 'armeabi-v7a'
+                arguments "NDK_PROJECT_PATH=jni/"
+            }
+        }
+    }
+    externalNativeBuild {
+        ndkBuild {
+            path 'jni/Android.mk'
+        }
+    }
+}
+afterEvaluate {
+
+    android.libraryVariants.all { variant ->
+        def nameCapped = variant.name.capitalize()
+        def nameLowered = variant.name.toLowerCase()
+
+        def zipTask = task("zip${nameCapped}", type: Exec, dependsOn: ":Bridge:makeAndCopy${nameCapped}") {
+            workingDir '..'
+            commandLine 'sh', 'build.sh',\
+                    project.name,\
+                    "${project.version}-${nameLowered}",\
+                    "${project.extensions['module_name']}"
+        }
+
+//        def renameTask = task("build${nameCapped}", type: Copy) {
+//            from "release/magisk-${project.name}-arm-arm64-${project.version}.zip"
+//            into "release"
+//            rename("${project.name}", "${project.extensions['module_name']}")
+//            rename("${project.version}", "${project.version}-${nameLowered}")
+//        }
+
+        def pushTask = task("push${nameCapped}", type: Exec) {
+            workingDir 'release'
+            commandLine 'cmd', '/c',
+                    "adb push magisk-${project.extensions['module_name']}-arm-arm64" +
+                            "-${project.version}-${nameLowered}.zip /sdcard/"
+        }
+
+//        renameTask.dependsOn(zipTask)
+        pushTask.dependsOn(zipTask)
+    }
+
+}
+dependencies {
+}

@@ -1,0 +1,8 @@
+# Declare files that will always have LF line endings on checkout.
+META-INF/** text eol=lf
+*.prop text eol=lf
+*.sh text eol=lf
+*.md text eol=lf
+
+# Denote all files that are truly binary and should not be modified.
+system/** binary

@@ -1,0 +1,1 @@
+include ':Core', ':Bridge', ':hiddenapistubs', ':dexmaker', ':dalvikdx'

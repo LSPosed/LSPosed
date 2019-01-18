@@ -1,0 +1,159 @@
+#!/sbin/sh
+##########################################################################################
+#
+# Magisk Module Template Install Script
+# by topjohnwu
+#
+##########################################################################################
+
+TMPDIR=/dev/tmp
+INSTALLER=$TMPDIR/install
+# Always mount under tmp
+MOUNTPATH=$TMPDIR/magisk_img
+
+# Default permissions
+umask 022
+
+# Initial cleanup
+rm -rf $TMPDIR 2>/dev/null
+mkdir -p $INSTALLER
+
+# echo before loading util_functions
+ui_print() { echo "$1"; }
+
+require_new_magisk() {
+  ui_print "*******************************"
+  ui_print " Please install Magisk v17.0+! "
+  ui_print "*******************************"
+  exit 1
+}
+
+##########################################################################################
+# Environment
+##########################################################################################
+
+OUTFD=$2
+ZIP=$3
+
+mount /data 2>/dev/null
+
+# Load utility functions
+if [ -f /data/adb/magisk/util_functions.sh ]; then
+  . /data/adb/magisk/util_functions.sh
+elif [ -f /data/magisk/util_functions.sh ]; then
+  NVBASE=/data
+  . /data/magisk/util_functions.sh
+else
+  require_new_magisk
+fi
+
+# Use alternative image if in BOOTMODE
+$BOOTMODE && IMG=$NVBASE/magisk_merge.img
+
+# Preperation for flashable zips
+setup_flashable
+
+# Mount partitions
+mount_partitions
+
+# Detect version and architecture
+api_level_arch_detect
+
+# You can get the Android API version from $API, the CPU architecture from $ARCH
+# Useful if you are creating Android version / platform dependent mods
+
+# Setup busybox and binaries
+$BOOTMODE && boot_actions || recovery_actions
+
+##########################################################################################
+# Preparation
+##########################################################################################
+
+# Extract common files
+unzip -o "$ZIP" module.prop config.sh 'common/*' -d $INSTALLER >&2
+
+[ ! -f $INSTALLER/config.sh ] && abort "! Unable to extract zip file!"
+# Load configurations
+. $INSTALLER/config.sh
+
+# Check architecture
+check_architecture
+
+# Check the installed magisk version
+MIN_VER=`grep_prop minMagisk $INSTALLER/module.prop`
+[ ! -z $MAGISK_VER_CODE -a $MAGISK_VER_CODE -ge $MIN_VER ] || require_new_magisk
+MODID=`grep_prop id $INSTALLER/module.prop`
+MODPATH=$MOUNTPATH/$MODID
+
+# Print mod name
+print_modname
+
+# Please leave this message in your flashable zip for credits :)
+ui_print "******************************"
+ui_print "Powered by Magisk (@topjohnwu)"
+ui_print "******************************"
+
+##########################################################################################
+# Install
+##########################################################################################
+
+# Get the variable reqSizeM. Use your own method to determine reqSizeM if needed
+request_zip_size_check "$ZIP"
+
+# This function will mount $IMG to $MOUNTPATH, and resize the image based on $reqSizeM
+mount_magisk_img
+
+# Create mod paths
+rm -rf $MODPATH 2>/dev/null
+mkdir -p $MODPATH
+
+# Extract files to system. Use your own method if needed
+ui_print "- Extracting module files"
+unzip -o "$ZIP" 'system/*' -d $MODPATH >&2
+
+# Remove placeholder
+rm -f $MODPATH/system/placeholder 2>/dev/null
+
+# Extra copy file function		
+copy_files
+
+# Handle replace folders
+for TARGET in $REPLACE; do
+  mktouch $MODPATH$TARGET/.replace
+done
+
+# Auto Mount
+$AUTOMOUNT && touch $MODPATH/auto_mount
+
+# prop files
+$PROPFILE && cp -af $INSTALLER/common/system.prop $MODPATH/system.prop
+
+# Module info
+cp -af $INSTALLER/module.prop $MODPATH/module.prop
+if $BOOTMODE; then
+  # Update info for Magisk Manager
+  mktouch /sbin/.core/img/$MODID/update
+  cp -af $INSTALLER/module.prop /sbin/.core/img/$MODID/module.prop
+fi
+
+# post-fs-data mode scripts
+$POSTFSDATA && cp -af $INSTALLER/common/post-fs-data.sh $MODPATH/post-fs-data.sh
+
+# service mode scripts
+$LATESTARTSERVICE && cp -af $INSTALLER/common/service.sh $MODPATH/service.sh
+
+ui_print "- Setting permissions"
+set_permissions
+
+##########################################################################################
+# Finalizing
+##########################################################################################
+
+# Unmount magisk image and shrink if possible
+unmount_magisk_img
+
+$BOOTMODE || recovery_cleanup
+rm -rf $TMPDIR
+
+ui_print "- Done"
+exit 0
