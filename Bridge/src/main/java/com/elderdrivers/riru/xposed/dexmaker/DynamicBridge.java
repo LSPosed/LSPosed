@@ -21,10 +21,6 @@ public final class DynamicBridge {
 
     public static synchronized void hookMethod(Member hookMethod, XposedBridge.AdditionalHookInfo additionalHookInfo) {
 
-        if (hookMethod.toString().contains("com.tencent.wcdb.database")) {
-            DexLog.w("wcdb not permitted.");
-            return;
-        }
         if (!checkMember(hookMethod)) {
             return;
         }
