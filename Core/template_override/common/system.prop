@@ -1,1 +1,8 @@
-# dalvik.vm.dex2oat-filter=speed
+#dalvik.vm.dex2oat-filter=speed
+
+dalvik.vm.dex2oat-flags=--inline-max-code-units=0
+#--debuggable --tiny-method-max=1 --small-method-max=2 --compiler-filter=speed
+#--compiler-backend=Quick --dump-cfg=output.cfg
+
+#dalvik.vm.usejit=false
+#dalvik.vm.usejitprofiles=false
