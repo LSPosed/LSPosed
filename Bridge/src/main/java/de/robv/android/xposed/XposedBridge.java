@@ -3,6 +3,10 @@ package de.robv.android.xposed;
 import android.annotation.SuppressLint;
 import android.util.Log;
 
+import com.elderdrivers.riru.xposed.core.HookMain;
+import com.elderdrivers.riru.xposed.dexmaker.DynamicBridge;
+import com.elderdrivers.riru.xposed.dexmaker.MethodInfo;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.AccessibleObject;
@@ -17,7 +21,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.elderdrivers.riru.xposed.dexmaker.DynamicBridge;
 import de.robv.android.xposed.XC_MethodHook.MethodHookParam;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
@@ -194,11 +197,20 @@ public final class XposedBridge {
 				returnType = null;
 			}
 
-			AdditionalHookInfo additionalInfo = new AdditionalHookInfo(callbacks, parameterTypes, returnType);
-			hookMethodNative(hookMethod, declaringClass, slot, additionalInfo);
-		}
+            AdditionalHookInfo additionalInfo = new AdditionalHookInfo(callbacks, parameterTypes, returnType);
+            MethodInfo methodInfo = new MethodInfo(hookMethod);
+            declaringClass = methodInfo.getClassForSure();
+            Member reflectMethod = (Member) HookMain.findMethod(
+                    declaringClass, methodInfo.methodName, methodInfo.methodSig);
+            if (reflectMethod == null) {
+                Log.e(TAG, "method not found: name="
+                        + methodInfo.methodName + ", sig=" + methodInfo.methodSig);
+                reflectMethod = hookMethod;
+            }
+            hookMethodNative(reflectMethod, declaringClass, slot, additionalInfo);
+        }
 
-		return callback.new Unhook(hookMethod);
+        return callback.new Unhook(hookMethod);
 	}
 
 	/**

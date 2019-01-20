@@ -82,6 +82,7 @@ public class HookMain {
     }
 
     public static void backupAndHook(Object target, Method hook, Method backup) {
+        Utils.logD(String.format("target=%s, hook=%s, backup=%s", target, hook, backup));
         if (target == null) {
             throw new IllegalArgumentException("null target method");
         }
@@ -108,7 +109,7 @@ public class HookMain {
         }
     }
 
-    private static Object findMethod(Class cls, String methodName, String methodSig) {
+    public static Object findMethod(Class cls, String methodName, String methodSig) {
         if (cls == null) {
             throw new IllegalArgumentException("null class");
         }
