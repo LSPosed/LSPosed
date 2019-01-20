@@ -27,8 +27,8 @@ public class HandleBindAppHooker implements KeepMembers {
     public static String methodSig = "(Landroid/app/ActivityThread$AppBindData;)V";
 
     public static void hook(Object thiz, Object bindData) {
-        backup(thiz, bindData);
         if (XposedBridge.disableHooks) {
+            backup(thiz, bindData);
             return;
         }
         try {
@@ -67,6 +67,7 @@ public class HandleBindAppHooker implements KeepMembers {
         } catch (Throwable t) {
             logE("error when hooking bindApp", t);
         }
+        backup(thiz, bindData);
     }
 
     public static void backup(Object thiz, Object bindData) {
