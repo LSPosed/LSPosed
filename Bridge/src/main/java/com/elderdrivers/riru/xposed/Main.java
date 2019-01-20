@@ -15,6 +15,7 @@ public class Main implements KeepAll {
     //    private static String sForkAndSpecializePramsStr = "";
 //    private static String sForkSystemServerPramsStr = "";
     public static String sAppDataDir = "";
+    private static final boolean DYNAMIC_LOAD_MODULES = false;
 
     static {
         init(Build.VERSION.SDK_INT);
@@ -35,6 +36,9 @@ public class Main implements KeepAll {
 //                uid, gid, Arrays.toString(gids), debugFlags, Arrays.toString(rlimits),
 //                mountExternal, seInfo, niceName, Arrays.toString(fdsToClose),
 //                Arrays.toString(fdsToIgnore), startChildZygote, instructionSet, appDataDir);
+        if (!DYNAMIC_LOAD_MODULES) {
+            Router.onProcessForked(false);
+        }
     }
 
     public static void forkAndSpecializePost(int pid, String appDataDir) {
@@ -42,7 +46,9 @@ public class Main implements KeepAll {
         if (pid == 0) {
             // in app process
             sAppDataDir = appDataDir;
-            Router.onProcessForked(false);
+            if (DYNAMIC_LOAD_MODULES) {
+                Router.onProcessForked(false);
+            }
         } else {
             // in zygote process, res is child zygote pid
             // don't print log here, see https://github.com/RikkaApps/Riru/blob/77adfd6a4a6a81bfd20569c910bc4854f2f84f5e/riru-core/jni/main/jni_native_method.cpp#L55-L66

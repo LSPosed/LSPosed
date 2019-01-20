@@ -3,15 +3,6 @@ package com.elderdrivers.riru.xposed.dexmaker;
 import android.os.Build;
 import android.text.TextUtils;
 
-import external.com.android.dx.BinaryOp;
-import external.com.android.dx.Code;
-import external.com.android.dx.Comparison;
-import external.com.android.dx.DexMaker;
-import external.com.android.dx.FieldId;
-import external.com.android.dx.Label;
-import external.com.android.dx.Local;
-import external.com.android.dx.MethodId;
-import external.com.android.dx.TypeId;
 import com.elderdrivers.riru.xposed.core.HookMain;
 
 import java.io.File;
@@ -26,6 +17,15 @@ import java.util.concurrent.atomic.AtomicLong;
 import dalvik.system.InMemoryDexClassLoader;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
+import external.com.android.dx.BinaryOp;
+import external.com.android.dx.Code;
+import external.com.android.dx.Comparison;
+import external.com.android.dx.DexMaker;
+import external.com.android.dx.FieldId;
+import external.com.android.dx.Label;
+import external.com.android.dx.Local;
+import external.com.android.dx.MethodId;
+import external.com.android.dx.TypeId;
 
 import static com.elderdrivers.riru.xposed.dexmaker.DexMakerUtils.autoBoxIfNecessary;
 import static com.elderdrivers.riru.xposed.dexmaker.DexMakerUtils.autoUnboxIfNecessary;
@@ -76,10 +76,12 @@ public class HookerDexMaker {
     private static final FieldId<XC_MethodHook.MethodHookParam, Boolean> returnEarlyFieldId =
             paramTypeId.getField(TypeId.BOOLEAN, "returnEarly");
     private static final TypeId<XposedBridge> xposedBridgeTypeId = TypeId.get(XposedBridge.class);
-    private static final MethodId<XposedBridge, Void> logMethodId =
+    private static final MethodId<XposedBridge, Void> logThrowableMethodId =
             xposedBridgeTypeId.getMethod(TypeId.VOID, "log", throwableTypeId);
+    private static final MethodId<XposedBridge, Void> logStrMethodId =
+            xposedBridgeTypeId.getMethod(TypeId.VOID, "log", TypeId.STRING);
 
-    private static AtomicLong sClassNameSuffix = new AtomicLong(0);
+    private static AtomicLong sClassNameSuffix = new AtomicLong(1);
 
     private FieldId<?, XposedBridge.AdditionalHookInfo> mHookInfoFieldId;
     private FieldId<?, Member> mMethodFieldId;
@@ -405,7 +407,7 @@ public class HookerDexMaker {
         // start of catch
         code.mark(tryBeforeCatch);
         code.moveException(throwable);
-        code.invokeStatic(logMethodId, null, throwable);
+        code.invokeStatic(logThrowableMethodId, null, throwable);
         code.invokeVirtual(setResultMethodId, null, param, nullObj);
         code.loadConstant(returnEarly, false);
         code.iput(returnEarlyFieldId, param, returnEarly);
@@ -476,7 +478,7 @@ public class HookerDexMaker {
         // catch
         code.mark(tryAfterCatch);
         code.moveException(throwable);
-        code.invokeStatic(logMethodId, null, throwable);
+        code.invokeStatic(logThrowableMethodId, null, throwable);
         // if lastThrowable == null, go to recover lastResult
         code.compareZ(Comparison.EQ, noBackupThrowable, lastThrowable);
         // lastThrowable != null, recover lastThrowable
