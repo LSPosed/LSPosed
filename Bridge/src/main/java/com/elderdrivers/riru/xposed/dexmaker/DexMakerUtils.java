@@ -44,44 +44,63 @@ public class DexMakerUtils {
         }
     }
 
-    public static void autoUnboxIfNecessary(Code code, Local target, Local source) {
+    public static void autoUnboxIfNecessary(Code code, Local target, Local source,
+                                            Map<TypeId, Local> tmpLocals, boolean castObj) {
         String unboxMethod;
         TypeId typeId = target.getType();
         TypeId<?> boxTypeId;
         if (typeId.equals(TypeId.BOOLEAN)) {
             unboxMethod = "booleanValue";
-            boxTypeId = TypeId.get(Boolean.class);
-            code.invokeVirtual(boxTypeId.getMethod(TypeId.BOOLEAN, unboxMethod), target, source);
+            boxTypeId = TypeId.get("Ljava/lang/Boolean;");
+            Local boxTypedLocal = tmpLocals.get(boxTypeId);
+            code.cast(boxTypedLocal, source);
+            code.invokeVirtual(boxTypeId.getMethod(TypeId.BOOLEAN, unboxMethod), target, boxTypedLocal);
         } else if (typeId.equals(TypeId.BYTE)) {
             unboxMethod = "byteValue";
-            boxTypeId = TypeId.get(Byte.class);
-            code.invokeVirtual(boxTypeId.getMethod(TypeId.BYTE, unboxMethod), target, source);
+            boxTypeId = TypeId.get("Ljava/lang/Byte;");
+            Local boxTypedLocal = tmpLocals.get(boxTypeId);
+            code.cast(boxTypedLocal, source);
+            code.invokeVirtual(boxTypeId.getMethod(TypeId.BYTE, unboxMethod), target, boxTypedLocal);
         } else if (typeId.equals(TypeId.CHAR)) {
             unboxMethod = "charValue";
-            boxTypeId = TypeId.get(Character.class);
-            code.invokeVirtual(boxTypeId.getMethod(TypeId.CHAR, unboxMethod), target, source);
+            boxTypeId = TypeId.get("Ljava/lang/Character;");
+            Local boxTypedLocal = tmpLocals.get(boxTypeId);
+            code.cast(boxTypedLocal, source);
+            code.invokeVirtual(boxTypeId.getMethod(TypeId.CHAR, unboxMethod), target, boxTypedLocal);
         } else if (typeId.equals(TypeId.DOUBLE)) {
             unboxMethod = "doubleValue";
-            boxTypeId = TypeId.get(Double.class);
-            code.invokeVirtual(boxTypeId.getMethod(TypeId.DOUBLE, unboxMethod), target, source);
+            boxTypeId = TypeId.get("Ljava/lang/Double;");
+            Local boxTypedLocal = tmpLocals.get(boxTypeId);
+            code.cast(boxTypedLocal, source);
+            code.invokeVirtual(boxTypeId.getMethod(TypeId.DOUBLE, unboxMethod), target, boxTypedLocal);
         } else if (typeId.equals(TypeId.FLOAT)) {
             unboxMethod = "floatValue";
-            boxTypeId = TypeId.get(Float.class);
-            code.invokeVirtual(boxTypeId.getMethod(TypeId.FLOAT, unboxMethod), target, source);
+            boxTypeId = TypeId.get("Ljava/lang/Float;");
+            Local boxTypedLocal = tmpLocals.get(boxTypeId);
+            code.cast(boxTypedLocal, source);
+            code.invokeVirtual(boxTypeId.getMethod(TypeId.FLOAT, unboxMethod), target, boxTypedLocal);
         } else if (typeId.equals(TypeId.INT)) {
             unboxMethod = "intValue";
-            boxTypeId = TypeId.get(Integer.class);
-            code.invokeVirtual(boxTypeId.getMethod(TypeId.INT, unboxMethod), target, source);
+            boxTypeId = TypeId.get("Ljava/lang/Integer;");
+            Local boxTypedLocal = tmpLocals.get(boxTypeId);
+            code.cast(boxTypedLocal, source);
+            code.invokeVirtual(boxTypeId.getMethod(TypeId.INT, unboxMethod), target, boxTypedLocal);
         } else if (typeId.equals(TypeId.LONG)) {
             unboxMethod = "longValue";
-            boxTypeId = TypeId.get(Long.class);
-            code.invokeVirtual(boxTypeId.getMethod(TypeId.LONG, unboxMethod), target, source);
+            boxTypeId = TypeId.get("Ljava/lang/Long;");
+            Local boxTypedLocal = tmpLocals.get(boxTypeId);
+            code.cast(boxTypedLocal, source);
+            code.invokeVirtual(boxTypeId.getMethod(TypeId.LONG, unboxMethod), target, boxTypedLocal);
         } else if (typeId.equals(TypeId.SHORT)) {
             unboxMethod = "shortValue";
-            boxTypeId = TypeId.get(Short.class);
-            code.invokeVirtual(boxTypeId.getMethod(TypeId.SHORT, unboxMethod), target, source);
+            boxTypeId = TypeId.get("Ljava/lang/Short;");
+            Local boxTypedLocal = tmpLocals.get(boxTypeId);
+            code.cast(boxTypedLocal, source);
+            code.invokeVirtual(boxTypeId.getMethod(TypeId.SHORT, unboxMethod), target, boxTypedLocal);
         } else if (typeId.equals(TypeId.VOID)) {
             code.loadConstant(target, null);
+        } else if (castObj){
+            code.cast(target, source);
         } else {
             code.move(target, source);
         }

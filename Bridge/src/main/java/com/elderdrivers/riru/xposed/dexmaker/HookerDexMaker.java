@@ -311,7 +311,7 @@ public class HookerDexMaker {
         Local<Object> callbackObj = code.newLocal(TypeId.OBJECT);
         Local<XC_MethodHook> callback = code.newLocal(callbackTypeId);
 
-        Local<Object> resultObj = code.newLocal(TypeId.OBJECT);
+        Local<Object> resultObj = code.newLocal(TypeId.OBJECT); // as a temp Local
         Local<Integer> one = code.newLocal(TypeId.INT);
         Local<Object> nullObj = code.newLocal(TypeId.OBJECT);
         Local<Throwable> throwable = code.newLocal(throwableTypeId);
@@ -435,6 +435,15 @@ public class HookerDexMaker {
         // try to call backup
         // try start
         code.addCatchClause(throwableTypeId, tryOrigCatch);
+        // we have to load args[] to paramLocals
+        // because args[] may be changed in beforeHookedMethod
+        // should consider first param is thisObj if hooked method is not static
+        offset = mIsStatic ? 0 : 1;
+        for (int i = offset; i < allArgsLocals.length; i++) {
+            code.loadConstant(argIndex, i - offset);
+            code.aget(resultObj, args, argIndex);
+            autoUnboxIfNecessary(code, allArgsLocals[i], resultObj, resultLocals, true);
+        }
         // get pre-created Local with a matching typeId
         if (mReturnTypeId.equals(TypeId.VOID)) {
             code.invokeStatic(mBackupMethodId, null, allArgsLocals);
@@ -511,7 +520,7 @@ public class HookerDexMaker {
             code.cast(matchObjLocal, resultObj);
             // have to use matching typed Object(Integer, Double ...) to do unboxing
             Local toReturn = resultLocals.get(mReturnTypeId);
-            autoUnboxIfNecessary(code, toReturn, matchObjLocal);
+            autoUnboxIfNecessary(code, toReturn, matchObjLocal, resultLocals, true);
             // return
             code.returnValue(toReturn);
         }
