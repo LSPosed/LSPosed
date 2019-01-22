@@ -33,7 +33,7 @@ A Riru module trying to provide a ART hooking framework (mainly for Android Pie)
 
 ## Get help
 
-GitHub issues(recommend): [Issues](https://github.com/solohsu/EdXposed/Issues/)
+GitHub issues(recommend): [Issues](https://github.com/solohsu/EdXposed/issues/)
 
 QQ Group: [855219808](http://shang.qq.com/wpa/qunwpa?idkey=fae42a3dba9dc758caf63e971be2564e67bf7edd751a2ff1c750478b0ad1ca3f)
 
