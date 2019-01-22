@@ -26,8 +26,8 @@ A Riru module trying to provide a ART hooking framework (mainly for Android Pie)
 ## Install
 
 1. make sure Magisk v17.0 or higher is installed.
-2. download [Riru-core](https://github.com/RikkaApps/Riru/releases) v11 or higher and install it in Magisk Manager.
-3. download [EdXposed](https://github.com/solohsu/EdXposed/releases) and install it in Magisk Manager.
+2. download [Riru-core](https://github.com/RikkaApps/Riru/releases) v10 or higher and install it in Magisk Manager or recovery.
+3. download [EdXposed](https://github.com/solohsu/EdXposed/releases) and install it in Magisk Manager or recovery.
 4. reboot.
 5. have fun :)
 
