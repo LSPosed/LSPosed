@@ -47,11 +47,15 @@ public final class XposedInit {
     private XposedInit() {
     }
 
+    private static volatile AtomicBoolean bootstrapHooked = new AtomicBoolean(false);
     /**
      * Hook some methods which we want to create an easier interface for developers.
      */
     /*package*/
     public static void initForZygote(boolean isSystem) throws Throwable {
+        if (!bootstrapHooked.compareAndSet(false, true)) {
+            return;
+        }
         startsSystemServer = isSystem;
         Router.startBootstrapHook(isSystem);
         // MIUI
