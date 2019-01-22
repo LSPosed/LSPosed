@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: 错误反馈/Bug report
+about: 错误反馈/Bug report / 不使用此模板提交会被close / Will close without this template
 title: "[BUG] "
 labels: bug
 assignees: solohsu, MlgmXyysd
