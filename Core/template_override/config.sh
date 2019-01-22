@@ -102,7 +102,7 @@ fail() {
 }
 
 check_architecture() {
-  if [[ "$ARCH" != "arm" && "$ARCH" != "arm64" ]]; then
+  if [[ "$ARCH" != "arm" && "$ARCH" != "arm64" && "$ARCH" != "x86" && "$ARCH" != "x64" ]]; then
     ui_print "- Unsupported platform: $ARCH"
     exit 1
   else
@@ -111,21 +111,32 @@ check_architecture() {
 }
 
 copy_files() {
-  if [ $IS64BIT = false ]; then
-	ui_print "- Removing unnecessary files"
-	rm -rf "$MODPATH/system/lib64"
+	if [[ "$ARCH" == "x86" || "$ARCH" == "x64" ]]; then
+	  ui_print "- Removing arm/arm64 libraries"
+    rm -rf "$MODPATH/system/lib"
+    rm -rf "$MODPATH/system/lib64"
+    mv "$MODPATH/system_x86/lib" "$MODPATH/system/lib"
+    mv "$MODPATH/system_x86/lib64" "$MODPATH/system/lib64"
+  else
+    ui_print "- Removing x86/x64 libraries"
+  fi
+  rm -rf "$MODPATH/system_x86"
+
+  if [[ "$IS64BIT" = false ]]; then
+	  ui_print "- Removing 64-bit libraries"
+	  rm -rf "$MODPATH/system/lib64"
   fi
 
   ui_print "- Extracting extra files"
-  unzip -o "$ZIP" 'data/*' -d $MODPATH >&2
+  unzip -o "$ZIP" 'data/*' -d "$MODPATH" >&2
 
   TARGET="/data/misc/riru/modules"
   
   # TODO: do not overwrite if file exists
-  [ -d $TARGET ] || mkdir -p $TARGET || fail "- Can't mkdir -p $TARGET"
+  [[ -d "$TARGET" ]] || mkdir -p "$TARGET" || fail "- Can't mkdir -p $TARGET"
   cp -af "$MODPATH$TARGET/." "$TARGET" || fail "- Can't cp -af $MODPATH$TARGET/. $TARGET"
-  
-  rm -rf $MODPATH/data 2>/dev/null
+
+  rm -rf "$MODPATH/data" 2>/dev/null
   
   ui_print "- Files copied"
 }

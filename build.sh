@@ -39,6 +39,8 @@ if [ -f elf-cleaner.sh ]; then
   source elf-cleaner.sh
   run_elf_cleaner $LIBS_OUTPUT/arm64-v8a
   run_elf_cleaner $LIBS_OUTPUT/armeabi-v7a
+  run_elf_cleaner $LIBS_OUTPUT/x86
+  run_elf_cleaner $LIBS_OUTPUT/x86-64
 fi
 
 # create tmp dir
@@ -51,8 +53,12 @@ mkdir -p $TMP_DIR
 # copy files
 mkdir -p $TMP_DIR_MAGISK/system/lib64
 mkdir -p $TMP_DIR_MAGISK/system/lib
+mkdir -p $TMP_DIR_MAGISK/system_x86/lib64
+mkdir -p $TMP_DIR_MAGISK/system_x86/lib
 cp -a $LIBS_OUTPUT/arm64-v8a/. $TMP_DIR_MAGISK/system/lib64
 cp -a $LIBS_OUTPUT/armeabi-v7a/. $TMP_DIR_MAGISK/system/lib
+[[ -d $LIBS_OUTPUT/x86_64 ]] && cp -a $LIBS_OUTPUT/x86_64/. $TMP_DIR_MAGISK/system_x86/lib64
+[[ -d $LIBS_OUTPUT/x86 ]] && cp -a $LIBS_OUTPUT/x86/. $TMP_DIR_MAGISK/system_x86/lib
 
 # run custom script
 if [ -f $MODULE_NAME/build-module.sh ]; then
@@ -62,7 +68,7 @@ fi
 
 # zip
 mkdir -p $MODULE_NAME/release
-ZIP_NAME=magisk-$ZIP_NAME_PREFIX-arm-arm64-"$VERSION".zip
+ZIP_NAME=magisk-$ZIP_NAME_PREFIX-"$VERSION".zip
 rm -f $MODULE_NAME/release/$ZIP_NAME
 rm -f $TMP_DIR_MAGISK/$ZIP_NAME
 (cd $TMP_DIR_MAGISK; zip -r $ZIP_NAME * > /dev/null)
