@@ -66,8 +66,9 @@ public class HandleBindAppHooker implements KeepMembers {
             }
         } catch (Throwable t) {
             logE("error when hooking bindApp", t);
+        } finally {
+            backup(thiz, bindData);
         }
-        backup(thiz, bindData);
     }
 
     public static void backup(Object thiz, Object bindData) {

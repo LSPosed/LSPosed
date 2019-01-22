@@ -34,7 +34,8 @@ public class LoadedApkConstructorHooker implements KeepMembers {
                             boolean includeCode, boolean registerPackage) {
 
         if (XposedBridge.disableHooks) {
-            backup(thiz, activityThread, aInfo, compatInfo, baseLoader, securityViolation, includeCode, registerPackage);
+            backup(thiz, activityThread, aInfo, compatInfo, baseLoader, securityViolation,
+                    includeCode, registerPackage);
             return;
         }
 
