@@ -23,6 +23,21 @@ A Riru module trying to provide a ART hooking framework (mainly for Android Pie)
 3. find the flashable under `Core/release/`
 4. flash the zip in recovery mode or in Magisk Manager
 
+## Install
+
+1. make sure Magisk v17.0 or higher is installed.
+2. download [Riru-core](https://github.com/RikkaApps/Riru/releases) v11 or higher and install it in Magisk Manager.
+3. download [EdXposed](https://github.com/solohsu/EdXposed/releases) and install it in Magisk Manager.
+4. reboot.
+5. have fun :)
+
 ## Contribute
 
 Apparently this framework is far from stable and all kinds of PRs are welcome. :)
+
+## Get help
+
+Github issues(recommend): [Issues](https://github.com/solohsu/EdXposed/Issues/)
+QQ Group: [855219808](http://shang.qq.com/wpa/qunwpa?idkey=fae42a3dba9dc758caf63e971be2564e67bf7edd751a2ff1c750478b0ad1ca3f)
+Telegream: [Code_of_MeowCat](http://t.me/Code_of_MeowCat)
+Discord: [Code_of_MeowCat](https://discord.gg/Hag6gNh)
