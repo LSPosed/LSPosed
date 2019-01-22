@@ -3,6 +3,7 @@ package de.robv.android.xposed;
 import android.annotation.SuppressLint;
 import android.app.AndroidAppHelper;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.internal.os.ZygoteInit;
@@ -23,6 +24,7 @@ import dalvik.system.DexFile;
 import dalvik.system.PathClassLoader;
 import de.robv.android.xposed.services.BaseService;
 
+import static com.elderdrivers.riru.xposed.entry.hooker.XposedBlackListHooker.BLACK_LIST_PACKAGE_NAME;
 import static de.robv.android.xposed.XposedHelpers.closeSilently;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.findFieldIfExists;
@@ -121,6 +123,11 @@ public final class XposedInit {
      */
     private static void loadModule(String apk, ClassLoader topClassLoader) {
         Log.i(TAG, "Loading modules from " + apk);
+
+        if (!TextUtils.isEmpty(apk) && apk.contains(BLACK_LIST_PACKAGE_NAME)) {
+            Log.i(TAG, "We are going to take over black list's job...");
+            return;
+        }
 
         if (!new File(apk).exists()) {
             Log.e(TAG, "  File does not exist");

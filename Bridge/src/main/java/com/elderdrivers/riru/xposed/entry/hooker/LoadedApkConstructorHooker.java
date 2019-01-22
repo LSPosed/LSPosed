@@ -33,7 +33,7 @@ public class LoadedApkConstructorHooker implements KeepMembers {
                             ClassLoader baseLoader, boolean securityViolation,
                             boolean includeCode, boolean registerPackage) {
 
-        if (XposedBridge.disableHooks) {
+        if (XposedBlackListHooker.shouldDisableHooks("")) {
             backup(thiz, activityThread, aInfo, compatInfo, baseLoader, securityViolation,
                     includeCode, registerPackage);
             return;
@@ -48,6 +48,11 @@ public class LoadedApkConstructorHooker implements KeepMembers {
             String packageName = loadedApk.getPackageName();
             Object mAppDir = getObjectField(thiz, "mAppDir");
             logD("LoadedApk#<init> ends: " + mAppDir);
+
+            if (XposedBlackListHooker.shouldDisableHooks(packageName)) {
+                return;
+            }
+
             if (packageName.equals("android")) {
                 logD("LoadedApk#<init> is android, skip: " + mAppDir);
                 return;

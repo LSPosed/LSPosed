@@ -11,6 +11,7 @@ import com.elderdrivers.riru.common.KeepMembers;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
+import static com.elderdrivers.riru.xposed.entry.hooker.XposedBlackListHooker.BLACK_LIST_PACKAGE_NAME;
 import static com.elderdrivers.riru.xposed.util.ClassLoaderUtils.replaceParentClassLoader;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
@@ -27,7 +28,7 @@ public class HandleBindAppHooker implements KeepMembers {
     public static String methodSig = "(Landroid/app/ActivityThread$AppBindData;)V";
 
     public static void hook(Object thiz, Object bindData) {
-        if (XposedBridge.disableHooks) {
+        if (XposedBlackListHooker.shouldDisableHooks("")) {
             backup(thiz, bindData);
             return;
         }
@@ -36,6 +37,11 @@ public class HandleBindAppHooker implements KeepMembers {
             ActivityThread activityThread = (ActivityThread) thiz;
             ApplicationInfo appInfo = (ApplicationInfo) getObjectField(bindData, "appInfo");
             String reportedPackageName = appInfo.packageName.equals("android") ? "system" : appInfo.packageName;
+
+            if (XposedBlackListHooker.shouldDisableHooks(reportedPackageName)) {
+                return;
+            }
+
             ComponentName instrumentationName = (ComponentName) getObjectField(bindData, "instrumentationName");
             if (instrumentationName != null) {
                 logD("Instrumentation detected, disabling framework for");
@@ -63,6 +69,9 @@ public class HandleBindAppHooker implements KeepMembers {
 
             if (reportedPackageName.equals(INSTALLER_PACKAGE_NAME)) {
                 XposedInstallerHooker.hookXposedInstaller(lpparam.classLoader);
+            }
+            if (reportedPackageName.equals(BLACK_LIST_PACKAGE_NAME)) {
+                XposedBlackListHooker.hook(lpparam.classLoader);
             }
         } catch (Throwable t) {
             logE("error when hooking bindApp", t);
