@@ -31,13 +31,17 @@ A Riru module trying to provide a ART hooking framework (mainly for Android Pie)
 4. reboot.
 5. have fun :)
 
+## Get help
+
+Github issues(recommend): [Issues](https://github.com/solohsu/EdXposed/Issues/)
+
+QQ Group: [855219808](http://shang.qq.com/wpa/qunwpa?idkey=fae42a3dba9dc758caf63e971be2564e67bf7edd751a2ff1c750478b0ad1ca3f)
+
+Telegream: [Code_of_MeowCat](http://t.me/Code_of_MeowCat)
+
+Discord: [Code_of_MeowCat](https://discord.gg/Hag6gNh)
+
 ## Contribute
 
 Apparently this framework is far from stable and all kinds of PRs are welcome. :)
 
-## Get help
-
-Github issues(recommend): [Issues](https://github.com/solohsu/EdXposed/Issues/)
-QQ Group: [855219808](http://shang.qq.com/wpa/qunwpa?idkey=fae42a3dba9dc758caf63e971be2564e67bf7edd751a2ff1c750478b0ad1ca3f)
-Telegream: [Code_of_MeowCat](http://t.me/Code_of_MeowCat)
-Discord: [Code_of_MeowCat](https://discord.gg/Hag6gNh)
