@@ -1,6 +1,6 @@
 id=riru_edxposed
 name=Riru - Ed Xposed
-version=v0.2.9_beta
+version=v0.2.9.1_beta
 versionCode=1
 author=givein2u
 description=Magisk version of Xposed. Require Riru - Core installed.
