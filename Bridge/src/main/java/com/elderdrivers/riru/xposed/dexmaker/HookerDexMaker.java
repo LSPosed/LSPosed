@@ -34,10 +34,17 @@ import static com.elderdrivers.riru.xposed.dexmaker.DexMakerUtils.getObjTypeIdIf
 
 public class HookerDexMaker {
 
+    public static final boolean IN_MEMORY_DEX_ELIGIBLE = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
+    // using InMemoryDexClassLoader when too many methods (about >175 ?)
+    // are to hook might lead to large memory allocation and gc problems, forbid it for now
+    public static final boolean IN_MEMORY_DEX_FORBIDDEN = true;
+    public static final boolean SHOULD_USE_IN_MEMORY_DEX = IN_MEMORY_DEX_ELIGIBLE && !IN_MEMORY_DEX_FORBIDDEN;
+
     public static final String METHOD_NAME_BACKUP = "backup";
     public static final String METHOD_NAME_HOOK = "hook";
     public static final String METHOD_NAME_CALL_BACKUP = "callBackup";
     public static final String METHOD_NAME_SETUP = "setup";
+    public static final TypeId<Object[]> objArrayTypeId = TypeId.get(Object[].class);
     private static final String CLASS_DESC_PREFIX = "L";
     private static final String CLASS_NAME_PREFIX = "EdHooker";
     private static final String FIELD_NAME_HOOK_INFO = "additionalHookInfo";
@@ -48,8 +55,6 @@ public class HookerDexMaker {
     private static final String CALLBACK_METHOD_NAME_BEFORE = "callBeforeHookedMethod";
     private static final String CALLBACK_METHOD_NAME_AFTER = "callAfterHookedMethod";
     private static final String PARAMS_METHOD_NAME_IS_EARLY_RETURN = "isEarlyReturn";
-
-    public static final TypeId<Object[]> objArrayTypeId = TypeId.get(Object[].class);
     private static final TypeId<Throwable> throwableTypeId = TypeId.get(Throwable.class);
     private static final TypeId<Member> memberTypeId = TypeId.get(Member.class);
     private static final TypeId<XC_MethodHook> callbackTypeId = TypeId.get(XC_MethodHook.class);
@@ -194,7 +199,7 @@ public class HookerDexMaker {
         generateCallBackupMethod();
 
         ClassLoader loader;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (SHOULD_USE_IN_MEMORY_DEX) {
             // in memory dex classloader
             byte[] dexBytes = mDexMaker.generate();
             loader = new InMemoryDexClassLoader(ByteBuffer.wrap(dexBytes), mAppClassLoader);

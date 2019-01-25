@@ -5,6 +5,7 @@ import android.app.AndroidAppHelper;
 import android.app.LoadedApk;
 import android.content.pm.ApplicationInfo;
 import android.content.res.CompatibilityInfo;
+import android.util.Log;
 
 import com.elderdrivers.riru.common.KeepMembers;
 
@@ -58,13 +59,21 @@ public class LoadedApkConstructorHooker implements KeepMembers {
                 return;
             }
 
+            // mIncludeCode checking should go ahead of loadedPackagesInProcess added checking
+            if (!getBooleanField(loadedApk, "mIncludeCode")) {
+                logD("LoadedApk#<init> mIncludeCode == false: " + mAppDir);
+                return;
+            }
+
             if (!loadedPackagesInProcess.add(packageName)) {
                 logD("LoadedApk#<init> has been loaded before, skip: " + mAppDir);
                 return;
             }
 
-            if (!getBooleanField(loadedApk, "mIncludeCode")) {
-                logD("LoadedApk#<init> mIncludeCode == false: " + mAppDir);
+            // OnePlus magic...
+            if (Log.getStackTraceString(new Throwable()).
+                    contains("android.app.ActivityThread$ApplicationThread.schedulePreload")) {
+                logD("LoadedApk#<init> maybe oneplus's custom opt, skip");
                 return;
             }
 

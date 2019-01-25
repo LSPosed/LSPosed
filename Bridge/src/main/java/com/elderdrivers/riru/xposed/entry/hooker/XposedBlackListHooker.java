@@ -18,13 +18,13 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.XposedBridge;
 
+import static com.elderdrivers.riru.xposed.util.FileUtils.IS_USING_PROTECTED_STORAGE;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedInit.INSTALLER_PACKAGE_NAME;
 
 public class XposedBlackListHooker {
 
     public static final String BLACK_LIST_PACKAGE_NAME = "com.flarejune.xposedblacklist";
-    private static final boolean IS_USING_PROTECTED_STORAGE = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N;
     private static final String BLACK_LIST_PREF_NAME = "list";
     private static final String PREF_KEY_BLACK_LIST = "blackList";
     public static final String PREF_FILE_PATH = (IS_USING_PROTECTED_STORAGE ? "/data/user_de/0/" : "/data/data")

@@ -1,9 +1,9 @@
 package com.elderdrivers.riru.xposed.dexmaker;
 
 import android.app.AndroidAppHelper;
-import android.os.Build;
 
 import com.elderdrivers.riru.xposed.Main;
+import com.elderdrivers.riru.xposed.util.FileUtils;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -12,12 +12,29 @@ import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import de.robv.android.xposed.XposedBridge;
 
+import static com.elderdrivers.riru.xposed.dexmaker.HookerDexMaker.SHOULD_USE_IN_MEMORY_DEX;
+import static com.elderdrivers.riru.xposed.util.FileUtils.getDataPathPrefix;
+
 public final class DynamicBridge {
 
-    private static HashMap<Member, HookerDexMaker> hookedInfo = new HashMap<>();
+    private static final HashMap<Member, Method> hookedInfo = new HashMap<>();
+    private static final HookerDexMaker dexMaker = new HookerDexMaker();
+    private static final AtomicBoolean dexPathInited = new AtomicBoolean(false);
+    private static final File dexDir;
+    private static final File dexOptDir;
+
+    static {
+        // we always choose to use device encrypted storage data on android n and later
+        // in case some app is installing hooks before phone is unlocked
+        String fixedAppDataDir = getDataPathPrefix() + AndroidAppHelper.currentPackageName() + "/";
+        dexDir = new File(fixedAppDataDir, "/cache/edhookers/"
+                + Main.sAppProcessName.replace(":", "_") + "/");
+        dexOptDir = new File(dexDir, "oat");
+    }
 
     public static synchronized void hookMethod(Member hookMethod, XposedBridge.AdditionalHookInfo additionalHookInfo) {
 
@@ -33,21 +50,24 @@ public final class DynamicBridge {
         DexLog.d("start to generate class for: " + hookMethod);
         try {
             // for Android Oreo and later use InMemoryClassLoader
-            String dexDirPath = "";
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            if (!SHOULD_USE_IN_MEMORY_DEX) {
                 // under Android Oreo, using DexClassLoader
-                String dataDir = Main.sAppDataDir;
-                String processName = AndroidAppHelper.currentProcessName();
-                File dexDir = new File(dataDir, "cache/edhookers/" + processName + "/");
-                dexDir.mkdirs();
-                dexDirPath = dexDir.getAbsolutePath();
+                if (dexPathInited.compareAndSet(false, true)) {
+                    // delete previous compiled dex to prevent potential crashing
+                    // TODO find a way to reuse them in consideration of performance
+                    try {
+                        dexDir.mkdirs();
+                        DexLog.d(Main.sAppProcessName + " deleting dir: " + dexOptDir.getAbsolutePath());
+                        FileUtils.delete(dexOptDir);
+                    } catch (Throwable throwable) {
+                    }
+                }
             }
-            HookerDexMaker dexMaker = new HookerDexMaker();
             dexMaker.start(hookMethod, additionalHookInfo,
-                    hookMethod.getDeclaringClass().getClassLoader(), dexDirPath);
-            hookedInfo.put(hookMethod, dexMaker);
+                    hookMethod.getDeclaringClass().getClassLoader(), dexDir.getAbsolutePath());
+            hookedInfo.put(hookMethod, dexMaker.getCallBackupMethod());
         } catch (Exception e) {
-            DexLog.e("error occur when generating dex", e);
+            DexLog.e("error occur when generating dex. dexDir=" + dexDir, e);
         }
     }
 
@@ -71,13 +91,9 @@ public final class DynamicBridge {
 
     public static Object invokeOriginalMethod(Member method, Object thisObject, Object[] args)
             throws InvocationTargetException, IllegalAccessException {
-        HookerDexMaker dexMaker = hookedInfo.get(method);
-        if (dexMaker == null) {
-            throw new IllegalStateException("method not hooked, cannot call original method.");
-        }
-        Method callBackup = dexMaker.getCallBackupMethod();
+        Method callBackup = hookedInfo.get(method);
         if (callBackup == null) {
-            throw new IllegalStateException("original method is null, something must be wrong!");
+            throw new IllegalStateException("method not hooked, cannot call original method.");
         }
         if (!Modifier.isStatic(callBackup.getModifiers())) {
             throw new IllegalStateException("original method is not static, something must be wrong!");

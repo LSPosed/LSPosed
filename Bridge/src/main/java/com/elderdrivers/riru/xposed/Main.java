@@ -9,13 +9,22 @@ import com.elderdrivers.riru.xposed.entry.Router;
 
 import java.lang.reflect.Method;
 
+import static com.elderdrivers.riru.xposed.util.FileUtils.getDataPathPrefix;
+
 @SuppressLint("DefaultLocale")
 public class Main implements KeepAll {
 
+    /**
+     * When set to true, install bootstrap hooks and loadModules
+     * for each process when it starts.
+     * This means you can deactivate or activate every module
+     * for the process you restart without rebooting.
+     */
+    private static final boolean DYNAMIC_LOAD_MODULES = false;
     //    private static String sForkAndSpecializePramsStr = "";
 //    private static String sForkSystemServerPramsStr = "";
     public static String sAppDataDir = "";
-    private static final boolean DYNAMIC_LOAD_MODULES = false;
+    public static String sAppProcessName = "";
 
     static {
         init(Build.VERSION.SDK_INT);
@@ -66,7 +75,7 @@ public class Main implements KeepAll {
 //        Utils.logD(sForkSystemServerPramsStr + " = " + pid);
         if (pid == 0) {
             // in system_server process
-            sAppDataDir = "/data/data/android/";
+            sAppDataDir = getDataPathPrefix() + "android/";
             Router.onProcessForked(true);
         } else {
             // in zygote process, res is child zygote pid

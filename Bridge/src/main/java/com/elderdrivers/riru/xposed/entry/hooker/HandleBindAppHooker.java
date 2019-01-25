@@ -7,6 +7,8 @@ import android.content.pm.ApplicationInfo;
 import android.content.res.CompatibilityInfo;
 
 import com.elderdrivers.riru.common.KeepMembers;
+import com.elderdrivers.riru.xposed.Main;
+import com.elderdrivers.riru.xposed.util.Utils;
 
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
@@ -36,7 +38,11 @@ public class HandleBindAppHooker implements KeepMembers {
             logD("ActivityThread#handleBindApplication() starts");
             ActivityThread activityThread = (ActivityThread) thiz;
             ApplicationInfo appInfo = (ApplicationInfo) getObjectField(bindData, "appInfo");
+            // save app process name here for later use
+            Main.sAppProcessName = (String) getObjectField(bindData, "processName");
             String reportedPackageName = appInfo.packageName.equals("android") ? "system" : appInfo.packageName;
+            Utils.logD("processName=" +  Main.sAppProcessName +
+                    ", packageName=" + reportedPackageName + ", appDataDir=" + Main.sAppDataDir);
 
             if (XposedBlackListHooker.shouldDisableHooks(reportedPackageName)) {
                 return;
