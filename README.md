@@ -32,6 +32,10 @@ A Riru module trying to provide a ART hooking framework (mainly for Android Pie)
 4. reboot.
 5. have fun :)
 
+## [EdXp Manager](https://github.com/solohsu/EdXpManager)
+
+Companion Android application for EdXposed
+
 ## Get help
 
 Forum (recommend): [Android Forum](http://af.meowcat.org/)
