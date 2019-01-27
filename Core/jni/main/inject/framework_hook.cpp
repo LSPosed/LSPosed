@@ -5,6 +5,9 @@
 #include <include/logging.h>
 #include "framework_hook.h"
 #include "include/misc.h"
+#include "config_manager.h"
+
+#define SYSTEM_SERVER_DATA_DIR "/data/user/0/android/"
 
 static jclass sEntryClass;
 static jstring sAppDataDir;
@@ -38,6 +41,9 @@ void findAndCall(JNIEnv *env, const char *methodName, const char *methodSig, ...
 void onNativeForkSystemServerPre(JNIEnv *env, jclass clazz, uid_t uid, gid_t gid, jintArray gids,
                                  jint runtime_flags, jobjectArray rlimits,
                                  jlong permittedCapabilities, jlong effectiveCapabilities) {
+    if (!is_app_need_hook(env, env->NewStringUTF(SYSTEM_SERVER_DATA_DIR))) {
+        return;
+    }
     prepareJavaEnv(env);
     // jump to java code
     findAndCall(env, "forkSystemServerPre", "(II[II[[IJJ)V", uid, gid, gids, runtime_flags, rlimits,
@@ -47,6 +53,9 @@ void onNativeForkSystemServerPre(JNIEnv *env, jclass clazz, uid_t uid, gid_t gid
 
 int onNativeForkSystemServerPost(JNIEnv *env, jclass clazz, jint res) {
     if (res == 0) {
+        if (!is_app_need_hook(env, env->NewStringUTF(SYSTEM_SERVER_DATA_DIR))) {
+            return 0;
+        }
         prepareJavaEnv(env);
         // only do work in child since findAndCall would print log
         findAndCall(env, "forkSystemServerPost", "(I)V", res);
@@ -70,17 +79,23 @@ void onNativeForkAndSpecializePre(JNIEnv *env, jclass clazz,
                                   jboolean is_child_zygote,
                                   jstring instructionSet,
                                   jstring appDataDir) {
+    sAppDataDir = appDataDir;
+    if (!is_app_need_hook(env, appDataDir)) {
+        return;
+    }
     prepareJavaEnv(env);
     findAndCall(env, "forkAndSpecializePre",
-                "(II[II[[IILjava/lang/String;Ljava/lang/String;[I[IZLjava/lang/String;Ljava/lang/String;)V",
+                "(II[II[[IILjava/lang/String;Ljava/lang/String;[I[IZLjava/lang/String;Ljava/lang/String;Z)V",
                 uid, gid, gids, runtime_flags, rlimits,
                 _mount_external, se_info, se_name, fdsToClose, fdsToIgnore,
-                is_child_zygote, instructionSet, appDataDir);
-    sAppDataDir = appDataDir;
+                is_child_zygote, instructionSet, appDataDir, is_global_mode());
 }
 
 int onNativeForkAndSpecializePost(JNIEnv *env, jclass clazz, jint res) {
     if (res == 0) {
+        if (!is_app_need_hook(env, sAppDataDir)) {
+            return 0;
+        }
         prepareJavaEnv(env);
         findAndCall(env, "forkAndSpecializePost", "(ILjava/lang/String;)V", res, sAppDataDir);
     } else {

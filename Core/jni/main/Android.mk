@@ -18,6 +18,7 @@ LOCAL_SRC_FILES:= \
   yahfa/HookMain.c \
   yahfa/trampoline.c \
   java_hook/java_hook.cpp \
-  inject/framework_hook.cpp
+  inject/framework_hook.cpp \
+  inject/config_manager.cpp
 
 include $(BUILD_SHARED_LIBRARY)

@@ -25,6 +25,7 @@ public class Main implements KeepAll {
 //    private static String sForkSystemServerPramsStr = "";
     public static String sAppDataDir = "";
     public static String sAppProcessName = "";
+    private static boolean sIsGlobalMode = false;
 
     static {
         init(Build.VERSION.SDK_INT);
@@ -39,13 +40,16 @@ public class Main implements KeepAll {
     public static void forkAndSpecializePre(int uid, int gid, int[] gids, int debugFlags,
                                             int[][] rlimits, int mountExternal, String seInfo,
                                             String niceName, int[] fdsToClose, int[] fdsToIgnore,
-                                            boolean startChildZygote, String instructionSet, String appDataDir) {
+                                            boolean startChildZygote, String instructionSet,
+                                            String appDataDir, boolean isGlobalMode) {
 //        sForkAndSpecializePramsStr = String.format(
 //                "Zygote#forkAndSpecialize(%d, %d, %s, %d, %s, %d, %s, %s, %s, %s, %s, %s, %s)",
 //                uid, gid, Arrays.toString(gids), debugFlags, Arrays.toString(rlimits),
 //                mountExternal, seInfo, niceName, Arrays.toString(fdsToClose),
 //                Arrays.toString(fdsToIgnore), startChildZygote, instructionSet, appDataDir);
-        if (!DYNAMIC_LOAD_MODULES) {
+        sAppDataDir = appDataDir;
+        sIsGlobalMode = isGlobalMode;
+        if (!DYNAMIC_LOAD_MODULES && isGlobalMode) {
             Router.onProcessForked(false);
         }
     }
@@ -54,8 +58,7 @@ public class Main implements KeepAll {
 //        Utils.logD(sForkAndSpecializePramsStr + " = " + pid);
         if (pid == 0) {
             // in app process
-            sAppDataDir = appDataDir;
-            if (DYNAMIC_LOAD_MODULES) {
+            if (DYNAMIC_LOAD_MODULES || !sIsGlobalMode) {
                 Router.onProcessForked(false);
             }
         } else {
@@ -69,13 +72,13 @@ public class Main implements KeepAll {
 //        sForkSystemServerPramsStr = String.format("Zygote#forkSystemServer(%d, %d, %s, %d, %s, %d, %d)",
 //                uid, gid, Arrays.toString(gids), debugFlags, Arrays.toString(rlimits),
 //                permittedCapabilities, effectiveCapabilities);
+        sAppDataDir = getDataPathPrefix() + "android/";
     }
 
     public static void forkSystemServerPost(int pid) {
 //        Utils.logD(sForkSystemServerPramsStr + " = " + pid);
         if (pid == 0) {
             // in system_server process
-            sAppDataDir = getDataPathPrefix() + "android/";
             Router.onProcessForked(true);
         } else {
             // in zygote process, res is child zygote pid

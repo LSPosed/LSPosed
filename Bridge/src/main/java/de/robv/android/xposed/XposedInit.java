@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.internal.os.ZygoteInit;
+import com.elderdrivers.riru.xposed.BuildConfig;
 import com.elderdrivers.riru.xposed.entry.Router;
 import com.elderdrivers.riru.xposed.util.Utils;
 
@@ -50,6 +51,7 @@ public final class XposedInit {
     }
 
     private static volatile AtomicBoolean bootstrapHooked = new AtomicBoolean(false);
+
     /**
      * Hook some methods which we want to create an easier interface for developers.
      */
@@ -122,10 +124,12 @@ public final class XposedInit {
      * in <code>assets/xposed_init</code>.
      */
     private static void loadModule(String apk, ClassLoader topClassLoader) {
-        Log.i(TAG, "Loading modules from " + apk);
+        if (BuildConfig.DEBUG)
+            Log.i(TAG, "Loading modules from " + apk);
 
         if (!TextUtils.isEmpty(apk) && apk.contains(BLACK_LIST_PACKAGE_NAME)) {
-            Log.i(TAG, "We are going to take over black list's job...");
+            if (BuildConfig.DEBUG)
+                Log.i(TAG, "We are going to take over black list's job...");
             return;
         }
 
@@ -186,7 +190,8 @@ public final class XposedInit {
                     continue;
 
                 try {
-                    Log.i(TAG, "  Loading class " + moduleClassName);
+                    if (BuildConfig.DEBUG)
+                        Log.i(TAG, "  Loading class " + moduleClassName);
                     Class<?> moduleClass = mcl.loadClass(moduleClassName);
 
                     if (!IXposedMod.class.isAssignableFrom(moduleClass)) {
