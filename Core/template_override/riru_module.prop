@@ -1,5 +1,5 @@
 name=Ed Xposed
-version=v0.2.9.6_beta
+version=v0.2.9.7_beta
 versionCode=1
 author=givein2u
 description=Elder driver Xposed for Android Pie. Require Riru - Core installed.

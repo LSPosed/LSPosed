@@ -14,18 +14,21 @@ import static com.elderdrivers.riru.xposed.util.FileUtils.getDataPathPrefix;
 @SuppressLint("DefaultLocale")
 public class Main implements KeepAll {
 
+    //    private static String sForkAndSpecializePramsStr = "";
+//    private static String sForkSystemServerPramsStr = "";
+    public static String sAppDataDir = "";
+    public static String sAppProcessName = "";
+    /**
+     * Whether do bootstrap hooking only once
+     */
+    private static boolean sIsGlobalMode = false;
     /**
      * When set to true, install bootstrap hooks and loadModules
      * for each process when it starts.
      * This means you can deactivate or activate every module
      * for the process you restart without rebooting.
      */
-    private static final boolean DYNAMIC_LOAD_MODULES = false;
-    //    private static String sForkAndSpecializePramsStr = "";
-//    private static String sForkSystemServerPramsStr = "";
-    public static String sAppDataDir = "";
-    public static String sAppProcessName = "";
-    private static boolean sIsGlobalMode = false;
+    private static boolean sIsDynamicModules = false;
 
     static {
         init(Build.VERSION.SDK_INT);
@@ -41,7 +44,8 @@ public class Main implements KeepAll {
                                             int[][] rlimits, int mountExternal, String seInfo,
                                             String niceName, int[] fdsToClose, int[] fdsToIgnore,
                                             boolean startChildZygote, String instructionSet,
-                                            String appDataDir, boolean isGlobalMode) {
+                                            String appDataDir, boolean isGlobalMode,
+                                            boolean isDynamicModules) {
 //        sForkAndSpecializePramsStr = String.format(
 //                "Zygote#forkAndSpecialize(%d, %d, %s, %d, %s, %d, %s, %s, %s, %s, %s, %s, %s)",
 //                uid, gid, Arrays.toString(gids), debugFlags, Arrays.toString(rlimits),
@@ -49,8 +53,12 @@ public class Main implements KeepAll {
 //                Arrays.toString(fdsToIgnore), startChildZygote, instructionSet, appDataDir);
         sAppDataDir = appDataDir;
         sIsGlobalMode = isGlobalMode;
-        if (!DYNAMIC_LOAD_MODULES && isGlobalMode) {
+        sIsDynamicModules = isDynamicModules;
+        if (isGlobalMode) {
             Router.onProcessForked(false);
+        }
+        if (!sIsDynamicModules) {
+            Router.loadModulesSafely();
         }
     }
 
@@ -58,8 +66,11 @@ public class Main implements KeepAll {
 //        Utils.logD(sForkAndSpecializePramsStr + " = " + pid);
         if (pid == 0) {
             // in app process
-            if (DYNAMIC_LOAD_MODULES || !sIsGlobalMode) {
+            if (!sIsGlobalMode) {
                 Router.onProcessForked(false);
+            }
+            if (sIsDynamicModules) {
+                Router.loadModulesSafely();
             }
         } else {
             // in zygote process, res is child zygote pid
@@ -80,6 +91,7 @@ public class Main implements KeepAll {
         if (pid == 0) {
             // in system_server process
             Router.onProcessForked(true);
+            Router.loadModulesSafely();
         } else {
             // in zygote process, res is child zygote pid
             // don't print log here, see https://github.com/RikkaApps/Riru/blob/77adfd6a4a6a81bfd20569c910bc4854f2f84f5e/riru-core/jni/main/jni_native_method.cpp#L55-L66

@@ -16,11 +16,18 @@ public class Router {
         // Initialize the Xposed framework and modules
         try {
             XposedInit.initForZygote(isSystem);
-            // FIXME some coredomain app can't reading modules.list
-            XposedInit.loadModules();
         } catch (Throwable t) {
             Utils.logE("Errors during Xposed initialization", t);
             XposedBridge.disableHooks = true;
+        }
+    }
+
+    public static void loadModulesSafely() {
+        try {
+            // FIXME some coredomain app can't reading modules.list
+            XposedInit.loadModules();
+        } catch (Exception exception) {
+            Utils.logE("error loading module list", exception);
         }
     }
 

@@ -17,14 +17,17 @@
 #define WHITE_LIST_PATH "/data/misc/riru/modules/edxposed/whitelist/"
 #define USE_WHITE_LIST "/data/misc/riru/modules/edxposed/usewhitelist"
 #define GLOBAL_MODE "/data/misc/riru/modules/edxposed/forceglobal"
+#define DYNAMIC_MODULES "/data/misc/riru/modules/edxposed/dynamicmodules"
 
 static char package_name[256];
 static bool global_mode = false;
+static bool dynamic_modules = false;
 static bool inited = false;
 
 void initOnce() {
     if (!inited) {
         global_mode = access(GLOBAL_MODE, F_OK) == 0;
+        dynamic_modules = access(DYNAMIC_MODULES, F_OK) == 0;
         inited = true;
     }
 }
@@ -69,7 +72,12 @@ int is_app_need_hook(JNIEnv *env, jstring appDataDir) {
     }
 }
 
-int is_global_mode() {
+bool is_global_mode() {
     initOnce();
     return global_mode;
+}
+
+bool is_dynamic_modules() {
+    initOnce();
+    return dynamic_modules;
 }
