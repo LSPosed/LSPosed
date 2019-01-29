@@ -1,6 +1,5 @@
 package com.elderdrivers.riru.xposed.dexmaker;
 
-import android.os.Build;
 import android.text.TextUtils;
 
 import com.elderdrivers.riru.xposed.core.HookMain;
@@ -31,14 +30,9 @@ import static com.elderdrivers.riru.xposed.dexmaker.DexMakerUtils.autoBoxIfNeces
 import static com.elderdrivers.riru.xposed.dexmaker.DexMakerUtils.autoUnboxIfNecessary;
 import static com.elderdrivers.riru.xposed.dexmaker.DexMakerUtils.createResultLocals;
 import static com.elderdrivers.riru.xposed.dexmaker.DexMakerUtils.getObjTypeIdIfPrimitive;
+import static com.elderdrivers.riru.xposed.dexmaker.DexMakerUtils.shouldUseInMemoryHook;
 
 public class HookerDexMaker {
-
-    public static final boolean IN_MEMORY_DEX_ELIGIBLE = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
-    // using InMemoryDexClassLoader when too many methods (about >175 ?)
-    // are to hook might lead to large memory allocation and gc problems, forbid it for now
-    public static final boolean IN_MEMORY_DEX_FORBIDDEN = true;
-    public static final boolean SHOULD_USE_IN_MEMORY_DEX = IN_MEMORY_DEX_ELIGIBLE && !IN_MEMORY_DEX_FORBIDDEN;
 
     public static final String METHOD_NAME_BACKUP = "backup";
     public static final String METHOD_NAME_HOOK = "hook";
@@ -199,7 +193,7 @@ public class HookerDexMaker {
         generateCallBackupMethod();
 
         ClassLoader loader;
-        if (SHOULD_USE_IN_MEMORY_DEX) {
+        if (shouldUseInMemoryHook()) {
             // in memory dex classloader
             byte[] dexBytes = mDexMaker.generate();
             loader = new InMemoryDexClassLoader(ByteBuffer.wrap(dexBytes), mAppClassLoader);

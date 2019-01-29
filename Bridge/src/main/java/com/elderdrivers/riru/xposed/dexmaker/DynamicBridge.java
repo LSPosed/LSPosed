@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import de.robv.android.xposed.XposedBridge;
 
-import static com.elderdrivers.riru.xposed.dexmaker.HookerDexMaker.SHOULD_USE_IN_MEMORY_DEX;
+import static com.elderdrivers.riru.xposed.dexmaker.DexMakerUtils.shouldUseInMemoryHook;
 import static com.elderdrivers.riru.xposed.util.FileUtils.getDataPathPrefix;
 
 public final class DynamicBridge {
@@ -50,7 +50,7 @@ public final class DynamicBridge {
         DexLog.d("start to generate class for: " + hookMethod);
         try {
             // for Android Oreo and later use InMemoryClassLoader
-            if (!SHOULD_USE_IN_MEMORY_DEX) {
+            if (!shouldUseInMemoryHook()) {
                 // under Android Oreo, using DexClassLoader
                 if (dexPathInited.compareAndSet(false, true)) {
                     // delete previous compiled dex to prevent potential crashing

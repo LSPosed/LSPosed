@@ -1,13 +1,36 @@
 package com.elderdrivers.riru.xposed.dexmaker;
 
-import external.com.android.dx.Code;
-import external.com.android.dx.Local;
-import external.com.android.dx.TypeId;
+import android.app.AndroidAppHelper;
+import android.os.Build;
+import android.text.TextUtils;
+
+import com.elderdrivers.riru.xposed.Main;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import de.robv.android.xposed.SELinuxHelper;
+import external.com.android.dx.Code;
+import external.com.android.dx.Local;
+import external.com.android.dx.TypeId;
+
 public class DexMakerUtils {
+
+    private static final boolean IN_MEMORY_DEX_ELIGIBLE = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
+    private static final String COMPAT_LIST_PATH = "/data/misc/riru/modules/edxposed/compatlist/";
+
+    public static boolean shouldUseInMemoryHook() {
+        if (!IN_MEMORY_DEX_ELIGIBLE) {
+            return false;
+        }
+        String packageName = AndroidAppHelper.currentPackageName();
+        if (TextUtils.isEmpty(packageName)) { //default to true
+            DexLog.w("packageName is empty, processName=" + Main.sAppProcessName
+                    + ", appDataDir=" + Main.sAppDataDir);
+            return true;
+        }
+        return !SELinuxHelper.getAppDataFileService().checkFileExists(COMPAT_LIST_PATH + packageName);
+    }
 
     public static void autoBoxIfNecessary(Code code, Local<Object> target, Local source) {
         String boxMethod = "valueOf";
@@ -99,7 +122,7 @@ public class DexMakerUtils {
             code.invokeVirtual(boxTypeId.getMethod(TypeId.SHORT, unboxMethod), target, boxTypedLocal);
         } else if (typeId.equals(TypeId.VOID)) {
             code.loadConstant(target, null);
-        } else if (castObj){
+        } else if (castObj) {
             code.cast(target, source);
         } else {
             code.move(target, source);
