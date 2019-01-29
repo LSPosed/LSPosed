@@ -19,6 +19,7 @@ A Riru module trying to provide a ART hooking framework (mainly for Android Pie)
 ## Build requirements
 
 same as [Riru-Core's](https://github.com/RikkaApps/Riru/blob/master/README.md#build-requirements)
+and zip binaries can be downloaded from [here](http://gnuwin32.sourceforge.net/packages/zip.htm)
 
 ## Build
 
