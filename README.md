@@ -16,6 +16,10 @@ A Riru module trying to provide a ART hooking framework (mainly for Android Pie)
 - only a few Xposed modules has been tested for working
 - file access services are not implemented yet, now simply use magiskpolicy to enable needed SELinux policies
 
+## Build requirements
+
+same as [Riru-Core's](https://github.com/RikkaApps/Riru/blob/master/README.md#build-requirements)
+
 ## Build
 
 1. run `:Bridge:makeAndCopyRelease` in Gradle window to build `edxposed.dex`
