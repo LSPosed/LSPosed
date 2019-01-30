@@ -153,19 +153,21 @@ public class DexMakerUtils {
         Local<Object> voidObjLocal = code.newLocal(TypeId.get("Ljava/lang/Void;"));
 
         // backup need initialized locals
-        code.loadConstant(booleanLocal, Boolean.valueOf(false));
-        code.loadConstant(byteLocal, Byte.valueOf("0"));
-        code.loadConstant(charLocal, Character.valueOf('\0'));
-        code.loadConstant(floatLocal, Float.valueOf(0));
+        code.loadConstant(booleanLocal, false);
+        code.loadConstant(byteLocal, (byte) 0);
+        code.loadConstant(charLocal, '\0');
+        code.loadConstant(doubleLocal,0.0);
+        code.loadConstant(floatLocal,0.0f);
         code.loadConstant(intLocal, 0);
-        code.loadConstant(longLocal, Long.valueOf(0));
-        code.loadConstant(shortLocal, Short.valueOf("0"));
+        code.loadConstant(longLocal, 0L);
+        code.loadConstant(shortLocal, (short) 0);
         code.loadConstant(voidLocal, null);
         code.loadConstant(objectLocal, null);
         // all to null
         code.loadConstant(booleanObjLocal, null);
         code.loadConstant(byteObjLocal, null);
         code.loadConstant(charObjLocal, null);
+        code.loadConstant(doubleObjLocal, null);
         code.loadConstant(floatObjLocal, null);
         code.loadConstant(intObjLocal, null);
         code.loadConstant(longObjLocal, null);
