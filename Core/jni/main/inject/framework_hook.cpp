@@ -7,7 +7,7 @@
 #include "include/misc.h"
 #include "config_manager.h"
 
-#define SYSTEM_SERVER_DATA_DIR "/data/user/0/android/"
+#define SYSTEM_SERVER_DATA_DIR "/data/user/0/android"
 
 static jclass sEntryClass;
 static jstring sAppDataDir;
