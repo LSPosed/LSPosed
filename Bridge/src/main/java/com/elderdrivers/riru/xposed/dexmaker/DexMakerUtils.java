@@ -14,10 +14,12 @@ import external.com.android.dx.Code;
 import external.com.android.dx.Local;
 import external.com.android.dx.TypeId;
 
+import static de.robv.android.xposed.XposedInit.INSTALLER_DATA_BASE_DIR;
+
 public class DexMakerUtils {
 
     private static final boolean IN_MEMORY_DEX_ELIGIBLE = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
-    private static final String COMPAT_LIST_PATH = "/data/misc/riru/modules/edxposed/compatlist/";
+    private static final String COMPAT_LIST_PATH = INSTALLER_DATA_BASE_DIR + "conf/compatlist/";
 
     public static boolean shouldUseInMemoryHook() {
         if (!IN_MEMORY_DEX_ELIGIBLE) {

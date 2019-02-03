@@ -6,6 +6,8 @@ META-INF/** text eol=lf
 *.prop text eol=lf
 *.sh text eol=lf
 *.md text eol=lf
+update-binary text eol=lf
+update-script text eol=lf
 
 # Denote all files that are truly binary and should not be modified.
 *.so binary
