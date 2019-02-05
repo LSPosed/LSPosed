@@ -51,6 +51,10 @@ int is_app_need_hook(JNIEnv *env, jstring appDataDir) {
         }
     }
     env->ReleaseStringUTFChars(appDataDir, app_data_dir);
+    if (strcmp(package_name, "com.solohsu.android.edxp.manager") == 0) {
+        // always hook installer app
+        return 1;
+    }
     bool use_white_list = access(USE_WHITE_LIST, F_OK) == 0;
     bool white_list_exists = access(WHITE_LIST_PATH, F_OK) == 0;
     bool black_list_exists = access(BLACK_LIST_PATH, F_OK) == 0;
