@@ -37,10 +37,9 @@ public final class XposedInit {
     private static boolean startsSystemServer = false;
     private static final String startClassName = ""; // ed: no support for tool process anymore
 
-    public static final String INSTALLER_PACKAGE_NAME = "org.meowcat.edxposed.manager";
-    public static final String INSTALLER_LEGACY_PACKAGE_NAME = "de.robv.android.xposed.installer";
+    public static final String INSTALLER_PACKAGE_NAME = "de.robv.android.xposed.installer";
     @SuppressLint("SdCardPath")
-    public static final String INSTALLER_DATA_BASE_DIR = Build.VERSION.SDK_INT >= 24
+    private static final String BASE_DIR = Build.VERSION.SDK_INT >= 24
             ? "/data/user_de/0/" + INSTALLER_PACKAGE_NAME + "/"
             : "/data/data/" + INSTALLER_PACKAGE_NAME + "/";
     private static final String INSTANT_RUN_CLASS = "com.android.tools.fd.runtime.BootstrapApplication";
@@ -89,7 +88,7 @@ public final class XposedInit {
     }
 
     /**
-     * Try to load all modules defined in <code>INSTALLER_DATA_BASE_DIR/conf/modules.list</code>
+     * Try to load all modules defined in <code>BASE_DIR/conf/modules.list</code>
      */
     private static volatile AtomicBoolean modulesLoaded = new AtomicBoolean(false);
 
@@ -97,7 +96,7 @@ public final class XposedInit {
         if (!modulesLoaded.compareAndSet(false, true)) {
             return;
         }
-        final String filename = INSTALLER_DATA_BASE_DIR + "conf/modules.list";
+        final String filename = BASE_DIR + "conf/modules.list";
         BaseService service = SELinuxHelper.getAppDataFileService();
         if (!service.checkFileExists(filename)) {
             Log.e(TAG, "Cannot load any modules because " + filename + " was not found");
