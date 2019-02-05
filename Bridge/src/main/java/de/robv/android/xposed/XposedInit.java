@@ -37,7 +37,8 @@ public final class XposedInit {
     private static boolean startsSystemServer = false;
     private static final String startClassName = ""; // ed: no support for tool process anymore
 
-    public static final String INSTALLER_PACKAGE_NAME = "de.robv.android.xposed.installer";
+    public static final String INSTALLER_PACKAGE_NAME = "com.solohsu.android.edxp.manager";
+    public static final String INSTALLER_LEGACY_PACKAGE_NAME = "de.robv.android.xposed.installer";
     @SuppressLint("SdCardPath")
     private static final String BASE_DIR = Build.VERSION.SDK_INT >= 24
             ? "/data/user_de/0/" + INSTALLER_PACKAGE_NAME + "/"

@@ -15,14 +15,15 @@ import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
+import static de.robv.android.xposed.XposedInit.INSTALLER_LEGACY_PACKAGE_NAME;
 import static de.robv.android.xposed.XposedInit.INSTALLER_PACKAGE_NAME;
 
 public class XposedInstallerHooker {
 
     public static void hookXposedInstaller(ClassLoader classLoader) {
         try {
-            final String xposedAppClass = INSTALLER_PACKAGE_NAME + ".XposedApp";
-            final Class InstallZipUtil = findClass(INSTALLER_PACKAGE_NAME
+            final String xposedAppClass = INSTALLER_LEGACY_PACKAGE_NAME + ".XposedApp";
+            final Class InstallZipUtil = findClass(INSTALLER_LEGACY_PACKAGE_NAME
                     + ".util.InstallZipUtil", classLoader);
             findAndHookMethod(xposedAppClass, classLoader, "getActiveXposedVersion",
                     XC_MethodReplacement.returnConstant(XposedBridge.getXposedVersion()));
