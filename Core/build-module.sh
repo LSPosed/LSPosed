@@ -10,6 +10,7 @@ function copy_files {
   cp $MODULE_NAME/template_override/module.prop $TMP_DIR_MAGISK
 
   cp -r $MODULE_NAME/template_override/system $TMP_DIR_MAGISK
+  cp -r $MODULE_NAME/template_override/system_x86 $TMP_DIR_MAGISK
   cp -r $MODULE_NAME/template_override/common $TMP_DIR_MAGISK
   cp -r $MODULE_NAME/template_override/META-INF $TMP_DIR_MAGISK
 }
