@@ -7,6 +7,7 @@
 #include <dlfcn.h>
 #include "java_hook/java_hook.h"
 #include "include/logging.h"
+#include "native_hook/native_hook.h"
 
 extern "C"
 {
@@ -44,6 +45,7 @@ void loadDexAndInit(JNIEnv *env, const char *dexPath) {
     if (isInited) {
         return;
     }
+    install_inline_hooks();
     jclass clzClassLoader = env->FindClass("java/lang/ClassLoader");
     LOGD("java/lang/ClassLoader: %p", clzClassLoader);
     jmethodID mdgetSystemClassLoader = env->GetStaticMethodID(clzClassLoader,
