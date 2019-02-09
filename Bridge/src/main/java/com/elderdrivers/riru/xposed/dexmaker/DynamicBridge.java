@@ -1,7 +1,5 @@
 package com.elderdrivers.riru.xposed.dexmaker;
 
-import android.app.AndroidAppHelper;
-
 import com.elderdrivers.riru.xposed.Main;
 import com.elderdrivers.riru.xposed.util.FileUtils;
 
@@ -18,22 +16,19 @@ import de.robv.android.xposed.XposedBridge;
 
 import static com.elderdrivers.riru.xposed.dexmaker.DexMakerUtils.shouldUseInMemoryHook;
 import static com.elderdrivers.riru.xposed.util.FileUtils.getDataPathPrefix;
+import static com.elderdrivers.riru.xposed.util.FileUtils.getPackageName;
+import static com.elderdrivers.riru.xposed.util.ProcessUtils.getCurrentProcessName;
 
 public final class DynamicBridge {
 
     private static final HashMap<Member, Method> hookedInfo = new HashMap<>();
     private static final HookerDexMaker dexMaker = new HookerDexMaker();
     private static final AtomicBoolean dexPathInited = new AtomicBoolean(false);
-    private static final File dexDir;
-    private static final File dexOptDir;
+    private static File dexDir;
+    private static File dexOptDir;
 
-    static {
-        // we always choose to use device encrypted storage data on android n and later
-        // in case some app is installing hooks before phone is unlocked
-        String fixedAppDataDir = getDataPathPrefix() + AndroidAppHelper.currentPackageName() + "/";
-        dexDir = new File(fixedAppDataDir, "/cache/edhookers/"
-                + Main.sAppProcessName.replace(":", "_") + "/");
-        dexOptDir = new File(dexDir, "oat");
+    public static void onForkPost() {
+        dexPathInited.set(false);
     }
 
     public static synchronized void hookMethod(Member hookMethod, XposedBridge.AdditionalHookInfo additionalHookInfo) {
@@ -51,20 +46,30 @@ public final class DynamicBridge {
         try {
             // for Android Oreo and later use InMemoryClassLoader
             if (!shouldUseInMemoryHook()) {
-                // under Android Oreo, using DexClassLoader
+                // using file based DexClassLoader
                 if (dexPathInited.compareAndSet(false, true)) {
                     // delete previous compiled dex to prevent potential crashing
                     // TODO find a way to reuse them in consideration of performance
                     try {
+                        // we always choose to use device encrypted storage data on android N and later
+                        // in case some app is installing hooks before phone is unlocked
+                        String fixedAppDataDir = getDataPathPrefix() + getPackageName(Main.sAppDataDir) + "/";
+                        dexDir = new File(fixedAppDataDir, "/cache/edhookers/"
+                                + getCurrentProcessName().replace(":", "_") + "/");
+                        dexOptDir = new File(dexDir, "oat");
                         dexDir.mkdirs();
                         DexLog.d(Main.sAppProcessName + " deleting dir: " + dexOptDir.getAbsolutePath());
-                        FileUtils.delete(dexOptDir);
+                        try {
+                            FileUtils.delete(dexOptDir);
+                        } catch (Throwable throwable) {
+                        }
                     } catch (Throwable throwable) {
+                        DexLog.e("error when init dex path", throwable);
                     }
                 }
             }
             dexMaker.start(hookMethod, additionalHookInfo,
-                    hookMethod.getDeclaringClass().getClassLoader(), dexDir.getAbsolutePath());
+                    hookMethod.getDeclaringClass().getClassLoader(), dexDir == null ? null : dexDir.getAbsolutePath());
             hookedInfo.put(hookMethod, dexMaker.getCallBackupMethod());
         } catch (Exception e) {
             DexLog.e("error occur when generating dex. dexDir=" + dexDir, e);

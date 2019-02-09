@@ -5,6 +5,7 @@ import android.os.Build;
 
 import com.elderdrivers.riru.common.KeepAll;
 import com.elderdrivers.riru.xposed.core.HookMethodResolver;
+import com.elderdrivers.riru.xposed.dexmaker.DynamicBridge;
 import com.elderdrivers.riru.xposed.entry.Router;
 
 import java.lang.reflect.Method;
@@ -55,9 +56,11 @@ public class Main implements KeepAll {
         sIsGlobalMode = isGlobalMode;
         sIsDynamicModules = isDynamicModules;
         if (isGlobalMode) {
+            // do bootstrap hooking only once in zygote process
             Router.onProcessForked(false);
         }
-        if (!sIsDynamicModules) {
+        if (!isDynamicModules) {
+            // load modules only once in zygote process
             Router.loadModulesSafely();
         }
     }
@@ -65,11 +68,14 @@ public class Main implements KeepAll {
     public static void forkAndSpecializePost(int pid, String appDataDir) {
 //        Utils.logD(sForkAndSpecializePramsStr + " = " + pid);
         if (pid == 0) {
+            DynamicBridge.onForkPost();
             // in app process
             if (!sIsGlobalMode) {
+                // do bootstrap hooking separately for each app process
                 Router.onProcessForked(false);
             }
             if (sIsDynamicModules) {
+                // load modules for each app process on its forked
                 Router.loadModulesSafely();
             }
         } else {
@@ -83,7 +89,8 @@ public class Main implements KeepAll {
 //        sForkSystemServerPramsStr = String.format("Zygote#forkSystemServer(%d, %d, %s, %d, %s, %d, %d)",
 //                uid, gid, Arrays.toString(gids), debugFlags, Arrays.toString(rlimits),
 //                permittedCapabilities, effectiveCapabilities);
-        sAppDataDir = getDataPathPrefix() + "android/";
+        sAppDataDir = getDataPathPrefix() + "android";
+        // system_server process doesn't need sIsGlobalMode and sIsDynamicModules
     }
 
     public static void forkSystemServerPost(int pid) {

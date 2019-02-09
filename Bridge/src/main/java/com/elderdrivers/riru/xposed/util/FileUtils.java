@@ -1,6 +1,7 @@
 package com.elderdrivers.riru.xposed.util;
 
 import android.os.Build;
+import android.text.TextUtils;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -56,6 +57,18 @@ public class FileUtils {
         } catch (Throwable throwable) {
             Utils.logE("error writing line to file " + file + ": " + throwable.getMessage());
         }
+    }
+
+    public static String getPackageName(String dataDir) {
+        if (TextUtils.isEmpty(dataDir)) {
+            Utils.logE("getPackageName using empty dataDir");
+            return "";
+        }
+        int lastIndex = dataDir.lastIndexOf("/");
+        if (lastIndex < 0) {
+            return dataDir;
+        }
+        return dataDir.substring(lastIndex + 1);
     }
 
     public static String getDataPathPrefix() {

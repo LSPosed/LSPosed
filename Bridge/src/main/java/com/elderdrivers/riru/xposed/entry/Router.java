@@ -13,11 +13,11 @@ import de.robv.android.xposed.XposedInit;
 public class Router {
 
     public static void onProcessForked(boolean isSystem) {
-        // Initialize the Xposed framework and modules
+        // Initialize the Xposed framework
         try {
             XposedInit.initForZygote(isSystem);
         } catch (Throwable t) {
-            Utils.logE("Errors during Xposed initialization", t);
+            Utils.logE("error during Xposed initialization", t);
             XposedBridge.disableHooks = true;
         }
     }

@@ -1,11 +1,24 @@
 package com.elderdrivers.riru.xposed.util;
 
+import android.os.Process;
+import android.text.TextUtils;
+
+import com.elderdrivers.riru.xposed.Main;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 
 public class ProcessUtils {
+
+    public static String getCurrentProcessName() {
+        String prettyName = Main.sAppProcessName;
+        if (!TextUtils.isEmpty(prettyName)) {
+            return prettyName;
+        }
+        return getProcessName(Process.myPid());
+    }
 
     /**
      * a common solution from https://stackoverflow.com/a/21389402
