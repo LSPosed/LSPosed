@@ -40,7 +40,7 @@ and zip binaries can be downloaded from [here](http://gnuwin32.sourceforge.net/p
 
 ## Companion applications
 - for v0.2.9.6 and v0.2.9.7: [EdXp Manager](https://github.com/solohsu/EdXpManager)
-- for v0.2.9.8 and later: [EdXpposed Installer](https://github.com/solohsu/XposedInstaller)
+- for v0.2.9.8 and later: [EdXposed Installer](https://github.com/solohsu/XposedInstaller)
 ## Get help
 
 Forum (recommend): [Android Forum](http://af.meowcat.org/)
