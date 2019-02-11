@@ -8,6 +8,7 @@ A Riru module trying to provide a ART hooking framework (mainly for Android Pie)
 - [Riru](https://github.com/RikkaApps/Riru): provides a way to inject codes into zygote process
 - [XposedBridge](https://github.com/rovo89/XposedBridge): the OG xposed framework APIs
 - [dexmaker](https://github.com/linkedin/dexmaker) and [dalvikdx](https://github.com/JakeWharton/dalvik-dx): dynamiclly generate YAHFA hooker classes
+- [Whale](https://github.com/asLody/whale): used for inline hooking
 
 ## Known issues
 
@@ -37,10 +38,9 @@ and zip binaries can be downloaded from [here](http://gnuwin32.sourceforge.net/p
 4. reboot.
 5. have fun :)
 
-## [EdXp Manager](https://github.com/solohsu/EdXpManager)
-
-Companion Android application for EdXposed
-
+## Companion applications
+- for v0.2.9.6 and v0.2.9.7: [EdXp Manager](https://github.com/solohsu/EdXpManager)
+- for v0.2.9.8 and later: [EdXpposed Installer](https://github.com/solohsu/XposedInstaller)
 ## Get help
 
 Forum (recommend): [Android Forum](http://af.meowcat.org/)
