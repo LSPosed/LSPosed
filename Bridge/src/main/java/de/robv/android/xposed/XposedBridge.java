@@ -65,6 +65,7 @@ public final class XposedBridge {
 	// built-in handlers
 	private static final Map<Member, CopyOnWriteSortedSet<XC_MethodHook>> sHookedMethodCallbacks = new HashMap<>();
 	public static final CopyOnWriteSortedSet<XC_LoadPackage> sLoadedPackageCallbacks = new CopyOnWriteSortedSet<>();
+	public static final HashMap<IXposedHookZygoteInit, IXposedHookZygoteInit.StartupParam> sZygoteInitCallbacks = new HashMap<>();
 	/*package*/ static final CopyOnWriteSortedSet<XC_InitPackageResources> sInitPackageResourcesCallbacks = new CopyOnWriteSortedSet<>();
 
 	private XposedBridge() {}
@@ -370,6 +371,13 @@ public final class XposedBridge {
 	public static void hookLoadPackage(XC_LoadPackage callback) {
 		synchronized (sLoadedPackageCallbacks) {
 			sLoadedPackageCallbacks.add(callback);
+		}
+	}
+
+	public static void hookZygoteInit(IXposedHookZygoteInit moduleInstance,
+									  IXposedHookZygoteInit.StartupParam param) {
+		synchronized (sZygoteInitCallbacks) {
+			sZygoteInitCallbacks.put(moduleInstance, param);
 		}
 	}
 

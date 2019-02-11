@@ -34,7 +34,7 @@ import static de.robv.android.xposed.XposedHelpers.setStaticLongField;
 
 public final class XposedInit {
     private static final String TAG = XposedBridge.TAG;
-    private static boolean startsSystemServer = false;
+    public static boolean startsSystemServer = false;
     private static final String startClassName = ""; // ed: no support for tool process anymore
 
     public static final String INSTALLER_PACKAGE_NAME = "com.solohsu.android.edxp.manager";
@@ -61,7 +61,6 @@ public final class XposedInit {
         if (!bootstrapHooked.compareAndSet(false, true)) {
             return;
         }
-        startsSystemServer = isSystem;
         Router.startBootstrapHook(isSystem);
         // MIUI
         if (findFieldIfExists(ZygoteInit.class, "BOOT_START_TIME") != null) {
@@ -209,7 +208,8 @@ public final class XposedInit {
                             IXposedHookZygoteInit.StartupParam param = new IXposedHookZygoteInit.StartupParam();
                             param.modulePath = apk;
                             param.startsSystemServer = startsSystemServer;
-                            ((IXposedHookZygoteInit) moduleInstance).initZygote(param);
+//                            ((IXposedHookZygoteInit) moduleInstance).initZygote(param);
+                            XposedBridge.hookZygoteInit((IXposedHookZygoteInit) moduleInstance, param);
                         }
 
                         if (moduleInstance instanceof IXposedHookLoadPackage)

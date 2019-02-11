@@ -7,10 +7,18 @@ import com.elderdrivers.riru.xposed.entry.bootstrap.SysInnerHookInfo;
 import com.elderdrivers.riru.xposed.entry.hooker.SystemMainHooker;
 import com.elderdrivers.riru.xposed.util.Utils;
 
+import java.util.Map;
+
+import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedInit;
 
 public class Router {
+
+    public static void prepare(boolean isSystem) {
+        // this flag is needed when loadModules
+        XposedInit.startsSystemServer = isSystem;
+    }
 
     public static void onProcessForked(boolean isSystem) {
         // Initialize the Xposed framework
@@ -28,6 +36,16 @@ public class Router {
             XposedInit.loadModules();
         } catch (Exception exception) {
             Utils.logE("error loading module list", exception);
+        }
+    }
+
+    public static void callZygoteInits() {
+        for (Map.Entry<IXposedHookZygoteInit, IXposedHookZygoteInit.StartupParam> entry : XposedBridge.sZygoteInitCallbacks.entrySet()) {
+            try {
+                entry.getKey().initZygote(entry.getValue());
+            } catch (Throwable t) {
+                Utils.logE("Failed to load class " + entry.getKey().getClass(), t);
+            }
         }
     }
 

@@ -55,6 +55,7 @@ public class Main implements KeepAll {
         sAppDataDir = appDataDir;
         sIsGlobalMode = isGlobalMode;
         sIsDynamicModules = isDynamicModules;
+        Router.prepare(false);
         if (isGlobalMode) {
             // do bootstrap hooking only once in zygote process
             Router.onProcessForked(false);
@@ -78,6 +79,7 @@ public class Main implements KeepAll {
                 // load modules for each app process on its forked
                 Router.loadModulesSafely();
             }
+            Router.callZygoteInits();
         } else {
             // in zygote process, res is child zygote pid
             // don't print log here, see https://github.com/RikkaApps/Riru/blob/77adfd6a4a6a81bfd20569c910bc4854f2f84f5e/riru-core/jni/main/jni_native_method.cpp#L55-L66
@@ -97,8 +99,10 @@ public class Main implements KeepAll {
 //        Utils.logD(sForkSystemServerPramsStr + " = " + pid);
         if (pid == 0) {
             // in system_server process
+            Router.prepare(true);
             Router.onProcessForked(true);
             Router.loadModulesSafely();
+            Router.callZygoteInits();
         } else {
             // in zygote process, res is child zygote pid
             // don't print log here, see https://github.com/RikkaApps/Riru/blob/77adfd6a4a6a81bfd20569c910bc4854f2f84f5e/riru-core/jni/main/jni_native_method.cpp#L55-L66
