@@ -14,8 +14,11 @@ bool onIsInSamePackageCalled(void *thiz, void *that) {
     std::string storage1, storage2;
     const char *thisDesc = (*getDesc)(thiz, &storage1);
     const char *thatDesc = (*getDesc)(that, &storage2);
-//    LOGE("onIsInSamePackageCalled, %s -> %s", thisDesc, thatDesc);
-    if (strstr(thisDesc, "EdHooker") != nullptr || strstr(thatDesc, "EdHooker") != nullptr) {
+    if (strstr(thisDesc, "EdHooker") != nullptr
+        || strstr(thatDesc, "EdHooker") != nullptr
+        || strstr(thisDesc, "com/elderdrivers/riru/") != nullptr
+        || strstr(thatDesc, "com/elderdrivers/riru/") != nullptr) {
+//        LOGE("onIsInSamePackageCalled, %s -> %s", thisDesc, thatDesc);
         return true;
     }
     return (*isInSamePackageBackup)(thiz, that);
