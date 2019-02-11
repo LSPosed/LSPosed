@@ -34,7 +34,7 @@ and zip binaries can be downloaded from [here](http://gnuwin32.sourceforge.net/p
 1. make sure Magisk v17.0 or higher is installed.
 2. download [Riru-core](https://github.com/RikkaApps/Riru/releases) v10 or higher and install it in Magisk Manager or recovery.
 3. download [EdXposed](https://github.com/solohsu/EdXposed/releases) and install it in Magisk Manager or recovery.
-4. Install official or third-part Xposed Installer.
+4. Install official or third-part Xposed Installer. (if you are using v0.2.9.8, you have to use EdXposed Installer app)
 4. reboot.
 5. have fun :)
 
