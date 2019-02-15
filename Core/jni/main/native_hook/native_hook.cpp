@@ -10,7 +10,7 @@ static const char *(*getDesc)(void *, std::string *);
 
 static bool (*isInSamePackageBackup)(void *, void *) = nullptr;
 
-bool onIsInSamePackageCalled(void *thiz, void *that) {
+static bool onIsInSamePackageCalled(void *thiz, void *that) {
     std::string storage1, storage2;
     const char *thisDesc = (*getDesc)(thiz, &storage1);
     const char *thatDesc = (*getDesc)(that, &storage2);
@@ -22,6 +22,72 @@ bool onIsInSamePackageCalled(void *thiz, void *that) {
         return true;
     }
     return (*isInSamePackageBackup)(thiz, that);
+}
+
+static bool onInvokeHiddenAPI() {
+    return false;
+}
+
+/**
+ * NOTICE:
+ * After Android Q(10.0), GetMemberActionImpl has been renamed to ShouldDenyAccessToMemberImpl,
+ * But we don't know the symbols until it's published.
+ * @author asLody
+ */
+static bool disable_HiddenAPIPolicyImpl(int api_level, void *artHandle,
+                                        void (*hookFun)(void *, void *, void **)) {
+    if (api_level < ANDROID_P) {
+        return true;
+    }
+    void *symbol = nullptr;
+    // Android P : Preview 1 ~ 4 version
+    symbol = dlsym(artHandle,
+                   "_ZN3art9hiddenapi25ShouldBlockAccessToMemberINS_8ArtFieldEEEbPT_PNS_6ThreadENSt3__18functionIFbS6_EEENS0_12AccessMethodE");
+    if (symbol) {
+        hookFun(symbol, reinterpret_cast<void *>(onInvokeHiddenAPI), nullptr);
+    }
+    symbol = dlsym(artHandle,
+                   "_ZN3art9hiddenapi25ShouldBlockAccessToMemberINS_9ArtMethodEEEbPT_PNS_6ThreadENSt3__18functionIFbS6_EEENS0_12AccessMethodE"
+    );
+
+    if (symbol) {
+        hookFun(symbol, reinterpret_cast<void *>(onInvokeHiddenAPI), nullptr);
+        return true;
+    }
+    // Android P : Release version
+    symbol = dlsym(artHandle,
+                   "_ZN3art9hiddenapi6detail19GetMemberActionImplINS_8ArtFieldEEENS0_6ActionEPT_NS_20HiddenApiAccessFlags7ApiListES4_NS0_12AccessMethodE"
+    );
+    if (symbol) {
+        hookFun(symbol, reinterpret_cast<void *>(onInvokeHiddenAPI), nullptr);
+    }
+    symbol = dlsym(artHandle,
+                   "_ZN3art9hiddenapi6detail19GetMemberActionImplINS_9ArtMethodEEENS0_6ActionEPT_NS_20HiddenApiAccessFlags7ApiListES4_NS0_12AccessMethodE"
+    );
+    if (symbol) {
+        hookFun(symbol, reinterpret_cast<void *>(onInvokeHiddenAPI), nullptr);
+    }
+    return symbol != nullptr;
+}
+
+static void hook_IsInSamePackage(int api_level, void *artHandle,
+                                 void (*hookFun)(void *, void *, void **)) {
+    // 5.0 - 7.1
+    const char *isInSamePackageSym = "_ZN3art6mirror5Class15IsInSamePackageEPS1_";
+    const char *getDescriptorSym = "_ZN3art6mirror5Class13GetDescriptorEPNSt3__112basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEE";
+    if (api_level >= ANDROID_O) {
+        // 8.0 and later
+        isInSamePackageSym = "_ZN3art6mirror5Class15IsInSamePackageENS_6ObjPtrIS1_EE";
+    }
+    void *original = dlsym(artHandle, isInSamePackageSym);
+    getDesc = reinterpret_cast<const char *(*)(void *, std::string *)>(dlsym(artHandle,
+                                                                             getDescriptorSym));
+    if (!original) {
+        LOGE("can't get isInSamePackageSym");
+        return;
+    }
+    (*hookFun)(original, reinterpret_cast<void *>(onIsInSamePackageCalled),
+               reinterpret_cast<void **>(&isInSamePackageBackup));
 }
 
 void install_inline_hooks() {
@@ -46,20 +112,11 @@ void install_inline_hooks() {
         LOGE("can't open libart");
         return;
     }
-    // 5.0 - 7.1
-    const char *isInSamePackageSym = "_ZN3art6mirror5Class15IsInSamePackageEPS1_";
-    const char *getDescriptorSym = "_ZN3art6mirror5Class13GetDescriptorEPNSt3__112basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEE";
-    if (api_level >= ANDROID_O) {
-        // 8.0 and later
-        isInSamePackageSym = "_ZN3art6mirror5Class15IsInSamePackageENS_6ObjPtrIS1_EE";
+    hook_IsInSamePackage(api_level, artHandle, hookFun);
+    if (disable_HiddenAPIPolicyImpl(api_level, artHandle, hookFun)) {
+        LOGI("disable_HiddenAPIPolicyImpl done.");
+    } else {
+        LOGE("disable_HiddenAPIPolicyImpl failed.");
     }
-    void *original = dlsym(artHandle, isInSamePackageSym);
-    getDesc = reinterpret_cast<const char *(*)(void *, std::string *)>(dlsym(artHandle,
-                                                                             getDescriptorSym));
-    if (!original) {
-        LOGE("can't get isInSamePackageSym");
-        return;
-    }
-    (*hookFun)(original, reinterpret_cast<void *>(onIsInSamePackageCalled),
-               reinterpret_cast<void **>(&isInSamePackageBackup));
 }
+
