@@ -41,7 +41,8 @@ void findAndCall(JNIEnv *env, const char *methodName, const char *methodSig, ...
 void onNativeForkSystemServerPre(JNIEnv *env, jclass clazz, uid_t uid, gid_t gid, jintArray gids,
                                  jint runtime_flags, jobjectArray rlimits,
                                  jlong permittedCapabilities, jlong effectiveCapabilities) {
-    if (!is_app_need_hook(env, env->NewStringUTF(SYSTEM_SERVER_DATA_DIR))) {
+    sAppDataDir = env->NewStringUTF(SYSTEM_SERVER_DATA_DIR);
+    if (!is_app_need_hook(env, sAppDataDir)) {
         return;
     }
     prepareJavaEnv(env);
@@ -53,7 +54,7 @@ void onNativeForkSystemServerPre(JNIEnv *env, jclass clazz, uid_t uid, gid_t gid
 
 int onNativeForkSystemServerPost(JNIEnv *env, jclass clazz, jint res) {
     if (res == 0) {
-        if (!is_app_need_hook(env, env->NewStringUTF(SYSTEM_SERVER_DATA_DIR))) {
+        if (!is_app_need_hook(env, sAppDataDir)) {
             return 0;
         }
         prepareJavaEnv(env);

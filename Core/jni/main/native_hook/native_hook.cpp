@@ -122,7 +122,5 @@ void install_inline_hooks() {
     } else {
         LOGE("disable_HiddenAPIPolicyImpl failed.");
     }
-    dlclose(whaleHandle);
-    dlclose(artHandle);
 }
 

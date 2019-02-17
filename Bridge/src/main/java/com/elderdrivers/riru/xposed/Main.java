@@ -2,21 +2,24 @@ package com.elderdrivers.riru.xposed;
 
 import android.annotation.SuppressLint;
 import android.os.Build;
+import android.os.Process;
 
 import com.elderdrivers.riru.common.KeepAll;
 import com.elderdrivers.riru.xposed.core.HookMethodResolver;
 import com.elderdrivers.riru.xposed.dexmaker.DynamicBridge;
 import com.elderdrivers.riru.xposed.entry.Router;
+import com.elderdrivers.riru.xposed.util.Utils;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 import static com.elderdrivers.riru.xposed.util.FileUtils.getDataPathPrefix;
 
 @SuppressLint("DefaultLocale")
 public class Main implements KeepAll {
 
-    //    private static String sForkAndSpecializePramsStr = "";
-//    private static String sForkSystemServerPramsStr = "";
+    private static String sForkAndSpecializePramsStr = "";
+    private static String sForkSystemServerPramsStr = "";
     public static String sAppDataDir = "";
     public static String sAppProcessName = "";
     /**
@@ -47,11 +50,13 @@ public class Main implements KeepAll {
                                             boolean startChildZygote, String instructionSet,
                                             String appDataDir, boolean isGlobalMode,
                                             boolean isDynamicModules) {
-//        sForkAndSpecializePramsStr = String.format(
-//                "Zygote#forkAndSpecialize(%d, %d, %s, %d, %s, %d, %s, %s, %s, %s, %s, %s, %s)",
-//                uid, gid, Arrays.toString(gids), debugFlags, Arrays.toString(rlimits),
-//                mountExternal, seInfo, niceName, Arrays.toString(fdsToClose),
-//                Arrays.toString(fdsToIgnore), startChildZygote, instructionSet, appDataDir);
+        if (BuildConfig.DEBUG) {
+            sForkAndSpecializePramsStr = String.format(
+                    "Zygote#forkAndSpecialize(%d, %d, %s, %d, %s, %d, %s, %s, %s, %s, %s, %s, %s)",
+                    uid, gid, Arrays.toString(gids), debugFlags, Arrays.toString(rlimits),
+                    mountExternal, seInfo, niceName, Arrays.toString(fdsToClose),
+                    Arrays.toString(fdsToIgnore), startChildZygote, instructionSet, appDataDir);
+        }
         sAppDataDir = appDataDir;
         sIsGlobalMode = isGlobalMode;
         sIsDynamicModules = isDynamicModules;
@@ -67,8 +72,8 @@ public class Main implements KeepAll {
     }
 
     public static void forkAndSpecializePost(int pid, String appDataDir) {
-//        Utils.logD(sForkAndSpecializePramsStr + " = " + pid);
         if (pid == 0) {
+            Utils.logD(sForkAndSpecializePramsStr + " = " + Process.myPid());
             DynamicBridge.onForkPost();
             // in app process
             if (!sIsGlobalMode) {
@@ -88,16 +93,18 @@ public class Main implements KeepAll {
 
     public static void forkSystemServerPre(int uid, int gid, int[] gids, int debugFlags, int[][] rlimits,
                                            long permittedCapabilities, long effectiveCapabilities) {
-//        sForkSystemServerPramsStr = String.format("Zygote#forkSystemServer(%d, %d, %s, %d, %s, %d, %d)",
-//                uid, gid, Arrays.toString(gids), debugFlags, Arrays.toString(rlimits),
-//                permittedCapabilities, effectiveCapabilities);
+        if (BuildConfig.DEBUG) {
+            sForkSystemServerPramsStr = String.format("Zygote#forkSystemServer(%d, %d, %s, %d, %s, %d, %d)",
+                    uid, gid, Arrays.toString(gids), debugFlags, Arrays.toString(rlimits),
+                    permittedCapabilities, effectiveCapabilities);
+        }
         sAppDataDir = getDataPathPrefix() + "android";
         // system_server process doesn't need sIsGlobalMode and sIsDynamicModules
     }
 
     public static void forkSystemServerPost(int pid) {
-//        Utils.logD(sForkSystemServerPramsStr + " = " + pid);
         if (pid == 0) {
+            Utils.logD(sForkSystemServerPramsStr + " = " + Process.myPid());
             // in system_server process
             Router.prepare(true);
             Router.onProcessForked(true);
@@ -113,12 +120,16 @@ public class Main implements KeepAll {
     // native methods
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
+    @SuppressWarnings("all")
     public static native boolean backupAndHookNative(Object target, Method hook, Method backup);
 
+    @SuppressWarnings("all")
     public static native void ensureMethodCached(Method hook, Method backup);
 
+    @SuppressWarnings("all")
     // JNI.ToReflectedMethod() could return either Method or Constructor
     public static native Object findMethodNative(Class targetClass, String methodName, String methodSig);
 
+    @SuppressWarnings("all")
     private static native void init(int SDK_version);
 }
