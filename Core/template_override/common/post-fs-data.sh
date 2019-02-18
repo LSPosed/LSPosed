@@ -6,6 +6,9 @@ MODDIR=${0%/*}
 # This script will be executed in post-fs-data mode
 # More info in the main Magisk thread
 
+# EdXposed Version
+edxp_ver="0.2.9.9_beta1"
+
 # necessary for using mmap in system_server process
 supolicy --live "allow system_server system_server process {execmem}"
 # supolicy --live "allow system_server system_server memprotect {mmap_zero}"
@@ -61,7 +64,7 @@ echo "Android sdk: ${android_sdk}">>$file
 echo "Android build: ${build}">>$file
 echo "Fingerprint: ${fingerprint}">>$file
 echo "ROM build description: ${build_desc}">>$file
-echo "EdXposed Version: 0.2.9.9">>$file
+echo "EdXposed Version: ${edxp_ver}">>$file
 echo "Architecture: ${arch}">>$file
 echo "Device: ${device}">>$file
 echo "Manufacturer: ${manufacturer}">>$file
