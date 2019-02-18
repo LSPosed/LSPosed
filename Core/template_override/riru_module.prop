@@ -1,5 +1,5 @@
 name=Ed Xposed
 version=v0.2.9.8_beta1
-versionCode=1
-author=givein2u
-description=Elder driver Xposed for Android Pie. Require Riru - Core installed.
+versionCode=2981
+author=givein2u & MlgmXyysd
+description=Magisk version of Xposed. Require Riru - Core installed.
