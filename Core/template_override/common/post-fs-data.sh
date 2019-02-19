@@ -34,9 +34,9 @@ time=$(date +%Y-%m-%d-%H-%M-%S)
 android_sdk=`getprop ro.build.version.sdk`
 if [ ${android_sdk} -ge 24 ]
 then
-  path=/data/user_de/0/com.solohsu.edxp.manager/log
+  path=/data/user_de/0/com.solohsu.android.edxp.manager/log
 else
-  path=/data/data/com.solohsu.edxp.manager/log
+  path=/data/data/com.solohsu.android.edxp.manager/log
 fi
 file=$path/error.log
 num=$(($RANDOM+100000000))
