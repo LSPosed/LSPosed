@@ -71,4 +71,10 @@ public class Router {
                 SystemMainHooker.systemServerCL,
                 SysInnerHookInfo.class.getName());
     }
+
+    public volatile static boolean forkCompleted = false;
+
+    public static void onEnterChildProcess() {
+        forkCompleted = true;
+    }
 }

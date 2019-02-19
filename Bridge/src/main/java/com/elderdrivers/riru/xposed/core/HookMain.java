@@ -1,5 +1,6 @@
 package com.elderdrivers.riru.xposed.core;
 
+import com.elderdrivers.riru.xposed.entry.hooker.OnePlusWorkAroundHooker;
 import com.elderdrivers.riru.xposed.util.Utils;
 
 import java.lang.reflect.Constructor;
@@ -7,11 +8,15 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Set;
 
 import static com.elderdrivers.riru.xposed.Main.backupAndHookNative;
 import static com.elderdrivers.riru.xposed.Main.findMethodNative;
 
 public class HookMain {
+
+    private static Set<String> hookItemWhiteList = Collections.singleton(OnePlusWorkAroundHooker.class.getName());
 
     public static void doHookDefault(ClassLoader patchClassLoader, ClassLoader originClassLoader, String hookInfoClassName) {
         try {
@@ -64,7 +69,9 @@ public class HookMain {
             }
             findAndBackupAndHook(clazz, methodName, methodSig, hook, backup);
         } catch (Throwable e) {
-            Utils.logE("error when hooking " + hookItemName, e);
+            if (!hookItemWhiteList.contains(hookItemName)) {
+                Utils.logE("error when hooking " + hookItemName, e);
+            }
         }
     }
 

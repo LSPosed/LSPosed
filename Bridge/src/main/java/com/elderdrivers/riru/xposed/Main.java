@@ -43,7 +43,6 @@ public class Main implements KeepAll {
     // entry points
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
-    @Deprecated
     public static void forkAndSpecializePre(int uid, int gid, int[] gids, int debugFlags,
                                             int[][] rlimits, int mountExternal, String seInfo,
                                             String niceName, int[] fdsToClose, int[] fdsToIgnore,
@@ -74,6 +73,7 @@ public class Main implements KeepAll {
     public static void forkAndSpecializePost(int pid, String appDataDir) {
         if (pid == 0) {
             Utils.logD(sForkAndSpecializePramsStr + " = " + Process.myPid());
+            Router.onEnterChildProcess();
             DynamicBridge.onForkPost();
             // in app process
             if (!sIsGlobalMode) {
@@ -106,6 +106,7 @@ public class Main implements KeepAll {
         if (pid == 0) {
             Utils.logD(sForkSystemServerPramsStr + " = " + Process.myPid());
             // in system_server process
+            Router.onEnterChildProcess();
             Router.prepare(true);
             Router.onProcessForked(true);
             Router.loadModulesSafely();
