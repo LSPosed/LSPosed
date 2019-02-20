@@ -1,5 +1,9 @@
 package com.elderdrivers.riru.xposed.entry;
 
+import android.text.TextUtils;
+
+import com.elderdrivers.riru.xposed.Main;
+import com.elderdrivers.riru.xposed.config.ConfigManager;
 import com.elderdrivers.riru.xposed.core.HookMain;
 import com.elderdrivers.riru.xposed.entry.bootstrap.AppBootstrapHookInfo;
 import com.elderdrivers.riru.xposed.entry.bootstrap.SysBootstrapHookInfo;
@@ -17,6 +21,22 @@ public class Router {
     public static void prepare(boolean isSystem) {
         // this flag is needed when loadModules
         XposedInit.startsSystemServer = isSystem;
+    }
+
+    public static void checkHookState(String appDataDir) {
+        // determine whether allow xposed or not
+//        XposedBridge.disableHooks = ConfigManager.shouldHook(parsePackageName(appDataDir));
+    }
+
+    private static String parsePackageName(String appDataDir) {
+        if (TextUtils.isEmpty(appDataDir)) {
+            return "";
+        }
+        int lastIndex = appDataDir.lastIndexOf("/");
+        if (lastIndex < 1) {
+            return "";
+        }
+        return appDataDir.substring(lastIndex + 1);
     }
 
     public static void installBootstrapHooks(boolean isSystem) {

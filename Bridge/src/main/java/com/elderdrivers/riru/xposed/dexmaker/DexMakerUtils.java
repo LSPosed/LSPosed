@@ -5,6 +5,7 @@ import android.os.Build;
 import android.text.TextUtils;
 
 import com.elderdrivers.riru.xposed.Main;
+import com.elderdrivers.riru.xposed.config.ConfigManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +18,6 @@ import external.com.android.dx.TypeId;
 public class DexMakerUtils {
 
     private static final boolean IN_MEMORY_DEX_ELIGIBLE = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
-    private static final String COMPAT_LIST_PATH = "/data/misc/riru/modules/edxposed/compatlist/";
 
     public static boolean shouldUseInMemoryHook() {
         if (!IN_MEMORY_DEX_ELIGIBLE) {
@@ -29,7 +29,7 @@ public class DexMakerUtils {
                     + ", appDataDir=" + Main.appDataDir);
             return true;
         }
-        return !SELinuxHelper.getAppDataFileService().checkFileExists(COMPAT_LIST_PATH + packageName);
+        return !ConfigManager.shouldUseCompatMode(packageName);
     }
 
     public static void autoBoxIfNecessary(Code code, Local<Object> target, Local source) {

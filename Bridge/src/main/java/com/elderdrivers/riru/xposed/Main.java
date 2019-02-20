@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Process;
 
 import com.elderdrivers.riru.common.KeepAll;
+import com.elderdrivers.riru.xposed.config.ConfigManager;
 import com.elderdrivers.riru.xposed.core.HookMethodResolver;
 import com.elderdrivers.riru.xposed.dexmaker.DynamicBridge;
 import com.elderdrivers.riru.xposed.entry.Router;
@@ -20,13 +21,6 @@ public class Main implements KeepAll {
 
     public static String appDataDir = "";
     public static String appProcessName = "";
-    /**
-     * When set to true, install bootstrap hooks and loadModules
-     * for each process when it starts.
-     * This means you can deactivate or activate every module
-     * for the process you restart without rebooting.
-     */
-    public static boolean isDynamicModules = false;
     private static String forkAndSpecializePramsStr = "";
     private static String forkSystemServerPramsStr = "";
 
@@ -43,7 +37,7 @@ public class Main implements KeepAll {
                                             int[][] rlimits, int mountExternal, String seInfo,
                                             String niceName, int[] fdsToClose, int[] fdsToIgnore,
                                             boolean startChildZygote, String instructionSet,
-                                            String appDataDir, boolean isDynamicModules) {
+                                            String appDataDir) {
         if (BuildConfig.DEBUG) {
             forkAndSpecializePramsStr = String.format(
                     "Zygote#forkAndSpecialize(%d, %d, %s, %d, %s, %d, %s, %s, %s, %s, %s, %s, %s)",
@@ -52,7 +46,6 @@ public class Main implements KeepAll {
                     Arrays.toString(fdsToIgnore), startChildZygote, instructionSet, appDataDir);
         }
         Main.appDataDir = appDataDir;
-        Main.isDynamicModules = isDynamicModules;
         Router.prepare(false);
         // install bootstrap hooks for secondary zygote
         Router.installBootstrapHooks(false);
@@ -63,9 +56,10 @@ public class Main implements KeepAll {
     public static void forkAndSpecializePost(int pid, String appDataDir) {
         if (pid == 0) {
             Utils.logD(forkAndSpecializePramsStr + " = " + Process.myPid());
+            // TODO consider processes without forkAndSpecializePost called
             Router.onEnterChildProcess();
             DynamicBridge.onForkPost();
-            if (isDynamicModules) {
+            if (ConfigManager.isDynamicModulesMode()) {
                 // load modules for each app process on its forked
                 Router.loadModulesSafely();
             }
@@ -76,15 +70,13 @@ public class Main implements KeepAll {
     }
 
     public static void forkSystemServerPre(int uid, int gid, int[] gids, int debugFlags, int[][] rlimits,
-                                           long permittedCapabilities, long effectiveCapabilities,
-                                           boolean isDynamicModules) {
+                                           long permittedCapabilities, long effectiveCapabilities) {
         if (BuildConfig.DEBUG) {
             forkSystemServerPramsStr = String.format("Zygote#forkSystemServer(%d, %d, %s, %d, %s, %d, %d)",
                     uid, gid, Arrays.toString(gids), debugFlags, Arrays.toString(rlimits),
                     permittedCapabilities, effectiveCapabilities);
         }
         Main.appDataDir = getDataPathPrefix() + "android";
-        Main.isDynamicModules = isDynamicModules;
         Router.prepare(true);
         // install bootstrap hooks for main zygote as early as possible
         // in case we miss some processes not forked via forkAndSpecialize
