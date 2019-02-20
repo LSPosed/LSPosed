@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.android.internal.os.ZygoteInit;
 import com.elderdrivers.riru.xposed.BuildConfig;
+import com.elderdrivers.riru.xposed.Main;
 import com.elderdrivers.riru.xposed.entry.Router;
 import com.elderdrivers.riru.xposed.util.Utils;
 
@@ -93,9 +94,10 @@ public final class XposedInit {
     private static volatile AtomicBoolean modulesLoaded = new AtomicBoolean(false);
 
     public static void loadModules() throws IOException {
-        if (!modulesLoaded.compareAndSet(false, true)) {
+        if (!modulesLoaded.compareAndSet(false, true) && !Main.isDynamicModules) {
             return;
         }
+        XposedBridge.clearLoadedPackages();
         final String filename = INSTALLER_DATA_BASE_DIR + "conf/modules.list";
         BaseService service = SELinuxHelper.getAppDataFileService();
         if (!service.checkFileExists(filename)) {

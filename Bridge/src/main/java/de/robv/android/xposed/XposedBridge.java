@@ -372,6 +372,12 @@ public final class XposedBridge {
 		}
 	}
 
+	public static void clearLoadedPackages() {
+		synchronized (sLoadedPackageCallbacks) {
+			sLoadedPackageCallbacks.clear();
+		}
+	}
+
 	/**
 	 * Adds a callback to be executed when the resources for an app are initialized.
 	 *
@@ -525,6 +531,10 @@ public final class XposedBridge {
 
 		public Object[] getSnapshot() {
 			return elements;
+		}
+
+		public synchronized void clear() {
+			elements = EMPTY_ARRAY;
 		}
 	}
 

@@ -13,7 +13,7 @@ import java.io.InputStreamReader;
 public class ProcessUtils {
 
     public static String getCurrentProcessName() {
-        String prettyName = Main.sAppProcessName;
+        String prettyName = Main.appProcessName;
         if (!TextUtils.isEmpty(prettyName)) {
             return prettyName;
         }
@@ -23,7 +23,7 @@ public class ProcessUtils {
     /**
      * a common solution from https://stackoverflow.com/a/21389402
      * <p>
-     * use {@link com.elderdrivers.riru.xposed.Main#sAppProcessName} to get current process name
+     * use {@link com.elderdrivers.riru.xposed.Main#appProcessName} to get current process name
      */
     public static String getProcessName(int pid) {
         BufferedReader cmdlineReader = null;

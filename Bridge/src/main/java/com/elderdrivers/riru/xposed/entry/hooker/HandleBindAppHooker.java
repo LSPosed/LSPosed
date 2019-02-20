@@ -39,10 +39,10 @@ public class HandleBindAppHooker implements KeepMembers {
             ActivityThread activityThread = (ActivityThread) thiz;
             ApplicationInfo appInfo = (ApplicationInfo) getObjectField(bindData, "appInfo");
             // save app process name here for later use
-            Main.sAppProcessName = (String) getObjectField(bindData, "processName");
+            Main.appProcessName = (String) getObjectField(bindData, "processName");
             String reportedPackageName = appInfo.packageName.equals("android") ? "system" : appInfo.packageName;
-            Utils.logD("processName=" +  Main.sAppProcessName +
-                    ", packageName=" + reportedPackageName + ", appDataDir=" + Main.sAppDataDir);
+            Utils.logD("processName=" +  Main.appProcessName +
+                    ", packageName=" + reportedPackageName + ", appDataDir=" + Main.appDataDir);
 
             if (XposedBlackListHooker.shouldDisableHooks(reportedPackageName)) {
                 return;

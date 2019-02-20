@@ -25,8 +25,8 @@ public class DexMakerUtils {
         }
         String packageName = AndroidAppHelper.currentPackageName();
         if (TextUtils.isEmpty(packageName)) { //default to true
-            DexLog.w("packageName is empty, processName=" + Main.sAppProcessName
-                    + ", appDataDir=" + Main.sAppDataDir);
+            DexLog.w("packageName is empty, processName=" + Main.appProcessName
+                    + ", appDataDir=" + Main.appDataDir);
             return true;
         }
         return !SELinuxHelper.getAppDataFileService().checkFileExists(COMPAT_LIST_PATH + packageName);

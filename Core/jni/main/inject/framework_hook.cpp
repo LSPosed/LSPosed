@@ -47,8 +47,8 @@ void onNativeForkSystemServerPre(JNIEnv *env, jclass clazz, uid_t uid, gid_t gid
     }
     prepareJavaEnv(env);
     // jump to java code
-    findAndCall(env, "forkSystemServerPre", "(II[II[[IJJ)V", uid, gid, gids, runtime_flags, rlimits,
-                permittedCapabilities, effectiveCapabilities);
+    findAndCall(env, "forkSystemServerPre", "(II[II[[IJJZ)V", uid, gid, gids, runtime_flags, rlimits,
+                permittedCapabilities, effectiveCapabilities, is_dynamic_modules());
 }
 
 

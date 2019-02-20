@@ -53,12 +53,12 @@ public final class DynamicBridge {
                     try {
                         // we always choose to use device encrypted storage data on android N and later
                         // in case some app is installing hooks before phone is unlocked
-                        String fixedAppDataDir = getDataPathPrefix() + getPackageName(Main.sAppDataDir) + "/";
+                        String fixedAppDataDir = getDataPathPrefix() + getPackageName(Main.appDataDir) + "/";
                         dexDir = new File(fixedAppDataDir, "/cache/edhookers/"
                                 + getCurrentProcessName().replace(":", "_") + "/");
                         dexOptDir = new File(dexDir, "oat");
                         dexDir.mkdirs();
-                        DexLog.d(Main.sAppProcessName + " deleting dir: " + dexOptDir.getAbsolutePath());
+                        DexLog.d(Main.appProcessName + " deleting dir: " + dexOptDir.getAbsolutePath());
                         try {
                             FileUtils.delete(dexOptDir);
                         } catch (Throwable throwable) {
