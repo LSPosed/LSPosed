@@ -7,8 +7,6 @@
 
 int is_app_need_hook(JNIEnv *env, jstring appDataDir);
 
-bool is_global_mode();
-
 bool is_dynamic_modules();
 
 #endif //EDXPOSED_CONFIG_MANAGER_H

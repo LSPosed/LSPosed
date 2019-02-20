@@ -18,14 +18,10 @@ import static com.elderdrivers.riru.xposed.util.FileUtils.getDataPathPrefix;
 @SuppressLint("DefaultLocale")
 public class Main implements KeepAll {
 
-    private static String sForkAndSpecializePramsStr = "";
-    private static String sForkSystemServerPramsStr = "";
     public static String sAppDataDir = "";
     public static String sAppProcessName = "";
-    /**
-     * Whether do bootstrap hooking only once
-     */
-    private static boolean sIsGlobalMode = false;
+    private static String sForkAndSpecializePramsStr = "";
+    private static String sForkSystemServerPramsStr = "";
     /**
      * When set to true, install bootstrap hooks and loadModules
      * for each process when it starts.
@@ -47,8 +43,7 @@ public class Main implements KeepAll {
                                             int[][] rlimits, int mountExternal, String seInfo,
                                             String niceName, int[] fdsToClose, int[] fdsToIgnore,
                                             boolean startChildZygote, String instructionSet,
-                                            String appDataDir, boolean isGlobalMode,
-                                            boolean isDynamicModules) {
+                                            String appDataDir, boolean isDynamicModules) {
         if (BuildConfig.DEBUG) {
             sForkAndSpecializePramsStr = String.format(
                     "Zygote#forkAndSpecialize(%d, %d, %s, %d, %s, %d, %s, %s, %s, %s, %s, %s, %s)",
@@ -57,13 +52,10 @@ public class Main implements KeepAll {
                     Arrays.toString(fdsToIgnore), startChildZygote, instructionSet, appDataDir);
         }
         sAppDataDir = appDataDir;
-        sIsGlobalMode = isGlobalMode;
         sIsDynamicModules = isDynamicModules;
         Router.prepare(false);
-        if (isGlobalMode) {
-            // do bootstrap hooking only once in zygote process
-            Router.onProcessForked(false);
-        }
+        // install bootstrap hooks for secondary zygote
+        Router.installBootstrapHooks(false);
         if (!isDynamicModules) {
             // load modules only once in zygote process
             Router.loadModulesSafely();
@@ -75,11 +67,6 @@ public class Main implements KeepAll {
             Utils.logD(sForkAndSpecializePramsStr + " = " + Process.myPid());
             Router.onEnterChildProcess();
             DynamicBridge.onForkPost();
-            // in app process
-            if (!sIsGlobalMode) {
-                // do bootstrap hooking separately for each app process
-                Router.onProcessForked(false);
-            }
             if (sIsDynamicModules) {
                 // load modules for each app process on its forked
                 Router.loadModulesSafely();
@@ -98,7 +85,10 @@ public class Main implements KeepAll {
                     permittedCapabilities, effectiveCapabilities);
         }
         sAppDataDir = getDataPathPrefix() + "android";
-        // system_server process doesn't need sIsGlobalMode and sIsDynamicModules
+        sIsDynamicModules = false;
+        // install bootstrap hooks for main zygote as early as possible
+        // in case we miss some processes
+        Router.installBootstrapHooks(true);
     }
 
     public static void forkSystemServerPost(int pid) {
@@ -107,7 +97,6 @@ public class Main implements KeepAll {
             // in system_server process
             Router.onEnterChildProcess();
             Router.prepare(true);
-            Router.onProcessForked(true);
             Router.loadModulesSafely();
         } else {
             // in zygote process, res is child zygote pid

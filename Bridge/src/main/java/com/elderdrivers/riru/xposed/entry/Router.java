@@ -12,11 +12,14 @@ import de.robv.android.xposed.XposedInit;
 
 public class Router {
 
+    public volatile static boolean forkCompleted = false;
+
     public static void prepare(boolean isSystem) {
         // this flag is needed when loadModules
         XposedInit.startsSystemServer = isSystem;
     }
-    public static void onProcessForked(boolean isSystem) {
+
+    public static void installBootstrapHooks(boolean isSystem) {
         // Initialize the Xposed framework
         try {
             XposedInit.initForZygote(isSystem);
@@ -57,8 +60,6 @@ public class Router {
                 SystemMainHooker.systemServerCL,
                 SysInnerHookInfo.class.getName());
     }
-
-    public volatile static boolean forkCompleted = false;
 
     public static void onEnterChildProcess() {
         forkCompleted = true;

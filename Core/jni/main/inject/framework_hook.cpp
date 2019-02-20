@@ -86,10 +86,10 @@ void onNativeForkAndSpecializePre(JNIEnv *env, jclass clazz,
     }
     prepareJavaEnv(env);
     findAndCall(env, "forkAndSpecializePre",
-                "(II[II[[IILjava/lang/String;Ljava/lang/String;[I[IZLjava/lang/String;Ljava/lang/String;ZZ)V",
+                "(II[II[[IILjava/lang/String;Ljava/lang/String;[I[IZLjava/lang/String;Ljava/lang/String;Z)V",
                 uid, gid, gids, runtime_flags, rlimits,
                 _mount_external, se_info, se_name, fdsToClose, fdsToIgnore,
-                is_child_zygote, instructionSet, appDataDir, is_global_mode(), is_dynamic_modules());
+                is_child_zygote, instructionSet, appDataDir, is_dynamic_modules());
 }
 
 int onNativeForkAndSpecializePost(JNIEnv *env, jclass clazz, jint res) {
