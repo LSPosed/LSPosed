@@ -84,7 +84,6 @@ public class Main implements KeepAll {
                 // load modules for each app process on its forked
                 Router.loadModulesSafely();
             }
-            Router.callZygoteInits();
         } else {
             // in zygote process, res is child zygote pid
             // don't print log here, see https://github.com/RikkaApps/Riru/blob/77adfd6a4a6a81bfd20569c910bc4854f2f84f5e/riru-core/jni/main/jni_native_method.cpp#L55-L66
@@ -110,7 +109,6 @@ public class Main implements KeepAll {
             Router.prepare(true);
             Router.onProcessForked(true);
             Router.loadModulesSafely();
-            Router.callZygoteInits();
         } else {
             // in zygote process, res is child zygote pid
             // don't print log here, see https://github.com/RikkaApps/Riru/blob/77adfd6a4a6a81bfd20569c910bc4854f2f84f5e/riru-core/jni/main/jni_native_method.cpp#L55-L66

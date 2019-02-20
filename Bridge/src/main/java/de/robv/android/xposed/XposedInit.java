@@ -208,8 +208,7 @@ public final class XposedInit {
                             IXposedHookZygoteInit.StartupParam param = new IXposedHookZygoteInit.StartupParam();
                             param.modulePath = apk;
                             param.startsSystemServer = startsSystemServer;
-//                            ((IXposedHookZygoteInit) moduleInstance).initZygote(param);
-                            XposedBridge.hookZygoteInit((IXposedHookZygoteInit) moduleInstance, param);
+                            ((IXposedHookZygoteInit) moduleInstance).initZygote(param);
                         }
 
                         if (moduleInstance instanceof IXposedHookLoadPackage)
