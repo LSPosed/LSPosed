@@ -18,9 +18,9 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.XposedBridge;
 
+import static com.elderdrivers.riru.xposed.config.InstallerChooser.INSTALLER_PACKAGE_NAME;
 import static com.elderdrivers.riru.xposed.util.FileUtils.IS_USING_PROTECTED_STORAGE;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
-import static de.robv.android.xposed.XposedInit.INSTALLER_PACKAGE_NAME;
 
 public class XposedBlackListHooker {
 

@@ -26,6 +26,8 @@ import dalvik.system.DexFile;
 import dalvik.system.PathClassLoader;
 import de.robv.android.xposed.services.BaseService;
 
+import static com.elderdrivers.riru.xposed.config.InstallerChooser.INSTALLER_DATA_BASE_DIR;
+import static com.elderdrivers.riru.xposed.config.InstallerChooser.INSTALLER_PACKAGE_NAME;
 import static com.elderdrivers.riru.xposed.entry.hooker.XposedBlackListHooker.BLACK_LIST_PACKAGE_NAME;
 import static de.robv.android.xposed.XposedHelpers.closeSilently;
 import static de.robv.android.xposed.XposedHelpers.findClass;
@@ -38,12 +40,6 @@ public final class XposedInit {
     public static boolean startsSystemServer = false;
     private static final String startClassName = ""; // ed: no support for tool process anymore
 
-    public static final String INSTALLER_PACKAGE_NAME = "com.solohsu.android.edxp.manager";
-    public static final String INSTALLER_LEGACY_PACKAGE_NAME = "de.robv.android.xposed.installer";
-    @SuppressLint("SdCardPath")
-    public static final String INSTALLER_DATA_BASE_DIR = Build.VERSION.SDK_INT >= 24
-            ? "/data/user_de/0/" + INSTALLER_PACKAGE_NAME + "/"
-            : "/data/data/" + INSTALLER_PACKAGE_NAME + "/";
     private static final String INSTANT_RUN_CLASS = "com.android.tools.fd.runtime.BootstrapApplication";
     // TODO not supported yet
     private static boolean disableResources = true;

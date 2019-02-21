@@ -4,17 +4,17 @@ import java.util.Collections;
 import java.util.Set;
 
 import de.robv.android.xposed.SELinuxHelper;
-import de.robv.android.xposed.XposedInit;
 
-import static de.robv.android.xposed.XposedInit.INSTALLER_PACKAGE_NAME;
+import static com.elderdrivers.riru.xposed.config.InstallerChooser.INSTALLER_DATA_BASE_DIR;
+import static com.elderdrivers.riru.xposed.config.InstallerChooser.INSTALLER_PACKAGE_NAME;
 
 public class ConfigManager {
 
-    private static final String BLACK_LIST_PATH = XposedInit.INSTALLER_DATA_BASE_DIR + "conf/blacklist/";
-    private static final String WHITE_LIST_PATH = XposedInit.INSTALLER_DATA_BASE_DIR + "conf/whitelist/";
-    private static final String COMPAT_LIST_PATH = XposedInit.INSTALLER_DATA_BASE_DIR + "conf/compatlist/";
-    private static final String USE_WHITE_LIST = XposedInit.INSTALLER_DATA_BASE_DIR + "conf/usewhitelist";
-    private static final String DYNAMIC_MODULES = XposedInit.INSTALLER_DATA_BASE_DIR + "conf/dynamicmodules";
+    private static final String BLACK_LIST_PATH = INSTALLER_DATA_BASE_DIR + "conf/blacklist/";
+    private static final String WHITE_LIST_PATH = INSTALLER_DATA_BASE_DIR + "conf/whitelist/";
+    private static final String COMPAT_LIST_PATH = INSTALLER_DATA_BASE_DIR + "conf/compatlist/";
+    private static final String USE_WHITE_LIST = INSTALLER_DATA_BASE_DIR + "conf/usewhitelist";
+    private static final String DYNAMIC_MODULES = INSTALLER_DATA_BASE_DIR + "conf/dynamicmodules";
     private static final Set<String> WHITE_LIST = Collections.singleton(INSTALLER_PACKAGE_NAME);
     private static final boolean IS_DYNAMIC_MODULES;
 

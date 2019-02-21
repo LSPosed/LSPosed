@@ -13,11 +13,11 @@ import com.elderdrivers.riru.xposed.util.Utils;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
+import static com.elderdrivers.riru.xposed.config.InstallerChooser.INSTALLER_PACKAGE_NAME;
 import static com.elderdrivers.riru.xposed.entry.hooker.XposedBlackListHooker.BLACK_LIST_PACKAGE_NAME;
 import static com.elderdrivers.riru.xposed.util.ClassLoaderUtils.replaceParentClassLoader;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
-import static de.robv.android.xposed.XposedInit.INSTALLER_PACKAGE_NAME;
 import static de.robv.android.xposed.XposedInit.loadedPackagesInProcess;
 import static de.robv.android.xposed.XposedInit.logD;
 import static de.robv.android.xposed.XposedInit.logE;

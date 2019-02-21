@@ -2,8 +2,7 @@ package com.elderdrivers.riru.xposed.entry;
 
 import android.text.TextUtils;
 
-import com.elderdrivers.riru.xposed.Main;
-import com.elderdrivers.riru.xposed.config.ConfigManager;
+import com.elderdrivers.riru.xposed.config.InstallerChooser;
 import com.elderdrivers.riru.xposed.core.HookMain;
 import com.elderdrivers.riru.xposed.entry.bootstrap.AppBootstrapHookInfo;
 import com.elderdrivers.riru.xposed.entry.bootstrap.SysBootstrapHookInfo;
@@ -21,6 +20,7 @@ public class Router {
     public static void prepare(boolean isSystem) {
         // this flag is needed when loadModules
         XposedInit.startsSystemServer = isSystem;
+        InstallerChooser.setup();
     }
 
     public static void checkHookState(String appDataDir) {
