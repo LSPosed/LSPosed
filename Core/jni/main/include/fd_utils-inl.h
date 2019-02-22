@@ -37,8 +37,7 @@ static const char* kPathPrefixWhitelist[] = {
         "/system/app/",
         "/system/priv-app/",
         "/vendor/app/",
-        "/vendor/priv-app/",
-        "/dev/binder"
+        "/vendor/priv-app/"
 };
 
 static const char* kFdPath = "/proc/self/fd";
