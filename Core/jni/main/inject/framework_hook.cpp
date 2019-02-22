@@ -5,6 +5,7 @@
 #include <include/logging.h>
 #include "framework_hook.h"
 #include "include/misc.h"
+#include "config_manager.h"
 
 #define SYSTEM_SERVER_DATA_DIR "/data/user/0/android"
 
@@ -41,6 +42,10 @@ void onNativeForkSystemServerPre(JNIEnv *env, jclass clazz, uid_t uid, gid_t gid
                                  jint runtime_flags, jobjectArray rlimits,
                                  jlong permittedCapabilities, jlong effectiveCapabilities) {
     sAppDataDir = env->NewStringUTF(SYSTEM_SERVER_DATA_DIR);
+    if (is_black_white_list_enabled()) {
+        // when black/white list is on, never inject into zygote
+        return;
+    }
     prepareJavaEnv(env);
     // jump to java code
     findAndCall(env, "forkSystemServerPre", "(II[II[[IJJ)V", uid, gid, gids, runtime_flags, rlimits,
@@ -50,9 +55,12 @@ void onNativeForkSystemServerPre(JNIEnv *env, jclass clazz, uid_t uid, gid_t gid
 
 int onNativeForkSystemServerPost(JNIEnv *env, jclass clazz, jint res) {
     if (res == 0) {
+        if (!is_app_need_hook(env, sAppDataDir)) {
+            return 0;
+        }
         prepareJavaEnv(env);
         // only do work in child since findAndCall would print log
-        findAndCall(env, "forkSystemServerPost", "(I)V", res);
+        findAndCall(env, "forkSystemServerPost", "(IZ)V", res, is_black_white_list_enabled());
     } else {
         // in zygote process, res is child zygote pid
         // don't print log here, see https://github.com/RikkaApps/Riru/blob/77adfd6a4a6a81bfd20569c910bc4854f2f84f5e/riru-core/jni/main/jni_native_method.cpp#L55-L66
@@ -74,6 +82,10 @@ void onNativeForkAndSpecializePre(JNIEnv *env, jclass clazz,
                                   jstring instructionSet,
                                   jstring appDataDir) {
     sAppDataDir = appDataDir;
+    if (is_black_white_list_enabled()) {
+        // when black/white list is on, never inject into zygote
+        return;
+    }
     prepareJavaEnv(env);
     findAndCall(env, "forkAndSpecializePre",
                 "(II[II[[IILjava/lang/String;Ljava/lang/String;[I[IZLjava/lang/String;Ljava/lang/String;)V",
@@ -84,8 +96,12 @@ void onNativeForkAndSpecializePre(JNIEnv *env, jclass clazz,
 
 int onNativeForkAndSpecializePost(JNIEnv *env, jclass clazz, jint res) {
     if (res == 0) {
+        if (!is_app_need_hook(env, sAppDataDir)) {
+            return 0;
+        }
         prepareJavaEnv(env);
-        findAndCall(env, "forkAndSpecializePost", "(ILjava/lang/String;)V", res, sAppDataDir);
+        findAndCall(env, "forkAndSpecializePost", "(ILjava/lang/String;Z)V", res, sAppDataDir,
+                    is_black_white_list_enabled());
     } else {
         // in zygote process, res is child zygote pid
         // don't print log here, see https://github.com/RikkaApps/Riru/blob/77adfd6a4a6a81bfd20569c910bc4854f2f84f5e/riru-core/jni/main/jni_native_method.cpp#L55-L66

@@ -5,6 +5,7 @@
 #include <jni.h>
 #include <fcntl.h>
 #include <dlfcn.h>
+#include <inject/config_manager.h>
 #include "java_hook/java_hook.h"
 #include "include/logging.h"
 #include "native_hook/native_hook.h"
@@ -38,6 +39,9 @@ static JNINativeMethod hookMethods[] = {
                 "ensureMethodCached",
                 "(Ljava/lang/reflect/Method;Ljava/lang/reflect/Method;)V",
                 (void *) Java_lab_galaxy_yahfa_HookMain_ensureMethodCached
+        },
+        {
+                "getInstallerPkgName", "()Ljava/lang/String;", (void *)get_installer_pkg_name
         }
 };
 
@@ -76,7 +80,7 @@ void loadDexAndInit(JNIEnv *env, const char *dexPath) {
     jclass entry_class = findClassFromLoader(env, myClassLoader, ENTRY_CLASS_NAME);
     if (NULL != entry_class) {
         LOGD("HookEntry Class %p", entry_class);
-        env->RegisterNatives(entry_class, hookMethods, 4);
+        env->RegisterNatives(entry_class, hookMethods, 5);
         isInited = true;
         LOGD("RegisterNatives succeed for HookEntry.");
     } else {

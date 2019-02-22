@@ -5,16 +5,13 @@ import android.os.Build;
 import android.os.Process;
 
 import com.elderdrivers.riru.common.KeepAll;
-import com.elderdrivers.riru.xposed.config.ConfigManager;
 import com.elderdrivers.riru.xposed.core.HookMethodResolver;
-import com.elderdrivers.riru.xposed.dexmaker.DynamicBridge;
-import com.elderdrivers.riru.xposed.entry.Router;
+import com.elderdrivers.riru.xposed.proxy.yahfa.BlackWhiteListProxy;
+import com.elderdrivers.riru.xposed.proxy.yahfa.NormalProxy;
 import com.elderdrivers.riru.xposed.util.Utils;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
-
-import static com.elderdrivers.riru.xposed.util.FileUtils.getDataPathPrefix;
 
 @SuppressLint("DefaultLocale")
 public class Main implements KeepAll {
@@ -45,23 +42,17 @@ public class Main implements KeepAll {
                     mountExternal, seInfo, niceName, Arrays.toString(fdsToClose),
                     Arrays.toString(fdsToIgnore), startChildZygote, instructionSet, appDataDir);
         }
-        Main.appDataDir = appDataDir;
-        Router.prepare(false);
-        // install bootstrap hooks for secondary zygote
-        Router.installBootstrapHooks(false);
-        // load modules for secondary zygote
-        Router.loadModulesSafely();
+        NormalProxy.forkAndSpecializePre(uid, gid, gids, debugFlags, rlimits, mountExternal, seInfo,
+                niceName, fdsToClose, fdsToIgnore, startChildZygote, instructionSet, appDataDir);
     }
 
-    public static void forkAndSpecializePost(int pid, String appDataDir) {
+    public static void forkAndSpecializePost(int pid, String appDataDir, boolean isBlackWhiteListMode) {
         if (pid == 0) {
             Utils.logD(forkAndSpecializePramsStr + " = " + Process.myPid());
-            // TODO consider processes without forkAndSpecializePost called
-            Router.onEnterChildProcess();
-            DynamicBridge.onForkPost();
-            if (ConfigManager.isDynamicModulesMode()) {
-                // load modules for each app process on its forked
-                Router.loadModulesSafely();
+            if (isBlackWhiteListMode) {
+                BlackWhiteListProxy.forkAndSpecializePost(pid, appDataDir);
+            } else {
+                NormalProxy.forkAndSpecializePost(pid, appDataDir);
             }
         } else {
             // in zygote process, res is child zygote pid
@@ -76,23 +67,18 @@ public class Main implements KeepAll {
                     uid, gid, Arrays.toString(gids), debugFlags, Arrays.toString(rlimits),
                     permittedCapabilities, effectiveCapabilities);
         }
-        Main.appDataDir = getDataPathPrefix() + "android";
-        Router.prepare(true);
-        // install bootstrap hooks for main zygote as early as possible
-        // in case we miss some processes not forked via forkAndSpecialize
-        // for instance com.android.phone
-        Router.installBootstrapHooks(true);
-        // loadModules have to be executed in zygote even isDynamicModules is false
-        // because if not global hooks installed in initZygote might not be
-        // propagated to processes not forked via forkAndSpecialize
-        Router.loadModulesSafely();
+        NormalProxy.forkSystemServerPre(uid, gid, gids, debugFlags, rlimits,
+                permittedCapabilities, effectiveCapabilities);
     }
 
-    public static void forkSystemServerPost(int pid) {
+    public static void forkSystemServerPost(int pid, boolean isBlackWhiteListMode) {
         if (pid == 0) {
             Utils.logD(forkSystemServerPramsStr + " = " + Process.myPid());
-            // in system_server process
-            Router.onEnterChildProcess();
+            if (isBlackWhiteListMode) {
+                BlackWhiteListProxy.forkSystemServerPost(pid);
+            } else {
+                NormalProxy.forkSystemServerPost(pid);
+            }
         } else {
             // in zygote process, res is child zygote pid
             // don't print log here, see https://github.com/RikkaApps/Riru/blob/77adfd6a4a6a81bfd20569c910bc4854f2f84f5e/riru-core/jni/main/jni_native_method.cpp#L55-L66
@@ -103,16 +89,14 @@ public class Main implements KeepAll {
     // native methods
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
-    @SuppressWarnings("all")
     public static native boolean backupAndHookNative(Object target, Method hook, Method backup);
 
-    @SuppressWarnings("all")
     public static native void ensureMethodCached(Method hook, Method backup);
 
-    @SuppressWarnings("all")
     // JNI.ToReflectedMethod() could return either Method or Constructor
     public static native Object findMethodNative(Class targetClass, String methodName, String methodSig);
 
-    @SuppressWarnings("all")
     private static native void init(int SDK_version);
+
+    public static native String getInstallerPkgName();
 }

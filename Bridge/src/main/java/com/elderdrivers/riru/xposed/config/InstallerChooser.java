@@ -10,6 +10,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import de.robv.android.xposed.SELinuxHelper;
 import de.robv.android.xposed.services.BaseService;
 
+import static com.elderdrivers.riru.xposed.Main.getInstallerPkgName;
+
 public class InstallerChooser {
 
     private static final AtomicBoolean hasSet = new AtomicBoolean(false);
@@ -21,7 +23,7 @@ public class InstallerChooser {
     public static final String SECONDARY_INSTALLER_PACKAGE_NAME = "org.meowcat.edxposed.manager";
     public static final String LEGACY_INSTALLER_PACKAGE_NAME = "de.robv.android.xposed.installer";
 
-    public static String INSTALLER_PACKAGE_NAME = PRIMARY_INSTALLER_PACKAGE_NAME;
+    public static String INSTALLER_PACKAGE_NAME = getInstallerPkgName();
     @SuppressLint("SdCardPath")
     public static String INSTALLER_DATA_BASE_DIR = DATA_DIR_PATH_PREFIX + INSTALLER_PACKAGE_NAME + "/";
 
