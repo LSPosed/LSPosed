@@ -1,6 +1,5 @@
 package de.robv.android.xposed;
 
-import android.annotation.SuppressLint;
 import android.app.AndroidAppHelper;
 import android.os.Build;
 import android.text.TextUtils;
@@ -27,7 +26,6 @@ import dalvik.system.PathClassLoader;
 import de.robv.android.xposed.services.BaseService;
 
 import static com.elderdrivers.riru.xposed.config.InstallerChooser.INSTALLER_DATA_BASE_DIR;
-import static com.elderdrivers.riru.xposed.config.InstallerChooser.INSTALLER_PACKAGE_NAME;
 import static com.elderdrivers.riru.xposed.entry.hooker.XposedBlackListHooker.BLACK_LIST_PACKAGE_NAME;
 import static de.robv.android.xposed.XposedHelpers.closeSilently;
 import static de.robv.android.xposed.XposedHelpers.findClass;
@@ -123,12 +121,10 @@ public final class XposedInit {
      * in <code>assets/xposed_init</code>.
      */
     private static void loadModule(String apk, ClassLoader topClassLoader) {
-        if (BuildConfig.DEBUG)
-            Log.i(TAG, "Loading modules from " + apk);
+        Log.i(TAG, "Loading modules from " + apk);
 
         if (!TextUtils.isEmpty(apk) && apk.contains(BLACK_LIST_PACKAGE_NAME)) {
-            if (BuildConfig.DEBUG)
-                Log.i(TAG, "We are going to take over black list's job...");
+            Log.i(TAG, "We are going to take over black list's job...");
             return;
         }
 
@@ -189,8 +185,7 @@ public final class XposedInit {
                     continue;
 
                 try {
-                    if (BuildConfig.DEBUG)
-                        Log.i(TAG, "  Loading class " + moduleClassName);
+                    Log.i(TAG, "  Loading class " + moduleClassName);
                     Class<?> moduleClass = mcl.loadClass(moduleClassName);
 
                     if (!IXposedMod.class.isAssignableFrom(moduleClass)) {

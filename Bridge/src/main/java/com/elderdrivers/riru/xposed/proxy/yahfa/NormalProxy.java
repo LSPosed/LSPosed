@@ -20,10 +20,12 @@ public class NormalProxy {
         Router.installBootstrapHooks(false);
         // load modules for secondary zygote
         Router.loadModulesSafely();
+        Main.closeFilesBeforeForkNative();
     }
 
     public static void forkAndSpecializePost(int pid, String appDataDir) {
         // TODO consider processes without forkAndSpecializePost called
+        Main.reopenFilesAfterForkNative();
         Router.onEnterChildProcess();
         DynamicBridge.onForkPost();
         if (ConfigManager.isDynamicModulesMode()) {
@@ -44,10 +46,12 @@ public class NormalProxy {
         // because if not global hooks installed in initZygote might not be
         // propagated to processes not forked via forkAndSpecialize
         Router.loadModulesSafely();
+        Main.closeFilesBeforeForkNative();
     }
 
     public static void forkSystemServerPost(int pid) {
         // in system_server process
+        Main.reopenFilesAfterForkNative();
         Router.onEnterChildProcess();
     }
 

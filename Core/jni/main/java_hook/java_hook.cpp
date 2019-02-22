@@ -8,6 +8,7 @@
 #include <inject/config_manager.h>
 #include "java_hook/java_hook.h"
 #include "include/logging.h"
+#include "include/fd_utils-inl.h"
 #include "native_hook/native_hook.h"
 
 extern "C"
@@ -18,6 +19,18 @@ extern "C"
 jobject gInjectDexClassLoader;
 
 static bool isInited = false;
+
+static FileDescriptorTable* gClosedFdTable = NULL;
+
+void closeFilesBeforeForkNative(JNIEnv*, jclass) {
+    gClosedFdTable = FileDescriptorTable::Create();
+}
+
+void reopenFilesAfterForkNative(JNIEnv*, jclass) {
+    gClosedFdTable->Reopen();
+    delete gClosedFdTable;
+    gClosedFdTable = NULL;
+}
 
 static JNINativeMethod hookMethods[] = {
         {
@@ -42,6 +55,12 @@ static JNINativeMethod hookMethods[] = {
         },
         {
                 "getInstallerPkgName", "()Ljava/lang/String;", (void *)get_installer_pkg_name
+        },
+        {
+                "closeFilesBeforeForkNative", "()V", (void *)closeFilesBeforeForkNative
+        },
+        {
+                "reopenFilesAfterForkNative", "()V", (void *)reopenFilesAfterForkNative
         }
 };
 
@@ -80,7 +99,7 @@ void loadDexAndInit(JNIEnv *env, const char *dexPath) {
     jclass entry_class = findClassFromLoader(env, myClassLoader, ENTRY_CLASS_NAME);
     if (NULL != entry_class) {
         LOGD("HookEntry Class %p", entry_class);
-        env->RegisterNatives(entry_class, hookMethods, 5);
+        env->RegisterNatives(entry_class, hookMethods, 7);
         isInited = true;
         LOGD("RegisterNatives succeed for HookEntry.");
     } else {

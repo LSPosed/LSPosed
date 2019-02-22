@@ -99,4 +99,10 @@ public class Main implements KeepAll {
     private static native void init(int SDK_version);
 
     public static native String getInstallerPkgName();
+
+    // prevent from fatal error caused by holding not whitelisted file descriptors when fork zygote
+    // https://github.com/rovo89/Xposed/commit/b3ba245ad04cd485699fb1d2ebde7117e58214ff
+    public static native void closeFilesBeforeForkNative();
+
+    public static native void reopenFilesAfterForkNative();
 }
