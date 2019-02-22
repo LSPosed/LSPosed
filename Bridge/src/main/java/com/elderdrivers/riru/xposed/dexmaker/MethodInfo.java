@@ -59,6 +59,7 @@ public class MethodInfo {
         try {
             return Class.forName(className, true, classLoader);
         } catch (Throwable throwable) {
+            DexLog.e("error when getClassForSure", throwable);
             return null;
         }
     }

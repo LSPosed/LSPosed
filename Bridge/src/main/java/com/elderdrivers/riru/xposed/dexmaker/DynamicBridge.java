@@ -32,7 +32,7 @@ public final class DynamicBridge {
     }
 
     public static synchronized void hookMethod(Member hookMethod, XposedBridge.AdditionalHookInfo additionalHookInfo) {
-
+        DexLog.d("hooking " + hookMethod);
         if (!checkMember(hookMethod)) {
             return;
         }
