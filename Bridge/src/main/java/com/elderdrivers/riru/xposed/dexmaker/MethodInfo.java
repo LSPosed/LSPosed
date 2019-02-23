@@ -57,6 +57,7 @@ public class MethodInfo {
 
     public Class getClassForSure() {
         try {
+            // TODO does initialize make sense?
             return Class.forName(className, true, classLoader);
         } catch (Throwable throwable) {
             DexLog.e("error when getClassForSure", throwable);

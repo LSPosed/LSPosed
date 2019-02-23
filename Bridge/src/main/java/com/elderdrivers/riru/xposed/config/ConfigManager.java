@@ -1,5 +1,7 @@
 package com.elderdrivers.riru.xposed.config;
 
+import com.elderdrivers.riru.xposed.util.Utils;
+
 import java.util.Collections;
 import java.util.Set;
 
@@ -20,6 +22,7 @@ public class ConfigManager {
 
     static {
         IS_DYNAMIC_MODULES = isFileExists(DYNAMIC_MODULES);
+        Utils.logI("using dynamic modules mode: " + IS_DYNAMIC_MODULES);
     }
 
     public static boolean isDynamicModulesMode() {

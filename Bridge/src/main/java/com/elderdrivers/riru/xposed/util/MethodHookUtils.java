@@ -23,6 +23,7 @@ public class MethodHookUtils {
                 Method method = (Method) target;
                 if (method.getDeclaringClass().equals(Application.class)
                         && method.getName().equals("attach")) {
+                    Utils.logW("replacing Application#attch to ContextWrapper#attachBaseContext, this is error-prone!");
                     return ContextWrapper.class.getDeclaredMethod("attachBaseContext", Context.class);
                 }
             }
