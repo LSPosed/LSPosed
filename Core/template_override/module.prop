@@ -1,7 +1,7 @@
 id=riru_edxposed
 name=Riru - Ed Xposed
 version=v0.2.9.9_beta3
-versionCode=2991
+versionCode=2993
 author=givein2u & MlgmXyysd
 description=Magisk version of Xposed. Require Riru - Core installed.
 minMagisk=17000
