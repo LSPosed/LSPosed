@@ -71,4 +71,4 @@ echo "Device: ${device}">>$file
 echo "Manufacturer: ${manufacturer}">>$file
 echo "Brand: ${brand}">>$file
 echo "Product: ${product}">>$file
-logcat *:V logcatcher-xposed-mlgmxyysd:S|grep -i "xposed">>$file &
+logcat *:V logcatcher-xposed-mlgmxyysd:S|grep -i "EdXposed-">>$file &
