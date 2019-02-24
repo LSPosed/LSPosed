@@ -9,7 +9,6 @@
 #include "java_hook/java_hook.h"
 #include "include/logging.h"
 #include "include/fd_utils-inl.h"
-#include "native_hook/native_hook.h"
 
 extern "C"
 {
@@ -20,16 +19,20 @@ jobject gInjectDexClassLoader;
 
 static bool isInited = false;
 
-static FileDescriptorTable* gClosedFdTable = NULL;
+static FileDescriptorTable* gClosedFdTable = nullptr;
 
 void closeFilesBeforeForkNative(JNIEnv*, jclass) {
     gClosedFdTable = FileDescriptorTable::Create();
 }
 
 void reopenFilesAfterForkNative(JNIEnv*, jclass) {
+    if (!gClosedFdTable) {
+        LOGE("gClosedFdTable is null when reopening files");
+        return;
+    }
     gClosedFdTable->Reopen();
     delete gClosedFdTable;
-    gClosedFdTable = NULL;
+    gClosedFdTable = nullptr;
 }
 
 static JNINativeMethod hookMethods[] = {

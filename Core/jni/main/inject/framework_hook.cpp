@@ -42,14 +42,17 @@ void onNativeForkSystemServerPre(JNIEnv *env, jclass clazz, uid_t uid, gid_t gid
                                  jint runtime_flags, jobjectArray rlimits,
                                  jlong permittedCapabilities, jlong effectiveCapabilities) {
     sAppDataDir = env->NewStringUTF(SYSTEM_SERVER_DATA_DIR);
-    if (is_black_white_list_enabled()) {
-        // when black/white list is on, never inject into zygote
+    bool is_black_white_list_mode = is_black_white_list_enabled();
+    bool is_dynamic_modules_mode = is_dynamic_modules_enabled();
+    if (is_black_white_list_mode && is_dynamic_modules_mode) {
+        // when black/white list is on, never inject into zygote if dynamic modules mode is on
         return;
     }
     prepareJavaEnv(env);
     // jump to java code
-    findAndCall(env, "forkSystemServerPre", "(II[II[[IJJ)V", uid, gid, gids, runtime_flags, rlimits,
-                permittedCapabilities, effectiveCapabilities);
+    findAndCall(env, "forkSystemServerPre", "(II[II[[IJJZZ)V", uid, gid, gids, runtime_flags,
+                rlimits, permittedCapabilities, effectiveCapabilities,
+                is_black_white_list_mode, is_dynamic_modules_mode);
 }
 
 
@@ -60,7 +63,8 @@ int onNativeForkSystemServerPost(JNIEnv *env, jclass clazz, jint res) {
         }
         prepareJavaEnv(env);
         // only do work in child since findAndCall would print log
-        findAndCall(env, "forkSystemServerPost", "(IZ)V", res, is_black_white_list_enabled());
+        findAndCall(env, "forkSystemServerPost", "(IZZ)V", res,
+                    is_black_white_list_enabled(), is_dynamic_modules_enabled());
     } else {
         // in zygote process, res is child zygote pid
         // don't print log here, see https://github.com/RikkaApps/Riru/blob/77adfd6a4a6a81bfd20569c910bc4854f2f84f5e/riru-core/jni/main/jni_native_method.cpp#L55-L66
@@ -82,16 +86,19 @@ void onNativeForkAndSpecializePre(JNIEnv *env, jclass clazz,
                                   jstring instructionSet,
                                   jstring appDataDir) {
     sAppDataDir = appDataDir;
-    if (is_black_white_list_enabled()) {
-        // when black/white list is on, never inject into zygote
+    bool is_black_white_list_mode = is_black_white_list_enabled();
+    bool is_dynamic_modules_mode = is_dynamic_modules_enabled();
+    if (is_black_white_list_mode && is_dynamic_modules_mode) {
+        // when black/white list is on, never inject into zygote if dynamic modules mode is on
         return;
     }
     prepareJavaEnv(env);
     findAndCall(env, "forkAndSpecializePre",
-                "(II[II[[IILjava/lang/String;Ljava/lang/String;[I[IZLjava/lang/String;Ljava/lang/String;)V",
+                "(II[II[[IILjava/lang/String;Ljava/lang/String;[I[IZLjava/lang/String;Ljava/lang/String;ZZ)V",
                 uid, gid, gids, runtime_flags, rlimits,
                 _mount_external, se_info, se_name, fdsToClose, fdsToIgnore,
-                is_child_zygote, instructionSet, appDataDir);
+                is_child_zygote, instructionSet, appDataDir,
+                is_black_white_list_mode, is_dynamic_modules_mode);
 }
 
 int onNativeForkAndSpecializePost(JNIEnv *env, jclass clazz, jint res) {
@@ -100,8 +107,8 @@ int onNativeForkAndSpecializePost(JNIEnv *env, jclass clazz, jint res) {
             return 0;
         }
         prepareJavaEnv(env);
-        findAndCall(env, "forkAndSpecializePost", "(ILjava/lang/String;Z)V", res, sAppDataDir,
-                    is_black_white_list_enabled());
+        findAndCall(env, "forkAndSpecializePost", "(ILjava/lang/String;ZZ)V", res, sAppDataDir,
+                    is_black_white_list_enabled(), is_dynamic_modules_enabled());
     } else {
         // in zygote process, res is child zygote pid
         // don't print log here, see https://github.com/RikkaApps/Riru/blob/77adfd6a4a6a81bfd20569c910bc4854f2f84f5e/riru-core/jni/main/jni_native_method.cpp#L55-L66

@@ -1,7 +1,5 @@
 package com.elderdrivers.riru.xposed.config;
 
-import com.elderdrivers.riru.xposed.util.Utils;
-
 import java.util.Collections;
 import java.util.Set;
 
@@ -18,11 +16,12 @@ public class ConfigManager {
     private static final String USE_WHITE_LIST = INSTALLER_DATA_BASE_DIR + "conf/usewhitelist";
     private static final String DYNAMIC_MODULES = INSTALLER_DATA_BASE_DIR + "conf/dynamicmodules";
     private static final Set<String> WHITE_LIST = Collections.singleton(INSTALLER_PACKAGE_NAME);
-    private static final boolean IS_DYNAMIC_MODULES;
+    private static volatile boolean IS_DYNAMIC_MODULES = false;
 
-    static {
-        IS_DYNAMIC_MODULES = isFileExists(DYNAMIC_MODULES);
-        Utils.logI("using dynamic modules mode: " + IS_DYNAMIC_MODULES);
+    public static synchronized void setDynamicModulesMode(boolean isDynamicModulesMode) {
+        if (isDynamicModulesMode != IS_DYNAMIC_MODULES) {
+            IS_DYNAMIC_MODULES = isDynamicModulesMode;
+        }
     }
 
     public static boolean isDynamicModulesMode() {

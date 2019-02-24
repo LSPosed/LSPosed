@@ -30,6 +30,7 @@ static char dynamic_modules_path[PATH_MAX];
 
 static const char *installer_package_name;
 static bool black_white_list_enabled = false;
+static bool dynamic_modules_enabled = false;
 static bool inited = false;
 
 static const char *get_installer_package_name() {
@@ -71,8 +72,10 @@ static void init_once() {
                  installer_package_name, "blackwhitelist");
         snprintf(dynamic_modules_path, PATH_MAX, config_path_tpl, data_path_prefix,
                  installer_package_name, "dynamicmodules");
+        dynamic_modules_enabled = access(dynamic_modules_path, F_OK) == 0;
         black_white_list_enabled = access(black_white_list_path, F_OK) == 0;
         LOGI("black/white list mode: %d", black_white_list_enabled);
+        LOGI("dynamic modules mode: %d", dynamic_modules_enabled);
         inited = true;
     }
 }
@@ -85,7 +88,6 @@ bool is_app_need_hook(JNIEnv *env, jstring appDataDir) {
         return true;
     }
     bool use_white_list = access(use_whitelist_path, F_OK) == 0;
-    LOGI("using %s list mode", use_white_list ? "white" : "black");
     if (!appDataDir) {
         LOGE("appDataDir is null");
         return !use_white_list;
@@ -127,6 +129,11 @@ bool is_app_need_hook(JNIEnv *env, jstring appDataDir) {
 bool is_black_white_list_enabled() {
     init_once();
     return black_white_list_enabled;
+}
+
+bool is_dynamic_modules_enabled() {
+    init_once();
+    return dynamic_modules_enabled;
 }
 
 jstring get_installer_pkg_name(JNIEnv *env) {

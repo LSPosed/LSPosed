@@ -13,8 +13,9 @@ public class NormalProxy {
                                             int[][] rlimits, int mountExternal, String seInfo,
                                             String niceName, int[] fdsToClose, int[] fdsToIgnore,
                                             boolean startChildZygote, String instructionSet,
-                                            String appDataDir) {
+                                            String appDataDir, boolean isDynamicModulesMode) {
         Main.appDataDir = appDataDir;
+        ConfigManager.setDynamicModulesMode(isDynamicModulesMode);
         Router.prepare(false);
         // install bootstrap hooks for secondary zygote
         Router.installBootstrapHooks(false);
@@ -23,20 +24,20 @@ public class NormalProxy {
         Main.closeFilesBeforeForkNative();
     }
 
-    public static void forkAndSpecializePost(int pid, String appDataDir) {
+    public static void forkAndSpecializePost(int pid, String appDataDir, boolean isDynamicModulesMode) {
         // TODO consider processes without forkAndSpecializePost called
         Main.reopenFilesAfterForkNative();
         Router.onEnterChildProcess();
         DynamicBridge.onForkPost();
-        if (ConfigManager.isDynamicModulesMode()) {
-            // load modules for each app process on its forked
-            Router.loadModulesSafely();
-        }
+        // load modules for each app process on its forked if dynamic modules mode is on
+        Router.loadModulesSafely();
     }
 
     public static void forkSystemServerPre(int uid, int gid, int[] gids, int debugFlags, int[][] rlimits,
-                                           long permittedCapabilities, long effectiveCapabilities) {
+                                           long permittedCapabilities, long effectiveCapabilities,
+                                           boolean isDynamicModulesMode) {
         Main.appDataDir = getDataPathPrefix() + "android";
+        ConfigManager.setDynamicModulesMode(isDynamicModulesMode);
         Router.prepare(true);
         // install bootstrap hooks for main zygote as early as possible
         // in case we miss some processes not forked via forkAndSpecialize
@@ -49,7 +50,7 @@ public class NormalProxy {
         Main.closeFilesBeforeForkNative();
     }
 
-    public static void forkSystemServerPost(int pid) {
+    public static void forkSystemServerPost(int pid, boolean isDynamicModulesMode) {
         // in system_server process
         Main.reopenFilesAfterForkNative();
         Router.onEnterChildProcess();
