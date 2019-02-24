@@ -6,7 +6,6 @@ import android.util.Log;
 import com.elderdrivers.riru.xposed.core.HookMain;
 import com.elderdrivers.riru.xposed.dexmaker.DynamicBridge;
 import com.elderdrivers.riru.xposed.dexmaker.MethodInfo;
-import com.elderdrivers.riru.xposed.util.MethodHookUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -155,7 +154,6 @@ public final class XposedBridge {
 	 * @see #hookAllConstructors
 	 */
 	public static XC_MethodHook.Unhook hookMethod(Member hookMethod, XC_MethodHook callback) {
-        hookMethod = MethodHookUtils.preCheck(hookMethod);
 		if (!(hookMethod instanceof Method) && !(hookMethod instanceof Constructor<?>)) {
 			throw new IllegalArgumentException("Only methods and constructors can be hooked: " + hookMethod.toString());
 		} else if (hookMethod.getDeclaringClass().isInterface()) {
@@ -402,7 +400,6 @@ public final class XposedBridge {
 	private synchronized static void hookMethodNative(final Member method, Class<?> declaringClass,
                                                       int slot, final Object additionalInfoObj) {
 		DynamicBridge.hookMethod(method, (AdditionalHookInfo) additionalInfoObj);
-
 	}
 
     private static Object invokeOriginalMethodNative(Member method, int methodId,

@@ -11,6 +11,7 @@
 #include <utility>
 #include <string>
 #include <inject/framework_hook.h>
+#include <native_hook/native_hook.h>
 
 #include "include/logging.h"
 #include "include/misc.h"
@@ -42,7 +43,8 @@ __attribute__((visibility("default"))) int nativeForkAndSpecializePost(JNIEnv *e
 }
 
 __attribute__((visibility("default"))) void onModuleLoaded() {
-
+    LOGI("onModuleLoaded: welcome to EdXposed!");
+    install_inline_hooks();
 }
 
 __attribute__((visibility("default")))

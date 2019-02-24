@@ -68,7 +68,7 @@ void loadDexAndInit(JNIEnv *env, const char *dexPath) {
     if (isInited) {
         return;
     }
-    install_inline_hooks();
+//    install_inline_hooks();
     jclass clzClassLoader = env->FindClass("java/lang/ClassLoader");
     LOGD("java/lang/ClassLoader: %p", clzClassLoader);
     jmethodID mdgetSystemClassLoader = env->GetStaticMethodID(clzClassLoader,

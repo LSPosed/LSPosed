@@ -2,13 +2,40 @@
 #include <dlfcn.h>
 #include <include/android_build.h>
 #include <string>
+#include <vector>
 
 #include "include/logging.h"
 #include "native_hook.h"
 
+static bool inlineHooksInstalled = false;
+
 static const char *(*getDesc)(void *, std::string *);
 
 static bool (*isInSamePackageBackup)(void *, void *) = nullptr;
+
+void *runtime_ = nullptr;
+
+void (*deoptBootImage)(void *runtime) = nullptr;
+
+bool (*runtimeInitBackup)(void *runtime, void *mapAddr) = nullptr;
+
+bool my_runtimeInit(void *runtime, void *mapAddr) {
+    if (!runtimeInitBackup) {
+        LOGE("runtimeInitBackup is null");
+        return false;
+    }
+    LOGI("runtimeInit starts");
+    bool result = (*runtimeInitBackup)(runtime, mapAddr);
+    if (!deoptBootImage) {
+        LOGE("deoptBootImageSym is null, skip deoptBootImage");
+    } else {
+        LOGI("deoptBootImage starts");
+        (*deoptBootImage)(runtime);
+        LOGI("deoptBootImage finishes");
+    }
+    LOGI("runtimeInit finishes");
+    return result;
+}
 
 static bool onIsInSamePackageCalled(void *thiz, void *that) {
     std::string storage1, storage2;
@@ -70,8 +97,8 @@ static bool disable_HiddenAPIPolicyImpl(int api_level, void *artHandle,
     return symbol != nullptr;
 }
 
-static void hook_IsInSamePackage(int api_level, void *artHandle,
-                                 void (*hookFun)(void *, void *, void **)) {
+static void hookIsInSamePackage(int api_level, void *artHandle,
+                                void (*hookFun)(void *, void *, void **)) {
     // 5.0 - 7.1
     const char *isInSamePackageSym = "_ZN3art6mirror5Class15IsInSamePackageEPS1_";
     const char *getDescriptorSym = "_ZN3art6mirror5Class13GetDescriptorEPNSt3__112basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEE";
@@ -94,11 +121,45 @@ static void hook_IsInSamePackage(int api_level, void *artHandle,
                reinterpret_cast<void **>(&isInSamePackageBackup));
 }
 
+void hookRuntime(int api_level, void *artHandle, void (*hookFun)(void *, void *, void **)) {
+    void *runtimeInitSym = nullptr;
+    if (api_level >= ANDROID_O) {
+        // only oreo has deoptBootImageSym in Runtime
+        runtime_ = dlsym(artHandle, "_ZN3art7Runtime9instance_E");
+        if (!runtime_) { LOGW("runtime instance not found"); }
+        runtimeInitSym = dlsym(artHandle, "_ZN3art7Runtime4InitEONS_18RuntimeArgumentMapE");
+        if (!runtimeInitSym) {
+            LOGE("can't find runtimeInitSym: %s", dlerror());
+            return;
+        }
+        deoptBootImage = reinterpret_cast<void (*)(void *)>(dlsym(artHandle,
+                                                                  "_ZN3art7Runtime19DeoptimizeBootImageEv"));
+        if (!deoptBootImage) {
+            LOGE("can't find deoptBootImageSym: %s", dlerror());
+            return;
+        }
+        LOGI("start to hook runtimeInitSym");
+        (*hookFun)(runtimeInitSym, reinterpret_cast<void *>(my_runtimeInit),
+                   reinterpret_cast<void **>(&runtimeInitBackup));
+        LOGI("runtimeInitSym hooked");
+    } else {
+        // TODO support deoptBootImage for Android 7.1 and before?
+        LOGI("hooking Runtime skipped");
+    }
+}
+
 void install_inline_hooks() {
-    int api_level = GetAndroidApiLevel();
-    if (api_level < ANDROID_LOLLIPOP) {
+    if (inlineHooksInstalled) {
+        LOGI("inline hooks installed, skip");
         return;
     }
+    LOGI("start to install inline hooks");
+    int api_level = GetAndroidApiLevel();
+    if (api_level < ANDROID_LOLLIPOP) {
+        LOGE("api level not supported: %d, skip", api_level);
+        return;
+    }
+    LOGI("using api level %d", api_level);
     void *whaleHandle = dlopen(kLibWhalePath, RTLD_LAZY | RTLD_GLOBAL);
     if (!whaleHandle) {
         LOGE("can't open libwhale: %s", dlerror());
@@ -116,11 +177,15 @@ void install_inline_hooks() {
         LOGE("can't open libart: %s", dlerror());
         return;
     }
-    hook_IsInSamePackage(api_level, artHandle, hookFun);
+    hookIsInSamePackage(api_level, artHandle, hookFun);
+    hookRuntime(api_level, artHandle, hookFun);
     if (disable_HiddenAPIPolicyImpl(api_level, artHandle, hookFun)) {
         LOGI("disable_HiddenAPIPolicyImpl done.");
     } else {
         LOGE("disable_HiddenAPIPolicyImpl failed.");
     }
+    dlclose(whaleHandle);
+    dlclose(artHandle);
+    LOGI("install inline hooks done");
 }
 
