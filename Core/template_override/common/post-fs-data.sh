@@ -18,7 +18,7 @@ supolicy --live "allow coredomain coredomain process {execmem}"
 
 # read configs set in our app
 supolicy --live "allow {zygote system_server} app_data_file * *"
-supolicy --live "attradd platform_app mlstrustedsubject"
+supolicy --live "attradd {system_app platform_app} mlstrustedsubject"
 
 # read module apk file in zygote
 supolicy --live "allow zygote apk_data_file * *"
