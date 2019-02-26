@@ -136,7 +136,7 @@ bool is_dynamic_modules_enabled() {
     return dynamic_modules_enabled;
 }
 
-jstring get_installer_pkg_name(JNIEnv *env) {
+jstring get_installer_pkg_name(JNIEnv *env, jclass clazz) {
     init_once();
     return env->NewStringUTF(installer_package_name);
 }
