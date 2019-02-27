@@ -3,6 +3,7 @@
 #include <include/android_build.h>
 #include <string>
 #include <vector>
+#include <inject/config_manager.h>
 
 #include "include/logging.h"
 #include "native_hook.h"
@@ -182,6 +183,9 @@ void deoptimize_method(JNIEnv *env, jclass clazz, jobject method) {
 }
 
 void hookRuntime(int api_level, void *artHandle, void (*hookFun)(void *, void *, void **)) {
+    if (!is_deopt_boot_image_enabled()) {
+        return;
+    }
     void *runtimeInitSym = nullptr;
     if (api_level >= ANDROID_O) {
         // only oreo has deoptBootImageSym in Runtime

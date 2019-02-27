@@ -27,10 +27,12 @@ static char whitelist_path[PATH_MAX];
 static char use_whitelist_path[PATH_MAX];
 static char black_white_list_path[PATH_MAX];
 static char dynamic_modules_path[PATH_MAX];
+static char deopt_boot_image_path[PATH_MAX];
 
 static const char *installer_package_name;
 static bool black_white_list_enabled = false;
 static bool dynamic_modules_enabled = false;
+static bool deopt_boot_image_enabled = false;
 static bool inited = false;
 
 static const char *get_installer_package_name() {
@@ -72,8 +74,11 @@ static void init_once() {
                  installer_package_name, "blackwhitelist");
         snprintf(dynamic_modules_path, PATH_MAX, config_path_tpl, data_path_prefix,
                  installer_package_name, "dynamicmodules");
+        snprintf(deopt_boot_image_path, PATH_MAX, config_path_tpl, data_path_prefix,
+                 installer_package_name, "deoptbootimage");
         dynamic_modules_enabled = access(dynamic_modules_path, F_OK) == 0;
         black_white_list_enabled = access(black_white_list_path, F_OK) == 0;
+        deopt_boot_image_enabled = access(deopt_boot_image_path, F_OK) == 0;
         LOGI("black/white list mode: %d", black_white_list_enabled);
         LOGI("dynamic modules mode: %d", dynamic_modules_enabled);
         inited = true;
@@ -136,7 +141,12 @@ bool is_dynamic_modules_enabled() {
     return dynamic_modules_enabled;
 }
 
-jstring get_installer_pkg_name(JNIEnv *env, jclass clazz) {
+bool is_deopt_boot_image_enabled() {
+    init_once();
+    return deopt_boot_image_enabled;
+}
+
+jstring get_installer_pkg_name(JNIEnv *env, jclass) {
     init_once();
     return env->NewStringUTF(installer_package_name);
 }
