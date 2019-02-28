@@ -2,6 +2,9 @@ package de.robv.android.xposed.callbacks;
 
 import android.os.Bundle;
 
+import com.elderdrivers.riru.xposed.entry.Router;
+import com.elderdrivers.riru.xposed.util.PrebuiltMethodsDeopter;
+
 import java.io.Serializable;
 
 import de.robv.android.xposed.XposedBridge;
@@ -98,6 +101,14 @@ public abstract class XCallback implements Comparable<XCallback> {
 
 	/** @hide */
 	public static void callAll(Param param) {
+
+		if (param instanceof XC_LoadPackage.LoadPackageParam) {
+		    // deopt methods in system apps or priv-apps, this would be not necessary
+            // only if we found out how to recompile their apks
+			XC_LoadPackage.LoadPackageParam lpp = (XC_LoadPackage.LoadPackageParam) param;
+			PrebuiltMethodsDeopter.deoptMethods(lpp.packageName, lpp.classLoader);
+		}
+
 		if (param.callbacks == null)
 			throw new IllegalStateException("This object was not created for use with callAll");
 

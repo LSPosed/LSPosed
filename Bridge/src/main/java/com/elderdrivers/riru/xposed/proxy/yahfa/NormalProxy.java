@@ -4,6 +4,7 @@ import com.elderdrivers.riru.xposed.Main;
 import com.elderdrivers.riru.xposed.config.ConfigManager;
 import com.elderdrivers.riru.xposed.dexmaker.DynamicBridge;
 import com.elderdrivers.riru.xposed.entry.Router;
+import com.elderdrivers.riru.xposed.util.PrebuiltMethodsDeopter;
 
 import static com.elderdrivers.riru.xposed.util.FileUtils.getDataPathPrefix;
 
@@ -17,6 +18,7 @@ public class NormalProxy {
         final boolean isDynamicModulesMode = Main.isDynamicModulesEnabled();
         Main.appDataDir = appDataDir;
         ConfigManager.setDynamicModulesMode(isDynamicModulesMode);
+        PrebuiltMethodsDeopter.deoptBootMethods(); // do it once for secondary zygote
         Router.prepare(false);
         // install bootstrap hooks for secondary zygote
         Router.installBootstrapHooks(false);
@@ -40,6 +42,7 @@ public class NormalProxy {
         Main.appDataDir = getDataPathPrefix() + "android";
         ConfigManager.setDynamicModulesMode(isDynamicModulesMode);
         Router.prepare(true);
+        PrebuiltMethodsDeopter.deoptBootMethods(); // do it once for main zygote
         // install bootstrap hooks for main zygote as early as possible
         // in case we miss some processes not forked via forkAndSpecialize
         // for instance com.android.phone

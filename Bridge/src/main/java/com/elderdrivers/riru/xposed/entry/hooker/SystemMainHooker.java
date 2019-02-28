@@ -4,6 +4,7 @@ import android.app.ActivityThread;
 
 import com.elderdrivers.riru.common.KeepMembers;
 import com.elderdrivers.riru.xposed.entry.Router;
+import com.elderdrivers.riru.xposed.util.PrebuiltMethodsDeopter;
 
 import de.robv.android.xposed.XposedBridge;
 
@@ -30,6 +31,8 @@ public class SystemMainHooker implements KeepMembers {
         try {
             // get system_server classLoader
             systemServerCL = Thread.currentThread().getContextClassLoader();
+            // deopt methods in SYSTEMSERVERCLASSPATH
+            PrebuiltMethodsDeopter.deoptSystemServerMethods(systemServerCL);
             Router.startSystemServerHook();
         } catch (Throwable t) {
             logE("error when hooking systemMain", t);
