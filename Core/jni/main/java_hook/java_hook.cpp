@@ -20,13 +20,13 @@ jobject gInjectDexClassLoader;
 
 static bool isInited = false;
 
-static FileDescriptorTable* gClosedFdTable = nullptr;
+static FileDescriptorTable *gClosedFdTable = nullptr;
 
-void closeFilesBeforeForkNative(JNIEnv*, jclass) {
+void closeFilesBeforeForkNative(JNIEnv *, jclass) {
     gClosedFdTable = FileDescriptorTable::Create();
 }
 
-void reopenFilesAfterForkNative(JNIEnv*, jclass) {
+void reopenFilesAfterForkNative(JNIEnv *, jclass) {
     if (!gClosedFdTable) {
         LOGE("gClosedFdTable is null when reopening files");
         return;
@@ -34,6 +34,22 @@ void reopenFilesAfterForkNative(JNIEnv*, jclass) {
     gClosedFdTable->Reopen();
     delete gClosedFdTable;
     gClosedFdTable = nullptr;
+}
+
+jlong suspendAllThreads(JNIEnv *, jclass) {
+    if (!suspendAll) {
+        return 0;
+    }
+    ScopedSuspendAll *suspendAllObj = (ScopedSuspendAll *) malloc(sizeof(ScopedSuspendAll));
+    suspendAll(suspendAllObj, "edxp_stop_gc", false);
+    return reinterpret_cast<jlong>(suspendAllObj);
+}
+
+void resumeAllThreads(JNIEnv *, jclass, jlong obj) {
+    if (!resumeAll) {
+        return;
+    }
+    resumeAll(reinterpret_cast<ScopedSuspendAll *>(obj));
 }
 
 static JNINativeMethod hookMethods[] = {
@@ -58,16 +74,22 @@ static JNINativeMethod hookMethods[] = {
                 (void *) Java_lab_galaxy_yahfa_HookMain_ensureMethodCached
         },
         {
-                "getInstallerPkgName", "()Ljava/lang/String;", (void *)get_installer_pkg_name
+                "getInstallerPkgName", "()Ljava/lang/String;", (void *) get_installer_pkg_name
         },
         {
-                "closeFilesBeforeForkNative", "()V", (void *)closeFilesBeforeForkNative
+                "closeFilesBeforeForkNative", "()V", (void *) closeFilesBeforeForkNative
         },
         {
-                "reopenFilesAfterForkNative", "()V", (void *)reopenFilesAfterForkNative
+                "reopenFilesAfterForkNative", "()V", (void *) reopenFilesAfterForkNative
         },
         {
-                "deoptMethodNative", "(Ljava/lang/Object;)V", (void *)deoptimize_method
+                "deoptMethodNative", "(Ljava/lang/Object;)V", (void *) deoptimize_method
+        },
+        {
+                "suspendAllThreads", "()J", (void *) suspendAllThreads
+        },
+        {
+                "resumeAllThreads", "(J)V", (void *) resumeAllThreads
         }
 };
 
@@ -106,7 +128,7 @@ void loadDexAndInit(JNIEnv *env, const char *dexPath) {
     jclass entry_class = findClassFromLoader(env, myClassLoader, ENTRY_CLASS_NAME);
     if (NULL != entry_class) {
         LOGD("HookEntry Class %p", entry_class);
-        env->RegisterNatives(entry_class, hookMethods, 8);
+        env->RegisterNatives(entry_class, hookMethods, 10);
         isInited = true;
         LOGD("RegisterNatives succeed for HookEntry.");
     } else {

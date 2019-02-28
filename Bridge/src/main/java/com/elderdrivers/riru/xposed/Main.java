@@ -125,4 +125,8 @@ public class Main implements KeepAll {
     public static native void reopenFilesAfterForkNative();
 
     public static native void deoptMethodNative(Object object);
+
+    public static native long suspendAllThreads();
+
+    public static native void resumeAllThreads(long obj);
 }
