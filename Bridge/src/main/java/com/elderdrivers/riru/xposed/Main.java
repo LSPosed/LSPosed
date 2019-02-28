@@ -34,36 +34,32 @@ public class Main implements KeepAll {
                                             int[][] rlimits, int mountExternal, String seInfo,
                                             String niceName, int[] fdsToClose, int[] fdsToIgnore,
                                             boolean startChildZygote, String instructionSet,
-                                            String appDataDir, boolean isBlackWhiteListMode,
-                                            boolean isDynamicModulesMode) {
+                                            String appDataDir) {
         if (BuildConfig.DEBUG) {
             forkAndSpecializePramsStr = String.format(
                     "Zygote#forkAndSpecialize(%d, %d, %s, %d, %s, %d, %s, %s, %s, %s, %s, %s, %s)",
                     uid, gid, Arrays.toString(gids), debugFlags, Arrays.toString(rlimits),
                     mountExternal, seInfo, niceName, Arrays.toString(fdsToClose),
-                    Arrays.toString(fdsToIgnore), startChildZygote, instructionSet, appDataDir,
-                    isDynamicModulesMode);
+                    Arrays.toString(fdsToIgnore), startChildZygote, instructionSet, appDataDir);
         }
-        if (isBlackWhiteListMode) {
+        if (isBlackWhiteListEnabled()) {
             BlackWhiteListProxy.forkAndSpecializePre(uid, gid, gids, debugFlags, rlimits,
                     mountExternal, seInfo, niceName, fdsToClose, fdsToIgnore, startChildZygote,
-                    instructionSet, appDataDir, isDynamicModulesMode);
+                    instructionSet, appDataDir);
         } else {
             NormalProxy.forkAndSpecializePre(uid, gid, gids, debugFlags, rlimits, mountExternal,
                     seInfo, niceName, fdsToClose, fdsToIgnore, startChildZygote, instructionSet,
-                    appDataDir, isDynamicModulesMode);
+                    appDataDir);
         }
     }
 
-    public static void forkAndSpecializePost(int pid, String appDataDir,
-                                             boolean isBlackWhiteListMode,
-                                             boolean isDynamicModulesMode) {
+    public static void forkAndSpecializePost(int pid, String appDataDir) {
         if (pid == 0) {
             Utils.logD(forkAndSpecializePramsStr + " = " + Process.myPid());
-            if (isBlackWhiteListMode) {
-                BlackWhiteListProxy.forkAndSpecializePost(pid, appDataDir, isDynamicModulesMode);
+            if (isBlackWhiteListEnabled()) {
+                BlackWhiteListProxy.forkAndSpecializePost(pid, appDataDir);
             } else {
-                NormalProxy.forkAndSpecializePost(pid, appDataDir, isDynamicModulesMode);
+                NormalProxy.forkAndSpecializePost(pid, appDataDir);
             }
         } else {
             // in zygote process, res is child zygote pid
@@ -72,30 +68,28 @@ public class Main implements KeepAll {
     }
 
     public static void forkSystemServerPre(int uid, int gid, int[] gids, int debugFlags, int[][] rlimits,
-                                           long permittedCapabilities, long effectiveCapabilities,
-                                           boolean isBlackWhiteListMode, boolean isDynamicModulesMode) {
+                                           long permittedCapabilities, long effectiveCapabilities) {
         if (BuildConfig.DEBUG) {
             forkSystemServerPramsStr = String.format("Zygote#forkSystemServer(%d, %d, %s, %d, %s, %d, %d)",
                     uid, gid, Arrays.toString(gids), debugFlags, Arrays.toString(rlimits),
                     permittedCapabilities, effectiveCapabilities);
         }
-        if (isBlackWhiteListMode) {
+        if (isBlackWhiteListEnabled()) {
             BlackWhiteListProxy.forkSystemServerPre(uid, gid, gids, debugFlags, rlimits,
-                    permittedCapabilities, effectiveCapabilities, isDynamicModulesMode);
+                    permittedCapabilities, effectiveCapabilities);
         } else {
             NormalProxy.forkSystemServerPre(uid, gid, gids, debugFlags, rlimits,
-                    permittedCapabilities, effectiveCapabilities, isDynamicModulesMode);
+                    permittedCapabilities, effectiveCapabilities);
         }
     }
 
-    public static void forkSystemServerPost(int pid, boolean isBlackWhiteListMode,
-                                            boolean isDynamicModulesMode) {
+    public static void forkSystemServerPost(int pid) {
         if (pid == 0) {
             Utils.logD(forkSystemServerPramsStr + " = " + Process.myPid());
-            if (isBlackWhiteListMode) {
-                BlackWhiteListProxy.forkSystemServerPost(pid, isDynamicModulesMode);
+            if (isBlackWhiteListEnabled()) {
+                BlackWhiteListProxy.forkSystemServerPost(pid);
             } else {
-                NormalProxy.forkSystemServerPost(pid, isDynamicModulesMode);
+                NormalProxy.forkSystemServerPost(pid);
             }
         } else {
             // in zygote process, res is child zygote pid
@@ -117,6 +111,10 @@ public class Main implements KeepAll {
     private static native void init(int SDK_version);
 
     public static native String getInstallerPkgName();
+
+    public static native boolean isBlackWhiteListEnabled();
+
+    public static native boolean isDynamicModulesEnabled();
 
     // prevent from fatal error caused by holding not whitelisted file descriptors when forking zygote
     // https://github.com/rovo89/Xposed/commit/b3ba245ad04cd485699fb1d2ebde7117e58214ff

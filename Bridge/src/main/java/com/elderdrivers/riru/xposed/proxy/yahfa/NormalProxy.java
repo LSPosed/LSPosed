@@ -13,7 +13,8 @@ public class NormalProxy {
                                             int[][] rlimits, int mountExternal, String seInfo,
                                             String niceName, int[] fdsToClose, int[] fdsToIgnore,
                                             boolean startChildZygote, String instructionSet,
-                                            String appDataDir, boolean isDynamicModulesMode) {
+                                            String appDataDir) {
+        final boolean isDynamicModulesMode = Main.isDynamicModulesEnabled();
         Main.appDataDir = appDataDir;
         ConfigManager.setDynamicModulesMode(isDynamicModulesMode);
         Router.prepare(false);
@@ -24,7 +25,7 @@ public class NormalProxy {
         Main.closeFilesBeforeForkNative();
     }
 
-    public static void forkAndSpecializePost(int pid, String appDataDir, boolean isDynamicModulesMode) {
+    public static void forkAndSpecializePost(int pid, String appDataDir) {
         // TODO consider processes without forkAndSpecializePost called
         Main.reopenFilesAfterForkNative();
         Router.onEnterChildProcess();
@@ -34,8 +35,8 @@ public class NormalProxy {
     }
 
     public static void forkSystemServerPre(int uid, int gid, int[] gids, int debugFlags, int[][] rlimits,
-                                           long permittedCapabilities, long effectiveCapabilities,
-                                           boolean isDynamicModulesMode) {
+                                           long permittedCapabilities, long effectiveCapabilities) {
+        final boolean isDynamicModulesMode = Main.isDynamicModulesEnabled();
         Main.appDataDir = getDataPathPrefix() + "android";
         ConfigManager.setDynamicModulesMode(isDynamicModulesMode);
         Router.prepare(true);
@@ -50,7 +51,7 @@ public class NormalProxy {
         Main.closeFilesBeforeForkNative();
     }
 
-    public static void forkSystemServerPost(int pid, boolean isDynamicModulesMode) {
+    public static void forkSystemServerPost(int pid) {
         // in system_server process
         Main.reopenFilesAfterForkNative();
         Router.onEnterChildProcess();

@@ -74,6 +74,12 @@ static JNINativeMethod hookMethods[] = {
                 (void *) Java_lab_galaxy_yahfa_HookMain_ensureMethodCached
         },
         {
+                "isBlackWhiteListEnabled", "()Z", (void *) is_black_white_list_enabled
+        },
+        {
+                "isDynamicModulesEnabled", "()Z", (void *) is_dynamic_modules_enabled
+        },
+        {
                 "getInstallerPkgName", "()Ljava/lang/String;", (void *) get_installer_pkg_name
         },
         {
@@ -128,7 +134,7 @@ void loadDexAndInit(JNIEnv *env, const char *dexPath) {
     jclass entry_class = findClassFromLoader(env, myClassLoader, ENTRY_CLASS_NAME);
     if (NULL != entry_class) {
         LOGD("HookEntry Class %p", entry_class);
-        env->RegisterNatives(entry_class, hookMethods, 10);
+        env->RegisterNatives(entry_class, hookMethods, 12);
         isInited = true;
         LOGD("RegisterNatives succeed for HookEntry.");
     } else {

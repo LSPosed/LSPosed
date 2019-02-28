@@ -12,7 +12,8 @@ public class BlackWhiteListProxy {
                                             int[][] rlimits, int mountExternal, String seInfo,
                                             String niceName, int[] fdsToClose, int[] fdsToIgnore,
                                             boolean startChildZygote, String instructionSet,
-                                            String appDataDir, boolean isDynamicModulesMode) {
+                                            String appDataDir) {
+        final boolean isDynamicModulesMode = Main.isDynamicModulesEnabled();
         ConfigManager.setDynamicModulesMode(isDynamicModulesMode);
         if (!isDynamicModulesMode) {
             Router.loadModulesSafely();
@@ -20,8 +21,8 @@ public class BlackWhiteListProxy {
         }
     }
 
-    public static void forkAndSpecializePost(int pid, String appDataDir,
-                                             boolean isDynamicModulesMode) {
+    public static void forkAndSpecializePost(int pid, String appDataDir) {
+        final boolean isDynamicModulesMode = Main.isDynamicModulesEnabled();
         if (!isDynamicModulesMode) {
             Main.reopenFilesAfterForkNative();
         }
@@ -34,8 +35,8 @@ public class BlackWhiteListProxy {
 
     public static void forkSystemServerPre(int uid, int gid, int[] gids, int debugFlags,
                                            int[][] rlimits, long permittedCapabilities,
-                                           long effectiveCapabilities,
-                                           boolean isDynamicModulesMode) {
+                                           long effectiveCapabilities) {
+        final boolean isDynamicModulesMode = Main.isDynamicModulesEnabled();
         ConfigManager.setDynamicModulesMode(isDynamicModulesMode);
         if (!isDynamicModulesMode) {
             Router.loadModulesSafely();
@@ -43,7 +44,8 @@ public class BlackWhiteListProxy {
         }
     }
 
-    public static void forkSystemServerPost(int pid, boolean isDynamicModulesMode) {
+    public static void forkSystemServerPost(int pid) {
+        final boolean isDynamicModulesMode = Main.isDynamicModulesEnabled();
         if (!isDynamicModulesMode) {
             Main.reopenFilesAfterForkNative();
         }
