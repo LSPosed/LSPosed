@@ -19,6 +19,13 @@ static constexpr const char *kLibWhalePath = "/system/lib/libwhale.so";
     static ret (*old_##func)(__VA_ARGS__); \
     static ret new_##func(__VA_ARGS__)
 
+class ScopedSuspendAll {
+};
+
+extern void (*suspendAll)(ScopedSuspendAll *, const char *, bool);
+
+extern void (*resumeAll)(ScopedSuspendAll *);
+
 void install_inline_hooks();
 
 void deoptimize_method(JNIEnv *env, jclass clazz, jobject method);

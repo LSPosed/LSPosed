@@ -50,9 +50,8 @@ void onNativeForkSystemServerPre(JNIEnv *env, jclass clazz, uid_t uid, gid_t gid
     }
     prepareJavaEnv(env);
     // jump to java code
-    findAndCall(env, "forkSystemServerPre", "(II[II[[IJJZZ)V", uid, gid, gids, runtime_flags,
-                rlimits, permittedCapabilities, effectiveCapabilities,
-                is_black_white_list_mode, is_dynamic_modules_mode);
+    findAndCall(env, "forkSystemServerPre", "(II[II[[IJJ)V", uid, gid, gids, runtime_flags,
+                rlimits, permittedCapabilities, effectiveCapabilities);
 }
 
 
@@ -63,8 +62,7 @@ int onNativeForkSystemServerPost(JNIEnv *env, jclass clazz, jint res) {
         }
         prepareJavaEnv(env);
         // only do work in child since findAndCall would print log
-        findAndCall(env, "forkSystemServerPost", "(IZZ)V", res,
-                    is_black_white_list_enabled(), is_dynamic_modules_enabled());
+        findAndCall(env, "forkSystemServerPost", "(I)V", res);
     } else {
         // in zygote process, res is child zygote pid
         // don't print log here, see https://github.com/RikkaApps/Riru/blob/77adfd6a4a6a81bfd20569c910bc4854f2f84f5e/riru-core/jni/main/jni_native_method.cpp#L55-L66
@@ -94,11 +92,10 @@ void onNativeForkAndSpecializePre(JNIEnv *env, jclass clazz,
     }
     prepareJavaEnv(env);
     findAndCall(env, "forkAndSpecializePre",
-                "(II[II[[IILjava/lang/String;Ljava/lang/String;[I[IZLjava/lang/String;Ljava/lang/String;ZZ)V",
+                "(II[II[[IILjava/lang/String;Ljava/lang/String;[I[IZLjava/lang/String;Ljava/lang/String;)V",
                 uid, gid, gids, runtime_flags, rlimits,
                 _mount_external, se_info, se_name, fdsToClose, fdsToIgnore,
-                is_child_zygote, instructionSet, appDataDir,
-                is_black_white_list_mode, is_dynamic_modules_mode);
+                is_child_zygote, instructionSet, appDataDir);
 }
 
 int onNativeForkAndSpecializePost(JNIEnv *env, jclass clazz, jint res) {
@@ -107,8 +104,7 @@ int onNativeForkAndSpecializePost(JNIEnv *env, jclass clazz, jint res) {
             return 0;
         }
         prepareJavaEnv(env);
-        findAndCall(env, "forkAndSpecializePost", "(ILjava/lang/String;ZZ)V", res, sAppDataDir,
-                    is_black_white_list_enabled(), is_dynamic_modules_enabled());
+        findAndCall(env, "forkAndSpecializePost", "(ILjava/lang/String;)V", res, sAppDataDir);
     } else {
         // in zygote process, res is child zygote pid
         // don't print log here, see https://github.com/RikkaApps/Riru/blob/77adfd6a4a6a81bfd20569c910bc4854f2f84f5e/riru-core/jni/main/jni_native_method.cpp#L55-L66

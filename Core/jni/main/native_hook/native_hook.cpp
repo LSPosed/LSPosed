@@ -212,6 +212,19 @@ void hookRuntime(int api_level, void *artHandle, void (*hookFun)(void *, void *,
     }
 }
 
+void (*suspendAll)(ScopedSuspendAll*, const char*, bool) = nullptr;
+void (*resumeAll)(ScopedSuspendAll*) = nullptr;
+
+void getSuspendSyms(int api_level, void *artHandle, void (*hookFun)(void *, void *, void **)) {
+    if (api_level < ANDROID_N) {
+        return;
+    }
+    suspendAll = reinterpret_cast<void (*)(ScopedSuspendAll*,const char*, bool)>(dlsym(artHandle,
+                                                        "_ZN3art16ScopedSuspendAllC2EPKcb"));
+    resumeAll = reinterpret_cast<void (*)(ScopedSuspendAll*)>(dlsym(artHandle,
+                                                            "_ZN3art16ScopedSuspendAllD2Ev"));
+}
+
 void install_inline_hooks() {
     if (inlineHooksInstalled) {
         LOGI("inline hooks installed, skip");
@@ -243,6 +256,7 @@ void install_inline_hooks() {
     }
     hookRuntime(api_level, artHandle, hookFun);
     hookInstrumentation(api_level, artHandle, hookFun);
+    getSuspendSyms(api_level, artHandle, hookFun);
     hookIsInSamePackage(api_level, artHandle, hookFun);
     if (disableHiddenAPIPolicyImpl(api_level, artHandle, hookFun)) {
         LOGI("disableHiddenAPIPolicyImpl done.");

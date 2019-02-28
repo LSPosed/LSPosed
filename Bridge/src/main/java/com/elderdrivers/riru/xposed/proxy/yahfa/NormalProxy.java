@@ -4,6 +4,7 @@ import com.elderdrivers.riru.xposed.Main;
 import com.elderdrivers.riru.xposed.config.ConfigManager;
 import com.elderdrivers.riru.xposed.dexmaker.DynamicBridge;
 import com.elderdrivers.riru.xposed.entry.Router;
+import com.elderdrivers.riru.xposed.util.PrebuiltMethodsDeopter;
 
 import static com.elderdrivers.riru.xposed.util.FileUtils.getDataPathPrefix;
 
@@ -13,9 +14,11 @@ public class NormalProxy {
                                             int[][] rlimits, int mountExternal, String seInfo,
                                             String niceName, int[] fdsToClose, int[] fdsToIgnore,
                                             boolean startChildZygote, String instructionSet,
-                                            String appDataDir, boolean isDynamicModulesMode) {
+                                            String appDataDir) {
+        final boolean isDynamicModulesMode = Main.isDynamicModulesEnabled();
         Main.appDataDir = appDataDir;
         ConfigManager.setDynamicModulesMode(isDynamicModulesMode);
+        PrebuiltMethodsDeopter.deoptBootMethods(); // do it once for secondary zygote
         Router.prepare(false);
         // install bootstrap hooks for secondary zygote
         Router.installBootstrapHooks(false);
@@ -24,7 +27,7 @@ public class NormalProxy {
         Main.closeFilesBeforeForkNative();
     }
 
-    public static void forkAndSpecializePost(int pid, String appDataDir, boolean isDynamicModulesMode) {
+    public static void forkAndSpecializePost(int pid, String appDataDir) {
         // TODO consider processes without forkAndSpecializePost called
         Main.reopenFilesAfterForkNative();
         Router.onEnterChildProcess();
@@ -34,11 +37,12 @@ public class NormalProxy {
     }
 
     public static void forkSystemServerPre(int uid, int gid, int[] gids, int debugFlags, int[][] rlimits,
-                                           long permittedCapabilities, long effectiveCapabilities,
-                                           boolean isDynamicModulesMode) {
+                                           long permittedCapabilities, long effectiveCapabilities) {
+        final boolean isDynamicModulesMode = Main.isDynamicModulesEnabled();
         Main.appDataDir = getDataPathPrefix() + "android";
         ConfigManager.setDynamicModulesMode(isDynamicModulesMode);
         Router.prepare(true);
+        PrebuiltMethodsDeopter.deoptBootMethods(); // do it once for main zygote
         // install bootstrap hooks for main zygote as early as possible
         // in case we miss some processes not forked via forkAndSpecialize
         // for instance com.android.phone
@@ -50,7 +54,7 @@ public class NormalProxy {
         Main.closeFilesBeforeForkNative();
     }
 
-    public static void forkSystemServerPost(int pid, boolean isDynamicModulesMode) {
+    public static void forkSystemServerPost(int pid) {
         // in system_server process
         Main.reopenFilesAfterForkNative();
         Router.onEnterChildProcess();
