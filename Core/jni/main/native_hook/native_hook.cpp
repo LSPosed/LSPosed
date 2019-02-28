@@ -3,6 +3,7 @@
 #include <include/android_build.h>
 #include <string>
 #include <vector>
+#include <inject/config_manager.h>
 
 #include "include/logging.h"
 #include "native_hook.h"
@@ -13,11 +14,19 @@ static const char *(*getDesc)(void *, std::string *);
 
 static bool (*isInSamePackageBackup)(void *, void *) = nullptr;
 
+// runtime
 void *runtime_ = nullptr;
 
 void (*deoptBootImage)(void *runtime) = nullptr;
 
 bool (*runtimeInitBackup)(void *runtime, void *mapAddr) = nullptr;
+
+// instrumentation
+void *instru_ = nullptr;
+
+static void *(*instrCstBackup)(void *instru) = nullptr;
+
+void (*deoptMethod)(void *, void *) = nullptr;
 
 bool my_runtimeInit(void *runtime, void *mapAddr) {
     if (!runtimeInitBackup) {
@@ -45,7 +54,6 @@ static bool onIsInSamePackageCalled(void *thiz, void *that) {
         || strstr(thatDesc, "EdHooker") != nullptr
         || strstr(thisDesc, "com/elderdrivers/riru/") != nullptr
         || strstr(thatDesc, "com/elderdrivers/riru/") != nullptr) {
-//        LOGE("onIsInSamePackageCalled, %s -> %s", thisDesc, thatDesc);
         return true;
     }
     return (*isInSamePackageBackup)(thiz, that);
@@ -61,8 +69,8 @@ static bool onInvokeHiddenAPI() {
  * But we don't know the symbols until it's published.
  * @author asLody
  */
-static bool disable_HiddenAPIPolicyImpl(int api_level, void *artHandle,
-                                        void (*hookFun)(void *, void *, void **)) {
+static bool disableHiddenAPIPolicyImpl(int api_level, void *artHandle,
+                                       void (*hookFun)(void *, void *, void **)) {
     if (api_level < ANDROID_P) {
         return true;
     }
@@ -121,7 +129,63 @@ static void hookIsInSamePackage(int api_level, void *artHandle,
                reinterpret_cast<void **>(&isInSamePackageBackup));
 }
 
+void *my_instruCst(void *instru) {
+    if (!instrCstBackup) {
+        LOGE("instrCstBackup is null");
+        return instru;
+    }
+    LOGI("instrCst starts");
+    void *result = (*instrCstBackup)(instru);
+    LOGI("instrCst finishes");
+    if (instru_ != instru) {
+        LOGI("instru_ changed from %p to %p", instru_, instru);
+        instru_ = instru;
+    }
+    return result;
+}
+
+void hookInstrumentation(int api_level, void *artHandle, void (*hookFun)(void *, void *, void **)) {
+    if (api_level < ANDROID_P) {
+        // TODO support other api levels
+        return;
+    }
+    void *instruCstSym = dlsym(artHandle,
+                               "_ZN3art15instrumentation15InstrumentationC2Ev");
+    deoptMethod = reinterpret_cast<void (*)(void *, void *)>(
+            dlsym(artHandle,
+                  "_ZN3art15instrumentation15Instrumentation40UpdateMethodsCodeToInterpreterEntryPointEPNS_9ArtMethodE"));
+    if (!instruCstSym) {
+        LOGE("can't get instruCstSym: %s", dlerror());
+        return;
+    }
+    (*hookFun)(instruCstSym, reinterpret_cast<void *>(my_instruCst),
+               reinterpret_cast<void **>(&instrCstBackup));
+    LOGI("instrCst hooked");
+}
+
+std::vector<void *> deoptedMethods;
+
+void deoptimize_method(JNIEnv *env, jclass clazz, jobject method) {
+    if (!deoptMethod) {
+        LOGE("deoptMethodSym is null, skip deopt");
+        return;
+    }
+    void *reflected_method = env->FromReflectedMethod(method);
+    if (std::find(deoptedMethods.begin(), deoptedMethods.end(), reflected_method) !=
+        deoptedMethods.end()) {
+        LOGD("method %p has been deopted before, skip...", reflected_method);
+        return;
+    }
+    LOGD("deoptimize method: %p", reflected_method);
+    (*deoptMethod)(instru_, reflected_method);
+    deoptedMethods.push_back(reflected_method);
+    LOGD("deoptimize method done: %p");
+}
+
 void hookRuntime(int api_level, void *artHandle, void (*hookFun)(void *, void *, void **)) {
+    if (!is_deopt_boot_image_enabled()) {
+        return;
+    }
     void *runtimeInitSym = nullptr;
     if (api_level >= ANDROID_O) {
         // only oreo has deoptBootImageSym in Runtime
@@ -177,12 +241,13 @@ void install_inline_hooks() {
         LOGE("can't open libart: %s", dlerror());
         return;
     }
-    hookIsInSamePackage(api_level, artHandle, hookFun);
     hookRuntime(api_level, artHandle, hookFun);
-    if (disable_HiddenAPIPolicyImpl(api_level, artHandle, hookFun)) {
-        LOGI("disable_HiddenAPIPolicyImpl done.");
+    hookInstrumentation(api_level, artHandle, hookFun);
+    hookIsInSamePackage(api_level, artHandle, hookFun);
+    if (disableHiddenAPIPolicyImpl(api_level, artHandle, hookFun)) {
+        LOGI("disableHiddenAPIPolicyImpl done.");
     } else {
-        LOGE("disable_HiddenAPIPolicyImpl failed.");
+        LOGE("disableHiddenAPIPolicyImpl failed.");
     }
     dlclose(whaleHandle);
     dlclose(artHandle);

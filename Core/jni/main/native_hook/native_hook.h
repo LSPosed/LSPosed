@@ -21,4 +21,6 @@ static constexpr const char *kLibWhalePath = "/system/lib/libwhale.so";
 
 void install_inline_hooks();
 
+void deoptimize_method(JNIEnv *env, jclass clazz, jobject method);
+
 #endif // HOOK_H

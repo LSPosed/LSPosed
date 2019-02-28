@@ -123,4 +123,6 @@ public class Main implements KeepAll {
     public static native void closeFilesBeforeForkNative();
 
     public static native void reopenFilesAfterForkNative();
+
+    public static native void deoptMethodNative(Object object);
 }

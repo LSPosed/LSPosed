@@ -6,6 +6,7 @@
 #include <fcntl.h>
 #include <dlfcn.h>
 #include <inject/config_manager.h>
+#include <native_hook/native_hook.h>
 #include "java_hook/java_hook.h"
 #include "include/logging.h"
 #include "include/fd_utils-inl.h"
@@ -64,6 +65,9 @@ static JNINativeMethod hookMethods[] = {
         },
         {
                 "reopenFilesAfterForkNative", "()V", (void *)reopenFilesAfterForkNative
+        },
+        {
+                "deoptMethodNative", "(Ljava/lang/Object;)V", (void *)deoptimize_method
         }
 };
 
@@ -102,7 +106,7 @@ void loadDexAndInit(JNIEnv *env, const char *dexPath) {
     jclass entry_class = findClassFromLoader(env, myClassLoader, ENTRY_CLASS_NAME);
     if (NULL != entry_class) {
         LOGD("HookEntry Class %p", entry_class);
-        env->RegisterNatives(entry_class, hookMethods, 7);
+        env->RegisterNatives(entry_class, hookMethods, 8);
         isInited = true;
         LOGD("RegisterNatives succeed for HookEntry.");
     } else {
