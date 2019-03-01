@@ -1,6 +1,7 @@
 package com.elderdrivers.riru.xposed.config;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Set;
 
 import de.robv.android.xposed.SELinuxHelper;
@@ -16,7 +17,12 @@ public class ConfigManager {
     private static final String USE_WHITE_LIST = INSTALLER_DATA_BASE_DIR + "conf/usewhitelist";
     private static final String DYNAMIC_MODULES = INSTALLER_DATA_BASE_DIR + "conf/dynamicmodules";
     private static final Set<String> WHITE_LIST = Collections.singleton(INSTALLER_PACKAGE_NAME);
+    private static final HashMap<String, Boolean> compatModeCache = new HashMap<>();
     private static volatile boolean IS_DYNAMIC_MODULES = false;
+
+    public static boolean isDynamicModulesMode() {
+        return IS_DYNAMIC_MODULES;
+    }
 
     public static synchronized void setDynamicModulesMode(boolean isDynamicModulesMode) {
         if (isDynamicModulesMode != IS_DYNAMIC_MODULES) {
@@ -24,16 +30,19 @@ public class ConfigManager {
         }
     }
 
-    public static boolean isDynamicModulesMode() {
-        return IS_DYNAMIC_MODULES;
-    }
-
     public static boolean shouldUseWhitelist() {
         return isFileExists(USE_WHITE_LIST);
     }
 
     public static boolean shouldUseCompatMode(String packageName) {
-        return isFileExists(COMPAT_LIST_PATH + packageName);
+        Boolean result;
+        if (compatModeCache.containsKey(packageName)
+                && (result = compatModeCache.get(packageName)) != null) {
+            return result;
+        }
+        result = isFileExists(COMPAT_LIST_PATH + packageName);
+        compatModeCache.put(packageName, result);
+        return result;
     }
 
     public static boolean shouldHook(String packageName) {

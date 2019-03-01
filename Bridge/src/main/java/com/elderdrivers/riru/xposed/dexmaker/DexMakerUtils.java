@@ -10,7 +10,6 @@ import com.elderdrivers.riru.xposed.config.ConfigManager;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.robv.android.xposed.SELinuxHelper;
 import external.com.android.dx.Code;
 import external.com.android.dx.Local;
 import external.com.android.dx.TypeId;
@@ -156,8 +155,8 @@ public class DexMakerUtils {
         code.loadConstant(booleanLocal, false);
         code.loadConstant(byteLocal, (byte) 0);
         code.loadConstant(charLocal, '\0');
-        code.loadConstant(doubleLocal,0.0);
-        code.loadConstant(floatLocal,0.0f);
+        code.loadConstant(doubleLocal, 0.0);
+        code.loadConstant(floatLocal, 0.0f);
         code.loadConstant(intLocal, 0);
         code.loadConstant(longLocal, 0L);
         code.loadConstant(shortLocal, (short) 0);

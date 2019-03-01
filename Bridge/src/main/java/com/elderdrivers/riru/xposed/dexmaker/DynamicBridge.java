@@ -27,6 +27,10 @@ public final class DynamicBridge {
     private static File dexDir;
     private static File dexOptDir;
 
+    /**
+     * Reset dexPathInited flag once we enter child process
+     * since it might have been set to true in zygote process
+     */
     public static void onForkPost() {
         dexPathInited.set(false);
     }
@@ -46,33 +50,45 @@ public final class DynamicBridge {
         try {
             // for Android Oreo and later use InMemoryClassLoader
             if (!shouldUseInMemoryHook()) {
-                // using file based DexClassLoader
-                if (dexPathInited.compareAndSet(false, true)) {
-                    // delete previous compiled dex to prevent potential crashing
-                    // TODO find a way to reuse them in consideration of performance
-                    try {
-                        // we always choose to use device encrypted storage data on android N and later
-                        // in case some app is installing hooks before phone is unlocked
-                        String fixedAppDataDir = getDataPathPrefix() + getPackageName(Main.appDataDir) + "/";
-                        dexDir = new File(fixedAppDataDir, "/cache/edhookers/"
-                                + getCurrentProcessName().replace(":", "_") + "/");
-                        dexOptDir = new File(dexDir, "oat");
-                        dexDir.mkdirs();
-                        DexLog.d(Main.appProcessName + " deleting dir: " + dexOptDir.getAbsolutePath());
-                        try {
-                            FileUtils.delete(dexOptDir);
-                        } catch (Throwable throwable) {
-                        }
-                    } catch (Throwable throwable) {
-                        DexLog.e("error when init dex path", throwable);
-                    }
-                }
+                setupDexCachePath();
             }
             dexMaker.start(hookMethod, additionalHookInfo,
-                    hookMethod.getDeclaringClass().getClassLoader(), dexDir == null ? null : dexDir.getAbsolutePath());
+                    hookMethod.getDeclaringClass().getClassLoader(), getDexDirPath());
             hookedInfo.put(hookMethod, dexMaker.getCallBackupMethod());
         } catch (Exception e) {
             DexLog.e("error occur when generating dex. dexDir=" + dexDir, e);
+        }
+    }
+
+    private static String getDexDirPath() {
+        if (dexDir == null) {
+            return null;
+        }
+        return dexDir.getAbsolutePath();
+    }
+
+    private static void setupDexCachePath() {
+        // using file based DexClassLoader
+        if (!dexPathInited.compareAndSet(false, true)) {
+            return;
+        }
+        // delete previous compiled dex to prevent potential crashing
+        // TODO find a way to reuse them in consideration of performance
+        try {
+            // we always choose to use device encrypted storage data on android N and later
+            // in case some app is installing hooks before phone is unlocked
+            String fixedAppDataDir = getDataPathPrefix() + getPackageName(Main.appDataDir) + "/";
+            dexDir = new File(fixedAppDataDir, "/cache/edhookers/"
+                    + getCurrentProcessName().replace(":", "_") + "/");
+            dexOptDir = new File(dexDir, "oat");
+            dexDir.mkdirs();
+            DexLog.d(Main.appProcessName + " deleting dir: " + dexOptDir.getAbsolutePath());
+            try {
+                FileUtils.delete(dexOptDir);
+            } catch (Throwable throwable) {
+            }
+        } catch (Throwable throwable) {
+            DexLog.e("error when init dex path", throwable);
         }
     }
 

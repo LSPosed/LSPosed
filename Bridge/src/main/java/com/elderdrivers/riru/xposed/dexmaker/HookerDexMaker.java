@@ -30,7 +30,6 @@ import static com.elderdrivers.riru.xposed.dexmaker.DexMakerUtils.autoBoxIfNeces
 import static com.elderdrivers.riru.xposed.dexmaker.DexMakerUtils.autoUnboxIfNecessary;
 import static com.elderdrivers.riru.xposed.dexmaker.DexMakerUtils.createResultLocals;
 import static com.elderdrivers.riru.xposed.dexmaker.DexMakerUtils.getObjTypeIdIfPrimitive;
-import static com.elderdrivers.riru.xposed.dexmaker.DexMakerUtils.shouldUseInMemoryHook;
 
 public class HookerDexMaker {
 
@@ -193,14 +192,11 @@ public class HookerDexMaker {
         generateCallBackupMethod();
 
         ClassLoader loader;
-        if (shouldUseInMemoryHook()) {
+        if (TextUtils.isEmpty(mDexDirPath)) {
             // in memory dex classloader
             byte[] dexBytes = mDexMaker.generate();
             loader = new InMemoryDexClassLoader(ByteBuffer.wrap(dexBytes), mAppClassLoader);
         } else {
-            if (TextUtils.isEmpty(mDexDirPath)) {
-                throw new IllegalArgumentException("dexDirPath should not be empty!!!");
-            }
             // Create the dex file and load it.
             loader = mDexMaker.generateAndLoad(mAppClassLoader, new File(mDexDirPath));
         }
