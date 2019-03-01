@@ -2,19 +2,15 @@ package com.elderdrivers.riru.xposed.entry;
 
 import android.text.TextUtils;
 
-import com.elderdrivers.riru.xposed.Main;
 import com.elderdrivers.riru.xposed.core.HookMain;
+import com.elderdrivers.riru.xposed.dexmaker.DynamicBridge;
 import com.elderdrivers.riru.xposed.entry.bootstrap.AppBootstrapHookInfo;
 import com.elderdrivers.riru.xposed.entry.bootstrap.SysBootstrapHookInfo;
 import com.elderdrivers.riru.xposed.entry.bootstrap.SysInnerHookInfo;
 import com.elderdrivers.riru.xposed.entry.hooker.SystemMainHooker;
-import com.elderdrivers.riru.xposed.util.InlinedMethodCallers;
 import com.elderdrivers.riru.xposed.util.Utils;
 
-import java.util.Arrays;
-
 import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.XposedInit;
 
 public class Router {
@@ -87,5 +83,6 @@ public class Router {
 
     public static void onEnterChildProcess() {
         forkCompleted = true;
+        DynamicBridge.onForkPost();
     }
 }
