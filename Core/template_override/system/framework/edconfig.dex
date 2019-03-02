@@ -1,4 +1,4 @@
-version=90.0-0.3.0.0 beta1
+version=90.0-0.3.0.0-beta1
 arch=arm64
 minsdk=23
 maxsdk=28
