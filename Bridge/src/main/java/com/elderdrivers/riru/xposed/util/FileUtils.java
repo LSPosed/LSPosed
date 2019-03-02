@@ -1,6 +1,8 @@
 package com.elderdrivers.riru.xposed.util;
 
+import android.annotation.SuppressLint;
 import android.os.Build;
+import android.os.Process;
 import android.text.TextUtils;
 
 import java.io.BufferedReader;
@@ -9,6 +11,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+
+import static com.elderdrivers.riru.xposed.util.ProcessUtils.PER_USER_RANGE;
 
 public class FileUtils {
 
@@ -71,7 +75,11 @@ public class FileUtils {
         return dataDir.substring(lastIndex + 1);
     }
 
+    // FIXME: Although multi-users is considered here, but compat mode doesn't support other users' apps on Oreo and later yet.
+    @SuppressLint("SdCardPath")
     public static String getDataPathPrefix() {
-        return IS_USING_PROTECTED_STORAGE ? "/data/user_de/0/" : "/data/data/";
+        int userId = Process.myUid() / PER_USER_RANGE;
+        String format = IS_USING_PROTECTED_STORAGE ? "/data/user_de/%d/" : "/data/user/%d/";
+        return String.format(format, userId);
     }
 }

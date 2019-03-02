@@ -12,6 +12,10 @@ import java.io.InputStreamReader;
 
 public class ProcessUtils {
 
+    // Copied from UserHandle, indicates range of uids allocated for a user.
+    public static final int PER_USER_RANGE = 100000;
+    public static final int USER_SYSTEM = 0;
+
     public static String getCurrentProcessName() {
         String prettyName = Main.appProcessName;
         if (!TextUtils.isEmpty(prettyName)) {

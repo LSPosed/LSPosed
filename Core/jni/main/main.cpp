@@ -19,6 +19,16 @@
 #include "include/config.h"
 
 extern "C" {
+
+__attribute__((visibility("default"))) void onModuleLoaded() {
+    LOGI("onModuleLoaded: welcome to EdXposed!");
+    install_inline_hooks();
+}
+
+__attribute__((visibility("default"))) int shouldSkipUid(int uid) {
+    return 0;
+}
+
 __attribute__((visibility("default"))) void nativeForkAndSpecializePre(JNIEnv *env, jclass clazz,
                                                                        jint _uid, jint gid,
                                                                        jintArray gids,
@@ -42,11 +52,6 @@ __attribute__((visibility("default"))) int nativeForkAndSpecializePost(JNIEnv *e
     return onNativeForkAndSpecializePost(env, clazz, res);
 }
 
-__attribute__((visibility("default"))) void onModuleLoaded() {
-    LOGI("onModuleLoaded: welcome to EdXposed!");
-    install_inline_hooks();
-}
-
 __attribute__((visibility("default")))
 void nativeForkSystemServerPre(JNIEnv *env, jclass clazz, uid_t uid, gid_t gid, jintArray gids,
                                jint runtime_flags, jobjectArray rlimits,
@@ -54,7 +59,6 @@ void nativeForkSystemServerPre(JNIEnv *env, jclass clazz, uid_t uid, gid_t gid, 
     onNativeForkSystemServerPre(env, clazz, uid, gid, gids, runtime_flags, rlimits,
                                 permittedCapabilities, effectiveCapabilities);
 }
-
 
 __attribute__((visibility("default")))
 int nativeForkSystemServerPost(JNIEnv *env, jclass clazz, jint res) {

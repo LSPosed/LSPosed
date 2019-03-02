@@ -2,7 +2,6 @@ package com.elderdrivers.riru.xposed.proxy.yahfa;
 
 import com.elderdrivers.riru.xposed.Main;
 import com.elderdrivers.riru.xposed.config.ConfigManager;
-import com.elderdrivers.riru.xposed.dexmaker.DynamicBridge;
 import com.elderdrivers.riru.xposed.entry.Router;
 import com.elderdrivers.riru.xposed.util.PrebuiltMethodsDeopter;
 
@@ -19,6 +18,7 @@ public class NormalProxy {
         Main.appDataDir = appDataDir;
         ConfigManager.setDynamicModulesMode(isDynamicModulesMode);
         PrebuiltMethodsDeopter.deoptBootMethods(); // do it once for secondary zygote
+        // call this to ensure the flag is set to false ASAP
         Router.prepare(false);
         // install bootstrap hooks for secondary zygote
         Router.installBootstrapHooks(false);
@@ -31,7 +31,6 @@ public class NormalProxy {
         // TODO consider processes without forkAndSpecializePost called
         Main.reopenFilesAfterForkNative();
         Router.onEnterChildProcess();
-        DynamicBridge.onForkPost();
         // load modules for each app process on its forked if dynamic modules mode is on
         Router.loadModulesSafely();
     }
@@ -41,6 +40,7 @@ public class NormalProxy {
         final boolean isDynamicModulesMode = Main.isDynamicModulesEnabled();
         Main.appDataDir = getDataPathPrefix() + "android";
         ConfigManager.setDynamicModulesMode(isDynamicModulesMode);
+        // set startsSystemServer flag used when loadModules
         Router.prepare(true);
         PrebuiltMethodsDeopter.deoptBootMethods(); // do it once for main zygote
         // install bootstrap hooks for main zygote as early as possible

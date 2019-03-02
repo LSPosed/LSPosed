@@ -18,6 +18,8 @@ public class BlackWhiteListProxy {
         // when isDynamicModulesMode is not on
         final boolean isDynamicModulesMode = Main.isDynamicModulesEnabled();
         ConfigManager.setDynamicModulesMode(isDynamicModulesMode);
+        // call this to ensure the flag is set to false ASAP
+        Router.prepare(false);
         PrebuiltMethodsDeopter.deoptBootMethods(); // do it once for secondary zygote
         if (!isDynamicModulesMode) {
             Router.loadModulesSafely();
@@ -34,7 +36,7 @@ public class BlackWhiteListProxy {
         }
         Main.appDataDir = appDataDir;
         ConfigManager.setDynamicModulesMode(isDynamicModulesMode);
-        Router.prepare(false);
+        Router.onEnterChildProcess();
         Router.installBootstrapHooks(false);
         Router.loadModulesSafely();
     }
@@ -46,6 +48,8 @@ public class BlackWhiteListProxy {
         final boolean isDynamicModulesMode = Main.isDynamicModulesEnabled();
         ConfigManager.setDynamicModulesMode(isDynamicModulesMode);
         PrebuiltMethodsDeopter.deoptBootMethods(); // do it once for main zygote
+        // set startsSystemServer flag used when loadModules
+        Router.prepare(true);
         // we never install bootstrap hooks here in black/white list mode
         // because installed hooks would be propagated to all child processes of main zygote
         // hence we cannot install hooks for processes like com.android.phone process who are
@@ -65,7 +69,7 @@ public class BlackWhiteListProxy {
         }
         Main.appDataDir = getDataPathPrefix() + "android";
         ConfigManager.setDynamicModulesMode(isDynamicModulesMode);
-        Router.prepare(true);
+        Router.onEnterChildProcess();
         Router.installBootstrapHooks(true);
         Router.loadModulesSafely();
     }
