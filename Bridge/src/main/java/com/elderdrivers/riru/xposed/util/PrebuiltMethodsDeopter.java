@@ -30,6 +30,7 @@ public class PrebuiltMethodsDeopter {
     }
 
     public static void deoptBootMethods() {
+        // todo check if has been done before
         deoptMethods(KEY_BOOT_IMAGE, null);
     }
 
