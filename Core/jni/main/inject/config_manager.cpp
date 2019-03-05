@@ -87,7 +87,7 @@ static void init_once() {
 
 static char package_name[256];
 
-bool is_app_need_hook(JNIEnv *env, jstring appDataDir) {
+bool is_app_need_hook(JNIEnv *env, jclass, jstring appDataDir) {
     init_once();
     if (!black_white_list_enabled) {
         return true;

@@ -7,7 +7,7 @@
 
 #include <jni.h>
 
-bool is_app_need_hook(JNIEnv *env, jstring appDataDir);
+bool is_app_need_hook(JNIEnv *env, jclass, jstring appDataDir);
 
 bool is_black_white_list_enabled();
 

@@ -80,6 +80,9 @@ static JNINativeMethod hookMethods[] = {
                 "isDynamicModulesEnabled", "()Z", (void *) is_dynamic_modules_enabled
         },
         {
+                "isAppNeedHook", "(Ljava/lang/String;)Z", (void *) is_app_need_hook
+        },
+        {
                 "getInstallerPkgName", "()Ljava/lang/String;", (void *) get_installer_pkg_name
         },
         {
@@ -134,7 +137,7 @@ void loadDexAndInit(JNIEnv *env, const char *dexPath) {
     jclass entry_class = findClassFromLoader(env, myClassLoader, ENTRY_CLASS_NAME);
     if (NULL != entry_class) {
         LOGD("HookEntry Class %p", entry_class);
-        env->RegisterNatives(entry_class, hookMethods, 12);
+        env->RegisterNatives(entry_class, hookMethods, 13);
         isInited = true;
         LOGD("RegisterNatives succeed for HookEntry.");
     } else {

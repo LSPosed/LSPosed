@@ -7,6 +7,7 @@ import com.elderdrivers.riru.xposed.dexmaker.DynamicBridge;
 import com.elderdrivers.riru.xposed.entry.bootstrap.AppBootstrapHookInfo;
 import com.elderdrivers.riru.xposed.entry.bootstrap.SysBootstrapHookInfo;
 import com.elderdrivers.riru.xposed.entry.bootstrap.SysInnerHookInfo;
+import com.elderdrivers.riru.xposed.entry.bootstrap.WorkAroundHookInfo;
 import com.elderdrivers.riru.xposed.entry.hooker.SystemMainHooker;
 import com.elderdrivers.riru.xposed.util.Utils;
 
@@ -79,6 +80,13 @@ public class Router {
                 Router.class.getClassLoader(),
                 SystemMainHooker.systemServerCL,
                 SysInnerHookInfo.class.getName());
+    }
+
+    public static void startWorkAroundHook() {
+        HookMain.doHookDefault(
+                Router.class.getClassLoader(),
+                XposedBridge.BOOTCLASSLOADER,
+                WorkAroundHookInfo.class.getName());
     }
 
     public static void onEnterChildProcess() {

@@ -57,9 +57,6 @@ void onNativeForkSystemServerPre(JNIEnv *env, jclass clazz, uid_t uid, gid_t gid
 
 int onNativeForkSystemServerPost(JNIEnv *env, jclass clazz, jint res) {
     if (res == 0) {
-        if (!is_app_need_hook(env, sAppDataDir)) {
-            return 0;
-        }
         prepareJavaEnv(env);
         // only do work in child since findAndCall would print log
         findAndCall(env, "forkSystemServerPost", "(I)V", res);
@@ -100,9 +97,6 @@ void onNativeForkAndSpecializePre(JNIEnv *env, jclass clazz,
 
 int onNativeForkAndSpecializePost(JNIEnv *env, jclass clazz, jint res) {
     if (res == 0) {
-        if (!is_app_need_hook(env, sAppDataDir)) {
-            return 0;
-        }
         prepareJavaEnv(env);
         findAndCall(env, "forkAndSpecializePost", "(ILjava/lang/String;)V", res, sAppDataDir);
     } else {

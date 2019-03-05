@@ -1,6 +1,5 @@
 package com.elderdrivers.riru.xposed.core;
 
-import com.elderdrivers.riru.xposed.Main;
 import com.elderdrivers.riru.xposed.entry.hooker.OnePlusWorkAroundHooker;
 import com.elderdrivers.riru.xposed.util.Utils;
 
@@ -112,13 +111,8 @@ public class HookMain {
         if (backup != null) {
             HookMethodResolver.resolveMethod(hook, backup);
         }
-        long obj = Main.suspendAllThreads();
-        try {
-            if (!backupAndHookNative(target, hook, backup)) {
-                throw new RuntimeException("Failed to hook " + target + " with " + hook);
-            }
-        } finally {
-            Main.resumeAllThreads(obj);
+        if (!backupAndHookNative(target, hook, backup)) {
+            throw new RuntimeException("Failed to hook " + target + " with " + hook);
         }
     }
 
