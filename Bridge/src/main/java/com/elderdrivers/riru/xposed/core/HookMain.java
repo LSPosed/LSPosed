@@ -111,6 +111,7 @@ public class HookMain {
         if (backup != null) {
             HookMethodResolver.resolveMethod(hook, backup);
         }
+        Runtime.getRuntime().gc();
         if (!backupAndHookNative(target, hook, backup)) {
             throw new RuntimeException("Failed to hook " + target + " with " + hook);
         }
