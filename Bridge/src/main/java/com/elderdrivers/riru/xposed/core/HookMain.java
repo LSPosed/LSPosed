@@ -1,5 +1,6 @@
 package com.elderdrivers.riru.xposed.core;
 
+import com.elderdrivers.riru.xposed.Main;
 import com.elderdrivers.riru.xposed.entry.hooker.OnePlusWorkAroundHooker;
 import com.elderdrivers.riru.xposed.util.Utils;
 
@@ -10,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Set;
+
+import de.robv.android.xposed.XposedHelpers;
 
 import static com.elderdrivers.riru.xposed.Main.backupAndHookNative;
 import static com.elderdrivers.riru.xposed.Main.findMethodNative;
@@ -111,7 +114,14 @@ public class HookMain {
         if (backup != null) {
             HookMethodResolver.resolveMethod(hook, backup);
         }
-        Runtime.getRuntime().gc();
+        // make sure GC completed before hook
+        Thread currentThread = Thread.currentThread();
+        int lastGcType = Main.waitForGcToComplete(
+                XposedHelpers.getLongField(currentThread, "nativePeer"));
+        if (lastGcType < 0) {
+            Utils.logW("waitForGcToComplete failed, using fallback");
+            Runtime.getRuntime().gc();
+        }
         if (!backupAndHookNative(target, hook, backup)) {
             throw new RuntimeException("Failed to hook " + target + " with " + hook);
         }

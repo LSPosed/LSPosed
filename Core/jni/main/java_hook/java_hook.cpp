@@ -52,6 +52,12 @@ void resumeAllThreads(JNIEnv *, jclass, jlong obj) {
     resumeAll(reinterpret_cast<ScopedSuspendAll *>(obj));
 }
 
+int waitForGcToComplete(JNIEnv *, jclass, jlong thread) {
+    // if waitGc succeeded, it should return one of enum collector::GcType
+    int gcType = waitGc(0, reinterpret_cast<void *>(thread));
+    return gcType;
+}
+
 static JNINativeMethod hookMethods[] = {
         {
                 "init",
@@ -99,6 +105,9 @@ static JNINativeMethod hookMethods[] = {
         },
         {
                 "resumeAllThreads", "(J)V", (void *) resumeAllThreads
+        },
+        {
+                "waitForGcToComplete", "(J)I", (void *) waitForGcToComplete
         }
 };
 
@@ -137,7 +146,7 @@ void loadDexAndInit(JNIEnv *env, const char *dexPath) {
     jclass entry_class = findClassFromLoader(env, myClassLoader, ENTRY_CLASS_NAME);
     if (NULL != entry_class) {
         LOGD("HookEntry Class %p", entry_class);
-        env->RegisterNatives(entry_class, hookMethods, 13);
+        env->RegisterNatives(entry_class, hookMethods, 14);
         isInited = true;
         LOGD("RegisterNatives succeed for HookEntry.");
     } else {

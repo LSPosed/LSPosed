@@ -28,6 +28,8 @@ static void *(*instrCstBackup)(void *instru) = nullptr;
 
 void (*deoptMethod)(void *, void *) = nullptr;
 
+static void (*heapPreForkBackup)(void *) = nullptr;
+
 bool my_runtimeInit(void *runtime, void *mapAddr) {
     if (!runtimeInitBackup) {
         LOGE("runtimeInitBackup is null");
@@ -212,17 +214,49 @@ void hookRuntime(int api_level, void *artHandle, void (*hookFun)(void *, void *,
     }
 }
 
-void (*suspendAll)(ScopedSuspendAll*, const char*, bool) = nullptr;
-void (*resumeAll)(ScopedSuspendAll*) = nullptr;
+void (*suspendAll)(ScopedSuspendAll *, const char *, bool) = nullptr;
+
+void (*resumeAll)(ScopedSuspendAll *) = nullptr;
+
+int (*waitGcInternal)(void *, int, void *) = nullptr;
+
+void *heap_ = nullptr;
+
+int waitGc(int gcCause, void *thread) {
+    if (!heap_) {
+        LOGE("heap_ is null");
+        return -1;
+    }
+    return (*waitGcInternal)(heap_, gcCause, thread);
+}
+
+static void myHeapPreFork(void *heap) {
+    heap_ = heap;
+    (*heapPreForkBackup)(heap);
+}
 
 void getSuspendSyms(int api_level, void *artHandle, void (*hookFun)(void *, void *, void **)) {
-    if (api_level < ANDROID_N) {
-        return;
+    if (api_level >= ANDROID_LOLLIPOP) {
+        waitGcInternal = reinterpret_cast<int (*)(void *, int, void *)>(dlsym(artHandle,
+                                                                              "_ZN3art2gc4Heap19WaitForGcToCompleteENS0_7GcCauseEPNS_6ThreadE"));
+        void *heapPreFork = dlsym(artHandle, "_ZN3art2gc4Heap13PreZygoteForkEv");
+        if (!heapPreFork) {
+            LOGE("can't find heapPreFork: %s", dlerror());
+        } else {
+            // a chance to get pointer of the heap
+            (*hookFun)(heapPreFork, reinterpret_cast<void *>(myHeapPreFork),
+                       reinterpret_cast<void **>(&heapPreForkBackup));
+            LOGI("heapPreFork hooked.");
+        }
     }
-    suspendAll = reinterpret_cast<void (*)(ScopedSuspendAll*,const char*, bool)>(dlsym(artHandle,
-                                                        "_ZN3art16ScopedSuspendAllC2EPKcb"));
-    resumeAll = reinterpret_cast<void (*)(ScopedSuspendAll*)>(dlsym(artHandle,
-                                                            "_ZN3art16ScopedSuspendAllD2Ev"));
+
+    if (api_level >= ANDROID_N) {
+        suspendAll = reinterpret_cast<void (*)(ScopedSuspendAll *, const char *, bool)>(dlsym(
+                artHandle,
+                "_ZN3art16ScopedSuspendAllC2EPKcb"));
+        resumeAll = reinterpret_cast<void (*)(ScopedSuspendAll *)>(dlsym(artHandle,
+                                                                         "_ZN3art16ScopedSuspendAllD2Ev"));
+    }
 }
 
 void install_inline_hooks() {

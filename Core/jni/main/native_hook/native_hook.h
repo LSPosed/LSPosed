@@ -26,6 +26,8 @@ extern void (*suspendAll)(ScopedSuspendAll *, const char *, bool);
 
 extern void (*resumeAll)(ScopedSuspendAll *);
 
+extern int waitGc(int, void *);
+
 void install_inline_hooks();
 
 void deoptimize_method(JNIEnv *env, jclass clazz, jobject method);

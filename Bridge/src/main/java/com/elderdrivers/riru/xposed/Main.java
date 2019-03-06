@@ -129,4 +129,6 @@ public class Main implements KeepAll {
     public static native long suspendAllThreads();
 
     public static native void resumeAllThreads(long obj);
+
+    public static native int waitForGcToComplete(long thread);
 }
