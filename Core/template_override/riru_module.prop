@@ -1,5 +1,5 @@
 name=Ed Xposed
-version=v0.3.0.0_beta1
-versionCode=3000
-author=givein2u & MlgmXyysd
+version=v0.3.0.0_beta2
+versionCode=3002
+author=solohsu & MlgmXyysd
 description=Magisk version of Xposed. Require Riru - Core installed.
