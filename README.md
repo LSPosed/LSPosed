@@ -56,5 +56,6 @@ Discord: [Code_of_MeowCat](https://discord.gg/Hag6gNh)
 
 ## Contribute
 
-Apparently this framework is far from stable and all kinds of PRs are welcome. :)
+- Apparently this framework is far from stable and all kinds of PRs are welcome. :)
+- [Buy me a coffee](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=7QSUMRYATU9D4&currency_code=USD&source=url)
 
