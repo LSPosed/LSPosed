@@ -11,6 +11,7 @@
 
 static jclass sEntryClass;
 static jstring sAppDataDir;
+static jstring sNiceName;
 
 void prepareJavaEnv(JNIEnv *env) {
     loadDexAndInit(env, INJECT_DEX_PATH);
@@ -81,6 +82,7 @@ void onNativeForkAndSpecializePre(JNIEnv *env, jclass clazz,
                                   jstring instructionSet,
                                   jstring appDataDir) {
     sAppDataDir = appDataDir;
+    sNiceName = se_name;
     bool is_black_white_list_mode = is_black_white_list_enabled();
     bool is_dynamic_modules_mode = is_dynamic_modules_enabled();
     if (is_black_white_list_mode && is_dynamic_modules_mode) {
@@ -98,7 +100,7 @@ void onNativeForkAndSpecializePre(JNIEnv *env, jclass clazz,
 int onNativeForkAndSpecializePost(JNIEnv *env, jclass clazz, jint res) {
     if (res == 0) {
         prepareJavaEnv(env);
-        findAndCall(env, "forkAndSpecializePost", "(ILjava/lang/String;)V", res, sAppDataDir);
+        findAndCall(env, "forkAndSpecializePost", "(ILjava/lang/String;Ljava/lang/String;)V", res, sAppDataDir, sNiceName);
     } else {
         // in zygote process, res is child zygote pid
         // don't print log here, see https://github.com/RikkaApps/Riru/blob/77adfd6a4a6a81bfd20569c910bc4854f2f84f5e/riru-core/jni/main/jni_native_method.cpp#L55-L66

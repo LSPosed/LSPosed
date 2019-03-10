@@ -3,6 +3,7 @@
 //
 
 #include <cstdio>
+#include <dirent.h>
 #include <unistd.h>
 #include <jni.h>
 #include <cstdlib>
@@ -10,9 +11,13 @@
 #include <thread>
 #include <vector>
 #include <string>
+
 #include <include/android_build.h>
 #include <include/logging.h>
+#include <linux/limits.h>
 #include "config_manager.h"
+
+using namespace std;
 
 #define PRIMARY_INSTALLER_PKG_NAME "com.solohsu.android.edxp.manager"
 #define SECONDARY_INSTALLER_PKG_NAME "org.meowcat.edxposed.manager"
@@ -22,6 +27,7 @@ static bool use_prot_storage = GetAndroidApiLevel() >= ANDROID_N;
 static const char *data_path_prefix = use_prot_storage ? "/data/user_de/0/" : "/data/user/0/";
 static const char *config_path_tpl = "%s/%s/conf/%s";
 static char data_test_path[PATH_MAX];
+static char base_config_path[PATH_MAX];
 static char blacklist_path[PATH_MAX];
 static char whitelist_path[PATH_MAX];
 static char use_whitelist_path[PATH_MAX];
@@ -34,6 +40,10 @@ static bool black_white_list_enabled = false;
 static bool dynamic_modules_enabled = false;
 static bool deopt_boot_image_enabled = false;
 static bool inited = false;
+// snapshot at boot
+static bool use_white_list_snapshot = false;
+static vector<string> white_list_default;
+static vector<string> black_list_default;
 
 static const char *get_installer_package_name() {
     snprintf(data_test_path, PATH_MAX, config_path_tpl, data_path_prefix,
@@ -61,9 +71,38 @@ static const char *get_installer_package_name() {
     return PRIMARY_INSTALLER_PKG_NAME;
 }
 
+static void snapshotBlackWhiteList() {
+    DIR *dir;
+    struct dirent *dent;
+    dir = opendir(whitelist_path);
+    if (dir != nullptr) {
+        while ((dent = readdir(dir)) != nullptr) {
+            if (dent->d_type == DT_REG) {
+                const char *fileName = dent->d_name;
+                LOGI("whitelist: %s", fileName);
+                white_list_default.emplace_back(fileName);
+            }
+        }
+        closedir(dir);
+    }
+    dir = opendir(blacklist_path);
+    if (dir != nullptr) {
+        while ((dent = readdir(dir)) != nullptr) {
+            if (dent->d_type == DT_REG) {
+                const char *fileName = dent->d_name;
+                LOGI("blacklist: %s", fileName);
+                black_list_default.emplace_back(fileName);
+            }
+        }
+        closedir(dir);
+    }
+}
+
 static void init_once() {
     if (!inited) {
         installer_package_name = get_installer_package_name();
+        snprintf(base_config_path, PATH_MAX, config_path_tpl, data_path_prefix,
+                 installer_package_name, "");
         snprintf(blacklist_path, PATH_MAX, config_path_tpl, data_path_prefix,
                  installer_package_name, "blacklist/");
         snprintf(whitelist_path, PATH_MAX, config_path_tpl, data_path_prefix,
@@ -78,9 +117,15 @@ static void init_once() {
                  installer_package_name, "deoptbootimage");
         dynamic_modules_enabled = access(dynamic_modules_path, F_OK) == 0;
         black_white_list_enabled = access(black_white_list_path, F_OK) == 0;
+        // use_white_list snapshot
+        use_white_list_snapshot = access(use_whitelist_path, F_OK) == 0;
         deopt_boot_image_enabled = access(deopt_boot_image_path, F_OK) == 0;
-        LOGI("black/white list mode: %d", black_white_list_enabled);
+        LOGI("black/white list mode: %d, using whitelist: %d", black_white_list_enabled,
+             use_white_list_snapshot);
         LOGI("dynamic modules mode: %d", dynamic_modules_enabled);
+        if (black_white_list_enabled) {
+            snapshotBlackWhiteList();
+        }
         inited = true;
     }
 }
@@ -92,12 +137,16 @@ bool is_app_need_hook(JNIEnv *env, jclass, jstring appDataDir) {
     if (!black_white_list_enabled) {
         return true;
     }
-    bool use_white_list = access(use_whitelist_path, F_OK) == 0;
-    if (!appDataDir) {
-        LOGE("appDataDir is null");
-        return !use_white_list;
-    }
+
     const char *app_data_dir = env->GetStringUTFChars(appDataDir, nullptr);
+    bool can_access_app_data = access(base_config_path, F_OK) == 0;
+    bool use_white_list;
+    if (can_access_app_data) {
+        use_white_list = access(use_whitelist_path, F_OK) == 0;
+    } else {
+        LOGE("can't access config path, using snapshot use_white_list: %s", app_data_dir);
+        use_white_list = use_white_list_snapshot;
+    }
     int user = 0;
     if (sscanf(app_data_dir, "/data/%*[^/]/%d/%s", &user, package_name) != 2) {
         if (sscanf(app_data_dir, "/data/%*[^/]/%s", package_name) != 1) {
@@ -115,6 +164,11 @@ bool is_app_need_hook(JNIEnv *env, jclass, jstring appDataDir) {
         return true;
     }
     if (use_white_list) {
+        if (!can_access_app_data) {
+            LOGE("can't access config path, using snapshot white list: %s", app_data_dir);
+            return find(white_list_default.begin(), white_list_default.end(), package_name) !=
+                   white_list_default.end();
+        }
         char path[PATH_MAX];
         snprintf(path, PATH_MAX, "%s%s", whitelist_path, package_name);
         bool res = access(path, F_OK) == 0;
@@ -122,6 +176,11 @@ bool is_app_need_hook(JNIEnv *env, jclass, jstring appDataDir) {
         env->ReleaseStringUTFChars(appDataDir, app_data_dir);
         return res;
     } else {
+        if (!can_access_app_data) {
+            LOGE("can't access config path, using snapshot black list: %s", app_data_dir);
+            return !(find(black_list_default.begin(), black_list_default.end(), package_name) !=
+                     black_list_default.end());
+        }
         char path[PATH_MAX];
         snprintf(path, PATH_MAX, "%s%s", blacklist_path, package_name);
         bool res = access(path, F_OK) != 0;
