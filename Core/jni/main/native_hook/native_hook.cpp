@@ -21,10 +21,9 @@ void (*deoptBootImage)(void *runtime) = nullptr;
 
 bool (*runtimeInitBackup)(void *runtime, void *mapAddr) = nullptr;
 
-// instrumentation
-void *instru_ = nullptr;
+void *class_linker_ = nullptr;
 
-static void *(*instrCstBackup)(void *instru) = nullptr;
+static void *(*classLinkerCstBackup)(void *, void *) = nullptr;
 
 void (*deoptMethod)(void *, void *) = nullptr;
 
@@ -131,38 +130,38 @@ static void hookIsInSamePackage(int api_level, void *artHandle,
                reinterpret_cast<void **>(&isInSamePackageBackup));
 }
 
-void *my_instruCst(void *instru) {
-    if (!instrCstBackup) {
-        LOGE("instrCstBackup is null");
-        return instru;
+void *my_classLinkerCst(void *classLinker, void *internTable) {
+    LOGI("classLinkerCst starts");
+    void *result = (*classLinkerCstBackup)(classLinker, internTable);
+    if (class_linker_ != classLinker) {
+        LOGI("class_linker_ changed from %p to %p", class_linker_, classLinker);
+        class_linker_ = classLinker;
     }
-    LOGI("instrCst starts");
-    void *result = (*instrCstBackup)(instru);
-    LOGI("instrCst finishes");
-    if (instru_ != instru) {
-        LOGI("instru_ changed from %p to %p", instru_, instru);
-        instru_ = instru;
-    }
+    LOGI("classLinkerCst finishes");
     return result;
 }
 
 void hookInstrumentation(int api_level, void *artHandle, void (*hookFun)(void *, void *, void **)) {
-    if (api_level < ANDROID_P) {
-        // TODO support other api levels
+    if (api_level < ANDROID_M) {
+        // 5.x not supported
         return;
     }
-    void *instruCstSym = dlsym(artHandle,
-                               "_ZN3art15instrumentation15InstrumentationC2Ev");
+    void *classLinkerCstSym = dlsym(artHandle,
+                                    "_ZN3art11ClassLinkerC2EPNS_11InternTableE");
+    if (!classLinkerCstSym) {
+        LOGE("can't get classLinkerCstSym: %s", dlerror());
+        return;
+    }
     deoptMethod = reinterpret_cast<void (*)(void *, void *)>(
             dlsym(artHandle,
-                  "_ZN3art15instrumentation15Instrumentation40UpdateMethodsCodeToInterpreterEntryPointEPNS_9ArtMethodE"));
-    if (!instruCstSym) {
-        LOGE("can't get instruCstSym: %s", dlerror());
+                  "_ZNK3art11ClassLinker27SetEntryPointsToInterpreterEPNS_9ArtMethodE"));
+    if (!deoptMethod) {
+        LOGE("can't get deoptMethodSym: %s", dlerror());
         return;
     }
-    (*hookFun)(instruCstSym, reinterpret_cast<void *>(my_instruCst),
-               reinterpret_cast<void **>(&instrCstBackup));
-    LOGI("instrCst hooked");
+    (*hookFun)(classLinkerCstSym, reinterpret_cast<void *>(my_classLinkerCst),
+               reinterpret_cast<void **>(&classLinkerCstBackup));
+    LOGI("classLinkerCst hooked");
 }
 
 std::vector<void *> deoptedMethods;
@@ -172,16 +171,20 @@ void deoptimize_method(JNIEnv *env, jclass clazz, jobject method) {
         LOGE("deoptMethodSym is null, skip deopt");
         return;
     }
+    if (!class_linker_) {
+        LOGE("class_linker_ is null, skip deopt");
+        return;
+    }
     void *reflected_method = env->FromReflectedMethod(method);
     if (std::find(deoptedMethods.begin(), deoptedMethods.end(), reflected_method) !=
         deoptedMethods.end()) {
         LOGD("method %p has been deopted before, skip...", reflected_method);
         return;
     }
-    LOGD("deoptimize method: %p", reflected_method);
-    (*deoptMethod)(instru_, reflected_method);
+    LOGD("deoptimizing method: %p", reflected_method);
+    (*deoptMethod)(class_linker_, reflected_method);
     deoptedMethods.push_back(reflected_method);
-    LOGD("deoptimize method done: %p");
+    LOGD("method deoptimized: %p", reflected_method);
 }
 
 void hookRuntime(int api_level, void *artHandle, void (*hookFun)(void *, void *, void **)) {
@@ -249,7 +252,6 @@ void getSuspendSyms(int api_level, void *artHandle, void (*hookFun)(void *, void
             LOGI("heapPreFork hooked.");
         }
     }
-
     if (api_level >= ANDROID_N) {
         suspendAll = reinterpret_cast<void (*)(ScopedSuspendAll *, const char *, bool)>(dlsym(
                 artHandle,

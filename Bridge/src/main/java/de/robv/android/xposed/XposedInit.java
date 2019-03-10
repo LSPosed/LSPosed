@@ -92,6 +92,7 @@ public final class XposedInit {
                 && !ConfigManager.isDynamicModulesMode()) {
             return;
         }
+        // FIXME module list is cleared but never could be reload again when using dynamic-module-list under multi-user environment
         XposedBridge.clearLoadedPackages();
         final String filename = INSTALLER_DATA_BASE_DIR + "conf/modules.list";
         BaseService service = SELinuxHelper.getAppDataFileService();
