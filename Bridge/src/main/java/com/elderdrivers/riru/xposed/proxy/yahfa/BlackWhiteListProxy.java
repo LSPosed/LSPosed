@@ -84,21 +84,24 @@ public class BlackWhiteListProxy {
         // loadModules once for all child processes of zygote
         // TODO maybe just save initZygote callbacks and call them when whitelisted process forked?
         Router.loadModulesSafely(true);
+        Main.closeFilesBeforeForkNative();
     }
 
     private static void onForkPostCommon(boolean isSystemServer, String appDataDir, String niceName) {
         Main.appDataDir = appDataDir;
         Main.niceName = niceName;
+        final boolean isDynamicModulesMode = Main.isDynamicModulesEnabled();
+        ConfigManager.setDynamicModulesMode(isDynamicModulesMode);
         Router.onEnterChildProcess();
+        if (!isDynamicModulesMode) {
+            Main.reopenFilesAfterForkNative();
+        }
         if (!checkNeedHook(appDataDir, niceName)) {
             // if is blacklisted, just stop here
             return;
         }
-        final boolean isDynamicModulesMode = Main.isDynamicModulesEnabled();
-        ConfigManager.setDynamicModulesMode(isDynamicModulesMode);
         Router.prepare(isSystemServer);
         PrebuiltMethodsDeopter.deoptBootMethods();
-        Router.reopenFilesIfNeeded();
         Router.installBootstrapHooks(isSystemServer);
         if (isDynamicModulesMode) {
             Router.loadModulesSafely(false);

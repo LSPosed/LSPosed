@@ -20,18 +20,21 @@ jobject gInjectDexClassLoader;
 
 static bool isInited = false;
 
-jlong closeFilesBeforeForkNative(JNIEnv *, jclass) {
-    return reinterpret_cast<jlong>(FileDescriptorTable::Create());
+static FileDescriptorTable *gClosedFdTable = nullptr;
+
+void closeFilesBeforeForkNative(JNIEnv *, jclass) {
+    // FIXME what if gClosedFdTable is not null
+    gClosedFdTable = FileDescriptorTable::Create();
 }
 
-void reopenFilesAfterForkNative(JNIEnv *, jclass, jlong fdTable) {
-    if (fdTable == 0) {
-        LOGE("fdTable is null when reopening files");
+void reopenFilesAfterForkNative(JNIEnv *, jclass) {
+    if (!gClosedFdTable) {
+        LOGE("gClosedFdTable is null when reopening files");
         return;
     }
-    auto *closedFdTable = reinterpret_cast<FileDescriptorTable *>(fdTable);
-    closedFdTable->Reopen();
-    delete closedFdTable;
+    gClosedFdTable->Reopen();
+    delete gClosedFdTable;
+    gClosedFdTable = nullptr;
 }
 
 jlong suspendAllThreads(JNIEnv *, jclass) {
@@ -90,10 +93,10 @@ static JNINativeMethod hookMethods[] = {
                 "getInstallerPkgName", "()Ljava/lang/String;", (void *) get_installer_pkg_name
         },
         {
-                "closeFilesBeforeForkNative", "()J", (void *) closeFilesBeforeForkNative
+                "closeFilesBeforeForkNative", "()V", (void *) closeFilesBeforeForkNative
         },
         {
-                "reopenFilesAfterForkNative", "(J)V", (void *) reopenFilesAfterForkNative
+                "reopenFilesAfterForkNative", "()V", (void *) reopenFilesAfterForkNative
         },
         {
                 "deoptMethodNative", "(Ljava/lang/Object;)V", (void *) deoptimize_method

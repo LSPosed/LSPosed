@@ -22,10 +22,9 @@ public class NormalProxy {
         PrebuiltMethodsDeopter.deoptBootMethods(); // do it once for secondary zygote
         // install bootstrap hooks for secondary zygote
         Router.installBootstrapHooks(false);
-        if (Main.closedFdTable == 0) {
-            // only load modules for secondary zygote
-            Router.loadModulesSafely(true);
-        }
+        // only load modules for secondary zygote
+        Router.loadModulesSafely(true);
+        Main.closeFilesBeforeForkNative();
     }
 
     public static void forkAndSpecializePost(int pid, String appDataDir, String niceName) {
@@ -33,7 +32,7 @@ public class NormalProxy {
         Main.appDataDir = appDataDir;
         Main.niceName = niceName;
         Router.prepare(false);
-        Router.reopenFilesIfNeeded();
+        Main.reopenFilesAfterForkNative();
         Router.onEnterChildProcess();
         // load modules for each app process on its forked if dynamic modules mode is on
         Router.loadModulesSafely(false);
@@ -54,6 +53,7 @@ public class NormalProxy {
         // because if not global hooks installed in initZygote might not be
         // propagated to processes not forked via forkAndSpecialize
         Router.loadModulesSafely(true);
+        Main.closeFilesBeforeForkNative();
     }
 
     public static void forkSystemServerPost(int pid) {
@@ -61,7 +61,7 @@ public class NormalProxy {
         Main.appDataDir = getDataPathPrefix() + "android";
         Main.niceName = "system_server";
         Router.prepare(true);
-        Router.reopenFilesIfNeeded();
+        Main.reopenFilesAfterForkNative();
         Router.onEnterChildProcess();
         // reload module list if dynamic mode is on
         Router.loadModulesSafely(false);
