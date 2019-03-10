@@ -18,6 +18,7 @@ public class Main implements KeepAll {
 
     public static String appDataDir = "";
     public static String appProcessName = "";
+    public static long closedFdTable = 0;
     private static String forkAndSpecializePramsStr = "";
     private static String forkSystemServerPramsStr = "";
 
@@ -120,9 +121,9 @@ public class Main implements KeepAll {
 
     // prevent from fatal error caused by holding not whitelisted file descriptors when forking zygote
     // https://github.com/rovo89/Xposed/commit/b3ba245ad04cd485699fb1d2ebde7117e58214ff
-    public static native void closeFilesBeforeForkNative();
+    public static native long closeFilesBeforeForkNative();
 
-    public static native void reopenFilesAfterForkNative();
+    public static native void reopenFilesAfterForkNative(long fdTable);
 
     public static native void deoptMethodNative(Object object);
 

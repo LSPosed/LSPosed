@@ -57,11 +57,12 @@ public final class XposedInit {
             return;
         }
         Router.startBootstrapHook(isSystem);
+
+        // TODO Are these still needed for us?
         // MIUI
         if (findFieldIfExists(ZygoteInit.class, "BOOT_START_TIME") != null) {
             setStaticLongField(ZygoteInit.class, "BOOT_START_TIME", XposedBridge.BOOT_START_TIME);
         }
-
         // Samsung
         if (Build.VERSION.SDK_INT >= 24) {
             Class<?> zygote = findClass("com.android.internal.os.Zygote", null);
@@ -87,10 +88,10 @@ public final class XposedInit {
      */
     private static volatile AtomicBoolean modulesLoaded = new AtomicBoolean(false);
 
-    public static void loadModules() throws IOException {
+    public static boolean loadModules() throws IOException {
         if (!modulesLoaded.compareAndSet(false, true)
                 && !ConfigManager.isDynamicModulesMode()) {
-            return;
+            return false;
         }
         // FIXME module list is cleared but never could be reload again when using dynamic-module-list under multi-user environment
         XposedBridge.clearLoadedPackages();
@@ -98,7 +99,7 @@ public final class XposedInit {
         BaseService service = SELinuxHelper.getAppDataFileService();
         if (!service.checkFileExists(filename)) {
             Log.e(TAG, "Cannot load any modules because " + filename + " was not found");
-            return;
+            return false;
         }
 
         ClassLoader topClassLoader = XposedBridge.BOOTCLASSLOADER;
@@ -114,6 +115,7 @@ public final class XposedInit {
             loadModule(apk, topClassLoader);
         }
         apks.close();
+        return true;
     }
 
 

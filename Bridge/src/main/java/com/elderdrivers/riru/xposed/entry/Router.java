@@ -2,6 +2,7 @@ package com.elderdrivers.riru.xposed.entry;
 
 import android.text.TextUtils;
 
+import com.elderdrivers.riru.xposed.Main;
 import com.elderdrivers.riru.xposed.core.HookMain;
 import com.elderdrivers.riru.xposed.dexmaker.DynamicBridge;
 import com.elderdrivers.riru.xposed.entry.bootstrap.AppBootstrapHookInfo;
@@ -50,12 +51,26 @@ public class Router {
         }
     }
 
-    public static void loadModulesSafely() {
+    public static void loadModulesSafely(boolean isInZygote) {
+        boolean loadedByMe;
         try {
             // FIXME some coredomain app can't reading modules.list
-            XposedInit.loadModules();
+            loadedByMe = XposedInit.loadModules();
         } catch (Exception exception) {
             Utils.logE("error loading module list", exception);
+            // return true in case there are files opened...
+            loadedByMe = true;
+        }
+        // at last close all fds
+        if (isInZygote && loadedByMe) {
+            Main.closedFdTable = Main.closeFilesBeforeForkNative();
+        }
+    }
+
+    public static void reopenFilesIfNeeded() {
+        long closedFdTable = Main.closedFdTable;
+        if (closedFdTable != 0) {
+            Main.reopenFilesAfterForkNative(closedFdTable);
         }
     }
 

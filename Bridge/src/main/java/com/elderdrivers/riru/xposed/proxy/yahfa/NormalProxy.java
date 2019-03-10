@@ -14,31 +14,33 @@ public class NormalProxy {
                                             String niceName, int[] fdsToClose, int[] fdsToIgnore,
                                             boolean startChildZygote, String instructionSet,
                                             String appDataDir) {
+        // mainly for secondary zygote
         final boolean isDynamicModulesMode = Main.isDynamicModulesEnabled();
-        Main.appDataDir = appDataDir;
         ConfigManager.setDynamicModulesMode(isDynamicModulesMode);
-        PrebuiltMethodsDeopter.deoptBootMethods(); // do it once for secondary zygote
         // call this to ensure the flag is set to false ASAP
         Router.prepare(false);
+        PrebuiltMethodsDeopter.deoptBootMethods(); // do it once for secondary zygote
         // install bootstrap hooks for secondary zygote
         Router.installBootstrapHooks(false);
-        // load modules for secondary zygote
-        Router.loadModulesSafely();
-        Main.closeFilesBeforeForkNative();
+        if (Main.closedFdTable == 0) {
+            // only load modules for secondary zygote
+            Router.loadModulesSafely(true);
+        }
     }
 
     public static void forkAndSpecializePost(int pid, String appDataDir) {
         // TODO consider processes without forkAndSpecializePost called
-        Main.reopenFilesAfterForkNative();
+        Main.appDataDir = appDataDir;
+        Router.prepare(false);
+        Router.reopenFilesIfNeeded();
         Router.onEnterChildProcess();
         // load modules for each app process on its forked if dynamic modules mode is on
-        Router.loadModulesSafely();
+        Router.loadModulesSafely(false);
     }
 
     public static void forkSystemServerPre(int uid, int gid, int[] gids, int debugFlags, int[][] rlimits,
                                            long permittedCapabilities, long effectiveCapabilities) {
         final boolean isDynamicModulesMode = Main.isDynamicModulesEnabled();
-        Main.appDataDir = getDataPathPrefix() + "android";
         ConfigManager.setDynamicModulesMode(isDynamicModulesMode);
         // set startsSystemServer flag used when loadModules
         Router.prepare(true);
@@ -50,14 +52,17 @@ public class NormalProxy {
         // loadModules have to be executed in zygote even isDynamicModules is false
         // because if not global hooks installed in initZygote might not be
         // propagated to processes not forked via forkAndSpecialize
-        Router.loadModulesSafely();
-        Main.closeFilesBeforeForkNative();
+        Router.loadModulesSafely(true);
     }
 
     public static void forkSystemServerPost(int pid) {
         // in system_server process
-        Main.reopenFilesAfterForkNative();
+        Main.appDataDir = getDataPathPrefix() + "android";
+        Router.prepare(true);
+        Router.reopenFilesIfNeeded();
         Router.onEnterChildProcess();
+        // reload module list if dynamic mode is on
+        Router.loadModulesSafely(false);
     }
 
 }
