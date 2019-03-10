@@ -17,6 +17,7 @@ import java.util.Arrays;
 public class Main implements KeepAll {
 
     public static String appDataDir = "";
+    public static String niceName = "";
     public static String appProcessName = "";
     public static long closedFdTable = 0;
     private static String forkAndSpecializePramsStr = "";
@@ -54,13 +55,13 @@ public class Main implements KeepAll {
         }
     }
 
-    public static void forkAndSpecializePost(int pid, String appDataDir) {
+    public static void forkAndSpecializePost(int pid, String appDataDir, String niceName) {
         if (pid == 0) {
             Utils.logD(forkAndSpecializePramsStr + " = " + Process.myPid());
             if (isBlackWhiteListEnabled()) {
-                BlackWhiteListProxy.forkAndSpecializePost(pid, appDataDir);
+                BlackWhiteListProxy.forkAndSpecializePost(pid, appDataDir, niceName);
             } else {
-                NormalProxy.forkAndSpecializePost(pid, appDataDir);
+                NormalProxy.forkAndSpecializePost(pid, appDataDir, niceName);
             }
         } else {
             // in zygote process, res is child zygote pid
@@ -121,9 +122,9 @@ public class Main implements KeepAll {
 
     // prevent from fatal error caused by holding not whitelisted file descriptors when forking zygote
     // https://github.com/rovo89/Xposed/commit/b3ba245ad04cd485699fb1d2ebde7117e58214ff
-    public static native long closeFilesBeforeForkNative();
+    public static native void closeFilesBeforeForkNative();
 
-    public static native void reopenFilesAfterForkNative(long fdTable);
+    public static native void reopenFilesAfterForkNative();
 
     public static native void deoptMethodNative(Object object);
 

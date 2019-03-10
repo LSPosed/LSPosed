@@ -1,9 +1,15 @@
 package com.elderdrivers.riru.xposed.proxy.yahfa;
 
+import android.text.TextUtils;
+
 import com.elderdrivers.riru.xposed.Main;
 import com.elderdrivers.riru.xposed.config.ConfigManager;
 import com.elderdrivers.riru.xposed.entry.Router;
 import com.elderdrivers.riru.xposed.util.PrebuiltMethodsDeopter;
+import com.elderdrivers.riru.xposed.util.ProcessUtils;
+import com.elderdrivers.riru.xposed.util.Utils;
+
+import de.robv.android.xposed.XposedBridge;
 
 import static com.elderdrivers.riru.xposed.Main.isAppNeedHook;
 import static com.elderdrivers.riru.xposed.util.FileUtils.getDataPathPrefix;
@@ -25,7 +31,7 @@ import static com.elderdrivers.riru.xposed.util.FileUtils.getDataPathPrefix;
  * * for all child processes of both main zygote and secondary zygote
  * 1) do the same things pre-forking first child process
  * 2. Dynamic mode:
- *  to be continued
+ * to be continued
  */
 public class BlackWhiteListProxy {
 
@@ -43,8 +49,8 @@ public class BlackWhiteListProxy {
         onForkPreForNonDynamicMode(false);
     }
 
-    public static void forkAndSpecializePost(int pid, String appDataDir) {
-        onForkPostCommon(false, appDataDir);
+    public static void forkAndSpecializePost(int pid, String appDataDir, String niceName) {
+        onForkPostCommon(false, appDataDir, niceName);
     }
 
     public static void forkSystemServerPre(int uid, int gid, int[] gids, int debugFlags,
@@ -60,7 +66,7 @@ public class BlackWhiteListProxy {
     }
 
     public static void forkSystemServerPost(int pid) {
-        onForkPostCommon(true, getDataPathPrefix() + "android");
+        onForkPostCommon(true, getDataPathPrefix() + "android", "system_server");
     }
 
     /**
@@ -76,24 +82,51 @@ public class BlackWhiteListProxy {
         // because installed hooks would be propagated to all child processes of zygote
         Router.startWorkAroundHook();
         // loadModules once for all child processes of zygote
+        // TODO maybe just save initZygote callbacks and call them when whitelisted process forked?
         Router.loadModulesSafely(true);
+        Main.closeFilesBeforeForkNative();
     }
 
-    private static void onForkPostCommon(boolean isSystemServer, String appDataDir) {
+    private static void onForkPostCommon(boolean isSystemServer, String appDataDir, String niceName) {
         Main.appDataDir = appDataDir;
+        Main.niceName = niceName;
+        final boolean isDynamicModulesMode = Main.isDynamicModulesEnabled();
+        ConfigManager.setDynamicModulesMode(isDynamicModulesMode);
         Router.onEnterChildProcess();
-        if (!isAppNeedHook(Main.appDataDir)) {
+        if (!isDynamicModulesMode) {
+            Main.reopenFilesAfterForkNative();
+        }
+        if (!checkNeedHook(appDataDir, niceName)) {
             // if is blacklisted, just stop here
             return;
         }
-        final boolean isDynamicModulesMode = Main.isDynamicModulesEnabled();
-        ConfigManager.setDynamicModulesMode(isDynamicModulesMode);
         Router.prepare(isSystemServer);
         PrebuiltMethodsDeopter.deoptBootMethods();
-        Router.reopenFilesIfNeeded();
         Router.installBootstrapHooks(isSystemServer);
         if (isDynamicModulesMode) {
             Router.loadModulesSafely(false);
         }
+    }
+
+    private static boolean checkNeedHook(String appDataDir, String niceName) {
+        boolean needHook;
+        if (TextUtils.isEmpty(appDataDir)) {
+            Utils.logE("niceName:" + niceName + ", procName:"
+                    + ProcessUtils.getCurrentProcessName() + ", appDataDir is null, blacklisted!");
+            needHook = false;
+        } else {
+            // FIXME some process cannot read app_data_file because of MLS, e.g. bluetooth
+            needHook = isAppNeedHook(appDataDir);
+        }
+        if (!needHook) {
+            // clean up the scene
+            onBlackListed();
+        }
+        return needHook;
+    }
+
+    private static void onBlackListed() {
+        XposedBridge.clearLoadedPackages();
+        XposedBridge.clearInitPackageResources();
     }
 }

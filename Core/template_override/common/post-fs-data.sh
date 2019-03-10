@@ -7,7 +7,7 @@ MODDIR=${0%/*}
 # More info in the main Magisk thread
 
 # EdXposed Version
-edxp_ver="0.3.0.0_beta3-SNAPSHOT"
+edxp_ver="0.3.1.0_beta-SNAPSHOT (3100)"
 
 # necessary for using mmap in system_server process
 supolicy --live "allow system_server system_server process {execmem}"
@@ -24,24 +24,14 @@ supolicy --live "attradd {system_app platform_app} mlstrustedsubject"
 supolicy --live "allow zygote apk_data_file * *"
 
 # beginning of Log Catcher
-msg[0]="Now just a little more only just a little more..."
-msg[1]="It's not a right that I'm due, my duty that is must have been kept..."
-msg[2]="Since one day you will disappear, I'll keep every part of you..."
-msg[3]="Yes we are time fliers scaling the walls of time climbers, tired of playing hide and seek with time..."
-msg[4]="Wherever you are in the world, I'll search for you..."
-msg[5]="Mitsuha. Mitsuha. Mitsuha, your name is Mitsuha..."
-msg[6]="Someone dear to me. I don't want to forget. I shouldn't forget!"
-time=$(date +%Y-%m-%d-%H-%M-%S)
 android_sdk=`getprop ro.build.version.sdk`
-if [ ${android_sdk} -ge 24 ]
+if [[ ${android_sdk} -ge 24 ]]
 then
   path=/data/user_de/0/com.solohsu.android.edxp.manager/log
 else
   path=/data/data/com.solohsu.android.edxp.manager/log
 fi
-file=$path/error.log
-num=$(($RANDOM+100000000))
-rand=$(($num%7))
+file=${path}/error.log
 build_desc=`getprop ro.build.description`
 product=`getprop ro.build.product`
 manufacturer=`getprop ro.product.manufacturer`
@@ -51,24 +41,25 @@ arch=`getprop ro.product.cpu.abi`
 device=`getprop ro.product.device`
 android=`getprop ro.build.version.release`
 build=`getprop ro.build.id`
-mkdir -p $path
-rm -rf $file
-touch $file
-echo "--------- beginning of head">>$file
-echo "EdXposed Log">>$file
-echo "Powered by Log Catcher">>$file
-echo "QQ chat group 855219808">>$file
-echo ${msg[$rand]}>>$file
-echo "--------- beginning of system info">>$file
-echo "Android version: ${android}">>$file
-echo "Android sdk: ${android_sdk}">>$file
-echo "Android build: ${build}">>$file
-echo "Fingerprint: ${fingerprint}">>$file
-echo "ROM build description: ${build_desc}">>$file
-echo "EdXposed Version: ${edxp_ver}">>$file
-echo "Architecture: ${arch}">>$file
-echo "Device: ${device}">>$file
-echo "Manufacturer: ${manufacturer}">>$file
-echo "Brand: ${brand}">>$file
-echo "Product: ${product}">>$file
-logcat *:V logcatcher-xposed-mlgmxyysd:S|grep -i "EdXposed-">>$file &
+mkdir -p ${path}
+rm -rf ${file}
+touch ${file}
+chmod 755 ${file}
+echo "--------- beginning of head">>${file}
+echo "EdXposed Log">>${file}
+echo "Powered by Log Catcher">>${file}
+echo "QQ chat group 855219808">>${file}
+echo "--------- beginning of system info">>${file}
+echo "Android version: ${android}">>${file}
+echo "Android sdk: ${android_sdk}">>${file}
+echo "Android build: ${build}">>${file}
+echo "Fingerprint: ${fingerprint}">>${file}
+echo "ROM build description: ${build_desc}">>${file}
+echo "EdXposed Version: ${edxp_ver}">>${file}
+echo "Architecture: ${arch}">>${file}
+echo "Device: ${device}">>${file}
+echo "Manufacturer: ${manufacturer}">>${file}
+echo "Brand: ${brand}">>${file}
+echo "Product: ${product}">>${file}
+logcat -f ${file} *:S logcatcher-xposed-mlgmxyysd:S EdXposed-Fwk:V EdXposed-dexmaker:V XSharedPreferences:V EdXposed-Bridge:V EdXposed-YAHFA:V EdXposed-Core-Native:V xhook:V EdXposed-Manager:V Riru:V RiruManager:V XposedInstaller:V &
+
