@@ -9,6 +9,8 @@ import com.elderdrivers.riru.xposed.util.PrebuiltMethodsDeopter;
 import com.elderdrivers.riru.xposed.util.ProcessUtils;
 import com.elderdrivers.riru.xposed.util.Utils;
 
+import de.robv.android.xposed.XposedBridge;
+
 import static com.elderdrivers.riru.xposed.Main.isAppNeedHook;
 import static com.elderdrivers.riru.xposed.util.FileUtils.getDataPathPrefix;
 
@@ -80,6 +82,7 @@ public class BlackWhiteListProxy {
         // because installed hooks would be propagated to all child processes of zygote
         Router.startWorkAroundHook();
         // loadModules once for all child processes of zygote
+        // TODO maybe just save initZygote callbacks and call them when whitelisted process forked?
         Router.loadModulesSafely(true);
     }
 
@@ -112,6 +115,15 @@ public class BlackWhiteListProxy {
             // FIXME some process cannot read app_data_file because of MLS, e.g. bluetooth
             needHook = isAppNeedHook(appDataDir);
         }
+        if (!needHook) {
+            // clean up the scene
+            onBlackListed();
+        }
         return needHook;
+    }
+
+    private static void onBlackListed() {
+        XposedBridge.clearLoadedPackages();
+        XposedBridge.clearInitPackageResources();
     }
 }

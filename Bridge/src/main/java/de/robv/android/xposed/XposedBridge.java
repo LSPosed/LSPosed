@@ -393,6 +393,12 @@ public final class XposedBridge {
 //		}
 	}
 
+	public static void clearInitPackageResources() {
+		synchronized (sInitPackageResourcesCallbacks) {
+			sInitPackageResourcesCallbacks.clear();
+		}
+	}
+
 	/**
 	 * Intercept every call to the specified method and call a handler function instead.
 	 * @param method The method to intercept
