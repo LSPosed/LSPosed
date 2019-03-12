@@ -1,7 +1,10 @@
 package com.elderdrivers.riru.xposed.dexmaker;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.text.TextUtils;
 
+import com.elderdrivers.riru.xposed.Main;
 import com.elderdrivers.riru.xposed.core.HookMain;
 
 import java.io.File;
@@ -178,6 +181,7 @@ public class HookerDexMaker {
         doMake();
     }
 
+    @TargetApi(Build.VERSION_CODES.O)
     private void doMake() throws Exception {
         mDexMaker = new DexMaker();
         // Generate a Hooker class.
@@ -208,6 +212,7 @@ public class HookerDexMaker {
         mHookMethod = mHookClass.getMethod(METHOD_NAME_HOOK, mActualParameterTypes);
         mBackupMethod = mHookClass.getMethod(METHOD_NAME_BACKUP, mActualParameterTypes);
         mCallBackupMethod = mHookClass.getMethod(METHOD_NAME_CALL_BACKUP, mActualParameterTypes);
+        Main.setMethodNonCompilable(mCallBackupMethod);
         HookMain.backupAndHook(mMember, mHookMethod, mBackupMethod);
     }
 

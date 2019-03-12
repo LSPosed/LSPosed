@@ -113,7 +113,10 @@ void Java_lab_galaxy_yahfa_HookMain_init(JNIEnv *env, jclass clazz, jint sdkVers
     setupTrampoline();
 }
 
-static void setNonCompilable(void *method) {
+void setNonCompilable(void *method) {
+    if (SDKVersion < ANDROID_N) {
+        return;
+    }
     int access_flags = read32((char *) method + OFFSET_access_flags_in_ArtMethod);
     LOGI("setNonCompilable: access flags is 0x%x", access_flags);
     access_flags |= kAccCompileDontBother;
