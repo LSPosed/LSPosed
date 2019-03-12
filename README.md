@@ -39,20 +39,15 @@ and zip binaries can be downloaded from [here](http://gnuwin32.sourceforge.net/p
 5. have fun :)
 
 ## Companion applications
+
 - for v0.2.9.5 and before: [Xposed Installer](https://github.com/DVDAndroid/XposedInstaller)
 - for v0.2.9.6 and v0.2.9.7: [Xposed Installer](https://github.com/DVDAndroid/XposedInstaller) and [EdXp Manager](https://github.com/solohsu/EdXpManager)(optional)
 - for v0.2.9.8 and later: [EdXposed Installer](https://github.com/solohsu/XposedInstaller)
 ## Get help
 
-Forum (recommend): [Android Forum](http://af.meowcat.org/)
+- GitHub issues (recommended): [Issues](https://github.com/solohsu/EdXposed/issues/)
 
-GitHub issues (recommend): [Issues](https://github.com/solohsu/EdXposed/issues/)
-
-QQ Group: [855219808](http://shang.qq.com/wpa/qunwpa?idkey=fae42a3dba9dc758caf63e971be2564e67bf7edd751a2ff1c750478b0ad1ca3f)
-
-Telegream: [Code_of_MeowCat](http://t.me/Code_of_MeowCat)
-
-Discord: [Code_of_MeowCat](https://discord.gg/Hag6gNh)
+- QQ Group: [855219808](http://shang.qq.com/wpa/qunwpa?idkey=fae42a3dba9dc758caf63e971be2564e67bf7edd751a2ff1c750478b0ad1ca3f)
 
 ## Contribute
 
