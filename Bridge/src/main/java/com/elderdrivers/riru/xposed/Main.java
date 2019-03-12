@@ -10,6 +10,7 @@ import com.elderdrivers.riru.xposed.proxy.yahfa.BlackWhiteListProxy;
 import com.elderdrivers.riru.xposed.proxy.yahfa.NormalProxy;
 import com.elderdrivers.riru.xposed.util.Utils;
 
+import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
@@ -19,7 +20,6 @@ public class Main implements KeepAll {
     public static String appDataDir = "";
     public static String niceName = "";
     public static String appProcessName = "";
-    public static long closedFdTable = 0;
     private static String forkAndSpecializePramsStr = "";
     private static String forkSystemServerPramsStr = "";
 
@@ -104,6 +104,8 @@ public class Main implements KeepAll {
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
     public static native boolean backupAndHookNative(Object target, Method hook, Method backup);
+
+    public static native void setMethodNonCompilable(Object member);
 
     public static native void ensureMethodCached(Method hook, Method backup);
 

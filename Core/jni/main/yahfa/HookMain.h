@@ -16,6 +16,8 @@ void Java_lab_galaxy_yahfa_HookMain_ensureMethodCached(JNIEnv *env, jclass clazz
                                                        jobject hook,
                                                        jobject backup);
 
+void setNonCompilable(void *method);
+
 static void* getResolvedMethodsAddr(JNIEnv*, jobject);
 
 #endif // HOOK_MAIN_H

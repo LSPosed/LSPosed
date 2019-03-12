@@ -59,6 +59,19 @@ int waitForGcToComplete(JNIEnv *, jclass, jlong thread) {
     return gcType;
 }
 
+void setMethodNonCompilable(JNIEnv *env, jclass, jobject member) {
+    if (!member) {
+        LOGE("setNonCompilableNative: member is null");
+        return;
+    }
+    void *artMethod = env->FromReflectedMethod(member);
+    if (!artMethod) {
+        LOGE("setNonCompilableNative: artMethod is null");
+        return;
+    }
+    setNonCompilable(artMethod);
+}
+
 static JNINativeMethod hookMethods[] = {
         {
                 "init",
@@ -69,6 +82,9 @@ static JNINativeMethod hookMethods[] = {
                 "backupAndHookNative",
                 "(Ljava/lang/Object;Ljava/lang/reflect/Method;Ljava/lang/reflect/Method;)Z",
                 (void *) Java_lab_galaxy_yahfa_HookMain_backupAndHookNative
+        },
+        {
+                "setMethodNonCompilable", "(Ljava/lang/Object;)V", (void *) setMethodNonCompilable
         },
         {
                 "findMethodNative",
@@ -116,7 +132,6 @@ void loadDexAndInit(JNIEnv *env, const char *dexPath) {
     if (isInited) {
         return;
     }
-//    install_inline_hooks();
     jclass clzClassLoader = env->FindClass("java/lang/ClassLoader");
     LOGD("java/lang/ClassLoader: %p", clzClassLoader);
     jmethodID mdgetSystemClassLoader = env->GetStaticMethodID(clzClassLoader,
@@ -147,7 +162,7 @@ void loadDexAndInit(JNIEnv *env, const char *dexPath) {
     jclass entry_class = findClassFromLoader(env, myClassLoader, ENTRY_CLASS_NAME);
     if (NULL != entry_class) {
         LOGD("HookEntry Class %p", entry_class);
-        env->RegisterNatives(entry_class, hookMethods, 14);
+        env->RegisterNatives(entry_class, hookMethods, 15);
         isInited = true;
         LOGD("RegisterNatives succeed for HookEntry.");
     } else {
