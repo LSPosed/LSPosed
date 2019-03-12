@@ -1,5 +1,5 @@
 apply plugin: 'com.android.library'
-version "v0.3.1.1_beta-SNAPSHOT"
+version "v0.3.1.2_beta"
 extensions["module_name"] = "EdXposed"
 android {
     compileSdkVersion 28

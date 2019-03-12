@@ -41,7 +41,7 @@ LATESTARTSERVICE=false
 
 print_modname() {
   ui_print "************************************"
-  ui_print " Riru - Ed Xposed v0.3.1.1          "
+  ui_print " Riru - Ed Xposed v0.3.1.2          "
   ui_print "************************************"
 }
 
@@ -111,16 +111,16 @@ check_architecture() {
 }
 
 copy_files() {
-	if [[ "$ARCH" == "x86" || "$ARCH" == "x64" ]]; then
-	  ui_print "- Removing arm/arm64 libraries"
+  cp -af $INSTALLER/common/util_functions.sh $MODPATH/util_functions.sh
+  if [[ "$ARCH" == "x86" || "$ARCH" == "x64" ]]; then
+	ui_print "- Removing arm/arm64 libraries"
     rm -rf "$MODPATH/system/lib"
     rm -rf "$MODPATH/system/lib64"
+    ui_print "- Extracting x86/64 libraries"
+	unzip -o "$ZIP" 'system_x86/*' -d $MODPATH >&2
     mv "$MODPATH/system_x86/lib" "$MODPATH/system/lib"
     mv "$MODPATH/system_x86/lib64" "$MODPATH/system/lib64"
-  else
-    ui_print "- Removing x86/x64 libraries"
   fi
-  rm -rf "$MODPATH/system_x86"
 
   if [[ "$IS64BIT" = false ]]; then
 	  ui_print "- Removing 64-bit libraries"
