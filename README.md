@@ -5,6 +5,7 @@ A Riru module trying to provide a ART hooking framework (mainly for Android Pie)
 ## Credits 
 
 - [YAHFA](https://github.com/rk700/YAHFA): the core java hooking framework
+- [Magisk](https://github.com/topjohnwu/Magisk/): makes all these possible
 - [Riru](https://github.com/RikkaApps/Riru): provides a way to inject codes into zygote process
 - [XposedBridge](https://github.com/rovo89/XposedBridge): the OG xposed framework APIs
 - [dexmaker](https://github.com/linkedin/dexmaker) and [dalvikdx](https://github.com/JakeWharton/dalvik-dx): dynamiclly generate YAHFA hooker classes
