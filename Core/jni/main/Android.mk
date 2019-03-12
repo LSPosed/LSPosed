@@ -1,7 +1,7 @@
 LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
-LOCAL_MODULE     := libriru_edxposed
+LOCAL_MODULE     := libriru_edxp
 LOCAL_C_INCLUDES := \
 	$(LOCAL_PATH) \
 	jni/external/include
