@@ -1,6 +1,6 @@
 # EdXposed
 
-A Riru module trying to provide a ART hooking framework (mainly for Android Pie) which delivers consistent APIs with the OG Xposed, leveraging YAHFA hooking framework.
+A Riru module trying to provide a ART hooking framework (initially for Android Pie) which delivers consistent APIs with the OG Xposed, leveraging YAHFA hooking framework.
 
 ## Credits 
 
@@ -10,6 +10,13 @@ A Riru module trying to provide a ART hooking framework (mainly for Android Pie)
 - [XposedBridge](https://github.com/rovo89/XposedBridge): the OG xposed framework APIs
 - [dexmaker](https://github.com/linkedin/dexmaker) and [dalvikdx](https://github.com/JakeWharton/dalvik-dx): dynamiclly generate YAHFA hooker classes
 - [Whale](https://github.com/asLody/whale): used for inline hooking
+
+## Supported versions
+
+- Android Oreo (8.0, 8.1) 
+- Android Pie (9.0)
+
+For devices with Android 7.x and lower, original Xposed is strongly recommended.
 
 ## Known issues
 
