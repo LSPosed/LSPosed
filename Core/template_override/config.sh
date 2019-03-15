@@ -41,7 +41,7 @@ LATESTARTSERVICE=false
 
 print_modname() {
   ui_print "************************************"
-  ui_print " Riru - Ed Xposed v0.3.1.3          "
+  ui_print " Riru - Ed Xposed v0.3.1.4          "
   ui_print "************************************"
 }
 

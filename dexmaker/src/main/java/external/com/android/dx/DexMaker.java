@@ -471,6 +471,10 @@ public final class DexMaker {
         }
     }
 
+    public ClassLoader generateAndLoad(ClassLoader parent, File dexCache) throws IOException {
+        return generateAndLoad(parent, dexCache, null);
+    }
+
     /**
      * Generates a dex file and loads its types into the current process.
      *
@@ -496,8 +500,9 @@ public final class DexMaker {
      * @param dexCache the destination directory where generated and optimized
      *     dex files will be written. If null, this class will try to guess the
      *     application's private data dir.
+     * @param fileName the name of dex file
      */
-    public ClassLoader generateAndLoad(ClassLoader parent, File dexCache) throws IOException {
+    public ClassLoader generateAndLoad(ClassLoader parent, File dexCache, String fileName) throws IOException {
         if (dexCache == null) {
             String property = System.getProperty("dexmaker.dexcache");
             if (property != null) {
@@ -511,7 +516,9 @@ public final class DexMaker {
             }
         }
 
-        File result = new File(dexCache, generateFileName());
+        if (fileName == null || fileName.isEmpty())
+            fileName = generateFileName();
+        File result = new File(dexCache, fileName);
         // Check that the file exists. If it does, return a DexClassLoader and skip all
         // the dex bytecode generation.
         if (result.exists()) {

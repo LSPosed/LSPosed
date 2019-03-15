@@ -42,7 +42,7 @@ public class HookerDexMaker {
     public static final String METHOD_NAME_SETUP = "setup";
     public static final TypeId<Object[]> objArrayTypeId = TypeId.get(Object[].class);
     private static final String CLASS_DESC_PREFIX = "L";
-    private static final String CLASS_NAME_PREFIX = "EdHooker";
+    private static final String CLASS_NAME_PREFIX = "ed_";
     private static final String FIELD_NAME_HOOK_INFO = "additionalHookInfo";
     private static final String FIELD_NAME_METHOD = "method";
     private static final String PARAMS_FIELD_NAME_METHOD = "method";
@@ -183,26 +183,30 @@ public class HookerDexMaker {
 
     @TargetApi(Build.VERSION_CODES.O)
     private void doMake() throws Exception {
+        final boolean useInMemoryCl = TextUtils.isEmpty(mDexDirPath);
         mDexMaker = new DexMaker();
-        // Generate a Hooker class.
-        String className = CLASS_NAME_PREFIX + sClassNameSuffix.getAndIncrement();
-        String classDesc = CLASS_DESC_PREFIX + className + ";";
-        mHookerTypeId = TypeId.get(classDesc);
-        mDexMaker.declare(mHookerTypeId, className + ".generated", Modifier.PUBLIC, TypeId.OBJECT);
-        generateFields();
-        generateSetupMethod();
-        generateBackupMethod();
-        generateHookMethod();
-        generateCallBackupMethod();
-
         ClassLoader loader;
-        if (TextUtils.isEmpty(mDexDirPath)) {
-            // in memory dex classloader
+        // Generate a Hooker class.
+        String className = CLASS_NAME_PREFIX;
+        if (!useInMemoryCl) {
+            // if not using InMemoryDexClassLoader, className is also used as dex file name
+            // so it should be different from each other
+            String suffix = DexMakerUtils.getSha1Hex(mMember.toString());
+            if (TextUtils.isEmpty(suffix)) { // just in case
+                suffix = String.valueOf(sClassNameSuffix.getAndIncrement());
+            }
+            className = className + suffix;
+            if (!new File(mDexDirPath, className).exists()) {
+                // if file exists, reuse it and skip generating
+                doGenerate(className);
+            }
+            // load dex file from disk
+            loader = mDexMaker.generateAndLoad(mAppClassLoader, new File(mDexDirPath), className);
+        } else {
+            // do everything in memory
+            doGenerate(className);
             byte[] dexBytes = mDexMaker.generate();
             loader = new InMemoryDexClassLoader(ByteBuffer.wrap(dexBytes), mAppClassLoader);
-        } else {
-            // Create the dex file and load it.
-            loader = mDexMaker.generateAndLoad(mAppClassLoader, new File(mDexDirPath));
         }
 
         mHookClass = loader.loadClass(className);
@@ -214,6 +218,17 @@ public class HookerDexMaker {
         mCallBackupMethod = mHookClass.getMethod(METHOD_NAME_CALL_BACKUP, mActualParameterTypes);
         Main.setMethodNonCompilable(mCallBackupMethod);
         HookMain.backupAndHook(mMember, mHookMethod, mBackupMethod);
+    }
+
+    private void doGenerate(String className) {
+        String classDesc = CLASS_DESC_PREFIX + className + ";";
+        mHookerTypeId = TypeId.get(classDesc);
+        mDexMaker.declare(mHookerTypeId, className + ".generated", Modifier.PUBLIC, TypeId.OBJECT);
+        generateFields();
+        generateSetupMethod();
+        generateBackupMethod();
+        generateHookMethod();
+        generateCallBackupMethod();
     }
 
     public Method getHookMethod() {
