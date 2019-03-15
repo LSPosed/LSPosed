@@ -22,4 +22,4 @@ supolicy --live "allow zygote apk_data_file * *"
 
 . ${MODDIR}/util_functions.sh
 
-start_verbose_log_catcher
+start_log_catchers
