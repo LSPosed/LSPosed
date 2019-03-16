@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import com.elderdrivers.riru.xposed.Main;
 import com.elderdrivers.riru.xposed.config.ConfigManager;
 
+import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -225,5 +226,21 @@ public class DexMakerUtils {
         String unboxMethod;
         TypeId<?> boxTypeId;
         code.returnValue(resultLocals.get(returnType));
+    }
+
+    public static String getSha1Hex(String text) {
+        final MessageDigest digest;
+        try {
+            digest = MessageDigest.getInstance("SHA-1");
+            byte[] result = digest.digest(text.getBytes("UTF-8"));
+            StringBuilder sb = new StringBuilder();
+            for (byte b : result) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (Exception e) {
+            DexLog.e("error hashing target method: " + text, e);
+        }
+        return "";
     }
 }

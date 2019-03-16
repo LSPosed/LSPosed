@@ -13,6 +13,7 @@ LOCAL_LDFLAGS := -Wl
 LOCAL_SRC_FILES:= \
   main.cpp \
   native_hook/native_hook.cpp \
+  native_hook/riru_hook.cpp \
   include/misc.cpp \
   include/riru.c \
   yahfa/HookMain.c \

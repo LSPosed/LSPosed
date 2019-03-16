@@ -7,6 +7,7 @@
 
 #include "include/logging.h"
 #include "native_hook.h"
+#include "riru_hook.h"
 
 static bool inlineHooksInstalled = false;
 
@@ -51,8 +52,9 @@ static bool onIsInSamePackageCalled(void *thiz, void *that) {
     std::string storage1, storage2;
     const char *thisDesc = (*getDesc)(thiz, &storage1);
     const char *thatDesc = (*getDesc)(that, &storage2);
-    if (strstr(thisDesc, "EdHooker") != nullptr
-        || strstr(thatDesc, "EdHooker") != nullptr
+    // Note: these identifiers should be consistent with those in Java layer
+    if (strstr(thisDesc, "EdHooker_") != nullptr
+        || strstr(thatDesc, "EdHooker_") != nullptr
         || strstr(thisDesc, "com/elderdrivers/riru/") != nullptr
         || strstr(thatDesc, "com/elderdrivers/riru/") != nullptr) {
         return true;
@@ -272,6 +274,7 @@ void install_inline_hooks() {
         LOGE("api level not supported: %d, skip", api_level);
         return;
     }
+    install_riru_hooks();
     LOGI("using api level %d", api_level);
     void *whaleHandle = dlopen(kLibWhalePath, RTLD_LAZY | RTLD_GLOBAL);
     if (!whaleHandle) {

@@ -1,6 +1,6 @@
 #!/system/bin/sh
 
-EDXP_VERSION="0.3.1.2_beta (3120)"
+EDXP_VERSION="0.3.1.5_beta-SNAPSHOT (3150)"
 ANDROID_SDK=`getprop ro.build.version.sdk`
 BUILD_DESC=`getprop ro.build.description`
 PRODUCT=`getprop ro.build.product`
@@ -23,32 +23,40 @@ setup_log_path () {
   else
     PATH_PREFIX=${PATH_PREFIX_LEGACY}
   fi
-  BASE_PATH=${PATH_PREFIX}${EDXP_INSTALLER}
-  if [[ -d ${BASE_PATH} ]]
+  DEFAULT_BASE_PATH=${PATH_PREFIX}${EDXP_INSTALLER}
+  BASE_PATH=${DEFAULT_BASE_PATH}
+  if [[ ! -d ${BASE_PATH} ]]
   then
-      LOG_PATH=${BASE_PATH}/log
-  else
     BASE_PATH=${PATH_PREFIX}${EDXP_MANAGER}
-    if [[ -d ${BASE_PATH} ]]
+    if [[ ! -d ${BASE_PATH} ]]
     then
-        LOG_PATH=${BASE_PATH}/log
-    else
       BASE_PATH=${PATH_PREFIX}${XP_INSTALLER}
-      if [[ -d ${BASE_PATH} ]]
+      if [[ ! -d ${BASE_PATH} ]]
       then
-        LOG_PATH=${BASE_PATH}/log
-      else
-        LOG_PATH=${BASE_PATH}/log
+        BASE_PATH=${DEFAULT_BASE_PATH}
       fi
     fi
   fi
+  LOG_PATH=${BASE_PATH}/log
+  CONF_PATH=${BASE_PATH}/conf
+  DISABLE_VERBOSE_LOG_FILE=${CONF_PATH}/disable_verbose_log
+  LOG_VERBOSE=true
+  if [[ -f ${DISABLE_VERBOSE_LOG_FILE} ]]; then LOG_VERBOSE=false; fi
 }
 
 start_log_cather () {
   LOG_FILE_NAME=$1
+  LOG_TAG_FILTERS=$2
+  CLEAN_OLD=$3
+  START_NEW=$4
   LOG_FILE=${LOG_PATH}/${LOG_FILE_NAME}
   mkdir -p ${LOG_PATH}
-  rm -rf ${LOG_FILE}
+  if [[ ${CLEAN_OLD} = true ]]; then
+    rm -rf ${LOG_FILE}
+  fi
+  if [[ ${START_NEW} = false ]]; then
+    return
+  fi
   touch ${LOG_FILE}
   chmod 777 ${LOG_FILE}
   echo "--------- beginning of head">>${LOG_FILE}
@@ -67,11 +75,20 @@ start_log_cather () {
   echo "Manufacture: ${MANUFACTURE}">>${LOG_FILE}
   echo "Brand: ${BRAND}">>${LOG_FILE}
   echo "Product: ${PRODUCT}">>${LOG_FILE}
-  logcat -f ${LOG_FILE} *:S logcatcher-xposed-mlgmxyysd:S EdXposed-Fwk:V EdXposed-dexmaker:V XSharedPreferences:V EdXposed-Bridge:V EdXposed-YAHFA:V EdXposed-Core-Native:V xhook:V Riru:V RiruManager:V EdXposed-Manager:V XposedInstaller:V &
+  logcat -f ${LOG_FILE} *:S ${LOG_TAG_FILTERS} &
 }
 
 start_verbose_log_catcher () {
-  start_log_cather error.log
+  start_log_cather all.log "EdXposed-Fwk:V EdXposed-dexmaker:V XSharedPreferences:V EdXposed-Bridge:V EdXposed-YAHFA:V EdXposed-Core-Native:V EdXposed-Manager:V XposedInstaller:V" true ${LOG_VERBOSE}
+}
+
+start_bridge_log_catcher () {
+  start_log_cather error.log "XSharedPreferences:V EdXposed-Bridge:V" true true
+}
+
+start_log_catchers () {
+  start_bridge_log_catcher
+  start_verbose_log_catcher
 }
 
 setup_log_path

@@ -1,7 +1,6 @@
 package com.elderdrivers.riru.xposed.dexmaker;
 
 import com.elderdrivers.riru.xposed.Main;
-import com.elderdrivers.riru.xposed.util.FileUtils;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -72,8 +71,6 @@ public final class DynamicBridge {
         if (!dexPathInited.compareAndSet(false, true)) {
             return;
         }
-        // delete previous compiled dex to prevent potential crashing
-        // TODO find a way to reuse them in consideration of performance
         try {
             // we always choose to use device encrypted storage data on android N and later
             // in case some app is installing hooks before phone is unlocked
@@ -83,10 +80,6 @@ public final class DynamicBridge {
             dexOptDir = new File(dexDir, "oat");
             dexDir.mkdirs();
             DexLog.d(Main.appProcessName + " deleting dir: " + dexOptDir.getAbsolutePath());
-            try {
-                FileUtils.delete(dexOptDir);
-            } catch (Throwable throwable) {
-            }
         } catch (Throwable throwable) {
             DexLog.e("error when init dex path", throwable);
         }
