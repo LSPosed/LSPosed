@@ -7,6 +7,7 @@
 
 #include "include/logging.h"
 #include "native_hook.h"
+#include "riru_hook.h"
 
 static bool inlineHooksInstalled = false;
 
@@ -272,6 +273,7 @@ void install_inline_hooks() {
         LOGE("api level not supported: %d, skip", api_level);
         return;
     }
+    install_riru_hooks();
     LOGI("using api level %d", api_level);
     void *whaleHandle = dlopen(kLibWhalePath, RTLD_LAZY | RTLD_GLOBAL);
     if (!whaleHandle) {
