@@ -8,8 +8,8 @@
 //#define DEBUG
 
 #define INJECT_DEX_PATH \
-"/system/framework/edxposed.dex:/system/framework/eddalvikdx.dex:/system/framework/eddexmaker.dex"
+"/system/framework/edxp.jar:/system/framework/eddalvikdx.jar:/system/framework/eddexmaker.jar"
 
-#define ENTRY_CLASS_NAME "com.elderdrivers.riru.xposed.Main"
+#define ENTRY_CLASS_NAME "com.elderdrivers.riru.edxp.yahfa.Main"
 
 #endif //CONFIG_H

@@ -3,5 +3,5 @@
 /libs
 /obj
 /release
-/template_override/system/framework/edxposed.dex
+/template_override/system/framework/edxp.jar
 *.iml

@@ -32,7 +32,7 @@ and zip binaries can be downloaded from [here](http://gnuwin32.sourceforge.net/p
 
 ## Build
 
-1. run `:Bridge:makeAndCopyRelease` in Gradle window to build `edxposed.dex`
+1. run `:Bridge:makeAndCopyRelease` in Gradle window to build `edxp.jar`
 2. run `:Core:zipRelease` to build Magisk Riru module flashable zip file
 3. find the flashable under `Core/release/`
 4. flash the zip in recovery mode or in Magisk Manager

@@ -2,8 +2,7 @@ package de.robv.android.xposed.callbacks;
 
 import android.os.Bundle;
 
-import com.elderdrivers.riru.xposed.entry.Router;
-import com.elderdrivers.riru.xposed.util.PrebuiltMethodsDeopter;
+import com.elderdrivers.riru.edxp.util.PrebuiltMethodsDeopter;
 
 import java.io.Serializable;
 

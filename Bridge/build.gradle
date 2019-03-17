@@ -122,17 +122,11 @@ afterEvaluate {
         def nameCapped = variant.name.capitalize()
         def nameLowered = variant.name.toLowerCase()
 
-        def makeAndCopyTask = task("makeAndCopy${nameCapped}", type: Copy, dependsOn: "assemble${nameCapped}") {
-            from "build/intermediates/transforms/dexMerger/${nameLowered}/0/classes.dex"
-            into '../Core/template_override/system/framework'
-            rename("classes.dex", "edxposed.dex")
+        def makeAndCopyTask = task("makeAndCopy${nameCapped}", type: Jar, dependsOn: "assemble${nameCapped}") {
+            from "build/intermediates/transforms/dexMerger/${nameLowered}/0/"
+            destinationDir file("../Core/template_override/system/framework/")
+            baseName "edxp"
         }
-
-//        def makeAndCopyTask = task("makeAndCopy${nameCapped}", type: Jar, dependsOn: "assemble${nameCapped}") {
-//            from "build/intermediates/transforms/dexMerger/${nameLowered}/0/"
-//            destinationDir file("../Core/template_override/system/framework/")
-//            baseName "edxposed"
-//        }
     }
 
 }

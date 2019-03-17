@@ -6,10 +6,9 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.internal.os.ZygoteInit;
-import com.elderdrivers.riru.xposed.BuildConfig;
-import com.elderdrivers.riru.xposed.config.ConfigManager;
-import com.elderdrivers.riru.xposed.entry.Router;
-import com.elderdrivers.riru.xposed.util.Utils;
+import com.elderdrivers.riru.edxp.config.ConfigManager;
+import com.elderdrivers.riru.edxp.yahfa.entry.Router;
+import com.elderdrivers.riru.edxp.util.Utils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -25,8 +24,8 @@ import dalvik.system.DexFile;
 import dalvik.system.PathClassLoader;
 import de.robv.android.xposed.services.BaseService;
 
-import static com.elderdrivers.riru.xposed.config.InstallerChooser.INSTALLER_DATA_BASE_DIR;
-import static com.elderdrivers.riru.xposed.entry.hooker.XposedBlackListHooker.BLACK_LIST_PACKAGE_NAME;
+import static com.elderdrivers.riru.edxp.config.InstallerChooser.INSTALLER_DATA_BASE_DIR;
+import static com.elderdrivers.riru.edxp.yahfa.entry.hooker.XposedBlackListHooker.BLACK_LIST_PACKAGE_NAME;
 import static de.robv.android.xposed.XposedHelpers.closeSilently;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.findFieldIfExists;
