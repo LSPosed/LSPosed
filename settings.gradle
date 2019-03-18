@@ -1,1 +1,1 @@
-include ':Core', ':Bridge', ':hiddenapistubs', ':dexmaker', ':dalvikdx'
+include ':edxp-core', ':xposed-bridge', ':hiddenapi-stubs', ':dexmaker', ':dalvikdx', ':edxp-yahfa'

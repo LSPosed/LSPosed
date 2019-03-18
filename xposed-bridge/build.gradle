@@ -1,0 +1,54 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
+
+    defaultConfig {
+        multiDexEnabled false
+        minSdkVersion 23
+    }
+
+    sourceSets {
+        main {
+            java.srcDirs += ['src/main/apacheCommonsLang']
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+// Make sure that hiddenapistubs are placed before the Android SDK in xposed-bridge.iml
+// as there doesn't seem to be any way to configure this in Android Studio.
+preBuild.doLast {
+    def imlFile = file(project.name + ".iml")
+    println 'Change ' + project.name + '.iml order'
+    try {
+        def parsedXml = (new groovy.util.XmlParser()).parse(imlFile)
+        def jdkNode = parsedXml.component[1].orderEntry.find { it.'@type' == 'jdk' }
+        parsedXml.component[1].remove(jdkNode)
+        def sdkString = "Android API " + android.compileSdkVersion.substring("android-".length()) + " Platform"
+        new groovy.util.Node(parsedXml.component[1], 'orderEntry', ['type': 'jdk', 'jdkName': sdkString, 'jdkType': 'Android SDK'])
+        groovy.xml.XmlUtil.serialize(parsedXml, new FileOutputStream(imlFile))
+    } catch (FileNotFoundException e) {
+        // nop, iml not found
+    }
+}
+
+dependencies {
+    compileOnly files("libs/framework-stub.jar")
+    compileOnly project(':dexmaker')
+}
+
+afterEvaluate {
+
+    tasks.withType(JavaCompile) {
+        options.compilerArgs.add("-Xbootclasspath/p:${projectDir.absolutePath}/libs/framework-stub.jar")
+    }
+
+}

@@ -32,10 +32,9 @@ and zip binaries can be downloaded from [here](http://gnuwin32.sourceforge.net/p
 
 ## Build
 
-1. run `:Bridge:makeAndCopyRelease` in Gradle window to build `edxp.jar`
-2. run `:Core:zipRelease` to build Magisk Riru module flashable zip file
-3. find the flashable under `Core/release/`
-4. flash the zip in recovery mode or in Magisk Manager
+1. run `./gradlew :edxp-core:zipRelease` to build flashable zip
+2. find the flashable under `edxp-core/release/`
+3. flash the zip in recovery mode or in Magisk Manager
 
 ## Install
 
