@@ -1,10 +1,9 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 28
 
     defaultConfig {
-        applicationId "com.elderdrivers.riru.edxp.yahfa"
         minSdkVersion 26
         targetSdkVersion 28
         versionCode 1
@@ -22,7 +21,6 @@ android {
 
 dependencies {
     compileOnly files("libs/framework-stub.jar")
-    implementation project(':edxp-common')
     implementation project(':xposed-bridge')
     compileOnly project(':dexmaker')
 }
@@ -47,16 +45,5 @@ afterEvaluate {
 
     tasks.withType(JavaCompile) {
         options.compilerArgs.add("-Xbootclasspath/p:${projectDir.absolutePath}/libs/framework-stub.jar")
-    }
-
-    android.applicationVariants.all { variant ->
-        def nameCapped = variant.name.capitalize()
-        def nameLowered = variant.name.toLowerCase()
-
-        def makeAndCopyTask = task("makeAndCopy${nameCapped}", type: Jar, dependsOn: "assemble${nameCapped}") {
-            from "build/intermediates/dex/${nameLowered}/mergeDex${nameCapped}/out/"
-            destinationDir file("../edxp-core/template_override/system/framework/")
-            baseName "edxp"
-        }
     }
 }

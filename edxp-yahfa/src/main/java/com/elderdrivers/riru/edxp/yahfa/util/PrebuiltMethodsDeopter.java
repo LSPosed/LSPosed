@@ -1,13 +1,14 @@
-package com.elderdrivers.riru.edxp.util;
+package com.elderdrivers.riru.edxp.yahfa.util;
 
+import com.elderdrivers.riru.edxp.util.Utils;
 import com.elderdrivers.riru.edxp.yahfa.Main;
 
 import java.util.Arrays;
 
 import de.robv.android.xposed.XposedHelpers;
 
-import static com.elderdrivers.riru.edxp.util.InlinedMethodCallers.KEY_BOOT_IMAGE;
-import static com.elderdrivers.riru.edxp.util.InlinedMethodCallers.KEY_SYSTEM_SERVER;
+import static com.elderdrivers.riru.edxp.yahfa.util.InlinedMethodCallers.KEY_BOOT_IMAGE;
+import static com.elderdrivers.riru.edxp.yahfa.util.InlinedMethodCallers.KEY_SYSTEM_SERVER;
 
 public class PrebuiltMethodsDeopter {
 

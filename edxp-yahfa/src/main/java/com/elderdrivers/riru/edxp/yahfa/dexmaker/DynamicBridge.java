@@ -76,7 +76,7 @@ public final class DynamicBridge {
             // in case some app is installing hooks before phone is unlocked
             String fixedAppDataDir = getDataPathPrefix() + getPackageName(Main.appDataDir) + "/";
             dexDir = new File(fixedAppDataDir, "/cache/edhookers/"
-                    + getCurrentProcessName().replace(":", "_") + "/");
+                    + getCurrentProcessName(Main.appProcessName).replace(":", "_") + "/");
             dexOptDir = new File(dexDir, "oat");
             dexDir.mkdirs();
             DexLog.d(Main.appProcessName + " deleting dir: " + dexOptDir.getAbsolutePath());

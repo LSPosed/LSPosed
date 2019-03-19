@@ -1,4 +1,4 @@
-package com.elderdrivers.riru.edxp.util;
+package com.elderdrivers.riru.edxp.yahfa.util;
 
 import java.util.HashMap;
 

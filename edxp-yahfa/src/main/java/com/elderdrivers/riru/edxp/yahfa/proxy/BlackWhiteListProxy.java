@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import com.elderdrivers.riru.edxp.yahfa.Main;
 import com.elderdrivers.riru.edxp.config.ConfigManager;
 import com.elderdrivers.riru.edxp.yahfa.entry.Router;
-import com.elderdrivers.riru.edxp.util.PrebuiltMethodsDeopter;
+import com.elderdrivers.riru.edxp.yahfa.util.PrebuiltMethodsDeopter;
 import com.elderdrivers.riru.edxp.util.ProcessUtils;
 import com.elderdrivers.riru.edxp.util.Utils;
 
@@ -112,7 +112,7 @@ public class BlackWhiteListProxy {
         boolean needHook;
         if (TextUtils.isEmpty(appDataDir)) {
             Utils.logE("niceName:" + niceName + ", procName:"
-                    + ProcessUtils.getCurrentProcessName() + ", appDataDir is null, blacklisted!");
+                    + ProcessUtils.getCurrentProcessName(Main.appProcessName) + ", appDataDir is null, blacklisted!");
             needHook = false;
         } else {
             // FIXME some process cannot read app_data_file because of MLS, e.g. bluetooth

@@ -1,7 +1,7 @@
 package com.elderdrivers.riru.edxp.yahfa.config;
 
 import com.elderdrivers.riru.edxp.hook.HookProvider;
-import com.elderdrivers.riru.edxp.util.PrebuiltMethodsDeopter;
+import com.elderdrivers.riru.edxp.yahfa.util.PrebuiltMethodsDeopter;
 import com.elderdrivers.riru.edxp.yahfa.dexmaker.DexMakerUtils;
 import com.elderdrivers.riru.edxp.yahfa.dexmaker.DynamicBridge;
 

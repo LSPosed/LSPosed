@@ -6,6 +6,7 @@ import android.os.Process;
 
 import com.elderdrivers.riru.common.KeepAll;
 import com.elderdrivers.riru.edxp.BuildConfig;
+import com.elderdrivers.riru.edxp.config.InstallerChooser;
 import com.elderdrivers.riru.edxp.yahfa.core.HookMethodResolver;
 import com.elderdrivers.riru.edxp.yahfa.entry.Router;
 import com.elderdrivers.riru.edxp.yahfa.proxy.BlackWhiteListProxy;
@@ -28,6 +29,7 @@ public class Main implements KeepAll {
         init(Build.VERSION.SDK_INT);
         HookMethodResolver.init();
         Router.injectConfig();
+        InstallerChooser.setInstallerPackageName(getInstallerPkgName());
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////

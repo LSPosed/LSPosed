@@ -3,8 +3,6 @@ package com.elderdrivers.riru.edxp.util;
 import android.os.Process;
 import android.text.TextUtils;
 
-import com.elderdrivers.riru.edxp.yahfa.Main;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,8 +14,7 @@ public class ProcessUtils {
     public static final int PER_USER_RANGE = 100000;
     public static final int USER_SYSTEM = 0;
 
-    public static String getCurrentProcessName() {
-        String prettyName = Main.appProcessName;
+    public static String getCurrentProcessName(String prettyName) {
         if (!TextUtils.isEmpty(prettyName)) {
             return prettyName;
         }
@@ -26,8 +23,6 @@ public class ProcessUtils {
 
     /**
      * a common solution from https://stackoverflow.com/a/21389402
-     * <p>
-     * use {@link Main#appProcessName} to get current process name
      */
     public static String getProcessName(int pid) {
         BufferedReader cmdlineReader = null;

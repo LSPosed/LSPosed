@@ -2,7 +2,7 @@ package com.elderdrivers.riru.edxp.yahfa.proxy;
 
 import com.elderdrivers.riru.edxp.yahfa.Main;
 import com.elderdrivers.riru.edxp.config.ConfigManager;
-import com.elderdrivers.riru.edxp.util.PrebuiltMethodsDeopter;
+import com.elderdrivers.riru.edxp.yahfa.util.PrebuiltMethodsDeopter;
 import com.elderdrivers.riru.edxp.yahfa.entry.Router;
 
 import static com.elderdrivers.riru.edxp.util.FileUtils.getDataPathPrefix;

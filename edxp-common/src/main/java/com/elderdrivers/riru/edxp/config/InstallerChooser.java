@@ -10,23 +10,25 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import de.robv.android.xposed.SELinuxHelper;
 import de.robv.android.xposed.services.BaseService;
 
-import static com.elderdrivers.riru.edxp.yahfa.Main.getInstallerPkgName;
-
 public class InstallerChooser {
 
     private static final AtomicBoolean hasSet = new AtomicBoolean(false);
+    @SuppressLint("SdCardPath")
     private static final String DATA_DIR_PATH_PREFIX =
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ? "/data/user_de/0/" : "/data/data/";
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ? "/data/user_de/0/" : "/data/user/0/";
 
 
     public static final String PRIMARY_INSTALLER_PACKAGE_NAME = "com.solohsu.android.edxp.manager";
     public static final String SECONDARY_INSTALLER_PACKAGE_NAME = "org.meowcat.edxposed.manager";
     public static final String LEGACY_INSTALLER_PACKAGE_NAME = "de.robv.android.xposed.installer";
 
-    public static String INSTALLER_PACKAGE_NAME = getInstallerPkgName();
-    @SuppressLint("SdCardPath")
-    public static String INSTALLER_DATA_BASE_DIR = DATA_DIR_PATH_PREFIX + INSTALLER_PACKAGE_NAME + "/";
+    public static String INSTALLER_PACKAGE_NAME;
+    public static String INSTALLER_DATA_BASE_DIR;
 
+    public static void setInstallerPackageName(String packageName) {
+        INSTALLER_PACKAGE_NAME = packageName;
+        INSTALLER_DATA_BASE_DIR = DATA_DIR_PATH_PREFIX + INSTALLER_PACKAGE_NAME + "/";
+    }
 
     public static void setup() {
         if (!hasSet.compareAndSet(false, true)) {
