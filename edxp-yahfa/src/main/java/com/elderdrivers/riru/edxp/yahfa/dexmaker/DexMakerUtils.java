@@ -3,9 +3,8 @@ package com.elderdrivers.riru.edxp.yahfa.dexmaker;
 import android.app.AndroidAppHelper;
 import android.os.Build;
 import android.text.TextUtils;
-import android.util.Log;
 
-import com.elderdrivers.riru.edxp.yahfa.Main;
+import com.elderdrivers.riru.edxp.Main;
 import com.elderdrivers.riru.edxp.config.ConfigManager;
 import com.elderdrivers.riru.edxp.yahfa.core.HookMain;
 

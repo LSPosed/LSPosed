@@ -9,7 +9,7 @@ public interface HookProvider {
 
     void hookMethod(Member method, XposedBridge.AdditionalHookInfo additionalInfo);
 
-    Object invokeOriginalMethod(Member method, Object thisObject, Object[] args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException;
+    Object invokeOriginalMethod(Member method, Object thisObject, Object[] args) throws Throwable;
 
     Member findMethodNative(Member hookMethod);
 

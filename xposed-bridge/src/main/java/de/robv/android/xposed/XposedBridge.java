@@ -60,7 +60,7 @@ public final class XposedBridge {
 	private static final Object[] EMPTY_ARRAY = new Object[0];
 
 	// built-in handlers
-	private static final Map<Member, CopyOnWriteSortedSet<XC_MethodHook>> sHookedMethodCallbacks = new HashMap<>();
+	public static final Map<Member, CopyOnWriteSortedSet<XC_MethodHook>> sHookedMethodCallbacks = new HashMap<>();
 	public static final CopyOnWriteSortedSet<XC_LoadPackage> sLoadedPackageCallbacks = new CopyOnWriteSortedSet<>();
 	/*package*/ static final CopyOnWriteSortedSet<XC_InitPackageResources> sInitPackageResourcesCallbacks = new CopyOnWriteSortedSet<>();
 
@@ -402,7 +402,7 @@ public final class XposedBridge {
                                                      Class<?>[] parameterTypes,
                                                      Class<?> returnType,
                                                      Object thisObject, Object[] args)
-            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+            throws Throwable {
         return EdXpConfigGlobal.getHookProvider().invokeOriginalMethod(method, thisObject, args);
     }
 
@@ -432,7 +432,7 @@ public final class XposedBridge {
 	 *             if an exception was thrown by the invoked method
 	 */
 	public static Object invokeOriginalMethod(Member method, Object thisObject, Object[] args)
-			throws NullPointerException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+			throws Throwable {
 		if (args == null) {
 			args = EMPTY_ARRAY;
 		}

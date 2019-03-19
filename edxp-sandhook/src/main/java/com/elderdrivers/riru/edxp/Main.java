@@ -1,17 +1,18 @@
-package com.elderdrivers.riru.edxp.yahfa;
+package com.elderdrivers.riru.edxp;
 
 import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Process;
 
 import com.elderdrivers.riru.common.KeepAll;
-import com.elderdrivers.riru.edxp.BuildConfig;
+import com.elderdrivers.riru.edxp.sandhook.BuildConfig;
 import com.elderdrivers.riru.edxp.config.InstallerChooser;
-import com.elderdrivers.riru.edxp.yahfa.core.HookMethodResolver;
-import com.elderdrivers.riru.edxp.yahfa.entry.Router;
-import com.elderdrivers.riru.edxp.yahfa.proxy.BlackWhiteListProxy;
-import com.elderdrivers.riru.edxp.yahfa.proxy.NormalProxy;
 import com.elderdrivers.riru.edxp.util.Utils;
+import com.elderdrivers.riru.edxp.sandhook.core.HookMethodResolver;
+import com.elderdrivers.riru.edxp.sandhook.entry.Router;
+import com.elderdrivers.riru.edxp.sandhook.proxy.BlackWhiteListProxy;
+import com.elderdrivers.riru.edxp.sandhook.proxy.NormalProxy;
+import com.swift.sandhook.xposedcompat.methodgen.SandHookXposedBridge;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -30,6 +31,7 @@ public class Main implements KeepAll {
         HookMethodResolver.init();
         Router.injectConfig();
         InstallerChooser.setInstallerPackageName(getInstallerPkgName());
+        SandHookXposedBridge.setLibPath();
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////

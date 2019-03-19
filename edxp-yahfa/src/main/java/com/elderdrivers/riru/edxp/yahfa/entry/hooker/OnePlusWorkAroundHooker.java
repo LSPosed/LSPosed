@@ -1,7 +1,7 @@
 package com.elderdrivers.riru.edxp.yahfa.entry.hooker;
 
 import com.elderdrivers.riru.common.KeepMembers;
-import com.elderdrivers.riru.edxp.yahfa.Main;
+import com.elderdrivers.riru.edxp.Main;
 import com.elderdrivers.riru.edxp.yahfa.entry.Router;
 
 import de.robv.android.xposed.XposedBridge;

@@ -1,6 +1,6 @@
 package com.elderdrivers.riru.edxp.yahfa.core;
 
-import com.elderdrivers.riru.edxp.yahfa.Main;
+import com.elderdrivers.riru.edxp.Main;
 import com.elderdrivers.riru.edxp.yahfa.entry.hooker.OnePlusWorkAroundHooker;
 import com.elderdrivers.riru.edxp.util.Utils;
 
@@ -14,8 +14,8 @@ import java.util.Set;
 
 import de.robv.android.xposed.XposedHelpers;
 
-import static com.elderdrivers.riru.edxp.yahfa.Main.backupAndHookNative;
-import static com.elderdrivers.riru.edxp.yahfa.Main.findMethodNative;
+import static com.elderdrivers.riru.edxp.Main.backupAndHookNative;
+import static com.elderdrivers.riru.edxp.Main.findMethodNative;
 
 public class HookMain {
 

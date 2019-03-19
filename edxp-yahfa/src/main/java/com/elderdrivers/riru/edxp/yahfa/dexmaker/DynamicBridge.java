@@ -1,6 +1,6 @@
 package com.elderdrivers.riru.edxp.yahfa.dexmaker;
 
-import com.elderdrivers.riru.edxp.yahfa.Main;
+import com.elderdrivers.riru.edxp.Main;
 
 import java.io.File;
 import java.lang.reflect.Constructor;

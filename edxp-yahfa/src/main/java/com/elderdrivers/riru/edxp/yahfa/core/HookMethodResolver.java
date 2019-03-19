@@ -2,7 +2,7 @@ package com.elderdrivers.riru.edxp.yahfa.core;
 
 import android.os.Build;
 
-import com.elderdrivers.riru.edxp.yahfa.Main;
+import com.elderdrivers.riru.edxp.Main;
 import com.elderdrivers.riru.edxp.util.Utils;
 
 import java.lang.reflect.Field;

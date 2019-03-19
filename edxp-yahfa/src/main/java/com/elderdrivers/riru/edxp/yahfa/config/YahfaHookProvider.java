@@ -1,11 +1,10 @@
 package com.elderdrivers.riru.edxp.yahfa.config;
 
 import com.elderdrivers.riru.edxp.hook.HookProvider;
-import com.elderdrivers.riru.edxp.yahfa.util.PrebuiltMethodsDeopter;
 import com.elderdrivers.riru.edxp.yahfa.dexmaker.DexMakerUtils;
 import com.elderdrivers.riru.edxp.yahfa.dexmaker.DynamicBridge;
+import com.elderdrivers.riru.edxp.yahfa.util.PrebuiltMethodsDeopter;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
 
 import de.robv.android.xposed.XposedBridge;
@@ -17,7 +16,7 @@ public class YahfaHookProvider implements HookProvider {
     }
 
     @Override
-    public Object invokeOriginalMethod(Member method, Object thisObject, Object[] args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    public Object invokeOriginalMethod(Member method, Object thisObject, Object[] args) throws Throwable {
         return DynamicBridge.invokeOriginalMethod(method, thisObject, args);
     }
 

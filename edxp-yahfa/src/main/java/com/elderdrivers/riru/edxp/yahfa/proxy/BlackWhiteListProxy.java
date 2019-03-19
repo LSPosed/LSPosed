@@ -2,7 +2,7 @@ package com.elderdrivers.riru.edxp.yahfa.proxy;
 
 import android.text.TextUtils;
 
-import com.elderdrivers.riru.edxp.yahfa.Main;
+import com.elderdrivers.riru.edxp.Main;
 import com.elderdrivers.riru.edxp.config.ConfigManager;
 import com.elderdrivers.riru.edxp.yahfa.entry.Router;
 import com.elderdrivers.riru.edxp.yahfa.util.PrebuiltMethodsDeopter;
@@ -11,7 +11,7 @@ import com.elderdrivers.riru.edxp.util.Utils;
 
 import de.robv.android.xposed.XposedBridge;
 
-import static com.elderdrivers.riru.edxp.yahfa.Main.isAppNeedHook;
+import static com.elderdrivers.riru.edxp.Main.isAppNeedHook;
 import static com.elderdrivers.riru.edxp.util.FileUtils.getDataPathPrefix;
 
 /**

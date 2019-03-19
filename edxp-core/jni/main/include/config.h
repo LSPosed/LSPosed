@@ -10,6 +10,6 @@
 #define INJECT_DEX_PATH \
 "/system/framework/edxp.jar:/system/framework/eddalvikdx.jar:/system/framework/eddexmaker.jar"
 
-#define ENTRY_CLASS_NAME "com.elderdrivers.riru.edxp.yahfa.Main"
+#define ENTRY_CLASS_NAME "com.elderdrivers.riru.edxp.Main"
 
 #endif //CONFIG_H

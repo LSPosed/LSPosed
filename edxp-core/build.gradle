@@ -47,6 +47,28 @@ afterEvaluate {
         }
 
         pushTask.dependsOn(zipTask)
+
+
+        zipTask = task("zipSandhook${nameCapped}", type: Exec, dependsOn: ":edxp-sandhook:makeAndCopy${nameCapped}") {
+            workingDir '..'
+            commandLine 'sh', 'build.sh',    \
+                        project.name,    \
+                        "Sandhook-${project.version}-${nameLowered}",    \
+                        "${project.extensions['module_name']}"
+        }
+
+        pushTask = task("pushSandhook${nameCapped}", type: Exec) {
+            workingDir 'release'
+            def commands = ["adb", "push", "magisk-${project.extensions['module_name']}-Sandhook" +
+                    "-${project.version}-${nameLowered}.zip", "/sdcard/"]
+            if (OperatingSystem.current().isWindows()) {
+                commandLine 'cmd', '/c', commands.join(" ")
+            } else {
+                commandLine commands
+            }
+        }
+
+        pushTask.dependsOn(zipTask)
     }
 
 }
