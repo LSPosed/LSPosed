@@ -31,9 +31,6 @@ public class Main implements KeepAll {
         HookMethodResolver.init();
         Router.injectConfig();
         InstallerChooser.setInstallerPackageName(getInstallerPkgName());
-        try {
-        WhaleRuntime.getMethodSlot(null);
-        } catch (Throwable throwable) {}
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
