@@ -1,0 +1,61 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 28
+
+    defaultConfig {
+        applicationId "com.elderdrivers.riru.edxp.whale"
+        minSdkVersion 26
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    compileOnly files("libs/framework-stub.jar")
+    implementation project(':edxp-common')
+    implementation project(':xposed-bridge')
+}
+
+
+preBuild.doLast {
+    def imlFile = file(project.name + ".iml")
+    println 'Change ' + project.name + '.iml order'
+    try {
+        def parsedXml = (new groovy.util.XmlParser()).parse(imlFile)
+        def jdkNode = parsedXml.component[1].orderEntry.find { it.'@type' == 'jdk' }
+        parsedXml.component[1].remove(jdkNode)
+        def sdkString = "Android API " + android.compileSdkVersion.substring("android-".length()) + " Platform"
+        new groovy.util.Node(parsedXml.component[1], 'orderEntry', ['type': 'jdk', 'jdkName': sdkString, 'jdkType': 'Android SDK'])
+        groovy.xml.XmlUtil.serialize(parsedXml, new FileOutputStream(imlFile))
+    } catch (FileNotFoundException e) {
+        // nop, iml not found
+    }
+}
+
+afterEvaluate {
+
+    tasks.withType(JavaCompile) {
+        options.compilerArgs.add("-Xbootclasspath/p:${projectDir.absolutePath}/libs/framework-stub.jar")
+    }
+
+    android.applicationVariants.all { variant ->
+        def nameCapped = variant.name.capitalize()
+        def nameLowered = variant.name.toLowerCase()
+
+        def makeAndCopyTask = task("makeAndCopy${nameCapped}", type: Jar, dependsOn: "assemble${nameCapped}") {
+            from "build/intermediates/dex/${nameLowered}/mergeDex${nameCapped}/out/"
+            destinationDir file("../edxp-core/template_override/system/framework/")
+            baseName "edxp"
+        }
+    }
+}

@@ -16,7 +16,7 @@ public class YahfaHookProvider implements HookProvider {
     }
 
     @Override
-    public Object invokeOriginalMethod(Member method, Object thisObject, Object[] args) throws Throwable {
+    public Object invokeOriginalMethod(Member method, long methodId, Object thisObject, Object[] args) throws Throwable {
         return DynamicBridge.invokeOriginalMethod(method, thisObject, args);
     }
 
@@ -28,5 +28,10 @@ public class YahfaHookProvider implements HookProvider {
     @Override
     public void deoptMethods(String packageName, ClassLoader classLoader) {
         PrebuiltMethodsDeopter.deoptMethods(packageName, classLoader);
+    }
+
+    @Override
+    public long getMethodId(Member member) {
+        return 0;
     }
 }

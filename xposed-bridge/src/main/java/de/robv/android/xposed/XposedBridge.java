@@ -260,7 +260,7 @@ public final class XposedBridge {
 	/**
 	 * This method is called as a replacement for hooked methods.
 	 */
-	private static Object handleHookedMethod(Member method, int originalMethodId, Object additionalInfoObj,
+	public static Object handleHookedMethod(Member method, long originalMethodId, Object additionalInfoObj,
 			Object thisObject, Object[] args) throws Throwable {
 		AdditionalHookInfo additionalInfo = (AdditionalHookInfo) additionalInfoObj;
 
@@ -398,12 +398,12 @@ public final class XposedBridge {
 		EdXpConfigGlobal.getHookProvider().hookMethod(method, (AdditionalHookInfo) additionalInfoObj);
 	}
 
-    private static Object invokeOriginalMethodNative(Member method, int methodId,
+    private static Object invokeOriginalMethodNative(Member method, long methodId,
                                                      Class<?>[] parameterTypes,
                                                      Class<?> returnType,
                                                      Object thisObject, Object[] args)
             throws Throwable {
-        return EdXpConfigGlobal.getHookProvider().invokeOriginalMethod(method, thisObject, args);
+        return EdXpConfigGlobal.getHookProvider().invokeOriginalMethod(method, methodId, thisObject, args);
     }
 
 	/**
@@ -452,7 +452,8 @@ public final class XposedBridge {
 			throw new IllegalArgumentException("method must be of type Method or Constructor");
 		}
 
-		return invokeOriginalMethodNative(method, 0, parameterTypes, returnType, thisObject, args);
+		long methodId = EdXpConfigGlobal.getHookProvider().getMethodId(method);
+		return invokeOriginalMethodNative(method, methodId, parameterTypes, returnType, thisObject, args);
 	}
 
 	/*package*/ static void setObjectClass(Object obj, Class<?> clazz) {

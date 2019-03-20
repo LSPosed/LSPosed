@@ -69,6 +69,27 @@ afterEvaluate {
         }
 
         pushTask.dependsOn(zipTask)
+
+        zipTask = task("zipWhale${nameCapped}", type: Exec, dependsOn: ":edxp-whale:makeAndCopy${nameCapped}") {
+            workingDir '..'
+            commandLine 'sh', 'build.sh',    \
+                        project.name,    \
+                        "Whale-${project.version}-${nameLowered}",    \
+                        "${project.extensions['module_name']}"
+        }
+
+        pushTask = task("pushWhale${nameCapped}", type: Exec) {
+            workingDir 'release'
+            def commands = ["adb", "push", "magisk-${project.extensions['module_name']}-Whale" +
+                    "-${project.version}-${nameLowered}.zip", "/sdcard/"]
+            if (OperatingSystem.current().isWindows()) {
+                commandLine 'cmd', '/c', commands.join(" ")
+            } else {
+                commandLine commands
+            }
+        }
+
+        pushTask.dependsOn(zipTask)
     }
 
 }

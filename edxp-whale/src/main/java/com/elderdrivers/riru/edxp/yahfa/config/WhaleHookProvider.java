@@ -1,29 +1,28 @@
-package com.elderdrivers.riru.edxp.sandhook.config;
+package com.elderdrivers.riru.edxp.yahfa.config;
 
 import com.elderdrivers.riru.edxp.hook.HookProvider;
-import com.elderdrivers.riru.edxp.sandhook.dexmaker.DexMakerUtils;
-import com.elderdrivers.riru.edxp.sandhook.util.PrebuiltMethodsDeopter;
-import com.swift.sandhook.xposedcompat.XposedCompat;
-import com.swift.sandhook.xposedcompat.methodgen.SandHookXposedBridge;
+import com.elderdrivers.riru.edxp.yahfa.util.PrebuiltMethodsDeopter;
+import com.lody.whale.WhaleRuntime;
 
 import java.lang.reflect.Member;
 
 import de.robv.android.xposed.XposedBridge;
 
-public class SandHookProvider implements HookProvider {
+public class WhaleHookProvider implements HookProvider {
+
     @Override
     public void hookMethod(Member method, XposedBridge.AdditionalHookInfo additionalInfo) {
-        XposedCompat.hookMethod(method, additionalInfo);
+        WhaleRuntime.hookMethodNative(method.getDeclaringClass(), method, additionalInfo);
     }
 
     @Override
     public Object invokeOriginalMethod(Member method, long methodId, Object thisObject, Object[] args) throws Throwable {
-        return SandHookXposedBridge.invokeOriginalMethod(method, thisObject, args);
+        return WhaleRuntime.invokeOriginalMethodNative(methodId, thisObject, args);
     }
 
     @Override
     public Member findMethodNative(Member hookMethod) {
-        return DexMakerUtils.findMethodNative(hookMethod);
+        return hookMethod;
     }
 
     @Override
@@ -33,6 +32,6 @@ public class SandHookProvider implements HookProvider {
 
     @Override
     public long getMethodId(Member member) {
-        return 0;
+        return WhaleRuntime.getMethodSlot(member);
     }
 }

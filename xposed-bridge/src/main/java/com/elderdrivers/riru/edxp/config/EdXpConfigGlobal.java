@@ -54,7 +54,7 @@ public class EdXpConfigGlobal {
         }
 
         @Override
-        public Object invokeOriginalMethod(Member method, Object thisObject, Object[] args)
+        public Object invokeOriginalMethod(Member method, long methodId, Object thisObject, Object[] args)
                 throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
             return null;
         }
@@ -67,6 +67,11 @@ public class EdXpConfigGlobal {
         @Override
         public void deoptMethods(String packageName, ClassLoader classLoader) {
 
+        }
+
+        @Override
+        public long getMethodId(Member member) {
+            return 0;
         }
     };
 }
