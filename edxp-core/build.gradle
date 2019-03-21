@@ -59,6 +59,10 @@ task copyDexmakerJar {
     }
 }
 
+task cleanTemplate(type: Delete) {
+    delete file(templateSystemPath), file(templateSystemx86Path)
+}
+
 afterEvaluate {
 
     android.libraryVariants.all { variant ->
@@ -72,7 +76,7 @@ afterEvaluate {
             def backendLowered = backend.toLowerCase()
 
             def zipTask = task("zip${backendCapped}${variantCapped}", type: Exec) {
-                dependsOn copyDalvikdxJar, copyDexmakerJar
+                dependsOn cleanTemplate, copyDalvikdxJar, copyDexmakerJar
                 dependsOn tasks.getByPath(":edxp-${backendLowered}:makeAndCopy${variantCapped}")
                 workingDir '..'
                 commandLine 'sh', 'build.sh', project.name,

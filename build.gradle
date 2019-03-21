@@ -18,7 +18,12 @@ buildscript {
 allprojects {
     ext {
         templateRootPath = project(":edxp-core").projectDir.path + "/template_override/"
+        templateSystemPath = templateRootPath + "/system/"
+        templateSystemx86Path = templateRootPath + "/system_x86/"
         templateFrameworkPath = templateRootPath + "/system/framework/"
+        templateLibPath = templateRootPath + "/system/lib/"
+        templateLib64Path = templateRootPath + "/system/lib64/"
+        templateEtcPath = templateRootPath + "/system/etc/"
     }
     repositories {
         google()
