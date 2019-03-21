@@ -1,4 +1,4 @@
-version=90.0-0.3.1.7-beta-SNAPSHOT ($backend)
+version=90.0-0.3.1.8-beta-SNAPSHOT ($backend)
 arch=arm64
 minsdk=23
 maxsdk=28
