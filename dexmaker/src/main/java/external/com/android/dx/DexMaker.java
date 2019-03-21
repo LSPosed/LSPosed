@@ -525,8 +525,6 @@ public final class DexMaker {
             return generateClassLoader(result, dexCache, parent);
         }
 
-        byte[] dex = generate();
-
         /*
          * This implementation currently dumps the dex to the filesystem. It
          * jars the emitted .dex for the benefit of Gingerbread and earlier
@@ -537,6 +535,7 @@ public final class DexMaker {
         result.createNewFile();
         JarOutputStream jarOut = new JarOutputStream(new FileOutputStream(result));
         JarEntry entry = new JarEntry(DexFormat.DEX_IN_JAR_NAME);
+        byte[] dex = generate();
         entry.setSize(dex.length);
         jarOut.putNextEntry(entry);
         jarOut.write(dex);
