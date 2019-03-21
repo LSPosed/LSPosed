@@ -29,7 +29,7 @@ public class NormalProxy {
 
     public static void forkAndSpecializePost(int pid, String appDataDir, String niceName) {
         // TODO consider processes without forkAndSpecializePost called
-        Main.appDataDir = appDataDir;
+        Main.setAppDataDir(appDataDir);
         Main.niceName = niceName;
         Router.prepare(false);
         Main.reopenFilesAfterForkNative();
@@ -58,7 +58,7 @@ public class NormalProxy {
 
     public static void forkSystemServerPost(int pid) {
         // in system_server process
-        Main.appDataDir = getDataPathPrefix() + "android";
+        Main.setAppDataDir(getDataPathPrefix() + "android");
         Main.niceName = "system_server";
         Router.prepare(true);
         Main.reopenFilesAfterForkNative();

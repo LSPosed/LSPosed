@@ -4,6 +4,15 @@ import android.os.Build;
 
 import com.elderdrivers.riru.common.KeepMembers;
 import com.elderdrivers.riru.edxp.sandhook.entry.Router;
+import com.swift.sandhook.SandHook;
+import com.swift.sandhook.annotation.HookMethod;
+import com.swift.sandhook.annotation.HookMethodBackup;
+import com.swift.sandhook.annotation.HookMode;
+import com.swift.sandhook.annotation.HookReflectClass;
+import com.swift.sandhook.annotation.SkipParamCheck;
+import com.swift.sandhook.annotation.ThisObject;
+
+import java.lang.reflect.Method;
 
 import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XposedBridge;
@@ -15,15 +24,21 @@ import static com.elderdrivers.riru.edxp.util.ClassLoaderUtils.replaceParentClas
 import static com.elderdrivers.riru.edxp.util.Utils.logD;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 
+@HookReflectClass("com.android.server.SystemServer")
 public class StartBootstrapServicesHooker implements KeepMembers {
     public static String className = "com.android.server.SystemServer";
     public static String methodName = "startBootstrapServices";
     public static String methodSig = "()V";
 
-    public static void hook(Object systemServer) {
+    @HookMethodBackup("startBootstrapServices")
+    @SkipParamCheck
+    static Method backup;
+
+    @HookMethod("startBootstrapServices")
+    public static void hook(@ThisObject Object systemServer) throws Throwable {
 
         if (XposedBridge.disableHooks) {
-            backup(systemServer);
+            SandHook.callOriginByBackup(backup, systemServer);
             return;
         }
 
@@ -56,7 +71,7 @@ public class StartBootstrapServicesHooker implements KeepMembers {
         } catch (Throwable t) {
             Router.logE("error when hooking startBootstrapServices", t);
         } finally {
-            backup(systemServer);
+            SandHook.callOriginByBackup(backup, systemServer);
         }
     }
 

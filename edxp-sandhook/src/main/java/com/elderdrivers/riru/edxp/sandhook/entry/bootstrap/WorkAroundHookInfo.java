@@ -7,4 +7,7 @@ public class WorkAroundHookInfo implements KeepMembers {
     public static String[] hookItemNames = {
             OnePlusWorkAroundHooker.class.getName()
     };
+
+    public static Class[] hookItems = {
+    };
 }

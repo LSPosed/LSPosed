@@ -12,4 +12,8 @@
 
 #define ENTRY_CLASS_NAME "com.elderdrivers.riru.edxp.Main"
 
+#define CLASS_SAND_HOOK "com.swift.sandhook.SandHook"
+
+#define CLASS_NEVER_CALL "com.swift.sandhook.ClassNeverCall"
+
 #endif //CONFIG_H

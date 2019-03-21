@@ -7,12 +7,15 @@ import com.swift.sandhook.wrapper.HookWrapper;
 import com.swift.sandhook.xposedcompat.hookstub.HookStubManager;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.nio.ByteBuffer;
 import java.util.Map;
 
+import dalvik.system.InMemoryDexClassLoader;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import external.com.android.dx.Code;
@@ -172,7 +175,13 @@ public class HookerDexMakerNew implements HookMaker {
             throw new IllegalArgumentException("dexDirPath should not be empty!!!");
         }
         // Create the dex file and load it.
-        loader = mDexMaker.generateAndLoad(mAppClassLoader, new File(mDexDirPath), dexName);
+        try {
+            loader = mDexMaker.generateAndLoad(mAppClassLoader, new File(mDexDirPath), dexName);
+        } catch (IOException e) {
+            //can not write file
+            byte[] dexBytes = mDexMaker.generate();
+            loader = new InMemoryDexClassLoader(ByteBuffer.wrap(dexBytes), mAppClassLoader);
+        }
         return loadHookerClass(loader, className);
     }
 
@@ -233,7 +242,7 @@ public class HookerDexMakerNew implements HookMaker {
         Code code = mDexMaker.declare(mHookMethodId, Modifier.PUBLIC | Modifier.STATIC);
 
         Local<Member> method = code.newLocal(memberTypeId);
- //       Local<Method> backupMethod = code.newLocal(methodTypeId);
+        //       Local<Method> backupMethod = code.newLocal(methodTypeId);
         Local<Object> thisObject = code.newLocal(TypeId.OBJECT);
         Local<Object[]> args = code.newLocal(objArrayTypeId);
         Local<Integer> actualParamSize = code.newLocal(TypeId.INT);

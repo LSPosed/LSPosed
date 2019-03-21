@@ -5,8 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.os.Process;
 import android.text.TextUtils;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,10 +22,10 @@ public class ProcessUtils {
 
     private static volatile String processName = null;
 
-    public static String getProcessName(Context context) {
+    public static String getProcessName() {
         if (!TextUtils.isEmpty(processName))
             return processName;
-        processName = doGetProcessName(context);
+        processName = getProcessName(Process.myPid());
         return processName;
     }
 
@@ -41,8 +45,35 @@ public class ProcessUtils {
         return context.getPackageName();
     }
 
+    public static String getProcessName(int pid) {
+        BufferedReader cmdlineReader = null;
+        try {
+            cmdlineReader = new BufferedReader(new InputStreamReader(
+                    new FileInputStream(
+                            "/proc/" + pid + "/cmdline"),
+                    "iso-8859-1"));
+            int c;
+            StringBuilder processName = new StringBuilder();
+            while ((c = cmdlineReader.read()) > 0) {
+                processName.append((char) c);
+            }
+            return processName.toString();
+        } catch (Throwable throwable) {
+            DexLog.w("getProcessName: " + throwable.getMessage());
+        } finally {
+            try {
+                if (cmdlineReader != null) {
+                    cmdlineReader.close();
+                }
+            } catch (Throwable throwable) {
+                DexLog.e("getProcessName: " + throwable.getMessage());
+            }
+        }
+        return "";
+    }
+
     public static boolean isMainProcess(Context context) {
-        String processName = getProcessName(context);
+        String processName = getProcessName();
         String pkgName = context.getPackageName();
         if (!TextUtils.isEmpty(processName) && !TextUtils.equals(processName, pkgName)) {
             return false;

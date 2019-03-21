@@ -5,12 +5,20 @@ import android.app.ActivityThread;
 import com.elderdrivers.riru.common.KeepMembers;
 import com.elderdrivers.riru.edxp.sandhook.entry.Router;
 import com.elderdrivers.riru.edxp.sandhook.util.PrebuiltMethodsDeopter;
+import com.swift.sandhook.SandHook;
+import com.swift.sandhook.annotation.HookClass;
+import com.swift.sandhook.annotation.HookMethod;
+import com.swift.sandhook.annotation.HookMethodBackup;
+import com.swift.sandhook.annotation.HookMode;
+
+import java.lang.reflect.Method;
 
 import de.robv.android.xposed.XposedBridge;
 
 
 // system_server initialization
 // ed: only support sdk >= 21 for now
+@HookClass(ActivityThread.class)
 public class SystemMainHooker implements KeepMembers {
 
     public static String className = "android.app.ActivityThread";
@@ -19,12 +27,16 @@ public class SystemMainHooker implements KeepMembers {
 
     public static ClassLoader systemServerCL;
 
-    public static ActivityThread hook() {
+    @HookMethodBackup("systemMain")
+    static Method backup;
+
+    @HookMethod("systemMain")
+    public static ActivityThread hook() throws Throwable {
         if (XposedBridge.disableHooks) {
-            return backup();
+            return (ActivityThread) SandHook.callOriginByBackup(backup, null);
         }
         Router.logD("ActivityThread#systemMain() starts");
-        ActivityThread activityThread = backup();
+        ActivityThread activityThread = (ActivityThread) SandHook.callOriginByBackup(backup, null);
         try {
             // get system_server classLoader
             systemServerCL = Thread.currentThread().getContextClassLoader();

@@ -6,6 +6,7 @@ import com.swift.sandhook.SandHook;
 import com.swift.sandhook.SandHookMethodResolver;
 import com.swift.sandhook.utils.ParamWrapper;
 import com.swift.sandhook.wrapper.BackupMethodStubs;
+import com.swift.sandhook.xposedcompat.XposedCompat;
 import com.swift.sandhook.xposedcompat.utils.DexLog;
 
 import java.lang.reflect.Constructor;
@@ -23,12 +24,15 @@ import static de.robv.android.xposed.XposedBridge.sHookedMethodCallbacks;
 
 public class HookStubManager {
 
+    public static volatile boolean is64Bit;
+    //64bits arg0 - arg7 is in reg x1 - x7 and > 7 is in stack, but can not match
+    public final static int MAX_64_ARGS = 7;
 
     public static int MAX_STUB_ARGS = 0;
 
     public static int[] stubSizes;
 
-    public static boolean hasStubBackup = false;
+    public static boolean hasStubBackup;
 
     public static AtomicInteger[] curUseStubIndexes;
 
@@ -41,10 +45,11 @@ public class HookStubManager {
             = sHookedMethodCallbacks;
 
     static {
-        Class stubClass = SandHook.is64Bit() ? MethodHookerStubs64.class : MethodHookerStubs32.class;
+        is64Bit = SandHook.is64Bit();
+        Class stubClass = is64Bit ? MethodHookerStubs64.class : MethodHookerStubs32.class;
         stubSizes = (int[]) XposedHelpers.getStaticObjectField(stubClass, "stubSizes");
         Boolean hasBackup = (Boolean) XposedHelpers.getStaticObjectField(stubClass, "hasStubBackup");
-        hasStubBackup = hasBackup == null ? false : hasBackup;
+        hasStubBackup = hasBackup != null && (hasBackup && !XposedCompat.useNewCallBackup);
         if (stubSizes != null && stubSizes.length > 0) {
             MAX_STUB_ARGS = stubSizes.length - 1;
             curUseStubIndexes = new AtomicInteger[MAX_STUB_ARGS + 1];
@@ -89,6 +94,8 @@ public class HookStubManager {
             needStubArgCount += parType.length;
             if (needStubArgCount > MAX_STUB_ARGS)
                 return null;
+            if (is64Bit && needStubArgCount > MAX_64_ARGS)
+                return null;
             for (Class par:parType) {
                 if (!ParamWrapper.support(par))
                     return null;
@@ -98,7 +105,7 @@ public class HookStubManager {
         }
 
         synchronized (HookStubManager.class) {
-            StubMethodsInfo stubMethodInfo = getStubMethodPair(SandHook.is64Bit(), needStubArgCount);
+            StubMethodsInfo stubMethodInfo = getStubMethodPair(is64Bit, needStubArgCount);
             if (stubMethodInfo == null)
                 return null;
             HookMethodEntity entity = new HookMethodEntity(origin, stubMethodInfo.hook, stubMethodInfo.backup);
@@ -180,7 +187,7 @@ public class HookStubManager {
     }
 
     public static Method getCallOriginMethod(int args, int index) {
-        Class stubClass = SandHook.is64Bit() ? MethodHookerStubs64.class : MethodHookerStubs32.class;
+        Class stubClass = is64Bit ? MethodHookerStubs64.class : MethodHookerStubs32.class;
         String className = stubClass.getName();
         className += "$";
         className += getCallOriginClassName(args, index);
@@ -294,7 +301,6 @@ public class HookStubManager {
                     param.setResult(SandHook.callOriginMethod(originMethod, thiz, param.args));
                 }
             } catch (Throwable e) {
-                XposedBridge.log(e);
                 param.setThrowable(e);
             }
         }
@@ -365,7 +371,6 @@ public class HookStubManager {
             try {
                 param.setResult(SandHook.callOriginMethod(origin, thiz, param.args));
             } catch (Throwable e) {
-                XposedBridge.log(e);
                 param.setThrowable(e);
             }
         }

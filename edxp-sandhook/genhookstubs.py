@@ -60,8 +60,9 @@ TEMP_STUB_INFO = """
 """
 
 
-STUB_SIZES = [10,20,30,30,30,30,30,20,10,10,5,5,3]
-HAS_BACKUP = False;
+STUB_SIZES_32 = [10,20,30,30,30,30,30,20,10,10,5,5,3]
+STUB_SIZES_64 = [10,20,30,30,30,30,50,50]
+HAS_BACKUP = False
 
 
 def getMethodId(args, index):
@@ -126,20 +127,29 @@ def genCallOriginClass(is64Bit, args, index):
     method = TEMP_STUB_CALL_ORIGIN_CLASS % (getCallOriginClassName(args, index), getMethodBackupName(index), genArgsListForCallOriginMethod(is64Bit, args))
     return method
 
-def genStubInfo():
+def genStubInfo32():
     hasStub = "true" if HAS_BACKUP else "false"
     stubSizes = ""
-    for args in range(len(STUB_SIZES)):
+    for args in range(len(STUB_SIZES_32)):
         if (args != 0):
             stubSizes += ", "
-        stubSizes += str(STUB_SIZES[args])
+        stubSizes += str(STUB_SIZES_32[args])
+    return TEMP_STUB_INFO % (hasStub, stubSizes)
+
+def genStubInfo64():
+    hasStub = "true" if HAS_BACKUP else "false"
+    stubSizes = ""
+    for args in range(len(STUB_SIZES_64)):
+        if (args != 0):
+            stubSizes += ", "
+        stubSizes += str(STUB_SIZES_64[args])
     return TEMP_STUB_INFO % (hasStub, stubSizes)
 
 def gen32Stub(packageDir):
-    class_content = genStubInfo()
+    class_content = genStubInfo32()
     class_name = STUB_FILE_NAME + "32"
-    for args in range(len(STUB_SIZES)):
-        for index in range(STUB_SIZES[args]):
+    for args in range(len(STUB_SIZES_32)):
+        for index in range(STUB_SIZES_32[args]):
             class_content += """\n\n\t//stub of arg size %d, index %d""" % (args, index)
             class_content += genHookMethod(False, args, index)
             if HAS_BACKUP:
@@ -155,10 +165,10 @@ def gen32Stub(packageDir):
 
 
 def gen64Stub(packageDir):
-    class_content = genStubInfo()
+    class_content = genStubInfo64()
     class_name = STUB_FILE_NAME + "64"
-    for args in range(len(STUB_SIZES)):
-        for index in range(STUB_SIZES[args]):
+    for args in range(len(STUB_SIZES_64)):
+        for index in range(STUB_SIZES_64[args]):
             class_content += """\n\n\t//stub of arg size %d, index %d""" % (args, index)
             class_content += genHookMethod(True, args, index)
             if HAS_BACKUP:

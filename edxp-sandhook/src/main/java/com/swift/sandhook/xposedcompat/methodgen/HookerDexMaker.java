@@ -9,12 +9,15 @@ import com.swift.sandhook.xposedcompat.XposedCompat;
 import com.swift.sandhook.xposedcompat.utils.DexLog;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.nio.ByteBuffer;
 import java.util.Map;
 
+import dalvik.system.InMemoryDexClassLoader;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import external.com.android.dx.BinaryOp;
@@ -218,7 +221,13 @@ public class HookerDexMaker implements HookMaker {
             throw new IllegalArgumentException("dexDirPath should not be empty!!!");
         }
         // Create the dex file and load it.
-        loader = mDexMaker.generateAndLoad(mAppClassLoader, new File(mDexDirPath), dexName);
+        try {
+            loader = mDexMaker.generateAndLoad(mAppClassLoader, new File(mDexDirPath), dexName);
+        } catch (IOException e) {
+            //can not write file
+            byte[] dexBytes = mDexMaker.generate();
+            loader = new InMemoryDexClassLoader(ByteBuffer.wrap(dexBytes), mAppClassLoader);
+        }
         return loadHookerClass(loader, className);
     }
 

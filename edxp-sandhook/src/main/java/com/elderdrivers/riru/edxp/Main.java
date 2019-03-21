@@ -12,6 +12,7 @@ import com.elderdrivers.riru.edxp.sandhook.core.HookMethodResolver;
 import com.elderdrivers.riru.edxp.sandhook.entry.Router;
 import com.elderdrivers.riru.edxp.sandhook.proxy.BlackWhiteListProxy;
 import com.elderdrivers.riru.edxp.sandhook.proxy.NormalProxy;
+import com.swift.sandhook.xposedcompat.XposedCompat;
 import com.swift.sandhook.xposedcompat.methodgen.SandHookXposedBridge;
 
 import java.lang.reflect.Method;
@@ -31,7 +32,12 @@ public class Main implements KeepAll {
         HookMethodResolver.init();
         Router.injectConfig();
         InstallerChooser.setInstallerPackageName(getInstallerPkgName());
-        SandHookXposedBridge.setLibPath();
+        SandHookXposedBridge.init();
+    }
+
+    public static void setAppDataDir(String appDataDir) {
+        Main.appDataDir = appDataDir;
+        XposedCompat.appDataDir = appDataDir;
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////

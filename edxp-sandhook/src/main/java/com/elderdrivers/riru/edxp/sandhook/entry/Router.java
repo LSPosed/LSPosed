@@ -14,12 +14,16 @@ import com.elderdrivers.riru.edxp.sandhook.entry.bootstrap.SysBootstrapHookInfo;
 import com.elderdrivers.riru.edxp.sandhook.entry.bootstrap.SysInnerHookInfo;
 import com.elderdrivers.riru.edxp.sandhook.entry.bootstrap.WorkAroundHookInfo;
 import com.elderdrivers.riru.edxp.sandhook.entry.hooker.SystemMainHooker;
+import com.swift.sandhook.SandHookConfig;
+import com.swift.sandhook.xposedcompat.XposedCompat;
 import com.swift.sandhook.xposedcompat.methodgen.SandHookXposedBridge;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedInit;
+
+import static de.robv.android.xposed.XposedInit.startsSystemServer;
 
 public class Router {
 
@@ -30,7 +34,7 @@ public class Router {
 
     public static void prepare(boolean isSystem) {
         // this flag is needed when loadModules
-        XposedInit.startsSystemServer = isSystem;
+        startsSystemServer = isSystem;
 //        InstallerChooser.setup();
     }
 
@@ -81,19 +85,22 @@ public class Router {
                     Router.class.getClassLoader(),
                     classLoader,
                     SysBootstrapHookInfo.class.getName());
+            XposedCompat.addHookers(classLoader, SysBootstrapHookInfo.hookItems);
         } else {
             HookMain.doHookDefault(
                     Router.class.getClassLoader(),
                     classLoader,
                     AppBootstrapHookInfo.class.getName());
+            XposedCompat.addHookers(classLoader, AppBootstrapHookInfo.hookItems);
         }
     }
 
     public static void startSystemServerHook() {
-        HookMain.doHookDefault(
-                Router.class.getClassLoader(),
-                SystemMainHooker.systemServerCL,
-                SysInnerHookInfo.class.getName());
+//        HookMain.doHookDefault(
+//                Router.class.getClassLoader(),
+//                SystemMainHooker.systemServerCL,
+//                SysInnerHookInfo.class.getName());
+        XposedCompat.addHookers(SystemMainHooker.systemServerCL, SysInnerHookInfo.hookItems);
     }
 
     public static void startWorkAroundHook() {
@@ -106,7 +113,8 @@ public class Router {
     public static void onEnterChildProcess() {
         forkCompleted = true;
         DynamicBridge.onForkPost();
-        SandHookXposedBridge.onForkPost();
+        //enable compile in child process
+        //SandHook.enableCompiler(!XposedInit.startsSystemServer);
     }
 
     public static void logD(String prefix) {
@@ -122,5 +130,6 @@ public class Router {
     public static void injectConfig() {
         EdXpConfigGlobal.sConfig = new SandHookEdxpConfig();
         EdXpConfigGlobal.sHookProvider = new SandHookProvider();
+        SandHookConfig.compiler = !startsSystemServer;
     }
 }

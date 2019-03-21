@@ -88,7 +88,7 @@ public class BlackWhiteListProxy {
     }
 
     private static void onForkPostCommon(boolean isSystemServer, String appDataDir, String niceName) {
-        Main.appDataDir = appDataDir;
+        Main.setAppDataDir(appDataDir);
         Main.niceName = niceName;
         final boolean isDynamicModulesMode = Main.isDynamicModulesEnabled();
         ConfigManager.setDynamicModulesMode(isDynamicModulesMode);

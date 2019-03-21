@@ -7,4 +7,8 @@ public class SysInnerHookInfo implements KeepMembers {
     public static String[] hookItemNames = {
             StartBootstrapServicesHooker.class.getName()
     };
+
+    public static Class[] hookItems = {
+            StartBootstrapServicesHooker.class
+    };
 }
