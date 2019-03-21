@@ -81,11 +81,19 @@ afterEvaluate {
                 workingDir '..'
                 commandLine 'sh', 'build.sh', project.name,
                         "${backendLowered}-${project.version}-${variantLowered}", "${module_name}"
+                doFirst {
+                    copy {
+                        from "${projectDir}/edconfig.tpl"
+                        into templateFrameworkPath
+                        rename "edconfig.tpl", "edconfig.jar"
+                        expand(backend: "$backendCapped")
+                    }
+                }
             }
 
             task("push${backendCapped}${variantCapped}", type: Exec) {
                 dependsOn zipTask
-                workingDir 'release'
+                workingDir "${projectDir}/release"
                 def commands = ["adb", "push",
                                 "magisk-${module_name}-${backendLowered}-${project.version}-${variantLowered}.zip",
                                 "/sdcard/"]
