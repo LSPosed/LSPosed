@@ -96,6 +96,14 @@ afterEvaluate {
                 }
             }
         }
+
+        // backward compatible
+        task("zip${variantCapped}") {
+            dependsOn "zipYahfa${variantCapped}"
+        }
+        task("push${variantCapped}") {
+            dependsOn "pushYahfa${variantCapped}"
+        }
     }
 
 }
