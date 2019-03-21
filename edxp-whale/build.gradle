@@ -29,7 +29,6 @@ dependencies {
 
 preBuild.doLast {
     def imlFile = file(project.name + ".iml")
-    println 'Change ' + project.name + '.iml order'
     try {
         def parsedXml = (new groovy.util.XmlParser()).parse(imlFile)
         def jdkNode = parsedXml.component[1].orderEntry.find { it.'@type' == 'jdk' }
@@ -49,12 +48,13 @@ afterEvaluate {
     }
 
     android.applicationVariants.all { variant ->
-        def nameCapped = variant.name.capitalize()
-        def nameLowered = variant.name.toLowerCase()
 
-        def makeAndCopyTask = task("makeAndCopy${nameCapped}", type: Jar, dependsOn: "assemble${nameCapped}") {
-            from "build/intermediates/dex/${nameLowered}/mergeDex${nameCapped}/out/"
-            destinationDir file("../edxp-core/template_override/system/framework/")
+        def variantNameCapped = variant.name.capitalize()
+        def variantNameLowered = variant.name.toLowerCase()
+
+        task("makeAndCopy${variantNameCapped}", type: Jar, dependsOn: "assemble${variantNameCapped}") {
+            from "${buildDir}/intermediates/dex/${variantNameLowered}/mergeDex${variantNameCapped}/out/"
+            destinationDir file(templateFrameworkPath)
             baseName "edxp"
         }
     }

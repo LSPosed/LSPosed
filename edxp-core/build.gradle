@@ -1,7 +1,16 @@
 import org.gradle.internal.os.OperatingSystem
+
 apply plugin: 'com.android.library'
+
 version "v0.3.1.6_beta-SNAPSHOT"
-extensions["module_name"] = "EdXposed"
+
+ext {
+    module_name = "EdXposed"
+    jar_dest_dir = "${projectDir}/template_override/system/framework/"
+    is_windows = OperatingSystem.current().isWindows()
+    backends = ["Yahfa", "Sandhook", "Whale"]
+}
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -21,78 +30,68 @@ android {
         }
     }
 }
+
+task copyDalvikdxJar {
+    def jarTask = tasks.getByPath(':dalvikdx:dexInJar')
+    dependsOn jarTask
+    doLast {
+        copy {
+            from jarTask
+            into jar_dest_dir
+        }
+    }
+    onlyIf {
+        !jarTask.state.upToDate || !file(jar_dest_dir + jarTask.archiveName).exists()
+    }
+}
+
+task copyDexmakerJar {
+    def jarTask = tasks.getByPath(':dexmaker:dexInJar')
+    dependsOn jarTask
+    doLast {
+        copy {
+            from jarTask
+            into jar_dest_dir
+        }
+    }
+    onlyIf {
+        !jarTask.state.upToDate || !file(jar_dest_dir + jarTask.archiveName).exists()
+    }
+}
+
 afterEvaluate {
 
     android.libraryVariants.all { variant ->
-        def nameCapped = variant.name.capitalize()
-        def nameLowered = variant.name.toLowerCase()
 
-        def zipTask = task("zip${nameCapped}", type: Exec, dependsOn: ":edxp-yahfa:makeAndCopy${nameCapped}") {
-            workingDir '..'
-            commandLine 'sh', 'build.sh',    \
-                        project.name,    \
-                        "${project.version}-${nameLowered}",    \
-                        "${project.extensions['module_name']}"
-        }
+        def variantCapped = variant.name.capitalize()
+        def variantLowered = variant.name.toLowerCase()
 
-        def pushTask = task("push${nameCapped}", type: Exec) {
-            workingDir 'release'
-            def commands = ["adb", "push", "magisk-${project.extensions['module_name']}" +
-                    "-${project.version}-${nameLowered}.zip", "/sdcard/"]
-            if (OperatingSystem.current().isWindows()) {
-                commandLine 'cmd', '/c', commands.join(" ")
-            } else {
-                commandLine commands
+        backends.each { backend ->
+
+            def backendCapped = backend.capitalize()
+            def backendLowered = backend.toLowerCase()
+
+            def zipTask = task("zip${backendCapped}${variantCapped}", type: Exec) {
+                dependsOn copyDalvikdxJar, copyDexmakerJar
+                dependsOn tasks.getByPath(":edxp-${backendLowered}:makeAndCopy${variantCapped}")
+                workingDir '..'
+                commandLine 'sh', 'build.sh', project.name,
+                        "${backendLowered}-${project.version}-${variantLowered}", "${module_name}"
+            }
+
+            task("push${backendCapped}${variantCapped}", type: Exec) {
+                dependsOn zipTask
+                workingDir 'release'
+                def commands = ["adb", "push",
+                                "magisk-${module_name}-${backendLowered}-${project.version}-${variantLowered}.zip",
+                                "/sdcard/"]
+                if (is_windows) {
+                    commandLine 'cmd', '/c', commands.join(" ")
+                } else {
+                    commandLine commands
+                }
             }
         }
-
-        pushTask.dependsOn(zipTask)
-
-
-        zipTask = task("zipSandhook${nameCapped}", type: Exec, dependsOn: ":edxp-sandhook:makeAndCopy${nameCapped}") {
-            workingDir '..'
-            commandLine 'sh', 'build.sh',    \
-                        project.name,    \
-                        "Sandhook-${project.version}-${nameLowered}",    \
-                        "${project.extensions['module_name']}"
-        }
-
-        pushTask = task("pushSandhook${nameCapped}", type: Exec) {
-            workingDir 'release'
-            def commands = ["adb", "push", "magisk-${project.extensions['module_name']}-Sandhook" +
-                    "-${project.version}-${nameLowered}.zip", "/sdcard/"]
-            if (OperatingSystem.current().isWindows()) {
-                commandLine 'cmd', '/c', commands.join(" ")
-            } else {
-                commandLine commands
-            }
-        }
-
-        pushTask.dependsOn(zipTask)
-
-        zipTask = task("zipWhale${nameCapped}", type: Exec, dependsOn: ":edxp-whale:makeAndCopy${nameCapped}") {
-            workingDir '..'
-            commandLine 'sh', 'build.sh',    \
-                        project.name,    \
-                        "Whale-${project.version}-${nameLowered}",    \
-                        "${project.extensions['module_name']}"
-        }
-
-        pushTask = task("pushWhale${nameCapped}", type: Exec) {
-            workingDir 'release'
-            def commands = ["adb", "push", "magisk-${project.extensions['module_name']}-Whale" +
-                    "-${project.version}-${nameLowered}.zip", "/sdcard/"]
-            if (OperatingSystem.current().isWindows()) {
-                commandLine 'cmd', '/c', commands.join(" ")
-            } else {
-                commandLine commands
-            }
-        }
-
-        pushTask.dependsOn(zipTask)
     }
 
-}
-
-dependencies {
 }

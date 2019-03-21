@@ -27,7 +27,6 @@ android {
 // as there doesn't seem to be any way to configure this in Android Studio.
 preBuild.doLast {
     def imlFile = file(project.name + ".iml")
-    println 'Change ' + project.name + '.iml order'
     try {
         def parsedXml = (new groovy.util.XmlParser()).parse(imlFile)
         def jdkNode = parsedXml.component[1].orderEntry.find { it.'@type' == 'jdk' }
