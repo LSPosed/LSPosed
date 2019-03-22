@@ -190,7 +190,7 @@ public class HookerDexMaker implements HookMaker {
         HookWrapper.HookEntity hookEntity = null;
         //try load cache first
         try {
-            ClassLoader loader = mDexMaker.generateAndLoad(mAppClassLoader, new File(mDexDirPath), dexName);
+            ClassLoader loader = mDexMaker.loadClassDirect(mAppClassLoader, new File(mDexDirPath), dexName);
             if (loader != null) {
                 hookEntity = loadHookerClass(loader, className);
             }
@@ -222,7 +222,7 @@ public class HookerDexMaker implements HookMaker {
         }
         // Create the dex file and load it.
         try {
-            loader = mDexMaker.generateAndLoad(mAppClassLoader, new File(mDexDirPath), dexName);
+            loader = mDexMaker.generateAndLoad(mAppClassLoader, new File(mDexDirPath), dexName, true);
         } catch (IOException e) {
             //can not write file
             byte[] dexBytes = mDexMaker.generate();
