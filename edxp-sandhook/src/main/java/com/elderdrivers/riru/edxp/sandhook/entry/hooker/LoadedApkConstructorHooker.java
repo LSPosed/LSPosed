@@ -47,13 +47,12 @@ public class LoadedApkConstructorHooker implements KeepMembers {
                             boolean includeCode, boolean registerPackage) throws Throwable {
 
         if (XposedBlackListHooker.shouldDisableHooks("")) {
-            SandHook.callOriginByBackup(backup, thiz, activityThread, aInfo, compatInfo, baseLoader, securityViolation, includeCode, registerPackage);
-
+            backup(thiz, activityThread, aInfo, compatInfo, baseLoader, securityViolation, includeCode, registerPackage);
             return;
         }
 
         Router.logD("LoadedApk#<init> starts");
-        SandHook.callOriginByBackup(backup, thiz, activityThread, aInfo, compatInfo, baseLoader, securityViolation, includeCode, registerPackage);
+        backup(thiz, activityThread, aInfo, compatInfo, baseLoader, securityViolation, includeCode, registerPackage);
 
         try {
             LoadedApk loadedApk = (LoadedApk) thiz;
@@ -105,7 +104,7 @@ public class LoadedApkConstructorHooker implements KeepMembers {
     public static void backup(Object thiz, ActivityThread activityThread,
                               ApplicationInfo aInfo, CompatibilityInfo compatInfo,
                               ClassLoader baseLoader, boolean securityViolation,
-                              boolean includeCode, boolean registerPackage) {
-
+                              boolean includeCode, boolean registerPackage) throws Throwable {
+        SandHook.callOriginByBackup(backup, thiz, activityThread, aInfo, compatInfo, baseLoader, securityViolation, includeCode, registerPackage);
     }
 }

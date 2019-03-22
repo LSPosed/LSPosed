@@ -38,7 +38,7 @@ public class StartBootstrapServicesHooker implements KeepMembers {
     public static void hook(@ThisObject Object systemServer) throws Throwable {
 
         if (XposedBridge.disableHooks) {
-            SandHook.callOriginByBackup(backup, systemServer);
+            backup(systemServer);
             return;
         }
 
@@ -71,11 +71,11 @@ public class StartBootstrapServicesHooker implements KeepMembers {
         } catch (Throwable t) {
             Router.logE("error when hooking startBootstrapServices", t);
         } finally {
-            SandHook.callOriginByBackup(backup, systemServer);
+            backup(systemServer);
         }
     }
 
-    public static void backup(Object systemServer) {
-
+    public static void backup(Object systemServer) throws Throwable {
+        SandHook.callOriginByBackup(backup, systemServer);
     }
 }

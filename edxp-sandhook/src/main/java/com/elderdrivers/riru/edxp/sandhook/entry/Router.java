@@ -4,7 +4,6 @@ import android.app.AndroidAppHelper;
 import android.text.TextUtils;
 
 import com.elderdrivers.riru.edxp.config.EdXpConfigGlobal;
-import com.elderdrivers.riru.edxp.util.Utils;
 import com.elderdrivers.riru.edxp.sandhook.config.SandHookEdxpConfig;
 import com.elderdrivers.riru.edxp.sandhook.config.SandHookProvider;
 import com.elderdrivers.riru.edxp.sandhook.core.HookMain;
@@ -14,9 +13,9 @@ import com.elderdrivers.riru.edxp.sandhook.entry.bootstrap.SysBootstrapHookInfo;
 import com.elderdrivers.riru.edxp.sandhook.entry.bootstrap.SysInnerHookInfo;
 import com.elderdrivers.riru.edxp.sandhook.entry.bootstrap.WorkAroundHookInfo;
 import com.elderdrivers.riru.edxp.sandhook.entry.hooker.SystemMainHooker;
+import com.elderdrivers.riru.edxp.util.Utils;
 import com.swift.sandhook.SandHookConfig;
 import com.swift.sandhook.xposedcompat.XposedCompat;
-import com.swift.sandhook.xposedcompat.methodgen.SandHookXposedBridge;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -30,6 +29,12 @@ public class Router {
     public volatile static boolean forkCompleted = false;
 
     private static volatile AtomicBoolean bootstrapHooked = new AtomicBoolean(false);
+
+    static boolean useSandHook;
+
+    static {
+        useSandHook = EdXpConfigGlobal.getHookProvider() instanceof SandHookProvider;
+    }
 
 
     public static void prepare(boolean isSystem) {
@@ -81,33 +86,46 @@ public class Router {
         Utils.logD("startBootstrapHook starts: isSystem = " + isSystem);
         ClassLoader classLoader = XposedBridge.BOOTCLASSLOADER;
         if (isSystem) {
-            HookMain.doHookDefault(
+            if (useSandHook) {
+                XposedCompat.addHookers(classLoader, SysBootstrapHookInfo.hookItems);
+            } else {
+                HookMain.doHookDefault(
                     Router.class.getClassLoader(),
                     classLoader,
                     SysBootstrapHookInfo.class.getName());
-            XposedCompat.addHookers(classLoader, SysBootstrapHookInfo.hookItems);
+            }
         } else {
-            HookMain.doHookDefault(
-                    Router.class.getClassLoader(),
-                    classLoader,
-                    AppBootstrapHookInfo.class.getName());
-            XposedCompat.addHookers(classLoader, AppBootstrapHookInfo.hookItems);
+            if (useSandHook) {
+                XposedCompat.addHookers(classLoader, AppBootstrapHookInfo.hookItems);
+            } else {
+                HookMain.doHookDefault(
+                        Router.class.getClassLoader(),
+                        classLoader,
+                        AppBootstrapHookInfo.class.getName());
+            }
         }
     }
 
     public static void startSystemServerHook() {
-//        HookMain.doHookDefault(
-//                Router.class.getClassLoader(),
-//                SystemMainHooker.systemServerCL,
-//                SysInnerHookInfo.class.getName());
-        XposedCompat.addHookers(SystemMainHooker.systemServerCL, SysInnerHookInfo.hookItems);
+        if (useSandHook) {
+            XposedCompat.addHookers(SystemMainHooker.systemServerCL, SysInnerHookInfo.hookItems);
+        } else {
+            HookMain.doHookDefault(
+                    Router.class.getClassLoader(),
+                    SystemMainHooker.systemServerCL,
+                    SysInnerHookInfo.class.getName());
+        }
     }
 
     public static void startWorkAroundHook() {
-        HookMain.doHookDefault(
-                Router.class.getClassLoader(),
-                XposedBridge.BOOTCLASSLOADER,
-                WorkAroundHookInfo.class.getName());
+        if (useSandHook) {
+            XposedCompat.addHookers(XposedBridge.BOOTCLASSLOADER, WorkAroundHookInfo.hookItems);
+        } else {
+            HookMain.doHookDefault(
+                    Router.class.getClassLoader(),
+                    XposedBridge.BOOTCLASSLOADER,
+                    WorkAroundHookInfo.class.getName());
+        }
     }
 
     public static void onEnterChildProcess() {

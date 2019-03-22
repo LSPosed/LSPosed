@@ -9,14 +9,10 @@ public class DexLog {
 
     public static final String TAG = "SandXposed";
 
-    public static volatile boolean DEBUG = true;
+    public static volatile boolean DEBUG = false;
 
     public static int v(String s) {
-        if (DEBUG) {
-            return Log.v(TAG, s);
-        } else {
-            return 0;
-        }
+        return Log.v(TAG, s);
     }
 
     public static int i(String s) {
@@ -24,7 +20,11 @@ public class DexLog {
     }
 
     public static int d(String s) {
-        return Log.d(TAG, s);
+        if (DEBUG) {
+            return Log.d(TAG, s);
+        } else {
+            return 0;
+        }
     }
 
     public static void printMethodHookIn(Member member) {
@@ -34,33 +34,19 @@ public class DexLog {
     }
 
     public static void printCallOriginError(Member member) {
-        if (DEBUG && member != null) {
-            Log.d("SandHook", "method <" + member.toString() + "> call origin error!");
-        }
+        Log.e("SandHook", "method <" + member.toString() + "> call origin error!");
     }
 
     public static int w(String s) {
-        if (DEBUG) {
-            return Log.w(TAG, s);
-        } else {
-            return 0;
-        }
+        return Log.w(TAG, s);
     }
 
     public static int e(String s) {
-        if (DEBUG) {
-            return Log.e(TAG, s);
-        } else {
-            return 0;
-        }
+        return Log.e(TAG, s);
     }
 
     public static int e(String s, Throwable t) {
-        if (DEBUG) {
-            return Log.e(TAG, s, t);
-        } else {
-            return 0;
-        }
+        return Log.e(TAG, s, t);
     }
 
 

@@ -33,10 +33,10 @@ public class SystemMainHooker implements KeepMembers {
     @HookMethod("systemMain")
     public static ActivityThread hook() throws Throwable {
         if (XposedBridge.disableHooks) {
-            return (ActivityThread) SandHook.callOriginByBackup(backup, null);
+            return backup();
         }
         Router.logD("ActivityThread#systemMain() starts");
-        ActivityThread activityThread = (ActivityThread) SandHook.callOriginByBackup(backup, null);
+        ActivityThread activityThread = backup();
         try {
             // get system_server classLoader
             systemServerCL = Thread.currentThread().getContextClassLoader();
@@ -49,7 +49,7 @@ public class SystemMainHooker implements KeepMembers {
         return activityThread;
     }
 
-    public static ActivityThread backup() {
-        return null;
+    public static ActivityThread backup() throws Throwable {
+        return (ActivityThread) SandHook.callOriginByBackup(backup, null);
     }
 }

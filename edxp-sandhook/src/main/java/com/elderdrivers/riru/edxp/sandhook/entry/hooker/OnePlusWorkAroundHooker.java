@@ -3,6 +3,7 @@ package com.elderdrivers.riru.edxp.sandhook.entry.hooker;
 import com.elderdrivers.riru.common.KeepMembers;
 import com.elderdrivers.riru.edxp.Main;
 import com.elderdrivers.riru.edxp.sandhook.entry.Router;
+import com.swift.sandhook.SandHook;
 import com.swift.sandhook.annotation.HookClass;
 import com.swift.sandhook.annotation.HookMethod;
 import com.swift.sandhook.annotation.HookMethodBackup;
@@ -40,7 +41,7 @@ public class OnePlusWorkAroundHooker implements KeepMembers {
     static Method backup;
 
     @HookMethod("inCompatConfigList")
-    public static boolean hook(int type, String packageName) {
+    public static boolean hook(int type, String packageName) throws Throwable {
         if (XposedBridge.disableHooks || Router.forkCompleted) {
             return backup(type, packageName);
         }
@@ -48,7 +49,7 @@ public class OnePlusWorkAroundHooker implements KeepMembers {
         return false;
     }
 
-    public static boolean backup(int type, String packageName) {
-        return false;
+    public static boolean backup(int type, String packageName) throws Throwable {
+        return (boolean) SandHook.callOriginByBackup(backup, null, type, packageName);
     }
 }
