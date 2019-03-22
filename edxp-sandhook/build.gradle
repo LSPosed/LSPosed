@@ -24,7 +24,7 @@ dependencies {
     compileOnly files("libs/framework-stub.jar")
     implementation project(':edxp-common')
     implementation project(':xposed-bridge')
-    implementation 'com.swift.sandhook:hooklib:3.2.2'
+    implementation 'com.swift.sandhook:hooklib:3.2.7'
     compileOnly project(':dexmaker')
 }
 

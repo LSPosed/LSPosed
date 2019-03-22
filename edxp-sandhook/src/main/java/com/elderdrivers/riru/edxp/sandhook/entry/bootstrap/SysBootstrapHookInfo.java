@@ -8,12 +8,16 @@ import com.elderdrivers.riru.edxp.sandhook.entry.hooker.SystemMainHooker;
 
 public class SysBootstrapHookInfo implements KeepMembers {
     public static String[] hookItemNames = {
-            OnePlusWorkAroundHooker.class.getName()
+            OnePlusWorkAroundHooker.class.getName(),
+            HandleBindAppHooker.class.getName(),
+            SystemMainHooker.class.getName(),
+            LoadedApkConstructorHooker.class.getName()
     };
 
     public static Class[] hookItems = {
             HandleBindAppHooker.class,
             SystemMainHooker.class,
-            LoadedApkConstructorHooker.class
+            LoadedApkConstructorHooker.class,
+            OnePlusWorkAroundHooker.class
     };
 }
