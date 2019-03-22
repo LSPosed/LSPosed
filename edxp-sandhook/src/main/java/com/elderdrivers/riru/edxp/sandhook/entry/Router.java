@@ -61,6 +61,7 @@ public class Router {
             }
             Router.startBootstrapHook(isSystem);
             XposedInit.initForZygote(isSystem);
+            SandHookConfig.compiler = !isSystem;
         } catch (Throwable t) {
             Utils.logE("error during Xposed initialization", t);
             XposedBridge.disableHooks = true;
