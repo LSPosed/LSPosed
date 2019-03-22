@@ -114,5 +114,6 @@ public class Router {
     public static void injectConfig() {
         EdXpConfigGlobal.sConfig = new SandHookEdxpConfig();
         EdXpConfigGlobal.sHookProvider = new SandHookProvider();
+        SandHookConfig.compiler = !startsSystemServer;
     }
 }

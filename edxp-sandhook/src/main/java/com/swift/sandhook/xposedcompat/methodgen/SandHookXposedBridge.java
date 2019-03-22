@@ -128,6 +128,7 @@ public final class SandHookXposedBridge {
         };
         SandHookConfig.DEBUG = true;
         //in zygote disable compile
+        SandHookConfig.compiler = false;
     }
 }
 
