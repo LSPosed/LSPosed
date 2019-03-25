@@ -30,6 +30,7 @@ public class Router {
 
     private static volatile AtomicBoolean bootstrapHooked = new AtomicBoolean(false);
 
+    static boolean useSandHook = false;
 
     public static void prepare(boolean isSystem) {
         // this flag is needed when loadModules
@@ -61,7 +62,7 @@ public class Router {
             }
             Router.startBootstrapHook(isSystem);
             XposedInit.initForZygote(isSystem);
-            SandHookConfig.compiler = !isSystem;
+            //SandHookConfig.compiler = !isSystem;
         } catch (Throwable t) {
             Utils.logE("error during Xposed initialization", t);
             XposedBridge.disableHooks = true;
@@ -81,18 +82,46 @@ public class Router {
         Utils.logD("startBootstrapHook starts: isSystem = " + isSystem);
         ClassLoader classLoader = XposedBridge.BOOTCLASSLOADER;
         if (isSystem) {
-            XposedCompat.addHookers(classLoader, SysBootstrapHookInfo.hookItems);
+            if (useSandHook) {
+                XposedCompat.addHookers(classLoader, SysBootstrapHookInfo.hookItems);
+            } else {
+                HookMain.doHookDefault(
+                        Router.class.getClassLoader(),
+                        classLoader,
+                        SysBootstrapHookInfo.class.getName());
+            }
         } else {
-            XposedCompat.addHookers(classLoader, AppBootstrapHookInfo.hookItems);
+            if (useSandHook) {
+                XposedCompat.addHookers(classLoader, AppBootstrapHookInfo.hookItems);
+            } else {
+                HookMain.doHookDefault(
+                        Router.class.getClassLoader(),
+                        classLoader,
+                        AppBootstrapHookInfo.class.getName());
+            }
         }
     }
 
     public static void startSystemServerHook() {
-        XposedCompat.addHookers(SystemMainHooker.systemServerCL, SysInnerHookInfo.hookItems);
+        if (useSandHook) {
+            XposedCompat.addHookers(SystemMainHooker.systemServerCL, SysInnerHookInfo.hookItems);
+        } else {
+            HookMain.doHookDefault(
+                    Router.class.getClassLoader(),
+                    SystemMainHooker.systemServerCL,
+                    SysInnerHookInfo.class.getName());
+        }
     }
 
     public static void startWorkAroundHook() {
-        XposedCompat.addHookers(XposedBridge.BOOTCLASSLOADER, WorkAroundHookInfo.hookItems);
+        if (useSandHook) {
+            XposedCompat.addHookers(XposedBridge.BOOTCLASSLOADER, WorkAroundHookInfo.hookItems);
+        } else {
+            HookMain.doHookDefault(
+                    Router.class.getClassLoader(),
+                    XposedBridge.BOOTCLASSLOADER,
+                    WorkAroundHookInfo.class.getName());
+        }
     }
 
     public static void onEnterChildProcess() {
