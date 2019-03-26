@@ -6,3 +6,21 @@ dependencies {
 
 sourceCompatibility = "7"
 targetCompatibility = "7"
+
+
+task dexInJar(type: Jar) {
+    dependsOn jar
+    doFirst {
+        exec {
+            workingDir jar.destinationDir
+            executable "dx"
+            args "--dex", "--output", "classes.dex", "${jar.archiveName}"
+        }
+    }
+    from "${jar.destinationDir}/classes.dex"
+    destinationDir jar.destinationDir
+    baseName "eddalvikdx"
+    onlyIf {
+        !jar.state.upToDate || !file(archiveName).exists()
+    }
+}

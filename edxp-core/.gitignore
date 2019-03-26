@@ -1,0 +1,8 @@
+/.externalNativeBuild
+/build
+/libs
+/obj
+/release
+/template_override/system
+/template_override/system_x86
+*.iml

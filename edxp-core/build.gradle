@@ -1,0 +1,117 @@
+import org.gradle.internal.os.OperatingSystem
+
+apply plugin: 'com.android.library'
+
+version "v0.3.1.8_beta-SNAPSHOT"
+
+ext {
+    module_name = "EdXposed"
+    jar_dest_dir = "${projectDir}/template_override/system/framework/"
+    is_windows = OperatingSystem.current().isWindows()
+    backends = ["Yahfa", "Sandhook", "Whale"]
+}
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+
+        externalNativeBuild {
+            ndkBuild {
+                abiFilters 'arm64-v8a', 'armeabi-v7a', 'x86', 'x86_64'
+                arguments "NDK_PROJECT_PATH=jni/"
+            }
+        }
+    }
+    externalNativeBuild {
+        ndkBuild {
+            path 'jni/Android.mk'
+        }
+    }
+}
+
+task copyDalvikdxJar {
+    def jarTask = tasks.getByPath(':dalvikdx:dexInJar')
+    dependsOn jarTask
+    doLast {
+        copy {
+            from jarTask
+            into jar_dest_dir
+        }
+    }
+    onlyIf {
+        !jarTask.state.upToDate || !file(jar_dest_dir + jarTask.archiveName).exists()
+    }
+}
+
+task copyDexmakerJar {
+    def jarTask = tasks.getByPath(':dexmaker:dexInJar')
+    dependsOn jarTask
+    doLast {
+        copy {
+            from jarTask
+            into jar_dest_dir
+        }
+    }
+    onlyIf {
+        !jarTask.state.upToDate || !file(jar_dest_dir + jarTask.archiveName).exists()
+    }
+}
+
+task cleanTemplate(type: Delete) {
+    delete file(templateSystemPath), file(templateSystemx86Path)
+}
+
+afterEvaluate {
+
+    android.libraryVariants.all { variant ->
+
+        def variantCapped = variant.name.capitalize()
+        def variantLowered = variant.name.toLowerCase()
+
+        backends.each { backend ->
+
+            def backendCapped = backend.capitalize()
+            def backendLowered = backend.toLowerCase()
+
+            def zipTask = task("zip${backendCapped}${variantCapped}", type: Exec) {
+                dependsOn cleanTemplate, copyDalvikdxJar, copyDexmakerJar
+                dependsOn tasks.getByPath(":edxp-${backendLowered}:makeAndCopy${variantCapped}")
+                workingDir '..'
+                commandLine 'sh', 'build.sh', project.name,
+                        "${backendLowered}-${project.version}-${variantLowered}", "${module_name}"
+                doFirst {
+                    copy {
+                        from "${projectDir}/edconfig.tpl"
+                        into templateFrameworkPath
+                        rename "edconfig.tpl", "edconfig.jar"
+                        expand(backend: "$backendCapped")
+                    }
+                }
+            }
+
+            task("push${backendCapped}${variantCapped}", type: Exec) {
+                dependsOn zipTask
+                workingDir "${projectDir}/release"
+                def commands = ["adb", "push",
+                                "magisk-${module_name}-${backendLowered}-${project.version}-${variantLowered}.zip",
+                                "/sdcard/"]
+                if (is_windows) {
+                    commandLine 'cmd', '/c', commands.join(" ")
+                } else {
+                    commandLine commands
+                }
+            }
+        }
+
+        // backward compatible
+        task("zip${variantCapped}") {
+            dependsOn "zipYahfa${variantCapped}"
+        }
+        task("push${variantCapped}") {
+            dependsOn "pushYahfa${variantCapped}"
+        }
+    }
+
+}

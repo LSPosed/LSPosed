@@ -1,14 +1,14 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    
+
     repositories {
         google()
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
-        
+        classpath 'com.android.tools.build:gradle:3.3.2'
+
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -16,6 +16,15 @@ buildscript {
 }
 
 allprojects {
+    ext {
+        templateRootPath = project(":edxp-core").projectDir.path + "/template_override/"
+        templateSystemPath = templateRootPath + "/system/"
+        templateSystemx86Path = templateRootPath + "/system_x86/"
+        templateFrameworkPath = templateRootPath + "/system/framework/"
+        templateLibPath = templateRootPath + "/system/lib/"
+        templateLib64Path = templateRootPath + "/system/lib64/"
+        templateEtcPath = templateRootPath + "/system/etc/"
+    }
     repositories {
         google()
         jcenter()
