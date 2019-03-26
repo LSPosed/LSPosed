@@ -1,14 +1,13 @@
 package com.elderdrivers.riru.edxp.whale.config;
 
-import com.elderdrivers.riru.edxp.hook.HookProvider;
-import com.elderdrivers.riru.edxp.whale.util.PrebuiltMethodsDeopter;
+import com.elderdrivers.riru.edxp.config.BaseHookProvider;
 import com.lody.whale.WhaleRuntime;
 
 import java.lang.reflect.Member;
 
 import de.robv.android.xposed.XposedBridge;
 
-public class WhaleHookProvider implements HookProvider {
+public class WhaleHookProvider extends BaseHookProvider {
 
     @Override
     public void hookMethod(Member method, XposedBridge.AdditionalHookInfo additionalInfo) {
@@ -23,11 +22,6 @@ public class WhaleHookProvider implements HookProvider {
     @Override
     public Member findMethodNative(Member hookMethod) {
         return hookMethod;
-    }
-
-    @Override
-    public void deoptMethods(String packageName, ClassLoader classLoader) {
-        PrebuiltMethodsDeopter.deoptMethods(packageName, classLoader);
     }
 
     @Override

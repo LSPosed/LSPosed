@@ -45,4 +45,9 @@ afterEvaluate {
     tasks.withType(JavaCompile) {
         options.compilerArgs.add("-Xbootclasspath/p:${projectDir.absolutePath}/libs/framework-stub.jar")
     }
+
+    task("copyCommonroperties", type: Copy) {
+        from file("${projectDir}/template_override/")
+        into file(templateRootPath)
+    }
 }

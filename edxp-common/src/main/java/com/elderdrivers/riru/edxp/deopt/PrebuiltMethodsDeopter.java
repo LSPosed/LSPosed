@@ -1,14 +1,14 @@
-package com.elderdrivers.riru.edxp.sandhook.util;
+package com.elderdrivers.riru.edxp.deopt;
 
+import com.elderdrivers.riru.edxp.config.EdXpConfigGlobal;
 import com.elderdrivers.riru.edxp.util.Utils;
-import com.elderdrivers.riru.edxp.Main;
 
 import java.util.Arrays;
 
 import de.robv.android.xposed.XposedHelpers;
 
-import static com.elderdrivers.riru.edxp.sandhook.util.InlinedMethodCallers.KEY_BOOT_IMAGE;
-import static com.elderdrivers.riru.edxp.sandhook.util.InlinedMethodCallers.KEY_SYSTEM_SERVER;
+import static com.elderdrivers.riru.edxp.deopt.InlinedMethodCallers.KEY_BOOT_IMAGE;
+import static com.elderdrivers.riru.edxp.deopt.InlinedMethodCallers.KEY_SYSTEM_SERVER;
 
 public class PrebuiltMethodsDeopter {
 
@@ -19,10 +19,10 @@ public class PrebuiltMethodsDeopter {
         }
         for (String[] caller : callers) {
             try {
-                Object method = Main.findMethodNative(
+                Object method = EdXpConfigGlobal.getHookProvider().findMethodNative(
                         XposedHelpers.findClass(caller[0], cl), caller[1], caller[2]);
                 if (method != null) {
-                    Main.deoptMethodNative(method);
+                    EdXpConfigGlobal.getHookProvider().deoptMethodNative(method);
                 }
             } catch (Throwable throwable) {
                 Utils.logE("error when deopting method: " + Arrays.toString(caller), throwable);

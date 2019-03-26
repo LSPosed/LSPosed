@@ -3,11 +3,11 @@ package com.elderdrivers.riru.edxp.sandhook.proxy;
 import android.text.TextUtils;
 
 import com.elderdrivers.riru.edxp.config.ConfigManager;
+import com.elderdrivers.riru.edxp.deopt.PrebuiltMethodsDeopter;
 import com.elderdrivers.riru.edxp.util.ProcessUtils;
 import com.elderdrivers.riru.edxp.util.Utils;
 import com.elderdrivers.riru.edxp.Main;
 import com.elderdrivers.riru.edxp.sandhook.entry.Router;
-import com.elderdrivers.riru.edxp.sandhook.util.PrebuiltMethodsDeopter;
 
 import de.robv.android.xposed.XposedBridge;
 

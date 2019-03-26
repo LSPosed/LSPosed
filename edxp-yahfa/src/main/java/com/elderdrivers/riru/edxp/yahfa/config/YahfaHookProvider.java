@@ -1,15 +1,15 @@
 package com.elderdrivers.riru.edxp.yahfa.config;
 
-import com.elderdrivers.riru.edxp.hook.HookProvider;
+import com.elderdrivers.riru.edxp.config.BaseHookProvider;
 import com.elderdrivers.riru.edxp.yahfa.dexmaker.DexMakerUtils;
 import com.elderdrivers.riru.edxp.yahfa.dexmaker.DynamicBridge;
-import com.elderdrivers.riru.edxp.yahfa.util.PrebuiltMethodsDeopter;
 
 import java.lang.reflect.Member;
 
 import de.robv.android.xposed.XposedBridge;
 
-public class YahfaHookProvider implements HookProvider {
+public class YahfaHookProvider extends BaseHookProvider {
+
     @Override
     public void hookMethod(Member method, XposedBridge.AdditionalHookInfo additionalInfo) {
         DynamicBridge.hookMethod(method, additionalInfo);
@@ -23,15 +23,5 @@ public class YahfaHookProvider implements HookProvider {
     @Override
     public Member findMethodNative(Member hookMethod) {
         return DexMakerUtils.findMethodNative(hookMethod);
-    }
-
-    @Override
-    public void deoptMethods(String packageName, ClassLoader classLoader) {
-        PrebuiltMethodsDeopter.deoptMethods(packageName, classLoader);
-    }
-
-    @Override
-    public long getMethodId(Member member) {
-        return 0;
     }
 }

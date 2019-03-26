@@ -3,7 +3,7 @@ package com.elderdrivers.riru.edxp.whale.entry.hooker;
 import android.app.ActivityThread;
 
 import com.elderdrivers.riru.common.KeepMembers;
-import com.elderdrivers.riru.edxp.whale.util.PrebuiltMethodsDeopter;
+import com.elderdrivers.riru.edxp.deopt.PrebuiltMethodsDeopter;
 import com.elderdrivers.riru.edxp.whale.entry.Router;
 
 import de.robv.android.xposed.XposedBridge;

@@ -73,5 +73,15 @@ public class EdXpConfigGlobal {
         public long getMethodId(Member member) {
             return 0;
         }
+
+        @Override
+        public Object findMethodNative(Class clazz, String methodName, String methodSig) {
+            return null;
+        }
+
+        @Override
+        public void deoptMethodNative(Object method) {
+
+        }
     };
 }

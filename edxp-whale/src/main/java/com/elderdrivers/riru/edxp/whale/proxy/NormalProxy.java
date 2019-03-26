@@ -2,7 +2,7 @@ package com.elderdrivers.riru.edxp.whale.proxy;
 
 import com.elderdrivers.riru.edxp.Main;
 import com.elderdrivers.riru.edxp.config.ConfigManager;
-import com.elderdrivers.riru.edxp.whale.util.PrebuiltMethodsDeopter;
+import com.elderdrivers.riru.edxp.deopt.PrebuiltMethodsDeopter;
 import com.elderdrivers.riru.edxp.whale.entry.Router;
 
 import static com.elderdrivers.riru.edxp.util.FileUtils.getDataPathPrefix;

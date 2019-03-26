@@ -3,13 +3,12 @@ package com.elderdrivers.riru.edxp.sandhook.entry.hooker;
 import android.app.ActivityThread;
 
 import com.elderdrivers.riru.common.KeepMembers;
+import com.elderdrivers.riru.edxp.deopt.PrebuiltMethodsDeopter;
 import com.elderdrivers.riru.edxp.sandhook.entry.Router;
-import com.elderdrivers.riru.edxp.sandhook.util.PrebuiltMethodsDeopter;
 import com.swift.sandhook.SandHook;
 import com.swift.sandhook.annotation.HookClass;
 import com.swift.sandhook.annotation.HookMethod;
 import com.swift.sandhook.annotation.HookMethodBackup;
-import com.swift.sandhook.annotation.HookMode;
 
 import java.lang.reflect.Method;
 

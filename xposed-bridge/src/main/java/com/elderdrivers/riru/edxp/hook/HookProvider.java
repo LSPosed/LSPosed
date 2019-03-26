@@ -15,4 +15,8 @@ public interface HookProvider {
     void deoptMethods(String packageName, ClassLoader classLoader);
 
     long getMethodId(Member member);
+
+    Object findMethodNative(Class clazz, String methodName, String methodSig);
+
+    void deoptMethodNative(Object method);
 }

@@ -2,8 +2,8 @@ package com.elderdrivers.riru.edxp.sandhook.proxy;
 
 import com.elderdrivers.riru.edxp.config.ConfigManager;
 import com.elderdrivers.riru.edxp.Main;
+import com.elderdrivers.riru.edxp.deopt.PrebuiltMethodsDeopter;
 import com.elderdrivers.riru.edxp.sandhook.entry.Router;
-import com.elderdrivers.riru.edxp.sandhook.util.PrebuiltMethodsDeopter;
 
 import static com.elderdrivers.riru.edxp.util.FileUtils.getDataPathPrefix;
 
