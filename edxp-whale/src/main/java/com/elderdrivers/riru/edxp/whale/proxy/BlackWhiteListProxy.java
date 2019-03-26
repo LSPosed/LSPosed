@@ -1,11 +1,11 @@
-package com.elderdrivers.riru.edxp.yahfa.proxy;
+package com.elderdrivers.riru.edxp.whale.proxy;
 
 import android.text.TextUtils;
 
 import com.elderdrivers.riru.edxp.Main;
 import com.elderdrivers.riru.edxp.config.ConfigManager;
-import com.elderdrivers.riru.edxp.yahfa.entry.Router;
-import com.elderdrivers.riru.edxp.yahfa.util.PrebuiltMethodsDeopter;
+import com.elderdrivers.riru.edxp.whale.entry.Router;
+import com.elderdrivers.riru.edxp.whale.util.PrebuiltMethodsDeopter;
 import com.elderdrivers.riru.edxp.util.ProcessUtils;
 import com.elderdrivers.riru.edxp.util.Utils;
 

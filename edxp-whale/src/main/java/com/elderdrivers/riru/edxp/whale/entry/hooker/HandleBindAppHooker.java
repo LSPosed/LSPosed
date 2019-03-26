@@ -1,4 +1,4 @@
-package com.elderdrivers.riru.edxp.yahfa.entry.hooker;
+package com.elderdrivers.riru.edxp.whale.entry.hooker;
 
 import android.app.ActivityThread;
 import android.app.LoadedApk;
@@ -9,7 +9,7 @@ import android.content.res.CompatibilityInfo;
 import com.elderdrivers.riru.common.KeepMembers;
 import com.elderdrivers.riru.edxp.util.Utils;
 import com.elderdrivers.riru.edxp.Main;
-import com.elderdrivers.riru.edxp.yahfa.entry.Router;
+import com.elderdrivers.riru.edxp.whale.entry.Router;
 
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
@@ -18,7 +18,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 import static com.elderdrivers.riru.edxp.config.InstallerChooser.INSTALLER_PACKAGE_NAME;
 import static com.elderdrivers.riru.edxp.util.ClassLoaderUtils.replaceParentClassLoader;
-import static com.elderdrivers.riru.edxp.yahfa.entry.hooker.XposedBlackListHooker.BLACK_LIST_PACKAGE_NAME;
+import static com.elderdrivers.riru.edxp.whale.entry.hooker.XposedBlackListHooker.BLACK_LIST_PACKAGE_NAME;
 
 // normal process initialization (for new Activity, Service, BroadcastReceiver etc.)
 public class HandleBindAppHooker implements KeepMembers {

@@ -1,10 +1,10 @@
-package com.elderdrivers.riru.edxp.yahfa.entry.bootstrap;
+package com.elderdrivers.riru.edxp.whale.entry.bootstrap;
 
 import com.elderdrivers.riru.common.KeepMembers;
-import com.elderdrivers.riru.edxp.yahfa.entry.hooker.HandleBindAppHooker;
-import com.elderdrivers.riru.edxp.yahfa.entry.hooker.LoadedApkConstructorHooker;
-import com.elderdrivers.riru.edxp.yahfa.entry.hooker.OnePlusWorkAroundHooker;
-import com.elderdrivers.riru.edxp.yahfa.entry.hooker.SystemMainHooker;
+import com.elderdrivers.riru.edxp.whale.entry.hooker.HandleBindAppHooker;
+import com.elderdrivers.riru.edxp.whale.entry.hooker.LoadedApkConstructorHooker;
+import com.elderdrivers.riru.edxp.whale.entry.hooker.OnePlusWorkAroundHooker;
+import com.elderdrivers.riru.edxp.whale.entry.hooker.SystemMainHooker;
 
 public class SysBootstrapHookInfo implements KeepMembers {
     public static String[] hookItemNames = {

@@ -1,9 +1,9 @@
-package com.elderdrivers.riru.edxp.yahfa.config;
+package com.elderdrivers.riru.edxp.whale.config;
 
 import com.elderdrivers.riru.edxp.config.EdXpConfig;
 import com.elderdrivers.riru.edxp.config.InstallerChooser;
 import com.elderdrivers.riru.edxp.Main;
-import com.elderdrivers.riru.edxp.yahfa.entry.hooker.XposedBlackListHooker;
+import com.elderdrivers.riru.edxp.whale.entry.hooker.XposedBlackListHooker;
 
 public class WhaleEdxpConfig implements EdXpConfig {
     @Override

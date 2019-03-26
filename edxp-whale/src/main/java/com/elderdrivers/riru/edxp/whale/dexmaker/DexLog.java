@@ -1,4 +1,4 @@
-package com.elderdrivers.riru.edxp.yahfa.dexmaker;
+package com.elderdrivers.riru.edxp.whale.dexmaker;
 
 import android.util.Log;
 

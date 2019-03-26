@@ -1,7 +1,7 @@
-package com.elderdrivers.riru.edxp.yahfa.config;
+package com.elderdrivers.riru.edxp.whale.config;
 
 import com.elderdrivers.riru.edxp.hook.HookProvider;
-import com.elderdrivers.riru.edxp.yahfa.util.PrebuiltMethodsDeopter;
+import com.elderdrivers.riru.edxp.whale.util.PrebuiltMethodsDeopter;
 import com.lody.whale.WhaleRuntime;
 
 import java.lang.reflect.Member;

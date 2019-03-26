@@ -1,4 +1,4 @@
-package com.elderdrivers.riru.edxp.yahfa.entry.hooker;
+package com.elderdrivers.riru.edxp.whale.entry.hooker;
 
 import com.elderdrivers.riru.edxp.util.Utils;
 

@@ -5,14 +5,12 @@ import android.os.Build;
 import android.os.Process;
 
 import com.elderdrivers.riru.common.KeepAll;
-import com.elderdrivers.riru.edxp.BuildConfig;
 import com.elderdrivers.riru.edxp.config.InstallerChooser;
-import com.elderdrivers.riru.edxp.yahfa.core.HookMethodResolver;
-import com.elderdrivers.riru.edxp.yahfa.entry.Router;
-import com.elderdrivers.riru.edxp.yahfa.proxy.BlackWhiteListProxy;
-import com.elderdrivers.riru.edxp.yahfa.proxy.NormalProxy;
+import com.elderdrivers.riru.edxp.whale.core.HookMethodResolver;
+import com.elderdrivers.riru.edxp.whale.entry.Router;
+import com.elderdrivers.riru.edxp.whale.proxy.BlackWhiteListProxy;
+import com.elderdrivers.riru.edxp.whale.proxy.NormalProxy;
 import com.elderdrivers.riru.edxp.util.Utils;
-import com.lody.whale.WhaleRuntime;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;

@@ -1,18 +1,18 @@
-package com.elderdrivers.riru.edxp.yahfa.entry;
+package com.elderdrivers.riru.edxp.whale.entry;
 
 import android.app.AndroidAppHelper;
 import android.text.TextUtils;
 
 import com.elderdrivers.riru.edxp.config.EdXpConfigGlobal;
 import com.elderdrivers.riru.edxp.util.Utils;
-import com.elderdrivers.riru.edxp.yahfa.config.WhaleHookProvider;
-import com.elderdrivers.riru.edxp.yahfa.config.WhaleEdxpConfig;
-import com.elderdrivers.riru.edxp.yahfa.core.HookMain;
-import com.elderdrivers.riru.edxp.yahfa.entry.bootstrap.AppBootstrapHookInfo;
-import com.elderdrivers.riru.edxp.yahfa.entry.bootstrap.SysBootstrapHookInfo;
-import com.elderdrivers.riru.edxp.yahfa.entry.bootstrap.SysInnerHookInfo;
-import com.elderdrivers.riru.edxp.yahfa.entry.bootstrap.WorkAroundHookInfo;
-import com.elderdrivers.riru.edxp.yahfa.entry.hooker.SystemMainHooker;
+import com.elderdrivers.riru.edxp.whale.config.WhaleHookProvider;
+import com.elderdrivers.riru.edxp.whale.config.WhaleEdxpConfig;
+import com.elderdrivers.riru.edxp.whale.core.HookMain;
+import com.elderdrivers.riru.edxp.whale.entry.bootstrap.AppBootstrapHookInfo;
+import com.elderdrivers.riru.edxp.whale.entry.bootstrap.SysBootstrapHookInfo;
+import com.elderdrivers.riru.edxp.whale.entry.bootstrap.SysInnerHookInfo;
+import com.elderdrivers.riru.edxp.whale.entry.bootstrap.WorkAroundHookInfo;
+import com.elderdrivers.riru.edxp.whale.entry.hooker.SystemMainHooker;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 

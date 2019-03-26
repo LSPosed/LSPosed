@@ -1,4 +1,4 @@
-package com.elderdrivers.riru.edxp.yahfa.core;
+package com.elderdrivers.riru.edxp.whale.core;
 
 import android.os.Build;
 
