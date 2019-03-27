@@ -1,10 +1,12 @@
 package com.swift.sandhook.xposedcompat.methodgen;
 
+import android.os.Build;
 import android.os.Process;
 import android.os.Trace;
 
 import com.swift.sandhook.SandHook;
 import com.swift.sandhook.SandHookConfig;
+import com.swift.sandhook.annotation.HookMode;
 import com.swift.sandhook.wrapper.HookWrapper;
 import com.swift.sandhook.xposedcompat.XposedCompat;
 import com.swift.sandhook.xposedcompat.hookstub.HookMethodEntity;
@@ -124,6 +126,9 @@ public final class SandHookXposedBridge {
             @Override
             public void loadLib() {
                 //do it in loadDexAndInit
+                if (SandHookConfig.SDK_INT >= Build.VERSION_CODES.O) {
+                    SandHook.setHookMode(HookMode.REPLACE);
+                }
             }
         };
         SandHookConfig.DEBUG = true;
