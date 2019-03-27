@@ -1,3 +1,4 @@
+import org.gradle.internal.os.OperatingSystem
 apply plugin: 'java-library'
 
 dependencies {
@@ -13,7 +14,10 @@ task dexInJar(type: Jar) {
     doFirst {
         exec {
             workingDir jar.destinationDir
-            executable "dx"
+            if (OperatingSystem.current().isWindows())
+                executable "dx.bat"
+            else
+                executable "dx"
             args "--dex", "--output", "classes.dex", "${jar.archiveName}"
         }
     }
