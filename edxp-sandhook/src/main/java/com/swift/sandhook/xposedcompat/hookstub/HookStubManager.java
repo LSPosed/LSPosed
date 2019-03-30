@@ -312,7 +312,6 @@ public class HookStubManager {
             try {
                 ((XC_MethodHook) snapshot[afterIdx]).callAfterHookedMethod(param);
             } catch (Throwable t) {
-                XposedBridge.log(t);
                 if (lastThrowable == null)
                     param.setResult(lastResult);
                 else
