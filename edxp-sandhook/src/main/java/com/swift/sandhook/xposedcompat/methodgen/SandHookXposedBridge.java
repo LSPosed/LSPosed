@@ -64,7 +64,7 @@ public final class SandHookXposedBridge {
             long timeStart = System.currentTimeMillis();
             HookMethodEntity stub = null;
             if (XposedCompat.useInternalStub) {
-                stub = HookStubManager.getHookMethodEntity(hookMethod);
+                stub = HookStubManager.getHookMethodEntity(hookMethod, additionalHookInfo);
             }
             if (stub != null) {
                 SandHook.hook(new HookWrapper.HookEntity(hookMethod, stub.hook, stub.backup, false));
