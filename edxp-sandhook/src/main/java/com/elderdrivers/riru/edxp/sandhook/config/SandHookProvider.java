@@ -3,7 +3,6 @@ package com.elderdrivers.riru.edxp.sandhook.config;
 import android.util.Log;
 
 import com.elderdrivers.riru.edxp.hook.HookProvider;
-import com.elderdrivers.riru.edxp.sandhook.dexmaker.DexMakerUtils;
 import com.elderdrivers.riru.edxp.sandhook.dexmaker.DynamicBridge;
 import com.elderdrivers.riru.edxp.sandhook.util.PrebuiltMethodsDeopter;
 import com.swift.sandhook.xposedcompat.XposedCompat;
@@ -42,7 +41,7 @@ public class SandHookProvider implements HookProvider {
 
     @Override
     public Member findMethodNative(Member hookMethod) {
-        return DexMakerUtils.findMethodNative(hookMethod);
+        return hookMethod;
     }
 
     @Override
