@@ -36,12 +36,12 @@ bool my_runtimeInit(void *runtime, void *mapAddr) {
         return false;
     }
     LOGI("runtimeInit starts");
-    bool result = (*runtimeInitBackup)(runtime, mapAddr);
+    bool result = runtimeInitBackup(runtime, mapAddr);
     if (!deoptBootImage) {
         LOGE("deoptBootImageSym is null, skip deoptBootImage");
     } else {
         LOGI("deoptBootImage starts");
-        (*deoptBootImage)(runtime);
+        deoptBootImage(runtime);
         LOGI("deoptBootImage finishes");
     }
     LOGI("runtimeInit finishes");
@@ -50,8 +50,8 @@ bool my_runtimeInit(void *runtime, void *mapAddr) {
 
 static bool onIsInSamePackageCalled(void *thiz, void *that) {
     std::string storage1, storage2;
-    const char *thisDesc = (*getDesc)(thiz, &storage1);
-    const char *thatDesc = (*getDesc)(that, &storage2);
+    const char *thisDesc = getDesc(thiz, &storage1);
+    const char *thatDesc = getDesc(that, &storage2);
     // Note: these identifiers should be consistent with those in Java layer
     if (strstr(thisDesc, "EdHooker_") != nullptr
         || strstr(thatDesc, "EdHooker_") != nullptr
@@ -128,13 +128,13 @@ static void hookIsInSamePackage(int api_level, void *artHandle,
         return;
     }
     getDesc = reinterpret_cast<const char *(*)(void *, std::string *)>(getDescSym);
-    (*hookFun)(original, reinterpret_cast<void *>(onIsInSamePackageCalled),
+    hookFun(original, reinterpret_cast<void *>(onIsInSamePackageCalled),
                reinterpret_cast<void **>(&isInSamePackageBackup));
 }
 
 void *my_classLinkerCst(void *classLinker, void *internTable) {
     LOGI("classLinkerCst starts");
-    void *result = (*classLinkerCstBackup)(classLinker, internTable);
+    void *result = classLinkerCstBackup(classLinker, internTable);
     if (class_linker_ != classLinker) {
         LOGI("class_linker_ changed from %p to %p", class_linker_, classLinker);
         class_linker_ = classLinker;
@@ -161,7 +161,7 @@ void hookInstrumentation(int api_level, void *artHandle, void (*hookFun)(void *,
         LOGE("can't get deoptMethodSym: %s", dlerror());
         return;
     }
-    (*hookFun)(classLinkerCstSym, reinterpret_cast<void *>(my_classLinkerCst),
+    hookFun(classLinkerCstSym, reinterpret_cast<void *>(my_classLinkerCst),
                reinterpret_cast<void **>(&classLinkerCstBackup));
     LOGI("classLinkerCst hooked");
 }
@@ -184,7 +184,7 @@ void deoptimize_method(JNIEnv *env, jclass clazz, jobject method) {
         return;
     }
     LOGD("deoptimizing method: %p", reflected_method);
-    (*deoptMethod)(class_linker_, reflected_method);
+    deoptMethod(class_linker_, reflected_method);
     deoptedMethods.push_back(reflected_method);
     LOGD("method deoptimized: %p", reflected_method);
 }
@@ -210,7 +210,7 @@ void hookRuntime(int api_level, void *artHandle, void (*hookFun)(void *, void *,
             return;
         }
         LOGI("start to hook runtimeInitSym");
-        (*hookFun)(runtimeInitSym, reinterpret_cast<void *>(my_runtimeInit),
+        hookFun(runtimeInitSym, reinterpret_cast<void *>(my_runtimeInit),
                    reinterpret_cast<void **>(&runtimeInitBackup));
         LOGI("runtimeInitSym hooked");
     } else {
@@ -232,12 +232,12 @@ int waitGc(int gcCause, void *thread) {
         LOGE("heap_ is null");
         return -1;
     }
-    return (*waitGcInternal)(heap_, gcCause, thread);
+    return waitGcInternal(heap_, gcCause, thread);
 }
 
 static void myHeapPreFork(void *heap) {
     heap_ = heap;
-    (*heapPreForkBackup)(heap);
+    heapPreForkBackup(heap);
 }
 
 void getSuspendSyms(int api_level, void *artHandle, void (*hookFun)(void *, void *, void **)) {
@@ -249,7 +249,7 @@ void getSuspendSyms(int api_level, void *artHandle, void (*hookFun)(void *, void
             LOGE("can't find heapPreFork: %s", dlerror());
         } else {
             // a chance to get pointer of the heap
-            (*hookFun)(heapPreFork, reinterpret_cast<void *>(myHeapPreFork),
+            hookFun(heapPreFork, reinterpret_cast<void *>(myHeapPreFork),
                        reinterpret_cast<void **>(&heapPreForkBackup));
             LOGI("heapPreFork hooked.");
         }

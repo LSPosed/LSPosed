@@ -7,6 +7,11 @@ import java.lang.reflect.Member;
 
 public abstract class BaseHookProvider implements HookProvider {
 
+    @Override
+    public void unhookMethod(Member method) {
+
+    }
+
     public Member findMethodNative(Member hookMethod) {
         return hookMethod;
     }

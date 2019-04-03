@@ -214,6 +214,7 @@ public final class XposedBridge {
 	 */
 	@Deprecated
 	public static void unhookMethod(Member hookMethod, XC_MethodHook callback) {
+		EdXpConfigGlobal.getHookProvider().unhookMethod(hookMethod);
 		CopyOnWriteSortedSet<XC_MethodHook> callbacks;
 		synchronized (sHookedMethodCallbacks) {
 			callbacks = sHookedMethodCallbacks.get(hookMethod);

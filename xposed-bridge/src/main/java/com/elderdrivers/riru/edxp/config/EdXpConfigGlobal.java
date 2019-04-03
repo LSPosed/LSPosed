@@ -54,6 +54,11 @@ public class EdXpConfigGlobal {
         }
 
         @Override
+        public void unhookMethod(Member method) {
+
+        }
+
+        @Override
         public Object invokeOriginalMethod(Member method, long methodId, Object thisObject, Object[] args)
                 throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
             return null;
