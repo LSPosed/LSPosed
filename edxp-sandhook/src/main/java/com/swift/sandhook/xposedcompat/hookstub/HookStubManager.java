@@ -296,7 +296,7 @@ public class HookStubManager {
                     long[] newArgs = entity.getArgsAddress(stubArgs, param.args);
                     param.setResult(entity.getResult(callOrigin.call(newArgs)));
                 } else {
-                    param.setResult(SandHook.callOriginMethod(originMethod, thiz, param.args));
+                    param.setResult(SandHook.callOriginMethod(originMethod, entity.backup, thiz, param.args));
                 }
             } catch (Throwable e) {
                 param.setThrowable(e);
@@ -337,7 +337,7 @@ public class HookStubManager {
         Object[] snapshot = additionalHookInfo.callbacks.getSnapshot();
 
         if (snapshot == null || snapshot.length == 0) {
-            return SandHook.callOriginMethod(origin, thiz, args);
+            return SandHook.callOriginMethod(origin, backup, thiz, args);
         }
 
         XC_MethodHook.MethodHookParam param = new XC_MethodHook.MethodHookParam();

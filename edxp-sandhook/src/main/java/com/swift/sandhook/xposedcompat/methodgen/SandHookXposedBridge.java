@@ -1,12 +1,11 @@
 package com.swift.sandhook.xposedcompat.methodgen;
 
-import android.os.Build;
 import android.os.Process;
 import android.os.Trace;
 
 import com.swift.sandhook.SandHook;
 import com.swift.sandhook.SandHookConfig;
-import com.swift.sandhook.annotation.HookMode;
+import com.swift.sandhook.blacklist.HookBlackList;
 import com.swift.sandhook.wrapper.HookWrapper;
 import com.swift.sandhook.xposedcompat.XposedCompat;
 import com.swift.sandhook.xposedcompat.hookstub.HookMethodEntity;
@@ -28,7 +27,7 @@ import de.robv.android.xposed.XposedBridge;
 public final class SandHookXposedBridge {
 
     private static final Map<Member, Method> hookedInfo = new ConcurrentHashMap<>();
-    private static HookMaker hookMaker = XposedCompat.useNewCallBackup ? new HookerDexMakerNew() : new HookerDexMaker();
+    private static HookMaker defaultHookMaker = XposedCompat.useNewCallBackup ? new HookerDexMakerNew() : new HookerDexMaker();
     private static final AtomicBoolean dexPathInited = new AtomicBoolean(false);
     private static File dexDir;
 
@@ -63,18 +62,24 @@ public final class SandHookXposedBridge {
             Trace.beginSection("SandXposed");
             long timeStart = System.currentTimeMillis();
             HookMethodEntity stub = null;
-            if (XposedCompat.useInternalStub) {
+            if (XposedCompat.useInternalStub && !HookBlackList.canNotHookByStub(hookMethod) && !HookBlackList.canNotHookByBridge(hookMethod)) {
                 stub = HookStubManager.getHookMethodEntity(hookMethod, additionalHookInfo);
             }
             if (stub != null) {
                 SandHook.hook(new HookWrapper.HookEntity(hookMethod, stub.hook, stub.backup, false));
                 entityMap.put(hookMethod, stub);
             } else {
+                HookMaker hookMaker;
+                if (HookBlackList.canNotHookByBridge(hookMethod)) {
+                    hookMaker = new HookerDexMaker();
+                } else {
+                    hookMaker = defaultHookMaker;
+                }
                 hookMaker.start(hookMethod, additionalHookInfo,
                         hookMethod.getDeclaringClass().getClassLoader(), dexDir == null ? null : dexDir.getAbsolutePath());
                 hookedInfo.put(hookMethod, hookMaker.getCallBackupMethod());
             }
-            DexLog.d("hook method <" + hookMethod.toString() + "> cost " + (System.currentTimeMillis() - timeStart) + " ms, by " + (stub != null ? "internal stub." : "dex maker"));
+            DexLog.d("hook method <" + hookMethod.toString() + "> cost " + (System.currentTimeMillis() - timeStart) + " ms, by " + (stub != null ? "internal stub" : "dex maker"));
             Trace.endSection();
         } catch (Exception e) {
             DexLog.e("error occur when hook method <" + hookMethod.toString() + ">", e);
@@ -126,9 +131,6 @@ public final class SandHookXposedBridge {
             @Override
             public void loadLib() {
                 //do it in loadDexAndInit
-                if (SandHookConfig.SDK_INT >= Build.VERSION_CODES.O) {
-                    SandHook.setHookMode(HookMode.REPLACE);
-                }
             }
         };
         SandHookConfig.DEBUG = true;
