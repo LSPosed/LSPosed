@@ -21,7 +21,7 @@ android {
 }
 
 dependencies {
-    compileOnly files("libs/framework-stub.jar")
+    compileOnly files("${hiddenApiStubJarFilePath}")
     implementation project(':edxp-common')
     implementation project(':xposed-bridge')
 }
@@ -44,7 +44,7 @@ preBuild.doLast {
 afterEvaluate {
 
     tasks.withType(JavaCompile) {
-        options.compilerArgs.add("-Xbootclasspath/p:${projectDir.absolutePath}/libs/framework-stub.jar")
+        options.compilerArgs.add("-Xbootclasspath/p:${hiddenApiStubJarFilePath}")
     }
 
     android.applicationVariants.all { variant ->
@@ -55,7 +55,7 @@ afterEvaluate {
         def myTemplatePath = "${projectDir}/template_override/"
 
         task("makeAndCopy${variantNameCapped}", type: Jar, dependsOn: "assemble${variantNameCapped}") {
-            dependsOn tasks.getByPath(":edxp-common:copyCommonroperties")
+            dependsOn tasks.getByPath(":edxp-common:copyCommonProperties")
             from "${buildDir}/intermediates/dex/${variantNameLowered}/mergeDex${variantNameCapped}/out/"
             destinationDir file(myTemplatePath + "system/framework/")
             baseName "edxp"

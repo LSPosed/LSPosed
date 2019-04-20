@@ -40,14 +40,14 @@ preBuild.doLast {
 }
 
 dependencies {
-    compileOnly files("libs/framework-stub.jar")
+    compileOnly files("${hiddenApiStubJarFilePath}")
     compileOnly project(':dexmaker')
 }
 
 afterEvaluate {
 
     tasks.withType(JavaCompile) {
-        options.compilerArgs.add("-Xbootclasspath/p:${projectDir.absolutePath}/libs/framework-stub.jar")
+        options.compilerArgs.add("-Xbootclasspath/p:${hiddenApiStubJarFilePath}")
     }
 
 }

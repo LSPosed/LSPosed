@@ -20,7 +20,7 @@ android {
 }
 
 dependencies {
-    compileOnly files("libs/framework-stub.jar")
+    compileOnly files("${hiddenApiStubJarFilePath}")
     implementation project(':xposed-bridge')
     compileOnly project(':dexmaker')
 }
@@ -43,10 +43,10 @@ preBuild.doLast {
 afterEvaluate {
 
     tasks.withType(JavaCompile) {
-        options.compilerArgs.add("-Xbootclasspath/p:${projectDir.absolutePath}/libs/framework-stub.jar")
+        options.compilerArgs.add("-Xbootclasspath/p:${hiddenApiStubJarFilePath}")
     }
 
-    task("copyCommonroperties", type: Copy) {
+    task("copyCommonProperties", type: Copy) {
         from file("${projectDir}/template_override/")
         into file(templateRootPath)
     }

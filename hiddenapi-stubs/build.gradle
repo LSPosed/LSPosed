@@ -14,10 +14,15 @@ android {
 
 task makeStubJar(type: Jar){
     baseName 'framework-stub'
-    from('build/intermediates/javac/release/compileReleaseJavaWithJavac/classes/')
+    from("${projectDir}/build/intermediates/javac/release/compileReleaseJavaWithJavac/classes/")
     into('')
+    destinationDir file("${projectDir}/libs")
     exclude('BuildConfig.class', 'R.class')
     exclude{ it.name.startsWith('R$')}
 }
 
 makeStubJar.dependsOn(build)
+
+afterEvaluate {
+    makeStubJar
+}
