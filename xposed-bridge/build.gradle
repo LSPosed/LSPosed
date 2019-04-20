@@ -5,7 +5,6 @@ android {
     buildToolsVersion '28.0.3'
 
     defaultConfig {
-        multiDexEnabled false
         minSdkVersion 23
     }
 
