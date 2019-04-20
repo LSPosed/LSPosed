@@ -39,7 +39,7 @@ preBuild.doLast {
 }
 
 dependencies {
-    compileOnly files("${hiddenApiStubJarFilePath}")
+    compileOnly project(':hiddenapi-stubs')
     compileOnly project(':dexmaker')
 }
 

@@ -4,12 +4,6 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 28
-    // Only build the release variant
-    variantFilter { variant ->
-        if (variant.buildType.name != BuilderConstants.RELEASE) {
-            variant.ignore = true
-        }
-    }
 }
 
 task makeStubJar(type: Jar){
@@ -21,8 +15,8 @@ task makeStubJar(type: Jar){
     exclude{ it.name.startsWith('R$')}
 }
 
-makeStubJar.dependsOn(build)
-
 afterEvaluate {
-    makeStubJar
+    tasks.withType(JavaCompile) {
+        it.finalizedBy(makeStubJar)
+    }
 }

@@ -20,7 +20,7 @@ android {
 }
 
 dependencies {
-    compileOnly files("${hiddenApiStubJarFilePath}")
+    compileOnly project(':hiddenapi-stubs')
     implementation project(':xposed-bridge')
     compileOnly project(':dexmaker')
 }
