@@ -34,8 +34,6 @@ import de.robv.android.xposed.XposedBridge.CopyOnWriteSortedSet;
 import de.robv.android.xposed.callbacks.XC_LayoutInflated;
 import de.robv.android.xposed.callbacks.XC_LayoutInflated.LayoutInflatedParam;
 import de.robv.android.xposed.callbacks.XCallback;
-import xposed.dummy.XResourcesSuperClass;
-import xposed.dummy.XTypedArraySuperClass;
 
 import static de.robv.android.xposed.XposedHelpers.decrementMethodDepth;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
@@ -52,7 +50,7 @@ import static de.robv.android.xposed.XposedHelpers.incrementMethodDepth;
  * be set using the methods made available via the API methods in this class.
  */
 @SuppressWarnings("JniMissingFunction")
-public class XResources extends XResourcesSuperClass {
+public class XResources extends Resources {
 	private static final SparseArray<HashMap<String, Object>> sReplacements = new SparseArray<>();
 	private static final SparseArray<HashMap<String, ResourceNames>> sResourceNames = new SparseArray<>();
 
@@ -80,10 +78,18 @@ public class XResources extends XResourcesSuperClass {
 	private String mResDir;
 	private String mPackageName;
 
-	/** Dummy, will never be called (objects are transferred to this class only). */
-	private XResources() {
-		throw new UnsupportedOperationException();
+	public XResources(AssetManager assets, DisplayMetrics metrics, Configuration config) {
+		super(assets, metrics, config);
 	}
+
+	public XResources(ClassLoader classLoader) {
+		super(classLoader);
+	}
+
+	/** Dummy, will never be called (objects are transferred to this class only). */
+//	private XResources() {
+//		throw new UnsupportedOperationException();
+//	}
 
 	/** @hide */
 	public void initObject(String resDir) {
@@ -168,7 +174,7 @@ public class XResources extends XResourcesSuperClass {
 			pkgInfo = PackageParser.parsePackageLite(resDir, 0);
 		}
 		if (pkgInfo != null && pkgInfo.packageName != null) {
-			Log.w(XposedBridge.TAG, "Package name for " + resDir + " had to be retrieved via parser");
+//			Log.w(XposedBridge.TAG, "Package name for " + resDir + " had to be retrieved via parser");
 			packageName = pkgInfo.packageName;
 			setPackageNameForResDir(packageName, resDir);
 			return packageName;
@@ -624,28 +630,28 @@ public class XResources extends XResourcesSuperClass {
 		}
 	}
 
-	/** @hide */
-	@Override
-	public XmlResourceParser getAnimation(int id) throws NotFoundException {
-		Object replacement = getReplacement(id);
-		if (replacement instanceof XResForwarder) {
-			Resources repRes = ((XResForwarder) replacement).getResources();
-			int repId = ((XResForwarder) replacement).getId();
-
-			boolean loadedFromCache = isXmlCached(repRes, repId);
-			XmlResourceParser result = repRes.getAnimation(repId);
-
-			if (!loadedFromCache) {
-				long parseState = (Build.VERSION.SDK_INT >= 21)
-					? getLongField(result, "mParseState")
-					: getIntField(result, "mParseState");
-				rewriteXmlReferencesNative(parseState, this, repRes);
-			}
-
-			return result;
-		}
-		return super.getAnimation(id);
-	}
+//	/** @hide */
+//	@Override
+//	public XmlResourceParser getAnimation(int id) throws NotFoundException {
+//		Object replacement = getReplacement(id);
+//		if (replacement instanceof XResForwarder) {
+//			Resources repRes = ((XResForwarder) replacement).getResources();
+//			int repId = ((XResForwarder) replacement).getId();
+//
+//			boolean loadedFromCache = isXmlCached(repRes, repId);
+//			XmlResourceParser result = repRes.getAnimation(repId);
+//
+//			if (!loadedFromCache) {
+//				long parseState = (Build.VERSION.SDK_INT >= 21)
+//					? getLongField(result, "mParseState")
+//					: getIntField(result, "mParseState");
+//				rewriteXmlReferencesNative(parseState, this, repRes);
+//			}
+//
+//			return result;
+//		}
+//		return super.getAnimation(id);
+//	}
 
 	/** @hide */
 	@Override
@@ -937,76 +943,76 @@ public class XResources extends XResourcesSuperClass {
 		return super.getIntArray(id);
 	}
 
-	/** @hide */
-	@Override
-	public XmlResourceParser getLayout(int id) throws NotFoundException {
-		XmlResourceParser result;
-		Object replacement = getReplacement(id);
-		if (replacement instanceof XResForwarder) {
-			Resources repRes = ((XResForwarder) replacement).getResources();
-			int repId = ((XResForwarder) replacement).getId();
-
-			boolean loadedFromCache = isXmlCached(repRes, repId);
-			result = repRes.getLayout(repId);
-
-			if (!loadedFromCache) {
-				long parseState = (Build.VERSION.SDK_INT >= 21)
-					? getLongField(result, "mParseState")
-					: getIntField(result, "mParseState");
-				rewriteXmlReferencesNative(parseState, this, repRes);
-			}
-		} else {
-			result = super.getLayout(id);
-		}
-
-		// Check whether this layout is hooked
-		HashMap<String, CopyOnWriteSortedSet<XC_LayoutInflated>> inner;
-		synchronized (sLayoutCallbacks) {
-			inner = sLayoutCallbacks.get(id);
-		}
-		if (inner != null) {
-			CopyOnWriteSortedSet<XC_LayoutInflated> callbacks;
-			synchronized (inner) {
-				callbacks = inner.get(mResDir);
-				if (callbacks == null && mResDir != null)
-					callbacks = inner.get(null);
-			}
-			if (callbacks != null) {
-				String variant = "layout";
-				TypedValue value = (TypedValue) getObjectField(this, "mTmpValue");
-				getValue(id, value, true);
-				if (value.type == TypedValue.TYPE_STRING) {
-					String[] components = value.string.toString().split("/", 3);
-					if (components.length == 3)
-						variant = components[1];
-					else
-						XposedBridge.log("Unexpected resource path \"" + value.string.toString()
-								+ "\" for resource id 0x" + Integer.toHexString(id));
-				} else {
-					XposedBridge.log(new NotFoundException("Could not find file name for resource id 0x") + Integer.toHexString(id));
-				}
-
-				synchronized (sXmlInstanceDetails) {
-					synchronized (sResourceNames) {
-						HashMap<String, ResourceNames> resNamesInner = sResourceNames.get(id);
-						if (resNamesInner != null) {
-							synchronized (resNamesInner) {
-								XMLInstanceDetails details = new XMLInstanceDetails(resNamesInner.get(mResDir), variant, callbacks);
-								sXmlInstanceDetails.put(result, details);
-
-								// if we were called inside LayoutInflater.parseInclude, store the details for it
-								MethodHookParam top = sIncludedLayouts.get().peek();
-								if (top != null)
-									top.setObjectExtra(EXTRA_XML_INSTANCE_DETAILS, details);
-							}
-						}
-					}
-				}
-			}
-		}
-
-		return result;
-	}
+//	/** @hide */
+//	@Override
+//	public XmlResourceParser getLayout(int id) throws NotFoundException {
+//		XmlResourceParser result;
+//		Object replacement = getReplacement(id);
+//		if (replacement instanceof XResForwarder) {
+//			Resources repRes = ((XResForwarder) replacement).getResources();
+//			int repId = ((XResForwarder) replacement).getId();
+//
+//			boolean loadedFromCache = isXmlCached(repRes, repId);
+//			result = repRes.getLayout(repId);
+//
+//			if (!loadedFromCache) {
+//				long parseState = (Build.VERSION.SDK_INT >= 21)
+//					? getLongField(result, "mParseState")
+//					: getIntField(result, "mParseState");
+//				rewriteXmlReferencesNative(parseState, this, repRes);
+//			}
+//		} else {
+//			result = super.getLayout(id);
+//		}
+//
+//		// Check whether this layout is hooked
+//		HashMap<String, CopyOnWriteSortedSet<XC_LayoutInflated>> inner;
+//		synchronized (sLayoutCallbacks) {
+//			inner = sLayoutCallbacks.get(id);
+//		}
+//		if (inner != null) {
+//			CopyOnWriteSortedSet<XC_LayoutInflated> callbacks;
+//			synchronized (inner) {
+//				callbacks = inner.get(mResDir);
+//				if (callbacks == null && mResDir != null)
+//					callbacks = inner.get(null);
+//			}
+//			if (callbacks != null) {
+//				String variant = "layout";
+//				TypedValue value = (TypedValue) getObjectField(this, "mTmpValue");
+//				getValue(id, value, true);
+//				if (value.type == TypedValue.TYPE_STRING) {
+//					String[] components = value.string.toString().split("/", 3);
+//					if (components.length == 3)
+//						variant = components[1];
+//					else
+//						XposedBridge.log("Unexpected resource path \"" + value.string.toString()
+//								+ "\" for resource id 0x" + Integer.toHexString(id));
+//				} else {
+//					XposedBridge.log(new NotFoundException("Could not find file name for resource id 0x") + Integer.toHexString(id));
+//				}
+//
+//				synchronized (sXmlInstanceDetails) {
+//					synchronized (sResourceNames) {
+//						HashMap<String, ResourceNames> resNamesInner = sResourceNames.get(id);
+//						if (resNamesInner != null) {
+//							synchronized (resNamesInner) {
+//								XMLInstanceDetails details = new XMLInstanceDetails(resNamesInner.get(mResDir), variant, callbacks);
+//								sXmlInstanceDetails.put(result, details);
+//
+//								// if we were called inside LayoutInflater.parseInclude, store the details for it
+//								MethodHookParam top = sIncludedLayouts.get().peek();
+//								if (top != null)
+//									top.setObjectExtra(EXTRA_XML_INSTANCE_DETAILS, details);
+//							}
+//						}
+//					}
+//				}
+//			}
+//		}
+//
+//		return result;
+//	}
 
 	/** @hide */
 	@Override
@@ -1094,28 +1100,28 @@ public class XResources extends XResourcesSuperClass {
 		return super.getTextArray(id);
 	}
 
-	/** @hide */
-	@Override
-	public XmlResourceParser getXml(int id) throws NotFoundException {
-		Object replacement = getReplacement(id);
-		if (replacement instanceof XResForwarder) {
-			Resources repRes = ((XResForwarder) replacement).getResources();
-			int repId = ((XResForwarder) replacement).getId();
-
-			boolean loadedFromCache = isXmlCached(repRes, repId);
-			XmlResourceParser result = repRes.getXml(repId);
-
-			if (!loadedFromCache) {
-				long parseState = (Build.VERSION.SDK_INT >= 21)
-					? getLongField(result, "mParseState")
-					: getIntField(result, "mParseState");
-				rewriteXmlReferencesNative(parseState, this, repRes);
-			}
-
-			return result;
-		}
-		return super.getXml(id);
-	}
+//	/** @hide */
+//	@Override
+//	public XmlResourceParser getXml(int id) throws NotFoundException {
+//		Object replacement = getReplacement(id);
+//		if (replacement instanceof XResForwarder) {
+//			Resources repRes = ((XResForwarder) replacement).getResources();
+//			int repId = ((XResForwarder) replacement).getId();
+//
+//			boolean loadedFromCache = isXmlCached(repRes, repId);
+//			XmlResourceParser result = repRes.getXml(repId);
+//
+//			if (!loadedFromCache) {
+//				long parseState = (Build.VERSION.SDK_INT >= 21)
+//					? getLongField(result, "mParseState")
+//					: getIntField(result, "mParseState");
+//				rewriteXmlReferencesNative(parseState, this, repRes);
+//			}
+//
+//			return result;
+//		}
+//		return super.getXml(id);
+//	}
 
 	private static boolean isXmlCached(Resources res, int id) {
 		int[] mCachedXmlBlockIds = (int[]) getObjectField(res, "mCachedXmlBlockIds");
@@ -1253,12 +1259,17 @@ public class XResources extends XResourcesSuperClass {
 	 * Mainly used when inflating layouts.
 	 * @hide
 	 */
-	public static class XTypedArray extends XTypedArraySuperClass {
-		/** Dummy, will never be called (objects are transferred to this class only). */
-		private XTypedArray() {
-			super(null, null, null, 0);
-			throw new UnsupportedOperationException();
-		}
+	public static class XTypedArray extends TypedArray {
+
+        public XTypedArray(Resources resources) {
+            super(resources);
+        }
+
+        /** Dummy, will never be called (objects are transferred to this class only). */
+//		private XTypedArray() {
+//			super(null, null, null, 0);
+//			throw new UnsupportedOperationException();
+//		}
 
 		@Override
 		public boolean getBoolean(int index, boolean defValue) {
