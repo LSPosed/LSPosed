@@ -1,5 +1,8 @@
 package com.elderdrivers.riru.edxp.config;
 
+import android.content.res.Resources;
+import android.content.res.XResources;
+
 import com.elderdrivers.riru.edxp.hook.HookProvider;
 
 import java.lang.reflect.InvocationTargetException;
@@ -86,6 +89,11 @@ public class EdXpConfigGlobal {
 
         @Override
         public void deoptMethodNative(Object method) {
+
+        }
+
+        @Override
+        public void rewriteXmlReferencesNative(long parserPtr, XResources origRes, Resources repRes) {
 
         }
     };

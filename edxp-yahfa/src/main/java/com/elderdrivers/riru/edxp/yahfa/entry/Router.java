@@ -3,6 +3,7 @@ package com.elderdrivers.riru.edxp.yahfa.entry;
 import android.app.AndroidAppHelper;
 import android.text.TextUtils;
 
+import com.elderdrivers.riru.edxp.Main;
 import com.elderdrivers.riru.edxp.config.EdXpConfigGlobal;
 import com.elderdrivers.riru.edxp.util.Utils;
 import com.elderdrivers.riru.edxp.yahfa.config.YahfaEdxpConfig;
@@ -57,6 +58,7 @@ public class Router {
             }
             Router.startBootstrapHook(isSystem);
             XposedInit.initForZygote(isSystem);
+            Main.initXResourcesNative();
         } catch (Throwable t) {
             Utils.logE("error during Xposed initialization", t);
             XposedBridge.disableHooks = true;

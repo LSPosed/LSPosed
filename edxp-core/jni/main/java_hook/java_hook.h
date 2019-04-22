@@ -4,6 +4,8 @@
 #include <jni.h>
 #include <unistd.h>
 
+#define NELEM(x) (sizeof(x)/sizeof((x)[0]))
+
 extern jobject gInjectDexClassLoader;
 
 void loadDexAndInit(JNIEnv *env, const char *dexPath);

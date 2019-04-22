@@ -1,17 +1,18 @@
 package com.elderdrivers.riru.edxp;
 
 import android.annotation.SuppressLint;
+import android.content.res.Resources;
+import android.content.res.XResources;
 import android.os.Build;
 import android.os.Process;
 
 import com.elderdrivers.riru.common.KeepAll;
-import com.elderdrivers.riru.edxp.BuildConfig;
 import com.elderdrivers.riru.edxp.config.InstallerChooser;
+import com.elderdrivers.riru.edxp.util.Utils;
 import com.elderdrivers.riru.edxp.yahfa.core.HookMethodResolver;
 import com.elderdrivers.riru.edxp.yahfa.entry.Router;
 import com.elderdrivers.riru.edxp.yahfa.proxy.BlackWhiteListProxy;
 import com.elderdrivers.riru.edxp.yahfa.proxy.NormalProxy;
-import com.elderdrivers.riru.edxp.util.Utils;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -139,4 +140,8 @@ public class Main implements KeepAll {
     public static native void resumeAllThreads(long obj);
 
     public static native int waitForGcToComplete(long thread);
+
+    public static native boolean initXResourcesNative();
+
+    public static native void rewriteXmlReferencesNative(long parserPtr, XResources origRes, Resources repRes);
 }
