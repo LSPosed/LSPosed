@@ -105,6 +105,12 @@ public final class XposedInit {
             return;
         }
 
+        if (!EdXpConfigGlobal.getHookProvider().initXResourcesNative()) {
+            Log.e(TAG, "Cannot hook resources");
+            disableResources = true;
+            return;
+        }
+
         /*
          * getTopLevelResources(a)
          *   -> getTopLevelResources(b)

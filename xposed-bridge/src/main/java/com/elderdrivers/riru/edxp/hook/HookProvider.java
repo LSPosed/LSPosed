@@ -25,5 +25,7 @@ public interface HookProvider {
 
     void deoptMethodNative(Object method);
 
+    boolean initXResourcesNative();
+
     void rewriteXmlReferencesNative(long parserPtr, XResources origRes, Resources repRes);
 }

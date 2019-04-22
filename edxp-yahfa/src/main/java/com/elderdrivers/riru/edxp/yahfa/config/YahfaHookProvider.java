@@ -30,6 +30,11 @@ public class YahfaHookProvider extends BaseHookProvider {
     }
 
     @Override
+    public boolean initXResourcesNative() {
+        return Main.initXResourcesNative();
+    }
+
+    @Override
     public void rewriteXmlReferencesNative(long parserPtr, XResources origRes, Resources repRes) {
         Main.rewriteXmlReferencesNative(parserPtr, origRes, repRes);
     }

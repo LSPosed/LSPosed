@@ -37,6 +37,11 @@ public abstract class BaseHookProvider implements HookProvider {
     }
 
     @Override
+    public boolean initXResourcesNative() {
+        return false;
+    }
+
+    @Override
     public void rewriteXmlReferencesNative(long parserPtr, XResources origRes, Resources repRes) {
 
     }

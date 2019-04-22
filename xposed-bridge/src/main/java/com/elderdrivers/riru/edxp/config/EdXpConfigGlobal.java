@@ -93,6 +93,11 @@ public class EdXpConfigGlobal {
         }
 
         @Override
+        public boolean initXResourcesNative() {
+            return false;
+        }
+
+        @Override
         public void rewriteXmlReferencesNative(long parserPtr, XResources origRes, Resources repRes) {
 
         }
