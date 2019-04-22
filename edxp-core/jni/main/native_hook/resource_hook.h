@@ -13,35 +13,37 @@ static constexpr const char *kLibFwPath = "/system/lib64/libandroidfw.so";
 static constexpr const char *kLibFwPath = "/system/lib/libandroidfw.so";
 #endif
 
-jboolean XposedBridge_initXResourcesNative(JNIEnv* env, jclass);
-void XResources_rewriteXmlReferencesNative(JNIEnv* env, jclass,
+jboolean XposedBridge_initXResourcesNative(JNIEnv *env, jclass);
+
+void XResources_rewriteXmlReferencesNative(JNIEnv *env, jclass,
                                            jlong parserPtr, jobject origRes, jobject repRes);
 
+typedef int32_t status_t;
+
 enum {
-    RES_NULL_TYPE               = 0x0000,
-    RES_STRING_POOL_TYPE        = 0x0001,
-    RES_TABLE_TYPE              = 0x0002,
-    RES_XML_TYPE                = 0x0003,
+    RES_NULL_TYPE = 0x0000,
+    RES_STRING_POOL_TYPE = 0x0001,
+    RES_TABLE_TYPE = 0x0002,
+    RES_XML_TYPE = 0x0003,
     // Chunk types in RES_XML_TYPE
-    RES_XML_FIRST_CHUNK_TYPE    = 0x0100,
-    RES_XML_START_NAMESPACE_TYPE= 0x0100,
-    RES_XML_END_NAMESPACE_TYPE  = 0x0101,
-    RES_XML_START_ELEMENT_TYPE  = 0x0102,
-    RES_XML_END_ELEMENT_TYPE    = 0x0103,
-    RES_XML_CDATA_TYPE          = 0x0104,
-    RES_XML_LAST_CHUNK_TYPE     = 0x017f,
+    RES_XML_FIRST_CHUNK_TYPE = 0x0100,
+    RES_XML_START_NAMESPACE_TYPE = 0x0100,
+    RES_XML_END_NAMESPACE_TYPE = 0x0101,
+    RES_XML_START_ELEMENT_TYPE = 0x0102,
+    RES_XML_END_ELEMENT_TYPE = 0x0103,
+    RES_XML_CDATA_TYPE = 0x0104,
+    RES_XML_LAST_CHUNK_TYPE = 0x017f,
     // This contains a uint32_t array mapping strings in the string
     // pool back to resource identifiers.  It is optional.
-    RES_XML_RESOURCE_MAP_TYPE   = 0x0180,
+    RES_XML_RESOURCE_MAP_TYPE = 0x0180,
     // Chunk types in RES_TABLE_TYPE
-    RES_TABLE_PACKAGE_TYPE      = 0x0200,
-    RES_TABLE_TYPE_TYPE         = 0x0201,
-    RES_TABLE_TYPE_SPEC_TYPE    = 0x0202,
-    RES_TABLE_LIBRARY_TYPE      = 0x0203
+    RES_TABLE_PACKAGE_TYPE = 0x0200,
+    RES_TABLE_TYPE_TYPE = 0x0201,
+    RES_TABLE_TYPE_SPEC_TYPE = 0x0202,
+    RES_TABLE_LIBRARY_TYPE = 0x0203
 };
 
-struct ResXMLTree_node
-{
+struct ResXMLTree_node {
     void *header;
     // Line number in original source file at which this element appeared.
     uint32_t lineNumber;
@@ -51,8 +53,8 @@ struct ResXMLTree_node
 
 class ResXMLTree;
 
-class ResXMLParser
-{
+class ResXMLParser {
+
 public:
     enum event_code_t {
         BAD_DOCUMENT = -1,
@@ -68,61 +70,63 @@ public:
         TEXT = RES_XML_CDATA_TYPE
     };
 
-public:
-    friend class ResXMLTree;
-
-    event_code_t nextNode();
-    const ResXMLTree&           mTree;
-    event_code_t                mEventCode;
-    const ResXMLTree_node*      mCurNode;
-    const void*                 mCurExt;
+    const ResXMLTree &mTree;
+    event_code_t mEventCode;
+    const ResXMLTree_node *mCurNode;
+    const void *mCurExt;
 };
 
-class ResStringPool
-{
+class ResStringPool {
+
 public:
-    int32_t                     mError;
-    void*                       mOwnedData;
-    const void*                 mHeader;
-    size_t                      mSize;
-    mutable pthread_mutex_t     mDecodeLock;
-    const uint32_t*             mEntries;
-    const uint32_t*             mEntryStyles;
-    const void*                 mStrings;
-    char16_t mutable**          mCache;
-    uint32_t                    mStringPoolSize;    // number of uint16_t
-    const uint32_t*             mStyles;
-    uint32_t                    mStylePoolSize;    // number of uint32_t
+    status_t mError;
+    void *mOwnedData;
+    const void *mHeader;
+    size_t mSize;
+    mutable pthread_mutex_t mDecodeLock;
+    const uint32_t *mEntries;
+    const uint32_t *mEntryStyles;
+    const void *mStrings;
+    char16_t mutable **mCache;
+    uint32_t mStringPoolSize;    // number of uint16_t
+    const uint32_t *mStyles;
+    uint32_t mStylePoolSize;    // number of uint32_t
 };
 
 
-class ResXMLTree : public ResXMLParser
-{
+class ResXMLTree : public ResXMLParser {
+
 public:
-    friend class ResXMLParser;
-    int32_t validateNode(const ResXMLTree_node* node) const;
-    void*                       mDynamicRefTable;
-    int32_t                     mError;
-    void*                       mOwnedData;
-    const void*                 mHeader;
-    size_t                      mSize;
-    const uint8_t*              mDataEnd;
-    ResStringPool               mStrings;
-    const uint32_t*             mResIds;
-    size_t                      mNumResIds;
-    const ResXMLTree_node*      mRootNode;
-    const void*                 mRootExt;
-    event_code_t                mRootCode;
+    void *mDynamicRefTable;
+    status_t mError;
+    void *mOwnedData;
+    const void *mHeader;
+    size_t mSize;
+    const uint8_t *mDataEnd;
+    ResStringPool mStrings;
+    const uint32_t *mResIds;
+    size_t mNumResIds;
+    const ResXMLTree_node *mRootNode;
+    const void *mRootExt;
+    event_code_t mRootCode;
 };
 
-struct ResXMLTree_attrExt
-{
+struct ResStringPool_ref {
+
+    // Index into the string pool table (uint32_t-offset from the indices
+    // immediately after ResStringPool_header) at which to find the location
+    // of the string data in the pool.
+    uint32_t index;
+};
+
+struct ResXMLTree_attrExt {
+
     // String of the full namespace of this element.
-    void* ns;
+    struct ResStringPool_ref ns;
 
     // String name of this node if it is an ELEMENT; the raw
     // character data if this is a CDATA node.
-    void* name;
+    struct ResStringPool_ref name;
 
     // Byte offset from the start of this structure where the attributes start.
     uint16_t attributeStart;
@@ -145,8 +149,8 @@ struct ResXMLTree_attrExt
     uint16_t styleIndex;
 };
 
-struct Res_value
-{
+struct Res_value {
+
     // Number of bytes in this structure.
     uint16_t size;
     // Always set to 0.
@@ -253,18 +257,17 @@ struct Res_value
     // The data for this item, as interpreted according to dataType.
     typedef uint32_t data_type;
     data_type data;
-    void copyFrom_dtoh(const Res_value& src);
 };
 
-struct ResXMLTree_attribute
-{
+struct ResXMLTree_attribute {
     // Namespace of this attribute.
-    void* ns;
+    struct ResStringPool_ref ns;
 
     // Name of this attribute.
-    void* name;
+    struct ResStringPool_ref name;
+
     // The original raw string value of this attribute.
-    void* rawValue;
+    struct ResStringPool_ref rawValue;
 
     // Processesd typed value of this attribute.
     struct Res_value typedValue;

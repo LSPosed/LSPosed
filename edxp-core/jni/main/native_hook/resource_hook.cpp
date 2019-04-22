@@ -97,34 +97,41 @@ jboolean XposedBridge_initXResourcesNative(JNIEnv *env, jclass) {
 
 void XResources_rewriteXmlReferencesNative(JNIEnv *env, jclass,
                                            jlong parserPtr, jobject origRes, jobject repRes) {
-    ResXMLParser* parser = (ResXMLParser*)parserPtr;
-    const ResXMLTree& mTree = parser->mTree;
-    uint32_t* mResIds = (uint32_t*)mTree.mResIds;
-    ResXMLTree_attrExt* tag;
-    int attrCount;
 
-    if (parser == NULL)
+    ResXMLParser *parser = (ResXMLParser *) parserPtr;
+
+    if (parser == nullptr)
         return;
+
+    const ResXMLTree &mTree = parser->mTree;
+    uint32_t *mResIds = (uint32_t *) mTree.mResIds;
+    ResXMLTree_attrExt *tag;
+    int attrCount;
 
     do {
         switch (ResXMLParser_next(parser)) {
             case ResXMLParser::START_TAG:
-                tag = (ResXMLTree_attrExt*)parser->mCurExt;
+                tag = (ResXMLTree_attrExt *) parser->mCurExt;
                 attrCount = dtohs(tag->attributeCount);
                 for (int idx = 0; idx < attrCount; idx++) {
-                    ResXMLTree_attribute* attr = (ResXMLTree_attribute*)
-                            (((const uint8_t*)tag)
+                    ResXMLTree_attribute *attr = (ResXMLTree_attribute *)
+                            (((const uint8_t *) tag)
                              + dtohs(tag->attributeStart)
-                             + (dtohs(tag->attributeSize)*idx));
+                             + (dtohs(tag->attributeSize) * idx));
 
                     // find resource IDs for attribute names
                     int32_t attrNameID = ResXMLParser_getAttributeNameID(parser, idx);
                     // only replace attribute name IDs for app packages
-                    if (attrNameID >= 0 && (size_t)attrNameID < mTree.mNumResIds && dtohl(mResIds[attrNameID]) >= 0x7f000000) {
+                    if (attrNameID >= 0 && (size_t) attrNameID < mTree.mNumResIds &&
+                        dtohl(mResIds[attrNameID]) >= 0x7f000000) {
                         size_t attNameLen;
-                        const char16_t* attrName = ResStringPool_stringAt(&(mTree.mStrings), attrNameID, &attNameLen);
-                        jint attrResID = env->CallStaticIntMethod(classXResources, methodXResourcesTranslateAttrId,
-                                                                  env->NewString((const jchar*)attrName, attNameLen), origRes);
+                        const char16_t *attrName = ResStringPool_stringAt(&(mTree.mStrings),
+                                                                          attrNameID, &attNameLen);
+                        jint attrResID = env->CallStaticIntMethod(classXResources,
+                                                                  methodXResourcesTranslateAttrId,
+                                                                  env->NewString(
+                                                                          (const jchar *) attrName,
+                                                                          attNameLen), origRes);
                         if (env->ExceptionCheck())
                             goto leave;
 
@@ -139,7 +146,8 @@ void XResources_rewriteXmlReferencesNative(JNIEnv *env, jclass,
                     if (oldValue < 0x7f000000)
                         continue;
 
-                    jint newValue = env->CallStaticIntMethod(classXResources, methodXResourcesTranslateResId,
+                    jint newValue = env->CallStaticIntMethod(classXResources,
+                                                             methodXResourcesTranslateResId,
                                                              oldValue, origRes, repRes);
                     if (env->ExceptionCheck())
                         goto leave;
