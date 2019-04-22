@@ -23,7 +23,7 @@ enum {
     RES_TABLE_TYPE              = 0x0002,
     RES_XML_TYPE                = 0x0003,
     // Chunk types in RES_XML_TYPE
-            RES_XML_FIRST_CHUNK_TYPE    = 0x0100,
+    RES_XML_FIRST_CHUNK_TYPE    = 0x0100,
     RES_XML_START_NAMESPACE_TYPE= 0x0100,
     RES_XML_END_NAMESPACE_TYPE  = 0x0101,
     RES_XML_START_ELEMENT_TYPE  = 0x0102,
@@ -32,9 +32,9 @@ enum {
     RES_XML_LAST_CHUNK_TYPE     = 0x017f,
     // This contains a uint32_t array mapping strings in the string
     // pool back to resource identifiers.  It is optional.
-            RES_XML_RESOURCE_MAP_TYPE   = 0x0180,
+    RES_XML_RESOURCE_MAP_TYPE   = 0x0180,
     // Chunk types in RES_TABLE_TYPE
-            RES_TABLE_PACKAGE_TYPE      = 0x0200,
+    RES_TABLE_PACKAGE_TYPE      = 0x0200,
     RES_TABLE_TYPE_TYPE         = 0x0201,
     RES_TABLE_TYPE_SPEC_TYPE    = 0x0202,
     RES_TABLE_LIBRARY_TYPE      = 0x0203
@@ -78,6 +78,23 @@ public:
     const void*                 mCurExt;
 };
 
+class ResStringPool
+{
+public:
+    int32_t                     mError;
+    void*                       mOwnedData;
+    const void*                 mHeader;
+    size_t                      mSize;
+    mutable pthread_mutex_t     mDecodeLock;
+    const uint32_t*             mEntries;
+    const uint32_t*             mEntryStyles;
+    const void*                 mStrings;
+    char16_t mutable**          mCache;
+    uint32_t                    mStringPoolSize;    // number of uint16_t
+    const uint32_t*             mStyles;
+    uint32_t                    mStylePoolSize;    // number of uint32_t
+};
+
 
 class ResXMLTree : public ResXMLParser
 {
@@ -90,7 +107,7 @@ public:
     const void*                 mHeader;
     size_t                      mSize;
     const uint8_t*              mDataEnd;
-    void*                       mStrings;
+    ResStringPool               mStrings;
     const uint32_t*             mResIds;
     size_t                      mNumResIds;
     const ResXMLTree_node*      mRootNode;

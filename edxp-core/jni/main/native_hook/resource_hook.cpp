@@ -20,7 +20,7 @@ void (*ResXMLParser_restart)(void *);
 
 int32_t (*ResXMLParser_getAttributeNameID)(void *, int);
 
-char16_t *(*ResStringPool_stringAt)(void *, int32_t, size_t *);
+char16_t *(*ResStringPool_stringAt)(const void *, int32_t, size_t *);
 
 bool prepareSymbols() {
     void *fwHandle = dlopen(kLibFwPath, RTLD_LAZY | RTLD_GLOBAL);
@@ -51,7 +51,7 @@ bool prepareSymbols() {
         LOGE("can't get ResXMLParser_getAttributeNameID: %s", dlerror());
         return false;
     }
-    ResStringPool_stringAt = reinterpret_cast<char16_t *(*)(void *, int32_t, size_t *)>(dlsym(
+    ResStringPool_stringAt = reinterpret_cast<char16_t *(*)(const void *, int32_t, size_t *)>(dlsym(
             fwHandle,
 #if defined(__LP64__)
             "_ZNK7android13ResStringPool8stringAtEmPm"
@@ -122,7 +122,7 @@ void XResources_rewriteXmlReferencesNative(JNIEnv *env, jclass,
                     // only replace attribute name IDs for app packages
                     if (attrNameID >= 0 && (size_t)attrNameID < mTree.mNumResIds && dtohl(mResIds[attrNameID]) >= 0x7f000000) {
                         size_t attNameLen;
-                        const char16_t* attrName = ResStringPool_stringAt(mTree.mStrings, attrNameID, &attNameLen);
+                        const char16_t* attrName = ResStringPool_stringAt(&(mTree.mStrings), attrNameID, &attNameLen);
                         jint attrResID = env->CallStaticIntMethod(classXResources, methodXResourcesTranslateAttrId,
                                                                   env->NewString((const jchar*)attrName, attNameLen), origRes);
                         if (env->ExceptionCheck())
