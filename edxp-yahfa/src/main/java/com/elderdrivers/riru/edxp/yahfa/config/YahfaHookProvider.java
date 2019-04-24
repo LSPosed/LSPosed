@@ -30,6 +30,16 @@ public class YahfaHookProvider extends BaseHookProvider {
     }
 
     @Override
+    public Object findMethodNative(Class clazz, String methodName, String methodSig) {
+        return Main.findMethodNative(clazz, methodName, methodSig);
+    }
+
+    @Override
+    public void deoptMethodNative(Object method) {
+        Main.deoptMethodNative(method);
+    }
+
+    @Override
     public boolean initXResourcesNative() {
         return Main.initXResourcesNative();
     }

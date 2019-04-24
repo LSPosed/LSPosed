@@ -44,18 +44,18 @@ public class WhaleHookProvider extends BaseHookProvider {
     }
 
     @Override
+    public Object findMethodNative(Class clazz, String methodName, String methodSig) {
+        return Main.findMethodNative(clazz, methodName, methodSig);
+    }
+
+    @Override
+    public void deoptMethodNative(Object method) {
+        Main.deoptMethodNative(method);
+    }
+
+    @Override
     public long getMethodId(Member member) {
         return WhaleRuntime.getMethodSlot(member);
-    }
-
-    @Override
-    public boolean initXResourcesNative() {
-        return Main.initXResourcesNative();
-    }
-
-    @Override
-    public void rewriteXmlReferencesNative(long parserPtr, XResources origRes, Resources repRes) {
-        Main.rewriteXmlReferencesNative(parserPtr, origRes, repRes);
     }
 
     @Override
