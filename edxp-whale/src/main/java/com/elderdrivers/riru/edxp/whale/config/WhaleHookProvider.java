@@ -1,5 +1,6 @@
 package com.elderdrivers.riru.edxp.whale.config;
 
+import com.elderdrivers.riru.edxp.Main;
 import com.elderdrivers.riru.edxp.config.BaseHookProvider;
 import com.lody.whale.WhaleRuntime;
 
@@ -37,6 +38,16 @@ public class WhaleHookProvider extends BaseHookProvider {
     @Override
     public Member findMethodNative(Member hookMethod) {
         return hookMethod;
+    }
+
+    @Override
+    public Object findMethodNative(Class clazz, String methodName, String methodSig) {
+        return Main.findMethodNative(clazz, methodName, methodSig);
+    }
+
+    @Override
+    public void deoptMethodNative(Object method) {
+        Main.deoptMethodNative(method);
     }
 
     @Override
