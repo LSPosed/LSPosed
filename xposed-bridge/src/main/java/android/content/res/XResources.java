@@ -1106,9 +1106,6 @@ public class XResources extends Resources {
 	@Override
 	public XmlResourceParser getXml(int id) throws NotFoundException {
 		Object replacement = getReplacement(id);
-		if (id == 2131034112) {
-			XposedBridge.log("2131034112: " + replacement);
-		}
 		if (replacement instanceof XResForwarder) {
 			Resources repRes = ((XResForwarder) replacement).getResources();
 			int repId = ((XResForwarder) replacement).getId();
