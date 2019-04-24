@@ -2,7 +2,7 @@ import org.gradle.internal.os.OperatingSystem
 
 apply plugin: 'com.android.library'
 
-version "v0.4.0.0_beta-SNAPSHOT"
+version "v0.4.0.1_beta-SNAPSHOT"
 
 ext {
     module_name = "EdXposed"
