@@ -203,7 +203,9 @@ static void ensureMethodCached(void *hookMethod, void *backupMethod,
     int methodIndex = read32(
             (void *) ((char *) backupMethod + OFFSET_dex_method_index_in_ArtMethod));
 
-    LOGI("methodIndex = %d", methodIndex);
+    if (methodIndex >= 512) {
+        LOGW("methodIndex = %d", methodIndex);
+    }
 
     // update the cached method manually
     // first we find the array of cached methods

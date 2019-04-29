@@ -25,6 +25,14 @@ public class Resources {
 		throw new UnsupportedOperationException("STUB");
 	}
 
+	public Resources(ClassLoader classLoader) {
+		throw new UnsupportedOperationException("STUB");
+	}
+
+	public void setImpl(ResourcesImpl impl) {
+		throw new UnsupportedOperationException("STUB");
+	}
+
 	public static Resources getSystem() {
 		throw new UnsupportedOperationException("STUB");
 	}

@@ -7,6 +7,7 @@
 #include <dlfcn.h>
 #include <inject/config_manager.h>
 #include <native_hook/native_hook.h>
+#include <native_hook/resource_hook.h>
 #include "java_hook/java_hook.h"
 #include "include/logging.h"
 #include "include/fd_utils-inl.h"
@@ -125,6 +126,12 @@ static JNINativeMethod hookMethods[] = {
         },
         {
                 "waitForGcToComplete", "(J)I", (void *) waitForGcToComplete
+        },
+        {
+                "initXResourcesNative", "()Z", (void *) XposedBridge_initXResourcesNative
+        },
+        {
+                "rewriteXmlReferencesNative", "(JLandroid/content/res/XResources;Landroid/content/res/Resources;)V", (void *) XResources_rewriteXmlReferencesNative
         }
 };
 
@@ -162,7 +169,7 @@ void loadDexAndInit(JNIEnv *env, const char *dexPath) {
     jclass entry_class = findClassFromLoader(env, myClassLoader, ENTRY_CLASS_NAME);
     if (NULL != entry_class) {
         LOGD("HookEntry Class %p", entry_class);
-        env->RegisterNatives(entry_class, hookMethods, 15);
+        env->RegisterNatives(entry_class, hookMethods, NELEM(hookMethods));
         isInited = true;
         LOGD("RegisterNatives succeed for HookEntry.");
     } else {

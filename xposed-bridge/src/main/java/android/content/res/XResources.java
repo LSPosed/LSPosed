@@ -18,6 +18,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.elderdrivers.riru.edxp.config.EdXpConfigGlobal;
+
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.File;
@@ -34,8 +36,6 @@ import de.robv.android.xposed.XposedBridge.CopyOnWriteSortedSet;
 import de.robv.android.xposed.callbacks.XC_LayoutInflated;
 import de.robv.android.xposed.callbacks.XC_LayoutInflated.LayoutInflatedParam;
 import de.robv.android.xposed.callbacks.XCallback;
-import xposed.dummy.XResourcesSuperClass;
-import xposed.dummy.XTypedArraySuperClass;
 
 import static de.robv.android.xposed.XposedHelpers.decrementMethodDepth;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
@@ -52,7 +52,7 @@ import static de.robv.android.xposed.XposedHelpers.incrementMethodDepth;
  * be set using the methods made available via the API methods in this class.
  */
 @SuppressWarnings("JniMissingFunction")
-public class XResources extends XResourcesSuperClass {
+public class XResources extends Resources {
 	private static final SparseArray<HashMap<String, Object>> sReplacements = new SparseArray<>();
 	private static final SparseArray<HashMap<String, ResourceNames>> sResourceNames = new SparseArray<>();
 
@@ -80,10 +80,18 @@ public class XResources extends XResourcesSuperClass {
 	private String mResDir;
 	private String mPackageName;
 
-	/** Dummy, will never be called (objects are transferred to this class only). */
-	private XResources() {
-		throw new UnsupportedOperationException();
+	public XResources(AssetManager assets, DisplayMetrics metrics, Configuration config) {
+		super(assets, metrics, config);
 	}
+
+	public XResources(ClassLoader classLoader) {
+		super(classLoader);
+	}
+
+	/** Dummy, will never be called (objects are transferred to this class only). */
+//	private XResources() {
+//		throw new UnsupportedOperationException();
+//	}
 
 	/** @hide */
 	public void initObject(String resDir) {
@@ -168,7 +176,7 @@ public class XResources extends XResourcesSuperClass {
 			pkgInfo = PackageParser.parsePackageLite(resDir, 0);
 		}
 		if (pkgInfo != null && pkgInfo.packageName != null) {
-			Log.w(XposedBridge.TAG, "Package name for " + resDir + " had to be retrieved via parser");
+//			Log.w(XposedBridge.TAG, "Package name for " + resDir + " had to be retrieved via parser");
 			packageName = pkgInfo.packageName;
 			setPackageNameForResDir(packageName, resDir);
 			return packageName;
@@ -1118,7 +1126,7 @@ public class XResources extends XResourcesSuperClass {
 	}
 
 	private static boolean isXmlCached(Resources res, int id) {
-		int[] mCachedXmlBlockIds = (int[]) getObjectField(res, "mCachedXmlBlockIds");
+		int[] mCachedXmlBlockIds = (int[]) getObjectField(getObjectField(res, "mResourcesImpl"), "mCachedXmlBlockCookies");
 		synchronized (mCachedXmlBlockIds) {
 			for (int cachedId : mCachedXmlBlockIds) {
 				if (cachedId == id)
@@ -1128,7 +1136,9 @@ public class XResources extends XResourcesSuperClass {
 		return false;
 	}
 
-	private static native void rewriteXmlReferencesNative(long parserPtr, XResources origRes, Resources repRes);
+	private static void rewriteXmlReferencesNative(long parserPtr, XResources origRes, Resources repRes) {
+		EdXpConfigGlobal.getHookProvider().rewriteXmlReferencesNative(parserPtr, origRes, repRes);
+	}
 
 	/**
 	 * Used to replace reference IDs in XMLs.
@@ -1253,12 +1263,17 @@ public class XResources extends XResourcesSuperClass {
 	 * Mainly used when inflating layouts.
 	 * @hide
 	 */
-	public static class XTypedArray extends XTypedArraySuperClass {
-		/** Dummy, will never be called (objects are transferred to this class only). */
-		private XTypedArray() {
-			super(null, null, null, 0);
-			throw new UnsupportedOperationException();
-		}
+	public static class XTypedArray extends TypedArray {
+
+        public XTypedArray(Resources resources) {
+            super(resources);
+        }
+
+        /** Dummy, will never be called (objects are transferred to this class only). */
+//		private XTypedArray() {
+//			super(null, null, null, 0);
+//			throw new UnsupportedOperationException();
+//		}
 
 		@Override
 		public boolean getBoolean(int index, boolean defValue) {

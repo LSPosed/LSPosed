@@ -8,6 +8,10 @@ public class TypedArray {
 		throw new UnsupportedOperationException("STUB");
 	}
 
+	protected TypedArray(Resources resources) {
+		throw new UnsupportedOperationException("STUB");
+	}
+
 	protected TypedArray(Resources resources, int[] data, int[] indices, int len) {
 		throw new UnsupportedOperationException("STUB");
 	}

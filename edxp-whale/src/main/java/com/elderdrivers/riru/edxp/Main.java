@@ -1,6 +1,8 @@
 package com.elderdrivers.riru.edxp;
 
 import android.annotation.SuppressLint;
+import android.content.res.Resources;
+import android.content.res.XResources;
 import android.os.Build;
 import android.os.Process;
 
@@ -138,4 +140,8 @@ public class Main implements KeepAll {
     public static native void resumeAllThreads(long obj);
 
     public static native int waitForGcToComplete(long thread);
+
+    public static native boolean initXResourcesNative();
+
+    public static native void rewriteXmlReferencesNative(long parserPtr, XResources origRes, Resources repRes);
 }

@@ -3,6 +3,7 @@ package com.elderdrivers.riru.edxp.yahfa.entry;
 import android.app.AndroidAppHelper;
 import android.text.TextUtils;
 
+import com.elderdrivers.riru.edxp.Main;
 import com.elderdrivers.riru.edxp.config.EdXpConfigGlobal;
 import com.elderdrivers.riru.edxp.util.Utils;
 import com.elderdrivers.riru.edxp.yahfa.config.YahfaEdxpConfig;

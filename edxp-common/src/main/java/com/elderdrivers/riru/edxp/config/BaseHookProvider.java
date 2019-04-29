@@ -1,5 +1,8 @@
 package com.elderdrivers.riru.edxp.config;
 
+import android.content.res.Resources;
+import android.content.res.XResources;
+
 import com.elderdrivers.riru.edxp.deopt.PrebuiltMethodsDeopter;
 import com.elderdrivers.riru.edxp.hook.HookProvider;
 
@@ -30,6 +33,16 @@ public abstract class BaseHookProvider implements HookProvider {
 
     @Override
     public void deoptMethodNative(Object method) {
+
+    }
+
+    @Override
+    public boolean initXResourcesNative() {
+        return false;
+    }
+
+    @Override
+    public void rewriteXmlReferencesNative(long parserPtr, XResources origRes, Resources repRes) {
 
     }
 }

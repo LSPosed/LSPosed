@@ -1,5 +1,7 @@
 package com.elderdrivers.riru.edxp.sandhook.config;
 
+import android.content.res.Resources;
+import android.content.res.XResources;
 import android.util.Log;
 
 import com.elderdrivers.riru.edxp.Main;
@@ -57,5 +59,15 @@ public class SandHookProvider extends BaseHookProvider {
     @Override
     public long getMethodId(Member member) {
         return 0;
+    }
+
+    @Override
+    public boolean initXResourcesNative() {
+        return Main.initXResourcesNative();
+    }
+
+    @Override
+    public void rewriteXmlReferencesNative(long parserPtr, XResources origRes, Resources repRes) {
+        Main.rewriteXmlReferencesNative(parserPtr, origRes, repRes);
     }
 }

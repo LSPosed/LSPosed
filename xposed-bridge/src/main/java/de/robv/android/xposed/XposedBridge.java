@@ -378,10 +378,9 @@ public final class XposedBridge {
 	 * @hide
 	 */
 	public static void hookInitPackageResources(XC_InitPackageResources callback) {
-		// TODO not supported yet
-//		synchronized (sInitPackageResourcesCallbacks) {
-//			sInitPackageResourcesCallbacks.add(callback);
-//		}
+		synchronized (sInitPackageResourcesCallbacks) {
+			sInitPackageResourcesCallbacks.add(callback);
+		}
 	}
 
 	public static void clearInitPackageResources() {
