@@ -129,9 +129,6 @@ static JNINativeMethod hookMethods[] = {
         },
         {
                 "initXResourcesNative", "()Z", (void *) XposedBridge_initXResourcesNative
-        },
-        {
-                "rewriteXmlReferencesNative", "(JLandroid/content/res/XResources;Landroid/content/res/Resources;)V", (void *) XResources_rewriteXmlReferencesNative
         }
 };
 

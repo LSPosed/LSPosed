@@ -11,14 +11,11 @@ import android.os.Build;
 import android.text.Html;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.elderdrivers.riru.edxp.config.EdXpConfigGlobal;
 
 import org.xmlpull.v1.XmlPullParser;
 
@@ -1136,9 +1133,7 @@ public class XResources extends Resources {
 		return false;
 	}
 
-	private static void rewriteXmlReferencesNative(long parserPtr, XResources origRes, Resources repRes) {
-		EdXpConfigGlobal.getHookProvider().rewriteXmlReferencesNative(parserPtr, origRes, repRes);
-	}
+	private static native void rewriteXmlReferencesNative(long parserPtr, XResources origRes, Resources repRes);
 
 	/**
 	 * Used to replace reference IDs in XMLs.

@@ -82,15 +82,7 @@ public final class XposedInit {
             } catch (NoSuchFieldError ignored) {
             }
         }
-        findAndHookMethod("android.app.ApplicationPackageManager", null, "getResourcesForApplication",
-                ApplicationInfo.class, new XC_MethodHook() {
-                    @Override
-                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                        ApplicationInfo app = (ApplicationInfo) param.args[0];
-                        XResources.setPackageNameForResDir(app.packageName,
-                                app.uid == Process.myUid() ? app.sourceDir : app.publicSourceDir);
-                    }
-                });
+
         hookResources();
     }
 
@@ -110,6 +102,16 @@ public final class XposedInit {
             disableResources = true;
             return;
         }
+
+        findAndHookMethod("android.app.ApplicationPackageManager", null, "getResourcesForApplication",
+                ApplicationInfo.class, new XC_MethodHook() {
+                    @Override
+                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                        ApplicationInfo app = (ApplicationInfo) param.args[0];
+                        XResources.setPackageNameForResDir(app.packageName,
+                                app.uid == Process.myUid() ? app.sourceDir : app.publicSourceDir);
+                    }
+                });
 
         /*
          * getTopLevelResources(a)

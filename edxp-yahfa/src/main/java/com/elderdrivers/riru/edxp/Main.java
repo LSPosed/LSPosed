@@ -143,5 +143,4 @@ public class Main implements KeepAll {
 
     public static native boolean initXResourcesNative();
 
-    public static native void rewriteXmlReferencesNative(long parserPtr, XResources origRes, Resources repRes);
 }

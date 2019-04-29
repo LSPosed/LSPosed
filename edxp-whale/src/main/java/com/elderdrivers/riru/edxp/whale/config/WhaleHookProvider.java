@@ -1,8 +1,5 @@
 package com.elderdrivers.riru.edxp.whale.config;
 
-import android.content.res.Resources;
-import android.content.res.XResources;
-
 import com.elderdrivers.riru.edxp.Main;
 import com.elderdrivers.riru.edxp.config.BaseHookProvider;
 import com.lody.whale.WhaleRuntime;
@@ -61,10 +58,5 @@ public class WhaleHookProvider extends BaseHookProvider {
     @Override
     public boolean initXResourcesNative() {
         return Main.initXResourcesNative();
-    }
-
-    @Override
-    public void rewriteXmlReferencesNative(long parserPtr, XResources origRes, Resources repRes) {
-        Main.rewriteXmlReferencesNative(parserPtr, origRes, repRes);
     }
 }
