@@ -19,8 +19,12 @@ public class PrebuiltMethodsDeopter {
         }
         for (String[] caller : callers) {
             try {
+                Class clazz = XposedHelpers.findClassIfExists(caller[0], cl);
+                if (clazz == null) {
+                    continue;
+                }
                 Object method = EdXpConfigGlobal.getHookProvider().findMethodNative(
-                        XposedHelpers.findClass(caller[0], cl), caller[1], caller[2]);
+                        clazz, caller[1], caller[2]);
                 if (method != null) {
                     EdXpConfigGlobal.getHookProvider().deoptMethodNative(method);
                 }

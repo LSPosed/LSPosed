@@ -26,7 +26,22 @@ public class InlinedMethodCallers {
      */
     private static final String[][] BOOT_IMAGE = {
             // callers of Application#attach(Context)
-            {"android.app.Instrumentation", "newApplication", "(Ljava/lang/ClassLoader;Ljava/lang/String;Landroid/content/Context;)Landroid/app/Application;"}
+            {"android.app.Instrumentation", "newApplication", "(Ljava/lang/ClassLoader;Ljava/lang/String;Landroid/content/Context;)Landroid/app/Application;"},
+
+            // for MIUI resources hooking
+            {"android.content.res.MiuiResources", "init", "(Ljava/lang/String;)V"},
+            {"android.content.res.MiuiResources", "updateMiuiImpl", "()V"},
+            {"android.content.res.MiuiResources", "setImpl", "(Landroid/content/res/ResourcesImpl;)V"},
+            {"android.content.res.MiuiResources", "loadOverlayValue", "(Landroid/util/TypedValue;I)V"},
+            {"android.content.res.MiuiResources", "getThemeString", "(I)Ljava/lang/CharSequence;"},
+            {"android.content.res.MiuiResources", "<init>", "(Ljava/lang/ClassLoader;)V"},
+            {"android.content.res.MiuiResources", "<init>", "()V"},
+            {"android.content.res.MiuiResources", "<init>", "(Landroid/content/res/AssetManager;Landroid/util/DisplayMetrics;Landroid/content/res/Configuration;)V"},
+            {"android.miui.ResourcesManager", "initMiuiResource", "(Landroid/content/res/Resources;Ljava/lang/String;)V"},
+            {"android.app.LoadedApk", "getResources", "()Landroid/content/res/Resources;"},
+            {"android.content.res.Resources", "getSystem", "()Landroid/content/res/Resources;"},
+            {"android.app.ApplicationPackageManager", "getResourcesForApplication", "(Landroid/content/pm/ApplicationInfo;)Landroid/content/res/Resources;"},
+            {"android.app.ContextImpl", "setResources", "(Landroid/content/res/Resources;)V"},
     };
 
     private static final String[][] SYSTEM_SERVER = {};
