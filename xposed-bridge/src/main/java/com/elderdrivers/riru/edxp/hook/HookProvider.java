@@ -23,4 +23,6 @@ public interface HookProvider {
     void deoptMethodNative(Object method);
 
     boolean initXResourcesNative();
+
+    boolean removeFinalFlagNative(Class clazz);
 }

@@ -73,6 +73,19 @@ void setMethodNonCompilable(JNIEnv *env, jclass, jobject member) {
     setNonCompilable(artMethod);
 }
 
+static constexpr uint32_t kAccFinal = 0x0010;
+
+jboolean removeFinalFlag(JNIEnv *env, jclass, jclass clazz) {
+    if (clazz) {
+        jfieldID java_lang_Class_accessFlags = env->GetFieldID(
+                env->FindClass("java/lang/Class"), "accessFlags", "I");
+        jint access_flags = env->GetIntField(clazz, java_lang_Class_accessFlags);
+        env->SetIntField(clazz, java_lang_Class_accessFlags, access_flags & ~kAccFinal);
+        return true;
+    }
+    return false;
+}
+
 static JNINativeMethod hookMethods[] = {
         {
                 "init",
@@ -129,6 +142,9 @@ static JNINativeMethod hookMethods[] = {
         },
         {
                 "initXResourcesNative", "()Z", (void *) XposedBridge_initXResourcesNative
+        },
+        {
+                "removeFinalFlagNative", "(Ljava/lang/Class;)Z", (void *) removeFinalFlag
         }
 };
 

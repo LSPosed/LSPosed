@@ -59,4 +59,9 @@ public class WhaleHookProvider extends BaseHookProvider {
     public boolean initXResourcesNative() {
         return Main.initXResourcesNative();
     }
+
+    @Override
+    public boolean removeFinalFlagNative(Class clazz) {
+        return Main.removeFinalFlagNative(clazz);
+    }
 }
