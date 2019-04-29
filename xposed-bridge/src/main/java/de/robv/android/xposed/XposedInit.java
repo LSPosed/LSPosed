@@ -57,8 +57,7 @@ public final class XposedInit {
     private static final String startClassName = ""; // ed: no support for tool process anymore
 
     private static final String INSTANT_RUN_CLASS = "com.android.tools.fd.runtime.BootstrapApplication";
-    // TODO not supported yet
-    private static boolean disableResources = false;
+    public static boolean disableResources = false;
     private static final String[] XRESOURCES_CONFLICTING_PACKAGES = {"com.sygic.aura"};
 
     private XposedInit() {
@@ -86,8 +85,11 @@ public final class XposedInit {
         hookResources();
     }
 
-    /*package*/
-    public static void hookResources() throws Throwable {
+    private static void hookResources() throws Throwable {
+
+        if (disableResources) {
+            return;
+        }
 
         String BASE_DIR = EdXpConfigGlobal.getConfig().getInstallerBaseDir();
 

@@ -16,4 +16,9 @@ public class XResourcesSuperClass extends Resources {
 		super(null, null, null);
 		throw new UnsupportedOperationException();
 	}
+
+	protected XResourcesSuperClass(ClassLoader classLoader) {
+		super(classLoader);
+		throw new UnsupportedOperationException();
+	}
 }

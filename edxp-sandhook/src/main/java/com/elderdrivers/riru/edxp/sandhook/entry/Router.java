@@ -33,9 +33,10 @@ public class Router {
     static boolean useSandHook = false;
 
     public static void prepare(boolean isSystem) {
+        startWorkAroundHook();
+        XposedBridge.initXResources();
         // this flag is needed when loadModules
         startsSystemServer = isSystem;
-//        InstallerChooser.setup();
     }
 
     public static void checkHookState(String appDataDir) {

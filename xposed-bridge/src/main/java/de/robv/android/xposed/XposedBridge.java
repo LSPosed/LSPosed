@@ -1,29 +1,33 @@
 package de.robv.android.xposed;
 
-import android.annotation.SuppressLint;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.util.Log;
 
 import com.elderdrivers.riru.edxp.config.EdXpConfigGlobal;
 
-import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import dalvik.system.InMemoryDexClassLoader;
 import de.robv.android.xposed.XC_MethodHook.MethodHookParam;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import external.com.android.dx.DexMaker;
+import external.com.android.dx.TypeId;
 
 import static de.robv.android.xposed.XposedHelpers.getIntField;
+import static de.robv.android.xposed.XposedHelpers.setObjectField;
 
 /**
  * This class contains most of Xposed's central logic, such as initialization and callbacks used by
@@ -83,16 +87,52 @@ public final class XposedBridge {
 //		}
 //	}
 
-	private static void initXResources() throws IOException {
-		// ed: no support for now
-	}
+	public static volatile ClassLoader dummyClassLoader = null;
 
-	@SuppressLint("SetWorldReadable")
-	private static File ensureSuperDexFile(String clz, Class<?> realSuperClz, Class<?> topClz) throws IOException {
-		XposedBridge.removeFinalFlagNative(realSuperClz);
-		File dexFile = DexCreator.ensure(clz, realSuperClz, topClz);
-		dexFile.setReadable(true, false);
-		return dexFile;
+	public static void initXResources() {
+	    if (disableHooks) {
+	        return;
+        }
+		String BASE_DIR = EdXpConfigGlobal.getConfig().getInstallerBaseDir();
+		if (SELinuxHelper.getAppDataFileService().checkFileExists(BASE_DIR + "conf/disable_resources")) {
+			Log.w(TAG, "Found " + BASE_DIR + "conf/disable_resources, not hooking resources");
+			XposedInit.disableResources = true;
+			return;
+		}
+        if (dummyClassLoader != null) {
+        	return;
+		}
+		try {
+			Resources res = Resources.getSystem();
+			Class resClass = res.getClass();
+			Class taClass = TypedArray.class;
+			try {
+				TypedArray ta = res.obtainTypedArray(res.getIdentifier(
+						"preloaded_drawables", "array", "android"));
+				taClass = ta.getClass();
+				ta.recycle();
+			} catch (Resources.NotFoundException nfe) {
+				XposedBridge.log(nfe);
+			}
+			XposedBridge.removeFinalFlagNative(resClass);
+			XposedBridge.removeFinalFlagNative(taClass);
+			DexMaker dexMaker = new DexMaker();
+			dexMaker.declare(TypeId.get("Lxposed/dummy/XResourcesSuperClass;"),
+					"XResourcesSuperClass.java",
+					Modifier.PUBLIC, TypeId.get(resClass));
+			dexMaker.declare(TypeId.get("Lxposed/dummy/XTypedArraySuperClass;"),
+					"XTypedArraySuperClass.java",
+					Modifier.PUBLIC, TypeId.get(taClass));
+			ClassLoader myCL = XposedBridge.class.getClassLoader();
+			dummyClassLoader = new InMemoryDexClassLoader(
+					ByteBuffer.wrap(dexMaker.generate()), myCL.getParent());
+			dummyClassLoader.loadClass("xposed.dummy.XResourcesSuperClass");
+			dummyClassLoader.loadClass("xposed.dummy.XTypedArraySuperClass");
+			setObjectField(myCL, "parent", dummyClassLoader);
+		} catch (Throwable throwable) {
+			XposedBridge.log(throwable);
+			XposedInit.disableResources = true;
+		}
 	}
 
 //	private static boolean hadInitErrors() {
@@ -478,7 +518,9 @@ public final class XposedBridge {
 
 	private static native Object cloneToSubclassNative(Object obj, Class<?> targetClazz);
 
-	private static native void removeFinalFlagNative(Class<?> clazz);
+	private static void removeFinalFlagNative(Class clazz) {
+		EdXpConfigGlobal.getHookProvider().removeFinalFlagNative(clazz);
+	}
 
 //	/*package*/ static native void closeFilesBeforeForkNative();
 //	/*package*/ static native void reopenFilesAfterForkNative();

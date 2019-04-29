@@ -27,9 +27,10 @@ public class Router {
 
 
     public static void prepare(boolean isSystem) {
+        startWorkAroundHook();
+        XposedBridge.initXResources();
         // this flag is needed when loadModules
         XposedInit.startsSystemServer = isSystem;
-//        InstallerChooser.setup();
     }
 
     public static void checkHookState(String appDataDir) {
