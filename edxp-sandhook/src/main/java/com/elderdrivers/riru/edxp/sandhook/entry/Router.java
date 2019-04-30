@@ -145,5 +145,6 @@ public class Router {
     public static void injectConfig() {
         EdXpConfigGlobal.sConfig = new SandHookEdxpConfig();
         EdXpConfigGlobal.sHookProvider = new SandHookProvider();
+        XposedBridge.log("using HookProvider: " + EdXpConfigGlobal.sHookProvider.getClass().getName());
     }
 }

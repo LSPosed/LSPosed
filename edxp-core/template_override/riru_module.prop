@@ -1,5 +1,0 @@
-name=Ed Xposed
-version=v0.4.0.1_beta-SNAPSHOT
-versionCode=4010
-author=solohsu & MlgmXyysd
-description=Magisk version of Xposed. Require Riru - Core installed.

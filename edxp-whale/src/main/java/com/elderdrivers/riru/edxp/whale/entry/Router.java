@@ -119,5 +119,6 @@ public class Router {
     public static void injectConfig() {
         EdXpConfigGlobal.sConfig = new WhaleEdxpConfig();
         EdXpConfigGlobal.sHookProvider = new WhaleHookProvider();
+        XposedBridge.log("using HookProvider: " + EdXpConfigGlobal.sHookProvider.getClass().getName());
     }
 }
