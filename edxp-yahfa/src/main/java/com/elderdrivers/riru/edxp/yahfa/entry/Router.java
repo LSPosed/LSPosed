@@ -26,10 +26,12 @@ public class Router {
 
     private static volatile AtomicBoolean bootstrapHooked = new AtomicBoolean(false);
 
+    public static void initResourcesHook() {
+        startWorkAroundHook(); // for OnePlus devices
+        XposedBridge.initXResources();
+    }
 
     public static void prepare(boolean isSystem) {
-        startWorkAroundHook();
-        XposedBridge.initXResources();
         // this flag is needed when loadModules
         XposedInit.startsSystemServer = isSystem;
     }
@@ -103,8 +105,15 @@ public class Router {
                 WorkAroundHookInfo.class.getName());
     }
 
-    public static void onEnterChildProcess() {
+    public static void onForkStart() {
+        forkCompleted = false;
+    }
+
+    public static void onForkFinish() {
         forkCompleted = true;
+    }
+
+    public static void onEnterChildProcess() {
         DynamicBridge.onForkPost();
     }
 

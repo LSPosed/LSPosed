@@ -14,7 +14,6 @@ import com.elderdrivers.riru.edxp.sandhook.entry.bootstrap.SysInnerHookInfo;
 import com.elderdrivers.riru.edxp.sandhook.entry.bootstrap.WorkAroundHookInfo;
 import com.elderdrivers.riru.edxp.sandhook.entry.hooker.SystemMainHooker;
 import com.elderdrivers.riru.edxp.util.Utils;
-import com.swift.sandhook.SandHookConfig;
 import com.swift.sandhook.xposedcompat.XposedCompat;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -32,9 +31,12 @@ public class Router {
 
     static boolean useSandHook = false;
 
-    public static void prepare(boolean isSystem) {
-        startWorkAroundHook();
+    public static void initResourcesHook() {
+        startWorkAroundHook(); // for OnePlus devices
         XposedBridge.initXResources();
+    }
+
+    public static void prepare(boolean isSystem) {
         // this flag is needed when loadModules
         startsSystemServer = isSystem;
     }
@@ -125,8 +127,15 @@ public class Router {
         }
     }
 
-    public static void onEnterChildProcess() {
+    public static void onForkStart() {
+        forkCompleted = false;
+    }
+
+    public static void onForkFinish() {
         forkCompleted = true;
+    }
+
+    public static void onEnterChildProcess() {
         DynamicBridge.onForkPost();
         //enable compile in child process
         //SandHook.enableCompiler(!XposedInit.startsSystemServer);

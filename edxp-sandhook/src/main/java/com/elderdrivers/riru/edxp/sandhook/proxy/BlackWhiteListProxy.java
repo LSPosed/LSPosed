@@ -2,17 +2,17 @@ package com.elderdrivers.riru.edxp.sandhook.proxy;
 
 import android.text.TextUtils;
 
+import com.elderdrivers.riru.edxp.Main;
 import com.elderdrivers.riru.edxp.config.ConfigManager;
 import com.elderdrivers.riru.edxp.deopt.PrebuiltMethodsDeopter;
+import com.elderdrivers.riru.edxp.sandhook.entry.Router;
 import com.elderdrivers.riru.edxp.util.ProcessUtils;
 import com.elderdrivers.riru.edxp.util.Utils;
-import com.elderdrivers.riru.edxp.Main;
-import com.elderdrivers.riru.edxp.sandhook.entry.Router;
 
 import de.robv.android.xposed.XposedBridge;
 
-import static com.elderdrivers.riru.edxp.util.FileUtils.getDataPathPrefix;
 import static com.elderdrivers.riru.edxp.Main.isAppNeedHook;
+import static com.elderdrivers.riru.edxp.util.FileUtils.getDataPathPrefix;
 
 /**
  * 1. Non dynamic mode
@@ -73,6 +73,8 @@ public class BlackWhiteListProxy {
      * Some details are different between main zygote and secondary zygote.
      */
     private static void onForkPreForNonDynamicMode(boolean isSystemServer) {
+        Router.onForkStart();
+        Router.initResourcesHook();
         ConfigManager.setDynamicModulesMode(false);
         // set startsSystemServer flag used when loadModules
         Router.prepare(isSystemServer);
@@ -92,13 +94,17 @@ public class BlackWhiteListProxy {
         Main.niceName = niceName;
         final boolean isDynamicModulesMode = Main.isDynamicModulesEnabled();
         ConfigManager.setDynamicModulesMode(isDynamicModulesMode);
-        Router.onEnterChildProcess();
         if (!isDynamicModulesMode) {
             Main.reopenFilesAfterForkNative();
         }
+        Router.onEnterChildProcess();
         if (!checkNeedHook(appDataDir, niceName)) {
             // if is blacklisted, just stop here
+            Router.onForkFinish();
             return;
+        }
+        if (isDynamicModulesMode) {
+            Router.initResourcesHook();
         }
         Router.prepare(isSystemServer);
         PrebuiltMethodsDeopter.deoptBootMethods();
@@ -106,6 +112,7 @@ public class BlackWhiteListProxy {
         if (isDynamicModulesMode) {
             Router.loadModulesSafely(false);
         }
+        Router.onForkFinish();
     }
 
     private static boolean checkNeedHook(String appDataDir, String niceName) {

@@ -5,8 +5,8 @@ import android.text.TextUtils;
 
 import com.elderdrivers.riru.edxp.config.EdXpConfigGlobal;
 import com.elderdrivers.riru.edxp.util.Utils;
-import com.elderdrivers.riru.edxp.whale.config.WhaleHookProvider;
 import com.elderdrivers.riru.edxp.whale.config.WhaleEdxpConfig;
+import com.elderdrivers.riru.edxp.whale.config.WhaleHookProvider;
 import com.elderdrivers.riru.edxp.whale.core.HookMain;
 import com.elderdrivers.riru.edxp.whale.entry.bootstrap.AppBootstrapHookInfo;
 import com.elderdrivers.riru.edxp.whale.entry.bootstrap.SysBootstrapHookInfo;
@@ -25,10 +25,12 @@ public class Router {
 
     private static volatile AtomicBoolean bootstrapHooked = new AtomicBoolean(false);
 
+    public static void initResourcesHook() {
+        startWorkAroundHook(); // for OnePlus devices
+        XposedBridge.initXResources();
+    }
 
     public static void prepare(boolean isSystem) {
-        startWorkAroundHook();
-        XposedBridge.initXResources();
         // this flag is needed when loadModules
         XposedInit.startsSystemServer = isSystem;
     }
@@ -102,8 +104,16 @@ public class Router {
                 WorkAroundHookInfo.class.getName());
     }
 
-    public static void onEnterChildProcess() {
+    public static void onForkStart() {
+        forkCompleted = false;
+    }
+
+    public static void onForkFinish() {
         forkCompleted = true;
+    }
+
+    public static void onEnterChildProcess() {
+        
     }
 
     public static void logD(String prefix) {

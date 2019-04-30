@@ -15,6 +15,8 @@ public class NormalProxy {
                                             boolean startChildZygote, String instructionSet,
                                             String appDataDir) {
         // mainly for secondary zygote
+        Router.onForkStart();
+        Router.initResourcesHook();
         final boolean isDynamicModulesMode = Main.isDynamicModulesEnabled();
         ConfigManager.setDynamicModulesMode(isDynamicModulesMode);
         // call this to ensure the flag is set to false ASAP
@@ -36,10 +38,13 @@ public class NormalProxy {
         Router.onEnterChildProcess();
         // load modules for each app process on its forked if dynamic modules mode is on
         Router.loadModulesSafely(false);
+        Router.onForkFinish();
     }
 
     public static void forkSystemServerPre(int uid, int gid, int[] gids, int debugFlags, int[][] rlimits,
                                            long permittedCapabilities, long effectiveCapabilities) {
+        Router.onForkStart();
+        Router.initResourcesHook();
         final boolean isDynamicModulesMode = Main.isDynamicModulesEnabled();
         ConfigManager.setDynamicModulesMode(isDynamicModulesMode);
         // set startsSystemServer flag used when loadModules
@@ -65,6 +70,7 @@ public class NormalProxy {
         Router.onEnterChildProcess();
         // reload module list if dynamic mode is on
         Router.loadModulesSafely(false);
+        Router.onForkFinish();
     }
 
 }
