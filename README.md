@@ -4,12 +4,13 @@ A Riru module trying to provide a ART hooking framework (initially for Android P
 
 ## Credits 
 
-- [YAHFA](https://github.com/rk700/YAHFA): the core java hooking framework
+- [YAHFA](https://github.com/rk700/YAHFA): the core ART hooking framework
 - [Magisk](https://github.com/topjohnwu/Magisk/): makes all these possible
 - [Riru](https://github.com/RikkaApps/Riru): provides a way to inject codes into zygote process
 - [XposedBridge](https://github.com/rovo89/XposedBridge): the OG xposed framework APIs
-- [dexmaker](https://github.com/linkedin/dexmaker) and [dalvikdx](https://github.com/JakeWharton/dalvik-dx): dynamiclly generate YAHFA hooker classes
+- [dexmaker](https://github.com/linkedin/dexmaker) and [dalvikdx](https://github.com/JakeWharton/dalvik-dx): to dynamiclly generate YAHFA hooker classes
 - [Whale](https://github.com/asLody/whale): used for inline hooking
+- [SandHook](https://github.com/ganyao114/SandHook/): ART hooking framework for SandHook variant
 
 ## Supported versions
 
@@ -20,9 +21,7 @@ For devices with Android 7.x and lower, original Xposed is strongly recommended.
 
 ## Known issues
 
-- resources hooking is not supported yet
 - may not be compatible with all ART devices
-- only a few Xposed modules has been tested for working
 - file access services are not implemented yet, now simply use magiskpolicy to enable needed SELinux policies
 
 ## Build requirements
@@ -32,16 +31,16 @@ and zip binaries can be downloaded from [here](http://gnuwin32.sourceforge.net/p
 
 ## Build
 
-1. run `./gradlew :edxp-core:zipRelease` to build flashable zip
+1. execute task `:edxp-core:[zip|push][Yahfa|Sandhook]Release` to build flashable zip for corresponding variant
 2. find the flashable under `edxp-core/release/`
-3. flash the zip in recovery mode or in Magisk Manager
+3. flash the zip in recovery mode or via Magisk Manager
 
 ## Install
 
 1. make sure Magisk v17.0 or higher is installed.
 2. download [Riru-core](https://github.com/RikkaApps/Riru/releases) v10 or higher and install it in Magisk Manager or recovery.
 3. download [EdXposed](https://github.com/solohsu/EdXposed/releases) and install it in Magisk Manager or recovery.
-4. Install companion application(s)
+4. install companion application
 4. reboot.
 5. have fun :)
 
@@ -59,5 +58,5 @@ and zip binaries can be downloaded from [here](http://gnuwin32.sourceforge.net/p
 ## Contribute
 
 - Apparently this framework is far from stable and all kinds of PRs are welcome. :)
-- [Buy me a coffee](https://www.paypal.me/givin2u)
+- [Buy me a coffee](https://www.paypal.me/givin2u) if you like my work.
 
