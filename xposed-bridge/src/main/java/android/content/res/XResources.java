@@ -11,14 +11,11 @@ import android.os.Build;
 import android.text.Html;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.elderdrivers.riru.edxp.config.EdXpConfigGlobal;
 
 import org.xmlpull.v1.XmlPullParser;
 
@@ -36,6 +33,8 @@ import de.robv.android.xposed.XposedBridge.CopyOnWriteSortedSet;
 import de.robv.android.xposed.callbacks.XC_LayoutInflated;
 import de.robv.android.xposed.callbacks.XC_LayoutInflated.LayoutInflatedParam;
 import de.robv.android.xposed.callbacks.XCallback;
+import xposed.dummy.XResourcesSuperClass;
+import xposed.dummy.XTypedArraySuperClass;
 
 import static de.robv.android.xposed.XposedHelpers.decrementMethodDepth;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
@@ -52,7 +51,7 @@ import static de.robv.android.xposed.XposedHelpers.incrementMethodDepth;
  * be set using the methods made available via the API methods in this class.
  */
 @SuppressWarnings("JniMissingFunction")
-public class XResources extends Resources {
+public class XResources extends XResourcesSuperClass {
 	private static final SparseArray<HashMap<String, Object>> sReplacements = new SparseArray<>();
 	private static final SparseArray<HashMap<String, ResourceNames>> sResourceNames = new SparseArray<>();
 
@@ -79,10 +78,6 @@ public class XResources extends Resources {
 	private boolean mIsObjectInited;
 	private String mResDir;
 	private String mPackageName;
-
-	public XResources(AssetManager assets, DisplayMetrics metrics, Configuration config) {
-		super(assets, metrics, config);
-	}
 
 	public XResources(ClassLoader classLoader) {
 		super(classLoader);
@@ -1136,9 +1131,7 @@ public class XResources extends Resources {
 		return false;
 	}
 
-	private static void rewriteXmlReferencesNative(long parserPtr, XResources origRes, Resources repRes) {
-		EdXpConfigGlobal.getHookProvider().rewriteXmlReferencesNative(parserPtr, origRes, repRes);
-	}
+	private static native void rewriteXmlReferencesNative(long parserPtr, XResources origRes, Resources repRes);
 
 	/**
 	 * Used to replace reference IDs in XMLs.
@@ -1263,7 +1256,7 @@ public class XResources extends Resources {
 	 * Mainly used when inflating layouts.
 	 * @hide
 	 */
-	public static class XTypedArray extends TypedArray {
+	public static class XTypedArray extends XTypedArraySuperClass {
 
         public XTypedArray(Resources resources) {
             super(resources);

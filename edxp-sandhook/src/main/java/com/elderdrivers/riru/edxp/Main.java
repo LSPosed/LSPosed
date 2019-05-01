@@ -1,19 +1,17 @@
 package com.elderdrivers.riru.edxp;
 
 import android.annotation.SuppressLint;
-import android.content.res.Resources;
-import android.content.res.XResources;
 import android.os.Build;
 import android.os.Process;
 
 import com.elderdrivers.riru.common.KeepAll;
-import com.elderdrivers.riru.edxp.sandhook.BuildConfig;
 import com.elderdrivers.riru.edxp.config.InstallerChooser;
-import com.elderdrivers.riru.edxp.util.Utils;
+import com.elderdrivers.riru.edxp.sandhook.BuildConfig;
 import com.elderdrivers.riru.edxp.sandhook.core.HookMethodResolver;
 import com.elderdrivers.riru.edxp.sandhook.entry.Router;
 import com.elderdrivers.riru.edxp.sandhook.proxy.BlackWhiteListProxy;
 import com.elderdrivers.riru.edxp.sandhook.proxy.NormalProxy;
+import com.elderdrivers.riru.edxp.util.Utils;
 import com.swift.sandhook.xposedcompat.XposedCompat;
 import com.swift.sandhook.xposedcompat.methodgen.SandHookXposedBridge;
 
@@ -152,5 +150,5 @@ public class Main implements KeepAll {
 
     public static native boolean initXResourcesNative();
 
-    public static native void rewriteXmlReferencesNative(long parserPtr, XResources origRes, Resources repRes);
+    public static native boolean removeFinalFlagNative(Class clazz);
 }

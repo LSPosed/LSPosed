@@ -59,6 +59,13 @@ static bool onIsInSamePackageCalled(void *thiz, void *that) {
         || strstr(thatDesc, "com/elderdrivers/riru/") != nullptr) {
         return true;
     }
+    // for MIUI resources hooking
+    if (strstr(thisDesc, "android/content/res/MiuiTypedArray") != nullptr
+        || strstr(thatDesc, "android/content/res/MiuiTypedArray") != nullptr
+        || strstr(thisDesc, "android/content/res/XResources$XTypedArray") != nullptr
+        || strstr(thatDesc, "android/content/res/XResources$XTypedArray") != nullptr) {
+        return true;
+    }
     return (*isInSamePackageBackup)(thiz, that);
 }
 

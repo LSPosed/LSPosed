@@ -3,6 +3,8 @@
 /libs
 /obj
 /release
+/template_override/module.prop
+/template_override/riru_module.prop
 /template_override/system
 /template_override/system_x86
 *.iml

@@ -2,13 +2,17 @@ import org.gradle.internal.os.OperatingSystem
 
 apply plugin: 'com.android.library'
 
-version "v0.4.0.1_beta-SNAPSHOT"
+version "v0.4.1.2_beta"
 
 ext {
+    versionCode = "4120"
     module_name = "EdXposed"
     jar_dest_dir = "${projectDir}/template_override/system/framework/"
     is_windows = OperatingSystem.current().isWindows()
-    backends = ["Yahfa", "Sandhook", "Whale"]
+    backends = ["YAHFA", "SandHook", "Whale"]
+    yahfa_authors = "solohsu, rk700 & MlgmXyysd"
+    sandhook_authors = "solohsu, ganyao114 & MlgmXyysd"
+    whale_authors = "solohsu, asLody & MlgmXyysd"
 }
 
 android {
@@ -72,21 +76,34 @@ afterEvaluate {
 
         backends.each { backend ->
 
-            def backendCapped = backend.capitalize()
             def backendLowered = backend.toLowerCase()
+            def backendCapped = backendLowered.capitalize()
+            def authorList = property("${backendLowered}" + "_authors")
 
             def zipTask = task("zip${backendCapped}${variantCapped}", type: Exec) {
                 dependsOn cleanTemplate, copyDalvikdxJar, copyDexmakerJar
                 dependsOn tasks.getByPath(":edxp-${backendLowered}:makeAndCopy${variantCapped}")
                 workingDir '..'
                 commandLine 'sh', 'build.sh', project.name,
-                        "${backendLowered}-${project.version}-${variantLowered}", "${module_name}"
+                        "${backend}-${project.version}-${variantLowered}", "${module_name}"
                 doFirst {
                     copy {
-                        from "${projectDir}/edconfig.tpl"
+                        from "${projectDir}/tpl/edconfig.tpl"
                         into templateFrameworkPath
                         rename "edconfig.tpl", "edconfig.jar"
-                        expand(backend: "$backendCapped")
+                        expand(version: "$version", backend: "$backend")
+                    }
+                    copy {
+                        from "${projectDir}/tpl/module.prop.tpl"
+                        into templateRootPath
+                        rename "module.prop.tpl", "module.prop"
+                        expand(backend: "$backendCapped", versionName: "$version" +  "($backend)",
+                                versionCode: "$versionCode", authorList: "$authorList")
+                    }
+                    copy {
+                        from "${templateRootPath}/module.prop"
+                        into templateRootPath
+                        rename "module.prop", "riru_module.prop"
                     }
                 }
             }
@@ -95,7 +112,7 @@ afterEvaluate {
                 dependsOn zipTask
                 workingDir "${projectDir}/release"
                 def commands = ["adb", "push",
-                                "magisk-${module_name}-${backendLowered}-${project.version}-${variantLowered}.zip",
+                                "magisk-${module_name}-${backend}-${project.version}-${variantLowered}.zip",
                                 "/sdcard/"]
                 if (is_windows) {
                     commandLine 'cmd', '/c', commands.join(" ")

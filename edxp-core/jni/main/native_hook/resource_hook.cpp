@@ -6,6 +6,7 @@
 #include <include/ByteOrder.h>
 #include <include/logging.h>
 #include <dlfcn.h>
+#include <java_hook/java_hook.h>
 #include "resource_hook.h"
 
 #define CLASS_XRESOURCES     "android/content/res/XResources"
@@ -44,7 +45,7 @@ bool prepareSymbols() {
 #if defined(__LP64__)
             "_ZNK7android12ResXMLParser18getAttributeNameIDEm"
 #else
-            "_ZNK7android12ResXMLParser18getAttributeNameIDEj"
+                                                                                       "_ZNK7android12ResXMLParser18getAttributeNameIDEj"
 #endif
     ));
     if (!ResXMLParser_getAttributeNameID) {
@@ -66,6 +67,15 @@ bool prepareSymbols() {
     return true;
 }
 
+int register_natives_XResources(JNIEnv *env, jclass clazz) {
+    const JNINativeMethod methods[] = {
+            {"rewriteXmlReferencesNative",
+                    "(JLandroid/content/res/XResources;Landroid/content/res/Resources;)V",
+                    (void *) XResources_rewriteXmlReferencesNative},
+    };
+    return env->RegisterNatives(clazz, methods, NELEM(methods));
+}
+
 jboolean XposedBridge_initXResourcesNative(JNIEnv *env, jclass) {
     classXResources = env->FindClass(CLASS_XRESOURCES);
     if (classXResources == NULL) {
@@ -74,6 +84,12 @@ jboolean XposedBridge_initXResourcesNative(JNIEnv *env, jclass) {
         return false;
     }
     classXResources = reinterpret_cast<jclass>(env->NewGlobalRef(classXResources));
+
+    if (register_natives_XResources(env, classXResources) != JNI_OK) {
+        LOGE("Could not register natives for '%s'", CLASS_XRESOURCES);
+        env->ExceptionClear();
+        return false;
+    }
 
     methodXResourcesTranslateResId = env->GetStaticMethodID(classXResources, "translateResId",
                                                             "(ILandroid/content/res/XResources;Landroid/content/res/Resources;)I");

@@ -1,8 +1,5 @@
 package com.elderdrivers.riru.edxp.hook;
 
-import android.content.res.Resources;
-import android.content.res.XResources;
-
 import java.lang.reflect.Member;
 
 import de.robv.android.xposed.XposedBridge;
@@ -27,5 +24,5 @@ public interface HookProvider {
 
     boolean initXResourcesNative();
 
-    void rewriteXmlReferencesNative(long parserPtr, XResources origRes, Resources repRes);
+    boolean removeFinalFlagNative(Class clazz);
 }
