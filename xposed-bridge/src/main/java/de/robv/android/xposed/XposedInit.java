@@ -266,14 +266,6 @@ public final class XposedInit {
         setStaticObjectField(Resources.class, "mSystem", systemRes);
 
         XResources.init(latestResKey);
-
-        //custom
-        hookAllConstructors(PackageParser.PackageParserException.class, new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                XposedBridge.log(new Throwable());
-            }
-        });
     }
 
     private static XResources cloneToXResources(XC_MethodHook.MethodHookParam param, String resDir) {
