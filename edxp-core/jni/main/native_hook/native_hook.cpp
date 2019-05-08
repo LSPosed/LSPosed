@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <inject/config_manager.h>
+#include <Substrate/SubstrateHook.h>
 
 #include "include/logging.h"
 #include "native_hook.h"
@@ -283,12 +284,16 @@ void install_inline_hooks() {
     }
     install_riru_hooks();
     LOGI("using api level %d", api_level);
+#ifdef __LP64__
     void *whaleHandle = dlopen(kLibWhalePath, RTLD_LAZY | RTLD_GLOBAL);
     if (!whaleHandle) {
         LOGE("can't open libwhale: %s", dlerror());
         return;
     }
     void *hookFunSym = dlsym(whaleHandle, "WInlineHookFunction");
+#else
+    void *hookFunSym = (void *)(MSHookFunction);
+#endif
     if (!hookFunSym) {
         LOGE("can't get WInlineHookFunction: %s", dlerror());
         return;
@@ -309,7 +314,9 @@ void install_inline_hooks() {
     } else {
         LOGE("disableHiddenAPIPolicyImpl failed.");
     }
+#ifdef __LP64__
     dlclose(whaleHandle);
+#endif
     dlclose(artHandle);
     LOGI("install inline hooks done");
 }
