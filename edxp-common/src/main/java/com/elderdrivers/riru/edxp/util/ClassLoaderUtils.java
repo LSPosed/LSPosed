@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import dalvik.system.PathClassLoader;
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 
 public class ClassLoaderUtils {
@@ -35,10 +36,12 @@ public class ClassLoaderUtils {
                 if (tmp == null) {
                     Utils.logD("before replacing =========================================>");
                     dumpClassLoaders(appClassLoader);
-                    Field parentField = ClassLoader.class.getDeclaredField("parent");
-                    parentField.setAccessible(true);
-                    parentField.set(curCL, parent);
-                    parentField.set(lastChild, curCL);
+                    ClassLoader myTopCL = curCL;
+                    if (curCL.getParent() == XposedBridge.dummyClassLoader) {
+                        myTopCL = curCL.getParent();
+                    }
+                    XposedHelpers.setObjectField(myTopCL, "parent", parent);
+                    XposedHelpers.setObjectField(lastChild, "parent", curCL);
                     Utils.logD("after replacing ==========================================>");
                     dumpClassLoaders(appClassLoader);
                 }

@@ -3,7 +3,6 @@ package de.robv.android.xposed;
 import android.app.ActivityThread;
 import android.app.AndroidAppHelper;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageParser;
 import android.content.res.Resources;
 import android.content.res.ResourcesImpl;
 import android.content.res.TypedArray;
