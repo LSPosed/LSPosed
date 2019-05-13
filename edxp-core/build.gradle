@@ -1,11 +1,12 @@
+import org.apache.tools.ant.filters.FixCrLfFilter
 import org.gradle.internal.os.OperatingSystem
 
 apply plugin: 'com.android.library'
 
-version "v0.4.1.4_beta"
+version "v0.4.2.0_beta"
 
 ext {
-    versionCode = "4140"
+    versionCode = "4200"
     module_name = "EdXposed"
     jar_dest_dir = "${projectDir}/template_override/system/framework/"
     is_windows = OperatingSystem.current().isWindows()
@@ -13,6 +14,10 @@ ext {
     yahfa_authors = "solohsu, rk700 & MlgmXyysd"
     sandhook_authors = "solohsu, ganyao114 & MlgmXyysd"
     whale_authors = "solohsu, asLody & MlgmXyysd"
+
+    moduleId = "edxp"
+    libPathRelease = "$buildDir/ndkBuild/release/lib"
+    zipPathMagiskRelease = "$buildDir/tmp/release/magisk"
 }
 
 android {
@@ -67,6 +72,57 @@ task cleanTemplate(type: Delete) {
     delete file(templateSystemPath), file(templateSystemx86Path)
 }
 
+// riru related tasks
+
+task buildNativeRelease(type: Exec) {
+    if (is_windows)
+        commandLine 'cmd', '/c', 'ndk-build.cmd',
+                '-j8',
+                "NDK_LIBS_OUT=$libPathRelease",
+                "NDK_OUT=$buildDir/ndkBuild/release/obj".replace("\\", "/")
+    else
+        commandLine 'ndk-build',
+                '-j8',
+                "NDK_LIBS_OUT=$libPathRelease",
+                "NDK_OUT=$buildDir/ndkBuild/release/obj"
+}
+
+task cleanMagiskRelease(type: Delete) {
+    delete file(zipPathMagiskRelease)
+}
+
+task copyFilesMagiskRelease {
+    doLast {
+        copy {
+            from "${projectDir}/template_override"
+            into zipPathMagiskRelease
+        }
+        copy {
+            from 'template_override/riru_module.prop'
+            into "$zipPathMagiskRelease/data/misc/riru/modules/${moduleId}"
+        }
+        copy {
+            from "$libPathRelease/armeabi-v7a"
+            into "$zipPathMagiskRelease/system/lib"
+        }
+        copy {
+            from "$libPathRelease/arm64-v8a"
+            into "$zipPathMagiskRelease/system/lib64"
+        }
+        copy {
+            from "$libPathRelease/x86"
+            into "$zipPathMagiskRelease/system_x86/lib"
+        }
+        copy {
+            from "$libPathRelease/x86_64"
+            into "$zipPathMagiskRelease/system_x86/lib64"
+        }
+
+        file("$zipPathMagiskRelease/riru_module.prop").delete()
+        file("$zipPathMagiskRelease/data/misc/riru/modules/${moduleId}/riru_module.prop").renameTo("$zipPathMagiskRelease/data/misc/riru/modules/${moduleId}/module.prop")
+    }
+}
+
 afterEvaluate {
 
     android.libraryVariants.all { variant ->
@@ -80,12 +136,18 @@ afterEvaluate {
             def backendCapped = backendLowered.capitalize()
             def authorList = property("${backendLowered}" + "_authors")
 
-            def zipTask = task("zip${backendCapped}${variantCapped}", type: Exec) {
+            def prepareJarsTask = task("prepareJars${backendCapped}${variantCapped}") {
                 dependsOn cleanTemplate, copyDalvikdxJar, copyDexmakerJar
                 dependsOn tasks.getByPath(":edxp-${backendLowered}:makeAndCopy${variantCapped}")
-                workingDir '..'
-                commandLine 'sh', 'build.sh', project.name,
-                        "${backend}-${project.version}-${variantLowered}", "${module_name}"
+            }
+
+            def preZipTask = task("preZip${backendCapped}${variantCapped}", type: GradleBuild) {
+                dependsOn prepareJarsTask
+                tasks = [
+                        'buildNativeRelease',
+                        'cleanMagiskRelease',
+                        'copyFilesMagiskRelease'
+                ]
                 doFirst {
                     copy {
                         from "${projectDir}/tpl/edconfig.tpl"
@@ -97,8 +159,9 @@ afterEvaluate {
                         from "${projectDir}/tpl/module.prop.tpl"
                         into templateRootPath
                         rename "module.prop.tpl", "module.prop"
-                        expand(backend: "$backendCapped", versionName: "$version" +  "($backend)",
+                        expand(backend: "$backendCapped", versionName: "$version" + "($backend)",
                                 versionCode: "$versionCode", authorList: "$authorList")
+                        filter(FixCrLfFilter.class, eol: FixCrLfFilter.CrLf.newInstance("lf"))
                     }
                     copy {
                         from "${templateRootPath}/module.prop"
@@ -106,6 +169,13 @@ afterEvaluate {
                         rename "module.prop", "riru_module.prop"
                     }
                 }
+            }
+
+            def zipTask = task("zip${backendCapped}${variantCapped}", type: Zip) {
+                dependsOn preZipTask
+                archiveName "magisk-${module_name}-${backend}-${project.version}-${variantLowered}.zip"
+                destinationDir file("$projectDir/release")
+                from "$zipPathMagiskRelease"
             }
 
             task("push${backendCapped}${variantCapped}", type: Exec) {

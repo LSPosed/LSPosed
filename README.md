@@ -22,9 +22,9 @@ and zip binaries can be downloaded from [here](http://gnuwin32.sourceforge.net/p
 
 ## Install
 
-1. Make sure Magisk v17.0 or higher is installed.
-2. Download [Riru-core](https://github.com/RikkaApps/Riru/releases) v10 or higher and install it in Magisk Manager or recovery.
-3. Download [EdXposed](https://github.com/solohsu/EdXposed/releases) and install it in Magisk Manager or recovery.
+1. Install Magisk v19.0+.
+2. Install [Riru-Core](https://github.com/RikkaApps/Riru/releases) v19+ from Magisk repo.
+3. Download [EdXposed](https://github.com/solohsu/EdXposed/releases) and install it in Magisk Manager or recovery mode.
 4. Install companion application.
 4. Reboot.
 5. Have fun! :)

@@ -1,6 +1,8 @@
 #ifndef RIRU_H
 #define RIRU_H
 
+#include <jni.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -50,6 +52,40 @@ void riru_set_func(const char *name, void *func);
  */
 void riru_set_native_method_func(const char *className, const char *name, const char *signature,
                                  void *func);
+
+/**
+ * Get native methods from Riru's jniRegisterNativeMethods hook.
+ * If both name and signature are null, all the class's methods will be returned.
+ *
+ * @param className className
+ * @param name method name, null for the method with specific signature
+ * @param signature method signature, null for the method with specific name
+ * @return JNINativeMethod*
+ */
+const JNINativeMethod *riru_get_original_native_methods(const char *className, const char *name,
+                                                        const char *signature);
+
+/**
+ * Return if Zygote class's native method nativeForkAndSpecialize & nativeForkSystemServer is replaced by
+ * Riru.
+ *
+ * @return methods replaced
+ */
+int riru_is_zygote_methods_replaced();
+
+/**
+ * Return calls count of Zygote class's native method nativeForkAndSpecialize replaced by Riru.
+ *
+ * @return nativeForkAndSpecialize calls count
+ */
+int riru_get_nativeForkAndSpecialize_calls_count();
+
+/**
+ * Return calls count of Zygote class native's method nativeForkSystemServer replaced by Riru.
+ *
+ * @return nativeForkAndSpecialize calls count
+ */
+int riru_get_nativeForkSystemServer_calls_count();
 #ifdef __cplusplus
 }
 #endif
