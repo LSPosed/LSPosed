@@ -1,4 +1,4 @@
-id=riru_edxposed
+id=${moduleId}
 name=Riru - Ed Xposed
 version=${versionName}
 versionCode=${versionCode}

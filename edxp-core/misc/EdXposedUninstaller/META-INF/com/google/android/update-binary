@@ -99,6 +99,15 @@ target_size_check() {
   curFreeM=$((curSizeM - curUsedM));
 }
 
+remove_edxposed() {
+    ui_print "- Deleting EdXposed..."
+    rm -r -f /data/adb/modules/riru_edxposed/
+    rm -r -f /data/adb/modules/riru_edxposed_sandhook/
+    rm -r -f /data/adb/modules/riru_edxposed_whale/
+    rm -r -f /data/misc/riru/modules/edxposed/
+    rm -r -f /data/misc/riru/modules/edxp/
+    ui_print "- Done"
+}
 ##########################################################################################
 # Preparation
 ##########################################################################################
@@ -112,11 +121,7 @@ mount /data 2>/dev/null
 
 if [ -d "/data/adb/magisk/" ]; then
 
-ui_print "- Deleting EdXposed..."
-rm -r -f /data/adb/modules/riru_edxposed/
-rm -r -f /data/misc/riru/modules/edxposed/
-rm -r -f /data/misc/riru/modules/edxp/
-ui_print "- Done"
+remove_edxposed
 exit 0
     
 fi
@@ -186,10 +191,5 @@ for LOOP in 0 1 2 3 4 5 6 7; do
   fi
 done
 
-ui_print "- Deleting EdXposed..."
-rm -r -f /magisk/riru_edxposed/
-rm -r -f /data/misc/riru/modules/edxposed/
-rm -r -f /data/misc/riru/modules/edxp/
-
-ui_print "- Done"
+remove_edxposed
 exit 0

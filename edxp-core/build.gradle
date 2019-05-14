@@ -11,11 +11,14 @@ ext {
     jar_dest_dir = "${projectDir}/template_override/system/framework/"
     is_windows = OperatingSystem.current().isWindows()
     backends = ["YAHFA", "SandHook", "Whale"]
+    yahfa_module_id = "riru_edxposed"
+    sandhook_module_id = yahfa_module_id + "_sandhook"
+    whale_module_id = yahfa_module_id + "_whale"
     yahfa_authors = "solohsu, rk700 & MlgmXyysd"
     sandhook_authors = "solohsu, ganyao114 & MlgmXyysd"
     whale_authors = "solohsu, asLody & MlgmXyysd"
 
-    moduleId = "edxp"
+    riruModuleId = "edxp"
     libPathRelease = "$buildDir/ndkBuild/release/lib"
     zipPathMagiskRelease = "$buildDir/tmp/release/magisk"
 }
@@ -99,7 +102,7 @@ task copyFilesMagiskRelease {
         }
         copy {
             from 'template_override/riru_module.prop'
-            into "$zipPathMagiskRelease/data/misc/riru/modules/${moduleId}"
+            into "$zipPathMagiskRelease/data/misc/riru/modules/${riruModuleId}"
         }
         copy {
             from "$libPathRelease/armeabi-v7a"
@@ -119,7 +122,7 @@ task copyFilesMagiskRelease {
         }
 
         file("$zipPathMagiskRelease/riru_module.prop").delete()
-        file("$zipPathMagiskRelease/data/misc/riru/modules/${moduleId}/riru_module.prop").renameTo("$zipPathMagiskRelease/data/misc/riru/modules/${moduleId}/module.prop")
+        file("$zipPathMagiskRelease/data/misc/riru/modules/${riruModuleId}/riru_module.prop").renameTo("$zipPathMagiskRelease/data/misc/riru/modules/${riruModuleId}/module.prop")
     }
 }
 
@@ -135,6 +138,7 @@ afterEvaluate {
             def backendLowered = backend.toLowerCase()
             def backendCapped = backendLowered.capitalize()
             def authorList = property("${backendLowered}" + "_authors")
+            def magiskModuleId = property("${backendLowered}" + "_module_id")
 
             def prepareJarsTask = task("prepareJars${backendCapped}${variantCapped}") {
                 dependsOn cleanTemplate, copyDalvikdxJar, copyDexmakerJar
@@ -159,7 +163,8 @@ afterEvaluate {
                         from "${projectDir}/tpl/module.prop.tpl"
                         into templateRootPath
                         rename "module.prop.tpl", "module.prop"
-                        expand(backend: "$backendCapped", versionName: "$version" + "($backend)",
+                        expand(moduleId: "$magiskModuleId", backend: "$backendCapped",
+                                versionName: "$version" + "($backend)",
                                 versionCode: "$versionCode", authorList: "$authorList")
                         filter(FixCrLfFilter.class, eol: FixCrLfFilter.CrLf.newInstance("lf"))
                     }
