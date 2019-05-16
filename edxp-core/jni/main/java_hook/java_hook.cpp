@@ -117,6 +117,9 @@ static JNINativeMethod hookMethods[] = {
                 "isDynamicModulesEnabled", "()Z", (void *) is_dynamic_modules_enabled
         },
         {
+                "isResourcesHookEnabled",  "()Z", (void *) is_resources_hook_enabled
+        },
+        {
                 "isAppNeedHook", "(Ljava/lang/String;)Z", (void *) is_app_need_hook
         },
         {

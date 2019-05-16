@@ -1,9 +1,9 @@
 package com.elderdrivers.riru.edxp.sandhook.config;
 
+import com.elderdrivers.riru.edxp.Main;
 import com.elderdrivers.riru.edxp.config.EdXpConfig;
 import com.elderdrivers.riru.edxp.config.InstallerChooser;
-import com.elderdrivers.riru.edxp.Main;
-import com.elderdrivers.riru.edxp.sandhook.entry.hooker.XposedBlackListHooker;
+import com.elderdrivers.riru.edxp.hooker.XposedBlackListHooker;
 
 public class SandHookEdxpConfig implements EdXpConfig {
     @Override
@@ -19,5 +19,10 @@ public class SandHookEdxpConfig implements EdXpConfig {
     @Override
     public boolean isDynamicModulesMode() {
         return Main.isDynamicModulesEnabled();
+    }
+
+    @Override
+    public boolean isResourcesHookEnabled() {
+        return Main.isResourcesHookEnabled();
     }
 }

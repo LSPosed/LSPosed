@@ -13,6 +13,8 @@ bool is_black_white_list_enabled();
 
 bool is_dynamic_modules_enabled();
 
+bool is_resources_hook_enabled();
+
 bool is_deopt_boot_image_enabled();
 
 jstring get_installer_pkg_name(JNIEnv *env, jclass clazz);

@@ -13,6 +13,7 @@ import java.util.HashMap;
 public class InlinedMethodCallers {
 
     public static final String KEY_BOOT_IMAGE = "boot_image";
+    public static final String KEY_BOOT_IMAGE_MIUI_RES = "boot_image_miui_res";
     public static final String KEY_SYSTEM_SERVER = "system_server";
 
     /**
@@ -27,7 +28,9 @@ public class InlinedMethodCallers {
     private static final String[][] BOOT_IMAGE = {
             // callers of Application#attach(Context)
             {"android.app.Instrumentation", "newApplication", "(Ljava/lang/ClassLoader;Ljava/lang/String;Landroid/content/Context;)Landroid/app/Application;"},
+    };
 
+    private static final String[][] BOOT_IMAGE_FOR_MIUI_RES = {
             // for MIUI resources hooking
             {"android.content.res.MiuiResources", "init", "(Ljava/lang/String;)V"},
             {"android.content.res.MiuiResources", "updateMiuiImpl", "()V"},
@@ -50,6 +53,7 @@ public class InlinedMethodCallers {
 
     static {
         CALLERS.put(KEY_BOOT_IMAGE, BOOT_IMAGE);
+        CALLERS.put(KEY_BOOT_IMAGE_MIUI_RES, BOOT_IMAGE_FOR_MIUI_RES);
         CALLERS.put(KEY_SYSTEM_SERVER, SYSTEM_SERVER);
         CALLERS.put("com.android.systemui", SYSTEM_UI);
     }

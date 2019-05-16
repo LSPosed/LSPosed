@@ -90,15 +90,9 @@ public final class XposedBridge {
 	public static volatile ClassLoader dummyClassLoader = null;
 
 	public static void initXResources() {
-	    if (disableHooks) {
+	    if (!EdXpConfigGlobal.getConfig().isResourcesHookEnabled()) {
 	        return;
         }
-		String BASE_DIR = EdXpConfigGlobal.getConfig().getInstallerBaseDir();
-		if (SELinuxHelper.getAppDataFileService().checkFileExists(BASE_DIR + "conf/disable_resources")) {
-			Log.w(TAG, "Found " + BASE_DIR + "conf/disable_resources, not hooking resources");
-			XposedInit.disableResources = true;
-			return;
-		}
         if (dummyClassLoader != null) {
         	return;
 		}

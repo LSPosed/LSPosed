@@ -56,7 +56,7 @@ public final class XposedInit {
     private static final String startClassName = ""; // ed: no support for tool process anymore
 
     private static final String INSTANT_RUN_CLASS = "com.android.tools.fd.runtime.BootstrapApplication";
-    public static boolean disableResources = false;
+    public static volatile boolean disableResources = false;
     private static final String[] XRESOURCES_CONFLICTING_PACKAGES = {"com.sygic.aura"};
 
     private XposedInit() {
@@ -85,16 +85,7 @@ public final class XposedInit {
     }
 
     private static void hookResources() throws Throwable {
-
-        if (disableResources) {
-            return;
-        }
-
-        String BASE_DIR = EdXpConfigGlobal.getConfig().getInstallerBaseDir();
-
-        if (SELinuxHelper.getAppDataFileService().checkFileExists(BASE_DIR + "conf/disable_resources")) {
-            Log.w(TAG, "Found " + BASE_DIR + "conf/disable_resources, not hooking resources");
-            disableResources = true;
+        if (!EdXpConfigGlobal.getConfig().isResourcesHookEnabled() || disableResources) {
             return;
         }
 

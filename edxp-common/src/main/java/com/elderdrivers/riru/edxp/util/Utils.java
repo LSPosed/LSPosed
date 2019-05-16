@@ -4,6 +4,8 @@ import android.util.Log;
 
 import com.elderdrivers.riru.edxp.BuildConfig;
 
+import de.robv.android.xposed.XposedHelpers;
+
 
 public class Utils {
 
@@ -41,5 +43,10 @@ public class Utils {
 
     public static void logE(String msg, Throwable throwable) {
         Log.e(LOG_TAG, msg, throwable);
+    }
+
+    public static String getSysProp(String key) {
+        Class sysProps = XposedHelpers.findClassIfExists("android.os.SystemProperties", null);
+        return (String) XposedHelpers.callStaticMethod(sysProps, "get", key);
     }
 }

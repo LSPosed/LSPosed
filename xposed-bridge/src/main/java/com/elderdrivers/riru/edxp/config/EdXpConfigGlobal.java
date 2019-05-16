@@ -9,7 +9,7 @@ public class EdXpConfigGlobal {
 
     public static EdXpConfig getConfig() {
         if (sConfig == null) {
-            return defaultConfig;
+            throw new IllegalArgumentException("sConfig should not be null.");
         }
         return sConfig;
     }
@@ -20,23 +20,4 @@ public class EdXpConfigGlobal {
         }
         return sHookProvider;
     }
-
-
-    private static final EdXpConfig defaultConfig = new EdXpConfig() {
-
-        @Override
-        public String getInstallerBaseDir() {
-            return "";
-        }
-
-        @Override
-        public String getBlackListModulePackageName() {
-            return "";
-        }
-
-        @Override
-        public boolean isDynamicModulesMode() {
-            return false;
-        }
-    };
 }

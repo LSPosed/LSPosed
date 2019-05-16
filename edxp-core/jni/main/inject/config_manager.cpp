@@ -34,11 +34,13 @@ static char use_whitelist_path[PATH_MAX];
 static char black_white_list_path[PATH_MAX];
 static char dynamic_modules_path[PATH_MAX];
 static char deopt_boot_image_path[PATH_MAX];
+static char resources_hook_disable_path[PATH_MAX];
 
 static const char *installer_package_name;
 static bool black_white_list_enabled = false;
 static bool dynamic_modules_enabled = false;
 static bool deopt_boot_image_enabled = false;
+static bool resources_hook_enabled = true;
 static bool inited = false;
 // snapshot at boot
 static bool use_white_list_snapshot = false;
@@ -115,14 +117,18 @@ static void init_once() {
                  installer_package_name, "dynamicmodules");
         snprintf(deopt_boot_image_path, PATH_MAX, config_path_tpl, data_path_prefix,
                  installer_package_name, "deoptbootimage");
+        snprintf(resources_hook_disable_path, PATH_MAX, config_path_tpl, data_path_prefix,
+                 installer_package_name, "disable_resources");
         dynamic_modules_enabled = access(dynamic_modules_path, F_OK) == 0;
         black_white_list_enabled = access(black_white_list_path, F_OK) == 0;
         // use_white_list snapshot
         use_white_list_snapshot = access(use_whitelist_path, F_OK) == 0;
         deopt_boot_image_enabled = access(deopt_boot_image_path, F_OK) == 0;
+        resources_hook_enabled = access(resources_hook_disable_path, F_OK) != 0;
         LOGI("black/white list mode: %d, using whitelist: %d", black_white_list_enabled,
              use_white_list_snapshot);
         LOGI("dynamic modules mode: %d", dynamic_modules_enabled);
+        LOGI("resources hook: %d", resources_hook_enabled);
         if (black_white_list_enabled) {
             snapshotBlackWhiteList();
         }
@@ -198,6 +204,11 @@ bool is_black_white_list_enabled() {
 bool is_dynamic_modules_enabled() {
     init_once();
     return dynamic_modules_enabled;
+}
+
+bool is_resources_hook_enabled() {
+    init_once();
+    return resources_hook_enabled;
 }
 
 bool is_deopt_boot_image_enabled() {
