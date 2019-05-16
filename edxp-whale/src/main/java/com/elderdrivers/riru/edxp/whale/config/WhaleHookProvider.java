@@ -5,6 +5,8 @@ import com.elderdrivers.riru.edxp.config.BaseHookProvider;
 import com.lody.whale.WhaleRuntime;
 
 import java.lang.reflect.Member;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +25,7 @@ public class WhaleHookProvider extends BaseHookProvider {
 
     @Override
     public void hookMethod(Member method, XposedBridge.AdditionalHookInfo additionalInfo) {
+        resolveStaticMethod(method);
         long slot = WhaleRuntime.hookMethodNative(method.getDeclaringClass(), method, additionalInfo);
         synchronized (sHookedMethodSlotMap) {
             sHookedMethodSlotMap.put(method, slot);
@@ -63,5 +66,28 @@ public class WhaleHookProvider extends BaseHookProvider {
     @Override
     public boolean removeFinalFlagNative(Class clazz) {
         return Main.removeFinalFlagNative(clazz);
+    }
+
+
+    /**
+     * the static method is lazy resolved, when not resolved, the entry point is a trampoline of
+     * a bridge, we can not hook these entry. this method force the static method to be resolved.
+     */
+    public static void resolveStaticMethod(Member method) {
+        //ignore result, just call to trigger resolve
+        if (method == null)
+            return;
+        try {
+            if (method instanceof Method && Modifier.isStatic(method.getModifiers())) {
+                ((Method) method).setAccessible(true);
+                ((Method) method).invoke(new Object(), getFakeArgs((Method) method));
+            }
+        } catch (Exception ignored) {
+            // we should never make a successful call.
+        }
+    }
+
+    private static Object[] getFakeArgs(Method method) {
+        return method.getParameterTypes().length == 0 ? new Object[]{new Object()} : null;
     }
 }
