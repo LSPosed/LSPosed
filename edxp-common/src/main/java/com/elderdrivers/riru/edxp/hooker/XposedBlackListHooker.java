@@ -1,4 +1,4 @@
-package com.elderdrivers.riru.edxp.whale.entry.hooker;
+package com.elderdrivers.riru.edxp.hooker;
 
 import android.annotation.TargetApi;
 import android.app.Activity;

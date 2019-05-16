@@ -8,6 +8,7 @@ import android.content.res.CompatibilityInfo;
 import android.util.Log;
 
 import com.elderdrivers.riru.common.KeepMembers;
+import com.elderdrivers.riru.edxp.hooker.XposedBlackListHooker;
 import com.elderdrivers.riru.edxp.sandhook.entry.Router;
 import com.swift.sandhook.SandHook;
 import com.swift.sandhook.annotation.HookClass;

@@ -8,6 +8,9 @@ import android.content.res.CompatibilityInfo;
 
 import com.elderdrivers.riru.common.KeepMembers;
 import com.elderdrivers.riru.edxp.Main;
+import com.elderdrivers.riru.edxp.hooker.SliceProviderFix;
+import com.elderdrivers.riru.edxp.hooker.XposedBlackListHooker;
+import com.elderdrivers.riru.edxp.hooker.XposedInstallerHooker;
 import com.elderdrivers.riru.edxp.sandhook.entry.Router;
 import com.elderdrivers.riru.edxp.util.Utils;
 import com.swift.sandhook.SandHook;
@@ -26,7 +29,8 @@ import de.robv.android.xposed.XposedInit;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 import static com.elderdrivers.riru.edxp.config.InstallerChooser.INSTALLER_PACKAGE_NAME;
-import static com.elderdrivers.riru.edxp.sandhook.entry.hooker.XposedBlackListHooker.BLACK_LIST_PACKAGE_NAME;
+import static com.elderdrivers.riru.edxp.hooker.SliceProviderFix.SYSTEMUI_PACKAGE_NAME;
+import static com.elderdrivers.riru.edxp.hooker.XposedBlackListHooker.BLACK_LIST_PACKAGE_NAME;
 import static com.elderdrivers.riru.edxp.util.ClassLoaderUtils.replaceParentClassLoader;
 
 // normal process initialization (for new Activity, Service, BroadcastReceiver etc.)
@@ -91,6 +95,9 @@ public class HandleBindAppHooker implements KeepMembers {
             }
             if (reportedPackageName.equals(BLACK_LIST_PACKAGE_NAME)) {
                 XposedBlackListHooker.hook(lpparam.classLoader);
+            }
+            if (reportedPackageName.equals(SYSTEMUI_PACKAGE_NAME)) {
+                SliceProviderFix.hook();
             }
         } catch (Throwable t) {
             Router.logE("error when hooking bindApp", t);
