@@ -24,6 +24,7 @@ dependencies {
     compileOnly files("${hiddenApiStubJarFilePath}")
     implementation project(':edxp-common')
     implementation project(':xposed-bridge')
+    compileOnly project(':dexmaker')
 }
 
 
