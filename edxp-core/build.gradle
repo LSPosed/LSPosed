@@ -3,7 +3,7 @@ import org.gradle.internal.os.OperatingSystem
 
 apply plugin: 'com.android.library'
 
-version "v0.4.2.3_beta"
+version "v0.4.2.3_alpha"
 
 ext {
     versionCode = "4230"
