@@ -123,7 +123,7 @@ REPLACE="
 
  print_modname() {
   ui_print "*******************************"
-  ui_print "*      Riru - Ed Xposed       *"
+  ui_print "*       Riru - EdXposed       *"
   ui_print "*******************************"
 }
 
