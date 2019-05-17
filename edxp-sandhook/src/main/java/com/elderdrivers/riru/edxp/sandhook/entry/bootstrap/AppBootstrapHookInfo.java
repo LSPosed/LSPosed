@@ -1,9 +1,9 @@
 package com.elderdrivers.riru.edxp.sandhook.entry.bootstrap;
 
 import com.elderdrivers.riru.common.KeepMembers;
-import com.elderdrivers.riru.edxp.sandhook.entry.hooker.HandleBindAppHooker;
-import com.elderdrivers.riru.edxp.sandhook.entry.hooker.LoadedApkConstructorHooker;
-import com.elderdrivers.riru.edxp.sandhook.entry.hooker.OnePlusWorkAroundHooker;
+import com.elderdrivers.riru.edxp.sandhook._hooker.HandleBindAppHooker;
+import com.elderdrivers.riru.edxp.sandhook._hooker.LoadedApkConstructorHooker;
+import com.elderdrivers.riru.edxp.sandhook._hooker.OnePlusWorkAroundHooker;
 
 public class AppBootstrapHookInfo implements KeepMembers {
     public static String[] hookItemNames = {

@@ -1,4 +1,4 @@
-package com.elderdrivers.riru.edxp.whale.entry.hooker;
+package com.elderdrivers.riru.edxp.yahfa._hooker;
 
 import android.app.ActivityThread;
 import android.app.LoadedApk;
@@ -12,7 +12,7 @@ import com.elderdrivers.riru.edxp.hooker.SliceProviderFix;
 import com.elderdrivers.riru.edxp.hooker.XposedBlackListHooker;
 import com.elderdrivers.riru.edxp.hooker.XposedInstallerHooker;
 import com.elderdrivers.riru.edxp.util.Utils;
-import com.elderdrivers.riru.edxp.whale.entry.Router;
+import com.elderdrivers.riru.edxp.yahfa.entry.Router;
 
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;

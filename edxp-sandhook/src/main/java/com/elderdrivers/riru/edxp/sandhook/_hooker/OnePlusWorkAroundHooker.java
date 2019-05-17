@@ -1,4 +1,4 @@
-package com.elderdrivers.riru.edxp.sandhook.entry.hooker;
+package com.elderdrivers.riru.edxp.sandhook._hooker;
 
 import com.elderdrivers.riru.common.KeepMembers;
 import com.elderdrivers.riru.edxp.Main;

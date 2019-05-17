@@ -1,4 +1,4 @@
-package com.elderdrivers.riru.edxp.yahfa.entry.hooker;
+package com.elderdrivers.riru.edxp.yahfa._hooker;
 
 import android.app.ActivityThread;
 import android.app.AndroidAppHelper;

@@ -1,4 +1,4 @@
-package com.elderdrivers.riru.edxp.sandhook.entry.hooker;
+package com.elderdrivers.riru.edxp.sandhook._hooker;
 
 import android.os.Build;
 
@@ -7,7 +7,6 @@ import com.elderdrivers.riru.edxp.sandhook.entry.Router;
 import com.swift.sandhook.SandHook;
 import com.swift.sandhook.annotation.HookMethod;
 import com.swift.sandhook.annotation.HookMethodBackup;
-import com.swift.sandhook.annotation.HookMode;
 import com.swift.sandhook.annotation.HookReflectClass;
 import com.swift.sandhook.annotation.SkipParamCheck;
 import com.swift.sandhook.annotation.ThisObject;

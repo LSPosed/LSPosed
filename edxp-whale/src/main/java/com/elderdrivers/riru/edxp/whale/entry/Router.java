@@ -12,7 +12,7 @@ import com.elderdrivers.riru.edxp.whale.entry.bootstrap.AppBootstrapHookInfo;
 import com.elderdrivers.riru.edxp.whale.entry.bootstrap.SysBootstrapHookInfo;
 import com.elderdrivers.riru.edxp.whale.entry.bootstrap.SysInnerHookInfo;
 import com.elderdrivers.riru.edxp.whale.entry.bootstrap.WorkAroundHookInfo;
-import com.elderdrivers.riru.edxp.whale.entry.hooker.SystemMainHooker;
+import com.elderdrivers.riru.edxp.whale._hooker.SystemMainHooker;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 

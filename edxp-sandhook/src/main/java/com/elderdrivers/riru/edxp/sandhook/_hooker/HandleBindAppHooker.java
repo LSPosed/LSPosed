@@ -1,4 +1,4 @@
-package com.elderdrivers.riru.edxp.yahfa.entry.hooker;
+package com.elderdrivers.riru.edxp.sandhook._hooker;
 
 import android.app.ActivityThread;
 import android.app.LoadedApk;
@@ -11,8 +11,17 @@ import com.elderdrivers.riru.edxp.Main;
 import com.elderdrivers.riru.edxp.hooker.SliceProviderFix;
 import com.elderdrivers.riru.edxp.hooker.XposedBlackListHooker;
 import com.elderdrivers.riru.edxp.hooker.XposedInstallerHooker;
+import com.elderdrivers.riru.edxp.sandhook.entry.Router;
 import com.elderdrivers.riru.edxp.util.Utils;
-import com.elderdrivers.riru.edxp.yahfa.entry.Router;
+import com.swift.sandhook.SandHook;
+import com.swift.sandhook.annotation.HookClass;
+import com.swift.sandhook.annotation.HookMethod;
+import com.swift.sandhook.annotation.HookMethodBackup;
+import com.swift.sandhook.annotation.Param;
+import com.swift.sandhook.annotation.SkipParamCheck;
+import com.swift.sandhook.annotation.ThisObject;
+
+import java.lang.reflect.Method;
 
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
@@ -25,13 +34,19 @@ import static com.elderdrivers.riru.edxp.hooker.XposedBlackListHooker.BLACK_LIST
 import static com.elderdrivers.riru.edxp.util.ClassLoaderUtils.replaceParentClassLoader;
 
 // normal process initialization (for new Activity, Service, BroadcastReceiver etc.)
+@HookClass(ActivityThread.class)
 public class HandleBindAppHooker implements KeepMembers {
 
     public static String className = "android.app.ActivityThread";
     public static String methodName = "handleBindApplication";
     public static String methodSig = "(Landroid/app/ActivityThread$AppBindData;)V";
 
-    public static void hook(Object thiz, Object bindData) {
+    @HookMethodBackup("handleBindApplication")
+    @SkipParamCheck
+    static Method backup;
+
+    @HookMethod("handleBindApplication")
+    public static void hook(@ThisObject ActivityThread thiz, @Param("android.app.ActivityThread$AppBindData") Object bindData) throws Throwable {
         if (XposedBlackListHooker.shouldDisableHooks("")) {
             backup(thiz, bindData);
             return;
@@ -91,6 +106,7 @@ public class HandleBindAppHooker implements KeepMembers {
         }
     }
 
-    public static void backup(Object thiz, Object bindData) {
+    public static void backup(Object thiz, Object bindData) throws Throwable {
+        SandHook.callOriginByBackup(backup, thiz, bindData);
     }
 }

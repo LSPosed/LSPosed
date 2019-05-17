@@ -13,7 +13,7 @@ import com.elderdrivers.riru.edxp.yahfa.entry.bootstrap.AppBootstrapHookInfo;
 import com.elderdrivers.riru.edxp.yahfa.entry.bootstrap.SysBootstrapHookInfo;
 import com.elderdrivers.riru.edxp.yahfa.entry.bootstrap.SysInnerHookInfo;
 import com.elderdrivers.riru.edxp.yahfa.entry.bootstrap.WorkAroundHookInfo;
-import com.elderdrivers.riru.edxp.yahfa.entry.hooker.SystemMainHooker;
+import com.elderdrivers.riru.edxp.yahfa._hooker.SystemMainHooker;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 

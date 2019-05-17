@@ -1,4 +1,4 @@
-package com.elderdrivers.riru.edxp.sandhook.entry.hooker;
+package com.elderdrivers.riru.edxp.whale._hooker;
 
 import android.app.ActivityThread;
 import android.app.AndroidAppHelper;
@@ -9,15 +9,7 @@ import android.util.Log;
 
 import com.elderdrivers.riru.common.KeepMembers;
 import com.elderdrivers.riru.edxp.hooker.XposedBlackListHooker;
-import com.elderdrivers.riru.edxp.sandhook.entry.Router;
-import com.swift.sandhook.SandHook;
-import com.swift.sandhook.annotation.HookClass;
-import com.swift.sandhook.annotation.HookMethod;
-import com.swift.sandhook.annotation.HookMethodBackup;
-import com.swift.sandhook.annotation.SkipParamCheck;
-import com.swift.sandhook.annotation.ThisObject;
-
-import java.lang.reflect.Method;
+import com.elderdrivers.riru.edxp.whale.entry.Router;
 
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
@@ -28,7 +20,6 @@ import static com.elderdrivers.riru.edxp.util.ClassLoaderUtils.replaceParentClas
 
 // when a package is loaded for an existing process, trigger the callbacks as well
 // ed: remove resources related hooking
-@HookClass(LoadedApk.class)
 public class LoadedApkConstructorHooker implements KeepMembers {
     public static String className = "android.app.LoadedApk";
     public static String methodName = "<init>";
@@ -37,23 +28,20 @@ public class LoadedApkConstructorHooker implements KeepMembers {
             "Landroid/content/res/CompatibilityInfo;" +
             "Ljava/lang/ClassLoader;ZZZ)V";
 
-    @HookMethodBackup
-    @SkipParamCheck
-    static Method backup;
-
-    @HookMethod
-    public static void hook(@ThisObject Object thiz, ActivityThread activityThread,
+    public static void hook(Object thiz, ActivityThread activityThread,
                             ApplicationInfo aInfo, CompatibilityInfo compatInfo,
                             ClassLoader baseLoader, boolean securityViolation,
-                            boolean includeCode, boolean registerPackage) throws Throwable {
+                            boolean includeCode, boolean registerPackage) {
 
         if (XposedBlackListHooker.shouldDisableHooks("")) {
-            backup(thiz, activityThread, aInfo, compatInfo, baseLoader, securityViolation, includeCode, registerPackage);
+            backup(thiz, activityThread, aInfo, compatInfo, baseLoader, securityViolation,
+                    includeCode, registerPackage);
             return;
         }
 
         Router.logD("LoadedApk#<init> starts");
-        backup(thiz, activityThread, aInfo, compatInfo, baseLoader, securityViolation, includeCode, registerPackage);
+        backup(thiz, activityThread, aInfo, compatInfo, baseLoader, securityViolation,
+                includeCode, registerPackage);
 
         try {
             LoadedApk loadedApk = (LoadedApk) thiz;
@@ -105,7 +93,7 @@ public class LoadedApkConstructorHooker implements KeepMembers {
     public static void backup(Object thiz, ActivityThread activityThread,
                               ApplicationInfo aInfo, CompatibilityInfo compatInfo,
                               ClassLoader baseLoader, boolean securityViolation,
-                              boolean includeCode, boolean registerPackage) throws Throwable {
-        SandHook.callOriginByBackup(backup, thiz, activityThread, aInfo, compatInfo, baseLoader, securityViolation, includeCode, registerPackage);
+                              boolean includeCode, boolean registerPackage) {
+
     }
 }

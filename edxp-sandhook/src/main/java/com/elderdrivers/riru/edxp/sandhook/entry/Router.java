@@ -12,7 +12,7 @@ import com.elderdrivers.riru.edxp.sandhook.entry.bootstrap.AppBootstrapHookInfo;
 import com.elderdrivers.riru.edxp.sandhook.entry.bootstrap.SysBootstrapHookInfo;
 import com.elderdrivers.riru.edxp.sandhook.entry.bootstrap.SysInnerHookInfo;
 import com.elderdrivers.riru.edxp.sandhook.entry.bootstrap.WorkAroundHookInfo;
-import com.elderdrivers.riru.edxp.sandhook.entry.hooker.SystemMainHooker;
+import com.elderdrivers.riru.edxp.sandhook._hooker.SystemMainHooker;
 import com.elderdrivers.riru.edxp.util.Utils;
 import com.swift.sandhook.xposedcompat.XposedCompat;
 

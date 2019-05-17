@@ -1,10 +1,10 @@
-package com.elderdrivers.riru.edxp.whale.entry.hooker;
+package com.elderdrivers.riru.edxp.yahfa._hooker;
 
 import android.app.ActivityThread;
 
 import com.elderdrivers.riru.common.KeepMembers;
 import com.elderdrivers.riru.edxp.deopt.PrebuiltMethodsDeopter;
-import com.elderdrivers.riru.edxp.whale.entry.Router;
+import com.elderdrivers.riru.edxp.yahfa.entry.Router;
 
 import de.robv.android.xposed.XposedBridge;
 
