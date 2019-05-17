@@ -1,7 +1,7 @@
 id=${moduleId}
-name=Riru - Ed Xposed
+name=Riru - EdXposed
 version=${versionName}
 versionCode=${versionCode}
 author=${authorList}
-description=Magisk version of Xposed. Require Riru - Core v19+ installed.
+description=Magisk version of Xposed. Require Riru - Core v19+ installed. See change log in EdXposed Manager.
 api=4
