@@ -1,7 +1,7 @@
 #ifndef HOOK_H
 #define HOOK_H
 
-#include <xhook/xhook.h>
+#include <xhook.h>
 
 #if defined(__LP64__)
 static constexpr const char *kLibArtPath = "/system/lib64/libart.so";

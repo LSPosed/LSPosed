@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <inject/config_manager.h>
-#include <Substrate/SubstrateHook.h>
+#include <SubstrateHook.h>
 
 #include "include/logging.h"
 #include "native_hook.h"

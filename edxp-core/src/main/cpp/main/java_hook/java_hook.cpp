@@ -14,7 +14,7 @@
 
 extern "C"
 {
-#include "../yahfa/HookMain.h"
+#include "HookMain.h"
 }
 
 jobject gInjectDexClassLoader;

@@ -10,8 +10,8 @@
 #include <vector>
 #include <utility>
 #include <string>
-#include <inject/framework_hook.h>
-#include <native_hook/native_hook.h>
+#include "inject/framework_hook.h"
+#include "native_hook/native_hook.h"
 
 #include "include/logging.h"
 #include "include/misc.h"

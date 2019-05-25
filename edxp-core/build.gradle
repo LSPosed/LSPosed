@@ -19,7 +19,6 @@ ext {
     whale_authors = "solohsu, asLody & MlgmXyysd"
 
     riruModuleId = "edxp"
-    libPathRelease = "$buildDir/ndkBuild/release/lib"
     zipPathMagiskRelease = "$buildDir/tmp/release/magisk"
 }
 
@@ -30,15 +29,37 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
 
         externalNativeBuild {
-            ndkBuild {
+            cmake {
                 abiFilters 'arm64-v8a', 'armeabi-v7a', 'x86', 'x86_64'
-                arguments "NDK_PROJECT_PATH=jni/"
+                cppFlags "-std=c++11 -ffixed-x18 -Qunused-arguments -frtti"
+                cFlags "-std=gnu99 -ffixed-x18 -Qunused-arguments -frtti"
             }
         }
     }
+
+    buildTypes {
+        debug {
+            externalNativeBuild {
+                cmake {
+                    cppFlags "-O0"
+                    cFlags "-O0"
+                }
+            }
+        }
+        release {
+            externalNativeBuild {
+                cmake {
+                    cppFlags "-fvisibility=hidden -fvisibility-inlines-hidden -O2 -s"
+                    cFlags "-fvisibility=hidden -fvisibility-inlines-hidden -O2 -s"
+                }
+            }
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
     externalNativeBuild {
-        ndkBuild {
-            path 'jni/Android.mk'
+        cmake {
+            path "src/main/cpp/CMakeLists.txt"
         }
     }
 }
@@ -75,57 +96,6 @@ task cleanTemplate(type: Delete) {
     delete file(templateSystemPath), file(templateSystemx86Path)
 }
 
-// riru related tasks
-
-task buildNativeRelease(type: Exec) {
-    if (is_windows)
-        commandLine 'cmd', '/c', 'ndk-build.cmd',
-                '-j8',
-                "NDK_LIBS_OUT=$libPathRelease",
-                "NDK_OUT=$buildDir/ndkBuild/release/obj".replace("\\", "/")
-    else
-        commandLine 'ndk-build',
-                '-j8',
-                "NDK_LIBS_OUT=$libPathRelease",
-                "NDK_OUT=$buildDir/ndkBuild/release/obj"
-}
-
-task cleanMagiskRelease(type: Delete) {
-    delete file(zipPathMagiskRelease)
-}
-
-task copyFilesMagiskRelease {
-    doLast {
-        copy {
-            from "${projectDir}/template_override"
-            into zipPathMagiskRelease
-        }
-        copy {
-            from 'template_override/riru_module.prop'
-            into "$zipPathMagiskRelease/data/misc/riru/modules/${riruModuleId}"
-        }
-        copy {
-            from "$libPathRelease/armeabi-v7a"
-            into "$zipPathMagiskRelease/system/lib"
-        }
-        copy {
-            from "$libPathRelease/arm64-v8a"
-            into "$zipPathMagiskRelease/system/lib64"
-        }
-        copy {
-            from "$libPathRelease/x86"
-            into "$zipPathMagiskRelease/system_x86/lib"
-        }
-        copy {
-            from "$libPathRelease/x86_64"
-            into "$zipPathMagiskRelease/system_x86/lib64"
-        }
-
-        file("$zipPathMagiskRelease/riru_module.prop").delete()
-        file("$zipPathMagiskRelease/data/misc/riru/modules/${riruModuleId}/riru_module.prop").renameTo("$zipPathMagiskRelease/data/misc/riru/modules/${riruModuleId}/module.prop")
-    }
-}
-
 afterEvaluate {
 
     android.libraryVariants.all { variant ->
@@ -145,13 +115,9 @@ afterEvaluate {
                 dependsOn tasks.getByPath(":edxp-${backendLowered}:makeAndCopy${variantCapped}")
             }
 
-            def preZipTask = task("preZip${backendCapped}${variantCapped}", type: GradleBuild) {
-                dependsOn prepareJarsTask
-                tasks = [
-                        'buildNativeRelease',
-                        'cleanMagiskRelease',
-                        'copyFilesMagiskRelease'
-                ]
+            def prepareMagiskFilesTask = task("prepareMagiskFiles${backendCapped}${variantCapped}", type: Delete) {
+                dependsOn prepareJarsTask, "assemble${variantCapped}"
+                delete file(zipPathMagiskRelease)
                 doFirst {
                     copy {
                         from "${projectDir}/tpl/edconfig.tpl"
@@ -174,10 +140,40 @@ afterEvaluate {
                         rename "module.prop", "riru_module.prop"
                     }
                 }
+                def libPathRelease = "${buildDir}/intermediates/cmake/${variantLowered}/obj"
+                doLast {
+                    copy {
+                        from "${projectDir}/template_override"
+                        into zipPathMagiskRelease
+                    }
+                    copy {
+                        from 'template_override/riru_module.prop'
+                        into "$zipPathMagiskRelease/data/misc/riru/modules/${riruModuleId}"
+                    }
+                    copy {
+                        from "$libPathRelease/armeabi-v7a"
+                        into "$zipPathMagiskRelease/system/lib"
+                    }
+                    copy {
+                        from "$libPathRelease/arm64-v8a"
+                        into "$zipPathMagiskRelease/system/lib64"
+                    }
+                    copy {
+                        from "$libPathRelease/x86"
+                        into "$zipPathMagiskRelease/system_x86/lib"
+                    }
+                    copy {
+                        from "$libPathRelease/x86_64"
+                        into "$zipPathMagiskRelease/system_x86/lib64"
+                    }
+
+                    file("$zipPathMagiskRelease/riru_module.prop").delete()
+                    file("$zipPathMagiskRelease/data/misc/riru/modules/${riruModuleId}/riru_module.prop").renameTo("$zipPathMagiskRelease/data/misc/riru/modules/${riruModuleId}/module.prop")
+                }
             }
 
             def zipTask = task("zip${backendCapped}${variantCapped}", type: Zip) {
-                dependsOn preZipTask
+                dependsOn prepareMagiskFilesTask
                 archiveName "magisk-${module_name}-${backend}-${project.version}-${variantLowered}.zip"
                 destinationDir file("$projectDir/release")
                 from "$zipPathMagiskRelease"

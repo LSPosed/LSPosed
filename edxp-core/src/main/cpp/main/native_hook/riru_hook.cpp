@@ -4,8 +4,8 @@
 
 #include <cstring>
 #include <string>
-#include <include/riru.h>
-#include <xhook/xhook.h>
+#include <riru.h>
+#include <xhook.h>
 #include <sys/system_properties.h>
 #include <include/logging.h>
 #include <include/android_build.h>
