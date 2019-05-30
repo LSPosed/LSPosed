@@ -5,13 +5,13 @@ import android.text.TextUtils;
 import com.elderdrivers.riru.edxp.Main;
 import com.elderdrivers.riru.edxp.config.ConfigManager;
 import com.elderdrivers.riru.edxp.deopt.PrebuiltMethodsDeopter;
+import com.elderdrivers.riru.edxp.framework.Zygote;
 import com.elderdrivers.riru.edxp.sandhook.entry.Router;
 import com.elderdrivers.riru.edxp.util.ProcessUtils;
 import com.elderdrivers.riru.edxp.util.Utils;
 
 import de.robv.android.xposed.XposedBridge;
 
-import static com.elderdrivers.riru.edxp.Main.isAppNeedHook;
 import static com.elderdrivers.riru.edxp.util.FileUtils.getDataPathPrefix;
 
 /**
@@ -40,7 +40,7 @@ public class BlackWhiteListProxy {
                                             String niceName, int[] fdsToClose, int[] fdsToIgnore,
                                             boolean startChildZygote, String instructionSet,
                                             String appDataDir) {
-        final boolean isDynamicModulesMode = Main.isDynamicModulesEnabled();
+        final boolean isDynamicModulesMode = ConfigManager.isDynamicModulesEnabled();
         if (isDynamicModulesMode) {
             // should never happen
             return;
@@ -56,7 +56,7 @@ public class BlackWhiteListProxy {
     public static void forkSystemServerPre(int uid, int gid, int[] gids, int debugFlags,
                                            int[][] rlimits, long permittedCapabilities,
                                            long effectiveCapabilities) {
-        final boolean isDynamicModulesMode = Main.isDynamicModulesEnabled();
+        final boolean isDynamicModulesMode = ConfigManager.isDynamicModulesEnabled();
         if (isDynamicModulesMode) {
             // should never happen
             return;
@@ -75,7 +75,6 @@ public class BlackWhiteListProxy {
     private static void onForkPreForNonDynamicMode(boolean isSystemServer) {
         Router.onForkStart();
         Router.initResourcesHook();
-        ConfigManager.setDynamicModulesMode(false);
         // set startsSystemServer flag used when loadModules
         Router.prepare(isSystemServer);
         // deoptBootMethods once for all child processes of zygote
@@ -86,16 +85,15 @@ public class BlackWhiteListProxy {
         // loadModules once for all child processes of zygote
         // TODO maybe just save initZygote callbacks and call them when whitelisted process forked?
         Router.loadModulesSafely(true);
-        Main.closeFilesBeforeForkNative();
+        Zygote.closeFilesBeforeFork();
     }
 
     private static void onForkPostCommon(boolean isSystemServer, String appDataDir, String niceName) {
         Main.setAppDataDir(appDataDir);
         Main.niceName = niceName;
-        final boolean isDynamicModulesMode = Main.isDynamicModulesEnabled();
-        ConfigManager.setDynamicModulesMode(isDynamicModulesMode);
+        final boolean isDynamicModulesMode = ConfigManager.isDynamicModulesEnabled();
         if (!isDynamicModulesMode) {
-            Main.reopenFilesAfterForkNative();
+            Zygote.reopenFilesAfterFork();
         }
         Router.onEnterChildProcess();
         if (!checkNeedHook(appDataDir, niceName)) {
@@ -123,7 +121,7 @@ public class BlackWhiteListProxy {
             needHook = false;
         } else {
             // FIXME some process cannot read app_data_file because of MLS, e.g. bluetooth
-            needHook = isAppNeedHook(appDataDir);
+            needHook = ConfigManager.isAppNeedHook(appDataDir);
         }
         if (!needHook) {
             // clean up the scene

@@ -3,6 +3,7 @@ package com.elderdrivers.riru.edxp.yahfa.core;
 import android.os.Build;
 
 import com.elderdrivers.riru.edxp.Main;
+import com.elderdrivers.riru.edxp.core.Yahfa;
 import com.elderdrivers.riru.edxp.util.Utils;
 
 import java.lang.reflect.Field;
@@ -122,7 +123,7 @@ public class HookMethodResolver {
     }
 
     private static void resolveInNative(Method hook, Method backup) {
-        Main.ensureMethodCached(hook, backup);
+        Yahfa.ensureMethodCached(hook, backup);
     }
 
     public static Field getField(Class topClass, String fieldName) throws NoSuchFieldException {

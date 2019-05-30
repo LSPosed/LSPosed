@@ -3,10 +3,10 @@ import org.gradle.internal.os.OperatingSystem
 
 apply plugin: 'com.android.library'
 
-version "v0.4.2.3_alpha"
+version "v0.4.3.0_alpha"
 
 ext {
-    versionCode = "4230"
+    versionCode = "4300"
     module_name = "EdXposed"
     jar_dest_dir = "${projectDir}/template_override/system/framework/"
     is_windows = OperatingSystem.current().isWindows()
@@ -31,7 +31,7 @@ android {
         externalNativeBuild {
             cmake {
                 abiFilters 'arm64-v8a', 'armeabi-v7a', 'x86', 'x86_64'
-                cppFlags "-std=c++11 -ffixed-x18 -Qunused-arguments -frtti"
+                cppFlags "-std=c++17 -ffixed-x18 -Qunused-arguments -frtti"
                 cFlags "-std=gnu99 -ffixed-x18 -Qunused-arguments -frtti"
             }
         }
@@ -49,8 +49,8 @@ android {
         release {
             externalNativeBuild {
                 cmake {
-                    cppFlags "-fvisibility=hidden -fvisibility-inlines-hidden -O2 -s"
-                    cFlags "-fvisibility=hidden -fvisibility-inlines-hidden -O2 -s"
+                    cppFlags "-fvisibility=hidden -fvisibility-inlines-hidden -O2 -s -Wno-unused-value"
+                    cFlags "-fvisibility=hidden -fvisibility-inlines-hidden -O2 -s -Wno-unused-value"
                 }
             }
             minifyEnabled true

@@ -5,6 +5,7 @@ import android.os.Build;
 import android.text.TextUtils;
 
 import com.elderdrivers.riru.edxp.Main;
+import com.elderdrivers.riru.edxp.core.Yahfa;
 import com.elderdrivers.riru.edxp.sandhook.core.HookMain;
 
 import java.io.File;
@@ -219,7 +220,7 @@ public class HookerDexMaker {
         mHookMethod = mHookClass.getMethod(METHOD_NAME_HOOK, mActualParameterTypes);
         mBackupMethod = mHookClass.getMethod(METHOD_NAME_BACKUP, mActualParameterTypes);
         mCallBackupMethod = mHookClass.getMethod(METHOD_NAME_CALL_BACKUP, mActualParameterTypes);
-        Main.setMethodNonCompilable(mCallBackupMethod);
+        Yahfa.setMethodNonCompilable(mCallBackupMethod);
         HookMain.backupAndHook(mMember, mHookMethod, mBackupMethod);
     }
 

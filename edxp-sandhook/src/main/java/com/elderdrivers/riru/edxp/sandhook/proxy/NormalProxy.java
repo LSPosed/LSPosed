@@ -3,6 +3,7 @@ package com.elderdrivers.riru.edxp.sandhook.proxy;
 import com.elderdrivers.riru.edxp.Main;
 import com.elderdrivers.riru.edxp.config.ConfigManager;
 import com.elderdrivers.riru.edxp.deopt.PrebuiltMethodsDeopter;
+import com.elderdrivers.riru.edxp.framework.Zygote;
 import com.elderdrivers.riru.edxp.sandhook.entry.Router;
 
 import static com.elderdrivers.riru.edxp.util.FileUtils.getDataPathPrefix;
@@ -17,8 +18,6 @@ public class NormalProxy {
         // mainly for secondary zygote
         Router.onForkStart();
         Router.initResourcesHook();
-        final boolean isDynamicModulesMode = Main.isDynamicModulesEnabled();
-        ConfigManager.setDynamicModulesMode(isDynamicModulesMode);
         // call this to ensure the flag is set to false ASAP
         Router.prepare(false);
         PrebuiltMethodsDeopter.deoptBootMethods(); // do it once for secondary zygote
@@ -26,7 +25,7 @@ public class NormalProxy {
         Router.installBootstrapHooks(false);
         // only load modules for secondary zygote
         Router.loadModulesSafely(true);
-        Main.closeFilesBeforeForkNative();
+        Zygote.closeFilesBeforeFork();
     }
 
     public static void forkAndSpecializePost(int pid, String appDataDir, String niceName) {
@@ -34,7 +33,7 @@ public class NormalProxy {
         Main.setAppDataDir(appDataDir);
         Main.niceName = niceName;
         Router.prepare(false);
-        Main.reopenFilesAfterForkNative();
+        Zygote.reopenFilesAfterFork();
         Router.onEnterChildProcess();
         // load modules for each app process on its forked if dynamic modules mode is on
         Router.loadModulesSafely(false);
@@ -45,8 +44,6 @@ public class NormalProxy {
                                            long permittedCapabilities, long effectiveCapabilities) {
         Router.onForkStart();
         Router.initResourcesHook();
-        final boolean isDynamicModulesMode = Main.isDynamicModulesEnabled();
-        ConfigManager.setDynamicModulesMode(isDynamicModulesMode);
         // set startsSystemServer flag used when loadModules
         Router.prepare(true);
         PrebuiltMethodsDeopter.deoptBootMethods(); // do it once for main zygote
@@ -58,7 +55,7 @@ public class NormalProxy {
         // because if not global hooks installed in initZygote might not be
         // propagated to processes not forked via forkAndSpecialize
         Router.loadModulesSafely(true);
-        Main.closeFilesBeforeForkNative();
+        Zygote.closeFilesBeforeFork();
     }
 
     public static void forkSystemServerPost(int pid) {
@@ -66,7 +63,7 @@ public class NormalProxy {
         Main.setAppDataDir(getDataPathPrefix() + "android");
         Main.niceName = "system_server";
         Router.prepare(true);
-        Main.reopenFilesAfterForkNative();
+        Zygote.reopenFilesAfterFork();
         Router.onEnterChildProcess();
         // reload module list if dynamic mode is on
         Router.loadModulesSafely(false);

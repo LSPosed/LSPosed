@@ -3,7 +3,10 @@ package com.elderdrivers.riru.edxp.sandhook.config;
 import android.util.Log;
 
 import com.elderdrivers.riru.edxp.Main;
+import com.elderdrivers.riru.edxp.art.ClassLinker;
 import com.elderdrivers.riru.edxp.config.BaseHookProvider;
+import com.elderdrivers.riru.edxp.core.ResourcesHook;
+import com.elderdrivers.riru.edxp.core.Yahfa;
 import com.elderdrivers.riru.edxp.sandhook.dexmaker.DynamicBridge;
 import com.swift.sandhook.xposedcompat.XposedCompat;
 import com.swift.sandhook.xposedcompat.methodgen.SandHookXposedBridge;
@@ -46,12 +49,12 @@ public class SandHookProvider extends BaseHookProvider {
 
     @Override
     public Object findMethodNative(Class clazz, String methodName, String methodSig) {
-        return Main.findMethodNative(clazz, methodName, methodSig);
+        return Yahfa.findMethodNative(clazz, methodName, methodSig);
     }
 
     @Override
     public void deoptMethodNative(Object method) {
-        Main.deoptMethodNative(method);
+        ClassLinker.setEntryPointsToInterpreter((Member) method);
     }
 
     @Override
@@ -61,11 +64,11 @@ public class SandHookProvider extends BaseHookProvider {
 
     @Override
     public boolean initXResourcesNative() {
-        return Main.initXResourcesNative();
+        return ResourcesHook.initXResourcesNative();
     }
 
     @Override
     public boolean removeFinalFlagNative(Class clazz) {
-        return Main.removeFinalFlagNative(clazz);
+        return ResourcesHook.removeFinalFlagNative(clazz);
     }
 }

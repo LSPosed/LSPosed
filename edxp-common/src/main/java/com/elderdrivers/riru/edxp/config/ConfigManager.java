@@ -18,17 +18,6 @@ public class ConfigManager {
     private static final String DYNAMIC_MODULES = INSTALLER_DATA_BASE_DIR + "conf/dynamicmodules";
     private static final Set<String> WHITE_LIST = Collections.singleton(INSTALLER_PACKAGE_NAME);
     private static final HashMap<String, Boolean> compatModeCache = new HashMap<>();
-    private static volatile boolean IS_DYNAMIC_MODULES = false;
-
-    public static boolean isDynamicModulesMode() {
-        return IS_DYNAMIC_MODULES;
-    }
-
-    public static synchronized void setDynamicModulesMode(boolean isDynamicModulesMode) {
-        if (isDynamicModulesMode != IS_DYNAMIC_MODULES) {
-            IS_DYNAMIC_MODULES = isDynamicModulesMode;
-        }
-    }
 
     public static boolean shouldUseWhitelist() {
         return isFileExists(USE_WHITE_LIST);
@@ -59,4 +48,16 @@ public class ConfigManager {
     private static boolean isFileExists(String path) {
         return SELinuxHelper.getAppDataFileService().checkFileExists(path);
     }
+
+    public static native boolean isBlackWhiteListEnabled();
+
+    public static native boolean isDynamicModulesEnabled();
+
+    public static native boolean isResourcesHookEnabled();
+
+    public static native boolean isDeoptBootImageEnabled();
+
+    public static native String getInstallerPackageName();
+
+    public static native boolean isAppNeedHook(String appDataDir);
 }

@@ -20,6 +20,7 @@
 #define ANDROID_O                       26
 #define ANDROID_O_MR1                   27
 #define ANDROID_P                       28
+#define ANDROID_Q                       29
 
 static inline int32_t GetAndroidApiLevel() {
     char prop_value[PROP_VALUE_MAX];

@@ -1,8 +1,9 @@
 package com.elderdrivers.riru.edxp.yahfa.core;
 
-import com.elderdrivers.riru.edxp.Main;
-import com.elderdrivers.riru.edxp.yahfa._hooker.OnePlusWorkAroundHooker;
+import com.elderdrivers.riru.edxp.art.Heap;
+import com.elderdrivers.riru.edxp.core.Yahfa;
 import com.elderdrivers.riru.edxp.util.Utils;
+import com.elderdrivers.riru.edxp.yahfa._hooker.OnePlusWorkAroundHooker;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -13,9 +14,6 @@ import java.util.Collections;
 import java.util.Set;
 
 import de.robv.android.xposed.XposedHelpers;
-
-import static com.elderdrivers.riru.edxp.Main.backupAndHookNative;
-import static com.elderdrivers.riru.edxp.Main.findMethodNative;
 
 public class HookMain {
 
@@ -116,13 +114,13 @@ public class HookMain {
         }
         // make sure GC completed before hook
         Thread currentThread = Thread.currentThread();
-        int lastGcType = Main.waitForGcToComplete(
+        int lastGcType = Heap.waitForGcToComplete(
                 XposedHelpers.getLongField(currentThread, "nativePeer"));
         if (lastGcType < 0) {
             Utils.logW("waitForGcToComplete failed, using fallback");
             Runtime.getRuntime().gc();
         }
-        if (!backupAndHookNative(target, hook, backup)) {
+        if (!Yahfa.backupAndHookNative(target, hook, backup)) {
             throw new RuntimeException("Failed to hook " + target + " with " + hook);
         }
     }
@@ -137,7 +135,7 @@ public class HookMain {
         if (methodSig == null) {
             throw new IllegalArgumentException("null method signature");
         }
-        return findMethodNative(cls, methodName, methodSig);
+        return Yahfa.findMethodNative(cls, methodName, methodSig);
     }
 
     private static void checkCompatibleMethods(Object original, Method replacement, String originalName, String replacementName) {

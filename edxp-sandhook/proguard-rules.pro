@@ -31,3 +31,7 @@
 -keepclassmembers class * implements com.elderdrivers.riru.common.KeepMembers { *; }
 
 -keep class com.swift.sandhook.** {*;}
+
+-keepclasseswithmember class * {
+    native <methods>;
+}

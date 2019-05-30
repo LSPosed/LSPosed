@@ -1,19 +1,36 @@
+
+#pragma once
+
 #include <jni.h>
 #include <sys/types.h>
+#include <string>
+#include "art/base/macros.h"
 
-#ifndef CONFIG_H
-#define CONFIG_H
+namespace edxp {
 
 //#define LOG_DISABLED
 //#define DEBUG
 
-#define INJECT_DEX_PATH \
-"/system/framework/edxp.jar:/system/framework/eddalvikdx.jar:/system/framework/eddexmaker.jar"
+#if defined(__LP64__)
+# define LP_SELECT(lp32, lp64) (lp64)
+#else
+# define LP_SELECT(lp32, lp64) (lp32)
+#endif
 
-#define ENTRY_CLASS_NAME "com.elderdrivers.riru.edxp.Main"
+    static constexpr const char *kInjectDexPath = "/system/framework/edxp.jar:"
+                                                  "/system/framework/eddalvikdx.jar:"
+                                                  "/system/framework/eddexmaker.jar";
+    static constexpr const char *kEntryClassName = "com.elderdrivers.riru.edxp.Main";
+    static constexpr const char *kSandHookClassName = "com.swift.sandhook.SandHook";
+    static constexpr const char *kSandHookNeverCallClassName = "com.swift.sandhook.ClassNeverCall";
 
-#define CLASS_SAND_HOOK "com.swift.sandhook.SandHook"
+    static const std::string kLibBasePath = LP_SELECT("/system/lib/", "/system/lib64/");
+    static const std::string kLibArtPath = kLibBasePath + "libart.so";
+    static const std::string kLibWhalePath = kLibBasePath + "libwhale.edxp.so";
+    static const std::string kLibSandHookPath = kLibBasePath + "libsandhook.edxp.so";
+    static const std::string kLibFwPath = kLibBasePath + "libandroidfw.so";
 
-#define CLASS_NEVER_CALL "com.swift.sandhook.ClassNeverCall"
-
-#endif //CONFIG_H
+    inline const char *const BoolToString(bool b) {
+        return b ? "true" : "false";
+    }
+}

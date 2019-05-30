@@ -31,3 +31,7 @@
 -keepclassmembers class * implements com.elderdrivers.riru.common.KeepMembers { *; }
 
 -keep class com.lody.** {*;}
+
+-keepclasseswithmember class * {
+    native <methods>;
+}

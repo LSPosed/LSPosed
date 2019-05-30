@@ -1,10 +1,35 @@
-#ifndef JNIHELPER_H
-#define JNIHELPER_H
+#pragma once
 
 #include <jni.h>
+#include <art/base/macros.h>
 #include "logging.h"
 
-int ClearException(JNIEnv *env) {
+#define JNI_START JNIEnv *env, jclass clazz
+
+ALWAYS_INLINE static void JNIExceptionClear(JNIEnv *env) {
+    if (env->ExceptionCheck()) {
+        env->ExceptionClear();
+    }
+}
+
+ALWAYS_INLINE static bool JNIExceptionCheck(JNIEnv *env) {
+    if (env->ExceptionCheck()) {
+        jthrowable e = env->ExceptionOccurred();
+        env->Throw(e);
+        env->DeleteLocalRef(e);
+        return true;
+    }
+    return false;
+}
+
+ALWAYS_INLINE static void JNIExceptionClearAndDescribe(JNIEnv *env) {
+    if (env->ExceptionCheck()) {
+        env->ExceptionDescribe();
+        env->ExceptionClear();
+    }
+}
+
+ALWAYS_INLINE static int ClearException(JNIEnv *env) {
     jthrowable exception = env->ExceptionOccurred();
     if (exception != nullptr) {
         env->ExceptionDescribe();
@@ -58,6 +83,10 @@ int ClearException(JNIEnv *env) {
     env->CallStaticVoidMethod(obj, __VA_ARGS__); \
     if (ClearException(env)) LOGE("CallStaticVoidMethod " #obj " " #__VA_ARGS__);
 
+#define JNI_CallStaticObjectMethod(env, obj, ...) \
+    env->CallStaticObjectMethod(obj, __VA_ARGS__); \
+    if (ClearException(env)) LOGE("CallStaticVoidMethod " #obj " " #__VA_ARGS__);
+
 #define JNI_GetArrayLength(env, array) \
     env->GetArrayLength(array); \
     if (ClearException(env)) LOGE("GetArrayLength " #array);
@@ -70,4 +99,3 @@ int ClearException(JNIEnv *env) {
     env->RegisterNatives(class, methods, size); \
     if (ClearException(env)) LOGE("RegisterNatives " #class);
 
-#endif // JNIHELPER_H

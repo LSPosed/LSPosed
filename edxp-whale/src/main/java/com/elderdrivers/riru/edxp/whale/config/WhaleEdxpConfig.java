@@ -1,6 +1,7 @@
 package com.elderdrivers.riru.edxp.whale.config;
 
 import com.elderdrivers.riru.edxp.Main;
+import com.elderdrivers.riru.edxp.config.ConfigManager;
 import com.elderdrivers.riru.edxp.config.EdXpConfig;
 import com.elderdrivers.riru.edxp.config.InstallerChooser;
 import com.elderdrivers.riru.edxp.hooker.XposedBlackListHooker;
@@ -18,11 +19,11 @@ public class WhaleEdxpConfig implements EdXpConfig {
 
     @Override
     public boolean isDynamicModulesMode() {
-        return Main.isDynamicModulesEnabled();
+        return ConfigManager.isDynamicModulesEnabled();
     }
 
     @Override
     public boolean isResourcesHookEnabled() {
-        return Main.isResourcesHookEnabled();
+        return ConfigManager.isResourcesHookEnabled();
     }
 }

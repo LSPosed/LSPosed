@@ -1,5 +1,8 @@
 apply plugin: 'com.android.application'
 
+sourceCompatibility = "7"
+targetCompatibility = "7"
+
 android {
     compileSdkVersion 28
 
@@ -45,7 +48,7 @@ preBuild.doLast {
 afterEvaluate {
 
     tasks.withType(JavaCompile) {
-        options.compilerArgs.add("-Xbootclasspath/p:${hiddenApiStubJarFilePath}")
+        options.compilerArgs << "-Xbootclasspath/p:${hiddenApiStubJarFilePath}"
     }
 
     android.applicationVariants.all { variant ->

@@ -5,7 +5,7 @@
 #include "android/log.h"
 
 #ifndef LOG_TAG
-#define LOG_TAG    "EdXposed-Core-Native"
+#define LOG_TAG    "EdXposed"
 #endif
 
 #include "config.h"

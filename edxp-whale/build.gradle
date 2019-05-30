@@ -1,5 +1,8 @@
 apply plugin: 'com.android.application'
 
+sourceCompatibility = "7"
+targetCompatibility = "7"
+
 android {
     compileSdkVersion 28
 
