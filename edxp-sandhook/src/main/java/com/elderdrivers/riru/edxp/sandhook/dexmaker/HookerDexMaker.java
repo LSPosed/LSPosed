@@ -4,9 +4,8 @@ import android.annotation.TargetApi;
 import android.os.Build;
 import android.text.TextUtils;
 
-import com.elderdrivers.riru.edxp.Main;
 import com.elderdrivers.riru.edxp.core.Yahfa;
-import com.elderdrivers.riru.edxp.sandhook.core.HookMain;
+import com.elderdrivers.riru.edxp.core.yahfa.HookMain;
 
 import java.io.File;
 import java.lang.reflect.Constructor;

@@ -2,7 +2,6 @@ package com.elderdrivers.riru.edxp.sandhook.config;
 
 import android.util.Log;
 
-import com.elderdrivers.riru.edxp.Main;
 import com.elderdrivers.riru.edxp.art.ClassLinker;
 import com.elderdrivers.riru.edxp.config.BaseHookProvider;
 import com.elderdrivers.riru.edxp.core.ResourcesHook;

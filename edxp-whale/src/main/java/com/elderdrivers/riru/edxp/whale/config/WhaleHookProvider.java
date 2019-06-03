@@ -1,6 +1,5 @@
 package com.elderdrivers.riru.edxp.whale.config;
 
-import com.elderdrivers.riru.edxp.Main;
 import com.elderdrivers.riru.edxp.art.ClassLinker;
 import com.elderdrivers.riru.edxp.config.BaseHookProvider;
 import com.elderdrivers.riru.edxp.core.ResourcesHook;

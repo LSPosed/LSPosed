@@ -1,9 +1,5 @@
 
-extern "C"
-{
 #include "HookMain.h"
-}
-
 #include <nativehelper/jni_macros.h>
 #include "jni.h"
 #include "native_util.h"

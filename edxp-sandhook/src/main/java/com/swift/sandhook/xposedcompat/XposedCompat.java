@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Process;
 import android.text.TextUtils;
 
+import com.elderdrivers.riru.edxp.config.ConfigManager;
 import com.swift.sandhook.SandHook;
 import com.swift.sandhook.xposedcompat.classloaders.ComposeClassLoader;
 import com.swift.sandhook.xposedcompat.methodgen.SandHookXposedBridge;
@@ -21,8 +22,6 @@ import static com.swift.sandhook.xposedcompat.utils.FileUtils.IS_USING_PROTECTED
 
 public class XposedCompat {
 
-    public static volatile String appDataDir;
-
     // TODO initialize these variables
     public static volatile File cacheDir;
     public static volatile ClassLoader classLoader;
@@ -37,16 +36,17 @@ public class XposedCompat {
     public static void addHookers(ClassLoader classLoader, Class[] hookers) {
         if (hookers == null)
             return;
-        for (Class hooker:hookers) {
+        for (Class hooker : hookers) {
             try {
                 SandHook.addHookClass(classLoader, hooker);
-            } catch (Throwable throwable) {}
+            } catch (Throwable throwable) {
+            }
         }
     }
 
     public static File getCacheDir() {
         if (cacheDir == null) {
-            String fixedAppDataDir = getDataPathPrefix() + getPackageName(appDataDir) + "/";
+            String fixedAppDataDir = getDataPathPrefix() + getPackageName(ConfigManager.appDataDir) + "/";
             cacheDir = new File(fixedAppDataDir, "/cache/sandhook/"
                     + ProcessUtils.getProcessName().replace(":", "_") + "/");
         }

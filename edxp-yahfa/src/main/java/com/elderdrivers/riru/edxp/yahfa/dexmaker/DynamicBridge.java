@@ -1,6 +1,7 @@
 package com.elderdrivers.riru.edxp.yahfa.dexmaker;
 
-import com.elderdrivers.riru.edxp.Main;
+
+import com.elderdrivers.riru.edxp.config.ConfigManager;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -13,10 +14,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import de.robv.android.xposed.XposedBridge;
 
-import static com.elderdrivers.riru.edxp.yahfa.dexmaker.DexMakerUtils.shouldUseInMemoryHook;
 import static com.elderdrivers.riru.edxp.util.FileUtils.getDataPathPrefix;
 import static com.elderdrivers.riru.edxp.util.FileUtils.getPackageName;
 import static com.elderdrivers.riru.edxp.util.ProcessUtils.getCurrentProcessName;
+import static com.elderdrivers.riru.edxp.yahfa.dexmaker.DexMakerUtils.shouldUseInMemoryHook;
 
 public final class DynamicBridge {
 
@@ -74,12 +75,12 @@ public final class DynamicBridge {
         try {
             // we always choose to use device encrypted storage data on android N and later
             // in case some app is installing hooks before phone is unlocked
-            String fixedAppDataDir = getDataPathPrefix() + getPackageName(Main.appDataDir) + "/";
+            String fixedAppDataDir = getDataPathPrefix() + getPackageName(ConfigManager.appDataDir) + "/";
             dexDir = new File(fixedAppDataDir, "/cache/edhookers/"
-                    + getCurrentProcessName(Main.appProcessName).replace(":", "_") + "/");
+                    + getCurrentProcessName(ConfigManager.appProcessName).replace(":", "_") + "/");
             dexOptDir = new File(dexDir, "oat");
             dexDir.mkdirs();
-            DexLog.d(Main.appProcessName + " deleting dir: " + dexOptDir.getAbsolutePath());
+            DexLog.d(ConfigManager.appProcessName + " deleting dir: " + dexOptDir.getAbsolutePath());
         } catch (Throwable throwable) {
             DexLog.e("error when init dex path", throwable);
         }

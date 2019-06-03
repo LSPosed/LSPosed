@@ -1,6 +1,5 @@
 package com.elderdrivers.riru.edxp.yahfa.config;
 
-import com.elderdrivers.riru.edxp.Main;
 import com.elderdrivers.riru.edxp.config.ConfigManager;
 import com.elderdrivers.riru.edxp.config.EdXpConfig;
 import com.elderdrivers.riru.edxp.config.InstallerChooser;

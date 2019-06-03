@@ -5,8 +5,7 @@ import android.os.Build;
 import android.text.TextUtils;
 
 import com.elderdrivers.riru.edxp.config.ConfigManager;
-import com.elderdrivers.riru.edxp.Main;
-import com.elderdrivers.riru.edxp.sandhook.core.HookMain;
+import com.elderdrivers.riru.edxp.core.yahfa.HookMain;
 
 import java.lang.reflect.Member;
 import java.security.MessageDigest;
@@ -27,8 +26,8 @@ public class DexMakerUtils {
         }
         String packageName = AndroidAppHelper.currentPackageName();
         if (TextUtils.isEmpty(packageName)) { //default to true
-            DexLog.w("packageName is empty, processName=" + Main.appProcessName
-                    + ", appDataDir=" + Main.appDataDir);
+            DexLog.w("packageName is empty, processName=" + ConfigManager.appProcessName
+                    + ", appDataDir=" + ConfigManager.appDataDir);
             return true;
         }
         return !ConfigManager.shouldUseCompatMode(packageName);

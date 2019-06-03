@@ -20,7 +20,7 @@ namespace edxp {
     static constexpr const char *kInjectDexPath = "/system/framework/edxp.jar:"
                                                   "/system/framework/eddalvikdx.jar:"
                                                   "/system/framework/eddexmaker.jar";
-    static constexpr const char *kEntryClassName = "com.elderdrivers.riru.edxp.Main";
+    static constexpr const char *kEntryClassName = "com.elderdrivers.riru.edxp.core.Main";
     static constexpr const char *kSandHookClassName = "com.swift.sandhook.SandHook";
     static constexpr const char *kSandHookNeverCallClassName = "com.swift.sandhook.ClassNeverCall";
 
