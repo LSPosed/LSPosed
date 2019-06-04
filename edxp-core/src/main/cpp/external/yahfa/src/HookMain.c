@@ -203,6 +203,7 @@ static void ensureMethodCached(void *hookMethod, void *backupMethod,
     int methodIndex = read32(
             (void *) ((char *) backupMethod + OFFSET_dex_method_index_in_ArtMethod));
 
+    // todo fixme
     if (methodIndex >= 512) {
         LOGW("methodIndex = %d", methodIndex);
     }
