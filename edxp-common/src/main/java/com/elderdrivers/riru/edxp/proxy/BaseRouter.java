@@ -16,6 +16,7 @@ import com.elderdrivers.riru.edxp._hooker.yahfa.SystemMainHooker;
 import com.elderdrivers.riru.edxp.core.yahfa.HookMain;
 import com.elderdrivers.riru.edxp.entry.yahfa.AppBootstrapHookInfo;
 import com.elderdrivers.riru.edxp.entry.yahfa.SysBootstrapHookInfo;
+import com.elderdrivers.riru.edxp.entry.yahfa.SysInnerHookInfo;
 import com.elderdrivers.riru.edxp.entry.yahfa.WorkAroundHookInfo;
 import com.elderdrivers.riru.edxp.util.Utils;
 
@@ -125,13 +126,13 @@ public abstract class BaseRouter implements Router {
         ClassLoader classLoader = BaseRouter.class.getClassLoader();
         if (useXposedApi) {
             XposedHelpers.findAndHookMethod(StartBootstrapServicesHooker.className,
-                    SystemMainHooker.systemServerCL,
+                    SystemMain.systemServerCL,
                     StartBootstrapServicesHooker.methodName, new StartBootstrapServices());
         } else {
             HookMain.doHookDefault(
                     classLoader,
-                    SystemMainHooker.systemServerCL,
-                    SystemMainHooker.class.getName());
+                    SystemMain.systemServerCL,
+                    SysInnerHookInfo.class.getName());
         }
     }
 

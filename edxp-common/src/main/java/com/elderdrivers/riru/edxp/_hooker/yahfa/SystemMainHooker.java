@@ -3,7 +3,7 @@ package com.elderdrivers.riru.edxp._hooker.yahfa;
 import android.app.ActivityThread;
 
 import com.elderdrivers.riru.common.KeepMembers;
-import com.elderdrivers.riru.edxp._hooker.impl.OneplusWorkaround;
+import com.elderdrivers.riru.edxp._hooker.impl.SystemMain;
 
 import de.robv.android.xposed.XC_MethodHook;
 
@@ -13,10 +13,8 @@ public class SystemMainHooker implements KeepMembers {
     public static String methodName = "systemMain";
     public static String methodSig = "()Landroid/app/ActivityThread;";
 
-    public static ClassLoader systemServerCL;
-
     public static ActivityThread hook() throws Throwable {
-        final XC_MethodHook methodHook = new OneplusWorkaround();
+        final XC_MethodHook methodHook = new SystemMain();
         final XC_MethodHook.MethodHookParam param = new XC_MethodHook.MethodHookParam();
         param.thisObject = null;
         param.args = new Object[]{};
