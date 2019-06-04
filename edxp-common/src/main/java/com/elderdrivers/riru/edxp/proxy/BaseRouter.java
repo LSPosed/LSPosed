@@ -124,7 +124,8 @@ public abstract class BaseRouter implements Router {
     public void startSystemServerHook() {
         ClassLoader classLoader = BaseRouter.class.getClassLoader();
         if (useXposedApi) {
-            XposedHelpers.findAndHookMethod(StartBootstrapServicesHooker.className, classLoader,
+            XposedHelpers.findAndHookMethod(StartBootstrapServicesHooker.className,
+                    SystemMainHooker.systemServerCL,
                     StartBootstrapServicesHooker.methodName, new StartBootstrapServices());
         } else {
             HookMain.doHookDefault(
