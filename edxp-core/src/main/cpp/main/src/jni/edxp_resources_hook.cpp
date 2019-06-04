@@ -16,8 +16,8 @@ namespace edxp {
             jclass class_clazz = JNI_FindClass(env, "java/lang/Class");
             jfieldID java_lang_Class_accessFlags = JNI_GetFieldID(
                     env, class_clazz, "accessFlags", "I");
-            jint access_flags = env->GetIntField(clazz, java_lang_Class_accessFlags);
-            env->SetIntField(clazz, java_lang_Class_accessFlags, access_flags & ~kAccFinal);
+            jint access_flags = env->GetIntField(target_class, java_lang_Class_accessFlags);
+            env->SetIntField(target_class, java_lang_Class_accessFlags, access_flags & ~kAccFinal);
             return JNI_TRUE;
         }
         return JNI_FALSE;
