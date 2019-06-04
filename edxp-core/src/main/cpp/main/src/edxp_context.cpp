@@ -7,11 +7,10 @@
 #include <jni/art_class_linker.h>
 #include <jni/art_heap.h>
 #include <jni/edxp_yahfa.h>
-#include <dlfcn.h>
-#include <native_hook.h>
 #include <jni/framework_zygote.h>
 #include <jni/edxp_resources_hook.h>
 #include <dl_util.h>
+#include <art/runtime/jni_env_ext.h>
 #include "edxp_context.h"
 #include "config_manager.h"
 
@@ -33,10 +32,21 @@ namespace edxp {
         return inject_class_loader_;
     }
 
+    void Context::CallOnPostFixupStaticTrampolines(void *class_ptr) {
+        if (post_fixup_static_mid_ != nullptr) {
+            JNIEnv *env;
+            vm_->GetEnv((void **) (&env), JNI_VERSION_1_4);
+            art::JNIEnvExt env_ext(env);
+            jobject clazz = env_ext.NewLocalRefer(class_ptr);
+            JNI_CallStaticVoidMethod(env, class_linker_class_, post_fixup_static_mid_, clazz);
+        }
+    }
+
     void Context::LoadDexAndInit(JNIEnv *env, const char *dex_path) {
         if (LIKELY(initialized_)) {
             return;
         }
+
         jclass classloader = JNI_FindClass(env, "java/lang/ClassLoader");
         jmethodID getsyscl_mid = JNI_GetStaticMethodID(
                 env, classloader, "getSystemClassLoader", "()Ljava/lang/ClassLoader;");
@@ -55,6 +65,15 @@ namespace edxp {
             return;
         }
         inject_class_loader_ = env->NewGlobalRef(my_cl);
+
+        // initialize pending methods related
+        env->GetJavaVM(&vm_);
+        class_linker_class_ = (jclass) env->NewGlobalRef(
+                FindClassFromLoader(env, kClassLinkerClassName));
+        post_fixup_static_mid_ = JNI_GetStaticMethodID(env, class_linker_class_,
+                                                       "onPostFixupStaticTrampolines",
+                                                       "(Ljava/lang/Class;)V");
+
         entry_class_ = (jclass) (env->NewGlobalRef(
                 FindClassFromLoader(env, GetCurrentClassLoader(), kEntryClassName)));
 
@@ -129,6 +148,10 @@ namespace edxp {
         } else {
             LOGE("method %s id is null", method_name);
         }
+    }
+
+    ALWAYS_INLINE JavaVM *Context::GetJavaVM() const {
+        return vm_;
     }
 
     ALWAYS_INLINE void Context::SetAppDataDir(jstring app_data_dir) {

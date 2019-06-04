@@ -21,6 +21,7 @@ namespace edxp {
                                                   "/system/framework/eddalvikdx.jar:"
                                                   "/system/framework/eddexmaker.jar";
     static constexpr const char *kEntryClassName = "com.elderdrivers.riru.edxp.core.Main";
+    static constexpr const char *kClassLinkerClassName = "com.elderdrivers.riru.edxp.art.ClassLinker";
     static constexpr const char *kSandHookClassName = "com.swift.sandhook.SandHook";
     static constexpr const char *kSandHookNeverCallClassName = "com.swift.sandhook.ClassNeverCall";
 

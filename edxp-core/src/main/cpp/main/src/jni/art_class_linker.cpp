@@ -28,7 +28,7 @@ namespace edxp {
     };
 
     void RegisterArtClassLinker(JNIEnv *env) {
-        REGISTER_EDXP_NATIVE_METHODS("com.elderdrivers.riru.edxp.art.ClassLinker");
+        REGISTER_EDXP_NATIVE_METHODS(kClassLinkerClassName);
     }
 
 }

@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include <dlfcn.h>
 #include "logging.h"
 
 namespace edxp {

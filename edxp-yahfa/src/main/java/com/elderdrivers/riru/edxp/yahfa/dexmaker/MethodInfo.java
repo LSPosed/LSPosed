@@ -55,16 +55,6 @@ public class MethodInfo {
         methodSig = builder.toString();
     }
 
-    public Class getClassForSure() {
-        try {
-            // TODO does initialize make sense?
-            return Class.forName(className, true, classLoader);
-        } catch (Throwable throwable) {
-            DexLog.e("error when getClassForSure", throwable);
-            return null;
-        }
-    }
-
     public static String getDescStr(Class clazz) {
         if (clazz.equals(boolean.class)) {
             return "Z";

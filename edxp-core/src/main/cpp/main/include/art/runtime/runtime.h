@@ -2,6 +2,7 @@
 #pragma once
 
 #include <base/object.h>
+#include <config_manager.h>
 
 namespace art {
 

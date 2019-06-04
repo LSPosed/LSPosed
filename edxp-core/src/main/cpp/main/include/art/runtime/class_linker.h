@@ -3,6 +3,9 @@
 
 #include <JNIHelper.h>
 #include <base/object.h>
+#include "runtime.h"
+#include "jni_env_ext.h"
+#include "edxp_context.h"
 
 namespace art {
 
@@ -24,6 +27,11 @@ namespace art {
             return ConstructorBackup(thiz, intern_table);
         }
 
+        CREATE_HOOK_STUB_ENTRIES(void, FixupStaticTrampolines, void *thiz, void *clazz_ptr) {
+            FixupStaticTrampolinesBackup(thiz, clazz_ptr);
+            edxp::Context::GetInstance()->CallOnPostFixupStaticTrampolines(clazz_ptr);
+        }
+
     public:
         ClassLinker(void *thiz) : HookedObject(thiz) {}
 
@@ -35,6 +43,8 @@ namespace art {
             HOOK_FUNC(Constructor, "_ZN3art11ClassLinkerC2EPNS_11InternTableE");
             RETRIEVE_FUNC_SYMBOL(SetEntryPointsToInterpreter,
                                  "_ZNK3art11ClassLinker27SetEntryPointsToInterpreterEPNS_9ArtMethodE");
+
+            HOOK_FUNC(FixupStaticTrampolines, "_ZN3art11ClassLinker22FixupStaticTrampolinesENS_6ObjPtrINS_6mirror5ClassEEE");
         }
 
         ALWAYS_INLINE void SetEntryPointsToInterpreter(void *art_method) const {

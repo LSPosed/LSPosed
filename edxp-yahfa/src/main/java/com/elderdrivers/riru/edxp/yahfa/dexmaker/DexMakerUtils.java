@@ -5,9 +5,11 @@ import android.os.Build;
 import android.text.TextUtils;
 
 import com.elderdrivers.riru.edxp.config.ConfigManager;
-import com.elderdrivers.riru.edxp.core.yahfa.HookMain;
+import com.elderdrivers.riru.edxp.util.ClassUtils;
+import com.elderdrivers.riru.edxp.util.Utils;
 
 import java.lang.reflect.Member;
+import java.lang.reflect.Modifier;
 import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.Map;
@@ -246,15 +248,19 @@ public class DexMakerUtils {
     }
 
     public static Member findMethodNative(Member hookMethod) {
-        MethodInfo methodInfo = new MethodInfo(hookMethod);
-        Class declaringClass = methodInfo.getClassForSure();
-        Member reflectMethod = (Member) HookMain.findMethod(
-                declaringClass, methodInfo.methodName, methodInfo.methodSig);
-        if (reflectMethod == null) {
-            DexLog.e("method not found: name="
-                    + methodInfo.methodName + ", sig=" + methodInfo.methodSig);
-            reflectMethod = hookMethod;
+        if (shouldDelayHook(hookMethod)) {
+            Utils.logD("solo: " + hookMethod + " hooking delayed.");
+            return null;
         }
-        return reflectMethod;
+        return hookMethod;
+    }
+
+    private static boolean shouldDelayHook(Member hookMethod) {
+        if (hookMethod == null) {
+            return false;
+        }
+        Class declaringClass = hookMethod.getDeclaringClass();
+        return Modifier.isStatic(hookMethod.getModifiers())
+                && !ClassUtils.isInitialized(declaringClass);
     }
 }

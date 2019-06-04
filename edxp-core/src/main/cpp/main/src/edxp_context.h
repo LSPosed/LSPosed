@@ -2,6 +2,7 @@
 #pragma once
 
 #include <unistd.h>
+#include <mutex>
 
 namespace edxp {
 
@@ -14,9 +15,13 @@ namespace edxp {
 
         jobject GetCurrentClassLoader() const;
 
+        void CallOnPostFixupStaticTrampolines(void *class_ptr);
+
         void PrepareJavaEnv(JNIEnv *env);
 
         void FindAndCall(JNIEnv *env, const char *method_name, const char *method_sig, ...) const;
+
+        JavaVM *GetJavaVM() const;
 
         void SetAppDataDir(jstring app_data_dir);
 
@@ -51,6 +56,9 @@ namespace edxp {
         jclass entry_class_ = nullptr;
         jstring app_data_dir_ = nullptr;
         jstring nice_name_ = nullptr;
+        JavaVM *vm_ = nullptr;
+        jclass class_linker_class_ = nullptr;
+        jmethodID post_fixup_static_mid_ = nullptr;
 
         Context() {}
 

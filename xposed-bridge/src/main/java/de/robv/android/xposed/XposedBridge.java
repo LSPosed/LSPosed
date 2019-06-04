@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import dalvik.system.InMemoryDexClassLoader;
 import de.robv.android.xposed.XC_MethodHook.MethodHookParam;
@@ -231,11 +232,31 @@ public final class XposedBridge {
 
             AdditionalHookInfo additionalInfo = new AdditionalHookInfo(callbacks, parameterTypes, returnType);
             Member reflectMethod = EdXpConfigGlobal.getHookProvider().findMethodNative(hookMethod);
-            hookMethodNative(reflectMethod, declaringClass, slot, additionalInfo);
+            if (reflectMethod != null) {
+				hookMethodNative(reflectMethod, declaringClass, slot, additionalInfo);
+			} else {
+                synchronized (pendingLock) {
+                    sPendingHookMethods.put(hookMethod, additionalInfo);
+                }
+			}
         }
 
         return callback.new Unhook(hookMethod);
 	}
+
+	private static final ConcurrentHashMap<Member, XposedBridge.AdditionalHookInfo>
+			sPendingHookMethods = new ConcurrentHashMap<>();
+	private static final Object pendingLock = new Object();
+
+	public static void hookPendingMethod(Class clazz) {
+	    synchronized (pendingLock) {
+            for (Member member : sPendingHookMethods.keySet()) {
+                if (member.getDeclaringClass().equals(clazz)) {
+                    hookMethodNative(member, clazz, 0, sPendingHookMethods.get(member));
+                }
+            }
+        }
+    }
 
 	/**
 	 * Removes the callback for a hooked method/constructor.

@@ -7,6 +7,7 @@
 #include <config_manager.h>
 #include <art/runtime/runtime.h>
 #include <dl_util.h>
+#include <art/runtime/jni_env_ext.h>
 
 #include "logging.h"
 #include "native_hook.h"
@@ -55,6 +56,7 @@ namespace edxp {
         art::gc::Heap::Setup(art_handle.Get(), hook_func);
         art::ClassLinker::Setup(art_handle.Get(), hook_func);
         art::mirror::Class::Setup(art_handle.Get(), hook_func);
+        art::JNIEnvExt::Setup(art_handle.Get(), hook_func);
         LOGI("Inline hooks installed");
     }
 
