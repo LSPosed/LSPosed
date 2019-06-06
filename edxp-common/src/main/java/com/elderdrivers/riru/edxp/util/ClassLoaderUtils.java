@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import dalvik.system.BaseDexClassLoader;
 import dalvik.system.PathClassLoader;
+import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 
@@ -62,6 +64,11 @@ public class ClassLoaderUtils {
         }
     }
 
+    public static ClassLoader createComposeClassLoader(ClassLoader appClassLoader) {
+        ClassLoader current = ClassLoaderUtils.class.getClassLoader();
+        return appClassLoader == null ? current : new ComposeClassLoader(appClassLoader, current);
+    }
+
     public static List<ClassLoader> getAppClassLoader() {
         List<ClassLoader> cacheLoaders = new ArrayList<>(0);
         try {
@@ -107,4 +114,42 @@ public class ClassLoaderUtils {
         return false;
     }
 
+    public static void hookClassLoading() {
+        final ClassLoader currentCl = ClassLoaderUtils.class.getClassLoader();
+        XposedHelpers.findAndHookMethod(Class.class,
+                "forName", String.class, boolean.class, ClassLoader.class,
+                new XC_MethodHook(Integer.MAX_VALUE) {
+                    @Override
+                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                        if (param.args[2] == currentCl) {
+                            return;
+                        }
+                        try {
+                            param.setResult(Class.forName(
+                                    (String) param.args[0], (boolean) param.args[1], currentCl));
+                        } catch (Throwable throwable) {
+                            // silently continue to call original
+                        }
+                    }
+                });
+        XC_MethodHook findClassHook = new XC_MethodHook(Integer.MAX_VALUE) {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                if (param.thisObject == currentCl) {
+                    return;
+                }
+                try {
+                    param.setResult(XposedHelpers.callMethod(currentCl,
+                            "findClass", param.args[0]));
+                    param.setThrowable(null);
+                } catch (Throwable throwable) {
+                    // silently continue to return
+                }
+            }
+        };
+        XposedHelpers.findAndHookMethod(BaseDexClassLoader.class,
+                "findClass", String.class, findClassHook);
+        XposedHelpers.findAndHookMethod("java.lang.BootClassLoader", null,
+                "findClass", String.class, findClassHook);
+    }
 }

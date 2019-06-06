@@ -7,10 +7,12 @@ import android.text.TextUtils;
 
 import com.elderdrivers.riru.edxp._hooker.impl.HandleBindApp;
 import com.elderdrivers.riru.edxp._hooker.impl.LoadedApkCstr;
+import com.elderdrivers.riru.edxp._hooker.impl.OneplusWorkaround;
 import com.elderdrivers.riru.edxp._hooker.impl.StartBootstrapServices;
 import com.elderdrivers.riru.edxp._hooker.impl.SystemMain;
 import com.elderdrivers.riru.edxp._hooker.yahfa.HandleBindAppHooker;
 import com.elderdrivers.riru.edxp._hooker.yahfa.LoadedApkConstructorHooker;
+import com.elderdrivers.riru.edxp._hooker.yahfa.OnePlusWorkAroundHooker;
 import com.elderdrivers.riru.edxp._hooker.yahfa.StartBootstrapServicesHooker;
 import com.elderdrivers.riru.edxp._hooker.yahfa.SystemMainHooker;
 import com.elderdrivers.riru.edxp.core.yahfa.HookMain;
@@ -138,15 +140,15 @@ public abstract class BaseRouter implements Router {
 
     public void startWorkAroundHook() {
         ClassLoader classLoader = BaseRouter.class.getClassLoader();
-//        if (useXposedApi) {
-//            XposedHelpers.findAndHookMethod(OnePlusWorkAroundHooker.className,
-//                    classLoader, OnePlusWorkAroundHooker.methodName,
-//                    int.class, String.class, new OneplusWorkaround());
-//        } else {
-        HookMain.doHookDefault(
-                BaseRouter.class.getClassLoader(),
-                classLoader,
-                WorkAroundHookInfo.class.getName());
-//        }
+        if (useXposedApi) {
+            XposedHelpers.findAndHookMethod(OnePlusWorkAroundHooker.className,
+                    classLoader, OnePlusWorkAroundHooker.methodName,
+                    int.class, String.class, new OneplusWorkaround());
+        } else {
+            HookMain.doHookDefault(
+                    BaseRouter.class.getClassLoader(),
+                    classLoader,
+                    WorkAroundHookInfo.class.getName());
+        }
     }
 }

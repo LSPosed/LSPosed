@@ -22,7 +22,6 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import static com.elderdrivers.riru.edxp.config.InstallerChooser.INSTALLER_PACKAGE_NAME;
 import static com.elderdrivers.riru.edxp.hooker.SliceProviderFix.SYSTEMUI_PACKAGE_NAME;
 import static com.elderdrivers.riru.edxp.hooker.XposedBlackListHooker.BLACK_LIST_PACKAGE_NAME;
-import static com.elderdrivers.riru.edxp.util.ClassLoaderUtils.replaceParentClassLoader;
 
 // normal process initialization (for new Activity, Service, BroadcastReceiver etc.)
 public class HandleBindApp extends XC_MethodHook {
@@ -61,8 +60,6 @@ public class HandleBindApp extends XC_MethodHook {
             XposedHelpers.setObjectField(activityThread, "mBoundApplication", bindData);
             XposedInit.loadedPackagesInProcess.add(reportedPackageName);
             LoadedApk loadedApk = activityThread.getPackageInfoNoCheck(appInfo, compatInfo);
-
-            replaceParentClassLoader(loadedApk.getClassLoader());
 
             XC_LoadPackage.LoadPackageParam lpparam = new XC_LoadPackage.LoadPackageParam(XposedBridge.sLoadedPackageCallbacks);
             lpparam.packageName = reportedPackageName;

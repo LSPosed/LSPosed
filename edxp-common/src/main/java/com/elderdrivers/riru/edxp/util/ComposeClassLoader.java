@@ -1,4 +1,4 @@
-package com.swift.sandhook.xposedcompat.classloaders;
+package com.elderdrivers.riru.edxp.util;
 
 /**
  * Created by weishu on 17/11/30.
@@ -7,6 +7,7 @@ package com.swift.sandhook.xposedcompat.classloaders;
 public class ComposeClassLoader extends ClassLoader {
 
     private final ClassLoader mAppClassLoader;
+
     public ComposeClassLoader(ClassLoader parent, ClassLoader appClassLoader) {
         super(parent);
         mAppClassLoader = appClassLoader;

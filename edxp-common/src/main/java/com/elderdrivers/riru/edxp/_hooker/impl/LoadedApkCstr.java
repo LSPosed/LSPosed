@@ -13,8 +13,6 @@ import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.XposedInit;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
-import static com.elderdrivers.riru.edxp.util.ClassLoaderUtils.replaceParentClassLoader;
-
 // when a package is loaded for an existing process, trigger the callbacks as well
 // ed: remove resources related hooking
 public class LoadedApkCstr extends XC_MethodHook {
@@ -59,8 +57,6 @@ public class LoadedApkCstr extends XC_MethodHook {
                 Hookers.logD("LoadedApk#<init> maybe oneplus's custom opt, skip");
                 return;
             }
-
-            replaceParentClassLoader(loadedApk.getClassLoader());
 
             XC_LoadPackage.LoadPackageParam lpparam = new XC_LoadPackage.LoadPackageParam(XposedBridge.sLoadedPackageCallbacks);
             lpparam.packageName = packageName;

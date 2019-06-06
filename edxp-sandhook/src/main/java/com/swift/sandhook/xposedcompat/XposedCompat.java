@@ -6,7 +6,7 @@ import android.text.TextUtils;
 
 import com.elderdrivers.riru.edxp.config.ConfigManager;
 import com.swift.sandhook.SandHook;
-import com.swift.sandhook.xposedcompat.classloaders.ComposeClassLoader;
+import com.elderdrivers.riru.edxp.util.ComposeClassLoader;
 import com.swift.sandhook.xposedcompat.methodgen.SandHookXposedBridge;
 import com.swift.sandhook.xposedcompat.utils.ApplicationUtils;
 import com.swift.sandhook.xposedcompat.utils.FileUtils;

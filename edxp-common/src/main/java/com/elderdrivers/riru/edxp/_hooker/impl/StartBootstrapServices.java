@@ -11,7 +11,6 @@ import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.XposedInit;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
-import static com.elderdrivers.riru.edxp.util.ClassLoaderUtils.replaceParentClassLoader;
 import static com.elderdrivers.riru.edxp.util.Utils.logD;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 
@@ -27,8 +26,6 @@ public class StartBootstrapServices extends XC_MethodHook {
 
         try {
             XposedInit.loadedPackagesInProcess.add("android");
-
-            replaceParentClassLoader(SystemMain.systemServerCL);
 
             XC_LoadPackage.LoadPackageParam lpparam = new XC_LoadPackage.LoadPackageParam(XposedBridge.sLoadedPackageCallbacks);
             lpparam.packageName = "android";

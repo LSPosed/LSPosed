@@ -3,6 +3,7 @@ package com.swift.sandhook.xposedcompat.methodgen;
 import android.os.Process;
 import android.os.Trace;
 
+import com.elderdrivers.riru.edxp.util.ClassLoaderUtils;
 import com.swift.sandhook.SandHook;
 import com.swift.sandhook.SandHookConfig;
 import com.swift.sandhook.blacklist.HookBlackList;
@@ -31,7 +32,7 @@ public final class SandHookXposedBridge {
     private static final AtomicBoolean dexPathInited = new AtomicBoolean(false);
     private static File dexDir;
 
-    public static Map<Member,HookMethodEntity> entityMap = new ConcurrentHashMap<>();
+    public static Map<Member, HookMethodEntity> entityMap = new ConcurrentHashMap<>();
 
     public static boolean hooked(Member member) {
         return hookedInfo.containsKey(member) || entityMap.containsKey(member);
@@ -76,7 +77,9 @@ public final class SandHookXposedBridge {
                     hookMaker = defaultHookMaker;
                 }
                 hookMaker.start(hookMethod, additionalHookInfo,
-                        hookMethod.getDeclaringClass().getClassLoader(), dexDir == null ? null : dexDir.getAbsolutePath());
+                        ClassLoaderUtils.createComposeClassLoader(
+                                hookMethod.getDeclaringClass().getClassLoader()),
+                        dexDir == null ? null : dexDir.getAbsolutePath());
                 hookedInfo.put(hookMethod, hookMaker.getCallBackupMethod());
             }
             DexLog.d("hook method <" + hookMethod.toString() + "> cost " + (System.currentTimeMillis() - timeStart) + " ms, by " + (stub != null ? "internal stub" : "dex maker"));

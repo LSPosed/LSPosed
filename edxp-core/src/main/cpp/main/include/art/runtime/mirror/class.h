@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include <edxp_context.h>
 #include "base/object.h"
 
 namespace art {
@@ -60,6 +61,9 @@ namespace art {
                 HOOK_FUNC(IsInSamePackage,
                           "_ZN3art6mirror5Class15IsInSamePackageENS_6ObjPtrIS1_EE", //8.0-
                           "_ZN3art6mirror5Class15IsInSamePackageEPS1_"); //5.0-7.1
+
+//                HOOK_FUNC(ClassForName,
+//                          "_ZN3artL18Class_classForNameEP7_JNIEnvP7_jclassP8_jstringhP8_jobject");
             }
         };
 
