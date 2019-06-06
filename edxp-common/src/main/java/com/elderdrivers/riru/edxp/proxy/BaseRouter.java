@@ -141,9 +141,12 @@ public abstract class BaseRouter implements Router {
     public void startWorkAroundHook() {
         ClassLoader classLoader = BaseRouter.class.getClassLoader();
         if (useXposedApi) {
-            XposedHelpers.findAndHookMethod(OnePlusWorkAroundHooker.className,
-                    classLoader, OnePlusWorkAroundHooker.methodName,
-                    int.class, String.class, new OneplusWorkaround());
+            try {
+                XposedHelpers.findAndHookMethod(OnePlusWorkAroundHooker.className,
+                        classLoader, OnePlusWorkAroundHooker.methodName,
+                        int.class, String.class, new OneplusWorkaround());
+            } catch (Throwable throwable) {
+            }
         } else {
             HookMain.doHookDefault(
                     BaseRouter.class.getClassLoader(),
