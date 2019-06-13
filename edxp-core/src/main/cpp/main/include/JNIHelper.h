@@ -85,7 +85,11 @@ ALWAYS_INLINE static int ClearException(JNIEnv *env) {
 
 #define JNI_CallStaticObjectMethod(env, obj, ...) \
     env->CallStaticObjectMethod(obj, __VA_ARGS__); \
-    if (ClearException(env)) LOGE("CallStaticVoidMethod " #obj " " #__VA_ARGS__);
+    if (ClearException(env)) LOGE("CallStaticObjectMethod " #obj " " #__VA_ARGS__);
+
+#define JNI_CallStaticIntMethod(env, obj, ...) \
+    env->CallStaticIntMethod(obj, __VA_ARGS__); \
+    if (ClearException(env)) LOGE("CallStaticIntMethod " #obj " " #__VA_ARGS__);
 
 #define JNI_GetArrayLength(env, array) \
     env->GetArrayLength(array); \

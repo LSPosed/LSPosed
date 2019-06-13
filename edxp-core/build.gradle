@@ -3,10 +3,10 @@ import org.gradle.internal.os.OperatingSystem
 
 apply plugin: 'com.android.library'
 
-version "v0.4.4.0_alpha"
+version "v0.4.4.1_alpha"
 
 ext {
-    versionCode = "4400"
+    versionCode = "4410"
     module_name = "EdXposed"
     jar_dest_dir = "${projectDir}/template_override/system/framework/"
     is_windows = OperatingSystem.current().isWindows()

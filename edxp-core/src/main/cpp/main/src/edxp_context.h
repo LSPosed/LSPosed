@@ -8,6 +8,13 @@ namespace edxp {
 
 #define SYSTEM_SERVER_DATA_DIR "/data/user/0/android"
 
+    enum Variant {
+        NONE = 0,
+        YAHFA = 1,
+        SANDHOOK = 2,
+        WHALE = 3
+    };
+
     class Context {
 
     public:
@@ -52,6 +59,7 @@ namespace edxp {
     private:
         static Context *instance_;
         bool initialized_ = false;
+        Variant variant_ = NONE;
         jobject inject_class_loader_ = nullptr;
         jclass entry_class_ = nullptr;
         jstring app_data_dir_ = nullptr;

@@ -123,6 +123,11 @@ public class Main implements KeepAll {
         return edxpImplRef.get();
     }
 
+    @EdxpImpl.Variant
+    public static synchronized int getEdxpVariant() {
+        return getEdxpImpl().getVariant();
+    }
+
     private static void loadEdxpImpls() {
         AccessController.doPrivileged(new PrivilegedAction<Void>() {
             public Void run() {
@@ -133,7 +138,7 @@ public class Main implements KeepAll {
                         iterator.next();
                     }
                 } catch (Throwable t) {
-                    // Do nothing
+                    Utils.logE("error when loadEdxpImpls", t);
                 }
                 return null;
             }

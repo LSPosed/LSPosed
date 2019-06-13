@@ -62,13 +62,12 @@ namespace edxp {
         hook_func = reinterpret_cast<HookFunType>(hook_func_symbol);
 
         if (api_level >= ANDROID_P) {
-            void *handle = DlOpen(kLibDlPath.c_str());
+            ScopedDlHandle dl_handle(kLibDlPath.c_str());
+            void *handle = dl_handle.Get();
             HOOK_FUNC(mydlopen, "__loader_dlopen");
-            dlclose(handle);
         } else {
-            void *art_handle = DlOpen(kLibArtPath.c_str());
-            InstallArtHooks(art_handle);
-            dlclose(art_handle);
+            ScopedDlHandle art_handle(kLibArtPath.c_str());
+            InstallArtHooks(art_handle.Get());
         }
     }
 

@@ -33,13 +33,14 @@ namespace edxp {
     }
 
     void Context::CallOnPostFixupStaticTrampolines(void *class_ptr) {
-        if (post_fixup_static_mid_ != nullptr) {
-            JNIEnv *env;
-            vm_->GetEnv((void **) (&env), JNI_VERSION_1_4);
-            art::JNIEnvExt env_ext(env);
-            jobject clazz = env_ext.NewLocalRefer(class_ptr);
-            JNI_CallStaticVoidMethod(env, class_linker_class_, post_fixup_static_mid_, clazz);
+        if (UNLIKELY(!post_fixup_static_mid_ || !class_linker_class_)) {
+            return;
         }
+        JNIEnv *env;
+        vm_->GetEnv((void **) (&env), JNI_VERSION_1_4);
+        art::JNIEnvExt env_ext(env);
+        ScopedLocalRef clazz(env, env_ext.NewLocalRefer(class_ptr));
+        JNI_CallStaticVoidMethod(env, class_linker_class_, post_fixup_static_mid_, clazz.get());
     }
 
     void Context::LoadDexAndInit(JNIEnv *env, const char *dex_path) {
@@ -60,11 +61,21 @@ namespace edxp {
                                             "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/ClassLoader;)V");
         jobject my_cl = JNI_NewObject(env, path_classloader, initMid, env->NewStringUTF(dex_path),
                                       nullptr, sys_classloader);
-        if (UNLIKELY(!my_cl)) {
+
+        env->DeleteLocalRef(classloader);
+        env->DeleteLocalRef(sys_classloader);
+        env->DeleteLocalRef(path_classloader);
+
+        if (UNLIKELY(my_cl == nullptr)) {
             LOG(ERROR) << "PathClassLoader creation failed!!!";
             return;
         }
+
+        // TODO clear up all these global refs if blacklisted?
+
         inject_class_loader_ = env->NewGlobalRef(my_cl);
+
+        env->DeleteLocalRef(my_cl);
 
         // initialize pending methods related
         env->GetJavaVM(&vm_);
@@ -84,22 +95,36 @@ namespace edxp {
         RegisterArtHeap(env);
         RegisterEdxpYahfa(env);
 
+        // must call entry class's methods after all native methods registered
+        if (LIKELY(entry_class_)) {
+            jmethodID get_variant_mid = JNI_GetStaticMethodID(env, entry_class_,
+                                                              "getEdxpVariant", "()I");
+            if (LIKELY(get_variant_mid)) {
+                int variant = JNI_CallStaticIntMethod(env, entry_class_, get_variant_mid);
+                variant_ = static_cast<Variant>(variant);
+            }
+        }
+
         initialized_ = true;
 
-        //for SandHook variant
-        ScopedDlHandle sandhook_handle(kLibSandHookPath.c_str());
-        if (!sandhook_handle.IsValid()) {
-            return;
-        }
-        typedef bool *(*TYPE_JNI_LOAD)(JNIEnv *, jclass, jclass);
-        auto jni_load = sandhook_handle.DlSym<TYPE_JNI_LOAD>("JNI_Load_Ex");
-        jclass sandhook_class = FindClassFromLoader(env, kSandHookClassName);
-        jclass nevercall_class = FindClassFromLoader(env, kSandHookNeverCallClassName);
-        if (!sandhook_class || !nevercall_class) { // fail-fast
-            return;
-        }
-        if (!jni_load(env, sandhook_class, nevercall_class)) {
-            LOGE("SandHook: HookEntry class error. %d", getpid());
+        if (variant_ == SANDHOOK) {
+            //for SandHook variant
+            ScopedDlHandle sandhook_handle(kLibSandHookPath.c_str());
+            if (!sandhook_handle.IsValid()) {
+                return;
+            }
+            typedef bool *(*TYPE_JNI_LOAD)(JNIEnv *, jclass, jclass);
+            auto jni_load = sandhook_handle.DlSym<TYPE_JNI_LOAD>("JNI_Load_Ex");
+            ScopedLocalRef sandhook_class(env, FindClassFromLoader(env, kSandHookClassName));
+            ScopedLocalRef nevercall_class(env,
+                                           FindClassFromLoader(env, kSandHookNeverCallClassName));
+            if (sandhook_class == nullptr || nevercall_class == nullptr) { // fail-fast
+                return;
+            }
+            if (!jni_load(env, sandhook_class.get(), nevercall_class.get())) {
+                LOGE("SandHook: HookEntry class error. %d", getpid());
+            }
+
         }
     }
 
@@ -136,7 +161,7 @@ namespace edxp {
 
     inline void Context::FindAndCall(JNIEnv *env, const char *method_name,
                                      const char *method_sig, ...) const {
-        if (!entry_class_) {
+        if (UNLIKELY(!entry_class_)) {
             LOGE("cannot call method %s, entry class is null", method_name);
             return;
         }
@@ -235,8 +260,7 @@ namespace edxp {
         if (res == 0) {
             PrepareJavaEnv(env);
             FindAndCall(env, "forkAndSpecializePost", "(ILjava/lang/String;Ljava/lang/String;)V",
-                        res,
-                        app_data_dir_, nice_name_);
+                        res, app_data_dir_, nice_name_);
         } else {
             // in zygote process, res is child zygote pid
             // don't print log here, see https://github.com/RikkaApps/Riru/blob/77adfd6a4a6a81bfd20569c910bc4854f2f84f5e/riru-core/jni/main/jni_native_method.cpp#L55-L66
