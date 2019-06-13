@@ -46,7 +46,14 @@ public class Utils {
     }
 
     public static String getSysProp(String key) {
-        Class sysProps = XposedHelpers.findClassIfExists("android.os.SystemProperties", null);
-        return (String) XposedHelpers.callStaticMethod(sysProps, "get", key);
+        try {
+            Class sysProps = XposedHelpers.findClassIfExists("android.os.SystemProperties", null);
+            if (sysProps != null) {
+                return (String) XposedHelpers.callStaticMethod(sysProps, "get", key);
+            }
+        } catch (Throwable throwable) {
+            Utils.logE("error when get sys prop", throwable);
+        }
+        return "";
     }
 }

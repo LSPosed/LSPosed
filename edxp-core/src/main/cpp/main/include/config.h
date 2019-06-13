@@ -5,6 +5,7 @@
 #include <sys/types.h>
 #include <string>
 #include "art/base/macros.h"
+#include "android_build.h"
 
 namespace edxp {
 
@@ -17,19 +18,23 @@ namespace edxp {
 # define LP_SELECT(lp32, lp64) (lp32)
 #endif
 
-    static constexpr const char *kInjectDexPath = "/system/framework/edxp.jar:"
-                                                  "/system/framework/eddalvikdx.jar:"
-                                                  "/system/framework/eddexmaker.jar";
-    static constexpr const char *kEntryClassName = "com.elderdrivers.riru.edxp.core.Main";
-    static constexpr const char *kClassLinkerClassName = "com.elderdrivers.riru.edxp.art.ClassLinker";
-    static constexpr const char *kSandHookClassName = "com.swift.sandhook.SandHook";
-    static constexpr const char *kSandHookNeverCallClassName = "com.swift.sandhook.ClassNeverCall";
+    static constexpr auto kInjectDexPath = "/system/framework/edxp.jar:"
+                                           "/system/framework/eddalvikdx.jar:"
+                                           "/system/framework/eddexmaker.jar";
+    static constexpr auto kEntryClassName = "com.elderdrivers.riru.edxp.core.Main";
+    static constexpr auto kClassLinkerClassName = "com.elderdrivers.riru.edxp.art.ClassLinker";
+    static constexpr auto kSandHookClassName = "com.swift.sandhook.SandHook";
+    static constexpr auto kSandHookNeverCallClassName = "com.swift.sandhook.ClassNeverCall";
 
-    static const std::string kLibBasePath = LP_SELECT("/system/lib/", "/system/lib64/");
-    static const std::string kLibArtPath = kLibBasePath + "libart.so";
-    static const std::string kLibWhalePath = kLibBasePath + "libwhale.edxp.so";
-    static const std::string kLibSandHookPath = kLibBasePath + "libsandhook.edxp.so";
-    static const std::string kLibFwPath = kLibBasePath + "libandroidfw.so";
+    static const auto kLibBasePath = std::string(LP_SELECT("/system/lib/", "/system/lib64/"));
+    static const auto kLibRuntimeBasePath = std::string(LP_SELECT("/apex/com.android.runtime/lib/",
+                                                                  "/apex/com.android.runtime/lib64/"));
+    static const auto kLibArtPath =
+            (GetAndroidApiLevel() >= ANDROID_Q ? kLibRuntimeBasePath : kLibBasePath) + "libart.so";
+    static const auto kLibWhalePath = kLibBasePath + "libwhale.edxp.so";
+    static const auto kLibSandHookPath = kLibBasePath + "libsandhook.edxp.so";
+    static const auto kLibFwPath = kLibBasePath + "libandroidfw.so";
+    static const auto kLibDlPath = kLibBasePath + "libdl.so";
 
     inline const char *const BoolToString(bool b) {
         return b ? "true" : "false";

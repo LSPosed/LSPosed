@@ -20,6 +20,19 @@
 namespace edxp {
 
     static bool installed = false;
+    static bool art_hooks_installed = false;
+    static HookFunType hook_func = nullptr;
+
+    void InstallArtHooks(void *art_handle);
+
+    CREATE_HOOK_STUB_ENTRIES(void *, mydlopen, const char *file_name, int flags,
+                             const void *caller) {
+        void *handle = mydlopenBackup(file_name, flags, caller);
+        if (std::string(file_name).find("libart.so") != std::string::npos) {
+            InstallArtHooks(handle);
+        }
+        return handle;
+    }
 
     void InstallInlineHooks() {
         if (installed) {
@@ -46,18 +59,31 @@ namespace edxp {
         if (!hook_func_symbol) {
             return;
         }
-        auto hook_func = reinterpret_cast<HookFunType>(hook_func_symbol);
-        ScopedDlHandle art_handle(kLibArtPath.c_str());
-        if (!art_handle.IsValid()) {
+        hook_func = reinterpret_cast<HookFunType>(hook_func_symbol);
+
+        if (api_level >= ANDROID_P) {
+            void *handle = DlOpen(kLibDlPath.c_str());
+            HOOK_FUNC(mydlopen, "__loader_dlopen");
+            dlclose(handle);
+        } else {
+            void *art_handle = DlOpen(kLibArtPath.c_str());
+            InstallArtHooks(art_handle);
+            dlclose(art_handle);
+        }
+    }
+
+    void InstallArtHooks(void *art_handle) {
+        if (art_hooks_installed) {
             return;
         }
-        art::hidden_api::DisableHiddenApi(art_handle.Get(), hook_func);
-        art::Runtime::Setup(art_handle.Get(), hook_func);
-        art::gc::Heap::Setup(art_handle.Get(), hook_func);
-        art::ClassLinker::Setup(art_handle.Get(), hook_func);
-        art::mirror::Class::Setup(art_handle.Get(), hook_func);
-        art::JNIEnvExt::Setup(art_handle.Get(), hook_func);
-        LOGI("Inline hooks installed");
+        art::hidden_api::DisableHiddenApi(art_handle, hook_func);
+        art::Runtime::Setup(art_handle, hook_func);
+        art::gc::Heap::Setup(art_handle, hook_func);
+        art::ClassLinker::Setup(art_handle, hook_func);
+        art::mirror::Class::Setup(art_handle, hook_func);
+        art::JNIEnvExt::Setup(art_handle, hook_func);
+        art_hooks_installed = true;
+        LOGI("ART hooks installed");
     }
 
 }

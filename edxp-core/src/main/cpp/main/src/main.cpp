@@ -19,67 +19,65 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-value"
 
+#define EXPORT extern "C" __attribute__((visibility("default")))
+
 namespace edxp {
 
-    extern "C" {
-
-    __attribute__((visibility("default"))) void onModuleLoaded() {
+    EXPORT void onModuleLoaded() {
         LOG(INFO) << "onModuleLoaded: welcome to EdXposed!";
         InstallInlineHooks();
     }
 
-    __attribute__((visibility("default"))) int shouldSkipUid(int uid) {
+    EXPORT int shouldSkipUid(int uid) {
         return 0;
     }
 
-    __attribute__((visibility("default"))) void
-    nativeForkAndSpecializePre(JNIEnv *env, jclass clazz, jint *_uid, jint *gid, jintArray *gids,
-                               jint *runtime_flags,
-                               jobjectArray *rlimits, jint *mount_external, jstring *se_info,
-                               jstring *se_name,
-                               jintArray *fds_to_close, jintArray *fds_to_ignore,
-                               jboolean *is_child_zygote,
-                               jstring *instruction_set, jstring *app_data_dir,
-                               jstring *package_name,
-                               jobjectArray *packages_for_uid, jstring *sandbox_id) {
+    EXPORT void nativeForkAndSpecializePre(JNIEnv *env, jclass clazz, jint *_uid, jint *gid,
+                                           jintArray *gids, jint *runtime_flags,
+                                           jobjectArray *rlimits, jint *mount_external,
+                                           jstring *se_info, jstring *nice_name,
+                                           jintArray *fds_to_close, jintArray *fds_to_ignore,
+                                           jboolean *start_child_zygote, jstring *instruction_set,
+                                           jstring *app_data_dir,
+            /* parameters added in Android Q */
+                                           jstring *package_name, jobjectArray *packages_for_uid,
+                                           jstring *sandbox_id) {
         Context::GetInstance()->OnNativeForkAndSpecializePre(env, clazz, *_uid, *gid, *gids,
                                                              *runtime_flags, *rlimits,
-                                                             *mount_external, *se_info, *se_name,
+                                                             *mount_external, *se_info, *nice_name,
                                                              *fds_to_close,
                                                              *fds_to_ignore,
-                                                             *is_child_zygote, *instruction_set,
+                                                             *start_child_zygote, *instruction_set,
                                                              *app_data_dir);
     }
 
-    __attribute__((visibility("default"))) int
-    nativeForkAndSpecializePost(JNIEnv *env, jclass clazz,
-                                jint res) {
+    EXPORT int nativeForkAndSpecializePost(JNIEnv *env, jclass clazz, jint res) {
         return Context::GetInstance()->OnNativeForkAndSpecializePost(env, clazz, res);
     }
 
-    __attribute__((visibility("default")))
-    void
-    nativeForkSystemServerPre(JNIEnv *env, jclass clazz, uid_t *uid, gid_t *gid, jintArray *gids,
-                              jint *runtime_flags,
-                              jobjectArray *rlimits, jlong *permitted_capabilities,
-                              jlong *effective_capabilities) {
+    EXPORT void nativeForkSystemServerPre(JNIEnv *env, jclass clazz, uid_t *uid, gid_t *gid,
+                                          jintArray *gids, jint *runtime_flags,
+                                          jobjectArray *rlimits, jlong *permitted_capabilities,
+                                          jlong *effective_capabilities) {
         Context::GetInstance()->OnNativeForkSystemServerPre(env, clazz, *uid, *gid, *gids,
                                                             *runtime_flags, *rlimits,
                                                             *permitted_capabilities,
-                                                            *effective_capabilities);
+                                                            *effective_capabilities
+        );
     }
 
-    __attribute__((visibility("default")))
-    int nativeForkSystemServerPost(JNIEnv *env, jclass clazz, jint res) {
+    EXPORT int nativeForkSystemServerPost(JNIEnv *env, jclass clazz, jint res) {
         return Context::GetInstance()->OnNativeForkSystemServerPost(env, clazz, res);
     }
 
-    __attribute__((visibility("default"))) void specializeAppProcessPre(
-            JNIEnv *env, jclass clazz, jint *_uid, jint *gid, jintArray *gids, jint *runtime_flags,
-            jobjectArray *rlimits, jint *mount_external, jstring *se_info, jstring *nice_name,
-            jboolean *start_child_zygote, jstring *instruction_set, jstring *app_data_dir,
-            jstring *package_name, jobjectArray *packages_for_uid, jstring *sandbox_id) {
-        Context::GetInstance()->OnNativeForkAndSpecializePre(env, clazz, *_uid, *gid, *gids,
+    /* method added in Android Q */
+    EXPORT void specializeAppProcessPre(JNIEnv *env, jclass clazz, jint *uid, jint *gid,
+                                        jintArray *gids, jint *runtime_flags, jobjectArray *rlimits,
+                                        jint *mount_external, jstring *se_info, jstring *nice_name,
+                                        jboolean *start_child_zygote, jstring *instruction_set,
+                                        jstring *app_data_dir, jstring *package_name,
+                                        jobjectArray *packages_for_uid, jstring *sandbox_id) {
+        Context::GetInstance()->OnNativeForkAndSpecializePre(env, clazz, *uid, *gid, *gids,
                                                              *runtime_flags, *rlimits,
                                                              *mount_external, *se_info, *nice_name,
                                                              nullptr, nullptr,
@@ -87,11 +85,8 @@ namespace edxp {
                                                              *app_data_dir);
     }
 
-    __attribute__((visibility("default"))) int specializeAppProcessPost(
-            JNIEnv *env, jclass clazz) {
+    EXPORT int specializeAppProcessPost(JNIEnv *env, jclass clazz) {
         return Context::GetInstance()->OnNativeForkAndSpecializePost(env, clazz, 0);
-    }
-
     }
 
 }

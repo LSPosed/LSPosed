@@ -1,6 +1,6 @@
 #!/system/bin/sh
 
-EDXP_VERSION="0.4.3.7_alpha (4370)"
+EDXP_VERSION="0.4.4.0_alpha (4400)"
 ANDROID_SDK=`getprop ro.build.version.sdk`
 BUILD_DESC=`getprop ro.build.description`
 PRODUCT=`getprop ro.build.product`

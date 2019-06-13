@@ -133,6 +133,7 @@ namespace edxp {
         LoadDexAndInit(env, kInjectDexPath);
     }
 
+
     inline void Context::FindAndCall(JNIEnv *env, const char *method_name,
                                      const char *method_sig, ...) const {
         if (!entry_class_) {
@@ -209,14 +210,14 @@ namespace edxp {
                                                jobjectArray rlimits,
                                                jint mount_external,
                                                jstring se_info,
-                                               jstring se_name,
+                                               jstring nice_name,
                                                jintArray fds_to_close,
                                                jintArray fds_to_ignore,
                                                jboolean is_child_zygote,
                                                jstring instruction_set,
                                                jstring app_data_dir) {
         app_data_dir_ = app_data_dir;
-        nice_name_ = se_name;
+        nice_name_ = nice_name;
         if (ConfigManager::GetInstance()->IsBlackWhiteListEnabled() &&
             ConfigManager::GetInstance()->IsDynamicModulesEnabled()) {
             // when black/white list is on, never inject into zygote if dynamic modules mode is on
@@ -226,7 +227,7 @@ namespace edxp {
         FindAndCall(env, "forkAndSpecializePre",
                     "(II[II[[IILjava/lang/String;Ljava/lang/String;[I[IZLjava/lang/String;Ljava/lang/String;)V",
                     uid, gid, gids, runtime_flags, rlimits,
-                    mount_external, se_info, se_name, fds_to_close, fds_to_ignore,
+                    mount_external, se_info, nice_name, fds_to_close, fds_to_ignore,
                     is_child_zygote, instruction_set, app_data_dir);
     }
 

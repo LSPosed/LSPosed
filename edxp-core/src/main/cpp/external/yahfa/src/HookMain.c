@@ -37,6 +37,7 @@ void Java_lab_galaxy_yahfa_HookMain_init(JNIEnv *env, jclass clazz, jint sdkVers
     SDKVersion = sdkVersion;
     LOGI("init to SDK %d", sdkVersion);
     switch (sdkVersion) {
+        case ANDROID_Q:
         case ANDROID_P:
             kAccCompileDontBother = 0x02000000;
             OFFSET_ArtMehod_in_Object = 0;

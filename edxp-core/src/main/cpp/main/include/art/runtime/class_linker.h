@@ -40,11 +40,13 @@ namespace art {
         }
 
         static void Setup(void *handle, HookFunType hook_func) {
-            HOOK_FUNC(Constructor, "_ZN3art11ClassLinkerC2EPNS_11InternTableE");
+            HOOK_FUNC(Constructor, "_ZN3art11ClassLinkerC2EPNS_11InternTableE",
+                      "_ZN3art11ClassLinkerC2EPNS_11InternTableEb"); // 10.0
             RETRIEVE_FUNC_SYMBOL(SetEntryPointsToInterpreter,
                                  "_ZNK3art11ClassLinker27SetEntryPointsToInterpreterEPNS_9ArtMethodE");
 
-            HOOK_FUNC(FixupStaticTrampolines, "_ZN3art11ClassLinker22FixupStaticTrampolinesENS_6ObjPtrINS_6mirror5ClassEEE");
+            HOOK_FUNC(FixupStaticTrampolines,
+                      "_ZN3art11ClassLinker22FixupStaticTrampolinesENS_6ObjPtrINS_6mirror5ClassEEE");
         }
 
         ALWAYS_INLINE void SetEntryPointsToInterpreter(void *art_method) const {
