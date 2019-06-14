@@ -19,3 +19,21 @@ build_script:
 
 artifacts:
   - path: 'edxp-core\release\**\*.zip'
+
+only_commits:
+  files:
+    - dalvikdx/
+    - dexmaker/
+    - edxp-common/
+    - edxp-core/
+    - edxp-sandhook/
+    - edxp-whale/
+    - edxp-yahfa/
+    - hiddenapi-stubs/
+    - xposed-bridge/
+    - build.gradle
+    - settings.gradle
+    - gradle.properties
+    - appveyor.yml
+
+version: '0.4.4.4_alpha (4441)'
