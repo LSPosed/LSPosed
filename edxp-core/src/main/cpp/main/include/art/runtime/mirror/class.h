@@ -19,14 +19,6 @@ namespace art {
                 return GetDescriptorSym(thiz, storage);
             }
 
-
-            CREATE_ORIGINAL_ENTRY(bool, IsInSamePackage, void *thiz, void *that) {
-                if (IsInSamePackageBackup) {
-                    return IsInSamePackageBackup(thiz, that);
-                }
-                return false;
-            }
-
             CREATE_HOOK_STUB_ENTRIES(bool, IsInSamePackage, void *thiz, void *that) {
                 std::string storage1, storage2;
                 const char *thisDesc = GetDescriptor(thiz, &storage1);
@@ -45,7 +37,7 @@ namespace art {
                     || strstr(thatDesc, "android/content/res/XResources$XTypedArray") != nullptr) {
                     return true;
                 }
-                return IsInSamePackage(thiz, that);
+                return IsInSamePackageBackup(thiz, that);
             }
 
         public:

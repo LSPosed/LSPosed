@@ -6,7 +6,7 @@ apply plugin: 'com.android.library'
 version "v0.4.4.4_alpha"
 
 ext {
-    versionCode = "4440"
+    versionCode = "4441"
     module_name = "EdXposed"
     jar_dest_dir = "${projectDir}/template_override/system/framework/"
     is_windows = OperatingSystem.current().isWindows()

@@ -32,7 +32,7 @@ namespace edxp {
     CREATE_HOOK_STUB_ENTRIES(void *, mydlopen, const char *file_name, int flags,
                              const void *caller) {
         void *handle = mydlopenBackup(file_name, flags, caller);
-        if (std::string(file_name).find(kLibArtName) != std::string::npos) {
+        if (file_name != nullptr && std::string(file_name).find(kLibArtName) != std::string::npos) {
             InstallArtHooks(handle);
         }
         return handle;
