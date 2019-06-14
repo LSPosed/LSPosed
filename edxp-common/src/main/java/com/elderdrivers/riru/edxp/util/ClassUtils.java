@@ -1,73 +1,36 @@
 package com.elderdrivers.riru.edxp.util;
 
+import android.os.Build;
+
 import de.robv.android.xposed.XposedHelpers;
 
 public class ClassUtils {
 
-    public enum ClassStatus {
-        kNotReady(0), // Zero-initialized Class object starts in this state.
-        kRetired(1),  // Retired, should not be used. Use the newly cloned one instead.
-        kErrorResolved(2),
-        kErrorUnresolved(3),
-        kIdx(4),  // Loaded, DEX idx in super_class_type_idx_ and interfaces_type_idx_.
-        kLoaded(5),  // DEX idx values resolved.
-        kResolving(6),  // Just cloned from temporary class object.
-        kResolved(7),  // Part of linking.
-        kVerifying(8),  // In the process of being verified.
-        kRetryVerificationAtRuntime(9),  // Compile time verification failed, retry at runtime.
-        kVerifyingAtRuntime(10),  // Retrying verification at runtime.
-        kVerified(11),  // Logically part of linking; done pre-init.
-        kSuperclassValidated(12),  // Superclass validation part of init done.
-        kInitializing(13),  // Class init in progress.
-        kInitialized(14);  // Ready to go.
-
-        private final int status;
-
-        ClassStatus(int status) {
-            this.status = status;
-        }
-
-        static ClassStatus withValue(int value) {
-            for (ClassStatus status : ClassStatus.values()) {
-                if (status.status == value) {
-                    return status;
-                }
-            }
-            return kNotReady;
-        }
-    }
-
-    /**
-     * enum class ClassStatus : uint8_t {
-     * kNotReady = 0,  // Zero-initialized Class object starts in this state.
-     * kRetired = 1,  // Retired, should not be used. Use the newly cloned one instead.
-     * kErrorResolved = 2,
-     * kErrorUnresolved = 3,
-     * kIdx = 4,  // Loaded, DEX idx in super_class_type_idx_ and interfaces_type_idx_.
-     * kLoaded = 5,  // DEX idx values resolved.
-     * kResolving = 6,  // Just cloned from temporary class object.
-     * kResolved = 7,  // Part of linking.
-     * kVerifying = 8,  // In the process of being verified.
-     * kRetryVerificationAtRuntime = 9,  // Compile time verification failed, retry at runtime.
-     * kVerifyingAtRuntime = 10,  // Retrying verification at runtime.
-     * kVerified = 11,  // Logically part of linking; done pre-init.
-     * kSuperclassValidated = 12,  // Superclass validation part of init done.
-     * kInitializing = 13,  // Class init in progress.
-     * kInitialized = 14,  // Ready to go.
-     * kLast = kInitialized
-     * };
-     */
-    public static ClassStatus getClassStatus(Class clazz) {
+    public static int getClassStatus(Class clazz, boolean isUnsigned) {
         if (clazz == null) {
-            return ClassStatus.kNotReady;
+            return 0;
         }
         int status = XposedHelpers.getIntField(clazz, "status");
-        return ClassStatus.withValue((int) (Integer.toUnsignedLong(status) >> (32 - 4)));
+        if (isUnsigned) {
+            status = (int) (Integer.toUnsignedLong(status) >> (32 - 4));
+        }
+        return status;
     }
 
 
+    /**
+     * 5.0-8.0: kInitialized = 10 int
+     * 8.1:     kInitialized = 11 int
+     * 9.0:     kInitialized = 14 uint8_t
+     */
     public static boolean isInitialized(Class clazz) {
-        return getClassStatus(clazz) == ClassStatus.kInitialized;
+        if (Build.VERSION.SDK_INT >= 28) {
+            return getClassStatus(clazz, true) == 14;
+        } else if (Build.VERSION.SDK_INT == 27) {
+            return getClassStatus(clazz, false) == 11;
+        } else {
+            return getClassStatus(clazz, false) == 10;
+        }
     }
 
 }
