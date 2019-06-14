@@ -3,7 +3,7 @@ package com.elderdrivers.riru.edxp.util;
 import android.os.Build;
 import android.util.ArrayMap;
 
-import com.elderdrivers.riru.edxp.BuildConfig;
+import com.elderdrivers.riru.edxp.common.BuildConfig;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

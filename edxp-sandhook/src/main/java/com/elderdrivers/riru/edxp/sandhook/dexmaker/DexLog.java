@@ -2,7 +2,7 @@ package com.elderdrivers.riru.edxp.sandhook.dexmaker;
 
 import android.util.Log;
 
-import com.elderdrivers.riru.edxp.BuildConfig;
+import com.elderdrivers.riru.edxp.sandhook.BuildConfig;
 
 public class DexLog {
 

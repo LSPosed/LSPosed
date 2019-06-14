@@ -2,7 +2,7 @@ package com.elderdrivers.riru.edxp.util;
 
 import android.util.Log;
 
-import com.elderdrivers.riru.edxp.BuildConfig;
+import com.elderdrivers.riru.edxp.common.BuildConfig;
 
 import de.robv.android.xposed.XposedHelpers;
 

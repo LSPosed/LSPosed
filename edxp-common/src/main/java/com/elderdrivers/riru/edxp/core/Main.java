@@ -4,8 +4,9 @@ import android.annotation.SuppressLint;
 import android.os.Process;
 
 import com.elderdrivers.riru.common.KeepAll;
-import com.elderdrivers.riru.edxp.BuildConfig;
+import com.elderdrivers.riru.edxp.common.BuildConfig;
 import com.elderdrivers.riru.edxp.config.ConfigManager;
+import com.elderdrivers.riru.edxp.framework.ProcessHelper;
 import com.elderdrivers.riru.edxp.util.Utils;
 
 import java.security.AccessController;
@@ -18,6 +19,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @SuppressLint("DefaultLocale")
 public class Main implements KeepAll {
 
+    private static final boolean logEnabled = BuildConfig.DEBUG;
     private static String forkAndSpecializePramsStr = "";
     private static String forkSystemServerPramsStr = "";
 
@@ -36,11 +38,14 @@ public class Main implements KeepAll {
                                             String niceName, int[] fdsToClose, int[] fdsToIgnore,
                                             boolean startChildZygote, String instructionSet,
                                             String appDataDir) {
+        if (isBlackListedProcess(uid)) {
+            return;
+        }
         final EdxpImpl edxp = getEdxpImpl();
         if (edxp == null || !edxp.isInitialized()) {
             return;
         }
-        if (BuildConfig.DEBUG) {
+        if (logEnabled) {
             forkAndSpecializePramsStr = String.format(
                     "Zygote#forkAndSpecialize(%d, %d, %s, %d, %s, %d, %s, %s, %s, %s, %s, %s, %s)",
                     uid, gid, Arrays.toString(gids), debugFlags, Arrays.toString(rlimits),
@@ -60,12 +65,17 @@ public class Main implements KeepAll {
     }
 
     public static void forkAndSpecializePost(int pid, String appDataDir, String niceName) {
+        if (isBlackListedProcess(Process.myUid())) {
+            return;
+        }
         final EdxpImpl edxp = getEdxpImpl();
         if (edxp == null || !edxp.isInitialized()) {
             return;
         }
         if (pid == 0) {
-            Utils.logD(forkAndSpecializePramsStr + " = " + Process.myPid());
+            if (logEnabled) {
+                Utils.logI(forkAndSpecializePramsStr + " = " + Process.myPid());
+            }
             if (ConfigManager.isBlackWhiteListEnabled()) {
                 edxp.getBlackWhiteListProxy().forkAndSpecializePost(pid, appDataDir, niceName);
             } else {
@@ -83,7 +93,7 @@ public class Main implements KeepAll {
         if (edxp == null || !edxp.isInitialized()) {
             return;
         }
-        if (BuildConfig.DEBUG) {
+        if (logEnabled) {
             forkSystemServerPramsStr = String.format("Zygote#forkSystemServer(%d, %d, %s, %d, %s, %d, %d)",
                     uid, gid, Arrays.toString(gids), debugFlags, Arrays.toString(rlimits),
                     permittedCapabilities, effectiveCapabilities);
@@ -103,7 +113,9 @@ public class Main implements KeepAll {
             return;
         }
         if (pid == 0) {
-            Utils.logD(forkSystemServerPramsStr + " = " + Process.myPid());
+            if (logEnabled) {
+                Utils.logI(forkSystemServerPramsStr + " = " + Process.myPid());
+            }
             if (ConfigManager.isBlackWhiteListEnabled()) {
                 edxp.getBlackWhiteListProxy().forkSystemServerPost(pid);
             } else {
@@ -145,4 +157,9 @@ public class Main implements KeepAll {
         });
     }
 
+    private static boolean isBlackListedProcess(int uid) {
+        return ProcessHelper.isIsolated(uid)
+                || ProcessHelper.isRELROUpdater(uid)
+                || ProcessHelper.isWebViewZygote(uid);
+    }
 }
