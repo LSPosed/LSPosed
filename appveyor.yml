@@ -1,0 +1,21 @@
+environment:
+  ANDROID_HOME: C:\android-sdk-windows
+
+install:
+  - appveyor DownloadFile https://dl.google.com/android/repository/sdk-tools-windows-4333796.zip
+  - 7z x sdk-tools-windows-4333796.zip -oC:\android-sdk-windows > nul
+  - yes | C:\android-sdk-windows\tools\bin\sdkmanager.bat --licenses > nul
+  - C:\android-sdk-windows\tools\bin\sdkmanager.bat "platforms;android-28" > nul
+  - C:\android-sdk-windows\tools\bin\sdkmanager.bat "platform-tools" > nul
+  - C:\android-sdk-windows\tools\bin\sdkmanager.bat "build-tools;28.0.3" > nul
+  - C:\android-sdk-windows\tools\bin\sdkmanager.bat "cmake;3.6.4111459" > nul
+  - C:\android-sdk-windows\tools\bin\sdkmanager.bat "patcher;v4" > nul
+  - C:\android-sdk-windows\tools\bin\sdkmanager.bat "ndk-bundle" > nul
+  - set PATH=%PATH%;C:\android-sdk-windows\ndk-bundle;C:\android-sdk-windows\build-tools\28.0.3
+
+build_script:
+  - gradlew.bat :edxp-core:zipYahfaRelease
+  - gradlew.bat :edxp-core:zipSandhookRelease
+
+artifacts:
+  - path: 'edxp-core\release\**\*.zip'
