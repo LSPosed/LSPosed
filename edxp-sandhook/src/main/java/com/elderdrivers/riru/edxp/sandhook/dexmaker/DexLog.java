@@ -6,7 +6,7 @@ import com.elderdrivers.riru.edxp.sandhook.BuildConfig;
 
 public class DexLog {
 
-    public static final String TAG = "EdXposed-dexmaker";
+    public static final String TAG = "EdXposed";
 
     public static int v(String s) {
         return Log.v(TAG, s);
