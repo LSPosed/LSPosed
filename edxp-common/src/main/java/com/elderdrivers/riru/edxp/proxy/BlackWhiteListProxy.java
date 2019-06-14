@@ -4,7 +4,6 @@ import android.text.TextUtils;
 
 import com.elderdrivers.riru.edxp.config.ConfigManager;
 import com.elderdrivers.riru.edxp.deopt.PrebuiltMethodsDeopter;
-import com.elderdrivers.riru.edxp.framework.Zygote;
 import com.elderdrivers.riru.edxp.util.ProcessUtils;
 import com.elderdrivers.riru.edxp.util.Utils;
 
@@ -87,16 +86,12 @@ public class BlackWhiteListProxy extends BaseProxy {
         // loadModules once for all child processes of zygote
         // TODO maybe just save initZygote callbacks and call them when whitelisted process forked?
         mRouter.loadModulesSafely(true);
-        Zygote.closeFilesBeforeFork();
     }
 
     private void onForkPostCommon(boolean isSystemServer, String appDataDir, String niceName) {
         ConfigManager.appDataDir = appDataDir;
         ConfigManager.niceName = niceName;
         final boolean isDynamicModulesMode = ConfigManager.isDynamicModulesEnabled();
-        if (!isDynamicModulesMode) {
-            Zygote.reopenFilesAfterFork();
-        }
         mRouter.onEnterChildProcess();
         if (!checkNeedHook(appDataDir, niceName)) {
             // if is blacklisted, just stop here

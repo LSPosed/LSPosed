@@ -16,19 +16,23 @@
 #include "art/runtime/class_linker.h"
 #include "art/runtime/gc/heap.h"
 #include "art/runtime/hidden_api.h"
+#include "framework/fd_utils.h"
 
 namespace edxp {
 
     static bool installed = false;
     static bool art_hooks_installed = false;
+    static bool fwk_hooks_installed = false;
     static HookFunType hook_func = nullptr;
 
     void InstallArtHooks(void *art_handle);
 
+    void InstallFwkHooks(void *fwk_handle);
+
     CREATE_HOOK_STUB_ENTRIES(void *, mydlopen, const char *file_name, int flags,
                              const void *caller) {
         void *handle = mydlopenBackup(file_name, flags, caller);
-        if (std::string(file_name).find("libart.so") != std::string::npos) {
+        if (std::string(file_name).find(kLibArtName) != std::string::npos) {
             InstallArtHooks(handle);
         }
         return handle;
@@ -69,6 +73,9 @@ namespace edxp {
             ScopedDlHandle art_handle(kLibArtPath.c_str());
             InstallArtHooks(art_handle.Get());
         }
+
+        ScopedDlHandle fwk_handle(kLibFwkPath.c_str());
+        InstallFwkHooks(fwk_handle.Get());
     }
 
     void InstallArtHooks(void *art_handle) {
@@ -83,6 +90,13 @@ namespace edxp {
         art::JNIEnvExt::Setup(art_handle, hook_func);
         art_hooks_installed = true;
         LOGI("ART hooks installed");
+    }
+
+    void InstallFwkHooks(void *fwk_handle) {
+        if (fwk_hooks_installed) {
+            return;
+        }
+        android::FileDescriptorWhitelist::Setup(fwk_handle, hook_func);
     }
 
 }

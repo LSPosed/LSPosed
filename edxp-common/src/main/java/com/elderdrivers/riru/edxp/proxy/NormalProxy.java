@@ -2,7 +2,6 @@ package com.elderdrivers.riru.edxp.proxy;
 
 import com.elderdrivers.riru.edxp.config.ConfigManager;
 import com.elderdrivers.riru.edxp.deopt.PrebuiltMethodsDeopter;
-import com.elderdrivers.riru.edxp.framework.Zygote;
 
 import static com.elderdrivers.riru.edxp.util.FileUtils.getDataPathPrefix;
 
@@ -27,7 +26,6 @@ public class NormalProxy extends BaseProxy {
         mRouter.installBootstrapHooks(false);
         // only load modules for secondary zygote
         mRouter.loadModulesSafely(true);
-        Zygote.closeFilesBeforeFork();
     }
 
     public void forkAndSpecializePost(int pid, String appDataDir, String niceName) {
@@ -35,7 +33,6 @@ public class NormalProxy extends BaseProxy {
         ConfigManager.appDataDir = appDataDir;
         ConfigManager.niceName = niceName;
         mRouter.prepare(false);
-        Zygote.reopenFilesAfterFork();
         mRouter.onEnterChildProcess();
         // load modules for each app process on its forked if dynamic modules mode is on
         mRouter.loadModulesSafely(false);
@@ -57,7 +54,6 @@ public class NormalProxy extends BaseProxy {
         // because if not global hooks installed in initZygote might not be
         // propagated to processes not forked via forkAndSpecialize
         mRouter.loadModulesSafely(true);
-        Zygote.closeFilesBeforeFork();
     }
 
     public void forkSystemServerPost(int pid) {
@@ -65,7 +61,6 @@ public class NormalProxy extends BaseProxy {
         ConfigManager.appDataDir = getDataPathPrefix() + "android";
         ConfigManager.niceName = "system_server";
         mRouter.prepare(true);
-        Zygote.reopenFilesAfterFork();
         mRouter.onEnterChildProcess();
         // reload module list if dynamic mode is on
         mRouter.loadModulesSafely(false);
