@@ -36,4 +36,4 @@ only_commits:
     - gradle.properties
     - appveyor.yml
 
-version: '0.4.4.4_alpha (4441)'
+version: '0.4.4.4_alpha (4441) {build}'
