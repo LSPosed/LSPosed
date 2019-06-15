@@ -11,6 +11,8 @@
 #include <jni/edxp_resources_hook.h>
 #include <dl_util.h>
 #include <art/runtime/jni_env_ext.h>
+#include <art/runtime/mirror/class.h>
+#include <android-base/strings.h>
 #include "edxp_context.h"
 #include "config_manager.h"
 
@@ -36,11 +38,16 @@ namespace edxp {
         if (UNLIKELY(!post_fixup_static_mid_ || !class_linker_class_)) {
             return;
         }
+        if (!class_ptr) {
+            return;
+        }
         JNIEnv *env;
         vm_->GetEnv((void **) (&env), JNI_VERSION_1_4);
         art::JNIEnvExt env_ext(env);
         ScopedLocalRef clazz(env, env_ext.NewLocalRefer(class_ptr));
-        JNI_CallStaticVoidMethod(env, class_linker_class_, post_fixup_static_mid_, clazz.get());
+        if (clazz != nullptr) {
+            JNI_CallStaticVoidMethod(env, class_linker_class_, post_fixup_static_mid_, clazz.get());
+        }
     }
 
     void Context::LoadDexAndInit(JNIEnv *env, const char *dex_path) {
@@ -169,7 +176,7 @@ namespace edxp {
         if (LIKELY(mid)) {
             va_list args;
             va_start(args, method_sig);
-            env->functions->CallStaticVoidMethodV(env, entry_class_, mid, args);
+            env->CallStaticVoidMethodV(entry_class_, mid, args);
             va_end(args);
         } else {
             LOGE("method %s id is null", method_name);

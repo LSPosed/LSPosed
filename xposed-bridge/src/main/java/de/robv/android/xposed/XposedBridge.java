@@ -18,7 +18,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 import dalvik.system.InMemoryDexClassLoader;
 import de.robv.android.xposed.XC_MethodHook.MethodHookParam;
@@ -235,28 +234,12 @@ public final class XposedBridge {
             if (reflectMethod != null) {
 				hookMethodNative(reflectMethod, declaringClass, slot, additionalInfo);
 			} else {
-                synchronized (pendingLock) {
-                    sPendingHookMethods.put(hookMethod, additionalInfo);
-                }
+				PendingHooks.recordPendingMethod(hookMethod, additionalInfo);
 			}
         }
 
         return callback.new Unhook(hookMethod);
 	}
-
-	private static final ConcurrentHashMap<Member, XposedBridge.AdditionalHookInfo>
-			sPendingHookMethods = new ConcurrentHashMap<>();
-	private static final Object pendingLock = new Object();
-
-	public static void hookPendingMethod(Class clazz) {
-	    synchronized (pendingLock) {
-            for (Member member : sPendingHookMethods.keySet()) {
-                if (member.getDeclaringClass().equals(clazz)) {
-                    hookMethodNative(member, clazz, 0, sPendingHookMethods.get(member));
-                }
-            }
-        }
-    }
 
 	/**
 	 * Removes the callback for a hooked method/constructor.
@@ -448,7 +431,7 @@ public final class XposedBridge {
 	 * Intercept every call to the specified method and call a handler function instead.
 	 * @param method The method to intercept
 	 */
-	private synchronized static void hookMethodNative(final Member method, Class<?> declaringClass,
+	/*package*/ synchronized static void hookMethodNative(final Member method, Class<?> declaringClass,
                                                       int slot, final Object additionalInfoObj) {
 		EdXpConfigGlobal.getHookProvider().hookMethod(method, (AdditionalHookInfo) additionalInfoObj);
 	}
