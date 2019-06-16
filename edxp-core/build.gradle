@@ -3,10 +3,24 @@ import org.gradle.internal.os.OperatingSystem
 
 apply plugin: 'com.android.library'
 
-version "v0.4.4.5_alpha"
+// Values set here will be overriden by AppVeyor, feel free to modify during development.
+def buildVersionName = 'v1.0.0'
+def buildVersionCode = 1
+
+if (System.env.APPVEYOR_BUILD_VERSION != null) {
+    buildVersionName = "v${System.getenv('appveyor_build_version')}"
+}
+
+if (System.env.APPVEYOR_BUILD_NUMBER != null) {
+    // Split is necessary because PRs set the build number to "1234-something".
+    def parts = System.env.APPVEYOR_BUILD_NUMBER.split('-')
+    buildVersionCode = Integer.valueOf(parts[0])
+}
+
+version buildVersionName
 
 ext {
-    versionCode = "4450"
+    versionCode = buildVersionCode
     module_name = "EdXposed"
     jar_dest_dir = "${projectDir}/template_override/system/framework/"
     is_windows = OperatingSystem.current().isWindows()
@@ -130,7 +144,7 @@ afterEvaluate {
                         into templateRootPath
                         rename "module.prop.tpl", "module.prop"
                         expand(moduleId: "$magiskModuleId", backend: "$backendCapped",
-                                versionName: "$version" + "($backend)",
+                                versionName: "$version" + " ($backend)",
                                 versionCode: "$versionCode", authorList: "$authorList")
                         filter(FixCrLfFilter.class, eol: FixCrLfFilter.CrLf.newInstance("lf"))
                     }
@@ -145,6 +159,14 @@ afterEvaluate {
                     copy {
                         from "${projectDir}/template_override"
                         into zipPathMagiskRelease
+                    }
+                    copy {
+                        from "${projectDir}/template_override/common/util_functions.sh"
+                        into "${zipPathMagiskRelease}/common"
+                        filter { line -> line
+                                .replaceAll('%VERSION%', "$version")
+                                .replaceAll('%VERSION_CODE%', "$versionCode")
+                                .replaceAll('%BACKEND%', "$backendCapped") }
                     }
                     copy {
                         from 'template_override/riru_module.prop'
