@@ -106,6 +106,9 @@ public class BlackWhiteListProxy extends BaseProxy {
         mRouter.installBootstrapHooks(isSystemServer);
         if (isDynamicModulesMode) {
             mRouter.loadModulesSafely(false);
+        } else {
+            XposedBridge.callInitZygotes();
+            XposedBridge.clearInitZygotes(); // one-time use
         }
         mRouter.onForkFinish();
     }
@@ -130,5 +133,6 @@ public class BlackWhiteListProxy extends BaseProxy {
     private static void onBlackListed() {
         XposedBridge.clearLoadedPackages();
         XposedBridge.clearInitPackageResources();
+        XposedBridge.clearInitZygotes();
     }
 }

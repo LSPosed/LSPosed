@@ -4,10 +4,10 @@ import com.elderdrivers.riru.edxp.hook.HookProvider;
 
 public class EdXpConfigGlobal {
 
-    public static volatile EdXpConfig sConfig;
+    public static volatile EdxpConfig sConfig;
     public static volatile HookProvider sHookProvider;
 
-    public static EdXpConfig getConfig() {
+    public static EdxpConfig getConfig() {
         if (sConfig == null) {
             throw new IllegalArgumentException("sConfig should not be null.");
         }

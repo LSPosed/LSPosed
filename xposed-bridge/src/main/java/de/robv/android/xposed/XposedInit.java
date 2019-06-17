@@ -414,7 +414,17 @@ public final class XposedInit {
                             IXposedHookZygoteInit.StartupParam param = new IXposedHookZygoteInit.StartupParam();
                             param.modulePath = apk;
                             param.startsSystemServer = startsSystemServer;
-                            ((IXposedHookZygoteInit) moduleInstance).initZygote(param);
+                            if (EdXpConfigGlobal.getConfig().isBlackWhiteListMode()
+                                    && !EdXpConfigGlobal.getConfig().isDynamicModulesMode()) {
+                                // postpone initZygote callbacks under black/white list mode
+                                // if dynamic modules mode is on, callback directly cause we
+                                // are already in app process here
+                                XposedBridge.hookInitZygote(new IXposedHookZygoteInit.Wrapper(
+                                        (IXposedHookZygoteInit) moduleInstance, param));
+                            } else {
+                                // FIXME under dynamic modules mode, initZygote is called twice
+                                ((IXposedHookZygoteInit) moduleInstance).initZygote(param);
+                            }
                         }
 
                         if (moduleInstance instanceof IXposedHookLoadPackage)

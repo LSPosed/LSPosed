@@ -22,7 +22,9 @@ import java.util.Set;
 import dalvik.system.InMemoryDexClassLoader;
 import de.robv.android.xposed.XC_MethodHook.MethodHookParam;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
+import de.robv.android.xposed.callbacks.XC_InitZygote;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import de.robv.android.xposed.callbacks.XCallback;
 import external.com.android.dx.DexMaker;
 import external.com.android.dx.TypeId;
 
@@ -67,6 +69,7 @@ public final class XposedBridge {
 	public static final Map<Member, CopyOnWriteSortedSet<XC_MethodHook>> sHookedMethodCallbacks = new HashMap<>();
 	public static final CopyOnWriteSortedSet<XC_LoadPackage> sLoadedPackageCallbacks = new CopyOnWriteSortedSet<>();
 	/*package*/ static final CopyOnWriteSortedSet<XC_InitPackageResources> sInitPackageResourcesCallbacks = new CopyOnWriteSortedSet<>();
+	/*package*/ static final CopyOnWriteSortedSet<XC_InitZygote> sInitZygoteCallbacks = new CopyOnWriteSortedSet<>();
 
 	private XposedBridge() {}
 
@@ -425,6 +428,22 @@ public final class XposedBridge {
 		synchronized (sInitPackageResourcesCallbacks) {
 			sInitPackageResourcesCallbacks.clear();
 		}
+	}
+
+	public static void hookInitZygote(XC_InitZygote callback) {
+		synchronized (sInitZygoteCallbacks) {
+			sInitZygoteCallbacks.add(callback);
+		}
+	}
+
+	public static void clearInitZygotes() {
+		synchronized (sInitZygoteCallbacks) {
+			sInitZygoteCallbacks.clear();
+		}
+	}
+
+	public static void callInitZygotes() {
+		XCallback.callAll(new IXposedHookZygoteInit.StartupParam(sInitZygoteCallbacks));
 	}
 
 	/**

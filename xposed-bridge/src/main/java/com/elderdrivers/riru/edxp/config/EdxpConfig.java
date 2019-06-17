@@ -1,6 +1,6 @@
 package com.elderdrivers.riru.edxp.config;
 
-public interface EdXpConfig {
+public interface EdxpConfig {
 
     String getInstallerBaseDir();
 
@@ -10,4 +10,5 @@ public interface EdXpConfig {
 
     boolean isResourcesHookEnabled();
 
+    boolean isBlackWhiteListMode();
 }
