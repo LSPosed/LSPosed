@@ -4,12 +4,13 @@ import com.elderdrivers.riru.edxp.art.ClassLinker;
 import com.elderdrivers.riru.edxp.config.BaseHookProvider;
 import com.elderdrivers.riru.edxp.core.ResourcesHook;
 import com.elderdrivers.riru.edxp.core.Yahfa;
-import com.elderdrivers.riru.edxp.yahfa.dexmaker.DexMakerUtils;
 import com.elderdrivers.riru.edxp.yahfa.dexmaker.DynamicBridge;
 
 import java.lang.reflect.Member;
 
 import de.robv.android.xposed.XposedBridge;
+
+import static com.elderdrivers.riru.edxp.util.ClassUtils.shouldDelayHook;
 
 public class YahfaHookProvider extends BaseHookProvider {
 
@@ -25,7 +26,7 @@ public class YahfaHookProvider extends BaseHookProvider {
 
     @Override
     public Member findMethodNative(Member hookMethod) {
-        return DexMakerUtils.findMethodNative(hookMethod);
+        return shouldDelayHook(hookMethod) ? null : hookMethod;
     }
 
     @Override

@@ -5,11 +5,7 @@ import android.os.Build;
 import android.text.TextUtils;
 
 import com.elderdrivers.riru.edxp.config.ConfigManager;
-import com.elderdrivers.riru.edxp.util.ClassUtils;
-import com.elderdrivers.riru.edxp.util.Utils;
 
-import java.lang.reflect.Member;
-import java.lang.reflect.Modifier;
 import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.Map;
@@ -245,22 +241,5 @@ public class DexMakerUtils {
             DexLog.e("error hashing target method: " + text, e);
         }
         return "";
-    }
-
-    public static Member findMethodNative(Member hookMethod) {
-        if (shouldDelayHook(hookMethod)) {
-            Utils.logD("solo: " + hookMethod + " hooking delayed.");
-            return null;
-        }
-        return hookMethod;
-    }
-
-    private static boolean shouldDelayHook(Member hookMethod) {
-        if (hookMethod == null) {
-            return false;
-        }
-        Class declaringClass = hookMethod.getDeclaringClass();
-        return Modifier.isStatic(hookMethod.getModifiers())
-                && !ClassUtils.isInitialized(declaringClass);
     }
 }

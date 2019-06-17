@@ -13,6 +13,7 @@
 #include <art/runtime/jni_env_ext.h>
 #include <art/runtime/mirror/class.h>
 #include <android-base/strings.h>
+#include <nativehelper/scoped_local_ref.h>
 #include "edxp_context.h"
 #include "config_manager.h"
 
@@ -30,7 +31,15 @@ namespace edxp {
         return instance_;
     }
 
-    ALWAYS_INLINE inline jobject Context::GetCurrentClassLoader() const {
+    ALWAYS_INLINE bool Context::IsInitialized() const {
+        return initialized_;
+    }
+
+    ALWAYS_INLINE Variant Context::GetVariant() const {
+        return variant_;
+    }
+
+    ALWAYS_INLINE jobject Context::GetCurrentClassLoader() const {
         return inject_class_loader_;
     }
 

@@ -1,9 +1,11 @@
 package com.elderdrivers.riru.edxp.whale.config;
 
 import com.elderdrivers.riru.edxp.art.ClassLinker;
+import com.elderdrivers.riru.edxp.art.Heap;
 import com.elderdrivers.riru.edxp.config.BaseHookProvider;
 import com.elderdrivers.riru.edxp.core.ResourcesHook;
 import com.elderdrivers.riru.edxp.core.Yahfa;
+import com.elderdrivers.riru.edxp.util.Utils;
 import com.lody.whale.WhaleRuntime;
 
 import java.lang.reflect.Member;
@@ -13,6 +15,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.robv.android.xposed.XposedBridge;
+import de.robv.android.xposed.XposedHelpers;
+
+import static com.elderdrivers.riru.edxp.util.ClassUtils.shouldDelayHook;
 
 public class WhaleHookProvider extends BaseHookProvider {
 
@@ -27,7 +32,7 @@ public class WhaleHookProvider extends BaseHookProvider {
 
     @Override
     public void hookMethod(Member method, XposedBridge.AdditionalHookInfo additionalInfo) {
-        resolveStaticMethod(method);
+//        resolveStaticMethod(method);
         long slot = WhaleRuntime.hookMethodNative(method.getDeclaringClass(), method, additionalInfo);
         synchronized (sHookedMethodSlotMap) {
             sHookedMethodSlotMap.put(method, slot);
@@ -42,7 +47,7 @@ public class WhaleHookProvider extends BaseHookProvider {
 
     @Override
     public Member findMethodNative(Member hookMethod) {
-        return hookMethod;
+        return shouldDelayHook(hookMethod) ? null : hookMethod;
     }
 
     @Override

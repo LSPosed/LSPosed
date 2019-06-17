@@ -56,6 +56,10 @@ namespace edxp {
                                          jlong permitted_capabilities,
                                          jlong effective_capabilities);
 
+        bool IsInitialized() const;
+
+        Variant GetVariant() const;
+
     private:
         static Context *instance_;
         bool initialized_ = false;
@@ -75,7 +79,6 @@ namespace edxp {
         void LoadDexAndInit(JNIEnv *env, const char *dex_path);
 
         jclass FindClassFromLoader(JNIEnv *env, jobject class_loader, const char *class_name) const;
-
     };
 
 }

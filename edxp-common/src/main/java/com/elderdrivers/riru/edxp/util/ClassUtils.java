@@ -2,6 +2,9 @@ package com.elderdrivers.riru.edxp.util;
 
 import android.os.Build;
 
+import java.lang.reflect.Member;
+import java.lang.reflect.Modifier;
+
 import de.robv.android.xposed.XposedHelpers;
 
 public class ClassUtils {
@@ -31,6 +34,15 @@ public class ClassUtils {
         } else {
             return getClassStatus(clazz, false) == 10;
         }
+    }
+
+    public static boolean shouldDelayHook(Member hookMethod) {
+        if (hookMethod == null) {
+            return false;
+        }
+        Class declaringClass = hookMethod.getDeclaringClass();
+        return Modifier.isStatic(hookMethod.getModifiers())
+                && !ClassUtils.isInitialized(declaringClass);
     }
 
 }
