@@ -62,5 +62,10 @@ public interface IXposedHookZygoteInit extends IXposedMod {
             // cause startupParam info is generated and saved along with instance here
             instance.initZygote(this.startupParam);
         }
+
+		@Override
+		public String getApkPath() {
+			return startupParam.modulePath;
+		}
 	}
 }

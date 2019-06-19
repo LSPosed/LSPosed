@@ -26,12 +26,20 @@ public interface IXposedHookLoadPackage extends IXposedMod {
 	/** @hide */
 	final class Wrapper extends XC_LoadPackage {
 		private final IXposedHookLoadPackage instance;
-		public Wrapper(IXposedHookLoadPackage instance) {
+		private final String apkPath;
+
+		public Wrapper(IXposedHookLoadPackage instance, String apkPath) {
 			this.instance = instance;
+			this.apkPath = apkPath;
 		}
 		@Override
 		public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable {
 			instance.handleLoadPackage(lpparam);
+		}
+
+		@Override
+		public String getApkPath() {
+			return apkPath;
 		}
 	}
 }

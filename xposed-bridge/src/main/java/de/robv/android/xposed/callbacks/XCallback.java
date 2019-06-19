@@ -6,6 +6,7 @@ import com.elderdrivers.riru.edxp.config.EdXpConfigGlobal;
 
 import java.io.Serializable;
 
+import de.robv.android.xposed.IModuleContext;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedBridge.CopyOnWriteSortedSet;
 
@@ -15,7 +16,7 @@ import de.robv.android.xposed.XposedBridge.CopyOnWriteSortedSet;
  * This class only keeps a priority for ordering multiple callbacks.
  * The actual (abstract) callback methods are added by subclasses.
  */
-public abstract class XCallback implements Comparable<XCallback> {
+public abstract class XCallback implements Comparable<XCallback>, IModuleContext {
 	/**
 	 * Callback priority, higher number means earlier execution.
 	 *
@@ -120,6 +121,11 @@ public abstract class XCallback implements Comparable<XCallback> {
 
 	/** @hide */
 	protected void call(Param param) throws Throwable {}
+
+	@Override
+	public String getApkPath() {
+		return "";
+	}
 
 	/** @hide */
 	@Override

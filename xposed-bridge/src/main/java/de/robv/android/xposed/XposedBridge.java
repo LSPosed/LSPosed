@@ -446,6 +446,12 @@ public final class XposedBridge {
 		XCallback.callAll(new IXposedHookZygoteInit.StartupParam(sInitZygoteCallbacks));
 	}
 
+	public static void clearAllCallbacks() {
+		clearLoadedPackages();
+		clearInitPackageResources();
+		clearInitZygotes();
+	}
+
 	/**
 	 * Intercept every call to the specified method and call a handler function instead.
 	 * @param method The method to intercept

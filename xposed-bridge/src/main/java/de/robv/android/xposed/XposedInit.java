@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.IBinder;
 import android.os.Process;
 import android.text.TextUtils;
+import android.util.ArraySet;
 import android.util.Log;
 
 import com.android.internal.os.ZygoteInit;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -34,11 +36,17 @@ import java.util.zip.ZipFile;
 import dalvik.system.DexFile;
 import dalvik.system.PathClassLoader;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
+import de.robv.android.xposed.callbacks.XC_InitZygote;
+import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import de.robv.android.xposed.callbacks.XCallback;
 import de.robv.android.xposed.services.BaseService;
 
+import static de.robv.android.xposed.XposedBridge.clearAllCallbacks;
 import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
+import static de.robv.android.xposed.XposedBridge.sInitPackageResourcesCallbacks;
+import static de.robv.android.xposed.XposedBridge.sInitZygoteCallbacks;
+import static de.robv.android.xposed.XposedBridge.sLoadedPackageCallbacks;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.closeSilently;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
@@ -292,44 +300,104 @@ public final class XposedInit {
     /**
      * Try to load all modules defined in <code>INSTALLER_DATA_BASE_DIR/conf/modules.list</code>
      */
-    private static volatile AtomicBoolean modulesLoaded = new AtomicBoolean(false);
+    private static final AtomicBoolean modulesLoaded = new AtomicBoolean(false);
+    private static final Object moduleLoadLock = new Object();
+    // @GuardedBy("moduleLoadLock")
+    private static final ArraySet<String> loadedModules = new ArraySet<>();
+    // @GuardedBy("moduleLoadLock")
+    private static long lastModuleListModifiedTime = -1;
 
-    public static void loadModules(boolean isInZygote) throws IOException {
+    public static boolean loadModules(boolean isInZygote, boolean callInitZygote) throws IOException {
         boolean hasLoaded = !modulesLoaded.compareAndSet(false, true);
         // dynamic module list mode doesn't apply to loading in zygote
         if (hasLoaded && (isInZygote || !EdXpConfigGlobal.getConfig().isDynamicModulesMode())) {
-            return;
+            return false;
         }
-        // FIXME module list is cleared but never could be reload again when using dynamic-module-list under multi-user environment
-        XposedBridge.clearLoadedPackages();
-        final String filename = EdXpConfigGlobal.getConfig().getInstallerBaseDir() + "conf/modules.list";
-        BaseService service = SELinuxHelper.getAppDataFileService();
-        if (!service.checkFileExists(filename)) {
-            Log.e(TAG, "Cannot load any modules because " + filename + " was not found");
-            return;
-        }
+        synchronized (moduleLoadLock) {
+            final String filename = EdXpConfigGlobal.getConfig().getInstallerBaseDir() + "conf/modules.list";
+            BaseService service = SELinuxHelper.getAppDataFileService();
+            if (!service.checkFileExists(filename)) {
+                Log.e(TAG, "Cannot load any modules because " + filename + " was not found");
+                // FIXME module list is cleared but never could be reload again
+                // when using dynamic-module-list under multi-user environment
+                clearAllCallbacks();
+                return false;
+            }
 
-        ClassLoader topClassLoader = XposedBridge.BOOTCLASSLOADER;
-        ClassLoader parent;
-        while ((parent = topClassLoader.getParent()) != null) {
-            topClassLoader = parent;
-        }
+            long moduleListModifiedTime = service.getFileModificationTime(filename);
+            if (lastModuleListModifiedTime == moduleListModifiedTime) {
+                // module list has not changed
+                return false;
+            }
 
-        InputStream stream = service.getFileInputStream(filename);
-        BufferedReader apks = new BufferedReader(new InputStreamReader(stream));
-        String apk;
-        while ((apk = apks.readLine()) != null) {
-            loadModule(apk, topClassLoader);
+            ClassLoader topClassLoader = XposedBridge.BOOTCLASSLOADER;
+            ClassLoader parent;
+            while ((parent = topClassLoader.getParent()) != null) {
+                topClassLoader = parent;
+            }
+
+            InputStream stream = service.getFileInputStream(filename);
+            BufferedReader apks = new BufferedReader(new InputStreamReader(stream));
+            ArraySet<String> newLoadedApk = new ArraySet<>();
+            String apk;
+            while ((apk = apks.readLine()) != null) {
+                if (loadedModules.contains(apk)) {
+                    newLoadedApk.add(apk);
+                } else {
+                    boolean loadSuccess = loadModule(apk, topClassLoader, callInitZygote);
+                    if (loadSuccess) {
+                        newLoadedApk.add(apk);
+                    }
+                }
+            }
+            loadedModules.clear();
+            loadedModules.addAll(newLoadedApk);
+            apks.close();
+
+            // refresh callback according to current loaded module list
+            pruneCallbacks(loadedModules);
+
+            lastModuleListModifiedTime = moduleListModifiedTime;
+
         }
-        apks.close();
+        return true;
     }
 
+    // remove deactivated or outdated module callbacks
+    private static void pruneCallbacks(Set<String> loadedModules) {
+        synchronized (moduleLoadLock) {
+            Object[] loadedPkgSnapshot = sLoadedPackageCallbacks.getSnapshot();
+            Object[] initPkgResSnapshot = sInitPackageResourcesCallbacks.getSnapshot();
+            Object[] initZygoteSnapshot = sInitZygoteCallbacks.getSnapshot();
+            for (Object loadedPkg : loadedPkgSnapshot) {
+                if (loadedPkg instanceof IModuleContext) {
+                    if (!loadedModules.contains(((IModuleContext) loadedPkg).getApkPath())) {
+                        sLoadedPackageCallbacks.remove((XC_LoadPackage) loadedPkg);
+                    }
+                }
+            }
+            for (Object initPkgRes : initPkgResSnapshot) {
+                if (initPkgRes instanceof IModuleContext) {
+                    if (!loadedModules.contains(((IModuleContext) initPkgRes).getApkPath())) {
+                        sInitPackageResourcesCallbacks.remove((XC_InitPackageResources) initPkgRes);
+                    }
+                }
+            }
+            for (Object initZygote : initZygoteSnapshot) {
+                if (initZygote instanceof IModuleContext) {
+                    if (!loadedModules.contains(((IModuleContext) initZygote).getApkPath())) {
+                        sInitZygoteCallbacks.remove((XC_InitZygote) initZygote);
+                    }
+                }
+            }
+        }
+    }
 
     /**
      * Load a module from an APK by calling the init(String) method for all classes defined
      * in <code>assets/xposed_init</code>.
      */
-    private static void loadModule(String apk, ClassLoader topClassLoader) {
+    private static boolean loadModule(String apk, ClassLoader topClassLoader, boolean callInitZygote) {
         Log.i(TAG, "Loading modules from " + apk);
 
         // todo remove this legacy logic
@@ -337,12 +405,12 @@ public final class XposedInit {
         if (!TextUtils.isEmpty(apk) && !TextUtils.isEmpty(blackListModulePackageName)
                 && apk.contains(blackListModulePackageName)) {
             Log.i(TAG, "We are going to take over black list's job...");
-            return;
+            return false;
         }
 
         if (!new File(apk).exists()) {
             Log.e(TAG, "  File does not exist");
-            return;
+            return false;
         }
 
         DexFile dexFile;
@@ -350,13 +418,13 @@ public final class XposedInit {
             dexFile = new DexFile(apk);
         } catch (IOException e) {
             Log.e(TAG, "  Cannot load module", e);
-            return;
+            return false;
         }
 
         if (dexFile.loadClass(INSTANT_RUN_CLASS, topClassLoader) != null) {
             Log.e(TAG, "  Cannot load module, please disable \"Instant Run\" in Android Studio.");
             closeSilently(dexFile);
-            return;
+            return false;
         }
 
         if (dexFile.loadClass(XposedBridge.class.getName(), topClassLoader) != null) {
@@ -365,7 +433,7 @@ public final class XposedInit {
             Log.e(TAG, "  This may cause strange issues and must be fixed by the module developer.");
             Log.e(TAG, "  For details, see: http://api.xposed.info/using.html");
             closeSilently(dexFile);
-            return;
+            return false;
         }
 
         closeSilently(dexFile);
@@ -378,13 +446,13 @@ public final class XposedInit {
             if (zipEntry == null) {
                 Log.e(TAG, "  assets/xposed_init not found in the APK");
                 closeSilently(zipFile);
-                return;
+                return false;
             }
             is = zipFile.getInputStream(zipEntry);
         } catch (IOException e) {
             Log.e(TAG, "  Cannot read assets/xposed_init in the APK", e);
             closeSilently(zipFile);
-            return;
+            return false;
         }
 
         ClassLoader mcl = new PathClassLoader(apk, XposedInit.class.getClassLoader());
@@ -414,24 +482,21 @@ public final class XposedInit {
                             IXposedHookZygoteInit.StartupParam param = new IXposedHookZygoteInit.StartupParam();
                             param.modulePath = apk;
                             param.startsSystemServer = startsSystemServer;
-                            if (EdXpConfigGlobal.getConfig().isBlackWhiteListMode()
-                                    && !EdXpConfigGlobal.getConfig().isDynamicModulesMode()) {
-                                // postpone initZygote callbacks under black/white list mode
-                                // if dynamic modules mode is on, callback directly cause we
-                                // are already in app process here
-                                XposedBridge.hookInitZygote(new IXposedHookZygoteInit.Wrapper(
-                                        (IXposedHookZygoteInit) moduleInstance, param));
-                            } else {
-                                // FIXME under dynamic modules mode, initZygote is called twice
+
+                            XposedBridge.hookInitZygote(new IXposedHookZygoteInit.Wrapper(
+                                    (IXposedHookZygoteInit) moduleInstance, param));
+                            if (callInitZygote) {
                                 ((IXposedHookZygoteInit) moduleInstance).initZygote(param);
                             }
                         }
 
                         if (moduleInstance instanceof IXposedHookLoadPackage)
-                            XposedBridge.hookLoadPackage(new IXposedHookLoadPackage.Wrapper((IXposedHookLoadPackage) moduleInstance));
+                            XposedBridge.hookLoadPackage(new IXposedHookLoadPackage.Wrapper(
+                                    (IXposedHookLoadPackage) moduleInstance, apk));
 
                         if (moduleInstance instanceof IXposedHookInitPackageResources)
-                            XposedBridge.hookInitPackageResources(new IXposedHookInitPackageResources.Wrapper((IXposedHookInitPackageResources) moduleInstance));
+                            XposedBridge.hookInitPackageResources(new IXposedHookInitPackageResources.Wrapper(
+                                    (IXposedHookInitPackageResources) moduleInstance, apk));
                     } else {
                         if (moduleInstance instanceof IXposedHookCmdInit) {
                             IXposedHookCmdInit.StartupParam param = new IXposedHookCmdInit.StartupParam();
@@ -442,10 +507,13 @@ public final class XposedInit {
                     }
                 } catch (Throwable t) {
                     Log.e(TAG, "    Failed to load class " + moduleClassName, t);
+                    return false;
                 }
             }
+            return true;
         } catch (IOException e) {
             Log.e(TAG, "  Failed to load module from " + apk, e);
+            return false;
         } finally {
             closeSilently(is);
             closeSilently(zipFile);

@@ -25,12 +25,21 @@ public interface IXposedHookInitPackageResources extends IXposedMod {
 	/** @hide */
 	final class Wrapper extends XC_InitPackageResources {
 		private final IXposedHookInitPackageResources instance;
-		public Wrapper(IXposedHookInitPackageResources instance) {
+		private final String apkPath;
+
+		public Wrapper(IXposedHookInitPackageResources instance, String apkPath) {
 			this.instance = instance;
+			this.apkPath = apkPath;
 		}
+
 		@Override
 		public void handleInitPackageResources(InitPackageResourcesParam resparam) throws Throwable {
 			instance.handleInitPackageResources(resparam);
+		}
+
+		@Override
+		public String getApkPath() {
+			return apkPath;
 		}
 	}
 }

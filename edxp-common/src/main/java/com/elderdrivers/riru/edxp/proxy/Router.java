@@ -10,7 +10,7 @@ public interface Router {
 
     void installBootstrapHooks(boolean isSystem);
 
-    void loadModulesSafely(boolean isInZygote);
+    void loadModulesSafely(boolean isInZygote, boolean callInitZygote);
 
     void startBootstrapHook(boolean isSystem);
 

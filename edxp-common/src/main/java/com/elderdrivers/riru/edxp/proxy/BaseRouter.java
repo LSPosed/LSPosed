@@ -72,10 +72,10 @@ public abstract class BaseRouter implements Router {
         }
     }
 
-    public void loadModulesSafely(boolean isInZygote) {
+    public void loadModulesSafely(boolean isInZygote, boolean callInitZygote) {
         try {
             // FIXME some coredomain app can't reading modules.list
-            XposedInit.loadModules(isInZygote);
+            XposedInit.loadModules(isInZygote, callInitZygote);
         } catch (Exception exception) {
             Utils.logE("error loading module list", exception);
         }

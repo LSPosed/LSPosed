@@ -25,7 +25,7 @@ public class NormalProxy extends BaseProxy {
         // install bootstrap hooks for secondary zygote
         mRouter.installBootstrapHooks(false);
         // only load modules for secondary zygote
-        mRouter.loadModulesSafely(true);
+        mRouter.loadModulesSafely(true, true);
     }
 
     public void forkAndSpecializePost(int pid, String appDataDir, String niceName) {
@@ -35,7 +35,7 @@ public class NormalProxy extends BaseProxy {
         mRouter.prepare(false);
         mRouter.onEnterChildProcess();
         // load modules for each app process on its forked if dynamic modules mode is on
-        mRouter.loadModulesSafely(false);
+        mRouter.loadModulesSafely(false, true);
         mRouter.onForkFinish();
     }
 
@@ -53,7 +53,7 @@ public class NormalProxy extends BaseProxy {
         // loadModules have to be executed in zygote even isDynamicModules is false
         // because if not global hooks installed in initZygote might not be
         // propagated to processes not forked via forkAndSpecialize
-        mRouter.loadModulesSafely(true);
+        mRouter.loadModulesSafely(true, true);
     }
 
     public void forkSystemServerPost(int pid) {
@@ -63,7 +63,9 @@ public class NormalProxy extends BaseProxy {
         mRouter.prepare(true);
         mRouter.onEnterChildProcess();
         // reload module list if dynamic mode is on
-        mRouter.loadModulesSafely(false);
+        if (ConfigManager.isDynamicModulesEnabled()) {
+            mRouter.loadModulesSafely(false, true);
+        }
         mRouter.onForkFinish();
     }
 

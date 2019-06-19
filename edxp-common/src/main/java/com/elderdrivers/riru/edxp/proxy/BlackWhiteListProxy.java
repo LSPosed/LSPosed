@@ -84,8 +84,7 @@ public class BlackWhiteListProxy extends BaseProxy {
         // because installed hooks would be propagated to all child processes of zygote
         mRouter.startWorkAroundHook();
         // loadModules once for all child processes of zygote
-        // TODO maybe just save initZygote callbacks and call them when whitelisted process forked?
-        mRouter.loadModulesSafely(true);
+        mRouter.loadModulesSafely(true, false);
     }
 
     private void onForkPostCommon(boolean isSystemServer, String appDataDir, String niceName) {
@@ -104,12 +103,15 @@ public class BlackWhiteListProxy extends BaseProxy {
         mRouter.prepare(isSystemServer);
         PrebuiltMethodsDeopter.deoptBootMethods();
         mRouter.installBootstrapHooks(isSystemServer);
+
+        // under dynamic modules mode, don't call initZygote when loadModule
+        // cuz loaded module won't has that chance to do it
         if (isDynamicModulesMode) {
-            mRouter.loadModulesSafely(false);
-        } else {
-            XposedBridge.callInitZygotes();
-            XposedBridge.clearInitZygotes(); // one-time use
+            mRouter.loadModulesSafely(false, false);
         }
+        // call all initZygote callbacks
+        XposedBridge.callInitZygotes();
+
         mRouter.onForkFinish();
     }
 
@@ -131,8 +133,6 @@ public class BlackWhiteListProxy extends BaseProxy {
     }
 
     private static void onBlackListed() {
-        XposedBridge.clearLoadedPackages();
-        XposedBridge.clearInitPackageResources();
-        XposedBridge.clearInitZygotes();
+        XposedBridge.clearAllCallbacks();
     }
 }

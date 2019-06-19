@@ -6,8 +6,6 @@ import com.elderdrivers.riru.edxp.yahfa.config.YahfaEdxpConfig;
 import com.elderdrivers.riru.edxp.yahfa.config.YahfaHookProvider;
 import com.elderdrivers.riru.edxp.yahfa.dexmaker.DynamicBridge;
 
-import de.robv.android.xposed.XposedBridge;
-
 public class YahfaRouter extends BaseRouter {
 
     public void onEnterChildProcess() {
@@ -17,7 +15,6 @@ public class YahfaRouter extends BaseRouter {
     public void injectConfig() {
         EdXpConfigGlobal.sConfig = new YahfaEdxpConfig();
         EdXpConfigGlobal.sHookProvider = new YahfaHookProvider();
-        XposedBridge.log("using HookProvider: " + EdXpConfigGlobal.sHookProvider.getClass().getName());
     }
 
 }

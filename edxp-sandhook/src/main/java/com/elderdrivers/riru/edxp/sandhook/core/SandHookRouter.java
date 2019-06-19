@@ -62,7 +62,6 @@ public class SandHookRouter extends BaseRouter {
     public void injectConfig() {
         EdXpConfigGlobal.sConfig = new SandHookEdxpConfig();
         EdXpConfigGlobal.sHookProvider = new SandHookProvider();
-        XposedBridge.log("using HookProvider: " + EdXpConfigGlobal.sHookProvider.getClass().getName());
     }
 
 }
