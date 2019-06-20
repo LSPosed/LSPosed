@@ -2,6 +2,7 @@ package com.elderdrivers.riru.edxp.util;
 
 import android.os.Build;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Member;
 import java.lang.reflect.Modifier;
 
@@ -37,7 +38,7 @@ public class ClassUtils {
     }
 
     public static boolean shouldDelayHook(Member hookMethod) {
-        if (hookMethod == null) {
+        if (hookMethod == null || hookMethod instanceof Constructor) {
             return false;
         }
         Class declaringClass = hookMethod.getDeclaringClass();

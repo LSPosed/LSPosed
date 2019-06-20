@@ -1,5 +1,6 @@
 package com.elderdrivers.riru.edxp.config;
 
+import com.elderdrivers.riru.edxp.core.Yahfa;
 import com.elderdrivers.riru.edxp.deopt.PrebuiltMethodsDeopter;
 import com.elderdrivers.riru.edxp.hook.HookProvider;
 
@@ -36,5 +37,10 @@ public abstract class BaseHookProvider implements HookProvider {
     @Override
     public boolean initXResourcesNative() {
         return false;
+    }
+
+    @Override
+    public void setNativeFlag(Member hookMethod, boolean isNative) {
+        Yahfa.setNativeFlag(hookMethod, isNative);
     }
 }

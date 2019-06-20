@@ -23,6 +23,8 @@ void Java_lab_galaxy_yahfa_HookMain_ensureMethodCached(JNIEnv *env, jclass clazz
 
 void setNonCompilable(void *method);
 
+bool setNativeFlag(void *method, bool isNative);
+
 static void *getResolvedMethodsAddr(JNIEnv *, jobject);
 
 #ifdef __cplusplus

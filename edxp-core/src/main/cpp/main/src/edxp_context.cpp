@@ -14,6 +14,7 @@
 #include <art/runtime/mirror/class.h>
 #include <android-base/strings.h>
 #include <nativehelper/scoped_local_ref.h>
+#include <jni/edxp_pending_hooks.h>
 #include "edxp_context.h"
 #include "config_manager.h"
 
@@ -43,8 +44,8 @@ namespace edxp {
         return inject_class_loader_;
     }
 
-    void Context::CallOnPostFixupStaticTrampolines(void *class_ptr) {
-        if (UNLIKELY(!post_fixup_static_mid_ || !class_linker_class_)) {
+    void Context::CallPostFixupStaticTrampolinesCallback(void *class_ptr, jmethodID callback_mid) {
+        if (UNLIKELY(!callback_mid || !class_linker_class_)) {
             return;
         }
         if (!class_ptr) {
@@ -55,8 +56,16 @@ namespace edxp {
         art::JNIEnvExt env_ext(env);
         ScopedLocalRef clazz(env, env_ext.NewLocalRefer(class_ptr));
         if (clazz != nullptr) {
-            JNI_CallStaticVoidMethod(env, class_linker_class_, post_fixup_static_mid_, clazz.get());
+            JNI_CallStaticVoidMethod(env, class_linker_class_, callback_mid, clazz.get());
         }
+    }
+
+    void Context::CallOnPreFixupStaticTrampolines(void *class_ptr) {
+        CallPostFixupStaticTrampolinesCallback(class_ptr, pre_fixup_static_mid_);
+    }
+
+    void Context::CallOnPostFixupStaticTrampolines(void *class_ptr) {
+        CallPostFixupStaticTrampolinesCallback(class_ptr, post_fixup_static_mid_);
     }
 
     void Context::LoadDexAndInit(JNIEnv *env, const char *dex_path) {
@@ -97,6 +106,9 @@ namespace edxp {
         env->GetJavaVM(&vm_);
         class_linker_class_ = (jclass) env->NewGlobalRef(
                 FindClassFromLoader(env, kClassLinkerClassName));
+        pre_fixup_static_mid_ = JNI_GetStaticMethodID(env, class_linker_class_,
+                                                      "onPreFixupStaticTrampolines",
+                                                      "(Ljava/lang/Class;)V");
         post_fixup_static_mid_ = JNI_GetStaticMethodID(env, class_linker_class_,
                                                        "onPostFixupStaticTrampolines",
                                                        "(Ljava/lang/Class;)V");
@@ -110,6 +122,7 @@ namespace edxp {
         RegisterArtClassLinker(env);
         RegisterArtHeap(env);
         RegisterEdxpYahfa(env);
+        RegisterPendingHooks(env);
 
         // must call entry class's methods after all native methods registered
         if (LIKELY(entry_class_)) {

@@ -15,4 +15,6 @@ public class Yahfa {
     public static native void init(int SDK_version);
 
     public static native void setMethodNonCompilable(Member member);
+
+    public static native boolean setNativeFlag(Member member, boolean isNative);
 }

@@ -3,9 +3,12 @@
 
 #include <JNIHelper.h>
 #include <base/object.h>
+#include <art/runtime/mirror/class.h>
+#include <android-base/strings.h>
 #include "runtime.h"
 #include "jni_env_ext.h"
 #include "edxp_context.h"
+#include "jni/edxp_pending_hooks.h"
 
 namespace art {
 
@@ -28,8 +31,17 @@ namespace art {
         }
 
         CREATE_HOOK_STUB_ENTRIES(void, FixupStaticTrampolines, void *thiz, void *clazz_ptr) {
+            art::mirror::Class clazz(clazz_ptr);
+            std::string storage;
+            const char *desc = clazz.GetDescriptor(&storage);
+            bool should_intercept = edxp::IsClassPending(desc);
+            if (UNLIKELY(should_intercept)) {
+                edxp::Context::GetInstance()->CallOnPreFixupStaticTrampolines(clazz_ptr);
+            }
             FixupStaticTrampolinesBackup(thiz, clazz_ptr);
-            edxp::Context::GetInstance()->CallOnPostFixupStaticTrampolines(clazz_ptr);
+            if (UNLIKELY(should_intercept)) {
+                edxp::Context::GetInstance()->CallOnPostFixupStaticTrampolines(clazz_ptr);
+            }
         }
 
     public:

@@ -22,6 +22,8 @@ namespace edxp {
 
         jobject GetCurrentClassLoader() const;
 
+        void CallOnPreFixupStaticTrampolines(void *class_ptr);
+
         void CallOnPostFixupStaticTrampolines(void *class_ptr);
 
         void PrepareJavaEnv(JNIEnv *env);
@@ -70,6 +72,7 @@ namespace edxp {
         jstring nice_name_ = nullptr;
         JavaVM *vm_ = nullptr;
         jclass class_linker_class_ = nullptr;
+        jmethodID pre_fixup_static_mid_ = nullptr;
         jmethodID post_fixup_static_mid_ = nullptr;
 
         Context() {}
@@ -79,6 +82,8 @@ namespace edxp {
         void LoadDexAndInit(JNIEnv *env, const char *dex_path);
 
         jclass FindClassFromLoader(JNIEnv *env, jobject class_loader, const char *class_name) const;
+
+        void CallPostFixupStaticTrampolinesCallback(void *class_ptr, jmethodID mid);
     };
 
 }

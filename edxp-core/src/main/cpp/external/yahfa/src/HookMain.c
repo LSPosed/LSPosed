@@ -2,6 +2,7 @@
 #include <string.h>
 #include <sys/mman.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #include "common.h"
 #include "env.h"
@@ -128,6 +129,26 @@ void setNonCompilable(void *method) {
     );
 }
 
+bool setNativeFlag(void *method, bool isNative) {
+    int access_flags = read32((char *) method + OFFSET_access_flags_in_ArtMethod);
+    LOGI("setNativeFlag: access flags is 0x%x", access_flags);
+    int old_access_flags = access_flags;
+    if (isNative) {
+        access_flags |= kAccNative;
+    } else {
+        access_flags &= ~kAccNative;
+    }
+    if (access_flags != old_access_flags) {
+        memcpy(
+                (char *) method + OFFSET_access_flags_in_ArtMethod,
+                &access_flags,
+                4
+        );
+        return true;
+    }
+    return false;
+}
+
 static int doBackupAndHook(JNIEnv *env, void *targetMethod, void *hookMethod, void *backupMethod) {
     if (hookCount >= hookCap) {
         LOGI("not enough capacity. Allocating...");
@@ -182,13 +203,7 @@ static int doBackupAndHook(JNIEnv *env, void *targetMethod, void *hookMethod, vo
 
     // set the target method to native so that Android O wouldn't invoke it with interpreter
     if (SDKVersion >= ANDROID_O) {
-        int access_flags = read32((char *) targetMethod + OFFSET_access_flags_in_ArtMethod);
-        access_flags |= kAccNative;
-        memcpy(
-                (char *) targetMethod + OFFSET_access_flags_in_ArtMethod,
-                &access_flags,
-                4
-        );
+        setNativeFlag(targetMethod, true);
         LOGI("access flags is 0x%x", access_flags);
     }
 

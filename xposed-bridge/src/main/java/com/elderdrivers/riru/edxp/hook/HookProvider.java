@@ -25,4 +25,7 @@ public interface HookProvider {
     boolean initXResourcesNative();
 
     boolean removeFinalFlagNative(Class clazz);
+
+    void setNativeFlag(Member hookMethod, boolean isNative);
+
 }

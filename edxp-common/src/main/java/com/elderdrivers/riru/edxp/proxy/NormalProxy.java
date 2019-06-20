@@ -29,14 +29,8 @@ public class NormalProxy extends BaseProxy {
     }
 
     public void forkAndSpecializePost(int pid, String appDataDir, String niceName) {
-        // TODO consider processes without forkAndSpecializePost called
-        ConfigManager.appDataDir = appDataDir;
-        ConfigManager.niceName = niceName;
-        mRouter.prepare(false);
-        mRouter.onEnterChildProcess();
-        // load modules for each app process on its forked if dynamic modules mode is on
-        mRouter.loadModulesSafely(false, true);
-        mRouter.onForkFinish();
+        // TODO consider processes without forkAndSpecializePost being called
+        forkPostCommon(pid, false, appDataDir, niceName);
     }
 
     public void forkSystemServerPre(int uid, int gid, int[] gids, int debugFlags, int[][] rlimits,
@@ -58,12 +52,20 @@ public class NormalProxy extends BaseProxy {
 
     public void forkSystemServerPost(int pid) {
         // in system_server process
-        ConfigManager.appDataDir = getDataPathPrefix() + "android";
-        ConfigManager.niceName = "system_server";
-        mRouter.prepare(true);
+        forkPostCommon(pid, true,
+                getDataPathPrefix() + "android", "system_server");
+    }
+
+
+    private void forkPostCommon(int pid, boolean isSystem, String appDataDir, String niceName) {
+        ConfigManager.appDataDir = appDataDir;
+        ConfigManager.niceName = niceName;
+        mRouter.prepare(isSystem);
         mRouter.onEnterChildProcess();
         // reload module list if dynamic mode is on
         if (ConfigManager.isDynamicModulesEnabled()) {
+            // FIXME this could be error-prone because hooks installed inside old versions
+            //  of initZygote instances of same module are not unhooked
             mRouter.loadModulesSafely(false, true);
         }
         mRouter.onForkFinish();
