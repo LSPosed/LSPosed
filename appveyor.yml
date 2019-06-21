@@ -1,4 +1,4 @@
-version: '0.4.5.0_alpha({build})'
+version: '0.4.5.1_alpha({build})'
 
 environment:
   ANDROID_HOME: C:\android-sdk-windows
