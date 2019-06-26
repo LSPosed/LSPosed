@@ -131,8 +131,4 @@ public class BlackWhiteListProxy extends BaseProxy {
         }
         return needHook;
     }
-
-    private static void onBlackListed() {
-        XposedBridge.clearAllCallbacks();
-    }
 }

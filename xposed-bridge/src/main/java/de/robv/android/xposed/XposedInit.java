@@ -309,8 +309,7 @@ public final class XposedInit {
 
     public static boolean loadModules(boolean isInZygote, boolean callInitZygote) throws IOException {
         boolean hasLoaded = !modulesLoaded.compareAndSet(false, true);
-        // dynamic module list mode doesn't apply to loading in zygote
-        if (hasLoaded && (isInZygote || !EdXpConfigGlobal.getConfig().isDynamicModulesMode())) {
+        if (hasLoaded && !EdXpConfigGlobal.getConfig().isDynamicModulesMode()) {
             return false;
         }
         synchronized (moduleLoadLock) {

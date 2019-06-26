@@ -133,7 +133,7 @@ namespace edxp {
                 variant_ = static_cast<Variant>(variant);
             }
         }
-        LOGI("EdxpVariant: %d", variant_);
+//        LOGI("EdxpVariant: %d", variant_);
 
         initialized_ = true;
 

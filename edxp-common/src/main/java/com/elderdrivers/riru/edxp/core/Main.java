@@ -16,6 +16,8 @@ import java.util.Iterator;
 import java.util.ServiceLoader;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static com.elderdrivers.riru.edxp.proxy.BaseProxy.onBlackListed;
+
 @SuppressLint("DefaultLocale")
 public class Main implements KeepAll {
 
@@ -66,6 +68,7 @@ public class Main implements KeepAll {
 
     public static void forkAndSpecializePost(int pid, String appDataDir, String niceName) {
         if (isBlackListedProcess(Process.myUid())) {
+            onBlackListed();
             return;
         }
         final EdxpImpl edxp = getEdxpImpl();
