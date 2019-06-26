@@ -43,11 +43,10 @@ public class BlackWhiteListProxy extends BaseProxy {
                                      String appDataDir) {
         final boolean isDynamicModulesMode = ConfigManager.isDynamicModulesEnabled();
         if (isDynamicModulesMode) {
-            // should never happen
-            return;
+            onForkPreForDynamicMode(false);
+        } else {
+            onForkPreForNonDynamicMode(false);
         }
-        // only enter here when isDynamicModulesMode is off
-        onForkPreForNonDynamicMode(false);
     }
 
     public void forkAndSpecializePost(int pid, String appDataDir, String niceName) {
@@ -59,15 +58,21 @@ public class BlackWhiteListProxy extends BaseProxy {
                                     long effectiveCapabilities) {
         final boolean isDynamicModulesMode = ConfigManager.isDynamicModulesEnabled();
         if (isDynamicModulesMode) {
-            // should never happen
-            return;
+            onForkPreForDynamicMode(true);
+        } else {
+            onForkPreForNonDynamicMode(true);
         }
-        // only enter here when isDynamicModulesMode is off
-        onForkPreForNonDynamicMode(true);
     }
 
     public void forkSystemServerPost(int pid) {
         onForkPostCommon(true, getDataPathPrefix() + "android", "system_server");
+    }
+
+    private void onForkPreForDynamicMode(boolean isSystemServer) {
+        mRouter.onForkStart();
+        mRouter.initResourcesHook();
+        mRouter.prepare(isSystemServer);
+        mRouter.loadModulesSafely(true, false);
     }
 
     /**

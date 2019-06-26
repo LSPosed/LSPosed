@@ -233,12 +233,6 @@ namespace edxp {
                                          jlong permitted_capabilities,
                                          jlong effective_capabilities) {
         app_data_dir_ = env->NewStringUTF(SYSTEM_SERVER_DATA_DIR);
-        bool is_black_white_list_mode = ConfigManager::GetInstance()->IsBlackWhiteListEnabled();
-        bool is_dynamic_modules_mode = ConfigManager::GetInstance()->IsDynamicModulesEnabled();
-        if (is_black_white_list_mode && is_dynamic_modules_mode) {
-            // when black/white list is on, never inject into zygote if dynamic modules mode is on
-            return;
-        }
         PrepareJavaEnv(env);
         // jump to java code
         FindAndCall(env, "forkSystemServerPre", "(II[II[[IJJ)V", uid, gid, gids, runtime_flags,
@@ -273,11 +267,6 @@ namespace edxp {
                                                jstring app_data_dir) {
         app_data_dir_ = app_data_dir;
         nice_name_ = nice_name;
-        if (ConfigManager::GetInstance()->IsBlackWhiteListEnabled() &&
-            ConfigManager::GetInstance()->IsDynamicModulesEnabled()) {
-            // when black/white list is on, never inject into zygote if dynamic modules mode is on
-            return;
-        }
         PrepareJavaEnv(env);
         FindAndCall(env, "forkAndSpecializePre",
                     "(II[II[[IILjava/lang/String;Ljava/lang/String;[I[IZLjava/lang/String;Ljava/lang/String;)V",
