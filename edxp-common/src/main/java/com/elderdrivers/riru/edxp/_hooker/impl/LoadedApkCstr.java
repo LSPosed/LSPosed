@@ -9,10 +9,8 @@ import com.elderdrivers.riru.edxp.hooker.XposedBlackListHooker;
 import com.elderdrivers.riru.edxp.util.Hookers;
 
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.XposedInit;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 // when a package is loaded for an existing process, trigger the callbacks as well
 // ed: remove resources related hooking
@@ -61,13 +59,11 @@ public class LoadedApkCstr extends XC_MethodHook {
                 return;
             }
 
-            XC_LoadPackage.LoadPackageParam lpparam = new XC_LoadPackage.LoadPackageParam(XposedBridge.sLoadedPackageCallbacks);
-            lpparam.packageName = packageName;
-            lpparam.processName = AndroidAppHelper.currentProcessName();
-            lpparam.classLoader = loadedApk.getClassLoader();
-            lpparam.appInfo = loadedApk.getApplicationInfo();
-            lpparam.isFirstApplication = false;
-            XC_LoadPackage.callAll(lpparam);
+            LoadedApkGetCL hook = new LoadedApkGetCL(loadedApk, packageName,
+                    AndroidAppHelper.currentProcessName(), false);
+            hook.setUnhook(XposedHelpers.findAndHookMethod(
+                    LoadedApk.class, "getClassLoader", hook));
+
         } catch (Throwable t) {
             Hookers.logE("error when hooking LoadedApk.<init>", t);
         }
