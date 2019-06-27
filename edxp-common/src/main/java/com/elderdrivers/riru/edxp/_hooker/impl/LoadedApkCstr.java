@@ -2,6 +2,7 @@ package com.elderdrivers.riru.edxp._hooker.impl;
 
 import android.app.AndroidAppHelper;
 import android.app.LoadedApk;
+import android.content.res.XResources;
 import android.util.Log;
 
 import com.elderdrivers.riru.edxp.hooker.XposedBlackListHooker;
@@ -30,6 +31,8 @@ public class LoadedApkCstr extends XC_MethodHook {
             String packageName = loadedApk.getPackageName();
             Object mAppDir = XposedHelpers.getObjectField(loadedApk, "mAppDir");
             Hookers.logD("LoadedApk#<init> ends: " + mAppDir);
+
+            XResources.setPackageNameForResDir(packageName, loadedApk.getResDir());
 
             if (XposedBlackListHooker.shouldDisableHooks(packageName)) {
                 return;

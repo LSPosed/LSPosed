@@ -5,6 +5,7 @@ import android.app.LoadedApk;
 import android.content.ComponentName;
 import android.content.pm.ApplicationInfo;
 import android.content.res.CompatibilityInfo;
+import android.content.res.XResources;
 
 import com.elderdrivers.riru.edxp.config.ConfigManager;
 import com.elderdrivers.riru.edxp.hooker.SliceProviderFix;
@@ -60,6 +61,8 @@ public class HandleBindApp extends XC_MethodHook {
             XposedHelpers.setObjectField(activityThread, "mBoundApplication", bindData);
             XposedInit.loadedPackagesInProcess.add(reportedPackageName);
             LoadedApk loadedApk = activityThread.getPackageInfoNoCheck(appInfo, compatInfo);
+
+            XResources.setPackageNameForResDir(appInfo.packageName, loadedApk.getResDir());
 
             XC_LoadPackage.LoadPackageParam lpparam = new XC_LoadPackage.LoadPackageParam(XposedBridge.sLoadedPackageCallbacks);
             lpparam.packageName = reportedPackageName;
