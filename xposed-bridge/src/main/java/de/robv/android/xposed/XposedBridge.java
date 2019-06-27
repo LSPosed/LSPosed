@@ -93,9 +93,6 @@ public final class XposedBridge {
 	public static volatile ClassLoader dummyClassLoader = null;
 
 	public static void initXResources() {
-	    if (!EdXpConfigGlobal.getConfig().isResourcesHookEnabled()) {
-	        return;
-        }
         if (dummyClassLoader != null) {
         	return;
 		}
