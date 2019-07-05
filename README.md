@@ -1,15 +1,15 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/qu3vj1d64nqia1b8/branch/master?svg=true)](https://ci.appveyor.com/project/ElderDrivers/edxposed/branch/master)
 
-# EdXposed
+
+# EdXposed [![Build status](https://ci.appveyor.com/api/projects/status/qu3vj1d64nqia1b8/branch/master?svg=true)](https://ci.appveyor.com/project/ElderDrivers/edxposed/branch/master)
 
 A Riru module trying to provide a ART hooking framework (initially for Android Pie) which delivers consistent APIs with the OG Xposed, leveraging YAHFA (or SandHook) hooking framework.
 
 ## Supported versions
 
-- Android Oreo (8.0, 8.1) 
+- Android Oreo (8.x) 
 - Android Pie (9.0)
 
-For devices with Android 7.x and lower, original Xposed is strongly recommended.
+For devices with Android Nougat (7.x) and lower, original Xposed is strongly recommended.
 
 ## Build requirements
 
@@ -50,6 +50,12 @@ and zip binaries can be downloaded from [here](http://gnuwin32.sourceforge.net/p
 ## Get help
 
 - GitHub issues: [Issues](https://github.com/solohsu/EdXposed/issues/)
+
+## Community
+
+- QQ Group: [855219808](http://shang.qq.com/wpa/qunwpa?idkey=fae42a3dba9dc758caf63e971be2564e67bf7edd751a2ff1c750478b0ad1ca3f)
+- Telegram: [Code_of_MeowCat](http://t.me/Code_of_MeowCat)
+- Discord (not recommended): [Code_of_MeowCat](https://discord.gg/Hag6gNh)
 
 ## Contribute
 
