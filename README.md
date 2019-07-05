@@ -22,17 +22,17 @@ and zip binaries can be downloaded from [here](http://gnuwin32.sourceforge.net/p
 
 ## Install
 
-1. Install Magisk v19.0+.
+1. Install Magisk v19.0+ (for Huawei devices, use our custom Magisk: Change Magisk update channel to [this](http://edxp.meowcat.org/repo/version.json)).
 2. Install [Riru-Core](https://github.com/RikkaApps/Riru/releases) v19+ from Magisk repo.
 3. Download [EdXposed](https://github.com/solohsu/EdXposed/releases) and install it in Magisk Manager or recovery mode.
-4. Install companion application.
+4. Install [companion application](#companion-applications).
 4. Reboot.
 5. Have fun! :)
 
 ## Companion applications
 
 - For v0.2.9.5 and before: [Xposed Installer](https://github.com/DVDAndroid/XposedInstaller).
-- For v0.2.9.6 and v0.2.9.7: [Xposed Installer](https://github.com/DVDAndroid/XposedInstaller) and [EdXp Manager](https://github.com/solohsu/EdXpManager)(optional).
+- For v0.2.9.6 and v0.2.9.7: [Xposed Installer](https://github.com/DVDAndroid/XposedInstaller) + [EdXp Manager](https://github.com/solohsu/EdXpManager)(optional).
 - For v0.2.9.8 and later: [EdXposed Installer](https://github.com/solohsu/XposedInstaller) and [EdXposed Manager](https://github.com/ElderDrivers/EdXposedManager).
 - For the latest version, we recommend to use [EdXposed Manager](https://github.com/ElderDrivers/EdXposedManager).
 
@@ -44,6 +44,7 @@ and zip binaries can be downloaded from [here](http://gnuwin32.sourceforge.net/p
 
 - May not be compatible with all ART devices.
 - File access services are not implemented yet, now EdXp simply uses magiskpolicy to enable needed SELinux policies.
+- Dynamic modules not work, caused by SELinux.
 
 ## Get help
 
