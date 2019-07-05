@@ -36,6 +36,7 @@ and zip binaries can be downloaded from [here](http://gnuwin32.sourceforge.net/p
 - For v0.2.9.5 and before: [Xposed Installer](https://github.com/DVDAndroid/XposedInstaller).
 - For v0.2.9.6 and v0.2.9.7: [Xposed Installer](https://github.com/DVDAndroid/XposedInstaller) and [EdXp Manager](https://github.com/solohsu/EdXpManager)(optional).
 - For v0.2.9.8 and later: [EdXposed Installer](https://github.com/solohsu/XposedInstaller) and [EdXposed Manager](https://github.com/ElderDrivers/EdXposedManager).
+- For the latest version, we recommend to use [EdXposed Manager](https://github.com/ElderDrivers/EdXposedManager).
 
 ## Useful links
 
