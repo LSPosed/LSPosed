@@ -50,11 +50,15 @@ and zip binaries can be downloaded from [here](http://gnuwin32.sourceforge.net/p
 
 - GitHub issues: [Issues](https://github.com/solohsu/EdXposed/issues/)
 
+Notice(for Chinese): 鉴于部分用户提交的Issues质量过低，对于中文用户反馈，请先阅读[EdXposed错误提交说明_cn](https://raw.githubusercontent.com/ElderDrivers/Repository-Website/gh-pages/repo/EdXposedIssuesReport_cn.txt)(不看说明提交的Issue会有很大可能被close)
+
 ## Community
 
 - QQ Group: [855219808](http://shang.qq.com/wpa/qunwpa?idkey=fae42a3dba9dc758caf63e971be2564e67bf7edd751a2ff1c750478b0ad1ca3f)
 - Telegram: [Code_of_MeowCat](http://t.me/Code_of_MeowCat)
 - Discord (not recommended): [Code_of_MeowCat](https://discord.gg/Hag6gNh)
+
+Notice: These community group don't accept any bug report, please use [Get help](#get-help) to report.
 
 ## Contribute
 
