@@ -5,7 +5,7 @@ import android.util.Log;
 import com.swift.sandhook.SandHook;
 import com.swift.sandhook.SandHookMethodResolver;
 import com.swift.sandhook.utils.ParamWrapper;
-import com.swift.sandhook.wrapper.BackupMethodStubs;
+import com.swift.sandhook.wrapper.StubMethodsFactory;
 import com.swift.sandhook.xposedcompat.XposedCompat;
 import com.swift.sandhook.xposedcompat.utils.DexLog;
 
@@ -167,13 +167,13 @@ public class HookStubManager {
         try {
             if (is64Bit) {
                 Method hook = MethodHookerStubs64.class.getDeclaredMethod(getHookMethodName(curUseStubIndex), pars);
-                Method backup = hasStubBackup ? MethodHookerStubs64.class.getDeclaredMethod(getBackupMethodName(curUseStubIndex), pars) : BackupMethodStubs.getStubMethod();
+                Method backup = hasStubBackup ? MethodHookerStubs64.class.getDeclaredMethod(getBackupMethodName(curUseStubIndex), pars) : StubMethodsFactory.getStubMethod();
                 if (hook == null || backup == null)
                     return null;
                 return new StubMethodsInfo(stubArgs, curUseStubIndex, hook, backup);
             } else {
                 Method hook = MethodHookerStubs32.class.getDeclaredMethod(getHookMethodName(curUseStubIndex), pars);
-                Method backup = hasStubBackup ? MethodHookerStubs32.class.getDeclaredMethod(getBackupMethodName(curUseStubIndex), pars) : BackupMethodStubs.getStubMethod();
+                Method backup = hasStubBackup ? MethodHookerStubs32.class.getDeclaredMethod(getBackupMethodName(curUseStubIndex), pars) : StubMethodsFactory.getStubMethod();
                 if (hook == null || backup == null)
                     return null;
                 return new StubMethodsInfo(stubArgs, curUseStubIndex, hook, backup);
