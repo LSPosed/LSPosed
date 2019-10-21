@@ -1,4 +1,6 @@
-# EdXposed [![Build status](https://ci.appveyor.com/api/projects/status/qu3vj1d64nqia1b8/branch/master?svg=true)](https://ci.appveyor.com/project/ElderDrivers/edxposed/branch/master)
+# EdXposed 
+
+Latest builds: [![Build status](https://ci.appveyor.com/api/projects/status/qu3vj1d64nqia1b8/branch/master?svg=true)](https://ci.appveyor.com/project/ElderDrivers/edxposed/branch/master)
 
 A Riru module trying to provide an ART hooking framework (initially for Android Pie) which delivers consistent APIs with the OG Xposed, leveraging YAHFA (or SandHook) hooking framework.
 
@@ -6,8 +8,9 @@ A Riru module trying to provide an ART hooking framework (initially for Android 
 
 - Android Oreo (8.x) 
 - Android Pie (9.0)
+- Android 10
 
-For devices with Android Nougat (7.x) and lower, original Xposed is strongly recommended.
+For Android Nougat (7.x) and lower, please use the original Xposed Framework.
 
 ## Build requirements
 
