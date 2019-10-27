@@ -82,7 +82,7 @@ start_log_cather () {
 }
 
 start_verbose_log_catcher () {
-  start_log_cather all.log "EdXposed:V XSharedPreferences:V EdXposed-Bridge:V EdXposed-Manager:V XposedInstaller:V" true ${LOG_VERBOSE}
+  start_log_cather all.log "EdXposed:V XSharedPreferences:V EdXposed-Bridge:V EdXposedManager:V XposedInstaller:V" true ${LOG_VERBOSE}
 }
 
 start_bridge_log_catcher () {
