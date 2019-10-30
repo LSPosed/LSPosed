@@ -16,6 +16,7 @@
 #include "art/runtime/class_linker.h"
 #include "art/runtime/gc/heap.h"
 #include "art/runtime/hidden_api.h"
+#include "art/runtime/oat_file_manager.h"
 #include "framework/fd_utils.h"
 
 namespace edxp {
@@ -88,6 +89,8 @@ namespace edxp {
         art::ClassLinker::Setup(art_handle, hook_func);
         art::mirror::Class::Setup(art_handle, hook_func);
         art::JNIEnvExt::Setup(art_handle, hook_func);
+        art::oat_file_manager::DisableOnlyUseSystemOatFiles(art_handle, hook_func);
+
         art_hooks_installed = true;
         LOGI("ART hooks installed");
     }

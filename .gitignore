@@ -12,3 +12,12 @@
 /release
 .externalNativeBuild
 elf-cleaner.sh
+
+# vscode
+.project
+.classpath
+.settings/
+.vscode/
+
+dalvikdx/bin/
+dexmaker/bin/
