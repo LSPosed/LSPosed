@@ -5,8 +5,8 @@ import android.os.Process;
 import android.text.TextUtils;
 
 import com.elderdrivers.riru.edxp.config.ConfigManager;
-import com.swift.sandhook.SandHook;
 import com.elderdrivers.riru.edxp.util.ComposeClassLoader;
+import com.swift.sandhook.wrapper.HookWrapper;
 import com.swift.sandhook.xposedcompat.methodgen.SandHookXposedBridge;
 import com.swift.sandhook.xposedcompat.utils.ApplicationUtils;
 import com.swift.sandhook.xposedcompat.utils.FileUtils;
@@ -38,7 +38,7 @@ public class XposedCompat {
             return;
         for (Class hooker : hookers) {
             try {
-                SandHook.addHookClass(classLoader, hooker);
+                HookWrapper.addHookClass(classLoader, hooker);
             } catch (Throwable throwable) {
             }
         }

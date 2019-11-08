@@ -1,5 +1,6 @@
 package com.swift.sandhook.xposedcompat.methodgen;
 
+import android.os.Build;
 import android.os.Process;
 import android.os.Trace;
 
@@ -137,6 +138,17 @@ public final class SandHookXposedBridge {
             }
         };
         SandHookConfig.DEBUG = true;
+        SandHookConfig.compiler = false;
+        //already impl in edxp
+        SandHookConfig.delayHook = false;
+        //use when call origin
+        HookBlackList.methodBlackList.add("java.lang.reflect.isStatic");
+        HookBlackList.methodBlackList.add("java.lang.reflect.Method.getModifiers");
+        if (Build.VERSION.SDK_INT >= 29) {
+            //unknown bug, disable tmp
+            //TODO Fix
+            XposedCompat.useInternalStub = false;
+        }
         //in zygote disable compile
     }
 }
