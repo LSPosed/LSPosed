@@ -44,6 +44,12 @@ public class XposedCompat {
         }
     }
 
+    public static void onForkProcess() {
+        cacheDir = null;
+        classLoader = null;
+        sandHookXposedClassLoader = null;
+    }
+
     public static File getCacheDir() {
         if (cacheDir == null) {
             String fixedAppDataDir = getDataPathPrefix() + getPackageName(ConfigManager.appDataDir) + "/";

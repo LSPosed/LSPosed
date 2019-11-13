@@ -28,4 +28,6 @@ public interface HookProvider {
 
     void setNativeFlag(Member hookMethod, boolean isNative);
 
+    boolean methodHooked(Member target);
+
 }

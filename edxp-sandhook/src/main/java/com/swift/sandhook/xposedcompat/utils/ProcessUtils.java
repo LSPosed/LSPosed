@@ -20,13 +20,8 @@ import java.util.List;
 
 public class ProcessUtils {
 
-    private static volatile String processName = null;
-
     public static String getProcessName() {
-        if (!TextUtils.isEmpty(processName))
-            return processName;
-        processName = getProcessName(Process.myPid());
-        return processName;
+        return getProcessName(Process.myPid());
     }
 
     private static String doGetProcessName(Context context) {

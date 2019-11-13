@@ -4,7 +4,6 @@ import com.elderdrivers.riru.edxp.config.EdXpConfigGlobal;
 import com.elderdrivers.riru.edxp.proxy.BaseRouter;
 import com.elderdrivers.riru.edxp.sandhook.config.SandHookEdxpConfig;
 import com.elderdrivers.riru.edxp.sandhook.config.SandHookProvider;
-import com.elderdrivers.riru.edxp.sandhook.dexmaker.DynamicBridge;
 import com.elderdrivers.riru.edxp.sandhook.entry.AppBootstrapHookInfo;
 import com.elderdrivers.riru.edxp.sandhook.entry.SysBootstrapHookInfo;
 import com.elderdrivers.riru.edxp.sandhook.entry.SysInnerHookInfo;
@@ -12,6 +11,7 @@ import com.elderdrivers.riru.edxp.sandhook.entry.WorkAroundHookInfo;
 import com.elderdrivers.riru.edxp.sandhook.hooker.SystemMainHooker;
 import com.elderdrivers.riru.edxp.util.Utils;
 import com.swift.sandhook.xposedcompat.XposedCompat;
+import com.swift.sandhook.xposedcompat.methodgen.SandHookXposedBridge;
 
 import de.robv.android.xposed.XposedBridge;
 
@@ -54,7 +54,7 @@ public class SandHookRouter extends BaseRouter {
     }
 
     public void onEnterChildProcess() {
-        DynamicBridge.onForkPost();
+        SandHookXposedBridge.onForkPost();
         //enable compile in child process
         //SandHook.enableCompiler(!XposedInit.startsSystemServer);
     }

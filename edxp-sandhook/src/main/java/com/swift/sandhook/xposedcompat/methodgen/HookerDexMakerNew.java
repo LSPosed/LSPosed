@@ -172,7 +172,9 @@ public class HookerDexMakerNew implements HookMaker {
 
         ClassLoader loader;
         if (TextUtils.isEmpty(mDexDirPath)) {
-            throw new IllegalArgumentException("dexDirPath should not be empty!!!");
+            byte[] dexBytes = mDexMaker.generate();
+            loader = new InMemoryDexClassLoader(ByteBuffer.wrap(dexBytes), mAppClassLoader);
+            return loadHookerClass(loader, className);
         }
         // Create the dex file and load it.
         try {

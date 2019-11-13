@@ -5,12 +5,15 @@ import com.elderdrivers.riru.edxp.core.Yahfa;
 import com.elderdrivers.riru.edxp.util.Utils;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import de.robv.android.xposed.XposedHelpers;
 
@@ -20,6 +23,12 @@ public class HookMain {
 
     public static void addHookItemWhiteList(String className) {
         hookItemWhiteList.add(className);
+    }
+
+    private static List<Object> hookedList = new CopyOnWriteArrayList();
+
+    public static boolean hooked(Member target) {
+        return hookedList.contains(target);
     }
 
     public static void doHookDefault(ClassLoader patchClassLoader, ClassLoader originClassLoader, String hookInfoClassName) {
@@ -125,6 +134,8 @@ public class HookMain {
         }
         if (!Yahfa.backupAndHookNative(target, hook, backup)) {
             throw new RuntimeException("Failed to hook " + target + " with " + hook);
+        } else {
+            hookedList.add(target);
         }
     }
 
