@@ -28,7 +28,7 @@ dependencies {
     compileOnly files("${hiddenApiStubJarFilePath}")
     implementation project(':edxp-common')
     implementation project(':xposed-bridge')
-    implementation 'com.swift.sandhook:hooklib:4.1.2'
+    implementation 'com.swift.sandhook:hooklib:4.1.6'
     compileOnly project(':dexmaker')
 }
 
