@@ -84,7 +84,7 @@ public final class SandHookXposedBridge {
                     hookMaker = defaultHookMaker;
                 }
                 hookMaker.start(hookMethod, additionalHookInfo,
-                        ClassLoaderUtils.createComposeClassLoader(
+                        ClassLoaderUtils.createProxyClassLoader(
                                 hookMethod.getDeclaringClass().getClassLoader()),
                         dexDir == null ? null : dexDir.getAbsolutePath());
                 hookedInfo.put(hookMethod, hookMaker.getCallBackupMethod());

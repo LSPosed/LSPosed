@@ -5,7 +5,7 @@ import android.os.Process;
 import android.text.TextUtils;
 
 import com.elderdrivers.riru.edxp.config.ConfigManager;
-import com.elderdrivers.riru.edxp.util.ComposeClassLoader;
+import com.elderdrivers.riru.edxp.util.ProxyClassLoader;
 import com.swift.sandhook.wrapper.HookWrapper;
 import com.swift.sandhook.xposedcompat.methodgen.SandHookXposedBridge;
 import com.swift.sandhook.xposedcompat.utils.ApplicationUtils;
@@ -74,7 +74,7 @@ public class XposedCompat {
         if (sandHookXposedClassLoader != null) {
             return sandHookXposedClassLoader;
         } else {
-            sandHookXposedClassLoader = new ComposeClassLoader(sandBoxHostClassLoader, appOriginClassLoader);
+            sandHookXposedClassLoader = new ProxyClassLoader(sandBoxHostClassLoader, appOriginClassLoader);
             return sandHookXposedClassLoader;
         }
     }

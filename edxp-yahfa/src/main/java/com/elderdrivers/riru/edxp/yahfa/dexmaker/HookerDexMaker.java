@@ -6,7 +6,7 @@ import android.text.TextUtils;
 
 import com.elderdrivers.riru.edxp.core.Yahfa;
 import com.elderdrivers.riru.edxp.core.yahfa.HookMain;
-import com.elderdrivers.riru.edxp.util.ComposeClassLoader;
+import com.elderdrivers.riru.edxp.util.ProxyClassLoader;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -181,7 +181,7 @@ public class HookerDexMaker {
             mAppClassLoader = getClass().getClassLoader();
         } else {
             mAppClassLoader = appClassLoader;
-            mAppClassLoader = new ComposeClassLoader(mAppClassLoader, getClass().getClassLoader());
+            mAppClassLoader = new ProxyClassLoader(mAppClassLoader, getClass().getClassLoader());
         }
         doMake();
     }
