@@ -3,5 +3,5 @@ name=Riru - EdXposed
 version=${versionName}
 versionCode=${versionCode}
 author=${authorList}
-description=Magisk version of Xposed. Require Riru - Core v19+ installed. See change log in EdXposed Manager or Github Releases.
+description=Another implementation of Xposed Framework, require Riru - Core v19.0+ installed. You can download Alpha or Canary(Debug) version in EdXposed Manager.
 api=4
