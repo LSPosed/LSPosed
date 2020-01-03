@@ -161,8 +161,8 @@ afterEvaluate {
                         into zipPathMagiskRelease
                     }
                     copy {
-                        from "${projectDir}/template_override/common/util_functions.sh"
-                        into "${zipPathMagiskRelease}/common"
+                        from "${projectDir}/template_override/util_functions.sh"
+                        into "${zipPathMagiskRelease}/"
                         filter { line -> line
                                 .replaceAll('%VERSION%', "$version")
                                     .replaceAll('%VERSION_CODE%', "$versionCode")
