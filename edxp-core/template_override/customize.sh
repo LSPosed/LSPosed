@@ -30,7 +30,7 @@ check_architecture
 check_riru_version
 
 ui_print "- Extracting module files"
-unzip -o "${ZIPFILE}" post-fs-data.sh sepolicy.rule system.prop util_functions.sh -d "${MODPATH}" >&2
+unzip -o "${ZIPFILE}" module.prop post-fs-data.sh sepolicy.rule system.prop util_functions.sh -d "${MODPATH}" >&2
 
 if [[ "${ARCH}" == "x86" || "${ARCH}" == "x64" ]]; then
   ui_print "- Extracting x86/64 libraries"
