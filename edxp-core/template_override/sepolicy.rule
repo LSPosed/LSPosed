@@ -1,0 +1,12 @@
+# necessary for using mmap in system_server process
+allow system_server system_server process {execmem}
+
+# for built-in apps // TODO maybe narrow down the target classes
+allow coredomain coredomain process {execmem}
+
+# read configs set in our app
+allow coredomain app_data_file * *
+attradd {system_app platform_app} mlstrustedsubject
+
+# read module apk file in zygote
+allow zygote apk_data_file * *
