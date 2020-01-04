@@ -29,7 +29,7 @@ and zip binaries can be downloaded from [here](http://gnuwin32.sourceforge.net/p
 
 ## Install
 
-1. Install Magisk v19.0+ (for latest EdXposed or Huawei devices, use at least official Magisk v20.2+ or use our custom Magisk: Change Magisk update channel to [this](http://edxp.meowcat.org/repo/version.json)).
+1. Install Magisk v20.2+
 2. Install [Riru-Core](https://github.com/RikkaApps/Riru/releases) v19+ from Magisk repo.
 3. [Download](#download) and install EdXposed in Magisk Manager or recovery mode.
 4. Install [companion application](#companion-applications).
@@ -40,8 +40,8 @@ and zip binaries can be downloaded from [here](http://gnuwin32.sourceforge.net/p
 
 Edxposed has three different builds
 
-- Beta：Stable version after passing the test, suitable for general users, update slowly.
-***Download Beta version in Magisk Manager's [Downloads] tab***
+- Stable：Stable version after passing the test, suitable for general users, update slowly.
+***Download Stable version in Magisk Manager's [Downloads] tab***
 
 - Alpha: Test version with multiple commits.
 ***Download Alpha version in [[Github Releases](https://github.com/ElderDrivers/EdXposed/releases)]***
@@ -50,6 +50,8 @@ Edxposed has three different builds
 ***Download Canary version in [[EdXposed Manager](https://github.com/ElderDrivers/EdXposedManager)]***
 
 ## Companion Applications
+
+>  Both Xposed Installer and EdXposed Installer are deprecated. Support will be stopped for later versions. Please use [EdXposed Manager](https://github.com/ElderDrivers/EdXposedManager)
 
 - For v0.2.9.5 and before: [Xposed Installer](https://github.com/DVDAndroid/XposedInstaller).
 - For v0.2.9.6 and v0.2.9.7: [Xposed Installer](https://github.com/DVDAndroid/XposedInstaller) + [EdXp Manager](https://github.com/solohsu/EdXpManager)(optional).
@@ -63,17 +65,17 @@ Edxposed has three different builds
 ## Known Issues
 
 - [ ] May not be compatible with all ART devices.
-- [ ] (Provisional solved, Use magiskpolicy to enable needed SELinux policies) File access services are not implemented yet.
-- [ ] (Provisional solved, #384) Wait for Magisk sepolicy update.
+- [ ] (Provisional solved, Use Magisk SEPolicy API to enable needed SELinux policies) File access services are not implemented yet.
+- [x] (Fixed) ~~Wait for Magisk sepolicy update.~~
 - [ ] (Provisional solved, #386) SafetyNet and some app tripped EdXposed.
-- [ ] (Provisional solved, #401) Some module cannot hook app, such as WeXposed. 
+- [ ] (Provisional solved, WeXposed fixed in v2.7) Some module cannot hook app, such as WeXposed.
 - [x] (Fixed, use EdXposed Manager v4.5.2 and newer) ~~Dynamic modules not work, caused by SELinux.~~
 
 ## Get Help
 
 - GitHub issues: [Issues](https://github.com/ElderDrivers/EdXposed/issues/)
 
-- Notice(for Chinese): In view of the low quality of issues submitted, please read the Chinese user report first[EdXposedIssuesReport_cn](http://edxp.meowcat.org/repo/EdXposedIssuesReport_cn.txt)(If you don't read the instructions, the submitted issue is likely to be closed)
+- Notice(for Chinese): In view of the low quality of issues submitted, please read the Chinese user report first[EdXposedIssuesReport_cn](http://edxp.meowcat.org/assets/EdXposedIssuesReport_cn.txt)(If you don't read the instructions, the submitted issue is likely to be closed)
 
 ## For Developers 
 

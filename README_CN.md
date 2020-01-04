@@ -29,7 +29,7 @@ zip 可执行文件可以在 [这里](http://gnuwin32.sourceforge.net/packages/z
 
 ## 安装
 
-1. 安装 Magisk v19.0+ (对于最新的 EdXposed 构建或华为/荣耀设备, 请使用我们自定义的 Magisk: 将 Magisk 更新通道更改为 [http://edxp.meowcat.org/repo/version.json](http://edxp.meowcat.org/repo/version.json)).
+1. 安装 Magisk v20.2+
 2. 在 Magisk 仓库中安装 [Riru-Core](https://github.com/RikkaApps/Riru/releases) v19 或更高版本.
 3. [下载](#下载)并在恢复模式(Recovery)或经由 Magisk Manager 安装 EdXposed.
 4. 安装 [框架管理应用](#框架管理应用).
@@ -40,8 +40,8 @@ zip 可执行文件可以在 [这里](http://gnuwin32.sourceforge.net/packages/z
 
 Edxposed 拥有三个不同的版本
 
-- Beta：经过测试的稳定版, 适合一般用户，更新缓慢.
-***在 [Magisk Manager] 中的 [下载] 页中下载 Beta 版本***
+- Stable：经过测试的稳定版, 适合一般用户，更新缓慢.
+***在 [Magisk Manager] 中的 [下载] 页中下载 Stable 版本***
 
 - Alpha: 多次提交更新的测试版.
 ***在 [[Github Releases](https://github.com/ElderDrivers/EdXposed/releases)] 中下载 Alpha 版本***
@@ -50,6 +50,8 @@ Edxposed 拥有三个不同的版本
 ***在 [[EdXposed Manager](https://github.com/ElderDrivers/EdXposedManager)] 中下载 Canary 版本***
 
 ## 框架管理应用
+
+> Xposed Installer 和 EdXposed Installer 均已停更，后续版本将取消支持，请使用 [EdXposed Manager](https://github.com/ElderDrivers/EdXposedManager)
 
 - 对于 v0.2.9.5 或更低版本: [Xposed Installer](https://github.com/DVDAndroid/XposedInstaller).
 - 对于 v0.2.9.6 和 v0.2.9.7: [Xposed Installer](https://github.com/DVDAndroid/XposedInstaller) + [EdXp Manager](https://github.com/solohsu/EdXpManager)(optional).
@@ -64,16 +66,16 @@ Edxposed 拥有三个不同的版本
 
 - [ ] 可能不兼容部分 ART 设备.
 - [ ] (临时解决, 使用 magiskpolicy 来启用所需的 SELinux 策略)文件访问服务尚未实现.
-- [ ] (临时解决, #384) 等待 Magisk 更新 SEPolicy.
+- [x] (已修复) ~~等待 Magisk 更新 SEPolicy.~~
 - [ ] (临时解决, #386) SafetyNet 和一些应用检测到了 EdXposed.
-- [ ] (临时解决, #401) 一些模块无法工作，例如微X模块. 
+- [ ] (临时解决, 微X模块已在2.7版本修复) 一些模块无法工作，例如微X模块.
 - [x] (已修复, 使用 EdXposed Manager v4.5.2 或更高版本) ~~受制于 SELinux 策略，即时列表功能无法使用.~~
 
 ## 获取帮助
 
-- GitHub issues: [Issues](https://github.com/solohsu/EdXposed/issues/)
+- GitHub issues: [Issues](https://github.com/ElderDrivers/EdXposed/issues/)
 
-- 注意: 鉴于部分用户提交的Issues质量过低，对于中文用户反馈，请先阅读[EdXposed错误提交说明_cn](https://raw.githubusercontent.com/ElderDrivers/Repository-Website/gh-pages/repo/EdXposedIssuesReport_cn.txt)(不看说明提交的Issue会有很大可能被close)
+- 注意: 鉴于部分用户提交的Issues质量过低，对于中文用户反馈，请先阅读[EdXposed错误提交说明_cn](http://edxp.meowcat.org/assets/EdXposedIssuesReport_cn.txt)(不看说明提交的Issue会有很大可能被close)
 
 ## 社区交流
 
@@ -87,7 +89,7 @@ Edxposed 拥有三个不同的版本
 - 显然，框架还不够稳定，欢迎使用PR贡献代码. :)
 - 如果你愿意，可以[请我喝杯咖啡](https://www.paypal.me/givin2u).
 
-## 鸣谢 
+## 鸣谢
 
 - [YAHFA](https://github.com/rk700/YAHFA): ART hook 核心框架
 - [Magisk](https://github.com/topjohnwu/Magisk/): 让一切成为可能

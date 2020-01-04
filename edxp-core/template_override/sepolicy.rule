@@ -1,5 +1,6 @@
 # necessary for using mmap in system_server process
 allow system_server system_server process {execmem}
+allow system_server system_server memprotect {mmap_zero}
 
 # for built-in apps // TODO maybe narrow down the target classes
 allow coredomain coredomain process {execmem}
