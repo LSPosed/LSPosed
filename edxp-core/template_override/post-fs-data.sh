@@ -1,6 +1,11 @@
 #!/system/bin/sh
 MODDIR=${0%/*}
 
+if [[ -z "${MODDIR}/sepolicy.sh" ]]
+then
+    . ${MODDIR}/sepolicy.sh
+fi
+
 grep_prop() {
     local REGEX="s/^$1=//p"
     shift
@@ -13,7 +18,8 @@ EDXP_VERSION=`grep_prop version ${MODDIR}/module.prop`
 ANDROID_SDK=`getprop ro.build.version.sdk`
 BUILD_DESC=`getprop ro.build.description`
 PRODUCT=`getprop ro.build.product`
-MANUFACTURE=`getprop ro.product.manufacturer`
+MODEL=`getprop ro.product.model`
+MANUFACTURER=`getprop ro.product.manufacturer`
 BRAND=`getprop ro.product.brand`
 FINGERPRINT=`getprop ro.build.fingerprint`
 ARCH=`getprop ro.product.cpu.abi`
@@ -88,18 +94,21 @@ start_log_cather () {
     echo "QQ support group: 855219808">>${LOG_FILE}
     echo "Telegram support group: @Code_Of_MeowCat">>${LOG_FILE}
     echo "--------- beginning of information">>${LOG_FILE}
+    echo "Manufacturer: ${MANUFACTURER}">>${LOG_FILE}
+    echo "Brand: ${BRAND}">>${LOG_FILE}
+    echo "Device: ${DEVICE}">>${LOG_FILE}
+    echo "Product: ${PRODUCT}">>${LOG_FILE}
+    echo "Model: ${MODEL}">>${LOG_FILE}
+    echo "Fingerprint: ${FINGERPRINT}">>${LOG_FILE}
+    echo "ROM description: ${BUILD_DESC}">>${LOG_FILE}
+    echo "Architecture: ${ARCH}">>${LOG_FILE}
+    echo "Android build: ${BUILD}">>${LOG_FILE}
     echo "Android version: ${ANDROID}">>${LOG_FILE}
     echo "Android sdk: ${ANDROID_SDK}">>${LOG_FILE}
-    echo "Android build: ${BUILD}">>${LOG_FILE}
-    echo "Fingerprint: ${FINGERPRINT}">>${LOG_FILE}
-    echo "ROM build description: ${BUILD_DESC}">>${LOG_FILE}
-    echo "EdXposed Version: ${EDXP_VERSION} (api: 90.0)">>${LOG_FILE}
-    echo "Architecture: ${ARCH}">>${LOG_FILE}
-    echo "Device: ${DEVICE}">>${LOG_FILE}
-    echo "Manufacture: ${MANUFACTURE}">>${LOG_FILE}
-    echo "Brand: ${BRAND}">>${LOG_FILE}
-    echo "Product: ${PRODUCT}">>${LOG_FILE}
-    echo "Riru: ${RIRU_VERSION} (${RIRU_VERCODE}) (api: ${RIRU_APICODE})">>${LOG_FILE}
+    echo "EdXposed version: ${EDXP_VERSION}">>${LOG_FILE}
+    echo "EdXposed api: 90.0">>${LOG_FILE}
+    echo "Riru version: ${RIRU_VERSION} (${RIRU_VERCODE})">>${LOG_FILE}
+    echo "Riru api: ${RIRU_APICODE}">>${LOG_FILE}
     echo "Magisk: ${MAGISK_VERSION} (${MAGISK_VERCODE})">>${LOG_FILE}
     logcat -f ${LOG_FILE} *:S ${LOG_TAG_FILTERS} &
 }
