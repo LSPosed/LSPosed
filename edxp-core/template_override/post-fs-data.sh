@@ -1,8 +1,7 @@
 #!/system/bin/sh
 MODDIR=${0%/*}
 
-if [[ -z "${MODDIR}/sepolicy.sh" ]]
-then
+if [[ -z "${MODDIR}/sepolicy.sh" ]]; then
     . ${MODDIR}/sepolicy.sh
 fi
 
@@ -37,8 +36,7 @@ XP_INSTALLER=de.robv.android.xposed.installer
 PATH_PREFIX_PROT=/data/user_de/0/
 PATH_PREFIX_LEGACY=/data/user/0/
 
-if [[ ${ANDROID_SDK} -ge 24 ]]
-then
+if [[ ${ANDROID_SDK} -ge 24 ]]; then
     PATH_PREFIX=${PATH_PREFIX_PROT}
 else
     PATH_PREFIX=${PATH_PREFIX_LEGACY}
@@ -47,14 +45,11 @@ fi
 DEFAULT_BASE_PATH=${PATH_PREFIX}${EDXP_INSTALLER}
 BASE_PATH=${DEFAULT_BASE_PATH}
 
-if [[ ! -d ${BASE_PATH} ]]
-then
+if [[ ! -d ${BASE_PATH} ]]; then
     BASE_PATH=${PATH_PREFIX}${EDXP_MANAGER}
-    if [[ ! -d ${BASE_PATH} ]]
-    then
+    if [[ ! -d ${BASE_PATH} ]]; then
         BASE_PATH=${PATH_PREFIX}${XP_INSTALLER}
-        if [[ ! -d ${BASE_PATH} ]]
-        then
+        if [[ ! -d ${BASE_PATH} ]]; then
             BASE_PATH=${DEFAULT_BASE_PATH}
         fi
     fi
@@ -65,8 +60,7 @@ CONF_PATH=${BASE_PATH}/conf
 DISABLE_VERBOSE_LOG_FILE=${CONF_PATH}/disable_verbose_log
 LOG_VERBOSE=true
 
-if [[ -f ${DISABLE_VERBOSE_LOG_FILE} ]]
-then
+if [[ -f ${DISABLE_VERBOSE_LOG_FILE} ]]; then
     LOG_VERBOSE=false
 fi
 
@@ -77,12 +71,10 @@ start_log_cather () {
     START_NEW=$4
     LOG_FILE=${LOG_PATH}/${LOG_FILE_NAME}
     mkdir -p ${LOG_PATH}
-    if [[ ${CLEAN_OLD} = true ]]
-    then
+    if [[ ${CLEAN_OLD} = true ]]; then
         rm -rf ${LOG_FILE}
     fi
-    if [[ ${START_NEW} = false ]]
-    then
+    if [[ ${START_NEW} = false ]]; then
         return
     fi
     chmod

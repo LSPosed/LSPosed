@@ -58,38 +58,28 @@ check_old_magisk_device() {
 }
 
 check_magisk_version() {
-    for TARGET in ${MODEL}
-    do
-        if [[ "${PROP_MODEL}" == ${TARGET} ]]
-        then
+    for TARGET in ${MODEL}; do
+        if [[ "${PROP_MODEL}" == ${TARGET} ]]; then
             DETECTED_DEVICE=true
         fi
     done
-    for TARGET in ${DEVICE}
-    do
-        if [[ "${PROP_DEVICE}" == ${TARGET} ]]
-        then
+    for TARGET in ${DEVICE}; do
+        if [[ "${PROP_DEVICE}" == ${TARGET} ]]; then
             DETECTED_DEVICE=true
         fi
     done
-    for TARGET in ${PRODUCT}
-    do
-        if [[ "${PROP_PRODUCT}" == ${TARGET} ]]
-        then
+    for TARGET in ${PRODUCT}; do
+        if [[ "${PROP_PRODUCT}" == ${TARGET} ]]; then
             DETECTED_DEVICE=true
         fi
     done
-    for TARGET in ${BRAND}
-    do
-        if [[ "${PROP_BRAND}" == ${TARGET} ]]
-        then
+    for TARGET in ${BRAND}; do
+        if [[ "${PROP_BRAND}" == ${TARGET} ]]; then
             DETECTED_DEVICE=true
         fi
     done
-    for TARGET in ${MANUFACTURER}
-    do
-        if [[ "${PROP_MANUFACTURER}" == ${TARGET} ]]
-        then
+    for TARGET in ${MANUFACTURER}; do
+        if [[ "${PROP_MANUFACTURER}" == ${TARGET} ]]; then
             DETECTED_DEVICE=true
         fi
     done
@@ -133,8 +123,7 @@ check_architecture
 ui_print "- Extracting module files"
 unzip -o "${ZIPFILE}" module.prop post-fs-data.sh system.prop uninstall.sh 'system/*' -d "${MODPATH}" >&2
 
-if [[ "${ARCH}" == "x86" || "${ARCH}" == "x64" ]]
-then
+if [[ "${ARCH}" == "x86" || "${ARCH}" == "x64" ]]; then
     ui_print "- Replacing x86/64 libraries"
     unzip -o "${ZIPFILE}" 'system_x86/*' -d "${MODPATH}" >&2
     rm -rf "${MODPATH}/system/lib"
@@ -144,14 +133,12 @@ then
     rm -rf "${MODPATH}/system_x86"
 fi
 
-if [[ "${IS64BIT}" = false ]]
-then
+if [[ "${IS64BIT}" = false ]]; then
     ui_print "- Removing 64-bit libraries"
     rm -rf "${MODPATH}/system/lib64"
 fi
 
-if [[ "${OLD_MAGISK}" = true ]]
-then
+if [[ "${OLD_MAGISK}" = true ]]; then
     ui_print "- Extracting custom sepolicy rule for old Magisk"
     unzip -o "${ZIPFILE}" sepolicy.sh -d "${MODPATH}" >&2
 else
