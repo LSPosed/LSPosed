@@ -28,9 +28,9 @@ ext {
     yahfa_module_id = "riru_edxposed"
     sandhook_module_id = yahfa_module_id + "_sandhook"
     whale_module_id = yahfa_module_id + "_whale"
-    yahfa_authors = "solohsu, rk700 & MlgmXyysd"
-    sandhook_authors = "solohsu, ganyao114 & MlgmXyysd"
-    whale_authors = "solohsu, asLody & MlgmXyysd"
+    yahfa_authors = "solohsu, MlgmXyysd & rk700"
+    sandhook_authors = "solohsu, MlgmXyysd & ganyao114"
+    whale_authors = "solohsu, MlgmXyysd & asLody"
 
     riruModuleId = "edxp"
     zipPathMagiskRelease = "$buildDir/tmp/release/magisk"
@@ -148,11 +148,6 @@ afterEvaluate {
                                 versionCode: "$versionCode", authorList: "$authorList")
                         filter(FixCrLfFilter.class, eol: FixCrLfFilter.CrLf.newInstance("lf"))
                     }
-                    copy {
-                        from "${templateRootPath}/module.prop"
-                        into templateRootPath
-                        rename "module.prop", "riru_module.prop"
-                    }
                 }
                 def libPathRelease = "${buildDir}/intermediates/cmake/${variantLowered}/obj"
                 doLast {
@@ -170,10 +165,6 @@ afterEvaluate {
                         filter(FixCrLfFilter.class, eol: FixCrLfFilter.CrLf.newInstance("lf"))
                     }
                     copy {
-                        from 'template_override/riru_module.prop'
-                        into "$zipPathMagiskRelease/data/misc/riru/modules/${riruModuleId}"
-                    }
-                    copy {
                         from "$libPathRelease/armeabi-v7a"
                         into "$zipPathMagiskRelease/system/lib"
                     }
@@ -189,15 +180,12 @@ afterEvaluate {
                         from "$libPathRelease/x86_64"
                         into "$zipPathMagiskRelease/system_x86/lib64"
                     }
-
-                    file("$zipPathMagiskRelease/riru_module.prop").delete()
-                    file("$zipPathMagiskRelease/data/misc/riru/modules/${riruModuleId}/riru_module.prop").renameTo("$zipPathMagiskRelease/data/misc/riru/modules/${riruModuleId}/module.prop")
                 }
             }
 
             def zipTask = task("zip${backendCapped}${variantCapped}", type: Zip) {
                 dependsOn prepareMagiskFilesTask
-                archiveName "magisk-${module_name}-${backend}-${project.version}-${variantLowered}.zip"
+                archiveName "${module_name}-${backend}-${project.version}-${variantLowered}.zip"
                 destinationDir file("$projectDir/release")
                 from "$zipPathMagiskRelease"
             }
@@ -206,7 +194,7 @@ afterEvaluate {
                 dependsOn zipTask
                 workingDir "${projectDir}/release"
                 def commands = ["adb", "push",
-                                "magisk-${module_name}-${backend}-${project.version}-${variantLowered}.zip",
+                                "${module_name}-${backend}-${project.version}-${variantLowered}.zip",
                                 "/sdcard/"]
                 if (is_windows) {
                     commandLine 'cmd', '/c', commands.join(" ")
