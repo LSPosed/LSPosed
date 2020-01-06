@@ -29,7 +29,7 @@ zip 可执行文件可以在 [这里](http://gnuwin32.sourceforge.net/packages/z
 
 ## 安装
 
-1. 安装 Magisk v20.2+
+1. 安装 Magisk v19+ (对于 华为 / 荣耀 或 一加 7T / 7TPro 设备, 需要 Magisk v20.2+)
 2. 在 Magisk 仓库中安装 [Riru-Core](https://github.com/RikkaApps/Riru/releases) v19 或更高版本.
 3. [下载](#下载)并在恢复模式(Recovery)或经由 Magisk Manager 安装 EdXposed.
 4. 安装 [框架管理应用](#框架管理应用).

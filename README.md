@@ -29,7 +29,7 @@ and zip binaries can be downloaded from [here](http://gnuwin32.sourceforge.net/p
 
 ## Install
 
-1. Install Magisk v20.2+
+1. Install Magisk v19+ (for Huawei/Honor or OnePlus 7T/7TPro device, need Magisk v20.2+)
 2. Install [Riru-Core](https://github.com/RikkaApps/Riru/releases) v19+ from Magisk repo.
 3. [Download](#download) and install EdXposed in Magisk Manager or recovery mode.
 4. Install [companion application](#companion-applications).
