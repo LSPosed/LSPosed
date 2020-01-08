@@ -5,7 +5,7 @@ apply plugin: 'com.android.library'
 
 // Values set here will be overriden by AppVeyor, feel free to modify during development.
 def buildVersionName = 'v0.4.6.1'
-def buildVersionCode = 10000
+def buildVersionCode = 233
 
 if (System.env.APPVEYOR_BUILD_VERSION != null) {
     buildVersionName = "v${System.getenv('appveyor_build_version')}"

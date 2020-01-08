@@ -66,7 +66,7 @@ namespace edxp {
         }
         hook_func = reinterpret_cast<HookFunType>(hook_func_symbol);
 
-        if (api_level >= ANDROID_P) {
+        if (api_level > ANDROID_P) {
             ScopedDlHandle dl_handle(kLibDlPath.c_str());
             void *handle = dl_handle.Get();
             HOOK_FUNC(mydlopen, "__loader_dlopen");
