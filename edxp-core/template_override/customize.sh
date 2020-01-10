@@ -2,12 +2,12 @@ SKIPUNZIP=1
 RIRU_PATH="/data/misc/riru"
 OLD_MAGISK=false
 DETECTED_DEVICE=false
-PROP_MODEL=`getprop ro.product.model`
-PROP_DEVICE=`getprop ro.product.device`
-PROP_PRODUCT=`getprop ro.build.product`
-PROP_BRAND=`getprop ro.product.brand`
-PROP_MANUFACTURER=`getprop ro.product.manufacturer`
-
+PROP_MODEL=$(getprop ro.product.model)
+PROP_DEVICE=$(getprop ro.product.device)
+PROP_PRODUCT=$(getprop ro.build.product)
+PROP_BRAND=$(getprop ro.product.brand)
+PROP_MANUFACTURER=$(getprop ro.product.manufacturer)
+VERSION=$(grep_prop version "$TMPDIR/module.prop")
 MODEL="
 HD1900
 HD1910
@@ -29,29 +29,53 @@ HUAWEI
 "
 
 require_new_magisk() {
-    ui_print "*******************************"
-    ui_print " Please install Magisk v20.2+! "
-    ui_print "*******************************"
-    abort
+    ui_print "*********************************************************"
+    ui_print "! Special device detected"
+    ui_print "! Magisk v20.2+ is required"
+    ui_print "! You can update from 'Magisk Manager' or https://github.com/topjohnwu/Magisk/releases"
+    abort    "*********************************************************"
+}
+
+require_riru() {
+    ui_print "*********************************************************"
+    ui_print "! Requirement module 'Riru - Core' is not installed"
+    ui_print "! You can download from 'Magisk Manager' or https://github.com/RikkaApps/Riru/releases"
+    abort    "*********************************************************"
 }
 
 require_new_riru() {
-    ui_print "**********************************"
-    ui_print " Please Install Riru - Core v19+! "
-    ui_print "**********************************"
-    abort
+    ui_print "*********************************************************"
+    ui_print "! Old Riru ${RIRU_VERSION} (below v19) detected"
+    ui_print "! The latest version of 'Riru - Core' is required"
+    ui_print "! You can download from 'Magisk Manager' or https://github.com/RikkaApps/Riru/releases"
+    abort    "*********************************************************"
 }
 
 require_yahfa() {
-    ui_print "****************************************"
-    ui_print " Only YAHFA supports x86 or x64 devices "
-    ui_print "****************************************"
-    abort
+    ui_print "*********************************************************"
+    ui_print "! Architecture x86 or x86_64 detected"
+    ui_print "! Only YAHFA variant supports x86 or x86_64 architecture devices"
+    ui_print "! You can download from 'Magisk Manager' or 'EdXposed Manager'"
+    abort    "*********************************************************"
+}
+
+require_new_android() {
+    ui_print "*********************************************************"
+    ui_print "! Old Android ${API} (below Oreo) detected"
+    ui_print "! Only the original Xposed Framework can be used under Android 8.0"
+    ui_print "! You can download from 'Xposed Installer' or 'Magisk Manager(Systemless-ly)'"
+    ui_print "! Learn more: https://github.com/ElderDrivers/EdXposed/wiki/Available-Android-versions"
+    abort    "*********************************************************"
 }
 
 check_old_magisk_device() {
     OLD_MAGISK=true
-    ui_print "- Old Magisk detected"
+    ui_print "*********************************************************"
+    ui_print "- Old Magisk ${MAGISK_VER_CODE} (below v20.2) detected"
+    ui_print "- The old Magisk may cause some problems (it may be fixed in new version)"
+    ui_print "- And support may be cancelled in subsequent versions"
+    ui_print "- In any case, you should update to the latest version in time"
+    ui_print "*********************************************************"
     if [[ "${DETECTED_DEVICE}" = true ]]; then
         require_new_magisk
     fi
@@ -87,14 +111,14 @@ check_magisk_version() {
         ui_print "- Special device detected"
     fi
     ui_print "- Magisk version is ${MAGISK_VER_CODE}"
-    [[ ${MAGISK_VER_CODE} -ge 20110 ]] || check_old_magisk_device
+    [[ ${MAGISK_VER_CODE} -ge 20102 ]] || check_old_magisk_device
 }
 
 check_riru_version() {
-    [[ ! -f "${RIRU_PATH}/api_version" ]] && require_new_riru
-    VERSION=$(cat "${RIRU_PATH}/api_version")
-    ui_print "- Riru API version is ${VERSION}"
-    [[ "${VERSION}" -ge 4 ]] || require_new_riru
+    [[ ! -f "${RIRU_PATH}/api_version" ]] && require_riru
+    RIRU_VERSION=$(cat "${RIRU_PATH}/api_version")
+    ui_print "- Riru API version is ${RIRU_VERSION}"
+    [[ "${RIRU_VERSION}" -ge 4 ]] || require_new_riru
 }
 
 check_architecture() {
@@ -116,15 +140,21 @@ check_architecture() {
     fi
 }
 
+check_android_version() {
+    [[ ${API} -ge 26 ]] || require_new_android
+}
+
+ui_print "- EdXposed Version ${VERSION}"
+
 check_magisk_version
 check_riru_version
 check_architecture
 
 ui_print "- Extracting module files"
-unzip -o "${ZIPFILE}" module.prop post-fs-data.sh system.prop uninstall.sh 'system/*' -d "${MODPATH}" >&2
+unzip -o "${ZIPFILE}" module.prop post-fs-data.sh sepolicy.rule system.prop uninstall.sh 'system/*' -d "${MODPATH}" >&2
 
 if [[ "${ARCH}" == "x86" || "${ARCH}" == "x64" ]]; then
-    ui_print "- Replacing x86/64 libraries"
+    ui_print "- Replacing x86 and x86_64 libraries"
     unzip -o "${ZIPFILE}" 'system_x86/*' -d "${MODPATH}" >&2
     rm -rf "${MODPATH}/system/lib"
     rm -rf "${MODPATH}/system/lib64"
@@ -139,11 +169,8 @@ if [[ "${IS64BIT}" = false ]]; then
 fi
 
 if [[ "${OLD_MAGISK}" = true ]]; then
-    ui_print "- Extracting custom sepolicy rule for old Magisk"
-    unzip -o "${ZIPFILE}" sepolicy.sh -d "${MODPATH}" >&2
-else
-    ui_print "- Extracting custom sepolicy rule"
-    unzip -o "${ZIPFILE}" sepolicy.rule -d "${MODPATH}" >&2
+    ui_print "- Removing sepolicy rule for old Magisk"
+    rm ${MODPATH}/sepolicy.rule
 fi
 
 ui_print "- Copying extra files"
@@ -152,10 +179,10 @@ TARGET="${RIRU_PATH}/modules/edxp"
 
 [[ -d "${TARGET}" ]] || mkdir -p "${TARGET}" || abort "! Can't mkdir -p ${TARGET}"
 
+rm "${TARGET}/module.prop"
+
 cp "${MODPATH}/module.prop" "${TARGET}/module.prop" || abort "! Can't create ${TARGET}/module.prop"
 
 set_perm_recursive "${MODPATH}" 0 0 0755 0644
-
-VERSION=`grep_prop version $TMPDIR/module.prop`
 
 ui_print "- Welcome to EdXposed ${VERSION}!"
