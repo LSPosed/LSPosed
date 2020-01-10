@@ -64,12 +64,7 @@ Edxposed has three different builds
 
 ## Known Issues
 
-- [ ] May not be compatible with all ART devices.
-- [ ] (Provisional solved, Use Magisk SEPolicy API to enable needed SELinux policies) File access services are not implemented yet.
-- [x] (Fixed) ~~Wait for Magisk sepolicy update.~~
-- [ ] (Provisional solved, #386) SafetyNet and some app tripped EdXposed.
-- [ ] (Provisional solved, WeXposed fixed in v2.7) Some module cannot hook app, such as WeXposed.
-- [x] (Fixed, use EdXposed Manager v4.5.2 and newer) ~~Dynamic modules not work, caused by SELinux.~~
+See [Wiki: Known issues or bugs](https://github.com/ElderDrivers/EdXposed/wiki/Known-issues-or-bugs)
 
 ## Get Help
 

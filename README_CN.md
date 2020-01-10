@@ -64,12 +64,7 @@ Edxposed 拥有三个不同的版本
 
 ## 已知问题
 
-- [ ] 可能不兼容部分 ART 设备.
-- [ ] (临时解决, 使用 magiskpolicy 来启用所需的 SELinux 策略)文件访问服务尚未实现.
-- [x] (已修复) ~~等待 Magisk 更新 SEPolicy.~~
-- [ ] (临时解决, #386) SafetyNet 和一些应用检测到了 EdXposed.
-- [ ] (临时解决, 微X模块已在2.7版本修复) 一些模块无法工作，例如微X模块.
-- [x] (已修复, 使用 EdXposed Manager v4.5.2 或更高版本) ~~受制于 SELinux 策略，即时列表功能无法使用.~~
+见 [Wiki: 已知问题和漏洞](https://github.com/ElderDrivers/EdXposed/wiki/已知问题和漏洞)
 
 ## 获取帮助
 
