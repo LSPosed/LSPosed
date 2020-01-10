@@ -34,6 +34,8 @@ public class ConfigManager {
 
     public static native boolean isDynamicModulesEnabled();
 
+    public static native boolean isNoModuleLogEnabled();
+
     public static native boolean isResourcesHookEnabled();
 
     public static native boolean isDeoptBootImageEnabled();

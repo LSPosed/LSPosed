@@ -23,6 +23,10 @@ public class BaseEdxpConfig implements EdxpConfig {
     public boolean isResourcesHookEnabled() {
         return ConfigManager.isResourcesHookEnabled();
     }
+    @Override
+    public boolean isNoModuleLogEnabled() {
+        return ConfigManager.isNoModuleLogEnabled();
+    }
 
     @Override
     public boolean isBlackWhiteListMode() {

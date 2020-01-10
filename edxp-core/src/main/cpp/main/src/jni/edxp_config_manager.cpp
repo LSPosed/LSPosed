@@ -22,6 +22,10 @@ namespace edxp {
         return (jboolean) ConfigManager::GetInstance()->IsDeoptBootImageEnabled();
     }
 
+    static jboolean ConfigManager_isNoModuleLogEnabled(JNI_START) {
+        return (jboolean) ConfigManager::GetInstance()->IsNoModuleLogEnabled();
+    }
+
     static jstring ConfigManager_getInstallerPackageName(JNI_START) {
         return env->NewStringUTF(ConfigManager::GetInstance()->GetInstallerPkgName().c_str());
     }
@@ -38,6 +42,7 @@ namespace edxp {
             NATIVE_METHOD(ConfigManager, isDynamicModulesEnabled, "()Z"),
             NATIVE_METHOD(ConfigManager, isResourcesHookEnabled, "()Z"),
             NATIVE_METHOD(ConfigManager, isDeoptBootImageEnabled, "()Z"),
+            NATIVE_METHOD(ConfigManager, isNoModuleLogEnabled, "()Z"),
             NATIVE_METHOD(ConfigManager, getInstallerPackageName, "()Ljava/lang/String;"),
             NATIVE_METHOD(ConfigManager, isAppNeedHook, "(Ljava/lang/String;)Z"),
     };

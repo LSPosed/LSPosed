@@ -8,6 +8,8 @@ public interface EdxpConfig {
 
     boolean isDynamicModulesMode();
 
+    boolean isNoModuleLogEnabled();
+
     boolean isResourcesHookEnabled();
 
     boolean isBlackWhiteListMode();

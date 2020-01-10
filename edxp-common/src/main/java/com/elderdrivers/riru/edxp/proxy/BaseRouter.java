@@ -145,7 +145,7 @@ public abstract class BaseRouter implements Router {
                 XposedHelpers.findAndHookMethod(OnePlusWorkAroundHooker.className,
                         classLoader, OnePlusWorkAroundHooker.methodName,
                         int.class, String.class, new OneplusWorkaround());
-            } catch (Throwable throwable) {
+            } catch (Throwable ignored) {
             }
         } else {
             HookMain.doHookDefault(

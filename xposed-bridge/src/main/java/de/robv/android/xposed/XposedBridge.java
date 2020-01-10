@@ -147,7 +147,7 @@ public final class XposedBridge {
 	}
 
 	/**
-	 * Writes a message to the Xposed error log.
+	 * Writes a message to the Xposed modules log.
 	 *
 	 * <p class="warning"><b>DON'T FLOOD THE LOG!!!</b> This is only meant for error logging.
 	 * If you want to write information/debug messages, use logcat.
@@ -155,11 +155,14 @@ public final class XposedBridge {
 	 * @param text The log message.
 	 */
 	public synchronized static void log(String text) {
-		Log.i(TAG, text);
+		if (EdXpConfigGlobal.getConfig().isNoModuleLogEnabled()) {
+			return;
+		}
+		Log.i(TAG, "Module: " + text);
 	}
 
 	/**
-	 * Logs a stack trace to the Xposed error log.
+	 * Logs a stack trace to the Xposed modules log.
 	 *
 	 * <p class="warning"><b>DON'T FLOOD THE LOG!!!</b> This is only meant for error logging.
 	 * If you want to write information/debug messages, use logcat.
@@ -167,7 +170,36 @@ public final class XposedBridge {
 	 * @param t The Throwable object for the stack trace.
 	 */
 	public synchronized static void log(Throwable t) {
-		Log.e(TAG, Log.getStackTraceString(t));
+		Log.e(TAG, "Module: " + Log.getStackTraceString(t));
+	}
+
+	/**
+	 * Writes a message to the Xposed modules log with module's name.
+	 *
+	 * <p class="warning"><b>DON'T FLOOD THE LOG!!!</b> This is only meant for error logging.
+	 * If you want to write information/debug messages, use logcat.
+	 *
+	 * @param name The module's name..
+	 * @param text The log message.
+	 */
+	public synchronized static void log(String name, String text) {
+		if (EdXpConfigGlobal.getConfig().isNoModuleLogEnabled()) {
+			return;
+		}
+		Log.i(TAG, "Module: " + name + ": " + text);
+	}
+
+	/**
+	 * Logs a stack trace to the Xposed modules log with module's name.
+	 *
+	 * <p class="warning"><b>DON'T FLOOD THE LOG!!!</b> This is only meant for error logging.
+	 * If you want to write information/debug messages, use logcat.
+	 *
+	 * @param name The module's name..
+	 * @param t The Throwable object for the stack trace.
+	 */
+	public synchronized static void log(String name, Throwable t) {
+		Log.e(TAG, "Module: " + name + ": " + Log.getStackTraceString(t));
 	}
 
 	/**

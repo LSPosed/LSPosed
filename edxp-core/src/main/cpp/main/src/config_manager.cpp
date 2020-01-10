@@ -30,11 +30,6 @@ namespace edxp {
             LOGI("using installer %s", kPrimaryInstallerPkgName);
             return kPrimaryInstallerPkgName;
         }
-        data_test_path = data_path_prefix_ + kSecondaryInstallerPkgName;
-        if (access(data_test_path.c_str(), F_OK) == 0) {
-            LOGI("using installer %s", kSecondaryInstallerPkgName);
-            return kSecondaryInstallerPkgName;
-        }
         data_test_path = data_path_prefix_ + kLegacyInstallerPkgName;
         if (access(data_test_path.c_str(), F_OK) == 0) {
             LOGI("using installer %s", kLegacyInstallerPkgName);
@@ -87,14 +82,16 @@ namespace edxp {
             black_white_list_enabled_ = access(GetConfigPath("blackwhitelist").c_str(), F_OK) == 0;
             deopt_boot_image_enabled_ = access(GetConfigPath("deoptbootimage").c_str(), F_OK) == 0;
             resources_hook_enabled_ = access(GetConfigPath("disable_resources").c_str(), F_OK) != 0;
+            no_module_log_enabled_ = access(GetConfigPath("disable_modules_log").c_str(), F_OK) == 0;
 
             // use_white_list snapshot
             use_white_list_snapshot_ = access(use_whitelist_path_.c_str(), F_OK) == 0;
-            LOGI("black/white list mode: %s, using whitelist: %s",
+            LOGI("application list mode: %s, using whitelist: %s",
                  BoolToString(black_white_list_enabled_), BoolToString(use_white_list_snapshot_));
             LOGI("dynamic modules mode: %s", BoolToString(dynamic_modules_enabled_));
             LOGI("resources hook: %s", BoolToString(resources_hook_enabled_));
             LOGI("deopt boot image: %s", BoolToString(deopt_boot_image_enabled_));
+            LOGI("no module log: %s", BoolToString(no_module_log_enabled_));
             if (black_white_list_enabled_) {
                 SnapshotBlackWhiteList();
             }
@@ -125,7 +122,6 @@ namespace edxp {
             }
         }
         if (strcmp(package_name, kPrimaryInstallerPkgName) == 0
-            || strcmp(package_name, kSecondaryInstallerPkgName) == 0
             || strcmp(package_name, kLegacyInstallerPkgName) == 0) {
             // always hook installer apps
             return true;
@@ -162,6 +158,10 @@ namespace edxp {
 
     ALWAYS_INLINE bool ConfigManager::IsDynamicModulesEnabled() const {
         return dynamic_modules_enabled_;
+    }
+
+    ALWAYS_INLINE bool ConfigManager::IsNoModuleLogEnabled() const {
+        return no_module_log_enabled_;
     }
 
     ALWAYS_INLINE bool ConfigManager::IsResourcesHookEnabled() const {

@@ -8,8 +8,7 @@
 
 namespace edxp {
 
-    static constexpr const char *kPrimaryInstallerPkgName = "com.solohsu.android.edxp.manager";
-    static constexpr const char *kSecondaryInstallerPkgName = "org.meowcat.edxposed.manager";
+    static constexpr const char *kPrimaryInstallerPkgName = "org.meowcat.edxposed.manager";
     static constexpr const char *kLegacyInstallerPkgName = "de.robv.android.xposed.installer";
 
     class ConfigManager {
@@ -30,6 +29,8 @@ namespace edxp {
 
         bool IsDeoptBootImageEnabled() const;
 
+        bool IsNoModuleLogEnabled() const;
+
         std::string GetInstallerPkgName() const;
 
         bool IsAppNeedHook(const std::string &app_data_dir) const;
@@ -47,6 +48,7 @@ namespace edxp {
         bool black_white_list_enabled_ = false;
         bool dynamic_modules_enabled_ = false;
         bool deopt_boot_image_enabled_ = false;
+        bool no_module_log_enabled_ = false;
         bool resources_hook_enabled_ = true;
         // snapshot at boot
         bool use_white_list_snapshot_ = false;
