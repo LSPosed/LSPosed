@@ -1,4 +1,13 @@
 #!/system/bin/sh
+
+grep_prop() {
+    local REGEX="s/^$1=//p"
+    shift
+    local FILES=$@
+    [[ -z "$FILES" ]] && FILES='/system/build.prop'
+    sed -n "$REGEX" ${FILES} 2>/dev/null | head -n 1
+}
+
 MODDIR=${0%/*}
 RIRU_PATH="/data/misc/riru"
 TARGET="${RIRU_PATH}/modules/edxp"
@@ -40,14 +49,6 @@ sepolicy() {
     supolicy --live "allow zygote apk_data_file * *"
 }
 
-grep_prop() {
-    local REGEX="s/^$1=//p"
-    shift
-    local FILES=$@
-    [[ -z "$FILES" ]] && FILES='/system/build.prop'
-    sed -n "$REGEX" ${FILES} 2>/dev/null | head -n 1
-}
-
 if [[ ${ANDROID_SDK} -ge 24 ]]; then
     PATH_PREFIX="${PATH_PREFIX_PROT}"
 else
@@ -68,7 +69,7 @@ LOG_PATH="${BASE_PATH}/log"
 CONF_PATH="${BASE_PATH}/conf"
 DISABLE_VERBOSE_LOG_FILE="${CONF_PATH}/disable_verbose_log"
 LOG_VERBOSE=true
-PATH_INFO=$(ls -ldZ "${BASE_PATH}")
+PATH_INFO=$(ls -ldZ "${LOG_PATH}")
 PATH_OWNER=$(echo "${PATH_INFO}" | awk -F " " '{print $3":"$4}')
 PATH_CONTEXT=$(echo "${PATH_INFO}" | awk -F " " '{print $5}')
 
@@ -95,11 +96,11 @@ start_log_cather () {
     touch ${LOG_FILE}
     chcon PATH_CONTEXT "${LOG_FILE}"
     chown PATH_OWNER "${LOG_FILE}"
-    chmod 644 ${LOG_FILE}
+    chmod 666 ${LOG_FILE}
     touch ${PID_FILE}
     chcon PATH_CONTEXT "${PID_FILE}"
     chown PATH_OWNER "${PID_FILE}"
-    chmod 644 ${PID_FILE}
+    chmod 666 ${PID_FILE}
     echo "--------- beginning of head">>${LOG_FILE}
     echo "EdXposed Log">>${LOG_FILE}
     echo "Powered by Log Catcher">>${LOG_FILE}

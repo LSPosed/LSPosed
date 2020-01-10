@@ -158,7 +158,7 @@ public final class XposedBridge {
 		if (EdXpConfigGlobal.getConfig().isNoModuleLogEnabled()) {
 			return;
 		}
-		Log.i(TAG, "Module: " + text);
+		Log.i(TAG, text);
 	}
 
 	/**
@@ -186,7 +186,7 @@ public final class XposedBridge {
 		if (EdXpConfigGlobal.getConfig().isNoModuleLogEnabled()) {
 			return;
 		}
-		Log.i(TAG, "Module: " + name + ": " + text);
+		Log.i(TAG, name + ": " + text);
 	}
 
 	/**
