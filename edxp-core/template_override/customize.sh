@@ -29,53 +29,53 @@ HUAWEI
 "
 
 require_new_magisk() {
-    ui_print "*********************************************************"
+    ui_print "******************************"
     ui_print "! Special device detected"
     ui_print "! Magisk v20.2+ is required"
     ui_print "! You can update from 'Magisk Manager' or https://github.com/topjohnwu/Magisk/releases"
-    abort    "*********************************************************"
+    abort    "******************************"
 }
 
 require_riru() {
-    ui_print "*********************************************************"
+    ui_print "******************************"
     ui_print "! Requirement module 'Riru - Core' is not installed"
     ui_print "! You can download from 'Magisk Manager' or https://github.com/RikkaApps/Riru/releases"
-    abort    "*********************************************************"
+    abort    "******************************"
 }
 
 require_new_riru() {
-    ui_print "*********************************************************"
-    ui_print "! Old Riru ${RIRU_VERSION} (below v19) detected"
+    ui_print "******************************"
+    ui_print "! Old Riru ${1} (below v19) detected"
     ui_print "! The latest version of 'Riru - Core' is required"
     ui_print "! You can download from 'Magisk Manager' or https://github.com/RikkaApps/Riru/releases"
-    abort    "*********************************************************"
+    abort    "******************************"
 }
 
 require_yahfa() {
-    ui_print "*********************************************************"
+    ui_print "******************************"
     ui_print "! Architecture x86 or x86_64 detected"
     ui_print "! Only YAHFA variant supports x86 or x86_64 architecture devices"
     ui_print "! You can download from 'Magisk Manager' or 'EdXposed Manager'"
-    abort    "*********************************************************"
+    abort    "******************************"
 }
 
 require_new_android() {
-    ui_print "*********************************************************"
-    ui_print "! Old Android ${API} (below Oreo) detected"
+    ui_print "******************************"
+    ui_print "! Old Android ${1} (below Oreo) detected"
     ui_print "! Only the original Xposed Framework can be used under Android 8.0"
     ui_print "! You can download from 'Xposed Installer' or 'Magisk Manager(Systemless-ly)'"
     ui_print "! Learn more: https://github.com/ElderDrivers/EdXposed/wiki/Available-Android-versions"
-    abort    "*********************************************************"
+    abort    "******************************"
 }
 
 check_old_magisk_device() {
     OLD_MAGISK=true
-    ui_print "*********************************************************"
-    ui_print "- Old Magisk ${MAGISK_VER_CODE} (below v20.2) detected"
+    ui_print "******************************"
+    ui_print "- Old Magisk ${1} (below v20.2) detected"
     ui_print "- The old Magisk may cause some problems (it may be fixed in new version)"
     ui_print "- And support may be cancelled in subsequent versions"
     ui_print "- In any case, you should update to the latest version in time"
-    ui_print "*********************************************************"
+    ui_print "******************************"
     if [[ "${DETECTED_DEVICE}" = true ]]; then
         require_new_magisk
     fi
@@ -111,14 +111,14 @@ check_magisk_version() {
         ui_print "- Special device detected"
     fi
     ui_print "- Magisk version is ${MAGISK_VER_CODE}"
-    [[ ${MAGISK_VER_CODE} -ge 20102 ]] || check_old_magisk_device
+    [[ ${MAGISK_VER_CODE} -ge 20102 ]] || check_old_magisk_device ${MAGISK_VER_CODE}
 }
 
 check_riru_version() {
     [[ ! -f "${RIRU_PATH}/api_version" ]] && require_riru
     RIRU_VERSION=$(cat "${RIRU_PATH}/api_version")
     ui_print "- Riru API version is ${RIRU_VERSION}"
-    [[ "${RIRU_VERSION}" -ge 4 ]] || require_new_riru
+    [[ "${RIRU_VERSION}" -ge 4 ]] || require_new_riru ${RIRU_VERSION}
 }
 
 check_architecture() {
@@ -141,7 +141,7 @@ check_architecture() {
 }
 
 check_android_version() {
-    [[ ${API} -ge 26 ]] || require_new_android
+    [[ ${API} -ge 26 ]] || require_new_android ${API}
 }
 
 ui_print "- EdXposed Version ${VERSION}"
