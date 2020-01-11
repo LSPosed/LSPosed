@@ -69,9 +69,12 @@ LOG_PATH="${BASE_PATH}/log"
 CONF_PATH="${BASE_PATH}/conf"
 DISABLE_VERBOSE_LOG_FILE="${CONF_PATH}/disable_verbose_log"
 LOG_VERBOSE=true
+OLD_PATH=${PATH}
+PATH=${PATH#*:}
 PATH_INFO=$(ls -ldZ "${LOG_PATH}")
-PATH_OWNER=$(echo "${PATH_INFO}" | awk -F " " '{print $3":"$4}')
-PATH_CONTEXT=$(echo "${PATH_INFO}" | awk -F " " '{print $5}')
+PATH=${OLD_PATH}
+PATH_OWNER=$(echo "${PATH_INFO}" | awk -F " " '{print $3":"$4}')
+PATH_CONTEXT=$(echo "${PATH_INFO}" | awk -F " " '{print $5}')
 
 if [[ -f ${DISABLE_VERBOSE_LOG_FILE} ]]; then
     LOG_VERBOSE=false
@@ -94,12 +97,12 @@ start_log_cather () {
         return
     fi
     touch ${LOG_FILE}
-    chcon PATH_CONTEXT "${LOG_FILE}"
-    chown PATH_OWNER "${LOG_FILE}"
+    chcon ${PATH_CONTEXT} "${LOG_FILE}"
+    chown ${PATH_OWNER} "${LOG_FILE}"
     chmod 666 ${LOG_FILE}
     touch ${PID_FILE}
-    chcon PATH_CONTEXT "${PID_FILE}"
-    chown PATH_OWNER "${PID_FILE}"
+    chcon ${PATH_CONTEXT} "${PID_FILE}"
+    chown ${PATH_OWNER} "${PID_FILE}"
     chmod 666 ${PID_FILE}
     echo "--------- beginning of head">>${LOG_FILE}
     echo "EdXposed Log">>${LOG_FILE}
@@ -140,10 +143,10 @@ start_bridge_log_catcher () {
 chcon -R u:object_r:system_file:s0 "${MODDIR}"
 
 # Backup app_process to avoid bootloop caused by original Xposed replacement
-rm -rf "${MODDIR}/system/bin"
-mkdir "${MODDIR}/system/bin"
-cp -f "/system/bin/app_process32" "${MODDIR}/system/bin/app_process32"
-[[ -f "/system/bin/app_process64" ]] && cp -f "/system/bin/app_process64" "${MODDIR}/system/bin/app_process64"
+#rm -rf "${MODDIR}/system/bin"
+#mkdir "${MODDIR}/system/bin"
+#cp -f "/system/bin/app_process32" "${MODDIR}/system/bin/app_process32"
+#[[ -f "/system/bin/app_process64" ]] && cp -f "/system/bin/app_process64" "${MODDIR}/system/bin/app_process64"
 
 start_verbose_log_catcher
 start_bridge_log_catcher
