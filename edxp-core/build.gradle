@@ -107,7 +107,7 @@ task copyDexmakerJar {
 }
 
 task cleanTemplate(type: Delete) {
-    delete file(templateSystemPath), file(templateSystemx86Path)
+    delete file(templateSystemx86Path)
 }
 
 afterEvaluate {
