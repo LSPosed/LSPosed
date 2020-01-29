@@ -31,9 +31,17 @@ HUAWEI
 require_new_magisk() {
     ui_print "******************************"
     ui_print "! Special device detected"
-    ui_print "! Magisk v20.2+ is required"
+    ui_print "! Magisk v20.2+ or custom Magisk v20.1(Deprecated) is required"
     ui_print "! You can update from 'Magisk Manager' or https://github.com/topjohnwu/Magisk/releases"
     abort    "******************************"
+}
+
+update_new_magisk() {
+    ui_print "******************************"
+    ui_print "- Deprecated custom Magisk v20.1 detected"
+    ui_print "- We will still keep the rule file for you"
+    ui_print "- You can update to the latest Magisk directly from official update channel"
+    ui_print "******************************"
 }
 
 require_riru() {
@@ -76,7 +84,7 @@ check_old_magisk_device() {
     ui_print "- And support may be cancelled in subsequent versions"
     ui_print "- In any case, you should update to the latest version in time"
     ui_print "******************************"
-    if [[ "${DETECTED_DEVICE}" = true ]]; then
+    if [[ "${DETECTED_DEVICE}" == true ]]; then
         require_new_magisk
     fi
 }
@@ -107,11 +115,12 @@ check_magisk_version() {
             DETECTED_DEVICE=true
         fi
     done
-    if [[ "${DETECTED_DEVICE}" = true ]]; then
+    if [[ "${DETECTED_DEVICE}" == true ]]; then
         ui_print "- Special device detected"
     fi
     ui_print "- Magisk version is ${MAGISK_VER_CODE}"
-    [[ ${MAGISK_VER_CODE} -ge 20102 ]] || check_old_magisk_device ${MAGISK_VER_CODE}
+    [[ ${MAGISK_VER_CODE} -ge 20101 ]] || check_old_magisk_device ${MAGISK_VER_CODE}
+    [[ ${MAGISK_VER_CODE} -eq 20101 ]] || update_new_magisk
 }
 
 check_riru_version() {
@@ -163,12 +172,12 @@ if [[ "${ARCH}" == "x86" || "${ARCH}" == "x64" ]]; then
     rm -rf "${MODPATH}/system_x86"
 fi
 
-if [[ "${IS64BIT}" = false ]]; then
+if [[ "${IS64BIT}" == false ]]; then
     ui_print "- Removing 64-bit libraries"
     rm -rf "${MODPATH}/system/lib64"
 fi
 
-if [[ "${OLD_MAGISK}" = true ]]; then
+if [[ "${OLD_MAGISK}" == true ]]; then
     ui_print "- Removing sepolicy rule for old Magisk"
     rm ${MODPATH}/sepolicy.rule
 fi

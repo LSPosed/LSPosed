@@ -35,18 +35,15 @@ PATH_PREFIX_LEGACY="/data/user/0/"
 
 sepolicy() {
     # necessary for using mmap in system_server process
-    supolicy --live "allow system_server system_server process {execmem}"
-    supolicy --live "allow system_server system_server memprotect {mmap_zero}"
-
-    # for built-in apps // TODO maybe narrow down the target classes
-    supolicy --live "allow coredomain coredomain process {execmem}"
-
     # read configs set in our app
-    supolicy --live "allow coredomain app_data_file * *"
-    supolicy --live "attradd {system_app platform_app} mlstrustedsubject"
-
+    # for built-in apps // TODO: maybe narrow down the target classes
     # read module apk file in zygote
-    supolicy --live "allow zygote apk_data_file * *"
+    supolicy --live "allow system_server system_server process { execmem }"\
+                    "allow system_server system_server memprotect { mmap_zero }"\
+                    "allow coredomain coredomain process { execmem }"\
+                    "allow coredomain app_data_file * *"\
+                    "attradd { system_app platform_app } mlstrustedsubject"\
+                    "allow zygote apk_data_file * *"
 }
 
 if [[ ${ANDROID_SDK} -ge 24 ]]; then
@@ -88,12 +85,12 @@ start_log_cather () {
     LOG_FILE="${LOG_PATH}/${LOG_FILE_NAME}.log"
     PID_FILE="${LOG_PATH}/${LOG_FILE_NAME}.pid"
     mkdir -p ${LOG_PATH}
-    if [[ ${CLEAN_OLD} = true ]]; then
+    if [[ ${CLEAN_OLD} == true ]]; then
         rm "${LOG_FILE}.old"
         mv "${LOG_FILE}" "${LOG_FILE}.old"
     fi
     rm "${LOG_PATH}/${LOG_FILE_NAME}.pid"
-    if [[ ${START_NEW} = false ]]; then
+    if [[ ${START_NEW} == false ]]; then
         return
     fi
     touch ${LOG_FILE}
@@ -140,13 +137,12 @@ start_bridge_log_catcher () {
     start_log_cather error "XSharedPreferences:V EdXposed-Bridge:V" true true
 }
 
-chcon -R u:object_r:system_file:s0 "${MODDIR}"
-
-# Backup app_process to avoid bootloop caused by original Xposed replacement
-#rm -rf "${MODDIR}/system/bin"
-#mkdir "${MODDIR}/system/bin"
-#cp -f "/system/bin/app_process32" "${MODDIR}/system/bin/app_process32"
-#[[ -f "/system/bin/app_process64" ]] && cp -f "/system/bin/app_process64" "${MODDIR}/system/bin/app_process64"
+# Backup app_process to avoid bootloop caused by original Xposed replacement in Android Oreo
+# TODO: Magisk mount replace
+rm -rf "${MODDIR}/system/bin"
+mkdir "${MODDIR}/system/bin"
+cp -f "/system/bin/app_process32" "${MODDIR}/system/bin/app_process32"
+[[ -f "/system/bin/app_process64" ]] && cp -f "/system/bin/app_process64" "${MODDIR}/system/bin/app_process64"
 
 start_verbose_log_catcher
 start_bridge_log_catcher
@@ -156,3 +152,5 @@ start_bridge_log_catcher
 cp "${MODDIR}/module.prop" "${TARGET}/module.prop"
 
 [[ -f "${MODDIR}/sepolicy.rule" ]] || sepolicy
+
+chcon -R u:object_r:system_file:s0 "${MODDIR}"
