@@ -2,6 +2,7 @@ SKIPUNZIP=1
 RIRU_PATH="/data/misc/riru"
 OLD_MAGISK=false
 DETECTED_DEVICE=false
+NO_PERSIST=false
 PROP_MODEL=$(getprop ro.product.model)
 PROP_DEVICE=$(getprop ro.product.device)
 PROP_PRODUCT=$(getprop ro.build.product)
@@ -29,11 +30,21 @@ HUAWEI
 "
 
 require_new_magisk() {
-    ui_print "******************************"
-    ui_print "! Special device detected"
-    ui_print "! Magisk v20.2+ or custom Magisk v20.1(Deprecated) is required"
-    ui_print "! You can update from 'Magisk Manager' or https://github.com/topjohnwu/Magisk/releases"
-    abort    "******************************"
+    if [[ "${NO_PERSIST}" == true ]]; then
+        ui_print "******************************"
+        ui_print "! Special device detected"
+        ui_print "! But persist is not found in your device, SEPolicy rules will not take effect correctly"
+        ui_print "! Deprecated custom Magisk v20.1 is required"
+        ui_print "! Change Magisk update channel to http://edxp.meowcat.org/repo/version.json"
+        ui_print "! And re-install Magisk"
+        abort    "******************************"
+    else
+        ui_print "******************************"
+        ui_print "! Special device detected"
+        ui_print "! Magisk v20.2+ or custom Magisk v20.1(Deprecated) is required"
+        ui_print "! You can update from 'Magisk Manager' or https://github.com/topjohnwu/Magisk/releases"
+        abort    "******************************"
+    fi
 }
 
 update_new_magisk() {
@@ -120,7 +131,7 @@ check_magisk_version() {
     fi
     ui_print "- Magisk version is ${MAGISK_VER_CODE}"
     [[ ${MAGISK_VER_CODE} -ge 20101 ]] || check_old_magisk_device ${MAGISK_VER_CODE}
-    [[ ${MAGISK_VER_CODE} -eq 20101 ]] || update_new_magisk
+    [[ ${MAGISK_VER_CODE} -eq 20101 ]] && update_new_magisk
 }
 
 check_riru_version() {
@@ -155,6 +166,7 @@ check_android_version() {
 
 ui_print "- EdXposed Version ${VERSION}"
 
+[[ -d "/mnt/vendor/persist" ]] || NO_PERSIST=true
 check_magisk_version
 check_riru_version
 check_architecture
@@ -178,7 +190,12 @@ if [[ "${IS64BIT}" == false ]]; then
 fi
 
 if [[ "${OLD_MAGISK}" == true ]]; then
-    ui_print "- Removing sepolicy rule for old Magisk"
+    ui_print "- Removing SEPolicy rule for old Magisk"
+    rm ${MODPATH}/sepolicy.rule
+fi
+
+if [[ "${NO_PERSIST}" == true ]]; then
+    ui_print "- Persist not detected, remove SEPolicy rule"
     rm ${MODPATH}/sepolicy.rule
 fi
 
