@@ -155,15 +155,15 @@ afterEvaluate {
                         from "${projectDir}/template_override"
                         into zipPathMagiskRelease
                     }
-                    copy {
-                        from "${projectDir}/template_override/util_functions.sh"
-                        into "${zipPathMagiskRelease}/"
-                        filter { line -> line
-                                .replaceAll('%VERSION%', "$version")
-                                    .replaceAll('%VERSION_CODE%', "$versionCode")
-                                .replaceAll('%BACKEND%', "$backendCapped") }
-                        filter(FixCrLfFilter.class, eol: FixCrLfFilter.CrLf.newInstance("lf"))
-                    }
+//                    copy {
+//                        from "${projectDir}/template_override/util_functions.sh"
+//                        into "${zipPathMagiskRelease}/"
+//                        filter { line -> line
+//                                .replaceAll('%VERSION%', "$version")
+//                                    .replaceAll('%VERSION_CODE%', "$versionCode")
+//                                .replaceAll('%BACKEND%', "$backendCapped") }
+//                        filter(FixCrLfFilter.class, eol: FixCrLfFilter.CrLf.newInstance("lf"))
+//                    }
                     copy {
                         from "$libPathRelease/armeabi-v7a"
                         into "$zipPathMagiskRelease/system/lib"
