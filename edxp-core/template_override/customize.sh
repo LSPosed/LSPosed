@@ -2,7 +2,7 @@ SKIPUNZIP=1
 RIRU_PATH="/data/misc/riru"
 OLD_MAGISK=false
 DETECTED_DEVICE=false
-NO_PERSIST=false
+NO_PERSIST=true
 PROP_MODEL=$(getprop ro.product.model)
 PROP_DEVICE=$(getprop ro.product.device)
 PROP_PRODUCT=$(getprop ro.build.product)
@@ -27,6 +27,10 @@ HONOR
 "
 MANUFACTURER="
 HUAWEI
+"
+PERSIST="
+/persist
+/mnt/vendor/persist
 "
 
 require_new_magisk() {
@@ -164,18 +168,17 @@ check_android_version() {
     [[ ${API} -ge 26 ]] || require_new_android ${API}
 }
 
+check_persist() {
+	for TARGET in ${PERSIST}; do
+        if [[ -d ${TARGET} ]]; then
+            NO_PERSIST=false
+        fi
+    done
+}
+
 ui_print "- EdXposed Version ${VERSION}"
 
-if [[ -d "/mnt/vendor/persist" ]]; then
-    NO_PERSIST=false
-else
-    NO_PERSIST=true
-fi
-if [[ -d "/persist" ]]; then
-    NO_PERSIST=false
-else
-    NO_PERSIST=true
-fi
+check_persist
 check_magisk_version
 check_riru_version
 check_architecture
