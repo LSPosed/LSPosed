@@ -166,7 +166,16 @@ check_android_version() {
 
 ui_print "- EdXposed Version ${VERSION}"
 
-[[ -d "/mnt/vendor/persist" ]] || NO_PERSIST=true
+if [[ -d "/mnt/vendor/persist" ]]; then
+    NO_PERSIST=false
+else
+    NO_PERSIST=true
+fi
+if [[ -d "/persist" ]]; then
+    NO_PERSIST=false
+else
+    NO_PERSIST=true
+fi
 check_magisk_version
 check_riru_version
 check_architecture
@@ -196,6 +205,8 @@ fi
 
 if [[ "${NO_PERSIST}" == true ]]; then
     ui_print "- Persist not detected, remove SEPolicy rule"
+	echo "- Mount: persist:" >&2
+	mount | grep persist >&2
     rm ${MODPATH}/sepolicy.rule
 fi
 
