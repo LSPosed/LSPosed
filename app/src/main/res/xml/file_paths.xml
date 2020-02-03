@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <external-cache-path
+        name="downloads"
+        path="downloads" />
+    <external-path
+        name="download"
+        path="Download" />
+    <!--suppress AndroidElementNotAllowed -->
+    <root-path
+        name="log_legacy"
+        path="/data/data/org.meowcat.edxposed.manager/log" />
+    <!--suppress AndroidElementNotAllowed -->
+    <root-path
+        name="log"
+        path="/data/user_de/0/org.meowcat.edxposed.manager/log" />
+</paths>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#2196f3</color>
+    <color name="colorBackground">#303030</color>
+    <color name="colorAccent">#448aff</color>
+    <color name="red_500">#F44336</color>
+    <color name="warning">@color/red_500</color>
+    <color name="download_status_update_available">#4CAF50</color>
+    <color name="amber_500">#FFC107</color>
+    <color name="navigationBarColor">#303030</color>
+    <color name="colorStickyHeader">#ea000000</color>
+</resources>
