@@ -286,8 +286,7 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
         private final Context mContext;
         private final DateFormat mDateFormatter = DateFormat.getDateInstance(DateFormat.SHORT);
         private final SharedPreferences mPrefs;
-        private String[] sectionHeadersStatus;
-        private String[] sectionHeadersDate;
+        private String[] sectionHeaders;
 
         DownloadsAdapter(Context context, Cursor cursor) {
             super(context, cursor);
@@ -295,12 +294,11 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
             mPrefs = context.getSharedPreferences("update_ignored", MODE_PRIVATE);
 
             Resources res = context.getResources();
-            sectionHeadersStatus = new String[]{
+            sectionHeaders = new String[]{
                     res.getString(R.string.download_section_framework),
                     res.getString(R.string.download_section_update_available),
                     res.getString(R.string.download_section_installed),
-                    res.getString(R.string.download_section_not_installed),};
-            sectionHeadersDate = new String[]{
+                    res.getString(R.string.download_section_not_installed),
                     res.getString(R.string.download_section_24h),
                     res.getString(R.string.download_section_7d),
                     res.getString(R.string.download_section_30d),
@@ -328,12 +326,12 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
                 long age = System.currentTimeMillis() - timestamp;
                 final long mSecsPerDay = 24 * 60 * 60 * 1000L;
                 if (age < mSecsPerDay)
-                    return 0;
+                    return 4;
                 if (age < 7 * mSecsPerDay)
-                    return 1;
+                    return 5;
                 if (age < 30 * mSecsPerDay)
-                    return 2;
-                return 3;
+                    return 6;
+                return 7;
             } else {
                 if (isFramework)
                     return 0;
@@ -358,9 +356,7 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
         public void onBindHeaderViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
             long section = getHeaderId(position);
             TextView tv = viewHolder.itemView.findViewById(android.R.id.title);
-            tv.setText(mSortingOrder == RepoDb.SORT_STATUS
-                    ? sectionHeadersStatus[(int) section]
-                    : sectionHeadersDate[(int) section]);
+            tv.setText(sectionHeaders[(int) section]);
         }
 
         @NonNull
