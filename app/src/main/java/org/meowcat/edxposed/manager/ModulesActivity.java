@@ -174,7 +174,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_modules, menu);
-        mSearchView = (SearchView) menu.findItem(R.id.app_search).getActionView();
+        mSearchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
         mSearchView.setOnQueryTextListener(mSearchListener);
         return super.onCreateOptionsMenu(menu);
     }
@@ -501,6 +501,15 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
 
     private boolean lowercaseContains(String s, CharSequence filter) {
         return !TextUtils.isEmpty(s) && s.toLowerCase().contains(filter);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mSearchView.isIconified()) {
+            super.onBackPressed();
+        } else {
+            mSearchView.setIconified(true);
+        }
     }
 
     private class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.ViewHolder> {

@@ -64,7 +64,7 @@ public class BlackListActivity extends BaseActivity implements AppAdapter.Callba
     @Override
     public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         getMenuInflater().inflate(R.menu.menu_app_list, menu);
-        mSearchView = (SearchView) menu.findItem(R.id.app_search).getActionView();
+        mSearchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
         mSearchView.setOnQueryTextListener(mSearchListener);
         return super.onCreateOptionsMenu(menu);
     }
