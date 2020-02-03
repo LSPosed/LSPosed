@@ -1,6 +1,6 @@
 package org.meowcat.edxposed.manager;
 
-import android.app.Activity;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -12,9 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.ListFragment;
 
@@ -37,21 +39,16 @@ import java.util.Date;
 import static org.meowcat.edxposed.manager.XposedApp.WRITE_EXTERNAL_PERMISSION;
 
 public class DownloadDetailsVersionsFragment extends ListFragment {
-    private static VersionsAdapter sAdapter;
     private DownloadDetailsActivity mActivity;
-    private Module module;
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = (DownloadDetailsActivity) activity;
-    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        module = mActivity.getModule();
+        mActivity = (DownloadDetailsActivity) getActivity();
+        if (mActivity == null) {
+            return;
+        }
+        Module module = mActivity.getModule();
         if (module == null)
             return;
 
@@ -64,23 +61,24 @@ public class DownloadDetailsVersionsFragment extends ListFragment {
                 TextView txtHeader = new TextView(getActivity());
                 txtHeader.setText(R.string.download_test_version_not_shown);
                 txtHeader.setTextColor(getResources().getColor(R.color.warning));
-                txtHeader.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mActivity.gotoPage(DownloadDetailsActivity.DOWNLOAD_SETTINGS);
-                    }
-                });
+                txtHeader.setOnClickListener(v -> mActivity.gotoPage(DownloadDetailsActivity.DOWNLOAD_SETTINGS));
                 getListView().addHeaderView(txtHeader);
             }
 
-            sAdapter = new VersionsAdapter(mActivity, mActivity.getInstalledModule());
+            VersionsAdapter sAdapter = new VersionsAdapter(mActivity, mActivity.getInstalledModule());
             for (ModuleVersion version : module.versions) {
                 if (repoLoader.isVersionShown(version))
                     sAdapter.add(version);
             }
             setListAdapter(sAdapter);
         }
-
+        if (getView() != null) {
+            ((FrameLayout) getView()).setClipChildren(false);
+            ((FrameLayout) getView()).setClipToPadding(false);
+        }
+        ((FrameLayout) getListView().getParent()).setClipChildren(false);
+        ((FrameLayout) getListView().getParent()).setClipToPadding(false);
+        getListView().setClipToPadding(false);
         getListView().setClipToPadding(false);
     }
 
@@ -91,7 +89,7 @@ public class DownloadDetailsVersionsFragment extends ListFragment {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == WRITE_EXTERNAL_PERMISSION) {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -171,7 +169,7 @@ public class DownloadDetailsVersionsFragment extends ListFragment {
         private final String mTextUpdateAvailable;
         private final long mInstalledVersionCode;
 
-        public VersionsAdapter(Context context, InstalledModule installed) {
+        VersionsAdapter(Context context, InstalledModule installed) {
             super(context, R.layout.item_version);
             TypedValue typedValue = new TypedValue();
             Resources.Theme theme = context.getTheme();
@@ -186,8 +184,10 @@ public class DownloadDetailsVersionsFragment extends ListFragment {
             mInstalledVersionCode = (installed != null) ? installed.versionCode : -1;
         }
 
+        @SuppressLint("InflateParams")
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        @NonNull
+        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             View view = convertView;
             if (view == null) {
                 LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -206,7 +206,9 @@ public class DownloadDetailsVersionsFragment extends ListFragment {
 
             ViewHolder holder = (ViewHolder) view.getTag();
             ModuleVersion item = getItem(position);
-
+            if (item == null) {
+                return view;
+            }
             holder.txtVersion.setText(item.name);
             holder.txtRelType.setText(item.relType.getTitleId());
             holder.txtRelType.setTextColor(item.relType == ReleaseType.STABLE

@@ -2,13 +2,20 @@ package org.meowcat.edxposed.manager;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.FileUtils;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.Toolbar;
 import androidx.preference.Preference;
 import androidx.preference.SwitchPreference;
 
@@ -30,27 +37,28 @@ public class SettingsActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        setSupportActionBar(findViewById(R.id.toolbar));
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(view -> finish());
         ActionBar bar = getSupportActionBar();
         if (bar != null) {
             bar.setDisplayHomeAsUpEnabled(true);
         }
-
+        setupWindowInsets();
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new SettingsFragment()).commit();
+                    .add(R.id.container, SettingsFragment.newInstance(findViewById(R.id.snackbar))).commit();
         }
 
     }
-
 
     @SuppressWarnings({"ResultOfMethodCallIgnored", "deprecation"})
     public static class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
         static final File mDisableResourcesFlag = new File(XposedApp.BASE_DIR + "conf/disable_resources");
         static final File mDynamicModulesFlag = new File(XposedApp.BASE_DIR + "conf/dynamicmodules");
+        static final File mDeoptBootFlag = new File(XposedApp.BASE_DIR + "conf/deoptbootimage");
         static final File mWhiteListModeFlag = new File(XposedApp.BASE_DIR + "conf/usewhitelist");
         static final File mBlackWhiteListModeFlag = new File(XposedApp.BASE_DIR + "conf/blackwhitelist");
-        static final File mDeoptBootFlag = new File(XposedApp.BASE_DIR + "conf/deoptbootimage");
         static final File mDisableVerboseLogsFlag = new File(XposedApp.BASE_DIR + "conf/disable_verbose_log");
         static final File mDisableModulesLogsFlag = new File(XposedApp.BASE_DIR + "conf/disable_modules_log");
         static final File mVerboseLogProcessID = new File(XposedApp.BASE_DIR + "log/all.pid");
@@ -59,7 +67,12 @@ public class SettingsActivity extends BaseActivity {
         private Preference stopVerboseLog;
         private Preference stopLog;
 
-        public SettingsFragment() {
+        private View rootView;
+
+        static SettingsFragment newInstance(View rootView) {
+            SettingsFragment fragment = new SettingsFragment();
+            fragment.setRootView(rootView);
+            return fragment;
         }
 
         @SuppressWarnings("SameParameterValue")
@@ -74,6 +87,10 @@ public class SettingsActivity extends BaseActivity {
                 perms |= FileUtils.S_IWOTH;
             }
             FileUtils.setPermissions(name, perms, -1, -1);
+        }
+
+        void setRootView(View rootView) {
+            this.rootView = rootView;
         }
 
         @SuppressLint({"ObsoleteSdkInt", "WorldReadableFiles"})
@@ -307,6 +324,16 @@ public class SettingsActivity extends BaseActivity {
                 return (enabled == mDisableResourcesFlag.exists());
             });
 
+            Preference compat_mode = findPreference("compat_mode");
+            if (compat_mode != null) {
+                compat_mode.setOnPreferenceClickListener(preference -> {
+                    Intent intent = new Intent();
+                    intent.setClass(Objects.requireNonNull(getContext()), CompatListActivity.class);
+                    Objects.requireNonNull(getActivity()).startActivity(intent);
+                    return true;
+                });
+            }
+
         }
 
         @Override
@@ -367,5 +394,16 @@ public class SettingsActivity extends BaseActivity {
                     .show();
         }
 
+        @Override
+        public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+            if (rootView == null) {
+                return;
+            }
+            ((LinearLayout) ((FrameLayout) rootView.findViewById(R.id.container)).getChildAt(0)).setClipToPadding(false);
+            ((LinearLayout) ((FrameLayout) rootView.findViewById(R.id.container)).getChildAt(0)).setClipChildren(false);
+            ((FrameLayout) ((LinearLayout) view).getChildAt(0)).setClipChildren(false);
+            ((FrameLayout) ((LinearLayout) view).getChildAt(0)).setClipToPadding(false);
+        }
     }
 }

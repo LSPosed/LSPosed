@@ -13,17 +13,16 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?colorBackground"
+            android:background="?colorActionBar"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_layout"
+            style="@style/Widget.MaterialComponents.TabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabBackground="?colorBackground"
-            app:tabIndicatorColor="?android:textColorPrimary"
-            app:tabMode="scrollable"
-            app:tabTextColor="?android:textColorPrimary" />
+            android:background="?colorActionBar"
+            app:tabMode="scrollable" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

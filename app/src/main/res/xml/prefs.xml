@@ -6,12 +6,6 @@
         android:title="@string/settings_group_app"
         app:iconSpaceReserved="false">
 
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="colored_notification"
-            android:title="@string/notification_coloration"
-            app:iconSpaceReserved="false" />
-
         <org.meowcat.edxposed.manager.widget.IntegerListPreference
             android:defaultValue="-1"
             android:entries="@array/theme_texts"
@@ -25,35 +19,10 @@
             android:title="@string/pure_black_dark_theme"
             app:iconSpaceReserved="false" />
 
-        <org.meowcat.edxposed.manager.widget.IntegerListPreference
-            android:defaultValue="0"
-            android:entries="@array/default_view_texts"
-            android:entryValues="@array/default_view_values"
-            android:key="default_view"
-            android:summary="%s"
-            android:title="@string/settings_default_view"
-            app:iconSpaceReserved="false" />
-
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="chrome_tabs"
-            android:summary="@string/chrome_custom_tabs_summ"
-            android:title="@string/chrome_custom_tabs"
-            app:iconSpaceReserved="false" />
-
         <SwitchPreference
             android:defaultValue="true"
             android:key="confirm_reboots"
             android:title="@string/confirm_reboots"
-            app:iconSpaceReserved="false" />
-
-        <org.meowcat.edxposed.manager.widget.IntegerListPreference
-            android:defaultValue="0"
-            android:entries="@array/list_sort_texts"
-            android:entryValues="@array/list_sort_values"
-            android:key="list_sort"
-            android:summary="%s"
-            android:title="@string/list_sort"
             app:iconSpaceReserved="false" />
 
         <SwitchPreference
@@ -76,12 +45,6 @@
         android:key="group_download"
         android:title="@string/settings_group_download"
         app:iconSpaceReserved="false">
-
-        <Preference
-            android:key="download_location"
-            android:summary="@string/download_location_summ"
-            android:title="@string/download_location"
-            app:iconSpaceReserved="false" />
 
         <SwitchPreference
             android:defaultValue="false"
@@ -145,7 +108,11 @@
         android:key="group_framework"
         android:title="@string/settings_group_framework"
         app:iconSpaceReserved="false">
-
+        <Preference
+            android:key="compat_mode"
+            android:summary="@string/pref_compat_mode_summary"
+            android:title="@string/pref_compat_mode_title"
+            app:iconSpaceReserved="false" />
         <SwitchPreference
             android:defaultValue="false"
             android:key="black_white_list_switch"

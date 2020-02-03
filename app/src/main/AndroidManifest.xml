@@ -22,45 +22,44 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
+            android:name=".CompatListActivity"
+            android:label="@string/nav_title_compat_list"
+            android:parentActivityName=".SettingsActivity" />
+        <activity
             android:name=".AboutActivity"
-            android:label="@string/About"
-            android:parentActivityName=".MainActivity" />
+            android:label="@string/About" />
         <activity
             android:name=".LogsActivity"
-            android:label="@string/Logs"
-            android:parentActivityName=".MainActivity" />
+            android:label="@string/Logs" />
         <activity
             android:name=".EdDownloadActivity"
-            android:label="@string/Install"
-            android:parentActivityName=".MainActivity" />
+            android:label="@string/Install" />
         <activity android:name=".BlackListActivity" />
         <activity android:name=".DownloadDetailsActivity" />
         <activity
             android:name=".DownloadActivity"
-            android:label="@string/Downloads"
-            android:parentActivityName=".MainActivity" />
+            android:label="@string/Downloads" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:theme="@style/AppThemeMain">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
-
         </activity>
         <activity
             android:name=".ModulesActivity"
-            android:label="@string/Modules"
-            android:parentActivityName=".MainActivity" />
+            android:label="@string/Modules" />
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/Settings"
-            android:parentActivityName=".MainActivity" />
+            android:label="@string/Settings"/>
 
         <receiver
             android:name=".receivers.PackageChangeReceiver"
@@ -73,7 +72,6 @@
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
-
         <receiver
             android:name=".receivers.DownloadReceiver"
             android:exported="true"
@@ -82,15 +80,12 @@
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
             </intent-filter>
         </receiver>
-
         <receiver
             android:name=".util.NotificationUtil$RebootReceiver"
             android:exported="false" />
-
         <receiver
             android:name=".util.NotificationUtil$ApkReceiver"
             android:exported="false" />
-
         <receiver
             android:name=".receivers.BootReceiver"
             android:enabled="true"
@@ -106,7 +101,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
     </application>
 
 </manifest>

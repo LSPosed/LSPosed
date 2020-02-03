@@ -7,30 +7,47 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="72dp"
-        android:gravity="center_vertical">
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:clipChildren="false"
+        android:clipToPadding="false">
 
         <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="32dp"
+            android:id="@+id/app_icon"
+            android:layout_width="42dp"
+            android:layout_height="64dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:adjustViewBounds="true"
             android:contentDescription="@string/app_name"
-            android:src="@mipmap/ic_launcher" />
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_launcher_foreground" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_marginStart="25dp"
+            android:layout_toEndOf="@id/app_icon"
             android:text="@string/app_name"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textSize="20sp" />
 
-        <View
+        <ImageView
+            android:id="@+id/menu_more"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="?selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="5dp"
+            app:srcCompat="@drawable/ic_more" />
+    </RelativeLayout>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/activity_main_status"

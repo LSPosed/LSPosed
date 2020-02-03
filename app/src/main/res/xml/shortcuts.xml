@@ -11,8 +11,7 @@
         <intent
             android:action="android.intent.action.MAIN"
             android:targetClass="org.meowcat.edxposed.manager.ModulesActivity"
-            android:targetPackage="org.meowcat.edxposed.manager">
-        </intent>
+            android:targetPackage="org.meowcat.edxposed.manager"></intent>
     </shortcut>
 
     <shortcut
@@ -25,8 +24,7 @@
         <intent
             android:action="android.intent.action.MAIN"
             android:targetClass="org.meowcat.edxposed.manager.DownloadActivity"
-            android:targetPackage="org.meowcat.edxposed.manager">
-        </intent>
+            android:targetPackage="org.meowcat.edxposed.manager"></intent>
     </shortcut>
 
 </shortcuts>

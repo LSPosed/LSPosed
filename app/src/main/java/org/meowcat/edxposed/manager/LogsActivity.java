@@ -22,6 +22,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
@@ -52,11 +53,14 @@ public class LogsActivity extends BaseActivity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_logs);
-        setSupportActionBar(findViewById(R.id.toolbar));
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(view -> finish());
         ActionBar bar = getSupportActionBar();
         if (bar != null) {
             bar.setDisplayHomeAsUpEnabled(true);
         }
+        setupWindowInsets();
         mTxtLog = findViewById(R.id.txtLog);
         mTxtLog.setTextIsSelectable(true);
         mSVLog = findViewById(R.id.svLog);
@@ -163,7 +167,7 @@ public class LogsActivity extends BaseActivity {
     }
 
     private void send() {
-        Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(this), "org.meowcat.edxposed.manager.fileprovider", errorLog ? mFileErrorLogError : mFileErrorLog);
+        Uri uri = FileProvider.getUriForFile(this, "org.meowcat.edxposed.manager.fileprovider", errorLog ? mFileErrorLogError : mFileErrorLog);
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_STREAM, uri);

@@ -21,7 +21,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
 import org.meowcat.edxposed.manager.repo.Module;
@@ -40,7 +39,6 @@ public class DownloadDetailsActivity extends BaseActivity implements RepoLoader.
     static final String PLAY_STORE_PACKAGE = "com.android.vending";
     static final String PLAY_STORE_LINK = "https://play.google.com/store/apps/details?id=%s";
     private static final String TAG = "DownloadDetailsActivity";
-    private static final String NOT_ACTIVE_NOTE_TAG = "NOT_ACTIVE_NOTE";
     private static RepoLoader sRepoLoader = RepoLoader.getInstance();
     private static ModuleUtil sModuleUtil = ModuleUtil.getInstance();
     private ViewPager mPager;
@@ -71,7 +69,6 @@ public class DownloadDetailsActivity extends BaseActivity implements RepoLoader.
 
             Toolbar toolbar = findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
-
             toolbar.setNavigationOnClickListener(view -> finish());
 
             ActionBar ab = getSupportActionBar();
@@ -99,6 +96,7 @@ public class DownloadDetailsActivity extends BaseActivity implements RepoLoader.
                 sRepoLoader.triggerReload(true);
             });
         }
+        setupWindowInsets();
     }
 
     private void setupTabs() {
@@ -106,7 +104,6 @@ public class DownloadDetailsActivity extends BaseActivity implements RepoLoader.
         mPager.setAdapter(new SwipeFragmentPagerAdapter(getSupportFragmentManager()));
         TabLayout mTabLayout = findViewById(R.id.sliding_tabs);
         mTabLayout.setupWithViewPager(mPager);
-        mTabLayout.setBackgroundColor(XposedApp.getColor(this));
     }
 
     private String getModulePackageName() {
@@ -183,26 +180,7 @@ public class DownloadDetailsActivity extends BaseActivity implements RepoLoader.
         } else {
             menu.removeItem(R.id.ignoreUpdate);
         }
-        setupBookmark(false);
         return true;
-    }
-
-    private void setupBookmark(boolean clicked) {
-        SharedPreferences myPref = getSharedPreferences("bookmarks", MODE_PRIVATE);
-
-        boolean saved = myPref.getBoolean(mModule.packageName, false);
-        boolean newValue;
-
-        if (clicked) {
-            newValue = !saved;
-            myPref.edit().putBoolean(mModule.packageName, newValue).apply();
-
-            int msg = newValue ? R.string.bookmark_added : R.string.bookmark_removed;
-
-            Snackbar.make(findViewById(android.R.id.content), msg, Snackbar.LENGTH_SHORT).show();
-        }
-
-        saved = myPref.getBoolean(mModule.packageName, false);
     }
 
     @Override
@@ -265,7 +243,7 @@ public class DownloadDetailsActivity extends BaseActivity implements RepoLoader.
         private String[] tabTitles = new String[]{getString(R.string.download_details_page_description), getString(R.string.download_details_page_versions), getString(R.string.download_details_page_settings),};
 
         SwipeFragmentPagerAdapter(FragmentManager fm) {
-            super(fm);
+            super(fm, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         }
 
         @Override

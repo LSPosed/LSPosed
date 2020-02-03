@@ -18,7 +18,9 @@
                 android:id="@+id/container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="6dp">
+                android:padding="6dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
 
                 <Spinner
                     android:id="@+id/chooserInstallers"
@@ -41,11 +43,14 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_gravity="center"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:padding="5dp"
                     android:src="@drawable/ic_info"
                     tools:ignore="ContentDescription,RtlHardcoded" />
 
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/warning_unstable"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -54,23 +59,25 @@
                     android:visibility="gone"
                     app:cardBackgroundColor="@color/amber_500">
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:orientation="horizontal"
                         tools:ignore="UseCompoundDrawables">
 
                         <ImageView
+                            android:id="@+id/warning"
                             android:layout_width="50dp"
                             android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
                             android:layout_margin="8dp"
                             android:src="@drawable/ic_warning"
                             tools:ignore="ContentDescription" />
 
                         <TextView
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toEndOf="@+id/warning"
                             android:paddingStart="8dp"
                             android:paddingEnd="8dp"
                             android:text="@string/unstable_build"
@@ -78,11 +85,11 @@
                             android:textAllCaps="true"
                             android:textStyle="bold" />
 
-                    </LinearLayout>
+                    </RelativeLayout>
 
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
 
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/warning_unofficial"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -117,7 +124,7 @@
 
                     </LinearLayout>
 
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
 
                 <Button
                     android:id="@+id/btnInstall"
@@ -153,6 +160,9 @@
                     android:layout_alignParentRight="true"
                     android:layout_gravity="center|end"
                     android:layout_marginTop="5dp"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:padding="5dp"
                     android:src="@drawable/ic_info"
                     tools:ignore="ContentDescription,RtlHardcoded" />
@@ -171,7 +181,7 @@
 
             <LinearLayout
                 android:id="@+id/author_view"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/container"
                 android:layout_marginTop="4dp"
@@ -191,7 +201,7 @@
                     tools:ignore="ContentDescription" />
 
                 <LinearLayout
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
                     android:layout_marginLeft="32dp"
@@ -213,7 +223,7 @@
 
             <LinearLayout
                 android:id="@+id/show_on_xda"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/author_view"
                 android:background="?android:attr/selectableItemBackground"
@@ -232,7 +242,7 @@
                     tools:ignore="ContentDescription" />
 
                 <LinearLayout
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
                     android:layout_marginLeft="32dp"
@@ -253,7 +263,7 @@
 
             <LinearLayout
                 android:id="@+id/updateDescription"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/show_on_xda"
                 android:background="?android:attr/selectableItemBackground"
@@ -272,7 +282,7 @@
                     tools:ignore="ContentDescription" />
 
                 <LinearLayout
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
                     android:layout_marginLeft="32dp"
@@ -292,7 +302,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/updateDescription"
                 android:background="?android:attr/selectableItemBackground"
@@ -311,7 +321,7 @@
                     tools:ignore="ContentDescription" />
 
                 <LinearLayout
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
                     android:layout_marginLeft="32dp"

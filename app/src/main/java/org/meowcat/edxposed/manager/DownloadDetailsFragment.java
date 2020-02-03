@@ -1,6 +1,5 @@
 package org.meowcat.edxposed.manager;
 
-import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
@@ -10,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import org.meowcat.edxposed.manager.repo.Module;
@@ -18,20 +18,17 @@ import org.meowcat.edxposed.manager.util.NavUtil;
 import org.meowcat.edxposed.manager.util.chrome.LinkTransformationMethod;
 
 public class DownloadDetailsFragment extends Fragment {
-    private DownloadDetailsActivity mActivity;
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = (DownloadDetailsActivity) activity;
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final Module module = mActivity.getModule();
-        if (module == null)
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        DownloadDetailsActivity mActivity = (DownloadDetailsActivity) getActivity();
+        if (mActivity == null) {
             return null;
-
+        }
+        final Module module = mActivity.getModule();
+        if (module == null) {
+            return null;
+        }
         final View view = inflater.inflate(R.layout.download_details, container, false);
 
         TextView title = view.findViewById(R.id.download_title);
@@ -70,12 +67,7 @@ public class DownloadDetailsFragment extends Fragment {
             final Uri link = NavUtil.parseURL(moreInfoEntry.second);
             if (link != null) {
                 txtValue.setTextColor(txtValue.getLinkTextColors());
-                moreInfoView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        NavUtil.startURL(getActivity(), link);
-                    }
-                });
+                moreInfoView.setOnClickListener(v -> NavUtil.startURL(getActivity(), link));
             }
 
             moreInfoContainer.addView(moreInfoView);

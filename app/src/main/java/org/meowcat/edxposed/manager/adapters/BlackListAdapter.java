@@ -23,10 +23,6 @@ public class BlackListAdapter extends AppAdapter {
         this.isWhiteListMode = isWhiteListMode;
     }
 
-//    public void setWhiteListMode(boolean isWhiteListMode) {
-//        this.isWhiteListMode = isWhiteListMode;
-//    }
-
     @Override
     protected List<String> generateCheckedList() {
         if (XposedApp.getPreferences().getBoolean("hook_modules", true)) {

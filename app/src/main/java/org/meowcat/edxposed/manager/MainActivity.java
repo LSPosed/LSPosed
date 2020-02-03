@@ -9,6 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.appcompat.view.menu.MenuPopupHelper;
+import androidx.appcompat.widget.PopupMenu;
 
 import com.google.android.material.card.MaterialCardView;
 
@@ -61,6 +64,15 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
             Intent intent = new Intent();
             intent.setClass(getApplicationContext(), AboutActivity.class);
             startActivity(intent);
+        });
+        ImageView menu = findViewById(R.id.menu_more);
+        menu.setOnClickListener(v -> {
+            PopupMenu appMenu = new PopupMenu(MainActivity.this, menu);
+            appMenu.inflate(R.menu.menu_installer);
+            appMenu.setOnMenuItemClickListener(this::onOptionsItemSelected);
+            MenuPopupHelper menuHelper = new MenuPopupHelper(MainActivity.this, (MenuBuilder) appMenu.getMenu(), menu);
+            menuHelper.setForceShowIcon(true);
+            menuHelper.show();
         });
         String installedXposedVersion;
         try {
@@ -131,24 +143,21 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
 
     @SuppressLint("SetTextI18n")
     private void notifyDataSetChanged() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                String frameworkUpdateVersion = mRepoLoader.getFrameworkUpdateVersion();
-                boolean moduleUpdateAvailable = mRepoLoader.hasModuleUpdates();
-                ModuleUtil.getInstance().getEnabledModules().size();
-                TextView description = findViewById(R.id.activity_main_modules_summary);
-                description.setText(String.format(getString(R.string.ModulesDetail), ModuleUtil.getInstance().getEnabledModules().size()));
-                if (frameworkUpdateVersion != null) {
-                    description = findViewById(R.id.activity_main_status_summary);
-                    description.setText(String.format(getString(R.string.welcome_framework_update_available), frameworkUpdateVersion));
-                }
-                description = findViewById(R.id.activity_main_download_summary);
-                if (moduleUpdateAvailable) {
-                    description.setText(R.string.modules_updates_available);
-                } else {
-                    description.setText(R.string.ModuleUptodate);
-                }
+        runOnUiThread(() -> {
+            String frameworkUpdateVersion = mRepoLoader.getFrameworkUpdateVersion();
+            boolean moduleUpdateAvailable = mRepoLoader.hasModuleUpdates();
+            ModuleUtil.getInstance().getEnabledModules().size();
+            TextView description = findViewById(R.id.activity_main_modules_summary);
+            description.setText(String.format(getString(R.string.ModulesDetail), ModuleUtil.getInstance().getEnabledModules().size()));
+            if (frameworkUpdateVersion != null) {
+                description = findViewById(R.id.activity_main_status_summary);
+                description.setText(String.format(getString(R.string.welcome_framework_update_available), frameworkUpdateVersion));
+            }
+            description = findViewById(R.id.activity_main_download_summary);
+            if (moduleUpdateAvailable) {
+                description.setText(R.string.modules_updates_available);
+            } else {
+                description.setText(R.string.ModuleUptodate);
             }
         });
     }

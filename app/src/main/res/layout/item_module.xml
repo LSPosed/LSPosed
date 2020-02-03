@@ -1,10 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:background="?selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
     android:minHeight="?android:attr/listPreferredItemHeight">
 
     <LinearLayout
@@ -15,17 +17,21 @@
         android:padding="8dp">
 
         <ImageView
-            android:id="@+id/icon"
-            android:layout_width="48dip"
-            android:layout_height="48dip"
+            android:id="@+id/app_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:gravity="end"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/app_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:ignore="ContentDescription" />
 
         <LinearLayout
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="4dip"
-            android:layout_marginEnd="4dip"
+            android:layout_marginStart="4dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -34,7 +40,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/title"
+                    android:id="@+id/app_name"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="4dip"
@@ -76,7 +82,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp" />
+                    android:layout_marginTop="2dp"
+                    android:text="@string/install_time" />
 
                 <TextView
                     android:id="@+id/tvInstallTime"
@@ -98,7 +105,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp" />
+                    android:layout_marginTop="2dp"
+                    android:text="@string/update_time" />
 
                 <TextView
                     android:id="@+id/tvUpdateTime"
@@ -119,7 +127,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textIsSelectable="false" />
+                android:textIsSelectable="false"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/warning"
@@ -135,10 +144,14 @@
         <Switch
             android:id="@+id/checkbox"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:checked="false"
             android:focusable="false"
-            android:gravity="top"
-            android:padding="3dp" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/app_name"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </LinearLayout>
 </FrameLayout>

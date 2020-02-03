@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.annotation.StringRes;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 
 import com.topjohnwu.superuser.Shell;
 
@@ -88,10 +89,7 @@ public final class NotificationUtil {
 
         if (prefs.getBoolean(HEADS_UP, true) && Build.VERSION.SDK_INT >= 21)
             builder.setPriority(2);
-
-        if (prefs.getBoolean(COLORED_NOTIFICATION, false))
-            builder.setColor(XposedApp.getColor(sContext));
-
+        builder.setColor(ContextCompat.getColor(sContext, R.color.colorPrimary));
         Intent iActivateAndReboot = new Intent(sContext, RebootReceiver.class);
         iActivateAndReboot.putExtra(RebootReceiver.EXTRA_ACTIVATE_MODULE, packageName);
         PendingIntent pActivateAndReboot = PendingIntent.getBroadcast(sContext, PENDING_INTENT_ACTIVATE_MODULE_AND_REBOOT,
@@ -138,10 +136,7 @@ public final class NotificationUtil {
 
         if (prefs.getBoolean(HEADS_UP, true) && Build.VERSION.SDK_INT >= 21)
             builder.setPriority(2);
-
-        if (prefs.getBoolean(COLORED_NOTIFICATION, false))
-            builder.setColor(XposedApp.getColor(sContext));
-
+        builder.setColor(ContextCompat.getColor(sContext, R.color.colorPrimary));
         Intent iSoftReboot = new Intent(sContext, RebootReceiver.class);
         iSoftReboot.putExtra(RebootReceiver.EXTRA_SOFT_REBOOT, true);
         PendingIntent pSoftReboot = PendingIntent.getBroadcast(sContext, PENDING_INTENT_SOFT_REBOOT,
@@ -178,10 +173,7 @@ public final class NotificationUtil {
 
         if (prefs.getBoolean(HEADS_UP, true) && Build.VERSION.SDK_INT >= 21)
             builder.setPriority(2);
-
-        if (prefs.getBoolean(COLORED_NOTIFICATION, false))
-            builder.setColor(XposedApp.getColor(sContext));
-
+        builder.setColor(ContextCompat.getColor(sContext, R.color.colorPrimary));
         NotificationCompat.BigTextStyle notiStyle = new NotificationCompat.BigTextStyle();
         notiStyle.setBigContentTitle(title);
         notiStyle.bigText(message);
@@ -203,10 +195,7 @@ public final class NotificationUtil {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(sContext).setContentTitle(title).setContentText(message)
                 .setVibrate(new long[]{0}).setProgress(0, 0, true)
                 .setSmallIcon(R.drawable.ic_notification).setOngoing(true);
-
-        if (prefs.getBoolean(COLORED_NOTIFICATION, false))
-            builder.setColor(XposedApp.getColor(sContext));
-
+        builder.setColor(ContextCompat.getColor(sContext, R.color.colorPrimary));
         NotificationCompat.BigTextStyle notiStyle = new NotificationCompat.BigTextStyle();
         notiStyle.setBigContentTitle(title);
         notiStyle.bigText(message);
@@ -232,10 +221,7 @@ public final class NotificationUtil {
 
         if (prefs.getBoolean(HEADS_UP, true) && Build.VERSION.SDK_INT >= 21)
             builder.setPriority(2);
-
-        if (prefs.getBoolean(COLORED_NOTIFICATION, false))
-            builder.setColor(XposedApp.getColor(sContext));
-
+        builder.setColor(ContextCompat.getColor(sContext, R.color.colorPrimary));
         NotificationCompat.BigTextStyle notiStyle = new NotificationCompat.BigTextStyle();
         notiStyle.setBigContentTitle(title);
         notiStyle.bigText(message);

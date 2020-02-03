@@ -4,15 +4,19 @@
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorBackground</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorActionBar">@color/colorActionBar</item>
         <item name="android:colorBackground">@color/colorBackground</item>
         <item name="android:windowBackground">@color/colorBackground</item>
-        <item name="colorBackground">@color/colorBackground</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">@bool/lightSystemUI</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">@bool/lightSystemUI
         </item>
         <item name="android:navigationBarColor">@color/navigationBarColor</item>
+    </style>
+
+    <style name="AppThemeMain" parent="AppTheme">
+        <item name="colorPrimaryDark">@color/colorBackground</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.ActionBar" />
@@ -23,9 +27,9 @@
 
     <style name="ThemeOverlay.Black">
         <item name="colorPrimaryDark">@android:color/black</item>
+        <item name="colorActionBar">@android:color/black</item>
         <item name="android:navigationBarColor">@android:color/black</item>
         <item name="android:colorBackground">@android:color/black</item>
         <item name="android:windowBackground">@android:color/black</item>
-        <item name="colorBackground">@android:color/black</item>
     </style>
 </resources>

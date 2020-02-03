@@ -1,6 +1,5 @@
 package org.meowcat.edxposed.manager;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,19 +15,18 @@ import org.meowcat.edxposed.manager.util.RepoLoader;
 import java.util.Map;
 
 public class DownloadDetailsSettingsFragment extends PreferenceFragmentCompat {
-    private DownloadDetailsActivity mActivity;
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = (DownloadDetailsActivity) activity;
-    }
 
     @Override
     public void onCreatePreferencesFix(Bundle savedInstanceState, String rootKey) {
-        final Module module = mActivity.getModule();
-        if (module == null)
+        DownloadDetailsActivity mActivity = (DownloadDetailsActivity) getActivity();
+        if (mActivity == null) {
             return;
+        }
+        final Module module = mActivity.getModule();
+        if (module == null) {
+            return;
+        }
 
         final String packageName = module.packageName;
 

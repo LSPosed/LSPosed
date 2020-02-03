@@ -1,6 +1,5 @@
 package org.meowcat.edxposed.manager;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -33,7 +32,7 @@ import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.SearchView;
-import androidx.core.app.ActivityCompat;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -119,11 +118,14 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modules);
-        setSupportActionBar(findViewById(R.id.toolbar));
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(view -> finish());
         ActionBar bar = getSupportActionBar();
         if (bar != null) {
             bar.setDisplayHomeAsUpEnabled(true);
         }
+        setupWindowInsets();
         filter = new ApplicationFilter();
         mModuleUtil = ModuleUtil.getInstance();
         mPm = getPackageManager();
@@ -276,15 +278,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         return super.onOptionsItemSelected(item);
     }
 
-    private boolean checkPermissions() {
-        if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(this), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, XposedApp.WRITE_EXTERNAL_PERMISSION);
-            }
-            return true;
-        }
-        return false;
-    }
 
     private boolean importModules(File path) {
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
@@ -551,9 +544,9 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             holder.appIcon.setImageDrawable(item.getIcon());
 
             TextView descriptionText = holder.appDescription;
+            descriptionText.setVisibility(View.VISIBLE);
             if (!item.getDescription().isEmpty()) {
                 descriptionText.setText(item.getDescription());
-                //descriptionText.setTextColor(ThemeUtil.getThemeColor(this, android.R.attr.textColorSecondary));
             } else {
                 descriptionText.setText(getString(R.string.module_empty_description));
                 descriptionText.setTextColor(getResources().getColor(R.color.warning));
@@ -634,8 +627,8 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
 
             ViewHolder(View itemView) {
                 super(itemView);
-                appIcon = itemView.findViewById(R.id.icon);
-                appName = itemView.findViewById(R.id.title);
+                appIcon = itemView.findViewById(R.id.app_icon);
+                appName = itemView.findViewById(R.id.app_name);
                 appDescription = itemView.findViewById(R.id.description);
                 appPackage = itemView.findViewById(R.id.package_name);
                 appVersion = itemView.findViewById(R.id.version_name);

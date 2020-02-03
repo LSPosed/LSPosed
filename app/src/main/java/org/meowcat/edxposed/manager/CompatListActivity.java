@@ -1,6 +1,5 @@
 package org.meowcat.edxposed.manager;
 
-import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.view.Menu;
@@ -16,16 +15,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-
 import org.meowcat.edxposed.manager.adapters.AppAdapter;
 import org.meowcat.edxposed.manager.adapters.AppHelper;
-import org.meowcat.edxposed.manager.adapters.BlackListAdapter;
+import org.meowcat.edxposed.manager.adapters.CompatListAdapter;
 
-public class BlackListActivity extends BaseActivity implements AppAdapter.Callback {
+public class CompatListActivity extends BaseActivity implements AppAdapter.Callback {
+
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private SearchView mSearchView;
-    private BlackListAdapter mAppAdapter;
+    private CompatListAdapter mAppAdapter;
 
     private SearchView.OnQueryTextListener mSearchListener;
 
@@ -43,17 +41,17 @@ public class BlackListActivity extends BaseActivity implements AppAdapter.Callba
         setupWindowInsets();
         mSwipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         RecyclerView mRecyclerView = findViewById(R.id.recyclerView);
-
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        final boolean isWhiteListMode = isWhiteListMode();
-        mAppAdapter = new BlackListAdapter(this, isWhiteListMode);
+        mAppAdapter = new CompatListAdapter(this);
         mRecyclerView.setAdapter(mAppAdapter);
-        mAppAdapter.setCallback(this);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
                 DividerItemDecoration.VERTICAL);
         mRecyclerView.addItemDecoration(dividerItemDecoration);
+        mAppAdapter.setCallback(this);
+
         mSwipeRefreshLayout.setRefreshing(true);
         mSwipeRefreshLayout.setOnRefreshListener(mAppAdapter::refresh);
+
         mSearchListener = new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -70,45 +68,16 @@ public class BlackListActivity extends BaseActivity implements AppAdapter.Callba
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         getMenuInflater().inflate(R.menu.menu_app_list, menu);
         mSearchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
         mSearchView.setOnQueryTextListener(mSearchListener);
         return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (!AppHelper.isBlackListMode()) {
-            new MaterialAlertDialogBuilder(this)
-                    .setMessage(R.string.warning_list_not_enabled)
-                    .setPositiveButton(R.string.Settings, (dialog, which) -> {
-                        Intent intent = new Intent();
-                        intent.setClass(BlackListActivity.this, SettingsActivity.class);
-                        startActivity(intent);
-                    })
-                    .setCancelable(false)
-                    .show();
-        }
-        changeTitle(isBlackListMode(), isWhiteListMode());
-    }
-
-
-    private void changeTitle(boolean isBlackListMode, boolean isWhiteListMode) {
-        if (isBlackListMode) {
-            setTitle(isWhiteListMode ? R.string.title_white_list : R.string.title_black_list);
-        } else {
-            setTitle(R.string.nav_title_black_list);
-        }
-    }
-
-    private boolean isWhiteListMode() {
-        return AppHelper.isWhiteListMode();
-    }
-
-    private boolean isBlackListMode() {
-        return AppHelper.isBlackListMode();
     }
 
     @Override
@@ -120,12 +89,7 @@ public class BlackListActivity extends BaseActivity implements AppAdapter.Callba
 
     @Override
     public void onItemClick(View v, ApplicationInfo info) {
-        getSupportFragmentManager();
         AppHelper.showMenu(this, getSupportFragmentManager(), v, info);
-    }
-
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
 
@@ -136,5 +100,10 @@ public class BlackListActivity extends BaseActivity implements AppAdapter.Callba
         } else {
             mSearchView.setIconified(true);
         }
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 }

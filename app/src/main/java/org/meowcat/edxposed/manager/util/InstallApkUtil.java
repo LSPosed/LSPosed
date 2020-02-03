@@ -115,8 +115,6 @@ public class InstallApkUtil extends AsyncTask<Void, Void, Integer> {
                 out.append(o);
                 out.append("\n");
             }
-//            Pattern failurePattern = Pattern.compile("(?m)^Failure\\s+\\[(.*?)]$");
-//            Matcher failureMatcher = failurePattern.matcher(out);
 
             if (result.equals(0)) {
                 NotificationUtil.showModuleInstallNotification(R.string.installation_successful, R.string.installation_successful_message, info.localFilename, info.title);

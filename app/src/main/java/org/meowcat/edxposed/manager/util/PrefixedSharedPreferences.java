@@ -15,7 +15,7 @@ public class PrefixedSharedPreferences implements SharedPreferences {
     private final SharedPreferences mBase;
     private final String mPrefix;
 
-    public PrefixedSharedPreferences(SharedPreferences base, String prefix) {
+    private PrefixedSharedPreferences(SharedPreferences base, String prefix) {
         mBase = base;
         mPrefix = prefix + "_";
     }

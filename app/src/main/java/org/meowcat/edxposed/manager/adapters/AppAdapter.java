@@ -34,7 +34,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
 
     protected final Context context;
     private final ApplicationInfo.DisplayNameComparator displayNameComparator;
-    public Callback callback;
+    private Callback callback;
     private List<ApplicationInfo> fullList, showList;
     private DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     private List<String> checkedList;
@@ -60,7 +60,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context).inflate(R.layout.item_app, parent, false);
+        View v = LayoutInflater.from(context).inflate(R.layout.item_module, parent, false);
         return new ViewHolder(v);
     }
 
@@ -186,7 +186,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         holder.mSwitch.setChecked(checkedList.contains(info.packageName));
         holder.mSwitch.setOnCheckedChangeListener((v, isChecked) ->
                 onCheckedChange(v, isChecked, info));
-        holder.infoLayout.setOnClickListener(v -> {
+        holder.itemView.setOnClickListener(v -> {
             if (callback != null) {
                 callback.onItemClick(v, info);
             }
@@ -218,7 +218,6 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        View infoLayout;
         ImageView appIcon;
         TextView appName;
         TextView appPackage;
@@ -229,7 +228,6 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
 
         ViewHolder(View itemView) {
             super(itemView);
-            infoLayout = itemView.findViewById(R.id.info_layout);
             appIcon = itemView.findViewById(R.id.app_icon);
             appName = itemView.findViewById(R.id.app_name);
             appPackage = itemView.findViewById(R.id.package_name);

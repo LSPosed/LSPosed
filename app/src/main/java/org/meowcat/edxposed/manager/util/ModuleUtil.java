@@ -212,8 +212,7 @@ public final class ModuleUtil {
         try {
             Log.i(XposedApp.TAG, "ModuleUtil -> updating modules.list");
             int installedXposedVersion = XposedApp.getXposedVersion();
-            boolean disabled = false;//StatusInstallerFragment.DISABLE_FILE.exists();
-            if (!XposedApp.getPreferences().getBoolean("skip_xposedminversion_check", false) && !disabled && installedXposedVersion <= 0 && showToast) {
+            if (!XposedApp.getPreferences().getBoolean("skip_xposedminversion_check", false) && installedXposedVersion <= 0 && showToast) {
                 Toast.makeText(mApp, R.string.notinstalled, Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -223,7 +222,7 @@ public final class ModuleUtil {
             List<InstalledModule> enabledModules = getEnabledModules();
             for (InstalledModule module : enabledModules) {
 
-                if (!XposedApp.getPreferences().getBoolean("skip_xposedminversion_check", false) && (!disabled && (module.minVersion > installedXposedVersion || module.minVersion < MIN_MODULE_VERSION)) && showToast) {
+                if (!XposedApp.getPreferences().getBoolean("skip_xposedminversion_check", false) && (module.minVersion > installedXposedVersion || module.minVersion < MIN_MODULE_VERSION) && showToast) {
                     Toast.makeText(mApp, R.string.notinstalled, Toast.LENGTH_SHORT).show();
                     continue;
                 }
@@ -305,7 +304,6 @@ public final class ModuleUtil {
             this.isFramework = isFramework;
             this.versionName = pkg.versionName;
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
-                //noinspection deprecation
                 this.versionCode = pkg.versionCode;
             } else {
                 this.versionCode = pkg.getLongVersionCode();
@@ -337,12 +335,6 @@ public final class ModuleUtil {
             return (app.flags & ApplicationInfo.FLAG_EXTERNAL_STORAGE) != 0;
         }
 
-        /**
-         * @hide
-         */
-//        public boolean isForwardLocked() {
-//            return (app.flags & FLAG_FORWARD_LOCK) != 0;
-//        }
         public String getAppName() {
             if (appName == null)
                 appName = app.loadLabel(mPm).toString();

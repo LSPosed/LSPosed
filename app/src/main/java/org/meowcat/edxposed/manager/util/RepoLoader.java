@@ -1,6 +1,9 @@
 package org.meowcat.edxposed.manager.util;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteException;
 import android.net.ConnectivityManager;
@@ -11,6 +14,9 @@ import android.widget.Toast;
 
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
+import org.meowcat.edxposed.manager.DownloadActivity;
 import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.XposedApp;
 import org.meowcat.edxposed.manager.repo.Module;
@@ -43,7 +49,7 @@ public class RepoLoader {
     private static RepoLoader mInstance = null;
     private final List<RepoListener> mListeners = new CopyOnWriteArrayList<>();
     private final Map<String, ReleaseType> mLocalReleaseTypesCache = new HashMap<>();
-    private XposedApp mApp = null;
+    private XposedApp mApp;
     private SharedPreferences mPref;
     private SharedPreferences mModulePref;
     private ConnectivityManager mConMgr;
@@ -206,11 +212,9 @@ public class RepoLoader {
                 mPref.edit().putLong("last_update_check", System.currentTimeMillis()).apply();
 
                 if (!messages.isEmpty()) {
-                    XposedApp.runOnUiThread(new Runnable() {
-                        public void run() {
-                            for (String message : messages) {
-                                Toast.makeText(mApp, message, Toast.LENGTH_LONG).show();
-                            }
+                    XposedApp.runOnUiThread(() -> {
+                        for (String message : messages) {
+                            Toast.makeText(mApp, message, Toast.LENGTH_LONG).show();
                         }
                     });
                 }
@@ -250,7 +254,7 @@ public class RepoLoader {
                 return;
 
             RepoDb.deleteRepositories();
-            mRepositories = new LinkedHashMap<Long, Repository>(0);
+            mRepositories = new LinkedHashMap<>(0);
             DownloadsUtil.clearCache(null);
             resetLastUpdateCheck();
         }
@@ -363,30 +367,18 @@ public class RepoLoader {
 
                 RepoDb.setTransactionSuccessful();
             } catch (SQLiteException e) {
-                XposedApp.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        /*new MaterialDialog.Builder(DownloadFragment.sActivity)
-                                .title(R.string.restart_needed)
-                                .content(R.string.cache_cleaned)
-                                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                    @Override
-                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                        Intent i = new Intent(DownloadFragment.sActivity, WelcomeActivity.class);
-                                        i.putExtra("fragment", 2);
-
-                                        PendingIntent pi = PendingIntent.getActivity(DownloadFragment.sActivity, 0, i, PendingIntent.FLAG_CANCEL_CURRENT);
-
-                                        AlarmManager mgr = (AlarmManager) mApp.getSystemService(Context.ALARM_SERVICE);
-                                        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, pi);
-                                        System.exit(0);
-                                    }
-                                })
-                                .positiveText(R.string.ok)
-                                .canceledOnTouchOutside(false)
-                                .show();*/
-                    }
-                });
+                XposedApp.runOnUiThread(() -> new MaterialAlertDialogBuilder(mApp)
+                        .setTitle(R.string.restart_needed)
+                        .setMessage(R.string.cache_cleaned)
+                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                            Intent i = new Intent(mApp, DownloadActivity.class);
+                            PendingIntent pi = PendingIntent.getActivity(mApp, 0, i, PendingIntent.FLAG_CANCEL_CURRENT);
+                            AlarmManager mgr = (AlarmManager) mApp.getSystemService(Context.ALARM_SERVICE);
+                            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, pi);
+                            System.exit(0);
+                        })
+                        .setCancelable(false)
+                        .show());
 
                 DownloadsUtil.clearCache(url);
             } catch (Throwable t) {

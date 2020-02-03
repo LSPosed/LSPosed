@@ -35,13 +35,6 @@ import java.util.Objects;
 import static org.meowcat.edxposed.manager.XposedApp.WRITE_EXTERNAL_PERMISSION;
 
 public class BaseAdvancedInstaller extends Fragment {
-
-    //    private static final String JAR_PATH = XposedApp.BASE_DIR + "bin/XposedBridge.jar";
-//    private static final int INSTALL_MODE_NORMAL = 0;
-//    private static final int INSTALL_MODE_RECOVERY_AUTO = 1;
-//    private static final int INSTALL_MODE_RECOVERY_MANUAL = 2;
-//    private static String APP_PROCESS_NAME = null;
-    //private List<String> messages = new ArrayList<>();
     private View mClickedButton;
 
     static BaseAdvancedInstaller newInstance(XposedTab tab) {
@@ -68,16 +61,6 @@ public class BaseAdvancedInstaller extends Fragment {
         XposedTab tab = Objects.requireNonNull(getArguments()).getParcelable("tab");
         return Objects.requireNonNull(tab).notice;
     }
-
-//    private String compatibility() {
-//        XposedTab tab = Objects.requireNonNull(getArguments()).getParcelable("tab");
-//        return Objects.requireNonNull(tab).getCompatibility();
-//    }
-
-//    private String incompatibility() {
-//        XposedTab tab = Objects.requireNonNull(getArguments()).getParcelable("tab");
-//        return Objects.requireNonNull(tab).getIncompatibility();
-//    }
 
     protected String author() {
         XposedTab tab = Objects.requireNonNull(getArguments()).getParcelable("tab");

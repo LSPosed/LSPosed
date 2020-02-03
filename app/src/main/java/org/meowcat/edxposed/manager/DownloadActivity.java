@@ -8,11 +8,9 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,7 +21,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
-import androidx.core.view.MenuItemCompat;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -55,18 +53,7 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
     private BroadcastReceiver connectionListener = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            ConnectivityManager cm = (ConnectivityManager) context.getSystemService(CONNECTIVITY_SERVICE);
-            NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-
             if (mRepoLoader != null) {
-               /*if (networkInfo == null) {
-                    ((TextView) backgroundList.findViewById(R.id.list_status)).setText(R.string.no_connection_available);
-                    backgroundList.findViewById(R.id.progress).setVisibility(View.GONE);
-                } else {
-                    ((TextView) backgroundList.findViewById(R.id.list_status)).setText(R.string.update_download_list);
-                    backgroundList.findViewById(R.id.progress).setVisibility(View.VISIBLE);
-                }
-*/
                 mRepoLoader.triggerReload(true);
             }
         }
@@ -77,12 +64,15 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_download);
-        setSupportActionBar(findViewById(R.id.toolbar));
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(view -> finish());
         ActionBar bar = getSupportActionBar();
         if (bar != null) {
             bar.setDisplayHomeAsUpEnabled(true);
         }
 
+        setupWindowInsets();
         mPref = XposedApp.getPreferences();
         mRepoLoader = RepoLoader.getInstance();
         mModuleUtil = ModuleUtil.getInstance();
@@ -116,44 +106,6 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mListView.getContext(),
                 DividerItemDecoration.VERTICAL);
         mListView.addItemDecoration(dividerItemDecoration);
-        /*mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if (mListView.getChildAt(0) != null) {
-                    refreshLayout.setEnabled(mListView.getFirstVisiblePosition() == 0 && mListView.getChildAt(0).getTop() == 0);
-                }
-            }
-        });*/
-
-        /*mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Cursor cursor = (Cursor) mAdapter.getItem(position);
-                String packageName = cursor.getString(OverviewColumnsIndexes.PKGNAME);
-
-                Intent detailsIntent = new Intent(getActivity(), DownloadDetailsActivity.class);
-                detailsIntent.setData(Uri.fromParts("package", packageName, null));
-                startActivity(detailsIntent);
-            }
-        });*/
-        mListView.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                // Expand the search view when the SEARCH key is triggered
-                if (keyCode == KeyEvent.KEYCODE_SEARCH && event.getAction() == KeyEvent.ACTION_UP && (event.getFlags() & KeyEvent.FLAG_CANCELED) == 0) {
-                    if (mSearchView != null)
-                        mSearchView.setIconified(false);
-                    return true;
-                }
-                return false;
-            }
-        });
-
     }
 
 
@@ -208,18 +160,6 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
                 return true;
             }
         });
-        MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
-            @Override
-            public boolean onMenuItemActionCollapse(MenuItem item) {
-                setFilter(null);
-                return true; // Return true to collapse action view
-            }
-
-            @Override
-            public boolean onMenuItemActionExpand(MenuItem item) {
-                return true; // Return true to expand action view
-            }
-        });
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -236,18 +176,17 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_sort:
-                new MaterialAlertDialogBuilder(this)
-                        .setTitle(R.string.download_sorting_title)
-                        .setSingleChoiceItems(R.array.download_sort_order, mSortingOrder, (dialog, which) -> {
-                            mSortingOrder = which;
-                            mPref.edit().putInt("download_sorting_order", mSortingOrder).apply();
-                            reloadItems();
-                            dialog.dismiss();
-                        })
-                        .show();
-                return true;
+        if (item.getItemId() == R.id.menu_sort) {
+            new MaterialAlertDialogBuilder(this)
+                    .setTitle(R.string.download_sorting_title)
+                    .setSingleChoiceItems(R.array.download_sort_order, mSortingOrder, (dialog, which) -> {
+                        mSortingOrder = which;
+                        mPref.edit().putInt("download_sorting_order", mSortingOrder).apply();
+                        reloadItems();
+                        dialog.dismiss();
+                    })
+                    .show();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

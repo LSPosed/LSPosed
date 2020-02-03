@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -88,13 +87,6 @@ public class XposedApp extends de.robv.android.xposed.installer.XposedApp implem
 
     public static SharedPreferences getPreferences() {
         return mInstance.mPref;
-    }
-
-    public static int getColor(Context context) {
-        SharedPreferences prefs = context.getSharedPreferences(context.getPackageName() + "_preferences", MODE_PRIVATE);
-        int defaultColor = context.getResources().getColor(R.color.colorPrimary);
-
-        return prefs.getInt("colors", defaultColor);
     }
 
     public static String getDownloadPath() {

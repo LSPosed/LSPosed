@@ -37,5 +37,5 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:1.2.0-alpha01"
     implementation 'com.annimon:stream:1.2.0'
     implementation 'com.google.code.gson:gson:2.8.6'
-    implementation 'de.psdev.licensesdialog:licensesdialog:1.8.3'
+    implementation 'de.psdev.licensesdialog:licensesdialog:2.1.0'
 }

@@ -1,14 +1,18 @@
 package org.meowcat.edxposed.manager;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +22,8 @@ import androidx.annotation.StyleRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.app.ActivityCompat;
+import androidx.core.view.ViewCompat;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.topjohnwu.superuser.Shell;
@@ -60,6 +66,15 @@ public class BaseActivity extends AppCompatActivity {
 
     public static boolean isNightMode(Configuration configuration) {
         return (configuration.uiMode & Configuration.UI_MODE_NIGHT_YES) > 0;
+    }
+
+    protected void setupWindowInsets() {
+        View rootView = findViewById(R.id.snackbar);
+        rootView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+        ViewCompat.setOnApplyWindowInsetsListener(rootView, (v, insets) -> {
+            rootView.setPadding(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(), insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
+            return insets;
+        });
     }
 
     @Override
@@ -140,6 +155,16 @@ public class BaseActivity extends AppCompatActivity {
             txtMessage.setTextSize(14);
         } catch (NullPointerException ignored) {
         }
+    }
+
+    public boolean checkPermissions() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, XposedApp.WRITE_EXTERNAL_PERMISSION);
+            }
+            return true;
+        }
+        return false;
     }
 
     void reboot(String mode) {

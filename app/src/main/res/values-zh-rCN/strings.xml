@@ -19,6 +19,8 @@
     <string name="menuSend">发送</string>
     <string name="menuSaveToSd">保存到 SD 卡</string>
 
+    <string name="restart_needed">需要重启</string>
+    <string name="cache_cleaned">应用缓存已清除, 需要重新启动</string>
     <!-- Welcome screen / main sections -->
     <string name="tabInstall">我的设备</string>
     <string name="welcome_framework_update_available">EdXposed 框架有更新可用(%s)</string>
