@@ -8,6 +8,11 @@ install:
     7z x sdk-tools-windows-3859397.zip -oC:\android-sdk-windows > nul
     
     yes | C:\android-sdk-windows\tools\bin\sdkmanager.bat --licenses > nul
+cache: 
+- C:\Users\appveyor\.gradle
+- C:\android-sdk-windows\build-tools
+- C:\android-sdk-windows\platforms
+- C:\android-sdk-windows\platform-tools
 build_script:
 - cmd: gradlew.bat assembleRelease
 artifacts:
