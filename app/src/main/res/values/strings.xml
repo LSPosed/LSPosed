@@ -27,7 +27,6 @@
     <string name="welcome_framework_update_available">An update for the EdXposed Framework is available (%s)</string>
 
     <!-- navigation view items -->
-    <string name="nav_item_install">Framework</string>
     <string name="nav_item_modules">Modules</string>
     <string name="nav_item_download">Download</string>
     <string name="nav_item_logs">Verbose Logs</string>
@@ -115,7 +114,6 @@
     <string name="settings_theme">Theme</string>
     <string name="settings_theme_light">Light</string>
     <string name="settings_theme_dark">Dark</string>
-    <string name="settings_default_view">Default view</string>
 
     <!-- Support tab -->
     <string name="support_modules_label">Support for modules</string>
@@ -199,9 +197,6 @@
 
     <string name="changelog">Changelog</string>
     <string name="scroll_top">Scroll to top</string>
-    <string name="bookmark_added">Bookmark added</string>
-    <string name="bookmark_removed">Bookmark removed</string>
-    <string name="notification_coloration">Color notification icon</string>
     <string name="file_is_empty">File is empty</string>
     <string name="install_with_su">Silent installation (root)</string>
     <string name="install_with_su_summ">If checked EdXposed Manager will install modules without a prompt</string>
@@ -213,8 +208,6 @@
     <string name="reboot_download">Reboot to Download</string>
     <string name="reboot_edl">Reboot to Emergency</string>
     <string name="loading">Loading…</string>
-    <string name="chrome_custom_tabs">Chrome Custom Tabs</string>
-    <string name="chrome_custom_tabs_summ">Open links in internal browser</string>
     <string name="scroll_bottom">Scroll to bottom</string>
     <string name="confirm_reboots">Confirm reboots</string>
     <string name="skip_xposedminversion_check">Skip status check</string>
@@ -224,8 +217,6 @@
     <string name="android_sdk" translatable="false">Android %2$s (%1$s, API %3$d)</string>
     <string name="later">Later</string>
     <string name="save">Save only</string>
-    <string name="download_location">Download location</string>
-    <string name="download_location_summ">Download location for APK files (modules only)</string>
     <string name="not_logcat">This is the EdXposed Framework and modules log\nif you need a Android logcat, you can try our Log Catcher Magisk module</string>
     <string name="installation_error">Installation error</string>
     <string name="installation_successful">Installation successful</string>
@@ -322,15 +313,6 @@
     <string name="edxp_installer_installed">You must to uninstall EdXposed Installer to use EdXposed Manager</string>
     <string name="install_time">Install time: </string>
     <string name="update_time">Update time: </string>
-    <string name="list_sort">List sorting</string>
-    <string name="sort_by_name">Sort by application name</string>
-    <string name="sort_by_name_reverse">Sort by application name (reverse)</string>
-    <string name="sort_by_package_name">Sort by package name</string>
-    <string name="sort_by_package_name_reverse">Sort by package name (reverse)</string>
-    <string name="sort_by_install_time">Sort by install time</string>
-    <string name="sort_by_install_time_reverse">Sort by install time (reverse)</string>
-    <string name="sort_by_update_time">Sort by update time</string>
-    <string name="sort_by_update_time_reverse">Sort by update time (reverse)</string>
     <string name="show_modules">Show modules and manager</string>
     <string name="show_modules_summary">Show modules and manager in application list\nThis option does not remove checked application flag</string>
     <string name="compile_failed">Optimization failed or return value is empty</string>

@@ -13,30 +13,10 @@
         <item>@string/settings_theme_dark</item>
     </string-array>
 
-    <string-array name="default_view_texts" translatable="false">
-        <item>@string/nav_item_install</item>
-        <item>@string/nav_item_modules</item>
-        <item>@string/nav_item_download</item>
-        <item>@string/nav_title_black_list</item>
-        <item>@string/nav_title_compat_list</item>
-        <item>@string/nav_item_logs</item>
-        <item>@string/nav_item_logs_err</item>
-    </string-array>
-
     <string-array name="theme_values" translatable="false">
         <item>-1</item>
         <item>1</item>
         <item>2</item>
-    </string-array>
-
-    <string-array name="default_view_values" translatable="false">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
     </string-array>
 
     <string-array name="release_type_texts" translatable="false">
@@ -63,28 +43,6 @@
         <item>stable</item>
         <item>beta</item>
         <item>experimental</item>
-    </string-array>
-
-    <string-array name="list_sort_texts">
-        <item>@string/sort_by_name</item>
-        <item>@string/sort_by_name_reverse</item>
-        <item>@string/sort_by_package_name</item>
-        <item>@string/sort_by_package_name_reverse</item>
-        <item>@string/sort_by_install_time</item>
-        <item>@string/sort_by_install_time_reverse</item>
-        <item>@string/sort_by_update_time</item>
-        <item>@string/sort_by_update_time_reverse</item>
-    </string-array>
-
-    <string-array name="list_sort_values" translatable="false">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
     </string-array>
 
 </resources>
