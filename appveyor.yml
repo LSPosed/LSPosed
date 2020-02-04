@@ -1,0 +1,16 @@
+environment:
+  matrix:
+  - ANDROID_HOME: "C:\\android-sdk-windows"
+install:
+- cmd: >-
+    appveyor DownloadFile https://dl.google.com/android/repository/sdk-tools-windows-3859397.zip
+    
+    7z x sdk-tools-windows-3859397.zip -oC:\android-sdk-windows > nul
+    
+    yes | C:\android-sdk-windows\tools\bin\sdkmanager.bat --licenses > nul
+cache: C:\android-sdk-windows\
+build_script:
+- cmd: gradlew.bat assembleRelease
+artifacts:
+- path: app/build/outputs/apk/
+  name: APK
