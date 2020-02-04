@@ -1,5 +1,4 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -9,42 +8,39 @@
     android:focusable="true"
     android:minHeight="?android:attr/listPreferredItemHeight">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="?android:attr/listPreferredItemHeight"
         android:orientation="horizontal"
-        android:padding="8dp">
-
-        <ImageView
-            android:id="@+id/app_icon"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:gravity="end"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/app_name"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ContentDescription" />
+        android:padding="8dp"
+        android:paddingStart="18dp"
+        android:paddingEnd="12dp">
 
         <LinearLayout
-            android:layout_width="0dip"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="4dp"
-            android:layout_weight="1"
+            android:layout_toStartOf="@id/checkbox"
             android:orientation="vertical">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="48dp">
+
+                <ImageView
+                    android:id="@+id/app_icon"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    tools:ignore="ContentDescription" />
 
                 <TextView
                     android:id="@+id/app_name"
-                    android:layout_width="0dip"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="4dip"
-                    android:layout_weight="1"
+                    android:layout_alignTop="@id/app_icon"
+                    android:layout_marginStart="8dp"
+                    android:layout_toEndOf="@id/app_icon"
                     android:singleLine="false"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textIsSelectable="false" />
@@ -53,10 +49,10 @@
                     android:id="@+id/version_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@id/app_name"
                     android:layout_marginStart="4dip"
+                    android:layout_toEndOf="@id/app_name"
                     android:ellipsize="marquee"
-                    android:gravity="end"
-                    android:marqueeRepeatLimit="marquee_forever"
                     android:maxWidth="100dp"
                     android:singleLine="true"
                     android:textAppearance="?android:attr/textAppearanceSmall"
@@ -64,62 +60,26 @@
                     android:textIsSelectable="false"
                     tools:ignore="RtlHardcoded" />
 
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/package_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/app_name"
+                    android:layout_alignBottom="@id/app_icon"
+                    android:layout_marginStart="8dp"
+                    android:layout_toEndOf="@id/app_icon"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textIsSelectable="false" />
+            </RelativeLayout>
 
             <TextView
-                android:id="@+id/package_name"
+                android:id="@+id/timestamps"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textIsSelectable="false" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:text="@string/install_time" />
-
-                <TextView
-                    android:id="@+id/tvInstallTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:layout_marginStart="4dip"
-                    android:ellipsize="marquee"
-                    android:gravity="end"
-                    android:marqueeRepeatLimit="marquee_forever"
-                    tools:ignore="RtlHardcoded" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:text="@string/update_time" />
-
-                <TextView
-                    android:id="@+id/tvUpdateTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:layout_marginStart="4dip"
-                    android:ellipsize="marquee"
-                    android:gravity="end"
-                    android:marqueeRepeatLimit="marquee_forever"
-                    tools:ignore="RtlHardcoded" />
-
-            </LinearLayout>
+                android:layout_gravity="center_vertical"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <TextView
                 android:id="@+id/description"
@@ -127,7 +87,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textIsSelectable="false"
                 android:visibility="gone" />
 
             <TextView
@@ -145,13 +104,11 @@
             android:id="@+id/checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:layout_marginStart="4dp"
             android:checked="false"
-            android:focusable="false"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/app_name"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:focusable="false" />
 
-    </LinearLayout>
+    </RelativeLayout>
 </FrameLayout>

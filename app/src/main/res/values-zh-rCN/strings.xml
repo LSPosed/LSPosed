@@ -275,8 +275,6 @@
     <string name="app_stop">停止</string>
     <string name="update_description">更新日志</string>
     <string name="edxp_installer_installed">你必须先卸载 EdXposed Installer 才能继续使用 EdXposed Manager</string>
-    <string name="install_time">安装日期: </string>
-    <string name="update_time">更新日期: </string>
     <string name="show_modules">显示模块和管理器</string>
     <string name="show_modules_summary">在应用列表内显示模块和管理器\n此选项并不会移除已勾选的应用标识</string>
     <string name="compile_failed">优化失败或返回值为空</string>
@@ -296,5 +294,6 @@
     <string name="pref_title_disable_modules_log">禁用模块日志</string>
     <string name="pref_disable_modules_log_summary">模块抛出的的异常堆栈仍将正常抓取</string>
     <string name="follow_system">跟随系统</string>
-    <string name="pure_black_dark_theme">使用纯黑深色主题</string>
+    <string name="pure_black_dark_theme">使用纯黑深色主题</string>>
+    <string name="install_timestamps">安装于 %1$s \u00b7 更新于 %2$s</string>
 </resources>

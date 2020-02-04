@@ -4,21 +4,20 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import androidx.preference.PreferenceManager;
-
-import com.takisoft.preferencex.PreferenceFragmentCompat;
-
 import org.meowcat.edxposed.manager.repo.Module;
 import org.meowcat.edxposed.manager.util.PrefixedSharedPreferences;
 import org.meowcat.edxposed.manager.util.RepoLoader;
 
 import java.util.Map;
 
-public class DownloadDetailsSettingsFragment extends PreferenceFragmentCompat {
+import moe.shizuku.preference.PreferenceFragment;
+import moe.shizuku.preference.PreferenceManager;
+
+public class DownloadDetailsSettingsFragment extends PreferenceFragment {
 
 
     @Override
-    public void onCreatePreferencesFix(Bundle savedInstanceState, String rootKey) {
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         DownloadDetailsActivity mActivity = (DownloadDetailsActivity) getActivity();
         if (mActivity == null) {
             return;

@@ -22,13 +22,11 @@ import org.meowcat.edxposed.manager.XposedApp;
 import org.meowcat.edxposed.manager.util.InstallApkUtil;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
 
@@ -36,7 +34,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
     private final ApplicationInfo.DisplayNameComparator displayNameComparator;
     private Callback callback;
     private List<ApplicationInfo> fullList, showList;
-    private DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+    private DateFormat dateformat = DateFormat.getDateInstance(DateFormat.SHORT);
     private List<String> checkedList;
     private PackageManager pm;
     private ApplicationFilter filter;
@@ -174,8 +172,9 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         holder.appName.setText(InstallApkUtil.getAppLabel(info, pm));
         try {
             holder.appVersion.setText(pm.getPackageInfo(info.packageName, 0).versionName);
-            holder.appInstallTime.setText(dateformat.format(new Date(pm.getPackageInfo(info.packageName, 0).firstInstallTime)));
-            holder.appUpdateTime.setText(dateformat.format(new Date(pm.getPackageInfo(info.packageName, 0).lastUpdateTime)));
+            String creationDate = dateformat.format(new Date(pm.getPackageInfo(info.packageName, 0).firstInstallTime));
+            String updateDate = dateformat.format(new Date(pm.getPackageInfo(info.packageName, 0).lastUpdateTime));
+            holder.timestamps.setText(holder.itemView.getContext().getString(R.string.install_timestamps, creationDate, updateDate));
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
@@ -222,8 +221,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         TextView appName;
         TextView appPackage;
         TextView appVersion;
-        TextView appInstallTime;
-        TextView appUpdateTime;
+        TextView timestamps;
         Switch mSwitch;
 
         ViewHolder(View itemView) {
@@ -232,8 +230,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
             appName = itemView.findViewById(R.id.app_name);
             appPackage = itemView.findViewById(R.id.package_name);
             appVersion = itemView.findViewById(R.id.version_name);
-            appInstallTime = itemView.findViewById(R.id.tvInstallTime);
-            appUpdateTime = itemView.findViewById(R.id.tvUpdateTime);
+            timestamps = itemView.findViewById(R.id.timestamps);
             mSwitch = itemView.findViewById(R.id.checkbox);
         }
     }

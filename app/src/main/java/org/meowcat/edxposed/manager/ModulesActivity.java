@@ -60,12 +60,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -80,7 +78,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
     private SearchView mSearchView;
     private SearchView.OnQueryTextListener mSearchListener;
     private PackageManager mPm;
-    private DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+    private DateFormat dateformat = DateFormat.getDateInstance(DateFormat.SHORT);
     private ModuleUtil mModuleUtil;
     private ModuleAdapter mAdapter = null;
     private MenuItem mClickedMenuItem = null;
@@ -533,13 +531,9 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             packageTv.setText(item.packageName);
             packageTv.setSelected(true);
 
-            TextView installTimeTv = holder.appInstallTime;
-            installTimeTv.setText(dateformat.format(new Date(item.installTime)));
-            installTimeTv.setSelected(true);
-
-            TextView updateTv = holder.appUpdateTime;
-            updateTv.setText(dateformat.format(new Date(item.updateTime)));
-            updateTv.setSelected(true);
+            String creationDate = dateformat.format(new Date(item.installTime));
+            String updateDate = dateformat.format(new Date(item.updateTime));
+            holder.timestamps.setText(getString(R.string.install_timestamps, creationDate, updateDate));
 
             holder.appIcon.setImageDrawable(item.getIcon());
 
@@ -620,8 +614,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             TextView appPackage;
             TextView appDescription;
             TextView appVersion;
-            TextView appInstallTime;
-            TextView appUpdateTime;
+            TextView timestamps;
             TextView warningText;
             Switch mSwitch;
 
@@ -632,8 +625,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 appDescription = itemView.findViewById(R.id.description);
                 appPackage = itemView.findViewById(R.id.package_name);
                 appVersion = itemView.findViewById(R.id.version_name);
-                appInstallTime = itemView.findViewById(R.id.tvInstallTime);
-                appUpdateTime = itemView.findViewById(R.id.tvUpdateTime);
+                timestamps = itemView.findViewById(R.id.timestamps);
                 warningText = itemView.findViewById(R.id.warning);
                 mSwitch = itemView.findViewById(R.id.checkbox);
             }

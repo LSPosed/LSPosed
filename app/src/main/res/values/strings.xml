@@ -88,6 +88,7 @@
     <string name="download_status_installed">Installed (version %s)</string>
     <string name="download_status_update_available">Update available (version %1$s \u2192 %2$s)</string>
     <string name="download_timestamps">Added on %1$s \u00b7 Updated on %2$s</string>
+    <string name="install_timestamps">Installed on %1$s \nUpdated on %2$s</string>
     <string name="download_sorting_title">Sorting order</string>
     <string name="download_sorting_status">Sort by status</string>
     <string name="download_sorting_updated">Sort by last update</string>
@@ -311,8 +312,6 @@
     <string name="app_stop">Stop it</string>
     <string name="update_description">Update Changelog</string>
     <string name="edxp_installer_installed">You must to uninstall EdXposed Installer to use EdXposed Manager</string>
-    <string name="install_time">Install time: </string>
-    <string name="update_time">Update time: </string>
     <string name="show_modules">Show modules and manager</string>
     <string name="show_modules_summary">Show modules and manager in application list\nThis option does not remove checked application flag</string>
     <string name="compile_failed">Optimization failed or return value is empty</string>

@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.FileUtils;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,11 +15,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
-import androidx.preference.Preference;
-import androidx.preference.SwitchPreference;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.takisoft.preferencex.PreferenceFragmentCompat;
 import com.topjohnwu.superuser.Shell;
 
 import org.meowcat.edxposed.manager.util.RepoLoader;
@@ -30,6 +26,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Objects;
+
+import moe.shizuku.preference.Preference;
+import moe.shizuku.preference.PreferenceFragment;
+import moe.shizuku.preference.SwitchPreference;
 
 public class SettingsActivity extends BaseActivity {
 
@@ -47,13 +47,13 @@ public class SettingsActivity extends BaseActivity {
         setupWindowInsets();
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, SettingsFragment.newInstance(findViewById(R.id.snackbar))).commit();
+                    .add(R.id.container, new SettingsFragment()).commit();
         }
 
     }
 
     @SuppressWarnings({"ResultOfMethodCallIgnored", "deprecation"})
-    public static class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
+    public static class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
         static final File mDisableResourcesFlag = new File(XposedApp.BASE_DIR + "conf/disable_resources");
         static final File mDynamicModulesFlag = new File(XposedApp.BASE_DIR + "conf/dynamicmodules");
         static final File mDeoptBootFlag = new File(XposedApp.BASE_DIR + "conf/deoptbootimage");
@@ -66,14 +66,6 @@ public class SettingsActivity extends BaseActivity {
 
         private Preference stopVerboseLog;
         private Preference stopLog;
-
-        private View rootView;
-
-        static SettingsFragment newInstance(View rootView) {
-            SettingsFragment fragment = new SettingsFragment();
-            fragment.setRootView(rootView);
-            return fragment;
-        }
 
         @SuppressWarnings("SameParameterValue")
         @SuppressLint({"WorldReadableFiles", "WorldWriteableFiles"})
@@ -89,25 +81,20 @@ public class SettingsActivity extends BaseActivity {
             FileUtils.setPermissions(name, perms, -1, -1);
         }
 
-        void setRootView(View rootView) {
-            this.rootView = rootView;
-        }
-
         @SuppressLint({"ObsoleteSdkInt", "WorldReadableFiles"})
         @Override
-        public void onCreatePreferencesFix(Bundle savedInstanceState, String rootKey) {
+        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             addPreferencesFromResource(R.xml.prefs);
 
             stopVerboseLog = findPreference("stop_verbose_log");
             stopLog = findPreference("stop_log");
 
-            //noinspection ConstantConditions
             findPreference("release_type_global").setOnPreferenceChangeListener((preference, newValue) -> {
                 RepoLoader.getInstance().setReleaseTypeGlobal((String) newValue);
                 return true;
             });
 
-            SwitchPreference prefWhiteListMode = findPreference("white_list_switch");
+            SwitchPreference prefWhiteListMode = (SwitchPreference) findPreference("white_list_switch");
             Objects.requireNonNull(prefWhiteListMode).setChecked(mWhiteListModeFlag.exists());
             prefWhiteListMode.setOnPreferenceChangeListener((preference, newValue) -> {
                 boolean enabled = (Boolean) newValue;
@@ -138,7 +125,7 @@ public class SettingsActivity extends BaseActivity {
                 return (enabled == mWhiteListModeFlag.exists());
             });
 
-            SwitchPreference prefVerboseLogs = findPreference("disable_verbose_log");
+            SwitchPreference prefVerboseLogs = (SwitchPreference) findPreference("disable_verbose_log");
             Objects.requireNonNull(prefVerboseLogs).setChecked(mDisableVerboseLogsFlag.exists());
             prefVerboseLogs.setOnPreferenceChangeListener((preference, newValue) -> {
                 boolean enabled = (Boolean) newValue;
@@ -169,7 +156,7 @@ public class SettingsActivity extends BaseActivity {
                 return (enabled == mDisableVerboseLogsFlag.exists());
             });
 
-            SwitchPreference prefModulesLogs = findPreference("disable_modules_log");
+            SwitchPreference prefModulesLogs = (SwitchPreference) findPreference("disable_modules_log");
             Objects.requireNonNull(prefModulesLogs).setChecked(mDisableModulesLogsFlag.exists());
             prefModulesLogs.setOnPreferenceChangeListener((preference, newValue) -> {
                 boolean enabled = (Boolean) newValue;
@@ -200,7 +187,7 @@ public class SettingsActivity extends BaseActivity {
                 return (enabled == mDisableModulesLogsFlag.exists());
             });
 
-            SwitchPreference prefBlackWhiteListMode = findPreference("black_white_list_switch");
+            SwitchPreference prefBlackWhiteListMode = (SwitchPreference) findPreference("black_white_list_switch");
             Objects.requireNonNull(prefBlackWhiteListMode).setChecked(mBlackWhiteListModeFlag.exists());
             prefBlackWhiteListMode.setOnPreferenceChangeListener((preference, newValue) -> {
                 boolean enabled = (Boolean) newValue;
@@ -231,7 +218,7 @@ public class SettingsActivity extends BaseActivity {
                 return (enabled == mBlackWhiteListModeFlag.exists());
             });
 
-            SwitchPreference prefEnableDeopt = findPreference("enable_boot_image_deopt");
+            SwitchPreference prefEnableDeopt = (SwitchPreference) findPreference("enable_boot_image_deopt");
             Objects.requireNonNull(prefEnableDeopt).setChecked(mDeoptBootFlag.exists());
             prefEnableDeopt.setOnPreferenceChangeListener((preference, newValue) -> {
                 boolean enabled = (Boolean) newValue;
@@ -262,7 +249,7 @@ public class SettingsActivity extends BaseActivity {
                 return (enabled == mDeoptBootFlag.exists());
             });
 
-            SwitchPreference prefDynamicResources = findPreference("is_dynamic_modules");
+            SwitchPreference prefDynamicResources = (SwitchPreference) findPreference("is_dynamic_modules");
             Objects.requireNonNull(prefDynamicResources).setChecked(mDynamicModulesFlag.exists());
             prefDynamicResources.setOnPreferenceChangeListener((preference, newValue) -> {
                 boolean enabled = (Boolean) newValue;
@@ -293,7 +280,7 @@ public class SettingsActivity extends BaseActivity {
                 return (enabled == mDynamicModulesFlag.exists());
             });
 
-            SwitchPreference prefDisableResources = findPreference("disable_resources");
+            SwitchPreference prefDisableResources = (SwitchPreference) findPreference("disable_resources");
             Objects.requireNonNull(prefDisableResources).setChecked(mDisableResourcesFlag.exists());
             prefDisableResources.setOnPreferenceChangeListener((preference, newValue) -> {
                 boolean enabled = (Boolean) newValue;
@@ -351,6 +338,12 @@ public class SettingsActivity extends BaseActivity {
         }
 
         @Override
+        public DividerDecoration onCreateItemDecoration() {
+            return new CategoryDivideDividerDecoration();
+            //return new DefaultDividerDecoration();
+        }
+
+        @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             if (key.contains("theme") || key.equals("ignore_chinese")) {
                 AppCompatDelegate.setDefaultNightMode(XposedApp.getPreferences().getInt("theme", 0));
@@ -368,11 +361,7 @@ public class SettingsActivity extends BaseActivity {
                 new Runnable() {
                     @Override
                     public void run() {
-                        areYouSure(R.string.stop_verbose_log_summary, (dialog, which) -> {
-
-                            Shell.su("kill $(cat " + mVerboseLogProcessID.getAbsolutePath() + ")").exec();
-
-                        });
+                        areYouSure(R.string.stop_verbose_log_summary, (dialog, which) -> Shell.su("kill $(cat " + mVerboseLogProcessID.getAbsolutePath() + ")").exec());
                     }
                 };
             } else if (preference.getKey().equals(stopLog.getKey())) {
@@ -397,13 +386,8 @@ public class SettingsActivity extends BaseActivity {
         @Override
         public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
-            if (rootView == null) {
-                return;
-            }
-            ((LinearLayout) ((FrameLayout) rootView.findViewById(R.id.container)).getChildAt(0)).setClipToPadding(false);
-            ((LinearLayout) ((FrameLayout) rootView.findViewById(R.id.container)).getChildAt(0)).setClipChildren(false);
-            ((FrameLayout) ((LinearLayout) view).getChildAt(0)).setClipChildren(false);
-            ((FrameLayout) ((LinearLayout) view).getChildAt(0)).setClipToPadding(false);
+            ((FrameLayout) view).setClipChildren(false);
+            ((FrameLayout) view).setClipToPadding(false);
         }
     }
 }

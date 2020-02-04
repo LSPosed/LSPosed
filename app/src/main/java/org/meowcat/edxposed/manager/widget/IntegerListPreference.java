@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.AttributeSet;
 
-public class IntegerListPreference extends com.takisoft.preferencex.SimpleMenuPreference {
+import moe.shizuku.preference.SimpleMenuPreference;
+
+public class IntegerListPreference extends SimpleMenuPreference {
     public IntegerListPreference(Context context) {
         super(context);
     }
