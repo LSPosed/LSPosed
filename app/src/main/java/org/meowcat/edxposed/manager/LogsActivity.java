@@ -88,6 +88,9 @@ public class LogsActivity extends BaseActivity {
         mListView.setAdapter(mAdapter);
         mListView.setLayoutManager(new LinearLayoutManager(this));
         TabLayout tabLayout = findViewById(R.id.sliding_tabs);
+        if (XposedApp.getPreferences().getBoolean("disable_verbose_log", false)) {
+            tabLayout.setVisibility(View.GONE);
+        }
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -260,10 +263,7 @@ public class LogsActivity extends BaseActivity {
             Thread.currentThread().setPriority(Thread.NORM_PRIORITY + 2);
 
             ArrayList<String> logs = new ArrayList<>();
-            if (XposedApp.getPreferences().getBoolean("disable_verbose_log", false) && allLog) {
-                logs.add(LogsActivity.this.getResources().getString(R.string.logs_verbose_disabled));
-                return logs;
-            }
+
             try {
                 File logfile = log[0];
                 try (Scanner scanner = new Scanner(logfile)) {
