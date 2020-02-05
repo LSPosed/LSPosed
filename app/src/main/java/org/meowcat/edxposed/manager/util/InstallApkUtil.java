@@ -16,6 +16,7 @@ import androidx.core.content.FileProvider;
 
 import com.topjohnwu.superuser.Shell;
 
+import org.meowcat.edxposed.manager.BuildConfig;
 import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.XposedApp;
 
@@ -58,7 +59,7 @@ public class InstallApkUtil extends AsyncTask<Void, Void, Integer> {
         installIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         Uri uri;
         if (Build.VERSION.SDK_INT >= 24) {
-            uri = FileProvider.getUriForFile(context, "moe.guo.edxpmanager.fileprovider", new File(localFilename));
+            uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileprovider", new File(localFilename));
             installIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         } else {
             uri = Uri.fromFile(new File(localFilename));
