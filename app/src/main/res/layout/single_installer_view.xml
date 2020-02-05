@@ -107,14 +107,16 @@
                         <ImageView
                             android:layout_width="50dp"
                             android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
                             android:layout_margin="8dp"
                             android:src="@drawable/ic_warning"
                             tools:ignore="ContentDescription" />
 
                         <TextView
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toEndOf="@+id/warning"
                             android:paddingStart="8dp"
                             android:paddingEnd="8dp"
                             android:text="@string/unofficial_build"
