@@ -19,3 +19,8 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-keep class org.meowcat.edxposed.manager.util.json.**{public *; }
+-keep class de.robv.android.xposed.installer.**{public *; }
+-repackageclasses ''
+-allowaccessmodification
+-optimizationpasses 9

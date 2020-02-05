@@ -31,8 +31,8 @@
                     android:gravity="center_vertical"
                     android:minHeight="48dp"
                     android:orientation="horizontal"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp">
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp">
 
                     <ImageView
                         android:layout_width="24dp"
@@ -70,8 +70,8 @@
                     android:gravity="center_vertical"
                     android:minHeight="48dp"
                     android:orientation="horizontal"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp">
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp">
 
                     <ImageView
                         android:layout_width="24dp"
@@ -109,8 +109,8 @@
                     android:gravity="center_vertical"
                     android:minHeight="48dp"
                     android:orientation="horizontal"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp">
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp">
 
                     <ImageView
                         android:layout_width="24dp"

@@ -89,7 +89,9 @@ public class InstallApkUtil extends AsyncTask<Void, Void, Integer> {
                 String path = "/data/local/tmp/";
                 String fileName = new File(info.localFilename).getName();
                 Shell.su("cat \"" + info.localFilename + "\">" + path + fileName).exec();
-                returnCode = Shell.su("pm install -r -f \"" + path + fileName + "\"").exec().getCode();
+                Shell.Result result = Shell.su("pm install -r -f \"" + path + fileName + "\"").exec();
+                returnCode = result.getCode();
+                output = result.getOut();
                 //noinspection ResultOfMethodCallIgnored
                 new File(path + fileName).delete();
             } catch (IllegalStateException e) {

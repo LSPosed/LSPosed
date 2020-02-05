@@ -306,7 +306,6 @@
 
     <string name="pref_title_disable_verbose_log">Disable verbose logs</string>
     <string name="logs_verbose_disabled">Verbose logs is disabled</string>
-    <string name="logs_too_long">Log is too long, not fully displayed</string>
     <string name="logs_cannot_read">Cannot read log: \n</string>
     <string name="app_launch">Launch it</string>
     <string name="app_stop">Stop it</string>

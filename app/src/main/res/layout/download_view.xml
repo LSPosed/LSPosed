@@ -13,7 +13,7 @@
             android:layout_weight="1"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnDownload"
             style="@style/Widget.MaterialComponents.Button"
             android:layout_width="wrap_content"
@@ -22,7 +22,7 @@
             android:text="@string/download_view_download"
             android:theme="@style/Widget.AppCompat.Button.Colored" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/save"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
@@ -31,7 +31,7 @@
             android:text="@string/save"
             android:theme="@style/Widget.AppCompat.Button.Colored" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnDownloadCancel"
             style="@style/Widget.MaterialComponents.Button"
             android:layout_width="wrap_content"
@@ -42,7 +42,7 @@
             android:visibility="gone"
             tools:ignore="ButtonOrder" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnRemove"
             style="@style/Widget.MaterialComponents.Button"
             android:layout_width="wrap_content"
@@ -52,7 +52,7 @@
             android:theme="@style/Widget.AppCompat.Button.Colored"
             android:visibility="gone" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnInstall"
             style="@style/Widget.MaterialComponents.Button"
             android:layout_width="wrap_content"

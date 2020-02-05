@@ -269,7 +269,6 @@
 
     <string name="pref_title_disable_verbose_log">禁用详细日志</string>
     <string name="logs_verbose_disabled">详细日志已禁用</string>
-    <string name="logs_too_long">日志过长, 未完全显示</string>
     <string name="logs_cannot_read">无法读取日志: \n</string>
     <string name="app_launch">运行</string>
     <string name="app_stop">停止</string>

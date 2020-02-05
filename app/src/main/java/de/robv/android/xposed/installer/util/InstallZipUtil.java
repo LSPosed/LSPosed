@@ -1,11 +1,11 @@
 package de.robv.android.xposed.installer.util;
 
+import org.meowcat.edxposed.manager.util.ModuleUtil;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-
-import org.meowcat.edxposed.manager.util.ModuleUtil;
 
 public final class InstallZipUtil {
 
@@ -38,7 +38,6 @@ public final class InstallZipUtil {
     public static class XposedProp {
         private String mVersion = null;
         private int mVersionInt = 0;
-        //private Set<String> mRequires = new HashSet<>();
 
         private boolean isComplete() {
             return mVersion != null
@@ -48,10 +47,5 @@ public final class InstallZipUtil {
         public String getVersion() {
             return mVersion;
         }
-
-//        public int getVersionInt() {
-//            return mVersionInt;
-//        }
-
     }
 }

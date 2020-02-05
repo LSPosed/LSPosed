@@ -208,8 +208,8 @@
                     android:gravity="center_vertical"
                     android:minHeight="48dp"
                     android:orientation="horizontal"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp">
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp">
 
                     <ImageView
                         android:layout_width="24dp"
@@ -246,8 +246,8 @@
                     android:gravity="center_vertical"
                     android:minHeight="48dp"
                     android:orientation="horizontal"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp">
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp">
 
                     <ImageView
                         android:layout_width="24dp"
@@ -284,8 +284,8 @@
                     android:gravity="center_vertical"
                     android:minHeight="48dp"
                     android:orientation="horizontal"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp">
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp">
 
                     <ImageView
                         android:layout_width="24dp"
@@ -573,8 +573,8 @@
                         android:orientation="horizontal"
                         android:padding="8dp">
 
-                        <androidx.appcompat.widget.AppCompatButton
-                            style="@style/Widget.AppCompat.Button.Borderless"
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.MaterialComponents.Button.TextButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:onClick="openLink"
@@ -582,8 +582,8 @@
                             android:text="@string/xda"
                             android:textColor="#F57C00" />
 
-                        <androidx.appcompat.widget.AppCompatButton
-                            style="@style/Widget.AppCompat.Button.Borderless"
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.MaterialComponents.Button.TextButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:onClick="openLink"
@@ -591,8 +591,8 @@
                             android:text="@string/github"
                             android:textColor="#4183c4" />
 
-                        <androidx.appcompat.widget.AppCompatButton
-                            style="@style/Widget.AppCompat.Button.Borderless"
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.MaterialComponents.Button.TextButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:onClick="openLink"
@@ -642,8 +642,8 @@
                         android:orientation="horizontal"
                         android:padding="8dp">
 
-                        <androidx.appcompat.widget.AppCompatButton
-                            style="@style/Widget.AppCompat.Button.Borderless"
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.MaterialComponents.Button.TextButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:onClick="openLink"
@@ -651,8 +651,8 @@
                             android:text="@string/xda"
                             android:textColor="#F57C00" />
 
-                        <androidx.appcompat.widget.AppCompatButton
-                            style="@style/Widget.AppCompat.Button.Borderless"
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.MaterialComponents.Button.TextButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:onClick="openLink"
@@ -660,8 +660,8 @@
                             android:text="@string/github"
                             android:textColor="#4183c4" />
 
-                        <androidx.appcompat.widget.AppCompatButton
-                            style="@style/Widget.AppCompat.Button.Borderless"
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.MaterialComponents.Button.TextButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:onClick="openLink"
@@ -711,8 +711,8 @@
                         android:orientation="horizontal"
                         android:padding="8dp">
 
-                        <androidx.appcompat.widget.AppCompatButton
-                            style="@style/Widget.AppCompat.Button.Borderless"
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.MaterialComponents.Button.TextButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:onClick="openLink"
@@ -720,8 +720,8 @@
                             android:text="@string/website"
                             android:textColor="#F57C00" />
 
-                        <androidx.appcompat.widget.AppCompatButton
-                            style="@style/Widget.AppCompat.Button.Borderless"
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.MaterialComponents.Button.TextButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:onClick="openLink"
@@ -772,8 +772,8 @@
                         android:orientation="horizontal"
                         android:padding="8dp">
 
-                        <androidx.appcompat.widget.AppCompatButton
-                            style="@style/Widget.AppCompat.Button.Borderless"
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.MaterialComponents.Button.TextButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:onClick="openLink"
@@ -781,8 +781,8 @@
                             android:text="@string/website"
                             android:textColor="#F57C00" />
 
-                        <androidx.appcompat.widget.AppCompatButton
-                            style="@style/Widget.AppCompat.Button.Borderless"
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.MaterialComponents.Button.TextButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:onClick="openLink"

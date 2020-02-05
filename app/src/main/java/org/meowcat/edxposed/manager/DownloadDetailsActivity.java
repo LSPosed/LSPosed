@@ -74,7 +74,6 @@ public class DownloadDetailsActivity extends BaseActivity implements RepoLoader.
             ActionBar ab = getSupportActionBar();
 
             if (ab != null) {
-                ab.setTitle(R.string.nav_item_download);
                 ab.setDisplayHomeAsUpEnabled(true);
             }
 

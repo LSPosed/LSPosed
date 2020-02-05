@@ -88,6 +88,7 @@ public class BlackListActivity extends BaseActivity implements AppAdapter.Callba
                         intent.setClass(BlackListActivity.this, SettingsActivity.class);
                         startActivity(intent);
                     })
+                    .setNegativeButton(android.R.string.cancel, (dialog, which) -> finish())
                     .setCancelable(false)
                     .show();
         }

@@ -288,7 +288,7 @@ public class LogsActivity extends BaseActivity {
                 mAdapter.setLogs(logs);
             }
             handler.removeCallbacks(mRunnable);//It loaded so fast that no need to show progress
-            if (mProgressDialog.isShowing()){
+            if (mProgressDialog.isShowing()) {
                 mProgressDialog.dismiss();
             }
         }
