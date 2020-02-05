@@ -7,7 +7,7 @@ android {
         applicationId "org.meowcat.edxposed.manager"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 45402
+        versionCode 45403
         versionName "4.5.4"
     }
     buildTypes {
@@ -32,8 +32,8 @@ dependencies {
     implementation "com.github.topjohnwu.libsu:core:2.5.0"
     implementation 'androidx.browser:browser:1.2.0'
     implementation 'com.timehop.stickyheadersrecyclerview:library:0.4.3@aar'
-    implementation 'moe.shizuku.preference:preference-appcompat:4.1.0-alpha02'
-    implementation 'moe.shizuku.preference:preference-simplemenu-appcompat:4.1.0-alpha02'
+    implementation 'com.takisoft.preferencex:preferencex:1.1.0'
+    implementation 'com.takisoft.preferencex:preferencex-simplemenu:1.1.0'
     implementation "androidx.recyclerview:recyclerview:1.2.0-alpha01"
     implementation 'com.annimon:stream:1.2.0'
     implementation 'com.google.code.gson:gson:2.8.6'
