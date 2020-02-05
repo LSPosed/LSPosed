@@ -98,13 +98,13 @@
                     android:visibility="gone"
                     app:cardBackgroundColor="@color/amber_500">
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:orientation="horizontal"
                         tools:ignore="UseCompoundDrawables">
 
                         <ImageView
+                            android:id="@+id/warning_unofficial_icon"
                             android:layout_width="50dp"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
@@ -116,7 +116,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:layout_toEndOf="@+id/warning"
+                            android:layout_toEndOf="@+id/warning_unofficial_icon"
                             android:paddingStart="8dp"
                             android:paddingEnd="8dp"
                             android:text="@string/unofficial_build"
@@ -124,7 +124,7 @@
                             android:textAllCaps="true"
                             android:textStyle="bold" />
 
-                    </LinearLayout>
+                    </RelativeLayout>
 
                 </com.google.android.material.card.MaterialCardView>
 
