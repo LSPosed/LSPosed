@@ -1,6 +1,7 @@
 package org.meowcat.edxposed.manager;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -14,11 +15,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.ListFragment;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import org.meowcat.edxposed.manager.repo.Module;
 import org.meowcat.edxposed.manager.repo.ModuleVersion;
@@ -40,6 +42,7 @@ import static org.meowcat.edxposed.manager.XposedApp.WRITE_EXTERNAL_PERMISSION;
 
 public class DownloadDetailsVersionsFragment extends ListFragment {
     private DownloadDetailsActivity mActivity;
+    private View rootView;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -48,6 +51,7 @@ public class DownloadDetailsVersionsFragment extends ListFragment {
         if (mActivity == null) {
             return;
         }
+        rootView = mActivity.findViewById(R.id.snackbar);
         Module module = mActivity.getModule();
         if (module == null)
             return;
@@ -95,7 +99,7 @@ public class DownloadDetailsVersionsFragment extends ListFragment {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 DownloadView.mClickedButton.performClick();
             } else {
-                Toast.makeText(getActivity(), R.string.permissionNotGranted, Toast.LENGTH_LONG).show();
+                Snackbar.make(rootView, R.string.permissionNotGranted, Snackbar.LENGTH_LONG).show();
             }
         }
     }
@@ -120,7 +124,7 @@ public class DownloadDetailsVersionsFragment extends ListFragment {
         @Override
         public void onDownloadFinished(Context context, DownloadsUtil.DownloadInfo info) {
             File localFile = new File(info.localFilename);
-
+            View rootView = ((Activity) context).findViewById(R.id.snackbar);
             if (!localFile.isFile())
                 return;
 
@@ -128,12 +132,12 @@ public class DownloadDetailsVersionsFragment extends ListFragment {
                 try {
                     String actualMd5Sum = HashUtil.md5(localFile);
                     if (!moduleVersion.md5sum.equals(actualMd5Sum)) {
-                        Toast.makeText(context, context.getString(R.string.download_md5sum_incorrect, actualMd5Sum, moduleVersion.md5sum), Toast.LENGTH_LONG).show();
+                        Snackbar.make(rootView, context.getString(R.string.download_md5sum_incorrect, actualMd5Sum, moduleVersion.md5sum), Snackbar.LENGTH_LONG).show();
                         DownloadsUtil.removeById(context, info.id);
                         return;
                     }
                 } catch (Exception e) {
-                    Toast.makeText(context, context.getString(R.string.download_could_not_read_file, e.getMessage()), Toast.LENGTH_LONG).show();
+                    Snackbar.make(rootView, context.getString(R.string.download_could_not_read_file, e.getMessage()), Snackbar.LENGTH_LONG).show();
                     DownloadsUtil.removeById(context, info.id);
                     return;
                 }
@@ -143,13 +147,13 @@ public class DownloadDetailsVersionsFragment extends ListFragment {
             PackageInfo packageInfo = pm.getPackageArchiveInfo(info.localFilename, 0);
 
             if (packageInfo == null) {
-                Toast.makeText(context, R.string.download_no_valid_apk, Toast.LENGTH_LONG).show();
+                Snackbar.make(rootView, R.string.download_no_valid_apk, Snackbar.LENGTH_LONG).show();
                 DownloadsUtil.removeById(context, info.id);
                 return;
             }
 
             if (!packageInfo.packageName.equals(moduleVersion.module.packageName)) {
-                Toast.makeText(context, context.getString(R.string.download_incorrect_package_name, packageInfo.packageName, moduleVersion.module.packageName), Toast.LENGTH_LONG).show();
+                Snackbar.make(rootView, context.getString(R.string.download_incorrect_package_name, packageInfo.packageName, moduleVersion.module.packageName), Snackbar.LENGTH_LONG).show();
                 DownloadsUtil.removeById(context, info.id);
                 return;
             }

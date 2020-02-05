@@ -1,25 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-    <item
-        android:icon="@drawable/ic_bug"
-        android:title="@string/Logs"
-        app:showAsAction="always"
-        tools:ignore="AlwaysShowAction">
-        <menu>
-            <group android:checkableBehavior="single">
-                <item
-                    android:id="@+id/menu_logs"
-                    android:checked="true"
-                    android:title="@string/nav_item_logs" />
-                <item
-                    android:id="@+id/menu_logs_err"
-                    android:title="@string/nav_item_logs_err" />
-            </group>
-        </menu>
-    </item>
-
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_save"
         android:icon="@drawable/ic_save"

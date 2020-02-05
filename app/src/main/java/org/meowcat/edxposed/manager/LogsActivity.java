@@ -7,17 +7,17 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.HorizontalScrollView;
-import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,29 +25,33 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.tabs.TabLayout;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Objects;
+import java.util.Scanner;
 
 public class LogsActivity extends BaseActivity {
-    private boolean errorLog = false;
+    private boolean allLog = false;
     private File mFileErrorLog = new File(XposedApp.BASE_DIR + "log/error.log");
     private File mFileErrorLogOld = new File(
             XposedApp.BASE_DIR + "log/error.log.old");
-    private File mFileErrorLogError = new File(XposedApp.BASE_DIR + "log/all.log");
-    private File mFileErrorLogOldError = new File(XposedApp.BASE_DIR + "log/all.log.old");
-    private TextView mTxtLog;
-    private ScrollView mSVLog;
-    private HorizontalScrollView mHSVLog;
+    private File mFileAllLog = new File(XposedApp.BASE_DIR + "log/all.log");
+    private File mFileAllLogOld = new File(XposedApp.BASE_DIR + "log/all.log.old");
     private MenuItem mClickedMenuItem = null;
+    private LogsAdapter mAdapter;
+    private RecyclerView mListView;
+    private Handler handler = new Handler();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,10 +65,6 @@ public class LogsActivity extends BaseActivity {
             bar.setDisplayHomeAsUpEnabled(true);
         }
         setupWindowInsets();
-        mTxtLog = findViewById(R.id.txtLog);
-        mTxtLog.setTextIsSelectable(true);
-        mSVLog = findViewById(R.id.svLog);
-        mHSVLog = findViewById(R.id.hsvLog);
 
         if (!XposedApp.getPreferences().getBoolean("hide_logcat_warning", false)) {
             @SuppressLint("InflateParams") final View dontShowAgainView = getLayoutInflater().inflate(R.layout.dialog_install_warning, null);
@@ -83,6 +83,29 @@ public class LogsActivity extends BaseActivity {
                     .setCancelable(false)
                     .show();
         }
+        mAdapter = new LogsAdapter();
+        mListView = findViewById(R.id.recyclerView);
+        mListView.setAdapter(mAdapter);
+        mListView.setLayoutManager(new LinearLayoutManager(this));
+        TabLayout tabLayout = findViewById(R.id.sliding_tabs);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                allLog = tab.getPosition() != 0;
+                reloadErrorLog();
+                scrollDown();
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 
     @Override
@@ -101,17 +124,6 @@ public class LogsActivity extends BaseActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         mClickedMenuItem = item;
         switch (item.getItemId()) {
-            case R.id.menu_logs:
-                item.setChecked(true);
-                errorLog = false;
-                reloadErrorLog();
-                break;
-            case R.id.menu_logs_err:
-                item.setChecked(true);
-                errorLog = true;
-                reloadErrorLog();
-                scrollDown();
-                break;
             case R.id.menu_scroll_top:
                 scrollTop();
                 break;
@@ -138,36 +150,32 @@ public class LogsActivity extends BaseActivity {
     }
 
     private void scrollTop() {
-        mSVLog.post(() -> mSVLog.scrollTo(0, 0));
-        mHSVLog.post(() -> mHSVLog.scrollTo(0, 0));
+        mListView.smoothScrollToPosition(0);
     }
 
     private void scrollDown() {
-        mSVLog.post(() -> mSVLog.scrollTo(0, mTxtLog.getHeight()));
-        mHSVLog.post(() -> mHSVLog.scrollTo(0, 0));
+        mListView.smoothScrollToPosition(mAdapter.getItemCount() - 1);
     }
 
     private void reloadErrorLog() {
-        new LogsReader().execute(errorLog ? mFileErrorLogError : mFileErrorLog);
-        mSVLog.post(() -> mSVLog.scrollTo(0, mTxtLog.getHeight()));
-        mHSVLog.post(() -> mHSVLog.scrollTo(0, 0));
+        new LogsReader().execute(allLog ? mFileAllLog : mFileErrorLog);
     }
 
     private void clear() {
         try {
-            new FileOutputStream(errorLog ? mFileErrorLogError : mFileErrorLog).close();
-            (errorLog ? mFileErrorLogOldError : mFileErrorLogOld).delete();
-            mTxtLog.setText(R.string.log_is_empty);
-            Toast.makeText(this, R.string.logs_cleared,
-                    Toast.LENGTH_SHORT).show();
+            new FileOutputStream(allLog ? mFileAllLog : mFileErrorLog).close();
+            //noinspection ResultOfMethodCallIgnored
+            (allLog ? mFileAllLogOld : mFileErrorLogOld).delete();
+            mAdapter.setEmpty();
+            Snackbar.make(findViewById(R.id.snackbar), R.string.logs_cleared, Snackbar.LENGTH_SHORT).show();
             reloadErrorLog();
         } catch (IOException e) {
-            Toast.makeText(this, getResources().getString(R.string.logs_clear_failed) + "n" + e.getMessage(), Toast.LENGTH_LONG).show();
+            Snackbar.make(findViewById(R.id.snackbar), getResources().getString(R.string.logs_clear_failed) + "n" + e.getMessage(), Snackbar.LENGTH_LONG).show();
         }
     }
 
     private void send() {
-        Uri uri = FileProvider.getUriForFile(this, "org.meowcat.edxposed.manager.fileprovider", errorLog ? mFileErrorLogError : mFileErrorLog);
+        Uri uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".fileprovider", allLog ? mFileAllLog : mFileErrorLog);
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
@@ -187,20 +195,20 @@ public class LogsActivity extends BaseActivity {
                     new Handler().postDelayed(() -> onOptionsItemSelected(mClickedMenuItem), 500);
                 }
             } else {
-                Toast.makeText(this, R.string.permissionNotGranted, Toast.LENGTH_LONG).show();
+                Snackbar.make(findViewById(R.id.snackbar), R.string.permissionNotGranted, Snackbar.LENGTH_LONG).show();
             }
         }
     }
 
     @SuppressLint("DefaultLocale")
     private void save() {
-        if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(this), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, XposedApp.WRITE_EXTERNAL_PERMISSION);
             return;
         }
 
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            Toast.makeText(this, R.string.sdcard_not_writable, Toast.LENGTH_LONG).show();
+            Snackbar.make(findViewById(R.id.snackbar), R.string.sdcard_not_writable, Snackbar.LENGTH_LONG).show();
             return;
         }
 
@@ -214,7 +222,7 @@ public class LogsActivity extends BaseActivity {
         File targetFile = new File(XposedApp.createFolder(), filename);
 
         try {
-            FileInputStream in = new FileInputStream(errorLog ? mFileErrorLogError : mFileErrorLog);
+            FileInputStream in = new FileInputStream(allLog ? mFileAllLog : mFileErrorLog);
             FileOutputStream out = new FileOutputStream(targetFile);
             byte[] buffer = new byte[1024];
             int len;
@@ -224,93 +232,119 @@ public class LogsActivity extends BaseActivity {
             in.close();
             out.close();
 
-            Toast.makeText(this, targetFile.toString(),
-                    Toast.LENGTH_LONG).show();
+            Snackbar.make(findViewById(R.id.snackbar), targetFile.toString(), Snackbar.LENGTH_LONG).show();
         } catch (IOException e) {
-            Toast.makeText(this, getResources().getString(R.string.logs_save_failed) + "\n" + e.getMessage(), Toast.LENGTH_LONG).show();
+            Snackbar.make(findViewById(R.id.snackbar), getResources().getString(R.string.logs_save_failed) + "\n" + e.getMessage(), Snackbar.LENGTH_LONG).show();
         }
     }
 
     @SuppressLint("StaticFieldLeak")
-    private class LogsReader extends AsyncTask<File, Integer, String> {
-
-        private static final int MAX_LOG_SIZE = 1000 * 1024; // 1000 KB
+    private class LogsReader extends AsyncTask<File, Integer, ArrayList<String>> {
         private ProgressDialog mProgressDialog;
-
-        private long skipLargeFile(BufferedReader is, long length) throws IOException {
-            if (length < MAX_LOG_SIZE)
-                return 0;
-
-            long skipped = length - MAX_LOG_SIZE;
-            long yetToSkip = skipped;
-            do {
-                yetToSkip -= is.skip(yetToSkip);
-            } while (yetToSkip > 0);
-
-            int c;
-            do {
-                c = is.read();
-                if (c == -1)
-                    break;
-                skipped++;
-            } while (c != '\n');
-
-            return skipped;
-
-        }
+        private Runnable mRunnable = new Runnable() {
+            @Override
+            public void run() {
+                mProgressDialog.show();
+            }
+        };
 
         @Override
         protected void onPreExecute() {
-            mTxtLog.setText("");
             mProgressDialog = new ProgressDialog(LogsActivity.this);
             mProgressDialog.setMessage(getString(R.string.loading));
             mProgressDialog.setProgress(0);
-            mProgressDialog.show();
+            handler.postDelayed(mRunnable, 500);
         }
 
         @Override
-        protected String doInBackground(File... log) {
+        protected ArrayList<String> doInBackground(File... log) {
             Thread.currentThread().setPriority(Thread.NORM_PRIORITY + 2);
 
-            StringBuilder llog = new StringBuilder(15 * 10 * 1024);
-
-            if (XposedApp.getPreferences().getBoolean(
-                    "disable_verbose_log", false) && errorLog) {
-                llog.append(LogsActivity.this.getResources().getString(R.string.logs_verbose_disabled));
-                return llog.toString();
+            ArrayList<String> logs = new ArrayList<>();
+            if (XposedApp.getPreferences().getBoolean("disable_verbose_log", false) && allLog) {
+                logs.add(LogsActivity.this.getResources().getString(R.string.logs_verbose_disabled));
+                return logs;
             }
             try {
                 File logfile = log[0];
-                BufferedReader br;
-                br = new BufferedReader(new FileReader(logfile));
-                long skipped = skipLargeFile(br, logfile.length());
-                if (skipped > 0) {
-                    llog.append(LogsActivity.this.getResources().getString(R.string.logs_too_long));
-                    llog.append("\n-----------------\n");
+                try (Scanner scanner = new Scanner(logfile)) {
+                    while (scanner.hasNextLine()) {
+                        logs.add(scanner.nextLine());
+                    }
                 }
-
-                char[] temp = new char[1024];
-                int read;
-                while ((read = br.read(temp)) > 0) {
-                    llog.append(temp, 0, read);
-                }
-                br.close();
+                return logs;
             } catch (IOException e) {
-                llog.append(LogsActivity.this.getResources().getString(R.string.logs_cannot_read));
-                llog.append(e.getMessage());
+                logs.add(LogsActivity.this.getResources().getString(R.string.logs_cannot_read));
+                logs.addAll(Arrays.asList(e.getMessage().split("\n")));
             }
 
-            return llog.toString();
+            return logs;
         }
 
         @Override
-        protected void onPostExecute(String llog) {
-            mProgressDialog.dismiss();
-            mTxtLog.setText(llog);
+        protected void onPostExecute(ArrayList<String> logs) {
+            if (logs.size() == 0) {
+                mAdapter.setEmpty();
+            } else {
+                mAdapter.setLogs(logs);
+            }
+            handler.removeCallbacks(mRunnable);//It loaded so fast that no need to show progress
+            if (mProgressDialog.isShowing()){
+                mProgressDialog.dismiss();
+            }
+        }
+    }
 
-            if (llog.length() == 0)
-                mTxtLog.setText(R.string.log_is_empty);
+    private class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.ViewHolder> {
+        ArrayList<String> logs = new ArrayList<>();
+
+        @NonNull
+        @Override
+        public LogsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_log, parent, false);
+            return new LogsAdapter.ViewHolder(v);
         }
 
+        @Override
+        public void onBindViewHolder(@NonNull LogsAdapter.ViewHolder holder, int position) {
+            TextView view = holder.textView;
+            view.setText(logs.get(position));
+            view.measure(0, 0);
+            int desiredWidth = view.getMeasuredWidth();
+            ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+            layoutParams.width = desiredWidth;
+            if (mListView.getWidth() < desiredWidth) {
+                mListView.requestLayout();
+            }
+
+        }
+
+        void setLogs(ArrayList<String> logs) {
+            this.logs.clear();
+            this.logs.addAll(logs);
+            notifyDataSetChanged();
+        }
+
+        void setEmpty() {
+            logs.clear();
+            logs.add(getString(R.string.log_is_empty));
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public int getItemCount() {
+            return logs.size();
+        }
+
+        class ViewHolder extends RecyclerView.ViewHolder {
+            TextView textView;
+
+            ViewHolder(View itemView) {
+                super(itemView);
+                textView = itemView.findViewById(R.id.log);
+            }
+        }
     }
+
+
 }

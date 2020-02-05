@@ -16,7 +16,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,6 +23,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.meowcat.edxposed.manager.util.NavUtil;
 import org.meowcat.edxposed.manager.util.json.XposedTab;
@@ -206,7 +206,7 @@ public class BaseAdvancedInstaller extends Fragment {
                     new Handler().postDelayed(() -> mClickedButton.performClick(), 500);
                 }
             } else {
-                Toast.makeText(getActivity(), R.string.permissionNotGranted, Toast.LENGTH_LONG).show();
+                Snackbar.make(getActivity().findViewById(R.id.snackbar), R.string.permissionNotGranted, Snackbar.LENGTH_LONG).show();
             }
         }
     }

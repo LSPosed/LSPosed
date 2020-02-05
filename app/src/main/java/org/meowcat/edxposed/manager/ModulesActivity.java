@@ -24,7 +24,6 @@ import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -37,6 +36,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import org.meowcat.edxposed.manager.repo.Module;
 import org.meowcat.edxposed.manager.repo.ModuleVersion;
@@ -189,7 +190,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                     new Handler().postDelayed(() -> onOptionsItemSelected(mClickedMenuItem), 500);
                 }
             } else {
-                Toast.makeText(this, R.string.permissionNotGranted, Toast.LENGTH_LONG).show();
+                Snackbar.make(findViewById(R.id.snackbar), R.string.permissionNotGranted, Snackbar.LENGTH_LONG).show();
             }
         }
     }
@@ -212,7 +213,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 }
 
                 if (ModuleUtil.getInstance().getEnabledModules().isEmpty()) {
-                    Toast.makeText(this, getString(R.string.no_enabled_modules), Toast.LENGTH_SHORT).show();
+                    Snackbar.make(findViewById(R.id.snackbar), R.string.no_enabled_modules, Snackbar.LENGTH_SHORT).show();
                     return false;
                 }
 
@@ -230,21 +231,21 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                     in.close();
                     out.close();
                 } catch (IOException e) {
-                    Toast.makeText(this, getResources().getString(R.string.logs_save_failed) + "\n" + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Snackbar.make(findViewById(R.id.snackbar), getResources().getString(R.string.logs_save_failed) + "\n" + e.getMessage(), Snackbar.LENGTH_LONG).show();
                     return false;
                 }
 
-                Toast.makeText(this, enabledModulesPath.toString(), Toast.LENGTH_LONG).show();
+                Snackbar.make(findViewById(R.id.snackbar), enabledModulesPath.toString(), Snackbar.LENGTH_LONG).show();
                 return true;
             case R.id.export_installed_modules:
                 if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                    Toast.makeText(this, R.string.sdcard_not_writable, Toast.LENGTH_LONG).show();
+                    Snackbar.make(findViewById(R.id.snackbar), R.string.sdcard_not_writable, Snackbar.LENGTH_LONG).show();
                     return false;
                 }
                 Map<String, ModuleUtil.InstalledModule> installedModules = ModuleUtil.getInstance().getModules();
 
                 if (installedModules.isEmpty()) {
-                    Toast.makeText(this, getString(R.string.no_installed_modules), Toast.LENGTH_SHORT).show();
+                    Snackbar.make(findViewById(R.id.snackbar), R.string.no_installed_modules, Snackbar.LENGTH_SHORT).show();
                     return false;
                 }
 
@@ -262,11 +263,11 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
 
                     fileOut.close();
                 } catch (IOException e) {
-                    Toast.makeText(this, getResources().getString(R.string.logs_save_failed) + "\n" + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Snackbar.make(findViewById(R.id.snackbar), getResources().getString(R.string.logs_save_failed) + "\n" + e.getMessage(), Snackbar.LENGTH_LONG).show();
                     return false;
                 }
 
-                Toast.makeText(this, installedModulesPath.toString(), Toast.LENGTH_LONG).show();
+                Snackbar.make(findViewById(R.id.snackbar), installedModulesPath.toString(), Snackbar.LENGTH_LONG).show();
                 return true;
             case R.id.import_installed_modules:
                 return importModules(installedModulesPath);
@@ -279,15 +280,14 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
 
     private boolean importModules(File path) {
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            Toast.makeText(this, R.string.sdcard_not_writable, Toast.LENGTH_LONG).show();
+            Snackbar.make(findViewById(R.id.snackbar), R.string.sdcard_not_writable, Snackbar.LENGTH_LONG).show();
             return false;
         }
         InputStream ips = null;
         RepoLoader repoLoader = RepoLoader.getInstance();
         List<Module> list = new ArrayList<>();
         if (!path.exists()) {
-            Toast.makeText(this, getString(R.string.no_backup_found),
-                    Toast.LENGTH_LONG).show();
+            Snackbar.make(findViewById(R.id.snackbar), R.string.no_backup_found, Snackbar.LENGTH_LONG).show();
             return false;
         }
         try {
@@ -297,8 +297,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         }
 
         if (path.length() == 0) {
-            Toast.makeText(this, R.string.file_is_empty,
-                    Toast.LENGTH_LONG).show();
+            Snackbar.make(findViewById(R.id.snackbar), R.string.file_is_empty, Snackbar.LENGTH_LONG).show();
             return false;
         }
 
@@ -311,15 +310,15 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 Module m = repoLoader.getModule(line);
 
                 if (m == null) {
-                    Toast.makeText(this, getString(R.string.download_details_not_found,
-                            line), Toast.LENGTH_SHORT).show();
+                    Snackbar.make(findViewById(R.id.snackbar), getString(R.string.download_details_not_found,
+                            line), Snackbar.LENGTH_SHORT).show();
                 } else {
                     list.add(m);
                 }
             }
             br.close();
         } catch (ActivityNotFoundException | IOException e) {
-            Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
+            Snackbar.make(findViewById(R.id.snackbar), e.toString(), Snackbar.LENGTH_SHORT).show();
         }
 
         for (final Module m : list) {
@@ -397,7 +396,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                     if (launchIntent != null) {
                         startActivity(launchIntent);
                     } else {
-                        Toast.makeText(this, getString(R.string.module_no_ui), Toast.LENGTH_LONG).show();
+                        Snackbar.make(findViewById(R.id.snackbar), R.string.module_no_ui, Snackbar.LENGTH_LONG).show();
                     }
                     return true;
 
@@ -473,7 +472,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 if (launchIntent != null) {
                     startActivity(launchIntent);
                 } else {
-                    Toast.makeText(this, getString(R.string.module_no_ui), Toast.LENGTH_LONG).show();
+                    Snackbar.make(findViewById(R.id.snackbar), R.string.module_no_ui, Snackbar.LENGTH_LONG).show();
                 }
             }
         } else {
@@ -485,7 +484,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             if (launchIntent != null) {
                 startActivity(launchIntent);
             } else {
-                Toast.makeText(this, getString(R.string.module_no_ui), Toast.LENGTH_LONG).show();
+                Snackbar.make(findViewById(R.id.snackbar), R.string.module_no_ui, Snackbar.LENGTH_LONG).show();
             }
         }
     }
