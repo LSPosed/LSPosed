@@ -93,7 +93,6 @@ public class LogsActivity extends BaseActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 allLog = tab.getPosition() != 0;
                 reloadErrorLog();
-                scrollDown();
             }
 
             @Override
@@ -323,6 +322,7 @@ public class LogsActivity extends BaseActivity {
             this.logs.clear();
             this.logs.addAll(logs);
             notifyDataSetChanged();
+            mListView.scrollToPosition(getItemCount() - 1);
         }
 
         void setEmpty() {
