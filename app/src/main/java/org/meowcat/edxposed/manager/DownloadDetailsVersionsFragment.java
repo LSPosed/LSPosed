@@ -1,7 +1,6 @@
 package org.meowcat.edxposed.manager;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -41,8 +40,8 @@ import java.util.Date;
 import static org.meowcat.edxposed.manager.XposedApp.WRITE_EXTERNAL_PERMISSION;
 
 public class DownloadDetailsVersionsFragment extends ListFragment {
-    private DownloadDetailsActivity mActivity;
     private static View rootView;
+    private DownloadDetailsActivity mActivity;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {

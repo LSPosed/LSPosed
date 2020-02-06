@@ -102,7 +102,15 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
         mListView.setAdapter(mAdapter);
 
         mListView.setLayoutManager(new LinearLayoutManager(this));
-        mListView.addItemDecoration(new StickyRecyclerHeadersDecoration(mAdapter));
+        StickyRecyclerHeadersDecoration headersDecor = new StickyRecyclerHeadersDecoration(mAdapter);
+        mListView.addItemDecoration(headersDecor);
+        mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                headersDecor.invalidateHeaders();
+            }
+        });
+
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mListView.getContext(),
                 DividerItemDecoration.VERTICAL);
         mListView.addItemDecoration(dividerItemDecoration);
@@ -171,7 +179,6 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
     private void reloadItems() {
         mAdapter.swapCursor(RepoDb.queryModuleOverview(mSortingOrder, mFilterText));
         mAdapter.notifyDataSetChanged();
-        //mAdapter.getFilter().filter(mFilterText);
     }
 
     @Override

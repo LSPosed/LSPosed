@@ -7,5 +7,49 @@
         android:title="@string/menuSearch"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/dexopt_all"
+        android:title="@string/dexopt_now"
+        app:showAsAction="never" />
 
+    <item
+        android:id="@+id/speed_all"
+        android:title="@string/speed_now"
+        app:showAsAction="never" />
+
+    <item
+        android:title="@string/reboot"
+        app:showAsAction="never">
+        <menu>
+            <item
+                android:id="@+id/soft_reboot"
+                android:title="@string/soft_reboot"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/reboot"
+                android:title="@string/reboot_system"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/reboot_recovery"
+                android:title="@string/reboot_recovery"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/reboot_bootloader"
+                android:title="@string/reboot_bootloader"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/reboot_download"
+                android:title="@string/reboot_download"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/reboot_edl"
+                android:title="@string/reboot_edl"
+                app:showAsAction="never" />
+        </menu>
+    </item>
 </menu>

@@ -13,13 +13,11 @@ import android.os.Looper;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StyleRes;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
@@ -119,8 +117,10 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     void softReboot() {
-        if (startShell())
+        if (!Shell.rootAccess()) {
+            showAlert(getString(R.string.root_failed));
             return;
+        }
 
         List<String> messages = new LinkedList<>();
         Shell.Result result = Shell.su("setprop ctl.restart surfaceflinger; setprop ctl.restart zygote").exec();
@@ -132,29 +132,16 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    private boolean startShell() {
-        if (Shell.rootAccess())
-            return false;
-
-        showAlert(getString(R.string.root_failed));
-        return true;
-    }
-
     void showAlert(final String result) {
         if (Looper.myLooper() != Looper.getMainLooper()) {
             runOnUiThread(() -> showAlert(result));
             return;
         }
 
-        AlertDialog dialog = new MaterialAlertDialogBuilder(this).setMessage(result).setPositiveButton(android.R.string.ok, null).create();
-        dialog.show();
-
-        TextView txtMessage = dialog
-                .findViewById(android.R.id.message);
-        try {
-            txtMessage.setTextSize(14);
-        } catch (NullPointerException ignored) {
-        }
+        new MaterialAlertDialogBuilder(this)
+                .setMessage(result)
+                .setPositiveButton(android.R.string.ok, null)
+                .show();
     }
 
     public boolean checkPermissions() {
@@ -168,8 +155,10 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     void reboot(String mode) {
-        if (startShell())
+        if (!Shell.rootAccess()) {
+            showAlert(getString(R.string.root_failed));
             return;
+        }
 
         List<String> messages = new LinkedList<>();
 

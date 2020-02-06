@@ -330,4 +330,5 @@
     <string name="follow_system">Follow system</string>
     <string name="pref_compat_mode_title">Compat List</string>
     <string name="pref_compat_mode_summary">Compat mode app list</string>
+    <string name="xposed_not_active">EdXposed Framework is not currently installed or active\nYou can close status check in settings</string>
 </resources>

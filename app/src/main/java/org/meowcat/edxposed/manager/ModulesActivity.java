@@ -1,15 +1,11 @@
 package org.meowcat.edxposed.manager;
 
-import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -27,9 +23,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.view.menu.MenuBuilder;
-import androidx.appcompat.view.menu.MenuPopupHelper;
-import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -108,6 +101,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             mSwipeRefreshLayout.setRefreshing(false);
         }
     };
+    private String selectedPackageName;
 
     private void filter(String constraint) {
         filter.filter(constraint);
@@ -129,15 +123,12 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         mModuleUtil = ModuleUtil.getInstance();
         mPm = getPackageManager();
         installedXposedVersion = XposedApp.getXposedVersion();
-        if (Build.VERSION.SDK_INT >= 21) {
-            if (installedXposedVersion <= 0) {
-                addHeader();
-            }
-        } else {
-            //if (StatusInstallerFragment.DISABLE_FILE.exists()) installedXposedVersion = -1;
-            if (installedXposedVersion <= 0) {
-                addHeader();
-            }
+        if (installedXposedVersion <= 0) {
+            Snackbar.make(findViewById(R.id.snackbar), R.string.xposed_not_active, Snackbar.LENGTH_LONG).setAction(R.string.Settings, v -> {
+                Intent intent = new Intent();
+                intent.setClass(ModulesActivity.this, SettingsActivity.class);
+                startActivity(intent);
+            }).show();
         }
         mAdapter = new ModuleAdapter();
         mModuleUtil.addListener(this);
@@ -164,12 +155,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             }
         };
 
-    }
-
-    private void addHeader() {
-        //View notActiveNote = getLayoutInflater().inflate(R.layout.xposed_not_active_note, mListView, false);
-        //notActiveNote.setTag(NOT_ACTIVE_NOTE_TAG);
-        //mListView.addHeaderView(notActiveNote);
     }
 
     @Override
@@ -277,7 +262,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         return super.onOptionsItemSelected(item);
     }
 
-
     private boolean importModules(File path) {
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             Snackbar.make(findViewById(R.id.snackbar), R.string.sdcard_not_writable, Snackbar.LENGTH_LONG).show();
@@ -362,78 +346,56 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         runOnUiThread(reloadModules);
     }
 
-    @SuppressLint("RestrictedApi")
-    private void showMenu(@NonNull Context context,
-                          @NonNull View anchor,
-                          @NonNull ApplicationInfo info) {
-        PopupMenu appMenu = new PopupMenu(context, anchor);
-        appMenu.inflate(R.menu.context_menu_modules);
-        ModuleUtil.InstalledModule installedModule = ModuleUtil.getInstance().getModule(info.packageName);
-        if (installedModule == null) {
-            return;
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        ModuleUtil.InstalledModule module = ModuleUtil.getInstance().getModule(selectedPackageName);
+        if (module == null) {
+            return false;
         }
-        try {
-            String support = RepoDb
-                    .getModuleSupport(installedModule.packageName);
-            if (NavUtil.parseURL(support) == null)
-                appMenu.getMenu().removeItem(R.id.menu_support);
-        } catch (RepoDb.RowNotFoundException e) {
-            appMenu.getMenu().removeItem(R.id.menu_download_updates);
-            appMenu.getMenu().removeItem(R.id.menu_support);
+        switch (item.getItemId()) {
+            case R.id.menu_launch:
+                String packageName = module.packageName;
+                if (packageName == null) {
+                    return false;
+                }
+                Intent launchIntent = getSettingsIntent(packageName);
+                if (launchIntent != null) {
+                    startActivity(launchIntent);
+                } else {
+                    Snackbar.make(findViewById(R.id.snackbar), R.string.module_no_ui, Snackbar.LENGTH_LONG).show();
+                }
+                return true;
+
+            case R.id.menu_download_updates:
+                Intent detailsIntent = new Intent(this, DownloadDetailsActivity.class);
+                detailsIntent.setData(Uri.fromParts("package", module.packageName, null));
+                startActivity(detailsIntent);
+                return true;
+
+            case R.id.menu_support:
+                NavUtil.startURL(this, Uri.parse(RepoDb.getModuleSupport(module.packageName)));
+                return true;
+
+            case R.id.menu_app_store:
+                Uri uri = Uri.parse("market://details?id=" + module.packageName);
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                try {
+                    startActivity(intent);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                return true;
+
+            case R.id.menu_app_info:
+                startActivity(new Intent(ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", module.packageName, null)));
+                return true;
+
+            case R.id.menu_uninstall:
+                startActivity(new Intent(Intent.ACTION_UNINSTALL_PACKAGE, Uri.fromParts("package", module.packageName, null)));
+                return true;
         }
-        appMenu.setOnMenuItemClickListener(menuItem -> {
-            ModuleUtil.InstalledModule module = ModuleUtil.getInstance().getModule(info.packageName);
-            if (module == null) {
-                return false;
-            }
-            switch (menuItem.getItemId()) {
-                case R.id.menu_launch:
-                    String packageName = module.packageName;
-                    if (packageName == null) {
-                        return false;
-                    }
-                    Intent launchIntent = getSettingsIntent(packageName);
-                    if (launchIntent != null) {
-                        startActivity(launchIntent);
-                    } else {
-                        Snackbar.make(findViewById(R.id.snackbar), R.string.module_no_ui, Snackbar.LENGTH_LONG).show();
-                    }
-                    return true;
-
-                case R.id.menu_download_updates:
-                    Intent detailsIntent = new Intent(this, DownloadDetailsActivity.class);
-                    detailsIntent.setData(Uri.fromParts("package", module.packageName, null));
-                    startActivity(detailsIntent);
-                    return true;
-
-                case R.id.menu_support:
-                    NavUtil.startURL(this, Uri.parse(RepoDb.getModuleSupport(module.packageName)));
-                    return true;
-
-                case R.id.menu_app_store:
-                    Uri uri = Uri.parse("market://details?id=" + module.packageName);
-                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    try {
-                        startActivity(intent);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                    return true;
-
-                case R.id.menu_app_info:
-                    startActivity(new Intent(ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", module.packageName, null)));
-                    return true;
-
-                case R.id.menu_uninstall:
-                    startActivity(new Intent(Intent.ACTION_UNINSTALL_PACKAGE, Uri.fromParts("package", module.packageName, null)));
-                    return true;
-            }
-            return true;
-        });
-        MenuPopupHelper menuHelper = new MenuPopupHelper(context, (MenuBuilder) appMenu.getMenu(), anchor);
-        menuHelper.setForceShowIcon(true);
-        menuHelper.show();
+        return super.onContextItemSelected(item);
     }
 
     private Intent getSettingsIntent(String packageName) {
@@ -456,37 +418,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setClassName(ris.get(0).activityInfo.packageName, ris.get(0).activityInfo.name);
         return intent;
-    }
-
-    public void onItemClick(View view) {
-        if (getFragmentManager() != null) {
-            try {
-                showMenu(this, view, Objects.requireNonNull(this).getPackageManager().getApplicationInfo((String) view.getTag(), 0));
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
-                String packageName = (String) view.getTag();
-                if (packageName == null)
-                    return;
-
-                Intent launchIntent = getSettingsIntent(packageName);
-                if (launchIntent != null) {
-                    startActivity(launchIntent);
-                } else {
-                    Snackbar.make(findViewById(R.id.snackbar), R.string.module_no_ui, Snackbar.LENGTH_LONG).show();
-                }
-            }
-        } else {
-            String packageName = (String) view.getTag();
-            if (packageName == null) {
-                return;
-            }
-            Intent launchIntent = getSettingsIntent(packageName);
-            if (launchIntent != null) {
-                startActivity(launchIntent);
-            } else {
-                Snackbar.make(findViewById(R.id.snackbar), R.string.module_no_ui, Snackbar.LENGTH_LONG).show();
-            }
-        }
     }
 
     private boolean lowercaseContains(String s, CharSequence filter) {
@@ -514,11 +445,41 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            //View view = holder.itemView;
             ModuleUtil.InstalledModule item = (ModuleUtil.InstalledModule) items.toArray()[position];
-            holder.itemView.setOnClickListener(v -> ModulesActivity.this.onItemClick(holder.itemView));
-            holder.itemView.setTag(item.packageName);
+            holder.itemView.setOnClickListener(v -> {
+                String packageName = item.packageName;
+                if (packageName == null) {
+                    return;
+                }
+                Intent launchIntent = getSettingsIntent(packageName);
+                if (launchIntent != null) {
+                    startActivity(launchIntent);
+                } else {
+                    Snackbar.make(findViewById(R.id.snackbar), R.string.module_no_ui, Snackbar.LENGTH_LONG).show();
+                }
+            });
 
+            holder.itemView.setOnLongClickListener(v -> {
+                selectedPackageName = item.packageName;
+                return false;
+            });
+
+            holder.itemView.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
+                getMenuInflater().inflate(R.menu.context_menu_modules, menu);
+                ModuleUtil.InstalledModule installedModule = ModuleUtil.getInstance().getModule(item.packageName);
+                if (installedModule == null) {
+                    return;
+                }
+                try {
+                    String support = RepoDb.getModuleSupport(installedModule.packageName);
+                    if (NavUtil.parseURL(support) == null) {
+                        menu.removeItem(R.id.menu_support);
+                    }
+                } catch (RepoDb.RowNotFoundException e) {
+                    menu.removeItem(R.id.menu_download_updates);
+                    menu.removeItem(R.id.menu_support);
+                }
+            });
             holder.appName.setText(item.getAppName());
 
             TextView version = holder.appVersion;

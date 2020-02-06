@@ -22,6 +22,9 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity
+            android:name=".CrashReportActivity"
+            android:process=":error_activity" />
+        <activity
             android:name=".CompatListActivity"
             android:label="@string/nav_title_compat_list" />
         <activity

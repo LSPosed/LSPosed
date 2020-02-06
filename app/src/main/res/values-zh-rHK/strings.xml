@@ -296,4 +296,5 @@
     <string name="install_timestamps">安裝於 %1$s \u00b7 更新於 %2$s</string>
     <string name="pref_compat_mode_summary">兼容模式應用列表</string>
     <string name="pref_compat_mode_title">兼容模式</string>
+    <string name="xposed_not_active">EdXposed 框架未安裝或未啟用, 您可在設定中關閉狀態檢查</string>
 </resources>
