@@ -268,7 +268,6 @@
     <string name="pref_enable_boot_image_deopt_summary">禁用系统代码的优化能使所有系统方法都可以被 hook 到, 但是会降低系统流畅度\n主要用于对比测试某个方法无法 hook 到是否为系统优化导致</string>
 
     <string name="pref_title_disable_verbose_log">禁用详细日志</string>
-    <string name="logs_verbose_disabled">详细日志已禁用</string>
     <string name="logs_cannot_read">无法读取日志: \n</string>
     <string name="app_launch">运行</string>
     <string name="app_stop">停止</string>
@@ -295,4 +294,6 @@
     <string name="follow_system">跟随系统</string>
     <string name="pure_black_dark_theme">使用纯黑深色主题</string>>
     <string name="install_timestamps">安装于 %1$s \u00b7 更新于 %2$s</string>
+    <string name="pref_compat_mode_summary">兼容模式应用列表</string>
+    <string name="pref_compat_mode_title">兼容模式</string>
 </resources>

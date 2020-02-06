@@ -305,7 +305,6 @@
     <string name="pref_enable_boot_image_deopt_summary">Turn on to make all framework methods hookable, but the whole system will be slowed down\nMainly used to check if one framework method is inlined when it can\'t be hooked into</string>
 
     <string name="pref_title_disable_verbose_log">Disable verbose logs</string>
-    <string name="logs_verbose_disabled">Verbose logs is disabled</string>
     <string name="logs_cannot_read">Cannot read log: \n</string>
     <string name="app_launch">Launch it</string>
     <string name="app_stop">Stop it</string>
