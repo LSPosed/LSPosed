@@ -42,7 +42,7 @@ import static org.meowcat.edxposed.manager.XposedApp.WRITE_EXTERNAL_PERMISSION;
 
 public class DownloadDetailsVersionsFragment extends ListFragment {
     private DownloadDetailsActivity mActivity;
-    private View rootView;
+    private static View rootView;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -124,7 +124,6 @@ public class DownloadDetailsVersionsFragment extends ListFragment {
         @Override
         public void onDownloadFinished(Context context, DownloadsUtil.DownloadInfo info) {
             File localFile = new File(info.localFilename);
-            View rootView = ((Activity) context).findViewById(R.id.snackbar);
             if (!localFile.isFile())
                 return;
 
