@@ -88,7 +88,7 @@
     <string name="download_status_installed">Installed (version %s)</string>
     <string name="download_status_update_available">Update available (version %1$s \u2192 %2$s)</string>
     <string name="download_timestamps">Added on %1$s \u00b7 Updated on %2$s</string>
-    <string name="install_timestamps">Installed on %1$s \nUpdated on %2$s</string>
+    <string name="install_timestamps">Installed on %1$s\nUpdated on %2$s</string>
     <string name="download_sorting_title">Sorting order</string>
     <string name="download_sorting_status">Sort by status</string>
     <string name="download_sorting_updated">Sort by last update</string>
@@ -331,4 +331,5 @@
     <string name="pref_compat_mode_title">Compat List</string>
     <string name="pref_compat_mode_summary">Compat mode app list</string>
     <string name="xposed_not_active">EdXposed Framework is not currently installed or active\nYou can close status check in settings</string>
+    <string name="transparent_status_bar">Transparent status bar</string>
 </resources>

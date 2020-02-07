@@ -191,7 +191,7 @@ public class XposedApp extends de.robv.android.xposed.installer.XposedApp implem
     @SuppressWarnings("JavaReflectionMemberAccess")
     @SuppressLint({"PrivateApi", "NewApi"})
     private void createDirectories() {
-        //FileUtils.setPermissions(BASE_DIR, 00777, -1, -1);
+        FileUtils.setPermissions(BASE_DIR, 00777, -1, -1);
         mkdirAndChmod("conf", 00777);
         mkdirAndChmod("log", 00777);
 
@@ -212,7 +212,6 @@ public class XposedApp extends de.robv.android.xposed.installer.XposedApp implem
         runOnUiThread(() -> {
             synchronized (XposedApp.this) {
                 if (mCurrentActivity != null) {
-                    mCurrentActivity.setProgressBarIndeterminateVisibility(isLoading);
                     if (refreshLayout != null)
                         refreshLayout.setRefreshing(isLoading);
                 }
@@ -222,8 +221,9 @@ public class XposedApp extends de.robv.android.xposed.installer.XposedApp implem
 
     @Override
     public synchronized void onActivityCreated(@NonNull Activity activity, Bundle savedInstanceState) {
-        if (mIsUiLoaded)
+        if (mIsUiLoaded) {
             return;
+        }
 
         RepoLoader.getInstance().triggerFirstLoadIfNecessary();
         mIsUiLoaded = true;
@@ -242,7 +242,6 @@ public class XposedApp extends de.robv.android.xposed.installer.XposedApp implem
 
     @Override
     public synchronized void onActivityPaused(Activity activity) {
-        activity.setProgressBarIndeterminateVisibility(false);
         mCurrentActivity = null;
     }
 

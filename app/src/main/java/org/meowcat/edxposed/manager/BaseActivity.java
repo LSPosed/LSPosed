@@ -21,6 +21,7 @@ import androidx.annotation.StyleRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -85,6 +86,13 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (!(this instanceof MainActivity) && !XposedApp.getPreferences().getBoolean("black_dark_theme", false)) {
+            if (XposedApp.getPreferences().getBoolean("transparent_status_bar", false)) {
+                getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorActionBar));
+            } else {
+                getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+            }
+        }
         if (!Objects.equals(mTheme, getTheme(this))) {
             recreate();
         }

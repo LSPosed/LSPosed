@@ -5,74 +5,74 @@
     android:layout_gravity="center"
     android:background="?selectableItemBackground"
     android:clickable="true"
-    android:focusable="true"
-    android:minHeight="?android:attr/listPreferredItemHeight">
+    android:focusable="true">
 
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:minHeight="?android:attr/listPreferredItemHeight"
         android:orientation="horizontal"
         android:padding="8dp"
-        android:paddingStart="18dp"
         android:paddingEnd="12dp">
 
+        <ImageView
+            android:id="@+id/app_icon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentTop="true"
+            tools:ignore="ContentDescription" />
+
         <LinearLayout
+            android:id="@+id/linear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@id/app_icon">
+
+            <TextView
+                android:id="@+id/app_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:layout_weight="1"
+                android:singleLine="false"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textIsSelectable="false" />
+
+            <TextView
+                android:id="@+id/version_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:ellipsize="marquee"
+                android:gravity="end"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:maxWidth="100dp"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textIsSelectable="false"
+                tools:ignore="RtlHardcoded" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linear"
+            android:layout_marginStart="8dp"
             android:layout_toStartOf="@id/checkbox"
+            android:layout_toEndOf="@id/app_icon"
             android:orientation="vertical">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="48dp">
-
-                <ImageView
-                    android:id="@+id/app_icon"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    tools:ignore="ContentDescription" />
-
-                <TextView
-                    android:id="@+id/app_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@id/app_icon"
-                    android:layout_marginStart="8dp"
-                    android:layout_toEndOf="@id/app_icon"
-                    android:singleLine="false"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textIsSelectable="false" />
-
-                <TextView
-                    android:id="@+id/version_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@id/app_name"
-                    android:layout_marginStart="4dip"
-                    android:layout_toEndOf="@id/app_name"
-                    android:ellipsize="marquee"
-                    android:maxWidth="100dp"
-                    android:singleLine="true"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@android:color/tertiary_text_dark"
-                    android:textIsSelectable="false"
-                    tools:ignore="RtlHardcoded" />
-
-                <TextView
-                    android:id="@+id/package_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/app_name"
-                    android:layout_alignBottom="@id/app_icon"
-                    android:layout_marginStart="8dp"
-                    android:layout_toEndOf="@id/app_icon"
-                    android:ellipsize="end"
-                    android:singleLine="true"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textIsSelectable="false" />
-            </RelativeLayout>
+            <TextView
+                android:id="@+id/package_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textIsSelectable="false" />
 
             <TextView
                 android:id="@+id/timestamps"

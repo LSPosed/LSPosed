@@ -177,8 +177,10 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
     }
 
     private void reloadItems() {
-        mAdapter.swapCursor(RepoDb.queryModuleOverview(mSortingOrder, mFilterText));
-        mAdapter.notifyDataSetChanged();
+        runOnUiThread(() -> {
+            mAdapter.swapCursor(RepoDb.queryModuleOverview(mSortingOrder, mFilterText));
+            mAdapter.notifyDataSetChanged();
+        });
     }
 
     @Override

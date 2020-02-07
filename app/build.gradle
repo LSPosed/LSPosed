@@ -7,8 +7,8 @@ android {
         applicationId "org.meowcat.edxposed.manager"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 45405
-        versionName "4.5.4.1"
+        versionCode 45406
+        versionName "4.5.4.2"
     }
     buildTypes {
         release {
@@ -34,7 +34,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.2.0-alpha04'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
-    implementation "com.github.topjohnwu.libsu:core:2.5.0"
+    implementation "com.github.topjohnwu.libsu:core:2.5.1"
     implementation 'androidx.browser:browser:1.2.0'
     implementation 'com.timehop.stickyheadersrecyclerview:library:0.4.3@aar'
     implementation 'com.takisoft.preferencex:preferencex:1.1.0'

@@ -20,6 +20,11 @@
             app:iconSpaceReserved="false" />
 
         <SwitchPreference
+            android:key="transparent_status_bar"
+            android:title="@string/transparent_status_bar"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreference
             android:defaultValue="true"
             android:key="confirm_reboots"
             android:title="@string/confirm_reboots"

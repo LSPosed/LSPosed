@@ -22,11 +22,13 @@ import org.meowcat.edxposed.manager.XposedApp;
 import org.meowcat.edxposed.manager.util.InstallApkUtil;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
 
@@ -34,7 +36,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
     private final ApplicationInfo.DisplayNameComparator displayNameComparator;
     private Callback callback;
     private List<ApplicationInfo> fullList, showList;
-    private DateFormat dateformat = DateFormat.getDateInstance(DateFormat.SHORT);
+    private DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     private List<String> checkedList;
     private PackageManager pm;
     private ApplicationFilter filter;

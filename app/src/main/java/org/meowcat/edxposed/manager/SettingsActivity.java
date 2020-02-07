@@ -1,6 +1,7 @@
 package org.meowcat.edxposed.manager;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.preference.Preference;
 import androidx.preference.SwitchPreference;
 
@@ -319,6 +321,20 @@ public class SettingsActivity extends BaseActivity {
                     mDisableResourcesFlag.delete();
                 }
                 return (enabled == mDisableResourcesFlag.exists());
+            });
+
+            SwitchPreference transparent_status_bar = findPreference("transparent_status_bar");
+            Objects.requireNonNull(transparent_status_bar).setOnPreferenceChangeListener((preference, newValue) -> {
+                boolean enabled = (Boolean) newValue;
+                Activity activity = getActivity();
+                if (activity != null && !XposedApp.getPreferences().getBoolean("black_dark_theme", false)) {
+                    if (enabled) {
+                        Objects.requireNonNull(getActivity()).getWindow().setStatusBarColor(ContextCompat.getColor(activity, R.color.colorActionBar));
+                    } else {
+                        Objects.requireNonNull(getActivity()).getWindow().setStatusBarColor(ContextCompat.getColor(activity, R.color.colorPrimaryDark));
+                    }
+                }
+                return true;
             });
 
             Preference compat_mode = findPreference("compat_mode");

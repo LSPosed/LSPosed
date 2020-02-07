@@ -293,8 +293,9 @@
     <string name="pref_disable_modules_log_summary">模組丟擲的的異常堆疊仍將正常抓取</string>
     <string name="follow_system">跟隨系統</string>
     <string name="pure_black_dark_theme">使用純黑深色主題</string>>
-    <string name="install_timestamps">安裝於 %1$s \u00b7 更新於 %2$s</string>
+    <string name="install_timestamps">安裝於 %1$s\n更新於 %2$s</string>
     <string name="pref_compat_mode_summary">相容模式應用列表</string>
     <string name="pref_compat_mode_title">相容模式</string>
     <string name="xposed_not_active">EdXposed 框架未安裝或未啟用, 您可在設定中關閉狀態檢查</string>
+    <string name="transparent_status_bar">透明狀態列</string>
 </resources>
