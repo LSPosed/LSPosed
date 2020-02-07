@@ -40,7 +40,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/downloadStatus"
             android:layout_alignStart="@id/description"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@android:color/tertiary_text_dark" />
+            android:textAppearance="?android:attr/textAppearanceSmall" />
     </RelativeLayout>
 </FrameLayout>

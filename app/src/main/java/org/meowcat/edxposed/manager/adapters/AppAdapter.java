@@ -174,6 +174,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         holder.appName.setText(InstallApkUtil.getAppLabel(info, pm));
         try {
             holder.appVersion.setText(pm.getPackageInfo(info.packageName, 0).versionName);
+            holder.appVersion.setSelected(true);
             String creationDate = dateformat.format(new Date(pm.getPackageInfo(info.packageName, 0).firstInstallTime));
             String updateDate = dateformat.format(new Date(pm.getPackageInfo(info.packageName, 0).lastUpdateTime));
             holder.timestamps.setText(holder.itemView.getContext().getString(R.string.install_timestamps, creationDate, updateDate));
@@ -181,7 +182,6 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
             e.printStackTrace();
         }
         holder.appPackage.setText(info.packageName);
-        //holder.appPackage.setTextColor(ThemeUtil.getThemeColor(context, android.R.attr.textColorSecondary));
 
         holder.mSwitch.setOnCheckedChangeListener(null);
         holder.mSwitch.setChecked(checkedList.contains(info.packageName));

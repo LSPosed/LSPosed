@@ -487,11 +487,9 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             TextView version = holder.appVersion;
             version.setText(Objects.requireNonNull(item).versionName);
             version.setSelected(true);
-            version.setTextColor(Color.parseColor("#808080"));
 
             TextView packageTv = holder.appPackage;
             packageTv.setText(item.packageName);
-            packageTv.setSelected(true);
 
             String creationDate = dateformat.format(new Date(item.installTime));
             String updateDate = dateformat.format(new Date(item.updateTime));
