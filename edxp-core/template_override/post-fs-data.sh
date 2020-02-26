@@ -144,6 +144,11 @@ mkdir "${MODDIR}/system/bin"
 cp -f "/system/bin/app_process32" "${MODDIR}/system/bin/app_process32"
 [[ -f "/system/bin/app_process64" ]] && cp -f "/system/bin/app_process64" "${MODDIR}/system/bin/app_process64"
 
+# install stub if manager not installed
+if [[ "$(pm path org.meowcat.edxposed.manager)" == "" ]]; then
+    pm install ${MODPATH}/EdXposed.apk 2>&2
+fi
+
 start_verbose_log_catcher
 start_bridge_log_catcher
 
