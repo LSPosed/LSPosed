@@ -2,7 +2,7 @@ SKIPUNZIP=1
 RIRU_PATH="/data/misc/riru"
 OLD_MAGISK=false
 DETECTED_DEVICE=false
-NO_PERSIST=true
+NO_PERSIST=false
 PROP_MODEL=$(getprop ro.product.model)
 PROP_DEVICE=$(getprop ro.product.device)
 PROP_PRODUCT=$(getprop ro.build.product)
@@ -27,10 +27,6 @@ HONOR
 "
 MANUFACTURER="
 HUAWEI
-"
-PERSIST="
-/persist
-/mnt/vendor/persist
 "
 
 require_new_magisk() {
@@ -153,7 +149,7 @@ check_architecture() {
     fi
     ui_print "- EdXposed Variant: ${VARIANTS}"
     if [[ "${ARCH}" != "arm" && "${ARCH}" != "arm64" && "${ARCH}" != "x86" && "${ARCH}" != "x64" ]]; then
-        abort "! Unsupported platform is ${ARCH}"
+        abort "! Unsupported platform ${ARCH}"
     else
         ui_print "- Device platform is ${ARCH}"
         if [[ "${ARCH}" == "x86" || "${ARCH}" == "x64" ]]; then
@@ -169,11 +165,9 @@ check_android_version() {
 }
 
 check_persist() {
-	for TARGET in ${PERSIST}; do
-        if [[ -d ${TARGET} ]]; then
-            NO_PERSIST=false
-        fi
-    done
+    if [[ "$(cat /proc/mounts | grep /sbin/.magisk/mirror/persist)" == "" ]]; then
+        NO_PERSIST=true
+    fi
 }
 
 ui_print "- EdXposed Version ${VERSION}"
@@ -184,7 +178,7 @@ check_riru_version
 check_architecture
 
 ui_print "- Extracting module files"
-unzip -o "${ZIPFILE}" module.prop post-fs-data.sh sepolicy.rule system.prop uninstall.sh 'system/*' -d "${MODPATH}" >&2
+unzip -o "${ZIPFILE}" EdXposed.apk module.prop post-fs-data.sh sepolicy.rule system.prop uninstall.sh 'system/*' -d "${MODPATH}" >&2
 
 if [[ "${ARCH}" == "x86" || "${ARCH}" == "x64" ]]; then
     ui_print "- Replacing x86 and x86_64 libraries"
@@ -199,6 +193,11 @@ fi
 if [[ "${IS64BIT}" == false ]]; then
     ui_print "- Removing 64-bit libraries"
     rm -rf "${MODPATH}/system/lib64"
+fi
+
+if [[ ${BOOTMODE} == true && "$(pm path org.meowcat.edxposed.manager)" == "" ]]; then
+    ui_print "- Installing stub apk"
+    pm install ${MODPATH}/EdXposed.apk 2>&2
 fi
 
 if [[ "${OLD_MAGISK}" == true ]]; then
