@@ -29,6 +29,9 @@ public class XposedInstallerHooker {
                             Utils.logD("before reloadXposedProp...");
                             final String propFieldName = "mXposedProp";
                             final Object thisObject = param.thisObject;
+                            if (thisObject == null) {
+                                return;
+                            }
                             if (XposedHelpers.getObjectField(thisObject, propFieldName) != null) {
                                 param.setResult(null);
                                 Utils.logD("reloadXposedProp already done, skip...");
