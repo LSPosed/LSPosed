@@ -1,14 +1,16 @@
 SKIPUNZIP=1
+
 RIRU_PATH="/data/misc/riru"
-OLD_MAGISK=false
-DETECTED_DEVICE=false
-NO_PERSIST=false
+
+VERSION=$(grep_prop version "${TMPDIR}/module.prop")
+RIRU_MIN_API_VERSION=$(grep_prop api "${TMPDIR}/module.prop")
+
 PROP_MODEL=$(getprop ro.product.model)
 PROP_DEVICE=$(getprop ro.product.device)
 PROP_PRODUCT=$(getprop ro.build.product)
 PROP_BRAND=$(getprop ro.product.brand)
 PROP_MANUFACTURER=$(getprop ro.product.manufacturer)
-VERSION=$(grep_prop version "$TMPDIR/module.prop")
+
 MODEL="
 HD1900
 HD1910
@@ -29,6 +31,15 @@ MANUFACTURER="
 HUAWEI
 "
 
+OLD_MAGISK=false
+DETECTED_DEVICE=false
+NO_PERSIST=false
+
+abortC() {
+  rm -rf "${MODPATH}"
+  abort "$1"
+}
+
 require_new_magisk() {
     if [[ "${NO_PERSIST}" == true ]]; then
         ui_print "******************************"
@@ -37,13 +48,13 @@ require_new_magisk() {
         ui_print "! Deprecated custom Magisk v20.1 is required"
         ui_print "! Change Magisk update channel to http://edxp.meowcat.org/repo/version.json"
         ui_print "! And re-install Magisk"
-        abort    "******************************"
+        abortC   "******************************"
     else
         ui_print "******************************"
         ui_print "! Special device detected"
         ui_print "! Magisk v20.2+ or custom Magisk v20.1(Deprecated) is required"
         ui_print "! You can update from 'Magisk Manager' or https://github.com/topjohnwu/Magisk/releases"
-        abort    "******************************"
+        abortC   "******************************"
     fi
 }
 
@@ -59,7 +70,7 @@ require_riru() {
     ui_print "******************************"
     ui_print "! Requirement module 'Riru - Core' is not installed"
     ui_print "! You can download from 'Magisk Manager' or https://github.com/RikkaApps/Riru/releases"
-    abort    "******************************"
+    abortC   "******************************"
 }
 
 require_new_riru() {
@@ -67,7 +78,7 @@ require_new_riru() {
     ui_print "! Old Riru ${1} (below v19) detected"
     ui_print "! The latest version of 'Riru - Core' is required"
     ui_print "! You can download from 'Magisk Manager' or https://github.com/RikkaApps/Riru/releases"
-    abort    "******************************"
+    abortC   "******************************"
 }
 
 require_yahfa() {
@@ -75,7 +86,7 @@ require_yahfa() {
     ui_print "! Architecture x86 or x86_64 detected"
     ui_print "! Only YAHFA variant supports x86 or x86_64 architecture devices"
     ui_print "! You can download from 'Magisk Manager' or 'EdXposed Manager'"
-    abort    "******************************"
+    abortC   "******************************"
 }
 
 require_new_android() {
@@ -84,7 +95,7 @@ require_new_android() {
     ui_print "! Only the original Xposed Framework can be used under Android 8.0"
     ui_print "! You can download from 'Xposed Installer' or 'Magisk Manager(Systemless-ly)'"
     ui_print "! Learn more: https://github.com/ElderDrivers/EdXposed/wiki/Available-Android-versions"
-    abort    "******************************"
+    abortC   "******************************"
 }
 
 check_old_magisk_device() {
@@ -129,16 +140,21 @@ check_magisk_version() {
     if [[ "${DETECTED_DEVICE}" == true ]]; then
         ui_print "- Special device detected"
     fi
-    ui_print "- Magisk version is ${MAGISK_VER_CODE}"
+    ui_print "- Magisk version: ${MAGISK_VER_CODE}"
     [[ ${MAGISK_VER_CODE} -ge 20101 ]] || check_old_magisk_device ${MAGISK_VER_CODE}
     [[ ${MAGISK_VER_CODE} -eq 20101 ]] && update_new_magisk
 }
 
 check_riru_version() {
-    [[ ! -f "${RIRU_PATH}/api_version" ]] && require_riru
-    RIRU_VERSION=$(cat "${RIRU_PATH}/api_version")
-    ui_print "- Riru API version is ${RIRU_VERSION}"
-    [[ "${RIRU_VERSION}" -ge 4 ]] || require_new_riru ${RIRU_VERSION}
+    if [[ ! -f "${RIRU_PATH}/api_version" ]] && [[ ! -f "${RIRU_PATH}/api_version.new" ]]; then
+        require_riru
+    fi
+    RIRU_API_VERSION=$(cat "${RIRU_PATH}/api_version.new") || RIRU_API_VERSION=$(cat "${RIRU_PATH}/api_version") || RIRU_API_VERSION=0
+    [[ "${RIRU_API_VERSION}" -eq "${RIRU_API_VERSION}" ]] || RIRU_API_VERSION=0
+    ui_print "- Riru API version: ${RIRU_API_VERSION}"
+    if [[ "${RIRU_API_VERSION}" -lt ${RIRU_MIN_API_VERSION} ]]; then
+        require_new_riru ${RIRU_API_VERSION}
+    fi
 }
 
 check_architecture() {
@@ -149,9 +165,9 @@ check_architecture() {
     fi
     ui_print "- EdXposed Variant: ${VARIANTS}"
     if [[ "${ARCH}" != "arm" && "${ARCH}" != "arm64" && "${ARCH}" != "x86" && "${ARCH}" != "x64" ]]; then
-        abort "! Unsupported platform ${ARCH}"
+        abortC "! Unsupported platform: ${ARCH}"
     else
-        ui_print "- Device platform is ${ARCH}"
+        ui_print "- Device platform: ${ARCH}"
         if [[ "${ARCH}" == "x86" || "${ARCH}" == "x64" ]]; then
             if [[ "${VARIANTS}" == "SandHook" ]]; then
                 require_yahfa
@@ -161,7 +177,11 @@ check_architecture() {
 }
 
 check_android_version() {
-    [[ ${API} -ge 26 ]] || require_new_android ${API}
+    if [[ ${API} -ge 26 ]]; then
+        ui_print "- Android sdk: ${API}"
+    else
+        require_new_android ${API}
+    fi
 }
 
 check_persist() {
@@ -207,7 +227,7 @@ fi
 
 if [[ "${NO_PERSIST}" == true ]]; then
     ui_print "- Persist not detected, remove SEPolicy rule"
-	echo "- Mount: persist:" >&2
+	echo "- Mounted persist:" >&2
 	mount | grep persist >&2
     rm ${MODPATH}/sepolicy.rule
 fi
