@@ -16,6 +16,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.ListFragment;
 
@@ -247,7 +248,7 @@ public class DownloadDetailsVersionsFragment extends ListFragment {
 
                 if (item.changelogIsHtml) {
                     holder.txtChanges.setText(RepoParser.parseSimpleHtml(getActivity(), item.changelog, holder.txtChanges));
-                    holder.txtChanges.setTransformationMethod(new LinkTransformationMethod(getActivity()));
+                    holder.txtChanges.setTransformationMethod(new LinkTransformationMethod((AppCompatActivity) getActivity()));
                     holder.txtChanges.setMovementMethod(LinkMovementMethod.getInstance());
                 } else {
                     holder.txtChanges.setText(item.changelog);

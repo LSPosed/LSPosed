@@ -10,7 +10,7 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:minHeight="?android:attr/listPreferredItemHeight"
+        android:minHeight="?attr/listPreferredItemHeight"
         android:orientation="horizontal"
         android:padding="8dp"
         android:paddingEnd="12dp">

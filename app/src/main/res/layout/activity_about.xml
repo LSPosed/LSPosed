@@ -41,7 +41,7 @@
                         android:adjustViewBounds="true"
                         android:contentDescription="@string/app_name"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/ic_launcher_foreground" />
+                        app:srcCompat="@drawable/ic_launcher_foreground" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -56,7 +56,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
+                    android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
@@ -68,7 +68,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_info" />
+                        app:srcCompat="@drawable/ic_info" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -99,7 +99,7 @@
                     android:id="@+id/changelogView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
+                    android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
@@ -111,7 +111,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_history" />
+                        app:srcCompat="@drawable/ic_history" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -129,7 +129,7 @@
                     android:id="@+id/licensesView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
+                    android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
@@ -140,7 +140,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_description" />
+                        app:srcCompat="@drawable/ic_description" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -159,7 +159,7 @@
                     android:id="@+id/translatorsView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
+                    android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
@@ -171,7 +171,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_language" />
+                        app:srcCompat="@drawable/ic_language" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -202,7 +202,7 @@
                     android:id="@+id/tgChannelView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
+                    android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
@@ -214,7 +214,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_modules" />
+                        app:srcCompat="@drawable/ic_modules" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -240,7 +240,7 @@
                     android:id="@+id/qqGroupView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
+                    android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
@@ -252,7 +252,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_help" />
+                        app:srcCompat="@drawable/ic_help" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -278,7 +278,7 @@
                     android:id="@+id/tgGroupView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
+                    android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
@@ -290,7 +290,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_help" />
+                        app:srcCompat="@drawable/ic_help" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -317,7 +317,7 @@
                     android:id="@+id/sourceCodeView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
+                    android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
@@ -329,7 +329,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_github" />
+                        app:srcCompat="@drawable/ic_github" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -355,7 +355,7 @@
                     android:id="@+id/donateView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
+                    android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
@@ -367,7 +367,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_donate" />
+                        app:srcCompat="@drawable/ic_donate" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -399,7 +399,7 @@
                     android:id="@+id/faqView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
+                    android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
@@ -411,7 +411,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_bug" />
+                        app:srcCompat="@drawable/ic_bug" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -436,7 +436,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
+                    android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
@@ -448,7 +448,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_info" />
+                        app:srcCompat="@drawable/ic_info" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -481,7 +481,7 @@
                     android:id="@+id/installerSupportView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
+                    android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
@@ -493,7 +493,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_help" />
+                        app:srcCompat="@drawable/ic_help" />
 
                     <LinearLayout
                         android:layout_width="match_parent"

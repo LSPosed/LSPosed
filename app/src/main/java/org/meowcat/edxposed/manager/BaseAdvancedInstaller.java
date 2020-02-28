@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
@@ -188,7 +189,7 @@ public class BaseAdvancedInstaller extends Fragment {
             view.findViewById(R.id.warning_unofficial).setVisibility(View.VISIBLE);
         }
 
-        showOnXda.setOnClickListener(v -> NavUtil.startURL(getActivity(), supportUrl()));
+        showOnXda.setOnClickListener(v -> NavUtil.startURL((AppCompatActivity) getActivity(), supportUrl()));
         updateDescription.setOnClickListener(v -> new MaterialAlertDialogBuilder(Objects.requireNonNull(getContext()))
                 .setTitle(R.string.changes)
                 .setMessage(Html.fromHtml(description()))

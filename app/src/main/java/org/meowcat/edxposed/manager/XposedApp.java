@@ -12,16 +12,17 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.FileUtils;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import org.meowcat.edxposed.manager.receivers.PackageChangeReceiver;
+import org.meowcat.edxposed.manager.util.FileUtils;
 import org.meowcat.edxposed.manager.util.ModuleUtil;
 import org.meowcat.edxposed.manager.util.NotificationUtil;
 import org.meowcat.edxposed.manager.util.RepoLoader;
@@ -52,7 +53,7 @@ public class XposedApp extends de.robv.android.xposed.installer.XposedApp implem
     private static Thread mUiThread;
     private static Handler mMainHandler;
     private SharedPreferences mPref;
-    private Activity mCurrentActivity = null;
+    private AppCompatActivity mCurrentActivity = null;
     private boolean mIsUiLoaded = false;
 
     public static XposedApp getInstance() {
@@ -236,7 +237,7 @@ public class XposedApp extends de.robv.android.xposed.installer.XposedApp implem
 
     @Override
     public synchronized void onActivityResumed(@NonNull Activity activity) {
-        mCurrentActivity = activity;
+        mCurrentActivity = (AppCompatActivity) activity;
         updateProgressIndicator(null);
     }
 

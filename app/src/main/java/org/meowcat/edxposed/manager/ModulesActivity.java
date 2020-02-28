@@ -4,7 +4,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -25,6 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -162,7 +162,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_modules, menu);
-        mSearchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+        mSearchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.menu_search));
         mSearchView.setOnQueryTextListener(mSearchListener);
         return super.onCreateOptionsMenu(menu);
     }

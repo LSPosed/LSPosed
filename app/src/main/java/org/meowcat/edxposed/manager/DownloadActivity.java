@@ -11,6 +11,7 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,10 +19,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -152,7 +155,7 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
 
         // Setup search button
         final MenuItem searchItem = menu.findItem(R.id.menu_search);
-        mSearchView = (SearchView) searchItem.getActionView();
+        mSearchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         mSearchView.setIconifiedByDefault(true);
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -347,6 +350,11 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
                 txtStatus.setText(mContext.getString(
                         R.string.download_status_installed, installedVersion));
                 //txtStatus.setTextColor(ThemeUtil.getThemeColor(mContext, R.attr.download_status_installed));
+                TypedValue typedValue = new TypedValue();
+                Resources.Theme theme = txtStatus.getContext().getTheme();
+                theme.resolveAttribute(android.R.attr.textColorSecondary, typedValue, true);
+                @ColorInt int color = typedValue.data;
+                txtStatus.setTextColor(color);
                 txtStatus.setVisibility(View.VISIBLE);
             } else {
                 txtStatus.setVisibility(View.GONE);

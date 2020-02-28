@@ -37,7 +37,7 @@
                         android:layout_height="128dp"
                         android:layout_centerHorizontal="true"
                         android:layout_margin="8dp"
-                        android:src="@drawable/ic_warning"
+                        app:srcCompat="@drawable/ic_warning"
                         tools:ignore="ContentDescription" />
 
                     <TextView

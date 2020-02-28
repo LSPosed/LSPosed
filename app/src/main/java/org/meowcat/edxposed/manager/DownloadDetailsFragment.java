@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import org.meowcat.edxposed.manager.repo.Module;
@@ -45,7 +46,7 @@ public class DownloadDetailsFragment extends Fragment {
         if (module.description != null) {
             if (module.descriptionIsHtml) {
                 description.setText(RepoParser.parseSimpleHtml(getActivity(), module.description, description));
-                description.setTransformationMethod(new LinkTransformationMethod(getActivity()));
+                description.setTransformationMethod(new LinkTransformationMethod((AppCompatActivity) getActivity()));
                 description.setMovementMethod(LinkMovementMethod.getInstance());
             } else {
                 description.setText(module.description);
@@ -67,7 +68,7 @@ public class DownloadDetailsFragment extends Fragment {
             final Uri link = NavUtil.parseURL(moreInfoEntry.second);
             if (link != null) {
                 txtValue.setTextColor(txtValue.getLinkTextColors());
-                moreInfoView.setOnClickListener(v -> NavUtil.startURL(getActivity(), link));
+                moreInfoView.setOnClickListener(v -> NavUtil.startURL((AppCompatActivity) getActivity(), link));
             }
 
             moreInfoContainer.addView(moreInfoView);

@@ -24,7 +24,7 @@
             android:adjustViewBounds="true"
             android:contentDescription="@string/app_name"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_launcher_foreground" />
+            app:srcCompat="@drawable/ic_launcher_foreground" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -57,7 +57,7 @@
         android:layout_marginEnd="16dp"
         android:clickable="true"
         android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground"
+        android:foreground="?attr/selectableItemBackground"
         app:cardBackgroundColor="#4CAF50"
         app:cardCornerRadius="8dp"
         app:cardElevation="8dp">
@@ -76,8 +76,8 @@
                 android:layout_height="28dp"
                 android:layout_centerVertical="true"
                 android:contentDescription="@string/Activated"
-                android:src="@drawable/ic_check_circle"
-                android:tint="@android:color/white" />
+                android:tint="@android:color/white"
+                app:srcCompat="@drawable/ic_check_circle" />
 
             <TextView
                 android:id="@+id/activity_main_status_title"
@@ -111,7 +111,7 @@
         android:layout_marginEnd="16dp"
         android:clickable="true"
         android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground"
+        android:foreground="?attr/selectableItemBackground"
         app:cardCornerRadius="8dp">
 
         <RelativeLayout
@@ -128,7 +128,7 @@
                 android:layout_height="28dp"
                 android:layout_centerVertical="true"
                 android:contentDescription="@string/Modules"
-                android:src="@drawable/ic_apps" />
+                app:srcCompat="@drawable/ic_apps" />
 
             <TextView
                 android:id="@+id/activity_main_modules_title"
@@ -161,7 +161,7 @@
         android:layout_marginEnd="16dp"
         android:clickable="true"
         android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground"
+        android:foreground="?attr/selectableItemBackground"
         app:cardCornerRadius="8dp">
 
         <RelativeLayout
@@ -178,7 +178,7 @@
                 android:layout_height="28dp"
                 android:layout_centerVertical="true"
                 android:contentDescription="@string/Downloads"
-                android:src="@drawable/ic_get_app" />
+                app:srcCompat="@drawable/ic_get_app" />
 
             <TextView
                 android:id="@+id/activity_main_downloads_title"
@@ -207,7 +207,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:background="?android:attr/selectableItemBackground"
+        android:background="?attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
         android:orientation="horizontal"
@@ -219,7 +219,7 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:contentDescription="@string/Apps"
-            android:src="@drawable/outline_list_24" />
+            app:srcCompat="@drawable/outline_list_24" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -234,7 +234,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:background="?android:attr/selectableItemBackground"
+        android:background="?attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
         android:orientation="horizontal"
@@ -246,7 +246,7 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:contentDescription="@string/Logs"
-            android:src="@drawable/ic_assignment" />
+            app:srcCompat="@drawable/ic_assignment" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -261,7 +261,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:background="?android:attr/selectableItemBackground"
+        android:background="?attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
         android:orientation="horizontal"
@@ -273,7 +273,7 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:contentDescription="@string/Settings"
-            android:src="@drawable/ic_settings" />
+            app:srcCompat="@drawable/ic_settings" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -288,7 +288,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:background="?android:attr/selectableItemBackground"
+        android:background="?attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
         android:orientation="horizontal"
@@ -300,7 +300,7 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:contentDescription="@string/About"
-            android:src="@drawable/ic_info" />
+            app:srcCompat="@drawable/ic_info" />
 
         <TextView
             android:layout_width="wrap_content"

@@ -17,7 +17,7 @@
     </style>
 
     <style name="AppearanceFoundation.Caption" parent="TextAppearance.AppCompat.Caption">
-        <item name="android:fontFamily">@font/exo</item>
+        <item name="fontFamily">@font/exo</item>
         <item name="android:textColor">?attr/colorOnSurface</item>
     </style>
 

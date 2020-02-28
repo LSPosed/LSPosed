@@ -1,6 +1,5 @@
 package org.meowcat.edxposed.manager.util.chrome;
 
-import android.app.Activity;
 import android.graphics.Rect;
 import android.text.Spannable;
 import android.text.Spanned;
@@ -10,14 +9,16 @@ import android.text.util.Linkify;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 /**
  * Created by Nikola D. on 12/23/2015.
  */
 public class LinkTransformationMethod implements TransformationMethod {
 
-    private Activity activity;
+    private AppCompatActivity activity;
 
-    public LinkTransformationMethod(Activity activity) {
+    public LinkTransformationMethod(AppCompatActivity activity) {
         this.activity = activity;
     }
 

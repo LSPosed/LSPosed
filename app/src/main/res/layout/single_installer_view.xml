@@ -47,7 +47,7 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:padding="5dp"
-                    android:src="@drawable/ic_info"
+                    app:srcCompat="@drawable/ic_info"
                     tools:ignore="ContentDescription,RtlHardcoded" />
 
                 <com.google.android.material.card.MaterialCardView
@@ -70,7 +70,7 @@
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:layout_margin="8dp"
-                            android:src="@drawable/ic_warning"
+                            app:srcCompat="@drawable/ic_warning"
                             tools:ignore="ContentDescription" />
 
                         <TextView
@@ -109,7 +109,7 @@
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:layout_margin="8dp"
-                            android:src="@drawable/ic_warning"
+                            app:srcCompat="@drawable/ic_warning"
                             tools:ignore="ContentDescription" />
 
                         <TextView
@@ -166,7 +166,7 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:padding="5dp"
-                    android:src="@drawable/ic_info"
+                    app:srcCompat="@drawable/ic_info"
                     tools:ignore="ContentDescription,RtlHardcoded" />
 
                 <Button
@@ -187,7 +187,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/container"
                 android:layout_marginTop="4dp"
-                android:background="?android:attr/selectableItemBackground"
+                android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
@@ -199,7 +199,7 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/ic_person"
+                    app:srcCompat="@drawable/ic_person"
                     tools:ignore="ContentDescription" />
 
                 <LinearLayout
@@ -228,7 +228,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/author_view"
-                android:background="?android:attr/selectableItemBackground"
+                android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
@@ -240,7 +240,7 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/ic_help"
+                    app:srcCompat="@drawable/ic_help"
                     tools:ignore="ContentDescription" />
 
                 <LinearLayout
@@ -268,7 +268,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/show_on_xda"
-                android:background="?android:attr/selectableItemBackground"
+                android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
@@ -280,7 +280,7 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/ic_description"
+                    app:srcCompat="@drawable/ic_description"
                     tools:ignore="ContentDescription" />
 
                 <LinearLayout
@@ -307,7 +307,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/updateDescription"
-                android:background="?android:attr/selectableItemBackground"
+                android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
@@ -319,7 +319,7 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/ic_info"
+                    app:srcCompat="@drawable/ic_info"
                     tools:ignore="ContentDescription" />
 
                 <LinearLayout

@@ -1,8 +1,9 @@
 package org.meowcat.edxposed.manager.util.chrome;
 
-import android.app.Activity;
 import android.text.style.URLSpan;
 import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.meowcat.edxposed.manager.util.NavUtil;
 
@@ -11,9 +12,9 @@ import org.meowcat.edxposed.manager.util.NavUtil;
  */
 public class CustomTabsURLSpan extends URLSpan {
 
-    private Activity activity;
+    private AppCompatActivity activity;
 
-    CustomTabsURLSpan(Activity activity, String url) {
+    CustomTabsURLSpan(AppCompatActivity activity, String url) {
         super(url);
         this.activity = activity;
     }

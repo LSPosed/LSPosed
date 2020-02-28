@@ -1,7 +1,5 @@
 package org.meowcat.edxposed.manager.util;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.text.Spannable;
@@ -11,8 +9,11 @@ import android.text.util.Linkify;
 
 import androidx.annotation.AnyThread;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.content.ContextCompat;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.XposedApp;
@@ -30,20 +31,20 @@ public final class NavUtil {
         return (spans.length > 0) ? Uri.parse(spans[0].getURL()) : null;
     }
 
-    public static void startURL(Activity activity, Uri uri) {
+    public static void startURL(AppCompatActivity activity, Uri uri) {
         CustomTabsIntent.Builder customTabsIntent = new CustomTabsIntent.Builder();
         customTabsIntent.setShowTitle(true);
         customTabsIntent.setToolbarColor(ContextCompat.getColor(activity, R.color.colorPrimary));
         customTabsIntent.build().launchUrl(activity, uri);
     }
 
-    public static void startURL(Activity activity, String url) {
+    public static void startURL(AppCompatActivity activity, String url) {
         startURL(activity, parseURL(url));
     }
 
     @AnyThread
     public static void showMessage(final @NonNull Context context, final CharSequence message) {
-        XposedApp.runOnUiThread(() -> new AlertDialog.Builder(context)
+        XposedApp.runOnUiThread(() -> new MaterialAlertDialogBuilder(context)
                 .setMessage(message)
                 .setPositiveButton(android.R.string.ok, null)
                 .show());
