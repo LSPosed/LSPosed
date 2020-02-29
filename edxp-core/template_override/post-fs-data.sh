@@ -9,9 +9,12 @@ grep_prop() {
 }
 
 MODDIR=${0%/*}
+
 RIRU_PATH="/data/misc/riru"
 TARGET="${RIRU_PATH}/modules/edxp"
-EDXP_VERSION=$(grep_prop version ${MODDIR}/module.prop)
+
+EDXP_VERSION=$(grep_prop version "${MODDIR}/module.prop")
+
 ANDROID_SDK=$(getprop ro.build.version.sdk)
 BUILD_DESC=$(getprop ro.build.description)
 PRODUCT=$(getprop ro.build.product)
@@ -23,21 +26,25 @@ ARCH=$(getprop ro.product.cpu.abi)
 DEVICE=$(getprop ro.product.device)
 ANDROID=$(getprop ro.build.version.release)
 BUILD=$(getprop ro.build.id)
-RIRU_VERSION=$(grep_prop version ${MODDIR}/../riru-core/module.prop)
-RIRU_VERCODE=$(grep_prop versionCode ${MODDIR}/../riru-core/module.prop)
-RIRU_APICODE=$(cat /data/misc/riru/api_version)
+
+RIRU_VERSION=$(cat "${RIRU_PATH}/version_name")
+RIRU_VERCODE=$(cat "${RIRU_PATH}/version_code")
+RIRU_APICODE=$(cat "${RIRU_PATH}/api_version")
+
 MAGISK_VERSION=$(su -v)
 MAGISK_VERCODE=$(su -V)
+
 EDXP_MANAGER="org.meowcat.edxposed.manager"
 XP_INSTALLER="de.robv.android.xposed.installer"
-PATH_PREFIX_PROT="/data/user_de/0/"
-PATH_PREFIX_LEGACY="/data/user/0/"
+PATH_PREFIX="/data/user_de/0/"
+#PATH_PREFIX_LEGACY="/data/user/0/"
 
 sepolicy() {
     # necessary for using mmap in system_server process
     # read configs set in our app
     # for built-in apps // TODO: maybe narrow down the target classes
     # read module apk file in zygote
+    # TODO: remove coredomain sepolicy
     supolicy --live "allow system_server system_server process { execmem }"\
                     "allow system_server system_server memprotect { mmap_zero }"\
                     "allow coredomain coredomain process { execmem }"\
@@ -46,11 +53,11 @@ sepolicy() {
                     "allow zygote apk_data_file * *"
 }
 
-if [[ ${ANDROID_SDK} -ge 24 ]]; then
-    PATH_PREFIX="${PATH_PREFIX_PROT}"
-else
-    PATH_PREFIX="${PATH_PREFIX_LEGACY}"
-fi
+#if [[ ${ANDROID_SDK} -ge 24 ]]; then
+#    PATH_PREFIX="${PATH_PREFIX_PROT}"
+#else
+#    PATH_PREFIX="${PATH_PREFIX_LEGACY}"
+#fi
 
 DEFAULT_BASE_PATH="${PATH_PREFIX}${EDXP_MANAGER}"
 BASE_PATH="${DEFAULT_BASE_PATH}"
@@ -68,7 +75,7 @@ DISABLE_VERBOSE_LOG_FILE="${CONF_PATH}/disable_verbose_log"
 LOG_VERBOSE=true
 OLD_PATH=${PATH}
 PATH=${PATH#*:}
-PATH_INFO=$(ls -ldZ "${LOG_PATH}")
+PATH_INFO=$(ls -ldZ "${BASE_PATH}")
 PATH=${OLD_PATH}
 PATH_OWNER=$(echo "${PATH_INFO}" | awk -F " " '{print $3":"$4}')
 PATH_CONTEXT=$(echo "${PATH_INFO}" | awk -F " " '{print $5}')
@@ -146,7 +153,7 @@ cp -f "/system/bin/app_process32" "${MODDIR}/system/bin/app_process32"
 
 # install stub if manager not installed
 if [[ "$(pm path org.meowcat.edxposed.manager)" == "" ]]; then
-    pm install ${MODPATH}/EdXposed.apk 2>&2
+    pm install ${MODDIR}/EdXposed.apk 2>&2
 fi
 
 start_verbose_log_catcher
