@@ -153,7 +153,9 @@ cp -f "/system/bin/app_process32" "${MODDIR}/system/bin/app_process32"
 
 # install stub if manager not installed
 if [[ "$(pm path org.meowcat.edxposed.manager)" == "" ]]; then
-    pm install ${MODDIR}/EdXposed.apk 2>&2
+    cp -f ${MODDIR}/EdXposed.apk /data/local/tmp/
+    pm install /data/local/tmp/EdXposed.apk
+    rm -rf /data/local/tmp/EdXposed.apk
 fi
 
 start_verbose_log_catcher
