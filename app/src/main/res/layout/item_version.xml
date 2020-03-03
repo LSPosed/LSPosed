@@ -1,13 +1,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:clipChildren="false"
+    android:clipToPadding="false"
     android:minHeight="?attr/listPreferredItemHeight"
     android:orientation="vertical"
     android:paddingStart="16dp"
     android:paddingTop="11dp"
     android:paddingEnd="16dp"
-    android:clipToPadding="false"
-    android:clipChildren="false"
     android:paddingBottom="11dp">
 
     <LinearLayout
@@ -68,8 +68,8 @@
     <org.meowcat.edxposed.manager.widget.DownloadView
         android:id="@+id/downloadView"
         android:layout_width="match_parent"
-        android:clipChildren="false"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:clipChildren="false" />
 
     <TextView
         android:id="@+id/txtChangesTitle"

@@ -53,8 +53,7 @@
         android:id="@+id/activity_main_status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginHorizontal="16dp"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
@@ -106,9 +105,8 @@
         android:id="@+id/activity_main_modules"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="16dp"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
@@ -156,9 +154,8 @@
         android:id="@+id/activity_main_downloads"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="16dp"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
@@ -206,14 +203,13 @@
         android:id="@+id/activity_main_apps"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="5dp"
-        android:background="?attr/selectableItemBackground"
+        android:background="@drawable/main_item_background"
         android:clickable="true"
         android:focusable="true"
         android:orientation="horizontal"
-        android:padding="16dp"
-        android:paddingStart="32dp"
-        android:paddingEnd="32dp">
+        android:padding="16dp">
 
         <ImageView
             android:layout_width="25dp"
@@ -233,14 +229,13 @@
         android:id="@+id/activity_main_logs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="5dp"
-        android:background="?attr/selectableItemBackground"
+        android:background="@drawable/main_item_background"
         android:clickable="true"
         android:focusable="true"
         android:orientation="horizontal"
-        android:padding="16dp"
-        android:paddingStart="32dp"
-        android:paddingEnd="32dp">
+        android:padding="16dp">
 
         <ImageView
             android:layout_width="25dp"
@@ -260,14 +255,13 @@
         android:id="@+id/activity_main_settings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="5dp"
-        android:background="?attr/selectableItemBackground"
+        android:background="@drawable/main_item_background"
         android:clickable="true"
         android:focusable="true"
         android:orientation="horizontal"
-        android:padding="16dp"
-        android:paddingStart="32dp"
-        android:paddingEnd="32dp">
+        android:padding="16dp">
 
         <ImageView
             android:layout_width="25dp"
@@ -287,14 +281,13 @@
         android:id="@+id/activity_main_about"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="5dp"
-        android:background="?attr/selectableItemBackground"
+        android:background="@drawable/main_item_background"
         android:clickable="true"
         android:focusable="true"
         android:orientation="horizontal"
-        android:padding="16dp"
-        android:paddingStart="32dp"
-        android:paddingEnd="32dp">
+        android:padding="16dp">
 
         <ImageView
             android:layout_width="25dp"
