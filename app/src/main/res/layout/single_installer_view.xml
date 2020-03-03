@@ -18,6 +18,7 @@
                 android:id="@+id/container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:clipToPadding="false"
                 android:padding="6dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp">
@@ -128,7 +129,7 @@
 
                 </com.google.android.material.card.MaterialCardView>
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnInstall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -169,7 +170,7 @@
                     app:srcCompat="@drawable/ic_info"
                     tools:ignore="ContentDescription,RtlHardcoded" />
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnUninstall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.net.Uri;
+import android.os.FileUtils;
 import android.view.View;
 import android.widget.Toast;
 
@@ -19,7 +20,6 @@ import org.meowcat.edxposed.manager.BuildConfig;
 import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.XposedApp;
 import org.meowcat.edxposed.manager.util.CompileUtil;
-import org.meowcat.edxposed.manager.util.FileUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;

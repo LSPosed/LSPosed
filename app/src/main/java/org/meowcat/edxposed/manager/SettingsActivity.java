@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.FileUtils;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -24,7 +25,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.takisoft.preferencex.PreferenceFragmentCompat;
 import com.topjohnwu.superuser.Shell;
 
-import org.meowcat.edxposed.manager.util.FileUtils;
 import org.meowcat.edxposed.manager.util.RepoLoader;
 
 import java.io.File;

@@ -1,4 +1,4 @@
-package org.meowcat.edxposed.manager.util;
+package android.os;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;

@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 28
     buildToolsVersion "29.0.3"
     defaultConfig {
         applicationId "org.meowcat.edxposed.manager"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 45406
-        versionName "4.5.4.2"
+        versionCode 45408
+        versionName "4.5.4.4"
     }
     buildTypes {
         release {
@@ -17,6 +17,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
+            applicationIdSuffix ".debug"
             minifyEnabled false
             shrinkResources false
         }

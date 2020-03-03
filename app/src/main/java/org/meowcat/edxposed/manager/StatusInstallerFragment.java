@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.FileUtils;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,8 +22,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-
-import org.meowcat.edxposed.manager.util.FileUtils;
 
 import java.io.BufferedReader;
 import java.io.File;

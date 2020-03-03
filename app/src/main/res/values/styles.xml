@@ -13,7 +13,8 @@
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">@bool/lightSystemUI
         </item>
         <item name="android:navigationBarColor">@color/navigationBarColor</item>
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+        <item name="alertDialogTheme">@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog
+        </item>
     </style>
 
     <style name="AppearanceFoundation.Caption" parent="TextAppearance.AppCompat.Caption">

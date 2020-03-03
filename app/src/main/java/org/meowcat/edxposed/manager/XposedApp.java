@@ -12,6 +12,7 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.FileUtils;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
@@ -22,7 +23,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import org.meowcat.edxposed.manager.receivers.PackageChangeReceiver;
-import org.meowcat.edxposed.manager.util.FileUtils;
 import org.meowcat.edxposed.manager.util.ModuleUtil;
 import org.meowcat.edxposed.manager.util.NotificationUtil;
 import org.meowcat.edxposed.manager.util.RepoLoader;

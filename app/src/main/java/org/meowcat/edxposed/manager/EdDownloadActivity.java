@@ -81,46 +81,47 @@ public class EdDownloadActivity extends BaseActivity {
     }
 
     @SuppressLint("StaticFieldLeak")
-    private class JSONParser extends AsyncTask<Void, Void, Boolean> {
+    private class JSONParser extends AsyncTask<Void, Void, String> {
 
         private String newApkVersion = null;
         private String newApkLink = null;
         private String newApkChangelog = null;
 
         @Override
-        protected Boolean doInBackground(Void... params) {
+        protected String doInBackground(Void... params) {
             try {
-                String originalJson = JSONUtils.getFileContent(JSONUtils.JSON_LINK);
+                return JSONUtils.getFileContent(JSONUtils.JSON_LINK);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e(XposedApp.TAG, "AdvancedInstallerFragment -> " + e.getMessage());
+                return null;
+            }
+        }
 
-                final JSONUtils.XposedJson xposedJson = new Gson().fromJson(originalJson, JSONUtils.XposedJson.class);
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            if (result == null) {
+                return;
+            }
+            try {
+                final JSONUtils.XposedJson xposedJson = new Gson().fromJson(result, JSONUtils.XposedJson.class);
 
                 List<XposedTab> tabs = Stream.of(xposedJson.tabs)
                         .filter(value -> value.sdks.contains(Build.VERSION.SDK_INT)).toList();
 
                 for (XposedTab tab : tabs) {
                     tabsAdapter.addFragment(tab.name, BaseAdvancedInstaller.newInstance(tab));
+                    tabsAdapter.notifyDataSetChanged();
                 }
 
                 newApkVersion = xposedJson.apk.version;
                 newApkLink = xposedJson.apk.link;
                 newApkChangelog = xposedJson.apk.changelog;
 
-                return true;
-            } catch (Exception e) {
-                e.printStackTrace();
-                Log.e(XposedApp.TAG, "AdvancedInstallerFragment -> " + e.getMessage());
-                return false;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(Boolean result) {
-            super.onPostExecute(result);
-
-            try {
-                tabsAdapter.notifyDataSetChanged();
-
-                if (newApkVersion == null) return;
+                if (newApkVersion == null) {
+                    return;
+                }
 
                 SharedPreferences prefs;
                 try {
