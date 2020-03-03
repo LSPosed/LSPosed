@@ -1,5 +1,6 @@
 package org.meowcat.edxposed.manager;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -10,14 +11,10 @@ import android.widget.TextView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.meowcat.edxposed.manager.util.NavUtil;
-
-import de.psdev.licensesdialog.LicensesDialog;
-import de.psdev.licensesdialog.licenses.ApacheSoftwareLicense20;
-import de.psdev.licensesdialog.model.Notice;
-import de.psdev.licensesdialog.model.Notices;
 
 public class AboutActivity extends BaseActivity {
 
@@ -67,7 +64,7 @@ public class AboutActivity extends BaseActivity {
         } catch (PackageManager.NameNotFoundException ignored) {
         }
 
-        licensesView.setOnClickListener(v12 -> createLicenseDialog());
+        licensesView.setOnClickListener(v12 -> startActivity(new Intent(this, OssLicensesMenuActivity.class)));
 
         txtModuleSupport.setText(getString(R.string.support_modules_description,
                 getString(R.string.module_support)));
@@ -87,18 +84,6 @@ public class AboutActivity extends BaseActivity {
 
     void setupView(View v, final int url) {
         v.setOnClickListener(v1 -> NavUtil.startURL(this, getString(url)));
-    }
-
-    private void createLicenseDialog() {
-        Notices notices = new Notices();
-        notices.addNotice(new Notice("sticky-headers-recyclerview", "https://github.com/timehop/sticky-headers-recyclerview", "timehop", new ApacheSoftwareLicense20()));
-        notices.addNotice(new Notice("libsu", "https://github.com/topjohnwu/libsu", "John Wu", new ApacheSoftwareLicense20()));
-
-        new LicensesDialog.Builder(this)
-                .setNotices(notices)
-                .setIncludeOwnLicense(true)
-                .build()
-                .show();
     }
 
     public void openLink(View view) {

@@ -12,7 +12,6 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,7 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
@@ -351,7 +349,7 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
                 txtStatus.setText(mContext.getString(
                         R.string.download_status_installed, installedVersion));
                 //txtStatus.setTextColor(ThemeUtil.getThemeColor(mContext, R.attr.download_status_installed));
-                TypedArray typedArray = DownloadActivity.this.getTheme().obtainStyledAttributes(new int[] { android.R.attr.textColorSecondary });
+                TypedArray typedArray = DownloadActivity.this.getTheme().obtainStyledAttributes(new int[]{android.R.attr.textColorSecondary});
                 int textColor = typedArray.getColor(0, 0);
                 typedArray.recycle();
                 txtStatus.setTextColor(textColor);

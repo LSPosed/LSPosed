@@ -34,7 +34,7 @@ public final class NavUtil {
     public static void startURL(AppCompatActivity activity, Uri uri) {
         CustomTabsIntent.Builder customTabsIntent = new CustomTabsIntent.Builder();
         customTabsIntent.setShowTitle(true);
-        customTabsIntent.setToolbarColor(ContextCompat.getColor(activity, R.color.colorPrimary));
+        customTabsIntent.setToolbarColor(ContextCompat.getColor(activity, R.color.colorActionBar));
         customTabsIntent.build().launchUrl(activity, uri);
     }
 

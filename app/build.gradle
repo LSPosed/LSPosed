@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 
 android {
     compileSdkVersion 28
@@ -43,5 +44,5 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:1.2.0-alpha01"
     implementation 'com.annimon:stream:1.2.0'
     implementation 'com.google.code.gson:gson:2.8.6'
-    implementation 'de.psdev.licensesdialog:licensesdialog:2.1.0'
+    implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 }
