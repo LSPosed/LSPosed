@@ -174,19 +174,6 @@ public final class XposedBridge {
 	}
 
 	/**
-	 * Logs a stack trace to the Xposed modules log with module's name.
-	 *
-	 * <p class="warning"><b>DON'T FLOOD THE LOG!!!</b> This is only meant for error logging.
-	 * If you want to write information/debug messages, use logcat.
-	 *
-	 * @param name The module's name..
-	 * @param t The Throwable object for the stack trace.
-	 */
-	public synchronized static void log(String name, Throwable t) {
-		Log.e(TAG, name + ": " + Log.getStackTraceString(t));
-	}
-
-	/**
 	 * Hook any method (or constructor) with the specified callback. See below for some wrappers
 	 * that make it easier to find a method/constructor in one step.
 	 *
