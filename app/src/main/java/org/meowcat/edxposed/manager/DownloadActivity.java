@@ -346,8 +346,8 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
             } else if (isInstalled) {
                 txtStatus.setText(mContext.getString(
                         R.string.download_status_installed, installedVersion));
-                //txtStatus.setTextColor(ThemeUtil.getThemeColor(mContext, R.attr.download_status_installed));
-                TypedArray typedArray = DownloadActivity.this.getTheme().obtainStyledAttributes(new int[]{android.R.attr.textColorSecondary});
+                txtStatus.setTextColor(getResources().getColor(R.color.warning));
+                TypedArray typedArray = DownloadActivity.this.getTheme().obtainStyledAttributes(new int[]{android.R.attr.textColorHighlight});
                 int textColor = typedArray.getColor(0, 0);
                 typedArray.recycle();
                 txtStatus.setTextColor(textColor);
