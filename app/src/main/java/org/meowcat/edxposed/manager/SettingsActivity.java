@@ -19,7 +19,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.preference.Preference;
-import androidx.preference.SwitchPreference;
+import androidx.preference.SwitchPreferenceCompat;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.takisoft.preferencex.PreferenceFragmentCompat;
@@ -106,7 +106,7 @@ public class SettingsActivity extends BaseActivity {
                 return true;
             });
 
-            SwitchPreference prefWhiteListMode = findPreference("white_list_switch");
+            SwitchPreferenceCompat prefWhiteListMode = findPreference("white_list_switch");
             Objects.requireNonNull(prefWhiteListMode).setChecked(mWhiteListModeFlag.exists());
             prefWhiteListMode.setOnPreferenceChangeListener((preference, newValue) -> {
                 boolean enabled = (Boolean) newValue;
@@ -137,7 +137,7 @@ public class SettingsActivity extends BaseActivity {
                 return (enabled == mWhiteListModeFlag.exists());
             });
 
-            SwitchPreference prefVerboseLogs = findPreference("disable_verbose_log");
+            SwitchPreferenceCompat prefVerboseLogs = findPreference("disable_verbose_log");
             Objects.requireNonNull(prefVerboseLogs).setChecked(mDisableVerboseLogsFlag.exists());
             prefVerboseLogs.setOnPreferenceChangeListener((preference, newValue) -> {
                 boolean enabled = (Boolean) newValue;
@@ -168,7 +168,7 @@ public class SettingsActivity extends BaseActivity {
                 return (enabled == mDisableVerboseLogsFlag.exists());
             });
 
-            SwitchPreference prefModulesLogs = findPreference("disable_modules_log");
+            SwitchPreferenceCompat prefModulesLogs = findPreference("disable_modules_log");
             Objects.requireNonNull(prefModulesLogs).setChecked(mDisableModulesLogsFlag.exists());
             prefModulesLogs.setOnPreferenceChangeListener((preference, newValue) -> {
                 boolean enabled = (Boolean) newValue;
@@ -199,7 +199,7 @@ public class SettingsActivity extends BaseActivity {
                 return (enabled == mDisableModulesLogsFlag.exists());
             });
 
-            SwitchPreference prefBlackWhiteListMode = findPreference("black_white_list_switch");
+            SwitchPreferenceCompat prefBlackWhiteListMode = findPreference("black_white_list_switch");
             Objects.requireNonNull(prefBlackWhiteListMode).setChecked(mBlackWhiteListModeFlag.exists());
             prefBlackWhiteListMode.setOnPreferenceChangeListener((preference, newValue) -> {
                 boolean enabled = (Boolean) newValue;
@@ -230,7 +230,7 @@ public class SettingsActivity extends BaseActivity {
                 return (enabled == mBlackWhiteListModeFlag.exists());
             });
 
-            SwitchPreference prefEnableDeopt = findPreference("enable_boot_image_deopt");
+            SwitchPreferenceCompat prefEnableDeopt = findPreference("enable_boot_image_deopt");
             Objects.requireNonNull(prefEnableDeopt).setChecked(mDeoptBootFlag.exists());
             prefEnableDeopt.setOnPreferenceChangeListener((preference, newValue) -> {
                 boolean enabled = (Boolean) newValue;
@@ -261,7 +261,7 @@ public class SettingsActivity extends BaseActivity {
                 return (enabled == mDeoptBootFlag.exists());
             });
 
-            SwitchPreference prefDynamicResources = findPreference("is_dynamic_modules");
+            SwitchPreferenceCompat prefDynamicResources = findPreference("is_dynamic_modules");
             Objects.requireNonNull(prefDynamicResources).setChecked(mDynamicModulesFlag.exists());
             prefDynamicResources.setOnPreferenceChangeListener((preference, newValue) -> {
                 boolean enabled = (Boolean) newValue;
@@ -292,7 +292,7 @@ public class SettingsActivity extends BaseActivity {
                 return (enabled == mDynamicModulesFlag.exists());
             });
 
-            SwitchPreference prefDisableResources = findPreference("disable_resources");
+            SwitchPreferenceCompat prefDisableResources = findPreference("disable_resources");
             Objects.requireNonNull(prefDisableResources).setChecked(mDisableResourcesFlag.exists());
             prefDisableResources.setOnPreferenceChangeListener((preference, newValue) -> {
                 boolean enabled = (Boolean) newValue;
@@ -323,7 +323,7 @@ public class SettingsActivity extends BaseActivity {
                 return (enabled == mDisableResourcesFlag.exists());
             });
 
-            SwitchPreference transparent_status_bar = findPreference("transparent_status_bar");
+            SwitchPreferenceCompat transparent_status_bar = findPreference("transparent_status_bar");
             Objects.requireNonNull(transparent_status_bar).setOnPreferenceChangeListener((preference, newValue) -> {
                 boolean enabled = (Boolean) newValue;
                 Activity activity = getActivity();

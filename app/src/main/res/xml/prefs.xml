@@ -14,30 +14,30 @@
             android:summary="%s"
             android:title="@string/settings_theme"
             app:iconSpaceReserved="false" />
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:key="black_dark_theme"
             android:title="@string/pure_black_dark_theme"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:key="transparent_status_bar"
             android:title="@string/transparent_status_bar"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="confirm_reboots"
             android:title="@string/confirm_reboots"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="skip_xposedminversion_check"
             android:summary="@string/skip_xposedminversion_check_summ"
             android:title="@string/skip_xposedminversion_check"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="show_modules"
             android:summary="@string/show_modules_summary"
@@ -51,7 +51,7 @@
         android:title="@string/settings_group_download"
         app:iconSpaceReserved="false">
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="install_with_su"
             android:summary="@string/install_with_su_summ"
@@ -67,41 +67,41 @@
             android:title="@string/settings_release_type"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="ignore_updates"
             android:summary="@string/ignore_updates_summ"
             android:title="@string/ignore_updates"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="heads_up"
             android:summary="@string/enable_heads_up_summary"
             android:title="@string/enable_heads_up"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="snack_bar"
             android:title="@string/notify_module_update"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="alt_download"
             android:summary="@string/alt_download_method_summ"
             android:title="@string/alt_download_method"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="custom_list"
             android:summary="@string/custom_list_summ"
             android:title="@string/custom_list"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:key="ignore_chinese"
             android:summary="@string/ignore_chinese_summary"
             android:title="@string/ignore_chinese"
@@ -118,35 +118,35 @@
             android:summary="@string/pref_compat_mode_summary"
             android:title="@string/pref_compat_mode_title"
             app:iconSpaceReserved="false" />
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="black_white_list_switch"
             android:summary="@string/pref_black_white_list_summary"
             android:title="@string/pref_title_black_white_list"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="white_list_switch"
             android:summary="@string/white_list_mode_summary"
             android:title="@string/white_list_mode_title"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="is_dynamic_modules"
             android:summary="@string/pref_dynamic_modules_summary"
             android:title="@string/pref_title_dynamic_modules"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="enable_boot_image_deopt"
             android:summary="@string/pref_enable_boot_image_deopt_summary"
             android:title="@string/pref_title_enable_boot_image_deopt"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="disable_resources"
             android:persistent="false"
@@ -154,27 +154,27 @@
             android:title="@string/settings_disable_resources"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="hook_modules"
             android:summary="@string/hook_modules_summary"
             android:title="@string/hook_modules"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="pass_safetynet"
             android:summary="@string/pass_safetynet_summary"
             android:title="@string/pass_safetynet"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="disable_verbose_log"
             android:title="@string/pref_title_disable_verbose_log"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="disable_modules_log"
             android:summary="@string/pref_disable_modules_log_summary"
