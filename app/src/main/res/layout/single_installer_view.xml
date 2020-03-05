@@ -187,15 +187,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/container"
+                android:layout_marginHorizontal="8dp"
                 android:layout_marginTop="4dp"
-                android:background="?attr/selectableItemBackground"
+                android:background="@drawable/main_item_background"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:minHeight="48dp"
                 android:orientation="horizontal"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp">
+                android:paddingHorizontal="8dp">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -229,14 +229,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/author_view"
-                android:background="?attr/selectableItemBackground"
+                android:layout_marginHorizontal="8dp"
+                android:background="@drawable/main_item_background"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:minHeight="48dp"
                 android:orientation="horizontal"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp">
+                android:paddingHorizontal="8dp">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -269,14 +269,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/show_on_xda"
-                android:background="?attr/selectableItemBackground"
+                android:layout_marginHorizontal="8dp"
+                android:background="@drawable/main_item_background"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:minHeight="48dp"
                 android:orientation="horizontal"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp">
+                android:paddingHorizontal="8dp">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -308,14 +308,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/updateDescription"
-                android:background="?attr/selectableItemBackground"
+                android:layout_marginHorizontal="8dp"
+                android:background="@drawable/main_item_background"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:minHeight="48dp"
                 android:orientation="horizontal"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp">
+                android:paddingHorizontal="8dp">
 
                 <ImageView
                     android:layout_width="24dp"

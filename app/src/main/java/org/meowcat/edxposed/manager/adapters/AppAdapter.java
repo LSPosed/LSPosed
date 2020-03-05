@@ -11,10 +11,10 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.meowcat.edxposed.manager.R;
@@ -224,7 +224,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         TextView appPackage;
         TextView appVersion;
         TextView timestamps;
-        Switch mSwitch;
+        SwitchCompat mSwitch;
 
         ViewHolder(View itemView) {
             super(itemView);

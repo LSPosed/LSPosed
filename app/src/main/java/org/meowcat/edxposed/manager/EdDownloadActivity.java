@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.widget.CheckBox;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -18,6 +17,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
@@ -58,7 +58,7 @@ public class EdDownloadActivity extends BaseActivity {
                     .setTitle(R.string.install_warning_title)
                     .setView(dontShowAgainView)
                     .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                        CheckBox checkBox = dontShowAgainView.findViewById(android.R.id.checkbox);
+                        MaterialCheckBox checkBox = dontShowAgainView.findViewById(android.R.id.checkbox);
                         if (checkBox.isChecked())
                             XposedApp.getPreferences().edit().putBoolean("hide_install_warning", true).apply();
                     })

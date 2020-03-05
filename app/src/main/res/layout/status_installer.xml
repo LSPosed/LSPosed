@@ -26,14 +26,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
+                    android:layout_marginHorizontal="8dp"
+                    android:background="@drawable/main_item_background"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
                     android:minHeight="48dp"
                     android:orientation="horizontal"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp">
+                    android:paddingHorizontal="8dp">
 
                     <ImageView
                         android:layout_width="24dp"
@@ -65,14 +65,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
+                    android:layout_marginHorizontal="8dp"
+                    android:background="@drawable/main_item_background"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
                     android:minHeight="48dp"
                     android:orientation="horizontal"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp">
+                    android:paddingHorizontal="8dp">
 
                     <ImageView
                         android:layout_width="24dp"
@@ -104,14 +104,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
+                    android:layout_marginHorizontal="8dp"
+                    android:background="@drawable/main_item_background"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
                     android:minHeight="48dp"
                     android:orientation="horizontal"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp">
+                    android:paddingHorizontal="8dp">
 
                     <ImageView
                         android:layout_width="24dp"
@@ -142,14 +142,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
+                    android:layout_marginHorizontal="8dp"
+                    android:background="@drawable/main_item_background"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
                     android:minHeight="48dp"
                     android:orientation="horizontal"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp">
+                    android:paddingHorizontal="8dp">
 
                     <ImageView
                         android:layout_width="24dp"
@@ -179,14 +179,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
+                    android:layout_marginHorizontal="8dp"
+                    android:background="@drawable/main_item_background"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
                     android:minHeight="48dp"
                     android:orientation="horizontal"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp">
+                    android:paddingHorizontal="8dp">
 
                     <ImageView
                         android:layout_width="24dp"
@@ -215,14 +215,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
+                    android:layout_marginHorizontal="8dp"
+                    android:background="@drawable/main_item_background"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
                     android:minHeight="48dp"
                     android:orientation="horizontal"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp">
+                    android:paddingHorizontal="8dp">
 
                     <ImageView
                         android:layout_width="24dp"
@@ -251,13 +251,13 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
+                    android:layout_marginHorizontal="8dp"
+                    android:background="@drawable/main_item_background"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp">
+                    android:paddingHorizontal="8dp">
 
                     <ImageView
                         android:layout_width="24dp"
@@ -312,14 +312,14 @@
                     android:id="@+id/click_to_update"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
+                    android:layout_marginHorizontal="8dp"
+                    android:background="@drawable/main_item_background"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
                     android:minHeight="48dp"
                     android:orientation="horizontal"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp">
+                    android:paddingHorizontal="8dp">
 
                     <ImageView
                         android:layout_width="24dp"

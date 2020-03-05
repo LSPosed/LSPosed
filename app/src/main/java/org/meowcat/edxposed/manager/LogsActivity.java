@@ -11,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,6 +22,7 @@ import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
@@ -71,7 +71,7 @@ public class LogsActivity extends BaseActivity {
                     .setTitle(R.string.install_warning_title)
                     .setView(dontShowAgainView)
                     .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                        CheckBox checkBox = dontShowAgainView.findViewById(android.R.id.checkbox);
+                        MaterialCheckBox checkBox = dontShowAgainView.findViewById(android.R.id.checkbox);
                         if (checkBox.isChecked())
                             XposedApp.getPreferences().edit().putBoolean("hide_logcat_warning", true).apply();
                     })

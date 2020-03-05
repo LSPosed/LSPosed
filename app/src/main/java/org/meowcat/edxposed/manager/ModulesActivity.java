@@ -13,12 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -482,7 +482,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 descriptionText.setTextColor(getResources().getColor(R.color.warning));
             }
 
-            Switch mSwitch = holder.mSwitch;
+            SwitchCompat mSwitch = holder.mSwitch;
             mSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 String packageName = item.packageName;
                 boolean changed = mModuleUtil.isModuleEnabled(packageName) ^ isChecked;
@@ -552,7 +552,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             TextView appVersion;
             TextView timestamps;
             TextView warningText;
-            Switch mSwitch;
+            SwitchCompat mSwitch;
 
             ViewHolder(View itemView) {
                 super(itemView);

@@ -15,7 +15,7 @@
             android:text="@string/install_warning"
             android:textSize="16sp" />
 
-        <CheckBox
+        <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@android:id/checkbox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
