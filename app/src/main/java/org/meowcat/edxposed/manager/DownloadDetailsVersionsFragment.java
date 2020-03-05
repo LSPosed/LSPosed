@@ -10,7 +10,6 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -109,7 +108,7 @@ public class DownloadDetailsVersionsFragment extends ListFragment {
                     try {
                         OutputStream os = mActivity.getContentResolver().openOutputStream(uri);
                         if (os != null) {
-                            FileInputStream in = new FileInputStream(new File(DownloadView.mInfo.localFilename));
+                            FileInputStream in = new FileInputStream(new File(DownloadView.lastInfo.localFilename));
                             byte[] buffer = new byte[1024];
                             int len;
                             while ((len = in.read(buffer)) > 0) {

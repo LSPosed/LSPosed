@@ -144,7 +144,6 @@
     <!-- DownloadView -->
     <string name="download_view_download">Download and Install</string>
     <string name="download_view_install">Install</string>
-    <string name="download_view_remove">Remove</string>
     <string name="download_view_cancel">Cancel</string>
     <string name="download_view_no_url">No download URL available</string>
     <string name="download_view_running">Download is running (%1$,d of %2$,d kB)</string>
@@ -185,7 +184,6 @@
         Name: %1$s
         \nDate: %2$s
     </string>
-    <string name="permissionNotGranted">This feature will not work without permission to write external storage</string>
     <string name="warningArchitecture">You will download a ZIP file, flash in Magisk Manager or Recovery manually</string>
     <string name="newVersion">New version of EdXposed Manager is available! Update it!</string>
     <string name="update">Update</string>
@@ -196,7 +194,6 @@
     <string name="scroll_top">Scroll to top</string>
     <string name="install_with_su">Silent installation (root)</string>
     <string name="install_with_su_summ">If checked EdXposed Manager will install modules without a prompt</string>
-    <string name="module_saved">Module saved at %1$s</string>
     <string name="ignore_updates">Ignore update</string>
     <string name="ignore_updates_summ">Ignore updates for a specific module</string>
     <string name="reboot_recovery">Reboot to Recovery</string>
@@ -228,9 +225,6 @@
     <string name="alt_download_method_summ">Check this option if you get issues when downloading a module</string>
     <string name="custom_list">Use mirrored modules list</string>
     <string name="custom_list_summ">Mirrored modules list can help load faster\nBut the newly submitted module display will be delayed (about 24 hours)</string>
-
-    <string name="known_issue_wrong_base_directory">Wrong base directory: %1$s</string>
-    <string name="known_issue_missing_base_directory">Missing base directory</string>
 
     <string name="dexopt_now">Optimize all apps with Dexopt</string>
     <string name="speed_now">Optimize all apps with Speed mode</string>
@@ -266,7 +260,6 @@
     <string name="support_faq_url" translatable="false">http://github.com/ElderDrivers/EdXposed/wiki</string>
     <string name="support_donate_url" translatable="false">http://edxp.meowcat.org/donate</string>
     <string name="about_source" translatable="false">https://github.com/ElderDrivers/EdXposedManager/</string>
-    <string name="about_support" translatable="false">http://edxp.meowcat.org/faq</string>
 
     <string name="solohsu" translatable="false">givein2u</string>
     <string name="mlgmxyysd" translatable="false">MlgmXyysd</string>
@@ -304,7 +297,6 @@
     <string name="app_launch">Launch it</string>
     <string name="app_stop">Stop it</string>
     <string name="update_description">Update Changelog</string>
-    <string name="edxp_installer_installed">You must to uninstall EdXposed Installer to use EdXposed Manager</string>
     <string name="show_modules">Show modules and manager</string>
     <string name="show_modules_summary">Show modules and manager in application list\nThis option does not remove checked application flag</string>
     <string name="compile_failed">Optimization failed or return value is empty</string>

@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.TooltipCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -100,7 +101,8 @@ public class BaseAdvancedInstaller extends Fragment {
         TextView author = view.findViewById(R.id.author);
         View showOnXda = view.findViewById(R.id.show_on_xda);
         View updateDescription = view.findViewById(R.id.updateDescription);
-
+        TooltipCompat.setTooltipText(infoInstaller, getString(R.string.info));
+        TooltipCompat.setTooltipText(infoUninstaller, getString(R.string.info));
         try {
             chooserInstallers.setAdapter(new XposedZip.MyAdapter(getContext(), installers()));
             chooserUninstallers.setAdapter(new XposedZip.MyAdapter(getContext(), uninstallers()));

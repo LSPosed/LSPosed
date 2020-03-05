@@ -20,7 +20,7 @@ import org.meowcat.edxposed.manager.util.DownloadsUtil.DownloadFinishedCallback;
 import java.util.Objects;
 
 public class DownloadView extends LinearLayout {
-    public static DownloadsUtil.DownloadInfo mInfo = null;
+    public static DownloadsUtil.DownloadInfo lastInfo = null;
     private final Button btnDownload;
     private final Button btnDownloadCancel;
     private final Button btnInstall;
@@ -28,6 +28,7 @@ public class DownloadView extends LinearLayout {
     private final ProgressBar progressBar;
     private final TextView txtInfo;
     public Fragment fragment;
+    private DownloadsUtil.DownloadInfo mInfo = null;
     private String mUrl = null;
     private final Runnable refreshViewRunnable = new Runnable() {
         @Override
@@ -120,6 +121,7 @@ public class DownloadView extends LinearLayout {
         });
 
         btnSave.setOnClickListener(v -> {
+            lastInfo = mInfo;
             mInfo = DownloadsUtil.addModule(getContext(), mTitle, mUrl, (context1, info) -> {
                 Intent exportIntent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
                 exportIntent.addCategory(Intent.CATEGORY_OPENABLE);

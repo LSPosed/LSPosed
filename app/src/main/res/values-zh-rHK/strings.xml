@@ -142,7 +142,6 @@
     <!-- DownloadView -->
     <string name="download_view_download">下載並安裝</string>
     <string name="download_view_install">安裝</string>
-    <string name="download_view_remove">刪除</string>
     <string name="download_view_cancel">取消</string>
     <string name="download_view_no_url">無可用的下載鏈接</string>
     <string name="download_view_running">正在下載(%1$,d / %2$,d kB)</string>
@@ -183,7 +182,6 @@
         名稱: %1$s
         \n日期: %2$s
     </string>
-    <string name="permissionNotGranted">當未允許寫入外部存儲空間權限時, 該功能無法正常工作</string>
     <string name="warningArchitecture">你將會下載一個 ZIP 格式文件, 請手動在 Magisk Manager 或 Recovery 中刷入</string>
     <string name="newVersion">EdXposed Manager 有新版本可用！現在更新！</string>
     <string name="update">更新</string>
@@ -194,7 +192,6 @@
     <string name="scroll_top">滾動到頂部</string>
     <string name="install_with_su">靜默安裝(root)</string>
     <string name="install_with_su_summ">勾選後在 EdXposed Manager 內安裝模塊時將不再顯示安裝提示</string>
-    <string name="module_saved">模塊已保存至 %1$s</string>
     <string name="ignore_updates">忽略更新</string>
     <string name="ignore_updates_summ">忽略指定模塊的更新</string>
     <string name="reboot_recovery">重啟至恢復模式</string>
@@ -254,8 +251,6 @@
     <string name="unofficial_build">這是一個非官方的構建\n安裝風險由您自行承擔</string>
     <string name="alt_download_method">備用下載方法</string>
     <string name="alt_download_method_summ">如果下載模塊時出現問題, 請開啟此選項</string>
-    <string name="known_issue_wrong_base_directory">錯誤的配置文件夾: %1$s</string>
-    <string name="known_issue_missing_base_directory">未知配置文件夾</string>
     <string name="dexopt_now">以 Dexopt 模式優化全部應用</string>
     <string name="speed_now">以 Speed 模式優化全部應用</string>
     <string name="this_may_take_a_while">請稍後, 這將需要一段時間…</string>
@@ -268,7 +263,6 @@
     <string name="app_launch">運行</string>
     <string name="app_stop">停止</string>
     <string name="update_description">更新日誌</string>
-    <string name="edxp_installer_installed">你必須先卸載 EdXposed Installer 才能繼續使用 EdXposed Manager</string>
     <string name="show_modules">顯示模塊和管理器</string>
     <string name="show_modules_summary">在應用列表內顯示模塊和管理器\n此選項並不會移除已勾選的應用標識</string>
     <string name="compile_failed">優化失敗或返回值為空</string>

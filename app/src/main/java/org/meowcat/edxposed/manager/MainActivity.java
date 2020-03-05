@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.appcompat.widget.TooltipCompat;
 
 import com.google.android.material.card.MaterialCardView;
 
@@ -20,6 +21,7 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
 
     private RepoLoader mRepoLoader;
 
+    @SuppressLint("PrivateResource")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +66,7 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
             startActivity(intent);
         });
         ImageView menu = findViewById(R.id.menu_more);
+        TooltipCompat.setTooltipText(menu, getString(androidx.appcompat.R.string.abc_action_menu_overflow_description));
         menu.setOnClickListener(v -> {
             PopupMenu appMenu = new PopupMenu(MainActivity.this, menu);
             appMenu.inflate(R.menu.menu_installer);

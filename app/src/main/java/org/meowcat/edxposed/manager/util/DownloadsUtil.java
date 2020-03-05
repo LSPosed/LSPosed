@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -58,6 +59,7 @@ public class DownloadsUtil {
             }
         } else */
         File destination = new File(context.getExternalCacheDir(), "/downloads/" + b.mTitle + b.mMimeType.getExtension());
+        removeAllForLocalFile(context, destination);
         request.setDestinationUri(Uri.fromFile(destination));
         request.setNotificationVisibility(Request.VISIBILITY_VISIBLE);
         DownloadManager dm = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
@@ -211,7 +213,7 @@ public class DownloadsUtil {
 
         dm.remove(ids);
     }
-/*
+
     private static void removeAllForLocalFile(Context context, File file) {
         //noinspection ResultOfMethodCallIgnored
         file.delete();
@@ -261,7 +263,7 @@ public class DownloadsUtil {
             ids[i] = idsList.get(i);
 
         dm.remove(ids);
-    }*/
+    }
 
 //    public static void removeOutdated(Context context, long cutoff) {
 //        DownloadManager dm = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);

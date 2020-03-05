@@ -1,7 +1,6 @@
 package org.meowcat.edxposed.manager;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -18,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -228,7 +228,7 @@ public class LogsActivity extends BaseActivity {
 
     @SuppressLint("StaticFieldLeak")
     private class LogsReader extends AsyncTask<File, Integer, ArrayList<String>> {
-        private ProgressDialog mProgressDialog;
+        private AlertDialog mProgressDialog;
         private Runnable mRunnable = new Runnable() {
             @Override
             public void run() {
@@ -238,9 +238,9 @@ public class LogsActivity extends BaseActivity {
 
         @Override
         protected void onPreExecute() {
-            mProgressDialog = new ProgressDialog(LogsActivity.this);
+            mProgressDialog = new MaterialAlertDialogBuilder(LogsActivity.this).create();
             mProgressDialog.setMessage(getString(R.string.loading));
-            mProgressDialog.setProgress(0);
+            mProgressDialog.setCancelable(false);
             handler.postDelayed(mRunnable, 500);
         }
 

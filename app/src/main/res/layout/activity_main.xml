@@ -32,6 +32,7 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="25dp"
             android:layout_toEndOf="@id/app_icon"
+            android:contentDescription="@string/app_name"
             android:text="@string/app_name"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textSize="20sp" />
@@ -44,9 +45,11 @@
             android:layout_centerVertical="true"
             android:background="?selectableItemBackgroundBorderless"
             android:clickable="true"
+            android:contentDescription="@string/abc_action_menu_overflow_description"
             android:focusable="true"
             android:padding="5dp"
-            app:srcCompat="@drawable/ic_more" />
+            app:srcCompat="@drawable/ic_more"
+            tools:ignore="PrivateResource" />
     </RelativeLayout>
 
     <com.google.android.material.card.MaterialCardView
