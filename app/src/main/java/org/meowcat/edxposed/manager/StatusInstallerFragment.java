@@ -3,13 +3,9 @@ package org.meowcat.edxposed.manager;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.FileUtils;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,13 +24,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.List;
-import java.util.Objects;
 
 @SuppressLint("StaticFieldLeak")
 public class StatusInstallerFragment extends Fragment {
 
-    public static final File DISABLE_FILE = new File(XposedApp.BASE_DIR + "conf/disabled");
     private static AppCompatActivity sActivity;
     private static String mUpdateLink;
     private static View mUpdateView;
@@ -98,20 +91,6 @@ public class StatusInstallerFragment extends Fragment {
         }
     }
 
-    @SuppressWarnings("SameParameterValue")
-    @SuppressLint({"WorldReadableFiles", "WorldWriteableFiles"})
-    private static void setFilePermissionsFromMode(String name, int mode) {
-        int perms = FileUtils.S_IRUSR | FileUtils.S_IWUSR
-                | FileUtils.S_IRGRP | FileUtils.S_IWGRP;
-        if ((mode & Context.MODE_WORLD_READABLE) != 0) {
-            perms |= FileUtils.S_IROTH;
-        }
-        if ((mode & Context.MODE_WORLD_WRITEABLE) != 0) {
-            perms |= FileUtils.S_IWOTH;
-        }
-        FileUtils.setPermissions(name, perms, -1, -1);
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,7 +98,6 @@ public class StatusInstallerFragment extends Fragment {
     }
 
     @SuppressLint("WorldReadableFiles")
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.status_installer, container, false);
@@ -156,8 +134,6 @@ public class StatusInstallerFragment extends Fragment {
         cpu.setText(getCompleteArch());
 
         determineVerifiedBootState(v);
-
-        refreshKnownIssue();
         return v;
     }
 
@@ -191,57 +167,58 @@ public class StatusInstallerFragment extends Fragment {
         }
     }
 
-    @SuppressWarnings("SameParameterValue")
-    private boolean checkAppInstalled(Context context, String pkgName) {
-        if (pkgName == null || pkgName.isEmpty()) {
-            return false;
-        }
-        final PackageManager packageManager = context.getPackageManager();
-        List<PackageInfo> info = packageManager.getInstalledPackages(0);
-        if (info == null || info.isEmpty()) {
-            return false;
-        }
-        for (int i = 0; i < info.size(); i++) {
-            if (pkgName.equals(info.get(i).packageName)) {
-                return true;
+    /*
+        @SuppressWarnings("SameParameterValue")
+        private boolean checkAppInstalled(Context context, String pkgName) {
+            if (pkgName == null || pkgName.isEmpty()) {
+                return false;
             }
-        }
-        return false;
-    }
-
-    @SuppressLint("StringFormatInvalid")
-    private void refreshKnownIssue() {
-        String issueName = null;
-        String issueLink = null;
-        final ApplicationInfo appInfo = Objects.requireNonNull(getActivity()).getApplicationInfo();
-        final File baseDir = new File(XposedApp.BASE_DIR);
-        final File baseDirCanonical = getCanonicalFile(baseDir);
-        final File baseDirActual = new File(Build.VERSION.SDK_INT >= 24 ? appInfo.deviceProtectedDataDir : appInfo.dataDir);
-        final File baseDirActualCanonical = getCanonicalFile(baseDirActual);
-
-        if (new File("/system/framework/core.jar.jex").exists()) {
-            issueName = "Aliyun OS";
-            issueLink = "https://forum.xda-developers.com/showpost.php?p=52289793&postcount=5";
-//        } else if (Build.VERSION.SDK_INT < 24 && (new File("/data/miui/DexspyInstaller.jar").exists() || checkClassExists("miui.dexspy.DexspyInstaller"))) {
-//            issueName = "MIUI/Dexspy";
-//            issueLink = "https://forum.xda-developers.com/showpost.php?p=52291098&postcount=6";
-//        } else if (Build.VERSION.SDK_INT < 24 && new File("/system/framework/twframework.jar").exists()) {
-//            issueName = "Samsung TouchWiz ROM";
-//            issueLink = "https://forum.xda-developers.com/showthread.php?t=3034811";
-        } else if (!baseDirCanonical.equals(baseDirActualCanonical)) {
-            Log.e(XposedApp.TAG, "Base directory: " + getPathWithCanonicalPath(baseDir, baseDirCanonical));
-            Log.e(XposedApp.TAG, "Expected: " + getPathWithCanonicalPath(baseDirActual, baseDirActualCanonical));
-            issueName = getString(R.string.known_issue_wrong_base_directory, getPathWithCanonicalPath(baseDirActual, baseDirActualCanonical));
-        } else if (!baseDir.exists()) {
-            issueName = getString(R.string.known_issue_missing_base_directory);
-            issueLink = "https://github.com/rovo89/XposedInstaller/issues/393";
-        } else if (checkAppInstalled(getContext(), "com.solohsu.android.edxp.manager")) {
-            issueName = getString(R.string.edxp_installer_installed);
-            issueLink = getString(R.string.about_support);
+            final PackageManager packageManager = context.getPackageManager();
+            List<PackageInfo> info = packageManager.getInstalledPackages(0);
+            if (info == null || info.isEmpty()) {
+                return false;
+            }
+            for (int i = 0; i < info.size(); i++) {
+                if (pkgName.equals(info.get(i).packageName)) {
+                    return true;
+                }
+            }
+            return false;
         }
 
-    }
+        @SuppressLint("StringFormatInvalid")
+        private void refreshKnownIssue() {
+            String issueName = null;
+            String issueLink = null;
+            final ApplicationInfo appInfo = Objects.requireNonNull(getActivity()).getApplicationInfo();
+            final File baseDir = new File(XposedApp.BASE_DIR);
+            final File baseDirCanonical = getCanonicalFile(baseDir);
+            final File baseDirActual = new File(Build.VERSION.SDK_INT >= 24 ? appInfo.deviceProtectedDataDir : appInfo.dataDir);
+            final File baseDirActualCanonical = getCanonicalFile(baseDirActual);
 
+            if (new File("/system/framework/core.jar.jex").exists()) {
+                issueName = "Aliyun OS";
+                issueLink = "https://forum.xda-developers.com/showpost.php?p=52289793&postcount=5";
+    //        } else if (Build.VERSION.SDK_INT < 24 && (new File("/data/miui/DexspyInstaller.jar").exists() || checkClassExists("miui.dexspy.DexspyInstaller"))) {
+    //            issueName = "MIUI/Dexspy";
+    //            issueLink = "https://forum.xda-developers.com/showpost.php?p=52291098&postcount=6";
+    //        } else if (Build.VERSION.SDK_INT < 24 && new File("/system/framework/twframework.jar").exists()) {
+    //            issueName = "Samsung TouchWiz ROM";
+    //            issueLink = "https://forum.xda-developers.com/showthread.php?t=3034811";
+            } else if (!baseDirCanonical.equals(baseDirActualCanonical)) {
+                Log.e(XposedApp.TAG, "Base directory: " + getPathWithCanonicalPath(baseDir, baseDirCanonical));
+                Log.e(XposedApp.TAG, "Expected: " + getPathWithCanonicalPath(baseDirActual, baseDirActualCanonical));
+                issueName = getString(R.string.known_issue_wrong_base_directory, getPathWithCanonicalPath(baseDirActual, baseDirActualCanonical));
+            } else if (!baseDir.exists()) {
+                issueName = getString(R.string.known_issue_missing_base_directory);
+                issueLink = "https://github.com/rovo89/XposedInstaller/issues/393";
+            } else if (checkAppInstalled(getContext(), "com.solohsu.android.edxp.manager")) {
+                issueName = getString(R.string.edxp_installer_installed);
+                issueLink = getString(R.string.about_support);
+            }
+
+        }
+    */
     private String getAndroidVersion() {
         switch (Build.VERSION.SDK_INT) {
 //            case 16:
@@ -296,23 +273,24 @@ public class StatusInstallerFragment extends Fragment {
         return manufacturer;
     }
 
-    private File getCanonicalFile(File file) {
-        try {
-            return file.getCanonicalFile();
-        } catch (IOException e) {
-            Log.e(XposedApp.TAG, "Failed to get canonical file for " + file.getAbsolutePath(), e);
-            return file;
+    /*
+        private File getCanonicalFile(File file) {
+            try {
+                return file.getCanonicalFile();
+            } catch (IOException e) {
+                Log.e(XposedApp.TAG, "Failed to get canonical file for " + file.getAbsolutePath(), e);
+                return file;
+            }
         }
-    }
 
-    private String getPathWithCanonicalPath(File file, File canonical) {
-        if (file.equals(canonical)) {
-            return file.getAbsolutePath();
-        } else {
-            return file.getAbsolutePath() + " \u2192 " + canonical.getAbsolutePath();
+        private String getPathWithCanonicalPath(File file, File canonical) {
+            if (file.equals(canonical)) {
+                return file.getAbsolutePath();
+            } else {
+                return file.getAbsolutePath() + " \u2192 " + canonical.getAbsolutePath();
+            }
         }
-    }
-
+    */
     private int extractIntPart(String str) {
         int result = 0, length = str.length();
         for (int offset = 0; offset < length; offset++) {

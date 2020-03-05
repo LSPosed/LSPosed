@@ -1,15 +1,11 @@
 package org.meowcat.edxposed.manager;
 
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,7 +20,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,15 +38,11 @@ import org.meowcat.edxposed.manager.util.NavUtil;
 import org.meowcat.edxposed.manager.util.RepoLoader;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -77,7 +68,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
     private DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     private ModuleUtil mModuleUtil;
     private ModuleAdapter mAdapter = null;
-    private MenuItem mClickedMenuItem = null;
     private RecyclerView mListView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private Runnable reloadModules = new Runnable() {
@@ -162,152 +152,140 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_modules, menu);
-        mSearchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.menu_search));
+        mSearchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
         mSearchView.setOnQueryTextListener(mSearchListener);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions,
-                grantResults);
-        if (requestCode == XposedApp.WRITE_EXTERNAL_PERMISSION) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                if (mClickedMenuItem != null) {
-                    new Handler().postDelayed(() -> onOptionsItemSelected(mClickedMenuItem), 500);
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+        if (requestCode == 42) {
+            File listModules = new File(XposedApp.ENABLED_MODULES_LIST_FILE);
+            if (data != null) {
+                Uri uri = data.getData();
+                if (uri != null) {
+                    try {
+                        OutputStream os = getContentResolver().openOutputStream(uri);
+                        if (os != null) {
+                            FileInputStream in = new FileInputStream(listModules);
+                            byte[] buffer = new byte[1024];
+                            int len;
+                            while ((len = in.read(buffer)) > 0) {
+                                os.write(buffer, 0, len);
+                            }
+                            os.close();
+                        }
+                    } catch (Exception e) {
+                        Snackbar.make(findViewById(R.id.snackbar), getResources().getString(R.string.logs_save_failed) + "\n" + e.getMessage(), Snackbar.LENGTH_LONG).show();
+                    }
                 }
-            } else {
-                Snackbar.make(findViewById(R.id.snackbar), R.string.permissionNotGranted, Snackbar.LENGTH_LONG).show();
+            }
+        } else if (requestCode == 43) {
+            if (data != null) {
+                Uri uri = data.getData();
+                if (uri != null) {
+                    try {
+                        OutputStream os = getContentResolver().openOutputStream(uri);
+                        if (os != null) {
+                            PrintWriter fileOut = new PrintWriter(os);
+
+                            Set<String> keys = ModuleUtil.getInstance().getModules().keySet();
+                            for (String key1 : keys) {
+                                fileOut.println(key1);
+                            }
+                            fileOut.close();
+                            os.close();
+                        }
+                    } catch (Exception e) {
+                        Snackbar.make(findViewById(R.id.snackbar), getResources().getString(R.string.logs_save_failed) + "\n" + e.getMessage(), Snackbar.LENGTH_LONG).show();
+                    }
+                }
+            }
+        } else if (requestCode == 44) {
+            if (data != null) {
+                Uri uri = data.getData();
+                if (uri != null) {
+                    try {
+                        importModules(uri);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        File enabledModulesPath = new File(XposedApp.createFolder(), "enabled_modules.list");
-        File installedModulesPath = new File(XposedApp.createFolder(), "installed_modules.list");
-        File listModules = new File(XposedApp.ENABLED_MODULES_LIST_FILE);
-
-        mClickedMenuItem = item;
-
-        if (checkPermissions())
-            return false;
-
+        Intent intent;
         switch (item.getItemId()) {
             case R.id.export_enabled_modules:
-                if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                    return false;
-                }
-
                 if (ModuleUtil.getInstance().getEnabledModules().isEmpty()) {
                     Snackbar.make(findViewById(R.id.snackbar), R.string.no_enabled_modules, Snackbar.LENGTH_SHORT).show();
                     return false;
                 }
-
-                try {
-                    XposedApp.createFolder();
-
-                    FileInputStream in = new FileInputStream(listModules);
-                    FileOutputStream out = new FileOutputStream(enabledModulesPath);
-
-                    byte[] buffer = new byte[1024];
-                    int len;
-                    while ((len = in.read(buffer)) > 0) {
-                        out.write(buffer, 0, len);
-                    }
-                    in.close();
-                    out.close();
-                } catch (IOException e) {
-                    Snackbar.make(findViewById(R.id.snackbar), getResources().getString(R.string.logs_save_failed) + "\n" + e.getMessage(), Snackbar.LENGTH_LONG).show();
-                    return false;
-                }
-
-                Snackbar.make(findViewById(R.id.snackbar), enabledModulesPath.toString(), Snackbar.LENGTH_LONG).show();
+                intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("text/*");
+                intent.putExtra(Intent.EXTRA_TITLE, "enabled_modules.list");
+                startActivityForResult(intent, 42);
                 return true;
             case R.id.export_installed_modules:
-                if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                    Snackbar.make(findViewById(R.id.snackbar), R.string.sdcard_not_writable, Snackbar.LENGTH_LONG).show();
-                    return false;
-                }
                 Map<String, ModuleUtil.InstalledModule> installedModules = ModuleUtil.getInstance().getModules();
 
                 if (installedModules.isEmpty()) {
                     Snackbar.make(findViewById(R.id.snackbar), R.string.no_installed_modules, Snackbar.LENGTH_SHORT).show();
                     return false;
                 }
-
-                try {
-                    XposedApp.createFolder();
-
-                    FileWriter fw = new FileWriter(installedModulesPath);
-                    BufferedWriter bw = new BufferedWriter(fw);
-                    PrintWriter fileOut = new PrintWriter(bw);
-
-                    Set<String> keys = installedModules.keySet();
-                    for (String key1 : keys) {
-                        fileOut.println(key1);
-                    }
-
-                    fileOut.close();
-                } catch (IOException e) {
-                    Snackbar.make(findViewById(R.id.snackbar), getResources().getString(R.string.logs_save_failed) + "\n" + e.getMessage(), Snackbar.LENGTH_LONG).show();
-                    return false;
-                }
-
-                Snackbar.make(findViewById(R.id.snackbar), installedModulesPath.toString(), Snackbar.LENGTH_LONG).show();
+                intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("text/*");
+                intent.putExtra(Intent.EXTRA_TITLE, "installed_modules.list");
+                startActivityForResult(intent, 43);
                 return true;
             case R.id.import_installed_modules:
-                return importModules(installedModulesPath);
             case R.id.import_enabled_modules:
-                return importModules(enabledModulesPath);
+                intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("*/*");
+                startActivityForResult(intent, 44);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private boolean importModules(File path) {
-        if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            Snackbar.make(findViewById(R.id.snackbar), R.string.sdcard_not_writable, Snackbar.LENGTH_LONG).show();
-            return false;
-        }
-        InputStream ips = null;
+    private void importModules(Uri uri) {
         RepoLoader repoLoader = RepoLoader.getInstance();
         List<Module> list = new ArrayList<>();
-        if (!path.exists()) {
-            Snackbar.make(findViewById(R.id.snackbar), R.string.no_backup_found, Snackbar.LENGTH_LONG).show();
-            return false;
-        }
-        try {
-            ips = new FileInputStream(path);
-        } catch (FileNotFoundException e) {
-            Log.e(XposedApp.TAG, "ModulesFragment -> " + e.getMessage());
-        }
-
-        if (path.length() == 0) {
-            Snackbar.make(findViewById(R.id.snackbar), R.string.file_is_empty, Snackbar.LENGTH_LONG).show();
-            return false;
-        }
 
         try {
-            assert ips != null;
-            InputStreamReader ipsr = new InputStreamReader(ips);
-            BufferedReader br = new BufferedReader(ipsr);
+            InputStream inputStream = getContentResolver().openInputStream(uri);
+            InputStreamReader isr = new InputStreamReader(inputStream);
+            BufferedReader br = new BufferedReader(isr);
             String line;
             while ((line = br.readLine()) != null) {
                 Module m = repoLoader.getModule(line);
 
                 if (m == null) {
-                    Snackbar.make(findViewById(R.id.snackbar), getString(R.string.download_details_not_found,
-                            line), Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(findViewById(R.id.snackbar), getString(R.string.download_details_not_found, line), Snackbar.LENGTH_SHORT).show();
                 } else {
                     list.add(m);
                 }
             }
             br.close();
-        } catch (ActivityNotFoundException | IOException e) {
-            Snackbar.make(findViewById(R.id.snackbar), e.toString(), Snackbar.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Snackbar.make(findViewById(R.id.snackbar), e.getLocalizedMessage(), Snackbar.LENGTH_SHORT).show();
         }
 
         for (final Module m : list) {
+            if (mModuleUtil.getModule(m.packageName) != null) {
+                continue;
+            }
             ModuleVersion mv = null;
             for (int i = 0; i < m.versions.size(); i++) {
                 ModuleVersion mvTemp = m.versions.get(i);
@@ -319,13 +297,11 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             }
 
             if (mv != null) {
-                DownloadsUtil.addModule(this, m.name, mv.downloadLink, false, (context, info) -> new InstallApkUtil(this, info).execute());
+                DownloadsUtil.addModule(this, m.name, mv.downloadLink, (context, info) -> new InstallApkUtil(this, info).execute());
             }
         }
 
         ModuleUtil.getInstance().reloadInstalledModules();
-
-        return true;
     }
 
     @Override

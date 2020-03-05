@@ -40,7 +40,7 @@ public class DownloadDetailsSettingsFragment extends PreferenceFragmentCompat {
 
         if (prefs.getBoolean("no_global", true)) {
             for (Map.Entry<String, ?> k : prefs.getAll().entrySet()) {
-                if (prefs.getString(k.getKey(), "").equals("global")) {
+                if (("global").equals(prefs.getString(k.getKey(), ""))) {
                     editor.putString(k.getKey(), "").apply();
                 }
             }

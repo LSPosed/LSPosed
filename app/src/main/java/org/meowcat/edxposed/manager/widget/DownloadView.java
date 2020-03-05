@@ -1,10 +1,8 @@
 package org.meowcat.edxposed.manager.widget;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.DownloadManager;
 import android.content.Context;
-import android.content.pm.PackageManager;
+import android.content.Intent;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +10,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import org.meowcat.edxposed.manager.R;
@@ -23,20 +19,15 @@ import org.meowcat.edxposed.manager.util.DownloadsUtil.DownloadFinishedCallback;
 
 import java.util.Objects;
 
-import static org.meowcat.edxposed.manager.XposedApp.WRITE_EXTERNAL_PERMISSION;
-
 public class DownloadView extends LinearLayout {
-    @SuppressLint("StaticFieldLeak")
-    public static Button mClickedButton;
+    public static DownloadsUtil.DownloadInfo mInfo = null;
     private final Button btnDownload;
     private final Button btnDownloadCancel;
     private final Button btnInstall;
-    private final Button btnRemove;
     private final Button btnSave;
     private final ProgressBar progressBar;
     private final TextView txtInfo;
     public Fragment fragment;
-    private DownloadsUtil.DownloadInfo mInfo = null;
     private String mUrl = null;
     private final Runnable refreshViewRunnable = new Runnable() {
         @Override
@@ -45,7 +36,6 @@ public class DownloadView extends LinearLayout {
                 btnDownload.setVisibility(View.GONE);
                 btnSave.setVisibility(View.GONE);
                 btnDownloadCancel.setVisibility(View.GONE);
-                btnRemove.setVisibility(View.GONE);
                 btnInstall.setVisibility(View.GONE);
                 progressBar.setVisibility(View.GONE);
                 txtInfo.setVisibility(View.VISIBLE);
@@ -54,7 +44,6 @@ public class DownloadView extends LinearLayout {
                 btnDownload.setVisibility(View.VISIBLE);
                 btnSave.setVisibility(View.VISIBLE);
                 btnDownloadCancel.setVisibility(View.GONE);
-                btnRemove.setVisibility(View.GONE);
                 btnInstall.setVisibility(View.GONE);
                 progressBar.setVisibility(View.GONE);
                 txtInfo.setVisibility(View.GONE);
@@ -66,7 +55,6 @@ public class DownloadView extends LinearLayout {
                         btnDownload.setVisibility(View.GONE);
                         btnSave.setVisibility(View.GONE);
                         btnDownloadCancel.setVisibility(View.VISIBLE);
-                        btnRemove.setVisibility(View.GONE);
                         btnInstall.setVisibility(View.GONE);
                         progressBar.setVisibility(View.VISIBLE);
                         txtInfo.setVisibility(View.VISIBLE);
@@ -88,7 +76,6 @@ public class DownloadView extends LinearLayout {
                         btnDownload.setVisibility(View.VISIBLE);
                         btnSave.setVisibility(View.VISIBLE);
                         btnDownloadCancel.setVisibility(View.GONE);
-                        btnRemove.setVisibility(View.GONE);
                         btnInstall.setVisibility(View.GONE);
                         progressBar.setVisibility(View.GONE);
                         txtInfo.setVisibility(View.VISIBLE);
@@ -98,9 +85,8 @@ public class DownloadView extends LinearLayout {
 
                     case DownloadManager.STATUS_SUCCESSFUL:
                         btnDownload.setVisibility(View.GONE);
-                        btnSave.setVisibility(View.GONE);
+                        btnSave.setVisibility(View.VISIBLE);
                         btnDownloadCancel.setVisibility(View.GONE);
-                        btnRemove.setVisibility(View.VISIBLE);
                         btnInstall.setVisibility(View.VISIBLE);
                         progressBar.setVisibility(View.GONE);
                         txtInfo.setVisibility(View.VISIBLE);
@@ -123,38 +109,30 @@ public class DownloadView extends LinearLayout {
 
         btnDownload = findViewById(R.id.btnDownload);
         btnDownloadCancel = findViewById(R.id.btnDownloadCancel);
-        btnRemove = findViewById(R.id.btnRemove);
         btnInstall = findViewById(R.id.btnInstall);
         btnSave = findViewById(R.id.save);
 
         btnDownload.setOnClickListener(v -> {
-            mClickedButton = btnDownload;
-
-            mInfo = DownloadsUtil.addModule(getContext(), mTitle, mUrl, false, mCallback);
+            mInfo = DownloadsUtil.addModule(getContext(), mTitle, mUrl, mCallback);
             refreshViewFromUiThread();
-
             if (mInfo != null)
                 new DownloadMonitor().start();
         });
 
         btnSave.setOnClickListener(v -> {
-            mClickedButton = btnSave;
-
-            if (checkPermissions())
-                return;
-
-            mInfo = DownloadsUtil.addModule(getContext(), mTitle, mUrl, true, (context1, info) -> Toast.makeText(context1, context1.getString(R.string.module_saved, info.localFilename), Toast.LENGTH_SHORT).show());
+            mInfo = DownloadsUtil.addModule(getContext(), mTitle, mUrl, (context1, info) -> {
+                Intent exportIntent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                exportIntent.addCategory(Intent.CATEGORY_OPENABLE);
+                exportIntent.setType(DownloadsUtil.MIME_TYPE_APK);
+                exportIntent.putExtra(Intent.EXTRA_TITLE, mTitle + ".apk");
+                fragment.startActivityForResult(exportIntent, 42);
+            });
+            refreshViewFromUiThread();
+            if (mInfo != null)
+                new DownloadMonitor().start();
         });
 
         btnDownloadCancel.setOnClickListener(v -> {
-            if (mInfo == null)
-                return;
-
-            DownloadsUtil.removeById(getContext(), mInfo.id);
-            // UI update will happen automatically by the DownloadMonitor
-        });
-
-        btnRemove.setOnClickListener(v -> {
             if (mInfo == null)
                 return;
 
@@ -173,15 +151,6 @@ public class DownloadView extends LinearLayout {
         txtInfo = findViewById(R.id.txtInfo);
 
         refreshViewFromUiThread();
-    }
-
-    private boolean checkPermissions() {
-        if (ActivityCompat.checkSelfPermission(this.getContext(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            fragment.requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_EXTERNAL_PERMISSION);
-            return true;
-        }
-        return false;
     }
 
     private void refreshViewFromUiThread() {

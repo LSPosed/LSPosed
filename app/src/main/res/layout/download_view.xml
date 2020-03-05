@@ -43,16 +43,6 @@
             tools:ignore="ButtonOrder" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnRemove"
-            style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            android:text="@string/download_view_remove"
-            android:theme="@style/Widget.AppCompat.Button.Colored"
-            android:visibility="gone" />
-
-        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnInstall"
             style="@style/Widget.MaterialComponents.Button"
             android:layout_width="wrap_content"

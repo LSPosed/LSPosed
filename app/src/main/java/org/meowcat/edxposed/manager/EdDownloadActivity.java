@@ -83,10 +83,6 @@ public class EdDownloadActivity extends BaseActivity {
     @SuppressLint("StaticFieldLeak")
     private class JSONParser extends AsyncTask<Void, Void, String> {
 
-        private String newApkVersion = null;
-        private String newApkLink = null;
-        private String newApkChangelog = null;
-
         @Override
         protected String doInBackground(Void... params) {
             try {
@@ -115,9 +111,9 @@ public class EdDownloadActivity extends BaseActivity {
                     tabsAdapter.notifyDataSetChanged();
                 }
 
-                newApkVersion = xposedJson.apk.version;
-                newApkLink = xposedJson.apk.link;
-                newApkChangelog = xposedJson.apk.changelog;
+                String newApkVersion = xposedJson.apk.version;
+                String newApkLink = xposedJson.apk.link;
+                String newApkChangelog = xposedJson.apk.changelog;
 
                 if (newApkVersion == null) {
                     return;

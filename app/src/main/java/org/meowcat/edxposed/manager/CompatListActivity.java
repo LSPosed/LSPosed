@@ -10,7 +10,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -69,14 +68,9 @@ public class CompatListActivity extends BaseActivity implements AppAdapter.Callb
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         getMenuInflater().inflate(R.menu.menu_app_list, menu);
-        mSearchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.menu_search));
+        mSearchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
         mSearchView.setOnQueryTextListener(mSearchListener);
         return super.onCreateOptionsMenu(menu);
     }

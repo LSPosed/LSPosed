@@ -2,10 +2,7 @@
 <paths>
     <external-cache-path
         name="downloads"
-        path="downloads" />
-    <external-path
-        name="download"
-        path="Download" />
+        path="/downloads" />
     <!--suppress AndroidElementNotAllowed -->
     <root-path
         name="log_legacy"

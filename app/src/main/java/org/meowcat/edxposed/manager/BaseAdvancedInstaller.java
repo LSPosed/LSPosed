@@ -1,13 +1,9 @@
 package org.meowcat.edxposed.manager;
 
-import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,11 +16,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.snackbar.Snackbar;
 
 import org.meowcat.edxposed.manager.util.NavUtil;
 import org.meowcat.edxposed.manager.util.json.XposedTab;
@@ -32,8 +26,6 @@ import org.meowcat.edxposed.manager.util.json.XposedZip;
 
 import java.util.List;
 import java.util.Objects;
-
-import static org.meowcat.edxposed.manager.XposedApp.WRITE_EXTERNAL_PERMISSION;
 
 public class BaseAdvancedInstaller extends Fragment {
     private View mClickedButton;
@@ -88,16 +80,6 @@ public class BaseAdvancedInstaller extends Fragment {
         return Objects.requireNonNull(tab).description;
     }
 
-    private boolean checkPermissions() {
-        if (Build.VERSION.SDK_INT < 23) return false;
-
-        if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_EXTERNAL_PERMISSION);
-            return true;
-        }
-        return false;
-    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -143,31 +125,21 @@ public class BaseAdvancedInstaller extends Fragment {
                     .setMessage(s).setPositiveButton(android.R.string.ok, null).show();
         });
 
-        btnInstall.setOnClickListener(v -> {
-            mClickedButton = v;
-            if (checkPermissions()) return;
+        btnInstall.setOnClickListener(v -> areYouSure(R.string.warningArchitecture,
+                (dialog, which) -> {
+                    XposedZip selectedInstaller = (XposedZip) chooserInstallers.getSelectedItem();
+                    Uri uri = Uri.parse(selectedInstaller.link);
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    startActivity(intent);
+                }));
 
-            areYouSure(R.string.warningArchitecture,
-                    (dialog, which) -> {
-                        XposedZip selectedInstaller = (XposedZip) chooserInstallers.getSelectedItem();
-                        Uri uri = Uri.parse(selectedInstaller.link);
-                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                        startActivity(intent);
-                    });
-        });
-
-        btnUninstall.setOnClickListener(v -> {
-            mClickedButton = v;
-            if (checkPermissions()) return;
-
-            areYouSure(R.string.warningArchitecture,
-                    (dialog, which) -> {
-                        XposedZip selectedUninstaller = (XposedZip) chooserUninstallers.getSelectedItem();
-                        Uri uri = Uri.parse(selectedUninstaller.link);
-                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                        startActivity(intent);
-                    });
-        });
+        btnUninstall.setOnClickListener(v -> areYouSure(R.string.warningArchitecture,
+                (dialog, which) -> {
+                    XposedZip selectedUninstaller = (XposedZip) chooserUninstallers.getSelectedItem();
+                    Uri uri = Uri.parse(selectedUninstaller.link);
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    startActivity(intent);
+                }));
 
         noticeTv.setText(Html.fromHtml(notice()));
         author.setText(getString(R.string.download_author, author()));
@@ -196,20 +168,6 @@ public class BaseAdvancedInstaller extends Fragment {
                 .setPositiveButton(android.R.string.ok, null).show());
 
         return view;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == WRITE_EXTERNAL_PERMISSION) {
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                if (mClickedButton != null) {
-                    new Handler().postDelayed(() -> mClickedButton.performClick(), 500);
-                }
-            } else {
-                Snackbar.make(getActivity().findViewById(R.id.snackbar), R.string.permissionNotGranted, Snackbar.LENGTH_LONG).show();
-            }
-        }
     }
 
 

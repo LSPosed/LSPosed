@@ -1,15 +1,11 @@
 package org.meowcat.edxposed.manager;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,7 +19,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,6 +31,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -48,7 +44,6 @@ public class LogsActivity extends BaseActivity {
             XposedApp.BASE_DIR + "log/error.log.old");
     private File mFileAllLog = new File(XposedApp.BASE_DIR + "log/all.log");
     private File mFileAllLogOld = new File(XposedApp.BASE_DIR + "log/all.log.old");
-    private MenuItem mClickedMenuItem = null;
     private LogsAdapter mAdapter;
     private RecyclerView mListView;
     private Handler handler = new Handler();
@@ -124,7 +119,6 @@ public class LogsActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        mClickedMenuItem = item;
         switch (item.getItemId()) {
             case R.id.menu_scroll_top:
                 scrollTop();
@@ -138,7 +132,8 @@ public class LogsActivity extends BaseActivity {
             case R.id.menu_send:
                 try {
                     send();
-                } catch (NullPointerException ignored) {
+                } catch (Exception e) {
+                    Snackbar.make(findViewById(R.id.snackbar), e.getLocalizedMessage(), Snackbar.LENGTH_LONG).show();
                 }
                 return true;
             case R.id.menu_save:
@@ -186,34 +181,8 @@ public class LogsActivity extends BaseActivity {
         startActivity(Intent.createChooser(sendIntent, getResources().getString(R.string.menuSend)));
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions,
-                grantResults);
-        if (requestCode == XposedApp.WRITE_EXTERNAL_PERMISSION) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                if (mClickedMenuItem != null) {
-                    new Handler().postDelayed(() -> onOptionsItemSelected(mClickedMenuItem), 500);
-                }
-            } else {
-                Snackbar.make(findViewById(R.id.snackbar), R.string.permissionNotGranted, Snackbar.LENGTH_LONG).show();
-            }
-        }
-    }
-
     @SuppressLint("DefaultLocale")
     private void save() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, XposedApp.WRITE_EXTERNAL_PERMISSION);
-            return;
-        }
-
-        if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            Snackbar.make(findViewById(R.id.snackbar), R.string.sdcard_not_writable, Snackbar.LENGTH_LONG).show();
-            return;
-        }
-
         Calendar now = Calendar.getInstance();
         String filename = String.format(
                 "EdXposed_Verbose_%04d%02d%02d_%02d%02d%02d.log",
@@ -221,22 +190,39 @@ public class LogsActivity extends BaseActivity {
                 now.get(Calendar.DAY_OF_MONTH), now.get(Calendar.HOUR_OF_DAY),
                 now.get(Calendar.MINUTE), now.get(Calendar.SECOND));
 
-        File targetFile = new File(XposedApp.createFolder(), filename);
+        Intent exportIntent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        exportIntent.addCategory(Intent.CATEGORY_OPENABLE);
+        exportIntent.setType("text/*");
+        exportIntent.putExtra(Intent.EXTRA_TITLE, filename);
+        startActivityForResult(exportIntent, 42);
+    }
 
-        try {
-            FileInputStream in = new FileInputStream(allLog ? mFileAllLog : mFileErrorLog);
-            FileOutputStream out = new FileOutputStream(targetFile);
-            byte[] buffer = new byte[1024];
-            int len;
-            while ((len = in.read(buffer)) > 0) {
-                out.write(buffer, 0, len);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+        if (requestCode == 42) {
+            if (data != null) {
+                Uri uri = data.getData();
+                if (uri != null) {
+                    try {
+                        OutputStream os = getContentResolver().openOutputStream(uri);
+                        if (os != null) {
+                            FileInputStream in = new FileInputStream(allLog ? mFileAllLog : mFileErrorLog);
+                            byte[] buffer = new byte[1024];
+                            int len;
+                            while ((len = in.read(buffer)) > 0) {
+                                os.write(buffer, 0, len);
+                            }
+                            os.close();
+                        }
+                    } catch (Exception e) {
+                        Snackbar.make(findViewById(R.id.snackbar), getResources().getString(R.string.logs_save_failed) + "\n" + e.getMessage(), Snackbar.LENGTH_LONG).show();
+                    }
+                }
             }
-            in.close();
-            out.close();
-
-            Snackbar.make(findViewById(R.id.snackbar), targetFile.toString(), Snackbar.LENGTH_LONG).show();
-        } catch (IOException e) {
-            Snackbar.make(findViewById(R.id.snackbar), getResources().getString(R.string.logs_save_failed) + "\n" + e.getMessage(), Snackbar.LENGTH_LONG).show();
         }
     }
 

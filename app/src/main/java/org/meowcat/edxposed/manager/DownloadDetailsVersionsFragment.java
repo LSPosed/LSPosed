@@ -1,12 +1,16 @@
 package org.meowcat.edxposed.manager;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,10 +39,10 @@ import org.meowcat.edxposed.manager.util.chrome.LinkTransformationMethod;
 import org.meowcat.edxposed.manager.widget.DownloadView;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.OutputStream;
 import java.text.DateFormat;
 import java.util.Date;
-
-import static org.meowcat.edxposed.manager.XposedApp.WRITE_EXTERNAL_PERMISSION;
 
 public class DownloadDetailsVersionsFragment extends ListFragment {
     private static View rootView;
@@ -93,13 +97,31 @@ public class DownloadDetailsVersionsFragment extends ListFragment {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == WRITE_EXTERNAL_PERMISSION) {
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                DownloadView.mClickedButton.performClick();
-            } else {
-                Snackbar.make(rootView, R.string.permissionNotGranted, Snackbar.LENGTH_LONG).show();
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+        if (requestCode == 42) {
+            if (data != null) {
+                Uri uri = data.getData();
+                if (uri != null) {
+                    try {
+                        OutputStream os = mActivity.getContentResolver().openOutputStream(uri);
+                        if (os != null) {
+                            FileInputStream in = new FileInputStream(new File(DownloadView.mInfo.localFilename));
+                            byte[] buffer = new byte[1024];
+                            int len;
+                            while ((len = in.read(buffer)) > 0) {
+                                os.write(buffer, 0, len);
+                            }
+                            os.close();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        //Snackbar.make(findViewById(R.id.snackbar), getResources().getString(R.string.logs_save_failed) + "\n" + e.getMessage(), Snackbar.LENGTH_LONG).show();
+                    }
+                }
             }
         }
     }

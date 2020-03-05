@@ -1,13 +1,10 @@
 package org.meowcat.edxposed.manager;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.text.TextUtils;
@@ -20,7 +17,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StyleRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 
@@ -150,16 +146,6 @@ public class BaseActivity extends AppCompatActivity {
                 .setMessage(result)
                 .setPositiveButton(android.R.string.ok, null)
                 .show();
-    }
-
-    public boolean checkPermissions() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, XposedApp.WRITE_EXTERNAL_PERMISSION);
-            }
-            return true;
-        }
-        return false;
     }
 
     void reboot(String mode) {

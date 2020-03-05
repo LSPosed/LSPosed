@@ -32,6 +32,7 @@ public class XposedApp extends Application {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
+        reloadXposedProp();
     }
 
     public void reloadXposedProp() {

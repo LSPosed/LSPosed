@@ -4,26 +4,17 @@ import android.annotation.SuppressLint;
 import android.app.DownloadManager;
 import android.app.DownloadManager.Query;
 import android.app.DownloadManager.Request;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.core.os.EnvironmentCompat;
 
 import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.XposedApp;
-import org.meowcat.edxposed.manager.repo.Module;
-import org.meowcat.edxposed.manager.repo.ModuleVersion;
-import org.meowcat.edxposed.manager.repo.ReleaseType;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -40,7 +31,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class DownloadsUtil {
-    static final String MIME_TYPE_APK = "application/vnd.android.package-archive";
+    public static final String MIME_TYPE_APK = "application/vnd.android.package-archive";
     //private static final String MIME_TYPE_ZIP = "application/zip";
     private static final Map<String, DownloadFinishedCallback> mCallbacks = new HashMap<>();
     @SuppressLint("StaticFieldLeak")
@@ -48,152 +39,55 @@ public class DownloadsUtil {
     private static final SharedPreferences mPref = mApp
             .getSharedPreferences("download_cache", Context.MODE_PRIVATE);
 
-    private static String DOWNLOAD_MODULES = "modules";
-
     private static DownloadInfo add(Builder b) {
         Context context = b.mContext;
         removeAllForUrl(context, b.mUrl);
 
-        if (!b.mDialog) {
-            synchronized (mCallbacks) {
-                mCallbacks.put(b.mUrl, b.mCallback);
-            }
-        }
-
-        String savePath = "Download/EdXposedManager";
-        if (b.mModule) {
-            savePath += "/modules";
+        synchronized (mCallbacks) {
+            mCallbacks.put(b.mUrl, b.mCallback);
         }
 
         Request request = new Request(Uri.parse(b.mUrl));
         request.setTitle(b.mTitle);
         request.setMimeType(b.mMimeType.toString());
-        if (b.mSave) {
+        /*if (b.mSave) {
             try {
                 request.setDestinationInExternalPublicDir(savePath, b.mTitle + b.mMimeType.getExtension());
             } catch (IllegalStateException e) {
                 Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
-        } else if (b.mDestination != null) {
-            //noinspection ResultOfMethodCallIgnored
-            b.mDestination.getParentFile().mkdirs();
-            removeAllForLocalFile(context, b.mDestination);
-            request.setDestinationUri(Uri.fromFile(b.mDestination));
-        }
-
+        } else */
+        File destination = new File(context.getExternalCacheDir(), "/downloads/" + b.mTitle + b.mMimeType.getExtension());
+        request.setDestinationUri(Uri.fromFile(destination));
         request.setNotificationVisibility(Request.VISIBILITY_VISIBLE);
-
         DownloadManager dm = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         long id = dm.enqueue(request);
-
-        if (b.mDialog) {
-            showDownloadDialog(b, id);
-        }
 
         return getById(context, id);
     }
 
-    private static File[] getDownloadDirs(String subDir) {
-        Context context = XposedApp.getInstance();
-        ArrayList<File> dirs = new ArrayList<>(2);
-        for (File dir : ContextCompat.getExternalCacheDirs(context)) {
-            if (dir != null && EnvironmentCompat.getStorageState(dir).equals(Environment.MEDIA_MOUNTED)) {
-                dirs.add(new File(new File(dir, "downloads"), subDir));
-            }
-        }
-        dirs.add(new File(new File(context.getCacheDir(), "downloads"), subDir));
-        return dirs.toArray(new File[0]);
-    }
-
-    private static File getDownloadTarget(String subDir, String filename) {
-        return new File(getDownloadDirs(subDir)[0], filename);
-    }
-
-    private static File getDownloadTargetForUrl(String subDir, String url) {
-        return getDownloadTarget(subDir, Uri.parse(url).getLastPathSegment());
-    }
-
-    public static DownloadInfo addModule(Context context, String title, String url, boolean save, DownloadFinishedCallback callback) {
+    public static DownloadInfo addModule(Context context, String title, String url, DownloadFinishedCallback callback) {
         return new Builder(context)
                 .setTitle(title)
                 .setUrl(url)
-                .setDestinationFromUrl(DownloadsUtil.DOWNLOAD_MODULES)
                 .setCallback(callback)
-                .setSave(save)
                 .setModule(true)
                 .setMimeType(MIME_TYPES.APK)
                 .download();
     }
 
-    private static void showDownloadDialog(final Builder b, final long id) {
-        final Context context = b.mContext;
-        final ProgressDialog dialog = new ProgressDialog(context);
-        dialog.setTitle(b.mTitle);
-        dialog.setMessage(context.getString(R.string.download_view_waiting));
-        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, context.getString(R.string.download_view_cancel), (dialog1, which) -> dialog1.cancel());
-        dialog.setOnCancelListener(dialog12 -> removeById(context, id));
+    /*
+        public static ModuleVersion getStableVersion(Module m) {
+            for (int i = 0; i < m.versions.size(); i++) {
+                ModuleVersion mvTemp = m.versions.get(i);
 
-        dialog.setProgress(0);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setProgressNumberFormat(context.getString(R.string.download_progress));
-        dialog.show();
-
-        new Thread("DownloadDialog") {
-            @Override
-            public void run() {
-                while (true) {
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        return;
-                    }
-
-                    final DownloadInfo info = getById(context, id);
-                    if (info == null) {
-                        dialog.cancel();
-                        return;
-                    } else if (info.status == DownloadManager.STATUS_FAILED) {
-                        dialog.cancel();
-                        XposedApp.runOnUiThread(() -> Toast.makeText(context,
-                                context.getString(R.string.download_view_failed, info.reason),
-                                Toast.LENGTH_LONG).show());
-                        return;
-                    } else if (info.status == DownloadManager.STATUS_SUCCESSFUL) {
-                        dialog.dismiss();
-                        // Hack to reset stat information.
-                        //noinspection ResultOfMethodCallIgnored
-                        new File(info.localFilename).setExecutable(false);
-                        if (b.mCallback != null) {
-                            b.mCallback.onDownloadFinished(context, info);
-                        }
-                        return;
-                    }
-
-                    XposedApp.runOnUiThread(() -> {
-                        if (info.totalSize <= 0 || info.status != DownloadManager.STATUS_RUNNING) {
-                            dialog.setMessage(context.getString(R.string.download_view_waiting));
-                        } else {
-                            dialog.setMessage(context.getString(R.string.download_running));
-                            dialog.setProgress(info.bytesDownloaded / 1024);
-                            dialog.setMax(info.totalSize / 1024);
-                        }
-                    });
+                if (mvTemp.relType == ReleaseType.STABLE) {
+                    return mvTemp;
                 }
             }
-        }.start();
-    }
-
-    public static ModuleVersion getStableVersion(Module m) {
-        for (int i = 0; i < m.versions.size(); i++) {
-            ModuleVersion mvTemp = m.versions.get(i);
-
-            if (mvTemp.relType == ReleaseType.STABLE) {
-                return mvTemp;
-            }
+            return null;
         }
-        return null;
-    }
-
+    */
     public static DownloadInfo getById(Context context, long id) {
         DownloadManager dm = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         Cursor c = dm.query(new Query().setFilterById(id));
@@ -317,7 +211,7 @@ public class DownloadsUtil {
 
         dm.remove(ids);
     }
-
+/*
     private static void removeAllForLocalFile(Context context, File file) {
         //noinspection ResultOfMethodCallIgnored
         file.delete();
@@ -367,7 +261,7 @@ public class DownloadsUtil {
             ids[i] = idsList.get(i);
 
         dm.remove(ids);
-    }
+    }*/
 
 //    public static void removeOutdated(Context context, long cutoff) {
 //        DownloadManager dm = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
@@ -563,9 +457,6 @@ public class DownloadsUtil {
         private String mUrl = null;
         private DownloadFinishedCallback mCallback = null;
         private MIME_TYPES mMimeType = MIME_TYPES.APK;
-        private File mDestination = null;
-        private boolean mDialog = false;
-        private boolean mSave = false;
 
         public Builder(Context context) {
             mContext = context;
@@ -591,30 +482,8 @@ public class DownloadsUtil {
             return this;
         }
 
-        Builder setDestination(File file) {
-            mDestination = file;
-            return this;
-        }
-
-        Builder setDestinationFromUrl(String subDir) {
-            if (mUrl == null) {
-                throw new IllegalStateException("URL must be set first");
-            }
-            return setDestination(getDownloadTargetForUrl(subDir, mUrl));
-        }
-
-        public Builder setSave(boolean save) {
-            this.mSave = save;
-            return this;
-        }
-
         public Builder setModule(boolean module) {
             this.mModule = module;
-            return this;
-        }
-
-        public Builder setDialog(boolean dialog) {
-            mDialog = dialog;
             return this;
         }
 

@@ -9,8 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.view.menu.MenuBuilder;
-import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.appcompat.widget.PopupMenu;
 
 import com.google.android.material.card.MaterialCardView;
@@ -70,9 +68,7 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
             PopupMenu appMenu = new PopupMenu(MainActivity.this, menu);
             appMenu.inflate(R.menu.menu_installer);
             appMenu.setOnMenuItemClickListener(this::onOptionsItemSelected);
-            MenuPopupHelper menuHelper = new MenuPopupHelper(MainActivity.this, (MenuBuilder) appMenu.getMenu(), menu);
-            menuHelper.setForceShowIcon(true);
-            menuHelper.show();
+            appMenu.show();
         });
         String installedXposedVersion;
         try {

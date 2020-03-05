@@ -23,7 +23,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -153,8 +152,7 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
         getMenuInflater().inflate(R.menu.menu_download, menu);
 
         // Setup search button
-        final MenuItem searchItem = menu.findItem(R.id.menu_search);
-        mSearchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        mSearchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
         mSearchView.setIconifiedByDefault(true);
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

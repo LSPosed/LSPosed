@@ -1,5 +1,6 @@
 package org.meowcat.edxposed.manager;
 
+import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
@@ -20,6 +21,7 @@ import org.meowcat.edxposed.manager.util.chrome.LinkTransformationMethod;
 
 public class DownloadDetailsFragment extends Fragment {
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         DownloadDetailsActivity mActivity = (DownloadDetailsActivity) getActivity();

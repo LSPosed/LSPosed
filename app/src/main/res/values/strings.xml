@@ -128,7 +128,6 @@
 
     <!-- Logs tab  -->
     <string name="logs_save_failed">Could not write log to SD card:</string>
-    <string name="sdcard_not_writable">SD card not found or not writable</string>
     <string name="menuClearLog">Clear log now</string>
     <string name="logs_cleared">Log successfully cleared.</string>
     <string name="logs_clear_failed">Could not clear the log:</string>
@@ -158,8 +157,6 @@
     <string name="download_could_not_read_file">Could not read downloaded file: %s</string>
     <string name="download_no_valid_apk">Downloaded file is not a valid APK (or incompatible)</string>
     <string name="download_incorrect_package_name">Package name is incorrect (downloaded: %1$s, expected: %2$s)</string>
-    <string name="download_running">Download is running</string>
-    <string name="download_progress" translatable="false">%1$,d / %2$,d kB</string>
 
     <!-- RepoLoader -->
     <string name="repo_download_failed_http">Downloading %1$s failed: %2$d (%3$s)</string>
@@ -176,7 +173,6 @@
     <string name="no_installed_modules">There are no installed modules!</string>
     <string name="enable_heads_up">Enable Heads-Up notification</string>
     <string name="enable_heads_up_summary">This option enables heads up notification on new/updated module</string>
-    <string name="no_backup_found">No backup found</string>
     <string name="no_enabled_modules">There are no modules enabled</string>
 
     <string name="share">Share with…</string>
@@ -198,7 +194,6 @@
 
     <string name="changelog">Changelog</string>
     <string name="scroll_top">Scroll to top</string>
-    <string name="file_is_empty">File is empty</string>
     <string name="install_with_su">Silent installation (root)</string>
     <string name="install_with_su_summ">If checked EdXposed Manager will install modules without a prompt</string>
     <string name="module_saved">Module saved at %1$s</string>

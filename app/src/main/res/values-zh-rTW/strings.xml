@@ -126,7 +126,6 @@
 
     <!-- Logs tab  -->
     <string name="logs_save_failed">無法將日誌寫入 SD 卡: </string>
-    <string name="sdcard_not_writable">無法找到 SD 卡或不可寫入</string>
     <string name="menuClearLog">立即清理日誌</string>
     <string name="logs_cleared">日誌清理成功</string>
     <string name="logs_clear_failed">無法清理日誌: </string>
@@ -156,7 +155,6 @@
     <string name="download_could_not_read_file">無法讀取下載的檔案: %s</string>
     <string name="download_no_valid_apk">下載的檔案並非有效的 APK (或存在相容性問題)</string>
     <string name="download_incorrect_package_name">檔案包名不正確(下載: %1$s, 預期: %2$s)</string>
-    <string name="download_running">正在下載</string>
 
     <!-- RepoLoader -->
     <string name="repo_download_failed_http">下載 %1$s 失敗: %2$d(%3$s)</string>
@@ -173,7 +171,6 @@
     <string name="no_installed_modules">沒有任何已安裝的模組</string>
     <string name="enable_heads_up">啟用浮動通知</string>
     <string name="enable_heads_up_summary">對新安裝或已更新的模組啟用浮動通知</string>
-    <string name="no_backup_found">找不到備份</string>
     <string name="no_enabled_modules">沒有任何已啟用的模組</string>
 
     <string name="share">分享</string>
@@ -195,7 +192,6 @@
 
     <string name="changelog">更新日誌</string>
     <string name="scroll_top">滾動到頂部</string>
-    <string name="file_is_empty">檔案為空</string>
     <string name="install_with_su">靜默安裝(root)</string>
     <string name="install_with_su_summ">勾選後在 EdXposed Manager 內安裝模組時將不再顯示安裝提示</string>
     <string name="module_saved">模組已儲存至 %1$s</string>
