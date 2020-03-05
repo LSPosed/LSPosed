@@ -18,7 +18,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.annimon.stream.Stream;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
@@ -27,7 +26,6 @@ import org.meowcat.edxposed.manager.util.json.JSONUtils;
 import org.meowcat.edxposed.manager.util.json.XposedTab;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class EdDownloadActivity extends BaseActivity {
 
@@ -103,12 +101,11 @@ public class EdDownloadActivity extends BaseActivity {
             try {
                 final JSONUtils.XposedJson xposedJson = new Gson().fromJson(result, JSONUtils.XposedJson.class);
 
-                List<XposedTab> tabs = Stream.of(xposedJson.tabs)
-                        .filter(value -> value.sdks.contains(Build.VERSION.SDK_INT)).toList();
-
-                for (XposedTab tab : tabs) {
-                    tabsAdapter.addFragment(tab.name, BaseAdvancedInstaller.newInstance(tab));
-                    tabsAdapter.notifyDataSetChanged();
+                for (XposedTab tab : xposedJson.tabs) {
+                    if (tab.sdks.contains(Build.VERSION.SDK_INT)) {
+                        tabsAdapter.addFragment(tab.name, BaseAdvancedInstaller.newInstance(tab));
+                        tabsAdapter.notifyDataSetChanged();
+                    }
                 }
 
                 String newApkVersion = xposedJson.apk.version;
