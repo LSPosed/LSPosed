@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 
 import com.takisoft.preferencex.SimpleMenuPreference;
 
+@SuppressWarnings("unused")
 public class IntegerListPreference extends SimpleMenuPreference {
     public IntegerListPreference(Context context) {
         super(context);
@@ -15,7 +16,7 @@ public class IntegerListPreference extends SimpleMenuPreference {
         super(context, attrs);
     }
 
-    public static int getIntValue(String value) {
+    private static int getIntValue(String value) {
         if (value == null)
             return 0;
 

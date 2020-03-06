@@ -19,8 +19,10 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.ListFragment;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -44,18 +46,17 @@ import java.text.DateFormat;
 import java.util.Date;
 
 public class DownloadDetailsVersionsFragment extends ListFragment {
-    private static View rootView;
-    private DownloadDetailsActivity mActivity;
+    @SuppressLint("StaticFieldLeak")
+    private DownloadDetailsActivity activity;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mActivity = (DownloadDetailsActivity) getActivity();
-        if (mActivity == null) {
+        activity = (DownloadDetailsActivity) getActivity();
+        if (activity == null) {
             return;
         }
-        rootView = mActivity.findViewById(R.id.snackbar);
-        Module module = mActivity.getModule();
+        Module module = activity.getModule();
         if (module == null)
             return;
 
@@ -68,25 +69,32 @@ public class DownloadDetailsVersionsFragment extends ListFragment {
                 TextView txtHeader = new TextView(getActivity());
                 txtHeader.setText(R.string.download_test_version_not_shown);
                 txtHeader.setTextColor(getResources().getColor(R.color.warning));
-                txtHeader.setOnClickListener(v -> mActivity.gotoPage(DownloadDetailsActivity.DOWNLOAD_SETTINGS));
+                txtHeader.setOnClickListener(v -> activity.gotoPage(DownloadDetailsActivity.DOWNLOAD_SETTINGS));
                 getListView().addHeaderView(txtHeader);
             }
 
-            VersionsAdapter sAdapter = new VersionsAdapter(mActivity, mActivity.getInstalledModule());
+            VersionsAdapter sAdapter = new VersionsAdapter(activity, activity.getInstalledModule(), activity.findViewById(R.id.snackbar));
             for (ModuleVersion version : module.versions) {
                 if (repoLoader.isVersionShown(version))
                     sAdapter.add(version);
             }
             setListAdapter(sAdapter);
         }
-        if (getView() != null) {
-            ((FrameLayout) getView()).setClipChildren(false);
-            ((FrameLayout) getView()).setClipToPadding(false);
-        }
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ((FrameLayout) view).setClipChildren(false);
+        ((FrameLayout) view).setClipToPadding(false);
         ((FrameLayout) getListView().getParent()).setClipChildren(false);
         ((FrameLayout) getListView().getParent()).setClipToPadding(false);
         getListView().setClipToPadding(false);
         getListView().setClipToPadding(false);
+        ViewCompat.setOnApplyWindowInsetsListener(view, (v, insets) -> {
+            getListView().setPadding(0, 0, 0, insets.getSystemWindowInsetBottom());
+            return insets;
+        });
     }
 
     @Override
@@ -106,7 +114,7 @@ public class DownloadDetailsVersionsFragment extends ListFragment {
                 Uri uri = data.getData();
                 if (uri != null) {
                     try {
-                        OutputStream os = mActivity.getContentResolver().openOutputStream(uri);
+                        OutputStream os = activity.getContentResolver().openOutputStream(uri);
                         if (os != null) {
                             FileInputStream in = new FileInputStream(new File(DownloadView.lastInfo.localFilename));
                             byte[] buffer = new byte[1024];
@@ -137,9 +145,11 @@ public class DownloadDetailsVersionsFragment extends ListFragment {
 
     public static class DownloadModuleCallback implements DownloadsUtil.DownloadFinishedCallback {
         private final ModuleVersion moduleVersion;
+        private View snackbar;
 
-        DownloadModuleCallback(ModuleVersion moduleVersion) {
+        DownloadModuleCallback(ModuleVersion moduleVersion, View snackbar) {
             this.moduleVersion = moduleVersion;
+            this.snackbar = snackbar;
         }
 
         @Override
@@ -152,12 +162,12 @@ public class DownloadDetailsVersionsFragment extends ListFragment {
                 try {
                     String actualMd5Sum = HashUtil.md5(localFile);
                     if (!moduleVersion.md5sum.equals(actualMd5Sum)) {
-                        Snackbar.make(rootView, context.getString(R.string.download_md5sum_incorrect, actualMd5Sum, moduleVersion.md5sum), Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(snackbar, context.getString(R.string.download_md5sum_incorrect, actualMd5Sum, moduleVersion.md5sum), Snackbar.LENGTH_LONG).show();
                         DownloadsUtil.removeById(context, info.id);
                         return;
                     }
                 } catch (Exception e) {
-                    Snackbar.make(rootView, context.getString(R.string.download_could_not_read_file, e.getMessage()), Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(snackbar, context.getString(R.string.download_could_not_read_file, e.getMessage()), Snackbar.LENGTH_LONG).show();
                     DownloadsUtil.removeById(context, info.id);
                     return;
                 }
@@ -167,13 +177,13 @@ public class DownloadDetailsVersionsFragment extends ListFragment {
             PackageInfo packageInfo = pm.getPackageArchiveInfo(info.localFilename, 0);
 
             if (packageInfo == null) {
-                Snackbar.make(rootView, R.string.download_no_valid_apk, Snackbar.LENGTH_LONG).show();
+                Snackbar.make(snackbar, R.string.download_no_valid_apk, Snackbar.LENGTH_LONG).show();
                 DownloadsUtil.removeById(context, info.id);
                 return;
             }
 
             if (!packageInfo.packageName.equals(moduleVersion.module.packageName)) {
-                Snackbar.make(rootView, context.getString(R.string.download_incorrect_package_name, packageInfo.packageName, moduleVersion.module.packageName), Snackbar.LENGTH_LONG).show();
+                Snackbar.make(snackbar, context.getString(R.string.download_incorrect_package_name, packageInfo.packageName, moduleVersion.module.packageName), Snackbar.LENGTH_LONG).show();
                 DownloadsUtil.removeById(context, info.id);
                 return;
             }
@@ -183,29 +193,31 @@ public class DownloadDetailsVersionsFragment extends ListFragment {
     }
 
     private class VersionsAdapter extends ArrayAdapter<ModuleVersion> {
-        private final DateFormat mDateFormatter = DateFormat
+        private final DateFormat dateFormatter = DateFormat
                 .getDateInstance(DateFormat.SHORT);
-        private final int mColorRelTypeStable;
-        private final int mColorRelTypeOthers;
-        private final int mColorInstalled;
-        private final int mColorUpdateAvailable;
-        private final String mTextInstalled;
-        private final String mTextUpdateAvailable;
-        private final long mInstalledVersionCode;
+        private final int colorRelTypeStable;
+        private final int colorRelTypeOthers;
+        private final int colorInstalled;
+        private final int colorUpdateAvailable;
+        private final String textInstalled;
+        private final String textUpdateAvailable;
+        private final long installedVersionCode;
+        private View snackbar;
 
-        VersionsAdapter(Context context, InstalledModule installed) {
+        VersionsAdapter(Context context, InstalledModule installed, View snackbar) {
             super(context, R.layout.item_version);
             TypedValue typedValue = new TypedValue();
             Resources.Theme theme = context.getTheme();
             theme.resolveAttribute(android.R.attr.textColorPrimary, typedValue, true);
             int color = ContextCompat.getColor(context, typedValue.resourceId);
-            mColorRelTypeStable = color;
-            mColorRelTypeOthers = getResources().getColor(R.color.warning);
-            mColorInstalled = color;
-            mColorUpdateAvailable = getResources().getColor(R.color.download_status_update_available);
-            mTextInstalled = getString(R.string.download_section_installed) + ":";
-            mTextUpdateAvailable = getString(R.string.download_section_update_available) + ":";
-            mInstalledVersionCode = (installed != null) ? installed.versionCode : -1;
+            colorRelTypeStable = color;
+            colorRelTypeOthers = getResources().getColor(R.color.warning);
+            colorInstalled = color;
+            colorUpdateAvailable = getResources().getColor(R.color.download_status_update_available);
+            textInstalled = getString(R.string.download_section_installed) + ":";
+            textUpdateAvailable = getString(R.string.download_section_update_available) + ":";
+            installedVersionCode = (installed != null) ? installed.versionCode : -1;
+            this.snackbar = snackbar;
         }
 
         @SuppressLint("InflateParams")
@@ -236,32 +248,32 @@ public class DownloadDetailsVersionsFragment extends ListFragment {
             holder.txtVersion.setText(item.name);
             holder.txtRelType.setText(item.relType.getTitleId());
             holder.txtRelType.setTextColor(item.relType == ReleaseType.STABLE
-                    ? mColorRelTypeStable : mColorRelTypeOthers);
+                    ? colorRelTypeStable : colorRelTypeOthers);
 
             if (item.uploaded > 0) {
                 holder.txtUploadDate.setText(
-                        mDateFormatter.format(new Date(item.uploaded)));
+                        dateFormatter.format(new Date(item.uploaded)));
                 holder.txtUploadDate.setVisibility(View.VISIBLE);
             } else {
                 holder.txtUploadDate.setVisibility(View.GONE);
             }
 
-            if (item.code <= 0 || mInstalledVersionCode <= 0
-                    || item.code < mInstalledVersionCode) {
+            if (item.code <= 0 || installedVersionCode <= 0
+                    || item.code < installedVersionCode) {
                 holder.txtStatus.setVisibility(View.GONE);
-            } else if (item.code == mInstalledVersionCode) {
-                holder.txtStatus.setText(mTextInstalled);
-                holder.txtStatus.setTextColor(mColorInstalled);
+            } else if (item.code == installedVersionCode) {
+                holder.txtStatus.setText(textInstalled);
+                holder.txtStatus.setTextColor(colorInstalled);
                 holder.txtStatus.setVisibility(View.VISIBLE);
-            } else { // item.code > mInstalledVersionCode
-                holder.txtStatus.setText(mTextUpdateAvailable);
-                holder.txtStatus.setTextColor(mColorUpdateAvailable);
+            } else { // item.code > installedVersionCode
+                holder.txtStatus.setText(textUpdateAvailable);
+                holder.txtStatus.setTextColor(colorUpdateAvailable);
                 holder.txtStatus.setVisibility(View.VISIBLE);
             }
 
             holder.downloadView.setUrl(item.downloadLink);
-            holder.downloadView.setTitle(mActivity.getModule().name);
-            holder.downloadView.setDownloadFinishedCallback(new DownloadModuleCallback(item));
+            holder.downloadView.setTitle(activity.getModule().name);
+            holder.downloadView.setDownloadFinishedCallback(new DownloadModuleCallback(item, snackbar));
 
             if (item.changelog != null && !item.changelog.isEmpty()) {
                 holder.txtChangesTitle.setVisibility(View.VISIBLE);

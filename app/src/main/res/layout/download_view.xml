@@ -23,7 +23,7 @@
             android:theme="@style/Widget.AppCompat.Button.Colored" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/save"
+            android:id="@+id/btnSave"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

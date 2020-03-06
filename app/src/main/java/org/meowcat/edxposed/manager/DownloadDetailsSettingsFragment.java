@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.preference.Preference;
 import androidx.preference.PreferenceManager;
 
 import com.takisoft.preferencex.PreferenceFragmentCompat;
@@ -15,7 +16,6 @@ import org.meowcat.edxposed.manager.util.RepoLoader;
 import java.util.Map;
 
 public class DownloadDetailsSettingsFragment extends PreferenceFragmentCompat {
-
 
     @Override
     public void onCreatePreferencesFix(Bundle savedInstanceState, String rootKey) {
@@ -48,11 +48,13 @@ public class DownloadDetailsSettingsFragment extends PreferenceFragmentCompat {
             editor.putBoolean("no_global", false).apply();
         }
 
-        findPreference("release_type").setOnPreferenceChangeListener(
-                (preference, newValue) -> {
-                    RepoLoader.getInstance().setReleaseTypeLocal(packageName, (String) newValue);
-                    return true;
-                });
+        Preference releaseType = findPreference("release_type");
+        if (releaseType != null) {
+            releaseType.setOnPreferenceChangeListener((preference, newValue) -> {
+                RepoLoader.getInstance().setReleaseTypeLocal(packageName, (String) newValue);
+                return true;
+            });
+        }
     }
 
 }

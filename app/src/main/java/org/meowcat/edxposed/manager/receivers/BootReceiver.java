@@ -1,6 +1,5 @@
 package org.meowcat.edxposed.manager.receivers;
 
-import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -32,8 +31,7 @@ public class BootReceiver extends BroadcastReceiver {
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private class CheckUpdates extends AsyncTask<Void, Void, Void> {
+    private static class CheckUpdates extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {

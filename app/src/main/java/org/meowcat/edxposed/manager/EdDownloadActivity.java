@@ -1,65 +1,58 @@
 package org.meowcat.edxposed.manager;
 
-import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 
-import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 
+import org.meowcat.edxposed.manager.databinding.ActivityEdDownloadBinding;
+import org.meowcat.edxposed.manager.databinding.DialogInstallWarningBinding;
 import org.meowcat.edxposed.manager.util.json.JSONUtils;
 import org.meowcat.edxposed.manager.util.json.XposedTab;
 
 import java.util.ArrayList;
 
 public class EdDownloadActivity extends BaseActivity {
-
+    ActivityEdDownloadBinding binding;
     private TabsAdapter tabsAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ed_download);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setNavigationOnClickListener(view -> finish());
+        binding = ActivityEdDownloadBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        setSupportActionBar(binding.toolbar);
+        binding.toolbar.setNavigationOnClickListener(view -> finish());
         ActionBar bar = getSupportActionBar();
         if (bar != null) {
             bar.setDisplayHomeAsUpEnabled(true);
         }
-        ViewPager mPager = findViewById(R.id.pager);
-        TabLayout mTabLayout = findViewById(R.id.tab_layout);
 
         tabsAdapter = new TabsAdapter(getSupportFragmentManager());
         tabsAdapter.notifyDataSetChanged();
-        mPager.setAdapter(tabsAdapter);
-        mTabLayout.setupWithViewPager(mPager);
+        binding.pager.setAdapter(tabsAdapter);
+        binding.tabLayout.setupWithViewPager(binding.pager);
         new JSONParser().execute();
 
         if (!XposedApp.getPreferences().getBoolean("hide_install_warning", false)) {
-            @SuppressLint("InflateParams") final View dontShowAgainView = getLayoutInflater().inflate(R.layout.dialog_install_warning, null);
-
+            DialogInstallWarningBinding binding = DialogInstallWarningBinding.inflate(getLayoutInflater());
+            binding.message.setText(R.string.not_logcat);
             new MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.install_warning_title)
-                    .setView(dontShowAgainView)
+                    .setView(binding.getRoot())
                     .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                        MaterialCheckBox checkBox = dontShowAgainView.findViewById(android.R.id.checkbox);
-                        if (checkBox.isChecked())
+                        if (binding.checkbox.isChecked())
                             XposedApp.getPreferences().edit().putBoolean("hide_install_warning", true).apply();
                     })
                     .setCancelable(false)
@@ -78,7 +71,6 @@ public class EdDownloadActivity extends BaseActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    @SuppressLint("StaticFieldLeak")
     private class JSONParser extends AsyncTask<Void, Void, String> {
 
         @Override

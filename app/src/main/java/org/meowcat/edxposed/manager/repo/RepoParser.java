@@ -33,7 +33,7 @@ public class RepoParser {
     public final static String TAG = XposedApp.TAG;
     private final static String NS = null;
     private final XmlPullParser parser;
-    private RepoParserCallback mCallback;
+    private RepoParserCallback callback;
     private boolean mRepoEventTriggered = false;
 
     private RepoParser(InputStream is, RepoParserCallback callback) throws XmlPullParserException, IOException {
@@ -41,7 +41,7 @@ public class RepoParser {
         parser = factory.newPullParser();
         parser.setInput(is, null);
         parser.nextTag();
-        mCallback = callback;
+        this.callback = callback;
     }
 
     public static void parse(InputStream is, RepoParserCallback callback) throws XmlPullParserException, IOException {
@@ -113,13 +113,13 @@ public class RepoParser {
                     triggerRepoEvent(repository);
                     Module module = readModule(repository);
                     if (module != null)
-                        mCallback.onNewModule(module);
+                        callback.onNewModule(module);
                     break;
                 case "remove-module":
                     triggerRepoEvent(repository);
                     String packageName = readRemoveModule();
                     if (packageName != null)
-                        mCallback.onRemoveModule(packageName);
+                        callback.onRemoveModule(packageName);
                     break;
                 default:
                     //skip(true);
@@ -128,14 +128,14 @@ public class RepoParser {
             }
         }
 
-        mCallback.onCompleted(repository);
+        callback.onCompleted(repository);
     }
 
     private void triggerRepoEvent(Repository repository) {
         if (mRepoEventTriggered)
             return;
 
-        mCallback.onRepositoryMetadata(repository);
+        callback.onRepositoryMetadata(repository);
         mRepoEventTriggered = true;
     }
 

@@ -17,15 +17,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
+
+import org.meowcat.edxposed.manager.databinding.ActivityLogsBinding;
+import org.meowcat.edxposed.manager.databinding.DialogInstallWarningBinding;
+import org.meowcat.edxposed.manager.databinding.ItemLogBinding;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,54 +41,48 @@ import java.util.Scanner;
 
 public class LogsActivity extends BaseActivity {
     private boolean allLog = false;
-    private File mFileErrorLog = new File(XposedApp.BASE_DIR + "log/error.log");
-    private File mFileErrorLogOld = new File(
+    private File fileErrorLog = new File(XposedApp.BASE_DIR + "log/error.log");
+    private File fileErrorLogOld = new File(
             XposedApp.BASE_DIR + "log/error.log.old");
-    private File mFileAllLog = new File(XposedApp.BASE_DIR + "log/all.log");
-    private File mFileAllLogOld = new File(XposedApp.BASE_DIR + "log/all.log.old");
-    private LogsAdapter mAdapter;
-    private RecyclerView mListView;
+    private File fileAllLog = new File(XposedApp.BASE_DIR + "log/all.log");
+    private File fileAllLogOld = new File(XposedApp.BASE_DIR + "log/all.log.old");
+    private LogsAdapter adapter;
     private Handler handler = new Handler();
+    private ActivityLogsBinding binding;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_logs);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setNavigationOnClickListener(view -> finish());
+        binding = ActivityLogsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        setSupportActionBar(binding.toolbar);
+        binding.toolbar.setNavigationOnClickListener(view -> finish());
         ActionBar bar = getSupportActionBar();
         if (bar != null) {
             bar.setDisplayHomeAsUpEnabled(true);
         }
-        setupWindowInsets();
+        setupWindowInsets(binding.snackbar, binding.recyclerView);
 
         if (!XposedApp.getPreferences().getBoolean("hide_logcat_warning", false)) {
-            @SuppressLint("InflateParams") final View dontShowAgainView = getLayoutInflater().inflate(R.layout.dialog_install_warning, null);
-
-            TextView message = dontShowAgainView.findViewById(android.R.id.message);
-            message.setText(R.string.not_logcat);
-
+            DialogInstallWarningBinding binding = DialogInstallWarningBinding.inflate(getLayoutInflater());
+            binding.message.setText(R.string.not_logcat);
             new MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.install_warning_title)
-                    .setView(dontShowAgainView)
+                    .setView(binding.getRoot())
                     .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                        MaterialCheckBox checkBox = dontShowAgainView.findViewById(android.R.id.checkbox);
-                        if (checkBox.isChecked())
+                        if (binding.checkbox.isChecked())
                             XposedApp.getPreferences().edit().putBoolean("hide_logcat_warning", true).apply();
                     })
                     .setCancelable(false)
                     .show();
         }
-        mAdapter = new LogsAdapter();
-        mListView = findViewById(R.id.recyclerView);
-        mListView.setAdapter(mAdapter);
-        mListView.setLayoutManager(new LinearLayoutManager(this));
-        TabLayout tabLayout = findViewById(R.id.sliding_tabs);
+        adapter = new LogsAdapter();
+        binding.recyclerView.setAdapter(adapter);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         if (XposedApp.getPreferences().getBoolean("disable_verbose_log", false)) {
-            tabLayout.setVisibility(View.GONE);
+            binding.slidingTabs.setVisibility(View.GONE);
         }
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        binding.slidingTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 allLog = tab.getPosition() != 0;
@@ -133,7 +129,7 @@ public class LogsActivity extends BaseActivity {
                 try {
                     send();
                 } catch (Exception e) {
-                    Snackbar.make(findViewById(R.id.snackbar), e.getLocalizedMessage(), Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(binding.snackbar, e.getLocalizedMessage(), Snackbar.LENGTH_LONG).show();
                 }
                 return true;
             case R.id.menu_save:
@@ -147,32 +143,32 @@ public class LogsActivity extends BaseActivity {
     }
 
     private void scrollTop() {
-        mListView.smoothScrollToPosition(0);
+        binding.recyclerView.smoothScrollToPosition(0);
     }
 
     private void scrollDown() {
-        mListView.smoothScrollToPosition(mAdapter.getItemCount() - 1);
+        binding.recyclerView.smoothScrollToPosition(adapter.getItemCount() - 1);
     }
 
     private void reloadErrorLog() {
-        new LogsReader().execute(allLog ? mFileAllLog : mFileErrorLog);
+        new LogsReader().execute(allLog ? fileAllLog : fileErrorLog);
     }
 
     private void clear() {
         try {
-            new FileOutputStream(allLog ? mFileAllLog : mFileErrorLog).close();
+            new FileOutputStream(allLog ? fileAllLog : fileErrorLog).close();
             //noinspection ResultOfMethodCallIgnored
-            (allLog ? mFileAllLogOld : mFileErrorLogOld).delete();
-            mAdapter.setEmpty();
-            Snackbar.make(findViewById(R.id.snackbar), R.string.logs_cleared, Snackbar.LENGTH_SHORT).show();
+            (allLog ? fileAllLogOld : fileErrorLogOld).delete();
+            adapter.setEmpty();
+            Snackbar.make(binding.snackbar, R.string.logs_cleared, Snackbar.LENGTH_SHORT).show();
             reloadErrorLog();
         } catch (IOException e) {
-            Snackbar.make(findViewById(R.id.snackbar), getResources().getString(R.string.logs_clear_failed) + "n" + e.getMessage(), Snackbar.LENGTH_LONG).show();
+            Snackbar.make(binding.snackbar, getResources().getString(R.string.logs_clear_failed) + "n" + e.getMessage(), Snackbar.LENGTH_LONG).show();
         }
     }
 
     private void send() {
-        Uri uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".fileprovider", allLog ? mFileAllLog : mFileErrorLog);
+        Uri uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".fileprovider", allLog ? fileAllLog : fileErrorLog);
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
@@ -210,7 +206,7 @@ public class LogsActivity extends BaseActivity {
                     try {
                         OutputStream os = getContentResolver().openOutputStream(uri);
                         if (os != null) {
-                            FileInputStream in = new FileInputStream(allLog ? mFileAllLog : mFileErrorLog);
+                            FileInputStream in = new FileInputStream(allLog ? fileAllLog : fileErrorLog);
                             byte[] buffer = new byte[1024];
                             int len;
                             while ((len = in.read(buffer)) > 0) {
@@ -219,7 +215,7 @@ public class LogsActivity extends BaseActivity {
                             os.close();
                         }
                     } catch (Exception e) {
-                        Snackbar.make(findViewById(R.id.snackbar), getResources().getString(R.string.logs_save_failed) + "\n" + e.getMessage(), Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(binding.snackbar, getResources().getString(R.string.logs_save_failed) + "\n" + e.getMessage(), Snackbar.LENGTH_LONG).show();
                     }
                 }
             }
@@ -269,9 +265,9 @@ public class LogsActivity extends BaseActivity {
         @Override
         protected void onPostExecute(ArrayList<String> logs) {
             if (logs.size() == 0) {
-                mAdapter.setEmpty();
+                adapter.setEmpty();
             } else {
-                mAdapter.setLogs(logs);
+                adapter.setLogs(logs);
             }
             handler.removeCallbacks(mRunnable);//It loaded so fast that no need to show progress
             if (mProgressDialog.isShowing()) {
@@ -286,8 +282,8 @@ public class LogsActivity extends BaseActivity {
         @NonNull
         @Override
         public LogsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_log, parent, false);
-            return new LogsAdapter.ViewHolder(v);
+            ItemLogBinding binding = ItemLogBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+            return new LogsAdapter.ViewHolder(binding);
         }
 
         @Override
@@ -298,8 +294,8 @@ public class LogsActivity extends BaseActivity {
             int desiredWidth = view.getMeasuredWidth();
             ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
             layoutParams.width = desiredWidth;
-            if (mListView.getWidth() < desiredWidth) {
-                mListView.requestLayout();
+            if (binding.recyclerView.getWidth() < desiredWidth) {
+                binding.recyclerView.requestLayout();
             }
 
         }
@@ -308,7 +304,7 @@ public class LogsActivity extends BaseActivity {
             this.logs.clear();
             this.logs.addAll(logs);
             notifyDataSetChanged();
-            mListView.scrollToPosition(getItemCount() - 1);
+            binding.recyclerView.scrollToPosition(getItemCount() - 1);
         }
 
         void setEmpty() {
@@ -325,9 +321,9 @@ public class LogsActivity extends BaseActivity {
         class ViewHolder extends RecyclerView.ViewHolder {
             TextView textView;
 
-            ViewHolder(View itemView) {
-                super(itemView);
-                textView = itemView.findViewById(R.id.log);
+            ViewHolder(ItemLogBinding binding) {
+                super(binding.getRoot());
+                textView = binding.log;
             }
         }
     }

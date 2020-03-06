@@ -19,14 +19,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.SwitchCompat;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import org.meowcat.edxposed.manager.databinding.ActivityModulesBinding;
 import org.meowcat.edxposed.manager.repo.Module;
 import org.meowcat.edxposed.manager.repo.ModuleVersion;
 import org.meowcat.edxposed.manager.repo.ReleaseType;
@@ -60,37 +59,36 @@ import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
 public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleListener {
 
     public static final String SETTINGS_CATEGORY = "de.robv.android.xposed.category.MODULE_SETTINGS";
+    ActivityModulesBinding binding;
     private int installedXposedVersion;
     private ApplicationFilter filter;
-    private SearchView mSearchView;
+    private SearchView searchView;
     private SearchView.OnQueryTextListener mSearchListener;
-    private PackageManager mPm;
+    private PackageManager pm;
     private DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-    private ModuleUtil mModuleUtil;
-    private ModuleAdapter mAdapter = null;
-    private RecyclerView mListView;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private ModuleUtil moduleUtil;
+    private ModuleAdapter adapter = null;
     private Runnable reloadModules = new Runnable() {
         public void run() {
-            String queryStr = mSearchView != null ? mSearchView.getQuery().toString() : "";
+            String queryStr = searchView != null ? searchView.getQuery().toString() : "";
             Collection<ModuleUtil.InstalledModule> showList;
-            Collection<ModuleUtil.InstalledModule> fullList = mModuleUtil.getModules().values();
+            Collection<ModuleUtil.InstalledModule> fullList = moduleUtil.getModules().values();
             if (queryStr.length() == 0) {
                 showList = fullList;
             } else {
                 showList = new ArrayList<>();
                 String filter = queryStr.toLowerCase();
                 for (ModuleUtil.InstalledModule info : fullList) {
-                    if (lowercaseContains(InstallApkUtil.getAppLabel(info.app, mPm), filter)
+                    if (lowercaseContains(InstallApkUtil.getAppLabel(info.app, pm), filter)
                             || lowercaseContains(info.packageName, filter)) {
                         showList.add(info);
                     }
                 }
             }
-            mAdapter.addAll(showList);
-            mAdapter.notifyDataSetChanged();
-            mModuleUtil.updateModulesList(false);
-            mSwipeRefreshLayout.setRefreshing(false);
+            adapter.addAll(showList);
+            adapter.notifyDataSetChanged();
+            moduleUtil.updateModulesList(false);
+            binding.swipeRefreshLayout.setRefreshing(false);
         }
     };
     private String selectedPackageName;
@@ -102,36 +100,33 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_modules);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setNavigationOnClickListener(view -> finish());
+        binding = ActivityModulesBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        setSupportActionBar(binding.appbar.toolbar);
+        binding.appbar.toolbar.setNavigationOnClickListener(view -> finish());
         ActionBar bar = getSupportActionBar();
         if (bar != null) {
             bar.setDisplayHomeAsUpEnabled(true);
         }
-        setupWindowInsets();
+        setupWindowInsets(binding.snackbar, binding.recyclerView);
         filter = new ApplicationFilter();
-        mModuleUtil = ModuleUtil.getInstance();
-        mPm = getPackageManager();
+        moduleUtil = ModuleUtil.getInstance();
+        pm = getPackageManager();
         installedXposedVersion = XposedApp.getXposedVersion();
         if (installedXposedVersion <= 0) {
-            Snackbar.make(findViewById(R.id.snackbar), R.string.xposed_not_active, Snackbar.LENGTH_LONG).setAction(R.string.Settings, v -> {
+            Snackbar.make(binding.snackbar, R.string.xposed_not_active, Snackbar.LENGTH_LONG).setAction(R.string.Settings, v -> {
                 Intent intent = new Intent();
                 intent.setClass(ModulesActivity.this, SettingsActivity.class);
                 startActivity(intent);
             }).show();
         }
-        mAdapter = new ModuleAdapter();
-        mModuleUtil.addListener(this);
-        mListView = findViewById(R.id.recyclerView);
-        mListView.setAdapter(mAdapter);
-        mListView.setLayoutManager(new LinearLayoutManager(this));
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mListView.getContext(),
-                DividerItemDecoration.VERTICAL);
-        mListView.addItemDecoration(dividerItemDecoration);
-        mSwipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
-        mSwipeRefreshLayout.setOnRefreshListener(() -> reloadModules.run());
+        adapter = new ModuleAdapter();
+        moduleUtil.addListener(this);
+        binding.recyclerView.setAdapter(adapter);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        binding.recyclerView.addItemDecoration(dividerItemDecoration);
+        binding.swipeRefreshLayout.setOnRefreshListener(() -> reloadModules.run());
         reloadModules.run();
         mSearchListener = new SearchView.OnQueryTextListener() {
             @Override
@@ -152,8 +147,8 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_modules, menu);
-        mSearchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
-        mSearchView.setOnQueryTextListener(mSearchListener);
+        searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+        searchView.setOnQueryTextListener(mSearchListener);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -180,7 +175,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                             os.close();
                         }
                     } catch (Exception e) {
-                        Snackbar.make(findViewById(R.id.snackbar), getResources().getString(R.string.logs_save_failed) + "\n" + e.getMessage(), Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(binding.snackbar, getResources().getString(R.string.logs_save_failed) + "\n" + e.getMessage(), Snackbar.LENGTH_LONG).show();
                     }
                 }
             }
@@ -201,7 +196,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                             os.close();
                         }
                     } catch (Exception e) {
-                        Snackbar.make(findViewById(R.id.snackbar), getResources().getString(R.string.logs_save_failed) + "\n" + e.getMessage(), Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(binding.snackbar, getResources().getString(R.string.logs_save_failed) + "\n" + e.getMessage(), Snackbar.LENGTH_LONG).show();
                     }
                 }
             }
@@ -225,7 +220,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         switch (item.getItemId()) {
             case R.id.export_enabled_modules:
                 if (ModuleUtil.getInstance().getEnabledModules().isEmpty()) {
-                    Snackbar.make(findViewById(R.id.snackbar), R.string.no_enabled_modules, Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(binding.snackbar, R.string.no_enabled_modules, Snackbar.LENGTH_SHORT).show();
                     return false;
                 }
                 intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
@@ -238,7 +233,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 Map<String, ModuleUtil.InstalledModule> installedModules = ModuleUtil.getInstance().getModules();
 
                 if (installedModules.isEmpty()) {
-                    Snackbar.make(findViewById(R.id.snackbar), R.string.no_installed_modules, Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(binding.snackbar, R.string.no_installed_modules, Snackbar.LENGTH_SHORT).show();
                     return false;
                 }
                 intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
@@ -271,7 +266,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 Module m = repoLoader.getModule(line);
 
                 if (m == null) {
-                    Snackbar.make(findViewById(R.id.snackbar), getString(R.string.download_details_not_found, line), Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(binding.snackbar, getString(R.string.download_details_not_found, line), Snackbar.LENGTH_SHORT).show();
                 } else {
                     list.add(m);
                 }
@@ -279,11 +274,11 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             br.close();
         } catch (Exception e) {
             e.printStackTrace();
-            Snackbar.make(findViewById(R.id.snackbar), e.getLocalizedMessage(), Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(binding.snackbar, e.getLocalizedMessage(), Snackbar.LENGTH_SHORT).show();
         }
 
         for (final Module m : list) {
-            if (mModuleUtil.getModule(m.packageName) != null) {
+            if (moduleUtil.getModule(m.packageName) != null) {
                 continue;
             }
             ModuleVersion mv = null;
@@ -307,20 +302,20 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mModuleUtil.removeListener(this);
-        mListView.setAdapter(null);
-        mAdapter = null;
+        moduleUtil.removeListener(this);
+        binding.recyclerView.setAdapter(null);
+        adapter = null;
     }
 
     @Override
     public void onSingleInstalledModuleReloaded(ModuleUtil moduleUtil, String packageName, ModuleUtil.InstalledModule module) {
-        mModuleUtil.updateModulesList(false);
+        moduleUtil.updateModulesList(false);
         runOnUiThread(reloadModules);
     }
 
     @Override
     public void onInstalledModulesReloaded(ModuleUtil moduleUtil) {
-        mModuleUtil.updateModulesList(false);
+        moduleUtil.updateModulesList(false);
         runOnUiThread(reloadModules);
     }
 
@@ -340,7 +335,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 if (launchIntent != null) {
                     startActivity(launchIntent);
                 } else {
-                    Snackbar.make(findViewById(R.id.snackbar), R.string.module_no_ui, Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(binding.snackbar, R.string.module_no_ui, Snackbar.LENGTH_LONG).show();
                 }
                 return true;
 
@@ -404,10 +399,10 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
 
     @Override
     public void onBackPressed() {
-        if (mSearchView.isIconified()) {
+        if (searchView.isIconified()) {
             super.onBackPressed();
         } else {
-            mSearchView.setIconified(true);
+            searchView.setIconified(true);
         }
     }
 
@@ -485,13 +480,13 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             SwitchCompat mSwitch = holder.mSwitch;
             mSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 String packageName = item.packageName;
-                boolean changed = mModuleUtil.isModuleEnabled(packageName) ^ isChecked;
+                boolean changed = moduleUtil.isModuleEnabled(packageName) ^ isChecked;
                 if (changed) {
-                    mModuleUtil.setModuleEnabled(packageName, isChecked);
-                    mModuleUtil.updateModulesList(true);
+                    moduleUtil.setModuleEnabled(packageName, isChecked);
+                    moduleUtil.updateModulesList(true);
                 }
             });
-            mSwitch.setChecked(mModuleUtil.isModuleEnabled(item.packageName));
+            mSwitch.setChecked(moduleUtil.isModuleEnabled(item.packageName));
             TextView warningText = holder.warningText;
 
             if (item.minVersion == 0) {

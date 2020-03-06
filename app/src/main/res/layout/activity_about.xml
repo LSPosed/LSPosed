@@ -8,15 +8,19 @@
     android:clipChildren="false"
     android:clipToPadding="false">
 
-    <include layout="@layout/appbar_layout" />
+    <include
+        android:id="@+id/appbar"
+        layout="@layout/appbar_layout" />
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="false"
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:ignore="UseCompoundDrawables,ContentDescription">
-
 
         <LinearLayout
             android:layout_width="match_parent"

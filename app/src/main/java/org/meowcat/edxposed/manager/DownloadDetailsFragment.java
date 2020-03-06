@@ -8,12 +8,14 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 
+import org.meowcat.edxposed.manager.databinding.DownloadDetailsBinding;
+import org.meowcat.edxposed.manager.databinding.DownloadMoreinfoBinding;
 import org.meowcat.edxposed.manager.repo.Module;
 import org.meowcat.edxposed.manager.repo.RepoParser;
 import org.meowcat.edxposed.manager.util.NavUtil;
@@ -32,50 +34,47 @@ public class DownloadDetailsFragment extends Fragment {
         if (module == null) {
             return null;
         }
-        final View view = inflater.inflate(R.layout.download_details, container, false);
+        DownloadDetailsBinding binding = DownloadDetailsBinding.inflate(inflater, container, false);
+        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
+            binding.getRoot().setPadding(0, 0, 0, insets.getSystemWindowInsetBottom());
+            return insets;
+        });
+        binding.downloadTitle.setText(module.name);
+        binding.downloadTitle.setTextIsSelectable(true);
 
-        TextView title = view.findViewById(R.id.download_title);
-        title.setText(module.name);
-        title.setTextIsSelectable(true);
-
-        TextView author = view.findViewById(R.id.download_author);
         if (module.author != null && !module.author.isEmpty())
-            author.setText(getString(R.string.download_author, module.author));
+            binding.downloadAuthor.setText(getString(R.string.download_author, module.author));
         else
-            author.setText(R.string.download_unknown_author);
+            binding.downloadAuthor.setText(R.string.download_unknown_author);
 
-        TextView description = view.findViewById(R.id.download_description);
         if (module.description != null) {
             if (module.descriptionIsHtml) {
-                description.setText(RepoParser.parseSimpleHtml(getActivity(), module.description, description));
-                description.setTransformationMethod(new LinkTransformationMethod((AppCompatActivity) getActivity()));
-                description.setMovementMethod(LinkMovementMethod.getInstance());
+                binding.downloadDescription.setText(RepoParser.parseSimpleHtml(getActivity(), module.description, binding.downloadDescription));
+                binding.downloadDescription.setTransformationMethod(new LinkTransformationMethod((AppCompatActivity) getActivity()));
+                binding.downloadDescription.setMovementMethod(LinkMovementMethod.getInstance());
             } else {
-                description.setText(module.description);
+                binding.downloadDescription.setText(module.description);
             }
-            description.setTextIsSelectable(true);
+            binding.downloadDescription.setTextIsSelectable(true);
         } else {
-            description.setVisibility(View.GONE);
+            binding.downloadDescription.setVisibility(View.GONE);
         }
 
-        ViewGroup moreInfoContainer = view.findViewById(R.id.download_moreinfo_container);
         for (Pair<String, String> moreInfoEntry : module.moreInfo) {
-            View moreInfoView = inflater.inflate(R.layout.download_moreinfo, moreInfoContainer, false);
-            TextView txtTitle = moreInfoView.findViewById(android.R.id.title);
-            TextView txtValue = moreInfoView.findViewById(android.R.id.message);
+            DownloadMoreinfoBinding moreinfoBinding = DownloadMoreinfoBinding.inflate(inflater, binding.downloadMoreinfoContainer, false);
 
-            txtTitle.setText(moreInfoEntry.first + ":");
-            txtValue.setText(moreInfoEntry.second);
+            moreinfoBinding.title.setText(moreInfoEntry.first + ":");
+            moreinfoBinding.message.setText(moreInfoEntry.second);
 
             final Uri link = NavUtil.parseURL(moreInfoEntry.second);
             if (link != null) {
-                txtValue.setTextColor(txtValue.getLinkTextColors());
-                moreInfoView.setOnClickListener(v -> NavUtil.startURL((AppCompatActivity) getActivity(), link));
+                moreinfoBinding.message.setTextColor(moreinfoBinding.message.getLinkTextColors());
+                moreinfoBinding.getRoot().setOnClickListener(v -> NavUtil.startURL((AppCompatActivity) getActivity(), link));
             }
 
-            moreInfoContainer.addView(moreInfoView);
+            binding.downloadMoreinfoContainer.addView(moreinfoBinding.getRoot());
         }
 
-        return view;
+        return binding.getRoot();
     }
 }

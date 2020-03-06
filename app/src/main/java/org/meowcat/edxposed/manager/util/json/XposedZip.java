@@ -26,7 +26,7 @@ public class XposedZip {
         List<XposedZip> list;
 
         public MyAdapter(Context context, List<XposedZip> objects) {
-            super(context, android.R.layout.simple_dropdown_item_1line, objects);
+            super(context, android.R.layout.simple_spinner_dropdown_item, objects);
             this.context = context;
             this.list = objects;
         }
@@ -57,7 +57,7 @@ public class XposedZip {
             return row;
         }
 
-        private class ItemHolder {
+        private static class ItemHolder {
             TextView name;
         }
 

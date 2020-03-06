@@ -2,6 +2,9 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 
 android {
+    viewBinding {
+        enabled = true
+    }
     compileSdkVersion 28
     buildToolsVersion "29.0.3"
     defaultConfig {

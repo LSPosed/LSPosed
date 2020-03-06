@@ -1,6 +1,5 @@
 package org.meowcat.edxposed.manager;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -8,8 +7,6 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -18,6 +15,7 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.topjohnwu.superuser.Shell;
 
+import org.meowcat.edxposed.manager.databinding.FragmentCompileDialogBinding;
 import org.meowcat.edxposed.manager.util.ToastUtil;
 
 import java.lang.ref.WeakReference;
@@ -62,11 +60,9 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
                 .setIcon(appInfo.loadIcon(pm))
                 .setTitle(appInfo.loadLabel(pm))
                 .setCancelable(false);
-        @SuppressLint("InflateParams") View customView = LayoutInflater.from(requireContext()).inflate(R.layout.fragment_compile_dialog, null);
-        builder.setView(customView);
-        TextView msgView = customView.findViewById(R.id.message);
-        //ProgressBar progressView = customView.findViewById(R.id.progress);
-        msgView.setText(msg);
+        FragmentCompileDialogBinding binding = FragmentCompileDialogBinding.inflate(LayoutInflater.from(requireContext()), null, false);
+        builder.setView(binding.getRoot());
+        binding.message.setText(msg);
         AlertDialog alertDialog = builder.create();
         alertDialog.setCanceledOnTouchOutside(false);
         return alertDialog;

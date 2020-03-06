@@ -11,18 +11,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 
-import com.google.android.material.tabs.TabLayout;
-
+import org.meowcat.edxposed.manager.databinding.ActivityDownloadDetailsBinding;
+import org.meowcat.edxposed.manager.databinding.ActivityDownloadDetailsNotFoundBinding;
 import org.meowcat.edxposed.manager.repo.Module;
 import org.meowcat.edxposed.manager.util.ModuleUtil;
 import org.meowcat.edxposed.manager.util.RepoLoader;
@@ -39,37 +36,37 @@ public class DownloadDetailsActivity extends BaseActivity implements RepoLoader.
     static final String PLAY_STORE_PACKAGE = "com.android.vending";
     static final String PLAY_STORE_LINK = "https://play.google.com/store/apps/details?id=%s";
     private static final String TAG = "DownloadDetailsActivity";
-    private static RepoLoader sRepoLoader = RepoLoader.getInstance();
-    private static ModuleUtil sModuleUtil = ModuleUtil.getInstance();
-    private ViewPager mPager;
-    private String mPackageName;
-    private Module mModule;
-    private ModuleUtil.InstalledModule mInstalledModule;
+    private static RepoLoader repoLoader = RepoLoader.getInstance();
+    private static ModuleUtil moduleUtil = ModuleUtil.getInstance();
+    private String packageName;
+    private Module module;
+    private ModuleUtil.InstalledModule installedModule;
+    private ActivityDownloadDetailsBinding binding;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
-        mPackageName = getModulePackageName();
+        packageName = getModulePackageName();
         try {
-            mModule = sRepoLoader.getModule(mPackageName);
+            module = repoLoader.getModule(packageName);
         } catch (Exception e) {
             Log.i(TAG, "DownloadDetailsActivity -> " + e.getMessage());
 
-            mModule = null;
+            module = null;
         }
 
-        mInstalledModule = ModuleUtil.getInstance().getModule(mPackageName);
+        installedModule = ModuleUtil.getInstance().getModule(packageName);
 
         super.onCreate(savedInstanceState);
-        sRepoLoader.addListener(this, false);
-        sModuleUtil.addListener(this);
+        repoLoader.addListener(this, false);
+        moduleUtil.addListener(this);
 
-        if (mModule != null) {
-            setContentView(R.layout.activity_download_details);
+        if (module != null) {
+            binding = ActivityDownloadDetailsBinding.inflate(getLayoutInflater());
+            setContentView(binding.getRoot());
 
-            Toolbar toolbar = findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
-            toolbar.setNavigationOnClickListener(view -> finish());
+            setSupportActionBar(binding.toolbar);
+            binding.toolbar.setNavigationOnClickListener(view -> finish());
 
             ActionBar ab = getSupportActionBar();
 
@@ -81,28 +78,26 @@ public class DownloadDetailsActivity extends BaseActivity implements RepoLoader.
 
             boolean directDownload = getIntent().getBooleanExtra("direct_download", false);
             // Updates available => start on the versions page
-            if (mInstalledModule != null && mInstalledModule.isUpdate(sRepoLoader.getLatestVersion(mModule)) || directDownload)
-                mPager.setCurrentItem(DOWNLOAD_VERSIONS);
+            if (installedModule != null && installedModule.isUpdate(repoLoader.getLatestVersion(module)) || directDownload)
+                binding.downloadPager.setCurrentItem(DOWNLOAD_VERSIONS);
 
         } else {
-            setContentView(R.layout.activity_download_details_not_found);
+            ActivityDownloadDetailsNotFoundBinding binding = ActivityDownloadDetailsNotFoundBinding.inflate(getLayoutInflater());
+            setContentView(binding.getRoot());
 
-            TextView txtMessage = findViewById(android.R.id.message);
-            txtMessage.setText(getResources().getString(R.string.download_details_not_found, mPackageName));
+            binding.message.setText(getResources().getString(R.string.download_details_not_found, packageName));
 
-            findViewById(R.id.reload).setOnClickListener(v -> {
+            binding.reload.setOnClickListener(v -> {
                 v.setEnabled(false);
-                sRepoLoader.triggerReload(true);
+                repoLoader.triggerReload(true);
             });
         }
-        setupWindowInsets();
+        setupWindowInsets(binding.snackbar, null);
     }
 
     private void setupTabs() {
-        mPager = findViewById(R.id.download_pager);
-        mPager.setAdapter(new SwipeFragmentPagerAdapter(getSupportFragmentManager()));
-        TabLayout mTabLayout = findViewById(R.id.sliding_tabs);
-        mTabLayout.setupWithViewPager(mPager);
+        binding.downloadPager.setAdapter(new SwipeFragmentPagerAdapter(getSupportFragmentManager()));
+        binding.slidingTabs.setupWithViewPager(binding.downloadPager);
     }
 
     private String getModulePackageName() {
@@ -129,20 +124,20 @@ public class DownloadDetailsActivity extends BaseActivity implements RepoLoader.
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        sRepoLoader.removeListener(this);
-        sModuleUtil.removeListener(this);
+        repoLoader.removeListener(this);
+        moduleUtil.removeListener(this);
     }
 
     public Module getModule() {
-        return mModule;
+        return module;
     }
 
     public ModuleUtil.InstalledModule getInstalledModule() {
-        return mInstalledModule;
+        return installedModule;
     }
 
     public void gotoPage(int page) {
-        mPager.setCurrentItem(page);
+        binding.downloadPager.setCurrentItem(page);
     }
 
     private void reload() {
@@ -161,7 +156,7 @@ public class DownloadDetailsActivity extends BaseActivity implements RepoLoader.
 
     @Override
     public void onSingleInstalledModuleReloaded(ModuleUtil moduleUtil, String packageName, ModuleUtil.InstalledModule module) {
-        if (packageName.equals(mPackageName))
+        if (this.packageName.equals(packageName))
             reload();
     }
 
@@ -174,7 +169,7 @@ public class DownloadDetailsActivity extends BaseActivity implements RepoLoader.
         if (updateIgnorePreference) {
             SharedPreferences prefs = getSharedPreferences("update_ignored", MODE_PRIVATE);
 
-            boolean ignored = prefs.getBoolean(mModule.packageName, false);
+            boolean ignored = prefs.getBoolean(module.packageName, false);
             menu.findItem(R.id.ignoreUpdate).setChecked(ignored);
         } else {
             menu.removeItem(R.id.ignoreUpdate);
@@ -189,10 +184,10 @@ public class DownloadDetailsActivity extends BaseActivity implements RepoLoader.
                 RepoLoader.getInstance().triggerReload(true);
                 return true;
             case R.id.menu_share:
-                String text = mModule.name + " - ";
+                String text = module.name + " - ";
 
-                if (isPackageInstalled(mPackageName, this)) {
-                    String s = getPackageManager().getInstallerPackageName(mPackageName);
+                if (isPackageInstalled(packageName, this)) {
+                    String s = getPackageManager().getInstallerPackageName(packageName);
                     boolean playStore;
 
                     try {
@@ -202,13 +197,13 @@ public class DownloadDetailsActivity extends BaseActivity implements RepoLoader.
                     }
 
                     if (playStore) {
-                        text += String.format(PLAY_STORE_LINK, mPackageName);
+                        text += String.format(PLAY_STORE_LINK, packageName);
                     } else {
-                        text += String.format(XPOSED_REPO_LINK, mPackageName);
+                        text += String.format(XPOSED_REPO_LINK, packageName);
                     }
                 } else {
                     text += String.format(XPOSED_REPO_LINK,
-                            mPackageName);
+                            packageName);
                 }
 
                 Intent sharingIntent = new Intent(Intent.ACTION_SEND);
@@ -219,8 +214,8 @@ public class DownloadDetailsActivity extends BaseActivity implements RepoLoader.
             case R.id.ignoreUpdate:
                 SharedPreferences prefs = getSharedPreferences("update_ignored", MODE_PRIVATE);
 
-                boolean ignored = prefs.getBoolean(mModule.packageName, false);
-                prefs.edit().putBoolean(mModule.packageName, !ignored).apply();
+                boolean ignored = prefs.getBoolean(module.packageName, false);
+                prefs.edit().putBoolean(module.packageName, !ignored).apply();
                 item.setChecked(!ignored);
                 break;
         }

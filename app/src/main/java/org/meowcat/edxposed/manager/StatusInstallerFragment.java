@@ -11,13 +11,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
+import org.meowcat.edxposed.manager.databinding.StatusInstallerBinding;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -27,28 +28,25 @@ import java.lang.reflect.Method;
 
 @SuppressLint("StaticFieldLeak")
 public class StatusInstallerFragment extends Fragment {
+    private static StatusInstallerBinding binding;
+    private static String updateLink;
 
-    private static AppCompatActivity sActivity;
-    private static String mUpdateLink;
-    private static View mUpdateView;
-    private static View mUpdateButton;
+    static void setUpdate(final String link, final String changelog, Context context) {
+        updateLink = link;
 
-    static void setUpdate(final String link, final String changelog, Context mContext) {
-        mUpdateLink = link;
-
-        mUpdateView.setVisibility(View.VISIBLE);
-        mUpdateButton.setVisibility(View.VISIBLE);
-        mUpdateButton.setOnClickListener(v -> new MaterialAlertDialogBuilder(sActivity)
+        binding.updateView.setVisibility(View.VISIBLE);
+        binding.clickToUpdate.setVisibility(View.VISIBLE);
+        binding.clickToUpdate.setOnClickListener(v -> new MaterialAlertDialogBuilder(context)
                 .setTitle(R.string.changes)
                 .setMessage(Html.fromHtml(changelog))
-                .setPositiveButton(R.string.update, (dialog, which) -> update(mContext))
+                .setPositiveButton(R.string.update, (dialog, which) -> update(context))
                 .setNegativeButton(R.string.later, null).show());
     }
 
-    private static void update(Context mContext) {
-        Uri uri = Uri.parse(mUpdateLink);
+    private static void update(Context context) {
+        Uri uri = Uri.parse(updateLink);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        mContext.startActivity(intent);
+        context.startActivity(intent);
     }
 
     private static String getCompleteArch() {
@@ -73,6 +71,7 @@ public class StatusInstallerFragment extends Fragment {
         return info + " (" + getArch() + ")";
     }
 
+    @SuppressWarnings("deprecation")
     private static String getArch() {
         if (Build.CPU_ABI.equals("arm64-v8a")) {
             return "arm64";
@@ -91,20 +90,10 @@ public class StatusInstallerFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        sActivity = (AppCompatActivity) getActivity();
-    }
-
     @SuppressLint("WorldReadableFiles")
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.status_installer, container, false);
-
-        mUpdateView = v.findViewById(R.id.updateView);
-        mUpdateButton = v.findViewById(R.id.click_to_update);
-
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = StatusInstallerBinding.inflate(inflater, container, false);
 
         String installedXposedVersion;
         try {
@@ -113,31 +102,24 @@ public class StatusInstallerFragment extends Fragment {
             installedXposedVersion = null;
         }
 
-        TextView api = v.findViewById(R.id.api);
-        TextView framework = v.findViewById(R.id.framework);
-        TextView manager = v.findViewById(R.id.manager);
-        TextView androidSdk = v.findViewById(R.id.android_version);
-        TextView manufacturer = v.findViewById(R.id.ic_manufacturer);
-        TextView cpu = v.findViewById(R.id.cpu);
-
         String mAppVer = "v" + BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")";
-        manager.setText(mAppVer);
+        binding.manager.setText(mAppVer);
         if (installedXposedVersion != null) {
             int installedXposedVersionInt = extractIntPart(installedXposedVersion);
             String installedXposedVersionStr = installedXposedVersionInt + ".0";
-            api.setText(installedXposedVersionStr);
-            framework.setText(installedXposedVersion.replace(installedXposedVersionStr + "-", ""));
+            binding.api.setText(installedXposedVersionStr);
+            binding.framework.setText(installedXposedVersion.replace(installedXposedVersionStr + "-", ""));
         }
 
-        androidSdk.setText(getString(R.string.android_sdk, getAndroidVersion(), Build.VERSION.RELEASE, Build.VERSION.SDK_INT));
-        manufacturer.setText(getUIFramework());
-        cpu.setText(getCompleteArch());
+        binding.androidVersion.setText(getString(R.string.android_sdk, getAndroidVersion(), Build.VERSION.RELEASE, Build.VERSION.SDK_INT));
+        binding.manufacturer.setText(getUIFramework());
+        binding.cpu.setText(getCompleteArch());
 
-        determineVerifiedBootState(v);
-        return v;
+        determineVerifiedBootState(binding);
+        return binding.getRoot();
     }
 
-    private void determineVerifiedBootState(View v) {
+    private void determineVerifiedBootState(StatusInstallerBinding binding) {
         try {
             @SuppressLint("PrivateApi") Class<?> c = Class.forName("android.os.SystemProperties");
             Method m = c.getDeclaredMethod("get", String.class, String.class);
@@ -150,17 +132,16 @@ public class StatusInstallerFragment extends Fragment {
             boolean verified = !propSystemVerified.equals("0");
             boolean detected = !propState.isEmpty() || fileDmVerityModule.exists();
 
-            TextView tv = v.findViewById(R.id.dmverity);
             if (verified) {
-                tv.setText(R.string.verified_boot_active);
-                tv.setTextColor(getResources().getColor(R.color.warning));
+                binding.dmverity.setText(R.string.verified_boot_active);
+                binding.dmverity.setTextColor(getResources().getColor(R.color.warning));
             } else if (detected) {
-                tv.setText(R.string.verified_boot_deactivated);
-                v.findViewById(R.id.dmverity_explanation).setVisibility(View.GONE);
+                binding.dmverity.setText(R.string.verified_boot_deactivated);
+                binding.dmverityExplanation.setVisibility(View.GONE);
             } else {
-                tv.setText(R.string.verified_boot_none);
-                tv.setTextColor(getResources().getColor(R.color.warning));
-                v.findViewById(R.id.dmverity_explanation).setVisibility(View.GONE);
+                binding.dmverity.setText(R.string.verified_boot_none);
+                binding.dmverity.setTextColor(getResources().getColor(R.color.warning));
+                binding.dmverityExplanation.setVisibility(View.GONE);
             }
         } catch (Exception e) {
             Log.e(XposedApp.TAG, "Could not detect Verified Boot state", e);
@@ -241,7 +222,7 @@ public class StatusInstallerFragment extends Fragment {
             case 28:
                 return "Pie";
             case 29:
-                return "Q";
+                return "Ten";
             case 30:
                 return "R";
         }

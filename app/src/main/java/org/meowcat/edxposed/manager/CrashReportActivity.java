@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import org.meowcat.edxposed.manager.databinding.ActivityCrashReportBinding;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -22,18 +24,20 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 public class CrashReportActivity extends AppCompatActivity {
+    ActivityCrashReportBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_crash_report);
-        findViewById(R.id.copyLogs).setOnClickListener(v -> {
+        binding = ActivityCrashReportBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        binding.copyLogs.setOnClickListener(v -> {
             ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
             //Are there any devices without clipboard...?
             if (clipboard != null) {
                 ClipData clip = ClipData.newPlainText("edcrash", getAllErrorDetailsFromIntent(getIntent()));
                 clipboard.setPrimaryClip(clip);
-                Snackbar.make(findViewById(R.id.snackbar), R.string.copy_toast_msg, Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(binding.snackbar, R.string.copy_toast_msg, Snackbar.LENGTH_SHORT).show();
             }
         });
 

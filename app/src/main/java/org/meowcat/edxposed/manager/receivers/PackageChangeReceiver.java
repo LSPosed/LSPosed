@@ -12,7 +12,7 @@ import org.meowcat.edxposed.manager.util.NotificationUtil;
 import java.util.Objects;
 
 public class PackageChangeReceiver extends BroadcastReceiver {
-    private static ModuleUtil mModuleUtil = null;
+    private static ModuleUtil moduleUtil = null;
 
     private static String getPackageName(Intent intent) {
         Uri uri = intent.getData();
@@ -49,22 +49,22 @@ public class PackageChangeReceiver extends BroadcastReceiver {
             return;
         }
 
-        mModuleUtil = getModuleUtilInstance();
+        moduleUtil = getModuleUtilInstance();
 
         InstalledModule module = ModuleUtil.getInstance().reloadSingleModule(packageName);
         if (module == null
                 || intent.getAction().equals(Intent.ACTION_PACKAGE_REMOVED)) {
             // Package being removed, disable it if it was a previously active
             // Xposed mod
-            if (mModuleUtil.isModuleEnabled(packageName)) {
-                mModuleUtil.setModuleEnabled(packageName, false);
-                mModuleUtil.updateModulesList(false);
+            if (moduleUtil.isModuleEnabled(packageName)) {
+                moduleUtil.setModuleEnabled(packageName, false);
+                moduleUtil.updateModulesList(false);
             }
             return;
         }
 
-        if (mModuleUtil.isModuleEnabled(packageName)) {
-            mModuleUtil.updateModulesList(false);
+        if (moduleUtil.isModuleEnabled(packageName)) {
+            moduleUtil.updateModulesList(false);
             NotificationUtil.showModulesUpdatedNotification();
         } else {
             NotificationUtil.showNotActivatedNotification(packageName, module.getAppName());
@@ -72,9 +72,9 @@ public class PackageChangeReceiver extends BroadcastReceiver {
     }
 
     private ModuleUtil getModuleUtilInstance() {
-        if (mModuleUtil == null) {
-            mModuleUtil = ModuleUtil.getInstance();
+        if (moduleUtil == null) {
+            moduleUtil = ModuleUtil.getInstance();
         }
-        return mModuleUtil;
+        return moduleUtil;
     }
 }

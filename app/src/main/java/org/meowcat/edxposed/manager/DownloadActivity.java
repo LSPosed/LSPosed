@@ -22,17 +22,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import org.meowcat.edxposed.manager.adapters.CursorRecyclerViewAdapter;
+import org.meowcat.edxposed.manager.databinding.ActivityDownloadBinding;
+import org.meowcat.edxposed.manager.databinding.ItemDownloadBinding;
 import org.meowcat.edxposed.manager.repo.RepoDb;
 import org.meowcat.edxposed.manager.repo.RepoDbDefinitions;
 import org.meowcat.edxposed.manager.util.ModuleUtil;
@@ -42,79 +42,73 @@ import java.text.DateFormat;
 import java.util.Date;
 
 public class DownloadActivity extends BaseActivity implements RepoLoader.RepoListener, ModuleUtil.ModuleListener, SharedPreferences.OnSharedPreferenceChangeListener {
-    private SharedPreferences mPref;
-    private DownloadsAdapter mAdapter;
-    private String mFilterText;
-    private RepoLoader mRepoLoader;
-    private ModuleUtil mModuleUtil;
-    private int mSortingOrder;
-    private SearchView mSearchView;
-    private SharedPreferences mIgnoredUpdatesPref;
+    private DownloadsAdapter adapter;
+    private String filterText;
+    private RepoLoader repoLoader;
+    private ModuleUtil moduleUtil;
+    private int sortingOrder;
+    private SearchView searchView;
+    private SharedPreferences ignoredUpdatesPref;
     private boolean changed = false;
     private BroadcastReceiver connectionListener = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (mRepoLoader != null) {
-                mRepoLoader.triggerReload(true);
+            if (repoLoader != null) {
+                repoLoader.triggerReload(true);
             }
         }
     };
+    private ActivityDownloadBinding binding;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_download);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setNavigationOnClickListener(view -> finish());
+        binding = ActivityDownloadBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        setSupportActionBar(binding.appbar.toolbar);
+        binding.appbar.toolbar.setNavigationOnClickListener(view -> finish());
         ActionBar bar = getSupportActionBar();
         if (bar != null) {
             bar.setDisplayHomeAsUpEnabled(true);
         }
 
-        setupWindowInsets();
-        mPref = XposedApp.getPreferences();
-        mRepoLoader = RepoLoader.getInstance();
-        mModuleUtil = ModuleUtil.getInstance();
-        mAdapter = new DownloadsAdapter(this, RepoDb.queryModuleOverview(mSortingOrder, mFilterText));
-        /*mAdapter.setFilterQueryProvider(new FilterQueryProvider() {
+        setupWindowInsets(binding.snackbar, binding.recyclerView);
+        repoLoader = RepoLoader.getInstance();
+        moduleUtil = ModuleUtil.getInstance();
+        adapter = new DownloadsAdapter(this, RepoDb.queryModuleOverview(sortingOrder, filterText));
+        /*adapter.setFilterQueryProvider(new FilterQueryProvider() {
             @Override
             public Cursor runQuery(CharSequence constraint) {
-                return RepoDb.queryModuleOverview(mSortingOrder, constraint);
+                return RepoDb.queryModuleOverview(sortingOrder, constraint);
             }
         });*/
 
-        mSortingOrder = mPref.getInt("download_sorting_order",
-                RepoDb.SORT_STATUS);
+        sortingOrder = XposedApp.getPreferences().getInt("download_sorting_order", RepoDb.SORT_STATUS);
 
-        mIgnoredUpdatesPref = getSharedPreferences("update_ignored", MODE_PRIVATE);
-        RecyclerView mListView = findViewById(R.id.recyclerView);
+        ignoredUpdatesPref = getSharedPreferences("update_ignored", MODE_PRIVATE);
         if (Build.VERSION.SDK_INT >= 26) {
-            mListView.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
+            binding.recyclerView.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
         }
-        final SwipeRefreshLayout refreshLayout = findViewById(R.id.swipeRefreshLayout);
-        refreshLayout.setOnRefreshListener(() -> {
-            mRepoLoader.setSwipeRefreshLayout(refreshLayout);
-            mRepoLoader.triggerReload(true);
+        binding.swipeRefreshLayout.setOnRefreshListener(() -> {
+            repoLoader.setSwipeRefreshLayout(binding.swipeRefreshLayout);
+            repoLoader.triggerReload(true);
         });
-        mRepoLoader.addListener(this, true);
-        mModuleUtil.addListener(this);
-        mListView.setAdapter(mAdapter);
+        repoLoader.addListener(this, true);
+        moduleUtil.addListener(this);
+        binding.recyclerView.setAdapter(adapter);
 
-        mListView.setLayoutManager(new LinearLayoutManager(this));
-        StickyRecyclerHeadersDecoration headersDecor = new StickyRecyclerHeadersDecoration(mAdapter);
-        mListView.addItemDecoration(headersDecor);
-        mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        StickyRecyclerHeadersDecoration headersDecor = new StickyRecyclerHeadersDecoration(adapter);
+        binding.recyclerView.addItemDecoration(headersDecor);
+        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {
                 headersDecor.invalidateHeaders();
             }
         });
 
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mListView.getContext(),
-                DividerItemDecoration.VERTICAL);
-        mListView.addItemDecoration(dividerItemDecoration);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        binding.recyclerView.addItemDecoration(dividerItemDecoration);
     }
 
 
@@ -122,7 +116,7 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
     public void onResume() {
         super.onResume();
 
-        mIgnoredUpdatesPref.registerOnSharedPreferenceChangeListener(this);
+        ignoredUpdatesPref.registerOnSharedPreferenceChangeListener(this);
         if (changed) {
             reloadItems();
             changed = !changed;
@@ -142,9 +136,9 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
     public void onDestroy() {
         super.onDestroy();
 
-        mRepoLoader.removeListener(this);
-        mModuleUtil.removeListener(this);
-        mIgnoredUpdatesPref.unregisterOnSharedPreferenceChangeListener(this);
+        repoLoader.removeListener(this);
+        moduleUtil.removeListener(this);
+        ignoredUpdatesPref.unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -152,13 +146,13 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
         getMenuInflater().inflate(R.menu.menu_download, menu);
 
         // Setup search button
-        mSearchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
-        mSearchView.setIconifiedByDefault(true);
-        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+        searchView.setIconifiedByDefault(true);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 setFilter(query);
-                mSearchView.clearFocus();
+                searchView.clearFocus();
                 return true;
             }
 
@@ -172,14 +166,14 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
     }
 
     private void setFilter(String filterText) {
-        mFilterText = filterText;
+        this.filterText = filterText;
         reloadItems();
     }
 
     private void reloadItems() {
         runOnUiThread(() -> {
-            mAdapter.swapCursor(RepoDb.queryModuleOverview(mSortingOrder, mFilterText));
-            mAdapter.notifyDataSetChanged();
+            adapter.swapCursor(RepoDb.queryModuleOverview(sortingOrder, filterText));
+            adapter.notifyDataSetChanged();
         });
     }
 
@@ -188,9 +182,9 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
         if (item.getItemId() == R.id.menu_sort) {
             new MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.download_sorting_title)
-                    .setSingleChoiceItems(R.array.download_sort_order, mSortingOrder, (dialog, which) -> {
-                        mSortingOrder = which;
-                        mPref.edit().putInt("download_sorting_order", mSortingOrder).apply();
+                    .setSingleChoiceItems(R.array.download_sort_order, sortingOrder, (dialog, which) -> {
+                        sortingOrder = which;
+                        XposedApp.getPreferences().edit().putInt("download_sorting_order", sortingOrder).apply();
                         reloadItems();
                         dialog.dismiss();
                     })
@@ -222,23 +216,23 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
 
     @Override
     public void onBackPressed() {
-        if (mSearchView.isIconified()) {
+        if (searchView.isIconified()) {
             super.onBackPressed();
         } else {
-            mSearchView.setIconified(true);
+            searchView.setIconified(true);
         }
     }
 
     private class DownloadsAdapter extends CursorRecyclerViewAdapter<DownloadsAdapter.ViewHolder> implements StickyRecyclerHeadersAdapter {
-        private final Context mContext;
-        private final DateFormat mDateFormatter = DateFormat.getDateInstance(DateFormat.SHORT);
-        private final SharedPreferences mPrefs;
+        private final Context context;
+        private final DateFormat dateFormatter = DateFormat.getDateInstance(DateFormat.SHORT);
+        private final SharedPreferences prefs;
         private String[] sectionHeaders;
 
         DownloadsAdapter(Context context, Cursor cursor) {
             super(context, cursor);
-            mContext = context;
-            mPrefs = context.getSharedPreferences("update_ignored", MODE_PRIVATE);
+            this.context = context;
+            prefs = context.getSharedPreferences("update_ignored", MODE_PRIVATE);
 
             Resources res = context.getResources();
             sectionHeaders = new String[]{
@@ -260,7 +254,7 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
             long updated = cursor.getLong(RepoDbDefinitions.OverviewColumnsIndexes.UPDATED);
             boolean isFramework = cursor.getInt(RepoDbDefinitions.OverviewColumnsIndexes.IS_FRAMEWORK) > 0;
             boolean isInstalled = cursor.getInt(RepoDbDefinitions.OverviewColumnsIndexes.IS_INSTALLED) > 0;
-            boolean updateIgnored = mPrefs.getBoolean(cursor.getString(RepoDbDefinitions.OverviewColumnsIndexes.PKGNAME), false);
+            boolean updateIgnored = prefs.getBoolean(cursor.getString(RepoDbDefinitions.OverviewColumnsIndexes.PKGNAME), false);
             boolean updateIgnorePreference = XposedApp.getPreferences().getBoolean("ignore_updates", false);
             boolean hasUpdate = cursor.getInt(RepoDbDefinitions.OverviewColumnsIndexes.HAS_UPDATE) > 0;
 
@@ -268,8 +262,8 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
                 hasUpdate = false;
             }
 
-            if (mSortingOrder != RepoDb.SORT_STATUS) {
-                long timestamp = (mSortingOrder == RepoDb.SORT_UPDATED) ? updated : created;
+            if (sortingOrder != RepoDb.SORT_STATUS) {
+                long timestamp = (sortingOrder == RepoDb.SORT_UPDATED) ? updated : created;
                 long age = System.currentTimeMillis() - timestamp;
                 final long mSecsPerDay = 24 * 60 * 60 * 1000L;
                 if (age < mSecsPerDay)
@@ -309,8 +303,8 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_download, parent, false);
-            return new ViewHolder(v);
+            ItemDownloadBinding binding = ItemDownloadBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+            return new ViewHolder(binding);
         }
 
         @Override
@@ -322,7 +316,7 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
             long created = cursor.getLong(RepoDbDefinitions.OverviewColumnsIndexes.CREATED);
             long updated = cursor.getLong(RepoDbDefinitions.OverviewColumnsIndexes.UPDATED);
             boolean isInstalled = cursor.getInt(RepoDbDefinitions.OverviewColumnsIndexes.IS_INSTALLED) > 0;
-            boolean updateIgnored = mPrefs.getBoolean(cursor.getString(RepoDbDefinitions.OverviewColumnsIndexes.PKGNAME), false);
+            boolean updateIgnored = prefs.getBoolean(cursor.getString(RepoDbDefinitions.OverviewColumnsIndexes.PKGNAME), false);
             boolean updateIgnorePreference = XposedApp.getPreferences().getBoolean("ignore_updates", false);
             boolean hasUpdate = cursor.getInt(RepoDbDefinitions.OverviewColumnsIndexes.HAS_UPDATE) > 0;
 
@@ -338,13 +332,13 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
 
             TextView txtStatus = holder.downloadStatus;
             if (hasUpdate) {
-                txtStatus.setText(mContext.getString(
+                txtStatus.setText(context.getString(
                         R.string.download_status_update_available,
                         installedVersion, latestVersion));
                 txtStatus.setTextColor(getResources().getColor(R.color.download_status_update_available));
                 txtStatus.setVisibility(View.VISIBLE);
             } else if (isInstalled) {
-                txtStatus.setText(mContext.getString(
+                txtStatus.setText(context.getString(
                         R.string.download_status_installed, installedVersion));
                 txtStatus.setTextColor(getResources().getColor(R.color.warning));
                 TypedArray typedArray = DownloadActivity.this.getTheme().obtainStyledAttributes(new int[]{android.R.attr.textColorHighlight});
@@ -356,8 +350,8 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
                 txtStatus.setVisibility(View.GONE);
             }
 
-            String creationDate = mDateFormatter.format(new Date(created));
-            String updateDate = mDateFormatter.format(new Date(updated));
+            String creationDate = dateFormatter.format(new Date(created));
+            String updateDate = dateFormatter.format(new Date(updated));
             holder.timestamps.setText(getString(R.string.download_timestamps, creationDate, updateDate));
             String packageName = cursor.getString(RepoDbDefinitions.OverviewColumnsIndexes.PKGNAME);
             holder.itemView.setOnClickListener(v -> {
@@ -373,12 +367,12 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
             TextView downloadStatus;
             TextView timestamps;
 
-            ViewHolder(View itemView) {
-                super(itemView);
-                appName = itemView.findViewById(R.id.title);
-                appDescription = itemView.findViewById(R.id.description);
-                downloadStatus = itemView.findViewById(R.id.downloadStatus);
-                timestamps = itemView.findViewById(R.id.timestamps);
+            ViewHolder(ItemDownloadBinding binding) {
+                super(binding.getRoot());
+                appName = binding.title;
+                appDescription = binding.description;
+                downloadStatus = binding.downloadStatus;
+                timestamps = binding.timestamps;
             }
         }
     }

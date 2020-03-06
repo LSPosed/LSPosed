@@ -10,60 +10,56 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.meowcat.edxposed.manager.adapters.AppAdapter;
 import org.meowcat.edxposed.manager.adapters.AppHelper;
-import org.meowcat.edxposed.manager.adapters.BlackListAdapter;
+import org.meowcat.edxposed.manager.adapters.CompatListAdapter;
+import org.meowcat.edxposed.manager.databinding.ActivityBlackListBinding;
 
 public class BlackListActivity extends BaseActivity implements AppAdapter.Callback {
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private SearchView mSearchView;
-    private BlackListAdapter mAppAdapter;
+    private SearchView searchView;
+    private CompatListAdapter appAdapter;
 
-    private SearchView.OnQueryTextListener mSearchListener;
+    private SearchView.OnQueryTextListener searchListener;
+    private ActivityBlackListBinding binding;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_black_list);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setNavigationOnClickListener(view -> finish());
+        binding = ActivityBlackListBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        setSupportActionBar(binding.appbar.toolbar);
+        binding.appbar.toolbar.setNavigationOnClickListener(view -> finish());
         ActionBar bar = getSupportActionBar();
         if (bar != null) {
             bar.setDisplayHomeAsUpEnabled(true);
         }
-        setupWindowInsets();
-        mSwipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
-        RecyclerView mRecyclerView = findViewById(R.id.recyclerView);
-
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        final boolean isWhiteListMode = isWhiteListMode();
-        mAppAdapter = new BlackListAdapter(this, isWhiteListMode);
-        mRecyclerView.setAdapter(mAppAdapter);
-        mAppAdapter.setCallback(this);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
+        setupWindowInsets(binding.snackbar, binding.recyclerView);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        appAdapter = new CompatListAdapter(this);
+        binding.recyclerView.setAdapter(appAdapter);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
                 DividerItemDecoration.VERTICAL);
-        mRecyclerView.addItemDecoration(dividerItemDecoration);
-        mSwipeRefreshLayout.setRefreshing(true);
-        mSwipeRefreshLayout.setOnRefreshListener(mAppAdapter::refresh);
-        mSearchListener = new SearchView.OnQueryTextListener() {
+        binding.recyclerView.addItemDecoration(dividerItemDecoration);
+        appAdapter.setCallback(this);
+
+        binding.swipeRefreshLayout.setRefreshing(true);
+        binding.swipeRefreshLayout.setOnRefreshListener(appAdapter::refresh);
+
+        searchListener = new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                mAppAdapter.filter(query);
+                appAdapter.filter(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                mAppAdapter.filter(newText);
+                appAdapter.filter(newText);
                 return false;
             }
         };
@@ -72,8 +68,8 @@ public class BlackListActivity extends BaseActivity implements AppAdapter.Callba
     @Override
     public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         getMenuInflater().inflate(R.menu.menu_app_list, menu);
-        mSearchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
-        mSearchView.setOnQueryTextListener(mSearchListener);
+        searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+        searchView.setOnQueryTextListener(searchListener);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -114,9 +110,9 @@ public class BlackListActivity extends BaseActivity implements AppAdapter.Callba
 
     @Override
     public void onDataReady() {
-        mSwipeRefreshLayout.setRefreshing(false);
-        String queryStr = mSearchView != null ? mSearchView.getQuery().toString() : "";
-        mAppAdapter.filter(queryStr);
+        binding.swipeRefreshLayout.setRefreshing(false);
+        String queryStr = searchView != null ? searchView.getQuery().toString() : "";
+        appAdapter.filter(queryStr);
     }
 
     @Override
@@ -127,10 +123,10 @@ public class BlackListActivity extends BaseActivity implements AppAdapter.Callba
 
     @Override
     public void onBackPressed() {
-        if (mSearchView.isIconified()) {
+        if (searchView.isIconified()) {
             super.onBackPressed();
         } else {
-            mSearchView.setIconified(true);
+            searchView.setIconified(true);
         }
     }
 }

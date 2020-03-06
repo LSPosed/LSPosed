@@ -53,7 +53,7 @@
     </RelativeLayout>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/activity_main_status"
+        android:id="@+id/status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
@@ -73,7 +73,7 @@
             android:paddingBottom="20dp">
 
             <ImageView
-                android:id="@+id/activity_main_status_icon"
+                android:id="@+id/status_icon"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:layout_centerVertical="true"
@@ -82,21 +82,21 @@
                 app:srcCompat="@drawable/ic_check_circle" />
 
             <TextView
-                android:id="@+id/activity_main_status_title"
+                android:id="@+id/status_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
-                android:layout_toEndOf="@id/activity_main_status_icon"
+                android:layout_toEndOf="@id/status_icon"
                 android:text="@string/Activated"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@android:color/white" />
 
             <TextView
-                android:id="@+id/activity_main_status_summary"
+                android:id="@+id/status_summary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/activity_main_status_title"
-                android:layout_alignStart="@id/activity_main_status_title"
+                android:layout_below="@id/status_title"
+                android:layout_alignStart="@id/status_title"
                 android:layout_marginTop="5dp"
                 android:text="@string/ActivatedDetail"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
@@ -105,7 +105,7 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/activity_main_modules"
+        android:id="@+id/modules"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
@@ -124,7 +124,7 @@
             android:paddingBottom="16dp">
 
             <ImageView
-                android:id="@+id/activity_main_modules_icon"
+                android:id="@+id/modules_icon"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:layout_centerVertical="true"
@@ -132,20 +132,20 @@
                 app:srcCompat="@drawable/ic_apps" />
 
             <TextView
-                android:id="@+id/activity_main_modules_title"
+                android:id="@+id/modules_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
-                android:layout_toEndOf="@id/activity_main_modules_icon"
+                android:layout_toEndOf="@id/modules_icon"
                 android:text="@string/Modules"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
             <TextView
-                android:id="@+id/activity_main_modules_summary"
+                android:id="@+id/modules_summary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/activity_main_modules_title"
-                android:layout_alignStart="@id/activity_main_modules_title"
+                android:layout_below="@id/modules_title"
+                android:layout_alignStart="@id/modules_title"
                 android:layout_marginTop="2dp"
                 android:text="@string/ModulesDetail"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
@@ -154,7 +154,7 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/activity_main_downloads"
+        android:id="@+id/downloads"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
@@ -173,7 +173,7 @@
             android:paddingBottom="16dp">
 
             <ImageView
-                android:id="@+id/activity_main_downloads_icon"
+                android:id="@+id/downloads_icon"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:layout_centerVertical="true"
@@ -181,20 +181,20 @@
                 app:srcCompat="@drawable/ic_get_app" />
 
             <TextView
-                android:id="@+id/activity_main_downloads_title"
+                android:id="@+id/downloads_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
-                android:layout_toEndOf="@id/activity_main_downloads_icon"
+                android:layout_toEndOf="@id/downloads_icon"
                 android:text="@string/Downloads"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
             <TextView
-                android:id="@+id/activity_main_download_summary"
+                android:id="@+id/download_summary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/activity_main_downloads_title"
-                android:layout_alignStart="@id/activity_main_downloads_title"
+                android:layout_below="@id/downloads_title"
+                android:layout_alignStart="@id/downloads_title"
                 android:layout_marginTop="2dp"
                 android:text="@string/ModuleUpgradable"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
@@ -203,7 +203,7 @@
     </com.google.android.material.card.MaterialCardView>
 
     <LinearLayout
-        android:id="@+id/activity_main_apps"
+        android:id="@+id/apps"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
@@ -229,7 +229,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/activity_main_logs"
+        android:id="@+id/logs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
@@ -255,7 +255,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/activity_main_settings"
+        android:id="@+id/settings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
@@ -281,7 +281,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/activity_main_about"
+        android:id="@+id/about"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"

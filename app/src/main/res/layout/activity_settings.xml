@@ -7,7 +7,9 @@
     android:clipChildren="false"
     android:clipToPadding="false">
 
-    <include layout="@layout/appbar_layout" />
+    <include
+        android:id="@+id/appbar"
+        layout="@layout/appbar_layout" />
 
     <FrameLayout
         android:id="@+id/container"
