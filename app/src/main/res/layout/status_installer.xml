@@ -24,7 +24,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="8dp"
+                    android:layout_marginHorizontal="16dp"
                     android:background="@drawable/main_item_background"
                     android:clickable="true"
                     android:focusable="true"
@@ -42,7 +42,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="32dp"
+                        android:layout_marginStart="16dp"
                         android:layout_marginLeft="32dp"
                         android:orientation="vertical"
                         android:paddingTop="8dp"
@@ -63,7 +63,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="8dp"
+                    android:layout_marginHorizontal="16dp"
                     android:background="@drawable/main_item_background"
                     android:clickable="true"
                     android:focusable="true"
@@ -81,7 +81,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="32dp"
+                        android:layout_marginStart="16dp"
                         android:layout_marginLeft="32dp"
                         android:orientation="vertical"
                         android:paddingTop="8dp"
@@ -102,7 +102,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="8dp"
+                    android:layout_marginHorizontal="16dp"
                     android:background="@drawable/main_item_background"
                     android:clickable="true"
                     android:focusable="true"
@@ -120,7 +120,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="32dp"
+                        android:layout_marginStart="16dp"
                         android:layout_marginLeft="32dp"
                         android:orientation="vertical"
                         android:paddingTop="8dp"
@@ -140,7 +140,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="8dp"
+                    android:layout_marginHorizontal="16dp"
                     android:background="@drawable/main_item_background"
                     android:clickable="true"
                     android:focusable="true"
@@ -158,7 +158,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="32dp"
+                        android:layout_marginStart="16dp"
                         android:orientation="vertical"
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp"
@@ -177,7 +177,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="8dp"
+                    android:layout_marginHorizontal="16dp"
                     android:background="@drawable/main_item_background"
                     android:clickable="true"
                     android:focusable="true"
@@ -195,7 +195,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="32dp"
+                        android:layout_marginStart="16dp"
                         android:orientation="vertical"
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp">
@@ -213,7 +213,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="8dp"
+                    android:layout_marginHorizontal="16dp"
                     android:background="@drawable/main_item_background"
                     android:clickable="true"
                     android:focusable="true"
@@ -231,7 +231,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="32dp"
+                        android:layout_marginStart="16dp"
                         android:orientation="vertical"
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp">
@@ -249,7 +249,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="8dp"
+                    android:layout_marginHorizontal="16dp"
                     android:background="@drawable/main_item_background"
                     android:clickable="true"
                     android:focusable="true"
@@ -266,7 +266,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="32dp"
+                        android:layout_marginStart="16dp"
                         android:orientation="vertical"
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp">
@@ -310,7 +310,7 @@
                     android:id="@+id/click_to_update"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="8dp"
+                    android:layout_marginHorizontal="16dp"
                     android:background="@drawable/main_item_background"
                     android:clickable="true"
                     android:focusable="true"
@@ -328,7 +328,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="32dp"
+                        android:layout_marginStart="16dp"
                         android:orientation="vertical"
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp">

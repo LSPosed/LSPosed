@@ -187,7 +187,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/container"
-                android:layout_marginHorizontal="8dp"
+                android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="4dp"
                 android:background="@drawable/main_item_background"
                 android:clickable="true"
@@ -206,8 +206,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginLeft="32dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
                     android:orientation="vertical"
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
@@ -229,7 +229,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/author_view"
-                android:layout_marginHorizontal="8dp"
+                android:layout_marginHorizontal="16dp"
                 android:background="@drawable/main_item_background"
                 android:clickable="true"
                 android:focusable="true"
@@ -247,8 +247,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginLeft="32dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
                     android:orientation="vertical"
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
@@ -269,7 +269,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/show_on_xda"
-                android:layout_marginHorizontal="8dp"
+                android:layout_marginHorizontal="16dp"
                 android:background="@drawable/main_item_background"
                 android:clickable="true"
                 android:focusable="true"
@@ -287,8 +287,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginLeft="32dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
                     android:orientation="vertical"
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
@@ -308,7 +308,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/updateDescription"
-                android:layout_marginHorizontal="8dp"
+                android:layout_marginHorizontal="16dp"
                 android:background="@drawable/main_item_background"
                 android:clickable="true"
                 android:focusable="true"
@@ -326,8 +326,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginLeft="32dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
                     android:orientation="vertical"
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
@@ -344,10 +344,6 @@
             </LinearLayout>
 
         </RelativeLayout>
-
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="10dp" />
 
     </LinearLayout>
 

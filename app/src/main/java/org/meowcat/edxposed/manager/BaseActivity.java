@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Looper;
 import android.text.TextUtils;
@@ -84,7 +85,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (!(this instanceof MainActivity) && !XposedApp.getPreferences().getBoolean("black_dark_theme", false)) {
+        if (!(this instanceof MainActivity) && getWindow().getStatusBarColor() != Color.BLACK) {
             if (XposedApp.getPreferences().getBoolean("transparent_status_bar", false)) {
                 getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorActionBar));
             } else {

@@ -26,18 +26,18 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="72dp"
-                android:layout_marginStart="32dp"
-                android:layout_marginEnd="32dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="10dp"
                 android:clipChildren="false"
                 android:clipToPadding="false">
 
                 <ImageView
                     android:id="@+id/app_icon"
-                    android:layout_width="42dp"
-                    android:layout_height="64dp"
-                    android:layout_alignParentStart="true"
+                    android:layout_width="28dp"
+                    android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:adjustViewBounds="true"
+                    android:layout_marginStart="16dp"
                     android:contentDescription="@string/app_name"
                     android:scaleType="centerCrop"
                     app:srcCompat="@drawable/ic_launcher_foreground" />
@@ -79,7 +79,8 @@
                 android:foreground="?attr/selectableItemBackground"
                 app:cardBackgroundColor="#4CAF50"
                 app:cardCornerRadius="8dp"
-                app:cardElevation="8dp">
+                app:cardElevation="8dp"
+                app:cardPreventCornerOverlap="false">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -130,7 +131,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                app:cardCornerRadius="8dp">
+                app:cardCornerRadius="8dp"
+                app:cardPreventCornerOverlap="false">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -179,7 +181,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                app:cardCornerRadius="8dp">
+                app:cardCornerRadius="8dp"
+                app:cardPreventCornerOverlap="false">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -223,17 +226,18 @@
                 android:id="@+id/apps"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/main_item_background"
                 android:clickable="true"
                 android:focusable="true"
                 android:orientation="horizontal"
-                android:padding="16dp">
+                android:padding="18dp">
 
                 <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:contentDescription="@string/Apps"
                     app:srcCompat="@drawable/outline_list_24" />
 
@@ -249,17 +253,18 @@
                 android:id="@+id/logs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/main_item_background"
                 android:clickable="true"
                 android:focusable="true"
                 android:orientation="horizontal"
-                android:padding="16dp">
+                android:padding="18dp">
 
                 <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:contentDescription="@string/Logs"
                     app:srcCompat="@drawable/ic_assignment" />
 
@@ -275,17 +280,18 @@
                 android:id="@+id/settings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/main_item_background"
                 android:clickable="true"
                 android:focusable="true"
                 android:orientation="horizontal"
-                android:padding="16dp">
+                android:padding="18dp">
 
                 <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:contentDescription="@string/Settings"
                     app:srcCompat="@drawable/ic_settings" />
 
@@ -301,17 +307,18 @@
                 android:id="@+id/about"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/main_item_background"
                 android:clickable="true"
                 android:focusable="true"
                 android:orientation="horizontal"
-                android:padding="16dp">
+                android:padding="18dp">
 
                 <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:contentDescription="@string/About"
                     app:srcCompat="@drawable/ic_info" />
 
