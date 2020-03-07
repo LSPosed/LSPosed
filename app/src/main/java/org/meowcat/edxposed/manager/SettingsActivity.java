@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.FileUtils;
 import android.view.View;
@@ -344,7 +345,7 @@ public class SettingsActivity extends BaseActivity {
                 transparent.setOnPreferenceChangeListener((preference, newValue) -> {
                     boolean enabled = (Boolean) newValue;
                     Activity activity = getActivity();
-                    if (activity != null && !XposedApp.getPreferences().getBoolean("black_dark_theme", false)) {
+                    if (activity != null && activity.getWindow().getStatusBarColor() != Color.BLACK) {
                         if (enabled) {
                             activity.getWindow().setStatusBarColor(ContextCompat.getColor(activity, R.color.colorActionBar));
                         } else {
@@ -408,7 +409,9 @@ public class SettingsActivity extends BaseActivity {
             ((FrameLayout) getListView().getParent()).setClipChildren(false);
             ((FrameLayout) getListView().getParent()).setClipToPadding(false);
             ViewCompat.setOnApplyWindowInsetsListener(view, (v, insets) -> {
-                getListView().setPadding(0, 0, 0, insets.getSystemWindowInsetBottom());
+                if (insets.getTappableElementInsets().bottom != insets.getSystemWindowInsetBottom()) {
+                    getListView().setPadding(0, 0, 0, insets.getSystemWindowInsetBottom());
+                }
                 return insets;
             });
         }

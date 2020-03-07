@@ -36,7 +36,9 @@ public class DownloadDetailsFragment extends Fragment {
         }
         DownloadDetailsBinding binding = DownloadDetailsBinding.inflate(inflater, container, false);
         ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
-            binding.getRoot().setPadding(0, 0, 0, insets.getSystemWindowInsetBottom());
+            if (insets.getTappableElementInsets().bottom != insets.getSystemWindowInsetBottom()) {
+                binding.getRoot().setPadding(0, 0, 0, insets.getSystemWindowInsetBottom());
+            }
             return insets;
         });
         binding.downloadTitle.setText(module.name);

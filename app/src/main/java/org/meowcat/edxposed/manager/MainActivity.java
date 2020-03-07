@@ -13,7 +13,7 @@ import org.meowcat.edxposed.manager.util.RepoLoader;
 
 public class MainActivity extends BaseActivity implements RepoLoader.RepoListener, ModuleUtil.ModuleListener {
     ActivityMainBinding binding;
-    private RepoLoader mRepoLoader;
+    private RepoLoader repoLoader;
 
     @SuppressLint("PrivateResource")
     @Override
@@ -21,10 +21,10 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        mRepoLoader = RepoLoader.getInstance();
+        setupWindowInsets(binding.snackbar, binding.nestedScrollView);
+        repoLoader = RepoLoader.getInstance();
         ModuleUtil.getInstance().addListener(this);
-        mRepoLoader.addListener(this, false);
+        repoLoader.addListener(this, false);
         binding.modules.setOnClickListener(v -> {
             Intent intent = new Intent();
             intent.setClass(getApplicationContext(), ModulesActivity.class);
@@ -110,8 +110,8 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
 
     private void notifyDataSetChanged() {
         runOnUiThread(() -> {
-            String frameworkUpdateVersion = mRepoLoader.getFrameworkUpdateVersion();
-            boolean moduleUpdateAvailable = mRepoLoader.hasModuleUpdates();
+            String frameworkUpdateVersion = repoLoader.getFrameworkUpdateVersion();
+            boolean moduleUpdateAvailable = repoLoader.hasModuleUpdates();
             ModuleUtil.getInstance().getEnabledModules().size();
             binding.modulesSummary.setText(String.format(getString(R.string.ModulesDetail), ModuleUtil.getInstance().getEnabledModules().size()));
             if (frameworkUpdateVersion != null) {
@@ -145,7 +145,7 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
     protected void onDestroy() {
         super.onDestroy();
         ModuleUtil.getInstance().removeListener(this);
-        mRepoLoader.removeListener(this);
+        repoLoader.removeListener(this);
     }
 
 }

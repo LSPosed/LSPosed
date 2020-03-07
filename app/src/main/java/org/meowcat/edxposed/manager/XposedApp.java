@@ -60,7 +60,7 @@ public class XposedApp extends de.robv.android.xposed.installer.XposedApp implem
     }
 
     public static InstallZipUtil.XposedProp getXposedProp() {
-        return de.robv.android.xposed.installer.XposedApp.getInstance().mXposedProp;
+        return de.robv.android.xposed.installer.XposedApp.getInstance().xposedProp;
     }
 
     public static void runOnUiThread(Runnable action) {

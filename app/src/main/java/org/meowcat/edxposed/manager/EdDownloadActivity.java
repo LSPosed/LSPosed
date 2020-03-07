@@ -12,6 +12,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.transition.TransitionManager;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
@@ -93,6 +94,7 @@ public class EdDownloadActivity extends BaseActivity {
             try {
                 final JSONUtils.XposedJson xposedJson = new Gson().fromJson(result, JSONUtils.XposedJson.class);
 
+                TransitionManager.beginDelayedTransition(binding.tabLayout);
                 for (XposedTab tab : xposedJson.tabs) {
                     if (tab.sdks.contains(Build.VERSION.SDK_INT)) {
                         tabsAdapter.addFragment(tab.name, BaseAdvancedInstaller.newInstance(tab));

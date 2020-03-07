@@ -66,7 +66,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void setupWindowInsets(View rootView, View secondView) {
         rootView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
         ViewCompat.setOnApplyWindowInsetsListener(rootView, (v, insets) -> {
-            if (secondView != null) {
+            if (secondView != null && insets.getTappableElementInsets().bottom != insets.getSystemWindowInsetBottom()) {
                 secondView.setPadding(0, 0, 0, insets.getSystemWindowInsetBottom());
             }
             rootView.setPadding(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(), insets.getSystemWindowInsetRight(), insets.getTappableElementInsets().bottom);

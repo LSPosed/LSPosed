@@ -1,6 +1,5 @@
 package org.meowcat.edxposed.manager.util;
 
-import android.annotation.SuppressLint;
 import android.app.DownloadManager;
 import android.app.DownloadManager.Query;
 import android.app.DownloadManager.Request;
@@ -34,31 +33,28 @@ import java.util.Objects;
 public class DownloadsUtil {
     public static final String MIME_TYPE_APK = "application/vnd.android.package-archive";
     //private static final String MIME_TYPE_ZIP = "application/zip";
-    private static final Map<String, DownloadFinishedCallback> mCallbacks = new HashMap<>();
-    @SuppressLint("StaticFieldLeak")
-    private static final XposedApp mApp = XposedApp.getInstance();
-    private static final SharedPreferences mPref = mApp
-            .getSharedPreferences("download_cache", Context.MODE_PRIVATE);
+    private static final Map<String, DownloadFinishedCallback> callbacks = new HashMap<>();
+    private static final SharedPreferences pref = XposedApp.getInstance().getSharedPreferences("download_cache", Context.MODE_PRIVATE);
 
     private static DownloadInfo add(Builder b) {
-        Context context = b.mContext;
-        removeAllForUrl(context, b.mUrl);
+        Context context = b.context;
+        removeAllForUrl(context, b.url);
 
-        synchronized (mCallbacks) {
-            mCallbacks.put(b.mUrl, b.mCallback);
+        synchronized (callbacks) {
+            callbacks.put(b.url, b.callback);
         }
 
-        Request request = new Request(Uri.parse(b.mUrl));
-        request.setTitle(b.mTitle);
-        request.setMimeType(b.mMimeType.toString());
+        Request request = new Request(Uri.parse(b.url));
+        request.setTitle(b.title);
+        request.setMimeType(b.mimeType.toString());
         /*if (b.mSave) {
             try {
-                request.setDestinationInExternalPublicDir(savePath, b.mTitle + b.mMimeType.getExtension());
+                request.setDestinationInExternalPublicDir(savePath, b.title + b.mimeType.getExtension());
             } catch (IllegalStateException e) {
                 Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         } else */
-        File destination = new File(context.getExternalCacheDir(), "/downloads/" + b.mTitle + b.mMimeType.getExtension());
+        File destination = new File(context.getExternalCacheDir(), "/downloads/" + b.title + b.mimeType.getExtension());
         removeAllForLocalFile(context, destination);
         request.setDestinationUri(Uri.fromFile(destination));
         request.setNotificationVisibility(Request.VISIBILITY_VISIBLE);
@@ -295,8 +291,8 @@ public class DownloadsUtil {
             return;
 
         DownloadFinishedCallback callback;
-        synchronized (mCallbacks) {
-            callback = mCallbacks.get(info.url);
+        synchronized (callbacks) {
+            callback = callbacks.get(info.url);
         }
 
         if (callback == null)
@@ -345,8 +341,8 @@ public class DownloadsUtil {
                 }
 
                 if (useNotModifiedTags) {
-                    String modified = mPref.getString("download_" + url + "_modified", null);
-                    String etag = mPref.getString("download_" + url + "_etag", null);
+                    String modified = pref.getString("download_" + url + "_modified", null);
+                    String etag = pref.getString("download_" + url + "_etag", null);
 
                     if (modified != null) {
                         connection.addRequestProperty("If-Modified-Since", modified);
@@ -366,7 +362,7 @@ public class DownloadsUtil {
                     return new SyncDownloadInfo(SyncDownloadInfo.STATUS_NOT_MODIFIED, null);
                 } else if (responseCode < 200 || responseCode >= 300) {
                     return new SyncDownloadInfo(SyncDownloadInfo.STATUS_FAILED,
-                            mApp.getString(R.string.repo_download_failed_http,
+                            XposedApp.getInstance().getString(R.string.repo_download_failed_http,
                                     url, responseCode,
                                     httpConnection.getResponseMessage()));
                 }
@@ -385,7 +381,7 @@ public class DownloadsUtil {
                 String modified = httpConnection.getHeaderField("Last-Modified");
                 String etag = httpConnection.getHeaderField("ETag");
 
-                mPref.edit()
+                pref.edit()
                         .putString("download_" + url + "_modified", modified)
                         .putString("download_" + url + "_etag", etag).apply();
             }
@@ -394,7 +390,7 @@ public class DownloadsUtil {
 
         } catch (Throwable t) {
             return new SyncDownloadInfo(SyncDownloadInfo.STATUS_FAILED,
-                    mApp.getString(R.string.repo_download_failed, url,
+                    XposedApp.getInstance().getString(R.string.repo_download_failed, url,
                             t.getMessage()));
 
         } finally {
@@ -415,10 +411,10 @@ public class DownloadsUtil {
 
     static void clearCache(String url) {
         if (url != null) {
-            mPref.edit().remove("download_" + url + "_modified")
+            pref.edit().remove("download_" + url + "_modified")
                     .remove("download_" + url + "_etag").apply();
         } else {
-            mPref.edit().clear().apply();
+            pref.edit().clear().apply();
         }
     }
 
@@ -453,39 +449,39 @@ public class DownloadsUtil {
     }
 
     public static class Builder {
-        private final Context mContext;
-        boolean mModule = false;
-        private String mTitle = null;
-        private String mUrl = null;
-        private DownloadFinishedCallback mCallback = null;
-        private MIME_TYPES mMimeType = MIME_TYPES.APK;
+        private final Context context;
+        boolean module = false;
+        private String title = null;
+        private String url = null;
+        private DownloadFinishedCallback callback = null;
+        private MIME_TYPES mimeType = MIME_TYPES.APK;
 
         public Builder(Context context) {
-            mContext = context;
+            this.context = context;
         }
 
         public Builder setTitle(String title) {
-            mTitle = title;
+            this.title = title;
             return this;
         }
 
         public Builder setUrl(String url) {
-            mUrl = url;
+            this.url = url;
             return this;
         }
 
         public Builder setCallback(DownloadFinishedCallback callback) {
-            mCallback = callback;
+            this.callback = callback;
             return this;
         }
 
-        Builder setMimeType(@SuppressWarnings("SameParameterValue") MIME_TYPES mimeType) {
-            mMimeType = mimeType;
+        Builder setMimeType(MIME_TYPES mimeType) {
+            this.mimeType = mimeType;
             return this;
         }
 
         public Builder setModule(boolean module) {
-            this.mModule = module;
+            this.module = module;
             return this;
         }
 

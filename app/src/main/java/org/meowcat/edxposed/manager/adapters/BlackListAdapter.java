@@ -6,6 +6,7 @@ import android.widget.CompoundButton;
 
 import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.XposedApp;
+import org.meowcat.edxposed.manager.databinding.ActivityBlackListBinding;
 import org.meowcat.edxposed.manager.util.ModuleUtil;
 import org.meowcat.edxposed.manager.util.ToastUtil;
 
@@ -18,8 +19,8 @@ public class BlackListAdapter extends AppAdapter {
     private volatile boolean isWhiteListMode;
     private List<String> checkedList;
 
-    public BlackListAdapter(Context context, boolean isWhiteListMode) {
-        super(context);
+    public BlackListAdapter(Context context, boolean isWhiteListMode, ActivityBlackListBinding binding) {
+        super(context, binding);
         this.isWhiteListMode = isWhiteListMode;
     }
 

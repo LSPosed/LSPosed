@@ -3,6 +3,7 @@ package org.meowcat.edxposed.manager;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.View;
 
@@ -17,15 +18,22 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.meowcat.edxposed.manager.adapters.AppAdapter;
 import org.meowcat.edxposed.manager.adapters.AppHelper;
-import org.meowcat.edxposed.manager.adapters.CompatListAdapter;
+import org.meowcat.edxposed.manager.adapters.BlackListAdapter;
 import org.meowcat.edxposed.manager.databinding.ActivityBlackListBinding;
 
 public class BlackListActivity extends BaseActivity implements AppAdapter.Callback {
     private SearchView searchView;
-    private CompatListAdapter appAdapter;
+    private BlackListAdapter appAdapter;
 
     private SearchView.OnQueryTextListener searchListener;
     private ActivityBlackListBinding binding;
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            binding.swipeRefreshLayout.setRefreshing(true);
+        }
+    };
+    private Handler handler = new Handler();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,15 +48,16 @@ public class BlackListActivity extends BaseActivity implements AppAdapter.Callba
         }
         setupWindowInsets(binding.snackbar, binding.recyclerView);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        appAdapter = new CompatListAdapter(this);
+        final boolean isWhiteListMode = isWhiteListMode();
+        appAdapter = new BlackListAdapter(this, isWhiteListMode, binding);
         binding.recyclerView.setAdapter(appAdapter);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
                 DividerItemDecoration.VERTICAL);
         binding.recyclerView.addItemDecoration(dividerItemDecoration);
         appAdapter.setCallback(this);
-
-        binding.swipeRefreshLayout.setRefreshing(true);
+        handler.postDelayed(runnable, 300);
         binding.swipeRefreshLayout.setOnRefreshListener(appAdapter::refresh);
+
 
         searchListener = new SearchView.OnQueryTextListener() {
             @Override
@@ -110,6 +119,7 @@ public class BlackListActivity extends BaseActivity implements AppAdapter.Callba
 
     @Override
     public void onDataReady() {
+        handler.removeCallbacks(runnable);
         binding.swipeRefreshLayout.setRefreshing(false);
         String queryStr = searchView != null ? searchView.getQuery().toString() : "";
         appAdapter.filter(queryStr);

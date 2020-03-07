@@ -38,7 +38,7 @@ public class CompatListActivity extends BaseActivity implements AppAdapter.Callb
         }
         setupWindowInsets(binding.snackbar, binding.recyclerView);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        appAdapter = new CompatListAdapter(this);
+        appAdapter = new CompatListAdapter(this, binding);
         binding.recyclerView.setAdapter(appAdapter);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
                 DividerItemDecoration.VERTICAL);

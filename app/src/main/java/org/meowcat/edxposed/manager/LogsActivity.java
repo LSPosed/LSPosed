@@ -237,7 +237,7 @@ public class LogsActivity extends BaseActivity {
             mProgressDialog = new MaterialAlertDialogBuilder(LogsActivity.this).create();
             mProgressDialog.setMessage(getString(R.string.loading));
             mProgressDialog.setCancelable(false);
-            handler.postDelayed(mRunnable, 500);
+            handler.postDelayed(mRunnable, 300);
         }
 
         @Override

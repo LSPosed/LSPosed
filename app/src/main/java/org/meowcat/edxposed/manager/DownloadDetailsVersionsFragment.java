@@ -92,7 +92,9 @@ public class DownloadDetailsVersionsFragment extends ListFragment {
         getListView().setClipToPadding(false);
         getListView().setClipToPadding(false);
         ViewCompat.setOnApplyWindowInsetsListener(view, (v, insets) -> {
-            getListView().setPadding(0, 0, 0, insets.getSystemWindowInsetBottom());
+            if (insets.getTappableElementInsets().bottom != insets.getSystemWindowInsetBottom()) {
+                getListView().setPadding(0, 0, 0, insets.getSystemWindowInsetBottom());
+            }
             return insets;
         });
     }

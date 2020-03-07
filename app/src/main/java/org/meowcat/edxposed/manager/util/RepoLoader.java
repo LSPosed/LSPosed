@@ -46,48 +46,48 @@ import java.util.zip.GZIPInputStream;
 public class RepoLoader {
     private static final int UPDATE_FREQUENCY = 24 * 60 * 60 * 1000;
     private static String DEFAULT_REPOSITORIES;
-    private static RepoLoader mInstance = null;
-    private final List<RepoListener> mListeners = new CopyOnWriteArrayList<>();
-    private final Map<String, ReleaseType> mLocalReleaseTypesCache = new HashMap<>();
-    private XposedApp mApp;
-    private SharedPreferences mPref;
-    private SharedPreferences mModulePref;
-    private ConnectivityManager mConMgr;
-    private boolean mIsLoading = false;
-    private boolean mReloadTriggeredOnce = false;
-    private Map<Long, Repository> mRepositories = null;
-    private ReleaseType mGlobalReleaseType;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private static RepoLoader instance = null;
+    private final List<RepoListener> listeners = new CopyOnWriteArrayList<>();
+    private final Map<String, ReleaseType> localReleaseTypesCache = new HashMap<>();
+    private XposedApp app;
+    private SharedPreferences pref;
+    private SharedPreferences modulePref;
+    private ConnectivityManager conMgr;
+    private boolean isLoading = false;
+    private boolean reloadTriggeredOnce = false;
+    private Map<Long, Repository> repositories = null;
+    private ReleaseType globalReleaseType;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private RepoLoader() {
-        mInstance = this;
-        mApp = XposedApp.getInstance();
-        mPref = mApp.getSharedPreferences("repo", Context.MODE_PRIVATE);
+        instance = this;
+        app = XposedApp.getInstance();
+        pref = app.getSharedPreferences("repo", Context.MODE_PRIVATE);
         DEFAULT_REPOSITORIES = XposedApp.getPreferences().getBoolean("custom_list", false) ? "https://cdn.jsdelivr.net/gh/ElderDrivers/Repository-Website@gh-pages/assets/full.xml.gz" : "https://dl-xda.xposed.info/repo/full.xml.gz";
-        mModulePref = mApp.getSharedPreferences("module_settings", Context.MODE_PRIVATE);
-        mConMgr = (ConnectivityManager) mApp.getSystemService(Context.CONNECTIVITY_SERVICE);
-        mGlobalReleaseType = ReleaseType.fromString(XposedApp.getPreferences().getString("release_type_global", "stable"));
+        modulePref = app.getSharedPreferences("module_settings", Context.MODE_PRIVATE);
+        conMgr = (ConnectivityManager) app.getSystemService(Context.CONNECTIVITY_SERVICE);
+        globalReleaseType = ReleaseType.fromString(XposedApp.getPreferences().getString("release_type_global", "stable"));
         refreshRepositories();
     }
 
     public static synchronized RepoLoader getInstance() {
-        if (mInstance == null)
+        if (instance == null)
             new RepoLoader();
-        return mInstance;
+        return instance;
     }
 
     private boolean refreshRepositories() {
-        mRepositories = RepoDb.getRepositories();
+        repositories = RepoDb.getRepositories();
 
         // Unlikely case (usually only during initial load): DB state doesn't
         // fit to configuration
         boolean needReload = false;
-        String[] config = (mPref.getString("repositories", DEFAULT_REPOSITORIES) + "").split("\\|");
-        if (mRepositories.size() != config.length) {
+        String[] config = (pref.getString("repositories", DEFAULT_REPOSITORIES) + "").split("\\|");
+        if (repositories.size() != config.length) {
             needReload = true;
         } else {
             int i = 0;
-            for (Repository repo : mRepositories.values()) {
+            for (Repository repo : repositories.values()) {
                 if (!repo.url.equals(config[i++])) {
                     needReload = true;
                     break;
@@ -102,16 +102,16 @@ public class RepoLoader {
         for (String url : config) {
             RepoDb.insertRepository(url);
         }
-        mRepositories = RepoDb.getRepositories();
+        repositories = RepoDb.getRepositories();
         return true;
     }
 
     public void setReleaseTypeGlobal(String relTypeString) {
         ReleaseType relType = ReleaseType.fromString(relTypeString);
-        if (mGlobalReleaseType == relType)
+        if (globalReleaseType == relType)
             return;
 
-        mGlobalReleaseType = relType;
+        globalReleaseType = relType;
 
         // Updating the latest version for all modules takes a moment
         new Thread("DBUpdate") {
@@ -129,8 +129,10 @@ public class RepoLoader {
         if (getReleaseTypeLocal(packageName) == relType)
             return;
 
-        synchronized (mLocalReleaseTypesCache) {
-            mLocalReleaseTypesCache.put(packageName, relType);
+        synchronized (localReleaseTypesCache) {
+            if (relType != null) {
+                localReleaseTypesCache.put(packageName, relType);
+            }
         }
 
         RepoDb.updateModuleLatestVersion(packageName);
@@ -138,20 +140,22 @@ public class RepoLoader {
     }
 
     private ReleaseType getReleaseTypeLocal(String packageName) {
-        synchronized (mLocalReleaseTypesCache) {
-            if (mLocalReleaseTypesCache.containsKey(packageName))
-                return mLocalReleaseTypesCache.get(packageName);
+        synchronized (localReleaseTypesCache) {
+            if (localReleaseTypesCache.containsKey(packageName))
+                return localReleaseTypesCache.get(packageName);
 
-            String value = mModulePref.getString(packageName + "_release_type",
+            String value = modulePref.getString(packageName + "_release_type",
                     null);
             ReleaseType result = (!TextUtils.isEmpty(value)) ? ReleaseType.fromString(value) : null;
-            mLocalReleaseTypesCache.put(packageName, result);
+            if (result != null) {
+                localReleaseTypesCache.put(packageName, result);
+            }
             return result;
         }
     }
 
     public Repository getRepository(long repoId) {
-        return mRepositories.get(repoId);
+        return repositories.get(repoId);
     }
 
     public Module getModule(String packageName) {
@@ -179,42 +183,42 @@ public class RepoLoader {
         if (localSetting != null)
             return localSetting;
         else
-            return mGlobalReleaseType;
+            return globalReleaseType;
     }
 
     public void triggerReload(final boolean force) {
-        mReloadTriggeredOnce = true;
+        reloadTriggeredOnce = true;
 
         if (force) {
             resetLastUpdateCheck();
         } else {
-            long lastUpdateCheck = mPref.getLong("last_update_check", 0);
+            long lastUpdateCheck = pref.getLong("last_update_check", 0);
             if (System.currentTimeMillis() < lastUpdateCheck + UPDATE_FREQUENCY)
                 return;
         }
 
-        NetworkInfo netInfo = mConMgr.getActiveNetworkInfo();
+        NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
         if (netInfo == null || !netInfo.isConnected())
             return;
 
         synchronized (this) {
-            if (mIsLoading)
+            if (isLoading)
                 return;
-            mIsLoading = true;
+            isLoading = true;
         }
-        mApp.updateProgressIndicator(mSwipeRefreshLayout);
+        app.updateProgressIndicator(swipeRefreshLayout);
 
         new Thread("RepositoryReload") {
             public void run() {
                 final List<String> messages = new LinkedList<>();
                 boolean hasChanged = downloadAndParseFiles(messages);
 
-                mPref.edit().putLong("last_update_check", System.currentTimeMillis()).apply();
+                pref.edit().putLong("last_update_check", System.currentTimeMillis()).apply();
 
                 if (!messages.isEmpty()) {
                     XposedApp.runOnUiThread(() -> {
                         for (String message : messages) {
-                            Toast.makeText(mApp, message, Toast.LENGTH_LONG).show();
+                            Toast.makeText(app, message, Toast.LENGTH_LONG).show();
                         }
                     });
                 }
@@ -223,38 +227,38 @@ public class RepoLoader {
                     notifyListeners();
 
                 synchronized (this) {
-                    mIsLoading = false;
+                    isLoading = false;
                 }
-                mApp.updateProgressIndicator(mSwipeRefreshLayout);
+                app.updateProgressIndicator(swipeRefreshLayout);
             }
         }.start();
     }
 
-    public void setSwipeRefreshLayout(SwipeRefreshLayout mSwipeRefreshLayout) {
-        this.mSwipeRefreshLayout = mSwipeRefreshLayout;
+    public void setSwipeRefreshLayout(SwipeRefreshLayout swipeRefreshLayout) {
+        this.swipeRefreshLayout = swipeRefreshLayout;
     }
 
     public void triggerFirstLoadIfNecessary() {
-        if (!mReloadTriggeredOnce)
+        if (!reloadTriggeredOnce)
             triggerReload(false);
     }
 
     public void resetLastUpdateCheck() {
-        mPref.edit().remove("last_update_check").apply();
+        pref.edit().remove("last_update_check").apply();
     }
 
     public synchronized boolean isLoading() {
-        return mIsLoading;
+        return isLoading;
     }
 
     public void clear(boolean notify) {
         synchronized (this) {
             // TODO Stop reloading repository when it should be cleared
-            if (mIsLoading)
+            if (isLoading)
                 return;
 
             RepoDb.deleteRepositories();
-            mRepositories = new LinkedHashMap<>(0);
+            repositories = new LinkedHashMap<>(0);
             DownloadsUtil.clearCache(null);
             resetLastUpdateCheck();
         }
@@ -270,7 +274,7 @@ public class RepoLoader {
                 sb.append("|");
             sb.append(repos[i]);
         }
-        mPref.edit().putString("repositories", sb.toString()).apply();
+        pref.edit().putString("repositories", sb.toString()).apply();
         if (refreshRepositories())
             triggerReload(true);
     }
@@ -287,7 +291,7 @@ public class RepoLoader {
         String filename = "repo_" + HashUtil.md5(repo) + ".xml";
         if (repo.endsWith(".gz"))
             filename += ".gz";
-        return new File(mApp.getCacheDir(), filename);
+        return new File(app.getCacheDir(), filename);
     }
 
     private boolean downloadAndParseFiles(List<String> messages) {
@@ -296,7 +300,7 @@ public class RepoLoader {
         final AtomicInteger insertCounter = new AtomicInteger();
         final AtomicInteger deleteCounter = new AtomicInteger();
 
-        for (Entry<Long, Repository> repoEntry : mRepositories.entrySet()) {
+        for (Entry<Long, Repository> repoEntry : repositories.entrySet()) {
             final long repoId = repoEntry.getKey();
             final Repository repo = repoEntry.getValue();
 
@@ -367,13 +371,13 @@ public class RepoLoader {
 
                 RepoDb.setTransactionSuccessful();
             } catch (SQLiteException e) {
-                XposedApp.runOnUiThread(() -> new MaterialAlertDialogBuilder(mApp)
+                XposedApp.runOnUiThread(() -> new MaterialAlertDialogBuilder(app)
                         .setTitle(R.string.restart_needed)
                         .setMessage(R.string.cache_cleaned)
                         .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                            Intent i = new Intent(mApp, DownloadActivity.class);
-                            PendingIntent pi = PendingIntent.getActivity(mApp, 0, i, PendingIntent.FLAG_CANCEL_CURRENT);
-                            AlarmManager mgr = (AlarmManager) mApp.getSystemService(Context.ALARM_SERVICE);
+                            Intent i = new Intent(app, DownloadActivity.class);
+                            PendingIntent pi = PendingIntent.getActivity(app, 0, i, PendingIntent.FLAG_CANCEL_CURRENT);
+                            AlarmManager mgr = (AlarmManager) app.getSystemService(Context.ALARM_SERVICE);
                             mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, pi);
                             System.exit(0);
                         })
@@ -383,7 +387,7 @@ public class RepoLoader {
                 DownloadsUtil.clearCache(url);
             } catch (Throwable t) {
                 Log.e(XposedApp.TAG, "RepoLoader -> Cannot load repository from " + url, t);
-                messages.add(mApp.getString(R.string.repo_load_failed, url, t.getMessage()));
+                messages.add(app.getString(R.string.repo_load_failed, url, t.getMessage()));
                 DownloadsUtil.clearCache(url);
             } finally {
                 if (in != null)
@@ -391,6 +395,7 @@ public class RepoLoader {
                         in.close();
                     } catch (IOException ignored) {
                     }
+                //noinspection ResultOfMethodCallIgnored
                 cacheFile.delete();
                 RepoDb.endTransation();
             }
@@ -402,20 +407,20 @@ public class RepoLoader {
     }
 
     public void addListener(RepoListener listener, boolean triggerImmediately) {
-        if (!mListeners.contains(listener))
-            mListeners.add(listener);
+        if (!listeners.contains(listener))
+            listeners.add(listener);
 
         if (triggerImmediately)
             listener.onRepoReloaded(this);
     }
 
     public void removeListener(RepoListener listener) {
-        mListeners.remove(listener);
+        listeners.remove(listener);
     }
 
     private void notifyListeners() {
-        for (RepoListener listener : mListeners) {
-            listener.onRepoReloaded(mInstance);
+        for (RepoListener listener : listeners) {
+            listener.onRepoReloaded(instance);
         }
     }
 

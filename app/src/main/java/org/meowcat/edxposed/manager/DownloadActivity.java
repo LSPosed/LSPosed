@@ -25,6 +25,7 @@ import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.TransitionManager;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
@@ -173,6 +174,7 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
     private void reloadItems() {
         runOnUiThread(() -> {
             adapter.swapCursor(RepoDb.queryModuleOverview(sortingOrder, filterText));
+            TransitionManager.beginDelayedTransition(binding.recyclerView);
             adapter.notifyDataSetChanged();
         });
     }

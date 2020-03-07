@@ -22,6 +22,7 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.TransitionManager;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -86,6 +87,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 }
             }
             adapter.addAll(showList);
+            TransitionManager.beginDelayedTransition(binding.recyclerView);
             adapter.notifyDataSetChanged();
             moduleUtil.updateModulesList(false);
             binding.swipeRefreshLayout.setRefreshing(false);

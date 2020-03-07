@@ -16,11 +16,11 @@ import static de.robv.android.xposed.installer.util.InstallZipUtil.parseXposedPr
 public class XposedApp extends Application {
     public static final String TAG = "XposedApp";
     private static final File EDXPOSED_PROP_FILE = new File("/system/framework/edconfig.jar");
-    private static XposedApp mInstance = null;
-    public InstallZipUtil.XposedProp mXposedProp;
+    private static XposedApp instance = null;
+    public InstallZipUtil.XposedProp xposedProp;
 
     public static XposedApp getInstance() {
-        return mInstance;
+        return instance;
     }
 
     // This method is hooked by XposedBridge to return the current version
@@ -31,7 +31,7 @@ public class XposedApp extends Application {
 
     public void onCreate() {
         super.onCreate();
-        mInstance = this;
+        instance = this;
         reloadXposedProp();
     }
 
@@ -51,7 +51,7 @@ public class XposedApp extends Application {
             }
         }
         synchronized (this) {
-            mXposedProp = prop;
+            xposedProp = prop;
         }
     }
 }
