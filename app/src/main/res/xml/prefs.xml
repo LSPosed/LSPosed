@@ -163,13 +163,6 @@
 
         <SwitchPreferenceCompat
             android:defaultValue="false"
-            android:key="pass_safetynet"
-            android:summary="@string/pass_safetynet_summary"
-            android:title="@string/pass_safetynet"
-            app:iconSpaceReserved="false" />
-
-        <SwitchPreferenceCompat
-            android:defaultValue="false"
             android:key="disable_verbose_log"
             android:title="@string/pref_title_disable_verbose_log"
             app:iconSpaceReserved="false" />

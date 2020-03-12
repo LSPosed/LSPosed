@@ -232,7 +232,7 @@
     <string name="meowcat">小喵工作室</string>
     <string name="white_list_mode_summary">白名單模式: 僅選中的應用加載 EdXposed 模塊\n僅當啟用應用名單模式時有效</string>
     <string name="pref_title_black_white_list">應用名單模式</string>
-    <string name="pref_black_white_list_summary">開啟後，可在\"應用\"中設置名單\n黑名單模式: 選中的應用不會加載 EdXposed 模塊\n注意: 使用應用名單可能會導致某些系統全局模塊不能正常工作\n</string>
+    <string name="pref_black_white_list_summary">開啟後，可在\"應用\"中設置名單\n黑名單模式: 選中的應用不會加載 EdXposed 模塊\n注意: 使用應用名單可能會導致某些系統全局模塊不能正常工作</string>
     <string name="ignore_chinese_summary">從模塊列表中隱藏中文模塊\n模塊仍然可以被搜索到\n啟用此選項可能會降低性能</string>
     <string name="ignore_chinese">忽略中文字符</string>
     <string name="verified_boot_explanation">引導驗證(dm-verity)防止設備在修改系統分區時引導</string>

@@ -9,7 +9,7 @@ android {
     buildToolsVersion "29.0.3"
     defaultConfig {
         applicationId "org.meowcat.edxposed.manager"
-        minSdkVersion 21
+        minSdkVersion 26
         targetSdkVersion 27
         versionCode 45408
         versionName "4.5.4.4"

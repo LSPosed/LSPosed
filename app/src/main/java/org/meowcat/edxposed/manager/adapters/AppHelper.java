@@ -46,7 +46,6 @@ public class AppHelper {
     private static final String BLACK_LIST_MODE = "conf/blackwhitelist";
 
     private static final List<String> FORCE_WHITE_LIST = new ArrayList<>(Collections.singletonList(BuildConfig.APPLICATION_ID));
-    private static final List<String> SAFETYNET_BLACK_LIST = new ArrayList<>(Arrays.asList("com.google.android.gms", "com.google.android.gsf"));
     static List<String> FORCE_WHITE_LIST_MODULE = new ArrayList<>(FORCE_WHITE_LIST);
 
     @SuppressWarnings("OctalInteger")
@@ -65,12 +64,6 @@ public class AppHelper {
     }
 
     private static boolean addWhiteList(String packageName) {
-        if (SAFETYNET_BLACK_LIST.contains(packageName)) {
-            if (XposedApp.getPreferences().getBoolean("pass_safetynet", false)) {
-                removeWhiteList(packageName);
-                return false;
-            }
-        }
         return whiteListFileName(packageName, true);
     }
 
@@ -90,11 +83,6 @@ public class AppHelper {
     }
 
     private static boolean removeBlackList(String packageName) {
-        if (SAFETYNET_BLACK_LIST.contains(packageName)) {
-            if (XposedApp.getPreferences().getBoolean("pass_safetynet", false)) {
-                return false;
-            }
-        }
         return blackListFileName(packageName, false);
     }
 
@@ -116,14 +104,6 @@ public class AppHelper {
                 removeBlackList(pn);
             }
         }
-        if (XposedApp.getPreferences().getBoolean("pass_safetynet", false)) {
-            for (String pn : SAFETYNET_BLACK_LIST) {
-                if (!s.contains(pn)) {
-                    s.add(pn);
-                    addBlackList(pn);
-                }
-            }
-        }
         return s;
     }
 
@@ -141,14 +121,6 @@ public class AppHelper {
             if (!result.contains(pn)) {
                 result.add(pn);
                 addWhiteList(pn);
-            }
-        }
-        if (XposedApp.getPreferences().getBoolean("pass_safetynet", false)) {
-            for (String pn : SAFETYNET_BLACK_LIST) {
-                if (result.contains(pn)) {
-                    result.remove(pn);
-                    removeWhiteList(pn);
-                }
             }
         }
         return result;

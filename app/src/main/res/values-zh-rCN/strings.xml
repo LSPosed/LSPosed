@@ -232,7 +232,7 @@
     <string name="meowcat">小喵工作室</string>
     <string name="white_list_mode_summary">白名单模式: 仅选中的应用加载 EdXposed 模块\n仅当启用应用名单模式时有效</string>
     <string name="pref_title_black_white_list">应用名单模式</string>
-    <string name="pref_black_white_list_summary">开启后，可在\"应用\"中设置名单\n黑名单模式: 选中的应用不会加载 EdXposed 模块\n注意: 使用应用名单可能会导致某些系统全局模块不能正常工作\n</string>
+    <string name="pref_black_white_list_summary">开启后，可在\"应用\"中设置名单\n黑名单模式: 选中的应用不会加载 EdXposed 模块\n注意: 使用应用名单可能会导致某些系统全局模块不能正常工作</string>
     <string name="ignore_chinese_summary">从模块列表中隐藏中文模块\n模块仍然可以被搜索到\n启用此选项可能会降低性能</string>
     <string name="ignore_chinese">忽略中文字符</string>
     <string name="verified_boot_explanation">引导验证(dm-verity)防止设备在修改系统分区时引导</string>
