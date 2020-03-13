@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Looper;
 import android.text.TextUtils;
@@ -106,16 +107,23 @@ public class BaseActivity extends AppCompatActivity {
         mTheme = getTheme(this);
     }
 
+    public int getThemedColor(int id) {
+        TypedArray typedArray = getTheme().obtainStyledAttributes(new int[]{id});
+        int color = typedArray.getColor(0, 0);
+        typedArray.recycle();
+        return color;
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
-        /*if (!(this instanceof MainActivity) && getWindow().getStatusBarColor() != Color.BLACK) {
+        if (!(this instanceof MainActivity)) {
             if (XposedApp.getPreferences().getBoolean("transparent_status_bar", false)) {
-                getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorActionBar));
+                getWindow().setStatusBarColor(getThemedColor(R.attr.colorActionBar));
             } else {
-                getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+                getWindow().setStatusBarColor(getThemedColor(R.attr.colorPrimaryDark));
             }
-        }*/
+        }
         if (!Objects.equals(mTheme, getTheme(this))) {
             recreate();
         }

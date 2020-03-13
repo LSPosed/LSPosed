@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.TooltipCompat;
 import androidx.core.text.HtmlCompat;
 import androidx.fragment.app.Fragment;
@@ -118,7 +117,7 @@ public class BaseAdvancedInstaller extends Fragment {
             binding.warningUnofficial.setVisibility(View.VISIBLE);
         }
 
-        binding.showOnXda.setOnClickListener(v -> NavUtil.startURL((AppCompatActivity) getActivity(), tab.support));
+        binding.showOnXda.setOnClickListener(v -> NavUtil.startURL((BaseActivity) getActivity(), tab.support));
         binding.updateDescription.setOnClickListener(v -> new MaterialAlertDialogBuilder(Objects.requireNonNull(getContext()))
                 .setTitle(R.string.changes)
                 .setMessage(HtmlCompat.fromHtml(tab.description, HtmlCompat.FROM_HTML_MODE_LEGACY))

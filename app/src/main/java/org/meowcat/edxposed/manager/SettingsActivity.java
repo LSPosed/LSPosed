@@ -393,21 +393,21 @@ public class SettingsActivity extends BaseActivity {
                 });
             }
 
-            /*SwitchPreferenceCompat transparent = findPreference("transparent_status_bar");
+            SwitchPreferenceCompat transparent = findPreference("transparent_status_bar");
             if (transparent != null) {
                 transparent.setOnPreferenceChangeListener((preference, newValue) -> {
                     boolean enabled = (Boolean) newValue;
-                    Activity activity = getActivity();
-                    if (activity != null && activity.getWindow().getStatusBarColor() != Color.BLACK) {
+                    SettingsActivity activity = (SettingsActivity) getActivity();
+                    if (activity != null) {
                         if (enabled) {
-                            activity.getWindow().setStatusBarColor(ContextCompat.getColor(activity, R.color.colorActionBar));
+                            activity.getWindow().setStatusBarColor(activity.getThemedColor(R.attr.colorActionBar));
                         } else {
-                            activity.getWindow().setStatusBarColor(ContextCompat.getColor(activity, R.color.colorPrimaryDark));
+                            activity.getWindow().setStatusBarColor(activity.getThemedColor(R.attr.colorPrimaryDark));
                         }
                     }
                     return true;
                 });
-            }*/
+            }
 
             Preference compat_mode = findPreference("compat_mode");
             if (compat_mode != null) {

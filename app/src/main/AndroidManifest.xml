@@ -61,7 +61,13 @@
             android:label="@string/Modules" />
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/Settings" />
+            android:label="@string/Settings">
+            <intent-filter>
+                <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <receiver
             android:name=".receivers.PackageChangeReceiver"

@@ -1,9 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--suppress ALL -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory
         android:key="group_app"
         android:title="@string/settings_group_app"
+        app:iconSpaceReserved="false">
+
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="skip_xposedminversion_check"
+            android:summary="@string/skip_xposedminversion_check_summ"
+            android:title="@string/skip_xposedminversion_check"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="show_modules"
+            android:summary="@string/show_modules_summary"
+            android:title="@string/show_modules"
+            app:iconSpaceReserved="false" />
+
+        <org.meowcat.edxposed.manager.widget.IntegerListPreference
+            android:defaultValue="0"
+            android:entries="@array/list_sort_texts"
+            android:entryValues="@array/list_sort_values"
+            android:key="list_sort"
+            android:summary="%s"
+            android:title="@string/list_sort"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/settings_group_theme"
         app:iconSpaceReserved="false">
         <org.meowcat.edxposed.manager.widget.ThemeColorPreference
             android:defaultValue="#1976D2"
@@ -30,44 +58,14 @@
             android:title="@string/colorized_action_bar"
             app:iconSpaceReserved="false" />
         <SwitchPreferenceCompat
+            android:key="transparent_status_bar"
+            android:title="@string/transparent_status_bar"
+            app:iconSpaceReserved="false" />
+        <SwitchPreferenceCompat
             android:key="black_dark_theme"
             android:title="@string/pure_black_dark_theme"
             app:iconSpaceReserved="false" />
-        <!--<SwitchPreferenceCompat
-            android:key="transparent_status_bar"
-            android:title="@string/transparent_status_bar"
-            app:iconSpaceReserved="false" />-->
-
-        <SwitchPreferenceCompat
-            android:defaultValue="true"
-            android:key="confirm_reboots"
-            android:title="@string/confirm_reboots"
-            app:iconSpaceReserved="false" />
-
-        <SwitchPreferenceCompat
-            android:defaultValue="false"
-            android:key="skip_xposedminversion_check"
-            android:summary="@string/skip_xposedminversion_check_summ"
-            android:title="@string/skip_xposedminversion_check"
-            app:iconSpaceReserved="false" />
-
-        <SwitchPreferenceCompat
-            android:defaultValue="true"
-            android:key="show_modules"
-            android:summary="@string/show_modules_summary"
-            android:title="@string/show_modules"
-            app:iconSpaceReserved="false" />
-
-        <org.meowcat.edxposed.manager.widget.IntegerListPreference
-            android:defaultValue="0"
-            android:entries="@array/list_sort_texts"
-            android:entryValues="@array/list_sort_values"
-            android:key="list_sort"
-            android:summary="%s"
-            android:title="@string/list_sort"
-            app:iconSpaceReserved="false" />
     </PreferenceCategory>
-
     <PreferenceCategory
         android:key="group_download"
         android:title="@string/settings_group_download"
@@ -107,13 +105,6 @@
             android:defaultValue="true"
             android:key="snack_bar"
             android:title="@string/notify_module_update"
-            app:iconSpaceReserved="false" />
-
-        <SwitchPreferenceCompat
-            android:defaultValue="false"
-            android:key="alt_download"
-            android:summary="@string/alt_download_method_summ"
-            android:title="@string/alt_download_method"
             app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat

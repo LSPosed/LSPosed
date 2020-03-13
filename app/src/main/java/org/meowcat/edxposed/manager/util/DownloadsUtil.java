@@ -32,7 +32,6 @@ import java.util.Objects;
 
 public class DownloadsUtil {
     public static final String MIME_TYPE_APK = "application/vnd.android.package-archive";
-    //private static final String MIME_TYPE_ZIP = "application/zip";
     private static final Map<String, DownloadFinishedCallback> callbacks = new HashMap<>();
     private static final SharedPreferences pref = XposedApp.getInstance().getSharedPreferences("download_cache", Context.MODE_PRIVATE);
 
@@ -47,17 +46,10 @@ public class DownloadsUtil {
         Request request = new Request(Uri.parse(b.url));
         request.setTitle(b.title);
         request.setMimeType(b.mimeType.toString());
-        /*if (b.mSave) {
-            try {
-                request.setDestinationInExternalPublicDir(savePath, b.title + b.mimeType.getExtension());
-            } catch (IllegalStateException e) {
-                Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        } else */
+        request.setNotificationVisibility(Request.VISIBILITY_VISIBLE);
         File destination = new File(context.getExternalCacheDir(), "/downloads/" + b.title + b.mimeType.getExtension());
         removeAllForLocalFile(context, destination);
         request.setDestinationUri(Uri.fromFile(destination));
-        request.setNotificationVisibility(Request.VISIBILITY_VISIBLE);
         DownloadManager dm = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         long id = dm.enqueue(request);
 

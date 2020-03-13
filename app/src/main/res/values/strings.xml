@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">EdXposed Manager</string>
+    <string name="app_name" translatable="false">EdXposed Manager</string>
     <string name="action_settings">Settings</string>
     <string name="Activated">Activated</string>
     <string name="Inactivate">Inactivate</string>
@@ -331,4 +331,5 @@
     <string name="primary_color">Primary color</string>
     <string name="accent_color">Accent color</string>
     <string name="colorized_action_bar">Colorized action bar</string>
+    <string name="settings_group_theme">Theme</string>
 </resources>

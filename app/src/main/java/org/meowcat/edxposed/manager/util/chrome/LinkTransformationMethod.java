@@ -9,16 +9,16 @@ import android.text.util.Linkify;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
+import org.meowcat.edxposed.manager.BaseActivity;
 
 /**
  * Created by Nikola D. on 12/23/2015.
  */
 public class LinkTransformationMethod implements TransformationMethod {
 
-    private AppCompatActivity activity;
+    private BaseActivity activity;
 
-    public LinkTransformationMethod(AppCompatActivity activity) {
+    public LinkTransformationMethod(BaseActivity activity) {
         this.activity = activity;
     }
 

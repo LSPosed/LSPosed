@@ -34,8 +34,6 @@
     <style name="ThemeOverlay" />
 
     <style name="ThemeOverlay.ActionBarPrimaryColor">
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorActionBar">@color/colorPrimary</item>
         <item name="actionBarTheme">@style/ThemeOverlay.MaterialComponents.Dark.ActionBar</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
         <item name="tabLayoutTheme">@style/Widget.MaterialComponents.TabLayout.Colored</item>

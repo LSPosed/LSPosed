@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.Uri;
@@ -344,10 +343,7 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
                 txtStatus.setText(context.getString(
                         R.string.download_status_installed, installedVersion));
                 txtStatus.setTextColor(ContextCompat.getColor(DownloadActivity.this, R.color.warning));
-                TypedArray typedArray = DownloadActivity.this.getTheme().obtainStyledAttributes(new int[]{android.R.attr.textColorHighlight});
-                int textColor = typedArray.getColor(0, 0);
-                typedArray.recycle();
-                txtStatus.setTextColor(textColor);
+                txtStatus.setTextColor(getThemedColor(android.R.attr.textColorHighlight));
                 txtStatus.setVisibility(View.VISIBLE);
             } else {
                 txtStatus.setVisibility(View.GONE);

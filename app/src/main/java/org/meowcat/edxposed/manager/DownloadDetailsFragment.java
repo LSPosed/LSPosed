@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 
@@ -52,7 +51,7 @@ public class DownloadDetailsFragment extends Fragment {
         if (module.description != null) {
             if (module.descriptionIsHtml) {
                 binding.downloadDescription.setText(RepoParser.parseSimpleHtml(getActivity(), module.description, binding.downloadDescription));
-                binding.downloadDescription.setTransformationMethod(new LinkTransformationMethod((AppCompatActivity) getActivity()));
+                binding.downloadDescription.setTransformationMethod(new LinkTransformationMethod((BaseActivity) getActivity()));
                 binding.downloadDescription.setMovementMethod(LinkMovementMethod.getInstance());
             } else {
                 binding.downloadDescription.setText(module.description);
@@ -71,7 +70,7 @@ public class DownloadDetailsFragment extends Fragment {
             final Uri link = NavUtil.parseURL(moreInfoEntry.second);
             if (link != null) {
                 moreinfoBinding.message.setTextColor(moreinfoBinding.message.getLinkTextColors());
-                moreinfoBinding.getRoot().setOnClickListener(v -> NavUtil.startURL((AppCompatActivity) getActivity(), link));
+                moreinfoBinding.getRoot().setOnClickListener(v -> NavUtil.startURL((BaseActivity) getActivity(), link));
             }
 
             binding.downloadMoreinfoContainer.addView(moreinfoBinding.getRoot());

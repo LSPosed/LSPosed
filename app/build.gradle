@@ -31,8 +31,8 @@ android {
         minSdkVersion 26
         //noinspection OldTargetApi
         targetSdkVersion 27
-        versionCode 45409
-        versionName "4.5.4.5"
+        versionCode 45410
+        versionName "4.5.4.6"
         signingConfig signingConfigs.release
     }
     buildTypes {
