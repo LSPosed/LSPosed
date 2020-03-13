@@ -128,11 +128,11 @@ public final class XSharedPreferences implements SharedPreferences {
 				map = mMap;
 			}
 		} catch (XmlPullParserException e) {
-			Log.w(TAG, "getSharedPreferences", e);
+			Log.w(TAG, "getSharedPreferences failed for: " + mFilename, e);
 		} catch (FileNotFoundException ignored) {
 			// SharedPreferencesImpl has a canRead() check, so it doesn't log anything in case the file doesn't exist
 		} catch (IOException e) {
-			Log.w(TAG, "getSharedPreferences", e);
+			Log.w(TAG, "getSharedPreferences failed for: " + mFilename, e);
 		} finally {
 			if (result != null && result.stream != null) {
 				try {
