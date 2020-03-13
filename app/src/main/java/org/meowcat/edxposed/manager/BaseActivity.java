@@ -142,8 +142,9 @@ public class BaseActivity extends AppCompatActivity {
             }
             theme.applyStyle(resid, false);
         }
-        if (!(this instanceof MainActivity)) {
-            theme.applyStyle(getCustomTheme(), true);
+        theme.applyStyle(getCustomTheme(), true);
+        if (this instanceof MainActivity) {
+            theme.applyStyle(R.style.ThemeOverlay_ActivityMain, true);
         }
         theme.applyStyle(getThemeStyleRes(this), true);
         // only pass theme style to super, so styled theme will not be overwritten

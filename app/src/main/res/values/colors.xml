@@ -12,4 +12,5 @@
     <color name="navigationBarColor">?colorPrimary</color>
     <color name="colorStickyHeader">#eafafafa</color>
     <color name="ic_launcher_background">#35C0CA</color>
+    <color name="navigationBarColorBlack">@android:color/black</color>
 </resources>

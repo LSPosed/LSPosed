@@ -5,5 +5,5 @@
     <color name="colorPrimaryDark">#2E2E2E</color>
     <color name="colorActionBar">#383838</color>
     <color name="navigationBarColor">#B3000000</color>
-    <color name="colorStickyHeader">#EA424242</color>
+    <color name="colorStickyHeader">#EA303030</color>
 </resources>

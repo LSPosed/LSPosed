@@ -7,11 +7,12 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorActionBar">@color/colorActionBar</item>
+        <item name="colorStickyHeader">@color/colorStickyHeader</item>
         <item name="actionBarTheme">@style/ThemeOverlay.MaterialComponents.ActionBar</item>
         <item name="android:colorBackground">@color/colorBackground</item>
         <item name="android:windowBackground">@color/colorBackground</item>
         <item name="actionBarPopupTheme">@style/AppTheme.PopupOverlay</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="m">@bool/lightSystemUI</item>
+        <item name="android:windowLightStatusBar">@bool/lightSystemUI</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">@bool/lightSystemUI
         </item>
         <item name="android:navigationBarColor">@color/navigationBarColor</item>
@@ -25,26 +26,28 @@
         <item name="android:textColor">?attr/colorOnSurface</item>
     </style>
 
-    <style name="AppThemeMain" parent="AppTheme">
-        <item name="colorPrimaryDark">@color/colorBackground</item>
-    </style>
-
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
 
     <style name="ThemeOverlay" />
 
     <style name="ThemeOverlay.ActionBarPrimaryColor">
         <item name="actionBarTheme">@style/ThemeOverlay.MaterialComponents.Dark.ActionBar</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+        <item name="android:windowLightStatusBar">false</item>
         <item name="tabLayoutTheme">@style/Widget.MaterialComponents.TabLayout.Colored</item>
+    </style>
+
+    <style name="ThemeOverlay.ActivityMain">
+        <item name="android:windowLightStatusBar">@bool/lightSystemUI</item>
+        <item name="colorPrimaryDark">@color/colorBackground</item>
     </style>
 
     <style name="ThemeOverlay.Black">
         <item name="colorPrimaryDark">@android:color/black</item>
         <item name="colorActionBar">@android:color/black</item>
-        <item name="android:navigationBarColor">@android:color/black</item>
+        <item name="android:navigationBarColor">@color/navigationBarColorBlack</item>
         <item name="android:colorBackground">@android:color/black</item>
         <item name="android:windowBackground">@android:color/black</item>
+        <item name="colorStickyHeader">#ea000000</item>
         <item name="tabLayoutTheme">@style/Widget.MaterialComponents.TabLayout</item>
     </style>
 </resources>
