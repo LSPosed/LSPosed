@@ -37,7 +37,27 @@
         <item>@string/reltype_beta_summary</item>
         <item>@string/reltype_experimental_summary</item>
     </string-array>
+    <string-array name="list_sort_texts">
+        <item>@string/sort_by_name</item>
+        <item>@string/sort_by_name_reverse</item>
+        <item>@string/sort_by_package_name</item>
+        <item>@string/sort_by_package_name_reverse</item>
+        <item>@string/sort_by_install_time</item>
+        <item>@string/sort_by_install_time_reverse</item>
+        <item>@string/sort_by_update_time</item>
+        <item>@string/sort_by_update_time_reverse</item>
+    </string-array>
 
+    <string-array name="list_sort_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+    </string-array>
     <string-array name="module_release_type_values" translatable="false">
         <item />
         <item>stable</item>

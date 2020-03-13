@@ -1,6 +1,7 @@
 package org.meowcat.edxposed.manager;
 
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
@@ -19,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -47,7 +49,8 @@ import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -64,16 +67,18 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
     private int installedXposedVersion;
     private ApplicationFilter filter;
     private SearchView searchView;
+    private ApplicationInfo.DisplayNameComparator displayNameComparator;
     private SearchView.OnQueryTextListener mSearchListener;
     private PackageManager pm;
+    private Comparator<ApplicationInfo> cmp;
     private DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     private ModuleUtil moduleUtil;
     private ModuleAdapter adapter = null;
     private Runnable reloadModules = new Runnable() {
         public void run() {
             String queryStr = searchView != null ? searchView.getQuery().toString() : "";
-            Collection<ModuleUtil.InstalledModule> showList;
-            Collection<ModuleUtil.InstalledModule> fullList = moduleUtil.getModules().values();
+            ArrayList<ModuleUtil.InstalledModule> showList;
+            ArrayList<ModuleUtil.InstalledModule> fullList = new ArrayList<>(moduleUtil.getModules().values());
             if (queryStr.length() == 0) {
                 showList = fullList;
             } else {
@@ -86,6 +91,72 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                     }
                 }
             }
+            switch (XposedApp.getPreferences().getInt("list_sort", 0)) {
+                case 7:
+                    cmp = Collections.reverseOrder((ApplicationInfo a, ApplicationInfo b) -> {
+                        try {
+                            return Long.compare(pm.getPackageInfo(a.packageName, 0).lastUpdateTime, pm.getPackageInfo(b.packageName, 0).lastUpdateTime);
+                        } catch (PackageManager.NameNotFoundException e) {
+                            e.printStackTrace();
+                            return displayNameComparator.compare(a, b);
+                        }
+                    });
+                    break;
+                case 6:
+                    cmp = (ApplicationInfo a, ApplicationInfo b) -> {
+                        try {
+                            return Long.compare(pm.getPackageInfo(a.packageName, 0).lastUpdateTime, pm.getPackageInfo(b.packageName, 0).lastUpdateTime);
+                        } catch (PackageManager.NameNotFoundException e) {
+                            e.printStackTrace();
+                            return displayNameComparator.compare(a, b);
+                        }
+                    };
+                    break;
+                case 5:
+                    cmp = Collections.reverseOrder((ApplicationInfo a, ApplicationInfo b) -> {
+                        try {
+                            return Long.compare(pm.getPackageInfo(a.packageName, 0).firstInstallTime, pm.getPackageInfo(b.packageName, 0).firstInstallTime);
+                        } catch (PackageManager.NameNotFoundException e) {
+                            e.printStackTrace();
+                            return displayNameComparator.compare(a, b);
+                        }
+                    });
+                    break;
+                case 4:
+                    cmp = (ApplicationInfo a, ApplicationInfo b) -> {
+                        try {
+                            return Long.compare(pm.getPackageInfo(a.packageName, 0).firstInstallTime, pm.getPackageInfo(b.packageName, 0).firstInstallTime);
+                        } catch (PackageManager.NameNotFoundException e) {
+                            e.printStackTrace();
+                            return displayNameComparator.compare(a, b);
+                        }
+                    };
+                    break;
+                case 3:
+                    cmp = Collections.reverseOrder((a, b) -> a.packageName.compareTo(b.packageName));
+                    break;
+                case 2:
+                    cmp = (a, b) -> a.packageName.compareTo(b.packageName);
+                    break;
+                case 1:
+                    cmp = Collections.reverseOrder(displayNameComparator);
+                    break;
+                case 0:
+                default:
+                    cmp = displayNameComparator;
+                    break;
+            }
+            Collections.sort(fullList, (a, b) -> {
+                boolean aChecked = moduleUtil.isModuleEnabled(a.packageName);
+                boolean bChecked = moduleUtil.isModuleEnabled(b.packageName);
+                if (aChecked == bChecked) {
+                    return cmp.compare(a.app, b.app);
+                } else if (aChecked) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            });
             adapter.addAll(showList);
             TransitionManager.beginDelayedTransition(binding.recyclerView);
             adapter.notifyDataSetChanged();
@@ -114,6 +185,8 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         filter = new ApplicationFilter();
         moduleUtil = ModuleUtil.getInstance();
         pm = getPackageManager();
+        displayNameComparator = new ApplicationInfo.DisplayNameComparator(pm);
+        cmp = displayNameComparator;
         installedXposedVersion = XposedApp.getXposedVersion();
         if (installedXposedVersion <= 0) {
             Snackbar.make(binding.snackbar, R.string.xposed_not_active, Snackbar.LENGTH_LONG).setAction(R.string.Settings, v -> {
@@ -409,7 +482,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
     }
 
     private class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.ViewHolder> {
-        Collection<ModuleUtil.InstalledModule> items;
+        ArrayList<ModuleUtil.InstalledModule> items = new ArrayList<>();
 
         @NonNull
         @Override
@@ -420,7 +493,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            ModuleUtil.InstalledModule item = (ModuleUtil.InstalledModule) items.toArray()[position];
+            ModuleUtil.InstalledModule item = items.get(position);
             holder.itemView.setOnClickListener(v -> {
                 String packageName = item.packageName;
                 if (packageName == null) {
@@ -476,7 +549,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 descriptionText.setText(item.getDescription());
             } else {
                 descriptionText.setText(getString(R.string.module_empty_description));
-                descriptionText.setTextColor(getResources().getColor(R.color.warning));
+                descriptionText.setTextColor(ContextCompat.getColor(ModulesActivity.this, R.color.warning));
             }
 
             SwitchCompat mSwitch = holder.mSwitch;
@@ -527,7 +600,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             }
         }
 
-        void addAll(Collection<ModuleUtil.InstalledModule> items) {
+        void addAll(ArrayList<ModuleUtil.InstalledModule> items) {
             this.items = items;
             notifyDataSetChanged();
         }

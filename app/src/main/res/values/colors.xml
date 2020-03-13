@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#2196f3</color>
+    <color name="colorPrimary">@color/material_blue_700</color>
     <color name="colorBackground">#fafafa</color>
     <color name="colorPrimaryDark">#dddddd</color>
-    <color name="colorAccent">#448aff</color>
+    <color name="colorAccent">#e91e63</color>
     <color name="colorActionBar">#F0F0F0</color>
     <color name="red_500">#F44336</color>
     <color name="warning">@color/red_500</color>

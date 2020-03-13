@@ -108,7 +108,7 @@
     <string name="settings_release_type">要顯示的版本</string>
     <string name="settings_group_framework">框架</string>
     <string name="settings_disable_resources">禁用資源鈎子</string>
-    <string name="settings_disable_resources_summary">解決與主題引擎的衝突\n<b>警告: </b> 啟用該選項將導致修改資源的模塊無法工作</string>
+    <string name="settings_disable_resources_summary">解決與主題引擎的衝突\n<b>警吿: </b> 啟用該選項將導致修改資源的模塊無法工作</string>
     <string name="settings_group_app">應用</string>
     <string name="settings_theme">主題</string>
     <string name="settings_theme_light">亮色</string>
@@ -286,6 +286,18 @@
     <string name="install_timestamps">安裝於 %1$s\n更新於 %2$s</string>
     <string name="pref_compat_mode_summary">兼容模式應用列表</string>
     <string name="pref_compat_mode_title">兼容模式</string>
-    <string name="xposed_not_active">EdXposed 框架未安裝或未啟用, 您可在設定中關閉狀態檢查</string>
+    <string name="xposed_not_active">EdXposed 框架未安裝或未激活, 您可在設置中關閉狀態檢查</string>
     <string name="transparent_status_bar">透明狀態欄</string>
+    <string name="list_sort">列表排序方式</string>
+    <string name="sort_by_name">應用名稱</string>
+    <string name="sort_by_name_reverse">應用名稱（降序）</string>
+    <string name="sort_by_package_name">包體名稱</string>
+    <string name="sort_by_package_name_reverse">包體名稱（降序）</string>
+    <string name="sort_by_install_time">安裝時間</string>
+    <string name="sort_by_install_time_reverse">安裝時間（降序）</string>
+    <string name="sort_by_update_time">更新時間</string>
+    <string name="sort_by_update_time_reverse">更新時間（降序）</string>
+    <string name="primary_color">主要色</string>
+    <string name="accent_color">強調色</string>
+    <string name="colorized_action_bar">着色應用欄</string>
 </resources>

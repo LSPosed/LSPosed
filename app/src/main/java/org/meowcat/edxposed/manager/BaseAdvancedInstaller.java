@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.TooltipCompat;
+import androidx.core.text.HtmlCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -26,7 +26,7 @@ import org.meowcat.edxposed.manager.util.json.XposedZip;
 import java.util.Objects;
 
 public class BaseAdvancedInstaller extends Fragment {
-    SingleInstallerViewBinding binding;
+    private SingleInstallerViewBinding binding;
 
     static BaseAdvancedInstaller newInstance(XposedTab tab) {
         BaseAdvancedInstaller myFragment = new BaseAdvancedInstaller();
@@ -98,7 +98,7 @@ public class BaseAdvancedInstaller extends Fragment {
                     startActivity(intent);
                 }));
 
-        binding.noticeTv.setText(Html.fromHtml(tab.notice));
+        binding.noticeTv.setText(HtmlCompat.fromHtml(tab.notice, HtmlCompat.FROM_HTML_MODE_LEGACY));
         binding.author.setText(getString(R.string.download_author, tab.author));
 
         try {
@@ -121,7 +121,7 @@ public class BaseAdvancedInstaller extends Fragment {
         binding.showOnXda.setOnClickListener(v -> NavUtil.startURL((AppCompatActivity) getActivity(), tab.support));
         binding.updateDescription.setOnClickListener(v -> new MaterialAlertDialogBuilder(Objects.requireNonNull(getContext()))
                 .setTitle(R.string.changes)
-                .setMessage(Html.fromHtml(tab.description))
+                .setMessage(HtmlCompat.fromHtml(tab.description, HtmlCompat.FROM_HTML_MODE_LEGACY))
                 .setPositiveButton(android.R.string.ok, null).show());
 
         return binding.getRoot();

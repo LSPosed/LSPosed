@@ -288,4 +288,16 @@
     <string name="pref_compat_mode_title">兼容模式</string>
     <string name="xposed_not_active">EdXposed 框架未安装或未激活, 您可在设置中关闭状态检查</string>
     <string name="transparent_status_bar">透明状态栏</string>
+    <string name="list_sort">列表排序方式</string>
+    <string name="sort_by_name">应用名称</string>
+    <string name="sort_by_name_reverse">应用名称（降序）</string>
+    <string name="sort_by_package_name">包体名称</string>
+    <string name="sort_by_package_name_reverse">包体名称（降序）</string>
+    <string name="sort_by_install_time">安装时间</string>
+    <string name="sort_by_install_time_reverse">安装时间（降序）</string>
+    <string name="sort_by_update_time">更新时间</string>
+    <string name="sort_by_update_time_reverse">更新时间（降序）</string>
+    <string name="primary_color">主要色</string>
+    <string name="accent_color">强调色</string>
+    <string name="colorized_action_bar">着色应用栏</string>
 </resources>

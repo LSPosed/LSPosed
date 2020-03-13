@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.TooltipCompat;
+import androidx.core.content.ContextCompat;
 
 import org.meowcat.edxposed.manager.databinding.ActivityMainBinding;
 import org.meowcat.edxposed.manager.util.ModuleUtil;
@@ -79,18 +80,18 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
                 String installedXposedVersionStr = installedXposedVersionInt + ".0";
                 binding.statusTitle.setText(R.string.Activated);
                 binding.statusSummary.setText(installedXposedVersion.replace(installedXposedVersionStr + "-", ""));
-                binding.status.setCardBackgroundColor(getResources().getColor(R.color.download_status_update_available));
+                binding.status.setCardBackgroundColor(ContextCompat.getColor(this, R.color.download_status_update_available));
                 binding.statusIcon.setImageDrawable(getDrawable(R.drawable.ic_check_circle));
             } else {
                 binding.statusTitle.setText(R.string.Inactivate);
                 binding.statusSummary.setText(R.string.installed_lollipop_inactive);
-                binding.status.setCardBackgroundColor(getResources().getColor(R.color.amber_500));
+                binding.status.setCardBackgroundColor(ContextCompat.getColor(this, R.color.amber_500));
                 binding.statusIcon.setImageDrawable(getDrawable(R.drawable.ic_warning));
             }
         } else {
             binding.statusTitle.setText(R.string.Install);
             binding.statusSummary.setText(R.string.InstallDetail);
-            binding.status.setCardBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            binding.status.setCardBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
             binding.statusIcon.setImageDrawable(getDrawable(R.drawable.ic_error));
         }
         notifyDataSetChanged();

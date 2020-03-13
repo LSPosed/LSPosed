@@ -5,7 +5,18 @@
         android:key="group_app"
         android:title="@string/settings_group_app"
         app:iconSpaceReserved="false">
-
+        <org.meowcat.edxposed.manager.widget.ThemeColorPreference
+            android:defaultValue="#1976D2"
+            android:dialogTitle="@string/primary_color"
+            android:key="primary_color"
+            android:title="@string/primary_color"
+            app:iconSpaceReserved="false" />
+        <org.meowcat.edxposed.manager.widget.ThemeColorPreference
+            android:defaultValue="#1a73e8"
+            android:dialogTitle="@string/accent_color"
+            android:key="accent_color"
+            android:title="@string/accent_color"
+            app:iconSpaceReserved="false" />
         <org.meowcat.edxposed.manager.widget.IntegerListPreference
             android:defaultValue="-1"
             android:entries="@array/theme_texts"
@@ -15,14 +26,17 @@
             android:title="@string/settings_theme"
             app:iconSpaceReserved="false" />
         <SwitchPreferenceCompat
+            android:key="colorized_action_bar"
+            android:title="@string/colorized_action_bar"
+            app:iconSpaceReserved="false" />
+        <SwitchPreferenceCompat
             android:key="black_dark_theme"
             android:title="@string/pure_black_dark_theme"
             app:iconSpaceReserved="false" />
-
-        <SwitchPreferenceCompat
+        <!--<SwitchPreferenceCompat
             android:key="transparent_status_bar"
             android:title="@string/transparent_status_bar"
-            app:iconSpaceReserved="false" />
+            app:iconSpaceReserved="false" />-->
 
         <SwitchPreferenceCompat
             android:defaultValue="true"
@@ -44,6 +58,14 @@
             android:title="@string/show_modules"
             app:iconSpaceReserved="false" />
 
+        <org.meowcat.edxposed.manager.widget.IntegerListPreference
+            android:defaultValue="0"
+            android:entries="@array/list_sort_texts"
+            android:entryValues="@array/list_sort_values"
+            android:key="list_sort"
+            android:summary="%s"
+            android:title="@string/list_sort"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory

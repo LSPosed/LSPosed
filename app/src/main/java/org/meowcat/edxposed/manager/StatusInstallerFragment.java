@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +13,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.core.text.HtmlCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -38,7 +39,7 @@ public class StatusInstallerFragment extends Fragment {
         binding.clickToUpdate.setVisibility(View.VISIBLE);
         binding.clickToUpdate.setOnClickListener(v -> new MaterialAlertDialogBuilder(context)
                 .setTitle(R.string.changes)
-                .setMessage(Html.fromHtml(changelog))
+                .setMessage(HtmlCompat.fromHtml(changelog, HtmlCompat.FROM_HTML_MODE_LEGACY))
                 .setPositiveButton(R.string.update, (dialog, which) -> update(context))
                 .setNegativeButton(R.string.later, null).show());
     }
@@ -134,13 +135,13 @@ public class StatusInstallerFragment extends Fragment {
 
             if (verified) {
                 binding.dmverity.setText(R.string.verified_boot_active);
-                binding.dmverity.setTextColor(getResources().getColor(R.color.warning));
+                binding.dmverity.setTextColor(ContextCompat.getColor(requireActivity(), R.color.warning));
             } else if (detected) {
                 binding.dmverity.setText(R.string.verified_boot_deactivated);
                 binding.dmverityExplanation.setVisibility(View.GONE);
             } else {
                 binding.dmverity.setText(R.string.verified_boot_none);
-                binding.dmverity.setTextColor(getResources().getColor(R.color.warning));
+                binding.dmverity.setTextColor(ContextCompat.getColor(requireActivity(), R.color.warning));
                 binding.dmverityExplanation.setVisibility(View.GONE);
             }
         } catch (Exception e) {

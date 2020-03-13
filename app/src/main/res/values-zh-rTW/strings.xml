@@ -86,7 +86,7 @@
     <string name="download_unknown_author">未知作者</string>
     <string name="download_status_installed">已安裝(版本 %s)</string>
     <string name="download_status_update_available">可更新(版本 %1$s \u2192 %2$s)</string>
-    <string name="download_timestamps">新增於 %1$s \u00b7 更新於 %2$s</string>
+    <string name="download_timestamps">添加於 %1$s \u00b7 更新於 %2$s</string>
     <string name="download_sorting_title">排序方式</string>
     <string name="download_sorting_status">按狀態排序</string>
     <string name="download_sorting_updated">按最後更新排序</string>
@@ -288,4 +288,16 @@
     <string name="pref_compat_mode_title">相容模式</string>
     <string name="xposed_not_active">EdXposed 框架未安裝或未啟用, 您可在設定中關閉狀態檢查</string>
     <string name="transparent_status_bar">透明狀態列</string>
+    <string name="list_sort">列表排序方式</string>
+    <string name="sort_by_name">應用名稱</string>
+    <string name="sort_by_name_reverse">應用名稱（降序）</string>
+    <string name="sort_by_package_name">包體名稱</string>
+    <string name="sort_by_package_name_reverse">包體名稱（降序）</string>
+    <string name="sort_by_install_time">安裝時間</string>
+    <string name="sort_by_install_time_reverse">安裝時間（降序）</string>
+    <string name="sort_by_update_time">更新時間</string>
+    <string name="sort_by_update_time_reverse">更新時間（降序）</string>
+    <string name="primary_color">主要色</string>
+    <string name="accent_color">強調色</string>
+    <string name="colorized_action_bar">著色應用欄</string>
 </resources>

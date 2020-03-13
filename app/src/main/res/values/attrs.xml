@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <attr name="colorActionBar" format="color" />
+    <attr name="actionBarTheme" format="reference" />
+    <attr name="actionBarPopupTheme" format="reference" />
+    <attr name="tabLayoutTheme" format="reference" />
 </resources>

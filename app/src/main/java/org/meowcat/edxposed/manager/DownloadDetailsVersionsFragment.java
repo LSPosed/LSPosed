@@ -68,7 +68,7 @@ public class DownloadDetailsVersionsFragment extends ListFragment {
             if (!repoLoader.isVersionShown(module.versions.get(0))) {
                 TextView txtHeader = new TextView(getActivity());
                 txtHeader.setText(R.string.download_test_version_not_shown);
-                txtHeader.setTextColor(getResources().getColor(R.color.warning));
+                txtHeader.setTextColor(ContextCompat.getColor(activity, R.color.warning));
                 txtHeader.setOnClickListener(v -> activity.gotoPage(DownloadDetailsActivity.DOWNLOAD_SETTINGS));
                 getListView().addHeaderView(txtHeader);
             }
@@ -213,9 +213,9 @@ public class DownloadDetailsVersionsFragment extends ListFragment {
             theme.resolveAttribute(android.R.attr.textColorPrimary, typedValue, true);
             int color = ContextCompat.getColor(context, typedValue.resourceId);
             colorRelTypeStable = color;
-            colorRelTypeOthers = getResources().getColor(R.color.warning);
+            colorRelTypeOthers = ContextCompat.getColor(activity, R.color.warning);
             colorInstalled = color;
-            colorUpdateAvailable = getResources().getColor(R.color.download_status_update_available);
+            colorUpdateAvailable = ContextCompat.getColor(activity, R.color.download_status_update_available);
             textInstalled = getString(R.string.download_section_installed) + ":";
             textUpdateAvailable = getString(R.string.download_section_update_available) + ":";
             installedVersionCode = (installed != null) ? installed.versionCode : -1;

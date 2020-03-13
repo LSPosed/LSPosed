@@ -4,10 +4,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.core.text.HtmlCompat;
 
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -43,7 +43,7 @@ public class AboutActivity extends BaseActivity {
         } else {
             binding.changelogView.setOnClickListener(v1 -> new MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.changes)
-                    .setMessage(Html.fromHtml(changes))
+                    .setMessage(HtmlCompat.fromHtml(changes, HtmlCompat.FROM_HTML_MODE_LEGACY))
                     .setPositiveButton(android.R.string.ok, null).show());
         }
 

@@ -8,14 +8,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.FileUtils;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.util.DisplayMetrics;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -34,19 +31,16 @@ import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Objects;
 
 import de.robv.android.xposed.installer.util.InstallZipUtil;
 
 public class XposedApp extends de.robv.android.xposed.installer.XposedApp implements Application.ActivityLifecycleCallbacks {
     public static final String TAG = "EdXposedManager";
+    public static final String BASE_DIR = "/data/user_de/0/" + BuildConfig.APPLICATION_ID + "/";
+    public static final String ENABLED_MODULES_LIST_FILE = "/data/user_de/0/" + BuildConfig.APPLICATION_ID + "/" + "conf/enabled_modules.list";
     @SuppressLint("SdCardPath")
     private static final String BASE_DIR_LEGACY = "/data/data/" + BuildConfig.APPLICATION_ID + "/";
-    public static final String BASE_DIR = Build.VERSION.SDK_INT >= 24
-            ? "/data/user_de/0/" + BuildConfig.APPLICATION_ID + "/" : BASE_DIR_LEGACY;
-    public static final String ENABLED_MODULES_LIST_FILE = (Build.VERSION.SDK_INT >= 24
-            ? "/data/user_de/0/" + BuildConfig.APPLICATION_ID + "/" : BASE_DIR_LEGACY) + "conf/enabled_modules.list";
     @SuppressLint("StaticFieldLeak")
     private static XposedApp instance = null;
     private static Thread uiThread;
@@ -143,14 +137,6 @@ public class XposedApp extends de.robv.android.xposed.installer.XposedApp implem
             }
         }
 
-        if (pref.getBoolean("force_english", false)) {
-            Resources res = getResources();
-            DisplayMetrics dm = res.getDisplayMetrics();
-            android.content.res.Configuration conf = res.getConfiguration();
-            conf.locale = Locale.ENGLISH;
-            res.updateConfiguration(conf, dm);
-        }
-
         RepoLoader.getInstance().triggerFirstLoadIfNecessary();
     }
 
@@ -184,15 +170,13 @@ public class XposedApp extends de.robv.android.xposed.installer.XposedApp implem
         mkdirAndChmod("conf", 00777);
         mkdirAndChmod("log", 00777);
 
-        if (Build.VERSION.SDK_INT >= 24) {
-            try {
-                @SuppressLint("SoonBlockedPrivateApi") Method deleteDir = FileUtils.class.getDeclaredMethod("deleteContentsAndDir", File.class);
-                deleteDir.invoke(null, new File(BASE_DIR_LEGACY, "bin"));
-                deleteDir.invoke(null, new File(BASE_DIR_LEGACY, "conf"));
-                deleteDir.invoke(null, new File(BASE_DIR_LEGACY, "log"));
-            } catch (ReflectiveOperationException e) {
-                Log.w(de.robv.android.xposed.installer.XposedApp.TAG, "Failed to delete obsolete directories", e);
-            }
+        try {
+            @SuppressLint("SoonBlockedPrivateApi") Method deleteDir = FileUtils.class.getDeclaredMethod("deleteContentsAndDir", File.class);
+            deleteDir.invoke(null, new File(BASE_DIR_LEGACY, "bin"));
+            deleteDir.invoke(null, new File(BASE_DIR_LEGACY, "conf"));
+            deleteDir.invoke(null, new File(BASE_DIR_LEGACY, "log"));
+        } catch (ReflectiveOperationException e) {
+            Log.w(de.robv.android.xposed.installer.XposedApp.TAG, "Failed to delete obsolete directories", e);
         }
     }
 

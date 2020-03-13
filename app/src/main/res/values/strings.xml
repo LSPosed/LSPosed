@@ -319,4 +319,16 @@
     <string name="pref_compat_mode_summary">Compat mode app list</string>
     <string name="xposed_not_active">EdXposed Framework is not currently installed or active\nYou can close status check in settings</string>
     <string name="transparent_status_bar">Transparent status bar</string>
+    <string name="list_sort">List sorting</string>
+    <string name="sort_by_name">Sort by application name</string>
+    <string name="sort_by_name_reverse">Sort by application name (reverse)</string>
+    <string name="sort_by_package_name">Sort by package name</string>
+    <string name="sort_by_package_name_reverse">Sort by package name (reverse)</string>
+    <string name="sort_by_install_time">Sort by install time</string>
+    <string name="sort_by_install_time_reverse">Sort by install time (reverse)</string>
+    <string name="sort_by_update_time">Sort by update time</string>
+    <string name="sort_by_update_time_reverse">Sort by update time (reverse)</string>
+    <string name="primary_color">Primary color</string>
+    <string name="accent_color">Accent color</string>
+    <string name="colorized_action_bar">Colorized action bar</string>
 </resources>

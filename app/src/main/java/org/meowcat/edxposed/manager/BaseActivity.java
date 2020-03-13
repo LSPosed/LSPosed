@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Looper;
 import android.text.TextUtils;
@@ -24,6 +23,8 @@ import androidx.core.view.ViewCompat;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.topjohnwu.superuser.Shell;
 
+import org.meowcat.edxposed.manager.util.CustomThemeColor;
+import org.meowcat.edxposed.manager.util.CustomThemeColors;
 import org.meowcat.edxposed.manager.util.NavUtil;
 
 import java.util.LinkedList;
@@ -49,8 +50,12 @@ public class BaseActivity extends AppCompatActivity {
         return THEME_DEFAULT;
     }
 
+    public static boolean isNightMode(Configuration configuration) {
+        return (configuration.uiMode & Configuration.UI_MODE_NIGHT_YES) > 0;
+    }
+
     @StyleRes
-    public static int getThemeStyleRes(Context context) {
+    public int getThemeStyleRes(Context context) {
         switch (getTheme(context)) {
             case THEME_BLACK:
                 return R.style.ThemeOverlay_Black;
@@ -60,8 +65,27 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    public static boolean isNightMode(Configuration configuration) {
-        return (configuration.uiMode & Configuration.UI_MODE_NIGHT_YES) > 0;
+    @StyleRes
+    private int getCustomTheme() {
+        String baseThemeName = XposedApp.getPreferences().getBoolean("colorized_action_bar", false) ?
+                "ThemeOverlay.ActionBarPrimaryColor" : "ThemeOverlay";
+        String customThemeName;
+        String primaryColorEntryName = "colorPrimary";
+        for (CustomThemeColor color : CustomThemeColors.Primary.values()) {
+            if (XposedApp.getPreferences().getInt("primary_color", ContextCompat.getColor(this, R.color.colorPrimary))
+                    == ContextCompat.getColor(this, color.getResourceId())) {
+                primaryColorEntryName = color.getResourceEntryName();
+            }
+        }
+        String accentColorEntryName = "colorAccent";
+        for (CustomThemeColor color : CustomThemeColors.Accent.values()) {
+            if (XposedApp.getPreferences().getInt("accent_color", ContextCompat.getColor(this, R.color.colorAccent))
+                    == ContextCompat.getColor(this, color.getResourceId())) {
+                accentColorEntryName = color.getResourceEntryName();
+            }
+        }
+        customThemeName = baseThemeName + "." + primaryColorEntryName + "." + accentColorEntryName;
+        return getResources().getIdentifier(customThemeName, "style", getPackageName());
     }
 
     protected void setupWindowInsets(View rootView, View secondView) {
@@ -85,13 +109,13 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (!(this instanceof MainActivity) && getWindow().getStatusBarColor() != Color.BLACK) {
+        /*if (!(this instanceof MainActivity) && getWindow().getStatusBarColor() != Color.BLACK) {
             if (XposedApp.getPreferences().getBoolean("transparent_status_bar", false)) {
                 getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorActionBar));
             } else {
                 getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
             }
-        }
+        }*/
         if (!Objects.equals(mTheme, getTheme(this))) {
             recreate();
         }
@@ -109,6 +133,9 @@ public class BaseActivity extends AppCompatActivity {
                 // Empty
             }
             theme.applyStyle(resid, false);
+        }
+        if (!(this instanceof MainActivity)) {
+            theme.applyStyle(getCustomTheme(), true);
         }
         theme.applyStyle(getThemeStyleRes(this), true);
         // only pass theme style to super, so styled theme will not be overwritten

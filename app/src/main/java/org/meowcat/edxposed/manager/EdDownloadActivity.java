@@ -1,5 +1,6 @@
 package org.meowcat.edxposed.manager;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -65,13 +66,10 @@ public class EdDownloadActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         getMenuInflater().inflate(R.menu.menu_installer, menu);
-        if (Build.VERSION.SDK_INT < 26) {
-            menu.findItem(R.id.dexopt_all).setVisible(false);
-            menu.findItem(R.id.speed_all).setVisible(false);
-        }
         return super.onCreateOptionsMenu(menu);
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class JSONParser extends AsyncTask<Void, Void, String> {
 
         @Override

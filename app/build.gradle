@@ -5,14 +5,33 @@ android {
     viewBinding {
         enabled = true
     }
+    signingConfigs {
+        def keystorePwd = null
+        def alias = null
+        def pwd = null
+        if (project.rootProject.file('local.properties').exists()) {
+            Properties properties = new Properties()
+            properties.load(project.rootProject.file('local.properties').newDataInputStream())
+            keystorePwd = properties.getProperty("RELEASE_STORE_PASSWORD")
+            alias = properties.getProperty("RELEASE_KEY_ALIAS")
+            pwd = properties.getProperty("RELEASE_KEY_PASSWORD")
+        }
+        release {
+            storeFile file("edxpmanager.jks")
+            storePassword keystorePwd != null ? keystorePwd : System.getenv("KEYSTORE_PASS")
+            keyAlias alias != null ? alias : System.getenv("ALIAS_NAME")
+            keyPassword pwd != null ? pwd : System.getenv("ALIAS_PASS")
+        }
+    }
     compileSdkVersion 28
     buildToolsVersion "29.0.3"
     defaultConfig {
         applicationId "org.meowcat.edxposed.manager"
         minSdkVersion 26
+        //noinspection OldTargetApi
         targetSdkVersion 27
-        versionCode 45408
-        versionName "4.5.4.4"
+        versionCode 45409
+        versionName "4.5.4.5"
     }
     buildTypes {
         release {
@@ -21,9 +40,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
-            applicationIdSuffix ".debug"
             minifyEnabled false
             shrinkResources false
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
@@ -45,6 +64,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.2.0-alpha05'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.takisoft.preferencex:preferencex:1.1.0'
+    implementation 'com.takisoft.preferencex:preferencex-colorpicker:1.1.0'
     implementation 'com.takisoft.preferencex:preferencex-simplemenu:1.1.0'
     implementation 'com.timehop.stickyheadersrecyclerview:library:0.4.3@aar'
 }

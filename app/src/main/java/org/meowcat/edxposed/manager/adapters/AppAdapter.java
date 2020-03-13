@@ -155,19 +155,16 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
                 break;
         }
         Collections.sort(fullList, (a, b) -> {
-            if (XposedApp.getPreferences().getBoolean("enabled_top", true)) {
-                boolean aChecked = checkedList.contains(a.packageName);
-                boolean bChecked = checkedList.contains(b.packageName);
-                if (aChecked == bChecked) {
-                    return cmp.compare(a, b);
-                } else if (aChecked) {
-                    return -1;
-                } else {
-                    return 1;
-                }
-            } else {
+            boolean aChecked = checkedList.contains(a.packageName);
+            boolean bChecked = checkedList.contains(b.packageName);
+            if (aChecked == bChecked) {
                 return cmp.compare(a, b);
+            } else if (aChecked) {
+                return -1;
+            } else {
+                return 1;
             }
+
         });
     }
 

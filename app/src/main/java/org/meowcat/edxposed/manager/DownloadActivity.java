@@ -22,6 +22,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -337,12 +338,12 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
                 txtStatus.setText(context.getString(
                         R.string.download_status_update_available,
                         installedVersion, latestVersion));
-                txtStatus.setTextColor(getResources().getColor(R.color.download_status_update_available));
+                txtStatus.setTextColor(ContextCompat.getColor(DownloadActivity.this, R.color.download_status_update_available));
                 txtStatus.setVisibility(View.VISIBLE);
             } else if (isInstalled) {
                 txtStatus.setText(context.getString(
                         R.string.download_status_installed, installedVersion));
-                txtStatus.setTextColor(getResources().getColor(R.color.warning));
+                txtStatus.setTextColor(ContextCompat.getColor(DownloadActivity.this, R.color.warning));
                 TypedArray typedArray = DownloadActivity.this.getTheme().obtainStyledAttributes(new int[]{android.R.attr.textColorHighlight});
                 int textColor = typedArray.getColor(0, 0);
                 typedArray.recycle();
