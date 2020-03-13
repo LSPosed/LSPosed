@@ -12,7 +12,7 @@
             android:title="@string/primary_color"
             app:iconSpaceReserved="false" />
         <org.meowcat.edxposed.manager.widget.ThemeColorPreference
-            android:defaultValue="#1a73e8"
+            android:defaultValue="#e91e63"
             android:dialogTitle="@string/accent_color"
             android:key="accent_color"
             android:title="@string/accent_color"

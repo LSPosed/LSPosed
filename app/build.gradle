@@ -24,7 +24,8 @@ android {
         }
     }
     compileSdkVersion 28
-    buildToolsVersion "29.0.3"
+    //noinspection GradleDependency
+    buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "org.meowcat.edxposed.manager"
         minSdkVersion 26
@@ -32,6 +33,7 @@ android {
         targetSdkVersion 27
         versionCode 45409
         versionName "4.5.4.5"
+        signingConfig signingConfigs.release
     }
     buildTypes {
         release {
