@@ -2,8 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 
 android {
-    viewBinding {
-        enabled = true
+    buildFeatures {
+        viewBinding = true
     }
     signingConfigs {
         def keystorePwd = null
