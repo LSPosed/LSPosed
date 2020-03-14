@@ -304,7 +304,6 @@ public class LogsActivity extends BaseActivity {
             this.logs.clear();
             this.logs.addAll(logs);
             notifyDataSetChanged();
-            binding.recyclerView.scrollToPosition(getItemCount() - 1);
         }
 
         void setEmpty() {

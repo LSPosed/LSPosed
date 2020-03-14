@@ -9,7 +9,6 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -66,8 +65,8 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
         super.onCreate(savedInstanceState);
         binding = ActivityDownloadBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setSupportActionBar(binding.appbar.toolbar);
-        binding.appbar.toolbar.setNavigationOnClickListener(view -> finish());
+        setSupportActionBar(binding.toolbar);
+        binding.toolbar.setNavigationOnClickListener(view -> finish());
         ActionBar bar = getSupportActionBar();
         if (bar != null) {
             bar.setDisplayHomeAsUpEnabled(true);
@@ -87,9 +86,7 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
         sortingOrder = XposedApp.getPreferences().getInt("download_sorting_order", RepoDb.SORT_STATUS);
 
         ignoredUpdatesPref = getSharedPreferences("update_ignored", MODE_PRIVATE);
-        if (Build.VERSION.SDK_INT >= 26) {
-            binding.recyclerView.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
-        }
+        binding.recyclerView.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
         binding.swipeRefreshLayout.setOnRefreshListener(() -> {
             repoLoader.setSwipeRefreshLayout(binding.swipeRefreshLayout);
             repoLoader.triggerReload(true);
@@ -107,9 +104,11 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
                 headersDecor.invalidateHeaders();
             }
         });
-
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-        binding.recyclerView.addItemDecoration(dividerItemDecoration);
+        if (!XposedApp.getPreferences().getBoolean("md2", false)) {
+            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
+                    DividerItemDecoration.VERTICAL);
+            binding.recyclerView.addItemDecoration(dividerItemDecoration);
+        }
     }
 
 

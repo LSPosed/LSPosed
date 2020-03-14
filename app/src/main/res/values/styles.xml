@@ -8,9 +8,12 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorActionBar">@color/colorActionBar</item>
         <item name="colorStickyHeader">@color/colorStickyHeader</item>
+        <item name="listItemPadding">8dp</item>
         <item name="actionBarTheme">@style/ThemeOverlay.MaterialComponents.ActionBar</item>
         <item name="android:colorBackground">@color/colorBackground</item>
         <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="listItemBackground">?selectableItemBackground</item>
+        <item name="roundBackground">@drawable/item_background_round</item>
         <item name="actionBarPopupTheme">@style/AppTheme.PopupOverlay</item>
         <item name="android:windowLightStatusBar">@bool/lightSystemUI</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">@bool/lightSystemUI
@@ -19,6 +22,7 @@
         <item name="alertDialogTheme">@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog
         </item>
         <item name="tabLayoutTheme">@style/Widget.MaterialComponents.TabLayout</item>
+        <item name="liftOnScroll">false</item>
     </style>
 
     <style name="AppearanceFoundation.Caption" parent="TextAppearance.AppCompat.Caption">
@@ -30,6 +34,18 @@
 
     <style name="ThemeOverlay" />
 
+    <style name="ThemeOverlay.Md2">
+        <item name="colorPrimaryDark">@color/colorPrimaryDark_md2</item>
+        <item name="colorActionBar">@color/colorActionBar_md2</item>
+        <item name="colorStickyHeader">@color/colorStickyHeader_md2</item>
+        <item name="android:colorBackground">@color/colorBackground_md2</item>
+        <item name="android:windowBackground">@color/colorBackground_md2</item>
+        <item name="listItemPadding">16dp</item>
+        <item name="listItemBackground">@drawable/item_background_md2</item>
+        <item name="roundBackground">@drawable/item_background_md2</item>
+        <item name="liftOnScroll">true</item>
+    </style>
+
     <style name="ThemeOverlay.ActionBarPrimaryColor">
         <item name="actionBarTheme">@style/ThemeOverlay.MaterialComponents.Dark.ActionBar</item>
         <item name="android:windowLightStatusBar">false</item>
@@ -38,7 +54,7 @@
 
     <style name="ThemeOverlay.ActivityMain">
         <item name="android:windowLightStatusBar">@bool/lightSystemUI</item>
-        <item name="colorPrimaryDark">@color/colorBackground</item>
+        <item name="colorPrimaryDark">?android:colorBackground</item>
     </style>
 
     <style name="ThemeOverlay.Black">

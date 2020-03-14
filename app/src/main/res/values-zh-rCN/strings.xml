@@ -301,4 +301,5 @@
     <string name="accent_color">强调色</string>
     <string name="colorized_action_bar">着色应用栏</string>
     <string name="settings_group_theme">主题</string>
+    <string name="material_design_2">质感设计 2</string>
 </resources>

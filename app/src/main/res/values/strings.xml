@@ -332,4 +332,5 @@
     <string name="accent_color">Accent color</string>
     <string name="colorized_action_bar">Colorized action bar</string>
     <string name="settings_group_theme">Theme</string>
+    <string name="material_design_2">Material Design 2</string>
 </resources>

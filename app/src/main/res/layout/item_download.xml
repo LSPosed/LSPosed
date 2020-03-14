@@ -1,46 +1,40 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?selectableItemBackground">
+    android:background="?listItemBackground"
+    android:padding="16dp">
 
-    <RelativeLayout
+    <TextView
+        android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dip">
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?attr/textAppearanceListItem"
-            android:textSize="16sp" />
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+        android:layout_alignStart="@id/title"
+        android:layout_marginBottom="8dip"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
-        <TextView
-            android:id="@+id/description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/title"
-            android:layout_alignStart="@id/title"
-            android:layout_marginBottom="8dip"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+    <TextView
+        android:id="@+id/downloadStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/description"
+        android:layout_alignStart="@id/description"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="?android:textColorSecondary"
+        android:visibility="gone" />
 
-        <TextView
-            android:id="@+id/downloadStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/description"
-            android:layout_alignStart="@id/description"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="?android:textColorSecondary"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/timestamps"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/downloadStatus"
-            android:layout_alignStart="@id/description"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-    </RelativeLayout>
-</FrameLayout>
+    <TextView
+        android:id="@+id/timestamps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/downloadStatus"
+        android:layout_alignStart="@id/description"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+</RelativeLayout>

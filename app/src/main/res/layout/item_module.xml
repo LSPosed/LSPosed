@@ -3,11 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?selectableItemBackground"
+    android:background="?listItemBackground"
     android:clickable="true"
     android:focusable="true"
     android:minHeight="?attr/listPreferredItemHeight"
-    android:padding="8dp">
+    android:padding="?listItemPadding"
+    android:paddingStart="8dp"
+    tools:ignore="RtlSymmetry">
 
     <ImageView
         android:id="@+id/app_icon"

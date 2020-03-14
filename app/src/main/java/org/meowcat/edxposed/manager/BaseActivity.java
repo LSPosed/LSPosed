@@ -68,7 +68,7 @@ public class BaseActivity extends AppCompatActivity {
 
     @StyleRes
     private int getCustomTheme() {
-        String baseThemeName = XposedApp.getPreferences().getBoolean("colorized_action_bar", false) ?
+        String baseThemeName = XposedApp.getPreferences().getBoolean("colorized_action_bar", false) && !XposedApp.getPreferences().getBoolean("md2", false) ?
                 "ThemeOverlay.ActionBarPrimaryColor" : "ThemeOverlay";
         String customThemeName;
         String primaryColorEntryName = "colorPrimary";
@@ -143,6 +143,9 @@ public class BaseActivity extends AppCompatActivity {
             theme.applyStyle(resid, false);
         }
         theme.applyStyle(getCustomTheme(), true);
+        if (XposedApp.getPreferences().getBoolean("md2", false)) {
+            theme.applyStyle(R.style.ThemeOverlay_Md2, true);
+        }
         if (this instanceof MainActivity) {
             theme.applyStyle(R.style.ThemeOverlay_ActivityMain, true);
         }

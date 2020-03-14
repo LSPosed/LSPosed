@@ -60,8 +60,8 @@ public class SettingsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = ActivitySettingsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setSupportActionBar(binding.appbar.toolbar);
-        binding.appbar.toolbar.setNavigationOnClickListener(view -> finish());
+        setSupportActionBar(binding.toolbar);
+        binding.toolbar.setNavigationOnClickListener(view -> finish());
         ActionBar bar = getSupportActionBar();
         if (bar != null) {
             bar.setDisplayHomeAsUpEnabled(true);
@@ -473,6 +473,19 @@ public class SettingsActivity extends BaseActivity {
                     return true;
                 });
             }
+
+            SwitchPreferenceCompat md2 = findPreference("md2");
+            if (md2 != null) {
+                md2.setOnPreferenceChangeListener((preference, newValue) -> {
+                    SettingsActivity activity = (SettingsActivity) getActivity();
+                    if (activity != null) {
+                        updatePreference(!md2.isChecked());
+                        activity.restart();
+                    }
+                    return true;
+                });
+                updatePreference(!md2.isChecked());
+            }
         }
 
         private void areYouSure(int contentTextId, DialogInterface.OnClickListener listener) {
@@ -485,6 +498,13 @@ public class SettingsActivity extends BaseActivity {
                         .setNegativeButton(android.R.string.no, null)
                         .show();
             }
+        }
+
+        private void updatePreference(boolean show) {
+            findPreference("black_dark_theme").setVisible(show);
+            findPreference("transparent_status_bar").setVisible(show);
+            //findPreference("accent_color").setVisible(show);
+            findPreference("colorized_action_bar").setVisible(show);
         }
 
         @Override

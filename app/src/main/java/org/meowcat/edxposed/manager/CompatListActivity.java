@@ -30,8 +30,8 @@ public class CompatListActivity extends BaseActivity implements AppAdapter.Callb
         super.onCreate(savedInstanceState);
         binding = ActivityBlackListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setSupportActionBar(binding.appbar.toolbar);
-        binding.appbar.toolbar.setNavigationOnClickListener(view -> finish());
+        setSupportActionBar(binding.toolbar);
+        binding.toolbar.setNavigationOnClickListener(view -> finish());
         ActionBar bar = getSupportActionBar();
         if (bar != null) {
             bar.setDisplayHomeAsUpEnabled(true);
@@ -40,9 +40,11 @@ public class CompatListActivity extends BaseActivity implements AppAdapter.Callb
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         appAdapter = new CompatListAdapter(this, binding);
         binding.recyclerView.setAdapter(appAdapter);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
-                DividerItemDecoration.VERTICAL);
-        binding.recyclerView.addItemDecoration(dividerItemDecoration);
+        if (!XposedApp.getPreferences().getBoolean("md2", false)) {
+            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
+                    DividerItemDecoration.VERTICAL);
+            binding.recyclerView.addItemDecoration(dividerItemDecoration);
+        }
         appAdapter.setCallback(this);
 
         binding.swipeRefreshLayout.setRefreshing(true);

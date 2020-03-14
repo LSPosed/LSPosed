@@ -8,10 +8,6 @@
     android:clipChildren="false"
     android:clipToPadding="false">
 
-    <include
-        android:id="@+id/appbar"
-        layout="@layout/appbar_layout" />
-
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
@@ -25,14 +21,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp">
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="72dp"
                 android:orientation="horizontal"
-                android:padding="8dp">
+                android:padding="16dp">
 
                 <ImageView
                     android:layout_width="42dp"
@@ -47,8 +42,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="8dp"
-                    android:paddingHorizontal="8dp"
+                    android:paddingHorizontal="16dp"
                     android:text="@string/app_name"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
             </LinearLayout>
@@ -56,13 +50,13 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/main_item_background"
+                android:background="?roundBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:minHeight="48dp"
                 android:orientation="horizontal"
-                android:paddingHorizontal="8dp">
+                android:paddingHorizontal="16dp">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -98,13 +92,13 @@
                 android:id="@+id/changelogView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/main_item_background"
+                android:background="?roundBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:minHeight="48dp"
                 android:orientation="horizontal"
-                android:paddingHorizontal="8dp">
+                android:paddingHorizontal="16dp">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -127,12 +121,13 @@
                 android:id="@+id/licensesView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/main_item_background"
+                android:background="?roundBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
+                android:minHeight="48dp"
                 android:orientation="horizontal"
-                android:paddingHorizontal="8dp">
+                android:paddingHorizontal="16dp">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -156,13 +151,13 @@
                 android:id="@+id/translatorsView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/main_item_background"
+                android:background="?roundBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:minHeight="48dp"
                 android:orientation="horizontal"
-                android:paddingHorizontal="8dp">
+                android:paddingHorizontal="16dp">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -198,13 +193,13 @@
                 android:id="@+id/tgChannelView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/main_item_background"
+                android:background="?roundBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:minHeight="48dp"
                 android:orientation="horizontal"
-                android:paddingHorizontal="8dp">
+                android:paddingHorizontal="16dp">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -235,13 +230,13 @@
                 android:id="@+id/qqGroupView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/main_item_background"
+                android:background="?roundBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:minHeight="48dp"
                 android:orientation="horizontal"
-                android:paddingHorizontal="8dp">
+                android:paddingHorizontal="16dp">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -272,13 +267,13 @@
                 android:id="@+id/tgGroupView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/main_item_background"
+                android:background="?roundBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:minHeight="48dp"
                 android:orientation="horizontal"
-                android:paddingHorizontal="8dp">
+                android:paddingHorizontal="16dp">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -310,13 +305,13 @@
                 android:id="@+id/sourceCodeView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/main_item_background"
+                android:background="?roundBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:minHeight="48dp"
                 android:orientation="horizontal"
-                android:paddingHorizontal="8dp">
+                android:paddingHorizontal="16dp">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -347,13 +342,13 @@
                 android:id="@+id/donateView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/main_item_background"
+                android:background="?roundBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:minHeight="48dp"
                 android:orientation="horizontal"
-                android:paddingHorizontal="8dp">
+                android:paddingHorizontal="16dp">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -390,13 +385,13 @@
                 android:id="@+id/faqView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/main_item_background"
+                android:background="?roundBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:minHeight="48dp"
                 android:orientation="horizontal"
-                android:paddingHorizontal="8dp">
+                android:paddingHorizontal="16dp">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -426,13 +421,13 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/main_item_background"
+                android:background="?roundBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:minHeight="48dp"
                 android:orientation="horizontal"
-                android:paddingHorizontal="8dp">
+                android:paddingHorizontal="16dp">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -470,13 +465,13 @@
                 android:id="@+id/installerSupportView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/main_item_background"
+                android:background="?roundBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:minHeight="48dp"
                 android:orientation="horizontal"
-                android:paddingHorizontal="8dp">
+                android:paddingHorizontal="16dp">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -507,9 +502,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:paddingStart="8dp"
+                android:paddingStart="16dp"
                 android:paddingTop="24dp"
-                android:paddingEnd="8dp"
+                android:paddingEnd="16dp"
                 android:paddingBottom="16dp"
                 android:text="@string/about_developers_label"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2"
@@ -525,7 +520,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="8dp">
+                    android:paddingHorizontal="16dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -544,7 +539,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="8dp">
+                    android:padding="16dp"
+                    android:paddingVertical="8dp">
 
                     <com.google.android.material.button.MaterialButton
                         style="@style/Widget.MaterialComponents.Button.TextButton"
@@ -586,7 +582,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="8dp">
+                    android:paddingHorizontal="16dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -605,7 +601,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="8dp">
+                    android:padding="16dp"
+                    android:paddingVertical="8dp">
 
                     <com.google.android.material.button.MaterialButton
                         style="@style/Widget.MaterialComponents.Button.TextButton"
@@ -647,7 +644,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="8dp">
+                    android:paddingHorizontal="16dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -666,7 +663,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="8dp">
+                    android:padding="16dp"
+                    android:paddingVertical="8dp">
 
                     <com.google.android.material.button.MaterialButton
                         style="@style/Widget.MaterialComponents.Button.TextButton"
@@ -700,7 +698,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="8dp">
+                    android:paddingHorizontal="16dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -719,7 +717,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="8dp">
+                    android:padding="16dp"
+                    android:paddingVertical="8dp">
 
                     <com.google.android.material.button.MaterialButton
                         style="@style/Widget.MaterialComponents.Button.TextButton"
@@ -746,4 +745,19 @@
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="?actionBarTheme"
+        app:liftOnScrollTargetViewId="@id/nestedScrollView">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?colorActionBar"
+            app:popupTheme="?actionBarPopupTheme" />
+
+    </com.google.android.material.appbar.AppBarLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

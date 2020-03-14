@@ -175,8 +175,8 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         super.onCreate(savedInstanceState);
         binding = ActivityModulesBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setSupportActionBar(binding.appbar.toolbar);
-        binding.appbar.toolbar.setNavigationOnClickListener(view -> finish());
+        setSupportActionBar(binding.toolbar);
+        binding.toolbar.setNavigationOnClickListener(view -> finish());
         ActionBar bar = getSupportActionBar();
         if (bar != null) {
             bar.setDisplayHomeAsUpEnabled(true);
@@ -199,8 +199,11 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         moduleUtil.addListener(this);
         binding.recyclerView.setAdapter(adapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-        binding.recyclerView.addItemDecoration(dividerItemDecoration);
+        if (!XposedApp.getPreferences().getBoolean("md2", false)) {
+            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
+                    DividerItemDecoration.VERTICAL);
+            binding.recyclerView.addItemDecoration(dividerItemDecoration);
+        }
         binding.swipeRefreshLayout.setOnRefreshListener(() -> reloadModules.run());
         reloadModules.run();
         mSearchListener = new SearchView.OnQueryTextListener() {
