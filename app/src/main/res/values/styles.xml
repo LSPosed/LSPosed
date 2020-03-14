@@ -8,7 +8,8 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorActionBar">@color/colorActionBar</item>
         <item name="colorStickyHeader">@color/colorStickyHeader</item>
-        <item name="listItemPadding">8dp</item>
+        <item name="modulesHorizontalPadding">8dp</item>
+        <item name="downloadVerticalPadding">16dp</item>
         <item name="actionBarTheme">@style/ThemeOverlay.MaterialComponents.ActionBar</item>
         <item name="android:colorBackground">@color/colorBackground</item>
         <item name="android:windowBackground">@color/colorBackground</item>
@@ -40,7 +41,8 @@
         <item name="colorStickyHeader">@color/colorStickyHeader_md2</item>
         <item name="android:colorBackground">@color/colorBackground_md2</item>
         <item name="android:windowBackground">@color/colorBackground_md2</item>
-        <item name="listItemPadding">16dp</item>
+        <item name="modulesHorizontalPadding">16dp</item>
+        <item name="downloadVerticalPadding">8dp</item>
         <item name="listItemBackground">@drawable/item_background_md2</item>
         <item name="roundBackground">@drawable/item_background_md2</item>
         <item name="liftOnScroll">true</item>

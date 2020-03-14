@@ -187,15 +187,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/container"
-                android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="4dp"
-                android:background="@drawable/item_background_round"
+                android:background="?roundBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:minHeight="48dp"
                 android:orientation="horizontal"
-                android:paddingHorizontal="8dp">
+                android:paddingHorizontal="16dp">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -229,14 +228,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/author_view"
-                android:layout_marginHorizontal="16dp"
-                android:background="@drawable/item_background_round"
+                android:background="?roundBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:minHeight="48dp"
                 android:orientation="horizontal"
-                android:paddingHorizontal="8dp">
+                android:paddingHorizontal="16dp">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -269,14 +267,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/show_on_xda"
-                android:layout_marginHorizontal="16dp"
-                android:background="@drawable/item_background_round"
+                android:background="?roundBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:minHeight="48dp"
                 android:orientation="horizontal"
-                android:paddingHorizontal="8dp">
+                android:paddingHorizontal="16dp">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -308,14 +305,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/updateDescription"
-                android:layout_marginHorizontal="16dp"
-                android:background="@drawable/item_background_round"
+                android:background="?roundBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:minHeight="48dp"
                 android:orientation="horizontal"
-                android:paddingHorizontal="8dp">
+                android:paddingHorizontal="16dp">
 
                 <ImageView
                     android:layout_width="24dp"

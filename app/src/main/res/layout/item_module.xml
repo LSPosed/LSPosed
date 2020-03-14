@@ -7,8 +7,9 @@
     android:clickable="true"
     android:focusable="true"
     android:minHeight="?attr/listPreferredItemHeight"
-    android:padding="?listItemPadding"
+    android:paddingVertical="8dp"
     android:paddingStart="8dp"
+    android:paddingEnd="?modulesHorizontalPadding"
     tools:ignore="RtlSymmetry">
 
     <ImageView

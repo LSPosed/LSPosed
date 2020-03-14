@@ -2,7 +2,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?listItemBackground"
-    android:padding="16dp">
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="?downloadVerticalPadding">
 
     <TextView
         android:id="@+id/title"

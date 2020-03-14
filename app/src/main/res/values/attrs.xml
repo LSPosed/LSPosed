@@ -5,7 +5,8 @@
     <attr name="listItemBackground" format="reference" />
     <attr name="roundBackground" format="reference" />
     <attr name="actionBarTheme" format="reference" />
-    <attr name="listItemPadding" format="dimension" />
+    <attr name="modulesHorizontalPadding" format="dimension" />
+    <attr name="downloadVerticalPadding" format="dimension" />
     <attr name="actionBarPopupTheme" format="reference" />
     <attr name="tabLayoutTheme" format="reference" />
 </resources>
