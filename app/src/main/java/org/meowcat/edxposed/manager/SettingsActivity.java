@@ -501,10 +501,18 @@ public class SettingsActivity extends BaseActivity {
         }
 
         private void updatePreference(boolean show) {
-            findPreference("black_dark_theme").setVisible(show);
-            findPreference("transparent_status_bar").setVisible(show);
-            //findPreference("accent_color").setVisible(show);
-            findPreference("colorized_action_bar").setVisible(show);
+            Preference black_dark_theme = findPreference("black_dark_theme");
+            if (black_dark_theme != null) {
+                black_dark_theme.setVisible(show);
+            }
+            Preference transparent_status_bar = findPreference("transparent_status_bar");
+            if (transparent_status_bar != null) {
+                transparent_status_bar.setVisible(show);
+            }
+            Preference colorized_action_bar = findPreference("colorized_action_bar");
+            if (colorized_action_bar != null) {
+                colorized_action_bar.setVisible(show);
+            }
         }
 
         @Override

@@ -35,7 +35,7 @@ public class PrefixedSharedPreferences implements SharedPreferences {
     @Override
     public Map<String, ?> getAll() {
         Map<String, ?> baseResult = mBase.getAll();
-        Map<String, Object> prefixedResult = new HashMap<String, Object>(baseResult);
+        Map<String, Object> prefixedResult = new HashMap<>(baseResult);
         for (Entry<String, ?> entry : baseResult.entrySet()) {
             prefixedResult.put(mPrefix + entry.getKey(), entry.getValue());
         }

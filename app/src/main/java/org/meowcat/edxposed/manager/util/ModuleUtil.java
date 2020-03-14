@@ -40,7 +40,7 @@ public final class ModuleUtil {
     private final String frameworkPackageName;
     private final List<ModuleListener> listeners = new CopyOnWriteArrayList<>();
     private SharedPreferences pref;
-    private InstalledModule framework = null;
+    //private InstalledModule framework = null;
     private Map<String, InstalledModule> installedModules;
     private boolean isReloading = false;
     private Toast toast;
@@ -93,9 +93,9 @@ public final class ModuleUtil {
                 if (app.metaData != null && app.metaData.containsKey("xposedmodule")) {
                     installed = new InstalledModule(pkg, false);
                     modules.put(pkg.packageName, installed);
-                } else if (isFramework(pkg.packageName)) {
+                }/* else if (isFramework(pkg.packageName)) {
                     framework = installed = new InstalledModule(pkg, true);
-                }
+                }*/
 
                 if (installed != null)
                     RepoDb.insertInstalledModule(installed);
@@ -156,17 +156,17 @@ public final class ModuleUtil {
         return isReloading;
     }
 
-    public InstalledModule getFramework() {
+/*    public InstalledModule getFramework() {
         return framework;
-    }
+    }*/
 
     public String getFrameworkPackageName() {
         return frameworkPackageName;
     }
 
-    private boolean isFramework(String packageName) {
+/*    private boolean isFramework(String packageName) {
         return frameworkPackageName.equals(packageName);
-    }
+    }*/
 
 //    public boolean isInstalled(String packageName) {
 //        return installedModules.containsKey(packageName) || isFramework(packageName);

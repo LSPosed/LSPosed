@@ -1,6 +1,5 @@
 package org.meowcat.edxposed.manager.adapters;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.database.DataSetObserver;
 
@@ -8,9 +7,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
-
-    @SuppressWarnings("FieldCanBeLocal")
-    private Context context;
 
     private Cursor cursor;
 
@@ -20,8 +16,7 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
 
     private DataSetObserver dataSetObserver;
 
-    public CursorRecyclerViewAdapter(Context context, Cursor cursor) {
-        this.context = context;
+    public CursorRecyclerViewAdapter(Cursor cursor) {
         this.cursor = cursor;
         dataValid = cursor != null;
         rowIdColumn = dataValid ? cursor.getColumnIndex("_id") : -1;
@@ -31,7 +26,7 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
         }
     }
 
-    public Cursor getCursor() {
+    protected Cursor getCursor() {
         return cursor;
     }
 
@@ -85,7 +80,7 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
      * {@link #changeCursor(Cursor)}, the returned old Cursor is <em>not</em>
      * closed.
      */
-    public Cursor swapCursor(Cursor newCursor) {
+    private Cursor swapCursor(Cursor newCursor) {
         if (newCursor == cursor) {
             return null;
         }

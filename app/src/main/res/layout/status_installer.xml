@@ -24,9 +24,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?roundBackground"
-                    android:clickable="true"
-                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:minHeight="48dp"
                     android:orientation="horizontal"
@@ -62,9 +59,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?roundBackground"
-                    android:clickable="true"
-                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:minHeight="48dp"
                     android:orientation="horizontal"
@@ -100,9 +94,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?roundBackground"
-                    android:clickable="true"
-                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:minHeight="48dp"
                     android:orientation="horizontal"
@@ -137,9 +128,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?roundBackground"
-                    android:clickable="true"
-                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:minHeight="48dp"
                     android:orientation="horizontal"
@@ -173,9 +161,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?roundBackground"
-                    android:clickable="true"
-                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:minHeight="48dp"
                     android:orientation="horizontal"
@@ -208,9 +193,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?roundBackground"
-                    android:clickable="true"
-                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:minHeight="48dp"
                     android:orientation="horizontal"
@@ -243,10 +225,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?roundBackground"
-                    android:clickable="true"
-                    android:focusable="true"
                     android:gravity="center_vertical"
+                    android:minHeight="48dp"
                     android:orientation="horizontal"
                     android:paddingHorizontal="16dp">
 
@@ -303,9 +283,6 @@
                     android:id="@+id/click_to_update"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?roundBackground"
-                    android:clickable="true"
-                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:minHeight="48dp"
                     android:orientation="horizontal"

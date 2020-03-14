@@ -219,34 +219,32 @@ public class BaseActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.dexopt_all:
                 areYouSure(R.string.take_while_cannot_resore, (dialog, which) -> {
-                            new MaterialAlertDialogBuilder(this)
-                                    .setTitle(R.string.dexopt_now)
-                                    .setMessage(R.string.this_may_take_a_while)
-                                    .setCancelable(false)
-                                    .show();
-                            new Thread("dexopt") {
-                                @Override
-                                public void run() {
-                                    if (!Shell.rootAccess()) {
-                                        dialog.dismiss();
-                                        NavUtil.showMessage(BaseActivity.this, getString(R.string.root_failed));
-                                        return;
-                                    }
-                                    Shell.su("cmd package bg-dexopt-job").exec();
+                    new MaterialAlertDialogBuilder(this)
+                            .setTitle(R.string.dexopt_now)
+                            .setMessage(R.string.this_may_take_a_while)
+                            .setCancelable(false)
+                            .show();
+                    new Thread("dexopt") {
+                        @Override
+                        public void run() {
+                            if (!Shell.rootAccess()) {
+                                dialog.dismiss();
+                                NavUtil.showMessage(BaseActivity.this, getString(R.string.root_failed));
+                                return;
+                            }
 
-                                    dialog.dismiss();
-                                    XposedApp.runOnUiThread(() -> Toast.makeText(BaseActivity.this, R.string.done, Toast.LENGTH_LONG).show());
-                                }
-                            }.start();
+                            Shell.su("cmd package bg-dexopt-job").exec();
+
+                            dialog.dismiss();
+                            XposedApp.runOnUiThread(() -> Toast.makeText(BaseActivity.this, R.string.done, Toast.LENGTH_LONG).show());
                         }
-                );
-
+                    }.start();
+                });
                 break;
             case R.id.speed_all:
                 areYouSure(R.string.take_while_cannot_resore, (dialog, which) -> {
-
                     new MaterialAlertDialogBuilder(this)
-                            .setTitle(R.string.dexopt_now)
+                            .setTitle(R.string.speed_now)
                             .setMessage(R.string.this_may_take_a_while)
                             .setCancelable(false)
                             .show();
@@ -264,51 +262,26 @@ public class BaseActivity extends AppCompatActivity {
                             dialog.dismiss();
                             XposedApp.runOnUiThread(() -> Toast.makeText(BaseActivity.this, R.string.done, Toast.LENGTH_LONG).show());
                         }
-
                     };
                 });
                 break;
             case R.id.reboot:
-                if (XposedApp.getPreferences().getBoolean("confirm_reboots", true)) {
-                    areYouSure(R.string.reboot, (dialog, which) -> reboot(null));
-                } else {
-                    reboot(null);
-                }
+                areYouSure(R.string.reboot, (dialog, which) -> reboot(null));
                 break;
             case R.id.soft_reboot:
-                if (XposedApp.getPreferences().getBoolean("confirm_reboots", true)) {
-                    areYouSure(R.string.soft_reboot, (dialog, which) -> softReboot());
-                } else {
-                    softReboot();
-                }
+                areYouSure(R.string.soft_reboot, (dialog, which) -> softReboot());
                 break;
             case R.id.reboot_recovery:
-                if (XposedApp.getPreferences().getBoolean("confirm_reboots", true)) {
-                    areYouSure(R.string.reboot_recovery, (dialog, which) -> reboot("recovery"));
-                } else {
-                    reboot("recovery");
-                }
+                reboot("recovery");
                 break;
             case R.id.reboot_bootloader:
-                if (XposedApp.getPreferences().getBoolean("confirm_reboots", true)) {
-                    areYouSure(R.string.reboot_bootloader, (dialog, which) -> reboot("bootloader"));
-                } else {
-                    reboot("bootloader");
-                }
+                reboot("bootloader");
                 break;
             case R.id.reboot_download:
-                if (XposedApp.getPreferences().getBoolean("confirm_reboots", true)) {
-                    areYouSure(R.string.reboot_download, (dialog, which) -> reboot("download"));
-                } else {
-                    reboot("download");
-                }
+                reboot("download");
                 break;
             case R.id.reboot_edl:
-                if (XposedApp.getPreferences().getBoolean("confirm_reboots", true)) {
-                    areYouSure(R.string.reboot_download, (dialog, which) -> reboot("edl"));
-                } else {
-                    reboot("edl");
-                }
+                reboot("edl");
                 break;
         }
 

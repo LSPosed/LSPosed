@@ -172,7 +172,7 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
 
     private void reloadItems() {
         runOnUiThread(() -> {
-            adapter.swapCursor(RepoDb.queryModuleOverview(sortingOrder, filterText));
+            adapter.changeCursor(RepoDb.queryModuleOverview(sortingOrder, filterText));
             TransitionManager.beginDelayedTransition(binding.recyclerView);
             adapter.notifyDataSetChanged();
         });
@@ -231,7 +231,7 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
         private String[] sectionHeaders;
 
         DownloadsAdapter(Context context, Cursor cursor) {
-            super(context, cursor);
+            super(cursor);
             this.context = context;
             prefs = context.getSharedPreferences("update_ignored", MODE_PRIVATE);
 

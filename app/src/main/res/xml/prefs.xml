@@ -2,7 +2,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory
-        android:key="group_app"
         android:title="@string/settings_group_app"
         app:iconSpaceReserved="false">
 
@@ -70,7 +69,6 @@
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
     <PreferenceCategory
-        android:key="group_download"
         android:title="@string/settings_group_download"
         app:iconSpaceReserved="false">
 

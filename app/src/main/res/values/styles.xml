@@ -42,7 +42,7 @@
         <item name="android:colorBackground">@color/colorBackground_md2</item>
         <item name="android:windowBackground">@color/colorBackground_md2</item>
         <item name="modulesHorizontalPadding">16dp</item>
-        <item name="downloadVerticalPadding">8dp</item>
+        <item name="downloadVerticalPadding">12dp</item>
         <item name="listItemBackground">@drawable/item_background_md2</item>
         <item name="roundBackground">@drawable/item_background_md2</item>
         <item name="liftOnScroll">true</item>

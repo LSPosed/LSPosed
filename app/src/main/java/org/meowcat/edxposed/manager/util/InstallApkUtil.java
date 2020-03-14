@@ -6,11 +6,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 
 import androidx.core.content.FileProvider;
 
@@ -23,7 +21,6 @@ import org.meowcat.edxposed.manager.XposedApp;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 
 public class InstallApkUtil extends AsyncTask<Void, Void, Integer> {
 
@@ -44,9 +41,6 @@ public class InstallApkUtil extends AsyncTask<Void, Void, Integer> {
         try {
             if (info.labelRes > 0) {
                 Resources res = pm.getResourcesForApplication(info);
-                Configuration config = new Configuration();
-                config.setLocale(Locale.getDefault());
-                res.updateConfiguration(config, res.getDisplayMetrics());
                 return res.getString(info.labelRes);
             }
         } catch (Exception ignored) {
@@ -58,12 +52,8 @@ public class InstallApkUtil extends AsyncTask<Void, Void, Integer> {
         Intent installIntent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
         installIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         Uri uri;
-        if (Build.VERSION.SDK_INT >= 24) {
-            uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileprovider", new File(localFilename));
-            installIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        } else {
-            uri = Uri.fromFile(new File(localFilename));
-        }
+        uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileprovider", new File(localFilename));
+        installIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         installIntent.setDataAndType(uri, DownloadsUtil.MIME_TYPE_APK);
         installIntent.putExtra(Intent.EXTRA_INSTALLER_PACKAGE_NAME, context.getApplicationInfo().packageName);
         context.startActivity(installIntent);

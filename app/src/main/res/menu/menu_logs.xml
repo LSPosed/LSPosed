@@ -22,16 +22,16 @@
     <item
         android:id="@+id/menu_scroll_top"
         android:title="@string/scroll_top"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/menu_scroll_down"
         android:title="@string/scroll_bottom"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/menu_clear"
         android:title="@string/menuClearLog"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
 
 </menu>

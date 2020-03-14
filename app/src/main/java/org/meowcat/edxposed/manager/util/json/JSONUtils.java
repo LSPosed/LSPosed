@@ -29,12 +29,12 @@ public class JSONUtils {
         return sb.toString();
     }
 
-    public class XposedJson {
+    public static class XposedJson {
         public List<XposedTab> tabs;
         public ApkRelease apk;
     }
 
-    public class ApkRelease {
+    public static class ApkRelease {
         public String version;
         public String changelog;
         public String link;

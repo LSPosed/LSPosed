@@ -7,7 +7,6 @@ import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LevelListDrawable;
-import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.util.Log;
@@ -16,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.text.HtmlCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
@@ -51,34 +51,32 @@ public class RepoParser {
     public static Spanned parseSimpleHtml(final Context context, String source, final TextView textView) {
         source = source.replaceAll("<li>", "\t\u0095 ");
         source = source.replaceAll("</li>", "<br>");
-        Spanned html = Html.fromHtml(source, new Html.ImageGetter() {
-            @Override
-            public Drawable getDrawable(String source) {
-                LevelListDrawable levelListDrawable = new LevelListDrawable();
-                final Drawable[] drawable = new Drawable[1];
-                Glide.with(context).asBitmap().load(source).into(new CustomTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(@NonNull Bitmap bitmap, @Nullable Transition<? super Bitmap> transition) {
-                        try {
-                            drawable[0] = new BitmapDrawable(context.getResources(), bitmap);
-                            Point size = new Point();
-                            ((Activity) context).getWindowManager().getDefaultDisplay().getSize(size);
-                            int multiplier = size.x / bitmap.getWidth();
-                            if (multiplier <= 0) multiplier = 1;
-                            levelListDrawable.addLevel(1, 1, drawable[0]);
-                            levelListDrawable.setBounds(0, 0, bitmap.getWidth() * multiplier, bitmap.getHeight() * multiplier);
-                            levelListDrawable.setLevel(1);
-                            textView.setText(textView.getText());
-                        } catch (Exception ignored) { /* Like a null bitmap, etc. */
-                        }
-                    }
+        Spanned html = HtmlCompat.fromHtml(source, HtmlCompat.FROM_HTML_MODE_LEGACY, source1 -> {
 
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) {
+            LevelListDrawable levelListDrawable = new LevelListDrawable();
+            final Drawable[] drawable = new Drawable[1];
+            Glide.with(context).asBitmap().load(source1).into(new CustomTarget<Bitmap>() {
+                @Override
+                public void onResourceReady(@NonNull Bitmap bitmap, @Nullable Transition<? super Bitmap> transition) {
+                    try {
+                        drawable[0] = new BitmapDrawable(context.getResources(), bitmap);
+                        Point size = new Point();
+                        ((Activity) context).getWindowManager().getDefaultDisplay().getSize(size);
+                        int multiplier = size.x / bitmap.getWidth();
+                        if (multiplier <= 0) multiplier = 1;
+                        levelListDrawable.addLevel(1, 1, drawable[0]);
+                        levelListDrawable.setBounds(0, 0, bitmap.getWidth() * multiplier, bitmap.getHeight() * multiplier);
+                        levelListDrawable.setLevel(1);
+                        textView.setText(textView.getText());
+                    } catch (Exception ignored) { /* Like a null bitmap, etc. */
                     }
-                });
-                return drawable[0];
-            }
+                }
+
+                @Override
+                public void onLoadCleared(@Nullable Drawable placeholder) {
+                }
+            });
+            return drawable[0];
         }, null);
 
         // trim trailing newlines
