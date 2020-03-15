@@ -9,8 +9,11 @@ import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Looper;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -37,10 +40,10 @@ public class BaseActivity extends AppCompatActivity {
 
     private static final String THEME_DEFAULT = "DEFAULT";
     private static final String THEME_BLACK = "BLACK";
-    private String mTheme;
+    private String theme;
 
     public static boolean isBlackNightTheme() {
-        return XposedApp.getPreferences().getBoolean("black_dark_theme", false);
+        return XposedApp.getPreferences().getBoolean("black_dark_theme", false) || XposedApp.getPreferences().getBoolean("md2", false);
     }
 
     public static String getTheme(Context context) {
@@ -53,6 +56,19 @@ public class BaseActivity extends AppCompatActivity {
 
     public static boolean isNightMode(Configuration configuration) {
         return (configuration.uiMode & Configuration.UI_MODE_NIGHT_YES) > 0;
+    }
+
+    @Override
+    public void setContentView(View view) {
+        FrameLayout frameLayout = new FrameLayout(this);
+        frameLayout.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        if (displayMetrics.widthPixels > displayMetrics.heightPixels) {
+            int padding = (displayMetrics.widthPixels - displayMetrics.heightPixels) / 2;
+            frameLayout.setPadding(padding, 0, padding, 0);
+        }
+        frameLayout.addView(view);
+        super.setContentView(frameLayout);
     }
 
     @StyleRes
@@ -104,7 +120,7 @@ public class BaseActivity extends AppCompatActivity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AppCompatDelegate.setDefaultNightMode(XposedApp.getPreferences().getInt("theme", 0));
-        mTheme = getTheme(this);
+        theme = getTheme(this) + getCustomTheme() + XposedApp.getPreferences().getBoolean("md2", false);
     }
 
     public int getThemedColor(int id) {
@@ -124,7 +140,7 @@ public class BaseActivity extends AppCompatActivity {
                 getWindow().setStatusBarColor(getThemedColor(R.attr.colorPrimaryDark));
             }
         }
-        if (!Objects.equals(mTheme, getTheme(this))) {
+        if (!Objects.equals(theme, getTheme(this) + getCustomTheme() + XposedApp.getPreferences().getBoolean("md2", false))) {
             recreate();
         }
     }
@@ -143,11 +159,8 @@ public class BaseActivity extends AppCompatActivity {
             theme.applyStyle(resid, false);
         }
         theme.applyStyle(getCustomTheme(), true);
-        if (XposedApp.getPreferences().getBoolean("md2", false)) {
+        if (XposedApp.getPreferences().getBoolean("md2", false) && !(this instanceof MainActivity)) {
             theme.applyStyle(R.style.ThemeOverlay_Md2, true);
-        }
-        if (this instanceof MainActivity) {
-            theme.applyStyle(R.style.ThemeOverlay_ActivityMain, true);
         }
         theme.applyStyle(getThemeStyleRes(this), true);
         // only pass theme style to super, so styled theme will not be overwritten

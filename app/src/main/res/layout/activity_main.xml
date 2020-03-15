@@ -12,7 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipChildren="false"
-        android:clipToPadding="false">
+        android:clipToPadding="false"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -96,8 +97,8 @@
                         android:layout_height="28dp"
                         android:layout_centerVertical="true"
                         android:contentDescription="@string/Activated"
-                        android:tint="@android:color/white"
-                        app:srcCompat="@drawable/ic_check_circle" />
+                        app:srcCompat="@drawable/ic_check_circle"
+                        app:tint="@android:color/white" />
 
                     <TextView
                         android:id="@+id/status_title"
@@ -132,6 +133,7 @@
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
                 app:cardCornerRadius="8dp"
+                app:cardElevation="8dp"
                 app:cardPreventCornerOverlap="false">
 
                 <RelativeLayout
@@ -182,6 +184,7 @@
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
                 app:cardCornerRadius="8dp"
+                app:cardElevation="8dp"
                 app:cardPreventCornerOverlap="false">
 
                 <RelativeLayout
@@ -229,7 +232,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="10dp"
-                android:background="?roundBackground"
+                android:background="@drawable/item_background_round_nopadding"
                 android:clickable="true"
                 android:focusable="true"
                 android:orientation="horizontal"
@@ -255,8 +258,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="5dp"
-                android:background="?roundBackground"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/item_background_round_nopadding"
                 android:clickable="true"
                 android:focusable="true"
                 android:orientation="horizontal"
@@ -282,8 +285,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="5dp"
-                android:background="?roundBackground"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/item_background_round_nopadding"
                 android:clickable="true"
                 android:focusable="true"
                 android:orientation="horizontal"
@@ -309,8 +312,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="5dp"
-                android:background="?roundBackground"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/item_background_round_nopadding"
                 android:clickable="true"
                 android:focusable="true"
                 android:orientation="horizontal"

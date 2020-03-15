@@ -43,6 +43,7 @@
             android:label="@string/Downloads" />
         <activity
             android:name=".MainActivity"
+            android:theme="@style/AppTheme.ActivityMain"
             android:label="@string/app_name"
             android:launchMode="singleTop">
             <intent-filter>
