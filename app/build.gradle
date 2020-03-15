@@ -51,6 +51,12 @@ android {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
     }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            outputFileName = "EdXposedManagerR-${defaultConfig.versionName}-${defaultConfig.versionCode}-${buildType.name}.apk"
+        }
+    }
 }
 
 dependencies {
