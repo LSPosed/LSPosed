@@ -285,16 +285,16 @@ public class BaseActivity extends AppCompatActivity {
                 areYouSure(R.string.soft_reboot, (dialog, which) -> softReboot());
                 break;
             case R.id.reboot_recovery:
-                reboot("recovery");
+                areYouSure(R.string.reboot_recovery, (dialog, which) -> reboot("recovery"));
                 break;
             case R.id.reboot_bootloader:
-                reboot("bootloader");
+                areYouSure(R.string.reboot_bootloader, (dialog, which) -> reboot("bootloader"));
                 break;
             case R.id.reboot_download:
-                reboot("download");
+                areYouSure(R.string.reboot_download, (dialog, which) -> reboot("download"));
                 break;
             case R.id.reboot_edl:
-                reboot("edl");
+                areYouSure(R.string.reboot_edl, (dialog, which) -> reboot("edl"));
                 break;
         }
 
