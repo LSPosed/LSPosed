@@ -1123,6 +1123,7 @@
         <item name="colorPrimary">@color/material_yellow_500</item>
         <item name="colorPrimaryDark">@color/material_yellow_700</item>
         <item name="colorActionBar">@color/material_yellow_500</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.MaterialComponents.Light</item>
     </style>
 
     <style name="ThemeOverlay.ActionBarPrimaryColor.material_yellow_500.colorAccent">

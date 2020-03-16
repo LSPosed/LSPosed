@@ -162,6 +162,9 @@ public class BaseActivity extends AppCompatActivity {
         if (XposedApp.getPreferences().getBoolean("md2", false) && !(this instanceof MainActivity)) {
             theme.applyStyle(R.style.ThemeOverlay_Md2, true);
         }
+        if (this instanceof MainActivity) {
+            theme.applyStyle(R.style.ThemeOverlay_ActivityMain, true);
+        }
         theme.applyStyle(getThemeStyleRes(this), true);
         // only pass theme style to super, so styled theme will not be overwritten
         super.onApplyThemeResource(theme, R.style.ThemeOverlay, first);

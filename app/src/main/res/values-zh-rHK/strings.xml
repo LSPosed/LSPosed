@@ -202,7 +202,7 @@
     <string name="scroll_bottom">滾動到底部</string>
     <string name="confirm_reboots">重啟確認</string>
     <string name="skip_xposedminversion_check">關閉狀態檢查</string>
-    <string name="skip_xposedminversion_check_summ">關閉針對模塊的\'EdXposed 安裝狀態\' 檢查</string>
+    <string name="skip_xposedminversion_check_summ">關閉針對模塊的"EdXposed 安裝狀態"檢查</string>
     <string name="support_xda">獲取幫助</string>
     <string name="later">稍後</string>
     <string name="save">僅下載</string>

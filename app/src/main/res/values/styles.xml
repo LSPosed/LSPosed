@@ -55,10 +55,13 @@
     </style>
 
     <style name="AppTheme.ActivityMain" parent="AppTheme">
-        <item name="android:windowLightStatusBar">@bool/lightSystemUI</item>
-        <item name="colorPrimaryDark">?android:colorBackground</item>
         <item name="android:ambientShadowAlpha">0.01</item>
         <item name="android:spotShadowAlpha">0.01</item>
+    </style>
+
+    <style name="ThemeOverlay.ActivityMain">
+        <item name="android:windowLightStatusBar">@bool/lightSystemUI</item>
+        <item name="colorPrimaryDark">?android:colorBackground</item>
     </style>
 
     <style name="ThemeOverlay.Black">
