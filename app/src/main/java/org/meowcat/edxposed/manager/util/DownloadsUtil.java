@@ -52,7 +52,6 @@ public class DownloadsUtil {
         request.setDestinationUri(Uri.fromFile(destination));
         DownloadManager dm = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         long id = dm.enqueue(request);
-
         return getById(context, id);
     }
 

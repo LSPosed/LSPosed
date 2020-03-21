@@ -23,7 +23,7 @@ android {
             keyPassword pwd != null ? pwd : System.getenv("ALIAS_PASS")
         }
     }
-    compileSdkVersion 28
+    compileSdkVersion 29
     //noinspection GradleDependency
     buildToolsVersion "29.0.2"
     defaultConfig {

@@ -18,17 +18,7 @@ public class BootReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, Intent intent) {
-        new android.os.Handler().postDelayed(() -> {
-            if (!isOnline(context)) return;
-
-            new CheckUpdates().execute();
-        }, 60 * 60 * 1000 /*60 min*/);
-    }
-
-    private boolean isOnline(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnectedOrConnecting();
+        new android.os.Handler().postDelayed(() -> new CheckUpdates().execute(), 60 * 60 * 1000 /*60 min*/);
     }
 
     private static class CheckUpdates extends AsyncTask<Void, Void, Void> {
@@ -47,6 +37,7 @@ public class BootReceiver extends BroadcastReceiver {
                     NotificationUtil.showInstallerUpdateNotification();
                 }
             } catch (Exception e) {
+                //noinspection ConstantConditions
                 Log.d(XposedApp.TAG, e.getMessage());
             }
             return null;

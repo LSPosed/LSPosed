@@ -9,14 +9,13 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.FileUtils;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import org.meowcat.edxposed.manager.receivers.PackageChangeReceiver;
@@ -119,7 +118,6 @@ public class XposedApp extends de.robv.android.xposed.installer.XposedApp implem
 
         de.robv.android.xposed.installer.XposedApp.getInstance().reloadXposedProp();
         createDirectories();
-        delete(new File(Environment.getExternalStorageDirectory() + "/Download/EdXposedManager/.temp"));
         NotificationUtil.init();
         registerReceivers();
 
@@ -150,17 +148,6 @@ public class XposedApp extends de.robv.android.xposed.installer.XposedApp implem
 
         PendingIntent.getBroadcast(this, 0,
                 new Intent(this, PackageChangeReceiver.class), 0);
-    }
-
-    private void delete(File file) {
-        if (file != null) {
-            if (file.isDirectory()) {
-                File[] files = file.listFiles();
-                if (files != null) for (File f : file.listFiles()) delete(f);
-            }
-            //noinspection ResultOfMethodCallIgnored
-            file.delete();
-        }
     }
 
     @SuppressWarnings({"JavaReflectionMemberAccess", "OctalInteger"})
