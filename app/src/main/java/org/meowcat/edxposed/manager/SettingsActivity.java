@@ -415,7 +415,8 @@ public class SettingsActivity extends BaseActivity {
                     Activity activity = getActivity();
                     if (activity != null) {
                         Intent intent = new Intent();
-                        intent.setClass(activity, CompatListActivity.class);
+                        intent.putExtra("compat_list",true);
+                        intent.setClass(activity, BlackListActivity.class);
                         activity.startActivity(intent);
                     }
                     return true;

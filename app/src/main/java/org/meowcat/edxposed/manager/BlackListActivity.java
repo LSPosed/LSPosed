@@ -19,11 +19,12 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import org.meowcat.edxposed.manager.adapters.AppAdapter;
 import org.meowcat.edxposed.manager.adapters.AppHelper;
 import org.meowcat.edxposed.manager.adapters.BlackListAdapter;
+import org.meowcat.edxposed.manager.adapters.CompatListAdapter;
 import org.meowcat.edxposed.manager.databinding.ActivityBlackListBinding;
 
 public class BlackListActivity extends BaseActivity implements AppAdapter.Callback {
     private SearchView searchView;
-    private BlackListAdapter appAdapter;
+    private AppAdapter appAdapter;
 
     private SearchView.OnQueryTextListener searchListener;
     private ActivityBlackListBinding binding;
@@ -34,10 +35,12 @@ public class BlackListActivity extends BaseActivity implements AppAdapter.Callba
         }
     };
     private Handler handler = new Handler();
+    private boolean isCompat;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        isCompat = getIntent().getBooleanExtra("compat_list", false);
         binding = ActivityBlackListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);
@@ -47,10 +50,11 @@ public class BlackListActivity extends BaseActivity implements AppAdapter.Callba
             bar.setDisplayHomeAsUpEnabled(true);
         }
         setupWindowInsets(binding.snackbar, binding.recyclerView);
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         final boolean isWhiteListMode = isWhiteListMode();
-        appAdapter = new BlackListAdapter(this, isWhiteListMode, binding);
+        appAdapter = isCompat ? new CompatListAdapter(this, binding) : new BlackListAdapter(this, isWhiteListMode, binding);
+        appAdapter.setHasStableIds(true);
         binding.recyclerView.setAdapter(appAdapter);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         if (!XposedApp.getPreferences().getBoolean("md2", false)) {
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
                     DividerItemDecoration.VERTICAL);
@@ -59,7 +63,6 @@ public class BlackListActivity extends BaseActivity implements AppAdapter.Callba
         appAdapter.setCallback(this);
         handler.postDelayed(runnable, 300);
         binding.swipeRefreshLayout.setOnRefreshListener(appAdapter::refresh);
-
 
         searchListener = new SearchView.OnQueryTextListener() {
             @Override
@@ -87,7 +90,7 @@ public class BlackListActivity extends BaseActivity implements AppAdapter.Callba
     @Override
     public void onResume() {
         super.onResume();
-        if (!AppHelper.isBlackListMode()) {
+        if (!isCompat && !AppHelper.isBlackListMode()) {
             new MaterialAlertDialogBuilder(this)
                     .setMessage(R.string.warning_list_not_enabled)
                     .setPositiveButton(R.string.Settings, (dialog, which) -> {
@@ -104,7 +107,9 @@ public class BlackListActivity extends BaseActivity implements AppAdapter.Callba
 
 
     private void changeTitle(boolean isBlackListMode, boolean isWhiteListMode) {
-        if (isBlackListMode) {
+        if (isCompat) {
+            setTitle(R.string.nav_title_compat_list);
+        } else if (isBlackListMode) {
             setTitle(isWhiteListMode ? R.string.title_white_list : R.string.title_black_list);
         } else {
             setTitle(R.string.nav_title_black_list);
@@ -124,12 +129,16 @@ public class BlackListActivity extends BaseActivity implements AppAdapter.Callba
         handler.removeCallbacks(runnable);
         binding.swipeRefreshLayout.setRefreshing(false);
         String queryStr = searchView != null ? searchView.getQuery().toString() : "";
-        appAdapter.filter(queryStr);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                appAdapter.getFilter().filter(queryStr);
+            }
+        });
     }
 
     @Override
     public void onItemClick(View v, ApplicationInfo info) {
-        getSupportFragmentManager();
         AppHelper.showMenu(this, getSupportFragmentManager(), v, info);
     }
 

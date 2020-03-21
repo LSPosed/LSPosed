@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,7 +33,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
+public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> implements Filterable {
 
     protected final Context context;
     private final ApplicationInfo.DisplayNameComparator displayNameComparator;
@@ -84,6 +85,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         AppHelper.makeSurePath();
         checkedList = generateCheckedList();
         sortApps();
+        showList = fullList;
         if (callback != null) {
             callback.onDataReady();
         }
@@ -196,6 +198,16 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
     }
 
     @Override
+    public long getItemId(int position) {
+        return showList.get(position).packageName.hashCode();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new ApplicationFilter();
+    }
+
+    @Override
     public int getItemCount() {
         return showList.size();
     }
@@ -246,17 +258,18 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            if (constraint == null || constraint.length() == 0) {
+            if (constraint.toString().isEmpty()) {
                 showList = fullList;
             } else {
-                showList = new ArrayList<>();
+                ArrayList<ApplicationInfo> filtered = new ArrayList<>();
                 String filter = constraint.toString().toLowerCase();
                 for (ApplicationInfo info : fullList) {
                     if (lowercaseContains(InstallApkUtil.getAppLabel(info, pm), filter)
                             || lowercaseContains(info.packageName, filter)) {
-                        showList.add(info);
+                        filtered.add(info);
                     }
                 }
+                showList = filtered;
             }
             return null;
         }

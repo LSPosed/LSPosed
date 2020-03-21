@@ -196,6 +196,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             }).show();
         }
         adapter = new ModuleAdapter();
+        adapter.setHasStableIds(true);
         moduleUtil.addListener(this);
         binding.recyclerView.setAdapter(adapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -561,7 +562,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 boolean changed = moduleUtil.isModuleEnabled(packageName) ^ isChecked;
                 if (changed) {
                     moduleUtil.setModuleEnabled(packageName, isChecked);
-                    moduleUtil.updateModulesList(true);
+                    moduleUtil.updateModulesList(true, binding);
                 }
             });
             mSwitch.setChecked(moduleUtil.isModuleEnabled(item.packageName));
@@ -615,6 +616,11 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             } else {
                 return 0;
             }
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return items.get(position).hashCode();
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {

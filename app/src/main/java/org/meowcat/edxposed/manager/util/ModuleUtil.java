@@ -16,8 +16,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.XposedApp;
+import org.meowcat.edxposed.manager.databinding.ActivityModulesBinding;
 import org.meowcat.edxposed.manager.repo.ModuleVersion;
 import org.meowcat.edxposed.manager.repo.RepoDb;
 
@@ -207,11 +210,19 @@ public final class ModuleUtil {
     }
 
     public synchronized void updateModulesList(boolean showToast) {
+        updateModulesList(showToast, null);
+    }
+
+    public synchronized void updateModulesList(boolean showToast, ActivityModulesBinding binding) {
         try {
             Log.i(XposedApp.TAG, "ModuleUtil -> updating modules.list");
             int installedXposedVersion = XposedApp.getXposedVersion();
             if (!XposedApp.getPreferences().getBoolean("skip_xposedminversion_check", false) && installedXposedVersion <= 0 && showToast) {
-                Toast.makeText(XposedApp.getInstance(), R.string.notinstalled, Toast.LENGTH_SHORT).show();
+                if (binding != null) {
+                    Snackbar.make(binding.snackbar, R.string.notinstalled, Snackbar.LENGTH_SHORT).show();
+                } else {
+                    showToast(R.string.notinstalled);
+                }
                 return;
             }
 
@@ -221,7 +232,11 @@ public final class ModuleUtil {
             for (InstalledModule module : enabledModules) {
 
                 if (!XposedApp.getPreferences().getBoolean("skip_xposedminversion_check", false) && (module.minVersion > installedXposedVersion || module.minVersion < MIN_MODULE_VERSION) && showToast) {
-                    Toast.makeText(XposedApp.getInstance(), R.string.notinstalled, Toast.LENGTH_SHORT).show();
+                    if (binding != null) {
+                        Snackbar.make(binding.snackbar, R.string.notinstalled, Snackbar.LENGTH_SHORT).show();
+                    } else {
+                        showToast(R.string.notinstalled);
+                    }
                     continue;
                 }
 
@@ -241,11 +256,19 @@ public final class ModuleUtil {
             FileUtils.setPermissions(XposedApp.ENABLED_MODULES_LIST_FILE, 00664, -1, -1);
 
             if (showToast) {
-                showToast(R.string.xposed_module_list_updated);
+                if (binding != null) {
+                    Snackbar.make(binding.snackbar, R.string.xposed_module_list_updated, Snackbar.LENGTH_SHORT).show();
+                } else {
+                    showToast(R.string.xposed_module_list_updated);
+                }
             }
         } catch (IOException e) {
             Log.e(XposedApp.TAG, "ModuleUtil -> cannot write " + MODULES_LIST_FILE, e);
-            Toast.makeText(XposedApp.getInstance(), "cannot write " + MODULES_LIST_FILE + e, Toast.LENGTH_SHORT).show();
+            if (binding != null) {
+                Snackbar.make(binding.snackbar, "cannot write " + MODULES_LIST_FILE + e, Snackbar.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(XposedApp.getInstance(), "cannot write " + MODULES_LIST_FILE + e, Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
