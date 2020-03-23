@@ -215,7 +215,7 @@ if [[ "${IS64BIT}" == false ]]; then
     rm -rf "${MODPATH}/system/lib64"
 fi
 
-if [[ "$(pm path org.meowcat.edxposed.manager)" == "" || "$(pm path de.robv.android.xposed.installer)" == "" ]]; then
+if [[ "$(pm path org.meowcat.edxposed.manager)" == "" && "$(pm path de.robv.android.xposed.installer)" == "" ]]; then
     NO_MANAGER=true
 fi
 
