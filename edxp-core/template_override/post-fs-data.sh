@@ -101,13 +101,7 @@ start_log_cather () {
         return
     fi
     touch ${LOG_FILE}
-    chcon ${PATH_CONTEXT} "${LOG_FILE}"
-    chown ${PATH_OWNER} "${LOG_FILE}"
-    chmod 666 ${LOG_FILE}
     touch ${PID_FILE}
-    chcon ${PATH_CONTEXT} "${PID_FILE}"
-    chown ${PATH_OWNER} "${PID_FILE}"
-    chmod 666 ${PID_FILE}
     echo "--------- beginning of head">>${LOG_FILE}
     echo "EdXposed Log">>${LOG_FILE}
     echo "Powered by Log Catcher">>${LOG_FILE}
@@ -134,6 +128,12 @@ start_log_cather () {
     logcat -f ${LOG_FILE} *:S ${LOG_TAG_FILTERS} &
     LOG_PID=$!
     echo "${LOG_PID}">"${LOG_PATH}/${LOG_FILE_NAME}.pid"
+    chcon ${PATH_CONTEXT} "${LOG_FILE}"
+    chown ${PATH_OWNER} "${LOG_FILE}"
+    chmod 666 ${LOG_FILE}
+    chcon ${PATH_CONTEXT} "${PID_FILE}"
+    chown ${PATH_OWNER} "${PID_FILE}"
+    chmod 666 ${PID_FILE}
 }
 
 start_verbose_log_catcher () {
