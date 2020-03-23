@@ -113,27 +113,27 @@ check_old_magisk_device() {
 
 check_magisk_version() {
     for TARGET in ${MODEL}; do
-        if [[ "${PROP_MODEL}" == ${TARGET} ]]; then
+        if [[ "${PROP_MODEL}" == "${TARGET}" ]]; then
             DETECTED_DEVICE=true
         fi
     done
     for TARGET in ${DEVICE}; do
-        if [[ "${PROP_DEVICE}" == ${TARGET} ]]; then
+        if [[ "${PROP_DEVICE}" == "${TARGET}" ]]; then
             DETECTED_DEVICE=true
         fi
     done
     for TARGET in ${PRODUCT}; do
-        if [[ "${PROP_PRODUCT}" == ${TARGET} ]]; then
+        if [[ "${PROP_PRODUCT}" == "${TARGET}" ]]; then
             DETECTED_DEVICE=true
         fi
     done
     for TARGET in ${BRAND}; do
-        if [[ "${PROP_BRAND}" == ${TARGET} ]]; then
+        if [[ "${PROP_BRAND}" == "${TARGET}" ]]; then
             DETECTED_DEVICE=true
         fi
     done
     for TARGET in ${MANUFACTURER}; do
-        if [[ "${PROP_MANUFACTURER}" == ${TARGET} ]]; then
+        if [[ "${PROP_MANUFACTURER}" == "${TARGET}" ]]; then
             DETECTED_DEVICE=true
         fi
     done
@@ -141,7 +141,7 @@ check_magisk_version() {
         ui_print "- Special device detected"
     fi
     ui_print "- Magisk version: ${MAGISK_VER_CODE}"
-    [[ ${MAGISK_VER_CODE} -ge 20101 ]] || check_old_magisk_device ${MAGISK_VER_CODE}
+    [[ ${MAGISK_VER_CODE} -ge 20101 ]] || check_old_magisk_device "${MAGISK_VER_CODE}"
     [[ ${MAGISK_VER_CODE} -eq 20101 ]] && update_new_magisk
 }
 
@@ -180,7 +180,7 @@ check_android_version() {
     if [[ ${API} -ge 26 ]]; then
         ui_print "- Android sdk: ${API}"
     else
-        require_new_android ${API}
+        require_new_android "${API}"
     fi
 }
 
@@ -215,16 +215,20 @@ if [[ "${IS64BIT}" == false ]]; then
     rm -rf "${MODPATH}/system/lib64"
 fi
 
-if [[ ${BOOTMODE} == true && "$(pm path org.meowcat.edxposed.manager)" == "" ]]; then
+if [[ "$(pm path org.meowcat.edxposed.manager)" == "" || "$(pm path de.robv.android.xposed.installer)" == "" ]]; then
+    NO_MANAGER=true
+fi
+
+if [[ ${BOOTMODE} == true && ${NO_MANAGER} == true ]]; then
     ui_print "- Installing stub apk"
-    cp -f ${MODPATH}/EdXposed.apk /data/local/tmp/
+    cp -f "${MODPATH}"/EdXposed.apk /data/local/tmp/
     pm install /data/local/tmp/EdXposed.apk 2>&2
     rm -rf /data/local/tmp/EdXposed.apk
 fi
 
 if [[ "${OLD_MAGISK}" == true ]]; then
     ui_print "- Removing SEPolicy rule for old Magisk"
-    rm ${MODPATH}/sepolicy.rule
+    rm "${MODPATH}"/sepolicy.rule
 fi
 
 echo "- Mounted persist:" >&2
