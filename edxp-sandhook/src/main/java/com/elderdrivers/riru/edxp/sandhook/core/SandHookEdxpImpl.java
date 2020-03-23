@@ -2,8 +2,6 @@ package com.elderdrivers.riru.edxp.sandhook.core;
 
 import android.os.Build;
 
-import com.elderdrivers.riru.edxp.config.ConfigManager;
-import com.elderdrivers.riru.edxp.config.InstallerChooser;
 import com.elderdrivers.riru.edxp.core.BaseEdxpImpl;
 import com.elderdrivers.riru.edxp.core.EdxpImpl;
 import com.elderdrivers.riru.edxp.core.Main;
@@ -36,9 +34,7 @@ public class SandHookEdxpImpl extends BaseEdxpImpl {
         Yahfa.init(Build.VERSION.SDK_INT);
         HookMethodResolver.init();
         getRouter().injectConfig();
-        InstallerChooser.setInstallerPackageName(ConfigManager.getInstallerPackageName());
         SandHookXposedBridge.init();
-
         setInitialized();
     }
 }

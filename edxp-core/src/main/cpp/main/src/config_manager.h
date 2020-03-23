@@ -22,16 +22,14 @@ namespace edxp {
         }
 
         bool IsBlackWhiteListEnabled() const;
-
         bool IsDynamicModulesEnabled() const;
-
         bool IsResourcesHookEnabled() const;
-
         bool IsDeoptBootImageEnabled() const;
-
         bool IsNoModuleLogEnabled() const;
 
-        std::string GetInstallerPkgName() const;
+        std::string GetInstallerPackageName() const;
+        std::string GetDataPathPrefix() const;
+        std::string GetConfigPath(const std::string &suffix) const;
 
         bool IsAppNeedHook(const std::string &app_data_dir) const;
 
@@ -64,10 +62,7 @@ namespace edxp {
         void SnapshotBlackWhiteList();
 
         std::string RetrieveInstallerPkgName() const;
-
-        std::string GetConfigPath(const std::string &suffix) const;
     };
-
 
 } // namespace edxp
 

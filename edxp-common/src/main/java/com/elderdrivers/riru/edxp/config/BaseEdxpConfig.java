@@ -1,10 +1,22 @@
 package com.elderdrivers.riru.edxp.config;
 
+import android.text.TextUtils;
+
 public class BaseEdxpConfig implements EdxpConfig {
 
     @Override
-    public String getInstallerBaseDir() {
-        return InstallerChooser.INSTALLER_DATA_BASE_DIR;
+    public String getInstallerConfigPath(String suffix) {
+        return ConfigManager.getInstallerConfigPath(suffix != null ? suffix : "");
+    }
+
+    @Override
+    public String getDataPathPrefix() {
+        return ConfigManager.getDataPathPrefix();
+    }
+
+    @Override
+    public String getInstallerPackageName() {
+        return ConfigManager.getInstallerPackageName();
     }
 
     @Override

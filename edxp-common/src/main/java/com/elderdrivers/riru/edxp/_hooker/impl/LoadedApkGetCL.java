@@ -2,6 +2,7 @@ package com.elderdrivers.riru.edxp._hooker.impl;
 
 import android.app.LoadedApk;
 
+import com.elderdrivers.riru.edxp.config.ConfigManager;
 import com.elderdrivers.riru.edxp.hooker.SliceProviderFix;
 import com.elderdrivers.riru.edxp.hooker.XposedInstallerHooker;
 import com.elderdrivers.riru.edxp.util.Hookers;
@@ -11,7 +12,6 @@ import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
-import static com.elderdrivers.riru.edxp.config.InstallerChooser.INSTALLER_PACKAGE_NAME;
 import static com.elderdrivers.riru.edxp.hooker.SliceProviderFix.SYSTEMUI_PACKAGE_NAME;
 
 public class LoadedApkGetCL extends XC_MethodHook {
@@ -60,7 +60,7 @@ public class LoadedApkGetCL extends XC_MethodHook {
             lpparam.isFirstApplication = this.isFirstApplication;
             XC_LoadPackage.callAll(lpparam);
 
-            if (this.packageName.equals(INSTALLER_PACKAGE_NAME)) {
+            if (this.packageName.equals(ConfigManager.getInstallerPackageName())) {
                 XposedInstallerHooker.hookXposedInstaller(lpparam.classLoader);
             }
             if (this.packageName.equals(SYSTEMUI_PACKAGE_NAME)) {

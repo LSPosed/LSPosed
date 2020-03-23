@@ -312,7 +312,7 @@ public final class XposedInit {
             return false;
         }
         synchronized (moduleLoadLock) {
-            final String filename = EdXpConfigGlobal.getConfig().getInstallerBaseDir() + "conf/modules.list";
+            final String filename = EdXpConfigGlobal.getConfig().getInstallerConfigPath("modules.list");
             BaseService service = SELinuxHelper.getAppDataFileService();
             if (!service.checkFileExists(filename)) {
                 Log.e(TAG, "Cannot load any modules because " + filename + " was not found");

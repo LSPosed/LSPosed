@@ -11,9 +11,9 @@ import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 
-import static com.elderdrivers.riru.edxp.config.InstallerChooser.LEGACY_INSTALLER_PACKAGE_NAME;
-
 public class XposedInstallerHooker {
+
+    private static final String LEGACY_INSTALLER_PACKAGE_NAME = "de.robv.android.xposed.installer";
 
     public static void hookXposedInstaller(ClassLoader classLoader) {
         try {

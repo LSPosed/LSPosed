@@ -172,8 +172,12 @@ namespace edxp {
         return deopt_boot_image_enabled_;
     }
 
-    ALWAYS_INLINE std::string ConfigManager::GetInstallerPkgName() const {
+    ALWAYS_INLINE std::string ConfigManager::GetInstallerPackageName() const {
         return installer_pkg_name_;
+    }
+
+    ALWAYS_INLINE std::string ConfigManager::GetDataPathPrefix() const {
+        return data_path_prefix_;
     }
 
     ALWAYS_INLINE std::string ConfigManager::GetConfigPath(const std::string &suffix) const {
