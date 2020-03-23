@@ -6,6 +6,7 @@ import android.os.Trace;
 import android.util.Log;
 
 import com.elderdrivers.riru.edxp.util.ClassLoaderUtils;
+import com.elderdrivers.riru.edxp.util.FileUtils;
 import com.swift.sandhook.SandHook;
 import com.swift.sandhook.SandHookConfig;
 import com.swift.sandhook.blacklist.HookBlackList;
@@ -14,7 +15,6 @@ import com.swift.sandhook.xposedcompat.XposedCompat;
 import com.swift.sandhook.xposedcompat.hookstub.HookMethodEntity;
 import com.swift.sandhook.xposedcompat.hookstub.HookStubManager;
 import com.swift.sandhook.xposedcompat.utils.DexLog;
-import com.swift.sandhook.xposedcompat.utils.FileUtils;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
