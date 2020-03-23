@@ -3,7 +3,6 @@ package com.elderdrivers.riru.edxp._hooker.impl;
 import android.app.LoadedApk;
 
 import com.elderdrivers.riru.edxp.hooker.SliceProviderFix;
-import com.elderdrivers.riru.edxp.hooker.XposedBlackListHooker;
 import com.elderdrivers.riru.edxp.hooker.XposedInstallerHooker;
 import com.elderdrivers.riru.edxp.util.Hookers;
 
@@ -14,8 +13,6 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 import static com.elderdrivers.riru.edxp.config.InstallerChooser.INSTALLER_PACKAGE_NAME;
 import static com.elderdrivers.riru.edxp.hooker.SliceProviderFix.SYSTEMUI_PACKAGE_NAME;
-import static com.elderdrivers.riru.edxp.hooker.XposedBlackListHooker.BLACK_LIST_PACKAGE_NAME;
-
 
 public class LoadedApkGetCL extends XC_MethodHook {
 
@@ -37,10 +34,6 @@ public class LoadedApkGetCL extends XC_MethodHook {
     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
 
         try {
-
-            if (XposedBlackListHooker.shouldDisableHooks("")) {
-                return;
-            }
 
             Hookers.logD("LoadedApk#getClassLoader starts");
 
@@ -69,9 +62,6 @@ public class LoadedApkGetCL extends XC_MethodHook {
 
             if (this.packageName.equals(INSTALLER_PACKAGE_NAME)) {
                 XposedInstallerHooker.hookXposedInstaller(lpparam.classLoader);
-            }
-            if (this.packageName.equals(BLACK_LIST_PACKAGE_NAME)) {
-                XposedBlackListHooker.hook(lpparam.classLoader);
             }
             if (this.packageName.equals(SYSTEMUI_PACKAGE_NAME)) {
                 SliceProviderFix.hook();

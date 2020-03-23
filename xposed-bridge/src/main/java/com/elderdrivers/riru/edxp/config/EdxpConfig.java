@@ -4,8 +4,6 @@ public interface EdxpConfig {
 
     String getInstallerBaseDir();
 
-    String getBlackListModulePackageName();
-
     boolean isDynamicModulesMode();
 
     boolean isNoModuleLogEnabled();

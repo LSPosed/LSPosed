@@ -8,7 +8,6 @@ import android.content.res.CompatibilityInfo;
 import android.content.res.XResources;
 
 import com.elderdrivers.riru.edxp.config.ConfigManager;
-import com.elderdrivers.riru.edxp.hooker.XposedBlackListHooker;
 import com.elderdrivers.riru.edxp.util.Hookers;
 import com.elderdrivers.riru.edxp.util.Utils;
 
@@ -22,9 +21,6 @@ public class HandleBindApp extends XC_MethodHook {
 
     @Override
     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-        if (XposedBlackListHooker.shouldDisableHooks("")) {
-            return;
-        }
         try {
             Hookers.logD("ActivityThread#handleBindApplication() starts");
             ActivityThread activityThread = (ActivityThread) param.thisObject;
@@ -35,10 +31,6 @@ public class HandleBindApp extends XC_MethodHook {
             String reportedPackageName = appInfo.packageName.equals("android") ? "system" : appInfo.packageName;
             Utils.logD("processName=" + ConfigManager.appProcessName +
                     ", packageName=" + reportedPackageName + ", appDataDir=" + ConfigManager.appDataDir);
-
-            if (XposedBlackListHooker.shouldDisableHooks(reportedPackageName)) {
-                return;
-            }
 
             ComponentName instrumentationName = (ComponentName) XposedHelpers.getObjectField(bindData, "instrumentationName");
             if (instrumentationName != null) {

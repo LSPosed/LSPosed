@@ -5,7 +5,6 @@ import android.app.LoadedApk;
 import android.content.res.XResources;
 import android.util.Log;
 
-import com.elderdrivers.riru.edxp.hooker.XposedBlackListHooker;
 import com.elderdrivers.riru.edxp.util.Hookers;
 
 import de.robv.android.xposed.XC_MethodHook;
@@ -18,10 +17,6 @@ public class LoadedApkCstr extends XC_MethodHook {
 
     @Override
     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-        if (XposedBlackListHooker.shouldDisableHooks("")) {
-            return;
-        }
-
         Hookers.logD("LoadedApk#<init> starts");
 
         try {
@@ -31,10 +26,6 @@ public class LoadedApkCstr extends XC_MethodHook {
             Hookers.logD("LoadedApk#<init> ends: " + mAppDir);
 
             XResources.setPackageNameForResDir(packageName, loadedApk.getResDir());
-
-            if (XposedBlackListHooker.shouldDisableHooks(packageName)) {
-                return;
-            }
 
             if (packageName.equals("android")) {
                 Hookers.logD("LoadedApk#<init> is android, skip: " + mAppDir);
