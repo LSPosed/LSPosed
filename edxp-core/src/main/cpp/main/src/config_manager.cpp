@@ -35,8 +35,7 @@ namespace edxp {
             LOGI("using installer %s", kLegacyInstallerPkgName);
             return kLegacyInstallerPkgName;
         }
-        LOGE("no supported installer app found, using primary as default %s",
-             kPrimaryInstallerPkgName);
+        LOGE("no supported installer app found, using default: %s", kPrimaryInstallerPkgName);
         return kPrimaryInstallerPkgName;
     }
 
@@ -48,7 +47,7 @@ namespace edxp {
             while ((dent = readdir(dir)) != nullptr) {
                 if (dent->d_type == DT_REG) {
                     const char *fileName = dent->d_name;
-                    LOGI("whitelist: %s", fileName);
+                    LOGI("  whitelist: %s", fileName);
                     white_list_default_.emplace_back(fileName);
                 }
             }
@@ -59,7 +58,7 @@ namespace edxp {
             while ((dent = readdir(dir)) != nullptr) {
                 if (dent->d_type == DT_REG) {
                     const char *fileName = dent->d_name;
-                    LOGI("blacklist: %s", fileName);
+                    LOGI("  blacklist: %s", fileName);
                     black_list_default_.emplace_back(fileName);
                 }
             }
@@ -67,39 +66,60 @@ namespace edxp {
         }
     }
 
-    void ConfigManager::InitOnce() {
-        if (!initialized_) {
-            use_prot_storage_ = GetAndroidApiLevel() >= ANDROID_N;
-            data_path_prefix_ = use_prot_storage_ ? "/data/user_de/0/" : "/data/user/0/";
+    void ConfigManager::UpdateConfigPath(const uid_t user) {
+        if (last_user_ != user) {
+            LOGI("updating config data paths from %u to %u...", last_user_, user);
+            last_user_ = user;
+        }
 
-            installer_pkg_name_ = RetrieveInstallerPkgName();
-            base_config_path_ = GetConfigPath("");
-            blacklist_path_ = GetConfigPath("blacklist/");
-            whitelist_path_ = GetConfigPath("whitelist/");
-            use_whitelist_path_ = GetConfigPath("usewhitelist");
+        const char *format = use_prot_storage_ ? "/data/user_de/%u/" : "/data/user/%u/";
+        char buff[PATH_MAX];
+        snprintf(buff, sizeof(buff), format, last_user_);
+        data_path_prefix_ = buff;
 
-            dynamic_modules_enabled_ = access(GetConfigPath("dynamicmodules").c_str(), F_OK) == 0;
-            black_white_list_enabled_ = access(GetConfigPath("blackwhitelist").c_str(), F_OK) == 0;
-            deopt_boot_image_enabled_ = access(GetConfigPath("deoptbootimage").c_str(), F_OK) == 0;
-            resources_hook_enabled_ = access(GetConfigPath("disable_resources").c_str(), F_OK) != 0;
-            no_module_log_enabled_ = access(GetConfigPath("disable_modules_log").c_str(), F_OK) == 0;
+        installer_pkg_name_ = RetrieveInstallerPkgName();
+        base_config_path_ = GetConfigPath("");
+        blacklist_path_ = GetConfigPath("blacklist/");
+        whitelist_path_ = GetConfigPath("whitelist/");
+        use_whitelist_path_ = GetConfigPath("usewhitelist");
 
-            // use_white_list snapshot
-            use_white_list_snapshot_ = access(use_whitelist_path_.c_str(), F_OK) == 0;
-            LOGI("application list mode: %s, using whitelist: %s",
-                 BoolToString(black_white_list_enabled_), BoolToString(use_white_list_snapshot_));
-            LOGI("dynamic modules mode: %s", BoolToString(dynamic_modules_enabled_));
-            LOGI("resources hook: %s", BoolToString(resources_hook_enabled_));
-            LOGI("deopt boot image: %s", BoolToString(deopt_boot_image_enabled_));
-            LOGI("no module log: %s", BoolToString(no_module_log_enabled_));
-            if (black_white_list_enabled_) {
-                SnapshotBlackWhiteList();
-            }
-            initialized_ = true;
+        dynamic_modules_enabled_ = access(GetConfigPath("dynamicmodules").c_str(), F_OK) == 0;
+        black_white_list_enabled_ = access(GetConfigPath("blackwhitelist").c_str(), F_OK) == 0;
+        deopt_boot_image_enabled_ = access(GetConfigPath("deoptbootimage").c_str(), F_OK) == 0;
+        resources_hook_enabled_ = access(GetConfigPath("disable_resources").c_str(), F_OK) != 0;
+        no_module_log_enabled_ = access(GetConfigPath("disable_modules_log").c_str(), F_OK) == 0;
+
+        // use_white_list snapshot
+        use_white_list_snapshot_ = access(use_whitelist_path_.c_str(), F_OK) == 0;
+        LOGI("data path prefix: %s", data_path_prefix_.c_str());
+        LOGI("  application list mode: %s", BoolToString(black_white_list_enabled_));
+        LOGI("    using whitelist: %s", BoolToString(use_white_list_snapshot_));
+        LOGI("  dynamic modules mode: %s", BoolToString(dynamic_modules_enabled_));
+        LOGI("  resources hook: %s", BoolToString(resources_hook_enabled_));
+        LOGI("  deopt boot image: %s", BoolToString(deopt_boot_image_enabled_));
+        LOGI("  no module log: %s", BoolToString(no_module_log_enabled_));
+        if (black_white_list_enabled_) {
+            SnapshotBlackWhiteList();
         }
     }
 
-    bool ConfigManager::IsAppNeedHook(const std::string &app_data_dir) const {
+    bool ConfigManager::IsAppNeedHook(const std::string &app_data_dir) {
+        // zygote always starts with `uid == 0` and then fork into different user.
+        // so we have to check if we are the correct user or not.
+        uid_t user = 0;
+        char package_name[PATH_MAX];
+        if (sscanf(app_data_dir.c_str(), "/data/%*[^/]/%u/%s", &user, package_name) != 2) {
+            if (sscanf(app_data_dir.c_str(), "/data/%*[^/]/%s", package_name) != 1) {
+                package_name[0] = '\0';
+                LOGE("can't parse %s", app_data_dir.c_str());
+                return false; // default to no hooking for safety
+            }
+        }
+
+        if (last_user_ != user) {
+            UpdateConfigPath(user);
+        }
+
         if (!black_white_list_enabled_) {
             return true;
         }
@@ -111,15 +131,6 @@ namespace edxp {
             LOGE("can't access config path, using snapshot use_white_list: %s",
                  app_data_dir.c_str());
             use_white_list = use_white_list_snapshot_;
-        }
-        int user = 0;
-        char package_name[PATH_MAX];
-        if (sscanf(app_data_dir.c_str(), "/data/%*[^/]/%d/%s", &user, package_name) != 2) {
-            if (sscanf(app_data_dir.c_str(), "/data/%*[^/]/%s", package_name) != 1) {
-                package_name[0] = '\0';
-                LOGE("can't parse %s", app_data_dir.c_str());
-                return !use_white_list;
-            }
         }
         if (strcmp(package_name, kPrimaryInstallerPkgName) == 0
             || strcmp(package_name, kLegacyInstallerPkgName) == 0) {
@@ -185,11 +196,9 @@ namespace edxp {
     };
 
     ConfigManager::ConfigManager() {
-        InitOnce();
-    }
-
-    ConfigManager::~ConfigManager() {
-        initialized_ = false;
+        use_prot_storage_ = GetAndroidApiLevel() >= ANDROID_N;
+        last_user_ = 0;
+        UpdateConfigPath(last_user_);
     }
 
 }
