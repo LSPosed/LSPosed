@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.FileUtils;
@@ -36,10 +37,9 @@ import de.robv.android.xposed.installer.util.InstallZipUtil;
 
 public class XposedApp extends de.robv.android.xposed.installer.XposedApp implements Application.ActivityLifecycleCallbacks {
     public static final String TAG = "EdXposedManager";
-    public static final String BASE_DIR = "/data/user_de/0/" + BuildConfig.APPLICATION_ID + "/";
-    public static final String ENABLED_MODULES_LIST_FILE = "/data/user_de/0/" + BuildConfig.APPLICATION_ID + "/" + "conf/enabled_modules.list";
-    @SuppressLint("SdCardPath")
-    private static final String BASE_DIR_LEGACY = "/data/data/" + BuildConfig.APPLICATION_ID + "/";
+    public static String BASE_DIR = null;
+    public static String ENABLED_MODULES_LIST_FILE = null;
+    private static String BASE_DIR_LEGACY = null;
     @SuppressLint("StaticFieldLeak")
     private static XposedApp instance = null;
     private static Thread uiThread;
@@ -109,6 +109,11 @@ public class XposedApp extends de.robv.android.xposed.installer.XposedApp implem
                 t.printStackTrace();
             }
         }
+
+        final ApplicationInfo appInfo = getApplicationInfo();
+        BASE_DIR_LEGACY = appInfo.dataDir;
+        BASE_DIR = appInfo.deviceProtectedDataDir + "/";
+        ENABLED_MODULES_LIST_FILE = BASE_DIR + "conf/enabled_modules.list";
 
         instance = this;
         uiThread = Thread.currentThread();
