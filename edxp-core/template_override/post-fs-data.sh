@@ -133,13 +133,9 @@ start_log_cather () {
     chmod -R 666 "${LOG_PATH}"
 }
 
-start_verbose_log_catcher () {
-    start_log_cather all "EdXposed:V XSharedPreferences:V EdXposed-Bridge:V EdXposedManager:V XposedInstaller:V" true ${LOG_VERBOSE}
-}
-
-start_bridge_log_catcher () {
-    start_log_cather error "XSharedPreferences:V EdXposed-Bridge:V" true true
-}
+# Replace cmdline to pass SafetyNet, i think you should replace device fingerprint (use SafetyPatch or MagiskHideProps module) too
+cat "/proc/cmdline" | sed 's/orange/green/i' | sed 's/yellow/green/i' | sed 's/unlocked/locked/i' > "${MODDIR}/cmdline"
+mount -o bind "${MODDIR}/cmdline" "/proc/cmdline"
 
 # Backup app_process to avoid bootloop caused by original Xposed replacement in Android Oreo
 # TODO: Magisk mount replace
@@ -158,13 +154,17 @@ if [[ ${NO_MANAGER} == true ]]; then
     rm -rf /data/local/tmp/EdXposed.apk
 fi
 
-start_verbose_log_catcher
-start_bridge_log_catcher
+# execute live patch if rule not found
+[[ -f "${MODDIR}/sepolicy.rule" ]] || sepolicy
+
+# start_verbose_log_catcher
+start_log_cather all "EdXposed:V XSharedPreferences:V EdXposed-Bridge:V EdXposedManager:V XposedInstaller:V" true ${LOG_VERBOSE}
+
+# start_bridge_log_catcher
+start_log_cather error "XSharedPreferences:V EdXposed-Bridge:V" true true
 
 [[ -d "${TARGET}" ]] || mkdir -p "${TARGET}"
 
 cp "${MODDIR}/module.prop" "${TARGET}/module.prop"
-
-[[ -f "${MODDIR}/sepolicy.rule" ]] || sepolicy
 
 chcon -R u:object_r:system_file:s0 "${MODDIR}"
