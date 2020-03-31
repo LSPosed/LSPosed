@@ -35,7 +35,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @SuppressWarnings("OctalInteger")
 public final class ModuleUtil {
     // xposedminversion below this
-    private static final String MODULES_LIST_FILE = XposedApp.BASE_DIR + "conf/modules.list";
+    public static String MODULES_LIST_FILE = XposedApp.BASE_DIR + "conf/modules.list";
     private static final String PLAY_STORE_PACKAGE = "com.android.vending";
     public static int MIN_MODULE_VERSION = 2; // reject modules with
     private static ModuleUtil instance = null;

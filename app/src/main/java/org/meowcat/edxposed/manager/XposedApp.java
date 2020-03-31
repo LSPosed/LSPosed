@@ -114,6 +114,7 @@ public class XposedApp extends de.robv.android.xposed.installer.XposedApp implem
         BASE_DIR_LEGACY = appInfo.dataDir;
         BASE_DIR = appInfo.deviceProtectedDataDir + "/";
         ENABLED_MODULES_LIST_FILE = BASE_DIR + "conf/enabled_modules.list";
+        ModuleUtil.MODULES_LIST_FILE = BASE_DIR + "conf/modules.list";
 
         instance = this;
         uiThread = Thread.currentThread();
