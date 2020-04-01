@@ -133,10 +133,6 @@ start_log_cather () {
     chmod -R 666 "${LOG_PATH}"
 }
 
-# Replace cmdline to pass SafetyNet, i think you should replace device fingerprint (use SafetyPatch or MagiskHideProps module) too
-cat "/proc/cmdline" | sed 's/orange/green/i' | sed 's/yellow/green/i' | sed 's/unlocked/locked/i' > "${MODDIR}/cmdline"
-mount -o bind "${MODDIR}/cmdline" "/proc/cmdline"
-
 # Backup app_process to avoid bootloop caused by original Xposed replacement in Android Oreo
 # TODO: Magisk mount replace
 rm -rf "${MODDIR}/system/bin"
