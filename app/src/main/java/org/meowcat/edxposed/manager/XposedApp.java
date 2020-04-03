@@ -124,16 +124,6 @@ public class XposedApp extends de.robv.android.xposed.installer.XposedApp implem
 
         pref = PreferenceManager.getDefaultSharedPreferences(this);
 
-        if (pref.getBoolean("hook_modules", true)) {
-            Collection<ModuleUtil.InstalledModule> installedModules = ModuleUtil.getInstance().getModules().values();
-            for (ModuleUtil.InstalledModule info : installedModules) {
-                if (!AppHelper.FORCE_WHITE_LIST_MODULE.contains(info.packageName)) {
-                    AppHelper.FORCE_WHITE_LIST_MODULE.add(info.packageName);
-                }
-            }
-            Log.d(TAG, "ApplicationList: Force add modules to list");
-        }
-
         de.robv.android.xposed.installer.XposedApp.getInstance().reloadXposedProp();
         createDirectories();
         NotificationUtil.init();
@@ -205,6 +195,16 @@ public class XposedApp extends de.robv.android.xposed.installer.XposedApp implem
 
         RepoLoader.getInstance().triggerFirstLoadIfNecessary();
         isUiLoaded = true;
+
+        if (pref.getBoolean("hook_modules", true)) {
+            Collection<ModuleUtil.InstalledModule> installedModules = ModuleUtil.getInstance().getModules().values();
+            for (ModuleUtil.InstalledModule info : installedModules) {
+                if (!AppHelper.FORCE_WHITE_LIST_MODULE.contains(info.packageName)) {
+                    AppHelper.FORCE_WHITE_LIST_MODULE.add(info.packageName);
+                }
+            }
+            Log.d(TAG, "ApplicationList: Force add modules to list");
+        }
     }
 
     @Override
