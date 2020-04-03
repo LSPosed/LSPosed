@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import org.meowcat.edxposed.manager.adapters.AppHelper;
 import org.meowcat.edxposed.manager.receivers.PackageChangeReceiver;
 import org.meowcat.edxposed.manager.util.ModuleUtil;
 import org.meowcat.edxposed.manager.util.NotificationUtil;
@@ -30,6 +31,7 @@ import java.io.StringWriter;
 import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Objects;
 
@@ -121,6 +123,16 @@ public class XposedApp extends de.robv.android.xposed.installer.XposedApp implem
         mainHandler = new Handler();
 
         pref = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if (pref.getBoolean("hook_modules", true)) {
+            Collection<ModuleUtil.InstalledModule> installedModules = ModuleUtil.getInstance().getModules().values();
+            for (ModuleUtil.InstalledModule info : installedModules) {
+                if (!AppHelper.FORCE_WHITE_LIST_MODULE.contains(info.packageName)) {
+                    AppHelper.FORCE_WHITE_LIST_MODULE.add(info.packageName);
+                }
+            }
+            Log.d(TAG, "ApplicationList: Force add modules to list");
+        }
 
         de.robv.android.xposed.installer.XposedApp.getInstance().reloadXposedProp();
         createDirectories();

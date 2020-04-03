@@ -8,6 +8,8 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.TooltipCompat;
 import androidx.core.content.ContextCompat;
 
+import org.meowcat.edxposed.manager.adapters.AppHelper;
+import org.meowcat.edxposed.manager.adapters.BlackListAdapter;
 import org.meowcat.edxposed.manager.databinding.ActivityMainBinding;
 import org.meowcat.edxposed.manager.util.ModuleUtil;
 import org.meowcat.edxposed.manager.util.RepoLoader;
@@ -95,6 +97,7 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
             binding.statusIcon.setImageDrawable(getDrawable(R.drawable.ic_error));
         }
         notifyDataSetChanged();
+        new Thread(() -> new BlackListAdapter(getApplicationContext(), AppHelper.isWhiteListMode(), null).generateCheckedList());
     }
 
     private int extractIntPart(String str) {

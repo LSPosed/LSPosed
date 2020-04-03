@@ -25,7 +25,7 @@ public class BlackListAdapter extends AppAdapter {
     }
 
     @Override
-    protected List<String> generateCheckedList() {
+    public List<String> generateCheckedList() {
         if (XposedApp.getPreferences().getBoolean("hook_modules", true)) {
             Collection<ModuleUtil.InstalledModule> installedModules = ModuleUtil.getInstance().getModules().values();
             for (ModuleUtil.InstalledModule info : installedModules) {
