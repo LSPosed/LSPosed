@@ -24,15 +24,14 @@ android {
         }
     }
     compileSdkVersion 29
-    //noinspection GradleDependency
-    buildToolsVersion "29.0.2"
+    buildToolsVersion "29.0.3"
     defaultConfig {
         applicationId "org.meowcat.edxposed.manager"
         minSdkVersion 26
         //noinspection OldTargetApi
         targetSdkVersion 27
-        versionCode 45611
-        versionName "4.5.6.1"
+        versionCode 457000
+        versionName "4.5.7.1"
         signingConfig signingConfigs.release
     }
     buildTypes {
@@ -73,6 +72,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.takisoft.preferencex:preferencex:1.1.0'
     implementation 'com.takisoft.preferencex:preferencex-colorpicker:1.1.0'
-    implementation 'com.github.NekoInverter.preferencex-android:preferencex-simplemenu:88f93154b2'
+    implementation 'tech.rectifier.preferencex-android:preferencex-simplemenu:88f93154b2'
     implementation 'com.timehop.stickyheadersrecyclerview:library:0.4.3@aar'
+    compileOnly 'de.robv.android.xposed:api:82'
 }

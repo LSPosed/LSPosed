@@ -302,4 +302,6 @@
     <string name="colorized_action_bar">着色应用栏</string>
     <string name="settings_group_theme">主题</string>
     <string name="material_design_2">惨白设计</string>
+    <string name="xposed_description">启用 EdXposed 的增强功能:\n判断 Xposed 是否正常工作\n移除针对 EdXposed 的后台限制\n假装安装了 Xposed Installer</string>
+    <string name="status_enhancement">增强模式已激活</string>
 </resources>

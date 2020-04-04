@@ -18,6 +18,7 @@ import androidx.fragment.app.FragmentManager;
 
 import org.meowcat.edxposed.manager.BuildConfig;
 import org.meowcat.edxposed.manager.R;
+import org.meowcat.edxposed.manager.StatusInstallerFragment;
 import org.meowcat.edxposed.manager.XposedApp;
 import org.meowcat.edxposed.manager.util.CompileUtil;
 
@@ -26,6 +27,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -44,7 +46,7 @@ public class AppHelper {
     private static final String WHITE_LIST_MODE = "conf/usewhitelist";
     private static final String BLACK_LIST_MODE = "conf/blackwhitelist";
 
-    private static final List<String> FORCE_WHITE_LIST = new ArrayList<>(Collections.singletonList(BuildConfig.APPLICATION_ID));
+    private static final List<String> FORCE_WHITE_LIST = new ArrayList<>(StatusInstallerFragment.isEnhancementEnabled() ? Arrays.asList(BuildConfig.APPLICATION_ID, "android") : Collections.singletonList(BuildConfig.APPLICATION_ID));
     public static List<String> FORCE_WHITE_LIST_MODULE = new ArrayList<>(FORCE_WHITE_LIST);
 
     @SuppressWarnings("OctalInteger")
