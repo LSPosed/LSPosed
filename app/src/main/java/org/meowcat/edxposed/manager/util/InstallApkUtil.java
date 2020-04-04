@@ -51,8 +51,7 @@ public class InstallApkUtil extends AsyncTask<Void, Void, Integer> {
     static void installApkNormally(Context context, String localFilename) {
         Intent installIntent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
         installIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        Uri uri;
-        uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileprovider", new File(localFilename));
+        Uri uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileprovider", new File(localFilename));
         installIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         installIntent.setDataAndType(uri, DownloadsUtil.MIME_TYPE_APK);
         installIntent.putExtra(Intent.EXTRA_INSTALLER_PACKAGE_NAME, context.getApplicationInfo().packageName);
@@ -82,8 +81,7 @@ public class InstallApkUtil extends AsyncTask<Void, Void, Integer> {
                 Shell.Result result = Shell.su("pm install -r -f \"" + path + fileName + "\"").exec();
                 returnCode = result.getCode();
                 output = result.getOut();
-                //noinspection ResultOfMethodCallIgnored
-                new File(path + fileName).delete();
+                Shell.su("rm -f " + path + fileName).exec();
             } catch (IllegalStateException e) {
                 returnCode = ERROR_ROOT_NOT_GRANTED;
             }
