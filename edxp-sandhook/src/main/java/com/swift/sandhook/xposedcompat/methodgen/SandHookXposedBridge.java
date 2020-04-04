@@ -5,6 +5,7 @@ import android.os.Process;
 import android.os.Trace;
 import android.util.Log;
 
+import com.elderdrivers.riru.edxp.config.ConfigManager;
 import com.elderdrivers.riru.edxp.util.ClassLoaderUtils;
 import com.elderdrivers.riru.edxp.util.FileUtils;
 import com.swift.sandhook.SandHook;
@@ -133,9 +134,11 @@ public final class SandHookXposedBridge {
 
     public static void init() {
         if (Process.is64Bit()) {
-            SandHookConfig.libSandHookPath = "/system/lib64/libsandhook.edxp.so";
+//            SandHookConfig.libSandHookPath = "/system/lib64/libsandhook.edxp.so";
+            SandHookConfig.libSandHookPath = "/system/lib64/" + ConfigManager.getLibSandHookName();
         } else {
-            SandHookConfig.libSandHookPath = "/system/lib/libsandhook.edxp.so";
+//            SandHookConfig.libSandHookPath = "/system/lib/libsandhook.edxp.so";
+            SandHookConfig.libSandHookPath = "/system/lib/" + ConfigManager.getLibSandHookName();
         }
         SandHookConfig.libLoader = new SandHookConfig.LibLoader() {
             @Override

@@ -41,6 +41,10 @@ public class ConfigManager {
 
     public static native String getXposedPropPath();
 
+    public static native String getLibSandHookName();
+
+    public static native String getLibWhaleName();
+
     public static native String getInstallerConfigPath(String suffix);
 
     public static native String getDataPathPrefix();

@@ -36,6 +36,10 @@ namespace edxp {
 
         std::string GetXposedPropPath() const;
 
+        std::string GetLibSandHookName() const;
+
+        std::string GetLibWhaleName() const;
+
         std::string GetDataPathPrefix() const;
 
         std::string GetConfigPath(const std::string &suffix) const;

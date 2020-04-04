@@ -1,6 +1,9 @@
 SKIPUNZIP=1
 
 RIRU_PATH="/data/misc/riru"
+RIRU_EDXP="$(cat /proc/sys/kernel/random/uuid|md5sum|cut -c 1-4)"
+RIRU_MODULES="${RIRU_PATH}/modules"
+RIRU_TARGET="${RIRU_MODULES}/${RIRU_EDXP}"
 
 VERSION=$(grep_prop version "${TMPDIR}/module.prop")
 RIRU_MIN_API_VERSION=$(grep_prop api "${TMPDIR}/module.prop")
@@ -15,6 +18,9 @@ JAR_EDXP=$(cat /proc/sys/kernel/random/uuid|md5sum|cut -c 1-8)".jar"
 JAR_EDDALVIKDX=$(cat /proc/sys/kernel/random/uuid|md5sum|cut -c 1-8)".jar"
 JAR_EDDEXMAKER=$(cat /proc/sys/kernel/random/uuid|md5sum|cut -c 1-8)".jar"
 JAR_EDCONFIG=$(cat /proc/sys/kernel/random/uuid|md5sum|cut -c 1-8)".jar"
+LIB_RIRU_EDXP="libriru_${RIRU_EDXP}.so"
+LIB_WHALE_EDXP="lib$(cat /proc/sys/kernel/random/uuid|md5sum|cut -c 1-10).so"
+LIB_SANDHOOK_EDXP="lib$(cat /proc/sys/kernel/random/uuid|md5sum|cut -c 1-13).so"
 
 MODEL="
 HD1900
@@ -205,12 +211,6 @@ check_architecture
 ui_print "- Extracting module files"
 unzip -o "${ZIPFILE}" EdXposed.apk module.prop post-fs-data.sh sepolicy.rule system.prop uninstall.sh 'system/*' -d "${MODPATH}" >&2
 
-ui_print "- Copying framework libraries"
-mv "${MODPATH}/system/framework/eddalvikdx.jar" "${MODPATH}/system/framework/${JAR_EDDALVIKDX}"
-mv "${MODPATH}/system/framework/edxp.jar" "${MODPATH}/system/framework/${JAR_EDXP}"
-mv "${MODPATH}/system/framework/eddexmaker.jar" "${MODPATH}/system/framework/${JAR_EDDEXMAKER}"
-mv "${MODPATH}/system/framework/edconfig.jar" "${MODPATH}/system/framework/${JAR_EDCONFIG}"
-
 if [[ "${ARCH}" == "x86" || "${ARCH}" == "x64" ]]; then
     ui_print "- Replacing x86 and x86_64 libraries"
     unzip -o "${ZIPFILE}" 'system_x86/*' -d "${MODPATH}" >&2
@@ -250,25 +250,63 @@ fi
 #    rm ${MODPATH}/sepolicy.rule
 #fi
 
-ui_print "- Resetting libraries path"
+ui_print "- Copying framework libraries"
 
-sed -i 's:/system/framework/edxp.jar\:/system/framework/eddalvikdx.jar\:/system/framework/eddexmaker.jar:/system/framework/'"${JAR_EDXP}"'\:/system/framework/'"${JAR_EDDALVIKDX}"'\:/system/framework/'"${JAR_EDDEXMAKER}"':g' "${MODPATH}/system/lib/libriru_edxp.so"
-sed -i 's:/system/framework/edconfig.jar:/system/framework/'"${JAR_EDCONFIG}"':g' "${MODPATH}/system/lib/libriru_edxp.so"
+mv "${MODPATH}/system/framework/eddalvikdx.jar" "${MODPATH}/system/framework/${JAR_EDDALVIKDX}"
+mv "${MODPATH}/system/framework/edxp.jar" "${MODPATH}/system/framework/${JAR_EDXP}"
+mv "${MODPATH}/system/framework/eddexmaker.jar" "${MODPATH}/system/framework/${JAR_EDDEXMAKER}"
+mv "${MODPATH}/system/framework/edconfig.jar" "${MODPATH}/system/framework/${JAR_EDCONFIG}"
+mv "${MODPATH}/system/lib/libriru_edxp.so" "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
+mv "${MODPATH}/system/lib/libwhale.edxp.so" "${MODPATH}/system/lib/${LIB_WHALE_EDXP}"
 
 if [[ "${IS64BIT}" == true ]]; then
-    sed -i 's:/system/framework/edxp.jar\:/system/framework/eddalvikdx.jar\:/system/framework/eddexmaker.jar:/system/framework/'"${JAR_EDXP}"'\:/system/framework/'"${JAR_EDDALVIKDX}"'\:/system/framework/'"${JAR_EDDEXMAKER}"':g' "${MODPATH}/system/lib64/libriru_edxp.so"
-    sed -i 's:/system/framework/edconfig.jar:/system/framework/'"${JAR_EDCONFIG}"':g' "${MODPATH}/system/lib64/libriru_edxp.so"
+    mv "${MODPATH}/system/lib64/libriru_edxp.so" "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
+    mv "${MODPATH}/system/lib64/libwhale.edxp.so" "${MODPATH}/system/lib64/${LIB_WHALE_EDXP}"
+fi
+
+if [[ "${VARIANTS}" == "SandHook" ]]; then
+    mv "${MODPATH}/system/lib/libsandhook.edxp.so" "${MODPATH}/system/lib/${LIB_SANDHOOK_EDXP}"
+    if [[ "${IS64BIT}" == true ]]; then
+        mv "${MODPATH}/system/lib64/libsandhook.edxp.so" "${MODPATH}/system/lib64/${LIB_SANDHOOK_EDXP}"
+    fi
+fi
+
+ui_print "- Resetting libraries path"
+
+sed -i 's:/system/framework/edxp.jar\:/system/framework/eddalvikdx.jar\:/system/framework/eddexmaker.jar:/system/framework/'"${JAR_EDXP}"'\:/system/framework/'"${JAR_EDDALVIKDX}"'\:/system/framework/'"${JAR_EDDEXMAKER}"':g' "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
+sed -i 's:/system/framework/edconfig.jar:/system/framework/'"${JAR_EDCONFIG}"':g' "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
+sed -i 's:libriru_edxp.so:'"${LIB_RIRU_EDXP}"':g' "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
+sed -i 's:libwhale.edxp.so:'"${LIB_WHALE_EDXP}"':g' "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
+sed -i 's:libsandhook.edxp.so:'"${LIB_SANDHOOK_EDXP}"':g' "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
+
+if [[ "${IS64BIT}" == true ]]; then
+    sed -i 's:/system/framework/edxp.jar\:/system/framework/eddalvikdx.jar\:/system/framework/eddexmaker.jar:/system/framework/'"${JAR_EDXP}"'\:/system/framework/'"${JAR_EDDALVIKDX}"'\:/system/framework/'"${JAR_EDDEXMAKER}"':g' "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
+    sed -i 's:/system/framework/edconfig.jar:/system/framework/'"${JAR_EDCONFIG}"':g' "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
+    sed -i 's:libriru_edxp.so:'"${LIB_RIRU_EDXP}"':g' "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
+    sed -i 's:libwhale.edxp.so:'"${LIB_WHALE_EDXP}"':g' "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
+    sed -i 's:libsandhook.edxp.so:'"${LIB_SANDHOOK_EDXP}"':g' "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
+fi
+
+ui_print "- Removing old configuration"
+
+if [[ -f "${RIRU_MODULES}/edxp.prop" ]]; then
+    OLD_CONFIG=$(cat "${RIRU_MODULES}/edxp.prop")
+    rm -rf "${RIRU_MODULES}/${OLD_CONFIG}"
+fi
+
+if [[ -e "${RIRU_MODULES}/edxp" ]]; then
+    rm -rf "${RIRU_MODULES}/edxp"
 fi
 
 ui_print "- Copying extra files"
 
-TARGET="${RIRU_PATH}/modules/edxp"
+[[ -d "${RIRU_TARGET}" ]] || mkdir -p "${RIRU_TARGET}" || abort "! Can't mkdir -p ${RIRU_TARGET}"
 
-[[ -d "${TARGET}" ]] || mkdir -p "${TARGET}" || abort "! Can't mkdir -p ${TARGET}"
+echo "${RIRU_EDXP}">"${RIRU_MODULES}/edxp.prop"
 
-rm "${TARGET}/module.prop"
+rm "${RIRU_TARGET}/module.prop"
 
-cp "${MODPATH}/module.prop" "${TARGET}/module.prop" || abort "! Can't create ${TARGET}/module.prop"
+cp "${MODPATH}/module.prop" "${RIRU_TARGET}/module.prop" || abort "! Can't create ${RIRU_TARGET}/module.prop"
 
 set_perm_recursive "${MODPATH}" 0 0 0755 0644
 

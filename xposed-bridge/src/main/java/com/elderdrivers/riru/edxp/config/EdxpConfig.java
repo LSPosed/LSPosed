@@ -10,6 +10,10 @@ public interface EdxpConfig {
 
     String getXposedPropPath();
 
+    String getLibSandHookName();
+
+    String getLibWhaleName();
+
     boolean isDynamicModulesMode();
 
     boolean isNoModuleLogEnabled();

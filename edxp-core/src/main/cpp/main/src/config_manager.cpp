@@ -191,6 +191,14 @@ namespace edxp {
         return kXposedPropPath;
     }
 
+    ALWAYS_INLINE std::string ConfigManager::GetLibSandHookName() const {
+        return kLibSandHookName;
+    }
+
+    ALWAYS_INLINE std::string ConfigManager::GetLibWhaleName() const {
+        return kLibWhaleName;
+    }
+
     ALWAYS_INLINE std::string ConfigManager::GetDataPathPrefix() const {
         return data_path_prefix_;
     }
