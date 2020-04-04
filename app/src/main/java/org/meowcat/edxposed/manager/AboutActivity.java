@@ -69,6 +69,8 @@ public class AboutActivity extends BaseActivity {
         if (translator.isEmpty()) {
             binding.translatorsView.setVisibility(View.GONE);
         }
+
+        binding.appIcon.setImageBitmap(XposedApp.getInstance().getAppIconLoader().loadIcon(getApplicationInfo(), false));
     }
 
     void setupView(View v, final int url) {

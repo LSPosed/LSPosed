@@ -33,6 +33,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import me.zhanghai.android.appiconloader.AppIconLoader;
+
 public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> implements Filterable {
 
     protected final Context context;
@@ -173,7 +175,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ApplicationInfo info = showList.get(position);
-        holder.appIcon.setImageDrawable(info.loadIcon(pm));
+        holder.appIcon.setImageBitmap(XposedApp.getInstance().getAppIconLoader().loadIcon(info, false));
         holder.appName.setText(InstallApkUtil.getAppLabel(info, pm));
         try {
             holder.appVersion.setText(pm.getPackageInfo(info.packageName, 0).versionName);

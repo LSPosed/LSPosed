@@ -35,19 +35,17 @@
 
                 <ImageView
                     android:id="@+id/app_icon"
-                    android:layout_width="28dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="16dp"
-                    android:contentDescription="@string/app_name"
-                    android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/ic_launcher_foreground" />
+                    android:contentDescription="@string/app_name" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="25dp"
+                    android:layout_marginStart="10dp"
                     android:layout_toEndOf="@id/app_icon"
                     android:contentDescription="@string/app_name"
                     android:text="@string/app_name"

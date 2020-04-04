@@ -14,6 +14,8 @@ import org.meowcat.edxposed.manager.databinding.ActivityMainBinding;
 import org.meowcat.edxposed.manager.util.ModuleUtil;
 import org.meowcat.edxposed.manager.util.RepoLoader;
 
+import me.zhanghai.android.appiconloader.AppIconLoader;
+
 public class MainActivity extends BaseActivity implements RepoLoader.RepoListener, ModuleUtil.ModuleListener {
     ActivityMainBinding binding;
     private RepoLoader repoLoader;
@@ -70,6 +72,7 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
             appMenu.setOnMenuItemClickListener(this::onOptionsItemSelected);
             appMenu.show();
         });
+        binding.appIcon.setImageBitmap(XposedApp.getInstance().getAppIconLoader().loadIcon(getApplicationInfo(), false));
         String installedXposedVersion;
         try {
             installedXposedVersion = XposedApp.getXposedProp().getVersion();
@@ -90,6 +93,11 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
                 binding.status.setCardBackgroundColor(ContextCompat.getColor(this, R.color.amber_500));
                 binding.statusIcon.setImageDrawable(getDrawable(R.drawable.ic_warning));
             }
+        } else if (XposedApp.getXposedVersion() > 0) {
+            binding.statusTitle.setText(R.string.Activated);
+            binding.statusSummary.setText(getString(R.string.version_x, XposedApp.getXposedVersion()));
+            binding.status.setCardBackgroundColor(ContextCompat.getColor(this, R.color.download_status_update_available));
+            binding.statusIcon.setImageDrawable(getDrawable(R.drawable.ic_check_circle));
         } else {
             binding.statusTitle.setText(R.string.Install);
             binding.statusSummary.setText(R.string.InstallDetail);

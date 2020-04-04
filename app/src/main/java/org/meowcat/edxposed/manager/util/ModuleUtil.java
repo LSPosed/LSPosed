@@ -8,6 +8,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.FileUtils;
@@ -31,6 +32,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import me.zhanghai.android.appiconloader.AppIconLoader;
 
 @SuppressWarnings("OctalInteger")
 public final class ModuleUtil {
@@ -385,23 +388,8 @@ public final class ModuleUtil {
             return (version != null) && version.code > versionCode;
         }
 
-        public Drawable getIcon() {
-            if (iconCache != null)
-                return iconCache.newDrawable();
-
-            Intent mIntent = new Intent(Intent.ACTION_MAIN);
-            //mIntent.addCategory(ModulesFragment.SETTINGS_CATEGORY);
-            mIntent.setPackage(app.packageName);
-            List<ResolveInfo> ris = pm.queryIntentActivities(mIntent, 0);
-
-            Drawable result;
-            if (ris == null || ris.size() <= 0)
-                result = app.loadIcon(pm);
-            else
-                result = ris.get(0).activityInfo.loadIcon(pm);
-            iconCache = result.getConstantState();
-
-            return result;
+        public Bitmap getIcon(Context context) {
+            return XposedApp.getInstance().getAppIconLoader().loadIcon(app, false);
         }
 
         @NonNull

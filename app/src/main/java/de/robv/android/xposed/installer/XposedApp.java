@@ -17,7 +17,7 @@ public class XposedApp extends Application {
     public static final String TAG = "XposedApp";
     private static final File EDXPOSED_PROP_FILE = new File("/system/framework/edconfig.jar");
     private static XposedApp instance = null;
-    public InstallZipUtil.XposedProp xposedProp;
+    public InstallZipUtil.XposedProp mXposedProp;
 
     public static XposedApp getInstance() {
         return instance;
@@ -51,7 +51,7 @@ public class XposedApp extends Application {
             }
         }
         synchronized (this) {
-            xposedProp = prop;
+            mXposedProp = prop;
         }
     }
 }

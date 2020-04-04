@@ -74,5 +74,6 @@ dependencies {
     implementation 'com.takisoft.preferencex:preferencex-colorpicker:1.1.0'
     implementation 'tech.rectifier.preferencex-android:preferencex-simplemenu:88f93154b2'
     implementation 'com.timehop.stickyheadersrecyclerview:library:0.4.3@aar'
+    implementation 'me.zhanghai.android.appiconloader:appiconloader:1.1.0'
     compileOnly 'de.robv.android.xposed:api:82'
 }

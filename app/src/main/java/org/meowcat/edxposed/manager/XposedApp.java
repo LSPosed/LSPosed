@@ -36,6 +36,7 @@ import java.util.Date;
 import java.util.Objects;
 
 import de.robv.android.xposed.installer.util.InstallZipUtil;
+import me.zhanghai.android.appiconloader.AppIconLoader;
 
 public class XposedApp extends de.robv.android.xposed.installer.XposedApp implements Application.ActivityLifecycleCallbacks {
     public static final String TAG = "EdXposedManager";
@@ -49,13 +50,14 @@ public class XposedApp extends de.robv.android.xposed.installer.XposedApp implem
     private SharedPreferences pref;
     private AppCompatActivity currentActivity = null;
     private boolean isUiLoaded = false;
+    private AppIconLoader appIconLoader;
 
     public static XposedApp getInstance() {
         return instance;
     }
 
     public static InstallZipUtil.XposedProp getXposedProp() {
-        return de.robv.android.xposed.installer.XposedApp.getInstance().xposedProp;
+        return de.robv.android.xposed.installer.XposedApp.getInstance().mXposedProp;
     }
 
     public static void runOnUiThread(Runnable action) {
@@ -144,6 +146,13 @@ public class XposedApp extends de.robv.android.xposed.installer.XposedApp implem
         }
 
         RepoLoader.getInstance().triggerFirstLoadIfNecessary();
+
+        appIconLoader = new AppIconLoader(getResources().getDimensionPixelSize(
+                R.dimen.app_icon_size), this);
+    }
+
+    public AppIconLoader getAppIconLoader(){
+        return appIconLoader;
     }
 
     private void registerReceivers() {

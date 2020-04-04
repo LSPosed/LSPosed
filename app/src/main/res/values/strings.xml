@@ -335,4 +335,5 @@
     <string name="material_design_2">Material Design 2</string>
     <string name="xposed_description">Enable EdXposed enhancements:\nRemove background restrictions on EdXposed\nDetermine if Xposed is working properly\nPretend to have Xposed Installer installed</string>
     <string name="status_enhancement">Enhancement mode</string>
+    <string name="version_x">Version %d</string>
 </resources>

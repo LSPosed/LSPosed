@@ -545,7 +545,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             String updateDate = dateformat.format(new Date(item.updateTime));
             holder.timestamps.setText(getString(R.string.install_timestamps, creationDate, updateDate));
 
-            holder.appIcon.setImageDrawable(item.getIcon());
+            holder.appIcon.setImageBitmap(item.getIcon(ModulesActivity.this));
 
             TextView descriptionText = holder.appDescription;
             descriptionText.setVisibility(View.VISIBLE);

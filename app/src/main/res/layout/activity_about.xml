@@ -27,22 +27,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="72dp"
                 android:orientation="horizontal"
-                android:padding="16dp">
+                android:padding="16dp"
+                android:clipChildren="false"
+                android:clipToPadding="false">
 
                 <ImageView
+                    android:id="@+id/app_icon"
                     android:layout_width="42dp"
-                    android:layout_height="64dp"
+                    android:layout_height="42dp"
                     android:layout_gravity="center_vertical"
-                    android:adjustViewBounds="true"
-                    android:contentDescription="@string/app_name"
-                    android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/ic_launcher_foreground" />
+                    android:contentDescription="@string/app_name" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:paddingHorizontal="16dp"
+                    android:layout_marginStart="14dp"
                     android:text="@string/app_name"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
             </LinearLayout>
@@ -67,7 +67,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
-                    android:layout_marginLeft="32dp"
                     android:orientation="vertical"
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
