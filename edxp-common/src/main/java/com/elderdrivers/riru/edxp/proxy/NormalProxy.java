@@ -3,6 +3,8 @@ package com.elderdrivers.riru.edxp.proxy;
 import com.elderdrivers.riru.edxp.config.ConfigManager;
 import com.elderdrivers.riru.edxp.deopt.PrebuiltMethodsDeopter;
 
+import de.robv.android.xposed.SELinuxHelper;
+
 import static com.elderdrivers.riru.edxp.util.FileUtils.getDataPathPrefix;
 
 public class NormalProxy extends BaseProxy {
@@ -18,6 +20,7 @@ public class NormalProxy extends BaseProxy {
                                      String appDataDir) {
         // mainly for secondary zygote
         mRouter.onForkStart();
+        SELinuxHelper.initOnce();
         mRouter.initResourcesHook();
         // call this to ensure the flag is set to false ASAP
         mRouter.prepare(false);
@@ -36,6 +39,7 @@ public class NormalProxy extends BaseProxy {
     public void forkSystemServerPre(int uid, int gid, int[] gids, int debugFlags, int[][] rlimits,
                                     long permittedCapabilities, long effectiveCapabilities) {
         mRouter.onForkStart();
+        SELinuxHelper.initOnce();
         mRouter.initResourcesHook();
         // set startsSystemServer flag used when loadModules
         mRouter.prepare(true);
