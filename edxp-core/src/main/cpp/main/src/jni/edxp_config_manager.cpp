@@ -30,6 +30,10 @@ namespace edxp {
         return env->NewStringUTF(ConfigManager::GetInstance()->GetInstallerPackageName().c_str());
     }
 
+    static jstring ConfigManager_getXposedPropPath(JNI_START) {
+        return env->NewStringUTF(ConfigManager::GetInstance()->GetXposedPropPath().c_str());
+    }
+
     static jstring ConfigManager_getDataPathPrefix(JNI_START) {
         return env->NewStringUTF(ConfigManager::GetInstance()->GetDataPathPrefix().c_str());
     }
@@ -56,6 +60,7 @@ namespace edxp {
             NATIVE_METHOD(ConfigManager, isDeoptBootImageEnabled, "()Z"),
             NATIVE_METHOD(ConfigManager, isNoModuleLogEnabled, "()Z"),
             NATIVE_METHOD(ConfigManager, getInstallerPackageName, "()Ljava/lang/String;"),
+            NATIVE_METHOD(ConfigManager, getXposedPropPath, "()Ljava/lang/String;"),
             NATIVE_METHOD(ConfigManager, getDataPathPrefix, "()Ljava/lang/String;"),
             NATIVE_METHOD(ConfigManager, getInstallerConfigPath, "(Ljava/lang/String;)Ljava/lang/String;"),
             NATIVE_METHOD(ConfigManager, isAppNeedHook, "(Ljava/lang/String;)Z"),

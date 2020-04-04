@@ -187,6 +187,10 @@ namespace edxp {
         return installer_pkg_name_;
     }
 
+    ALWAYS_INLINE std::string ConfigManager::GetXposedPropPath() const {
+        return kXposedPropPath;
+    }
+
     ALWAYS_INLINE std::string ConfigManager::GetDataPathPrefix() const {
         return data_path_prefix_;
     }

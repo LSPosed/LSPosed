@@ -11,6 +11,11 @@ PROP_PRODUCT=$(getprop ro.build.product)
 PROP_BRAND=$(getprop ro.product.brand)
 PROP_MANUFACTURER=$(getprop ro.product.manufacturer)
 
+JAR_EDXP=$(cat /proc/sys/kernel/random/uuid|md5sum|cut -c 1-8)".jar"
+JAR_EDDALVIKDX=$(cat /proc/sys/kernel/random/uuid|md5sum|cut -c 1-8)".jar"
+JAR_EDDEXMAKER=$(cat /proc/sys/kernel/random/uuid|md5sum|cut -c 1-8)".jar"
+JAR_EDCONFIG=$(cat /proc/sys/kernel/random/uuid|md5sum|cut -c 1-8)".jar"
+
 MODEL="
 HD1900
 HD1910
@@ -200,6 +205,12 @@ check_architecture
 ui_print "- Extracting module files"
 unzip -o "${ZIPFILE}" EdXposed.apk module.prop post-fs-data.sh sepolicy.rule system.prop uninstall.sh 'system/*' -d "${MODPATH}" >&2
 
+ui_print "- Copying framework libraries"
+mv "${MODPATH}/system/framework/eddalvikdx.jar" "${MODPATH}/system/framework/${JAR_EDDALVIKDX}"
+mv "${MODPATH}/system/framework/edxp.jar" "${MODPATH}/system/framework/${JAR_EDXP}"
+mv "${MODPATH}/system/framework/eddexmaker.jar" "${MODPATH}/system/framework/${JAR_EDDEXMAKER}"
+mv "${MODPATH}/system/framework/edconfig.jar" "${MODPATH}/system/framework/${JAR_EDCONFIG}"
+
 if [[ "${ARCH}" == "x86" || "${ARCH}" == "x64" ]]; then
     ui_print "- Replacing x86 and x86_64 libraries"
     unzip -o "${ZIPFILE}" 'system_x86/*' -d "${MODPATH}" >&2
@@ -221,7 +232,7 @@ fi
 
 if [[ ${BOOTMODE} == true && ${NO_MANAGER} == true ]]; then
     ui_print "- Installing stub apk"
-    cp -f "${MODPATH}"/EdXposed.apk /data/local/tmp/
+    cp -f "${MODPATH}/EdXposed.apk" /data/local/tmp/
     pm install /data/local/tmp/EdXposed.apk 2>&2
     rm -rf /data/local/tmp/EdXposed.apk
 fi
@@ -231,13 +242,23 @@ if [[ "${OLD_MAGISK}" == true ]]; then
     rm "${MODPATH}"/sepolicy.rule
 fi
 
-echo "- Mounted persist:" >&2
-mount | grep persist >&2
+#echo "- Mounted persist:" >&2
+#mount | grep persist >&2
 
 #if [[ "${NO_PERSIST}" == true ]]; then
 #    ui_print "- Persist not detected, remove SEPolicy rule"
 #    rm ${MODPATH}/sepolicy.rule
 #fi
+
+ui_print "- Resetting libraries path"
+
+sed -i 's:/system/framework/edxp.jar\:/system/framework/eddalvikdx.jar\:/system/framework/eddexmaker.jar:/system/framework/'"${JAR_EDXP}"'\:/system/framework/'"${JAR_EDDALVIKDX}"'\:/system/framework/'"${JAR_EDDEXMAKER}"':g' "${MODPATH}/system/lib/libriru_edxp.so"
+sed -i 's:/system/framework/edconfig.jar:/system/framework/'"${JAR_EDCONFIG}"':g' "${MODPATH}/system/lib/libriru_edxp.so"
+
+if [[ "${IS64BIT}" == true ]]; then
+    sed -i 's:/system/framework/edxp.jar\:/system/framework/eddalvikdx.jar\:/system/framework/eddexmaker.jar:/system/framework/'"${JAR_EDXP}"'\:/system/framework/'"${JAR_EDDALVIKDX}"'\:/system/framework/'"${JAR_EDDEXMAKER}"':g' "${MODPATH}/system/lib64/libriru_edxp.so"
+    sed -i 's:/system/framework/edconfig.jar:/system/framework/'"${JAR_EDCONFIG}"':g' "${MODPATH}/system/lib64/libriru_edxp.so"
+fi
 
 ui_print "- Copying extra files"
 

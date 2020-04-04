@@ -8,6 +8,8 @@ public interface EdxpConfig {
 
     String getInstallerPackageName();
 
+    String getXposedPropPath();
+
     boolean isDynamicModulesMode();
 
     boolean isNoModuleLogEnabled();
