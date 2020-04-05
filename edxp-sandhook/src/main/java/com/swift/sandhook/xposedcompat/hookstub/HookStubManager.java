@@ -356,6 +356,7 @@ public class HookStubManager {
             try {
                 ((XC_MethodHook) snapshot[beforeIdx]).callBeforeHookedMethod(param);
             } catch (Throwable t) {
+                XposedBridge.log(t);
                 // reset result (ignoring what the unexpectedly exiting callback did)
                 param.setResult(null);
                 param.returnEarly = false;
