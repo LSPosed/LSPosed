@@ -191,24 +191,28 @@
 
     <PreferenceCategory
         android:key="group_enhancement"
-        android:title="@string/settings_group_enhancement">
+        android:title="@string/settings_group_enhancement"
+        app:iconSpaceReserved="false">
 
         <Preference
             android:key="enhancement_status"
             android:title="@string/settings_title_enhancement"
-            android:summary="@string/settings_summary_enhancement" />
+            android:summary="@string/settings_summary_enhancement"
+            app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="pretend_xposed_installer"
             android:summary="@string/settings_summary_pretend_xposed_installer"
-            android:title="@string/settings_title_pretend_xposed_installer" />
+            android:title="@string/settings_title_pretend_xposed_installer"
+            app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="hide_edxposed_manager"
             android:summary="@string/settings_summary_hide_edxposed_manager"
-            android:title="@string/settings_title_hide_edxposed_manager" />
+            android:title="@string/settings_title_hide_edxposed_manager"
+            app:iconSpaceReserved="false" />
 
     </PreferenceCategory>
 
