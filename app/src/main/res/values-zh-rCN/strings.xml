@@ -302,6 +302,14 @@
     <string name="colorized_action_bar">着色应用栏</string>
     <string name="settings_group_theme">主题</string>
     <string name="material_design_2">惨白设计</string>
-    <string name="xposed_description">启用 EdXposed 的增强功能:\n判断 Xposed 是否正常工作\n移除针对 EdXposed 的后台限制\n假装安装了 Xposed Installer</string>
+    <string name="xposed_description">启用 EdXposed 的增强功能:\n    - 判断 Xposed 是否正常工作\n    - 移除针对 EdXposed 的后台限制\n    - 假装安装了 Xposed Installer\n    - 隐藏 EdXposed Manager</string>
     <string name="status_enhancement">增强模式已激活</string>
+    <string name="settings_group_enhancement">增强模式</string>
+    <string name="settings_title_enhancement">增强模式状态</string>
+    <string name="settings_summary_enhancement">未激活\n你可以在「模块」中启用增强模块</string>
+    <string name="settings_summary_enhancement_enabled">已激活</string>
+    <string name="settings_title_pretend_xposed_installer">Xposed Installer 伪装</string>
+    <string name="settings_summary_pretend_xposed_installer">假装已安装 Xposed Installer 来使一些过时但有用的模块正常工作\n注：开启此功能可能会被某些软件（如 RootBeer）检测到 EdXposed</string>
+    <string name="settings_title_hide_edxposed_manager">隐藏 EdXposed Manager</string>
+    <string name="settings_summary_hide_edxposed_manager">防止软件检测到 EdXposed Manager\n注：模块可能无法正常打开 Manager 界面</string>
 </resources>

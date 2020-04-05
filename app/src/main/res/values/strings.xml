@@ -333,7 +333,15 @@
     <string name="colorized_action_bar">Colorized action bar</string>
     <string name="settings_group_theme">Theme</string>
     <string name="material_design_2">Material Design 2</string>
-    <string name="xposed_description">Enable EdXposed enhancements:\nRemove background restrictions on EdXposed\nDetermine if Xposed is working properly\nPretend to have Xposed Installer installed</string>
+    <string name="xposed_description">Enable EdXposed enhancements:\nRemove background restrictions on EdXposed\nDetermine if Xposed is working properly\nPretend to have Xposed Installer installed\nHide EdXposed Manager</string>
     <string name="status_enhancement">Enhancement mode</string>
+    <string name="settings_group_enhancement">Enhancement mode</string>
+    <string name="settings_title_enhancement">Enhancement mode status</string>
+    <string name="settings_summary_enhancement">Disabled\nYou can enable enhancement mode in the module</string>
+    <string name="settings_summary_enhancement_enabled">Enabled</string>
+    <string name="settings_title_pretend_xposed_installer">Pretend to have Xposed Installer installed</string>
+    <string name="settings_summary_pretend_xposed_installer">Pretend that Xposed Installer is installed to make some outdated but useful modules work\nWARNING: Some software (eg. RootBeer) may detect that EdXposed when this function is turned on</string>
+    <string name="settings_title_hide_edxposed_manager">Hide EdXposed Manager</string>
+    <string name="settings_summary_hide_edxposed_manager">Prevent the software from detecting EdXposed Manager\nWARNING: Modules may not be able to start the Manager UI properly</string>
     <string name="version_x">Version %d</string>
 </resources>

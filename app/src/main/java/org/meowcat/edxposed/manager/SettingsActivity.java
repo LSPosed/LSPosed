@@ -26,6 +26,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.takisoft.preferencex.PreferenceFragmentCompat;
 import com.topjohnwu.superuser.Shell;
 
+import org.meowcat.edxposed.manager.adapters.AppHelper;
+import org.meowcat.edxposed.manager.adapters.BlackListAdapter;
 import org.meowcat.edxposed.manager.databinding.ActivitySettingsBinding;
 import org.meowcat.edxposed.manager.util.RepoLoader;
 import org.meowcat.edxposed.manager.widget.IntegerListPreference;
@@ -34,6 +36,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Objects;
 
 public class SettingsActivity extends BaseActivity {
     private static final String KEY_PREFIX = SettingsActivity.class.getName() + '.';
@@ -111,6 +114,8 @@ public class SettingsActivity extends BaseActivity {
 
     @SuppressWarnings({"ResultOfMethodCallIgnored", "deprecation"})
     public static class SettingsFragment extends PreferenceFragmentCompat {
+        private static final File pretendXposedInstallerFlag = new File(XposedApp.BASE_DIR + "conf/pretend_xposed_installer");
+        private static final File hideEdXposedManagerFlag = new File(XposedApp.BASE_DIR + "conf/hide_edxposed_manager");
         static final File disableResourcesFlag = new File(XposedApp.BASE_DIR + "conf/disable_resources");
         static final File dynamicModulesFlag = new File(XposedApp.BASE_DIR + "conf/dynamicmodules");
         static final File deoptBootFlag = new File(XposedApp.BASE_DIR + "conf/deoptbootimage");
@@ -486,6 +491,74 @@ public class SettingsActivity extends BaseActivity {
                     return true;
                 });
                 updatePreference(!md2.isChecked());
+
+                Preference enhancement_status = findPreference("enhancement_status");
+                Objects.requireNonNull(enhancement_status).setSummary(StatusInstallerFragment.isEnhancementEnabled() ? R.string.settings_summary_enhancement_enabled : R.string.settings_summary_enhancement);
+                SwitchPreferenceCompat prefPretendXposedInstaller = findPreference("pretend_xposed_installer");
+
+                Objects.requireNonNull(prefPretendXposedInstaller).setChecked(pretendXposedInstallerFlag.exists());
+                prefPretendXposedInstaller.setOnPreferenceChangeListener((preference, newValue) -> {
+                    boolean enabled = (Boolean) newValue;
+                    if (enabled) {
+                        new BlackListAdapter(getContext(), AppHelper.isWhiteListMode(), null).generateCheckedList();
+                        FileOutputStream fos = null;
+                        try {
+                            fos = new FileOutputStream(pretendXposedInstallerFlag.getPath());
+                            setFilePermissionsFromMode(pretendXposedInstallerFlag.getPath());
+                        } catch (FileNotFoundException e) {
+                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                        } finally {
+                            if (fos != null) {
+                                try {
+                                    fos.close();
+                                } catch (IOException e) {
+                                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    try {
+                                        pretendXposedInstallerFlag.createNewFile();
+                                    } catch (IOException e1) {
+                                        Toast.makeText(getActivity(), e1.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        pretendXposedInstallerFlag.delete();
+                    }
+                    return (enabled == pretendXposedInstallerFlag.exists());
+                });
+
+                SwitchPreferenceCompat prefHideEdXposedManager = findPreference("hide_edxposed_manager");
+                Objects.requireNonNull(prefHideEdXposedManager).setChecked(hideEdXposedManagerFlag.exists());
+                prefHideEdXposedManager.setOnPreferenceChangeListener((preference, newValue) -> {
+                    boolean enabled = (Boolean) newValue;
+                    if (enabled) {
+                        new BlackListAdapter(getContext(), AppHelper.isWhiteListMode(), null).generateCheckedList();
+                        FileOutputStream fos = null;
+                        try {
+                            fos = new FileOutputStream(hideEdXposedManagerFlag.getPath());
+                            setFilePermissionsFromMode(hideEdXposedManagerFlag.getPath());
+                        } catch (FileNotFoundException e) {
+                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                        } finally {
+                            if (fos != null) {
+                                try {
+                                    fos.close();
+                                } catch (IOException e) {
+                                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    try {
+                                        hideEdXposedManagerFlag.createNewFile();
+                                    } catch (IOException e1) {
+                                        Toast.makeText(getActivity(), e1.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        hideEdXposedManagerFlag.delete();
+                    }
+                    return (enabled == hideEdXposedManagerFlag.exists());
+                });
+
             }
         }
 

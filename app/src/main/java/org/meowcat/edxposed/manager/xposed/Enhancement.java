@@ -1,5 +1,18 @@
-package org.meowcat.edxposed.manager.xposed;
+package org.meowcat.edxposed.manager.xposed;import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.os.Binder;
 import android.os.Build;
+
+import androidx.annotation.Keep;
+
+import org.meowcat.edxposed.manager.StatusInstallerFragment;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XC_MethodHook;
@@ -8,11 +21,44 @@ import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
+import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static org.meowcat.edxposed.manager.BuildConfig.APPLICATION_ID;
 
+@Keep
 public class Enhancement implements IXposedHookLoadPackage {
 
+    private static final String mPretendXposedInstallerFlag = "pretend_xposed_installer";
+    private static final String mHideEdXposedManagerFlag = "hide_edxposed_manager";
+
     private static final String LEGACY_INSTALLER = "de.robv.android.xposed.installer";
+
+    private static List modulesList = null;
+
+    private static boolean getFlagState(int user, String flag) {
+        return new File(String.format("/data/user_de/%s/%s/conf/%s", user, APPLICATION_ID, flag)).exists();
+    }
+
+    private static List getModulesList(int user) {
+        if (modulesList != null) {
+            return modulesList;
+        }
+        final File listFile = new File(String.format("/data/user_de/%s/%s/conf/enabled_modules.list", user, APPLICATION_ID));
+        List<String> list = new ArrayList<>();
+        try {
+            FileReader fileReader = new FileReader(listFile);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String str;
+            while ((str = bufferedReader.readLine()) != null) {
+                list.add(str);
+            }
+            bufferedReader.close();
+            fileReader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        modulesList = list;
+        return list;
+    }
 
     private static void hookAllMethods(String className, ClassLoader classLoader, String methodName, XC_MethodHook callback) {
         try {
@@ -27,24 +73,165 @@ public class Enhancement implements IXposedHookLoadPackage {
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) {
         if (lpparam.packageName.equals("android")) {
-            // Hook PM to pretend to have legacy Xposed Installer installed
+            // android.app.ApplicationPackageManager.getInstalledApplicationsAsUser(int flag, int userId)
+            findAndHookMethod("android.app.ApplicationPackageManager", lpparam.classLoader, "getInstalledApplicationsAsUser", int.class, int.class, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) {
+                    if (param.args != null && param.args[0] != null) {
+                        final int userId = (int) param.args[1];
+
+                        boolean isXposedModule = false;
+                        final String[] packages =
+                                (String[]) XposedHelpers.callMethod(param.thisObject, "getPackagesForUid", Binder.getCallingUid());
+                        for (String packageName : packages) {
+                            if (packageName.equals(APPLICATION_ID)) {
+                                return;
+                            }
+                            if (getModulesList(userId).contains(packageName)) {
+                                isXposedModule = true;
+                                break;
+                            }
+                        }
+
+                        @SuppressWarnings("unchecked") List<ApplicationInfo> applicationInfoList = (List<ApplicationInfo>) param.getResult();
+                        if (isXposedModule) {
+                            if (getFlagState(userId, mPretendXposedInstallerFlag)) {
+                                for (ApplicationInfo applicationInfo : applicationInfoList) {
+                                    if (applicationInfo.packageName.equals(APPLICATION_ID)) {
+                                        applicationInfo.packageName = LEGACY_INSTALLER;
+                                        applicationInfoList.add(applicationInfo);
+                                        break;
+                                    }
+                                }
+                            }
+                        } else {
+                            if (getFlagState(userId, mHideEdXposedManagerFlag)) {
+                                for (ApplicationInfo applicationInfo : applicationInfoList) {
+                                    if (applicationInfo.packageName.equals(APPLICATION_ID)) {
+                                        applicationInfoList.remove(applicationInfo);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        param.setResult(applicationInfoList);
+                    }
+                }
+            });
+            // android.app.ApplicationPackageManager.getInstalledPackagesAsUser(int flag, int userId)
+            findAndHookMethod("android.app.ApplicationPackageManager", lpparam.classLoader, "getInstalledPackagesAsUser", int.class, int.class, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) {
+                    if (param.args != null && param.args[0] != null) {
+                        final int userId = (int) param.args[1];
+
+                        boolean isXposedModule = false;
+                        final String[] packages =
+                                (String[]) XposedHelpers.callMethod(param.thisObject, "getPackagesForUid", Binder.getCallingUid());
+                        for (String packageName : packages) {
+                            if (packageName.equals(APPLICATION_ID)) {
+                                return;
+                            }
+                            if (getModulesList(userId).contains(packageName)) {
+                                isXposedModule = true;
+                                break;
+                            }
+                        }
+
+                        @SuppressWarnings("unchecked") List<PackageInfo> packageInfoList = (List<PackageInfo>) param.getResult();
+                        if (isXposedModule) {
+                            if (getFlagState(userId, mPretendXposedInstallerFlag)) {
+                                for (PackageInfo packageInfo : packageInfoList) {
+                                    if (packageInfo.packageName.equals(APPLICATION_ID)) {
+                                        packageInfo.packageName = LEGACY_INSTALLER;
+                                        packageInfoList.add(packageInfo);
+                                        break;
+                                    }
+                                }
+                            }
+                        } else {
+                            if (getFlagState(userId, mHideEdXposedManagerFlag)) {
+                                for (PackageInfo packageInfo : packageInfoList) {
+                                    if (packageInfo.packageName.equals(APPLICATION_ID)) {
+                                        packageInfoList.remove(packageInfo);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        param.setResult(packageInfoList);
+                    }
+                }
+            });
+            // com.android.server.pm.PackageManagerService.getApplicationInfo(String packageName, int flag, int userId)
             hookAllMethods("com.android.server.pm.PackageManagerService", lpparam.classLoader, "getApplicationInfo", new XC_MethodHook() {
                 @Override
                 protected void beforeHookedMethod(MethodHookParam param) {
                     if (param.args != null && param.args[0] != null) {
-                        if (param.args[0].equals(LEGACY_INSTALLER)) {
-                            param.args[0] = APPLICATION_ID;
+                        final int userId = (int) param.args[2];
+
+                        boolean isXposedModule = false;
+                        final String[] packages =
+                                (String[]) XposedHelpers.callMethod(param.thisObject, "getPackagesForUid", Binder.getCallingUid());
+                        for (String packageName : packages) {
+                            if (packageName.equals(APPLICATION_ID)) {
+                                return;
+                            }
+                            if (getModulesList(userId).contains(packageName)) {
+                                isXposedModule = true;
+                                break;
+                            }
+                        }
+
+                        if (isXposedModule) {
+                            if (getFlagState(userId, mPretendXposedInstallerFlag)) {
+                                if (param.args[0].equals(LEGACY_INSTALLER)) {
+                                    param.args[0] = APPLICATION_ID;
+                                }
+                            }
+                        } else {
+                            if (getFlagState(userId, mHideEdXposedManagerFlag)) {
+                                if (param.args[0].equals(APPLICATION_ID)) {
+                                    param.setResult(null);
+                                }
+                            }
                         }
                     }
 
                 }
             });
+            // com.android.server.pm.PackageManagerService.getPackageInfo(String packageName, int flag, int userId)
             hookAllMethods("com.android.server.pm.PackageManagerService", lpparam.classLoader, "getPackageInfo", new XC_MethodHook() {
                 @Override
                 protected void beforeHookedMethod(MethodHookParam param) {
                     if (param.args != null && param.args[0] != null) {
-                        if (param.args[0].equals(LEGACY_INSTALLER)) {
-                            param.args[0] = APPLICATION_ID;
+                        final int userId = (int) param.args[2];
+
+                        boolean isXposedModule = false;
+                        final String[] packages =
+                                (String[]) XposedHelpers.callMethod(param.thisObject, "getPackagesForUid", Binder.getCallingUid());
+                        for (String packageName : packages) {
+                            if (packageName.equals(APPLICATION_ID)) {
+                                return;
+                            }
+                            if (getModulesList(userId).contains(packageName)) {
+                                isXposedModule = true;
+                                break;
+                            }
+                        }
+
+                        if (isXposedModule) {
+                            if (getFlagState(userId, mPretendXposedInstallerFlag)) {
+                                if (param.args[0].equals(LEGACY_INSTALLER)) {
+                                    param.args[0] = APPLICATION_ID;
+                                }
+                            }
+                        } else {
+                            if (getFlagState(userId, mHideEdXposedManagerFlag)) {
+                                if (param.args[0].equals(APPLICATION_ID)) {
+                                    param.setResult(null);
+                                }
+                            }
                         }
                     }
                 }
@@ -84,7 +271,8 @@ public class Enhancement implements IXposedHookLoadPackage {
             }
         } else if (lpparam.packageName.equals(APPLICATION_ID)) {
             // Make sure Xposed work
-            XposedHelpers.findAndHookMethod("org.meowcat.edxposed.manager.StatusInstallerFragment", lpparam.classLoader, "isEnhancementEnabled", XC_MethodReplacement.returnConstant(true));
+            XposedHelpers.findAndHookMethod(StatusInstallerFragment.class.getName(), lpparam.classLoader, "isEnhancementEnabled", XC_MethodReplacement.returnConstant(true));
+            // XposedHelpers.findAndHookMethod(StatusInstallerFragment.class.getName(), lpparam.classLoader, "isSELinuxEnforced", XC_MethodReplacement.returnConstant(SELinuxHelper.isSELinuxEnforced()));
         }
     }
 
