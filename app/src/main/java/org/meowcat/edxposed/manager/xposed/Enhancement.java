@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
@@ -31,6 +32,18 @@ public class Enhancement implements IXposedHookLoadPackage {
     private static final String mHideEdXposedManagerFlag = "hide_edxposed_manager";
 
     private static final String LEGACY_INSTALLER = "de.robv.android.xposed.installer";
+
+    private static final List HIDE_WHITE_LIST = Arrays.asList( // TODO: more whitelist packages
+            APPLICATION_ID, // Whitelist or crash
+            "com.android.providers.downloads", // For download modules
+            "com.android.providers.downloads.ui",
+            "com.android.packageinstaller", // For uninstall EdXposed Manager
+            "com.google.android.packageinstaller",
+            "com.android.systemui", // For notifications
+            "com.android.permissioncontroller", // For permissions grant
+            "com.topjohnwu.magisk", // For superuser root grant
+            "eu.chainfire.supersu"
+    ); // System server (uid <= 1000) will auto pass
 
     private static List modulesList = null;
 
@@ -79,12 +92,16 @@ public class Enhancement implements IXposedHookLoadPackage {
                 protected void afterHookedMethod(MethodHookParam param) {
                     if (param.args != null && param.args[0] != null) {
                         final int userId = (int) param.args[1];
+                        final int packageUid = Binder.getCallingUid();
 
                         boolean isXposedModule = false;
                         final String[] packages =
-                                (String[]) XposedHelpers.callMethod(param.thisObject, "getPackagesForUid", Binder.getCallingUid());
+                                (String[]) XposedHelpers.callMethod(param.thisObject, "getPackagesForUid", packageUid);
+                        if (packages == null || packages.length == 0 || packageUid <= 1000) {
+                            return;
+                        }
                         for (String packageName : packages) {
-                            if (packageName.equals(APPLICATION_ID)) {
+                            if (HIDE_WHITE_LIST.contains(packageName)) {
                                 return;
                             }
                             if (getModulesList(userId).contains(packageName)) {
@@ -107,7 +124,7 @@ public class Enhancement implements IXposedHookLoadPackage {
                         } else {
                             if (getFlagState(userId, mHideEdXposedManagerFlag)) {
                                 for (ApplicationInfo applicationInfo : applicationInfoList) {
-                                    if (applicationInfo.packageName.equals(APPLICATION_ID)) {
+                                    if (applicationInfo.packageName.equals(APPLICATION_ID) || applicationInfo.packageName.equals(LEGACY_INSTALLER)) {
                                         applicationInfoList.remove(applicationInfo);
                                         break;
                                     }
@@ -124,12 +141,16 @@ public class Enhancement implements IXposedHookLoadPackage {
                 protected void afterHookedMethod(MethodHookParam param) {
                     if (param.args != null && param.args[0] != null) {
                         final int userId = (int) param.args[1];
+                        final int packageUid = Binder.getCallingUid();
 
                         boolean isXposedModule = false;
                         final String[] packages =
-                                (String[]) XposedHelpers.callMethod(param.thisObject, "getPackagesForUid", Binder.getCallingUid());
+                                (String[]) XposedHelpers.callMethod(param.thisObject, "getPackagesForUid", packageUid);
+                        if (packages == null || packages.length == 0 || packageUid <= 1000) {
+                            return;
+                        }
                         for (String packageName : packages) {
-                            if (packageName.equals(APPLICATION_ID)) {
+                            if (HIDE_WHITE_LIST.contains(packageName)) {
                                 return;
                             }
                             if (getModulesList(userId).contains(packageName)) {
@@ -152,7 +173,7 @@ public class Enhancement implements IXposedHookLoadPackage {
                         } else {
                             if (getFlagState(userId, mHideEdXposedManagerFlag)) {
                                 for (PackageInfo packageInfo : packageInfoList) {
-                                    if (packageInfo.packageName.equals(APPLICATION_ID)) {
+                                    if (packageInfo.packageName.equals(APPLICATION_ID) || packageInfo.packageName.equals(LEGACY_INSTALLER)) {
                                         packageInfoList.remove(packageInfo);
                                         break;
                                     }
@@ -169,12 +190,16 @@ public class Enhancement implements IXposedHookLoadPackage {
                 protected void beforeHookedMethod(MethodHookParam param) {
                     if (param.args != null && param.args[0] != null) {
                         final int userId = (int) param.args[2];
+                        final int packageUid = Binder.getCallingUid();
 
                         boolean isXposedModule = false;
                         final String[] packages =
-                                (String[]) XposedHelpers.callMethod(param.thisObject, "getPackagesForUid", Binder.getCallingUid());
+                                (String[]) XposedHelpers.callMethod(param.thisObject, "getPackagesForUid", packageUid);
+                        if (packages == null || packages.length == 0 || packageUid <= 1000) {
+                            return;
+                        }
                         for (String packageName : packages) {
-                            if (packageName.equals(APPLICATION_ID)) {
+                            if (HIDE_WHITE_LIST.contains(packageName)) {
                                 return;
                             }
                             if (getModulesList(userId).contains(packageName)) {
@@ -191,7 +216,7 @@ public class Enhancement implements IXposedHookLoadPackage {
                             }
                         } else {
                             if (getFlagState(userId, mHideEdXposedManagerFlag)) {
-                                if (param.args[0].equals(APPLICATION_ID)) {
+                                if (param.args[0].equals(APPLICATION_ID) || param.args[0].equals(LEGACY_INSTALLER)) {
                                     param.setResult(null);
                                 }
                             }
@@ -206,12 +231,16 @@ public class Enhancement implements IXposedHookLoadPackage {
                 protected void beforeHookedMethod(MethodHookParam param) {
                     if (param.args != null && param.args[0] != null) {
                         final int userId = (int) param.args[2];
+                        final int packageUid = Binder.getCallingUid();
 
                         boolean isXposedModule = false;
                         final String[] packages =
-                                (String[]) XposedHelpers.callMethod(param.thisObject, "getPackagesForUid", Binder.getCallingUid());
+                                (String[]) XposedHelpers.callMethod(param.thisObject, "getPackagesForUid", packageUid);
+                        if (packages == null || packages.length == 0 || packageUid <= 1000) {
+                            return;
+                        }
                         for (String packageName : packages) {
-                            if (packageName.equals(APPLICATION_ID)) {
+                            if (HIDE_WHITE_LIST.contains(packageName)) {
                                 return;
                             }
                             if (getModulesList(userId).contains(packageName)) {
@@ -228,7 +257,7 @@ public class Enhancement implements IXposedHookLoadPackage {
                             }
                         } else {
                             if (getFlagState(userId, mHideEdXposedManagerFlag)) {
-                                if (param.args[0].equals(APPLICATION_ID)) {
+                                if (param.args[0].equals(APPLICATION_ID) || param.args[0].equals(LEGACY_INSTALLER)) {
                                     param.setResult(null);
                                 }
                             }
