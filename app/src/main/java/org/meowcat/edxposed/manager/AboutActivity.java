@@ -46,12 +46,7 @@ public class AboutActivity extends BaseActivity {
                     .setMessage(HtmlCompat.fromHtml(changes, HtmlCompat.FROM_HTML_MODE_LEGACY))
                     .setPositiveButton(android.R.string.ok, null).show());
         }
-
-        try {
-            String version = getPackageManager().getPackageInfo(packageName, 0).versionName;
-            binding.appVersion.setText(version);
-        } catch (PackageManager.NameNotFoundException ignored) {
-        }
+        binding.appVersion.setText(BuildConfig.VERSION_NAME);
 
         binding.licensesView.setOnClickListener(v12 -> startActivity(new Intent(this, OssLicensesMenuActivity.class)));
 
