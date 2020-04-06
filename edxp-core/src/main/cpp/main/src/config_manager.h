@@ -32,6 +32,8 @@ namespace edxp {
 
         bool IsNoModuleLogEnabled() const;
 
+        bool IsHiddenAPIBypassEnabled() const;
+
         std::string GetInstallerPackageName() const;
 
         std::string GetXposedPropPath() const;
@@ -46,6 +48,7 @@ namespace edxp {
 
         bool IsAppNeedHook(const std::string &app_data_dir);
 
+        bool hidden_api_bypass_enabled_ = false;
     private:
         inline static ConfigManager *instance_;
         uid_t last_user_ = false;

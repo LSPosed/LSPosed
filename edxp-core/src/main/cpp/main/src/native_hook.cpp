@@ -83,7 +83,9 @@ namespace edxp {
         if (art_hooks_installed) {
             return;
         }
-        art::hidden_api::DisableHiddenApi(art_handle, hook_func);
+        if (ConfigManager::GetInstance() -> IsHiddenAPIBypassEnabled()) {
+            art::hidden_api::DisableHiddenApi(art_handle, hook_func);
+        }
         art::Runtime::Setup(art_handle, hook_func);
         art::gc::Heap::Setup(art_handle, hook_func);
         art::ClassLinker::Setup(art_handle, hook_func);

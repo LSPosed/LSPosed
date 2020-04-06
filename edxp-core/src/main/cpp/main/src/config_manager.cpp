@@ -88,6 +88,7 @@ namespace edxp {
         deopt_boot_image_enabled_ = access(GetConfigPath("deoptbootimage").c_str(), F_OK) == 0;
         resources_hook_enabled_ = access(GetConfigPath("disable_resources").c_str(), F_OK) != 0;
         no_module_log_enabled_ = access(GetConfigPath("disable_modules_log").c_str(), F_OK) == 0;
+        hidden_api_bypass_enabled_ = access(GetConfigPath("disable_hidden_api_bypass").c_str(), F_OK) != 0;
 
         // use_white_list snapshot
         use_white_list_snapshot_ = access(use_whitelist_path_.c_str(), F_OK) == 0;
@@ -98,6 +99,7 @@ namespace edxp {
         LOGI("  resources hook: %s", BoolToString(resources_hook_enabled_));
         LOGI("  deopt boot image: %s", BoolToString(deopt_boot_image_enabled_));
         LOGI("  no module log: %s", BoolToString(no_module_log_enabled_));
+        LOGI("  hidden api bypass: %s", BoolToString(hidden_api_bypass_enabled_));
         if (black_white_list_enabled_) {
             SnapshotBlackWhiteList();
         }
@@ -181,6 +183,10 @@ namespace edxp {
 
     ALWAYS_INLINE bool ConfigManager::IsDeoptBootImageEnabled() const {
         return deopt_boot_image_enabled_;
+    }
+
+    ALWAYS_INLINE bool ConfigManager::IsHiddenAPIBypassEnabled() const {
+        return hidden_api_bypass_enabled_;
     }
 
     ALWAYS_INLINE std::string ConfigManager::GetInstallerPackageName() const {
