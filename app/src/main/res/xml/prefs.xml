@@ -162,8 +162,14 @@
 
         <SwitchPreferenceCompat
             android:defaultValue="false"
+            android:key="disable_hidden_api_bypass"
+            android:summary="@string/settings_summary_disable_hidden_api_bypass"
+            android:title="@string/settings_title_disable_hidden_api_bypass"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
             android:key="disable_resources"
-            android:persistent="false"
             android:summary="@string/settings_disable_resources_summary"
             android:title="@string/settings_disable_resources"
             app:iconSpaceReserved="false" />
@@ -196,8 +202,8 @@
 
         <Preference
             android:key="enhancement_status"
-            android:title="@string/settings_title_enhancement"
             android:summary="@string/settings_summary_enhancement"
+            android:title="@string/settings_title_enhancement"
             app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat

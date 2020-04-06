@@ -108,7 +108,7 @@
     <string name="settings_release_type">要显示的版本</string>
     <string name="settings_group_framework">框架</string>
     <string name="settings_disable_resources">禁用资源钩子</string>
-    <string name="settings_disable_resources_summary">解决与主题引擎的冲突\n<b>警告: </b> 启用该选项将导致修改资源的模块无法工作</string>
+    <string name="settings_disable_resources_summary">解决与主题引擎的冲突 <b>警告: </b> 启用该选项将导致修改资源的模块无法工作</string>
     <string name="settings_group_app">应用</string>
     <string name="settings_theme">主题</string>
     <string name="settings_theme_light">亮色</string>
@@ -313,4 +313,6 @@
     <string name="settings_summary_pretend_xposed_installer">假装已安装 Xposed Installer 来使一些过时但有用的模块正常工作\n仅对「模块」中已启用模块生效\n注：开启此功能可能会被某些软件（如 RootBeer）检测到 EdXposed</string>
     <string name="settings_title_hide_edxposed_manager">隐藏 EdXposed Manager</string>
     <string name="settings_summary_hide_edxposed_manager">防止软件检测到 EdXposed Manager\n注：模块可能无法正常打开 EdXposed Manager 界面，系统中关于 EdXposed Manager 的一些功能可能无法正常使用</string>
+    <string name="settings_title_disable_hidden_api_bypass">禁用绕过隐藏 API 的限制</string>
+    <string name="settings_summary_disable_hidden_api_bypass">禁用绕过隐藏 API 的限制将会通过某些检测（如Snapchat）\n<b>警告:</b> 启用此选项可能会使某些功能无法正常工作，或出现一些其他问题</string>
 </resources>

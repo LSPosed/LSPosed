@@ -344,4 +344,6 @@
     <string name="settings_summary_pretend_xposed_installer">Pretend that Xposed Installer is installed to make some outdated but useful modules work\nOnly work for the enabled modules in \"Modules\"\nWARNING: Some software (eg. RootBeer) may detect that EdXposed when this function is turned on</string>
     <string name="settings_title_hide_edxposed_manager">Hide EdXposed Manager</string>
     <string name="settings_summary_hide_edxposed_manager">Prevent the software from detecting EdXposed Manager\nWARNING: Modules may not be able to start the EdXposed Manager UI properly, some fratures of EdXposed Manager in the system may not work properly</string>
+    <string name="settings_title_disable_hidden_api_bypass">Disable hidden API restrictions bypass</string>
+    <string name="settings_summary_disable_hidden_api_bypass">Disable hidden API restrictions bypass will pass some detection (eg Snapchat), these APIs are disabled by default\n<b>WARNING:</b> Enable this option may cause some features do not work properly, or some other problems</string>
 </resources>
