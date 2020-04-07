@@ -494,7 +494,7 @@ public class SettingsActivity extends BaseActivity {
                 updatePreference(!md2.isChecked());
 
                 Preference enhancement_status = findPreference("enhancement_status");
-                Objects.requireNonNull(enhancement_status).setSummary(StatusInstallerFragment.isEnhancementEnabled() ? R.string.settings_summary_enhancement_enabled : R.string.settings_summary_enhancement);
+                Objects.requireNonNull(enhancement_status).setSummary(XposedApp.isEnhancementEnabled() ? R.string.settings_summary_enhancement_enabled : R.string.settings_summary_enhancement);
                 SwitchPreferenceCompat prefPretendXposedInstaller = findPreference("pretend_xposed_installer");
 
                 Objects.requireNonNull(prefPretendXposedInstaller).setChecked(pretendXposedInstallerFlag.exists());

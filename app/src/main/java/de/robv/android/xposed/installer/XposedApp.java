@@ -19,6 +19,10 @@ public class XposedApp extends Application {
     private static XposedApp instance = null;
     public InstallZipUtil.XposedProp mXposedProp;
 
+    public static boolean isEnhancementEnabled() {
+        return false;
+    }
+
     public static XposedApp getInstance() {
         return instance;
     }

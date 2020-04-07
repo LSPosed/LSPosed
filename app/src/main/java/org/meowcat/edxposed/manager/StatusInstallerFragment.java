@@ -44,10 +44,6 @@ public class StatusInstallerFragment extends Fragment {
                 .setNegativeButton(R.string.later, null).show());
     }
 
-    public static boolean isEnhancementEnabled() {
-        return false;
-    }
-
     private static void update(Context context) {
         Uri uri = Uri.parse(updateLink);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
@@ -108,7 +104,7 @@ public class StatusInstallerFragment extends Fragment {
         }
 
         String mAppVer;
-        if (isEnhancementEnabled()) {
+        if (XposedApp.isEnhancementEnabled()) {
             mAppVer = String.format("v%s (%s) (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE, getString(R.string.status_enhancement));
         } else {
             mAppVer = String.format("v%s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE);
