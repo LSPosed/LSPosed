@@ -81,6 +81,7 @@ HUAWEI
 OLD_MAGISK=false
 DETECTED_DEVICE=false
 #NO_PERSIST=false
+[[ "$(getenforce)" == "Enforcing" ]] && ENFORCE=true || ENFORCE=false
 
 abortC() {
   rm -rf "${MODPATH}"
@@ -268,9 +269,9 @@ fi
 
 if [[ ${BOOTMODE} == true && ${NO_MANAGER} == true ]]; then
     ui_print "- Installing stub apk"
-    cp -f "${MODPATH}/EdXposed.apk" /data/local/tmp/
-    pm install /data/local/tmp/EdXposed.apk 2>&2
-    rm -rf /data/local/tmp/EdXposed.apk
+    ${ENFORCE} && setenforce 0
+    (pm install "${MODPATH}/EdXposed.apk" >/dev/null 2>&2) || ui_print "  - Stub install failed! Do not forget install EdXposed Manager manually"
+    ${ENFORCE} && setenforce 1
 fi
 
 if [[ "${OLD_MAGISK}" == true ]]; then
