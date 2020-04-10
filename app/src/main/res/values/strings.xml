@@ -300,6 +300,7 @@
     <string name="show_modules">Show modules and manager</string>
     <string name="show_modules_summary">Show modules and manager in application list\nThis option does not remove checked application flag</string>
     <string name="compile_failed">Optimization failed or return value is empty</string>
+    <string name="compile_failed_with_info">Optimization failed: </string>
     <string name="hook_modules">Force hook modules</string>
     <string name="hook_modules_summary">Force add modules to white-list and remove from black list\nClosing this option does not remove modules from white list\nApp list mode is required to enable</string>
     <string name="not_installed">Not installed</string>

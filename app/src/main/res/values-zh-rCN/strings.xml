@@ -266,6 +266,7 @@
     <string name="show_modules">显示模块和管理器</string>
     <string name="show_modules_summary">在应用列表内显示模块和管理器\n此选项并不会移除已勾选的应用标识</string>
     <string name="compile_failed">优化失败或返回值为空</string>
+    <string name="compile_failed_with_info">优化失败: </string>
     <string name="hook_modules">强制添加模块</string>
     <string name="hook_modules_summary">强制将模块添加进白名单并移出黑名单\n关闭此选项并不会移除已勾选的应用标识\n仅当启用应用名单模式时有效</string>
     <string name="custom_list">使用镜像化的模块列表</string>

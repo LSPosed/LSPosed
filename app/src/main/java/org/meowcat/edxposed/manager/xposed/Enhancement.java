@@ -1,9 +1,16 @@
-package org.meowcat.edxposed.manager.xposed;import android.content.pm.ApplicationInfo;
+package org.meowcat.edxposed.manager.xposed;
+
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.os.Binder;
 import android.os.Build;
+import android.os.FileObserver;
+import android.os.StrictMode;
+import android.os.UserHandle;
+import android.util.SparseArray;
 
 import androidx.annotation.Keep;
+import androidx.annotation.Nullable;
 
 import org.meowcat.edxposed.manager.StatusInstallerFragment;
 
@@ -13,6 +20,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
@@ -21,9 +29,11 @@ import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
-import de.robv.android.xposed.installer.XposedApp;
 
+import static de.robv.android.xposed.XposedHelpers.callMethod;
+import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
+import static java.util.Collections.binarySearch;
 import static org.meowcat.edxposed.manager.BuildConfig.APPLICATION_ID;
 
 @Keep
@@ -34,8 +44,9 @@ public class Enhancement implements IXposedHookLoadPackage {
 
     private static final String LEGACY_INSTALLER = "de.robv.android.xposed.installer";
 
-    private static final List HIDE_WHITE_LIST = Arrays.asList( // TODO: more whitelist packages
+    private static final List<String> HIDE_WHITE_LIST = Arrays.asList( // TODO: more whitelist packages
             APPLICATION_ID, // Whitelist or crash
+            LEGACY_INSTALLER, // for safety
             "com.android.providers.downloads", // For download modules
             "com.android.providers.downloads.ui",
             "com.android.packageinstaller", // For uninstall EdXposed Manager
@@ -44,39 +55,84 @@ public class Enhancement implements IXposedHookLoadPackage {
             "com.android.permissioncontroller", // For permissions grant
             "com.topjohnwu.magisk", // For superuser root grant
             "eu.chainfire.supersu"
-    ); // System server (uid <= 1000) will auto pass
+    ); // UserHandle.isCore(uid) will auto pass
 
-    private static List modulesList = null;
+    private static final SparseArray<List<String>> modulesList = new SparseArray<>();
+    private static final SparseArray<FileObserver> modulesListObservers = new SparseArray<>();
 
-    private static boolean getFlagState(int user, String flag) {
-        return new File(String.format("/data/user_de/%s/%s/conf/%s", user, APPLICATION_ID, flag)).exists();
+    static {
+        Collections.sort(HIDE_WHITE_LIST);
     }
 
-    private static List getModulesList(int user) {
-        if (modulesList != null) {
-            return modulesList;
-        }
-        final File listFile = new File(String.format("/data/user_de/%s/%s/conf/enabled_modules.list", user, APPLICATION_ID));
-        List<String> list = new ArrayList<>();
+    private static boolean getFlagState(int user, String flag) {
+        final StrictMode.ThreadPolicy oldPolicy = StrictMode.allowThreadDiskReads();
         try {
-            FileReader fileReader = new FileReader(listFile);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-            String str;
-            while ((str = bufferedReader.readLine()) != null) {
-                list.add(str);
-            }
-            bufferedReader.close();
-            fileReader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+            return new File(String.format("/data/user_de/%s/%s/conf/%s", user, APPLICATION_ID, flag)).exists();
+        } finally {
+            StrictMode.setThreadPolicy(oldPolicy);
         }
-        modulesList = list;
+    }
+
+    private static List<String> getModulesList(final int user) {
+        final int index = modulesList.indexOfKey(user);
+        if (index >= 0) {
+            return modulesList.valueAt(index);
+        }
+
+        final String filename = String.format("/data/user_de/%s/%s/conf/enabled_modules.list", user, APPLICATION_ID);
+        final FileObserver observer = new FileObserver(filename) {
+            @Override
+            public void onEvent(int event, @Nullable String path) {
+                switch (event) {
+                    case FileObserver.MODIFY:
+                        modulesList.put(user, readModulesList(filename));
+                        break;
+                    case FileObserver.MOVED_FROM:
+                    case FileObserver.MOVED_TO:
+                    case FileObserver.MOVE_SELF:
+                    case FileObserver.DELETE:
+                    case FileObserver.DELETE_SELF:
+                        modulesList.remove(user);
+                        modulesListObservers.remove(user);
+                        break;
+                }
+            }
+        };
+        modulesListObservers.put(user, observer);
+        final List<String> list = readModulesList(filename);
+        modulesList.put(user, list);
+        observer.startWatching();
         return list;
+    }
+
+    private static List<String> readModulesList(final String filename) {
+        XposedBridge.log("EdXpMgrEx: Reading modules list " + filename + "...");
+        final StrictMode.ThreadPolicy oldPolicy = StrictMode.allowThreadDiskReads();
+        try {
+            final File listFile = new File(filename);
+            final List<String> list = new ArrayList<>();
+            try {
+                final FileReader fileReader = new FileReader(listFile);
+                final BufferedReader bufferedReader = new BufferedReader(fileReader);
+                String str;
+                while ((str = bufferedReader.readLine()) != null) {
+                    list.add(str);
+                }
+                bufferedReader.close();
+                fileReader.close();
+            } catch (IOException e) {
+                XposedBridge.log(e);
+            }
+            Collections.sort(list);
+            return list;
+        } finally {
+            StrictMode.setThreadPolicy(oldPolicy);
+        }
     }
 
     private static void hookAllMethods(String className, ClassLoader classLoader, String methodName, XC_MethodHook callback) {
         try {
-            Class<?> hookClass = XposedHelpers.findClassIfExists(className, classLoader);
+            final Class<?> hookClass = XposedHelpers.findClassIfExists(className, classLoader);
             if (hookClass == null || XposedBridge.hookAllMethods(hookClass, methodName, callback).size() == 0)
                 XposedBridge.log("Failed to hook " + methodName + " method in " + className);
         } catch (Throwable t) {
@@ -87,31 +143,33 @@ public class Enhancement implements IXposedHookLoadPackage {
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) {
         if (lpparam.packageName.equals("android")) {
-            // android.app.ApplicationPackageManager.getInstalledApplicationsAsUser(int flag, int userId)
-            findAndHookMethod("android.app.ApplicationPackageManager", lpparam.classLoader, "getInstalledApplicationsAsUser", int.class, int.class, new XC_MethodHook() {
+            // com.android.server.pm.PackageManagerService.getInstalledApplications(int flag, int userId)
+            findAndHookMethod("com.android.server.pm.PackageManagerService", lpparam.classLoader, "getInstalledApplications", int.class, int.class, new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) {
                     if (param.args != null && param.args[0] != null) {
-                        final int userId = (int) param.args[1];
                         final int packageUid = Binder.getCallingUid();
+                        if ((boolean) callStaticMethod(UserHandle.class, "isCore", packageUid)) {
+                            return;
+                        }
 
+                        final int userId = (int) param.args[1];
                         boolean isXposedModule = false;
-                        final String[] packages =
-                                (String[]) XposedHelpers.callMethod(param.thisObject, "getPackagesForUid", packageUid);
-                        if (packages == null || packages.length == 0 || packageUid <= 1000) {
+                        final String[] packages = (String[]) callMethod(param.thisObject, "getPackagesForUid", packageUid);
+                        if (packages == null || packages.length == 0) {
                             return;
                         }
                         for (String packageName : packages) {
-                            if (HIDE_WHITE_LIST.contains(packageName)) {
+                            if (binarySearch(HIDE_WHITE_LIST, packageName) >= 0) {
                                 return;
                             }
-                            if (getModulesList(userId).contains(packageName)) {
+                            if (binarySearch(getModulesList(userId), packageName) >= 0) {
                                 isXposedModule = true;
                                 break;
                             }
                         }
 
-                        @SuppressWarnings("unchecked") List<ApplicationInfo> applicationInfoList = (List<ApplicationInfo>) param.getResult();
+                        @SuppressWarnings("unchecked") final List<ApplicationInfo> applicationInfoList = (List<ApplicationInfo>) callMethod(param.getResult(), "getList");
                         if (isXposedModule) {
                             if (getFlagState(userId, mPretendXposedInstallerFlag)) {
                                 for (ApplicationInfo applicationInfo : applicationInfoList) {
@@ -132,35 +190,37 @@ public class Enhancement implements IXposedHookLoadPackage {
                                 }
                             }
                         }
-                        param.setResult(applicationInfoList);
+                        param.setResult(param.getResult()); // "reset" the result to indicate that we handled it
                     }
                 }
             });
-            // android.app.ApplicationPackageManager.getInstalledPackagesAsUser(int flag, int userId)
-            findAndHookMethod("android.app.ApplicationPackageManager", lpparam.classLoader, "getInstalledPackagesAsUser", int.class, int.class, new XC_MethodHook() {
+            // com.android.server.pm.PackageManagerService.getInstalledPackages(int flag, int userId)
+            findAndHookMethod("com.android.server.pm.PackageManagerService", lpparam.classLoader, "getInstalledPackages", int.class, int.class, new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) {
                     if (param.args != null && param.args[0] != null) {
-                        final int userId = (int) param.args[1];
                         final int packageUid = Binder.getCallingUid();
+                        if ((boolean) callStaticMethod(UserHandle.class, "isCore", packageUid)) {
+                            return;
+                        }
 
+                        final int userId = (int) param.args[1];
                         boolean isXposedModule = false;
-                        final String[] packages =
-                                (String[]) XposedHelpers.callMethod(param.thisObject, "getPackagesForUid", packageUid);
-                        if (packages == null || packages.length == 0 || packageUid <= 1000) {
+                        final String[] packages = (String[]) callMethod(param.thisObject, "getPackagesForUid", packageUid);
+                        if (packages == null || packages.length == 0) {
                             return;
                         }
                         for (String packageName : packages) {
-                            if (HIDE_WHITE_LIST.contains(packageName)) {
+                            if (binarySearch(HIDE_WHITE_LIST, packageName) >= 0) {
                                 return;
                             }
-                            if (getModulesList(userId).contains(packageName)) {
+                            if (binarySearch(getModulesList(userId), packageName) >= 0) {
                                 isXposedModule = true;
                                 break;
                             }
                         }
 
-                        @SuppressWarnings("unchecked") List<PackageInfo> packageInfoList = (List<PackageInfo>) param.getResult();
+                        @SuppressWarnings("unchecked") final List<PackageInfo> packageInfoList = (List<PackageInfo>) callMethod(param.getResult(), "getList");
                         if (isXposedModule) {
                             if (getFlagState(userId, mPretendXposedInstallerFlag)) {
                                 for (PackageInfo packageInfo : packageInfoList) {
@@ -181,7 +241,7 @@ public class Enhancement implements IXposedHookLoadPackage {
                                 }
                             }
                         }
-                        param.setResult(packageInfoList);
+                        param.setResult(param.getResult()); // "reset" the result to indicate that we handled it
                     }
                 }
             });
@@ -190,20 +250,22 @@ public class Enhancement implements IXposedHookLoadPackage {
                 @Override
                 protected void beforeHookedMethod(MethodHookParam param) {
                     if (param.args != null && param.args[0] != null) {
-                        final int userId = (int) param.args[2];
                         final int packageUid = Binder.getCallingUid();
+                        if ((boolean) callStaticMethod(UserHandle.class, "isCore", packageUid)) {
+                            return;
+                        }
 
+                        final int userId = (int) param.args[2];
                         boolean isXposedModule = false;
-                        final String[] packages =
-                                (String[]) XposedHelpers.callMethod(param.thisObject, "getPackagesForUid", packageUid);
-                        if (packages == null || packages.length == 0 || packageUid <= 1000) {
+                        final String[] packages = (String[]) callMethod(param.thisObject, "getPackagesForUid", packageUid);
+                        if (packages == null || packages.length == 0) {
                             return;
                         }
                         for (String packageName : packages) {
-                            if (HIDE_WHITE_LIST.contains(packageName)) {
+                            if (binarySearch(HIDE_WHITE_LIST, packageName) >= 0) {
                                 return;
                             }
-                            if (getModulesList(userId).contains(packageName)) {
+                            if (binarySearch(getModulesList(userId), packageName) >= 0) {
                                 isXposedModule = true;
                                 break;
                             }
@@ -223,7 +285,6 @@ public class Enhancement implements IXposedHookLoadPackage {
                             }
                         }
                     }
-
                 }
             });
             // com.android.server.pm.PackageManagerService.getPackageInfo(String packageName, int flag, int userId)
@@ -231,20 +292,22 @@ public class Enhancement implements IXposedHookLoadPackage {
                 @Override
                 protected void beforeHookedMethod(MethodHookParam param) {
                     if (param.args != null && param.args[0] != null) {
-                        final int userId = (int) param.args[2];
                         final int packageUid = Binder.getCallingUid();
+                        if ((boolean) callStaticMethod(UserHandle.class, "isCore", packageUid)) {
+                            return;
+                        }
 
+                        final int userId = (int) param.args[2];
                         boolean isXposedModule = false;
-                        final String[] packages =
-                                (String[]) XposedHelpers.callMethod(param.thisObject, "getPackagesForUid", packageUid);
-                        if (packages == null || packages.length == 0 || packageUid <= 1000) {
+                        final String[] packages = (String[]) callMethod(param.thisObject, "getPackagesForUid", packageUid);
+                        if (packages == null || packages.length == 0) {
                             return;
                         }
                         for (String packageName : packages) {
-                            if (HIDE_WHITE_LIST.contains(packageName)) {
+                            if (binarySearch(HIDE_WHITE_LIST, packageName) >= 0) {
                                 return;
                             }
-                            if (getModulesList(userId).contains(packageName)) {
+                            if (binarySearch(getModulesList(userId), packageName) >= 0) {
                                 isXposedModule = true;
                                 break;
                             }
@@ -268,7 +331,7 @@ public class Enhancement implements IXposedHookLoadPackage {
             });
             // Hook AM to remove restrict of EdXposed Manager
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                hookAllMethods("com.android.server.am.ActivityManagerService", lpparam.classLoader, "appRestrictedInBackgroundLocked", new XC_MethodHook() {
+                final XC_MethodHook hook = new XC_MethodHook() {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) {
                         if (param.args != null && param.args[1] != null) {
@@ -277,31 +340,14 @@ public class Enhancement implements IXposedHookLoadPackage {
                             }
                         }
                     }
-                });
-                hookAllMethods("com.android.server.am.ActivityManagerService", lpparam.classLoader, "appServicesRestrictedInBackgroundLocked", new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) {
-                        if (param.args != null && param.args[1] != null) {
-                            if (param.args[1].equals(APPLICATION_ID)) {
-                                param.setResult(0);
-                            }
-                        }
-                    }
-                });
-                hookAllMethods("com.android.server.am.ActivityManagerService", lpparam.classLoader, "getAppStartModeLocked", new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) {
-                        if (param.args != null && param.args[1] != null) {
-                            if (param.args[1].equals(APPLICATION_ID)) {
-                                param.setResult(0);
-                            }
-                        }
-                    }
-                });
+                };
+                hookAllMethods("com.android.server.am.ActivityManagerService", lpparam.classLoader, "appRestrictedInBackgroundLocked", hook);
+                hookAllMethods("com.android.server.am.ActivityManagerService", lpparam.classLoader, "appServicesRestrictedInBackgroundLocked", hook);
+                hookAllMethods("com.android.server.am.ActivityManagerService", lpparam.classLoader, "getAppStartModeLocked", hook);
             }
         } else if (lpparam.packageName.equals(APPLICATION_ID)) {
             // Make sure Xposed work
-            XposedHelpers.findAndHookMethod(XposedApp.class.getName(), lpparam.classLoader, "isEnhancementEnabled", XC_MethodReplacement.returnConstant(true));
+            XposedHelpers.findAndHookMethod(StatusInstallerFragment.class.getName(), lpparam.classLoader, "isEnhancementEnabled", XC_MethodReplacement.returnConstant(true));
             // XposedHelpers.findAndHookMethod(StatusInstallerFragment.class.getName(), lpparam.classLoader, "isSELinuxEnforced", XC_MethodReplacement.returnConstant(SELinuxHelper.isSELinuxEnforced()));
         }
     }
