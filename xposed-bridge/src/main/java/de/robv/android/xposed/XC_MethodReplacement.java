@@ -29,6 +29,7 @@ public abstract class XC_MethodReplacement extends XC_MethodHook {
 			Object result = replaceHookedMethod(param);
 			param.setResult(result);
 		} catch (Throwable t) {
+			XposedBridge.log(t);
 			param.setThrowable(t);
 		}
 	}
