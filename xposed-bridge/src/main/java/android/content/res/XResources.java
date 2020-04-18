@@ -8,6 +8,7 @@ import android.graphics.Movie;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.StrictMode;
 import android.text.Html;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -115,8 +116,10 @@ public class XResources extends XResourcesSuperClass {
 			if (mResDir == null)
 				return false;
 
+			final StrictMode.ThreadPolicy policy = StrictMode.allowThreadDiskReads();
 			Long lastModification = new File(mResDir).lastModified();
 			Long oldModified = sResDirLastModified.get(mResDir);
+			StrictMode.setThreadPolicy(policy);
 			if (lastModification.equals(oldModified))
 				return false;
 

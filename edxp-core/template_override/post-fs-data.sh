@@ -12,6 +12,7 @@ MODDIR=${0%/*}
 
 RIRU_PATH="/data/misc/riru"
 TARGET="${RIRU_PATH}/modules"
+[[ "$(getenforce)" == "Enforcing" ]] && ENFORCE=true || ENFORCE=false
 
 EDXP_VERSION=$(grep_prop version "${MODDIR}/module.prop")
 
@@ -142,9 +143,9 @@ if [[ "$(pm path org.meowcat.edxposed.manager)" == "" && "$(pm path de.robv.andr
     NO_MANAGER=true
 fi
 if [[ ${NO_MANAGER} == true ]]; then
-    cp -f ${MODDIR}/EdXposed.apk /data/local/tmp/
-    pm install /data/local/tmp/EdXposed.apk
-    rm -rf /data/local/tmp/EdXposed.apk
+    ${ENFORCE} && setenforce 0
+    pm install "${MODDIR}/EdXposed.apk"
+    ${ENFORCE} && setenforce 1
 fi
 
 # execute live patch if rule not found
