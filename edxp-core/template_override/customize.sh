@@ -295,10 +295,12 @@ mv "${MODPATH}/system/framework/eddexmaker.jar" "${MODPATH}/system/framework/${J
 mv "${MODPATH}/system/framework/edconfig.jar" "${MODPATH}/system/framework/${JAR_EDCONFIG}"
 mv "${MODPATH}/system/lib/libriru_edxp.so" "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
 mv "${MODPATH}/system/lib/libwhale.edxp.so" "${MODPATH}/system/lib/${LIB_WHALE_EDXP}"
+mv "${MODPATH}/system/lib/libsandhook-native.so" "${MODPATH}/system/lib/libsandhook-native.so"
 
 if [[ "${IS64BIT}" == true ]]; then
     mv "${MODPATH}/system/lib64/libriru_edxp.so" "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
     mv "${MODPATH}/system/lib64/libwhale.edxp.so" "${MODPATH}/system/lib64/${LIB_WHALE_EDXP}"
+    mv "${MODPATH}/system/lib64/libsandhook-native.so" "${MODPATH}/system/lib64/libsandhook-native.so"
 fi
 
 if [[ "${VARIANTS}" == "SandHook" ]]; then

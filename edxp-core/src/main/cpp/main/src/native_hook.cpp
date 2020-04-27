@@ -21,18 +21,21 @@
 
 namespace edxp {
 
-    static bool installed = false;
-    static bool art_hooks_installed = false;
-    static bool fwk_hooks_installed = false;
+    static volatile bool installed = false;
+    static volatile bool art_hooks_installed = false;
+    static volatile bool fwk_hooks_installed = false;
     static HookFunType hook_func = nullptr;
 
     void InstallArtHooks(void *art_handle);
 
     void InstallFwkHooks(void *fwk_handle);
 
+    bool InstallLinkerHooks(const char *linker_path);
+
     CREATE_HOOK_STUB_ENTRIES(void *, mydlopen, const char *file_name, int flags,
+                             const void *ext_info,
                              const void *caller) {
-        void *handle = mydlopenBackup(file_name, flags, caller);
+        void *handle = mydlopenBackup(file_name, flags, ext_info, caller);
         if (file_name != nullptr && std::string(file_name).find(kLibArtName) != std::string::npos) {
             InstallArtHooks(handle);
         }
@@ -66,12 +69,10 @@ namespace edxp {
         }
         hook_func = reinterpret_cast<HookFunType>(hook_func_symbol);
 
-        if (api_level > ANDROID_P) {
-            ScopedDlHandle dl_handle(kLibDlPath.c_str());
-            void *handle = dl_handle.Get();
-            HOOK_FUNC(mydlopen, "__loader_dlopen");
+        if (api_level >= ANDROID_Q) {
+            InstallLinkerHooks(kLinkerPath.c_str());
         } else {
-            ScopedDlHandle art_handle(kLibArtPath.c_str());
+            ScopedDlHandle art_handle(kLibArtLegacyPath.c_str());
             InstallArtHooks(art_handle.Get());
         }
 
@@ -79,11 +80,39 @@ namespace edxp {
         InstallFwkHooks(fwk_handle.Get());
     }
 
+    bool InstallLinkerHooks(const char *linker_path) {
+        void *handle = dlopen(kLibSandHookNativePath.c_str(), RTLD_NOW);
+
+        if (!handle) {
+            LOGI("Failed to open libsandhook-native");
+            return false;
+        }
+
+        auto getSym = reinterpret_cast<void *(*)(const char *, const char *)>(dlsym(handle,
+                                                                                    "SandGetSym"));
+        if (!getSym) {
+            LOGI("SandGetSym is null");
+            return false;
+        }
+
+        auto dlopen_symbol = "__dl__Z9do_dlopenPKciPK17android_dlextinfoPKv";
+        void *dlopen_addr = getSym(linker_path, dlopen_symbol);
+        if (dlopen_addr) {
+            hook_func(dlopen_addr, (void *) mydlopenReplace,
+                      (void **) &mydlopenBackup);
+            LOGI("dlopen hooked");
+            return true;
+        }
+
+        LOGI("dlopen_addr is null");
+        return false;
+    }
+
     void InstallArtHooks(void *art_handle) {
         if (art_hooks_installed) {
             return;
         }
-        if (ConfigManager::GetInstance() -> IsHiddenAPIBypassEnabled()) {
+        if (ConfigManager::GetInstance()->IsHiddenAPIBypassEnabled()) {
             art::hidden_api::DisableHiddenApi(art_handle, hook_func);
         }
         art::Runtime::Setup(art_handle, hook_func);

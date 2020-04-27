@@ -29,20 +29,23 @@ namespace edxp {
 
     static constexpr auto kLibArtName = "libart.so";
     static constexpr auto kLibFwkName = "libandroid_runtime.so";
+    static constexpr auto kLibFwName = "libandroidfw.so";
     static constexpr auto kLibWhaleName = "libwhale.edxp.so";
     static constexpr auto kLibSandHookName = "libsandhook.edxp.so";
+    static constexpr auto kLibSandHookNativeName = "libsandhook-native.so";
 
-    static const auto kLibBasePath = std::string(LP_SELECT("/system/lib/", "/system/lib64/"));
-    static const auto kLibRuntimeBasePath = std::string(
-            LP_SELECT("/apex/com.android.runtime/lib/", "/apex/com.android.runtime/lib64/"));
+    static const auto kLibBasePath = std::string(
+            LP_SELECT("/system/lib/",
+                      "/system/lib64/"));
+    static const auto kLinkerPath = std::string(
+            LP_SELECT("/apex/com.android.runtime/bin/linker",
+                      "/apex/com.android.runtime/bin/linker64"));
 
-    static const auto kLibArtPath =
-            (GetAndroidApiLevel() >= ANDROID_Q ? kLibRuntimeBasePath : kLibBasePath) + kLibArtName;
-
+    static const auto kLibArtLegacyPath = kLibBasePath + kLibArtName;
     static const auto kLibWhalePath = kLibBasePath + kLibWhaleName;
     static const auto kLibSandHookPath = kLibBasePath + kLibSandHookName;
-    static const auto kLibFwPath = kLibBasePath + "libandroidfw.so";
-    static const auto kLibDlPath = kLibBasePath + "libdl.so";
+    static const auto kLibSandHookNativePath = kLibBasePath + kLibSandHookNativeName;
+    static const auto kLibFwPath = kLibBasePath + kLibFwName;
     static const auto kLibFwkPath = kLibBasePath + kLibFwkName;
 
     inline const char *const BoolToString(bool b) {
