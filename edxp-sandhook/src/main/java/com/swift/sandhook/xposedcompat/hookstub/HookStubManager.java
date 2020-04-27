@@ -281,6 +281,7 @@ public class HookStubManager {
                 ((XC_MethodHook) snapshot[beforeIdx]).callBeforeHookedMethod(param);
             } catch (Throwable t) {
                 // reset result (ignoring what the unexpectedly exiting callback did)
+                XposedBridge.log(t);
                 param.setResult(null);
                 param.returnEarly = false;
                 continue;
@@ -304,6 +305,7 @@ public class HookStubManager {
                     param.setResult(SandHook.callOriginMethod(originMethod, entity.backup, thiz, param.args));
                 }
             } catch (Throwable e) {
+                XposedBridge.log(e);
                 param.setThrowable(e);
             }
         }
@@ -317,6 +319,7 @@ public class HookStubManager {
             try {
                 ((XC_MethodHook) snapshot[afterIdx]).callAfterHookedMethod(param);
             } catch (Throwable t) {
+                XposedBridge.log(t);
                 if (lastThrowable == null)
                     param.setResult(lastResult);
                 else
@@ -375,6 +378,7 @@ public class HookStubManager {
             try {
                 param.setResult(SandHook.callOriginMethod(true, origin, backup, thiz, param.args));
             } catch (Throwable e) {
+                XposedBridge.log(e);
                 param.setThrowable(e);
             }
         }
