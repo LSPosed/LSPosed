@@ -22,8 +22,36 @@ namespace edxp {
         return (jboolean) ConfigManager::GetInstance()->IsDeoptBootImageEnabled();
     }
 
+    static jboolean ConfigManager_isNoModuleLogEnabled(JNI_START) {
+        return (jboolean) ConfigManager::GetInstance()->IsNoModuleLogEnabled();
+    }
+
     static jstring ConfigManager_getInstallerPackageName(JNI_START) {
-        return env->NewStringUTF(ConfigManager::GetInstance()->GetInstallerPkgName().c_str());
+        return env->NewStringUTF(ConfigManager::GetInstance()->GetInstallerPackageName().c_str());
+    }
+
+    static jstring ConfigManager_getXposedPropPath(JNI_START) {
+        return env->NewStringUTF(ConfigManager::GetInstance()->GetXposedPropPath().c_str());
+    }
+
+    static jstring ConfigManager_getLibWhaleName(JNI_START) {
+        return env->NewStringUTF(ConfigManager::GetInstance()->GetLibWhaleName().c_str());
+    }
+
+    static jstring ConfigManager_getLibSandHookName(JNI_START) {
+        return env->NewStringUTF(ConfigManager::GetInstance()->GetLibSandHookName().c_str());
+    }
+
+    static jstring ConfigManager_getDataPathPrefix(JNI_START) {
+        return env->NewStringUTF(ConfigManager::GetInstance()->GetDataPathPrefix().c_str());
+    }
+
+    static jstring ConfigManager_getInstallerConfigPath(JNI_START, jstring jSuffix) {
+        const char *suffix = env->GetStringUTFChars(jSuffix, JNI_FALSE);
+        auto result = ConfigManager::GetInstance()->GetConfigPath(suffix);
+        env->ReleaseStringUTFChars(jSuffix, suffix);
+        return env->NewStringUTF(result.c_str());
+
     }
 
     static jboolean ConfigManager_isAppNeedHook(JNI_START, jstring appDataDir) {
@@ -38,7 +66,13 @@ namespace edxp {
             NATIVE_METHOD(ConfigManager, isDynamicModulesEnabled, "()Z"),
             NATIVE_METHOD(ConfigManager, isResourcesHookEnabled, "()Z"),
             NATIVE_METHOD(ConfigManager, isDeoptBootImageEnabled, "()Z"),
+            NATIVE_METHOD(ConfigManager, isNoModuleLogEnabled, "()Z"),
             NATIVE_METHOD(ConfigManager, getInstallerPackageName, "()Ljava/lang/String;"),
+            NATIVE_METHOD(ConfigManager, getXposedPropPath, "()Ljava/lang/String;"),
+            NATIVE_METHOD(ConfigManager, getLibSandHookName, "()Ljava/lang/String;"),
+            NATIVE_METHOD(ConfigManager, getLibWhaleName, "()Ljava/lang/String;"),
+            NATIVE_METHOD(ConfigManager, getDataPathPrefix, "()Ljava/lang/String;"),
+            NATIVE_METHOD(ConfigManager, getInstallerConfigPath, "(Ljava/lang/String;)Ljava/lang/String;"),
             NATIVE_METHOD(ConfigManager, isAppNeedHook, "(Ljava/lang/String;)Z"),
     };
 

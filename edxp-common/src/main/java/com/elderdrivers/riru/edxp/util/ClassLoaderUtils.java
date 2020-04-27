@@ -64,9 +64,9 @@ public class ClassLoaderUtils {
         }
     }
 
-    public static ClassLoader createComposeClassLoader(ClassLoader appClassLoader) {
+    public static ClassLoader createProxyClassLoader(ClassLoader appClassLoader) {
         ClassLoader current = ClassLoaderUtils.class.getClassLoader();
-        return appClassLoader == null ? current : new ComposeClassLoader(appClassLoader, current);
+        return appClassLoader == null ? current : new ProxyClassLoader(appClassLoader, current);
     }
 
     public static List<ClassLoader> getAppClassLoader() {

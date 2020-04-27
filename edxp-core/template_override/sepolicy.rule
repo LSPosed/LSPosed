@@ -1,0 +1,6 @@
+allow system_server system_server process {execmem}
+allow system_server system_server memprotect {mmap_zero}
+allow coredomain coredomain process {execmem}
+allow coredomain app_data_file * *
+attradd {system_app platform_app} mlstrustedsubject
+allow zygote apk_data_file * *

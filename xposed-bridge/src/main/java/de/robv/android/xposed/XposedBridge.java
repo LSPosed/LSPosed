@@ -143,11 +143,11 @@ public final class XposedBridge {
 	 */
 	public static int getXposedVersion() {
 		// ed: fixed value for now
-		return 90;
+		return 91;
 	}
 
 	/**
-	 * Writes a message to the Xposed error log.
+	 * Writes a message to the Xposed modules log.
 	 *
 	 * <p class="warning"><b>DON'T FLOOD THE LOG!!!</b> This is only meant for error logging.
 	 * If you want to write information/debug messages, use logcat.
@@ -155,11 +155,14 @@ public final class XposedBridge {
 	 * @param text The log message.
 	 */
 	public synchronized static void log(String text) {
+		if (EdXpConfigGlobal.getConfig().isNoModuleLogEnabled()) {
+			return;
+		}
 		Log.i(TAG, text);
 	}
 
 	/**
-	 * Logs a stack trace to the Xposed error log.
+	 * Logs a stack trace to the Xposed modules log.
 	 *
 	 * <p class="warning"><b>DON'T FLOOD THE LOG!!!</b> This is only meant for error logging.
 	 * If you want to write information/debug messages, use logcat.

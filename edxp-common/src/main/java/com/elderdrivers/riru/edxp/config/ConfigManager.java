@@ -4,15 +4,12 @@ import java.util.HashMap;
 
 import de.robv.android.xposed.SELinuxHelper;
 
-import static com.elderdrivers.riru.edxp.config.InstallerChooser.INSTALLER_DATA_BASE_DIR;
-
 public class ConfigManager {
 
     public static String appDataDir = "";
     public static String niceName = "";
     public static String appProcessName = "";
 
-    private static final String COMPAT_LIST_PATH = INSTALLER_DATA_BASE_DIR + "conf/compatlist/";
     private static final HashMap<String, Boolean> compatModeCache = new HashMap<>();
 
     public static boolean shouldUseCompatMode(String packageName) {
@@ -21,7 +18,7 @@ public class ConfigManager {
                 && (result = compatModeCache.get(packageName)) != null) {
             return result;
         }
-        result = isFileExists(COMPAT_LIST_PATH + packageName);
+        result = isFileExists(getInstallerConfigPath("compatlist/" + packageName));
         compatModeCache.put(packageName, result);
         return result;
     }
@@ -34,11 +31,23 @@ public class ConfigManager {
 
     public static native boolean isDynamicModulesEnabled();
 
+    public static native boolean isNoModuleLogEnabled();
+
     public static native boolean isResourcesHookEnabled();
 
     public static native boolean isDeoptBootImageEnabled();
 
     public static native String getInstallerPackageName();
+
+    public static native String getXposedPropPath();
+
+    public static native String getLibSandHookName();
+
+    public static native String getLibWhaleName();
+
+    public static native String getInstallerConfigPath(String suffix);
+
+    public static native String getDataPathPrefix();
 
     public static native boolean isAppNeedHook(String appDataDir);
 }

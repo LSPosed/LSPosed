@@ -2,12 +2,9 @@ package com.elderdrivers.riru.edxp.whale.core;
 
 import android.os.Build;
 
-import com.elderdrivers.riru.edxp.config.ConfigManager;
-import com.elderdrivers.riru.edxp.config.InstallerChooser;
 import com.elderdrivers.riru.edxp.core.BaseEdxpImpl;
 import com.elderdrivers.riru.edxp.core.EdxpImpl;
 import com.elderdrivers.riru.edxp.core.Main;
-import com.elderdrivers.riru.edxp.core.Proxy;
 import com.elderdrivers.riru.edxp.core.Yahfa;
 import com.elderdrivers.riru.edxp.core.yahfa.HookMethodResolver;
 import com.elderdrivers.riru.edxp.proxy.Router;
@@ -36,8 +33,6 @@ public class WhaleEdxpImpl extends BaseEdxpImpl {
         Yahfa.init(Build.VERSION.SDK_INT);
         HookMethodResolver.init();
         getRouter().injectConfig();
-        InstallerChooser.setInstallerPackageName(ConfigManager.getInstallerPackageName());
-
         setInitialized();
     }
 

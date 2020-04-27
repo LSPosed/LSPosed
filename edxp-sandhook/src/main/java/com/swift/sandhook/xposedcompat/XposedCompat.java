@@ -1,24 +1,22 @@
 package com.swift.sandhook.xposedcompat;
 
-import android.annotation.SuppressLint;
 import android.os.Process;
 import android.text.TextUtils;
 
 import com.elderdrivers.riru.edxp.config.ConfigManager;
-import com.elderdrivers.riru.edxp.util.ComposeClassLoader;
+import com.elderdrivers.riru.edxp.util.FileUtils;
+import com.elderdrivers.riru.edxp.util.ProcessUtils;
+import com.elderdrivers.riru.edxp.util.ProxyClassLoader;
 import com.swift.sandhook.wrapper.HookWrapper;
 import com.swift.sandhook.xposedcompat.methodgen.SandHookXposedBridge;
 import com.swift.sandhook.xposedcompat.utils.ApplicationUtils;
-import com.swift.sandhook.xposedcompat.utils.FileUtils;
-import com.swift.sandhook.xposedcompat.utils.ProcessUtils;
 
 import java.io.File;
 import java.lang.reflect.Member;
 
 import de.robv.android.xposed.XposedBridge;
 
-import static com.elderdrivers.riru.edxp.util.ProcessUtils.PER_USER_RANGE;
-import static com.swift.sandhook.xposedcompat.utils.FileUtils.IS_USING_PROTECTED_STORAGE;
+import static com.elderdrivers.riru.edxp.util.FileUtils.getDataPathPrefix;
 
 public class XposedCompat {
 
@@ -54,7 +52,7 @@ public class XposedCompat {
         if (cacheDir == null) {
             String fixedAppDataDir = getDataPathPrefix() + getPackageName(ConfigManager.appDataDir) + "/";
             cacheDir = new File(fixedAppDataDir, "/cache/sandhook/"
-                    + ProcessUtils.getProcessName().replace(":", "_") + "/");
+                    + ProcessUtils.getProcessName(Process.myPid()).replace(":", "_") + "/");
         }
         return cacheDir;
     }
@@ -74,7 +72,7 @@ public class XposedCompat {
         if (sandHookXposedClassLoader != null) {
             return sandHookXposedClassLoader;
         } else {
-            sandHookXposedClassLoader = new ComposeClassLoader(sandBoxHostClassLoader, appOriginClassLoader);
+            sandHookXposedClassLoader = new ProxyClassLoader(sandBoxHostClassLoader, appOriginClassLoader);
             return sandHookXposedClassLoader;
         }
     }
@@ -102,14 +100,6 @@ public class XposedCompat {
             return dataDir;
         }
         return dataDir.substring(lastIndex + 1);
-    }
-
-    // FIXME: Although multi-users is considered here, but compat mode doesn't support other users' apps on Oreo and later yet.
-    @SuppressLint("SdCardPath")
-    public static String getDataPathPrefix() {
-        int userId = Process.myUid() / PER_USER_RANGE;
-        String format = IS_USING_PROTECTED_STORAGE ? "/data/user_de/%d/" : "/data/user/%d/";
-        return String.format(format, userId);
     }
 
 }

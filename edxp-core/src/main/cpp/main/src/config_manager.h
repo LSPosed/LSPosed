@@ -8,9 +8,9 @@
 
 namespace edxp {
 
-    static constexpr const char *kPrimaryInstallerPkgName = "com.solohsu.android.edxp.manager";
-    static constexpr const char *kSecondaryInstallerPkgName = "org.meowcat.edxposed.manager";
+    static constexpr const char *kPrimaryInstallerPkgName = "org.meowcat.edxposed.manager";
     static constexpr const char *kLegacyInstallerPkgName = "de.robv.android.xposed.installer";
+    static constexpr auto kXposedPropPath = "/system/framework/edconfig.jar";
 
     class ConfigManager {
     public:
@@ -30,13 +30,28 @@ namespace edxp {
 
         bool IsDeoptBootImageEnabled() const;
 
-        std::string GetInstallerPkgName() const;
+        bool IsNoModuleLogEnabled() const;
 
-        bool IsAppNeedHook(const std::string &app_data_dir) const;
+        bool IsHiddenAPIBypassEnabled() const;
 
+        std::string GetInstallerPackageName() const;
+
+        std::string GetXposedPropPath() const;
+
+        std::string GetLibSandHookName() const;
+
+        std::string GetLibWhaleName() const;
+
+        std::string GetDataPathPrefix() const;
+
+        std::string GetConfigPath(const std::string &suffix) const;
+
+        bool IsAppNeedHook(const std::string &app_data_dir);
+
+        bool hidden_api_bypass_enabled_ = false;
     private:
         inline static ConfigManager *instance_;
-        bool initialized_ = false;
+        uid_t last_user_ = false;
         bool use_prot_storage_ = true;
         std::string data_path_prefix_;
         std::string installer_pkg_name_;
@@ -47,6 +62,7 @@ namespace edxp {
         bool black_white_list_enabled_ = false;
         bool dynamic_modules_enabled_ = false;
         bool deopt_boot_image_enabled_ = false;
+        bool no_module_log_enabled_ = false;
         bool resources_hook_enabled_ = true;
         // snapshot at boot
         bool use_white_list_snapshot_ = false;
@@ -55,17 +71,12 @@ namespace edxp {
 
         ConfigManager();
 
-        ~ConfigManager();
-
-        void InitOnce();
+        void UpdateConfigPath(const uid_t user);
 
         void SnapshotBlackWhiteList();
 
         std::string RetrieveInstallerPkgName() const;
-
-        std::string GetConfigPath(const std::string &suffix) const;
     };
-
 
 } // namespace edxp
 

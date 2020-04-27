@@ -17,7 +17,10 @@ namespace art {
             if (api_level == ANDROID_P) {
                 HOOK_FUNC(SetOnlyUseSystemOatFiles,
                           "_ZN3art14OatFileManager24SetOnlyUseSystemOatFilesEv");
-                          
+            }
+            if (api_level == ANDROID_Q) {
+                HOOK_FUNC(SetOnlyUseSystemOatFiles,
+                          "_ZN3art14OatFileManager24SetOnlyUseSystemOatFilesEbb");
             }
         };
 

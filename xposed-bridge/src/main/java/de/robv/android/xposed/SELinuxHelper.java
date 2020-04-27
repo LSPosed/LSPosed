@@ -1,6 +1,11 @@
 package de.robv.android.xposed;
 
 import android.os.SELinux;
+import android.util.Log;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 import de.robv.android.xposed.services.BaseService;
 import de.robv.android.xposed.services.BinderService;
@@ -28,7 +33,36 @@ public final class SELinuxHelper {
 	 * @return A boolean indicating whether SELinux is enforcing.
 	*/
 	public static boolean isSELinuxEnforced() {
-		return sIsSELinuxEnabled && SELinux.isSELinuxEnforced();
+		if (!sIsSELinuxEnabled) {
+			return false;
+		}
+		boolean result = false;
+		final File SELINUX_STATUS_FILE = new File("/sys/fs/selinux/enforce");
+		if (SELINUX_STATUS_FILE.exists()) {
+			try {
+				FileInputStream fis = new FileInputStream(SELINUX_STATUS_FILE);
+				int status = fis.read();
+				switch (status) {
+					case 49:
+						result = true;
+						break;
+					case 48:
+						result = false;
+						break;
+					default:
+						XposedBridge.log("Unexpected byte " + status + " in /sys/fs/selinux/enforce");
+				}
+				fis.close();
+			} catch (IOException e) {
+				if (e.getMessage().contains("Permission denied")) {
+					result = true;
+				} else {
+					XposedBridge.log("Failed to read SELinux status: " + e.getMessage());
+					result = false;
+				}
+			}
+		}
+		return result;
 	}
 
 	/**
@@ -56,14 +90,15 @@ public final class SELinuxHelper {
 
 
 	// ----------------------------------------------------------------------------
+	// TODO: SELinux status
 	private static boolean sIsSELinuxEnabled = false;
 	private static BaseService sServiceAppDataFile = new DirectAccessService(); // ed: initialized directly
 
-	/*package*/ static void initOnce() {
+	/*package*/ public static void initOnce() {
 		// ed: we assume all selinux policies have been added lively using magiskpolicy
-//		try {
-//			sIsSELinuxEnabled = SELinux.isSELinuxEnabled();
-//		} catch (NoClassDefFoundError ignored) {}
+		try {
+			sIsSELinuxEnabled = SELinux.isSELinuxEnabled();
+		} catch (NoClassDefFoundError ignored) {}
 	}
 
 	/*package*/ static void initForProcess(String packageName) {

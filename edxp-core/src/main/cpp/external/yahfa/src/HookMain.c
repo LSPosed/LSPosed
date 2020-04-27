@@ -20,6 +20,7 @@ static int OFFSET_access_flags_in_ArtMethod;
 static size_t ArtMethodSize;
 static int kAccNative = 0x0100;
 static int kAccCompileDontBother = 0x01000000;
+static int kAccFastInterpreterToInterpreterInvoke = 0x40000000;
 
 static inline uint16_t read16(void *addr) {
     return *((uint16_t *) addr);
@@ -29,8 +30,8 @@ static inline uint32_t read32(void *addr) {
     return *((uint32_t *) addr);
 }
 
-static inline uint64_t read64(void *addr) {
-    return *((uint64_t *) addr);
+static inline void write32(void *addr, uint32_t value) {
+    *((uint32_t *) addr) = value;
 }
 
 void Java_lab_galaxy_yahfa_HookMain_init(JNIEnv *env, jclass clazz, jint sdkVersion) {
@@ -122,11 +123,7 @@ void setNonCompilable(void *method) {
     int access_flags = read32((char *) method + OFFSET_access_flags_in_ArtMethod);
     LOGI("setNonCompilable: access flags is 0x%x", access_flags);
     access_flags |= kAccCompileDontBother;
-    memcpy(
-            (char *) method + OFFSET_access_flags_in_ArtMethod,
-            &access_flags,
-            4
-    );
+    write32((char *) method + OFFSET_access_flags_in_ArtMethod, access_flags);
 }
 
 bool setNativeFlag(void *method, bool isNative) {
@@ -135,15 +132,15 @@ bool setNativeFlag(void *method, bool isNative) {
     int old_access_flags = access_flags;
     if (isNative) {
         access_flags |= kAccNative;
+        if (SDKVersion >= ANDROID_Q) {
+            // On API 29 whether to use the fast path or not is cached in the ART method structure
+            access_flags &= ~kAccFastInterpreterToInterpreterInvoke;
+        }
     } else {
         access_flags &= ~kAccNative;
     }
     if (access_flags != old_access_flags) {
-        memcpy(
-                (char *) method + OFFSET_access_flags_in_ArtMethod,
-                &access_flags,
-                4
-        );
+        write32((char *) method + OFFSET_access_flags_in_ArtMethod, access_flags);
         return true;
     }
     return false;
