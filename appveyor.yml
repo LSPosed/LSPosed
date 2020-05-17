@@ -27,8 +27,6 @@ pull_requests:
 
 skip_tags: true
 
-skip_branch_with_pr: true
-
 only_commits:
   files:
     - dalvikdx/
