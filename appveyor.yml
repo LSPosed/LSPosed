@@ -25,6 +25,10 @@ artifacts:
 pull_requests:
   do_not_increment_build_number: true
 
+skip_tags: true
+
+skip_branch_with_pr: true
+
 only_commits:
   files:
     - dalvikdx/
