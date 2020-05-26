@@ -12,8 +12,6 @@ import android.util.SparseArray;
 import androidx.annotation.Keep;
 import androidx.annotation.Nullable;
 
-import org.meowcat.edxposed.manager.StatusInstallerFragment;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -29,6 +27,7 @@ import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import de.robv.android.xposed.installer.XposedApp;
 
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
@@ -347,7 +346,7 @@ public class Enhancement implements IXposedHookLoadPackage {
             }
         } else if (lpparam.packageName.equals(APPLICATION_ID)) {
             // Make sure Xposed work
-            XposedHelpers.findAndHookMethod(StatusInstallerFragment.class.getName(), lpparam.classLoader, "isEnhancementEnabled", XC_MethodReplacement.returnConstant(true));
+            XposedHelpers.findAndHookMethod(XposedApp.class.getName(), lpparam.classLoader, "isEnhancementEnabled", XC_MethodReplacement.returnConstant(true));
             // XposedHelpers.findAndHookMethod(StatusInstallerFragment.class.getName(), lpparam.classLoader, "isSELinuxEnforced", XC_MethodReplacement.returnConstant(SELinuxHelper.isSELinuxEnforced()));
         }
     }

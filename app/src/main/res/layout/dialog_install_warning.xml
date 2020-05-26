@@ -1,26 +1,14 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="12dp">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/checkbox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_marginLeft="?attr/dialogPreferredPadding"
+        android:layout_marginRight="?attr/dialogPreferredPadding"
+        android:text="@string/dont_show_again" />
 
-        <TextView
-            android:id="@android:id/message"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/install_warning"
-            android:textSize="16sp" />
-
-        <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@android:id/checkbox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/dont_show_again" />
-
-    </LinearLayout>
-
-</ScrollView>
+</LinearLayout>

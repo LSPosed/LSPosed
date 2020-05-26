@@ -33,8 +33,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import me.zhanghai.android.appiconloader.AppIconLoader;
-
 public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> implements Filterable {
 
     protected final Context context;

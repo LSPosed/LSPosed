@@ -14,8 +14,6 @@ import org.meowcat.edxposed.manager.databinding.ActivityMainBinding;
 import org.meowcat.edxposed.manager.util.ModuleUtil;
 import org.meowcat.edxposed.manager.util.RepoLoader;
 
-import me.zhanghai.android.appiconloader.AppIconLoader;
-
 public class MainActivity extends BaseActivity implements RepoLoader.RepoListener, ModuleUtil.ModuleListener {
     ActivityMainBinding binding;
     private RepoLoader repoLoader;

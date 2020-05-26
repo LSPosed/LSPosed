@@ -2,7 +2,6 @@ package org.meowcat.edxposed.manager;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 

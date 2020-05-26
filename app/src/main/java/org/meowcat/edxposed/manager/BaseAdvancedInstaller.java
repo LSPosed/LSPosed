@@ -87,7 +87,7 @@ public class BaseAdvancedInstaller extends Fragment {
                     Uri uri = Uri.parse(selectedInstaller.link);
                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                     startActivity(intent);
-                }));
+                }, tab.description));
 
         binding.btnUninstall.setOnClickListener(v -> warningArchitecture(
                 (dialog, which) -> {
@@ -95,7 +95,7 @@ public class BaseAdvancedInstaller extends Fragment {
                     Uri uri = Uri.parse(selectedUninstaller.link);
                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                     startActivity(intent);
-                }));
+                }, tab.description));
 
         binding.noticeTv.setText(HtmlCompat.fromHtml(tab.notice, HtmlCompat.FROM_HTML_MODE_LEGACY));
         binding.author.setText(getString(R.string.download_author, tab.author));
@@ -126,12 +126,18 @@ public class BaseAdvancedInstaller extends Fragment {
         return binding.getRoot();
     }
 
-    private void warningArchitecture(DialogInterface.OnClickListener listener) {
+    private void warningArchitecture(DialogInterface.OnClickListener listener, String description) {
         Activity activity = getActivity();
+        StringBuilder sb = new StringBuilder();
+        sb.append(getString(R.string.warningArchitecture));
+        sb.append("\n\n");
+        sb.append(getString(R.string.changes));
+        sb.append("\n");
+        sb.append(HtmlCompat.fromHtml(description, HtmlCompat.FROM_HTML_MODE_LEGACY));
         if (activity != null) {
             new MaterialAlertDialogBuilder(activity)
                     .setTitle(R.string.areyousure)
-                    .setMessage(R.string.warningArchitecture)
+                    .setMessage(sb.toString())
                     .setPositiveButton(android.R.string.yes, listener)
                     .setNegativeButton(android.R.string.no, null)
                     .show();

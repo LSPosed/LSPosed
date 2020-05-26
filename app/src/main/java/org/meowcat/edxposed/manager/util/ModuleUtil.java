@@ -1,13 +1,11 @@
 package org.meowcat.edxposed.manager.util;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -33,13 +31,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import me.zhanghai.android.appiconloader.AppIconLoader;
-
 @SuppressWarnings("OctalInteger")
 public final class ModuleUtil {
+    private static final String PLAY_STORE_PACKAGE = "com.android.vending";
     // xposedminversion below this
     public static String MODULES_LIST_FILE = XposedApp.BASE_DIR + "conf/modules.list";
-    private static final String PLAY_STORE_PACKAGE = "com.android.vending";
     public static int MIN_MODULE_VERSION = 2; // reject modules with
     private static ModuleUtil instance = null;
     private final PackageManager pm;

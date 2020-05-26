@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name" translatable="false">EdXposed Manager</string>
-    <string name="action_settings">Settings</string>
     <string name="Activated">Activated</string>
     <string name="Inactivate">Inactivate</string>
     <string name="Install">Install</string>
@@ -202,7 +201,6 @@
     <string name="reboot_edl">Reboot to Emergency</string>
     <string name="loading">Loading…</string>
     <string name="scroll_bottom">Scroll to bottom</string>
-    <string name="confirm_reboots">Confirm reboots</string>
     <string name="skip_xposedminversion_check">Skip status check</string>
     <string name="skip_xposedminversion_check_summ">Skip \"EdXposed Status\" check for modules</string>
 
@@ -221,8 +219,6 @@
 
     <string name="unstable_build">This is a unstable build\nInstall it at your own risk</string>
     <string name="unofficial_build">This is a unofficial build\nInstall it at your own risk</string>
-    <string name="alt_download_method">Alternative download method</string>
-    <string name="alt_download_method_summ">Check this option if you get issues when downloading a module</string>
     <string name="custom_list">Use mirrored modules list</string>
     <string name="custom_list_summ">Mirrored modules list can help load faster\nBut the newly submitted module display will be delayed (about 24 hours)</string>
 
@@ -304,8 +300,6 @@
     <string name="hook_modules">Force hook modules</string>
     <string name="hook_modules_summary">Force add modules to white-list and remove from black list\nClosing this option does not remove modules from white list\nApp list mode is required to enable</string>
     <string name="not_installed">Not installed</string>
-    <string name="pass_safetynet">Pass SafetyNet</string>
-    <string name="pass_safetynet_summary">Force add GMS and GSF to black list and remove from white list\nClosing this option does not remove modules from black list\nApp list mode is required to enable</string>
     <string name="support_group_telegram_channel">Telegram Channel: @EdXposed</string>
     <string name="warning_list_not_enabled">Application list mode is not enabled, you can enable in settings</string>
     <string name="empty_param">Params empty</string>

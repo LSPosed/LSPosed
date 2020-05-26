@@ -49,9 +49,9 @@ public class EdDownloadActivity extends BaseActivity {
 
         if (!XposedApp.getPreferences().getBoolean("hide_install_warning", false)) {
             DialogInstallWarningBinding binding = DialogInstallWarningBinding.inflate(getLayoutInflater());
-            binding.message.setText(R.string.not_logcat);
             new MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.install_warning_title)
+                    .setMessage(R.string.install_warning)
                     .setView(binding.getRoot())
                     .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                         if (binding.checkbox.isChecked())

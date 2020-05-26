@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
-    <string name="action_settings">設定</string>
     <string name="Activated">已啟用</string>
     <string name="Inactivate">未啟用</string>
     <string name="Install">安裝</string>
@@ -200,7 +199,6 @@
     <string name="reboot_edl">重啟至救援模式</string>
     <string name="loading">正在載入…</string>
     <string name="scroll_bottom">滾動到底部</string>
-    <string name="confirm_reboots">重啟確認</string>
     <string name="skip_xposedminversion_check">關閉狀態檢查</string>
     <string name="skip_xposedminversion_check_summ">關閉針對模組的"EdXposed 安裝狀態"檢查</string>
     <string name="support_xda">獲取幫助</string>
@@ -249,8 +247,6 @@
     <string name="install_load_apk">正在安裝 %s</string>
     <string name="unstable_build">這是一個不穩定的構建\n安裝風險由您自行承擔</string>
     <string name="unofficial_build">這是一個非官方的構建\n安裝風險由您自行承擔</string>
-    <string name="alt_download_method">備用下載方法</string>
-    <string name="alt_download_method_summ">如果下載模組時出現問題, 請開啟此選項</string>
     <string name="dexopt_now">以 Dexopt 模式優化全部應用</string>
     <string name="speed_now">以 Speed 模式優化全部應用</string>
     <string name="this_may_take_a_while">請稍後, 這將需要一段時間…</string>
@@ -271,8 +267,6 @@
     <string name="custom_list">使用映象化的模組列表</string>
     <string name="custom_list_summ">映象化的模組列表可以幫助加速載入\n但新提交的模組顯示會有延遲(大約24小時)</string>
     <string name="not_installed">未安裝</string>
-    <string name="pass_safetynet">通過 SafetyNet 校驗</string>
-    <string name="pass_safetynet_summary">強制將 GMS 和 GSF 加入黑名單並移出白名單\n關閉此選項並不會移除已勾選的應用標識\n僅當啟用應用名單模式時有效</string>
     <string name="support_group_telegram_channel">Telegram 頻道: @EdXposed</string>
     <string name="warning_list_not_enabled">應用名單模式未啟用，您可以在設定中啟用</string>
     <string name="empty_param">引數為空</string>

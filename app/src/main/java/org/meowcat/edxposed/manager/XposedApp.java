@@ -148,10 +148,10 @@ public class XposedApp extends de.robv.android.xposed.installer.XposedApp implem
         RepoLoader.getInstance().triggerFirstLoadIfNecessary();
 
         appIconLoader = new AppIconLoader(getResources().getDimensionPixelSize(
-                R.dimen.app_icon_size), this);
+                R.dimen.app_icon_size), false, this);
     }
 
-    public AppIconLoader getAppIconLoader(){
+    public AppIconLoader getAppIconLoader() {
         return appIconLoader;
     }
 
