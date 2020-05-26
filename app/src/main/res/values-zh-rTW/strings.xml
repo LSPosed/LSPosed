@@ -37,7 +37,7 @@
     <string name="soft_reboot">軟重啟</string>
     <string name="reboot">重啟</string>
     <string name="areyousure">您確定？</string>
-    <string name="reboot_failed">重啟失敗, 請使用裝置自帶的重啟功能</string>
+    <string name="reboot_failed">重啟失敗, 請使用裝置內建的重啟功能</string>
     <string name="install_warning_title">請小心！</string>
     <string name="install_warning">某些情況下, 您的裝置可能會在安裝 EdXposed 過後變得無法正常啟動\n\n如果您先前從未聽說過「軟變磚」或「無限重啟」, 又或者您不知道如何從這些情況中恢復手機, 那麼請"<b>不要</b>"安裝或使用 EdXposed！\n\n無論如何, 都強烈建議您做好近期的資料備份</string>
     <string name="dont_show_again">不再提示</string>
@@ -301,4 +301,18 @@
     <string name="accent_color">強調色</string>
     <string name="colorized_action_bar">著色應用欄</string>
     <string name="settings_group_theme">主題</string>
+    <string name="material_design_2">慘白設計</string>
+    <string name="version_x">版本 %d</string>
+    <string name="xposed_description">開啟 EdXposed 的增強功能:\n    - 判斷 Xposed 是否正常執行\n    - 移除針對 EdXposed 的後臺限制\n    - 假裝安裝了 Xposed Installer\n    - 隱藏 EdXposed Manager</string>
+    <string name="status_enhancement">增強模式啟用</string>
+    <string name="settings_group_enhancement">增強模式</string>
+    <string name="settings_title_enhancement">增強模式狀態</string>
+    <string name="settings_summary_enhancement">未啟用\n你可以在「模組」中啟用增強模式</string>
+    <string name="settings_summary_enhancement_enabled">已啟用</string>
+    <string name="settings_title_pretend_xposed_installer">Xposed Installer 偽裝</string>
+    <string name="settings_summary_pretend_xposed_installer">假裝已安裝 Xposed Installer 來使一些老舊但有用的模組正常運作\n僅對「模處」中啟用的模組有效\n注：開啟此功能可能會被某些應用（如 RootBeer）偵測到 EdXposed</string>
+    <string name="settings_title_hide_edxposed_manager">隱藏 EdXposed Manager</string>
+    <string name="settings_summary_hide_edxposed_manager">防止應用偵測到 EdXposed Manager\n注：模組可能無法正常開啟 EdXposed Manager 介面，系統中關於 EdXposed Manager 的一些功能可能無法正常使用</string>
+    <string name="settings_title_disable_hidden_api_bypass">禁用繞過隱藏 API 的限制</string>
+    <string name="settings_summary_disable_hidden_api_bypass">禁用繞過隱藏 API 的限制將會通過某些檢測（如Snapchat）\n<b>警告:</b> 啟用此選項可能會使某些功能無法正常工作，或出現一些其他問題</string>
 </resources>
