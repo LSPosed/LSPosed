@@ -10,7 +10,7 @@
     <string name="Downloads">下載</string>
     <string name="ModuleUpgradable">%s 模組可更新</string>
     <string name="ModuleUptodate">所有模組已是最新版本</string>
-    <string name="Apps">應用</string>
+    <string name="Apps">Apps</string>
     <string name="Logs">日誌</string>
     <string name="Settings">設定</string>
     <string name="About">關於</string>
@@ -19,7 +19,7 @@
     <string name="menuSaveToSd">儲存到 SD 卡</string>
 
     <string name="restart_needed">需要重啟</string>
-    <string name="cache_cleaned">應用快取已清除, 需要重新啟動</string>
+    <string name="cache_cleaned">App 快取已清除, 需要重新啟動</string>
     <!-- Welcome screen / main sections -->
     <string name="tabInstall">我的裝置</string>
     <string name="welcome_framework_update_available">EdXposed 框架有更新可用(%s)</string>
@@ -63,8 +63,8 @@
     <string name="module_launch">開啟</string>
     <string name="module_download_updates">下載/更新</string>
     <string name="module_support">支援</string>
-    <string name="module_app_info">應用資訊</string>
-    <string name="modules_app_store">在應用商店檢視</string>
+    <string name="module_app_info">App 資訊</string>
+    <string name="modules_app_store">在 Play 商店檢視</string>
     <string name="module_uninstall">解除安裝</string>
 
     <!-- Download tab -->
@@ -108,7 +108,7 @@
     <string name="settings_group_framework">框架</string>
     <string name="settings_disable_resources">禁用資源鉤子</string>
     <string name="settings_disable_resources_summary">解決與主題引擎的衝突\n<b>警告: </b> 啟用該選項將導致修改資源的模組無法工作</string>
-    <string name="settings_group_app">應用</string>
+    <string name="settings_group_app">Apps</string>
     <string name="settings_theme">主題</string>
     <string name="settings_theme_light">亮色</string>
     <string name="settings_theme_dark">暗色</string>
@@ -132,8 +132,8 @@
 
     <!-- About tab -->
     <string name="about_developers_label">主要開發者</string>
-    <string name="about_translator_label">簡體中文(中國)翻譯</string>
-    <string name="translator">MlgmXyysd</string>
+    <string name="about_translator_label">繁體中文(台灣)翻譯</string>
+    <string name="translator">MlgmXyysd、Jia-Bin</string>
     <string name="about_version_label">版本</string>
     <string name="about_source_label">原始碼</string>
     <string name="about_libraries_label">使用的庫</string>
@@ -207,19 +207,19 @@
     <string name="not_logcat">此處僅顯示 EdXposed 及模組相關日誌資訊\n如果您想抓取系統日誌, 可以嘗試我們的 Log Catcher Magisk 模組</string>
 
     <!-- EdXp related -->
-    <string name="nav_title_black_list">應用</string>
-    <string name="white_list_mode_title">白名單模式</string>
+    <string name="nav_title_black_list">Apps</string>
+    <string name="white_list_mode_title">允許單模式</string>
     <string name="nav_title_compat_list">相容模式</string>
-    <string name="title_white_list">白名單</string>
-    <string name="title_black_list">黑名單</string>
+    <string name="title_white_list">允許名單</string>
+    <string name="title_black_list">封鎖名單</string>
     <string name="add_package_failed">修改失敗, 一個或多個設定阻止你繼續修改</string>
     <string name="menu_title_compile_reset">取消優化</string>
-    <string name="menu_title_compile_speed">以 Speed 模式優化應用</string>
-    <string name="menu_title_compile_dexopt">以 Dexopt 模式優化應用</string>
+    <string name="menu_title_compile_speed">以 Speed 模式優化 App</string>
+    <string name="menu_title_compile_dexopt">以 Dexopt 模式優化 App</string>
     <string name="compile_reset_msg">清除中…</string>
     <string name="compile_speed_msg">優化中…</string>
     <string name="pref_title_dynamic_modules">即時模組列表</string>
-    <string name="pref_dynamic_modules_summary">啟用後, 每個應用程序啟動時重新載入最新的模組列表(免重啟)</string>
+    <string name="pref_dynamic_modules_summary">啟用後, 每個 App 啟動時重新載入最新的模組列表(免重啟)</string>
     <string name="notinstalled">EdXposed 框架未安裝</string>
     <string name="meowcat_summary">MlgmXyysd 所屬團隊</string>
     <string name="elderdrivers_summary">EdXposed 的開發團隊</string>
@@ -228,9 +228,9 @@
     <string name="website">官網</string>
     <string name="coolapk">酷安</string>
     <string name="meowcat">小喵工作室</string>
-    <string name="white_list_mode_summary">白名單模式: 僅選中的應用載入 EdXposed 模組\n僅當啟用應用名單模式時有效</string>
-    <string name="pref_title_black_white_list">應用名單模式</string>
-    <string name="pref_black_white_list_summary">開啟後，可在\"應用\"中設定名單\n黑名單模式: 選中的應用不會載入 EdXposed 模組\n注意: 使用應用名單可能會導致某些系統全域性模組不能正常工作</string>
+    <string name="white_list_mode_summary">允許名單模式: 僅選中的 App 載入 EdXposed 模組\n僅當啟用 App 名單模式時有效</string>
+    <string name="pref_title_black_white_list">App 名單模式</string>
+    <string name="pref_black_white_list_summary">開啟後，可在\"App\"中設定名單\封鎖名單模式: 選中的 App 不會載入 EdXposed 模組\n注意: 使用 App 名單可能會導致某些系統全域性模組不能正常工作</string>
     <string name="ignore_chinese_summary">從模組列表中隱藏中文模組\n模組仍然可以被搜尋到\n啟用此選項可能會降低效能</string>
     <string name="ignore_chinese">忽略中文字元</string>
     <string name="verified_boot_explanation">引導驗證(dm-verity)防止裝置在修改系統分割槽時引導</string>
@@ -247,10 +247,12 @@
     <string name="install_load_apk">正在安裝 %s</string>
     <string name="unstable_build">這是一個不穩定的構建\n安裝風險由您自行承擔</string>
     <string name="unofficial_build">這是一個非官方的構建\n安裝風險由您自行承擔</string>
-    <string name="dexopt_now">以 Dexopt 模式優化全部應用</string>
-    <string name="speed_now">以 Speed 模式優化全部應用</string>
+    <string name="alt_download_method">備用下載方法</string>
+    <string name="alt_download_method_summ">如果下載模組時出現問題, 請開啟此選項</string>
+    <string name="dexopt_now">以 Dexopt 模式優化全部 App</string>
+    <string name="speed_now">以 Speed 模式優化全部 App</string>
     <string name="this_may_take_a_while">請稍後, 這將需要一段時間…</string>
-    <string name="take_while_cannot_resore">你確定要優化全部應用嗎?\n\n這將需要一段時間, 並且無法恢復\n\n提示: 你可以在應用名單中優化單個應用</string>
+    <string name="take_while_cannot_resore">你確定要優化全部 App 嗎?\n\n這將需要一段時間, 並且無法恢復\n\n提示: 你可以在 App 名單中優化單個 App</string>
     <string name="pref_title_enable_boot_image_deopt">禁用系統程式碼優化</string>
     <string name="pref_enable_boot_image_deopt_summary">禁用系統程式碼的優化能使所有系統方法都可以被 hook 到, 但是會降低系統流暢度\n主要用於對比測試某個方法無法 hook 到是否為系統優化導致</string>
 
@@ -260,15 +262,17 @@
     <string name="app_stop">停止</string>
     <string name="update_description">更新日誌</string>
     <string name="show_modules">顯示模組和管理器</string>
-    <string name="show_modules_summary">在應用列表內顯示模組和管理器\n此選項並不會移除已勾選的應用標識</string>
+    <string name="show_modules_summary">在 App 列表內顯示模組和管理器\n此選項並不會移除已勾選的 App 標識</string>
     <string name="compile_failed">優化失敗或返回值為空</string>
     <string name="hook_modules">強制新增模組</string>
-    <string name="hook_modules_summary">強制將模組新增進白名單並移出黑名單\n關閉此選項並不會移除已勾選的應用標識\n僅當啟用應用名單模式時有效</string>
+    <string name="hook_modules_summary">強制將模組新增進白允許名單並移出封鎖名單\n關閉此選項並不會移除已勾選的 App 標識\n僅當啟用 App 名單模式時有效</string>
     <string name="custom_list">使用映象化的模組列表</string>
     <string name="custom_list_summ">映象化的模組列表可以幫助加速載入\n但新提交的模組顯示會有延遲(大約24小時)</string>
     <string name="not_installed">未安裝</string>
+    <string name="pass_safetynet">通過 SafetyNet 校驗</string>
+    <string name="pass_safetynet_summary">強制將 GMS 和 GSF 加入封鎖名單並移出允許名單\n關閉此選項並不會移除已勾選的 App 標識\n僅當啟用 App 名單模式時有效</string>
     <string name="support_group_telegram_channel">Telegram 頻道: @EdXposed</string>
-    <string name="warning_list_not_enabled">應用名單模式未啟用，您可以在設定中啟用</string>
+    <string name="warning_list_not_enabled">App 名單模式未啟用，您可以在設定中啟用</string>
     <string name="empty_param">引數為空</string>
     <string name="reboot_system">重啟至系統</string>
     <string name="stop_log_summary">在下次啟動之前，模組日誌將不再被記錄</string>
@@ -278,13 +282,13 @@
     <string name="follow_system">跟隨系統</string>
     <string name="pure_black_dark_theme">使用純黑深色主題</string>>
     <string name="install_timestamps">安裝於 %1$s\n更新於 %2$s</string>
-    <string name="pref_compat_mode_summary">相容模式應用列表</string>
+    <string name="pref_compat_mode_summary">相容模式 App 列表</string>
     <string name="pref_compat_mode_title">相容模式</string>
     <string name="xposed_not_active">EdXposed 框架未安裝或未啟用, 您可在設定中關閉狀態檢查</string>
     <string name="transparent_status_bar">透明狀態列</string>
     <string name="list_sort">列表排序方式</string>
-    <string name="sort_by_name">應用名稱</string>
-    <string name="sort_by_name_reverse">應用名稱（降序）</string>
+    <string name="sort_by_name">App 名稱</string>
+    <string name="sort_by_name_reverse">App 名稱（降序）</string>
     <string name="sort_by_package_name">包體名稱</string>
     <string name="sort_by_package_name_reverse">包體名稱（降序）</string>
     <string name="sort_by_install_time">安裝時間</string>
@@ -304,9 +308,9 @@
     <string name="settings_summary_enhancement">未啟用\n你可以在「模組」中啟用增強模式</string>
     <string name="settings_summary_enhancement_enabled">已啟用</string>
     <string name="settings_title_pretend_xposed_installer">Xposed Installer 偽裝</string>
-    <string name="settings_summary_pretend_xposed_installer">假裝已安裝 Xposed Installer 來使一些老舊但有用的模組正常運作\n僅對「模處」中啟用的模組有效\n注：開啟此功能可能會被某些應用（如 RootBeer）偵測到 EdXposed</string>
+    <string name="settings_summary_pretend_xposed_installer">假裝已安裝 Xposed Installer 來使一些老舊但有用的模組正常運作\n僅對「模處」中啟用的模組有效\n注：開啟此功能可能會被某些 App（如 RootBeer）偵測到 EdXposed</string>
     <string name="settings_title_hide_edxposed_manager">隱藏 EdXposed Manager</string>
-    <string name="settings_summary_hide_edxposed_manager">防止應用偵測到 EdXposed Manager\n注：模組可能無法正常開啟 EdXposed Manager 介面，系統中關於 EdXposed Manager 的一些功能可能無法正常使用</string>
+    <string name="settings_summary_hide_edxposed_manager">防止 App 偵測到 EdXposed Manager\n注：模組可能無法正常開啟 EdXposed Manager 介面，系統中關於 EdXposed Manager 的一些功能可能無法正常使用</string>
     <string name="settings_title_disable_hidden_api_bypass">禁用繞過隱藏 API 的限制</string>
     <string name="settings_summary_disable_hidden_api_bypass">禁用繞過隱藏 API 的限制將會通過某些檢測（如Snapchat）\n<b>警告:</b> 啟用此選項可能會使某些功能無法正常工作，或出現一些其他問題</string>
 </resources>
