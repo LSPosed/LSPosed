@@ -8,17 +8,34 @@ dependencies {
 sourceCompatibility = "7"
 targetCompatibility = "7"
 
+task findDx {
+    if (OperatingSystem.current().isWindows()){
+        return true
+    }
+    doLast {
+        new ByteArrayOutputStream().withStream { os ->
+            exec {
+                commandLine "which", "dx"
+                standardOutput os
+            }
+            rootProject.ext.dxPath = os.toString()
+        }
+    }
+}
 
 task dexInJar(type: Jar) {
     dependsOn jar
+    dependsOn findDx
     doFirst {
         exec {
             workingDir jar.destinationDir
-            if (OperatingSystem.current().isWindows())
+            if (OperatingSystem.current().isWindows()){
                 executable "dx.bat"
-            else
-                executable "dx"
-            args "--dex", "--output", "classes.dex", "${jar.archiveName}"
+                args "--dex", "--output", "classes.dex", "${jar.archiveName}"
+            } else {
+                executable "bash"
+                args rootProject.ext.dxPath.trim(), "--dex", "--output", "classes.dex", "${jar.archiveName}"
+            }
         }
     }
     from "${jar.destinationDir}/classes.dex"

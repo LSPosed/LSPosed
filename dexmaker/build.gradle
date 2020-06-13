@@ -19,11 +19,13 @@ task dexInJar(type: Jar) {
     doFirst {
         exec {
             workingDir jar.destinationDir
-            if (OperatingSystem.current().isWindows())
+            if (OperatingSystem.current().isWindows()){
                 executable "dx.bat"
-            else
-                executable "dx"
-            args "--dex", "--output", "classes.dex", "${jar.archiveName}"
+                args "--dex", "--output", "classes.dex", "${jar.archiveName}"
+            } else {
+                executable "bash"
+                args rootProject.ext.dxPath.trim(), "--dex", "--output", "classes.dex", "${jar.archiveName}"
+            }
         }
     }
     from "${jar.destinationDir}/classes.dex"
