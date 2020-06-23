@@ -148,14 +148,14 @@ public class SettingsActivity extends BaseActivity {
             Preference stopVerboseLog = findPreference("stop_verbose_log");
             if (stopVerboseLog != null) {
                 stopVerboseLog.setOnPreferenceClickListener(preference -> {
-                    areYouSure(R.string.stop_verbose_log_summary, (dialog, which) -> Shell.su("kill $(cat " + verboseLogProcessID.getAbsolutePath() + ")").exec());
+                    areYouSure(R.string.stop_verbose_log_summary, (dialog, which) -> Shell.su("pkill -P $(cat " + verboseLogProcessID.getAbsolutePath() + ")").exec());
                     return true;
                 });
             }
             Preference stopLog = findPreference("stop_log");
             if (stopLog != null) {
                 stopLog.setOnPreferenceClickListener(preference -> {
-                    areYouSure(R.string.stop_log_summary, (dialog, which) -> Shell.su("kill $(cat " + modulesLogProcessID.getAbsolutePath() + ")").exec());
+                    areYouSure(R.string.stop_log_summary, (dialog, which) -> Shell.su("pkill -P $(cat " + modulesLogProcessID.getAbsolutePath() + ")").exec());
                     return true;
                 });
             }
