@@ -105,7 +105,7 @@ public class Enhancement implements IXposedHookLoadPackage {
     }
 
     private static List<String> readModulesList(final String filename) {
-        XposedBridge.log("EdXpMgrEx: Reading modules list " + filename + "...");
+        XposedBridge.log("EdXposedManager: Reading modules list " + filename + "...");
         final StrictMode.ThreadPolicy oldPolicy = StrictMode.allowThreadDiskReads();
         try {
             final File listFile = new File(filename);
