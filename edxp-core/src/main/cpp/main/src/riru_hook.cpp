@@ -46,9 +46,9 @@ namespace edxp {
                             strcat(value,kPropValueCompilerFlagsWS);
                         }
                     }
+                }
                 if(strstr(value,kPropValueCompilerFlags) != NULL)
                     LOGI("system_property_get: %s -> %s", key, value);
-            }
             }
                     
                     
@@ -100,9 +100,9 @@ namespace edxp {
                         res.append(kPropValueCompilerFlagsWS);
                     }
                 }
+            }
                 if(strstr(res.c_str(),kPropValueCompilerFlags) != NULL)
                     LOGI("android::base::GetProperty: %s -> %s", key.c_str(), res.c_str());
-            }
         }
             
                 
