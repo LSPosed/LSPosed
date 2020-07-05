@@ -501,7 +501,7 @@ public class SettingsActivity extends BaseActivity {
                 prefPretendXposedInstaller.setOnPreferenceChangeListener((preference, newValue) -> {
                     boolean enabled = (Boolean) newValue;
                     if (enabled) {
-                        new BlackListAdapter(getContext(), AppHelper.isWhiteListMode(), null).generateCheckedList();
+                        new BlackListAdapter(getContext(), AppHelper.isWhiteListMode()).generateCheckedList();
                         FileOutputStream fos = null;
                         try {
                             fos = new FileOutputStream(pretendXposedInstallerFlag.getPath());
@@ -533,7 +533,7 @@ public class SettingsActivity extends BaseActivity {
                 prefHideEdXposedManager.setOnPreferenceChangeListener((preference, newValue) -> {
                     boolean enabled = (Boolean) newValue;
                     if (enabled) {
-                        new BlackListAdapter(getContext(), AppHelper.isWhiteListMode(), null).generateCheckedList();
+                        new BlackListAdapter(getContext(), AppHelper.isWhiteListMode()).generateCheckedList();
                         FileOutputStream fos = null;
                         try {
                             fos = new FileOutputStream(hideEdXposedManagerFlag.getPath());

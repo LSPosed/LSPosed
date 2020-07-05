@@ -51,7 +51,7 @@ public class BlackListActivity extends BaseActivity implements AppAdapter.Callba
         }
         setupWindowInsets(binding.snackbar, binding.recyclerView);
         final boolean isWhiteListMode = isWhiteListMode();
-        appAdapter = isCompat ? new CompatListAdapter(this, binding) : new BlackListAdapter(this, isWhiteListMode, binding);
+        appAdapter = isCompat ? new CompatListAdapter(this) : new BlackListAdapter(this, isWhiteListMode);
         appAdapter.setHasStableIds(true);
         binding.recyclerView.setAdapter(appAdapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));

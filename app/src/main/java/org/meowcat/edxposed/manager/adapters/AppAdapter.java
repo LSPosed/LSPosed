@@ -17,11 +17,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.transition.TransitionManager;
 
 import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.XposedApp;
-import org.meowcat.edxposed.manager.databinding.ActivityBlackListBinding;
 import org.meowcat.edxposed.manager.util.InstallApkUtil;
 
 import java.text.DateFormat;
@@ -44,11 +42,9 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
     private PackageManager pm;
     private ApplicationFilter filter;
     private Comparator<ApplicationInfo> cmp;
-    private ActivityBlackListBinding binding;
 
-    AppAdapter(Context context, ActivityBlackListBinding binding) {
+    AppAdapter(Context context) {
         this.context = context;
-        this.binding = binding;
         fullList = showList = Collections.emptyList();
         checkedList = Collections.emptyList();
         filter = new ApplicationFilter();
@@ -276,7 +272,6 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            TransitionManager.beginDelayedTransition(binding.recyclerView);
             notifyDataSetChanged();
         }
     }

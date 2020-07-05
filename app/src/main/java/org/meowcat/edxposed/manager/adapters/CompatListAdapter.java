@@ -5,7 +5,6 @@ import android.content.pm.ApplicationInfo;
 import android.widget.CompoundButton;
 
 import org.meowcat.edxposed.manager.R;
-import org.meowcat.edxposed.manager.databinding.ActivityBlackListBinding;
 import org.meowcat.edxposed.manager.util.ToastUtil;
 
 import java.util.List;
@@ -14,8 +13,8 @@ public class CompatListAdapter extends AppAdapter {
 
     private List<String> checkedList;
 
-    public CompatListAdapter(Context context, ActivityBlackListBinding binding) {
-        super(context, binding);
+    public CompatListAdapter(Context context) {
+        super(context);
     }
 
     @Override

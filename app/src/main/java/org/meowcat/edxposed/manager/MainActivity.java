@@ -103,7 +103,7 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
             binding.statusIcon.setImageDrawable(getDrawable(R.drawable.ic_error));
         }
         notifyDataSetChanged();
-        new Thread(() -> new BlackListAdapter(getApplicationContext(), AppHelper.isWhiteListMode(), null).generateCheckedList());
+        new Thread(() -> new BlackListAdapter(getApplicationContext(), AppHelper.isWhiteListMode()).generateCheckedList());
     }
 
     private int extractIntPart(String str) {
