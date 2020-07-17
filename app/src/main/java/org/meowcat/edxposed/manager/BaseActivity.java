@@ -119,7 +119,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AppCompatDelegate.setDefaultNightMode(XposedApp.getPreferences().getInt("theme", 0));
+        AppCompatDelegate.setDefaultNightMode(XposedApp.getPreferences().getInt("theme", -1));
         theme = getTheme(this) + getCustomTheme() + XposedApp.getPreferences().getBoolean("md2", false);
     }
 

@@ -47,7 +47,14 @@ public class DownloadsUtil {
         request.setTitle(b.title);
         request.setMimeType(b.mimeType.toString());
         request.setNotificationVisibility(Request.VISIBILITY_VISIBLE);
-        File destination = new File(context.getExternalCacheDir(), "/downloads/" + b.title + b.mimeType.getExtension());
+        File path = new File(context.getExternalCacheDir(), "downloads");
+        try {
+            if (!path.mkdirs()) return null;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        File destination = new File(path, b.title + b.mimeType.getExtension());
         removeAllForLocalFile(context, destination);
         request.setDestinationUri(Uri.fromFile(destination));
         DownloadManager dm = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
