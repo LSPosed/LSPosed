@@ -103,12 +103,6 @@
             app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
-            android:defaultValue="true"
-            android:key="snack_bar"
-            android:title="@string/notify_module_update"
-            app:iconSpaceReserved="false" />
-
-        <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="custom_list"
             android:summary="@string/custom_list_summ"

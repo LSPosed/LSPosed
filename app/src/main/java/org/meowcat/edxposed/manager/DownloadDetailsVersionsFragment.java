@@ -111,9 +111,8 @@ public class DownloadDetailsVersionsFragment extends ListFragment {
         private final String textInstalled;
         private final String textUpdateAvailable;
         private final long installedVersionCode;
-        //private View snackbar;
 
-        VersionsAdapter(Context context, InstalledModule installed/*, View snackbar*/) {
+        VersionsAdapter(Context context, InstalledModule installed) {
             super(context, R.layout.item_version);
             TypedValue typedValue = new TypedValue();
             Resources.Theme theme = context.getTheme();
@@ -126,7 +125,6 @@ public class DownloadDetailsVersionsFragment extends ListFragment {
             textInstalled = getString(R.string.download_section_installed) + ":";
             textUpdateAvailable = getString(R.string.download_section_update_available) + ":";
             installedVersionCode = (installed != null) ? installed.versionCode : -1;
-            //this.snackbar = snackbar;
         }
 
         @SuppressLint("InflateParams")
@@ -182,7 +180,6 @@ public class DownloadDetailsVersionsFragment extends ListFragment {
 
             holder.downloadView.setUrl(item.downloadLink);
             holder.downloadView.setTitle(activity.getModule().name);
-            //holder.downloadView.setDownloadFinishedCallback(new DownloadModuleCallback(item, snackbar));
 
             if (item.changelog != null && !item.changelog.isEmpty()) {
                 holder.txtChangesTitle.setVisibility(View.VISIBLE);
