@@ -1,5 +1,4 @@
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,43 +20,5 @@
             android:layout_marginEnd="4dp"
             android:text="@string/download_view_download"
             android:theme="@style/Widget.AppCompat.Button.Colored" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnSave"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            android:text="@string/save"
-            android:theme="@style/Widget.AppCompat.Button.Colored" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnDownloadCancel"
-            style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            android:text="@string/download_view_cancel"
-            android:theme="@style/Widget.AppCompat.Button.Colored"
-            android:visibility="gone"
-            tools:ignore="ButtonOrder" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnInstall"
-            style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            android:text="@string/download_view_install"
-            android:theme="@style/Widget.AppCompat.Button.Colored"
-            android:visibility="gone" />
-
     </LinearLayout>
-
-    <ProgressBar
-        android:id="@+id/progress"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
 </merge>

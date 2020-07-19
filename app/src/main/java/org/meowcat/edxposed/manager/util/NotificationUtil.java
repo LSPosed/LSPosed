@@ -12,7 +12,6 @@ import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.annotation.StringRes;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
@@ -25,17 +24,14 @@ import org.meowcat.edxposed.manager.XposedApp;
 public final class NotificationUtil {
 
     public static final int NOTIFICATION_MODULE_NOT_ACTIVATED_YET = 0;
-    public static final int NOTIFICATION_MODULE_INSTALLING = 4;
     private static final int NOTIFICATION_MODULES_UPDATED = 1;
     private static final int NOTIFICATION_INSTALLER_UPDATE = 2;
-    private static final int NOTIFICATION_MODULE_INSTALLATION = 3;
     private static final int PENDING_INTENT_OPEN_MODULES = 0;
     private static final int PENDING_INTENT_OPEN_INSTALL = 1;
     private static final int PENDING_INTENT_SOFT_REBOOT = 2;
     private static final int PENDING_INTENT_REBOOT = 3;
     private static final int PENDING_INTENT_ACTIVATE_MODULE_AND_REBOOT = 4;
     private static final int PENDING_INTENT_ACTIVATE_MODULE = 5;
-    private static final int PENDING_INTENT_INSTALL_APK = 6;
 
     private static final String HEADS_UP = "heads_up";
     private static final String FRAGMENT_ID = "fragment";
@@ -63,10 +59,6 @@ public final class NotificationUtil {
             notificationManager.createNotificationChannel(channelUpdate);
             notificationManager.createNotificationChannel(channelModule);
         }
-    }
-
-    public static void cancel(int id) {
-        notificationManager.cancel(id);
     }
 
     public static void cancel(String tag, int id) {
@@ -145,48 +137,6 @@ public final class NotificationUtil {
         notificationManager.notify(null, NOTIFICATION_MODULES_UPDATED, builder.build());
     }
 
-    static void showModuleInstallNotification(@StringRes int title, @StringRes int message, String path, Object... args) {
-        showModuleInstallNotification(context.getString(title), context.getString(message, args), path, title == R.string.installation_error);
-    }
-
-    private static void showModuleInstallNotification(String title, String message, String path, boolean error) {
-        NotificationCompat.Builder builder = getNotificationBuilder(title, message, NOTIFICATION_MODULES_CHANNEL);
-
-        if (error) {
-            Intent iInstallApk = new Intent(context, ApkReceiver.class);
-            iInstallApk.putExtra(ApkReceiver.EXTRA_APK_PATH, path);
-            PendingIntent pInstallApk = PendingIntent.getBroadcast(context, PENDING_INTENT_INSTALL_APK, iInstallApk, PendingIntent.FLAG_UPDATE_CURRENT);
-
-            builder.addAction(new NotificationCompat.Action.Builder(0, context.getString(R.string.installation_apk_normal), pInstallApk).build());
-        }
-
-        if (prefs.getBoolean(HEADS_UP, true)) {
-            builder.setPriority(2);
-        }
-        NotificationCompat.BigTextStyle notiStyle = new NotificationCompat.BigTextStyle();
-        notiStyle.setBigContentTitle(title);
-        notiStyle.bigText(message);
-        builder.setStyle(notiStyle);
-
-        notificationManager.notify(null, NOTIFICATION_MODULE_INSTALLATION, builder.build());
-
-        new android.os.Handler().postDelayed(() -> cancel(NOTIFICATION_MODULE_INSTALLATION), 10 * 1000);
-    }
-
-    public static void showModuleInstallingNotification(String appName) {
-        String title = context.getString(R.string.install_load);
-        String message = context.getString(R.string.install_load_apk, appName);
-        NotificationCompat.Builder builder = getNotificationBuilder(title, message, NOTIFICATION_MODULES_CHANNEL)
-                .setProgress(0, 0, true)
-                .setOngoing(true);
-        NotificationCompat.BigTextStyle notiStyle = new NotificationCompat.BigTextStyle();
-        notiStyle.setBigContentTitle(title);
-        notiStyle.bigText(message);
-        builder.setStyle(notiStyle);
-
-        notificationManager.notify(null, NOTIFICATION_MODULE_INSTALLING, builder.build());
-    }
-
     public static void showInstallerUpdateNotification() {
         Intent intent = new Intent(context, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -262,28 +212,6 @@ public final class NotificationUtil {
             if (returnCode != 0) {
                 Log.e(XposedApp.TAG, "NotificationUtil -> Could not reboot");
             }
-        }
-    }
-
-    public static class ApkReceiver extends BroadcastReceiver {
-        public static final String EXTRA_APK_PATH = "path";
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            /*
-             * Close the notification bar in order to see the toast that module
-             * was enabled successfully. Furthermore, if SU permissions haven't
-             * been granted yet, the SU dialog will be prompted behind the
-             * expanded notification panel and is therefore not visible to the
-             * user.
-             */
-            context.sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
-
-            if (intent.hasExtra(EXTRA_APK_PATH)) {
-                String path = intent.getStringExtra(EXTRA_APK_PATH);
-                InstallApkUtil.installApkNormally(context, path);
-            }
-            NotificationUtil.cancel(NotificationUtil.NOTIFICATION_MODULE_INSTALLATION);
         }
     }
 }

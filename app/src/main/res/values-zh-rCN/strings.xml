@@ -139,7 +139,7 @@
     <string name="about_libraries_label">使用的库</string>
 
     <!-- DownloadView -->
-    <string name="download_view_download">下载并安装</string>
+    <string name="download_view_download">下载</string>
     <string name="download_view_install">安装</string>
     <string name="download_view_cancel">取消</string>
     <string name="download_view_no_url">无可用的下载链接</string>

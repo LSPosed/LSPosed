@@ -78,14 +78,6 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".receivers.DownloadReceiver"
-            android:exported="true"
-            android:permission="android.permission.SEND_DOWNLOAD_COMPLETED_INTENTS">
-            <intent-filter>
-                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
-            </intent-filter>
-        </receiver>
-        <receiver
             android:name=".util.NotificationUtil$RebootReceiver"
             android:exported="false" />
         <receiver

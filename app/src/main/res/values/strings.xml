@@ -141,7 +141,7 @@
     <string name="about_libraries_label">Used libraries</string>
 
     <!-- DownloadView -->
-    <string name="download_view_download">Download and Install</string>
+    <string name="download_view_download">Download</string>
     <string name="download_view_install">Install</string>
     <string name="download_view_cancel">Cancel</string>
     <string name="download_view_no_url">No download URL available</string>

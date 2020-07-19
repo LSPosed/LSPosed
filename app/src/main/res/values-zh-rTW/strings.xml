@@ -139,7 +139,7 @@
     <string name="about_libraries_label">使用的庫</string>
 
     <!-- DownloadView -->
-    <string name="download_view_download">下載並安裝</string>
+    <string name="download_view_download">下載</string>
     <string name="download_view_install">安裝</string>
     <string name="download_view_cancel">取消</string>
     <string name="download_view_no_url">無可用的下載連結</string>

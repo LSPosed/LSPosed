@@ -32,7 +32,6 @@ import org.meowcat.edxposed.manager.repo.Module;
 import org.meowcat.edxposed.manager.repo.ModuleVersion;
 import org.meowcat.edxposed.manager.repo.ReleaseType;
 import org.meowcat.edxposed.manager.repo.RepoDb;
-import org.meowcat.edxposed.manager.util.DownloadsUtil;
 import org.meowcat.edxposed.manager.util.InstallApkUtil;
 import org.meowcat.edxposed.manager.util.ModuleUtil;
 import org.meowcat.edxposed.manager.util.NavUtil;
@@ -369,7 +368,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             }
 
             if (mv != null) {
-                DownloadsUtil.addModule(this, m.name, mv.downloadLink, (context, info) -> new InstallApkUtil(this, info).execute());
+                NavUtil.startURL(this, mv.downloadLink);
             }
         }
 
