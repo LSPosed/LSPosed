@@ -14,6 +14,7 @@
 #define ANDROID_O2 27
 #define ANDROID_P 28
 #define ANDROID_Q 29
+#define ANDROID_R 30
 
 #define roundUpTo4(v) ((v+4-1) - ((v+4-1)&3))
 #define roundUpTo8(v) ((v+8-1) - ((v+8-1)&7))
