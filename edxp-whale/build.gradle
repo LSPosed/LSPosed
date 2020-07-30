@@ -12,7 +12,7 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        multiDexEnabled true
+        multiDexEnabled false
     }
 
     buildTypes {
@@ -61,8 +61,10 @@ afterEvaluate {
 
         task("makeAndCopy${variantNameCapped}", type: Jar, dependsOn: "assemble${variantNameCapped}") {
             dependsOn tasks.getByPath(":edxp-common:copyCommonProperties")
-            from "${buildDir}/intermediates/transforms/dexMerger/${variantNameLowered}/0/",
-                    "${projectDir}/src/main/resources/"
+            def dexOutPath = variant.name.contains("release") ?
+                    "${buildDir}/intermediates/transforms/dexMerger/${variantNameLowered}/0/" :
+                    "${buildDir}/intermediates/dex/${variantNameLowered}/mergeDex${variantNameCapped}/out/"
+            from dexOutPath, "${projectDir}/src/main/resources/"
             destinationDir file(myTemplatePath + "system/framework/")
             baseName "edxp"
             doLast {
