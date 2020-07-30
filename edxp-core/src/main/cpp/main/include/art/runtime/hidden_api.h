@@ -32,10 +32,10 @@ namespace art {
 
         static void DisableHiddenApi(void *handle, HookFunType hook_func) {
             const int api_level = GetAndroidApiLevel();
-            if (api_level < ANDROID_P) {
+            if (api_level < __ANDROID_API_P__) {
                 return;
             }
-            if (api_level == ANDROID_P) {
+            if (api_level == __ANDROID_API_P__) {
                 HOOK_FUNC(GetMethodActionImpl,
                           "_ZN3art9hiddenapi6detail19GetMemberActionImplINS_9ArtMethodEEENS0_"
                           "6ActionEPT_NS_20HiddenApiAccessFlags7ApiListES4_NS0_12AccessMethodE");

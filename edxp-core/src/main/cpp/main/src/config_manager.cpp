@@ -214,7 +214,7 @@ namespace edxp {
     };
 
     ConfigManager::ConfigManager() {
-        use_prot_storage_ = GetAndroidApiLevel() >= ANDROID_N;
+        use_prot_storage_ = GetAndroidApiLevel() >= __ANDROID_API_N__;
         last_user_ = 0;
         UpdateConfigPath(last_user_);
     }

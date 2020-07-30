@@ -37,7 +37,7 @@ namespace edxp {
             LP_SELECT("/apex/com.android.runtime/lib/", "/apex/com.android.runtime/lib64/"));
 
     static const auto kLibArtPath =
-            (GetAndroidApiLevel() >= ANDROID_Q ? kLibRuntimeBasePath : kLibBasePath) + kLibArtName;
+            (GetAndroidApiLevel() >= __ANDROID_API_Q__ ? kLibRuntimeBasePath : kLibBasePath) + kLibArtName;
 
     static const auto kLibWhalePath = kLibBasePath + kLibWhaleName;
     static const auto kLibSandHookPath = kLibBasePath + kLibSandHookName;

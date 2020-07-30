@@ -12,7 +12,7 @@ public class Yahfa {
     // JNI.ToReflectedMethod() could return either Method or Constructor
     public static native Object findMethodNative(Class targetClass, String methodName, String methodSig);
 
-    public static native void init(int SDK_version);
+    public static native void init(int sdkVersion);
 
     public static native void setMethodNonCompilable(Member member);
 

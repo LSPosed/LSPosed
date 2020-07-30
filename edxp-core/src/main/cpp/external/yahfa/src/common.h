@@ -26,4 +26,7 @@
 #endif // DEBUG
 #endif // LOG_DISABLED
 
+#define pointer_size sizeof(void*)
+#define roundUpToPtrSize(v) (v + pointer_size - 1 - ((v + pointer_size - 1) & (pointer_size - 1)))
+
 #endif //YAHFA_COMMON_H

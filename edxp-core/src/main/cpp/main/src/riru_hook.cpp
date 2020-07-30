@@ -54,7 +54,7 @@ namespace edxp {
                     
                 
             
-            if (api_level == ANDROID_O_MR1) {
+            if (api_level == __ANDROID_API_O_MR1__) {
                 // https://android.googlesource.com/platform/art/+/f5516d38736fb97bfd0435ad03bbab17ddabbe4e
                 // Android 8.1 add a fatal check for debugging (removed in Android 9.0),
                 // which will be triggered by EdXposed in cases where target method is hooked
@@ -106,7 +106,7 @@ namespace edxp {
         }
             
                 
-        if (api_level == ANDROID_O_MR1) {
+        if (api_level == __ANDROID_API_O_MR1__) {
             // see __system_property_get hook above for explanations
             if (strcmp(kPropKeyUseJitProfiles, key.c_str()) == 0) {
                 res = "false";
@@ -126,7 +126,7 @@ namespace edxp {
 
         XHOOK_REGISTER(__system_property_get);
 
-        if (GetAndroidApiLevel() >= ANDROID_P) {
+        if (GetAndroidApiLevel() >= __ANDROID_API_P__) {
             XHOOK_REGISTER(
                     _ZN7android4base11GetPropertyERKNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEES9_);
         }
