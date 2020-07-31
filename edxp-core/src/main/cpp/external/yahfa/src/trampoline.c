@@ -123,7 +123,7 @@ int doInitHookCap(unsigned int cap) {
     }
     unsigned int allSize = trampolineSize * cap;
     unsigned char *buf = mmap(NULL, allSize, PROT_READ | PROT_WRITE | PROT_EXEC,
-                              MAP_ANONYMOUS | MAP_PRIVATE, 0, 0);
+                              MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
     if (buf == MAP_FAILED) {
         LOGE("mmap failed, errno = %s", strerror(errno));
         return 1;
