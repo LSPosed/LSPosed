@@ -4,7 +4,7 @@ import org.gradle.internal.os.OperatingSystem
 apply plugin: 'com.android.library'
 
 // Values set here will be overriden by AppVeyor, feel free to modify during development.
-def buildVersionName = 'v0.4.6.3'
+def buildVersionName = 'v0.4.6.4'
 def buildVersionCode = 233
 
 if (System.env.APPVEYOR_BUILD_VERSION != null) {
