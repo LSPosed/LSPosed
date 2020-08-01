@@ -21,6 +21,7 @@ import com.elderdrivers.riru.edxp.entry.yahfa.SysBootstrapHookInfo;
 import com.elderdrivers.riru.edxp.entry.yahfa.SysInnerHookInfo;
 import com.elderdrivers.riru.edxp.entry.yahfa.WorkAroundHookInfo;
 import com.elderdrivers.riru.edxp.util.Utils;
+import com.elderdrivers.riru.edxp.util.Versions;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -127,9 +128,13 @@ public abstract class BaseRouter implements Router {
     public void startSystemServerHook() {
         ClassLoader classLoader = BaseRouter.class.getClassLoader();
         if (useXposedApi) {
+            StartBootstrapServices sbsHooker = new StartBootstrapServices();
+            Object[] paramTypesAndCallback = Versions.hasR() ?
+                    new Object[]{"com.android.server.utils.TimingsTraceAndSlog", sbsHooker} :
+                    new Object[]{sbsHooker};
             XposedHelpers.findAndHookMethod(StartBootstrapServicesHooker.className,
                     SystemMain.systemServerCL,
-                    StartBootstrapServicesHooker.methodName, new StartBootstrapServices());
+                    StartBootstrapServicesHooker.methodName, paramTypesAndCallback);
         } else {
             HookMain.doHookDefault(
                     classLoader,

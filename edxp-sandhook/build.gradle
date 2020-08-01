@@ -4,7 +4,7 @@ sourceCompatibility = "7"
 targetCompatibility = "7"
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion androidCompileSdkVersion.toInteger()
 
     defaultConfig {
         applicationId "com.elderdrivers.riru.edxp.sandhook"
