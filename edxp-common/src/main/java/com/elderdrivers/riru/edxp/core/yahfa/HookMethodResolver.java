@@ -91,22 +91,23 @@ public class HookMethodResolver {
         }
     }
 
-    public static void resolveMethod(Method hook, Method backup) {
+    public static void resolveMethod(Method hook, Method backup, Object target) {
         if (canResolvedInJava && artMethodField != null) {
             // in java
             try {
-                resolveInJava(hook, backup);
+                resolveInJava(hook, backup, target);
             } catch (Exception e) {
                 // in native
-                resolveInNative(hook, backup);
+                resolveInNative(hook, backup, target);
             }
         } else {
             // in native
-            resolveInNative(hook, backup);
+            resolveInNative(hook, backup, target);
         }
     }
 
-    private static void resolveInJava(Method hook, Method backup) throws Exception {
+    private static void resolveInJava(Method hook, Method backup, Object target) throws Exception {
+        Utils.logD("start to resolve in java. target: " + target);
         Object dexCache = dexCacheField.get(hook.getDeclaringClass());
         if (isArtMethod) {
             Object artMethod = artMethodField.get(backup);
@@ -121,7 +122,8 @@ public class HookMethodResolver {
         }
     }
 
-    private static void resolveInNative(Method hook, Method backup) {
+    private static void resolveInNative(Method hook, Method backup, Object target) {
+        Utils.logD("start to resolve in native. target: " + target);
         Yahfa.ensureMethodCached(hook, backup);
     }
 

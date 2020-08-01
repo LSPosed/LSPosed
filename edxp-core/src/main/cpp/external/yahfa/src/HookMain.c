@@ -31,8 +31,8 @@ static inline void write32(void *addr, uint32_t value) {
     *((uint32_t *) addr) = value;
 }
 
-static inline void* readAddr(void *addr) {
-    return *((void**) addr);
+static inline void *readAddr(void *addr) {
+    return *((void **) addr);
 }
 
 void Java_lab_galaxy_yahfa_HookMain_init(JNIEnv *env, jclass clazz, jint sdkVersion) {
@@ -215,8 +215,8 @@ static int doBackupAndHook(JNIEnv *env, void *targetMethod, void *hookMethod, vo
 
 static void ensureMethodCached(void *hookMethod, void *backupMethod,
                                void *hookClassResolvedMethods) {
-    if (!backupMethod || (long) backupMethod < 0x1000) {
-        LOGW("ensureMethodCached: backupMethod is null or illegal: %p", backupMethod);
+    if (!backupMethod) {
+        LOGE("ensureMethodCached: backupMethod is null");
         return;
     }
     void *dexCacheResolvedMethods;
@@ -263,17 +263,16 @@ static void ensureMethodCached(void *hookMethod, void *backupMethod,
     }
 }
 
-static void *getArtMethod(JNIEnv *env, jobject jmethod) {
+void *getArtMethod(JNIEnv *env, jobject jmethod) {
     void *artMethod = NULL;
 
-    if(jmethod == NULL) {
+    if (jmethod == NULL) {
         return artMethod;
     }
 
-    if(SDKVersion == __ANDROID_API_R__) {
+    if (SDKVersion == __ANDROID_API_R__) {
         artMethod = (void *) (*env)->GetLongField(env, jmethod, fieldArtMethod);
-    }
-    else {
+    } else {
         artMethod = (void *) (*env)->FromReflectedMethod(env, jmethod);
     }
 
@@ -329,8 +328,8 @@ jboolean Java_lab_galaxy_yahfa_HookMain_backupAndHookNative(JNIEnv *env, jclass 
 void Java_lab_galaxy_yahfa_HookMain_ensureMethodCached(JNIEnv *env, jclass clazz,
                                                        jobject hook,
                                                        jobject backup) {
-    ensureMethodCached((void *) (*env)->FromReflectedMethod(env, hook),
-                       backup == NULL ? NULL : (void *) (*env)->FromReflectedMethod(env, backup),
+    ensureMethodCached(getArtMethod(env, hook),
+                       getArtMethod(env, backup),
                        getResolvedMethodsAddr(env, hook));
 }
 

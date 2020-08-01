@@ -31,10 +31,10 @@ namespace edxp {
             LOGE("setNonCompilableNative: member is null");
             return;
         }
-        void *art_method = env->FromReflectedMethod(member);
+        void *art_method = getArtMethod(env, member);
 
-        if (!art_method || (long)art_method < 0x1000) {
-            LOGE("setNonCompilableNative: art_method is null or invalid: %p", art_method);
+        if (!art_method) {
+            LOGE("setNonCompilableNative: art_method is null");
             return;
         }
         setNonCompilable(art_method);
@@ -45,7 +45,7 @@ namespace edxp {
             LOGE("setNativeFlagNative: member is null");
             return JNI_FALSE;
         }
-        void *art_method = env->FromReflectedMethod(member);
+        void *art_method = getArtMethod(env, member);
         if (!art_method) {
             LOGE("setNativeFlagNative: art_method is null");
             return JNI_FALSE;
