@@ -85,6 +85,19 @@ if [[ -f ${DISABLE_VERBOSE_LOG_FILE} ]]; then
     LOG_VERBOSE=false
 fi
 
+# If logcat client is kicked out by klogd server, we'll restart it.
+# However, if it is killed manually or by EdXposed Manager, we'll exit.
+# Refer to https://github.com/ElderDrivers/EdXposed/pull/575 for more information.
+loop_logcat() {
+    while true
+    do
+        logcat $*
+        if [[ $? -ne 1 ]]; then
+            break
+        fi
+    done
+}
+
 start_log_cather () {
     LOG_FILE_NAME=$1
     LOG_TAG_FILTERS=$2
@@ -126,7 +139,7 @@ start_log_cather () {
     echo "Riru version: ${RIRU_VERSION} (${RIRU_VERCODE})">>${LOG_FILE}
     echo "Riru api: ${RIRU_APICODE}">>${LOG_FILE}
     echo "Magisk: ${MAGISK_VERSION%:*} (${MAGISK_VERCODE})">>${LOG_FILE}
-    logcat -f ${LOG_FILE} *:S ${LOG_TAG_FILTERS} &
+    loop_logcat -f ${LOG_FILE} *:S ${LOG_TAG_FILTERS} &
     LOG_PID=$!
     echo "${LOG_PID}">"${LOG_PATH}/${LOG_FILE_NAME}.pid"
 }

@@ -28,6 +28,7 @@ namespace edxp {
     static constexpr const char *kPropValueCompilerFilter = "quicken";
     static constexpr const char *kPropValuePmBgDexopt = "speed";
     static constexpr const char *kPropValueCompilerFlags = "--inline-max-code-units=0";
+    static constexpr const char *kPropValueCompilerFlagsWS = " --inline-max-code-units=0";
 
 
     void InstallRiruHooks();

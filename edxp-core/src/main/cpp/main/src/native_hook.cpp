@@ -49,7 +49,7 @@ namespace edxp {
         }
         LOGI("Start to install inline hooks");
         int api_level = GetAndroidApiLevel();
-        if (UNLIKELY(api_level < ANDROID_LOLLIPOP)) {
+        if (UNLIKELY(api_level < __ANDROID_API_L__)) {
             LOGE("API level not supported: %d, skip inline hooks", api_level);
             return;
         }
@@ -69,7 +69,7 @@ namespace edxp {
         }
         hook_func = reinterpret_cast<HookFunType>(hook_func_symbol);
 
-        if (api_level >= ANDROID_Q) {
+        if (api_level >= __ANDROID_API_Q__) {
             InstallLinkerHooks(kLinkerPath.c_str());
         } else {
             ScopedDlHandle art_handle(kLibArtLegacyPath.c_str());

@@ -68,7 +68,7 @@ namespace art {
 
             HOOK_FUNC(FixupStaticTrampolines,
                       "_ZN3art11ClassLinker22FixupStaticTrampolinesENS_6ObjPtrINS_6mirror5ClassEEE");
-            if (GetAndroidApiLevel() >= ANDROID_R) {
+            if (GetAndroidApiLevel() >= __ANDROID_API_R__) {
                 HOOK_FUNC(ShouldUseInterpreterEntrypoint,
                           "_ZN3art11ClassLinker30ShouldUseInterpreterEntrypointEPNS_9ArtMethodEPKv");
             }
