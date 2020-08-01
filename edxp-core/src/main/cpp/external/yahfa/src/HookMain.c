@@ -200,7 +200,6 @@ static int doBackupAndHook(JNIEnv *env, void *targetMethod, void *hookMethod, vo
     // set the target method to native so that Android O wouldn't invoke it with interpreter
     if (SDKVersion >= __ANDROID_API_O__) {
         setNativeFlag(targetMethod, true);
-        LOGI("access flags is 0x%x", access_flags);
     }
 
     LOGI("hook and backup done");
