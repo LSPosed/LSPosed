@@ -105,6 +105,7 @@ namespace edxp {
         }
     }
 
+    // TODO ignore unrelated processes
     bool ConfigManager::IsAppNeedHook(const std::string &app_data_dir) {
         // zygote always starts with `uid == 0` and then fork into different user.
         // so we have to check if we are the correct user or not.

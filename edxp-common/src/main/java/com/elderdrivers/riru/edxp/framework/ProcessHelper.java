@@ -1,7 +1,10 @@
 package com.elderdrivers.riru.edxp.framework;
 
 import de.robv.android.xposed.XposedHelpers;
+import de.robv.android.xposed.annotation.ApiSensitive;
+import de.robv.android.xposed.annotation.Level;
 
+@ApiSensitive(Level.MIDDLE)
 public class ProcessHelper {
 
     static {

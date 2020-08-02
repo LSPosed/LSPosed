@@ -36,6 +36,7 @@ namespace art {
             return instance_;
         }
 
+        // @ApiSensitive(Level.LOW)
         static void Setup(void *handle, HookFunType hook_func) {
             HOOK_FUNC(Init, "_ZN3art7Runtime4InitEONS_18RuntimeArgumentMapE");
             RETRIEVE_FUNC_SYMBOL(DeoptimizeBootImage,

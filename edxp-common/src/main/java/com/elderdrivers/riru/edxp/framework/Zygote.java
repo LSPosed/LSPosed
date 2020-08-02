@@ -3,7 +3,10 @@ package com.elderdrivers.riru.edxp.framework;
 import com.elderdrivers.riru.edxp.util.Utils;
 
 import de.robv.android.xposed.XposedHelpers;
+import de.robv.android.xposed.annotation.ApiSensitive;
+import de.robv.android.xposed.annotation.Level;
 
+@ApiSensitive(Level.LOW)
 public class Zygote {
 
     // prevent from fatal error caused by holding not whitelisted file descriptors when forking zygote

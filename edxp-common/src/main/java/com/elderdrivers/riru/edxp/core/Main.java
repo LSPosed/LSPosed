@@ -160,6 +160,7 @@ public class Main implements KeepAll {
         });
     }
 
+    // TODO do this earlier?
     private static boolean isBlackListedProcess(int uid) {
         return ProcessHelper.isIsolated(uid)
                 || ProcessHelper.isRELROUpdater(uid)

@@ -23,6 +23,7 @@
 
 namespace edxp {
 
+    // TODO exclude unrelated processes
     EXPORT void onModuleLoaded() {
         LOG(INFO) << "onModuleLoaded: welcome to EdXposed!";
         InstallInlineHooks();

@@ -5,7 +5,10 @@ import com.elderdrivers.riru.edxp._hooker.impl.OneplusWorkaround;
 import com.elderdrivers.riru.edxp.core.yahfa.HookMain;
 
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.annotation.ApiSensitive;
+import de.robv.android.xposed.annotation.Level;
 
+@ApiSensitive(Level.MIDDLE)
 public class OnePlusWorkAroundHooker implements KeepMembers {
 
     static {

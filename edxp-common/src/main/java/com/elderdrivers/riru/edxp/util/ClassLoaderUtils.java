@@ -15,7 +15,10 @@ import dalvik.system.PathClassLoader;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
+import de.robv.android.xposed.annotation.ApiSensitive;
+import de.robv.android.xposed.annotation.Level;
 
+@ApiSensitive(Level.LOW)
 public class ClassLoaderUtils {
 
     public static final String DEXPATH = "/system/framework/edxp.jar:/system/framework/eddalvikdx.jar:/system/framework/eddexmaker.jar";

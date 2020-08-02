@@ -28,6 +28,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.XposedInit;
+import de.robv.android.xposed.annotation.ApiSensitive;
+import de.robv.android.xposed.annotation.Level;
 
 public abstract class BaseRouter implements Router {
 
@@ -94,6 +96,7 @@ public abstract class BaseRouter implements Router {
     }
 
 
+    @ApiSensitive(Level.LOW)
     public void startBootstrapHook(boolean isSystem) {
         Utils.logD("startBootstrapHook starts: isSystem = " + isSystem);
         ClassLoader classLoader = BaseRouter.class.getClassLoader();
@@ -143,6 +146,7 @@ public abstract class BaseRouter implements Router {
         }
     }
 
+    @ApiSensitive(Level.LOW)
     public void startWorkAroundHook() {
         ClassLoader classLoader = BaseRouter.class.getClassLoader();
         if (useXposedApi) {

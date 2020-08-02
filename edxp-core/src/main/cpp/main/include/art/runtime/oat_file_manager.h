@@ -11,6 +11,7 @@ namespace art {
             return;
         }
 
+        // @ApiSensitive(Level.LOW)
         // http://androidxref.com/9.0.0_r3/xref/art/runtime/oat_file_manager.cc#637
         static void DisableOnlyUseSystemOatFiles(void *handle, HookFunType hook_func) {
             const int api_level = GetAndroidApiLevel();

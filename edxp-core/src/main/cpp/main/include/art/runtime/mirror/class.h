@@ -46,6 +46,7 @@ namespace art {
         public:
             Class(void *thiz) : HookedObject(thiz) {}
 
+            // @ApiSensitive(Level.MIDDLE)
             static void Setup(void *handle, HookFunType hook_func) {
                 RETRIEVE_FUNC_SYMBOL(GetDescriptor, "_ZN3art6mirror5Class13GetDescriptorEPNSt3__112"
                                                     "basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEE");

@@ -80,7 +80,9 @@ namespace edxp {
         InstallFwkHooks(fwk_handle.Get());
     }
 
+    // @ApiSensitive(Level.MIDDLE)
     bool InstallLinkerHooks(const char *linker_path) {
+        // TODO flags
         void *handle = dlopen(kLibSandHookNativePath.c_str(), RTLD_NOW);
 
         if (!handle) {

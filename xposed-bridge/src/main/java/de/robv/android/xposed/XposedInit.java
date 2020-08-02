@@ -34,6 +34,8 @@ import java.util.zip.ZipFile;
 
 import dalvik.system.DexFile;
 import dalvik.system.PathClassLoader;
+import de.robv.android.xposed.annotation.ApiSensitive;
+import de.robv.android.xposed.annotation.Level;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XC_InitZygote;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
@@ -91,6 +93,7 @@ public final class XposedInit {
         hookResources();
     }
 
+    @ApiSensitive(Level.MIDDLE)
     private static void hookResources() throws Throwable {
         if (!EdXpConfigGlobal.getConfig().isResourcesHookEnabled() || disableResources) {
             return;
@@ -265,6 +268,7 @@ public final class XposedInit {
         XResources.init(latestResKey);
     }
 
+    @ApiSensitive(Level.MIDDLE)
     private static XResources cloneToXResources(XC_MethodHook.MethodHookParam param, String resDir) {
         Object result = param.getResult();
         if (result == null || result instanceof XResources ||

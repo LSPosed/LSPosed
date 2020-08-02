@@ -17,7 +17,10 @@ import com.swift.sandhook.annotation.ThisObject;
 import java.lang.reflect.Method;
 
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.annotation.ApiSensitive;
+import de.robv.android.xposed.annotation.Level;
 
+@ApiSensitive(Level.LOW)
 @HookClass(LoadedApk.class)
 public class LoadedApkConstructorHooker implements KeepMembers {
     public static String className = "android.app.LoadedApk";

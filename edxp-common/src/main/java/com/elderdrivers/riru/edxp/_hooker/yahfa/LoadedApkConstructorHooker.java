@@ -8,7 +8,10 @@ import com.elderdrivers.riru.common.KeepMembers;
 import com.elderdrivers.riru.edxp._hooker.impl.LoadedApkCstr;
 
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.annotation.ApiSensitive;
+import de.robv.android.xposed.annotation.Level;
 
+@ApiSensitive(Level.LOW)
 public class LoadedApkConstructorHooker implements KeepMembers {
     public static String className = "android.app.LoadedApk";
     public static String methodName = "<init>";

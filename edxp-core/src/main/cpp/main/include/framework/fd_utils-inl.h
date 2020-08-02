@@ -40,7 +40,8 @@ static const char *kPathPrefixWhitelist[] = {
 
 static const char *kFdPath = "/proc/self/fd";
 
-// todo stay up to date
+// TODO stay up-to-date
+// @ApiSensitive(Level.MIDDLE)
 // Keeps track of all relevant information (flags, offset etc.) of an
 // open zygote file descriptor.
 class FileDescriptorInfo {

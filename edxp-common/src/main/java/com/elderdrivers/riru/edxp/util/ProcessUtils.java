@@ -8,6 +8,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 
+import de.robv.android.xposed.annotation.ApiSensitive;
+import de.robv.android.xposed.annotation.Level;
+
+@ApiSensitive(Level.LOW)
 public class ProcessUtils {
 
     // Copied from UserHandle, indicates range of uids allocated for a user.

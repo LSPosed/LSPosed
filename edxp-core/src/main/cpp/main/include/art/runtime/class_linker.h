@@ -60,6 +60,7 @@ namespace art {
             return instance_;
         }
 
+        // @ApiSensitive(Level.MIDDLE)
         static void Setup(void *handle, HookFunType hook_func) {
             HOOK_FUNC(Constructor, "_ZN3art11ClassLinkerC2EPNS_11InternTableE",
                       "_ZN3art11ClassLinkerC2EPNS_11InternTableEb"); // 10.0

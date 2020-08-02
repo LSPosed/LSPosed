@@ -21,7 +21,7 @@ android {
 
 dependencies {
     compileOnly project(':hiddenapi-stubs')
-    implementation project(':xposed-bridge')
+    api project(':xposed-bridge')
     compileOnly project(':dexmaker')
     api "androidx.annotation:annotation:1.1.0-rc01"
 }

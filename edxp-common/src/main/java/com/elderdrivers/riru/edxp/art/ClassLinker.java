@@ -1,10 +1,8 @@
 package com.elderdrivers.riru.edxp.art;
 
 import com.elderdrivers.riru.common.KeepAll;
-import com.elderdrivers.riru.edxp.core.Yahfa;
 
 import java.lang.reflect.Member;
-import java.util.function.Consumer;
 
 import de.robv.android.xposed.PendingHooks;
 

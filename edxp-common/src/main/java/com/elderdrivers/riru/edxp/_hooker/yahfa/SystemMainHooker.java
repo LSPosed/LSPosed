@@ -6,7 +6,10 @@ import com.elderdrivers.riru.common.KeepMembers;
 import com.elderdrivers.riru.edxp._hooker.impl.SystemMain;
 
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.annotation.ApiSensitive;
+import de.robv.android.xposed.annotation.Level;
 
+@ApiSensitive(Level.LOW)
 public class SystemMainHooker implements KeepMembers {
 
     public static String className = "android.app.ActivityThread";

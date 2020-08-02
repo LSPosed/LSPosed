@@ -13,7 +13,11 @@ import java.lang.reflect.Method;
 
 import dalvik.system.BaseDexClassLoader;
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.annotation.ApiSensitive;
+import de.robv.android.xposed.annotation.Level;
 
+// TODO check HOS / OOS ver.11 when available
+@ApiSensitive(Level.MIDDLE)
 @HookClass(BaseDexClassLoader.class)
 public class OnePlusWorkAroundHooker implements KeepMembers {
 

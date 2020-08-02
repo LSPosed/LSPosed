@@ -20,6 +20,7 @@
 
 namespace edxp {
 
+    // @ApiSensitive(Level.HIGH)
     static constexpr const char *kPropKeyCompilerFilter = "dalvik.vm.dex2oat-filter";
     static constexpr const char *kPropKeyCompilerFlags = "dalvik.vm.dex2oat-flags";
     static constexpr const char *kPropKeyUseJitProfiles = "dalvik.vm.usejitprofiles";
