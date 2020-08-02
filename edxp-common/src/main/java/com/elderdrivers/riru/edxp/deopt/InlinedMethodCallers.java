@@ -32,8 +32,10 @@ public class InlinedMethodCallers {
     private static final String[][] BOOT_IMAGE = {
             // callers of Application#attach(Context)
             {"android.app.Instrumentation", "newApplication", "(Ljava/lang/ClassLoader;Ljava/lang/String;Landroid/content/Context;)Landroid/app/Application;"},
+            {"android.app.Instrumentation", "newApplication", "(Ljava/lang/ClassLoader;Landroid/content/Context;)Landroid/app/Application;"},
     };
 
+    // TODO deprecate this
     private static final String[][] BOOT_IMAGE_FOR_MIUI_RES = {
             // for MIUI resources hooking
             {"android.content.res.MiuiResources", "init", "(Ljava/lang/String;)V"},
