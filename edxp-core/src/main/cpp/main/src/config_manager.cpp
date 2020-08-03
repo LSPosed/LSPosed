@@ -86,7 +86,7 @@ namespace edxp {
         dynamic_modules_enabled_ = access(GetConfigPath("dynamicmodules").c_str(), F_OK) == 0;
         black_white_list_enabled_ = access(GetConfigPath("blackwhitelist").c_str(), F_OK) == 0;
         deopt_boot_image_enabled_ = access(GetConfigPath("deoptbootimage").c_str(), F_OK) == 0;
-        resources_hook_enabled_ = access(GetConfigPath("disable_resources").c_str(), F_OK) != 0;
+        resources_hook_enabled_ = access(GetConfigPath("enable_resources").c_str(), F_OK) == 0;
         no_module_log_enabled_ = access(GetConfigPath("disable_modules_log").c_str(), F_OK) == 0;
         hidden_api_bypass_enabled_ = access(GetConfigPath("disable_hidden_api_bypass").c_str(), F_OK) != 0;
 

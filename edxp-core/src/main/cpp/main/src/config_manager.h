@@ -63,7 +63,7 @@ namespace edxp {
         bool dynamic_modules_enabled_ = false;
         bool deopt_boot_image_enabled_ = false;
         bool no_module_log_enabled_ = false;
-        bool resources_hook_enabled_ = true;
+        bool resources_hook_enabled_ = false;
         // snapshot at boot
         bool use_white_list_snapshot_ = false;
         std::vector<std::string> white_list_default_;
