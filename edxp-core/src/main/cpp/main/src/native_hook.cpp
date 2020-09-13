@@ -70,7 +70,13 @@ namespace edxp {
         hook_func = reinterpret_cast<HookFunType>(hook_func_symbol);
 
         if (api_level >= __ANDROID_API_Q__) {
+#if defined(__i386__) || defined(__x86_64__)
+            ScopedDlHandle dl_handle(kLibDlPath.c_str());
+            void *handle = dl_handle.Get();
+            HOOK_FUNC(mydlopen, "__loader_dlopen");
+#else
             InstallLinkerHooks(kLinkerPath.c_str());
+#endif
         } else {
             ScopedDlHandle art_handle(kLibArtLegacyPath.c_str());
             InstallArtHooks(art_handle.Get());

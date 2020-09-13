@@ -32,6 +32,7 @@ namespace edxp {
     static constexpr auto kLibFwName = "libandroidfw.so";
     static constexpr auto kLibWhaleName = "libwhale.edxp.so";
     static constexpr auto kLibSandHookName = "libsandhook.edxp.so";
+    static constexpr auto kLibDlName = "libdl.so";
     static constexpr auto kLibSandHookNativeName = "libsandhook-native.so";
 
     static const auto kLibBasePath = std::string(
@@ -41,6 +42,7 @@ namespace edxp {
             LP_SELECT("/apex/com.android.runtime/bin/linker",
                       "/apex/com.android.runtime/bin/linker64"));
 
+    static const auto kLibDlPath = kLibBasePath + kLibDlName;
     static const auto kLibArtLegacyPath = kLibBasePath + kLibArtName;
     static const auto kLibWhalePath = kLibBasePath + kLibWhaleName;
     static const auto kLibSandHookPath = kLibBasePath + kLibSandHookName;
