@@ -241,6 +241,7 @@ check_android_version() {
 ui_print "- EdXposed Version ${VERSION}"
 
 #check_persist
+check_android_version
 check_magisk_version
 check_riru_version
 check_architecture
