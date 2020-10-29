@@ -19,7 +19,7 @@ getRandomNameExist() {
     fi
 }
 
-RIRU_PATH="/data/misc/riru"
+RIRU_PATH="/data/adb/riru"
 RIRU_EDXP="$(getRandomNameExist 4 "libriru_" ".so" "
 /system/lib
 /system/lib64
@@ -114,21 +114,6 @@ update_new_magisk() {
     ui_print "******************************"
 }
 
-require_riru() {
-    ui_print "******************************"
-    ui_print "! Requirement module 'Riru - Core' is not installed"
-    ui_print "! You can download from 'Magisk Manager' or https://github.com/RikkaApps/Riru/releases"
-    abortC   "******************************"
-}
-
-require_new_riru() {
-    ui_print "******************************"
-    ui_print "! Old Riru ${1} (below v19) detected"
-    ui_print "! The latest version of 'Riru - Core' is required"
-    ui_print "! You can download from 'Magisk Manager' or https://github.com/RikkaApps/Riru/releases"
-    abortC   "******************************"
-}
-
 require_yahfa() {
     ui_print "******************************"
     ui_print "! Architecture x86 or x86_64 detected"
@@ -193,18 +178,6 @@ check_magisk_version() {
     [[ ${MAGISK_VER_CODE} -eq 20101 ]] && update_new_magisk
 }
 
-check_riru_version() {
-    if [[ ! -f "${RIRU_PATH}/api_version" ]] && [[ ! -f "${RIRU_PATH}/api_version.new" ]]; then
-        require_riru
-    fi
-    RIRU_API_VERSION=$(cat "${RIRU_PATH}/api_version.new") || RIRU_API_VERSION=$(cat "${RIRU_PATH}/api_version") || RIRU_API_VERSION=0
-    [[ "${RIRU_API_VERSION}" -eq "${RIRU_API_VERSION}" ]] || RIRU_API_VERSION=0
-    ui_print "- Riru API version: ${RIRU_API_VERSION}"
-    if [[ "${RIRU_API_VERSION}" -lt ${RIRU_MIN_API_VERSION} ]]; then
-        require_new_riru ${RIRU_API_VERSION}
-    fi
-}
-
 check_architecture() {
     if [[ "${MODID}" == "riru_edxposed_sandhook" ]]; then
         VARIANTS="SandHook"
@@ -237,6 +210,10 @@ check_android_version() {
 #        NO_PERSIST=true
 #    fi
 #}
+
+# extract riru.sh
+unzip -o "$ZIPFILE" riru.sh -d "$MODPATH" >&2
+. $MODPATH/riru.sh
 
 ui_print "- EdXposed Version ${VERSION}"
 
@@ -337,6 +314,17 @@ fi
 if [[ -e "${RIRU_MODULES}/edxp" ]]; then
     rm -rf "${RIRU_MODULES}/edxp"
 fi
+
+# extract Riru files
+ui_print "- Extracting Riru files"
+ui_print $RIRU_TARGET
+[ -d "$RIRU_TARGET" ] || mkdir -p "$RIRU_TARGET" || abort "! Can't create $RIRU_TARGET"
+
+rm -f "$RIRU_TARGET/module.prop.new"
+unzip -o "$ZIPFILE" 'riru/module.prop.new' -d "$RIRU_TARGET"  >&2
+mv "$RIRU_TARGET/riru/module.prop.new" "$RIRU_TARGET/module.prop"
+rm -rf "$RIRU_TARGET/riru/"
+set_perm "$RIRU_TARGET/module.prop" 0 0 0600 $RIRU_SECONTEXT
 
 ui_print "- Copying extra files"
 

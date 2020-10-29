@@ -34,6 +34,10 @@ ext {
 
     riruModuleId = "edxp"
     zipPathMagiskRelease = "$buildDir/tmp/release/magisk"
+
+    moduleMinRiruApiVersion = 9
+    moduleMinRiruVersionName = "v22.0"
+    moduleMaxRiruApiVersion = 9
 }
 
 android {
@@ -47,6 +51,9 @@ android {
                 abiFilters 'arm64-v8a', 'armeabi-v7a', 'x86', 'x86_64'
                 cppFlags "-std=c++17 -ffixed-x18 -Qunused-arguments -frtti"
                 cFlags "-std=gnu99 -ffixed-x18 -Qunused-arguments -frtti"
+                arguments "-DRIRU_MODULE_API_VERSION=$moduleMaxRiruApiVersion",
+                        "-DRIRU_MODULE_VERSION=$buildVersionCode",
+                        "-DRIRU_MODULE_VERSION_NAME:STRING=\"$buildVersionName\""
             }
         }
     }
@@ -74,6 +81,7 @@ android {
     externalNativeBuild {
         cmake {
             path "src/main/cpp/CMakeLists.txt"
+            version "3.10.2"
         }
     }
 }
@@ -148,22 +156,35 @@ afterEvaluate {
                                 versionCode: "$versionCode", authorList: "$authorList")
                         filter(FixCrLfFilter.class, eol: FixCrLfFilter.CrLf.newInstance("lf"))
                     }
+                    copy {
+                        from "${projectDir}/tpl/riru_module.prop.tpl"
+                        into "$templateRootPath/riru"
+                        rename "riru_module.prop.tpl", "module.prop.new"
+                        expand(minApi: "$moduleMinRiruApiVersion",
+                                versionName: "$version" + " ($backend)",
+                                versionCode: "$versionCode", authorList: "$authorList")
+                        filter(FixCrLfFilter.class, eol: FixCrLfFilter.CrLf.newInstance("lf"))
+                    }
                 }
                 def libPathRelease = "${buildDir}/intermediates/cmake/${variantLowered}/obj"
                 doLast {
                     copy {
                         from "${projectDir}/template_override"
                         into zipPathMagiskRelease
+                        exclude 'riru.sh'
                     }
-//                    copy {
-//                        from "${projectDir}/template_override/util_functions.sh"
-//                        into "${zipPathMagiskRelease}/"
-//                        filter { line -> line
-//                                .replaceAll('%VERSION%', "$version")
-//                                    .replaceAll('%VERSION_CODE%', "$versionCode")
-//                                .replaceAll('%BACKEND%', "$backendCapped") }
-//                        filter(FixCrLfFilter.class, eol: FixCrLfFilter.CrLf.newInstance("lf"))
-//                    }
+                    copy {
+                        from "${projectDir}/template_override"
+                        into zipPathMagiskRelease
+                        include 'riru.sh'
+                        filter { line ->
+                            line.replaceAll('%%%RIRU_MODULE_ID%%%', riruModuleId)
+                                    .replaceAll('%%%RIRU_MIN_API_VERSION%%%', moduleMinRiruApiVersion.toString())
+                                    .replaceAll('%%%RIRU_MIN_VERSION_NAME%%%', moduleMinRiruVersionName)
+                        }
+                        filter(FixCrLfFilter.class,
+                                eol: FixCrLfFilter.CrLf.newInstance("lf"))
+                    }
                     copy {
                         from "$libPathRelease/armeabi-v7a"
                         into "$zipPathMagiskRelease/system/lib"
