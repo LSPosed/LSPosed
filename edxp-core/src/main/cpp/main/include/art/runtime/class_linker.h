@@ -23,6 +23,7 @@ namespace art {
         }
 
         CREATE_HOOK_STUB_ENTRIES(void *, Constructor, void *thiz, void *intern_table) {
+            LOGI("ConstructorReplace called");
             if (LIKELY(instance_))
                 instance_->Reset(thiz);
             else
@@ -62,6 +63,20 @@ namespace art {
 
         // @ApiSensitive(Level.MIDDLE)
         static void Setup(void *handle, HookFunType hook_func) {
+            LOGD("Classlinker hook setup, handle=%p", handle);
+            // TODO: Maybe not compatible with Android 10-
+#ifdef __LP64__
+            size_t OFFSET_classlinker = 472 / 8;
+#else
+            size_t OFFSET_classlinker = 276 / 4;
+#endif
+            // ClassLinker* GetClassLinker() but inlined
+            void* cl = reinterpret_cast<void*>(
+                    reinterpret_cast<size_t*>(Runtime::Current()->Get()) + OFFSET_classlinker
+            );
+            LOGD("Classlinker object: %p", cl);
+            instance_ = new ClassLinker(cl);
+
             HOOK_FUNC(Constructor, "_ZN3art11ClassLinkerC2EPNS_11InternTableE",
                       "_ZN3art11ClassLinkerC2EPNS_11InternTableEb"); // 10.0
             RETRIEVE_FUNC_SYMBOL(SetEntryPointsToInterpreter,
@@ -76,6 +91,7 @@ namespace art {
         }
 
         ALWAYS_INLINE void SetEntryPointsToInterpreter(void *art_method) const {
+            LOGD("SetEntryPointsToInterpreter start, thiz=%p, art_method=%p", thiz_, art_method);
             if (LIKELY(thiz_))
                 SetEntryPointsToInterpreter(thiz_, art_method);
         }
