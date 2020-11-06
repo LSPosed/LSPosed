@@ -178,7 +178,7 @@ check_magisk_version() {
     [[ ${MAGISK_VER_CODE} -eq 20101 ]] && update_new_magisk
 }
 
-check_architecture() {
+edxp_check_architecture() {
     if [[ "${MODID}" == "riru_edxposed_sandhook" ]]; then
         VARIANTS="SandHook"
     else
@@ -221,7 +221,7 @@ ui_print "- EdXposed Version ${VERSION}"
 check_android_version
 check_magisk_version
 check_riru_version
-check_architecture
+edxp_check_architecture
 
 ui_print "- Extracting module files"
 unzip -o "${ZIPFILE}" EdXposed.apk module.prop post-fs-data.sh sepolicy.rule system.prop uninstall.sh 'system/*' -d "${MODPATH}" >&2
@@ -272,13 +272,13 @@ mv "${MODPATH}/system/framework/edxp.jar" "${MODPATH}/system/framework/${JAR_EDX
 mv "${MODPATH}/system/framework/eddexmaker.jar" "${MODPATH}/system/framework/${JAR_EDDEXMAKER}"
 mv "${MODPATH}/system/framework/edconfig.jar" "${MODPATH}/system/framework/${JAR_EDCONFIG}"
 mv "${MODPATH}/system/lib/libriru_edxp.so" "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
-mv "${MODPATH}/system/lib/libwhale.edxp.so" "${MODPATH}/system/lib/${LIB_WHALE_EDXP}"
-mv "${MODPATH}/system/lib/libsandhook-native.so" "${MODPATH}/system/lib/libsandhook-native.so"
+#mv "${MODPATH}/system/lib/libwhale.edxp.so" "${MODPATH}/system/lib/${LIB_WHALE_EDXP}"
+#mv "${MODPATH}/system/lib/libsandhook-native.so" "${MODPATH}/system/lib/libsandhook-native.so"
 
 if [[ "${IS64BIT}" == true ]]; then
     mv "${MODPATH}/system/lib64/libriru_edxp.so" "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
-    mv "${MODPATH}/system/lib64/libwhale.edxp.so" "${MODPATH}/system/lib64/${LIB_WHALE_EDXP}"
-    mv "${MODPATH}/system/lib64/libsandhook-native.so" "${MODPATH}/system/lib64/libsandhook-native.so"
+    #mv "${MODPATH}/system/lib64/libwhale.edxp.so" "${MODPATH}/system/lib64/${LIB_WHALE_EDXP}"
+    #mv "${MODPATH}/system/lib64/libsandhook-native.so" "${MODPATH}/system/lib64/libsandhook-native.so"
 fi
 
 if [[ "${VARIANTS}" == "SandHook" ]]; then
