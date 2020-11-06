@@ -19,6 +19,7 @@
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-value"
+#define quote(sequence) "\"" #sequence "\""
 
 namespace edxp {
     // TODO exclude unrelated processes
@@ -116,7 +117,7 @@ RIRU_EXPORT void *init(void *arg) {
                     module->supportHide = false;
 
                     module->version = RIRU_MODULE_VERSION;
-                    module->versionName = RIRU_MODULE_VERSION_NAME;
+                    module->versionName = quote(RIRU_MODULE_VERSION_NAME);
                     module->onModuleLoaded = edxp::onModuleLoaded;
                     module->shouldSkipUid = edxp::shouldSkipUid;
                     module->forkAndSpecializePre = edxp::nativeForkAndSpecializePre;
