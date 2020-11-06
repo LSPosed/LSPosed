@@ -6,6 +6,7 @@
 #include <art/runtime/mirror/class.h>
 #include <android-base/strings.h>
 #include "runtime.h"
+#include "config.h"
 #include "jni_env_ext.h"
 #include "edxp_context.h"
 #include "jni/edxp_pending_hooks.h"
@@ -84,7 +85,11 @@ namespace art {
 
             HOOK_FUNC(FixupStaticTrampolines,
                       "_ZN3art11ClassLinker22FixupStaticTrampolinesENS_6ObjPtrINS_6mirror5ClassEEE");
-            if (GetAndroidApiLevel() >= __ANDROID_API_R__) {
+
+            // Sandhook will hook ShouldUseInterpreterEntrypoint, so we just skip
+            // edxp::Context::GetInstance()->GetVariant() will not work here, so we use smh dirty hack
+            if (GetAndroidApiLevel() >= __ANDROID_API_R__ && access(edxp::kLibSandHookNativePath.c_str(), F_OK) == -1) {
+                LOGD("Not sandhook, installing _ZN3art11ClassLinker30ShouldUseInterpreterEntrypointEPNS_9ArtMethodEPKv");
                 HOOK_FUNC(ShouldUseInterpreterEntrypoint,
                           "_ZN3art11ClassLinker30ShouldUseInterpreterEntrypointEPNS_9ArtMethodEPKv");
             }

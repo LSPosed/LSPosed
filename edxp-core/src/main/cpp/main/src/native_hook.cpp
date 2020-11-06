@@ -30,18 +30,6 @@ namespace edxp {
 
     void InstallFwkHooks(void *fwk_handle);
 
-    bool InstallLinkerHooks(const char *linker_path);
-
-    CREATE_HOOK_STUB_ENTRIES(void *, mydlopen, const char *file_name, int flags,
-                             const void *ext_info,
-                             const void *caller) {
-        void *handle = mydlopenBackup(file_name, flags, ext_info, caller);
-        if (file_name != nullptr && std::string(file_name).find(kLibArtName) != std::string::npos) {
-            InstallArtHooks(handle);
-        }
-        return handle;
-    }
-
     void InstallInlineHooks() {
         if (installed) {
             LOGI("Inline hooks have been installed, skip");

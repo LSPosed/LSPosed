@@ -167,11 +167,16 @@ afterEvaluate {
                     }
                 }
                 def libPathRelease = "${buildDir}/intermediates/cmake/${variantLowered}/obj"
+                def exclude_list = ["riru.sh"]
+                if(backendLowered == "yahfa") {
+                    exclude_list.add("system/lib/libsandhook-native.so")
+                    exclude_list.add("system/lib64/libsandhook-native.so")
+                }
                 doLast {
                     copy {
                         from "${projectDir}/template_override"
                         into zipPathMagiskRelease
-                        exclude 'riru.sh'
+                        exclude exclude_list
                     }
                     copy {
                         from "${projectDir}/template_override"
