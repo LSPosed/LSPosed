@@ -66,11 +66,42 @@ namespace art {
         static void Setup(void *handle, HookFunType hook_func) {
             LOGD("Classlinker hook setup, handle=%p", handle);
             // TODO: Maybe not compatible with Android 10-
+            int api_level = GetAndroidApiLevel();
+            size_t OFFSET_classlinker;  // Get offset from art::Runtime::RunRootClinits() call in IDA
+            switch(api_level) {
+                case __ANDROID_API_O__:
+                case __ANDROID_API_O_MR1__:
 #ifdef __LP64__
-            size_t OFFSET_classlinker = 472 / 8;
+                    OFFSET_classlinker = 400 / 8;
 #else
-            size_t OFFSET_classlinker = 276 / 4;
+                    OFFSET_classlinker = 240 / 4;
 #endif
+                    break;
+                case __ANDROID_API_P__:
+#ifdef __LP64__
+                    OFFSET_classlinker = 528 / 8;
+#else
+                    OFFSET_classlinker = 336 / 4;
+#endif
+                    break;
+                case __ANDROID_API_Q__:
+#ifdef __LP64__
+                    OFFSET_classlinker = 480 / 8;
+#else
+                    OFFSET_classlinker = 280 / 4;
+#endif
+                    break;
+                default:
+                    LOGE("No valid offset for art::Runtime::class_linker_ found. Using Android R.");
+                case __ANDROID_API_R__:
+#ifdef __LP64__
+                    OFFSET_classlinker = 472 / 8;
+#else
+                    OFFSET_classlinker = 276 / 4;
+#endif
+                    break;
+            }
+
             // ClassLinker* GetClassLinker() but inlined
             void* cl = reinterpret_cast<void*>(
                     reinterpret_cast<size_t*>(Runtime::Current()->Get()) + OFFSET_classlinker
@@ -88,7 +119,7 @@ namespace art {
 
             // Sandhook will hook ShouldUseInterpreterEntrypoint, so we just skip
             // edxp::Context::GetInstance()->GetVariant() will not work here, so we use smh dirty hack
-            if (GetAndroidApiLevel() >= __ANDROID_API_R__ && access(edxp::kLibSandHookNativePath.c_str(), F_OK) == -1) {
+            if (api_level >= __ANDROID_API_R__ && access(edxp::kLibSandHookNativePath.c_str(), F_OK) == -1) {
                 LOGD("Not sandhook, installing _ZN3art11ClassLinker30ShouldUseInterpreterEntrypointEPNS_9ArtMethodEPKv");
                 HOOK_FUNC(ShouldUseInterpreterEntrypoint,
                           "_ZN3art11ClassLinker30ShouldUseInterpreterEntrypointEPNS_9ArtMethodEPKv");
