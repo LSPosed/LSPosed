@@ -114,7 +114,7 @@ RIRU_EXPORT void *init(void *arg) {
                     memset(module, 0, sizeof(RiruModuleInfoV9));
                     _module = module;
 
-                    module->supportHide = false;
+                    module->supportHide = true;
 
                     module->version = RIRU_MODULE_VERSION;
                     module->versionName = quote(RIRU_MODULE_VERSION_NAME);
