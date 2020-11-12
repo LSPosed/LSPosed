@@ -6,7 +6,6 @@ import android.os.Process;
 import com.elderdrivers.riru.common.KeepAll;
 import com.elderdrivers.riru.edxp.common.BuildConfig;
 import com.elderdrivers.riru.edxp.config.ConfigManager;
-import com.elderdrivers.riru.edxp.framework.ProcessHelper;
 import com.elderdrivers.riru.edxp.util.Utils;
 
 import java.security.AccessController;
@@ -15,8 +14,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.ServiceLoader;
 import java.util.concurrent.atomic.AtomicReference;
-
-import static com.elderdrivers.riru.edxp.proxy.BaseProxy.onBlackListed;
 
 @SuppressLint("DefaultLocale")
 public class Main implements KeepAll {
@@ -40,9 +37,6 @@ public class Main implements KeepAll {
                                             String niceName, int[] fdsToClose, int[] fdsToIgnore,
                                             boolean startChildZygote, String instructionSet,
                                             String appDataDir) {
-        if (isBlackListedProcess(uid)) {
-            return;
-        }
         final EdxpImpl edxp = getEdxpImpl();
         if (edxp == null || !edxp.isInitialized()) {
             return;
@@ -67,10 +61,6 @@ public class Main implements KeepAll {
     }
 
     public static void forkAndSpecializePost(int pid, String appDataDir, String niceName) {
-        if (isBlackListedProcess(Process.myUid())) {
-            onBlackListed();
-            return;
-        }
         final EdxpImpl edxp = getEdxpImpl();
         if (edxp == null || !edxp.isInitialized()) {
             return;
@@ -158,12 +148,5 @@ public class Main implements KeepAll {
                 return null;
             }
         });
-    }
-
-    // TODO do this earlier?
-    private static boolean isBlackListedProcess(int uid) {
-        return ProcessHelper.isIsolated(uid)
-                || ProcessHelper.isRELROUpdater(uid)
-                || ProcessHelper.isWebViewZygote(uid);
     }
 }

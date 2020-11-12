@@ -103,3 +103,31 @@ ALWAYS_INLINE static int ClearException(JNIEnv *env) {
     env->RegisterNatives(class, methods, size); \
     if (ClearException(env)) LOGE("RegisterNatives " #class);
 
+class JUTFString {
+public:
+    inline JUTFString(JNIEnv *env, jstring jstr) : JUTFString(env, jstr, nullptr) {
+    }
+
+    inline JUTFString(JNIEnv *env, jstring jstr, const char *default_cstr) : env_(env),
+                                                                             jstr_(jstr) {
+        if (env_ && jstr_) cstr_ = env_->GetStringUTFChars(jstr, nullptr);
+        else cstr_ = default_cstr;
+    }
+
+    inline operator const char *() const { return cstr_; }
+
+    inline operator const std::string() const { return cstr_; }
+
+    inline operator const bool() const { return cstr_ != nullptr; }
+
+    inline auto get() const { return cstr_; }
+
+    inline ~JUTFString() {
+        if (env_ && jstr_) env_->ReleaseStringUTFChars(jstr_, cstr_);
+    }
+
+private:
+    JNIEnv *env_;
+    jstring jstr_;
+    const char *cstr_;
+};
