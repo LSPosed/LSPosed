@@ -80,6 +80,7 @@ namespace edxp {
         jmethodID pre_fixup_static_mid_ = nullptr;
         jmethodID post_fixup_static_mid_ = nullptr;
         bool skip_ = false;
+        bool release_ = true;
 
         Context() {}
 
@@ -91,7 +92,7 @@ namespace edxp {
 
         void CallPostFixupStaticTrampolinesCallback(void *class_ptr, jmethodID mid);
 
-        static bool ShouldSkipInject(JNIEnv *env, jstring nice_name, jstring data_dir, jint uid,
+        static std::tuple<bool, bool> ShouldSkipInject(JNIEnv *env, jstring nice_name, jstring data_dir, jint uid,
                                      jboolean is_child_zygote);
 
         void ReleaseJavaEnv(JNIEnv *env);

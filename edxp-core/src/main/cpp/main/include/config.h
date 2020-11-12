@@ -26,6 +26,7 @@ namespace edxp {
     static constexpr auto kClassLinkerClassName = "com.elderdrivers.riru.edxp.art.ClassLinker";
     static constexpr auto kSandHookClassName = "com.swift.sandhook.SandHook";
     static constexpr auto kSandHookNeverCallClassName = "com.swift.sandhook.ClassNeverCall";
+    static constexpr auto kXposedBridgeClassName = "de.robv.android.xposed.XposedBridge";
 
     static constexpr auto kLibArtName = "libart.so";
     static constexpr auto kLibFwkName = "libandroid_runtime.so";

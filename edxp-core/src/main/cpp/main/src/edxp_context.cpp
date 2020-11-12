@@ -81,8 +81,6 @@ namespace edxp {
             return;
         }
 
-        // TODO clear up all these global refs if blacklisted?
-
         inject_class_loader_ = env->NewGlobalRef(my_cl);
 
         env->DeleteLocalRef(my_cl);
@@ -175,6 +173,16 @@ namespace edxp {
 
     void Context::ReleaseJavaEnv(JNIEnv *env) {
         if (UNLIKELY(!instance_)) return;
+
+        auto xposed_bridge_class = FindClassFromLoader(env, inject_class_loader_, kXposedBridgeClassName);
+        if(LIKELY(xposed_bridge_class)){
+            jmethodID clear_all_callbacks_method = JNI_GetStaticMethodID(env, xposed_bridge_class, "clearAllCallbacks",
+                                                "()V");
+            if(LIKELY(clear_all_callbacks_method)) {
+                JNI_CallStaticVoidMethod(env, xposed_bridge_class, clear_all_callbacks_method);
+            }
+        }
+
         initialized_ = false;
         if (entry_class_) {
             env->DeleteGlobalRef(entry_class_);
@@ -193,6 +201,10 @@ namespace edxp {
         vm_ = nullptr;
         pre_fixup_static_mid_ = nullptr;
         post_fixup_static_mid_ = nullptr;
+
+        auto systemClass    = env->FindClass("java/lang/System");
+        auto systemGCMethod = env->GetStaticMethodID(systemClass, "gc", "()V");
+        env->CallStaticVoidMethod(systemClass, systemGCMethod);
     }
 
 
@@ -239,13 +251,15 @@ namespace edxp {
         return 0;
     }
 
-    bool Context::ShouldSkipInject(JNIEnv *env, jstring nice_name, jstring data_dir, jint uid,
+    std::tuple<bool, bool> Context::ShouldSkipInject(JNIEnv *env, jstring nice_name, jstring data_dir, jint uid,
                                    jboolean is_child_zygote) {
         const auto app_id = uid % PER_USER_RANGE;
         const JUTFString package_name(env, nice_name, "UNKNOWN");
         bool skip = false;
+        bool release = true;
         if (is_child_zygote) {
             skip = true;
+            release = false; // In Android R, calling XposedBridge.clearAllCallbacks cause crashes.
             LOGW("skip injecting into %s because it's a child zygote", package_name.get());
         }
 
@@ -253,17 +267,17 @@ namespace edxp {
             (app_id >= FIRST_APP_ZYGOTE_ISOLATED_UID && app_id <= LAST_APP_ZYGOTE_ISOLATED_UID) ||
             app_id == SHARED_RELRO_UID) {
             skip = true;
+            release = false; // In Android R, calling XposedBridge.clearAllCallbacks cause crashes.
             LOGW("skip injecting into %s because it's isolated", package_name.get());
         }
 
-        // TODO(yujincheng08): check whitelist/blacklist.
         const JUTFString dir(env, data_dir);
         if(!dir || !ConfigManager::GetInstance()->IsAppNeedHook(dir)) {
             skip = true;
             LOGW("skip injecting xposed into %s because it's whitelisted/blacklisted",
                  package_name.get());
         }
-        return skip;
+        return {skip, release};
     }
 
     void Context::OnNativeForkAndSpecializePre(JNIEnv *env, jclass clazz,
@@ -279,7 +293,7 @@ namespace edxp {
                                                jboolean is_child_zygote,
                                                jstring instruction_set,
                                                jstring app_data_dir) {
-        skip_ = ShouldSkipInject(env, nice_name, app_data_dir, uid, is_child_zygote);
+        std::tie(skip_, release_) = ShouldSkipInject(env, nice_name, app_data_dir, uid, is_child_zygote);
         app_data_dir_ = app_data_dir;
         nice_name_ = nice_name;
         PrepareJavaEnv(env);
@@ -302,7 +316,8 @@ namespace edxp {
                             res, app_data_dir_, nice_name_);
                 LOGD("injected xposed into %s", package_name.get());
             } else {
-                ReleaseJavaEnv(env);
+                if(release_)
+                    ReleaseJavaEnv(env);
                 LOGD("skipped %s", package_name.get());
             }
         } else {
