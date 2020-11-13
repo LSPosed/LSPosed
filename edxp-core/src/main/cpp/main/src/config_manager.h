@@ -3,62 +3,77 @@
 
 #include <vector>
 #include <string>
-#include <JNIHelper.h>
+#include "JNIHelper.h"
+#include <utility>
 #include <art/runtime/native/native_util.h>
+#include <filesystem>
+#include <unordered_set>
 
 namespace edxp {
 
-    static constexpr const char *kPrimaryInstallerPkgName = "org.meowcat.edxposed.manager";
-    static constexpr const char *kLegacyInstallerPkgName = "de.robv.android.xposed.installer";
-    static constexpr auto kXposedPropPath = "/system/framework/edconfig.jar";
+    static const std::string kPrimaryInstallerPkgName = "org.meowcat.edxposed.manager";
+    static const std::string kLegacyInstallerPkgName = "de.robv.android.xposed.installer";
+    static const std::string kXposedPropPath = "/system/framework/edconfig.jar";
 
     class ConfigManager {
     public:
 
-        static ConfigManager *GetInstance() {
-            if (instance_ == 0) {
-                instance_ = new ConfigManager();
+        inline static ConfigManager *GetInstance() {
+            if (!instance_) {
+                instance_ = std::make_unique<ConfigManager>();
             }
-            return instance_;
+            return instance_.get();
         }
 
-        bool IsBlackWhiteListEnabled() const;
+        inline static std::unique_ptr<ConfigManager> ReleaseInstance() {
+            return std::move(instance_);
+        }
 
-        bool IsDynamicModulesEnabled() const;
+        inline auto IsBlackWhiteListEnabled() const { return black_white_list_enabled_; }
 
-        bool IsResourcesHookEnabled() const;
+        inline auto IsDynamicModulesEnabled() const { return dynamic_modules_enabled_; }
 
-        bool IsDeoptBootImageEnabled() const;
+        inline auto IsResourcesHookEnabled() const { return resources_hook_enabled_; }
 
-        bool IsNoModuleLogEnabled() const;
+        inline auto IsDeoptBootImageEnabled() const { return deopt_boot_image_enabled_; }
 
-        bool IsHiddenAPIBypassEnabled() const;
+        inline auto IsNoModuleLogEnabled() const { return no_module_log_enabled_; }
 
-        std::string GetInstallerPackageName() const;
+        inline auto IsHiddenAPIBypassEnabled() const { return hidden_api_bypass_enabled_; }
 
-        std::string GetXposedPropPath() const;
+        inline auto GetInstallerPackageName() const { return installer_pkg_name_; }
 
-        std::string GetLibSandHookName() const;
+        inline auto GetXposedPropPath() const { return kXposedPropPath; }
 
-        std::string GetLibWhaleName() const;
+        inline auto GetLibSandHookName() const { return kLibSandHookName; }
 
-        std::string GetDataPathPrefix() const;
+        inline auto GetLibWhaleName() const { return kLibWhaleName; }
 
-        std::string GetConfigPath(const std::string &suffix) const;
+        inline auto GetDataPathPrefix() const { return data_path_prefix_; }
+
+        inline auto GetConfigPath(const std::string &suffix) const {
+            return data_path_prefix_ / installer_pkg_name_ / "conf" / suffix;
+        }
+
+        inline auto GetModulesList() const { return modules_list_.get(); }
 
         bool IsAppNeedHook(const std::string &app_data_dir);
 
-        bool hidden_api_bypass_enabled_ = false;
+        bool UpdateModuleList();
+
+        static std::tuple<bool, uid_t, std::string>
+        GetAppInfoFromDir(const std::string &app_data_dir);
+
     private:
-        inline static ConfigManager *instance_;
+        inline static std::unique_ptr<ConfigManager> instance_ = nullptr;
         uid_t last_user_ = false;
         bool use_prot_storage_ = true;
-        std::string data_path_prefix_;
-        std::string installer_pkg_name_;
-        std::string base_config_path_;
-        std::string blacklist_path_;
-        std::string whitelist_path_;
-        std::string use_whitelist_path_;
+        std::filesystem::path data_path_prefix_;
+        std::filesystem::path installer_pkg_name_;
+        std::filesystem::path base_config_path_;
+        std::filesystem::path blacklist_path_;
+        std::filesystem::path whitelist_path_;
+        std::filesystem::path use_whitelist_path_;
         bool black_white_list_enabled_ = false;
         bool dynamic_modules_enabled_ = false;
         bool deopt_boot_image_enabled_ = false;
@@ -66,8 +81,13 @@ namespace edxp {
         bool resources_hook_enabled_ = false;
         // snapshot at boot
         bool use_white_list_snapshot_ = false;
-        std::vector<std::string> white_list_default_;
-        std::vector<std::string> black_list_default_;
+        std::unordered_set<std::string> white_list_default_;
+        std::unordered_set<std::string> black_list_default_;
+        bool hidden_api_bypass_enabled_ = false;
+
+        std::unique_ptr<std::string> modules_list_ = nullptr;
+
+        std::filesystem::file_time_type last_write_time_;
 
         ConfigManager();
 
@@ -76,6 +96,8 @@ namespace edxp {
         void SnapshotBlackWhiteList();
 
         std::string RetrieveInstallerPkgName() const;
+
+        friend std::unique_ptr<ConfigManager> std::make_unique<ConfigManager>();
     };
 
 } // namespace edxp

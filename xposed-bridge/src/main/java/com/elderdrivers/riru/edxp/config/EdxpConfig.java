@@ -21,4 +21,6 @@ public interface EdxpConfig {
     boolean isResourcesHookEnabled();
 
     boolean isBlackWhiteListMode();
+
+    String getModulesList();
 }

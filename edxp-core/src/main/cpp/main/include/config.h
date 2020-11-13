@@ -6,6 +6,7 @@
 #include <string>
 #include "art/base/macros.h"
 #include "android_build.h"
+#include "utils.h"
 
 namespace edxp {
 
@@ -18,23 +19,22 @@ namespace edxp {
 # define LP_SELECT(lp32, lp64) (lp32)
 #endif
 
-    static constexpr auto kInjectDexPath = "/system/framework/edxp.jar:"
-                                           "/system/framework/eddalvikdx.jar:"
-                                           "/system/framework/eddexmaker.jar";
+    static const auto kInjectDexPath = "/system/framework/edxp.dex:"
+                                           "/system/framework/eddalvikdx.dex:"
+                                           "/system/framework/eddexmaker.dex"_str;
 
-    static constexpr auto kEntryClassName = "com.elderdrivers.riru.edxp.core.Main";
-    static constexpr auto kClassLinkerClassName = "com.elderdrivers.riru.edxp.art.ClassLinker";
-    static constexpr auto kSandHookClassName = "com.swift.sandhook.SandHook";
-    static constexpr auto kSandHookNeverCallClassName = "com.swift.sandhook.ClassNeverCall";
-    static constexpr auto kXposedBridgeClassName = "de.robv.android.xposed.XposedBridge";
+    static const auto kEntryClassName = "com.elderdrivers.riru.edxp.core.Main"_str;
+    static const auto kClassLinkerClassName = "com.elderdrivers.riru.edxp.art.ClassLinker";
+    static const auto kSandHookClassName = "com.swift.sandhook.SandHook"_str;
+    static const auto kSandHookNeverCallClassName = "com.swift.sandhook.ClassNeverCall"_str;
 
-    static constexpr auto kLibArtName = "libart.so";
-    static constexpr auto kLibFwkName = "libandroid_runtime.so";
-    static constexpr auto kLibFwName = "libandroidfw.so";
-    static constexpr auto kLibWhaleName = "libwhale.edxp.so";
-    static constexpr auto kLibSandHookName = "libsandhook.edxp.so";
-    static constexpr auto kLibDlName = "libdl.so";
-    static constexpr auto kLibSandHookNativeName = "libsandhook-native.so";
+    static const auto kLibArtName = "libart.so"_str;
+    static const auto kLibFwkName = "libandroid_runtime.so"_str;
+    static const auto kLibFwName = "libandroidfw.so"_str;
+    static const auto kLibWhaleName = "libwhale.edxp.so"_str;
+    static const auto kLibSandHookName = "libsandhook.edxp.so"_str;
+    static const auto kLibDlName = "libdl.so"_str;
+    static const auto kLibSandHookNativeName = "libsandhook-native.so"_str;
 
     static const auto kLibBasePath = std::string(
             LP_SELECT("/system/lib/",
@@ -50,7 +50,7 @@ namespace edxp {
     static const auto kLibFwPath = kLibBasePath + kLibFwName;
     static const auto kLibFwkPath = kLibBasePath + kLibFwkName;
 
-    inline const char *const BoolToString(bool b) {
+    inline constexpr const char *const BoolToString(bool b) {
         return b ? "true" : "false";
     }
 }

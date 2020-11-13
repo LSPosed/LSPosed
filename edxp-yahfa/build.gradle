@@ -22,10 +22,11 @@ android {
         }
     }
 
+    ndkVersion androidCompileNdkVersion
 }
 
 dependencies {
-    compileOnly files("${hiddenApiStubJarFilePath}")
+    compileOnly project(':hiddenapi-stubs')
     implementation project(':edxp-common')
     compileOnly project(':dexmaker')
 }
@@ -58,6 +59,23 @@ afterEvaluate {
 
         def myTemplatePath = "${projectDir}/template_override/"
 
+        task("copyDex${variantNameCapped}", type: Copy) {
+            dependsOn "assemble${variantNameCapped}"
+            dependsOn tasks.getByPath(":edxp-common:copyCommonProperties")
+            def dexOutPath = "${buildDir}/intermediates/dex/${variantNameLowered}/minify${variantNameCapped}WithR8"
+            from (dexOutPath){
+                rename("classes.dex", "edxp.dex")
+            }
+            from "${projectDir}/src/main/resources/"
+            destinationDir file(myTemplatePath + "system/framework/")
+            doLast {
+                copy {
+                    from file(myTemplatePath)
+                    into file(templateRootPath)
+                }
+            }
+        }
+
         task("makeAndCopy${variantNameCapped}", type: Jar, dependsOn: "assemble${variantNameCapped}") {
             dependsOn tasks.getByPath(":edxp-common:copyCommonProperties")
             def dexOutPath = variant.name.contains("release") ?
@@ -70,6 +88,7 @@ afterEvaluate {
                 copy {
                     from file(myTemplatePath)
                     into file(templateRootPath)
+                    include "*.dex"
                 }
             }
             outputs.upToDateWhen { false }

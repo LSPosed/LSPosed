@@ -32,6 +32,6 @@
 
 -keep class com.swift.sandhook.** {*;}
 
--keepclasseswithmember class * {
+-keepclasseswithmembers class * {
     native <methods>;
 }

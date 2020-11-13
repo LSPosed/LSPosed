@@ -5,15 +5,15 @@
 #include <dlfcn.h>
 #include <sys/mman.h>
 
-#define __uintval(p)               reinterpret_cast<uintptr_t>(p)
-#define __ptr(p)                   reinterpret_cast<void *>(p)
-#define __align_up(x, n)           (((x) + ((n) - 1)) & ~((n) - 1))
-#define __align_down(x, n)         ((x) & -(n))
-#define __page_size                4096
-#define __page_align(n)            __align_up(static_cast<uintptr_t>(n), __page_size)
-#define __ptr_align(x)             __ptr(__align_down(reinterpret_cast<uintptr_t>(x), __page_size))
-#define __make_rwx(p, n)           ::mprotect(__ptr_align(p), \
-                                              __page_align(__uintval(p) + n) != __page_align(__uintval(p)) ? __page_align(n) + __page_size : __page_align(n), \
+#define _uintval(p)               reinterpret_cast<uintptr_t>(p)
+#define _ptr(p)                   reinterpret_cast<void *>(p)
+#define _align_up(x, n)           (((x) + ((n) - 1)) & ~((n) - 1))
+#define _align_down(x, n)         ((x) & -(n))
+#define _page_size                4096
+#define _page_align(n)            _align_up(static_cast<uintptr_t>(n), _page_size)
+#define _ptr_align(x)             _ptr(_align_down(reinterpret_cast<uintptr_t>(x), _page_size))
+#define _make_rwx(p, n)           ::mprotect(_ptr_align(p), \
+                                              _page_align(_uintval(p) + n) != _page_align(_uintval(p)) ? _page_align(n) + _page_size : _page_align(n), \
                                               PROT_READ | PROT_WRITE | PROT_EXEC)
 
 typedef void (*HookFunType)(void *, void *, void **);
@@ -97,7 +97,7 @@ namespace edxp {
 
     ALWAYS_INLINE inline static void HookFunction(HookFunType hook_fun, void *original,
                                                   void *replace, void **backup) {
-        __make_rwx(original, __page_size);
+        _make_rwx(original, _page_size);
         hook_fun(original, replace, backup);
     }
 

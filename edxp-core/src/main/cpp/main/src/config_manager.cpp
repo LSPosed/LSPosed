@@ -14,55 +14,46 @@
 
 #include <android_build.h>
 #include <logging.h>
-#include <linux/limits.h>
-#include <JNIHelper.h>
+#include <climits>
+#include <fstream>
 #include "art/runtime/native/native_util.h"
 #include "config_manager.h"
 
-using namespace std;
-using namespace art;
-
 namespace edxp {
+    namespace fs = std::filesystem;
 
     std::string ConfigManager::RetrieveInstallerPkgName() const {
-        std::string data_test_path = data_path_prefix_ + kPrimaryInstallerPkgName;
-        if (access(data_test_path.c_str(), F_OK) == 0) {
-            LOGI("using installer %s", kPrimaryInstallerPkgName);
+        std::string data_test_path = data_path_prefix_ / kPrimaryInstallerPkgName;
+        if (fs::exists(data_test_path)) {
+            LOGI("using installer %s", kPrimaryInstallerPkgName.c_str());
             return kPrimaryInstallerPkgName;
         }
-        data_test_path = data_path_prefix_ + kLegacyInstallerPkgName;
-        if (access(data_test_path.c_str(), F_OK) == 0) {
-            LOGI("using installer %s", kLegacyInstallerPkgName);
+        data_test_path = data_path_prefix_ / kLegacyInstallerPkgName;
+        if (fs::exists(data_test_path)) {
+            LOGI("using installer %s", kLegacyInstallerPkgName.c_str());
             return kLegacyInstallerPkgName;
         }
-        LOGE("no supported installer app found, using default: %s", kPrimaryInstallerPkgName);
+        LOGE("no supported installer app found, using default: %s",
+             kPrimaryInstallerPkgName.c_str());
         return kPrimaryInstallerPkgName;
     }
 
     void ConfigManager::SnapshotBlackWhiteList() {
-        DIR *dir;
-        struct dirent *dent;
-        dir = opendir(whitelist_path_.c_str());
-        if (dir != nullptr) {
-            while ((dent = readdir(dir)) != nullptr) {
-                if (dent->d_type == DT_REG) {
-                    const char *fileName = dent->d_name;
-                    LOGI("  whitelist: %s", fileName);
-                    white_list_default_.emplace_back(fileName);
-                }
+        white_list_default_.clear();
+        for (auto &item: fs::directory_iterator(whitelist_path_)) {
+            if (item.is_regular_file()) {
+                const auto &file_name = item.path().filename();
+                LOGI("  whitelist: %s", file_name.c_str());
+                white_list_default_.emplace(file_name);
             }
-            closedir(dir);
         }
-        dir = opendir(blacklist_path_.c_str());
-        if (dir != nullptr) {
-            while ((dent = readdir(dir)) != nullptr) {
-                if (dent->d_type == DT_REG) {
-                    const char *fileName = dent->d_name;
-                    LOGI("  blacklist: %s", fileName);
-                    black_list_default_.emplace_back(fileName);
-                }
+        black_list_default_.clear();
+        for (auto &item: fs::directory_iterator(blacklist_path_)) {
+            if (item.is_regular_file()) {
+                const auto &file_name = item.path().filename();
+                LOGI("  blacklist: %s", file_name.c_str());
+                black_list_default_.emplace(file_name);
             }
-            closedir(dir);
         }
     }
 
@@ -72,10 +63,8 @@ namespace edxp {
             last_user_ = user;
         }
 
-        const char *format = use_prot_storage_ ? "/data/user_de/%u/" : "/data/user/%u/";
-        char buff[PATH_MAX];
-        snprintf(buff, sizeof(buff), format, last_user_);
-        data_path_prefix_ = buff;
+        data_path_prefix_ = use_prot_storage_ ? "/data/user_de" : "/data/user";
+        data_path_prefix_ /= std::to_string(last_user_);
 
         installer_pkg_name_ = RetrieveInstallerPkgName();
         base_config_path_ = GetConfigPath("");
@@ -83,15 +72,16 @@ namespace edxp {
         whitelist_path_ = GetConfigPath("whitelist/");
         use_whitelist_path_ = GetConfigPath("usewhitelist");
 
-        dynamic_modules_enabled_ = access(GetConfigPath("dynamicmodules").c_str(), F_OK) == 0;
-        black_white_list_enabled_ = access(GetConfigPath("blackwhitelist").c_str(), F_OK) == 0;
-        deopt_boot_image_enabled_ = access(GetConfigPath("deoptbootimage").c_str(), F_OK) == 0;
-        resources_hook_enabled_ = access(GetConfigPath("enable_resources").c_str(), F_OK) == 0;
-        no_module_log_enabled_ = access(GetConfigPath("disable_modules_log").c_str(), F_OK) == 0;
-        hidden_api_bypass_enabled_ = access(GetConfigPath("disable_hidden_api_bypass").c_str(), F_OK) != 0;
+        dynamic_modules_enabled_ = fs::exists(GetConfigPath("dynamicmodules"));
+        black_white_list_enabled_ = fs::exists(GetConfigPath("blackwhitelist"));
+        deopt_boot_image_enabled_ = fs::exists(GetConfigPath("deoptbootimage"));
+        resources_hook_enabled_ = fs::exists(GetConfigPath("enable_resources"));
+        no_module_log_enabled_ = fs::exists(GetConfigPath("disable_modules_log"));
+        hidden_api_bypass_enabled_ =
+                !fs::exists(GetConfigPath("disable_hidden_api_bypass"));
 
         // use_white_list snapshot
-        use_white_list_snapshot_ = access(use_whitelist_path_.c_str(), F_OK) == 0;
+        use_white_list_snapshot_ = fs::exists(use_whitelist_path_);
         LOGI("data path prefix: %s", data_path_prefix_.c_str());
         LOGI("  application list mode: %s", BoolToString(black_white_list_enabled_));
         LOGI("    using whitelist: %s", BoolToString(use_white_list_snapshot_));
@@ -105,19 +95,32 @@ namespace edxp {
         }
     }
 
+    std::tuple<bool, uid_t, std::string>
+    ConfigManager::GetAppInfoFromDir(const std::string &app_data_dir) {
+        uid_t uid = 0;
+        fs::path path(app_data_dir);
+        std::vector<std::string> splits(path.begin(), path.end());
+        if (splits.size() < 5u) {
+            LOGE("can't parse %s", path.c_str());
+            return {false, uid, {}};
+        }
+        const auto &uid_str = splits[3];
+        const auto &package_name = splits[4];
+        try {
+            uid = stol(uid_str);
+        } catch (const std::invalid_argument &ignored) {
+            LOGE("can't parse %s", app_data_dir.c_str());
+            return {false, 0, {}};
+        }
+        return {true, uid, package_name};
+    }
+
     // TODO ignore unrelated processes
     bool ConfigManager::IsAppNeedHook(const std::string &app_data_dir) {
         // zygote always starts with `uid == 0` and then fork into different user.
         // so we have to check if we are the correct user or not.
-        uid_t user = 0;
-        char package_name[PATH_MAX];
-        if (sscanf(app_data_dir.c_str(), "/data/%*[^/]/%u/%s", &user, package_name) != 2) {
-            if (sscanf(app_data_dir.c_str(), "/data/%*[^/]/%s", package_name) != 1) {
-                package_name[0] = '\0';
-                LOGE("can't parse %s", app_data_dir.c_str());
-                return false; // default to no hooking for safety
-            }
-        }
+        const auto[res, user, package_name] = GetAppInfoFromDir(app_data_dir);
+        if (!res) return true;
 
         if (last_user_ != user) {
             UpdateConfigPath(user);
@@ -126,17 +129,17 @@ namespace edxp {
         if (!black_white_list_enabled_) {
             return true;
         }
-        bool can_access_app_data = access(base_config_path_.c_str(), F_OK) == 0;
+        bool can_access_app_data = fs::exists(base_config_path_);
         bool use_white_list;
         if (can_access_app_data) {
-            use_white_list = access(use_whitelist_path_.c_str(), F_OK) == 0;
+            use_white_list = fs::exists(use_whitelist_path_);
         } else {
             LOGE("can't access config path, using snapshot use_white_list: %s",
                  app_data_dir.c_str());
             use_white_list = use_white_list_snapshot_;
         }
-        if (strcmp(package_name, kPrimaryInstallerPkgName) == 0
-            || strcmp(package_name, kLegacyInstallerPkgName) == 0) {
+        if (package_name == kPrimaryInstallerPkgName
+            || package_name == kLegacyInstallerPkgName) {
             // always hook installer apps
             return true;
         }
@@ -144,80 +147,55 @@ namespace edxp {
             if (!can_access_app_data) {
                 LOGE("can't access config path, using snapshot white list: %s",
                      app_data_dir.c_str());
-                return !(find(white_list_default_.begin(), white_list_default_.end(),
-                              package_name) ==
-                         white_list_default_.end());
+                return white_list_default_.count(package_name);
             }
-            std::string target_path = whitelist_path_ + package_name;
-            bool res = access(target_path.c_str(), F_OK) == 0;
+            std::string target_path = whitelist_path_ / package_name;
+            bool res = fs::exists(target_path);
             LOGD("using whitelist, %s -> %d", app_data_dir.c_str(), res);
             return res;
         } else {
             if (!can_access_app_data) {
                 LOGE("can't access config path, using snapshot black list: %s",
                      app_data_dir.c_str());
-                return find(black_list_default_.begin(), black_list_default_.end(), package_name) ==
-                       black_list_default_.end();
+                return black_list_default_.count(package_name);
             }
-            std::string target_path = blacklist_path_ + package_name;
-            bool res = access(target_path.c_str(), F_OK) != 0;
+            std::string target_path = blacklist_path_ / package_name;
+            bool res = !fs::exists(target_path);
             LOGD("using blacklist, %s -> %d", app_data_dir.c_str(), res);
             return res;
         }
     }
 
-    ALWAYS_INLINE bool ConfigManager::IsBlackWhiteListEnabled() const {
-        return black_white_list_enabled_;
-    }
-
-    ALWAYS_INLINE bool ConfigManager::IsDynamicModulesEnabled() const {
-        return dynamic_modules_enabled_;
-    }
-
-    ALWAYS_INLINE bool ConfigManager::IsNoModuleLogEnabled() const {
-        return no_module_log_enabled_;
-    }
-
-    ALWAYS_INLINE bool ConfigManager::IsResourcesHookEnabled() const {
-        return resources_hook_enabled_;
-    }
-
-    ALWAYS_INLINE bool ConfigManager::IsDeoptBootImageEnabled() const {
-        return deopt_boot_image_enabled_;
-    }
-
-    ALWAYS_INLINE bool ConfigManager::IsHiddenAPIBypassEnabled() const {
-        return hidden_api_bypass_enabled_;
-    }
-
-    ALWAYS_INLINE std::string ConfigManager::GetInstallerPackageName() const {
-        return installer_pkg_name_;
-    }
-
-    ALWAYS_INLINE std::string ConfigManager::GetXposedPropPath() const {
-        return kXposedPropPath;
-    }
-
-    ALWAYS_INLINE std::string ConfigManager::GetLibSandHookName() const {
-        return kLibSandHookName;
-    }
-
-    ALWAYS_INLINE std::string ConfigManager::GetLibWhaleName() const {
-        return kLibWhaleName;
-    }
-
-    ALWAYS_INLINE std::string ConfigManager::GetDataPathPrefix() const {
-        return data_path_prefix_;
-    }
-
-    ALWAYS_INLINE std::string ConfigManager::GetConfigPath(const std::string &suffix) const {
-        return data_path_prefix_ + installer_pkg_name_ + "/conf/" + suffix;
-    };
-
     ConfigManager::ConfigManager() {
         use_prot_storage_ = GetAndroidApiLevel() >= __ANDROID_API_N__;
         last_user_ = 0;
         UpdateConfigPath(last_user_);
+    }
+
+    bool ConfigManager::UpdateModuleList() {
+        if (LIKELY(modules_list_) && !IsDynamicModulesEnabled())
+            return true;
+        auto global_modules_list = GetConfigPath("modules.list");
+        if (!fs::exists(global_modules_list)) {
+            LOGE("Cannot access path %s", global_modules_list.c_str());
+            return false;
+        }
+
+        if (auto last_write_time = fs::last_write_time(global_modules_list);
+                LIKELY(last_write_time < last_write_time_)) {
+            return true;
+        } else {
+            last_write_time_ = last_write_time;
+        }
+
+        std::ifstream ifs(global_modules_list);
+        if (!ifs.good()) {
+            LOGE("Cannot access path %s", global_modules_list.c_str());
+            return false;
+        }
+        modules_list_ = std::make_unique<std::string>(std::istreambuf_iterator<char>(ifs),
+                                                      std::istreambuf_iterator<char>());
+        return true;
     }
 
 }

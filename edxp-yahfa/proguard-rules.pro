@@ -30,6 +30,6 @@
 -keep class * implements com.elderdrivers.riru.common.KeepAll { *; }
 -keepclassmembers class * implements com.elderdrivers.riru.common.KeepMembers { *; }
 
--keepclasseswithmember class * {
+-keepclasseswithmembers class * {
     native <methods>;
 }

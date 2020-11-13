@@ -32,6 +32,6 @@
 
 -keep class com.lody.** {*;}
 
--keepclasseswithmember class * {
+-keepclasseswithmembers class * {
     native <methods>;
 }

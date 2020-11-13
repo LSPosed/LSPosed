@@ -14,20 +14,30 @@ dependencies {
     compileOnly project(':dalvikdx')
 }
 
-task dexInJar(type: Jar) {
+task makeDex(type: Exec) {
     dependsOn jar
-    doFirst {
-        exec {
-            workingDir jar.destinationDir
-            if (OperatingSystem.current().isWindows()){
-                executable "dx.bat"
-                args "--dex", "--output", "classes.dex", "${jar.archiveName}"
-            } else {
-                executable "bash"
-                args rootProject.ext.dxPath.trim(), "--dex", "--output", "classes.dex", "${jar.archiveName}"
-            }
-        }
+    def dexName = "classes.dex"
+    workingDir jar.destinationDir
+    if (OperatingSystem.current().isWindows()) {
+        executable "dx.bat"
+        args "--dex", "--output", dexName, "${jar.archiveName}"
+    } else {
+        executable "bash"
+        args rootProject.ext.dxPath.trim(), "--dex", "--output", dexName, "${jar.archiveName}"
     }
+}
+
+task dex(type: Copy) {
+    dependsOn makeDex
+    from (jar.destinationDir) {
+        include "classes.dex"
+        rename "classes.dex", "eddexmaker.dex"
+    }
+    destinationDir new File(projectDir, "dex")
+}
+
+task dexInJar(type: Jar) {
+    dependsOn makeDex
     from "${jar.destinationDir}/classes.dex"
     destinationDir jar.destinationDir
     baseName "eddexmaker"

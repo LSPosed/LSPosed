@@ -1,13 +1,15 @@
 
 #pragma once
 
+#include <utility>
 #include <unistd.h>
-#include <mutex>
+#include <vector>
+#include <string>
+#include <string_view>
+#include "utils.h"
 
 namespace edxp {
-
-#define SYSTEM_SERVER_DATA_DIR "/data/user/0/android"
-
+    static const auto SYSTEM_SERVER_DATA_DIR = "/data/user/0/android"_str;
     enum Variant {
         NONE = 0,
         YAHFA = 1,
@@ -18,11 +20,15 @@ namespace edxp {
     class Context {
 
     public:
-        inline static auto GetInstance() {
-            if (instance_ == nullptr) {
-                instance_ = new Context();
+        inline static Context *GetInstance() {
+            if (!instance_) {
+                instance_ = std::make_unique<Context>();
             }
-            return instance_;
+            return instance_.get();
+        }
+
+        inline static std::unique_ptr<Context> ReleaseInstance() {
+            return std::move(instance_);
         }
 
         inline auto GetCurrentClassLoader() const { return inject_class_loader_; }
@@ -45,7 +51,13 @@ namespace edxp {
 
         inline auto GetNiceName() const { return nice_name_; }
 
-        jclass FindClassFromLoader(JNIEnv *env, const char *className) const;
+        inline jclass FindClassFromLoader(JNIEnv *env, const std::string &className) const {
+            return FindClassFromLoader(env, className.c_str());
+        };
+
+        inline jclass FindClassFromLoader(JNIEnv *env, const char *className) const {
+            return FindClassFromLoader(env, GetCurrentClassLoader(), className);
+        }
 
         void OnNativeForkAndSpecializePre(JNIEnv *env, jclass clazz, jint uid, jint gid,
                                           jintArray gids, jint runtime_flags, jobjectArray rlimits,
@@ -68,7 +80,7 @@ namespace edxp {
         inline auto GetVariant() const { return variant_; };
 
     private:
-        inline static Context *instance_;
+        inline static std::unique_ptr<Context> instance_;
         bool initialized_ = false;
         Variant variant_ = NONE;
         jobject inject_class_loader_ = nullptr;
@@ -80,22 +92,29 @@ namespace edxp {
         jmethodID pre_fixup_static_mid_ = nullptr;
         jmethodID post_fixup_static_mid_ = nullptr;
         bool skip_ = false;
-        bool release_ = true;
+        std::vector<std::vector<signed char>> dexes;
 
         Context() {}
 
-        ~Context() {}
+        void PreLoadDex(JNIEnv *env, const std::string &dex_path);
 
-        void LoadDexAndInit(JNIEnv *env, const char *dex_path);
+        void InjectDexAndInit(JNIEnv *env);
 
-        jclass FindClassFromLoader(JNIEnv *env, jobject class_loader, const char *class_name) const;
+        inline jclass FindClassFromLoader(JNIEnv *env, jobject class_loader,
+                                          const std::string &class_name) const {
+            return FindClassFromLoader(env, class_loader, class_name.c_str());
+        }
+
+        static jclass
+        FindClassFromLoader(JNIEnv *env, jobject class_loader, const char *class_name);
 
         void CallPostFixupStaticTrampolinesCallback(void *class_ptr, jmethodID mid);
 
-        static std::tuple<bool, bool> ShouldSkipInject(JNIEnv *env, jstring nice_name, jstring data_dir, jint uid,
+        static bool ShouldSkipInject(JNIEnv *env, jstring nice_name, jstring data_dir, jint uid,
                                      jboolean is_child_zygote);
 
-        void ReleaseJavaEnv(JNIEnv *env);
+        friend std::unique_ptr<Context> std::make_unique<Context>();
+
     };
 
 }

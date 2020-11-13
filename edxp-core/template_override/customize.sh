@@ -36,18 +36,18 @@ PROP_PRODUCT=$(getprop ro.build.product)
 PROP_BRAND=$(getprop ro.product.brand)
 PROP_MANUFACTURER=$(getprop ro.product.manufacturer)
 
-JAR_EDXP="$(getRandomNameExist 8 "" ".jar" "
+JAR_EDXP="$(getRandomNameExist 8 "" ".dex" "
 /system/framework
-").jar"
-JAR_EDDALVIKDX="$(getRandomNameExist 8 "" ".jar" "
+").dex"
+JAR_EDDALVIKDX="$(getRandomNameExist 8 "" ".dex" "
 /system/framework
-").jar"
-JAR_EDDEXMAKER="$(getRandomNameExist 8 "" ".jar" "
+").dex"
+JAR_EDDEXMAKER="$(getRandomNameExist 8 "" ".dex" "
 /system/framework
-").jar"
-JAR_EDCONFIG="$(getRandomNameExist 8 "" ".jar" "
-/system/framework
-").jar"
+").dex"
+#JAR_EDCONFIG="$(getRandomNameExist 8 "" ".jar" "
+#/system/framework
+#").jar"
 LIB_RIRU_EDXP="libriru_${RIRU_EDXP}.so"
 LIB_WHALE_EDXP="lib$(getRandomNameExist 10 "lib" ".so" "
 /system/lib
@@ -267,10 +267,10 @@ fi
 
 ui_print "- Copying framework libraries"
 
-mv "${MODPATH}/system/framework/eddalvikdx.jar" "${MODPATH}/system/framework/${JAR_EDDALVIKDX}"
-mv "${MODPATH}/system/framework/edxp.jar" "${MODPATH}/system/framework/${JAR_EDXP}"
-mv "${MODPATH}/system/framework/eddexmaker.jar" "${MODPATH}/system/framework/${JAR_EDDEXMAKER}"
-mv "${MODPATH}/system/framework/edconfig.jar" "${MODPATH}/system/framework/${JAR_EDCONFIG}"
+mv "${MODPATH}/system/framework/eddalvikdx.dex" "${MODPATH}/system/framework/${JAR_EDDALVIKDX}"
+mv "${MODPATH}/system/framework/edxp.dex" "${MODPATH}/system/framework/${JAR_EDXP}"
+mv "${MODPATH}/system/framework/eddexmaker.dex" "${MODPATH}/system/framework/${JAR_EDDEXMAKER}"
+#mv "${MODPATH}/system/framework/edconfig.jar" "${MODPATH}/system/framework/${JAR_EDCONFIG}"
 mv "${MODPATH}/system/lib/libriru_edxp.so" "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
 #mv "${MODPATH}/system/lib/libwhale.edxp.so" "${MODPATH}/system/lib/${LIB_WHALE_EDXP}"
 mv "${MODPATH}/system/lib/libsandhook-native.so" "${MODPATH}/system/lib/libsandhook-native.so"
@@ -290,15 +290,15 @@ fi
 
 ui_print "- Resetting libraries path"
 
-sed -i 's:/system/framework/edxp.jar\:/system/framework/eddalvikdx.jar\:/system/framework/eddexmaker.jar:/system/framework/'"${JAR_EDXP}"'\:/system/framework/'"${JAR_EDDALVIKDX}"'\:/system/framework/'"${JAR_EDDEXMAKER}"':g' "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
-sed -i 's:/system/framework/edconfig.jar:/system/framework/'"${JAR_EDCONFIG}"':g' "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
+sed -i 's:/system/framework/edxp.dex\:/system/framework/eddalvikdx.dex\:/system/framework/eddexmaker.dex:/system/framework/'"${JAR_EDXP}"'\:/system/framework/'"${JAR_EDDALVIKDX}"'\:/system/framework/'"${JAR_EDDEXMAKER}"':g' "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
+#sed -i 's:/system/framework/edconfig.jar:/system/framework/'"${JAR_EDCONFIG}"':g' "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
 sed -i 's:libriru_edxp.so:'"${LIB_RIRU_EDXP}"':g' "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
 #sed -i 's:libwhale.edxp.so:'"${LIB_WHALE_EDXP}"':g' "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
 sed -i 's:libsandhook.edxp.so:'"${LIB_SANDHOOK_EDXP}"':g' "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
 
 if [[ "${IS64BIT}" == true ]]; then
-    sed -i 's:/system/framework/edxp.jar\:/system/framework/eddalvikdx.jar\:/system/framework/eddexmaker.jar:/system/framework/'"${JAR_EDXP}"'\:/system/framework/'"${JAR_EDDALVIKDX}"'\:/system/framework/'"${JAR_EDDEXMAKER}"':g' "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
-    sed -i 's:/system/framework/edconfig.jar:/system/framework/'"${JAR_EDCONFIG}"':g' "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
+    sed -i 's:/system/framework/edxp.dex\:/system/framework/eddalvikdx.dex\:/system/framework/eddexmaker.dex:/system/framework/'"${JAR_EDXP}"'\:/system/framework/'"${JAR_EDDALVIKDX}"'\:/system/framework/'"${JAR_EDDEXMAKER}"':g' "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
+#    sed -i 's:/system/framework/edconfig.jar:/system/framework/'"${JAR_EDCONFIG}"':g' "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
     sed -i 's:libriru_edxp.so:'"${LIB_RIRU_EDXP}"':g' "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
     #sed -i 's:libwhale.edxp.so:'"${LIB_WHALE_EDXP}"':g' "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
     sed -i 's:libsandhook.edxp.so:'"${LIB_SANDHOOK_EDXP}"':g' "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"

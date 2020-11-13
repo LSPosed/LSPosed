@@ -61,6 +61,16 @@ namespace edxp {
         return result;
     }
 
+    static jstring ConfigManager_getModulesList(JNI_START) {
+        if (auto module_list = ConfigManager::GetInstance()->GetModulesList(); module_list) {
+            LOGD("module list: %s", module_list->c_str());
+            return env->NewStringUTF(module_list->c_str());
+        } else {
+            LOGW("Empty modules list");
+            return env->NewStringUTF("");
+        }
+    }
+
     static JNINativeMethod gMethods[] = {
             NATIVE_METHOD(ConfigManager, isBlackWhiteListEnabled, "()Z"),
             NATIVE_METHOD(ConfigManager, isDynamicModulesEnabled, "()Z"),
@@ -72,8 +82,10 @@ namespace edxp {
             NATIVE_METHOD(ConfigManager, getLibSandHookName, "()Ljava/lang/String;"),
             NATIVE_METHOD(ConfigManager, getLibWhaleName, "()Ljava/lang/String;"),
             NATIVE_METHOD(ConfigManager, getDataPathPrefix, "()Ljava/lang/String;"),
-            NATIVE_METHOD(ConfigManager, getInstallerConfigPath, "(Ljava/lang/String;)Ljava/lang/String;"),
+            NATIVE_METHOD(ConfigManager, getInstallerConfigPath,
+                          "(Ljava/lang/String;)Ljava/lang/String;"),
             NATIVE_METHOD(ConfigManager, isAppNeedHook, "(Ljava/lang/String;)Z"),
+            NATIVE_METHOD(ConfigManager, getModulesList, "()Ljava/lang/String;"),
     };
 
     void RegisterConfigManagerMethods(JNIEnv *env) {

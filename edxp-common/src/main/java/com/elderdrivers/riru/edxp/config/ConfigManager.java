@@ -50,4 +50,6 @@ public class ConfigManager {
     public static native String getDataPathPrefix();
 
     public static native boolean isAppNeedHook(String appDataDir);
+
+    public static native String getModulesList();
 }

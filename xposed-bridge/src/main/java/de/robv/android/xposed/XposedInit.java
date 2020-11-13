@@ -17,10 +17,12 @@ import com.android.internal.os.ZygoteInit;
 import com.elderdrivers.riru.edxp.config.EdXpConfigGlobal;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringBufferInputStream;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -307,38 +309,21 @@ public final class XposedInit {
     private static final Object moduleLoadLock = new Object();
     // @GuardedBy("moduleLoadLock")
     private static final ArraySet<String> loadedModules = new ArraySet<>();
-    // @GuardedBy("moduleLoadLock")
-    private static long lastModuleListModifiedTime = -1;
 
-    public static boolean loadModules(boolean isInZygote, boolean callInitZygote) throws IOException {
+    public static boolean loadModules(boolean callInitZygote) throws IOException {
         boolean hasLoaded = !modulesLoaded.compareAndSet(false, true);
         if (hasLoaded && !EdXpConfigGlobal.getConfig().isDynamicModulesMode()) {
             return false;
         }
         synchronized (moduleLoadLock) {
-            final String filename = EdXpConfigGlobal.getConfig().getInstallerConfigPath("modules.list");
-            BaseService service = SELinuxHelper.getAppDataFileService();
-            if (!service.checkFileExists(filename)) {
-                Log.e(TAG, "Cannot load any modules because " + filename + " was not found");
-                // FIXME module list is cleared but never could be reload again
-                // when using dynamic-module-list under multi-user environment
-                clearAllCallbacks();
-                return false;
-            }
-
-            long moduleListModifiedTime = service.getFileModificationTime(filename);
-            if (lastModuleListModifiedTime == moduleListModifiedTime) {
-                // module list has not changed
-                return false;
-            }
-
             ClassLoader topClassLoader = XposedBridge.BOOTCLASSLOADER;
             ClassLoader parent;
             while ((parent = topClassLoader.getParent()) != null) {
                 topClassLoader = parent;
             }
 
-            InputStream stream = service.getFileInputStream(filename);
+            String moduleList = EdXpConfigGlobal.getConfig().getModulesList();
+            InputStream stream = new ByteArrayInputStream(moduleList.getBytes());
             BufferedReader apks = new BufferedReader(new InputStreamReader(stream));
             ArraySet<String> newLoadedApk = new ArraySet<>();
             String apk;
@@ -358,9 +343,6 @@ public final class XposedInit {
 
             // refresh callback according to current loaded module list
             pruneCallbacks(loadedModules);
-
-            lastModuleListModifiedTime = moduleListModifiedTime;
-
         }
         return true;
     }

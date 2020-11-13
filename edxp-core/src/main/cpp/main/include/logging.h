@@ -17,7 +17,7 @@
 #define LOGW(...)
 #define LOGE(...)
 #else
-#ifndef NDEBUG
+#if 1
 #define LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 #else
 #define LOGD(...)

@@ -8,7 +8,6 @@ import com.elderdrivers.riru.edxp.core.Main;
 import com.elderdrivers.riru.edxp.core.Proxy;
 import com.elderdrivers.riru.edxp.core.Yahfa;
 import com.elderdrivers.riru.edxp.core.yahfa.HookMethodResolver;
-import com.elderdrivers.riru.edxp.proxy.BlackWhiteListProxy;
 import com.elderdrivers.riru.edxp.proxy.NormalProxy;
 import com.elderdrivers.riru.edxp.proxy.Router;
 
@@ -33,11 +32,6 @@ public class YahfaEdxpImpl extends BaseEdxpImpl {
         HookMethodResolver.init();
         getRouter().injectConfig();
         setInitialized();
-    }
-
-    @Override
-    protected Proxy createBlackWhiteListProxy() {
-        return new BlackWhiteListProxy(getRouter());
     }
 
     @Override

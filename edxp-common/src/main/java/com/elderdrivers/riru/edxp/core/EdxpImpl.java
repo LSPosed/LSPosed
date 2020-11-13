@@ -1,7 +1,7 @@
 package com.elderdrivers.riru.edxp.core;
 
-import androidx.annotation.IntDef;
-import androidx.annotation.NonNull;
+import android.support.annotation.IntDef;
+import android.support.annotation.NonNull;
 
 import com.elderdrivers.riru.common.KeepAll;
 import com.elderdrivers.riru.edxp.proxy.Router;
@@ -19,9 +19,6 @@ public interface EdxpImpl extends KeepAll {
 
     @NonNull
     Proxy getNormalProxy();
-
-    @NonNull
-    Proxy getBlackWhiteListProxy();
 
     @NonNull
     Router getRouter();

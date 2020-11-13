@@ -51,4 +51,7 @@ public class BaseEdxpConfig implements EdxpConfig {
     public boolean isBlackWhiteListMode() {
         return ConfigManager.isBlackWhiteListEnabled();
     }
+
+    @Override
+    public String getModulesList() { return ConfigManager.getModulesList(); }
 }

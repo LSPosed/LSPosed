@@ -4,7 +4,7 @@
 #include <art/base/macros.h>
 #include "logging.h"
 
-#define JNI_START JNIEnv *env, jclass clazz
+#define JNI_START JNIEnv *env, [[maybe_unused]] jclass clazz
 
 ALWAYS_INLINE static void JNIExceptionClear(JNIEnv *env) {
     if (env->ExceptionCheck()) {
@@ -126,8 +126,29 @@ public:
         if (env_ && jstr_) env_->ReleaseStringUTFChars(jstr_, cstr_);
     }
 
+    JUTFString(JUTFString &&other)
+            : env_(std::move(other.env_)), jstr_(std::move(other.jstr_)),
+              cstr_(std::move(other.cstr_)) {
+        other.cstr_ = nullptr;
+    }
+
+    JUTFString &
+    operator=(JUTFString &&other) {
+        if (&other != this) {
+            env_ = std::move(other.env_);
+            jstr_ = std::move(other.jstr_);
+            cstr_ = std::move(other.cstr_);
+            other.cstr_ = nullptr;
+        }
+        return *this;
+    }
+
 private:
     JNIEnv *env_;
     jstring jstr_;
     const char *cstr_;
+
+    JUTFString(const JUTFString &) = delete;
+
+    JUTFString &operator=(const JUTFString &) = delete;
 };

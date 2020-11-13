@@ -70,8 +70,8 @@ android {
         release {
             externalNativeBuild {
                 cmake {
-                    cppFlags "-fvisibility=hidden -fvisibility-inlines-hidden -O2 -s -Wno-unused-value"
-                    cFlags "-fvisibility=hidden -fvisibility-inlines-hidden -O2 -s -Wno-unused-value"
+                    cppFlags "-fvisibility=hidden -fvisibility-inlines-hidden -O2 -s -Wno-unused-value -fomit-frame-pointer"
+                    cFlags "-fvisibility=hidden -fvisibility-inlines-hidden -O2 -s -Wno-unused-value -fomit-frame-pointer"
                 }
             }
             minifyEnabled true
@@ -82,6 +82,35 @@ android {
         cmake {
             path "src/main/cpp/CMakeLists.txt"
         }
+    }
+    ndkVersion androidCompileNdkVersion
+}
+
+task copyDalvikdxDex {
+    def dexTask = tasks.getByPath(':dalvikdx:dex')
+    dependsOn dexTask
+    doLast {
+        copy {
+            from dexTask
+            into jar_dest_dir
+        }
+    }
+    onlyIf {
+        !dexTask.state.upToDate
+    }
+}
+
+task copyDexmakerDex {
+    def dexTask = tasks.getByPath(':dexmaker:dex')
+    dependsOn dexTask
+    doLast {
+        copy {
+            from dexTask
+            into jar_dest_dir
+        }
+    }
+    onlyIf {
+        !dexTask.state.upToDate
     }
 }
 
@@ -132,8 +161,8 @@ afterEvaluate {
             def magiskModuleId = property("${backendLowered}" + "_module_id")
 
             def prepareJarsTask = task("prepareJars${backendCapped}${variantCapped}") {
-                dependsOn cleanTemplate, copyDalvikdxJar, copyDexmakerJar
-                dependsOn tasks.getByPath(":edxp-${backendLowered}:makeAndCopy${variantCapped}")
+                dependsOn cleanTemplate, copyDalvikdxDex, copyDexmakerDex
+                dependsOn tasks.getByPath(":edxp-${backendLowered}:copyDex${variantCapped}")
             }
 
             def prepareMagiskFilesTask = task("prepareMagiskFiles${backendCapped}${variantCapped}", type: Delete) {
@@ -220,7 +249,28 @@ afterEvaluate {
                 workingDir "${projectDir}/release"
                 def commands = ["adb", "push",
                                 "${module_name}-${backend}-${project.version}-${variantLowered}.zip",
-                                "/sdcard/"]
+                                "/data/local/tmp/"]
+                if (is_windows) {
+                    commandLine 'cmd', '/c', commands.join(" ")
+                } else {
+                    commandLine commands
+                }
+            }
+            task("flash${backendCapped}${variantCapped}", type: Exec) {
+                dependsOn tasks.getByPath("push${backendCapped}${variantCapped}")
+                workingDir "${projectDir}/release"
+                def commands = ["adb", "shell", "su", "-c",
+                                "magisk --install-module /data/local/tmp/${module_name}-${backend}-${project.version}-${variantLowered}.zip"]
+                if (is_windows) {
+                    commandLine 'cmd', '/c', commands.join(" ")
+                } else {
+                    commandLine commands
+                }
+            }
+            task("flashAndReboot${backendCapped}${variantCapped}", type: Exec) {
+                dependsOn tasks.getByPath("flash${backendCapped}${variantCapped}")
+                workingDir "${projectDir}/release"
+                def commands = ["adb", "shell", "reboot"]
                 if (is_windows) {
                     commandLine 'cmd', '/c', commands.join(" ")
                 } else {

@@ -7,8 +7,9 @@ android {
 }
 
 task makeStubJar(type: Jar){
+    dependsOn assemble
     baseName 'framework-stub'
-    from("${projectDir}/build/intermediates/javac/release/compileReleaseJavaWithJavac/classes/")
+    from("${projectDir}/build/intermediates/javac/release/classes/")
     into('')
     destinationDir file("${projectDir}/libs")
     exclude('BuildConfig.class', 'R.class')

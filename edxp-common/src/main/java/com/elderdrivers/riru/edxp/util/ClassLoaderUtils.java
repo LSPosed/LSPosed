@@ -21,7 +21,7 @@ import de.robv.android.xposed.annotation.Level;
 @ApiSensitive(Level.LOW)
 public class ClassLoaderUtils {
 
-    public static final String DEXPATH = "/system/framework/edxp.jar:/system/framework/eddalvikdx.jar:/system/framework/eddexmaker.jar";
+    public static final String DEXPATH = "/system/framework/edxp.dex:/system/framework/eddalvikdx.dex:/system/framework/eddexmaker.dex";
 
     public static void replaceParentClassLoader(ClassLoader appClassLoader) {
         if (appClassLoader == null) {
