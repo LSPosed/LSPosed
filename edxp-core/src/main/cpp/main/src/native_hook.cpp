@@ -8,6 +8,8 @@
 #include <art/runtime/runtime.h>
 #include <dl_util.h>
 #include <art/runtime/jni_env_ext.h>
+#include <dobby.h>
+#include "android_restriction.h" // from Dobby
 
 #include "logging.h"
 #include "native_hook.h"
@@ -18,6 +20,8 @@
 #include "art/runtime/hidden_api.h"
 #include "art/runtime/oat_file_manager.h"
 #include "framework/fd_utils.h"
+
+std::vector<soinfo_t> linker_get_solist(); // Dobby but not in .h
 
 namespace edxp {
 
@@ -35,6 +39,7 @@ namespace edxp {
             LOGI("Inline hooks have been installed, skip");
             return;
         }
+        installed = true;
         LOGI("Start to install inline hooks");
         int api_level = GetAndroidApiLevel();
         if (UNLIKELY(api_level < __ANDROID_API_L__)) {
@@ -43,12 +48,8 @@ namespace edxp {
         }
         LOGI("Using api level %d", api_level);
         InstallRiruHooks();
-#ifdef __LP64__
-        ScopedDlHandle whale_handle(kLibWhalePath.c_str());
-        if (!whale_handle.IsValid()) {
-            return;
-        }
-        void *hook_func_symbol = whale_handle.DlSym<void *>("WInlineHookFunction");
+#ifndef __i386__ // Dobby doesn't support x86 for now
+        void *hook_func_symbol = (void *)DobbyHook;
 #else
         void *hook_func_symbol = (void *) MSHookFunction;
 #endif
@@ -57,51 +58,32 @@ namespace edxp {
         }
         hook_func = reinterpret_cast<HookFunType>(hook_func_symbol);
 
+        // install ART hooks
         if (api_level >= __ANDROID_API_Q__) {
-#if defined(__i386__) || defined(__x86_64__)
-            ScopedDlHandle dl_handle(kLibDlPath.c_str());
-            void *handle = dl_handle.Get();
-            HOOK_FUNC(mydlopen, "__loader_dlopen");
-#else
-            InstallLinkerHooks(kLinkerPath.c_str());
-#endif
+            // From Riru v22 we can't get ART handle by hooking dlopen, so we get libart.so from soinfo.
+            // Ref: https://android.googlesource.com/platform/bionic/+/master/linker/linker_soinfo.h
+            auto solist = linker_get_solist();
+            bool found = false;
+            for (auto & it : solist) {
+                const char* real_path = linker_soinfo_get_realpath(it);
+                if (real_path != nullptr && std::string(real_path).find(kLibArtName) != std::string::npos) {
+                    found = true;
+                    InstallArtHooks(it);
+                    break;
+                }
+            }
+            if(!found) {
+                LOGE("Android 10+ detected and libart.so can't be found in memory.");
+                return;
+            }
         } else {
+            // do dlopen directly in Android 9-
             ScopedDlHandle art_handle(kLibArtLegacyPath.c_str());
             InstallArtHooks(art_handle.Get());
         }
 
         ScopedDlHandle fwk_handle(kLibFwkPath.c_str());
         InstallFwkHooks(fwk_handle.Get());
-    }
-
-    // @ApiSensitive(Level.MIDDLE)
-    bool InstallLinkerHooks(const char *linker_path) {
-        // TODO flags
-        void *handle = dlopen(kLibSandHookNativePath.c_str(), RTLD_NOW);
-
-        if (!handle) {
-            LOGI("Failed to open libsandhook-native");
-            return false;
-        }
-
-        auto getSym = reinterpret_cast<void *(*)(const char *, const char *)>(dlsym(handle,
-                                                                                    "SandGetSym"));
-        if (!getSym) {
-            LOGI("SandGetSym is null");
-            return false;
-        }
-
-        auto dlopen_symbol = "__dl__Z9do_dlopenPKciPK17android_dlextinfoPKv";
-        void *dlopen_addr = getSym(linker_path, dlopen_symbol);
-        if (dlopen_addr) {
-            hook_func(dlopen_addr, (void *) mydlopenReplace,
-                      (void **) &mydlopenBackup);
-            LOGI("dlopen hooked");
-            return true;
-        }
-
-        LOGI("dlopen_addr is null");
-        return false;
     }
 
     void InstallArtHooks(void *art_handle) {

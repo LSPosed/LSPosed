@@ -159,7 +159,7 @@ namespace edxp {
         } else {
             LOG(ERROR) << "No loadClass/findClass method found";
         }
-        LOG(ERROR) << "Class %s not found: " << class_name;
+        LOG(ERROR) << "Class " << class_name << " not found";
         return ret;
     }
 

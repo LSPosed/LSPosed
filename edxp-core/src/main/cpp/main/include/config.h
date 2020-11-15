@@ -45,7 +45,6 @@ namespace edxp {
 
     static const auto kLibDlPath = kLibBasePath + kLibDlName;
     static const auto kLibArtLegacyPath = kLibBasePath + kLibArtName;
-    static const auto kLibWhalePath = kLibBasePath + kLibWhaleName;
     static const auto kLibSandHookPath = kLibBasePath + kLibSandHookName;
     static const auto kLibSandHookNativePath = kLibBasePath + kLibSandHookNativeName;
     static const auto kLibFwPath = kLibBasePath + kLibFwName;
