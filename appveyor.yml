@@ -4,6 +4,8 @@ environment:
   ANDROID_HOME: C:\android-sdk-windows
 
 install:
+  - cd %APPVEYOR_BUILD_FOLDER%
+  - git submodule update --init --recursive
   - appveyor DownloadFile https://dl.google.com/android/repository/sdk-tools-windows-4333796.zip
   - 7z x sdk-tools-windows-4333796.zip -oC:\android-sdk-windows > nul
   - yes | C:\android-sdk-windows\tools\bin\sdkmanager.bat --licenses > nul
