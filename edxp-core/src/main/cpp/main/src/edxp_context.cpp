@@ -7,7 +7,6 @@
 #include <jni/art_class_linker.h>
 #include <jni/art_heap.h>
 #include <jni/edxp_yahfa.h>
-#include <jni/framework_zygote.h>
 #include <jni/edxp_resources_hook.h>
 #include <dl_util.h>
 #include <art/runtime/jni_env_ext.h>
@@ -100,7 +99,6 @@ namespace edxp {
                 FindClassFromLoader(env, GetCurrentClassLoader(), kEntryClassName)));
 
         RegisterEdxpResourcesHook(env);
-        RegisterFrameworkZygote(env);
         RegisterConfigManagerMethods(env);
         RegisterArtClassLinker(env);
         RegisterArtHeap(env);
