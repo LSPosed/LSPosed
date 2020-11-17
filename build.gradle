@@ -23,7 +23,7 @@ allprojects {
         templateLibPath = templateRootPath + "/system/lib/"
         templateLib64Path = templateRootPath + "/system/lib64/"
         templateEtcPath = templateRootPath + "/system/etc/"
-        hiddenApiStubJarFilePath = project(":hiddenapi-stubs").projectDir.absolutePath + "/libs/framework-stub.jar"
+        hiddenApiStubJarFilePath = project(":hiddenapi-stubs").buildDir.absolutePath + "/libs/framework-stub.jar"
     }
     repositories {
         google()

@@ -28,7 +28,7 @@ android {
 dependencies {
     compileOnly project(':hiddenapi-stubs')
     implementation project(':edxp-common')
-    compileOnly project(':dexmaker')
+    compileOnly files(project(":dexmaker").tasks.getByName("makeJarRelease").outputs)
 }
 
 
@@ -57,8 +57,6 @@ afterEvaluate {
         def variantNameCapped = variant.name.capitalize()
         def variantNameLowered = variant.name.toLowerCase()
 
-        def myTemplatePath = "${projectDir}/template_override/"
-
         task("copyDex${variantNameCapped}", type: Copy) {
             dependsOn "assemble${variantNameCapped}"
             dependsOn tasks.getByPath(":edxp-common:copyCommonProperties")
@@ -67,31 +65,9 @@ afterEvaluate {
                 rename("classes.dex", "edxp.dex")
             }
             from "${projectDir}/src/main/resources/"
-            destinationDir file(myTemplatePath + "system/framework/")
-            doLast {
-                copy {
-                    from file(myTemplatePath)
-                    into file(templateRootPath)
-                }
-            }
-        }
-
-        task("makeAndCopy${variantNameCapped}", type: Jar, dependsOn: "assemble${variantNameCapped}") {
-            dependsOn tasks.getByPath(":edxp-common:copyCommonProperties")
-            def dexOutPath = variant.name.contains("release") ?
-                    "${buildDir}/intermediates/transforms/dexMerger/${variantNameLowered}/0/" :
-                    "${buildDir}/intermediates/dex/${variantNameLowered}/mergeDex${variantNameCapped}/out/"
-            from dexOutPath, "${projectDir}/src/main/resources/"
-            destinationDir file(myTemplatePath + "system/framework/")
-            baseName "edxp"
-            doLast {
-                copy {
-                    from file(myTemplatePath)
-                    into file(templateRootPath)
-                    include "*.dex"
-                }
-            }
+            destinationDir file(templateRootPath + "system/framework/")
             outputs.upToDateWhen { false }
         }
+
     }
 }

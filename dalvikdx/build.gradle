@@ -1,57 +1,33 @@
-import org.gradle.internal.os.OperatingSystem
-apply plugin: 'java-library'
+apply plugin: 'com.android.application'
 
-dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+repositories {
+    jcenter()
 }
 
-sourceCompatibility = "7"
-targetCompatibility = "7"
+android {
+    compileSdkVersion androidCompileSdkVersion.toInteger()
+    ndkVersion androidCompileNdkVersion
+}
 
-task findDx {
-    if (OperatingSystem.current().isWindows()){
-        return true
-    }
-    doLast {
-        new ByteArrayOutputStream().withStream { os ->
-            exec {
-                commandLine "which", "dx"
-                standardOutput os
+afterEvaluate {
+    android.applicationVariants.all { variant ->
+        def variantNameCapped = variant.name.capitalize()
+        def variantNameLowered = variant.name.toLowerCase()
+
+        task("copyDex${variantNameCapped}", type: Copy) {
+            dependsOn "assemble${variantNameCapped}"
+            def dexOutPath = "${buildDir}/intermediates/dex/${variantNameLowered}/mergeDex${variantNameCapped}"
+            from (dexOutPath){
+                rename("classes.dex", "eddalvikdx.dex")
             }
-            rootProject.ext.dxPath = os.toString()
+            destinationDir file(templateRootPath + "system/framework/")
+            outputs.upToDateWhen { false }
         }
-    }
-}
-
-task makeDex(type: Exec) {
-    dependsOn jar
-    dependsOn findDx
-    def dexName = "classes.dex"
-    workingDir jar.destinationDir
-    if (OperatingSystem.current().isWindows()) {
-        executable "dx.bat"
-        args "--dex", "--output", dexName, "${jar.archiveName}"
-    } else {
-        executable "bash"
-        args rootProject.ext.dxPath.trim(), "--dex", "--output", dexName, "${jar.archiveName}"
-    }
-}
-
-task dex(type: Copy) {
-    dependsOn makeDex
-    from (jar.destinationDir) {
-        include "classes.dex"
-        rename "classes.dex", "eddalvikdx.dex"
-    }
-    destinationDir new File(projectDir, "dex")
-}
-
-task dexInJar(type: Jar) {
-    dependsOn makeDex
-    from "${jar.destinationDir}/classes.dex"
-    destinationDir jar.destinationDir
-    baseName "eddalvikdx"
-    onlyIf {
-        !jar.state.upToDate || !file(archiveName).exists()
+        task("makeJar${variantNameCapped}", type: Jar, dependsOn: "assemble${variantNameCapped}") {
+            dependsOn "assemble${variantNameCapped}"
+            from "${buildDir}/intermediates/javac/${variantNameLowered}/classes"
+            baseName "dalvikdx"
+            outputs.file(archivePath)
+        }
     }
 }
