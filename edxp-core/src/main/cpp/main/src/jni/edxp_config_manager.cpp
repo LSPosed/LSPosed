@@ -2,6 +2,7 @@
 #include <config_manager.h>
 #include <nativehelper/jni_macros.h>
 #include <native_util.h>
+#include <sstream>
 #include "edxp_config_manager.h"
 
 namespace edxp {
@@ -54,21 +55,13 @@ namespace edxp {
 
     }
 
-    static jboolean ConfigManager_isAppNeedHook(JNI_START, jstring appDataDir) {
-        const char *app_data_dir = env->GetStringUTFChars(appDataDir, JNI_FALSE);
-        auto result = (jboolean) ConfigManager::GetInstance()->IsAppNeedHook(app_data_dir);
-        env->ReleaseStringUTFChars(appDataDir, app_data_dir);
-        return result;
-    }
-
     static jstring ConfigManager_getModulesList(JNI_START) {
-        if (auto module_list = ConfigManager::GetInstance()->GetModulesList(); module_list) {
-            LOGD("module list: %s", module_list->c_str());
-            return env->NewStringUTF(module_list->c_str());
-        } else {
-            LOGW("Empty modules list");
-            return env->NewStringUTF("");
-        }
+        auto module_list = ConfigManager::GetInstance()->GetAppModulesList();
+        std::ostringstream join;
+        std::copy(module_list.begin(), module_list.end(), std::ostream_iterator<std::string>(join, "\n"));
+        const auto &list = join.str();
+        LOGD("module list: %s", list.c_str());
+        return env->NewStringUTF(list.c_str());
     }
 
     static JNINativeMethod gMethods[] = {
@@ -84,7 +77,6 @@ namespace edxp {
             NATIVE_METHOD(ConfigManager, getDataPathPrefix, "()Ljava/lang/String;"),
             NATIVE_METHOD(ConfigManager, getInstallerConfigPath,
                           "(Ljava/lang/String;)Ljava/lang/String;"),
-            NATIVE_METHOD(ConfigManager, isAppNeedHook, "(Ljava/lang/String;)Z"),
             NATIVE_METHOD(ConfigManager, getModulesList, "()Ljava/lang/String;"),
     };
 

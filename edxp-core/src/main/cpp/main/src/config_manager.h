@@ -8,6 +8,7 @@
 #include <art/runtime/native/native_util.h>
 #include <filesystem>
 #include <unordered_set>
+#include <unordered_map>
 
 namespace edxp {
 
@@ -17,7 +18,6 @@ namespace edxp {
 
     class ConfigManager {
     public:
-
         inline static ConfigManager *GetInstance() {
             if (!instance_) {
                 instance_ = std::make_unique<ConfigManager>();
@@ -55,18 +55,17 @@ namespace edxp {
             return data_path_prefix_ / installer_pkg_name_ / "conf" / suffix;
         }
 
-        inline auto GetModulesList() const { return modules_list_.get(); }
+        inline auto GetAppModulesList() const { return app_modules_list_; };
 
-        bool IsAppNeedHook(const std::string &app_data_dir);
+        bool UpdateAppModuleList(const uid_t user, const std::string &pkg_name);
+
+        bool IsAppNeedHook(const uid_t user, const std::string &pkg_name);
 
         bool UpdateModuleList();
 
-        static std::tuple<bool, uid_t, std::string>
-        GetAppInfoFromDir(const std::string &app_data_dir);
-
     private:
         inline static std::unique_ptr<ConfigManager> instance_ = nullptr;
-        uid_t last_user_ = false;
+        uid_t last_user_ = 0;
         bool use_prot_storage_ = true;
         std::filesystem::path data_path_prefix_;
         std::filesystem::path installer_pkg_name_;
@@ -85,7 +84,9 @@ namespace edxp {
         std::unordered_set<std::string> black_list_default_;
         bool hidden_api_bypass_enabled_ = false;
 
-        std::unique_ptr<std::string> modules_list_ = nullptr;
+        std::vector<std::pair<std::string, std::unordered_set<std::string>>> modules_list_;
+
+        std::vector<std::string> app_modules_list_;
 
         std::filesystem::file_time_type last_write_time_;
 
@@ -97,7 +98,11 @@ namespace edxp {
 
         std::string RetrieveInstallerPkgName() const;
 
+        static std::string GetPackageNameFromBaseApkPath(const std::filesystem::path &path);
+
+
         friend std::unique_ptr<ConfigManager> std::make_unique<ConfigManager>();
+
     };
 
 } // namespace edxp

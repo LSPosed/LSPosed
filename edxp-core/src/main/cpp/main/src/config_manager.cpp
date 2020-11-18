@@ -16,6 +16,7 @@
 #include <logging.h>
 #include <climits>
 #include <fstream>
+#include <sstream>
 #include "art/runtime/native/native_util.h"
 #include "config_manager.h"
 
@@ -58,10 +59,10 @@ namespace edxp {
     }
 
     void ConfigManager::UpdateConfigPath(const uid_t user) {
-        if (last_user_ != user) {
-            LOGI("updating config data paths from %u to %u...", last_user_, user);
-            last_user_ = user;
-        }
+        if (LIKELY(last_user_ == user && instance_)) return;
+
+        LOGI("updating config data paths from %u to %u...", last_user_, user);
+        last_user_ = user;
 
         data_path_prefix_ = use_prot_storage_ ? "/data/user_de" : "/data/user";
         data_path_prefix_ /= std::to_string(last_user_);
@@ -79,6 +80,10 @@ namespace edxp {
         no_module_log_enabled_ = fs::exists(GetConfigPath("disable_modules_log"));
         hidden_api_bypass_enabled_ =
                 !fs::exists(GetConfigPath("disable_hidden_api_bypass"));
+        modules_list_.clear();
+        app_modules_list_.clear();
+
+        UpdateModuleList();
 
         // use_white_list snapshot
         use_white_list_snapshot_ = fs::exists(use_whitelist_path_);
@@ -95,36 +100,23 @@ namespace edxp {
         }
     }
 
-    std::tuple<bool, uid_t, std::string>
-    ConfigManager::GetAppInfoFromDir(const std::string &app_data_dir) {
-        uid_t uid = 0;
-        fs::path path(app_data_dir);
-        std::vector<std::string> splits(path.begin(), path.end());
-        if (splits.size() < 5u) {
-            LOGE("can't parse %s", path.c_str());
-            return {false, uid, {}};
+    std::string ConfigManager::GetPackageNameFromBaseApkPath(const fs::path &path) {
+        std::vector<std::string> paths(path.begin(), path.end());
+        auto base_apk = paths.back(); // base.apk
+        if (base_apk != "base.apk") return {};
+        paths.pop_back();
+        auto pkg_name_with_obfuscation = paths.back();
+        if (auto pos = pkg_name_with_obfuscation.find('-'); pos != std::string::npos) {
+            return pkg_name_with_obfuscation.substr(0, pos);
         }
-        const auto &uid_str = splits[3];
-        const auto &package_name = splits[4];
-        try {
-            uid = stol(uid_str);
-        } catch (const std::invalid_argument &ignored) {
-            LOGE("can't parse %s", app_data_dir.c_str());
-            return {false, 0, {}};
-        }
-        return {true, uid, package_name};
+        return {};
     }
 
     // TODO ignore unrelated processes
-    bool ConfigManager::IsAppNeedHook(const std::string &app_data_dir) {
+    bool ConfigManager::IsAppNeedHook(const uid_t user, const std::string &package_name) {
         // zygote always starts with `uid == 0` and then fork into different user.
         // so we have to check if we are the correct user or not.
-        const auto[res, user, package_name] = GetAppInfoFromDir(app_data_dir);
-        if (!res) return true;
-
-        if (last_user_ != user) {
-            UpdateConfigPath(user);
-        }
+        UpdateConfigPath(user);
 
         if (!black_white_list_enabled_) {
             return true;
@@ -135,7 +127,7 @@ namespace edxp {
             use_white_list = fs::exists(use_whitelist_path_);
         } else {
             LOGE("can't access config path, using snapshot use_white_list: %s",
-                 app_data_dir.c_str());
+                 package_name.c_str());
             use_white_list = use_white_list_snapshot_;
         }
         if (package_name == kPrimaryInstallerPkgName
@@ -146,22 +138,22 @@ namespace edxp {
         if (use_white_list) {
             if (!can_access_app_data) {
                 LOGE("can't access config path, using snapshot white list: %s",
-                     app_data_dir.c_str());
+                     package_name.c_str());
                 return white_list_default_.count(package_name);
             }
             std::string target_path = whitelist_path_ / package_name;
             bool res = fs::exists(target_path);
-            LOGD("using whitelist, %s -> %d", app_data_dir.c_str(), res);
+            LOGD("using whitelist, %s -> %d", package_name.c_str(), res);
             return res;
         } else {
             if (!can_access_app_data) {
                 LOGE("can't access config path, using snapshot black list: %s",
-                     app_data_dir.c_str());
+                     package_name.c_str());
                 return black_list_default_.count(package_name);
             }
             std::string target_path = blacklist_path_ / package_name;
             bool res = !fs::exists(target_path);
-            LOGD("using blacklist, %s -> %d", app_data_dir.c_str(), res);
+            LOGD("using blacklist, %s -> %d", package_name.c_str(), res);
             return res;
         }
     }
@@ -173,8 +165,9 @@ namespace edxp {
     }
 
     bool ConfigManager::UpdateModuleList() {
-        if (LIKELY(modules_list_) && !IsDynamicModulesEnabled())
+        if (LIKELY(!modules_list_.empty()) && !IsDynamicModulesEnabled())
             return true;
+        modules_list_.clear();
         auto global_modules_list = GetConfigPath("modules.list");
         if (!fs::exists(global_modules_list)) {
             LOGE("Cannot access path %s", global_modules_list.c_str());
@@ -193,9 +186,42 @@ namespace edxp {
             LOGE("Cannot access path %s", global_modules_list.c_str());
             return false;
         }
-        modules_list_ = std::make_unique<std::string>(std::istreambuf_iterator<char>(ifs),
-                                                      std::istreambuf_iterator<char>());
+        std::string module;
+        while (std::getline(ifs, module)) {
+            const auto &module_pkg_name = GetPackageNameFromBaseApkPath(module);
+            modules_list_.emplace_back(std::move(module), std::unordered_set<std::string>{});
+            const auto &module_scope_conf = GetConfigPath(module_pkg_name + ".conf");
+            if (!fs::exists(module_scope_conf)) {
+                LOGD("module scope is not set for %s", module_pkg_name.c_str());
+                continue;
+            }
+            std::ifstream ifs_c(module_scope_conf);
+            if (!ifs_c.good()) {
+                LOGE("Cannot access path %s", module_scope_conf.c_str());
+                continue;
+            }
+            auto & scope = modules_list_.back().second;
+            std::string app_pkg_name;
+            while(std::getline(ifs_c, app_pkg_name)) {
+                scope.emplace(std::move(app_pkg_name));
+            }
+            scope.insert(module_pkg_name); // Always add module itself
+            LOGD("scope of %s is:\n%s", module_pkg_name.c_str(), ([&scope](){
+                std::ostringstream join;
+                std::copy(scope.begin(), scope.end(), std::ostream_iterator<std::string>(join, "\n"));
+                return join.str();
+            })().c_str());
+        }
         return true;
+    }
+
+    bool ConfigManager::UpdateAppModuleList(const uid_t user, const std::string &pkg_name) {
+        UpdateConfigPath(user);
+        app_modules_list_.clear();
+        for(const auto&[module, scope]: modules_list_) {
+            if(scope.empty() || scope.count(pkg_name)) app_modules_list_.push_back(module);
+        }
+        return !app_modules_list_.empty();
     }
 
 }

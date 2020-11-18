@@ -23,6 +23,8 @@
 #pragma clang diagnostic ignored "-Wunused-value"
 
 namespace edxp {
+    namespace fs = std::filesystem;
+
     constexpr int FIRST_ISOLATED_UID = 99000;
     constexpr int LAST_ISOLATED_UID = 99999;
     constexpr int FIRST_APP_ZYGOTE_ISOLATED_UID = 90000;
@@ -226,17 +228,31 @@ namespace edxp {
                                          jint runtime_flags, jobjectArray rlimits,
                                          jlong permitted_capabilities,
                                          jlong effective_capabilities) {
-        app_data_dir_ = env->NewStringUTF(SYSTEM_SERVER_DATA_DIR.c_str());
-        ConfigManager::GetInstance()->UpdateModuleList();
+        ConfigManager::GetInstance()->UpdateModuleList(); // I don't think we need this, but anyway
+        skip_ = false;
+        if (!ConfigManager::GetInstance()->IsAppNeedHook(0, "android")) {
+            skip_ = true;
+            LOGW("skip injecting xposed into android because it's whitelisted/blacklisted");
+        }
+        if (!ConfigManager::GetInstance()->UpdateAppModuleList(0, "android")) {
+            skip_ = true;
+            LOGW("skip injecting into andorid because no module hooks it");
+        }
         PreLoadDex(env, kInjectDexPath);
     }
 
 
     int Context::OnNativeForkSystemServerPost(JNIEnv *env, jclass clazz, jint res) {
         if (res == 0) {
-            PrepareJavaEnv(env);
-            // only do work in child since FindAndCall would print log
-            FindAndCall(env, "forkSystemServerPost", "(I)V", res);
+            if (!skip_) {
+                PrepareJavaEnv(env);
+                // only do work in child since FindAndCall would print log
+                FindAndCall(env, "forkSystemServerPost", "(I)V", res);
+            } else {
+                auto config_manager = ConfigManager::ReleaseInstance();
+                auto context = Context::ReleaseInstance();
+                LOGD("skipped system server");
+            }
         } else {
             // in zygote process, res is child zygote pid
             // don't print log here, see https://github.com/RikkaApps/Riru/blob/77adfd6a4a6a81bfd20569c910bc4854f2f84f5e/riru-core/jni/main/jni_native_method.cpp#L55-L66
@@ -244,28 +260,60 @@ namespace edxp {
         return 0;
     }
 
+    std::tuple<bool, uid_t, std::string>
+    Context::GetAppInfoFromDir(JNIEnv *env, jstring dir) {
+        uid_t uid = 0;
+        JUTFString app_data_dir(env, dir);
+        if (!app_data_dir) return {false, 0, {}};
+        fs::path path(app_data_dir.get());
+        std::vector<std::string> splits(path.begin(), path.end());
+        if (splits.size() < 5u) {
+            LOGE("can't parse %s", path.c_str());
+            return {false, uid, {}};
+        }
+        const auto &uid_str = splits[3];
+        const auto &package_name = splits[4];
+        try {
+            uid = stol(uid_str);
+        } catch (const std::invalid_argument &ignored) {
+            LOGE("can't parse %s", app_data_dir.get());
+            return {false, uid, {}};
+        }
+        return {true, uid, package_name};
+    }
+
     bool Context::ShouldSkipInject(JNIEnv *env, jstring nice_name, jstring data_dir, jint uid,
                                    jboolean is_child_zygote) {
         const auto app_id = uid % PER_USER_RANGE;
-        const JUTFString package_name(env, nice_name, "UNKNOWN");
+        const auto&[res, user, package_name] = GetAppInfoFromDir(env, data_dir);
         bool skip = false;
-        if (is_child_zygote) {
+        if (!res) {
+            LOGW("skip injecting into %s because it has no data dir", package_name.c_str());
             skip = true;
-            LOGW("skip injecting into %s because it's a child zygote", package_name.get());
+        }
+        if (!skip && is_child_zygote) {
+            skip = true;
+            LOGW("skip injecting into %s because it's a child zygote", package_name.c_str());
         }
 
-        if ((app_id >= FIRST_ISOLATED_UID && app_id <= LAST_ISOLATED_UID) ||
-            (app_id >= FIRST_APP_ZYGOTE_ISOLATED_UID && app_id <= LAST_APP_ZYGOTE_ISOLATED_UID) ||
-            app_id == SHARED_RELRO_UID) {
+        if (!skip && ((app_id >= FIRST_ISOLATED_UID && app_id <= LAST_ISOLATED_UID) ||
+                      (app_id >= FIRST_APP_ZYGOTE_ISOLATED_UID &&
+                       app_id <= LAST_APP_ZYGOTE_ISOLATED_UID) ||
+                      app_id == SHARED_RELRO_UID)) {
             skip = true;
-            LOGW("skip injecting into %s because it's isolated", package_name.get());
+            LOGW("skip injecting into %s because it's isolated", package_name.c_str());
         }
 
-        const JUTFString dir(env, data_dir);
-        if (!dir || !ConfigManager::GetInstance()->IsAppNeedHook(dir)) {
+        if (!skip && !ConfigManager::GetInstance()->IsAppNeedHook(user, package_name)) {
             skip = true;
             LOGW("skip injecting xposed into %s because it's whitelisted/blacklisted",
-                 package_name.get());
+                 package_name.c_str());
+        }
+
+        if (!skip && !ConfigManager::GetInstance()->UpdateAppModuleList(user, package_name)) {
+            skip = true;
+            LOGW("skip injecting xposed into %s because no module hooks it",
+                 package_name.c_str());
         }
         return skip;
     }
@@ -283,9 +331,10 @@ namespace edxp {
                                                jboolean is_child_zygote,
                                                jstring instruction_set,
                                                jstring app_data_dir) {
+        ConfigManager::GetInstance()->UpdateModuleList();
         skip_ = ShouldSkipInject(env, nice_name, app_data_dir, uid,
                                  is_child_zygote);
-        ConfigManager::GetInstance()->UpdateModuleList();
+        const JUTFString dir(env, app_data_dir, "");
         app_data_dir_ = app_data_dir;
         nice_name_ = nice_name;
         PreLoadDex(env, kInjectDexPath);

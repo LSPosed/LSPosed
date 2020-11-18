@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <vector>
 #include <string>
+#include <tuple>
 #include <string_view>
 #include "utils.h"
 
@@ -113,8 +114,9 @@ namespace edxp {
         static bool ShouldSkipInject(JNIEnv *env, jstring nice_name, jstring data_dir, jint uid,
                                      jboolean is_child_zygote);
 
-        friend std::unique_ptr<Context> std::make_unique<Context>();
+        static std::tuple<bool, uid_t, std::string> GetAppInfoFromDir(JNIEnv *env, jstring dir);
 
+        friend std::unique_ptr<Context> std::make_unique<Context>();
     };
 
 }
