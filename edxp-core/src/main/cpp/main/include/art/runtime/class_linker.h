@@ -72,9 +72,9 @@ namespace art {
                 case __ANDROID_API_O__:
                 case __ANDROID_API_O_MR1__:
 #ifdef __LP64__
-                    OFFSET_classlinker = 400 / 8;
+                    OFFSET_classlinker = 464 / 8;
 #else
-                    OFFSET_classlinker = 240 / 4;
+                    OFFSET_classlinker = 284 / 4;
 #endif
                     break;
                 case __ANDROID_API_P__:
