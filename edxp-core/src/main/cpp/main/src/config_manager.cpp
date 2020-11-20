@@ -25,12 +25,12 @@ namespace edxp {
 
     std::string ConfigManager::RetrieveInstallerPkgName() const {
         std::string data_test_path = data_path_prefix_ / kPrimaryInstallerPkgName;
-        if (fs::exists(data_test_path)) {
+        if (path_exists(data_test_path)) {
             LOGI("using installer %s", kPrimaryInstallerPkgName.c_str());
             return kPrimaryInstallerPkgName;
         }
         data_test_path = data_path_prefix_ / kLegacyInstallerPkgName;
-        if (fs::exists(data_test_path)) {
+        if (path_exists(data_test_path)) {
             LOGI("using installer %s", kLegacyInstallerPkgName.c_str());
             return kLegacyInstallerPkgName;
         }
@@ -73,20 +73,20 @@ namespace edxp {
         whitelist_path_ = GetConfigPath("whitelist/");
         use_whitelist_path_ = GetConfigPath("usewhitelist");
 
-        dynamic_modules_enabled_ = fs::exists(GetConfigPath("dynamicmodules"));
-        black_white_list_enabled_ = fs::exists(GetConfigPath("blackwhitelist"));
-        deopt_boot_image_enabled_ = fs::exists(GetConfigPath("deoptbootimage"));
-        resources_hook_enabled_ = fs::exists(GetConfigPath("enable_resources"));
-        no_module_log_enabled_ = fs::exists(GetConfigPath("disable_modules_log"));
+        dynamic_modules_enabled_ = path_exists(GetConfigPath("dynamicmodules"));
+        black_white_list_enabled_ = path_exists(GetConfigPath("blackwhitelist"));
+        deopt_boot_image_enabled_ = path_exists(GetConfigPath("deoptbootimage"));
+        resources_hook_enabled_ = path_exists(GetConfigPath("enable_resources"));
+        no_module_log_enabled_ = path_exists(GetConfigPath("disable_modules_log"));
         hidden_api_bypass_enabled_ =
-                !fs::exists(GetConfigPath("disable_hidden_api_bypass"));
+                !path_exists(GetConfigPath("disable_hidden_api_bypass"));
         modules_list_.clear();
         app_modules_list_.clear();
 
         UpdateModuleList();
 
         // use_white_list snapshot
-        use_white_list_snapshot_ = fs::exists(use_whitelist_path_);
+        use_white_list_snapshot_ = path_exists(use_whitelist_path_);
         LOGI("data path prefix: %s", data_path_prefix_.c_str());
         LOGI("  application list mode: %s", BoolToString(black_white_list_enabled_));
         LOGI("    using whitelist: %s", BoolToString(use_white_list_snapshot_));
@@ -121,10 +121,10 @@ namespace edxp {
         if (!black_white_list_enabled_) {
             return true;
         }
-        bool can_access_app_data = fs::exists(base_config_path_);
+        bool can_access_app_data = path_exists(base_config_path_);
         bool use_white_list;
         if (can_access_app_data) {
-            use_white_list = fs::exists(use_whitelist_path_);
+            use_white_list = path_exists(use_whitelist_path_);
         } else {
             LOGE("can't access config path, using snapshot use_white_list: %s",
                  package_name.c_str());
@@ -142,7 +142,7 @@ namespace edxp {
                 return white_list_default_.count(package_name);
             }
             std::string target_path = whitelist_path_ / package_name;
-            bool res = fs::exists(target_path);
+            bool res = path_exists(target_path);
             LOGD("using whitelist, %s -> %d", package_name.c_str(), res);
             return res;
         } else {
@@ -152,7 +152,7 @@ namespace edxp {
                 return black_list_default_.count(package_name);
             }
             std::string target_path = blacklist_path_ / package_name;
-            bool res = !fs::exists(target_path);
+            bool res = !path_exists(target_path);
             LOGD("using blacklist, %s -> %d", package_name.c_str(), res);
             return res;
         }
@@ -169,7 +169,7 @@ namespace edxp {
             return true;
         modules_list_.clear();
         auto global_modules_list = GetConfigPath("modules.list");
-        if (!fs::exists(global_modules_list)) {
+        if (!path_exists(global_modules_list)) {
             LOGE("Cannot access path %s", global_modules_list.c_str());
             return false;
         }
@@ -191,7 +191,7 @@ namespace edxp {
             const auto &module_pkg_name = GetPackageNameFromBaseApkPath(module);
             modules_list_.emplace_back(std::move(module), std::unordered_set<std::string>{});
             const auto &module_scope_conf = GetConfigPath(module_pkg_name + ".conf");
-            if (!fs::exists(module_scope_conf)) {
+            if (!path_exists(module_scope_conf)) {
                 LOGD("module scope is not set for %s", module_pkg_name.c_str());
                 continue;
             }
@@ -200,15 +200,16 @@ namespace edxp {
                 LOGE("Cannot access path %s", module_scope_conf.c_str());
                 continue;
             }
-            auto & scope = modules_list_.back().second;
+            auto &scope = modules_list_.back().second;
             std::string app_pkg_name;
-            while(std::getline(ifs_c, app_pkg_name)) {
+            while (std::getline(ifs_c, app_pkg_name)) {
                 scope.emplace(std::move(app_pkg_name));
             }
             scope.insert(module_pkg_name); // Always add module itself
-            LOGD("scope of %s is:\n%s", module_pkg_name.c_str(), ([&scope](){
+            LOGD("scope of %s is:\n%s", module_pkg_name.c_str(), ([&scope]() {
                 std::ostringstream join;
-                std::copy(scope.begin(), scope.end(), std::ostream_iterator<std::string>(join, "\n"));
+                std::copy(scope.begin(), scope.end(),
+                          std::ostream_iterator<std::string>(join, "\n"));
                 return join.str();
             })().c_str());
         }
@@ -218,8 +219,8 @@ namespace edxp {
     bool ConfigManager::UpdateAppModuleList(const uid_t user, const std::string &pkg_name) {
         UpdateConfigPath(user);
         app_modules_list_.clear();
-        for(const auto&[module, scope]: modules_list_) {
-            if(scope.empty() || scope.count(pkg_name)) app_modules_list_.push_back(module);
+        for (const auto&[module, scope]: modules_list_) {
+            if (scope.empty() || scope.count(pkg_name)) app_modules_list_.push_back(module);
         }
         return !app_modules_list_.empty();
     }

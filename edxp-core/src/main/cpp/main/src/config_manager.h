@@ -9,6 +9,7 @@
 #include <filesystem>
 #include <unordered_set>
 #include <unordered_map>
+#include "config.h"
 
 namespace edxp {
 
@@ -99,7 +100,6 @@ namespace edxp {
         std::string RetrieveInstallerPkgName() const;
 
         static std::string GetPackageNameFromBaseApkPath(const std::filesystem::path &path);
-
 
         friend std::unique_ptr<ConfigManager> std::make_unique<ConfigManager>();
 
