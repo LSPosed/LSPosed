@@ -3,7 +3,6 @@
 #include <android_build.h>
 #include <string>
 #include <vector>
-#include <SubstrateHook.h>
 #include <config_manager.h>
 #include <art/runtime/runtime.h>
 #include <dl_util.h>
@@ -48,15 +47,7 @@ namespace edxp {
         }
         LOGI("Using api level %d", api_level);
         InstallRiruHooks();
-#ifndef __i386__ // Dobby doesn't support x86 for now
-        void *hook_func_symbol = (void *)DobbyHook;
-#else
-        void *hook_func_symbol = (void *) MSHookFunction;
-#endif
-        if (!hook_func_symbol) {
-            return;
-        }
-        hook_func = reinterpret_cast<HookFunType>(hook_func_symbol);
+        hook_func = reinterpret_cast<HookFunType>(DobbyHook);
 
         // install ART hooks
         if (api_level >= __ANDROID_API_Q__) {

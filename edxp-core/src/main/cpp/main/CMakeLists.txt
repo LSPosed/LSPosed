@@ -8,4 +8,4 @@ include_directories(include src)
 add_library(riru_edxp SHARED ${SRC_LIST} ${SRC_JNI_LIST})
 
 find_library(log-lib log)
-target_link_libraries(riru_edxp yahfa riru xhook substrate android dobby ${log-lib})
+target_link_libraries(riru_edxp yahfa riru xhook android dobby ${log-lib})
