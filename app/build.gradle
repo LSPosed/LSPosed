@@ -27,7 +27,7 @@ android {
         disable 'MissingTranslation'
         disable 'ExtraTranslation'
     }
-    compileSdkVersion 29
+    compileSdkVersion 30
     buildToolsVersion "30.0.2"
     defaultConfig {
         applicationId "org.meowcat.edxposed.manager"
