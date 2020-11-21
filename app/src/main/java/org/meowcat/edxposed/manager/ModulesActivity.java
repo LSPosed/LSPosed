@@ -496,7 +496,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             ModuleUtil.InstalledModule item = items.get(position);
             holder.itemView.setOnClickListener(v -> {
                 String packageName = item.packageName;
-                if (packageName == null) {
+                if (packageName == null || packageName.equals(BuildConfig.APPLICATION_ID)) {
                     return;
                 }
                 Intent launchIntent = getSettingsIntent(packageName);
@@ -526,6 +526,11 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 } catch (RepoDb.RowNotFoundException e) {
                     menu.removeItem(R.id.menu_download_updates);
                     menu.removeItem(R.id.menu_support);
+                }
+                if (installedModule.packageName.equals(BuildConfig.APPLICATION_ID)) {
+                    menu.removeItem(R.id.menu_launch);
+                    menu.removeItem(R.id.menu_scope);
+                    menu.removeItem(R.id.menu_uninstall);
                 }
             });
             holder.appName.setText(item.getAppName());
