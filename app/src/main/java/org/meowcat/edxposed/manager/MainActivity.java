@@ -2,6 +2,7 @@ package org.meowcat.edxposed.manager;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.PopupMenu;
@@ -13,6 +14,7 @@ import org.meowcat.edxposed.manager.adapters.BlackListAdapter;
 import org.meowcat.edxposed.manager.databinding.ActivityMainBinding;
 import org.meowcat.edxposed.manager.util.ModuleUtil;
 import org.meowcat.edxposed.manager.util.RepoLoader;
+import org.meowcat.edxposed.manager.util.light.Light;
 
 public class MainActivity extends BaseActivity implements RepoLoader.RepoListener, ModuleUtil.ModuleListener {
     ActivityMainBinding binding;
@@ -24,6 +26,13 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        getWindow().getDecorView().post(() -> {
+            if (Light.setLightSourceAlpha(getWindow().getDecorView(), 0.01f, 0.029f)) {
+                binding.status.setElevation(24);
+                binding.modules.setElevation(12);
+                binding.downloads.setElevation(12);
+            }
+        });
         setupWindowInsets(binding.snackbar, binding.nestedScrollView);
         repoLoader = RepoLoader.getInstance();
         ModuleUtil.getInstance().addListener(this);
@@ -84,23 +93,23 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
                 binding.statusTitle.setText(R.string.Activated);
                 binding.statusSummary.setText(installedXposedVersion.replace(installedXposedVersionStr + "-", ""));
                 binding.status.setCardBackgroundColor(ContextCompat.getColor(this, R.color.download_status_update_available));
-                binding.statusIcon.setImageDrawable(getDrawable(R.drawable.ic_check_circle));
+                binding.statusIcon.setImageResource(R.drawable.ic_check_circle);
             } else {
                 binding.statusTitle.setText(R.string.Inactivate);
                 binding.statusSummary.setText(R.string.installed_lollipop_inactive);
                 binding.status.setCardBackgroundColor(ContextCompat.getColor(this, R.color.amber_500));
-                binding.statusIcon.setImageDrawable(getDrawable(R.drawable.ic_warning));
+                binding.statusIcon.setImageResource(R.drawable.ic_warning);
             }
         } else if (XposedApp.getXposedVersion() > 0) {
             binding.statusTitle.setText(R.string.Activated);
             binding.statusSummary.setText(getString(R.string.version_x, XposedApp.getXposedVersion()));
             binding.status.setCardBackgroundColor(ContextCompat.getColor(this, R.color.download_status_update_available));
-            binding.statusIcon.setImageDrawable(getDrawable(R.drawable.ic_check_circle));
+            binding.statusIcon.setImageResource(R.drawable.ic_check_circle);
         } else {
             binding.statusTitle.setText(R.string.Install);
             binding.statusSummary.setText(R.string.InstallDetail);
             binding.status.setCardBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
-            binding.statusIcon.setImageDrawable(getDrawable(R.drawable.ic_error));
+            binding.statusIcon.setImageResource(R.drawable.ic_error);
         }
         notifyDataSetChanged();
         new Thread(() -> new BlackListAdapter(getApplicationContext(), AppHelper.isWhiteListMode()).generateCheckedList());

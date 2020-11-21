@@ -43,7 +43,6 @@
             android:label="@string/menu_scope"/>
         <activity
             android:name=".MainActivity"
-            android:theme="@style/AppTheme.ActivityMain"
             android:label="@string/app_name"
             android:launchMode="singleTop">
             <intent-filter>
@@ -82,9 +81,6 @@
         </receiver>
         <receiver
             android:name=".util.NotificationUtil$RebootReceiver"
-            android:exported="false" />
-        <receiver
-            android:name=".util.NotificationUtil$ApkReceiver"
             android:exported="false" />
         <receiver
             android:name=".receivers.BootReceiver"
