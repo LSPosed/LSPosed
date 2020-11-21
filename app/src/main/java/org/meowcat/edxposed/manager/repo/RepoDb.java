@@ -37,7 +37,7 @@ public final class RepoDb extends SQLiteOpenHelper {
 
     @SuppressLint("StaticFieldLeak")
     private static Context context;
-    private static SQLiteDatabase db;
+    private static final SQLiteDatabase db;
 
     static {
         RepoDb instance = new RepoDb(XposedApp.getInstance());

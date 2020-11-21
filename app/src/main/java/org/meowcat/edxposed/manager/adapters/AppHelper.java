@@ -269,48 +269,40 @@ public class AppHelper {
         PopupMenu appMenu = new PopupMenu(context, anchor);
         appMenu.inflate(R.menu.menu_app_item);
         appMenu.setOnMenuItemClickListener(menuItem -> {
-            switch (menuItem.getItemId()) {
-                case R.id.app_menu_launch:
-                    Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(info.packageName);
-                    if (launchIntent != null) {
-                        context.startActivity(launchIntent);
-                    } else {
-                        Toast.makeText(context, context.getString(R.string.module_no_ui), Toast.LENGTH_LONG).show();
-                    }
-                    break;
-                case R.id.app_menu_stop:
-                    try {
-                        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-                        Objects.requireNonNull(manager).killBackgroundProcesses(info.packageName);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                    break;
-                case R.id.app_menu_compile_speed:
-                    CompileUtil.compileSpeed(context, fragmentManager, info);
-                    break;
-                case R.id.app_menu_compile_dexopt:
-                    CompileUtil.compileDexopt(context, fragmentManager, info);
-                    break;
-                case R.id.app_menu_compile_reset:
-                    CompileUtil.reset(context, fragmentManager, info);
-                    break;
-                case R.id.app_menu_store:
-                    Uri uri = Uri.parse("market://details?id=" + info.packageName);
-                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    try {
-                        context.startActivity(intent);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                    break;
-                case R.id.app_menu_info:
-                    context.startActivity(new Intent(ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", info.packageName, null)));
-                    break;
-                case R.id.app_menu_uninstall:
-                    context.startActivity(new Intent(Intent.ACTION_UNINSTALL_PACKAGE, Uri.fromParts("package", info.packageName, null)));
-                    break;
+            int itemId = menuItem.getItemId();
+            if (itemId == R.id.app_menu_launch) {
+                Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(info.packageName);
+                if (launchIntent != null) {
+                    context.startActivity(launchIntent);
+                } else {
+                    Toast.makeText(context, context.getString(R.string.module_no_ui), Toast.LENGTH_LONG).show();
+                }
+            } else if (itemId == R.id.app_menu_stop) {
+                try {
+                    ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+                    Objects.requireNonNull(manager).killBackgroundProcesses(info.packageName);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            } else if (itemId == R.id.app_menu_compile_speed) {
+                CompileUtil.compileSpeed(context, fragmentManager, info);
+            } else if (itemId == R.id.app_menu_compile_dexopt) {
+                CompileUtil.compileDexopt(context, fragmentManager, info);
+            } else if (itemId == R.id.app_menu_compile_reset) {
+                CompileUtil.reset(context, fragmentManager, info);
+            } else if (itemId == R.id.app_menu_store) {
+                Uri uri = Uri.parse("market://details?id=" + info.packageName);
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                try {
+                    context.startActivity(intent);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            } else if (itemId == R.id.app_menu_info) {
+                context.startActivity(new Intent(ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", info.packageName, null)));
+            } else if (itemId == R.id.app_menu_uninstall) {
+                context.startActivity(new Intent(Intent.ACTION_UNINSTALL_PACKAGE, Uri.fromParts("package", info.packageName, null)));
             }
             return true;
         });
@@ -358,6 +350,7 @@ public class AppHelper {
         return s;
     }
 
+    @SuppressLint("WorldReadableFiles")
     static boolean saveScopeList(String modulePackageName, List<String> list) {
         File file = new File(BASE_PATH + String.format(SCOPE_LIST_PATH, modulePackageName));
         try {

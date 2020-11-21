@@ -36,8 +36,8 @@ public class DownloadDetailsActivity extends BaseActivity implements RepoLoader.
     static final String PLAY_STORE_PACKAGE = "com.android.vending";
     static final String PLAY_STORE_LINK = "https://play.google.com/store/apps/details?id=%s";
     private static final String TAG = "DownloadDetailsActivity";
-    private static RepoLoader repoLoader = RepoLoader.getInstance();
-    private static ModuleUtil moduleUtil = ModuleUtil.getInstance();
+    private static final RepoLoader repoLoader = RepoLoader.getInstance();
+    private static final ModuleUtil moduleUtil = ModuleUtil.getInstance();
     private String packageName;
     private Module module;
     private ModuleUtil.InstalledModule installedModule;
@@ -179,45 +179,44 @@ public class DownloadDetailsActivity extends BaseActivity implements RepoLoader.
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_refresh:
-                RepoLoader.getInstance().triggerReload(true);
-                return true;
-            case R.id.menu_share:
-                String text = module.name + " - ";
+        int itemId = item.getItemId();
+        if (itemId == R.id.menu_refresh) {
+            RepoLoader.getInstance().triggerReload(true);
+            return true;
+        } else if (itemId == R.id.menu_share) {
+            String text = module.name + " - ";
 
-                if (isPackageInstalled(packageName, this)) {
-                    String s = getPackageManager().getInstallerPackageName(packageName);
-                    boolean playStore;
+            if (isPackageInstalled(packageName, this)) {
+                String s = getPackageManager().getInstallerPackageName(packageName);
+                boolean playStore;
 
-                    try {
-                        playStore = s.equals(PLAY_STORE_PACKAGE);
-                    } catch (NullPointerException e) {
-                        playStore = false;
-                    }
-
-                    if (playStore) {
-                        text += String.format(PLAY_STORE_LINK, packageName);
-                    } else {
-                        text += String.format(XPOSED_REPO_LINK, packageName);
-                    }
-                } else {
-                    text += String.format(XPOSED_REPO_LINK,
-                            packageName);
+                try {
+                    playStore = PLAY_STORE_PACKAGE.equals(s);
+                } catch (NullPointerException e) {
+                    playStore = false;
                 }
 
-                Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-                sharingIntent.setType("text/plain");
-                sharingIntent.putExtra(Intent.EXTRA_TEXT, text);
-                startActivity(Intent.createChooser(sharingIntent, getString(R.string.share)));
-                return true;
-            case R.id.ignoreUpdate:
-                SharedPreferences prefs = getSharedPreferences("update_ignored", MODE_PRIVATE);
+                if (playStore) {
+                    text += String.format(PLAY_STORE_LINK, packageName);
+                } else {
+                    text += String.format(XPOSED_REPO_LINK, packageName);
+                }
+            } else {
+                text += String.format(XPOSED_REPO_LINK,
+                        packageName);
+            }
 
-                boolean ignored = prefs.getBoolean(module.packageName, false);
-                prefs.edit().putBoolean(module.packageName, !ignored).apply();
-                item.setChecked(!ignored);
-                break;
+            Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+            sharingIntent.setType("text/plain");
+            sharingIntent.putExtra(Intent.EXTRA_TEXT, text);
+            startActivity(Intent.createChooser(sharingIntent, getString(R.string.share)));
+            return true;
+        } else if (itemId == R.id.ignoreUpdate) {
+            SharedPreferences prefs = getSharedPreferences("update_ignored", MODE_PRIVATE);
+
+            boolean ignored = prefs.getBoolean(module.packageName, false);
+            prefs.edit().putBoolean(module.packageName, !ignored).apply();
+            item.setChecked(!ignored);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -234,7 +233,7 @@ public class DownloadDetailsActivity extends BaseActivity implements RepoLoader.
 
     class SwipeFragmentPagerAdapter extends FragmentPagerAdapter {
         final int PAGE_COUNT = 3;
-        private String[] tabTitles = new String[]{getString(R.string.download_details_page_description), getString(R.string.download_details_page_versions), getString(R.string.download_details_page_settings),};
+        private final String[] tabTitles = new String[]{getString(R.string.download_details_page_description), getString(R.string.download_details_page_versions), getString(R.string.download_details_page_settings),};
 
         SwipeFragmentPagerAdapter(FragmentManager fm) {
             super(fm, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);

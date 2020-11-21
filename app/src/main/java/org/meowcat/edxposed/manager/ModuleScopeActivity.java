@@ -31,12 +31,11 @@ public class ModuleScopeActivity extends BaseActivity implements AppAdapter.Call
         }
     };
     private final Handler handler = new Handler();
-    private String modulePackageName;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        modulePackageName = getIntent().getStringExtra("modulePackageName");
+        String modulePackageName = getIntent().getStringExtra("modulePackageName");
         String moduleName = getIntent().getStringExtra("moduleName");
         binding = ActivityBlackListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

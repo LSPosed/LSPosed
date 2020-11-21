@@ -41,13 +41,13 @@ import java.util.Scanner;
 
 public class LogsActivity extends BaseActivity {
     private boolean allLog = false;
-    private File fileErrorLog = new File(XposedApp.BASE_DIR + "log/error.log");
-    private File fileErrorLogOld = new File(
+    private final File fileErrorLog = new File(XposedApp.BASE_DIR + "log/error.log");
+    private final File fileErrorLogOld = new File(
             XposedApp.BASE_DIR + "log/error.log.old");
-    private File fileAllLog = new File(XposedApp.BASE_DIR + "log/all.log");
-    private File fileAllLogOld = new File(XposedApp.BASE_DIR + "log/all.log.old");
+    private final File fileAllLog = new File(XposedApp.BASE_DIR + "log/all.log");
+    private final File fileAllLogOld = new File(XposedApp.BASE_DIR + "log/all.log.old");
     private LogsAdapter adapter;
-    private Handler handler = new Handler();
+    private final Handler handler = new Handler();
     private ActivityLogsBinding binding;
 
     @Override
@@ -115,29 +115,27 @@ public class LogsActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_scroll_top:
-                scrollTop();
-                break;
-            case R.id.menu_scroll_down:
-                scrollDown();
-                break;
-            case R.id.menu_refresh:
-                reloadErrorLog();
-                return true;
-            case R.id.menu_send:
-                try {
-                    send();
-                } catch (Exception e) {
-                    Snackbar.make(binding.snackbar, e.getLocalizedMessage(), Snackbar.LENGTH_LONG).show();
-                }
-                return true;
-            case R.id.menu_save:
-                save();
-                return true;
-            case R.id.menu_clear:
-                clear();
-                return true;
+        int itemId = item.getItemId();
+        if (itemId == R.id.menu_scroll_top) {
+            scrollTop();
+        } else if (itemId == R.id.menu_scroll_down) {
+            scrollDown();
+        } else if (itemId == R.id.menu_refresh) {
+            reloadErrorLog();
+            return true;
+        } else if (itemId == R.id.menu_send) {
+            try {
+                send();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return true;
+        } else if (itemId == R.id.menu_save) {
+            save();
+            return true;
+        } else if (itemId == R.id.menu_clear) {
+            clear();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -225,7 +223,7 @@ public class LogsActivity extends BaseActivity {
     @SuppressLint("StaticFieldLeak")
     private class LogsReader extends AsyncTask<File, Integer, ArrayList<String>> {
         private AlertDialog mProgressDialog;
-        private Runnable mRunnable = new Runnable() {
+        private final Runnable mRunnable = new Runnable() {
             @Override
             public void run() {
                 mProgressDialog.show();
@@ -256,7 +254,9 @@ public class LogsActivity extends BaseActivity {
                 return logs;
             } catch (IOException e) {
                 logs.add(LogsActivity.this.getResources().getString(R.string.logs_cannot_read));
-                logs.addAll(Arrays.asList(e.getMessage().split("\n")));
+                if (e.getMessage() != null) {
+                    logs.addAll(Arrays.asList(e.getMessage().split("\n")));
+                }
             }
 
             return logs;

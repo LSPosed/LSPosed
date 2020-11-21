@@ -110,7 +110,6 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
             List<String> stdout = new ArrayList<>();
             List<String> stderr = new ArrayList<>();
             Shell.Result result = Shell.su(commands).to(stdout, stderr).exec();
-            List<String> ret;
             if (stderr.size() > 0) {
                 return "Error: " + TextUtils.join("\n", stderr);
             } else if (!result.isSuccess()) { // they might don't write to stderr

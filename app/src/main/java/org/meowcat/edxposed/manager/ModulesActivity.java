@@ -144,7 +144,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                     cmp = displayNameComparator;
                     break;
             }
-            Collections.sort(fullList, (a, b) -> {
+            fullList.sort((a, b) -> {
                 boolean aChecked = moduleUtil.isModuleEnabled(a.packageName);
                 boolean bChecked = moduleUtil.isModuleEnabled(b.packageName);
                 if (aChecked == bChecked) {
@@ -202,7 +202,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                     DividerItemDecoration.VERTICAL);
             binding.recyclerView.addItemDecoration(dividerItemDecoration);
         }
-        binding.swipeRefreshLayout.setOnRefreshListener(() -> reloadModules.run());
+        binding.swipeRefreshLayout.setOnRefreshListener(reloadModules::run);
         reloadModules.run();
         mSearchListener = new SearchView.OnQueryTextListener() {
             @Override
@@ -293,38 +293,37 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         Intent intent;
-        switch (item.getItemId()) {
-            case R.id.export_enabled_modules:
-                if (ModuleUtil.getInstance().getEnabledModules().isEmpty()) {
-                    Snackbar.make(binding.snackbar, R.string.no_enabled_modules, Snackbar.LENGTH_SHORT).show();
-                    return false;
-                }
-                intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("text/*");
-                intent.putExtra(Intent.EXTRA_TITLE, "enabled_modules.list");
-                startActivityForResult(intent, 42);
-                return true;
-            case R.id.export_installed_modules:
-                Map<String, ModuleUtil.InstalledModule> installedModules = ModuleUtil.getInstance().getModules();
+        int itemId = item.getItemId();
+        if (itemId == R.id.export_enabled_modules) {
+            if (ModuleUtil.getInstance().getEnabledModules().isEmpty()) {
+                Snackbar.make(binding.snackbar, R.string.no_enabled_modules, Snackbar.LENGTH_SHORT).show();
+                return false;
+            }
+            intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("text/*");
+            intent.putExtra(Intent.EXTRA_TITLE, "enabled_modules.list");
+            startActivityForResult(intent, 42);
+            return true;
+        } else if (itemId == R.id.export_installed_modules) {
+            Map<String, ModuleUtil.InstalledModule> installedModules = ModuleUtil.getInstance().getModules();
 
-                if (installedModules.isEmpty()) {
-                    Snackbar.make(binding.snackbar, R.string.no_installed_modules, Snackbar.LENGTH_SHORT).show();
-                    return false;
-                }
-                intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("text/*");
-                intent.putExtra(Intent.EXTRA_TITLE, "installed_modules.list");
-                startActivityForResult(intent, 43);
-                return true;
-            case R.id.import_installed_modules:
-            case R.id.import_enabled_modules:
-                intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("*/*");
-                startActivityForResult(intent, 44);
-                return true;
+            if (installedModules.isEmpty()) {
+                Snackbar.make(binding.snackbar, R.string.no_installed_modules, Snackbar.LENGTH_SHORT).show();
+                return false;
+            }
+            intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("text/*");
+            intent.putExtra(Intent.EXTRA_TITLE, "installed_modules.list");
+            startActivityForResult(intent, 43);
+            return true;
+        } else if (itemId == R.id.import_installed_modules || itemId == R.id.import_enabled_modules) {
+            intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("*/*");
+            startActivityForResult(intent, 44);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -350,7 +349,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             br.close();
         } catch (Exception e) {
             e.printStackTrace();
-            Snackbar.make(binding.snackbar, e.getLocalizedMessage(), Snackbar.LENGTH_SHORT).show();
         }
 
         for (final Module m : list) {
@@ -396,59 +394,54 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
     }
 
     @Override
-    public boolean onContextItemSelected(MenuItem item) {
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
         ModuleUtil.InstalledModule module = ModuleUtil.getInstance().getModule(selectedPackageName);
         if (module == null) {
             return false;
         }
-        switch (item.getItemId()) {
-            case R.id.menu_launch:
-                String packageName = module.packageName;
-                if (packageName == null) {
-                    return false;
-                }
-                Intent launchIntent = getSettingsIntent(packageName);
-                if (launchIntent != null) {
-                    startActivity(launchIntent);
-                } else {
-                    Snackbar.make(binding.snackbar, R.string.module_no_ui, Snackbar.LENGTH_LONG).show();
-                }
-                return true;
-
-            case R.id.menu_download_updates:
-                Intent detailsIntent = new Intent(this, DownloadDetailsActivity.class);
-                detailsIntent.setData(Uri.fromParts("package", module.packageName, null));
-                startActivity(detailsIntent);
-                return true;
-
-            case R.id.menu_support:
-                NavUtil.startURL(this, Uri.parse(RepoDb.getModuleSupport(module.packageName)));
-                return true;
-
-            case R.id.menu_app_store:
-                Uri uri = Uri.parse("market://details?id=" + module.packageName);
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                try {
-                    startActivity(intent);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-                return true;
-
-            case R.id.menu_app_info:
-                startActivity(new Intent(ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", module.packageName, null)));
-                return true;
-
-            case R.id.menu_uninstall:
-                startActivity(new Intent(Intent.ACTION_UNINSTALL_PACKAGE, Uri.fromParts("package", module.packageName, null)));
-                return true;
-            case R.id.menu_scope:
-                Intent scopeIntent = new Intent(this, ModuleScopeActivity.class);
-                scopeIntent.putExtra("modulePackageName", module.packageName);
-                scopeIntent.putExtra("moduleName", module.getAppName());
-                startActivity(scopeIntent);
-                return true;
+        int itemId = item.getItemId();
+        if (itemId == R.id.menu_launch) {
+            String packageName = module.packageName;
+            if (packageName == null) {
+                return false;
+            }
+            Intent launchIntent = getSettingsIntent(packageName);
+            if (launchIntent != null) {
+                startActivity(launchIntent);
+            } else {
+                Snackbar.make(binding.snackbar, R.string.module_no_ui, Snackbar.LENGTH_LONG).show();
+            }
+            return true;
+        } else if (itemId == R.id.menu_download_updates) {
+            Intent detailsIntent = new Intent(this, DownloadDetailsActivity.class);
+            detailsIntent.setData(Uri.fromParts("package", module.packageName, null));
+            startActivity(detailsIntent);
+            return true;
+        } else if (itemId == R.id.menu_support) {
+            NavUtil.startURL(this, Uri.parse(RepoDb.getModuleSupport(module.packageName)));
+            return true;
+        } else if (itemId == R.id.menu_app_store) {
+            Uri uri = Uri.parse("market://details?id=" + module.packageName);
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            try {
+                startActivity(intent);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            return true;
+        } else if (itemId == R.id.menu_app_info) {
+            startActivity(new Intent(ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", module.packageName, null)));
+            return true;
+        } else if (itemId == R.id.menu_uninstall) {
+            startActivity(new Intent(Intent.ACTION_UNINSTALL_PACKAGE, Uri.fromParts("package", module.packageName, null)));
+            return true;
+        } else if (itemId == R.id.menu_scope) {
+            Intent scopeIntent = new Intent(this, ModuleScopeActivity.class);
+            scopeIntent.putExtra("modulePackageName", module.packageName);
+            scopeIntent.putExtra("moduleName", module.getAppName());
+            startActivity(scopeIntent);
+            return true;
         }
         return super.onContextItemSelected(item);
     }

@@ -33,7 +33,7 @@ public class RepoParser {
     public final static String TAG = XposedApp.TAG;
     private final static String NS = null;
     private final XmlPullParser parser;
-    private RepoParserCallback callback;
+    private final RepoParserCallback callback;
     private boolean mRepoEventTriggered = false;
 
     private RepoParser(InputStream is, RepoParserCallback callback) throws XmlPullParserException, IOException {

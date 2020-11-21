@@ -310,4 +310,5 @@
     <string name="settings_summary_hide_edxposed_manager">防止软件检测到 EdXposed Manager\n注：模块可能无法正常打开 EdXposed Manager 界面，系统中关于 EdXposed Manager 的一些功能可能无法正常使用</string>
     <string name="settings_title_disable_hidden_api_bypass">禁用绕过隐藏 API 的限制</string>
     <string name="settings_summary_disable_hidden_api_bypass">禁用绕过隐藏 API 的限制将会通过某些检测（如Snapchat）\n<b>警告:</b> 启用此选项可能会使某些功能无法正常工作，或出现一些其他问题</string>
+    <string name="menu_scope">作用域</string>
 </resources>

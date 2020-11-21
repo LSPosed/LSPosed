@@ -17,7 +17,7 @@ public class DownloadView extends LinearLayout {
     public Fragment fragment;
     private String mUrl = null;
     private String mTitle = null;
-    private DownloadViewBinding binding;
+    private final DownloadViewBinding binding;
 
     public DownloadView(Context context, final AttributeSet attrs) {
         super(context, attrs);
@@ -38,7 +38,7 @@ public class DownloadView extends LinearLayout {
         if (mUrl != null) {
             binding.btnDownload.setVisibility(View.VISIBLE);
             binding.txtInfo.setVisibility(View.GONE);
-        }else {
+        } else {
             binding.btnDownload.setVisibility(View.GONE);
             binding.txtInfo.setVisibility(View.VISIBLE);
             binding.txtInfo.setText(R.string.download_view_no_url);

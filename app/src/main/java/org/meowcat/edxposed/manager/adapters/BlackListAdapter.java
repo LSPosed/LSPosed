@@ -15,7 +15,7 @@ import java.util.List;
 
 public class BlackListAdapter extends AppAdapter {
 
-    private volatile boolean isWhiteListMode;
+    private final boolean isWhiteListMode;
     private List<String> checkedList;
 
     public BlackListAdapter(Context context, boolean isWhiteListMode) {

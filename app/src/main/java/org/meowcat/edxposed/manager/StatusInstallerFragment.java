@@ -135,8 +135,14 @@ public class StatusInstallerFragment extends Fragment {
             String propState = (String) m.invoke(null, "ro.boot.verifiedbootstate", "");
             File fileDmVerityModule = new File("/sys/module/dm_verity");
 
-            boolean verified = !propSystemVerified.equals("0");
-            boolean detected = !propState.isEmpty() || fileDmVerityModule.exists();
+            boolean verified = false;
+            if (propSystemVerified != null) {
+                verified = !propSystemVerified.equals("0");
+            }
+            boolean detected = false;
+            if (propState != null) {
+                detected = !propState.isEmpty() || fileDmVerityModule.exists();
+            }
 
             if (verified) {
                 binding.dmverity.setText(R.string.verified_boot_active);

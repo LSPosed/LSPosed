@@ -11,7 +11,7 @@ import org.meowcat.edxposed.manager.util.NavUtil;
  */
 public class CustomTabsURLSpan extends URLSpan {
 
-    private BaseActivity activity;
+    private final BaseActivity activity;
 
     CustomTabsURLSpan(BaseActivity activity, String url) {
         super(url);

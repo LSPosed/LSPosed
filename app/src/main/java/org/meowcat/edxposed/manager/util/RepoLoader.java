@@ -49,10 +49,10 @@ public class RepoLoader {
     private static RepoLoader instance = null;
     private final List<RepoListener> listeners = new CopyOnWriteArrayList<>();
     private final Map<String, ReleaseType> localReleaseTypesCache = new HashMap<>();
-    private XposedApp app;
-    private SharedPreferences pref;
-    private SharedPreferences modulePref;
-    private ConnectivityManager conMgr;
+    private final XposedApp app;
+    private final SharedPreferences pref;
+    private final SharedPreferences modulePref;
+    private final ConnectivityManager conMgr;
     private boolean isLoading = false;
     private boolean reloadTriggeredOnce = false;
     private Map<Long, Repository> repositories = null;

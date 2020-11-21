@@ -28,13 +28,13 @@ public class BlackListActivity extends BaseActivity implements AppAdapter.Callba
 
     private SearchView.OnQueryTextListener searchListener;
     private ActivityBlackListBinding binding;
-    private Runnable runnable = new Runnable() {
+    private final Runnable runnable = new Runnable() {
         @Override
         public void run() {
             binding.swipeRefreshLayout.setRefreshing(true);
         }
     };
-    private Handler handler = new Handler();
+    private final Handler handler = new Handler();
     private boolean isCompat;
 
     @Override
@@ -129,12 +129,7 @@ public class BlackListActivity extends BaseActivity implements AppAdapter.Callba
         handler.removeCallbacks(runnable);
         binding.swipeRefreshLayout.setRefreshing(false);
         String queryStr = searchView != null ? searchView.getQuery().toString() : "";
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                appAdapter.getFilter().filter(queryStr);
-            }
-        });
+        runOnUiThread(() -> appAdapter.getFilter().filter(queryStr));
     }
 
     @Override

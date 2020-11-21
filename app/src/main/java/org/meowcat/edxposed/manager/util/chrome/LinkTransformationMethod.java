@@ -16,7 +16,7 @@ import org.meowcat.edxposed.manager.BaseActivity;
  */
 public class LinkTransformationMethod implements TransformationMethod {
 
-    private BaseActivity activity;
+    private final BaseActivity activity;
 
     public LinkTransformationMethod(BaseActivity activity) {
         this.activity = activity;

@@ -50,7 +50,7 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
     private SearchView searchView;
     private SharedPreferences ignoredUpdatesPref;
     private boolean changed = false;
-    private BroadcastReceiver connectionListener = new BroadcastReceiver() {
+    private final BroadcastReceiver connectionListener = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (repoLoader != null) {
@@ -224,11 +224,11 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
         }
     }
 
-    private class DownloadsAdapter extends CursorRecyclerViewAdapter<DownloadsAdapter.ViewHolder> implements StickyRecyclerHeadersAdapter {
+    private class DownloadsAdapter extends CursorRecyclerViewAdapter<DownloadsAdapter.ViewHolder> implements StickyRecyclerHeadersAdapter<DownloadsAdapter.HeaderViewHolder> {
         private final Context context;
         private final DateFormat dateFormatter = DateFormat.getDateInstance(DateFormat.SHORT);
         private final SharedPreferences prefs;
-        private String[] sectionHeaders;
+        private final String[] sectionHeaders;
 
         DownloadsAdapter(Context context, Cursor cursor) {
             super(cursor);
@@ -288,17 +288,15 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
         }
 
         @Override
-        public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
+        public HeaderViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.sticky_header_download, parent, false);
-            return new RecyclerView.ViewHolder(view) {
-            };
+            return new HeaderViewHolder(view);
         }
 
         @Override
-        public void onBindHeaderViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+        public void onBindHeaderViewHolder(HeaderViewHolder viewHolder, int position) {
             long section = getHeaderId(position);
-            TextView tv = viewHolder.itemView.findViewById(android.R.id.title);
-            tv.setText(sectionHeaders[(int) section]);
+            viewHolder.title.setText(sectionHeaders[(int) section]);
         }
 
         @NonNull
@@ -371,6 +369,15 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
                 appDescription = binding.description;
                 downloadStatus = binding.downloadStatus;
                 timestamps = binding.timestamps;
+            }
+        }
+
+        class HeaderViewHolder extends RecyclerView.ViewHolder {
+            TextView title;
+
+            HeaderViewHolder(View view) {
+                super(view);
+                title = findViewById(android.R.id.title);
             }
         }
     }
