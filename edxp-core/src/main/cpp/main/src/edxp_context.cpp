@@ -236,7 +236,7 @@ namespace edxp {
         }
         if (!ConfigManager::GetInstance()->UpdateAppModuleList(0, "android")) {
             skip_ = true;
-            LOGW("skip injecting into andorid because no module hooks it");
+            LOGW("skip injecting into android because no module hooks it");
         }
         PreLoadDex(env, kInjectDexPath);
     }
@@ -251,7 +251,7 @@ namespace edxp {
             } else {
                 auto config_manager = ConfigManager::ReleaseInstance();
                 auto context = Context::ReleaseInstance();
-                LOGD("skipped system server");
+                LOGD("skipped android");
             }
         } else {
             // in zygote process, res is child zygote pid
