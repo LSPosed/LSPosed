@@ -69,10 +69,10 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
     private SearchView.OnQueryTextListener mSearchListener;
     private PackageManager pm;
     private Comparator<ApplicationInfo> cmp;
-    private DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+    private final DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     private ModuleUtil moduleUtil;
     private ModuleAdapter adapter = null;
-    private Runnable reloadModules = new Runnable() {
+    private final Runnable reloadModules = new Runnable() {
         public void run() {
             String queryStr = searchView != null ? searchView.getQuery().toString() : "";
             ArrayList<ModuleUtil.InstalledModule> showList;
@@ -442,6 +442,12 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
 
             case R.id.menu_uninstall:
                 startActivity(new Intent(Intent.ACTION_UNINSTALL_PACKAGE, Uri.fromParts("package", module.packageName, null)));
+                return true;
+            case R.id.menu_scope:
+                Intent scopeIntent = new Intent(this, ModuleScopeActivity.class);
+                scopeIntent.putExtra("modulePackageName", module.packageName);
+                scopeIntent.putExtra("moduleName", module.getAppName());
+                startActivity(scopeIntent);
                 return true;
         }
         return super.onContextItemSelected(item);

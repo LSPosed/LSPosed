@@ -341,4 +341,5 @@
     <string name="settings_summary_hide_edxposed_manager">Prevent the software from detecting EdXposed Manager\nWARNING: Modules may not be able to start the EdXposed Manager UI properly, some fratures of EdXposed Manager in the system may not work properly</string>
     <string name="settings_title_disable_hidden_api_bypass">Disable hidden API restrictions bypass</string>
     <string name="settings_summary_disable_hidden_api_bypass">Disable hidden API restrictions bypass will pass some detection (eg Snapchat), these APIs are disabled by default\n<b>WARNING:</b> Enable this option may cause some features do not work properly, or some other problems</string>
+    <string name="menu_scope">Scope</string>
 </resources>

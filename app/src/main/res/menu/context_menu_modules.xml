@@ -5,6 +5,9 @@
         android:id="@+id/menu_launch"
         android:title="@string/module_launch" />
     <item
+        android:id="@+id/menu_scope"
+        android:title="@string/menu_scope" />
+    <item
         android:id="@+id/menu_download_updates"
         android:title="@string/module_download_updates" />
     <item

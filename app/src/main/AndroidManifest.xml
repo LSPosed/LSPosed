@@ -39,6 +39,9 @@
             android:name=".DownloadActivity"
             android:label="@string/Downloads" />
         <activity
+            android:name=".ModuleScopeActivity"
+            android:label="@string/menu_scope"/>
+        <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme.ActivityMain"
             android:label="@string/app_name"

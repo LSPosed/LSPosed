@@ -33,14 +33,14 @@ import java.util.Locale;
 
 public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> implements Filterable {
 
-    protected final Context context;
+    protected Context context;
     private final ApplicationInfo.DisplayNameComparator displayNameComparator;
     private Callback callback;
-    private List<ApplicationInfo> fullList, showList;
-    private DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+    protected List<ApplicationInfo> fullList, showList;
+    private final DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     private List<String> checkedList;
-    private PackageManager pm;
-    private ApplicationFilter filter;
+    private final PackageManager pm;
+    private final ApplicationFilter filter;
     private Comparator<ApplicationInfo> cmp;
 
     AppAdapter(Context context) {
@@ -66,17 +66,36 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
     }
 
     private void loadApps() {
+        boolean onlyInAppList = this instanceof ScopeAdapter;
         fullList = pm.getInstalledApplications(PackageManager.GET_META_DATA);
-        if (!XposedApp.getPreferences().getBoolean("show_modules", true)) {
-            List<ApplicationInfo> rmList = new ArrayList<>();
+        List<ApplicationInfo> rmList = new ArrayList<>();
+        if (!XposedApp.getPreferences().getBoolean("show_modules", true) || onlyInAppList) {
             for (ApplicationInfo info : fullList) {
                 if (info.metaData != null && info.metaData.containsKey("xposedmodule") || AppHelper.FORCE_WHITE_LIST_MODULE.contains(info.packageName)) {
                     rmList.add(info);
                 }
             }
-            if (rmList.size() > 0) {
-                fullList.removeAll(rmList);
+        }
+        if (onlyInAppList && AppHelper.isBlackListMode()) {
+            if (AppHelper.isWhiteListMode()) {
+                List<String> whiteList = AppHelper.getWhiteList();
+                for (ApplicationInfo info : fullList) {
+                    if (!whiteList.contains(info.packageName)) {
+                        rmList.add(info);
+                    }
+                }
+            } else {
+                List<String> blackList = AppHelper.getBlackList();
+                for (ApplicationInfo info : fullList) {
+                    if (blackList.contains(info.packageName)) {
+                        rmList.add(info);
+                    }
+                }
             }
+
+        }
+        if (rmList.size() > 0) {
+            fullList.removeAll(rmList);
         }
         AppHelper.makeSurePath();
         checkedList = generateCheckedList();
@@ -152,7 +171,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
                 cmp = displayNameComparator;
                 break;
         }
-        Collections.sort(fullList, (a, b) -> {
+        fullList.sort((a, b) -> {
             boolean aChecked = checkedList.contains(a.packageName);
             boolean bChecked = checkedList.contains(b.packageName);
             if (aChecked == bChecked) {

@@ -21,13 +21,18 @@ import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.XposedApp;
 import org.meowcat.edxposed.manager.util.CompileUtil;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -42,11 +47,14 @@ public class AppHelper {
     private static final String WHITE_LIST_PATH = "conf/whitelist/";
     private static final String BLACK_LIST_PATH = "conf/blacklist/";
     private static final String COMPAT_LIST_PATH = "conf/compatlist/";
+    private static final String SCOPE_LIST_PATH = "conf/%s.conf";
     private static final String WHITE_LIST_MODE = "conf/usewhitelist";
     private static final String BLACK_LIST_MODE = "conf/blackwhitelist";
 
     private static final List<String> FORCE_WHITE_LIST = new ArrayList<>(XposedApp.isEnhancementEnabled() ? Arrays.asList(BuildConfig.APPLICATION_ID, "android") : Collections.singletonList(BuildConfig.APPLICATION_ID));
     public static List<String> FORCE_WHITE_LIST_MODULE = new ArrayList<>(FORCE_WHITE_LIST);
+
+    private static final HashMap<String, List<String>> scopeList = new HashMap<>();
 
     @SuppressWarnings("OctalInteger")
     static void makeSurePath() {
@@ -330,5 +338,40 @@ public class AppHelper {
 
     static boolean removeCompatList(String packageName) {
         return compatListFileName(packageName, false);
+    }
+
+    static List<String> getScopeList(String modulePackageName) {
+        if (scopeList.containsKey(modulePackageName)) {
+            return scopeList.get(modulePackageName);
+        }
+        File file = new File(BASE_PATH + String.format(SCOPE_LIST_PATH, modulePackageName));
+        List<String> s = new ArrayList<>();
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+            for (String line; (line = bufferedReader.readLine()) != null; ) {
+                s.add(line);
+            }
+            scopeList.put(modulePackageName, s);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return s;
+    }
+
+    static boolean saveScopeList(String modulePackageName, List<String> list) {
+        File file = new File(BASE_PATH + String.format(SCOPE_LIST_PATH, modulePackageName));
+        try {
+            PrintWriter pr = new PrintWriter(new FileWriter(file));
+            for (String line : list) {
+                pr.println(line);
+            }
+            pr.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        scopeList.put(modulePackageName, list);
+        setFilePermissionsFromMode(file.getPath(), Context.MODE_WORLD_READABLE);
+        return true;
     }
 }
