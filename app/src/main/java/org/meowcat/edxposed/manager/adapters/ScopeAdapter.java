@@ -12,7 +12,7 @@ import java.util.List;
 
 public class ScopeAdapter extends AppAdapter {
 
-    private final String modulePackageName;
+    protected final String modulePackageName;
     private List<String> checkedList;
 
     public ScopeAdapter(Context context, String modulePackageName) {

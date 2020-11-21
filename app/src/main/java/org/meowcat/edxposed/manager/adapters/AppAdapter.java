@@ -66,33 +66,35 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
     }
 
     private void loadApps() {
-        boolean onlyInAppList = this instanceof ScopeAdapter;
         fullList = pm.getInstalledApplications(PackageManager.GET_META_DATA);
         List<ApplicationInfo> rmList = new ArrayList<>();
-        if (!XposedApp.getPreferences().getBoolean("show_modules", true) || onlyInAppList) {
-            for (ApplicationInfo info : fullList) {
+        for (ApplicationInfo info : fullList) {
+            if (!XposedApp.getPreferences().getBoolean("show_modules", true)) {
                 if (info.metaData != null && info.metaData.containsKey("xposedmodule") || AppHelper.FORCE_WHITE_LIST_MODULE.contains(info.packageName)) {
+                    rmList.add(info);
+                    continue;
+                }
+            }
+            if (this instanceof ScopeAdapter) {
+                if (AppHelper.isBlackListMode()) {
+                    if (AppHelper.isWhiteListMode()) {
+                        List<String> whiteList = AppHelper.getWhiteList();
+                        if (!whiteList.contains(info.packageName)) {
+                            rmList.add(info);
+                            continue;
+                        }
+                    } else {
+                        List<String> blackList = AppHelper.getBlackList();
+                        if (blackList.contains(info.packageName)) {
+                            rmList.add(info);
+                            continue;
+                        }
+                    }
+                }
+                if (info.packageName.equals(((ScopeAdapter) this).modulePackageName)) {
                     rmList.add(info);
                 }
             }
-        }
-        if (onlyInAppList && AppHelper.isBlackListMode()) {
-            if (AppHelper.isWhiteListMode()) {
-                List<String> whiteList = AppHelper.getWhiteList();
-                for (ApplicationInfo info : fullList) {
-                    if (!whiteList.contains(info.packageName)) {
-                        rmList.add(info);
-                    }
-                }
-            } else {
-                List<String> blackList = AppHelper.getBlackList();
-                for (ApplicationInfo info : fullList) {
-                    if (blackList.contains(info.packageName)) {
-                        rmList.add(info);
-                    }
-                }
-            }
-
         }
         if (rmList.size() > 0) {
             fullList.removeAll(rmList);
