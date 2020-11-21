@@ -377,7 +377,7 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
 
             HeaderViewHolder(View view) {
                 super(view);
-                title = findViewById(android.R.id.title);
+                title = view.findViewById(android.R.id.title);
             }
         }
     }
