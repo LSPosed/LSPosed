@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.FileUtils;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -29,6 +28,7 @@ import com.topjohnwu.superuser.Shell;
 import org.meowcat.edxposed.manager.adapters.AppHelper;
 import org.meowcat.edxposed.manager.adapters.BlackListAdapter;
 import org.meowcat.edxposed.manager.databinding.ActivitySettingsBinding;
+import org.meowcat.edxposed.manager.util.FileUtils;
 import org.meowcat.edxposed.manager.util.RepoLoader;
 import org.meowcat.edxposed.manager.widget.IntegerListPreference;
 
@@ -137,7 +137,7 @@ public class SettingsActivity extends BaseActivity {
             if ((Context.MODE_WORLD_READABLE & MODE_WORLD_WRITEABLE) != 0) {
                 perms |= FileUtils.S_IWOTH;
             }
-            FileUtils.setPermissions(name, perms, -1, -1);
+            FileUtils.setPermissions(name, perms);
         }
 
         @SuppressLint({"ObsoleteSdkInt", "WorldReadableFiles"})

@@ -10,7 +10,6 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.FileUtils;
 import android.os.Handler;
 import android.util.Log;
 
@@ -21,6 +20,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import org.meowcat.edxposed.manager.adapters.AppHelper;
 import org.meowcat.edxposed.manager.receivers.PackageChangeReceiver;
+import org.meowcat.edxposed.manager.util.FileUtils;
 import org.meowcat.edxposed.manager.util.ModuleUtil;
 import org.meowcat.edxposed.manager.util.NotificationUtil;
 import org.meowcat.edxposed.manager.util.RepoLoader;
@@ -80,7 +80,7 @@ public class XposedApp extends de.robv.android.xposed.installer.XposedApp implem
         dir = BASE_DIR + dir;
         //noinspection ResultOfMethodCallIgnored
         new File(dir).mkdir();
-        FileUtils.setPermissions(dir, permissions, -1, -1);
+        FileUtils.setPermissions(dir, permissions);
     }
 
     public void onCreate() {
@@ -170,7 +170,7 @@ public class XposedApp extends de.robv.android.xposed.installer.XposedApp implem
     @SuppressWarnings({"JavaReflectionMemberAccess", "OctalInteger"})
     @SuppressLint({"PrivateApi", "NewApi"})
     private void createDirectories() {
-        FileUtils.setPermissions(BASE_DIR, 00777, -1, -1);
+        FileUtils.setPermissions(BASE_DIR, 00777);
         mkdirAndChmod("conf", 00777);
         mkdirAndChmod("log", 00777);
 
@@ -228,7 +228,7 @@ public class XposedApp extends de.robv.android.xposed.installer.XposedApp implem
     }
 
     @Override
-    public synchronized void onActivityPaused(Activity activity) {
+    public synchronized void onActivityPaused(@NonNull Activity activity) {
         currentActivity = null;
     }
 

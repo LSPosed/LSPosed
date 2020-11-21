@@ -9,7 +9,6 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.os.FileUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -41,7 +40,7 @@ public final class ModuleUtil {
     private final PackageManager pm;
     private final String frameworkPackageName;
     private final List<ModuleListener> listeners = new CopyOnWriteArrayList<>();
-    private SharedPreferences pref;
+    private final SharedPreferences pref;
     //private InstalledModule framework = null;
     private Map<String, InstalledModule> installedModules;
     private boolean isReloading = false;
@@ -251,8 +250,8 @@ public final class ModuleUtil {
             modulesList.close();
             enabledModulesList.close();
 
-            FileUtils.setPermissions(MODULES_LIST_FILE, 00664, -1, -1);
-            FileUtils.setPermissions(XposedApp.ENABLED_MODULES_LIST_FILE, 00664, -1, -1);
+            FileUtils.setPermissions(MODULES_LIST_FILE, 00664);
+            FileUtils.setPermissions(XposedApp.ENABLED_MODULES_LIST_FILE, 00664);
 
             if (showToast) {
                 if (binding != null) {
@@ -315,8 +314,6 @@ public final class ModuleUtil {
         public ApplicationInfo app;
         private String appName; // loaded lazyily
         private String description; // loaded lazyily
-
-        private Drawable.ConstantState iconCache = null;
 
         private InstalledModule(PackageInfo pkg, boolean isFramework) {
             this.app = pkg.applicationInfo;
@@ -384,7 +381,7 @@ public final class ModuleUtil {
             return (version != null) && version.code > versionCode;
         }
 
-        public Bitmap getIcon(Context context) {
+        public Bitmap getIcon() {
             return XposedApp.getInstance().getAppIconLoader().loadIcon(app, false);
         }
 
