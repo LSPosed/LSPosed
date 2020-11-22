@@ -2,6 +2,7 @@ package org.meowcat.edxposed.manager.adapters;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.text.TextUtils;
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.meowcat.edxposed.manager.App;
 import org.meowcat.edxposed.manager.R;
+import org.meowcat.edxposed.manager.util.GlideApp;
 import org.meowcat.edxposed.manager.util.InstallApkUtil;
 
 import java.text.DateFormat;
@@ -190,13 +192,16 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ApplicationInfo info = showList.get(position);
-        holder.appIcon.setImageBitmap(App.getInstance().getAppIconLoader().loadIcon(info, false));
         holder.appName.setText(InstallApkUtil.getAppLabel(info, pm));
         try {
-            holder.appVersion.setText(pm.getPackageInfo(info.packageName, 0).versionName);
+            PackageInfo packageInfo = pm.getPackageInfo(info.packageName, 0);
+            GlideApp.with(holder.appIcon)
+                    .load(packageInfo)
+                    .into(holder.appIcon);
+            holder.appVersion.setText(packageInfo.versionName);
             holder.appVersion.setSelected(true);
-            String creationDate = dateformat.format(new Date(pm.getPackageInfo(info.packageName, 0).firstInstallTime));
-            String updateDate = dateformat.format(new Date(pm.getPackageInfo(info.packageName, 0).lastUpdateTime));
+            String creationDate = dateformat.format(new Date(packageInfo.firstInstallTime));
+            String updateDate = dateformat.format(new Date(packageInfo.lastUpdateTime));
             holder.timestamps.setText(holder.itemView.getContext().getString(R.string.install_timestamps, creationDate, updateDate));
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();

@@ -8,9 +8,12 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.TooltipCompat;
 import androidx.core.content.ContextCompat;
 
+import com.bumptech.glide.Glide;
+
 import org.meowcat.edxposed.manager.adapters.AppHelper;
 import org.meowcat.edxposed.manager.adapters.BlackListAdapter;
 import org.meowcat.edxposed.manager.databinding.ActivityMainBinding;
+import org.meowcat.edxposed.manager.util.GlideHelper;
 import org.meowcat.edxposed.manager.util.ModuleUtil;
 import org.meowcat.edxposed.manager.util.RepoLoader;
 import org.meowcat.edxposed.manager.util.light.Light;
@@ -78,7 +81,9 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
             appMenu.setOnMenuItemClickListener(this::onOptionsItemSelected);
             appMenu.show();
         });
-        binding.appIcon.setImageBitmap(App.getInstance().getAppIconLoader().loadIcon(getApplicationInfo(), false));
+        Glide.with(binding.appIcon)
+                .load(GlideHelper.wrapApplicationInfoForIconLoader(getApplicationInfo()))
+                .into(binding.appIcon);
         String installedXposedVersion;
         try {
             installedXposedVersion = App.getXposedProp().getVersion();

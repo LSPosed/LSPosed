@@ -6,7 +6,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.graphics.Bitmap;
 import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
@@ -311,11 +310,13 @@ public final class ModuleUtil {
         public final long updateTime;
         final boolean isFramework;
         public ApplicationInfo app;
+        public PackageInfo pkg;
         private String appName; // loaded lazyily
         private String description; // loaded lazyily
 
         private InstalledModule(PackageInfo pkg, boolean isFramework) {
             this.app = pkg.applicationInfo;
+            this.pkg = pkg;
             this.packageName = pkg.packageName;
             this.isFramework = isFramework;
             this.versionName = pkg.versionName;
@@ -380,8 +381,8 @@ public final class ModuleUtil {
             return (version != null) && version.code > versionCode;
         }
 
-        public Bitmap getIcon() {
-            return App.getInstance().getAppIconLoader().loadIcon(app, false);
+        public PackageInfo getPackageInfo() {
+            return pkg;
         }
 
         @NonNull

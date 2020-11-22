@@ -22,7 +22,6 @@ import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -32,6 +31,7 @@ import org.meowcat.edxposed.manager.repo.Module;
 import org.meowcat.edxposed.manager.repo.ModuleVersion;
 import org.meowcat.edxposed.manager.repo.ReleaseType;
 import org.meowcat.edxposed.manager.repo.RepoDb;
+import org.meowcat.edxposed.manager.util.GlideApp;
 import org.meowcat.edxposed.manager.util.InstallApkUtil;
 import org.meowcat.edxposed.manager.util.LinearLayoutManagerFix;
 import org.meowcat.edxposed.manager.util.ModuleUtil;
@@ -547,7 +547,9 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             String updateDate = dateformat.format(new Date(item.updateTime));
             holder.timestamps.setText(getString(R.string.install_timestamps, creationDate, updateDate));
 
-            holder.appIcon.setImageBitmap(item.getIcon());
+            GlideApp.with(holder.appIcon)
+                    .load(item.getPackageInfo())
+                    .into(holder.appIcon);
 
             TextView descriptionText = holder.appDescription;
             descriptionText.setVisibility(View.VISIBLE);

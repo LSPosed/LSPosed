@@ -63,6 +63,7 @@ android {
 }
 
 dependencies {
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.browser:browser:1.2.0'
@@ -76,8 +77,8 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.takisoft.preferencex:preferencex:1.1.0'
     implementation 'com.takisoft.preferencex:preferencex-colorpicker:1.1.0'
-    implementation 'tech.rectifier.preferencex-android:preferencex-simplemenu:88f93154b2'
     implementation 'com.timehop.stickyheadersrecyclerview:library:0.4.3@aar'
-    implementation 'me.zhanghai.android.appiconloader:appiconloader:1.2.0'
+    implementation 'tech.rectifier.preferencex-android:preferencex-simplemenu:88f93154b2'
+    implementation 'me.zhanghai.android.appiconloader:appiconloader-glide:1.2.0'
     compileOnly 'de.robv.android.xposed:api:82'
 }

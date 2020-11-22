@@ -8,10 +8,12 @@ import android.view.View;
 import androidx.appcompat.app.ActionBar;
 import androidx.core.text.HtmlCompat;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.meowcat.edxposed.manager.databinding.ActivityAboutBinding;
+import org.meowcat.edxposed.manager.util.GlideHelper;
 import org.meowcat.edxposed.manager.util.NavUtil;
 
 public class AboutActivity extends BaseActivity {
@@ -64,7 +66,9 @@ public class AboutActivity extends BaseActivity {
             binding.translatorsView.setVisibility(View.GONE);
         }
 
-        binding.appIcon.setImageBitmap(App.getInstance().getAppIconLoader().loadIcon(getApplicationInfo(), false));
+        Glide.with(binding.appIcon)
+                .load(GlideHelper.wrapApplicationInfoForIconLoader(getApplicationInfo()))
+                .into(binding.appIcon);
     }
 
     void setupView(View v, final int url) {
