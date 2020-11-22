@@ -21,6 +21,7 @@ import org.meowcat.edxposed.manager.adapters.AppHelper;
 import org.meowcat.edxposed.manager.adapters.BlackListAdapter;
 import org.meowcat.edxposed.manager.adapters.CompatListAdapter;
 import org.meowcat.edxposed.manager.databinding.ActivityBlackListBinding;
+import org.meowcat.edxposed.manager.util.LinearLayoutManagerFix;
 
 public class BlackListActivity extends BaseActivity implements AppAdapter.Callback {
     private SearchView searchView;
@@ -54,7 +55,7 @@ public class BlackListActivity extends BaseActivity implements AppAdapter.Callba
         appAdapter = isCompat ? new CompatListAdapter(this) : new BlackListAdapter(this, isWhiteListMode);
         appAdapter.setHasStableIds(true);
         binding.recyclerView.setAdapter(appAdapter);
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerView.setLayoutManager(new LinearLayoutManagerFix(this));
         if (!App.getPreferences().getBoolean("md2", false)) {
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
                     DividerItemDecoration.VERTICAL);

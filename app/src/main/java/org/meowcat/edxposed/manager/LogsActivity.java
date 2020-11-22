@@ -28,6 +28,7 @@ import com.google.android.material.tabs.TabLayout;
 import org.meowcat.edxposed.manager.databinding.ActivityLogsBinding;
 import org.meowcat.edxposed.manager.databinding.DialogInstallWarningBinding;
 import org.meowcat.edxposed.manager.databinding.ItemLogBinding;
+import org.meowcat.edxposed.manager.util.LinearLayoutManagerFix;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -78,7 +79,7 @@ public class LogsActivity extends BaseActivity {
         }
         adapter = new LogsAdapter();
         binding.recyclerView.setAdapter(adapter);
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerView.setLayoutManager(new LinearLayoutManagerFix(this));
         if (App.getPreferences().getBoolean("disable_verbose_log", false)) {
             binding.slidingTabs.setVisibility(View.GONE);
         }

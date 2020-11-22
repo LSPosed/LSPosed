@@ -35,6 +35,7 @@ import org.meowcat.edxposed.manager.databinding.ActivityDownloadBinding;
 import org.meowcat.edxposed.manager.databinding.ItemDownloadBinding;
 import org.meowcat.edxposed.manager.repo.RepoDb;
 import org.meowcat.edxposed.manager.repo.RepoDbDefinitions;
+import org.meowcat.edxposed.manager.util.LinearLayoutManagerFix;
 import org.meowcat.edxposed.manager.util.ModuleUtil;
 import org.meowcat.edxposed.manager.util.RepoLoader;
 
@@ -95,7 +96,7 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
         moduleUtil.addListener(this);
         binding.recyclerView.setAdapter(adapter);
 
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerView.setLayoutManager(new LinearLayoutManagerFix(this));
         StickyRecyclerHeadersDecoration headersDecor = new StickyRecyclerHeadersDecoration(adapter);
         binding.recyclerView.addItemDecoration(headersDecor);
         adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {

@@ -33,6 +33,7 @@ import org.meowcat.edxposed.manager.repo.ModuleVersion;
 import org.meowcat.edxposed.manager.repo.ReleaseType;
 import org.meowcat.edxposed.manager.repo.RepoDb;
 import org.meowcat.edxposed.manager.util.InstallApkUtil;
+import org.meowcat.edxposed.manager.util.LinearLayoutManagerFix;
 import org.meowcat.edxposed.manager.util.ModuleUtil;
 import org.meowcat.edxposed.manager.util.NavUtil;
 import org.meowcat.edxposed.manager.util.RepoLoader;
@@ -196,7 +197,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         adapter.setHasStableIds(true);
         moduleUtil.addListener(this);
         binding.recyclerView.setAdapter(adapter);
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerView.setLayoutManager(new LinearLayoutManagerFix(this));
         if (!App.getPreferences().getBoolean("md2", false)) {
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
                     DividerItemDecoration.VERTICAL);

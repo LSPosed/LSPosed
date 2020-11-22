@@ -17,6 +17,7 @@ import org.meowcat.edxposed.manager.adapters.AppAdapter;
 import org.meowcat.edxposed.manager.adapters.AppHelper;
 import org.meowcat.edxposed.manager.adapters.ScopeAdapter;
 import org.meowcat.edxposed.manager.databinding.ActivityScopeListBinding;
+import org.meowcat.edxposed.manager.util.LinearLayoutManagerFix;
 
 public class ModuleScopeActivity extends BaseActivity implements AppAdapter.Callback {
     private SearchView searchView;
@@ -50,7 +51,7 @@ public class ModuleScopeActivity extends BaseActivity implements AppAdapter.Call
         appAdapter = new ScopeAdapter(this, modulePackageName, binding.masterSwitch);
         appAdapter.setHasStableIds(true);
         binding.recyclerView.setAdapter(appAdapter);
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerView.setLayoutManager(new LinearLayoutManagerFix(this));
         if (!App.getPreferences().getBoolean("md2", false)) {
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
                     DividerItemDecoration.VERTICAL);
