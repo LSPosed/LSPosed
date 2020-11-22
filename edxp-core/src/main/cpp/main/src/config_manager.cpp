@@ -203,7 +203,8 @@ namespace edxp {
             auto &scope = modules_list_.back().second;
             std::string app_pkg_name;
             while (std::getline(ifs_c, app_pkg_name)) {
-                scope.emplace(std::move(app_pkg_name));
+                if(!app_pkg_name.empty())
+                    scope.emplace(std::move(app_pkg_name));
             }
             scope.insert(module_pkg_name); // Always add module itself
             LOGD("scope of %s is:\n%s", module_pkg_name.c_str(), ([&scope]() {
@@ -222,7 +223,7 @@ namespace edxp {
         for (const auto&[module, scope]: modules_list_) {
             if (scope.empty() || scope.count(pkg_name)) app_modules_list_.push_back(module);
         }
-        return !app_modules_list_.empty();
+        return !app_modules_list_.empty() || pkg_name == installer_pkg_name_;
     }
 
 }
