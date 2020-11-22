@@ -20,6 +20,7 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+-dontoptimize
 -dontobfuscate
 -keep class de.robv.android.xposed.** {*;}
 -keep class android.** { *; }
