@@ -353,6 +353,9 @@ public class AppHelper {
     @SuppressLint("WorldReadableFiles")
     static boolean saveScopeList(String modulePackageName, List<String> list) {
         File file = new File(BASE_PATH + String.format(SCOPE_LIST_PATH, modulePackageName));
+        if (list.size() == 0) {
+            return file.delete();
+        }
         try {
             PrintWriter pr = new PrintWriter(new FileWriter(file));
             for (String line : list) {
