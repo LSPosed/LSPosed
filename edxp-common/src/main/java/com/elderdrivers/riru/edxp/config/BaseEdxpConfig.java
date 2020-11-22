@@ -29,11 +29,6 @@ public class BaseEdxpConfig implements EdxpConfig {
     }
 
     @Override
-    public boolean isDynamicModulesMode() {
-        return ConfigManager.isDynamicModulesEnabled();
-    }
-
-    @Override
     public boolean isResourcesHookEnabled() {
         return ConfigManager.isResourcesHookEnabled();
     }

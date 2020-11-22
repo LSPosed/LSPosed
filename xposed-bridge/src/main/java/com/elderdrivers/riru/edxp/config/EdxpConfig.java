@@ -12,8 +12,6 @@ public interface EdxpConfig {
 
     String getLibSandHookName();
 
-    boolean isDynamicModulesMode();
-
     boolean isNoModuleLogEnabled();
 
     boolean isResourcesHookEnabled();

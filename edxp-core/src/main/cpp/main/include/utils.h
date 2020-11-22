@@ -5,6 +5,7 @@
 
 #include <string>
 #include <filesystem>
+#include <sys/system_properties.h>
 #include "logging.h"
 #include <sys/system_properties.h>
 
@@ -20,12 +21,19 @@ namespace edxp {
         return {str, size};
     }
 
-    inline bool path_exists(const std::filesystem::path &path) {
+    inline bool path_exists(const std::filesystem::path &path, bool quite = false) {
         try {
             return std::filesystem::exists(path);
         } catch (const std::filesystem::filesystem_error &e) {
-            LOGE("%s", e.what());
+            if (!quite)
+                LOGE("%s", e.what());
             return false;
         }
+    }
+
+    static inline int32_t GetAndroidApiLevel() {
+        char prop_value[PROP_VALUE_MAX];
+        __system_property_get("ro.build.version.sdk", prop_value);
+        return std::atoi(prop_value);
     }
 }

@@ -231,13 +231,15 @@ namespace edxp {
                                          jint runtime_flags, jobjectArray rlimits,
                                          jlong permitted_capabilities,
                                          jlong effective_capabilities) {
-        ConfigManager::GetInstance()->UpdateModuleList(); // I don't think we need this, but anyway
+        ConfigManager::SetCurrentUser(0u);
+        app_modules_list_ = ConfigManager::GetInstance()->GetAppModuleList(
+                "android"); // I don't think we need this, but anyway
         skip_ = false;
-        if (!ConfigManager::GetInstance()->IsAppNeedHook(0, "android")) {
+        if (!ConfigManager::GetInstance()->IsAppNeedHook("android")) {
             skip_ = true;
             LOGD("skip injecting xposed into android because it's whitelisted/blacklisted");
         }
-        if (!skip_ && !ConfigManager::GetInstance()->UpdateAppModuleList(0, "android")) {
+        if (!skip_ && app_modules_list_.empty()) {
             skip_ = true;
             LOGD("skip injecting into android because no module hooks it");
         }
@@ -265,7 +267,7 @@ namespace edxp {
                 // only do work in child since FindAndCall would print log
                 FindAndCall(env, "forkSystemServerPost", "(I)V", res);
             } else {
-                auto config_manager = ConfigManager::ReleaseInstance();
+                auto config_managers = ConfigManager::ReleaseInstances();
                 auto context = Context::ReleaseInstance();
                 LOGD("skipped android");
             }
@@ -298,12 +300,12 @@ namespace edxp {
         return {true, uid, package_name};
     }
 
-    bool Context::ShouldSkipInject(JNIEnv *env, jstring nice_name, jstring data_dir, jint uid,
-                                   jboolean is_child_zygote) {
+    bool Context::ShouldSkipInject(const std::string &package_name, uid_t user, uid_t uid,
+                                   bool info_res, const std::vector<std::string> &app_modules_list_,
+                                   bool is_child_zygote) {
         const auto app_id = uid % PER_USER_RANGE;
-        const auto&[res, user, package_name] = GetAppInfoFromDir(env, data_dir);
         bool skip = false;
-        if (!res) {
+        if (!info_res) {
             LOGW("skip injecting into %s because it has no data dir", package_name.c_str());
             skip = true;
         }
@@ -320,13 +322,14 @@ namespace edxp {
             LOGW("skip injecting into %s because it's isolated", package_name.c_str());
         }
 
-        if (!skip && !ConfigManager::GetInstance()->IsAppNeedHook(user, package_name)) {
+        if (!skip && !ConfigManager::GetInstance()->IsAppNeedHook(package_name)) {
             skip = true;
             LOGW("skip injecting xposed into %s because it's whitelisted/blacklisted",
                  package_name.c_str());
         }
 
-        if (!skip && !ConfigManager::GetInstance()->UpdateAppModuleList(user, package_name)) {
+        if (!skip && app_modules_list_.empty() &&
+            package_name != ConfigManager::GetInstance()->GetInstallerPackageName()) {
             skip = true;
             LOGD("skip injecting xposed into %s because no module hooks it",
                  package_name.c_str());
@@ -347,10 +350,10 @@ namespace edxp {
                                                jboolean is_child_zygote,
                                                jstring instruction_set,
                                                jstring app_data_dir) {
-        ConfigManager::GetInstance()->UpdateModuleList();
-        skip_ = ShouldSkipInject(env, nice_name, app_data_dir, uid,
-                                 is_child_zygote);
-        const JUTFString dir(env, app_data_dir, "");
+        const auto&[res, user, package_name] = GetAppInfoFromDir(env, app_data_dir);
+        ConfigManager::SetCurrentUser(user);
+        app_modules_list_ = ConfigManager::GetInstance()->GetAppModuleList(package_name);
+        skip_ = ShouldSkipInject(package_name, user, uid, res, app_modules_list_, is_child_zygote);
         app_data_dir_ = app_data_dir;
         nice_name_ = nice_name;
         PreLoadDex(env, kInjectDexPath);
@@ -369,7 +372,7 @@ namespace edxp {
                             res, app_data_dir_, nice_name_);
                 LOGD("injected xposed into %s", process_name.get());
             } else {
-                auto config_manager = ConfigManager::ReleaseInstance();
+                auto config_manager = ConfigManager::ReleaseInstances();
                 auto context = Context::ReleaseInstance();
                 LOGD("skipped %s", process_name.get());
             }

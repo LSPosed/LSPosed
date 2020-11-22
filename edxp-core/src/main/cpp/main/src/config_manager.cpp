@@ -25,12 +25,12 @@ namespace edxp {
 
     std::string ConfigManager::RetrieveInstallerPkgName() const {
         std::string data_test_path = data_path_prefix_ / kPrimaryInstallerPkgName;
-        if (path_exists(data_test_path)) {
+        if (path_exists(data_test_path, true)) {
             LOGI("using installer %s", kPrimaryInstallerPkgName.c_str());
             return kPrimaryInstallerPkgName;
         }
         data_test_path = data_path_prefix_ / kLegacyInstallerPkgName;
-        if (path_exists(data_test_path)) {
+        if (path_exists(data_test_path, true)) {
             LOGI("using installer %s", kLegacyInstallerPkgName.c_str());
             return kLegacyInstallerPkgName;
         }
@@ -39,69 +39,14 @@ namespace edxp {
         return kPrimaryInstallerPkgName;
     }
 
-    void ConfigManager::SnapshotBlackWhiteList() {
-        white_list_default_.clear();
-        black_list_default_.clear();
-        try {
-            for (auto &item: fs::directory_iterator(whitelist_path_)) {
-                if (item.is_regular_file()) {
-                    const auto &file_name = item.path().filename();
-                    LOGI("  whitelist: %s", file_name.c_str());
-                    white_list_default_.emplace(file_name);
-                }
+    std::unordered_set<std::string> ConfigManager::GetAppList(const fs::path &dir) {
+        std::unordered_set<std::string> set;
+        for (auto &item: fs::directory_iterator(dir)) {
+            if (item.is_regular_file()) {
+                set.emplace(item.path().filename());
             }
-            for (auto &item: fs::directory_iterator(blacklist_path_)) {
-                if (item.is_regular_file()) {
-                    const auto &file_name = item.path().filename();
-                    LOGI("  blacklist: %s", file_name.c_str());
-                    black_list_default_.emplace(file_name);
-                }
-            }
-        } catch (const fs::filesystem_error &e) {
-            LOGE("%s", e.what());
         }
-    }
-
-    void ConfigManager::UpdateConfigPath(const uid_t user) {
-        if (LIKELY(last_user_ == user && instance_)) return;
-
-        LOGI("updating config data paths from %u to %u...", last_user_, user);
-        last_user_ = user;
-
-        data_path_prefix_ = use_prot_storage_ ? "/data/user_de" : "/data/user";
-        data_path_prefix_ /= std::to_string(last_user_);
-
-        installer_pkg_name_ = RetrieveInstallerPkgName();
-        base_config_path_ = GetConfigPath("");
-        blacklist_path_ = GetConfigPath("blacklist/");
-        whitelist_path_ = GetConfigPath("whitelist/");
-        use_whitelist_path_ = GetConfigPath("usewhitelist");
-
-        dynamic_modules_enabled_ = path_exists(GetConfigPath("dynamicmodules"));
-        black_white_list_enabled_ = path_exists(GetConfigPath("blackwhitelist"));
-        deopt_boot_image_enabled_ = path_exists(GetConfigPath("deoptbootimage"));
-        resources_hook_enabled_ = path_exists(GetConfigPath("enable_resources"));
-        no_module_log_enabled_ = path_exists(GetConfigPath("disable_modules_log"));
-        hidden_api_bypass_enabled_ =
-                !path_exists(GetConfigPath("disable_hidden_api_bypass"));
-        modules_list_.clear();
-        app_modules_list_.clear();
-
-        UpdateModuleList();
-
-        // use_white_list snapshot
-        use_white_list_snapshot_ = path_exists(use_whitelist_path_);
-        LOGI("data path prefix: %s", data_path_prefix_.c_str());
-        LOGI("  application list mode: %s", BoolToString(black_white_list_enabled_));
-        LOGI("    using whitelist: %s", BoolToString(use_white_list_snapshot_));
-        LOGI("  dynamic modules mode: %s", BoolToString(dynamic_modules_enabled_));
-        LOGI("  resources hook: %s", BoolToString(resources_hook_enabled_));
-        LOGI("  deopt boot image: %s", BoolToString(deopt_boot_image_enabled_));
-        LOGI("  no module log: %s", BoolToString(no_module_log_enabled_));
-        LOGI("  hidden api bypass: %s", BoolToString(hidden_api_bypass_enabled_));
-        if (black_white_list_enabled_) {
-            SnapshotBlackWhiteList();
-        }
+        return set;
     }
 
     std::string ConfigManager::GetPackageNameFromBaseApkPath(const fs::path &path) {
@@ -117,85 +62,71 @@ namespace edxp {
     }
 
     // TODO ignore unrelated processes
-    bool ConfigManager::IsAppNeedHook(const uid_t user, const std::string &package_name) {
-        // zygote always starts with `uid == 0` and then fork into different user.
-        // so we have to check if we are the correct user or not.
-        UpdateConfigPath(user);
+    bool ConfigManager::IsAppNeedHook(const std::string &package_name) const {
+        if (!black_list_enable_ && !white_list_enable_) {
+            return true;
+        }
 
-        if (!black_white_list_enabled_) {
+        if (package_name == installer_pkg_name_) {
             return true;
         }
-        bool can_access_app_data = path_exists(base_config_path_);
-        bool use_white_list;
-        if (can_access_app_data) {
-            use_white_list = path_exists(use_whitelist_path_);
-        } else {
-            LOGE("can't access config path, using snapshot use_white_list: %s",
-                 package_name.c_str());
-            use_white_list = use_white_list_snapshot_;
-        }
-        if (package_name == kPrimaryInstallerPkgName
-            || package_name == kLegacyInstallerPkgName) {
-            // always hook installer apps
-            return true;
-        }
-        if (use_white_list) {
-            if (!can_access_app_data) {
-                LOGE("can't access config path, using snapshot white list: %s",
-                     package_name.c_str());
-                return white_list_default_.count(package_name);
-            }
-            std::string target_path = whitelist_path_ / package_name;
-            bool res = path_exists(target_path);
+
+        if (white_list_enable_) {
+            auto res = white_list_.count(package_name);
             LOGD("using whitelist, %s -> %d", package_name.c_str(), res);
             return res;
         } else {
-            if (!can_access_app_data) {
-                LOGE("can't access config path, using snapshot black list: %s",
-                     package_name.c_str());
-                return black_list_default_.count(package_name) == 0;
-            }
-            std::string target_path = blacklist_path_ / package_name;
-            bool res = !path_exists(target_path);
+            auto res = black_list_.count(package_name);
             LOGD("using blacklist, %s -> %d", package_name.c_str(), res);
             return res;
         }
     }
 
-    ConfigManager::ConfigManager() {
-        use_prot_storage_ = GetAndroidApiLevel() >= __ANDROID_API_N__;
-        last_user_ = 0;
-        UpdateConfigPath(last_user_);
+    ConfigManager::ConfigManager(uid_t user) :
+            user_(user),
+            data_path_prefix_(fs::path(use_prot_storage_ ? "/data/user_de" : "/data/user") /
+                              std::to_string(user_)),
+            installer_pkg_name_(RetrieveInstallerPkgName()),
+            black_list_enable_(path_exists(GetConfigPath("blacklist"))),
+            white_list_enable_(path_exists(GetConfigPath("whiltelist"))),
+            deopt_boot_image_enabled_(path_exists(GetConfigPath("deoptbootimage"))),
+            no_module_log_enabled_(path_exists(GetConfigPath("disable_modules_log"))),
+            resources_hook_enabled_(path_exists(GetConfigPath("enable_resources"))),
+            hidden_api_bypass_enabled_(!path_exists(GetConfigPath("disable_hidden_api_bypass"))),
+            white_list_(white_list_enable_ ? GetAppList(GetConfigPath("whitelist/"))
+                                           : std::unordered_set<std::string>{}),
+            black_list_(black_list_enable_ ? GetAppList(GetConfigPath("blacklist/"))
+                                           : std::unordered_set<std::string>{}),
+            modules_list_(GetModuleList()),
+            last_write_time_(GetLastWriteTime()){
+        // use_white_list snapshot
+        LOGI("data path prefix: %s", data_path_prefix_.c_str());
+        LOGI("  using blacklist: %s", BoolToString(black_list_enable_));
+        LOGI("  using whitelist: %s", BoolToString(white_list_enable_));
+        LOGI("  resources hook: %s", BoolToString(resources_hook_enabled_));
+        LOGI("  deopt boot image: %s", BoolToString(deopt_boot_image_enabled_));
+        LOGI("  no module log: %s", BoolToString(no_module_log_enabled_));
+        LOGI("  hidden api bypass: %s", BoolToString(hidden_api_bypass_enabled_));
     }
 
-    bool ConfigManager::UpdateModuleList() {
-        if (LIKELY(!modules_list_.empty()) && !IsDynamicModulesEnabled())
-            return true;
-        modules_list_.clear();
+    auto ConfigManager::GetModuleList() -> std::remove_const_t<decltype(modules_list_)> {
+        std::remove_const_t<decltype(modules_list_)> modules_list;
         auto global_modules_list = GetConfigPath("modules.list");
         if (!path_exists(global_modules_list)) {
             LOGE("Cannot access path %s", global_modules_list.c_str());
-            return false;
+            return modules_list;
         }
-
-        if (auto last_write_time = fs::last_write_time(global_modules_list);
-                LIKELY(last_write_time < last_write_time_)) {
-            return true;
-        } else {
-            last_write_time_ = last_write_time;
-        }
-
         std::ifstream ifs(global_modules_list);
         if (!ifs.good()) {
             LOGE("Cannot access path %s", global_modules_list.c_str());
-            return false;
+            return modules_list;
         }
         std::string module;
         while (std::getline(ifs, module)) {
             const auto &module_pkg_name = GetPackageNameFromBaseApkPath(module);
-            modules_list_.emplace_back(std::move(module), std::unordered_set<std::string>{});
+            modules_list.emplace_back(std::move(module), std::unordered_set<std::string>{});
             const auto &module_scope_conf = GetConfigPath(module_pkg_name + ".conf");
-            if (!path_exists(module_scope_conf)) {
+            if (!path_exists(module_scope_conf, true)) {
                 LOGD("module scope is not set for %s", module_pkg_name.c_str());
                 continue;
             }
@@ -204,7 +135,7 @@ namespace edxp {
                 LOGE("Cannot access path %s", module_scope_conf.c_str());
                 continue;
             }
-            auto &scope = modules_list_.back().second;
+            auto &scope = modules_list.back().second;
             std::string app_pkg_name;
             while (std::getline(ifs_c, app_pkg_name)) {
                 if (!app_pkg_name.empty())
@@ -218,16 +149,22 @@ namespace edxp {
                 return join.str();
             })().c_str());
         }
-        return true;
+        return modules_list;
     }
 
-    bool ConfigManager::UpdateAppModuleList(const uid_t user, const std::string &pkg_name) {
-        UpdateConfigPath(user);
-        app_modules_list_.clear();
+    std::vector<std::string> ConfigManager::GetAppModuleList(const std::string &pkg_name) const {
+        std::vector<std::string> app_modules_list;
         for (const auto&[module, scope]: modules_list_) {
-            if (scope.empty() || scope.count(pkg_name)) app_modules_list_.push_back(module);
+            if (scope.empty() || scope.count(pkg_name)) app_modules_list.push_back(module);
         }
-        return !app_modules_list_.empty() || pkg_name == installer_pkg_name_;
+        return app_modules_list;
+    }
+
+    std::filesystem::file_time_type ConfigManager::GetLastWriteTime() const {
+        auto dynamic_path = GetConfigPath("dynamic");
+        if (!path_exists(dynamic_path, true))
+            return {};
+        return fs::last_write_time(dynamic_path);
     }
 
 }

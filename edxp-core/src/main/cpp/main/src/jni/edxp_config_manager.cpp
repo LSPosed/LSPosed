@@ -11,10 +11,6 @@ namespace edxp {
         return (jboolean) ConfigManager::GetInstance()->IsBlackWhiteListEnabled();
     }
 
-    static jboolean ConfigManager_isDynamicModulesEnabled(JNI_START) {
-        return (jboolean) ConfigManager::GetInstance()->IsDynamicModulesEnabled();
-    }
-
     static jboolean ConfigManager_isResourcesHookEnabled(JNI_START) {
         return (jboolean) ConfigManager::GetInstance()->IsResourcesHookEnabled();
     }
@@ -52,7 +48,7 @@ namespace edxp {
     }
 
     static jstring ConfigManager_getModulesList(JNI_START) {
-        auto module_list = ConfigManager::GetInstance()->GetAppModulesList();
+        auto module_list = Context::GetInstance()->GetAppModulesList();
         std::ostringstream join;
         std::copy(module_list.begin(), module_list.end(), std::ostream_iterator<std::string>(join, "\n"));
         const auto &list = join.str();
@@ -62,7 +58,6 @@ namespace edxp {
 
     static JNINativeMethod gMethods[] = {
             NATIVE_METHOD(ConfigManager, isBlackWhiteListEnabled, "()Z"),
-            NATIVE_METHOD(ConfigManager, isDynamicModulesEnabled, "()Z"),
             NATIVE_METHOD(ConfigManager, isResourcesHookEnabled, "()Z"),
             NATIVE_METHOD(ConfigManager, isDeoptBootImageEnabled, "()Z"),
             NATIVE_METHOD(ConfigManager, isNoModuleLogEnabled, "()Z"),

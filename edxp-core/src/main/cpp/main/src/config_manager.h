@@ -10,6 +10,7 @@
 #include <unordered_set>
 #include <unordered_map>
 #include "config.h"
+#include "utils.h"
 
 namespace edxp {
 
@@ -20,19 +21,23 @@ namespace edxp {
     class ConfigManager {
     public:
         inline static ConfigManager *GetInstance() {
-            if (!instance_) {
-                instance_ = std::make_unique<ConfigManager>();
+            return instances_[current_user].get();
+        }
+
+        inline static void SetCurrentUser(uid_t user) {
+            if (auto instance = instances_.find(user);
+                    !instance->second || instance->second->NeedUpdateConfig()) {
+                instances_[user] = std::make_unique<ConfigManager>(user);
             }
-            return instance_.get();
         }
 
-        inline static std::unique_ptr<ConfigManager> ReleaseInstance() {
-            return std::move(instance_);
+        inline static auto ReleaseInstances() {
+            return std::move(instances_);
         }
 
-        inline auto IsBlackWhiteListEnabled() const { return black_white_list_enabled_; }
-
-        inline auto IsDynamicModulesEnabled() const { return dynamic_modules_enabled_; }
+        inline auto IsBlackWhiteListEnabled() const {
+            return black_list_enable_ || white_list_enable_;
+        }
 
         inline auto IsResourcesHookEnabled() const { return resources_hook_enabled_; }
 
@@ -54,52 +59,50 @@ namespace edxp {
             return data_path_prefix_ / installer_pkg_name_ / "conf" / suffix;
         }
 
-        inline auto GetAppModulesList() const { return app_modules_list_; };
+        std::vector<std::string> GetAppModuleList(const std::string &pkg_name) const;
 
-        bool UpdateAppModuleList(const uid_t user, const std::string &pkg_name);
+        bool IsAppNeedHook(const std::string &pkg_name) const;
 
-        bool IsAppNeedHook(const uid_t user, const std::string &pkg_name);
+        bool NeedUpdateConfig() const {
+            return last_write_time_ < GetLastWriteTime();
+        }
 
-        bool UpdateModuleList();
 
     private:
-        inline static std::unique_ptr<ConfigManager> instance_ = nullptr;
-        uid_t last_user_ = 0;
-        bool use_prot_storage_ = true;
-        std::filesystem::path data_path_prefix_;
-        std::filesystem::path installer_pkg_name_;
-        std::filesystem::path base_config_path_;
-        std::filesystem::path blacklist_path_;
-        std::filesystem::path whitelist_path_;
-        std::filesystem::path use_whitelist_path_;
-        bool black_white_list_enabled_ = false;
-        bool dynamic_modules_enabled_ = false;
-        bool deopt_boot_image_enabled_ = false;
-        bool no_module_log_enabled_ = false;
-        bool resources_hook_enabled_ = false;
+        inline static std::unordered_map<uid_t, std::unique_ptr<ConfigManager>> instances_{};
+        inline static uid_t current_user = 0u;
+        inline static bool use_prot_storage_ = GetAndroidApiLevel() >= __ANDROID_API_N__;
+
+        const uid_t user_;
+        const std::filesystem::path data_path_prefix_;
+        const std::filesystem::path installer_pkg_name_;
+        const bool black_list_enable_ = false;
+        const bool white_list_enable_ = false;
+        const bool deopt_boot_image_enabled_ = false;
+        const bool no_module_log_enabled_ = false;
+        const bool resources_hook_enabled_ = false;
+        const bool hidden_api_bypass_enabled_ = false;
         // snapshot at boot
-        bool use_white_list_snapshot_ = false;
-        std::unordered_set<std::string> white_list_default_;
-        std::unordered_set<std::string> black_list_default_;
-        bool hidden_api_bypass_enabled_ = false;
+        const std::unordered_set<std::string> white_list_;
+        const std::unordered_set<std::string> black_list_;
 
-        std::vector<std::pair<std::string, std::unordered_set<std::string>>> modules_list_;
+        const std::vector<std::pair<std::string, std::unordered_set<std::string>>> modules_list_;
 
-        std::vector<std::string> app_modules_list_;
+        const std::filesystem::file_time_type last_write_time_;
 
-        std::filesystem::file_time_type last_write_time_;
+        ConfigManager(uid_t uid);
 
-        ConfigManager();
-
-        void UpdateConfigPath(const uid_t user);
-
-        void SnapshotBlackWhiteList();
+        static std::unordered_set<std::string> GetAppList(const std::filesystem::path &dir);
 
         std::string RetrieveInstallerPkgName() const;
 
         static std::string GetPackageNameFromBaseApkPath(const std::filesystem::path &path);
 
-        friend std::unique_ptr<ConfigManager> std::make_unique<ConfigManager>();
+        std::remove_const_t<decltype(modules_list_)> GetModuleList();
+
+        std::filesystem::file_time_type GetLastWriteTime() const;
+
+        friend std::unique_ptr<ConfigManager> std::make_unique<ConfigManager>(uid_t &);
 
     };
 

@@ -312,7 +312,7 @@ public final class XposedInit {
 
     public static boolean loadModules(boolean callInitZygote) throws IOException {
         boolean hasLoaded = !modulesLoaded.compareAndSet(false, true);
-        if (hasLoaded && !EdXpConfigGlobal.getConfig().isDynamicModulesMode()) {
+        if (hasLoaded) {
             return false;
         }
         synchronized (moduleLoadLock) {

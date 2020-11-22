@@ -51,6 +51,8 @@ namespace edxp {
 
         inline auto GetNiceName() const { return nice_name_; }
 
+        inline auto GetAppModulesList() const { return app_modules_list_; }
+
         inline jclass FindClassFromLoader(JNIEnv *env, const std::string &className) const {
             return FindClassFromLoader(env, className.c_str());
         };
@@ -93,6 +95,7 @@ namespace edxp {
         jmethodID post_fixup_static_mid_ = nullptr;
         bool skip_ = false;
         std::vector<std::vector<signed char>> dexes;
+        std::vector<std::string> app_modules_list_;
 
         Context() {}
 
@@ -110,12 +113,15 @@ namespace edxp {
 
         void CallPostFixupStaticTrampolinesCallback(void *class_ptr, jmethodID mid);
 
-        static bool ShouldSkipInject(JNIEnv *env, jstring nice_name, jstring data_dir, jint uid,
-                                     jboolean is_child_zygote);
+        static bool
+        ShouldSkipInject(const std::string &package_name, uid_t user, uid_t uid, bool res,
+                         const std::vector<std::string> &app_module_list,
+                         bool is_child_zygote);
 
         static std::tuple<bool, uid_t, std::string> GetAppInfoFromDir(JNIEnv *env, jstring dir);
 
         friend std::unique_ptr<Context> std::make_unique<Context>();
+
     };
 
 }

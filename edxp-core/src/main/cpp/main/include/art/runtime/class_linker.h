@@ -10,6 +10,7 @@
 #include "jni_env_ext.h"
 #include "edxp_context.h"
 #include "jni/edxp_pending_hooks.h"
+#include "utils.h"
 
 namespace art {
 
