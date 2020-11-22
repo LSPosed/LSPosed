@@ -354,6 +354,7 @@ public class AppHelper {
     static boolean saveScopeList(String modulePackageName, List<String> list) {
         File file = new File(BASE_PATH + String.format(SCOPE_LIST_PATH, modulePackageName));
         if (list.size() == 0) {
+            scopeList.put(modulePackageName, list);
             return file.delete();
         }
         try {

@@ -205,6 +205,11 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
 
         holder.mSwitch.setOnCheckedChangeListener(null);
         holder.mSwitch.setChecked(checkedList.contains(info.packageName));
+        if (this instanceof ScopeAdapter) {
+            holder.mSwitch.setEnabled(((ScopeAdapter) this).enabled);
+        } else {
+            holder.mSwitch.setEnabled(true);
+        }
         holder.mSwitch.setOnCheckedChangeListener((v, isChecked) ->
                 onCheckedChange(v, isChecked, info));
         holder.itemView.setOnClickListener(v -> {

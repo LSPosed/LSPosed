@@ -16,14 +16,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import org.meowcat.edxposed.manager.adapters.AppAdapter;
 import org.meowcat.edxposed.manager.adapters.AppHelper;
 import org.meowcat.edxposed.manager.adapters.ScopeAdapter;
-import org.meowcat.edxposed.manager.databinding.ActivityBlackListBinding;
+import org.meowcat.edxposed.manager.databinding.ActivityScopeListBinding;
 
 public class ModuleScopeActivity extends BaseActivity implements AppAdapter.Callback {
     private SearchView searchView;
-    private AppAdapter appAdapter;
+    private ScopeAdapter appAdapter;
 
     private SearchView.OnQueryTextListener searchListener;
-    private ActivityBlackListBinding binding;
+    private ActivityScopeListBinding binding;
     private final Runnable runnable = new Runnable() {
         @Override
         public void run() {
@@ -37,7 +37,7 @@ public class ModuleScopeActivity extends BaseActivity implements AppAdapter.Call
         super.onCreate(savedInstanceState);
         String modulePackageName = getIntent().getStringExtra("modulePackageName");
         String moduleName = getIntent().getStringExtra("moduleName");
-        binding = ActivityBlackListBinding.inflate(getLayoutInflater());
+        binding = ActivityScopeListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);
         binding.toolbar.setNavigationOnClickListener(view -> finish());
@@ -47,7 +47,7 @@ public class ModuleScopeActivity extends BaseActivity implements AppAdapter.Call
             bar.setSubtitle(moduleName);
         }
         setupWindowInsets(binding.snackbar, binding.recyclerView);
-        appAdapter = new ScopeAdapter(this, modulePackageName);
+        appAdapter = new ScopeAdapter(this, modulePackageName, binding.masterSwitch);
         appAdapter.setHasStableIds(true);
         binding.recyclerView.setAdapter(appAdapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
