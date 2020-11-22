@@ -15,7 +15,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.meowcat.edxposed.manager.BaseActivity;
 import org.meowcat.edxposed.manager.R;
-import org.meowcat.edxposed.manager.XposedApp;
+import org.meowcat.edxposed.manager.App;
 
 public final class NavUtil {
 
@@ -43,7 +43,7 @@ public final class NavUtil {
 
     @AnyThread
     public static void showMessage(final @NonNull Context context, final CharSequence message) {
-        XposedApp.runOnUiThread(() -> new MaterialAlertDialogBuilder(context)
+        App.runOnUiThread(() -> new MaterialAlertDialogBuilder(context)
                 .setMessage(message)
                 .setPositiveButton(android.R.string.ok, null)
                 .show());

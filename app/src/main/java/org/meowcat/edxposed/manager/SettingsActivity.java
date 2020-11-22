@@ -114,18 +114,18 @@ public class SettingsActivity extends BaseActivity {
 
     @SuppressWarnings({"ResultOfMethodCallIgnored", "deprecation"})
     public static class SettingsFragment extends PreferenceFragmentCompat {
-        private static final File pretendXposedInstallerFlag = new File(XposedApp.BASE_DIR + "conf/pretend_xposed_installer");
-        private static final File hideEdXposedManagerFlag = new File(XposedApp.BASE_DIR + "conf/hide_edxposed_manager");
-        private static final File disableHiddenAPIBypassFlag = new File(XposedApp.BASE_DIR + "conf/disable_hidden_api_bypass");
-        private static final File disableResourcesFlag = new File(XposedApp.BASE_DIR + "conf/disable_resources");
-        private static final File dynamicModulesFlag = new File(XposedApp.BASE_DIR + "conf/dynamicmodules");
-        private static final File deoptBootFlag = new File(XposedApp.BASE_DIR + "conf/deoptbootimage");
-        private static final File whiteListModeFlag = new File(XposedApp.BASE_DIR + "conf/usewhitelist");
-        private static final File blackWhiteListModeFlag = new File(XposedApp.BASE_DIR + "conf/blackwhitelist");
-        private static final File disableVerboseLogsFlag = new File(XposedApp.BASE_DIR + "conf/disable_verbose_log");
-        private static final File disableModulesLogsFlag = new File(XposedApp.BASE_DIR + "conf/disable_modules_log");
-        private static final File verboseLogProcessID = new File(XposedApp.BASE_DIR + "log/all.pid");
-        private static final File modulesLogProcessID = new File(XposedApp.BASE_DIR + "log/error.pid");
+        private static final File pretendXposedInstallerFlag = new File(App.BASE_DIR + "conf/pretend_xposed_installer");
+        private static final File hideEdXposedManagerFlag = new File(App.BASE_DIR + "conf/hide_edxposed_manager");
+        private static final File disableHiddenAPIBypassFlag = new File(App.BASE_DIR + "conf/disable_hidden_api_bypass");
+        private static final File disableResourcesFlag = new File(App.BASE_DIR + "conf/disable_resources");
+        private static final File dynamicModulesFlag = new File(App.BASE_DIR + "conf/dynamicmodules");
+        private static final File deoptBootFlag = new File(App.BASE_DIR + "conf/deoptbootimage");
+        private static final File whiteListModeFlag = new File(App.BASE_DIR + "conf/usewhitelist");
+        private static final File blackWhiteListModeFlag = new File(App.BASE_DIR + "conf/blackwhitelist");
+        private static final File disableVerboseLogsFlag = new File(App.BASE_DIR + "conf/disable_verbose_log");
+        private static final File disableModulesLogsFlag = new File(App.BASE_DIR + "conf/disable_modules_log");
+        private static final File verboseLogProcessID = new File(App.BASE_DIR + "log/all.pid");
+        private static final File modulesLogProcessID = new File(App.BASE_DIR + "log/error.pid");
 
         @SuppressLint({"WorldReadableFiles", "WorldWriteableFiles"})
         static void setFilePermissionsFromMode(String name) {
@@ -494,7 +494,7 @@ public class SettingsActivity extends BaseActivity {
                 updatePreference(!md2.isChecked());
 
                 Preference enhancement_status = findPreference("enhancement_status");
-                Objects.requireNonNull(enhancement_status).setSummary(XposedApp.isEnhancementEnabled() ? R.string.settings_summary_enhancement_enabled : R.string.settings_summary_enhancement);
+                Objects.requireNonNull(enhancement_status).setSummary(App.isEnhancementEnabled() ? R.string.settings_summary_enhancement_enabled : R.string.settings_summary_enhancement);
                 SwitchPreferenceCompat prefPretendXposedInstaller = findPreference("pretend_xposed_installer");
 
                 Objects.requireNonNull(prefPretendXposedInstaller).setChecked(pretendXposedInstallerFlag.exists());

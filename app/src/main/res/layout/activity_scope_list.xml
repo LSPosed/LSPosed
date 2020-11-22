@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="?actionBarTheme"
-            app:elevation="4dp">
+            android:elevation="4dp">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"

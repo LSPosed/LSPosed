@@ -18,8 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.meowcat.edxposed.manager.App;
 import org.meowcat.edxposed.manager.R;
-import org.meowcat.edxposed.manager.XposedApp;
 import org.meowcat.edxposed.manager.util.InstallApkUtil;
 
 import java.text.DateFormat;
@@ -69,7 +69,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
         fullList = pm.getInstalledApplications(PackageManager.GET_META_DATA);
         List<ApplicationInfo> rmList = new ArrayList<>();
         for (ApplicationInfo info : fullList) {
-            if (!XposedApp.getPreferences().getBoolean("show_modules", true)) {
+            if (!App.getPreferences().getBoolean("show_modules", true)) {
                 if (info.metaData != null && info.metaData.containsKey("xposedmodule") || AppHelper.FORCE_WHITE_LIST_MODULE.contains(info.packageName)) {
                     rmList.add(info);
                     continue;
@@ -118,7 +118,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
     }
 
     private void sortApps() {
-        switch (XposedApp.getPreferences().getInt("list_sort", 0)) {
+        switch (App.getPreferences().getInt("list_sort", 0)) {
             case 7:
                 cmp = Collections.reverseOrder((ApplicationInfo a, ApplicationInfo b) -> {
                     try {
@@ -190,7 +190,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ApplicationInfo info = showList.get(position);
-        holder.appIcon.setImageBitmap(XposedApp.getInstance().getAppIconLoader().loadIcon(info, false));
+        holder.appIcon.setImageBitmap(App.getInstance().getAppIconLoader().loadIcon(info, false));
         holder.appName.setText(InstallApkUtil.getAppLabel(info, pm));
         try {
             holder.appVersion.setText(pm.getPackageInfo(info.packageName, 0).versionName);

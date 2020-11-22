@@ -2,7 +2,6 @@ package org.meowcat.edxposed.manager;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.PopupMenu;
@@ -79,16 +78,16 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
             appMenu.setOnMenuItemClickListener(this::onOptionsItemSelected);
             appMenu.show();
         });
-        binding.appIcon.setImageBitmap(XposedApp.getInstance().getAppIconLoader().loadIcon(getApplicationInfo(), false));
+        binding.appIcon.setImageBitmap(App.getInstance().getAppIconLoader().loadIcon(getApplicationInfo(), false));
         String installedXposedVersion;
         try {
-            installedXposedVersion = XposedApp.getXposedProp().getVersion();
+            installedXposedVersion = App.getXposedProp().getVersion();
         } catch (NullPointerException e) {
             installedXposedVersion = null;
         }
         if (installedXposedVersion != null) {
             int installedXposedVersionInt = extractIntPart(installedXposedVersion);
-            if (installedXposedVersionInt == XposedApp.getXposedVersion()) {
+            if (installedXposedVersionInt == App.getXposedVersion()) {
                 String installedXposedVersionStr = installedXposedVersionInt + ".0";
                 binding.statusTitle.setText(R.string.Activated);
                 binding.statusSummary.setText(installedXposedVersion.replace(installedXposedVersionStr + "-", ""));
@@ -100,9 +99,9 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
                 binding.status.setCardBackgroundColor(ContextCompat.getColor(this, R.color.amber_500));
                 binding.statusIcon.setImageResource(R.drawable.ic_warning);
             }
-        } else if (XposedApp.getXposedVersion() > 0) {
+        } else if (App.getXposedVersion() > 0) {
             binding.statusTitle.setText(R.string.Activated);
-            binding.statusSummary.setText(getString(R.string.version_x, XposedApp.getXposedVersion()));
+            binding.statusSummary.setText(getString(R.string.version_x, App.getXposedVersion()));
             binding.status.setCardBackgroundColor(ContextCompat.getColor(this, R.color.download_status_update_available));
             binding.statusIcon.setImageResource(R.drawable.ic_check_circle);
         } else {

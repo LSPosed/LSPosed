@@ -16,9 +16,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import org.meowcat.edxposed.manager.App;
 import org.meowcat.edxposed.manager.DownloadActivity;
 import org.meowcat.edxposed.manager.R;
-import org.meowcat.edxposed.manager.XposedApp;
 import org.meowcat.edxposed.manager.repo.Module;
 import org.meowcat.edxposed.manager.repo.ModuleVersion;
 import org.meowcat.edxposed.manager.repo.ReleaseType;
@@ -49,7 +49,7 @@ public class RepoLoader {
     private static RepoLoader instance = null;
     private final List<RepoListener> listeners = new CopyOnWriteArrayList<>();
     private final Map<String, ReleaseType> localReleaseTypesCache = new HashMap<>();
-    private final XposedApp app;
+    private final App app;
     private final SharedPreferences pref;
     private final SharedPreferences modulePref;
     private final ConnectivityManager conMgr;
@@ -61,12 +61,12 @@ public class RepoLoader {
 
     private RepoLoader() {
         instance = this;
-        app = XposedApp.getInstance();
+        app = App.getInstance();
         pref = app.getSharedPreferences("repo", Context.MODE_PRIVATE);
-        DEFAULT_REPOSITORIES = XposedApp.getPreferences().getBoolean("custom_list", false) ? "https://cdn.jsdelivr.net/gh/ElderDrivers/Repository-Website@gh-pages/assets/full.xml.gz" : "https://dl-xda.xposed.info/repo/full.xml.gz";
+        DEFAULT_REPOSITORIES = App.getPreferences().getBoolean("custom_list", false) ? "https://cdn.jsdelivr.net/gh/ElderDrivers/Repository-Website@gh-pages/assets/full.xml.gz" : "https://dl-xda.xposed.info/repo/full.xml.gz";
         modulePref = app.getSharedPreferences("module_settings", Context.MODE_PRIVATE);
         conMgr = (ConnectivityManager) app.getSystemService(Context.CONNECTIVITY_SERVICE);
-        globalReleaseType = ReleaseType.fromString(XposedApp.getPreferences().getString("release_type_global", "stable"));
+        globalReleaseType = ReleaseType.fromString(App.getPreferences().getString("release_type_global", "stable"));
         refreshRepositories();
     }
 
@@ -216,7 +216,7 @@ public class RepoLoader {
                 pref.edit().putLong("last_update_check", System.currentTimeMillis()).apply();
 
                 if (!messages.isEmpty()) {
-                    XposedApp.runOnUiThread(() -> {
+                    App.runOnUiThread(() -> {
                         for (String message : messages) {
                             Toast.makeText(app, message, Toast.LENGTH_LONG).show();
                         }
@@ -310,7 +310,7 @@ public class RepoLoader {
             SyncDownloadInfo info = DownloadsUtil.downloadSynchronously(url,
                     cacheFile);
 
-            Log.i(XposedApp.TAG, String.format(
+            Log.i(App.TAG, String.format(
                     "RepoLoader -> Downloaded %s with status %d (error: %s), size %d bytes",
                     url, info.status, info.errorMessage, cacheFile.length()));
 
@@ -362,7 +362,7 @@ public class RepoLoader {
                             repo.version = repository.version;
                         }
 
-                        Log.i(XposedApp.TAG, String.format(
+                        Log.i(App.TAG, String.format(
                                 "RepoLoader -> Updated repository %s to version %s (%d new / %d removed modules)",
                                 repo.url, repo.version, insertCounter.get(),
                                 deleteCounter.get()));
@@ -371,7 +371,7 @@ public class RepoLoader {
 
                 RepoDb.setTransactionSuccessful();
             } catch (SQLiteException e) {
-                XposedApp.runOnUiThread(() -> new MaterialAlertDialogBuilder(app)
+                App.runOnUiThread(() -> new MaterialAlertDialogBuilder(app)
                         .setTitle(R.string.restart_needed)
                         .setMessage(R.string.cache_cleaned)
                         .setPositiveButton(android.R.string.ok, (dialog, which) -> {
@@ -386,7 +386,7 @@ public class RepoLoader {
 
                 DownloadsUtil.clearCache(url);
             } catch (Throwable t) {
-                Log.e(XposedApp.TAG, "RepoLoader -> Cannot load repository from " + url, t);
+                Log.e(App.TAG, "RepoLoader -> Cannot load repository from " + url, t);
                 messages.add(app.getString(R.string.repo_load_failed, url, t.getMessage()));
                 DownloadsUtil.clearCache(url);
             } finally {

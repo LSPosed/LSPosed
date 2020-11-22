@@ -15,9 +15,9 @@ import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.FragmentManager;
 
+import org.meowcat.edxposed.manager.App;
 import org.meowcat.edxposed.manager.BuildConfig;
 import org.meowcat.edxposed.manager.R;
-import org.meowcat.edxposed.manager.XposedApp;
 import org.meowcat.edxposed.manager.util.CompileUtil;
 import org.meowcat.edxposed.manager.util.FileUtils;
 
@@ -41,9 +41,9 @@ import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
 @SuppressWarnings("deprecation")
 public class AppHelper {
 
-    public static final String TAG = XposedApp.TAG;
+    public static final String TAG = App.TAG;
 
-    private static final String BASE_PATH = XposedApp.BASE_DIR;
+    private static final String BASE_PATH = App.BASE_DIR;
     private static final String WHITE_LIST_PATH = "conf/whitelist/";
     private static final String BLACK_LIST_PATH = "conf/blacklist/";
     private static final String COMPAT_LIST_PATH = "conf/compatlist/";
@@ -51,16 +51,16 @@ public class AppHelper {
     private static final String WHITE_LIST_MODE = "conf/usewhitelist";
     private static final String BLACK_LIST_MODE = "conf/blackwhitelist";
 
-    private static final List<String> FORCE_WHITE_LIST = new ArrayList<>(XposedApp.isEnhancementEnabled() ? Arrays.asList(BuildConfig.APPLICATION_ID, "android") : Collections.singletonList(BuildConfig.APPLICATION_ID));
+    private static final List<String> FORCE_WHITE_LIST = new ArrayList<>(App.isEnhancementEnabled() ? Arrays.asList(BuildConfig.APPLICATION_ID, "android") : Collections.singletonList(BuildConfig.APPLICATION_ID));
     public static List<String> FORCE_WHITE_LIST_MODULE = new ArrayList<>(FORCE_WHITE_LIST);
 
     private static final HashMap<String, List<String>> scopeList = new HashMap<>();
 
     @SuppressWarnings("OctalInteger")
     static void makeSurePath() {
-        XposedApp.mkdirAndChmod(WHITE_LIST_PATH, 00777);
-        XposedApp.mkdirAndChmod(BLACK_LIST_PATH, 00777);
-        XposedApp.mkdirAndChmod(COMPAT_LIST_PATH, 00777);
+        App.mkdirAndChmod(WHITE_LIST_PATH, 00777);
+        App.mkdirAndChmod(BLACK_LIST_PATH, 00777);
+        App.mkdirAndChmod(COMPAT_LIST_PATH, 00777);
     }
 
     public static boolean isWhiteListMode() {

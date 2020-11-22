@@ -21,7 +21,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 
-import org.meowcat.edxposed.manager.XposedApp;
+import org.meowcat.edxposed.manager.App;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class RepoParser {
-    public final static String TAG = XposedApp.TAG;
+    public final static String TAG = App.TAG;
     private final static String NS = null;
     private final XmlPullParser parser;
     private final RepoParserCallback callback;

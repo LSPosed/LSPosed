@@ -165,7 +165,7 @@ public class DownloadDetailsActivity extends BaseActivity implements RepoLoader.
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_download_details, menu);
 
-        boolean updateIgnorePreference = XposedApp.getPreferences().getBoolean("ignore_updates", false);
+        boolean updateIgnorePreference = App.getPreferences().getBoolean("ignore_updates", false);
         if (updateIgnorePreference) {
             SharedPreferences prefs = getSharedPreferences("update_ignored", MODE_PRIVATE);
 

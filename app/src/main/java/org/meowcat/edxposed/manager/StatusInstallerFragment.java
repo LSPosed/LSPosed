@@ -98,13 +98,13 @@ public class StatusInstallerFragment extends Fragment {
 
         String installedXposedVersion;
         try {
-            installedXposedVersion = XposedApp.getXposedProp().getVersion();
+            installedXposedVersion = App.getXposedProp().getVersion();
         } catch (NullPointerException e) {
             installedXposedVersion = null;
         }
 
         String mAppVer;
-        if (XposedApp.isEnhancementEnabled()) {
+        if (App.isEnhancementEnabled()) {
             mAppVer = String.format("v%s (%s) (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE, getString(R.string.status_enhancement));
         } else {
             mAppVer = String.format("v%s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE);
@@ -156,7 +156,7 @@ public class StatusInstallerFragment extends Fragment {
                 binding.dmverityExplanation.setVisibility(View.GONE);
             }
         } catch (Exception e) {
-            Log.e(XposedApp.TAG, "Could not detect Verified Boot state", e);
+            Log.e(App.TAG, "Could not detect Verified Boot state", e);
         }
     }
 
@@ -184,7 +184,7 @@ public class StatusInstallerFragment extends Fragment {
             String issueName = null;
             String issueLink = null;
             final ApplicationInfo appInfo = Objects.requireNonNull(getActivity()).getApplicationInfo();
-            final File baseDir = new File(XposedApp.BASE_DIR);
+            final File baseDir = new File(App.BASE_DIR);
             final File baseDirCanonical = getCanonicalFile(baseDir);
             final File baseDirActual = new File(Build.VERSION.SDK_INT >= 24 ? appInfo.deviceProtectedDataDir : appInfo.dataDir);
             final File baseDirActualCanonical = getCanonicalFile(baseDirActual);
@@ -199,8 +199,8 @@ public class StatusInstallerFragment extends Fragment {
     //            issueName = "Samsung TouchWiz ROM";
     //            issueLink = "https://forum.xda-developers.com/showthread.php?t=3034811";
             } else if (!baseDirCanonical.equals(baseDirActualCanonical)) {
-                Log.e(XposedApp.TAG, "Base directory: " + getPathWithCanonicalPath(baseDir, baseDirCanonical));
-                Log.e(XposedApp.TAG, "Expected: " + getPathWithCanonicalPath(baseDirActual, baseDirActualCanonical));
+                Log.e(App.TAG, "Base directory: " + getPathWithCanonicalPath(baseDir, baseDirCanonical));
+                Log.e(App.TAG, "Expected: " + getPathWithCanonicalPath(baseDirActual, baseDirActualCanonical));
                 issueName = getString(R.string.known_issue_wrong_base_directory, getPathWithCanonicalPath(baseDirActual, baseDirActualCanonical));
             } else if (!baseDir.exists()) {
                 issueName = getString(R.string.known_issue_missing_base_directory);
@@ -271,7 +271,7 @@ public class StatusInstallerFragment extends Fragment {
             try {
                 return file.getCanonicalFile();
             } catch (IOException e) {
-                Log.e(XposedApp.TAG, "Failed to get canonical file for " + file.getAbsolutePath(), e);
+                Log.e(App.TAG, "Failed to get canonical file for " + file.getAbsolutePath(), e);
                 return file;
             }
         }

@@ -41,11 +41,11 @@ import java.util.Scanner;
 
 public class LogsActivity extends BaseActivity {
     private boolean allLog = false;
-    private final File fileErrorLog = new File(XposedApp.BASE_DIR + "log/error.log");
+    private final File fileErrorLog = new File(App.BASE_DIR + "log/error.log");
     private final File fileErrorLogOld = new File(
-            XposedApp.BASE_DIR + "log/error.log.old");
-    private final File fileAllLog = new File(XposedApp.BASE_DIR + "log/all.log");
-    private final File fileAllLogOld = new File(XposedApp.BASE_DIR + "log/all.log.old");
+            App.BASE_DIR + "log/error.log.old");
+    private final File fileAllLog = new File(App.BASE_DIR + "log/all.log");
+    private final File fileAllLogOld = new File(App.BASE_DIR + "log/all.log.old");
     private LogsAdapter adapter;
     private final Handler handler = new Handler();
     private ActivityLogsBinding binding;
@@ -63,7 +63,7 @@ public class LogsActivity extends BaseActivity {
         }
         setupWindowInsets(binding.snackbar, binding.recyclerView);
 
-        if (!XposedApp.getPreferences().getBoolean("hide_logcat_warning", false)) {
+        if (!App.getPreferences().getBoolean("hide_logcat_warning", false)) {
             DialogInstallWarningBinding binding = DialogInstallWarningBinding.inflate(getLayoutInflater());
             new MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.install_warning_title)
@@ -71,7 +71,7 @@ public class LogsActivity extends BaseActivity {
                     .setView(binding.getRoot())
                     .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                         if (binding.checkbox.isChecked())
-                            XposedApp.getPreferences().edit().putBoolean("hide_logcat_warning", true).apply();
+                            App.getPreferences().edit().putBoolean("hide_logcat_warning", true).apply();
                     })
                     .setCancelable(false)
                     .show();
@@ -79,7 +79,7 @@ public class LogsActivity extends BaseActivity {
         adapter = new LogsAdapter();
         binding.recyclerView.setAdapter(adapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        if (XposedApp.getPreferences().getBoolean("disable_verbose_log", false)) {
+        if (App.getPreferences().getBoolean("disable_verbose_log", false)) {
             binding.slidingTabs.setVisibility(View.GONE);
         }
         binding.slidingTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -220,6 +220,7 @@ public class LogsActivity extends BaseActivity {
         }
     }
 
+    @SuppressWarnings("deprecation")
     @SuppressLint("StaticFieldLeak")
     private class LogsReader extends AsyncTask<File, Integer, ArrayList<String>> {
         private AlertDialog mProgressDialog;

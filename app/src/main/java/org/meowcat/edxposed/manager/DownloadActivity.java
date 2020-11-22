@@ -83,7 +83,7 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
             }
         });*/
 
-        sortingOrder = XposedApp.getPreferences().getInt("download_sorting_order", RepoDb.SORT_STATUS);
+        sortingOrder = App.getPreferences().getInt("download_sorting_order", RepoDb.SORT_STATUS);
 
         ignoredUpdatesPref = getSharedPreferences("update_ignored", MODE_PRIVATE);
         binding.recyclerView.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
@@ -104,7 +104,7 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
                 headersDecor.invalidateHeaders();
             }
         });
-        if (!XposedApp.getPreferences().getBoolean("md2", false)) {
+        if (!App.getPreferences().getBoolean("md2", false)) {
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
                     DividerItemDecoration.VERTICAL);
             binding.recyclerView.addItemDecoration(dividerItemDecoration);
@@ -185,7 +185,7 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
                     .setTitle(R.string.download_sorting_title)
                     .setSingleChoiceItems(R.array.download_sort_order, sortingOrder, (dialog, which) -> {
                         sortingOrder = which;
-                        XposedApp.getPreferences().edit().putInt("download_sorting_order", sortingOrder).apply();
+                        App.getPreferences().edit().putInt("download_sorting_order", sortingOrder).apply();
                         reloadItems();
                         dialog.dismiss();
                     })
@@ -256,7 +256,7 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
             boolean isFramework = cursor.getInt(RepoDbDefinitions.OverviewColumnsIndexes.IS_FRAMEWORK) > 0;
             boolean isInstalled = cursor.getInt(RepoDbDefinitions.OverviewColumnsIndexes.IS_INSTALLED) > 0;
             boolean updateIgnored = prefs.getBoolean(cursor.getString(RepoDbDefinitions.OverviewColumnsIndexes.PKGNAME), false);
-            boolean updateIgnorePreference = XposedApp.getPreferences().getBoolean("ignore_updates", false);
+            boolean updateIgnorePreference = App.getPreferences().getBoolean("ignore_updates", false);
             boolean hasUpdate = cursor.getInt(RepoDbDefinitions.OverviewColumnsIndexes.HAS_UPDATE) > 0;
 
             if (hasUpdate && updateIgnored && updateIgnorePreference) {
@@ -316,7 +316,7 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
             long updated = cursor.getLong(RepoDbDefinitions.OverviewColumnsIndexes.UPDATED);
             boolean isInstalled = cursor.getInt(RepoDbDefinitions.OverviewColumnsIndexes.IS_INSTALLED) > 0;
             boolean updateIgnored = prefs.getBoolean(cursor.getString(RepoDbDefinitions.OverviewColumnsIndexes.PKGNAME), false);
-            boolean updateIgnorePreference = XposedApp.getPreferences().getBoolean("ignore_updates", false);
+            boolean updateIgnorePreference = App.getPreferences().getBoolean("ignore_updates", false);
             boolean hasUpdate = cursor.getInt(RepoDbDefinitions.OverviewColumnsIndexes.HAS_UPDATE) > 0;
 
             if (hasUpdate && updateIgnored && updateIgnorePreference) {

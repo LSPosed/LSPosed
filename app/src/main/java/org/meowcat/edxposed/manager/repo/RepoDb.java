@@ -10,8 +10,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
 import android.util.Pair;
 
+import org.meowcat.edxposed.manager.App;
 import org.meowcat.edxposed.manager.BuildConfig;
-import org.meowcat.edxposed.manager.XposedApp;
 import org.meowcat.edxposed.manager.repo.RepoDbDefinitions.InstalledModulesColumns;
 import org.meowcat.edxposed.manager.repo.RepoDbDefinitions.InstalledModulesUpdatesColumns;
 import org.meowcat.edxposed.manager.repo.RepoDbDefinitions.ModuleVersionsColumns;
@@ -40,7 +40,7 @@ public final class RepoDb extends SQLiteOpenHelper {
     private static final SQLiteDatabase db;
 
     static {
-        RepoDb instance = new RepoDb(XposedApp.getInstance());
+        RepoDb instance = new RepoDb(App.getInstance());
         db = instance.getWritableDatabase();
         db.execSQL("PRAGMA foreign_keys=ON");
         instance.createTempTables(db);

@@ -55,7 +55,7 @@ public class BlackListActivity extends BaseActivity implements AppAdapter.Callba
         appAdapter.setHasStableIds(true);
         binding.recyclerView.setAdapter(appAdapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        if (!XposedApp.getPreferences().getBoolean("md2", false)) {
+        if (!App.getPreferences().getBoolean("md2", false)) {
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
                     DividerItemDecoration.VERTICAL);
             binding.recyclerView.addItemDecoration(dividerItemDecoration);

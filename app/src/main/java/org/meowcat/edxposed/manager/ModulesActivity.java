@@ -89,7 +89,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                     }
                 }
             }
-            switch (XposedApp.getPreferences().getInt("list_sort", 0)) {
+            switch (App.getPreferences().getInt("list_sort", 0)) {
                 case 7:
                     cmp = Collections.reverseOrder((ApplicationInfo a, ApplicationInfo b) -> {
                         try {
@@ -184,7 +184,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         pm = getPackageManager();
         displayNameComparator = new ApplicationInfo.DisplayNameComparator(pm);
         cmp = displayNameComparator;
-        installedXposedVersion = XposedApp.getXposedVersion();
+        installedXposedVersion = App.getXposedVersion();
         if (installedXposedVersion <= 0) {
             Snackbar.make(binding.snackbar, R.string.xposed_not_active, Snackbar.LENGTH_LONG).setAction(R.string.Settings, v -> {
                 Intent intent = new Intent();
@@ -197,7 +197,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         moduleUtil.addListener(this);
         binding.recyclerView.setAdapter(adapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        if (!XposedApp.getPreferences().getBoolean("md2", false)) {
+        if (!App.getPreferences().getBoolean("md2", false)) {
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
                     DividerItemDecoration.VERTICAL);
             binding.recyclerView.addItemDecoration(dividerItemDecoration);
@@ -235,7 +235,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             return;
         }
         if (requestCode == 42) {
-            File listModules = new File(XposedApp.ENABLED_MODULES_LIST_FILE);
+            File listModules = new File(App.ENABLED_MODULES_LIST_FILE);
             if (data != null) {
                 Uri uri = data.getData();
                 if (uri != null) {
@@ -570,31 +570,31 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             TextView warningText = holder.warningText;
 
             if (item.minVersion == 0) {
-                if (!XposedApp.getPreferences().getBoolean("skip_xposedminversion_check", false)) {
+                if (!App.getPreferences().getBoolean("skip_xposedminversion_check", false)) {
                     mSwitch.setEnabled(false);
                 }
                 warningText.setText(getString(R.string.no_min_version_specified));
                 warningText.setVisibility(View.VISIBLE);
             } else if (installedXposedVersion > 0 && item.minVersion > installedXposedVersion) {
-                if (!XposedApp.getPreferences().getBoolean("skip_xposedminversion_check", false)) {
+                if (!App.getPreferences().getBoolean("skip_xposedminversion_check", false)) {
                     mSwitch.setEnabled(false);
                 }
                 warningText.setText(String.format(getString(R.string.warning_xposed_min_version), item.minVersion));
                 warningText.setVisibility(View.VISIBLE);
             } else if (item.minVersion < ModuleUtil.MIN_MODULE_VERSION) {
-                if (!XposedApp.getPreferences().getBoolean("skip_xposedminversion_check", false)) {
+                if (!App.getPreferences().getBoolean("skip_xposedminversion_check", false)) {
                     mSwitch.setEnabled(false);
                 }
                 warningText.setText(String.format(getString(R.string.warning_min_version_too_low), item.minVersion, ModuleUtil.MIN_MODULE_VERSION));
                 warningText.setVisibility(View.VISIBLE);
             } else if (item.isInstalledOnExternalStorage()) {
-                if (!XposedApp.getPreferences().getBoolean("skip_xposedminversion_check", false)) {
+                if (!App.getPreferences().getBoolean("skip_xposedminversion_check", false)) {
                     mSwitch.setEnabled(false);
                 }
                 warningText.setText(getString(R.string.warning_installed_on_external_storage));
                 warningText.setVisibility(View.VISIBLE);
             } else if (installedXposedVersion == 0 || (installedXposedVersion == -1)) {
-                if (!XposedApp.getPreferences().getBoolean("skip_xposedminversion_check", false)) {
+                if (!App.getPreferences().getBoolean("skip_xposedminversion_check", false)) {
                     mSwitch.setEnabled(false);
                 }
                 warningText.setText(getString(R.string.not_installed_no_lollipop));

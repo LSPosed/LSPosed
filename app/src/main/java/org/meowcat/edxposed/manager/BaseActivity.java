@@ -43,7 +43,7 @@ public class BaseActivity extends AppCompatActivity {
     private String theme;
 
     public static boolean isBlackNightTheme() {
-        return XposedApp.getPreferences().getBoolean("black_dark_theme", false) || XposedApp.getPreferences().getBoolean("md2", false);
+        return App.getPreferences().getBoolean("black_dark_theme", false) || App.getPreferences().getBoolean("md2", false);
     }
 
     public static String getTheme(Context context) {
@@ -84,19 +84,19 @@ public class BaseActivity extends AppCompatActivity {
 
     @StyleRes
     private int getCustomTheme() {
-        String baseThemeName = XposedApp.getPreferences().getBoolean("colorized_action_bar", false) && !XposedApp.getPreferences().getBoolean("md2", false) ?
+        String baseThemeName = App.getPreferences().getBoolean("colorized_action_bar", false) && !App.getPreferences().getBoolean("md2", false) ?
                 "ThemeOverlay.ActionBarPrimaryColor" : "ThemeOverlay";
         String customThemeName;
         String primaryColorEntryName = "colorPrimary";
         for (CustomThemeColor color : CustomThemeColors.Primary.values()) {
-            if (XposedApp.getPreferences().getInt("primary_color", ContextCompat.getColor(this, R.color.colorPrimary))
+            if (App.getPreferences().getInt("primary_color", ContextCompat.getColor(this, R.color.colorPrimary))
                     == ContextCompat.getColor(this, color.getResourceId())) {
                 primaryColorEntryName = color.getResourceEntryName();
             }
         }
         String accentColorEntryName = "colorAccent";
         for (CustomThemeColor color : CustomThemeColors.Accent.values()) {
-            if (XposedApp.getPreferences().getInt("accent_color", ContextCompat.getColor(this, R.color.colorAccent))
+            if (App.getPreferences().getInt("accent_color", ContextCompat.getColor(this, R.color.colorAccent))
                     == ContextCompat.getColor(this, color.getResourceId())) {
                 accentColorEntryName = color.getResourceEntryName();
             }
@@ -119,8 +119,8 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AppCompatDelegate.setDefaultNightMode(XposedApp.getPreferences().getInt("theme", -1));
-        theme = getTheme(this) + getCustomTheme() + XposedApp.getPreferences().getBoolean("md2", false);
+        AppCompatDelegate.setDefaultNightMode(App.getPreferences().getInt("theme", -1));
+        theme = getTheme(this) + getCustomTheme() + App.getPreferences().getBoolean("md2", false);
     }
 
     public int getThemedColor(int id) {
@@ -134,13 +134,13 @@ public class BaseActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (!(this instanceof MainActivity)) {
-            if (XposedApp.getPreferences().getBoolean("transparent_status_bar", false)) {
+            if (App.getPreferences().getBoolean("transparent_status_bar", false)) {
                 getWindow().setStatusBarColor(getThemedColor(R.attr.colorActionBar));
             } else {
                 getWindow().setStatusBarColor(getThemedColor(R.attr.colorPrimaryDark));
             }
         }
-        if (!Objects.equals(theme, getTheme(this) + getCustomTheme() + XposedApp.getPreferences().getBoolean("md2", false))) {
+        if (!Objects.equals(theme, getTheme(this) + getCustomTheme() + App.getPreferences().getBoolean("md2", false))) {
             recreate();
         }
     }
@@ -159,7 +159,7 @@ public class BaseActivity extends AppCompatActivity {
             theme.applyStyle(resid, false);
         }
         theme.applyStyle(getCustomTheme(), true);
-        if (XposedApp.getPreferences().getBoolean("md2", false) && !(this instanceof MainActivity)) {
+        if (App.getPreferences().getBoolean("md2", false) && !(this instanceof MainActivity)) {
             theme.applyStyle(R.style.ThemeOverlay_Md2, true);
         }
         if (this instanceof MainActivity) {
@@ -232,73 +232,65 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.dexopt_all:
-                areYouSure(R.string.take_while_cannot_resore, (dialog, which) -> {
-                    new MaterialAlertDialogBuilder(this)
-                            .setTitle(R.string.dexopt_now)
-                            .setMessage(R.string.this_may_take_a_while)
-                            .setCancelable(false)
-                            .show();
-                    new Thread("dexopt") {
-                        @Override
-                        public void run() {
-                            if (!Shell.rootAccess()) {
-                                dialog.dismiss();
-                                NavUtil.showMessage(BaseActivity.this, getString(R.string.root_failed));
-                                return;
-                            }
-
-                            Shell.su("cmd package bg-dexopt-job").exec();
-
+        int itemId = item.getItemId();
+        if (itemId == R.id.dexopt_all) {
+            areYouSure(R.string.take_while_cannot_resore, (dialog, which) -> {
+                new MaterialAlertDialogBuilder(this)
+                        .setTitle(R.string.dexopt_now)
+                        .setMessage(R.string.this_may_take_a_while)
+                        .setCancelable(false)
+                        .show();
+                new Thread("dexopt") {
+                    @Override
+                    public void run() {
+                        if (!Shell.rootAccess()) {
                             dialog.dismiss();
-                            XposedApp.runOnUiThread(() -> Toast.makeText(BaseActivity.this, R.string.done, Toast.LENGTH_LONG).show());
+                            NavUtil.showMessage(BaseActivity.this, getString(R.string.root_failed));
+                            return;
                         }
-                    }.start();
-                });
-                break;
-            case R.id.speed_all:
-                areYouSure(R.string.take_while_cannot_resore, (dialog, which) -> {
-                    new MaterialAlertDialogBuilder(this)
-                            .setTitle(R.string.speed_now)
-                            .setMessage(R.string.this_may_take_a_while)
-                            .setCancelable(false)
-                            .show();
-                    new Thread("dex2oat") {
-                        @Override
-                        public void run() {
-                            if (!Shell.rootAccess()) {
-                                dialog.dismiss();
-                                NavUtil.showMessage(BaseActivity.this, getString(R.string.root_failed));
-                                return;
-                            }
 
-                            Shell.su("cmd package compile -m speed -a").exec();
+                        Shell.su("cmd package bg-dexopt-job").exec();
 
+                        dialog.dismiss();
+                        App.runOnUiThread(() -> Toast.makeText(BaseActivity.this, R.string.done, Toast.LENGTH_LONG).show());
+                    }
+                }.start();
+            });
+        } else if (itemId == R.id.speed_all) {
+            areYouSure(R.string.take_while_cannot_resore, (dialog, which) -> {
+                new MaterialAlertDialogBuilder(this)
+                        .setTitle(R.string.speed_now)
+                        .setMessage(R.string.this_may_take_a_while)
+                        .setCancelable(false)
+                        .show();
+                new Thread("dex2oat") {
+                    @Override
+                    public void run() {
+                        if (!Shell.rootAccess()) {
                             dialog.dismiss();
-                            XposedApp.runOnUiThread(() -> Toast.makeText(BaseActivity.this, R.string.done, Toast.LENGTH_LONG).show());
+                            NavUtil.showMessage(BaseActivity.this, getString(R.string.root_failed));
+                            return;
                         }
-                    };
-                });
-                break;
-            case R.id.reboot:
-                areYouSure(R.string.reboot, (dialog, which) -> reboot(null));
-                break;
-            case R.id.soft_reboot:
-                areYouSure(R.string.soft_reboot, (dialog, which) -> softReboot());
-                break;
-            case R.id.reboot_recovery:
-                areYouSure(R.string.reboot_recovery, (dialog, which) -> reboot("recovery"));
-                break;
-            case R.id.reboot_bootloader:
-                areYouSure(R.string.reboot_bootloader, (dialog, which) -> reboot("bootloader"));
-                break;
-            case R.id.reboot_download:
-                areYouSure(R.string.reboot_download, (dialog, which) -> reboot("download"));
-                break;
-            case R.id.reboot_edl:
-                areYouSure(R.string.reboot_edl, (dialog, which) -> reboot("edl"));
-                break;
+
+                        Shell.su("cmd package compile -m speed -a").exec();
+
+                        dialog.dismiss();
+                        App.runOnUiThread(() -> Toast.makeText(BaseActivity.this, R.string.done, Toast.LENGTH_LONG).show());
+                    }
+                };
+            });
+        } else if (itemId == R.id.reboot) {
+            areYouSure(R.string.reboot, (dialog, which) -> reboot(null));
+        } else if (itemId == R.id.soft_reboot) {
+            areYouSure(R.string.soft_reboot, (dialog, which) -> softReboot());
+        } else if (itemId == R.id.reboot_recovery) {
+            areYouSure(R.string.reboot_recovery, (dialog, which) -> reboot("recovery"));
+        } else if (itemId == R.id.reboot_bootloader) {
+            areYouSure(R.string.reboot_bootloader, (dialog, which) -> reboot("bootloader"));
+        } else if (itemId == R.id.reboot_download) {
+            areYouSure(R.string.reboot_download, (dialog, which) -> reboot("download"));
+        } else if (itemId == R.id.reboot_edl) {
+            areYouSure(R.string.reboot_edl, (dialog, which) -> reboot("edl"));
         }
 
         return super.onOptionsItemSelected(item);

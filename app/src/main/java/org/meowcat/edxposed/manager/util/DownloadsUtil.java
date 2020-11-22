@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import org.meowcat.edxposed.manager.R;
-import org.meowcat.edxposed.manager.XposedApp;
+import org.meowcat.edxposed.manager.App;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -15,7 +15,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 public class DownloadsUtil {
-    private static final SharedPreferences pref = XposedApp.getInstance().getSharedPreferences("download_cache", Context.MODE_PRIVATE);
+    private static final SharedPreferences pref = App.getInstance().getSharedPreferences("download_cache", Context.MODE_PRIVATE);
 
     static SyncDownloadInfo downloadSynchronously(String url, File target) {
         final boolean useNotModifiedTags = target.exists();
@@ -57,7 +57,7 @@ public class DownloadsUtil {
                     return new SyncDownloadInfo(SyncDownloadInfo.STATUS_NOT_MODIFIED, null);
                 } else if (responseCode < 200 || responseCode >= 300) {
                     return new SyncDownloadInfo(SyncDownloadInfo.STATUS_FAILED,
-                            XposedApp.getInstance().getString(R.string.repo_download_failed_http,
+                            App.getInstance().getString(R.string.repo_download_failed_http,
                                     url, responseCode,
                                     httpConnection.getResponseMessage()));
                 }
@@ -85,7 +85,7 @@ public class DownloadsUtil {
 
         } catch (Throwable t) {
             return new SyncDownloadInfo(SyncDownloadInfo.STATUS_FAILED,
-                    XposedApp.getInstance().getString(R.string.repo_download_failed, url,
+                    App.getInstance().getString(R.string.repo_download_failed, url,
                             t.getMessage()));
 
         } finally {

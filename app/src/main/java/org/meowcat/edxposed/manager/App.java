@@ -28,23 +28,22 @@ import org.meowcat.edxposed.manager.util.RepoLoader;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Objects;
 
+import de.robv.android.xposed.installer.XposedApp;
 import de.robv.android.xposed.installer.util.InstallZipUtil;
 import me.zhanghai.android.appiconloader.AppIconLoader;
 
-public class XposedApp extends de.robv.android.xposed.installer.XposedApp implements Application.ActivityLifecycleCallbacks {
+public class App extends XposedApp implements Application.ActivityLifecycleCallbacks {
     public static final String TAG = "EdXposedManager";
     public static String BASE_DIR = null;
     public static String ENABLED_MODULES_LIST_FILE = null;
-    private static String BASE_DIR_LEGACY = null;
     @SuppressLint("StaticFieldLeak")
-    private static XposedApp instance = null;
+    private static App instance = null;
     private static Thread uiThread;
     private static Handler mainHandler;
     private SharedPreferences pref;
@@ -52,12 +51,12 @@ public class XposedApp extends de.robv.android.xposed.installer.XposedApp implem
     private boolean isUiLoaded = false;
     private AppIconLoader appIconLoader;
 
-    public static XposedApp getInstance() {
+    public static App getInstance() {
         return instance;
     }
 
     public static InstallZipUtil.XposedProp getXposedProp() {
-        return de.robv.android.xposed.installer.XposedApp.getInstance().mXposedProp;
+        return XposedApp.getInstance().mXposedProp;
     }
 
     public static void runOnUiThread(Runnable action) {
@@ -102,10 +101,10 @@ public class XposedApp extends de.robv.android.xposed.installer.XposedApp implem
                         String disclaimer = " [stack trace too large]";
                         stackTraceString = stackTraceString.substring(0, 131071 - disclaimer.length()) + disclaimer;
                     }
-                    Intent intent = new Intent(XposedApp.this, CrashReportActivity.class);
+                    Intent intent = new Intent(App.this, CrashReportActivity.class);
                     intent.putExtra(BuildConfig.APPLICATION_ID + ".EXTRA_STACK_TRACE", stackTraceString);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    XposedApp.this.startActivity(intent);
+                    App.this.startActivity(intent);
                     android.os.Process.killProcess(android.os.Process.myPid());
                     System.exit(10);
                 });
@@ -115,7 +114,6 @@ public class XposedApp extends de.robv.android.xposed.installer.XposedApp implem
         }
 
         final ApplicationInfo appInfo = getApplicationInfo();
-        BASE_DIR_LEGACY = appInfo.dataDir;
         BASE_DIR = appInfo.deviceProtectedDataDir + "/";
         ENABLED_MODULES_LIST_FILE = BASE_DIR + "conf/enabled_modules.list";
         ModuleUtil.MODULES_LIST_FILE = BASE_DIR + "conf/modules.list";
@@ -126,7 +124,7 @@ public class XposedApp extends de.robv.android.xposed.installer.XposedApp implem
 
         pref = PreferenceManager.getDefaultSharedPreferences(this);
 
-        de.robv.android.xposed.installer.XposedApp.getInstance().reloadXposedProp();
+        XposedApp.getInstance().reloadXposedProp();
         createDirectories();
         NotificationUtil.init();
         registerReceivers();
@@ -167,27 +165,18 @@ public class XposedApp extends de.robv.android.xposed.installer.XposedApp implem
                 new Intent(this, PackageChangeReceiver.class), 0);
     }
 
-    @SuppressWarnings({"JavaReflectionMemberAccess", "OctalInteger"})
+    @SuppressWarnings({"OctalInteger"})
     @SuppressLint({"PrivateApi", "NewApi"})
     private void createDirectories() {
         FileUtils.setPermissions(BASE_DIR, 00777);
         mkdirAndChmod("conf", 00777);
         mkdirAndChmod("log", 00777);
-
-        try {
-            @SuppressLint("SoonBlockedPrivateApi") Method deleteDir = FileUtils.class.getDeclaredMethod("deleteContentsAndDir", File.class);
-            deleteDir.invoke(null, new File(BASE_DIR_LEGACY, "bin"));
-            deleteDir.invoke(null, new File(BASE_DIR_LEGACY, "conf"));
-            deleteDir.invoke(null, new File(BASE_DIR_LEGACY, "log"));
-        } catch (ReflectiveOperationException e) {
-            Log.w(de.robv.android.xposed.installer.XposedApp.TAG, "Failed to delete obsolete directories", e);
-        }
     }
 
     public void updateProgressIndicator(final SwipeRefreshLayout refreshLayout) {
         final boolean isLoading = RepoLoader.getInstance().isLoading() || ModuleUtil.getInstance().isLoading();
         runOnUiThread(() -> {
-            synchronized (XposedApp.this) {
+            synchronized (App.this) {
                 if (currentActivity != null) {
                     if (refreshLayout != null)
                         refreshLayout.setRefreshing(isLoading);

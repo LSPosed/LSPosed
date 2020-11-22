@@ -47,7 +47,7 @@ public class EdDownloadActivity extends BaseActivity {
         binding.tabLayout.setupWithViewPager(binding.pager);
         new JSONParser().execute();
 
-        if (!XposedApp.getPreferences().getBoolean("hide_install_warning", false)) {
+        if (!App.getPreferences().getBoolean("hide_install_warning", false)) {
             DialogInstallWarningBinding binding = DialogInstallWarningBinding.inflate(getLayoutInflater());
             new MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.install_warning_title)
@@ -55,7 +55,7 @@ public class EdDownloadActivity extends BaseActivity {
                     .setView(binding.getRoot())
                     .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                         if (binding.checkbox.isChecked())
-                            XposedApp.getPreferences().edit().putBoolean("hide_install_warning", true).apply();
+                            App.getPreferences().edit().putBoolean("hide_install_warning", true).apply();
                     })
                     .setCancelable(false)
                     .show();
@@ -69,6 +69,7 @@ public class EdDownloadActivity extends BaseActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    @SuppressWarnings("deprecation")
     @SuppressLint("StaticFieldLeak")
     private class JSONParser extends AsyncTask<Void, Void, String> {
 
@@ -78,7 +79,7 @@ public class EdDownloadActivity extends BaseActivity {
                 return JSONUtils.getFileContent(JSONUtils.JSON_LINK);
             } catch (Exception e) {
                 e.printStackTrace();
-                Log.e(XposedApp.TAG, "AdvancedInstallerFragment -> " + e.getMessage());
+                Log.e(App.TAG, "AdvancedInstallerFragment -> " + e.getMessage());
                 return null;
             }
         }

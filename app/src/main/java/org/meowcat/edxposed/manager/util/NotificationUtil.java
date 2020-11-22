@@ -17,9 +17,9 @@ import androidx.core.content.ContextCompat;
 
 import com.topjohnwu.superuser.Shell;
 
+import org.meowcat.edxposed.manager.App;
 import org.meowcat.edxposed.manager.MainActivity;
 import org.meowcat.edxposed.manager.R;
-import org.meowcat.edxposed.manager.XposedApp;
 
 public final class NotificationUtil {
 
@@ -49,8 +49,8 @@ public final class NotificationUtil {
             return;
         }
 
-        context = XposedApp.getInstance();
-        prefs = XposedApp.getPreferences();
+        context = App.getInstance();
+        prefs = App.getPreferences();
         notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -199,7 +199,7 @@ public final class NotificationUtil {
             }
 
             if (!Shell.rootAccess()) {
-                Log.e(XposedApp.TAG, "NotificationUtil -> Could not start root shell");
+                Log.e(App.TAG, "NotificationUtil -> Could not start root shell");
                 return;
             }
 
@@ -210,7 +210,7 @@ public final class NotificationUtil {
                     : Shell.su("reboot").exec().getCode();
 
             if (returnCode != 0) {
-                Log.e(XposedApp.TAG, "NotificationUtil -> Could not reboot");
+                Log.e(App.TAG, "NotificationUtil -> Could not reboot");
             }
         }
     }
