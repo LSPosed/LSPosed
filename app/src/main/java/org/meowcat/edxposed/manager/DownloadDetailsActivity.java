@@ -50,7 +50,7 @@ public class DownloadDetailsActivity extends BaseActivity implements RepoLoader.
         try {
             module = repoLoader.getModule(packageName);
         } catch (Exception e) {
-            Log.i(TAG, "DownloadDetailsActivity -> " + e.getMessage());
+            Log.i(App.TAG, "DownloadDetailsActivity -> " + e.getMessage());
 
             module = null;
         }

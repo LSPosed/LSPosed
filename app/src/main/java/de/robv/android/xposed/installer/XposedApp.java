@@ -14,7 +14,7 @@ import static de.robv.android.xposed.installer.util.InstallZipUtil.parseXposedPr
 
 @SuppressLint("Registered")
 public class XposedApp extends Application {
-    public static final String TAG = "App";
+    public static final String TAG = "EdXposedManager";
     private static final File EDXPOSED_PROP_FILE = new File("/system/framework/edconfig.jar");
     private static XposedApp instance = null;
     public InstallZipUtil.XposedProp mXposedProp;

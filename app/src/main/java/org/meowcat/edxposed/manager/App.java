@@ -38,7 +38,6 @@ import de.robv.android.xposed.installer.XposedApp;
 import de.robv.android.xposed.installer.util.InstallZipUtil;
 
 public class App extends XposedApp implements Application.ActivityLifecycleCallbacks {
-    public static final String TAG = "EdXposedManager";
     public static String BASE_DIR = null;
     public static String ENABLED_MODULES_LIST_FILE = null;
     @SuppressLint("StaticFieldLeak")
