@@ -3,8 +3,8 @@ package org.meowcat.edxposed.manager.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.App;
+import org.meowcat.edxposed.manager.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
