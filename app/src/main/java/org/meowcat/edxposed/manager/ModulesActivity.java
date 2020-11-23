@@ -528,6 +528,9 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                     menu.removeItem(R.id.menu_download_updates);
                     menu.removeItem(R.id.menu_support);
                 }
+                if (!App.supportScope()) {
+                    menu.removeItem(R.id.menu_scope);
+                }
                 if (installedModule.packageName.equals(BuildConfig.APPLICATION_ID)) {
                     menu.removeItem(R.id.menu_launch);
                     menu.removeItem(R.id.menu_scope);
