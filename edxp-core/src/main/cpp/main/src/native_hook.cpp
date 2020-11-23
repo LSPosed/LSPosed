@@ -18,7 +18,6 @@
 #include "art/runtime/gc/heap.h"
 #include "art/runtime/hidden_api.h"
 #include "art/runtime/oat_file_manager.h"
-#include "framework/fd_utils.h"
 
 std::vector<soinfo_t> linker_get_solist(); // Dobby but not in .h
 
@@ -26,12 +25,9 @@ namespace edxp {
 
     static volatile bool installed = false;
     static volatile bool art_hooks_installed = false;
-    static volatile bool fwk_hooks_installed = false;
     static HookFunType hook_func = nullptr;
 
     void InstallArtHooks(void *art_handle);
-
-    void InstallFwkHooks(void *fwk_handle);
 
     void InstallInlineHooks() {
         if (installed) {
@@ -72,9 +68,6 @@ namespace edxp {
             ScopedDlHandle art_handle(kLibArtLegacyPath.c_str());
             InstallArtHooks(art_handle.Get());
         }
-
-        ScopedDlHandle fwk_handle(kLibFwkPath.c_str());
-        InstallFwkHooks(fwk_handle.Get());
     }
 
     void InstallArtHooks(void *art_handle) {
@@ -94,13 +87,5 @@ namespace edxp {
         art_hooks_installed = true;
         LOGI("ART hooks installed");
     }
-
-    void InstallFwkHooks(void *fwk_handle) {
-        if (fwk_hooks_installed) {
-            return;
-        }
-        android::FileDescriptorWhitelist::Setup(fwk_handle, hook_func);
-    }
-
 }
 

@@ -29,7 +29,6 @@ namespace edxp {
     static const auto kSandHookNeverCallClassName = "com.swift.sandhook.ClassNeverCall"_str;
 
     static const auto kLibArtName = "libart.so"_str;
-    static const auto kLibFwkName = "libandroid_runtime.so"_str;
     static const auto kLibFwName = "libandroidfw.so"_str;
     static const auto kLibWhaleName = "libwhale.edxp.so"_str;
     static const auto kLibSandHookName = "libsandhook.edxp.so"_str;
@@ -39,16 +38,10 @@ namespace edxp {
     static const auto kLibBasePath = std::string(
             LP_SELECT("/system/lib/",
                       "/system/lib64/"));
-    static const auto kLinkerPath = std::string(
-            LP_SELECT("/apex/com.android.runtime/bin/linker",
-                      "/apex/com.android.runtime/bin/linker64"));
-
-    static const auto kLibDlPath = kLibBasePath + kLibDlName;
     static const auto kLibArtLegacyPath = kLibBasePath + kLibArtName;
     static const auto kLibSandHookPath = kLibBasePath + kLibSandHookName;
     static const auto kLibSandHookNativePath = kLibBasePath + kLibSandHookNativeName;
     static const auto kLibFwPath = kLibBasePath + kLibFwName;
-    static const auto kLibFwkPath = kLibBasePath + kLibFwkName;
 
     inline constexpr const char *const BoolToString(bool b) {
         return b ? "true" : "false";
