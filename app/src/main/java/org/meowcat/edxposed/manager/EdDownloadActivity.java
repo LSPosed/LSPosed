@@ -95,7 +95,7 @@ public class EdDownloadActivity extends BaseActivity {
 
                 TransitionManager.beginDelayedTransition(binding.tabLayout);
                 for (XposedTab tab : xposedJson.tabs) {
-                    if (tab.sdks.contains(Build.VERSION.SDK_INT)) {
+                    if (tab.installers.size() > 0 && tab.sdks.contains(Build.VERSION.SDK_INT)) {
                         tabsAdapter.addFragment(tab.name, BaseAdvancedInstaller.newInstance(tab));
                         tabsAdapter.notifyDataSetChanged();
                     }
