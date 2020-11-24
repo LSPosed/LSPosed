@@ -6,5 +6,5 @@
     <color name="colorAccent_md2">@color/material_blue_700</color>
     <color name="colorActionBar_md2">#fff</color>
     <color name="colorStickyHeader_md2">#eaffffff</color>
-    <color name="selectorTransparency_md2">#1affffff</color>
+    <color name="selectorTransparency_md2">#34ffffff</color>
 </resources>
