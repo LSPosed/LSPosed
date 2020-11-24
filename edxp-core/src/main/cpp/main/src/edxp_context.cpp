@@ -234,7 +234,7 @@ namespace edxp {
             skip_ = true;
             LOGW("skip injecting xposed into android because it's whitelisted/blacklisted");
         }
-        if (!ConfigManager::GetInstance()->UpdateAppModuleList(0, "android")) {
+        if (!skip_ && !ConfigManager::GetInstance()->UpdateAppModuleList(0, "android")) {
             skip_ = true;
             LOGW("skip injecting into android because no module hooks it");
         }

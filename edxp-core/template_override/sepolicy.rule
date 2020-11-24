@@ -1,3 +1,4 @@
 allow system_server system_server process execmem
 allow system_server system_server memprotect mmap_zero
-attradd { system_app platform_app } mlstrustedsubject
+allow zygote app_data_file dir { search read }
+allow zygote app_data_file file { getattr read open }

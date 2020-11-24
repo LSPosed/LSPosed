@@ -41,20 +41,24 @@ namespace edxp {
 
     void ConfigManager::SnapshotBlackWhiteList() {
         white_list_default_.clear();
-        for (auto &item: fs::directory_iterator(whitelist_path_)) {
-            if (item.is_regular_file()) {
-                const auto &file_name = item.path().filename();
-                LOGI("  whitelist: %s", file_name.c_str());
-                white_list_default_.emplace(file_name);
-            }
-        }
         black_list_default_.clear();
-        for (auto &item: fs::directory_iterator(blacklist_path_)) {
-            if (item.is_regular_file()) {
-                const auto &file_name = item.path().filename();
-                LOGI("  blacklist: %s", file_name.c_str());
-                black_list_default_.emplace(file_name);
+        try {
+            for (auto &item: fs::directory_iterator(whitelist_path_)) {
+                if (item.is_regular_file()) {
+                    const auto &file_name = item.path().filename();
+                    LOGI("  whitelist: %s", file_name.c_str());
+                    white_list_default_.emplace(file_name);
+                }
             }
+            for (auto &item: fs::directory_iterator(blacklist_path_)) {
+                if (item.is_regular_file()) {
+                    const auto &file_name = item.path().filename();
+                    LOGI("  blacklist: %s", file_name.c_str());
+                    black_list_default_.emplace(file_name);
+                }
+            }
+        } catch (const fs::filesystem_error &e) {
+            LOGE("%s", e.what());
         }
     }
 
@@ -203,7 +207,7 @@ namespace edxp {
             auto &scope = modules_list_.back().second;
             std::string app_pkg_name;
             while (std::getline(ifs_c, app_pkg_name)) {
-                if(!app_pkg_name.empty())
+                if (!app_pkg_name.empty())
                     scope.emplace(std::move(app_pkg_name));
             }
             scope.insert(module_pkg_name); // Always add module itself
