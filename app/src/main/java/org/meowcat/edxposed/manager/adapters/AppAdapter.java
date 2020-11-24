@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -16,8 +17,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 
 import org.meowcat.edxposed.manager.App;
 import org.meowcat.edxposed.manager.R;
@@ -197,7 +202,17 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
             PackageInfo packageInfo = pm.getPackageInfo(info.packageName, 0);
             GlideApp.with(holder.appIcon)
                     .load(packageInfo)
-                    .into(holder.appIcon);
+                    .into(new CustomTarget<Drawable>() {
+                        @Override
+                        public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                            holder.appIcon.setImageDrawable(resource);
+                        }
+
+                        @Override
+                        public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                        }
+                    });
             holder.appVersion.setText(packageInfo.versionName);
             holder.appVersion.setSelected(true);
             String creationDate = dateformat.format(new Date(packageInfo.firstInstallTime));
