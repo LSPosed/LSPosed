@@ -76,12 +76,6 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
         fullList = pm.getInstalledApplications(PackageManager.GET_META_DATA);
         List<ApplicationInfo> rmList = new ArrayList<>();
         for (ApplicationInfo info : fullList) {
-            if (!App.getPreferences().getBoolean("show_modules", true)) {
-                if (info.metaData != null && info.metaData.containsKey("xposedmodule") || AppHelper.FORCE_WHITE_LIST_MODULE.contains(info.packageName)) {
-                    rmList.add(info);
-                    continue;
-                }
-            }
             if (this instanceof ScopeAdapter) {
                 if (AppHelper.isBlackListMode()) {
                     if (AppHelper.isWhiteListMode()) {
@@ -99,6 +93,10 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
                     }
                 }
                 if (info.packageName.equals(((ScopeAdapter) this).modulePackageName)) {
+                    rmList.add(info);
+                }
+            } else if (!App.getPreferences().getBoolean("show_modules", true)) {
+                if (info.metaData != null && info.metaData.containsKey("xposedmodule") || AppHelper.FORCE_WHITE_LIST_MODULE.contains(info.packageName)) {
                     rmList.add(info);
                 }
             }
