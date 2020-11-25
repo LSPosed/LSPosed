@@ -15,7 +15,6 @@ namespace edxp {
         NONE = 0,
         YAHFA = 1,
         SANDHOOK = 2,
-        WHALE = 3
     };
 
     class Context {

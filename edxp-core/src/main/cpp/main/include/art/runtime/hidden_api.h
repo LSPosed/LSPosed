@@ -32,7 +32,7 @@ namespace art {
 
         // @ApiSensitive(Level.HIGH)
         static void DisableHiddenApi(void *handle, HookFunType hook_func) {
-            const int api_level = GetAndroidApiLevel();
+            const int api_level = edxp::GetAndroidApiLevel();
             if (api_level < __ANDROID_API_P__) {
                 return;
             }

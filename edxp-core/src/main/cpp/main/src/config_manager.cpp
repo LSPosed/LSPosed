@@ -12,13 +12,13 @@
 #include <vector>
 #include <string>
 
-#include <android_build.h>
 #include <logging.h>
 #include <climits>
 #include <fstream>
 #include <sstream>
 #include "art/runtime/native/native_util.h"
 #include "config_manager.h"
+#include "utils.h"
 
 namespace edxp {
     namespace fs = std::filesystem;

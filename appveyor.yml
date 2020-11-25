@@ -36,7 +36,6 @@ only_commits:
     - edxp-common/
     - edxp-core/
     - edxp-sandhook/
-    - edxp-whale/
     - edxp-yahfa/
     - hiddenapi-stubs/
     - xposed-bridge/

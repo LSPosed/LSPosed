@@ -48,8 +48,6 @@ namespace edxp {
 
         inline auto GetLibSandHookName() const { return kLibSandHookName; }
 
-        inline auto GetLibWhaleName() const { return kLibWhaleName; }
-
         inline auto GetDataPathPrefix() const { return data_path_prefix_; }
 
         inline auto GetConfigPath(const std::string &suffix) const {

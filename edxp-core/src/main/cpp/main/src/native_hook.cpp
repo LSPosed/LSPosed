@@ -1,6 +1,5 @@
 
 #include <dlfcn.h>
-#include <android_build.h>
 #include <string>
 #include <vector>
 #include <config_manager.h>
@@ -9,7 +8,7 @@
 #include <art/runtime/jni_env_ext.h>
 #include <dobby.h>
 #include "android_restriction.h" // from Dobby
-
+#include "utils.h"
 #include "logging.h"
 #include "native_hook.h"
 #include "riru_hook.h"

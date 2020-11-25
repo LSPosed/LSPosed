@@ -27,10 +27,6 @@ public class BaseEdxpConfig implements EdxpConfig {
     public String getLibSandHookName() {
         return ConfigManager.getLibSandHookName();
     }
-    @Override
-    public String getLibWhaleName() {
-        return ConfigManager.getLibWhaleName();
-    }
 
     @Override
     public boolean isDynamicModulesMode() {

@@ -84,10 +84,5 @@ public class Main implements KeepAll {
         }catch(Throwable ignored) {
             Utils.logD("not using yahfa");
         }
-        try {
-            Class.forName("com.elderdrivers.riru.edxp.whale.core.WhaleEdxpImpl");
-        }catch(Throwable ignored) {
-            Utils.logD("not found whale");
-        }
     }
 }

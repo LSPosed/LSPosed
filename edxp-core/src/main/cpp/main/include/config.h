@@ -5,7 +5,6 @@
 #include <sys/types.h>
 #include <string>
 #include "art/base/macros.h"
-#include "android_build.h"
 #include "utils.h"
 
 namespace edxp {
@@ -30,7 +29,6 @@ namespace edxp {
 
     static const auto kLibArtName = "libart.so"_str;
     static const auto kLibFwName = "libandroidfw.so"_str;
-    static const auto kLibWhaleName = "libwhale.edxp.so"_str;
     static const auto kLibSandHookName = "libsandhook.edxp.so"_str;
     static const auto kLibDlName = "libdl.so"_str;
     static const auto kLibSandHookNativeName = "libsandhook-native.so"_str;

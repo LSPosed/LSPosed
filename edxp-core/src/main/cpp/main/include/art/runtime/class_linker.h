@@ -66,7 +66,7 @@ namespace art {
         static void Setup(void *handle, HookFunType hook_func) {
             LOGD("Classlinker hook setup, handle=%p", handle);
             // TODO: Maybe not compatible with Android 10-
-            int api_level = GetAndroidApiLevel();
+            int api_level = edxp::GetAndroidApiLevel();
             size_t OFFSET_classlinker;  // Get offset from art::Runtime::RunRootClinits() call in IDA
             switch(api_level) {
                 case __ANDROID_API_O__:

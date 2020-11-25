@@ -24,13 +24,11 @@ ext {
     module_name = "EdXposed"
     jar_dest_dir = "${projectDir}/template_override/system/framework/"
     is_windows = OperatingSystem.current().isWindows()
-    backends = ["YAHFA", "SandHook", "Whale"]
+    backends = ["YAHFA", "SandHook"]
     yahfa_module_id = "riru_edxposed"
     sandhook_module_id = yahfa_module_id + "_sandhook"
-    whale_module_id = yahfa_module_id + "_whale"
     yahfa_authors = "solohsu, MlgmXyysd & rk700"
     sandhook_authors = "solohsu, MlgmXyysd & ganyao114"
-    whale_authors = "solohsu, MlgmXyysd & asLody"
 
     riruModuleId = "edxp"
     zipPathMagiskRelease = "$buildDir/tmp/release/magisk"

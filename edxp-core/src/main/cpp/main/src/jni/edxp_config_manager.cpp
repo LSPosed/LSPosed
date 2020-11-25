@@ -35,10 +35,6 @@ namespace edxp {
         return env->NewStringUTF(ConfigManager::GetInstance()->GetXposedPropPath().c_str());
     }
 
-    static jstring ConfigManager_getLibWhaleName(JNI_START) {
-        return env->NewStringUTF(ConfigManager::GetInstance()->GetLibWhaleName().c_str());
-    }
-
     static jstring ConfigManager_getLibSandHookName(JNI_START) {
         return env->NewStringUTF(ConfigManager::GetInstance()->GetLibSandHookName().c_str());
     }
@@ -73,7 +69,6 @@ namespace edxp {
             NATIVE_METHOD(ConfigManager, getInstallerPackageName, "()Ljava/lang/String;"),
             NATIVE_METHOD(ConfigManager, getXposedPropPath, "()Ljava/lang/String;"),
             NATIVE_METHOD(ConfigManager, getLibSandHookName, "()Ljava/lang/String;"),
-            NATIVE_METHOD(ConfigManager, getLibWhaleName, "()Ljava/lang/String;"),
             NATIVE_METHOD(ConfigManager, getDataPathPrefix, "()Ljava/lang/String;"),
             NATIVE_METHOD(ConfigManager, getInstallerConfigPath,
                           "(Ljava/lang/String;)Ljava/lang/String;"),

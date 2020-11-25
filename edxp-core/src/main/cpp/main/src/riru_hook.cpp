@@ -8,7 +8,7 @@
 #include <xhook.h>
 #include <sys/system_properties.h>
 #include <logging.h>
-#include <android_build.h>
+#include "utils.h"
 #include "riru_hook.h"
 
 namespace edxp {

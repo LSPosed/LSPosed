@@ -15,7 +15,6 @@ public interface EdxpImpl extends KeepAll {
     int NONE = 0;
     int YAHFA = 1;
     int SANDHOOK = 2;
-    int WHALE = 3;
 
     @NonNull
     Proxy getNormalProxy();
@@ -31,7 +30,7 @@ public interface EdxpImpl extends KeepAll {
     boolean isInitialized();
 
     @Retention(SOURCE)
-    @IntDef({NONE, YAHFA, SANDHOOK, WHALE})
+    @IntDef({NONE, YAHFA, SANDHOOK})
     @interface Variant {
     }
 }

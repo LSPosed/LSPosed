@@ -6,5 +6,6 @@
 /template_override/module.prop
 /template_override/system
 /template_override/system_x86
+/template_override/riru/module.prop.new
 *.iml
 /.cxx
