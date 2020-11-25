@@ -35,7 +35,7 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
                 binding.downloads.setElevation(12);
             }
         });
-        setupWindowInsets(binding.snackbar, binding.nestedScrollView);
+        setupWindowInsets(binding.snackbar, null);
         repoLoader = RepoLoader.getInstance();
         ModuleUtil.getInstance().addListener(this);
         repoLoader.addListener(this, false);

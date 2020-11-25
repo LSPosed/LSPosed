@@ -7,7 +7,6 @@
     android:clipChildren="false"
     android:clipToPadding="false">
 
-
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"

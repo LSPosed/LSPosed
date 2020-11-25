@@ -30,7 +30,7 @@ public class AboutActivity extends BaseActivity {
         if (bar != null) {
             bar.setDisplayHomeAsUpEnabled(true);
         }
-        setupWindowInsets(binding.snackbar, binding.nestedScrollView);
+        setupWindowInsets(binding.snackbar, null);
 
         String packageName = getPackageName();
         String translator = getResources().getString(R.string.translator);

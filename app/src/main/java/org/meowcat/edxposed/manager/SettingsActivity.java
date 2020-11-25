@@ -17,7 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.view.ViewCompat;
 import androidx.preference.Preference;
 import androidx.preference.SwitchPreferenceCompat;
 
@@ -74,7 +73,6 @@ public class SettingsActivity extends BaseActivity {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new SettingsFragment()).commit();
         }
-
     }
 
     private void restart() {
@@ -628,12 +626,6 @@ public class SettingsActivity extends BaseActivity {
             ((LinearLayout) view).setClipChildren(false);
             ((FrameLayout) getListView().getParent()).setClipChildren(false);
             ((FrameLayout) getListView().getParent()).setClipToPadding(false);
-            ViewCompat.setOnApplyWindowInsetsListener(view, (v, insets) -> {
-                if (insets.getTappableElementInsets().bottom != insets.getSystemWindowInsetBottom()) {
-                    getListView().setPadding(0, 0, 0, insets.getSystemWindowInsetBottom());
-                }
-                return insets;
-            });
         }
     }
 }
