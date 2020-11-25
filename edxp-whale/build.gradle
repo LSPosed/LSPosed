@@ -64,7 +64,6 @@ afterEvaluate {
             from (dexOutPath){
                 rename("classes.dex", "edxp.dex")
             }
-            from "${projectDir}/src/main/resources/"
             destinationDir file(templateRootPath + "system/framework/")
             outputs.upToDateWhen { false }
         }
