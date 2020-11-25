@@ -41,6 +41,8 @@ import org.meowcat.edxposed.manager.util.RepoLoader;
 import java.text.DateFormat;
 import java.util.Date;
 
+import me.zhanghai.android.fastscroll.FastScrollerBuilder;
+
 public class DownloadActivity extends BaseActivity implements RepoLoader.RepoListener, ModuleUtil.ModuleListener, SharedPreferences.OnSharedPreferenceChangeListener {
     private DownloadsAdapter adapter;
     private String filterText;
@@ -104,11 +106,15 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
                 headersDecor.invalidateHeaders();
             }
         });
+        FastScrollerBuilder fastScrollerBuilder = new FastScrollerBuilder(binding.recyclerView);
         if (!App.getPreferences().getBoolean("md2", false)) {
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
                     DividerItemDecoration.VERTICAL);
             binding.recyclerView.addItemDecoration(dividerItemDecoration);
+        } else {
+            fastScrollerBuilder.useMd2Style();
         }
+        fastScrollerBuilder.build();
     }
 
 

@@ -18,6 +18,8 @@ import org.meowcat.edxposed.manager.adapters.ScopeAdapter;
 import org.meowcat.edxposed.manager.databinding.ActivityScopeListBinding;
 import org.meowcat.edxposed.manager.util.LinearLayoutManagerFix;
 
+import me.zhanghai.android.fastscroll.FastScrollerBuilder;
+
 public class ModuleScopeActivity extends BaseActivity implements AppAdapter.Callback {
     private SearchView searchView;
     private ScopeAdapter appAdapter;
@@ -51,11 +53,15 @@ public class ModuleScopeActivity extends BaseActivity implements AppAdapter.Call
         appAdapter.setHasStableIds(true);
         binding.recyclerView.setAdapter(appAdapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManagerFix(this));
+        FastScrollerBuilder fastScrollerBuilder = new FastScrollerBuilder(binding.recyclerView);
         if (!App.getPreferences().getBoolean("md2", false)) {
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
                     DividerItemDecoration.VERTICAL);
             binding.recyclerView.addItemDecoration(dividerItemDecoration);
+        } else {
+            fastScrollerBuilder.useMd2Style();
         }
+        fastScrollerBuilder.build();
         appAdapter.setCallback(this);
         handler.postDelayed(runnable, 300);
         binding.swipeRefreshLayout.setOnRefreshListener(() -> appAdapter.refresh());

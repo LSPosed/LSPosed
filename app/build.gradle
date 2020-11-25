@@ -80,5 +80,6 @@ dependencies {
     implementation 'com.timehop.stickyheadersrecyclerview:library:0.4.3@aar'
     implementation 'tech.rectifier.preferencex-android:preferencex-simplemenu:88f93154b2'
     implementation 'me.zhanghai.android.appiconloader:appiconloader-glide:1.2.0'
+    implementation 'me.zhanghai.android.fastscroll:library:1.1.5'
     compileOnly 'de.robv.android.xposed:api:82'
 }

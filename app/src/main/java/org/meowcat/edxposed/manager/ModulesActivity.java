@@ -58,6 +58,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import me.zhanghai.android.fastscroll.FastScrollerBuilder;
+
 import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
 
 public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleListener {
@@ -199,11 +201,15 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         moduleUtil.addListener(this);
         binding.recyclerView.setAdapter(adapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManagerFix(this));
+        FastScrollerBuilder fastScrollerBuilder = new FastScrollerBuilder(binding.recyclerView);
         if (!App.getPreferences().getBoolean("md2", false)) {
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
                     DividerItemDecoration.VERTICAL);
             binding.recyclerView.addItemDecoration(dividerItemDecoration);
+        } else {
+            fastScrollerBuilder.useMd2Style();
         }
+        fastScrollerBuilder.build();
         binding.swipeRefreshLayout.setOnRefreshListener(reloadModules::run);
         reloadModules.run();
         mSearchListener = new SearchView.OnQueryTextListener() {

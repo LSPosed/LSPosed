@@ -9,7 +9,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class RecyclerViewBugFixed extends RecyclerView {
+import me.zhanghai.android.fastscroll.FixItemDecorationRecyclerView;
+
+public class RecyclerViewBugFixed extends FixItemDecorationRecyclerView {
 
 
     public RecyclerViewBugFixed(@NonNull Context context) {
