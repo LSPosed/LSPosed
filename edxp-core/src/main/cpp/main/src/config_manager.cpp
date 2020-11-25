@@ -153,7 +153,7 @@ namespace edxp {
             if (!can_access_app_data) {
                 LOGE("can't access config path, using snapshot black list: %s",
                      package_name.c_str());
-                return black_list_default_.count(package_name);
+                return black_list_default_.count(package_name) == 0;
             }
             std::string target_path = blacklist_path_ / package_name;
             bool res = !path_exists(target_path);
