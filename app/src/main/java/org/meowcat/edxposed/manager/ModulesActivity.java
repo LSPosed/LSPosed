@@ -24,6 +24,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.meowcat.edxposed.manager.databinding.ActivityModulesBinding;
@@ -185,7 +186,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         pm = getPackageManager();
         displayNameComparator = new ApplicationInfo.DisplayNameComparator(pm);
         cmp = displayNameComparator;
-        installedXposedVersion = App.getXposedVersion();
+        installedXposedVersion = App.getActiveXposedVersion();
         if (installedXposedVersion <= 0) {
             Snackbar.make(binding.snackbar, R.string.xposed_not_active, Snackbar.LENGTH_LONG).setAction(R.string.Settings, v -> {
                 Intent intent = new Intent();
@@ -406,17 +407,17 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             if (packageName == null) {
                 return false;
             }
-            Intent launchIntent = getSettingsIntent(packageName);
-            if (launchIntent != null) {
-                startActivity(launchIntent);
+            Intent intent = getSettingsIntent(packageName);
+            if (intent != null) {
+                startActivity(intent);
             } else {
                 Snackbar.make(binding.snackbar, R.string.module_no_ui, Snackbar.LENGTH_LONG).show();
             }
             return true;
         } else if (itemId == R.id.menu_download_updates) {
-            Intent detailsIntent = new Intent(this, DownloadDetailsActivity.class);
-            detailsIntent.setData(Uri.fromParts("package", module.packageName, null));
-            startActivity(detailsIntent);
+            Intent intent = new Intent(this, DownloadDetailsActivity.class);
+            intent.setData(Uri.fromParts("package", module.packageName, null));
+            startActivity(intent);
             return true;
         } else if (itemId == R.id.menu_support) {
             NavUtil.startURL(this, Uri.parse(RepoDb.getModuleSupport(module.packageName)));
@@ -427,8 +428,8 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             try {
                 startActivity(intent);
-            } catch (Exception ex) {
-                ex.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             return true;
         } else if (itemId == R.id.menu_app_info) {
@@ -438,10 +439,22 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             startActivity(new Intent(Intent.ACTION_UNINSTALL_PACKAGE, Uri.fromParts("package", module.packageName, null)));
             return true;
         } else if (itemId == R.id.menu_scope) {
-            Intent scopeIntent = new Intent(this, ModuleScopeActivity.class);
-            scopeIntent.putExtra("modulePackageName", module.packageName);
-            scopeIntent.putExtra("moduleName", module.getAppName());
-            startActivity(scopeIntent);
+            if (App.supportScope()) {
+                Intent intent = new Intent(this, ModuleScopeActivity.class);
+                intent.putExtra("modulePackageName", module.packageName);
+                intent.putExtra("moduleName", module.getAppName());
+                startActivity(intent);
+            } else {
+                new MaterialAlertDialogBuilder(this)
+                        .setMessage(R.string.scope_not_supported)
+                        .setPositiveButton(R.string.download_view_download, (dialog, which) -> {
+                            Intent intent = new Intent();
+                            intent.setClass(this, EdDownloadActivity.class);
+                            startActivity(intent);
+                        })
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .show();
+            }
             return true;
         }
         return super.onContextItemSelected(item);
@@ -527,9 +540,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 } catch (RepoDb.RowNotFoundException e) {
                     menu.removeItem(R.id.menu_download_updates);
                     menu.removeItem(R.id.menu_support);
-                }
-                if (!App.supportScope()) {
-                    menu.removeItem(R.id.menu_scope);
                 }
                 if (installedModule.packageName.equals(BuildConfig.APPLICATION_ID)) {
                     menu.removeItem(R.id.menu_launch);

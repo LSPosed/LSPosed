@@ -212,7 +212,7 @@ public final class ModuleUtil {
     public synchronized void updateModulesList(boolean showToast, ActivityModulesBinding binding) {
         try {
             Log.i(App.TAG, "ModuleUtil -> updating modules.list");
-            int installedXposedVersion = App.getXposedVersion();
+            int installedXposedVersion = App.getActiveXposedVersion();
             if (!App.getPreferences().getBoolean("skip_xposedminversion_check", false) && installedXposedVersion <= 0 && showToast) {
                 if (binding != null) {
                     Snackbar.make(binding.snackbar, R.string.notinstalled, Snackbar.LENGTH_SHORT).show();
@@ -332,7 +332,7 @@ public final class ModuleUtil {
                 this.minVersion = 0;
                 this.description = "";
             } else {
-                int version = App.getXposedVersion();
+                int version = App.getActiveXposedVersion();
                 if (version > 0 && App.getPreferences().getBoolean("skip_xposedminversion_check", false)) {
                     this.minVersion = version;
                 } else {

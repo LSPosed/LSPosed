@@ -92,7 +92,7 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
         }
         if (installedXposedVersion != null) {
             int installedXposedVersionInt = extractIntPart(installedXposedVersion);
-            if (installedXposedVersionInt == App.getXposedVersion()) {
+            if (App.getActiveXposedVersion() != -1) {
                 String installedXposedVersionStr = installedXposedVersionInt + ".0";
                 binding.statusTitle.setText(R.string.Activated);
                 binding.statusSummary.setText(installedXposedVersion.replace(installedXposedVersionStr + "-", ""));
@@ -104,9 +104,9 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
                 binding.status.setCardBackgroundColor(ContextCompat.getColor(this, R.color.amber_500));
                 binding.statusIcon.setImageResource(R.drawable.ic_warning);
             }
-        } else if (App.getXposedVersion() > 0) {
+        } else if (App.getActiveXposedVersion() > 0) {
             binding.statusTitle.setText(R.string.Activated);
-            binding.statusSummary.setText(getString(R.string.version_x, App.getXposedVersion()));
+            binding.statusSummary.setText(getString(R.string.version_x, App.getActiveXposedVersion()));
             binding.status.setCardBackgroundColor(ContextCompat.getColor(this, R.color.download_status_update_available));
             binding.statusIcon.setImageResource(R.drawable.ic_check_circle);
         } else {

@@ -343,4 +343,5 @@
     <string name="settings_summary_disable_hidden_api_bypass">Disable hidden API restrictions bypass will pass some detection (eg Snapchat), these APIs are disabled by default\n<b>WARNING:</b> Enable this option may cause some features do not work properly, or some other problems</string>
     <string name="menu_scope">Scope</string>
     <string name="enable_scope">Enable scope</string>
+    <string name="scope_not_supported">The version of EdXposed you installed does not support module scope, download new version?</string>
 </resources>

@@ -24,7 +24,6 @@ import org.meowcat.edxposed.manager.util.FileUtils;
 import org.meowcat.edxposed.manager.util.ModuleUtil;
 import org.meowcat.edxposed.manager.util.NotificationUtil;
 import org.meowcat.edxposed.manager.util.RepoLoader;
-import org.meowcat.edxposed.manager.util.Version;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -54,7 +53,7 @@ public class App extends XposedApp implements Application.ActivityLifecycleCallb
     }
 
     public static InstallZipUtil.XposedProp getXposedProp() {
-        return XposedApp.getInstance().mXposedProp;
+        return getInstance().mXposedProp;
     }
 
     public static void runOnUiThread(Runnable action) {
@@ -63,10 +62,6 @@ public class App extends XposedApp implements Application.ActivityLifecycleCallb
         } else {
             action.run();
         }
-    }
-
-    public static Integer getXposedVersion() {
-        return getActiveXposedVersion();
     }
 
     public static SharedPreferences getPreferences() {
@@ -81,12 +76,7 @@ public class App extends XposedApp implements Application.ActivityLifecycleCallb
     }
 
     public static boolean supportScope() {
-        try {
-            String version = App.getXposedProp().getVersion();
-            return new Version(version.substring(6, 13)).compareTo(new Version("0.5.1.3")) >= 0;
-        } catch (Exception e) {
-            return false;
-        }
+        return App.getActiveXposedVersion() >= 92;
     }
 
     public void onCreate() {
@@ -131,7 +121,6 @@ public class App extends XposedApp implements Application.ActivityLifecycleCallb
 
         pref = PreferenceManager.getDefaultSharedPreferences(this);
 
-        XposedApp.getInstance().reloadXposedProp();
         createDirectories();
         NotificationUtil.init();
         registerReceivers();
