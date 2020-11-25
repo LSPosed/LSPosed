@@ -41,17 +41,12 @@ PATH_PREFIX="/data/user_de/0/"
 #PATH_PREFIX_LEGACY="/data/user/0/"
 
 sepolicy() {
-    # necessary for using mmap in system_server process
-    # read configs set in our app
-    # for built-in apps // TODO: maybe narrow down the target classes
-    # read module apk file in zygote
-    # TODO: remove coredomain sepolicy
-    supolicy --live "allow system_server system_server process { execmem }"\
-                    "allow system_server system_server memprotect { mmap_zero }"\
-                    "allow coredomain coredomain process { execmem }"\
-                    "allow coredomain app_data_file * *"\
-                    "attradd { system_app platform_app } mlstrustedsubject"\
-                    "allow zygote apk_data_file * *"
+    # Should be deprecated now. This is for debug only.
+    supolicy --live "allow system_server system_server process execmem" \
+                    "allow system_server system_server memprotect mmap_zero" \
+                    "allow zygote app_data_file dir { search read open }" \
+                    "allow zygote app_data_file file { getattr read open }" \
+                    "allow zygote app_data_file dir { getattr search read open }"
 }
 
 #if [[ ${ANDROID_SDK} -ge 24 ]]; then
