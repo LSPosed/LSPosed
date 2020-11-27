@@ -208,7 +208,7 @@ afterEvaluate {
             task("push${backendCapped}${variantCapped}", type: Exec) {
                 dependsOn zipTask
                 workingDir "${projectDir}/release"
-                def commands = ["adb", "push",
+                def commands = [android.adbExecutable, "push",
                                 "${module_name}-${backend}-${project.version}-${variantLowered}.zip",
                                 "/data/local/tmp/"]
                 if (is_windows) {
@@ -220,7 +220,7 @@ afterEvaluate {
             task("flash${backendCapped}${variantCapped}", type: Exec) {
                 dependsOn tasks.getByPath("push${backendCapped}${variantCapped}")
                 workingDir "${projectDir}/release"
-                def commands = ["adb", "shell", "su", "-c",
+                def commands = [android.adbExecutable, "shell", "su", "-c",
                                 "magisk --install-module /data/local/tmp/${module_name}-${backend}-${project.version}-${variantLowered}.zip"]
                 if (is_windows) {
                     commandLine 'cmd', '/c', commands.join(" ")
@@ -231,7 +231,7 @@ afterEvaluate {
             task("flashAndReboot${backendCapped}${variantCapped}", type: Exec) {
                 dependsOn tasks.getByPath("flash${backendCapped}${variantCapped}")
                 workingDir "${projectDir}/release"
-                def commands = ["adb", "shell", "reboot"]
+                def commands = [android.adbExecutable, "shell", "reboot"]
                 if (is_windows) {
                     commandLine 'cmd', '/c', commands.join(" ")
                 } else {

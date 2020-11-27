@@ -360,3 +360,11 @@ cp "${MODPATH}/module.prop" "${RIRU_TARGET}/module.prop" || abort "! Can't creat
 set_perm_recursive "${MODPATH}" 0 0 0755 0644
 
 ui_print "- Welcome to EdXposed ${VERSION}!"
+
+# before Magisk 16e4c67, sepolicy.rule is copied on the second reboot
+if [ "$MAGISK_VER_CODE" -lt 21006 ]; then
+  ui_print "*******************************"
+  ui_print "- Magisk version below 21006."
+  ui_print "- You have to manually reboot twice."
+  ui_print "*******************************"
+fi
