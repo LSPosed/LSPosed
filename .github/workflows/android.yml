@@ -50,19 +50,19 @@ jobs:
       with:
         name: EdXposed-SandHook-debug
         path: './EdXposed-SandHook-debug/*'
-    - name: Prepare publish artifact
-      if: ${{ github.event_name == 'push' && success() }}
-      run: mkdir -p to_publish && mv edxp-core/release/EdXposed-YAHFA-v*-release.zip to_publish/EdXposed-YAHFA-release.zip && mv edxp-core/release/EdXposed-SandHook-v*-release.zip to_publish/EdXposed-SandHook-release.zip && echo $APPVEYOR_BUILD_NUMBER > to_publish/version
-    - name: Publish build
-      if: ${{ github.event_name == 'push' && success() }}
-      uses: dmnemec/copy_file_to_another_repo_action@v1.0.4
-      env:
-        API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
-      with:
-        source_file: 'to_publish/*'
-        destination_repo: 'ElderDrivers/Repository-Website'
-        destination_folder: 'assets'
-        user_email: 'mlgmxyysd@meowcat.org'
-        user_name: 'MlgmXyysd'
+#    - name: Prepare publish artifact
+#      if: ${{ github.event_name == 'push' && success() }}
+#      run: mkdir -p to_publish && mv edxp-core/release/EdXposed-YAHFA-v*-release.zip to_publish/EdXposed-YAHFA-release.zip && mv edxp-core/release/EdXposed-SandHook-v*-release.zip to_publish/EdXposed-SandHook-release.zip && echo $APPVEYOR_BUILD_NUMBER > to_publish/version
+#    - name: Publish build
+#      if: ${{ github.event_name == 'push' && success() }}
+#      uses: dmnemec/copy_file_to_another_repo_action@v1.0.4
+#      env:
+#        API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+#      with:
+#        source_file: 'to_publish/*'
+#        destination_repo: 'ElderDrivers/Repository-Website'
+#        destination_folder: 'assets'
+#        user_email: 'mlgmxyysd@meowcat.org'
+#        user_name: 'MlgmXyysd'
 
 
