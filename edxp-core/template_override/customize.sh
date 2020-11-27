@@ -19,7 +19,7 @@ getRandomNameExist() {
     fi
 }
 
-RIRU_PATH="/data/misc/riru"
+RIRU_PATH="/data/adb/riru"
 RIRU_EDXP="$(getRandomNameExist 4 "libriru_" ".so" "
 /system/lib
 /system/lib64
@@ -36,23 +36,19 @@ PROP_PRODUCT=$(getprop ro.build.product)
 PROP_BRAND=$(getprop ro.product.brand)
 PROP_MANUFACTURER=$(getprop ro.product.manufacturer)
 
-JAR_EDXP="$(getRandomNameExist 8 "" ".jar" "
+JAR_EDXP="$(getRandomNameExist 8 "" ".dex" "
 /system/framework
-").jar"
-JAR_EDDALVIKDX="$(getRandomNameExist 8 "" ".jar" "
+").dex"
+JAR_EDDALVIKDX="$(getRandomNameExist 8 "" ".dex" "
 /system/framework
-").jar"
-JAR_EDDEXMAKER="$(getRandomNameExist 8 "" ".jar" "
+").dex"
+JAR_EDDEXMAKER="$(getRandomNameExist 8 "" ".dex" "
 /system/framework
-").jar"
+").dex"
 JAR_EDCONFIG="$(getRandomNameExist 8 "" ".jar" "
 /system/framework
 ").jar"
 LIB_RIRU_EDXP="libriru_${RIRU_EDXP}.so"
-LIB_WHALE_EDXP="lib$(getRandomNameExist 10 "lib" ".so" "
-/system/lib
-/system/lib64
-").so"
 LIB_SANDHOOK_EDXP="lib$(getRandomNameExist 13 "lib" ".so" "
 /system/lib
 /system/lib64
@@ -112,21 +108,6 @@ update_new_magisk() {
     ui_print "- We will still keep the rule file for you"
     ui_print "- You can update to the latest Magisk directly from official update channel"
     ui_print "******************************"
-}
-
-require_riru() {
-    ui_print "******************************"
-    ui_print "! Requirement module 'Riru - Core' is not installed"
-    ui_print "! You can download from 'Magisk Manager' or https://github.com/RikkaApps/Riru/releases"
-    abortC   "******************************"
-}
-
-require_new_riru() {
-    ui_print "******************************"
-    ui_print "! Old Riru ${1} (below v19) detected"
-    ui_print "! The latest version of 'Riru - Core' is required"
-    ui_print "! You can download from 'Magisk Manager' or https://github.com/RikkaApps/Riru/releases"
-    abortC   "******************************"
 }
 
 require_yahfa() {
@@ -193,19 +174,7 @@ check_magisk_version() {
     [[ ${MAGISK_VER_CODE} -eq 20101 ]] && update_new_magisk
 }
 
-check_riru_version() {
-    if [[ ! -f "${RIRU_PATH}/api_version" ]] && [[ ! -f "${RIRU_PATH}/api_version.new" ]]; then
-        require_riru
-    fi
-    RIRU_API_VERSION=$(cat "${RIRU_PATH}/api_version.new") || RIRU_API_VERSION=$(cat "${RIRU_PATH}/api_version") || RIRU_API_VERSION=0
-    [[ "${RIRU_API_VERSION}" -eq "${RIRU_API_VERSION}" ]] || RIRU_API_VERSION=0
-    ui_print "- Riru API version: ${RIRU_API_VERSION}"
-    if [[ "${RIRU_API_VERSION}" -lt ${RIRU_MIN_API_VERSION} ]]; then
-        require_new_riru ${RIRU_API_VERSION}
-    fi
-}
-
-check_architecture() {
+edxp_check_architecture() {
     if [[ "${MODID}" == "riru_edxposed_sandhook" ]]; then
         VARIANTS="SandHook"
     else
@@ -240,28 +209,64 @@ check_android_version() {
 
 ui_print "- EdXposed Version ${VERSION}"
 
+# extract verify.sh
+ui_print "- Extracting verify.sh"
+unzip -o "$ZIPFILE" 'verify.sh' -d "$TMPDIR" >&2
+if [ ! -f "$TMPDIR/verify.sh" ]; then
+  ui_print    "*********************************************************"
+  ui_print    "! Unable to extract verify.sh!"
+  ui_print    "! This zip may be corrupted, please try downloading again"
+  abort "*********************************************************"
+fi
+. $TMPDIR/verify.sh
+
+# extract riru.sh
+extract "$ZIPFILE" riru.sh "$MODPATH"
+. $MODPATH/riru.sh
+
 #check_persist
 check_android_version
 check_magisk_version
 check_riru_version
-check_architecture
+edxp_check_architecture
 
 ui_print "- Extracting module files"
-unzip -o "${ZIPFILE}" EdXposed.apk module.prop post-fs-data.sh sepolicy.rule system.prop uninstall.sh 'system/*' -d "${MODPATH}" >&2
+extract "${ZIPFILE}" 'EdXposed.apk' "${MODPATH}"
+extract "${ZIPFILE}" 'module.prop' "${MODPATH}"
+extract "${ZIPFILE}" 'system.prop' "${MODPATH}"
+extract "${ZIPFILE}" 'sepolicy.rule' "${MODPATH}"
+extract "${ZIPFILE}" 'post-fs-data.sh' "${MODPATH}"
+extract "${ZIPFILE}" 'uninstall.sh' "${MODPATH}"
 
-if [[ "${ARCH}" == "x86" || "${ARCH}" == "x64" ]]; then
-    ui_print "- Replacing x86 and x86_64 libraries"
-    unzip -o "${ZIPFILE}" 'system_x86/*' -d "${MODPATH}" >&2
-    rm -rf "${MODPATH}/system/lib"
-    rm -rf "${MODPATH}/system/lib64"
-    mv "${MODPATH}/system_x86/lib" "${MODPATH}/system/lib"
-    mv "${MODPATH}/system_x86/lib64" "${MODPATH}/system/lib64"
-    rm -rf "${MODPATH}/system_x86"
-fi
+extract "${ZIPFILE}" 'system/framework/edconfig.jar' "${MODPATH}"
+extract "${ZIPFILE}" 'system/framework/eddalvikdx.dex' "${MODPATH}"
+extract "${ZIPFILE}" 'system/framework/eddexmaker.dex' "${MODPATH}"
+extract "${ZIPFILE}" 'system/framework/edxp.dex' "${MODPATH}"
 
-if [[ "${IS64BIT}" == false ]]; then
-    ui_print "- Removing 64-bit libraries"
-    rm -rf "${MODPATH}/system/lib64"
+if [ "$ARCH" = "x86" ] || [ "$ARCH" = "x64" ]; then
+  ui_print "- Extracting x86 libraries"
+  extract "$ZIPFILE" 'system_x86/lib/libriru_edxp.so' "$MODPATH"
+  mv "$MODPATH/system_x86/" "$MODPATH/system/"
+
+  if [ "$IS64BIT" = true ]; then
+    ui_print "- Extracting x64 libraries"
+    extract "$ZIPFILE" 'system_x86/lib64/libriru_edxp.so' "$MODPATH"
+    mv "$MODPATH/system_x86/lib64" "$MODPATH/system/lib64"
+  fi
+else
+  ui_print "- Extracting arm libraries"
+  extract "$ZIPFILE" 'system/lib/libriru_edxp.so' "$MODPATH"
+  if [[ "${VARIANTS}" == "SandHook" ]]; then
+    extract "$ZIPFILE" 'system/lib/libsandhook-native.so' "$MODPATH"
+  fi
+
+  if [ "$IS64BIT" = true ]; then
+    ui_print "- Extracting arm64 libraries"
+    extract "$ZIPFILE" 'system/lib64/libriru_edxp.so' "$MODPATH"
+    if [[ "${VARIANTS}" == "SandHook" ]]; then
+     extract "$ZIPFILE" 'system/lib/libsandhook-native.so' "$MODPATH"
+    fi
+  fi
 fi
 
 if [[ "$(pm path org.meowcat.edxposed.manager)" == "" && "$(pm path de.robv.android.xposed.installer)" == "" ]]; then
@@ -290,16 +295,14 @@ fi
 
 ui_print "- Copying framework libraries"
 
-mv "${MODPATH}/system/framework/eddalvikdx.jar" "${MODPATH}/system/framework/${JAR_EDDALVIKDX}"
-mv "${MODPATH}/system/framework/edxp.jar" "${MODPATH}/system/framework/${JAR_EDXP}"
-mv "${MODPATH}/system/framework/eddexmaker.jar" "${MODPATH}/system/framework/${JAR_EDDEXMAKER}"
+mv "${MODPATH}/system/framework/eddalvikdx.dex" "${MODPATH}/system/framework/${JAR_EDDALVIKDX}"
+mv "${MODPATH}/system/framework/edxp.dex" "${MODPATH}/system/framework/${JAR_EDXP}"
+mv "${MODPATH}/system/framework/eddexmaker.dex" "${MODPATH}/system/framework/${JAR_EDDEXMAKER}"
 mv "${MODPATH}/system/framework/edconfig.jar" "${MODPATH}/system/framework/${JAR_EDCONFIG}"
 mv "${MODPATH}/system/lib/libriru_edxp.so" "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
-mv "${MODPATH}/system/lib/libwhale.edxp.so" "${MODPATH}/system/lib/${LIB_WHALE_EDXP}"
 
 if [[ "${IS64BIT}" == true ]]; then
     mv "${MODPATH}/system/lib64/libriru_edxp.so" "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
-    mv "${MODPATH}/system/lib64/libwhale.edxp.so" "${MODPATH}/system/lib64/${LIB_WHALE_EDXP}"
 fi
 
 if [[ "${VARIANTS}" == "SandHook" ]]; then
@@ -311,17 +314,15 @@ fi
 
 ui_print "- Resetting libraries path"
 
-sed -i 's:/system/framework/edxp.jar\:/system/framework/eddalvikdx.jar\:/system/framework/eddexmaker.jar:/system/framework/'"${JAR_EDXP}"'\:/system/framework/'"${JAR_EDDALVIKDX}"'\:/system/framework/'"${JAR_EDDEXMAKER}"':g' "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
+sed -i 's:/system/framework/edxp.dex\:/system/framework/eddalvikdx.dex\:/system/framework/eddexmaker.dex:/system/framework/'"${JAR_EDXP}"'\:/system/framework/'"${JAR_EDDALVIKDX}"'\:/system/framework/'"${JAR_EDDEXMAKER}"':g' "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
 sed -i 's:/system/framework/edconfig.jar:/system/framework/'"${JAR_EDCONFIG}"':g' "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
 sed -i 's:libriru_edxp.so:'"${LIB_RIRU_EDXP}"':g' "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
-sed -i 's:libwhale.edxp.so:'"${LIB_WHALE_EDXP}"':g' "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
 sed -i 's:libsandhook.edxp.so:'"${LIB_SANDHOOK_EDXP}"':g' "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
 
 if [[ "${IS64BIT}" == true ]]; then
-    sed -i 's:/system/framework/edxp.jar\:/system/framework/eddalvikdx.jar\:/system/framework/eddexmaker.jar:/system/framework/'"${JAR_EDXP}"'\:/system/framework/'"${JAR_EDDALVIKDX}"'\:/system/framework/'"${JAR_EDDEXMAKER}"':g' "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
+    sed -i 's:/system/framework/edxp.dex\:/system/framework/eddalvikdx.dex\:/system/framework/eddexmaker.dex:/system/framework/'"${JAR_EDXP}"'\:/system/framework/'"${JAR_EDDALVIKDX}"'\:/system/framework/'"${JAR_EDDEXMAKER}"':g' "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
     sed -i 's:/system/framework/edconfig.jar:/system/framework/'"${JAR_EDCONFIG}"':g' "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
     sed -i 's:libriru_edxp.so:'"${LIB_RIRU_EDXP}"':g' "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
-    sed -i 's:libwhale.edxp.so:'"${LIB_WHALE_EDXP}"':g' "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
     sed -i 's:libsandhook.edxp.so:'"${LIB_SANDHOOK_EDXP}"':g' "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
 fi
 
@@ -336,6 +337,16 @@ if [[ -e "${RIRU_MODULES}/edxp" ]]; then
     rm -rf "${RIRU_MODULES}/edxp"
 fi
 
+# extract Riru files
+ui_print "- Extracting Riru files"
+[ -d "$RIRU_TARGET" ] || mkdir -p "$RIRU_TARGET" || abort "! Can't create $RIRU_TARGET"
+
+rm -f "$RIRU_TARGET/module.prop.new"
+extract "$ZIPFILE" 'riru/module.prop.new' "$RIRU_TARGET"
+mv "$RIRU_TARGET/riru/module.prop.new" "$RIRU_TARGET/module.prop"
+rm -rf "$RIRU_TARGET/riru/"
+set_perm "$RIRU_TARGET/module.prop" 0 0 0600 $RIRU_SECONTEXT
+
 ui_print "- Copying extra files"
 
 [[ -d "${RIRU_TARGET}" ]] || mkdir -p "${RIRU_TARGET}" || abort "! Can't mkdir -p ${RIRU_TARGET}"
@@ -349,3 +360,11 @@ cp "${MODPATH}/module.prop" "${RIRU_TARGET}/module.prop" || abort "! Can't creat
 set_perm_recursive "${MODPATH}" 0 0 0755 0644
 
 ui_print "- Welcome to EdXposed ${VERSION}!"
+
+# before Magisk 16e4c67, sepolicy.rule is copied on the second reboot
+if [ "$MAGISK_VER_CODE" -lt 21006 ]; then
+  ui_print "*******************************"
+  ui_print "- Magisk version below 21006."
+  ui_print "- You have to manually reboot twice."
+  ui_print "*******************************"
+fi

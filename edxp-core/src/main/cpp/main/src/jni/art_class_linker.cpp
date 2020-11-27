@@ -4,6 +4,7 @@
 #include <art/runtime/class_linker.h>
 #include <nativehelper/jni_macros.h>
 #include <vector>
+#include <HookMain.h>
 #include "art_class_linker.h"
 
 namespace edxp {
@@ -11,7 +12,7 @@ namespace edxp {
     static std::vector<void *> deopted_methods;
 
     static void ClassLinker_setEntryPointsToInterpreter(JNI_START, jobject method) {
-        void *reflected_method = env->FromReflectedMethod(method);
+        void *reflected_method = getArtMethod(env, method);
         if (std::find(deopted_methods.begin(), deopted_methods.end(), reflected_method) !=
             deopted_methods.end()) {
             LOGD("method %p has been deopted before, skip...", reflected_method);

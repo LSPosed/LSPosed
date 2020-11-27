@@ -21,6 +21,8 @@ import java.util.Set;
 
 import dalvik.system.InMemoryDexClassLoader;
 import de.robv.android.xposed.XC_MethodHook.MethodHookParam;
+import de.robv.android.xposed.annotation.ApiSensitive;
+import de.robv.android.xposed.annotation.Level;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XC_InitZygote;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
@@ -92,6 +94,7 @@ public final class XposedBridge {
 
 	public static volatile ClassLoader dummyClassLoader = null;
 
+	@ApiSensitive(Level.MIDDLE)
 	public static void initXResources() {
         if (dummyClassLoader != null) {
         	return;
@@ -143,7 +146,7 @@ public final class XposedBridge {
 	 */
 	public static int getXposedVersion() {
 		// ed: fixed value for now
-		return 91;
+		return 92;
 	}
 
 	/**

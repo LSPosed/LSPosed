@@ -3,6 +3,7 @@
 
 #include <cstdint>
 
+// @ApiSensitive(Level.MIDDLE)
 namespace android {
 
     typedef int32_t status_t;

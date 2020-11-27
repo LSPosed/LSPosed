@@ -1,8 +1,8 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion '28.0.3'
+    compileSdkVersion androidCompileSdkVersion.toInteger()
+    ndkVersion androidCompileNdkVersion
 
     defaultConfig {
         minSdkVersion 26
@@ -39,8 +39,8 @@ preBuild.doLast {
 }
 
 dependencies {
-    compileOnly project(':hiddenapi-stubs')
-    compileOnly project(':dexmaker')
+    compileOnly files(project(":dexmaker").tasks.getByName("makeJarRelease").outputs)
+    compileOnly files(project(":hiddenapi-stubs").tasks.getByName("makeStubJar").outputs)
 }
 
 afterEvaluate {

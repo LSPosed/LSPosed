@@ -91,6 +91,6 @@ Edxposed 拥有三个不同的版本
 - [Riru](https://github.com/RikkaApps/Riru): 提供一种将代码注入 zygote 进程的方法
 - [XposedBridge](https://github.com/rovo89/XposedBridge): 原版 xposed 框架的 API
 - [dexmaker](https://github.com/linkedin/dexmaker) 和 [dalvikdx](https://github.com/JakeWharton/dalvik-dx): 动态生成 YAHFA hook 类
-- [Whale](https://github.com/asLody/whale): 用于 hook 内联方法
 - [SandHook](https://github.com/ganyao114/SandHook/): SandHook 分支的 ART hooking 框架
+- [Dobby](https://github.com/jmpews/Dobby): 用于 hook 内联方法
 

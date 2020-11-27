@@ -122,7 +122,9 @@ public class HookMain {
             checkCompatibleMethods(target, backup, "Original", "Backup");
         }
         if (backup != null) {
-            HookMethodResolver.resolveMethod(hook, backup);
+            HookMethodResolver.resolveMethod(hook, backup, target);
+        } else {
+            Utils.logD("wanna resolve backup method, but it's null, target: " + target);
         }
         // make sure GC completed before hook
         Thread currentThread = Thread.currentThread();

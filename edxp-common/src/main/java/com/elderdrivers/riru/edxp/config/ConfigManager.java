@@ -43,11 +43,9 @@ public class ConfigManager {
 
     public static native String getLibSandHookName();
 
-    public static native String getLibWhaleName();
-
     public static native String getInstallerConfigPath(String suffix);
 
     public static native String getDataPathPrefix();
 
-    public static native boolean isAppNeedHook(String appDataDir);
+    public static native String getModulesList();
 }

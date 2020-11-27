@@ -37,6 +37,7 @@ namespace art {
                 return instance_;
             }
 
+            // @ApiSensitive(Level.MIDDLE)
             static void Setup(void *handle, HookFunType hook_func) {
                 HOOK_FUNC(PreZygoteFork, "_ZN3art2gc4Heap13PreZygoteForkEv");
                 RETRIEVE_FUNC_SYMBOL(WaitForGcToComplete,

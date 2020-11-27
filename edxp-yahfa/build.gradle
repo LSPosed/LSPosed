@@ -4,7 +4,7 @@ sourceCompatibility = "7"
 targetCompatibility = "7"
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion androidCompileSdkVersion.toInteger()
 
     defaultConfig {
         applicationId "com.elderdrivers.riru.edxp.yahfa"
@@ -22,13 +22,13 @@ android {
         }
     }
 
+    ndkVersion androidCompileNdkVersion
 }
 
 dependencies {
-    compileOnly files("${hiddenApiStubJarFilePath}")
+    compileOnly project(':hiddenapi-stubs')
     implementation project(':edxp-common')
-    implementation project(':xposed-bridge')
-    compileOnly project(':dexmaker')
+    compileOnly files(project(":dexmaker").tasks.getByName("makeJarRelease").outputs)
 }
 
 
@@ -57,23 +57,16 @@ afterEvaluate {
         def variantNameCapped = variant.name.capitalize()
         def variantNameLowered = variant.name.toLowerCase()
 
-        def myTemplatePath = "${projectDir}/template_override/"
-
-        task("makeAndCopy${variantNameCapped}", type: Jar, dependsOn: "assemble${variantNameCapped}") {
+        task("copyDex${variantNameCapped}", type: Copy) {
+            dependsOn "assemble${variantNameCapped}"
             dependsOn tasks.getByPath(":edxp-common:copyCommonProperties")
-            def dexOutPath = variant.name.contains("release") ?
-                    "${buildDir}/intermediates/transforms/dexMerger/${variantNameLowered}/0/" :
-                    "${buildDir}/intermediates/dex/${variantNameLowered}/mergeDex${variantNameCapped}/out/"
-            from dexOutPath, "${projectDir}/src/main/resources/"
-            destinationDir file(myTemplatePath + "system/framework/")
-            baseName "edxp"
-            doLast {
-                copy {
-                    from file(myTemplatePath)
-                    into file(templateRootPath)
-                }
+            def dexOutPath = "${buildDir}/intermediates/dex/${variantNameLowered}/minify${variantNameCapped}WithR8"
+            from (dexOutPath){
+                rename("classes.dex", "edxp.dex")
             }
+            destinationDir file(templateRootPath + "system/framework/")
             outputs.upToDateWhen { false }
         }
+
     }
 }

@@ -21,8 +21,13 @@ public class XposedInstallerHooker {
             final String xposedAppClass = LEGACY_INSTALLER_PACKAGE_NAME + ".XposedApp";
             final Class InstallZipUtil = XposedHelpers.findClass(LEGACY_INSTALLER_PACKAGE_NAME
                     + ".util.InstallZipUtil", classLoader);
-            XposedHelpers.findAndHookMethod(xposedAppClass, classLoader, "getActiveXposedVersion",
-                    XC_MethodReplacement.returnConstant(XposedBridge.getXposedVersion()));
+            XposedHelpers.findAndHookMethod(xposedAppClass, classLoader, "getActiveXposedVersion", new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    Utils.logD("after getActiveXposedVersion...");
+                    param.setResult(XposedBridge.getXposedVersion());
+                }
+            });
             XposedHelpers.findAndHookMethod(xposedAppClass, classLoader,
                     "reloadXposedProp", new XC_MethodHook() {
                         @Override

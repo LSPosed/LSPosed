@@ -8,10 +8,13 @@ import java.lang.reflect.Field;
 
 import dalvik.system.BaseDexClassLoader;
 import dalvik.system.DexClassLoader;
+import de.robv.android.xposed.annotation.ApiSensitive;
+import de.robv.android.xposed.annotation.Level;
 
 /**
  * For 6.0 only.
  */
+@ApiSensitive(Level.LOW)
 @TargetApi(Build.VERSION_CODES.M)
 public class DexUtils {
 

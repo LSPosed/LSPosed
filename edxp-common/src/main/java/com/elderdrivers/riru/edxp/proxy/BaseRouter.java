@@ -7,55 +7,40 @@ import android.text.TextUtils;
 
 import com.elderdrivers.riru.edxp._hooker.impl.HandleBindApp;
 import com.elderdrivers.riru.edxp._hooker.impl.LoadedApkCstr;
-import com.elderdrivers.riru.edxp._hooker.impl.OneplusWorkaround;
 import com.elderdrivers.riru.edxp._hooker.impl.StartBootstrapServices;
 import com.elderdrivers.riru.edxp._hooker.impl.SystemMain;
 import com.elderdrivers.riru.edxp._hooker.yahfa.HandleBindAppHooker;
 import com.elderdrivers.riru.edxp._hooker.yahfa.LoadedApkConstructorHooker;
-import com.elderdrivers.riru.edxp._hooker.yahfa.OnePlusWorkAroundHooker;
 import com.elderdrivers.riru.edxp._hooker.yahfa.StartBootstrapServicesHooker;
 import com.elderdrivers.riru.edxp._hooker.yahfa.SystemMainHooker;
 import com.elderdrivers.riru.edxp.core.yahfa.HookMain;
 import com.elderdrivers.riru.edxp.entry.yahfa.AppBootstrapHookInfo;
 import com.elderdrivers.riru.edxp.entry.yahfa.SysBootstrapHookInfo;
 import com.elderdrivers.riru.edxp.entry.yahfa.SysInnerHookInfo;
-import com.elderdrivers.riru.edxp.entry.yahfa.WorkAroundHookInfo;
 import com.elderdrivers.riru.edxp.util.Utils;
+import com.elderdrivers.riru.edxp.util.Versions;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.XposedInit;
+import de.robv.android.xposed.annotation.ApiSensitive;
+import de.robv.android.xposed.annotation.Level;
 
 public abstract class BaseRouter implements Router {
-
-    protected volatile boolean forkCompleted = false;
 
     protected volatile AtomicBoolean bootstrapHooked = new AtomicBoolean(false);
 
     protected static boolean useXposedApi = false;
 
     public void initResourcesHook() {
-        startWorkAroundHook(); // for OnePlus devices
         XposedBridge.initXResources();
     }
 
     public void prepare(boolean isSystem) {
         // this flag is needed when loadModules
         XposedInit.startsSystemServer = isSystem;
-    }
-
-    public void onForkStart() {
-        forkCompleted = false;
-    }
-
-    public void onForkFinish() {
-        forkCompleted = true;
-    }
-
-    public boolean isForkCompleted() {
-        return forkCompleted;
     }
 
     public void installBootstrapHooks(boolean isSystem) {
@@ -72,10 +57,9 @@ public abstract class BaseRouter implements Router {
         }
     }
 
-    public void loadModulesSafely(boolean isInZygote, boolean callInitZygote) {
+    public void loadModulesSafely(boolean callInitZygote) {
         try {
-            // FIXME some coredomain app can't reading modules.list
-            XposedInit.loadModules(isInZygote, callInitZygote);
+            XposedInit.loadModules(callInitZygote);
         } catch (Exception exception) {
             Utils.logE("error loading module list", exception);
         }
@@ -93,6 +77,7 @@ public abstract class BaseRouter implements Router {
     }
 
 
+    @ApiSensitive(Level.LOW)
     public void startBootstrapHook(boolean isSystem) {
         Utils.logD("startBootstrapHook starts: isSystem = " + isSystem);
         ClassLoader classLoader = BaseRouter.class.getClassLoader();
@@ -127,31 +112,18 @@ public abstract class BaseRouter implements Router {
     public void startSystemServerHook() {
         ClassLoader classLoader = BaseRouter.class.getClassLoader();
         if (useXposedApi) {
+            StartBootstrapServices sbsHooker = new StartBootstrapServices();
+            Object[] paramTypesAndCallback = Versions.hasR() ?
+                    new Object[]{"com.android.server.utils.TimingsTraceAndSlog", sbsHooker} :
+                    new Object[]{sbsHooker};
             XposedHelpers.findAndHookMethod(StartBootstrapServicesHooker.className,
                     SystemMain.systemServerCL,
-                    StartBootstrapServicesHooker.methodName, new StartBootstrapServices());
+                    StartBootstrapServicesHooker.methodName, paramTypesAndCallback);
         } else {
             HookMain.doHookDefault(
                     classLoader,
                     SystemMain.systemServerCL,
                     SysInnerHookInfo.class.getName());
-        }
-    }
-
-    public void startWorkAroundHook() {
-        ClassLoader classLoader = BaseRouter.class.getClassLoader();
-        if (useXposedApi) {
-            try {
-                XposedHelpers.findAndHookMethod(OnePlusWorkAroundHooker.className,
-                        classLoader, OnePlusWorkAroundHooker.methodName,
-                        int.class, String.class, new OneplusWorkaround());
-            } catch (Throwable ignored) {
-            }
-        } else {
-            HookMain.doHookDefault(
-                    BaseRouter.class.getClassLoader(),
-                    classLoader,
-                    WorkAroundHookInfo.class.getName());
         }
     }
 }

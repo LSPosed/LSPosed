@@ -14,7 +14,9 @@
 #include "framework/androidfw/ResourceTypes.h"
 #include "resource_hook.h"
 #include "dl_util.h"
+#include "config.h"
 
+// @ApiSensitive(Level.HIGH)
 namespace edxp {
 
     static constexpr const char *kXResourcesClassName = "android/content/res/XResources";

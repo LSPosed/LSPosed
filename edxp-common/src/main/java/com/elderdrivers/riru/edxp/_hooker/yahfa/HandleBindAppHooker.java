@@ -4,7 +4,10 @@ import com.elderdrivers.riru.common.KeepMembers;
 import com.elderdrivers.riru.edxp._hooker.impl.HandleBindApp;
 
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.annotation.ApiSensitive;
+import de.robv.android.xposed.annotation.Level;
 
+@ApiSensitive(Level.LOW)
 public class HandleBindAppHooker implements KeepMembers {
 
     public static String className = "android.app.ActivityThread";

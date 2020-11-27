@@ -1,47 +1,33 @@
-import org.gradle.internal.os.OperatingSystem
-apply plugin: 'java-library'
+apply plugin: 'com.android.application'
 
-dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+repositories {
+    jcenter()
 }
 
-sourceCompatibility = "7"
-targetCompatibility = "7"
-
-task findDx {
-    if (OperatingSystem.current().isWindows()){
-        return true
-    }
-    doLast {
-        new ByteArrayOutputStream().withStream { os ->
-            exec {
-                commandLine "which", "dx"
-                standardOutput os
-            }
-            rootProject.ext.dxPath = os.toString()
-        }
-    }
+android {
+    compileSdkVersion androidCompileSdkVersion.toInteger()
+    ndkVersion androidCompileNdkVersion
 }
 
-task dexInJar(type: Jar) {
-    dependsOn jar
-    dependsOn findDx
-    doFirst {
-        exec {
-            workingDir jar.destinationDir
-            if (OperatingSystem.current().isWindows()){
-                executable "dx.bat"
-                args "--dex", "--output", "classes.dex", "${jar.archiveName}"
-            } else {
-                executable "bash"
-                args rootProject.ext.dxPath.trim(), "--dex", "--output", "classes.dex", "${jar.archiveName}"
+afterEvaluate {
+    android.applicationVariants.all { variant ->
+        def variantNameCapped = variant.name.capitalize()
+        def variantNameLowered = variant.name.toLowerCase()
+
+        task("copyDex${variantNameCapped}", type: Copy) {
+            dependsOn "assemble${variantNameCapped}"
+            def dexOutPath = "${buildDir}/intermediates/dex/${variantNameLowered}/mergeDex${variantNameCapped}"
+            from (dexOutPath){
+                rename("classes.dex", "eddalvikdx.dex")
             }
+            destinationDir file(templateRootPath + "system/framework/")
+            outputs.upToDateWhen { false }
         }
-    }
-    from "${jar.destinationDir}/classes.dex"
-    destinationDir jar.destinationDir
-    baseName "eddalvikdx"
-    onlyIf {
-        !jar.state.upToDate || !file(archiveName).exists()
+        task("makeJar${variantNameCapped}", type: Jar, dependsOn: "assemble${variantNameCapped}") {
+            dependsOn "assemble${variantNameCapped}"
+            from "${buildDir}/intermediates/javac/${variantNameLowered}/classes"
+            baseName "dalvikdx"
+            outputs.file(archivePath)
+        }
     }
 }

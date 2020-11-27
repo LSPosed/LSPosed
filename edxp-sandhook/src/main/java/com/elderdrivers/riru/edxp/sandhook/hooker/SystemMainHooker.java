@@ -12,8 +12,11 @@ import com.swift.sandhook.annotation.HookMethodBackup;
 import java.lang.reflect.Method;
 
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.annotation.ApiSensitive;
+import de.robv.android.xposed.annotation.Level;
 
 
+@ApiSensitive(Level.LOW)
 // system_server initialization
 // ed: only support sdk >= 21 for now
 @HookClass(ActivityThread.class)

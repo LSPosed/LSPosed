@@ -1,0 +1,3 @@
+[submodule "edxp-core/src/main/cpp/external/Dobby"]
+	path = edxp-core/src/main/cpp/external/Dobby
+	url = https://github.com/jmpews/Dobby.git

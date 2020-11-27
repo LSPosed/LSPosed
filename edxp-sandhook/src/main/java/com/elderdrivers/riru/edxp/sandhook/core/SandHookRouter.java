@@ -7,7 +7,6 @@ import com.elderdrivers.riru.edxp.sandhook.config.SandHookProvider;
 import com.elderdrivers.riru.edxp.sandhook.entry.AppBootstrapHookInfo;
 import com.elderdrivers.riru.edxp.sandhook.entry.SysBootstrapHookInfo;
 import com.elderdrivers.riru.edxp.sandhook.entry.SysInnerHookInfo;
-import com.elderdrivers.riru.edxp.sandhook.entry.WorkAroundHookInfo;
 import com.elderdrivers.riru.edxp.sandhook.hooker.SystemMainHooker;
 import com.elderdrivers.riru.edxp.util.Utils;
 import com.swift.sandhook.xposedcompat.XposedCompat;
@@ -42,14 +41,6 @@ public class SandHookRouter extends BaseRouter {
             XposedCompat.addHookers(SystemMainHooker.systemServerCL, SysInnerHookInfo.hookItems);
         } else {
             super.startSystemServerHook();
-        }
-    }
-
-    public void startWorkAroundHook() {
-        if (useSandHook) {
-            XposedCompat.addHookers(XposedBridge.BOOTCLASSLOADER, WorkAroundHookInfo.hookItems);
-        } else {
-            super.startWorkAroundHook();
         }
     }
 

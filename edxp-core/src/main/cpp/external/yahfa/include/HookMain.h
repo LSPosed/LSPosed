@@ -25,6 +25,8 @@ void setNonCompilable(void *method);
 
 bool setNativeFlag(void *method, bool isNative);
 
+void *getArtMethod(JNIEnv *env, jobject jmethod);
+
 static void *getResolvedMethodsAddr(JNIEnv *, jobject);
 
 #ifdef __cplusplus

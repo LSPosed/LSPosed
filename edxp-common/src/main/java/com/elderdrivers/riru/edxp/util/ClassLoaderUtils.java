@@ -15,10 +15,13 @@ import dalvik.system.PathClassLoader;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
+import de.robv.android.xposed.annotation.ApiSensitive;
+import de.robv.android.xposed.annotation.Level;
 
+@ApiSensitive(Level.LOW)
 public class ClassLoaderUtils {
 
-    public static final String DEXPATH = "/system/framework/edxp.jar:/system/framework/eddalvikdx.jar:/system/framework/eddexmaker.jar";
+    public static final String DEXPATH = "/system/framework/edxp.dex:/system/framework/eddalvikdx.dex:/system/framework/eddexmaker.dex";
 
     public static void replaceParentClassLoader(ClassLoader appClassLoader) {
         if (appClassLoader == null) {

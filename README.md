@@ -101,6 +101,5 @@ Notice: These community group don't accept any bug report, please use [Get help]
 - [Riru](https://github.com/RikkaApps/Riru): provides a way to inject codes into zygote process
 - [XposedBridge](https://github.com/rovo89/XposedBridge): the OG xposed framework APIs
 - [dexmaker](https://github.com/linkedin/dexmaker) and [dalvikdx](https://github.com/JakeWharton/dalvik-dx): to dynamiclly generate YAHFA hooker classes
-- [Whale](https://github.com/asLody/whale): used for inline hooking
 - [SandHook](https://github.com/ganyao114/SandHook/): ART hooking framework for SandHook variant
-
+- [Dobby](https://github.com/jmpews/Dobby): used for inline hooking

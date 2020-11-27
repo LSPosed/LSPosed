@@ -1,4 +1,4 @@
-version=91.0-$version ($backend)
+version=92.0-$version ($backend)
 arch=arm64
 minsdk=26
 maxsdk=29

@@ -11,6 +11,7 @@ namespace edxp {
         return XposedBridge_initXResourcesNative(env, clazz);
     }
 
+    // @ApiSensitive(Level.MIDDLE)
     static jboolean ResourcesHook_removeFinalFlagNative(JNI_START, jclass target_class) {
         if (target_class) {
             jclass class_clazz = JNI_FindClass(env, "java/lang/Class");

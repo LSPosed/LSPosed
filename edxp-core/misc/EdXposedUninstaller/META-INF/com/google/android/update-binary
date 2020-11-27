@@ -103,7 +103,6 @@ remove_edxposed() {
     ui_print "- Deleting EdXposed..."
     rm -r -f /data/adb/modules/riru_edxposed/
     rm -r -f /data/adb/modules/riru_edxposed_sandhook/
-    rm -r -f /data/adb/modules/riru_edxposed_whale/
     rm -r -f /data/misc/riru/modules/edxposed/
     rm -r -f /data/misc/riru/modules/edxp/
     ui_print "- Done"

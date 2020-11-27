@@ -36,10 +36,14 @@ namespace art {
             return instance_;
         }
 
+        // @ApiSensitive(Level.LOW)
         static void Setup(void *handle, HookFunType hook_func) {
             HOOK_FUNC(Init, "_ZN3art7Runtime4InitEONS_18RuntimeArgumentMapE");
             RETRIEVE_FUNC_SYMBOL(DeoptimizeBootImage,
                                  "_ZN3art7Runtime19DeoptimizeBootImageEv");
+            RETRIEVE_FIELD_SYMBOL(thiz, "_ZN3art7Runtime9instance_E");
+            LOGD("_ZN3art7Runtime9instance_E = %p", thiz);
+            instance_ = new Runtime(thiz);
         }
 
         ALWAYS_INLINE void DeoptimizeBootImage() const {

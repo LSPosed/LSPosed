@@ -21,6 +21,8 @@ static int kAccNative = 0x0100;
 static int kAccCompileDontBother = 0x01000000;
 static int kAccFastInterpreterToInterpreterInvoke = 0x40000000;
 
+static jfieldID fieldArtMethod = NULL;
+
 static inline uint32_t read32(void *addr) {
     return *((uint32_t *) addr);
 }
@@ -29,15 +31,19 @@ static inline void write32(void *addr, uint32_t value) {
     *((uint32_t *) addr) = value;
 }
 
-static inline void* readAddr(void *addr) {
-    return *((void**) addr);
+static inline void *readAddr(void *addr) {
+    return *((void **) addr);
 }
 
 void Java_lab_galaxy_yahfa_HookMain_init(JNIEnv *env, jclass clazz, jint sdkVersion) {
     int i;
     SDKVersion = sdkVersion;
+    jclass classExecutable;
     LOGI("init to SDK %d", sdkVersion);
     switch (sdkVersion) {
+        case __ANDROID_API_R__:
+            classExecutable = (*env)->FindClass(env, "java/lang/reflect/Executable");
+            fieldArtMethod = (*env)->GetFieldID(env, classExecutable, "artMethod", "J");
         case __ANDROID_API_Q__:
         case __ANDROID_API_P__:
             kAccCompileDontBother = 0x02000000;
@@ -209,6 +215,10 @@ static int doBackupAndHook(JNIEnv *env, void *targetMethod, void *hookMethod, vo
 
 static void ensureMethodCached(void *hookMethod, void *backupMethod,
                                void *hookClassResolvedMethods) {
+    if (!backupMethod) {
+        LOGE("ensureMethodCached: backupMethod is null");
+        return;
+    }
     void *dexCacheResolvedMethods;
     // then we get the dex method index of the static backup method
     int methodIndex = read32(
@@ -253,6 +263,24 @@ static void ensureMethodCached(void *hookMethod, void *backupMethod,
     }
 }
 
+void *getArtMethod(JNIEnv *env, jobject jmethod) {
+    void *artMethod = NULL;
+
+    if (jmethod == NULL) {
+        return artMethod;
+    }
+
+    if (SDKVersion == __ANDROID_API_R__) {
+        artMethod = (void *) (*env)->GetLongField(env, jmethod, fieldArtMethod);
+    } else {
+        artMethod = (void *) (*env)->FromReflectedMethod(env, jmethod);
+    }
+
+    LOGI("ArtMethod: %p", artMethod);
+    return artMethod;
+
+}
+
 jobject Java_lab_galaxy_yahfa_HookMain_findMethodNative(JNIEnv *env, jclass clazz,
                                                         jclass targetClass, jstring methodName,
                                                         jstring methodSig) {
@@ -285,12 +313,13 @@ jboolean Java_lab_galaxy_yahfa_HookMain_backupAndHookNative(JNIEnv *env, jclass 
                                                             jobject backup) {
 
     if (!doBackupAndHook(env,
-                         (void *) (*env)->FromReflectedMethod(env, target),
-                         (void *) (*env)->FromReflectedMethod(env, hook),
-                         backup == NULL ? NULL : (void *) (*env)->FromReflectedMethod(env, backup)
+                         getArtMethod(env, target),
+                         getArtMethod(env, hook),
+                         getArtMethod(env, backup)
     )) {
         (*env)->NewGlobalRef(env,
                              hook); // keep a global ref so that the hook method would not be GCed
+        if (backup) (*env)->NewGlobalRef(env, backup);
         return JNI_TRUE;
     } else {
         return JNI_FALSE;
@@ -300,8 +329,8 @@ jboolean Java_lab_galaxy_yahfa_HookMain_backupAndHookNative(JNIEnv *env, jclass 
 void Java_lab_galaxy_yahfa_HookMain_ensureMethodCached(JNIEnv *env, jclass clazz,
                                                        jobject hook,
                                                        jobject backup) {
-    ensureMethodCached((void *) (*env)->FromReflectedMethod(env, hook),
-                       backup == NULL ? NULL : (void *) (*env)->FromReflectedMethod(env, backup),
+    ensureMethodCached(getArtMethod(env, hook),
+                       getArtMethod(env, backup),
                        getResolvedMethodsAddr(env, hook));
 }
 

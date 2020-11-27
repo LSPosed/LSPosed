@@ -1,7 +1,7 @@
 package com.elderdrivers.riru.edxp.core;
 
-import androidx.annotation.IntDef;
-import androidx.annotation.NonNull;
+import android.support.annotation.IntDef;
+import android.support.annotation.NonNull;
 
 import com.elderdrivers.riru.common.KeepAll;
 import com.elderdrivers.riru.edxp.proxy.Router;
@@ -15,13 +15,9 @@ public interface EdxpImpl extends KeepAll {
     int NONE = 0;
     int YAHFA = 1;
     int SANDHOOK = 2;
-    int WHALE = 3;
 
     @NonNull
     Proxy getNormalProxy();
-
-    @NonNull
-    Proxy getBlackWhiteListProxy();
 
     @NonNull
     Router getRouter();
@@ -34,7 +30,7 @@ public interface EdxpImpl extends KeepAll {
     boolean isInitialized();
 
     @Retention(SOURCE)
-    @IntDef({NONE, YAHFA, SANDHOOK, WHALE})
+    @IntDef({NONE, YAHFA, SANDHOOK})
     @interface Variant {
     }
 }

@@ -1,10 +1,20 @@
 import org.apache.tools.ant.filters.FixCrLfFilter
 import org.gradle.internal.os.OperatingSystem
 
+import java.security.MessageDigest
+
 apply plugin: 'com.android.library'
 
+static def calcSha256(file) {
+    def md = MessageDigest.getInstance("SHA-256")
+    file.eachByte 4096, { bytes, size ->
+        md.update(bytes, 0, size);
+    }
+    return md.digest().encodeHex()
+}
+
 // Values set here will be overriden by AppVeyor, feel free to modify during development.
-def buildVersionName = 'v0.4.6.4'
+def buildVersionName = 'v0.5.0.8'
 def buildVersionCode = 233
 
 if (System.env.APPVEYOR_BUILD_VERSION != null) {
@@ -24,20 +34,22 @@ ext {
     module_name = "EdXposed"
     jar_dest_dir = "${projectDir}/template_override/system/framework/"
     is_windows = OperatingSystem.current().isWindows()
-    backends = ["YAHFA", "SandHook", "Whale"]
+    backends = ["YAHFA", "SandHook"]
     yahfa_module_id = "riru_edxposed"
     sandhook_module_id = yahfa_module_id + "_sandhook"
-    whale_module_id = yahfa_module_id + "_whale"
     yahfa_authors = "solohsu, MlgmXyysd & rk700"
     sandhook_authors = "solohsu, MlgmXyysd & ganyao114"
-    whale_authors = "solohsu, MlgmXyysd & asLody"
 
     riruModuleId = "edxp"
     zipPathMagiskRelease = "$buildDir/tmp/release/magisk"
+
+    moduleMinRiruApiVersion = 9
+    moduleMinRiruVersionName = "v22.0"
+    moduleMaxRiruApiVersion = 9
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion androidCompileSdkVersion.toInteger()
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
@@ -45,8 +57,11 @@ android {
         externalNativeBuild {
             cmake {
                 abiFilters 'arm64-v8a', 'armeabi-v7a', 'x86', 'x86_64'
-                cppFlags "-std=c++17 -ffixed-x18 -Qunused-arguments -frtti"
-                cFlags "-std=gnu99 -ffixed-x18 -Qunused-arguments -frtti"
+                cppFlags "-std=c++17 -ffixed-x18 -Qunused-arguments -frtti -fomit-frame-pointer"
+                cFlags "-std=gnu99 -ffixed-x18 -Qunused-arguments -frtti -fomit-frame-pointer"
+                arguments "-DRIRU_MODULE_API_VERSION=$moduleMaxRiruApiVersion",
+                        "-DRIRU_MODULE_VERSION=$buildVersionCode",
+                        "-DRIRU_MODULE_VERSION_NAME:STRING=\"$buildVersionName\""
             }
         }
     }
@@ -63,8 +78,8 @@ android {
         release {
             externalNativeBuild {
                 cmake {
-                    cppFlags "-fvisibility=hidden -fvisibility-inlines-hidden -O2 -s -Wno-unused-value"
-                    cFlags "-fvisibility=hidden -fvisibility-inlines-hidden -O2 -s -Wno-unused-value"
+                    cppFlags "-fvisibility=hidden -fvisibility-inlines-hidden -O2 -s -Wno-unused-value -fomit-frame-pointer"
+                    cFlags "-fvisibility=hidden -fvisibility-inlines-hidden -O2 -s -Wno-unused-value -fomit-frame-pointer"
                 }
             }
             minifyEnabled true
@@ -76,34 +91,7 @@ android {
             path "src/main/cpp/CMakeLists.txt"
         }
     }
-}
-
-task copyDalvikdxJar {
-    def jarTask = tasks.getByPath(':dalvikdx:dexInJar')
-    dependsOn jarTask
-    doLast {
-        copy {
-            from jarTask
-            into jar_dest_dir
-        }
-    }
-    onlyIf {
-        !jarTask.state.upToDate || !file(jar_dest_dir + jarTask.archiveName).exists()
-    }
-}
-
-task copyDexmakerJar {
-    def jarTask = tasks.getByPath(':dexmaker:dexInJar')
-    dependsOn jarTask
-    doLast {
-        copy {
-            from jarTask
-            into jar_dest_dir
-        }
-    }
-    onlyIf {
-        !jarTask.state.upToDate || !file(jar_dest_dir + jarTask.archiveName).exists()
-    }
+    ndkVersion androidCompileNdkVersion
 }
 
 task cleanTemplate(type: Delete) {
@@ -125,8 +113,10 @@ afterEvaluate {
             def magiskModuleId = property("${backendLowered}" + "_module_id")
 
             def prepareJarsTask = task("prepareJars${backendCapped}${variantCapped}") {
-                dependsOn cleanTemplate, copyDalvikdxJar, copyDexmakerJar
-                dependsOn tasks.getByPath(":edxp-${backendLowered}:makeAndCopy${variantCapped}")
+                dependsOn cleanTemplate
+                dependsOn tasks.getByPath(":dexmaker:copyDex${variantCapped}")
+                dependsOn tasks.getByPath(":dalvikdx:copyDex${variantCapped}")
+                dependsOn tasks.getByPath(":edxp-${backendLowered}:copyDex${variantCapped}")
             }
 
             def prepareMagiskFilesTask = task("prepareMagiskFiles${backendCapped}${variantCapped}", type: Delete) {
@@ -148,22 +138,40 @@ afterEvaluate {
                                 versionCode: "$versionCode", authorList: "$authorList")
                         filter(FixCrLfFilter.class, eol: FixCrLfFilter.CrLf.newInstance("lf"))
                     }
+                    copy {
+                        from "${projectDir}/tpl/riru_module.prop.tpl"
+                        into "$templateRootPath/riru"
+                        rename "riru_module.prop.tpl", "module.prop.new"
+                        expand(minApi: "$moduleMinRiruApiVersion",
+                                versionName: "$version" + " ($backend)",
+                                versionCode: "$versionCode", authorList: "$authorList")
+                        filter(FixCrLfFilter.class, eol: FixCrLfFilter.CrLf.newInstance("lf"))
+                    }
                 }
                 def libPathRelease = "${buildDir}/intermediates/cmake/${variantLowered}/obj"
+                def exclude_list = ["riru.sh"]
+                if(backendLowered == "yahfa") {
+                    exclude_list.add("system/lib/libsandhook-native.so")
+                    exclude_list.add("system/lib64/libsandhook-native.so")
+                }
                 doLast {
                     copy {
                         from "${projectDir}/template_override"
                         into zipPathMagiskRelease
+                        exclude exclude_list
                     }
-//                    copy {
-//                        from "${projectDir}/template_override/util_functions.sh"
-//                        into "${zipPathMagiskRelease}/"
-//                        filter { line -> line
-//                                .replaceAll('%VERSION%', "$version")
-//                                    .replaceAll('%VERSION_CODE%', "$versionCode")
-//                                .replaceAll('%BACKEND%', "$backendCapped") }
-//                        filter(FixCrLfFilter.class, eol: FixCrLfFilter.CrLf.newInstance("lf"))
-//                    }
+                    copy {
+                        from "${projectDir}/template_override"
+                        into zipPathMagiskRelease
+                        include 'riru.sh'
+                        filter { line ->
+                            line.replaceAll('%%%RIRU_MODULE_ID%%%', riruModuleId)
+                                    .replaceAll('%%%RIRU_MIN_API_VERSION%%%', moduleMinRiruApiVersion.toString())
+                                    .replaceAll('%%%RIRU_MIN_VERSION_NAME%%%', moduleMinRiruVersionName)
+                        }
+                        filter(FixCrLfFilter.class,
+                                eol: FixCrLfFilter.CrLf.newInstance("lf"))
+                    }
                     copy {
                         from "$libPathRelease/armeabi-v7a"
                         into "$zipPathMagiskRelease/system/lib"
@@ -180,6 +188,13 @@ afterEvaluate {
                         from "$libPathRelease/x86_64"
                         into "$zipPathMagiskRelease/system_x86/lib64"
                     }
+                    // generate sha1sum
+                    fileTree(zipPathMagiskRelease).matching {
+                        exclude "README.md", "META-INF"
+                    }.visit { f ->
+                        if (f.directory) return
+                        file(f.file.path + ".sha256sum").text = calcSha256(f.file)
+                    }
                 }
             }
 
@@ -193,9 +208,30 @@ afterEvaluate {
             task("push${backendCapped}${variantCapped}", type: Exec) {
                 dependsOn zipTask
                 workingDir "${projectDir}/release"
-                def commands = ["adb", "push",
+                def commands = [android.adbExecutable, "push",
                                 "${module_name}-${backend}-${project.version}-${variantLowered}.zip",
-                                "/sdcard/"]
+                                "/data/local/tmp/"]
+                if (is_windows) {
+                    commandLine 'cmd', '/c', commands.join(" ")
+                } else {
+                    commandLine commands
+                }
+            }
+            task("flash${backendCapped}${variantCapped}", type: Exec) {
+                dependsOn tasks.getByPath("push${backendCapped}${variantCapped}")
+                workingDir "${projectDir}/release"
+                def commands = [android.adbExecutable, "shell", "su", "-c",
+                                "magisk --install-module /data/local/tmp/${module_name}-${backend}-${project.version}-${variantLowered}.zip"]
+                if (is_windows) {
+                    commandLine 'cmd', '/c', commands.join(" ")
+                } else {
+                    commandLine commands
+                }
+            }
+            task("flashAndReboot${backendCapped}${variantCapped}", type: Exec) {
+                dependsOn tasks.getByPath("flash${backendCapped}${variantCapped}")
+                workingDir "${projectDir}/release"
+                def commands = [android.adbExecutable, "shell", "reboot"]
                 if (is_windows) {
                     commandLine 'cmd', '/c', commands.join(" ")
                 } else {

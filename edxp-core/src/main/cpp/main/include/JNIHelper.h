@@ -4,7 +4,7 @@
 #include <art/base/macros.h>
 #include "logging.h"
 
-#define JNI_START JNIEnv *env, jclass clazz
+#define JNI_START JNIEnv *env, [[maybe_unused]] jclass clazz
 
 ALWAYS_INLINE static void JNIExceptionClear(JNIEnv *env) {
     if (env->ExceptionCheck()) {
@@ -103,3 +103,52 @@ ALWAYS_INLINE static int ClearException(JNIEnv *env) {
     env->RegisterNatives(class, methods, size); \
     if (ClearException(env)) LOGE("RegisterNatives " #class);
 
+class JUTFString {
+public:
+    inline JUTFString(JNIEnv *env, jstring jstr) : JUTFString(env, jstr, nullptr) {
+    }
+
+    inline JUTFString(JNIEnv *env, jstring jstr, const char *default_cstr) : env_(env),
+                                                                             jstr_(jstr) {
+        if (env_ && jstr_) cstr_ = env_->GetStringUTFChars(jstr, nullptr);
+        else cstr_ = default_cstr;
+    }
+
+    inline operator const char *() const { return cstr_; }
+
+    inline operator const std::string() const { return cstr_; }
+
+    inline operator const bool() const { return cstr_ != nullptr; }
+
+    inline auto get() const { return cstr_; }
+
+    inline ~JUTFString() {
+        if (env_ && jstr_) env_->ReleaseStringUTFChars(jstr_, cstr_);
+    }
+
+    JUTFString(JUTFString &&other)
+            : env_(std::move(other.env_)), jstr_(std::move(other.jstr_)),
+              cstr_(std::move(other.cstr_)) {
+        other.cstr_ = nullptr;
+    }
+
+    JUTFString &
+    operator=(JUTFString &&other) {
+        if (&other != this) {
+            env_ = std::move(other.env_);
+            jstr_ = std::move(other.jstr_);
+            cstr_ = std::move(other.cstr_);
+            other.cstr_ = nullptr;
+        }
+        return *this;
+    }
+
+private:
+    JNIEnv *env_;
+    jstring jstr_;
+    const char *cstr_;
+
+    JUTFString(const JUTFString &) = delete;
+
+    JUTFString &operator=(const JUTFString &) = delete;
+};

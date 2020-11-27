@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion androidCompileSdkVersion.toInteger()
 
     defaultConfig {
         minSdkVersion 26
@@ -17,13 +17,14 @@ android {
         }
     }
 
+    ndkVersion androidCompileNdkVersion
 }
 
 dependencies {
     compileOnly project(':hiddenapi-stubs')
-    implementation project(':xposed-bridge')
+    api project(':xposed-bridge')
     compileOnly project(':dexmaker')
-    api "androidx.annotation:annotation:1.1.0-rc01"
+    compileOnly 'com.android.support:support-annotations:28.0.0'
 }
 
 

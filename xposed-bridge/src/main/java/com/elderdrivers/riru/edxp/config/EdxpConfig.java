@@ -12,8 +12,6 @@ public interface EdxpConfig {
 
     String getLibSandHookName();
 
-    String getLibWhaleName();
-
     boolean isDynamicModulesMode();
 
     boolean isNoModuleLogEnabled();
@@ -21,4 +19,6 @@ public interface EdxpConfig {
     boolean isResourcesHookEnabled();
 
     boolean isBlackWhiteListMode();
+
+    String getModulesList();
 }

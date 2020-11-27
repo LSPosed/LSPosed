@@ -7,9 +7,12 @@ import java.lang.reflect.Member;
 import java.lang.reflect.Modifier;
 
 import de.robv.android.xposed.XposedHelpers;
+import de.robv.android.xposed.annotation.ApiSensitive;
+import de.robv.android.xposed.annotation.Level;
 
 public class ClassUtils {
 
+    @ApiSensitive(Level.MIDDLE)
     public static int getClassStatus(Class clazz, boolean isUnsigned) {
         if (clazz == null) {
             return 0;
@@ -25,8 +28,9 @@ public class ClassUtils {
     /**
      * 5.0-8.0: kInitialized = 10 int
      * 8.1:     kInitialized = 11 int
-     * 9.0:     kInitialized = 14 uint8_t
+     * 9.0+:    kInitialized = 14 uint8_t
      */
+    @ApiSensitive(Level.MIDDLE)
     public static boolean isInitialized(Class clazz) {
         if (Build.VERSION.SDK_INT >= 28) {
             return getClassStatus(clazz, true) == 14;
