@@ -232,11 +232,11 @@ namespace edxp {
         skip_ = false;
         if (!ConfigManager::GetInstance()->IsAppNeedHook(0, "android")) {
             skip_ = true;
-            LOGW("skip injecting xposed into android because it's whitelisted/blacklisted");
+            LOGD("skip injecting xposed into android because it's whitelisted/blacklisted");
         }
         if (!skip_ && !ConfigManager::GetInstance()->UpdateAppModuleList(0, "android")) {
             skip_ = true;
-            LOGW("skip injecting into android because no module hooks it");
+            LOGD("skip injecting into android because no module hooks it");
         }
         PreLoadDex(env, kInjectDexPath);
     }
@@ -312,7 +312,7 @@ namespace edxp {
 
         if (!skip && !ConfigManager::GetInstance()->UpdateAppModuleList(user, package_name)) {
             skip = true;
-            LOGW("skip injecting xposed into %s because no module hooks it",
+            LOGD("skip injecting xposed into %s because no module hooks it",
                  package_name.c_str());
         }
         return skip;

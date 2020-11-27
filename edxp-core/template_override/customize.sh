@@ -264,7 +264,7 @@ else
     ui_print "- Extracting arm64 libraries"
     extract "$ZIPFILE" 'system/lib64/libriru_edxp.so' "$MODPATH"
     if [[ "${VARIANTS}" == "SandHook" ]]; then
-     extract "$ZIPFILE" 'system/lib/libsandhook-native.so' "$MODPATH"
+     extract "$ZIPFILE" 'system/lib64/libsandhook-native.so' "$MODPATH"
     fi
   fi
 fi
