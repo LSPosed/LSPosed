@@ -62,7 +62,9 @@ afterEvaluate {
         task("copyDex${variantNameCapped}", type: Copy) {
             dependsOn "assemble${variantNameCapped}"
             dependsOn tasks.getByPath(":edxp-common:copyCommonProperties")
-            def dexOutPath = "${buildDir}/intermediates/dex/${variantNameLowered}/minify${variantNameCapped}WithR8"
+            def dexOutPath = variant.name.contains("release") ?
+                    "${buildDir}/intermediates/dex/${variantNameLowered}/minify${variantNameCapped}WithR8" :
+                    "${buildDir}/intermediates/dex/${variantNameLowered}/mergeDex${variantNameCapped}"
             from (dexOutPath){
                 rename("classes.dex", "edxp.dex")
             }
