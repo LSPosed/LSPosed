@@ -1,4 +1,4 @@
-package org.meowcat.edxposed.manager;
+package org.meowcat.edxposed.manager.ui.fragment;
 
 import android.annotation.SuppressLint;
 import android.net.Uri;
@@ -13,10 +13,13 @@ import androidx.annotation.NonNull;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 
+import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.databinding.DownloadDetailsBinding;
 import org.meowcat.edxposed.manager.databinding.DownloadMoreinfoBinding;
 import org.meowcat.edxposed.manager.repo.Module;
 import org.meowcat.edxposed.manager.repo.RepoParser;
+import org.meowcat.edxposed.manager.ui.activity.BaseActivity;
+import org.meowcat.edxposed.manager.ui.activity.DownloadDetailsActivity;
 import org.meowcat.edxposed.manager.util.NavUtil;
 import org.meowcat.edxposed.manager.util.chrome.LinkTransformationMethod;
 

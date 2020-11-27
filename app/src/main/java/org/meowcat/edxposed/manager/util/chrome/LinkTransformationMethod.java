@@ -9,7 +9,7 @@ import android.text.util.Linkify;
 import android.view.View;
 import android.widget.TextView;
 
-import org.meowcat.edxposed.manager.BaseActivity;
+import org.meowcat.edxposed.manager.ui.activity.BaseActivity;
 
 /**
  * Created by Nikola D. on 12/23/2015.

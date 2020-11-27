@@ -3,7 +3,7 @@ package org.meowcat.edxposed.manager.util.chrome;
 import android.text.style.URLSpan;
 import android.view.View;
 
-import org.meowcat.edxposed.manager.BaseActivity;
+import org.meowcat.edxposed.manager.ui.activity.BaseActivity;
 import org.meowcat.edxposed.manager.util.NavUtil;
 
 /**

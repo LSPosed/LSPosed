@@ -1,4 +1,4 @@
-package org.meowcat.edxposed.manager;
+package org.meowcat.edxposed.manager.ui.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -19,14 +19,17 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.ListFragment;
 
+import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.repo.Module;
 import org.meowcat.edxposed.manager.repo.ModuleVersion;
 import org.meowcat.edxposed.manager.repo.ReleaseType;
 import org.meowcat.edxposed.manager.repo.RepoParser;
+import org.meowcat.edxposed.manager.ui.activity.BaseActivity;
+import org.meowcat.edxposed.manager.ui.activity.DownloadDetailsActivity;
 import org.meowcat.edxposed.manager.util.ModuleUtil.InstalledModule;
 import org.meowcat.edxposed.manager.util.RepoLoader;
 import org.meowcat.edxposed.manager.util.chrome.LinkTransformationMethod;
-import org.meowcat.edxposed.manager.widget.DownloadView;
+import org.meowcat.edxposed.manager.ui.widget.DownloadView;
 
 import java.text.DateFormat;
 import java.util.Date;

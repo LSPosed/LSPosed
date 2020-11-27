@@ -1,4 +1,4 @@
-package org.meowcat.edxposed.manager;
+package org.meowcat.edxposed.manager.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -24,12 +24,14 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.takisoft.preferencex.PreferenceFragmentCompat;
 import com.topjohnwu.superuser.Shell;
 
+import org.meowcat.edxposed.manager.App;
+import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.adapters.AppHelper;
 import org.meowcat.edxposed.manager.adapters.BlackListAdapter;
 import org.meowcat.edxposed.manager.databinding.ActivitySettingsBinding;
 import org.meowcat.edxposed.manager.util.FileUtils;
 import org.meowcat.edxposed.manager.util.RepoLoader;
-import org.meowcat.edxposed.manager.widget.IntegerListPreference;
+import org.meowcat.edxposed.manager.ui.widget.IntegerListPreference;
 
 import java.io.File;
 import java.io.FileNotFoundException;

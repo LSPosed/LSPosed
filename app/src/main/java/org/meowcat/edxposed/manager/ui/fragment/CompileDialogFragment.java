@@ -1,4 +1,4 @@
-package org.meowcat.edxposed.manager;
+package org.meowcat.edxposed.manager.ui.fragment;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.topjohnwu.superuser.Shell;
 
+import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.databinding.FragmentCompileDialogBinding;
 import org.meowcat.edxposed.manager.util.ToastUtil;
 

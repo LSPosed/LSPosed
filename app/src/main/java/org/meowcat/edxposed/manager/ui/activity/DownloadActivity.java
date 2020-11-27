@@ -1,4 +1,4 @@
-package org.meowcat.edxposed.manager;
+package org.meowcat.edxposed.manager.ui.activity;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -29,6 +29,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
+import org.meowcat.edxposed.manager.App;
+import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.adapters.CursorRecyclerViewAdapter;
 import org.meowcat.edxposed.manager.databinding.ActivityDownloadBinding;
 import org.meowcat.edxposed.manager.databinding.ItemDownloadBinding;

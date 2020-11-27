@@ -1,4 +1,4 @@
-package org.meowcat.edxposed.manager;
+package org.meowcat.edxposed.manager.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +18,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import org.meowcat.edxposed.manager.App;
+import org.meowcat.edxposed.manager.ui.fragment.DownloadDetailsFragment;
+import org.meowcat.edxposed.manager.ui.fragment.DownloadDetailsSettingsFragment;
+import org.meowcat.edxposed.manager.ui.fragment.DownloadDetailsVersionsFragment;
+import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.databinding.ActivityDownloadDetailsBinding;
 import org.meowcat.edxposed.manager.databinding.ActivityDownloadDetailsNotFoundBinding;
 import org.meowcat.edxposed.manager.repo.Module;

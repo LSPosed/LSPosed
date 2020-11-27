@@ -18,7 +18,7 @@ import androidx.core.content.ContextCompat;
 import com.topjohnwu.superuser.Shell;
 
 import org.meowcat.edxposed.manager.App;
-import org.meowcat.edxposed.manager.MainActivity;
+import org.meowcat.edxposed.manager.ui.activity.MainActivity;
 import org.meowcat.edxposed.manager.R;
 
 public final class NotificationUtil {

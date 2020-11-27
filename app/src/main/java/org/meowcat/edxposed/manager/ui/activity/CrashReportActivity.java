@@ -1,4 +1,4 @@
-package org.meowcat.edxposed.manager;
+package org.meowcat.edxposed.manager.ui.activity;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import org.meowcat.edxposed.manager.BuildConfig;
+import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.databinding.ActivityCrashReportBinding;
 
 import java.text.DateFormat;

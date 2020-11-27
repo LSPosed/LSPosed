@@ -7,7 +7,7 @@ import android.widget.CompoundButton;
 
 import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.util.ToastUtil;
-import org.meowcat.edxposed.manager.widget.MasterSwitch;
+import org.meowcat.edxposed.manager.ui.widget.MasterSwitch;
 
 import java.util.ArrayList;
 import java.util.List;

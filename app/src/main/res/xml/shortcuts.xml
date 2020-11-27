@@ -8,7 +8,7 @@
         android:shortcutShortLabel="@string/nav_item_modules">
         <intent
             android:action="android.intent.action.MAIN"
-            android:targetClass="org.meowcat.edxposed.manager.ModulesActivity"
+            android:targetClass="org.meowcat.edxposed.manager.ui.activity.ModulesActivity"
             android:targetPackage="org.meowcat.edxposed.manager" />
     </shortcut>
 
@@ -20,7 +20,7 @@
         android:shortcutShortLabel="@string/nav_item_download">
         <intent
             android:action="android.intent.action.MAIN"
-            android:targetClass="org.meowcat.edxposed.manager.DownloadActivity"
+            android:targetClass="org.meowcat.edxposed.manager.ui.activity.DownloadActivity"
             android:targetPackage="org.meowcat.edxposed.manager" />
     </shortcut>
 

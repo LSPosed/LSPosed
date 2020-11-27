@@ -1,4 +1,4 @@
-package org.meowcat.edxposed.manager;
+package org.meowcat.edxposed.manager.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -27,6 +27,8 @@ import androidx.core.view.ViewCompat;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.topjohnwu.superuser.Shell;
 
+import org.meowcat.edxposed.manager.App;
+import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.util.CustomThemeColor;
 import org.meowcat.edxposed.manager.util.CustomThemeColors;
 import org.meowcat.edxposed.manager.util.NavUtil;

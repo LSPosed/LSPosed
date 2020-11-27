@@ -1,4 +1,4 @@
-package org.meowcat.edxposed.manager;
+package org.meowcat.edxposed.manager.ui.fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -9,7 +9,9 @@ import androidx.preference.PreferenceManager;
 
 import com.takisoft.preferencex.PreferenceFragmentCompat;
 
+import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.repo.Module;
+import org.meowcat.edxposed.manager.ui.activity.DownloadDetailsActivity;
 import org.meowcat.edxposed.manager.util.PrefixedSharedPreferences;
 import org.meowcat.edxposed.manager.util.RepoLoader;
 

@@ -1,4 +1,4 @@
-package org.meowcat.edxposed.manager.widget;
+package org.meowcat.edxposed.manager.ui.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;

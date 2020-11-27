@@ -1,4 +1,4 @@
-package org.meowcat.edxposed.manager;
+package org.meowcat.edxposed.manager.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -10,6 +10,8 @@ import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 
+import org.meowcat.edxposed.manager.App;
+import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.adapters.AppHelper;
 import org.meowcat.edxposed.manager.adapters.BlackListAdapter;
 import org.meowcat.edxposed.manager.databinding.ActivityMainBinding;

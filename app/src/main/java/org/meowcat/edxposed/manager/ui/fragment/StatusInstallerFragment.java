@@ -1,4 +1,4 @@
-package org.meowcat.edxposed.manager;
+package org.meowcat.edxposed.manager.ui.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -19,6 +19,9 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import org.meowcat.edxposed.manager.App;
+import org.meowcat.edxposed.manager.BuildConfig;
+import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.databinding.StatusInstallerBinding;
 
 import java.io.BufferedReader;
@@ -32,7 +35,7 @@ public class StatusInstallerFragment extends Fragment {
     private static StatusInstallerBinding binding;
     private static String updateLink;
 
-    static void setUpdate(final String link, final String changelog, Context context) {
+    public static void setUpdate(final String link, final String changelog, Context context) {
         updateLink = link;
 
         binding.updateView.setVisibility(View.VISIBLE);

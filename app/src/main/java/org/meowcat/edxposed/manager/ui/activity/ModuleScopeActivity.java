@@ -1,6 +1,5 @@
-package org.meowcat.edxposed.manager;
+package org.meowcat.edxposed.manager.ui.activity;
 
-import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,23 +12,23 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.DividerItemDecoration;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-
+import org.meowcat.edxposed.manager.App;
+import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.adapters.AppAdapter;
 import org.meowcat.edxposed.manager.adapters.AppHelper;
-import org.meowcat.edxposed.manager.adapters.BlackListAdapter;
-import org.meowcat.edxposed.manager.adapters.CompatListAdapter;
-import org.meowcat.edxposed.manager.databinding.ActivityBlackListBinding;
+import org.meowcat.edxposed.manager.adapters.ScopeAdapter;
+import org.meowcat.edxposed.manager.databinding.ActivityScopeListBinding;
+import org.meowcat.edxposed.manager.ui.activity.BaseActivity;
 import org.meowcat.edxposed.manager.util.LinearLayoutManagerFix;
 
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 
-public class BlackListActivity extends BaseActivity implements AppAdapter.Callback {
+public class ModuleScopeActivity extends BaseActivity implements AppAdapter.Callback {
     private SearchView searchView;
-    private AppAdapter appAdapter;
+    private ScopeAdapter appAdapter;
 
     private SearchView.OnQueryTextListener searchListener;
-    private ActivityBlackListBinding binding;
+    private ActivityScopeListBinding binding;
     private final Runnable runnable = new Runnable() {
         @Override
         public void run() {
@@ -37,23 +36,23 @@ public class BlackListActivity extends BaseActivity implements AppAdapter.Callba
         }
     };
     private final Handler handler = new Handler();
-    private boolean isCompat;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        isCompat = getIntent().getBooleanExtra("compat_list", false);
-        binding = ActivityBlackListBinding.inflate(getLayoutInflater());
+        String modulePackageName = getIntent().getStringExtra("modulePackageName");
+        String moduleName = getIntent().getStringExtra("moduleName");
+        binding = ActivityScopeListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);
         binding.toolbar.setNavigationOnClickListener(view -> finish());
         ActionBar bar = getSupportActionBar();
         if (bar != null) {
             bar.setDisplayHomeAsUpEnabled(true);
+            bar.setSubtitle(moduleName);
         }
         setupWindowInsets(binding.snackbar, binding.recyclerView);
-        final boolean isWhiteListMode = isWhiteListMode();
-        appAdapter = isCompat ? new CompatListAdapter(this) : new BlackListAdapter(this, isWhiteListMode);
+        appAdapter = new ScopeAdapter(this, modulePackageName, binding.masterSwitch);
         appAdapter.setHasStableIds(true);
         binding.recyclerView.setAdapter(appAdapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManagerFix(this));
@@ -68,7 +67,7 @@ public class BlackListActivity extends BaseActivity implements AppAdapter.Callba
         fastScrollerBuilder.build();
         appAdapter.setCallback(this);
         handler.postDelayed(runnable, 300);
-        binding.swipeRefreshLayout.setOnRefreshListener(appAdapter::refresh);
+        binding.swipeRefreshLayout.setOnRefreshListener(() -> appAdapter.refresh());
 
         searchListener = new SearchView.OnQueryTextListener() {
             @Override
@@ -91,43 +90,6 @@ public class BlackListActivity extends BaseActivity implements AppAdapter.Callba
         searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
         searchView.setOnQueryTextListener(searchListener);
         return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (!isCompat && !AppHelper.isBlackListMode()) {
-            new MaterialAlertDialogBuilder(this)
-                    .setMessage(R.string.warning_list_not_enabled)
-                    .setPositiveButton(R.string.Settings, (dialog, which) -> {
-                        Intent intent = new Intent();
-                        intent.setClass(BlackListActivity.this, SettingsActivity.class);
-                        startActivity(intent);
-                    })
-                    .setNegativeButton(android.R.string.cancel, (dialog, which) -> finish())
-                    .setCancelable(false)
-                    .show();
-        }
-        changeTitle(isBlackListMode(), isWhiteListMode());
-    }
-
-
-    private void changeTitle(boolean isBlackListMode, boolean isWhiteListMode) {
-        if (isCompat) {
-            setTitle(R.string.nav_title_compat_list);
-        } else if (isBlackListMode) {
-            setTitle(isWhiteListMode ? R.string.title_white_list : R.string.title_black_list);
-        } else {
-            setTitle(R.string.nav_title_black_list);
-        }
-    }
-
-    private boolean isWhiteListMode() {
-        return AppHelper.isWhiteListMode();
-    }
-
-    private boolean isBlackListMode() {
-        return AppHelper.isBlackListMode();
     }
 
     @Override

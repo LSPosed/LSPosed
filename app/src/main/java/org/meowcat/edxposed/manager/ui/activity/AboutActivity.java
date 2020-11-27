@@ -1,4 +1,4 @@
-package org.meowcat.edxposed.manager;
+package org.meowcat.edxposed.manager.ui.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +12,8 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import org.meowcat.edxposed.manager.BuildConfig;
+import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.databinding.ActivityAboutBinding;
 import org.meowcat.edxposed.manager.util.GlideHelper;
 import org.meowcat.edxposed.manager.util.NavUtil;

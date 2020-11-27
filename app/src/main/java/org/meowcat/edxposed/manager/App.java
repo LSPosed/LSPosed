@@ -20,6 +20,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import org.meowcat.edxposed.manager.adapters.AppHelper;
 import org.meowcat.edxposed.manager.receivers.PackageChangeReceiver;
+import org.meowcat.edxposed.manager.ui.activity.CrashReportActivity;
 import org.meowcat.edxposed.manager.util.FileUtils;
 import org.meowcat.edxposed.manager.util.ModuleUtil;
 import org.meowcat.edxposed.manager.util.NotificationUtil;

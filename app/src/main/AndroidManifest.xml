@@ -20,29 +20,29 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity
-            android:name=".CrashReportActivity"
+            android:name=".ui.activity.CrashReportActivity"
             android:process=":error_activity" />
         <activity
-            android:name=".AboutActivity"
+            android:name=".ui.activity.AboutActivity"
             android:label="@string/About" />
         <activity
-            android:name=".LogsActivity"
+            android:name=".ui.activity.LogsActivity"
             android:label="@string/Logs" />
         <activity
-            android:name=".EdDownloadActivity"
+            android:name=".ui.activity.EdDownloadActivity"
             android:label="@string/Install" />
-        <activity android:name=".BlackListActivity" />
+        <activity android:name=".ui.activity.BlackListActivity" />
         <activity
-            android:name=".DownloadDetailsActivity"
+            android:name=".ui.activity.DownloadDetailsActivity"
             android:label="@string/nav_item_download" />
         <activity
-            android:name=".DownloadActivity"
+            android:name=".ui.activity.DownloadActivity"
             android:label="@string/Downloads" />
         <activity
-            android:name=".ModuleScopeActivity"
+            android:name=".ui.activity.ModuleScopeActivity"
             android:label="@string/menu_scope"/>
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.activity.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop">
             <intent-filter>
@@ -56,10 +56,10 @@
                 android:resource="@xml/shortcuts" />
         </activity>
         <activity
-            android:name=".ModulesActivity"
+            android:name=".ui.activity.ModulesActivity"
             android:label="@string/Modules" />
         <activity
-            android:name=".SettingsActivity"
+            android:name=".ui.activity.SettingsActivity"
             android:label="@string/Settings">
             <intent-filter>
                 <action android:name="android.intent.action.APPLICATION_PREFERENCES" />

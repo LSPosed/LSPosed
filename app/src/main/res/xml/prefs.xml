@@ -19,7 +19,7 @@
             android:title="@string/show_modules"
             app:iconSpaceReserved="false" />
 
-        <org.meowcat.edxposed.manager.widget.IntegerListPreference
+        <org.meowcat.edxposed.manager.ui.widget.IntegerListPreference
             android:defaultValue="0"
             android:entries="@array/list_sort_texts"
             android:entryValues="@array/list_sort_values"
@@ -31,19 +31,19 @@
     <PreferenceCategory
         android:title="@string/settings_group_theme"
         app:iconSpaceReserved="false">
-        <org.meowcat.edxposed.manager.widget.ThemeColorPreference
+        <org.meowcat.edxposed.manager.ui.widget.ThemeColorPreference
             android:defaultValue="#1976D2"
             android:dialogTitle="@string/primary_color"
             android:key="primary_color"
             android:title="@string/primary_color"
             app:iconSpaceReserved="false" />
-        <org.meowcat.edxposed.manager.widget.ThemeColorPreference
+        <org.meowcat.edxposed.manager.ui.widget.ThemeColorPreference
             android:defaultValue="#e91e63"
             android:dialogTitle="@string/accent_color"
             android:key="accent_color"
             android:title="@string/accent_color"
             app:iconSpaceReserved="false" />
-        <org.meowcat.edxposed.manager.widget.IntegerListPreference
+        <org.meowcat.edxposed.manager.ui.widget.IntegerListPreference
             android:defaultValue="-1"
             android:entries="@array/theme_texts"
             android:entryValues="@array/theme_values"

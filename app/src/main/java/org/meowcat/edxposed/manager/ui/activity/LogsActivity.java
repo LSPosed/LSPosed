@@ -1,4 +1,4 @@
-package org.meowcat.edxposed.manager;
+package org.meowcat.edxposed.manager.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -24,6 +24,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
+import org.meowcat.edxposed.manager.App;
+import org.meowcat.edxposed.manager.BuildConfig;
+import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.databinding.ActivityLogsBinding;
 import org.meowcat.edxposed.manager.databinding.DialogInstallWarningBinding;
 import org.meowcat.edxposed.manager.databinding.ItemLogBinding;

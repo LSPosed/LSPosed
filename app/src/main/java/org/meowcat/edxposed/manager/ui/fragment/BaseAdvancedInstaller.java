@@ -1,4 +1,4 @@
-package org.meowcat.edxposed.manager;
+package org.meowcat.edxposed.manager.ui.fragment;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -17,7 +17,9 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.databinding.SingleInstallerViewBinding;
+import org.meowcat.edxposed.manager.ui.activity.BaseActivity;
 import org.meowcat.edxposed.manager.util.NavUtil;
 import org.meowcat.edxposed.manager.util.json.XposedTab;
 import org.meowcat.edxposed.manager.util.json.XposedZip;
@@ -27,7 +29,7 @@ import java.util.Objects;
 public class BaseAdvancedInstaller extends Fragment {
     private SingleInstallerViewBinding binding;
 
-    static BaseAdvancedInstaller newInstance(XposedTab tab) {
+    public static BaseAdvancedInstaller newInstance(XposedTab tab) {
         BaseAdvancedInstaller myFragment = new BaseAdvancedInstaller();
 
         Bundle args = new Bundle();
