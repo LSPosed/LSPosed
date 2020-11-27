@@ -10,7 +10,7 @@ grep_prop() {
 
 MODDIR=${0%/*}
 
-RIRU_PATH="/data/misc/riru"
+RIRU_PATH="/data/adb/riru"
 TARGET="${RIRU_PATH}/modules"
 [[ "$(getenforce)" == "Enforcing" ]] && ENFORCE=true || ENFORCE=false
 
