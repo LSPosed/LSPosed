@@ -57,6 +57,7 @@ afterEvaluate {
 
         def variantNameCapped = variant.name.capitalize()
         def variantNameLowered = variant.name.toLowerCase()
+        def myTemplatePath = "${projectDir}/template_override/"
 
         task("copyDex${variantNameCapped}", type: Copy) {
             dependsOn "assemble${variantNameCapped}"
@@ -67,6 +68,12 @@ afterEvaluate {
             }
             destinationDir file(templateRootPath + "system/framework/")
             outputs.upToDateWhen { false }
+            doLast {
+                copy {
+                    from file(myTemplatePath)
+                    into file(templateRootPath)
+                }
+            }
         }
 
     }
