@@ -39,13 +39,13 @@ jobs:
         name: EdXposed-SandHook-release
         path: './EdXposed-SandHook-release/*'
     - name: Upload YAHFA debug
-      if: ${{ github.event_name == 'pull_request' && success() }}
+#      if: ${{ github.event_name == 'pull_request' && success() }}
       uses: actions/upload-artifact@v2
       with:
         name: EdXposed-YAHFA-debug
         path: './EdXposed-YAHFA-debug/*'
     - name: Upload Sandhook debug
-      if: ${{ github.event_name == 'pull_request' && success() }}
+#      if: ${{ github.event_name == 'pull_request' && success() }}
       uses: actions/upload-artifact@v2
       with:
         name: EdXposed-SandHook-debug
