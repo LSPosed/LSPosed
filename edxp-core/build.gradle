@@ -1,7 +1,17 @@
 import org.apache.tools.ant.filters.FixCrLfFilter
 import org.gradle.internal.os.OperatingSystem
 
+import java.security.MessageDigest
+
 apply plugin: 'com.android.library'
+
+static def calcSha256(file) {
+    def md = MessageDigest.getInstance("SHA-256")
+    file.eachByte 4096, { bytes, size ->
+        md.update(bytes, 0, size);
+    }
+    return md.digest().encodeHex()
+}
 
 // Values set here will be overriden by AppVeyor, feel free to modify during development.
 def buildVersionName = 'v0.5.0.8'
@@ -177,6 +187,13 @@ afterEvaluate {
                     copy {
                         from "$libPathRelease/x86_64"
                         into "$zipPathMagiskRelease/system_x86/lib64"
+                    }
+                    // generate sha1sum
+                    fileTree(zipPathMagiskRelease).matching {
+                        exclude "README.md", "META-INF"
+                    }.visit { f ->
+                        if (f.directory) return
+                        file(f.file.path + ".sha256sum").text = calcSha256(f.file)
                     }
                 }
             }

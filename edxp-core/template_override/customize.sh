@@ -45,9 +45,9 @@ JAR_EDDALVIKDX="$(getRandomNameExist 8 "" ".dex" "
 JAR_EDDEXMAKER="$(getRandomNameExist 8 "" ".dex" "
 /system/framework
 ").dex"
-#JAR_EDCONFIG="$(getRandomNameExist 8 "" ".jar" "
-#/system/framework
-#").jar"
+JAR_EDCONFIG="$(getRandomNameExist 8 "" ".jar" "
+/system/framework
+").jar"
 LIB_RIRU_EDXP="libriru_${RIRU_EDXP}.so"
 LIB_SANDHOOK_EDXP="lib$(getRandomNameExist 13 "lib" ".so" "
 /system/lib
@@ -207,11 +207,22 @@ check_android_version() {
 #    fi
 #}
 
-# extract riru.sh
-unzip -o "$ZIPFILE" riru.sh -d "$MODPATH" >&2
-. $MODPATH/riru.sh
-
 ui_print "- EdXposed Version ${VERSION}"
+
+# extract verify.sh
+ui_print "- Extracting verify.sh"
+unzip -o "$ZIPFILE" 'verify.sh' -d "$TMPDIR" >&2
+if [ ! -f "$TMPDIR/verify.sh" ]; then
+  ui_print    "*********************************************************"
+  ui_print    "! Unable to extract verify.sh!"
+  ui_print    "! This zip may be corrupted, please try downloading again"
+  abort "*********************************************************"
+fi
+. $TMPDIR/verify.sh
+
+# extract riru.sh
+extract "$ZIPFILE" riru.sh "$MODPATH"
+. $MODPATH/riru.sh
 
 #check_persist
 check_android_version
@@ -220,21 +231,42 @@ check_riru_version
 edxp_check_architecture
 
 ui_print "- Extracting module files"
-unzip -o "${ZIPFILE}" EdXposed.apk module.prop post-fs-data.sh sepolicy.rule system.prop uninstall.sh 'system/*' -d "${MODPATH}" >&2
+extract "${ZIPFILE}" 'EdXposed.apk' "${MODPATH}"
+extract "${ZIPFILE}" 'module.prop' "${MODPATH}"
+extract "${ZIPFILE}" 'system.prop' "${MODPATH}"
+extract "${ZIPFILE}" 'sepolicy.rule' "${MODPATH}"
+extract "${ZIPFILE}" 'post-fs-data.sh' "${MODPATH}"
+extract "${ZIPFILE}" 'uninstall.sh' "${MODPATH}"
 
-if [[ "${ARCH}" == "x86" || "${ARCH}" == "x64" ]]; then
-    ui_print "- Replacing x86 and x86_64 libraries"
-    unzip -o "${ZIPFILE}" 'system_x86/*' -d "${MODPATH}" >&2
-    rm -rf "${MODPATH}/system/lib"
-    rm -rf "${MODPATH}/system/lib64"
-    mv "${MODPATH}/system_x86/lib" "${MODPATH}/system/lib"
-    mv "${MODPATH}/system_x86/lib64" "${MODPATH}/system/lib64"
-    rm -rf "${MODPATH}/system_x86"
-fi
+extract "${ZIPFILE}" 'system/framework/edconfig.jar' "${MODPATH}"
+extract "${ZIPFILE}" 'system/framework/eddalvikdx.dex' "${MODPATH}"
+extract "${ZIPFILE}" 'system/framework/eddexmaker.dex' "${MODPATH}"
+extract "${ZIPFILE}" 'system/framework/edxp.dex' "${MODPATH}"
 
-if [[ "${IS64BIT}" == false ]]; then
-    ui_print "- Removing 64-bit libraries"
-    rm -rf "${MODPATH}/system/lib64"
+if [ "$ARCH" = "x86" ] || [ "$ARCH" = "x64" ]; then
+  ui_print "- Extracting x86 libraries"
+  extract "$ZIPFILE" 'system_x86/lib/libriru_edxp.so' "$MODPATH"
+  mv "$MODPATH/system_x86/" "$MODPATH/system/"
+
+  if [ "$IS64BIT" = true ]; then
+    ui_print "- Extracting x64 libraries"
+    extract "$ZIPFILE" 'system_x86/lib64/libriru_edxp.so' "$MODPATH"
+    mv "$MODPATH/system_x86/lib64" "$MODPATH/system/lib64"
+  fi
+else
+  ui_print "- Extracting arm libraries"
+  extract "$ZIPFILE" 'system/lib/libriru_edxp.so' "$MODPATH"
+  if [[ "${VARIANTS}" == "SandHook" ]]; then
+    extract "$ZIPFILE" 'system/lib/libsandhook-native.so' "$MODPATH"
+  fi
+
+  if [ "$IS64BIT" = true ]; then
+    ui_print "- Extracting arm64 libraries"
+    extract "$ZIPFILE" 'system/lib64/libriru_edxp.so' "$MODPATH"
+    if [[ "${VARIANTS}" == "SandHook" ]]; then
+     extract "$ZIPFILE" 'system/lib/libsandhook-native.so' "$MODPATH"
+    fi
+  fi
 fi
 
 if [[ "$(pm path org.meowcat.edxposed.manager)" == "" && "$(pm path de.robv.android.xposed.installer)" == "" ]]; then
@@ -266,13 +298,11 @@ ui_print "- Copying framework libraries"
 mv "${MODPATH}/system/framework/eddalvikdx.dex" "${MODPATH}/system/framework/${JAR_EDDALVIKDX}"
 mv "${MODPATH}/system/framework/edxp.dex" "${MODPATH}/system/framework/${JAR_EDXP}"
 mv "${MODPATH}/system/framework/eddexmaker.dex" "${MODPATH}/system/framework/${JAR_EDDEXMAKER}"
-#mv "${MODPATH}/system/framework/edconfig.jar" "${MODPATH}/system/framework/${JAR_EDCONFIG}"
+mv "${MODPATH}/system/framework/edconfig.jar" "${MODPATH}/system/framework/${JAR_EDCONFIG}"
 mv "${MODPATH}/system/lib/libriru_edxp.so" "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
-mv "${MODPATH}/system/lib/libsandhook-native.so" "${MODPATH}/system/lib/libsandhook-native.so"
 
 if [[ "${IS64BIT}" == true ]]; then
     mv "${MODPATH}/system/lib64/libriru_edxp.so" "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
-    mv "${MODPATH}/system/lib64/libsandhook-native.so" "${MODPATH}/system/lib64/libsandhook-native.so"
 fi
 
 if [[ "${VARIANTS}" == "SandHook" ]]; then
@@ -285,13 +315,13 @@ fi
 ui_print "- Resetting libraries path"
 
 sed -i 's:/system/framework/edxp.dex\:/system/framework/eddalvikdx.dex\:/system/framework/eddexmaker.dex:/system/framework/'"${JAR_EDXP}"'\:/system/framework/'"${JAR_EDDALVIKDX}"'\:/system/framework/'"${JAR_EDDEXMAKER}"':g' "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
-#sed -i 's:/system/framework/edconfig.jar:/system/framework/'"${JAR_EDCONFIG}"':g' "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
+sed -i 's:/system/framework/edconfig.jar:/system/framework/'"${JAR_EDCONFIG}"':g' "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
 sed -i 's:libriru_edxp.so:'"${LIB_RIRU_EDXP}"':g' "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
 sed -i 's:libsandhook.edxp.so:'"${LIB_SANDHOOK_EDXP}"':g' "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
 
 if [[ "${IS64BIT}" == true ]]; then
     sed -i 's:/system/framework/edxp.dex\:/system/framework/eddalvikdx.dex\:/system/framework/eddexmaker.dex:/system/framework/'"${JAR_EDXP}"'\:/system/framework/'"${JAR_EDDALVIKDX}"'\:/system/framework/'"${JAR_EDDEXMAKER}"':g' "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
-#    sed -i 's:/system/framework/edconfig.jar:/system/framework/'"${JAR_EDCONFIG}"':g' "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
+    sed -i 's:/system/framework/edconfig.jar:/system/framework/'"${JAR_EDCONFIG}"':g' "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
     sed -i 's:libriru_edxp.so:'"${LIB_RIRU_EDXP}"':g' "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
     sed -i 's:libsandhook.edxp.so:'"${LIB_SANDHOOK_EDXP}"':g' "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
 fi
@@ -309,11 +339,10 @@ fi
 
 # extract Riru files
 ui_print "- Extracting Riru files"
-ui_print $RIRU_TARGET
 [ -d "$RIRU_TARGET" ] || mkdir -p "$RIRU_TARGET" || abort "! Can't create $RIRU_TARGET"
 
 rm -f "$RIRU_TARGET/module.prop.new"
-unzip -o "$ZIPFILE" 'riru/module.prop.new' -d "$RIRU_TARGET"  >&2
+extract "$ZIPFILE" 'riru/module.prop.new' "$RIRU_TARGET"
 mv "$RIRU_TARGET/riru/module.prop.new" "$RIRU_TARGET/module.prop"
 rm -rf "$RIRU_TARGET/riru/"
 set_perm "$RIRU_TARGET/module.prop" 0 0 0600 $RIRU_SECONTEXT
