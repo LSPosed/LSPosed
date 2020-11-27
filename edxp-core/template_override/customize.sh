@@ -285,14 +285,6 @@ if [[ "${OLD_MAGISK}" == true ]]; then
     rm "${MODPATH}"/sepolicy.rule
 fi
 
-#echo "- Mounted persist:" >&2
-#mount | grep persist >&2
-
-#if [[ "${NO_PERSIST}" == true ]]; then
-#    ui_print "- Persist not detected, remove SEPolicy rule"
-#    rm ${MODPATH}/sepolicy.rule
-#fi
-
 ui_print "- Copying framework libraries"
 
 mv "${MODPATH}/system/framework/eddalvikdx.dex" "${MODPATH}/system/framework/${JAR_EDDALVIKDX}"
