@@ -258,6 +258,7 @@ else
   extract "$ZIPFILE" 'system/lib/libriru_edxp.so' "$MODPATH"
   if [[ "${VARIANTS}" == "SandHook" ]]; then
     extract "$ZIPFILE" 'system/lib/libsandhook-native.so' "$MODPATH"
+    extract "$ZIPFILE" 'system/lib/libsandhook.edxp.so' "$MODPATH"
   fi
 
   if [ "$IS64BIT" = true ]; then
@@ -265,6 +266,7 @@ else
     extract "$ZIPFILE" 'system/lib64/libriru_edxp.so' "$MODPATH"
     if [[ "${VARIANTS}" == "SandHook" ]]; then
      extract "$ZIPFILE" 'system/lib64/libsandhook-native.so' "$MODPATH"
+     extract "$ZIPFILE" 'system/lib64/libsandhook.edxp.so' "$MODPATH"
     fi
   fi
 fi
