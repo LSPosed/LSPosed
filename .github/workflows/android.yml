@@ -1,0 +1,68 @@
+name: Android CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: ${{ !startsWith(github.event.head_commit.message, '[skip ci]') }}
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: 'recursive'
+    - name: set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+    - name: Install NDK
+      run:  echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;22.0.6917172" --channel=1 --sdk_root=${ANDROID_SDK_ROOT} | grep -v = || true
+    - name: Get version code
+      run: echo APPVEYOR_BUILD_NUMBER=$(expr $GITHUB_RUN_NUMBER + 4999) >> $GITHUB_ENV
+    - name: Build with Gradle
+      run:  bash ./gradlew zipYahfaRelease zipSandhookRelease zipYahfaDebug zipSandhookDebug
+    - name: Prepare artifact
+      if: success()
+      run: unzip edxp-core/release/EdXposed-YAHFA-v*-release.zip -d EdXposed-YAHFA-release;
+           unzip edxp-core/release/EdXposed-SandHook-v*-release.zip -d EdXposed-SandHook-release;
+           unzip edxp-core/release/EdXposed-YAHFA-v*-debug.zip -d EdXposed-YAHFA-debug;
+           unzip edxp-core/release/EdXposed-SandHook-v*-debug.zip -d EdXposed-SandHook-debug
+    - name: Upload YAHFA release
+      uses: actions/upload-artifact@v2
+      with:
+        name: EdXposed-YAHFA-release
+        path: './EdXposed-YAHFA-release/*'
+    - name: Upload Sandhook release
+      if: success()
+      uses: actions/upload-artifact@v2
+      with:
+        name: EdXposed-SandHook-release
+        path: './EdXposed-SandHook-release/*'
+    - name: Upload YAHFA debug
+      if: ${{ github.event_name == 'pull_request' && success() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: EdXposed-YAHFA-debug
+        path: './EdXposed-YAHFA-debug/*'
+    - name: Upload Sandhook debug
+      if: ${{ github.event_name == 'pull_request' && success() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: EdXposed-SandHook-debug
+        path: './EdXposed-SandHook-debug/*'
+    - name: Prepare publish artifact
+      if: ${{ github.event_name == 'push' && success() }}
+      run: mkdir -p to_publish && mv edxp-core/release/EdXposed-YAHFA-v*-release.zip to_publish/EdXposed-YAHFA-release.zip && mv edxp-core/release/EdXposed-SandHook-v*-release.zip to_publish/EdXposed-SandHook-release.zip && echo $APPVEYOR_BUILD_NUMBER > to_publish/version
+    - name: Publish build
+      if: ${{ github.event_name == 'push' && success() }}
+      uses: dmnemec/copy_file_to_another_repo_action@v1.0.4
+      env:
+        API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+      with:
+        source_file: 'to_publish/*'
+        destination_repo: 'ElderDrivers/Repository-Website'
+        destination_folder: 'assets'
+        user_email: 'mlgmxyysd@meowcat.org'
+        user_name: 'MlgmXyysd'
+
+
