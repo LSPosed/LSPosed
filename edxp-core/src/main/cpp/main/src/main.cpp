@@ -11,11 +11,12 @@
 #include <utility>
 #include <string>
 #include <android-base/logging.h>
-#include "native_hook.h"
 #include "logging.h"
 #include "config.h"
 #include "edxp_context.h"
 #include "riru.h"
+#include "config_manager.h"
+#include "native_hook.h"
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-value"

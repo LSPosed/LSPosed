@@ -1,4 +1,3 @@
-
 #include <jni.h>
 #include <android-base/macros.h>
 #include <JNIHelper.h>
@@ -354,6 +353,7 @@ namespace edxp {
         ConfigManager::SetCurrentUser(user);
         app_modules_list_ = ConfigManager::GetInstance()->GetAppModuleList(package_name);
         skip_ = ShouldSkipInject(package_name, user, uid, res, app_modules_list_, is_child_zygote);
+        ConfigManager::GetInstance()->EnsurePermission(package_name, uid % PER_USER_RANGE);
         app_data_dir_ = app_data_dir;
         nice_name_ = nice_name;
         PreLoadDex(env, kInjectDexPath);
@@ -372,7 +372,7 @@ namespace edxp {
                             res, app_data_dir_, nice_name_);
                 LOGD("injected xposed into %s", process_name.get());
             } else {
-                auto config_manager = ConfigManager::ReleaseInstances();
+                [[maybe_unused]] auto config_manager = ConfigManager::ReleaseInstances();
                 auto context = Context::ReleaseInstance();
                 LOGD("skipped %s", process_name.get());
             }

@@ -18,7 +18,7 @@ public class ConfigManager {
                 && (result = compatModeCache.get(packageName)) != null) {
             return result;
         }
-        result = isFileExists(getInstallerConfigPath("compatlist/" + packageName));
+        result = isFileExists(getConfigPath("compatlist/" + packageName));
         compatModeCache.put(packageName, result);
         return result;
     }
@@ -41,7 +41,9 @@ public class ConfigManager {
 
     public static native String getLibSandHookName();
 
-    public static native String getInstallerConfigPath(String suffix);
+    public static native String getConfigPath(String suffix);
+
+    public static native String getBaseConfigPath();
 
     public static native String getDataPathPrefix();
 

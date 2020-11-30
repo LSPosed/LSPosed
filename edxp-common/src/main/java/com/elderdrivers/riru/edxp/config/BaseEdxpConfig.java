@@ -5,8 +5,8 @@ import android.text.TextUtils;
 public class BaseEdxpConfig implements EdxpConfig {
 
     @Override
-    public String getInstallerConfigPath(String suffix) {
-        return ConfigManager.getInstallerConfigPath(suffix != null ? suffix : "");
+    public String getConfigPath(String suffix) {
+        return ConfigManager.getConfigPath(suffix != null ? suffix : "");
     }
 
     @Override

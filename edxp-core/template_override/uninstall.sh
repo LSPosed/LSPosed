@@ -25,5 +25,3 @@ if [[ "${REMOVE}" == true ]]; then
         rm "/data/misc/riru/modules/edxp.prop"
     fi
 fi
-
-

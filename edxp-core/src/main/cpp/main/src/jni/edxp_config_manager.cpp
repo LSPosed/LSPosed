@@ -39,12 +39,16 @@ namespace edxp {
         return env->NewStringUTF(ConfigManager::GetInstance()->GetDataPathPrefix().c_str());
     }
 
-    static jstring ConfigManager_getInstallerConfigPath(JNI_START, jstring jSuffix) {
+    static jstring ConfigManager_getConfigPath(JNI_START, jstring jSuffix) {
         const char *suffix = env->GetStringUTFChars(jSuffix, JNI_FALSE);
         auto result = ConfigManager::GetInstance()->GetConfigPath(suffix);
         env->ReleaseStringUTFChars(jSuffix, suffix);
         return env->NewStringUTF(result.c_str());
+    }
 
+    static jstring ConfigManager_getBaseConfigPath(JNI_START) {
+        auto result = ConfigManager::GetInstance()->GetBaseConfigPath();
+        return env->NewStringUTF(result.c_str());
     }
 
     static jstring ConfigManager_getModulesList(JNI_START) {
@@ -65,8 +69,9 @@ namespace edxp {
             NATIVE_METHOD(ConfigManager, getXposedPropPath, "()Ljava/lang/String;"),
             NATIVE_METHOD(ConfigManager, getLibSandHookName, "()Ljava/lang/String;"),
             NATIVE_METHOD(ConfigManager, getDataPathPrefix, "()Ljava/lang/String;"),
-            NATIVE_METHOD(ConfigManager, getInstallerConfigPath,
+            NATIVE_METHOD(ConfigManager, getConfigPath,
                           "(Ljava/lang/String;)Ljava/lang/String;"),
+            NATIVE_METHOD(ConfigManager, getBaseConfigPath,"()Ljava/lang/String;"),
             NATIVE_METHOD(ConfigManager, getModulesList, "()Ljava/lang/String;"),
     };
 

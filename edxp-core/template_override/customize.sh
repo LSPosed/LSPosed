@@ -353,6 +353,22 @@ cp "${MODPATH}/module.prop" "${RIRU_TARGET}/module.prop" || abort "! Can't creat
 
 set_perm_recursive "${MODPATH}" 0 0 0755 0644
 
+ui_print "- Creating configuration directories"
+if [[ -f /data/adb/edxp/misc_path ]]; then
+  MISC_PATH=$(cat /data/adb/edxp/misc_path)
+  ui_print "- Use previous path $MISC_PATH"
+else
+  MISC_PATH="edxp_$(tr -cd 'A-Za-z0-9' < /dev/urandom | head -c16)"
+  ui_print "- Use new path $MISC_PATH"
+  mkdir -p /data/adb/edxp || abort "! Can't create adb path"
+  echo "$MISC_PATH" > /data/adb/edxp/misc_path || abort "! Can't store configuration path"
+fi
+set_perm_recursive /data/adb/edxp root root 0700 0600 "u:object_r:magisk_file:s0" || abort "! Can't set permission"
+mkdir -p /data/misc/$MISC_PATH || abort "! Can't create configuration path"
+set_perm /data/misc/$MISC_PATH root root 0771 "u:object_r:magisk_file:s0" || abort "! Can't set permission"
+echo "rm -rf /data/misc/$MISC_PATH" >> "$MODPATH/uninstall.sh" || abort "! Can't write uninstall.sh"
+echo "rm -rf /data/adb/edxp" >> "$MODPATH/uninstall.sh" || abort "! Can't write uninstall.sh"
+
 ui_print "- Welcome to EdXposed ${VERSION}!"
 
 # before Magisk 16e4c67, sepolicy.rule is copied on the second reboot

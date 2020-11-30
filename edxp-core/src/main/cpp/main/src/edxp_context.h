@@ -121,7 +121,6 @@ namespace edxp {
         static std::tuple<bool, uid_t, std::string> GetAppInfoFromDir(JNIEnv *env, jstring dir);
 
         friend std::unique_ptr<Context> std::make_unique<Context>();
-
     };
 
 }

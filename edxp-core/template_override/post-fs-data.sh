@@ -35,9 +35,9 @@ RIRU_APICODE=$(cat "${RIRU_PATH}/api_version")
 MAGISK_VERSION=$(su -v)
 MAGISK_VERCODE=$(su -V)
 
-EDXP_MANAGER="org.meowcat.edxposed.manager"
-XP_INSTALLER="de.robv.android.xposed.installer"
-PATH_PREFIX="/data/user_de/0/"
+#EDXP_MANAGER="org.meowcat.edxposed.manager"
+#XP_INSTALLER="de.robv.android.xposed.installer"
+#PATH_PREFIX="/data/user_de/0/"
 #PATH_PREFIX_LEGACY="/data/user/0/"
 
 sepolicy() {
@@ -55,14 +55,7 @@ sepolicy() {
 #fi
 
 DEFAULT_BASE_PATH="${PATH_PREFIX}${EDXP_MANAGER}"
-BASE_PATH="${DEFAULT_BASE_PATH}"
-
-if [[ ! -d ${BASE_PATH} ]]; then
-    BASE_PATH="${PATH_PREFIX}${XP_INSTALLER}"
-    if [[ ! -d ${BASE_PATH} ]]; then
-        BASE_PATH="${DEFAULT_BASE_PATH}"
-    fi
-fi
+BASE_PATH="/data/misc/$(cat /data/adb/edxp/misc_path)/0"
 
 LOG_PATH="${BASE_PATH}/log"
 CONF_PATH="${BASE_PATH}/conf"
@@ -165,8 +158,8 @@ start_log_cather all "EdXposed:V XSharedPreferences:V EdXposed-Bridge:V EdXposed
 start_log_cather error "XSharedPreferences:V EdXposed-Bridge:V" true true
 
 
-if [[ -f "/data/misc/riru/modules/edxp.prop" ]]; then
-    CONFIG=$(cat "/data/misc/riru/modules/edxp.prop")
+if [[ -f "/data/adb/riru/modules/edxp.prop" ]]; then
+    CONFIG=$(cat "/data/adb/riru/modules/edxp.prop")
     [[ -d "${TARGET}/${CONFIG}" ]] || mkdir -p "${TARGET}/${CONFIG}"
     cp "${MODDIR}/module.prop" "${TARGET}/${CONFIG}/module.prop"
 fi

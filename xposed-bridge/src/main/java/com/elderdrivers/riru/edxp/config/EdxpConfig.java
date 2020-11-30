@@ -2,7 +2,7 @@ package com.elderdrivers.riru.edxp.config;
 
 public interface EdxpConfig {
 
-    String getInstallerConfigPath(String suffix);
+    String getConfigPath(String suffix);
 
     String getDataPathPrefix();
 
