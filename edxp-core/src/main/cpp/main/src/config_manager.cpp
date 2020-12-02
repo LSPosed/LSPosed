@@ -292,7 +292,7 @@ namespace edxp {
                                             fs::perms::others_exec);
                 path_chown(prefs_path, uid, 0);
             }
-            if (pkg_name == installer_pkg_name_) {
+            if (pkg_name == installer_pkg_name_ || pkg_name == kPrimaryInstallerPkgName) {
                 auto conf_path = GetConfigPath();
                 if (!path_exists<true>(conf_path)) {
                     fs::create_directories(conf_path);
@@ -308,6 +308,17 @@ namespace edxp {
                 }
                 if (const auto &[r_uid, r_gid] = path_own(log_path); r_uid != uid) {
                     path_chown(log_path, uid, 0, true);
+                }
+
+                if (pkg_name == kPrimaryInstallerPkgName) {
+                    try {
+                        auto installer_pkg_name_path = GetConfigPath("installer");
+                        if (path_exists<true>(installer_pkg_name_path)) {
+                            fs::remove(installer_pkg_name_path);
+                        }
+                    } catch (const fs::filesystem_error &e) {
+                        LOGE("%s", e.what());
+                    }
                 }
             }
         } catch (const fs::filesystem_error &e) {
