@@ -4,6 +4,7 @@ import com.elderdrivers.riru.edxp.config.ConfigManager;
 import com.elderdrivers.riru.edxp.deopt.PrebuiltMethodsDeopter;
 
 import de.robv.android.xposed.SELinuxHelper;
+import de.robv.android.xposed.XposedInit;
 
 import static com.elderdrivers.riru.edxp.util.FileUtils.getDataPathPrefix;
 
@@ -55,6 +56,7 @@ public class NormalProxy extends BaseProxy {
     private void forkPostCommon(int pid, boolean isSystem, String appDataDir, String niceName) {
         ConfigManager.appDataDir = appDataDir;
         ConfigManager.niceName = niceName;
+        XposedInit.prefsBasePath = ConfigManager.getPrefsPath("");
         mRouter.prepare(isSystem);
         mRouter.onEnterChildProcess();
         mRouter.loadModulesSafely(true);

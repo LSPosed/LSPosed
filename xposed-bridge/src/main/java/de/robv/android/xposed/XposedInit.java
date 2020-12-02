@@ -69,6 +69,7 @@ public final class XposedInit {
     private static final String INSTANT_RUN_CLASS = "com.android.tools.fd.runtime.BootstrapApplication";
     public static volatile boolean disableResources = false;
     private static final String[] XRESOURCES_CONFLICTING_PACKAGES = {"com.sygic.aura"};
+    public static String prefsBasePath = null;
 
     private XposedInit() {
     }
@@ -309,6 +310,12 @@ public final class XposedInit {
     private static final Object moduleLoadLock = new Object();
     // @GuardedBy("moduleLoadLock")
     private static final ArraySet<String> loadedModules = new ArraySet<>();
+
+    public static ArraySet<String> getLoadedModules() {
+        synchronized (moduleLoadLock) {
+            return loadedModules;
+        }
+    }
 
     public static boolean loadModules(boolean callInitZygote) throws IOException {
         boolean hasLoaded = !modulesLoaded.compareAndSet(false, true);
