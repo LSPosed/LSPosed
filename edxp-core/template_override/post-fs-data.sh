@@ -122,7 +122,7 @@ start_log_cather () {
     echo "Android version: ${ANDROID}">>${LOG_FILE}
     echo "Android sdk: ${ANDROID_SDK}">>${LOG_FILE}
     echo "EdXposed version: ${EDXP_VERSION}">>${LOG_FILE}
-    echo "EdXposed api: 91.0">>${LOG_FILE}
+    echo "EdXposed api: 93.0">>${LOG_FILE}
     echo "Riru version: ${RIRU_VERSION} (${RIRU_VERCODE})">>${LOG_FILE}
     echo "Riru api: ${RIRU_APICODE}">>${LOG_FILE}
     echo "Magisk: ${MAGISK_VERSION%:*} (${MAGISK_VERCODE})">>${LOG_FILE}

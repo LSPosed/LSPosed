@@ -146,7 +146,7 @@ public final class XposedBridge {
 	 */
 	public static int getXposedVersion() {
 		// ed: fixed value for now
-		return 92;
+		return 93;
 	}
 
 	/**
