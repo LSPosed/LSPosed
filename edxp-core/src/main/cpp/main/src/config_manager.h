@@ -14,10 +14,17 @@
 
 namespace edxp {
 
-    static const std::string kPrimaryInstallerPkgName = "org.meowcat.edxposed.manager";
-    static const std::string kXposedPropPath = "/system/framework/edconfig.jar";
 
     class ConfigManager {
+    private:
+        inline static const auto kPrimaryInstallerPkgName = "org.meowcat.edxposed.manager"_str;
+        inline static const auto kXposedPropName = "edconfig.jar"_str;
+        inline static const std::vector<std::string> kXposedInjectDexPath = {
+                "edxp.dex",
+                "eddalvikdx.dex",
+                "eddexmaker.dex",
+        };
+
     public:
         inline static ConfigManager *GetInstance() {
             return instances_[current_user].get();
@@ -25,7 +32,8 @@ namespace edxp {
 
         inline static void SetCurrentUser(uid_t user) {
             if (auto instance = instances_.find(user);
-                    instance == instances_.end() || !instance->second || instance->second->NeedUpdateConfig()) {
+                    instance == instances_.end() || !instance->second ||
+                    instance->second->NeedUpdateConfig()) {
                 instances_[user] = std::make_unique<ConfigManager>(user);
             }
         }
@@ -33,6 +41,8 @@ namespace edxp {
         inline static auto ReleaseInstances() {
             return std::move(instances_);
         }
+
+        inline auto IsInitialized() const { return initialized_; }
 
         // Always true now
         inline auto IsBlackWhiteListEnabled() const { return true; }
@@ -45,11 +55,15 @@ namespace edxp {
 
         inline auto GetInstallerPackageName() const { return installer_pkg_name_; }
 
-        inline auto GetXposedPropPath() const { return kXposedPropPath; }
-
         inline auto GetLibSandHookName() const { return kLibSandHookName; }
 
         inline auto GetDataPathPrefix() const { return data_path_prefix_; }
+
+        inline static auto GetFrameworkPath(const std::string &suffix = {}) {
+            return GetMiscPath() / "framework" / suffix;
+        }
+
+        inline auto GetXposedPropPath() const { return GetFrameworkPath(kXposedPropName); }
 
         inline auto GetConfigPath(const std::string &suffix = {}) const {
             return base_config_path_ / "conf" / suffix;
@@ -75,10 +89,15 @@ namespace edxp {
 
         void EnsurePermission(const std::string &pkg_name, uid_t uid) const;
 
+
     private:
         inline static std::unordered_map<uid_t, std::unique_ptr<ConfigManager>> instances_{};
         inline static uid_t current_user = 0u;
+        inline static std::filesystem::path misc_path_;
+        inline static std::vector<std::filesystem::path> inject_dex_paths_;
         inline static const bool use_prot_storage_ = GetAndroidApiLevel() >= __ANDROID_API_N__;
+
+        static decltype(misc_path_) GetMiscPath();
 
         const uid_t user_;
         const std::filesystem::path data_path_prefix_;
@@ -114,6 +133,9 @@ namespace edxp {
         friend std::unique_ptr<ConfigManager> std::make_unique<ConfigManager>(uid_t &);
 
         std::filesystem::path RetrieveBaseConfigPath() const;
+
+    public:
+        static decltype(inject_dex_paths_) GetInjectDexPaths();
     };
 
 } // namespace edxp

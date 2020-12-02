@@ -10,7 +10,6 @@
 #include "utils.h"
 
 namespace edxp {
-    static const auto SYSTEM_SERVER_DATA_DIR = "/data/user/0/android"_str;
     enum Variant {
         NONE = 0,
         YAHFA = 1,
@@ -99,7 +98,7 @@ namespace edxp {
 
         Context() {}
 
-        void PreLoadDex(JNIEnv *env, const std::string &dex_path);
+        void PreLoadDex(const std::vector<std::filesystem::path> &dex_path);
 
         void InjectDexAndInit(JNIEnv *env);
 
@@ -118,7 +117,7 @@ namespace edxp {
                          const std::vector<std::string> &app_module_list,
                          bool is_child_zygote);
 
-        static std::tuple<bool, uid_t, std::string> GetAppInfoFromDir(JNIEnv *env, jstring dir);
+        static std::tuple<bool, uid_t, std::string> GetAppInfoFromDir(JNIEnv *env, jstring dir, jstring nice_name);
 
         friend std::unique_ptr<Context> std::make_unique<Context>();
     };

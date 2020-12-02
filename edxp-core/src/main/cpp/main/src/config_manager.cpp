@@ -85,23 +85,16 @@ namespace edxp {
     namespace fs = std::filesystem;
 
     fs::path ConfigManager::RetrieveBaseConfigPath() const {
-        fs::path misc_path("/data/adb/edxp/misc_path");
-        try {
-            RirudSocket rirud_socket{};
-            auto path = rirud_socket.ReadFile(misc_path);
-            path.erase(std::find_if(path.rbegin(), path.rend(), [](unsigned char ch) {
-                return !std::isspace(ch);
-            }).base(), path.end());
-            return fs::path("/data/misc") / path / std::to_string(user_);
-        } catch (const RirudSocket::RirudSocketException &e) {
-            LOGE("%s", e.what());
+        if (auto misc_path = GetMiscPath(); !misc_path.empty()) {
+            return misc_path / std::to_string(user_);
+        } else {
             return {};
         }
     }
 
     std::string ConfigManager::RetrieveInstallerPkgName() const {
         std::string installer_pkg_name_path = GetConfigPath("installer");
-        if (!path_exists(installer_pkg_name_path, true)) {
+        if (!path_exists<true>(installer_pkg_name_path)) {
             LOGW("installer not set, using default one %s", kPrimaryInstallerPkgName.c_str());
             return kPrimaryInstallerPkgName;
         }
@@ -217,7 +210,7 @@ namespace edxp {
             auto &[module_path, scope] = modules_list[module_pkg_name];
             module_path.assign(std::move(module));
             const auto &module_scope_conf = GetConfigPath(module_pkg_name + ".conf");
-            if (!path_exists(module_scope_conf, true)) {
+            if (!path_exists<true>(module_scope_conf)) {
                 LOGD("module scope is not set for %s", module_pkg_name.c_str());
                 continue;
             }
@@ -253,7 +246,7 @@ namespace edxp {
 
     std::filesystem::file_time_type ConfigManager::GetLastWriteTime() const {
         auto modules_list = GetConfigPath("modules.list");
-        if (!path_exists(modules_list, true))
+        if (!path_exists<true>(modules_list))
             return {};
         return fs::last_write_time(modules_list);
     }
@@ -262,7 +255,7 @@ namespace edxp {
         if (base_config_path_.empty()) return false;
         try {
             fs::create_directories(base_config_path_);
-            fs::permissions(base_config_path_.parent_path(),
+            fs::permissions(GetMiscPath(),
                             fs::perms::owner_all | fs::perms::group_all | fs::perms::others_exec);
             fs::permissions(base_config_path_,
                             fs::perms::owner_all | fs::perms::group_all | fs::perms::others_exec);
@@ -286,7 +279,7 @@ namespace edxp {
         try {
             if (modules_list_.count(pkg_name)) {
                 auto prefs_path = GetPrefsPath(pkg_name);
-                if (!path_exists(prefs_path, true)) {
+                if (!path_exists<true>(prefs_path)) {
                     fs::create_directories(prefs_path);
                 } else {
                     const auto &[r_uid, r_gid] = path_own(prefs_path);
@@ -301,11 +294,11 @@ namespace edxp {
             }
             if (pkg_name == installer_pkg_name_) {
                 auto conf_path = GetConfigPath();
-                if (!path_exists(conf_path, true)) {
+                if (!path_exists<true>(conf_path)) {
                     fs::create_directories(conf_path);
                 }
                 auto log_path = GetLogPath();
-                if (!path_exists(log_path, true)) {
+                if (!path_exists<true>(log_path)) {
                     fs::create_directories(log_path);
                 }
                 fs::permissions(conf_path, fs::perms::owner_all | fs::perms::group_all);
@@ -320,6 +313,34 @@ namespace edxp {
         } catch (const fs::filesystem_error &e) {
             LOGE("%s", e.what());
         }
+    }
+
+    auto ConfigManager::GetMiscPath() -> decltype(misc_path_) {
+        if (misc_path_.empty()) {
+            fs::path misc_path("/data/adb/edxp/misc_path");
+            try {
+                RirudSocket rirud_socket{};
+                auto path = rirud_socket.ReadFile(misc_path);
+                path.erase(std::find_if(path.rbegin(), path.rend(), [](unsigned char ch) {
+                    return !std::isspace(ch);
+                }).base(), path.end());
+                misc_path_ = fs::path("/data/misc") / path;
+            } catch (const RirudSocket::RirudSocketException &e) {
+                LOGE("%s", e.what());
+            }
+        }
+        return misc_path_;
+    }
+
+    auto ConfigManager::GetInjectDexPaths() -> decltype(inject_dex_paths_) {
+        if (inject_dex_paths_.empty()) {
+            std::transform(kXposedInjectDexPath.begin(), kXposedInjectDexPath.end(),
+                           std::back_inserter(inject_dex_paths_),
+                           [](auto i) {
+                               return GetFrameworkPath(i);
+                           });
+        }
+        return inject_dex_paths_;
     }
 
 }

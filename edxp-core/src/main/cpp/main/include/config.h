@@ -29,10 +29,6 @@ inline constexpr bool is64 = Is64();
 # define LP_SELECT(lp32, lp64) (lp32)
 #endif
 
-    static const auto kInjectDexPath = "/system/framework/edxp.dex:"
-                                           "/system/framework/eddalvikdx.dex:"
-                                           "/system/framework/eddexmaker.dex"_str;
-
     static const auto kEntryClassName = "com.elderdrivers.riru.edxp.core.Main"_str;
     static const auto kClassLinkerClassName = "com.elderdrivers.riru.edxp.art.ClassLinker";
     static const auto kSandHookClassName = "com.swift.sandhook.SandHook"_str;

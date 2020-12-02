@@ -58,17 +58,8 @@ namespace edxp {
         CallPostFixupStaticTrampolinesCallback(class_ptr, post_fixup_static_mid_);
     }
 
-    void Context::PreLoadDex(JNIEnv *env, const std::string &dex_path) {
-        if (LIKELY(!dexes.empty())) return;
-        std::vector<std::string> paths;
-        {
-            std::istringstream is(dex_path);
-            std::string path;
-            while (std::getline(is, path, ':')) {
-                paths.emplace_back(std::move(path));
-            }
-        }
-        for (const auto &path: paths) {
+    void Context::PreLoadDex(const std::vector<fs::path> &dex_paths) {
+        for (const auto &path: dex_paths) {
             std::ifstream is(path, std::ios::binary);
             if (!is.good()) {
                 LOGE("Cannot load path %s", path.c_str());
@@ -234,15 +225,20 @@ namespace edxp {
         app_modules_list_ = ConfigManager::GetInstance()->GetAppModuleList(
                 "android"); // I don't think we need this, but anyway
         skip_ = false;
-        if (!ConfigManager::GetInstance()->IsAppNeedHook("android")) {
+        if (!ConfigManager::GetInstance()->IsInitialized()) {
+            LOGE("skip injecting into android because configurations are not loaded properly");
+        }
+        if (skip_ && !ConfigManager::GetInstance()->IsAppNeedHook("android")) {
             skip_ = true;
-            LOGW("skip injecting xposed into android because it's whitelisted/blacklisted");
+            LOGW("skip injecting into android because it's whitelisted/blacklisted");
         }
         if (!skip_ && app_modules_list_.empty()) {
             skip_ = true;
             LOGW("skip injecting into android because no module hooks it");
         }
-        PreLoadDex(env, kInjectDexPath);
+        if(!skip_) {
+            PreLoadDex(ConfigManager::GetInjectDexPaths());
+        }
     }
 
 
@@ -278,10 +274,11 @@ namespace edxp {
     }
 
     std::tuple<bool, uid_t, std::string>
-    Context::GetAppInfoFromDir(JNIEnv *env, jstring dir) {
+    Context::GetAppInfoFromDir(JNIEnv *env, jstring dir, jstring nice_name) {
         uid_t uid = 0;
         JUTFString app_data_dir(env, dir);
-        if (!app_data_dir) return {false, 0, {}};
+        JUTFString name(env, nice_name);
+        if (!app_data_dir) return {false, 0, name.get()};
         fs::path path(app_data_dir.get());
         std::vector<std::string> splits(path.begin(), path.end());
         if (splits.size() < 5u) {
@@ -304,7 +301,11 @@ namespace edxp {
                                    bool is_child_zygote) {
         const auto app_id = uid % PER_USER_RANGE;
         bool skip = false;
-        if (!info_res) {
+        if (!ConfigManager::GetInstance()->IsInitialized()) {
+            LOGE("skip injecting into %s because configurations are not loaded properly", package_name.c_str());
+            skip = true;
+        }
+        if (!skip && !info_res) {
             LOGW("skip injecting into %s because it has no data dir", package_name.c_str());
             skip = true;
         }
@@ -349,14 +350,16 @@ namespace edxp {
                                                jboolean is_child_zygote,
                                                jstring instruction_set,
                                                jstring app_data_dir) {
-        const auto&[res, user, package_name] = GetAppInfoFromDir(env, app_data_dir);
-        ConfigManager::SetCurrentUser(user);
-        app_modules_list_ = ConfigManager::GetInstance()->GetAppModuleList(package_name);
-        skip_ = ShouldSkipInject(package_name, user, uid, res, app_modules_list_, is_child_zygote);
-        ConfigManager::GetInstance()->EnsurePermission(package_name, uid % PER_USER_RANGE);
+        const auto&[res, user, package_name] = GetAppInfoFromDir(env, app_data_dir, nice_name);
         app_data_dir_ = app_data_dir;
         nice_name_ = nice_name;
-        PreLoadDex(env, kInjectDexPath);
+        ConfigManager::SetCurrentUser(user);
+        skip_ = ShouldSkipInject(package_name, user, uid, res, app_modules_list_, is_child_zygote);
+        if(!skip_) {
+            app_modules_list_ = ConfigManager::GetInstance()->GetAppModuleList(package_name);
+            ConfigManager::GetInstance()->EnsurePermission(package_name, uid % PER_USER_RANGE);
+            PreLoadDex(ConfigManager::GetInjectDexPaths());
+        }
     }
 
     int

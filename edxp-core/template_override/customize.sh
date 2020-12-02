@@ -36,18 +36,6 @@ PROP_PRODUCT=$(getprop ro.build.product)
 PROP_BRAND=$(getprop ro.product.brand)
 PROP_MANUFACTURER=$(getprop ro.product.manufacturer)
 
-JAR_EDXP="$(getRandomNameExist 8 "" ".dex" "
-/system/framework
-").dex"
-JAR_EDDALVIKDX="$(getRandomNameExist 8 "" ".dex" "
-/system/framework
-").dex"
-JAR_EDDEXMAKER="$(getRandomNameExist 8 "" ".dex" "
-/system/framework
-").dex"
-#JAR_EDCONFIG="$(getRandomNameExist 8 "" ".jar" "
-#/system/framework
-#").jar"
 LIB_RIRU_EDXP="libriru_${RIRU_EDXP}.so"
 LIB_SANDHOOK_EDXP="lib$(getRandomNameExist 13 "lib" ".so" "
 /system/lib
@@ -287,14 +275,30 @@ if [[ "${OLD_MAGISK}" == true ]]; then
     rm "${MODPATH}"/sepolicy.rule
 fi
 
+ui_print "- Creating configuration directories"
+if [[ -f /data/adb/edxp/misc_path ]]; then
+  MISC_PATH=$(cat /data/adb/edxp/misc_path)
+  ui_print "- Use previous path $MISC_PATH"
+else
+  MISC_PATH="edxp_$(tr -cd 'A-Za-z0-9' < /dev/urandom | head -c16)"
+  ui_print "- Use new path $MISC_PATH"
+  mkdir -p /data/adb/edxp || abort "! Can't create adb path"
+  echo "$MISC_PATH" > /data/adb/edxp/misc_path || abort "! Can't store configuration path"
+fi
+set_perm_recursive /data/adb/edxp root root 0700 0600 "u:object_r:magisk_file:s0" || abort "! Can't set permission"
+mkdir -p /data/misc/$MISC_PATH || abort "! Can't create configuration path"
+set_perm /data/misc/$MISC_PATH root root 0771 "u:object_r:magisk_file:s0" || abort "! Can't set permission"
+echo "rm -rf /data/misc/$MISC_PATH" >> "$MODPATH/uninstall.sh" || abort "! Can't write uninstall.sh"
+echo "rm -rf /data/adb/edxp" >> "$MODPATH/uninstall.sh" || abort "! Can't write uninstall.sh"
+
+
 ui_print "- Copying framework libraries"
 
-mv "${MODPATH}/system/framework/eddalvikdx.dex" "${MODPATH}/system/framework/${JAR_EDDALVIKDX}"
-mv "${MODPATH}/system/framework/edxp.dex" "${MODPATH}/system/framework/${JAR_EDXP}"
-mv "${MODPATH}/system/framework/eddexmaker.dex" "${MODPATH}/system/framework/${JAR_EDDEXMAKER}"
-#mv "${MODPATH}/system/framework/edconfig.jar" "${MODPATH}/system/framework/${JAR_EDCONFIG}"
-mv "${MODPATH}/system/lib/libriru_edxp.so" "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
+rm -rf "/data/misc/$MISC_PATH/framework"
+mv "${MODPATH}/system/framework" "/data/misc/$MISC_PATH/framework"
+set_perm_recursive /data/misc/$MISC_PATH/framework root root 0755 0644 "u:object_r:magisk_file:s0" || abort "! Can't set permission"
 
+mv "${MODPATH}/system/lib/libriru_edxp.so" "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
 if [[ "${IS64BIT}" == true ]]; then
     mv "${MODPATH}/system/lib64/libriru_edxp.so" "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
 fi
@@ -352,23 +356,6 @@ rm "${RIRU_TARGET}/module.prop"
 cp "${MODPATH}/module.prop" "${RIRU_TARGET}/module.prop" || abort "! Can't create ${RIRU_TARGET}/module.prop"
 
 set_perm_recursive "${MODPATH}" 0 0 0755 0644
-
-ui_print "- Creating configuration directories"
-if [[ -f /data/adb/edxp/misc_path ]]; then
-  MISC_PATH=$(cat /data/adb/edxp/misc_path)
-  ui_print "- Use previous path $MISC_PATH"
-else
-  MISC_PATH="edxp_$(tr -cd 'A-Za-z0-9' < /dev/urandom | head -c16)"
-  ui_print "- Use new path $MISC_PATH"
-  mkdir -p /data/adb/edxp || abort "! Can't create adb path"
-  echo "$MISC_PATH" > /data/adb/edxp/misc_path || abort "! Can't store configuration path"
-fi
-set_perm_recursive /data/adb/edxp root root 0700 0600 "u:object_r:magisk_file:s0" || abort "! Can't set permission"
-mkdir -p /data/misc/$MISC_PATH || abort "! Can't create configuration path"
-set_perm /data/misc/$MISC_PATH root root 0771 "u:object_r:magisk_file:s0" || abort "! Can't set permission"
-echo "rm -rf /data/misc/$MISC_PATH" >> "$MODPATH/uninstall.sh" || abort "! Can't write uninstall.sh"
-echo "rm -rf /data/adb/edxp" >> "$MODPATH/uninstall.sh" || abort "! Can't write uninstall.sh"
-
 ui_print "- Welcome to EdXposed ${VERSION}!"
 
 # before Magisk 16e4c67, sepolicy.rule is copied on the second reboot
