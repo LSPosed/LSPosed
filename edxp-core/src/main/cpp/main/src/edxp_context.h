@@ -114,7 +114,7 @@ namespace edxp {
 
         static bool
         ShouldSkipInject(const std::string &package_name, uid_t user, uid_t uid, bool res,
-                         const std::vector<std::string> &app_module_list,
+                         const std::function<bool()>& empty_list,
                          bool is_child_zygote);
 
         static std::tuple<bool, uid_t, std::string> GetAppInfoFromDir(JNIEnv *env, jstring dir, jstring nice_name);

@@ -146,12 +146,12 @@ namespace edxp {
         }
     }
 
-    ConfigManager::ConfigManager(uid_t user) :
+    ConfigManager::ConfigManager(uid_t user, bool initialized) :
             user_(user),
             data_path_prefix_(fs::path(use_prot_storage_ ? "/data/user_de" : "/data/user") /
                               std::to_string(user_)),
             base_config_path_(RetrieveBaseConfigPath()),
-            initialized_(InitConfigPath()),
+            initialized_(initialized || InitConfigPath()),
             installer_pkg_name_(RetrieveInstallerPkgName()),
             white_list_enable_(path_exists(GetConfigPath("usewhitelist"))),
             deopt_boot_image_enabled_(path_exists(GetConfigPath("deoptbootimage"))),
@@ -225,7 +225,7 @@ namespace edxp {
                     scope.emplace(std::move(app_pkg_name));
             }
             scope.insert(module_pkg_name); // Always add module itself
-            LOGD("scope of %s is:\n%s", module_pkg_name.c_str(), ([&scope = scope]() {
+            LOGI("scope of %s is:\n%s", module_pkg_name.c_str(), ([&scope = scope]() {
                 std::ostringstream join;
                 std::copy(scope.begin(), scope.end(),
                           std::ostream_iterator<std::string>(join, "\n  "));

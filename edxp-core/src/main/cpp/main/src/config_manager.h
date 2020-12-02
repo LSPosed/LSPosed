@@ -30,19 +30,20 @@ namespace edxp {
             return instances_[current_user].get();
         }
 
+        inline auto IsInitialized() const { return initialized_; }
+
         inline static void SetCurrentUser(uid_t user) {
             if (auto instance = instances_.find(user);
-                    instance == instances_.end() || !instance->second ||
-                    instance->second->NeedUpdateConfig()) {
+                    instance == instances_.end() ||  !instance->second) {
                 instances_[user] = std::make_unique<ConfigManager>(user);
+            } else if(instance->second->NeedUpdateConfig()) {
+                instances_[user] = std::make_unique<ConfigManager>(user, instance->second->IsInitialized());
             }
         }
 
         inline static auto ReleaseInstances() {
             return std::move(instances_);
         }
-
-        inline auto IsInitialized() const { return initialized_; }
 
         // Always true now
         inline auto IsBlackWhiteListEnabled() const { return true; }
@@ -116,7 +117,7 @@ namespace edxp {
 
         const std::filesystem::file_time_type last_write_time_;
 
-        ConfigManager(uid_t uid);
+        ConfigManager(uid_t uid, bool initialized=false);
 
         static std::unordered_set<std::string> GetAppList(const std::filesystem::path &dir);
 
@@ -131,6 +132,7 @@ namespace edxp {
         bool InitConfigPath() const;
 
         friend std::unique_ptr<ConfigManager> std::make_unique<ConfigManager>(uid_t &);
+        friend std::unique_ptr<ConfigManager> std::make_unique<ConfigManager>(uid_t &, bool&&);
 
         std::filesystem::path RetrieveBaseConfigPath() const;
 
