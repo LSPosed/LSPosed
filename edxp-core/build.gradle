@@ -43,9 +43,19 @@ ext {
     riruModuleId = "edxp"
     zipPathMagiskRelease = "$buildDir/tmp/release/magisk"
 
-    moduleMinRiruApiVersion = 9
-    moduleMinRiruVersionName = "v22.0"
-    moduleMaxRiruApiVersion = 9
+    moduleMinRiruApiVersion = 10
+    moduleMinRiruVersionName = "v23.0"
+    moduleMaxRiruApiVersion = 10
+}
+
+repositories {
+    mavenLocal()
+    jcenter()
+    maven { url 'https://dl.bintray.com/rikkaw/Libraries' }
+}
+
+dependencies {
+    implementation 'rikka.ndk:riru:10'
 }
 
 android {
@@ -53,6 +63,10 @@ android {
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
+
+        buildFeatures {
+            prefab true
+        }
 
         externalNativeBuild {
             cmake {

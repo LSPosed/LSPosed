@@ -14,7 +14,7 @@
 #include "logging.h"
 #include "config.h"
 #include "edxp_context.h"
-#include "riru.h"
+#include <riru.h>
 #include "config_manager.h"
 #include "native_hook.h"
 
@@ -90,7 +90,7 @@ namespace edxp {
 }
 
 int riru_api_version;
-RiruApiV9 *riru_api_v9;
+RiruApiV10 *riru_api_v10;
 
 RIRU_EXPORT void *init(void *arg) {
     static int step = 0;
@@ -106,11 +106,13 @@ RIRU_EXPORT void *init(void *arg) {
         }
         case 2: {
             switch (riru_api_version) {
+                case 10:
+                    [[fallthrough]];
                 case 9: {
-                    riru_api_v9 = (RiruApiV9 *) arg;
+                    riru_api_v10 = (RiruApiV10 *) arg;
 
-                    auto module = (RiruModuleInfoV9 *) malloc(sizeof(RiruModuleInfoV9));
-                    memset(module, 0, sizeof(RiruModuleInfoV9));
+                    auto module = (RiruModuleInfoV10 *) malloc(sizeof(RiruModuleInfoV10));
+                    memset(module, 0, sizeof(RiruModuleInfoV10));
                     _module = module;
 
                     module->supportHide = true;

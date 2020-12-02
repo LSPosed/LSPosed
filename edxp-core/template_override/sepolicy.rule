@@ -1,4 +1,2 @@
 allow system_server system_server process execmem
 allow system_server system_server memprotect mmap_zero
-# TODO: use rirud
-allow zygote adb_data_file file { getattr read }

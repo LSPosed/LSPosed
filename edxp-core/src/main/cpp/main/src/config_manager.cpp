@@ -19,6 +19,7 @@
 #include "art/runtime/native/native_util.h"
 #include "config_manager.h"
 #include "utils.h"
+#include "rirud_socket.h"
 
 /*
  * Logic:
@@ -79,22 +80,23 @@
  * of the conf on its own data dir)
  *
  */
+
 namespace edxp {
     namespace fs = std::filesystem;
 
     fs::path ConfigManager::RetrieveBaseConfigPath() const {
         fs::path misc_path("/data/adb/edxp/misc_path");
-        if (path_exists(misc_path)) {
-            std::ifstream ifs(misc_path);
-            if (ifs.good()) {
-                return fs::path("/data/misc") /
-                       std::string{std::istream_iterator<char>(ifs),
-                                   std::istream_iterator<char>()} /
-                       std::to_string(user_);
-            }
+        try {
+            RirudSocket rirud_socket{};
+            auto path = rirud_socket.ReadFile(misc_path);
+            path.erase(std::find_if(path.rbegin(), path.rend(), [](unsigned char ch) {
+                return !std::isspace(ch);
+            }).base(), path.end());
+            return fs::path("/data/misc") / path / std::to_string(user_);
+        } catch (const RirudSocket::RirudSocketException &e) {
+            LOGE("%s", e.what());
+            return {};
         }
-        LOGW("fallback because %s is not accessible", misc_path.c_str());
-        return data_path_prefix_ / kPrimaryInstallerPkgName;
     }
 
     std::string ConfigManager::RetrieveInstallerPkgName() const {
@@ -257,7 +259,7 @@ namespace edxp {
     }
 
     bool ConfigManager::InitConfigPath() const {
-        if (base_config_path_.string().rfind("/data/misc") != 0) return true;
+        if (base_config_path_.empty()) return false;
         try {
             fs::create_directories(base_config_path_);
             fs::permissions(base_config_path_.parent_path(),
