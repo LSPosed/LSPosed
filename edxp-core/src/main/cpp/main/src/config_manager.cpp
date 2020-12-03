@@ -109,10 +109,14 @@ namespace edxp {
 
     std::unordered_set<std::string> ConfigManager::GetAppList(const fs::path &dir) {
         std::unordered_set<std::string> set;
-        for (auto &item: fs::directory_iterator(dir)) {
-            if (item.is_regular_file()) {
-                set.emplace(item.path().filename());
+        try {
+            for (auto &item: fs::directory_iterator(dir)) {
+                if (item.is_regular_file()) {
+                    set.emplace(item.path().filename());
+                }
             }
+        } catch (const fs::filesystem_error &e) {
+            LOGE("%s", e.what());
         }
         return set;
     }
