@@ -63,7 +63,10 @@ public class HandleBindApp extends XC_MethodHook {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                         String fileName = ((File)param.args[0]).getName();
-                        param.args[0] = new File(ConfigManager.getPrefsPath(ai.packageName), fileName);
+                        File file = new File(ConfigManager.getPrefsPath(ai.packageName), fileName);
+                        file.createNewFile();
+                        file.setReadable(true, false);
+                        param.args[0] = file;
                     }
                 });
             }
