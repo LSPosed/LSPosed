@@ -63,7 +63,7 @@ RirudSocket::~RirudSocket() {
 
 std::string RirudSocket::ReadFile(const fs::path &path) {
     Write(ACTION_READ_FILE);
-    Write(path.string().size());
+    Write(static_cast<uint32_t>(path.string().size()));
     Write(path.string());
     int32_t rirud_errno;
     Read(rirud_errno);
