@@ -144,7 +144,7 @@ namespace edxp {
             LOGD("using whitelist, %s -> %s", package_name.c_str(), BoolToString(res));
             return res;
         } else {
-            auto res = black_list_.count(package_name);
+            auto res = !black_list_.count(package_name);
             LOGD("using blacklist, %s -> %s", package_name.c_str(), BoolToString(res));
             return res;
         }
