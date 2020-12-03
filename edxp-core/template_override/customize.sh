@@ -287,6 +287,7 @@ else
   if [[ -d /data/user_de/0/org.meowcat.edxposed.manager/conf/ ]]; then
     mkdir -p /data/misc/$MISC_PATH/0/conf
     cp -r /data/user_de/0/org.meowcat.edxposed.manager/conf/* /data/misc/$MISC_PATH/0/conf/
+    set_perm_recursive /data/misc/$MISC_PATH root root 0771 0660 "u:object_r:magisk_file:s0" || abort "! Can't set permission"
   fi
 fi
 set_perm_recursive /data/adb/edxp root root 0700 0600 "u:object_r:magisk_file:s0" || abort "! Can't set permission"
