@@ -236,11 +236,11 @@ namespace edxp {
         skip_ = false;
         if (!ConfigManager::GetInstance()->IsAppNeedHook("android")) {
             skip_ = true;
-            LOGD("skip injecting xposed into android because it's whitelisted/blacklisted");
+            LOGW("skip injecting xposed into android because it's whitelisted/blacklisted");
         }
         if (!skip_ && app_modules_list_.empty()) {
             skip_ = true;
-            LOGD("skip injecting into android because no module hooks it");
+            LOGW("skip injecting into android because no module hooks it");
         }
         PreLoadDex(env, kInjectDexPath);
     }
@@ -266,7 +266,7 @@ namespace edxp {
                 // only do work in child since FindAndCall would print log
                 FindAndCall(env, "forkSystemServerPost", "(I)V", res);
             } else {
-                auto config_managers = ConfigManager::ReleaseInstances();
+                [[maybe_unused]] auto config_managers = ConfigManager::ReleaseInstances();
                 auto context = Context::ReleaseInstance();
                 LOGD("skipped android");
             }
@@ -330,7 +330,7 @@ namespace edxp {
         if (!skip && app_modules_list_.empty() &&
             package_name != ConfigManager::GetInstance()->GetInstallerPackageName()) {
             skip = true;
-            LOGD("skip injecting xposed into %s because no module hooks it",
+            LOGW("skip injecting xposed into %s because no module hooks it",
                  package_name.c_str());
         }
         return skip;
