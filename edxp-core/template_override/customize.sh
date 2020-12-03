@@ -284,6 +284,10 @@ else
   ui_print "- Use new path $MISC_PATH"
   mkdir -p /data/adb/edxp || abort "! Can't create adb path"
   echo "$MISC_PATH" > /data/adb/edxp/misc_path || abort "! Can't store configuration path"
+  if [[ -d /data/user_de/0/org.meowcat.edxposed.manager/conf/ ]]; then
+    mkdir -p /data/misc/$MISC_PATH/0/conf
+    cp -r /data/user_de/0/org.meowcat.edxposed.manager/conf/* /data/misc/$MISC_PATH/0/conf/
+  fi
 fi
 set_perm_recursive /data/adb/edxp root root 0700 0600 "u:object_r:magisk_file:s0" || abort "! Can't set permission"
 mkdir -p /data/misc/$MISC_PATH || abort "! Can't create configuration path"
@@ -311,15 +315,10 @@ if [[ "${VARIANTS}" == "SandHook" ]]; then
 fi
 
 ui_print "- Resetting libraries path"
-
-sed -i 's:/system/framework/edxp.dex\:/system/framework/eddalvikdx.dex\:/system/framework/eddexmaker.dex:/system/framework/'"${JAR_EDXP}"'\:/system/framework/'"${JAR_EDDALVIKDX}"'\:/system/framework/'"${JAR_EDDEXMAKER}"':g' "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
-#sed -i 's:/system/framework/edconfig.jar:/system/framework/'"${JAR_EDCONFIG}"':g' "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
 sed -i 's:libriru_edxp.so:'"${LIB_RIRU_EDXP}"':g' "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
 sed -i 's:libsandhook.edxp.so:'"${LIB_SANDHOOK_EDXP}"':g' "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
 
 if [[ "${IS64BIT}" == true ]]; then
-    sed -i 's:/system/framework/edxp.dex\:/system/framework/eddalvikdx.dex\:/system/framework/eddexmaker.dex:/system/framework/'"${JAR_EDXP}"'\:/system/framework/'"${JAR_EDDALVIKDX}"'\:/system/framework/'"${JAR_EDDEXMAKER}"':g' "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
-#    sed -i 's:/system/framework/edconfig.jar:/system/framework/'"${JAR_EDCONFIG}"':g' "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
     sed -i 's:libriru_edxp.so:'"${LIB_RIRU_EDXP}"':g' "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
     sed -i 's:libsandhook.edxp.so:'"${LIB_SANDHOOK_EDXP}"':g' "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
 fi

@@ -43,9 +43,7 @@ MAGISK_VERCODE=$(su -V)
 sepolicy() {
     # Should be deprecated now. This is for debug only.
     supolicy --live "allow system_server system_server process execmem" \
-                    "allow system_server system_server memprotect mmap_zero" \
-                    "allow zygote app_data_file dir { getattr search read open }" \
-                    "allow zygote app_data_file file { getattr read open }"
+                    "allow system_server system_server memprotect mmap_zero"
 }
 
 #if [[ ${ANDROID_SDK} -ge 24 ]]; then
