@@ -59,6 +59,7 @@ namespace edxp {
     }
 
     void Context::PreLoadDex(const std::vector<fs::path> &dex_paths) {
+        if (LIKELY(!dexes.empty())) return;
         for (const auto &path: dex_paths) {
             std::ifstream is(path, std::ios::binary);
             if (!is.good()) {
