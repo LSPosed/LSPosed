@@ -16,19 +16,6 @@ namespace art {
                 DeoptimizeBootImageSym(thiz);
         }
 
-        CREATE_HOOK_STUB_ENTRIES(bool, Init, void *thiz, void *runtime_options) {
-            if (LIKELY(instance_))
-                instance_->Reset(thiz);
-            else
-                instance_ = new Runtime(thiz);
-            bool success = InitBackup(thiz, runtime_options);
-            if (edxp::ConfigManager::GetInstance()->IsDeoptBootImageEnabled()) {
-                DeoptimizeBootImage(thiz);
-                LOGI("DeoptimizeBootImage done");
-            }
-            return success;
-        }
-
     public:
         Runtime(void *thiz) : HookedObject(thiz) {}
 
@@ -38,19 +25,13 @@ namespace art {
 
         // @ApiSensitive(Level.LOW)
         static void Setup(void *handle, HookFunType hook_func) {
-            HOOK_FUNC(Init, "_ZN3art7Runtime4InitEONS_18RuntimeArgumentMapE");
             RETRIEVE_FUNC_SYMBOL(DeoptimizeBootImage,
                                  "_ZN3art7Runtime19DeoptimizeBootImageEv");
-            RETRIEVE_FIELD_SYMBOL(thiz, "_ZN3art7Runtime9instance_E");
+            RETRIEVE_FIELD_SYMBOL(instance, "_ZN3art7Runtime9instance_E");
+            void * thiz = *reinterpret_cast<void**>(instance);
             LOGD("_ZN3art7Runtime9instance_E = %p", thiz);
             instance_ = new Runtime(thiz);
         }
-
-        ALWAYS_INLINE void DeoptimizeBootImage() const {
-            if (LIKELY(thiz_))
-                DeoptimizeBootImage(thiz_);
-        }
-
     };
 
 }

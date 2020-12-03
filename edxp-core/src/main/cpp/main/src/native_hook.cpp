@@ -24,7 +24,7 @@ namespace edxp {
 
     static volatile bool installed = false;
     static volatile bool art_hooks_installed = false;
-    static HookFunType hook_func = nullptr;
+    static HookFunType hook_func =  reinterpret_cast<HookFunType>(DobbyHook);
 
     void InstallArtHooks(void *art_handle);
 
@@ -42,8 +42,6 @@ namespace edxp {
         }
         LOGI("Using api level %d", api_level);
         InstallRiruHooks();
-        hook_func = reinterpret_cast<HookFunType>(DobbyHook);
-
         // install ART hooks
         if (api_level >= __ANDROID_API_Q__) {
             // From Riru v22 we can't get ART handle by hooking dlopen, so we get libart.so from soinfo.
@@ -73,9 +71,7 @@ namespace edxp {
         if (art_hooks_installed) {
             return;
         }
-        if (ConfigManager::GetInstance()->IsHiddenAPIBypassEnabled()) {
-            art::hidden_api::DisableHiddenApi(art_handle, hook_func);
-        }
+        art::hidden_api::DisableHiddenApi(art_handle, hook_func);
         art::Runtime::Setup(art_handle, hook_func);
         art::gc::Heap::Setup(art_handle, hook_func);
         art::ClassLinker::Setup(art_handle, hook_func);

@@ -18,6 +18,9 @@
 #include <sstream>
 #include "edxp_context.h"
 #include "config_manager.h"
+#include "art/runtime/runtime.h"
+#include "art/runtime/gc/heap.h"
+#include "native_hook.h"
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-value"
@@ -242,9 +245,22 @@ namespace edxp {
     }
 
 
-    int Context::OnNativeForkSystemServerPost(JNIEnv *env, jclass clazz, jint res) {
+    int
+    Context::OnNativeForkSystemServerPost(JNIEnv *env, [[maybe_unused]] jclass clazz, jint res) {
         if (res == 0) {
             if (!skip_) {
+                if (void *buf = mmap(nullptr, 1, PROT_READ | PROT_WRITE | PROT_EXEC,
+                                     MAP_ANONYMOUS | MAP_PRIVATE, -1,
+                                     0);
+                        buf == MAP_FAILED) {
+                    skip_ = true;
+                    LOGE("skip injecting into android because sepolicy was not loaded properly");
+                } else {
+                    munmap(buf, 1);
+                }
+            }
+            if (!skip_) {
+                InstallInlineHooks();
                 PrepareJavaEnv(env);
                 // only do work in child since FindAndCall would print log
                 FindAndCall(env, "forkSystemServerPost", "(I)V", res);
@@ -345,6 +361,7 @@ namespace edxp {
         if (res == 0) {
             const JUTFString process_name(env, nice_name_);
             if (!skip_) {
+                InstallInlineHooks();
                 PrepareJavaEnv(env);
                 LOGD("Done prepare");
                 FindAndCall(env, "forkAndSpecializePost",

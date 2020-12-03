@@ -12,6 +12,17 @@ namespace edxp {
 //#define LOG_DISABLED
 //#define DEBUG
 
+
+inline bool constexpr Is64() {
+#if defined(__LP64__)
+    return true;
+#else
+    return false;
+#endif
+}
+
+inline constexpr bool is64 = Is64();
+
 #if defined(__LP64__)
 # define LP_SELECT(lp32, lp64) (lp64)
 #else
