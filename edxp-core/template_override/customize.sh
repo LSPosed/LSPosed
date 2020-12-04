@@ -229,6 +229,7 @@ extract "${ZIPFILE}" 'uninstall.sh' "${MODPATH}"
 extract "${ZIPFILE}" 'system/framework/edconfig.jar' "${MODPATH}"
 extract "${ZIPFILE}" 'system/framework/eddalvikdx.dex' "${MODPATH}"
 extract "${ZIPFILE}" 'system/framework/eddexmaker.dex' "${MODPATH}"
+extract "${ZIPFILE}" 'system/framework/edservice.dex' "${MODPATH}"
 extract "${ZIPFILE}" 'system/framework/edxp.dex' "${MODPATH}"
 
 if [ "$ARCH" = "x86" ] || [ "$ARCH" = "x64" ]; then

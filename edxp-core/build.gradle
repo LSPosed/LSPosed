@@ -130,6 +130,7 @@ afterEvaluate {
                 dependsOn cleanTemplate
                 dependsOn tasks.getByPath(":dexmaker:copyDex${variantCapped}")
                 dependsOn tasks.getByPath(":dalvikdx:copyDex${variantCapped}")
+                dependsOn tasks.getByPath(":edxp-service:copyDex${variantCapped}")
                 dependsOn tasks.getByPath(":edxp-${backendLowered}:copyDex${variantCapped}")
             }
 

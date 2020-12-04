@@ -53,10 +53,10 @@ sepolicy() {
 #fi
 
 DEFAULT_BASE_PATH="${PATH_PREFIX}${EDXP_MANAGER}"
-BASE_PATH="/data/misc/$(cat /data/adb/edxp/misc_path)/0"
+BASE_PATH="/data/misc/$(cat /data/adb/edxp/misc_path)"
 
-LOG_PATH="${BASE_PATH}/log"
-CONF_PATH="${BASE_PATH}/conf"
+LOG_PATH="${BASE_PATH}/0/log"
+CONF_PATH="${BASE_PATH}/0/conf"
 DISABLE_VERBOSE_LOG_FILE="${CONF_PATH}/disable_verbose_log"
 LOG_VERBOSE=true
 OLD_PATH=${PATH}
@@ -164,5 +164,6 @@ fi
 
 chcon -R u:object_r:system_file:s0 "${MODDIR}"
 chcon -R ${PATH_CONTEXT} "${LOG_PATH}"
+chcon -R u:object_r:magisk_file:s0 $BASE_PATH
 chown -R ${PATH_OWNER} "${LOG_PATH}"
 chmod -R 666 "${LOG_PATH}"

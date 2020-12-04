@@ -64,6 +64,7 @@ namespace edxp {
             std::ifstream is(path, std::ios::binary);
             if (!is.good()) {
                 LOGE("Cannot load path %s", path.c_str());
+                continue;
             }
             dexes.emplace_back(std::istreambuf_iterator<char>(is),
                                std::istreambuf_iterator<char>());
@@ -88,19 +89,14 @@ namespace edxp {
         jmethodID initMid = JNI_GetMethodID(env, in_memory_classloader, "<init>",
                                             "([Ljava/nio/ByteBuffer;Ljava/lang/ClassLoader;)V");
         jclass byte_buffer_class = JNI_FindClass(env, "java/nio/ByteBuffer");
-        jmethodID byte_buffer_wrap = JNI_GetStaticMethodID(env, byte_buffer_class, "wrap",
-                                                           "([B)Ljava/nio/ByteBuffer;");
         auto buffer_array = env->NewObjectArray(dexes.size(), byte_buffer_class, nullptr);
         for (size_t i = 0; i != dexes.size(); ++i) {
-            const auto dex = dexes.at(i);
-            auto byte_array = env->NewByteArray(dex.size());
-            env->SetByteArrayRegion(byte_array, 0, dex.size(),
-                                    dex.data());
-            auto buffer = JNI_CallStaticObjectMethod(env, byte_buffer_class, byte_buffer_wrap,
-                                                     byte_array);
+            auto &dex = dexes.at(i);
+            auto buffer = env->NewDirectByteBuffer(reinterpret_cast<void *>(dex.data()),
+                                                   dex.size());
             env->SetObjectArrayElement(buffer_array, i, buffer);
         }
-        jobject my_cl = env->NewObject(in_memory_classloader, initMid,
+        jobject my_cl = JNI_NewObject(env, in_memory_classloader, initMid,
                                        buffer_array, sys_classloader);
         env->DeleteLocalRef(classloader);
         env->DeleteLocalRef(sys_classloader);
@@ -240,8 +236,67 @@ namespace edxp {
         if (!skip_) {
             PreLoadDex(ConfigManager::GetInjectDexPaths());
         }
+        ConfigManager::GetInstance()->EnsurePermission("android", 1000);
     }
 
+    void Context::RegisterEdxpService(JNIEnv *env) {
+        auto path = ConfigManager::GetFrameworkPath("edservice.dex");
+        std::ifstream is(path, std::ios::binary);
+        if (!is.good()) {
+            LOGE("Cannot load path %s", path.c_str());
+            return;
+        }
+        std::vector<unsigned char> dex{std::istreambuf_iterator<char>(is),
+                                       std::istreambuf_iterator<char>()};
+        LOGD("Loaded %s with size %zu", path.c_str(), dex.size());
+
+        jclass classloader = JNI_FindClass(env, "java/lang/ClassLoader");
+        jmethodID getsyscl_mid = JNI_GetStaticMethodID(
+                env, classloader, "getSystemClassLoader", "()Ljava/lang/ClassLoader;");
+        jobject sys_classloader = JNI_CallStaticObjectMethod(env, classloader, getsyscl_mid);
+
+        if (UNLIKELY(!sys_classloader)) {
+            LOGE("getSystemClassLoader failed!!!");
+            return;
+        }
+        // load dex
+        jobject bufferDex = env->NewDirectByteBuffer(reinterpret_cast<void *>(dex.data()),
+                                                     dex.size());
+
+        jclass in_memory_classloader = JNI_FindClass(env, "dalvik/system/InMemoryDexClassLoader");
+        jmethodID initMid = JNI_GetMethodID(env, in_memory_classloader, "<init>",
+                                            "(Ljava/nio/ByteBuffer;Ljava/lang/ClassLoader;)V");
+        jobject my_cl = JNI_NewObject(env, in_memory_classloader,
+                                      initMid,
+                                      bufferDex,
+                                      sys_classloader);
+
+        env->DeleteLocalRef(classloader);
+        env->DeleteLocalRef(sys_classloader);
+        env->DeleteLocalRef(in_memory_classloader);
+
+        if (UNLIKELY(my_cl == nullptr)) {
+            LOGE("InMemoryDexClassLoader creation failed!!!");
+            return;
+        }
+
+        auto service_class = (jclass) env->NewGlobalRef(
+                FindClassFromLoader(env, my_cl, "com.elderdrivers.riru.edxp.service.ServiceProxy"));
+        if (LIKELY(service_class)) {
+            jfieldID path_fid = JNI_GetStaticFieldID(env, service_class, "CONFIG_PATH",
+                                                     "Ljava/lang/String;");
+            if (LIKELY(path_fid)) {
+                env->SetStaticObjectField(service_class, path_fid, env->NewStringUTF(
+                        ConfigManager::GetMiscPath().c_str()));
+                jmethodID install_mid = JNI_GetStaticMethodID(env, service_class,
+                                                              "install", "()V");
+                if (LIKELY(install_mid)) {
+                    JNI_CallStaticVoidMethod(env, service_class, install_mid);
+                    LOGW("Installed EdXposed Service");
+                }
+            }
+        }
+    }
 
     int
     Context::OnNativeForkSystemServerPost(JNIEnv *env, [[maybe_unused]] jclass clazz, jint res) {
@@ -262,11 +317,8 @@ namespace edxp {
                 PrepareJavaEnv(env);
                 // only do work in child since FindAndCall would print log
                 FindAndCall(env, "forkSystemServerPost", "(I)V", res);
-            } else {
-                [[maybe_unused]] auto config_managers = ConfigManager::ReleaseInstances();
-                auto context = Context::ReleaseInstance();
-                LOGD("skipped android");
             }
+            RegisterEdxpService(env);
         } else {
             // in zygote process, res is child zygote pid
             // don't print log here, see https://github.com/RikkaApps/Riru/blob/77adfd6a4a6a81bfd20569c910bc4854f2f84f5e/riru-core/jni/main/jni_native_method.cpp#L55-L66

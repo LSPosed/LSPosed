@@ -63,6 +63,8 @@ namespace edxp {
 
         inline const auto &GetDataPathPrefix() const { return data_path_prefix_; }
 
+        inline static const auto &GetMiscPath() {return misc_path_;}
+
         inline static auto GetFrameworkPath(const std::string &suffix = {}) {
             return misc_path_ / "framework" / suffix;
         }

@@ -229,6 +229,7 @@ namespace edxp {
                     scope.emplace(std::move(app_pkg_name));
             }
             scope.insert(module_pkg_name); // Always add module itself
+            if (module_pkg_name == installer_pkg_name_) scope.erase("android");
             LOGI("scope of %s is:\n%s", module_pkg_name.c_str(), ([&scope = scope]() {
                 std::ostringstream join;
                 std::copy(scope.begin(), scope.end(),
@@ -296,7 +297,8 @@ namespace edxp {
                                             fs::perms::others_exec);
                 path_chown(prefs_path, uid, 0);
             }
-            if (pkg_name == installer_pkg_name_ || pkg_name == kPrimaryInstallerPkgName) {
+            if (pkg_name == installer_pkg_name_ || pkg_name == kPrimaryInstallerPkgName ||
+                pkg_name == "android") {
                 auto conf_path = GetConfigPath();
                 if (!path_exists<true>(conf_path)) {
                     fs::create_directories(conf_path);
@@ -307,11 +309,14 @@ namespace edxp {
                 }
                 fs::permissions(conf_path, fs::perms::owner_all | fs::perms::group_all);
                 fs::permissions(log_path, fs::perms::owner_all | fs::perms::group_all);
-                if (const auto &[r_uid, r_gid] = path_own(conf_path); r_uid != uid) {
-                    path_chown(conf_path, uid, 0, true);
+                if (pkg_name == "android") uid = -1;
+                if (const auto &[r_uid, r_gid] = path_own(conf_path);
+                        (uid != -1 && r_uid != uid) || r_gid != 1000u) {
+                    path_chown(conf_path, uid, 1000u, true);
                 }
-                if (const auto &[r_uid, r_gid] = path_own(log_path); r_uid != uid) {
-                    path_chown(log_path, uid, 0, true);
+                if (const auto &[r_uid, r_gid] = path_own(log_path);
+                        (uid != -1 && r_uid != uid) || r_gid != 1000u) {
+                    path_chown(log_path, uid, 1000u, true);
                 }
 
                 if (pkg_name == kPrimaryInstallerPkgName) {
@@ -330,7 +335,7 @@ namespace edxp {
         }
     }
 
-    void ConfigManager::Init(){
+    void ConfigManager::Init() {
         fs::path misc_path("/data/adb/edxp/misc_path");
         try {
             RirudSocket rirud_socket{};
