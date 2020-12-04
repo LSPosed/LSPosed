@@ -52,6 +52,8 @@ RirudSocket::RirudSocket() {
     socklen_t socklen = sizeof(sa_family_t) + strlen(addr.sun_path + 1) + 1;
 
     if (connect(fd_, reinterpret_cast<struct sockaddr *>(&addr), socklen) == -1) {
+        close(fd_);
+        fd_ = -1;
         throw RirudSocketException(strerror(errno));
     }
 }

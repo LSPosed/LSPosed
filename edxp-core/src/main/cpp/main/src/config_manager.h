@@ -26,6 +26,8 @@ namespace edxp {
         };
 
     public:
+        static void Init();
+
         inline static ConfigManager *GetInstance() {
             return instances_[current_user].get();
         }
@@ -34,10 +36,11 @@ namespace edxp {
 
         inline static void SetCurrentUser(uid_t user) {
             if (auto instance = instances_.find(user);
-                    instance == instances_.end() ||  !instance->second) {
+                    instance == instances_.end() || !instance->second) {
                 instances_[user] = std::make_unique<ConfigManager>(user);
-            } else if(instance->second->NeedUpdateConfig()) {
-                instances_[user] = std::make_unique<ConfigManager>(user, instance->second->IsInitialized());
+            } else if (instance->second->NeedUpdateConfig()) {
+                instances_[user] = std::make_unique<ConfigManager>(user,
+                                                                   instance->second->IsInitialized());
             }
         }
 
@@ -48,20 +51,20 @@ namespace edxp {
         // Always true now
         inline auto IsBlackWhiteListEnabled() const { return true; }
 
-        inline auto IsResourcesHookEnabled() const { return resources_hook_enabled_; }
+        inline const auto &IsResourcesHookEnabled() const { return resources_hook_enabled_; }
 
-        inline auto IsDeoptBootImageEnabled() const { return deopt_boot_image_enabled_; }
+        inline const auto &IsDeoptBootImageEnabled() const { return deopt_boot_image_enabled_; }
 
-        inline auto IsNoModuleLogEnabled() const { return no_module_log_enabled_; }
+        inline const auto &IsNoModuleLogEnabled() const { return no_module_log_enabled_; }
 
-        inline auto GetInstallerPackageName() const { return installer_pkg_name_; }
+        inline const auto &GetInstallerPackageName() const { return installer_pkg_name_; }
 
-        inline auto GetLibSandHookName() const { return kLibSandHookName; }
+        inline const auto &GetLibSandHookName() const { return kLibSandHookName; }
 
-        inline auto GetDataPathPrefix() const { return data_path_prefix_; }
+        inline const auto &GetDataPathPrefix() const { return data_path_prefix_; }
 
         inline static auto GetFrameworkPath(const std::string &suffix = {}) {
-            return GetMiscPath() / "framework" / suffix;
+            return misc_path_ / "framework" / suffix;
         }
 
         inline auto GetXposedPropPath() const { return GetFrameworkPath(kXposedPropName); }
@@ -74,7 +77,7 @@ namespace edxp {
             return base_config_path_ / "log" / suffix;
         }
 
-        inline auto GetBaseConfigPath() const { return base_config_path_; }
+        inline const auto &GetBaseConfigPath() const { return base_config_path_; }
 
         inline auto GetPrefsPath(const std::string &pkg_name) const {
             return base_config_path_ / "prefs" / pkg_name;
@@ -90,6 +93,7 @@ namespace edxp {
 
         void EnsurePermission(const std::string &pkg_name, uid_t uid) const;
 
+        static const auto &GetInjectDexPaths() { return inject_dex_paths_; };
 
     private:
         inline static std::unordered_map<uid_t, std::unique_ptr<ConfigManager>> instances_{};
@@ -97,8 +101,6 @@ namespace edxp {
         inline static std::filesystem::path misc_path_;
         inline static std::vector<std::filesystem::path> inject_dex_paths_;
         inline static const bool use_prot_storage_ = GetAndroidApiLevel() >= __ANDROID_API_N__;
-
-        static decltype(misc_path_) GetMiscPath();
 
         const uid_t user_;
         const std::filesystem::path data_path_prefix_;
@@ -117,7 +119,7 @@ namespace edxp {
 
         const std::filesystem::file_time_type last_write_time_;
 
-        ConfigManager(uid_t uid, bool initialized=false);
+        ConfigManager(uid_t uid, bool initialized = false);
 
         static std::unordered_set<std::string> GetAppList(const std::filesystem::path &dir);
 
@@ -132,12 +134,10 @@ namespace edxp {
         bool InitConfigPath() const;
 
         friend std::unique_ptr<ConfigManager> std::make_unique<ConfigManager>(uid_t &);
-        friend std::unique_ptr<ConfigManager> std::make_unique<ConfigManager>(uid_t &, bool&&);
+
+        friend std::unique_ptr<ConfigManager> std::make_unique<ConfigManager>(uid_t &, bool &&);
 
         std::filesystem::path RetrieveBaseConfigPath() const;
-
-    public:
-        static decltype(inject_dex_paths_) GetInjectDexPaths();
     };
 
 } // namespace edxp

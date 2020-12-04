@@ -22,9 +22,10 @@
 #pragma clang diagnostic ignored "-Wunused-value"
 
 namespace edxp {
-    // TODO exclude unrelated processes
     static void onModuleLoaded() {
-        LOG(INFO) << "onModuleLoaded: welcome to EdXposed!";
+        LOGI("onModuleLoaded: welcome to EdXposed!");
+        // rirud must be used in onModuleLoaded
+        ConfigManager::Init();
     }
 
     static int shouldSkipUid(int uid) {

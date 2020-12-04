@@ -85,8 +85,8 @@ namespace edxp {
     namespace fs = std::filesystem;
 
     fs::path ConfigManager::RetrieveBaseConfigPath() const {
-        if (auto misc_path = GetMiscPath(); !misc_path.empty()) {
-            return misc_path / std::to_string(user_);
+        if (!misc_path_.empty()) {
+            return misc_path_ / std::to_string(user_);
         } else {
             return {};
         }
@@ -259,7 +259,7 @@ namespace edxp {
         if (base_config_path_.empty()) return false;
         try {
             fs::create_directories(base_config_path_);
-            fs::permissions(GetMiscPath(),
+            fs::permissions(misc_path_,
                             fs::perms::owner_all | fs::perms::group_all | fs::perms::others_exec);
             fs::permissions(base_config_path_,
                             fs::perms::owner_all | fs::perms::group_all | fs::perms::others_exec);
@@ -330,32 +330,22 @@ namespace edxp {
         }
     }
 
-    auto ConfigManager::GetMiscPath() -> decltype(misc_path_) {
-        if (misc_path_.empty()) {
-            fs::path misc_path("/data/adb/edxp/misc_path");
-            try {
-                RirudSocket rirud_socket{};
-                auto path = rirud_socket.ReadFile(misc_path);
-                path.erase(std::find_if(path.rbegin(), path.rend(), [](unsigned char ch) {
-                    return !std::isspace(ch);
-                }).base(), path.end());
-                misc_path_ = fs::path("/data/misc") / path;
-            } catch (const RirudSocket::RirudSocketException &e) {
-                LOGE("%s", e.what());
-            }
-        }
-        return misc_path_;
-    }
-
-    auto ConfigManager::GetInjectDexPaths() -> decltype(inject_dex_paths_) {
-        if (inject_dex_paths_.empty()) {
+    void ConfigManager::Init(){
+        fs::path misc_path("/data/adb/edxp/misc_path");
+        try {
+            RirudSocket rirud_socket{};
+            auto path = rirud_socket.ReadFile(misc_path);
+            path.erase(std::find_if(path.rbegin(), path.rend(), [](unsigned char ch) {
+                return !std::isspace(ch);
+            }).base(), path.end());
+            misc_path_ = fs::path("/data/misc") / path;
             std::transform(kXposedInjectDexPath.begin(), kXposedInjectDexPath.end(),
                            std::back_inserter(inject_dex_paths_),
                            [](auto i) {
                                return GetFrameworkPath(i);
                            });
+        } catch (const RirudSocket::RirudSocketException &e) {
+            LOGE("%s", e.what());
         }
-        return inject_dex_paths_;
     }
-
 }
