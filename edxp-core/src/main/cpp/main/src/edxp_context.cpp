@@ -68,7 +68,7 @@ namespace edxp {
             }
             dexes.emplace_back(std::istreambuf_iterator<char>(is),
                                std::istreambuf_iterator<char>());
-            LOGD("Loaded %s with size %zu", path.c_str(), dexes.back().size());
+            LOGI("Loaded %s with size %zu", path.c_str(), dexes.back().size());
         }
     }
 
@@ -97,7 +97,7 @@ namespace edxp {
             env->SetObjectArrayElement(buffer_array, i, buffer);
         }
         jobject my_cl = JNI_NewObject(env, in_memory_classloader, initMid,
-                                       buffer_array, sys_classloader);
+                                      buffer_array, sys_classloader);
         env->DeleteLocalRef(classloader);
         env->DeleteLocalRef(sys_classloader);
         env->DeleteLocalRef(in_memory_classloader);
@@ -248,7 +248,7 @@ namespace edxp {
         }
         std::vector<unsigned char> dex{std::istreambuf_iterator<char>(is),
                                        std::istreambuf_iterator<char>()};
-        LOGD("Loaded %s with size %zu", path.c_str(), dex.size());
+        LOGI("Loaded %s with size %zu", path.c_str(), dex.size());
 
         jclass classloader = JNI_FindClass(env, "java/lang/ClassLoader");
         jmethodID getsyscl_mid = JNI_GetStaticMethodID(
@@ -336,7 +336,7 @@ namespace edxp {
         std::vector<std::string> splits(path.begin(), path.end());
         if (splits.size() < 5u) {
             LOGE("can't parse %s", path.c_str());
-            return {false, uid, {}};
+            return {false, 0, name.get()};
         }
         const auto &uid_str = splits[3];
         const auto &package_name = splits[4];
@@ -383,8 +383,7 @@ namespace edxp {
                  package_name.c_str());
         }
 
-        if (!skip && empty_list() &&
-            package_name != ConfigManager::GetInstance()->GetInstallerPackageName()) {
+        if (!skip && empty_list() && !ConfigManager::GetInstance()->IsInstaller(package_name)) {
             skip = true;
             LOGW("skip injecting xposed into %s because no module hooks it",
                  package_name.c_str());
@@ -417,7 +416,7 @@ namespace edxp {
                                      return app_modules_list_.empty();
                                  }, is_child_zygote);
         if (!skip_) {
-            ConfigManager::GetInstance()->EnsurePermission(package_name, uid % PER_USER_RANGE);
+            ConfigManager::GetInstance()->EnsurePermission(package_name, uid);
             PreLoadDex(ConfigManager::GetInjectDexPaths());
         }
     }

@@ -133,9 +133,8 @@ namespace edxp {
         return {};
     }
 
-    // TODO ignore unrelated processes
     bool ConfigManager::IsAppNeedHook(const std::string &package_name) const {
-        if (package_name == installer_pkg_name_) {
+        if (IsInstaller(package_name)) {
             return true;
         }
 
@@ -229,7 +228,7 @@ namespace edxp {
                     scope.emplace(std::move(app_pkg_name));
             }
             scope.insert(module_pkg_name); // Always add module itself
-            if (module_pkg_name == installer_pkg_name_) scope.erase("android");
+            if (IsInstaller(module_pkg_name)) scope.erase("android");
             LOGI("scope of %s is:\n%s", module_pkg_name.c_str(), ([&scope = scope]() {
                 std::ostringstream join;
                 std::copy(scope.begin(), scope.end(),
@@ -297,8 +296,7 @@ namespace edxp {
                                             fs::perms::others_exec);
                 path_chown(prefs_path, uid, 0);
             }
-            if (pkg_name == installer_pkg_name_ || pkg_name == kPrimaryInstallerPkgName ||
-                pkg_name == "android") {
+            if (IsInstaller(pkg_name) || pkg_name == "android") {
                 auto conf_path = GetConfigPath();
                 if (!path_exists<true>(conf_path)) {
                     fs::create_directories(conf_path);
@@ -320,13 +318,9 @@ namespace edxp {
                 }
 
                 if (pkg_name == kPrimaryInstallerPkgName) {
-                    try {
-                        auto installer_pkg_name_path = GetConfigPath("installer");
-                        if (path_exists<true>(installer_pkg_name_path)) {
-                            fs::remove(installer_pkg_name_path);
-                        }
-                    } catch (const fs::filesystem_error &e) {
-                        LOGE("%s", e.what());
+                    auto installer_pkg_name_path = GetConfigPath("installer");
+                    if (path_exists<true>(installer_pkg_name_path)) {
+                        fs::remove(installer_pkg_name_path);
                     }
                 }
             }

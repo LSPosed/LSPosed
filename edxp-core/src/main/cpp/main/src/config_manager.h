@@ -42,6 +42,7 @@ namespace edxp {
                 instances_[user] = std::make_unique<ConfigManager>(user,
                                                                    instance->second->IsInitialized());
             }
+            current_user = user;
         }
 
         inline static auto ReleaseInstances() {
@@ -96,6 +97,10 @@ namespace edxp {
         void EnsurePermission(const std::string &pkg_name, uid_t uid) const;
 
         static const auto &GetInjectDexPaths() { return inject_dex_paths_; };
+
+        bool IsInstaller(const std::string& pkg_name) const {
+            return pkg_name == installer_pkg_name_ || pkg_name == kPrimaryInstallerPkgName;
+        }
 
     private:
         inline static std::unordered_map<uid_t, std::unique_ptr<ConfigManager>> instances_{};
