@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.util.Log;
 
+import com.elderdrivers.riru.edxp.bridge.BuildConfig;
 import com.elderdrivers.riru.edxp.config.EdXpConfigGlobal;
 
 import java.lang.reflect.AccessibleObject;
@@ -145,8 +146,7 @@ public final class XposedBridge {
 	 * Returns the currently installed version of the Xposed framework.
 	 */
 	public static int getXposedVersion() {
-		// ed: fixed value for now
-		return 93;
+		return BuildConfig.API_CODE;
 	}
 
 	/**

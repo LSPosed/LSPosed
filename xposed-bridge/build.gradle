@@ -18,6 +18,10 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "int", "API_CODE", "$apiCode"
+        }
+        debug {
+            buildConfigField "int", "API_CODE", "$apiCode"
         }
     }
 }

@@ -28,7 +28,7 @@ namespace edxp {
     };
 
     void RegisterArtClassLinker(JNIEnv *env) {
-        REGISTER_EDXP_NATIVE_METHODS(kClassLinkerClassName);
+        REGISTER_EDXP_NATIVE_METHODS(kClassLinkerClassName.c_str());
     }
 
 }

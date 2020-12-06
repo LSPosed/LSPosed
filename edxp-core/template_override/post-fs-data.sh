@@ -3,7 +3,7 @@
 grep_prop() {
     local REGEX="s/^$1=//p"
     shift
-    local FILES=$@
+    local FILES="$@"
     [[ -z "$FILES" ]] && FILES='/system/build.prop'
     sed -n "$REGEX" ${FILES} 2>/dev/null | head -n 1
 }
@@ -11,10 +11,12 @@ grep_prop() {
 MODDIR=${0%/*}
 
 RIRU_PATH="/data/adb/riru"
+RIRU_PROP="/data/adb/modules/riru-core/module.prop"
 TARGET="${RIRU_PATH}/modules"
 [[ "$(getenforce)" == "Enforcing" ]] && ENFORCE=true || ENFORCE=false
 
 EDXP_VERSION=$(grep_prop version "${MODDIR}/module.prop")
+EDXP_APICODE=$(grep_prop api "${MODDIR}/module.prop")
 
 ANDROID_SDK=$(getprop ro.build.version.sdk)
 BUILD_DESC=$(getprop ro.build.description)
@@ -28,12 +30,12 @@ DEVICE=$(getprop ro.product.device)
 ANDROID=$(getprop ro.build.version.release)
 BUILD=$(getprop ro.build.id)
 
-RIRU_VERSION=$(cat "${RIRU_PATH}/version_name")
-RIRU_VERCODE=$(cat "${RIRU_PATH}/version_code")
+RIRU_VERSION=$(grep_prop version $RIRU_PROP)
+RIRU_VERCODE=$(grep_prop versionCode $RIRU_PROP)
 RIRU_APICODE=$(cat "${RIRU_PATH}/api_version")
 
-MAGISK_VERSION=$(su -v)
-MAGISK_VERCODE=$(su -V)
+MAGISK_VERSION=$(magisk -v)
+MAGISK_VERCODE=$(magisk -V)
 
 #EDXP_MANAGER="org.meowcat.edxposed.manager"
 #XP_INSTALLER="de.robv.android.xposed.installer"
@@ -120,7 +122,7 @@ start_log_cather () {
     echo "Android version: ${ANDROID}">>${LOG_FILE}
     echo "Android sdk: ${ANDROID_SDK}">>${LOG_FILE}
     echo "EdXposed version: ${EDXP_VERSION}">>${LOG_FILE}
-    echo "EdXposed api: 93.0">>${LOG_FILE}
+    echo "EdXposed api: ${EDXP_APICODE}">>${LOG_FILE}
     echo "Riru version: ${RIRU_VERSION} (${RIRU_VERCODE})">>${LOG_FILE}
     echo "Riru api: ${RIRU_APICODE}">>${LOG_FILE}
     echo "Magisk: ${MAGISK_VERSION%:*} (${MAGISK_VERCODE})">>${LOG_FILE}

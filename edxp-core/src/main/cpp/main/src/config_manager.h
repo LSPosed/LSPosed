@@ -17,8 +17,8 @@ namespace edxp {
 
     class ConfigManager {
     private:
-        inline static const auto kPrimaryInstallerPkgName = "org.meowcat.edxposed.manager"_str;
-        inline static const auto kXposedPropName = "edconfig.jar"_str;
+        inline static const auto kPrimaryInstallerPkgName = "org.meowcat.edxposed.manager"s;
+        inline static const auto kXposedPropName = "edconfig.jar"s;
         inline static const std::vector<std::string> kXposedInjectDexPath = {
                 "edxp.dex",
                 "eddalvikdx.dex",
@@ -29,7 +29,7 @@ namespace edxp {
         static void Init();
 
         inline static ConfigManager *GetInstance() {
-            return instances_[current_user].get();
+            return instances_[current_user_].get();
         }
 
         inline auto IsInitialized() const { return initialized_; }
@@ -42,7 +42,7 @@ namespace edxp {
                 instances_[user] = std::make_unique<ConfigManager>(user,
                                                                    instance->second->IsInitialized());
             }
-            current_user = user;
+            current_user_ = user;
         }
 
         inline static auto ReleaseInstances() {
@@ -104,7 +104,7 @@ namespace edxp {
 
     private:
         inline static std::unordered_map<uid_t, std::unique_ptr<ConfigManager>> instances_{};
-        inline static uid_t current_user = 0u;
+        inline static uid_t current_user_ = 0u;
         inline static std::filesystem::path misc_path_;
         inline static std::vector<std::filesystem::path> inject_dex_paths_;
         inline static const bool use_prot_storage_ = GetAndroidApiLevel() >= __ANDROID_API_N__;

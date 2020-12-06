@@ -142,7 +142,7 @@ afterEvaluate {
                         from "${projectDir}/tpl/edconfig.tpl"
                         into templateFrameworkPath
                         rename "edconfig.tpl", "edconfig.jar"
-                        expand(version: "$version", backend: "$backend")
+                        expand(version: "$version", backend: "$backend", apiCode: "$apiCode")
                     }
                     copy {
                         from "${projectDir}/tpl/module.prop.tpl"
@@ -150,7 +150,8 @@ afterEvaluate {
                         rename "module.prop.tpl", "module.prop"
                         expand(moduleId: "$magiskModuleId", backend: "$backendCapped",
                                 versionName: "$version" + " ($backend)",
-                                versionCode: "$versionCode", authorList: "$authorList")
+                                versionCode: "$versionCode", authorList: "$authorList",
+                                apiCode: "$apiCode")
                         filter(FixCrLfFilter.class, eol: FixCrLfFilter.CrLf.newInstance("lf"))
                     }
                     copy {

@@ -29,20 +29,20 @@ inline constexpr bool is64 = Is64();
 # define LP_SELECT(lp32, lp64) (lp32)
 #endif
 
-    static const auto kEntryClassName = "com.elderdrivers.riru.edxp.core.Main"_str;
-    static const auto kClassLinkerClassName = "com.elderdrivers.riru.edxp.art.ClassLinker";
-    static const auto kSandHookClassName = "com.swift.sandhook.SandHook"_str;
-    static const auto kSandHookNeverCallClassName = "com.swift.sandhook.ClassNeverCall"_str;
+    static const auto kEntryClassName = "com.elderdrivers.riru.edxp.core.Main"s;
+    static const auto kClassLinkerClassName = "com.elderdrivers.riru.edxp.art.ClassLinker"s;
+    static const auto kSandHookClassName = "com.swift.sandhook.SandHook"s;
+    static const auto kSandHookNeverCallClassName = "com.swift.sandhook.ClassNeverCall"s;
 
-    static const auto kLibArtName = "libart.so"_str;
-    static const auto kLibFwName = "libandroidfw.so"_str;
-    static const auto kLibSandHookName = "libsandhook.edxp.so"_str;
-    static const auto kLibDlName = "libdl.so"_str;
-    static const auto kLibSandHookNativeName = "libsandhook-native.so"_str;
+    static const auto kLibArtName = "libart.so"s;
+    static const auto kLibFwName = "libandroidfw.so"s;
+    static const auto kLibSandHookName = "libsandhook.edxp.so"s;
+    static const auto kLibDlName = "libdl.so"s;
+    static const auto kLibSandHookNativeName = "libsandhook-native.so"s;
 
-    static const auto kLibBasePath = std::string(
-            LP_SELECT("/system/lib/",
-                      "/system/lib64/"));
+    static const auto kLibBasePath =
+            LP_SELECT("/system/lib/"s,
+                      "/system/lib64/"s);
     static const auto kLibArtLegacyPath = kLibBasePath + kLibArtName;
     static const auto kLibSandHookPath = kLibBasePath + kLibSandHookName;
     static const auto kLibSandHookNativePath = kLibBasePath + kLibSandHookNativeName;

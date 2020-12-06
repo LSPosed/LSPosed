@@ -11,15 +11,12 @@
 #include "logging.h"
 
 namespace edxp {
+    using namespace std::literals::string_literals;
 
     static inline int32_t GetAndroidApiLevel() {
         char prop_value[PROP_VALUE_MAX];
         __system_property_get("ro.build.version.sdk", prop_value);
         return atoi(prop_value);
-    }
-
-    inline const std::string operator ""_str(const char *str, std::size_t size) {
-        return {str, size};
     }
 
     template<bool quite = false>
