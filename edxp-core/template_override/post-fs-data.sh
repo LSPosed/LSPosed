@@ -55,7 +55,8 @@ sepolicy() {
 #fi
 
 DEFAULT_BASE_PATH="${PATH_PREFIX}${EDXP_MANAGER}"
-BASE_PATH="/data/misc/$(cat /data/adb/edxp/misc_path)"
+MISC_PATH=$(cat /data/adb/edxp/misc_path)
+BASE_PATH="/data/misc/$MISC_PATH"
 
 LOG_PATH="${BASE_PATH}/0/log"
 CONF_PATH="${BASE_PATH}/0/conf"
@@ -166,6 +167,7 @@ fi
 
 chcon -R u:object_r:system_file:s0 "${MODDIR}"
 chcon -R ${PATH_CONTEXT} "${LOG_PATH}"
-chcon -R u:object_r:magisk_file:s0 $BASE_PATH
 chown -R ${PATH_OWNER} "${LOG_PATH}"
 chmod -R 666 "${LOG_PATH}"
+[[ -z "$MISC_PATH" ]] && chcon -R u:object_r:magisk_file:s0 "$BASE_PATH"
+rm -f /data/adb/edxp/new_install

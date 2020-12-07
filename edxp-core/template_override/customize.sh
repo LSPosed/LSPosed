@@ -246,7 +246,6 @@ else
   ui_print "- Extracting arm libraries"
   extract "$ZIPFILE" 'system/lib/libriru_edxp.so' "$MODPATH"
   if [[ "${VARIANTS}" == "SandHook" ]]; then
-    extract "$ZIPFILE" 'system/lib/libsandhook-native.so' "$MODPATH"
     extract "$ZIPFILE" 'system/lib/libsandhook.edxp.so' "$MODPATH"
   fi
 
@@ -254,7 +253,6 @@ else
     ui_print "- Extracting arm64 libraries"
     extract "$ZIPFILE" 'system/lib64/libriru_edxp.so' "$MODPATH"
     if [[ "${VARIANTS}" == "SandHook" ]]; then
-     extract "$ZIPFILE" 'system/lib64/libsandhook-native.so' "$MODPATH"
      extract "$ZIPFILE" 'system/lib64/libsandhook.edxp.so' "$MODPATH"
     fi
   fi
@@ -291,11 +289,12 @@ else
     set_perm_recursive /data/misc/$MISC_PATH root root 0771 0660 "u:object_r:magisk_file:s0" || abort "! Can't set permission"
   fi
 fi
+touch /data/adb/edxp/new_install || abort "! Can't touch new install"
 set_perm_recursive /data/adb/edxp root root 0700 0600 "u:object_r:magisk_file:s0" || abort "! Can't set permission"
 mkdir -p /data/misc/$MISC_PATH || abort "! Can't create configuration path"
 set_perm /data/misc/$MISC_PATH root root 0771 "u:object_r:magisk_file:s0" || abort "! Can't set permission"
 echo "rm -rf /data/misc/$MISC_PATH" >> "$MODPATH/uninstall.sh" || abort "! Can't write uninstall.sh"
-echo "rm -rf /data/adb/edxp" >> "$MODPATH/uninstall.sh" || abort "! Can't write uninstall.sh"
+echo "[[ -f /data/adb/edxp/new_install ]] || rm -rf /data/adb/edxp" >> "$MODPATH/uninstall.sh" || abort "! Can't write uninstall.sh"
 
 
 ui_print "- Copying framework libraries"

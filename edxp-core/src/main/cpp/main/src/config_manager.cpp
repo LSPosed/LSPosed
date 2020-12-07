@@ -227,7 +227,8 @@ namespace edxp {
                 if (!app_pkg_name.empty())
                     scope.emplace(std::move(app_pkg_name));
             }
-            scope.insert(module_pkg_name); // Always add module itself
+            if(!scope.empty())
+                scope.insert(module_pkg_name); // Always add module itself
             if (IsInstaller(module_pkg_name)) scope.erase("android");
             LOGI("scope of %s is:\n%s", module_pkg_name.c_str(), ([&scope = scope]() {
                 std::ostringstream join;

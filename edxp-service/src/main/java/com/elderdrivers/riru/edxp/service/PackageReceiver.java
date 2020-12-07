@@ -98,10 +98,8 @@ public class PackageReceiver {
             return result;
         }
 
-        private void updateModuleList(int uid, String packageName) {
+        private void updateModuleList(int uid) {
             Map<String, String> enabledModules = loadEnabledModules(uid);
-
-            if (!enabledModules.containsKey(packageName)) return;
 
             try {
                 File moduleListFile = new File(CONFIG_PATH, uid + "/" + MODULES_LIST_FILENAME);
@@ -157,7 +155,7 @@ public class PackageReceiver {
                 for (Object uh : (List<Object>) m.invoke(um)) {
                     int uid = (int) uh.getClass().getDeclaredField("id").get(uh);
                     Utils.logI("updating uid: " + uid);
-                    updateModuleList(uid, packageName);
+                    updateModuleList(uid);
                 }
                 Toast.makeText(context, "EdXposed: Updated " + packageName, Toast.LENGTH_SHORT).show();
             } catch (Throwable e) {

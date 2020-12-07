@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.android.internal.util.XmlUtils;
+import com.jaredrummler.apkparser.ApkParser;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -72,8 +73,17 @@ public final class XSharedPreferences implements SharedPreferences {
         Set<String> modules = XposedInit.getLoadedModules();
         for (String m : modules) {
             if (m.contains("/" + packageName + "-")) {
-                PackageInfo packageInfo = ((Context) ActivityThread.currentActivityThread().getSystemContext()).getPackageManager().getPackageArchiveInfo(m, PackageManager.GET_META_DATA);
-                newModule = packageInfo != null && packageInfo.applicationInfo != null && packageInfo.applicationInfo.metaData.getBoolean("xposedmodule") && packageInfo.applicationInfo.metaData.getInt("xposedminversion", -1) > 92;
+                boolean isModule = false;
+                int xposedminversion = -1;
+                try {
+                    ApkParser ap = ApkParser.create(new File(m));
+                    isModule = ap.getApkMeta().metaData.containsKey("xposedmodule");
+                    if(isModule)
+                        xposedminversion = Integer.parseInt(ap.getApkMeta().metaData.get("xposedminversion"));
+                } catch (NumberFormatException | IOException e) {
+                    Log.w(TAG, "Apk parser fails: " + e);
+                }
+                newModule = isModule && xposedminversion > 92;
             }
         }
         if (newModule && XposedInit.prefsBasePath != null) {

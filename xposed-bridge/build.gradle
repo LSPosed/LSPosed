@@ -43,6 +43,7 @@ preBuild.doLast {
 }
 
 dependencies {
+    compileOnly project(':apk-parser:library')
     compileOnly files(project(":dexmaker").tasks.getByName("makeJarRelease").outputs)
     compileOnly files(project(":hiddenapi-stubs").tasks.getByName("makeStubJar").outputs)
 }

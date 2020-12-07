@@ -1,3 +1,6 @@
 [submodule "edxp-core/src/main/cpp/external/Dobby"]
 	path = edxp-core/src/main/cpp/external/Dobby
 	url = https://github.com/jmpews/Dobby.git
+[submodule "apk-parser"]
+	path = apk-parser
+	url = https://github.com/jaredrummler/APKParser.git

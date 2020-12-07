@@ -12,8 +12,10 @@ import android.content.res.XResources;
 import com.elderdrivers.riru.edxp.config.ConfigManager;
 import com.elderdrivers.riru.edxp.util.Hookers;
 import com.elderdrivers.riru.edxp.util.Utils;
+import com.jaredrummler.apkparser.ApkParser;
 
 import java.io.File;
+import java.io.IOException;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
@@ -55,15 +57,24 @@ public class HandleBindApp extends XC_MethodHook {
             String processName = (String) XposedHelpers.getObjectField(bindData, "processName");
 
 
-            final ApplicationInfo ai = ActivityThread.currentActivityThread().getSystemContext().getPackageManager().getApplicationInfo(appInfo.packageName, PackageManager.GET_META_DATA);
+            boolean isModule = false;
+            int xposedminversion = -1;
+            try {
+                ApkParser ap = ApkParser.create(new File(appInfo.sourceDir));
+                isModule = ap.getApkMeta().metaData.containsKey("xposedmodule");
+                if(isModule)
+                    xposedminversion = Integer.parseInt(ap.getApkMeta().metaData.get("xposedminversion"));
+            } catch (NumberFormatException | IOException e) {
+                Hookers.logE("ApkParser fails", e);
+            }
 
-            if(ai.metaData.getBoolean("xposedmodule") && ai.metaData.getInt("xposedminversion", -1) > 92) {
+            if (isModule && xposedminversion > 92) {
                 Utils.logW("New modules detected, hook preferences");
                 XposedHelpers.findAndHookMethod(ContextImpl.class, "getSharedPreferences", File.class, int.class, new XC_MethodHook() {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                        String fileName = ((File)param.args[0]).getName();
-                        File file = new File(ConfigManager.getPrefsPath(ai.packageName), fileName);
+                        String fileName = ((File) param.args[0]).getName();
+                        File file = new File(ConfigManager.getPrefsPath(appInfo.packageName), fileName);
                         file.createNewFile();
                         file.setReadable(true, false);
                         param.args[0] = file;
