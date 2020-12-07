@@ -1,7 +1,5 @@
 package com.elderdrivers.riru.edxp.service;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
 import android.app.ActivityThread;
 import android.content.BroadcastReceiver;
@@ -98,8 +96,10 @@ public class PackageReceiver {
             return result;
         }
 
-        private void updateModuleList(int uid) {
+        private void updateModuleList(int uid, String packageName) {
             Map<String, String> enabledModules = loadEnabledModules(uid);
+
+            if(packageName != null && !enabledModules.containsKey(packageName)) return;
 
             try {
                 File moduleListFile = new File(CONFIG_PATH, uid + "/" + MODULES_LIST_FILENAME);
@@ -155,7 +155,7 @@ public class PackageReceiver {
                 for (Object uh : (List<Object>) m.invoke(um)) {
                     int uid = (int) uh.getClass().getDeclaredField("id").get(uh);
                     Utils.logI("updating uid: " + uid);
-                    updateModuleList(uid);
+                    updateModuleList(uid, pkgInfo == null ? null : packageName);
                 }
                 Toast.makeText(context, "EdXposed: Updated " + packageName, Toast.LENGTH_SHORT).show();
             } catch (Throwable e) {

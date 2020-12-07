@@ -7,8 +7,6 @@ public class Yahfa {
 
     public static native boolean backupAndHookNative(Object target, Method hook, Method backup);
 
-    public static native void ensureMethodCached(Method hook, Method backup);
-
     // JNI.ToReflectedMethod() could return either Method or Constructor
     public static native Object findMethodNative(Class targetClass, String methodName, String methodSig);
 

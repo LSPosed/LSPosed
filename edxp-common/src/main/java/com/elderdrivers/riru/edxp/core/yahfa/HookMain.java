@@ -121,11 +121,6 @@ public class HookMain {
             // backup is just a placeholder and the constraint could be less strict
             checkCompatibleMethods(target, backup, "Original", "Backup");
         }
-        if (backup != null) {
-            HookMethodResolver.resolveMethod(hook, backup, target);
-        } else {
-            Utils.logD("wanna resolve backup method, but it's null, target: " + target);
-        }
         // make sure GC completed before hook
         Thread currentThread = Thread.currentThread();
         int lastGcType = Heap.waitForGcToComplete(

@@ -169,5 +169,5 @@ chcon -R u:object_r:system_file:s0 "${MODDIR}"
 chcon -R ${PATH_CONTEXT} "${LOG_PATH}"
 chown -R ${PATH_OWNER} "${LOG_PATH}"
 chmod -R 666 "${LOG_PATH}"
-[[ -z "$MISC_PATH" ]] && chcon -R u:object_r:magisk_file:s0 "$BASE_PATH"
+[[ -z "$MISC_PATH" ]] || chcon -R u:object_r:magisk_file:s0 "$BASE_PATH"
 rm -f /data/adb/edxp/new_install

@@ -344,6 +344,7 @@ namespace edxp {
                            [](auto i) {
                                return GetFrameworkPath(i);
                            });
+            LOGI("Got base config path: %s", misc_path_.c_str());
         } catch (const RirudSocket::RirudSocketException &e) {
             LOGE("%s", e.what());
         }

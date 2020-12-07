@@ -22,10 +22,6 @@ namespace edxp {
         return Java_lab_galaxy_yahfa_HookMain_backupAndHookNative(env, clazz, target, hook, backup);
     }
 
-    static void Yahfa_ensureMethodCached(JNI_START, jobject hook, jobject backup) {
-        Java_lab_galaxy_yahfa_HookMain_ensureMethodCached(env, clazz, hook, backup);
-    }
-
     static void Yahfa_setMethodNonCompilable(JNI_START, jobject member) {
         if (!member) {
             LOGE("setNonCompilableNative: member is null");
@@ -59,8 +55,6 @@ namespace edxp {
                           "(Ljava/lang/Class;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Object;"),
             NATIVE_METHOD(Yahfa, backupAndHookNative,
                           "(Ljava/lang/Object;Ljava/lang/reflect/Method;Ljava/lang/reflect/Method;)Z"),
-            NATIVE_METHOD(Yahfa, ensureMethodCached,
-                          "(Ljava/lang/reflect/Method;Ljava/lang/reflect/Method;)V"),
             NATIVE_METHOD(Yahfa, setMethodNonCompilable, "(Ljava/lang/reflect/Member;)V"),
             NATIVE_METHOD(Yahfa, setNativeFlag, "(Ljava/lang/reflect/Member;Z)Z"),
     };

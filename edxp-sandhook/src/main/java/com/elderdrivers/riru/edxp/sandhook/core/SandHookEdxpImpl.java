@@ -6,7 +6,6 @@ import com.elderdrivers.riru.edxp.core.BaseEdxpImpl;
 import com.elderdrivers.riru.edxp.core.EdxpImpl;
 import com.elderdrivers.riru.edxp.core.Main;
 import com.elderdrivers.riru.edxp.core.Yahfa;
-import com.elderdrivers.riru.edxp.core.yahfa.HookMethodResolver;
 import com.swift.sandhook.xposedcompat.methodgen.SandHookXposedBridge;
 
 public class SandHookEdxpImpl extends BaseEdxpImpl {
@@ -32,7 +31,6 @@ public class SandHookEdxpImpl extends BaseEdxpImpl {
     @Override
     public void init() {
         Yahfa.init(Build.VERSION.SDK_INT);
-        HookMethodResolver.init();
         getRouter().injectConfig();
         SandHookXposedBridge.init();
         setInitialized();
