@@ -120,13 +120,17 @@ bool setNativeFlag(void *method, bool isNative) {
     LOGI("setNativeFlag: access flags is 0x%x", access_flags);
     int old_access_flags = access_flags;
     if (isNative) {
-        access_flags |= kAccNative;
+        // TODO: Temporally disable native for compatible with Android R,
+        //       but we should keep this and MarkInitializedClassVisiblyInitialized
+        if (SDKVersion < __ANDROID_API_R__)
+            access_flags |= kAccNative;
         if (SDKVersion >= __ANDROID_API_Q__) {
             // On API 29 whether to use the fast path or not is cached in the ART method structure
             access_flags &= ~kAccFastInterpreterToInterpreterInvoke;
         }
     } else {
-        access_flags &= ~kAccNative;
+        if (SDKVersion < __ANDROID_API_R__)
+            access_flags &= ~kAccNative;
     }
     if (access_flags != old_access_flags) {
         setFlags(method, access_flags);
