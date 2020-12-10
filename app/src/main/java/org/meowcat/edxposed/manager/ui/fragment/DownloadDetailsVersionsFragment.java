@@ -26,10 +26,10 @@ import org.meowcat.edxposed.manager.repo.ReleaseType;
 import org.meowcat.edxposed.manager.repo.RepoParser;
 import org.meowcat.edxposed.manager.ui.activity.BaseActivity;
 import org.meowcat.edxposed.manager.ui.activity.DownloadDetailsActivity;
+import org.meowcat.edxposed.manager.ui.widget.DownloadView;
 import org.meowcat.edxposed.manager.util.ModuleUtil.InstalledModule;
 import org.meowcat.edxposed.manager.util.RepoLoader;
 import org.meowcat.edxposed.manager.util.chrome.LinkTransformationMethod;
-import org.meowcat.edxposed.manager.ui.widget.DownloadView;
 
 import java.text.DateFormat;
 import java.util.Date;

@@ -17,7 +17,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.meowcat.edxposed.manager.App;
-import org.meowcat.edxposed.manager.ui.activity.DownloadActivity;
 import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.repo.Module;
 import org.meowcat.edxposed.manager.repo.ModuleVersion;
@@ -26,6 +25,7 @@ import org.meowcat.edxposed.manager.repo.RepoDb;
 import org.meowcat.edxposed.manager.repo.RepoParser;
 import org.meowcat.edxposed.manager.repo.RepoParser.RepoParserCallback;
 import org.meowcat.edxposed.manager.repo.Repository;
+import org.meowcat.edxposed.manager.ui.activity.DownloadActivity;
 import org.meowcat.edxposed.manager.util.DownloadsUtil.SyncDownloadInfo;
 
 import java.io.File;

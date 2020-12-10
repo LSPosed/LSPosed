@@ -24,21 +24,16 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.takisoft.preferencex.PreferenceFragmentCompat;
 import com.topjohnwu.superuser.Shell;
 
-import org.meowcat.edxposed.manager.App;
 import org.meowcat.edxposed.manager.Constants;
 import org.meowcat.edxposed.manager.R;
-import org.meowcat.edxposed.manager.adapters.AppHelper;
-import org.meowcat.edxposed.manager.adapters.BlackListAdapter;
 import org.meowcat.edxposed.manager.databinding.ActivitySettingsBinding;
-import org.meowcat.edxposed.manager.util.FileUtils;
-import org.meowcat.edxposed.manager.util.RepoLoader;
 import org.meowcat.edxposed.manager.ui.widget.IntegerListPreference;
+import org.meowcat.edxposed.manager.util.RepoLoader;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Objects;
 
 public class SettingsActivity extends BaseActivity {
     private static final String KEY_PREFIX = SettingsActivity.class.getName() + '.';
@@ -113,7 +108,7 @@ public class SettingsActivity extends BaseActivity {
         return restarting || super.dispatchGenericMotionEvent(event);
     }
 
-    @SuppressWarnings({"ResultOfMethodCallIgnored", "deprecation"})
+    @SuppressWarnings({"ResultOfMethodCallIgnored"})
     public static class SettingsFragment extends PreferenceFragmentCompat {
         private static final File disableResourcesFlag = new File(Constants.getBaseDir() + "conf/disable_resources");
         private static final File dynamicModulesFlag = new File(Constants.getBaseDir() + "conf/dynamicmodules");
@@ -124,19 +119,6 @@ public class SettingsActivity extends BaseActivity {
         private static final File disableModulesLogsFlag = new File(Constants.getBaseDir() + "conf/disable_modules_log");
         private static final File verboseLogProcessID = new File(Constants.getBaseDir() + "log/all.pid");
         private static final File modulesLogProcessID = new File(Constants.getBaseDir() + "log/error.pid");
-
-        @SuppressLint({"WorldReadableFiles", "WorldWriteableFiles"})
-        static void setFilePermissionsFromMode(String name) {
-            int perms = FileUtils.S_IRUSR | FileUtils.S_IWUSR
-                    | FileUtils.S_IRGRP | FileUtils.S_IWGRP;
-            if ((MODE_WORLD_READABLE) != 0) {
-                perms |= FileUtils.S_IROTH;
-            }
-            if ((Context.MODE_WORLD_READABLE & MODE_WORLD_WRITEABLE) != 0) {
-                perms |= FileUtils.S_IWOTH;
-            }
-            FileUtils.setPermissions(name, perms);
-        }
 
         @SuppressLint({"ObsoleteSdkInt", "WorldReadableFiles"})
         @Override
@@ -175,7 +157,6 @@ public class SettingsActivity extends BaseActivity {
                         FileOutputStream fos = null;
                         try {
                             fos = new FileOutputStream(whiteListModeFlag.getPath());
-                            setFilePermissionsFromMode(whiteListModeFlag.getPath());
                         } catch (FileNotFoundException e) {
                             Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                         } finally {
@@ -208,7 +189,6 @@ public class SettingsActivity extends BaseActivity {
                         FileOutputStream fos = null;
                         try {
                             fos = new FileOutputStream(disableVerboseLogsFlag.getPath());
-                            setFilePermissionsFromMode(disableVerboseLogsFlag.getPath());
                         } catch (FileNotFoundException e) {
                             Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                         } finally {
@@ -241,7 +221,6 @@ public class SettingsActivity extends BaseActivity {
                         FileOutputStream fos = null;
                         try {
                             fos = new FileOutputStream(disableModulesLogsFlag.getPath());
-                            setFilePermissionsFromMode(disableModulesLogsFlag.getPath());
                         } catch (FileNotFoundException e) {
                             Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                         } finally {
@@ -274,7 +253,6 @@ public class SettingsActivity extends BaseActivity {
                         FileOutputStream fos = null;
                         try {
                             fos = new FileOutputStream(blackWhiteListModeFlag.getPath());
-                            setFilePermissionsFromMode(blackWhiteListModeFlag.getPath());
                         } catch (FileNotFoundException e) {
                             Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                         } finally {
@@ -307,7 +285,6 @@ public class SettingsActivity extends BaseActivity {
                         FileOutputStream fos = null;
                         try {
                             fos = new FileOutputStream(deoptBootFlag.getPath());
-                            setFilePermissionsFromMode(deoptBootFlag.getPath());
                         } catch (FileNotFoundException e) {
                             Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                         } finally {
@@ -340,7 +317,6 @@ public class SettingsActivity extends BaseActivity {
                         FileOutputStream fos = null;
                         try {
                             fos = new FileOutputStream(dynamicModulesFlag.getPath());
-                            setFilePermissionsFromMode(dynamicModulesFlag.getPath());
                         } catch (FileNotFoundException e) {
                             Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                         } finally {
@@ -373,7 +349,6 @@ public class SettingsActivity extends BaseActivity {
                         FileOutputStream fos = null;
                         try {
                             fos = new FileOutputStream(disableResourcesFlag.getPath());
-                            setFilePermissionsFromMode(disableResourcesFlag.getPath());
                         } catch (FileNotFoundException e) {
                             Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                         } finally {

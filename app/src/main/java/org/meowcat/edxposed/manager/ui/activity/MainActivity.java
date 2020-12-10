@@ -10,7 +10,6 @@ import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 
-import org.meowcat.edxposed.manager.App;
 import org.meowcat.edxposed.manager.Constants;
 import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.adapters.AppHelper;

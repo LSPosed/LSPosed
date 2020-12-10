@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-@SuppressWarnings("OctalInteger")
 public final class ModuleUtil {
     private static final String PLAY_STORE_PACKAGE = "com.android.vending";
     // xposedminversion below this
@@ -247,9 +246,6 @@ public final class ModuleUtil {
             }
             modulesList.close();
             enabledModulesList.close();
-
-            FileUtils.setPermissions(Constants.getEnabledModulesListFile(), 00664);
-            FileUtils.setPermissions(Constants.getEnabledModulesListFile(), 00664);
 
             if (showToast) {
                 if (binding != null) {

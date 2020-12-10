@@ -8,9 +8,9 @@ import android.widget.LinearLayout;
 
 import androidx.fragment.app.Fragment;
 
-import org.meowcat.edxposed.manager.ui.activity.BaseActivity;
 import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.databinding.DownloadViewBinding;
+import org.meowcat.edxposed.manager.ui.activity.BaseActivity;
 import org.meowcat.edxposed.manager.util.NavUtil;
 
 public class DownloadView extends LinearLayout {

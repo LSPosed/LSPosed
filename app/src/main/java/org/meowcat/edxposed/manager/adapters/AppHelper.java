@@ -20,7 +20,6 @@ import org.meowcat.edxposed.manager.BuildConfig;
 import org.meowcat.edxposed.manager.Constants;
 import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.util.CompileUtil;
-import org.meowcat.edxposed.manager.util.FileUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -38,7 +37,6 @@ import java.util.Objects;
 
 import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
 
-@SuppressWarnings("deprecation")
 public class AppHelper {
 
     private static final String BASE_PATH = Constants.getBaseDir();
@@ -54,11 +52,10 @@ public class AppHelper {
 
     private static final HashMap<String, List<String>> scopeList = new HashMap<>();
 
-    @SuppressWarnings("OctalInteger")
     static void makeSurePath() {
-        App.mkdirAndChmod(WHITE_LIST_PATH, 00777);
-        App.mkdirAndChmod(BLACK_LIST_PATH, 00777);
-        App.mkdirAndChmod(COMPAT_LIST_PATH, 00777);
+        App.mkdir(WHITE_LIST_PATH);
+        App.mkdir(BLACK_LIST_PATH);
+        App.mkdir(COMPAT_LIST_PATH);
     }
 
     public static boolean isWhiteListMode() {
@@ -141,7 +138,6 @@ public class AppHelper {
                 FileOutputStream fos = null;
                 try {
                     fos = new FileOutputStream(file.getPath());
-                    setFilePermissionsFromMode(file.getPath(), Context.MODE_WORLD_READABLE);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } finally {
@@ -167,20 +163,6 @@ public class AppHelper {
         return returns;
     }
 
-    @SuppressWarnings("SameParameterValue")
-    @SuppressLint({"WorldReadableFiles", "WorldWriteableFiles"})
-    private static void setFilePermissionsFromMode(String name, int mode) {
-        int perms = FileUtils.S_IRUSR | FileUtils.S_IWUSR
-                | FileUtils.S_IRGRP | FileUtils.S_IWGRP;
-        if ((mode & Context.MODE_WORLD_READABLE) != 0) {
-            perms |= FileUtils.S_IROTH;
-        }
-        if ((mode & Context.MODE_WORLD_WRITEABLE) != 0) {
-            perms |= FileUtils.S_IWOTH;
-        }
-        FileUtils.setPermissions(name, perms);
-    }
-
     @SuppressLint("WorldReadableFiles")
     private static Boolean blackListFileName(String packageName, boolean isAdd) {
         boolean returns = true;
@@ -190,7 +172,6 @@ public class AppHelper {
                 FileOutputStream fos = null;
                 try {
                     fos = new FileOutputStream(file.getPath());
-                    setFilePermissionsFromMode(file.getPath(), Context.MODE_WORLD_READABLE);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } finally {
@@ -225,7 +206,6 @@ public class AppHelper {
                 FileOutputStream fos = null;
                 try {
                     fos = new FileOutputStream(file.getPath());
-                    setFilePermissionsFromMode(file.getPath(), Context.MODE_WORLD_READABLE);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } finally {
@@ -366,7 +346,6 @@ public class AppHelper {
             return false;
         }
         scopeList.put(modulePackageName, list);
-        setFilePermissionsFromMode(file.getPath(), Context.MODE_WORLD_READABLE);
         return true;
     }
 }

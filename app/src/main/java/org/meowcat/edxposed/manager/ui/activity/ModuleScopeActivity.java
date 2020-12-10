@@ -18,7 +18,6 @@ import org.meowcat.edxposed.manager.adapters.AppAdapter;
 import org.meowcat.edxposed.manager.adapters.AppHelper;
 import org.meowcat.edxposed.manager.adapters.ScopeAdapter;
 import org.meowcat.edxposed.manager.databinding.ActivityScopeListBinding;
-import org.meowcat.edxposed.manager.ui.activity.BaseActivity;
 import org.meowcat.edxposed.manager.util.LinearLayoutManagerFix;
 
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;

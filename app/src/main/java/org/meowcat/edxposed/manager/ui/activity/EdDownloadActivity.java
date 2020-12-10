@@ -19,12 +19,12 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 
 import org.meowcat.edxposed.manager.App;
-import org.meowcat.edxposed.manager.ui.fragment.BaseAdvancedInstaller;
 import org.meowcat.edxposed.manager.BuildConfig;
 import org.meowcat.edxposed.manager.R;
-import org.meowcat.edxposed.manager.ui.fragment.StatusInstallerFragment;
 import org.meowcat.edxposed.manager.databinding.ActivityEdDownloadBinding;
 import org.meowcat.edxposed.manager.databinding.DialogInstallWarningBinding;
+import org.meowcat.edxposed.manager.ui.fragment.BaseAdvancedInstaller;
+import org.meowcat.edxposed.manager.ui.fragment.StatusInstallerFragment;
 import org.meowcat.edxposed.manager.util.json.JSONUtils;
 import org.meowcat.edxposed.manager.util.json.XposedTab;
 

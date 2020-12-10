@@ -14,8 +14,8 @@ import androidx.browser.customtabs.CustomTabsIntent;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.meowcat.edxposed.manager.App;
-import org.meowcat.edxposed.manager.ui.activity.BaseActivity;
 import org.meowcat.edxposed.manager.R;
+import org.meowcat.edxposed.manager.ui.activity.BaseActivity;
 
 public final class NavUtil {
 

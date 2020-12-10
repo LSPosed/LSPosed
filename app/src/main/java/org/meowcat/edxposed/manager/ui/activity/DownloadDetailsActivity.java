@@ -19,13 +19,13 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import org.meowcat.edxposed.manager.App;
-import org.meowcat.edxposed.manager.ui.fragment.DownloadDetailsFragment;
-import org.meowcat.edxposed.manager.ui.fragment.DownloadDetailsSettingsFragment;
-import org.meowcat.edxposed.manager.ui.fragment.DownloadDetailsVersionsFragment;
 import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.databinding.ActivityDownloadDetailsBinding;
 import org.meowcat.edxposed.manager.databinding.ActivityDownloadDetailsNotFoundBinding;
 import org.meowcat.edxposed.manager.repo.Module;
+import org.meowcat.edxposed.manager.ui.fragment.DownloadDetailsFragment;
+import org.meowcat.edxposed.manager.ui.fragment.DownloadDetailsSettingsFragment;
+import org.meowcat.edxposed.manager.ui.fragment.DownloadDetailsVersionsFragment;
 import org.meowcat.edxposed.manager.util.ModuleUtil;
 import org.meowcat.edxposed.manager.util.RepoLoader;
 

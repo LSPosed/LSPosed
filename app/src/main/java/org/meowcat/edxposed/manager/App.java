@@ -7,7 +7,6 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,7 +20,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import org.meowcat.edxposed.manager.adapters.AppHelper;
 import org.meowcat.edxposed.manager.receivers.PackageChangeReceiver;
 import org.meowcat.edxposed.manager.ui.activity.CrashReportActivity;
-import org.meowcat.edxposed.manager.util.FileUtils;
 import org.meowcat.edxposed.manager.util.ModuleUtil;
 import org.meowcat.edxposed.manager.util.NotificationUtil;
 import org.meowcat.edxposed.manager.util.RepoLoader;
@@ -61,11 +59,10 @@ public class App extends Application implements Application.ActivityLifecycleCal
         return instance.pref;
     }
 
-    public static void mkdirAndChmod(String dir, int permissions) {
+    public static void mkdir(String dir) {
         dir = Constants.getBaseDir() + dir;
         //noinspection ResultOfMethodCallIgnored
         new File(dir).mkdir();
-        FileUtils.setPermissions(dir, permissions);
     }
 
     public static boolean supportScope() {
@@ -142,12 +139,10 @@ public class App extends Application implements Application.ActivityLifecycleCal
                 new Intent(this, PackageChangeReceiver.class), 0);
     }
 
-    @SuppressWarnings({"OctalInteger"})
     @SuppressLint({"PrivateApi", "NewApi"})
     private void createDirectories() {
-        FileUtils.setPermissions(Constants.getBaseDir(), 00777);
-        mkdirAndChmod("conf", 00777);
-        mkdirAndChmod("log", 00777);
+        mkdir("conf");
+        mkdir("log");
     }
 
     public void updateProgressIndicator(final SwipeRefreshLayout refreshLayout) {
