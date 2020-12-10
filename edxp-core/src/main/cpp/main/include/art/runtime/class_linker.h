@@ -120,8 +120,10 @@ namespace art {
             HOOK_FUNC(FixupStaticTrampolines,
                       "_ZN3art11ClassLinker22FixupStaticTrampolinesENS_6ObjPtrINS_6mirror5ClassEEE");
 
+            // Sandhook will hook ShouldUseInterpreterEntrypoint, so we just skip
+            // edxp::Context::GetInstance()->GetVariant() will not work here, so we use smh dirty hack
             if (api_level >= __ANDROID_API_R__ &&
-                edxp::Context::GetInstance()->GetVariant() != edxp::Variant::SANDHOOK) {
+                access(edxp::kLibSandHookNativePath.c_str(), F_OK) == -1) {
                 LOGD("Not sandhook, installing _ZN3art11ClassLinker30ShouldUseInterpreterEntrypointEPNS_9ArtMethodEPKv");
                 HOOK_FUNC(ShouldUseInterpreterEntrypoint,
                           "_ZN3art11ClassLinker30ShouldUseInterpreterEntrypointEPNS_9ArtMethodEPKv");
