@@ -25,21 +25,12 @@ public final class PendingHooks {
         }
     }
 
-    public synchronized static void removeNativeFlags(Class clazz) {
-        for (Member member : sPendingHookMethods.keySet()) {
-            if (member.getDeclaringClass().equals(clazz) && sNonNativeMethods.contains(member)) {
-                EdXpConfigGlobal.getHookProvider().setNativeFlag(member, false);
-            }
-        }
-    }
-
     public synchronized static void recordPendingMethod(Member hookMethod,
                                                         XposedBridge.AdditionalHookInfo additionalInfo) {
         if (!Modifier.isNative(hookMethod.getModifiers())) {
             // record non-native methods for later native flag temporary removing
             sNonNativeMethods.add(hookMethod);
         }
-        EdXpConfigGlobal.getHookProvider().setNativeFlag(hookMethod, true);
         sPendingHookMethods.put(hookMethod, additionalInfo);
         recordPendingMethodNative("L" +
                 hookMethod.getDeclaringClass().getName().replace(".", "/") + ";");

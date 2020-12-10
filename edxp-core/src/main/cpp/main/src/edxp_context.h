@@ -32,8 +32,6 @@ namespace edxp {
 
         inline auto GetCurrentClassLoader() const { return inject_class_loader_; }
 
-        void CallOnPreFixupStaticTrampolines(void *class_ptr);
-
         void CallOnPostFixupStaticTrampolines(void *class_ptr);
 
         void PrepareJavaEnv(JNIEnv *env);
@@ -90,7 +88,6 @@ namespace edxp {
         jstring nice_name_ = nullptr;
         JavaVM *vm_ = nullptr;
         jclass class_linker_class_ = nullptr;
-        jmethodID pre_fixup_static_mid_ = nullptr;
         jmethodID post_fixup_static_mid_ = nullptr;
         bool skip_ = false;
         std::vector<std::vector<signed char>> dexes;

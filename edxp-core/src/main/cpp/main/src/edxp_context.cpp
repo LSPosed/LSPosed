@@ -50,10 +50,6 @@ namespace edxp {
         }
     }
 
-    void Context::CallOnPreFixupStaticTrampolines(void *class_ptr) {
-        CallPostFixupStaticTrampolinesCallback(class_ptr, pre_fixup_static_mid_);
-    }
-
     void Context::CallOnPostFixupStaticTrampolines(void *class_ptr) {
         CallPostFixupStaticTrampolinesCallback(class_ptr, post_fixup_static_mid_);
     }
@@ -116,9 +112,6 @@ namespace edxp {
         env->GetJavaVM(&vm_);
         class_linker_class_ = (jclass) env->NewGlobalRef(
                 FindClassFromLoader(env, kClassLinkerClassName));
-        pre_fixup_static_mid_ = JNI_GetStaticMethodID(env, class_linker_class_,
-                                                      "onPreFixupStaticTrampolines",
-                                                      "(Ljava/lang/Class;)V");
         post_fixup_static_mid_ = JNI_GetStaticMethodID(env, class_linker_class_,
                                                        "onPostFixupStaticTrampolines",
                                                        "(Ljava/lang/Class;)V");

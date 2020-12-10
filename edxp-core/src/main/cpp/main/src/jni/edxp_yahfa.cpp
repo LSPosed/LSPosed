@@ -38,19 +38,6 @@ namespace edxp {
         setNonCompilable(art_method);
     }
 
-    static jboolean Yahfa_setNativeFlag(JNI_START, jobject member, jboolean is_native) {
-        if (!member) {
-            LOGE("setNativeFlagNative: member is null");
-            return JNI_FALSE;
-        }
-        void *art_method = getArtMethod(env, member);
-        if (!art_method) {
-            LOGE("setNativeFlagNative: art_method is null");
-            return JNI_FALSE;
-        }
-        return (jboolean) setNativeFlag(art_method, is_native);
-    }
-
     static void Yahfa_recordHooked(JNI_START, jobject member) {
         edxp::recordHooked(getArtMethod(env, member));
     }
@@ -72,7 +59,6 @@ namespace edxp {
             NATIVE_METHOD(Yahfa, backupAndHookNative,
                           "(Ljava/lang/Object;Ljava/lang/reflect/Method;Ljava/lang/reflect/Method;)Z"),
             NATIVE_METHOD(Yahfa, setMethodNonCompilable, "(Ljava/lang/reflect/Member;)V"),
-            NATIVE_METHOD(Yahfa, setNativeFlag, "(Ljava/lang/reflect/Member;Z)Z"),
             NATIVE_METHOD(Yahfa, recordHooked, "(Ljava/lang/reflect/Member;)V"),
             NATIVE_METHOD(Yahfa, isHooked, "(Ljava/lang/reflect/Member;)Z"),
             NATIVE_METHOD(Yahfa, makeInitializedClassesVisiblyInitialized, "(JZ)V"),

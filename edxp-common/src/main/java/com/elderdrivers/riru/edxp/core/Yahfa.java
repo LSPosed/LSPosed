@@ -14,8 +14,6 @@ public class Yahfa {
 
     public static native void setMethodNonCompilable(Member member);
 
-    public static native boolean setNativeFlag(Member member, boolean isNative);
-
     public static native void recordHooked(Member member);
 
     public static native boolean isHooked(Member member);

@@ -23,8 +23,6 @@ void Java_lab_galaxy_yahfa_HookMain_ensureMethodCached(JNIEnv *env, jclass clazz
 
 void setNonCompilable(void *method);
 
-bool setNativeFlag(void *method, bool isNative);
-
 void *getArtMethod(JNIEnv *env, jobject jmethod);
 
 // TODO: move to common utils instead of in YAHFA's code

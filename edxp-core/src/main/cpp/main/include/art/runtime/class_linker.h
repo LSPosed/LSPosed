@@ -40,9 +40,6 @@ namespace art {
             const char *desc = clazz.GetDescriptor(&storage);
             bool should_intercept =
                     edxp::IsClassPending(desc) || std::string(desc).rfind("LEdHooker_") == 0;
-            if (UNLIKELY(should_intercept)) {
-                edxp::Context::GetInstance()->CallOnPreFixupStaticTrampolines(clazz_ptr);
-            }
             FixupStaticTrampolinesBackup(thiz, clazz_ptr);
             if (UNLIKELY(should_intercept)) {
                 edxp::Context::GetInstance()->CallOnPostFixupStaticTrampolines(clazz_ptr);
