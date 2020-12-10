@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat;
 import com.bumptech.glide.Glide;
 
 import org.meowcat.edxposed.manager.App;
+import org.meowcat.edxposed.manager.Constants;
 import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.adapters.AppHelper;
 import org.meowcat.edxposed.manager.adapters.BlackListAdapter;
@@ -86,18 +87,11 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
         Glide.with(binding.appIcon)
                 .load(GlideHelper.wrapApplicationInfoForIconLoader(getApplicationInfo()))
                 .into(binding.appIcon);
-        String installedXposedVersion;
-        try {
-            installedXposedVersion = App.getXposedProp().getVersion();
-        } catch (NullPointerException e) {
-            installedXposedVersion = null;
-        }
+        String installedXposedVersion = Constants.getXposedVersion();
         if (installedXposedVersion != null) {
-            int installedXposedVersionInt = extractIntPart(installedXposedVersion);
-            if (App.getActiveXposedVersion() != -1) {
-                String installedXposedVersionStr = installedXposedVersionInt + ".0";
+            if (Constants.getXposedApiVersion() != -1) {
                 binding.statusTitle.setText(R.string.Activated);
-                binding.statusSummary.setText(installedXposedVersion.replace(installedXposedVersionStr + "-", ""));
+                binding.statusSummary.setText(installedXposedVersion + " (" + Constants.getXposedVariant() + ")");
                 binding.status.setCardBackgroundColor(ContextCompat.getColor(this, R.color.download_status_update_available));
                 binding.statusIcon.setImageResource(R.drawable.ic_check_circle);
             } else {
@@ -106,9 +100,9 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
                 binding.status.setCardBackgroundColor(ContextCompat.getColor(this, R.color.amber_500));
                 binding.statusIcon.setImageResource(R.drawable.ic_warning);
             }
-        } else if (App.getActiveXposedVersion() > 0) {
+        } else if (Constants.getXposedApiVersion() > 0) {
             binding.statusTitle.setText(R.string.Activated);
-            binding.statusSummary.setText(getString(R.string.version_x, App.getActiveXposedVersion()));
+            binding.statusSummary.setText(getString(R.string.version_x, Constants.getXposedApiVersion()));
             binding.status.setCardBackgroundColor(ContextCompat.getColor(this, R.color.download_status_update_available));
             binding.statusIcon.setImageResource(R.drawable.ic_check_circle);
         } else {

@@ -97,18 +97,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
-        <meta-data
-            android:name="xposedmodule"
-            android:value="true" />
-
-        <meta-data
-            android:name="xposeddescription"
-            android:value="@string/xposed_description" />
-
-        <meta-data
-            android:name="xposedminversion"
-            android:value="82" />
     </application>
 
 </manifest>

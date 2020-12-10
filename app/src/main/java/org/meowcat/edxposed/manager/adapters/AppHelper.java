@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentManager;
 
 import org.meowcat.edxposed.manager.App;
 import org.meowcat.edxposed.manager.BuildConfig;
+import org.meowcat.edxposed.manager.Constants;
 import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.util.CompileUtil;
 import org.meowcat.edxposed.manager.util.FileUtils;
@@ -30,7 +31,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -41,9 +41,7 @@ import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
 @SuppressWarnings("deprecation")
 public class AppHelper {
 
-    public static final String TAG = App.TAG;
-
-    private static final String BASE_PATH = App.BASE_DIR;
+    private static final String BASE_PATH = Constants.getBaseDir();
     private static final String WHITE_LIST_PATH = "conf/whitelist/";
     private static final String BLACK_LIST_PATH = "conf/blacklist/";
     private static final String COMPAT_LIST_PATH = "conf/compatlist/";
@@ -51,7 +49,7 @@ public class AppHelper {
     private static final String WHITE_LIST_MODE = "conf/usewhitelist";
     private static final String BLACK_LIST_MODE = "conf/blackwhitelist";
 
-    private static final List<String> FORCE_WHITE_LIST = new ArrayList<>(App.isEnhancementEnabled() ? Arrays.asList(BuildConfig.APPLICATION_ID, "android") : Collections.singletonList(BuildConfig.APPLICATION_ID));
+    private static final List<String> FORCE_WHITE_LIST = new ArrayList<>(Collections.singletonList(BuildConfig.APPLICATION_ID));
     public static List<String> FORCE_WHITE_LIST_MODULE = new ArrayList<>(FORCE_WHITE_LIST);
 
     private static final HashMap<String, List<String>> scopeList = new HashMap<>();

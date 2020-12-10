@@ -35,12 +35,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Objects;
 
-import de.robv.android.xposed.installer.XposedApp;
-import de.robv.android.xposed.installer.util.InstallZipUtil;
-
-public class App extends XposedApp implements Application.ActivityLifecycleCallbacks {
-    public static String BASE_DIR = null;
-    public static String ENABLED_MODULES_LIST_FILE = null;
+public class App extends Application implements Application.ActivityLifecycleCallbacks {
+    public static final String TAG = "EdXposedManager";
     @SuppressLint("StaticFieldLeak")
     private static App instance = null;
     private static Thread uiThread;
@@ -51,10 +47,6 @@ public class App extends XposedApp implements Application.ActivityLifecycleCallb
 
     public static App getInstance() {
         return instance;
-    }
-
-    public static InstallZipUtil.XposedProp getXposedProp() {
-        return getInstance().mXposedProp;
     }
 
     public static void runOnUiThread(Runnable action) {
@@ -70,14 +62,14 @@ public class App extends XposedApp implements Application.ActivityLifecycleCallb
     }
 
     public static void mkdirAndChmod(String dir, int permissions) {
-        dir = BASE_DIR + dir;
+        dir = Constants.getBaseDir() + dir;
         //noinspection ResultOfMethodCallIgnored
         new File(dir).mkdir();
         FileUtils.setPermissions(dir, permissions);
     }
 
     public static boolean supportScope() {
-        return App.getActiveXposedVersion() >= 92;
+        return Constants.getXposedApiVersion() >= 92;
     }
 
     public void onCreate() {
@@ -110,11 +102,6 @@ public class App extends XposedApp implements Application.ActivityLifecycleCallb
                 t.printStackTrace();
             }
         }
-
-        final ApplicationInfo appInfo = getApplicationInfo();
-        BASE_DIR = appInfo.deviceProtectedDataDir + "/";
-        ENABLED_MODULES_LIST_FILE = BASE_DIR + "conf/enabled_modules.list";
-        ModuleUtil.MODULES_LIST_FILE = BASE_DIR + "conf/modules.list";
 
         instance = this;
         uiThread = Thread.currentThread();
@@ -158,7 +145,7 @@ public class App extends XposedApp implements Application.ActivityLifecycleCallb
     @SuppressWarnings({"OctalInteger"})
     @SuppressLint({"PrivateApi", "NewApi"})
     private void createDirectories() {
-        FileUtils.setPermissions(BASE_DIR, 00777);
+        FileUtils.setPermissions(Constants.getBaseDir(), 00777);
         mkdirAndChmod("conf", 00777);
         mkdirAndChmod("log", 00777);
     }

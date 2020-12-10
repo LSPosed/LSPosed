@@ -29,6 +29,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.meowcat.edxposed.manager.App;
 import org.meowcat.edxposed.manager.BuildConfig;
+import org.meowcat.edxposed.manager.Constants;
 import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.databinding.ActivityModulesBinding;
 import org.meowcat.edxposed.manager.repo.Module;
@@ -191,7 +192,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         pm = getPackageManager();
         displayNameComparator = new ApplicationInfo.DisplayNameComparator(pm);
         cmp = displayNameComparator;
-        installedXposedVersion = App.getActiveXposedVersion();
+        installedXposedVersion = Constants.getXposedApiVersion();
         if (installedXposedVersion <= 0) {
             Snackbar.make(binding.snackbar, R.string.xposed_not_active, Snackbar.LENGTH_LONG).setAction(R.string.Settings, v -> {
                 Intent intent = new Intent();
@@ -246,7 +247,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             return;
         }
         if (requestCode == 42) {
-            File listModules = new File(App.ENABLED_MODULES_LIST_FILE);
+            File listModules = new File(Constants.getEnabledModulesListFile());
             if (data != null) {
                 Uri uri = data.getData();
                 if (uri != null) {

@@ -26,6 +26,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import org.meowcat.edxposed.manager.App;
 import org.meowcat.edxposed.manager.BuildConfig;
+import org.meowcat.edxposed.manager.Constants;
 import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.databinding.ActivityLogsBinding;
 import org.meowcat.edxposed.manager.databinding.DialogInstallWarningBinding;
@@ -44,11 +45,11 @@ import java.util.Scanner;
 
 public class LogsActivity extends BaseActivity {
     private boolean allLog = false;
-    private final File fileErrorLog = new File(App.BASE_DIR + "log/error.log");
+    private final File fileErrorLog = new File(Constants.getBaseDir() + "log/error.log");
     private final File fileErrorLogOld = new File(
-            App.BASE_DIR + "log/error.log.old");
-    private final File fileAllLog = new File(App.BASE_DIR + "log/all.log");
-    private final File fileAllLogOld = new File(App.BASE_DIR + "log/all.log.old");
+            Constants.getBaseDir() + "log/error.log.old");
+    private final File fileAllLog = new File(Constants.getBaseDir() + "log/all.log");
+    private final File fileAllLogOld = new File(Constants.getBaseDir() + "log/all.log.old");
     private LogsAdapter adapter;
     private final Handler handler = new Handler();
     private ActivityLogsBinding binding;

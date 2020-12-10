@@ -21,6 +21,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.meowcat.edxposed.manager.App;
 import org.meowcat.edxposed.manager.BuildConfig;
+import org.meowcat.edxposed.manager.Constants;
 import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.databinding.StatusInstallerBinding;
 
@@ -99,25 +100,12 @@ public class StatusInstallerFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = StatusInstallerBinding.inflate(inflater, container, false);
 
-        String installedXposedVersion;
-        try {
-            installedXposedVersion = App.getXposedProp().getVersion();
-        } catch (NullPointerException e) {
-            installedXposedVersion = null;
-        }
-
-        String mAppVer;
-        if (App.isEnhancementEnabled()) {
-            mAppVer = String.format("v%s (%s) (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE, getString(R.string.status_enhancement));
-        } else {
-            mAppVer = String.format("v%s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE);
-        }
+        String installedXposedVersion = Constants.getXposedVersion();
+        String mAppVer = String.format("v%s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE);
         binding.manager.setText(mAppVer);
         if (installedXposedVersion != null) {
-            int installedXposedVersionInt = extractIntPart(installedXposedVersion);
-            String installedXposedVersionStr = installedXposedVersionInt + ".0";
-            binding.api.setText(installedXposedVersionStr);
-            binding.framework.setText(installedXposedVersion.replace(installedXposedVersionStr + "-", ""));
+            binding.api.setText(Constants.getXposedApiVersion() + ".0");
+            binding.framework.setText(installedXposedVersion + " (" + Constants.getXposedVariant() + ")");
         }
 
         binding.androidVersion.setText(getString(R.string.android_sdk, getAndroidVersion(), Build.VERSION.RELEASE, Build.VERSION.SDK_INT));

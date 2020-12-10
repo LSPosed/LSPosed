@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.meowcat.edxposed.manager.App;
+import org.meowcat.edxposed.manager.Constants;
 import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.databinding.ActivityModulesBinding;
 import org.meowcat.edxposed.manager.repo.ModuleVersion;
@@ -32,7 +33,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public final class ModuleUtil {
     private static final String PLAY_STORE_PACKAGE = "com.android.vending";
     // xposedminversion below this
-    public static String MODULES_LIST_FILE = App.BASE_DIR + "conf/modules.list";
     public static int MIN_MODULE_VERSION = 2; // reject modules with
     private static ModuleUtil instance = null;
     private final PackageManager pm;
@@ -212,7 +212,7 @@ public final class ModuleUtil {
     public synchronized void updateModulesList(boolean showToast, ActivityModulesBinding binding) {
         try {
             Log.i(App.TAG, "ModuleUtil -> updating modules.list");
-            int installedXposedVersion = App.getActiveXposedVersion();
+            int installedXposedVersion = Constants.getXposedApiVersion();
             if (!App.getPreferences().getBoolean("skip_xposedminversion_check", false) && installedXposedVersion <= 0 && showToast) {
                 if (binding != null) {
                     Snackbar.make(binding.snackbar, R.string.notinstalled, Snackbar.LENGTH_SHORT).show();
@@ -222,8 +222,8 @@ public final class ModuleUtil {
                 return;
             }
 
-            PrintWriter modulesList = new PrintWriter(MODULES_LIST_FILE);
-            PrintWriter enabledModulesList = new PrintWriter(App.ENABLED_MODULES_LIST_FILE);
+            PrintWriter modulesList = new PrintWriter(Constants.getModulesListFile());
+            PrintWriter enabledModulesList = new PrintWriter(Constants.getEnabledModulesListFile());
             List<InstalledModule> enabledModules = getEnabledModules();
             for (InstalledModule module : enabledModules) {
 
@@ -248,8 +248,8 @@ public final class ModuleUtil {
             modulesList.close();
             enabledModulesList.close();
 
-            FileUtils.setPermissions(MODULES_LIST_FILE, 00664);
-            FileUtils.setPermissions(App.ENABLED_MODULES_LIST_FILE, 00664);
+            FileUtils.setPermissions(Constants.getEnabledModulesListFile(), 00664);
+            FileUtils.setPermissions(Constants.getEnabledModulesListFile(), 00664);
 
             if (showToast) {
                 if (binding != null) {
@@ -259,11 +259,11 @@ public final class ModuleUtil {
                 }
             }
         } catch (IOException e) {
-            Log.e(App.TAG, "ModuleUtil -> cannot write " + MODULES_LIST_FILE, e);
+            Log.e(App.TAG, "ModuleUtil -> cannot write " + Constants.getModulesListFile(), e);
             if (binding != null) {
-                Snackbar.make(binding.snackbar, "cannot write " + MODULES_LIST_FILE + e, Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(binding.snackbar, "cannot write " + Constants.getModulesListFile() + e, Snackbar.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(App.getInstance(), "cannot write " + MODULES_LIST_FILE + e, Toast.LENGTH_SHORT).show();
+                Toast.makeText(App.getInstance(), "cannot write " + Constants.getModulesListFile() + e, Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -332,7 +332,7 @@ public final class ModuleUtil {
                 this.minVersion = 0;
                 this.description = "";
             } else {
-                int version = App.getActiveXposedVersion();
+                int version = Constants.getXposedApiVersion();
                 if (version > 0 && App.getPreferences().getBoolean("skip_xposedminversion_check", false)) {
                     this.minVersion = version;
                 } else {

@@ -25,6 +25,7 @@ import com.takisoft.preferencex.PreferenceFragmentCompat;
 import com.topjohnwu.superuser.Shell;
 
 import org.meowcat.edxposed.manager.App;
+import org.meowcat.edxposed.manager.Constants;
 import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.adapters.AppHelper;
 import org.meowcat.edxposed.manager.adapters.BlackListAdapter;
@@ -114,18 +115,15 @@ public class SettingsActivity extends BaseActivity {
 
     @SuppressWarnings({"ResultOfMethodCallIgnored", "deprecation"})
     public static class SettingsFragment extends PreferenceFragmentCompat {
-        private static final File pretendXposedInstallerFlag = new File(App.BASE_DIR + "conf/pretend_xposed_installer");
-        private static final File hideEdXposedManagerFlag = new File(App.BASE_DIR + "conf/hide_edxposed_manager");
-        private static final File disableHiddenAPIBypassFlag = new File(App.BASE_DIR + "conf/disable_hidden_api_bypass");
-        private static final File disableResourcesFlag = new File(App.BASE_DIR + "conf/disable_resources");
-        private static final File dynamicModulesFlag = new File(App.BASE_DIR + "conf/dynamicmodules");
-        private static final File deoptBootFlag = new File(App.BASE_DIR + "conf/deoptbootimage");
-        private static final File whiteListModeFlag = new File(App.BASE_DIR + "conf/usewhitelist");
-        private static final File blackWhiteListModeFlag = new File(App.BASE_DIR + "conf/blackwhitelist");
-        private static final File disableVerboseLogsFlag = new File(App.BASE_DIR + "conf/disable_verbose_log");
-        private static final File disableModulesLogsFlag = new File(App.BASE_DIR + "conf/disable_modules_log");
-        private static final File verboseLogProcessID = new File(App.BASE_DIR + "log/all.pid");
-        private static final File modulesLogProcessID = new File(App.BASE_DIR + "log/error.pid");
+        private static final File disableResourcesFlag = new File(Constants.getBaseDir() + "conf/disable_resources");
+        private static final File dynamicModulesFlag = new File(Constants.getBaseDir() + "conf/dynamicmodules");
+        private static final File deoptBootFlag = new File(Constants.getBaseDir() + "conf/deoptbootimage");
+        private static final File whiteListModeFlag = new File(Constants.getBaseDir() + "conf/usewhitelist");
+        private static final File blackWhiteListModeFlag = new File(Constants.getBaseDir() + "conf/blackwhitelist");
+        private static final File disableVerboseLogsFlag = new File(Constants.getBaseDir() + "conf/disable_verbose_log");
+        private static final File disableModulesLogsFlag = new File(Constants.getBaseDir() + "conf/disable_modules_log");
+        private static final File verboseLogProcessID = new File(Constants.getBaseDir() + "log/all.pid");
+        private static final File modulesLogProcessID = new File(Constants.getBaseDir() + "log/error.pid");
 
         @SuppressLint({"WorldReadableFiles", "WorldWriteableFiles"})
         static void setFilePermissionsFromMode(String name) {
@@ -492,105 +490,6 @@ public class SettingsActivity extends BaseActivity {
                     return true;
                 });
                 updatePreference(!md2.isChecked());
-
-                Preference enhancement_status = findPreference("enhancement_status");
-                Objects.requireNonNull(enhancement_status).setSummary(App.isEnhancementEnabled() ? R.string.settings_summary_enhancement_enabled : R.string.settings_summary_enhancement);
-                SwitchPreferenceCompat prefPretendXposedInstaller = findPreference("pretend_xposed_installer");
-
-                Objects.requireNonNull(prefPretendXposedInstaller).setChecked(pretendXposedInstallerFlag.exists());
-                prefPretendXposedInstaller.setOnPreferenceChangeListener((preference, newValue) -> {
-                    boolean enabled = (Boolean) newValue;
-                    if (enabled) {
-                        new BlackListAdapter(getContext(), AppHelper.isWhiteListMode()).generateCheckedList();
-                        FileOutputStream fos = null;
-                        try {
-                            fos = new FileOutputStream(pretendXposedInstallerFlag.getPath());
-                            setFilePermissionsFromMode(pretendXposedInstallerFlag.getPath());
-                        } catch (FileNotFoundException e) {
-                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                        } finally {
-                            if (fos != null) {
-                                try {
-                                    fos.close();
-                                } catch (IOException e) {
-                                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                                    try {
-                                        pretendXposedInstallerFlag.createNewFile();
-                                    } catch (IOException e1) {
-                                        Toast.makeText(getActivity(), e1.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        pretendXposedInstallerFlag.delete();
-                    }
-                    return (enabled == pretendXposedInstallerFlag.exists());
-                });
-
-                SwitchPreferenceCompat prefHideEdXposedManager = findPreference("hide_edxposed_manager");
-                Objects.requireNonNull(prefHideEdXposedManager).setChecked(hideEdXposedManagerFlag.exists());
-                prefHideEdXposedManager.setOnPreferenceChangeListener((preference, newValue) -> {
-                    boolean enabled = (Boolean) newValue;
-                    if (enabled) {
-                        new BlackListAdapter(getContext(), AppHelper.isWhiteListMode()).generateCheckedList();
-                        FileOutputStream fos = null;
-                        try {
-                            fos = new FileOutputStream(hideEdXposedManagerFlag.getPath());
-                            setFilePermissionsFromMode(hideEdXposedManagerFlag.getPath());
-                        } catch (FileNotFoundException e) {
-                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                        } finally {
-                            if (fos != null) {
-                                try {
-                                    fos.close();
-                                } catch (IOException e) {
-                                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                                    try {
-                                        hideEdXposedManagerFlag.createNewFile();
-                                    } catch (IOException e1) {
-                                        Toast.makeText(getActivity(), e1.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        hideEdXposedManagerFlag.delete();
-                    }
-                    return (enabled == hideEdXposedManagerFlag.exists());
-                });
-
-                SwitchPreferenceCompat prefDisableHiddenAPIBypass = findPreference("disable_hidden_api_bypass");
-                Objects.requireNonNull(prefDisableHiddenAPIBypass).setChecked(disableHiddenAPIBypassFlag.exists());
-                prefDisableHiddenAPIBypass.setOnPreferenceChangeListener((preference, newValue) -> {
-                    boolean enabled = (Boolean) newValue;
-                    if (enabled) {
-                        FileOutputStream fos = null;
-                        try {
-                            fos = new FileOutputStream(disableHiddenAPIBypassFlag.getPath());
-                            setFilePermissionsFromMode(disableHiddenAPIBypassFlag.getPath());
-                        } catch (FileNotFoundException e) {
-                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                        } finally {
-                            if (fos != null) {
-                                try {
-                                    fos.close();
-                                } catch (IOException e) {
-                                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                                    try {
-                                        disableHiddenAPIBypassFlag.createNewFile();
-                                    } catch (IOException e1) {
-                                        Toast.makeText(getActivity(), e1.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        disableHiddenAPIBypassFlag.delete();
-                    }
-                    return (enabled == disableHiddenAPIBypassFlag.exists());
-                });
-
             }
         }
 
