@@ -58,19 +58,10 @@ namespace art {
 
         CREATE_HOOK_STUB_ENTRIES(bool, ShouldUseInterpreterEntrypoint, void *art_method,
                                  const void *quick_code) {
-            if (UNLIKELY(quick_code != nullptr && edxp::isEntryHooked(quick_code))) {
+            if (quick_code != nullptr && UNLIKELY(edxp::isHooked(art_method))) {
                 return false;
             }
             return ShouldUseInterpreterEntrypointBackup(art_method, quick_code);
-        }
-
-        CREATE_HOOK_STUB_ENTRIES(bool, IsQuickToInterpreterBridge, void *thiz,
-                                 const void *quick_code) {
-            if (quick_code != nullptr && UNLIKELY(edxp::isEntryHooked(quick_code))) {
-                LOGD("Pretend to be quick to interpreter bridge %p", quick_code);
-                return true;
-            }
-            return IsQuickToInterpreterBridgeBackup(thiz, quick_code);
         }
 
     public:
@@ -138,8 +129,7 @@ namespace art {
 
             // Sandhook will hook ShouldUseInterpreterEntrypoint, so we just skip
             // edxp::Context::GetInstance()->GetVariant() will not work here, so we use smh dirty hack
-            if (api_level >= __ANDROID_API_Q__ &&
-                edxp::path_exists(edxp::kLibSandHookNativePath)) {
+            if (!edxp::path_exists(edxp::kLibSandHookNativePath)) {
                 LOGD("Not sandhook, installing _ZN3art11ClassLinker30ShouldUseInterpreterEntrypointEPNS_9ArtMethodEPKv");
                 HOOK_FUNC(ShouldUseInterpreterEntrypoint,
                           "_ZN3art11ClassLinker30ShouldUseInterpreterEntrypointEPNS_9ArtMethodEPKv");
@@ -151,8 +141,6 @@ namespace art {
 //            if (api_level >= __ANDROID_API_R__) {
 //                RETRIEVE_FUNC_SYMBOL(MakeInitializedClassesVisiblyInitialized,
 //                                     "_ZN3art11ClassLinker40MakeInitializedClassesVisiblyInitializedEPNS_6ThreadEb");
-//                HOOK_FUNC(IsQuickToInterpreterBridge,
-//                          "_ZNK3art11ClassLinker26IsQuickToInterpreterBridgeEPKv");
 //            }
 
         }

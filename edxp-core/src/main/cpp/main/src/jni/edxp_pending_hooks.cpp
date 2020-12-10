@@ -30,16 +30,12 @@ namespace edxp {
         REGISTER_EDXP_NATIVE_METHODS("de.robv.android.xposed.PendingHooks");
     }
 
-    bool isEntryHooked(const void* entry) {
-        return hooked_methods_.count(entry);
-    }
-
     bool isHooked(void* art_method) {
-        return isEntryHooked(getEntryPoint(art_method));
+        return hooked_methods_.count(art_method);
     }
 
     void recordHooked(void * art_method) {
-        hooked_methods_.insert(getEntryPoint(art_method));
+        hooked_methods_.insert(art_method);
     }
 
 }

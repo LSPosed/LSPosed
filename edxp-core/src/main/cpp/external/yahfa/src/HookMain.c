@@ -113,36 +113,8 @@ void setNonCompilable(void *method) {
     LOGI("setNonCompilable: change access flags from 0x%x to 0x%x", old_flags, access_flags);
 }
 
-bool setNativeFlag(void *method, bool isNative) {
-    uint32_t access_flags = getFlags(method);
-    uint32_t old_flags = access_flags;
-    LOGI("setNativeFlag: access flags is 0x%x", access_flags);
-    uint32_t old_access_flags = access_flags;
-    if (isNative) {
-        access_flags |= kAccNative;
-        if (SDKVersion >= __ANDROID_API_Q__) {
-            // On API 29 whether to use the fast path or not is cached in the ART method structure
-            access_flags &= ~kAccFastInterpreterToInterpreterInvoke;
-        }
-    } else {
-        access_flags &= ~kAccNative;
-    }
-    if (access_flags != old_access_flags) {
-        setFlags(method, access_flags);
-        LOGI("change access flags from 0x%x to 0x%x", old_flags, access_flags);
-        return true;
-    }
-    return false;
-}
-
 void *getEntryPoint(void* method) {
     return readAddr((char *) method + OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod);
-}
-
-void setEntryPoint(void* method, void* entry) {
-    memcpy((char *) method + OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod,
-           &entry,
-           pointer_size);
 }
 
 static int replaceMethod(void *fromMethod, void *toMethod, int isBackup) {
@@ -186,12 +158,6 @@ static int replaceMethod(void *fromMethod, void *toMethod, int isBackup) {
         memcpy((char *) fromMethod + OFFSET_entry_point_from_interpreter_in_ArtMethod,
                (char *) toMethod + OFFSET_entry_point_from_interpreter_in_ArtMethod,
                pointer_size);
-    }
-
-    // set the target method to native so that Android O wouldn't invoke it with interpreter
-    // for Q or above, we use ShouldUseInterpreterEntrypoint
-    if (SDKVersion >= __ANDROID_API_O__ && SDKVersion < __ANDROID_API_Q__) {
-        setNativeFlag(fromMethod, true);
     }
 
     hookCount += 1;
