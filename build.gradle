@@ -24,6 +24,7 @@ allprojects {
         templateLib64Path = templateRootPath + "/system/lib64/"
         templateEtcPath = templateRootPath + "/system/etc/"
         hiddenApiStubJarFilePath = project(":hiddenapi-stubs").buildDir.absolutePath + "/libs/framework-stub.jar"
+        zipPathMagiskReleasePath = project(":edxp-core").projectDir.path + "/build/tmp/release/magisk"
     }
     repositories {
         google()
@@ -33,9 +34,4 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
-}
-
-ext {
-    minSdkVersion = 23
-    targetSdkVersion = 28
 }

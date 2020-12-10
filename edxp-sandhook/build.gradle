@@ -8,8 +8,8 @@ android {
 
     defaultConfig {
         applicationId "com.elderdrivers.riru.edxp.sandhook"
-        minSdkVersion 26
-        targetSdkVersion 28
+        minSdkVersion minSdkVersion
+        targetSdkVersion targetSdkVersion
         versionCode 1
         versionName "1.0"
         multiDexEnabled false
@@ -28,7 +28,7 @@ android {
 dependencies {
     compileOnly project(':hiddenapi-stubs')
     implementation project(':edxp-common')
-    implementation 'com.swift.sandhook:hooklib:4.2.1'
+    implementation project(':sandhook-hooklib')
     compileOnly files(project(":dexmaker").tasks.getByName("makeJarRelease").outputs)
 }
 
@@ -62,21 +62,21 @@ afterEvaluate {
         task("copyDex${variantNameCapped}", type: Copy) {
             dependsOn "assemble${variantNameCapped}"
             dependsOn tasks.getByPath(":edxp-common:copyCommonProperties")
+            dependsOn tasks.getByPath(":sandhook-hooklib:copySandHook${variantNameCapped}LibraryToMagiskTemplate")
             def dexOutPath = variant.name.contains("release") ?
                     "${buildDir}/intermediates/dex/${variantNameLowered}/minify${variantNameCapped}WithR8" :
                     "${buildDir}/intermediates/dex/${variantNameLowered}/mergeDex${variantNameCapped}"
             from (dexOutPath){
                 rename("classes.dex", "edxp.dex")
             }
-            destinationDir file(templateRootPath + "system/framework/")
+            destinationDir file(zipPathMagiskReleasePath + "/system/framework/")
             outputs.upToDateWhen { false }
             doLast {
                 copy {
                     from file(myTemplatePath)
-                    into file(templateRootPath)
+                    into file(zipPathMagiskReleasePath)
                 }
             }
         }
-
     }
 }

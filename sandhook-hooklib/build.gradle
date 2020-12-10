@@ -1,0 +1,66 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion targetSdkVersion
+
+    defaultConfig {
+        minSdkVersion minSdkVersion
+        targetSdkVersion targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+
+        externalNativeBuild {
+            cmake {
+                //arguments "-DCMAKE_BUILD_TYPE=Release"
+            }
+        }
+        ndk {
+            abiFilters 'armeabi-v7a', 'arm64-v8a'
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path "src/main/cpp/CMakeLists.txt"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    api project(':sandhook-annotation')
+}
+
+afterEvaluate {
+    android.libraryVariants.all { variant ->
+        def variantNameCapped = variant.name.capitalize()
+        def variantNameLowered = variant.name.toLowerCase()
+
+        task("copySandHook${variantNameCapped}LibraryToMagiskTemplate") {
+            def libPathRelease = "${buildDir}/intermediates/cmake/${variantNameLowered}/obj"
+            doLast {
+                project.logger.lifecycle(libPathRelease)
+                copy {
+                    include "libsandhook.edxp.so"
+                    from "${libPathRelease}/armeabi-v7a"
+                    into "${zipPathMagiskReleasePath}/system/lib"
+                }
+                copy {
+                    project.logger.lifecycle(zipPathMagiskReleasePath)
+                    include "libsandhook.edxp.so"
+                    from "${libPathRelease}/arm64-v8a"
+                    into "${zipPathMagiskReleasePath}/system/lib64"
+                }
+            }
+        }
+
+    }
+}

@@ -41,7 +41,6 @@ ext {
     sandhook_authors = "solohsu, MlgmXyysd & ganyao114"
 
     riruModuleId = "edxp"
-    zipPathMagiskRelease = "$buildDir/tmp/release/magisk"
 
     moduleMinRiruApiVersion = 10
     moduleMinRiruVersionName = "v23.0"
@@ -120,13 +119,16 @@ afterEvaluate {
         def variantLowered = variant.name.toLowerCase()
 
         backends.each { backend ->
-
             def backendLowered = backend.toLowerCase()
             def backendCapped = backendLowered.capitalize()
             def authorList = property("${backendLowered}" + "_authors")
             def magiskModuleId = property("${backendLowered}" + "_module_id")
 
+            project.logger.lifecycle("delete file")
+            delete file(zipPathMagiskReleasePath)
+
             def prepareJarsTask = task("prepareJars${backendCapped}${variantCapped}") {
+                project.logger.lifecycle("prepareJarsTask")
                 dependsOn cleanTemplate
                 dependsOn tasks.getByPath(":dexmaker:copyDex${variantCapped}")
                 dependsOn tasks.getByPath(":dalvikdx:copyDex${variantCapped}")
@@ -136,7 +138,6 @@ afterEvaluate {
 
             def prepareMagiskFilesTask = task("prepareMagiskFiles${backendCapped}${variantCapped}", type: Delete) {
                 dependsOn prepareJarsTask, "assemble${variantCapped}"
-                delete file(zipPathMagiskRelease)
                 doFirst {
                     copy {
                         from "${projectDir}/tpl/edconfig.tpl"
@@ -169,12 +170,12 @@ afterEvaluate {
                 doLast {
                     copy {
                         from "${projectDir}/template_override"
-                        into zipPathMagiskRelease
+                        into zipPathMagiskReleasePath
                         exclude exclude_list
                     }
                     copy {
                         from "${projectDir}/template_override"
-                        into zipPathMagiskRelease
+                        into zipPathMagiskReleasePath
                         include 'riru.sh'
                         filter { line ->
                             line.replaceAll('%%%RIRU_MODULE_ID%%%', riruModuleId)
@@ -185,23 +186,27 @@ afterEvaluate {
                                 eol: FixCrLfFilter.CrLf.newInstance("lf"))
                     }
                     copy {
+                        include "libriru_edxp.so"
                         from "$libPathRelease/armeabi-v7a"
-                        into "$zipPathMagiskRelease/system/lib"
+                        into "$zipPathMagiskReleasePath/system/lib"
                     }
                     copy {
+                        include "libriru_edxp.so"
                         from "$libPathRelease/arm64-v8a"
-                        into "$zipPathMagiskRelease/system/lib64"
+                        into "$zipPathMagiskReleasePath/system/lib64"
                     }
                     copy {
+                        include "libriru_edxp.so"
                         from "$libPathRelease/x86"
-                        into "$zipPathMagiskRelease/system_x86/lib"
+                        into "$zipPathMagiskReleasePath/system_x86/lib"
                     }
                     copy {
+                        include "libriru_edxp.so"
                         from "$libPathRelease/x86_64"
-                        into "$zipPathMagiskRelease/system_x86/lib64"
+                        into "$zipPathMagiskReleasePath/system_x86/lib64"
                     }
                     // generate sha1sum
-                    fileTree(zipPathMagiskRelease).matching {
+                    fileTree(zipPathMagiskReleasePath).matching {
                         exclude "README.md", "META-INF"
                     }.visit { f ->
                         if (f.directory) return
@@ -214,7 +219,7 @@ afterEvaluate {
                 dependsOn prepareMagiskFilesTask
                 archiveName "${module_name}-${backend}-${project.version}-${variantLowered}.zip"
                 destinationDir file("$projectDir/release")
-                from "$zipPathMagiskRelease"
+                from "$zipPathMagiskReleasePath"
             }
 
             task("push${backendCapped}${variantCapped}", type: Exec) {

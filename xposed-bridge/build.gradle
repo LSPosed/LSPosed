@@ -5,7 +5,7 @@ android {
     ndkVersion androidCompileNdkVersion
 
     defaultConfig {
-        minSdkVersion 26
+        minSdkVersion minSdkVersion
     }
 
     sourceSets {
