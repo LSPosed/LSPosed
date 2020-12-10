@@ -14,7 +14,7 @@ static def calcSha256(file) {
 }
 
 // Values set here will be overriden by AppVeyor, feel free to modify during development.
-def buildVersionName = 'v0.5.0.8'
+def buildVersionName = 'v0.5.1.0'
 def buildVersionCode = 233
 
 if (System.env.APPVEYOR_BUILD_VERSION != null) {

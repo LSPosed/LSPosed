@@ -1,4 +1,4 @@
-version: '0.5.0.6_{build}-{branch}'
+version: '0.5.1.0_{build}-{branch}'
 
 environment:
   ANDROID_HOME: C:\android-sdk-windows
