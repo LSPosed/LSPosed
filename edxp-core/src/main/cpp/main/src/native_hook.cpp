@@ -17,6 +17,7 @@
 #include "art/runtime/gc/heap.h"
 #include "art/runtime/hidden_api.h"
 #include "art/runtime/oat_file_manager.h"
+#include "art/runtime/jit/jit_code_cache.h"
 
 std::vector<soinfo_t> linker_get_solist(); // Dobby but not in .h
 
@@ -78,6 +79,7 @@ namespace edxp {
         art::mirror::Class::Setup(art_handle, hook_func);
         art::JNIEnvExt::Setup(art_handle, hook_func);
         art::oat_file_manager::DisableOnlyUseSystemOatFiles(art_handle, hook_func);
+        art::jit::HookJitCacheCode(art_handle, hook_func);
 
         art_hooks_installed = true;
         LOGI("ART hooks installed");

@@ -136,6 +136,16 @@ bool setNativeFlag(void *method, bool isNative) {
     return false;
 }
 
+void *getEntryPoint(void* method) {
+    return readAddr((char *) method + OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod);
+}
+
+void setEntryPoint(void* method, void* entry) {
+    memcpy((char *) method + OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod,
+           &entry,
+           pointer_size);
+}
+
 static int replaceMethod(void *fromMethod, void *toMethod, int isBackup) {
     if (hookCount >= hookCap) {
         LOGI("not enough capacity. Allocating...");

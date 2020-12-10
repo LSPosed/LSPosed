@@ -5,6 +5,7 @@ import android.os.Build;
 import com.elderdrivers.riru.edxp.art.ClassLinker;
 import com.elderdrivers.riru.edxp.art.Heap;
 import com.elderdrivers.riru.edxp.core.Yahfa;
+import com.elderdrivers.riru.edxp.util.ClassUtils;
 import com.elderdrivers.riru.edxp.util.Utils;
 
 import java.lang.reflect.Constructor;
@@ -122,12 +123,13 @@ public class HookMain {
         }
         // make sure GC completed before hook
         Thread currentThread = Thread.currentThread();
-        int lastGcType = Heap.waitForGcToComplete(
-                XposedHelpers.getLongField(currentThread, "nativePeer"));
+        long nativePeer = XposedHelpers.getLongField(currentThread, "nativePeer");
+        int lastGcType = Heap.waitForGcToComplete(nativePeer);
         if (lastGcType < 0) {
             Utils.logW("waitForGcToComplete failed, using fallback");
             Runtime.getRuntime().gc();
         }
+
         if (!Yahfa.backupAndHookNative(target, hook, backup)) {
             throw new RuntimeException("Failed to hook " + target + " with " + hook);
         } else {

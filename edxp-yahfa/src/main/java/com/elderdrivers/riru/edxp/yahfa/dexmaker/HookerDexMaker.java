@@ -217,7 +217,7 @@ public class HookerDexMaker {
             loader = new InMemoryDexClassLoader(ByteBuffer.wrap(dexBytes), mAppClassLoader);
         }
 
-        mHookClass = loader.loadClass(className);
+        mHookClass = Class.forName(className.replace("/", "."), true, loader);
         // Execute our newly-generated code in-process.
         mHookClass.getMethod(METHOD_NAME_SETUP, Member.class, XposedBridge.AdditionalHookInfo.class)
                 .invoke(null, mMember, mHookInfo);

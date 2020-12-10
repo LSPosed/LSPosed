@@ -11,6 +11,7 @@
 #include "edxp_context.h"
 #include "jni/edxp_pending_hooks.h"
 #include "utils.h"
+#include "HookMain.h"
 
 namespace art {
 
@@ -37,7 +38,8 @@ namespace art {
             art::mirror::Class clazz(clazz_ptr);
             std::string storage;
             const char *desc = clazz.GetDescriptor(&storage);
-            bool should_intercept = edxp::IsClassPending(desc) || std::string(desc).rfind("LEdHooker_") == 0;
+            bool should_intercept =
+                    edxp::IsClassPending(desc) || std::string(desc).rfind("LEdHooker_") == 0;
             if (UNLIKELY(should_intercept)) {
                 edxp::Context::GetInstance()->CallOnPreFixupStaticTrampolines(clazz_ptr);
             }
@@ -47,13 +49,28 @@ namespace art {
             }
         }
 
+        CREATE_FUNC_SYMBOL_ENTRY(void, MakeInitializedClassesVisiblyInitialized, void *thiz,
+                                 void *self, bool wait) {
+            if (LIKELY(MakeInitializedClassesVisiblyInitializedSym))
+                MakeInitializedClassesVisiblyInitializedSym(thiz, self, wait);
+        }
+
+
         CREATE_HOOK_STUB_ENTRIES(bool, ShouldUseInterpreterEntrypoint, void *art_method,
                                  const void *quick_code) {
-            if (UNLIKELY(edxp::isHooked(art_method) && quick_code != nullptr)) {
-                LOGD("Hooked method %p, no use interpreter", art_method);
+            if (UNLIKELY(quick_code != nullptr && edxp::isEntryHooked(quick_code))) {
                 return false;
             }
             return ShouldUseInterpreterEntrypointBackup(art_method, quick_code);
+        }
+
+        CREATE_HOOK_STUB_ENTRIES(bool, IsQuickToInterpreterBridge, void *thiz,
+                                 const void *quick_code) {
+            if (quick_code != nullptr && UNLIKELY(edxp::isEntryHooked(quick_code))) {
+                LOGD("Pretend to be quick to interpreter bridge %p", quick_code);
+                return true;
+            }
+            return IsQuickToInterpreterBridgeBackup(thiz, quick_code);
         }
 
     public:
@@ -127,6 +144,23 @@ namespace art {
                 HOOK_FUNC(ShouldUseInterpreterEntrypoint,
                           "_ZN3art11ClassLinker30ShouldUseInterpreterEntrypointEPNS_9ArtMethodEPKv");
             }
+
+            // MakeInitializedClassesVisiblyInitialized will cause deadlock
+            // IsQuickToInterpreterBridge cannot be hooked by Dobby yet
+            // So we use GetSavedEntryPointOfPreCompiledMethod instead
+//            if (api_level >= __ANDROID_API_R__) {
+//                RETRIEVE_FUNC_SYMBOL(MakeInitializedClassesVisiblyInitialized,
+//                                     "_ZN3art11ClassLinker40MakeInitializedClassesVisiblyInitializedEPNS_6ThreadEb");
+//                HOOK_FUNC(IsQuickToInterpreterBridge,
+//                          "_ZNK3art11ClassLinker26IsQuickToInterpreterBridgeEPKv");
+//            }
+
+        }
+
+        ALWAYS_INLINE void MakeInitializedClassesVisiblyInitialized(void *self, bool wait) const {
+            LOGD("MakeInitializedClassesVisiblyInitialized start, thiz=%p, self=%p", thiz_, self);
+            if (LIKELY(thiz_))
+                MakeInitializedClassesVisiblyInitialized(thiz_, self, wait);
         }
 
         ALWAYS_INLINE void SetEntryPointsToInterpreter(void *art_method) const {

@@ -29,6 +29,11 @@ void *getArtMethod(JNIEnv *env, jobject jmethod);
 
 static void *getResolvedMethodsAddr(JNIEnv *, jobject);
 
+// TODO: move to common utils instead of in YAHFA's code
+void *getEntryPoint(void* method);
+
+void setEntryPoint(void* method, void* entry);
+
 #ifdef __cplusplus
 }
 #endif

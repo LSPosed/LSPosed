@@ -2,6 +2,7 @@
 #include <nativehelper/jni_macros.h>
 #include <set>
 #include <string>
+#include "HookMain.h"
 #include "jni.h"
 #include "native_util.h"
 #include "edxp_pending_hooks.h"
@@ -10,7 +11,7 @@ namespace edxp {
 
     static std::set<std::string> class_descs_;
 
-    static std::set<void*> hooked_methods_;
+    static std::set<const void*> hooked_methods_;
 
     bool IsClassPending(const char *class_desc) {
         return class_descs_.find(class_desc) != class_descs_.end();
@@ -29,12 +30,16 @@ namespace edxp {
         REGISTER_EDXP_NATIVE_METHODS("de.robv.android.xposed.PendingHooks");
     }
 
+    bool isEntryHooked(const void* entry) {
+        return hooked_methods_.count(entry);
+    }
+
     bool isHooked(void* art_method) {
-        return hooked_methods_.count(art_method);
+        return isEntryHooked(getEntryPoint(art_method));
     }
 
     void recordHooked(void * art_method) {
-        hooked_methods_.insert(art_method);
+        hooked_methods_.insert(getEntryPoint(art_method));
     }
 
 }

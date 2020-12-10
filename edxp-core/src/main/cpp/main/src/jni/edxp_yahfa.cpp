@@ -5,6 +5,7 @@
 #include "native_util.h"
 #include "edxp_yahfa.h"
 #include "edxp_pending_hooks.h"
+#include "art/runtime/class_linker.h"
 
 namespace edxp {
 
@@ -58,6 +59,12 @@ namespace edxp {
         return edxp::isHooked(getArtMethod(env, member));
     }
 
+    static void
+    Yahfa_makeInitializedClassesVisiblyInitialized(JNI_START, jlong thread, jboolean wait) {
+        art::ClassLinker::Current()->MakeInitializedClassesVisiblyInitialized(
+                reinterpret_cast<void *>(thread), wait);
+    }
+
     static JNINativeMethod gMethods[] = {
             NATIVE_METHOD(Yahfa, init, "(I)V"),
             NATIVE_METHOD(Yahfa, findMethodNative,
@@ -68,6 +75,7 @@ namespace edxp {
             NATIVE_METHOD(Yahfa, setNativeFlag, "(Ljava/lang/reflect/Member;Z)Z"),
             NATIVE_METHOD(Yahfa, recordHooked, "(Ljava/lang/reflect/Member;)V"),
             NATIVE_METHOD(Yahfa, isHooked, "(Ljava/lang/reflect/Member;)Z"),
+            NATIVE_METHOD(Yahfa, makeInitializedClassesVisiblyInitialized, "(JZ)V"),
     };
 
     void RegisterEdxpYahfa(JNIEnv *env) {
