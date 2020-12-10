@@ -4,6 +4,7 @@
 #include "jni.h"
 #include "native_util.h"
 #include "edxp_yahfa.h"
+#include "edxp_pending_hooks.h"
 
 namespace edxp {
 
@@ -49,14 +50,24 @@ namespace edxp {
         return (jboolean) setNativeFlag(art_method, is_native);
     }
 
+    static void Yahfa_recordHooked(JNI_START, jobject member) {
+        edxp::recordHooked(getArtMethod(env, member));
+    }
+
+    static jboolean Yahfa_isHooked(JNI_START, jobject member) {
+        return edxp::isHooked(getArtMethod(env, member));
+    }
+
     static JNINativeMethod gMethods[] = {
             NATIVE_METHOD(Yahfa, init, "(I)V"),
             NATIVE_METHOD(Yahfa, findMethodNative,
-                          "(Ljava/lang/Class;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Object;"),
+                          "(Ljava/lang/Class;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/reflect/Member;"),
             NATIVE_METHOD(Yahfa, backupAndHookNative,
                           "(Ljava/lang/Object;Ljava/lang/reflect/Method;Ljava/lang/reflect/Method;)Z"),
             NATIVE_METHOD(Yahfa, setMethodNonCompilable, "(Ljava/lang/reflect/Member;)V"),
             NATIVE_METHOD(Yahfa, setNativeFlag, "(Ljava/lang/reflect/Member;Z)Z"),
+            NATIVE_METHOD(Yahfa, recordHooked, "(Ljava/lang/reflect/Member;)V"),
+            NATIVE_METHOD(Yahfa, isHooked, "(Ljava/lang/reflect/Member;)Z"),
     };
 
     void RegisterEdxpYahfa(JNIEnv *env) {

@@ -2,6 +2,8 @@ package com.elderdrivers.riru.edxp._hooker.yahfa;
 
 import com.elderdrivers.riru.common.KeepMembers;
 import com.elderdrivers.riru.edxp._hooker.impl.HandleBindApp;
+import com.elderdrivers.riru.edxp.core.Yahfa;
+import com.elderdrivers.riru.edxp.util.Hookers;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.annotation.ApiSensitive;

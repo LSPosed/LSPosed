@@ -13,10 +13,10 @@ static int OFFSET_entry_point_from_interpreter_in_ArtMethod;
 static int OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod;
 static int OFFSET_ArtMehod_in_Object;
 static int OFFSET_access_flags_in_ArtMethod;
-static int kAccNative = 0x0100;
-static int kAccCompileDontBother = 0x01000000;
-static int kAccFastInterpreterToInterpreterInvoke = 0x40000000;
-static int kAccPreCompiled = 0x00200000;
+static uint32_t kAccNative = 0x0100;
+static uint32_t kAccCompileDontBother = 0x01000000;
+static uint32_t kAccFastInterpreterToInterpreterInvoke = 0x40000000;
+static uint32_t kAccPreCompiled = 0x00200000;
 
 static jfieldID fieldArtMethod = NULL;
 
@@ -107,30 +107,26 @@ void setNonCompilable(void *method) {
     if (SDKVersion < __ANDROID_API_N__) {
         return;
     }
-    int access_flags = getFlags(method);
-    int old_flags = access_flags;
+    uint32_t access_flags = getFlags(method);
+    uint32_t old_flags = access_flags;
     access_flags |= kAccCompileDontBother;
     setFlags(method, access_flags);
     LOGI("setNonCompilable: change access flags from 0x%x to 0x%x", old_flags, access_flags);
 }
 
 bool setNativeFlag(void *method, bool isNative) {
-    int access_flags = getFlags(method);
-    int old_flags = access_flags;
+    uint32_t access_flags = getFlags(method);
+    uint32_t old_flags = access_flags;
     LOGI("setNativeFlag: access flags is 0x%x", access_flags);
-    int old_access_flags = access_flags;
+    uint32_t old_access_flags = access_flags;
     if (isNative) {
-        // TODO: Temporally disable native for compatible with Android R,
-        //       but we should keep this and MarkInitializedClassVisiblyInitialized
-        if (SDKVersion < __ANDROID_API_R__)
-            access_flags |= kAccNative;
+        access_flags |= kAccNative;
         if (SDKVersion >= __ANDROID_API_Q__) {
             // On API 29 whether to use the fast path or not is cached in the ART method structure
             access_flags &= ~kAccFastInterpreterToInterpreterInvoke;
         }
     } else {
-        if (SDKVersion < __ANDROID_API_R__)
-            access_flags &= ~kAccNative;
+        access_flags &= ~kAccNative;
     }
     if (access_flags != old_access_flags) {
         setFlags(method, access_flags);
@@ -184,7 +180,8 @@ static int replaceMethod(void *fromMethod, void *toMethod, int isBackup) {
     }
 
     // set the target method to native so that Android O wouldn't invoke it with interpreter
-    if (SDKVersion >= __ANDROID_API_O__) {
+    // for Q or above, we use ShouldUseInterpreterEntrypoint
+    if (SDKVersion >= __ANDROID_API_O__ && SDKVersion < __ANDROID_API_Q__) {
         setNativeFlag(fromMethod, true);
     }
 

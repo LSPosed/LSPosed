@@ -1,5 +1,8 @@
 package com.elderdrivers.riru.edxp.core.yahfa;
 
+import android.os.Build;
+
+import com.elderdrivers.riru.edxp.art.ClassLinker;
 import com.elderdrivers.riru.edxp.art.Heap;
 import com.elderdrivers.riru.edxp.core.Yahfa;
 import com.elderdrivers.riru.edxp.util.Utils;
@@ -15,6 +18,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import de.robv.android.xposed.PendingHooks;
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 
 public class HookMain {
@@ -23,12 +28,6 @@ public class HookMain {
 
     public static void addHookItemWhiteList(String className) {
         hookItemWhiteList.add(className);
-    }
-
-    private static List<Object> hookedList = new CopyOnWriteArrayList();
-
-    public static boolean hooked(Member target) {
-        return hookedList.contains(target);
     }
 
     public static void doHookDefault(ClassLoader patchClassLoader, ClassLoader originClassLoader, String hookInfoClassName) {
@@ -97,11 +96,11 @@ public class HookMain {
         backupAndHook(findMethod(targetClass, methodName, methodSig), hook, backup);
     }
 
-    public static void hook(Object target, Method hook) {
+    public static void hook(Member target, Method hook) {
         backupAndHook(target, hook, null);
     }
 
-    public static void backupAndHook(Object target, Method hook, Method backup) {
+    public static void backupAndHook(Member target, Method hook, Method backup) {
         Utils.logD(String.format("target=%s, hook=%s, backup=%s", target, hook, backup));
         if (target == null) {
             throw new IllegalArgumentException("null target method");
@@ -132,11 +131,12 @@ public class HookMain {
         if (!Yahfa.backupAndHookNative(target, hook, backup)) {
             throw new RuntimeException("Failed to hook " + target + " with " + hook);
         } else {
-            hookedList.add(target);
+            Yahfa.recordHooked(target);
+            Yahfa.recordHooked(backup);
         }
     }
 
-    public static Object findMethod(Class cls, String methodName, String methodSig) {
+    public static Member findMethod(Class cls, String methodName, String methodSig) {
         if (cls == null) {
             throw new IllegalArgumentException("null class");
         }

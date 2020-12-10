@@ -10,6 +10,8 @@ namespace edxp {
 
     static std::set<std::string> class_descs_;
 
+    static std::set<void*> hooked_methods_;
+
     bool IsClassPending(const char *class_desc) {
         return class_descs_.find(class_desc) != class_descs_.end();
     }
@@ -25,6 +27,14 @@ namespace edxp {
 
     void RegisterPendingHooks(JNIEnv *env) {
         REGISTER_EDXP_NATIVE_METHODS("de.robv.android.xposed.PendingHooks");
+    }
+
+    bool isHooked(void* art_method) {
+        return hooked_methods_.count(art_method);
+    }
+
+    void recordHooked(void * art_method) {
+        hooked_methods_.insert(art_method);
     }
 
 }

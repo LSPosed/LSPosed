@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import com.elderdrivers.riru.edxp.core.Yahfa;
 import com.elderdrivers.riru.edxp.core.yahfa.HookMain;
 import com.elderdrivers.riru.edxp.util.ProxyClassLoader;
+import com.elderdrivers.riru.edxp.yahfa.BuildConfig;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -183,11 +184,11 @@ public class HookerDexMaker {
             mAppClassLoader = appClassLoader;
             mAppClassLoader = new ProxyClassLoader(mAppClassLoader, getClass().getClassLoader());
         }
-        doMake();
+        doMake(member.getDeclaringClass().getName());
     }
 
     @TargetApi(Build.VERSION_CODES.O)
-    private void doMake() throws Exception {
+    private void doMake(String hookedClassName) throws Exception {
         final boolean useInMemoryCl = TextUtils.isEmpty(mDexDirPath);
         mDexMaker = new DexMaker();
         ClassLoader loader;
@@ -209,6 +210,8 @@ public class HookerDexMaker {
             loader = mDexMaker.generateAndLoad(mAppClassLoader, new File(mDexDirPath), className);
         } else {
             // do everything in memory
+            if(BuildConfig.DEBUG)
+                className = className + hookedClassName.replace(".", "/");
             doGenerate(className);
             byte[] dexBytes = mDexMaker.generate();
             loader = new InMemoryDexClassLoader(ByteBuffer.wrap(dexBytes), mAppClassLoader);

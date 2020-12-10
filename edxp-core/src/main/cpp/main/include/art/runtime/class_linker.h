@@ -37,7 +37,7 @@ namespace art {
             art::mirror::Class clazz(clazz_ptr);
             std::string storage;
             const char *desc = clazz.GetDescriptor(&storage);
-            bool should_intercept = edxp::IsClassPending(desc);
+            bool should_intercept = edxp::IsClassPending(desc) || std::string(desc).rfind("LEdHooker_") == 0;
             if (UNLIKELY(should_intercept)) {
                 edxp::Context::GetInstance()->CallOnPreFixupStaticTrampolines(clazz_ptr);
             }
@@ -49,9 +49,8 @@ namespace art {
 
         CREATE_HOOK_STUB_ENTRIES(bool, ShouldUseInterpreterEntrypoint, void *art_method,
                                  const void *quick_code) {
-            // TODO check hooked
-            bool hooked = false;
-            if (hooked && quick_code != nullptr) {
+            if (UNLIKELY(edxp::isHooked(art_method) && quick_code != nullptr)) {
+                LOGD("Hooked method %p, no use interpreter", art_method);
                 return false;
             }
             return ShouldUseInterpreterEntrypointBackup(art_method, quick_code);
@@ -122,8 +121,8 @@ namespace art {
 
             // Sandhook will hook ShouldUseInterpreterEntrypoint, so we just skip
             // edxp::Context::GetInstance()->GetVariant() will not work here, so we use smh dirty hack
-            if (api_level >= __ANDROID_API_R__ &&
-                access(edxp::kLibSandHookNativePath.c_str(), F_OK) == -1) {
+            if (api_level >= __ANDROID_API_Q__ &&
+                edxp::path_exists(edxp::kLibSandHookNativePath)) {
                 LOGD("Not sandhook, installing _ZN3art11ClassLinker30ShouldUseInterpreterEntrypointEPNS_9ArtMethodEPKv");
                 HOOK_FUNC(ShouldUseInterpreterEntrypoint,
                           "_ZN3art11ClassLinker30ShouldUseInterpreterEntrypointEPNS_9ArtMethodEPKv");

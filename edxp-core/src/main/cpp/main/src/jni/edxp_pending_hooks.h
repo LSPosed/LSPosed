@@ -9,4 +9,8 @@ namespace edxp {
 
     void RegisterPendingHooks(JNIEnv *);
 
+    bool isHooked(void* art_method);
+
+    void recordHooked(void* art_method);
+
 } // namespace edxp
