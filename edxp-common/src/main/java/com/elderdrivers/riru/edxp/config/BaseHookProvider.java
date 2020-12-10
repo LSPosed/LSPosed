@@ -48,7 +48,7 @@ public abstract class BaseHookProvider implements HookProvider {
 
     @Override
     public boolean methodHooked(Member target) {
-        return Yahfa.isHooked((Method)target);
+        return Yahfa.isHooked(target);
     }
 
     @Override
