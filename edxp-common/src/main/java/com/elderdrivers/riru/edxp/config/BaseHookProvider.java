@@ -1,12 +1,10 @@
 package com.elderdrivers.riru.edxp.config;
 
 import com.elderdrivers.riru.edxp.core.Yahfa;
-import com.elderdrivers.riru.edxp.core.yahfa.HookMain;
 import com.elderdrivers.riru.edxp.deopt.PrebuiltMethodsDeopter;
 import com.elderdrivers.riru.edxp.hook.HookProvider;
 
 import java.lang.reflect.Member;
-import java.lang.reflect.Method;
 
 public abstract class BaseHookProvider implements HookProvider {
 

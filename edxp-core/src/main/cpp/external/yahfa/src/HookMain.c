@@ -16,7 +16,6 @@ static int OFFSET_access_flags_in_ArtMethod;
 static uint32_t kAccNative = 0x0100;
 static uint32_t kAccCompileDontBother = 0x01000000;
 static uint32_t kAccFastInterpreterToInterpreterInvoke = 0x40000000;
-static uint32_t kAccPreCompiled = 0x00200000;
 
 static jfieldID fieldArtMethod = NULL;
 
@@ -285,30 +284,5 @@ jboolean Java_lab_galaxy_yahfa_HookMain_backupAndHookNative(JNIEnv *env, jclass 
         return JNI_TRUE;
     } else {
         return JNI_FALSE;
-    }
-}
-
-static void *getResolvedMethodsAddr(JNIEnv *env, jobject hook) {
-    // get backup class
-    jclass methodClass = (*env)->FindClass(env, "java/lang/reflect/Method");
-    jmethodID getClassMid = (*env)->GetMethodID(env, methodClass, "getDeclaringClass",
-                                                "()Ljava/lang/Class;");
-    jclass backupClass = (*env)->CallObjectMethod(env, hook, getClassMid);
-    // get dexCache of backup class
-    jclass classClass = (*env)->FindClass(env, "java/lang/Class");
-    jfieldID dexCacheFid = (*env)->GetFieldID(env, classClass, "dexCache", "Ljava/lang/Object;");
-    jobject dexCacheObj = (*env)->GetObjectField(env, backupClass, dexCacheFid);
-    // get resolvedMethods address
-    jclass dexCacheClass = (*env)->GetObjectClass(env, dexCacheObj);
-    if (SDKVersion >= __ANDROID_API_N__) {
-        jfieldID resolvedMethodsFid = (*env)->GetFieldID(env, dexCacheClass, "resolvedMethods",
-                                                         "J");
-        return (void *) (*env)->GetLongField(env, dexCacheObj, resolvedMethodsFid);
-    } else if (SDKVersion >= __ANDROID_API_L__) {
-        LOGE("this should has been done in java world: %d", SDKVersion);
-        return 0;
-    } else {
-        LOGE("not compatible with SDK %d", SDKVersion);
-        return 0;
     }
 }

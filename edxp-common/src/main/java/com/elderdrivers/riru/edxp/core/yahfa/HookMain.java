@@ -1,8 +1,5 @@
 package com.elderdrivers.riru.edxp.core.yahfa;
 
-import android.os.Build;
-
-import com.elderdrivers.riru.edxp.art.ClassLinker;
 import com.elderdrivers.riru.edxp.art.Heap;
 import com.elderdrivers.riru.edxp.core.Yahfa;
 import com.elderdrivers.riru.edxp.util.ClassUtils;
@@ -15,12 +12,8 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
 
-import de.robv.android.xposed.PendingHooks;
-import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 
 public class HookMain {

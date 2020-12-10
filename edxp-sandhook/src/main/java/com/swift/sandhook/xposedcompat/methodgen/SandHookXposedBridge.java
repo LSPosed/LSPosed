@@ -6,6 +6,7 @@ import android.os.Trace;
 import android.util.Log;
 
 import com.elderdrivers.riru.edxp.config.ConfigManager;
+import com.elderdrivers.riru.edxp.core.Yahfa;
 import com.elderdrivers.riru.edxp.util.ClassLoaderUtils;
 import com.elderdrivers.riru.edxp.util.FileUtils;
 import com.swift.sandhook.SandHook;
@@ -56,6 +57,8 @@ public final class SandHookXposedBridge {
             DexLog.w("already hook method:" + hookMethod.toString());
             return;
         }
+
+        Yahfa.recordHooked(hookMethod);  // in case static method got reset.
 
         try {
             if (dexPathInited.compareAndSet(false, true)) {
