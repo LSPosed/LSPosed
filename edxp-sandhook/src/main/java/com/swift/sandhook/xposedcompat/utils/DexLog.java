@@ -2,6 +2,8 @@ package com.swift.sandhook.xposedcompat.utils;
 
 import android.util.Log;
 
+import com.elderdrivers.riru.edxp.sandhook.BuildConfig;
+
 import java.lang.reflect.Member;
 
 
@@ -9,7 +11,7 @@ public class DexLog {
 
     public static final String TAG = "SandXposed";
 
-    public static volatile boolean DEBUG = false;
+    public static volatile boolean DEBUG = BuildConfig.DEBUG;
 
     public static int v(String s) {
         return Log.v(TAG, s);
