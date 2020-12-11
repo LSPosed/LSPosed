@@ -26,9 +26,9 @@ void ArtMethod::tryDisableInline() {
 }
 
 void ArtMethod::disableInterpreterForO() {
-    if (SDK_INT >= ANDROID_O && SDK_INT < ANDROID_R && DEBUG) {
+    /*if (SDK_INT >= ANDROID_O && SDK_INT < ANDROID_R && DEBUG) {
         setNative();
-    }
+    }*/
 }
 
 void ArtMethod::disableFastInterpreterForQ() {
