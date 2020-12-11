@@ -1,5 +1,4 @@
 #include "jni.h"
-#include <string.h>
 #include <sys/mman.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -27,6 +26,10 @@ static inline void write32(void *addr, uint32_t value) {
 
 static inline void *readAddr(void *addr) {
     return *((void **) addr);
+}
+
+static inline void writeAddr(void *addr, void *value) {
+    *((void **)addr) = value;
 }
 
 void Java_lab_galaxy_yahfa_HookMain_init(JNIEnv *env, jclass clazz, jint sdkVersion) {
@@ -142,18 +145,17 @@ static int replaceMethod(void *fromMethod, void *toMethod, int isBackup) {
          newEntrypoint
     );
     if (newEntrypoint) {
-        memcpy((char *) fromMethod + OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod,
-               &newEntrypoint,
-               pointer_size);
+        writeAddr((char *) fromMethod + OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod,
+                newEntrypoint);
     } else {
         LOGE("failed to allocate space for trampoline of target method");
         return 1;
     }
 
     if (OFFSET_entry_point_from_interpreter_in_ArtMethod != 0) {
-        memcpy((char *) fromMethod + OFFSET_entry_point_from_interpreter_in_ArtMethod,
-               (char *) toMethod + OFFSET_entry_point_from_interpreter_in_ArtMethod,
-               pointer_size);
+        void *interpEntrypoint = readAddr((char *) toMethod + OFFSET_entry_point_from_interpreter_in_ArtMethod);
+        writeAddr((char *) fromMethod + OFFSET_entry_point_from_interpreter_in_ArtMethod,
+                interpEntrypoint);
     }
 
     hookCount += 1;
