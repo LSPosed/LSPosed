@@ -1,11 +1,11 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion targetSdkVersion
+    compileSdkVersion androidCompileSdkVersion.toInteger()
 
     defaultConfig {
-        minSdkVersion minSdkVersion
-        targetSdkVersion targetSdkVersion
+        minSdkVersion androidMinSdkVersion.toInteger()
+        targetSdkVersion androidTargetSdkVersion.toInteger()
         versionCode 1
         versionName "1.0"
 
@@ -47,14 +47,12 @@ afterEvaluate {
         task("copySandHook${variantNameCapped}LibraryToMagiskTemplate") {
             def libPathRelease = "${buildDir}/intermediates/cmake/${variantNameLowered}/obj"
             doLast {
-                project.logger.lifecycle(libPathRelease)
                 copy {
                     include "libsandhook.edxp.so"
                     from "${libPathRelease}/armeabi-v7a"
                     into "${zipPathMagiskReleasePath}/system/lib"
                 }
                 copy {
-                    project.logger.lifecycle(zipPathMagiskReleasePath)
                     include "libsandhook.edxp.so"
                     from "${libPathRelease}/arm64-v8a"
                     into "${zipPathMagiskReleasePath}/system/lib64"

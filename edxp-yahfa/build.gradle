@@ -8,8 +8,8 @@ android {
 
     defaultConfig {
         applicationId "com.elderdrivers.riru.edxp.yahfa"
-        minSdkVersion minSdkVersion
-        targetSdkVersion targetSdkVersion
+        minSdkVersion androidMinSdkVersion.toInteger()
+        targetSdkVersion androidTargetSdkVersion.toInteger()
         versionCode 1
         versionName "1.0"
         multiDexEnabled false
