@@ -57,17 +57,23 @@ afterEvaluate {
         def variantNameCapped = variant.name.capitalize()
         def variantNameLowered = variant.name.toLowerCase()
 
-        task("copyDex${variantNameCapped}", type: Copy) {
+        task "copyDex${variantNameCapped}" {
             dependsOn "assemble${variantNameCapped}"
             dependsOn tasks.getByPath(":edxp-common:copyCommonProperties")
             def dexOutPath = variant.name.contains("release") ?
                     "${buildDir}/intermediates/dex/${variantNameLowered}/minify${variantNameCapped}WithR8" :
                     "${buildDir}/intermediates/dex/${variantNameLowered}/mergeDex${variantNameCapped}"
-            from (dexOutPath){
-                rename("classes.dex", "edxp.dex")
-            }
-            destinationDir file(templateRootPath + "system/framework/")
+
             outputs.upToDateWhen { false }
+            doLast {
+                project.logger.lifecycle("copyDex${variantNameCapped}")
+                copy {
+                    from (dexOutPath){
+                        rename("classes.dex", "edxp.dex")
+                    }
+                    into file(zipPathMagiskReleasePath + "/system/framework/")
+                }
+            }
         }
 
     }

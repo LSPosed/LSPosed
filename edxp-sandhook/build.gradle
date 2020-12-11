@@ -59,19 +59,21 @@ afterEvaluate {
         def variantNameLowered = variant.name.toLowerCase()
         def myTemplatePath = "${projectDir}/template_override/"
 
-        task("copyDex${variantNameCapped}", type: Copy) {
+        task "copyDex${variantNameCapped}" {
             dependsOn "assemble${variantNameCapped}"
             dependsOn tasks.getByPath(":edxp-common:copyCommonProperties")
             dependsOn tasks.getByPath(":sandhook-hooklib:copySandHook${variantNameCapped}LibraryToMagiskTemplate")
             def dexOutPath = variant.name.contains("release") ?
                     "${buildDir}/intermediates/dex/${variantNameLowered}/minify${variantNameCapped}WithR8" :
                     "${buildDir}/intermediates/dex/${variantNameLowered}/mergeDex${variantNameCapped}"
-            from (dexOutPath){
-                rename("classes.dex", "edxp.dex")
-            }
-            destinationDir file(zipPathMagiskReleasePath + "/system/framework/")
-            outputs.upToDateWhen { false }
-            doLast {
+            doLast  {
+                project.logger.lifecycle("copyDex${variantNameCapped}")
+                copy {
+                    from(dexOutPath) {
+                        rename "classes.dex", "edxp.dex"
+                    }
+                    into myTemplatePath + "system/framework/"
+                }
                 copy {
                     from file(myTemplatePath)
                     into file(zipPathMagiskReleasePath)

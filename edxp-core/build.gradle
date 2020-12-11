@@ -124,11 +124,9 @@ afterEvaluate {
             def authorList = property("${backendLowered}" + "_authors")
             def magiskModuleId = property("${backendLowered}" + "_module_id")
 
-            project.logger.lifecycle("delete file")
             delete file(zipPathMagiskReleasePath)
 
             def prepareJarsTask = task("prepareJars${backendCapped}${variantCapped}") {
-                project.logger.lifecycle("prepareJarsTask")
                 dependsOn cleanTemplate
                 dependsOn tasks.getByPath(":dexmaker:copyDex${variantCapped}")
                 dependsOn tasks.getByPath(":dalvikdx:copyDex${variantCapped}")
