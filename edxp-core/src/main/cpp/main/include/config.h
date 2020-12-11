@@ -37,15 +37,12 @@ inline constexpr bool is64 = Is64();
     static const auto kLibArtName = "libart.so"s;
     static const auto kLibFwName = "libandroidfw.so"s;
     static const auto kLibSandHookName = "libsandhook.edxp.so"s;
-    static const auto kLibDlName = "libdl.so"s;
-    static const auto kLibSandHookNativeName = "libsandhook-native.so"s;
 
     static const auto kLibBasePath =
             LP_SELECT("/system/lib/"s,
                       "/system/lib64/"s);
     static const auto kLibArtLegacyPath = kLibBasePath + kLibArtName;
     static const auto kLibSandHookPath = kLibBasePath + kLibSandHookName;
-    static const auto kLibSandHookNativePath = kLibBasePath + kLibSandHookNativeName;
     static const auto kLibFwPath = kLibBasePath + kLibFwName;
 
     inline constexpr const char *const BoolToString(bool b) {
