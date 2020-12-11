@@ -38,6 +38,8 @@ only_commits:
     - edxp-sandhook/
     - edxp-yahfa/
     - hiddenapi-stubs/
+    - sandhook-annotation/
+    - sandhook-hooklib/
     - xposed-bridge/
     - build.gradle
     - settings.gradle
