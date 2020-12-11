@@ -30,23 +30,9 @@ extern "C" {
 
     void (*profileSaver_ForceProcessProfiles)() = nullptr;
 
-    //for Android R
-    void *jniIdManager = nullptr;
-    ArtMethod *(*origin_DecodeArtMethodId)(void *thiz, jmethodID jmethodId) = nullptr;
-    ArtMethod *replace_DecodeArtMethodId(void *thiz, jmethodID jmethodId) {
-        jniIdManager = thiz;
-        return origin_DecodeArtMethodId(thiz, jmethodId);
-    }
+    jfieldID fieldArtMethod = nullptr;
 
-    bool (*origin_ShouldUseInterpreterEntrypoint)(ArtMethod *artMethod, const void* quick_code) = nullptr;
-    bool replace_ShouldUseInterpreterEntrypoint(ArtMethod *artMethod, const void* quick_code) {
-        if (SandHook::TrampolineManager::get().methodHooked(artMethod) && quick_code != nullptr) {
-            return false;
-        }
-        return origin_ShouldUseInterpreterEntrypoint(artMethod, quick_code);
-    }
-
-    // paths
+// paths
     const char* art_lib_path;
     const char* jit_lib_path;
 
@@ -139,32 +125,9 @@ extern "C" {
             profileSaver_ForceProcessProfiles = reinterpret_cast<void (*)()>(getSymCompat(art_lib_path, "_ZN3art12ProfileSaver20ForceProcessProfilesEv"));
         }
 
-        //init native hook lib
-        void* native_hook_handle = dlopen("libsandhook-native.so", RTLD_LAZY | RTLD_GLOBAL);
-        if (native_hook_handle) {
-            hook_native = reinterpret_cast<void *(*)(void *, void *)>(dlsym(native_hook_handle, "SandInlineHook"));
-        } else {
-            hook_native = reinterpret_cast<void *(*)(void *, void *)>(getSymCompat(
-                    "libsandhook-native.so", "SandInlineHook"));
-        }
-
-        if (SDK_INT >= ANDROID_R && hook_native) {
-            const char *symbol_decode_method = sizeof(void*) == 8 ? "_ZN3art3jni12JniIdManager15DecodeGenericIdINS_9ArtMethodEEEPT_m" : "_ZN3art3jni12JniIdManager15DecodeGenericIdINS_9ArtMethodEEEPT_j";
-            void *decodeArtMethod = getSymCompat(art_lib_path, symbol_decode_method);
-            if (art_lib_path != nullptr) {
-                origin_DecodeArtMethodId = reinterpret_cast<ArtMethod *(*)(void *,
-                                                                           jmethodID)>(hook_native(
-                        decodeArtMethod,
-                        reinterpret_cast<void *>(replace_DecodeArtMethodId)));
-            }
-            void *shouldUseInterpreterEntrypoint = getSymCompat(art_lib_path,
-                                                                "_ZN3art11ClassLinker30ShouldUseInterpreterEntrypointEPNS_9ArtMethodEPKv");
-            if (shouldUseInterpreterEntrypoint != nullptr) {
-                origin_ShouldUseInterpreterEntrypoint = reinterpret_cast<bool (*)(ArtMethod *,
-                                                                                  const void *)>(hook_native(
-                        shouldUseInterpreterEntrypoint,
-                        reinterpret_cast<void *>(replace_ShouldUseInterpreterEntrypoint)));
-            }
+        if (SDK_INT >=ANDROID_R) {
+            auto classExecutable = env->FindClass("java/lang/reflect/Executable");
+            fieldArtMethod = env->GetFieldID(classExecutable, "artMethod", "J");
         }
 
     }
@@ -283,8 +246,7 @@ extern "C" {
     void fake_jit_update_options(void* handle) {
         //do nothing
         LOGW("android q: art request update compiler options");
-        return;
-    }
+   }
 
     bool replaceUpdateCompilerOptionsQ() {
         if (SDK_INT < ANDROID_Q)
@@ -349,16 +311,10 @@ extern "C" {
     }
 
     ArtMethod* getArtMethod(JNIEnv *env, jobject method) {
-        jmethodID methodId = env->FromReflectedMethod(method);
-        if (SDK_INT >= ANDROID_R && isIndexId(methodId)) {
-            if (origin_DecodeArtMethodId == nullptr || jniIdManager == nullptr) {
-                auto res = callStaticMethodAddr(env, "com/swift/sandhook/SandHook", "getArtMethod",
-                                                "(Ljava/lang/reflect/Member;)J", method);
-                return reinterpret_cast<ArtMethod *>(res);
-            } else {
-                return origin_DecodeArtMethodId(jniIdManager, methodId);
-            }
+        if (SDK_INT >= ANDROID_R) {
+            return reinterpret_cast<ArtMethod *>(env->GetLongField(method, fieldArtMethod));
         } else {
+            jmethodID methodId = env->FromReflectedMethod(method);
             return reinterpret_cast<ArtMethod *>(methodId);
         }
     }

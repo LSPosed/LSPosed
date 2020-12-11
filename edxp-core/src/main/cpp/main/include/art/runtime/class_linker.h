@@ -124,13 +124,8 @@ namespace art {
             HOOK_FUNC(FixupStaticTrampolines,
                       "_ZN3art11ClassLinker22FixupStaticTrampolinesENS_6ObjPtrINS_6mirror5ClassEEE");
 
-            // Sandhook will hook ShouldUseInterpreterEntrypoint, so we just skip
-            // edxp::Context::GetInstance()->GetVariant() will not work here, so we use smh dirty hack
-            if (!edxp::path_exists(edxp::kLibSandHookNativePath)) {
-                LOGD("Not sandhook, installing _ZN3art11ClassLinker30ShouldUseInterpreterEntrypointEPNS_9ArtMethodEPKv");
-                HOOK_FUNC(ShouldUseInterpreterEntrypoint,
-                          "_ZN3art11ClassLinker30ShouldUseInterpreterEntrypointEPNS_9ArtMethodEPKv");
-            }
+            HOOK_FUNC(ShouldUseInterpreterEntrypoint,
+                      "_ZN3art11ClassLinker30ShouldUseInterpreterEntrypointEPNS_9ArtMethodEPKv");
 
             // MakeInitializedClassesVisiblyInitialized will cause deadlock
             // IsQuickToInterpreterBridge cannot be hooked by Dobby yet
