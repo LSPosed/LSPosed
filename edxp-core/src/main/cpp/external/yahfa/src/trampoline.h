@@ -16,6 +16,6 @@ int doInitHookCap(unsigned int cap);
 void setupTrampoline(uint8_t offset);
 void *genTrampoline(void *toMethod, void *entrypoint);
 
-#define DEFAULT_CAP 1 //size of each trampoline area would be no more than 4k Bytes(one page)
+#define DEFAULT_CAP 4 //size of each trampoline area would be no more than 4k Bytes(one page)
 
 #endif //YAHFA_TAMPOLINE_H

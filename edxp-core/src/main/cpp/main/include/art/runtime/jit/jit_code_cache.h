@@ -9,7 +9,7 @@ namespace art {
         CREATE_HOOK_STUB_ENTRIES(const void*, GetSavedEntryPointOfPreCompiledMethod, void *thiz,
                                  void *art_method) {
             if (UNLIKELY(edxp::isHooked(art_method))) {
-                LOGD("Found hooked method, return entrypoint as jit entrypoint");
+                LOGD("Found hooked method %p, return entrypoint as jit entrypoint", art_method);
                 return getEntryPoint(art_method);
             }
             return GetSavedEntryPointOfPreCompiledMethodBackup(thiz, art_method);

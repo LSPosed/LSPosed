@@ -9,13 +9,11 @@
 #include "HookMain.h"
 
 int SDKVersion;
-static int OFFSET_entry_point_from_interpreter_in_ArtMethod;
-static int OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod;
-static int OFFSET_ArtMehod_in_Object;
-static int OFFSET_access_flags_in_ArtMethod;
-static uint32_t kAccNative = 0x0100;
+static uint32_t OFFSET_entry_point_from_interpreter_in_ArtMethod;
+static uint32_t OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod;
+static uint32_t OFFSET_ArtMehod_in_Object;
+static uint32_t OFFSET_access_flags_in_ArtMethod;
 static uint32_t kAccCompileDontBother = 0x01000000;
-static uint32_t kAccFastInterpreterToInterpreterInvoke = 0x40000000;
 
 static jfieldID fieldArtMethod = NULL;
 
@@ -32,7 +30,6 @@ static inline void *readAddr(void *addr) {
 }
 
 void Java_lab_galaxy_yahfa_HookMain_init(JNIEnv *env, jclass clazz, jint sdkVersion) {
-    int i;
     SDKVersion = sdkVersion;
     jclass classExecutable;
     LOGI("init to SDK %d", sdkVersion);
