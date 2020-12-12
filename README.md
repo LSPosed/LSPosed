@@ -1,15 +1,16 @@
 # EdXposed Framework
 
-[![Latest builds](https://ci.appveyor.com/api/projects/status/qu3vj1d64nqia1b8/branch/master?svg=true)](https://ci.appveyor.com/project/ElderDrivers/edxposed/branch/master) [![中文说明文档](art/README_CN.png)](README_CN.md)
+[![Latest builds](https://ci.appveyor.com/api/projects/status/qu3vj1d64nqia1b8/branch/master?svg=true)](https://ci.appveyor.com/project/ElderDrivers/edxposed/branch/master) ![Android CI](https://github.com/ElderDrivers/EdXposed/workflows/Android%20CI/badge.svg)[![中文说明文档](art/README_CN.png)](README_CN.md)
 
 ## Introduction 
 
-A Riru module trying to provide an ART hooking framework (initially for Android Pie) which delivers consistent APIs with the OG Xposed, leveraging YAHFA (or SandHook) hooking framework, supports Android 8.0 ~ **10**.
+A Riru module trying to provide an ART hooking framework (initially for Android Pie) which delivers consistent APIs with the OG Xposed, leveraging YAHFA (or SandHook) hooking framework, supports Android 8.0 ~ **11**.
 
 > Xposed is a framework for modules that can change the behavior of the system and apps without touching any APKs. That's great because it means that modules can work for different versions and even ROMs without any changes (as long as the original code was not changed too much). It's also easy to undo. As all changes are done in the memory, you just need to deactivate the module and reboot to get your original system back. There are many other advantages, but here is just one more: Multiple modules can do changes to the same part of the system or app. With modified APKs, you to decide for one. No way to combine them, unless the author builds multiple APKs with different combinations.
 
 ## Supported Versions
 
+- Android R (11)[sdk30] (Experimental)
 - Android Q (10)[sdk29]
 - Android Pie (9)[sdk28]
 - Android Oreo (8.x)[sdk26/27]
@@ -29,7 +30,9 @@ and zip binaries can be downloaded from [here](http://gnuwin32.sourceforge.net/p
 
 ## Install
 
-1. Install Magisk v19+ (for Huawei/Honor or OnePlus 7T/7TPro device, need Magisk v20.2+)
+### For latest Canary build, you need Magisk v21+ and Riru-Core v23+. 
+
+1. Install Magisk v19+ (for Huawei/Honor or OnePlus 7T/7TPro device, Magisk v20.2+ is required)
 2. Install [Riru-Core](https://github.com/RikkaApps/Riru/releases) v19+ from Magisk repo.
 3. [Download](#download) and install EdXposed in Magisk Manager or recovery mode.
 4. Install [companion application](#companion-applications).

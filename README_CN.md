@@ -1,6 +1,6 @@
 # EdXposed Framework
 
-[![最新构建](https://ci.appveyor.com/api/projects/status/qu3vj1d64nqia1b8/branch/master?svg=true)](https://ci.appveyor.com/project/ElderDrivers/edxposed/branch/master) [![English](art/README_EN.png)](README.md)
+[![最新构建](https://ci.appveyor.com/api/projects/status/qu3vj1d64nqia1b8/branch/master?svg=true)](https://ci.appveyor.com/project/ElderDrivers/edxposed/branch/master) ![Android CI](https://github.com/ElderDrivers/EdXposed/workflows/Android%20CI/badge.svg) [![English](art/README_EN.png)](README.md)
 
 ## Introduction 
 
@@ -13,6 +13,7 @@
 - Android Oreo (8.x, sdk26/27)
 - Android Pie (9, sdk28)
 - Android Q (10, sdk29)
+- Android R (11, sdk30) (实验性)
 
 如果你使用 Android Nougat (7.x) 或更低版本, 请使用原版的 Xposed 框架
 
@@ -28,6 +29,8 @@ zip 可执行文件可以在 [这里](http://gnuwin32.sourceforge.net/packages/z
 3. 经由 Magisk Manager 或在恢复模式(Recovery)中刷入
 
 ## 安装
+
+### 对于最新金丝雀构建，你需要Magisk v21+和Riru-Core v23+
 
 1. 安装 Magisk v19+ (对于 华为 / 荣耀 或 一加 7T / 7TPro 设备, 需要 Magisk v20.2+)
 2. 在 Magisk 仓库中安装 [Riru-Core](https://github.com/RikkaApps/Riru/releases) v19 或更高版本.
