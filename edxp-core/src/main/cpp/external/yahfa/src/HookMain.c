@@ -115,17 +115,6 @@ void *getEntryPoint(void* method) {
 }
 
 static int replaceMethod(void *fromMethod, void *toMethod, int isBackup) {
-    if (hookCount >= hookCap) {
-        LOGI("not enough capacity. Allocating...");
-        if (doInitHookCap(DEFAULT_CAP)) {
-            LOGE("cannot hook method");
-            return 1;
-        }
-        LOGI("Allocating done");
-    }
-
-    LOGI("replace method from %p to %p", fromMethod, toMethod);
-
     // replace entry point
     void *newEntrypoint = NULL;
     if(isBackup) {
@@ -157,7 +146,6 @@ static int replaceMethod(void *fromMethod, void *toMethod, int isBackup) {
                pointer_size);
     }
 
-    hookCount += 1;
     return 0;
 }
 
