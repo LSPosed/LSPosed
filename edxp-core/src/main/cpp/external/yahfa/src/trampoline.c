@@ -16,6 +16,10 @@
 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
+static _Thread_local unsigned char *trampolineCode; // place where trampolines are saved
+
+_Thread_local unsigned int hookCap = 1;
+_Thread_local unsigned int hookCount = 1;
 
 // trampoline:
 // 1. set eax/rdi/r0/x0 to the hook ArtMethod addr
@@ -123,22 +127,22 @@ unsigned char trampolineForBackup[] = {
 
 #endif
 
+// trampoline size required for each hook
+static unsigned int trampolineSize = roundUpToPtrSize(MAX(sizeof(trampoline), sizeof(trampolineForBackup)));
+
 static inline void FlushCache(void *addr, size_t size) {
     __builtin___clear_cache((char *) addr, (char *) ((uintptr_t) addr + size));
 }
 
 void *genTrampoline(void *toMethod, void *entrypoint) {
-    size_t size = entrypoint == NULL ? sizeof(trampoline) : sizeof(trampolineForBackup);
-
-    // TODO: make use of thread_local to avoid frequent memory allocate
-    void *targetAddr = doInitHookCap(size);
+    unsigned char *targetAddr = trampolineCode + trampolineSize * hookCount;
 
     if (targetAddr == NULL) return NULL;
 
     if (entrypoint != NULL) {
-        memcpy(targetAddr, trampolineForBackup, size);
+        memcpy(targetAddr, trampolineForBackup, sizeof(trampolineForBackup));
     } else {
-        memcpy(targetAddr, trampoline, size);
+        memcpy(targetAddr, trampoline, sizeof(trampoline)); // do not use trampolineSize since it's a rounded size
     }
 
     // replace with the actual ArtMethod addr
@@ -180,7 +184,7 @@ void *genTrampoline(void *toMethod, void *entrypoint) {
 #else
 #error Unsupported architecture
 #endif
-    FlushCache(targetAddr, size);
+    FlushCache(targetAddr, trampolineSize);
 
     return targetAddr;
 }
@@ -200,17 +204,20 @@ void setupTrampoline(uint8_t offset) {
 #endif
 }
 
-void *doInitHookCap(size_t size) {
-    if (size == 0) {
-        LOGE("invalid capacity: %zx", size);
-        return NULL;
+int doInitHookCap() {
+    if (hookCap > hookCount) {
+        return 0;
     }
-    unsigned char *buf = mmap(NULL, size, PROT_READ | PROT_WRITE | PROT_EXEC,
+    hookCap *= 2;
+    unsigned int allSize = trampolineSize * hookCap;
+    unsigned char *buf = mmap(NULL, allSize, PROT_READ | PROT_WRITE | PROT_EXEC,
                               MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
     if (buf == MAP_FAILED) {
         LOGE("mmap failed, errno = %s", strerror(errno));
-        return NULL;
+        return 1;
     }
-    return buf;
+    hookCount = 0;
+    trampolineCode = buf;
+    return 0;
 }
 
