@@ -7,12 +7,9 @@
 
 extern int SDKVersion;
 
-extern _Thread_local unsigned int hookCap; // capacity for trampolines
-extern _Thread_local unsigned int hookCount; // current count of used trampolines
-
 extern unsigned char trampoline[];
 
-int doInitHookCap();
+void* doInitHookCap(size_t cap);
 void setupTrampoline(uint8_t offset);
 void *genTrampoline(void *toMethod, void *entrypoint);
 

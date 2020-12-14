@@ -118,16 +118,6 @@ void *getEntryPoint(void* method) {
 }
 
 static int replaceMethod(void *fromMethod, void *toMethod, int isBackup) {
-    if (hookCount >= hookCap) {
-        LOGI("not enough capacity. Allocating...");
-        if (doInitHookCap()) {
-            LOGE("cannot hook method");
-            return 1;
-        }
-        LOGI("Allocating done");
-    }
-
-    LOGI("replace method from %p to %p", fromMethod, toMethod);
     // replace entry point
     void *newEntrypoint = NULL;
     if(isBackup) {
@@ -157,8 +147,6 @@ static int replaceMethod(void *fromMethod, void *toMethod, int isBackup) {
         writeAddr((char *) fromMethod + OFFSET_entry_point_from_interpreter_in_ArtMethod,
                 interpEntrypoint);
     }
-
-    hookCount += 1;
 
     return 0;
 }
