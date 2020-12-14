@@ -220,11 +220,11 @@ namespace edxp {
         }
         if (skip_ && !ConfigManager::GetInstance()->IsAppNeedHook("android")) {
             skip_ = true;
-            LOGW("skip injecting into android because it's whitelisted/blacklisted");
+            LOGD("skip injecting into android because it's whitelisted/blacklisted");
         }
         if (!skip_ && app_modules_list_.empty()) {
             skip_ = true;
-            LOGW("skip injecting into android because no module hooks it");
+            LOGD("skip injecting into android because no module hooks it");
         }
         if (!skip_) {
             PreLoadDex(ConfigManager::GetInjectDexPaths());
@@ -354,12 +354,12 @@ namespace edxp {
             skip = true;
         }
         if (!skip && !info_res) {
-            LOGW("skip injecting into %s because it has no data dir", package_name.c_str());
+            LOGD("skip injecting into %s because it has no data dir", package_name.c_str());
             skip = true;
         }
         if (!skip && is_child_zygote) {
             skip = true;
-            LOGW("skip injecting into %s because it's a child zygote", package_name.c_str());
+            LOGD("skip injecting into %s because it's a child zygote", package_name.c_str());
         }
 
         if (!skip && ((app_id >= FIRST_ISOLATED_UID && app_id <= LAST_ISOLATED_UID) ||
@@ -367,18 +367,18 @@ namespace edxp {
                        app_id <= LAST_APP_ZYGOTE_ISOLATED_UID) ||
                       app_id == SHARED_RELRO_UID)) {
             skip = true;
-            LOGW("skip injecting into %s because it's isolated", package_name.c_str());
+            LOGI("skip injecting into %s because it's isolated", package_name.c_str());
         }
 
         if (!skip && !ConfigManager::GetInstance()->IsAppNeedHook(package_name)) {
             skip = true;
-            LOGW("skip injecting xposed into %s because it's whitelisted/blacklisted",
+            LOGD("skip injecting xposed into %s because it's whitelisted/blacklisted",
                  package_name.c_str());
         }
 
         if (!skip && empty_list() && !ConfigManager::GetInstance()->IsInstaller(package_name)) {
             skip = true;
-            LOGW("skip injecting xposed into %s because no module hooks it",
+            LOGD("skip injecting xposed into %s because no module hooks it",
                  package_name.c_str());
         }
         return skip;
