@@ -202,7 +202,7 @@ void *getArtMethod(JNIEnv *env, jobject jmethod) {
         artMethod = (void *) (*env)->FromReflectedMethod(env, jmethod);
     }
 
-    LOGI("ArtMethod: %p", artMethod);
+    LOGI("HookMain: getArtMethod: %p", artMethod);
     return artMethod;
 
 }

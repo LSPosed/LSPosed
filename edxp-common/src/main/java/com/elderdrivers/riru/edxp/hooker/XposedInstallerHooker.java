@@ -4,6 +4,7 @@ import android.app.AndroidAppHelper;
 import android.view.View;
 
 import com.elderdrivers.riru.edxp.config.ConfigManager;
+import com.elderdrivers.riru.edxp.config.EdXpConfigGlobal;
 import com.elderdrivers.riru.edxp.util.Utils;
 
 import java.io.File;
@@ -81,7 +82,8 @@ public class XposedInstallerHooker {
                     }
                 }
             });
-            XposedHelpers.findAndHookMethod("org.meowcat.edxposed.manager.StatusInstallerFragment", classLoader, "getCanonicalFile", File.class, new XC_MethodHook() {
+            Class clazz = XposedHelpers.findClassIfExists("org.meowcat.edxposed.manager.StatusInstallerFragment", classLoader);
+            XposedHelpers.findAndHookMethod(clazz, "getCanonicalFile", File.class, new XC_MethodHook() {
                 @Override
                 protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                     File arg = (File)param.args[0];
@@ -90,6 +92,15 @@ public class XposedInstallerHooker {
                     }
                 }
             });
+
+            // deopt manager
+            Object method = EdXpConfigGlobal.getHookProvider().findMethodNative(
+                    clazz, "onCreateView", "(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;");
+            if (method != null) {
+                EdXpConfigGlobal.getHookProvider().deoptMethodNative(method);
+            } else {
+                Utils.logE("onCreateView not found");
+            }
         } catch (Throwable t) {
             Utils.logE("Could not hook Xposed Installer", t);
         }
