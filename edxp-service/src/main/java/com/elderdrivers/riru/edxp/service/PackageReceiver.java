@@ -81,14 +81,13 @@ public class PackageReceiver {
                 File enabledModules = new File(CONFIG_PATH, uid + "/" + ENABLED_MODULES_LIST_FILENAME);
                 if (!enabledModules.exists()) return result;
                 Scanner scanner = new Scanner(enabledModules);
-                if (scanner.hasNextLine()) {
+                while (scanner.hasNextLine()) {
                     String packageName = scanner.nextLine();
                     PackageInfo info = getPackageInfo(packageName);
-                    if (info != null && isXposedModule(info.applicationInfo)) {
+                    if (info != null && isXposedModule(info.applicationInfo))
                         result.put(packageName, info.applicationInfo.sourceDir);
-                    } else {
-                        Utils.logW(String.format("remove obsolete package %s", packageName));
-                    }
+                    else if (info == null)
+                        result.put(packageName, null);
                 }
             } catch (Throwable e) {
                 Utils.logE("Unable to read enabled modules", e);
@@ -96,25 +95,43 @@ public class PackageReceiver {
             return result;
         }
 
-        private void updateModuleList(int uid, String packageName) {
+        private boolean updateModuleList(int uid, String packageName) {
             Map<String, String> enabledModules = loadEnabledModules(uid);
 
-            if(packageName != null && !enabledModules.containsKey(packageName)) return;
+            if (!enabledModules.containsKey(packageName)) return false;
 
             try {
                 File moduleListFile = new File(CONFIG_PATH, uid + "/" + MODULES_LIST_FILENAME);
-                moduleListFile.createNewFile();
+                File enabledModuleListFile = new File(CONFIG_PATH, uid + "/" + ENABLED_MODULES_LIST_FILENAME);
+                if (moduleListFile.exists() && !moduleListFile.canWrite()) {
+                    moduleListFile.delete();
+                    moduleListFile.createNewFile();
+                }
+                if (enabledModuleListFile.exists() && !enabledModuleListFile.canWrite()) {
+                    enabledModuleListFile.delete();
+                    enabledModuleListFile.createNewFile();
+                }
                 PrintWriter modulesList = new PrintWriter(moduleListFile);
-                PrintWriter enabledModulesList = new PrintWriter(new File(CONFIG_PATH, uid + "/" + ENABLED_MODULES_LIST_FILENAME));
+                PrintWriter enabledModulesList = new PrintWriter(enabledModuleListFile);
                 for (Map.Entry<String, String> module : enabledModules.entrySet()) {
-                    modulesList.println(module.getValue());
-                    enabledModulesList.println(module.getKey());
+                    String apkPath = module.getValue();
+                    if (apkPath != null) {
+                        modulesList.println(module.getValue());
+                        enabledModulesList.println(module.getKey());
+                    } else {
+                        Utils.logI(String.format("remove obsolete package %s", packageName));
+                        File prefsDir = new File(CONFIG_PATH, uid + "/prefs/" + packageName);
+                        for (File childFile : prefsDir.listFiles()) {
+                            childFile.delete();
+                        }
+                    }
                 }
                 modulesList.close();
                 enabledModulesList.close();
             } catch (Throwable e) {
                 Utils.logE("Fail to update module list", e);
             }
+            return true;
         }
 
         @Override
@@ -152,12 +169,14 @@ public class PackageReceiver {
                 @SuppressLint("DiscouragedPrivateApi")
                 Method m = UserManager.class.getDeclaredMethod("getUsers");
                 m.setAccessible(true);
+                boolean res = false;
                 for (Object uh : (List<Object>) m.invoke(um)) {
                     int uid = (int) uh.getClass().getDeclaredField("id").get(uh);
                     Utils.logI("updating uid: " + uid);
-                    updateModuleList(uid, pkgInfo == null ? null : packageName);
+                    res = res || updateModuleList(uid, packageName);
                 }
-                Toast.makeText(context, "EdXposed: Updated " + packageName, Toast.LENGTH_SHORT).show();
+                if (res)
+                    Toast.makeText(context, "EdXposed: Updated " + packageName, Toast.LENGTH_SHORT).show();
             } catch (Throwable e) {
                 Utils.logW("update failed", e);
             }

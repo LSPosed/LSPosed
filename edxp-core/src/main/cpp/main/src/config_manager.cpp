@@ -312,14 +312,8 @@ namespace edxp {
                 fs::permissions(conf_path, fs::perms::owner_all | fs::perms::group_all);
                 fs::permissions(log_path, fs::perms::owner_all | fs::perms::group_all);
                 if (pkg_name == "android") uid = -1;
-                if (const auto &[r_uid, r_gid] = path_own(conf_path);
-                        (uid != -1 && r_uid != uid) || r_gid != 1000u) {
-                    path_chown(conf_path, uid, 1000u, true);
-                }
-                if (const auto &[r_uid, r_gid] = path_own(log_path);
-                        (uid != -1 && r_uid != uid) || r_gid != 1000u) {
-                    path_chown(log_path, uid, 1000u, true);
-                }
+                path_chown(conf_path, uid, 1000u, true);
+                path_chown(log_path, uid, 1000u, true);
 
                 if (pkg_name == kPrimaryInstallerPkgName) {
                     auto installer_pkg_name_path = GetConfigPath("installer");

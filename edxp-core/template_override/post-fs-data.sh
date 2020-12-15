@@ -11,7 +11,7 @@ grep_prop() {
 MODDIR=${0%/*}
 
 RIRU_PATH="/data/adb/riru"
-RIRU_PROP="/data/adb/modules/riru-core/module.prop"
+RIRU_PROP="$(magisk --path)/.magisk/modules/riru-core/module.prop"
 TARGET="${RIRU_PATH}/modules"
 [[ "$(getenforce)" == "Enforcing" ]] && ENFORCE=true || ENFORCE=false
 
