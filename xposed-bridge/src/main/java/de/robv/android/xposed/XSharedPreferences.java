@@ -75,15 +75,18 @@ public final class XSharedPreferences implements SharedPreferences {
             if (m.contains("/" + packageName + "-")) {
                 boolean isModule = false;
                 int xposedminversion = -1;
+                boolean xposedsharedprefs = false;
                 try {
                     ApkParser ap = ApkParser.create(new File(m));
                     isModule = ap.getApkMeta().metaData.containsKey("xposedmodule");
-                    if(isModule)
+                    if(isModule) {
                         xposedminversion = Integer.parseInt(ap.getApkMeta().metaData.get("xposedminversion"));
+                        xposedsharedprefs = ap.getApkMeta().metaData.containsKey("xposedsharedprefs");
+                    }
                 } catch (NumberFormatException | IOException e) {
                     Log.w(TAG, "Apk parser fails: " + e);
                 }
-                newModule = isModule && xposedminversion > 92;
+                newModule = isModule && (xposedminversion > 92 || xposedsharedprefs);
             }
         }
         if (newModule && XposedInit.prefsBasePath != null) {

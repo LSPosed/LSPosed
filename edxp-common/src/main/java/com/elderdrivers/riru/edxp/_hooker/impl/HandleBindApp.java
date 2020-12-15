@@ -1,11 +1,12 @@
 package com.elderdrivers.riru.edxp._hooker.impl;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityThread;
 import android.app.ContextImpl;
 import android.app.LoadedApk;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.content.res.CompatibilityInfo;
 import android.content.res.XResources;
 
@@ -26,7 +27,7 @@ import de.robv.android.xposed.XposedInit;
 public class HandleBindApp extends XC_MethodHook {
 
     @Override
-    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+    protected void beforeHookedMethod(MethodHookParam param) {
         try {
             Hookers.logD("ActivityThread#handleBindApplication() starts");
             ActivityThread activityThread = (ActivityThread) param.thisObject;
@@ -59,25 +60,35 @@ public class HandleBindApp extends XC_MethodHook {
 
             boolean isModule = false;
             int xposedminversion = -1;
+            boolean xposedsharedprefs = false;
             try {
                 ApkParser ap = ApkParser.create(new File(appInfo.sourceDir));
                 isModule = ap.getApkMeta().metaData.containsKey("xposedmodule");
-                if(isModule)
+                if (isModule) {
                     xposedminversion = Integer.parseInt(ap.getApkMeta().metaData.get("xposedminversion"));
+                    xposedsharedprefs = ap.getApkMeta().metaData.containsKey("xposedsharedprefs");
+                }
             } catch (NumberFormatException | IOException e) {
                 Hookers.logE("ApkParser fails", e);
             }
 
-            if (isModule && xposedminversion > 92) {
+            if (isModule && (xposedminversion > 92 || xposedsharedprefs)) {
                 Utils.logW("New modules detected, hook preferences");
-                XposedHelpers.findAndHookMethod(ContextImpl.class, "getSharedPreferences", File.class, int.class, new XC_MethodHook() {
+                XposedHelpers.findAndHookMethod(ContextImpl.class, "checkMode", int.class, new XC_MethodHook() {
+                    @SuppressWarnings("deprecation")
+                    @SuppressLint("WorldReadableFiles")
                     @Override
-                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                        String fileName = ((File) param.args[0]).getName();
-                        File file = new File(ConfigManager.getPrefsPath(appInfo.packageName), fileName);
-                        file.createNewFile();
-                        file.setReadable(true, false);
-                        param.args[0] = file;
+                    protected void afterHookedMethod(MethodHookParam param) {
+                        if (((int) param.args[0] & Context.MODE_WORLD_READABLE) != 0) {
+                            param.setThrowable(null);
+                        }
+                    }
+                });
+                XposedHelpers.findAndHookMethod(ContextImpl.class, "getPreferencesDir", new XC_MethodHook() {
+                    @SuppressLint({"SetWorldReadable", "WorldReadableFiles"})
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) {
+                        param.setResult(new File(ConfigManager.getPrefsPath(appInfo.packageName)));
                     }
                 });
             }

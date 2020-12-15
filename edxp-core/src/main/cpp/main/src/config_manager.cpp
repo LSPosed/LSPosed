@@ -227,7 +227,7 @@ namespace edxp {
                 if (!app_pkg_name.empty())
                     scope.emplace(std::move(app_pkg_name));
             }
-            if(!scope.empty())
+            if (!scope.empty())
                 scope.insert(module_pkg_name); // Always add module itself
             if (IsInstaller(module_pkg_name)) scope.erase("android");
             LOGI("scope of %s is:\n%s", module_pkg_name.c_str(), ([&scope = scope]() {
@@ -295,7 +295,10 @@ namespace edxp {
                 }
                 fs::permissions(prefs_path, fs::perms::owner_all | fs::perms::group_all |
                                             fs::perms::others_exec);
-                path_chown(prefs_path, uid, 0);
+                if (const auto &[r_uid, r_gid] = path_own(prefs_path);
+                        (uid != -1 && r_uid != uid) || r_gid != 1000u) {
+                    path_chown(prefs_path, uid, 1000u, false);
+                }
             }
             if (IsInstaller(pkg_name) || pkg_name == "android") {
                 auto conf_path = GetConfigPath();
