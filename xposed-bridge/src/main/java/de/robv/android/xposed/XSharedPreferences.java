@@ -76,8 +76,7 @@ public final class XSharedPreferences implements SharedPreferences {
                 boolean isModule = false;
                 int xposedminversion = -1;
                 boolean xposedsharedprefs = false;
-                try {
-                    ApkParser ap = ApkParser.create(new File(m));
+                try (ApkParser ap = ApkParser.create(new File(m))) {
                     isModule = ap.getApkMeta().metaData.containsKey("xposedmodule");
                     if(isModule) {
                         xposedminversion = Integer.parseInt(ap.getApkMeta().metaData.get("xposedminversion"));

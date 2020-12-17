@@ -61,8 +61,7 @@ public class HandleBindApp extends XC_MethodHook {
             boolean isModule = false;
             int xposedminversion = -1;
             boolean xposedsharedprefs = false;
-            try {
-                ApkParser ap = ApkParser.create(new File(appInfo.sourceDir));
+            try (ApkParser ap = ApkParser.create(new File(appInfo.sourceDir))){
                 isModule = ap.getApkMeta().metaData.containsKey("xposedmodule");
                 if (isModule) {
                     xposedminversion = Integer.parseInt(ap.getApkMeta().metaData.get("xposedminversion"));
