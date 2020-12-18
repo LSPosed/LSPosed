@@ -17,7 +17,7 @@ static uint32_t OFFSET_access_flags_in_ArtMethod;
 static uint32_t kAccCompileDontBother = 0x01000000;
 
 static jfieldID fieldArtMethod = nullptr;
-static std::unordered_map<void*, void*> replaced_entrypoint;
+//static std::unordered_map<void*, void*> replaced_entrypoint;
 
 static inline uint32_t read32(void *addr) {
     return *((uint32_t *) addr);
@@ -136,7 +136,7 @@ static int replaceMethod(void *fromMethod, void *toMethod, int isBackup) {
     }
 
     void* fromEntrypoint = (char *) fromMethod + OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod;
-    replaced_entrypoint[fromEntrypoint] = newEntrypoint;
+    //replaced_entrypoint[fromEntrypoint] = newEntrypoint;
 
     LOGI("replace entry point from %p to %p",
          readAddr(fromEntrypoint),
@@ -247,8 +247,4 @@ extern "C" jboolean Java_lab_galaxy_yahfa_HookMain_backupAndHookNative(JNIEnv *e
     } else {
         return JNI_FALSE;
     }
-}
-
-void *getOriginalEntryPointFromHookedEntryPoint(void* method) {
-    return replaced_entrypoint[method];
 }

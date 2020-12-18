@@ -131,7 +131,10 @@ void *genTrampoline(void *toMethod, void *entrypoint) {
     size_t size = entrypoint == NULL ? sizeof(trampoline) : sizeof(trampolineForBackup);
 
     // TODO: make use of thread_local to avoid frequent memory allocate
-    void *targetAddr = doInitHookCap(size);
+    char *targetAddr = doInitHookCap(size + 8);
+    // 8 bytes for AOT header.
+    memset(targetAddr, 0, 8);
+    targetAddr += 8;
 
     if (targetAddr == NULL) return NULL;
 
