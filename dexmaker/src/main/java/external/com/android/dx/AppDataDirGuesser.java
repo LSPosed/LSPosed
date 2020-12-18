@@ -136,20 +136,31 @@ class AppDataDirGuesser {
 
     File[] guessPath(String input) {
         List<File> results = new ArrayList<>();
+        String apkPathRoot = "/data/app/";
         for (String potential : splitPathList(input)) {
-            if (!potential.startsWith("/data/app/")) {
+            if (!potential.startsWith(apkPathRoot)) {
                 continue;
             }
-            int start = "/data/app/".length();
             int end = potential.lastIndexOf(".apk");
             if (end != potential.length() - 4) {
                 continue;
             }
-            int dash = potential.indexOf("-");
-            if (dash != -1) {
-                end = dash;
+            int endSlash = potential.lastIndexOf("/", end);
+            if (endSlash == apkPathRoot.length() - 1) {
+                // Apks cannot be directly under /data/app
+                continue;
             }
-            String packageName = potential.substring(start, end);
+            int startSlash = potential.lastIndexOf("/", endSlash - 1);
+            if (startSlash == -1) {
+                continue;
+            }
+            // Look for the first dash after the package name
+            int dash = potential.indexOf("-", startSlash);
+            if (dash == -1) {
+                continue;
+            }
+            end = dash;
+            String packageName = potential.substring(startSlash + 1, end);
             File dataDir = getWriteableDirectory("/data/data/" + packageName);
 
             if (dataDir == null) {

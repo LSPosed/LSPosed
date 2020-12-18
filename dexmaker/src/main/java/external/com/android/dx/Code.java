@@ -484,15 +484,27 @@ public final class Code {
      * must be a primitive, String, Class, TypeId, or null.
      */
     public <T> void loadConstant(Local<T> target, T value) {
+        loadConstantInternal(target, value);
+    }
+
+    /**
+     * Copies a class type in {@code target}. The benefit to using this method vs {@link Code#loadConstant(Local, Object)}
+     * is that the {@code value} can itself be a generated type - {@link TypeId} allows for deferred referencing of class types.
+     */
+    public void loadDeferredClassConstant(Local<Class> target, TypeId value) {
+        loadConstantInternal(target, value);
+    }
+
+    private void loadConstantInternal(Local target, Object value) {
         Rop rop = value == null
-                ? Rops.CONST_OBJECT_NOTHROW
-                : Rops.opConst(target.type.ropType);
+                  ? Rops.CONST_OBJECT_NOTHROW
+                  : Rops.opConst(target.type.ropType);
         if (rop.getBranchingness() == BRANCH_NONE) {
             addInstruction(new PlainCstInsn(rop, sourcePosition, target.spec(),
-                    RegisterSpecList.EMPTY, Constants.getConstant(value)));
+                                            RegisterSpecList.EMPTY, Constants.getConstant(value)));
         } else {
             addInstruction(new ThrowingCstInsn(rop, sourcePosition,
-                    RegisterSpecList.EMPTY, catches, Constants.getConstant(value)));
+                                               RegisterSpecList.EMPTY, catches, Constants.getConstant(value)));
             moveResult(target, true);
         }
     }
