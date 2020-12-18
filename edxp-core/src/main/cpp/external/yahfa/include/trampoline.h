@@ -8,6 +8,7 @@
 extern int SDKVersion;
 
 extern unsigned char trampoline[];
+extern unsigned char trampolineForBackup[];
 
 void* doInitHookCap(size_t cap);
 void setupTrampoline(uint8_t offset);
