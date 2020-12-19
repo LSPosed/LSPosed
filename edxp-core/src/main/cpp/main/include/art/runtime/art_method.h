@@ -16,19 +16,22 @@ namespace art {
         inline static size_t oat_header_length;
         inline static int32_t oat_header_code_length_offset;
         CREATE_HOOK_STUB_ENTRIES(void *, GetOatQuickMethodHeader, void *thiz, uintptr_t pc) {
-            LOGD("GetOatQuickMethodHeader called");
+            // LOGD("GetOatQuickMethodHeader called, thiz=%p", thiz);
             // This is a partial copy from AOSP. We only touch them if they are hooked.
             if (LIKELY(edxp::isHooked(thiz))) {
-                LOGD("GetOatQuickMethodHeader: isHooked=true, thiz=%p", thiz);
-                char* thiz_ = static_cast<char *>(thiz);
-                char* code_length_loc = thiz_ + oat_header_code_length_offset;
-                uint32_t code_length = *reinterpret_cast<uint32_t *>(code_length_loc);
-                uintptr_t original_ep = reinterpret_cast<uintptr_t>(
-                        getOriginalEntryPointFromTargetMethod(thiz));
-                if (original_ep <= pc <= original_ep + code_length) return thiz_ - oat_header_length;
-                // If PC is not in range, we mark it as not found.
-                LOGD("GetOatQuickMethodHeader: PC not found in current method.");
-                return nullptr;
+                uintptr_t original_ep = reinterpret_cast<uintptr_t>(getOriginalEntryPointFromTargetMethod(thiz));
+                if(original_ep) {
+                    char* code_length_loc = reinterpret_cast<char *>(original_ep) + oat_header_code_length_offset;
+                    uint32_t code_length = *reinterpret_cast<uint32_t *>(code_length_loc) & ~0x80000000;
+                    LOGD("GetOatQuickMethodHeader: isHooked=true, original_ep=0x%x, code_length=0x%x, pc=0x%x", original_ep, code_length, pc);
+                    if (original_ep <= pc && pc <= original_ep + code_length)
+                        return reinterpret_cast<void *>(original_ep - oat_header_length);
+                    // If PC is not in range, we mark it as not found.
+                    LOGD("GetOatQuickMethodHeader: PC not found in current method.");
+                    return nullptr;
+                } else {
+                    LOGD("GetOatQuickMethodHeader: isHooked but not backup, fallback to system");
+                }
             }
             return GetOatQuickMethodHeaderBackup(thiz, pc);
         }

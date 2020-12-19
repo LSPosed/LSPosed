@@ -125,18 +125,17 @@ void *getEntryPoint(void* method) {
 static int replaceMethod(void *fromMethod, void *toMethod, int isBackup) {
     // replace entry point
     void *newEntrypoint = nullptr;
+    void* fromEntrypoint = (char *) fromMethod + OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod;
     if(isBackup) {
         void *originEntrypoint = readAddr((char *) toMethod + OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod);
         // entry point hardcoded
         newEntrypoint = genTrampoline(toMethod, originEntrypoint);
+        replaced_entrypoint[fromMethod] = newEntrypoint;
     }
     else {
         // entry point from ArtMethod struct
         newEntrypoint = genTrampoline(toMethod, nullptr);
     }
-
-    void* fromEntrypoint = (char *) fromMethod + OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod;
-    replaced_entrypoint[fromMethod] = newEntrypoint;
 
     LOGI("replace entry point from %p to %p",
          readAddr(fromEntrypoint),
