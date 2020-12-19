@@ -13,7 +13,6 @@ MODDIR=${0%/*}
 RIRU_PATH="/data/adb/riru"
 RIRU_PROP="$(magisk --path)/.magisk/modules/riru-core/module.prop"
 TARGET="${RIRU_PATH}/modules"
-[[ "$(getenforce)" == "Enforcing" ]] && ENFORCE=true || ENFORCE=false
 
 EDXP_VERSION=$(grep_prop version "${MODDIR}/module.prop")
 EDXP_APICODE=$(grep_prop api "${MODDIR}/module.prop")
@@ -42,7 +41,7 @@ MAGISK_VERCODE=$(magisk -V)
 #PATH_PREFIX="/data/user_de/0/"
 #PATH_PREFIX_LEGACY="/data/user/0/"
 
-sepolicy() {
+livePatch() {
     # Should be deprecated now. This is for debug only.
     supolicy --live "allow system_server system_server process execmem" \
                     "allow system_server system_server memprotect mmap_zero"
@@ -102,32 +101,32 @@ start_log_cather () {
     if [[ ${START_NEW} == false ]]; then
         return
     fi
-    touch ${LOG_FILE}
-    touch ${PID_FILE}
-    echo "--------- beginning of head">>${LOG_FILE}
-    echo "EdXposed Log">>${LOG_FILE}
-    echo "Powered by Log Catcher">>${LOG_FILE}
-    echo "QQ support group: 855219808">>${LOG_FILE}
-    echo "Telegram support group: @Code_Of_MeowCat">>${LOG_FILE}
-    echo "Telegram channel: @EdXposed">>${LOG_FILE}
-    echo "--------- beginning of information">>${LOG_FILE}
-    echo "Manufacturer: ${MANUFACTURER}">>${LOG_FILE}
-    echo "Brand: ${BRAND}">>${LOG_FILE}
-    echo "Device: ${DEVICE}">>${LOG_FILE}
-    echo "Product: ${PRODUCT}">>${LOG_FILE}
-    echo "Model: ${MODEL}">>${LOG_FILE}
-    echo "Fingerprint: ${FINGERPRINT}">>${LOG_FILE}
-    echo "ROM description: ${BUILD_DESC}">>${LOG_FILE}
-    echo "Architecture: ${ARCH}">>${LOG_FILE}
-    echo "Android build: ${BUILD}">>${LOG_FILE}
-    echo "Android version: ${ANDROID}">>${LOG_FILE}
-    echo "Android sdk: ${ANDROID_SDK}">>${LOG_FILE}
-    echo "EdXposed version: ${EDXP_VERSION}">>${LOG_FILE}
-    echo "EdXposed api: ${EDXP_APICODE}">>${LOG_FILE}
-    echo "Riru version: ${RIRU_VERSION} (${RIRU_VERCODE})">>${LOG_FILE}
-    echo "Riru api: ${RIRU_APICODE}">>${LOG_FILE}
-    echo "Magisk: ${MAGISK_VERSION%:*} (${MAGISK_VERCODE})">>${LOG_FILE}
-    loop_logcat -f ${LOG_FILE} *:S ${LOG_TAG_FILTERS} &
+    touch "${LOG_FILE}"
+    touch "${PID_FILE}"
+    echo "--------- beginning of head">>"${LOG_FILE}"
+    echo "EdXposed Log">>"${LOG_FILE}"
+    echo "Powered by Log Catcher">>"${LOG_FILE}"
+    echo "QQ support group: 855219808">>"${LOG_FILE}"
+    echo "Telegram support group: @Code_Of_MeowCat">>"${LOG_FILE}"
+    echo "Telegram channel: @EdXposed">>"${LOG_FILE}"
+    echo "--------- beginning of information">>"${LOG_FILE}"
+    echo "Manufacturer: ${MANUFACTURER}">>"${LOG_FILE}"
+    echo "Brand: ${BRAND}">>"${LOG_FILE}"
+    echo "Device: ${DEVICE}">>"${LOG_FILE}"
+    echo "Product: ${PRODUCT}">>"${LOG_FILE}"
+    echo "Model: ${MODEL}">>"${LOG_FILE}"
+    echo "Fingerprint: ${FINGERPRINT}">>"${LOG_FILE}"
+    echo "ROM description: ${BUILD_DESC}">>"${LOG_FILE}"
+    echo "Architecture: ${ARCH}">>"${LOG_FILE}"
+    echo "Android build: ${BUILD}">>"${LOG_FILE}"
+    echo "Android version: ${ANDROID}">>"${LOG_FILE}"
+    echo "Android sdk: ${ANDROID_SDK}">>"${LOG_FILE}"
+    echo "EdXposed version: ${EDXP_VERSION}">>"${LOG_FILE}"
+    echo "EdXposed api: ${EDXP_APICODE}">>"${LOG_FILE}"
+    echo "Riru version: ${RIRU_VERSION} (${RIRU_VERCODE})">>"${LOG_FILE}"
+    echo "Riru api: ${RIRU_APICODE}">>"${LOG_FILE}"
+    echo "Magisk: ${MAGISK_VERSION%:*} (${MAGISK_VERCODE})">>"${LOG_FILE}"
+    loop_logcat -f "${LOG_FILE}" *:S "${LOG_TAG_FILTERS}" &
     LOG_PID=$!
     echo "${LOG_PID}">"${LOG_PATH}/${LOG_FILE_NAME}.pid"
 }
@@ -140,24 +139,28 @@ cp -f "/system/bin/app_process32" "${MODDIR}/system/bin/app_process32"
 [[ -f "/system/bin/app_process64" ]] && cp -f "/system/bin/app_process64" "${MODDIR}/system/bin/app_process64"
 
 # install stub if manager not installed
-if [[ "$(pm path org.meowcat.edxposed.manager)" == "" && "$(pm path de.robv.android.xposed.installer)" == "" ]]; then
+if [[ "$(pm path org.meowcat.edxposed.manager 2>&1)" == "" && "$(pm path de.robv.android.xposed.installer 2>&1)" == "" ]]; then
     NO_MANAGER=true
 fi
 if [[ ${NO_MANAGER} == true ]]; then
-    ${ENFORCE} && setenforce 0
-    pm install "${MODDIR}/EdXposed.apk"
-    ${ENFORCE} && setenforce 1
+    cp "${MODDIR}/EdXposed.apk" "/data/local/tmp/EdXposed.apk"
+    LOCAL_PATH_INFO=$(ls -ldZ "/data/local/tmp")
+    LOCAL_PATH_OWNER=$(echo "${LOCAL_PATH_INFO}" | awk -F " " '{print $3":"$4}')
+    LOCAL_PATH_CONTEXT=$(echo "${LOCAL_PATH_INFO}" | awk -F " " '{print $5}')
+    chcon "${LOCAL_PATH_CONTEXT}" "/data/local/tmp/EdXposed.apk"
+    chown "${LOCAL_PATH_OWNER}" "/data/local/tmp/EdXposed.apk"
+    pm install "/data/local/tmp/EdXposed.apk"
+    rm -f "/data/local/tmp/EdXposed.apk"
 fi
 
 # execute live patch if rule not found
-[[ -f "${MODDIR}/sepolicy.rule" ]] || sepolicy
+[[ -f "${MODDIR}/sepolicy.rule" ]] || livePatch
 
 # start_verbose_log_catcher
 start_log_cather all "EdXposed:V XSharedPreferences:V EdXposed-Bridge:V EdXposedManager:V XposedInstaller:V" true ${LOG_VERBOSE}
 
 # start_bridge_log_catcher
 start_log_cather error "XSharedPreferences:V EdXposed-Bridge:V" true true
-
 
 if [[ -f "/data/adb/riru/modules/edxp.prop" ]]; then
     CONFIG=$(cat "/data/adb/riru/modules/edxp.prop")
