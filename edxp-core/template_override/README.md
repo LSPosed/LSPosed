@@ -10,7 +10,7 @@ A Riru module trying to provide an ART hooking framework (initially for Android 
 
 What are the differences between EdXposed Framework and Xposed Framework?
 
-1. EdXposed fully supports Android Pie and Q (even R)
+1. EdXposed fully supports Android Pie, Q and R
 2. EdXposed have App List mode. Only the apps you want to apply Xposed modules are hooked. Other apps in system run in a completely clean environment
 3. EdXposed doesn't need to reboot system to active most modules
 4. EdXposed is hard to detect. EdXposed use Riru to inject, doesn't modify the libart and app_process
@@ -20,7 +20,7 @@ What are the differences between EdXposed Framework and Xposed Framework?
 To put it simply, just follow these steps:
 
 1. Install Magisk
-2. Flash the Riru - Core Magisk module. You can find it in [Riru release page](https://github.com/RikkaApps/Riru/releases).
+2. Flash the Riru Magisk module. You can find it in [Riru release page](https://github.com/RikkaApps/Riru/releases).
 3. Flash the Riru - EdXposed Magisk module. You can find it in [EdXposed release page](https://github.com/ElderDrivers/EdXposed/releases).
 4. Install EdXposed Manager. You can find it in [EdXposed Manager release page](https://github.com/ElderDrivers/EdXposedManager/releases).
 5. Reboot :)
