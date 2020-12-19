@@ -30,5 +30,8 @@ void *getArtMethod(JNIEnv *env, jobject jmethod);
 // TODO: move to common utils instead of in YAHFA's code
 void *getEntryPoint(void* method);
 
+// get original entrypoint from target ArtMethod
+void *getOriginalEntryPointFromTargetMethod(void* method);
+
 
 #endif // HOOK_MAIN_H

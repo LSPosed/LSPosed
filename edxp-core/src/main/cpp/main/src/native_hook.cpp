@@ -13,6 +13,7 @@
 #include "native_hook.h"
 #include "riru_hook.h"
 #include "art/runtime/mirror/class.h"
+#include "art/runtime/art_method.h"
 #include "art/runtime/class_linker.h"
 #include "art/runtime/gc/heap.h"
 #include "art/runtime/hidden_api.h"
@@ -75,6 +76,7 @@ namespace edxp {
         art::hidden_api::DisableHiddenApi(art_handle, hook_func);
         art::Runtime::Setup(art_handle, hook_func);
         art::gc::Heap::Setup(art_handle, hook_func);
+        art::ArtMethod::Setup(art_handle, hook_func);
         art::ClassLinker::Setup(art_handle, hook_func);
         art::mirror::Class::Setup(art_handle, hook_func);
         art::JNIEnvExt::Setup(art_handle, hook_func);

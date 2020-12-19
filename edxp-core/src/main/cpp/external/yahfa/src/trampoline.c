@@ -131,25 +131,7 @@ void *genTrampoline(void *toMethod, void *entrypoint) {
     size_t size = entrypoint == NULL ? sizeof(trampoline) : sizeof(trampolineForBackup);
 
     // TODO: make use of thread_local to avoid frequent memory allocate
-    size_t oatHeaderLen;
-    switch (SDKVersion) {
-        case __ANDROID_API_O__:
-        case __ANDROID_API_O_MR1__:
-        case __ANDROID_API_P__:
-            oatHeaderLen = 12 + 12; // 3*u32 + QuickMethodFrameInfo(3*u32)
-            break;
-        default:
-            LOGW("No valid offset in SDK %d for oatHeaderLen, using Android R", SDKVersion);
-        case __ANDROID_API_Q__:
-        case __ANDROID_API_R__:
-            oatHeaderLen = 8; // 2*u32
-            break;
-    }
-    char *targetAddr = doInitHookCap(size + oatHeaderLen);
-    // 4 bytes for AOT header, then copy code_size_.
-    memcpy(targetAddr, toMethod - oatHeaderLen, oatHeaderLen);
-    targetAddr += oatHeaderLen;
-
+    char *targetAddr = doInitHookCap(size);
     if (targetAddr == NULL) return NULL;
 
     if (entrypoint != NULL) {

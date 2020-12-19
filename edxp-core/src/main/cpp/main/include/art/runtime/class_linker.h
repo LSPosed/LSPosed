@@ -71,7 +71,6 @@ namespace art {
         // @ApiSensitive(Level.MIDDLE)
         static void Setup(void *handle, HookFunType hook_func) {
             LOGD("Classlinker hook setup, handle=%p", handle);
-            // TODO: Maybe not compatible with Android 10-
             int api_level = edxp::GetAndroidApiLevel();
             size_t OFFSET_classlinker;  // Get offset from art::Runtime::RunRootClinits() call in IDA
             switch (api_level) {
