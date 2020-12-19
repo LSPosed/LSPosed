@@ -20,9 +20,12 @@ install:
 build_script:
   - gradlew.bat :edxp-core:zipYahfaRelease
   - gradlew.bat :edxp-core:zipSandhookRelease
+  - gradlew.bat :edxp-core:zipYahfaDebug
+  - gradlew.bat :edxp-core:zipSandhookDebug
 
 artifacts:
   - path: 'edxp-core\release\**\*.zip'
+  - path: 'edxp-core\debug\**\*.zip'
 
 pull_requests:
   do_not_increment_build_number: true

@@ -1,6 +1,6 @@
 # EdXposed Framework
 
-[![Latest builds](https://ci.appveyor.com/api/projects/status/qu3vj1d64nqia1b8/branch/master?svg=true)](https://ci.appveyor.com/project/ElderDrivers/edxposed/branch/master) ![Android CI](https://github.com/ElderDrivers/EdXposed/workflows/Android%20CI/badge.svg)[![中文说明文档](art/README_CN.png)](README_CN.md)
+[![Latest builds](https://ci.appveyor.com/api/projects/status/qu3vj1d64nqia1b8/branch/master?svg=true)](https://ci.appveyor.com/project/ElderDrivers/edxposed/branch/master) ![Android CI](https://github.com/ElderDrivers/EdXposed/workflows/Android%20CI/badge.svg) [![中文说明文档](art/README_CN.png)](README_CN.md)
 
 ## Introduction 
 
@@ -10,10 +10,10 @@ A Riru module trying to provide an ART hooking framework (initially for Android 
 
 ## Supported Versions
 
-- Android R (11)[sdk30] (Experimental)
-- Android Q (10)[sdk29]
-- Android Pie (9)[sdk28]
-- Android Oreo (8.x)[sdk26/27]
+- Android R (11, sdk30) (Experimental)
+- Android Q (10, sdk29)
+- Android Pie (9, sdk28)
+- Android Oreo (8.x, sdk26/27)
 
 For Android Nougat (7.x) and lower, please use the original Xposed Framework.
 
@@ -24,18 +24,16 @@ and zip binaries can be downloaded from [here](http://gnuwin32.sourceforge.net/p
 
 ## Build
 
-1. Execute task `:edxp-core:[zip|push][Yahfa|Sandhook]Release` to build flashable zip for corresponding variant.
+1. Execute task `:edxp-core:zip[Yahfa|Sandhook]Release` to build flashable zip for corresponding variant.
 2. Find the flashable under `edxp-core/release/`.
 3. Flash the zip in recovery mode or via Magisk Manager.
 
 ## Install
 
-### For latest Canary build, you need Magisk v21+ and Riru-Core v23+. 
-
-1. Install Magisk v19+ (for Huawei/Honor or OnePlus 7T/7TPro device, Magisk v20.2+ is required)
-2. Install [Riru-Core](https://github.com/RikkaApps/Riru/releases) v19+ from Magisk repo.
-3. [Download](#download) and install EdXposed in Magisk Manager or recovery mode.
-4. Install [companion application](#companion-applications).
+1. Install Magisk v21+
+2. Install [Riru](https://github.com/RikkaApps/Riru/releases) v23+ from Magisk repo.
+3. [Download](#download) and install EdXposed in Magisk Manager or recovery.
+4. Install [EdXposed Manager](https://github.com/ElderDrivers/EdXposedManager).
 4. Reboot.
 5. Have fun! :)
 
@@ -51,15 +49,6 @@ Edxposed has three different builds
 
 - Canary: Debug version. Automatically build by CI.
 ***Download Canary version in [[EdXposed Manager](https://github.com/ElderDrivers/EdXposedManager)]***
-
-## Companion Applications
-
->  Both Xposed Installer and EdXposed Installer are deprecated. Support will be stopped for later versions. Please use [EdXposed Manager](https://github.com/ElderDrivers/EdXposedManager)
-
-- For v0.2.9.5 and before: [Xposed Installer](https://github.com/DVDAndroid/XposedInstaller).
-- For v0.2.9.6 and v0.2.9.7: [Xposed Installer](https://github.com/DVDAndroid/XposedInstaller) + [EdXp Manager](https://github.com/solohsu/EdXpManager)(optional).
-- For v0.2.9.8 and later: [EdXposed Installer](https://github.com/solohsu/XposedInstaller) and [EdXposed Manager](https://github.com/ElderDrivers/EdXposedManager).
-- For the latest version, we recommend to use [EdXposed Manager](https://github.com/ElderDrivers/EdXposedManager).
 
 ## Useful Links
 

@@ -150,16 +150,7 @@ afterEvaluate {
                         expand(moduleId: "$magiskModuleId", backend: "$backendCapped",
                                 versionName: "$version" + " ($backend)",
                                 versionCode: "$versionCode", authorList: "$authorList",
-                                apiCode: "$apiCode")
-                        filter(FixCrLfFilter.class, eol: FixCrLfFilter.CrLf.newInstance("lf"))
-                    }
-                    copy {
-                        from "${projectDir}/tpl/riru_module.prop.tpl"
-                        into "$templateRootPath/riru"
-                        rename "riru_module.prop.tpl", "module.prop.new"
-                        expand(minApi: "$moduleMinRiruApiVersion",
-                                versionName: "$version" + " ($backend)",
-                                versionCode: "$versionCode", authorList: "$authorList")
+                                apiCode: "$apiCode", minApi: "$moduleMinRiruApiVersion")
                         filter(FixCrLfFilter.class, eol: FixCrLfFilter.CrLf.newInstance("lf"))
                     }
                 }
@@ -174,7 +165,7 @@ afterEvaluate {
                     copy {
                         from "${projectDir}/template_override"
                         into zipPathMagiskReleasePath
-                        include 'riru.sh'
+                        include 'util_functions.sh'
                         filter { line ->
                             line.replaceAll('%%%RIRU_MODULE_ID%%%', riruModuleId)
                                     .replaceAll('%%%RIRU_MIN_API_VERSION%%%', moduleMinRiruApiVersion.toString())
@@ -208,7 +199,7 @@ afterEvaluate {
                         exclude "README.md", "META-INF"
                     }.visit { f ->
                         if (f.directory) return
-                        file(f.file.path + ".sha256sum").text = calcSha256(f.file)
+                        file(f.file.path + ".s").text = calcSha256(f.file)
                     }
                 }
             }
