@@ -19,6 +19,7 @@
 #include "art/runtime/hidden_api.h"
 #include "art/runtime/oat_file_manager.h"
 #include "art/runtime/jit/jit_code_cache.h"
+#include "art/runtime/art_method.h"
 
 std::vector<soinfo_t> linker_get_solist(); // Dobby but not in .h
 
@@ -76,7 +77,8 @@ namespace edxp {
         art::hidden_api::DisableHiddenApi(art_handle, hook_func);
         art::Runtime::Setup(art_handle, hook_func);
         art::gc::Heap::Setup(art_handle, hook_func);
-        art::ArtMethod::Setup(art_handle, hook_func);
+        art::art_method::Setup(art_handle, hook_func);
+        art::Thread::Setup(art_handle, hook_func);
         art::ClassLinker::Setup(art_handle, hook_func);
         art::mirror::Class::Setup(art_handle, hook_func);
         art::JNIEnvExt::Setup(art_handle, hook_func);

@@ -64,7 +64,12 @@ namespace art {
 
             const char *GetDescriptor(std::string *storage) {
                 if (thiz_ && GetDescriptorSym) {
-                    return GetDescriptor(thiz_, storage);
+                    if (storage == nullptr) {
+                        std::string str;
+                        return GetDescriptor(thiz_, &str);
+                    } else {
+                        return GetDescriptor(thiz_, storage);
+                    }
                 }
                 return "";
             }

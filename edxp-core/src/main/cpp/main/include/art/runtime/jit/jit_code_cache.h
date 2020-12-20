@@ -1,6 +1,7 @@
 #pragma once
 
 #include "base/object.h"
+#include "art/runtime/art_method.h"
 
 namespace art {
 
@@ -9,7 +10,8 @@ namespace art {
         CREATE_HOOK_STUB_ENTRIES(const void*, GetSavedEntryPointOfPreCompiledMethod, void *thiz,
                                  void *art_method) {
             if (UNLIKELY(edxp::isHooked(art_method))) {
-                LOGD("Found hooked method %p, return entrypoint as jit entrypoint", art_method);
+                LOGD("Found hooked method %p (%s), return entrypoint as jit entrypoint", art_method,
+                     art::art_method::PrettyMethod(art_method).c_str());
                 return getEntryPoint(art_method);
             }
             return GetSavedEntryPointOfPreCompiledMethodBackup(thiz, art_method);
@@ -25,7 +27,7 @@ namespace art {
                 HOOK_FUNC(GetSavedEntryPointOfPreCompiledMethod,
                           "_ZN3art3jit12JitCodeCache37GetSavedEntryPointOfPreCompiledMethodEPNS_9ArtMethodE");
             }
-        };
+        }
 
     }
 

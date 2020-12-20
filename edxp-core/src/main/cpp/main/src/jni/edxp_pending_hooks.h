@@ -5,7 +5,7 @@
 
 namespace edxp {
 
-    bool IsClassPending(const char *);
+    bool IsClassPending(void *);
 
     void RegisterPendingHooks(JNIEnv *);
 
