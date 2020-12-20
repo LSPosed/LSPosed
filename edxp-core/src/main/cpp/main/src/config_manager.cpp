@@ -251,10 +251,13 @@ namespace edxp {
 
     fs::file_time_type ConfigManager::GetLastWriteTime() const {
         auto config_path = GetConfigPath();
+        auto list_path = GetConfigPath("modules.list");
         auto blacklist_path = GetConfigPath("blacklist");
         auto whitelist_path = GetConfigPath("whitelist");
         return std::max({path_exists<true>(config_path) ? fs::last_write_time(config_path)
                                                         : fs::file_time_type{},
+                         path_exists<true>(list_path) ? fs::last_write_time(list_path)
+                                                           : fs::file_time_type{},
                          path_exists<true>(blacklist_path) ? fs::last_write_time(blacklist_path)
                                                            : fs::file_time_type{},
                          path_exists<true>(whitelist_path) ? fs::last_write_time(whitelist_path)
