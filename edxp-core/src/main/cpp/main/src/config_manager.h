@@ -60,14 +60,19 @@ namespace edxp {
 
         inline const auto &GetInstallerPackageName() const { return installer_pkg_name_; }
 
-        inline const auto &GetLibSandHookName() const { return kLibSandHookName; }
-
         inline const auto &GetDataPathPrefix() const { return data_path_prefix_; }
 
-        inline static const auto &GetMiscPath() {return misc_path_;}
+        inline static const auto &GetMiscPath() { return misc_path_; }
 
         inline static auto GetFrameworkPath(const std::string &suffix = {}) {
             return misc_path_ / "framework" / suffix;
+        }
+
+        inline static auto GetLibSandHookName() {
+            if constexpr(edxp::is64)
+                return GetFrameworkPath("lib64/libsandhook.edxp.so");
+            else
+                return GetFrameworkPath("lib/libsandhook.edxp.so");
         }
 
         inline auto GetXposedPropPath() const { return GetFrameworkPath(kXposedPropName); }
@@ -98,7 +103,7 @@ namespace edxp {
 
         static const auto &GetInjectDexPaths() { return inject_dex_paths_; };
 
-        bool IsInstaller(const std::string& pkg_name) const {
+        bool IsInstaller(const std::string &pkg_name) const {
             return pkg_name == installer_pkg_name_ || pkg_name == kPrimaryInstallerPkgName;
         }
 

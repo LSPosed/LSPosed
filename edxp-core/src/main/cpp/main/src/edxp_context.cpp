@@ -141,7 +141,7 @@ namespace edxp {
 
         if (variant_ == SANDHOOK) {
             //for SandHook variant
-            ScopedDlHandle sandhook_handle(kLibSandHookPath.c_str());
+            ScopedDlHandle sandhook_handle(ConfigManager::GetLibSandHookName().c_str());
             if (!sandhook_handle.IsValid()) {
                 return;
             }

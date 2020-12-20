@@ -213,30 +213,20 @@ ui_print "- ${LANG_CUST_INST_COPY_LIB}"
 
 rm -rf "/data/misc/$MISC_PATH/framework"
 mv "${MODPATH}/system/framework" "/data/misc/$MISC_PATH/framework"
+
+if [[ "${VARIANTS}" == "SandHook" ]]; then
+  mkdir -p "/data/misc/$MISC_PATH/framework/lib"
+  mv "${MODPATH}/system/lib/libsandhook.edxp.so" "/data/misc/$MISC_PATH/framework/lib/libsandhook.edxp.so"
+  if [ "$IS64BIT" = true ]; then
+    mkdir -p "/data/misc/$MISC_PATH/framework/lib64"
+    mv "${MODPATH}/system/lib64/libsandhook.edxp.so" "/data/misc/$MISC_PATH/framework/lib64/libsandhook.edxp.so"
+  fi
+fi
 set_perm_recursive /data/misc/$MISC_PATH/framework root root 0755 0644 "u:object_r:magisk_file:s0" || abortC "! ${LANG_CUST_ERR_PERM}"
 
 mv "${MODPATH}/system/lib/libriru_edxp.so" "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
 if [[ "${IS64BIT}" == true ]]; then
     mv "${MODPATH}/system/lib64/libriru_edxp.so" "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
-fi
-
-if [[ "${VARIANTS}" == "SandHook" ]]; then
-    mv "${MODPATH}/system/lib/libsandhook.edxp.so" "${MODPATH}/system/lib/${LIB_SANDHOOK_EDXP}"
-    if [[ "${IS64BIT}" == true ]]; then
-        mv "${MODPATH}/system/lib64/libsandhook.edxp.so" "${MODPATH}/system/lib64/${LIB_SANDHOOK_EDXP}"
-    fi
-fi
-
-ui_print "- ${LANG_CUST_INST_RAND_LIB_1}"
-ui_print "  - ${LANG_CUST_INST_RAND_LIB_2}"
-ui_print "  - ${LANG_CUST_INST_RAND_LIB_3}"
-sed -i 's:libriru_edxp.so:'"${LIB_RIRU_EDXP}"':g' "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
-sed -i 's:libsandhook.edxp.so:'"${LIB_SANDHOOK_EDXP}"':g' "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
-
-ui_print "  - ${LANG_CUST_INST_RAND_LIB_4}"
-if [[ "${IS64BIT}" == true ]]; then
-    sed -i 's:libriru_edxp.so:'"${LIB_RIRU_EDXP}"':g' "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
-    sed -i 's:libsandhook.edxp.so:'"${LIB_SANDHOOK_EDXP}"':g' "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
 fi
 
 ui_print "- ${LANG_CUST_INST_REM_OLDCONF}"
