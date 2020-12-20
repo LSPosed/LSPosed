@@ -249,11 +249,16 @@ namespace edxp {
         return app_modules_list;
     }
 
-    std::filesystem::file_time_type ConfigManager::GetLastWriteTime() const {
-        auto modules_list = GetConfigPath("modules.list");
-        if (!path_exists<true>(modules_list))
-            return {};
-        return fs::last_write_time(modules_list);
+    fs::file_time_type ConfigManager::GetLastWriteTime() const {
+        auto config_path = GetConfigPath();
+        auto blacklist_path = GetConfigPath("blacklist");
+        auto whitelist_path = GetConfigPath("whitelist");
+        return std::max({path_exists<true>(config_path) ? fs::last_write_time(config_path)
+                                                        : fs::file_time_type{},
+                         path_exists<true>(blacklist_path) ? fs::last_write_time(blacklist_path)
+                                                           : fs::file_time_type{},
+                         path_exists<true>(whitelist_path) ? fs::last_write_time(whitelist_path)
+                                                           : fs::file_time_type{}});
     }
 
     bool ConfigManager::InitConfigPath() const {
