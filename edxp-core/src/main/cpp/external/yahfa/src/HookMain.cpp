@@ -126,24 +126,20 @@ static int replaceMethod(void *fromMethod, void *toMethod, int isBackup) {
     // replace entry point
     void *newEntrypoint = nullptr;
     void* fromEntrypoint = (char *) fromMethod + OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod;
-    if(isBackup) {
+    if (isBackup) {
         void *originEntrypoint = readAddr((char *) toMethod + OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod);
         // entry point hardcoded
         newEntrypoint = genTrampoline(toMethod, originEntrypoint);
-        replaced_entrypoint[toMethod] = originEntrypoint;
     }
     else {
         // entry point from ArtMethod struct
         newEntrypoint = genTrampoline(toMethod, nullptr);
     }
+    replaced_entrypoint[fromMethod] = readAddr(fromEntrypoint);
 
-    LOGI("replace entry point from %p to %p",
-         readAddr(fromEntrypoint),
-         newEntrypoint
-    );
+    LOGI("replace entry point from %p to %p", readAddr(fromEntrypoint), newEntrypoint);
     if (newEntrypoint) {
-        writeAddr(fromEntrypoint,
-                newEntrypoint);
+        writeAddr(fromEntrypoint, newEntrypoint);
     } else {
         LOGE("failed to allocate space for trampoline of target method");
         return 1;
@@ -152,8 +148,7 @@ static int replaceMethod(void *fromMethod, void *toMethod, int isBackup) {
     // For pre Android M devices, should be not used by EdXposed.
     if (OFFSET_entry_point_from_interpreter_in_ArtMethod != 0) {
         void *interpEntrypoint = readAddr((char *) toMethod + OFFSET_entry_point_from_interpreter_in_ArtMethod);
-        writeAddr(fromEntrypoint,
-                interpEntrypoint);
+        writeAddr(fromEntrypoint, interpEntrypoint);
     }
 
     return 0;
