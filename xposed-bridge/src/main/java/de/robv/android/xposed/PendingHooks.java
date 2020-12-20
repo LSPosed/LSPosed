@@ -1,17 +1,11 @@
 package de.robv.android.xposed;
 
-import com.elderdrivers.riru.edxp.config.EdXpConfigGlobal;
-import com.jaredrummler.apkparser.utils.Utils;
-
 import java.lang.reflect.Member;
-import java.lang.reflect.Modifier;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 import static de.robv.android.xposed.XposedBridge.hookMethodNative;
-import static de.robv.android.xposed.XposedBridge.log;
 
 public final class PendingHooks {
 

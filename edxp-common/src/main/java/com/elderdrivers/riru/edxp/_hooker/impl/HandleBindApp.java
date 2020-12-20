@@ -12,11 +12,12 @@ import android.content.res.XResources;
 
 import com.elderdrivers.riru.edxp.config.ConfigManager;
 import com.elderdrivers.riru.edxp.util.Hookers;
+import com.elderdrivers.riru.edxp.util.MetaDataReader;
 import com.elderdrivers.riru.edxp.util.Utils;
-import com.jaredrummler.apkparser.ApkParser;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
@@ -61,11 +62,12 @@ public class HandleBindApp extends XC_MethodHook {
             boolean isModule = false;
             int xposedminversion = -1;
             boolean xposedsharedprefs = false;
-            try (ApkParser ap = ApkParser.create(new File(appInfo.sourceDir))){
-                isModule = ap.getApkMeta().metaData.containsKey("xposedmodule");
+            try {
+                Map<String, Object> metaData = MetaDataReader.getMetaData(new File(appInfo.sourceDir));
+                isModule = metaData.containsKey("xposedmodule");
                 if (isModule) {
-                    xposedminversion = Integer.parseInt(ap.getApkMeta().metaData.get("xposedminversion"));
-                    xposedsharedprefs = ap.getApkMeta().metaData.containsKey("xposedsharedprefs");
+                    xposedminversion = (Integer) metaData.get("xposedminversion");
+                    xposedsharedprefs = metaData.containsKey("xposedsharedprefs");
                 }
             } catch (NumberFormatException | IOException e) {
                 Hookers.logE("ApkParser fails", e);

@@ -1,17 +1,14 @@
 package de.robv.android.xposed;
 
 import android.annotation.SuppressLint;
-import android.app.ActivityThread;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.android.internal.util.XmlUtils;
-import com.jaredrummler.apkparser.ApkParser;
+import com.elderdrivers.riru.edxp.util.MetaDataReader;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -76,11 +73,12 @@ public final class XSharedPreferences implements SharedPreferences {
                 boolean isModule = false;
                 int xposedminversion = -1;
                 boolean xposedsharedprefs = false;
-                try (ApkParser ap = ApkParser.create(new File(m))) {
-                    isModule = ap.getApkMeta().metaData.containsKey("xposedmodule");
-                    if(isModule) {
-                        xposedminversion = Integer.parseInt(ap.getApkMeta().metaData.get("xposedminversion"));
-                        xposedsharedprefs = ap.getApkMeta().metaData.containsKey("xposedsharedprefs");
+                try {
+                    Map<String, Object> metaData = MetaDataReader.getMetaData(new File(m));
+                    isModule = metaData.containsKey("xposedmodule");
+                    if (isModule) {
+                        xposedminversion = (Integer) metaData.get("xposedminversion");
+                        xposedsharedprefs = metaData.containsKey("xposedsharedprefs");
                     }
                 } catch (NumberFormatException | IOException e) {
                     Log.w(TAG, "Apk parser fails: " + e);
