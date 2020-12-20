@@ -38,8 +38,8 @@ namespace art {
         CREATE_HOOK_STUB_ENTRIES(void *, GetOatQuickMethodHeader, void *thiz, uintptr_t pc) {
             // This is a partial copy from AOSP. We only touch them if they are hooked.
             if (UNLIKELY(edxp::isHooked(thiz))) {
-                uintptr_t original_ep = reinterpret_cast<uintptr_t>(getOriginalEntryPointFromTargetMethod(
-                        thiz));
+                uintptr_t original_ep = reinterpret_cast<uintptr_t>(
+                        getOriginalEntryPointFromTargetMethod(thiz));
                 if (original_ep) {
                     char *code_length_loc =
                             reinterpret_cast<char *>(original_ep) + oat_header_code_length_offset;
@@ -53,7 +53,8 @@ namespace art {
                     LOGD("art_method::GetOatQuickMethodHeader: PC not found in current method.");
                     return nullptr;
                 } else {
-                    LOGD("art_method::GetOatQuickMethodHeader: isHooked but not backup, fallback to system");
+                    LOGD("art_method::GetOatQuickMethodHeader: ArtMethod=%p (%s), isHooked=true, pc=0x%x, isHooked but not backup, fallback to system",
+                         thiz, PrettyMethod(thiz).c_str(), pc);
                 }
             }
             return GetOatQuickMethodHeaderBackup(thiz, pc);

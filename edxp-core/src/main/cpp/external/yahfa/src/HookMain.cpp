@@ -130,7 +130,7 @@ static int replaceMethod(void *fromMethod, void *toMethod, int isBackup) {
         void *originEntrypoint = readAddr((char *) toMethod + OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod);
         // entry point hardcoded
         newEntrypoint = genTrampoline(toMethod, originEntrypoint);
-        replaced_entrypoint[fromMethod] = newEntrypoint;
+        replaced_entrypoint[toMethod] = originEntrypoint;
     }
     else {
         // entry point from ArtMethod struct
