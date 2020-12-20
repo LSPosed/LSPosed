@@ -28,7 +28,7 @@ namespace art {
 
         CREATE_HOOK_STUB_ENTRIES(uint32_t, ToDexPc, void** frame, const uintptr_t pc, bool abort_on_failure) {
             void* method = *frame;
-            if (LIKELY(edxp::isHooked(method))) {
+            if (UNLIKELY(edxp::isHooked(method))) {
                 LOGD("art_method::ToDexPc: Method %p is hooked, return kDexNoIndex", method);
                 return 0xFFFFFFFF; // kDexNoIndex
             }
