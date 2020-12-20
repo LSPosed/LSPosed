@@ -95,8 +95,6 @@ public class SandHook {
         if (SandHookConfig.delayHook && PendingHookHandler.canWork() && ClassStatusUtils.isStaticAndNoInited(entity.target)) {
             PendingHookHandler.addPendingHook(entity);
             return;
-        } else if (entity.initClass) {
-            resolveStaticMethod(target);
         }
 
         resolveStaticMethod(backup);

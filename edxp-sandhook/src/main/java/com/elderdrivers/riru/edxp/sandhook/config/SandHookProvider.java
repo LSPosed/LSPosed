@@ -16,6 +16,8 @@ import java.lang.reflect.Method;
 
 import de.robv.android.xposed.XposedBridge;
 
+import static com.elderdrivers.riru.edxp.util.ClassUtils.shouldDelayHook;
+
 public class SandHookProvider extends BaseHookProvider {
     @Override
     public void hookMethod(Member method, XposedBridge.AdditionalHookInfo additionalInfo) {
@@ -50,7 +52,7 @@ public class SandHookProvider extends BaseHookProvider {
 
     @Override
     public Member findMethodNative(Member hookMethod) {
-        return hookMethod;
+        return shouldDelayHook(hookMethod) ? null : hookMethod;
     }
 
     @Override
