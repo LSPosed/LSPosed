@@ -84,4 +84,5 @@ namespace art {
         }
     }
 }
+
 #endif //EDXPOSED_ART_METHOD_H
