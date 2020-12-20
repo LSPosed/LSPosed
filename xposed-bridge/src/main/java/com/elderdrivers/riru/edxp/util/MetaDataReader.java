@@ -104,4 +104,16 @@ public class MetaDataReader {
             super.end();
         }
     }
+
+    public static int extractIntPart(String str) {
+        int result = 0, length = str.length();
+        for (int offset = 0; offset < length; offset++) {
+            char c = str.charAt(offset);
+            if ('0' <= c && c <= '9')
+                result = result * 10 + (c - '0');
+            else
+                break;
+        }
+        return result;
+    }
 }

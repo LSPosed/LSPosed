@@ -66,7 +66,12 @@ public class HandleBindApp extends XC_MethodHook {
                 Map<String, Object> metaData = MetaDataReader.getMetaData(new File(appInfo.sourceDir));
                 isModule = metaData.containsKey("xposedmodule");
                 if (isModule) {
-                    xposedminversion = (Integer) metaData.get("xposedminversion");
+                    Object minVersionRaw = metaData.get("xposedminversion");
+                    if (minVersionRaw instanceof Integer) {
+                        xposedminversion = (Integer) minVersionRaw;
+                    } else if (minVersionRaw instanceof String) {
+                        xposedminversion = MetaDataReader.extractIntPart((String) minVersionRaw);
+                    }
                     xposedsharedprefs = metaData.containsKey("xposedsharedprefs");
                 }
             } catch (NumberFormatException | IOException e) {

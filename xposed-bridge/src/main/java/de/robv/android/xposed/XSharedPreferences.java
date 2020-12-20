@@ -25,8 +25,6 @@ import de.robv.android.xposed.services.FileResult;
  * This class is basically the same as SharedPreferencesImpl from AOSP, but
  * read-only and without listeners support. Instead, it is made to be
  * compatible with all ROMs.
- *
- * @deprecated in Android Pie or later was lost by Google, will not remove
  */
 public final class XSharedPreferences implements SharedPreferences {
     private static final String TAG = "XSharedPreferences";
@@ -77,7 +75,12 @@ public final class XSharedPreferences implements SharedPreferences {
                     Map<String, Object> metaData = MetaDataReader.getMetaData(new File(m));
                     isModule = metaData.containsKey("xposedmodule");
                     if (isModule) {
-                        xposedminversion = (Integer) metaData.get("xposedminversion");
+                        Object minVersionRaw = metaData.get("xposedminversion");
+                        if (minVersionRaw instanceof Integer) {
+                            xposedminversion = (Integer) minVersionRaw;
+                        } else if (minVersionRaw instanceof String) {
+                            xposedminversion = MetaDataReader.extractIntPart((String) minVersionRaw);
+                        }
                         xposedsharedprefs = metaData.containsKey("xposedsharedprefs");
                     }
                 } catch (NumberFormatException | IOException e) {
