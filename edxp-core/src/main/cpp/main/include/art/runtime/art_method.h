@@ -26,6 +26,15 @@ namespace art {
             return PrettyMethod(thiz, true);
         }
 
+        CREATE_HOOK_STUB_ENTRIES(uint32_t, ToDexPc, void** frame, const uintptr_t pc, bool abort_on_failure) {
+            void* method = *frame;
+            if (LIKELY(edxp::isHooked(method))) {
+                LOGD("art_method::ToDexPc: Method %p is hooked, return kDexNoIndex", method);
+                return 0xFFFFFFFF; // kDexNoIndex
+            }
+            return ToDexPcBackup(frame, pc, abort_on_failure);
+        }
+
         CREATE_HOOK_STUB_ENTRIES(void *, GetOatQuickMethodHeader, void *thiz, uintptr_t pc) {
             // This is a partial copy from AOSP. We only touch them if they are hooked.
             if (UNLIKELY(edxp::isHooked(thiz))) {
@@ -36,22 +45,22 @@ namespace art {
                             reinterpret_cast<char *>(original_ep) + oat_header_code_length_offset;
                     uint32_t code_length =
                             *reinterpret_cast<uint32_t *>(code_length_loc) & ~0x80000000;
-                    LOGD("GetOatQuickMethodHeader: ArtMethod=%p (%s), isHooked=true, original_ep=0x%x, code_length=0x%x, pc=0x%x",
+                    LOGD("art_method::GetOatQuickMethodHeader: ArtMethod=%p (%s), isHooked=true, original_ep=0x%x, code_length=0x%x, pc=0x%x",
                          thiz, PrettyMethod(thiz).c_str(), original_ep, code_length, pc);
                     if (original_ep <= pc && pc <= original_ep + code_length)
                         return reinterpret_cast<void *>(original_ep - oat_header_length);
                     // If PC is not in range, we mark it as not found.
-                    LOGD("GetOatQuickMethodHeader: PC not found in current method.");
+                    LOGD("art_method::GetOatQuickMethodHeader: PC not found in current method.");
                     return nullptr;
                 } else {
-                    LOGD("GetOatQuickMethodHeader: isHooked but not backup, fallback to system");
+                    LOGD("art_method::GetOatQuickMethodHeader: isHooked but not backup, fallback to system");
                 }
             }
             return GetOatQuickMethodHeaderBackup(thiz, pc);
         }
 
         static void Setup(void *handle, HookFunType hook_func) {
-            LOGD("Classlinker hook setup, handle=%p", handle);
+            LOGD("art_method hook setup, handle=%p", handle);
             int api_level = edxp::GetAndroidApiLevel();
             switch (api_level) {
                 case __ANDROID_API_O__:
@@ -63,7 +72,7 @@ namespace art {
                     oat_header_code_length_offset = -4;
                     break;
                 default:
-                    LOGW("No valid offset in SDK %d for oatHeaderLen, using offset from Android R",
+                    LOGW("No valid offset in SDK %d for oat_header_length, using offset from Android R",
                          api_level);
                     [[fallthrough]];
                 case __ANDROID_API_Q__:
@@ -79,8 +88,8 @@ namespace art {
                 HOOK_FUNC(GetOatQuickMethodHeader, "_ZN3art9ArtMethod23GetOatQuickMethodHeaderEj");
             }
 
-            RETRIEVE_FUNC_SYMBOL(PrettyMethod,
-                                 "_ZN3art9ArtMethod12PrettyMethodEb");
+            RETRIEVE_FUNC_SYMBOL(PrettyMethod, "_ZN3art9ArtMethod12PrettyMethodEb");
+            HOOK_FUNC(ToDexPc, "_ZNK3art20OatQuickMethodHeader7ToDexPcEPPNS_9ArtMethodEjb");
         }
     }
 }
