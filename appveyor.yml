@@ -38,12 +38,14 @@ only_commits:
     - edxp-common/
     - edxp-core/
     - edxp-sandhook/
+    - edxp-service/
     - edxp-yahfa/
     - hiddenapi-stubs/
     - sandhook-annotation/
     - sandhook-hooklib/
     - xposed-bridge/
-    - build.gradle
-    - settings.gradle
-    - gradle.properties
+    - .gitmodules
     - appveyor.yml
+    - build.gradle
+    - gradle.properties
+    - settings.gradle
