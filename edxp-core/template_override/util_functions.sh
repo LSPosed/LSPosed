@@ -42,6 +42,13 @@ require_yahfa() {
     abortC   "${POUNDS}"
 }
 
+duplicate_installation() {
+    ui_print "${POUNDS}"
+    ui_print "! ${LANG_UTIL_ERR_DUPINST_1}"
+    ui_print "! ${LANG_UTIL_ERR_DUPINST_2} ${1} ${LANG_UTIL_ERR_DUPINST_3}"
+    abortC   "${POUNDS}"
+}
+
 require_new_android() {
     ui_print "${POUNDS}"
     ui_print "! ${LANG_UTIL_ERR_ANDROID_UNSUPPORT_1} ${1} ${LANG_UTIL_ERR_ANDROID_UNSUPPORT_2}"
@@ -52,16 +59,22 @@ require_new_android() {
 
 edxp_check_architecture() {
     if [[ "${MODID}" == "riru_edxposed_sandhook" ]]; then
-        VARIANTS="SandHook"
+        VARIANT="SandHook"
+        if [[ "${IS_MAGISK_LITE}" == "false" && -d "${MODPATH}/../../modules/riru_edxposed" || -d "${MODPATH}/../../modules_update/riru_edxposed" ]] || [[ "${IS_MAGISK_LITE}" == "true" && -d "${MODPATH}/../../lite_modules/riru_edxposed" || -d "${MODPATH}/../../lite_modules_update/riru_edxposed" ]]; then
+            duplicate_installation "EdXposed (YAHFA)"
+        fi
     else
-        VARIANTS="YAHFA"
+        VARIANT="YAHFA"
+        if [[ "${IS_MAGISK_LITE}" == "false" && -d "${MODPATH}/../../modules/riru_edxposed_sandhook" || -d "${MODPATH}/../../modules_update/riru_edxposed_sandhook" ]] || [[ "${IS_MAGISK_LITE}" == "true" && -d "${MODPATH}/../../lite_modules/riru_edxposed_sandhook" || -d "${MODPATH}/../../lite_modules_update/riru_edxposed_sandhook" ]]; then
+            duplicate_installation "EdXposed (SandHook)"
+        fi
     fi
     if [[ "${ARCH}" != "arm" && "${ARCH}" != "arm64" && "${ARCH}" != "x86" && "${ARCH}" != "x64" ]]; then
         abortC "! ${LANG_UTIL_ERR_PLATFORM_UNSUPPORT}: ${ARCH}"
     else
         ui_print "- ${LANG_UTIL_PLATFORM}: ${ARCH}"
         if [[ "${ARCH}" == "x86" || "${ARCH}" == "x64" ]]; then
-            if [[ "${VARIANTS}" == "SandHook" ]]; then
+            if [[ "${VARIANT}" == "SandHook" ]]; then
                 require_yahfa
             fi
         fi

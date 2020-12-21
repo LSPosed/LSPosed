@@ -33,6 +33,9 @@ RIRU_EDXP="$(getRandomNameExist 4 "libriru_" ".so" "
 RIRU_MODULES="${RIRU_PATH}/modules"
 RIRU_TARGET="${RIRU_MODULES}/${RIRU_EDXP}"
 
+IS_MAGISK_LITE=false
+[[ "${MAGISK_VER:0-5}" == "-lite" ]] && IS_MAGISK_LITE=true
+
 VERSION=$(grep_prop version "${TMPDIR}/module.prop")
 RIRU_MIN_API_VERSION=$(grep_prop api "${TMPDIR}/module.prop")
 
@@ -95,6 +98,9 @@ LANG_UTIL_ERR_ANDROID_UNSUPPORT_1="Unsupported Android version"
 LANG_UTIL_ERR_ANDROID_UNSUPPORT_2="(below Oreo)"
 LANG_UTIL_ERR_ANDROID_UNSUPPORT_3="Learn more from our GitHub Wiki"
 LANG_UTIL_ERR_PLATFORM_UNSUPPORT="Unsupported platform"
+LANG_UTIL_ERR_DUPINST_1="Duplicate installation is now allowed"
+LANG_UTIL_ERR_DUPINST_2="Remove"
+LANG_UTIL_ERR_DUPINST_3="and reboot to install again"
 
 # Load lang
 if [[ ${BOOTMODE} == true ]]; then
@@ -157,14 +163,14 @@ if [ "$ARCH" = "x86" ] || [ "$ARCH" = "x64" ]; then
 else
   ui_print "- ${LANG_CUST_INST_EXT_LIB_ARM}"
   extract "$ZIPFILE" 'system/lib/libriru_edxp.so' "${MODPATH}"
-  if [[ "${VARIANTS}" == "SandHook" ]]; then
+  if [[ "${VARIANT}" == "SandHook" ]]; then
     extract "$ZIPFILE" 'system/lib/libsandhook.edxp.so' "${MODPATH}"
   fi
 
   if [ "$IS64BIT" = true ]; then
     ui_print "- ${LANG_CUST_INST_EXT_LIB_ARM64}"
     extract "$ZIPFILE" 'system/lib64/libriru_edxp.so' "${MODPATH}"
-    if [[ "${VARIANTS}" == "SandHook" ]]; then
+    if [[ "${VARIANT}" == "SandHook" ]]; then
      extract "$ZIPFILE" 'system/lib64/libsandhook.edxp.so' "${MODPATH}"
     fi
   fi
@@ -214,7 +220,7 @@ ui_print "- ${LANG_CUST_INST_COPY_LIB}"
 rm -rf "/data/misc/$MISC_PATH/framework"
 mv "${MODPATH}/system/framework" "/data/misc/$MISC_PATH/framework"
 
-if [[ "${VARIANTS}" == "SandHook" ]]; then
+if [[ "${VARIANT}" == "SandHook" ]]; then
   mkdir -p "/data/misc/$MISC_PATH/framework/lib"
   mv "${MODPATH}/system/lib/libsandhook.edxp.so" "/data/misc/$MISC_PATH/framework/lib/libsandhook.edxp.so"
   if [ "$IS64BIT" = true ]; then
