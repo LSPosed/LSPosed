@@ -131,13 +131,6 @@ start_log_cather () {
     echo "${LOG_PID}">"${LOG_PATH}/${LOG_FILE_NAME}.pid"
 }
 
-# Backup app_process to avoid bootloop caused by original Xposed replacement in Android Oreo
-# TODO: Magisk mount replace
-rm -rf "${MODDIR}/system/bin"
-mkdir "${MODDIR}/system/bin"
-cp -f "/system/bin/app_process32" "${MODDIR}/system/bin/app_process32"
-[[ -f "/system/bin/app_process64" ]] && cp -f "/system/bin/app_process64" "${MODDIR}/system/bin/app_process64"
-
 # install stub if manager not installed
 if [[ "$(pm path org.meowcat.edxposed.manager 2>&1)" == "" && "$(pm path de.robv.android.xposed.installer 2>&1)" == "" ]]; then
     NO_MANAGER=true
