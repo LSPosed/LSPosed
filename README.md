@@ -10,23 +10,11 @@ A Riru module trying to provide an ART hooking framework (initially for Android 
 
 ## Supported Versions
 
-- Android R (11, sdk30) (Experimental)
-- Android Q (10, sdk29)
-- Android Pie (9, sdk28)
-- Android Oreo (8.x, sdk26/27)
-
-For Android Nougat (7.x) and lower, please use the original Xposed Framework.
-
-## Build Requirements
-
-Same as [Riru-Core's](https://github.com/RikkaApps/Riru/blob/master/README.md#build-requirements)
-and zip binaries can be downloaded from [here](http://gnuwin32.sourceforge.net/packages/zip.htm).
+[Wiki: Available Android versions](https://github.com/ElderDrivers/EdXposed/wiki/Available-Android-versions)
 
 ## Build
 
-1. Execute task `:edxp-core:zip[Yahfa|Sandhook]Release` to build flashable zip for corresponding variant.
-2. Find the flashable under `edxp-core/release/`.
-3. Flash the zip in recovery mode or via Magisk Manager.
+[Wiki: Build](https://github.com/ElderDrivers/EdXposed/wiki/Build)
 
 ## Install
 
@@ -56,7 +44,7 @@ Edxposed has three different builds
 
 ## Known Issues
 
-See [Wiki: Known issues or bugs](https://github.com/ElderDrivers/EdXposed/wiki/Known-issues-or-bugs)
+See [Issues](https://github.com/ElderDrivers/EdXposed/issues)
 
 ## Get Help
 
@@ -64,9 +52,9 @@ See [Wiki: Known issues or bugs](https://github.com/ElderDrivers/EdXposed/wiki/K
 
 - Notice(for Chinese): In view of the low quality of issues submitted, please read the Chinese user report first[EdXposedIssuesReport_cn](http://edxp.meowcat.org/assets/EdXposedIssuesReport_cn.txt)(If you don't read the instructions, the submitted issue is likely to be closed)
 
-## For Developers 
+## For Developers
 
-Developers are welcomed to write Xposed modules with hooks based on EdXposed Framework. Module written based on EdXposed framework is fully compatible with the original Xposed Framework, so contrary a Xposed Framework-based module will work well with the EdXposed framework too. 
+Developers are welcomed to write Xposed modules with hooks based on EdXposed Framework. Module written based on EdXposed framework is fully compatible with the original Xposed Framework, so contrary a Xposed Framework-based module will work well with the EdXposed framework too.
 
 - [Xposed Framework API](https://api.xposed.info/)
 

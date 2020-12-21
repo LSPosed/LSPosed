@@ -53,7 +53,7 @@ livePatch() {
 #    PATH_PREFIX="${PATH_PREFIX_LEGACY}"
 #fi
 
-DEFAULT_BASE_PATH="${PATH_PREFIX}${EDXP_MANAGER}"
+#DEFAULT_BASE_PATH="${PATH_PREFIX}${EDXP_MANAGER}"
 MISC_PATH=$(cat /data/adb/edxp/misc_path)
 BASE_PATH="/data/misc/$MISC_PATH"
 
