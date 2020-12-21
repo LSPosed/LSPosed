@@ -20,17 +20,18 @@ public class MetaDataReader {
     }
 
     private MetaDataReader(File apk) throws IOException {
-        JarFile zip = new JarFile(apk);
-        InputStream is = zip.getInputStream(zip.getEntry("AndroidManifest.xml"));
-        byte[] bytes =  getBytesFromInputStream(is);
-        AxmlReader reader = new AxmlReader(bytes);
-        reader.accept(new AxmlVisitor() {
-            @Override
-            public NodeVisitor child(String ns, String name) {
-                NodeVisitor child = super.child(ns, name);
-                return new ManifestTagVisitor(child);
-            }
-        });
+        try(JarFile zip = new JarFile(apk)) {
+            InputStream is = zip.getInputStream(zip.getEntry("AndroidManifest.xml"));
+            byte[] bytes =  getBytesFromInputStream(is);
+            AxmlReader reader = new AxmlReader(bytes);
+            reader.accept(new AxmlVisitor() {
+                @Override
+                public NodeVisitor child(String ns, String name) {
+                    NodeVisitor child = super.child(ns, name);
+                    return new ManifestTagVisitor(child);
+                }
+            });
+        }
     }
 
     public static byte[] getBytesFromInputStream(InputStream inputStream) throws IOException {
