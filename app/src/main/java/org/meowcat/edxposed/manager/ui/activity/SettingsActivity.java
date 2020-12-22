@@ -110,7 +110,7 @@ public class SettingsActivity extends BaseActivity {
 
     @SuppressWarnings({"ResultOfMethodCallIgnored"})
     public static class SettingsFragment extends PreferenceFragmentCompat {
-        private static final File disableResourcesFlag = new File(Constants.getBaseDir() + "conf/disable_resources");
+        private static final File enableResourcesFlag = new File(Constants.getBaseDir() + "conf/enable_resources");
         private static final File dynamicModulesFlag = new File(Constants.getBaseDir() + "conf/dynamicmodules");
         private static final File deoptBootFlag = new File(Constants.getBaseDir() + "conf/deoptbootimage");
         private static final File whiteListModeFlag = new File(Constants.getBaseDir() + "conf/usewhitelist");
@@ -342,13 +342,13 @@ public class SettingsActivity extends BaseActivity {
 
             SwitchPreferenceCompat prefDisableResources = findPreference("disable_resources");
             if (prefDisableResources != null) {
-                prefDisableResources.setChecked(disableResourcesFlag.exists());
+                prefDisableResources.setChecked(!enableResourcesFlag.exists());
                 prefDisableResources.setOnPreferenceChangeListener((preference, newValue) -> {
                     boolean enabled = (Boolean) newValue;
-                    if (enabled) {
+                    if (!enabled) {
                         FileOutputStream fos = null;
                         try {
-                            fos = new FileOutputStream(disableResourcesFlag.getPath());
+                            fos = new FileOutputStream(enableResourcesFlag.getPath());
                         } catch (FileNotFoundException e) {
                             Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                         } finally {
@@ -358,7 +358,7 @@ public class SettingsActivity extends BaseActivity {
                                 } catch (IOException e) {
                                     Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                                     try {
-                                        disableResourcesFlag.createNewFile();
+                                        enableResourcesFlag.createNewFile();
                                     } catch (IOException e1) {
                                         Toast.makeText(getActivity(), e1.getMessage(), Toast.LENGTH_SHORT).show();
                                     }
@@ -366,9 +366,9 @@ public class SettingsActivity extends BaseActivity {
                             }
                         }
                     } else {
-                        disableResourcesFlag.delete();
+                        enableResourcesFlag.delete();
                     }
-                    return (enabled == disableResourcesFlag.exists());
+                    return (enabled != enableResourcesFlag.exists());
                 });
             }
 
