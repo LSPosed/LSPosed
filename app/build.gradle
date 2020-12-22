@@ -32,8 +32,7 @@ android {
     defaultConfig {
         applicationId "org.meowcat.edxposed.manager"
         minSdkVersion 26
-        //noinspection OldTargetApi
-        targetSdkVersion 27
+        targetSdkVersion 30
         versionCode 458010
         versionName "4.5.8.1"
         signingConfig signingConfigs.release
@@ -66,7 +65,7 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.browser:browser:1.2.0'
+    implementation 'androidx.browser:browser:1.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation "androidx.recyclerview:recyclerview:1.1.0"
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
