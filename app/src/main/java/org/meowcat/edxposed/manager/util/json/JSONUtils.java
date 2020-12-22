@@ -9,7 +9,7 @@ import java.util.List;
 
 public class JSONUtils {
 
-    public static final String JSON_LINK = "http://edxp.meowcat.org/assets/version.json";
+    public static final String JSON_LINK = "https://edxp.meowcat.org/assets/version.json";
 
     public static String getFileContent(String url) throws IOException {
         HttpURLConnection c = (HttpURLConnection) new URL(url).openConnection();
