@@ -72,13 +72,6 @@
         android:title="@string/settings_group_download"
         app:iconSpaceReserved="false">
 
-        <SwitchPreferenceCompat
-            android:defaultValue="false"
-            android:key="install_with_su"
-            android:summary="@string/install_with_su_summ"
-            android:title="@string/install_with_su"
-            app:iconSpaceReserved="false" />
-
         <SimpleMenuPreference
             android:defaultValue="stable"
             android:entries="@array/release_type_texts"
