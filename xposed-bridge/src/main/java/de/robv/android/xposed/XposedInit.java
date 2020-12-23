@@ -338,6 +338,7 @@ public final class XposedInit {
                 if (loadedModules.contains(apk)) {
                     newLoadedApk.add(apk);
                 } else {
+                    loadedModules.add(apk); // temporarily add it for XSharedPreference
                     boolean loadSuccess = loadModule(apk, topClassLoader, callInitZygote);
                     if (loadSuccess) {
                         newLoadedApk.add(apk);
