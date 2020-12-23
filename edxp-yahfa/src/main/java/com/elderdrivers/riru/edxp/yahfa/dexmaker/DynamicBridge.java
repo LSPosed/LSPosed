@@ -12,6 +12,7 @@ import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import de.robv.android.xposed.EdHooker;
 import de.robv.android.xposed.XposedBridge;
 
 import static com.elderdrivers.riru.edxp.util.FileUtils.getDataPathPrefix;
@@ -21,7 +22,7 @@ import static com.elderdrivers.riru.edxp.yahfa.dexmaker.DexMakerUtils.shouldUseI
 
 public final class DynamicBridge {
 
-    private static final HashMap<Member, Method> hookedInfo = new HashMap<>();
+    private static final HashMap<Member, EdHooker> hookedInfo = new HashMap<>();
     private static final HookerDexMaker dexMaker = new HookerDexMaker();
     private static final AtomicBoolean dexPathInited = new AtomicBoolean(false);
     private static File dexDir;
@@ -47,6 +48,7 @@ public final class DynamicBridge {
         }
 
         DexLog.d("start to generate class for: " + hookMethod);
+        long startTime = System.nanoTime();
         try {
             // for Android Oreo and later use InMemoryClassLoader
             if (!shouldUseInMemoryHook()) {
@@ -54,10 +56,12 @@ public final class DynamicBridge {
             }
             dexMaker.start(hookMethod, additionalHookInfo,
                     hookMethod.getDeclaringClass().getClassLoader(), getDexDirPath());
-            hookedInfo.put(hookMethod, dexMaker.getCallBackupMethod());
+            hookedInfo.put(hookMethod, dexMaker.getHooker());
         } catch (Exception e) {
             DexLog.e("error occur when generating dex. dexDir=" + dexDir, e);
         }
+        long endTime   = System.nanoTime();
+        DexLog.d("generated class for " + hookMethod + " in " + ((endTime-startTime) * 1.e-6) + "ms");
     }
 
     private static String getDexDirPath() {
@@ -106,28 +110,11 @@ public final class DynamicBridge {
 
     public static Object invokeOriginalMethod(Member method, Object thisObject, Object[] args)
             throws InvocationTargetException, IllegalAccessException {
-        Method callBackup = hookedInfo.get(method);
-        if (callBackup == null) {
+        EdHooker hooker = hookedInfo.get(method);
+        if (hooker == null) {
             throw new IllegalStateException("method not hooked, cannot call original method.");
         }
-        if (!Modifier.isStatic(callBackup.getModifiers())) {
-            throw new IllegalStateException("original method is not static, something must be wrong!");
-        }
-        callBackup.setAccessible(true);
-        if (args == null) {
-            args = new Object[0];
-        }
-        final int argsSize = args.length;
-        if (Modifier.isStatic(method.getModifiers())) {
-            return callBackup.invoke(null, args);
-        } else {
-            Object[] newArgs = new Object[argsSize + 1];
-            newArgs[0] = thisObject;
-            for (int i = 1; i < newArgs.length; i++) {
-                newArgs[i] = args[i - 1];
-            }
-            return callBackup.invoke(null, newArgs);
-        }
+        return hooker.callBackup(thisObject, args);
     }
 }
 
