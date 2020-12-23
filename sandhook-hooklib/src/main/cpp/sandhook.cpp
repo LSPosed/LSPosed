@@ -157,9 +157,9 @@ JNIEXPORT jboolean JNICALL
 Java_com_swift_sandhook_SandHook_initNative(JNIEnv *env, jclass type, jint sdk, jboolean debug) {
     SDK_INT = sdk;
     DEBUG = debug;
+    SandHook::CastCompilerOptions::init(env);
     initHideApi(env);
     SandHook::CastArtMethod::init(env);
-    SandHook::CastCompilerOptions::init(env);
     trampolineManager.init(SandHook::CastArtMethod::entryPointQuickCompiled->getOffset());
     return JNI_TRUE;
 
