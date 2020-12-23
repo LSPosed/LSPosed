@@ -43,6 +43,12 @@ namespace art {
                 return IsInSamePackageBackup(thiz, that);
             }
 
+            CREATE_FUNC_SYMBOL_ENTRY(void*, GetClassDef, void* thiz) {
+                if (LIKELY(GetClassDefSym))
+                    return GetClassDefSym(thiz);
+                return nullptr;
+            }
+
         public:
             Class(void *thiz) : HookedObject(thiz) {}
 
@@ -50,6 +56,8 @@ namespace art {
             static void Setup(void *handle, HookFunType hook_func) {
                 RETRIEVE_FUNC_SYMBOL(GetDescriptor, "_ZN3art6mirror5Class13GetDescriptorEPNSt3__112"
                                                     "basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEE");
+
+                RETRIEVE_FUNC_SYMBOL(GetClassDef, "_ZN3art6mirror5Class11GetClassDefEv");
 
 //                RETRIEVE_FIELD_SYMBOL(mutator_lock_, "_ZN3art5Locks13mutator_lock_E");
 //                LOGE("mutator_lock_: %p", mutator_lock_);
@@ -64,14 +72,20 @@ namespace art {
 
             const char *GetDescriptor(std::string *storage) {
                 if (thiz_ && GetDescriptorSym) {
-                    if (storage == nullptr) {
-                        std::string str;
-                        return GetDescriptor(thiz_, &str);
-                    } else {
-                        return GetDescriptor(thiz_, storage);
-                    }
+                    return GetDescriptor(thiz_, storage);
                 }
                 return "";
+            }
+
+            std::string GetDescriptor() {
+                std::string storage;
+                return GetDescriptor(&storage);
+            }
+
+            void *GetClassDef() {
+                if(thiz_ && GetClassDefSym)
+                    return GetClassDef(thiz_);
+                return nullptr;
             }
         };
 

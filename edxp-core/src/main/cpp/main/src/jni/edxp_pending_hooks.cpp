@@ -22,8 +22,14 @@ namespace edxp {
     static void PendingHooks_recordPendingMethodNative(JNI_START, jlong thread, jclass class_ref) {
         art::Thread current_thread(reinterpret_cast<void *>(thread));
         auto *class_ptr = current_thread.DecodeJObject(class_ref);
-        LOGD("record pending: %p (%s)", class_ptr, art::mirror::Class(class_ptr).GetDescriptor(nullptr));
-        pending_classes_.insert(class_ptr);
+        art::mirror::Class mirror_class(class_ptr);
+        if (auto def = mirror_class.GetClassDef(); LIKELY(def)) {
+            LOGD("record pending: %p (%s)", class_ptr, mirror_class.GetDescriptor().c_str());
+            pending_classes_.insert(def);
+        } else {
+            LOGW("fail to record pending for : %p (%s)", class_ptr,
+                 mirror_class.GetDescriptor().c_str());
+        }
     }
 
     static JNINativeMethod gMethods[] = {

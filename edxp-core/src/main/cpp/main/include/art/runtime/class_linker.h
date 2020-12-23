@@ -35,10 +35,13 @@ namespace art {
         }
 
         CREATE_HOOK_STUB_ENTRIES(void, FixupStaticTrampolines, void *thiz, void *clazz_ptr) {
-            bool should_intercept = edxp::IsClassPending(clazz_ptr);
             FixupStaticTrampolinesBackup(thiz, clazz_ptr);
+            art::mirror::Class mirror_class(clazz_ptr);
+            auto class_def = mirror_class.GetClassDef();
+            bool should_intercept = class_def && edxp::IsClassPending(class_def);
             if (UNLIKELY(should_intercept)) {
-                LOGD("Pending hook for %p (%s)", clazz_ptr, art::mirror::Class(clazz_ptr).GetDescriptor(nullptr));
+                LOGD("Pending hook for %p (%s)", clazz_ptr,
+                     art::mirror::Class(clazz_ptr).GetDescriptor().c_str());
                 edxp::Context::GetInstance()->CallOnPostFixupStaticTrampolines(clazz_ptr);
             }
         }
