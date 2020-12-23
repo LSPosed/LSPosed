@@ -13,7 +13,6 @@ extern int SDK_INT;
 extern "C" {
 
 
-    void* (*jitLoad)(bool*) = nullptr;
     void* jitCompilerHandle = nullptr;
     bool (*jitCompileMethod)(void*, void*, void*, bool) = nullptr;
     bool (*jitCompileMethodQ)(void*, void*, void*, bool, bool) = nullptr;
@@ -77,11 +76,17 @@ extern "C" {
                                                              bool)>(getSymCompat(jit_lib_path,
                                                                                  "jit_compile_method"));
             }
-            jitLoad = reinterpret_cast<void* (*)(bool*)>(getSymCompat(jit_lib_path, "jit_load"));
-            bool generate_debug_info = false;
-
-            if (jitLoad != nullptr) {
-                jitCompilerHandle = (jitLoad)(&generate_debug_info);
+            auto jit_load = getSymCompat(jit_lib_path, "jit_load");
+            if (jit_load) {
+                if (SDK_INT >= ANDROID_Q) {
+                    // Android 10：void* jit_load()
+                    // Android 11: JitCompilerInterface* jit_load()
+                    jitCompilerHandle = reinterpret_cast<void*(*)()>(jit_load)();
+                } else {
+                    // void* jit_load(bool* generate_debug_info)
+                    bool generate_debug_info = false;
+                    jitCompilerHandle = reinterpret_cast<void*(*)(void*)>(jit_load)(&generate_debug_info);
+                }
             } else {
                 jitCompilerHandle = getGlobalJitCompiler();
             }
