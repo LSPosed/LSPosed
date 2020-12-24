@@ -20,9 +20,8 @@ namespace edxp {
     }
 
     static inline std::string GetAndroidBrand() {
-        std::string prop_value;
-        prop_value.reserve(PROP_VALUE_MAX);
-        __system_property_get("ro.product.brand", prop_value.data());
+        char prop_value[PROP_VALUE_MAX];
+        __system_property_get("ro.product.brand", prop_value);
         return prop_value;
     }
 
