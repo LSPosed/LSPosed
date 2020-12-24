@@ -1,7 +1,6 @@
 package com.swift.sandhook.xposedcompat.methodgen;
 
-import android.text.TextUtils;
-
+import com.elderdrivers.riru.edxp.config.ConfigManager;
 import com.swift.sandhook.SandHook;
 import com.swift.sandhook.wrapper.HookWrapper;
 import com.swift.sandhook.xposedcompat.hookstub.HookStubManager;
@@ -28,8 +27,10 @@ import external.com.android.dx.TypeId;
 import static com.swift.sandhook.xposedcompat.utils.DexMakerUtils.MD5;
 import static com.swift.sandhook.xposedcompat.utils.DexMakerUtils.autoBoxIfNecessary;
 import static com.swift.sandhook.xposedcompat.utils.DexMakerUtils.autoUnboxIfNecessary;
+import static com.swift.sandhook.xposedcompat.utils.DexMakerUtils.canCache;
 import static com.swift.sandhook.xposedcompat.utils.DexMakerUtils.createResultLocals;
 import static com.swift.sandhook.xposedcompat.utils.DexMakerUtils.getObjTypeIdIfPrimitive;
+import static com.swift.sandhook.xposedcompat.utils.DexMakerUtils.getSha1Hex;
 
 public class HookerDexMakerNew implements HookMaker {
 
@@ -70,7 +71,6 @@ public class HookerDexMakerNew implements HookMaker {
     private Class<?> mHookClass;
     private Method mHookMethod;
     private Method mBackupMethod;
-    private String mDexDirPath;
 
     private static TypeId<?>[] getParameterTypeIds(Class<?>[] parameterTypes, boolean isStatic) {
         int parameterSize = parameterTypes.length;
@@ -101,7 +101,7 @@ public class HookerDexMakerNew implements HookMaker {
     }
 
     public void start(Member member, XposedBridge.AdditionalHookInfo hookInfo,
-                      ClassLoader appClassLoader, String dexDirPath) throws Exception {
+                      ClassLoader appClassLoader) throws Exception {
         if (member instanceof Method) {
             Method method = (Method) member;
             mIsStatic = Modifier.isStatic(method.getModifiers());
@@ -134,7 +134,6 @@ public class HookerDexMakerNew implements HookMaker {
         }
         mMember = member;
         mHookInfo = hookInfo;
-        mDexDirPath = dexDirPath;
         if (appClassLoader == null
                 || appClassLoader.getClass().getName().equals("java.lang.BootClassLoader")) {
             mAppClassLoader = this.getClass().getClassLoader();
@@ -150,7 +149,7 @@ public class HookerDexMakerNew implements HookMaker {
         HookWrapper.HookEntity hookEntity = null;
         //try load cache first
         try {
-            ClassLoader loader = mDexMaker.loadClassDirect(mAppClassLoader, new File(mDexDirPath), dexName);
+            ClassLoader loader = mDexMaker.loadClassDirect(mAppClassLoader, new File(ConfigManager.getCachePath("")), dexName);
             if (loader != null) {
                 hookEntity = loadHookerClass(loader, className);
             }
@@ -171,14 +170,17 @@ public class HookerDexMakerNew implements HookMaker {
         generateBackupMethod();
 
         ClassLoader loader;
-        if (TextUtils.isEmpty(mDexDirPath)) {
+        if (!canCache) {
             byte[] dexBytes = mDexMaker.generate();
             loader = new InMemoryDexClassLoader(ByteBuffer.wrap(dexBytes), mAppClassLoader);
             return loadHookerClass(loader, className);
         }
         // Create the dex file and load it.
         try {
-            loader = mDexMaker.generateAndLoad(mAppClassLoader, new File(mDexDirPath), dexName, true);
+            loader = mDexMaker.generateAndLoad(mAppClassLoader, new File(ConfigManager.getCachePath("")), dexName, true);
+            File dexFile = new File(ConfigManager.getCachePath(dexName));
+            dexFile.setWritable(true, false);
+            dexFile.setReadable(true, false);
         } catch (IOException e) {
             //can not write file
             byte[] dexBytes = mDexMaker.generate();
@@ -203,7 +205,7 @@ public class HookerDexMakerNew implements HookMaker {
     }
 
     private String getClassName(Member originMethod) {
-        return CLASS_NAME_PREFIX + "_" + MD5(originMethod.toString());
+        return CLASS_NAME_PREFIX + "_" + getSha1Hex(originMethod.toString());
     }
 
     public Method getHookMethod() {

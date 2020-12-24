@@ -4,6 +4,7 @@ import com.elderdrivers.riru.edxp.config.ConfigManager;
 import com.elderdrivers.riru.edxp.util.Utils;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.Map;
@@ -224,7 +225,7 @@ public class DexMakerUtils {
         final MessageDigest digest;
         try {
             digest = MessageDigest.getInstance("SHA-1");
-            byte[] result = digest.digest(text.getBytes("UTF-8"));
+            byte[] result = digest.digest(text.getBytes(StandardCharsets.UTF_8));
             StringBuilder sb = new StringBuilder();
             for (byte b : result) {
                 sb.append(String.format("%02x", b));

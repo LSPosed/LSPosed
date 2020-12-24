@@ -7,7 +7,7 @@ import de.robv.android.xposed.XposedBridge;
 
 public interface HookMaker {
     void start(Member member, XposedBridge.AdditionalHookInfo hookInfo,
-               ClassLoader appClassLoader, String dexDirPath) throws Exception;
+               ClassLoader appClassLoader) throws Exception;
     Method getHookMethod();
     Method getBackupMethod();
     Method getCallBackupMethod();
