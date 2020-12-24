@@ -22,8 +22,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.StringBufferInputStream;
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,7 +34,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import dalvik.system.DexFile;
 import dalvik.system.PathClassLoader;
 import de.robv.android.xposed.annotation.ApiSensitive;
 import de.robv.android.xposed.annotation.Level;
@@ -397,30 +396,35 @@ public final class XposedInit {
             return false;
         }
 
-        DexFile dexFile;
+        ClassLoader mcl = new PathClassLoader(apk, topClassLoader);
         try {
-            dexFile = new DexFile(apk);
-        } catch (IOException e) {
-            Log.e(TAG, "  Cannot load module", e);
-            return false;
+            if (mcl.loadClass(INSTANT_RUN_CLASS) != null) {
+                Log.e(TAG, "  Cannot load module, please disable \"Instant Run\" in Android Studio.");
+                return false;
+            }
+        } catch (ClassNotFoundException ignored) {
         }
 
-        if (dexFile.loadClass(INSTANT_RUN_CLASS, topClassLoader) != null) {
-            Log.e(TAG, "  Cannot load module, please disable \"Instant Run\" in Android Studio.");
-            closeSilently(dexFile);
-            return false;
+        try {
+            if (mcl.loadClass(XposedBridge.class.getName()) != null) {
+                Log.e(TAG, "  Cannot load module:");
+                Log.e(TAG, "  The Xposed API classes are compiled into the module's APK.");
+                Log.e(TAG, "  This may cause strange issues and must be fixed by the module developer.");
+                Log.e(TAG, "  For details, see: http://api.xposed.info/using.html");
+                return false;
+            }
+        } catch (ClassNotFoundException ignored) {
         }
 
-        if (dexFile.loadClass(XposedBridge.class.getName(), topClassLoader) != null) {
+        try {
+            Field parentField = ClassLoader.class.getDeclaredField("parent");
+            parentField.setAccessible(true);
+            parentField.set(mcl, XposedInit.class.getClassLoader());
+        } catch (NoSuchFieldException | IllegalAccessException e) {
             Log.e(TAG, "  Cannot load module:");
-            Log.e(TAG, "  The Xposed API classes are compiled into the module's APK.");
-            Log.e(TAG, "  This may cause strange issues and must be fixed by the module developer.");
-            Log.e(TAG, "  For details, see: http://api.xposed.info/using.html");
-            closeSilently(dexFile);
+            Log.e(TAG, "  Classloader cannot change parent.");
             return false;
         }
-
-        closeSilently(dexFile);
 
         ZipFile zipFile = null;
         InputStream is;
@@ -439,7 +443,6 @@ public final class XposedInit {
             return false;
         }
 
-        ClassLoader mcl = new PathClassLoader(apk, XposedInit.class.getClassLoader());
         BufferedReader moduleClassesReader = new BufferedReader(new InputStreamReader(is));
         try {
             String moduleClassName;
