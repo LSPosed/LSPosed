@@ -15,17 +15,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import de.robv.android.xposed.EdHooker;
 import de.robv.android.xposed.XposedBridge;
 
-import static com.elderdrivers.riru.edxp.util.FileUtils.getDataPathPrefix;
-import static com.elderdrivers.riru.edxp.util.FileUtils.getPackageName;
-import static com.elderdrivers.riru.edxp.util.ProcessUtils.getCurrentProcessName;
-import static com.elderdrivers.riru.edxp.yahfa.dexmaker.DexMakerUtils.shouldUseInMemoryHook;
-
 public final class DynamicBridge {
 
     private static final HashMap<Member, EdHooker> hookedInfo = new HashMap<>();
     private static final HookerDexMaker dexMaker = new HookerDexMaker();
     private static final AtomicBoolean dexPathInited = new AtomicBoolean(false);
-    private static File dexDir;
     private static File dexOptDir;
 
     /**
@@ -50,44 +44,14 @@ public final class DynamicBridge {
         DexLog.d("start to generate class for: " + hookMethod);
         long startTime = System.nanoTime();
         try {
-            // for Android Oreo and later use InMemoryClassLoader
-            if (!shouldUseInMemoryHook()) {
-                setupDexCachePath();
-            }
             dexMaker.start(hookMethod, additionalHookInfo,
-                    hookMethod.getDeclaringClass().getClassLoader(), getDexDirPath());
+                    hookMethod.getDeclaringClass().getClassLoader());
             hookedInfo.put(hookMethod, dexMaker.getHooker());
         } catch (Exception e) {
-            DexLog.e("error occur when generating dex. dexDir=" + dexDir, e);
+            DexLog.e("error occur when generating dex.", e);
         }
         long endTime   = System.nanoTime();
         DexLog.d("generated class for " + hookMethod + " in " + ((endTime-startTime) * 1.e-6) + "ms");
-    }
-
-    private static String getDexDirPath() {
-        if (dexDir == null) {
-            return null;
-        }
-        return dexDir.getAbsolutePath();
-    }
-
-    private static void setupDexCachePath() {
-        // using file based DexClassLoader
-        if (!dexPathInited.compareAndSet(false, true)) {
-            return;
-        }
-        try {
-            // we always choose to use device encrypted storage data on android N and later
-            // in case some app is installing hooks before phone is unlocked
-            String fixedAppDataDir = getDataPathPrefix() + getPackageName(ConfigManager.appDataDir) + "/";
-            dexDir = new File(fixedAppDataDir, "/cache/edhookers/"
-                    + getCurrentProcessName(ConfigManager.appProcessName).replace(":", "_") + "/");
-            dexOptDir = new File(dexDir, "oat");
-            dexDir.mkdirs();
-            DexLog.d(ConfigManager.appProcessName + " deleting dir: " + dexOptDir.getAbsolutePath());
-        } catch (Throwable throwable) {
-            DexLog.e("error when init dex path", throwable);
-        }
     }
 
     private static boolean checkMember(Member member) {

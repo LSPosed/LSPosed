@@ -45,6 +45,8 @@ public class ConfigManager {
 
     public static native String getPrefsPath(String suffix);
 
+    public static native String getCachePath(String suffix);
+
     public static native String getBaseConfigPath();
 
     public static native String getDataPathPrefix();

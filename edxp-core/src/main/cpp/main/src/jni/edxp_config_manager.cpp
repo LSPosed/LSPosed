@@ -53,6 +53,13 @@ namespace edxp {
         return env->NewStringUTF(result.c_str());
     }
 
+    static jstring ConfigManager_getCachePath(JNI_START, jstring jSuffix) {
+        const char *suffix = env->GetStringUTFChars(jSuffix, JNI_FALSE);
+        auto result = ConfigManager::GetCachePath(suffix);
+        env->ReleaseStringUTFChars(jSuffix, suffix);
+        return env->NewStringUTF(result.c_str());
+    }
+
     static jstring ConfigManager_getBaseConfigPath(JNI_START) {
         auto result = ConfigManager::GetInstance()->GetBaseConfigPath();
         return env->NewStringUTF(result.c_str());
@@ -79,6 +86,8 @@ namespace edxp {
             NATIVE_METHOD(ConfigManager, getConfigPath,
                           "(Ljava/lang/String;)Ljava/lang/String;"),
             NATIVE_METHOD(ConfigManager, getPrefsPath,
+                          "(Ljava/lang/String;)Ljava/lang/String;"),
+            NATIVE_METHOD(ConfigManager, getCachePath,
                           "(Ljava/lang/String;)Ljava/lang/String;"),
             NATIVE_METHOD(ConfigManager, getBaseConfigPath,"()Ljava/lang/String;"),
             NATIVE_METHOD(ConfigManager, getModulesList, "()Ljava/lang/String;"),

@@ -230,6 +230,9 @@ if [[ "${VARIANT}" == "SandHook" ]]; then
 fi
 set_perm_recursive /data/misc/$MISC_PATH/framework root root 0755 0644 "u:object_r:magisk_file:s0" || abortC "! ${LANG_CUST_ERR_PERM}"
 
+mkdir -p /data/misc/$MISC_PATH/cache
+set_perm /data/misc/$MISC_PATH/cache root root 0777 "u:object_r:magisk_file:s0" || abortC "! ${LANG_CUST_ERR_PERM}"
+
 mv "${MODPATH}/system/lib/libriru_edxp.so" "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
 if [[ "${IS64BIT}" == true ]]; then
     mv "${MODPATH}/system/lib64/libriru_edxp.so" "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"

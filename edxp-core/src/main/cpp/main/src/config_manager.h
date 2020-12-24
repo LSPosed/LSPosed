@@ -68,6 +68,10 @@ namespace edxp {
             return misc_path_ / "framework" / suffix;
         }
 
+        inline static auto GetCachePath(const std::string &suffix = {}) {
+            return misc_path_ / "cache" / suffix;
+        }
+
         inline static auto GetLibSandHookName() {
             if constexpr(edxp::is64)
                 return GetFrameworkPath("lib64/libsandhook.edxp.so");

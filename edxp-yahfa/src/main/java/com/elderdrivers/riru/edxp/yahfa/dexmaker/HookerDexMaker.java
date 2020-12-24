@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.os.Build;
 import android.text.TextUtils;
 
+import com.elderdrivers.riru.edxp.config.ConfigManager;
 import com.elderdrivers.riru.edxp.core.yahfa.HookMain;
 import com.elderdrivers.riru.edxp.util.ProxyClassLoader;
 import com.elderdrivers.riru.edxp.yahfa.BuildConfig;
@@ -26,9 +27,11 @@ import external.com.android.dx.FieldId;
 import external.com.android.dx.Local;
 import external.com.android.dx.MethodId;
 import external.com.android.dx.TypeId;
+import pxb.android.arsc.Config;
 
 import static com.elderdrivers.riru.edxp.yahfa.dexmaker.DexMakerUtils.autoBoxIfNecessary;
 import static com.elderdrivers.riru.edxp.yahfa.dexmaker.DexMakerUtils.autoUnboxIfNecessary;
+import static com.elderdrivers.riru.edxp.yahfa.dexmaker.DexMakerUtils.canCache;
 import static com.elderdrivers.riru.edxp.yahfa.dexmaker.DexMakerUtils.createResultLocals;
 import static com.elderdrivers.riru.edxp.yahfa.dexmaker.DexMakerUtils.getObjTypeIdIfPrimitive;
 
@@ -69,7 +72,6 @@ public class HookerDexMaker {
     private Class<?> mHookClass;
     private Method mHookMethod;
     private Method mBackupMethod;
-    private String mDexDirPath;
     private EdHooker mHooker;
 
     private static TypeId<?>[] getParameterTypeIds(Class<?>[] parameterTypes, boolean isStatic) {
@@ -101,7 +103,7 @@ public class HookerDexMaker {
     }
 
     public void start(Member member, XposedBridge.AdditionalHookInfo hookInfo,
-                      ClassLoader appClassLoader, String dexDirPath) throws Exception {
+                      ClassLoader appClassLoader) throws Exception {
         if (member instanceof Method) {
             Method method = (Method) member;
             mIsStatic = Modifier.isStatic(method.getModifiers());
@@ -132,7 +134,6 @@ public class HookerDexMaker {
         }
         mMember = member;
         mHookInfo = hookInfo;
-        mDexDirPath = dexDirPath;
         if (appClassLoader == null
                 || appClassLoader.getClass().getName().equals("java.lang.BootClassLoader")) {
             mAppClassLoader = getClass().getClassLoader();
@@ -145,27 +146,36 @@ public class HookerDexMaker {
 
     @TargetApi(Build.VERSION_CODES.O)
     private void doMake(String hookedClassName) throws Exception {
-        final boolean useInMemoryCl = TextUtils.isEmpty(mDexDirPath);
         mDexMaker = new DexMaker();
-        ClassLoader loader;
+        ClassLoader loader = null;
         // Generate a Hooker class.
         String className = CLASS_NAME_PREFIX;
-        if (!useInMemoryCl) {
-            // if not using InMemoryDexClassLoader, className is also used as dex file name
-            // so it should be different from each other
-            String suffix = DexMakerUtils.getSha1Hex(mMember.toString());
-            if (TextUtils.isEmpty(suffix)) { // just in case
-                suffix = String.valueOf(sClassNameSuffix.getAndIncrement());
-            }
-            className = className + suffix;
-            if (!new File(mDexDirPath, className).exists()) {
-                // if file exists, reuse it and skip generating
-                doGenerate(className);
-            }
-            // load dex file from disk
-            loader = mDexMaker.generateAndLoad(mAppClassLoader, new File(mDexDirPath), className);
-        } else {
+        boolean usedCache = false;
+        if (canCache) {
+            try {
+                // className is also used as dex file name
+                // so it should be different from each other
+                String suffix = DexMakerUtils.getSha1Hex(mMember.toString());
+                className = className + suffix;
+                String dexFileName = className + ".jar";
+                File dexFile = new File(ConfigManager.getCachePath(dexFileName));
+                if (!dexFile.exists()) {
+                    // if file exists, reuse it and skip generating
+                    DexLog.d("Generating " + dexFileName);
+                    doGenerate(className);
+                    loader = mDexMaker.generateAndLoad(mAppClassLoader, new File(ConfigManager.getCachePath("")), dexFileName, false);
+                    dexFile.setWritable(true, false);
+                    dexFile.setReadable(true, false);
+                } else {
+                    DexLog.d("Using cache " + dexFileName);
+                    loader = mDexMaker.loadClassDirect(mAppClassLoader, new File(ConfigManager.getCachePath("")), dexFileName);
+                }
+                usedCache = true;
+            } catch (Throwable ignored) {}
+        }
+        if (!usedCache) {
             // do everything in memory
+            DexLog.d("Generating in memory");
             if(BuildConfig.DEBUG)
                 className = className + hookedClassName.replace(".", "/");
             doGenerate(className);
