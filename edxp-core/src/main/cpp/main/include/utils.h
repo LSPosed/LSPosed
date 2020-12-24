@@ -19,6 +19,13 @@ namespace edxp {
         return atoi(prop_value);
     }
 
+    static inline std::string GetAndroidBrand() {
+        std::string prop_value;
+        prop_value.reserve(PROP_VALUE_MAX);
+        __system_property_get("ro.product.brand", prop_value.data());
+        return prop_value;
+    }
+
     template<bool quite = false>
     inline bool path_exists(const std::filesystem::path &path) {
         try {

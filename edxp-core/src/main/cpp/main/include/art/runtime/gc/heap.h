@@ -63,9 +63,19 @@ namespace art {
                         [[fallthrough]];
                     case __ANDROID_API_R__:
                         if constexpr(edxp::is64) {
-                            OFFSET_heap = 392;
+                            // TODO: preload band to a boolean or enum
+                            if (edxp::GetAndroidBrand() == "meizu") {
+                                OFFSET_heap = 0x190;
+                            } else {
+                                OFFSET_heap = 392;
+                            }
                         } else {
-                            OFFSET_heap = 236;
+                            // TODO: preload band to a boolean or enum
+                            if (edxp::GetAndroidBrand() == "meizu") {
+                                OFFSET_heap = 0xF4;
+                            } else {
+                                OFFSET_heap = 236;
+                            }
                         }
                         break;
                 }
