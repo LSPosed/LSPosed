@@ -41,9 +41,9 @@ public class NormalProxy extends BaseProxy {
         mRouter.initResourcesHook();
         mRouter.prepare(isSystem);
         PrebuiltMethodsDeopter.deoptBootMethods(); // do it once for secondary zygote
+        mRouter.installBootstrapHooks(isSystem);
         ConfigManager.appDataDir = appDataDir;
         ConfigManager.niceName = niceName;
-        mRouter.installBootstrapHooks(isSystem);
         XposedInit.prefsBasePath = ConfigManager.getPrefsPath("");
         mRouter.onEnterChildProcess();
         Utils.logI("Loading modules for " + niceName);
