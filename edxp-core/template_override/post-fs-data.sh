@@ -169,6 +169,7 @@ chmod -R 666 "${LOG_PATH}"
 if [[ ! -z "${MISC_PATH}" ]]; then
     mkdir -p "${BASE_PATH}/cache"
     chcon -R u:object_r:magisk_file:s0 "${BASE_PATH}"
-    chmod -R 777 "${BASE_PATH}"
+    chmod 771 "${BASE_PATH}"
+    chmod 777 "${BASE_PATH}/cache"
 fi
 rm -f /data/adb/edxp/new_install
