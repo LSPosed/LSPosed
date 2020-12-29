@@ -173,3 +173,4 @@ if [[ ! -z "${MISC_PATH}" ]]; then
     chmod 777 "${BASE_PATH}/cache"
 fi
 rm -f /data/adb/edxp/new_install
+rm -f /data/adb/edxp/keep_data
