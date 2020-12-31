@@ -82,8 +82,8 @@ public class XposedInstallerHooker {
                     }
                 }
             });
-            Class clazz = XposedHelpers.findClassIfExists("org.meowcat.edxposed.manager.StatusInstallerFragment", classLoader);
-            XposedHelpers.findAndHookMethod(clazz, "getCanonicalFile", File.class, new XC_MethodHook() {
+
+            XposedHelpers.findAndHookMethod("org.meowcat.edxposed.manager.StatusInstallerFragment", classLoader, "getCanonicalFile", File.class, new XC_MethodHook() {
                 @Override
                 protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                     File arg = (File)param.args[0];
@@ -94,8 +94,8 @@ public class XposedInstallerHooker {
             });
 
             // deopt manager
-            Object method = EdXpConfigGlobal.getHookProvider().findMethodNative(
-                    clazz, "onCreateView", "(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;");
+            Class clazz = XposedHelpers.findClassIfExists("org.meowcat.edxposed.manager.MainActivity", classLoader);
+            Object method = XposedHelpers.findMethodExact(clazz, "getXposedStatus", String.class);
             if (method != null) {
                 EdXpConfigGlobal.getHookProvider().deoptMethodNative(method);
             } else {
