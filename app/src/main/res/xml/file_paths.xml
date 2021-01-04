@@ -5,10 +5,6 @@
         path="/downloads" />
     <!--suppress AndroidElementNotAllowed -->
     <root-path
-        name="log_legacy"
-        path="/data/data/org.meowcat.edxposed.manager/log" />
-    <!--suppress AndroidElementNotAllowed -->
-    <root-path
         name="log"
-        path="/data/user_de/0/org.meowcat.edxposed.manager/log" />
+        path="/" />
 </paths>

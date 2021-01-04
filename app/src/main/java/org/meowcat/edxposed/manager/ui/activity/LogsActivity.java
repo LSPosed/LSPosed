@@ -174,8 +174,8 @@ public class LogsActivity extends BaseActivity {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
+        sendIntent.setDataAndType(uri, "text/plain");
         sendIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        sendIntent.setType("application/html");
         startActivity(Intent.createChooser(sendIntent, getResources().getString(R.string.menuSend)));
     }
 
