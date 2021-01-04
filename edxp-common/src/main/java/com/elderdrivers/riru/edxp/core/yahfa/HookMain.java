@@ -115,9 +115,7 @@ public class HookMain {
             checkCompatibleMethods(target, backup, "Original", "Backup");
         }
         // make sure GC completed before hook
-        Thread currentThread = Thread.currentThread();
-        long nativePeer = XposedHelpers.getLongField(currentThread, "nativePeer");
-        int lastGcType = Heap.waitForGcToComplete(nativePeer);
+        int lastGcType = Heap.waitForGcToComplete();
         if (lastGcType < 0) {
             Utils.logW("waitForGcToComplete failed, using fallback");
             Runtime.getRuntime().gc();

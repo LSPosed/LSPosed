@@ -33,14 +33,12 @@ public final class PendingHooks {
                         });
 
         pending.put(hookMethod, additionalInfo);
-        Thread currentThread = Thread.currentThread();
-        long nativePeer = XposedHelpers.getLongField(currentThread, "nativePeer");
-        recordPendingMethodNative(nativePeer, hookMethod.getDeclaringClass());
+        recordPendingMethodNative(hookMethod.getDeclaringClass());
     }
 
     public synchronized void cleanUp() {
         sPendingHooks.clear();
     }
 
-    private static native void recordPendingMethodNative(long thread, Class clazz);
+    private static native void recordPendingMethodNative(Class clazz);
 }

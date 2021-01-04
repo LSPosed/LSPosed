@@ -2,6 +2,6 @@ package com.elderdrivers.riru.edxp.art;
 
 public class Heap {
 
-    public static native int waitForGcToComplete(long thread);
+    public static native int waitForGcToComplete();
 
 }

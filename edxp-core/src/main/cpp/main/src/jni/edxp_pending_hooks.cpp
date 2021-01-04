@@ -19,9 +19,8 @@ namespace edxp {
         return pending_classes_.count(clazz);
     }
 
-    static void PendingHooks_recordPendingMethodNative(JNI_START, jlong thread, jclass class_ref) {
-        art::Thread current_thread(reinterpret_cast<void *>(thread));
-        auto *class_ptr = current_thread.DecodeJObject(class_ref);
+    static void PendingHooks_recordPendingMethodNative(JNI_START, jclass class_ref) {
+        auto *class_ptr = art::Thread::Current().DecodeJObject(class_ref);
         art::mirror::Class mirror_class(class_ptr);
         if (auto def = mirror_class.GetClassDef(); LIKELY(def)) {
             LOGD("record pending: %p (%s)", class_ptr, mirror_class.GetDescriptor().c_str());
@@ -33,7 +32,7 @@ namespace edxp {
     }
 
     static JNINativeMethod gMethods[] = {
-            NATIVE_METHOD(PendingHooks, recordPendingMethodNative, "(JLjava/lang/Class;)V"),
+            NATIVE_METHOD(PendingHooks, recordPendingMethodNative, "(Ljava/lang/Class;)V"),
     };
 
     void RegisterPendingHooks(JNIEnv *env) {

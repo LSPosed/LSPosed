@@ -29,17 +29,28 @@ namespace art {
                 return nullptr;
         }
 #endif
+        CREATE_FUNC_SYMBOL_ENTRY(void *, CurrentFromGdb) {
+            if (LIKELY(CurrentFromGdbSym))
+                    return CurrentFromGdbSym();
+            else
+                return nullptr;
+        }
 
     public:
         Thread(void *thiz) : HookedObject(thiz) {}
+        static Thread Current() {
+            return Thread(CurrentFromGdb());
+        }
 
-        static void Setup(void *handle, HookFunType hook_func) {
+        static void Setup(void *handle, [[maybe_unused]] HookFunType hook_func) {
             RETRIEVE_FUNC_SYMBOL(DecodeJObject,
                                  "_ZNK3art6Thread13DecodeJObjectEP8_jobject");
+            RETRIEVE_FUNC_SYMBOL(CurrentFromGdb,
+                                 "_ZN3art6Thread14CurrentFromGdbEv");
         }
 
         void *DecodeJObject(jobject obj) {
-            if (thiz_ && DecodeJObjectSym) {
+            if (LIKELY(thiz_ && DecodeJObjectSym)) {
                 return DecodeJObject(thiz_, obj);
             }
             return nullptr;
