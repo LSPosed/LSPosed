@@ -17,7 +17,7 @@ namespace art {
             CREATE_FUNC_SYMBOL_ENTRY(const char *, GetDescriptor, void *thiz,
                                      std::string *storage) {
                 if (GetDescriptorSym)
-                    return GetDescriptorSym(thiz, storage);
+                    return edxp::call_as_member_func(GetDescriptorSym, thiz, storage);
                 else
                     return "";
             }
@@ -45,7 +45,7 @@ namespace art {
 
             CREATE_FUNC_SYMBOL_ENTRY(void*, GetClassDef, void* thiz) {
                 if (LIKELY(GetClassDefSym))
-                    return GetClassDefSym(thiz);
+                    return edxp::call_as_member_func(GetClassDefSym, thiz);
                 return nullptr;
             }
 

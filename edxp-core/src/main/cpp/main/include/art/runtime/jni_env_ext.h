@@ -9,12 +9,12 @@ namespace art {
     class JNIEnvExt : edxp::HookedObject {
 
     private:
-        CREATE_FUNC_SYMBOL_ENTRY(jobject, NewLocalRef, void *env, void *mirror_ptr) {
-            return NewLocalRefSym(env, mirror_ptr);
+        CREATE_FUNC_SYMBOL_ENTRY(jobject, NewLocalRef, void *thiz, void *mirror_ptr) {
+            return edxp::call_as_member_func(NewLocalRefSym, thiz, mirror_ptr);
         }
 
-        CREATE_FUNC_SYMBOL_ENTRY(void, DeleteLocalRef, void *env, jobject obj) {
-            DeleteLocalRefSym(env, obj);
+        CREATE_FUNC_SYMBOL_ENTRY(void, DeleteLocalRef, void *thiz, jobject obj) {
+            return edxp::call_as_member_func(DeleteLocalRefSym, thiz, obj);
         }
 
     public:

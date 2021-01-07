@@ -22,7 +22,7 @@ namespace art {
 
         CREATE_FUNC_SYMBOL_ENTRY(void, SetEntryPointsToInterpreter, void *thiz, void *art_method) {
             if (LIKELY(SetEntryPointsToInterpreterSym))
-                SetEntryPointsToInterpreterSym(thiz, art_method);
+                edxp::call_as_member_func(SetEntryPointsToInterpreterSym, thiz, art_method);
         }
 
         CREATE_HOOK_STUB_ENTRIES(void *, Constructor, void *thiz, void *intern_table) {
@@ -49,7 +49,7 @@ namespace art {
         CREATE_FUNC_SYMBOL_ENTRY(void, MakeInitializedClassesVisiblyInitialized, void *thiz,
                                  void *self, bool wait) {
             if (LIKELY(MakeInitializedClassesVisiblyInitializedSym))
-                MakeInitializedClassesVisiblyInitializedSym(thiz, self, wait);
+                edxp::call_as_member_func(MakeInitializedClassesVisiblyInitializedSym, thiz, self, wait);
         }
 
 

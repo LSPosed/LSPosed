@@ -82,6 +82,10 @@ namespace edxp {
         }
     };
 
+    struct ObjPtr {
+        void* data;
+    };
+
     ALWAYS_INLINE static void *Dlsym(void *handle, const char *name) {
         return dlsym(handle, name);
     }
@@ -123,6 +127,57 @@ namespace edxp {
             LOGW("%s not found", first);
             return nullptr;
         }
+    }
+
+    template<typename Class, typename Return, typename T, typename... Args>
+    inline auto memfun_cast(Return (*func)(T *, Args...)) {
+        static_assert(std::is_same_v<T, void> || std::is_same_v<Class, T>,
+                      "Not viable cast");
+        union {
+            Return (Class::*f)(Args...);
+
+            struct {
+                decltype(func) p;
+                std::ptrdiff_t adj;
+            } data;
+        } u{.data = {func, 0}};
+        static_assert(sizeof(u.f) == sizeof(u.data), "Try different T");
+        return u.f;
+    }
+
+    template<typename Return, typename... Args, typename T,
+            typename = std::enable_if_t<!std::is_same_v<T, void>>>
+    inline auto memfun_cast(Return (*func)(T *, Args...)) {
+        return memfun_cast<T>(func);
+    }
+
+    template<typename Return, typename... Args, typename T, typename U,
+            typename = std::enable_if_t<!std::is_same_v<T, void> || !std::is_same_v<U, void>>>
+    inline Return
+    call_as_member_func(Return (*func)(U *, std::remove_reference_t<Args>...), T *thiz,
+                        Args &&... args) {
+        using Class = std::conditional_t<std::is_same_v<T, void>, U, T>;
+        return (reinterpret_cast<Class *>(thiz)->*memfun_cast<Class>
+                (func))(
+                std::forward<Args>(args)...);
+    }
+
+    template<typename Class, typename Return, typename... Args>
+    inline Return
+    call_as_member_func(Return (*func)(void *, std::remove_reference_t<Args>...), void *thiz,
+                        Args &&... args) {
+        return (reinterpret_cast<Class *>(thiz)->*memfun_cast<Class>(func))(
+                std::forward<Args>(args)...);
+    }
+
+    template<typename Return, typename... Args>
+    inline Return
+    call_as_member_func(Return (*func)(void *, std::remove_reference_t<Args>...), void *thiz,
+                        Args &&... args) {
+        struct DummyClass {
+        };
+        return (reinterpret_cast<DummyClass *>(thiz)->*memfun_cast<DummyClass>(func))(
+                std::forward<Args>(args)...);
     }
 
 } // namespace edxp

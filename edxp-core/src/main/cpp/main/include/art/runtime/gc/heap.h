@@ -19,7 +19,7 @@ namespace art {
             CREATE_FUNC_SYMBOL_ENTRY(collector::GcType, WaitForGcToComplete,
                                      void *thiz, GcCause cause, void *threadSelf) {
                 if (LIKELY(WaitForGcToCompleteSym))
-                    return WaitForGcToCompleteSym(thiz, cause, threadSelf);
+                    return edxp::call_as_member_func(WaitForGcToCompleteSym, thiz, cause, threadSelf);
                 return art::gc::collector::GcType::kGcTypeNone;
             }
 

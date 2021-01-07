@@ -13,7 +13,7 @@ namespace art {
 
         CREATE_FUNC_SYMBOL_ENTRY(void, DeoptimizeBootImage, void *thiz) {
             if (LIKELY(DeoptimizeBootImageSym))
-                DeoptimizeBootImageSym(thiz);
+                edxp::call_as_member_func(DeoptimizeBootImageSym, thiz);
         }
 
     public:

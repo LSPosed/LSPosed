@@ -18,7 +18,7 @@ namespace art {
             if (UNLIKELY(thiz == nullptr))
                 return "null";
             if (LIKELY(PrettyMethodSym))
-                return PrettyMethodSym(thiz, with_signature);
+                return edxp::call_as_member_func(PrettyMethodSym, thiz, with_signature);
             else return "null sym";
         }
 
