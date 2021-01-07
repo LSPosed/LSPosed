@@ -1,7 +1,12 @@
 package com.elderdrivers.riru.edxp.hooker;
 
 import android.app.AndroidAppHelper;
+import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.elderdrivers.riru.edxp.config.ConfigManager;
 import com.elderdrivers.riru.edxp.config.EdXpConfigGlobal;
@@ -94,15 +99,29 @@ public class XposedInstallerHooker {
             });
 
             // deopt manager
-            Class clazz = XposedHelpers.findClassIfExists("org.meowcat.edxposed.manager.MainActivity", classLoader);
-            Object method = XposedHelpers.findMethodExact(clazz, "getXposedStatus", String.class);
-            if (method != null) {
-                EdXpConfigGlobal.getHookProvider().deoptMethodNative(method);
-            } else {
-                Utils.logE("onCreateView not found");
-            }
+            deoptMethod(classLoader, "org.meowcat.edxposed.manager.ModulesFragment", "onActivityCreated", Bundle.class);
+            deoptMethod(classLoader, "org.meowcat.edxposed.manager.ModulesFragment", "showMenu", Context.class, View.class, ApplicationInfo.class);
+            deoptMethod(classLoader, "org.meowcat.edxposed.manager.StatusInstallerFragment", "onCreateView", LayoutInflater.class, ViewGroup.class, Bundle.class);
+            deoptMethod(classLoader, "org.meowcat.edxposed.manager.util.ModuleUtil", "updateModulesList", boolean.class, View.class);
+
         } catch (Throwable t) {
             Utils.logE("Could not hook Xposed Installer", t);
         }
+    }
+
+    private static void deoptMethod(ClassLoader cl, String className, String methodName, Class<?> ...params) {
+        try {
+            Class clazz = XposedHelpers.findClassIfExists(className, cl);
+            if (clazz == null) {
+                Utils.logE("Class " + className + " not found when deoptimizing EdXposed Manager");
+                return;
+            }
+
+            Object method = XposedHelpers.findMethodExact(clazz, methodName, params);
+            EdXpConfigGlobal.getHookProvider().deoptMethodNative(method);
+        } catch (Exception e) {
+            Utils.logE("Error when deoptimizing " + className + ":" + methodName, e);
+        }
+
     }
 }
