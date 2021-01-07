@@ -15,6 +15,14 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Path;
+import java.nio.file.StandardWatchEventKinds;
+import java.nio.file.WatchEvent;
+import java.nio.file.WatchKey;
+import java.nio.file.WatchService;
+import java.security.MessageDigest;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -28,12 +36,26 @@ import de.robv.android.xposed.services.FileResult;
  */
 public final class XSharedPreferences implements SharedPreferences {
     private static final String TAG = "XSharedPreferences";
+    private static final HashMap<Path, PrefsData> mInstances = new HashMap<>();
+    private static final Object mContent = new Object();
+    private static Thread mDaemon = null;
+    private static WatchService mWatcher;
+    private final HashMap<OnSharedPreferenceChangeListener, Object> mListeners = new HashMap<>();
     private final File mFile;
     private final String mFilename;
     private Map<String, Object> mMap;
     private boolean mLoaded = false;
     private long mLastModified;
     private long mFileSize;
+
+    static {
+        try {
+            mWatcher = new File(XposedInit.prefsBasePath).toPath().getFileSystem().newWatchService();
+            Log.d(TAG, "Created WatchService instance");
+        } catch (IOException e) {
+            Log.e(TAG, "Failed to create WatchService", e);
+        }
+    }
 
     /**
      * Read settings from the specified file.
@@ -42,8 +64,8 @@ public final class XSharedPreferences implements SharedPreferences {
      */
     public XSharedPreferences(File prefFile) {
         mFile = prefFile;
-        mFilename = mFile.getAbsolutePath();
-        startLoadFromDisk();
+        mFilename = prefFile.getAbsolutePath();
+        init();
     }
 
     /**
@@ -95,7 +117,101 @@ public final class XSharedPreferences implements SharedPreferences {
             mFile = new File(Environment.getDataDirectory(), "data/" + packageName + "/shared_prefs/" + prefFileName + ".xml");
         }
         mFilename = mFile.getAbsolutePath();
+        init();
+    }
+
+    private void tryRegisterWatcher() {
+        Path path = mFile.toPath();
+        if (mInstances.containsKey(path)) {
+            return;
+        }
+        try {
+            path.getParent().register(mWatcher, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_DELETE);
+            mInstances.put(path, new PrefsData(this));
+            Log.d(TAG, "Registered file watcher for " + path);
+        } catch (Exception e) {
+            Log.d(TAG, "Failed to register file watcher", e);
+        }
+    }
+
+    private void init() {
+        if (mDaemon == null || !mDaemon.isAlive()) {
+            mDaemon = new Thread() {
+                @Override
+                public void run() {
+                    Log.d(TAG, "Daemon thread started");
+                    while (true) {
+                        WatchKey key;
+                        try {
+                            key = mWatcher.take();
+                        } catch (InterruptedException ignored) {
+                            return;
+                        }
+                        for (WatchEvent<?> event : key.pollEvents()) {
+                            WatchEvent.Kind<?> kind = event.kind();
+                            if (kind == StandardWatchEventKinds.OVERFLOW) {
+                                continue;
+                            }
+                            Path dir = (Path)key.watchable();
+                            Path path = dir.resolve((Path)event.context());
+                            String pathStr = path.toString();
+                            Log.v(TAG, "File " + path.toString() + " event: " + kind.name());
+                            // We react to both real and backup files due to rare race conditions
+                            if (pathStr.endsWith(".bak")) {
+                                if (kind != StandardWatchEventKinds.ENTRY_DELETE) {
+                                    continue;
+                                } else {
+                                    pathStr = path.getFileName().toString();
+                                    path = dir.resolve(pathStr.substring(0, pathStr.length() - 4));
+                                }
+                            } else if (SELinuxHelper.getAppDataFileService().checkFileExists(pathStr + ".bak")) {
+                                continue;
+                            }
+                            PrefsData data = mInstances.get(path);
+                            if (data != null && data.hasChanged()) {
+                                for (OnSharedPreferenceChangeListener l : data.mPrefs.mListeners.keySet()) {
+                                    try {
+                                        l.onSharedPreferenceChanged(data.mPrefs, null);
+                                    } catch (Throwable t) {
+                                        Log.e(TAG, "Fail in preference change listener", t);
+                                    }
+                                }
+                            }
+                        }
+                        key.reset();
+                    }
+                }
+            };
+            mDaemon.setName(TAG + "-Daemon");
+            mDaemon.setDaemon(true);
+            mDaemon.start();
+        }
+        tryRegisterWatcher();
         startLoadFromDisk();
+    }
+
+    private static long tryGetFileSize(String filename) {
+        try {
+            return SELinuxHelper.getAppDataFileService().getFileSize(filename);
+        } catch (IOException ignored) {
+            return 0;
+        }
+    }
+
+    private static byte[] tryGetFileHash(String filename) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            try (InputStream is = SELinuxHelper.getAppDataFileService().getFileInputStream(filename)) {
+                byte[] buf = new byte[4096];
+                int read;
+                while ((read = is.read(buf)) != -1) {
+                    md.update(buf, 0, read);
+                }
+            }
+            return md.digest();
+        } catch (Exception ignored) {
+            return new byte[0];
+        }
     }
 
     /**
@@ -117,7 +233,11 @@ public final class XSharedPreferences implements SharedPreferences {
         if (!mFile.exists()) // Just in case - the file should never be created if it doesn't exist.
             return false;
 
-        return mFile.setReadable(true, false);
+        if (!mFile.setReadable(true, false))
+            return false;
+
+        tryRegisterWatcher();
+        return true;
     }
 
     /**
@@ -194,8 +314,9 @@ public final class XSharedPreferences implements SharedPreferences {
      * <p><strong>Warning:</strong> With enforcing SELinux, this call might be quite expensive.
      */
     public synchronized void reload() {
-        if (hasFileChanged())
-            startLoadFromDisk();
+        if (hasFileChanged()) {
+            init();
+        }
     }
 
     /**
@@ -329,22 +450,53 @@ public final class XSharedPreferences implements SharedPreferences {
         throw new UnsupportedOperationException("read-only implementation");
     }
 
-    /**
-     * @deprecated Not supported by this implementation.
-     */
     @Deprecated
     @Override
     public void registerOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener) {
-        throw new UnsupportedOperationException("listeners are not supported in this implementation");
+        synchronized(this) {
+            mListeners.put(listener, mContent);
+        }
     }
 
-    /**
-     * @deprecated Not supported by this implementation.
-     */
     @Deprecated
     @Override
     public void unregisterOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener) {
-        throw new UnsupportedOperationException("listeners are not supported in this implementation");
+        synchronized(this) {
+            mListeners.remove(listener);
+        }
     }
 
+    private static class PrefsData {
+        public final XSharedPreferences mPrefs;
+        private long mSize;
+        private byte[] mHash;
+
+        public PrefsData(XSharedPreferences prefs) {
+            mPrefs = prefs;
+            mSize = tryGetFileSize(prefs.mFilename);
+            mHash = tryGetFileHash(prefs.mFilename);
+        }
+
+        public boolean hasChanged() {
+            long size = tryGetFileSize(mPrefs.mFilename);
+            if (size < 1) {
+                Log.d(TAG, "Ignoring empty prefs file");
+                return false;
+            }
+            if (size != mSize) {
+                mSize = size;
+                mHash = tryGetFileHash(mPrefs.mFilename);
+                Log.d(TAG, "Prefs file size changed");
+                return true;
+            }
+            byte[] hash = tryGetFileHash(mPrefs.mFilename);
+            if (!Arrays.equals(hash, mHash)) {
+                mHash = hash;
+                Log.d(TAG, "Prefs file hash changed");
+                return true;
+            }
+            Log.d(TAG, "Prefs file not changed");
+            return false;
+        }
+    }
 }
