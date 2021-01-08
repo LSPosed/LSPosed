@@ -7,7 +7,7 @@ namespace art {
 
     namespace jit {
 
-        CREATE_HOOK_STUB_ENTRIES(const void*, GetSavedEntryPointOfPreCompiledMethod, void *thiz,
+        CREATE_MEM_HOOK_STUB_ENTRIES(const void*, GetSavedEntryPointOfPreCompiledMethod, void *thiz,
                                  void *art_method) {
             if (UNLIKELY(edxp::isHooked(art_method))) {
                 LOGD("Found hooked method %p (%s), return entrypoint as jit entrypoint", art_method,
@@ -24,7 +24,7 @@ namespace art {
             // our hooked entry point won't be overwritten.
             // This is for SandHook and YAHFA
             if (api_level >= __ANDROID_API_R__) {
-                HOOK_FUNC(GetSavedEntryPointOfPreCompiledMethod,
+                HOOK_MEM_FUNC(GetSavedEntryPointOfPreCompiledMethod,
                           "_ZN3art3jit12JitCodeCache37GetSavedEntryPointOfPreCompiledMethodEPNS_9ArtMethodE");
             }
         }

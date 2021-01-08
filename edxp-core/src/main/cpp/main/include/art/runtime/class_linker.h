@@ -20,21 +20,12 @@ namespace art {
     private:
         inline static ClassLinker *instance_;
 
-        CREATE_FUNC_SYMBOL_ENTRY(void, SetEntryPointsToInterpreter, void *thiz, void *art_method) {
+        CREATE_MEM_FUNC_SYMBOL_ENTRY(void, SetEntryPointsToInterpreter, void *thiz, void *art_method) {
             if (LIKELY(SetEntryPointsToInterpreterSym))
-                edxp::call_as_member_func(SetEntryPointsToInterpreterSym, thiz, art_method);
+                SetEntryPointsToInterpreterSym(thiz, art_method);
         }
 
-        CREATE_HOOK_STUB_ENTRIES(void *, Constructor, void *thiz, void *intern_table) {
-            LOGI("ConstructorReplace called");
-            if (LIKELY(instance_))
-                instance_->Reset(thiz);
-            else
-                instance_ = new ClassLinker(thiz);
-            return ConstructorBackup(thiz, intern_table);
-        }
-
-        CREATE_HOOK_STUB_ENTRIES(void, FixupStaticTrampolines, void *thiz, void *clazz_ptr) {
+        CREATE_MEM_HOOK_STUB_ENTRIES(void, FixupStaticTrampolines, void *thiz, void *clazz_ptr) {
             FixupStaticTrampolinesBackup(thiz, clazz_ptr);
             art::mirror::Class mirror_class(clazz_ptr);
             auto class_def = mirror_class.GetClassDef();
@@ -46,10 +37,10 @@ namespace art {
             }
         }
 
-        CREATE_FUNC_SYMBOL_ENTRY(void, MakeInitializedClassesVisiblyInitialized, void *thiz,
+        CREATE_MEM_FUNC_SYMBOL_ENTRY(void, MakeInitializedClassesVisiblyInitialized, void *thiz,
                                  void *self, bool wait) {
             if (LIKELY(MakeInitializedClassesVisiblyInitializedSym))
-                edxp::call_as_member_func(MakeInitializedClassesVisiblyInitializedSym, thiz, self, wait);
+                MakeInitializedClassesVisiblyInitializedSym(thiz, self, wait);
         }
 
 
@@ -115,12 +106,10 @@ namespace art {
             LOGD("Classlinker object: %p", thiz);
             instance_ = new ClassLinker(thiz);
 
-            HOOK_FUNC(Constructor, "_ZN3art11ClassLinkerC2EPNS_11InternTableE",
-                      "_ZN3art11ClassLinkerC2EPNS_11InternTableEb"); // 10.0
-            RETRIEVE_FUNC_SYMBOL(SetEntryPointsToInterpreter,
+            RETRIEVE_MEM_FUNC_SYMBOL(SetEntryPointsToInterpreter,
                                  "_ZNK3art11ClassLinker27SetEntryPointsToInterpreterEPNS_9ArtMethodE");
 
-            HOOK_FUNC(FixupStaticTrampolines,
+            HOOK_MEM_FUNC(FixupStaticTrampolines,
                       "_ZN3art11ClassLinker22FixupStaticTrampolinesENS_6ObjPtrINS_6mirror5ClassEEE");
 
             HOOK_FUNC(ShouldUseInterpreterEntrypoint,

@@ -14,15 +14,15 @@ namespace art {
 
         private:
 
-            CREATE_FUNC_SYMBOL_ENTRY(const char *, GetDescriptor, void *thiz,
+            CREATE_MEM_FUNC_SYMBOL_ENTRY(const char *, GetDescriptor, void *thiz,
                                      std::string *storage) {
                 if (GetDescriptorSym)
-                    return edxp::call_as_member_func(GetDescriptorSym, thiz, storage);
+                    return GetDescriptorSym(thiz, storage);
                 else
                     return "";
             }
 
-            CREATE_HOOK_STUB_ENTRIES(bool, IsInSamePackage, void *thiz, void *that) {
+            CREATE_MEM_HOOK_STUB_ENTRIES(bool, IsInSamePackage, void *thiz, void *that) {
                 std::string storage1, storage2;
                 const char *thisDesc = GetDescriptor(thiz, &storage1);
                 const char *thatDesc = GetDescriptor(that, &storage2);
@@ -43,9 +43,9 @@ namespace art {
                 return IsInSamePackageBackup(thiz, that);
             }
 
-            CREATE_FUNC_SYMBOL_ENTRY(void*, GetClassDef, void* thiz) {
+            CREATE_MEM_FUNC_SYMBOL_ENTRY(void*, GetClassDef, void* thiz) {
                 if (LIKELY(GetClassDefSym))
-                    return edxp::call_as_member_func(GetClassDefSym, thiz);
+                    return GetClassDefSym(thiz);
                 return nullptr;
             }
 
@@ -54,15 +54,15 @@ namespace art {
 
             // @ApiSensitive(Level.MIDDLE)
             static void Setup(void *handle, HookFunType hook_func) {
-                RETRIEVE_FUNC_SYMBOL(GetDescriptor, "_ZN3art6mirror5Class13GetDescriptorEPNSt3__112"
+                RETRIEVE_MEM_FUNC_SYMBOL(GetDescriptor, "_ZN3art6mirror5Class13GetDescriptorEPNSt3__112"
                                                     "basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEE");
 
-                RETRIEVE_FUNC_SYMBOL(GetClassDef, "_ZN3art6mirror5Class11GetClassDefEv");
+                RETRIEVE_MEM_FUNC_SYMBOL(GetClassDef, "_ZN3art6mirror5Class11GetClassDefEv");
 
 //                RETRIEVE_FIELD_SYMBOL(mutator_lock_, "_ZN3art5Locks13mutator_lock_E");
 //                LOGE("mutator_lock_: %p", mutator_lock_);
 
-                HOOK_FUNC(IsInSamePackage,
+                HOOK_MEM_FUNC(IsInSamePackage,
                           "_ZN3art6mirror5Class15IsInSamePackageENS_6ObjPtrIS1_EE", //8.0-
                           "_ZN3art6mirror5Class15IsInSamePackageEPS1_"); //5.0-7.1
 

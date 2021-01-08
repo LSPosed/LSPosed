@@ -7,9 +7,9 @@ namespace art {
 
     class Thread : public edxp::HookedObject {
 
-        CREATE_FUNC_SYMBOL_ENTRY(edxp::ObjPtr, DecodeJObject, void *thiz, jobject obj) {
+        CREATE_MEM_FUNC_SYMBOL_ENTRY(edxp::ObjPtr, DecodeJObject, void *thiz, jobject obj) {
             if (DecodeJObjectSym)
-                return edxp::call_as_member_func(DecodeJObjectSym, thiz, obj);
+                return DecodeJObjectSym(thiz, obj);
             else
                 return {.data=nullptr};
         }
@@ -27,7 +27,7 @@ namespace art {
         }
 
         static void Setup(void *handle, [[maybe_unused]] HookFunType hook_func) {
-            RETRIEVE_FUNC_SYMBOL(DecodeJObject,
+            RETRIEVE_MEM_FUNC_SYMBOL(DecodeJObject,
                                  "_ZNK3art6Thread13DecodeJObjectEP8_jobject");
             RETRIEVE_FUNC_SYMBOL(CurrentFromGdb,
                                  "_ZN3art6Thread14CurrentFromGdbEv");

@@ -11,9 +11,9 @@ namespace art {
     private:
         inline static Runtime *instance_;
 
-        CREATE_FUNC_SYMBOL_ENTRY(void, DeoptimizeBootImage, void *thiz) {
+        CREATE_MEM_FUNC_SYMBOL_ENTRY(void, DeoptimizeBootImage, void *thiz) {
             if (LIKELY(DeoptimizeBootImageSym))
-                edxp::call_as_member_func(DeoptimizeBootImageSym, thiz);
+                DeoptimizeBootImageSym(thiz);
         }
 
     public:
@@ -25,7 +25,7 @@ namespace art {
 
         // @ApiSensitive(Level.LOW)
         static void Setup(void *handle, HookFunType hook_func) {
-            RETRIEVE_FUNC_SYMBOL(DeoptimizeBootImage,
+            RETRIEVE_MEM_FUNC_SYMBOL(DeoptimizeBootImage,
                                  "_ZN3art7Runtime19DeoptimizeBootImageEv");
             RETRIEVE_FIELD_SYMBOL(instance, "_ZN3art7Runtime9instance_E");
             void * thiz = *reinterpret_cast<void**>(instance);

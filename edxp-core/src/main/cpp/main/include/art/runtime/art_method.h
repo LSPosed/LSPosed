@@ -14,11 +14,11 @@ namespace art {
         inline static size_t oat_header_length;
         inline static int32_t oat_header_code_length_offset;
 
-        CREATE_FUNC_SYMBOL_ENTRY(std::string, PrettyMethod, void *thiz, bool with_signature) {
+        CREATE_MEM_FUNC_SYMBOL_ENTRY(std::string, PrettyMethod, void *thiz, bool with_signature) {
             if (UNLIKELY(thiz == nullptr))
                 return "null";
             if (LIKELY(PrettyMethodSym))
-                return edxp::call_as_member_func(PrettyMethodSym, thiz, with_signature);
+                return PrettyMethodSym(thiz, with_signature);
             else return "null sym";
         }
 
@@ -26,7 +26,7 @@ namespace art {
             return PrettyMethod(thiz, true);
         }
 
-        CREATE_HOOK_STUB_ENTRIES(void *, GetOatQuickMethodHeader, void *thiz, uintptr_t pc) {
+        CREATE_MEM_HOOK_STUB_ENTRIES(void *, GetOatQuickMethodHeader, void *thiz, uintptr_t pc) {
             // This is a partial copy from AOSP. We only touch them if they are hooked.
             if (UNLIKELY(edxp::isHooked(thiz))) {
                 uintptr_t original_ep = reinterpret_cast<uintptr_t>(getOriginalEntryPointFromTargetMethod(
@@ -75,12 +75,12 @@ namespace art {
                     break;
             }
             if constexpr (edxp::is64) {
-                HOOK_FUNC(GetOatQuickMethodHeader, "_ZN3art9ArtMethod23GetOatQuickMethodHeaderEm");
+                HOOK_MEM_FUNC(GetOatQuickMethodHeader, "_ZN3art9ArtMethod23GetOatQuickMethodHeaderEm");
             } else {
-                HOOK_FUNC(GetOatQuickMethodHeader, "_ZN3art9ArtMethod23GetOatQuickMethodHeaderEj");
+                HOOK_MEM_FUNC(GetOatQuickMethodHeader, "_ZN3art9ArtMethod23GetOatQuickMethodHeaderEj");
             }
 
-            RETRIEVE_FUNC_SYMBOL(PrettyMethod, "_ZN3art9ArtMethod12PrettyMethodEb");
+            RETRIEVE_MEM_FUNC_SYMBOL(PrettyMethod, "_ZN3art9ArtMethod12PrettyMethodEb");
         }
     }
 }

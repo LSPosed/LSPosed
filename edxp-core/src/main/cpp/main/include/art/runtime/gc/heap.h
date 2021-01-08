@@ -16,10 +16,10 @@ namespace art {
         private:
             inline static Heap *instance_;
 
-            CREATE_FUNC_SYMBOL_ENTRY(collector::GcType, WaitForGcToComplete,
+            CREATE_MEM_FUNC_SYMBOL_ENTRY(collector::GcType, WaitForGcToComplete,
                                      void *thiz, GcCause cause, void *threadSelf) {
                 if (LIKELY(WaitForGcToCompleteSym))
-                    return edxp::call_as_member_func(WaitForGcToCompleteSym, thiz, cause, threadSelf);
+                    return WaitForGcToCompleteSym(thiz, cause, threadSelf);
                 return art::gc::collector::GcType::kGcTypeNone;
             }
 
@@ -83,7 +83,7 @@ namespace art {
                         reinterpret_cast<size_t>(Runtime::Current()->Get()) + OFFSET_heap);
                 LOGD("art::runtime::Heap object: %p", thiz);
                 instance_ = new Heap(thiz);
-                RETRIEVE_FUNC_SYMBOL(WaitForGcToComplete,
+                RETRIEVE_MEM_FUNC_SYMBOL(WaitForGcToComplete,
                                      "_ZN3art2gc4Heap19WaitForGcToCompleteENS0_7GcCauseEPNS_6ThreadE");
             }
 

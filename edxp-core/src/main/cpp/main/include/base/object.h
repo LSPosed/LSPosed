@@ -28,11 +28,26 @@ typedef void (*HookFunType)(void *, void *, void **);
         inline static ret (*func##Backup)(__VA_ARGS__); \
         static ret func##Replace(__VA_ARGS__)
 
+#define HOOK_MEM_FUNC(func, ...) \
+        edxp::HookSyms(handle, hook_func, \
+            reinterpret_cast<void *>(func##Replace), \
+            reinterpret_cast<void **>(&func##BackupSym), \
+            __VA_ARGS__), func##Backup = func##BackupSym
+
+#define CREATE_MEM_HOOK_STUB_ENTRIES(ret, func, thiz, ...) \
+        inline static edxp::MemberFunction<ret(__VA_ARGS__)> func##Backup; \
+        inline static ret (*func##BackupSym)(thiz, ## __VA_ARGS__); \
+        static ret func##Replace(thiz, ## __VA_ARGS__)
+
 #define CREATE_ORIGINAL_ENTRY(ret, func, ...) \
         static ret func(__VA_ARGS__)
 
 #define RETRIEVE_FUNC_SYMBOL(name, ...) \
         name##Sym = reinterpret_cast<name##Type>( \
+                edxp::Dlsym(handle, __VA_ARGS__))
+
+#define RETRIEVE_MEM_FUNC_SYMBOL(name, ...) \
+        name##Sym = reinterpret_cast<name##Type::FunType>( \
                 edxp::Dlsym(handle, __VA_ARGS__))
 
 #define RETRIEVE_FIELD_SYMBOL(name, ...) \
@@ -42,6 +57,11 @@ typedef void (*HookFunType)(void *, void *, void **);
         typedef ret (*func##Type)(__VA_ARGS__); \
         inline static ret (*func##Sym)(__VA_ARGS__); \
         ALWAYS_INLINE static ret func(__VA_ARGS__)
+
+#define CREATE_MEM_FUNC_SYMBOL_ENTRY(ret, func, thiz, ...) \
+        using func##Type = edxp::MemberFunction<ret(__VA_ARGS__)>; \
+        inline static func##Type func##Sym; \
+        ALWAYS_INLINE static ret func(thiz, ## __VA_ARGS__)
 
 namespace edxp {
 
@@ -83,7 +103,7 @@ namespace edxp {
     };
 
     struct ObjPtr {
-        void* data;
+        void *data;
     };
 
     ALWAYS_INLINE static void *Dlsym(void *handle, const char *name) {
@@ -130,7 +150,7 @@ namespace edxp {
     }
 
     template<typename Class, typename Return, typename T, typename... Args>
-    inline auto memfun_cast(Return (*func)(T *, Args...)) {
+    inline static auto memfun_cast(Return (*func)(T *, Args...)) {
         static_assert(std::is_same_v<T, void> || std::is_same_v<Class, T>,
                       "Not viable cast");
         union {
@@ -145,39 +165,45 @@ namespace edxp {
         return u.f;
     }
 
-    template<typename Return, typename... Args, typename T,
+    template<typename T, typename Return, typename... Args,
             typename = std::enable_if_t<!std::is_same_v<T, void>>>
     inline auto memfun_cast(Return (*func)(T *, Args...)) {
         return memfun_cast<T>(func);
     }
 
-    template<typename Return, typename... Args, typename T, typename U,
-            typename = std::enable_if_t<!std::is_same_v<T, void> || !std::is_same_v<U, void>>>
-    inline Return
-    call_as_member_func(Return (*func)(U *, std::remove_reference_t<Args>...), T *thiz,
-                        Args &&... args) {
-        using Class = std::conditional_t<std::is_same_v<T, void>, U, T>;
-        return (reinterpret_cast<Class *>(thiz)->*memfun_cast<Class>
-                (func))(
-                std::forward<Args>(args)...);
-    }
+    template<typename, typename=void>
+    class MemberFunction;
 
-    template<typename Class, typename Return, typename... Args>
-    inline Return
-    call_as_member_func(Return (*func)(void *, std::remove_reference_t<Args>...), void *thiz,
-                        Args &&... args) {
-        return (reinterpret_cast<Class *>(thiz)->*memfun_cast<Class>(func))(
-                std::forward<Args>(args)...);
-    }
+    template<typename This, typename Return, typename ... Args>
+    class MemberFunction<Return(Args...), This> {
+        using SelfType = MemberFunction<Return(This *, Args...), This>;
+        using ThisType = std::conditional_t<std::is_same_v<This, void>, SelfType, This>;
+        using MemFunType = Return(ThisType::*)(Args...);
+    public:
+        using FunType = Return (*)(This *, Args...);
+    private:
+        MemFunType f_ = nullptr;
+    public:
+        MemberFunction() = default;
 
-    template<typename Return, typename... Args>
-    inline Return
-    call_as_member_func(Return (*func)(void *, std::remove_reference_t<Args>...), void *thiz,
-                        Args &&... args) {
-        struct DummyClass {
-        };
-        return (reinterpret_cast<DummyClass *>(thiz)->*memfun_cast<DummyClass>(func))(
-                std::forward<Args>(args)...);
-    }
+        MemberFunction(FunType f) : f_(memfun_cast<ThisType>(f)) {}
+
+        MemberFunction(MemFunType f) : f_(f) {}
+
+        Return operator()(This *thiz, Args... args) {
+            return (reinterpret_cast<ThisType *>(thiz)->*f_)(std::forward<Args>(args)...);
+        }
+
+        inline operator bool() {
+            return f_ != nullptr;
+        }
+    };
+
+    // deduction guide
+    template<typename This, typename Return, typename...Args>
+    MemberFunction(Return(*f)(This *, Args...)) -> MemberFunction<Return(Args...), This>;
+
+    template<typename This, typename Return, typename...Args>
+    MemberFunction(Return(This::*f)(Args...)) -> MemberFunction<Return(Args...), This>;
 
 } // namespace edxp
