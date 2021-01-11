@@ -121,8 +121,11 @@ public class PackageReceiver {
                     } else {
                         Utils.logI(String.format("remove obsolete package %s", packageName));
                         File prefsDir = new File(CONFIG_PATH, uid + "/prefs/" + packageName);
-                        for (File childFile : prefsDir.listFiles()) {
-                            childFile.delete();
+                        File[] fileList = prefsDir.listFiles();
+                        if (fileList != null) {
+                            for (File childFile : fileList) {
+                                childFile.delete();
+                            }
                         }
                     }
                 }
@@ -173,7 +176,7 @@ public class PackageReceiver {
                 for (Object uh : (List<Object>) m.invoke(um)) {
                     int uid = (int) uh.getClass().getDeclaredField("id").get(uh);
                     Utils.logI("updating uid: " + uid);
-                    res = res || updateModuleList(uid, packageName);
+                    res = updateModuleList(uid, packageName) || res;
                 }
                 if (res)
                     Toast.makeText(context, "EdXposed: Updated " + packageName, Toast.LENGTH_SHORT).show();
