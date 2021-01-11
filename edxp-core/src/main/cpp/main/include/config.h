@@ -24,9 +24,9 @@ inline bool constexpr Is64() {
 inline constexpr bool is64 = Is64();
 
 #if defined(__LP64__)
-# define LP_SELECT(lp32, lp64) (lp64)
+# define LP_SELECT(lp32, lp64) lp64
 #else
-# define LP_SELECT(lp32, lp64) (lp32)
+# define LP_SELECT(lp32, lp64) lp32
 #endif
 
     static const auto kEntryClassName = "com.elderdrivers.riru.edxp.core.Main"s;

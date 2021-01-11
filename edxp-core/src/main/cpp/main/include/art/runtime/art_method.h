@@ -26,30 +26,40 @@ namespace art {
             return PrettyMethod(thiz, true);
         }
 
-        CREATE_MEM_HOOK_STUB_ENTRIES(void *, GetOatQuickMethodHeader, void *thiz, uintptr_t pc) {
-            // This is a partial copy from AOSP. We only touch them if they are hooked.
-            if (UNLIKELY(edxp::isHooked(thiz))) {
-                uintptr_t original_ep = reinterpret_cast<uintptr_t>(getOriginalEntryPointFromTargetMethod(
-                        thiz)) & ~0x1;
-                if (original_ep) {
-                    char *code_length_loc =
-                            reinterpret_cast<char *>(original_ep) + oat_header_code_length_offset;
-                    uint32_t code_length =
-                            *reinterpret_cast<uint32_t *>(code_length_loc) & ~0x80000000u;
-                    LOGD("art_method::GetOatQuickMethodHeader: ArtMethod=%p (%s), isHooked=true, original_ep=0x%zux, code_length=0x%x, pc=0x%zux",
-                         thiz, PrettyMethod(thiz).c_str(), original_ep, code_length, pc);
-                    if (original_ep <= pc && pc <= original_ep + code_length)
-                        return reinterpret_cast<void *>(original_ep - oat_header_length);
-                    // If PC is not in range, we mark it as not found.
-                    LOGD("art_method::GetOatQuickMethodHeader: PC not found in current method.");
-                    return nullptr;
-                } else {
-                    LOGD("art_method::GetOatQuickMethodHeader: ArtMethod=%p (%s) isHooked but not backup, fallback to system",
-                            thiz, PrettyMethod(thiz).c_str());
-                }
-            }
-            return GetOatQuickMethodHeaderBackup(thiz, pc);
-        }
+        CREATE_MEM_HOOK_STUB_ENTRIES(
+                LP_SELECT("_ZN3art9ArtMethod23GetOatQuickMethodHeaderEj", "_ZN3art9ArtMethod23GetOatQuickMethodHeaderEm"),
+                void *, GetOatQuickMethodHeader,
+                (void * thiz, uintptr_t pc), {
+                    // This is a partial copy from AOSP. We only touch them if they are hooked.
+                    if (UNLIKELY(edxp::isHooked(thiz))) {
+                        uintptr_t original_ep =
+                                reinterpret_cast<uintptr_t>(getOriginalEntryPointFromTargetMethod(
+                                        thiz)) & ~0x1;
+                        if (original_ep) {
+                            char *code_length_loc =
+                                    reinterpret_cast<char *>(original_ep) +
+                                    oat_header_code_length_offset;
+                            uint32_t code_length =
+                                    *reinterpret_cast<uint32_t *>(code_length_loc) &
+                                    ~0x80000000u;
+                            LOGD("art_method::GetOatQuickMethodHeader: ArtMethod=%p (%s), isHooked=true, original_ep=0x%zux, code_length=0x%x, pc=0x%zux",
+                                 thiz, PrettyMethod(thiz).c_str(),
+                                 original_ep, code_length, pc);
+                            if (original_ep <= pc &&
+                                pc <= original_ep + code_length)
+                                return reinterpret_cast<void *>(
+                                        original_ep -
+                                        oat_header_length);
+                            // If PC is not in range, we mark it as not found.
+                            LOGD("art_method::GetOatQuickMethodHeader: PC not found in current method.");
+                            return nullptr;
+                        } else {
+                            LOGD("art_method::GetOatQuickMethodHeader: ArtMethod=%p (%s) isHooked but not backup, fallback to system",
+                                 thiz, PrettyMethod(thiz).c_str());
+                        }
+                    }
+                    return backup(thiz, pc);
+                });
 
         static void Setup(void *handle, HookFunType hook_func) {
             LOGD("art_method hook setup, handle=%p", handle);
@@ -74,11 +84,7 @@ namespace art {
                     oat_header_code_length_offset = -4;
                     break;
             }
-            if constexpr (edxp::is64) {
-                HOOK_MEM_FUNC(GetOatQuickMethodHeader, "_ZN3art9ArtMethod23GetOatQuickMethodHeaderEm");
-            } else {
-                HOOK_MEM_FUNC(GetOatQuickMethodHeader, "_ZN3art9ArtMethod23GetOatQuickMethodHeaderEj");
-            }
+            edxp::HookSyms(handle, hook_func, GetOatQuickMethodHeader);
 
             RETRIEVE_MEM_FUNC_SYMBOL(PrettyMethod, "_ZN3art9ArtMethod12PrettyMethodEb");
         }

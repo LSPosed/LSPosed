@@ -20,13 +20,13 @@ namespace art {
     private:
         inline static ClassLinker *instance_;
 
-        CREATE_MEM_FUNC_SYMBOL_ENTRY(void, SetEntryPointsToInterpreter, void *thiz, void *art_method) {
+        CREATE_MEM_FUNC_SYMBOL_ENTRY(void, SetEntryPointsToInterpreter, void *thiz,
+                                     void *art_method) {
             if (LIKELY(SetEntryPointsToInterpreterSym))
                 SetEntryPointsToInterpreterSym(thiz, art_method);
         }
 
-        CREATE_MEM_HOOK_STUB_ENTRIES(void, FixupStaticTrampolines, void *thiz, void *clazz_ptr) {
-            FixupStaticTrampolinesBackup(thiz, clazz_ptr);
+        ALWAYS_INLINE static void MaybeDelayHook(void *clazz_ptr) {
             art::mirror::Class mirror_class(clazz_ptr);
             auto class_def = mirror_class.GetClassDef();
             bool should_intercept = class_def && edxp::IsClassPending(class_def);
@@ -37,20 +37,37 @@ namespace art {
             }
         }
 
+        CREATE_MEM_HOOK_STUB_ENTRIES(
+                "_ZN3art11ClassLinker22FixupStaticTrampolinesENS_6ObjPtrINS_6mirror5ClassEEE",
+                void, FixupStaticTrampolines, (void * thiz, void * clazz_ptr), {
+                    backup(thiz, clazz_ptr);
+                    MaybeDelayHook(clazz_ptr);
+                });
+
+        CREATE_MEM_HOOK_STUB_ENTRIES(
+                "_ZN3art11ClassLinker22FixupStaticTrampolinesEPNS_6ThreadENS_6ObjPtrINS_6mirror5ClassEEE",
+                void, FixupStaticTrampolinesWithThread, (void * thiz,
+                void * thread, void * clazz_ptr), {
+                    backup(thiz, thread, clazz_ptr);
+                    MaybeDelayHook(clazz_ptr);
+                });
+
         CREATE_MEM_FUNC_SYMBOL_ENTRY(void, MakeInitializedClassesVisiblyInitialized, void *thiz,
-                                 void *self, bool wait) {
+                                     void *self, bool wait) {
             if (LIKELY(MakeInitializedClassesVisiblyInitializedSym))
                 MakeInitializedClassesVisiblyInitializedSym(thiz, self, wait);
         }
 
 
-        CREATE_HOOK_STUB_ENTRIES(bool, ShouldUseInterpreterEntrypoint, void *art_method,
-                                 const void *quick_code) {
-            if (quick_code != nullptr && UNLIKELY(edxp::isHooked(art_method))) {
-                return false;
-            }
-            return ShouldUseInterpreterEntrypointBackup(art_method, quick_code);
-        }
+        CREATE_HOOK_STUB_ENTRIES(
+                "_ZN3art11ClassLinker30ShouldUseInterpreterEntrypointEPNS_9ArtMethodEPKv",
+                bool, ShouldUseInterpreterEntrypoint, (void * art_method,
+                        const void *quick_code), {
+                    if (quick_code != nullptr && UNLIKELY(edxp::isHooked(art_method))) {
+                        return false;
+                    }
+                    return backup(art_method, quick_code);
+                });
 
     public:
         ClassLinker(void *thiz) : HookedObject(thiz) {}
@@ -107,16 +124,14 @@ namespace art {
             instance_ = new ClassLinker(thiz);
 
             RETRIEVE_MEM_FUNC_SYMBOL(SetEntryPointsToInterpreter,
-                                 "_ZNK3art11ClassLinker27SetEntryPointsToInterpreterEPNS_9ArtMethodE");
+                                     "_ZNK3art11ClassLinker27SetEntryPointsToInterpreterEPNS_9ArtMethodE");
 
-            HOOK_MEM_FUNC(FixupStaticTrampolines,
-                      "_ZN3art11ClassLinker22FixupStaticTrampolinesENS_6ObjPtrINS_6mirror5ClassEEE");
-
-            HOOK_FUNC(ShouldUseInterpreterEntrypoint,
-                      "_ZN3art11ClassLinker30ShouldUseInterpreterEntrypointEPNS_9ArtMethodEPKv");
+            edxp::HookSyms(handle, hook_func, FixupStaticTrampolines,
+                           FixupStaticTrampolinesWithThread);
+            edxp::HookSyms(handle, hook_func, ShouldUseInterpreterEntrypoint);
 
             // MakeInitializedClassesVisiblyInitialized will cause deadlock
-            // IsQuickToInterpreterBridge cannot be hooked by Dobby yet
+            // IsQuickToInterpreterBridge is inlined
             // So we use GetSavedEntryPointOfPreCompiledMethod instead
 //            if (api_level >= __ANDROID_API_R__) {
 //                RETRIEVE_FUNC_SYMBOL(MakeInitializedClassesVisiblyInitialized,

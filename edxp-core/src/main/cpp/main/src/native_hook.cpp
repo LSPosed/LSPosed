@@ -82,7 +82,7 @@ namespace edxp {
         art::ClassLinker::Setup(art_handle, hook_func);
         art::mirror::Class::Setup(art_handle, hook_func);
         art::JNIEnvExt::Setup(art_handle, hook_func);
-        art::oat_file_manager::DisableOnlyUseSystemOatFiles(art_handle, hook_func);
+//        art::oat_file_manager::DisableOnlyUseSystemOatFiles(art_handle, hook_func);
         art::jit::HookJitCacheCode(art_handle, hook_func);
 
         art_hooks_installed = true;
