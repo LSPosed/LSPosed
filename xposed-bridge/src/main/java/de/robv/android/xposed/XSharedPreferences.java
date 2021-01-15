@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.android.internal.util.XmlUtils;
+import com.elderdrivers.riru.edxp.bridge.BuildConfig;
 import com.elderdrivers.riru.edxp.util.MetaDataReader;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -16,6 +17,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.AccessDeniedException;
 import java.nio.file.Path;
 import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
@@ -36,10 +38,11 @@ import de.robv.android.xposed.services.FileResult;
  */
 public final class XSharedPreferences implements SharedPreferences {
     private static final String TAG = "XSharedPreferences";
-    private static final HashMap<Path, PrefsData> mInstances = new HashMap<>();
-    private static final Object mContent = new Object();
-    private static Thread mDaemon = null;
-    private static WatchService mWatcher;
+    private static final HashMap<Path, PrefsData> sInstances = new HashMap<>();
+    private static final Object sContent = new Object();
+    private static Thread sDaemon = null;
+    private static WatchService sWatcher;
+
     private final HashMap<OnSharedPreferenceChangeListener, Object> mListeners = new HashMap<>();
     private final File mFile;
     private final String mFilename;
@@ -47,14 +50,88 @@ public final class XSharedPreferences implements SharedPreferences {
     private boolean mLoaded = false;
     private long mLastModified;
     private long mFileSize;
+    private boolean mWatcherEnabled;
 
-    static {
-        try {
-            mWatcher = new File(XposedInit.prefsBasePath).toPath().getFileSystem().newWatchService();
-            Log.d(TAG, "Created WatchService instance");
-        } catch (IOException e) {
-            Log.e(TAG, "Failed to create WatchService", e);
+    private static synchronized WatchService getWatcher() {
+        if (sWatcher == null) {
+            try {
+                sWatcher = new File(XposedInit.prefsBasePath).toPath().getFileSystem().newWatchService();
+                if (BuildConfig.DEBUG) Log.d(TAG, "Created WatchService instance");
+            } catch (IOException e) {
+                Log.e(TAG, "Failed to create WatchService", e);
+            }
         }
+
+        if (sWatcher != null && (sDaemon == null || !sDaemon.isAlive())) {
+            initWatcherDaemon();
+        }
+
+        return sWatcher;
+    }
+
+    private static void initWatcherDaemon() {
+        sDaemon = new Thread() {
+            @Override
+            public void run() {
+                Log.d(TAG, "Watcher daemon thread started");
+                while (true) {
+                    WatchKey key;
+                    try {
+                        key = sWatcher.take();
+                    } catch (InterruptedException ignored) {
+                        return;
+                    }
+                    for (WatchEvent<?> event : key.pollEvents()) {
+                        WatchEvent.Kind<?> kind = event.kind();
+                        if (kind == StandardWatchEventKinds.OVERFLOW) {
+                            continue;
+                        }
+                        Path dir = (Path) key.watchable();
+                        Path path = dir.resolve((Path) event.context());
+                        String pathStr = path.toString();
+                        if (BuildConfig.DEBUG) Log.v(TAG, "File " + path.toString() + " event: " + kind.name());
+                        // We react to both real and backup files due to rare race conditions
+                        if (pathStr.endsWith(".bak")) {
+                            if (kind != StandardWatchEventKinds.ENTRY_DELETE) {
+                                continue;
+                            } else {
+                                pathStr = path.getFileName().toString();
+                                path = dir.resolve(pathStr.substring(0, pathStr.length() - 4));
+                            }
+                        } else if (SELinuxHelper.getAppDataFileService().checkFileExists(pathStr + ".bak")) {
+                            continue;
+                        }
+                        PrefsData data = sInstances.get(path);
+                        if (data != null && data.hasChanged()) {
+                            for (OnSharedPreferenceChangeListener l : data.mPrefs.mListeners.keySet()) {
+                                try {
+                                    l.onSharedPreferenceChanged(data.mPrefs, null);
+                                } catch (Throwable t) {
+                                    if (BuildConfig.DEBUG) Log.e(TAG, "Fail in preference change listener", t);
+                                }
+                            }
+                        }
+                    }
+                    key.reset();
+                }
+            }
+        };
+        sDaemon.setName(TAG + "-Daemon");
+        sDaemon.setDaemon(true);
+        sDaemon.start();
+    }
+
+    /**
+     * Read settings from the specified file.
+     *
+     * @param prefFile The file to read the preferences from.
+     * @param enableWatcher Whether to enable support for preference change listeners
+     */
+    public XSharedPreferences(File prefFile, boolean enableWatcher) {
+        mFile = prefFile;
+        mFilename = prefFile.getAbsolutePath();
+        mWatcherEnabled = enableWatcher;
+        init();
     }
 
     /**
@@ -63,9 +140,7 @@ public final class XSharedPreferences implements SharedPreferences {
      * @param prefFile The file to read the preferences from.
      */
     public XSharedPreferences(File prefFile) {
-        mFile = prefFile;
-        mFilename = prefFile.getAbsolutePath();
-        init();
+        this(prefFile, false);
     }
 
     /**
@@ -104,6 +179,7 @@ public final class XSharedPreferences implements SharedPreferences {
                             xposedminversion = MetaDataReader.extractIntPart((String) minVersionRaw);
                         }
                         xposedsharedprefs = metaData.containsKey("xposedsharedprefs");
+                        mWatcherEnabled = metaData.containsKey("xposedsharedprefswatcher");
                     }
                 } catch (NumberFormatException | IOException e) {
                     Log.w(TAG, "Apk parser fails: " + e);
@@ -121,71 +197,25 @@ public final class XSharedPreferences implements SharedPreferences {
     }
 
     private void tryRegisterWatcher() {
+        if (!mWatcherEnabled) {
+            return;
+        }
         Path path = mFile.toPath();
-        if (mInstances.containsKey(path)) {
+        if (sInstances.containsKey(path)) {
             return;
         }
         try {
-            path.getParent().register(mWatcher, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_DELETE);
-            mInstances.put(path, new PrefsData(this));
-            Log.d(TAG, "Registered file watcher for " + path);
+            path.getParent().register(getWatcher(), StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_DELETE);
+            sInstances.put(path, new PrefsData(this));
+            if (BuildConfig.DEBUG) Log.d(TAG, "tryRegisterWatcher: registered file watcher for " + path);
+        } catch (AccessDeniedException accDeniedEx) {
+            if (BuildConfig.DEBUG) Log.d(TAG, "tryRegisterWatcher: access denied to " + path);
         } catch (Exception e) {
-            Log.d(TAG, "Failed to register file watcher", e);
+            Log.d(TAG, "tryRegisterWatcher: failed to register file watcher", e);
         }
     }
 
     private void init() {
-        if (mDaemon == null || !mDaemon.isAlive()) {
-            mDaemon = new Thread() {
-                @Override
-                public void run() {
-                    Log.d(TAG, "Daemon thread started");
-                    while (true) {
-                        WatchKey key;
-                        try {
-                            key = mWatcher.take();
-                        } catch (InterruptedException ignored) {
-                            return;
-                        }
-                        for (WatchEvent<?> event : key.pollEvents()) {
-                            WatchEvent.Kind<?> kind = event.kind();
-                            if (kind == StandardWatchEventKinds.OVERFLOW) {
-                                continue;
-                            }
-                            Path dir = (Path)key.watchable();
-                            Path path = dir.resolve((Path)event.context());
-                            String pathStr = path.toString();
-                            Log.v(TAG, "File " + path.toString() + " event: " + kind.name());
-                            // We react to both real and backup files due to rare race conditions
-                            if (pathStr.endsWith(".bak")) {
-                                if (kind != StandardWatchEventKinds.ENTRY_DELETE) {
-                                    continue;
-                                } else {
-                                    pathStr = path.getFileName().toString();
-                                    path = dir.resolve(pathStr.substring(0, pathStr.length() - 4));
-                                }
-                            } else if (SELinuxHelper.getAppDataFileService().checkFileExists(pathStr + ".bak")) {
-                                continue;
-                            }
-                            PrefsData data = mInstances.get(path);
-                            if (data != null && data.hasChanged()) {
-                                for (OnSharedPreferenceChangeListener l : data.mPrefs.mListeners.keySet()) {
-                                    try {
-                                        l.onSharedPreferenceChanged(data.mPrefs, null);
-                                    } catch (Throwable t) {
-                                        Log.e(TAG, "Fail in preference change listener", t);
-                                    }
-                                }
-                            }
-                        }
-                        key.reset();
-                    }
-                }
-            };
-            mDaemon.setName(TAG + "-Daemon");
-            mDaemon.setDaemon(true);
-            mDaemon.start();
-        }
         tryRegisterWatcher();
         startLoadFromDisk();
     }
@@ -454,7 +484,7 @@ public final class XSharedPreferences implements SharedPreferences {
     @Override
     public void registerOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener) {
         synchronized(this) {
-            mListeners.put(listener, mContent);
+            mListeners.put(listener, sContent);
         }
     }
 
@@ -480,22 +510,22 @@ public final class XSharedPreferences implements SharedPreferences {
         public boolean hasChanged() {
             long size = tryGetFileSize(mPrefs.mFilename);
             if (size < 1) {
-                Log.d(TAG, "Ignoring empty prefs file");
+                if (BuildConfig.DEBUG) Log.d(TAG, "Ignoring empty prefs file");
                 return false;
             }
             if (size != mSize) {
                 mSize = size;
                 mHash = tryGetFileHash(mPrefs.mFilename);
-                Log.d(TAG, "Prefs file size changed");
+                if (BuildConfig.DEBUG) Log.d(TAG, "Prefs file size changed");
                 return true;
             }
             byte[] hash = tryGetFileHash(mPrefs.mFilename);
             if (!Arrays.equals(hash, mHash)) {
                 mHash = hash;
-                Log.d(TAG, "Prefs file hash changed");
+                if (BuildConfig.DEBUG) Log.d(TAG, "Prefs file hash changed");
                 return true;
             }
-            Log.d(TAG, "Prefs file not changed");
+            if (BuildConfig.DEBUG) Log.d(TAG, "Prefs file not changed");
             return false;
         }
     }
