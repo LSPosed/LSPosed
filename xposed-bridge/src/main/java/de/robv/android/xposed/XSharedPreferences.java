@@ -483,6 +483,9 @@ public final class XSharedPreferences implements SharedPreferences {
     @Deprecated
     @Override
     public void registerOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener) {
+        if (!mWatcherEnabled)
+            throw new UnsupportedOperationException("File watcher feature is disabled for this instance");
+
         synchronized(this) {
             mListeners.put(listener, sContent);
         }
@@ -491,6 +494,9 @@ public final class XSharedPreferences implements SharedPreferences {
     @Deprecated
     @Override
     public void unregisterOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener) {
+        if (!mWatcherEnabled)
+            throw new UnsupportedOperationException("File watcher feature is disabled for this instance");
+
         synchronized(this) {
             mListeners.remove(listener);
         }
