@@ -26,6 +26,12 @@ public class XposedInstallerHooker {
     private static final String LEGACY_INSTALLER_PACKAGE_NAME = "de.robv.android.xposed.installer";
 
     public static void hookXposedInstaller(final ClassLoader classLoader) {
+        // Deopt manager. It will not throw exception.
+        deoptMethod(classLoader, "org.meowcat.edxposed.manager.ModulesFragment", "onActivityCreated", Bundle.class);
+        deoptMethod(classLoader, "org.meowcat.edxposed.manager.ModulesFragment", "showMenu", Context.class, View.class, ApplicationInfo.class);
+        deoptMethod(classLoader, "org.meowcat.edxposed.manager.StatusInstallerFragment", "onCreateView", LayoutInflater.class, ViewGroup.class, Bundle.class);
+        deoptMethod(classLoader, "org.meowcat.edxposed.manager.util.ModuleUtil", "updateModulesList", boolean.class, View.class);
+
         try {
             final String xposedAppClass = LEGACY_INSTALLER_PACKAGE_NAME + ".XposedApp";
             final Class InstallZipUtil = XposedHelpers.findClass(LEGACY_INSTALLER_PACKAGE_NAME
@@ -97,13 +103,6 @@ public class XposedInstallerHooker {
                     }
                 }
             });
-
-            // deopt manager
-            deoptMethod(classLoader, "org.meowcat.edxposed.manager.ModulesFragment", "onActivityCreated", Bundle.class);
-            deoptMethod(classLoader, "org.meowcat.edxposed.manager.ModulesFragment", "showMenu", Context.class, View.class, ApplicationInfo.class);
-            deoptMethod(classLoader, "org.meowcat.edxposed.manager.StatusInstallerFragment", "onCreateView", LayoutInflater.class, ViewGroup.class, Bundle.class);
-            deoptMethod(classLoader, "org.meowcat.edxposed.manager.util.ModuleUtil", "updateModulesList", boolean.class, View.class);
-
         } catch (Throwable t) {
             Utils.logE("Could not hook Xposed Installer", t);
         }
