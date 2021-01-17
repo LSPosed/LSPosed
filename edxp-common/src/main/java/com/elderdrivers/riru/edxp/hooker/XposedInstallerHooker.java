@@ -10,10 +10,13 @@ import android.view.ViewGroup;
 
 import com.elderdrivers.riru.edxp.config.ConfigManager;
 import com.elderdrivers.riru.edxp.config.EdXpConfigGlobal;
+import com.elderdrivers.riru.edxp.common.BuildConfig;
+import com.elderdrivers.riru.edxp.core.EdxpImpl;
+import com.elderdrivers.riru.edxp.core.Main;
 import com.elderdrivers.riru.edxp.util.Utils;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 
 import de.robv.android.xposed.XC_MethodHook;
@@ -54,10 +57,27 @@ public class XposedInstallerHooker {
                                 Utils.logD("reloadXposedProp already done, skip...");
                                 return;
                             }
-                            File file = new File(ConfigManager.getXposedPropPath());
-                            FileInputStream is = null;
-                            try {
-                                is = new FileInputStream(file);
+                            //version=92.0-$version ($backend)
+                            StringBuilder stringBuilder = new StringBuilder();
+                            stringBuilder.append("version=");
+                            stringBuilder.append(XposedBridge.getXposedVersion());
+                            stringBuilder.append(".0-");
+                            stringBuilder.append(BuildConfig.VERSION_NAME);
+                            stringBuilder.append(" (");
+                            String variant = "None";
+                            switch (Main.getEdxpVariant()) {
+                                case EdxpImpl.NONE:
+                                    break;
+                                case EdxpImpl.YAHFA:
+                                    variant = "YAHFA";
+                                    break;
+                                case EdxpImpl.SANDHOOK:
+                                    variant = "SandHook";
+                                    break;
+                            }
+                            stringBuilder.append(variant);
+                            stringBuilder.append(")");
+                            try (ByteArrayInputStream is = new ByteArrayInputStream(stringBuilder.toString().getBytes())) {
                                 Object props = XposedHelpers.callStaticMethod(InstallZipUtil,
                                         "parseXposedProp", is);
                                 synchronized (thisObject) {
@@ -66,14 +86,7 @@ public class XposedInstallerHooker {
                                 Utils.logD("reloadXposedProp done...");
                                 param.setResult(null);
                             } catch (IOException e) {
-                                Utils.logE("Could not read " + file.getPath(), e);
-                            } finally {
-                                if (is != null) {
-                                    try {
-                                        is.close();
-                                    } catch (IOException ignored) {
-                                    }
-                                }
+                                Utils.logE("Could not reloadXposedProp", e);
                             }
                         }
                     });
@@ -105,6 +118,59 @@ public class XposedInstallerHooker {
             });
         } catch (Throwable t) {
             Utils.logE("Could not hook Xposed Installer", t);
+        }
+
+        // for new manager
+        try {
+            XposedHelpers.findAndHookMethod("org.meowcat.edxposed.manager.Constants", classLoader, "getXposedApiVersion", new XC_MethodReplacement() {
+                @Override
+                protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
+                    return XposedBridge.getXposedVersion();
+                }
+            });
+            XposedHelpers.findAndHookMethod("org.meowcat.edxposed.manager.Constants", classLoader, "getXposedVersion", new XC_MethodReplacement() {
+                @Override
+                protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
+                    return BuildConfig.VERSION_NAME;
+                }
+            });
+            XposedHelpers.findAndHookMethod("org.meowcat.edxposed.manager.Constants", classLoader, "getXposedVersionCode", new XC_MethodReplacement() {
+                @Override
+                protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
+                    return BuildConfig.VERSION_CODE;
+                }
+            });
+            XposedHelpers.findAndHookMethod("org.meowcat.edxposed.manager.Constants", classLoader, "getXposedApiVersion", new XC_MethodReplacement() {
+                @Override
+                protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
+                    return XposedBridge.getXposedVersion();
+                }
+            });
+            XposedHelpers.findAndHookMethod("org.meowcat.edxposed.manager.Constants", classLoader, "getXposedVariant", new XC_MethodReplacement() {
+                @Override
+                protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
+                    String variant = "None";
+                    switch (Main.getEdxpVariant()) {
+                        case EdxpImpl.NONE:
+                            break;
+                        case EdxpImpl.YAHFA:
+                            variant = "YAHFA";
+                            break;
+                        case EdxpImpl.SANDHOOK:
+                            variant = "SandHook";
+                            break;
+                    }
+                    return variant;
+                }
+            });
+            XposedHelpers.findAndHookMethod("org.meowcat.edxposed.manager.Constants", classLoader, "getBaseDir", new XC_MethodReplacement() {
+                @Override
+                protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
+                    return ConfigManager.getBaseConfigPath() + "/";
+                }
+            });
+        } catch (Throwable t) {
+            Utils.logE("Could not hook EdXposed Installer", t);
         }
     }
 

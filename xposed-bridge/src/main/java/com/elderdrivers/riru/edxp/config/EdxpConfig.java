@@ -8,8 +8,6 @@ public interface EdxpConfig {
 
     String getInstallerPackageName();
 
-    String getXposedPropPath();
-
     String getLibSandHookName();
 
     boolean isNoModuleLogEnabled();

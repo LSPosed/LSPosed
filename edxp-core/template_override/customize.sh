@@ -143,7 +143,6 @@ extract "${ZIPFILE}" 'sepolicy.rule' "${MODPATH}"
 extract "${ZIPFILE}" 'post-fs-data.sh' "${MODPATH}"
 extract "${ZIPFILE}" 'uninstall.sh' "${MODPATH}"
 
-extract "${ZIPFILE}" 'system/framework/edconfig.jar' "${MODPATH}"
 extract "${ZIPFILE}" 'system/framework/eddalvikdx.dex' "${MODPATH}"
 extract "${ZIPFILE}" 'system/framework/eddexmaker.dex' "${MODPATH}"
 extract "${ZIPFILE}" 'system/framework/edservice.dex' "${MODPATH}"

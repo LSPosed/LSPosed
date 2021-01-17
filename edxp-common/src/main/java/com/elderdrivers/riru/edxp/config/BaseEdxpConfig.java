@@ -20,10 +20,6 @@ public class BaseEdxpConfig implements EdxpConfig {
     }
 
     @Override
-    public String getXposedPropPath() {
-        return ConfigManager.getXposedPropPath();
-    }
-    @Override
     public String getLibSandHookName() {
         return ConfigManager.getLibSandHookName();
     }

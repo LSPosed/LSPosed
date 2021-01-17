@@ -30,7 +30,6 @@ if (System.env.APPVEYOR_BUILD_NUMBER != null) {
 version buildVersionName
 
 ext {
-    versionCode = buildVersionCode
     module_name = "EdXposed"
     jar_dest_dir = "${projectDir}/template_override/system/framework/"
     is_windows = OperatingSystem.current().isWindows()
@@ -73,8 +72,8 @@ android {
                 cppFlags "-std=c++17 -ffixed-x18 -Qunused-arguments -frtti -fomit-frame-pointer"
                 cFlags "-std=gnu99 -ffixed-x18 -Qunused-arguments -frtti -fomit-frame-pointer"
                 arguments "-DRIRU_MODULE_API_VERSION=$moduleMaxRiruApiVersion",
-                        "-DRIRU_MODULE_VERSION=$buildVersionCode",
-                        "-DRIRU_MODULE_VERSION_NAME:STRING=\"$buildVersionName\""
+                        "-DRIRU_MODULE_VERSION=$rootProject.ext.versionCode",
+                        "-DRIRU_MODULE_VERSION_NAME:STRING=\"$rootProject.ext.versionName\""
             }
         }
     }
