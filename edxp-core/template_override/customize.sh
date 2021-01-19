@@ -2,6 +2,9 @@ SKIPUNZIP=1
 
 abortC() {
   rm -rf "${MODPATH}"
+  if [[ ! -f /data/adb/edxp/misc_path ]]; then
+    [[ -d "${MISC_PATH}" ]] && rm -rf "${MISC_PATH}"
+  fi
   abort "$1"
 }
 
