@@ -203,7 +203,7 @@ else
 fi
 touch /data/adb/edxp/new_install || abortC "! ${LANG_CUST_ERR_CONF_FIRST}"
 set_perm_recursive /data/adb/edxp root root 0700 0600 "u:object_r:magisk_file:s0" || abortC "! ${LANG_CUST_ERR_PERM}"
-mkdir -p /data/misc/$MISC_PATH || abortC "! ${LANG_CUST_ERR_CONF_CREATE}"
+mkdir -p /data/misc/$MISC_PATH/0/conf/ || abortC "! ${LANG_CUST_ERR_CONF_CREATE}"
 set_perm /data/misc/$MISC_PATH root root 0771 "u:object_r:magisk_file:s0" || abortC "! ${LANG_CUST_ERR_PERM}"
 echo "[[ -f /data/adb/edxp/keep_data ]] || rm -rf /data/misc/$MISC_PATH" >> "${MODPATH}/uninstall.sh" || abortC "! ${LANG_CUST_ERR_CONF_UNINST}"
 echo "[[ -f /data/adb/edxp/new_install ]] || rm -rf /data/adb/edxp" >> "${MODPATH}/uninstall.sh" || abortC "! ${LANG_CUST_ERR_CONF_UNINST}"
