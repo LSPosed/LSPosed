@@ -14,16 +14,11 @@
 
 namespace edxp {
 
-
     class ConfigManager {
     private:
         inline static const auto kPrimaryInstallerPkgName = "org.meowcat.edxposed.manager"s;
         inline static const auto kXposedPropName = "edconfig.jar"s;
-        inline static const std::vector<std::string> kXposedInjectDexPath = {
-                "edxp.dex",
-                "eddalvikdx.dex",
-                "eddexmaker.dex",
-        };
+        inline static const auto kXposedInjectDexPath = "edxp.dex";
 
     public:
         static void Init();
@@ -105,22 +100,22 @@ namespace edxp {
 
         void EnsurePermission(const std::string &pkg_name, uid_t uid) const;
 
-        static const auto &GetInjectDexPaths() { return inject_dex_paths_; };
+        static const auto &GetInjectDexPath() { return inject_dex_path_; };
 
         bool IsInstaller(const std::string &pkg_name) const {
             return pkg_name == installer_pkg_name_ || pkg_name == kPrimaryInstallerPkgName;
         }
 
+
     private:
         inline static std::unordered_map<uid_t, std::unique_ptr<ConfigManager>> instances_{};
         inline static uid_t current_user_ = 0u;
-        inline static std::filesystem::path misc_path_;
-        inline static std::vector<std::filesystem::path> inject_dex_paths_;
-        inline static const bool use_prot_storage_ = GetAndroidApiLevel() >= __ANDROID_API_N__;
+        inline static std::filesystem::path misc_path_;   // /data/misc/edxp_xxxx
+        inline static std::filesystem::path inject_dex_path_;
 
         const uid_t user_;
-        const std::filesystem::path data_path_prefix_;
-        const std::filesystem::path base_config_path_;
+        const std::filesystem::path data_path_prefix_;   // /data/user_de/{user}
+        const std::filesystem::path base_config_path_;   // /data/misc/edxp_xxxx/{user}
         const bool initialized_ = false;
         const std::filesystem::path installer_pkg_name_;
         const bool white_list_enable_ = false;

@@ -151,7 +151,7 @@ namespace edxp {
 
     ConfigManager::ConfigManager(uid_t user, bool initialized) :
             user_(user),
-            data_path_prefix_(fs::path(use_prot_storage_ ? "/data/user_de" : "/data/user") /
+            data_path_prefix_(fs::path("/data/user_de") /
                               std::to_string(user_)),
             base_config_path_(RetrieveBaseConfigPath()),
             initialized_(initialized || InitConfigPath()),
@@ -344,11 +344,7 @@ namespace edxp {
                 return !std::isspace(ch);
             }).base(), path.end());
             misc_path_ = fs::path("/data/misc") / path;
-            std::transform(kXposedInjectDexPath.begin(), kXposedInjectDexPath.end(),
-                           std::back_inserter(inject_dex_paths_),
-                           [](auto i) {
-                               return GetFrameworkPath(i);
-                           });
+            inject_dex_path_ = GetFrameworkPath(kXposedInjectDexPath);
             LOGI("Got base config path: %s", misc_path_.c_str());
         } catch (const RirudSocket::RirudSocketException &e) {
             LOGE("%s", e.what());

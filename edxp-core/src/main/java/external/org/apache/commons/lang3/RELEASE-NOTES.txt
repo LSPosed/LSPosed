@@ -1,0 +1,40 @@
+$Id: RELEASE-NOTES.txt 1199820 2011-11-09 16:14:52Z bayard $
+
+                        Commons Lang Package
+                            Version 3.1
+                           Release Notes
+
+
+INTRODUCTION:
+
+This document contains the release notes for the 3.1 version of Apache Commons Lang.
+Commons Lang is a set of utility functions and reusable components that should be of use in any 
+Java environment.
+
+Lang 3.0 and onwards now targets Java 5.0, making use of features that arrived with Java 5.0 such as generics, 
+variable arguments, autoboxing, concurrency and formatted output.
+
+For the advice on upgrading from 2.x to 3.x, see the following page: 
+
+    http://commons.apache.org/lang/article3_0.html
+
+CHANGES IN 3.1
+================
+
+    [LANG-760] Add API StringUtils.toString(byte[] intput, String charsetName)
+    [LANG-756] Add APIs ClassUtils.isPrimitiveWrapper(Class<?>) and isPrimitiveOrWrapper(Class<?>)
+    [LANG-758] Add an example with whitespace in StringUtils.defaultIfEmpty
+    [LANG-752] Fix createLong() so it behaves like createInteger()
+    [LANG-751] Include the actual type in the Validate.isInstance and isAssignableFrom exception messages
+    [LANG-748] Deprecating chomp(String, String)
+    [LANG-736] CharUtils static final array CHAR_STRING is not needed to compute CHAR_STRING_ARRAY
+    [LANG-695] SystemUtils.IS_OS_UNIX doesn't recognize FreeBSD as a Unix system
+
+BUG FIXES IN 3.1
+==================
+
+    [LANG-749] Incorrect Bundle-SymbolicName in Manifest
+    [LANG-746] NumberUtils does not handle upper-case hex: 0X and -0X
+    [LANG-744] StringUtils throws java.security.AccessControlException on Google App Engine
+    [LANG-741] Ant build has wrong component.name
+    [LANG-698] Document that the Mutable numbers don't work as expected with String.format

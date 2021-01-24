@@ -45,7 +45,6 @@ preBuild.doLast {
 }
 
 dependencies {
-    compileOnly files(project(":dexmaker").tasks.getByName("makeJarRelease").outputs)
     compileOnly files(project(":hiddenapi-stubs").tasks.getByName("makeStubJar").outputs)
 }
 

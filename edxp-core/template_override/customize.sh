@@ -143,9 +143,6 @@ extract "${ZIPFILE}" 'sepolicy.rule' "${MODPATH}"
 extract "${ZIPFILE}" 'post-fs-data.sh' "${MODPATH}"
 extract "${ZIPFILE}" 'uninstall.sh' "${MODPATH}"
 
-extract "${ZIPFILE}" 'system/framework/eddalvikdx.dex' "${MODPATH}"
-extract "${ZIPFILE}" 'system/framework/eddexmaker.dex' "${MODPATH}"
-extract "${ZIPFILE}" 'system/framework/edservice.dex' "${MODPATH}"
 extract "${ZIPFILE}" 'system/framework/edxp.dex' "${MODPATH}"
 
 if [ "$ARCH" = "x86" ] || [ "$ARCH" = "x64" ]; then

@@ -54,18 +54,17 @@ namespace edxp {
         CallPostFixupStaticTrampolinesCallback(class_ptr, post_fixup_static_mid_);
     }
 
-    void Context::PreLoadDex(const std::vector<fs::path> &dex_paths) {
+    void Context::PreLoadDex(const fs::path &dex_path) {
         if (LIKELY(!dexes.empty())) return;
-        for (const auto &path: dex_paths) {
-            std::ifstream is(path, std::ios::binary);
-            if (!is.good()) {
-                LOGE("Cannot load path %s", path.c_str());
-                continue;
-            }
-            dexes.emplace_back(std::istreambuf_iterator<char>(is),
-                               std::istreambuf_iterator<char>());
-            LOGI("Loaded %s with size %zu", path.c_str(), dexes.back().size());
+
+        std::ifstream is(dex_path, std::ios::binary);
+        if (!is.good()) {
+            LOGE("Cannot load path %s", dex_path.c_str());
+            return;
         }
+        dexes.emplace_back(std::istreambuf_iterator<char>(is),
+                           std::istreambuf_iterator<char>());
+        LOGI("Loaded %s with size %zu", dex_path.c_str(), dexes.back().size());
     }
 
     void Context::InjectDexAndInit(JNIEnv *env) {
@@ -227,7 +226,7 @@ namespace edxp {
             LOGD("skip injecting into android because no module hooks it");
         }
         if (!skip_) {
-            PreLoadDex(ConfigManager::GetInjectDexPaths());
+            PreLoadDex(ConfigManager::GetInjectDexPath());
         }
         ConfigManager::GetInstance()->EnsurePermission("android", 1000);
     }
@@ -410,7 +409,7 @@ namespace edxp {
                                  }, is_child_zygote);
         if (!skip_) {
             ConfigManager::GetInstance()->EnsurePermission(package_name, uid);
-            PreLoadDex(ConfigManager::GetInjectDexPaths());
+            PreLoadDex(ConfigManager::GetInjectDexPath());
         }
     }
 

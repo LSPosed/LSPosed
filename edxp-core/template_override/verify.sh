@@ -22,10 +22,10 @@ extract() {
   hash_path=""
   if [ $junk_paths = true ]; then
     file_path="$dir/$(basename "$file")"
-    hash_path="$TMPDIR_FOR_VERIFY/$(basename "$file").s"
+    hash_path="$TMPDIR_FOR_VERIFY/$(basename "$file").sha256"
   else
     file_path="$dir/$file"
-    hash_path="$TMPDIR_FOR_VERIFY/$file.s"
+    hash_path="$TMPDIR_FOR_VERIFY/$file.sha256"
   fi
 
   unzip $opts "$zip" "$file" -d "$dir" >&2

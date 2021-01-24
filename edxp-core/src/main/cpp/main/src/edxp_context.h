@@ -95,7 +95,7 @@ namespace edxp {
 
         Context() {}
 
-        void PreLoadDex(const std::vector<std::filesystem::path> &dex_path);
+        void PreLoadDex(const std::filesystem::path &dex_paths);
 
         void InjectDexAndInit(JNIEnv *env);
 
