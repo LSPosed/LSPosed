@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 
 import org.meowcat.edxposed.manager.R;
@@ -37,12 +36,6 @@ public class DownloadDetailsFragment extends Fragment {
             return null;
         }
         DownloadDetailsBinding binding = DownloadDetailsBinding.inflate(inflater, container, false);
-        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
-            if (insets.getTappableElementInsets().bottom != insets.getSystemWindowInsetBottom()) {
-                binding.getRoot().setPadding(0, 0, 0, insets.getSystemWindowInsetBottom());
-            }
-            return insets;
-        });
         binding.downloadTitle.setText(module.name);
         binding.downloadTitle.setTextIsSelectable(true);
 

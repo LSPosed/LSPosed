@@ -10,13 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.core.view.ViewCompat;
 import androidx.fragment.app.ListFragment;
 
 import org.meowcat.edxposed.manager.R;
@@ -69,23 +66,6 @@ public class DownloadDetailsVersionsFragment extends ListFragment {
             }
             setListAdapter(sAdapter);
         }
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        ((FrameLayout) view).setClipChildren(false);
-        ((FrameLayout) view).setClipToPadding(false);
-        ((FrameLayout) getListView().getParent()).setClipChildren(false);
-        ((FrameLayout) getListView().getParent()).setClipToPadding(false);
-        getListView().setClipToPadding(false);
-        getListView().setClipToPadding(false);
-        ViewCompat.setOnApplyWindowInsetsListener(view, (v, insets) -> {
-            if (insets.getTappableElementInsets().bottom != insets.getSystemWindowInsetBottom()) {
-                getListView().setPadding(0, 0, 0, insets.getSystemWindowInsetBottom());
-            }
-            return insets;
-        });
     }
 
     @Override
