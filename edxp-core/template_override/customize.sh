@@ -107,8 +107,8 @@ if [[ ${BOOTMODE} == true ]]; then
   [[ ${locale} == "" ]] && locale=$(settings get system system_locales|awk -F "," '{print $1}'|awk -F "-" '{print $1"_"$NF}')
   file=${locale}.sh
   unzip -o "$ZIPFILE" "${file}" -d "$TMPDIR" >&2
-  unzip -o "$ZIPFILE" "${file}.s" -d "$TMPDIR" >&2
-  (echo "$(cat "${TMPDIR}/${file}.s")  ${TMPDIR}/${file}" | sha256sum -c -s -) && . "${TMPDIR}/${file}"
+  unzip -o "$ZIPFILE" "${file}.sha256" -d "$TMPDIR" >&2
+  (echo "$(cat "${TMPDIR}/${file}.sha256")  ${TMPDIR}/${file}" | sha256sum -c -s -) && . "${TMPDIR}/${file}"
 fi
 ### lang end ###
 
