@@ -9,7 +9,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.core.text.HtmlCompat;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.meowcat.edxposed.manager.BuildConfig;
@@ -50,8 +49,6 @@ public class AboutActivity extends BaseActivity {
                     .setPositiveButton(android.R.string.ok, null).show());
         }
         binding.appVersion.setText(BuildConfig.VERSION_NAME);
-
-        binding.licensesView.setOnClickListener(v12 -> startActivity(new Intent(this, OssLicensesMenuActivity.class)));
 
         binding.tabSupportModuleDescription.setText(getString(R.string.support_modules_description,
                 getString(R.string.module_support)));

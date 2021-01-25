@@ -303,7 +303,7 @@
                     android:text="@string/Settings"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
             </LinearLayout>
-
+<!--
             <LinearLayout
                 android:id="@+id/about"
                 android:layout_width="match_parent"
@@ -330,6 +330,7 @@
                     android:text="@string/About"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
             </LinearLayout>
+-->
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -71,11 +71,11 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
             intent.setClass(getApplicationContext(), LogsActivity.class);
             startActivity(intent);
         });
-        binding.about.setOnClickListener(v -> {
+        /*binding.about.setOnClickListener(v -> {
             Intent intent = new Intent();
             intent.setClass(getApplicationContext(), AboutActivity.class);
             startActivity(intent);
-        });
+        });*/
         TooltipCompat.setTooltipText(binding.menuMore, getString(androidx.appcompat.R.string.abc_action_menu_overflow_description));
         binding.menuMore.setOnClickListener(v -> {
             PopupMenu appMenu = new PopupMenu(MainActivity.this, binding.menuMore);
