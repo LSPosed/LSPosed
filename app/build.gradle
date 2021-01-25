@@ -2,9 +2,13 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 
 android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
+
     buildFeatures {
         viewBinding = true
     }
+
     signingConfigs {
         def keystorePwd = null
         def alias = null
@@ -23,25 +27,42 @@ android {
             keyPassword pwd != null ? pwd : System.getenv("ALIAS_PASS")
         }
     }
-    lintOptions {
-        disable 'MissingTranslation'
-        disable 'ExtraTranslation'
-    }
-    compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+
     defaultConfig {
         applicationId "org.meowcat.edxposed.manager"
         minSdkVersion 26
         targetSdkVersion 30
         versionCode 458010
         versionName "4.5.8.1"
-        signingConfig signingConfigs.release
     }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+    lintOptions {
+        disable 'MissingTranslation'
+        disable 'ExtraTranslation'
+        abortOnError true
+        checkReleaseBuilds true
+    }
+
+    packagingOptions {
+        exclude 'META-INF/**'
+        exclude 'org/**'
+        exclude '**.properties'
+        exclude '**.bin'
+    }
+
+    dependenciesInfo.includeInApk false
+
     buildTypes {
         release {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
         debug {
             minifyEnabled false
@@ -49,11 +70,6 @@ android {
             signingConfig signingConfigs.release
         }
     }
-    compileOptions {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
-    }
-
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
             outputFileName = "EdXposedManagerR-${defaultConfig.versionName}-${defaultConfig.versionCode}-${buildType.name}.apk"
