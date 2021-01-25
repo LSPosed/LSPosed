@@ -3,20 +3,13 @@ package com.elderdrivers.riru.edxp.core;
 import android.annotation.SuppressLint;
 
 import com.elderdrivers.riru.common.KeepAll;
-import com.elderdrivers.riru.edxp.config.ConfigManager;
 import com.elderdrivers.riru.edxp.util.Utils;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.concurrent.atomic.AtomicReference;
 
 @SuppressLint("DefaultLocale")
 public class Main implements KeepAll {
     private static final AtomicReference<EdxpImpl> edxpImplRef = new AtomicReference<>(null);
-
-    static {
-        loadEdxpImpls();
-    }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     // entry points
@@ -30,8 +23,8 @@ public class Main implements KeepAll {
         // won't be loaded
     }
 
-    public static void forkAndSpecializePost(int pid, String appDataDir, String niceName) {
-        final EdxpImpl edxp = getEdxpImpl();
+    public static void forkAndSpecializePost(int pid, String appDataDir, String niceName, int variant) {
+        EdxpImpl edxp = getEdxpImpl(variant);
         if (edxp == null || !edxp.isInitialized()) {
             Utils.logE("Not started up");
             return;
@@ -46,8 +39,8 @@ public class Main implements KeepAll {
         // Won't load
     }
 
-    public static void forkSystemServerPost(int pid) {
-        final EdxpImpl edxp = getEdxpImpl();
+    public static void forkSystemServerPost(int pid, int variant) {
+        EdxpImpl edxp = getEdxpImpl(variant);
         if (edxp == null || !edxp.isInitialized()) {
             return;
         }
@@ -60,27 +53,12 @@ public class Main implements KeepAll {
         return edxpImplRef.compareAndSet(null, edxp);
     }
 
-    public static synchronized EdxpImpl getEdxpImpl() {
-        return edxpImplRef.get();
-    }
-
-    @EdxpImpl.Variant
-    public static synchronized int getEdxpVariant() {
-        return getEdxpImpl().getVariant();
-    }
-
-    private static void loadEdxpImpls() {
-        String file_name = ConfigManager.getMiscPath() + "/variant";
-        int variant = EdxpImpl.NONE;
-        try {
-            String f = new String(Files.readAllBytes(Paths.get(file_name))).trim();
-            variant = Integer.parseInt(f);
-        } catch (Exception e) {
-            Utils.logE("loadEdxpImpls: ", e);
+    public static synchronized EdxpImpl getEdxpImpl(int variant) {
+        EdxpImpl edxp = edxpImplRef.get();
+        if (edxp != null) {
+            return edxp;
         }
-
         Utils.logD("Loading variant " + variant);
-
         try {
             switch (variant) {
                 case EdxpImpl.YAHFA:
@@ -96,5 +74,15 @@ public class Main implements KeepAll {
         } catch (ClassNotFoundException e) {
             Utils.logE("loadEdxpImpls: Class not found", e);
         }
+        return edxpImplRef.get();
+    }
+
+    public static synchronized EdxpImpl getEdxpImpl() {
+        return edxpImplRef.get();
+    }
+
+    @EdxpImpl.Variant
+    public static synchronized int getEdxpVariant() {
+        return getEdxpImpl().getVariant();
     }
 }

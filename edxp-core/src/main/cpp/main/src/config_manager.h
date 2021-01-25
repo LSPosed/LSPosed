@@ -44,8 +44,7 @@ namespace edxp {
             return std::move(instances_);
         }
 
-        // Always true now
-        inline auto IsBlackWhiteListEnabled() const { return true; }
+        inline const auto &GetVariant() const { return variant_; }
 
         inline const auto &IsResourcesHookEnabled() const { return resources_hook_enabled_; }
 
@@ -114,6 +113,7 @@ namespace edxp {
         inline static std::filesystem::path inject_dex_path_;
 
         const uid_t user_;
+        const int variant_;
         const std::filesystem::path data_path_prefix_;   // /data/user_de/{user}
         const std::filesystem::path base_config_path_;   // /data/misc/edxp_xxxx/{user}
         const bool initialized_ = false;
@@ -149,6 +149,8 @@ namespace edxp {
         friend std::unique_ptr<ConfigManager> std::make_unique<ConfigManager>(uid_t &, bool &&);
 
         std::filesystem::path RetrieveBaseConfigPath() const;
+
+        static int GetVariant(const std::filesystem::path &dir);
     };
 
 } // namespace edxp

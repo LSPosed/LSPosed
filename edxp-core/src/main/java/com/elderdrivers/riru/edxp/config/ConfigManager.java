@@ -22,8 +22,6 @@ public class ConfigManager {
 
     public static native String getBaseConfigPath();
 
-    public static native String getMiscPath();
-
     public static native String getDataPathPrefix();
 
     public static native String getModulesList();

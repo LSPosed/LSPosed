@@ -125,15 +125,7 @@ namespace edxp {
         RegisterEdxpYahfa(env);
         RegisterPendingHooks(env);
 
-        // must call entry class's methods after all native methods registered
-        if (LIKELY(entry_class_)) {
-            jmethodID get_variant_mid = JNI_GetStaticMethodID(env, entry_class_,
-                                                              "getEdxpVariant", "()I");
-            if (LIKELY(get_variant_mid)) {
-                int variant = JNI_CallStaticIntMethod(env, entry_class_, get_variant_mid);
-                variant_ = static_cast<Variant>(variant);
-            }
-        }
+        variant_ = Variant(ConfigManager::GetInstance()->GetVariant());
 //        LOGI("EdxpVariant: %d", variant_);
 
         initialized_ = true;
@@ -308,7 +300,8 @@ namespace edxp {
                 InstallInlineHooks();
                 PrepareJavaEnv(env);
                 // only do work in child since FindAndCall would print log
-                FindAndCall(env, "forkSystemServerPost", "(I)V", res);
+                FindAndCall(env, "forkSystemServerPost", "(II)V", res,
+                            variant_);
             }
             RegisterEdxpService(env);
         } else {
@@ -422,8 +415,9 @@ namespace edxp {
                 PrepareJavaEnv(env);
                 LOGD("Done prepare");
                 FindAndCall(env, "forkAndSpecializePost",
-                            "(ILjava/lang/String;Ljava/lang/String;)V",
-                            res, app_data_dir_, nice_name_);
+                            "(ILjava/lang/String;Ljava/lang/String;I)V",
+                            res, app_data_dir_, nice_name_,
+                            variant_);
                 LOGD("injected xposed into %s", process_name.get());
             } else {
                 [[maybe_unused]] auto config_manager = ConfigManager::ReleaseInstances();

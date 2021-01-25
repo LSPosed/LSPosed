@@ -163,7 +163,8 @@ namespace edxp {
             white_list_(GetAppList(GetConfigPath("whitelist/"))),
             black_list_(GetAppList(GetConfigPath("blacklist/"))),
             modules_list_(GetModuleList()),
-            last_write_time_(GetLastWriteTime()) {
+            last_write_time_(GetLastWriteTime()),
+            variant_(GetVariant(GetMiscPath() / "variant")) {
         // use_white_list snapshot
         LOGI("base config path: %s", base_config_path_.c_str());
         LOGI("  using installer package name: %s", installer_pkg_name_.c_str());
@@ -193,6 +194,16 @@ namespace edxp {
                       std::ostream_iterator<std::string>(join, "\n"));
             return join.str();
         })().c_str());
+    }
+
+    int ConfigManager::GetVariant(const fs::path &dir) {
+        std::ifstream ifs(dir);
+        if (!ifs.good()) {
+            return 0;
+        }
+        int variant;
+        ifs >> variant;
+        return variant;
     }
 
     auto ConfigManager::GetModuleList() -> std::remove_const_t<decltype(modules_list_)> {
@@ -257,7 +268,7 @@ namespace edxp {
         return std::max({path_exists<true>(config_path) ? fs::last_write_time(config_path)
                                                         : fs::file_time_type{},
                          path_exists<true>(list_path) ? fs::last_write_time(list_path)
-                                                           : fs::file_time_type{},
+                                                      : fs::file_time_type{},
                          path_exists<true>(blacklist_path) ? fs::last_write_time(blacklist_path)
                                                            : fs::file_time_type{},
                          path_exists<true>(whitelist_path) ? fs::last_write_time(whitelist_path)

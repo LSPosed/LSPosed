@@ -79,8 +79,7 @@ namespace edxp {
                           "(Ljava/lang/String;)Ljava/lang/String;"),
             NATIVE_METHOD(ConfigManager, getCachePath,
                           "(Ljava/lang/String;)Ljava/lang/String;"),
-            NATIVE_METHOD(ConfigManager, getBaseConfigPath,"()Ljava/lang/String;"),
-            NATIVE_METHOD(ConfigManager, getMiscPath,"()Ljava/lang/String;"),
+            NATIVE_METHOD(ConfigManager, getBaseConfigPath, "()Ljava/lang/String;"),
             NATIVE_METHOD(ConfigManager, getModulesList, "()Ljava/lang/String;"),
     };
 
