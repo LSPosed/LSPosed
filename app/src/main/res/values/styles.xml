@@ -1,0 +1,88 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorActionBar">@color/colorActionBar</item>
+        <item name="colorStickyHeader">@color/colorStickyHeader</item>
+        <item name="modulesHorizontalPadding">8dp</item>
+        <item name="downloadVerticalPadding">16dp</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.MaterialComponents.ActionBar</item>
+        <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="listItemBackground">?selectableItemBackground</item>
+        <item name="roundBackground">@drawable/item_background_round</item>
+        <item name="actionBarPopupTheme">@style/AppTheme.PopupOverlay</item>
+        <item name="android:windowLightStatusBar">@bool/lightSystemUI</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">@bool/lightSystemUI
+        </item>
+        <item name="android:navigationBarColor">@color/navigationBarColor</item>
+        <item name="alertDialogTheme">@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog
+        </item>
+        <item name="tabLayoutTheme">@style/Widget.MaterialComponents.TabLayout</item>
+        <item name="liftOnScroll">false</item>
+    </style>
+
+    <style name="AppearanceFoundation.Caption" parent="TextAppearance.AppCompat.Caption">
+        <item name="fontFamily">@font/exo</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
+
+    <style name="MasterSwitch" parent="@style/ThemeOverlay.AppCompat.Dark">
+        <item name="masterSwitchBackgroundOff">#80868b</item>
+        <item name="masterSwitchBackgroundOn">?colorAccent</item>
+        <item name="masterSwitchTextAppearance">@style/MasterSwitch.TextAppearance</item>
+        <item name="switchStyle">@style/MasterSwitch.Switch</item>
+    </style>
+
+    <style name="MasterSwitch.Switch" parent="@style/Widget.AppCompat.CompoundButton.Switch">
+        <item name="trackTint">#33ffffff</item>
+        <item name="thumbTint">@android:color/white</item>
+    </style>
+
+    <style name="MasterSwitch.TextAppearance" parent="@style/TextAppearance.AppCompat.Body2">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="ThemeOverlay" />
+
+    <style name="ThemeOverlay.Md2">
+        <item name="colorPrimaryDark">@color/colorPrimaryDark_md2</item>
+        <item name="colorActionBar">@color/colorActionBar_md2</item>
+        <item name="colorStickyHeader">@color/colorStickyHeader_md2</item>
+        <item name="android:colorBackground">@color/colorBackground_md2</item>
+        <item name="android:windowBackground">@color/colorBackground_md2</item>
+        <item name="modulesHorizontalPadding">16dp</item>
+        <item name="downloadVerticalPadding">12dp</item>
+        <item name="listItemBackground">@drawable/item_background_md2</item>
+        <item name="roundBackground">@drawable/item_background_md2</item>
+        <item name="liftOnScroll">true</item>
+    </style>
+
+    <style name="ThemeOverlay.ActionBarPrimaryColor">
+        <item name="actionBarTheme">@style/ThemeOverlay.MaterialComponents.Dark.ActionBar</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="tabLayoutTheme">@style/Widget.MaterialComponents.TabLayout.Colored</item>
+    </style>
+
+    <style name="ThemeOverlay.ActivityMain">
+        <item name="android:windowLightStatusBar">@bool/lightSystemUI</item>
+        <item name="colorPrimaryDark">?android:colorBackground</item>
+    </style>
+
+    <style name="ThemeOverlay.Black">
+        <item name="colorPrimaryDark">@android:color/black</item>
+        <item name="colorActionBar">@android:color/black</item>
+        <item name="android:navigationBarColor">@color/navigationBarColorBlack</item>
+        <item name="android:colorBackground">@android:color/black</item>
+        <item name="android:windowBackground">@android:color/black</item>
+        <item name="colorStickyHeader">#ea000000</item>
+        <item name="tabLayoutTheme">@style/Widget.MaterialComponents.TabLayout</item>
+    </style>
+</resources>

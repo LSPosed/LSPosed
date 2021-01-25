@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <external-cache-path
+        name="downloads"
+        path="/downloads" />
+    <!--suppress AndroidElementNotAllowed -->
+    <root-path
+        name="log"
+        path="/" />
+</paths>

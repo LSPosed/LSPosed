@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="colorActionBar" format="color" />
+    <attr name="colorStickyHeader" format="color" />
+    <attr name="listItemBackground" format="reference" />
+    <attr name="roundBackground" format="reference" />
+    <attr name="actionBarTheme" format="reference" />
+    <attr name="modulesHorizontalPadding" format="dimension" />
+    <attr name="downloadVerticalPadding" format="dimension" />
+    <attr name="actionBarPopupTheme" format="reference" />
+    <attr name="tabLayoutTheme" format="reference" />
+
+    <declare-styleable name="MasterSwitch">
+        <attr name="masterSwitchTextAppearance" format="reference" />
+        <attr name="masterSwitchBackgroundOn" format="color" />
+        <attr name="masterSwitchBackgroundOff" format="color" />
+        <attr name="masterSwitchForeground" format="color" />
+    </declare-styleable>
+</resources>

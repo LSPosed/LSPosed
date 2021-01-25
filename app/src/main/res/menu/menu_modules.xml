@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_search"
+        android:title="@string/menuSearch"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:title="@string/export_"
+        app:showAsAction="never">
+        <menu>
+            <item
+                android:id="@+id/export_enabled_modules"
+                android:title="@string/export_enabled_modules"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/export_installed_modules"
+                android:title="@string/export_installed_modules"
+                app:showAsAction="never" />
+        </menu>
+    </item>
+
+    <item
+        android:title="@string/import_"
+        app:showAsAction="never">
+        <menu>
+            <item
+                android:id="@+id/import_enabled_modules"
+                android:title="@string/import_enabled_modules"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/import_installed_modules"
+                android:title="@string/import_installed_modules"
+                app:showAsAction="never" />
+        </menu>
+    </item>
+
+    <item
+        android:title="@string/reboot"
+        app:showAsAction="never">
+        <menu>
+            <item
+                android:id="@+id/soft_reboot"
+                android:title="@string/soft_reboot"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/reboot"
+                android:title="@string/reboot_system"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/reboot_recovery"
+                android:title="@string/reboot_recovery"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/reboot_bootloader"
+                android:title="@string/reboot_bootloader"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/reboot_download"
+                android:title="@string/reboot_download"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/reboot_edl"
+                android:title="@string/reboot_edl"
+                app:showAsAction="never" />
+        </menu>
+    </item>
+
+</menu>

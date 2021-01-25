@@ -19,5 +19,4 @@ elf-cleaner.sh
 .settings/
 .vscode/
 
-dalvikdx/bin/
-dexmaker/bin/
+.cxx

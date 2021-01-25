@@ -18,7 +18,11 @@ jobs:
     - name: Get version code
       run: echo APPVEYOR_BUILD_NUMBER=$(expr $GITHUB_RUN_NUMBER + 4999) >> $GITHUB_ENV
     - name: Build with Gradle
-      run:  bash ./gradlew zipRelease zipDebug
+      env:
+        KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
+        ALIAS_NAME: ${{ secrets.ALIAS_NAME }}
+        ALIAS_PASS: ${{ secrets.ALIAS_PASS }}
+      run:  bash ./gradlew zipRelease zipDebug :app:assembleRelease
     - name: Prepare artifact
       if: success()
       run: unzip edxp-core/release/LSPosed-v*-release.zip -d LSPosed-release;

@@ -1,0 +1,4 @@
+<resources>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Dark" />
+</resources>

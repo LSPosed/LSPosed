@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">@color/material_blue_700</color>
+    <color name="colorBackground">#303030</color>
+    <color name="colorPrimaryDark">#2E2E2E</color>
+    <color name="colorActionBar">#383838</color>
+    <color name="navigationBarColor">#B3000000</color>
+    <color name="colorStickyHeader">#EA303030</color>
+</resources>
