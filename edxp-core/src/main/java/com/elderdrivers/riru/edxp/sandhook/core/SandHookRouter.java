@@ -2,7 +2,6 @@ package com.elderdrivers.riru.edxp.sandhook.core;
 
 import com.elderdrivers.riru.edxp.config.EdXpConfigGlobal;
 import com.elderdrivers.riru.edxp.proxy.BaseRouter;
-import com.elderdrivers.riru.edxp.sandhook.config.SandHookEdxpConfig;
 import com.elderdrivers.riru.edxp.sandhook.config.SandHookProvider;
 import com.elderdrivers.riru.edxp.sandhook.entry.AppBootstrapHookInfo;
 import com.elderdrivers.riru.edxp.sandhook.entry.SysBootstrapHookInfo;
@@ -51,7 +50,6 @@ public class SandHookRouter extends BaseRouter {
     }
 
     public void injectConfig() {
-        EdXpConfigGlobal.sConfig = new SandHookEdxpConfig();
         EdXpConfigGlobal.sHookProvider = new SandHookProvider();
     }
 

@@ -1,16 +1,13 @@
 package de.robv.android.xposed;
 
 import android.os.SELinux;
-import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
 import de.robv.android.xposed.services.BaseService;
-import de.robv.android.xposed.services.BinderService;
 import de.robv.android.xposed.services.DirectAccessService;
-import de.robv.android.xposed.services.ZygoteService;
 
 /**
  * A helper to work with (or without) SELinux, abstracting much of its big complexity.

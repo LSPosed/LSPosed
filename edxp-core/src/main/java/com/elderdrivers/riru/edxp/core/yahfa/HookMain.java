@@ -2,7 +2,6 @@ package com.elderdrivers.riru.edxp.core.yahfa;
 
 import com.elderdrivers.riru.edxp.art.Heap;
 import com.elderdrivers.riru.edxp.core.Yahfa;
-import com.elderdrivers.riru.edxp.util.ClassUtils;
 import com.elderdrivers.riru.edxp.util.Utils;
 
 import java.lang.reflect.Constructor;
@@ -13,8 +12,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-
-import de.robv.android.xposed.XposedHelpers;
 
 public class HookMain {
 

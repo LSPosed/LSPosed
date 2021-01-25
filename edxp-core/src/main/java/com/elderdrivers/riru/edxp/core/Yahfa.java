@@ -17,6 +17,4 @@ public class Yahfa {
     public static native void recordHooked(Member member);
 
     public static native boolean isHooked(Member member);
-
-    public static native void makeInitializedClassesVisiblyInitialized(long thread, boolean wait);
 }

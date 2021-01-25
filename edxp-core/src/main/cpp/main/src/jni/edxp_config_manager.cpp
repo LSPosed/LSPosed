@@ -7,16 +7,8 @@
 
 namespace edxp {
 
-    static jboolean ConfigManager_isBlackWhiteListEnabled(JNI_START) {
-        return (jboolean) ConfigManager::GetInstance()->IsBlackWhiteListEnabled();
-    }
-
     static jboolean ConfigManager_isResourcesHookEnabled(JNI_START) {
         return (jboolean) ConfigManager::GetInstance()->IsResourcesHookEnabled();
-    }
-
-    static jboolean ConfigManager_isDeoptBootImageEnabled(JNI_START) {
-        return (jboolean) ConfigManager::GetInstance()->IsDeoptBootImageEnabled();
     }
 
     static jboolean ConfigManager_isNoModuleLogEnabled(JNI_START) {
@@ -76,9 +68,7 @@ namespace edxp {
     }
 
     static JNINativeMethod gMethods[] = {
-            NATIVE_METHOD(ConfigManager, isBlackWhiteListEnabled, "()Z"),
             NATIVE_METHOD(ConfigManager, isResourcesHookEnabled, "()Z"),
-            NATIVE_METHOD(ConfigManager, isDeoptBootImageEnabled, "()Z"),
             NATIVE_METHOD(ConfigManager, isNoModuleLogEnabled, "()Z"),
             NATIVE_METHOD(ConfigManager, getInstallerPackageName, "()Ljava/lang/String;"),
             NATIVE_METHOD(ConfigManager, getLibSandHookName, "()Ljava/lang/String;"),

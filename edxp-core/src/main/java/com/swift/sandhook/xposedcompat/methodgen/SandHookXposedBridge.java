@@ -3,7 +3,6 @@ package com.swift.sandhook.xposedcompat.methodgen;
 import android.os.Build;
 import android.os.Process;
 import android.os.Trace;
-import android.util.Log;
 
 import com.elderdrivers.riru.edxp.config.ConfigManager;
 import com.elderdrivers.riru.edxp.core.Yahfa;
@@ -25,7 +24,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import de.robv.android.xposed.XposedBridge;
 

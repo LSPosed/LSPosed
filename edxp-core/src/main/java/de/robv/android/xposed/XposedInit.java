@@ -14,6 +14,7 @@ import android.util.ArraySet;
 import android.util.Log;
 
 import com.android.internal.os.ZygoteInit;
+import com.elderdrivers.riru.edxp.config.ConfigManager;
 import com.elderdrivers.riru.edxp.config.EdXpConfigGlobal;
 
 import java.io.BufferedReader;
@@ -41,9 +42,7 @@ import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XC_InitZygote;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import de.robv.android.xposed.callbacks.XCallback;
-import de.robv.android.xposed.services.BaseService;
 
-import static de.robv.android.xposed.XposedBridge.clearAllCallbacks;
 import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedBridge.sInitPackageResourcesCallbacks;
@@ -97,7 +96,7 @@ public final class XposedInit {
 
     @ApiSensitive(Level.MIDDLE)
     private static void hookResources() throws Throwable {
-        if (!EdXpConfigGlobal.getConfig().isResourcesHookEnabled() || disableResources) {
+        if (!ConfigManager.isResourcesHookEnabled() || disableResources) {
             return;
         }
 
@@ -328,7 +327,7 @@ public final class XposedInit {
                 topClassLoader = parent;
             }
 
-            String moduleList = EdXpConfigGlobal.getConfig().getModulesList();
+            String moduleList = ConfigManager.getModulesList();
             InputStream stream = new ByteArrayInputStream(moduleList.getBytes());
             BufferedReader apks = new BufferedReader(new InputStreamReader(stream));
             ArraySet<String> newLoadedApk = new ArraySet<>();

@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.util.Log;
 
 import com.elderdrivers.riru.edxp.BuildConfig;
+import com.elderdrivers.riru.edxp.config.ConfigManager;
 import com.elderdrivers.riru.edxp.config.EdXpConfigGlobal;
 
 import java.lang.reflect.AccessibleObject;
@@ -158,7 +159,7 @@ public final class XposedBridge {
 	 * @param text The log message.
 	 */
 	public synchronized static void log(String text) {
-		if (EdXpConfigGlobal.getConfig().isNoModuleLogEnabled()) {
+		if (ConfigManager.isNoModuleLogEnabled()) {
 			return;
 		}
 		Log.i(TAG, text);

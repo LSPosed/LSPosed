@@ -2,6 +2,7 @@ package com.elderdrivers.riru.edxp.deopt;
 
 import android.text.TextUtils;
 
+import com.elderdrivers.riru.edxp.config.ConfigManager;
 import com.elderdrivers.riru.edxp.config.EdXpConfigGlobal;
 import com.elderdrivers.riru.edxp.util.Utils;
 
@@ -41,7 +42,7 @@ public class PrebuiltMethodsDeopter {
         // todo check if has been done before
         deoptMethods(KEY_BOOT_IMAGE, null);
         if (!TextUtils.isEmpty(Utils.getSysProp("ro.miui.ui.version.code"))
-                && EdXpConfigGlobal.getConfig().isResourcesHookEnabled()) {
+                && ConfigManager.isResourcesHookEnabled()) {
             //deopt these only for MIUI with resources hook enabled
             deoptMethods(KEY_BOOT_IMAGE_MIUI_RES, null);
         }

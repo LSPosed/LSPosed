@@ -3,11 +3,11 @@ package com.elderdrivers.riru.edxp.yahfa.dexmaker;
 import android.annotation.TargetApi;
 import android.os.Build;
 
+import com.elderdrivers.riru.edxp.BuildConfig;
 import com.elderdrivers.riru.edxp.config.ConfigManager;
 import com.elderdrivers.riru.edxp.core.Yahfa;
 import com.elderdrivers.riru.edxp.core.yahfa.HookMain;
 import com.elderdrivers.riru.edxp.util.ProxyClassLoader;
-import com.elderdrivers.riru.edxp.BuildConfig;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -30,7 +30,6 @@ import external.com.android.dx.Label;
 import external.com.android.dx.Local;
 import external.com.android.dx.MethodId;
 import external.com.android.dx.TypeId;
-import pxb.android.arsc.Config;
 
 import static com.elderdrivers.riru.edxp.yahfa.dexmaker.DexMakerUtils.autoBoxIfNecessary;
 import static com.elderdrivers.riru.edxp.yahfa.dexmaker.DexMakerUtils.autoUnboxIfNecessary;

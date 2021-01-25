@@ -24,7 +24,6 @@ import external.com.android.dx.Local;
 import external.com.android.dx.MethodId;
 import external.com.android.dx.TypeId;
 
-import static com.swift.sandhook.xposedcompat.utils.DexMakerUtils.MD5;
 import static com.swift.sandhook.xposedcompat.utils.DexMakerUtils.autoBoxIfNecessary;
 import static com.swift.sandhook.xposedcompat.utils.DexMakerUtils.autoUnboxIfNecessary;
 import static com.swift.sandhook.xposedcompat.utils.DexMakerUtils.canCache;
