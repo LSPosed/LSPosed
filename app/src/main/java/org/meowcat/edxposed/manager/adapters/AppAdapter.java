@@ -77,19 +77,17 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
         List<ApplicationInfo> rmList = new ArrayList<>();
         for (ApplicationInfo info : fullList) {
             if (this instanceof ScopeAdapter) {
-                if (AppHelper.isBlackListMode()) {
-                    if (AppHelper.isWhiteListMode()) {
-                        List<String> whiteList = AppHelper.getWhiteList();
-                        if (!whiteList.contains(info.packageName)) {
-                            rmList.add(info);
-                            continue;
-                        }
-                    } else {
-                        List<String> blackList = AppHelper.getBlackList();
-                        if (blackList.contains(info.packageName)) {
-                            rmList.add(info);
-                            continue;
-                        }
+                if (AppHelper.isWhiteListMode()) {
+                    List<String> whiteList = AppHelper.getWhiteList();
+                    if (!whiteList.contains(info.packageName)) {
+                        rmList.add(info);
+                        continue;
+                    }
+                } else {
+                    List<String> blackList = AppHelper.getBlackList();
+                    if (blackList.contains(info.packageName)) {
+                        rmList.add(info);
+                        continue;
                     }
                 }
                 if (info.packageName.equals(((ScopeAdapter) this).modulePackageName)) {

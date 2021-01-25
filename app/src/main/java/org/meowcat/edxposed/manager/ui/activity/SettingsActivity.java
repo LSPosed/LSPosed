@@ -114,7 +114,6 @@ public class SettingsActivity extends BaseActivity {
         private static final File dynamicModulesFlag = new File(Constants.getBaseDir() + "conf/dynamicmodules");
         private static final File deoptBootFlag = new File(Constants.getBaseDir() + "conf/deoptbootimage");
         private static final File whiteListModeFlag = new File(Constants.getBaseDir() + "conf/usewhitelist");
-        private static final File blackWhiteListModeFlag = new File(Constants.getBaseDir() + "conf/blackwhitelist");
         private static final File disableVerboseLogsFlag = new File(Constants.getBaseDir() + "conf/disable_verbose_log");
         private static final File disableModulesLogsFlag = new File(Constants.getBaseDir() + "conf/disable_modules_log");
         private static final File verboseLogProcessID = new File(Constants.getBaseDir() + "log/all.pid");
@@ -241,38 +240,6 @@ public class SettingsActivity extends BaseActivity {
                         disableModulesLogsFlag.delete();
                     }
                     return (enabled == disableModulesLogsFlag.exists());
-                });
-            }
-
-            SwitchPreferenceCompat prefBlackWhiteListMode = findPreference("black_white_list_switch");
-            if (prefBlackWhiteListMode != null) {
-                prefBlackWhiteListMode.setChecked(blackWhiteListModeFlag.exists());
-                prefBlackWhiteListMode.setOnPreferenceChangeListener((preference, newValue) -> {
-                    boolean enabled = (Boolean) newValue;
-                    if (enabled) {
-                        FileOutputStream fos = null;
-                        try {
-                            fos = new FileOutputStream(blackWhiteListModeFlag.getPath());
-                        } catch (FileNotFoundException e) {
-                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                        } finally {
-                            if (fos != null) {
-                                try {
-                                    fos.close();
-                                } catch (IOException e) {
-                                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                                    try {
-                                        blackWhiteListModeFlag.createNewFile();
-                                    } catch (IOException e1) {
-                                        Toast.makeText(getActivity(), e1.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        blackWhiteListModeFlag.delete();
-                    }
-                    return (enabled == blackWhiteListModeFlag.exists());
                 });
             }
 

@@ -1,6 +1,5 @@
 package org.meowcat.edxposed.manager.ui.activity;
 
-import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,8 +11,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.DividerItemDecoration;
-
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.meowcat.edxposed.manager.App;
 import org.meowcat.edxposed.manager.R;
@@ -95,36 +92,17 @@ public class BlackListActivity extends BaseActivity implements AppAdapter.Callba
     @Override
     public void onResume() {
         super.onResume();
-        if (!AppHelper.isBlackListMode()) {
-            new MaterialAlertDialogBuilder(this)
-                    .setMessage(R.string.warning_list_not_enabled)
-                    .setPositiveButton(R.string.Settings, (dialog, which) -> {
-                        Intent intent = new Intent();
-                        intent.setClass(BlackListActivity.this, SettingsActivity.class);
-                        startActivity(intent);
-                    })
-                    .setNegativeButton(android.R.string.cancel, (dialog, which) -> finish())
-                    .setCancelable(false)
-                    .show();
-        }
-        changeTitle(isBlackListMode(), isWhiteListMode());
+        changeTitle(isWhiteListMode());
     }
 
 
-    private void changeTitle(boolean isBlackListMode, boolean isWhiteListMode) {
-        if (isBlackListMode) {
-            setTitle(isWhiteListMode ? R.string.title_white_list : R.string.title_black_list);
-        } else {
-            setTitle(R.string.nav_title_black_list);
-        }
+    private void changeTitle(boolean isWhiteListMode) {
+        setTitle(isWhiteListMode ? R.string.title_white_list : R.string.title_black_list);
+
     }
 
     private boolean isWhiteListMode() {
         return AppHelper.isWhiteListMode();
-    }
-
-    private boolean isBlackListMode() {
-        return AppHelper.isBlackListMode();
     }
 
     @Override

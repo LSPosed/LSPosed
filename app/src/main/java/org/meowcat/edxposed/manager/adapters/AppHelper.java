@@ -44,7 +44,6 @@ public class AppHelper {
     private static final String BLACK_LIST_PATH = "conf/blacklist/";
     private static final String SCOPE_LIST_PATH = "conf/%s.conf";
     private static final String WHITE_LIST_MODE = "conf/usewhitelist";
-    private static final String BLACK_LIST_MODE = "conf/blackwhitelist";
 
     private static final List<String> FORCE_WHITE_LIST = new ArrayList<>(Collections.singletonList(BuildConfig.APPLICATION_ID));
     public static List<String> FORCE_WHITE_LIST_MODULE = new ArrayList<>(FORCE_WHITE_LIST);
@@ -58,10 +57,6 @@ public class AppHelper {
 
     public static boolean isWhiteListMode() {
         return new File(BASE_PATH + WHITE_LIST_MODE).exists();
-    }
-
-    public static boolean isBlackListMode() {
-        return new File(BASE_PATH + BLACK_LIST_MODE).exists();
     }
 
     private static boolean addWhiteList(String packageName) {

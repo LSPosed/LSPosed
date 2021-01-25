@@ -114,12 +114,6 @@
         android:key="group_framework"
         android:title="@string/settings_group_framework"
         app:iconSpaceReserved="false">
-        <SwitchPreferenceCompat
-            android:defaultValue="false"
-            android:key="black_white_list_switch"
-            android:summary="@string/pref_black_white_list_summary"
-            android:title="@string/pref_title_black_white_list"
-            app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
             android:defaultValue="false"
