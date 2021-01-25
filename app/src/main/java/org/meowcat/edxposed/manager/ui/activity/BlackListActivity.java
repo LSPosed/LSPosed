@@ -20,7 +20,6 @@ import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.adapters.AppAdapter;
 import org.meowcat.edxposed.manager.adapters.AppHelper;
 import org.meowcat.edxposed.manager.adapters.BlackListAdapter;
-import org.meowcat.edxposed.manager.adapters.CompatListAdapter;
 import org.meowcat.edxposed.manager.databinding.ActivityBlackListBinding;
 import org.meowcat.edxposed.manager.util.LinearLayoutManagerFix;
 
@@ -39,12 +38,10 @@ public class BlackListActivity extends BaseActivity implements AppAdapter.Callba
         }
     };
     private final Handler handler = new Handler();
-    private boolean isCompat;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        isCompat = getIntent().getBooleanExtra("compat_list", false);
         binding = ActivityBlackListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);
@@ -55,7 +52,7 @@ public class BlackListActivity extends BaseActivity implements AppAdapter.Callba
         }
         setupWindowInsets(binding.snackbar, binding.recyclerView);
         final boolean isWhiteListMode = isWhiteListMode();
-        appAdapter = isCompat ? new CompatListAdapter(this) : new BlackListAdapter(this, isWhiteListMode);
+        appAdapter = new BlackListAdapter(this, isWhiteListMode);
         appAdapter.setHasStableIds(true);
         binding.recyclerView.setAdapter(appAdapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManagerFix(this));
@@ -98,7 +95,7 @@ public class BlackListActivity extends BaseActivity implements AppAdapter.Callba
     @Override
     public void onResume() {
         super.onResume();
-        if (!isCompat && !AppHelper.isBlackListMode()) {
+        if (!AppHelper.isBlackListMode()) {
             new MaterialAlertDialogBuilder(this)
                     .setMessage(R.string.warning_list_not_enabled)
                     .setPositiveButton(R.string.Settings, (dialog, which) -> {
@@ -115,9 +112,7 @@ public class BlackListActivity extends BaseActivity implements AppAdapter.Callba
 
 
     private void changeTitle(boolean isBlackListMode, boolean isWhiteListMode) {
-        if (isCompat) {
-            setTitle(R.string.nav_title_compat_list);
-        } else if (isBlackListMode) {
+        if (isBlackListMode) {
             setTitle(isWhiteListMode ? R.string.title_white_list : R.string.title_black_list);
         } else {
             setTitle(R.string.nav_title_black_list);

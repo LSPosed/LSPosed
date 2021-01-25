@@ -42,7 +42,6 @@ public class AppHelper {
     private static final String BASE_PATH = Constants.getBaseDir();
     private static final String WHITE_LIST_PATH = "conf/whitelist/";
     private static final String BLACK_LIST_PATH = "conf/blacklist/";
-    private static final String COMPAT_LIST_PATH = "conf/compatlist/";
     private static final String SCOPE_LIST_PATH = "conf/%s.conf";
     private static final String WHITE_LIST_MODE = "conf/usewhitelist";
     private static final String BLACK_LIST_MODE = "conf/blackwhitelist";
@@ -55,7 +54,6 @@ public class AppHelper {
     static void makeSurePath() {
         App.mkdir(WHITE_LIST_PATH);
         App.mkdir(BLACK_LIST_PATH);
-        App.mkdir(COMPAT_LIST_PATH);
     }
 
     public static boolean isWhiteListMode() {
@@ -197,40 +195,6 @@ public class AppHelper {
         return returns;
     }
 
-    @SuppressLint("WorldReadableFiles")
-    private static Boolean compatListFileName(String packageName, boolean isAdd) {
-        boolean returns = true;
-        File file = new File(BASE_PATH + COMPAT_LIST_PATH + packageName);
-        if (isAdd) {
-            if (!file.exists()) {
-                FileOutputStream fos = null;
-                try {
-                    fos = new FileOutputStream(file.getPath());
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } finally {
-                    if (fos != null) {
-                        try {
-                            fos.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            try {
-                                returns = file.createNewFile();
-                            } catch (IOException e1) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                }
-            }
-        } else {
-            if (file.exists()) {
-                returns = file.delete();
-            }
-        }
-        return returns;
-    }
-
     static boolean addPackageName(boolean isWhiteListMode, String packageName) {
         return isWhiteListMode ? addWhiteList(packageName) : addBlackList(packageName);
     }
@@ -287,27 +251,6 @@ public class AppHelper {
         MenuPopupHelper menuHelper = new MenuPopupHelper(context, (MenuBuilder) appMenu.getMenu(), anchor);
         menuHelper.setForceShowIcon(true);
         menuHelper.show();
-    }
-
-    static List<String> getCompatList() {
-        File file = new File(BASE_PATH + COMPAT_LIST_PATH);
-        File[] files = file.listFiles();
-        if (files == null) {
-            return new ArrayList<>();
-        }
-        List<String> s = new ArrayList<>();
-        for (File file1 : files) {
-            s.add(file1.getName());
-        }
-        return s;
-    }
-
-    static boolean addCompatList(String packageName) {
-        return compatListFileName(packageName, true);
-    }
-
-    static boolean removeCompatList(String packageName) {
-        return compatListFileName(packageName, false);
     }
 
     static List<String> getScopeList(String modulePackageName) {

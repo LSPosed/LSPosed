@@ -388,20 +388,6 @@ public class SettingsActivity extends BaseActivity {
                 });
             }
 
-            Preference compat_mode = findPreference("compat_mode");
-            if (compat_mode != null) {
-                compat_mode.setOnPreferenceClickListener(preference -> {
-                    Activity activity = getActivity();
-                    if (activity != null) {
-                        Intent intent = new Intent();
-                        intent.putExtra("compat_list", true);
-                        intent.setClass(activity, BlackListActivity.class);
-                        activity.startActivity(intent);
-                    }
-                    return true;
-                });
-            }
-
             IntegerListPreference theme = findPreference("theme");
             if (theme != null) {
                 theme.setOnPreferenceChangeListener((preference, newValue) -> {
@@ -474,8 +460,8 @@ public class SettingsActivity extends BaseActivity {
                 new MaterialAlertDialogBuilder(activity)
                         .setTitle(R.string.areyousure)
                         .setMessage(contentTextId)
-                        .setPositiveButton(android.R.string.yes, listener)
-                        .setNegativeButton(android.R.string.no, null)
+                        .setPositiveButton(android.R.string.ok, listener)
+                        .setNegativeButton(android.R.string.cancel, null)
                         .show();
             }
         }
