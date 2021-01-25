@@ -7,7 +7,7 @@
 #include <dl_util.h>
 #include <art/runtime/jni_env_ext.h>
 #include <dobby.h>
-#include "android_restriction.h" // from Dobby
+#include "bionic_linker_restriction.h"
 #include "utils.h"
 #include "logging.h"
 #include "native_hook.h"

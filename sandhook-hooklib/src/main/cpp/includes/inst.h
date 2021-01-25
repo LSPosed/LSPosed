@@ -103,6 +103,8 @@ namespace SandHook {
         virtual bool pcRelated() = 0;
 
         virtual Size bin() = 0;
+
+        virtual ~Inst() = default;
     };
 
     class InstVisitor {
