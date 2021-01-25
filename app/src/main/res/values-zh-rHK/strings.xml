@@ -3,8 +3,8 @@
     <string name="Activated">已激活</string>
     <string name="Inactivate">未激活</string>
     <string name="Install">安裝</string>
-    <string name="InstallDetail">點按安裝 EdXposed</string>
-    <string name="ActivatedDetail">EdXposed 框架已激活</string>
+    <string name="InstallDetail">點按安裝 LSPosed</string>
+    <string name="ActivatedDetail">LSPosed 框架已激活</string>
     <string name="Modules">模塊</string>
     <string name="ModulesDetail">%d 模塊已啟用</string>
     <string name="Downloads">下載</string>
@@ -22,7 +22,7 @@
     <string name="cache_cleaned">應用緩存已清除, 需要重新啟動</string>
     <!-- Welcome screen / main sections -->
     <string name="tabInstall">我的設備</string>
-    <string name="welcome_framework_update_available">EdXposed 框架有更新可用(%s)</string>
+    <string name="welcome_framework_update_available">LSPosed 框架有更新可用(%s)</string>
 
     <!-- navigation view items -->
     <string name="nav_item_modules">模塊</string>
@@ -38,28 +38,28 @@
     <string name="areyousure">您確定？</string>
     <string name="reboot_failed">重啟失敗, 請使用設備自帶的重啟功能</string>
     <string name="install_warning_title">請小心！</string>
-    <string name="install_warning">某些情況下, 您的設備可能會在安裝 EdXposed 過後變得無法正常啟動\n\n如果您先前從未聽説過「軟變磚」或「無限重啟」, 又或者您不知道如何從這些情況中恢復手機, 那麼請"<b>不要</b>"安裝或使用 EdXposed！\n\n無論如何, 都強烈建議您做好近期的數據備份</string>
+    <string name="install_warning">某些情況下, 您的設備可能會在安裝 LSPosed 過後變得無法正常啟動\n\n如果您先前從未聽説過「軟變磚」或「無限重啟」, 又或者您不知道如何從這些情況中恢復手機, 那麼請"<b>不要</b>"安裝或使用 LSPosed！\n\n無論如何, 都強烈建議您做好近期的數據備份</string>
     <string name="dont_show_again">不再提示</string>
-    <string name="installed_lollipop_inactive">EdXposed 框架已安裝, 但尚未激活\n請查看日誌以瞭解詳情</string>
+    <string name="installed_lollipop_inactive">LSPosed 框架已安裝, 但尚未激活\n請查看日誌以瞭解詳情</string>
     <string name="modules_updates_available">有模塊更新可用</string>
 
     <!-- File operations -->
     <string name="root_failed">無法獲取 root 權限\n\n請確認您的設備已正確 root 且沒有阻止 shell 命令</string>
 
     <!-- Modules tab -->
-    <string name="module_is_not_activated_yet">EdXposed 模塊尚未激活</string>
+    <string name="module_is_not_activated_yet">LSPosed 模塊尚未激活</string>
     <string name="module_is_not_activated_yet_detailed">%s 已安裝, 但尚未激活</string>
     <string name="activate_and_reboot">激活並重啟</string>
     <string name="activate_only">僅激活</string>
-    <string name="module_activated">EdXposed 模塊已激活</string>
+    <string name="module_activated">LSPosed 模塊已激活</string>
     <string name="module_empty_description">(未提供介紹)</string>
     <string name="module_no_ui">該模塊未提供用户界面</string>
-    <string name="xposed_module_list_updated">EdXposed 模塊列表已更新\n變更將在重啟後生效</string>
-    <string name="xposed_module_updated_notification_title">EdXposed 模塊已更新</string>
+    <string name="xposed_module_list_updated">LSPosed 模塊列表已更新\n變更將在重啟後生效</string>
+    <string name="xposed_module_updated_notification_title">LSPosed 模塊已更新</string>
     <string name="xposed_module_updated_notification">重啟以使變更生效</string>
-    <string name="warning_xposed_min_version">該模塊需要更新版本的 EdXposed(%d), 因此無法被激活</string>
-    <string name="no_min_version_specified">該模塊未指定所需的 EdXposed 版本</string>
-    <string name="warning_min_version_too_low">該模塊針對 EdXposed %1$d 版本構建 , 由於不兼容 %2$d 版本中的變更, 現已被停用</string>
+    <string name="warning_xposed_min_version">該模塊需要更新版本的 LSPosed(%d), 因此無法被激活</string>
+    <string name="no_min_version_specified">該模塊未指定所需的 LSPosed 版本</string>
+    <string name="warning_min_version_too_low">該模塊針對 LSPosed %1$d 版本構建 , 由於不兼容 %2$d 版本中的變更, 現已被停用</string>
     <string name="module_launch">打開</string>
     <string name="module_download_updates">下載/更新</string>
     <string name="module_support">支持</string>
@@ -90,7 +90,7 @@
     <string name="download_sorting_status">按狀態排序</string>
     <string name="download_sorting_updated">按最後更新排序</string>
     <string name="download_sorting_created">按添加日期排序</string>
-    <string name="download_section_framework">EdXposed 框架</string>
+    <string name="download_section_framework">LSPosed 框架</string>
     <string name="download_section_update_available">有更新可用</string>
     <string name="download_section_installed">已安裝</string>
     <string name="download_section_not_installed">未安裝</string>
@@ -121,7 +121,7 @@
     <string name="support_group_qq">QQ 羣組: 855219808</string>
     <string name="support_group_telegram">Telegram 羣組: @Code_of_MeowCat</string>
     <string name="support_donate_label">捐贈</string>
-    <string name="support_donate_description">如果您想對 EdXposed 表達感謝, 可以在此向我們捐贈</string>
+    <string name="support_donate_description">如果您想對 LSPosed 表達感謝, 可以在此向我們捐贈</string>
 
     <!-- Logs tab  -->
     <string name="logs_save_failed">無法將日誌寫入 SD 卡: </string>
@@ -182,15 +182,15 @@
         \n日期: %2$s
     </string>
     <string name="warningArchitecture">你將會下載一個 ZIP 格式文件, 請手動在 Magisk Manager 或 Recovery 中刷入</string>
-    <string name="newVersion">EdXposed Manager 有新版本可用！現在更新！</string>
+    <string name="newVersion">LSPosed Manager 有新版本可用！現在更新！</string>
     <string name="update">更新</string>
-    <string name="not_installed_no_lollipop">EdXposed 框架未安裝</string>
+    <string name="not_installed_no_lollipop">LSPosed 框架未安裝</string>
     <string name="notify_module_update">啟用模塊更新通知</string>
 
     <string name="changelog">更新日誌</string>
     <string name="scroll_top">滾動到頂部</string>
     <string name="install_with_su">靜默安裝(root)</string>
-    <string name="install_with_su_summ">勾選後在 EdXposed Manager 內安裝模塊時將不再顯示安裝提示</string>
+    <string name="install_with_su_summ">勾選後在 LSPosed Manager 內安裝模塊時將不再顯示安裝提示</string>
     <string name="ignore_updates">忽略更新</string>
     <string name="ignore_updates_summ">忽略指定模塊的更新</string>
     <string name="reboot_recovery">重啟至恢復模式</string>
@@ -200,11 +200,11 @@
     <string name="loading">正在加載…</string>
     <string name="scroll_bottom">滾動到底部</string>
     <string name="skip_xposedminversion_check">關閉狀態檢查</string>
-    <string name="skip_xposedminversion_check_summ">關閉針對模塊的\"EdXposed 安裝狀態\"檢查</string>
+    <string name="skip_xposedminversion_check_summ">關閉針對模塊的\"LSPosed 安裝狀態\"檢查</string>
     <string name="support_xda">獲取幫助</string>
     <string name="later">稍後</string>
     <string name="save">僅下載</string>
-    <string name="not_logcat">此處僅顯示 EdXposed 及模塊相關日誌信息\n如果您想抓取系統日誌, 可以嘗試我們的 Log Catcher Magisk 模塊</string>
+    <string name="not_logcat">此處僅顯示 LSPosed 及模塊相關日誌信息\n如果您想抓取系統日誌, 可以嘗試我們的 Log Catcher Magisk 模塊</string>
 
     <!-- EdXp related -->
     <string name="nav_title_black_list">應用</string>
@@ -220,17 +220,17 @@
     <string name="compile_speed_msg">優化中…</string>
     <string name="pref_title_dynamic_modules">即時模塊列表</string>
     <string name="pref_dynamic_modules_summary">啟用後, 每個應用進程啟動時重新加載最新的模塊列表(免重啟)</string>
-    <string name="notinstalled">EdXposed 框架未安裝</string>
+    <string name="notinstalled">LSPosed 框架未安裝</string>
     <string name="meowcat_summary">MlgmXyysd 所屬團隊</string>
-    <string name="elderdrivers_summary">EdXposed 的開發團隊</string>
-    <string name="solohsu_summary">EdXposed 的主要開發者</string>
-    <string name="mlgmxyysd_summary">EdXposed Manager 的主要開發者</string>
+    <string name="elderdrivers_summary">LSPosed 的開發團隊</string>
+    <string name="solohsu_summary">LSPosed 的主要開發者</string>
+    <string name="mlgmxyysd_summary">LSPosed Manager 的主要開發者</string>
     <string name="website">官網</string>
     <string name="coolapk">酷安</string>
     <string name="meowcat">小喵工作室</string>
-    <string name="white_list_mode_summary">白名單模式: 僅選中的應用加載 EdXposed 模塊\n僅當啟用應用名單模式時有效</string>
+    <string name="white_list_mode_summary">白名單模式: 僅選中的應用加載 LSPosed 模塊\n僅當啟用應用名單模式時有效</string>
     <string name="pref_title_black_white_list">應用名單模式</string>
-    <string name="pref_black_white_list_summary">開啟後，可在\"應用\"中設置名單\n黑名單模式: 選中的應用不會加載 EdXposed 模塊\n注意: 使用應用名單可能會導致某些系統全局模塊不能正常工作</string>
+    <string name="pref_black_white_list_summary">開啟後，可在\"應用\"中設置名單\n黑名單模式: 選中的應用不會加載 LSPosed 模塊\n注意: 使用應用名單可能會導致某些系統全局模塊不能正常工作</string>
     <string name="ignore_chinese_summary">從模塊列表中隱藏中文模塊\n模塊仍然可以被搜索到\n啟用此選項可能會降低性能</string>
     <string name="ignore_chinese">忽略中文字符</string>
     <string name="verified_boot_explanation">引導驗證(dm-verity)防止設備在修改系統分區時引導</string>
@@ -267,7 +267,7 @@
     <string name="custom_list">使用鏡像化的模塊列表</string>
     <string name="custom_list_summ">鏡像化的模塊列表可以幫助加速加載\n但新提交的模塊顯示會有延遲(大約24小時)</string>
     <string name="not_installed">未安裝</string>
-    <string name="support_group_telegram_channel">Telegram 頻道: @EdXposed</string>
+    <string name="support_group_telegram_channel">Telegram 頻道: @LSPosed</string>
     <string name="warning_list_not_enabled">應用名單模式未啟用，您可以在設置中啟用</string>
     <string name="empty_param">參數為空</string>
     <string name="reboot_system">重啟至系統</string>
@@ -280,7 +280,7 @@
     <string name="install_timestamps">安裝於 %1$s\n更新於 %2$s</string>
     <string name="pref_compat_mode_summary">兼容模式應用列表</string>
     <string name="pref_compat_mode_title">兼容模式</string>
-    <string name="xposed_not_active">EdXposed 框架未安裝或未激活, 您可在設置中關閉狀態檢查</string>
+    <string name="xposed_not_active">LSPosed 框架未安裝或未激活, 您可在設置中關閉狀態檢查</string>
     <string name="transparent_status_bar">透明狀態欄</string>
     <string name="list_sort">列表排序方式</string>
     <string name="sort_by_name">應用名稱</string>

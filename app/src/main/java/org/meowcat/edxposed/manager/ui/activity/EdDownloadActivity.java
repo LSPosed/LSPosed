@@ -50,7 +50,7 @@ public class EdDownloadActivity extends BaseActivity {
         tabsAdapter.notifyDataSetChanged();
         binding.pager.setAdapter(tabsAdapter);
         binding.tabLayout.setupWithViewPager(binding.pager);
-        new JSONParser().execute();
+        //new JSONParser().execute();
 
         if (!App.getPreferences().getBoolean("hide_install_warning", false)) {
             DialogInstallWarningBinding binding = DialogInstallWarningBinding.inflate(getLayoutInflater());

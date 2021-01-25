@@ -16,7 +16,7 @@ public class BootReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, Intent intent) {
-        new TaskRunner().executeAsync(new LongRunningTask());
+        //new TaskRunner().executeAsync(new LongRunningTask());
     }
 
     private static class LongRunningTask implements Callable<Void> {

@@ -1,10 +1,10 @@
 <resources>
-    <string name="app_name" translatable="false">EdXposed Manager</string>
+    <string name="app_name" translatable="false">LSPosed Manager</string>
     <string name="Activated">Activated</string>
     <string name="Inactivate">Inactivate</string>
     <string name="Install">Install</string>
-    <string name="InstallDetail">Tap to install EdXposed</string>
-    <string name="ActivatedDetail">EdXposed is activated</string>
+    <string name="InstallDetail">Tap to install LSPosed</string>
+    <string name="ActivatedDetail">LSPosed is activated</string>
     <string name="Modules">Modules</string>
     <string name="ModulesDetail">%d modules enabled</string>
     <string name="Downloads">Downloads</string>
@@ -23,7 +23,7 @@
 
     <!-- Welcome screen / main sections -->
     <string name="tabInstall">Device</string>
-    <string name="welcome_framework_update_available">An update for the EdXposed Framework is available (%s)</string>
+    <string name="welcome_framework_update_available">An update for the LSPosed Framework is available (%s)</string>
 
     <!-- navigation view items -->
     <string name="nav_item_modules">Modules</string>
@@ -39,28 +39,28 @@
     <string name="areyousure">Are you sure?</string>
     <string name="reboot_failed">Reboot failed. Please use the device\'s normal reboot function</string>
     <string name="install_warning_title">Be careful!</string>
-    <string name="install_warning">In some cases, your device might no longer boot after installing EdXposed.\n\nIf you never heard about \"soft brick\" and \"bootloop\" before or if you don\'t know how to recover from such a situation, do <b>NOT</b> install or use EdXposed!\n\nIn any case, having a recent backup is highly recommended.</string>
+    <string name="install_warning">In some cases, your device might no longer boot after installing LSPosed.\n\nIf you never heard about \"soft brick\" and \"bootloop\" before or if you don\'t know how to recover from such a situation, do <b>NOT</b> install or use LSPosed!\n\nIn any case, having a recent backup is highly recommended.</string>
     <string name="dont_show_again">Don\'t show this again</string>
-    <string name="installed_lollipop_inactive">EdXposed Framework is installed, but not active\nPlease check the logs for details</string>
+    <string name="installed_lollipop_inactive">LSPosed Framework is installed, but not active\nPlease check the logs for details</string>
     <string name="modules_updates_available">Module update(s) are available</string>
 
     <!-- File operations -->
     <string name="root_failed">Failed to get root access\n\nMake sure your device is rooted properly and you have not blocked shell commands</string>
 
     <!-- Modules tab -->
-    <string name="module_is_not_activated_yet">EdXposed module is not activated yet</string>
+    <string name="module_is_not_activated_yet">LSPosed module is not activated yet</string>
     <string name="module_is_not_activated_yet_detailed">%s has been installed, but is not activated yet</string>
     <string name="activate_and_reboot">Activate and reboot</string>
     <string name="activate_only">Activate only</string>
-    <string name="module_activated">EdXposed module has been activated</string>
+    <string name="module_activated">LSPosed module has been activated</string>
     <string name="module_empty_description">(no description provided)</string>
     <string name="module_no_ui">This module does not provide a user interface</string>
-    <string name="xposed_module_list_updated">EdXposed module list was updated\nChanges will become active on reboot</string>
-    <string name="xposed_module_updated_notification_title">EdXposed module updated</string>
+    <string name="xposed_module_list_updated">LSPosed module list was updated\nChanges will become active on reboot</string>
+    <string name="xposed_module_updated_notification_title">LSPosed module updated</string>
     <string name="xposed_module_updated_notification">Reboot to activate changes</string>
-    <string name="warning_xposed_min_version">This module requires a newer EdXposed version (%d) and thus cannot be activated</string>
-    <string name="no_min_version_specified">This module does not specify the EdXposed version it needs.</string>
-    <string name="warning_min_version_too_low">This module was created for EdXposed version %1$d, but due to incompatible changes in version %2$d, it has been disabled</string>
+    <string name="warning_xposed_min_version">This module requires a newer LSPosed version (%d) and thus cannot be activated</string>
+    <string name="no_min_version_specified">This module does not specify the LSPosed version it needs.</string>
+    <string name="warning_min_version_too_low">This module was created for LSPosed version %1$d, but due to incompatible changes in version %2$d, it has been disabled</string>
     <string name="module_launch">Launch UI</string>
     <string name="module_download_updates">Download/Updates</string>
     <string name="module_support">Support</string>
@@ -92,7 +92,7 @@
     <string name="download_sorting_status">Sort by status</string>
     <string name="download_sorting_updated">Sort by last update</string>
     <string name="download_sorting_created">Sort by creation date</string>
-    <string name="download_section_framework">EdXposed Framework</string>
+    <string name="download_section_framework">LSPosed Framework</string>
     <string name="download_section_update_available">Update available</string>
     <string name="download_section_installed">Installed</string>
     <string name="download_section_not_installed">Not installed</string>
@@ -123,7 +123,7 @@
     <string name="support_group_qq">QQ Group: 855219808</string>
     <string name="support_group_telegram">Telegram Group: @Code_of_MeowCat</string>
     <string name="support_donate_label">Donate</string>
-    <string name="support_donate_description">If you would like to say thanks for EdXposed, you can donate to our here</string>
+    <string name="support_donate_description">If you would like to say thanks for LSPosed, you can donate to our here</string>
 
     <!-- Logs tab  -->
     <string name="logs_save_failed">Could not write log to SD card:</string>
@@ -184,15 +184,15 @@
         \nDate: %2$s
     </string>
     <string name="warningArchitecture">You will download a ZIP file, flash in Magisk Manager or Recovery manually</string>
-    <string name="newVersion">New version of EdXposed Manager is available! Update it!</string>
+    <string name="newVersion">New version of LSPosed Manager is available! Update it!</string>
     <string name="update">Update</string>
-    <string name="not_installed_no_lollipop">EdXposed Framework is not installed</string>
+    <string name="not_installed_no_lollipop">LSPosed Framework is not installed</string>
     <string name="notify_module_update">Enable module update notification</string>
 
     <string name="changelog">Changelog</string>
     <string name="scroll_top">Scroll to top</string>
     <string name="install_with_su">Silent installation (root)</string>
-    <string name="install_with_su_summ">If checked EdXposed Manager will install modules without a prompt</string>
+    <string name="install_with_su_summ">If checked LSPosed Manager will install modules without a prompt</string>
     <string name="ignore_updates">Ignore update</string>
     <string name="ignore_updates_summ">Ignore updates for a specific module</string>
     <string name="reboot_recovery">Reboot to Recovery</string>
@@ -202,13 +202,13 @@
     <string name="loading">Loading…</string>
     <string name="scroll_bottom">Scroll to bottom</string>
     <string name="skip_xposedminversion_check">Skip status check</string>
-    <string name="skip_xposedminversion_check_summ">Skip \"EdXposed Status\" check for modules</string>
+    <string name="skip_xposedminversion_check_summ">Skip \"LSPosed Status\" check for modules</string>
 
     <string name="support_xda">Get support</string>
     <string name="android_sdk" translatable="false">Android %2$s (%1$s, API %3$d)</string>
     <string name="later">Later</string>
     <string name="save">Save only</string>
-    <string name="not_logcat">This is the EdXposed Framework and modules log\nif you need a Android logcat, you can try our Log Catcher Magisk module</string>
+    <string name="not_logcat">This is the LSPosed Framework and modules log\nif you need a Android logcat, you can try our Log Catcher Magisk module</string>
     <string name="installation_error">Installation error</string>
     <string name="installation_successful">Installation successful</string>
     <string name="installation_successful_message">%s installed successfully</string>
@@ -249,13 +249,13 @@
     <string name="pref_title_dynamic_modules">Instant module list</string>
     <string name="pref_dynamic_modules_summary">When turned on, load latest activated module list on each app process started</string>
     <string name="pref_title_black_white_list">App List mode</string>
-    <string name="pref_black_white_list_summary">After opening, you can set the list in \"Application\"\nBlack List mode: Selected app NOT to load EdXposed modules\nNote: using app list mode might break system-wide modules\' functions</string>
-    <string name="white_list_mode_summary">White List mode: Only selected app load EdXposed modules\nApp list mode is required to enable</string>
+    <string name="pref_black_white_list_summary">After opening, you can set the list in \"Application\"\nBlack List mode: Selected app NOT to load LSPosed modules\nNote: using app list mode might break system-wide modules\' functions</string>
+    <string name="white_list_mode_summary">White List mode: Only selected app load LSPosed modules\nApp list mode is required to enable</string>
 
     <string name="support_material_xda" translatable="false">http://edxp.meowcat.org/</string>
-    <string name="support_faq_url" translatable="false">http://github.com/ElderDrivers/EdXposed/wiki</string>
+    <string name="support_faq_url" translatable="false">http://github.com/ElderDrivers/LSPosed/wiki</string>
     <string name="support_donate_url" translatable="false">http://edxp.meowcat.org/donate</string>
-    <string name="about_source" translatable="false">https://github.com/ElderDrivers/EdXposedManager/</string>
+    <string name="about_source" translatable="false">https://github.com/ElderDrivers/LSPosedManager/</string>
 
     <string name="solohsu" translatable="false">givein2u</string>
     <string name="mlgmxyysd" translatable="false">MlgmXyysd</string>
@@ -267,9 +267,9 @@
     <string name="coolapk">CoolApk</string>
     <string name="website">Website</string>
 
-    <string name="solohsu_summary">Main creator of EdXposed</string>
-    <string name="mlgmxyysd_summary">Main creator of EdXposed Manager</string>
-    <string name="elderdrivers_summary">Organization of EdXposed</string>
+    <string name="solohsu_summary">Main creator of LSPosed</string>
+    <string name="mlgmxyysd_summary">Main creator of LSPosed Manager</string>
+    <string name="elderdrivers_summary">Organization of LSPosed</string>
     <string name="meowcat_summary">Organization of MlgmXyysd</string>
     <string name="solohsu_xda" translatable="false">https://forum.xda-developers.com/member.php?u=5571846</string>
     <string name="solohsu_github" translatable="false">https://github.com/solohsu</string>
@@ -283,8 +283,8 @@
     <string name="elderdrivers_website" translatable="false">http://edxp.meowcat.org/</string>
     <string name="group_qq_link" translatable="false">https://jq.qq.com/?k=57IiX8R</string>
     <string name="group_telegram_link" translatable="false">http://t.me/Code_of_MeowCat</string>
-    <string name="group_telegram_channel_link" translatable="false">http://t.me/EdXposed</string>
-    <string name="notinstalled">The EdXposed framework is not installed.</string>
+    <string name="group_telegram_channel_link" translatable="false">http://t.me/LSPosed</string>
+    <string name="notinstalled">The LSPosed framework is not installed.</string>
     <string name="pref_title_enable_boot_image_deopt">De-optimize boot image</string>
     <string name="pref_enable_boot_image_deopt_summary">Turn on to make all framework methods hookable, but the whole system will be slowed down\nMainly used to check if one framework method is inlined when it can\'t be hooked into</string>
 
@@ -300,7 +300,7 @@
     <string name="hook_modules">Force hook modules</string>
     <string name="hook_modules_summary">Force add modules to white-list and remove from black list\nClosing this option does not remove modules from white list\nApp list mode is required to enable</string>
     <string name="not_installed">Not installed</string>
-    <string name="support_group_telegram_channel">Telegram Channel: @EdXposed</string>
+    <string name="support_group_telegram_channel">Telegram Channel: @LSPosed</string>
     <string name="warning_list_not_enabled">Application list mode is not enabled, you can enable in settings</string>
     <string name="empty_param">Params empty</string>
     <string name="reboot_system">Reboot to System</string>
@@ -312,7 +312,7 @@
     <string name="follow_system">Follow system</string>
     <string name="pref_compat_mode_title">Compat List</string>
     <string name="pref_compat_mode_summary">Compat mode app list</string>
-    <string name="xposed_not_active">EdXposed Framework is not currently installed or active\nYou can close status check in settings</string>
+    <string name="xposed_not_active">LSPosed Framework is not currently installed or active\nYou can close status check in settings</string>
     <string name="transparent_status_bar">Transparent status bar</string>
     <string name="list_sort">List sorting</string>
     <string name="sort_by_name">Sort by application name</string>
@@ -329,19 +329,19 @@
     <string name="settings_group_theme">Theme</string>
     <string name="material_design_2">Material Design 2</string>
     <string name="version_x">Version %d</string>
-    <string name="xposed_description">Enable EdXposed enhancements:\nRemove background restrictions on EdXposed\nDetermine if Xposed is working properly\nPretend to have Xposed Installer installed\nHide EdXposed Manager</string>
+    <string name="xposed_description">Enable LSPosed enhancements:\nRemove background restrictions on LSPosed\nDetermine if Xposed is working properly\nPretend to have Xposed Installer installed\nHide LSPosed Manager</string>
     <string name="status_enhancement">Enhancement mode</string>
     <string name="settings_group_enhancement">Enhancement mode</string>
     <string name="settings_title_enhancement">Enhancement mode status</string>
     <string name="settings_summary_enhancement">Disabled\nYou can enable enhancement mode in the module</string>
     <string name="settings_summary_enhancement_enabled">Enabled</string>
     <string name="settings_title_pretend_xposed_installer">Pretend to have Xposed Installer installed</string>
-    <string name="settings_summary_pretend_xposed_installer">Pretend that Xposed Installer is installed to make some outdated but useful modules work\nOnly work for the enabled modules in \"Modules\"\nWARNING: Some software (eg. RootBeer) may detect that EdXposed when this function is turned on</string>
-    <string name="settings_title_hide_edxposed_manager">Hide EdXposed Manager</string>
-    <string name="settings_summary_hide_edxposed_manager">Prevent the software from detecting EdXposed Manager\nWARNING: Modules may not be able to start the EdXposed Manager UI properly, some fratures of EdXposed Manager in the system may not work properly</string>
+    <string name="settings_summary_pretend_xposed_installer">Pretend that Xposed Installer is installed to make some outdated but useful modules work\nOnly work for the enabled modules in \"Modules\"\nWARNING: Some software (eg. RootBeer) may detect that LSPosed when this function is turned on</string>
+    <string name="settings_title_hide_LSPosed_manager">Hide LSPosed Manager</string>
+    <string name="settings_summary_hide_LSPosed_manager">Prevent the software from detecting LSPosed Manager\nWARNING: Modules may not be able to start the LSPosed Manager UI properly, some fratures of LSPosed Manager in the system may not work properly</string>
     <string name="settings_title_disable_hidden_api_bypass">Disable hidden API restrictions bypass</string>
     <string name="settings_summary_disable_hidden_api_bypass">Disable hidden API restrictions bypass will pass some detection (eg Snapchat), these APIs are disabled by default\n<b>WARNING:</b> Enable this option may cause some features do not work properly, or some other problems</string>
     <string name="menu_scope">Scope</string>
     <string name="enable_scope">Enable scope</string>
-    <string name="scope_not_supported">The version of EdXposed you installed does not support module scope, download new version?</string>
+    <string name="scope_not_supported">The version of LSPosed you installed does not support module scope, download new version?</string>
 </resources>
