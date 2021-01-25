@@ -115,6 +115,15 @@
         android:title="@string/settings_group_framework"
         app:iconSpaceReserved="false">
 
+        <SimpleMenuPreference
+            android:defaultValue="1"
+            android:entries="@array/variant_texts"
+            android:entryValues="@array/variant_values"
+            android:key="variant"
+            android:summary="%s"
+            android:title="@string/settings_variant"
+            app:iconSpaceReserved="false" />
+
         <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="white_list_switch"

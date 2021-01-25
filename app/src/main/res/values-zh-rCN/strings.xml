@@ -313,4 +313,7 @@
     <string name="menu_scope">作用域</string>
     <string name="enable_scope">启用作用域</string>
     <string name="scope_not_supported">您安装的 LSPosed 版本不支持模块作用域，下载新版本？</string>
+    <string name="settings_enable_resources">启用资源钩子</string>
+    <string name="settings_enable_resources_summary"><b>警告: </b> 资源钩子已被弃用</string>
+    <string name="settings_variant">变体</string>
 </resources>

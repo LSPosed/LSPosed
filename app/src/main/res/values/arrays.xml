@@ -65,4 +65,13 @@
         <item>experimental</item>
     </string-array>
 
+    <string-array name="variant_texts" translatable="false">
+        <item>YAHFA</item>
+        <item>SandHook</item>
+    </string-array>
+    <string-array name="variant_values" translatable="false">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
 </resources>

@@ -15,6 +15,7 @@ import androidx.preference.Preference;
 import androidx.preference.SwitchPreferenceCompat;
 
 import com.takisoft.preferencex.PreferenceFragmentCompat;
+import com.takisoft.preferencex.SimpleMenuPreference;
 
 import org.meowcat.edxposed.manager.Constants;
 import org.meowcat.edxposed.manager.R;
@@ -22,7 +23,10 @@ import org.meowcat.edxposed.manager.databinding.ActivitySettingsBinding;
 import org.meowcat.edxposed.manager.ui.widget.IntegerListPreference;
 import org.meowcat.edxposed.manager.util.RepoLoader;
 
-import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class SettingsActivity extends BaseActivity {
     private static final String KEY_PREFIX = SettingsActivity.class.getName() + '.';
@@ -97,15 +101,14 @@ public class SettingsActivity extends BaseActivity {
         return restarting || super.dispatchGenericMotionEvent(event);
     }
 
-    @SuppressWarnings({"ResultOfMethodCallIgnored"})
     public static class SettingsFragment extends PreferenceFragmentCompat {
-        private static final File enableResourcesFlag = new File(Constants.getBaseDir() + "conf/enable_resources");
-        private static final File deoptBootFlag = new File(Constants.getBaseDir() + "conf/deoptbootimage");
-        private static final File whiteListModeFlag = new File(Constants.getBaseDir() + "conf/usewhitelist");
-        private static final File disableVerboseLogsFlag = new File(Constants.getBaseDir() + "conf/disable_verbose_log");
-        private static final File disableModulesLogsFlag = new File(Constants.getBaseDir() + "conf/disable_modules_log");
+        private static final Path enableResourcesFlag = Paths.get(Constants.getBaseDir(), "conf/enable_resources");
+        private static final Path deoptBootFlag = Paths.get(Constants.getBaseDir(), "conf/deoptbootimage");
+        private static final Path whiteListModeFlag = Paths.get(Constants.getBaseDir(), "conf/usewhitelist");
+        private static final Path disableVerboseLogsFlag = Paths.get(Constants.getBaseDir(), "conf/disable_verbose_log");
+        private static final Path disableModulesLogsFlag = Paths.get(Constants.getBaseDir() + "conf/disable_modules_log");
+        private static final Path variantFlag = Paths.get(Constants.getBaseDir()).getParent().resolve("variant");
 
-        @SuppressLint({"ObsoleteSdkInt", "WorldReadableFiles"})
         @Override
         public void onCreatePreferencesFix(Bundle savedInstanceState, String rootKey) {
             addPreferencesFromResource(R.xml.prefs);
@@ -120,32 +123,55 @@ public class SettingsActivity extends BaseActivity {
 
             SwitchPreferenceCompat prefWhiteListMode = findPreference("white_list_switch");
             if (prefWhiteListMode != null) {
-                prefWhiteListMode.setChecked(whiteListModeFlag.exists());
+                prefWhiteListMode.setChecked(Files.exists(whiteListModeFlag));
                 prefWhiteListMode.setOnPreferenceChangeListener(new OnFlagChangeListener(whiteListModeFlag));
             }
 
             SwitchPreferenceCompat prefVerboseLogs = findPreference("disable_verbose_log");
             if (prefVerboseLogs != null) {
-                prefVerboseLogs.setChecked(disableVerboseLogsFlag.exists());
+                prefVerboseLogs.setChecked(Files.exists(disableVerboseLogsFlag));
                 prefVerboseLogs.setOnPreferenceChangeListener(new OnFlagChangeListener(disableVerboseLogsFlag));
             }
 
             SwitchPreferenceCompat prefModulesLogs = findPreference("disable_modules_log");
             if (prefModulesLogs != null) {
-                prefModulesLogs.setChecked(disableModulesLogsFlag.exists());
+                prefModulesLogs.setChecked(Files.exists(disableModulesLogsFlag));
                 prefModulesLogs.setOnPreferenceChangeListener(new OnFlagChangeListener(disableModulesLogsFlag));
             }
 
             SwitchPreferenceCompat prefEnableDeopt = findPreference("enable_boot_image_deopt");
             if (prefEnableDeopt != null) {
-                prefEnableDeopt.setChecked(deoptBootFlag.exists());
+                prefEnableDeopt.setChecked(Files.exists(deoptBootFlag));
                 prefEnableDeopt.setOnPreferenceChangeListener(new OnFlagChangeListener(deoptBootFlag));
             }
 
-            SwitchPreferenceCompat prefDisableResources = findPreference("enable_resources");
-            if (prefDisableResources != null) {
-                prefDisableResources.setChecked(!enableResourcesFlag.exists());
-                prefDisableResources.setOnPreferenceChangeListener(new OnFlagChangeListener(enableResourcesFlag));
+            SwitchPreferenceCompat prefEnableResources = findPreference("enable_resources");
+            if (prefEnableResources != null) {
+                prefEnableResources.setChecked(Files.exists(enableResourcesFlag));
+                prefEnableResources.setOnPreferenceChangeListener(new OnFlagChangeListener(enableResourcesFlag));
+            }
+
+            SimpleMenuPreference prefVariant = findPreference("variant");
+            if (prefVariant != null) {
+                if (requireActivity().getApplicationInfo().uid / 100000 != 0) {
+                    prefVariant.setVisible(false);
+                } else {
+                    try {
+                        prefVariant.setValue(new String(Files.readAllBytes(variantFlag)).trim());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    prefVariant.setOnPreferenceChangeListener((preference, newValue) -> {
+                        try {
+                            Files.write(variantFlag, ((String) newValue).getBytes());
+                            return true;
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
+                    });
+                }
             }
 
             SwitchPreferenceCompat transparent = findPreference("transparent_status_bar");
@@ -246,25 +272,26 @@ public class SettingsActivity extends BaseActivity {
         }
 
         private class OnFlagChangeListener implements Preference.OnPreferenceChangeListener {
-            private final File flag;
+            private final Path flag;
 
-            OnFlagChangeListener(File flag) {
+            OnFlagChangeListener(Path flag) {
                 this.flag = flag;
             }
 
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 boolean enabled = (Boolean) newValue;
-                if (enabled) {
-                    try {
-                        flag.createNewFile();
-                    } catch (Exception e) {
-                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                try {
+                    if (enabled) {
+                        Files.createFile(flag);
+                    } else {
+                        Files.delete(flag);
                     }
-                } else {
-                    flag.delete();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
-                return (enabled == flag.exists());
+                return (enabled == Files.exists(flag));
             }
         }
     }

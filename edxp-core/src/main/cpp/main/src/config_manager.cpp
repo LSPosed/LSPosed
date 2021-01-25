@@ -322,6 +322,11 @@ namespace edxp {
                 if (pkg_name == "android") uid = -1;
                 path_chown(conf_path, uid, 1000u, true);
                 path_chown(log_path, uid, 1000u, true);
+                if (current_user_ == 0) {
+                    auto variant = GetMiscPath() / "variant";
+                    fs::permissions(variant, fs::perms::owner_all | fs::perms::group_all);
+                    chown(variant.c_str(), uid, 1000u);
+                }
 
                 if (pkg_name == kPrimaryInstallerPkgName) {
                     auto installer_pkg_name_path = GetConfigPath("installer");
