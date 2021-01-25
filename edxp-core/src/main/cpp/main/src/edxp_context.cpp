@@ -224,7 +224,7 @@ namespace edxp {
     }
 
     void Context::RegisterEdxpService(JNIEnv *env) {
-        auto path = ConfigManager::GetFrameworkPath("edservice.dex");
+        auto path = ConfigManager::GetFrameworkPath("edxp.dex");
         std::ifstream is(path, std::ios::binary);
         if (!is.good()) {
             LOGE("Cannot load path %s", path.c_str());
