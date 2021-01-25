@@ -8,9 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.elderdrivers.riru.edxp.BuildConfig;
 import com.elderdrivers.riru.edxp.config.ConfigManager;
 import com.elderdrivers.riru.edxp.config.EdXpConfigGlobal;
-import com.elderdrivers.riru.edxp.BuildConfig;
 import com.elderdrivers.riru.edxp.core.EdxpImpl;
 import com.elderdrivers.riru.edxp.core.Main;
 import com.elderdrivers.riru.edxp.util.Utils;
@@ -26,26 +26,73 @@ import de.robv.android.xposed.XposedHelpers;
 
 public class XposedInstallerHooker {
 
-    private static final String LEGACY_INSTALLER_PACKAGE_NAME = "de.robv.android.xposed.installer";
-
     public static void hookXposedInstaller(final ClassLoader classLoader) {
-        // Deopt manager. It will not throw exception.
-        deoptMethod(classLoader, "org.meowcat.edxposed.manager.ModulesFragment", "onActivityCreated", Bundle.class);
-        deoptMethod(classLoader, "org.meowcat.edxposed.manager.ModulesFragment", "showMenu", Context.class, View.class, ApplicationInfo.class);
-        deoptMethod(classLoader, "org.meowcat.edxposed.manager.StatusInstallerFragment", "onCreateView", LayoutInflater.class, ViewGroup.class, Bundle.class);
-        deoptMethod(classLoader, "org.meowcat.edxposed.manager.util.ModuleUtil", "updateModulesList", boolean.class, View.class);
-
+        // EdXposed Manager R
         try {
-            final String xposedAppClass = LEGACY_INSTALLER_PACKAGE_NAME + ".XposedApp";
-            final Class InstallZipUtil = XposedHelpers.findClass(LEGACY_INSTALLER_PACKAGE_NAME
-                    + ".util.InstallZipUtil", classLoader);
+            XposedHelpers.findAndHookMethod("org.meowcat.edxposed.manager.Constants", classLoader, "getXposedApiVersion", new XC_MethodReplacement() {
+                @Override
+                protected Object replaceHookedMethod(MethodHookParam param) {
+                    return XposedBridge.getXposedVersion();
+                }
+            });
+            XposedHelpers.findAndHookMethod("org.meowcat.edxposed.manager.Constants", classLoader, "getXposedVersion", new XC_MethodReplacement() {
+                @Override
+                protected Object replaceHookedMethod(MethodHookParam param) {
+                    return BuildConfig.VERSION_NAME;
+                }
+            });
+            XposedHelpers.findAndHookMethod("org.meowcat.edxposed.manager.Constants", classLoader, "getXposedVersionCode", new XC_MethodReplacement() {
+                @Override
+                protected Object replaceHookedMethod(MethodHookParam param) {
+                    return BuildConfig.VERSION_CODE;
+                }
+            });
+            XposedHelpers.findAndHookMethod("org.meowcat.edxposed.manager.Constants", classLoader, "getXposedApiVersion", new XC_MethodReplacement() {
+                @Override
+                protected Object replaceHookedMethod(MethodHookParam param) {
+                    return XposedBridge.getXposedVersion();
+                }
+            });
+            XposedHelpers.findAndHookMethod("org.meowcat.edxposed.manager.Constants", classLoader, "getXposedVariant", new XC_MethodReplacement() {
+                @Override
+                protected Object replaceHookedMethod(MethodHookParam param) {
+                    String variant = "None";
+                    switch (Main.getEdxpVariant()) {
+                        case EdxpImpl.NONE:
+                            break;
+                        case EdxpImpl.YAHFA:
+                            variant = "YAHFA";
+                            break;
+                        case EdxpImpl.SANDHOOK:
+                            variant = "SandHook";
+                            break;
+                    }
+                    return variant;
+                }
+            });
+            XposedHelpers.findAndHookMethod("org.meowcat.edxposed.manager.Constants", classLoader, "getBaseDir", new XC_MethodReplacement() {
+                @Override
+                protected Object replaceHookedMethod(MethodHookParam param) {
+                    return ConfigManager.getBaseConfigPath() + "/";
+                }
+            });
+            Utils.logD("Hooked EdXposed Manager R");
+            return;
+        } catch (Throwable t) {
+            Utils.logW("Could not hook EdXposed Manager R", t);
+        }
+
+        // EdXposed Manager and Xposed Installer
+        try {
+            final String xposedAppClass = "de.robv.android.xposed.installer.XposedApp";
+            final Class<?> InstallZipUtil = XposedHelpers.findClass("de.robv.android.xposed.installer.util.InstallZipUtil", classLoader);
             XposedHelpers.findAndHookMethod(xposedAppClass, classLoader, "getActiveXposedVersion",
                     XC_MethodReplacement.returnConstant(XposedBridge.getXposedVersion())
             );
             XposedHelpers.findAndHookMethod(xposedAppClass, classLoader,
                     "reloadXposedProp", new XC_MethodHook() {
                         @Override
-                        protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                        protected void beforeHookedMethod(MethodHookParam param) {
                             Utils.logD("before reloadXposedProp...");
                             final String propFieldName = "mXposedProp";
                             final Object thisObject = param.thisObject;
@@ -90,6 +137,17 @@ public class XposedInstallerHooker {
                             }
                         }
                     });
+        } catch (Throwable t) {
+            Utils.logW("Could not hook Xposed Installer or EdXposed Manager", t);
+            return;
+        }
+
+        // EdXposed Manager
+        deoptMethod(classLoader, "org.meowcat.edxposed.manager.ModulesFragment", "onActivityCreated", Bundle.class);
+        deoptMethod(classLoader, "org.meowcat.edxposed.manager.ModulesFragment", "showMenu", Context.class, View.class, ApplicationInfo.class);
+        deoptMethod(classLoader, "org.meowcat.edxposed.manager.StatusInstallerFragment", "onCreateView", LayoutInflater.class, ViewGroup.class, Bundle.class);
+        deoptMethod(classLoader, "org.meowcat.edxposed.manager.util.ModuleUtil", "updateModulesList", boolean.class, View.class);
+        try {
             XposedHelpers.findAndHookMethod("org.meowcat.edxposed.manager.XposedApp", classLoader, "onCreate", new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
@@ -110,73 +168,21 @@ public class XposedInstallerHooker {
             XposedHelpers.findAndHookMethod("org.meowcat.edxposed.manager.StatusInstallerFragment", classLoader, "getCanonicalFile", File.class, new XC_MethodHook() {
                 @Override
                 protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                    File arg = (File)param.args[0];
-                    if(arg.equals(new File(AndroidAppHelper.currentApplicationInfo().deviceProtectedDataDir))) {
+                    File arg = (File) param.args[0];
+                    if (arg.equals(new File(AndroidAppHelper.currentApplicationInfo().deviceProtectedDataDir))) {
                         param.args[0] = new File(ConfigManager.getBaseConfigPath());
                     }
                 }
             });
+            Utils.logD("Hooked EdXposed Manager");
         } catch (Throwable t) {
-            Utils.logE("Could not hook Xposed Installer", t);
-        }
-
-        // for new manager
-        try {
-            XposedHelpers.findAndHookMethod("org.meowcat.edxposed.manager.Constants", classLoader, "getXposedApiVersion", new XC_MethodReplacement() {
-                @Override
-                protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
-                    return XposedBridge.getXposedVersion();
-                }
-            });
-            XposedHelpers.findAndHookMethod("org.meowcat.edxposed.manager.Constants", classLoader, "getXposedVersion", new XC_MethodReplacement() {
-                @Override
-                protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
-                    return BuildConfig.VERSION_NAME;
-                }
-            });
-            XposedHelpers.findAndHookMethod("org.meowcat.edxposed.manager.Constants", classLoader, "getXposedVersionCode", new XC_MethodReplacement() {
-                @Override
-                protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
-                    return BuildConfig.VERSION_CODE;
-                }
-            });
-            XposedHelpers.findAndHookMethod("org.meowcat.edxposed.manager.Constants", classLoader, "getXposedApiVersion", new XC_MethodReplacement() {
-                @Override
-                protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
-                    return XposedBridge.getXposedVersion();
-                }
-            });
-            XposedHelpers.findAndHookMethod("org.meowcat.edxposed.manager.Constants", classLoader, "getXposedVariant", new XC_MethodReplacement() {
-                @Override
-                protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
-                    String variant = "None";
-                    switch (Main.getEdxpVariant()) {
-                        case EdxpImpl.NONE:
-                            break;
-                        case EdxpImpl.YAHFA:
-                            variant = "YAHFA";
-                            break;
-                        case EdxpImpl.SANDHOOK:
-                            variant = "SandHook";
-                            break;
-                    }
-                    return variant;
-                }
-            });
-            XposedHelpers.findAndHookMethod("org.meowcat.edxposed.manager.Constants", classLoader, "getBaseDir", new XC_MethodReplacement() {
-                @Override
-                protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
-                    return ConfigManager.getBaseConfigPath() + "/";
-                }
-            });
-        } catch (Throwable t) {
-            Utils.logE("Could not hook EdXposed Installer", t);
+            Utils.logD("Hooked Xposed Installer");
         }
     }
 
-    private static void deoptMethod(ClassLoader cl, String className, String methodName, Class<?> ...params) {
+    private static void deoptMethod(ClassLoader cl, String className, String methodName, Class<?>... params) {
         try {
-            Class clazz = XposedHelpers.findClassIfExists(className, cl);
+            Class<?> clazz = XposedHelpers.findClassIfExists(className, cl);
             if (clazz == null) {
                 Utils.logE("Class " + className + " not found when deoptimizing EdXposed Manager");
                 return;
@@ -184,8 +190,8 @@ public class XposedInstallerHooker {
 
             Object method = XposedHelpers.findMethodExact(clazz, methodName, params);
             EdXpConfigGlobal.getHookProvider().deoptMethodNative(method);
-        } catch (Throwable e) {
-            Utils.logE("Error when deoptimizing " + className + ":" + methodName, e);
+        } catch (Throwable t) {
+            Utils.logE("Error when deoptimizing " + className + ":" + methodName, t);
         }
 
     }

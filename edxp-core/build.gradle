@@ -9,26 +9,10 @@ apply plugin: 'com.android.application'
 static def calcSha256(file) {
     def md = MessageDigest.getInstance("SHA-256")
     file.eachByte 4096, { bytes, size ->
-        md.update(bytes, 0, size);
+        md.update(bytes, 0, size)
     }
     return md.digest().encodeHex()
 }
-
-// Values set here will be overriden by AppVeyor, feel free to modify during development.
-def buildVersionName = 'v0.5.1.4'
-def buildVersionCode = 233
-
-if (System.env.APPVEYOR_BUILD_VERSION != null) {
-    buildVersionName = "v${System.getenv('appveyor_build_version')}"
-}
-
-if (System.env.APPVEYOR_BUILD_NUMBER != null) {
-    // Split is necessary because PRs set the build number to "1234-something".
-    def parts = System.env.APPVEYOR_BUILD_NUMBER.split('-')
-    buildVersionCode = Integer.valueOf(parts[0])
-}
-
-version buildVersionName
 
 ext {
     module_name = "LSPosed"
@@ -150,7 +134,7 @@ afterEvaluate {
     android.applicationVariants.all { variant ->
         def variantCapped = variant.name.capitalize()
         def variantLowered = variant.name.toLowerCase()
-        def zipFileName = "${module_name}-${project.version}-${variantLowered}.zip"
+        def zipFileName = "${module_name}-${rootProject.ext.versionName}-${variantLowered}.zip"
 
         task("copyMainDex${variantCapped}", type: Copy) {
             def dexOutPath = variant.name.contains("release") ?
@@ -170,18 +154,12 @@ afterEvaluate {
             dependsOn tasks.getByPath(":sandhook-hooklib:copySandHook${variantCapped}LibraryToMagiskTemplate")
             doFirst {
                 copy {
-                    from "${projectDir}/tpl/edconfig.tpl"
-                    into templateFrameworkPath
-                    rename "edconfig.tpl", "edconfig.jar"
-                    expand(version: "$version", apiCode: "$apiCode")
-                }
-                copy {
                     from "${projectDir}/tpl/module.prop.tpl"
                     into templateRootPath
                     rename "module.prop.tpl", "module.prop"
                     expand(moduleId: "$module_id",
-                            versionName: "$version",
-                            versionCode: "$versionCode", authorList: "$authors",
+                            versionName: "$rootProject.ext.versionName",
+                            versionCode: "$rootProject.ext.versionCode", authorList: "$authors",
                             apiCode: "$apiCode", minApi: "$moduleMinRiruApiVersion")
                     filter(FixCrLfFilter.class, eol: FixCrLfFilter.CrLf.newInstance("lf"))
                 }
