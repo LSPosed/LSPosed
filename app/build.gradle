@@ -1,44 +1,25 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    compileSdkVersion androidCompileSdkVersion.toInteger()
+
     ndkVersion androidCompileNdkVersion
 
     buildFeatures {
         viewBinding = true
     }
 
-    signingConfigs {
-        def keystorePwd = null
-        def alias = null
-        def pwd = null
-        if (project.rootProject.file('local.properties').exists()) {
-            Properties properties = new Properties()
-            properties.load(project.rootProject.file('local.properties').newDataInputStream())
-            keystorePwd = properties.getProperty("RELEASE_STORE_PASSWORD")
-            alias = properties.getProperty("RELEASE_KEY_ALIAS")
-            pwd = properties.getProperty("RELEASE_KEY_PASSWORD")
-        }
-        release {
-            storeFile file("edxpmanager.jks")
-            storePassword keystorePwd != null ? keystorePwd : System.getenv("KEYSTORE_PASS")
-            keyAlias alias != null ? alias : System.getenv("ALIAS_NAME")
-            keyPassword pwd != null ? pwd : System.getenv("ALIAS_PASS")
-        }
-    }
-
     defaultConfig {
         applicationId "org.meowcat.edxposed.manager"
-        minSdkVersion 26
-        targetSdkVersion 30
+        minSdkVersion androidMinSdkVersion.toInteger()
+        targetSdkVersion androidTargetSdkVersion.toInteger()
         versionCode 458010
         versionName "4.5.8.1"
     }
 
     compileOptions {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
     }
 
     lintOptions {
@@ -62,12 +43,10 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
         }
         debug {
             minifyEnabled false
             shrinkResources false
-            signingConfig signingConfigs.release
         }
     }
     applicationVariants.all { variant ->
