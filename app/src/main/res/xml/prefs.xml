@@ -124,13 +124,6 @@
 
         <SwitchPreferenceCompat
             android:defaultValue="false"
-            android:key="is_dynamic_modules"
-            android:summary="@string/pref_dynamic_modules_summary"
-            android:title="@string/pref_title_dynamic_modules"
-            app:iconSpaceReserved="false" />
-
-        <SwitchPreferenceCompat
-            android:defaultValue="false"
             android:key="enable_boot_image_deopt"
             android:summary="@string/pref_enable_boot_image_deopt_summary"
             android:title="@string/pref_title_enable_boot_image_deopt"

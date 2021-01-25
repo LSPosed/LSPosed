@@ -1,28 +1,20 @@
 package org.meowcat.edxposed.manager.ui.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.Preference;
 import androidx.preference.SwitchPreferenceCompat;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.takisoft.preferencex.PreferenceFragmentCompat;
-import com.topjohnwu.superuser.Shell;
 
 import org.meowcat.edxposed.manager.Constants;
 import org.meowcat.edxposed.manager.R;
@@ -31,9 +23,6 @@ import org.meowcat.edxposed.manager.ui.widget.IntegerListPreference;
 import org.meowcat.edxposed.manager.util.RepoLoader;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 public class SettingsActivity extends BaseActivity {
     private static final String KEY_PREFIX = SettingsActivity.class.getName() + '.';
@@ -111,33 +100,15 @@ public class SettingsActivity extends BaseActivity {
     @SuppressWarnings({"ResultOfMethodCallIgnored"})
     public static class SettingsFragment extends PreferenceFragmentCompat {
         private static final File enableResourcesFlag = new File(Constants.getBaseDir() + "conf/enable_resources");
-        private static final File dynamicModulesFlag = new File(Constants.getBaseDir() + "conf/dynamicmodules");
         private static final File deoptBootFlag = new File(Constants.getBaseDir() + "conf/deoptbootimage");
         private static final File whiteListModeFlag = new File(Constants.getBaseDir() + "conf/usewhitelist");
         private static final File disableVerboseLogsFlag = new File(Constants.getBaseDir() + "conf/disable_verbose_log");
         private static final File disableModulesLogsFlag = new File(Constants.getBaseDir() + "conf/disable_modules_log");
-        private static final File verboseLogProcessID = new File(Constants.getBaseDir() + "log/all.pid");
-        private static final File modulesLogProcessID = new File(Constants.getBaseDir() + "log/error.pid");
 
         @SuppressLint({"ObsoleteSdkInt", "WorldReadableFiles"})
         @Override
         public void onCreatePreferencesFix(Bundle savedInstanceState, String rootKey) {
             addPreferencesFromResource(R.xml.prefs);
-
-            Preference stopVerboseLog = findPreference("stop_verbose_log");
-            if (stopVerboseLog != null) {
-                stopVerboseLog.setOnPreferenceClickListener(preference -> {
-                    areYouSure(R.string.stop_verbose_log_summary, (dialog, which) -> Shell.su("pkill -P $(cat " + verboseLogProcessID.getAbsolutePath() + ")").exec());
-                    return true;
-                });
-            }
-            Preference stopLog = findPreference("stop_log");
-            if (stopLog != null) {
-                stopLog.setOnPreferenceClickListener(preference -> {
-                    areYouSure(R.string.stop_log_summary, (dialog, which) -> Shell.su("pkill -P $(cat " + modulesLogProcessID.getAbsolutePath() + ")").exec());
-                    return true;
-                });
-            }
 
             Preference releaseType = findPreference("release_type_global");
             if (releaseType != null) {
@@ -150,193 +121,31 @@ public class SettingsActivity extends BaseActivity {
             SwitchPreferenceCompat prefWhiteListMode = findPreference("white_list_switch");
             if (prefWhiteListMode != null) {
                 prefWhiteListMode.setChecked(whiteListModeFlag.exists());
-                prefWhiteListMode.setOnPreferenceChangeListener((preference, newValue) -> {
-                    boolean enabled = (Boolean) newValue;
-                    if (enabled) {
-                        FileOutputStream fos = null;
-                        try {
-                            fos = new FileOutputStream(whiteListModeFlag.getPath());
-                        } catch (FileNotFoundException e) {
-                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                        } finally {
-                            if (fos != null) {
-                                try {
-                                    fos.close();
-                                } catch (IOException e) {
-                                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                                    try {
-                                        whiteListModeFlag.createNewFile();
-                                    } catch (IOException e1) {
-                                        Toast.makeText(getActivity(), e1.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        whiteListModeFlag.delete();
-                    }
-                    return (enabled == whiteListModeFlag.exists());
-                });
+                prefWhiteListMode.setOnPreferenceChangeListener(new OnFlagChangeListener(whiteListModeFlag));
             }
 
             SwitchPreferenceCompat prefVerboseLogs = findPreference("disable_verbose_log");
             if (prefVerboseLogs != null) {
                 prefVerboseLogs.setChecked(disableVerboseLogsFlag.exists());
-                prefVerboseLogs.setOnPreferenceChangeListener((preference, newValue) -> {
-                    boolean enabled = (Boolean) newValue;
-                    if (enabled) {
-                        FileOutputStream fos = null;
-                        try {
-                            fos = new FileOutputStream(disableVerboseLogsFlag.getPath());
-                        } catch (FileNotFoundException e) {
-                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                        } finally {
-                            if (fos != null) {
-                                try {
-                                    fos.close();
-                                } catch (IOException e) {
-                                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                                    try {
-                                        disableVerboseLogsFlag.createNewFile();
-                                    } catch (IOException e1) {
-                                        Toast.makeText(getActivity(), e1.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        disableVerboseLogsFlag.delete();
-                    }
-                    return (enabled == disableVerboseLogsFlag.exists());
-                });
+                prefVerboseLogs.setOnPreferenceChangeListener(new OnFlagChangeListener(disableVerboseLogsFlag));
             }
 
             SwitchPreferenceCompat prefModulesLogs = findPreference("disable_modules_log");
             if (prefModulesLogs != null) {
                 prefModulesLogs.setChecked(disableModulesLogsFlag.exists());
-                prefModulesLogs.setOnPreferenceChangeListener((preference, newValue) -> {
-                    boolean enabled = (Boolean) newValue;
-                    if (enabled) {
-                        FileOutputStream fos = null;
-                        try {
-                            fos = new FileOutputStream(disableModulesLogsFlag.getPath());
-                        } catch (FileNotFoundException e) {
-                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                        } finally {
-                            if (fos != null) {
-                                try {
-                                    fos.close();
-                                } catch (IOException e) {
-                                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                                    try {
-                                        disableModulesLogsFlag.createNewFile();
-                                    } catch (IOException e1) {
-                                        Toast.makeText(getActivity(), e1.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        disableModulesLogsFlag.delete();
-                    }
-                    return (enabled == disableModulesLogsFlag.exists());
-                });
+                prefModulesLogs.setOnPreferenceChangeListener(new OnFlagChangeListener(disableModulesLogsFlag));
             }
 
             SwitchPreferenceCompat prefEnableDeopt = findPreference("enable_boot_image_deopt");
             if (prefEnableDeopt != null) {
                 prefEnableDeopt.setChecked(deoptBootFlag.exists());
-                prefEnableDeopt.setOnPreferenceChangeListener((preference, newValue) -> {
-                    boolean enabled = (Boolean) newValue;
-                    if (enabled) {
-                        FileOutputStream fos = null;
-                        try {
-                            fos = new FileOutputStream(deoptBootFlag.getPath());
-                        } catch (FileNotFoundException e) {
-                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                        } finally {
-                            if (fos != null) {
-                                try {
-                                    fos.close();
-                                } catch (IOException e) {
-                                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                                    try {
-                                        deoptBootFlag.createNewFile();
-                                    } catch (IOException e1) {
-                                        Toast.makeText(getActivity(), e1.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        deoptBootFlag.delete();
-                    }
-                    return (enabled == deoptBootFlag.exists());
-                });
-            }
-
-            SwitchPreferenceCompat prefDynamicResources = findPreference("is_dynamic_modules");
-            if (prefDynamicResources != null) {
-                prefDynamicResources.setChecked(dynamicModulesFlag.exists());
-                prefDynamicResources.setOnPreferenceChangeListener((preference, newValue) -> {
-                    boolean enabled = (Boolean) newValue;
-                    if (enabled) {
-                        FileOutputStream fos = null;
-                        try {
-                            fos = new FileOutputStream(dynamicModulesFlag.getPath());
-                        } catch (FileNotFoundException e) {
-                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                        } finally {
-                            if (fos != null) {
-                                try {
-                                    fos.close();
-                                } catch (IOException e) {
-                                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                                    try {
-                                        dynamicModulesFlag.createNewFile();
-                                    } catch (IOException e1) {
-                                        Toast.makeText(getActivity(), e1.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        dynamicModulesFlag.delete();
-                    }
-                    return (enabled == dynamicModulesFlag.exists());
-                });
+                prefEnableDeopt.setOnPreferenceChangeListener(new OnFlagChangeListener(deoptBootFlag));
             }
 
             SwitchPreferenceCompat prefDisableResources = findPreference("disable_resources");
             if (prefDisableResources != null) {
                 prefDisableResources.setChecked(!enableResourcesFlag.exists());
-                prefDisableResources.setOnPreferenceChangeListener((preference, newValue) -> {
-                    boolean enabled = (Boolean) newValue;
-                    if (!enabled) {
-                        FileOutputStream fos = null;
-                        try {
-                            fos = new FileOutputStream(enableResourcesFlag.getPath());
-                        } catch (FileNotFoundException e) {
-                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                        } finally {
-                            if (fos != null) {
-                                try {
-                                    fos.close();
-                                } catch (IOException e) {
-                                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                                    try {
-                                        enableResourcesFlag.createNewFile();
-                                    } catch (IOException e1) {
-                                        Toast.makeText(getActivity(), e1.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        enableResourcesFlag.delete();
-                    }
-                    return (enabled != enableResourcesFlag.exists());
-                });
+                prefDisableResources.setOnPreferenceChangeListener(new OnFlagChangeListener(enableResourcesFlag));
             }
 
             SwitchPreferenceCompat transparent = findPreference("transparent_status_bar");
@@ -421,18 +230,6 @@ public class SettingsActivity extends BaseActivity {
             }
         }
 
-        private void areYouSure(int contentTextId, DialogInterface.OnClickListener listener) {
-            Activity activity = getActivity();
-            if (activity != null) {
-                new MaterialAlertDialogBuilder(activity)
-                        .setTitle(R.string.areyousure)
-                        .setMessage(contentTextId)
-                        .setPositiveButton(android.R.string.ok, listener)
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .show();
-            }
-        }
-
         private void updatePreference(boolean show) {
             Preference black_dark_theme = findPreference("black_dark_theme");
             if (black_dark_theme != null) {
@@ -448,13 +245,27 @@ public class SettingsActivity extends BaseActivity {
             }
         }
 
-        @Override
-        public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-            super.onViewCreated(view, savedInstanceState);
-            ((LinearLayout) view).setClipToPadding(false);
-            ((LinearLayout) view).setClipChildren(false);
-            ((FrameLayout) getListView().getParent()).setClipChildren(false);
-            ((FrameLayout) getListView().getParent()).setClipToPadding(false);
+        private class OnFlagChangeListener implements Preference.OnPreferenceChangeListener {
+            private final File flag;
+
+            OnFlagChangeListener(File flag) {
+                this.flag = flag;
+            }
+
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                boolean enabled = (Boolean) newValue;
+                if (enabled) {
+                    try {
+                        flag.createNewFile();
+                    } catch (Exception e) {
+                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    flag.delete();
+                }
+                return (enabled == flag.exists());
+            }
         }
     }
 }
