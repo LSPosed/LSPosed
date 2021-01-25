@@ -1,7 +1,7 @@
 package com.elderdrivers.riru.edxp.core;
 
-import android.support.annotation.IntDef;
-import android.support.annotation.NonNull;
+import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
 
 import com.elderdrivers.riru.common.KeepAll;
 import com.elderdrivers.riru.edxp.proxy.Router;

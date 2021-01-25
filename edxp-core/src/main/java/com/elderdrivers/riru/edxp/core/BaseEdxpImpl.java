@@ -1,6 +1,6 @@
 package com.elderdrivers.riru.edxp.core;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.elderdrivers.riru.edxp.proxy.NormalProxy;
 import com.elderdrivers.riru.edxp.proxy.Router;
