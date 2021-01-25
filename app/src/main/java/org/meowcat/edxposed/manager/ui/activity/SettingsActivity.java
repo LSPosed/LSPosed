@@ -142,7 +142,7 @@ public class SettingsActivity extends BaseActivity {
                 prefEnableDeopt.setOnPreferenceChangeListener(new OnFlagChangeListener(deoptBootFlag));
             }
 
-            SwitchPreferenceCompat prefDisableResources = findPreference("disable_resources");
+            SwitchPreferenceCompat prefDisableResources = findPreference("enable_resources");
             if (prefDisableResources != null) {
                 prefDisableResources.setChecked(!enableResourcesFlag.exists());
                 prefDisableResources.setOnPreferenceChangeListener(new OnFlagChangeListener(enableResourcesFlag));

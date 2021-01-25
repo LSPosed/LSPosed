@@ -108,8 +108,8 @@
     <string name="settings_group_download">Download and install</string>
     <string name="settings_release_type">Versions to be shown</string>
     <string name="settings_group_framework">Framework</string>
-    <string name="settings_disable_resources">Disabled resource hooks</string>
-    <string name="settings_disable_resources_summary">Workaround for conflicts with theming engines\n<b>WARNING:</b> Modules which try to change resources will not work when this is enabled</string>
+    <string name="settings_enable_resources">Enable resource hooks</string>
+    <string name="settings_enable_resources_summary"><b>WARNING:</b> Resource hooks are deprecated</string>
     <string name="settings_group_app">Application</string>
     <string name="settings_theme">Theme</string>
     <string name="settings_theme_light">Light</string>
@@ -344,4 +344,5 @@
     <string name="menu_scope">Scope</string>
     <string name="enable_scope">Enable scope</string>
     <string name="scope_not_supported">The version of LSPosed you installed does not support module scope, download new version?</string>
+    <string name="settings_variant">Variant</string>
 </resources>
