@@ -27,6 +27,21 @@ import de.robv.android.xposed.XposedHelpers;
 public class XposedInstallerHooker {
 
     public static void hookXposedInstaller(final ClassLoader classLoader) {
+        String variant_ = "None";
+        switch (Main.getEdxpVariant()) {
+            case EdxpImpl.YAHFA:
+                variant_ = "YAHFA";
+                break;
+            case EdxpImpl.SANDHOOK:
+                variant_ = "SandHook";
+                break;
+            case EdxpImpl.NONE:
+            default:
+                variant_ = "Unknown";
+                break;
+        }
+        final String variant = variant_;
+
         // EdXposed Manager R
         try {
             XposedHelpers.findAndHookMethod("org.meowcat.edxposed.manager.Constants", classLoader, "getXposedApiVersion", new XC_MethodReplacement() {
@@ -56,17 +71,6 @@ public class XposedInstallerHooker {
             XposedHelpers.findAndHookMethod("org.meowcat.edxposed.manager.Constants", classLoader, "getXposedVariant", new XC_MethodReplacement() {
                 @Override
                 protected Object replaceHookedMethod(MethodHookParam param) {
-                    String variant = "None";
-                    switch (Main.getEdxpVariant()) {
-                        case EdxpImpl.NONE:
-                            break;
-                        case EdxpImpl.YAHFA:
-                            variant = "YAHFA";
-                            break;
-                        case EdxpImpl.SANDHOOK:
-                            variant = "SandHook";
-                            break;
-                    }
                     return variant;
                 }
             });
@@ -112,16 +116,6 @@ public class XposedInstallerHooker {
                             stringBuilder.append(BuildConfig.VERSION_NAME);
                             stringBuilder.append(" (");
                             String variant = "None";
-                            switch (Main.getEdxpVariant()) {
-                                case EdxpImpl.NONE:
-                                    break;
-                                case EdxpImpl.YAHFA:
-                                    variant = "YAHFA";
-                                    break;
-                                case EdxpImpl.SANDHOOK:
-                                    variant = "SandHook";
-                                    break;
-                            }
                             stringBuilder.append(variant);
                             stringBuilder.append(")");
                             try (ByteArrayInputStream is = new ByteArrayInputStream(stringBuilder.toString().getBytes())) {

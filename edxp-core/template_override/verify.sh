@@ -31,8 +31,8 @@ extract() {
   unzip $opts "$zip" "$file" -d "$dir" >&2
   [ -f "$file_path" ] || abort_verify "$file ${LANG_VERIFY_ERR_NOT_EXIST}"
 
-  unzip $opts "$zip" "$file.s" -d "$TMPDIR_FOR_VERIFY" >&2
-  [ -f "$hash_path" ] || abort_verify "$file.s ${LANG_VERIFY_ERR_NOT_EXIST}"
+  unzip $opts "$zip" "$file.sha256" -d "$TMPDIR_FOR_VERIFY" >&2
+  [ -f "$hash_path" ] || abort_verify "$file.sha256 ${LANG_VERIFY_ERR_NOT_EXIST}"
 
   (echo "$(cat "$hash_path")  $file_path" | sha256sum -c -s -) || abort_verify "${LANG_VERIFY_ERR_MISMATCH} $file"
   ui_print "- ${LANG_VERIFY_SUCCESS} $file" >&1

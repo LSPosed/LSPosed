@@ -158,16 +158,12 @@ if [ "$ARCH" = "x86" ] || [ "$ARCH" = "x64" ]; then
 else
   ui_print "- ${LANG_CUST_INST_EXT_LIB_ARM}"
   extract "$ZIPFILE" 'system/lib/libriru_edxp.so' "${MODPATH}"
-  if [[ "${VARIANT}" == "SandHook" ]]; then
-    extract "$ZIPFILE" 'system/lib/libsandhook.edxp.so' "${MODPATH}"
-  fi
+  extract "$ZIPFILE" 'system/lib/libsandhook.edxp.so' "${MODPATH}"
 
   if [ "$IS64BIT" = true ]; then
     ui_print "- ${LANG_CUST_INST_EXT_LIB_ARM64}"
     extract "$ZIPFILE" 'system/lib64/libriru_edxp.so' "${MODPATH}"
-    if [[ "${VARIANT}" == "SandHook" ]]; then
-     extract "$ZIPFILE" 'system/lib64/libsandhook.edxp.so' "${MODPATH}"
-    fi
+    extract "$ZIPFILE" 'system/lib64/libsandhook.edxp.so' "${MODPATH}"
   fi
 fi
 
@@ -189,9 +185,11 @@ fi
 
 ui_print "- ${LANG_CUST_INST_CONF_CREATE}"
 if [[ -f /data/adb/edxp/misc_path ]]; then
+  # read current MISC_PATH
   MISC_PATH=$(cat /data/adb/edxp/misc_path)
   ui_print "  - ${LANG_CUST_INST_CONF_OLD} $MISC_PATH"
 else
+  # generate random MISC_PATH
   MISC_RAND=$(tr -cd 'A-Za-z0-9' < /dev/urandom | head -c16)
   MISC_PATH="edxp_${MISC_RAND}"
   ui_print "  - ${LANG_CUST_INST_CONF_NEW} ${MISC_RAND}"
@@ -209,20 +207,22 @@ mkdir -p /data/misc/$MISC_PATH || abortC "! ${LANG_CUST_ERR_CONF_CREATE}"
 set_perm /data/misc/$MISC_PATH root root 0771 "u:object_r:magisk_file:s0" || abortC "! ${LANG_CUST_ERR_PERM}"
 echo "[[ -f /data/adb/edxp/keep_data ]] || rm -rf /data/misc/$MISC_PATH" >> "${MODPATH}/uninstall.sh" || abortC "! ${LANG_CUST_ERR_CONF_UNINST}"
 echo "[[ -f /data/adb/edxp/new_install ]] || rm -rf /data/adb/edxp" >> "${MODPATH}/uninstall.sh" || abortC "! ${LANG_CUST_ERR_CONF_UNINST}"
+# TODO: let user select variant
+echo "1" > /data/misc/$MISC_PATH/variant
 
 ui_print "- ${LANG_CUST_INST_COPY_LIB}"
 
 rm -rf "/data/misc/$MISC_PATH/framework"
 mv "${MODPATH}/system/framework" "/data/misc/$MISC_PATH/framework"
 
-if [[ "${VARIANT}" == "SandHook" ]]; then
-  mkdir -p "/data/misc/$MISC_PATH/framework/lib"
-  mv "${MODPATH}/system/lib/libsandhook.edxp.so" "/data/misc/$MISC_PATH/framework/lib/libsandhook.edxp.so"
-  if [ "$IS64BIT" = true ]; then
-    mkdir -p "/data/misc/$MISC_PATH/framework/lib64"
-    mv "${MODPATH}/system/lib64/libsandhook.edxp.so" "/data/misc/$MISC_PATH/framework/lib64/libsandhook.edxp.so"
-  fi
+
+mkdir -p "/data/misc/$MISC_PATH/framework/lib"
+mv "${MODPATH}/system/lib/libsandhook.edxp.so" "/data/misc/$MISC_PATH/framework/lib/libsandhook.edxp.so"
+if [ "$IS64BIT" = true ]; then
+  mkdir -p "/data/misc/$MISC_PATH/framework/lib64"
+  mv "${MODPATH}/system/lib64/libsandhook.edxp.so" "/data/misc/$MISC_PATH/framework/lib64/libsandhook.edxp.so"
 fi
+
 set_perm_recursive /data/misc/$MISC_PATH/framework root root 0755 0644 "u:object_r:magisk_file:s0" || abortC "! ${LANG_CUST_ERR_PERM}"
 
 mkdir -p /data/misc/$MISC_PATH/cache

@@ -59,22 +59,15 @@ require_new_android() {
 }
 
 edxp_check_architecture() {
-    if [[ "${MODID}" == "riru_edxposed_sandhook" ]]; then
-        VARIANT="SandHook"
-        [[ -d "${MODPATH}/../../${MODULES_PATH}/riru_edxposed" ]] && duplicate_installation "YAHFA"
-    else
-        VARIANT="YAHFA"
-        [[ -d "${MODPATH}/../../${MODULES_PATH}/riru_edxposed_sandhook" ]] && duplicate_installation "SandHook"
-    fi
     if [[ "${ARCH}" != "arm" && "${ARCH}" != "arm64" && "${ARCH}" != "x86" && "${ARCH}" != "x64" ]]; then
         abortC "! ${LANG_UTIL_ERR_PLATFORM_UNSUPPORT}: ${ARCH}"
     else
         ui_print "- ${LANG_UTIL_PLATFORM}: ${ARCH}"
-        if [[ "${ARCH}" == "x86" || "${ARCH}" == "x64" ]]; then
-            if [[ "${VARIANT}" == "SandHook" ]]; then
-                require_yahfa
-            fi
-        fi
+        # if [[ "${ARCH}" == "x86" || "${ARCH}" == "x64" ]]; then
+        #     if [[ "${VARIANT}" == "SandHook" ]]; then
+        #         require_yahfa
+        #     fi
+        # fi
     fi
 }
 

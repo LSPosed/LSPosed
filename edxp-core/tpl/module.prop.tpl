@@ -1,5 +1,5 @@
 id=${moduleId}
-name=Riru - Lsposed
+name=Riru - LSPosed
 version=${versionName}
 versionCode=${versionCode}
 author=${authorList}

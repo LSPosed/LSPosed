@@ -61,6 +61,11 @@ namespace edxp {
         return env->NewStringUTF(result.c_str());
     }
 
+    static jstring ConfigManager_getMiscPath(JNI_START) {
+        auto result = ConfigManager::GetInstance()->GetMiscPath();
+        return env->NewStringUTF(result.c_str());
+    }
+
     static jstring ConfigManager_getModulesList(JNI_START) {
         auto module_list = Context::GetInstance()->GetAppModulesList();
         std::ostringstream join;
@@ -85,6 +90,7 @@ namespace edxp {
             NATIVE_METHOD(ConfigManager, getCachePath,
                           "(Ljava/lang/String;)Ljava/lang/String;"),
             NATIVE_METHOD(ConfigManager, getBaseConfigPath,"()Ljava/lang/String;"),
+            NATIVE_METHOD(ConfigManager, getMiscPath,"()Ljava/lang/String;"),
             NATIVE_METHOD(ConfigManager, getModulesList, "()Ljava/lang/String;"),
     };
 

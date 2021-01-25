@@ -70,13 +70,13 @@ public class Main implements KeepAll {
     }
 
     private static void loadEdxpImpls() {
-        String file_name = ConfigManager.getConfigPath("variant");
+        String file_name = ConfigManager.getMiscPath() + "/variant";
         int variant = EdxpImpl.NONE;
         try {
-            String f = new String(Files.readAllBytes(Paths.get(file_name)));
+            String f = new String(Files.readAllBytes(Paths.get(file_name))).trim();
             variant = Integer.parseInt(f);
-        } catch (Exception ignored) {
-
+        } catch (Exception e) {
+            Utils.logE("loadEdxpImpls: ", e);
         }
 
         Utils.logD("Loading variant " + variant);
@@ -90,7 +90,7 @@ public class Main implements KeepAll {
                     Class.forName("com.elderdrivers.riru.edxp.sandhook.core.SandHookEdxpImpl");
                     break;
                 default:
-                    Utils.logE("Unsupported variant" + variant);
+                    Utils.logE("Unsupported variant " + variant);
 
             }
         } catch (ClassNotFoundException e) {
