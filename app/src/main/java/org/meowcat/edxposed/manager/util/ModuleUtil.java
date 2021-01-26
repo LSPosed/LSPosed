@@ -30,7 +30,6 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public final class ModuleUtil {
-    private static final String PLAY_STORE_PACKAGE = "com.android.vending";
     // xposedminversion below this
     public static int MIN_MODULE_VERSION = 2; // reject modules with
     private static ModuleUtil instance = null;
@@ -236,13 +235,7 @@ public final class ModuleUtil {
                 }
 
                 modulesList.println(module.app.sourceDir);
-
-                try {
-                    String installer = pm.getInstallerPackageName(module.app.packageName);
-                    if (!PLAY_STORE_PACKAGE.equals(installer))
-                        enabledModulesList.println(module.app.packageName);
-                } catch (Exception ignored) {
-                }
+                enabledModulesList.println(module.app.packageName);
             }
             modulesList.close();
             enabledModulesList.close();
