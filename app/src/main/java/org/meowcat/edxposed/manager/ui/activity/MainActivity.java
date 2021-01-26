@@ -15,8 +15,10 @@ import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.adapters.AppHelper;
 import org.meowcat.edxposed.manager.adapters.BlackListAdapter;
 import org.meowcat.edxposed.manager.databinding.ActivityMainBinding;
+import org.meowcat.edxposed.manager.ui.fragment.StatusDialogBuilder;
 import org.meowcat.edxposed.manager.util.GlideHelper;
 import org.meowcat.edxposed.manager.util.ModuleUtil;
+import org.meowcat.edxposed.manager.util.NavUtil;
 import org.meowcat.edxposed.manager.util.light.Light;
 
 public class MainActivity extends BaseActivity implements ModuleUtil.ModuleListener {
@@ -46,9 +48,14 @@ public class MainActivity extends BaseActivity implements ModuleUtil.ModuleListe
             startActivity(intent);
         });
         binding.status.setOnClickListener(v -> {
-            Intent intent = new Intent();
-            intent.setClass(getApplicationContext(), EdDownloadActivity.class);
-            startActivity(intent);
+            if (Constants.getXposedVersionCode() != -1) {
+                new StatusDialogBuilder(this)
+                        .setTitle(R.string.info)
+                        .setPositiveButton(android.R.string.ok, null)
+                        .show();
+            } else {
+                NavUtil.startURL(this, getString(R.string.about_source));
+            }
         });
         binding.settings.setOnClickListener(v -> {
             Intent intent = new Intent();
@@ -77,20 +84,8 @@ public class MainActivity extends BaseActivity implements ModuleUtil.ModuleListe
                 .into(binding.appIcon);
         String installedXposedVersion = Constants.getXposedVersion();
         if (installedXposedVersion != null) {
-            if (Constants.getXposedApiVersion() != -1) {
-                binding.statusTitle.setText(R.string.Activated);
-                binding.statusSummary.setText(installedXposedVersion + " (" + Constants.getXposedVariant() + ")");
-                binding.status.setCardBackgroundColor(ContextCompat.getColor(this, R.color.download_status_update_available));
-                binding.statusIcon.setImageResource(R.drawable.ic_check_circle);
-            } else {
-                binding.statusTitle.setText(R.string.Inactivate);
-                binding.statusSummary.setText(R.string.installed_lollipop_inactive);
-                binding.status.setCardBackgroundColor(ContextCompat.getColor(this, R.color.amber_500));
-                binding.statusIcon.setImageResource(R.drawable.ic_warning);
-            }
-        } else if (Constants.getXposedApiVersion() > 0) {
             binding.statusTitle.setText(R.string.Activated);
-            binding.statusSummary.setText(getString(R.string.version_x, Constants.getXposedApiVersion()));
+            binding.statusSummary.setText(installedXposedVersion + " (" + Constants.getXposedVariant() + ")");
             binding.status.setCardBackgroundColor(ContextCompat.getColor(this, R.color.download_status_update_available));
             binding.statusIcon.setImageResource(R.drawable.ic_check_circle);
         } else {
@@ -99,7 +94,6 @@ public class MainActivity extends BaseActivity implements ModuleUtil.ModuleListe
             binding.status.setCardBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
             binding.statusIcon.setImageResource(R.drawable.ic_error);
         }
-        //notifyDataSetChanged();
         binding.modulesSummary.setText(String.format(getString(R.string.ModulesDetail), ModuleUtil.getInstance().getEnabledModules().size()));
         new Thread(() -> new BlackListAdapter(getApplicationContext(), AppHelper.isWhiteListMode()).generateCheckedList());
     }

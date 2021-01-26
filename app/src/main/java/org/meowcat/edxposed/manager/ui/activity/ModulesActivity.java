@@ -36,6 +36,7 @@ import org.meowcat.edxposed.manager.databinding.ActivityModulesBinding;
 import org.meowcat.edxposed.manager.util.GlideApp;
 import org.meowcat.edxposed.manager.util.LinearLayoutManagerFix;
 import org.meowcat.edxposed.manager.util.ModuleUtil;
+import org.meowcat.edxposed.manager.util.NavUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -427,11 +428,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             } else {
                 new MaterialAlertDialogBuilder(this)
                         .setMessage(R.string.scope_not_supported)
-                        .setPositiveButton(R.string.download_view_download, (dialog, which) -> {
-                            Intent intent = new Intent();
-                            intent.setClass(this, EdDownloadActivity.class);
-                            startActivity(intent);
-                        })
+                        .setPositiveButton(R.string.download_view_download, (dialog, which) -> NavUtil.startURL(this, getString(R.string.about_source)))
                         .setNegativeButton(android.R.string.cancel, null)
                         .show();
             }

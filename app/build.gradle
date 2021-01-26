@@ -67,10 +67,8 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     implementation "com.github.topjohnwu.libsu:core:2.5.1"
     implementation 'com.google.android.material:material:1.2.1'
-    implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.takisoft.preferencex:preferencex:1.1.0'
     implementation 'com.takisoft.preferencex:preferencex-colorpicker:1.1.0'
-    implementation 'com.timehop.stickyheadersrecyclerview:library:0.4.3@aar'
     implementation 'tech.rectifier.preferencex-android:preferencex-simplemenu:88f93154b2'
     implementation 'me.zhanghai.android.appiconloader:appiconloader-glide:1.2.0'
     implementation 'me.zhanghai.android.fastscroll:library:1.1.5'

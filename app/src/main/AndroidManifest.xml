@@ -4,8 +4,6 @@
     package="org.meowcat.edxposed.manager">
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
@@ -30,9 +28,6 @@
         <activity
             android:name=".ui.activity.LogsActivity"
             android:label="@string/Logs" />
-        <activity
-            android:name=".ui.activity.EdDownloadActivity"
-            android:label="@string/Install" />
         <activity android:name=".ui.activity.BlackListActivity" />
         <activity
             android:name=".ui.activity.ModuleScopeActivity"
