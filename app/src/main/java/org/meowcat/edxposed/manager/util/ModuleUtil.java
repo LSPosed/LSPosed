@@ -1,7 +1,5 @@
 package org.meowcat.edxposed.manager.util;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -17,6 +15,7 @@ import com.google.android.material.snackbar.Snackbar;
 import org.meowcat.edxposed.manager.App;
 import org.meowcat.edxposed.manager.Constants;
 import org.meowcat.edxposed.manager.R;
+import org.meowcat.edxposed.manager.adapters.AppHelper;
 import org.meowcat.edxposed.manager.databinding.ActivityModulesBinding;
 
 import java.io.IOException;
@@ -33,15 +32,15 @@ public final class ModuleUtil {
     private static ModuleUtil instance = null;
     private final PackageManager pm;
     private final List<ModuleListener> listeners = new CopyOnWriteArrayList<>();
-    private final SharedPreferences pref;
     //private InstalledModule framework = null;
     private Map<String, InstalledModule> installedModules;
+    private final List<String> enabledModules;
     private boolean isReloading = false;
     private Toast toast;
 
     private ModuleUtil() {
-        pref = App.getInstance().getSharedPreferences("enabled_modules", Context.MODE_PRIVATE);
         pm = App.getInstance().getPackageManager();
+        enabledModules = AppHelper.getEnabledModuleList();
     }
 
     public static synchronized ModuleUtil getInstance() {
@@ -140,9 +139,9 @@ public final class ModuleUtil {
 
     public void setModuleEnabled(String packageName, boolean enabled) {
         if (enabled) {
-            pref.edit().putInt(packageName, 1).apply();
+            enabledModules.add(packageName);
         } else {
-            pref.edit().remove(packageName).apply();
+            enabledModules.remove(packageName);
         }
         for (ModuleListener listener : listeners) {
             listener.onModuleEnableChange(instance);
@@ -150,13 +149,13 @@ public final class ModuleUtil {
     }
 
     public boolean isModuleEnabled(String packageName) {
-        return pref.contains(packageName);
+        return enabledModules.contains(packageName);
     }
 
     public List<InstalledModule> getEnabledModules() {
         LinkedList<InstalledModule> result = new LinkedList<>();
 
-        for (String packageName : pref.getAll().keySet()) {
+        for (String packageName : enabledModules) {
             InstalledModule module = getModule(packageName);
             if (module != null)
                 result.add(module);

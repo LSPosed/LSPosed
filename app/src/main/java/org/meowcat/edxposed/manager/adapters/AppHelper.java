@@ -245,6 +245,20 @@ public class AppHelper {
         menuHelper.show();
     }
 
+    public static List<String> getEnabledModuleList() {
+        File file = new File(Constants.getEnabledModulesListFile());
+        List<String> s = new ArrayList<>();
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+            for (String line; (line = bufferedReader.readLine()) != null; ) {
+                s.add(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return s;
+    }
+
     static List<String> getScopeList(String modulePackageName) {
         if (scopeList.containsKey(modulePackageName)) {
             return scopeList.get(modulePackageName);
