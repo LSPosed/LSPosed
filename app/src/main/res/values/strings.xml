@@ -252,10 +252,8 @@
     <string name="pref_black_white_list_summary">After opening, you can set the list in \"Application\"\nBlack List mode: Selected app NOT to load LSPosed modules\nNote: using app list mode might break system-wide modules\' functions</string>
     <string name="white_list_mode_summary">White List mode: Only selected app load LSPosed modules\nApp list mode is required to enable</string>
 
-    <string name="support_material_xda" translatable="false">http://edxp.meowcat.org/</string>
-    <string name="support_faq_url" translatable="false">http://github.com/ElderDrivers/LSPosed/wiki</string>
-    <string name="support_donate_url" translatable="false">http://edxp.meowcat.org/donate</string>
-    <string name="about_source" translatable="false">https://github.com/ElderDrivers/LSPosedManager/</string>
+    <string name="support_faq_url" translatable="false">https://github.com/LSPosed/LSPosed/wiki</string>
+    <string name="about_source" translatable="false">https://github.com/LSPosed/LSPosed/</string>
 
     <string name="solohsu" translatable="false">givein2u</string>
     <string name="mlgmxyysd" translatable="false">MlgmXyysd</string>
