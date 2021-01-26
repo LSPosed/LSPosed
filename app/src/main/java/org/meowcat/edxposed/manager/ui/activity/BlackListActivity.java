@@ -3,6 +3,7 @@ package org.meowcat.edxposed.manager.ui.activity;
 import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,7 +36,7 @@ public class BlackListActivity extends BaseActivity implements AppAdapter.Callba
             binding.swipeRefreshLayout.setRefreshing(true);
         }
     };
-    private final Handler handler = new Handler();
+    private final Handler handler = new Handler(Looper.getMainLooper());
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

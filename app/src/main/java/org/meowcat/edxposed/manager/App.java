@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -99,7 +100,7 @@ public class App extends Application implements Application.ActivityLifecycleCal
 
         instance = this;
         uiThread = Thread.currentThread();
-        mainHandler = new Handler();
+        mainHandler = new Handler(Looper.getMainLooper());
 
         pref = PreferenceManager.getDefaultSharedPreferences(this);
 

@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -52,7 +53,7 @@ public class LogsActivity extends BaseActivity {
     private final File fileAllLog = new File(Constants.getBaseDir() + "log/all.log");
     private final File fileAllLogOld = new File(Constants.getBaseDir() + "log/all.log.old");
     private LogsAdapter adapter;
-    private final Handler handler = new Handler();
+    private final Handler handler = new Handler(Looper.getMainLooper());
     private ActivityLogsBinding binding;
     private LinearLayoutManagerFix layoutManager;
 

@@ -78,12 +78,6 @@
         <receiver
             android:name=".util.NotificationUtil$RebootReceiver"
             android:exported="false" />
-        <receiver
-            android:name=".receivers.BootReceiver"
-            android:enabled="true"
-            android:exported="true"
-            tools:ignore="ExportedReceiver" />
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
