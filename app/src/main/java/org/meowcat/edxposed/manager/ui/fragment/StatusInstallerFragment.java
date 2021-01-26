@@ -101,7 +101,7 @@ public class StatusInstallerFragment extends Fragment {
         binding = StatusInstallerBinding.inflate(inflater, container, false);
 
         String installedXposedVersion = Constants.getXposedVersion();
-        String mAppVer = String.format("v%s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE);
+        String mAppVer = String.format("%s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE);
         binding.manager.setText(mAppVer);
         if (installedXposedVersion != null) {
             binding.api.setText(Constants.getXposedApiVersion() + ".0");

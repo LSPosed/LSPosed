@@ -13,8 +13,8 @@ android {
         applicationId "org.meowcat.edxposed.manager"
         minSdkVersion androidMinSdkVersion.toInteger()
         targetSdkVersion androidTargetSdkVersion.toInteger()
-        versionCode 458010
-        versionName "4.5.8.1"
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
     }
 
     compileOptions {
