@@ -26,7 +26,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
-import org.meowcat.edxposed.manager.App;
 import org.meowcat.edxposed.manager.BuildConfig;
 import org.meowcat.edxposed.manager.Constants;
 import org.meowcat.edxposed.manager.R;
@@ -70,7 +69,7 @@ public class LogsActivity extends BaseActivity {
         }
         setupWindowInsets(binding.snackbar, binding.recyclerView);
 
-        if (!App.getPreferences().getBoolean("hide_logcat_warning", false)) {
+        if (!preferences.getBoolean("hide_logcat_warning", false)) {
             DialogInstallWarningBinding binding = DialogInstallWarningBinding.inflate(getLayoutInflater());
             new MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.install_warning_title)
@@ -78,7 +77,7 @@ public class LogsActivity extends BaseActivity {
                     .setView(binding.getRoot())
                     .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                         if (binding.checkbox.isChecked())
-                            App.getPreferences().edit().putBoolean("hide_logcat_warning", true).apply();
+                            preferences.edit().putBoolean("hide_logcat_warning", true).apply();
                     })
                     .setCancelable(false)
                     .show();
@@ -87,7 +86,7 @@ public class LogsActivity extends BaseActivity {
         binding.recyclerView.setAdapter(adapter);
         layoutManager = new LinearLayoutManagerFix(this);
         binding.recyclerView.setLayoutManager(layoutManager);
-        if (App.getPreferences().getBoolean("disable_verbose_log", false)) {
+        if (preferences.getBoolean("disable_verbose_log", false)) {
             binding.slidingTabs.setVisibility(View.GONE);
         }
         binding.slidingTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

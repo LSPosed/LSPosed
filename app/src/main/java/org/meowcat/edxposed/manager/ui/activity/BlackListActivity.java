@@ -14,7 +14,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.DividerItemDecoration;
 
-import org.meowcat.edxposed.manager.App;
 import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.adapters.AppAdapter;
 import org.meowcat.edxposed.manager.adapters.AppHelper;
@@ -56,7 +55,7 @@ public class BlackListActivity extends BaseActivity implements AppAdapter.Callba
         binding.recyclerView.setAdapter(appAdapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManagerFix(this));
         FastScrollerBuilder fastScrollerBuilder = new FastScrollerBuilder(binding.recyclerView);
-        if (!App.getPreferences().getBoolean("md2", false)) {
+        if (!preferences.getBoolean("md2", false)) {
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
                     DividerItemDecoration.VERTICAL);
             binding.recyclerView.addItemDecoration(dividerItemDecoration);

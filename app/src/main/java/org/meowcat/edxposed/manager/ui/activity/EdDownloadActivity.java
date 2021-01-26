@@ -52,7 +52,7 @@ public class EdDownloadActivity extends BaseActivity {
         binding.tabLayout.setupWithViewPager(binding.pager);
         //new JSONParser().execute();
 
-        if (!App.getPreferences().getBoolean("hide_install_warning", false)) {
+        if (!preferences.getBoolean("hide_install_warning", false)) {
             DialogInstallWarningBinding binding = DialogInstallWarningBinding.inflate(getLayoutInflater());
             new MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.install_warning_title)
@@ -60,7 +60,7 @@ public class EdDownloadActivity extends BaseActivity {
                     .setView(binding.getRoot())
                     .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                         if (binding.checkbox.isChecked())
-                            App.getPreferences().edit().putBoolean("hide_install_warning", true).apply();
+                            preferences.edit().putBoolean("hide_install_warning", true).apply();
                     })
                     .setCancelable(false)
                     .show();

@@ -44,11 +44,11 @@ public class BaseActivity extends AppCompatActivity {
 
     private static final String THEME_DEFAULT = "DEFAULT";
     private static final String THEME_BLACK = "BLACK";
+    protected static SharedPreferences preferences;
     private String theme;
-    protected SharedPreferences preferences;
 
     public static boolean isBlackNightTheme() {
-        return App.getPreferences().getBoolean("black_dark_theme", false) || App.getPreferences().getBoolean("md2", false);
+        return preferences.getBoolean("black_dark_theme", false) || preferences.getBoolean("md2", false);
     }
 
     public static String getTheme(Context context) {
@@ -89,19 +89,19 @@ public class BaseActivity extends AppCompatActivity {
 
     @StyleRes
     private int getCustomTheme() {
-        String baseThemeName = App.getPreferences().getBoolean("colorized_action_bar", false) && !App.getPreferences().getBoolean("md2", false) ?
+        String baseThemeName = preferences.getBoolean("colorized_action_bar", false) && !preferences.getBoolean("md2", false) ?
                 "ThemeOverlay.ActionBarPrimaryColor" : "ThemeOverlay";
         String customThemeName;
         String primaryColorEntryName = "colorPrimary";
         for (CustomThemeColor color : CustomThemeColors.Primary.values()) {
-            if (App.getPreferences().getInt("primary_color", ContextCompat.getColor(this, R.color.colorPrimary))
+            if (preferences.getInt("primary_color", ContextCompat.getColor(this, R.color.colorPrimary))
                     == ContextCompat.getColor(this, color.getResourceId())) {
                 primaryColorEntryName = color.getResourceEntryName();
             }
         }
         String accentColorEntryName = "colorAccent";
         for (CustomThemeColor color : CustomThemeColors.Accent.values()) {
-            if (App.getPreferences().getInt("accent_color", ContextCompat.getColor(this, R.color.colorAccent))
+            if (preferences.getInt("accent_color", ContextCompat.getColor(this, R.color.colorAccent))
                     == ContextCompat.getColor(this, color.getResourceId())) {
                 accentColorEntryName = color.getResourceEntryName();
             }
@@ -118,8 +118,8 @@ public class BaseActivity extends AppCompatActivity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         preferences = App.getPreferences();
-        AppCompatDelegate.setDefaultNightMode(App.getPreferences().getInt("theme", -1));
-        theme = getTheme(this) + getCustomTheme() + App.getPreferences().getBoolean("md2", false);
+        AppCompatDelegate.setDefaultNightMode(preferences.getInt("theme", -1));
+        theme = getTheme(this) + getCustomTheme() + preferences.getBoolean("md2", false);
     }
 
     public int getThemedColor(int id) {
@@ -133,13 +133,13 @@ public class BaseActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (!(this instanceof MainActivity)) {
-            if (App.getPreferences().getBoolean("transparent_status_bar", false)) {
+            if (preferences.getBoolean("transparent_status_bar", false)) {
                 getWindow().setStatusBarColor(getThemedColor(R.attr.colorActionBar));
             } else {
                 getWindow().setStatusBarColor(getThemedColor(R.attr.colorPrimaryDark));
             }
         }
-        if (!Objects.equals(theme, getTheme(this) + getCustomTheme() + App.getPreferences().getBoolean("md2", false))) {
+        if (!Objects.equals(theme, getTheme(this) + getCustomTheme() + preferences.getBoolean("md2", false))) {
             recreate();
         }
     }
@@ -158,7 +158,7 @@ public class BaseActivity extends AppCompatActivity {
             theme.applyStyle(resid, false);
         }
         theme.applyStyle(getCustomTheme(), true);
-        if (App.getPreferences().getBoolean("md2", false) && !(this instanceof MainActivity)) {
+        if (preferences.getBoolean("md2", false) && !(this instanceof MainActivity)) {
             theme.applyStyle(R.style.ThemeOverlay_Md2, true);
         }
         if (this instanceof MainActivity) {

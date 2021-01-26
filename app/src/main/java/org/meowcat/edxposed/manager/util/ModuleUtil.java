@@ -1,5 +1,6 @@
 package org.meowcat.edxposed.manager.util;
 
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -37,10 +38,12 @@ public final class ModuleUtil {
     private final List<String> enabledModules;
     private boolean isReloading = false;
     private Toast toast;
+    private final SharedPreferences prefs;
 
     private ModuleUtil() {
         pm = App.getInstance().getPackageManager();
         enabledModules = AppHelper.getEnabledModuleList();
+        prefs = App.getPreferences();
     }
 
     public static synchronized ModuleUtil getInstance() {
@@ -174,7 +177,7 @@ public final class ModuleUtil {
         try {
             Log.i(App.TAG, "ModuleUtil -> updating modules.list");
             int installedXposedVersion = Constants.getXposedApiVersion();
-            if (!App.getPreferences().getBoolean("skip_xposedminversion_check", false) && installedXposedVersion <= 0 && showToast) {
+            if (!prefs.getBoolean("skip_xposedminversion_check", false) && installedXposedVersion <= 0 && showToast) {
                 if (binding != null) {
                     Snackbar.make(binding.snackbar, R.string.notinstalled, Snackbar.LENGTH_SHORT).show();
                 } else {
@@ -188,7 +191,7 @@ public final class ModuleUtil {
             List<InstalledModule> enabledModules = getEnabledModules();
             for (InstalledModule module : enabledModules) {
 
-                if (!App.getPreferences().getBoolean("skip_xposedminversion_check", false) && (module.minVersion > installedXposedVersion || module.minVersion < MIN_MODULE_VERSION) && showToast) {
+                if (!prefs.getBoolean("skip_xposedminversion_check", false) && (module.minVersion > installedXposedVersion || module.minVersion < MIN_MODULE_VERSION) && showToast) {
                     if (binding != null) {
                         Snackbar.make(binding.snackbar, R.string.notinstalled, Snackbar.LENGTH_SHORT).show();
                     } else {
@@ -287,7 +290,7 @@ public final class ModuleUtil {
                 this.description = "";
             } else {
                 int version = Constants.getXposedApiVersion();
-                if (version > 0 && App.getPreferences().getBoolean("skip_xposedminversion_check", false)) {
+                if (version > 0 && prefs.getBoolean("skip_xposedminversion_check", false)) {
                     this.minVersion = version;
                 } else {
                     Object minVersionRaw = app.metaData.get("xposedminversion");
