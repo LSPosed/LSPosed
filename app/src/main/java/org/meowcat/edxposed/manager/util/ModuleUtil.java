@@ -22,6 +22,7 @@ import org.meowcat.edxposed.manager.databinding.ActivityModulesBinding;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -157,15 +158,15 @@ public final class ModuleUtil {
 
     public List<InstalledModule> getEnabledModules() {
         LinkedList<InstalledModule> result = new LinkedList<>();
-
-        for (String packageName : enabledModules) {
-            InstalledModule module = getModule(packageName);
-            if (module != null)
+        Iterator<String> iterator = enabledModules.iterator();
+        while (iterator.hasNext()) {
+            InstalledModule module = getModule(iterator.next());
+            if (module != null) {
                 result.add(module);
-            else
-                setModuleEnabled(packageName, false);
+            } else {
+                iterator.remove();
+            }
         }
-
         return result;
     }
 
