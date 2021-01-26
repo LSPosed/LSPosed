@@ -19,7 +19,6 @@ import org.meowcat.edxposed.manager.Constants;
 import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.databinding.ActivityModulesBinding;
 import org.meowcat.edxposed.manager.repo.ModuleVersion;
-import org.meowcat.edxposed.manager.repo.RepoDb;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -77,9 +76,9 @@ public final class ModuleUtil {
         }
 
         Map<String, InstalledModule> modules = new HashMap<>();
-        RepoDb.beginTransation();
+        //RepoDb.beginTransation();
         try {
-            RepoDb.deleteAllInstalledModules();
+            //RepoDb.deleteAllInstalledModules();
 
             for (PackageInfo pkg : pm.getInstalledPackages(PackageManager.GET_META_DATA)) {
                 ApplicationInfo app = pkg.applicationInfo;
@@ -94,13 +93,13 @@ public final class ModuleUtil {
                     framework = installed = new InstalledModule(pkg, true);
                 }*/
 
-                if (installed != null)
-                    RepoDb.insertInstalledModule(installed);
+                //if (installed != null)
+                //    RepoDb.insertInstalledModule(installed);
             }
 
-            RepoDb.setTransactionSuccessful();
+            //RepoDb.setTransactionSuccessful();
         } finally {
-            RepoDb.endTransation();
+            //RepoDb.endTransation();
         }
 
         installedModules = modules;
@@ -117,7 +116,7 @@ public final class ModuleUtil {
         try {
             pkg = pm.getPackageInfo(packageName, PackageManager.GET_META_DATA);
         } catch (NameNotFoundException e) {
-            RepoDb.deleteInstalledModule(packageName);
+            //RepoDb.deleteInstalledModule(packageName);
             InstalledModule old = installedModules.remove(packageName);
             if (old != null) {
                 for (ModuleListener listener : listeners) {
@@ -130,7 +129,7 @@ public final class ModuleUtil {
         ApplicationInfo app = pkg.applicationInfo;
         if (app.enabled && app.metaData != null && app.metaData.containsKey("xposedmodule")) {
             InstalledModule module = new InstalledModule(pkg, false);
-            RepoDb.insertInstalledModule(module);
+            //RepoDb.insertInstalledModule(module);
             installedModules.put(packageName, module);
             for (ModuleListener listener : listeners) {
                 listener.onSingleInstalledModuleReloaded(instance, packageName,
@@ -138,7 +137,7 @@ public final class ModuleUtil {
             }
             return module;
         } else {
-            RepoDb.deleteInstalledModule(packageName);
+            //RepoDb.deleteInstalledModule(packageName);
             InstalledModule old = installedModules.remove(packageName);
             if (old != null) {
                 for (ModuleListener listener : listeners) {
@@ -182,6 +181,9 @@ public final class ModuleUtil {
             pref.edit().putInt(packageName, 1).apply();
         } else {
             pref.edit().remove(packageName).apply();
+        }
+        for (ModuleListener listener : listeners) {
+            listener.onModuleEnableChange(instance);
         }
     }
 
@@ -287,6 +289,8 @@ public final class ModuleUtil {
          * Called whenever all installed modules have been reloaded
          */
         void onInstalledModulesReloaded(ModuleUtil moduleUtil);
+
+        void onModuleEnableChange(ModuleUtil moduleUtil);
     }
 
     public class InstalledModule {

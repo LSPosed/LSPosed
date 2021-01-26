@@ -68,7 +68,7 @@
             android:title="@string/pure_black_dark_theme"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
-    <PreferenceCategory
+<!--    <PreferenceCategory
         android:title="@string/settings_group_download"
         app:iconSpaceReserved="false">
 
@@ -109,7 +109,7 @@
             app:iconSpaceReserved="false" />
 
     </PreferenceCategory>
-
+-->
     <PreferenceCategory
         android:key="group_framework"
         android:title="@string/settings_group_framework"

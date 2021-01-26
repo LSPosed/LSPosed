@@ -13,16 +13,13 @@ import android.os.Handler;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import org.meowcat.edxposed.manager.adapters.AppHelper;
 import org.meowcat.edxposed.manager.receivers.PackageChangeReceiver;
 import org.meowcat.edxposed.manager.ui.activity.CrashReportActivity;
 import org.meowcat.edxposed.manager.util.ModuleUtil;
 import org.meowcat.edxposed.manager.util.NotificationUtil;
-import org.meowcat.edxposed.manager.util.RepoLoader;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -40,7 +37,7 @@ public class App extends Application implements Application.ActivityLifecycleCal
     private static Thread uiThread;
     private static Handler mainHandler;
     private SharedPreferences pref;
-    private AppCompatActivity currentActivity = null;
+    //private AppCompatActivity currentActivity = null;
     private boolean isUiLoaded = false;
 
     public static App getInstance() {
@@ -124,7 +121,7 @@ public class App extends Application implements Application.ActivityLifecycleCal
             }
         }
 
-        RepoLoader.getInstance().triggerFirstLoadIfNecessary();
+        //RepoLoader.getInstance().triggerFirstLoadIfNecessary();
     }
 
     private void registerReceivers() {
@@ -145,25 +142,26 @@ public class App extends Application implements Application.ActivityLifecycleCal
         mkdir("log");
     }
 
-    public void updateProgressIndicator(final SwipeRefreshLayout refreshLayout) {
-        final boolean isLoading = RepoLoader.getInstance().isLoading() || ModuleUtil.getInstance().isLoading();
-        runOnUiThread(() -> {
-            synchronized (App.this) {
-                if (currentActivity != null) {
-                    if (refreshLayout != null)
-                        refreshLayout.setRefreshing(isLoading);
+    /*
+        public void updateProgressIndicator(final SwipeRefreshLayout refreshLayout) {
+            final boolean isLoading = RepoLoader.getInstance().isLoading() || ModuleUtil.getInstance().isLoading();
+            runOnUiThread(() -> {
+                synchronized (App.this) {
+                    if (currentActivity != null) {
+                        if (refreshLayout != null)
+                            refreshLayout.setRefreshing(isLoading);
+                    }
                 }
-            }
-        });
-    }
-
+            });
+        }
+    */
     @Override
     public synchronized void onActivityCreated(@NonNull Activity activity, Bundle savedInstanceState) {
         if (isUiLoaded) {
             return;
         }
 
-        RepoLoader.getInstance().triggerFirstLoadIfNecessary();
+        //RepoLoader.getInstance().triggerFirstLoadIfNecessary();
         isUiLoaded = true;
 
         if (pref.getBoolean("hook_modules", true)) {
@@ -184,13 +182,13 @@ public class App extends Application implements Application.ActivityLifecycleCal
 
     @Override
     public synchronized void onActivityResumed(@NonNull Activity activity) {
-        currentActivity = (AppCompatActivity) activity;
-        updateProgressIndicator(null);
+        //currentActivity = (AppCompatActivity) activity;
+        //updateProgressIndicator(null);
     }
 
     @Override
     public synchronized void onActivityPaused(@NonNull Activity activity) {
-        currentActivity = null;
+        //currentActivity = null;
     }
 
     @Override

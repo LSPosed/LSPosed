@@ -219,6 +219,11 @@ public class DownloadActivity extends BaseActivity implements RepoLoader.RepoLis
     }
 
     @Override
+    public void onModuleEnableChange(ModuleUtil moduleUtil) {
+
+    }
+
+    @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         changed = true;
     }

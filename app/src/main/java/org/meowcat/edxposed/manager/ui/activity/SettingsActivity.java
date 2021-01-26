@@ -21,7 +21,6 @@ import org.meowcat.edxposed.manager.Constants;
 import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.databinding.ActivitySettingsBinding;
 import org.meowcat.edxposed.manager.ui.widget.IntegerListPreference;
-import org.meowcat.edxposed.manager.util.RepoLoader;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -112,7 +111,7 @@ public class SettingsActivity extends BaseActivity {
         @Override
         public void onCreatePreferencesFix(Bundle savedInstanceState, String rootKey) {
             addPreferencesFromResource(R.xml.prefs);
-
+/*
             Preference releaseType = findPreference("release_type_global");
             if (releaseType != null) {
                 releaseType.setOnPreferenceChangeListener((preference, newValue) -> {
@@ -120,7 +119,7 @@ public class SettingsActivity extends BaseActivity {
                     return true;
                 });
             }
-
+*/
             SwitchPreferenceCompat prefWhiteListMode = findPreference("white_list_switch");
             if (prefWhiteListMode != null) {
                 prefWhiteListMode.setChecked(Files.exists(whiteListModeFlag));

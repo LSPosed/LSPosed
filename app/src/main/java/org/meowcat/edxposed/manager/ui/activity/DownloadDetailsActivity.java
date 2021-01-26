@@ -160,6 +160,11 @@ public class DownloadDetailsActivity extends BaseActivity implements RepoLoader.
     }
 
     @Override
+    public void onModuleEnableChange(ModuleUtil moduleUtil) {
+
+    }
+
+    @Override
     public void onSingleInstalledModuleReloaded(ModuleUtil moduleUtil, String packageName, ModuleUtil.InstalledModule module) {
         if (this.packageName.equals(packageName))
             reload();

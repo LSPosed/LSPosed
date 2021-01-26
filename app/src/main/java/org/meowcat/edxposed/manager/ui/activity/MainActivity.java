@@ -17,12 +17,11 @@ import org.meowcat.edxposed.manager.adapters.BlackListAdapter;
 import org.meowcat.edxposed.manager.databinding.ActivityMainBinding;
 import org.meowcat.edxposed.manager.util.GlideHelper;
 import org.meowcat.edxposed.manager.util.ModuleUtil;
-import org.meowcat.edxposed.manager.util.RepoLoader;
 import org.meowcat.edxposed.manager.util.light.Light;
 
-public class MainActivity extends BaseActivity implements RepoLoader.RepoListener, ModuleUtil.ModuleListener {
+public class MainActivity extends BaseActivity implements /*RepoLoader.RepoListener, */ModuleUtil.ModuleListener {
     ActivityMainBinding binding;
-    private RepoLoader repoLoader;
+    //private RepoLoader repoLoader;
 
     @SuppressLint("PrivateResource")
     @Override
@@ -34,23 +33,23 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
             if (Light.setLightSourceAlpha(getWindow().getDecorView(), 0.01f, 0.029f)) {
                 binding.status.setElevation(24);
                 binding.modules.setElevation(12);
-                binding.downloads.setElevation(12);
+                //binding.downloads.setElevation(12);
             }
         });
         setupWindowInsets(binding.snackbar, null);
-        repoLoader = RepoLoader.getInstance();
+        //repoLoader = RepoLoader.getInstance();
         ModuleUtil.getInstance().addListener(this);
-        repoLoader.addListener(this, false);
+        //repoLoader.addListener(this, false);
         binding.modules.setOnClickListener(v -> {
             Intent intent = new Intent();
             intent.setClass(getApplicationContext(), ModulesActivity.class);
             startActivity(intent);
         });
-        binding.downloads.setOnClickListener(v -> {
+        /*binding.downloads.setOnClickListener(v -> {
             Intent intent = new Intent();
             intent.setClass(getApplicationContext(), DownloadActivity.class);
             startActivity(intent);
-        });
+        });*/
         binding.apps.setOnClickListener(v -> {
             Intent intent = new Intent();
             intent.setClass(getApplicationContext(), BlackListActivity.class);
@@ -110,22 +109,12 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
             binding.status.setCardBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
             binding.statusIcon.setImageResource(R.drawable.ic_error);
         }
-        notifyDataSetChanged();
+        //notifyDataSetChanged();
+        binding.modulesSummary.setText(String.format(getString(R.string.ModulesDetail), ModuleUtil.getInstance().getEnabledModules().size()));
         new Thread(() -> new BlackListAdapter(getApplicationContext(), AppHelper.isWhiteListMode()).generateCheckedList());
     }
 
-    private int extractIntPart(String str) {
-        int result = 0, length = str.length();
-        for (int offset = 0; offset < length; offset++) {
-            char c = str.charAt(offset);
-            if ('0' <= c && c <= '9')
-                result = result * 10 + (c - '0');
-            else
-                break;
-        }
-        return result;
-    }
-
+/*
     private void notifyDataSetChanged() {
         runOnUiThread(() -> {
             String frameworkUpdateVersion = repoLoader.getFrameworkUpdateVersion();
@@ -142,28 +131,33 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
             }
         });
     }
-
+*/
 
     @Override
     public void onInstalledModulesReloaded(ModuleUtil moduleUtil) {
-        notifyDataSetChanged();
+        //notifyDataSetChanged();
+    }
+
+    @Override
+    public void onModuleEnableChange(ModuleUtil moduleUtil) {
+        binding.modulesSummary.setText(String.format(getString(R.string.ModulesDetail), moduleUtil.getEnabledModules().size()));
     }
 
     @Override
     public void onSingleInstalledModuleReloaded(ModuleUtil moduleUtil, String packageName, ModuleUtil.InstalledModule module) {
-        notifyDataSetChanged();
+        //notifyDataSetChanged();
     }
 
-    @Override
+    /*@Override
     public void onRepoReloaded(RepoLoader loader) {
         notifyDataSetChanged();
-    }
+    }*/
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         ModuleUtil.getInstance().removeListener(this);
-        repoLoader.removeListener(this);
+        //repoLoader.removeListener(this);
     }
 
 }

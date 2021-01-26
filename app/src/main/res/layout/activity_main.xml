@@ -172,7 +172,7 @@
                 </RelativeLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.card.MaterialCardView
+<!--            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/downloads"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -222,7 +222,7 @@
                         android:textColor="@android:color/darker_gray" />
                 </RelativeLayout>
             </com.google.android.material.card.MaterialCardView>
-
+-->
             <LinearLayout
                 android:id="@+id/apps"
                 android:layout_width="match_parent"

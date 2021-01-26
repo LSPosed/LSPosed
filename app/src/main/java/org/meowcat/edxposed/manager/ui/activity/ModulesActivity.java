@@ -32,22 +32,13 @@ import org.meowcat.edxposed.manager.BuildConfig;
 import org.meowcat.edxposed.manager.Constants;
 import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.databinding.ActivityModulesBinding;
-import org.meowcat.edxposed.manager.repo.Module;
-import org.meowcat.edxposed.manager.repo.ModuleVersion;
-import org.meowcat.edxposed.manager.repo.ReleaseType;
-import org.meowcat.edxposed.manager.repo.RepoDb;
 import org.meowcat.edxposed.manager.util.GlideApp;
 import org.meowcat.edxposed.manager.util.InstallApkUtil;
 import org.meowcat.edxposed.manager.util.LinearLayoutManagerFix;
 import org.meowcat.edxposed.manager.util.ModuleUtil;
-import org.meowcat.edxposed.manager.util.NavUtil;
-import org.meowcat.edxposed.manager.util.RepoLoader;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.text.DateFormat;
@@ -288,7 +279,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                     }
                 }
             }
-        } else if (requestCode == 44) {
+        }/* else if (requestCode == 44) {
             if (data != null) {
                 Uri uri = data.getData();
                 if (uri != null) {
@@ -299,7 +290,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                     }
                 }
             }
-        }
+        }*/
     }
 
     @Override
@@ -340,51 +331,52 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         return super.onOptionsItemSelected(item);
     }
 
-    private void importModules(Uri uri) {
-        RepoLoader repoLoader = RepoLoader.getInstance();
-        List<Module> list = new ArrayList<>();
+    /*
+        private void importModules(Uri uri) {
+            RepoLoader repoLoader = RepoLoader.getInstance();
+            List<Module> list = new ArrayList<>();
 
-        try {
-            InputStream inputStream = getContentResolver().openInputStream(uri);
-            InputStreamReader isr = new InputStreamReader(inputStream);
-            BufferedReader br = new BufferedReader(isr);
-            String line;
-            while ((line = br.readLine()) != null) {
-                Module m = repoLoader.getModule(line);
+            try {
+                InputStream inputStream = getContentResolver().openInputStream(uri);
+                InputStreamReader isr = new InputStreamReader(inputStream);
+                BufferedReader br = new BufferedReader(isr);
+                String line;
+                while ((line = br.readLine()) != null) {
+                    Module m = repoLoader.getModule(line);
 
-                if (m == null) {
-                    Snackbar.make(binding.snackbar, getString(R.string.download_details_not_found, line), Snackbar.LENGTH_SHORT).show();
-                } else {
-                    list.add(m);
+                    if (m == null) {
+                        Snackbar.make(binding.snackbar, getString(R.string.download_details_not_found, line), Snackbar.LENGTH_SHORT).show();
+                    } else {
+                        list.add(m);
+                    }
+                }
+                br.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            for (final Module m : list) {
+                if (moduleUtil.getModule(m.packageName) != null) {
+                    continue;
+                }
+                ModuleVersion mv = null;
+                for (int i = 0; i < m.versions.size(); i++) {
+                    ModuleVersion mvTemp = m.versions.get(i);
+
+                    if (mvTemp.relType == ReleaseType.STABLE) {
+                        mv = mvTemp;
+                        break;
+                    }
+                }
+
+                if (mv != null) {
+                    NavUtil.startURL(this, mv.downloadLink);
                 }
             }
-            br.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+
+            ModuleUtil.getInstance().reloadInstalledModules();
         }
-
-        for (final Module m : list) {
-            if (moduleUtil.getModule(m.packageName) != null) {
-                continue;
-            }
-            ModuleVersion mv = null;
-            for (int i = 0; i < m.versions.size(); i++) {
-                ModuleVersion mvTemp = m.versions.get(i);
-
-                if (mvTemp.relType == ReleaseType.STABLE) {
-                    mv = mvTemp;
-                    break;
-                }
-            }
-
-            if (mv != null) {
-                NavUtil.startURL(this, mv.downloadLink);
-            }
-        }
-
-        ModuleUtil.getInstance().reloadInstalledModules();
-    }
-
+    */
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -406,6 +398,11 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
     }
 
     @Override
+    public void onModuleEnableChange(ModuleUtil moduleUtil) {
+
+    }
+
+    @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         ModuleUtil.InstalledModule module = ModuleUtil.getInstance().getModule(selectedPackageName);
         if (module == null) {
@@ -424,14 +421,14 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 Snackbar.make(binding.snackbar, R.string.module_no_ui, Snackbar.LENGTH_LONG).show();
             }
             return true;
-        } else if (itemId == R.id.menu_download_updates) {
+        /*} else if (itemId == R.id.menu_download_updates) {
             Intent intent = new Intent(this, DownloadDetailsActivity.class);
             intent.setData(Uri.fromParts("package", module.packageName, null));
             startActivity(intent);
             return true;
         } else if (itemId == R.id.menu_support) {
-            NavUtil.startURL(this, Uri.parse(RepoDb.getModuleSupport(module.packageName)));
-            return true;
+            //NavUtil.startURL(this, Uri.parse(RepoDb.getModuleSupport(module.packageName)));
+            return true;*/
         } else if (itemId == R.id.menu_app_store) {
             Uri uri = Uri.parse("market://details?id=" + module.packageName);
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
@@ -538,7 +535,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
 
             holder.itemView.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
                 getMenuInflater().inflate(R.menu.context_menu_modules, menu);
-                ModuleUtil.InstalledModule installedModule = ModuleUtil.getInstance().getModule(item.packageName);
+                /*ModuleUtil.InstalledModule installedModule = ModuleUtil.getInstance().getModule(item.packageName);
                 if (installedModule == null) {
                     return;
                 }
@@ -555,7 +552,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                     menu.removeItem(R.id.menu_launch);
                     menu.removeItem(R.id.menu_scope);
                     menu.removeItem(R.id.menu_uninstall);
-                }
+                }*/
             });
             holder.appName.setText(item.getAppName());
 

@@ -206,7 +206,7 @@ public class RepoLoader {
                 return;
             isLoading = true;
         }
-        app.updateProgressIndicator(swipeRefreshLayout);
+        //app.updateProgressIndicator(swipeRefreshLayout);
 
         new Thread("RepositoryReload") {
             public void run() {
@@ -229,7 +229,7 @@ public class RepoLoader {
                 synchronized (this) {
                     isLoading = false;
                 }
-                app.updateProgressIndicator(swipeRefreshLayout);
+                //app.updateProgressIndicator(swipeRefreshLayout);
             }
         }.start();
     }
