@@ -120,8 +120,6 @@ public class App extends Application implements Application.ActivityLifecycleCal
             } catch (PackageManager.NameNotFoundException ignored) {
             }
         }
-
-        //RepoLoader.getInstance().triggerFirstLoadIfNecessary();
     }
 
     private void registerReceivers() {
@@ -142,19 +140,6 @@ public class App extends Application implements Application.ActivityLifecycleCal
         mkdir("log");
     }
 
-    /*
-        public void updateProgressIndicator(final SwipeRefreshLayout refreshLayout) {
-            final boolean isLoading = RepoLoader.getInstance().isLoading() || ModuleUtil.getInstance().isLoading();
-            runOnUiThread(() -> {
-                synchronized (App.this) {
-                    if (currentActivity != null) {
-                        if (refreshLayout != null)
-                            refreshLayout.setRefreshing(isLoading);
-                    }
-                }
-            });
-        }
-    */
     @Override
     public synchronized void onActivityCreated(@NonNull Activity activity, Bundle savedInstanceState) {
         if (isUiLoaded) {
@@ -182,13 +167,12 @@ public class App extends Application implements Application.ActivityLifecycleCal
 
     @Override
     public synchronized void onActivityResumed(@NonNull Activity activity) {
-        //currentActivity = (AppCompatActivity) activity;
-        //updateProgressIndicator(null);
+
     }
 
     @Override
     public synchronized void onActivityPaused(@NonNull Activity activity) {
-        //currentActivity = null;
+
     }
 
     @Override

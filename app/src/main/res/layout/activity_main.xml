@@ -172,57 +172,6 @@
                 </RelativeLayout>
             </com.google.android.material.card.MaterialCardView>
 
-<!--            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/downloads"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="10dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackground"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp"
-                app:cardPreventCornerOverlap="false">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="18dp"
-                    android:paddingTop="16dp"
-                    android:paddingEnd="18dp"
-                    android:paddingBottom="16dp">
-
-                    <ImageView
-                        android:id="@+id/downloads_icon"
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        android:layout_centerVertical="true"
-                        android:contentDescription="@string/Downloads"
-                        app:srcCompat="@drawable/ic_get_app" />
-
-                    <TextView
-                        android:id="@+id/downloads_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="25dp"
-                        android:layout_toEndOf="@id/downloads_icon"
-                        android:text="@string/Downloads"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-                    <TextView
-                        android:id="@+id/download_summary"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/downloads_title"
-                        android:layout_alignStart="@id/downloads_title"
-                        android:layout_marginTop="2dp"
-                        android:text="@string/ModuleUpgradable"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                        android:textColor="@android:color/darker_gray" />
-                </RelativeLayout>
-            </com.google.android.material.card.MaterialCardView>
--->
             <LinearLayout
                 android:id="@+id/apps"
                 android:layout_width="match_parent"

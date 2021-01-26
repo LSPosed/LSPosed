@@ -25,7 +25,6 @@ public final class NotificationUtil {
 
     public static final int NOTIFICATION_MODULE_NOT_ACTIVATED_YET = 0;
     private static final int NOTIFICATION_MODULES_UPDATED = 1;
-    private static final int NOTIFICATION_INSTALLER_UPDATE = 2;
     private static final int PENDING_INTENT_OPEN_MODULES = 0;
     private static final int PENDING_INTENT_OPEN_INSTALL = 1;
     private static final int PENDING_INTENT_SOFT_REBOOT = 2;
@@ -36,7 +35,6 @@ public final class NotificationUtil {
     private static final String HEADS_UP = "heads_up";
     private static final String FRAGMENT_ID = "fragment";
 
-    private static final String NOTIFICATION_UPDATE_CHANNEL = "app_update_channel";
     private static final String NOTIFICATION_MODULES_CHANNEL = "modules_channel";
 
     @SuppressLint("StaticFieldLeak")
@@ -54,9 +52,7 @@ public final class NotificationUtil {
         notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channelUpdate = new NotificationChannel(NOTIFICATION_UPDATE_CHANNEL, context.getString(R.string.download_section_update_available), NotificationManager.IMPORTANCE_DEFAULT);
             NotificationChannel channelModule = new NotificationChannel(NOTIFICATION_MODULES_CHANNEL, context.getString(R.string.nav_item_modules), NotificationManager.IMPORTANCE_DEFAULT);
-            notificationManager.createNotificationChannel(channelUpdate);
             notificationManager.createNotificationChannel(channelModule);
         }
     }
@@ -135,30 +131,6 @@ public final class NotificationUtil {
         builder.addAction(new NotificationCompat.Action.Builder(0, context.getString(R.string.soft_reboot), pSoftReboot).build());
 
         notificationManager.notify(null, NOTIFICATION_MODULES_UPDATED, builder.build());
-    }
-
-    public static void showInstallerUpdateNotification() {
-        Intent intent = new Intent(context, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra(FRAGMENT_ID, 0);
-
-        PendingIntent pInstallTab = PendingIntent.getActivity(context, PENDING_INTENT_OPEN_INSTALL,
-                intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        String title = context.getString(R.string.app_name);
-        String message = context.getString(R.string.newVersion);
-        NotificationCompat.Builder builder = getNotificationBuilder(title, message, NOTIFICATION_UPDATE_CHANNEL)
-                .setContentIntent(pInstallTab);
-
-        if (prefs.getBoolean(HEADS_UP, true)) {
-            builder.setPriority(2);
-        }
-        NotificationCompat.BigTextStyle notiStyle = new NotificationCompat.BigTextStyle();
-        notiStyle.setBigContentTitle(title);
-        notiStyle.bigText(message);
-        builder.setStyle(notiStyle);
-
-        notificationManager.notify(null, NOTIFICATION_INSTALLER_UPDATE, builder.build());
     }
 
     private static NotificationCompat.Builder getNotificationBuilder(String title, String message, String channel) {

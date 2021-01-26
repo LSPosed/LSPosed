@@ -18,7 +18,6 @@ import org.meowcat.edxposed.manager.App;
 import org.meowcat.edxposed.manager.Constants;
 import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.databinding.ActivityModulesBinding;
-import org.meowcat.edxposed.manager.repo.ModuleVersion;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -33,7 +32,6 @@ public final class ModuleUtil {
     public static int MIN_MODULE_VERSION = 2; // reject modules with
     private static ModuleUtil instance = null;
     private final PackageManager pm;
-    private final String frameworkPackageName;
     private final List<ModuleListener> listeners = new CopyOnWriteArrayList<>();
     private final SharedPreferences pref;
     //private InstalledModule framework = null;
@@ -44,7 +42,6 @@ public final class ModuleUtil {
     private ModuleUtil() {
         pref = App.getInstance().getSharedPreferences("enabled_modules", Context.MODE_PRIVATE);
         pm = App.getInstance().getPackageManager();
-        frameworkPackageName = App.getInstance().getPackageName();
     }
 
     public static synchronized ModuleUtil getInstance() {
@@ -76,31 +73,18 @@ public final class ModuleUtil {
         }
 
         Map<String, InstalledModule> modules = new HashMap<>();
-        //RepoDb.beginTransation();
-        try {
-            //RepoDb.deleteAllInstalledModules();
 
-            for (PackageInfo pkg : pm.getInstalledPackages(PackageManager.GET_META_DATA)) {
-                ApplicationInfo app = pkg.applicationInfo;
-                if (!app.enabled)
-                    continue;
+        for (PackageInfo pkg : pm.getInstalledPackages(PackageManager.GET_META_DATA)) {
+            ApplicationInfo app = pkg.applicationInfo;
+            if (!app.enabled)
+                continue;
 
-                InstalledModule installed = null;
-                if (app.metaData != null && app.metaData.containsKey("xposedmodule")) {
-                    installed = new InstalledModule(pkg, false);
-                    modules.put(pkg.packageName, installed);
-                }/* else if (isFramework(pkg.packageName)) {
-                    framework = installed = new InstalledModule(pkg, true);
-                }*/
-
-                //if (installed != null)
-                //    RepoDb.insertInstalledModule(installed);
+            if (app.metaData != null && app.metaData.containsKey("xposedmodule")) {
+                InstalledModule installed = new InstalledModule(pkg, false);
+                modules.put(pkg.packageName, installed);
             }
-
-            //RepoDb.setTransactionSuccessful();
-        } finally {
-            //RepoDb.endTransation();
         }
+
 
         installedModules = modules;
         synchronized (this) {
@@ -129,7 +113,6 @@ public final class ModuleUtil {
         ApplicationInfo app = pkg.applicationInfo;
         if (app.enabled && app.metaData != null && app.metaData.containsKey("xposedmodule")) {
             InstalledModule module = new InstalledModule(pkg, false);
-            //RepoDb.insertInstalledModule(module);
             installedModules.put(packageName, module);
             for (ModuleListener listener : listeners) {
                 listener.onSingleInstalledModuleReloaded(instance, packageName,
@@ -137,7 +120,6 @@ public final class ModuleUtil {
             }
             return module;
         } else {
-            //RepoDb.deleteInstalledModule(packageName);
             InstalledModule old = installedModules.remove(packageName);
             if (old != null) {
                 for (ModuleListener listener : listeners) {
@@ -147,26 +129,6 @@ public final class ModuleUtil {
             return null;
         }
     }
-
-    public synchronized boolean isLoading() {
-        return isReloading;
-    }
-
-/*    public InstalledModule getFramework() {
-        return framework;
-    }*/
-
-    public String getFrameworkPackageName() {
-        return frameworkPackageName;
-    }
-
-/*    private boolean isFramework(String packageName) {
-        return frameworkPackageName.equals(packageName);
-    }*/
-
-//    public boolean isInstalled(String packageName) {
-//        return installedModules.containsKey(packageName) || isFramework(packageName);
-//    }
 
     public InstalledModule getModule(String packageName) {
         return installedModules.get(packageName);
@@ -368,10 +330,6 @@ public final class ModuleUtil {
                 this.description = (descriptionTmp != null) ? descriptionTmp : "";
             }
             return this.description;
-        }
-
-        public boolean isUpdate(ModuleVersion version) {
-            return (version != null) && version.code > versionCode;
         }
 
         public PackageInfo getPackageInfo() {

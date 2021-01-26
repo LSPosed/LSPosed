@@ -31,9 +31,9 @@ import org.meowcat.edxposed.manager.App;
 import org.meowcat.edxposed.manager.BuildConfig;
 import org.meowcat.edxposed.manager.Constants;
 import org.meowcat.edxposed.manager.R;
+import org.meowcat.edxposed.manager.adapters.AppAdapter;
 import org.meowcat.edxposed.manager.databinding.ActivityModulesBinding;
 import org.meowcat.edxposed.manager.util.GlideApp;
-import org.meowcat.edxposed.manager.util.InstallApkUtil;
 import org.meowcat.edxposed.manager.util.LinearLayoutManagerFix;
 import org.meowcat.edxposed.manager.util.ModuleUtil;
 
@@ -82,7 +82,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 showList = new ArrayList<>();
                 String filter = queryStr.toLowerCase();
                 for (ModuleUtil.InstalledModule info : fullList) {
-                    if (lowercaseContains(InstallApkUtil.getAppLabel(info.app, pm), filter)
+                    if (lowercaseContains(AppAdapter.getAppLabel(info.app, pm), filter)
                             || lowercaseContains(info.packageName, filter)) {
                         showList.add(info);
                     }
@@ -351,52 +351,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         return super.onOptionsItemSelected(item);
     }
 
-    /*
-        private void importModules(Uri uri) {
-            RepoLoader repoLoader = RepoLoader.getInstance();
-            List<Module> list = new ArrayList<>();
-
-            try {
-                InputStream inputStream = getContentResolver().openInputStream(uri);
-                InputStreamReader isr = new InputStreamReader(inputStream);
-                BufferedReader br = new BufferedReader(isr);
-                String line;
-                while ((line = br.readLine()) != null) {
-                    Module m = repoLoader.getModule(line);
-
-                    if (m == null) {
-                        Snackbar.make(binding.snackbar, getString(R.string.download_details_not_found, line), Snackbar.LENGTH_SHORT).show();
-                    } else {
-                        list.add(m);
-                    }
-                }
-                br.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            for (final Module m : list) {
-                if (moduleUtil.getModule(m.packageName) != null) {
-                    continue;
-                }
-                ModuleVersion mv = null;
-                for (int i = 0; i < m.versions.size(); i++) {
-                    ModuleVersion mvTemp = m.versions.get(i);
-
-                    if (mvTemp.relType == ReleaseType.STABLE) {
-                        mv = mvTemp;
-                        break;
-                    }
-                }
-
-                if (mv != null) {
-                    NavUtil.startURL(this, mv.downloadLink);
-                }
-            }
-
-            ModuleUtil.getInstance().reloadInstalledModules();
-        }
-    */
     @Override
     public void onDestroy() {
         super.onDestroy();

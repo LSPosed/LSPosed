@@ -19,9 +19,8 @@ import org.meowcat.edxposed.manager.util.GlideHelper;
 import org.meowcat.edxposed.manager.util.ModuleUtil;
 import org.meowcat.edxposed.manager.util.light.Light;
 
-public class MainActivity extends BaseActivity implements /*RepoLoader.RepoListener, */ModuleUtil.ModuleListener {
+public class MainActivity extends BaseActivity implements ModuleUtil.ModuleListener {
     ActivityMainBinding binding;
-    //private RepoLoader repoLoader;
 
     @SuppressLint("PrivateResource")
     @Override
@@ -33,23 +32,15 @@ public class MainActivity extends BaseActivity implements /*RepoLoader.RepoListe
             if (Light.setLightSourceAlpha(getWindow().getDecorView(), 0.01f, 0.029f)) {
                 binding.status.setElevation(24);
                 binding.modules.setElevation(12);
-                //binding.downloads.setElevation(12);
             }
         });
         setupWindowInsets(binding.snackbar, null);
-        //repoLoader = RepoLoader.getInstance();
         ModuleUtil.getInstance().addListener(this);
-        //repoLoader.addListener(this, false);
         binding.modules.setOnClickListener(v -> {
             Intent intent = new Intent();
             intent.setClass(getApplicationContext(), ModulesActivity.class);
             startActivity(intent);
         });
-        /*binding.downloads.setOnClickListener(v -> {
-            Intent intent = new Intent();
-            intent.setClass(getApplicationContext(), DownloadActivity.class);
-            startActivity(intent);
-        });*/
         binding.apps.setOnClickListener(v -> {
             Intent intent = new Intent();
             intent.setClass(getApplicationContext(), BlackListActivity.class);
@@ -114,28 +105,9 @@ public class MainActivity extends BaseActivity implements /*RepoLoader.RepoListe
         new Thread(() -> new BlackListAdapter(getApplicationContext(), AppHelper.isWhiteListMode()).generateCheckedList());
     }
 
-/*
-    private void notifyDataSetChanged() {
-        runOnUiThread(() -> {
-            String frameworkUpdateVersion = repoLoader.getFrameworkUpdateVersion();
-            boolean moduleUpdateAvailable = repoLoader.hasModuleUpdates();
-            ModuleUtil.getInstance().getEnabledModules().size();
-            binding.modulesSummary.setText(String.format(getString(R.string.ModulesDetail), ModuleUtil.getInstance().getEnabledModules().size()));
-            if (frameworkUpdateVersion != null) {
-                binding.statusSummary.setText(String.format(getString(R.string.welcome_framework_update_available), frameworkUpdateVersion));
-            }
-            if (moduleUpdateAvailable) {
-                binding.downloadSummary.setText(R.string.modules_updates_available);
-            } else {
-                binding.downloadSummary.setText(R.string.ModuleUptodate);
-            }
-        });
-    }
-*/
-
     @Override
     public void onInstalledModulesReloaded(ModuleUtil moduleUtil) {
-        //notifyDataSetChanged();
+
     }
 
     @Override
@@ -145,19 +117,13 @@ public class MainActivity extends BaseActivity implements /*RepoLoader.RepoListe
 
     @Override
     public void onSingleInstalledModuleReloaded(ModuleUtil moduleUtil, String packageName, ModuleUtil.InstalledModule module) {
-        //notifyDataSetChanged();
-    }
 
-    /*@Override
-    public void onRepoReloaded(RepoLoader loader) {
-        notifyDataSetChanged();
-    }*/
+    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         ModuleUtil.getInstance().removeListener(this);
-        //repoLoader.removeListener(this);
     }
 
 }

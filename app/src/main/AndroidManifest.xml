@@ -35,12 +35,6 @@
             android:label="@string/Install" />
         <activity android:name=".ui.activity.BlackListActivity" />
         <activity
-            android:name=".ui.activity.DownloadDetailsActivity"
-            android:label="@string/nav_item_download" />
-        <activity
-            android:name=".ui.activity.DownloadActivity"
-            android:label="@string/Downloads" />
-        <activity
             android:name=".ui.activity.ModuleScopeActivity"
             android:label="@string/menu_scope" />
         <activity

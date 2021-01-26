@@ -111,15 +111,7 @@ public class SettingsActivity extends BaseActivity {
         @Override
         public void onCreatePreferencesFix(Bundle savedInstanceState, String rootKey) {
             addPreferencesFromResource(R.xml.prefs);
-/*
-            Preference releaseType = findPreference("release_type_global");
-            if (releaseType != null) {
-                releaseType.setOnPreferenceChangeListener((preference, newValue) -> {
-                    RepoLoader.getInstance().setReleaseTypeGlobal((String) newValue);
-                    return true;
-                });
-            }
-*/
+
             SwitchPreferenceCompat prefWhiteListMode = findPreference("white_list_switch");
             if (prefWhiteListMode != null) {
                 prefWhiteListMode.setChecked(Files.exists(whiteListModeFlag));

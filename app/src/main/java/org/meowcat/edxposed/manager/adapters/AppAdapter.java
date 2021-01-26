@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.text.TextUtils;
@@ -32,7 +33,6 @@ import com.bumptech.glide.request.transition.Transition;
 import org.meowcat.edxposed.manager.App;
 import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.util.GlideApp;
-import org.meowcat.edxposed.manager.util.InstallApkUtil;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -277,7 +277,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ApplicationInfo info = showList.get(position);
-        holder.appName.setText(InstallApkUtil.getAppLabel(info, pm));
+        holder.appName.setText(getAppLabel(info, pm));
         try {
             PackageInfo packageInfo = pm.getPackageInfo(info.packageName, 0);
             GlideApp.with(holder.appIcon)
@@ -387,7 +387,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
                 ArrayList<ApplicationInfo> filtered = new ArrayList<>();
                 String filter = constraint.toString().toLowerCase();
                 for (ApplicationInfo info : fullList) {
-                    if (lowercaseContains(InstallApkUtil.getAppLabel(info, pm), filter)
+                    if (lowercaseContains(getAppLabel(info, pm), filter)
                             || lowercaseContains(info.packageName, filter)) {
                         filtered.add(info);
                     }
@@ -401,5 +401,16 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
         protected void publishResults(CharSequence constraint, FilterResults results) {
             notifyDataSetChanged();
         }
+    }
+
+    public static String getAppLabel(ApplicationInfo info, PackageManager pm) {
+        try {
+            if (info.labelRes > 0) {
+                Resources res = pm.getResourcesForApplication(info);
+                return res.getString(info.labelRes);
+            }
+        } catch (Exception ignored) {
+        }
+        return info.loadLabel(pm).toString();
     }
 }
