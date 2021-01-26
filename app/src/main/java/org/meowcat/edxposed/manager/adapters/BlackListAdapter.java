@@ -28,7 +28,7 @@ public class BlackListAdapter extends AppAdapter {
         if (App.getPreferences().getBoolean("hook_modules", true)) {
             Collection<ModuleUtil.InstalledModule> installedModules = ModuleUtil.getInstance().getModules().values();
             for (ModuleUtil.InstalledModule info : installedModules) {
-                AppHelper.FORCE_WHITE_LIST_MODULE.add(info.packageName);
+                AppHelper.forceWhiteList.add(info.packageName);
             }
         }
         AppHelper.makeSurePath();

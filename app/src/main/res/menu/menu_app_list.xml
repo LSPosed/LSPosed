@@ -6,16 +6,79 @@
         android:id="@+id/menu_search"
         android:title="@string/menuSearch"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
-        app:showAsAction="always" />
-    <item
-        android:id="@+id/dexopt_all"
-        android:title="@string/dexopt_now"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/speed_all"
-        android:title="@string/speed_now"
-        app:showAsAction="never" />
+        android:id="@+id/item_show_system"
+        android:checkable="true"
+        android:checked="true"
+        android:title="@string/menu_show_system_apps" />
+
+    <item
+        android:id="@+id/item_show_modules"
+        android:checkable="true"
+        android:checked="true"
+        android:title="@string/menu_show_modules" />
+
+    <item
+        android:id="@+id/item_list_sort"
+        android:title="@string/list_sort"
+        app:showAsAction="never">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/item_sort_by_name"
+                    android:checked="true"
+                    android:title="@string/sort_by_name" />
+
+                <item
+                    android:id="@+id/item_sort_by_name_reverse"
+                    android:title="@string/sort_by_name_reverse" />
+
+                <item
+                    android:id="@+id/item_sort_by_package_name"
+                    android:title="@string/sort_by_package_name" />
+
+                <item
+                    android:id="@+id/item_sort_by_package_name_reverse"
+                    android:title="@string/sort_by_package_name_reverse" />
+
+                <item
+                    android:id="@+id/item_sort_by_install_time"
+                    android:title="@string/sort_by_install_time" />
+
+                <item
+                    android:id="@+id/item_sort_by_install_time_reverse"
+                    android:title="@string/sort_by_install_time_reverse" />
+                <item
+                    android:id="@+id/item_sort_by_update_time"
+                    android:title="@string/sort_by_update_time" />
+
+                <item
+                    android:id="@+id/item_sort_by_update_time_reverse"
+                    android:title="@string/sort_by_update_time_reverse" />
+            </group>
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/menu_optimize"
+        android:title="@string/menu_optimize"
+        app:showAsAction="never">
+        <menu>
+            <group>
+                <item
+                    android:id="@+id/dexopt_all"
+                    android:title="@string/dexopt_now"
+                    app:showAsAction="never" />
+
+                <item
+                    android:id="@+id/speed_all"
+                    android:title="@string/speed_now"
+                    app:showAsAction="never" />
+            </group>
+        </menu>
+    </item>
 
     <item
         android:title="@string/reboot"

@@ -4,6 +4,7 @@ import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -66,7 +67,7 @@ public class ModuleScopeActivity extends BaseActivity implements AppAdapter.Call
         fastScrollerBuilder.build();
         appAdapter.setCallback(this);
         handler.postDelayed(runnable, 300);
-        binding.swipeRefreshLayout.setOnRefreshListener(() -> appAdapter.refresh());
+        binding.swipeRefreshLayout.setOnRefreshListener(appAdapter::refresh);
 
         searchListener = new SearchView.OnQueryTextListener() {
             @Override
@@ -84,11 +85,35 @@ public class ModuleScopeActivity extends BaseActivity implements AppAdapter.Call
     }
 
     @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (!appAdapter.onOptionsItemSelected(item)) {
+            return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(@NonNull Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_app_list, menu);
+        appAdapter.onCreateOptionsMenu(menu, getMenuInflater());
         searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
         searchView.setOnQueryTextListener(searchListener);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        changeTitle(isWhiteListMode());
+    }
+
+
+    private void changeTitle(boolean isWhiteListMode) {
+        setTitle(isWhiteListMode ? R.string.title_white_list : R.string.title_black_list);
+
+    }
+
+    private boolean isWhiteListMode() {
+        return AppHelper.isWhiteListMode();
     }
 
     @Override

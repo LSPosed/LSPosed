@@ -16,7 +16,6 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.FragmentManager;
 
 import org.meowcat.edxposed.manager.App;
-import org.meowcat.edxposed.manager.BuildConfig;
 import org.meowcat.edxposed.manager.Constants;
 import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.util.CompileUtil;
@@ -30,7 +29,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -45,8 +43,7 @@ public class AppHelper {
     private static final String SCOPE_LIST_PATH = "conf/%s.conf";
     private static final String WHITE_LIST_MODE = "conf/usewhitelist";
 
-    private static final List<String> FORCE_WHITE_LIST = new ArrayList<>(Collections.singletonList(BuildConfig.APPLICATION_ID));
-    public static List<String> FORCE_WHITE_LIST_MODULE = new ArrayList<>(FORCE_WHITE_LIST);
+    public static List<String> forceWhiteList = new ArrayList<>();
 
     private static final HashMap<String, List<String>> scopeList = new HashMap<>();
 
@@ -64,7 +61,7 @@ public class AppHelper {
     }
 
     private static boolean addBlackList(String packageName) {
-        if (FORCE_WHITE_LIST_MODULE.contains(packageName)) {
+        if (forceWhiteList.contains(packageName)) {
             removeBlackList(packageName);
             return false;
         }
@@ -72,7 +69,7 @@ public class AppHelper {
     }
 
     private static boolean removeWhiteList(String packageName) {
-        if (FORCE_WHITE_LIST_MODULE.contains(packageName)) {
+        if (forceWhiteList.contains(packageName)) {
             return false;
         }
         return whiteListFileName(packageName, false);
@@ -94,7 +91,7 @@ public class AppHelper {
                 s.add(file1.getName());
             }
         }
-        for (String pn : FORCE_WHITE_LIST_MODULE) {
+        for (String pn : forceWhiteList) {
             if (s.contains(pn)) {
                 s.remove(pn);
                 removeBlackList(pn);
@@ -107,13 +104,13 @@ public class AppHelper {
         File file = new File(BASE_PATH + WHITE_LIST_PATH);
         File[] files = file.listFiles();
         if (files == null) {
-            return FORCE_WHITE_LIST_MODULE;
+            return forceWhiteList;
         }
         List<String> result = new ArrayList<>();
         for (File file1 : files) {
             result.add(file1.getName());
         }
-        for (String pn : FORCE_WHITE_LIST_MODULE) {
+        for (String pn : forceWhiteList) {
             if (!result.contains(pn)) {
                 result.add(pn);
                 addWhiteList(pn);

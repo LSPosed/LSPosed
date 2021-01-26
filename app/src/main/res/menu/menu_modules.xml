@@ -24,17 +24,43 @@
     </item>
 
     <item
-        android:title="@string/import_"
+        android:id="@+id/item_list_sort"
+        android:title="@string/list_sort"
         app:showAsAction="never">
         <menu>
-            <item
-                android:id="@+id/import_enabled_modules"
-                android:title="@string/import_enabled_modules"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/import_installed_modules"
-                android:title="@string/import_installed_modules"
-                app:showAsAction="never" />
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/item_sort_by_name"
+                    android:checked="true"
+                    android:title="@string/sort_by_name" />
+
+                <item
+                    android:id="@+id/item_sort_by_name_reverse"
+                    android:title="@string/sort_by_name_reverse" />
+
+                <item
+                    android:id="@+id/item_sort_by_package_name"
+                    android:title="@string/sort_by_package_name" />
+
+                <item
+                    android:id="@+id/item_sort_by_package_name_reverse"
+                    android:title="@string/sort_by_package_name_reverse" />
+
+                <item
+                    android:id="@+id/item_sort_by_install_time"
+                    android:title="@string/sort_by_install_time" />
+
+                <item
+                    android:id="@+id/item_sort_by_install_time_reverse"
+                    android:title="@string/sort_by_install_time_reverse" />
+                <item
+                    android:id="@+id/item_sort_by_update_time"
+                    android:title="@string/sort_by_update_time" />
+
+                <item
+                    android:id="@+id/item_sort_by_update_time_reverse"
+                    android:title="@string/sort_by_update_time_reverse" />
+            </group>
         </menu>
     </item>
 

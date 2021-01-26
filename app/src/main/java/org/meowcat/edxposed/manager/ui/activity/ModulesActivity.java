@@ -88,7 +88,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                     }
                 }
             }
-            switch (App.getPreferences().getInt("list_sort", 0)) {
+            switch (preferences.getInt("list_sort", 0)) {
                 case 7:
                     cmp = Collections.reverseOrder((ApplicationInfo a, ApplicationInfo b) -> {
                         try {
@@ -197,7 +197,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         binding.recyclerView.setAdapter(adapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManagerFix(this));
         FastScrollerBuilder fastScrollerBuilder = new FastScrollerBuilder(binding.recyclerView);
-        if (!App.getPreferences().getBoolean("md2", false)) {
+        if (!preferences.getBoolean("md2", false)) {
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
                     DividerItemDecoration.VERTICAL);
             binding.recyclerView.addItemDecoration(dividerItemDecoration);
@@ -279,24 +279,14 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                     }
                 }
             }
-        }/* else if (requestCode == 44) {
-            if (data != null) {
-                Uri uri = data.getData();
-                if (uri != null) {
-                    try {
-                        importModules(uri);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }*/
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         Intent intent;
         int itemId = item.getItemId();
+        boolean reload = false;
         if (itemId == R.id.export_enabled_modules) {
             if (ModuleUtil.getInstance().getEnabledModules().isEmpty()) {
                 Snackbar.make(binding.snackbar, R.string.no_enabled_modules, Snackbar.LENGTH_SHORT).show();
@@ -321,12 +311,42 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             intent.putExtra(Intent.EXTRA_TITLE, "installed_modules.list");
             startActivityForResult(intent, 43);
             return true;
-        } else if (itemId == R.id.import_installed_modules || itemId == R.id.import_enabled_modules) {
-            intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.setType("*/*");
-            startActivityForResult(intent, 44);
-            return true;
+        } else if (itemId == R.id.item_sort_by_name) {
+            item.setChecked(true);
+            preferences.edit().putInt("list_sort", 0).apply();
+            reload = true;
+        } else if (itemId == R.id.item_sort_by_name_reverse) {
+            item.setChecked(true);
+            preferences.edit().putInt("list_sort", 1).apply();
+            reload = true;
+        } else if (itemId == R.id.item_sort_by_package_name) {
+            item.setChecked(true);
+            preferences.edit().putInt("list_sort", 2).apply();
+            reload = true;
+        } else if (itemId == R.id.item_sort_by_package_name_reverse) {
+            item.setChecked(true);
+            preferences.edit().putInt("list_sort", 3).apply();
+            reload = true;
+        } else if (itemId == R.id.item_sort_by_install_time) {
+            item.setChecked(true);
+            preferences.edit().putInt("list_sort", 4).apply();
+            reload = true;
+        } else if (itemId == R.id.item_sort_by_install_time_reverse) {
+            item.setChecked(true);
+            preferences.edit().putInt("list_sort", 5).apply();
+            reload = true;
+        } else if (itemId == R.id.item_sort_by_update_time) {
+            item.setChecked(true);
+            preferences.edit().putInt("list_sort", 6).apply();
+            reload = true;
+        } else if (itemId == R.id.item_sort_by_update_time_reverse) {
+            item.setChecked(true);
+            preferences.edit().putInt("list_sort", 7).apply();
+            reload = true;
+        }
+        if (reload) {
+            moduleUtil.updateModulesList(false, null);
+            reloadModules.run();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -593,31 +613,31 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             TextView warningText = holder.warningText;
 
             if (item.minVersion == 0) {
-                if (!App.getPreferences().getBoolean("skip_xposedminversion_check", false)) {
+                if (!preferences.getBoolean("skip_xposedminversion_check", false)) {
                     mSwitch.setEnabled(false);
                 }
                 warningText.setText(getString(R.string.no_min_version_specified));
                 warningText.setVisibility(View.VISIBLE);
             } else if (installedXposedVersion > 0 && item.minVersion > installedXposedVersion) {
-                if (!App.getPreferences().getBoolean("skip_xposedminversion_check", false)) {
+                if (!preferences.getBoolean("skip_xposedminversion_check", false)) {
                     mSwitch.setEnabled(false);
                 }
                 warningText.setText(String.format(getString(R.string.warning_xposed_min_version), item.minVersion));
                 warningText.setVisibility(View.VISIBLE);
             } else if (item.minVersion < ModuleUtil.MIN_MODULE_VERSION) {
-                if (!App.getPreferences().getBoolean("skip_xposedminversion_check", false)) {
+                if (!preferences.getBoolean("skip_xposedminversion_check", false)) {
                     mSwitch.setEnabled(false);
                 }
                 warningText.setText(String.format(getString(R.string.warning_min_version_too_low), item.minVersion, ModuleUtil.MIN_MODULE_VERSION));
                 warningText.setVisibility(View.VISIBLE);
             } else if (item.isInstalledOnExternalStorage()) {
-                if (!App.getPreferences().getBoolean("skip_xposedminversion_check", false)) {
+                if (!preferences.getBoolean("skip_xposedminversion_check", false)) {
                     mSwitch.setEnabled(false);
                 }
                 warningText.setText(getString(R.string.warning_installed_on_external_storage));
                 warningText.setVisibility(View.VISIBLE);
             } else if (installedXposedVersion == 0 || (installedXposedVersion == -1)) {
-                if (!App.getPreferences().getBoolean("skip_xposedminversion_check", false)) {
+                if (!preferences.getBoolean("skip_xposedminversion_check", false)) {
                     mSwitch.setEnabled(false);
                 }
                 warningText.setText(getString(R.string.not_installed_no_lollipop));

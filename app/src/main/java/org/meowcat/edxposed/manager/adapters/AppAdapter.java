@@ -1,6 +1,8 @@
 package org.meowcat.edxposed.manager.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -8,6 +10,9 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -49,9 +54,11 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
     private final PackageManager pm;
     private final ApplicationFilter filter;
     private Comparator<ApplicationInfo> cmp;
+    private final SharedPreferences preferences;
 
     AppAdapter(Context context) {
         this.context = context;
+        preferences = App.getPreferences();
         fullList = showList = Collections.emptyList();
         checkedList = Collections.emptyList();
         filter = new ApplicationFilter();
@@ -93,10 +100,14 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
                 if (info.packageName.equals(((ScopeAdapter) this).modulePackageName)) {
                     rmList.add(info);
                 }
-            } else if (!App.getPreferences().getBoolean("show_modules", true)) {
-                if (info.metaData != null && info.metaData.containsKey("xposedmodule") || AppHelper.FORCE_WHITE_LIST_MODULE.contains(info.packageName)) {
+            }
+            if (!preferences.getBoolean("show_modules", true)) {
+                if (info.metaData != null && info.metaData.containsKey("xposedmodule") || AppHelper.forceWhiteList.contains(info.packageName)) {
                     rmList.add(info);
                 }
+            }
+            if (!preferences.getBoolean("show_system_apps", true) && (info.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
+                rmList.add(info);
             }
         }
         if (rmList.size() > 0) {
@@ -121,7 +132,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
     }
 
     private void sortApps() {
-        switch (App.getPreferences().getInt("list_sort", 0)) {
+        switch (preferences.getInt("list_sort", 0)) {
             case 7:
                 cmp = Collections.reverseOrder((ApplicationInfo a, ApplicationInfo b) -> {
                     try {
@@ -190,6 +201,79 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
         });
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    @SuppressLint("NonConstantResourceId")
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId == R.id.item_show_system) {
+            item.setChecked(!item.isChecked());
+            preferences.edit().putBoolean("show_system_apps", item.isChecked()).apply();
+        } else if (itemId == R.id.item_show_modules) {
+            item.setChecked(!item.isChecked());
+            preferences.edit().putBoolean("show_modules", item.isChecked()).apply();
+        } else if (itemId == R.id.item_sort_by_name) {
+            item.setChecked(true);
+            preferences.edit().putInt("list_sort", 0).apply();
+        } else if (itemId == R.id.item_sort_by_name_reverse) {
+            item.setChecked(true);
+            preferences.edit().putInt("list_sort", 1).apply();
+        } else if (itemId == R.id.item_sort_by_package_name) {
+            item.setChecked(true);
+            preferences.edit().putInt("list_sort", 2).apply();
+        } else if (itemId == R.id.item_sort_by_package_name_reverse) {
+            item.setChecked(true);
+            preferences.edit().putInt("list_sort", 3).apply();
+        } else if (itemId == R.id.item_sort_by_install_time) {
+            item.setChecked(true);
+            preferences.edit().putInt("list_sort", 4).apply();
+        } else if (itemId == R.id.item_sort_by_install_time_reverse) {
+            item.setChecked(true);
+            preferences.edit().putInt("list_sort", 5).apply();
+        } else if (itemId == R.id.item_sort_by_update_time) {
+            item.setChecked(true);
+            preferences.edit().putInt("list_sort", 6).apply();
+        } else if (itemId == R.id.item_sort_by_update_time_reverse) {
+            item.setChecked(true);
+            preferences.edit().putInt("list_sort", 7).apply();
+        } else {
+            return false;
+        }
+        refresh();
+        return true;
+    }
+
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_app_list, menu);
+        menu.findItem(R.id.item_show_modules).setChecked(preferences.getBoolean("show_modules", true));
+        menu.findItem(R.id.item_show_system).setChecked(preferences.getBoolean("show_system_apps", true));
+        switch (preferences.getInt("list_sort", 0)) {
+            case 7:
+                menu.findItem(R.id.item_sort_by_update_time_reverse).setChecked(true);
+                break;
+            case 6:
+                menu.findItem(R.id.item_sort_by_update_time).setChecked(true);
+                break;
+            case 5:
+                menu.findItem(R.id.item_sort_by_install_time_reverse).setChecked(true);
+                break;
+            case 4:
+                menu.findItem(R.id.item_sort_by_install_time).setChecked(true);
+                break;
+            case 3:
+                menu.findItem(R.id.item_sort_by_package_name_reverse).setChecked(true);
+                break;
+            case 2:
+                menu.findItem(R.id.item_sort_by_package_name).setChecked(true);
+                break;
+            case 1:
+                menu.findItem(R.id.item_sort_by_name_reverse).setChecked(true);
+                break;
+            case 0:
+                menu.findItem(R.id.item_sort_by_name).setChecked(true);
+                break;
+        }
+    }
+
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ApplicationInfo info = showList.get(position);
@@ -255,6 +339,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
     }
 
     public void refresh() {
+        //noinspection deprecation
         AsyncTask.THREAD_POOL_EXECUTOR.execute(this::loadApps);
     }
 

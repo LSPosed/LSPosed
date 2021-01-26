@@ -167,8 +167,8 @@ public class App extends Application implements Application.ActivityLifecycleCal
         if (pref.getBoolean("hook_modules", true)) {
             Collection<ModuleUtil.InstalledModule> installedModules = ModuleUtil.getInstance().getModules().values();
             for (ModuleUtil.InstalledModule info : installedModules) {
-                if (!AppHelper.FORCE_WHITE_LIST_MODULE.contains(info.packageName)) {
-                    AppHelper.FORCE_WHITE_LIST_MODULE.add(info.packageName);
+                if (!AppHelper.forceWhiteList.contains(info.packageName)) {
+                    AppHelper.forceWhiteList.add(info.packageName);
                 }
             }
             Log.d(TAG, "ApplicationList: Force add modules to list");

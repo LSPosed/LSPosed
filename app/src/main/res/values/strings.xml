@@ -345,4 +345,7 @@
     <string name="enable_scope">Enable scope</string>
     <string name="scope_not_supported">The version of LSPosed you installed does not support module scope, download new version?</string>
     <string name="settings_variant">Variant</string>
+    <string name="menu_optimize">Optimize</string>
+    <string name="menu_show_system_apps">System apps</string>
+    <string name="menu_show_modules">Modules</string>
 </resources>

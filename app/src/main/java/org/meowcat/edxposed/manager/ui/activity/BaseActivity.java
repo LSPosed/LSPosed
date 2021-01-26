@@ -3,6 +3,7 @@ package org.meowcat.edxposed.manager.ui.activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -42,6 +43,7 @@ public class BaseActivity extends AppCompatActivity {
     private static final String THEME_DEFAULT = "DEFAULT";
     private static final String THEME_BLACK = "BLACK";
     private String theme;
+    protected SharedPreferences preferences;
 
     public static boolean isBlackNightTheme() {
         return App.getPreferences().getBoolean("black_dark_theme", false) || App.getPreferences().getBoolean("md2", false);
@@ -113,6 +115,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        preferences = App.getPreferences();
         AppCompatDelegate.setDefaultNightMode(App.getPreferences().getInt("theme", -1));
         theme = getTheme(this) + getCustomTheme() + App.getPreferences().getBoolean("md2", false);
     }
