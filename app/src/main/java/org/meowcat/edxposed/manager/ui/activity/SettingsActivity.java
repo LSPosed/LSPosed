@@ -58,7 +58,6 @@ public class SettingsActivity extends BaseActivity {
         if (bar != null) {
             bar.setDisplayHomeAsUpEnabled(true);
         }
-        setupWindowInsets(binding.snackbar, null);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new SettingsFragment()).commit();

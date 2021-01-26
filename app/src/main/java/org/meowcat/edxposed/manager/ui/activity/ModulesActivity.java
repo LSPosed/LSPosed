@@ -177,7 +177,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         if (bar != null) {
             bar.setDisplayHomeAsUpEnabled(true);
         }
-        setupWindowInsets(binding.snackbar, binding.recyclerView);
         filter = new ApplicationFilter();
         moduleUtil = ModuleUtil.getInstance();
         pm = getPackageManager();
@@ -507,27 +506,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 return false;
             });
 
-            holder.itemView.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
-                getMenuInflater().inflate(R.menu.context_menu_modules, menu);
-                /*ModuleUtil.InstalledModule installedModule = ModuleUtil.getInstance().getModule(item.packageName);
-                if (installedModule == null) {
-                    return;
-                }
-                try {
-                    String support = RepoDb.getModuleSupport(installedModule.packageName);
-                    if (NavUtil.parseURL(support) == null) {
-                        menu.removeItem(R.id.menu_support);
-                    }
-                } catch (RepoDb.RowNotFoundException e) {
-                    menu.removeItem(R.id.menu_download_updates);
-                    menu.removeItem(R.id.menu_support);
-                }
-                if (installedModule.packageName.equals(BuildConfig.APPLICATION_ID)) {
-                    menu.removeItem(R.id.menu_launch);
-                    menu.removeItem(R.id.menu_scope);
-                    menu.removeItem(R.id.menu_uninstall);
-                }*/
-            });
+            holder.itemView.setOnCreateContextMenuListener((menu, v, menuInfo) -> getMenuInflater().inflate(R.menu.context_menu_modules, menu));
             holder.appName.setText(item.getAppName());
 
             TextView version = holder.appVersion;

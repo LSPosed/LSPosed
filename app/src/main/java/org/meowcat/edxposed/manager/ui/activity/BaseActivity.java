@@ -47,6 +47,10 @@ public class BaseActivity extends AppCompatActivity {
     protected static SharedPreferences preferences;
     private String theme;
 
+    static {
+        preferences = App.getPreferences();
+    }
+
     public static boolean isBlackNightTheme() {
         return preferences.getBoolean("black_dark_theme", false) || preferences.getBoolean("md2", false);
     }
@@ -110,14 +114,9 @@ public class BaseActivity extends AppCompatActivity {
         return getResources().getIdentifier(customThemeName, "style", getPackageName());
     }
 
-    protected void setupWindowInsets(View rootView, View secondView) {
-        // TODO:
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        preferences = App.getPreferences();
         AppCompatDelegate.setDefaultNightMode(preferences.getInt("theme", -1));
         theme = getTheme(this) + getCustomTheme() + preferences.getBoolean("md2", false);
     }

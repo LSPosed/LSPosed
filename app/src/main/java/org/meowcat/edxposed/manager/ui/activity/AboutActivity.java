@@ -27,7 +27,6 @@ public class AboutActivity extends BaseActivity {
         if (bar != null) {
             bar.setDisplayHomeAsUpEnabled(true);
         }
-        setupWindowInsets(binding.snackbar, null);
 
         binding.appVersion.setText(BuildConfig.VERSION_NAME);
 
@@ -44,7 +43,7 @@ public class AboutActivity extends BaseActivity {
         v.setOnClickListener(v1 -> NavUtil.startURL(this, getString(url)));
     }
 
-    public void openLink(View view) {
-        NavUtil.startURL(this, view.getTag().toString());
-    }
+    //public void openLink(View view) {
+    //    NavUtil.startURL(this, view.getTag().toString());
+    //}
 }

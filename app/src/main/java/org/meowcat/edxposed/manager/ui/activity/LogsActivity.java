@@ -67,7 +67,6 @@ public class LogsActivity extends BaseActivity {
         if (bar != null) {
             bar.setDisplayHomeAsUpEnabled(true);
         }
-        setupWindowInsets(binding.snackbar, binding.recyclerView);
 
         if (!preferences.getBoolean("hide_logcat_warning", false)) {
             DialogInstallWarningBinding binding = DialogInstallWarningBinding.inflate(getLayoutInflater());

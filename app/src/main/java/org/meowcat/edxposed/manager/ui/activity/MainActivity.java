@@ -34,7 +34,6 @@ public class MainActivity extends BaseActivity implements ModuleUtil.ModuleListe
                 binding.modules.setElevation(12);
             }
         });
-        setupWindowInsets(binding.snackbar, null);
         ModuleUtil.getInstance().addListener(this);
         binding.modules.setOnClickListener(v -> {
             Intent intent = new Intent();

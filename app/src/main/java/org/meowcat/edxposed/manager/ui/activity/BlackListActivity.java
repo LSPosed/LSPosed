@@ -48,7 +48,6 @@ public class BlackListActivity extends BaseActivity implements AppAdapter.Callba
         if (bar != null) {
             bar.setDisplayHomeAsUpEnabled(true);
         }
-        setupWindowInsets(binding.snackbar, binding.recyclerView);
         final boolean isWhiteListMode = isWhiteListMode();
         appAdapter = new BlackListAdapter(this, isWhiteListMode);
         appAdapter.setHasStableIds(true);

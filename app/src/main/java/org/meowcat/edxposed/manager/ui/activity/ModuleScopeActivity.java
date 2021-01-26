@@ -51,7 +51,6 @@ public class ModuleScopeActivity extends BaseActivity implements AppAdapter.Call
             bar.setDisplayHomeAsUpEnabled(true);
             bar.setSubtitle(moduleName);
         }
-        setupWindowInsets(binding.snackbar, binding.recyclerView);
         appAdapter = new ScopeAdapter(this, modulePackageName, binding.masterSwitch);
         appAdapter.setHasStableIds(true);
         binding.recyclerView.setAdapter(appAdapter);
