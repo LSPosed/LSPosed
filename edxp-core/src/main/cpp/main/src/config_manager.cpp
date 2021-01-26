@@ -313,7 +313,7 @@ namespace edxp {
                     }
                 }
                 fs::permissions(prefs_path, fs::perms::owner_all | fs::perms::group_all |
-                                            fs::perms::others_exec);
+                                            fs::perms::others_exec | fs::perms::set_gid);
                 if (const auto &[r_uid, r_gid] = path_own(prefs_path);
                         (uid != -1 && r_uid != uid) || r_gid != 1000u) {
                     path_chown(prefs_path, uid, 1000u, false);
@@ -328,8 +328,8 @@ namespace edxp {
                 if (!path_exists<true>(log_path)) {
                     fs::create_directories(log_path);
                 }
-                fs::permissions(conf_path, fs::perms::owner_all | fs::perms::group_all);
-                fs::permissions(log_path, fs::perms::owner_all | fs::perms::group_all);
+                fs::permissions(conf_path, fs::perms::owner_all | fs::perms::group_all | fs::perms::set_gid);
+                fs::permissions(log_path, fs::perms::owner_all | fs::perms::group_all | fs::perms::set_gid);
                 if (pkg_name == "android") uid = -1;
                 path_chown(conf_path, uid, 1000u, true);
                 path_chown(log_path, uid, 1000u, true);
@@ -340,6 +340,7 @@ namespace edxp {
                 }
 
                 if (pkg_name == kPrimaryInstallerPkgName) {
+                    umask(0007);
                     auto installer_pkg_name_path = GetConfigPath("installer");
                     if (path_exists<true>(installer_pkg_name_path)) {
                         fs::remove(installer_pkg_name_path);
