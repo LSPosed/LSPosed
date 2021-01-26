@@ -47,6 +47,7 @@ afterEvaluate {
         def variantNameLowered = variant.name.toLowerCase()
 
         task("copyKeySelector${variantNameCapped}LibraryToMagiskTemplate") {
+            dependsOn tasks.getByName("assemble${variantNameCapped}")
             def libPathRelease = "${buildDir}/intermediates/cmake/${variantNameLowered}/obj"
             doLast {
                 copy {

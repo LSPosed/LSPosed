@@ -28,7 +28,9 @@
 #include <cerrno>
 #include <unistd.h>
 #include <stdexcept>
+#include <sys/system_properties.h>
 
+#include "Languages.h"
 #include "key_selector.h"
 
 // Global variables
@@ -260,16 +262,26 @@ int main() {
     const int cursor_max = SandHook;
 
     auto print_status = [&cursor](){
-        std::cout << "\33[2K\r"; // clear this line
+        //std::cout << "\33[2K\r"; // clear this line
         std::cout << "[";
         std::cout << (cursor == YAHFA ? "x" : " ");
         std::cout << "] YAHFA  [";
         std::cout << (cursor == SandHook ? "x" : " ");
-        std::cout << "] SandHook" << std::flush;
+        std::cout << "] SandHook" << std::endl;
     };
 
-    std::cout << "Select variant. Use Volume Down to move and Volume Up to confirm." << std::endl;
-    std::cout << "The program will select YAHFA for you in " << timeout << " seconds if you don't have a physical volume button. " << std::endl;
+    // languages
+    Languages* l;
+    char locale[256];
+    __system_property_get("persist.sys.locale", locale);
+    if (locale[0] == 'z' && locale[1] == 'h') {
+        l = new LanguageChinese();
+    } else {
+        l = new Languages();
+    }
+
+    std::cout << l->desc_line_1() << std::endl;
+    std::cout << l->desc_line_2(timeout) << std::endl;
     print_status();
     while (int event = get_event()) {
         bool leave = false;
@@ -287,12 +299,13 @@ int main() {
             default:
                 std::cout << "ERROR\n";
         }
-        print_status();
         if (leave) {
             break;
         }
+        print_status();
     }
 
     // std::cout << std::endl << cursor << std::endl;
+    delete l;
     return cursor;
 }

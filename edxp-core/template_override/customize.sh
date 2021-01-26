@@ -100,6 +100,8 @@ LANG_UTIL_ERR_ANDROID_UNSUPPORT_1="Unsupported Android version"
 LANG_UTIL_ERR_ANDROID_UNSUPPORT_2="(below Oreo)"
 LANG_UTIL_ERR_ANDROID_UNSUPPORT_3="Learn more from our GitHub Wiki"
 LANG_UTIL_ERR_PLATFORM_UNSUPPORT="Unsupported platform"
+LANG_UTIL_ERR_VARIANT_SELECTION="Error occurred when selecting variant"
+LANG_UTIL_ERR_VARIANT_UNSUPPORT="Unsupported variant"
 LANG_UTIL_ERR_DUPINST_1="Duplicate installation is now allowed"
 LANG_UTIL_ERR_DUPINST_2="Remove"
 LANG_UTIL_ERR_DUPINST_3="and reboot to install again"
@@ -135,6 +137,29 @@ check_android_version
 check_magisk_version
 check_riru_version
 edxp_check_architecture
+
+# determinate variant
+if [ "${ARCH}" == "arm" ]; then
+  BIN_PATH="system/bin"
+elif [ "${ARCH}" == "arm64" ]; then
+  BIN_PATH="system/bin64"
+elif [ "${ARCH}" == "x86" ]; then
+  BIN_PATH="system_x86/bin"
+elif [ "${ARCH}" == "x64" ]; then
+  BIN_PATH="system_x86/bin64"
+else
+  # unreachable
+  abortC "${LANG_UTIL_ERR_PLATFORM_UNSUPPORT}"
+fi
+
+extract "${ZIPFILE}" "${BIN_PATH}/key_selector" "${TMPDIR}"
+SELECTOR_PATH="${TMPDIR}/${BIN_PATH}/key_selector"
+chmod 755 "${SELECTOR_PATH}"
+"${SELECTOR_PATH}"
+VARIANT=$?
+if [ VARIANT -lt 16 ]; then
+  abortC "${LANG_UTIL_ERR_VARIANT_SELECTION}"
+fi
 
 ui_print "- ${LANG_CUST_INST_EXT_FILES}"
 
@@ -210,8 +235,14 @@ mkdir -p /data/misc/$MISC_PATH/0/conf/ || abortC "! ${LANG_CUST_ERR_CONF_CREATE}
 set_perm /data/misc/$MISC_PATH root root 0771 "u:object_r:magisk_file:s0" || abortC "! ${LANG_CUST_ERR_PERM}"
 echo "[[ -f /data/adb/edxp/keep_data ]] || rm -rf /data/misc/$MISC_PATH" >> "${MODPATH}/uninstall.sh" || abortC "! ${LANG_CUST_ERR_CONF_UNINST}"
 echo "[[ -f /data/adb/edxp/new_install ]] || rm -rf /data/adb/edxp" >> "${MODPATH}/uninstall.sh" || abortC "! ${LANG_CUST_ERR_CONF_UNINST}"
-# TODO: let user select variant
-echo "1" > /data/misc/$MISC_PATH/variant
+
+if [ $VARIANT == 17 ]; then
+  echo "1" > /data/misc/$MISC_PATH/variant
+elif [ $VARIANT == 18 ]; then
+  echo "2" > /data/misc/$MISC_PATH/variant
+else
+  abortC "${LANG_UTIL_ERR_VARIANT_UNSUPPORT} ${VARIANT}"
+fi
 
 ui_print "- ${LANG_CUST_INST_COPY_LIB}"
 
