@@ -4,10 +4,10 @@ on:
   push:
     paths:
     - 'app/**'
-# TODO: debug apk for pr
-#  pull_request:
-#    paths:
-#    - 'app/**'
+    - '.github/workflows/manager.yml'
+  pull_request:
+    paths:
+    - 'app/**'
 
 jobs:
   build:
@@ -25,26 +25,26 @@ jobs:
       - name: Get version code
         run: echo APPVEYOR_BUILD_NUMBER=$(expr $GITHUB_RUN_NUMBER + 4999) >> $GITHUB_ENV
       - name: Build with Gradle
-        env:
-          KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
-          ALIAS_NAME: ${{ secrets.ALIAS_NAME }}
-          ALIAS_PASS: ${{ secrets.ALIAS_PASS }}
         run:  bash ./gradlew :app:assembleRelease
       - name: Sign Manager Release
         if: ${{ github.event_name == 'push' && success() }}
         id: sign
         uses: r0adkll/sign-android-release@v1.0.4
-        env:
-          BUILD_TOOLS_VERSION: "30.0.2"
         with:
           releaseDirectory: app/build/outputs/apk/release
           signingKeyBase64: ${{ secrets.SIGNING_KEY }}
           alias: ${{ secrets.ALIAS }}
           keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
-      - name: Upload built apk
+      - name: Upload signed apk
         if: success()
         uses: actions/upload-artifact@v2
         with:
           name: manager
           path: ${{ steps.sign.outputs.signedReleaseFile }}
+      - name: Upload unsigned apk
+        if: ${{ github.event_name == 'pull_request' || failure() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: manager-unsigned
+          path: "app/build/outputs/apk/release/*.apk"
