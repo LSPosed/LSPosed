@@ -1,1 +1,1 @@
-include ':edxp-core', ':hiddenapi-stubs', ':sandhook-hooklib', ':sandhook-annotation', ':app'
+include ':edxp-core', ':hiddenapi-stubs', ':sandhook-hooklib', ':sandhook-annotation', ':app', ':key-selector'

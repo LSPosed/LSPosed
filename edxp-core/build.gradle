@@ -38,6 +38,7 @@ dependencies {
     implementation 'rikka.ndk:riru:10'
     implementation project(path: ':sandhook-hooklib')
     compileOnly project(':hiddenapi-stubs')
+    compileOnly project(':key-selector')
     compileOnly 'androidx.annotation:annotation:1.1.0'
 }
 
@@ -152,6 +153,7 @@ afterEvaluate {
         def prepareMagiskFilesTask = task("prepareMagiskFiles${variantCapped}", type: Delete) {
             dependsOn "assemble${variantCapped}"
             dependsOn tasks.getByPath(":sandhook-hooklib:copySandHook${variantCapped}LibraryToMagiskTemplate")
+            dependsOn tasks.getByPath(":key-selector:copyKeySelector${variantCapped}LibraryToMagiskTemplate")
             doFirst {
                 copy {
                     from "${projectDir}/tpl/module.prop.tpl"
