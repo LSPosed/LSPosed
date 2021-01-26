@@ -7,8 +7,10 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.os.PowerManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.MenuItem;
@@ -170,8 +172,8 @@ public class BaseActivity extends AppCompatActivity {
     private void areYouSure(int contentTextId, DialogInterface.OnClickListener listener) {
         new MaterialAlertDialogBuilder(this).setTitle(R.string.areyousure)
                 .setMessage(contentTextId)
-                .setPositiveButton(android.R.string.yes, listener)
-                .setNegativeButton(android.R.string.no, null)
+                .setPositiveButton(android.R.string.ok, listener)
+                .setNegativeButton(android.R.string.cancel, null)
                 .show();
     }
 
@@ -181,8 +183,15 @@ public class BaseActivity extends AppCompatActivity {
             return;
         }
 
+        String command;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && ((PowerManager) getSystemService(Context.POWER_SERVICE)).isRebootingUserspaceSupported()) {
+            command = "/system/bin/svc power reboot userspace";
+        } else {
+            command = "setprop ctl.restart surfaceflinger; setprop ctl.restart zygote";
+        }
+
         List<String> messages = new LinkedList<>();
-        Shell.Result result = Shell.su("setprop ctl.restart surfaceflinger; setprop ctl.restart zygote").exec();
+        Shell.Result result = Shell.su(command).exec();
         if (result.getCode() != 0) {
             messages.add(result.getOut().toString());
             messages.add("");
