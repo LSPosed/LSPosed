@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -53,6 +54,7 @@ public class LogsActivity extends BaseActivity {
     private LogsAdapter adapter;
     private final Handler handler = new Handler();
     private ActivityLogsBinding binding;
+    private LinearLayoutManagerFix layoutManager;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,7 +84,8 @@ public class LogsActivity extends BaseActivity {
         }
         adapter = new LogsAdapter();
         binding.recyclerView.setAdapter(adapter);
-        binding.recyclerView.setLayoutManager(new LinearLayoutManagerFix(this));
+        layoutManager = new LinearLayoutManagerFix(this);
+        binding.recyclerView.setLayoutManager(layoutManager);
         if (App.getPreferences().getBoolean("disable_verbose_log", false)) {
             binding.slidingTabs.setVisibility(View.GONE);
         }
@@ -121,9 +124,19 @@ public class LogsActivity extends BaseActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.menu_scroll_top) {
-            scrollTop();
+            Log.e("Test", adapter.getItemCount() + "");
+            if (layoutManager.findFirstVisibleItemPosition() > 1000) {
+                binding.recyclerView.scrollToPosition(0);
+            } else {
+                binding.recyclerView.smoothScrollToPosition(0);
+            }
+            binding.recyclerView.smoothScrollToPosition(0);
         } else if (itemId == R.id.menu_scroll_down) {
-            scrollDown();
+            if (adapter.getItemCount() - layoutManager.findLastVisibleItemPosition() > 1000) {
+                binding.recyclerView.scrollToPosition(adapter.getItemCount() - 1);
+            } else {
+                binding.recyclerView.smoothScrollToPosition(adapter.getItemCount() - 1);
+            }
         } else if (itemId == R.id.menu_refresh) {
             reloadErrorLog();
             return true;
@@ -142,14 +155,6 @@ public class LogsActivity extends BaseActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void scrollTop() {
-        binding.recyclerView.smoothScrollToPosition(0);
-    }
-
-    private void scrollDown() {
-        binding.recyclerView.smoothScrollToPosition(adapter.getItemCount() - 1);
     }
 
     private void reloadErrorLog() {
