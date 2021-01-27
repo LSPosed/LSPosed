@@ -1,323 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingHorizontal="?dialogPreferredPadding">
 
-        <FrameLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/api"
+            android:drawablePadding="8dp"
+            android:paddingTop="8dp"
+            android:minHeight="48dp"
+            android:paddingBottom="8dp"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp">
+            android:text="@string/not_installed"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            app:drawableStartCompat="@drawable/ic_modules" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:minHeight="48dp"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="16dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        app:srcCompat="@drawable/ic_modules"
-                        tools:ignore="ContentDescription" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginLeft="32dp"
-                        android:orientation="vertical"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
-                        tools:ignore="RtlHardcoded">
-
-                        <TextView
-                            android:id="@+id/api"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/not_installed"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:minHeight="48dp"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="16dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        app:srcCompat="@drawable/ic_framework"
-                        tools:ignore="ContentDescription" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginLeft="32dp"
-                        android:orientation="vertical"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
-                        tools:ignore="RtlHardcoded">
-
-                        <TextView
-                            android:id="@+id/framework"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/not_installed"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:minHeight="48dp"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="16dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        app:srcCompat="@drawable/ic_manager"
-                        tools:ignore="ContentDescription" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginLeft="32dp"
-                        android:orientation="vertical"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
-                        tools:ignore="RtlHardcoded">
-
-                        <TextView
-                            android:id="@+id/manager"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:minHeight="48dp"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="16dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        app:srcCompat="@drawable/ic_android"
-                        tools:ignore="ContentDescription" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:orientation="vertical"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
-                        tools:ignore="RtlHardcoded">
-
-                        <TextView
-                            android:id="@+id/android_version"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:minHeight="48dp"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="16dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        app:srcCompat="@drawable/ic_phone"
-                        tools:ignore="ContentDescription" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:orientation="vertical"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp">
-
-                        <TextView
-                            android:id="@+id/manufacturer"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:minHeight="48dp"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="16dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        app:srcCompat="@drawable/ic_chip"
-                        tools:ignore="ContentDescription" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:orientation="vertical"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp">
-
-                        <TextView
-                            android:id="@+id/cpu"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:minHeight="48dp"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="16dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        app:srcCompat="@drawable/ic_verified"
-                        tools:ignore="ContentDescription" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:orientation="vertical"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp">
-
-                        <TextView
-                            android:id="@+id/dmverity"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
-
-                        <TextView
-                            android:id="@+id/dmverity_explanation"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/verified_boot_explanation"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:id="@+id/updateView"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/framework"
+            android:drawablePadding="8dp"
+            android:paddingTop="8dp"
+            android:minHeight="48dp"
+            android:paddingBottom="8dp"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:paddingTop="20dp"
-            android:visibility="gone">
+            android:text="@string/not_installed"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            app:drawableStartCompat="@drawable/ic_framework" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+        <TextView
+            android:id="@+id/manager"
+            android:drawablePadding="8dp"
+            android:paddingTop="8dp"
+            android:minHeight="48dp"
+            android:paddingBottom="8dp"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            app:drawableStartCompat="@drawable/ic_manager" />
 
-                <LinearLayout
-                    android:id="@+id/click_to_update"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:minHeight="48dp"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="16dp">
+        <TextView
+            android:id="@+id/android_version"
+            android:drawablePadding="8dp"
+            android:paddingTop="8dp"
+            android:minHeight="48dp"
+            android:paddingBottom="8dp"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            app:drawableStartCompat="@drawable/ic_android" />
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        app:srcCompat="@drawable/ic_update"
-                        tools:ignore="ContentDescription" />
+        <TextView
+            android:id="@+id/manufacturer"
+            android:drawablePadding="8dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:minHeight="48dp"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            app:drawableStartCompat="@drawable/ic_phone" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:orientation="vertical"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp">
+        <TextView
+            android:id="@+id/cpu"
+            android:drawablePadding="8dp"
+            android:paddingTop="8dp"
+            android:minHeight="48dp"
+            android:paddingBottom="8dp"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            app:drawableStartCompat="@drawable/ic_chip" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/newVersion"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                            android:textColor="@color/download_status_update_available" />
-
-                    </LinearLayout>
-
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </FrameLayout>
+        <TextView
+            android:id="@+id/dmverity"
+            android:paddingTop="8dp"
+            android:drawablePadding="8dp"
+            android:minHeight="48dp"
+            android:paddingBottom="8dp"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            app:drawableStartCompat="@drawable/ic_verified"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
     </LinearLayout>
-
 </ScrollView>

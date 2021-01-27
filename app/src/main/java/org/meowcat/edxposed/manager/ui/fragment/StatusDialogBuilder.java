@@ -113,11 +113,9 @@ public class StatusDialogBuilder extends MaterialAlertDialogBuilder {
                 binding.dmverity.setTextColor(ContextCompat.getColor(getContext(), R.color.warning));
             } else if (detected) {
                 binding.dmverity.setText(R.string.verified_boot_deactivated);
-                binding.dmverityExplanation.setVisibility(View.GONE);
             } else {
                 binding.dmverity.setText(R.string.verified_boot_none);
                 binding.dmverity.setTextColor(ContextCompat.getColor(getContext(), R.color.warning));
-                binding.dmverityExplanation.setVisibility(View.GONE);
             }
         } catch (Exception e) {
             Log.e(App.TAG, "Could not detect Verified Boot state", e);
