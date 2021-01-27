@@ -1,6 +1,9 @@
 package com.elderdrivers.riru.edxp.yahfa.dexmaker;
 
 
+import com.elderdrivers.riru.edxp.config.ConfigManager;
+
+import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
@@ -9,11 +12,12 @@ import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import de.robv.android.xposed.LspHooker;
 import de.robv.android.xposed.XposedBridge;
 
 public final class DynamicBridge {
 
-    private static final HashMap<Member, Method> hookedInfo = new HashMap<>();
+    private static final HashMap<Member, LspHooker> hookedInfo = new HashMap<>();
     private static final HookerDexMaker dexMaker = new HookerDexMaker();
     private static final AtomicBoolean dexPathInited = new AtomicBoolean(false);
 
@@ -40,7 +44,7 @@ public final class DynamicBridge {
         try {
             dexMaker.start(hookMethod, additionalHookInfo,
                     hookMethod.getDeclaringClass().getClassLoader());
-            hookedInfo.put(hookMethod, dexMaker.getCallBackupMethod());
+            hookedInfo.put(hookMethod, dexMaker.getHooker());
         } catch (Exception e) {
             DexLog.e("error occur when generating dex.", e);
         }
@@ -66,25 +70,16 @@ public final class DynamicBridge {
 
     public static Object invokeOriginalMethod(Member method, Object thisObject, Object[] args)
             throws InvocationTargetException, IllegalAccessException {
-        Method callBackup = hookedInfo.get(method);
-        if (callBackup == null) {
+        LspHooker hooker = hookedInfo.get(method);
+        if (hooker == null) {
             throw new IllegalStateException("method not hooked, cannot call original method.");
         }
-        if (!Modifier.isStatic(callBackup.getModifiers())) {
-            throw new IllegalStateException("original method is not static, something must be wrong!");
-        }
-        callBackup.setAccessible(true);
-        if (args == null) {
-            args = new Object[0];
-        }
-        final int argsSize = args.length;
-        if (Modifier.isStatic(method.getModifiers())) {
-            return callBackup.invoke(null, args);
-        } else {
-            Object[] newArgs = new Object[argsSize + 1];
-            newArgs[0] = thisObject;
-            System.arraycopy(args, 0, newArgs, 1, argsSize);
-            return callBackup.invoke(null, newArgs);
+        try {
+            return hooker.callBackup(thisObject, args);
+        } catch (IllegalAccessException e) {
+            throw e;
+        } catch (Throwable e) {
+            throw new InvocationTargetException(e);
         }
     }
 }

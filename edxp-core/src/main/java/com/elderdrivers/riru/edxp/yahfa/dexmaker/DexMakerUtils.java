@@ -13,6 +13,7 @@ import external.com.android.dx.Code;
 import external.com.android.dx.Local;
 import external.com.android.dx.TypeId;
 
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class DexMakerUtils {
 
     public static boolean canCache = true;
@@ -213,12 +214,6 @@ public class DexMakerUtils {
         } else {
             return typeId;
         }
-    }
-
-    public static void returnRightValue(Code code, Class<?> returnType, Map<Class, Local> resultLocals) {
-        String unboxMethod;
-        TypeId<?> boxTypeId;
-        code.returnValue(resultLocals.get(returnType));
     }
 
     public static String getSha1Hex(String text) {

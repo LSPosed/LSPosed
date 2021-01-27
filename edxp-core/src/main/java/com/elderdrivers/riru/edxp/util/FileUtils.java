@@ -72,6 +72,6 @@ public class FileUtils {
     }
 
     public static String getDataPathPrefix() {
-        return ConfigManager.getDataPathPrefix();
+        return ConfigManager.getDataPathPrefix() + "/";
     }
 }

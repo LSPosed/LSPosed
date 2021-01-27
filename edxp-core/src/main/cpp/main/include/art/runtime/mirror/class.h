@@ -29,8 +29,8 @@ namespace art {
                 const char *thisDesc = GetDescriptor(thiz, &storage1);
                 const char *thatDesc = GetDescriptor(that, &storage2);
                 // Note: these identifiers should be consistent with those in Java layer
-                if (strstr(thisDesc, "EdHooker_") != nullptr
-                    || strstr(thatDesc, "EdHooker_") != nullptr
+                if (strstr(thisDesc, "LspHooker_") != nullptr
+                    || strstr(thatDesc, "LspHooker_") != nullptr
                     || strstr(thisDesc, "com/elderdrivers/riru/") != nullptr
                     || strstr(thatDesc, "com/elderdrivers/riru/") != nullptr) {
                     return true;
