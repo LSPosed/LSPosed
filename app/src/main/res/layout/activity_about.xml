@@ -4,16 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/snackbar"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clipChildren="false"
-    android:clipToPadding="false">
+    android:layout_height="match_parent">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clipChildren="false"
-        android:clipToPadding="false"
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:ignore="UseCompoundDrawables,ContentDescription">
@@ -26,8 +22,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="72dp"
-                android:clipChildren="false"
-                android:clipToPadding="false"
                 android:orientation="horizontal"
                 android:padding="16dp">
 
@@ -210,69 +204,69 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                 android:textColor="?android:textColorSecondary" />
 
-<!--            TODO:
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="vertical">
+            <!--            TODO:
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingHorizontal="16dp">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:paddingHorizontal="16dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/solohsu"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/solohsu"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/solohsu_summary"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
-                </LinearLayout>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/solohsu_summary"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
+                            </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="16dp"
-                    android:paddingVertical="8dp">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:padding="16dp"
+                                android:paddingVertical="8dp">
 
-                    <com.google.android.material.button.MaterialButton
-                        style="@style/Widget.MaterialComponents.Button.TextButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:onClick="openLink"
-                        android:tag="@string/solohsu_xda"
-                        android:text="@string/xda"
-                        android:textColor="#F57C00" />
+                                <com.google.android.material.button.MaterialButton
+                                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:onClick="openLink"
+                                    android:tag="@string/solohsu_xda"
+                                    android:text="@string/xda"
+                                    android:textColor="#F57C00" />
 
-                    <com.google.android.material.button.MaterialButton
-                        style="@style/Widget.MaterialComponents.Button.TextButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:onClick="openLink"
-                        android:tag="@string/solohsu_github"
-                        android:text="@string/github"
-                        android:textColor="#4183c4" />
+                                <com.google.android.material.button.MaterialButton
+                                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:onClick="openLink"
+                                    android:tag="@string/solohsu_github"
+                                    android:text="@string/github"
+                                    android:textColor="#4183c4" />
 
-                    <com.google.android.material.button.MaterialButton
-                        style="@style/Widget.MaterialComponents.Button.TextButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:onClick="openLink"
-                        android:tag="@string/solohsu_coolapk"
-                        android:text="@string/coolapk"
-                        android:textColor="#0F9D58" />
-                </LinearLayout>
+                                <com.google.android.material.button.MaterialButton
+                                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:onClick="openLink"
+                                    android:tag="@string/solohsu_coolapk"
+                                    android:text="@string/coolapk"
+                                    android:textColor="#0F9D58" />
+                            </LinearLayout>
 
-            </LinearLayout>
--->
+                        </LinearLayout>
+            -->
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

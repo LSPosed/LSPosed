@@ -4,67 +4,61 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/snackbar"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clipChildren="false"
-    android:clipToPadding="false">
+    android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/warning_crash"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:orientation="vertical">
+            android:layout_margin="16dp"
+            android:orientation="horizontal"
+            app:cardBackgroundColor="@color/amber_500">
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/warning_crash"
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:orientation="horizontal"
-                app:cardBackgroundColor="@color/amber_500">
+                tools:ignore="UseCompoundDrawables">
 
-                <RelativeLayout
-                    android:layout_width="wrap_content"
+                <ImageView
+                    android:id="@+id/warning"
+                    android:layout_width="128dp"
+                    android:layout_height="128dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_margin="8dp"
+                    app:srcCompat="@drawable/ic_warning"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:ignore="UseCompoundDrawables">
+                    android:layout_below="@+id/warning"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="16dp"
+                    android:text="Manager crashed"
+                    android:textAlignment="center"
+                    android:textAllCaps="true"
+                    android:textSize="36sp"
+                    android:textStyle="bold" />
 
-                    <ImageView
-                        android:id="@+id/warning"
-                        android:layout_width="128dp"
-                        android:layout_height="128dp"
-                        android:layout_centerHorizontal="true"
-                        android:layout_margin="8dp"
-                        app:srcCompat="@drawable/ic_warning"
-                        tools:ignore="ContentDescription" />
+            </RelativeLayout>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/warning"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginBottom="16dp"
-                        android:text="Manager crashed"
-                        android:textAlignment="center"
-                        android:textAllCaps="true"
-                        android:textSize="36sp"
-                        android:textStyle="bold" />
+        </com.google.android.material.card.MaterialCardView>
 
-                </RelativeLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/copyLogs"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="4dp"
+            android:text="Copy logs"
+            android:theme="@style/Widget.AppCompat.Button.Colored" />
+    </LinearLayout>
 
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/copyLogs"
-                style="@style/Widget.MaterialComponents.Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="4dp"
-                android:text="Copy logs"
-                android:theme="@style/Widget.AppCompat.Button.Colored" />
-        </LinearLayout>
-    </RelativeLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

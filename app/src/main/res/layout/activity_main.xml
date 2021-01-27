@@ -3,24 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/snackbar"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clipChildren="false"
-    android:clipToPadding="false">
+    android:layout_height="match_parent">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipChildren="false"
-        android:clipToPadding="false"
         android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:animateLayoutChanges="true"
-            android:clipChildren="false"
-            android:clipToPadding="false"
             android:orientation="vertical"
             tools:context=".ui.activity.MainActivity">
 
