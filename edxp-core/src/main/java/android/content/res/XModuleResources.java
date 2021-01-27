@@ -6,6 +6,7 @@ import android.util.DisplayMetrics;
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.IXposedHookZygoteInit.StartupParam;
+import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
 
 /**
@@ -33,7 +34,8 @@ public class XModuleResources extends Resources {
 			throw new IllegalArgumentException("path must not be null");
 
 		AssetManager assets = new AssetManager();
-		assets.addAssetPath(path);
+		XposedHelpers.callMethod(assets, "addAssetPath", path);
+		//assets.addAssetPath(path);
 
 		XModuleResources res;
 		if (origRes != null)

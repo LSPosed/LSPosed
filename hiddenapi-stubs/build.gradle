@@ -4,12 +4,3 @@ android {
     compileSdkVersion androidCompileSdkVersion.toInteger()
     ndkVersion androidCompileNdkVersion
 }
-
-task makeStubJar(type: Jar){
-    dependsOn assemble
-    baseName 'framework-stub'
-    from("${buildDir}/intermediates/javac/release/classes/")
-    exclude('BuildConfig.class', 'R.class')
-    exclude{ it.name.startsWith('R$')}
-    outputs.file(archivePath)
-}

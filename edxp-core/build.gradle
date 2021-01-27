@@ -70,6 +70,11 @@ android {
         buildConfigField("Integer", "VERSION_CODE", String.valueOf(rootProject.ext.versionCode))
     }
 
+    lintOptions {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+
     buildTypes {
         debug {
             externalNativeBuild {
@@ -122,11 +127,6 @@ preBuild.doLast {
 }
 
 afterEvaluate {
-    tasks.withType(JavaCompile) {
-        dependsOn tasks.getByPath(":hiddenapi-stubs:makeStubJar")
-        options.compilerArgs.add("-Xbootclasspath/p:${hiddenApiStubJarFilePath}")
-    }
-
     task("copyCommonProperties", type: Copy) {
         from file("${projectDir}/template_override/")
         into file(templateRootPath)

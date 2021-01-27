@@ -801,32 +801,6 @@ public class XResources extends XResourcesSuperClass {
 
 	/** @hide */
 	@Override
-	public Drawable getDrawable(int id, Theme theme, boolean supportComposedIcons) throws NotFoundException {
-		try {
-			if (incrementMethodDepth("getDrawable") == 1) {
-				Object replacement = getReplacement(id);
-				if (replacement instanceof DrawableLoader) {
-					try {
-						Drawable result = ((DrawableLoader) replacement).newDrawable(this, id);
-						if (result != null)
-							return result;
-					} catch (Throwable t) { XposedBridge.log(t); }
-				} else if (replacement instanceof Integer) {
-					return new ColorDrawable((Integer) replacement);
-				} else if (replacement instanceof XResForwarder) {
-					Resources repRes = ((XResForwarder) replacement).getResources();
-					int repId = ((XResForwarder) replacement).getId();
-					return repRes.getDrawable(repId);
-				}
-			}
-			return super.getDrawable(id, theme, supportComposedIcons);
-		} finally {
-			decrementMethodDepth("getDrawable");
-		}
-	}
-
-	/** @hide */
-	@Override
 	public Drawable getDrawableForDensity(int id, int density) throws NotFoundException {
 		try {
 			if (incrementMethodDepth("getDrawableForDensity") == 1) {
@@ -872,32 +846,6 @@ public class XResources extends XResourcesSuperClass {
 				}
 			}
 			return super.getDrawableForDensity(id, density, theme);
-		} finally {
-			decrementMethodDepth("getDrawableForDensity");
-		}
-	}
-
-	/** @hide */
-	@Override
-	public Drawable getDrawableForDensity(int id, int density, Theme theme, boolean supportComposedIcons) throws NotFoundException {
-		try {
-			if (incrementMethodDepth("getDrawableForDensity") == 1) {
-				Object replacement = getReplacement(id);
-				if (replacement instanceof DrawableLoader) {
-					try {
-						Drawable result = ((DrawableLoader) replacement).newDrawableForDensity(this, id, density);
-						if (result != null)
-							return result;
-					} catch (Throwable t) { XposedBridge.log(t); }
-				} else if (replacement instanceof Integer) {
-					return new ColorDrawable((Integer) replacement);
-				} else if (replacement instanceof XResForwarder) {
-					Resources repRes = ((XResForwarder) replacement).getResources();
-					int repId = ((XResForwarder) replacement).getId();
-					return repRes.getDrawableForDensity(repId, density);
-				}
-			}
-			return super.getDrawableForDensity(id, density, theme, supportComposedIcons);
 		} finally {
 			decrementMethodDepth("getDrawableForDensity");
 		}

@@ -262,7 +262,8 @@ public final class XposedInit {
         // Replace system resources
         XResources systemRes = new XResources(
                 (ClassLoader) XposedHelpers.getObjectField(Resources.getSystem(), "mClassLoader"));
-        systemRes.setImpl((ResourcesImpl) XposedHelpers.getObjectField(Resources.getSystem(), "mResourcesImpl"));
+        XposedHelpers.callMethod(systemRes, "setImpl", XposedHelpers.getObjectField(Resources.getSystem(), "mResourcesImpl"));
+        //systemRes.setImpl((ResourcesImpl) XposedHelpers.getObjectField(Resources.getSystem(), "mResourcesImpl"));
         systemRes.initObject(null);
         setStaticObjectField(Resources.class, "mSystem", systemRes);
 
@@ -280,7 +281,8 @@ public final class XposedInit {
         // Replace the returned resources with our subclass.
         XResources newRes = new XResources(
                 (ClassLoader) XposedHelpers.getObjectField(param.getResult(), "mClassLoader"));
-        newRes.setImpl((ResourcesImpl) XposedHelpers.getObjectField(param.getResult(), "mResourcesImpl"));
+        XposedHelpers.callMethod(newRes, "setImpl", XposedHelpers.getObjectField(param.getResult(), "mResourcesImpl"));
+        //newRes.setImpl((ResourcesImpl) XposedHelpers.getObjectField(param.getResult(), "mResourcesImpl"));
         newRes.initObject(resDir);
 
         // Invoke handleInitPackageResources().
