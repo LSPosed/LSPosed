@@ -123,6 +123,7 @@ namespace edxp {
 
     std::string ConfigManager::GetPackageNameFromBaseApkPath(const fs::path &path) {
         std::vector<std::string> paths(path.begin(), path.end());
+        if (paths.empty()) return {};
         auto base_apk = paths.back(); // base.apk
         if (base_apk != "base.apk") return {};
         paths.pop_back();

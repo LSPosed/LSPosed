@@ -5,34 +5,40 @@
 
 #include "common.h"
 #include "HookMain.h"
+
 extern "C" {
 #include "trampoline.h"
 }
 
 int SDKVersion;
-static uint32_t OFFSET_entry_point_from_interpreter_in_ArtMethod;
-static uint32_t OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod;
-static uint32_t OFFSET_ArtMehod_in_Object;
-static uint32_t OFFSET_access_flags_in_ArtMethod;
-static uint32_t kAccCompileDontBother = 0x01000000;
+namespace {
+    uint32_t OFFSET_entry_point_from_interpreter_in_ArtMethod;
+    uint32_t OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod;
+    uint32_t OFFSET_ArtMehod_in_Object;
+    uint32_t OFFSET_access_flags_in_ArtMethod;
+    uint32_t kAccCompileDontBother = 0x01000000;
+    uint32_t kAccNative = 0x0100;
+    uint32_t kAccFastInterpreterToInterpreterInvoke = 0x40000000;
 
-static jfieldID fieldArtMethod = nullptr;
-static std::unordered_map<void*, void*> replaced_entrypoint;
+    jfieldID fieldArtMethod = nullptr;
 
-static inline uint32_t read32(void *addr) {
-    return *((uint32_t *) addr);
-}
+    std::unordered_map<void *, void *> replaced_entrypoint;
 
-static inline void write32(void *addr, uint32_t value) {
-    *((uint32_t *) addr) = value;
-}
+    inline uint32_t read32(void *addr) {
+        return *((uint32_t *) addr);
+    }
 
-static inline void *readAddr(void *addr) {
-    return *((void **) addr);
-}
+    inline void write32(void *addr, uint32_t value) {
+        *((uint32_t *) addr) = value;
+    }
 
-static inline void writeAddr(void *addr, void *value) {
-    *((void **)addr) = value;
+    inline void *readAddr(void *addr) {
+        return *((void **) addr);
+    }
+
+    inline void writeAddr(void *addr, void *value) {
+        *((void **) addr) = value;
+    }
 }
 
 extern "C" void Java_lab_galaxy_yahfa_HookMain_init(JNIEnv *env, jclass clazz, jint sdkVersion) {
@@ -97,13 +103,13 @@ extern "C" void Java_lab_galaxy_yahfa_HookMain_init(JNIEnv *env, jclass clazz, j
 }
 
 static uint32_t getFlags(void *method_) {
-    char* method = (char*)method_;
+    char *method = (char *) method_;
     uint32_t access_flags = read32(method + OFFSET_access_flags_in_ArtMethod);
     return access_flags;
 }
 
 static void setFlags(void *method_, uint32_t access_flags) {
-    char* method = (char*)method_;
+    char *method = (char *) method_;
     write32(method + OFFSET_access_flags_in_ArtMethod, access_flags);
 }
 
@@ -118,20 +124,21 @@ void setNonCompilable(void *method) {
     LOGI("setNonCompilable: change access flags from 0x%x to 0x%x", old_flags, access_flags);
 }
 
-void *getEntryPoint(void* method) {
+void *getEntryPoint(void *method) {
     return readAddr((char *) method + OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod);
 }
 
 static int replaceMethod(void *fromMethod, void *toMethod, int isBackup) {
     // replace entry point
     void *newEntrypoint = nullptr;
-    void* fromEntrypoint = (char *) fromMethod + OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod;
+    void *fromEntrypoint =
+            (char *) fromMethod + OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod;
     if (isBackup) {
-        void *originEntrypoint = readAddr((char *) toMethod + OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod);
+        void *originEntrypoint = readAddr(
+                (char *) toMethod + OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod);
         // entry point hardcoded
         newEntrypoint = genTrampoline(toMethod, originEntrypoint);
-    }
-    else {
+    } else {
         // entry point from ArtMethod struct
         newEntrypoint = genTrampoline(toMethod, nullptr);
     }
@@ -147,7 +154,8 @@ static int replaceMethod(void *fromMethod, void *toMethod, int isBackup) {
 
     // For pre Android M devices, should be not used by EdXposed.
     if (OFFSET_entry_point_from_interpreter_in_ArtMethod != 0) {
-        void *interpEntrypoint = readAddr((char *) toMethod + OFFSET_entry_point_from_interpreter_in_ArtMethod);
+        void *interpEntrypoint = readAddr(
+                (char *) toMethod + OFFSET_entry_point_from_interpreter_in_ArtMethod);
         writeAddr(fromEntrypoint, interpEntrypoint);
     }
 
@@ -165,7 +173,7 @@ static int doBackupAndHook(void *targetMethod, void *hookMethod, void *backupMet
     if (SDKVersion >= __ANDROID_API_N__) {
         setNonCompilable(targetMethod);
 //        setNonCompilable(hookMethod);
-        if(backupMethod) setNonCompilable(backupMethod);
+        if (backupMethod) setNonCompilable(backupMethod);
     }
 
     if (backupMethod) {// do method backup
@@ -201,8 +209,9 @@ void *getArtMethod(JNIEnv *env, jobject jmethod) {
 }
 
 extern "C" jobject Java_lab_galaxy_yahfa_HookMain_findMethodNative(JNIEnv *env, jclass clazz,
-                                                        jclass targetClass, jstring methodName,
-                                                        jstring methodSig) {
+                                                                   jclass targetClass,
+                                                                   jstring methodName,
+                                                                   jstring methodSig) {
     const char *c_methodName = env->GetStringUTFChars(methodName, nullptr);
     const char *c_methodSig = env->GetStringUTFChars(methodSig, nullptr);
     jobject ret = nullptr;
@@ -228,8 +237,8 @@ extern "C" jobject Java_lab_galaxy_yahfa_HookMain_findMethodNative(JNIEnv *env, 
 }
 
 extern "C" jboolean Java_lab_galaxy_yahfa_HookMain_backupAndHookNative(JNIEnv *env, jclass clazz,
-                                                            jobject target, jobject hook,
-                                                            jobject backup) {
+                                                                       jobject target, jobject hook,
+                                                                       jobject backup) {
 
     if (!doBackupAndHook(getArtMethod(env, target),
                          getArtMethod(env, hook),
@@ -243,6 +252,6 @@ extern "C" jboolean Java_lab_galaxy_yahfa_HookMain_backupAndHookNative(JNIEnv *e
     }
 }
 
-void *getOriginalEntryPointFromTargetMethod(void* method) {
+void *getOriginalEntryPointFromTargetMethod(void *method) {
     return replaced_entrypoint[method];
 }
