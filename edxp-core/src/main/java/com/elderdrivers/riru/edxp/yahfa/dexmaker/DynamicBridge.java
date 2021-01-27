@@ -74,13 +74,7 @@ public final class DynamicBridge {
         if (hooker == null) {
             throw new IllegalStateException("method not hooked, cannot call original method.");
         }
-        try {
-            return hooker.callBackup(thisObject, args);
-        } catch (IllegalAccessException e) {
-            throw e;
-        } catch (Throwable e) {
-            throw new InvocationTargetException(e);
-        }
+        return hooker.callBackup(thisObject, args);
     }
 }
 

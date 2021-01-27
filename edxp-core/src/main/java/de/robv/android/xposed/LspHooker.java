@@ -18,29 +18,32 @@ public class LspHooker {
         this.backup = backup;
     }
 
-    public Object callBackup(Object thisObject, Object[] args) throws Throwable {
-        try {
-            if (args == null) {
-                args = new Object[0];
-            }
-            if (Modifier.isStatic(method.getModifiers())) {
-                return backup.invoke(null, args);
-            } else {
-                Object[] newArgs = new Object[args.length + 1];
-                newArgs[0] = thisObject;
-                System.arraycopy(args, 0, newArgs, 1, args.length);
-                return backup.invoke(null, newArgs);
-            }
-        } catch (InvocationTargetException ite) {
-            throw ite.getCause();
+    public Object callBackup(Object thisObject, Object[] args) throws InvocationTargetException, IllegalAccessException {
+        if (args == null) {
+            args = new Object[0];
+        }
+        if (Modifier.isStatic(method.getModifiers())) {
+            return backup.invoke(null, args);
+        } else {
+            Object[] newArgs = new Object[args.length + 1];
+            newArgs[0] = thisObject;
+            System.arraycopy(args, 0, newArgs, 1, args.length);
+            return backup.invoke(null, newArgs);
         }
     }
 
     @SuppressWarnings({"unused", "RedundantSuppression"})
     public Object handleHookedMethod(Object[] args) throws Throwable {
+        if (disableHooks) {
+            try {
+                return backup.invoke(null, args);
+            } catch (InvocationTargetException ite) {
+                throw ite.getCause();
+            }
+        }
         Object[] callbacksSnapshot = additionalInfo.callbacks.getSnapshot();
         final int callbacksLength = callbacksSnapshot.length;
-        if (disableHooks || callbacksLength == 0) {
+        if (callbacksLength == 0) {
             try {
                 return backup.invoke(null, args);
             } catch (InvocationTargetException ite) {
@@ -84,7 +87,11 @@ public class LspHooker {
 
         // call original method if not requested otherwise
         if (!param.returnEarly) {
-            param.setResult(callBackup(param.thisObject, param.args));
+            try {
+                param.setResult(callBackup(param.thisObject, param.args));
+            } catch (InvocationTargetException e) {
+                param.setThrowable(e.getCause());
+            }
         }
 
         // call "after method" callbacks
