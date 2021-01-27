@@ -22,7 +22,7 @@
 
     <item
         android:id="@+id/item_list_sort"
-        android:title="@string/list_sort"
+        android:title="@string/menu_sort"
         app:showAsAction="never">
         <menu>
             <group android:checkableBehavior="single">
@@ -81,7 +81,7 @@
     </item>
 
     <item
-        android:title="@string/reboot"
+        android:title="@string/menu_reboot"
         app:showAsAction="never">
         <menu>
             <item

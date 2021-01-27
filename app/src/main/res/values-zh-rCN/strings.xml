@@ -319,4 +319,6 @@
     <string name="menu_optimize">优化…</string>
     <string name="menu_show_system_apps">系统应用</string>
     <string name="menu_show_modules">模块</string>
+    <string name="menu_reboot">重启…</string>
+    <string name="menu_sort">排序…</string>
 </resources>
