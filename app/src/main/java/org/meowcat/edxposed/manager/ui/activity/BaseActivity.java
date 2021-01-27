@@ -1,6 +1,5 @@
 package org.meowcat.edxposed.manager.ui.activity;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -12,11 +11,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.os.PowerManager;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -39,7 +34,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-@SuppressLint("Registered")
 public class BaseActivity extends AppCompatActivity {
 
     private static final String THEME_DEFAULT = "DEFAULT";
@@ -65,19 +59,6 @@ public class BaseActivity extends AppCompatActivity {
 
     public static boolean isNightMode(Configuration configuration) {
         return (configuration.uiMode & Configuration.UI_MODE_NIGHT_YES) > 0;
-    }
-
-    @Override
-    public void setContentView(View view) {
-        FrameLayout frameLayout = new FrameLayout(this);
-        frameLayout.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-        if (displayMetrics.widthPixels > displayMetrics.heightPixels) {
-            int padding = (displayMetrics.widthPixels - displayMetrics.heightPixels) / 2;
-            frameLayout.setPadding(padding, 0, padding, 0);
-        }
-        frameLayout.addView(view);
-        super.setContentView(frameLayout);
     }
 
     @StyleRes
