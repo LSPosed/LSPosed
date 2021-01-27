@@ -26,10 +26,7 @@
         <activity
             android:name=".ui.activity.LogsActivity"
             android:label="@string/Logs" />
-        <activity android:name=".ui.activity.BlackListActivity" />
-        <activity
-            android:name=".ui.activity.ModuleScopeActivity"
-            android:label="@string/menu_scope" />
+        <activity android:name=".ui.activity.AppListActivity" />
         <activity
             android:name=".ui.activity.MainActivity"
             android:label="@string/app_name"
@@ -71,6 +68,7 @@
         <receiver
             android:name=".util.NotificationUtil$RebootReceiver"
             android:exported="false" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"

@@ -201,7 +201,6 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
         });
     }
 
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     @SuppressLint("NonConstantResourceId")
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();

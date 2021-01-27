@@ -44,7 +44,7 @@ public class MainActivity extends BaseActivity implements ModuleUtil.ModuleListe
         });
         binding.apps.setOnClickListener(v -> {
             Intent intent = new Intent();
-            intent.setClass(getApplicationContext(), BlackListActivity.class);
+            intent.setClass(getApplicationContext(), AppListActivity.class);
             startActivity(intent);
         });
         binding.status.setOnClickListener(v -> {

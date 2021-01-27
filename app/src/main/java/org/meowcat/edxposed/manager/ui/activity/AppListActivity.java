@@ -4,6 +4,7 @@ import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,17 +19,18 @@ import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.adapters.AppAdapter;
 import org.meowcat.edxposed.manager.adapters.AppHelper;
 import org.meowcat.edxposed.manager.adapters.BlackListAdapter;
-import org.meowcat.edxposed.manager.databinding.ActivityBlackListBinding;
+import org.meowcat.edxposed.manager.adapters.ScopeAdapter;
+import org.meowcat.edxposed.manager.databinding.ActivityScopeListBinding;
 import org.meowcat.edxposed.manager.util.LinearLayoutManagerFix;
 
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 
-public class BlackListActivity extends BaseActivity implements AppAdapter.Callback {
+public class AppListActivity extends BaseActivity implements AppAdapter.Callback {
     private SearchView searchView;
     private AppAdapter appAdapter;
 
     private SearchView.OnQueryTextListener searchListener;
-    private ActivityBlackListBinding binding;
+    private ActivityScopeListBinding binding;
     private final Runnable runnable = new Runnable() {
         @Override
         public void run() {
@@ -40,16 +42,24 @@ public class BlackListActivity extends BaseActivity implements AppAdapter.Callba
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityBlackListBinding.inflate(getLayoutInflater());
+        String modulePackageName = getIntent().getStringExtra("modulePackageName");
+        String moduleName = getIntent().getStringExtra("moduleName");
+        binding = ActivityScopeListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);
         binding.toolbar.setNavigationOnClickListener(view -> finish());
         ActionBar bar = getSupportActionBar();
-        if (bar != null) {
-            bar.setDisplayHomeAsUpEnabled(true);
+        bar.setDisplayHomeAsUpEnabled(true);
+        if (!TextUtils.isEmpty(modulePackageName)) {
+            bar.setTitle(R.string.menu_scope);
+            bar.setSubtitle(moduleName);
+            appAdapter = new ScopeAdapter(this, modulePackageName, binding.masterSwitch);
+        } else {
+            final boolean isWhiteListMode = AppHelper.isWhiteListMode();
+            bar.setTitle(isWhiteListMode ? R.string.title_white_list : R.string.title_black_list);
+            binding.masterSwitch.setVisibility(View.GONE);
+            appAdapter = new BlackListAdapter(this, isWhiteListMode);
         }
-        final boolean isWhiteListMode = isWhiteListMode();
-        appAdapter = new BlackListAdapter(this, isWhiteListMode);
         appAdapter.setHasStableIds(true);
         binding.recyclerView.setAdapter(appAdapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManagerFix(this));
@@ -95,22 +105,6 @@ public class BlackListActivity extends BaseActivity implements AppAdapter.Callba
         searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
         searchView.setOnQueryTextListener(searchListener);
         return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        changeTitle(isWhiteListMode());
-    }
-
-
-    private void changeTitle(boolean isWhiteListMode) {
-        setTitle(isWhiteListMode ? R.string.title_white_list : R.string.title_black_list);
-
-    }
-
-    private boolean isWhiteListMode() {
-        return AppHelper.isWhiteListMode();
     }
 
     @Override

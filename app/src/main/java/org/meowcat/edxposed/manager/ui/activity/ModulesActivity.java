@@ -421,7 +421,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             return true;
         } else if (itemId == R.id.menu_scope) {
             if (App.supportScope()) {
-                Intent intent = new Intent(this, ModuleScopeActivity.class);
+                Intent intent = new Intent(this, AppListActivity.class);
                 intent.putExtra("modulePackageName", module.packageName);
                 intent.putExtra("moduleName", module.getAppName());
                 startActivity(intent);
