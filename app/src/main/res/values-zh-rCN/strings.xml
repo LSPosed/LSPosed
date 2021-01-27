@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="Activated">已激活</string>
-    <string name="Inactivate">未激活</string>
     <string name="Install">安装</string>
     <string name="InstallDetail">点按安装 LSPosed</string>
     <string name="ActivatedDetail">LSPosed 框架已激活</string>
     <string name="Modules">模块</string>
     <string name="ModulesDetail">%d 模块已启用</string>
-    <string name="Downloads">下载</string>
-    <string name="ModuleUpgradable">%s 模块可更新</string>
-    <string name="ModuleUptodate">所有模块已是最新版本</string>
     <string name="Apps">应用</string>
     <string name="Logs">日志</string>
     <string name="Settings">设置</string>
@@ -18,11 +14,7 @@
     <string name="menuSend">发送</string>
     <string name="menuSaveToSd">保存到 SD 卡</string>
 
-    <string name="restart_needed">需要重启</string>
-    <string name="cache_cleaned">应用缓存已清除, 需要重新启动</string>
     <!-- Welcome screen / main sections -->
-    <string name="tabInstall">我的设备</string>
-    <string name="welcome_framework_update_available">LSPosed 框架有更新可用(%s)</string>
 
     <!-- navigation view items -->
     <string name="nav_item_modules">模块</string>
@@ -31,17 +23,12 @@
     <string name="nav_item_logs_err">模块日志</string>
 
     <!-- Installer tab -->
-    <string name="install">安装/更新</string>
-    <string name="uninstall">卸载</string>
     <string name="soft_reboot">软重启</string>
     <string name="reboot">重启</string>
     <string name="areyousure">您确定？</string>
     <string name="reboot_failed">重启失败, 请使用设备自带的重启功能</string>
     <string name="install_warning_title">请小心！</string>
-    <string name="install_warning">某些情况下, 您的设备可能会在安装 LSPosed 过后变得无法正常启动\n\n如果您先前从未听说过「软变砖」或「无限重启」, 又或者您不知道如何从这些情况中恢复手机, 那么请"<b>不要</b>"安装或使用 LSPosed！\n\n无论如何, 都强烈建议您做好近期的数据备份</string>
     <string name="dont_show_again">不再提示</string>
-    <string name="installed_lollipop_inactive">LSPosed 框架已安装, 但尚未激活\n请查看日志以了解详情</string>
-    <string name="modules_updates_available">有模块更新可用</string>
 
     <!-- File operations -->
     <string name="root_failed">无法获取 root 权限\n\n请确认您的设备已正确 root 且没有阻止 shell 命令</string>
@@ -61,8 +48,6 @@
     <string name="no_min_version_specified">该模块未指定所需的 LSPosed 版本</string>
     <string name="warning_min_version_too_low">该模块针对 LSPosed %1$d 版本构建 , 由于不兼容 %2$d 版本中的变更, 现已被停用</string>
     <string name="module_launch">打开</string>
-    <string name="module_download_updates">下载/更新</string>
-    <string name="module_support">支持</string>
     <string name="module_app_info">应用信息</string>
     <string name="modules_app_store">在应用商店查看</string>
     <string name="module_uninstall">卸载</string>
@@ -70,58 +55,16 @@
     <!-- Download tab -->
     <string name="menuSearch">搜索</string>
     <string name="menuReload">重新加载</string>
-    <string name="changes">"更新日志: "</string>
-    <string name="download_details_page_description">介绍</string>
-    <string name="download_details_page_versions">版本</string>
-    <string name="download_details_page_settings">设置</string>
-    <string name="reltype_stable">稳定版</string>
-    <string name="reltype_stable_summary">稳定版(低故障率)</string>
-    <string name="reltype_beta">测试版</string>
-    <string name="reltype_beta_summary">测试版(预计存在问题)</string>
-    <string name="reltype_experimental">实验版</string>
-    <string name="reltype_experimental_summary">实验版(高故障率)</string>
-    <string name="reltype_use_global_summary">使用全局设置</string>
-    <string name="download_author">作者: %s</string>
-    <string name="download_unknown_author">未知作者</string>
-    <string name="download_status_installed">已安装(版本 %s)</string>
-    <string name="download_status_update_available">可更新(版本 %1$s \u2192 %2$s)</string>
-    <string name="download_timestamps">添加于 %1$s \u00b7 更新于 %2$s</string>
-    <string name="download_sorting_title">排序方式</string>
-    <string name="download_sorting_status">按状态排序</string>
-    <string name="download_sorting_updated">按最后更新排序</string>
-    <string name="download_sorting_created">按添加日期排序</string>
-    <string name="download_section_framework">LSPosed 框架</string>
-    <string name="download_section_update_available">有更新可用</string>
-    <string name="download_section_installed">已安装</string>
-    <string name="download_section_not_installed">未安装</string>
-    <string name="download_section_24h">最近 24 小时</string>
-    <string name="download_section_7d">最近 7 天</string>
-    <string name="download_section_30d">最近 30 天</string>
-    <string name="download_section_older">超过 30 天前</string>
-    <string name="download_details_not_found">在仓库中找不到包名为 \"%s\" 的模块</string>
-    <string name="download_no_versions">作者还没有上传过任何内容</string>
-    <string name="download_test_version_not_shown">有新的测试版可用, 但根据全局或模块的设置未被显示</string>
 
     <!-- Settings tab -->
-    <string name="settings_group_download">下载和安装</string>
-    <string name="settings_release_type">要显示的版本</string>
     <string name="settings_group_framework">框架</string>
-    <string name="settings_disable_resources">禁用资源钩子</string>
-    <string name="settings_disable_resources_summary">解决与主题引擎的冲突\n<b>警告: </b> 启用该选项将导致修改资源的模块无法工作</string>
     <string name="settings_group_app">应用</string>
     <string name="settings_theme">主题</string>
     <string name="settings_theme_light">亮色</string>
     <string name="settings_theme_dark">暗色</string>
 
     <!-- Support tab -->
-    <string name="support_modules_label">模块支持</string>
-    <string name="support_modules_description">在模块列表中点击任意模块并选择 \"%1$s\"</string>
     <string name="support_framework_label">框架/管理器 支持</string>
-    <string name="support_faq_label">常见/已知问题</string>
-    <string name="support_group_qq">QQ 群组: 855219808</string>
-    <string name="support_group_telegram">Telegram 群组: @Code_of_MeowCat</string>
-    <string name="support_donate_label">捐赠</string>
-    <string name="support_donate_description">如果您想对 LSPosed 表达感谢, 可以在此向我们捐赠</string>
 
     <!-- Logs tab  -->
     <string name="logs_save_failed">无法将日志写入 SD 卡: </string>
@@ -132,67 +75,28 @@
 
     <!-- About tab -->
     <string name="about_developers_label">主要开发者</string>
-    <string name="about_translator_label">简体中文(中国)翻译</string>
-    <string name="translator">MlgmXyysd</string>
     <string name="about_version_label">版本</string>
     <string name="about_source_label">源代码</string>
-    <string name="about_libraries_label">使用的库</string>
 
     <!-- DownloadView -->
     <string name="download_view_download">下载</string>
-    <string name="download_view_install">安装</string>
-    <string name="download_view_cancel">取消</string>
-    <string name="download_view_no_url">无可用的下载链接</string>
-    <string name="download_view_running">正在下载(%1$,d / %2$,d kB)</string>
-    <string name="download_view_waiting">等待下载中</string>
-    <string name="download_view_successful">下载成功</string>
-    <string name="download_view_failed">下载失败(错误 %d)</string>
 
     <!-- DownloadUtils -->
-    <string name="download_md5sum_incorrect">MD5 校验码错误(下载: %1$s, 预期: %2$s)</string>
-    <string name="download_could_not_read_file">无法读取下载的文件: %s</string>
-    <string name="download_no_valid_apk">下载的文件并非有效的 APK (或存在兼容性问题)</string>
-    <string name="download_incorrect_package_name">文件包名不正确(下载: %1$s, 预期: %2$s)</string>
 
     <!-- RepoLoader -->
-    <string name="repo_download_failed_http">下载 %1$s 失败: %2$d(%3$s)</string>
-    <string name="repo_download_failed">下载 %1$s 失败: %2$s</string>
-    <string name="repo_load_failed">无法从 %1$s:\n%2$s 中加载仓库</string>
 
     <string name="warning_installed_on_external_storage">此模块因被安装在 SD 卡中而导致无法加载, 请将其移动到内部存储</string>
     <string name="export_">导出…</string>
-    <string name="import_">导入…</string>
     <string name="export_enabled_modules">导出已启用模块列表</string>
-    <string name="import_enabled_modules">导入已启用模块列表</string>
     <string name="export_installed_modules">导出已安装模块列表</string>
-    <string name="import_installed_modules">导入已安装模块列表</string>
     <string name="no_installed_modules">没有任何已安装的模块</string>
-    <string name="enable_heads_up">启用浮动通知</string>
-    <string name="enable_heads_up_summary">对新安装或已更新的模块启用浮动通知</string>
     <string name="no_enabled_modules">没有任何已启用的模块</string>
 
-    <string name="share">分享</string>
     <string name="info">信息</string>
-    <string name="infoInstaller">
-        名称: %1$s
-        \n版本: %2$s
-    </string>
-    <string name="infoUninstaller">
-        名称: %1$s
-        \n日期: %2$s
-    </string>
-    <string name="warningArchitecture">你将会下载一个 ZIP 格式文件, 请手动在 Magisk Manager 或 Recovery 中刷入</string>
     <string name="newVersion">LSPosed Manager 有新版本可用！现在更新！</string>
-    <string name="update">更新</string>
     <string name="not_installed_no_lollipop">LSPosed 框架未安装</string>
-    <string name="notify_module_update">启用模块更新通知</string>
 
-    <string name="changelog">更新日志</string>
     <string name="scroll_top">滚动到顶部</string>
-    <string name="install_with_su">静默安装(root)</string>
-    <string name="install_with_su_summ">勾选后在 LSPosed Manager 内安装模块时将不再显示安装提示</string>
-    <string name="ignore_updates">忽略更新</string>
-    <string name="ignore_updates_summ">忽略指定模块的更新</string>
     <string name="reboot_recovery">重启至恢复模式</string>
     <string name="reboot_bootloader">重启至引导加载器</string>
     <string name="reboot_download">重启至下载模式</string>
@@ -201,15 +105,10 @@
     <string name="scroll_bottom">滚动到底部</string>
     <string name="skip_xposedminversion_check">关闭状态检查</string>
     <string name="skip_xposedminversion_check_summ">关闭针对模块的\“LSPosed 安装状态\”检查</string>
-    <string name="support_xda">获取帮助</string>
-    <string name="later">稍后</string>
-    <string name="save">仅下载</string>
     <string name="not_logcat">此处仅显示 LSPosed 及模块相关日志信息\n如果您想抓取系统日志, 可以尝试我们的 Log Catcher Magisk 模块</string>
 
     <!-- EdXp related -->
-    <string name="nav_title_black_list">应用</string>
     <string name="white_list_mode_title">白名单模式</string>
-    <string name="nav_title_compat_list">兼容模式</string>
     <string name="title_white_list">白名单</string>
     <string name="title_black_list">黑名单</string>
     <string name="add_package_failed">修改失败, 一个或多个设置阻止你继续修改</string>
@@ -218,35 +117,13 @@
     <string name="menu_title_compile_dexopt">以 Dexopt 模式优化应用</string>
     <string name="compile_reset_msg">清除中…</string>
     <string name="compile_speed_msg">优化中…</string>
-    <string name="pref_title_dynamic_modules">即时模块列表</string>
-    <string name="pref_dynamic_modules_summary">启用后, 每个应用进程启动时重新加载最新的模块列表(免重启)</string>
     <string name="notinstalled">LSPosed 框架未安装</string>
-    <string name="meowcat_summary">MlgmXyysd 所属团队</string>
-    <string name="elderdrivers_summary">LSPosed 的开发团队</string>
-    <string name="solohsu_summary">LSPosed 的主要开发者</string>
-    <string name="mlgmxyysd_summary">LSPosed Manager 的主要开发者</string>
-    <string name="website">官网</string>
-    <string name="coolapk">酷安</string>
-    <string name="meowcat">小喵工作室</string>
     <string name="white_list_mode_summary">白名单模式: 仅选中的应用加载 LSPosed 模块\n仅当启用应用名单模式时有效</string>
-    <string name="pref_title_black_white_list">应用名单模式</string>
-    <string name="pref_black_white_list_summary">开启后，可在\"应用\"中设置名单\n黑名单模式: 选中的应用不会加载 LSPosed 模块\n注意: 使用应用名单可能会导致某些系统全局模块不能正常工作</string>
-    <string name="ignore_chinese_summary">从模块列表中隐藏中文模块\n模块仍然可以被搜索到\n启用此选项可能会降低性能</string>
-    <string name="ignore_chinese">忽略中文字符</string>
     <string name="verified_boot_explanation">引导验证(dm-verity)防止设备在修改系统分区时引导</string>
     <string name="verified_boot_active">引导验证已启用</string>
     <string name="verified_boot_deactivated">引导验证已禁用</string>
     <string name="verified_boot_none">无法获取引导验证状态</string>
     <string name="done">完成！</string>
-    <string name="installation_error">安装错误</string>
-    <string name="installation_successful">安装成功</string>
-    <string name="installation_successful_message">成功安装 %s</string>
-    <string name="installation_error_message">%1$s 安装失败 (%2$s)</string>
-    <string name="install_load">安装中…</string>
-    <string name="installation_apk_normal">使用普通方式安装 APK</string>
-    <string name="install_load_apk">正在安装 %s</string>
-    <string name="unstable_build">这是一个不稳定的构建\n安装风险由您自行承担</string>
-    <string name="unofficial_build">这是一个非官方的构建\n安装风险由您自行承担</string>
     <string name="dexopt_now">以 Dexopt 模式优化全部应用</string>
     <string name="speed_now">以 Speed 模式优化全部应用</string>
     <string name="this_may_take_a_while">请稍后, 这将需要一段时间…</string>
@@ -258,32 +135,21 @@
     <string name="logs_cannot_read">无法读取日志: \n</string>
     <string name="app_launch">运行</string>
     <string name="app_stop">停止</string>
-    <string name="update_description">更新日志</string>
-    <string name="show_modules">显示模块和管理器</string>
-    <string name="show_modules_summary">在应用列表内显示模块和管理器\n此选项并不会移除已勾选的应用标识</string>
     <string name="compile_failed">优化失败或返回值为空</string>
     <string name="compile_failed_with_info">优化失败: </string>
     <string name="hook_modules">强制添加模块</string>
     <string name="hook_modules_summary">强制将模块添加进白名单并移出黑名单\n关闭此选项并不会移除已勾选的应用标识\n仅当启用应用名单模式时有效</string>
-    <string name="custom_list">使用镜像化的模块列表</string>
-    <string name="custom_list_summ">镜像化的模块列表可以帮助加速加载\n但新提交的模块显示会有延迟(大约24小时)</string>
     <string name="not_installed">未安装</string>
     <string name="support_group_telegram_channel">Telegram 频道: @LSPosed</string>
-    <string name="warning_list_not_enabled">应用名单模式未启用，您可以在设置中启用</string>
     <string name="empty_param">参数为空</string>
     <string name="reboot_system">重启至系统</string>
-    <string name="stop_log_summary">在下次启动之前，模块日志将不再被记录</string>
-    <string name="stop_verbose_log_summary">在下次启动之前，详细日志将不再被记录</string>
     <string name="pref_title_disable_modules_log">禁用模块日志</string>
     <string name="pref_disable_modules_log_summary">模块抛出的的异常堆栈仍将正常抓取</string>
     <string name="follow_system">跟随系统</string>
     <string name="pure_black_dark_theme">使用纯黑深色主题</string>>
     <string name="install_timestamps">安装于 %1$s\n更新于 %2$s</string>
-    <string name="pref_compat_mode_summary">兼容模式应用列表</string>
-    <string name="pref_compat_mode_title">兼容模式</string>
     <string name="xposed_not_active">LSPosed 框架未安装或未激活, 您可在设置中关闭状态检查</string>
     <string name="transparent_status_bar">透明状态栏</string>
-    <string name="list_sort">列表排序方式</string>
     <string name="sort_by_name">应用名称</string>
     <string name="sort_by_name_reverse">应用名称（降序）</string>
     <string name="sort_by_package_name">包体名称</string>
@@ -297,19 +163,6 @@
     <string name="colorized_action_bar">着色应用栏</string>
     <string name="settings_group_theme">主题</string>
     <string name="material_design_2">惨白设计</string>
-    <string name="version_x">版本 %d</string>
-    <string name="xposed_description">启用 LSPosed 的增强功能:\n    - 判断 Xposed 是否正常工作\n    - 移除针对 LSPosed 的后台限制\n    - 假装安装了 Xposed Installer\n    - 隐藏 LSPosed Manager</string>
-    <string name="status_enhancement">增强模式已激活</string>
-    <string name="settings_group_enhancement">增强模式</string>
-    <string name="settings_title_enhancement">增强模式状态</string>
-    <string name="settings_summary_enhancement">未激活\n你可以在「模块」中启用增强模块</string>
-    <string name="settings_summary_enhancement_enabled">已激活</string>
-    <string name="settings_title_pretend_xposed_installer">Xposed Installer 伪装</string>
-    <string name="settings_summary_pretend_xposed_installer">假装已安装 Xposed Installer 来使一些过时但有用的模块正常工作\n仅对「模块」中已启用模块生效\n注：开启此功能可能会被某些软件（如 RootBeer）检测到 LSPosed</string>
-    <string name="settings_title_hide_LSPosed_manager">隐藏 LSPosed Manager</string>
-    <string name="settings_summary_hide_LSPosed_manager">防止软件检测到 LSPosed Manager\n注：模块可能无法正常打开 LSPosed Manager 界面，系统中关于 LSPosed Manager 的一些功能可能无法正常使用</string>
-    <string name="settings_title_disable_hidden_api_bypass">禁用绕过隐藏 API 的限制</string>
-    <string name="settings_summary_disable_hidden_api_bypass">禁用绕过隐藏 API 的限制将会通过某些检测（如Snapchat）\n<b>警告:</b> 启用此选项可能会使某些功能无法正常工作，或出现一些其他问题</string>
     <string name="menu_scope">作用域</string>
     <string name="enable_scope">启用作用域</string>
     <string name="scope_not_supported">您安装的 LSPosed 版本不支持模块作用域，下载新版本？</string>
