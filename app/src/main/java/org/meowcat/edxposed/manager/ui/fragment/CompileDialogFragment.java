@@ -28,6 +28,7 @@ import java.util.List;
 
 import rikka.shizuku.ShizukuSystemProperties;
 
+import static android.content.pm.PackageManager.PERMISSION_DENIED;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 @SuppressWarnings("deprecation")
@@ -125,8 +126,7 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
             int type = arguments.getInt(KEY_TYPE);
             appInfo = arguments.getParcelable(KEY_APP_INFO);
             type = type * 10 + 1;
-            if (App.checkPermission(type))
-                onRequestPermissionsResult(type, PERMISSION_GRANTED);
+            onRequestPermissionsResult(type, App.checkPermission(type) ? PERMISSION_GRANTED : PERMISSION_DENIED);
         } else {
             dismissAllowingStateLoss();
         }

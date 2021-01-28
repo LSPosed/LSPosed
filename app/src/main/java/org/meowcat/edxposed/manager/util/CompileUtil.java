@@ -24,6 +24,7 @@ import rikka.shizuku.ShizukuBinderWrapper;
 import rikka.shizuku.ShizukuSystemProperties;
 import rikka.shizuku.SystemServiceHelper;
 
+import static android.content.pm.PackageManager.PERMISSION_DENIED;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 @SuppressWarnings("deprecation")
@@ -125,15 +126,13 @@ public class CompileUtil {
     public static void compileAllDexopt(Activity activity) {
         sActivity = activity;
         int type = CompileType.DEXOPT_ALL.ordinal() * 10 + 1;
-        if (App.checkPermission(type))
-            onRequestPermissionsResult(type, PERMISSION_GRANTED);
+        onRequestPermissionsResult(type, App.checkPermission(type) ? PERMISSION_GRANTED : PERMISSION_DENIED);
     }
 
     public static void compileAllSpeed(Activity activity) {
         sActivity = activity;
         int type = CompileType.SPEED_ALL.ordinal() * 10 + 1;
-        if (App.checkPermission(type))
-            onRequestPermissionsResult(type, PERMISSION_GRANTED);
+        onRequestPermissionsResult(type, App.checkPermission(type) ? PERMISSION_GRANTED : PERMISSION_DENIED);
     }
 
     private static void compilePackageInBg(FragmentManager fragmentManager,

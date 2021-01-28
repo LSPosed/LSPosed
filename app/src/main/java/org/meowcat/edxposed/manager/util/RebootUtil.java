@@ -15,6 +15,7 @@ import rikka.shizuku.ShizukuBinderWrapper;
 import rikka.shizuku.ShizukuSystemProperties;
 import rikka.shizuku.SystemServiceHelper;
 
+import static android.content.pm.PackageManager.PERMISSION_DENIED;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 public class RebootUtil {
@@ -60,9 +61,8 @@ public class RebootUtil {
 
 
     public static void reboot(RebootType mode) {
-        if (App.checkPermission(mode.ordinal())) {
-            onRequestPermissionsResult(mode.ordinal(), PERMISSION_GRANTED);
-        }
+        onRequestPermissionsResult(mode.ordinal(), App.checkPermission(mode.ordinal()) ? PERMISSION_GRANTED : PERMISSION_DENIED);
+
     }
 
     private static void rebootWithShell(RebootType mode) {
