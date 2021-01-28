@@ -12,8 +12,6 @@ public class Yahfa {
 
     public static native void init(int sdkVersion);
 
-    //public static native void setMethodNonCompilable(Member member);
-
     public static native void recordHooked(Member member);
 
     public static native boolean isHooked(Member member);

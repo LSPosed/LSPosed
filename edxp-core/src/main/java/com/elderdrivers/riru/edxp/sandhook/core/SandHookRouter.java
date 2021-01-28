@@ -16,7 +16,6 @@ import de.robv.android.xposed.XposedBridge;
 public class SandHookRouter extends BaseRouter {
 
     public SandHookRouter() {
-        useXposedApi = true;
     }
 
     private static boolean useSandHook = false;

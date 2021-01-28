@@ -64,7 +64,7 @@ namespace art {
 //                RETRIEVE_FIELD_SYMBOL(mutator_lock_, "_ZN3art5Locks13mutator_lock_E");
 //                LOGE("mutator_lock_: %p", mutator_lock_);
 
-                edxp::HookSyms(handle, hook_func, IsInSamePackage);
+//                edxp::HookSyms(handle, hook_func, IsInSamePackage);
 
 //                HOOK_FUNC(ClassForName,
 //                          "_ZN3artL18Class_classForNameEP7_JNIEnvP7_jclassP8_jstringhP8_jobject");

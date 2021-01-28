@@ -7,17 +7,17 @@ namespace art {
 
     namespace jit {
 
-        CREATE_MEM_HOOK_STUB_ENTRIES("_ZN3art3jit12JitCodeCache37GetSavedEntryPointOfPreCompiledMethodEPNS_9ArtMethodE",
-                const void*, GetSavedEntryPointOfPreCompiledMethod, (void *thiz,
-                                 void *art_method), {
-            if (UNLIKELY(edxp::isHooked(art_method))) {
-                LOGD("Found hooked method %p (%s), return entrypoint as jit entrypoint", art_method,
-                     art::art_method::PrettyMethod(art_method).c_str());
-                return getEntryPoint(art_method);
-            }
-            return backup(thiz, art_method);
-        });
-
+//        CREATE_MEM_HOOK_STUB_ENTRIES("_ZN3art3jit12JitCodeCache37GetSavedEntryPointOfPreCompiledMethodEPNS_9ArtMethodE",
+//                const void*, GetSavedEntryPointOfPreCompiledMethod, (void *thiz,
+//                                 void *art_method), {
+//            if (UNLIKELY(edxp::isHooked(art_method))) {
+//                LOGD("Found hooked method %p (%s), return entrypoint as jit entrypoint", art_method,
+//                     art::art_method::PrettyMethod(art_method).c_str());
+//                return getEntryPoint(art_method);
+//            }
+//            return backup(thiz, art_method);
+//        });
+//
         static void HookJitCacheCode(void *handle, HookFunType hook_func) {
             const int api_level = edxp::GetAndroidApiLevel();
             // For android R, the invisibly initialization makes static methods initializes multiple
@@ -25,7 +25,7 @@ namespace art {
             // our hooked entry point won't be overwritten.
             // This is for SandHook and YAHFA
             if (api_level >= __ANDROID_API_R__) {
-                edxp::HookSyms(handle, hook_func, GetSavedEntryPointOfPreCompiledMethod);
+//                edxp::HookSyms(handle, hook_func, GetSavedEntryPointOfPreCompiledMethod);
             }
         }
 

@@ -1,15 +1,12 @@
 package com.elderdrivers.riru.edxp.yahfa.dexmaker;
 
-
-import com.elderdrivers.riru.edxp.config.ConfigManager;
-
-import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import de.robv.android.xposed.LspHooker;
@@ -17,7 +14,7 @@ import de.robv.android.xposed.XposedBridge;
 
 public final class DynamicBridge {
 
-    private static final HashMap<Member, LspHooker> hookedInfo = new HashMap<>();
+    private static final ConcurrentHashMap<Member, LspHooker> hookedInfo = new ConcurrentHashMap<>();
     private static final HookerDexMaker dexMaker = new HookerDexMaker();
     private static final AtomicBoolean dexPathInited = new AtomicBoolean(false);
 
@@ -74,7 +71,10 @@ public final class DynamicBridge {
         if (hooker == null) {
             throw new IllegalStateException("method not hooked, cannot call original method.");
         }
-        return hooker.callBackup(thisObject, args);
+        if (args == null) {
+            args = new Object[0];
+        }
+        return hooker.getBackup().invoke(thisObject, args);
     }
 }
 
