@@ -61,13 +61,7 @@ namespace art {
 
                 RETRIEVE_MEM_FUNC_SYMBOL(GetClassDef, "_ZN3art6mirror5Class11GetClassDefEv");
 
-//                RETRIEVE_FIELD_SYMBOL(mutator_lock_, "_ZN3art5Locks13mutator_lock_E");
-//                LOGE("mutator_lock_: %p", mutator_lock_);
-
-//                edxp::HookSyms(handle, hook_func, IsInSamePackage);
-
-//                HOOK_FUNC(ClassForName,
-//                          "_ZN3artL18Class_classForNameEP7_JNIEnvP7_jclassP8_jstringhP8_jobject");
+                edxp::HookSyms(handle, hook_func, IsInSamePackage);
             }
 
             const char *GetDescriptor(std::string *storage) {
