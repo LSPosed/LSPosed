@@ -3,6 +3,7 @@ package org.meowcat.edxposed.manager.ui.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.TooltipCompat;
@@ -25,7 +26,7 @@ import java.util.Locale;
 public class MainActivity extends BaseActivity {
     ActivityMainBinding binding;
 
-    @SuppressLint("PrivateResource")
+    @SuppressLint({"PrivateResource", "ClickableViewAccessibility"})
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,12 +75,11 @@ public class MainActivity extends BaseActivity {
             startActivity(intent);
         });
         TooltipCompat.setTooltipText(binding.menuMore, getString(androidx.appcompat.R.string.abc_action_menu_overflow_description));
-        binding.menuMore.setOnClickListener(v -> {
-            PopupMenu appMenu = new PopupMenu(MainActivity.this, binding.menuMore);
-            appMenu.inflate(R.menu.menu_installer);
-            appMenu.setOnMenuItemClickListener(this::onOptionsItemSelected);
-            appMenu.show();
-        });
+        PopupMenu appMenu = new PopupMenu(MainActivity.this, binding.menuMore);
+        appMenu.inflate(R.menu.menu_installer);
+        appMenu.setOnMenuItemClickListener(this::onOptionsItemSelected);
+        binding.menuMore.setOnTouchListener(appMenu.getDragToOpenListener());
+        binding.menuMore.setOnClickListener(v -> appMenu.show());
         Glide.with(binding.appIcon)
                 .load(GlideHelper.wrapApplicationInfoForIconLoader(getApplicationInfo()))
                 .into(binding.appIcon);
