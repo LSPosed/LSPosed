@@ -209,7 +209,7 @@ namespace lspd {
         if (!ConfigManager::GetInstance()->IsInitialized()) {
             LOGE("skip injecting into android because configurations are not loaded properly");
         }
-        if (skip_ && !ConfigManager::GetInstance()->IsAppNeedHook("android")) {
+        if (!skip_ && !ConfigManager::GetInstance()->IsAppNeedHook("android")) {
             skip_ = true;
             LOGD("skip injecting into android because it's whitelisted/blacklisted");
         }
