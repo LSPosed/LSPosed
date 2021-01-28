@@ -19,10 +19,7 @@ import org.meowcat.edxposed.manager.R;
 
 public class MasterSwitch extends FrameLayout implements View.OnClickListener, Checkable {
 
-    private TextView masterTitle;
     private SwitchCompat switchCompat;
-
-    private String title;
 
     private OnCheckedChangeListener listener;
 
@@ -57,15 +54,11 @@ public class MasterSwitch extends FrameLayout implements View.OnClickListener, C
         drawable.addState(new int[]{}, new ColorDrawable(colorOff));
         setBackground(drawable);
 
-        masterTitle = findViewById(android.R.id.title);
+        TextView masterTitle = findViewById(android.R.id.title);
+        masterTitle.setText(R.string.enable_scope);
         switchCompat = findViewById(R.id.switchWidget);
 
         setOnClickListener(this);
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-        masterTitle.setText(title);
     }
 
     private void updateViews() {

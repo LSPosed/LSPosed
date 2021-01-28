@@ -1,6 +1,5 @@
 package org.meowcat.edxposed.manager.ui.activity;
 
-import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -8,12 +7,16 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.DividerItemDecoration;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.adapters.AppAdapter;
@@ -25,7 +28,7 @@ import org.meowcat.edxposed.manager.util.LinearLayoutManagerFix;
 
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 
-public class AppListActivity extends BaseActivity implements AppAdapter.Callback {
+public class AppListActivity extends BaseActivity {
     private SearchView searchView;
     private AppAdapter appAdapter;
 
@@ -55,10 +58,9 @@ public class AppListActivity extends BaseActivity implements AppAdapter.Callback
             bar.setSubtitle(moduleName);
             appAdapter = new ScopeAdapter(this, modulePackageName, binding.masterSwitch);
         } else {
-            final boolean isWhiteListMode = AppHelper.isWhiteListMode();
-            bar.setTitle(isWhiteListMode ? R.string.title_white_list : R.string.title_black_list);
+            bar.setTitle(AppHelper.isWhiteListMode() ? R.string.title_white_list : R.string.title_black_list);
             binding.masterSwitch.setVisibility(View.GONE);
-            appAdapter = new BlackListAdapter(this, isWhiteListMode);
+            appAdapter = new BlackListAdapter(this);
         }
         appAdapter.setHasStableIds(true);
         binding.recyclerView.setAdapter(appAdapter);
@@ -72,7 +74,6 @@ public class AppListActivity extends BaseActivity implements AppAdapter.Callback
             fastScrollerBuilder.useMd2Style();
         }
         fastScrollerBuilder.build();
-        appAdapter.setCallback(this);
         handler.postDelayed(runnable, 300);
         binding.swipeRefreshLayout.setOnRefreshListener(appAdapter::refresh);
 
@@ -107,7 +108,6 @@ public class AppListActivity extends BaseActivity implements AppAdapter.Callback
         return super.onCreateOptionsMenu(menu);
     }
 
-    @Override
     public void onDataReady() {
         handler.removeCallbacks(runnable);
         binding.swipeRefreshLayout.setRefreshing(false);
@@ -116,16 +116,19 @@ public class AppListActivity extends BaseActivity implements AppAdapter.Callback
     }
 
     @Override
-    public void onItemClick(View v, ApplicationInfo info) {
-        AppHelper.showMenu(this, getSupportFragmentManager(), v, info);
-    }
-
-    @Override
     public void onBackPressed() {
         if (searchView.isIconified()) {
             super.onBackPressed();
         } else {
             searchView.setIconified(true);
+        }
+    }
+
+    public void makeSnackBar(@StringRes int text, @Snackbar.Duration int duration) {
+        if (binding != null) {
+            Snackbar.make(binding.snackbar, text, duration).show();
+        } else {
+            Toast.makeText(this, text, duration == Snackbar.LENGTH_LONG ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -10,8 +10,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.view.menu.MenuBuilder;
-import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.FragmentManager;
 
@@ -20,14 +18,11 @@ import org.meowcat.edxposed.manager.Constants;
 import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.util.CompileUtil;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,7 +42,7 @@ public class AppHelper {
 
     private static final HashMap<String, List<String>> scopeList = new HashMap<>();
 
-    static void makeSurePath() {
+    public static void makeSurePath() {
         App.mkdir(WHITE_LIST_PATH);
         App.mkdir(BLACK_LIST_PATH);
     }
@@ -56,143 +51,61 @@ public class AppHelper {
         return new File(BASE_PATH + WHITE_LIST_MODE).exists();
     }
 
-    private static boolean addWhiteList(String packageName) {
-        return whiteListFileName(packageName, true);
+
+    public static List<String> getAppList() {
+        return getAppList(isWhiteListMode());
     }
 
-    private static boolean addBlackList(String packageName) {
-        if (forceWhiteList.contains(packageName)) {
-            removeBlackList(packageName);
-            return false;
-        }
-        return blackListFileName(packageName, true);
-    }
-
-    private static boolean removeWhiteList(String packageName) {
-        if (forceWhiteList.contains(packageName)) {
-            return false;
-        }
-        return whiteListFileName(packageName, false);
-    }
-
-    private static boolean removeBlackList(String packageName) {
-        return blackListFileName(packageName, false);
-    }
-
-    static List<String> getBlackList() {
-        File file = new File(BASE_PATH + BLACK_LIST_PATH);
-        File[] files = file.listFiles();
-        if (files == null) {
-            return new ArrayList<>();
-        }
+    public static List<String> getAppList(boolean white) {
+        Path dir = Paths.get(BASE_PATH + (white ? WHITE_LIST_PATH : BLACK_LIST_PATH));
         List<String> s = new ArrayList<>();
-        for (File file1 : files) {
-            if (!file1.isDirectory()) {
-                s.add(file1.getName());
-            }
-        }
-        for (String pn : forceWhiteList) {
-            if (s.contains(pn)) {
-                s.remove(pn);
-                removeBlackList(pn);
-            }
-        }
-        return s;
-    }
-
-    static List<String> getWhiteList() {
-        File file = new File(BASE_PATH + WHITE_LIST_PATH);
-        File[] files = file.listFiles();
-        if (files == null) {
-            return forceWhiteList;
-        }
-        List<String> result = new ArrayList<>();
-        for (File file1 : files) {
-            result.add(file1.getName());
-        }
-        for (String pn : forceWhiteList) {
-            if (!result.contains(pn)) {
-                result.add(pn);
-                addWhiteList(pn);
-            }
-        }
-        return result;
-    }
-
-    @SuppressLint("WorldReadableFiles")
-    private static Boolean whiteListFileName(String packageName, boolean isAdd) {
-        boolean returns = true;
-        File file = new File(BASE_PATH + WHITE_LIST_PATH + packageName);
-        if (isAdd) {
-            if (!file.exists()) {
-                FileOutputStream fos = null;
-                try {
-                    fos = new FileOutputStream(file.getPath());
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } finally {
-                    if (fos != null) {
-                        try {
-                            fos.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            try {
-                                returns = file.createNewFile();
-                            } catch (IOException e1) {
-                                e.printStackTrace();
-                            }
-                        }
+        try {
+            Files.list(dir).forEach(path -> {
+                if (!Files.isDirectory(path)) {
+                    String packageName = path.getFileName().toString();
+                    if (forceWhiteList.contains(packageName)) {
+                        createAppListFile(packageName, white, white);
+                    } else {
+                        s.add(packageName);
                     }
                 }
-            }
-        } else {
-            if (file.exists()) {
-                returns = file.delete();
-            }
+            });
+            return s;
+        } catch (IOException e) {
+            return s;
         }
-        return returns;
     }
 
-    @SuppressLint("WorldReadableFiles")
-    private static Boolean blackListFileName(String packageName, boolean isAdd) {
-        boolean returns = true;
-        File file = new File(BASE_PATH + BLACK_LIST_PATH + packageName);
-        if (isAdd) {
-            if (!file.exists()) {
-                FileOutputStream fos = null;
-                try {
-                    fos = new FileOutputStream(file.getPath());
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } finally {
-                    if (fos != null) {
-                        try {
-                            fos.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            try {
-                                returns = file.createNewFile();
-                            } catch (IOException e1) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
+    private static boolean createAppListFile(String packageName, boolean white, boolean add) {
+        Path path = Paths.get(BASE_PATH + (white ? WHITE_LIST_PATH : BLACK_LIST_PATH) + packageName);
+        try {
+            if (Files.exists(path)) {
+                if (!add) {
+                    Files.delete(path);
                 }
+            } else if (add) {
+                Files.createFile(path);
             }
-        } else {
-            if (file.exists()) {
-                returns = file.delete();
-            }
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
         }
-        return returns;
     }
 
-    static boolean addPackageName(boolean isWhiteListMode, String packageName) {
-        return isWhiteListMode ? addWhiteList(packageName) : addBlackList(packageName);
+    static boolean setPackageAppList(String packageName, boolean add) {
+        return setPackageAppList(packageName, isWhiteListMode(), add);
     }
 
-    static boolean removePackageName(boolean isWhiteListMode, String packageName) {
-        return isWhiteListMode ? removeWhiteList(packageName) : removeBlackList(packageName);
+    static boolean setPackageAppList(String packageName, boolean white, boolean add) {
+        if (add && !white && forceWhiteList.contains(packageName)) {
+            createAppListFile(packageName, false, false);
+            return false;
+        }
+        if (!add && white && forceWhiteList.contains(packageName)) {
+            return false;
+        }
+        return createAppListFile(packageName, white, add);
     }
 
     @SuppressLint("RestrictedApi")
@@ -240,19 +153,14 @@ public class AppHelper {
             }
             return true;
         });
-        MenuPopupHelper menuHelper = new MenuPopupHelper(context, (MenuBuilder) appMenu.getMenu(), anchor);
-        menuHelper.setForceShowIcon(true);
-        menuHelper.show();
+        appMenu.show();
     }
 
     public static List<String> getEnabledModuleList() {
-        File file = new File(Constants.getEnabledModulesListFile());
+        Path path = Paths.get(Constants.getEnabledModulesListFile());
         List<String> s = new ArrayList<>();
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-            for (String line; (line = bufferedReader.readLine()) != null; ) {
-                s.add(line);
-            }
+            s = Files.readAllLines(path);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -263,13 +171,10 @@ public class AppHelper {
         if (scopeList.containsKey(modulePackageName)) {
             return scopeList.get(modulePackageName);
         }
-        File file = new File(BASE_PATH + String.format(SCOPE_LIST_PATH, modulePackageName));
+        Path path = Paths.get(BASE_PATH + String.format(SCOPE_LIST_PATH, modulePackageName));
         List<String> s = new ArrayList<>();
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-            for (String line; (line = bufferedReader.readLine()) != null; ) {
-                s.add(line);
-            }
+            s = Files.readAllLines(path);
             scopeList.put(modulePackageName, s);
         } catch (IOException e) {
             e.printStackTrace();
@@ -279,17 +184,19 @@ public class AppHelper {
 
     @SuppressLint("WorldReadableFiles")
     static boolean saveScopeList(String modulePackageName, List<String> list) {
-        File file = new File(BASE_PATH + String.format(SCOPE_LIST_PATH, modulePackageName));
+        Path path = Paths.get(BASE_PATH + String.format(SCOPE_LIST_PATH, modulePackageName));
         if (list.size() == 0) {
             scopeList.put(modulePackageName, list);
-            return file.delete();
+            try {
+                Files.delete(path);
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
         }
         try {
-            PrintWriter pr = new PrintWriter(new FileWriter(file));
-            for (String line : list) {
-                pr.println(line);
-            }
-            pr.close();
+            Files.write(path, list);
         } catch (IOException e) {
             e.printStackTrace();
             return false;

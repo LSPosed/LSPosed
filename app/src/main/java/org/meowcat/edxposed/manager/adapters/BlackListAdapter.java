@@ -1,13 +1,14 @@
 package org.meowcat.edxposed.manager.adapters;
 
-import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.widget.CompoundButton;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import org.meowcat.edxposed.manager.App;
 import org.meowcat.edxposed.manager.R;
+import org.meowcat.edxposed.manager.ui.activity.AppListActivity;
 import org.meowcat.edxposed.manager.util.ModuleUtil;
-import org.meowcat.edxposed.manager.util.ToastUtil;
 
 import java.util.Collection;
 import java.util.List;
@@ -15,36 +16,22 @@ import java.util.List;
 
 public class BlackListAdapter extends AppAdapter {
 
-    private final boolean isWhiteListMode;
     private List<String> checkedList;
 
-    public BlackListAdapter(Context context, boolean isWhiteListMode) {
-        super(context);
-        this.isWhiteListMode = isWhiteListMode;
+    public BlackListAdapter(AppListActivity activity) {
+        super(activity);
     }
 
     @Override
     public List<String> generateCheckedList() {
-        if (App.getPreferences().getBoolean("hook_modules", true)) {
-            Collection<ModuleUtil.InstalledModule> installedModules = ModuleUtil.getInstance().getModules().values();
-            for (ModuleUtil.InstalledModule info : installedModules) {
-                AppHelper.forceWhiteList.add(info.packageName);
-            }
-        }
         AppHelper.makeSurePath();
-        if (isWhiteListMode) {
-            checkedList = AppHelper.getWhiteList();
-        } else {
-            checkedList = AppHelper.getBlackList();
-        }
+        checkedList = AppHelper.getAppList(AppHelper.isWhiteListMode());
         return checkedList;
     }
 
     @Override
     protected void onCheckedChange(CompoundButton view, boolean isChecked, ApplicationInfo info) {
-        boolean success = isChecked ?
-                AppHelper.addPackageName(isWhiteListMode, info.packageName) :
-                AppHelper.removePackageName(isWhiteListMode, info.packageName);
+        boolean success = AppHelper.setPackageAppList(info.packageName, isChecked);
         if (success) {
             if (isChecked) {
                 checkedList.add(info.packageName);
@@ -52,7 +39,7 @@ public class BlackListAdapter extends AppAdapter {
                 checkedList.remove(info.packageName);
             }
         } else {
-            ToastUtil.showShortToast(context, R.string.add_package_failed);
+            activity.makeSnackBar(R.string.add_package_failed, Snackbar.LENGTH_SHORT);
             view.setChecked(!isChecked);
         }
     }

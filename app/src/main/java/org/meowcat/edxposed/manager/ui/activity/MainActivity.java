@@ -12,8 +12,6 @@ import com.bumptech.glide.Glide;
 
 import org.meowcat.edxposed.manager.Constants;
 import org.meowcat.edxposed.manager.R;
-import org.meowcat.edxposed.manager.adapters.AppHelper;
-import org.meowcat.edxposed.manager.adapters.BlackListAdapter;
 import org.meowcat.edxposed.manager.databinding.ActivityMainBinding;
 import org.meowcat.edxposed.manager.ui.fragment.StatusDialogBuilder;
 import org.meowcat.edxposed.manager.util.GlideHelper;
@@ -95,7 +93,6 @@ public class MainActivity extends BaseActivity implements ModuleUtil.ModuleListe
             binding.statusIcon.setImageResource(R.drawable.ic_error);
         }
         binding.modulesSummary.setText(String.format(getString(R.string.ModulesDetail), ModuleUtil.getInstance().getEnabledModules().size()));
-        new Thread(() -> new BlackListAdapter(getApplicationContext(), AppHelper.isWhiteListMode()).generateCheckedList());
     }
 
     @Override

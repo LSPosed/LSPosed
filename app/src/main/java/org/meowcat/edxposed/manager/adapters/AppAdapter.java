@@ -1,7 +1,6 @@
 package org.meowcat.edxposed.manager.adapters;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -32,6 +31,7 @@ import com.bumptech.glide.request.transition.Transition;
 
 import org.meowcat.edxposed.manager.App;
 import org.meowcat.edxposed.manager.R;
+import org.meowcat.edxposed.manager.ui.activity.AppListActivity;
 import org.meowcat.edxposed.manager.util.GlideApp;
 
 import java.text.DateFormat;
@@ -45,9 +45,8 @@ import java.util.Locale;
 
 public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> implements Filterable {
 
-    protected Context context;
+    protected AppListActivity activity;
     private final ApplicationInfo.DisplayNameComparator displayNameComparator;
-    private Callback callback;
     protected List<ApplicationInfo> fullList, showList;
     private final DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     private List<String> checkedList;
@@ -56,26 +55,22 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
     private Comparator<ApplicationInfo> cmp;
     private final SharedPreferences preferences;
 
-    AppAdapter(Context context) {
-        this.context = context;
+    AppAdapter(AppListActivity activity) {
+        this.activity = activity;
         preferences = App.getPreferences();
         fullList = showList = Collections.emptyList();
         checkedList = Collections.emptyList();
         filter = new ApplicationFilter();
-        pm = context.getPackageManager();
+        pm = activity.getPackageManager();
         displayNameComparator = new ApplicationInfo.DisplayNameComparator(pm);
         cmp = displayNameComparator;
         refresh();
     }
 
-    public void setCallback(Callback callback) {
-        this.callback = callback;
-    }
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context).inflate(R.layout.item_module, parent, false);
+        View v = LayoutInflater.from(activity).inflate(R.layout.item_module, parent, false);
         return new ViewHolder(v);
     }
 
@@ -84,15 +79,15 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
         List<ApplicationInfo> rmList = new ArrayList<>();
         for (ApplicationInfo info : fullList) {
             if (this instanceof ScopeAdapter) {
-                if (AppHelper.isWhiteListMode()) {
-                    List<String> whiteList = AppHelper.getWhiteList();
-                    if (!whiteList.contains(info.packageName)) {
+                boolean white = AppHelper.isWhiteListMode();
+                List<String> list = AppHelper.getAppList(white);
+                if (white) {
+                    if (!list.contains(info.packageName)) {
                         rmList.add(info);
                         continue;
                     }
                 } else {
-                    List<String> blackList = AppHelper.getBlackList();
-                    if (blackList.contains(info.packageName)) {
+                    if (list.contains(info.packageName)) {
                         rmList.add(info);
                         continue;
                     }
@@ -117,8 +112,8 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
         checkedList = generateCheckedList();
         sortApps();
         showList = fullList;
-        if (callback != null) {
-            callback.onDataReady();
+        if (activity != null) {
+            activity.onDataReady();
         }
     }
 
@@ -312,9 +307,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
         holder.mSwitch.setOnCheckedChangeListener((v, isChecked) ->
                 onCheckedChange(v, isChecked, info));
         holder.itemView.setOnClickListener(v -> {
-            if (callback != null) {
-                callback.onItemClick(v, info);
-            }
+            AppHelper.showMenu(activity, activity.getSupportFragmentManager(), v, info);
         });
     }
 
@@ -346,12 +339,6 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
         // override this to implements your functions
     }
 
-    public interface Callback {
-        void onDataReady();
-
-        void onItemClick(View v, ApplicationInfo info);
-    }
-
     static class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView appIcon;
@@ -372,7 +359,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
         }
     }
 
-    class ApplicationFilter extends Filter {
+    private class ApplicationFilter extends Filter {
 
         private boolean lowercaseContains(String s, CharSequence filter) {
             return !TextUtils.isEmpty(s) && s.toLowerCase().contains(filter);

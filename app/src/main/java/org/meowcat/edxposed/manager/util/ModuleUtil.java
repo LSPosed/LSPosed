@@ -21,6 +21,7 @@ import org.meowcat.edxposed.manager.databinding.ActivityModulesBinding;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -76,6 +77,7 @@ public final class ModuleUtil {
         }
 
         Map<String, InstalledModule> modules = new HashMap<>();
+        AppHelper.forceWhiteList.clear();
 
         for (PackageInfo pkg : pm.getInstalledPackages(PackageManager.GET_META_DATA)) {
             ApplicationInfo app = pkg.applicationInfo;
@@ -85,6 +87,7 @@ public final class ModuleUtil {
             if (app.metaData != null && app.metaData.containsKey("xposedmodule")) {
                 InstalledModule installed = new InstalledModule(pkg, false);
                 modules.put(pkg.packageName, installed);
+                AppHelper.forceWhiteList.add(pkg.packageName);
             }
         }
 

@@ -5,18 +5,14 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
-import org.meowcat.edxposed.manager.adapters.AppHelper;
 import org.meowcat.edxposed.manager.ui.activity.CrashReportActivity;
-import org.meowcat.edxposed.manager.ui.fragment.CompileDialogFragment;
 import org.meowcat.edxposed.manager.util.CompileUtil;
 import org.meowcat.edxposed.manager.util.ModuleUtil;
 import org.meowcat.edxposed.manager.util.NotificationUtil;
@@ -25,11 +21,6 @@ import org.meowcat.edxposed.manager.util.RebootUtil;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Objects;
 
 import rikka.shizuku.Shizuku;
 import rikka.sui.Sui;
@@ -143,22 +134,9 @@ public class App extends Application implements Application.ActivityLifecycleCal
 
         createDirectories();
         NotificationUtil.init();
-
-        registerActivityLifecycleCallbacks(this);
-
-        @SuppressLint("SimpleDateFormat") DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        Date date = new Date();
+        ModuleUtil.getInstance();
 
         Shizuku.addRequestPermissionResultListener(REQUEST_PERMISSION_RESULT_LISTENER);
-
-        if (!Objects.requireNonNull(pref.getString("date", "")).equals(dateFormat.format(date))) {
-            pref.edit().putString("date", dateFormat.format(date)).apply();
-
-            try {
-                Log.i(TAG, String.format("EdXposedManager - %s - %s", BuildConfig.VERSION_CODE, getPackageManager().getPackageInfo(getPackageName(), 0).versionName));
-            } catch (PackageManager.NameNotFoundException ignored) {
-            }
-        }
     }
 
     @SuppressLint({"PrivateApi", "NewApi"})
@@ -171,19 +149,6 @@ public class App extends Application implements Application.ActivityLifecycleCal
     public synchronized void onActivityCreated(@NonNull Activity activity, Bundle savedInstanceState) {
         if (isUiLoaded) {
             return;
-        }
-
-        //RepoLoader.getInstance().triggerFirstLoadIfNecessary();
-        isUiLoaded = true;
-
-        if (pref.getBoolean("hook_modules", true)) {
-            Collection<ModuleUtil.InstalledModule> installedModules = ModuleUtil.getInstance().getModules().values();
-            for (ModuleUtil.InstalledModule info : installedModules) {
-                if (!AppHelper.forceWhiteList.contains(info.packageName)) {
-                    AppHelper.forceWhiteList.add(info.packageName);
-                }
-            }
-            Log.d(TAG, "ApplicationList: Force add modules to list");
         }
     }
 
