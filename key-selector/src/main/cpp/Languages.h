@@ -11,8 +11,8 @@ public:
     virtual const std::string desc_line_1() {
         return "Select variant. Use Volume Down to move and Volume Up to confirm.";
     }
-    virtual const std::string desc_line_2(int seconds) {
-        const char base[] = "The program will select YAHFA for you in %d seconds if you don't \nhave a physical volume button. ";
+    virtual const std::string desc_line_2(uint16_t seconds) {
+        const char base[] = "The program will select YAHFA for you in %hu seconds if you don't \nhave a physical volume button. ";
         std::string out;
         out.resize(sizeof(base) + 20);
         sprintf(out.data(), base, seconds);
@@ -25,8 +25,8 @@ public:
     const std::string desc_line_1() override {
         return "请选择变种。使用音量减切换，音量加确定。";
     }
-    const std::string desc_line_2(int seconds) override {
-        const char base[] = "如果您的设备没有音量键，本程序将会在 %d 秒后自动选择 YAHFA 。";
+    const std::string desc_line_2(uint16_t seconds) override {
+        const char base[] = "如果您的设备没有音量键，本程序将会在 %hu 秒后自动选择 YAHFA 。";
         std::string out;
         out.resize(sizeof(base) + 20);
         sprintf(out.data(), base, seconds);
