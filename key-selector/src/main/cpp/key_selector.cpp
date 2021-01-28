@@ -16,19 +16,20 @@
  * limitations under the License.
  */
 
-#include <iostream>
+#include <cerrno>
 #include <cstdlib>
+#include <cstring>
 #include <dirent.h>
 #include <fcntl.h>
-#include <cstring>
+#include <filesystem>
+#include <iostream>
+#include <linux/input.h>
+#include <sstream>
 #include <sys/ioctl.h>
 #include <sys/inotify.h>
 #include <sys/poll.h>
-#include <linux/input.h>
-#include <cerrno>
-#include <unistd.h>
-#include <stdexcept>
 #include <sys/system_properties.h>
+#include <unistd.h>
 
 #include "Languages.h"
 #include "key_selector.h"
@@ -48,7 +49,7 @@ static int open_device(const char *device)
     char name[80];
     char location[80];
     char idstr[80];
-    struct input_id id;
+    input_id id{};
 
     fd = open(device, O_RDWR);
     if (fd < 0) {
@@ -128,7 +129,7 @@ static int read_notify(const char *dirname, int nfd)
     char devname[PATH_MAX];
     char *filename;
     char event_buf[512];
-    int event_size;
+    uint32_t event_size;
     int event_pos = 0;
     struct inotify_event *event;
 
@@ -163,30 +164,15 @@ static int read_notify(const char *dirname, int nfd)
 
 static int scan_dir(const char *dirname)
 {
-    char devname[PATH_MAX];
-    char *filename;
-    DIR *dir;
-    struct dirent *de;
-
-    dir = opendir(dirname);
-    if (dir == NULL) {
+    namespace fs = std::filesystem;
+    try {
+        for (auto &item: fs::directory_iterator(dirname)) {
+            open_device(item.path().c_str());
+        }
+    } catch (const fs::filesystem_error &e) {
+        std::cerr << e.what();
         return -1;
     }
-
-    strcpy(devname, dirname);
-    filename = devname + strlen(devname);
-    *filename++ = '/';
-
-    while ((de = readdir(dir))) {
-        if (de->d_name[0] == '.' && (de->d_name[1] == '\0' ||
-                                     (de->d_name[1] == '.' && de->d_name[2] == '\0'))) {
-            continue;
-        }
-
-        strcpy(filename, de->d_name);
-        open_device(devname);
-    }
-    closedir(dir);
     return 0;
 }
 
@@ -194,7 +180,7 @@ static int scan_dir(const char *dirname)
 uint32_t get_event() {
     int i;
     int res;
-    struct input_event event;
+    input_event event{};
     const char *device_path = "/dev/input";
     unsigned char keys;
 
@@ -206,12 +192,14 @@ uint32_t get_event() {
 
     res = inotify_add_watch(ufds[0].fd, device_path, IN_DELETE | IN_CREATE);
     if (res < 0) {
-        throw std::logic_error("inotify_add_watch failed");
+        std::cerr << "inotify_add_watch failed" << std::endl;
+        exit(1);
     }
 
     res = scan_dir(device_path);
     if (res < 0) {
-        throw std::logic_error("scan dev failed");
+        std::cerr << "scan dev failed" << std::endl;
+        exit(1);
     }
 
     while (true) {
@@ -245,7 +233,7 @@ uint32_t get_event() {
 
 int main() {
     if (getuid() != 0) {
-        std::cout << "Root required" << std::endl;
+        std::cerr << "Root required" << std::endl;
         exit(1);
     }
 
@@ -254,20 +242,57 @@ int main() {
     alarm(timeout);
     auto sig_handler = [](int){
         std::cout << "No operation after " << timeout << " seconds" << std::endl;
-        exit(YAHFA);
+        exit(static_cast<int>(Variant::YAHFA));
     };
     signal(SIGALRM, sig_handler);
 
-    int cursor = YAHFA;
-    const int cursor_max = SandHook;
+    // get current arch
+#if defined(__arm__)
+    const Arch arch = ARM;
+#elif defined(__aarch64__)
+    const Arch arch = ARM64;
+#elif defined(__i386__)
+    const Arch arch = x86;
+#elif defined(__x86_64__)
+    const Arch arch = x86_64;
+#else
+#error "Unsupported arch"
+#endif
 
-    auto print_status = [&cursor](){
+    std::unordered_map<Variant, VariantDetail> variants;
+    for (const auto i: AllVariants) {
+        switch (i) {
+            case Variant::YAHFA:
+                variants[i] = {
+                        .expression = "YAHFA",
+                        .supported_arch = {ARM, ARM64, x86, x86_64}
+                };
+                break;
+            case Variant::SandHook:
+                variants[i] = {
+                        .expression = "SandHook",
+                        .supported_arch = {ARM, ARM64}
+                };
+                break;
+        }
+    }
+
+    Variant cursor = Variant::YAHFA;
+
+    auto print_status = [&cursor, variants, arch](){
         //std::cout << "\33[2K\r"; // clear this line
-        std::cout << "[";
-        std::cout << (cursor == YAHFA ? "x" : " ");
-        std::cout << "] YAHFA  [";
-        std::cout << (cursor == SandHook ? "x" : " ");
-        std::cout << "] SandHook" << std::endl;
+        std::stringstream ss;
+        for (const auto &i: variants) {
+            if (!i.second.supported_arch.contains(arch)) {
+                continue;
+            }
+            ss << "[";
+            ss << (cursor == i.first ? "x" : " ");
+            ss << "] ";
+            ss << i.second.expression;
+            ss << " ";
+        }
+        std::cout << ss.str() << std::endl;
     };
 
     // languages
@@ -292,9 +317,6 @@ int main() {
                 break;
             case KEYCHECK_PRESSED_VOLUMEDOWN:
                 cursor++;
-                if (cursor > cursor_max) {
-                    cursor = YAHFA;
-                }
                 break;
             default:
                 std::cout << "ERROR\n";
@@ -307,5 +329,5 @@ int main() {
 
     // std::cout << std::endl << cursor << std::endl;
     delete l;
-    return cursor;
+    return static_cast<int>(cursor);
 }
