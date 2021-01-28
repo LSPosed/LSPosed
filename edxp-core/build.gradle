@@ -135,7 +135,7 @@ afterEvaluate {
     android.applicationVariants.all { variant ->
         def variantCapped = variant.name.capitalize()
         def variantLowered = variant.name.toLowerCase()
-        def zipFileName = "${module_name}-${rootProject.ext.versionName}-${variantLowered}.zip"
+        def zipFileName = "${module_name}-${rootProject.ext.versionName}-${rootProject.ext.versionCode}-${variantLowered}.zip"
 
         task("copyMainDex${variantCapped}", type: Copy) {
             def dexOutPath = variant.name.contains("release") ?
