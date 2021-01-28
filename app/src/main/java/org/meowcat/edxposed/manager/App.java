@@ -18,6 +18,7 @@ import org.meowcat.edxposed.manager.adapters.AppHelper;
 import org.meowcat.edxposed.manager.ui.activity.CrashReportActivity;
 import org.meowcat.edxposed.manager.util.ModuleUtil;
 import org.meowcat.edxposed.manager.util.NotificationUtil;
+import org.meowcat.edxposed.manager.util.RebootUtil;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -28,6 +29,11 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Objects;
 
+import rikka.shizuku.Shizuku;
+import rikka.sui.Sui;
+
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+
 public class App extends Application implements Application.ActivityLifecycleCallbacks {
     public static final String TAG = "EdXposedManager";
     @SuppressLint("StaticFieldLeak")
@@ -37,6 +43,36 @@ public class App extends Application implements Application.ActivityLifecycleCal
     private SharedPreferences pref;
     //private AppCompatActivity currentActivity = null;
     private boolean isUiLoaded = false;
+
+    private final Shizuku.OnRequestPermissionResultListener REQUEST_PERMISSION_RESULT_LISTENER = this::onRequestPermissionsResult;
+
+    static {
+        Sui.init(BuildConfig.APPLICATION_ID);
+    }
+
+    private void onRequestPermissionsResult(int requestCode, int grantResult) {
+        if (requestCode < 10) {
+            RebootUtil.onRequestPermissionsResult(requestCode, grantResult);
+        }
+    }
+
+    public static boolean checkPermission(int code) {
+        try {
+            if (!Shizuku.isPreV11() && Shizuku.getVersion() >= 11) {
+                if (Shizuku.checkSelfPermission() == PERMISSION_GRANTED) {
+                    return true;
+                } else if (Shizuku.shouldShowRequestPermissionRationale()) {
+                    return false;
+                } else {
+                    Shizuku.requestPermission(code);
+                    return false;
+                }
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     public static App getInstance() {
         return instance;
@@ -108,6 +144,8 @@ public class App extends Application implements Application.ActivityLifecycleCal
 
         @SuppressLint("SimpleDateFormat") DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         Date date = new Date();
+
+        Shizuku.addRequestPermissionResultListener(REQUEST_PERMISSION_RESULT_LISTENER);
 
         if (!Objects.requireNonNull(pref.getString("date", "")).equals(dateFormat.format(date))) {
             pref.edit().putString("date", dateFormat.format(date)).apply();

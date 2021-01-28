@@ -6,8 +6,6 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
-import android.os.PowerManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -172,21 +170,7 @@ public final class NotificationUtil {
             }
 
             boolean softReboot = intent.getBooleanExtra(EXTRA_SOFT_REBOOT, false);
-            String command;
-            if (softReboot) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && ((PowerManager) context.getSystemService(Context.POWER_SERVICE)).isRebootingUserspaceSupported()) {
-                    command = "/system/bin/svc power reboot userspace";
-                } else {
-                    command = "setprop ctl.restart surfaceflinger; setprop ctl.restart zygote";
-                }
-            } else {
-                command = "/system/bin/svc power reboot";
-            }
-            int returnCode = Shell.su(command).exec().getCode();
-
-            if (returnCode != 0) {
-                Log.e(App.TAG, "NotificationUtil -> Could not reboot");
-            }
+            RebootUtil.reboot(softReboot ? RebootUtil.RebootType.USERSPACE : RebootUtil.RebootType.NORMAL);
         }
     }
 }
