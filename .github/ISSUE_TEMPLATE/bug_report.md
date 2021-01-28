@@ -35,7 +35,7 @@ Magisk:
 
 Riru:
 
-EdXposed:
+LSPposed:
 
 **相关日志/Related Logs**
 
