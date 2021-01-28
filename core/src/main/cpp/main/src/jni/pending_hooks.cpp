@@ -19,11 +19,14 @@ namespace lspd {
         return pending_classes_.count(clazz);
     }
 
-    static void PendingHooks_recordPendingMethodNative(JNI_START, jclass class_ref) {
+    static void PendingHooks_recordPendingMethodNative(JNI_START, jobject method_ref, jclass class_ref) {
         auto *class_ptr = art::Thread::Current().DecodeJObject(class_ref);
+        auto *method = getArtMethod(env, method_ref);
         art::mirror::Class mirror_class(class_ptr);
         if (auto def = mirror_class.GetClassDef(); LIKELY(def)) {
-            LOGD("record pending: %p (%s)", class_ptr, mirror_class.GetDescriptor().c_str());
+            LOGD("record pending: %p (%s) with %p", class_ptr, mirror_class.GetDescriptor().c_str(), method);
+            // Add it for ShouldUseInterpreterEntrypoint
+            recordHooked(method);
             pending_classes_.insert(def);
         } else {
             LOGW("fail to record pending for : %p (%s)", class_ptr,
@@ -32,7 +35,7 @@ namespace lspd {
     }
 
     static JNINativeMethod gMethods[] = {
-            NATIVE_METHOD(PendingHooks, recordPendingMethodNative, "(Ljava/lang/Class;)V"),
+            NATIVE_METHOD(PendingHooks, recordPendingMethodNative, "(Ljava/lang/reflect/Member;Ljava/lang/Class;)V"),
     };
 
     void RegisterPendingHooks(JNIEnv *env) {

@@ -33,12 +33,12 @@ public final class PendingHooks {
                         });
 
         pending.put(hookMethod, additionalInfo);
-        recordPendingMethodNative(hookMethod.getDeclaringClass());
+        recordPendingMethodNative(hookMethod, hookMethod.getDeclaringClass());
     }
 
     public synchronized void cleanUp() {
         sPendingHooks.clear();
     }
 
-    private static native void recordPendingMethodNative(Class clazz);
+    private static native void recordPendingMethodNative(Member hookMethod, Class clazz);
 }

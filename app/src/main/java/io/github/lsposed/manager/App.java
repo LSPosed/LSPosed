@@ -125,21 +125,8 @@ public class App extends Application {
 
         pref = PreferenceManager.getDefaultSharedPreferences(this);
 
-        master();
         NotificationUtil.init();
 
         Shizuku.addRequestPermissionResultListener(REQUEST_PERMISSION_RESULT_LISTENER);
     }
-
-    private void master() {
-        // This will affect the fengshui of the whole app, don't remove this
-        Constants.getXposedVersionCode();
-        Constants.getXposedVersion();
-        Constants.getXposedApiVersion();
-        Constants.getXposedVariant();
-        Constants.getBaseDir();
-        Constants.getModulesListFile();
-        Constants.getEnabledModulesListFile();
-    }
-
 }
