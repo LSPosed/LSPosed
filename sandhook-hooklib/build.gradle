@@ -49,12 +49,12 @@ afterEvaluate {
             def libPathRelease = "${buildDir}/intermediates/cmake/${variantNameLowered}/obj"
             doLast {
                 copy {
-                    include "libsandhook.edxp.so"
+                    include "libsandhook.lspd.so"
                     from "${libPathRelease}/armeabi-v7a"
                     into "${zipPathMagiskReleasePath}/system/lib"
                 }
                 copy {
-                    include "libsandhook.edxp.so"
+                    include "libsandhook.lspd.so"
                     from "${libPathRelease}/arm64-v8a"
                     into "${zipPathMagiskReleasePath}/system/lib64"
                 }

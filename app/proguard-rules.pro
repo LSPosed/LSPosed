@@ -19,5 +19,5 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
--keep class org.meowcat.edxposed.manager.util.json.** {public *; }
--keep class org.meowcat.edxposed.manager.Constants { *; }
+-keep class io.github.lsposed.manager.util.json.** {public *; }
+-keep class io.github.lsposed.manager.Constants { *; }

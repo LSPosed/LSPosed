@@ -118,7 +118,7 @@
     <string name="verified_boot_none">Could not detect Verified Boot state</string>
     <string name="verified_boot_active">Verified Boot is active</string>
 
-    <!-- EdXp related -->
+    <!-- LSPd related -->
     <string name="white_list_mode_title">White List mode</string>
     <string name="title_white_list">White List</string>
     <string name="title_black_list">Black List</string>

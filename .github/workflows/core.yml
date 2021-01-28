@@ -4,9 +4,11 @@ on:
   push:
     paths-ignore:
     - 'app/**'
+    - '**.md'
   pull_request:
     paths-ignore:
     - 'app/**'
+    - '**.md'
 
 jobs:
   build:
@@ -31,8 +33,8 @@ jobs:
       run:  bash ./gradlew zipRelease zipDebug :app:assembleRelease
     - name: Prepare artifact
       if: success()
-      run: unzip edxp-core/release/LSPosed-v*-release.zip -d LSPosed-release;
-           unzip edxp-core/release/LSPosed-v*-debug.zip -d LSPosed-debug;
+      run: unzip lspd-core/release/LSPosed-v*-release.zip -d LSPosed-release;
+           unzip lspd-core/release/LSPosed-v*-debug.zip -d LSPosed-debug;
     - name: Upload release
       uses: actions/upload-artifact@v2
       with:
@@ -49,7 +51,7 @@ jobs:
         CHANNEL_ID: ${{ secrets.CHANNEL_ID }}
         BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
       run: |
-        OUTPUT="edxp-core/release/"
+        OUTPUT="lspd-core/release/"
         export release=$(find $OUTPUT -name "LSPosed-v*-release.zip")
         export debug=$(find $OUTPUT -name "LSPosed-v*-debug.zip")
         curl -v "https://api.telegram.org/bot${BOT_TOKEN}/sendMediaGroup?chat_id=${CHANNEL_ID}&media=%5B%7B%22type%22:%22document%22,%20%22media%22:%22attach://release%22%7D,%7B%22type%22:%22document%22,%20%22media%22:%22attach://debug%22%7D%5D"  -F release="@$release" -F debug="@$debug"

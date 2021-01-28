@@ -2,8 +2,8 @@
 // Created by 双草酸酯 on 1/26/21.
 //
 
-#ifndef EDXPOSED_LANGUAGES_H
-#define EDXPOSED_LANGUAGES_H
+#ifndef LSPOSED_LANGUAGES_H
+#define LSPOSED_LANGUAGES_H
 #include <string>
 
 class Languages {
@@ -34,4 +34,4 @@ public:
     }
 };
 
-#endif //EDXPOSED_LANGUAGES_H
+#endif //LSPOSED_LANGUAGES_H

@@ -10,7 +10,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "org.meowcat.edxposed.manager"
+        applicationId "io.github.lsposed.manager"
         minSdkVersion androidMinSdkVersion.toInteger()
         targetSdkVersion androidTargetSdkVersion.toInteger()
         versionCode rootProject.ext.versionCode
