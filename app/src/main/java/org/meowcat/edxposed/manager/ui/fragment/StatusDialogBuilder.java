@@ -24,11 +24,27 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Locale;
 
+import dalvik.system.VMRuntime;
+
 @SuppressLint("StaticFieldLeak")
 public class StatusDialogBuilder extends MaterialAlertDialogBuilder {
+    private static String CPU_ABI;
+    private static String CPU_ABI2;
 
     public StatusDialogBuilder(@NonNull Context context) {
         super(context);
+        final String[] abiList;
+        if (VMRuntime.getRuntime().is64Bit()) {
+            abiList = Build.SUPPORTED_64_BIT_ABIS;
+        } else {
+            abiList = Build.SUPPORTED_32_BIT_ABIS;
+        }
+        CPU_ABI = abiList[0];
+        if (abiList.length > 1) {
+            CPU_ABI2 = abiList[1];
+        } else {
+            CPU_ABI2 = "";
+        }
         StatusInstallerBinding binding = StatusInstallerBinding.inflate(LayoutInflater.from(context), null, false);
 
         String installedXposedVersion = Constants.getXposedVersion();
@@ -70,19 +86,18 @@ public class StatusDialogBuilder extends MaterialAlertDialogBuilder {
         return info + " (" + getArch() + ")";
     }
 
-    @SuppressWarnings("deprecation")
-    private static String getArch() {
-        if (Build.CPU_ABI.equals("arm64-v8a")) {
+    public static String getArch() {
+        if (CPU_ABI.equals("arm64-v8a")) {
             return "arm64";
-        } else if (Build.CPU_ABI.equals("x86_64")) {
+        } else if (CPU_ABI.equals("x86_64")) {
             return "x86_64";
-        } else if (Build.CPU_ABI.equals("mips64")) {
+        } else if (CPU_ABI.equals("mips64")) {
             return "mips64";
-        } else if (Build.CPU_ABI.startsWith("x86") || Build.CPU_ABI2.startsWith("x86")) {
+        } else if (CPU_ABI.startsWith("x86") || CPU_ABI2.startsWith("x86")) {
             return "x86";
-        } else if (Build.CPU_ABI.startsWith("mips")) {
+        } else if (CPU_ABI.startsWith("mips")) {
             return "mips";
-        } else if (Build.CPU_ABI.startsWith("armeabi-v5") || Build.CPU_ABI.startsWith("armeabi-v6")) {
+        } else if (CPU_ABI.startsWith("armeabi-v5") || CPU_ABI.startsWith("armeabi-v6")) {
             return "armv5";
         } else {
             return "arm";
@@ -143,14 +158,26 @@ public class StatusDialogBuilder extends MaterialAlertDialogBuilder {
             manufacturer += " " + Character.toUpperCase(Build.BRAND.charAt(0)) + Build.BRAND.substring(1);
         }
         manufacturer += " " + Build.MODEL + " ";
-        if (new File("/system/framework/twframework.jar").exists() || new File("/system/framework/samsung-services.jar").exists()) {
-            manufacturer += "(TouchWiz)";
-        } else if (new File("/system/framework/framework-miui-res.apk").exists() || new File("/system/app/miui/miui.apk").exists() || new File("/system/app/miuisystem/miuisystem.apk").exists()) {
-            manufacturer += "(Mi UI)";
+        if (new File("/system/framework/framework-miui-res.apk").exists() || new File("/system/app/miui/miui.apk").exists() || new File("/system/app/miuisystem/miuisystem.apk").exists()) {
+            manufacturer += "(MIUI)";
         } else if (new File("/system/priv-app/oneplus-framework-res/oneplus-framework-res.apk").exists()) {
-            manufacturer += "(Oxygen/Hydrogen OS)";
+            manufacturer += "(Hydrogen/Oxygen OS)";
+        } else if (new File("/system/framework/oppo-framework.jar").exists() || new File("/system/framework/oppo-framework-res.apk").exists() || new File("/system/framework/coloros-framework.jar").exists() || new File("/system/framework/coloros.services.jar").exists() || new File("/system/framework/oppo-services.jar").exists() || new File("/system/framework/coloros-support-wrapper.jar").exists()) {
+            manufacturer += "(Color OS)";
+        } else if (new File("/system/framework/hwEmui.jar").exists() || new File("/system/framework/hwcustEmui.jar").exists() || new File("/system/framework/hwframework.jar").exists() || new File("/system/framework/framework-res-hwext.apk").exists() || new File("/system/framework/hwServices.jar").exists() || new File("/system/framework/hwcustframework.jar").exists()) {
+            manufacturer += "(EMUI)";
         } else if (new File("/system/framework/com.samsung.device.jar").exists() || new File("/system/framework/sec_platform_library.jar").exists()) {
             manufacturer += "(One UI)";
+        } else if (new File("/system/priv-app/CarbonDelta/CarbonDelta.apk").exists()) {
+            manufacturer += "(Carbon OS)";
+        } else if (new File("/system/framework/flyme-framework.jar").exists() || new File("/system/framework/flyme-res").exists() || new File("/system/framework/flyme-telephony-common.jar").exists()) {
+            manufacturer += "(Flyme)";
+        } else if (new File("/system/framework/org.lineageos.platform-res.apk").exists() || new File("/system/framework/org.lineageos.platform.jar").exists()) {
+            manufacturer += "(Lineage OS Based ROM)";
+        } else if (new File("/system/framework/twframework.jar").exists() || new File("/system/framework/samsung-services.jar").exists()) {
+            manufacturer += "(TouchWiz)";
+        } else if (new File("/system/framework/core.jar.jex").exists()) {
+            manufacturer += "(Aliyun OS)";
         }
         return manufacturer;
     }
