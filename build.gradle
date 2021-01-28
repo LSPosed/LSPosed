@@ -31,7 +31,7 @@ allprojects {
     ext {
         versionCode = buildVersionCode
         versionName = buildVersionName
-        templateRootPath = project(":edxp-core").projectDir.path + "/template_override/"
+        templateRootPath = project(":core").projectDir.path + "/template_override/"
         templateSystemPath = templateRootPath + "/system/"
         templateSystemx86Path = templateRootPath + "/system_x86/"
         templateFrameworkPath = templateRootPath + "/system/framework/"
@@ -39,7 +39,7 @@ allprojects {
         templateLib64Path = templateRootPath + "/system/lib64/"
         templateEtcPath = templateRootPath + "/system/etc/"
         hiddenApiStubJarFilePath = project(":hiddenapi-stubs").buildDir.absolutePath + "/libs/framework-stub.jar"
-        zipPathMagiskReleasePath = project(":edxp-core").projectDir.path + "/build/tmp/release/magisk/"
+        zipPathMagiskReleasePath = project(":core").projectDir.path + "/build/tmp/release/magisk/"
     }
     repositories {
         google()

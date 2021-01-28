@@ -40,6 +40,6 @@ LSPposed:
 **相关日志/Related Logs**
 
 <!--
-为了帮助我们定位问题，请使用 debug 版 EdXposed 模块抓取日志
+为了帮助我们定位问题，请使用 debug 版 LSPosed 模块抓取日志
 Please capture log with debug version, otherwise it won't help us locating the issue
 -->

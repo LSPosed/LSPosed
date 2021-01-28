@@ -104,7 +104,7 @@
     <string name="skip_xposedminversion_check_summ">关闭针对模块的\“LSPosed 安装状态\”检查</string>
     <string name="not_logcat">此处仅显示 LSPosed 及模块相关日志信息\n如果您想抓取系统日志, 可以尝试我们的 Log Catcher Magisk 模块</string>
 
-    <!-- EdXp related -->
+    <!-- LSPd related -->
     <string name="white_list_mode_title">白名单模式</string>
     <string name="title_white_list">白名单</string>
     <string name="title_black_list">黑名单</string>
