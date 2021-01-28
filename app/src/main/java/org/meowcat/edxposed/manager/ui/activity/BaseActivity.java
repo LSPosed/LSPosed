@@ -8,7 +8,6 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,13 +17,12 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.topjohnwu.superuser.Shell;
 
 import org.meowcat.edxposed.manager.App;
 import org.meowcat.edxposed.manager.R;
+import org.meowcat.edxposed.manager.util.CompileUtil;
 import org.meowcat.edxposed.manager.util.CustomThemeColor;
 import org.meowcat.edxposed.manager.util.CustomThemeColors;
-import org.meowcat.edxposed.manager.util.NavUtil;
 import org.meowcat.edxposed.manager.util.RebootUtil;
 
 import java.util.Objects;
@@ -156,51 +154,9 @@ public class BaseActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.dexopt_all) {
-            areYouSure(R.string.take_while_cannot_resore, (dialog, which) -> {
-                new MaterialAlertDialogBuilder(this)
-                        .setTitle(R.string.dexopt_now)
-                        .setMessage(R.string.this_may_take_a_while)
-                        .setCancelable(false)
-                        .show();
-                new Thread("dexopt") {
-                    @Override
-                    public void run() {
-                        if (!Shell.rootAccess()) {
-                            dialog.dismiss();
-                            NavUtil.showMessage(BaseActivity.this, getString(R.string.root_failed));
-                            return;
-                        }
-
-                        Shell.su("cmd package bg-dexopt-job").exec();
-
-                        dialog.dismiss();
-                        App.runOnUiThread(() -> Toast.makeText(BaseActivity.this, R.string.done, Toast.LENGTH_LONG).show());
-                    }
-                }.start();
-            });
+            CompileUtil.compileAllDexopt(this);
         } else if (itemId == R.id.speed_all) {
-            areYouSure(R.string.take_while_cannot_resore, (dialog, which) -> {
-                new MaterialAlertDialogBuilder(this)
-                        .setTitle(R.string.speed_now)
-                        .setMessage(R.string.this_may_take_a_while)
-                        .setCancelable(false)
-                        .show();
-                new Thread("dex2oat") {
-                    @Override
-                    public void run() {
-                        if (!Shell.rootAccess()) {
-                            dialog.dismiss();
-                            NavUtil.showMessage(BaseActivity.this, getString(R.string.root_failed));
-                            return;
-                        }
-
-                        Shell.su("cmd package compile -m speed -a").exec();
-
-                        dialog.dismiss();
-                        App.runOnUiThread(() -> Toast.makeText(BaseActivity.this, R.string.done, Toast.LENGTH_LONG).show());
-                    }
-                };
-            });
+            CompileUtil.compileAllSpeed(this);
         } else if (itemId == R.id.reboot) {
             areYouSure(R.string.reboot, (dialog, which) -> RebootUtil.reboot(RebootUtil.RebootType.NORMAL));
         } else if (itemId == R.id.soft_reboot) {

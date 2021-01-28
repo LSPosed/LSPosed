@@ -16,19 +16,31 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.topjohnwu.superuser.Shell;
 
+import org.meowcat.edxposed.manager.App;
 import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.databinding.FragmentCompileDialogBinding;
+import org.meowcat.edxposed.manager.util.CompileUtil;
 import org.meowcat.edxposed.manager.util.ToastUtil;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
+import rikka.shizuku.ShizukuSystemProperties;
+
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+
+@SuppressWarnings("deprecation")
 public class CompileDialogFragment extends AppCompatDialogFragment {
+
+    private static final String COMPILE_COMMAND_PREFIX = "cmd package ";
+    private static final String COMPILE_RESET_COMMAND = COMPILE_COMMAND_PREFIX + "compile --reset ";
+    private static final String COMPILE_SPEED_COMMAND = COMPILE_COMMAND_PREFIX + "compile -f -m speed ";
+    private static final String COMPILE_DEXOPT_COMMAND = COMPILE_COMMAND_PREFIX + "force-dex-opt ";
 
     private static final String KEY_APP_INFO = "app_info";
     private static final String KEY_MSG = "msg";
-    private static final String KEY_COMMANDS = "commands";
+    private static final String KEY_TYPE = "type";
     private ApplicationInfo appInfo;
 
 
@@ -36,11 +48,11 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
     }
 
     public static CompileDialogFragment newInstance(ApplicationInfo appInfo,
-                                                    String msg, String[] commands) {
+                                                    String msg, CompileUtil.CompileType type) {
         Bundle arguments = new Bundle();
         arguments.putParcelable(KEY_APP_INFO, appInfo);
         arguments.putString(KEY_MSG, msg);
-        arguments.putStringArray(KEY_COMMANDS, commands);
+        arguments.putInt(KEY_TYPE, type.ordinal());
         CompileDialogFragment fragment = new CompileDialogFragment();
         fragment.setArguments(arguments);
         fragment.setCancelable(false);
@@ -72,25 +84,67 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
         return alertDialog;
     }
 
+    public void onRequestPermissionsResult(int requestCode, int grantResult) {
+        CompileUtil.CompileType mode = CompileUtil.CompileType.values()[(requestCode - 1) / 10];
+        if (grantResult == PERMISSION_GRANTED) {
+            AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
+                try {
+                    boolean checkProfiles = ShizukuSystemProperties.getBoolean("dalvik.vm.usejitprofiles", false);
+                    switch (mode) {
+                        case RESET:
+                            CompileUtil.PACKAGE_MANAGER.get().clearApplicationProfileData(appInfo.packageName);
+                            String filter = ShizukuSystemProperties.get("pm.dexopt.install");
+                            CompileUtil.PACKAGE_MANAGER.get().performDexOptMode(appInfo.packageName, checkProfiles, filter, true, true, null);
+                            break;
+                        case SPEED:
+                            CompileUtil.PACKAGE_MANAGER.get().performDexOptMode(appInfo.packageName, checkProfiles, "speed", true, true, null);
+                            break;
+                        case DEXOPT:
+                            CompileUtil.PACKAGE_MANAGER.get().forceDexOpt(appInfo.packageName);
+                            break;
+                    }
+                    App.runOnUiThread(() -> {
+                        ToastUtil.showLongToast(requireContext(), R.string.done);
+                        dismiss();
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    compileWithShell(mode);
+                }
+            });
+        } else {
+            compileWithShell(mode);
+        }
+    }
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         Bundle arguments = getArguments();
         if (arguments != null) {
-            String[] commandPrefixes = arguments.getStringArray(KEY_COMMANDS);
+            int type = arguments.getInt(KEY_TYPE);
             appInfo = arguments.getParcelable(KEY_APP_INFO);
-            if (commandPrefixes == null || commandPrefixes.length == 0 || appInfo == null) {
-                ToastUtil.showShortToast(context, R.string.empty_param);
-                dismissAllowingStateLoss();
-                return;
-            }
-            String[] commands = new String[commandPrefixes.length];
-            for (int i = 0; i < commandPrefixes.length; i++) {
-                commands[i] = commandPrefixes[i] + appInfo.packageName;
-            }
-            new CompileTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, commands);
+            type = type * 10 + 1;
+            if (App.checkPermission(type))
+                onRequestPermissionsResult(type, PERMISSION_GRANTED);
         } else {
             dismissAllowingStateLoss();
+        }
+    }
+
+    private void compileWithShell(CompileUtil.CompileType type) {
+        String command = null;
+        if (type == CompileUtil.CompileType.RESET) {
+            command = COMPILE_RESET_COMMAND + appInfo.packageName;
+        } else if (type == CompileUtil.CompileType.DEXOPT) {
+            command = COMPILE_DEXOPT_COMMAND + appInfo.packageName;
+        } else if (type == CompileUtil.CompileType.SPEED) {
+            command = COMPILE_SPEED_COMMAND + appInfo.packageName;
+        }
+        if (command != null) {
+            new CompileTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, command);
+        } else {
+            dismiss();
         }
     }
 

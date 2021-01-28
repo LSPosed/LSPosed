@@ -16,6 +16,8 @@ import androidx.preference.PreferenceManager;
 
 import org.meowcat.edxposed.manager.adapters.AppHelper;
 import org.meowcat.edxposed.manager.ui.activity.CrashReportActivity;
+import org.meowcat.edxposed.manager.ui.fragment.CompileDialogFragment;
+import org.meowcat.edxposed.manager.util.CompileUtil;
 import org.meowcat.edxposed.manager.util.ModuleUtil;
 import org.meowcat.edxposed.manager.util.NotificationUtil;
 import org.meowcat.edxposed.manager.util.RebootUtil;
@@ -53,6 +55,8 @@ public class App extends Application implements Application.ActivityLifecycleCal
     private void onRequestPermissionsResult(int requestCode, int grantResult) {
         if (requestCode < 10) {
             RebootUtil.onRequestPermissionsResult(requestCode, grantResult);
+        } else {
+            CompileUtil.onRequestPermissionsResult(requestCode, grantResult);
         }
     }
 
