@@ -51,22 +51,22 @@ public class App extends Application implements Application.ActivityLifecycleCal
         }
     }
 
-    public static boolean checkPermission(int code) {
+    public static int checkPermission(int code) {
         try {
             if (!Shizuku.isPreV11() && Shizuku.getVersion() >= 11) {
                 if (Shizuku.checkSelfPermission() == PERMISSION_GRANTED) {
-                    return true;
+                    return 0;
                 } else if (Shizuku.shouldShowRequestPermissionRationale()) {
-                    return false;
+                    return -1;
                 } else {
                     Shizuku.requestPermission(code);
-                    return false;
+                    return -1;
                 }
             }
         } catch (Throwable e) {
             e.printStackTrace();
         }
-        return false;
+        return -2;
     }
 
     public static App getInstance() {

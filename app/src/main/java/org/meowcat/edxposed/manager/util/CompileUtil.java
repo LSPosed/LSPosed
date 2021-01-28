@@ -126,13 +126,29 @@ public class CompileUtil {
     public static void compileAllDexopt(Activity activity) {
         sActivity = activity;
         int type = CompileType.DEXOPT_ALL.ordinal() * 10 + 1;
-        onRequestPermissionsResult(type, App.checkPermission(type) ? PERMISSION_GRANTED : PERMISSION_DENIED);
+        int result = App.checkPermission(type);
+        switch (result){
+            case 0:
+                onRequestPermissionsResult(type, PERMISSION_GRANTED);
+                break;
+            case -2:
+                onRequestPermissionsResult(type, PERMISSION_DENIED);
+                break;
+        }
     }
 
     public static void compileAllSpeed(Activity activity) {
         sActivity = activity;
         int type = CompileType.SPEED_ALL.ordinal() * 10 + 1;
-        onRequestPermissionsResult(type, App.checkPermission(type) ? PERMISSION_GRANTED : PERMISSION_DENIED);
+        int result = App.checkPermission(type);
+        switch (result){
+            case 0:
+                onRequestPermissionsResult(type, PERMISSION_GRANTED);
+                break;
+            case -2:
+                onRequestPermissionsResult(type, PERMISSION_DENIED);
+                break;
+        }
     }
 
     private static void compilePackageInBg(FragmentManager fragmentManager,

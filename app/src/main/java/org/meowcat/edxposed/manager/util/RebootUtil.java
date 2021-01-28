@@ -61,8 +61,15 @@ public class RebootUtil {
 
 
     public static void reboot(RebootType mode) {
-        onRequestPermissionsResult(mode.ordinal(), App.checkPermission(mode.ordinal()) ? PERMISSION_GRANTED : PERMISSION_DENIED);
-
+        int result = App.checkPermission(mode.ordinal());
+        switch (result){
+            case 0:
+                onRequestPermissionsResult(mode.ordinal(), PERMISSION_GRANTED);
+                break;
+            case -2:
+                onRequestPermissionsResult(mode.ordinal(), PERMISSION_DENIED);
+                break;
+        }
     }
 
     private static void rebootWithShell(RebootType mode) {

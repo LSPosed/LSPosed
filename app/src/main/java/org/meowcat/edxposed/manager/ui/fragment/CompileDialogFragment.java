@@ -126,7 +126,15 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
             int type = arguments.getInt(KEY_TYPE);
             appInfo = arguments.getParcelable(KEY_APP_INFO);
             type = type * 10 + 1;
-            onRequestPermissionsResult(type, App.checkPermission(type) ? PERMISSION_GRANTED : PERMISSION_DENIED);
+            int result = App.checkPermission(type);
+            switch (result){
+                case 0:
+                    onRequestPermissionsResult(type, PERMISSION_GRANTED);
+                    break;
+                case -2:
+                    onRequestPermissionsResult(type, PERMISSION_DENIED);
+                    break;
+            }
         } else {
             dismissAllowingStateLoss();
         }
