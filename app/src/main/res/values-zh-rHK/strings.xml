@@ -26,7 +26,6 @@
     <string name="soft_reboot">軟重啟</string>
     <string name="reboot">重啟</string>
     <string name="areyousure">您確定？</string>
-    <string name="reboot_failed">重啟失敗, 請使用設備自帶的重啟功能</string>
     <string name="install_warning_title">請小心！</string>
     <string name="dont_show_again">不再提示</string>
 
@@ -43,7 +42,6 @@
     <string name="module_no_ui">該模塊未提供用户界面</string>
     <string name="xposed_module_list_updated">LSPosed 模塊列表已更新</string>
     <string name="xposed_module_updated_notification_title">LSPosed 模塊已更新</string>
-    <string name="xposed_module_updated_notification">重啟以使變更生效</string>
     <string name="warning_xposed_min_version">該模塊需要更新版本的 LSPosed(%d), 因此無法被激活</string>
     <string name="no_min_version_specified">該模塊未指定所需的 LSPosed 版本</string>
     <string name="warning_min_version_too_low">該模塊針對 LSPosed %1$d 版本構建 , 由於不兼容 %2$d 版本中的變更, 現已被停用</string>
@@ -67,7 +65,6 @@
     <string name="support_framework_label">框架/管理器 支持</string>
 
     <!-- Logs tab  -->
-    <string name="logs_save_failed">無法將日誌寫入 SD 卡: </string>
     <string name="menuClearLog">立即清理日誌</string>
     <string name="logs_cleared">日誌清理成功</string>
     <string name="logs_clear_failed">無法清理日誌: </string>
@@ -93,7 +90,6 @@
     <string name="no_enabled_modules">沒有任何已啟用的模塊</string>
 
     <string name="info">信息</string>
-    <string name="newVersion">LSPosed Manager 有新版本可用！現在更新！</string>
     <string name="not_installed_no_lollipop">LSPosed 框架未安裝</string>
 
     <string name="scroll_top">滾動到頂部</string>
@@ -119,7 +115,6 @@
     <string name="compile_speed_msg">優化中…</string>
     <string name="notinstalled">LSPosed 框架未安裝</string>
     <string name="white_list_mode_summary">僅選中的應用加載 LSPosed 模塊</string>
-    <string name="verified_boot_explanation">引導驗證(dm-verity)防止設備在修改系統分區時引導</string>
     <string name="verified_boot_active">引導驗證已啟用</string>
     <string name="verified_boot_deactivated">引導驗證已禁用</string>
     <string name="verified_boot_none">無法獲取引導驗證狀態</string>
@@ -127,7 +122,6 @@
     <string name="dexopt_now">以 Dexopt 模式優化全部應用</string>
     <string name="speed_now">以 Speed 模式優化全部應用</string>
     <string name="this_may_take_a_while">請稍後, 這將需要一段時間…</string>
-    <string name="take_while_cannot_resore">你確定要優化全部應用嗎?\n\n這將需要一段時間, 並且無法恢復\n\n提示: 你可以在應用名單中優化單個應用</string>
     <string name="pref_title_enable_boot_image_deopt">禁用系統代碼優化</string>
     <string name="pref_enable_boot_image_deopt_summary">禁用系統代碼的優化能使所有系統方法都可以被 hook 到, 但是會降低系統流暢度\n主要用於對比測試某個方法無法 hook 到是否為系統優化導致</string>
 
@@ -140,7 +134,6 @@
     <string name="hook_modules_summary">強制將模塊添加進白名單並移出黑名單\n關閉此選項並不會移除已勾選的應用標識</string>
     <string name="not_installed">未安裝</string>
     <string name="support_group_telegram_channel">Telegram 頻道: @LSPosed</string>
-    <string name="empty_param">參數為空</string>
     <string name="reboot_system">重啟至系統</string>
     <string name="pref_title_disable_modules_log">禁用模塊日誌</string>
     <string name="pref_disable_modules_log_summary">模塊拋出的的異常堆棧仍將正常抓取</string>

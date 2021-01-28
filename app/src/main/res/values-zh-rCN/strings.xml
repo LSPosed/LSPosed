@@ -26,7 +26,6 @@
     <string name="soft_reboot">软重启</string>
     <string name="reboot">重启</string>
     <string name="areyousure">您确定？</string>
-    <string name="reboot_failed">重启失败, 请使用设备自带的重启功能</string>
     <string name="install_warning_title">请小心！</string>
     <string name="dont_show_again">不再提示</string>
 
@@ -43,7 +42,6 @@
     <string name="module_no_ui">该模块未提供用户界面</string>
     <string name="xposed_module_list_updated">LSPosed 模块列表已更新</string>
     <string name="xposed_module_updated_notification_title">LSPosed 模块已更新</string>
-    <string name="xposed_module_updated_notification">重启以使变更生效</string>
     <string name="warning_xposed_min_version">该模块需要更新版本的 LSPosed(%d), 因此无法被激活</string>
     <string name="no_min_version_specified">该模块未指定所需的 LSPosed 版本</string>
     <string name="warning_min_version_too_low">该模块针对 LSPosed %1$d 版本构建 , 由于不兼容 %2$d 版本中的变更, 现已被停用</string>
@@ -67,7 +65,7 @@
     <string name="support_framework_label">框架/管理器 支持</string>
 
     <!-- Logs tab  -->
-    <string name="logs_save_failed">无法将日志写入 SD 卡: </string>
+    <string name="logs_save_failed">保存失败：</string>
     <string name="menuClearLog">立即清理日志</string>
     <string name="logs_cleared">日志清理成功</string>
     <string name="logs_clear_failed">无法清理日志: </string>
@@ -93,7 +91,6 @@
     <string name="no_enabled_modules">没有任何已启用的模块</string>
 
     <string name="info">信息</string>
-    <string name="newVersion">LSPosed Manager 有新版本可用！现在更新！</string>
     <string name="not_installed_no_lollipop">LSPosed 框架未安装</string>
 
     <string name="scroll_top">滚动到顶部</string>
@@ -119,7 +116,6 @@
     <string name="compile_speed_msg">优化中…</string>
     <string name="notinstalled">LSPosed 框架未安装</string>
     <string name="white_list_mode_summary">仅选中的应用加载 LSPosed 模块</string>
-    <string name="verified_boot_explanation">引导验证(dm-verity)防止设备在修改系统分区时引导</string>
     <string name="verified_boot_active">引导验证已启用</string>
     <string name="verified_boot_deactivated">引导验证已禁用</string>
     <string name="verified_boot_none">无法获取引导验证状态</string>
@@ -127,7 +123,6 @@
     <string name="dexopt_now">以 Dexopt 模式优化全部应用</string>
     <string name="speed_now">以 Speed 模式优化全部应用</string>
     <string name="this_may_take_a_while">请稍后, 这将需要一段时间…</string>
-    <string name="take_while_cannot_resore">你确定要优化全部应用吗?\n\n这将需要一段时间, 并且无法恢复\n\n提示: 你可以在应用名单中优化单个应用</string>
     <string name="pref_title_enable_boot_image_deopt">禁用系统代码优化</string>
     <string name="pref_enable_boot_image_deopt_summary">禁用系统代码的优化能使所有系统方法都可以被 hook 到, 但是会降低系统流畅度\n主要用于对比测试某个方法无法 hook 到是否为系统优化导致</string>
 
@@ -141,7 +136,6 @@
     <string name="hook_modules_summary">强制将模块添加进白名单并移出黑名单\n关闭此选项并不会移除已勾选的应用标识</string>
     <string name="not_installed">未安装</string>
     <string name="support_group_telegram_channel">Telegram 频道: @LSPosed</string>
-    <string name="empty_param">参数为空</string>
     <string name="reboot_system">重启至系统</string>
     <string name="pref_title_disable_modules_log">禁用模块日志</string>
     <string name="pref_disable_modules_log_summary">模块抛出的的异常堆栈仍将正常抓取</string>

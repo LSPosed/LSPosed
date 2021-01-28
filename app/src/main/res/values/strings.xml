@@ -1,29 +1,21 @@
 <resources>
     <string name="app_name" translatable="false">LSPosed Manager</string>
     <string name="Activated">Activated</string>
-    <string name="Inactivate">Inactivate</string>
     <string name="Install">Install</string>
     <string name="InstallDetail">Tap to install LSPosed</string>
     <string name="ActivatedDetail">LSPosed is activated</string>
     <string name="Modules">Modules</string>
     <string name="ModulesDetail">%d modules enabled</string>
-    <string name="Downloads">Downloads</string>
-    <string name="ModuleUpgradable">%s modules can be upgraded</string>
-    <string name="ModuleUptodate">All modules are up-to-date</string>
     <string name="Apps">Apps</string>
     <string name="Logs">Logs</string>
     <string name="Settings">Settings</string>
     <string name="About">About</string>
 
-    <string name="restart_needed">Restart needed</string>
-    <string name="cache_cleaned">App\'s cache has been cleaned. Restart is needed</string>
     <!-- General/various strings -->
     <string name="menuSend">Send</string>
     <string name="menuSaveToSd">Save</string>
 
     <!-- Welcome screen / main sections -->
-    <string name="tabInstall">Device</string>
-    <string name="welcome_framework_update_available">An update for the LSPosed Framework is available (%s)</string>
 
     <!-- navigation view items -->
     <string name="nav_item_modules">Modules</string>
@@ -32,17 +24,11 @@
     <string name="nav_item_logs_err">Modules Logs</string>
 
     <!-- Installer tab -->
-    <string name="install">Install/Update</string>
-    <string name="uninstall">Uninstall</string>
     <string name="soft_reboot">Soft reboot</string>
     <string name="reboot">Reboot</string>
     <string name="areyousure">Are you sure?</string>
-    <string name="reboot_failed">Reboot failed. Please use the device\'s normal reboot function</string>
     <string name="install_warning_title">Be careful!</string>
-    <string name="install_warning">In some cases, your device might no longer boot after installing LSPosed.\n\nIf you never heard about \"soft brick\" and \"bootloop\" before or if you don\'t know how to recover from such a situation, do <b>NOT</b> install or use LSPosed!\n\nIn any case, having a recent backup is highly recommended.</string>
     <string name="dont_show_again">Don\'t show this again</string>
-    <string name="installed_lollipop_inactive">LSPosed Framework is installed, but not active\nPlease check the logs for details</string>
-    <string name="modules_updates_available">Module update(s) are available</string>
 
     <!-- File operations -->
     <string name="root_failed">Failed to get root access\n\nMake sure your device is rooted properly and you have not blocked shell commands</string>
@@ -57,13 +43,10 @@
     <string name="module_no_ui">This module does not provide a user interface</string>
     <string name="xposed_module_list_updated">LSPosed module list was updated</string>
     <string name="xposed_module_updated_notification_title">LSPosed module updated</string>
-    <string name="xposed_module_updated_notification">Reboot to activate changes</string>
     <string name="warning_xposed_min_version">This module requires a newer LSPosed version (%d) and thus cannot be activated</string>
     <string name="no_min_version_specified">This module does not specify the LSPosed version it needs.</string>
     <string name="warning_min_version_too_low">This module was created for LSPosed version %1$d, but due to incompatible changes in version %2$d, it has been disabled</string>
     <string name="module_launch">Launch UI</string>
-    <string name="module_download_updates">Download/Updates</string>
-    <string name="module_support">Support</string>
     <string name="modules_app_store">View in App Store</string>
     <string name="module_app_info">App info</string>
     <string name="module_uninstall">Uninstall</string>
@@ -71,42 +54,9 @@
     <!-- Download tab -->
     <string name="menuSearch">Search</string>
     <string name="menuReload">Reload</string>
-    <string name="changes">Changelog:</string>
-    <string name="download_details_page_description">Description</string>
-    <string name="download_details_page_versions">Versions</string>
-    <string name="download_details_page_settings">Settings</string>
-    <string name="reltype_stable">Stable</string>
-    <string name="reltype_stable_summary">Stable (low risk of bugs)</string>
-    <string name="reltype_beta">Beta</string>
-    <string name="reltype_beta_summary">Beta (some bugs to be expected)</string>
-    <string name="reltype_experimental">Experimental</string>
-    <string name="reltype_experimental_summary">Experimental (high risk of bugs)</string>
-    <string name="reltype_use_global_summary">Use global setting</string>
-    <string name="download_author">by %s</string>
-    <string name="download_unknown_author">unknown author</string>
-    <string name="download_status_installed">Installed (version %s)</string>
-    <string name="download_status_update_available">Update available (version %1$s \u2192 %2$s)</string>
-    <string name="download_timestamps">Added on %1$s \u00b7 Updated on %2$s</string>
     <string name="install_timestamps">Installed on %1$s\nUpdated on %2$s</string>
-    <string name="download_sorting_title">Sorting order</string>
-    <string name="download_sorting_status">Sort by status</string>
-    <string name="download_sorting_updated">Sort by last update</string>
-    <string name="download_sorting_created">Sort by creation date</string>
-    <string name="download_section_framework">LSPosed Framework</string>
-    <string name="download_section_update_available">Update available</string>
-    <string name="download_section_installed">Installed</string>
-    <string name="download_section_not_installed">Not installed</string>
-    <string name="download_section_24h">Last 24 hours</string>
-    <string name="download_section_7d">Last 7 days</string>
-    <string name="download_section_30d">Last 30 days</string>
-    <string name="download_section_older">More than 30 days ago</string>
-    <string name="download_details_not_found">There is no module with package name \"%s\" in the repository</string>
-    <string name="download_no_versions">The author hasn\'t uploaded anything yet</string>
-    <string name="download_test_version_not_shown">A test version is available, however it isn\'t shown due to your global or module-specific settings</string>
 
     <!-- Settings tab -->
-    <string name="settings_group_download">Download and install</string>
-    <string name="settings_release_type">Versions to be shown</string>
     <string name="settings_group_framework">Framework</string>
     <string name="settings_enable_resources">Enable resource hooks</string>
     <string name="settings_enable_resources_summary"><b>WARNING:</b> Resource hooks are deprecated</string>
@@ -116,17 +66,10 @@
     <string name="settings_theme_dark">Dark</string>
 
     <!-- Support tab -->
-    <string name="support_modules_label">Support for modules</string>
-    <string name="support_modules_description">Click any module in the modules list and select \"%1$s\".</string>
     <string name="support_framework_label">Framework/Manager support</string>
-    <string name="support_faq_label">FAQ/known issues</string>
-    <string name="support_group_qq">QQ Group: 855219808</string>
-    <string name="support_group_telegram">Telegram Group: @Code_of_MeowCat</string>
-    <string name="support_donate_label">Donate</string>
-    <string name="support_donate_description">If you would like to say thanks for LSPosed, you can donate to our here</string>
 
     <!-- Logs tab  -->
-    <string name="logs_save_failed">Could not write log to SD card:</string>
+    <string name="logs_save_failed">Failed to save:</string>
     <string name="menuClearLog">Clear log now</string>
     <string name="logs_cleared">Log successfully cleared.</string>
     <string name="logs_clear_failed">Could not clear the log:</string>
@@ -134,67 +77,27 @@
 
     <!-- About tab -->
     <string name="about_developers_label">Main developers</string>
-    <string name="about_translator_label">Translator</string>
-    <string name="translator">MlgmXyysd</string>
     <string name="about_version_label">Version</string>
     <string name="about_source_label">Source code</string>
-    <string name="about_libraries_label">Used libraries</string>
 
     <!-- DownloadView -->
     <string name="download_view_download">Download</string>
-    <string name="download_view_install">Install</string>
-    <string name="download_view_cancel">Cancel</string>
-    <string name="download_view_no_url">No download URL available</string>
-    <string name="download_view_running">Download is running (%1$,d of %2$,d kB)</string>
-    <string name="download_view_waiting">Download is waiting</string>
-    <string name="download_view_successful">Download successful</string>
-    <string name="download_view_failed">Download failed (error %d)</string>
 
     <!-- DownloadUtils -->
-    <string name="download_md5sum_incorrect">MD5 sum is incorrect (downloaded: %1$s, expected: %2$s)</string>
-    <string name="download_could_not_read_file">Could not read downloaded file: %s</string>
-    <string name="download_no_valid_apk">Downloaded file is not a valid APK (or incompatible)</string>
-    <string name="download_incorrect_package_name">Package name is incorrect (downloaded: %1$s, expected: %2$s)</string>
 
     <!-- RepoLoader -->
-    <string name="repo_download_failed_http">Downloading %1$s failed: %2$d (%3$s)</string>
-    <string name="repo_download_failed">Downloading %1$s failed: %2$s</string>
-    <string name="repo_load_failed">Cannot load repository from %1$s:\n%2$s</string>
 
     <string name="warning_installed_on_external_storage">This module cannot be loaded because it\'s installed on the SD card, please move it to internal storage</string>
     <string name="export_">Export…</string>
-    <string name="import_">Import…</string>
     <string name="export_enabled_modules">Export enabled modules list</string>
-    <string name="import_enabled_modules">Import enabled modules list</string>
     <string name="export_installed_modules">Export installed modules list</string>
-    <string name="import_installed_modules">Import installed modules list</string>
     <string name="no_installed_modules">There are no installed modules!</string>
-    <string name="enable_heads_up">Enable Heads-Up notification</string>
-    <string name="enable_heads_up_summary">This option enables heads up notification on new/updated module</string>
     <string name="no_enabled_modules">There are no modules enabled</string>
 
-    <string name="share">Share with…</string>
     <string name="info">Info</string>
-    <string name="infoInstaller">
-        Name: %1$s
-        \nVersion: %2$s
-    </string>
-    <string name="infoUninstaller">
-        Name: %1$s
-        \nDate: %2$s
-    </string>
-    <string name="warningArchitecture">You will download a ZIP file, flash in Magisk Manager or Recovery manually</string>
-    <string name="newVersion">New version of LSPosed Manager is available! Update it!</string>
-    <string name="update">Update</string>
     <string name="not_installed_no_lollipop">LSPosed Framework is not installed</string>
-    <string name="notify_module_update">Enable module update notification</string>
 
-    <string name="changelog">Changelog</string>
     <string name="scroll_top">Scroll to top</string>
-    <string name="install_with_su">Silent installation (root)</string>
-    <string name="install_with_su_summ">If checked LSPosed Manager will install modules without a prompt</string>
-    <string name="ignore_updates">Ignore update</string>
-    <string name="ignore_updates_summ">Ignore updates for a specific module</string>
     <string name="reboot_recovery">Reboot to Recovery</string>
     <string name="reboot_bootloader">Reboot to Bootloader</string>
     <string name="reboot_download">Reboot to Download</string>
@@ -204,39 +107,18 @@
     <string name="skip_xposedminversion_check">Skip status check</string>
     <string name="skip_xposedminversion_check_summ">Skip \"LSPosed Status\" check for modules</string>
 
-    <string name="support_xda">Get support</string>
     <string name="android_sdk" translatable="false">Android %2$s (%1$s, API %3$d)</string>
-    <string name="later">Later</string>
-    <string name="save">Save only</string>
     <string name="not_logcat">This is the LSPosed Framework and modules log\nif you need a Android logcat, you can try our Log Catcher Magisk module</string>
-    <string name="installation_error">Installation error</string>
-    <string name="installation_successful">Installation successful</string>
-    <string name="installation_successful_message">%s installed successfully</string>
-    <string name="installation_error_message">%1$s installation failed (%2$s)</string>
-    <string name="installation_apk_normal">Install APK normally</string>
-    <string name="install_load">Installing…</string>
-    <string name="install_load_apk">Installing %s</string>
-
-    <string name="unstable_build">This is a unstable build\nInstall it at your own risk</string>
-    <string name="unofficial_build">This is a unofficial build\nInstall it at your own risk</string>
-    <string name="custom_list">Use mirrored modules list</string>
-    <string name="custom_list_summ">Mirrored modules list can help load faster\nBut the newly submitted module display will be delayed (about 24 hours)</string>
 
     <string name="dexopt_now">Optimize all apps with Dexopt</string>
     <string name="speed_now">Optimize all apps with Speed mode</string>
     <string name="this_may_take_a_while">Please wait, this may take a while…</string>
-    <string name="take_while_cannot_resore">Are you sure to optimize all apps?\n\nThis may take a while, and CANNOT be restored\n\nTip: You can optimize selected app in Application List</string>
     <string name="done">Done!</string>
     <string name="verified_boot_deactivated">Verified Boot is deactivated</string>
     <string name="verified_boot_none">Could not detect Verified Boot state</string>
     <string name="verified_boot_active">Verified Boot is active</string>
-    <string name="verified_boot_explanation">Verified Boot (dm-verity) prevents the device from booting if the system partition is modified</string>
-    <string name="ignore_chinese">Ignore Chinese characters</string>
-    <string name="ignore_chinese_summary">Hide Chinese modules from list\nModules are still available in search window\nEnabling this option may result in slow performance</string>
 
     <!-- EdXp related -->
-    <string name="nav_title_black_list">Applications</string>
-    <string name="nav_title_compat_list">Compat List</string>
     <string name="white_list_mode_title">White List mode</string>
     <string name="title_white_list">White List</string>
     <string name="title_black_list">Black List</string>
@@ -246,41 +128,10 @@
     <string name="menu_title_compile_dexopt">Optimize with Dexopt mode</string>
     <string name="compile_reset_msg">Resetting …</string>
     <string name="compile_speed_msg">Optimizing …</string>
-    <string name="pref_title_dynamic_modules">Instant module list</string>
-    <string name="pref_dynamic_modules_summary">When turned on, load latest activated module list on each app process started</string>
-    <string name="pref_title_black_white_list">App List mode</string>
-    <string name="pref_black_white_list_summary">After opening, you can set the list in \"Application\"\nBlack List mode: Selected app NOT to load LSPosed modules\nNote: using app list mode might break system-wide modules\' functions</string>
     <string name="white_list_mode_summary">Only selected app load LSPosed modules</string>
 
-    <string name="support_faq_url" translatable="false">https://github.com/LSPosed/LSPosed/wiki</string>
     <string name="about_source" translatable="false">https://github.com/LSPosed/LSPosed/</string>
 
-    <string name="solohsu" translatable="false">givein2u</string>
-    <string name="mlgmxyysd" translatable="false">MlgmXyysd</string>
-    <string name="meowcat">MeowCat Studio</string>
-    <string name="elderdrivers" translatable="false">Elder Drivers</string>
-
-    <string name="github" translatable="false">GitHub</string>
-    <string name="xda" translatable="false">XDA</string>
-    <string name="coolapk">CoolApk</string>
-    <string name="website">Website</string>
-
-    <string name="solohsu_summary">Main creator of LSPosed</string>
-    <string name="mlgmxyysd_summary">Main creator of LSPosed Manager</string>
-    <string name="elderdrivers_summary">Organization of LSPosed</string>
-    <string name="meowcat_summary">Organization of MlgmXyysd</string>
-    <string name="solohsu_xda" translatable="false">https://forum.xda-developers.com/member.php?u=5571846</string>
-    <string name="solohsu_github" translatable="false">https://github.com/solohsu</string>
-    <string name="solohsu_coolapk" translatable="false">http://www.coolapk.com/u/537470</string>
-    <string name="mlgmxyysd_coolapk" translatable="false">http://www.coolapk.com/u/814297</string>
-    <string name="mlgmxyysd_xda" translatable="false">https://forum.xda-developers.com/member.php?u=8430637</string>
-    <string name="mlgmxyysd_github" translatable="false">https://github.com/MlgmXyysd</string>
-    <string name="meowcat_website" translatable="false">http://www.meowcat.org/</string>
-    <string name="meowcat_github" translatable="false">https://github.com/MeowCat-Studio</string>
-    <string name="elderdrivers_github" translatable="false">https://github.com/ElderDrivers/</string>
-    <string name="elderdrivers_website" translatable="false">http://edxp.meowcat.org/</string>
-    <string name="group_qq_link" translatable="false">https://jq.qq.com/?k=57IiX8R</string>
-    <string name="group_telegram_link" translatable="false">http://t.me/Code_of_MeowCat</string>
     <string name="group_telegram_channel_link" translatable="false">http://t.me/LSPosed</string>
     <string name="notinstalled">The LSPosed framework is not installed.</string>
     <string name="pref_title_enable_boot_image_deopt">De-optimize boot image</string>
@@ -290,29 +141,19 @@
     <string name="logs_cannot_read">Cannot read log: \n</string>
     <string name="app_launch">Launch it</string>
     <string name="app_stop">Stop it</string>
-    <string name="update_description">Update Changelog</string>
-    <string name="show_modules">Show modules and manager</string>
-    <string name="show_modules_summary">Show modules and manager in application list\nThis option does not remove checked application flag</string>
     <string name="compile_failed">Optimization failed or return value is empty</string>
     <string name="compile_failed_with_info">Optimization failed: </string>
     <string name="hook_modules">Force hook modules</string>
     <string name="hook_modules_summary">Force add modules to white-list and remove from black list\nClosing this option does not remove added modules from white list</string>
     <string name="not_installed">Not installed</string>
     <string name="support_group_telegram_channel">Telegram Channel: @LSPosed</string>
-    <string name="warning_list_not_enabled">Application list mode is not enabled, you can enable in settings</string>
-    <string name="empty_param">Params empty</string>
     <string name="reboot_system">Reboot to System</string>
-    <string name="stop_verbose_log_summary">Verbose log will stop catch before the next boot</string>
-    <string name="stop_log_summary">Modules log will stop catch before the next boot</string>
     <string name="pref_title_disable_modules_log">Disable modules logs</string>
     <string name="pref_disable_modules_log_summary">Exception stack thrown by the module will still be catched normally</string>
     <string name="pure_black_dark_theme">Use the pure black dark theme</string>
     <string name="follow_system">Follow system</string>
-    <string name="pref_compat_mode_title">Compat List</string>
-    <string name="pref_compat_mode_summary">Compat mode app list</string>
     <string name="xposed_not_active">LSPosed Framework is not currently installed or active\nYou can close status check in settings</string>
     <string name="transparent_status_bar">Transparent status bar</string>
-    <string name="list_sort">List sorting</string>
     <string name="sort_by_name">Sort by application name</string>
     <string name="sort_by_name_reverse">Sort by application name (reverse)</string>
     <string name="sort_by_package_name">Sort by package name</string>
@@ -326,19 +167,6 @@
     <string name="colorized_action_bar">Colorized action bar</string>
     <string name="settings_group_theme">Theme</string>
     <string name="material_design_2">Material Design 2</string>
-    <string name="version_x">Version %d</string>
-    <string name="xposed_description">Enable LSPosed enhancements:\nRemove background restrictions on LSPosed\nDetermine if Xposed is working properly\nPretend to have Xposed Installer installed\nHide LSPosed Manager</string>
-    <string name="status_enhancement">Enhancement mode</string>
-    <string name="settings_group_enhancement">Enhancement mode</string>
-    <string name="settings_title_enhancement">Enhancement mode status</string>
-    <string name="settings_summary_enhancement">Disabled\nYou can enable enhancement mode in the module</string>
-    <string name="settings_summary_enhancement_enabled">Enabled</string>
-    <string name="settings_title_pretend_xposed_installer">Pretend to have Xposed Installer installed</string>
-    <string name="settings_summary_pretend_xposed_installer">Pretend that Xposed Installer is installed to make some outdated but useful modules work\nOnly work for the enabled modules in \"Modules\"\nWARNING: Some software (eg. RootBeer) may detect that LSPosed when this function is turned on</string>
-    <string name="settings_title_hide_LSPosed_manager">Hide LSPosed Manager</string>
-    <string name="settings_summary_hide_LSPosed_manager">Prevent the software from detecting LSPosed Manager\nWARNING: Modules may not be able to start the LSPosed Manager UI properly, some fratures of LSPosed Manager in the system may not work properly</string>
-    <string name="settings_title_disable_hidden_api_bypass">Disable hidden API restrictions bypass</string>
-    <string name="settings_summary_disable_hidden_api_bypass">Disable hidden API restrictions bypass will pass some detection (eg Snapchat), these APIs are disabled by default\n<b>WARNING:</b> Enable this option may cause some features do not work properly, or some other problems</string>
     <string name="menu_scope">Scope</string>
     <string name="enable_scope">Enable scope</string>
     <string name="scope_not_supported">The version of LSPosed you installed does not support module scope, download new version?</string>
