@@ -45,11 +45,12 @@ namespace art {
                 });
 
         CREATE_MEM_HOOK_STUB_ENTRIES(
-                "_ZN3art11ClassLinker22FixupStaticTrampolinesEPNS_6ThreadENS_6ObjPtrINS_6mirror5ClassEEE",
-                void, FixupStaticTrampolinesWithThread, (void * thiz,
-                void * thread, void * clazz_ptr), {
-                    backup(thiz, thread, clazz_ptr);
-                    MaybeDelayHook(clazz_ptr);
+                "_ZN3art11ClassLinker20MarkClassInitializedEPNS_6ThreadENS_6HandleINS_6mirror5ClassEEE",
+                void*, MarkClassInitialized, (void * thiz, void * self, uint32_t * clazz_ptr), {
+                    void *result = backup(thiz, self, clazz_ptr);
+                    auto ptr = reinterpret_cast<void *>(*clazz_ptr);
+                    MaybeDelayHook(ptr);
+                    return result;
                 });
 
         CREATE_MEM_FUNC_SYMBOL_ENTRY(void, MakeInitializedClassesVisiblyInitialized, void *thiz,
@@ -126,9 +127,18 @@ namespace art {
             RETRIEVE_MEM_FUNC_SYMBOL(SetEntryPointsToInterpreter,
                                      "_ZNK3art11ClassLinker27SetEntryPointsToInterpreterEPNS_9ArtMethodE");
 
-            lspd::HookSyms(handle, hook_func, FixupStaticTrampolines,
-                           FixupStaticTrampolinesWithThread);
             lspd::HookSyms(handle, hook_func, ShouldUseInterpreterEntrypoint);
+
+            if (api_level >= __ANDROID_API_R__) {
+                // In android R, FixupStaticTrampolines won't be called unless it's marking it as
+                // invisiblyInitialized.
+                // So we miss some calls between initialized and invisiblyInitialized.
+                // Therefore we hook the new introduced MarkClassInitialized instead
+                // This only happens on non-x86 devices
+                lspd::HookSyms(handle, hook_func, MarkClassInitialized);
+            } else {
+                lspd::HookSyms(handle, hook_func, FixupStaticTrampolines);
+            }
 
             // MakeInitializedClassesVisiblyInitialized will cause deadlock
             // IsQuickToInterpreterBridge is inlined
