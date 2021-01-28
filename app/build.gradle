@@ -51,7 +51,7 @@ android {
     }
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
-            outputFileName = "EdXposedManagerR-${defaultConfig.versionName}-${defaultConfig.versionCode}-${buildType.name}.apk"
+            outputFileName = "LSPosedManager-${defaultConfig.versionName}-${defaultConfig.versionCode}-${buildType.name}.apk"
         }
     }
 }
