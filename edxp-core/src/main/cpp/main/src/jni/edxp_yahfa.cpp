@@ -52,7 +52,7 @@ namespace edxp {
                           "(Ljava/lang/Class;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/reflect/Member;"),
             NATIVE_METHOD(Yahfa, backupAndHookNative,
                           "(Ljava/lang/Object;Ljava/lang/reflect/Method;Ljava/lang/reflect/Method;)Z"),
-            NATIVE_METHOD(Yahfa, setMethodNonCompilable, "(Ljava/lang/reflect/Member;)V"),
+            //NATIVE_METHOD(Yahfa, setMethodNonCompilable, "(Ljava/lang/reflect/Member;)V"),
             NATIVE_METHOD(Yahfa, recordHooked, "(Ljava/lang/reflect/Member;)V"),
             NATIVE_METHOD(Yahfa, isHooked, "(Ljava/lang/reflect/Member;)Z"),
     };
