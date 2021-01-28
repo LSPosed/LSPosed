@@ -14,7 +14,6 @@ import androidx.preference.PreferenceManager;
 
 import org.meowcat.edxposed.manager.ui.activity.CrashReportActivity;
 import org.meowcat.edxposed.manager.util.CompileUtil;
-import org.meowcat.edxposed.manager.util.ModuleUtil;
 import org.meowcat.edxposed.manager.util.NotificationUtil;
 import org.meowcat.edxposed.manager.util.RebootUtil;
 
@@ -35,7 +34,7 @@ public class App extends Application implements Application.ActivityLifecycleCal
     private static Handler mainHandler;
     private SharedPreferences pref;
     //private AppCompatActivity currentActivity = null;
-    private boolean isUiLoaded = false;
+    private final boolean isUiLoaded = false;
 
     private final Shizuku.OnRequestPermissionResultListener REQUEST_PERMISSION_RESULT_LISTENER = this::onRequestPermissionsResult;
 
@@ -134,7 +133,6 @@ public class App extends Application implements Application.ActivityLifecycleCal
 
         createDirectories();
         NotificationUtil.init();
-        ModuleUtil.getInstance();
 
         Shizuku.addRequestPermissionResultListener(REQUEST_PERMISSION_RESULT_LISTENER);
     }
