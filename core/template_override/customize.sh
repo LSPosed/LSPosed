@@ -63,6 +63,7 @@ LANG_CUST_INST_EXT_LIB_ARM64="Extracting arm64 libraries"
 LANG_CUST_INST_STUB="Installing stub manager"
 LANG_CUST_INST_CONF_CREATE="Creating configuration directories"
 LANG_CUST_INST_CONF_OLD="Use previous path"
+LANG_CUST_DISABLE_EDXP="**WARNING**: This installation will disable edxposed because of incompatibility"
 LANG_CUST_INST_CONF_NEW="Use new path"
 LANG_CUST_INST_COPY_LIB="Copying framework libraries"
 LANG_CUST_INST_REM_OLDCONF="Removing old configuration"
@@ -216,6 +217,15 @@ if [[ -f /data/adb/lspd/misc_path ]]; then
   # read current MISC_PATH
   MISC_PATH=$(cat /data/adb/lspd/misc_path)
   ui_print "  - ${LANG_CUST_INST_CONF_OLD} $MISC_PATH"
+elif [[ -f /data/adb/edxp/misc_path ]]; then
+  mkdir -p /data/adb/lspd || abortC "! ${LANG_CUST_ERR_CONF_CREATE}"
+  MISC_PATH=$(cat /data/adb/edxp/misc_path | sed "s/edxp/lspd/")
+  echo $MISC_PATH > /data/adb/lspd/misc_path
+  ui_print "  - ${LANG_CUST_INST_CONF_OLD} $MISC_PATH"
+  cp -r /data/misc/$(cat /data/adb/edxp/misc_path) /data/misc/$MISC_PATH
+  ui_print "  - ${LANG_CUST_DISABLE_EDXP} $MISC_PATH"
+  touch $(magisk --path)/.magisk/modules/riru_edxposed/disable
+  touch $(magisk --path)/.magisk/modules/riru_edxposed_sandhook/disable
 else
   # generate random MISC_PATH
   MISC_RAND=$(tr -cd 'A-Za-z0-9' < /dev/urandom | head -c16)
