@@ -12,7 +12,7 @@
     <string name="About">關於</string>
     <!-- General/various strings -->
     <string name="menuSend">傳送</string>
-    <string name="menuSaveToSd">儲存到 SD 卡</string>
+    <string name="menuSaveToSd">儲存</string>
 
     <!-- Welcome screen / main sections -->
 
@@ -41,7 +41,7 @@
     <string name="module_activated">LSPosed 模組已啟用</string>
     <string name="module_empty_description">(未提供介紹)</string>
     <string name="module_no_ui">該模組未提供使用者介面</string>
-    <string name="xposed_module_list_updated">LSPosed 模組列表已更新\n變更將在重啟後生效</string>
+    <string name="xposed_module_list_updated">LSPosed 模組列表已更新</string>
     <string name="xposed_module_updated_notification_title">LSPosed 模組已更新</string>
     <string name="xposed_module_updated_notification">重啟以使變更生效</string>
     <string name="warning_xposed_min_version">該模組需要更新版本的 LSPosed(%d), 因此無法被啟用</string>
@@ -118,7 +118,7 @@
     <string name="compile_reset_msg">清除中…</string>
     <string name="compile_speed_msg">優化中…</string>
     <string name="notinstalled">LSPosed 框架未安裝</string>
-    <string name="white_list_mode_summary">允許名單模式: 僅選中的 App 載入 LSPosed 模組\n僅當啟用 App 名單模式時有效</string>
+    <string name="white_list_mode_summary">僅選中的 App 載入 LSPosed 模組</string>
     <string name="verified_boot_explanation">引導驗證(dm-verity)防止裝置在修改系統分割槽時引導</string>
     <string name="verified_boot_active">引導驗證已啟用</string>
     <string name="verified_boot_deactivated">引導驗證已禁用</string>
@@ -137,7 +137,7 @@
     <string name="app_stop">停止</string>
     <string name="compile_failed">優化失敗或返回值為空</string>
     <string name="hook_modules">強制新增模組</string>
-    <string name="hook_modules_summary">強制將模組新增進白允許名單並移出封鎖名單\n關閉此選項並不會移除已勾選的 App 標識\n僅當啟用 App 名單模式時有效</string>
+    <string name="hook_modules_summary">強制將模組新增進白允許名單並移出封鎖名單\n關閉此選項並不會移除已勾選的 App 標識</string>
     <string name="not_installed">未安裝</string>
     <string name="support_group_telegram_channel">Telegram 頻道: @LSPosed</string>
     <string name="empty_param">引數為空</string>

@@ -19,7 +19,7 @@
     <string name="cache_cleaned">App\'s cache has been cleaned. Restart is needed</string>
     <!-- General/various strings -->
     <string name="menuSend">Send</string>
-    <string name="menuSaveToSd">Save to SD card</string>
+    <string name="menuSaveToSd">Save</string>
 
     <!-- Welcome screen / main sections -->
     <string name="tabInstall">Device</string>
@@ -55,7 +55,7 @@
     <string name="module_activated">LSPosed module has been activated</string>
     <string name="module_empty_description">(no description provided)</string>
     <string name="module_no_ui">This module does not provide a user interface</string>
-    <string name="xposed_module_list_updated">LSPosed module list was updated\nChanges will become active on reboot</string>
+    <string name="xposed_module_list_updated">LSPosed module list was updated</string>
     <string name="xposed_module_updated_notification_title">LSPosed module updated</string>
     <string name="xposed_module_updated_notification">Reboot to activate changes</string>
     <string name="warning_xposed_min_version">This module requires a newer LSPosed version (%d) and thus cannot be activated</string>
@@ -250,7 +250,7 @@
     <string name="pref_dynamic_modules_summary">When turned on, load latest activated module list on each app process started</string>
     <string name="pref_title_black_white_list">App List mode</string>
     <string name="pref_black_white_list_summary">After opening, you can set the list in \"Application\"\nBlack List mode: Selected app NOT to load LSPosed modules\nNote: using app list mode might break system-wide modules\' functions</string>
-    <string name="white_list_mode_summary">White List mode: Only selected app load LSPosed modules\nApp list mode is required to enable</string>
+    <string name="white_list_mode_summary">Only selected app load LSPosed modules</string>
 
     <string name="support_faq_url" translatable="false">https://github.com/LSPosed/LSPosed/wiki</string>
     <string name="about_source" translatable="false">https://github.com/LSPosed/LSPosed/</string>
@@ -296,7 +296,7 @@
     <string name="compile_failed">Optimization failed or return value is empty</string>
     <string name="compile_failed_with_info">Optimization failed: </string>
     <string name="hook_modules">Force hook modules</string>
-    <string name="hook_modules_summary">Force add modules to white-list and remove from black list\nClosing this option does not remove modules from white list\nApp list mode is required to enable</string>
+    <string name="hook_modules_summary">Force add modules to white-list and remove from black list\nClosing this option does not remove added modules from white list</string>
     <string name="not_installed">Not installed</string>
     <string name="support_group_telegram_channel">Telegram Channel: @LSPosed</string>
     <string name="warning_list_not_enabled">Application list mode is not enabled, you can enable in settings</string>

@@ -12,7 +12,7 @@
     <string name="About">关于</string>
     <!-- General/various strings -->
     <string name="menuSend">发送</string>
-    <string name="menuSaveToSd">保存到 SD 卡</string>
+    <string name="menuSaveToSd">保存</string>
 
     <!-- Welcome screen / main sections -->
 
@@ -41,7 +41,7 @@
     <string name="module_activated">LSPosed 模块已激活</string>
     <string name="module_empty_description">(未提供介绍)</string>
     <string name="module_no_ui">该模块未提供用户界面</string>
-    <string name="xposed_module_list_updated">LSPosed 模块列表已更新\n变更将在重启后生效</string>
+    <string name="xposed_module_list_updated">LSPosed 模块列表已更新</string>
     <string name="xposed_module_updated_notification_title">LSPosed 模块已更新</string>
     <string name="xposed_module_updated_notification">重启以使变更生效</string>
     <string name="warning_xposed_min_version">该模块需要更新版本的 LSPosed(%d), 因此无法被激活</string>
@@ -118,7 +118,7 @@
     <string name="compile_reset_msg">清除中…</string>
     <string name="compile_speed_msg">优化中…</string>
     <string name="notinstalled">LSPosed 框架未安装</string>
-    <string name="white_list_mode_summary">白名单模式: 仅选中的应用加载 LSPosed 模块\n仅当启用应用名单模式时有效</string>
+    <string name="white_list_mode_summary">仅选中的应用加载 LSPosed 模块</string>
     <string name="verified_boot_explanation">引导验证(dm-verity)防止设备在修改系统分区时引导</string>
     <string name="verified_boot_active">引导验证已启用</string>
     <string name="verified_boot_deactivated">引导验证已禁用</string>
@@ -138,7 +138,7 @@
     <string name="compile_failed">优化失败或返回值为空</string>
     <string name="compile_failed_with_info">优化失败: </string>
     <string name="hook_modules">强制添加模块</string>
-    <string name="hook_modules_summary">强制将模块添加进白名单并移出黑名单\n关闭此选项并不会移除已勾选的应用标识\n仅当启用应用名单模式时有效</string>
+    <string name="hook_modules_summary">强制将模块添加进白名单并移出黑名单\n关闭此选项并不会移除已勾选的应用标识</string>
     <string name="not_installed">未安装</string>
     <string name="support_group_telegram_channel">Telegram 频道: @LSPosed</string>
     <string name="empty_param">参数为空</string>
