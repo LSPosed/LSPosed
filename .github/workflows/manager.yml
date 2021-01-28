@@ -48,3 +48,11 @@ jobs:
         with:
           name: manager-unsigned
           path: "app/build/outputs/apk/release/*.apk"
+      - name: Post to channel
+        if: ${{ github.event_name != 'pull_request' && success() }}
+        env:
+          CHANNEL_ID: ${{ secrets.CHANNEL_ID }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          FILE: ${{ steps.sign.outputs.signedReleaseFile }}
+        run: |
+          curl https://api.telegram.org/bot${BOT_TOKEN}/sendDocument -X POST -F chat_id="$CHANNEL_ID" -F document="@$FILE"
