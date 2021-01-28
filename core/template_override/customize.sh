@@ -223,7 +223,7 @@ elif [[ -f /data/adb/edxp/misc_path ]]; then
   echo $MISC_PATH > /data/adb/lspd/misc_path
   ui_print "  - ${LANG_CUST_INST_CONF_OLD} $MISC_PATH"
   cp -r /data/misc/$(cat /data/adb/edxp/misc_path) /data/misc/$MISC_PATH
-  ui_print "  - ${LANG_CUST_DISABLE_EDXP} $MISC_PATH"
+  ui_print "  - ${LANG_CUST_DISABLE_EDXP}"
   touch $(magisk --path)/.magisk/modules/riru_edxposed/disable
   touch $(magisk --path)/.magisk/modules/riru_edxposed_sandhook/disable
 else
