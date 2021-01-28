@@ -1,6 +1,7 @@
 package org.meowcat.edxposed.manager.ui.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -85,8 +86,8 @@ public class MainActivity extends BaseActivity {
                 .into(binding.appIcon);
         String installedXposedVersion = Constants.getXposedVersion();
         if (installedXposedVersion != null) {
-            binding.statusTitle.setText(R.string.Activated);
-            binding.statusSummary.setText(String.format(Locale.US, "%s (%s)", installedXposedVersion, Constants.getXposedVariant()));
+            binding.statusTitle.setText(String.format(Locale.US, "%s %s", getString(R.string.Activated), Constants.getXposedVariant()));
+            binding.statusSummary.setText(String.format(Locale.US, "%s (%d)", installedXposedVersion, Constants.getXposedVersionCode()));
             binding.status.setCardBackgroundColor(ContextCompat.getColor(this, R.color.download_status_update_available));
             binding.statusIcon.setImageResource(R.drawable.ic_check_circle);
         } else {

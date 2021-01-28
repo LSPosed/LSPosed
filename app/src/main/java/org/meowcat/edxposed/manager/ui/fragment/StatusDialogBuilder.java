@@ -53,7 +53,7 @@ public class StatusDialogBuilder extends MaterialAlertDialogBuilder {
 
         if (installedXposedVersion != null) {
             binding.api.setText(String.format(Locale.US, "%s.0", Constants.getXposedVariant()));
-            binding.framework.setText(String.format(Locale.US, "%s (%s)", installedXposedVersion, Constants.getXposedVariant()));
+            binding.framework.setText(String.format(Locale.US, "%s (%s)", installedXposedVersion, Constants.getXposedVersionCode()));
         }
 
         binding.androidVersion.setText(context.getString(R.string.android_sdk, getAndroidVersion(), Build.VERSION.RELEASE, Build.VERSION.SDK_INT));
