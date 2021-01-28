@@ -28,6 +28,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
 
+import de.robv.android.xposed.XposedHelpers;
+
 import static com.elderdrivers.riru.edxp.service.ServiceProxy.CONFIG_PATH;
 
 public class PackageReceiver {
@@ -37,6 +39,8 @@ public class PackageReceiver {
 
         private final String MODULES_LIST_FILENAME = "conf/modules.list";
         private final String ENABLED_MODULES_LIST_FILENAME = "conf/enabled_modules.list";
+        private final String MODULE_UPDATED = "io.github.lsposed.action.MODULE_UPDATED";
+        private final String MODULE_NOT_ACTIVATAED = "io.github.lsposed.action.MODULE_NOT_ACTIVATAED";
 
         private String getPackageName(Intent intent) {
             Uri uri = intent.getData();
@@ -137,6 +141,7 @@ public class PackageReceiver {
             return true;
         }
 
+        @SuppressLint("WrongConstant")
         @Override
         public void onReceive(Context context, Intent intent) {
             if (Objects.requireNonNull(intent.getAction()).equals(Intent.ACTION_PACKAGE_REMOVED) && intent.getBooleanExtra(Intent.EXTRA_REPLACING, false))
@@ -172,14 +177,32 @@ public class PackageReceiver {
                 @SuppressLint("DiscouragedPrivateApi")
                 Method m = UserManager.class.getDeclaredMethod("getUsers");
                 m.setAccessible(true);
-                boolean res = false;
                 for (Object uh : (List<Object>) m.invoke(um)) {
                     int uid = (int) uh.getClass().getDeclaredField("id").get(uh);
                     Utils.logI("updating uid: " + uid);
-                    res = updateModuleList(uid, packageName) || res;
+                    boolean activated = updateModuleList(uid, packageName);
+                    UserHandle userHandle = null;
+                    try {
+                        userHandle = (UserHandle) XposedHelpers.callStaticMethod(UserHandle.class, "of", uid);
+                    } catch (Throwable t) {
+                        Utils.logW("get user handle failed", t);
+                    }
+                    if (userHandle != null) {
+                        try {
+                            Intent broadCast = new Intent(activated ? MODULE_UPDATED : MODULE_NOT_ACTIVATAED);
+                            broadCast.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES | 0x01000000);
+                            broadCast.setData(intent.getData());
+                            broadCast.setPackage(ServiceProxy.INSTALLER_PACKAGE_NAME);
+                            XposedHelpers.callMethod(context, "sendBroadcastAsUser", broadCast, userHandle);
+                            Utils.logI("broadcast to " + ServiceProxy.INSTALLER_PACKAGE_NAME);
+                        } catch (Throwable t) {
+                            Utils.logW("send broadcast failed", t);
+                            Toast.makeText(context, "EdXposed: Updated " + packageName, Toast.LENGTH_SHORT).show();
+                        }
+                    } else if (activated) {
+                        Toast.makeText(context, "EdXposed: Updated " + packageName, Toast.LENGTH_SHORT).show();
+                    }
                 }
-                if (res)
-                    Toast.makeText(context, "EdXposed: Updated " + packageName, Toast.LENGTH_SHORT).show();
             } catch (Throwable e) {
                 Utils.logW("update failed", e);
             }

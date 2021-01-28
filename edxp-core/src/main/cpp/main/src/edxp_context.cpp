@@ -269,9 +269,13 @@ namespace edxp {
         if (LIKELY(service_class)) {
             jfieldID path_fid = JNI_GetStaticFieldID(env, service_class, "CONFIG_PATH",
                                                      "Ljava/lang/String;");
-            if (LIKELY(path_fid)) {
+            jfieldID pn_fid = JNI_GetStaticFieldID(env, service_class, "INSTALLER_PACKAGE_NAME",
+                                                     "Ljava/lang/String;");
+            if (LIKELY(path_fid) && LIKELY(pn_fid)) {
                 env->SetStaticObjectField(service_class, path_fid, env->NewStringUTF(
                         ConfigManager::GetMiscPath().c_str()));
+                env->SetStaticObjectField(service_class, pn_fid, env->NewStringUTF(
+                        ConfigManager::GetInstance()->GetInstallerPackageName().c_str()));
                 jmethodID install_mid = JNI_GetStaticMethodID(env, service_class,
                                                               "install", "()V");
                 if (LIKELY(install_mid)) {

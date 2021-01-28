@@ -17,6 +17,7 @@ import java.lang.reflect.Proxy;
 public class ServiceProxy implements InvocationHandler, KeepAll {
 
     public static String CONFIG_PATH = null;
+    public static String INSTALLER_PACKAGE_NAME = null;
 
     private static IServiceManager original;
 
