@@ -18,8 +18,8 @@ public class LspHooker {
         this.backup = backup;
     }
 
-    public Method getBackup() {
-        return backup;
+    public Object invokeOriginalMethod(Object thisObject, Object[] args) throws InvocationTargetException, IllegalAccessException {
+        return backup.invoke(thisObject, args);
     }
 
     @SuppressWarnings({"unused", "RedundantSuppression"})

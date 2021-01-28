@@ -74,7 +74,7 @@ public final class DynamicBridge {
         if (args == null) {
             args = new Object[0];
         }
-        return hooker.getBackup().invoke(thisObject, args);
+        return hooker.invokeOriginalMethod(thisObject, args);
     }
 }
 
