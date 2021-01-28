@@ -3,9 +3,7 @@ package org.meowcat.edxposed.manager;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
-import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -17,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
 import org.meowcat.edxposed.manager.adapters.AppHelper;
-import org.meowcat.edxposed.manager.receivers.PackageChangeReceiver;
 import org.meowcat.edxposed.manager.ui.activity.CrashReportActivity;
 import org.meowcat.edxposed.manager.util.ModuleUtil;
 import org.meowcat.edxposed.manager.util.NotificationUtil;
@@ -106,7 +103,6 @@ public class App extends Application implements Application.ActivityLifecycleCal
 
         createDirectories();
         NotificationUtil.init();
-        registerReceivers();
 
         registerActivityLifecycleCallbacks(this);
 
@@ -121,18 +117,6 @@ public class App extends Application implements Application.ActivityLifecycleCal
             } catch (PackageManager.NameNotFoundException ignored) {
             }
         }
-    }
-
-    private void registerReceivers() {
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(Intent.ACTION_PACKAGE_ADDED);
-        filter.addAction(Intent.ACTION_PACKAGE_CHANGED);
-        filter.addAction(Intent.ACTION_PACKAGE_REMOVED);
-        filter.addDataScheme("package");
-        registerReceiver(new PackageChangeReceiver(), filter);
-
-        PendingIntent.getBroadcast(this, 0,
-                new Intent(this, PackageChangeReceiver.class), 0);
     }
 
     @SuppressLint({"PrivateApi", "NewApi"})

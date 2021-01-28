@@ -1,18 +1,19 @@
 package org.meowcat.edxposed.manager.util;
 
 import android.annotation.SuppressLint;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.PowerManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.core.app.NotificationChannelCompat;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
 import com.topjohnwu.superuser.Shell;
@@ -20,7 +21,9 @@ import com.topjohnwu.superuser.Shell;
 import org.meowcat.edxposed.manager.App;
 import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.ui.activity.MainActivity;
+import org.meowcat.edxposed.manager.ui.activity.ModulesActivity;
 
+@SuppressLint("UnspecifiedImmutableFlag")
 public final class NotificationUtil {
 
     public static final int NOTIFICATION_MODULE_NOT_ACTIVATED_YET = 0;
@@ -32,15 +35,12 @@ public final class NotificationUtil {
     private static final int PENDING_INTENT_ACTIVATE_MODULE_AND_REBOOT = 4;
     private static final int PENDING_INTENT_ACTIVATE_MODULE = 5;
 
-    private static final String HEADS_UP = "heads_up";
-    private static final String FRAGMENT_ID = "fragment";
-
-    private static final String NOTIFICATION_MODULES_CHANNEL = "modules_channel";
+    private static final String NOTIFICATION_MODULES_CHANNEL = "modules_channel_2";
 
     @SuppressLint("StaticFieldLeak")
     private static Context context = null;
-    private static NotificationManager notificationManager;
-    private static SharedPreferences prefs;
+    @SuppressLint("StaticFieldLeak")
+    private static NotificationManagerCompat notificationManager;
 
     public static void init() {
         if (context != null) {
@@ -48,13 +48,14 @@ public final class NotificationUtil {
         }
 
         context = App.getInstance();
-        prefs = App.getPreferences();
-        notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager = NotificationManagerCompat.from(context);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channelModule = new NotificationChannel(NOTIFICATION_MODULES_CHANNEL, context.getString(R.string.nav_item_modules), NotificationManager.IMPORTANCE_DEFAULT);
-            notificationManager.createNotificationChannel(channelModule);
-        }
+        NotificationChannelCompat.Builder channel = new NotificationChannelCompat.Builder(NOTIFICATION_MODULES_CHANNEL,
+                NotificationManager.IMPORTANCE_HIGH)
+                .setName(context.getString(R.string.nav_item_modules))
+                .setSound(null, null)
+                .setVibrationPattern(null);
+        notificationManager.createNotificationChannel(channel.build());
     }
 
     public static void cancel(String tag, int id) {
@@ -66,58 +67,52 @@ public final class NotificationUtil {
     }
 
     public static void showNotActivatedNotification(String packageName, String appName) {
-        Intent intent = new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).putExtra(FRAGMENT_ID, 1);
+        Intent intent = new Intent(context, ModulesActivity.class)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
         PendingIntent pModulesTab = PendingIntent.getActivity(context, PENDING_INTENT_OPEN_MODULES, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         String title = context.getString(R.string.module_is_not_activated_yet);
-        NotificationCompat.Builder builder = getNotificationBuilder(title, appName, NOTIFICATION_MODULES_CHANNEL)
+        NotificationCompat.Builder builder = getNotificationBuilder(title, appName)
                 .setContentIntent(pModulesTab);
-        if (prefs.getBoolean(HEADS_UP, true)) {
-            builder.setPriority(2);
+
+        // Only show the quick activation button if any module has been
+        // enabled before,
+        // to ensure that the user know the way to disable the module later.
+        if (!ModuleUtil.getInstance().getEnabledModules().isEmpty()) {
+            Intent iActivateAndReboot = new Intent(context, RebootReceiver.class);
+            iActivateAndReboot.putExtra(RebootReceiver.EXTRA_ACTIVATE_MODULE, packageName);
+            PendingIntent pActivateAndReboot = PendingIntent.getBroadcast(context, PENDING_INTENT_ACTIVATE_MODULE_AND_REBOOT,
+                    iActivateAndReboot, PendingIntent.FLAG_UPDATE_CURRENT);
+            Intent iActivate = new Intent(context, RebootReceiver.class);
+            iActivate.putExtra(RebootReceiver.EXTRA_ACTIVATE_MODULE, packageName);
+            iActivate.putExtra(RebootReceiver.EXTRA_ACTIVATE_MODULE_AND_RETURN, true);
+            PendingIntent pActivate = PendingIntent.getBroadcast(context, PENDING_INTENT_ACTIVATE_MODULE,
+                    iActivate, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            builder.addAction(new NotificationCompat.Action.Builder(R.drawable.ic_apps, context.getString(R.string.activate_and_reboot), pActivateAndReboot).build());
+            builder.addAction(new NotificationCompat.Action.Builder(R.drawable.ic_apps, context.getString(R.string.activate_only), pActivate).build());
         }
-        Intent iActivateAndReboot = new Intent(context, RebootReceiver.class);
-        iActivateAndReboot.putExtra(RebootReceiver.EXTRA_ACTIVATE_MODULE, packageName);
-        PendingIntent pActivateAndReboot = PendingIntent.getBroadcast(context, PENDING_INTENT_ACTIVATE_MODULE_AND_REBOOT,
-                iActivateAndReboot, PendingIntent.FLAG_UPDATE_CURRENT);
-        Intent iActivate = new Intent(context, RebootReceiver.class);
-        iActivate.putExtra(RebootReceiver.EXTRA_ACTIVATE_MODULE, packageName);
-        iActivate.putExtra(RebootReceiver.EXTRA_ACTIVATE_MODULE_AND_RETURN, true);
-        PendingIntent pActivate = PendingIntent.getBroadcast(context, PENDING_INTENT_ACTIVATE_MODULE,
-                iActivate, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.BigTextStyle style = new NotificationCompat.BigTextStyle();
         style.setBigContentTitle(title);
         style.bigText(context.getString(R.string.module_is_not_activated_yet_detailed, appName));
         builder.setStyle(style);
 
-        // Only show the quick activation button if any module has been
-        // enabled before,
-        // to ensure that the user know the way to disable the module later.
-        if (!ModuleUtil.getInstance().getEnabledModules().isEmpty()) {
-            builder.addAction(new NotificationCompat.Action.Builder(R.drawable.ic_apps, context.getString(R.string.activate_and_reboot), pActivateAndReboot).build());
-            builder.addAction(new NotificationCompat.Action.Builder(R.drawable.ic_apps, context.getString(R.string.activate_only), pActivate).build());
-        }
-
         notificationManager.notify(packageName, NOTIFICATION_MODULE_NOT_ACTIVATED_YET, builder.build());
     }
 
-    public static void showModulesUpdatedNotification() {
-        Intent intent = new Intent(context, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra(FRAGMENT_ID, 0);
+    public static void showModulesUpdatedNotification(String appName) {
+        Intent intent = new Intent(context, MainActivity.class)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        PendingIntent pInstallTab = PendingIntent.getActivity(context, PENDING_INTENT_OPEN_INSTALL,
-                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pInstallTab = PendingIntent.getActivity(context, PENDING_INTENT_OPEN_INSTALL, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         String title = context
                 .getString(R.string.xposed_module_updated_notification_title);
-        String message = context
-                .getString(R.string.xposed_module_updated_notification);
-        NotificationCompat.Builder builder = getNotificationBuilder(title, message, NOTIFICATION_MODULES_CHANNEL)
+        NotificationCompat.Builder builder = getNotificationBuilder(title, appName)
                 .setContentIntent(pInstallTab);
-        if (prefs.getBoolean(HEADS_UP, true)) {
-            builder.setPriority(2);
-        }
+
         Intent iSoftReboot = new Intent(context, RebootReceiver.class);
         iSoftReboot.putExtra(RebootReceiver.EXTRA_SOFT_REBOOT, true);
         PendingIntent pSoftReboot = PendingIntent.getBroadcast(context, PENDING_INTENT_SOFT_REBOOT,
@@ -133,10 +128,11 @@ public final class NotificationUtil {
         notificationManager.notify(null, NOTIFICATION_MODULES_UPDATED, builder.build());
     }
 
-    private static NotificationCompat.Builder getNotificationBuilder(String title, String message, String channel) {
-        return new NotificationCompat.Builder(context, channel)
+    private static NotificationCompat.Builder getNotificationBuilder(String title, String message) {
+        return new NotificationCompat.Builder(context, NOTIFICATION_MODULES_CHANNEL)
                 .setContentTitle(title)
                 .setContentText(message)
+                .setSound(null)
                 .setVibrate(new long[]{0})
                 .setAutoCancel(true)
                 .setSmallIcon(R.drawable.ic_notification)
@@ -175,11 +171,18 @@ public final class NotificationUtil {
                 return;
             }
 
-            boolean isSoftReboot = intent.getBooleanExtra(EXTRA_SOFT_REBOOT,
-                    false);
-            int returnCode = isSoftReboot
-                    ? Shell.su("setprop ctl.restart surfaceflinger; setprop ctl.restart zygote").exec().getCode()
-                    : Shell.su("reboot").exec().getCode();
+            boolean softReboot = intent.getBooleanExtra(EXTRA_SOFT_REBOOT, false);
+            String command;
+            if (softReboot) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && ((PowerManager) context.getSystemService(Context.POWER_SERVICE)).isRebootingUserspaceSupported()) {
+                    command = "/system/bin/svc power reboot userspace";
+                } else {
+                    command = "setprop ctl.restart surfaceflinger; setprop ctl.restart zygote";
+                }
+            } else {
+                command = "/system/bin/svc power reboot";
+            }
+            int returnCode = Shell.su(command).exec().getCode();
 
             if (returnCode != 0) {
                 Log.e(App.TAG, "NotificationUtil -> Could not reboot");

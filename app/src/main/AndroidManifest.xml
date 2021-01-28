@@ -55,19 +55,20 @@
         </activity>
 
         <receiver
-            android:name=".receivers.PackageChangeReceiver"
-            android:exported="false">
+            android:name=".util.NotificationUtil$RebootReceiver"
+            android:exported="false" />
+
+        <receiver
+            android:name=".receivers.EdServiceReceiver"
+            android:exported="true"
+            android:permission="android.permission.INTERACT_ACROSS_USERS_FULL">
             <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_ADDED" />
-                <action android:name="android.intent.action.PACKAGE_CHANGED" />
-                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                <action android:name="io.github.lsposed.action.MODULE_UPDATED" />
+                <action android:name="io.github.lsposed.action.MODULE_NOT_ACTIVATAED" />
 
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
-        <receiver
-            android:name=".util.NotificationUtil$RebootReceiver"
-            android:exported="false" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
