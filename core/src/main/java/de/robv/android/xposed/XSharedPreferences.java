@@ -18,6 +18,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.AccessDeniedException;
+import java.nio.file.ClosedWatchServiceException;
 import java.nio.file.Path;
 import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
@@ -38,9 +39,9 @@ import de.robv.android.xposed.services.FileResult;
  */
 public final class XSharedPreferences implements SharedPreferences {
     private static final String TAG = "XSharedPreferences";
-    private static final HashMap<Path, PrefsData> sInstances = new HashMap<>();
+    private static final HashMap<WatchKey, PrefsData> sWatcherKeyInstances = new HashMap<>();
     private static final Object sContent = new Object();
-    private static Thread sDaemon = null;
+    private static Thread sWatcherDaemon = null;
     private static WatchService sWatcher;
 
     private final HashMap<OnSharedPreferenceChangeListener, Object> mListeners = new HashMap<>();
@@ -50,34 +51,21 @@ public final class XSharedPreferences implements SharedPreferences {
     private boolean mLoaded = false;
     private long mLastModified;
     private long mFileSize;
-    private boolean mWatcherEnabled;
-
-    private static synchronized WatchService getWatcher() {
-        if (sWatcher == null) {
-            try {
-                sWatcher = new File(XposedInit.prefsBasePath).toPath().getFileSystem().newWatchService();
-                if (BuildConfig.DEBUG) Log.d(TAG, "Created WatchService instance");
-            } catch (IOException e) {
-                Log.e(TAG, "Failed to create WatchService", e);
-            }
-        }
-
-        if (sWatcher != null && (sDaemon == null || !sDaemon.isAlive())) {
-            initWatcherDaemon();
-        }
-
-        return sWatcher;
-    }
+    private WatchKey mWatchKey;
 
     private static void initWatcherDaemon() {
-        sDaemon = new Thread() {
+        sWatcherDaemon = new Thread() {
             @Override
             public void run() {
-                Log.d(TAG, "Watcher daemon thread started");
+                if (BuildConfig.DEBUG) Log.d(TAG, "Watcher daemon thread started");
                 while (true) {
                     WatchKey key;
                     try {
                         key = sWatcher.take();
+                    } catch (ClosedWatchServiceException ignored) {
+                        if (BuildConfig.DEBUG) Log.d(TAG, "Watcher daemon thread finished");
+                        sWatcher = null;
+                        return;
                     } catch (InterruptedException ignored) {
                         return;
                     }
@@ -94,14 +82,11 @@ public final class XSharedPreferences implements SharedPreferences {
                         if (pathStr.endsWith(".bak")) {
                             if (kind != StandardWatchEventKinds.ENTRY_DELETE) {
                                 continue;
-                            } else {
-                                pathStr = path.getFileName().toString();
-                                path = dir.resolve(pathStr.substring(0, pathStr.length() - 4));
                             }
                         } else if (SELinuxHelper.getAppDataFileService().checkFileExists(pathStr + ".bak")) {
                             continue;
                         }
-                        PrefsData data = sInstances.get(path);
+                        PrefsData data = sWatcherKeyInstances.get(key);
                         if (data != null && data.hasChanged()) {
                             for (OnSharedPreferenceChangeListener l : data.mPrefs.mListeners.keySet()) {
                                 try {
@@ -116,22 +101,9 @@ public final class XSharedPreferences implements SharedPreferences {
                 }
             }
         };
-        sDaemon.setName(TAG + "-Daemon");
-        sDaemon.setDaemon(true);
-        sDaemon.start();
-    }
-
-    /**
-     * Read settings from the specified file.
-     *
-     * @param prefFile The file to read the preferences from.
-     * @param enableWatcher Whether to enable support for preference change listeners
-     */
-    public XSharedPreferences(File prefFile, boolean enableWatcher) {
-        mFile = prefFile;
-        mFilename = prefFile.getAbsolutePath();
-        mWatcherEnabled = enableWatcher;
-        init();
+        sWatcherDaemon.setName(TAG + "-Daemon");
+        sWatcherDaemon.setDaemon(true);
+        sWatcherDaemon.start();
     }
 
     /**
@@ -140,7 +112,9 @@ public final class XSharedPreferences implements SharedPreferences {
      * @param prefFile The file to read the preferences from.
      */
     public XSharedPreferences(File prefFile) {
-        this(prefFile, false);
+        mFile = prefFile;
+        mFilename = prefFile.getAbsolutePath();
+        init();
     }
 
     /**
@@ -179,7 +153,6 @@ public final class XSharedPreferences implements SharedPreferences {
                             xposedminversion = MetaDataReader.extractIntPart((String) minVersionRaw);
                         }
                         xposedsharedprefs = metaData.containsKey("xposedsharedprefs");
-                        mWatcherEnabled = metaData.containsKey("xposedsharedprefswatcher");
                     }
                 } catch (NumberFormatException | IOException e) {
                     Log.w(TAG, "Apk parser fails: " + e);
@@ -197,26 +170,52 @@ public final class XSharedPreferences implements SharedPreferences {
     }
 
     private void tryRegisterWatcher() {
-        if (!mWatcherEnabled) {
+        if (mWatchKey != null && mWatchKey.isValid()) {
             return;
         }
-        Path path = mFile.toPath();
-        if (sInstances.containsKey(path)) {
-            return;
+
+        synchronized (sWatcherKeyInstances) {
+            Path path = mFile.toPath();
+            try {
+                if (sWatcher == null) {
+                    sWatcher = new File(XposedInit.prefsBasePath).toPath().getFileSystem().newWatchService();
+                    if (BuildConfig.DEBUG) Log.d(TAG, "Created WatchService instance");
+                }
+                mWatchKey = path.getParent().register(sWatcher, StandardWatchEventKinds.ENTRY_CREATE,
+                        StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_DELETE);
+                sWatcherKeyInstances.put(mWatchKey, new PrefsData(this));
+                if (sWatcherDaemon == null || !sWatcherDaemon.isAlive()) {
+                    initWatcherDaemon();
+                }
+                if (BuildConfig.DEBUG) Log.d(TAG, "tryRegisterWatcher: registered file watcher for " + path);
+            } catch (AccessDeniedException accDeniedEx) {
+                if (BuildConfig.DEBUG) Log.e(TAG, "tryRegisterWatcher: access denied to " + path);
+            } catch (Exception e) {
+                Log.e(TAG, "tryRegisterWatcher: failed to register file watcher", e);
+            }
         }
-        try {
-            path.getParent().register(getWatcher(), StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_DELETE);
-            sInstances.put(path, new PrefsData(this));
-            if (BuildConfig.DEBUG) Log.d(TAG, "tryRegisterWatcher: registered file watcher for " + path);
-        } catch (AccessDeniedException accDeniedEx) {
-            if (BuildConfig.DEBUG) Log.d(TAG, "tryRegisterWatcher: access denied to " + path);
-        } catch (Exception e) {
-            Log.d(TAG, "tryRegisterWatcher: failed to register file watcher", e);
+    }
+
+    private void tryUnregisterWatcher() {
+        synchronized (sWatcherKeyInstances) {
+            if (mWatchKey != null) {
+                sWatcherKeyInstances.remove(mWatchKey);
+                mWatchKey.cancel();
+                mWatchKey = null;
+            }
+            boolean atLeastOneValid = false;
+            for (WatchKey key : sWatcherKeyInstances.keySet()) {
+                atLeastOneValid |= key.isValid();
+            }
+            if (!atLeastOneValid) {
+                try {
+                    sWatcher.close();
+                } catch (Exception ignore) { }
+            }
         }
     }
 
     private void init() {
-        tryRegisterWatcher();
         startLoadFromDisk();
     }
 
@@ -266,7 +265,15 @@ public final class XSharedPreferences implements SharedPreferences {
         if (!mFile.setReadable(true, false))
             return false;
 
-        tryRegisterWatcher();
+        // Watcher service needs read access to parent directory (looks like execute is not enough)
+        if (mFile.getParentFile() != null) {
+            mFile.getParentFile().setReadable(true, false);
+        }
+
+        if (!mListeners.isEmpty()) {
+            tryRegisterWatcher();
+        }
+
         return true;
     }
 
@@ -480,25 +487,38 @@ public final class XSharedPreferences implements SharedPreferences {
         throw new UnsupportedOperationException("read-only implementation");
     }
 
-    @Deprecated
+    /**
+     * Registers a callback to be invoked when a change happens to a preference file.<br>
+     * Note that it is not possible to determine which preference changed exactly and thus
+     * preference key in callback invocation will always be null.
+     *
+     * @param listener The callback that will run.
+     * @see #unregisterOnSharedPreferenceChangeListener
+     */
     @Override
     public void registerOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener) {
-        if (!mWatcherEnabled)
-            throw new UnsupportedOperationException("File watcher feature is disabled for this instance");
+        if (listener == null)
+            throw new IllegalArgumentException("listener cannot be null");
 
         synchronized(this) {
-            mListeners.put(listener, sContent);
+            if (mListeners.put(listener, sContent) == null) {
+                tryRegisterWatcher();
+            }
         }
     }
 
-    @Deprecated
+    /**
+     * Unregisters a previous callback.
+     *
+     * @param listener The callback that should be unregistered.
+     * @see #registerOnSharedPreferenceChangeListener
+     */
     @Override
     public void unregisterOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener) {
-        if (!mWatcherEnabled)
-            throw new UnsupportedOperationException("File watcher feature is disabled for this instance");
-
         synchronized(this) {
-            mListeners.remove(listener);
+            if (mListeners.remove(listener) != null && mListeners.isEmpty()) {
+                tryUnregisterWatcher();
+            }
         }
     }
 
