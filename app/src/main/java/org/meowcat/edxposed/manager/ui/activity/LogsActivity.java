@@ -39,6 +39,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -47,8 +49,7 @@ import java.util.Scanner;
 public class LogsActivity extends BaseActivity {
     private boolean allLog = false;
     private final File fileErrorLog = new File(Constants.getBaseDir() + "log/error.log");
-    private final File fileErrorLogOld = new File(
-            Constants.getBaseDir() + "log/error.log.old");
+    private final File fileErrorLogOld = new File(Constants.getBaseDir() + "log/error.log.old");
     private final File fileAllLog = new File(Constants.getBaseDir() + "log/all.log");
     private final File fileAllLogOld = new File(Constants.getBaseDir() + "log/all.log.old");
     private LogsAdapter adapter;
@@ -85,7 +86,7 @@ public class LogsActivity extends BaseActivity {
         binding.recyclerView.setAdapter(adapter);
         layoutManager = new LinearLayoutManagerFix(this);
         binding.recyclerView.setLayoutManager(layoutManager);
-        if (preferences.getBoolean("disable_verbose_log", false)) {
+        if (Files.exists(Paths.get(Constants.getBaseDir(), "conf/disable_verbose_log"))) {
             binding.slidingTabs.setVisibility(View.GONE);
         }
         binding.slidingTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

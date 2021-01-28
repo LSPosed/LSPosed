@@ -11,6 +11,13 @@
             android:summary="@string/skip_xposedminversion_check_summ"
             android:title="@string/skip_xposedminversion_check"
             app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="hook_modules"
+            android:summary="@string/hook_modules_summary"
+            android:title="@string/hook_modules"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/settings_group_theme"
@@ -52,48 +59,7 @@
             android:title="@string/pure_black_dark_theme"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
-    <!--    <PreferenceCategory
-            android:title="@string/settings_group_download"
-            app:iconSpaceReserved="false">
 
-            <SimpleMenuPreference
-                android:defaultValue="stable"
-                android:entries="@array/release_type_texts"
-                android:entryValues="@array/release_type_values"
-                android:key="release_type_global"
-                android:summary="%s"
-                android:title="@string/settings_release_type"
-                app:iconSpaceReserved="false" />
-
-            <SwitchPreferenceCompat
-                android:defaultValue="false"
-                android:key="ignore_updates"
-                android:summary="@string/ignore_updates_summ"
-                android:title="@string/ignore_updates"
-                app:iconSpaceReserved="false" />
-
-            <SwitchPreferenceCompat
-                android:defaultValue="true"
-                android:key="heads_up"
-                android:summary="@string/enable_heads_up_summary"
-                android:title="@string/enable_heads_up"
-                app:iconSpaceReserved="false" />
-
-            <SwitchPreferenceCompat
-                android:defaultValue="false"
-                android:key="custom_list"
-                android:summary="@string/custom_list_summ"
-                android:title="@string/custom_list"
-                app:iconSpaceReserved="false" />
-
-            <SwitchPreferenceCompat
-                android:key="ignore_chinese"
-                android:summary="@string/ignore_chinese_summary"
-                android:title="@string/ignore_chinese"
-                app:iconSpaceReserved="false" />
-
-        </PreferenceCategory>
-    -->
     <PreferenceCategory
         android:key="group_framework"
         android:title="@string/settings_group_framework"
@@ -106,6 +72,7 @@
             android:key="variant"
             android:summary="%s"
             android:title="@string/settings_variant"
+            android:persistent="false"
             app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
@@ -113,6 +80,7 @@
             android:key="white_list_switch"
             android:summary="@string/white_list_mode_summary"
             android:title="@string/white_list_mode_title"
+            android:persistent="false"
             app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
@@ -120,6 +88,7 @@
             android:key="enable_boot_image_deopt"
             android:summary="@string/pref_enable_boot_image_deopt_summary"
             android:title="@string/pref_title_enable_boot_image_deopt"
+            android:persistent="false"
             app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
@@ -127,19 +96,14 @@
             android:key="enable_resources"
             android:summary="@string/settings_enable_resources_summary"
             android:title="@string/settings_enable_resources"
-            app:iconSpaceReserved="false" />
-
-        <SwitchPreferenceCompat
-            android:defaultValue="true"
-            android:key="hook_modules"
-            android:summary="@string/hook_modules_summary"
-            android:title="@string/hook_modules"
+            android:persistent="false"
             app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="disable_verbose_log"
             android:title="@string/pref_title_disable_verbose_log"
+            android:persistent="false"
             app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
@@ -147,6 +111,7 @@
             android:key="disable_modules_log"
             android:summary="@string/pref_disable_modules_log_summary"
             android:title="@string/pref_title_disable_modules_log"
+            android:persistent="false"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
 </PreferenceScreen>
