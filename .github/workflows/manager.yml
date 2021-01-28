@@ -29,7 +29,7 @@ jobs:
       - name: Sign Manager Release
         if: ${{ github.event_name == 'push' && success() }}
         id: sign
-        uses: r0adkll/sign-android-release@v1.0.4
+        uses: tehcneko/sign-android-release@v1.0.0
         with:
           releaseDirectory: app/build/outputs/apk/release
           signingKeyBase64: ${{ secrets.SIGNING_KEY }}
