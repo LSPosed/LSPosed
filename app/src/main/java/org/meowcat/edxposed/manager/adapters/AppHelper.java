@@ -58,9 +58,8 @@ public class AppHelper {
                     String packageName = path.getFileName().toString();
                     if (forceWhiteList.contains(packageName)) {
                         createAppListFile(packageName, white, white);
-                    } else {
-                        s.add(packageName);
                     }
+                    if (white) s.add(packageName);
                 }
             });
             return s;

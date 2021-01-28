@@ -372,11 +372,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
     }
 
     @Override
-    public void onModuleEnableChange(ModuleUtil moduleUtil) {
-
-    }
-
-    @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         ModuleUtil.InstalledModule module = ModuleUtil.getInstance().getModule(selectedPackageName);
         if (module == null) {

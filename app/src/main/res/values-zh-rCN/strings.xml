@@ -174,4 +174,6 @@
     <string name="menu_show_modules">模块</string>
     <string name="menu_reboot">重启…</string>
     <string name="menu_sort">排序…</string>
+    <string name="blacklist_summary">%d 个应用位于黑名单中</string>
+    <string name="whitelist_summary">%d 个应用位于白名单中</string>
 </resources>

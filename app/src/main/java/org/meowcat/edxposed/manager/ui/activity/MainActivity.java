@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 
 import org.meowcat.edxposed.manager.Constants;
 import org.meowcat.edxposed.manager.R;
+import org.meowcat.edxposed.manager.adapters.AppHelper;
 import org.meowcat.edxposed.manager.databinding.ActivityMainBinding;
 import org.meowcat.edxposed.manager.ui.fragment.StatusDialogBuilder;
 import org.meowcat.edxposed.manager.util.GlideHelper;
@@ -21,7 +22,7 @@ import org.meowcat.edxposed.manager.util.light.Light;
 
 import java.util.Locale;
 
-public class MainActivity extends BaseActivity implements ModuleUtil.ModuleListener {
+public class MainActivity extends BaseActivity {
     ActivityMainBinding binding;
 
     @SuppressLint("PrivateResource")
@@ -34,9 +35,9 @@ public class MainActivity extends BaseActivity implements ModuleUtil.ModuleListe
             if (Light.setLightSourceAlpha(getWindow().getDecorView(), 0.01f, 0.029f)) {
                 binding.status.setElevation(24);
                 binding.modules.setElevation(12);
+                binding.apps.setElevation(12);
             }
         });
-        ModuleUtil.getInstance().addListener(this);
         binding.modules.setOnClickListener(v -> {
             Intent intent = new Intent();
             intent.setClass(getApplicationContext(), ModulesActivity.class);
@@ -94,28 +95,14 @@ public class MainActivity extends BaseActivity implements ModuleUtil.ModuleListe
             binding.status.setCardBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
             binding.statusIcon.setImageResource(R.drawable.ic_error);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         binding.modulesSummary.setText(String.format(getString(R.string.ModulesDetail), ModuleUtil.getInstance().getEnabledModules().size()));
+        binding.appsTitle.setText(AppHelper.isWhiteListMode() ? R.string.title_white_list : R.string.title_black_list);
+        int count = AppHelper.getAppList(AppHelper.isWhiteListMode()).size();
+        binding.appsSummary.setText(getString(AppHelper.isWhiteListMode() ? R.string.whitelist_summary : R.string.blacklist_summary, count));
     }
-
-    @Override
-    public void onInstalledModulesReloaded(ModuleUtil moduleUtil) {
-
-    }
-
-    @Override
-    public void onModuleEnableChange(ModuleUtil moduleUtil) {
-        binding.modulesSummary.setText(String.format(getString(R.string.ModulesDetail), moduleUtil.getEnabledModules().size()));
-    }
-
-    @Override
-    public void onSingleInstalledModuleReloaded(ModuleUtil moduleUtil, String packageName, ModuleUtil.InstalledModule module) {
-
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ModuleUtil.getInstance().removeListener(this);
-    }
-
 }

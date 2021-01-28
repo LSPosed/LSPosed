@@ -148,9 +148,6 @@ public final class ModuleUtil {
         } else {
             enabledModules.remove(packageName);
         }
-        for (ModuleListener listener : listeners) {
-            listener.onModuleEnableChange(instance);
-        }
     }
 
     public boolean isModuleEnabled(String packageName) {
@@ -246,8 +243,6 @@ public final class ModuleUtil {
          * Called whenever all installed modules have been reloaded
          */
         void onInstalledModulesReloaded(ModuleUtil moduleUtil);
-
-        void onModuleEnableChange(ModuleUtil moduleUtil);
     }
 
     public class InstalledModule {

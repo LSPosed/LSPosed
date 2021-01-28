@@ -348,4 +348,6 @@
     <string name="menu_show_modules">Modules</string>
     <string name="menu_reboot">Reboot…</string>
     <string name="menu_sort">Sorting…</string>
+    <string name="blacklist_summary">%d apps blacklisted</string>
+    <string name="whitelist_summary">%d apps whitelisted</string>
 </resources>
