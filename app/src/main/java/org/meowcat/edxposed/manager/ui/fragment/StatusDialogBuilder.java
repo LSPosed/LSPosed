@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.Locale;
 
 @SuppressLint("StaticFieldLeak")
 public class StatusDialogBuilder extends MaterialAlertDialogBuilder {
@@ -35,8 +36,8 @@ public class StatusDialogBuilder extends MaterialAlertDialogBuilder {
         binding.manager.setText(mAppVer);
 
         if (installedXposedVersion != null) {
-            binding.api.setText(Constants.getXposedApiVersion() + ".0");
-            binding.framework.setText(installedXposedVersion + " (" + Constants.getXposedVariant() + ")");
+            binding.api.setText(String.format(Locale.US, "%s.0", Constants.getXposedVariant()));
+            binding.framework.setText(String.format(Locale.US, "%s (%s)", installedXposedVersion, Constants.getXposedVariant()));
         }
 
         binding.androidVersion.setText(context.getString(R.string.android_sdk, getAndroidVersion(), Build.VERSION.RELEASE, Build.VERSION.SDK_INT));

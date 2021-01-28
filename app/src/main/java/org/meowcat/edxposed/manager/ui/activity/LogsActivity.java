@@ -158,6 +158,7 @@ public class LogsActivity extends BaseActivity {
     }
 
     private void reloadErrorLog() {
+        //noinspection deprecation
         new LogsReader().execute(allLog ? fileAllLog : fileErrorLog);
     }
 

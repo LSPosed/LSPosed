@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,11 +18,9 @@ import org.meowcat.edxposed.manager.App;
 import org.meowcat.edxposed.manager.Constants;
 import org.meowcat.edxposed.manager.R;
 import org.meowcat.edxposed.manager.adapters.AppHelper;
-import org.meowcat.edxposed.manager.databinding.ActivityModulesBinding;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -106,7 +105,6 @@ public final class ModuleUtil {
         try {
             pkg = pm.getPackageInfo(packageName, PackageManager.GET_META_DATA);
         } catch (NameNotFoundException e) {
-            //RepoDb.deleteInstalledModule(packageName);
             InstalledModule old = installedModules.remove(packageName);
             if (old != null) {
                 for (ModuleListener listener : listeners) {
@@ -177,16 +175,12 @@ public final class ModuleUtil {
         updateModulesList(showToast, null);
     }
 
-    public synchronized void updateModulesList(boolean showToast, ActivityModulesBinding binding) {
+    public synchronized void updateModulesList(boolean showToast, View view) {
         try {
             Log.i(App.TAG, "ModuleUtil -> updating modules.list");
             int installedXposedVersion = Constants.getXposedApiVersion();
             if (!prefs.getBoolean("skip_xposedminversion_check", false) && installedXposedVersion <= 0 && showToast) {
-                if (binding != null) {
-                    Snackbar.make(binding.snackbar, R.string.notinstalled, Snackbar.LENGTH_SHORT).show();
-                } else {
-                    showToast(R.string.notinstalled);
-                }
+                showToast(view, R.string.notinstalled);
                 return;
             }
 
@@ -196,11 +190,7 @@ public final class ModuleUtil {
             for (InstalledModule module : enabledModules) {
 
                 if (!prefs.getBoolean("skip_xposedminversion_check", false) && (module.minVersion > installedXposedVersion || module.minVersion < MIN_MODULE_VERSION) && showToast) {
-                    if (binding != null) {
-                        Snackbar.make(binding.snackbar, R.string.notinstalled, Snackbar.LENGTH_SHORT).show();
-                    } else {
-                        showToast(R.string.notinstalled);
-                    }
+                    showToast(view, R.string.notinstalled);
                     continue;
                 }
 
@@ -211,30 +201,29 @@ public final class ModuleUtil {
             enabledModulesList.close();
 
             if (showToast) {
-                if (binding != null) {
-                    Snackbar.make(binding.snackbar, R.string.xposed_module_list_updated, Snackbar.LENGTH_SHORT).show();
-                } else {
-                    showToast(R.string.xposed_module_list_updated);
-                }
+                showToast(view, R.string.xposed_module_list_updated);
             }
         } catch (IOException e) {
             Log.e(App.TAG, "ModuleUtil -> cannot write " + Constants.getModulesListFile(), e);
-            if (binding != null) {
-                Snackbar.make(binding.snackbar, "cannot write " + Constants.getModulesListFile() + e, Snackbar.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(App.getInstance(), "cannot write " + Constants.getModulesListFile() + e, Toast.LENGTH_SHORT).show();
-            }
+            showToast(view, "cannot write " + Constants.getModulesListFile() + e);
         }
     }
 
-    @SuppressWarnings("SameParameterValue")
-    private void showToast(int message) {
-        if (toast != null) {
-            toast.cancel();
-            toast = null;
+    private void showToast(View view, int message) {
+        showToast(view, App.getInstance().getString(message));
+    }
+
+    private void showToast(View view, String message) {
+        if (view != null) {
+            Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show();
+        } else {
+            if (toast != null) {
+                toast.cancel();
+                toast = null;
+            }
+            toast = Toast.makeText(App.getInstance(), message, Toast.LENGTH_SHORT);
+            toast.show();
         }
-        toast = Toast.makeText(App.getInstance(), App.getInstance().getString(message), Toast.LENGTH_SHORT);
-        toast.show();
     }
 
     public void addListener(ModuleListener listener) {

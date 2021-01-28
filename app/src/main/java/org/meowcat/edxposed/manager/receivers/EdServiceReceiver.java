@@ -3,9 +3,9 @@ package org.meowcat.edxposed.manager.receivers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 
+import org.meowcat.edxposed.manager.util.ModuleUtil;
 import org.meowcat.edxposed.manager.util.NotificationUtil;
 
 public class EdServiceReceiver extends BroadcastReceiver {
@@ -22,19 +22,15 @@ public class EdServiceReceiver extends BroadcastReceiver {
             return;
         }
 
-        String appName = "null";
-        try {
-            PackageManager pm = context.getPackageManager();
-            pm.getApplicationInfo(packageName, 0);
-            appName = (String) pm.getApplicationInfo(packageName, 0).loadLabel(pm);
-        } catch (Exception e) {
-            e.printStackTrace();
+        ModuleUtil.InstalledModule module = ModuleUtil.getInstance().reloadSingleModule(packageName);
+        if (module == null) {
+            return;
         }
 
         if (intent.getAction().equals("io.github.lsposed.action.MODULE_NOT_ACTIVATAED")) {
-            NotificationUtil.showNotActivatedNotification(packageName, appName);
+            NotificationUtil.showNotActivatedNotification(packageName, module.getAppName());
         } else if (intent.getAction().equals("io.github.lsposed.action.MODULE_UPDATED")) {
-            NotificationUtil.showModulesUpdatedNotification(appName);
+            NotificationUtil.showModulesUpdatedNotification(module.getAppName());
         }
     }
 }

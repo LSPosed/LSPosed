@@ -62,7 +62,7 @@ public class RebootUtil {
 
     public static void reboot(RebootType mode) {
         int result = App.checkPermission(mode.ordinal());
-        switch (result){
+        switch (result) {
             case 0:
                 onRequestPermissionsResult(mode.ordinal(), PERMISSION_GRANTED);
                 break;

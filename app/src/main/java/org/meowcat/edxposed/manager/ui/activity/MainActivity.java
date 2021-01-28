@@ -19,6 +19,8 @@ import org.meowcat.edxposed.manager.util.ModuleUtil;
 import org.meowcat.edxposed.manager.util.NavUtil;
 import org.meowcat.edxposed.manager.util.light.Light;
 
+import java.util.Locale;
+
 public class MainActivity extends BaseActivity implements ModuleUtil.ModuleListener {
     ActivityMainBinding binding;
 
@@ -83,7 +85,7 @@ public class MainActivity extends BaseActivity implements ModuleUtil.ModuleListe
         String installedXposedVersion = Constants.getXposedVersion();
         if (installedXposedVersion != null) {
             binding.statusTitle.setText(R.string.Activated);
-            binding.statusSummary.setText(installedXposedVersion + " (" + Constants.getXposedVariant() + ")");
+            binding.statusSummary.setText(String.format(Locale.US, "%s (%s)", installedXposedVersion, Constants.getXposedVariant()));
             binding.status.setCardBackgroundColor(ContextCompat.getColor(this, R.color.download_status_update_available));
             binding.statusIcon.setImageResource(R.drawable.ic_check_circle);
         } else {

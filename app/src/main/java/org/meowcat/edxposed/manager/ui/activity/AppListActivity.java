@@ -52,6 +52,7 @@ public class AppListActivity extends BaseActivity {
         setSupportActionBar(binding.toolbar);
         binding.toolbar.setNavigationOnClickListener(view -> finish());
         ActionBar bar = getSupportActionBar();
+        assert bar != null;
         bar.setDisplayHomeAsUpEnabled(true);
         if (!TextUtils.isEmpty(modulePackageName)) {
             bar.setTitle(R.string.menu_scope);

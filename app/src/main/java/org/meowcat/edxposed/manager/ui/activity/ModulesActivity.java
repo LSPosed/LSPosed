@@ -395,14 +395,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 Snackbar.make(binding.snackbar, R.string.module_no_ui, Snackbar.LENGTH_LONG).show();
             }
             return true;
-        /*} else if (itemId == R.id.menu_download_updates) {
-            Intent intent = new Intent(this, DownloadDetailsActivity.class);
-            intent.setData(Uri.fromParts("package", module.packageName, null));
-            startActivity(intent);
-            return true;
-        } else if (itemId == R.id.menu_support) {
-            //NavUtil.startURL(this, Uri.parse(RepoDb.getModuleSupport(module.packageName)));
-            return true;*/
         } else if (itemId == R.id.menu_app_store) {
             Uri uri = Uri.parse("market://details?id=" + module.packageName);
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
@@ -536,7 +528,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 boolean changed = moduleUtil.isModuleEnabled(packageName) ^ isChecked;
                 if (changed) {
                     moduleUtil.setModuleEnabled(packageName, isChecked);
-                    moduleUtil.updateModulesList(true, binding);
+                    moduleUtil.updateModulesList(true, binding.snackbar);
                 }
             });
             mSwitch.setChecked(moduleUtil.isModuleEnabled(item.packageName));

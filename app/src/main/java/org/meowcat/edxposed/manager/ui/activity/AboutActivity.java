@@ -42,8 +42,4 @@ public class AboutActivity extends BaseActivity {
     void setupView(View v, final int url) {
         v.setOnClickListener(v1 -> NavUtil.startURL(this, getString(url)));
     }
-
-    //public void openLink(View view) {
-    //    NavUtil.startURL(this, view.getTag().toString());
-    //}
 }

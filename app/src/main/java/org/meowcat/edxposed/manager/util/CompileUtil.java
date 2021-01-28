@@ -127,7 +127,7 @@ public class CompileUtil {
         sActivity = activity;
         int type = CompileType.DEXOPT_ALL.ordinal() * 10 + 1;
         int result = App.checkPermission(type);
-        switch (result){
+        switch (result) {
             case 0:
                 onRequestPermissionsResult(type, PERMISSION_GRANTED);
                 break;
@@ -141,7 +141,7 @@ public class CompileUtil {
         sActivity = activity;
         int type = CompileType.SPEED_ALL.ordinal() * 10 + 1;
         int result = App.checkPermission(type);
-        switch (result){
+        switch (result) {
             case 0:
                 onRequestPermissionsResult(type, PERMISSION_GRANTED);
                 break;

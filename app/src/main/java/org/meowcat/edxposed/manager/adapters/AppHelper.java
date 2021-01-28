@@ -1,6 +1,5 @@
 package org.meowcat.edxposed.manager.adapters;
 
-import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
@@ -26,7 +25,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
 
@@ -49,11 +47,6 @@ public class AppHelper {
 
     public static boolean isWhiteListMode() {
         return new File(BASE_PATH + WHITE_LIST_MODE).exists();
-    }
-
-
-    public static List<String> getAppList() {
-        return getAppList(isWhiteListMode());
     }
 
     public static List<String> getAppList(boolean white) {
@@ -108,7 +101,6 @@ public class AppHelper {
         return createAppListFile(packageName, white, add);
     }
 
-    @SuppressLint("RestrictedApi")
     public static void showMenu(@NonNull Context context,
                                 @NonNull FragmentManager fragmentManager,
                                 @NonNull View anchor,
@@ -127,9 +119,9 @@ public class AppHelper {
             } else if (itemId == R.id.app_menu_stop) {
                 try {
                     ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-                    Objects.requireNonNull(manager).killBackgroundProcesses(info.packageName);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+                    manager.killBackgroundProcesses(info.packageName);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             } else if (itemId == R.id.app_menu_compile_speed) {
                 CompileUtil.compileSpeed(context, fragmentManager, info);
@@ -143,8 +135,8 @@ public class AppHelper {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 try {
                     context.startActivity(intent);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             } else if (itemId == R.id.app_menu_info) {
                 context.startActivity(new Intent(ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", info.packageName, null)));
@@ -182,7 +174,6 @@ public class AppHelper {
         return s;
     }
 
-    @SuppressLint("WorldReadableFiles")
     static boolean saveScopeList(String modulePackageName, List<String> list) {
         Path path = Paths.get(BASE_PATH + String.format(SCOPE_LIST_PATH, modulePackageName));
         if (list.size() == 0) {
