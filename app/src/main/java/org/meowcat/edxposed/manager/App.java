@@ -1,15 +1,12 @@
 package org.meowcat.edxposed.manager;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 
-import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
 import org.meowcat.edxposed.manager.ui.activity.CrashReportActivity;
@@ -26,15 +23,13 @@ import rikka.sui.Sui;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
-public class App extends Application implements Application.ActivityLifecycleCallbacks {
+public class App extends Application {
     public static final String TAG = "EdXposedManager";
     @SuppressLint("StaticFieldLeak")
     private static App instance = null;
     private static Thread uiThread;
     private static Handler mainHandler;
     private SharedPreferences pref;
-    //private AppCompatActivity currentActivity = null;
-    private final boolean isUiLoaded = false;
 
     private final Shizuku.OnRequestPermissionResultListener REQUEST_PERMISSION_RESULT_LISTENER = this::onRequestPermissionsResult;
 
@@ -85,9 +80,8 @@ public class App extends Application implements Application.ActivityLifecycleCal
     }
 
     public static void mkdir(String dir) {
-        dir = Constants.getBaseDir() + dir;
         //noinspection ResultOfMethodCallIgnored
-        new File(dir).mkdir();
+        new File(Constants.getBaseDir() + dir).mkdir();
     }
 
     public static boolean supportScope() {
@@ -137,46 +131,9 @@ public class App extends Application implements Application.ActivityLifecycleCal
         Shizuku.addRequestPermissionResultListener(REQUEST_PERMISSION_RESULT_LISTENER);
     }
 
-    @SuppressLint({"PrivateApi", "NewApi"})
     private void createDirectories() {
         mkdir("conf");
         mkdir("log");
     }
 
-    @Override
-    public synchronized void onActivityCreated(@NonNull Activity activity, Bundle savedInstanceState) {
-        if (isUiLoaded) {
-            return;
-        }
-    }
-
-    @Override
-    public void onActivityStarted(@NonNull Activity activity) {
-
-    }
-
-    @Override
-    public synchronized void onActivityResumed(@NonNull Activity activity) {
-
-    }
-
-    @Override
-    public synchronized void onActivityPaused(@NonNull Activity activity) {
-
-    }
-
-    @Override
-    public void onActivityStopped(@NonNull Activity activity) {
-
-    }
-
-    @Override
-    public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
-
-    }
-
-    @Override
-    public void onActivityDestroyed(@NonNull Activity activity) {
-
-    }
 }
