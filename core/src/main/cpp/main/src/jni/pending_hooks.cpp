@@ -10,13 +10,18 @@
 #include "art/runtime/mirror/class.h"
 
 namespace lspd {
+    namespace {
+        std::unordered_set<const void *> pending_classes_;
 
-    static std::unordered_set<const void *> pending_classes_;
-
-    static std::unordered_set<const void *> hooked_methods_;
+        std::unordered_set<const void *> hooked_methods_;
+    }
 
     bool IsClassPending(void *clazz) {
         return pending_classes_.count(clazz);
+    }
+
+    void DonePendingHook(void *clazz) {
+        pending_classes_.erase(clazz);
     }
 
     static void PendingHooks_recordPendingMethodNative(JNI_START, jobject method_ref, jclass class_ref) {

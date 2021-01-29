@@ -34,6 +34,7 @@ namespace art {
                 LOGD("Pending hook for %p (%s)", clazz_ptr,
                      art::mirror::Class(clazz_ptr).GetDescriptor().c_str());
                 lspd::Context::GetInstance()->CallOnPostFixupStaticTrampolines(clazz_ptr);
+                lspd::DonePendingHook(class_def);
             }
         }
 

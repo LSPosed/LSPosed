@@ -13,4 +13,6 @@ namespace lspd {
 
     void recordHooked(void* art_method);
 
+    void DonePendingHook(void *clazz);
+
 } // namespace lspd

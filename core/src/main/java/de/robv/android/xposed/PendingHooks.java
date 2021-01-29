@@ -18,6 +18,7 @@ public final class PendingHooks {
             for (Map.Entry<Member, XposedBridge.AdditionalHookInfo> hook : sPendingHooks.get(clazz).entrySet()) {
                 hookMethodNative(hook.getKey(), clazz, 0, hook.getValue());
             }
+            sPendingHooks.remove(clazz);
         }
     }
 
