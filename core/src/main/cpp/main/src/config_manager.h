@@ -17,7 +17,6 @@ namespace lspd {
     class ConfigManager {
     private:
         inline static const auto kPrimaryInstallerPkgName = "io.github.lsposed.manager"s;
-        inline static const auto kXposedPropName = "edconfig.jar"s;
         inline static const auto kXposedInjectDexPath = "lspd.dex";
 
     public:
@@ -48,8 +47,6 @@ namespace lspd {
 
         inline const auto &IsResourcesHookEnabled() const { return resources_hook_enabled_; }
 
-        inline const auto &IsDeoptBootImageEnabled() const { return deopt_boot_image_enabled_; }
-
         inline const auto &IsNoModuleLogEnabled() const { return no_module_log_enabled_; }
 
         inline const auto &GetInstallerPackageName() const { return installer_pkg_name_; }
@@ -72,8 +69,6 @@ namespace lspd {
             else
                 return GetFrameworkPath("lib/libsandhook.lspd.so");
         }
-
-        inline auto GetXposedPropPath() const { return GetFrameworkPath(kXposedPropName); }
 
         inline auto GetConfigPath(const std::string &suffix = {}) const {
             return base_config_path_ / "conf" / suffix;
@@ -118,7 +113,6 @@ namespace lspd {
         const std::filesystem::path base_config_path_;   // /data/misc/lspd_xxxx/{user}
         const bool initialized_ = false;
         const std::filesystem::path installer_pkg_name_;
-        const bool deopt_boot_image_enabled_ = false;
         const bool no_module_log_enabled_ = false;
         const bool resources_hook_enabled_ = false;
         // snapshot at boot

@@ -102,7 +102,6 @@ public class SettingsActivity extends BaseActivity {
 
     public static class SettingsFragment extends PreferenceFragmentCompat {
         private static final Path enableResourcesFlag = Paths.get(Constants.getBaseDir(), "conf/enable_resources");
-        private static final Path deoptBootFlag = Paths.get(Constants.getBaseDir(), "conf/deoptbootimage");
         private static final Path disableVerboseLogsFlag = Paths.get(Constants.getBaseDir(), "conf/disable_verbose_log");
         private static final Path disableModulesLogsFlag = Paths.get(Constants.getBaseDir() + "conf/disable_modules_log");
         private static final Path variantFlag = Paths.get(Constants.getBaseDir()).getParent().resolve("variant");
@@ -129,12 +128,6 @@ public class SettingsActivity extends BaseActivity {
             if (prefModulesLogs != null) {
                 prefModulesLogs.setChecked(Files.exists(disableModulesLogsFlag));
                 prefModulesLogs.setOnPreferenceChangeListener(new OnFlagChangeListener(disableModulesLogsFlag));
-            }
-
-            SwitchPreferenceCompat prefEnableDeopt = findPreference("enable_boot_image_deopt");
-            if (prefEnableDeopt != null) {
-                prefEnableDeopt.setChecked(Files.exists(deoptBootFlag));
-                prefEnableDeopt.setOnPreferenceChangeListener(new OnFlagChangeListener(deoptBootFlag));
             }
 
             SwitchPreferenceCompat prefEnableResources = findPreference("enable_resources");

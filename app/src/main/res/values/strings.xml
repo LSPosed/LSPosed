@@ -35,9 +35,6 @@
     <!-- Modules tab -->
     <string name="module_is_not_activated_yet">LSPosed module is not activated yet</string>
     <string name="module_is_not_activated_yet_detailed">%s has been installed, but is not activated yet</string>
-    <string name="activate_and_reboot">Activate and reboot</string>
-    <string name="activate_only">Activate only</string>
-    <string name="module_activated">LSPosed module has been activated</string>
     <string name="module_empty_description">(no description provided)</string>
     <string name="module_no_ui">This module does not provide a user interface</string>
     <string name="xposed_module_list_updated">LSPosed module list was updated</string>
@@ -65,7 +62,6 @@
     <string name="settings_theme_dark">Dark</string>
 
     <!-- Support tab -->
-    <string name="support_framework_label">Framework/Manager support</string>
 
     <!-- Logs tab  -->
     <string name="logs_save_failed">Failed to save:</string>
@@ -75,8 +71,6 @@
     <string name="log_is_empty">Log is empty.</string>
 
     <!-- About tab -->
-    <string name="about_developers_label">Main developers</string>
-    <string name="about_version_label">Version</string>
     <string name="about_source_label">Source code</string>
 
     <!-- DownloadView -->
@@ -118,23 +112,18 @@
     <string name="verified_boot_active">Verified Boot is active</string>
 
     <!-- LSPd related -->
-    <string name="white_list_mode_title">White List mode</string>
     <string name="title_white_list">White List</string>
-    <string name="title_black_list">Black List</string>
     <string name="add_package_failed">Failed to edit, one or more settings prevent you from editing.</string>
     <string name="menu_title_compile_reset">De-optimize</string>
     <string name="menu_title_compile_speed">Optimize with Speed mode</string>
     <string name="menu_title_compile_dexopt">Optimize with Dexopt mode</string>
     <string name="compile_reset_msg">Resetting …</string>
     <string name="compile_speed_msg">Optimizing …</string>
-    <string name="white_list_mode_summary">Only selected app load LSPosed modules</string>
 
     <string name="about_source" translatable="false">https://github.com/LSPosed/LSPosed/</string>
 
     <string name="group_telegram_channel_link" translatable="false">http://t.me/LSPosed</string>
     <string name="notinstalled">The LSPosed framework is not installed.</string>
-    <string name="pref_title_enable_boot_image_deopt">De-optimize boot image</string>
-    <string name="pref_enable_boot_image_deopt_summary">Turn on to make all framework methods hookable, but the whole system will be slowed down\nMainly used to check if one framework method is inlined when it can\'t be hooked into</string>
 
     <string name="pref_title_disable_verbose_log">Disable verbose logs</string>
     <string name="logs_cannot_read">Cannot read log: \n</string>
@@ -145,7 +134,6 @@
     <string name="hook_modules">Force hook modules</string>
     <string name="hook_modules_summary">Force add modules to white list\nClosing this option does not remove added modules from white list</string>
     <string name="not_installed">Not installed</string>
-    <string name="support_group_telegram_channel">Telegram Channel: @LSPosed</string>
     <string name="reboot_system">Reboot to System</string>
     <string name="pref_title_disable_modules_log">Disable modules logs</string>
     <string name="pref_disable_modules_log_summary">Exception stack thrown by the module will still be catched normally</string>
@@ -167,15 +155,12 @@
     <string name="settings_group_theme">Theme</string>
     <string name="material_design_2">Material Design 2</string>
     <string name="menu_scope">Scope</string>
-    <string name="enable_scope">Enable scope</string>
     <string name="scope_not_supported">The version of LSPosed you installed does not support module scope, download new version?</string>
     <string name="settings_variant">Variant</string>
     <string name="menu_optimize">Optimize…</string>
     <string name="menu_show_system_apps">System apps</string>
-    <string name="menu_show_modules">Modules</string>
     <string name="menu_reboot">Reboot…</string>
     <string name="menu_sort">Sorting…</string>
-    <string name="blacklist_summary">%d apps blacklisted</string>
     <string name="whitelist_summary">%d apps whitelisted</string>
     <string name="enable_module">Enable module</string>
     <string name="no_scope_selected">You did not select any app. Continue?</string>

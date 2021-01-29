@@ -34,9 +34,6 @@
     <!-- Modules tab -->
     <string name="module_is_not_activated_yet">LSPosed 模組尚未啟用</string>
     <string name="module_is_not_activated_yet_detailed">%s 已安裝, 但尚未啟用</string>
-    <string name="activate_and_reboot">啟用並重啟</string>
-    <string name="activate_only">僅啟用</string>
-    <string name="module_activated">LSPosed 模組已啟用</string>
     <string name="module_empty_description">(未提供介紹)</string>
     <string name="module_no_ui">該模組未提供使用者介面</string>
     <string name="xposed_module_list_updated">LSPosed 模組列表已更新</string>
@@ -61,7 +58,6 @@
     <string name="settings_theme_dark">暗色</string>
 
     <!-- Support tab -->
-    <string name="support_framework_label">框架/管理器 支援</string>
 
     <!-- Logs tab  -->
     <string name="menuClearLog">立即清理日誌</string>
@@ -70,8 +66,6 @@
     <string name="log_is_empty">日誌為空</string>
 
     <!-- About tab -->
-    <string name="about_developers_label">主要開發者</string>
-    <string name="about_version_label">版本</string>
     <string name="about_source_label">原始碼</string>
 
     <!-- DownloadView -->
@@ -103,9 +97,7 @@
     <string name="not_logcat">此處僅顯示 LSPosed 及模組相關日誌資訊\n如果您想抓取系統日誌, 可以嘗試我們的 Log Catcher Magisk 模組</string>
 
     <!-- LSPd related -->
-    <string name="white_list_mode_title">允許單模式</string>
     <string name="title_white_list">允許名單</string>
-    <string name="title_black_list">封鎖名單</string>
     <string name="add_package_failed">修改失敗, 一個或多個設定阻止你繼續修改</string>
     <string name="menu_title_compile_reset">取消優化</string>
     <string name="menu_title_compile_speed">以 Speed 模式優化 App</string>
@@ -113,7 +105,6 @@
     <string name="compile_reset_msg">清除中…</string>
     <string name="compile_speed_msg">優化中…</string>
     <string name="notinstalled">LSPosed 框架未安裝</string>
-    <string name="white_list_mode_summary">僅選中的 App 載入 LSPosed 模組</string>
     <string name="verified_boot_active">引導驗證已啟用</string>
     <string name="verified_boot_deactivated">引導驗證已禁用</string>
     <string name="verified_boot_none">無法獲取引導驗證狀態</string>
@@ -121,8 +112,6 @@
     <string name="dexopt_now">以 Dexopt 模式優化全部 App</string>
     <string name="speed_now">以 Speed 模式優化全部 App</string>
     <string name="this_may_take_a_while">請稍後, 這將需要一段時間…</string>
-    <string name="pref_title_enable_boot_image_deopt">禁用系統程式碼優化</string>
-    <string name="pref_enable_boot_image_deopt_summary">禁用系統程式碼的優化能使所有系統方法都可以被 hook 到, 但是會降低系統流暢度\n主要用於對比測試某個方法無法 hook 到是否為系統優化導致</string>
 
     <string name="pref_title_disable_verbose_log">禁用詳細日誌</string>
     <string name="logs_cannot_read">無法讀取日誌: \n</string>
@@ -132,7 +121,6 @@
     <string name="hook_modules">強制新增模組</string>
     <string name="hook_modules_summary">強制將模組新增進白允許名單\n關閉此選項並不會移除已勾選的 App 標識</string>
     <string name="not_installed">未安裝</string>
-    <string name="support_group_telegram_channel">Telegram 頻道: @LSPosed</string>
     <string name="reboot_system">重啟至系統</string>
     <string name="pref_title_disable_modules_log">禁用模組日誌</string>
     <string name="pref_disable_modules_log_summary">模組丟擲的的異常堆疊仍將正常抓取</string>

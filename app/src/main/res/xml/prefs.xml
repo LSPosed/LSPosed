@@ -78,14 +78,6 @@
 
         <SwitchPreferenceCompat
             android:defaultValue="false"
-            android:key="enable_boot_image_deopt"
-            android:summary="@string/pref_enable_boot_image_deopt_summary"
-            android:title="@string/pref_title_enable_boot_image_deopt"
-            android:persistent="false"
-            app:iconSpaceReserved="false" />
-
-        <SwitchPreferenceCompat
-            android:defaultValue="false"
             android:key="enable_resources"
             android:summary="@string/settings_enable_resources_summary"
             android:title="@string/settings_enable_resources"
