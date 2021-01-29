@@ -82,7 +82,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
                 rmList.add(info);
                 continue;
             }
-            if ((info.applicationInfo.flags & ApplicationInfo.FLAG_HAS_CODE) == 0) {
+            if ((info.applicationInfo.flags & ApplicationInfo.FLAG_HAS_CODE) == 0 && !info.packageName.equals("android")) {
                 rmList.add(info);
                 continue;
             }
