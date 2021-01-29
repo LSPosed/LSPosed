@@ -16,16 +16,15 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.topjohnwu.superuser.Shell;
 
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
+
 import io.github.lsposed.manager.App;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.databinding.FragmentCompileDialogBinding;
 import io.github.lsposed.manager.util.CompileUtil;
 import io.github.lsposed.manager.util.ToastUtil;
-
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
-
 import rikka.shizuku.ShizukuSystemProperties;
 
 import static android.content.pm.PackageManager.PERMISSION_DENIED;
@@ -105,8 +104,12 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
                             break;
                     }
                     App.runOnUiThread(() -> {
-                        ToastUtil.showLongToast(requireContext(), R.string.done);
-                        dismiss();
+                        ToastUtil.showLongToast(App.getInstance(), R.string.done);
+                        try {
+                            dismissAllowingStateLoss();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     });
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -136,7 +139,11 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
                     break;
             }
         } else {
-            dismissAllowingStateLoss();
+            try {
+                dismissAllowingStateLoss();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -152,7 +159,11 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
         if (command != null) {
             new CompileTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, command);
         } else {
-            dismiss();
+            try {
+                dismissAllowingStateLoss();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -167,7 +178,7 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
         @Override
         protected String doInBackground(String... commands) {
             if (outerRef.get() == null) {
-                return outerRef.get().requireContext().getString(R.string.compile_failed);
+                return App.getInstance().getString(R.string.compile_failed);
             }
             // Also get STDERR
             List<String> stdout = new ArrayList<>();
@@ -184,18 +195,19 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
 
         @Override
         protected void onPostExecute(String result) {
-            if (outerRef.get() == null || !outerRef.get().isAdded()) {
-                return;
+            try {
+                outerRef.get().dismissAllowingStateLoss();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            Context ctx = outerRef.get().requireContext();
+            Context context = App.getInstance();
             if (result.length() == 0) {
-                ToastUtil.showLongToast(ctx, R.string.compile_failed);
+                ToastUtil.showLongToast(context, R.string.compile_failed);
             } else if (result.length() >= 5 && "Error".equals(result.substring(0, 5))) {
-                ToastUtil.showLongToast(ctx, ctx.getString(R.string.compile_failed_with_info) + " " + result.substring(6));
+                ToastUtil.showLongToast(context, context.getString(R.string.compile_failed_with_info) + " " + result.substring(6));
             } else {
-                ToastUtil.showLongToast(ctx, R.string.done);
+                ToastUtil.showLongToast(context, R.string.done);
             }
-            outerRef.get().dismissAllowingStateLoss();
         }
     }
 }
