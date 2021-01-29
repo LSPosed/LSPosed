@@ -191,22 +191,21 @@ namespace lspd {
     }
 
     void
-    Context::OnNativeForkSystemServerPre(JNIEnv *env, [[maybe_unused]] jclass clazz, uid_t uid,
-                                         gid_t gid,
-                                         jintArray gids,
-                                         jint runtime_flags, jobjectArray rlimits,
-                                         jlong permitted_capabilities,
-                                         jlong effective_capabilities) {
+    Context::OnNativeForkSystemServerPre([[maybe_unused]] JNIEnv *env,
+                                         [[maybe_unused]] jclass clazz,
+                                         [[maybe_unused]]  uid_t uid,
+                                         [[maybe_unused]] gid_t gid,
+                                         [[maybe_unused]] jintArray gids,
+                                         [[maybe_unused]] jint runtime_flags,
+                                         [[maybe_unused]] jobjectArray rlimits,
+                                         [[maybe_unused]] jlong permitted_capabilities,
+                                         [[maybe_unused]] jlong effective_capabilities) {
         ConfigManager::SetCurrentUser(0u);
         app_modules_list_ = ConfigManager::GetInstance()->GetAppModuleList(
                 "android"); // I don't think we need this, but anyway
         skip_ = false;
         if (!ConfigManager::GetInstance()->IsInitialized()) {
             LOGE("skip injecting into android because configurations are not loaded properly");
-        }
-        if (!skip_ && !ConfigManager::GetInstance()->IsAppNeedHook("android")) {
-            skip_ = true;
-            LOGD("skip injecting into android because it's whitelisted/blacklisted");
         }
         if (!skip_ && app_modules_list_.empty()) {
             skip_ = true;
@@ -359,12 +358,6 @@ namespace lspd {
                       app_id == SHARED_RELRO_UID)) {
             skip = true;
             LOGI("skip injecting into %s because it's isolated", package_name.c_str());
-        }
-
-        if (!skip && !ConfigManager::GetInstance()->IsAppNeedHook(package_name)) {
-            skip = true;
-            LOGD("skip injecting xposed into %s because it's whitelisted/blacklisted",
-                 package_name.c_str());
         }
 
         if (!skip && empty_list() && !ConfigManager::GetInstance()->IsInstaller(package_name)) {

@@ -134,16 +134,6 @@ namespace lspd {
         return {};
     }
 
-    bool ConfigManager::IsAppNeedHook(const std::string &package_name) const {
-        if (IsInstaller(package_name)) {
-            return true;
-        }
-
-        auto res = white_list_.count(package_name);
-        LOGD("should hook %s -> %s", package_name.c_str(), BoolToString(res));
-        return res;
-    }
-
     ConfigManager::ConfigManager(uid_t user, bool initialized) :
             user_(user),
             data_path_prefix_(fs::path("/data/user_de") /
@@ -153,7 +143,6 @@ namespace lspd {
             installer_pkg_name_(RetrieveInstallerPkgName()),
             no_module_log_enabled_(path_exists(GetConfigPath("disable_modules_log"))),
             resources_hook_enabled_(path_exists(GetConfigPath("enable_resources"))),
-            white_list_(GetAppList(GetConfigPath("whitelist/"))),
             modules_list_(GetModuleList()),
             last_write_time_(GetLastWriteTime()),
             variant_(GetVariant(GetMiscPath() / "variant")) {
@@ -162,12 +151,6 @@ namespace lspd {
         LOGI("  using installer package name: %s", installer_pkg_name_.c_str());
         LOGI("  no module log: %s", BoolToString(no_module_log_enabled_));
         LOGI("  resources hook: %s", BoolToString(resources_hook_enabled_));
-        LOGI("  white list: \n %s", ([this]() {
-            std::ostringstream join;
-            std::copy(white_list_.begin(), white_list_.end(),
-                      std::ostream_iterator<std::string>(join, "\n"));
-            return join.str();
-        })().c_str());
         LOGI("  module list: \n %s", ([this]() {
             std::ostringstream join;
             std::vector<std::string> module_list;

@@ -79,8 +79,6 @@ namespace lspd {
 
         std::vector<std::string> GetAppModuleList(const std::string &pkg_name) const;
 
-        bool IsAppNeedHook(const std::string &pkg_name) const;
-
         bool NeedUpdateConfig() const {
             return last_write_time_ < GetLastWriteTime();
         }
@@ -108,8 +106,6 @@ namespace lspd {
         const std::filesystem::path installer_pkg_name_;
         const bool no_module_log_enabled_ = false;
         const bool resources_hook_enabled_ = false;
-        // snapshot at boot
-        const std::unordered_set<std::string> white_list_;
 
         const std::unordered_map<std::string, std::pair<std::string, std::unordered_set<std::string>>> modules_list_;
 
