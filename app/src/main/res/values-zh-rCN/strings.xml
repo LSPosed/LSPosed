@@ -169,4 +169,6 @@
     <string name="menu_sort">排序…</string>
     <string name="blacklist_summary">%d 个应用位于黑名单中</string>
     <string name="whitelist_summary">%d 个应用位于白名单中</string>
+    <string name="enable_module">启用模块</string>
+    <string name="no_scope_selected">未选择任何应用。继续？</string>
 </resources>

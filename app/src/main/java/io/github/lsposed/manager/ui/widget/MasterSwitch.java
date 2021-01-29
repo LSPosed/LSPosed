@@ -55,7 +55,7 @@ public class MasterSwitch extends FrameLayout implements View.OnClickListener, C
         setBackground(drawable);
 
         TextView masterTitle = findViewById(android.R.id.title);
-        masterTitle.setText(R.string.enable_scope);
+        masterTitle.setText(R.string.enable_module);
         switchCompat = findViewById(R.id.switchWidget);
 
         setOnClickListener(this);

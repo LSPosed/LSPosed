@@ -177,4 +177,6 @@
     <string name="menu_sort">Sorting…</string>
     <string name="blacklist_summary">%d apps blacklisted</string>
     <string name="whitelist_summary">%d apps whitelisted</string>
+    <string name="enable_module">Enable module</string>
+    <string name="no_scope_selected">You did not select any app. Continue?</string>
 </resources>

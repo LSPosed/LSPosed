@@ -144,7 +144,9 @@ public final class ModuleUtil {
 
     public void setModuleEnabled(String packageName, boolean enabled) {
         if (enabled) {
-            enabledModules.add(packageName);
+            if (!enabledModules.contains(packageName)) {
+                enabledModules.add(packageName);
+            }
         } else {
             enabledModules.remove(packageName);
         }

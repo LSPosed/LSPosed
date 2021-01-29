@@ -48,6 +48,7 @@ import io.github.lsposed.manager.BuildConfig;
 import io.github.lsposed.manager.Constants;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.adapters.AppAdapter;
+import io.github.lsposed.manager.adapters.AppHelper;
 import io.github.lsposed.manager.databinding.ActivityModulesBinding;
 import io.github.lsposed.manager.util.GlideApp;
 import io.github.lsposed.manager.util.LinearLayoutManagerFix;
@@ -205,7 +206,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         }
         fastScrollerBuilder.build();
         binding.swipeRefreshLayout.setOnRefreshListener(reloadModules::run);
-        reloadModules.run();
         mSearchListener = new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -220,6 +220,12 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             }
         };
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        reloadModules.run();
     }
 
     @Override
@@ -521,6 +527,14 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 String packageName = item.packageName;
                 boolean changed = moduleUtil.isModuleEnabled(packageName) ^ isChecked;
                 if (changed) {
+                    if (isChecked && AppHelper.getScopeList(packageName).isEmpty()) {
+                        moduleUtil.setModuleEnabled(packageName, true);
+                        Intent intent = new Intent(ModulesActivity.this, AppListActivity.class);
+                        intent.putExtra("modulePackageName", packageName);
+                        intent.putExtra("moduleName", item.getAppName());
+                        startActivity(intent);
+                        return;
+                    }
                     moduleUtil.setModuleEnabled(packageName, isChecked);
                     moduleUtil.updateModulesList(true, binding.snackbar);
                 }

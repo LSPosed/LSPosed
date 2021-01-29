@@ -48,7 +48,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
     private final ApplicationInfo.DisplayNameComparator displayNameComparator;
     protected List<PackageInfo> fullList, showList;
     private final DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-    private List<String> checkedList;
+    public List<String> checkedList;
     private final PackageManager pm;
     private final ApplicationFilter filter;
     private Comparator<PackageInfo> cmp;

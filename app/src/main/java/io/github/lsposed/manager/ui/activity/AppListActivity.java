@@ -16,6 +16,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.DividerItemDecoration;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 import io.github.lsposed.manager.R;
@@ -24,6 +25,7 @@ import io.github.lsposed.manager.adapters.ScopeAdapter;
 import io.github.lsposed.manager.adapters.WhiteListAdapter;
 import io.github.lsposed.manager.databinding.ActivityScopeListBinding;
 import io.github.lsposed.manager.util.LinearLayoutManagerFix;
+import io.github.lsposed.manager.util.ModuleUtil;
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 
 public class AppListActivity extends BaseActivity {
@@ -39,16 +41,17 @@ public class AppListActivity extends BaseActivity {
         }
     };
     private final Handler handler = new Handler(Looper.getMainLooper());
+    private String modulePackageName;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String modulePackageName = getIntent().getStringExtra("modulePackageName");
+        modulePackageName = getIntent().getStringExtra("modulePackageName");
         String moduleName = getIntent().getStringExtra("moduleName");
         binding = ActivityScopeListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);
-        binding.toolbar.setNavigationOnClickListener(view -> finish());
+        binding.toolbar.setNavigationOnClickListener(view -> onBackPressed());
         ActionBar bar = getSupportActionBar();
         assert bar != null;
         bar.setDisplayHomeAsUpEnabled(true);
@@ -117,7 +120,18 @@ public class AppListActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         if (searchView.isIconified()) {
-            super.onBackPressed();
+            if (binding.masterSwitch.isChecked() && appAdapter.checkedList.isEmpty()) {
+                new MaterialAlertDialogBuilder(this)
+                        .setMessage(R.string.no_scope_selected)
+                        .setPositiveButton(android.R.string.cancel, null)
+                        .setNegativeButton(android.R.string.ok, (dialog, which) -> {
+                            ModuleUtil.getInstance().setModuleEnabled(modulePackageName, false);
+                            super.onBackPressed();
+                        })
+                        .show();
+            } else {
+                super.onBackPressed();
+            }
         } else {
             searchView.setIconified(true);
         }

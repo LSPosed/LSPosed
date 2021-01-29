@@ -145,7 +145,7 @@ public class AppHelper {
         return s;
     }
 
-    static List<String> getScopeList(String modulePackageName) {
+    public static List<String> getScopeList(String modulePackageName) {
         if (scopeList.containsKey(modulePackageName)) {
             return scopeList.get(modulePackageName);
         }
