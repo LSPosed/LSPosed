@@ -3,8 +3,12 @@ package io.github.lsposed.manager.adapters;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -17,6 +21,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -132,6 +138,61 @@ public class AppHelper {
             return true;
         });
         appMenu.show();
+    }
+    
+    public static boolean onOptionsItemSelected(MenuItem item, SharedPreferences preferences) {
+        int itemId = item.getItemId();
+         if (itemId == R.id.item_sort_by_name) {
+            item.setChecked(true);
+            preferences.edit().putInt("list_sort", 0).apply();
+        } else if (itemId == R.id.item_sort_by_name_reverse) {
+            item.setChecked(true);
+            preferences.edit().putInt("list_sort", 1).apply();
+        } else if (itemId == R.id.item_sort_by_package_name) {
+            item.setChecked(true);
+            preferences.edit().putInt("list_sort", 2).apply();
+        } else if (itemId == R.id.item_sort_by_package_name_reverse) {
+            item.setChecked(true);
+            preferences.edit().putInt("list_sort", 3).apply();
+        } else if (itemId == R.id.item_sort_by_install_time) {
+            item.setChecked(true);
+            preferences.edit().putInt("list_sort", 4).apply();
+        } else if (itemId == R.id.item_sort_by_install_time_reverse) {
+            item.setChecked(true);
+            preferences.edit().putInt("list_sort", 5).apply();
+        } else if (itemId == R.id.item_sort_by_update_time) {
+            item.setChecked(true);
+            preferences.edit().putInt("list_sort", 6).apply();
+        } else if (itemId == R.id.item_sort_by_update_time_reverse) {
+            item.setChecked(true);
+            preferences.edit().putInt("list_sort", 7).apply();
+        } else {
+             return false;
+         }
+         return true;
+    }
+
+    public static Comparator<PackageInfo> getAppListComparator(int sort, PackageManager pm) {
+        ApplicationInfo.DisplayNameComparator displayNameComparator = new ApplicationInfo.DisplayNameComparator(pm);
+        switch (sort) {
+            case 7:
+                return Collections.reverseOrder((PackageInfo a, PackageInfo b) -> Long.compare(a.lastUpdateTime, b.lastUpdateTime));
+            case 6:
+                return (PackageInfo a, PackageInfo b) -> Long.compare(a.lastUpdateTime, b.lastUpdateTime);
+            case 5:
+                return Collections.reverseOrder((PackageInfo a, PackageInfo b) -> Long.compare(a.firstInstallTime, b.firstInstallTime));
+            case 4:
+                return (PackageInfo a, PackageInfo b) -> Long.compare(a.firstInstallTime, b.firstInstallTime);
+            case 3:
+                return Collections.reverseOrder((a, b) -> a.packageName.compareTo(b.packageName));
+            case 2:
+                return (a, b) -> a.packageName.compareTo(b.packageName);
+            case 1:
+                return Collections.reverseOrder((PackageInfo a, PackageInfo b) -> displayNameComparator.compare(a.applicationInfo, b.applicationInfo));
+            case 0:
+            default:
+                return (PackageInfo a, PackageInfo b) -> displayNameComparator.compare(a.applicationInfo, b.applicationInfo);
+        }
     }
 
     public static List<String> getEnabledModuleList() {

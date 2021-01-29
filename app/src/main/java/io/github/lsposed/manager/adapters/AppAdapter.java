@@ -45,13 +45,11 @@ import io.github.lsposed.manager.util.GlideApp;
 public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> implements Filterable {
 
     protected AppListActivity activity;
-    private final ApplicationInfo.DisplayNameComparator displayNameComparator;
     protected List<PackageInfo> fullList, showList;
     private final DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     public List<String> checkedList;
     private final PackageManager pm;
     private final ApplicationFilter filter;
-    private Comparator<PackageInfo> cmp;
     private final SharedPreferences preferences;
 
     AppAdapter(AppListActivity activity) {
@@ -61,7 +59,6 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
         checkedList = Collections.emptyList();
         filter = new ApplicationFilter();
         pm = activity.getPackageManager();
-        displayNameComparator = new ApplicationInfo.DisplayNameComparator(pm);
         refresh();
     }
 
@@ -123,33 +120,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
     }
 
     private void sortApps() {
-        switch (preferences.getInt("list_sort", 0)) {
-            case 7:
-                cmp = Collections.reverseOrder((PackageInfo a, PackageInfo b) -> Long.compare(a.lastUpdateTime, b.lastUpdateTime));
-                break;
-            case 6:
-                cmp = (PackageInfo a, PackageInfo b) -> Long.compare(a.lastUpdateTime, b.lastUpdateTime);
-                break;
-            case 5:
-                cmp = Collections.reverseOrder((PackageInfo a, PackageInfo b) -> Long.compare(a.firstInstallTime, b.firstInstallTime));
-                break;
-            case 4:
-                cmp = (PackageInfo a, PackageInfo b) -> Long.compare(a.firstInstallTime, b.firstInstallTime);
-                break;
-            case 3:
-                cmp = Collections.reverseOrder((a, b) -> a.packageName.compareTo(b.packageName));
-                break;
-            case 2:
-                cmp = (a, b) -> a.packageName.compareTo(b.packageName);
-                break;
-            case 1:
-                cmp = Collections.reverseOrder((PackageInfo a, PackageInfo b) -> displayNameComparator.compare(a.applicationInfo, b.applicationInfo));
-                break;
-            case 0:
-            default:
-                cmp = (PackageInfo a, PackageInfo b) -> displayNameComparator.compare(a.applicationInfo, b.applicationInfo);
-                break;
-        }
+        Comparator<PackageInfo> cmp = AppHelper.getAppListComparator(preferences.getInt("list_sort", 0), pm);
         fullList.sort((a, b) -> {
             boolean aChecked = checkedList.contains(a.packageName);
             boolean bChecked = checkedList.contains(b.packageName);
@@ -173,31 +144,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
         } else if (itemId == R.id.item_show_modules) {
             item.setChecked(!item.isChecked());
             preferences.edit().putBoolean("show_modules", item.isChecked()).apply();
-        } else if (itemId == R.id.item_sort_by_name) {
-            item.setChecked(true);
-            preferences.edit().putInt("list_sort", 0).apply();
-        } else if (itemId == R.id.item_sort_by_name_reverse) {
-            item.setChecked(true);
-            preferences.edit().putInt("list_sort", 1).apply();
-        } else if (itemId == R.id.item_sort_by_package_name) {
-            item.setChecked(true);
-            preferences.edit().putInt("list_sort", 2).apply();
-        } else if (itemId == R.id.item_sort_by_package_name_reverse) {
-            item.setChecked(true);
-            preferences.edit().putInt("list_sort", 3).apply();
-        } else if (itemId == R.id.item_sort_by_install_time) {
-            item.setChecked(true);
-            preferences.edit().putInt("list_sort", 4).apply();
-        } else if (itemId == R.id.item_sort_by_install_time_reverse) {
-            item.setChecked(true);
-            preferences.edit().putInt("list_sort", 5).apply();
-        } else if (itemId == R.id.item_sort_by_update_time) {
-            item.setChecked(true);
-            preferences.edit().putInt("list_sort", 6).apply();
-        } else if (itemId == R.id.item_sort_by_update_time_reverse) {
-            item.setChecked(true);
-            preferences.edit().putInt("list_sort", 7).apply();
-        } else {
+        } else if (!AppHelper.onOptionsItemSelected(item, preferences)) {
             return false;
         }
         refresh();

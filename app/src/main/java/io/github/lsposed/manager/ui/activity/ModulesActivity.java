@@ -1,7 +1,7 @@
 package io.github.lsposed.manager.ui.activity;
 
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
@@ -34,7 +34,6 @@ import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -65,10 +64,8 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
     private int installedXposedVersion;
     private ApplicationFilter filter;
     private SearchView searchView;
-    private ApplicationInfo.DisplayNameComparator displayNameComparator;
     private SearchView.OnQueryTextListener mSearchListener;
     private PackageManager pm;
-    private Comparator<ApplicationInfo> cmp;
     private final DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     private ModuleUtil moduleUtil;
     private ModuleAdapter adapter = null;
@@ -89,66 +86,12 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                     }
                 }
             }
-            switch (preferences.getInt("list_sort", 0)) {
-                case 7:
-                    cmp = Collections.reverseOrder((ApplicationInfo a, ApplicationInfo b) -> {
-                        try {
-                            return Long.compare(pm.getPackageInfo(a.packageName, 0).lastUpdateTime, pm.getPackageInfo(b.packageName, 0).lastUpdateTime);
-                        } catch (PackageManager.NameNotFoundException e) {
-                            e.printStackTrace();
-                            return displayNameComparator.compare(a, b);
-                        }
-                    });
-                    break;
-                case 6:
-                    cmp = (ApplicationInfo a, ApplicationInfo b) -> {
-                        try {
-                            return Long.compare(pm.getPackageInfo(a.packageName, 0).lastUpdateTime, pm.getPackageInfo(b.packageName, 0).lastUpdateTime);
-                        } catch (PackageManager.NameNotFoundException e) {
-                            e.printStackTrace();
-                            return displayNameComparator.compare(a, b);
-                        }
-                    };
-                    break;
-                case 5:
-                    cmp = Collections.reverseOrder((ApplicationInfo a, ApplicationInfo b) -> {
-                        try {
-                            return Long.compare(pm.getPackageInfo(a.packageName, 0).firstInstallTime, pm.getPackageInfo(b.packageName, 0).firstInstallTime);
-                        } catch (PackageManager.NameNotFoundException e) {
-                            e.printStackTrace();
-                            return displayNameComparator.compare(a, b);
-                        }
-                    });
-                    break;
-                case 4:
-                    cmp = (ApplicationInfo a, ApplicationInfo b) -> {
-                        try {
-                            return Long.compare(pm.getPackageInfo(a.packageName, 0).firstInstallTime, pm.getPackageInfo(b.packageName, 0).firstInstallTime);
-                        } catch (PackageManager.NameNotFoundException e) {
-                            e.printStackTrace();
-                            return displayNameComparator.compare(a, b);
-                        }
-                    };
-                    break;
-                case 3:
-                    cmp = Collections.reverseOrder((a, b) -> a.packageName.compareTo(b.packageName));
-                    break;
-                case 2:
-                    cmp = (a, b) -> a.packageName.compareTo(b.packageName);
-                    break;
-                case 1:
-                    cmp = Collections.reverseOrder(displayNameComparator);
-                    break;
-                case 0:
-                default:
-                    cmp = displayNameComparator;
-                    break;
-            }
+            Comparator<PackageInfo> cmp = AppHelper.getAppListComparator(preferences.getInt("list_sort", 0), pm);
             fullList.sort((a, b) -> {
                 boolean aChecked = moduleUtil.isModuleEnabled(a.packageName);
                 boolean bChecked = moduleUtil.isModuleEnabled(b.packageName);
                 if (aChecked == bChecked) {
-                    return cmp.compare(a.app, b.app);
+                    return cmp.compare(a.pkg, b.pkg);
                 } else if (aChecked) {
                     return -1;
                 } else {
@@ -181,8 +124,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         filter = new ApplicationFilter();
         moduleUtil = ModuleUtil.getInstance();
         pm = getPackageManager();
-        displayNameComparator = new ApplicationInfo.DisplayNameComparator(pm);
-        cmp = displayNameComparator;
         installedXposedVersion = Constants.getXposedApiVersion();
         if (installedXposedVersion <= 0) {
             Snackbar.make(binding.snackbar, R.string.xposed_not_active, Snackbar.LENGTH_LONG).setAction(R.string.Settings, v -> {
@@ -291,7 +232,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         Intent intent;
         int itemId = item.getItemId();
-        boolean reload = false;
         if (itemId == R.id.export_enabled_modules) {
             if (ModuleUtil.getInstance().getEnabledModules().isEmpty()) {
                 Snackbar.make(binding.snackbar, R.string.no_enabled_modules, Snackbar.LENGTH_SHORT).show();
@@ -316,40 +256,8 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             intent.putExtra(Intent.EXTRA_TITLE, "installed_modules.list");
             startActivityForResult(intent, 43);
             return true;
-        } else if (itemId == R.id.item_sort_by_name) {
-            item.setChecked(true);
-            preferences.edit().putInt("list_sort", 0).apply();
-            reload = true;
-        } else if (itemId == R.id.item_sort_by_name_reverse) {
-            item.setChecked(true);
-            preferences.edit().putInt("list_sort", 1).apply();
-            reload = true;
-        } else if (itemId == R.id.item_sort_by_package_name) {
-            item.setChecked(true);
-            preferences.edit().putInt("list_sort", 2).apply();
-            reload = true;
-        } else if (itemId == R.id.item_sort_by_package_name_reverse) {
-            item.setChecked(true);
-            preferences.edit().putInt("list_sort", 3).apply();
-            reload = true;
-        } else if (itemId == R.id.item_sort_by_install_time) {
-            item.setChecked(true);
-            preferences.edit().putInt("list_sort", 4).apply();
-            reload = true;
-        } else if (itemId == R.id.item_sort_by_install_time_reverse) {
-            item.setChecked(true);
-            preferences.edit().putInt("list_sort", 5).apply();
-            reload = true;
-        } else if (itemId == R.id.item_sort_by_update_time) {
-            item.setChecked(true);
-            preferences.edit().putInt("list_sort", 6).apply();
-            reload = true;
-        } else if (itemId == R.id.item_sort_by_update_time_reverse) {
-            item.setChecked(true);
-            preferences.edit().putInt("list_sort", 7).apply();
-            reload = true;
         }
-        if (reload) {
+        if (AppHelper.onOptionsItemSelected(item, preferences)) {
             moduleUtil.updateModulesList(false, null);
             reloadModules.run();
         }
