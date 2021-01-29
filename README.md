@@ -57,4 +57,4 @@ Notice: These community group don't accept any bug report, please use [Get help]
 - [dexmaker](https://github.com/linkedin/dexmaker) and [dalvikdx](https://github.com/JakeWharton/dalvik-dx): to dynamiclly generate YAHFA hooker classes
 - [SandHook](https://github.com/ganyao114/SandHook/): ART hooking framework for SandHook variant
 - [Dobby](https://github.com/jmpews/Dobby): used for inline hooking
-- [LSPosed](https://github.com/ElderDrivers/LSPosed): fork source
+- [EdXposed](https://github.com/ElderDrivers/EdXposed): fork source
