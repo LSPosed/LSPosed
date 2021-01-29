@@ -11,17 +11,4 @@
             android:targetClass="io.github.lsposed.manager.ui.activity.ModulesActivity"
             android:targetPackage="io.github.lsposed.manager" />
     </shortcut>
-
-    <shortcut
-        android:enabled="true"
-        android:icon="@drawable/shortcut_ic_downloads"
-        android:shortcutId="downloads"
-        android:shortcutLongLabel="@string/nav_item_download"
-        android:shortcutShortLabel="@string/nav_item_download">
-        <intent
-            android:action="android.intent.action.MAIN"
-            android:targetClass="io.github.lsposed.manager.ui.activity.DownloadActivity"
-            android:targetPackage="io.github.lsposed.manager" />
-    </shortcut>
-
 </shortcuts>

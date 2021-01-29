@@ -18,7 +18,6 @@
 
     <!-- navigation view items -->
     <string name="nav_item_modules">模块</string>
-    <string name="nav_item_download">下载</string>
     <string name="nav_item_logs">详细日志</string>
     <string name="nav_item_logs_err">模块日志</string>
 

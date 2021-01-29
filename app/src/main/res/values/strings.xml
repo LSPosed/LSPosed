@@ -19,7 +19,6 @@
 
     <!-- navigation view items -->
     <string name="nav_item_modules">Modules</string>
-    <string name="nav_item_download">Download</string>
     <string name="nav_item_logs">Verbose Logs</string>
     <string name="nav_item_logs_err">Modules Logs</string>
 

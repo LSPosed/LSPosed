@@ -18,7 +18,6 @@
 
     <!-- navigation view items -->
     <string name="nav_item_modules">模組</string>
-    <string name="nav_item_download">下載</string>
     <string name="nav_item_logs">詳細日誌</string>
     <string name="nav_item_logs_err">模組日誌</string>
 
