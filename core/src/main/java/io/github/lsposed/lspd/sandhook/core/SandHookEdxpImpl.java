@@ -5,7 +5,7 @@ import android.os.Build;
 import io.github.lsposed.lspd.core.BaseEdxpImpl;
 import io.github.lsposed.lspd.core.EdxpImpl;
 import io.github.lsposed.lspd.core.Main;
-import io.github.lsposed.lspd.core.Yahfa;
+import io.github.lsposed.lspd.nativebridge.Yahfa;
 import com.swift.sandhook.xposedcompat.methodgen.SandHookXposedBridge;
 
 public class SandHookEdxpImpl extends BaseEdxpImpl {

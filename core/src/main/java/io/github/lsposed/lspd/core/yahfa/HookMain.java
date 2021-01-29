@@ -1,7 +1,7 @@
 package io.github.lsposed.lspd.core.yahfa;
 
-import io.github.lsposed.lspd.art.Heap;
-import io.github.lsposed.lspd.core.Yahfa;
+import io.github.lsposed.lspd.nativebridge.Heap;
+import io.github.lsposed.lspd.nativebridge.Yahfa;
 import io.github.lsposed.lspd.util.Utils;
 
 import java.lang.reflect.Constructor;

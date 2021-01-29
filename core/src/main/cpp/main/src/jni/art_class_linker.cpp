@@ -11,7 +11,7 @@ namespace lspd {
 
     static std::unordered_set<void *> deopted_methods;
 
-    static void ClassLinker_setEntryPointsToInterpreter(JNI_START, jobject method) {
+    LSP_DEF_NATIVE_METHOD(void, ClassLinker, setEntryPointsToInterpreter, jobject method) {
         void *reflected_method = getArtMethodYahfa(env, method);
         if (deopted_methods.count(reflected_method)) {
             LOGD("method %p has been deopted before, skip...", reflected_method);
@@ -24,7 +24,8 @@ namespace lspd {
     }
 
     static JNINativeMethod gMethods[] = {
-            NATIVE_METHOD(ClassLinker, setEntryPointsToInterpreter, "(Ljava/lang/reflect/Member;)V")
+            LSP_NATIVE_METHOD(ClassLinker, setEntryPointsToInterpreter,
+                              "(Ljava/lang/reflect/Member;)V")
     };
 
     void RegisterArtClassLinker(JNIEnv *env) {

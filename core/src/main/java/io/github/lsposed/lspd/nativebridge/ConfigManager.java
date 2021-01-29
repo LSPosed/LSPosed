@@ -1,4 +1,4 @@
-package io.github.lsposed.lspd.config;
+package io.github.lsposed.lspd.nativebridge;
 
 public class ConfigManager {
 

@@ -1,4 +1,4 @@
-package io.github.lsposed.lspd.art;
+package io.github.lsposed.lspd.nativebridge;
 
 import io.github.lsposed.common.KeepAll;
 

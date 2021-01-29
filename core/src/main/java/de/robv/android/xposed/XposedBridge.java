@@ -5,7 +5,7 @@ import android.content.res.TypedArray;
 import android.util.Log;
 
 import io.github.lsposed.lspd.BuildConfig;
-import io.github.lsposed.lspd.config.ConfigManager;
+import io.github.lsposed.lspd.nativebridge.ConfigManager;
 import io.github.lsposed.lspd.config.LSPdConfigGlobal;
 
 import java.lang.reflect.AccessibleObject;

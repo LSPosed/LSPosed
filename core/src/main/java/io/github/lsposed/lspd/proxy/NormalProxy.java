@@ -1,6 +1,6 @@
 package io.github.lsposed.lspd.proxy;
 
-import io.github.lsposed.lspd.config.ConfigManager;
+import io.github.lsposed.lspd.nativebridge.ConfigManager;
 import io.github.lsposed.lspd.deopt.PrebuiltMethodsDeopter;
 import io.github.lsposed.lspd.util.Utils;
 

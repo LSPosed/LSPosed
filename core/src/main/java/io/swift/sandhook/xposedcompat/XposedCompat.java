@@ -3,7 +3,7 @@ package com.swift.sandhook.xposedcompat;
 import android.os.Process;
 import android.text.TextUtils;
 
-import io.github.lsposed.lspd.config.ConfigManager;
+import io.github.lsposed.lspd.nativebridge.ConfigManager;
 import io.github.lsposed.lspd.util.FileUtils;
 import io.github.lsposed.lspd.util.ProcessUtils;
 import io.github.lsposed.lspd.util.ProxyClassLoader;

@@ -2,7 +2,7 @@ package io.github.lsposed.lspd._hooker.impl;
 
 import android.app.LoadedApk;
 
-import io.github.lsposed.lspd.config.ConfigManager;
+import io.github.lsposed.lspd.nativebridge.ConfigManager;
 import io.github.lsposed.lspd.hooker.XposedInstallerHooker;
 import io.github.lsposed.lspd.util.Hookers;
 

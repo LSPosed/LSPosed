@@ -4,7 +4,7 @@ import android.annotation.TargetApi;
 import android.os.Build;
 
 import io.github.lsposed.lspd.BuildConfig;
-import io.github.lsposed.lspd.config.ConfigManager;
+import io.github.lsposed.lspd.nativebridge.ConfigManager;
 import io.github.lsposed.lspd.core.yahfa.HookMain;
 import io.github.lsposed.lspd.util.ProxyClassLoader;
 

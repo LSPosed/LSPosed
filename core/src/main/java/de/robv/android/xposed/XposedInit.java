@@ -4,7 +4,6 @@ import android.app.ActivityThread;
 import android.app.AndroidAppHelper;
 import android.content.pm.ApplicationInfo;
 import android.content.res.Resources;
-import android.content.res.ResourcesImpl;
 import android.content.res.TypedArray;
 import android.content.res.XResources;
 import android.os.Build;
@@ -14,7 +13,7 @@ import android.util.ArraySet;
 import android.util.Log;
 
 import com.android.internal.os.ZygoteInit;
-import io.github.lsposed.lspd.config.ConfigManager;
+import io.github.lsposed.lspd.nativebridge.ConfigManager;
 import io.github.lsposed.lspd.config.LSPdConfigGlobal;
 
 import java.io.BufferedReader;

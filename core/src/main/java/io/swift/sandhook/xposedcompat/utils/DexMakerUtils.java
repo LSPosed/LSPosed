@@ -1,5 +1,5 @@
 package com.swift.sandhook.xposedcompat.utils;
-import io.github.lsposed.lspd.config.ConfigManager;
+import io.github.lsposed.lspd.nativebridge.ConfigManager;
 import io.github.lsposed.lspd.util.Utils;
 
 import java.io.File;

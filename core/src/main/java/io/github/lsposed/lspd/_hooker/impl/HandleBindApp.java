@@ -10,7 +10,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.res.CompatibilityInfo;
 import android.content.res.XResources;
 
-import io.github.lsposed.lspd.config.ConfigManager;
+import io.github.lsposed.lspd.nativebridge.ConfigManager;
 import io.github.lsposed.lspd.util.Hookers;
 import io.github.lsposed.lspd.util.MetaDataReader;
 import io.github.lsposed.lspd.util.Utils;

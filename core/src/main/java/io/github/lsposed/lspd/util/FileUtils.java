@@ -2,7 +2,7 @@ package io.github.lsposed.lspd.util;
 
 import android.text.TextUtils;
 
-import io.github.lsposed.lspd.config.ConfigManager;
+import io.github.lsposed.lspd.nativebridge.ConfigManager;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

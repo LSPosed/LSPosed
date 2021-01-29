@@ -2,7 +2,7 @@ package io.github.lsposed.lspd.deopt;
 
 import android.text.TextUtils;
 
-import io.github.lsposed.lspd.config.ConfigManager;
+import io.github.lsposed.lspd.nativebridge.ConfigManager;
 import io.github.lsposed.lspd.config.LSPdConfigGlobal;
 import io.github.lsposed.lspd.util.Utils;
 

@@ -7,77 +7,78 @@
 
 namespace lspd {
 
-    static jboolean ConfigManager_isResourcesHookEnabled(JNI_START) {
+    LSP_DEF_NATIVE_METHOD(jboolean, ConfigManager, isResourcesHookEnabled) {
         return (jboolean) ConfigManager::GetInstance()->IsResourcesHookEnabled();
     }
 
-    static jboolean ConfigManager_isNoModuleLogEnabled(JNI_START) {
+    LSP_DEF_NATIVE_METHOD(jboolean, ConfigManager, isNoModuleLogEnabled) {
         return (jboolean) ConfigManager::GetInstance()->IsNoModuleLogEnabled();
     }
 
-    static jstring ConfigManager_getInstallerPackageName(JNI_START) {
+    LSP_DEF_NATIVE_METHOD(jstring, ConfigManager, getInstallerPackageName) {
         return env->NewStringUTF(ConfigManager::GetInstance()->GetInstallerPackageName().c_str());
     }
 
-    static jstring ConfigManager_getDataPathPrefix(JNI_START) {
+    LSP_DEF_NATIVE_METHOD(jstring, ConfigManager, getDataPathPrefix) {
         return env->NewStringUTF(ConfigManager::GetInstance()->GetDataPathPrefix().c_str());
     }
 
-    static jstring ConfigManager_getConfigPath(JNI_START, jstring jSuffix) {
+    LSP_DEF_NATIVE_METHOD(jstring, ConfigManager, getConfigPath, jstring jSuffix) {
         const char *suffix = env->GetStringUTFChars(jSuffix, JNI_FALSE);
         auto result = ConfigManager::GetInstance()->GetConfigPath(suffix);
         env->ReleaseStringUTFChars(jSuffix, suffix);
         return env->NewStringUTF(result.c_str());
     }
 
-    static jstring ConfigManager_getPrefsPath(JNI_START, jstring jSuffix) {
+    LSP_DEF_NATIVE_METHOD(jstring, ConfigManager, getPrefsPath, jstring jSuffix) {
         const char *suffix = env->GetStringUTFChars(jSuffix, JNI_FALSE);
         auto result = ConfigManager::GetInstance()->GetPrefsPath(suffix);
         env->ReleaseStringUTFChars(jSuffix, suffix);
         return env->NewStringUTF(result.c_str());
     }
 
-    static jstring ConfigManager_getCachePath(JNI_START, jstring jSuffix) {
+    LSP_DEF_NATIVE_METHOD(jstring, ConfigManager, getCachePath, jstring jSuffix) {
         const char *suffix = env->GetStringUTFChars(jSuffix, JNI_FALSE);
         auto result = ConfigManager::GetCachePath(suffix);
         env->ReleaseStringUTFChars(jSuffix, suffix);
         return env->NewStringUTF(result.c_str());
     }
 
-    static jstring ConfigManager_getBaseConfigPath(JNI_START) {
+    LSP_DEF_NATIVE_METHOD(jstring, ConfigManager, getBaseConfigPath) {
         auto result = ConfigManager::GetInstance()->GetBaseConfigPath();
         return env->NewStringUTF(result.c_str());
     }
 
-    static jstring ConfigManager_getMiscPath(JNI_START) {
-        auto result = ConfigManager::GetInstance()->GetMiscPath();
+    LSP_DEF_NATIVE_METHOD(jstring, ConfigManager, getMiscPath) {
+        auto result = ConfigManager::GetMiscPath();
         return env->NewStringUTF(result.c_str());
     }
 
-    static jstring ConfigManager_getModulesList(JNI_START) {
+    LSP_DEF_NATIVE_METHOD(jstring, ConfigManager, getModulesList) {
         auto module_list = Context::GetInstance()->GetAppModulesList();
         std::ostringstream join;
-        std::copy(module_list.begin(), module_list.end(), std::ostream_iterator<std::string>(join, "\n"));
+        std::copy(module_list.begin(), module_list.end(),
+                  std::ostream_iterator<std::string>(join, "\n"));
         const auto &list = join.str();
         LOGD("module list: %s", list.c_str());
         return env->NewStringUTF(list.c_str());
     }
 
     static JNINativeMethod gMethods[] = {
-            NATIVE_METHOD(ConfigManager, isResourcesHookEnabled, "()Z"),
-            NATIVE_METHOD(ConfigManager, isNoModuleLogEnabled, "()Z"),
-            NATIVE_METHOD(ConfigManager, getInstallerPackageName, "()Ljava/lang/String;"),
-            NATIVE_METHOD(ConfigManager, getDataPathPrefix, "()Ljava/lang/String;"),
-            NATIVE_METHOD(ConfigManager, getPrefsPath,
-                          "(Ljava/lang/String;)Ljava/lang/String;"),
-            NATIVE_METHOD(ConfigManager, getCachePath,
-                          "(Ljava/lang/String;)Ljava/lang/String;"),
-            NATIVE_METHOD(ConfigManager, getBaseConfigPath, "()Ljava/lang/String;"),
-            NATIVE_METHOD(ConfigManager, getModulesList, "()Ljava/lang/String;"),
+            LSP_NATIVE_METHOD(ConfigManager, isResourcesHookEnabled, "()Z"),
+            LSP_NATIVE_METHOD(ConfigManager, isNoModuleLogEnabled, "()Z"),
+            LSP_NATIVE_METHOD(ConfigManager, getInstallerPackageName, "()Ljava/lang/String;"),
+            LSP_NATIVE_METHOD(ConfigManager, getDataPathPrefix, "()Ljava/lang/String;"),
+            LSP_NATIVE_METHOD(ConfigManager, getPrefsPath,
+                              "(Ljava/lang/String;)Ljava/lang/String;"),
+            LSP_NATIVE_METHOD(ConfigManager, getCachePath,
+                              "(Ljava/lang/String;)Ljava/lang/String;"),
+            LSP_NATIVE_METHOD(ConfigManager, getBaseConfigPath, "()Ljava/lang/String;"),
+            LSP_NATIVE_METHOD(ConfigManager, getModulesList, "()Ljava/lang/String;"),
     };
 
     void RegisterConfigManagerMethods(JNIEnv *env) {
-        REGISTER_EDXP_NATIVE_METHODS("io.github.lsposed.lspd.config.ConfigManager");
+        REGISTER_EDXP_NATIVE_METHODS("io.github.lsposed.lspd.nativebridge.ConfigManager");
     }
 
 }

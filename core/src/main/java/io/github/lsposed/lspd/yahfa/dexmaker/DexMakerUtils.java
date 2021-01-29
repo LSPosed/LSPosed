@@ -1,6 +1,6 @@
 package io.github.lsposed.lspd.yahfa.dexmaker;
 
-import io.github.lsposed.lspd.config.ConfigManager;
+import io.github.lsposed.lspd.nativebridge.ConfigManager;
 import io.github.lsposed.lspd.util.Utils;
 
 import java.io.File;

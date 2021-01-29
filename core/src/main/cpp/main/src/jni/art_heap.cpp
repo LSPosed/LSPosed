@@ -9,18 +9,18 @@
 namespace lspd {
 
 
-    static jint Heap_waitForGcToComplete(JNI_START) {
+    LSP_DEF_NATIVE_METHOD(jint, Heap, waitForGcToComplete) {
         art::gc::collector::GcType gcType = art::gc::Heap::Current()->WaitForGcToComplete(
                 art::gc::GcCause::kGcCauseNone, art::Thread::Current().Get());
         return gcType;
     }
 
     static JNINativeMethod gMethods[] = {
-            NATIVE_METHOD(Heap, waitForGcToComplete, "()I")
+            LSP_NATIVE_METHOD(Heap, waitForGcToComplete, "()I")
     };
 
     void RegisterArtHeap(JNIEnv *env) {
-        REGISTER_EDXP_NATIVE_METHODS("io.github.lsposed.lspd.art.Heap");
+        REGISTER_EDXP_NATIVE_METHODS("io.github.lsposed.lspd.nativebridge.Heap");
     }
 
 }

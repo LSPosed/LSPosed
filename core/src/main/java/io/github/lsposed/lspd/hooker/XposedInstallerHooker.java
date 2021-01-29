@@ -4,7 +4,7 @@ import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import io.github.lsposed.lspd.BuildConfig;
-import io.github.lsposed.lspd.config.ConfigManager;
+import io.github.lsposed.lspd.nativebridge.ConfigManager;
 import io.github.lsposed.lspd.core.EdxpImpl;
 import io.github.lsposed.lspd.core.Main;
 import io.github.lsposed.lspd.util.Utils;

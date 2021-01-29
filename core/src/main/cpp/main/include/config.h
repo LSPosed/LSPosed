@@ -30,7 +30,7 @@ inline constexpr bool is64 = Is64();
 #endif
 
     static const auto kEntryClassName = "io.github.lsposed.lspd.core.Main"s;
-    static const auto kClassLinkerClassName = "io.github.lsposed.lspd.art.ClassLinker"s;
+    static const auto kClassLinkerClassName = "io.github.lsposed.lspd.nativebridge.ClassLinker"s;
     static const auto kSandHookClassName = "com.swift.sandhook.SandHook"s;
     static const auto kSandHookNeverCallClassName = "com.swift.sandhook.ClassNeverCall"s;
 

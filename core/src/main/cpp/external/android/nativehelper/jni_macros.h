@@ -28,6 +28,19 @@
     _NATIVEHELPER_JNI_MACRO_CAST(void*) (className ## _ ## functionName) \
   }
 #endif
+
+#ifndef LSP_NATIVE_METHOD
+#define LSP_NATIVE_METHOD(className, functionName, signature)                \
+  { #functionName,                                                       \
+    signature,                                                           \
+    _NATIVEHELPER_JNI_MACRO_CAST(void*) (Java_io_github_lsposed_lspd_nativebridge_## className ## _ ## functionName) \
+  }
+#endif
+
+#ifndef LSP_DEF_NATIVE_METHOD
+#define LSP_DEF_NATIVE_METHOD(ret, className,  functionName, ...)                \
+  extern "C" ret Java_io_github_lsposed_lspd_nativebridge_## className ## _ ## functionName (JNI_START, ##  __VA_ARGS__)
+#endif
 // Intended to construct a JNINativeMethod (when the C name doesn't match the Java name).
 //   (Assumes the C name is the ClassName_Identifier).
 #ifndef OVERLOADED_NATIVE_METHOD

@@ -1,6 +1,6 @@
 package com.swift.sandhook.xposedcompat.methodgen;
 
-import io.github.lsposed.lspd.config.ConfigManager;
+import io.github.lsposed.lspd.nativebridge.ConfigManager;
 import com.swift.sandhook.SandHook;
 import com.swift.sandhook.SandHookMethodResolver;
 import com.swift.sandhook.wrapper.HookWrapper;
