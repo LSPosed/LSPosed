@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.text.TextUtils;
@@ -29,11 +28,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 
-import io.github.lsposed.manager.App;
-import io.github.lsposed.manager.R;
-import io.github.lsposed.manager.ui.activity.AppListActivity;
-import io.github.lsposed.manager.util.GlideApp;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -43,16 +37,21 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import io.github.lsposed.manager.App;
+import io.github.lsposed.manager.R;
+import io.github.lsposed.manager.ui.activity.AppListActivity;
+import io.github.lsposed.manager.util.GlideApp;
+
 public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> implements Filterable {
 
     protected AppListActivity activity;
     private final ApplicationInfo.DisplayNameComparator displayNameComparator;
-    protected List<ApplicationInfo> fullList, showList;
+    protected List<PackageInfo> fullList, showList;
     private final DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     private List<String> checkedList;
     private final PackageManager pm;
     private final ApplicationFilter filter;
-    private Comparator<ApplicationInfo> cmp;
+    private Comparator<PackageInfo> cmp;
     private final SharedPreferences preferences;
 
     AppAdapter(AppListActivity activity) {
@@ -63,7 +62,6 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
         filter = new ApplicationFilter();
         pm = activity.getPackageManager();
         displayNameComparator = new ApplicationInfo.DisplayNameComparator(pm);
-        cmp = displayNameComparator;
         refresh();
     }
 
@@ -75,9 +73,9 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
     }
 
     private void loadApps() {
-        fullList = pm.getInstalledApplications(PackageManager.GET_META_DATA);
-        List<ApplicationInfo> rmList = new ArrayList<>();
-        for (ApplicationInfo info : fullList) {
+        fullList = pm.getInstalledPackages(PackageManager.GET_META_DATA);
+        List<PackageInfo> rmList = new ArrayList<>();
+        for (PackageInfo info : fullList) {
             if (this instanceof ScopeAdapter) {
                 boolean white = AppHelper.isWhiteListMode();
                 List<String> list = AppHelper.getAppList(white);
@@ -97,11 +95,11 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
                 }
             }
             if (!preferences.getBoolean("show_modules", true)) {
-                if (info.metaData != null && info.metaData.containsKey("xposedmodule") || AppHelper.forceWhiteList.contains(info.packageName)) {
+                if (info.applicationInfo.metaData != null && info.applicationInfo.metaData.containsKey("xposedmodule") || AppHelper.forceWhiteList.contains(info.packageName)) {
                     rmList.add(info);
                 }
             }
-            if (!preferences.getBoolean("show_system_apps", true) && (info.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
+            if (!preferences.getBoolean("show_system_apps", true) && (info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
                 rmList.add(info);
             }
         }
@@ -129,44 +127,16 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
     private void sortApps() {
         switch (preferences.getInt("list_sort", 0)) {
             case 7:
-                cmp = Collections.reverseOrder((ApplicationInfo a, ApplicationInfo b) -> {
-                    try {
-                        return Long.compare(pm.getPackageInfo(a.packageName, 0).lastUpdateTime, pm.getPackageInfo(b.packageName, 0).lastUpdateTime);
-                    } catch (PackageManager.NameNotFoundException e) {
-                        e.printStackTrace();
-                        return displayNameComparator.compare(a, b);
-                    }
-                });
+                cmp = Collections.reverseOrder((PackageInfo a, PackageInfo b) -> Long.compare(a.lastUpdateTime, b.lastUpdateTime));
                 break;
             case 6:
-                cmp = (ApplicationInfo a, ApplicationInfo b) -> {
-                    try {
-                        return Long.compare(pm.getPackageInfo(a.packageName, 0).lastUpdateTime, pm.getPackageInfo(b.packageName, 0).lastUpdateTime);
-                    } catch (PackageManager.NameNotFoundException e) {
-                        e.printStackTrace();
-                        return displayNameComparator.compare(a, b);
-                    }
-                };
+                cmp = (PackageInfo a, PackageInfo b) -> Long.compare(a.lastUpdateTime, b.lastUpdateTime);
                 break;
             case 5:
-                cmp = Collections.reverseOrder((ApplicationInfo a, ApplicationInfo b) -> {
-                    try {
-                        return Long.compare(pm.getPackageInfo(a.packageName, 0).firstInstallTime, pm.getPackageInfo(b.packageName, 0).firstInstallTime);
-                    } catch (PackageManager.NameNotFoundException e) {
-                        e.printStackTrace();
-                        return displayNameComparator.compare(a, b);
-                    }
-                });
+                cmp = Collections.reverseOrder((PackageInfo a, PackageInfo b) -> Long.compare(a.firstInstallTime, b.firstInstallTime));
                 break;
             case 4:
-                cmp = (ApplicationInfo a, ApplicationInfo b) -> {
-                    try {
-                        return Long.compare(pm.getPackageInfo(a.packageName, 0).firstInstallTime, pm.getPackageInfo(b.packageName, 0).firstInstallTime);
-                    } catch (PackageManager.NameNotFoundException e) {
-                        e.printStackTrace();
-                        return displayNameComparator.compare(a, b);
-                    }
-                };
+                cmp = (PackageInfo a, PackageInfo b) -> Long.compare(a.firstInstallTime, b.firstInstallTime);
                 break;
             case 3:
                 cmp = Collections.reverseOrder((a, b) -> a.packageName.compareTo(b.packageName));
@@ -175,11 +145,11 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
                 cmp = (a, b) -> a.packageName.compareTo(b.packageName);
                 break;
             case 1:
-                cmp = Collections.reverseOrder(displayNameComparator);
+                cmp = Collections.reverseOrder((PackageInfo a, PackageInfo b) -> displayNameComparator.compare(a.applicationInfo, b.applicationInfo));
                 break;
             case 0:
             default:
-                cmp = displayNameComparator;
+                cmp = (PackageInfo a, PackageInfo b) -> displayNameComparator.compare(a.applicationInfo, b.applicationInfo);
                 break;
         }
         fullList.sort((a, b) -> {
@@ -270,8 +240,8 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ApplicationInfo info = showList.get(position);
-        holder.appName.setText(getAppLabel(info, pm));
+        PackageInfo info = showList.get(position);
+        holder.appName.setText(getAppLabel(info.applicationInfo, pm));
         try {
             PackageInfo packageInfo = pm.getPackageInfo(info.packageName, 0);
             GlideApp.with(holder.appIcon)
@@ -305,10 +275,8 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
             holder.mSwitch.setEnabled(true);
         }
         holder.mSwitch.setOnCheckedChangeListener((v, isChecked) ->
-                onCheckedChange(v, isChecked, info));
-        holder.itemView.setOnClickListener(v -> {
-            AppHelper.showMenu(activity, activity.getSupportFragmentManager(), v, info);
-        });
+                onCheckedChange(v, isChecked, info.packageName));
+        holder.itemView.setOnClickListener(v -> AppHelper.showMenu(activity, activity.getSupportFragmentManager(), v, info.applicationInfo));
     }
 
     @Override
@@ -335,7 +303,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
         AsyncTask.THREAD_POOL_EXECUTOR.execute(this::loadApps);
     }
 
-    protected void onCheckedChange(CompoundButton buttonView, boolean isChecked, ApplicationInfo info) {
+    protected void onCheckedChange(CompoundButton buttonView, boolean isChecked, String packageName) {
         // override this to implements your functions
     }
 
@@ -370,10 +338,10 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
             if (constraint.toString().isEmpty()) {
                 showList = fullList;
             } else {
-                ArrayList<ApplicationInfo> filtered = new ArrayList<>();
+                ArrayList<PackageInfo> filtered = new ArrayList<>();
                 String filter = constraint.toString().toLowerCase();
-                for (ApplicationInfo info : fullList) {
-                    if (lowercaseContains(getAppLabel(info, pm), filter)
+                for (PackageInfo info : fullList) {
+                    if (lowercaseContains(getAppLabel(info.applicationInfo, pm), filter)
                             || lowercaseContains(info.packageName, filter)) {
                         filtered.add(info);
                     }
@@ -390,13 +358,6 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
     }
 
     public static String getAppLabel(ApplicationInfo info, PackageManager pm) {
-        try {
-            if (info.labelRes > 0) {
-                Resources res = pm.getResourcesForApplication(info);
-                return res.getString(info.labelRes);
-            }
-        } catch (Exception ignored) {
-        }
         return info.loadLabel(pm).toString();
     }
 }

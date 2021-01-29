@@ -1,16 +1,16 @@
 package io.github.lsposed.manager.adapters;
 
-import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.widget.CompoundButton;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.ui.activity.AppListActivity;
 import io.github.lsposed.manager.ui.widget.MasterSwitch;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ScopeAdapter extends AppAdapter {
 
@@ -38,7 +38,7 @@ public class ScopeAdapter extends AppAdapter {
         AppHelper.makeSurePath();
         List<String> scopeList = AppHelper.getScopeList(modulePackageName);
         List<String> list = new ArrayList<>();
-        for (ApplicationInfo info : fullList) {
+        for (PackageInfo info : fullList) {
             list.add(info.packageName);
         }
         scopeList.retainAll(list);
@@ -49,18 +49,18 @@ public class ScopeAdapter extends AppAdapter {
     }
 
     @Override
-    protected void onCheckedChange(CompoundButton view, boolean isChecked, ApplicationInfo info) {
+    protected void onCheckedChange(CompoundButton view, boolean isChecked, String packageName) {
         if (isChecked) {
-            checkedList.add(info.packageName);
+            checkedList.add(packageName);
         } else {
-            checkedList.remove(info.packageName);
+            checkedList.remove(packageName);
         }
         if (!AppHelper.saveScopeList(modulePackageName, checkedList)) {
             activity.makeSnackBar(R.string.add_package_failed, Snackbar.LENGTH_SHORT);
             if (!isChecked) {
-                checkedList.add(info.packageName);
+                checkedList.add(packageName);
             } else {
-                checkedList.remove(info.packageName);
+                checkedList.remove(packageName);
             }
             view.setChecked(!isChecked);
         }
