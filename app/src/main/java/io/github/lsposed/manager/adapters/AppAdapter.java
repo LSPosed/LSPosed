@@ -86,10 +86,6 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
                 rmList.add(info);
                 continue;
             }
-            if (AppHelper.forceWhiteList.contains(info.packageName)) {
-                rmList.add(info);
-                continue;
-            }
             if (!preferences.getBoolean("show_system_apps", false) && (info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
                 rmList.add(info);
                 continue;
@@ -101,6 +97,10 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
                 }
                 List<String> list = AppHelper.getAppList();
                 if (!list.contains(info.packageName)) {
+                    rmList.add(info);
+                }
+            } else {
+                if (AppHelper.forceWhiteList.contains(info.packageName)) {
                     rmList.add(info);
                 }
             }
