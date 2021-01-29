@@ -38,7 +38,7 @@
  * Permission:
  * /data/adb/lspd should be accessible by zygote by sepolicy
  * /data/misc/$misc_path is random path, and mounted by magisk
- * it should have context `u:object_r:shell_data_file:s0`, which should be readable by normal app
+ * it should have context `u:object_r:magisk_file:s0`, which should be readable by normal app
  * and zygote
  *
  * /data/misc/$misc_path's owner should be root:root, with permission 771
@@ -208,6 +208,7 @@ namespace lspd {
         while (std::getline(ifs, module)) {
             const auto &module_pkg_name = GetPackageNameFromBaseApkPath(module);
             auto &[module_path, scope] = modules_list[module_pkg_name];
+            scope.insert(module_pkg_name); // Always add module itself
             module_path.assign(std::move(module));
             const auto &module_scope_conf = GetConfigPath(module_pkg_name + ".conf");
             if (!path_exists<true>(module_scope_conf)) {
@@ -224,8 +225,6 @@ namespace lspd {
                 if (!app_pkg_name.empty())
                     scope.emplace(std::move(app_pkg_name));
             }
-            if (!scope.empty())
-                scope.insert(module_pkg_name); // Always add module itself
             if (IsInstaller(module_pkg_name)) scope.erase("android");
             LOGI("scope of %s is:\n%s", module_pkg_name.c_str(), ([&scope = scope]() {
                 std::ostringstream join;
