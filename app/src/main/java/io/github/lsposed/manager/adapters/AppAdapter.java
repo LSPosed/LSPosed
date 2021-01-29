@@ -73,6 +73,15 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
         fullList = pm.getInstalledPackages(PackageManager.GET_META_DATA);
         List<PackageInfo> rmList = new ArrayList<>();
         for (PackageInfo info : fullList) {
+            if (info.applicationInfo.category == ApplicationInfo.CATEGORY_GAME) {
+                rmList.add(info);
+                continue;
+            }
+            //noinspection deprecation
+            if ((info.applicationInfo.flags & ApplicationInfo.FLAG_IS_GAME) != 0) {
+                rmList.add(info);
+                continue;
+            }
             if ((info.applicationInfo.flags & ApplicationInfo.FLAG_HAS_CODE) == 0) {
                 rmList.add(info);
                 continue;
