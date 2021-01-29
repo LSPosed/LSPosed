@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.FragmentManager;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -32,9 +31,7 @@ public class AppHelper {
 
     private static final String BASE_PATH = Constants.getBaseDir();
     private static final String WHITE_LIST_PATH = "conf/whitelist/";
-    private static final String BLACK_LIST_PATH = "conf/blacklist/";
     private static final String SCOPE_LIST_PATH = "conf/%s.conf";
-    private static final String WHITE_LIST_MODE = "conf/usewhitelist";
 
     public static List<String> forceWhiteList = new ArrayList<>();
 
@@ -42,15 +39,10 @@ public class AppHelper {
 
     public static void makeSurePath() {
         App.mkdir(WHITE_LIST_PATH);
-        App.mkdir(BLACK_LIST_PATH);
     }
 
-    public static boolean isWhiteListMode() {
-        return new File(BASE_PATH + WHITE_LIST_MODE).exists();
-    }
-
-    public static List<String> getAppList(boolean white) {
-        Path dir = Paths.get(BASE_PATH + (white ? WHITE_LIST_PATH : BLACK_LIST_PATH));
+    public static List<String> getAppList() {
+        Path dir = Paths.get(BASE_PATH + (WHITE_LIST_PATH));
         List<String> list = new ArrayList<>();
         try {
             Files.list(dir).forEach(path -> {
@@ -59,13 +51,8 @@ public class AppHelper {
                 }
             });
             forceWhiteList.forEach(s -> {
-                if (list.contains(s)) {
-                    if (!white) {
-                        createAppListFile(s, false, false);
-                        list.remove(s);
-                    }
-                } else if (white) {
-                    createAppListFile(s, true, true);
+                if (!list.contains(s)) {
+                    createAppListFile(s, true);
                     list.add(s);
                 }
             });
@@ -76,8 +63,8 @@ public class AppHelper {
         }
     }
 
-    private static boolean createAppListFile(String packageName, boolean white, boolean add) {
-        Path path = Paths.get(BASE_PATH + (white ? WHITE_LIST_PATH : BLACK_LIST_PATH) + packageName);
+    private static boolean createAppListFile(String packageName, boolean add) {
+        Path path = Paths.get(BASE_PATH + (WHITE_LIST_PATH) + packageName);
         try {
             if (Files.exists(path)) {
                 if (!add) {
@@ -94,18 +81,10 @@ public class AppHelper {
     }
 
     static boolean setPackageAppList(String packageName, boolean add) {
-        return setPackageAppList(packageName, isWhiteListMode(), add);
-    }
-
-    static boolean setPackageAppList(String packageName, boolean white, boolean add) {
-        if (add && !white && forceWhiteList.contains(packageName)) {
-            createAppListFile(packageName, false, false);
+        if (!add && forceWhiteList.contains(packageName)) {
             return false;
         }
-        if (!add && white && forceWhiteList.contains(packageName)) {
-            return false;
-        }
-        return createAppListFile(packageName, white, add);
+        return createAppListFile(packageName, add);
     }
 
     public static void showMenu(@NonNull Context context,

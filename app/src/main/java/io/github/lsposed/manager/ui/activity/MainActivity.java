@@ -10,6 +10,8 @@ import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 
+import java.util.Locale;
+
 import io.github.lsposed.manager.Constants;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.adapters.AppHelper;
@@ -19,8 +21,6 @@ import io.github.lsposed.manager.util.GlideHelper;
 import io.github.lsposed.manager.util.ModuleUtil;
 import io.github.lsposed.manager.util.NavUtil;
 import io.github.lsposed.manager.util.light.Light;
-
-import java.util.Locale;
 
 public class MainActivity extends BaseActivity {
     ActivityMainBinding binding;
@@ -100,8 +100,8 @@ public class MainActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         binding.modulesSummary.setText(String.format(getString(R.string.ModulesDetail), ModuleUtil.getInstance().getEnabledModules().size()));
-        binding.appsTitle.setText(AppHelper.isWhiteListMode() ? R.string.title_white_list : R.string.title_black_list);
-        int count = AppHelper.getAppList(AppHelper.isWhiteListMode()).size();
-        binding.appsSummary.setText(getString(AppHelper.isWhiteListMode() ? R.string.whitelist_summary : R.string.blacklist_summary, count));
+        binding.appsTitle.setText(R.string.Apps);
+        int count = AppHelper.getAppList().size();
+        binding.appsSummary.setText(getString(R.string.whitelist_summary, count));
     }
 }

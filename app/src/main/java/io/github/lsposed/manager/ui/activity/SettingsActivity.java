@@ -17,15 +17,15 @@ import androidx.preference.SwitchPreferenceCompat;
 import com.takisoft.preferencex.PreferenceFragmentCompat;
 import com.takisoft.preferencex.SimpleMenuPreference;
 
-import io.github.lsposed.manager.Constants;
-import io.github.lsposed.manager.R;
-import io.github.lsposed.manager.databinding.ActivitySettingsBinding;
-import io.github.lsposed.manager.ui.widget.IntegerListPreference;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import io.github.lsposed.manager.Constants;
+import io.github.lsposed.manager.R;
+import io.github.lsposed.manager.databinding.ActivitySettingsBinding;
+import io.github.lsposed.manager.ui.widget.IntegerListPreference;
 
 public class SettingsActivity extends BaseActivity {
     private static final String KEY_PREFIX = SettingsActivity.class.getName() + '.';
@@ -102,7 +102,6 @@ public class SettingsActivity extends BaseActivity {
     public static class SettingsFragment extends PreferenceFragmentCompat {
         private static final Path enableResourcesFlag = Paths.get(Constants.getBaseDir(), "conf/enable_resources");
         private static final Path deoptBootFlag = Paths.get(Constants.getBaseDir(), "conf/deoptbootimage");
-        private static final Path whiteListModeFlag = Paths.get(Constants.getBaseDir(), "conf/usewhitelist");
         private static final Path disableVerboseLogsFlag = Paths.get(Constants.getBaseDir(), "conf/disable_verbose_log");
         private static final Path disableModulesLogsFlag = Paths.get(Constants.getBaseDir() + "conf/disable_modules_log");
         private static final Path variantFlag = Paths.get(Constants.getBaseDir()).getParent().resolve("variant");
@@ -110,12 +109,6 @@ public class SettingsActivity extends BaseActivity {
         @Override
         public void onCreatePreferencesFix(Bundle savedInstanceState, String rootKey) {
             addPreferencesFromResource(R.xml.prefs);
-
-            SwitchPreferenceCompat prefWhiteListMode = findPreference("white_list_switch");
-            if (prefWhiteListMode != null) {
-                prefWhiteListMode.setChecked(Files.exists(whiteListModeFlag));
-                prefWhiteListMode.setOnPreferenceChangeListener(new OnFlagChangeListener(whiteListModeFlag));
-            }
 
             SwitchPreferenceCompat prefVerboseLogs = findPreference("disable_verbose_log");
             if (prefVerboseLogs != null) {

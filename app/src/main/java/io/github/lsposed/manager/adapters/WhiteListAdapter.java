@@ -10,18 +10,18 @@ import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.ui.activity.AppListActivity;
 
 
-public class BlackListAdapter extends AppAdapter {
+public class WhiteListAdapter extends AppAdapter {
 
     private List<String> checkedList;
 
-    public BlackListAdapter(AppListActivity activity) {
+    public WhiteListAdapter(AppListActivity activity) {
         super(activity);
     }
 
     @Override
     public List<String> generateCheckedList() {
         AppHelper.makeSurePath();
-        return checkedList = AppHelper.getAppList(AppHelper.isWhiteListMode());
+        return checkedList = AppHelper.getAppList();
     }
 
     @Override

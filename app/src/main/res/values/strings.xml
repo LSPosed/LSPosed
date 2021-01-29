@@ -143,7 +143,7 @@
     <string name="compile_failed">Optimization failed or return value is empty</string>
     <string name="compile_failed_with_info">Optimization failed: </string>
     <string name="hook_modules">Force hook modules</string>
-    <string name="hook_modules_summary">Force add modules to white-list and remove from black list\nClosing this option does not remove added modules from white list</string>
+    <string name="hook_modules_summary">Force add modules to white list\nClosing this option does not remove added modules from white list</string>
     <string name="not_installed">Not installed</string>
     <string name="support_group_telegram_channel">Telegram Channel: @LSPosed</string>
     <string name="reboot_system">Reboot to System</string>

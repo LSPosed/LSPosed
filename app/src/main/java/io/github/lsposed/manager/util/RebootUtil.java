@@ -10,7 +10,6 @@ import com.topjohnwu.superuser.Shell;
 
 import io.github.lsposed.manager.App;
 import io.github.lsposed.manager.BuildConfig;
-
 import rikka.shizuku.ShizukuBinderWrapper;
 import rikka.shizuku.ShizukuSystemProperties;
 import rikka.shizuku.SystemServiceHelper;
@@ -61,7 +60,7 @@ public class RebootUtil {
 
 
     public static void reboot(RebootType mode) {
-        int result = App.checkPermission(mode.ordinal());
+        int result = App.checkPermission(mode.ordinal(), 0);
         switch (result) {
             case 0:
                 onRequestPermissionsResult(mode.ordinal(), PERMISSION_GRANTED);

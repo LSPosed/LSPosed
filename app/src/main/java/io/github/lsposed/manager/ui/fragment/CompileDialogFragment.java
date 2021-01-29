@@ -33,6 +33,7 @@ import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 @SuppressWarnings("deprecation")
 public class CompileDialogFragment extends AppCompatDialogFragment {
 
+    // TODO:
     private static final String COMPILE_COMMAND_PREFIX = "cmd package ";
     private static final String COMPILE_RESET_COMMAND = COMPILE_COMMAND_PREFIX + "compile --reset ";
     private static final String COMPILE_SPEED_COMMAND = COMPILE_COMMAND_PREFIX + "compile -f -m speed ";
@@ -85,7 +86,7 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
     }
 
     public void onRequestPermissionsResult(int requestCode, int grantResult) {
-        CompileUtil.CompileType mode = CompileUtil.CompileType.values()[(requestCode - 1) / 10];
+        CompileUtil.CompileType mode = CompileUtil.CompileType.values()[requestCode];
         if (grantResult == PERMISSION_GRANTED) {
             AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
                 try {
@@ -128,8 +129,7 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
         if (arguments != null) {
             int type = arguments.getInt(KEY_TYPE);
             appInfo = arguments.getParcelable(KEY_APP_INFO);
-            type = type * 10 + 1;
-            int result = App.checkPermission(type);
+            int result = App.checkPermission(type, 1);
             switch (result) {
                 case 0:
                     onRequestPermissionsResult(type, PERMISSION_GRANTED);

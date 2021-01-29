@@ -132,7 +132,7 @@
     <string name="compile_failed">优化失败或返回值为空</string>
     <string name="compile_failed_with_info">优化失败: </string>
     <string name="hook_modules">强制添加模块</string>
-    <string name="hook_modules_summary">强制将模块添加进白名单并移出黑名单\n关闭此选项并不会移除已勾选的应用标识</string>
+    <string name="hook_modules_summary">强制将模块添加进白名单\n关闭此选项并不会移除已勾选的应用标识</string>
     <string name="not_installed">未安装</string>
     <string name="support_group_telegram_channel">Telegram 频道: @LSPosed</string>
     <string name="reboot_system">重启至系统</string>

@@ -130,7 +130,7 @@
     <string name="app_stop">停止</string>
     <string name="compile_failed">優化失敗或返回值為空</string>
     <string name="hook_modules">強制添加模塊</string>
-    <string name="hook_modules_summary">強制將模塊添加進白名單並移出黑名單\n關閉此選項並不會移除已勾選的應用標識</string>
+    <string name="hook_modules_summary">強制將模塊添加進白名單\n關閉此選項並不會移除已勾選的應用標識</string>
     <string name="not_installed">未安裝</string>
     <string name="support_group_telegram_channel">Telegram 頻道: @LSPosed</string>
     <string name="reboot_system">重啟至系統</string>

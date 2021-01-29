@@ -14,12 +14,11 @@ import androidx.fragment.app.FragmentManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.topjohnwu.superuser.Shell;
 
+import java.util.List;
+
 import io.github.lsposed.manager.App;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.ui.fragment.CompileDialogFragment;
-
-import java.util.List;
-
 import rikka.shizuku.ShizukuBinderWrapper;
 import rikka.shizuku.ShizukuSystemProperties;
 import rikka.shizuku.SystemServiceHelper;
@@ -29,6 +28,7 @@ import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 @SuppressWarnings("deprecation")
 public class CompileUtil {
+    // TODO:
 
     public enum CompileType {
         RESET,
@@ -58,7 +58,7 @@ public class CompileUtil {
     private static Activity sActivity;
 
     public static void onRequestPermissionsResult(int requestCode, int grantResult) {
-        CompileUtil.CompileType mode = CompileUtil.CompileType.values()[(requestCode - 1) / 10];
+        CompileUtil.CompileType mode = CompileUtil.CompileType.values()[requestCode];
         if (mode == CompileType.DEXOPT_ALL || mode == CompileType.SPEED_ALL) {
             AlertDialog dialog = new MaterialAlertDialogBuilder(sActivity)
                     .setTitle(R.string.speed_now)
@@ -125,8 +125,8 @@ public class CompileUtil {
 
     public static void compileAllDexopt(Activity activity) {
         sActivity = activity;
-        int type = CompileType.DEXOPT_ALL.ordinal() * 10 + 1;
-        int result = App.checkPermission(type);
+        int type = CompileType.DEXOPT_ALL.ordinal();
+        int result = App.checkPermission(type, 1);
         switch (result) {
             case 0:
                 onRequestPermissionsResult(type, PERMISSION_GRANTED);
@@ -139,8 +139,8 @@ public class CompileUtil {
 
     public static void compileAllSpeed(Activity activity) {
         sActivity = activity;
-        int type = CompileType.SPEED_ALL.ordinal() * 10 + 1;
-        int result = App.checkPermission(type);
+        int type = CompileType.SPEED_ALL.ordinal();
+        int result = App.checkPermission(type, 1);
         switch (result) {
             case 0:
                 onRequestPermissionsResult(type, PERMISSION_GRANTED);
