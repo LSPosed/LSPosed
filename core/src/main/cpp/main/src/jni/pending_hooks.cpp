@@ -12,12 +12,17 @@
 namespace lspd {
     namespace {
         std::unordered_set<const void *> pending_classes_;
+        std::unordered_set<const void *> pending_methods_;
 
         std::unordered_set<const void *> hooked_methods_;
     }
 
     bool IsClassPending(void *clazz) {
         return pending_classes_.count(clazz);
+    }
+
+    bool IsMethodPending(void* art_method) {
+        return pending_methods_.erase(art_method) > 0;
     }
 
     void DonePendingHook(void *clazz) {
@@ -31,7 +36,7 @@ namespace lspd {
         if (auto def = mirror_class.GetClassDef(); LIKELY(def)) {
             LOGD("record pending: %p (%s) with %p", class_ptr, mirror_class.GetDescriptor().c_str(), method);
             // Add it for ShouldUseInterpreterEntrypoint
-            recordHooked(method);
+            pending_methods_.insert(method);
             pending_classes_.insert(def);
         } else {
             LOGW("fail to record pending for : %p (%s)", class_ptr,
@@ -40,7 +45,7 @@ namespace lspd {
     }
 
     static JNINativeMethod gMethods[] = {
-            NATIVE_METHOD(PendingHooks, recordPendingMethodNative, "(Ljava/lang/reflect/Member;Ljava/lang/Class;)V"),
+            NATIVE_METHOD(PendingHooks, recordPendingMethodNative, "(Ljava/lang/reflect/Method;Ljava/lang/Class;)V"),
     };
 
     void RegisterPendingHooks(JNIEnv *env) {

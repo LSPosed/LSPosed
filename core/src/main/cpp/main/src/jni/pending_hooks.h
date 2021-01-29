@@ -15,4 +15,6 @@ namespace lspd {
 
     void DonePendingHook(void *clazz);
 
+    bool IsMethodPending(void* art_method);
+
 } // namespace lspd

@@ -2,8 +2,8 @@ package io.github.lsposed.lspd.util;
 
 import android.os.Build;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Member;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 import de.robv.android.xposed.XposedHelpers;
@@ -46,7 +46,7 @@ public class ClassUtils {
     }
 
     public static boolean shouldDelayHook(Member hookMethod) {
-        if (hookMethod == null || hookMethod instanceof Constructor) {
+        if (!(hookMethod instanceof Method)) {
             return false;
         }
         Class declaringClass = hookMethod.getDeclaringClass();

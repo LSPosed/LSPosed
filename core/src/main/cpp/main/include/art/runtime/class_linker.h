@@ -65,7 +65,7 @@ namespace art {
                 "_ZN3art11ClassLinker30ShouldUseInterpreterEntrypointEPNS_9ArtMethodEPKv",
                 bool, ShouldUseInterpreterEntrypoint, (void * art_method,
                         const void *quick_code), {
-                    if (quick_code != nullptr && UNLIKELY(lspd::isHooked(art_method))) {
+                    if (quick_code != nullptr && UNLIKELY(lspd::isHooked(art_method) || lspd::IsMethodPending(art_method))) {
                         return false;
                     }
                     return backup(art_method, quick_code);

@@ -241,7 +241,7 @@ public final class XposedBridge {
             if (reflectMethod != null) {
 				hookMethodNative(reflectMethod, declaringClass, slot, additionalInfo);
 			} else {
-				PendingHooks.recordPendingMethod(hookMethod, additionalInfo);
+				PendingHooks.recordPendingMethod((Method)hookMethod, additionalInfo);
 			}
         }
 

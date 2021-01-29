@@ -1,6 +1,7 @@
 package de.robv.android.xposed;
 
 import java.lang.reflect.Member;
+import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
@@ -22,7 +23,7 @@ public final class PendingHooks {
         }
     }
 
-    public synchronized static void recordPendingMethod(Member hookMethod,
+    public synchronized static void recordPendingMethod(Method hookMethod,
                                                         XposedBridge.AdditionalHookInfo additionalInfo) {
         ConcurrentHashMap<Member, XposedBridge.AdditionalHookInfo> pending =
                 sPendingHooks.computeIfAbsent(hookMethod.getDeclaringClass(),
@@ -41,5 +42,5 @@ public final class PendingHooks {
         sPendingHooks.clear();
     }
 
-    private static native void recordPendingMethodNative(Member hookMethod, Class clazz);
+    private static native void recordPendingMethodNative(Method hookMethod, Class clazz);
 }
