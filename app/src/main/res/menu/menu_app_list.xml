@@ -15,12 +15,6 @@
         android:title="@string/menu_show_system_apps" />
 
     <item
-        android:id="@+id/item_show_modules"
-        android:checkable="true"
-        android:checked="true"
-        android:title="@string/menu_show_modules" />
-
-    <item
         android:id="@+id/item_list_sort"
         android:title="@string/menu_sort"
         app:showAsAction="never">

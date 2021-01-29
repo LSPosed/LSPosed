@@ -26,6 +26,7 @@ import io.github.lsposed.manager.Constants;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.databinding.ActivitySettingsBinding;
 import io.github.lsposed.manager.ui.widget.IntegerListPreference;
+import io.github.lsposed.manager.util.ModuleUtil;
 
 public class SettingsActivity extends BaseActivity {
     private static final String KEY_PREFIX = SettingsActivity.class.getName() + '.';
@@ -109,6 +110,14 @@ public class SettingsActivity extends BaseActivity {
         @Override
         public void onCreatePreferencesFix(Bundle savedInstanceState, String rootKey) {
             addPreferencesFromResource(R.xml.prefs);
+
+            SwitchPreferenceCompat prefHookModules = findPreference("hook_modules");
+            if (prefHookModules != null) {
+                prefHookModules.setOnPreferenceChangeListener((preference, newValue) -> {
+                    ModuleUtil.getInstance().reloadInstalledModules((Boolean) newValue);
+                    return true;
+                });
+            }
 
             SwitchPreferenceCompat prefVerboseLogs = findPreference("disable_verbose_log");
             if (prefVerboseLogs != null) {

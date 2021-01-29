@@ -67,8 +67,12 @@ public final class ModuleUtil {
         return result;
     }
 
-    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     public void reloadInstalledModules() {
+        reloadInstalledModules(prefs.getBoolean("hook_modules", true));
+    }
+
+    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
+    public void reloadInstalledModules(boolean hookModules) {
         synchronized (this) {
             if (isReloading)
                 return;
@@ -77,7 +81,6 @@ public final class ModuleUtil {
 
         Map<String, InstalledModule> modules = new HashMap<>();
         AppHelper.forceWhiteList.clear();
-
         for (PackageInfo pkg : pm.getInstalledPackages(PackageManager.GET_META_DATA)) {
             ApplicationInfo app = pkg.applicationInfo;
             if (!app.enabled)
@@ -86,7 +89,7 @@ public final class ModuleUtil {
             if (app.metaData != null && app.metaData.containsKey("xposedmodule")) {
                 InstalledModule installed = new InstalledModule(pkg, false);
                 modules.put(pkg.packageName, installed);
-                AppHelper.forceWhiteList.add(pkg.packageName);
+                if (hookModules) AppHelper.forceWhiteList.add(pkg.packageName);
             }
         }
 

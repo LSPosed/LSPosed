@@ -86,11 +86,9 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
                 rmList.add(info);
                 continue;
             }
-            if (!preferences.getBoolean("show_modules", true)) {
-                if (info.applicationInfo.metaData != null && info.applicationInfo.metaData.containsKey("xposedmodule")) {
-                    rmList.add(info);
-                    continue;
-                }
+            if (AppHelper.forceWhiteList.contains(info.packageName)) {
+                rmList.add(info);
+                continue;
             }
             if (!preferences.getBoolean("show_system_apps", true) && (info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
                 rmList.add(info);
@@ -150,9 +148,6 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
         if (itemId == R.id.item_show_system) {
             item.setChecked(!item.isChecked());
             preferences.edit().putBoolean("show_system_apps", item.isChecked()).apply();
-        } else if (itemId == R.id.item_show_modules) {
-            item.setChecked(!item.isChecked());
-            preferences.edit().putBoolean("show_modules", item.isChecked()).apply();
         } else if (!AppHelper.onOptionsItemSelected(item, preferences)) {
             return false;
         }
@@ -162,7 +157,6 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
 
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.menu_app_list, menu);
-        menu.findItem(R.id.item_show_modules).setChecked(preferences.getBoolean("show_modules", true));
         menu.findItem(R.id.item_show_system).setChecked(preferences.getBoolean("show_system_apps", true));
         switch (preferences.getInt("list_sort", 0)) {
             case 7:
