@@ -120,13 +120,7 @@ public final class SandHookXposedBridge {
     }
 
     public static void init() {
-        if (Process.is64Bit()) {
-//            SandHookConfig.libSandHookPath = "/system/lib64/libsandhook.lspd.so";
-            SandHookConfig.libSandHookPath = "/system/lib64/" + ConfigManager.getLibSandHookName();
-        } else {
-//            SandHookConfig.libSandHookPath = "/system/lib/libsandhook.lspd.so";
-            SandHookConfig.libSandHookPath = "/system/lib/" + ConfigManager.getLibSandHookName();
-        }
+        SandHookConfig.libSandHookPath = "";
         SandHookConfig.libLoader = new SandHookConfig.LibLoader() {
             @Override
             public void loadLib() {

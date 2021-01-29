@@ -12,7 +12,7 @@ namespace lspd {
     static std::unordered_set<void *> deopted_methods;
 
     static void ClassLinker_setEntryPointsToInterpreter(JNI_START, jobject method) {
-        void *reflected_method = getArtMethod(env, method);
+        void *reflected_method = getArtMethodYahfa(env, method);
         if (deopted_methods.count(reflected_method)) {
             LOGD("method %p has been deopted before, skip...", reflected_method);
             return;

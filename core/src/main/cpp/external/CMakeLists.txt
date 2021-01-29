@@ -16,3 +16,6 @@ endif (NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
 add_subdirectory(Dobby)
 target_include_directories(dobby PUBLIC Dobby/include)
 target_include_directories(dobby PUBLIC Dobby/builtin-plugin/BionicLinkerRestriction)
+
+add_subdirectory(SandHook)
+target_include_directories(sandhook.lspd PUBLIC SandHook)

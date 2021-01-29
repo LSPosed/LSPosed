@@ -19,10 +19,6 @@ namespace lspd {
         return env->NewStringUTF(ConfigManager::GetInstance()->GetInstallerPackageName().c_str());
     }
 
-    static jstring ConfigManager_getLibSandHookName(JNI_START) {
-        return env->NewStringUTF(ConfigManager::GetLibSandHookName().c_str());
-    }
-
     static jstring ConfigManager_getDataPathPrefix(JNI_START) {
         return env->NewStringUTF(ConfigManager::GetInstance()->GetDataPathPrefix().c_str());
     }
@@ -71,7 +67,6 @@ namespace lspd {
             NATIVE_METHOD(ConfigManager, isResourcesHookEnabled, "()Z"),
             NATIVE_METHOD(ConfigManager, isNoModuleLogEnabled, "()Z"),
             NATIVE_METHOD(ConfigManager, getInstallerPackageName, "()Ljava/lang/String;"),
-            NATIVE_METHOD(ConfigManager, getLibSandHookName, "()Ljava/lang/String;"),
             NATIVE_METHOD(ConfigManager, getDataPathPrefix, "()Ljava/lang/String;"),
             NATIVE_METHOD(ConfigManager, getPrefsPath,
                           "(Ljava/lang/String;)Ljava/lang/String;"),

@@ -1,8 +1,7 @@
 #include "jni.h"
-#include <string.h>
+#include <cstring>
 #include <sys/mman.h>
-#include <stdlib.h>
-#include <stdbool.h>
+#include <cstdlib>
 
 #include "common.h"
 #include "trampoline.h"
@@ -21,7 +20,7 @@ static uint32_t kAccProtected = 0x0004;  // field, method, ic
 static uint32_t kAccStatic = 0x0008;  // field, method, ic
 
 
-static jfieldID fieldArtMethod = NULL;
+static jfieldID fieldArtMethod = nullptr;
 
 static inline uint32_t read32(void *addr) {
     return *((uint32_t *) addr);
@@ -39,14 +38,14 @@ static inline void writeAddr(void *addr, void *value) {
     *((void **) addr) = value;
 }
 
-void Java_lab_galaxy_yahfa_HookMain_init(JNIEnv *env, jclass clazz, jint sdkVersion) {
+extern "C" void Java_lab_galaxy_yahfa_HookMain_init(JNIEnv *env, jclass clazz, jint sdkVersion) {
     SDKVersion = sdkVersion;
     jclass classExecutable;
     LOGI("init to SDK %d", sdkVersion);
     switch (sdkVersion) {
         case __ANDROID_API_R__:
-            classExecutable = (*env)->FindClass(env, "java/lang/reflect/Executable");
-            fieldArtMethod = (*env)->GetFieldID(env, classExecutable, "artMethod", "J");
+            classExecutable = env->FindClass("java/lang/reflect/Executable");
+            fieldArtMethod = env->GetFieldID(classExecutable, "artMethod", "J");
         case __ANDROID_API_Q__:
         case __ANDROID_API_P__:
             kAccCompileDontBother = 0x02000000;
@@ -188,63 +187,61 @@ static int doBackupAndHook(JNIEnv *env, void *targetMethod, void *hookMethod, vo
     return 0;
 }
 
-void *getArtMethod(JNIEnv *env, jobject jmethod) {
-    void *artMethod = NULL;
+void *getArtMethodYahfa(JNIEnv *env, jobject jmethod) {
+    void *artMethod = nullptr;
 
-    if (jmethod == NULL) {
+    if (jmethod == nullptr) {
         return artMethod;
     }
 
     if (SDKVersion == __ANDROID_API_R__) {
-        artMethod = (void *) (*env)->GetLongField(env, jmethod, fieldArtMethod);
+        artMethod = (void *) env->GetLongField(jmethod, fieldArtMethod);
     } else {
-        artMethod = (void *) (*env)->FromReflectedMethod(env, jmethod);
+        artMethod = (void *) env->FromReflectedMethod(jmethod);
     }
 
     LOGI("ArtMethod: %p", artMethod);
     return artMethod;
-
 }
 
-jobject Java_lab_galaxy_yahfa_HookMain_findMethodNative(JNIEnv *env, jclass clazz,
+extern "C" jobject Java_lab_galaxy_yahfa_HookMain_findMethodNative(JNIEnv *env, jclass clazz,
                                                         jclass targetClass, jstring methodName,
                                                         jstring methodSig) {
-    const char *c_methodName = (*env)->GetStringUTFChars(env, methodName, NULL);
-    const char *c_methodSig = (*env)->GetStringUTFChars(env, methodSig, NULL);
-    jobject ret = NULL;
+    const char *c_methodName = env->GetStringUTFChars(methodName, nullptr);
+    const char *c_methodSig = env->GetStringUTFChars(methodSig, nullptr);
+    jobject ret = nullptr;
 
 
     //Try both GetMethodID and GetStaticMethodID -- Whatever works :)
-    jmethodID method = (*env)->GetMethodID(env, targetClass, c_methodName, c_methodSig);
-    if (!(*env)->ExceptionCheck(env)) {
-        ret = (*env)->ToReflectedMethod(env, targetClass, method, JNI_FALSE);
+    jmethodID method = env->GetMethodID(targetClass, c_methodName, c_methodSig);
+    if (!env->ExceptionCheck()) {
+        ret = env->ToReflectedMethod(targetClass, method, JNI_FALSE);
     } else {
-        (*env)->ExceptionClear(env);
-        method = (*env)->GetStaticMethodID(env, targetClass, c_methodName, c_methodSig);
-        if (!(*env)->ExceptionCheck(env)) {
-            ret = (*env)->ToReflectedMethod(env, targetClass, method, JNI_TRUE);
+        env->ExceptionClear();
+        method = env->GetStaticMethodID(targetClass, c_methodName, c_methodSig);
+        if (!env->ExceptionCheck()) {
+            ret = env->ToReflectedMethod(targetClass, method, JNI_TRUE);
         } else {
-            (*env)->ExceptionClear(env);
+            env->ExceptionClear();
         }
     }
 
-    (*env)->ReleaseStringUTFChars(env, methodName, c_methodName);
-    (*env)->ReleaseStringUTFChars(env, methodSig, c_methodSig);
+    env->ReleaseStringUTFChars(methodName, c_methodName);
+    env->ReleaseStringUTFChars(methodSig, c_methodSig);
     return ret;
 }
 
-jboolean Java_lab_galaxy_yahfa_HookMain_backupAndHookNative(JNIEnv *env, jclass clazz,
+extern "C" jboolean Java_lab_galaxy_yahfa_HookMain_backupAndHookNative(JNIEnv *env, jclass clazz,
                                                             jobject target, jobject hook,
                                                             jobject backup) {
 
     if (!doBackupAndHook(env,
-                         getArtMethod(env, target),
-                         getArtMethod(env, hook),
-                         getArtMethod(env, backup)
+                         getArtMethodYahfa(env, target),
+                         getArtMethodYahfa(env, hook),
+                         getArtMethodYahfa(env, backup)
     )) {
-        (*env)->NewGlobalRef(env,
-                             hook); // keep a global ref so that the hook method would not be GCed
-        if (backup) (*env)->NewGlobalRef(env, backup);
+        env->NewGlobalRef(hook); // keep a global ref so that the hook method would not be GCed
+        if (backup) env->NewGlobalRef(backup);
         return JNI_TRUE;
     } else {
         return JNI_FALSE;

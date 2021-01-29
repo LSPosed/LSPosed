@@ -152,7 +152,6 @@ afterEvaluate {
 
         def prepareMagiskFilesTask = task("prepareMagiskFiles${variantCapped}", type: Delete) {
             dependsOn "assemble${variantCapped}"
-            dependsOn tasks.getByPath(":sandhook-hooklib:copySandHook${variantCapped}LibraryToMagiskTemplate")
             dependsOn tasks.getByPath(":key-selector:copyKeySelector${variantCapped}LibraryToMagiskTemplate")
             doFirst {
                 copy {

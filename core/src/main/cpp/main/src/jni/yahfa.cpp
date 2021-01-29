@@ -25,11 +25,11 @@ namespace lspd {
     }
 
     static void Yahfa_recordHooked(JNI_START, jobject member) {
-        lspd::recordHooked(getArtMethod(env, member));
+        lspd::recordHooked(getArtMethodYahfa(env, member));
     }
 
     static jboolean Yahfa_isHooked(JNI_START, jobject member) {
-        return lspd::isHooked(getArtMethod(env, member));
+        return lspd::isHooked(getArtMethodYahfa(env, member));
     }
 
     static JNINativeMethod gMethods[] = {

@@ -46,10 +46,6 @@ VERSION=$(grep_prop version "${TMPDIR}/module.prop")
 RIRU_MIN_API_VERSION=$(grep_prop api "${TMPDIR}/module.prop")
 
 LIB_RIRU_EDXP="libriru_${RIRU_EDXP}.so"
-LIB_SANDHOOK_EDXP="lib$(getRandomNameExist 13 "lib" ".so" "
-/system/lib
-/system/lib64
-").so"
 
 ### lang start ###
 # Default en_US
@@ -187,12 +183,10 @@ if [ "$ARCH" = "x86" ] || [ "$ARCH" = "x64" ]; then
 else
   ui_print "- ${LANG_CUST_INST_EXT_LIB_ARM}"
   extract "$ZIPFILE" 'system/lib/libriru_lspd.so' "${MODPATH}"
-  extract "$ZIPFILE" 'system/lib/libsandhook.lspd.so' "${MODPATH}"
 
   if [ "$IS64BIT" = true ]; then
     ui_print "- ${LANG_CUST_INST_EXT_LIB_ARM64}"
     extract "$ZIPFILE" 'system/lib64/libriru_lspd.so' "${MODPATH}"
-    extract "$ZIPFILE" 'system/lib64/libsandhook.lspd.so' "${MODPATH}"
   fi
 fi
 
@@ -246,9 +240,9 @@ set_perm /data/misc/$MISC_PATH root root 0771 "u:object_r:magisk_file:s0" || abo
 echo "[[ -f /data/adb/lspd/keep_data ]] || rm -rf /data/misc/$MISC_PATH" >> "${MODPATH}/uninstall.sh" || abortC "! ${LANG_CUST_ERR_CONF_UNINST}"
 echo "[[ -f /data/adb/lspd/new_install ]] || rm -rf /data/adb/lspd" >> "${MODPATH}/uninstall.sh" || abortC "! ${LANG_CUST_ERR_CONF_UNINST}"
 
-if [ $VARIANT == 17 ]; then
+if [ $VARIANT == 17 ]; then  # YAHFA
   echo "1" > /data/misc/$MISC_PATH/variant
-elif [ $VARIANT == 18 ]; then
+elif [ $VARIANT == 18 ]; then  # SandHook
   echo "2" > /data/misc/$MISC_PATH/variant
 else
   abortC "${LANG_UTIL_ERR_VARIANT_UNSUPPORT} ${VARIANT}"
@@ -261,10 +255,8 @@ mv "${MODPATH}/system/framework" "/data/misc/$MISC_PATH/framework"
 
 
 mkdir -p "/data/misc/$MISC_PATH/framework/lib"
-mv "${MODPATH}/system/lib/libsandhook.lspd.so" "/data/misc/$MISC_PATH/framework/lib/libsandhook.lspd.so"
 if [ "$IS64BIT" = true ]; then
   mkdir -p "/data/misc/$MISC_PATH/framework/lib64"
-  mv "${MODPATH}/system/lib64/libsandhook.lspd.so" "/data/misc/$MISC_PATH/framework/lib64/libsandhook.lspd.so"
 fi
 
 set_perm_recursive /data/misc/$MISC_PATH/framework root root 0755 0644 "u:object_r:magisk_file:s0" || abortC "! ${LANG_CUST_ERR_PERM}"

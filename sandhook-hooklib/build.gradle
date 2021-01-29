@@ -9,21 +9,7 @@ android {
         versionCode 1
         versionName "1.0"
 
-        externalNativeBuild {
-            cmake {
-                //arguments "-DCMAKE_BUILD_TYPE=Release"
-            }
-        }
-        ndk {
-            abiFilters 'armeabi-v7a', 'arm64-v8a'
-        }
         consumerProguardFiles 'proguard-rules.pro'
-    }
-
-    externalNativeBuild {
-        cmake {
-            path "src/main/cpp/CMakeLists.txt"
-        }
     }
 
     buildTypes {
@@ -38,28 +24,4 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     api project(':sandhook-annotation')
-}
-
-afterEvaluate {
-    android.libraryVariants.all { variant ->
-        def variantNameCapped = variant.name.capitalize()
-        def variantNameLowered = variant.name.toLowerCase()
-
-        task("copySandHook${variantNameCapped}LibraryToMagiskTemplate") {
-            def libPathRelease = "${buildDir}/intermediates/cmake/${variantNameLowered}/obj"
-            doLast {
-                copy {
-                    include "libsandhook.lspd.so"
-                    from "${libPathRelease}/armeabi-v7a"
-                    into "${zipPathMagiskReleasePath}/system/lib"
-                }
-                copy {
-                    include "libsandhook.lspd.so"
-                    from "${libPathRelease}/arm64-v8a"
-                    into "${zipPathMagiskReleasePath}/system/lib64"
-                }
-            }
-        }
-
-    }
 }

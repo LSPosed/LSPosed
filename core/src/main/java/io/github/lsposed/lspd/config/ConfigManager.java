@@ -12,8 +12,6 @@ public class ConfigManager {
 
     public static native String getInstallerPackageName();
 
-    public static native String getLibSandHookName();
-
     public static native String getPrefsPath(String suffix);
 
     public static native String getCachePath(String suffix);

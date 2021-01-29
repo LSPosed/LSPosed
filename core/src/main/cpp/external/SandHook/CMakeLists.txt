@@ -5,6 +5,7 @@ ENABLE_LANGUAGE(ASM)
 
 add_definitions(-std=c++11)
 
+if (${CMAKE_ANDROID_ARCH_ABI} STREQUAL armeabi-v7a OR ${CMAKE_ANDROID_ARCH_ABI} STREQUAL arm64-v8a)
 set(${PROJECT_NAME}_SOURCES
         sandhook.cpp
         trampoline/trampoline.cpp
@@ -25,9 +26,11 @@ set(${PROJECT_NAME}_SOURCES
         inst/insts_arm64.cpp
         nativehook/native_hook.cpp
         )
-
+else()
+    set(${PROJECT_NAME}_SOURCES dummy.cpp)
+endif()
 add_library(${PROJECT_NAME}
-        SHARED
+        STATIC
         ${${PROJECT_NAME}_SOURCES})
 
 target_link_libraries(${PROJECT_NAME} log)

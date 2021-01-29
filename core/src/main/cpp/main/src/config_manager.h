@@ -63,13 +63,6 @@ namespace lspd {
             return misc_path_ / "cache" / suffix;
         }
 
-        inline static auto GetLibSandHookName() {
-            if constexpr(lspd::is64)
-                return GetFrameworkPath("lib64/libsandhook.lspd.so");
-            else
-                return GetFrameworkPath("lib/libsandhook.lspd.so");
-        }
-
         inline auto GetConfigPath(const std::string &suffix = {}) const {
             return base_config_path_ / "conf" / suffix;
         }

@@ -13,6 +13,7 @@
 #include <android-base/strings.h>
 #include <nativehelper/scoped_local_ref.h>
 #include <jni/pending_hooks.h>
+#include <sandhook.h>
 #include <fstream>
 #include <sstream>
 #include "context.h"
@@ -126,25 +127,19 @@ namespace lspd {
         RegisterPendingHooks(env);
 
         variant_ = Variant(ConfigManager::GetInstance()->GetVariant());
-//        LOGI("EdxpVariant: %d", variant_);
+        LOGI("LSP Variant: %d", variant_);
 
         initialized_ = true;
 
         if (variant_ == SANDHOOK) {
             //for SandHook variant
-            ScopedDlHandle sandhook_handle(ConfigManager::GetLibSandHookName().c_str());
-            if (!sandhook_handle.IsValid()) {
-                return;
-            }
-            typedef bool *(*TYPE_JNI_LOAD)(JNIEnv *, jclass, jclass);
-            auto jni_load = sandhook_handle.DlSym<TYPE_JNI_LOAD>("JNI_Load_Ex");
             ScopedLocalRef sandhook_class(env, FindClassFromLoader(env, kSandHookClassName));
             ScopedLocalRef nevercall_class(env,
                                            FindClassFromLoader(env, kSandHookNeverCallClassName));
             if (sandhook_class == nullptr || nevercall_class == nullptr) { // fail-fast
                 return;
             }
-            if (!jni_load(env, sandhook_class.get(), nevercall_class.get())) {
+            if (!JNI_Load_Ex(env, sandhook_class.get(), nevercall_class.get())) {
                 LOGE("SandHook: HookEntry class error. %d", getpid());
             }
 

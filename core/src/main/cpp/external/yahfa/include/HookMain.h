@@ -19,7 +19,7 @@ jboolean Java_lab_galaxy_yahfa_HookMain_backupAndHookNative(JNIEnv *env, jclass 
 
 void setNonCompilable(void *method);
 
-void *getArtMethod(JNIEnv *env, jobject jmethod);
+void *getArtMethodYahfa(JNIEnv *env, jobject jmethod);
 
 #ifdef __cplusplus
 }
