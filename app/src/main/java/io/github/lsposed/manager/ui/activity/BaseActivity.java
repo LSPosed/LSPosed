@@ -42,7 +42,7 @@ public class BaseActivity extends AppCompatActivity {
         return preferences.getBoolean("black_dark_theme", false) || preferences.getBoolean("md2", true);
     }
 
-    public static String getTheme(Context context) {
+    public String getTheme(Context context) {
         if (isBlackNightTheme()
                 && isNightMode(context.getResources().getConfiguration()))
             return THEME_BLACK;
@@ -56,6 +56,9 @@ public class BaseActivity extends AppCompatActivity {
 
     @StyleRes
     public int getThemeStyleRes(Context context) {
+        if (this instanceof AboutActivity) {
+            return R.style.ThemeOverlay_Black;
+        }
         switch (getTheme(context)) {
             case THEME_BLACK:
                 return R.style.ThemeOverlay_Black;
@@ -111,6 +114,8 @@ public class BaseActivity extends AppCompatActivity {
             } else {
                 getWindow().setStatusBarColor(getThemedColor(R.attr.colorPrimaryDark));
             }
+        } else {
+            getWindow().setStatusBarColor(getThemedColor(android.R.attr.colorBackground));
         }
         if (!Objects.equals(theme, getTheme(this) + getCustomTheme() + preferences.getBoolean("md2", true))) {
             recreate();
