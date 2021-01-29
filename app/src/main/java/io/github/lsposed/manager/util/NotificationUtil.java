@@ -7,7 +7,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.core.app.NotificationChannelCompat;
 import androidx.core.app.NotificationCompat;
@@ -30,8 +29,6 @@ public final class NotificationUtil {
     private static final int PENDING_INTENT_OPEN_INSTALL = 1;
     private static final int PENDING_INTENT_SOFT_REBOOT = 2;
     private static final int PENDING_INTENT_REBOOT = 3;
-    private static final int PENDING_INTENT_ACTIVATE_MODULE_AND_REBOOT = 4;
-    private static final int PENDING_INTENT_ACTIVATE_MODULE = 5;
 
     private static final String NOTIFICATION_MODULES_CHANNEL = "modules_channel_2";
 
@@ -73,24 +70,6 @@ public final class NotificationUtil {
         String title = context.getString(R.string.module_is_not_activated_yet);
         NotificationCompat.Builder builder = getNotificationBuilder(title, appName)
                 .setContentIntent(pModulesTab);
-
-        // Only show the quick activation button if any module has been
-        // enabled before,
-        // to ensure that the user know the way to disable the module later.
-        if (!ModuleUtil.getInstance().getEnabledModules().isEmpty()) {
-            Intent iActivateAndReboot = new Intent(context, RebootReceiver.class);
-            iActivateAndReboot.putExtra(RebootReceiver.EXTRA_ACTIVATE_MODULE, packageName);
-            PendingIntent pActivateAndReboot = PendingIntent.getBroadcast(context, PENDING_INTENT_ACTIVATE_MODULE_AND_REBOOT,
-                    iActivateAndReboot, PendingIntent.FLAG_UPDATE_CURRENT);
-            Intent iActivate = new Intent(context, RebootReceiver.class);
-            iActivate.putExtra(RebootReceiver.EXTRA_ACTIVATE_MODULE, packageName);
-            iActivate.putExtra(RebootReceiver.EXTRA_ACTIVATE_MODULE_AND_RETURN, true);
-            PendingIntent pActivate = PendingIntent.getBroadcast(context, PENDING_INTENT_ACTIVATE_MODULE,
-                    iActivate, PendingIntent.FLAG_UPDATE_CURRENT);
-
-            builder.addAction(new NotificationCompat.Action.Builder(R.drawable.ic_apps, context.getString(R.string.activate_and_reboot), pActivateAndReboot).build());
-            builder.addAction(new NotificationCompat.Action.Builder(R.drawable.ic_apps, context.getString(R.string.activate_only), pActivate).build());
-        }
 
         NotificationCompat.BigTextStyle style = new NotificationCompat.BigTextStyle();
         style.setBigContentTitle(title);
@@ -139,8 +118,6 @@ public final class NotificationUtil {
 
     public static class RebootReceiver extends BroadcastReceiver {
         public static String EXTRA_SOFT_REBOOT = "soft";
-        public static String EXTRA_ACTIVATE_MODULE = "activate_module";
-        public static String EXTRA_ACTIVATE_MODULE_AND_RETURN = "activate_module_and_return";
 
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -153,16 +130,6 @@ public final class NotificationUtil {
              */
             context.sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
             cancelAll();
-
-            if (intent.hasExtra(EXTRA_ACTIVATE_MODULE)) {
-                String packageName = intent.getStringExtra(EXTRA_ACTIVATE_MODULE);
-                ModuleUtil moduleUtil = ModuleUtil.getInstance();
-                moduleUtil.setModuleEnabled(packageName, true);
-                moduleUtil.updateModulesList(false);
-                Toast.makeText(context, R.string.module_activated, Toast.LENGTH_SHORT).show();
-
-                if (intent.hasExtra(EXTRA_ACTIVATE_MODULE_AND_RETURN)) return;
-            }
 
             if (!Shell.rootAccess()) {
                 Log.e(App.TAG, "NotificationUtil -> Could not start root shell");
