@@ -50,8 +50,10 @@ jobs:
       env:
         CHANNEL_ID: ${{ secrets.CHANNEL_ID }}
         BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+        COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
       run: |
         OUTPUT="core/release/"
         export release=$(find $OUTPUT -name "LSPosed-v*-release.zip")
         export debug=$(find $OUTPUT -name "LSPosed-v*-debug.zip")
-        curl -v "https://api.telegram.org/bot${BOT_TOKEN}/sendMediaGroup?chat_id=${CHANNEL_ID}&media=%5B%7B%22type%22:%22document%22,%20%22media%22:%22attach://release%22%7D,%7B%22type%22:%22document%22,%20%22media%22:%22attach://debug%22%7D%5D"  -F release="@$release" -F debug="@$debug"
+        ESCAPED=`echo $COMMIT_MESSAGE | python3 -c 'import json,sys,urllib.parse; print(urllib.parse.quote(json.dumps(sys.stdin.read())))'`
+        curl -v "https://api.telegram.org/bot${BOT_TOKEN}/sendMediaGroup?chat_id=${CHANNEL_ID}&media=%5B%7B%22type%22:%22document%22,%20%22media%22:%22attach://release%22%7D,%7B%22type%22:%22document%22,%20%22media%22:%22attach://debug%22,%22caption%22:${ESCAPED}%7D%5D"  -F release="@$release" -F debug="@$debug"
