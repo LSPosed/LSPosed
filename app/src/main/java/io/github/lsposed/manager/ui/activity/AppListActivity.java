@@ -23,7 +23,7 @@ import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.adapters.AppAdapter;
 import io.github.lsposed.manager.adapters.ScopeAdapter;
 import io.github.lsposed.manager.adapters.WhiteListAdapter;
-import io.github.lsposed.manager.databinding.ActivityScopeListBinding;
+import io.github.lsposed.manager.databinding.ActivityAppListBinding;
 import io.github.lsposed.manager.util.LinearLayoutManagerFix;
 import io.github.lsposed.manager.util.ModuleUtil;
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
@@ -33,7 +33,7 @@ public class AppListActivity extends BaseActivity {
     private AppAdapter appAdapter;
 
     private SearchView.OnQueryTextListener searchListener;
-    private ActivityScopeListBinding binding;
+    private ActivityAppListBinding binding;
     private final Runnable runnable = new Runnable() {
         @Override
         public void run() {
@@ -48,7 +48,7 @@ public class AppListActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         modulePackageName = getIntent().getStringExtra("modulePackageName");
         String moduleName = getIntent().getStringExtra("moduleName");
-        binding = ActivityScopeListBinding.inflate(getLayoutInflater());
+        binding = ActivityAppListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);
         binding.toolbar.setNavigationOnClickListener(view -> onBackPressed());
