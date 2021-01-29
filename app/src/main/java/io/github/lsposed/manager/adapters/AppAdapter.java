@@ -80,25 +80,25 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
                 rmList.add(info);
                 continue;
             }
-            if (this instanceof ScopeAdapter) {
-                List<String> list = AppHelper.getAppList();
-                if (!list.contains(info.packageName)) {
-                    rmList.add(info);
-                    continue;
-                }
-                if (info.packageName.equals(((ScopeAdapter) this).modulePackageName)) {
-                    rmList.add(info);
-                    continue;
-                }
-            }
             if (!preferences.getBoolean("show_modules", true)) {
-                if (info.applicationInfo.metaData != null && info.applicationInfo.metaData.containsKey("xposedmodule") || AppHelper.forceWhiteList.contains(info.packageName)) {
+                if (info.applicationInfo.metaData != null && info.applicationInfo.metaData.containsKey("xposedmodule")) {
                     rmList.add(info);
                     continue;
                 }
             }
             if (!preferences.getBoolean("show_system_apps", true) && (info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
                 rmList.add(info);
+                continue;
+            }
+            if (this instanceof ScopeAdapter) {
+                if (info.packageName.equals(((ScopeAdapter) this).modulePackageName)) {
+                    rmList.add(info);
+                    continue;
+                }
+                List<String> list = AppHelper.getAppList();
+                if (!list.contains(info.packageName)) {
+                    rmList.add(info);
+                }
             }
         }
         if (rmList.size() > 0) {
