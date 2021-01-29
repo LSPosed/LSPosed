@@ -12,11 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.FragmentManager;
 
-import io.github.lsposed.manager.App;
-import io.github.lsposed.manager.Constants;
-import io.github.lsposed.manager.R;
-import io.github.lsposed.manager.util.CompileUtil;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -25,6 +20,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import io.github.lsposed.manager.App;
+import io.github.lsposed.manager.Constants;
+import io.github.lsposed.manager.R;
+import io.github.lsposed.manager.util.CompileUtil;
 
 import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
 
@@ -51,20 +51,28 @@ public class AppHelper {
 
     public static List<String> getAppList(boolean white) {
         Path dir = Paths.get(BASE_PATH + (white ? WHITE_LIST_PATH : BLACK_LIST_PATH));
-        List<String> s = new ArrayList<>();
+        List<String> list = new ArrayList<>();
         try {
             Files.list(dir).forEach(path -> {
                 if (!Files.isDirectory(path)) {
-                    String packageName = path.getFileName().toString();
-                    if (forceWhiteList.contains(packageName)) {
-                        createAppListFile(packageName, white, white);
-                    }
-                    if (white) s.add(packageName);
+                    list.add(path.getFileName().toString());
                 }
             });
-            return s;
+            forceWhiteList.forEach(s -> {
+                if (list.contains(s)) {
+                    if (!white) {
+                        createAppListFile(s, false, false);
+                        list.remove(s);
+                    }
+                } else if (white) {
+                    createAppListFile(s, true, true);
+                    list.add(s);
+                }
+            });
+            return list;
         } catch (IOException e) {
-            return s;
+            e.printStackTrace();
+            return list;
         }
     }
 
