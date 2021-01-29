@@ -118,13 +118,11 @@ namespace lspd {
         const std::filesystem::path base_config_path_;   // /data/misc/lspd_xxxx/{user}
         const bool initialized_ = false;
         const std::filesystem::path installer_pkg_name_;
-        const bool white_list_enable_ = false;
         const bool deopt_boot_image_enabled_ = false;
         const bool no_module_log_enabled_ = false;
         const bool resources_hook_enabled_ = false;
         // snapshot at boot
         const std::unordered_set<std::string> white_list_;
-        const std::unordered_set<std::string> black_list_;
 
         const std::unordered_map<std::string, std::pair<std::string, std::unordered_set<std::string>>> modules_list_;
 
