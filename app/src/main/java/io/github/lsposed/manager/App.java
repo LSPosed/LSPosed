@@ -11,6 +11,7 @@ import androidx.preference.PreferenceManager;
 
 import io.github.lsposed.manager.ui.activity.CrashReportActivity;
 import io.github.lsposed.manager.util.CompileUtil;
+import io.github.lsposed.manager.util.ModuleUtil;
 import io.github.lsposed.manager.util.NotificationUtil;
 import io.github.lsposed.manager.util.RebootUtil;
 
@@ -126,6 +127,7 @@ public class App extends Application {
         pref = PreferenceManager.getDefaultSharedPreferences(this);
 
         NotificationUtil.init();
+        ModuleUtil.getInstance();
 
         Shizuku.addRequestPermissionResultListener(REQUEST_PERMISSION_RESULT_LISTENER);
     }
