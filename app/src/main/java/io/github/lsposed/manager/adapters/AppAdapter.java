@@ -90,7 +90,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
                 rmList.add(info);
                 continue;
             }
-            if (!preferences.getBoolean("show_system_apps", true) && (info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
+            if (!preferences.getBoolean("show_system_apps", false) && (info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
                 rmList.add(info);
                 continue;
             }
@@ -157,7 +157,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
 
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.menu_app_list, menu);
-        menu.findItem(R.id.item_show_system).setChecked(preferences.getBoolean("show_system_apps", true));
+        menu.findItem(R.id.item_show_system).setChecked(preferences.getBoolean("show_system_apps", false));
         switch (preferences.getInt("list_sort", 0)) {
             case 7:
                 menu.findItem(R.id.item_sort_by_update_time_reverse).setChecked(true);
