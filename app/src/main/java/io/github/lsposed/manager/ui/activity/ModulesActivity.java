@@ -27,17 +27,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
-import io.github.lsposed.manager.App;
-import io.github.lsposed.manager.BuildConfig;
-import io.github.lsposed.manager.Constants;
-import io.github.lsposed.manager.R;
-import io.github.lsposed.manager.adapters.AppAdapter;
-import io.github.lsposed.manager.databinding.ActivityModulesBinding;
-import io.github.lsposed.manager.util.GlideApp;
-import io.github.lsposed.manager.util.LinearLayoutManagerFix;
-import io.github.lsposed.manager.util.ModuleUtil;
-import io.github.lsposed.manager.util.NavUtil;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStream;
@@ -54,6 +43,16 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import io.github.lsposed.manager.App;
+import io.github.lsposed.manager.BuildConfig;
+import io.github.lsposed.manager.Constants;
+import io.github.lsposed.manager.R;
+import io.github.lsposed.manager.adapters.AppAdapter;
+import io.github.lsposed.manager.databinding.ActivityModulesBinding;
+import io.github.lsposed.manager.util.GlideApp;
+import io.github.lsposed.manager.util.LinearLayoutManagerFix;
+import io.github.lsposed.manager.util.ModuleUtil;
+import io.github.lsposed.manager.util.NavUtil;
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 
 import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
@@ -197,7 +196,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         binding.recyclerView.setAdapter(adapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManagerFix(this));
         FastScrollerBuilder fastScrollerBuilder = new FastScrollerBuilder(binding.recyclerView);
-        if (!preferences.getBoolean("md2", false)) {
+        if (!preferences.getBoolean("md2", true)) {
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
                     DividerItemDecoration.VERTICAL);
             binding.recyclerView.addItemDecoration(dividerItemDecoration);

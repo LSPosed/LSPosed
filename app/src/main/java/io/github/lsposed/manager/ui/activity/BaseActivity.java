@@ -18,14 +18,14 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import java.util.Objects;
+
 import io.github.lsposed.manager.App;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.util.CompileUtil;
 import io.github.lsposed.manager.util.CustomThemeColor;
 import io.github.lsposed.manager.util.CustomThemeColors;
 import io.github.lsposed.manager.util.RebootUtil;
-
-import java.util.Objects;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -39,7 +39,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public static boolean isBlackNightTheme() {
-        return preferences.getBoolean("black_dark_theme", false) || preferences.getBoolean("md2", false);
+        return preferences.getBoolean("black_dark_theme", false) || preferences.getBoolean("md2", true);
     }
 
     public static String getTheme(Context context) {
@@ -67,7 +67,7 @@ public class BaseActivity extends AppCompatActivity {
 
     @StyleRes
     private int getCustomTheme() {
-        String baseThemeName = preferences.getBoolean("colorized_action_bar", false) && !preferences.getBoolean("md2", false) ?
+        String baseThemeName = preferences.getBoolean("colorized_action_bar", false) && !preferences.getBoolean("md2", true) ?
                 "ThemeOverlay.ActionBarPrimaryColor" : "ThemeOverlay";
         String customThemeName;
         String primaryColorEntryName = "colorPrimary";
@@ -92,7 +92,7 @@ public class BaseActivity extends AppCompatActivity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AppCompatDelegate.setDefaultNightMode(preferences.getInt("theme", -1));
-        theme = getTheme(this) + getCustomTheme() + preferences.getBoolean("md2", false);
+        theme = getTheme(this) + getCustomTheme() + preferences.getBoolean("md2", true);
     }
 
     public int getThemedColor(int id) {
@@ -112,7 +112,7 @@ public class BaseActivity extends AppCompatActivity {
                 getWindow().setStatusBarColor(getThemedColor(R.attr.colorPrimaryDark));
             }
         }
-        if (!Objects.equals(theme, getTheme(this) + getCustomTheme() + preferences.getBoolean("md2", false))) {
+        if (!Objects.equals(theme, getTheme(this) + getCustomTheme() + preferences.getBoolean("md2", true))) {
             recreate();
         }
     }
@@ -131,7 +131,7 @@ public class BaseActivity extends AppCompatActivity {
             theme.applyStyle(resid, false);
         }
         theme.applyStyle(getCustomTheme(), true);
-        if (preferences.getBoolean("md2", false) && !(this instanceof MainActivity)) {
+        if (preferences.getBoolean("md2", true) && !(this instanceof MainActivity)) {
             theme.applyStyle(R.style.ThemeOverlay_Md2, true);
         }
         if (this instanceof MainActivity) {

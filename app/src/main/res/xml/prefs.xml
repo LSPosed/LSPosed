@@ -45,6 +45,7 @@
         <SwitchPreferenceCompat
             android:key="md2"
             android:title="@string/material_design_2"
+            android:defaultValue="true"
             app:iconSpaceReserved="false" />
         <SwitchPreferenceCompat
             android:key="colorized_action_bar"
