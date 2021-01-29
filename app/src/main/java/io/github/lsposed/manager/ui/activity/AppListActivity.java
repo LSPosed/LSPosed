@@ -21,6 +21,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.adapters.AppAdapter;
+import io.github.lsposed.manager.adapters.AppHelper;
 import io.github.lsposed.manager.adapters.ScopeAdapter;
 import io.github.lsposed.manager.adapters.WhiteListAdapter;
 import io.github.lsposed.manager.databinding.ActivityAppListBinding;
@@ -120,7 +121,7 @@ public class AppListActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         if (searchView.isIconified()) {
-            if (binding.masterSwitch.isChecked() && appAdapter.checkedList.isEmpty()) {
+            if (binding.masterSwitch.isChecked() && AppHelper.getScopeList(modulePackageName).isEmpty()) {
                 new MaterialAlertDialogBuilder(this)
                         .setMessage(R.string.no_scope_selected)
                         .setPositiveButton(android.R.string.cancel, null)

@@ -139,10 +139,10 @@ public class AppHelper {
         });
         appMenu.show();
     }
-    
+
     public static boolean onOptionsItemSelected(MenuItem item, SharedPreferences preferences) {
         int itemId = item.getItemId();
-         if (itemId == R.id.item_sort_by_name) {
+        if (itemId == R.id.item_sort_by_name) {
             item.setChecked(true);
             preferences.edit().putInt("list_sort", 0).apply();
         } else if (itemId == R.id.item_sort_by_name_reverse) {
@@ -167,9 +167,9 @@ public class AppHelper {
             item.setChecked(true);
             preferences.edit().putInt("list_sort", 7).apply();
         } else {
-             return false;
-         }
-         return true;
+            return false;
+        }
+        return true;
     }
 
     public static Comparator<PackageInfo> getAppListComparator(int sort, PackageManager pm) {

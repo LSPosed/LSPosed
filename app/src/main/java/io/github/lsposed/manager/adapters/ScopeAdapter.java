@@ -1,12 +1,9 @@
 package io.github.lsposed.manager.adapters;
 
-import android.content.pm.PackageInfo;
-import android.util.Log;
 import android.widget.CompoundButton;
 
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.github.lsposed.manager.R;
@@ -28,7 +25,6 @@ public class ScopeAdapter extends AppAdapter {
         masterSwitch.setOnCheckedChangedListener(new MasterSwitch.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(boolean checked) {
-                Log.e("Test", checked + "");
                 enabled = checked;
                 ModuleUtil.getInstance().setModuleEnabled(modulePackageName, enabled);
                 notifyDataSetChanged();
@@ -39,13 +35,7 @@ public class ScopeAdapter extends AppAdapter {
     @Override
     public List<String> generateCheckedList() {
         AppHelper.makeSurePath();
-        List<String> scopeList = AppHelper.getScopeList(modulePackageName);
-        List<String> list = new ArrayList<>();
-        for (PackageInfo info : fullList) {
-            list.add(info.packageName);
-        }
-        scopeList.retainAll(list);
-        checkedList = scopeList;
+        checkedList = AppHelper.getScopeList(modulePackageName);
         enabled = ModuleUtil.getInstance().isModuleEnabled(modulePackageName);
         activity.runOnUiThread(() -> masterSwitch.setChecked(enabled));
         return checkedList;

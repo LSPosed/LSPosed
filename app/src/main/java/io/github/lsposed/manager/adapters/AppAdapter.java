@@ -47,7 +47,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
     protected AppListActivity activity;
     protected List<PackageInfo> fullList, showList;
     private final DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-    public List<String> checkedList;
+    private List<String> checkedList;
     private final PackageManager pm;
     private final ApplicationFilter filter;
     private final SharedPreferences preferences;
