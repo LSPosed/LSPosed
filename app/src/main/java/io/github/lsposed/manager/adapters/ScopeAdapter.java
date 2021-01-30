@@ -11,7 +11,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -189,8 +188,6 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             Intent launchIntent = pm.getLaunchIntentForPackage(info.packageName);
             if (launchIntent != null) {
                 activity.startActivity(launchIntent);
-            } else {
-                activity.makeSnackBar(R.string.module_no_ui, Snackbar.LENGTH_LONG);
             }
         } else if (itemId == R.id.app_menu_stop) {
             try {
@@ -263,7 +260,6 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Log.e("Test", enabled + "");
         holder.root.setAlpha(enabled ? 1.0f : .5f);
         PackageInfo info = showList.get(position);
         holder.appName.setText(getAppLabel(info.applicationInfo, pm));
@@ -282,7 +278,16 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                 });
         holder.appDescription.setText(activity.getString(R.string.app_description, info.packageName, info.versionName));
 
-        holder.itemView.setOnCreateContextMenuListener((menu, v, menuInfo) -> activity.getMenuInflater().inflate(R.menu.menu_app_item, menu));
+        holder.itemView.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
+            activity.getMenuInflater().inflate(R.menu.menu_app_item, menu);
+            Intent launchIntent = pm.getLaunchIntentForPackage(info.packageName);
+            if (launchIntent == null) {
+                menu.removeItem(R.id.app_menu_launch);
+            }
+            if ((info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
+                menu.removeItem(R.id.app_menu_uninstall);
+            }
+        });
 
         holder.checkbox.setOnCheckedChangeListener(null);
         holder.checkbox.setChecked(checkedList.contains(info.packageName));
