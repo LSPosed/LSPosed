@@ -138,11 +138,11 @@
     <string name="accent_color">强调色</string>
     <string name="colorized_action_bar">着色应用栏</string>
     <string name="settings_group_theme">主题</string>
-    <string name="material_design_2">惨白设计</string>
+    <string name="material_design_2">沉浸设计</string>
     <string name="menu_scope">作用域</string>
     <string name="settings_enable_resources">启用资源钩子</string>
     <string name="settings_enable_resources_summary"><b>警告: </b> 资源钩子已被弃用</string>
-    <string name="settings_variant">变体</string>
+    <string name="settings_variant">切换框架</string>
     <string name="menu_optimize">优化…</string>
     <string name="menu_show_system_apps">系统应用</string>
     <string name="menu_reboot">重启…</string>
