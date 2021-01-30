@@ -27,11 +27,10 @@ import io.github.lsposed.manager.databinding.StatusInstallerBinding;
 
 @SuppressLint("StaticFieldLeak")
 public class StatusDialogBuilder extends MaterialAlertDialogBuilder {
-    private static String CPU_ABI;
-    private static String CPU_ABI2;
+    private static final String CPU_ABI;
+    private static final String CPU_ABI2;
 
-    public StatusDialogBuilder(@NonNull Context context) {
-        super(context);
+    static {
         final String[] abiList;
         if (VMRuntime.getRuntime().is64Bit()) {
             abiList = Build.SUPPORTED_64_BIT_ABIS;
@@ -44,6 +43,10 @@ public class StatusDialogBuilder extends MaterialAlertDialogBuilder {
         } else {
             CPU_ABI2 = "";
         }
+    }
+
+    public StatusDialogBuilder(@NonNull Context context) {
+        super(context);
         StatusInstallerBinding binding = StatusInstallerBinding.inflate(LayoutInflater.from(context), null, false);
 
         String installedXposedVersion = Constants.getXposedVersion();

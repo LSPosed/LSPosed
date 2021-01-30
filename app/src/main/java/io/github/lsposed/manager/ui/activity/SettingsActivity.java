@@ -3,6 +3,7 @@ package io.github.lsposed.manager.ui.activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -25,6 +26,7 @@ import java.nio.file.Paths;
 import io.github.lsposed.manager.Constants;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.databinding.ActivitySettingsBinding;
+import io.github.lsposed.manager.ui.fragment.StatusDialogBuilder;
 import io.github.lsposed.manager.ui.widget.IntegerListPreference;
 
 public class SettingsActivity extends BaseActivity {
@@ -129,7 +131,7 @@ public class SettingsActivity extends BaseActivity {
 
             SimpleMenuPreference prefVariant = findPreference("variant");
             if (prefVariant != null) {
-                if (requireActivity().getApplicationInfo().uid / 100000 != 0) {
+                if (StatusDialogBuilder.getArch().contains("x86") || requireActivity().getApplicationInfo().uid / 100000 != 0) {
                     prefVariant.setVisible(false);
                 } else {
                     try {
