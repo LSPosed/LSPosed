@@ -81,14 +81,22 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
             if (checkedList.contains(info.packageName)) {
                 continue;
             }
-            if (info.applicationInfo.category == ApplicationInfo.CATEGORY_GAME) {
-                rmList.add(info);
-                continue;
+            if (!preferences.getBoolean("show_modules", false)) {
+                if (info.applicationInfo.metaData != null && info.applicationInfo.metaData.containsKey("xposedmodule")) {
+                    rmList.add(info);
+                    continue;
+                }
             }
-            //noinspection deprecation
-            if ((info.applicationInfo.flags & ApplicationInfo.FLAG_IS_GAME) != 0) {
-                rmList.add(info);
-                continue;
+            if (!preferences.getBoolean("show_games", false)) {
+                if (info.applicationInfo.category == ApplicationInfo.CATEGORY_GAME) {
+                    rmList.add(info);
+                    continue;
+                }
+                //noinspection deprecation
+                if ((info.applicationInfo.flags & ApplicationInfo.FLAG_IS_GAME) != 0) {
+                    rmList.add(info);
+                    continue;
+                }
             }
             if ((info.applicationInfo.flags & ApplicationInfo.FLAG_HAS_CODE) == 0 && !info.packageName.equals("android")) {
                 rmList.add(info);
@@ -96,12 +104,6 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
             }
             if (!preferences.getBoolean("show_system_apps", false) && (info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
                 rmList.add(info);
-                continue;
-            }
-            if (this instanceof ScopeAdapter) {
-                if (info.packageName.equals(((ScopeAdapter) this).modulePackageName)) {
-                    rmList.add(info);
-                }
             }
         }
         if (rmList.size() > 0) {
@@ -145,6 +147,12 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
         if (itemId == R.id.item_show_system) {
             item.setChecked(!item.isChecked());
             preferences.edit().putBoolean("show_system_apps", item.isChecked()).apply();
+        } else if (itemId == R.id.item_show_games) {
+            item.setChecked(!item.isChecked());
+            preferences.edit().putBoolean("show_games", item.isChecked()).apply();
+        } else if (itemId == R.id.item_show_modules) {
+            item.setChecked(!item.isChecked());
+            preferences.edit().putBoolean("show_modules", item.isChecked()).apply();
         } else if (!AppHelper.onOptionsItemSelected(item, preferences)) {
             return false;
         }
@@ -155,6 +163,8 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.menu_app_list, menu);
         menu.findItem(R.id.item_show_system).setChecked(preferences.getBoolean("show_system_apps", false));
+        menu.findItem(R.id.item_show_games).setChecked(preferences.getBoolean("show_games", false));
+        menu.findItem(R.id.item_show_modules).setChecked(preferences.getBoolean("show_modules", false));
         switch (preferences.getInt("list_sort", 0)) {
             case 7:
                 menu.findItem(R.id.item_sort_by_update_time_reverse).setChecked(true);

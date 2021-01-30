@@ -9,6 +9,18 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/item_show_games"
+        android:checkable="true"
+        android:checked="true"
+        android:title="@string/menu_show_games" />
+
+    <item
+        android:id="@+id/item_show_modules"
+        android:checkable="true"
+        android:checked="true"
+        android:title="@string/menu_show_modules" />
+
+    <item
         android:id="@+id/item_show_system"
         android:checkable="true"
         android:checked="true"
