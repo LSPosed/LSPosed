@@ -136,5 +136,25 @@
     <string name="accent_color">強調色</string>
     <string name="colorized_action_bar">著色應用欄</string>
     <string name="settings_group_theme">主題</string>
-    <string name="material_design_2">慘白設計</string>
+    <string name="material_design_2">沉浸設計</string>
+    <string name="menu_scope">作用域</string>
+    <string name="settings_enable_resources">啟用資源鉤子</string>
+    <string name="settings_enable_resources_summary"><b>警告: </b> 資源鉤子已被棄用</string>
+    <string name="settings_variant">切換框架</string>
+    <string name="menu_optimize">優化…</string>
+    <string name="menu_show_system_apps">系統應用</string>
+    <string name="menu_reboot">重啟…</string>
+    <string name="menu_sort">排序…</string>
+    <string name="enable_module">啟用模塊</string>
+    <string name="no_scope_selected">未選擇任何應用。繼續？</string>
+    <string name="menu_show_games">遊戲</string>
+    <string name="menu_show_modules">模塊</string>
+    <string name="failed_to_save_scope_list">作用域列表保存失敗</string>
+    <string name="module_settings">模塊設置</string>
+    <string name="app_description">%s\n版本：%s</string>
+    <string name="use_recommended">推薦應用</string>
+    <string name="no_scope_selected_has_recommended">未選擇任何應用。選擇推薦的應用？</string>
+    <string name="use_recommended_message">選擇推薦的應用?</string>
+    <string name="requested_by_module">推薦的應用</string>
+    <string name="module_disabled_no_selection">由於未選擇任何應用，模塊 %s 已被禁用。</string>     
 </resources>
