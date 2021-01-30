@@ -24,11 +24,6 @@
         <item name="liftOnScroll">false</item>
     </style>
 
-    <style name="AppearanceFoundation.Caption" parent="TextAppearance.AppCompat.Caption">
-        <item name="fontFamily">@font/exo</item>
-        <item name="android:textColor">?attr/colorOnSurface</item>
-    </style>
-
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
 
     <style name="MasterSwitch" parent="@style/ThemeOverlay.AppCompat.Dark">

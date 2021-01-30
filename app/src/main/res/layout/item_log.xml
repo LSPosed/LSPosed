@@ -3,6 +3,6 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:fontFamily="monospace"
-    android:text=""
-    android:textAppearance="@style/AppearanceFoundation.Caption"
+    android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+    android:textColor="?attr/colorOnSurface"
     android:textSize="10sp" />
