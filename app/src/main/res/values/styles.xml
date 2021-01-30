@@ -28,7 +28,7 @@
 
     <style name="MasterSwitch" parent="@style/ThemeOverlay.AppCompat.Dark">
         <item name="masterSwitchBackgroundOff">#80868b</item>
-        <item name="masterSwitchBackgroundOn">?colorPrimarySurface</item>
+        <item name="masterSwitchBackgroundOn">?colorAccent</item>
         <item name="masterSwitchTextAppearance">@style/MasterSwitch.TextAppearance</item>
         <item name="switchStyle">@style/MasterSwitch.Switch</item>
     </style>
