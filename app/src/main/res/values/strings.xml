@@ -112,7 +112,6 @@
     <string name="verified_boot_active">Verified Boot is active</string>
 
     <!-- LSPd related -->
-    <string name="title_white_list">White List</string>
     <string name="add_package_failed">Failed to edit, one or more settings prevent you from editing.</string>
     <string name="menu_title_compile_reset">De-optimize</string>
     <string name="menu_title_compile_speed">Optimize with Speed mode</string>
@@ -161,7 +160,6 @@
     <string name="menu_show_system_apps">System apps</string>
     <string name="menu_reboot">Reboot…</string>
     <string name="menu_sort">Sorting…</string>
-    <string name="whitelist_summary">%d apps whitelisted</string>
     <string name="enable_module">Enable module</string>
     <string name="no_scope_selected">You did not select any app. Continue?</string>
 </resources>

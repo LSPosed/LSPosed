@@ -23,7 +23,6 @@ import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.adapters.AppAdapter;
 import io.github.lsposed.manager.adapters.AppHelper;
 import io.github.lsposed.manager.adapters.ScopeAdapter;
-import io.github.lsposed.manager.adapters.WhiteListAdapter;
 import io.github.lsposed.manager.databinding.ActivityAppListBinding;
 import io.github.lsposed.manager.util.LinearLayoutManagerFix;
 import io.github.lsposed.manager.util.ModuleUtil;
@@ -60,10 +59,6 @@ public class AppListActivity extends BaseActivity {
             bar.setTitle(R.string.menu_scope);
             bar.setSubtitle(moduleName);
             appAdapter = new ScopeAdapter(this, modulePackageName, binding.masterSwitch);
-        } else {
-            bar.setTitle(R.string.title_white_list);
-            binding.masterSwitch.setVisibility(View.GONE);
-            appAdapter = new WhiteListAdapter(this);
         }
         appAdapter.setHasStableIds(true);
         binding.recyclerView.setAdapter(appAdapter);

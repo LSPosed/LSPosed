@@ -97,7 +97,6 @@
     <string name="not_logcat">此處僅顯示 LSPosed 及模塊相關日誌信息\n如果您想抓取系統日誌, 可以嘗試我們的 Log Catcher Magisk 模塊</string>
 
     <!-- LSPd related -->
-    <string name="title_white_list">白名單</string>
     <string name="add_package_failed">修改失敗, 一個或多個設置阻止你繼續修改</string>
     <string name="menu_title_compile_reset">取消優化</string>
     <string name="menu_title_compile_speed">以 Speed 模式優化應用</string>

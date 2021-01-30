@@ -36,62 +36,11 @@ import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
 public class AppHelper {
 
     private static final String BASE_PATH = Constants.getBaseDir();
-    private static final String WHITE_LIST_PATH = "conf/whitelist/";
     private static final String SCOPE_LIST_PATH = "conf/%s.conf";
 
     public static List<String> forceWhiteList = new ArrayList<>();
 
     private static final HashMap<String, List<String>> scopeList = new HashMap<>();
-
-    public static void makeSurePath() {
-        App.mkdir(WHITE_LIST_PATH);
-    }
-
-    public static List<String> getAppList() {
-        Path dir = Paths.get(BASE_PATH + (WHITE_LIST_PATH));
-        List<String> list = new ArrayList<>();
-        try {
-            Files.list(dir).forEach(path -> {
-                if (!Files.isDirectory(path)) {
-                    list.add(path.getFileName().toString());
-                }
-            });
-            forceWhiteList.forEach(s -> {
-                if (!list.contains(s)) {
-                    createAppListFile(s, true);
-                    list.add(s);
-                }
-            });
-            return list;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return list;
-        }
-    }
-
-    private static boolean createAppListFile(String packageName, boolean add) {
-        Path path = Paths.get(BASE_PATH + (WHITE_LIST_PATH) + packageName);
-        try {
-            if (Files.exists(path)) {
-                if (!add) {
-                    Files.delete(path);
-                }
-            } else if (add) {
-                Files.createFile(path);
-            }
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    static boolean setPackageAppList(String packageName, boolean add) {
-        if (!add && forceWhiteList.contains(packageName)) {
-            return false;
-        }
-        return createAppListFile(packageName, add);
-    }
 
     public static void showMenu(@NonNull Context context,
                                 @NonNull FragmentManager fragmentManager,

@@ -70,9 +70,17 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
     }
 
     private void loadApps() {
+        checkedList = generateCheckedList();
         fullList = pm.getInstalledPackages(PackageManager.GET_META_DATA);
         List<PackageInfo> rmList = new ArrayList<>();
         for (PackageInfo info : fullList) {
+            if (info.packageName.equals(((ScopeAdapter) this).modulePackageName)) {
+                rmList.add(info);
+                continue;
+            }
+            if (checkedList.contains(info.packageName)) {
+                continue;
+            }
             if (info.applicationInfo.category == ApplicationInfo.CATEGORY_GAME) {
                 rmList.add(info);
                 continue;
@@ -93,23 +101,12 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> impl
             if (this instanceof ScopeAdapter) {
                 if (info.packageName.equals(((ScopeAdapter) this).modulePackageName)) {
                     rmList.add(info);
-                    continue;
-                }
-                List<String> list = AppHelper.getAppList();
-                if (!list.contains(info.packageName)) {
-                    rmList.add(info);
-                }
-            } else {
-                if (AppHelper.forceWhiteList.contains(info.packageName)) {
-                    rmList.add(info);
                 }
             }
         }
         if (rmList.size() > 0) {
             fullList.removeAll(rmList);
         }
-        AppHelper.makeSurePath();
-        checkedList = generateCheckedList();
         sortApps();
         showList = fullList;
         if (activity != null) {

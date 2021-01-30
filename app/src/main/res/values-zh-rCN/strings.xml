@@ -98,7 +98,6 @@
     <string name="not_logcat">此处仅显示 LSPosed 及模块相关日志信息\n如果您想抓取系统日志, 可以尝试我们的 Log Catcher Magisk 模块</string>
 
     <!-- LSPd related -->
-    <string name="title_white_list">白名单</string>
     <string name="add_package_failed">修改失败, 一个或多个设置阻止你继续修改</string>
     <string name="menu_title_compile_reset">取消优化</string>
     <string name="menu_title_compile_speed">以 Speed 模式优化应用</string>
@@ -153,7 +152,6 @@
     <string name="menu_show_system_apps">系统应用</string>
     <string name="menu_reboot">重启…</string>
     <string name="menu_sort">排序…</string>
-    <string name="whitelist_summary">%d 个应用位于白名单中</string>
     <string name="enable_module">启用模块</string>
     <string name="no_scope_selected">未选择任何应用。继续？</string>
 </resources>

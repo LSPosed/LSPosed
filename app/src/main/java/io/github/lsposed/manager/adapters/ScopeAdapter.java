@@ -34,7 +34,6 @@ public class ScopeAdapter extends AppAdapter {
 
     @Override
     public List<String> generateCheckedList() {
-        AppHelper.makeSurePath();
         checkedList = AppHelper.getScopeList(modulePackageName);
         enabled = ModuleUtil.getInstance().isModuleEnabled(modulePackageName);
         activity.runOnUiThread(() -> masterSwitch.setChecked(enabled));
