@@ -52,8 +52,8 @@ public class AppListActivity extends BaseActivity {
         ActionBar bar = getSupportActionBar();
         assert bar != null;
         bar.setDisplayHomeAsUpEnabled(true);
-        bar.setTitle(R.string.menu_scope);
-        bar.setSubtitle(moduleName);
+        bar.setTitle(moduleName);
+        bar.setSubtitle(modulePackageName);
         scopeAdapter = new ScopeAdapter(this, modulePackageName, binding.masterSwitch);
         scopeAdapter.setHasStableIds(true);
         binding.recyclerView.setAdapter(scopeAdapter);
@@ -87,10 +87,10 @@ public class AppListActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (!scopeAdapter.onOptionsItemSelected(item)) {
-            return super.onOptionsItemSelected(item);
+        if (scopeAdapter.onOptionsItemSelected(item)) {
+            return true;
         }
-        return true;
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -106,6 +106,14 @@ public class AppListActivity extends BaseActivity {
         binding.swipeRefreshLayout.setRefreshing(false);
         String queryStr = searchView != null ? searchView.getQuery().toString() : "";
         runOnUiThread(() -> scopeAdapter.getFilter().filter(queryStr));
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        if (scopeAdapter.onContextItemSelected(item)) {
+            return true;
+        }
+        return super.onContextItemSelected(item);
     }
 
     @Override

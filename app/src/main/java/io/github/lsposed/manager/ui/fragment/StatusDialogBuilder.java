@@ -11,12 +11,6 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import io.github.lsposed.manager.App;
-import io.github.lsposed.manager.BuildConfig;
-import io.github.lsposed.manager.Constants;
-import io.github.lsposed.manager.R;
-import io.github.lsposed.manager.databinding.StatusInstallerBinding;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -25,6 +19,11 @@ import java.lang.reflect.Method;
 import java.util.Locale;
 
 import dalvik.system.VMRuntime;
+import io.github.lsposed.manager.App;
+import io.github.lsposed.manager.BuildConfig;
+import io.github.lsposed.manager.Constants;
+import io.github.lsposed.manager.R;
+import io.github.lsposed.manager.databinding.StatusInstallerBinding;
 
 @SuppressLint("StaticFieldLeak")
 public class StatusDialogBuilder extends MaterialAlertDialogBuilder {

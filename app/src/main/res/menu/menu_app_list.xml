@@ -9,6 +9,12 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/menu_launch"
+        android:title="@string/module_settings"
+        android:icon="@drawable/ic_settings"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/item_show_games"
         android:checkable="true"
         android:checked="true"

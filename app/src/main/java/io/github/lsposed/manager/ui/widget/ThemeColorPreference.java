@@ -9,10 +9,10 @@ import com.takisoft.preferencex.ColorPickerPreference;
 import com.takisoft.preferencex.ColorPickerPreferenceDialogFragmentCompat;
 import com.takisoft.preferencex.PreferenceFragmentCompat;
 
+import java.util.Objects;
+
 import io.github.lsposed.manager.util.CustomThemeColor;
 import io.github.lsposed.manager.util.CustomThemeColors;
-
-import java.util.Objects;
 
 public class ThemeColorPreference extends ColorPickerPreference {
 

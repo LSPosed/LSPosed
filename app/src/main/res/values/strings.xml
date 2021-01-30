@@ -160,4 +160,6 @@
     <string name="menu_show_games">Games</string>
     <string name="menu_show_modules">Modules</string>
     <string name="failed_to_save_scope_list">Failed save scope list</string>
+    <string name="module_settings">Module settings</string>
+    <string name="app_description">%s\nVersion: %s</string>
 </resources>

@@ -1,12 +1,17 @@
 package io.github.lsposed.manager.adapters;
 
+import android.app.ActivityManager;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,33 +26,31 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import io.github.lsposed.manager.App;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.ui.activity.AppListActivity;
 import io.github.lsposed.manager.ui.widget.MasterSwitch;
+import io.github.lsposed.manager.util.CompileUtil;
 import io.github.lsposed.manager.util.GlideApp;
 import io.github.lsposed.manager.util.ModuleUtil;
+
+import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
 
 public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> implements Filterable {
 
     private final AppListActivity activity;
-    private final DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     private final PackageManager pm;
     private final ApplicationFilter filter;
     private final SharedPreferences preferences;
@@ -56,6 +59,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     private List<PackageInfo> fullList, showList;
     private List<String> checkedList;
     private boolean enabled = true;
+    private ApplicationInfo selectedInfo;
 
     public ScopeAdapter(AppListActivity activity, String modulePackageName, MasterSwitch masterSwitch) {
         this.activity = activity;
@@ -74,6 +78,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                 notifyDataSetChanged();
             }
         });
+        enabled = ModuleUtil.getInstance().isModuleEnabled(modulePackageName);
         refresh();
     }
 
@@ -85,7 +90,6 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     }
 
     private void loadApps() {
-        enabled = ModuleUtil.getInstance().isModuleEnabled(modulePackageName);
         activity.runOnUiThread(() -> masterSwitch.setChecked(enabled));
         checkedList = AppHelper.getScopeList(modulePackageName);
         fullList = pm.getInstalledPackages(PackageManager.GET_META_DATA);
@@ -161,6 +165,13 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         } else if (itemId == R.id.item_show_modules) {
             item.setChecked(!item.isChecked());
             preferences.edit().putBoolean("show_modules", item.isChecked()).apply();
+        } else if (itemId == R.id.menu_launch) {
+            Intent launchIntent = pm.getLaunchIntentForPackage(modulePackageName);
+            if (launchIntent != null) {
+                activity.startActivity(launchIntent);
+            } else {
+                activity.makeSnackBar(R.string.module_no_ui, Snackbar.LENGTH_LONG);
+            }
         } else if (!AppHelper.onOptionsItemSelected(item, preferences)) {
             return false;
         }
@@ -168,8 +179,57 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         return true;
     }
 
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        ApplicationInfo info = selectedInfo;
+        if (info == null) {
+            return false;
+        }
+        int itemId = item.getItemId();
+        if (itemId == R.id.app_menu_launch) {
+            Intent launchIntent = pm.getLaunchIntentForPackage(info.packageName);
+            if (launchIntent != null) {
+                activity.startActivity(launchIntent);
+            } else {
+                activity.makeSnackBar(R.string.module_no_ui, Snackbar.LENGTH_LONG);
+            }
+        } else if (itemId == R.id.app_menu_stop) {
+            try {
+                ActivityManager manager = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
+                manager.killBackgroundProcesses(info.packageName);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if (itemId == R.id.app_menu_compile_speed) {
+            CompileUtil.compileSpeed(activity, activity.getSupportFragmentManager(), info);
+        } else if (itemId == R.id.app_menu_compile_dexopt) {
+            CompileUtil.compileDexopt(activity, activity.getSupportFragmentManager(), info);
+        } else if (itemId == R.id.app_menu_compile_reset) {
+            CompileUtil.reset(activity, activity.getSupportFragmentManager(), info);
+        } else if (itemId == R.id.app_menu_store) {
+            Uri uri = Uri.parse("market://details?id=" + info.packageName);
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            try {
+                activity.startActivity(intent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if (itemId == R.id.app_menu_info) {
+            activity.startActivity(new Intent(ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", info.packageName, null)));
+        } else if (itemId == R.id.app_menu_uninstall) {
+            activity.startActivity(new Intent(Intent.ACTION_UNINSTALL_PACKAGE, Uri.fromParts("package", info.packageName, null)));
+        } else {
+            return false;
+        }
+        return true;
+    }
+
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.menu_app_list, menu);
+        Intent intent = AppHelper.getSettingsIntent(modulePackageName, pm);
+        if (intent == null) {
+            menu.removeItem(R.id.menu_launch);
+        }
         menu.findItem(R.id.item_show_system).setChecked(preferences.getBoolean("show_system_apps", false));
         menu.findItem(R.id.item_show_games).setChecked(preferences.getBoolean("show_games", false));
         menu.findItem(R.id.item_show_modules).setChecked(preferences.getBoolean("show_modules", false));
@@ -203,6 +263,8 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Log.e("Test", enabled + "");
+        holder.root.setAlpha(enabled ? 1.0f : .5f);
         PackageInfo info = showList.get(position);
         holder.appName.setText(getAppLabel(info.applicationInfo, pm));
         GlideApp.with(holder.appIcon)
@@ -218,20 +280,21 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
 
                     }
                 });
-        holder.appVersion.setText(info.versionName);
-        holder.appVersion.setSelected(true);
-        String creationDate = dateformat.format(new Date(info.firstInstallTime));
-        String updateDate = dateformat.format(new Date(info.lastUpdateTime));
-        holder.timestamps.setText(holder.itemView.getContext().getString(R.string.install_timestamps, creationDate, updateDate));
-        holder.appPackage.setText(info.packageName);
+        holder.appDescription.setText(activity.getString(R.string.app_description, info.packageName, info.versionName));
 
-        holder.mSwitch.setOnCheckedChangeListener(null);
-        holder.mSwitch.setChecked(checkedList.contains(info.packageName));
+        holder.itemView.setOnCreateContextMenuListener((menu, v, menuInfo) -> activity.getMenuInflater().inflate(R.menu.menu_app_item, menu));
 
-        holder.mSwitch.setEnabled(((ScopeAdapter) this).enabled);
-        holder.mSwitch.setOnCheckedChangeListener((v, isChecked) ->
-                onCheckedChange(v, isChecked, info.packageName));
-        holder.itemView.setOnClickListener(v -> AppHelper.showMenu(activity, activity.getSupportFragmentManager(), v, info.applicationInfo));
+        holder.checkbox.setOnCheckedChangeListener(null);
+        holder.checkbox.setChecked(checkedList.contains(info.packageName));
+
+        holder.checkbox.setOnCheckedChangeListener((v, isChecked) -> onCheckedChange(v, isChecked, info.packageName));
+        holder.itemView.setOnClickListener(v -> {
+            if (enabled) holder.checkbox.toggle();
+        });
+        holder.itemView.setOnLongClickListener(v -> {
+            selectedInfo = info.applicationInfo;
+            return false;
+        });
     }
 
     @Override
@@ -254,7 +317,6 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     }
 
     public void refresh() {
-        //noinspection deprecation
         AsyncTask.THREAD_POOL_EXECUTOR.execute(this::loadApps);
     }
 
@@ -277,21 +339,20 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
+        View root;
         ImageView appIcon;
         TextView appName;
-        TextView appPackage;
-        TextView appVersion;
-        TextView timestamps;
-        SwitchCompat mSwitch;
+        TextView appDescription;
+        MaterialCheckBox checkbox;
 
         ViewHolder(View itemView) {
             super(itemView);
+            root = itemView.findViewById(R.id.item_root);
             appIcon = itemView.findViewById(R.id.app_icon);
             appName = itemView.findViewById(R.id.app_name);
-            appPackage = itemView.findViewById(R.id.package_name);
-            appVersion = itemView.findViewById(R.id.version_name);
-            timestamps = itemView.findViewById(R.id.timestamps);
-            mSwitch = itemView.findViewById(R.id.checkbox);
+            appDescription = itemView.findViewById(R.id.description);
+            checkbox = itemView.findViewById(R.id.checkbox);
+            checkbox.setVisibility(View.VISIBLE);
         }
     }
 

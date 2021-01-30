@@ -16,6 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:paddingTop="16dp"
+            android:paddingStart="54dp"
             android:paddingBottom="16dp">
 
             <TextView

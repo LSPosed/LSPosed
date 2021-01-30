@@ -3,16 +3,7 @@
 
     <item
         android:id="@+id/menu_launch"
-        android:title="@string/module_launch" />
-    <item
-        android:id="@+id/menu_scope"
-        android:title="@string/menu_scope" />
-    <!--    <item
-            android:id="@+id/menu_download_updates"
-            android:title="@string/module_download_updates" />
-        <item
-            android:id="@+id/menu_support"
-            android:title="@string/module_support" />-->
+        android:title="@string/module_settings" />
     <item
         android:id="@+id/menu_app_store"
         android:title="@string/modules_app_store" />

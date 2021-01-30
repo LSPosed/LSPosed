@@ -1,20 +1,12 @@
 package io.github.lsposed.manager.adapters;
 
-import android.app.ActivityManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
+import android.content.pm.ResolveInfo;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.PopupMenu;
-import androidx.fragment.app.FragmentManager;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -28,62 +20,34 @@ import java.util.List;
 
 import io.github.lsposed.manager.Constants;
 import io.github.lsposed.manager.R;
-import io.github.lsposed.manager.util.CompileUtil;
-
-import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
 
 public class AppHelper {
 
+    public static final String SETTINGS_CATEGORY = "de.robv.android.xposed.category.MODULE_SETTINGS";
     private static final String BASE_PATH = Constants.getBaseDir();
     private static final String SCOPE_LIST_PATH = "conf/%s.conf";
 
     private static final HashMap<String, List<String>> scopeList = new HashMap<>();
 
-    public static void showMenu(@NonNull Context context,
-                                @NonNull FragmentManager fragmentManager,
-                                @NonNull View anchor,
-                                @NonNull ApplicationInfo info) {
-        PopupMenu appMenu = new PopupMenu(context, anchor);
-        appMenu.inflate(R.menu.menu_app_item);
-        appMenu.setOnMenuItemClickListener(menuItem -> {
-            int itemId = menuItem.getItemId();
-            if (itemId == R.id.app_menu_launch) {
-                Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(info.packageName);
-                if (launchIntent != null) {
-                    context.startActivity(launchIntent);
-                } else {
-                    Toast.makeText(context, context.getString(R.string.module_no_ui), Toast.LENGTH_LONG).show();
-                }
-            } else if (itemId == R.id.app_menu_stop) {
-                try {
-                    ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-                    manager.killBackgroundProcesses(info.packageName);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } else if (itemId == R.id.app_menu_compile_speed) {
-                CompileUtil.compileSpeed(context, fragmentManager, info);
-            } else if (itemId == R.id.app_menu_compile_dexopt) {
-                CompileUtil.compileDexopt(context, fragmentManager, info);
-            } else if (itemId == R.id.app_menu_compile_reset) {
-                CompileUtil.reset(context, fragmentManager, info);
-            } else if (itemId == R.id.app_menu_store) {
-                Uri uri = Uri.parse("market://details?id=" + info.packageName);
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                try {
-                    context.startActivity(intent);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } else if (itemId == R.id.app_menu_info) {
-                context.startActivity(new Intent(ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", info.packageName, null)));
-            } else if (itemId == R.id.app_menu_uninstall) {
-                context.startActivity(new Intent(Intent.ACTION_UNINSTALL_PACKAGE, Uri.fromParts("package", info.packageName, null)));
-            }
-            return true;
-        });
-        appMenu.show();
+    public static Intent getSettingsIntent(String packageName, PackageManager packageManager) {
+        // taken from
+        // ApplicationPackageManager.getLaunchIntentForPackage(String)
+        // first looks for an Xposed-specific category, falls back to
+        // getLaunchIntentForPackage
+
+        Intent intentToResolve = new Intent(Intent.ACTION_MAIN);
+        intentToResolve.addCategory(SETTINGS_CATEGORY);
+        intentToResolve.setPackage(packageName);
+        List<ResolveInfo> ris = packageManager.queryIntentActivities(intentToResolve, 0);
+
+        if (ris.size() <= 0) {
+            return packageManager.getLaunchIntentForPackage(packageName);
+        }
+
+        Intent intent = new Intent(intentToResolve);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setClassName(ris.get(0).activityInfo.packageName, ris.get(0).activityInfo.name);
+        return intent;
     }
 
     public static boolean onOptionsItemSelected(MenuItem item, SharedPreferences preferences) {
@@ -122,17 +86,17 @@ public class AppHelper {
         ApplicationInfo.DisplayNameComparator displayNameComparator = new ApplicationInfo.DisplayNameComparator(pm);
         switch (sort) {
             case 7:
-                return Collections.reverseOrder((PackageInfo a, PackageInfo b) -> Long.compare(a.lastUpdateTime, b.lastUpdateTime));
+                return Collections.reverseOrder(Comparator.comparingLong((PackageInfo a) -> a.lastUpdateTime));
             case 6:
-                return (PackageInfo a, PackageInfo b) -> Long.compare(a.lastUpdateTime, b.lastUpdateTime);
+                return Comparator.comparingLong((PackageInfo a) -> a.lastUpdateTime);
             case 5:
-                return Collections.reverseOrder((PackageInfo a, PackageInfo b) -> Long.compare(a.firstInstallTime, b.firstInstallTime));
+                return Collections.reverseOrder(Comparator.comparingLong((PackageInfo a) -> a.firstInstallTime));
             case 4:
-                return (PackageInfo a, PackageInfo b) -> Long.compare(a.firstInstallTime, b.firstInstallTime);
+                return Comparator.comparingLong((PackageInfo a) -> a.firstInstallTime);
             case 3:
-                return Collections.reverseOrder((a, b) -> a.packageName.compareTo(b.packageName));
+                return Collections.reverseOrder(Comparator.comparing(a -> a.packageName));
             case 2:
-                return (a, b) -> a.packageName.compareTo(b.packageName);
+                return Comparator.comparing(a -> a.packageName);
             case 1:
                 return Collections.reverseOrder((PackageInfo a, PackageInfo b) -> displayNameComparator.compare(a.applicationInfo, b.applicationInfo));
             case 0:

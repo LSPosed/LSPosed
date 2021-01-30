@@ -3,7 +3,6 @@ package io.github.lsposed.manager.ui.activity;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -19,7 +18,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,18 +28,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import io.github.lsposed.manager.BuildConfig;
 import io.github.lsposed.manager.Constants;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.adapters.AppHelper;
@@ -56,14 +48,12 @@ import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
 
 public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleListener {
 
-    public static final String SETTINGS_CATEGORY = "de.robv.android.xposed.category.MODULE_SETTINGS";
     ActivityModulesBinding binding;
     private int installedXposedVersion;
     private ApplicationFilter filter;
     private SearchView searchView;
     private SearchView.OnQueryTextListener mSearchListener;
     private PackageManager pm;
-    private final DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     private ModuleUtil moduleUtil;
     private ModuleAdapter adapter = null;
     private final Runnable reloadModules = new Runnable() {
@@ -293,7 +283,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             if (packageName == null) {
                 return false;
             }
-            Intent intent = getSettingsIntent(packageName);
+            Intent intent = AppHelper.getSettingsIntent(packageName, pm);
             if (intent != null) {
                 startActivity(intent);
             } else {
@@ -316,36 +306,8 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         } else if (itemId == R.id.menu_uninstall) {
             startActivity(new Intent(Intent.ACTION_UNINSTALL_PACKAGE, Uri.fromParts("package", module.packageName, null)));
             return true;
-        } else if (itemId == R.id.menu_scope) {
-            Intent intent = new Intent(this, AppListActivity.class);
-            intent.putExtra("modulePackageName", module.packageName);
-            intent.putExtra("moduleName", module.getAppName());
-            startActivity(intent);
-            return true;
         }
         return super.onContextItemSelected(item);
-    }
-
-    private Intent getSettingsIntent(String packageName) {
-        // taken from
-        // ApplicationPackageManager.getLaunchIntentForPackage(String)
-        // first looks for an Xposed-specific category, falls back to
-        // getLaunchIntentForPackage
-        PackageManager pm = getPackageManager();
-
-        Intent intentToResolve = new Intent(Intent.ACTION_MAIN);
-        intentToResolve.addCategory(SETTINGS_CATEGORY);
-        intentToResolve.setPackage(packageName);
-        List<ResolveInfo> ris = pm.queryIntentActivities(intentToResolve, 0);
-
-        if (ris.size() <= 0) {
-            return pm.getLaunchIntentForPackage(packageName);
-        }
-
-        Intent intent = new Intent(intentToResolve);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.setClassName(ris.get(0).activityInfo.packageName, ris.get(0).activityInfo.name);
-        return intent;
     }
 
     private boolean lowercaseContains(String s, CharSequence filter) {
@@ -374,17 +336,12 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             ModuleUtil.InstalledModule item = items.get(position);
+            boolean enabled = moduleUtil.isModuleEnabled(item.packageName);
             holder.itemView.setOnClickListener(v -> {
-                String packageName = item.packageName;
-                if (packageName == null || packageName.equals(BuildConfig.APPLICATION_ID)) {
-                    return;
-                }
-                Intent launchIntent = getSettingsIntent(packageName);
-                if (launchIntent != null) {
-                    startActivity(launchIntent);
-                } else {
-                    Snackbar.make(findViewById(R.id.snackbar), R.string.module_no_ui, Snackbar.LENGTH_LONG).show();
-                }
+                Intent intent = new Intent(ModulesActivity.this, AppListActivity.class);
+                intent.putExtra("modulePackageName", item.packageName);
+                intent.putExtra("moduleName", item.getAppName());
+                startActivity(intent);
             });
 
             holder.itemView.setOnLongClickListener(v -> {
@@ -392,19 +349,20 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 return false;
             });
 
-            holder.itemView.setOnCreateContextMenuListener((menu, v, menuInfo) -> getMenuInflater().inflate(R.menu.context_menu_modules, menu));
+            holder.root.setAlpha(enabled ? 1.0f : .5f);
+
+            holder.itemView.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
+                getMenuInflater().inflate(R.menu.context_menu_modules, menu);
+                Intent intent = AppHelper.getSettingsIntent(item.packageName, pm);
+                if (intent == null) {
+                    menu.removeItem(R.id.menu_launch);
+                }
+            });
             holder.appName.setText(item.getAppName());
 
             TextView version = holder.appVersion;
             version.setText(Objects.requireNonNull(item).versionName);
             version.setSelected(true);
-
-            TextView packageTv = holder.appPackage;
-            packageTv.setText(item.packageName);
-
-            String creationDate = dateformat.format(new Date(item.installTime));
-            String updateDate = dateformat.format(new Date(item.updateTime));
-            holder.timestamps.setText(getString(R.string.install_timestamps, creationDate, updateDate));
 
             GlideApp.with(holder.appIcon)
                     .load(item.getPackageInfo())
@@ -418,59 +376,24 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 descriptionText.setText(getString(R.string.module_empty_description));
                 descriptionText.setTextColor(ContextCompat.getColor(ModulesActivity.this, R.color.warning));
             }
-
-            SwitchCompat mSwitch = holder.mSwitch;
-            mSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                String packageName = item.packageName;
-                boolean changed = moduleUtil.isModuleEnabled(packageName) ^ isChecked;
-                if (changed) {
-                    if (isChecked && AppHelper.getScopeList(packageName).isEmpty()) {
-                        moduleUtil.setModuleEnabled(packageName, true);
-                        Intent intent = new Intent(ModulesActivity.this, AppListActivity.class);
-                        intent.putExtra("modulePackageName", packageName);
-                        intent.putExtra("moduleName", item.getAppName());
-                        startActivity(intent);
-                        return;
-                    }
-                    moduleUtil.setModuleEnabled(packageName, isChecked);
-                    moduleUtil.updateModulesList(true, binding.snackbar);
-                }
-            });
-            mSwitch.setChecked(moduleUtil.isModuleEnabled(item.packageName));
             TextView warningText = holder.warningText;
 
             if (item.minVersion == 0) {
-                if (!preferences.getBoolean("skip_xposedminversion_check", false)) {
-                    mSwitch.setEnabled(false);
-                }
                 warningText.setText(getString(R.string.no_min_version_specified));
                 warningText.setVisibility(View.VISIBLE);
             } else if (installedXposedVersion > 0 && item.minVersion > installedXposedVersion) {
-                if (!preferences.getBoolean("skip_xposedminversion_check", false)) {
-                    mSwitch.setEnabled(false);
-                }
                 warningText.setText(String.format(getString(R.string.warning_xposed_min_version), item.minVersion));
                 warningText.setVisibility(View.VISIBLE);
             } else if (item.minVersion < ModuleUtil.MIN_MODULE_VERSION) {
-                if (!preferences.getBoolean("skip_xposedminversion_check", false)) {
-                    mSwitch.setEnabled(false);
-                }
                 warningText.setText(String.format(getString(R.string.warning_min_version_too_low), item.minVersion, ModuleUtil.MIN_MODULE_VERSION));
                 warningText.setVisibility(View.VISIBLE);
             } else if (item.isInstalledOnExternalStorage()) {
-                if (!preferences.getBoolean("skip_xposedminversion_check", false)) {
-                    mSwitch.setEnabled(false);
-                }
                 warningText.setText(getString(R.string.warning_installed_on_external_storage));
                 warningText.setVisibility(View.VISIBLE);
             } else if (installedXposedVersion == 0 || (installedXposedVersion == -1)) {
-                if (!preferences.getBoolean("skip_xposedminversion_check", false)) {
-                    mSwitch.setEnabled(false);
-                }
                 warningText.setText(getString(R.string.not_installed_no_lollipop));
                 warningText.setVisibility(View.VISIBLE);
             } else {
-                mSwitch.setEnabled(true);
                 warningText.setVisibility(View.GONE);
             }
         }
@@ -495,25 +418,22 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
+            View root;
             ImageView appIcon;
             TextView appName;
-            TextView appPackage;
             TextView appDescription;
             TextView appVersion;
-            TextView timestamps;
             TextView warningText;
-            SwitchCompat mSwitch;
 
             ViewHolder(View itemView) {
                 super(itemView);
+                root = itemView.findViewById(R.id.item_root);
                 appIcon = itemView.findViewById(R.id.app_icon);
                 appName = itemView.findViewById(R.id.app_name);
                 appDescription = itemView.findViewById(R.id.description);
-                appPackage = itemView.findViewById(R.id.package_name);
                 appVersion = itemView.findViewById(R.id.version_name);
-                timestamps = itemView.findViewById(R.id.timestamps);
+                appVersion.setVisibility(View.VISIBLE);
                 warningText = itemView.findViewById(R.id.warning);
-                mSwitch = itemView.findViewById(R.id.checkbox);
             }
         }
     }

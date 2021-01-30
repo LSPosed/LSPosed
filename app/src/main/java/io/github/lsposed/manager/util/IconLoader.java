@@ -3,6 +3,7 @@ package io.github.lsposed.manager.util;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.graphics.Bitmap;
+import android.graphics.drawable.AdaptiveIconDrawable;
 
 import androidx.annotation.NonNull;
 
@@ -21,7 +22,7 @@ public class IconLoader extends AppGlideModule {
     public void registerComponents(Context context, @NonNull Glide glide, Registry registry) {
         int iconSize = context.getResources().getDimensionPixelSize(R.dimen.app_icon_size);
         registry.prepend(PackageInfo.class, Bitmap.class, new AppIconModelLoader.Factory(iconSize,
-                false, context));
+                context.getApplicationInfo().loadIcon(context.getPackageManager()) instanceof AdaptiveIconDrawable, context));
     }
 }
 
