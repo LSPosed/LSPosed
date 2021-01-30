@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -166,6 +167,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     private void checkRecommended() {
         checkedList.clear();
         checkedList.addAll(recommendedList);
+        Log.e("Test", recommendedList.toString());
         AppHelper.saveScopeList(modulePackageName, checkedList);
         notifyDataSetChanged();
     }
@@ -204,6 +206,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             } else {
                 activity.makeSnackBar(R.string.module_no_ui, Snackbar.LENGTH_LONG);
             }
+            return true;
         } else if (!AppHelper.onOptionsItemSelected(item, preferences)) {
             return false;
         }

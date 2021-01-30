@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import io.github.lsposed.manager.App;
-import io.github.lsposed.manager.BuildConfig;
 import io.github.lsposed.manager.Constants;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.adapters.AppHelper;
@@ -328,7 +327,7 @@ public final class ModuleUtil {
                 try {
                     int scopeListResourceId = app.metaData.getInt("xposedscope");
                     if (scopeListResourceId != 0) {
-                        scopeList = Arrays.asList(pm.getResourcesForApplication(BuildConfig.APPLICATION_ID).getStringArray(scopeListResourceId));
+                        scopeList = Arrays.asList(pm.getResourcesForApplication(app).getStringArray(scopeListResourceId));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
