@@ -14,11 +14,6 @@ import androidx.annotation.NonNull;
 
 import com.google.android.material.snackbar.Snackbar;
 
-import io.github.lsposed.manager.App;
-import io.github.lsposed.manager.Constants;
-import io.github.lsposed.manager.R;
-import io.github.lsposed.manager.adapters.AppHelper;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -27,6 +22,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import io.github.lsposed.manager.App;
+import io.github.lsposed.manager.Constants;
+import io.github.lsposed.manager.R;
+import io.github.lsposed.manager.adapters.AppHelper;
 
 public final class ModuleUtil {
     // xposedminversion below this
@@ -68,11 +68,6 @@ public final class ModuleUtil {
     }
 
     public void reloadInstalledModules() {
-        reloadInstalledModules(prefs.getBoolean("hook_modules", true));
-    }
-
-    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
-    public void reloadInstalledModules(boolean hookModules) {
         synchronized (this) {
             if (isReloading)
                 return;
@@ -80,7 +75,6 @@ public final class ModuleUtil {
         }
 
         Map<String, InstalledModule> modules = new HashMap<>();
-        AppHelper.forceWhiteList.clear();
         for (PackageInfo pkg : pm.getInstalledPackages(PackageManager.GET_META_DATA)) {
             ApplicationInfo app = pkg.applicationInfo;
             if (!app.enabled)
@@ -89,7 +83,6 @@ public final class ModuleUtil {
             if (app.metaData != null && app.metaData.containsKey("xposedmodule")) {
                 InstalledModule installed = new InstalledModule(pkg, false);
                 modules.put(pkg.packageName, installed);
-                if (hookModules) AppHelper.forceWhiteList.add(pkg.packageName);
             }
         }
 

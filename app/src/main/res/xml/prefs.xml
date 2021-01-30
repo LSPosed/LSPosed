@@ -11,13 +11,6 @@
             android:summary="@string/skip_xposedminversion_check_summ"
             android:title="@string/skip_xposedminversion_check"
             app:iconSpaceReserved="false" />
-
-        <SwitchPreferenceCompat
-            android:defaultValue="true"
-            android:key="hook_modules"
-            android:summary="@string/hook_modules_summary"
-            android:title="@string/hook_modules"
-            app:iconSpaceReserved="false" />
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/settings_group_theme"

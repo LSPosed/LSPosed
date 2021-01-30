@@ -26,7 +26,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
-import io.github.lsposed.manager.App;
 import io.github.lsposed.manager.Constants;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.util.CompileUtil;
@@ -37,8 +36,6 @@ public class AppHelper {
 
     private static final String BASE_PATH = Constants.getBaseDir();
     private static final String SCOPE_LIST_PATH = "conf/%s.conf";
-
-    public static List<String> forceWhiteList = new ArrayList<>();
 
     private static final HashMap<String, List<String>> scopeList = new HashMap<>();
 
