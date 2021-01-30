@@ -30,12 +30,6 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        getWindow().getDecorView().post(() -> {
-            if (Light.setLightSourceAlpha(getWindow().getDecorView(), 0.01f, 0.029f)) {
-                binding.status.setElevation(24);
-                binding.modules.setElevation(12);
-            }
-        });
         binding.modules.setOnClickListener(v -> {
             Intent intent = new Intent();
             intent.setClass(getApplicationContext(), ModulesActivity.class);
@@ -91,6 +85,12 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onResume() {
+        getWindow().getDecorView().post(() -> {
+            if (Light.setLightSourceAlpha(getWindow().getDecorView(), 0.01f, 0.029f)) {
+                binding.status.setElevation(24);
+                binding.modules.setElevation(12);
+            }
+        });
         super.onResume();
         binding.modulesSummary.setText(String.format(getString(R.string.ModulesDetail), ModuleUtil.getInstance().getEnabledModules().size()));
     }
