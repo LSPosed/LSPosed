@@ -36,11 +36,6 @@ RIRU_EDXP="$(getRandomNameExist 4 "libriru_" ".so" "
 RIRU_MODULES="${RIRU_PATH}/modules"
 RIRU_TARGET="${RIRU_MODULES}/${RIRU_EDXP}"
 
-IS_MAGISK_LITE=false
-MODULES_PATH="modules"
-[[ "${MAGISK_VER:0-5}" == "-lite" ]] && IS_MAGISK_LITE=true
-[[ "${IS_MAGISK_LITE}" == "true" ]] && MODULES_PATH="lite_modules"
-
 
 VERSION=$(grep_prop version "${TMPDIR}/module.prop")
 RIRU_MIN_API_VERSION=$(grep_prop api "${TMPDIR}/module.prop")
@@ -56,7 +51,6 @@ LANG_CUST_INST_EXT_LIB_X86="Extracting x86 libraries"
 LANG_CUST_INST_EXT_LIB_X64="Extracting x86_64 libraries"
 LANG_CUST_INST_EXT_LIB_ARM="Extracting arm libraries"
 LANG_CUST_INST_EXT_LIB_ARM64="Extracting arm64 libraries"
-LANG_CUST_INST_STUB="Installing stub manager"
 LANG_CUST_INST_CONF_CREATE="Creating configuration directories"
 LANG_CUST_INST_CONF_OLD="Use previous path"
 LANG_CUST_DISABLE_EDXP="**WARNING**: This installation will disable edxposed because of incompatibility"
@@ -66,8 +60,7 @@ LANG_CUST_INST_REM_OLDCONF="Removing old configuration"
 LANG_CUST_INST_COPT_EXTRA="Copying extra files"
 LANG_CUST_INST_DONE="Welcome to"
 
-LANG_CUST_ERR_VERIFY_FAIL_1="Unable to extract verify tool!"
-LANG_CUST_ERR_VERIFY_FAIL_2="This zip may be corrupted, please try downloading again"
+LANG_CUST_ERR_VERIFY_FAIL="Unable to extract verify tool!"
 LANG_CUST_ERR_PERM="Can't set permission"
 LANG_CUST_ERR_CONF_CREATE="Can't create configuration path"
 LANG_CUST_ERR_CONF_STORE="Can't store configuration path"
@@ -89,18 +82,12 @@ LANG_UTIL_ERR_RIRU_NOT_FOUND_1="is not installed"
 LANG_UTIL_ERR_RIRU_NOT_FOUND_2="Please install Riru from Magisk Manager"
 LANG_UTIL_ERR_RIRU_LOW_1="or above is required"
 LANG_UTIL_ERR_RIRU_LOW_2="Please upgrade Riru from Magisk Manager"
-LANG_UTIL_ERR_REQUIRE_YAHFA_1="Architecture x86 or x86_64 detected"
-LANG_UTIL_ERR_REQUIRE_YAHFA_2="Only YAHFA variant supports x86 or x86_64 architecture devices"
-LANG_UTIL_ERR_REQUIRE_YAHFA_3="You can download from 'Magisk Manager' or 'LSPosed Manager'"
 LANG_UTIL_ERR_ANDROID_UNSUPPORT_1="Unsupported Android version"
 LANG_UTIL_ERR_ANDROID_UNSUPPORT_2="(below Oreo)"
 LANG_UTIL_ERR_ANDROID_UNSUPPORT_3="Learn more from our GitHub Wiki"
 LANG_UTIL_ERR_PLATFORM_UNSUPPORT="Unsupported platform"
 LANG_UTIL_ERR_VARIANT_SELECTION="Error occurred when selecting variant"
 LANG_UTIL_ERR_VARIANT_UNSUPPORT="Unsupported variant"
-LANG_UTIL_ERR_DUPINST_1="Duplicate installation is now allowed"
-LANG_UTIL_ERR_DUPINST_2="Remove"
-LANG_UTIL_ERR_DUPINST_3="and reboot to install again"
 
 # Load lang
 if [[ ${BOOTMODE} == true ]]; then
@@ -130,7 +117,6 @@ extract "$ZIPFILE" 'util_functions.sh' "${TMPDIR}"
 . ${TMPDIR}/util_functions.sh
 
 check_android_version
-check_magisk_version
 check_riru_version
 lspd_check_architecture
 
@@ -219,7 +205,7 @@ touch /data/adb/lspd/new_install || abortC "! ${LANG_CUST_ERR_CONF_FIRST}"
 set_perm_recursive /data/adb/lspd root root 0700 0600 "u:object_r:magisk_file:s0" || abortC "! ${LANG_CUST_ERR_PERM}"
 mkdir -p /data/misc/$MISC_PATH/0/conf/ || abortC "! ${LANG_CUST_ERR_CONF_CREATE}"
 set_perm /data/misc/$MISC_PATH root root 0771 "u:object_r:magisk_file:s0" || abortC "! ${LANG_CUST_ERR_PERM}"
-echo "[[ -f /data/adb/lspd/keep_data ]] || rm -rf /data/misc/$MISC_PATH" >> "${MODPATH}/uninstall.sh" || abortC "! ${LANG_CUST_ERR_CONF_UNINST}"
+echo "rm -rf /data/misc/$MISC_PATH" >> "${MODPATH}/uninstall.sh" || abortC "! ${LANG_CUST_ERR_CONF_UNINST}"
 echo "[[ -f /data/adb/lspd/new_install ]] || rm -rf /data/adb/lspd" >> "${MODPATH}/uninstall.sh" || abortC "! ${LANG_CUST_ERR_CONF_UNINST}"
 
 if [ $VARIANT == 17 ]; then  # YAHFA
@@ -275,8 +261,6 @@ rm -f "${RIRU_TARGET}/module.prop"
 cp "${MODPATH}/module.prop" "${RIRU_TARGET}/module.prop" || abortC "! ${LANG_CUST_ERR_EXTRA_CREATE} ${RIRU_TARGET}/module.prop"
 
 set_perm "$RIRU_TARGET/module.prop" 0 0 0600 $RIRU_SECONTEXT || abortC "! ${LANG_CUST_ERR_PERM}"
-
-rm -f /data/adb/lspd/keep_data
 
 set_perm_recursive "${MODPATH}" 0 0 0755 0644
 ui_print "- ${LANG_CUST_INST_DONE} LSPosed ${VERSION}!"

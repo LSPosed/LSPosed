@@ -36,24 +36,12 @@ RIRU_APICODE=$(cat "${RIRU_PATH}/api_version")
 MAGISK_VERSION=$(magisk -v)
 MAGISK_VERCODE=$(magisk -V)
 
-#EDXP_MANAGER="io.github.lsposed.manager"
-#XP_INSTALLER="de.robv.android.xposed.installer"
-#PATH_PREFIX="/data/user_de/0/"
-#PATH_PREFIX_LEGACY="/data/user/0/"
-
 livePatch() {
     # Should be deprecated now. This is for debug only.
     supolicy --live "allow system_server system_server process execmem" \
                     "allow system_server system_server memprotect mmap_zero"
 }
 
-#if [[ ${ANDROID_SDK} -ge 24 ]]; then
-#    PATH_PREFIX="${PATH_PREFIX_PROT}"
-#else
-#    PATH_PREFIX="${PATH_PREFIX_LEGACY}"
-#fi
-
-#DEFAULT_BASE_PATH="${PATH_PREFIX}${EDXP_MANAGER}"
 MISC_PATH=$(cat /data/adb/lspd/misc_path)
 BASE_PATH="/data/misc/$MISC_PATH"
 
@@ -103,7 +91,6 @@ start_log_cather () {
     fi
     touch "${LOG_FILE}"
     touch "${PID_FILE}"
-    echo "--------- beginning of head">>"${LOG_FILE}"
     echo "LSPosed Log">>"${LOG_FILE}"
     echo "--------- beginning of information">>"${LOG_FILE}"
     echo "Manufacturer: ${MANUFACTURER}">>"${LOG_FILE}"
@@ -127,26 +114,11 @@ start_log_cather () {
     echo "${LOG_PID}">"${LOG_PATH}/${LOG_FILE_NAME}.pid"
 }
 
-# install stub if manager not installed
-if [[ "$(pm path io.github.lsposed.manager 2>&1)" == "" && "$(pm path de.robv.android.xposed.installer 2>&1)" == "" ]]; then
-    NO_MANAGER=true
-fi
-if [[ ${NO_MANAGER} == true ]]; then
-    cp "${MODDIR}/LSPosed.apk" "/data/local/tmp/LSPosed.apk"
-    LOCAL_PATH_INFO=$(ls -ldZ "/data/local/tmp")
-    LOCAL_PATH_OWNER=$(echo "${LOCAL_PATH_INFO}" | awk -F " " '{print $3":"$4}')
-    LOCAL_PATH_CONTEXT=$(echo "${LOCAL_PATH_INFO}" | awk -F " " '{print $5}')
-    chcon "${LOCAL_PATH_CONTEXT}" "/data/local/tmp/LSPosed.apk"
-    chown "${LOCAL_PATH_OWNER}" "/data/local/tmp/LSPosed.apk"
-    pm install "/data/local/tmp/LSPosed.apk"
-    rm -f "/data/local/tmp/LSPosed.apk"
-fi
-
 # execute live patch if rule not found
 [[ -f "${MODDIR}/sepolicy.rule" ]] || livePatch
 
 # start_verbose_log_catcher
-start_log_cather all "LSPosed:V XSharedPreferences:V LSPosed-Bridge:V LSPosedManager:V XposedInstaller:V *:F" true ${LOG_VERBOSE}
+start_log_cather all "LSPosed:V XSharedPreferences:V LSPosed-Bridge:V LSPosedManager:V *:F" true ${LOG_VERBOSE}
 
 # start_bridge_log_catcher
 start_log_cather error "XSharedPreferences:V LSPosed-Bridge:V" true true
@@ -169,4 +141,3 @@ if [[ ! -z "${MISC_PATH}" ]]; then
     chmod 777 "${BASE_PATH}/cache"
 fi
 rm -f /data/adb/lspd/new_install
-rm -f /data/adb/lspd/keep_data

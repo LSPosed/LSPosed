@@ -34,22 +34,6 @@ check_magisk_version() {
   fi
 }
 
-require_yahfa() {
-    ui_print "${POUNDS}"
-    ui_print "! ${LANG_UTIL_ERR_REQUIRE_YAHFA_1}"
-    ui_print "! ${LANG_UTIL_ERR_REQUIRE_YAHFA_2}"
-    ui_print "! ${LANG_UTIL_ERR_REQUIRE_YAHFA_3}"
-    abortC   "${POUNDS}"
-}
-
-duplicate_installation() {
-    touch /data/adb/lspd/keep_data
-    ui_print "${POUNDS}"
-    ui_print "! ${LANG_UTIL_ERR_DUPINST_1}"
-    ui_print "! ${LANG_UTIL_ERR_DUPINST_2} LSPosed (${1}) ${LANG_UTIL_ERR_DUPINST_3}"
-    abortC   "${POUNDS}"
-}
-
 require_new_android() {
     ui_print "${POUNDS}"
     ui_print "! ${LANG_UTIL_ERR_ANDROID_UNSUPPORT_1} ${1} ${LANG_UTIL_ERR_ANDROID_UNSUPPORT_2}"
@@ -63,11 +47,6 @@ lspd_check_architecture() {
         abortC "! ${LANG_UTIL_ERR_PLATFORM_UNSUPPORT}: ${ARCH}"
     else
         ui_print "- ${LANG_UTIL_PLATFORM}: ${ARCH}"
-        # if [[ "${ARCH}" == "x86" || "${ARCH}" == "x64" ]]; then
-        #     if [[ "${VARIANT}" == "SandHook" ]]; then
-        #         require_yahfa
-        #     fi
-        # fi
     fi
 }
 
