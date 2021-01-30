@@ -31,9 +31,6 @@
  * module list and modules scopes are preloaded
  * can get app module list by call a const function
  * for installer's pkg name, it's retrieved by /data/misc/$misc_path/$uid/conf/installer.
- * if not exists, fallback
- * blacklist and whitelist are instead set by blacklist.conf and whitelist.conf respectively
- * dynamic mode is always on
  *
  * Permission:
  * /data/adb/lspd should be accessible by zygote by sepolicy
@@ -105,20 +102,6 @@ namespace lspd {
             return kPrimaryInstallerPkgName;
         }
         return {std::istream_iterator<char>(ifs), std::istream_iterator<char>()};
-    }
-
-    std::unordered_set<std::string> ConfigManager::GetAppList(const fs::path &dir) {
-        std::unordered_set<std::string> set;
-        try {
-            for (auto &item: fs::directory_iterator(dir)) {
-                if (item.is_regular_file()) {
-                    set.emplace(item.path().filename());
-                }
-            }
-        } catch (const fs::filesystem_error &e) {
-            LOGE("%s", e.what());
-        }
-        return set;
     }
 
     std::string ConfigManager::GetPackageNameFromBaseApkPath(const fs::path &path) {
@@ -229,16 +212,10 @@ namespace lspd {
     fs::file_time_type ConfigManager::GetLastWriteTime() const {
         auto config_path = GetConfigPath();
         auto list_path = GetConfigPath("modules.list");
-        auto blacklist_path = GetConfigPath("blacklist");
-        auto whitelist_path = GetConfigPath("whitelist");
         return std::max({path_exists<true>(config_path) ? fs::last_write_time(config_path)
                                                         : fs::file_time_type{},
                          path_exists<true>(list_path) ? fs::last_write_time(list_path)
-                                                      : fs::file_time_type{},
-                         path_exists<true>(blacklist_path) ? fs::last_write_time(blacklist_path)
-                                                           : fs::file_time_type{},
-                         path_exists<true>(whitelist_path) ? fs::last_write_time(whitelist_path)
-                                                           : fs::file_time_type{}});
+                                                      : fs::file_time_type{},});
     }
 
     bool ConfigManager::InitConfigPath() const {

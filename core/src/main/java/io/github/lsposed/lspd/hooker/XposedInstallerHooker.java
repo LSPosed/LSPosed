@@ -27,45 +27,48 @@ public class XposedInstallerHooker {
         }
         final String variant = variant_;
 
+        Utils.logI("Found LSPosed Manager, hooking it");
+
         // LSPosed Manager R
         try {
-            XposedHelpers.findAndHookMethod("io.github.lsposed.manager.Constants", classLoader, "getXposedApiVersion", new XC_MethodReplacement() {
+            Class<?> ConstantsClass = XposedHelpers.findClass("io.github.lsposed.manager.Constants", classLoader);
+            XposedHelpers.findAndHookMethod(ConstantsClass, "getXposedApiVersion", new XC_MethodReplacement() {
                 @Override
                 protected Object replaceHookedMethod(MethodHookParam param) {
                     return XposedBridge.getXposedVersion();
                 }
             });
-            XposedHelpers.findAndHookMethod("io.github.lsposed.manager.Constants", classLoader, "getXposedVersion", new XC_MethodReplacement() {
+            XposedHelpers.findAndHookMethod(ConstantsClass, "getXposedVersion", new XC_MethodReplacement() {
                 @Override
                 protected Object replaceHookedMethod(MethodHookParam param) {
                     return BuildConfig.VERSION_NAME;
                 }
             });
-            XposedHelpers.findAndHookMethod("io.github.lsposed.manager.Constants", classLoader, "getXposedVersionCode", new XC_MethodReplacement() {
+            XposedHelpers.findAndHookMethod(ConstantsClass, "getXposedVersionCode", new XC_MethodReplacement() {
                 @Override
                 protected Object replaceHookedMethod(MethodHookParam param) {
                     return BuildConfig.VERSION_CODE;
                 }
             });
-            XposedHelpers.findAndHookMethod("io.github.lsposed.manager.Constants", classLoader, "getXposedApiVersion", new XC_MethodReplacement() {
+            XposedHelpers.findAndHookMethod(ConstantsClass, "getXposedApiVersion", new XC_MethodReplacement() {
                 @Override
                 protected Object replaceHookedMethod(MethodHookParam param) {
                     return XposedBridge.getXposedVersion();
                 }
             });
-            XposedHelpers.findAndHookMethod("io.github.lsposed.manager.Constants", classLoader, "getXposedVariant", new XC_MethodReplacement() {
+            XposedHelpers.findAndHookMethod(ConstantsClass, "getXposedVariant", new XC_MethodReplacement() {
                 @Override
                 protected Object replaceHookedMethod(MethodHookParam param) {
                     return variant;
                 }
             });
-            XposedHelpers.findAndHookMethod("io.github.lsposed.manager.Constants", classLoader, "getBaseDir", new XC_MethodReplacement() {
+            XposedHelpers.findAndHookMethod(ConstantsClass, "getBaseDir", new XC_MethodReplacement() {
                 @Override
                 protected Object replaceHookedMethod(MethodHookParam param) {
                     return ConfigManager.getBaseConfigPath() + "/";
                 }
             });
-            Utils.logD("Hooked LSPosed Manager");
+            Utils.logI("Hooked LSPosed Manager");
         } catch (Throwable t) {
             Utils.logW("Could not hook LSPosed Manager", t);
         }
