@@ -16,6 +16,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -24,6 +25,7 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import io.github.lsposed.manager.App;
+import io.github.lsposed.manager.BuildConfig;
 import io.github.lsposed.manager.Constants;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.adapters.AppHelper;
@@ -256,6 +258,7 @@ public final class ModuleUtil {
         public PackageInfo pkg;
         private String appName; // loaded lazyily
         private String description; // loaded lazyily
+        private List<String> scopeList; // loaded lazyily
 
         private InstalledModule(PackageInfo pkg, boolean isFramework) {
             this.app = pkg.applicationInfo;
@@ -318,6 +321,20 @@ public final class ModuleUtil {
                 this.description = (descriptionTmp != null) ? descriptionTmp : "";
             }
             return this.description;
+        }
+
+        public List<String> getScopeList() {
+            if (this.scopeList == null) {
+                try {
+                    int scopeListResourceId = app.metaData.getInt("xposedscope");
+                    if (scopeListResourceId != 0) {
+                        scopeList = Arrays.asList(pm.getResourcesForApplication(BuildConfig.APPLICATION_ID).getStringArray(scopeListResourceId));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            return this.scopeList;
         }
 
         public PackageInfo getPackageInfo() {

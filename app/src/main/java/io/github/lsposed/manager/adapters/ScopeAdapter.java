@@ -22,6 +22,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,6 +31,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -54,14 +56,17 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     private final ApplicationFilter filter;
     private final SharedPreferences preferences;
     private final String modulePackageName;
+    private final String moduleName;
     private final MasterSwitch masterSwitch;
     private List<PackageInfo> fullList, showList;
     private List<String> checkedList;
+    private final List<String> recommendedList;
     private boolean enabled = true;
     private ApplicationInfo selectedInfo;
 
-    public ScopeAdapter(AppListActivity activity, String modulePackageName, MasterSwitch masterSwitch) {
+    public ScopeAdapter(AppListActivity activity, String moduleName, String modulePackageName, MasterSwitch masterSwitch) {
         this.activity = activity;
+        this.moduleName = moduleName;
         this.modulePackageName = modulePackageName;
         this.masterSwitch = masterSwitch;
         preferences = App.getPreferences();
@@ -77,6 +82,8 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                 notifyDataSetChanged();
             }
         });
+        ModuleUtil.InstalledModule module = ModuleUtil.getInstance().getModule(modulePackageName);
+        recommendedList = module.getScopeList();
         enabled = ModuleUtil.getInstance().isModuleEnabled(modulePackageName);
         refresh();
     }
@@ -91,12 +98,15 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     private void loadApps() {
         activity.runOnUiThread(() -> masterSwitch.setChecked(enabled));
         checkedList = AppHelper.getScopeList(modulePackageName);
+        if (checkedList.isEmpty() && hasRecommended()) {
+            checkRecommended();
+        }
         fullList = pm.getInstalledPackages(PackageManager.GET_META_DATA);
         List<String> installedList = new ArrayList<>();
         List<PackageInfo> rmList = new ArrayList<>();
         for (PackageInfo info : fullList) {
             installedList.add(info.packageName);
-            if (info.packageName.equals(((ScopeAdapter) this).modulePackageName)) {
+            if (info.packageName.equals(this.modulePackageName)) {
                 rmList.add(info);
                 continue;
             }
@@ -153,9 +163,32 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         });
     }
 
+    private void checkRecommended() {
+        checkedList.clear();
+        checkedList.addAll(recommendedList);
+        AppHelper.saveScopeList(modulePackageName, checkedList);
+        notifyDataSetChanged();
+    }
+
+    private boolean hasRecommended() {
+        return recommendedList != null && !recommendedList.isEmpty();
+    }
+
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
-        if (itemId == R.id.item_show_system) {
+        if (itemId == R.id.use_recommended) {
+            if (!checkedList.isEmpty()) {
+                new MaterialAlertDialogBuilder(activity)
+                        .setTitle(R.string.use_recommended)
+                        .setMessage(R.string.use_recommended_message)
+                        .setPositiveButton(android.R.string.ok, (dialog, which) -> checkRecommended())
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .show();
+            } else {
+                checkRecommended();
+            }
+            return true;
+        } else if (itemId == R.id.item_show_system) {
             item.setChecked(!item.isChecked());
             preferences.edit().putBoolean("show_system_apps", item.isChecked()).apply();
         } else if (itemId == R.id.item_show_games) {
@@ -227,6 +260,9 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         if (intent == null) {
             menu.removeItem(R.id.menu_launch);
         }
+        if (!hasRecommended()) {
+            menu.removeItem(R.id.use_recommended);
+        }
         menu.findItem(R.id.item_show_system).setChecked(preferences.getBoolean("show_system_apps", false));
         menu.findItem(R.id.item_show_games).setChecked(preferences.getBoolean("show_games", false));
         menu.findItem(R.id.item_show_modules).setChecked(preferences.getBoolean("show_modules", false));
@@ -276,7 +312,11 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
 
                     }
                 });
-        holder.appDescription.setText(activity.getString(R.string.app_description, info.packageName, info.versionName));
+        String description = activity.getString(R.string.app_description, info.packageName, info.versionName);
+        if (hasRecommended() && recommendedList.contains(info.packageName)) {
+            description += "\n" + activity.getString(R.string.requested_by_module);
+        }
+        holder.appDescription.setText(description);
 
         holder.itemView.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
             activity.getMenuInflater().inflate(R.menu.menu_app_item, menu);
@@ -388,6 +428,36 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             notifyDataSetChanged();
+        }
+    }
+
+    public boolean onBackPressed() {
+        if (masterSwitch.isChecked() && checkedList.isEmpty()) {
+            if (hasRecommended()) {
+                new MaterialAlertDialogBuilder(activity)
+                        .setTitle(R.string.use_recommended)
+                        .setMessage(R.string.no_scope_selected_has_recommended)
+                        .setPositiveButton(android.R.string.ok, (dialog, which) -> checkRecommended())
+                        .setNegativeButton(android.R.string.cancel, (dialog, which) -> {
+                            ModuleUtil.getInstance().setModuleEnabled(modulePackageName, false);
+                            Toast.makeText(activity, activity.getString(R.string.module_disabled_no_selection, moduleName), Toast.LENGTH_LONG).show();
+                            activity.finish();
+                        })
+                        .show();
+            } else {
+                new MaterialAlertDialogBuilder(activity)
+                        .setMessage(R.string.no_scope_selected)
+                        .setPositiveButton(android.R.string.cancel, null)
+                        .setNegativeButton(android.R.string.ok, (dialog, which) -> {
+                            ModuleUtil.getInstance().setModuleEnabled(modulePackageName, false);
+                            Toast.makeText(activity, activity.getString(R.string.module_disabled_no_selection, moduleName), Toast.LENGTH_LONG).show();
+                            activity.finish();
+                        })
+                        .show();
+            }
+            return false;
+        } else {
+            return true;
         }
     }
 

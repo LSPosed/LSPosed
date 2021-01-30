@@ -14,15 +14,12 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.DividerItemDecoration;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 import io.github.lsposed.manager.R;
-import io.github.lsposed.manager.adapters.AppHelper;
 import io.github.lsposed.manager.adapters.ScopeAdapter;
 import io.github.lsposed.manager.databinding.ActivityAppListBinding;
 import io.github.lsposed.manager.util.LinearLayoutManagerFix;
-import io.github.lsposed.manager.util.ModuleUtil;
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 
 public class AppListActivity extends BaseActivity {
@@ -38,12 +35,11 @@ public class AppListActivity extends BaseActivity {
         }
     };
     private final Handler handler = new Handler(Looper.getMainLooper());
-    private String modulePackageName;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        modulePackageName = getIntent().getStringExtra("modulePackageName");
+        String modulePackageName = getIntent().getStringExtra("modulePackageName");
         String moduleName = getIntent().getStringExtra("moduleName");
         binding = ActivityAppListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -54,7 +50,7 @@ public class AppListActivity extends BaseActivity {
         bar.setDisplayHomeAsUpEnabled(true);
         bar.setTitle(moduleName);
         bar.setSubtitle(modulePackageName);
-        scopeAdapter = new ScopeAdapter(this, modulePackageName, binding.masterSwitch);
+        scopeAdapter = new ScopeAdapter(this, moduleName, modulePackageName, binding.masterSwitch);
         scopeAdapter.setHasStableIds(true);
         binding.recyclerView.setAdapter(scopeAdapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManagerFix(this));
@@ -119,16 +115,7 @@ public class AppListActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         if (searchView.isIconified()) {
-            if (binding.masterSwitch.isChecked() && AppHelper.getScopeList(modulePackageName).isEmpty()) {
-                new MaterialAlertDialogBuilder(this)
-                        .setMessage(R.string.no_scope_selected)
-                        .setPositiveButton(android.R.string.cancel, null)
-                        .setNegativeButton(android.R.string.ok, (dialog, which) -> {
-                            ModuleUtil.getInstance().setModuleEnabled(modulePackageName, false);
-                            super.onBackPressed();
-                        })
-                        .show();
-            } else {
+            if (scopeAdapter.onBackPressed()) {
                 super.onBackPressed();
             }
         } else {

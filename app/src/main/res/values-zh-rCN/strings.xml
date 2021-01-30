@@ -154,4 +154,9 @@
     <string name="failed_to_save_scope_list">作用域列表保存失败</string>
     <string name="module_settings">模块设置</string>
     <string name="app_description">%s\n版本：%s</string>
+    <string name="use_recommended">推荐</string>
+    <string name="no_scope_selected_has_recommended">未选择任何应用。选择推荐的应用？</string>
+    <string name="use_recommended_message">选择推荐的应用?</string>
+    <string name="requested_by_module">推荐的应用</string>
+    <string name="module_disabled_no_selection">由于未选择任何应用，模块 %s 已被禁用。</string>
 </resources>

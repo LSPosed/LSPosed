@@ -162,4 +162,9 @@
     <string name="failed_to_save_scope_list">Failed save scope list</string>
     <string name="module_settings">Module settings</string>
     <string name="app_description">%s\nVersion: %s</string>
+    <string name="use_recommended">Recommended</string>
+    <string name="no_scope_selected_has_recommended">You did not select any app. Select recommended apps?</string>
+    <string name="use_recommended_message">Select recommended apps?</string>
+    <string name="requested_by_module">Recommended</string>
+    <string name="module_disabled_no_selection">Module %s has been disabled since no app selected.</string>
 </resources>
