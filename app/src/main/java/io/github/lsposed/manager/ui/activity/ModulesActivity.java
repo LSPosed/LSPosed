@@ -46,8 +46,8 @@ import io.github.lsposed.manager.App;
 import io.github.lsposed.manager.BuildConfig;
 import io.github.lsposed.manager.Constants;
 import io.github.lsposed.manager.R;
-import io.github.lsposed.manager.adapters.AppAdapter;
 import io.github.lsposed.manager.adapters.AppHelper;
+import io.github.lsposed.manager.adapters.ScopeAdapter;
 import io.github.lsposed.manager.databinding.ActivityModulesBinding;
 import io.github.lsposed.manager.util.GlideApp;
 import io.github.lsposed.manager.util.LinearLayoutManagerFix;
@@ -80,7 +80,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 showList = new ArrayList<>();
                 String filter = queryStr.toLowerCase();
                 for (ModuleUtil.InstalledModule info : fullList) {
-                    if (lowercaseContains(AppAdapter.getAppLabel(info.app, pm), filter)
+                    if (lowercaseContains(ScopeAdapter.getAppLabel(info.app, pm), filter)
                             || lowercaseContains(info.packageName, filter)) {
                         showList.add(info);
                     }

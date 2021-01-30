@@ -1,27 +1,71 @@
 package io.github.lsposed.manager.adapters;
 
+import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.Filter;
+import android.widget.Filterable;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
+import io.github.lsposed.manager.App;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.ui.activity.AppListActivity;
 import io.github.lsposed.manager.ui.widget.MasterSwitch;
+import io.github.lsposed.manager.util.GlideApp;
 import io.github.lsposed.manager.util.ModuleUtil;
 
-public class ScopeAdapter extends AppAdapter {
+public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> implements Filterable {
 
-    protected final String modulePackageName;
-    protected boolean enabled = true;
-    private List<String> checkedList;
+    private final AppListActivity activity;
+    private final DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+    private final PackageManager pm;
+    private final ApplicationFilter filter;
+    private final SharedPreferences preferences;
+    private final String modulePackageName;
     private final MasterSwitch masterSwitch;
+    private List<PackageInfo> fullList, showList;
+    private List<String> checkedList;
+    private boolean enabled = true;
 
     public ScopeAdapter(AppListActivity activity, String modulePackageName, MasterSwitch masterSwitch) {
-        super(activity);
+        this.activity = activity;
         this.modulePackageName = modulePackageName;
         this.masterSwitch = masterSwitch;
+        preferences = App.getPreferences();
+        fullList = showList = Collections.emptyList();
+        checkedList = Collections.emptyList();
+        filter = new ApplicationFilter();
+        pm = activity.getPackageManager();
         masterSwitch.setOnCheckedChangedListener(new MasterSwitch.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(boolean checked) {
@@ -30,31 +74,258 @@ public class ScopeAdapter extends AppAdapter {
                 notifyDataSetChanged();
             }
         });
+        refresh();
     }
 
+    @NonNull
     @Override
-    public List<String> generateCheckedList() {
-        checkedList = AppHelper.getScopeList(modulePackageName);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(activity).inflate(R.layout.item_module, parent, false);
+        return new ViewHolder(v);
+    }
+
+    private void loadApps() {
         enabled = ModuleUtil.getInstance().isModuleEnabled(modulePackageName);
         activity.runOnUiThread(() -> masterSwitch.setChecked(enabled));
-        return checkedList;
+        checkedList = AppHelper.getScopeList(modulePackageName);
+        fullList = pm.getInstalledPackages(PackageManager.GET_META_DATA);
+        List<String> installedList = new ArrayList<>();
+        List<PackageInfo> rmList = new ArrayList<>();
+        for (PackageInfo info : fullList) {
+            installedList.add(info.packageName);
+            if (info.packageName.equals(((ScopeAdapter) this).modulePackageName)) {
+                rmList.add(info);
+                continue;
+            }
+            if (checkedList.contains(info.packageName)) {
+                continue;
+            }
+            if (!preferences.getBoolean("show_modules", false)) {
+                if (info.applicationInfo.metaData != null && info.applicationInfo.metaData.containsKey("xposedmodule")) {
+                    rmList.add(info);
+                    continue;
+                }
+            }
+            if (!preferences.getBoolean("show_games", false)) {
+                if (info.applicationInfo.category == ApplicationInfo.CATEGORY_GAME) {
+                    rmList.add(info);
+                    continue;
+                }
+                //noinspection deprecation
+                if ((info.applicationInfo.flags & ApplicationInfo.FLAG_IS_GAME) != 0) {
+                    rmList.add(info);
+                    continue;
+                }
+            }
+            if ((info.applicationInfo.flags & ApplicationInfo.FLAG_HAS_CODE) == 0 && !info.packageName.equals("android")) {
+                rmList.add(info);
+                continue;
+            }
+            if (!preferences.getBoolean("show_system_apps", false) && (info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
+                rmList.add(info);
+            }
+        }
+        checkedList.retainAll(installedList);
+        if (rmList.size() > 0) {
+            fullList.removeAll(rmList);
+        }
+        sortApps();
+        showList = fullList;
+        activity.onDataReady();
+    }
+
+    private void sortApps() {
+        Comparator<PackageInfo> cmp = AppHelper.getAppListComparator(preferences.getInt("list_sort", 0), pm);
+        fullList.sort((a, b) -> {
+            boolean aChecked = checkedList.contains(a.packageName);
+            boolean bChecked = checkedList.contains(b.packageName);
+            if (aChecked == bChecked) {
+                return cmp.compare(a, b);
+            } else if (aChecked) {
+                return -1;
+            } else {
+                return 1;
+            }
+
+        });
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId == R.id.item_show_system) {
+            item.setChecked(!item.isChecked());
+            preferences.edit().putBoolean("show_system_apps", item.isChecked()).apply();
+        } else if (itemId == R.id.item_show_games) {
+            item.setChecked(!item.isChecked());
+            preferences.edit().putBoolean("show_games", item.isChecked()).apply();
+        } else if (itemId == R.id.item_show_modules) {
+            item.setChecked(!item.isChecked());
+            preferences.edit().putBoolean("show_modules", item.isChecked()).apply();
+        } else if (!AppHelper.onOptionsItemSelected(item, preferences)) {
+            return false;
+        }
+        refresh();
+        return true;
+    }
+
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_app_list, menu);
+        menu.findItem(R.id.item_show_system).setChecked(preferences.getBoolean("show_system_apps", false));
+        menu.findItem(R.id.item_show_games).setChecked(preferences.getBoolean("show_games", false));
+        menu.findItem(R.id.item_show_modules).setChecked(preferences.getBoolean("show_modules", false));
+        switch (preferences.getInt("list_sort", 0)) {
+            case 7:
+                menu.findItem(R.id.item_sort_by_update_time_reverse).setChecked(true);
+                break;
+            case 6:
+                menu.findItem(R.id.item_sort_by_update_time).setChecked(true);
+                break;
+            case 5:
+                menu.findItem(R.id.item_sort_by_install_time_reverse).setChecked(true);
+                break;
+            case 4:
+                menu.findItem(R.id.item_sort_by_install_time).setChecked(true);
+                break;
+            case 3:
+                menu.findItem(R.id.item_sort_by_package_name_reverse).setChecked(true);
+                break;
+            case 2:
+                menu.findItem(R.id.item_sort_by_package_name).setChecked(true);
+                break;
+            case 1:
+                menu.findItem(R.id.item_sort_by_name_reverse).setChecked(true);
+                break;
+            case 0:
+                menu.findItem(R.id.item_sort_by_name).setChecked(true);
+                break;
+        }
     }
 
     @Override
-    protected void onCheckedChange(CompoundButton view, boolean isChecked, String packageName) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        PackageInfo info = showList.get(position);
+        holder.appName.setText(getAppLabel(info.applicationInfo, pm));
+        GlideApp.with(holder.appIcon)
+                .load(info)
+                .into(new CustomTarget<Drawable>() {
+                    @Override
+                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                        holder.appIcon.setImageDrawable(resource);
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                    }
+                });
+        holder.appVersion.setText(info.versionName);
+        holder.appVersion.setSelected(true);
+        String creationDate = dateformat.format(new Date(info.firstInstallTime));
+        String updateDate = dateformat.format(new Date(info.lastUpdateTime));
+        holder.timestamps.setText(holder.itemView.getContext().getString(R.string.install_timestamps, creationDate, updateDate));
+        holder.appPackage.setText(info.packageName);
+
+        holder.mSwitch.setOnCheckedChangeListener(null);
+        holder.mSwitch.setChecked(checkedList.contains(info.packageName));
+
+        holder.mSwitch.setEnabled(((ScopeAdapter) this).enabled);
+        holder.mSwitch.setOnCheckedChangeListener((v, isChecked) ->
+                onCheckedChange(v, isChecked, info.packageName));
+        holder.itemView.setOnClickListener(v -> AppHelper.showMenu(activity, activity.getSupportFragmentManager(), v, info.applicationInfo));
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return showList.get(position).packageName.hashCode();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new ApplicationFilter();
+    }
+
+    @Override
+    public int getItemCount() {
+        return showList.size();
+    }
+
+    public void filter(String constraint) {
+        filter.filter(constraint);
+    }
+
+    public void refresh() {
+        //noinspection deprecation
+        AsyncTask.THREAD_POOL_EXECUTOR.execute(this::loadApps);
+    }
+
+    protected void onCheckedChange(CompoundButton buttonView, boolean isChecked, String packageName) {
         if (isChecked) {
             checkedList.add(packageName);
         } else {
             checkedList.remove(packageName);
         }
         if (!AppHelper.saveScopeList(modulePackageName, checkedList)) {
-            activity.makeSnackBar(R.string.add_package_failed, Snackbar.LENGTH_SHORT);
+            activity.makeSnackBar(R.string.failed_to_save_scope_list, Snackbar.LENGTH_SHORT);
             if (!isChecked) {
                 checkedList.add(packageName);
             } else {
                 checkedList.remove(packageName);
             }
-            view.setChecked(!isChecked);
+            buttonView.setChecked(!isChecked);
         }
+    }
+
+    static class ViewHolder extends RecyclerView.ViewHolder {
+
+        ImageView appIcon;
+        TextView appName;
+        TextView appPackage;
+        TextView appVersion;
+        TextView timestamps;
+        SwitchCompat mSwitch;
+
+        ViewHolder(View itemView) {
+            super(itemView);
+            appIcon = itemView.findViewById(R.id.app_icon);
+            appName = itemView.findViewById(R.id.app_name);
+            appPackage = itemView.findViewById(R.id.package_name);
+            appVersion = itemView.findViewById(R.id.version_name);
+            timestamps = itemView.findViewById(R.id.timestamps);
+            mSwitch = itemView.findViewById(R.id.checkbox);
+        }
+    }
+
+    private class ApplicationFilter extends Filter {
+
+        private boolean lowercaseContains(String s, CharSequence filter) {
+            return !TextUtils.isEmpty(s) && s.toLowerCase().contains(filter);
+        }
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            if (constraint.toString().isEmpty()) {
+                showList = fullList;
+            } else {
+                ArrayList<PackageInfo> filtered = new ArrayList<>();
+                String filter = constraint.toString().toLowerCase();
+                for (PackageInfo info : fullList) {
+                    if (lowercaseContains(getAppLabel(info.applicationInfo, pm), filter)
+                            || lowercaseContains(info.packageName, filter)) {
+                        filtered.add(info);
+                    }
+                }
+                showList = filtered;
+            }
+            return null;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            notifyDataSetChanged();
+        }
+    }
+
+    public static String getAppLabel(ApplicationInfo info, PackageManager pm) {
+        return info.loadLabel(pm).toString();
     }
 }

@@ -97,7 +97,6 @@
     <string name="not_logcat">此處僅顯示 LSPosed 及模塊相關日誌信息\n如果您想抓取系統日誌, 可以嘗試我們的 Log Catcher Magisk 模塊</string>
 
     <!-- LSPd related -->
-    <string name="add_package_failed">修改失敗, 一個或多個設置阻止你繼續修改</string>
     <string name="menu_title_compile_reset">取消優化</string>
     <string name="menu_title_compile_speed">以 Speed 模式優化應用</string>
     <string name="menu_title_compile_dexopt">以 Dexopt 模式優化應用</string>
@@ -117,8 +116,6 @@
     <string name="app_launch">運行</string>
     <string name="app_stop">停止</string>
     <string name="compile_failed">優化失敗或返回值為空</string>
-    <string name="hook_modules">強制添加模塊</string>
-    <string name="hook_modules_summary">強制將模塊添加進白名單\n關閉此選項並不會移除已勾選的應用標識</string>
     <string name="not_installed">未安裝</string>
     <string name="reboot_system">重啟至系統</string>
     <string name="pref_title_disable_modules_log">禁用模塊日誌</string>

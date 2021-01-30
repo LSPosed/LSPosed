@@ -14,16 +14,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
 
-import io.github.lsposed.manager.BuildConfig;
-import io.github.lsposed.manager.R;
-import io.github.lsposed.manager.databinding.ActivityCrashReportBinding;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
+import io.github.lsposed.manager.BuildConfig;
+import io.github.lsposed.manager.R;
+import io.github.lsposed.manager.databinding.ActivityCrashReportBinding;
 
 public class CrashReportActivity extends AppCompatActivity {
     ActivityCrashReportBinding binding;

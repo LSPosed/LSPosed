@@ -98,7 +98,6 @@
     <string name="not_logcat">此处仅显示 LSPosed 及模块相关日志信息\n如果您想抓取系统日志, 可以尝试我们的 Log Catcher Magisk 模块</string>
 
     <!-- LSPd related -->
-    <string name="add_package_failed">修改失败, 一个或多个设置阻止你继续修改</string>
     <string name="menu_title_compile_reset">取消优化</string>
     <string name="menu_title_compile_speed">以 Speed 模式优化应用</string>
     <string name="menu_title_compile_dexopt">以 Dexopt 模式优化应用</string>
@@ -119,8 +118,6 @@
     <string name="app_stop">停止</string>
     <string name="compile_failed">优化失败或返回值为空</string>
     <string name="compile_failed_with_info">优化失败: </string>
-    <string name="hook_modules">强制添加模块</string>
-    <string name="hook_modules_summary">强制将模块添加进白名单\n关闭此选项并不会移除已勾选的应用标识</string>
     <string name="not_installed">未安装</string>
     <string name="reboot_system">重启至系统</string>
     <string name="pref_title_disable_modules_log">禁用模块日志</string>
@@ -154,4 +151,7 @@
     <string name="menu_sort">排序…</string>
     <string name="enable_module">启用模块</string>
     <string name="no_scope_selected">未选择任何应用。继续？</string>
+    <string name="menu_show_games">游戏</string>
+    <string name="menu_show_modules">模块</string>
+    <string name="failed_to_save_scope_list">作用域列表保存失败</string>
 </resources>
