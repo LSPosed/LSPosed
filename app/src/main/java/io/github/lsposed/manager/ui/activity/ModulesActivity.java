@@ -24,7 +24,6 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
@@ -42,7 +41,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import io.github.lsposed.manager.App;
 import io.github.lsposed.manager.BuildConfig;
 import io.github.lsposed.manager.Constants;
 import io.github.lsposed.manager.R;
@@ -52,7 +50,6 @@ import io.github.lsposed.manager.databinding.ActivityModulesBinding;
 import io.github.lsposed.manager.util.GlideApp;
 import io.github.lsposed.manager.util.LinearLayoutManagerFix;
 import io.github.lsposed.manager.util.ModuleUtil;
-import io.github.lsposed.manager.util.NavUtil;
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 
 import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
@@ -320,18 +317,10 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             startActivity(new Intent(Intent.ACTION_UNINSTALL_PACKAGE, Uri.fromParts("package", module.packageName, null)));
             return true;
         } else if (itemId == R.id.menu_scope) {
-            if (App.supportScope()) {
-                Intent intent = new Intent(this, AppListActivity.class);
-                intent.putExtra("modulePackageName", module.packageName);
-                intent.putExtra("moduleName", module.getAppName());
-                startActivity(intent);
-            } else {
-                new MaterialAlertDialogBuilder(this)
-                        .setMessage(R.string.scope_not_supported)
-                        .setPositiveButton(R.string.download_view_download, (dialog, which) -> NavUtil.startURL(this, getString(R.string.about_source)))
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .show();
-            }
+            Intent intent = new Intent(this, AppListActivity.class);
+            intent.putExtra("modulePackageName", module.packageName);
+            intent.putExtra("moduleName", module.getAppName());
+            startActivity(intent);
             return true;
         }
         return super.onContextItemSelected(item);

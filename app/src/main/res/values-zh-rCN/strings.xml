@@ -70,7 +70,6 @@
     <string name="about_source_label">源代码</string>
 
     <!-- DownloadView -->
-    <string name="download_view_download">下载</string>
 
     <!-- DownloadUtils -->
 
@@ -141,7 +140,6 @@
     <string name="settings_group_theme">主题</string>
     <string name="material_design_2">惨白设计</string>
     <string name="menu_scope">作用域</string>
-    <string name="scope_not_supported">您安装的 LSPosed 版本不支持模块作用域，下载新版本？</string>
     <string name="settings_enable_resources">启用资源钩子</string>
     <string name="settings_enable_resources_summary"><b>警告: </b> 资源钩子已被弃用</string>
     <string name="settings_variant">变体</string>
