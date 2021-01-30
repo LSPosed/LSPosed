@@ -166,7 +166,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             item.setChecked(!item.isChecked());
             preferences.edit().putBoolean("show_modules", item.isChecked()).apply();
         } else if (itemId == R.id.menu_launch) {
-            Intent launchIntent = pm.getLaunchIntentForPackage(modulePackageName);
+            Intent launchIntent = AppHelper.getSettingsIntent(modulePackageName, pm);
             if (launchIntent != null) {
                 activity.startActivity(launchIntent);
             } else {
