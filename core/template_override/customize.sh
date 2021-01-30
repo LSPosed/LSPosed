@@ -68,7 +68,6 @@ LANG_CUST_INST_DONE="Welcome to"
 
 LANG_CUST_ERR_VERIFY_FAIL_1="Unable to extract verify tool!"
 LANG_CUST_ERR_VERIFY_FAIL_2="This zip may be corrupted, please try downloading again"
-LANG_CUST_ERR_STUB="Stub install failed! Do not forget install LSPosed Manager manually"
 LANG_CUST_ERR_PERM="Can't set permission"
 LANG_CUST_ERR_CONF_CREATE="Can't create configuration path"
 LANG_CUST_ERR_CONF_STORE="Can't store configuration path"
@@ -161,7 +160,6 @@ fi
 ui_print "- ${LANG_CUST_INST_EXT_FILES}"
 
 # extract module files
-extract "${ZIPFILE}" 'LSPosed.apk' "${MODPATH}"
 extract "${ZIPFILE}" 'module.prop' "${MODPATH}"
 extract "${ZIPFILE}" 'system.prop' "${MODPATH}"
 extract "${ZIPFILE}" 'sepolicy.rule' "${MODPATH}"
@@ -188,22 +186,6 @@ else
     ui_print "- ${LANG_CUST_INST_EXT_LIB_ARM64}"
     extract "$ZIPFILE" 'system/lib64/libriru_lspd.so' "${MODPATH}"
   fi
-fi
-
-if [[ ${BOOTMODE} == true ]]; then
-  [[ "$(pm path io.github.lsposed.manager)" == "" && "$(pm path de.robv.android.xposed.installer)" == "" ]] && NO_MANAGER=true
-fi
-
-if [[ ${BOOTMODE} == true && ${NO_MANAGER} == true ]]; then
-    ui_print "- ${LANG_CUST_INST_STUB}"
-    cp "${MODPATH}/LSPosed.apk" "/data/local/tmp/LSPosed.apk"
-    LOCAL_PATH_INFO=$(ls -ldZ "/data/local/tmp")
-    LOCAL_PATH_OWNER=$(echo "${LOCAL_PATH_INFO}" | awk -F " " '{print $3":"$4}')
-    LOCAL_PATH_CONTEXT=$(echo "${LOCAL_PATH_INFO}" | awk -F " " '{print $5}')
-    chcon ${LOCAL_PATH_CONTEXT} "/data/local/tmp/LSPosed.apk"
-    chown ${LOCAL_PATH_OWNER} "/data/local/tmp/LSPosed.apk"
-    (pm install "/data/local/tmp/LSPosed.apk" >/dev/null 2>&2) || ui_print "  ! ${LANG_CUST_ERR_STUB}"
-    rm -f "/data/local/tmp/LSPosed.apk"
 fi
 
 ui_print "- ${LANG_CUST_INST_CONF_CREATE}"
