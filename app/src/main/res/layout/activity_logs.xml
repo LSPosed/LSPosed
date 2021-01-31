@@ -48,6 +48,7 @@
             android:id="@+id/recyclerView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="vertical" />
+            android:orientation="vertical"
+            android:clipToPadding="false" />
     </HorizontalScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

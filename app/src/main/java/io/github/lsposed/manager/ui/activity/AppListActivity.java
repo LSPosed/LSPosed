@@ -54,6 +54,7 @@ public class AppListActivity extends BaseActivity {
         scopeAdapter.setHasStableIds(true);
         binding.recyclerView.setAdapter(scopeAdapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManagerFix(this));
+        setupRecyclerViewInsets(binding.recyclerView, binding.getRoot());
         FastScrollerBuilder fastScrollerBuilder = new FastScrollerBuilder(binding.recyclerView);
         if (!preferences.getBoolean("md2", true)) {
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,

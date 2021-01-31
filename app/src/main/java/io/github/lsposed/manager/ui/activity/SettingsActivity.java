@@ -3,16 +3,24 @@ package io.github.lsposed.manager.ui.activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.preference.Preference;
 import androidx.preference.SwitchPreferenceCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.takisoft.preferencex.PreferenceFragmentCompat;
 import com.takisoft.preferencex.SimpleMenuPreference;
@@ -27,6 +35,7 @@ import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.databinding.ActivitySettingsBinding;
 import io.github.lsposed.manager.ui.fragment.StatusDialogBuilder;
 import io.github.lsposed.manager.ui.widget.IntegerListPreference;
+import io.github.lsposed.manager.ui.widget.RecyclerViewBugFixed;
 
 public class SettingsActivity extends BaseActivity {
     private static final String KEY_PREFIX = SettingsActivity.class.getName() + '.';
@@ -62,6 +71,14 @@ public class SettingsActivity extends BaseActivity {
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new SettingsFragment()).commit();
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+            ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
+                Insets insets1 = insets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.ime());
+                binding.getRoot().setPadding(insets1.left, insets1.top, insets1.right, 0);
+                return insets;
+            });
         }
     }
 
@@ -269,6 +286,21 @@ public class SettingsActivity extends BaseActivity {
                     Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
                 return (enabled == Files.exists(flag));
+            }
+        }
+
+        @Override
+        public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                RecyclerView recyclerView = getListView();
+                recyclerView.setClipToPadding(false);
+                recyclerView.setEdgeEffectFactory(new RecyclerViewBugFixed.AlwaysClipToPaddingEdgeEffectFactory());
+                ViewCompat.setOnApplyWindowInsetsListener(recyclerView, (v, insets) -> {
+                    Insets insets1 = insets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.ime());
+                    v.setPadding(0, 0, 0, insets1.bottom);
+                    return WindowInsetsCompat.CONSUMED;
+                });
             }
         }
     }
