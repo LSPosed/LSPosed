@@ -86,6 +86,7 @@ public class LogsActivity extends BaseActivity {
         binding.recyclerView.setAdapter(adapter);
         layoutManager = new LinearLayoutManagerFix(this);
         binding.recyclerView.setLayoutManager(layoutManager);
+        setupRecyclerViewInsets(binding.recyclerView, binding.getRoot());
         if (Files.exists(Paths.get(Constants.getBaseDir(), "conf/disable_verbose_log"))) {
             binding.slidingTabs.setVisibility(View.GONE);
         }
