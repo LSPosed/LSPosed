@@ -9,21 +9,6 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:title="@string/export_"
-        app:showAsAction="never">
-        <menu>
-            <item
-                android:id="@+id/export_enabled_modules"
-                android:title="@string/export_enabled_modules"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/export_installed_modules"
-                android:title="@string/export_installed_modules"
-                app:showAsAction="never" />
-        </menu>
-    </item>
-
-    <item
         android:id="@+id/item_list_sort"
         android:title="@string/menu_sort"
         app:showAsAction="never">

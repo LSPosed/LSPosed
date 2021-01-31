@@ -24,15 +24,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 import io.github.lsposed.manager.Constants;
 import io.github.lsposed.manager.R;
@@ -165,85 +159,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != RESULT_OK) {
-            return;
-        }
-        if (requestCode == 42) {
-            File listModules = new File(Constants.getEnabledModulesListFile());
-            if (data != null) {
-                Uri uri = data.getData();
-                if (uri != null) {
-                    try {
-                        OutputStream os = getContentResolver().openOutputStream(uri);
-                        if (os != null) {
-                            FileInputStream in = new FileInputStream(listModules);
-                            byte[] buffer = new byte[1024];
-                            int len;
-                            while ((len = in.read(buffer)) > 0) {
-                                os.write(buffer, 0, len);
-                            }
-                            os.close();
-                        }
-                    } catch (Exception e) {
-                        Snackbar.make(binding.snackbar, getResources().getString(R.string.logs_save_failed) + "\n" + e.getMessage(), Snackbar.LENGTH_LONG).show();
-                    }
-                }
-            }
-        } else if (requestCode == 43) {
-            if (data != null) {
-                Uri uri = data.getData();
-                if (uri != null) {
-                    try {
-                        OutputStream os = getContentResolver().openOutputStream(uri);
-                        if (os != null) {
-                            PrintWriter fileOut = new PrintWriter(os);
-
-                            Set<String> keys = ModuleUtil.getInstance().getModules().keySet();
-                            for (String key1 : keys) {
-                                fileOut.println(key1);
-                            }
-                            fileOut.close();
-                            os.close();
-                        }
-                    } catch (Exception e) {
-                        Snackbar.make(binding.snackbar, getResources().getString(R.string.logs_save_failed) + "\n" + e.getMessage(), Snackbar.LENGTH_LONG).show();
-                    }
-                }
-            }
-        }
-    }
-
-    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        Intent intent;
-        int itemId = item.getItemId();
-        if (itemId == R.id.export_enabled_modules) {
-            if (ModuleUtil.getInstance().getEnabledModules().isEmpty()) {
-                Snackbar.make(binding.snackbar, R.string.no_enabled_modules, Snackbar.LENGTH_SHORT).show();
-                return false;
-            }
-            intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.setType("text/*");
-            intent.putExtra(Intent.EXTRA_TITLE, "enabled_modules.list");
-            startActivityForResult(intent, 42);
-            return true;
-        } else if (itemId == R.id.export_installed_modules) {
-            Map<String, ModuleUtil.InstalledModule> installedModules = ModuleUtil.getInstance().getModules();
-
-            if (installedModules.isEmpty()) {
-                Snackbar.make(binding.snackbar, R.string.no_installed_modules, Snackbar.LENGTH_SHORT).show();
-                return false;
-            }
-            intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.setType("text/*");
-            intent.putExtra(Intent.EXTRA_TITLE, "installed_modules.list");
-            startActivityForResult(intent, 43);
-            return true;
-        }
         if (AppHelper.onOptionsItemSelected(item, preferences)) {
             moduleUtil.updateModulesList(false, null);
             reloadModules.run();
