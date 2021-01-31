@@ -167,4 +167,5 @@
     <string name="use_recommended_message">Select recommended apps?</string>
     <string name="requested_by_module">Recommended</string>
     <string name="module_disabled_no_selection">Module %s has been disabled since no app selected.</string>
+    <string name="android_framework">System Framework</string>
 </resources>

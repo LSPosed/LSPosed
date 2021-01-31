@@ -11,6 +11,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
@@ -116,7 +117,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                 rmList.add(info);
                 continue;
             }
-            if (checkedList.contains(info.packageName)) {
+            if (checkedList.contains(info.packageName) || info.packageName.equals("android")) {
                 continue;
             }
             if (!preferences.getBoolean("show_modules", false)) {
@@ -136,7 +137,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                     continue;
                 }
             }
-            if ((info.applicationInfo.flags & ApplicationInfo.FLAG_HAS_CODE) == 0 && !info.packageName.equals("android")) {
+            if ((info.applicationInfo.flags & ApplicationInfo.FLAG_HAS_CODE) == 0) {
                 rmList.add(info);
                 continue;
             }
@@ -156,6 +157,17 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     private void sortApps() {
         Comparator<PackageInfo> cmp = AppHelper.getAppListComparator(preferences.getInt("list_sort", 0), pm);
         fullList.sort((a, b) -> {
+            boolean aAndroid = a.packageName.equals("android");
+            boolean bAnrdoid = b.packageName.equals("android");
+            if (aAndroid || bAnrdoid) {
+                if (aAndroid == bAnrdoid) {
+                    return 0;
+                } else if (aAndroid) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            }
             boolean aChecked = checkedList.contains(a.packageName);
             boolean bChecked = checkedList.contains(b.packageName);
             if (aChecked == bChecked) {
@@ -305,7 +317,8 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.root.setAlpha(enabled ? 1.0f : .5f);
         PackageInfo info = showList.get(position);
-        holder.appName.setText(getAppLabel(info.applicationInfo, pm));
+        boolean android = info.packageName.equals("android");
+        holder.appName.setText(android ? activity.getString(R.string.android_framework) : getAppLabel(info.applicationInfo, pm));
         GlideApp.with(holder.appIcon)
                 .load(info)
                 .into(new CustomTarget<Drawable>() {
@@ -319,13 +332,14 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
 
                     }
                 });
-        SpannableStringBuilder sb = new SpannableStringBuilder(activity.getString(R.string.app_description, info.packageName, info.versionName));
+        SpannableStringBuilder sb = new SpannableStringBuilder(android ? "" : activity.getString(R.string.app_description, info.packageName, info.versionName));
+        holder.appDescription.setVisibility(View.VISIBLE);
         if (hasRecommended() && recommendedList.contains(info.packageName)) {
-            sb.append("\n");
+            if (!android) sb.append("\n");
             String recommended = activity.getString(R.string.requested_by_module);
             sb.append(recommended);
             final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(activity.getThemedColor(R.attr.colorAccent));
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 final TypefaceSpan typefaceSpan = new TypefaceSpan(Typeface.create("sans-serif-medium", Typeface.NORMAL));
                 sb.setSpan(typefaceSpan, sb.length() - recommended.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
             } else {
@@ -333,6 +347,8 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                 sb.setSpan(styleSpan, sb.length() - recommended.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
             }
             sb.setSpan(foregroundColorSpan, sb.length() - recommended.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        } else if (android) {
+            holder.appDescription.setVisibility(View.GONE);
         }
         holder.appDescription.setText(sb);
 
