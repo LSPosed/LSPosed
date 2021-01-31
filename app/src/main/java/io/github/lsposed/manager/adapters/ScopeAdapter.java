@@ -1,7 +1,5 @@
 package io.github.lsposed.manager.adapters;
 
-import android.app.ActivityManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
@@ -241,13 +239,6 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             if (launchIntent != null) {
                 activity.startActivity(launchIntent);
             }
-        } else if (itemId == R.id.app_menu_stop) {
-            try {
-                ActivityManager manager = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
-                manager.killBackgroundProcesses(info.packageName);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         } else if (itemId == R.id.app_menu_compile_speed) {
             CompileUtil.compileSpeed(activity, activity.getSupportFragmentManager(), info);
         } else if (itemId == R.id.app_menu_compile_dexopt) {
@@ -265,8 +256,6 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             }
         } else if (itemId == R.id.app_menu_info) {
             activity.startActivity(new Intent(ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", info.packageName, null)));
-        } else if (itemId == R.id.app_menu_uninstall) {
-            activity.startActivity(new Intent(Intent.ACTION_UNINSTALL_PACKAGE, Uri.fromParts("package", info.packageName, null)));
         } else {
             return false;
         }
@@ -358,8 +347,11 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             if (launchIntent == null) {
                 menu.removeItem(R.id.app_menu_launch);
             }
-            if ((info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
-                menu.removeItem(R.id.app_menu_uninstall);
+            if (android) {
+                menu.removeItem(R.id.app_menu_compile_speed);
+                menu.removeItem(R.id.app_menu_compile_dexopt);
+                menu.removeItem(R.id.app_menu_compile_reset);
+                menu.removeItem(R.id.app_menu_store);
             }
         });
 

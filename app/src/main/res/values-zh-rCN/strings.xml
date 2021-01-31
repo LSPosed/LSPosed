@@ -112,7 +112,6 @@
     <string name="pref_title_disable_verbose_log">禁用详细日志</string>
     <string name="logs_cannot_read">无法读取日志: \n</string>
     <string name="app_launch">运行</string>
-    <string name="app_stop">停止</string>
     <string name="compile_failed">优化失败或返回值为空</string>
     <string name="compile_failed_with_info">优化失败: </string>
     <string name="not_installed">未安装</string>
