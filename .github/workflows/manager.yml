@@ -37,7 +37,7 @@ jobs:
           keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
       - name: Upload signed apk
-        if: success()
+        if: ${{ github.event_name == 'push' && success() }}
         uses: actions/upload-artifact@v2
         with:
           name: manager
