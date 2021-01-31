@@ -29,7 +29,7 @@ jobs:
         run:  bash ./gradlew :app:assembleRelease
       - name: Sign Manager Release
         if: ${{ github.event_name != 'pull_request' && success() && github.ref == 'refs/heads/master' }}
-        id: sign3
+        id: sign
         uses: LSPosed/sign-android-release@v1.0.0
         with:
           releaseDirectory: app/build/outputs/apk/release
