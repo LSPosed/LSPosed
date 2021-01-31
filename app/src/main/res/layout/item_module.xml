@@ -9,7 +9,7 @@
     android:minHeight="?attr/listPreferredItemHeight"
     android:paddingVertical="16dp"
     android:paddingStart="16dp"
-    android:paddingEnd="16dp">
+    android:paddingEnd="24dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/item_root"
@@ -29,16 +29,16 @@
 
         <TextView
             android:id="@+id/app_name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:singleLine="false"
             android:textAppearance="?android:attr/textAppearance"
-            android:textSize="16sp"
             android:textIsSelectable="false"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@id/description"
             app:layout_constraintStart_toEndOf="@id/app_icon"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/description"
             tools:text="@tools:sample/first_names" />
 
         <TextView
@@ -81,8 +81,6 @@
             android:focusable="false"
             android:clickable="false"
             android:visibility="gone"
-            android:minHeight="0dp"
-            android:minWidth="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
