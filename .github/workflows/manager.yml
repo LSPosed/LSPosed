@@ -30,7 +30,7 @@ jobs:
       - name: Sign Manager Release
         if: ${{ github.event_name != 'pull_request' && success() && github.ref == 'refs/heads/master' }}
         id: sign
-        uses: tehcneko/sign-android-release@v1.0.2
+        uses: LSPosed/sign-android-release@v1.0.0
         with:
           releaseDirectory: app/build/outputs/apk/release
           signingKeyBase64: ${{ secrets.SIGNING_KEY }}
