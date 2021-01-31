@@ -159,4 +159,5 @@
     <string name="use_recommended_message">选择推荐的应用?</string>
     <string name="requested_by_module">推荐的应用</string>
     <string name="module_disabled_no_selection">由于未选择任何应用，模块 %s 已被禁用。</string>
+    <string name="android_framework">系统框架</string>
 </resources>
