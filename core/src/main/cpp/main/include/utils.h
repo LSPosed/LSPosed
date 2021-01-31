@@ -58,4 +58,15 @@ namespace lspd {
         stat(path.c_str(), &sb);
         return {sb.st_uid, sb.st_gid};
     }
+
+    inline void recursive_permissions(const std::filesystem::path &p,
+                                      std::filesystem::perms prms,
+                                      std::filesystem::perm_options opts = std::filesystem::perm_options::replace) {
+        std::filesystem::permissions(p, prms, opts);
+        if (std::filesystem::is_directory(p)) {
+            for(auto &item : std::filesystem::recursive_directory_iterator(p)) {
+                std::filesystem::permissions(item.path(), prms, opts);
+            }
+        }
+    }
 }

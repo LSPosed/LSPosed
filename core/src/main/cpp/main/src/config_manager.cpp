@@ -271,15 +271,15 @@ namespace lspd {
                 if (!path_exists<true>(log_path)) {
                     fs::create_directories(log_path);
                 }
-                fs::permissions(conf_path, fs::perms::owner_all | fs::perms::group_all | fs::perms::set_gid);
-                fs::permissions(log_path, fs::perms::owner_all | fs::perms::group_all | fs::perms::set_gid);
+                recursive_permissions(conf_path, fs::perms::owner_all | fs::perms::group_all | fs::perms::set_gid);
+                recursive_permissions(log_path, fs::perms::owner_all | fs::perms::group_all | fs::perms::set_gid);
                 if (pkg_name == "android") uid = -1;
                 path_chown(conf_path, uid, 1000u, true);
                 path_chown(log_path, uid, 1000u, true);
                 if (current_user_ == 0) {
                     auto variant = GetMiscPath() / "variant";
                     fs::permissions(variant, fs::perms::owner_all | fs::perms::group_all);
-                    chown(variant.c_str(), uid, 1000u);
+                    path_chown(variant, uid, 1000u);
                 }
 
                 if (pkg_name == kPrimaryInstallerPkgName) {
