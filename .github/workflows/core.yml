@@ -47,6 +47,7 @@ jobs:
         name: LSPosed-debug
         path: './LSPosed-debug/*'
     - name: Post to channel
+      if: ${{ github.event_name != 'pull_request' && success() && github.ref == 'refs/heads/master' }}
       env:
         CHANNEL_ID: ${{ secrets.CHANNEL_ID }}
         BOT_TOKEN: ${{ secrets.BOT_TOKEN }}

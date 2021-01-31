@@ -49,7 +49,7 @@ jobs:
           name: manager-unsigned
           path: "app/build/outputs/apk/release/*.apk"
       - name: Post to channel
-        if: ${{ github.event_name != 'pull_request' && success() }}
+        if: ${{ github.event_name != 'pull_request' && success() && github.ref == 'refs/heads/master' }}
         env:
           CHANNEL_ID: ${{ secrets.CHANNEL_ID }}
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
