@@ -13,17 +13,6 @@
     </shortcut>
     <shortcut
         android:enabled="true"
-        android:icon="@drawable/shortcut_ic_apps"
-        android:shortcutId="apps"
-        android:shortcutLongLabel="@string/Apps"
-        android:shortcutShortLabel="@string/Apps">
-        <intent
-            android:action="android.intent.action.MAIN"
-            android:targetClass="io.github.lsposed.manager.ui.activity.AppListActivity"
-            android:targetPackage="io.github.lsposed.manager" />
-    </shortcut>
-    <shortcut
-        android:enabled="true"
         android:icon="@drawable/shortcut_ic_logs"
         android:shortcutId="log"
         android:shortcutLongLabel="@string/Logs"

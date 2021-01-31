@@ -6,7 +6,6 @@
     <string name="ActivatedDetail">LSPosed is activated</string>
     <string name="Modules">Modules</string>
     <string name="ModulesDetail">%d modules enabled</string>
-    <string name="Apps">Apps</string>
     <string name="Logs">Logs</string>
     <string name="Settings">Settings</string>
     <string name="About">About</string>

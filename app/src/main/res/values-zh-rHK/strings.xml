@@ -6,7 +6,6 @@
     <string name="ActivatedDetail">LSPosed 框架已激活</string>
     <string name="Modules">模塊</string>
     <string name="ModulesDetail">%d 模塊已啟用</string>
-    <string name="Apps">應用</string>
     <string name="Logs">日誌</string>
     <string name="Settings">設置</string>
     <string name="About">關於</string>
