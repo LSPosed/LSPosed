@@ -352,6 +352,12 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             if ((info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
                 menu.removeItem(R.id.app_menu_uninstall);
             }
+            if (android) {
+                menu.removeItem(R.id.app_menu_compile_speed);
+                menu.removeItem(R.id.app_menu_compile_dexopt);
+                menu.removeItem(R.id.app_menu_compile_reset);
+                menu.removeItem(R.id.app_menu_store);
+            }
         });
 
         holder.checkbox.setOnCheckedChangeListener(null);
