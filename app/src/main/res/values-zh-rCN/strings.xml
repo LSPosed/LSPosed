@@ -41,7 +41,6 @@
     <string name="warning_xposed_min_version">该模块需要更新版本的 LSPosed(%d), 因此无法被激活</string>
     <string name="no_min_version_specified">该模块未指定所需的 LSPosed 版本</string>
     <string name="warning_min_version_too_low">该模块针对 LSPosed %1$d 版本构建 , 由于不兼容 %2$d 版本中的变更, 现已被停用</string>
-    <string name="module_launch">打开</string>
     <string name="module_app_info">应用信息</string>
     <string name="modules_app_store">在应用商店查看</string>
     <string name="module_uninstall">卸载</string>
@@ -114,7 +113,6 @@
     <string name="pref_title_disable_verbose_log">禁用详细日志</string>
     <string name="logs_cannot_read">无法读取日志: \n</string>
     <string name="app_launch">运行</string>
-    <string name="app_stop">停止</string>
     <string name="compile_failed">优化失败或返回值为空</string>
     <string name="compile_failed_with_info">优化失败: </string>
     <string name="not_installed">未安装</string>
@@ -122,8 +120,8 @@
     <string name="pref_title_disable_modules_log">禁用模块日志</string>
     <string name="pref_disable_modules_log_summary">模块抛出的的异常堆栈仍将正常抓取</string>
     <string name="follow_system">跟随系统</string>
-    <string name="pure_black_dark_theme">使用纯黑深色主题</string>>
-    <string name="install_timestamps">安装于 %1$s\n更新于 %2$s</string>
+    <string name="pure_black_dark_theme">使用纯黑深色主题</string><![CDATA[>
+    ]]>
     <string name="xposed_not_active">LSPosed 框架未安装或未激活, 您可在设置中关闭状态检查</string>
     <string name="transparent_status_bar">透明状态栏</string>
     <string name="sort_by_name">应用名称</string>
@@ -139,7 +137,6 @@
     <string name="colorized_action_bar">着色应用栏</string>
     <string name="settings_group_theme">主题</string>
     <string name="material_design_2">惨白设计</string>
-    <string name="menu_scope">作用域</string>
     <string name="settings_enable_resources">启用资源钩子</string>
     <string name="settings_enable_resources_summary"><b>警告: </b> 资源钩子已被弃用</string>
     <string name="settings_variant">变体</string>
