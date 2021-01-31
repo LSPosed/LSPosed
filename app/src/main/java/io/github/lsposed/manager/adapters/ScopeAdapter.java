@@ -7,10 +7,16 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
+import android.text.style.TypefaceSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -313,11 +319,22 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
 
                     }
                 });
-        String description = activity.getString(R.string.app_description, info.packageName, info.versionName);
+        SpannableStringBuilder sb = new SpannableStringBuilder(activity.getString(R.string.app_description, info.packageName, info.versionName));
         if (hasRecommended() && recommendedList.contains(info.packageName)) {
-            description += "\n" + activity.getString(R.string.requested_by_module);
+            sb.append("\n");
+            String recommended = activity.getString(R.string.requested_by_module);
+            sb.append(recommended);
+            final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(activity.getThemedColor(R.attr.colorAccent));
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+                final TypefaceSpan typefaceSpan = new TypefaceSpan(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+                sb.setSpan(typefaceSpan, sb.length() - recommended.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            } else {
+                final StyleSpan styleSpan = new StyleSpan(Typeface.BOLD);
+                sb.setSpan(styleSpan, sb.length() - recommended.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            }
+            sb.setSpan(foregroundColorSpan, sb.length() - recommended.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         }
-        holder.appDescription.setText(description);
+        holder.appDescription.setText(sb);
 
         holder.itemView.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
             activity.getMenuInflater().inflate(R.menu.menu_app_item, menu);
