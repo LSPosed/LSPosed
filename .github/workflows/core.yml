@@ -2,6 +2,7 @@ name: Core
 
 on:
   push:
+    branches: [ master ]
     paths-ignore:
     - 'app/**'
     - '**.md'
@@ -30,7 +31,7 @@ jobs:
         KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
         ALIAS_NAME: ${{ secrets.ALIAS_NAME }}
         ALIAS_PASS: ${{ secrets.ALIAS_PASS }}
-      run:  bash ./gradlew zipRelease zipDebug :app:assembleRelease
+      run:  bash ./gradlew zipRelease zipDebug
     - name: Prepare artifact
       if: success()
       run: unzip core/release/LSPosed-v*-release.zip -d LSPosed-release;

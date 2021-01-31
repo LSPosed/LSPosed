@@ -2,6 +2,7 @@ name: Manager
 
 on:
   push:
+    branches: [ master ]
     paths:
     - 'app/**'
     - '.github/workflows/manager.yml'
