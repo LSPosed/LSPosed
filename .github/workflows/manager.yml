@@ -27,9 +27,9 @@ jobs:
       - name: Build with Gradle
         run:  bash ./gradlew :app:assembleRelease
       - name: Sign Manager Release
-        if: ${{ github.event_name == 'push' && success() }}
+        if: ${{ github.event_name != 'pull_request' && success() && github.ref == 'refs/heads/master' }}
         id: sign
-        uses: tehcneko/sign-android-release@v1.0.0
+        uses: tehcneko/sign-android-release@v1.0.1
         with:
           releaseDirectory: app/build/outputs/apk/release
           signingKeyBase64: ${{ secrets.SIGNING_KEY }}
@@ -37,7 +37,7 @@ jobs:
           keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
       - name: Upload signed apk
-        if: ${{ github.event_name == 'push' && success() }}
+        if: ${{ github.event_name != 'pull_request' && success() && github.ref == 'refs/heads/master' }}
         uses: actions/upload-artifact@v2
         with:
           name: manager
