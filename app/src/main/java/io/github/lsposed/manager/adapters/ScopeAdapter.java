@@ -256,8 +256,6 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             }
         } else if (itemId == R.id.app_menu_info) {
             activity.startActivity(new Intent(ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", info.packageName, null)));
-        } else if (itemId == R.id.app_menu_uninstall) {
-            activity.startActivity(new Intent(Intent.ACTION_UNINSTALL_PACKAGE, Uri.fromParts("package", info.packageName, null)));
         } else {
             return false;
         }
@@ -348,9 +346,6 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             Intent launchIntent = pm.getLaunchIntentForPackage(info.packageName);
             if (launchIntent == null) {
                 menu.removeItem(R.id.app_menu_launch);
-            }
-            if ((info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
-                menu.removeItem(R.id.app_menu_uninstall);
             }
             if (android) {
                 menu.removeItem(R.id.app_menu_compile_speed);

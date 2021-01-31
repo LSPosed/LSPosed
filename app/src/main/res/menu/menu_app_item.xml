@@ -18,7 +18,4 @@
     <item
         android:id="@+id/app_menu_info"
         android:title="@string/module_app_info" />
-    <item
-        android:id="@+id/app_menu_uninstall"
-        android:title="@string/module_uninstall" />
 </menu>
