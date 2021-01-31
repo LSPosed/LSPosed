@@ -155,20 +155,24 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     private void sortApps() {
         Comparator<PackageInfo> cmp = AppHelper.getAppListComparator(preferences.getInt("list_sort", 0), pm);
         fullList.sort((a, b) -> {
-            boolean aAndroid = a.packageName.equals("android");
-            boolean bAnrdoid = b.packageName.equals("android");
-            if (aAndroid || bAnrdoid) {
-                if (aAndroid == bAnrdoid) {
-                    return 0;
-                } else if (aAndroid) {
-                    return -1;
-                } else {
-                    return 1;
-                }
-            }
             boolean aChecked = checkedList.contains(a.packageName);
             boolean bChecked = checkedList.contains(b.packageName);
             if (aChecked == bChecked) {
+                if (hasRecommended()) {
+                    boolean aRecommended = recommendedList.contains(a.packageName);
+                    boolean bRecommended = recommendedList.contains(b.packageName);
+                    if (aRecommended || bRecommended) {
+                        if (aRecommended == bRecommended) {
+                            return cmp.compare(a, b);
+                        } else if (aRecommended) {
+                            return -1;
+                        } else {
+                            return 1;
+                        }
+                    }
+                }
+                if (a.packageName.equals("android")) return -1;
+                if (b.packageName.equals("android")) return 1;
                 return cmp.compare(a, b);
             } else if (aChecked) {
                 return -1;
