@@ -4,9 +4,6 @@
         android:id="@+id/app_menu_launch"
         android:title="@string/app_launch" />
     <item
-        android:id="@+id/app_menu_stop"
-        android:title="@string/app_stop" />
-    <item
         android:id="@+id/app_menu_compile_speed"
         android:title="@string/menu_title_compile_speed" />
     <item
