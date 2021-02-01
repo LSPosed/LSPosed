@@ -2,7 +2,7 @@
 name: Bug report
 about: Bug report / Your issue will be close if you don't follow this template
 title: "[BUG] "
-labels: bug
+labels:
 assignees: ''
 ---
 
