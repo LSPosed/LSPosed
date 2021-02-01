@@ -10,7 +10,7 @@ A Riru module trying to provide an ART hooking framework (initially for Android 
 
 ## Supported Versions
 
-Android 8.1+
+Android 8 ~ 11
 
 ## Install
 
@@ -18,8 +18,8 @@ Android 8.1+
 2. Install [Riru](https://github.com/RikkaApps/Riru/releases) v23+ from Magisk repo.
 3. [Download](#download) and install LSPosed in Magisk Manager
 4. Install LSPosed Manager
-4. Reboot.
-5. Have fun! :)
+5. Reboot.
+6. Have fun! :)
 
 ## Download
 
@@ -31,6 +31,7 @@ You can download LSPosed framework and LSPosed Manager from Github Action or Git
 ## Get Help
 
 - GitHub issues: [Issues](https://github.com/LSPosed/LSPosed/issues/)
+- (For Chinese speakers) 本项目只接受英语标题的issue。如果您不懂英语，请使用[谷歌翻译](https://translate.google.cn)
 
 ## For Developers
 
