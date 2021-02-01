@@ -1,47 +1,60 @@
 # LSPosed Framework
 
-[简体中文](https://github.com/ElderDrivers/LSPosed/wiki/%E7%AE%80%E4%BB%8B)
+![Core](https://github.com/LSPosed/LSPosed/workflows/Core/badge.svg) ![Manager](https://github.com/LSPosed/LSPosed/workflows/Manager/badge.svg)
 
 ## Introduction 
 
-A Riru module trying to provide an ART hooking framework (initially for Android Pie) which delivers consistent APIs with the OG Xposed, leveraging YAHFA (or SandHook) hooking framework, supports Android 8.0 ~ **10**.
+A Riru module trying to provide an ART hooking framework (initially for Android Pie) which delivers consistent APIs with the OG Xposed, leveraging YAHFA and SandHook hooking framework, supports Android 8.0 ~ **11**.
 
 > Xposed is a framework for modules that can change the behavior of the system and apps without touching any APKs. That's great because it means that modules can work for different versions and even ROMs without any changes (as long as the original code was not changed too much). It's also easy to undo. As all changes are done in the memory, you just need to deactivate the module and reboot to get your original system back. There are many other advantages, but here is just one more: Multiple modules can do changes to the same part of the system or app. With modified APKs, you to decide for one. No way to combine them, unless the author builds multiple APKs with different combinations.
 
-What are the differences between LSPosed Framework and Xposed Framework?
+## Supported Versions
 
-1. LSPosed fully supports Android Pie, Q and R
-2. LSPosed have App List mode. Only the apps you want to apply Xposed modules are hooked. Other apps in system run in a completely clean environment
-3. LSPosed doesn't need to reboot system to active most modules
-4. LSPosed is hard to detect. LSPosed use Riru to inject, doesn't modify the libart and app_process
+Android 8.1+
 
-## How to use ?
+## Install
 
-To put it simply, just follow these steps:
+1. Install Magisk v21+
+1. Install [Riru](https://github.com/RikkaApps/Riru/releases) v23+ from Magisk repo.
+1. [Download](#download) and install LSPosed in Magisk Manager
+1. Install LSPosed Manager
+1. Reboot.
+1. Have fun! :)
 
-1. Install Magisk
-2. Flash the Riru Magisk module. You can find it in [Riru release page](https://github.com/RikkaApps/Riru/releases).
-3. Flash the Riru - LSPosed Magisk module. You can find it in [LSPosed release page](https://github.com/ElderDrivers/LSPosed/releases).
-4. Install LSPosed Manager. You can find it in [LSPosed Manager release page](https://github.com/ElderDrivers/LSPosedManager/releases).
-5. Reboot :)
+## Download
 
-More informations in detail:
+You can download LSPosed framework and LSPosed Manager from Github Action or Github Release
+## Useful Links
 
-[**Official Website**](http://lspd.meowcat.org/)
-
-[**Wiki**](https://github.com/ElderDrivers/LSPosed/wiki)
-
-[**Telegram Channel**](https://t.me/LSPosed/)
-
-## Community Discussion
-
-- QQ Group: [855219808](http://shang.qq.com/wpa/qunwpa?idkey=fae42a3dba9dc758caf63e971be2564e67bf7edd751a2ff1c750478b0ad1ca3f)
-- Telegram: [@Code_of_MeowCat](http://t.me/Code_of_MeowCat)
-
-Notice: These community group don't accept any bug report, please use [Get help](#get-help) to report.
+- [List of Xposed Modules For Android Pie Working With LSPosed](https://forum.xda-developers.com/xposed/list-xposed-modules-android-pie-ed-t3892768) (thanks to Uraniam9 @ xda-developers)
 
 ## Get Help
 
-- GitHub Issues: [Issues](https://github.com/ElderDrivers/LSPosed/issues/)
+- GitHub issues: [Issues](https://github.com/LSPosed/LSPosed/issues/)
 
-- Notice(for Chinese): In view of the low quality of issues submitted, please read the Chinese user report first[LSPosedIssuesReport_cn](http://lspd.meowcat.org/assets/LSPosedIssuesReport_cn.txt)(If you don't read the instructions, the submitted issue is likely to be closed)
+## For Developers
+
+Developers are welcomed to write Xposed modules with hooks based on LSPosed Framework. Module written based on LSPosed framework is fully compatible with the original Xposed Framework, so contrary a Xposed Framework-based module will work well with the LSPosed framework too.
+
+- [Xposed Framework API](https://api.xposed.info/)
+
+We use the module repository of the original Xposed, so you simply upload the module to repository, then you can download your module in LSPosed.
+
+- [Xposed Module Repository](https://repo.xposed.info/)
+
+## Community Discussion
+
+- Telegram: [@LSPosed](http://t.me/LSPosed)
+
+Notice: These community group don't accept any bug report, please use [Get help](#get-help) to report.
+
+## Credits 
+
+- [YAHFA](https://github.com/rk700/YAHFA): the core ART hooking framework
+- [Magisk](https://github.com/topjohnwu/Magisk/): makes all these possible
+- [Riru](https://github.com/RikkaApps/Riru): provides a way to inject codes into zygote process
+- [XposedBridge](https://github.com/rovo89/XposedBridge): the OG xposed framework APIs
+- [dexmaker](https://github.com/linkedin/dexmaker) and [dalvikdx](https://github.com/JakeWharton/dalvik-dx): to dynamiclly generate YAHFA hooker classes
+- [SandHook](https://github.com/ganyao114/SandHook/): ART hooking framework for SandHook variant
+- [Dobby](https://github.com/jmpews/Dobby): used for inline hooking
+- [EdXposed](https://github.com/ElderDrivers/EdXposed): fork source
