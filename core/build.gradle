@@ -166,6 +166,10 @@ afterEvaluate {
                             apiCode: "$apiCode", minApi: "$moduleMinRiruApiVersion")
                     filter(FixCrLfFilter.class, eol: FixCrLfFilter.CrLf.newInstance("lf"))
                 }
+                copy {
+                    from ("${rootProject.projectDir}/README.md")
+                    into file(zipPathMagiskReleasePath)
+                }
             }
             def libPathRelease = "${buildDir}/intermediates/cmake/${variantLowered}/obj"
             def exclude_list = ["riru.sh"]
