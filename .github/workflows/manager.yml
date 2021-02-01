@@ -37,6 +37,8 @@ jobs:
           alias: ${{ secrets.ALIAS }}
           keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
+        env:
+          BUILD_TOOLS_VERSION: "30.0.3"
       - name: Upload signed apk
         if: ${{ github.event_name != 'pull_request' && success() && github.ref == 'refs/heads/master' }}
         uses: actions/upload-artifact@v2
