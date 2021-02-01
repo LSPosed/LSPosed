@@ -4,6 +4,7 @@ android {
     compileSdkVersion androidCompileSdkVersion.toInteger()
 
     ndkVersion androidCompileNdkVersion
+    buildToolsVersion androidBuildToolsVersion
 
     buildFeatures {
         viewBinding = true
