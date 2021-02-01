@@ -156,4 +156,5 @@
     <string name="requested_by_module">推荐的应用</string>
     <string name="module_disabled_no_selection">由于未选择任何应用，模块 %s 已被禁用。</string>
     <string name="android_framework">系统框架</string>
+    <string name="app_destroyed">此应用程序已被损坏，请确保您从官方来源下载该应用程序。</string>
 </resources>

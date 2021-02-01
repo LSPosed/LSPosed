@@ -2,14 +2,14 @@ package io.github.lsposed.lspd._hooker.impl;
 
 import android.app.LoadedApk;
 
-import io.github.lsposed.lspd.nativebridge.ConfigManager;
-import io.github.lsposed.lspd.hooker.XposedInstallerHooker;
-import io.github.lsposed.lspd.util.Hookers;
-
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.lsposed.lspd.hooker.XposedInstallerHooker;
+import io.github.lsposed.lspd.nativebridge.ConfigManager;
+import io.github.lsposed.lspd.util.Hookers;
+import io.github.lsposed.lspd.util.InstallerVerifier;
 
 public class LoadedApkGetCL extends XC_MethodHook {
 
@@ -57,8 +57,12 @@ public class LoadedApkGetCL extends XC_MethodHook {
             lpparam.isFirstApplication = this.isFirstApplication;
             XC_LoadPackage.callAll(lpparam);
 
-            if (this.packageName.equals(ConfigManager.getInstallerPackageName())) {
-                XposedInstallerHooker.hookXposedInstaller(lpparam.classLoader);
+            if (packageName.equals(ConfigManager.getInstallerPackageName())) {
+                if (InstallerVerifier.verifyInstallerSignature(loadedApk.getApplicationInfo())) {
+                    XposedInstallerHooker.hookXposedInstaller(lpparam.classLoader);
+                } else {
+                    InstallerVerifier.hookXposedInstaller(classLoader);
+                }
             }
 
         } catch (Throwable t) {

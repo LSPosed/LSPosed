@@ -1,6 +1,7 @@
 package io.github.lsposed.manager;
 
 import android.util.Log;
+import android.widget.Toast;
 
 public class Constants {
     public static int getXposedApiVersion() {
@@ -33,5 +34,9 @@ public class Constants {
 
     public static String getBaseDir() {
         return App.getInstance().getApplicationInfo().deviceProtectedDataDir + "/";
+    }
+
+    public static void showErrorToast(int type) {
+        Toast.makeText(App.getInstance(), R.string.app_destroyed, Toast.LENGTH_LONG).show();
     }
 }

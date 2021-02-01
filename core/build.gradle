@@ -36,6 +36,7 @@ repositories {
 
 dependencies {
     implementation 'rikka.ndk:riru:10'
+    implementation 'com.android.tools.build:apksig:4.1.2'
     implementation project(path: ':sandhook-hooklib')
     compileOnly project(':hiddenapi-stubs')
     compileOnly project(':key-selector')
@@ -104,8 +105,8 @@ android {
     ndkVersion androidCompileNdkVersion
     buildToolsVersion androidBuildToolsVersion
     compileOptions {
-        targetCompatibility JavaVersion.VERSION_1_7
-        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
     }
 }
 
