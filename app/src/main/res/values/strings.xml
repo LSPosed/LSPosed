@@ -33,7 +33,6 @@
     <string name="module_is_not_activated_yet_detailed">%s has been installed, but is not activated yet</string>
     <string name="module_empty_description">(no description provided)</string>
     <string name="module_no_ui">This module does not provide a user interface</string>
-    <string name="xposed_module_list_updated">LSPosed module list was updated</string>
     <string name="xposed_module_updated_notification_title">LSPosed module updated</string>
     <string name="warning_xposed_min_version">This module requires a newer LSPosed version (%d) and thus cannot be activated</string>
     <string name="no_min_version_specified">This module does not specify the LSPosed version it needs.</string>
@@ -88,9 +87,6 @@
     <string name="not_logcat">This is the LSPosed Framework and modules log\nif you need a Android logcat, you can try our Log Catcher Magisk module</string>
 
     <string name="done">Done!</string>
-    <string name="verified_boot_deactivated">Verified Boot is deactivated</string>
-    <string name="verified_boot_none">Could not detect Verified Boot state</string>
-    <string name="verified_boot_active">Verified Boot is active</string>
 
     <!-- LSPd related -->
     <string name="menu_title_compile_reset">De-optimize</string>
@@ -100,7 +96,6 @@
     <string name="about_source" translatable="false">https://github.com/LSPosed/LSPosed/</string>
 
     <string name="group_telegram_channel_link" translatable="false">http://t.me/LSPosed</string>
-    <string name="notinstalled">The LSPosed framework is not installed.</string>
 
     <string name="pref_title_disable_verbose_log">Disable verbose logs</string>
     <string name="logs_cannot_read">Cannot read log: \n</string>
@@ -144,4 +139,6 @@
     <string name="module_disabled_no_selection">Module %s has been disabled since no app selected.</string>
     <string name="android_framework">System Framework</string>
     <string name="app_destroyed">This application has been destroyed, please make sure you download it from the official source.</string>
+    <string name="selinux_permissive">&lt;b&gt;WARNING:&lt;\/b&gt; SELinux is not enforcing! the malicious program that attacks this can completely control your device and may cause your property damage and legal liability.</string>
+    <string name="selinux_permissive_summary">SELinux is not enforcing!</string>
 </resources>

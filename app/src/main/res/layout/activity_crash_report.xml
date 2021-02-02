@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:orientation="horizontal"
-            app:cardBackgroundColor="@color/amber_500">
+            app:cardBackgroundColor="@color/material_amber_500">
 
             <RelativeLayout
                 android:layout_width="wrap_content"

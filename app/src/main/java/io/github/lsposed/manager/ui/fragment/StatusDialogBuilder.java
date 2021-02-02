@@ -3,11 +3,11 @@ package io.github.lsposed.manager.ui.fragment;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
+import androidx.core.text.HtmlCompat;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -15,11 +15,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.Locale;
 
 import dalvik.system.VMRuntime;
-import io.github.lsposed.manager.App;
 import io.github.lsposed.manager.BuildConfig;
 import io.github.lsposed.manager.Constants;
 import io.github.lsposed.manager.R;
@@ -62,7 +60,10 @@ public class StatusDialogBuilder extends MaterialAlertDialogBuilder {
         binding.manufacturer.setText(getUIFramework());
         binding.cpu.setText(getCompleteArch());
 
-        determineVerifiedBootState(binding);
+        if (Constants.isPermissive()) {
+            binding.selinux.setVisibility(View.VISIBLE);
+            binding.selinux.setText(HtmlCompat.fromHtml(context.getString(R.string.selinux_permissive), HtmlCompat.FROM_HTML_MODE_LEGACY));
+        }
         setView(binding.getRoot());
     }
 
@@ -103,39 +104,6 @@ public class StatusDialogBuilder extends MaterialAlertDialogBuilder {
             return "armv5";
         } else {
             return "arm";
-        }
-    }
-
-    private void determineVerifiedBootState(StatusInstallerBinding binding) {
-        try {
-            @SuppressLint("PrivateApi") Class<?> c = Class.forName("android.os.SystemProperties");
-            Method m = c.getDeclaredMethod("get", String.class, String.class);
-            m.setAccessible(true);
-
-            String propSystemVerified = (String) m.invoke(null, "partition.system.verified", "0");
-            String propState = (String) m.invoke(null, "ro.boot.verifiedbootstate", "");
-            File fileDmVerityModule = new File("/sys/module/dm_verity");
-
-            boolean verified = false;
-            if (propSystemVerified != null) {
-                verified = !propSystemVerified.equals("0");
-            }
-            boolean detected = false;
-            if (propState != null) {
-                detected = !propState.isEmpty() || fileDmVerityModule.exists();
-            }
-
-            if (verified) {
-                binding.dmverity.setText(R.string.verified_boot_active);
-                binding.dmverity.setTextColor(ContextCompat.getColor(getContext(), R.color.warning));
-            } else if (detected) {
-                binding.dmverity.setText(R.string.verified_boot_deactivated);
-            } else {
-                binding.dmverity.setText(R.string.verified_boot_none);
-                binding.dmverity.setTextColor(ContextCompat.getColor(getContext(), R.color.warning));
-            }
-        } catch (Exception e) {
-            Log.e(App.TAG, "Could not detect Verified Boot state", e);
         }
     }
 

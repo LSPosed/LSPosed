@@ -18,7 +18,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -276,7 +275,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 descriptionText.setText(item.getDescription());
             } else {
                 descriptionText.setText(getString(R.string.module_empty_description));
-                descriptionText.setTextColor(ContextCompat.getColor(ModulesActivity.this, R.color.warning));
             }
             TextView warningText = holder.warningText;
 

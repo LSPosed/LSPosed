@@ -5,10 +5,9 @@
     <color name="colorPrimaryDark">#dddddd</color>
     <color name="colorAccent">#e91e63</color>
     <color name="colorActionBar">#F0F0F0</color>
-    <color name="red_500">#F44336</color>
-    <color name="warning">@color/red_500</color>
-    <color name="download_status_update_available">#4CAF50</color>
-    <color name="amber_500">#FFC107</color>
     <color name="navigationBarColor">@color/colorPrimary</color>
     <color name="navigationBarColorBlack">@android:color/black</color>
+    <color name="colorError">@color/material_red_500</color>
+    <color name="colorNormal">@color/material_green_500</color>
+    <color name="colorInstall">@color/material_blue_500</color>
 </resources>
