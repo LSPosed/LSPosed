@@ -81,8 +81,6 @@
     <string name="not_logcat">此處僅顯示 LSPosed 及模塊相關日誌信息\n如果您想抓取系統日誌, 可以嘗試我們的 Log Catcher Magisk 模塊</string>
 
     <!-- LSPd related -->
-    <string name="menu_title_compile_reset">取消優化</string>
-    <string name="compile_reset_msg">清除中…</string>
     <string name="compile_speed_msg">優化中…</string>
     <string name="done">完成！</string>
 

@@ -89,8 +89,6 @@
     <string name="done">Done!</string>
 
     <!-- LSPd related -->
-    <string name="menu_title_compile_reset">De-optimize</string>
-    <string name="compile_reset_msg">Resetting …</string>
     <string name="compile_speed_msg">Optimizing …</string>
 
     <string name="about_source" translatable="false">https://github.com/LSPosed/LSPosed/</string>
@@ -139,6 +137,7 @@
     <string name="module_disabled_no_selection">Module %s has been disabled since no app selected.</string>
     <string name="android_framework">System Framework</string>
     <string name="app_destroyed">This application has been destroyed, please make sure you download it from the official source.</string>
+    <string name="compile_speed">Re-optimize</string>
     <string name="selinux_permissive">&lt;b&gt;WARNING:&lt;\/b&gt; SELinux is not enforcing! the malicious program that attacks this can completely control your device and may cause your property damage and legal liability.</string>
     <string name="selinux_permissive_summary">SELinux is not enforcing!</string>
 </resources>

@@ -82,8 +82,6 @@
     <string name="not_logcat">此处仅显示 LSPosed 及模块相关日志信息\n如果您想抓取系统日志, 可以尝试我们的 Log Catcher Magisk 模块</string>
 
     <!-- LSPd related -->
-    <string name="menu_title_compile_reset">取消优化</string>
-    <string name="compile_reset_msg">清除中…</string>
     <string name="compile_speed_msg">优化中…</string>
     <string name="done">完成！</string>
 
@@ -132,6 +130,7 @@
     <string name="module_disabled_no_selection">由于未选择任何应用，模块 %s 已被禁用。</string>
     <string name="android_framework">系统框架</string>
     <string name="app_destroyed">此应用程序已被损坏，请确保您从官方来源下载该应用程序。</string>
+    <string name="compile_speed">重新优化</string>
     <string name="selinux_permissive">&lt;b&gt;警告：&lt;\/b&gt;SELinux 未处于严格模式！对此进行攻击的恶意程序可以完全控制你的设备，并可能造成你的财产损失和法律责任。</string>
     <string name="selinux_permissive_summary">SELinux 未处于严格模式！</string>
 </resources>
