@@ -102,8 +102,8 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
                             e.printStackTrace();
                         }
                     });
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (Throwable t) {
+                    t.printStackTrace();
                     compileWithShell(mode);
                 }
             });
