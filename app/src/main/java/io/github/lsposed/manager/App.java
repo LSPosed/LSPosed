@@ -15,7 +15,6 @@ import java.io.StringWriter;
 import io.github.lsposed.manager.ui.activity.CrashReportActivity;
 import io.github.lsposed.manager.util.CompileUtil;
 import io.github.lsposed.manager.util.NotificationUtil;
-import io.github.lsposed.manager.util.RebootUtil;
 import rikka.shizuku.Shizuku;
 import rikka.sui.Sui;
 
@@ -36,15 +35,10 @@ public class App extends Application {
     }
 
     private void onRequestPermissionsResult(int requestCode, int grantResult) {
-        if (requestCode < 10) {
-            RebootUtil.onRequestPermissionsResult(requestCode, grantResult);
-        } else {
-            CompileUtil.onRequestPermissionsResult(requestCode - 10, grantResult);
-        }
+        CompileUtil.onRequestPermissionsResult(requestCode, grantResult);
     }
 
-    public static int checkPermission(int code, int from) {
-        int requestCode = code + from * 10;
+    public static int checkPermission(int code) {
         try {
             if (!Shizuku.isPreV11() && Shizuku.getVersion() >= 11) {
                 if (Shizuku.checkSelfPermission() == PERMISSION_GRANTED) {
@@ -52,7 +46,7 @@ public class App extends Application {
                 } else if (Shizuku.shouldShowRequestPermissionRationale()) {
                     return -1;
                 } else {
-                    Shizuku.requestPermission(requestCode);
+                    Shizuku.requestPermission(code);
                     return -1;
                 }
             }
