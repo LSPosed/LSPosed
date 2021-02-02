@@ -457,28 +457,20 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
 
     public boolean onBackPressed() {
         if (masterSwitch.isChecked() && checkedList.isEmpty()) {
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(activity);
+            builder.setTitle(R.string.use_recommended);
+            builder.setMessage(hasRecommended() ? R.string.no_scope_selected_has_recommended : R.string.no_scope_selected);
             if (hasRecommended()) {
-                new MaterialAlertDialogBuilder(activity)
-                        .setTitle(R.string.use_recommended)
-                        .setMessage(R.string.no_scope_selected_has_recommended)
-                        .setPositiveButton(android.R.string.ok, (dialog, which) -> checkRecommended())
-                        .setNegativeButton(android.R.string.cancel, (dialog, which) -> {
-                            ModuleUtil.getInstance().setModuleEnabled(modulePackageName, false);
-                            Toast.makeText(activity, activity.getString(R.string.module_disabled_no_selection, moduleName), Toast.LENGTH_LONG).show();
-                            activity.finish();
-                        })
-                        .show();
+                builder.setPositiveButton(android.R.string.ok, (dialog, which) -> checkRecommended());
             } else {
-                new MaterialAlertDialogBuilder(activity)
-                        .setMessage(R.string.no_scope_selected)
-                        .setPositiveButton(android.R.string.cancel, null)
-                        .setNegativeButton(android.R.string.ok, (dialog, which) -> {
-                            ModuleUtil.getInstance().setModuleEnabled(modulePackageName, false);
-                            Toast.makeText(activity, activity.getString(R.string.module_disabled_no_selection, moduleName), Toast.LENGTH_LONG).show();
-                            activity.finish();
-                        })
-                        .show();
+                builder.setPositiveButton(android.R.string.cancel, null);
             }
+            builder.setNegativeButton(hasRecommended() ? android.R.string.cancel : android.R.string.ok, (dialog, which) -> {
+                ModuleUtil.getInstance().setModuleEnabled(modulePackageName, false);
+                Toast.makeText(activity, activity.getString(R.string.module_disabled_no_selection, moduleName), Toast.LENGTH_LONG).show();
+                activity.finish();
+            });
+            builder.show();
             return false;
         } else {
             return true;
