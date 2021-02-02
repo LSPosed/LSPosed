@@ -84,8 +84,6 @@
 
     <!-- LSPd related -->
     <string name="menu_title_compile_reset">取消优化</string>
-    <string name="menu_title_compile_speed">以 Speed 模式优化应用</string>
-    <string name="menu_title_compile_dexopt">以 Dexopt 模式优化应用</string>
     <string name="compile_reset_msg">清除中…</string>
     <string name="compile_speed_msg">优化中…</string>
     <string name="notinstalled">LSPosed 框架未安装</string>

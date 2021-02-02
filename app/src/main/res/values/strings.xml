@@ -94,8 +94,6 @@
 
     <!-- LSPd related -->
     <string name="menu_title_compile_reset">De-optimize</string>
-    <string name="menu_title_compile_speed">Optimize with Speed mode</string>
-    <string name="menu_title_compile_dexopt">Optimize with Dexopt mode</string>
     <string name="compile_reset_msg">Resetting …</string>
     <string name="compile_speed_msg">Optimizing …</string>
 

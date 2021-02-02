@@ -4,12 +4,6 @@
         android:id="@+id/app_menu_launch"
         android:title="@string/app_launch" />
     <item
-        android:id="@+id/app_menu_compile_speed"
-        android:title="@string/menu_title_compile_speed" />
-    <item
-        android:id="@+id/app_menu_compile_dexopt"
-        android:title="@string/menu_title_compile_dexopt" />
-    <item
         android:id="@+id/app_menu_compile_reset"
         android:title="@string/menu_title_compile_reset" />
     <item

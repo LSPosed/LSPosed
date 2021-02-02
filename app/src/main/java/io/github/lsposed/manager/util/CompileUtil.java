@@ -15,9 +15,7 @@ public class CompileUtil {
     // TODO:
 
     public enum CompileType {
-        RESET,
-        SPEED,
-        DEXOPT;
+        RESET;
 
         @Override
         public String toString() {
@@ -45,24 +43,12 @@ public class CompileUtil {
     public static void reset(Context context, FragmentManager fragmentManager,
                              ApplicationInfo info) {
         compilePackageInBg(fragmentManager, info,
-                context.getString(R.string.compile_reset_msg), CompileType.RESET);
-    }
-
-    public static void compileSpeed(Context context, FragmentManager fragmentManager,
-                                    ApplicationInfo info) {
-        compilePackageInBg(fragmentManager, info,
-                context.getString(R.string.compile_speed_msg), CompileType.SPEED);
-    }
-
-    public static void compileDexopt(Context context, FragmentManager fragmentManager,
-                                     ApplicationInfo info) {
-        compilePackageInBg(fragmentManager, info,
-                context.getString(R.string.compile_speed_msg), CompileType.DEXOPT);
+                context.getString(R.string.compile_reset_msg));
     }
 
     private static void compilePackageInBg(FragmentManager fragmentManager,
-                                           ApplicationInfo info, String msg, CompileType type) {
-        instance = CompileDialogFragment.newInstance(info, msg, type);
+                                           ApplicationInfo info, String msg) {
+        instance = CompileDialogFragment.newInstance(info, msg, CompileType.RESET);
         instance.show(fragmentManager, TAG_COMPILE_DIALOG);
     }
 
