@@ -17,7 +17,7 @@ Android 8 ~ 11
 1. Install Magisk v21+
 2. Install [Riru](https://github.com/RikkaApps/Riru/releases) v23+ from Magisk repo.
 3. [Download](#download) and install LSPosed in Magisk Manager
-4. Install LSPosed Manager
+4. Install [LSPosed Manager](https://github.com/LSPosed/LSPosed/releases)
 5. Reboot.
 6. Have fun! :)
 
