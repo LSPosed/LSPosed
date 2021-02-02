@@ -7,12 +7,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-
-import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -26,7 +22,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import io.github.lsposed.manager.App;
 import io.github.lsposed.manager.Constants;
-import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.adapters.AppHelper;
 
 public final class ModuleUtil {
@@ -35,11 +30,9 @@ public final class ModuleUtil {
     private static ModuleUtil instance = null;
     private final PackageManager pm;
     private final List<ModuleListener> listeners = new CopyOnWriteArrayList<>();
-    //private InstalledModule framework = null;
     private Map<String, InstalledModule> installedModules;
     private final List<String> enabledModules;
     private boolean isReloading = false;
-    private Toast toast;
     private final SharedPreferences prefs;
 
     private ModuleUtil() {
@@ -92,9 +85,6 @@ public final class ModuleUtil {
         synchronized (this) {
             isReloading = false;
         }
-        for (ModuleListener listener : listeners) {
-            listener.onInstalledModulesReloaded(instance);
-        }
     }
 
     public InstalledModule reloadSingleModule(String packageName) {
@@ -143,9 +133,11 @@ public final class ModuleUtil {
         if (enabled) {
             if (!enabledModules.contains(packageName)) {
                 enabledModules.add(packageName);
+                updateModulesList();
             }
         } else {
             enabledModules.remove(packageName);
+            updateModulesList();
         }
     }
 
@@ -167,58 +159,20 @@ public final class ModuleUtil {
         return result;
     }
 
-    public synchronized void updateModulesList(boolean showToast) {
-        updateModulesList(showToast, null);
-    }
-
-    public synchronized void updateModulesList(boolean showToast, View view) {
+    public synchronized void updateModulesList() {
         try {
             Log.i(App.TAG, "ModuleUtil -> updating modules.list");
-            int installedXposedVersion = Constants.getXposedApiVersion();
-            if (!prefs.getBoolean("skip_xposedminversion_check", false) && installedXposedVersion <= 0 && showToast) {
-                showToast(view, R.string.notinstalled);
-                return;
-            }
-
             PrintWriter modulesList = new PrintWriter(Constants.getModulesListFile());
             PrintWriter enabledModulesList = new PrintWriter(Constants.getEnabledModulesListFile());
             List<InstalledModule> enabledModules = getEnabledModules();
             for (InstalledModule module : enabledModules) {
-
-                if (!prefs.getBoolean("skip_xposedminversion_check", false) && (module.minVersion > installedXposedVersion || module.minVersion < MIN_MODULE_VERSION) && showToast) {
-                    showToast(view, R.string.notinstalled);
-                    continue;
-                }
-
                 modulesList.println(module.app.sourceDir);
                 enabledModulesList.println(module.app.packageName);
             }
             modulesList.close();
             enabledModulesList.close();
-
-            if (showToast) {
-                showToast(view, R.string.xposed_module_list_updated);
-            }
         } catch (IOException e) {
             Log.e(App.TAG, "ModuleUtil -> cannot write " + Constants.getModulesListFile(), e);
-            showToast(view, "cannot write " + Constants.getModulesListFile() + e);
-        }
-    }
-
-    private void showToast(View view, int message) {
-        showToast(view, App.getInstance().getString(message));
-    }
-
-    private void showToast(View view, String message) {
-        if (view != null) {
-            Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show();
-        } else {
-            if (toast != null) {
-                toast.cancel();
-                toast = null;
-            }
-            toast = Toast.makeText(App.getInstance(), message, Toast.LENGTH_SHORT);
-            toast.show();
         }
     }
 
@@ -237,11 +191,6 @@ public final class ModuleUtil {
          * reloaded
          */
         void onSingleInstalledModuleReloaded(ModuleUtil moduleUtil, String packageName, InstalledModule module);
-
-        /**
-         * Called whenever all installed modules have been reloaded
-         */
-        void onInstalledModulesReloaded(ModuleUtil moduleUtil);
     }
 
     public class InstalledModule {

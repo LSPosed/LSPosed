@@ -81,7 +81,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             });
             adapter.addAll(showList);
             adapter.notifyDataSetChanged();
-            moduleUtil.updateModulesList(false);
+            moduleUtil.updateModulesList();
             binding.swipeRefreshLayout.setRefreshing(false);
         }
     };
@@ -170,13 +170,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
 
     @Override
     public void onSingleInstalledModuleReloaded(ModuleUtil moduleUtil, String packageName, ModuleUtil.InstalledModule module) {
-        moduleUtil.updateModulesList(false);
-        runOnUiThread(reloadModules);
-    }
-
-    @Override
-    public void onInstalledModulesReloaded(ModuleUtil moduleUtil) {
-        moduleUtil.updateModulesList(false);
         runOnUiThread(reloadModules);
     }
 
