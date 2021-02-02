@@ -14,10 +14,14 @@
 
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+-keepattributes SourceFile,LineNumberTable
 
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
--keep class io.github.lsposed.manager.util.json.** {public *; }
 -keep class io.github.lsposed.manager.Constants { *; }
+-keepnames class io.github.lsposed.manager.adapters.* { *; }
+-keepnames class io.github.lsposed.manager.receivers.* { *; }
+-keepnames class io.github.lsposed.manager.ui.* { *; }
+-keepnames class io.github.lsposed.manager.utils.* { *; }
+-keepnames class io.github.lsposed.manager.* { *; }
