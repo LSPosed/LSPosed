@@ -33,20 +33,23 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         // make sure the versions are consistent
-        Version managerVersion = new Version(BuildConfig.VERSION_NAME);
-        Version coreVersion = new Version(Constants.getXposedVersion());
+        String coreVersionStr = Constants.getXposedVersion();
 
-        if (!managerVersion.equals(coreVersion)) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage(R.string.outdated_manager)
-                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            android.os.Process.killProcess(android.os.Process.myPid());
-                        }
-                    })
-                    .setCancelable(false);
-            Dialog dlg = builder.create();
-            dlg.show();
+        if (coreVersionStr != null) {
+            Version managerVersion = new Version(BuildConfig.VERSION_NAME);
+            Version coreVersion = new Version(coreVersionStr);
+            if (!managerVersion.equals(coreVersion)) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage(R.string.outdated_manager)
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                android.os.Process.killProcess(android.os.Process.myPid());
+                            }
+                        })
+                        .setCancelable(false);
+                Dialog dlg = builder.create();
+                dlg.show();
+            }
         }
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
