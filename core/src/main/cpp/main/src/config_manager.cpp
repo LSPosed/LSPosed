@@ -128,12 +128,13 @@ namespace lspd {
             resources_hook_enabled_(path_exists(GetConfigPath("enable_resources"))),
             modules_list_(GetModuleList()),
             last_write_time_(GetLastWriteTime()),
-            variant_(GetVariant(GetMiscPath() / "variant")) {
-        // use_white_list snapshot
+            variant_(ReadInt(GetVariantPath())),
+            selinux_permissive_(ReadInt(GetSelinuxStatusPath()) != 1) {
         LOGI("base config path: %s", base_config_path_.c_str());
         LOGI("  using installer package name: %s", installer_pkg_name_.c_str());
         LOGI("  no module log: %s", BoolToString(no_module_log_enabled_));
         LOGI("  resources hook: %s", BoolToString(resources_hook_enabled_));
+        LOGI("  selinux permissive: %s", BoolToString(selinux_permissive_));
         LOGI("  module list: \n %s", ([this]() {
             std::ostringstream join;
             std::vector<std::string> module_list;
@@ -146,14 +147,17 @@ namespace lspd {
         })().c_str());
     }
 
-    int ConfigManager::GetVariant(const fs::path &dir) {
+    int ConfigManager::ReadInt(const fs::path &dir) {
+        if (!path_exists(dir)) {
+            return 0;
+        }
         std::ifstream ifs(dir);
         if (!ifs.good()) {
             return 0;
         }
-        int variant;
-        ifs >> variant;
-        return variant;
+        int result;
+        ifs >> result;
+        return result;
     }
 
     auto ConfigManager::GetModuleList() -> std::remove_const_t<decltype(modules_list_)> {
@@ -271,13 +275,15 @@ namespace lspd {
                 if (!path_exists<true>(log_path)) {
                     fs::create_directories(log_path);
                 }
-                recursive_permissions(conf_path, fs::perms::owner_all | fs::perms::group_all | fs::perms::set_gid);
-                recursive_permissions(log_path, fs::perms::owner_all | fs::perms::group_all | fs::perms::set_gid);
+                recursive_permissions(conf_path, fs::perms::owner_all | fs::perms::group_all |
+                                                 fs::perms::set_gid);
+                recursive_permissions(log_path, fs::perms::owner_all | fs::perms::group_all |
+                                                fs::perms::set_gid);
                 if (pkg_name == "android") uid = -1;
                 path_chown(conf_path, uid, 1000u, true);
                 path_chown(log_path, uid, 1000u, true);
                 if (current_user_ == 0) {
-                    auto variant = GetMiscPath() / "variant";
+                    auto variant = GetVariantPath();
                     fs::permissions(variant, fs::perms::owner_all | fs::perms::group_all);
                     path_chown(variant, uid, 1000u);
                 }

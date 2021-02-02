@@ -77,6 +77,14 @@ namespace lspd {
             return base_config_path_ / "prefs" / pkg_name;
         }
 
+        inline static auto GetVariantPath() {
+            return misc_path_ / "variant";
+        }
+
+        inline static std::filesystem::path GetSelinuxStatusPath() {
+            return "/sys/fs/selinux/enforce";
+        }
+
         std::vector<std::string> GetAppModuleList(const std::string &pkg_name) const;
 
         bool NeedUpdateConfig() const {
@@ -89,6 +97,10 @@ namespace lspd {
 
         bool IsInstaller(const std::string &pkg_name) const {
             return pkg_name == installer_pkg_name_ || pkg_name == kPrimaryInstallerPkgName;
+        }
+
+        bool IsPermissive() const {
+            return selinux_permissive_;
         }
 
 
@@ -106,6 +118,7 @@ namespace lspd {
         const std::filesystem::path installer_pkg_name_;
         const bool no_module_log_enabled_ = false;
         const bool resources_hook_enabled_ = false;
+        const bool selinux_permissive_ = false;
 
         const std::unordered_map<std::string, std::pair<std::string, std::unordered_set<std::string>>> modules_list_;
 
@@ -131,7 +144,7 @@ namespace lspd {
 
         std::filesystem::path RetrieveBaseConfigPath() const;
 
-        static int GetVariant(const std::filesystem::path &dir);
+        static int ReadInt(const std::filesystem::path &dir);
     };
 
 } // namespace lspd

@@ -64,6 +64,10 @@ namespace lspd {
         return env->NewStringUTF(list.c_str());
     }
 
+    LSP_DEF_NATIVE_METHOD(jboolean, ConfigManager, isPermissive) {
+        return ConfigManager::GetInstance()->IsPermissive();
+    }
+
     static JNINativeMethod gMethods[] = {
             LSP_NATIVE_METHOD(ConfigManager, isResourcesHookEnabled, "()Z"),
             LSP_NATIVE_METHOD(ConfigManager, isNoModuleLogEnabled, "()Z"),
@@ -75,6 +79,7 @@ namespace lspd {
                               "(Ljava/lang/String;)Ljava/lang/String;"),
             LSP_NATIVE_METHOD(ConfigManager, getBaseConfigPath, "()Ljava/lang/String;"),
             LSP_NATIVE_METHOD(ConfigManager, getModulesList, "()Ljava/lang/String;"),
+            LSP_NATIVE_METHOD(ConfigManager, isPermissive, "()Z"),
     };
 
     void RegisterConfigManagerMethods(JNIEnv *env) {
