@@ -13,6 +13,7 @@
     <!-- General/various strings -->
     <string name="menuSend">Send</string>
     <string name="menuSaveToSd">Save</string>
+    <string name="ok">OK</string>
 
     <!-- Welcome screen / main sections -->
 
@@ -140,4 +141,5 @@
     <string name="compile_speed">Re-optimize</string>
     <string name="selinux_permissive">&lt;b&gt;WARNING:&lt;\/b&gt; SELinux is not enforcing! the malicious program that attacks this can completely control your device and may cause your property damage and legal liability.</string>
     <string name="selinux_permissive_summary">SELinux is not enforcing!</string>
+    <string name="outdated_manager">Version of LSPosed Manager and LSPosed Core are not consistent. Please re-install the corresponding version.</string>
 </resources>

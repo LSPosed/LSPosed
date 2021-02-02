@@ -12,6 +12,7 @@
     <!-- General/various strings -->
     <string name="menuSend">发送</string>
     <string name="menuSaveToSd">保存</string>
+    <string name="ok">确定</string>
 
     <!-- Welcome screen / main sections -->
 
@@ -133,4 +134,5 @@
     <string name="compile_speed">重新优化</string>
     <string name="selinux_permissive">&lt;b&gt;警告：&lt;\/b&gt;SELinux 未处于严格模式！对此进行攻击的恶意程序可以完全控制你的设备，并可能造成你的财产损失和法律责任。</string>
     <string name="selinux_permissive_summary">SELinux 未处于严格模式！</string>
+    <string name="outdated_manager">LSPosed Manager 和 LSPosed Core 的版本不一致。请重新安装对应的版本。</string>
 </resources>
