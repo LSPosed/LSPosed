@@ -12,50 +12,40 @@ import android.view.LayoutInflater;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.topjohnwu.superuser.Shell;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
 
 import io.github.lsposed.manager.App;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.databinding.FragmentCompileDialogBinding;
-import io.github.lsposed.manager.util.CompileUtil;
 import io.github.lsposed.manager.util.ToastUtil;
-import rikka.shizuku.ShizukuSystemProperties;
-
-import static android.content.pm.PackageManager.PERMISSION_DENIED;
-import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 @SuppressWarnings("deprecation")
 public class CompileDialogFragment extends AppCompatDialogFragment {
 
     // TODO:
-    private static final String COMPILE_COMMAND_PREFIX = "cmd package ";
-    private static final String COMPILE_RESET_COMMAND = COMPILE_COMMAND_PREFIX + "compile --reset ";
+    private static final String[] COMPILE_RESET_COMMAND = new String[]{"cmd", "package", "compile", "-f", "-m", "speed", ""};
 
     private static final String KEY_APP_INFO = "app_info";
     private static final String KEY_MSG = "msg";
-    private static final String KEY_TYPE = "type";
     private ApplicationInfo appInfo;
-
 
     public CompileDialogFragment() {
     }
 
-    public static CompileDialogFragment newInstance(ApplicationInfo appInfo,
-                                                    String msg, CompileUtil.CompileType type) {
+    public static void speed(Context context, FragmentManager fragmentManager, ApplicationInfo info) {
         Bundle arguments = new Bundle();
-        arguments.putParcelable(KEY_APP_INFO, appInfo);
-        arguments.putString(KEY_MSG, msg);
-        arguments.putInt(KEY_TYPE, type.ordinal());
+        arguments.putParcelable(KEY_APP_INFO, info);
+        arguments.putString(KEY_MSG, context.getString(R.string.compile_speed_msg));
         CompileDialogFragment fragment = new CompileDialogFragment();
         fragment.setArguments(arguments);
         fragment.setCancelable(false);
-        return fragment;
+        fragment.show(fragmentManager, "compile_dialog");
     }
 
     @Override
@@ -83,66 +73,14 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
         return alertDialog;
     }
 
-    public void onRequestPermissionsResult(int requestCode, int grantResult) {
-        CompileUtil.CompileType mode = CompileUtil.CompileType.values()[requestCode];
-        if (grantResult == PERMISSION_GRANTED) {
-            AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
-                try {
-                    boolean checkProfiles = ShizukuSystemProperties.getBoolean("dalvik.vm.usejitprofiles", false);
-                    if (mode == CompileUtil.CompileType.RESET) {
-                        CompileUtil.PACKAGE_MANAGER.get().clearApplicationProfileData(appInfo.packageName);
-                        String filter = ShizukuSystemProperties.get("pm.dexopt.install");
-                        CompileUtil.PACKAGE_MANAGER.get().performDexOptMode(appInfo.packageName, checkProfiles, filter, true, true, null);
-                    }
-                    App.runOnUiThread(() -> {
-                        ToastUtil.showLongToast(App.getInstance(), R.string.done);
-                        try {
-                            dismissAllowingStateLoss();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    });
-                } catch (Throwable t) {
-                    t.printStackTrace();
-                    compileWithShell(mode);
-                }
-            });
-        } else {
-            compileWithShell(mode);
-        }
-    }
-
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         Bundle arguments = getArguments();
         if (arguments != null) {
-            int type = arguments.getInt(KEY_TYPE);
             appInfo = arguments.getParcelable(KEY_APP_INFO);
-            int result = App.checkPermission(type);
-            switch (result) {
-                case 0:
-                    onRequestPermissionsResult(type, PERMISSION_GRANTED);
-                    break;
-                case -2:
-                    onRequestPermissionsResult(type, PERMISSION_DENIED);
-                    break;
-            }
-        } else {
-            try {
-                dismissAllowingStateLoss();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void compileWithShell(CompileUtil.CompileType type) {
-        String command = null;
-        if (type == CompileUtil.CompileType.RESET) {
-            command = COMPILE_RESET_COMMAND + appInfo.packageName;
-        }
-        if (command != null) {
+            String[] command = COMPILE_RESET_COMMAND;
+            command[6] = appInfo.packageName;
             new CompileTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, command);
         } else {
             try {
@@ -164,18 +102,37 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
         @Override
         protected String doInBackground(String... commands) {
             if (outerRef.get() == null) {
-                return App.getInstance().getString(R.string.compile_failed);
+                return "";
             }
-            // Also get STDERR
-            List<String> stdout = new ArrayList<>();
-            List<String> stderr = new ArrayList<>();
-            Shell.Result result = Shell.su(commands).to(stdout, stderr).exec();
-            if (stderr.size() > 0) {
-                return "Error: " + TextUtils.join("\n", stderr);
-            } else if (!result.isSuccess()) { // they might don't write to stderr
-                return "Error: " + TextUtils.join("\n", stdout);
-            } else {
-                return TextUtils.join("\n", stdout);
+            try {
+                Process process = Runtime.getRuntime().exec(commands);
+                BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+                BufferedReader inputReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                int read;
+                char[] buffer = new char[4096];
+                StringBuilder err = new StringBuilder();
+                while ((read = errorReader.read(buffer)) > 0) {
+                    err.append(buffer, 0, read);
+                }
+                StringBuilder input = new StringBuilder();
+                while ((read = inputReader.read(buffer)) > 0) {
+                    input.append(buffer, 0, read);
+                }
+                errorReader.close();
+                inputReader.close();
+                process.waitFor();
+                String result = "";
+                if (process.exitValue() != 0) {
+                    result = "Error ";
+                }
+                if (TextUtils.isEmpty(err)) {
+                    return result + input.toString();
+                } else {
+                    return result + err.toString();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "Error " + e.getCause();
             }
         }
 

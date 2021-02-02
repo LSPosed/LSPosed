@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Handler;
-import android.os.Looper;
 
 import androidx.preference.PreferenceManager;
 
@@ -13,59 +11,16 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import io.github.lsposed.manager.ui.activity.CrashReportActivity;
-import io.github.lsposed.manager.util.CompileUtil;
 import io.github.lsposed.manager.util.NotificationUtil;
-import rikka.shizuku.Shizuku;
-import rikka.sui.Sui;
-
-import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 public class App extends Application {
     public static final String TAG = "LSPosedManager";
     @SuppressLint("StaticFieldLeak")
     private static App instance = null;
-    private static Thread uiThread;
-    private static Handler mainHandler;
     private SharedPreferences pref;
-
-    private final Shizuku.OnRequestPermissionResultListener REQUEST_PERMISSION_RESULT_LISTENER = this::onRequestPermissionsResult;
-
-    static {
-        Sui.init(BuildConfig.APPLICATION_ID);
-    }
-
-    private void onRequestPermissionsResult(int requestCode, int grantResult) {
-        CompileUtil.onRequestPermissionsResult(requestCode, grantResult);
-    }
-
-    public static int checkPermission(int code) {
-        try {
-            if (!Shizuku.isPreV11() && Shizuku.getVersion() >= 11) {
-                if (Shizuku.checkSelfPermission() == PERMISSION_GRANTED) {
-                    return 0;
-                } else if (Shizuku.shouldShowRequestPermissionRationale()) {
-                    return -1;
-                } else {
-                    Shizuku.requestPermission(code);
-                    return -1;
-                }
-            }
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-        return -2;
-    }
 
     public static App getInstance() {
         return instance;
-    }
-
-    public static void runOnUiThread(Runnable action) {
-        if (Thread.currentThread() != uiThread) {
-            mainHandler.post(action);
-        } else {
-            action.run();
-        }
     }
 
     public static SharedPreferences getPreferences() {
@@ -104,13 +59,9 @@ public class App extends Application {
         }
 
         instance = this;
-        uiThread = Thread.currentThread();
-        mainHandler = new Handler(Looper.getMainLooper());
 
         pref = PreferenceManager.getDefaultSharedPreferences(this);
 
         NotificationUtil.init();
-
-        Shizuku.addRequestPermissionResultListener(REQUEST_PERMISSION_RESULT_LISTENER);
     }
 }

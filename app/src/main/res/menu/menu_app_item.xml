@@ -4,8 +4,8 @@
         android:id="@+id/app_menu_launch"
         android:title="@string/app_launch" />
     <item
-        android:id="@+id/app_menu_compile_reset"
-        android:title="@string/menu_title_compile_reset" />
+        android:id="@+id/app_menu_compile_speed"
+        android:title="@string/compile_speed" />
     <item
         android:id="@+id/app_menu_store"
         android:title="@string/modules_app_store" />
