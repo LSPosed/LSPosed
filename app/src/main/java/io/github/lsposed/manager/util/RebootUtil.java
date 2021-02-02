@@ -38,7 +38,6 @@ public class RebootUtil {
             try {
                 if (mode == RebootType.USERSPACE && !supportUserspaceReboot()) {
                     ShizukuSystemProperties.set("ctl.restart", "surfaceflinger");
-                    ShizukuSystemProperties.set("ctl.restart", "zygote");
                 } else {
                     POWER_MANAGER.get().reboot(BuildConfig.DEBUG, mode.toString(), false);
                 }
@@ -80,7 +79,7 @@ public class RebootUtil {
             if (supportUserspaceReboot()) {
                 command = "/system/bin/svc power reboot userspace";
             } else {
-                command = "setprop ctl.restart surfaceflinger; setprop ctl.restart zygote";
+                command = "setprop ctl.restart surfaceflinger";
             }
         } else if (mode == RebootType.NORMAL) {
             command = "/system/bin/svc power reboot";
