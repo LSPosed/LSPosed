@@ -147,40 +147,44 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         if (rmList.size() > 0) {
             fullList.removeAll(rmList);
         }
-        sortApps();
-        showList = fullList;
+        showList = sortApps(fullList);
         activity.onDataReady();
     }
 
-    private void sortApps() {
-        Comparator<PackageInfo> cmp = AppHelper.getAppListComparator(preferences.getInt("list_sort", 0), pm);
-        fullList.sort((a, b) -> {
+    private List<PackageInfo> sortApps(List<PackageInfo> list) {
+        Comparator<PackageInfo> comparator = AppHelper.getAppListComparator(preferences.getInt("list_sort", 0), pm);
+        Comparator<PackageInfo> frameworkComparator = (a, b) -> {
+            if (a.packageName.equals("android") == b.packageName.equals("android")) {
+                return comparator.compare(a, b);
+            } else if (a.packageName.equals("android")) {
+                return -1;
+            } else {
+                return 1;
+            }
+        };
+        Comparator<PackageInfo> recommendedComparator = (a, b) -> {
+            boolean aRecommended = hasRecommended() && recommendedList.contains(a.packageName);
+            boolean bRecommended = hasRecommended() && recommendedList.contains(b.packageName);
+            if (aRecommended == bRecommended) {
+                return frameworkComparator.compare(a, b);
+            } else if (aRecommended) {
+                return -1;
+            } else {
+                return 1;
+            }
+        };
+        list.sort((a, b) -> {
             boolean aChecked = checkedList.contains(a.packageName);
             boolean bChecked = checkedList.contains(b.packageName);
             if (aChecked == bChecked) {
-                if (hasRecommended()) {
-                    boolean aRecommended = recommendedList.contains(a.packageName);
-                    boolean bRecommended = recommendedList.contains(b.packageName);
-                    if (aRecommended || bRecommended) {
-                        if (aRecommended == bRecommended) {
-                            return cmp.compare(a, b);
-                        } else if (aRecommended) {
-                            return -1;
-                        } else {
-                            return 1;
-                        }
-                    }
-                }
-                if (a.packageName.equals("android")) return -1;
-                if (b.packageName.equals("android")) return 1;
-                return cmp.compare(a, b);
+                return recommendedComparator.compare(a, b);
             } else if (aChecked) {
                 return -1;
             } else {
                 return 1;
             }
-
         });
+        return list;
     }
 
     private void checkRecommended() {
