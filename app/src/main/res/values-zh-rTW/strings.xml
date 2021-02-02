@@ -12,6 +12,7 @@
     <!-- General/various strings -->
     <string name="menuSend">傳送</string>
     <string name="menuSaveToSd">儲存</string>
+    <string name="ok">確定</string>
 
     <!-- Welcome screen / main sections -->
 
@@ -36,7 +37,7 @@
     <string name="warning_xposed_min_version">該模組需要更新版本的 LSPosed(%d), 因此無法被啟用</string>
     <string name="no_min_version_specified">該模組未指定所需的 LSPosed 版本</string>
     <string name="warning_min_version_too_low">該模組針對 LSPosed %1$d 版本構建 , 由於不相容 %2$d 版本中的變更, 現已被停用</string>
-    <string name="module_app_info">App 資訊</string>
+    <string name="module_app_info">程式資訊</string>
     <string name="modules_app_store">在 Play 商店檢視</string>
     <string name="module_uninstall">解除安裝</string>
 
@@ -46,7 +47,7 @@
 
     <!-- Settings tab -->
     <string name="settings_group_framework">框架</string>
-    <string name="settings_group_app">Apps</string>
+    <string name="settings_group_app">程式</string>
     <string name="settings_theme">主題</string>
     <string name="settings_theme_light">亮色</string>
     <string name="settings_theme_dark">暗色</string>
@@ -54,6 +55,7 @@
     <!-- Support tab -->
 
     <!-- Logs tab  -->
+    <string name="logs_save_failed">儲存失敗：</string>
     <string name="menuClearLog">立即清理日誌</string>
     <string name="logs_cleared">日誌清理成功</string>
     <string name="logs_clear_failed">無法清理日誌: </string>
@@ -81,13 +83,14 @@
     <string name="not_logcat">此處僅顯示 LSPosed 及模組相關日誌資訊\n如果您想抓取系統日誌, 可以嘗試我們的 Log Catcher Magisk 模組</string>
 
     <!-- LSPd related -->
-    <string name="compile_speed_msg">優化中…</string>
+    <string name="compile_speed_msg">最佳化中…</string>
     <string name="done">完成！</string>
 
     <string name="pref_title_disable_verbose_log">禁用詳細日誌</string>
     <string name="logs_cannot_read">無法讀取日誌: \n</string>
     <string name="app_launch">執行</string>
-    <string name="compile_failed">優化失敗或返回值為空</string>
+    <string name="compile_failed">最佳化失敗或返回值為空</string>
+    <string name="compile_failed_with_info">最佳化失敗: </string>
     <string name="not_installed">未安裝</string>
     <string name="pref_title_disable_modules_log">禁用模組日誌</string>
     <string name="pref_disable_modules_log_summary">模組丟擲的的異常堆疊仍將正常抓取</string>
@@ -96,8 +99,8 @@
     ]]>
     <string name="xposed_not_active">LSPosed 框架未安裝或未啟用, 您可在設定中關閉狀態檢查</string>
     <string name="transparent_status_bar">透明狀態列</string>
-    <string name="sort_by_name">App 名稱</string>
-    <string name="sort_by_name_reverse">App 名稱（降序）</string>
+    <string name="sort_by_name">程式名稱</string>
+    <string name="sort_by_name_reverse">程式名稱（降序）</string>
     <string name="sort_by_package_name">包體名稱</string>
     <string name="sort_by_package_name_reverse">包體名稱（降序）</string>
     <string name="sort_by_install_time">安裝時間</string>
@@ -109,4 +112,27 @@
     <string name="colorized_action_bar">著色應用欄</string>
     <string name="settings_group_theme">主題</string>
     <string name="material_design_2">慘白設計</string>
+    <string name="settings_enable_resources">啟用資源鉤子</string>
+    <string name="settings_enable_resources_summary"><b>警告: </b> 資源鉤子已被棄用</string>
+    <string name="settings_variant">變體</string>
+    <string name="menu_show_system_apps">系統程式</string>
+    <string name="menu_sort">排序…</string>
+    <string name="enable_module">啟用模組</string>
+    <string name="no_scope_selected">未選擇任何程式。繼續？</string>
+    <string name="menu_show_games">遊戲</string>
+    <string name="menu_show_modules">模組</string>
+    <string name="failed_to_save_scope_list">作用域列表儲存失敗</string>
+    <string name="module_settings">模組設定</string>
+    <string name="app_description">%s\n版本：%s</string>
+    <string name="use_recommended">推薦程式</string>
+    <string name="no_scope_selected_has_recommended">未選擇任何程式。選擇推薦的程式？</string>
+    <string name="use_recommended_message">選擇推薦的程式?</string>
+    <string name="requested_by_module">推薦的程式</string>
+    <string name="module_disabled_no_selection">由於未選擇任何程式，模組 %s 已被禁用。</string>
+    <string name="android_framework">系統框架</string>
+    <string name="app_destroyed">此應用程式已被損壞，請確保您從官方來源下載該應用程式。</string>
+    <string name="compile_speed">重新最佳化</string>
+    <string name="selinux_permissive">&lt;b&gt;警告：&lt;\/b&gt;SELinux 未處於嚴格模式！對此進行攻擊的惡意程式可以完全控制你的裝置，並可能造成你的財產損失和法律責任。</string>
+    <string name="selinux_permissive_summary">SELinux 未處於嚴格模式！</string>
+    <string name="outdated_manager">LSPosed Manager 和 LSPosed Core 的版本不一致。請重新安裝對應的版本。</string>
 </resources>
