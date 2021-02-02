@@ -32,7 +32,6 @@
     <string name="module_is_not_activated_yet_detailed">%s 已安裝, 但尚未啟用</string>
     <string name="module_empty_description">(未提供介紹)</string>
     <string name="module_no_ui">該模組未提供使用者介面</string>
-    <string name="xposed_module_list_updated">LSPosed 模組列表已更新</string>
     <string name="xposed_module_updated_notification_title">LSPosed 模組已更新</string>
     <string name="warning_xposed_min_version">該模組需要更新版本的 LSPosed(%d), 因此無法被啟用</string>
     <string name="no_min_version_specified">該模組未指定所需的 LSPosed 版本</string>
@@ -85,10 +84,6 @@
     <string name="menu_title_compile_reset">取消優化</string>
     <string name="compile_reset_msg">清除中…</string>
     <string name="compile_speed_msg">優化中…</string>
-    <string name="notinstalled">LSPosed 框架未安裝</string>
-    <string name="verified_boot_active">引導驗證已啟用</string>
-    <string name="verified_boot_deactivated">引導驗證已禁用</string>
-    <string name="verified_boot_none">無法獲取引導驗證狀態</string>
     <string name="done">完成！</string>
 
     <string name="pref_title_disable_verbose_log">禁用詳細日誌</string>

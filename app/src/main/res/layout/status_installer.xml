@@ -85,16 +85,13 @@
             app:drawableStartCompat="@drawable/ic_chip" />
 
         <TextView
-            android:id="@+id/dmverity"
+            android:id="@+id/selinux"
             android:paddingTop="8dp"
-            android:drawablePadding="8dp"
-            android:minHeight="48dp"
-            android:paddingBottom="8dp"
             android:gravity="center_vertical"
             android:layout_width="wrap_content"
-            app:drawableStartCompat="@drawable/ic_verified"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            android:visibility="gone" />
 
     </LinearLayout>
 </ScrollView>

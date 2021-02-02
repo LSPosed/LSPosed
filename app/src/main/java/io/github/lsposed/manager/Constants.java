@@ -36,6 +36,10 @@ public class Constants {
         return App.getInstance().getApplicationInfo().deviceProtectedDataDir + "/";
     }
 
+    public static boolean isPermissive() {
+        return true;
+    }
+
     public static void showErrorToast(int type) {
         Toast.makeText(App.getInstance(), R.string.app_destroyed, Toast.LENGTH_LONG).show();
     }

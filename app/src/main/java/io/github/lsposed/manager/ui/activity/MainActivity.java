@@ -64,13 +64,19 @@ public class MainActivity extends BaseActivity {
         String installedXposedVersion = Constants.getXposedVersion();
         if (installedXposedVersion != null) {
             binding.statusTitle.setText(String.format(Locale.US, "%s %s", getString(R.string.Activated), Constants.getXposedVariant()));
-            binding.statusSummary.setText(String.format(Locale.US, "%s (%d)", installedXposedVersion, Constants.getXposedVersionCode()));
-            binding.status.setCardBackgroundColor(ContextCompat.getColor(this, R.color.download_status_update_available));
-            binding.statusIcon.setImageResource(R.drawable.ic_check_circle);
+            if (!Constants.isPermissive()) {
+                binding.status.setCardBackgroundColor(ContextCompat.getColor(this, R.color.colorNormal));
+                binding.statusIcon.setImageResource(R.drawable.ic_check_circle);
+                binding.statusSummary.setText(String.format(Locale.US, "%s (%d)", installedXposedVersion, Constants.getXposedVersionCode()));
+            } else {
+                binding.status.setCardBackgroundColor(ContextCompat.getColor(this, R.color.colorError));
+                binding.statusIcon.setImageResource(R.drawable.ic_warning);
+                binding.statusSummary.setText(R.string.selinux_permissive_summary);
+            }
         } else {
             binding.statusTitle.setText(R.string.Install);
             binding.statusSummary.setText(R.string.InstallDetail);
-            binding.status.setCardBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
+            binding.status.setCardBackgroundColor(ContextCompat.getColor(this, R.color.colorInstall));
             binding.statusIcon.setImageResource(R.drawable.ic_error);
         }
     }

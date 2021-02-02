@@ -5,4 +5,7 @@
     <color name="colorPrimaryDark">#2E2E2E</color>
     <color name="colorActionBar">#383838</color>
     <color name="navigationBarColor">#B3000000</color>
+    <color name="colorError">@color/material_red_700</color>
+    <color name="colorNormal">@color/material_green_700</color>
+    <color name="colorInstall">@color/material_blue_700</color>
 </resources>
