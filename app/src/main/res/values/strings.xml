@@ -22,14 +22,11 @@
     <string name="nav_item_logs_err">Modules Logs</string>
 
     <!-- Installer tab -->
-    <string name="soft_reboot">Soft reboot</string>
-    <string name="reboot">Reboot</string>
     <string name="areyousure">Are you sure?</string>
     <string name="install_warning_title">Be careful!</string>
     <string name="dont_show_again">Don\'t show this again</string>
 
     <!-- File operations -->
-    <string name="root_failed">Failed to get root access\n\nMake sure your device is rooted properly and you have not blocked shell commands</string>
 
     <!-- Modules tab -->
     <string name="module_is_not_activated_yet">LSPosed module is not activated yet</string>
@@ -77,20 +74,11 @@
     <!-- RepoLoader -->
 
     <string name="warning_installed_on_external_storage">This module cannot be loaded because it\'s installed on the SD card, please move it to internal storage</string>
-    <string name="export_">Export…</string>
-    <string name="export_enabled_modules">Export enabled modules list</string>
-    <string name="export_installed_modules">Export installed modules list</string>
-    <string name="no_installed_modules">There are no installed modules!</string>
-    <string name="no_enabled_modules">There are no modules enabled</string>
 
     <string name="info">Info</string>
     <string name="not_installed_no_lollipop">LSPosed Framework is not installed</string>
 
     <string name="scroll_top">Scroll to top</string>
-    <string name="reboot_recovery">Reboot to Recovery</string>
-    <string name="reboot_bootloader">Reboot to Bootloader</string>
-    <string name="reboot_download">Reboot to Download</string>
-    <string name="reboot_edl">Reboot to Emergency</string>
     <string name="loading">Loading…</string>
     <string name="scroll_bottom">Scroll to bottom</string>
     <string name="skip_xposedminversion_check">Skip status check</string>
@@ -99,9 +87,6 @@
     <string name="android_sdk" translatable="false">Android %2$s (%1$s, API %3$d)</string>
     <string name="not_logcat">This is the LSPosed Framework and modules log\nif you need a Android logcat, you can try our Log Catcher Magisk module</string>
 
-    <string name="dexopt_now">Optimize all apps with Dexopt</string>
-    <string name="speed_now">Optimize all apps with Speed mode</string>
-    <string name="this_may_take_a_while">Please wait, this may take a while…</string>
     <string name="done">Done!</string>
     <string name="verified_boot_deactivated">Verified Boot is deactivated</string>
     <string name="verified_boot_none">Could not detect Verified Boot state</string>
@@ -109,8 +94,6 @@
 
     <!-- LSPd related -->
     <string name="menu_title_compile_reset">De-optimize</string>
-    <string name="menu_title_compile_speed">Optimize with Speed mode</string>
-    <string name="menu_title_compile_dexopt">Optimize with Dexopt mode</string>
     <string name="compile_reset_msg">Resetting …</string>
     <string name="compile_speed_msg">Optimizing …</string>
 
@@ -125,7 +108,6 @@
     <string name="compile_failed">Optimization failed or return value is empty</string>
     <string name="compile_failed_with_info">Optimization failed: </string>
     <string name="not_installed">Not installed</string>
-    <string name="reboot_system">Reboot to System</string>
     <string name="pref_title_disable_modules_log">Disable modules logs</string>
     <string name="pref_disable_modules_log_summary">Exception stack thrown by the module will still be catched normally</string>
     <string name="pure_black_dark_theme">Use the pure black dark theme</string>
@@ -146,9 +128,7 @@
     <string name="settings_group_theme">Theme</string>
     <string name="material_design_2">Material Design 2</string>
     <string name="settings_variant">Variant</string>
-    <string name="menu_optimize">Optimize…</string>
     <string name="menu_show_system_apps">System apps</string>
-    <string name="menu_reboot">Reboot…</string>
     <string name="menu_sort">Sorting…</string>
     <string name="enable_module">Enable module</string>
     <string name="no_scope_selected">You did not select any app. Continue?</string>

@@ -243,10 +243,6 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             if (launchIntent != null) {
                 activity.startActivity(launchIntent);
             }
-        } else if (itemId == R.id.app_menu_compile_speed) {
-            CompileUtil.compileSpeed(activity, activity.getSupportFragmentManager(), info);
-        } else if (itemId == R.id.app_menu_compile_dexopt) {
-            CompileUtil.compileDexopt(activity, activity.getSupportFragmentManager(), info);
         } else if (itemId == R.id.app_menu_compile_reset) {
             CompileUtil.reset(activity, activity.getSupportFragmentManager(), info);
         } else if (itemId == R.id.app_menu_store) {
@@ -352,8 +348,6 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                 menu.removeItem(R.id.app_menu_launch);
             }
             if (android) {
-                menu.removeItem(R.id.app_menu_compile_speed);
-                menu.removeItem(R.id.app_menu_compile_dexopt);
                 menu.removeItem(R.id.app_menu_compile_reset);
                 menu.removeItem(R.id.app_menu_store);
             }

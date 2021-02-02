@@ -36,8 +36,6 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
     // TODO:
     private static final String COMPILE_COMMAND_PREFIX = "cmd package ";
     private static final String COMPILE_RESET_COMMAND = COMPILE_COMMAND_PREFIX + "compile --reset ";
-    private static final String COMPILE_SPEED_COMMAND = COMPILE_COMMAND_PREFIX + "compile -f -m speed ";
-    private static final String COMPILE_DEXOPT_COMMAND = COMPILE_COMMAND_PREFIX + "force-dex-opt ";
 
     private static final String KEY_APP_INFO = "app_info";
     private static final String KEY_MSG = "msg";
@@ -91,18 +89,10 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
             AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
                 try {
                     boolean checkProfiles = ShizukuSystemProperties.getBoolean("dalvik.vm.usejitprofiles", false);
-                    switch (mode) {
-                        case RESET:
-                            CompileUtil.PACKAGE_MANAGER.get().clearApplicationProfileData(appInfo.packageName);
-                            String filter = ShizukuSystemProperties.get("pm.dexopt.install");
-                            CompileUtil.PACKAGE_MANAGER.get().performDexOptMode(appInfo.packageName, checkProfiles, filter, true, true, null);
-                            break;
-                        case SPEED:
-                            CompileUtil.PACKAGE_MANAGER.get().performDexOptMode(appInfo.packageName, checkProfiles, "speed", true, true, null);
-                            break;
-                        case DEXOPT:
-                            CompileUtil.PACKAGE_MANAGER.get().forceDexOpt(appInfo.packageName);
-                            break;
+                    if (mode == CompileUtil.CompileType.RESET) {
+                        CompileUtil.PACKAGE_MANAGER.get().clearApplicationProfileData(appInfo.packageName);
+                        String filter = ShizukuSystemProperties.get("pm.dexopt.install");
+                        CompileUtil.PACKAGE_MANAGER.get().performDexOptMode(appInfo.packageName, checkProfiles, filter, true, true, null);
                     }
                     App.runOnUiThread(() -> {
                         ToastUtil.showLongToast(App.getInstance(), R.string.done);
@@ -129,7 +119,7 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
         if (arguments != null) {
             int type = arguments.getInt(KEY_TYPE);
             appInfo = arguments.getParcelable(KEY_APP_INFO);
-            int result = App.checkPermission(type, 1);
+            int result = App.checkPermission(type);
             switch (result) {
                 case 0:
                     onRequestPermissionsResult(type, PERMISSION_GRANTED);
@@ -151,10 +141,6 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
         String command = null;
         if (type == CompileUtil.CompileType.RESET) {
             command = COMPILE_RESET_COMMAND + appInfo.packageName;
-        } else if (type == CompileUtil.CompileType.DEXOPT) {
-            command = COMPILE_DEXOPT_COMMAND + appInfo.packageName;
-        } else if (type == CompileUtil.CompileType.SPEED) {
-            command = COMPILE_SPEED_COMMAND + appInfo.packageName;
         }
         if (command != null) {
             new CompileTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, command);

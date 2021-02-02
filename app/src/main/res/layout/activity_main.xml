@@ -46,20 +46,6 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"
                     android:textSize="20sp"
                     tools:ignore="RelativeOverlap" />
-
-                <ImageView
-                    android:id="@+id/menu_more"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:background="?selectableItemBackgroundBorderless"
-                    android:clickable="true"
-                    android:contentDescription="@string/abc_action_menu_overflow_description"
-                    android:focusable="true"
-                    android:padding="2dp"
-                    app:srcCompat="@drawable/ic_more"
-                    tools:ignore="PrivateResource" />
             </RelativeLayout>
 
             <com.google.android.material.card.MaterialCardView

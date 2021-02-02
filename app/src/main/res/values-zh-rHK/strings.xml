@@ -21,14 +21,11 @@
     <string name="nav_item_logs_err">模塊日誌</string>
 
     <!-- Installer tab -->
-    <string name="soft_reboot">軟重啟</string>
-    <string name="reboot">重啟</string>
     <string name="areyousure">您確定？</string>
     <string name="install_warning_title">請小心！</string>
     <string name="dont_show_again">不再提示</string>
 
     <!-- File operations -->
-    <string name="root_failed">無法獲取 root 權限\n\n請確認您的設備已正確 root 且沒有阻止 shell 命令</string>
 
     <!-- Modules tab -->
     <string name="module_is_not_activated_yet">LSPosed 模塊尚未激活</string>
@@ -73,20 +70,11 @@
     <!-- RepoLoader -->
 
     <string name="warning_installed_on_external_storage">此模塊因被安裝在 SD 卡中而導致無法加載, 請將其移動到內部存儲</string>
-    <string name="export_">導出…</string>
-    <string name="export_enabled_modules">導出已啟用模塊列表</string>
-    <string name="export_installed_modules">導出已安裝模塊列表</string>
-    <string name="no_installed_modules">沒有任何已安裝的模塊</string>
-    <string name="no_enabled_modules">沒有任何已啟用的模塊</string>
 
     <string name="info">信息</string>
     <string name="not_installed_no_lollipop">LSPosed 框架未安裝</string>
 
     <string name="scroll_top">滾動到頂部</string>
-    <string name="reboot_recovery">重啟至恢復模式</string>
-    <string name="reboot_bootloader">重啟至引導加載器</string>
-    <string name="reboot_download">重啟至下載模式</string>
-    <string name="reboot_edl">重啟至救援模式</string>
     <string name="loading">正在加載…</string>
     <string name="scroll_bottom">滾動到底部</string>
     <string name="skip_xposedminversion_check">關閉狀態檢查</string>
@@ -95,8 +83,6 @@
 
     <!-- LSPd related -->
     <string name="menu_title_compile_reset">取消優化</string>
-    <string name="menu_title_compile_speed">以 Speed 模式優化應用</string>
-    <string name="menu_title_compile_dexopt">以 Dexopt 模式優化應用</string>
     <string name="compile_reset_msg">清除中…</string>
     <string name="compile_speed_msg">優化中…</string>
     <string name="notinstalled">LSPosed 框架未安裝</string>
@@ -104,16 +90,12 @@
     <string name="verified_boot_deactivated">引導驗證已禁用</string>
     <string name="verified_boot_none">無法獲取引導驗證狀態</string>
     <string name="done">完成！</string>
-    <string name="dexopt_now">以 Dexopt 模式優化全部應用</string>
-    <string name="speed_now">以 Speed 模式優化全部應用</string>
-    <string name="this_may_take_a_while">請稍後, 這將需要一段時間…</string>
 
     <string name="pref_title_disable_verbose_log">禁用詳細日誌</string>
     <string name="logs_cannot_read">無法讀取日誌: \n</string>
     <string name="app_launch">運行</string>
     <string name="compile_failed">優化失敗或返回值為空</string>
     <string name="not_installed">未安裝</string>
-    <string name="reboot_system">重啟至系統</string>
     <string name="pref_title_disable_modules_log">禁用模塊日誌</string>
     <string name="pref_disable_modules_log_summary">模塊拋出的的異常堆棧仍將正常抓取</string>
     <string name="follow_system">跟隨系統</string>

@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.appcompat.widget.PopupMenu;
-import androidx.appcompat.widget.TooltipCompat;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
@@ -60,12 +58,6 @@ public class MainActivity extends BaseActivity {
             intent.setClass(getApplicationContext(), AboutActivity.class);
             startActivity(intent);
         });
-        TooltipCompat.setTooltipText(binding.menuMore, getString(androidx.appcompat.R.string.abc_action_menu_overflow_description));
-        PopupMenu appMenu = new PopupMenu(MainActivity.this, binding.menuMore);
-        appMenu.inflate(R.menu.menu_installer);
-        appMenu.setOnMenuItemClickListener(this::onOptionsItemSelected);
-        binding.menuMore.setOnTouchListener(appMenu.getDragToOpenListener());
-        binding.menuMore.setOnClickListener(v -> appMenu.show());
         Glide.with(binding.appIcon)
                 .load(GlideHelper.wrapApplicationInfoForIconLoader(getApplicationInfo()))
                 .into(binding.appIcon);

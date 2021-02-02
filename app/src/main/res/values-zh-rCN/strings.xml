@@ -21,14 +21,11 @@
     <string name="nav_item_logs_err">模块日志</string>
 
     <!-- Installer tab -->
-    <string name="soft_reboot">软重启</string>
-    <string name="reboot">重启</string>
     <string name="areyousure">您确定？</string>
     <string name="install_warning_title">请小心！</string>
     <string name="dont_show_again">不再提示</string>
 
     <!-- File operations -->
-    <string name="root_failed">无法获取 root 权限\n\n请确认您的设备已正确 root 且没有阻止 shell 命令</string>
 
     <!-- Modules tab -->
     <string name="module_is_not_activated_yet">LSPosed 模块尚未激活</string>
@@ -74,20 +71,11 @@
     <!-- RepoLoader -->
 
     <string name="warning_installed_on_external_storage">此模块因被安装在 SD 卡中而导致无法加载, 请将其移动到内部存储</string>
-    <string name="export_">导出…</string>
-    <string name="export_enabled_modules">导出已启用模块列表</string>
-    <string name="export_installed_modules">导出已安装模块列表</string>
-    <string name="no_installed_modules">没有任何已安装的模块</string>
-    <string name="no_enabled_modules">没有任何已启用的模块</string>
 
     <string name="info">信息</string>
     <string name="not_installed_no_lollipop">LSPosed 框架未安装</string>
 
     <string name="scroll_top">滚动到顶部</string>
-    <string name="reboot_recovery">重启至恢复模式</string>
-    <string name="reboot_bootloader">重启至引导加载器</string>
-    <string name="reboot_download">重启至下载模式</string>
-    <string name="reboot_edl">重启至救援模式</string>
     <string name="loading">正在加载…</string>
     <string name="scroll_bottom">滚动到底部</string>
     <string name="skip_xposedminversion_check">关闭状态检查</string>
@@ -96,8 +84,6 @@
 
     <!-- LSPd related -->
     <string name="menu_title_compile_reset">取消优化</string>
-    <string name="menu_title_compile_speed">以 Speed 模式优化应用</string>
-    <string name="menu_title_compile_dexopt">以 Dexopt 模式优化应用</string>
     <string name="compile_reset_msg">清除中…</string>
     <string name="compile_speed_msg">优化中…</string>
     <string name="notinstalled">LSPosed 框架未安装</string>
@@ -105,9 +91,6 @@
     <string name="verified_boot_deactivated">引导验证已禁用</string>
     <string name="verified_boot_none">无法获取引导验证状态</string>
     <string name="done">完成！</string>
-    <string name="dexopt_now">以 Dexopt 模式优化全部应用</string>
-    <string name="speed_now">以 Speed 模式优化全部应用</string>
-    <string name="this_may_take_a_while">请稍后, 这将需要一段时间…</string>
 
     <string name="pref_title_disable_verbose_log">禁用详细日志</string>
     <string name="logs_cannot_read">无法读取日志: \n</string>
@@ -115,7 +98,6 @@
     <string name="compile_failed">优化失败或返回值为空</string>
     <string name="compile_failed_with_info">优化失败: </string>
     <string name="not_installed">未安装</string>
-    <string name="reboot_system">重启至系统</string>
     <string name="pref_title_disable_modules_log">禁用模块日志</string>
     <string name="pref_disable_modules_log_summary">模块抛出的的异常堆栈仍将正常抓取</string>
     <string name="follow_system">跟随系统</string>
@@ -139,9 +121,7 @@
     <string name="settings_enable_resources">启用资源钩子</string>
     <string name="settings_enable_resources_summary"><b>警告: </b> 资源钩子已被弃用</string>
     <string name="settings_variant">变体</string>
-    <string name="menu_optimize">优化…</string>
     <string name="menu_show_system_apps">系统应用</string>
-    <string name="menu_reboot">重启…</string>
     <string name="menu_sort">排序…</string>
     <string name="enable_module">启用模块</string>
     <string name="no_scope_selected">未选择任何应用。继续？</string>

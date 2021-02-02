@@ -3,21 +3,16 @@ package io.github.lsposed.manager.util;
 import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import androidx.core.app.NotificationChannelCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
-import com.topjohnwu.superuser.Shell;
-
 import io.github.lsposed.manager.App;
 import io.github.lsposed.manager.R;
-import io.github.lsposed.manager.ui.activity.MainActivity;
 import io.github.lsposed.manager.ui.activity.ModulesActivity;
 
 @SuppressLint("UnspecifiedImmutableFlag")
@@ -27,9 +22,6 @@ public final class NotificationUtil {
     private static final int NOTIFICATION_MODULES_UPDATED = 1;
     private static final int PENDING_INTENT_OPEN_MODULES = 0;
     private static final int PENDING_INTENT_OPEN_INSTALL = 1;
-    private static final int PENDING_INTENT_SOFT_REBOOT = 2;
-    private static final int PENDING_INTENT_REBOOT = 3;
-
     private static final String NOTIFICATION_MODULES_CHANNEL = "modules_channel_2";
 
     @SuppressLint("StaticFieldLeak")
@@ -53,14 +45,6 @@ public final class NotificationUtil {
         notificationManager.createNotificationChannel(channel.build());
     }
 
-    public static void cancel(String tag, int id) {
-        notificationManager.cancel(tag, id);
-    }
-
-    public static void cancelAll() {
-        notificationManager.cancelAll();
-    }
-
     public static void showNotActivatedNotification(String packageName, String appName) {
         Intent intent = new Intent(context, ModulesActivity.class)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -80,7 +64,7 @@ public final class NotificationUtil {
     }
 
     public static void showModulesUpdatedNotification(String appName) {
-        Intent intent = new Intent(context, MainActivity.class)
+        Intent intent = new Intent(context, ModulesActivity.class)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         PendingIntent pInstallTab = PendingIntent.getActivity(context, PENDING_INTENT_OPEN_INSTALL, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -89,18 +73,6 @@ public final class NotificationUtil {
                 .getString(R.string.xposed_module_updated_notification_title);
         NotificationCompat.Builder builder = getNotificationBuilder(title, appName)
                 .setContentIntent(pInstallTab);
-
-        Intent iSoftReboot = new Intent(context, RebootReceiver.class);
-        iSoftReboot.putExtra(RebootReceiver.EXTRA_SOFT_REBOOT, true);
-        PendingIntent pSoftReboot = PendingIntent.getBroadcast(context, PENDING_INTENT_SOFT_REBOOT,
-                iSoftReboot, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        Intent iReboot = new Intent(context, RebootReceiver.class);
-        PendingIntent pReboot = PendingIntent.getBroadcast(context, PENDING_INTENT_REBOOT,
-                iReboot, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        builder.addAction(new NotificationCompat.Action.Builder(0, context.getString(R.string.reboot), pReboot).build());
-        builder.addAction(new NotificationCompat.Action.Builder(0, context.getString(R.string.soft_reboot), pSoftReboot).build());
 
         notificationManager.notify(null, NOTIFICATION_MODULES_UPDATED, builder.build());
     }
@@ -114,30 +86,5 @@ public final class NotificationUtil {
                 .setAutoCancel(true)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setColor(ContextCompat.getColor(context, R.color.colorPrimary));
-    }
-
-    public static class RebootReceiver extends BroadcastReceiver {
-        public static String EXTRA_SOFT_REBOOT = "soft";
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            /*
-             * Close the notification bar in order to see the toast that module
-             * was enabled successfully. Furthermore, if SU permissions haven't
-             * been granted yet, the SU dialog will be prompted behind the
-             * expanded notification panel and is therefore not visible to the
-             * user.
-             */
-            context.sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
-            cancelAll();
-
-            if (!Shell.rootAccess()) {
-                Log.e(App.TAG, "NotificationUtil -> Could not start root shell");
-                return;
-            }
-
-            boolean softReboot = intent.getBooleanExtra(EXTRA_SOFT_REBOOT, false);
-            RebootUtil.reboot(softReboot ? RebootUtil.RebootType.USERSPACE : RebootUtil.RebootType.NORMAL);
-        }
     }
 }

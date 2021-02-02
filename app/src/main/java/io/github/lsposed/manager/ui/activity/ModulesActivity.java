@@ -67,7 +67,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                     }
                 }
             }
-            Comparator<PackageInfo> cmp = AppHelper.getAppListComparator(preferences.getInt("list_sort", 0), pm);
+            Comparator<PackageInfo> cmp = AppHelper.getAppListComparator(0, pm);
             fullList.sort((a, b) -> {
                 boolean aChecked = moduleUtil.isModuleEnabled(a.packageName);
                 boolean bChecked = moduleUtil.isModuleEnabled(b.packageName);
@@ -158,15 +158,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
         searchView.setOnQueryTextListener(mSearchListener);
         return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (AppHelper.onOptionsItemSelected(item, preferences)) {
-            moduleUtil.updateModulesList(false, null);
-            reloadModules.run();
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
