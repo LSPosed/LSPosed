@@ -29,7 +29,6 @@
     <string name="dont_show_again">Don\'t show this again</string>
 
     <!-- File operations -->
-    <string name="root_failed">Failed to get root access\n\nMake sure your device is rooted properly and you have not blocked shell commands</string>
 
     <!-- Modules tab -->
     <string name="module_is_not_activated_yet">LSPosed module is not activated yet</string>
@@ -77,11 +76,6 @@
     <!-- RepoLoader -->
 
     <string name="warning_installed_on_external_storage">This module cannot be loaded because it\'s installed on the SD card, please move it to internal storage</string>
-    <string name="export_">Export…</string>
-    <string name="export_enabled_modules">Export enabled modules list</string>
-    <string name="export_installed_modules">Export installed modules list</string>
-    <string name="no_installed_modules">There are no installed modules!</string>
-    <string name="no_enabled_modules">There are no modules enabled</string>
 
     <string name="info">Info</string>
     <string name="not_installed_no_lollipop">LSPosed Framework is not installed</string>
@@ -99,9 +93,6 @@
     <string name="android_sdk" translatable="false">Android %2$s (%1$s, API %3$d)</string>
     <string name="not_logcat">This is the LSPosed Framework and modules log\nif you need a Android logcat, you can try our Log Catcher Magisk module</string>
 
-    <string name="dexopt_now">Optimize all apps with Dexopt</string>
-    <string name="speed_now">Optimize all apps with Speed mode</string>
-    <string name="this_may_take_a_while">Please wait, this may take a while…</string>
     <string name="done">Done!</string>
     <string name="verified_boot_deactivated">Verified Boot is deactivated</string>
     <string name="verified_boot_none">Could not detect Verified Boot state</string>
@@ -146,7 +137,6 @@
     <string name="settings_group_theme">Theme</string>
     <string name="material_design_2">Material Design 2</string>
     <string name="settings_variant">Variant</string>
-    <string name="menu_optimize">Optimize…</string>
     <string name="menu_show_system_apps">System apps</string>
     <string name="menu_reboot">Reboot…</string>
     <string name="menu_sort">Sorting…</string>

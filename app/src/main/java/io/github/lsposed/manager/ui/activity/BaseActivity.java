@@ -28,7 +28,6 @@ import java.util.Objects;
 
 import io.github.lsposed.manager.App;
 import io.github.lsposed.manager.R;
-import io.github.lsposed.manager.util.CompileUtil;
 import io.github.lsposed.manager.util.CustomThemeColor;
 import io.github.lsposed.manager.util.CustomThemeColors;
 import io.github.lsposed.manager.util.RebootUtil;
@@ -176,11 +175,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
-        if (itemId == R.id.dexopt_all) {
-            CompileUtil.compileAllDexopt(this);
-        } else if (itemId == R.id.speed_all) {
-            CompileUtil.compileAllSpeed(this);
-        } else if (itemId == R.id.reboot) {
+        if (itemId == R.id.reboot) {
             areYouSure(R.string.reboot, (dialog, which) -> RebootUtil.reboot(RebootUtil.RebootType.NORMAL));
         } else if (itemId == R.id.soft_reboot) {
             areYouSure(R.string.soft_reboot, (dialog, which) -> RebootUtil.reboot(RebootUtil.RebootType.USERSPACE));

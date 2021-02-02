@@ -28,7 +28,6 @@
     <string name="dont_show_again">不再提示</string>
 
     <!-- File operations -->
-    <string name="root_failed">无法获取 root 权限\n\n请确认您的设备已正确 root 且没有阻止 shell 命令</string>
 
     <!-- Modules tab -->
     <string name="module_is_not_activated_yet">LSPosed 模块尚未激活</string>
@@ -74,11 +73,6 @@
     <!-- RepoLoader -->
 
     <string name="warning_installed_on_external_storage">此模块因被安装在 SD 卡中而导致无法加载, 请将其移动到内部存储</string>
-    <string name="export_">导出…</string>
-    <string name="export_enabled_modules">导出已启用模块列表</string>
-    <string name="export_installed_modules">导出已安装模块列表</string>
-    <string name="no_installed_modules">没有任何已安装的模块</string>
-    <string name="no_enabled_modules">没有任何已启用的模块</string>
 
     <string name="info">信息</string>
     <string name="not_installed_no_lollipop">LSPosed 框架未安装</string>
@@ -105,9 +99,6 @@
     <string name="verified_boot_deactivated">引导验证已禁用</string>
     <string name="verified_boot_none">无法获取引导验证状态</string>
     <string name="done">完成！</string>
-    <string name="dexopt_now">以 Dexopt 模式优化全部应用</string>
-    <string name="speed_now">以 Speed 模式优化全部应用</string>
-    <string name="this_may_take_a_while">请稍后, 这将需要一段时间…</string>
 
     <string name="pref_title_disable_verbose_log">禁用详细日志</string>
     <string name="logs_cannot_read">无法读取日志: \n</string>
@@ -139,7 +130,6 @@
     <string name="settings_enable_resources">启用资源钩子</string>
     <string name="settings_enable_resources_summary"><b>警告: </b> 资源钩子已被弃用</string>
     <string name="settings_variant">变体</string>
-    <string name="menu_optimize">优化…</string>
     <string name="menu_show_system_apps">系统应用</string>
     <string name="menu_reboot">重启…</string>
     <string name="menu_sort">排序…</string>
