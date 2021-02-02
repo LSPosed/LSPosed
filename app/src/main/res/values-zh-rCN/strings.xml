@@ -83,9 +83,6 @@
 
     <!-- LSPd related -->
     <string name="compile_speed_msg">优化中…</string>
-    <string name="verified_boot_active">引导验证已启用</string>
-    <string name="verified_boot_deactivated">引导验证已禁用</string>
-    <string name="verified_boot_none">无法获取引导验证状态</string>
     <string name="done">完成！</string>
 
     <string name="pref_title_disable_verbose_log">禁用详细日志</string>
@@ -134,4 +131,6 @@
     <string name="android_framework">系统框架</string>
     <string name="app_destroyed">此应用程序已被损坏，请确保您从官方来源下载该应用程序。</string>
     <string name="compile_speed">重新优化</string>
+    <string name="selinux_permissive">&lt;b&gt;警告：&lt;\/b&gt;SELinux 未处于严格模式！对此进行攻击的恶意程序可以完全控制你的设备，并可能造成你的财产损失和法律责任。</string>
+    <string name="selinux_permissive_summary">SELinux 未处于严格模式！</string>
 </resources>

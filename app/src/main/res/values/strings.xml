@@ -87,9 +87,6 @@
     <string name="not_logcat">This is the LSPosed Framework and modules log\nif you need a Android logcat, you can try our Log Catcher Magisk module</string>
 
     <string name="done">Done!</string>
-    <string name="verified_boot_deactivated">Verified Boot is deactivated</string>
-    <string name="verified_boot_none">Could not detect Verified Boot state</string>
-    <string name="verified_boot_active">Verified Boot is active</string>
 
     <!-- LSPd related -->
     <string name="compile_speed_msg">Optimizing …</string>
@@ -141,4 +138,6 @@
     <string name="android_framework">System Framework</string>
     <string name="app_destroyed">This application has been destroyed, please make sure you download it from the official source.</string>
     <string name="compile_speed">Re-optimize</string>
+    <string name="selinux_permissive">&lt;b&gt;WARNING:&lt;\/b&gt; SELinux is not enforcing! the malicious program that attacks this can completely control your device and may cause your property damage and legal liability.</string>
+    <string name="selinux_permissive_summary">SELinux is not enforcing!</string>
 </resources>

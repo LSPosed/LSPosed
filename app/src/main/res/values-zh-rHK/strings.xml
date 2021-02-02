@@ -82,9 +82,6 @@
 
     <!-- LSPd related -->
     <string name="compile_speed_msg">優化中…</string>
-    <string name="verified_boot_active">引導驗證已啟用</string>
-    <string name="verified_boot_deactivated">引導驗證已禁用</string>
-    <string name="verified_boot_none">無法獲取引導驗證狀態</string>
     <string name="done">完成！</string>
 
     <string name="pref_title_disable_verbose_log">禁用詳細日誌</string>
