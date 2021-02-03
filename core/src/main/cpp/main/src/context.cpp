@@ -35,24 +35,18 @@ namespace lspd {
     constexpr int SHARED_RELRO_UID = 1037;
     constexpr int PER_USER_RANGE = 100000;
 
-    void Context::CallPostFixupStaticTrampolinesCallback(void *class_ptr, jmethodID callback_mid) {
-        if (UNLIKELY(!callback_mid || !class_linker_class_)) {
+    void Context::CallOnPostFixupStaticTrampolines(void *class_ptr) {
+        if (UNLIKELY(!class_ptr || !class_linker_class_ || !post_fixup_static_mid_)) {
             return;
         }
-        if (!class_ptr) {
-            return;
-        }
+
         JNIEnv *env;
         vm_->GetEnv((void **) (&env), JNI_VERSION_1_4);
         art::JNIEnvExt env_ext(env);
         ScopedLocalRef clazz(env, env_ext.NewLocalRefer(class_ptr));
         if (clazz != nullptr) {
-            JNI_CallStaticVoidMethod(env, class_linker_class_, callback_mid, clazz.get());
+            JNI_CallStaticVoidMethod(env, class_linker_class_, post_fixup_static_mid_, clazz.get());
         }
-    }
-
-    void Context::CallOnPostFixupStaticTrampolines(void *class_ptr) {
-        CallPostFixupStaticTrampolinesCallback(class_ptr, post_fixup_static_mid_);
     }
 
     void Context::PreLoadDex(const fs::path &dex_path) {
@@ -264,7 +258,7 @@ namespace lspd {
             jfieldID path_fid = JNI_GetStaticFieldID(env, service_class, "CONFIG_PATH",
                                                      "Ljava/lang/String;");
             jfieldID pn_fid = JNI_GetStaticFieldID(env, service_class, "INSTALLER_PACKAGE_NAME",
-                                                     "Ljava/lang/String;");
+                                                   "Ljava/lang/String;");
             if (LIKELY(path_fid) && LIKELY(pn_fid)) {
                 env->SetStaticObjectField(service_class, path_fid, env->NewStringUTF(
                         ConfigManager::GetMiscPath().c_str()));
