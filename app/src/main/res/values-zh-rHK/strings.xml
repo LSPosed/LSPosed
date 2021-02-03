@@ -21,7 +21,6 @@
     <string name="nav_item_logs_err">模塊日誌</string>
 
     <!-- Installer tab -->
-    <string name="areyousure">您確定？</string>
     <string name="install_warning_title">請小心！</string>
     <string name="dont_show_again">不再提示</string>
 
@@ -46,7 +45,6 @@
 
     <!-- Settings tab -->
     <string name="settings_group_framework">框架</string>
-    <string name="settings_group_app">應用</string>
     <string name="settings_theme">主題</string>
     <string name="settings_theme_light">亮色</string>
     <string name="settings_theme_dark">暗色</string>
@@ -76,8 +74,6 @@
     <string name="scroll_top">滾動到頂部</string>
     <string name="loading">正在加載…</string>
     <string name="scroll_bottom">滾動到底部</string>
-    <string name="skip_xposedminversion_check">關閉狀態檢查</string>
-    <string name="skip_xposedminversion_check_summ">關閉針對模塊的\"LSPosed 安裝狀態\"檢查</string>
     <string name="not_logcat">此處僅顯示 LSPosed 及模塊相關日誌信息\n如果您想抓取系統日誌, 可以嘗試我們的 Log Catcher Magisk 模塊</string>
 
     <!-- LSPd related -->

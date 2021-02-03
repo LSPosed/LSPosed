@@ -2,17 +2,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory
-        android:title="@string/settings_group_app"
-        app:iconSpaceReserved="false">
-
-        <SwitchPreferenceCompat
-            android:defaultValue="false"
-            android:key="skip_xposedminversion_check"
-            android:summary="@string/skip_xposedminversion_check_summ"
-            android:title="@string/skip_xposedminversion_check"
-            app:iconSpaceReserved="false" />
-    </PreferenceCategory>
-    <PreferenceCategory
         android:title="@string/settings_group_theme"
         app:iconSpaceReserved="false">
         <io.github.lsposed.manager.ui.widget.ThemeColorPreference

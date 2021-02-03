@@ -1,6 +1,5 @@
 package io.github.lsposed.manager.util;
 
-import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -33,12 +32,10 @@ public final class ModuleUtil {
     private Map<String, InstalledModule> installedModules;
     private final List<String> enabledModules;
     private boolean isReloading = false;
-    private final SharedPreferences prefs;
 
     private ModuleUtil() {
         pm = App.getInstance().getPackageManager();
         enabledModules = AppHelper.getEnabledModuleList();
-        prefs = App.getPreferences();
     }
 
     public static synchronized ModuleUtil getInstance() {
@@ -226,18 +223,13 @@ public final class ModuleUtil {
                 this.minVersion = 0;
                 this.description = "";
             } else {
-                int version = Constants.getXposedApiVersion();
-                if (version > 0 && prefs.getBoolean("skip_xposedminversion_check", false)) {
-                    this.minVersion = version;
+                Object minVersionRaw = app.metaData.get("xposedminversion");
+                if (minVersionRaw instanceof Integer) {
+                    this.minVersion = (Integer) minVersionRaw;
+                } else if (minVersionRaw instanceof String) {
+                    this.minVersion = extractIntPart((String) minVersionRaw);
                 } else {
-                    Object minVersionRaw = app.metaData.get("xposedminversion");
-                    if (minVersionRaw instanceof Integer) {
-                        this.minVersion = (Integer) minVersionRaw;
-                    } else if (minVersionRaw instanceof String) {
-                        this.minVersion = extractIntPart((String) minVersionRaw);
-                    } else {
-                        this.minVersion = 0;
-                    }
+                    this.minVersion = 0;
                 }
             }
         }

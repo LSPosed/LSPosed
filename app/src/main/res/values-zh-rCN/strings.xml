@@ -22,7 +22,6 @@
     <string name="nav_item_logs_err">模块日志</string>
 
     <!-- Installer tab -->
-    <string name="areyousure">您确定？</string>
     <string name="install_warning_title">请小心！</string>
     <string name="dont_show_again">不再提示</string>
 
@@ -47,7 +46,6 @@
 
     <!-- Settings tab -->
     <string name="settings_group_framework">框架</string>
-    <string name="settings_group_app">应用</string>
     <string name="settings_theme">主题</string>
     <string name="settings_theme_light">亮色</string>
     <string name="settings_theme_dark">暗色</string>
@@ -78,8 +76,6 @@
     <string name="scroll_top">滚动到顶部</string>
     <string name="loading">正在加载…</string>
     <string name="scroll_bottom">滚动到底部</string>
-    <string name="skip_xposedminversion_check">关闭状态检查</string>
-    <string name="skip_xposedminversion_check_summ">关闭针对模块的\“LSPosed 安装状态\”检查</string>
     <string name="not_logcat">此处仅显示 LSPosed 及模块相关日志信息\n如果您想抓取系统日志, 可以尝试我们的 Log Catcher Magisk 模块</string>
 
     <!-- LSPd related -->

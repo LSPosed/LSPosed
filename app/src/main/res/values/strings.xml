@@ -23,7 +23,6 @@
     <string name="nav_item_logs_err">Modules Logs</string>
 
     <!-- Installer tab -->
-    <string name="areyousure">Are you sure?</string>
     <string name="install_warning_title">Be careful!</string>
     <string name="dont_show_again">Don\'t show this again</string>
 
@@ -50,7 +49,6 @@
     <string name="settings_group_framework">Framework</string>
     <string name="settings_enable_resources">Enable resource hooks</string>
     <string name="settings_enable_resources_summary"><b>WARNING:</b> Resource hooks are deprecated</string>
-    <string name="settings_group_app">Application</string>
     <string name="settings_theme">Theme</string>
     <string name="settings_theme_light">Light</string>
     <string name="settings_theme_dark">Dark</string>
@@ -81,8 +79,6 @@
     <string name="scroll_top">Scroll to top</string>
     <string name="loading">Loading…</string>
     <string name="scroll_bottom">Scroll to bottom</string>
-    <string name="skip_xposedminversion_check">Skip status check</string>
-    <string name="skip_xposedminversion_check_summ">Skip \"LSPosed Status\" check for modules</string>
 
     <string name="android_sdk" translatable="false">Android %2$s (%1$s, API %3$d)</string>
     <string name="not_logcat">This is the LSPosed Framework and modules log\nif you need a Android logcat, you can try our Log Catcher Magisk module</string>
