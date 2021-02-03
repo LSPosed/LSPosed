@@ -3,7 +3,6 @@
     <string name="Activated">已激活</string>
     <string name="Install">安装</string>
     <string name="InstallDetail">点按安装 LSPosed</string>
-    <string name="ActivatedDetail">LSPosed 框架已激活</string>
     <string name="Modules">模块</string>
     <string name="ModulesDetail">%d 模块已启用</string>
     <string name="Logs">日志</string>
@@ -22,7 +21,6 @@
     <string name="nav_item_logs_err">模块日志</string>
 
     <!-- Installer tab -->
-    <string name="areyousure">您确定？</string>
     <string name="install_warning_title">请小心！</string>
     <string name="dont_show_again">不再提示</string>
 
@@ -42,12 +40,10 @@
     <string name="module_uninstall">卸载</string>
 
     <!-- Download tab -->
-    <string name="menuSearch">搜索</string>
     <string name="menuReload">重新加载</string>
 
     <!-- Settings tab -->
     <string name="settings_group_framework">框架</string>
-    <string name="settings_group_app">应用</string>
     <string name="settings_theme">主题</string>
     <string name="settings_theme_light">亮色</string>
     <string name="settings_theme_dark">暗色</string>
@@ -73,13 +69,10 @@
     <string name="warning_installed_on_external_storage">此模块因被安装在 SD 卡中而导致无法加载, 请将其移动到内部存储</string>
 
     <string name="info">信息</string>
-    <string name="not_installed_no_lollipop">LSPosed 框架未安装</string>
 
     <string name="scroll_top">滚动到顶部</string>
     <string name="loading">正在加载…</string>
     <string name="scroll_bottom">滚动到底部</string>
-    <string name="skip_xposedminversion_check">关闭状态检查</string>
-    <string name="skip_xposedminversion_check_summ">关闭针对模块的\“LSPosed 安装状态\”检查</string>
     <string name="not_logcat">此处仅显示 LSPosed 及模块相关日志信息\n如果您想抓取系统日志, 可以尝试我们的 Log Catcher Magisk 模块</string>
 
     <!-- LSPd related -->
@@ -95,9 +88,7 @@
     <string name="pref_title_disable_modules_log">禁用模块日志</string>
     <string name="pref_disable_modules_log_summary">模块抛出的的异常堆栈仍将正常抓取</string>
     <string name="follow_system">跟随系统</string>
-    <string name="pure_black_dark_theme">使用纯黑深色主题</string><![CDATA[>
-    ]]>
-    <string name="xposed_not_active">LSPosed 框架未安装或未激活, 您可在设置中关闭状态检查</string>
+    <string name="pure_black_dark_theme">使用纯黑深色主题</string>
     <string name="transparent_status_bar">透明状态栏</string>
     <string name="sort_by_name">应用名称</string>
     <string name="sort_by_name_reverse">应用名称（降序）</string>
@@ -135,4 +126,5 @@
     <string name="selinux_permissive">&lt;b&gt;警告：&lt;\/b&gt;SELinux 未处于严格模式！对此进行攻击的恶意程序可以完全控制你的设备，并可能造成你的财产损失和法律责任。</string>
     <string name="selinux_permissive_summary">SELinux 未处于严格模式！</string>
     <string name="outdated_manager">LSPosed Manager 和 LSPosed Core 的版本不一致。请重新安装对应的版本。</string>
+    <string name="lsposed_not_active">LSPosed 未安装或未激活</string>
 </resources>

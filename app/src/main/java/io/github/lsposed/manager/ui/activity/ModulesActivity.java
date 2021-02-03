@@ -3,9 +3,16 @@ package io.github.lsposed.manager.ui.activity;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
+import android.text.style.TypefaceSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +25,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,7 +50,6 @@ import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
 public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleListener {
 
     ActivityAppListBinding binding;
-    private int installedXposedVersion;
     private ApplicationFilter filter;
     private SearchView searchView;
     private SearchView.OnQueryTextListener mSearchListener;
@@ -105,14 +112,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         filter = new ApplicationFilter();
         moduleUtil = ModuleUtil.getInstance();
         pm = getPackageManager();
-        installedXposedVersion = Constants.getXposedApiVersion();
-        if (installedXposedVersion <= 0) {
-            Snackbar.make(binding.snackbar, R.string.xposed_not_active, Snackbar.LENGTH_LONG).setAction(R.string.Settings, v -> {
-                Intent intent = new Intent();
-                intent.setClass(ModulesActivity.this, SettingsActivity.class);
-                startActivity(intent);
-            }).show();
-        }
         adapter = new ModuleAdapter();
         adapter.setHasStableIds(true);
         moduleUtil.addListener(this);
@@ -269,33 +268,38 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                     .load(item.getPackageInfo())
                     .into(holder.appIcon);
 
-            TextView descriptionText = holder.appDescription;
-            descriptionText.setVisibility(View.VISIBLE);
+            SpannableStringBuilder sb = new SpannableStringBuilder();
             if (!item.getDescription().isEmpty()) {
-                descriptionText.setText(item.getDescription());
+                sb.append(item.getDescription());
             } else {
-                descriptionText.setText(getString(R.string.module_empty_description));
+                sb.append(getString(R.string.module_empty_description));
             }
-            TextView warningText = holder.warningText;
 
+            int installedXposedVersion = Constants.getXposedApiVersion();
+            String warningText = null;
             if (item.minVersion == 0) {
-                warningText.setText(getString(R.string.no_min_version_specified));
-                warningText.setVisibility(View.VISIBLE);
+                warningText = getString(R.string.no_min_version_specified);
             } else if (installedXposedVersion > 0 && item.minVersion > installedXposedVersion) {
-                warningText.setText(String.format(getString(R.string.warning_xposed_min_version), item.minVersion));
-                warningText.setVisibility(View.VISIBLE);
+                warningText = String.format(getString(R.string.warning_xposed_min_version), item.minVersion);
             } else if (item.minVersion < ModuleUtil.MIN_MODULE_VERSION) {
-                warningText.setText(String.format(getString(R.string.warning_min_version_too_low), item.minVersion, ModuleUtil.MIN_MODULE_VERSION));
-                warningText.setVisibility(View.VISIBLE);
+                warningText = String.format(getString(R.string.warning_min_version_too_low), item.minVersion, ModuleUtil.MIN_MODULE_VERSION);
             } else if (item.isInstalledOnExternalStorage()) {
-                warningText.setText(getString(R.string.warning_installed_on_external_storage));
-                warningText.setVisibility(View.VISIBLE);
-            } else if (installedXposedVersion == 0 || (installedXposedVersion == -1)) {
-                warningText.setText(getString(R.string.not_installed_no_lollipop));
-                warningText.setVisibility(View.VISIBLE);
-            } else {
-                warningText.setVisibility(View.GONE);
+                warningText = getString(R.string.warning_installed_on_external_storage);
             }
+            if (warningText != null) {
+                sb.append("\n");
+                sb.append(warningText);
+                final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ContextCompat.getColor(ModulesActivity.this, R.color.material_red_500));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    final TypefaceSpan typefaceSpan = new TypefaceSpan(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+                    sb.setSpan(typefaceSpan, sb.length() - warningText.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                } else {
+                    final StyleSpan styleSpan = new StyleSpan(Typeface.BOLD);
+                    sb.setSpan(styleSpan, sb.length() - warningText.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                }
+                sb.setSpan(foregroundColorSpan, sb.length() - warningText.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            }
+            holder.appDescription.setText(sb);
         }
 
         void addAll(ArrayList<ModuleUtil.InstalledModule> items) {

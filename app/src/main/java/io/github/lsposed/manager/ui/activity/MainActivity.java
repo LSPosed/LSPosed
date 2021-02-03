@@ -3,10 +3,12 @@ package io.github.lsposed.manager.ui.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Locale;
 
@@ -28,11 +30,6 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        binding.modules.setOnClickListener(v -> {
-            Intent intent = new Intent();
-            intent.setClass(getApplicationContext(), ModulesActivity.class);
-            startActivity(intent);
-        });
         binding.status.setOnClickListener(v -> {
             if (Constants.getXposedVersionCode() != -1) {
                 new StatusDialogBuilder(this)
@@ -43,21 +40,10 @@ public class MainActivity extends BaseActivity {
                 NavUtil.startURL(this, getString(R.string.about_source));
             }
         });
-        binding.settings.setOnClickListener(v -> {
-            Intent intent = new Intent();
-            intent.setClass(getApplicationContext(), SettingsActivity.class);
-            startActivity(intent);
-        });
-        binding.logs.setOnClickListener(v -> {
-            Intent intent = new Intent();
-            intent.setClass(getApplicationContext(), LogsActivity.class);
-            startActivity(intent);
-        });
-        binding.about.setOnClickListener(v -> {
-            Intent intent = new Intent();
-            intent.setClass(getApplicationContext(), AboutActivity.class);
-            startActivity(intent);
-        });
+        binding.modules.setOnClickListener(new StartActivityListener(ModulesActivity.class, true));
+        binding.logs.setOnClickListener(new StartActivityListener(LogsActivity.class, true));
+        binding.settings.setOnClickListener(new StartActivityListener(SettingsActivity.class, false));
+        binding.about.setOnClickListener(new StartActivityListener(AboutActivity.class, false));
         Glide.with(binding.appIcon)
                 .load(GlideHelper.wrapApplicationInfoForIconLoader(getApplicationInfo()))
                 .into(binding.appIcon);
@@ -78,6 +64,28 @@ public class MainActivity extends BaseActivity {
             binding.statusSummary.setText(R.string.InstallDetail);
             binding.status.setCardBackgroundColor(ContextCompat.getColor(this, R.color.colorInstall));
             binding.statusIcon.setImageResource(R.drawable.ic_error);
+            Snackbar.make(binding.snackbar, R.string.lsposed_not_active, Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    private class StartActivityListener implements View.OnClickListener {
+        boolean requireInstalled;
+        Class<?> clazz;
+
+        StartActivityListener(Class<?> clazz, boolean requireInstalled) {
+            this.clazz = clazz;
+            this.requireInstalled = requireInstalled;
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (requireInstalled && Constants.getXposedVersion() == null) {
+                Snackbar.make(binding.snackbar, R.string.lsposed_not_active, Snackbar.LENGTH_LONG).show();
+            } else {
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, clazz);
+                startActivity(intent);
+            }
         }
     }
 

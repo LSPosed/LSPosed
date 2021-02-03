@@ -3,7 +3,6 @@
     <string name="Activated">Activated</string>
     <string name="Install">Install</string>
     <string name="InstallDetail">Tap to install LSPosed</string>
-    <string name="ActivatedDetail">LSPosed is activated</string>
     <string name="Modules">Modules</string>
     <string name="ModulesDetail">%d modules enabled</string>
     <string name="Logs">Logs</string>
@@ -23,7 +22,6 @@
     <string name="nav_item_logs_err">Modules Logs</string>
 
     <!-- Installer tab -->
-    <string name="areyousure">Are you sure?</string>
     <string name="install_warning_title">Be careful!</string>
     <string name="dont_show_again">Don\'t show this again</string>
 
@@ -43,14 +41,12 @@
     <string name="module_uninstall">Uninstall</string>
 
     <!-- Download tab -->
-    <string name="menuSearch">Search</string>
     <string name="menuReload">Reload</string>
 
     <!-- Settings tab -->
     <string name="settings_group_framework">Framework</string>
     <string name="settings_enable_resources">Enable resource hooks</string>
     <string name="settings_enable_resources_summary"><b>WARNING:</b> Resource hooks are deprecated</string>
-    <string name="settings_group_app">Application</string>
     <string name="settings_theme">Theme</string>
     <string name="settings_theme_light">Light</string>
     <string name="settings_theme_dark">Dark</string>
@@ -76,13 +72,10 @@
     <string name="warning_installed_on_external_storage">This module cannot be loaded because it\'s installed on the SD card, please move it to internal storage</string>
 
     <string name="info">Info</string>
-    <string name="not_installed_no_lollipop">LSPosed Framework is not installed</string>
 
     <string name="scroll_top">Scroll to top</string>
     <string name="loading">Loading…</string>
     <string name="scroll_bottom">Scroll to bottom</string>
-    <string name="skip_xposedminversion_check">Skip status check</string>
-    <string name="skip_xposedminversion_check_summ">Skip \"LSPosed Status\" check for modules</string>
 
     <string name="android_sdk" translatable="false">Android %2$s (%1$s, API %3$d)</string>
     <string name="not_logcat">This is the LSPosed Framework and modules log\nif you need a Android logcat, you can try our Log Catcher Magisk module</string>
@@ -106,7 +99,6 @@
     <string name="pref_disable_modules_log_summary">Exception stack thrown by the module will still be catched normally</string>
     <string name="pure_black_dark_theme">Use the pure black dark theme</string>
     <string name="follow_system">Follow system</string>
-    <string name="xposed_not_active">LSPosed Framework is not currently installed or active\nYou can close status check in settings</string>
     <string name="transparent_status_bar">Transparent status bar</string>
     <string name="sort_by_name">Sort by application name</string>
     <string name="sort_by_name_reverse">Sort by application name (reverse)</string>
@@ -142,4 +134,5 @@
     <string name="selinux_permissive">&lt;b&gt;WARNING:&lt;\/b&gt; SELinux is not enforcing! the malicious program that attacks this can completely control your device and may cause your property damage and legal liability.</string>
     <string name="selinux_permissive_summary">SELinux is not enforcing!</string>
     <string name="outdated_manager">Version of LSPosed Manager and LSPosed Core are not consistent. Please re-install the corresponding version.</string>
+    <string name="lsposed_not_active">LSPosed is not currently installed or active.</string>
 </resources>

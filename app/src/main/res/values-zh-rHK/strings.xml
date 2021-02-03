@@ -3,7 +3,6 @@
     <string name="Activated">已激活</string>
     <string name="Install">安裝</string>
     <string name="InstallDetail">點按安裝 LSPosed</string>
-    <string name="ActivatedDetail">LSPosed 框架已激活</string>
     <string name="Modules">模塊</string>
     <string name="ModulesDetail">%d 模塊已啟用</string>
     <string name="Logs">日誌</string>
@@ -21,7 +20,6 @@
     <string name="nav_item_logs_err">模塊日誌</string>
 
     <!-- Installer tab -->
-    <string name="areyousure">您確定？</string>
     <string name="install_warning_title">請小心！</string>
     <string name="dont_show_again">不再提示</string>
 
@@ -41,12 +39,10 @@
     <string name="module_uninstall">卸載</string>
 
     <!-- Download tab -->
-    <string name="menuSearch">搜索</string>
     <string name="menuReload">重新加載</string>
 
     <!-- Settings tab -->
     <string name="settings_group_framework">框架</string>
-    <string name="settings_group_app">應用</string>
     <string name="settings_theme">主題</string>
     <string name="settings_theme_light">亮色</string>
     <string name="settings_theme_dark">暗色</string>
@@ -71,13 +67,10 @@
     <string name="warning_installed_on_external_storage">此模塊因被安裝在 SD 卡中而導致無法加載, 請將其移動到內部存儲</string>
 
     <string name="info">信息</string>
-    <string name="not_installed_no_lollipop">LSPosed 框架未安裝</string>
 
     <string name="scroll_top">滾動到頂部</string>
     <string name="loading">正在加載…</string>
     <string name="scroll_bottom">滾動到底部</string>
-    <string name="skip_xposedminversion_check">關閉狀態檢查</string>
-    <string name="skip_xposedminversion_check_summ">關閉針對模塊的\"LSPosed 安裝狀態\"檢查</string>
     <string name="not_logcat">此處僅顯示 LSPosed 及模塊相關日誌信息\n如果您想抓取系統日誌, 可以嘗試我們的 Log Catcher Magisk 模塊</string>
 
     <!-- LSPd related -->
@@ -93,8 +86,8 @@
     <string name="pref_disable_modules_log_summary">模塊拋出的的異常堆棧仍將正常抓取</string>
     <string name="follow_system">跟隨系統</string>
     <string name="pure_black_dark_theme">使用純黑深色主題</string><![CDATA[>
+
     ]]>
-    <string name="xposed_not_active">LSPosed 框架未安裝或未激活, 您可在設置中關閉狀態檢查</string>
     <string name="transparent_status_bar">透明狀態欄</string>
     <string name="sort_by_name">應用名稱</string>
     <string name="sort_by_name_reverse">應用名稱（降序）</string>
