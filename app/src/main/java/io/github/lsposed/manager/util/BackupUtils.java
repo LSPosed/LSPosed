@@ -26,7 +26,7 @@ public class BackupUtils {
                         continue;
                     }
                     String fileName = file.getFileName().toString();
-                    if (!fileName.endsWith(".list") && !fileName.endsWith(".conf")) {
+                    if ((!fileName.endsWith(".list") && !fileName.endsWith(".conf")) || fileName.equals("modules.list")) {
                         continue;
                     }
                     ZipEntry entry = new ZipEntry(fileName);
@@ -56,7 +56,7 @@ public class BackupUtils {
                     continue;
                 }
                 String fileName = entry.getName();
-                if (!fileName.endsWith(".list") && !fileName.endsWith(".conf")) {
+                if ((!fileName.endsWith(".list") && !fileName.endsWith(".conf")) || fileName.equals("modules.list")) {
                     in.closeEntry();
                     continue;
                 }

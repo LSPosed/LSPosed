@@ -30,7 +30,7 @@ public final class ModuleUtil {
     private final PackageManager pm;
     private final List<ModuleListener> listeners = new CopyOnWriteArrayList<>();
     private Map<String, InstalledModule> installedModules;
-    private final List<String> enabledModules;
+    private List<String> enabledModules;
     private boolean isReloading = false;
 
     private ModuleUtil() {
@@ -56,6 +56,10 @@ public final class ModuleUtil {
                 break;
         }
         return result;
+    }
+
+    public void reloadEnabledModules() {
+        enabledModules = AppHelper.getEnabledModuleList();
     }
 
     public void reloadInstalledModules() {

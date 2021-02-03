@@ -47,6 +47,7 @@ import io.github.lsposed.manager.ui.fragment.StatusDialogBuilder;
 import io.github.lsposed.manager.ui.widget.IntegerListPreference;
 import io.github.lsposed.manager.ui.widget.RecyclerViewBugFixed;
 import io.github.lsposed.manager.util.BackupUtils;
+import io.github.lsposed.manager.util.ModuleUtil;
 
 public class SettingsActivity extends BaseActivity {
     private static final String KEY_PREFIX = SettingsActivity.class.getName() + '.';
@@ -183,6 +184,8 @@ public class SettingsActivity extends BaseActivity {
                                 activity.runOnUiThread(() -> {
                                     alertDialog.dismiss();
                                     activity.makeSnackBar(success ? R.string.settings_restore_success : R.string.settings_restore_failed, Snackbar.LENGTH_SHORT);
+                                    ModuleUtil.getInstance().reloadEnabledModules();
+                                    ModuleUtil.getInstance().updateModulesList();
                                 });
                             } catch (Exception e) {
                                 e.printStackTrace();
