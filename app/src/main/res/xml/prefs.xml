@@ -81,4 +81,21 @@
             android:persistent="false"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="group_backup"
+        android:title="@string/settings_backup_and_restore"
+        app:iconSpaceReserved="false">
+        <Preference
+            android:key="backup"
+            android:title="@string/settings_backup"
+            app:iconSpaceReserved="false" />
+        <Preference
+            android:key="restore"
+            android:title="@string/settings_restore"
+            app:iconSpaceReserved="false" />
+        <Preference
+            android:summary="@string/settings_backup_and_restore_summery"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
 </PreferenceScreen>

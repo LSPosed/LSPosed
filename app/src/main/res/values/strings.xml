@@ -135,4 +135,14 @@
     <string name="selinux_permissive_summary">SELinux is not enforcing!</string>
     <string name="outdated_manager">Version of LSPosed Manager and LSPosed Core are not consistent. Please re-install the corresponding version.</string>
     <string name="lsposed_not_active">LSPosed is not currently installed or active.</string>
+    <string name="settings_backup_and_restore">Backup and restore</string>
+    <string name="settings_backup_and_restore_summery">Backup or restore module list and scope lists.</string>
+    <string name="settings_backup">Backup</string>
+    <string name="settings_backuping">Backing up…</string>
+    <string name="settings_backup_success">Backup finished!</string>
+    <string name="settings_backup_failed">Failed to backup</string>
+    <string name="settings_restore">Restore</string>
+    <string name="settings_restoring">Restoring…</string>
+    <string name="settings_restore_success">Restore finished!</string>
+    <string name="settings_restore_failed">Failed to restore</string>
 </resources>

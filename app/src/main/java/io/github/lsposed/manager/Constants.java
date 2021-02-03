@@ -32,6 +32,10 @@ public class Constants {
         return getBaseDir() + "conf/modules.list";
     }
 
+    public static String getConfDir() {
+        return getBaseDir() + "conf/";
+    }
+
     public static String getBaseDir() {
         return App.getInstance().getApplicationInfo().deviceProtectedDataDir + "/";
     }
