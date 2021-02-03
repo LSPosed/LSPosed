@@ -135,13 +135,13 @@ public class HookerDexMaker {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @TargetApi(Build.VERSION_CODES.O)
     private void doMake(String hookedClassName) throws Exception {
-        mDexMaker = new DexMaker();
         ClassLoader loader = null;
         // Generate a Hooker class.
         String className = CLASS_NAME_PREFIX;
         boolean usedCache = false;
         if (canCache) {
             try {
+                mDexMaker = new DexMaker();
                 // className is also used as dex file name
                 // so it should be different from each other
                 String suffix = DexMakerUtils.getSha1Hex(mMember.toString());
@@ -165,8 +165,9 @@ public class HookerDexMaker {
         if (!usedCache) {
             // do everything in memory
             DexLog.d("Generating in memory");
-            if(BuildConfig.DEBUG)
+            if (BuildConfig.DEBUG)
                 className = className + hookedClassName.replace(".", "/");
+            mDexMaker = new DexMaker();
             doGenerate(className);
             byte[] dexBytes = mDexMaker.generate();
             loader = new InMemoryDexClassLoader(ByteBuffer.wrap(dexBytes), mAppClassLoader);
