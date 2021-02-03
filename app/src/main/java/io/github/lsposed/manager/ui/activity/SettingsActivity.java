@@ -3,6 +3,7 @@ package io.github.lsposed.manager.ui.activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -10,9 +11,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -22,6 +27,7 @@ import androidx.preference.Preference;
 import androidx.preference.SwitchPreferenceCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.takisoft.preferencex.PreferenceFragmentCompat;
 import com.takisoft.preferencex.SimpleMenuPreference;
@@ -30,13 +36,18 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Calendar;
+import java.util.Locale;
 
+import io.github.lsposed.manager.BuildConfig;
 import io.github.lsposed.manager.Constants;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.databinding.ActivitySettingsBinding;
 import io.github.lsposed.manager.ui.fragment.StatusDialogBuilder;
 import io.github.lsposed.manager.ui.widget.IntegerListPreference;
 import io.github.lsposed.manager.ui.widget.RecyclerViewBugFixed;
+import io.github.lsposed.manager.util.BackupUtils;
+import io.github.lsposed.manager.util.ModuleUtil;
 
 public class SettingsActivity extends BaseActivity {
     private static final String KEY_PREFIX = SettingsActivity.class.getName() + '.';
@@ -126,6 +137,62 @@ public class SettingsActivity extends BaseActivity {
         private static final Path disableVerboseLogsFlag = Paths.get(Constants.getBaseDir(), "conf/disable_verbose_log");
         private static final Path disableModulesLogsFlag = Paths.get(Constants.getBaseDir() + "conf/disable_modules_log");
         private static final Path variantFlag = Paths.get(Constants.getBaseDir()).getParent().resolve("variant");
+        ActivityResultLauncher<String> backupLauncher = registerForActivityResult(new ActivityResultContracts.CreateDocument(),
+                uri -> {
+                    if (uri != null) {
+                        try {
+                            // grantUriPermission might throw RemoteException on MIUI
+                            requireActivity().grantUriPermission(BuildConfig.APPLICATION_ID, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        AlertDialog alertDialog = new MaterialAlertDialogBuilder(requireActivity())
+                                .setCancelable(false)
+                                .setMessage(R.string.settings_backuping)
+                                .show();
+                        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
+                            boolean success = BackupUtils.backup(requireContext(), uri);
+                            try {
+                                SettingsActivity activity = (SettingsActivity) requireActivity();
+                                activity.runOnUiThread(() -> {
+                                    alertDialog.dismiss();
+                                    activity.makeSnackBar(success ? R.string.settings_backup_success : R.string.settings_backup_failed, Snackbar.LENGTH_SHORT);
+                                });
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        });
+                    }
+                });
+        ActivityResultLauncher<String[]> restoreLauncher = registerForActivityResult(new ActivityResultContracts.OpenDocument(),
+                uri -> {
+                    if (uri != null) {
+                        try {
+                            // grantUriPermission might throw RemoteException on MIUI
+                            requireActivity().grantUriPermission(BuildConfig.APPLICATION_ID, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        AlertDialog alertDialog = new MaterialAlertDialogBuilder(requireActivity())
+                                .setCancelable(false)
+                                .setMessage(R.string.settings_restoring)
+                                .show();
+                        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
+                            boolean success = BackupUtils.restore(requireContext(), uri);
+                            try {
+                                SettingsActivity activity = (SettingsActivity) requireActivity();
+                                activity.runOnUiThread(() -> {
+                                    alertDialog.dismiss();
+                                    activity.makeSnackBar(success ? R.string.settings_restore_success : R.string.settings_restore_failed, Snackbar.LENGTH_SHORT);
+                                    ModuleUtil.getInstance().reloadEnabledModules();
+                                    ModuleUtil.getInstance().updateModulesList();
+                                });
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        });
+                    }
+                });
 
         @Override
         public void onCreatePreferencesFix(Bundle savedInstanceState, String rootKey) {
@@ -175,6 +242,29 @@ public class SettingsActivity extends BaseActivity {
                         }
                     });
                 }
+            }
+
+            Preference backup = findPreference("backup");
+            if (backup != null) {
+                backup.setEnabled(installed);
+                backup.setOnPreferenceClickListener(preference -> {
+                    Calendar now = Calendar.getInstance();
+                    backupLauncher.launch(String.format(Locale.US,
+                            "LSPosed_Backup_%04d%02d%02d_%02d%02d%02d.zip",
+                            now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1,
+                            now.get(Calendar.DAY_OF_MONTH), now.get(Calendar.HOUR_OF_DAY),
+                            now.get(Calendar.MINUTE), now.get(Calendar.SECOND)));
+                    return true;
+                });
+            }
+
+            Preference restore = findPreference("restore");
+            if (restore != null) {
+                restore.setEnabled(installed);
+                restore.setOnPreferenceClickListener(preference -> {
+                    restoreLauncher.launch(new String[]{"*/*"});
+                    return true;
+                });
             }
 
             SwitchPreferenceCompat transparent = findPreference("transparent_status_bar");
@@ -308,5 +398,9 @@ public class SettingsActivity extends BaseActivity {
                 });
             }
         }
+    }
+
+    public void makeSnackBar(@StringRes int text, @Snackbar.Duration int duration) {
+        Snackbar.make(binding.snackbar, text, duration).show();
     }
 }

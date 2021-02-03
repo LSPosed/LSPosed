@@ -127,4 +127,14 @@
     <string name="selinux_permissive_summary">SELinux 未处于严格模式！</string>
     <string name="outdated_manager">LSPosed Manager 和 LSPosed Core 的版本不一致。请重新安装对应的版本。</string>
     <string name="lsposed_not_active">LSPosed 未安装或未激活</string>
+    <string name="settings_backup_and_restore">备份与恢复</string>
+    <string name="settings_backup_and_restore_summery">备份或恢复模块列表与作用域列表</string>
+    <string name="settings_backup">备份</string>
+    <string name="settings_backuping">备份中…</string>
+    <string name="settings_backup_success">备份成功！</string>
+    <string name="settings_backup_failed">备份失败</string>
+    <string name="settings_restore">恢复</string>
+    <string name="settings_restoring">恢复中…</string>
+    <string name="settings_restore_success">恢复成功！</string>
+    <string name="settings_restore_failed">恢复失败</string>
 </resources>
