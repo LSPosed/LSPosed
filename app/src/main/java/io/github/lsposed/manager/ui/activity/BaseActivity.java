@@ -44,7 +44,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public static boolean isBlackNightTheme() {
-        return preferences.getBoolean("black_dark_theme", false) || preferences.getBoolean("md2", true);
+        return preferences.getBoolean("black_dark_theme", false);
     }
 
     public String getTheme(Context context) {
@@ -107,7 +107,7 @@ public class BaseActivity extends AppCompatActivity {
         if (coreVersionStr != null) {
             Version managerVersion = new Version(BuildConfig.VERSION_NAME);
             Version coreVersion = new Version(coreVersionStr);
-            if (managerVersion.equals(coreVersion)) {
+            if (!managerVersion.equals(coreVersion)) {
                 new MaterialAlertDialogBuilder(this)
                         .setMessage(R.string.outdated_manager)
                         .setPositiveButton(R.string.ok, (dialog, id) -> {
