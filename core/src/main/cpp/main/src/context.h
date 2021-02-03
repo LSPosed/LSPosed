@@ -107,8 +107,6 @@ namespace lspd {
         static jclass
         FindClassFromLoader(JNIEnv *env, jobject class_loader, const char *class_name);
 
-        void CallPostFixupStaticTrampolinesCallback(void *class_ptr, jmethodID mid);
-
         static bool
         ShouldSkipInject(const std::string &package_name, uid_t user, uid_t uid, bool res,
                          const std::function<bool()>& empty_list,
