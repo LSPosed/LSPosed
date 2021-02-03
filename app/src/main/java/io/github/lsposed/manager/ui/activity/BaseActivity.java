@@ -1,7 +1,6 @@
 package io.github.lsposed.manager.ui.activity;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -25,9 +24,13 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import java.util.Objects;
 
 import io.github.lsposed.manager.App;
+import io.github.lsposed.manager.BuildConfig;
+import io.github.lsposed.manager.Constants;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.util.CustomThemeColor;
 import io.github.lsposed.manager.util.CustomThemeColors;
+import io.github.lsposed.manager.util.NavUtil;
+import io.github.lsposed.manager.util.Version;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -98,6 +101,23 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         AppCompatDelegate.setDefaultNightMode(preferences.getInt("theme", -1));
         theme = getTheme(this) + getCustomTheme() + preferences.getBoolean("md2", true);
+
+        // make sure the versions are consistent
+        String coreVersionStr = Constants.getXposedVersion();
+        if (coreVersionStr != null) {
+            Version managerVersion = new Version(BuildConfig.VERSION_NAME);
+            Version coreVersion = new Version(coreVersionStr);
+            if (managerVersion.equals(coreVersion)) {
+                new MaterialAlertDialogBuilder(this)
+                        .setMessage(R.string.outdated_manager)
+                        .setPositiveButton(R.string.ok, (dialog, id) -> {
+                            NavUtil.startURL(this, getString(R.string.about_source));
+                            finish();
+                        })
+                        .setCancelable(false)
+                        .show();
+            }
+        }
     }
 
     protected void setupRecyclerViewInsets(View recyclerView, View root) {
@@ -159,13 +179,5 @@ public class BaseActivity extends AppCompatActivity {
         theme.applyStyle(getThemeStyleRes(this), true);
         // only pass theme style to super, so styled theme will not be overwritten
         super.onApplyThemeResource(theme, R.style.ThemeOverlay, first);
-    }
-
-    private void areYouSure(int contentTextId, DialogInterface.OnClickListener listener) {
-        new MaterialAlertDialogBuilder(this).setTitle(R.string.areyousure)
-                .setMessage(contentTextId)
-                .setPositiveButton(android.R.string.ok, listener)
-                .setNegativeButton(android.R.string.cancel, null)
-                .show();
     }
 }
