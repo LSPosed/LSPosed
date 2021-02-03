@@ -22,6 +22,7 @@ import androidx.preference.Preference;
 import androidx.preference.SwitchPreferenceCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.takisoft.preferencex.PreferenceFragmentCompat;
 import com.takisoft.preferencex.SimpleMenuPreference;
 
@@ -80,6 +81,9 @@ public class SettingsActivity extends BaseActivity {
                 return insets;
             });
         }
+        if (Constants.getXposedVersion() == null) {
+            Snackbar.make(binding.snackbar, R.string.lsposed_not_active, Snackbar.LENGTH_LONG).show();
+        }
     }
 
     private void restart() {
@@ -127,20 +131,24 @@ public class SettingsActivity extends BaseActivity {
         public void onCreatePreferencesFix(Bundle savedInstanceState, String rootKey) {
             addPreferencesFromResource(R.xml.prefs);
 
+            boolean installed = Constants.getXposedVersion() != null;
             SwitchPreferenceCompat prefVerboseLogs = findPreference("disable_verbose_log");
             if (prefVerboseLogs != null) {
+                prefVerboseLogs.setEnabled(installed);
                 prefVerboseLogs.setChecked(Files.exists(disableVerboseLogsFlag));
                 prefVerboseLogs.setOnPreferenceChangeListener(new OnFlagChangeListener(disableVerboseLogsFlag));
             }
 
             SwitchPreferenceCompat prefModulesLogs = findPreference("disable_modules_log");
             if (prefModulesLogs != null) {
+                prefModulesLogs.setEnabled(installed);
                 prefModulesLogs.setChecked(Files.exists(disableModulesLogsFlag));
                 prefModulesLogs.setOnPreferenceChangeListener(new OnFlagChangeListener(disableModulesLogsFlag));
             }
 
             SwitchPreferenceCompat prefEnableResources = findPreference("enable_resources");
             if (prefEnableResources != null) {
+                prefEnableResources.setEnabled(installed);
                 prefEnableResources.setChecked(Files.exists(enableResourcesFlag));
                 prefEnableResources.setOnPreferenceChangeListener(new OnFlagChangeListener(enableResourcesFlag));
             }
@@ -150,6 +158,7 @@ public class SettingsActivity extends BaseActivity {
                 if (StatusDialogBuilder.getArch().contains("x86") || requireActivity().getApplicationInfo().uid / 100000 != 0) {
                     prefVariant.setVisible(false);
                 } else {
+                    prefVariant.setEnabled(installed);
                     try {
                         prefVariant.setValue(new String(Files.readAllBytes(variantFlag)).trim());
                     } catch (Exception e) {
