@@ -36,7 +36,7 @@ namespace lspd {
     constexpr int PER_USER_RANGE = 100000;
 
     void Context::CallOnPostFixupStaticTrampolines(void *class_ptr) {
-        if (UNLIKELY(!class_ptr || !class_linker_class_)) {
+        if (UNLIKELY(!class_ptr || !class_linker_class_ || !post_fixup_static_mid_)) {
             return;
         }
 
