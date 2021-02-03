@@ -85,18 +85,5 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/warning"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginBottom="8dp"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/material_red_500"
-            android:visibility="gone"
-            app:layout_constraintStart_toStartOf="@+id/description"
-            app:layout_constraintTop_toBottomOf="@+id/description"
-            tools:text="@tools:sample/lorem" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

@@ -3,7 +3,6 @@
     <string name="Activated">已啟用</string>
     <string name="Install">安裝</string>
     <string name="InstallDetail">點按安裝 LSPosed</string>
-    <string name="ActivatedDetail">LSPosed 框架已啟用</string>
     <string name="Modules">模組</string>
     <string name="ModulesDetail">%d 模組已啟用</string>
     <string name="Logs">日誌</string>
@@ -41,7 +40,6 @@
     <string name="module_uninstall">解除安裝</string>
 
     <!-- Download tab -->
-    <string name="menuSearch">搜尋</string>
     <string name="menuReload">重新載入</string>
 
     <!-- Settings tab -->
@@ -71,7 +69,6 @@
     <string name="warning_installed_on_external_storage">此模組因被安裝在 SD 卡中而導致無法載入, 請將其移動到內部儲存</string>
 
     <string name="info">資訊</string>
-    <string name="not_installed_no_lollipop">LSPosed 框架未安裝</string>
 
     <string name="scroll_top">滾動到頂部</string>
     <string name="loading">正在載入…</string>
@@ -92,8 +89,8 @@
     <string name="pref_disable_modules_log_summary">模組丟擲的的異常堆疊仍將正常抓取</string>
     <string name="follow_system">跟隨系統</string>
     <string name="pure_black_dark_theme">使用純黑深色主題</string><![CDATA[>
+
     ]]>
-    <string name="xposed_not_active">LSPosed 框架未安裝或未啟用, 您可在設定中關閉狀態檢查</string>
     <string name="transparent_status_bar">透明狀態列</string>
     <string name="sort_by_name">程式名稱</string>
     <string name="sort_by_name_reverse">程式名稱（降序）</string>

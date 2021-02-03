@@ -3,7 +3,6 @@
     <string name="Activated">Activated</string>
     <string name="Install">Install</string>
     <string name="InstallDetail">Tap to install LSPosed</string>
-    <string name="ActivatedDetail">LSPosed is activated</string>
     <string name="Modules">Modules</string>
     <string name="ModulesDetail">%d modules enabled</string>
     <string name="Logs">Logs</string>
@@ -42,7 +41,6 @@
     <string name="module_uninstall">Uninstall</string>
 
     <!-- Download tab -->
-    <string name="menuSearch">Search</string>
     <string name="menuReload">Reload</string>
 
     <!-- Settings tab -->
@@ -74,7 +72,6 @@
     <string name="warning_installed_on_external_storage">This module cannot be loaded because it\'s installed on the SD card, please move it to internal storage</string>
 
     <string name="info">Info</string>
-    <string name="not_installed_no_lollipop">LSPosed Framework is not installed</string>
 
     <string name="scroll_top">Scroll to top</string>
     <string name="loading">Loading…</string>
@@ -102,7 +99,6 @@
     <string name="pref_disable_modules_log_summary">Exception stack thrown by the module will still be catched normally</string>
     <string name="pure_black_dark_theme">Use the pure black dark theme</string>
     <string name="follow_system">Follow system</string>
-    <string name="xposed_not_active">LSPosed Framework is not currently installed or active\nYou can close status check in settings</string>
     <string name="transparent_status_bar">Transparent status bar</string>
     <string name="sort_by_name">Sort by application name</string>
     <string name="sort_by_name_reverse">Sort by application name (reverse)</string>
@@ -138,4 +134,5 @@
     <string name="selinux_permissive">&lt;b&gt;WARNING:&lt;\/b&gt; SELinux is not enforcing! the malicious program that attacks this can completely control your device and may cause your property damage and legal liability.</string>
     <string name="selinux_permissive_summary">SELinux is not enforcing!</string>
     <string name="outdated_manager">Version of LSPosed Manager and LSPosed Core are not consistent. Please re-install the corresponding version.</string>
+    <string name="lsposed_not_active">LSPosed is not currently installed or active.</string>
 </resources>
