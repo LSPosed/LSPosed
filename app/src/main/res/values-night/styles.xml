@@ -1,4 +1,14 @@
 <resources>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Dark" />
+
+    <style name="ThemeOverlay.Md2">
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorActionBar">@color/colorPrimaryDark</item>
+        <item name="android:colorBackground">@color/colorPrimaryDark</item>
+        <item name="android:windowBackground">@color/colorPrimaryDark</item>
+        <item name="listItemBackground">@drawable/item_background_md2</item>
+        <item name="roundBackground">@drawable/item_background_md2</item>
+        <item name="liftOnScroll">true</item>
+    </style>
 </resources>
