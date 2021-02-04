@@ -194,7 +194,7 @@ namespace lspd {
                     scope.emplace(std::move(app_pkg_name));
             }
             if (IsInstaller(module_pkg_name)) scope.erase("android");
-            LOGI("scope of %s is:\n%s", module_pkg_name.c_str(), ([&scope = scope]() {
+            LOGI("scope of %s is:\n  %s", module_pkg_name.c_str(), ([&scope = scope]() {
                 std::ostringstream join;
                 std::copy(scope.begin(), scope.end(),
                           std::ostream_iterator<std::string>(join, "\n  "));
