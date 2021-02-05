@@ -127,17 +127,24 @@ public final class XposedInit {
         final Class<?> classGTLR;
         final Class<?> classResKey;
         final ThreadLocal<Object> latestResKey = new ThreadLocal<>();
+        final String createResourceMethod;
 
         if (Build.VERSION.SDK_INT <= 18) {
             classGTLR = ActivityThread.class;
             classResKey = Class.forName("android.app.ActivityThread$ResourcesKey");
+            createResourceMethod = "getOrCreateResources";
+        } else if (Build.VERSION.SDK_INT < 30){
+            classGTLR = Class.forName("android.app.ResourcesManager");
+            classResKey = Class.forName("android.content.res.ResourcesKey");
+            createResourceMethod = "getOrCreateResources";
         } else {
             classGTLR = Class.forName("android.app.ResourcesManager");
             classResKey = Class.forName("android.content.res.ResourcesKey");
+            createResourceMethod = "createResources";
         }
 
         if (Build.VERSION.SDK_INT >= 24) {
-            hookAllMethods(classGTLR, "getOrCreateResources", new XC_MethodHook() {
+            hookAllMethods(classGTLR, createResourceMethod, new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                     // At least on OnePlus 5, the method has an additional parameter compared to AOSP.
