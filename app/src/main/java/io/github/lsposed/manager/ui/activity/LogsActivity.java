@@ -238,7 +238,9 @@ public class LogsActivity extends BaseActivity {
         private final Runnable mRunnable = new Runnable() {
             @Override
             public void run() {
-                mProgressDialog.show();
+                if (!isFinishing()) {
+                    mProgressDialog.show();
+                }
             }
         };
 
