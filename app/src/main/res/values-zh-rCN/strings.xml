@@ -137,4 +137,7 @@
     <string name="settings_restoring">恢复中…</string>
     <string name="settings_restore_success">恢复成功！</string>
     <string name="settings_restore_failed">恢复失败</string>
+    <string name="menu_backup_and_restore">备份…</string>
+    <string name="menu_backup">备份</string>
+    <string name="menu_restore">恢复</string>
 </resources>
