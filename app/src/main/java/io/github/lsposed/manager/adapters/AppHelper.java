@@ -131,7 +131,7 @@ public class AppHelper {
         return s;
     }
 
-    static boolean saveScopeList(String modulePackageName, List<String> list) {
+    public static boolean saveScopeList(String modulePackageName, List<String> list) {
         Path path = Paths.get(BASE_PATH + String.format(SCOPE_LIST_PATH, modulePackageName));
         if (list.size() == 0) {
             scopeList.put(modulePackageName, list);
