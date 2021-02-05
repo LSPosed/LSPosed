@@ -93,7 +93,6 @@ public class BackupUtils {
                         AppHelper.saveScopeList(name, scope);
                     }
                 }
-                ModuleUtil.getInstance().updateModulesList();
             }
             return true;
         } catch (Exception e) {
