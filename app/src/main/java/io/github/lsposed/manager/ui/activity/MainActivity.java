@@ -7,7 +7,6 @@ import android.view.View;
 
 import androidx.core.content.ContextCompat;
 
-import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Locale;
@@ -16,7 +15,6 @@ import io.github.lsposed.manager.Constants;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.databinding.ActivityMainBinding;
 import io.github.lsposed.manager.ui.fragment.StatusDialogBuilder;
-import io.github.lsposed.manager.util.GlideHelper;
 import io.github.lsposed.manager.util.ModuleUtil;
 import io.github.lsposed.manager.util.NavUtil;
 import io.github.lsposed.manager.util.light.Light;
@@ -44,9 +42,7 @@ public class MainActivity extends BaseActivity {
         binding.logs.setOnClickListener(new StartActivityListener(LogsActivity.class, true));
         binding.settings.setOnClickListener(new StartActivityListener(SettingsActivity.class, false));
         binding.about.setOnClickListener(new StartActivityListener(AboutActivity.class, false));
-        Glide.with(binding.appIcon)
-                .load(GlideHelper.wrapApplicationInfoForIconLoader(getApplicationInfo()))
-                .into(binding.appIcon);
+        binding.appIcon.setImageDrawable(getApplicationContext().getPackageManager().getApplicationIcon(getApplicationInfo()));
         String installedXposedVersion = Constants.getXposedVersion();
         if (installedXposedVersion != null) {
             binding.statusTitle.setText(String.format(Locale.US, "%s %s", getString(R.string.Activated), Constants.getXposedVariant()));

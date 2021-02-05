@@ -33,8 +33,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
@@ -52,7 +50,6 @@ import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.ui.activity.AppListActivity;
 import io.github.lsposed.manager.ui.fragment.CompileDialogFragment;
 import io.github.lsposed.manager.ui.widget.MasterSwitch;
-import io.github.lsposed.manager.util.GlideApp;
 import io.github.lsposed.manager.util.ModuleUtil;
 
 import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
@@ -327,19 +324,11 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         PackageInfo info = showList.get(position);
         boolean android = info.packageName.equals("android");
         holder.appName.setText(android ? activity.getString(R.string.android_framework) : getAppLabel(info.applicationInfo, pm));
-        GlideApp.with(holder.appIcon)
-                .load(info)
-                .into(new CustomTarget<Drawable>() {
-                    @Override
-                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                        holder.appIcon.setImageDrawable(resource);
-                    }
-
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) {
-
-                    }
-                });
+        try {
+            holder.appIcon.setImageDrawable(holder.appIcon.getContext().getPackageManager().getApplicationIcon(info.packageName));
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
         SpannableStringBuilder sb = new SpannableStringBuilder(android ? "" : activity.getString(R.string.app_description, info.packageName, info.versionName));
         holder.appDescription.setVisibility(View.VISIBLE);
         if (hasRecommended() && recommendedList.contains(info.packageName)) {

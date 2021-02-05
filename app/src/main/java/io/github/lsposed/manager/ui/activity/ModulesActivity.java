@@ -40,7 +40,6 @@ import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.adapters.AppHelper;
 import io.github.lsposed.manager.adapters.ScopeAdapter;
 import io.github.lsposed.manager.databinding.ActivityAppListBinding;
-import io.github.lsposed.manager.util.GlideApp;
 import io.github.lsposed.manager.util.LinearLayoutManagerFix;
 import io.github.lsposed.manager.util.ModuleUtil;
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
@@ -264,9 +263,11 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             version.setText(Objects.requireNonNull(item).versionName);
             version.setSelected(true);
 
-            GlideApp.with(holder.appIcon)
-                    .load(item.getPackageInfo())
-                    .into(holder.appIcon);
+            try {
+                holder.appIcon.setImageDrawable(getApplicationContext().getPackageManager().getApplicationIcon(item.packageName));
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
 
             SpannableStringBuilder sb = new SpannableStringBuilder();
             if (!item.getDescription().isEmpty()) {
