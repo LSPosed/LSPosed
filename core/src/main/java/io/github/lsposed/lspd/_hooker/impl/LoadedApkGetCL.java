@@ -55,7 +55,6 @@ public class LoadedApkGetCL extends XC_MethodHook {
             lpparam.classLoader = classLoader;
             lpparam.appInfo = loadedApk.getApplicationInfo();
             lpparam.isFirstApplication = this.isFirstApplication;
-            XC_LoadPackage.callAll(lpparam);
 
             if (packageName.equals(ConfigManager.getInstallerPackageName())) {
                 if (InstallerVerifier.verifyInstallerSignature(loadedApk.getApplicationInfo())) {
@@ -63,6 +62,8 @@ public class LoadedApkGetCL extends XC_MethodHook {
                 } else {
                     InstallerVerifier.hookXposedInstaller(classLoader);
                 }
+            } else {
+                XC_LoadPackage.callAll(lpparam);
             }
 
         } catch (Throwable t) {
