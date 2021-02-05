@@ -47,6 +47,7 @@ import java.util.List;
 import java.util.Locale;
 
 import io.github.lsposed.manager.App;
+import io.github.lsposed.manager.BuildConfig;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.ui.activity.AppListActivity;
 import io.github.lsposed.manager.ui.fragment.CompileDialogFragment;
@@ -113,7 +114,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         List<PackageInfo> rmList = new ArrayList<>();
         for (PackageInfo info : fullList) {
             installedList.add(info.packageName);
-            if (info.packageName.equals(this.modulePackageName)) {
+            if (info.packageName.equals(BuildConfig.APPLICATION_ID) || info.packageName.equals(this.modulePackageName)) {
                 rmList.add(info);
                 continue;
             }
