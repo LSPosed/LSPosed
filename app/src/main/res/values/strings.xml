@@ -145,4 +145,7 @@
     <string name="settings_restoring">Restoring…</string>
     <string name="settings_restore_success">Restore finished!</string>
     <string name="settings_restore_failed">Failed to restore</string>
+    <string name="menu_backup_and_restore">Backup…</string>
+    <string name="menu_backup">Backup</string>
+    <string name="menu_restore">Restore</string>
 </resources>

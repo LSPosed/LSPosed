@@ -40,9 +40,11 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 import io.github.lsposed.manager.App;
 import io.github.lsposed.manager.R;
@@ -89,7 +91,6 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         });
         ModuleUtil.InstalledModule module = ModuleUtil.getInstance().getModule(modulePackageName);
         recommendedList = module.getScopeList();
-        enabled = ModuleUtil.getInstance().isModuleEnabled(modulePackageName);
         refresh();
     }
 
@@ -101,6 +102,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     }
 
     private void loadApps() {
+        enabled = ModuleUtil.getInstance().isModuleEnabled(modulePackageName);
         activity.runOnUiThread(() -> masterSwitch.setChecked(enabled));
         checkedList = AppHelper.getScopeList(modulePackageName);
         if (checkedList.isEmpty() && hasRecommended()) {
@@ -228,6 +230,18 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             } else {
                 activity.makeSnackBar(R.string.module_no_ui, Snackbar.LENGTH_LONG);
             }
+            return true;
+        } else if (itemId == R.id.backup) {
+            Calendar now = Calendar.getInstance();
+            activity.backupLauncher.launch(String.format(Locale.US,
+                    "%s_%04d%02d%02d_%02d%02d%02d.lsp",
+                    moduleName,
+                    now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1,
+                    now.get(Calendar.DAY_OF_MONTH), now.get(Calendar.HOUR_OF_DAY),
+                    now.get(Calendar.MINUTE), now.get(Calendar.SECOND)));
+            return true;
+        } else if (itemId == R.id.restore) {
+            activity.restoreLauncher.launch(new String[]{"*/*"});
             return true;
         } else if (!AppHelper.onOptionsItemSelected(item, preferences)) {
             return false;

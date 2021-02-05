@@ -47,7 +47,6 @@ import io.github.lsposed.manager.ui.fragment.StatusDialogBuilder;
 import io.github.lsposed.manager.ui.widget.IntegerListPreference;
 import io.github.lsposed.manager.ui.widget.RecyclerViewBugFixed;
 import io.github.lsposed.manager.util.BackupUtils;
-import io.github.lsposed.manager.util.ModuleUtil;
 
 public class SettingsActivity extends BaseActivity {
     private static final String KEY_PREFIX = SettingsActivity.class.getName() + '.';
@@ -184,8 +183,6 @@ public class SettingsActivity extends BaseActivity {
                                 activity.runOnUiThread(() -> {
                                     alertDialog.dismiss();
                                     activity.makeSnackBar(success ? R.string.settings_restore_success : R.string.settings_restore_failed, Snackbar.LENGTH_SHORT);
-                                    ModuleUtil.getInstance().reloadEnabledModules();
-                                    ModuleUtil.getInstance().updateModulesList();
                                 });
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -250,7 +247,7 @@ public class SettingsActivity extends BaseActivity {
                 backup.setOnPreferenceClickListener(preference -> {
                     Calendar now = Calendar.getInstance();
                     backupLauncher.launch(String.format(Locale.US,
-                            "LSPosed_Backup_%04d%02d%02d_%02d%02d%02d.zip",
+                            "LSPosed_%04d%02d%02d_%02d%02d%02d.lsp",
                             now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1,
                             now.get(Calendar.DAY_OF_MONTH), now.get(Calendar.HOUR_OF_DAY),
                             now.get(Calendar.MINUTE), now.get(Calendar.SECOND)));

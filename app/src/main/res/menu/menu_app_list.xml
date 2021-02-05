@@ -75,4 +75,17 @@
             </group>
         </menu>
     </item>
+
+    <item
+        android:title="@string/menu_backup_and_restore"
+        app:showAsAction="never">
+        <menu>
+            <item
+                android:id="@+id/backup"
+                android:title="@string/menu_backup" />
+            <item
+                android:id="@+id/restore"
+                android:title="@string/menu_restore" />
+        </menu>
+    </item>
 </menu>

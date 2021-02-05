@@ -1,24 +1,31 @@
 package io.github.lsposed.manager.ui.activity;
 
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.DividerItemDecoration;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
+import io.github.lsposed.manager.BuildConfig;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.adapters.ScopeAdapter;
 import io.github.lsposed.manager.databinding.ActivityAppListBinding;
+import io.github.lsposed.manager.util.BackupUtils;
 import io.github.lsposed.manager.util.LinearLayoutManagerFix;
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 
@@ -35,6 +42,8 @@ public class AppListActivity extends BaseActivity {
         }
     };
     private final Handler handler = new Handler(Looper.getMainLooper());
+    public ActivityResultLauncher<String> backupLauncher;
+    public ActivityResultLauncher<String[]> restoreLauncher;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,6 +89,60 @@ public class AppListActivity extends BaseActivity {
                 return false;
             }
         };
+
+        backupLauncher = registerForActivityResult(new ActivityResultContracts.CreateDocument(),
+                uri -> {
+                    if (uri != null) {
+                        try {
+                            // grantUriPermission might throw RemoteException on MIUI
+                            grantUriPermission(BuildConfig.APPLICATION_ID, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        AlertDialog alertDialog = new MaterialAlertDialogBuilder(this)
+                                .setCancelable(false)
+                                .setMessage(R.string.settings_backuping)
+                                .show();
+                        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
+                            boolean success = BackupUtils.backup(this, uri, modulePackageName);
+                            try {
+                                runOnUiThread(() -> {
+                                    alertDialog.dismiss();
+                                    makeSnackBar(success ? R.string.settings_backup_success : R.string.settings_backup_failed, Snackbar.LENGTH_SHORT);
+                                });
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        });
+                    }
+                });
+        restoreLauncher = registerForActivityResult(new ActivityResultContracts.OpenDocument(),
+                uri -> {
+                    if (uri != null) {
+                        try {
+                            // grantUriPermission might throw RemoteException on MIUI
+                            grantUriPermission(BuildConfig.APPLICATION_ID, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        AlertDialog alertDialog = new MaterialAlertDialogBuilder(this)
+                                .setCancelable(false)
+                                .setMessage(R.string.settings_restoring)
+                                .show();
+                        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
+                            boolean success = BackupUtils.restore(this, uri, modulePackageName);
+                            try {
+                                runOnUiThread(() -> {
+                                    alertDialog.dismiss();
+                                    makeSnackBar(success ? R.string.settings_restore_success : R.string.settings_restore_failed, Snackbar.LENGTH_SHORT);
+                                    scopeAdapter.refresh();
+                                });
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        });
+                    }
+                });
     }
 
     @Override
@@ -125,10 +188,6 @@ public class AppListActivity extends BaseActivity {
     }
 
     public void makeSnackBar(@StringRes int text, @Snackbar.Duration int duration) {
-        if (binding != null) {
-            Snackbar.make(binding.snackbar, text, duration).show();
-        } else {
-            Toast.makeText(this, text, duration == Snackbar.LENGTH_LONG ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT).show();
-        }
+        Snackbar.make(binding.snackbar, text, duration).show();
     }
 }

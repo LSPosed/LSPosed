@@ -3,45 +3,54 @@ package io.github.lsposed.manager.util;
 import android.content.Context;
 import android.net.Uri;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
-import io.github.lsposed.manager.Constants;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
+
+import io.github.lsposed.manager.adapters.AppHelper;
 
 public class BackupUtils {
-    public static boolean backup(Context context, Uri uri) {
-        try {
-            Path confPath = Paths.get(Constants.getConfDir());
-            Object[] files = Files.list(confPath).toArray();
+    private static final int VERSION = 1;
 
-            try (ZipOutputStream out = new ZipOutputStream(context.getContentResolver().openOutputStream(uri))) {
-                for (Object object : files) {
-                    Path file = (Path) object;
-                    if (!Files.isRegularFile(file)) {
-                        continue;
-                    }
-                    String fileName = file.getFileName().toString();
-                    if ((!fileName.endsWith(".list") && !fileName.endsWith(".conf")) || fileName.equals("modules.list")) {
-                        continue;
-                    }
-                    ZipEntry entry = new ZipEntry(fileName);
-                    out.putNextEntry(entry);
-                    try {
-                        Files.copy(file, out);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    out.closeEntry();
+    public static boolean backup(Context context, Uri uri) {
+        return backup(context, uri, null);
+    }
+
+    public static boolean backup(Context context, Uri uri, String packageName) {
+        try {
+            JSONObject rootObject = new JSONObject();
+            rootObject.put("version", VERSION);
+            JSONArray modulesArray = new JSONArray();
+            Map<String, ModuleUtil.InstalledModule> modules = ModuleUtil.getInstance().getModules();
+            for (ModuleUtil.InstalledModule module : modules.values()) {
+                if (packageName != null && !module.packageName.equals(packageName)) {
+                    continue;
                 }
-                return true;
-            } catch (Exception e) {
-                e.printStackTrace();
+                JSONObject moduleObject = new JSONObject();
+                moduleObject.put("enable", ModuleUtil.getInstance().isModuleEnabled(module.packageName));
+                moduleObject.put("package", module.packageName);
+                List<String> scope = AppHelper.getScopeList(module.packageName);
+                JSONArray scopeArray = new JSONArray();
+                for (String s : scope) {
+                    scopeArray.put(s);
+                }
+                moduleObject.put("scope", scopeArray);
+                modulesArray.put(moduleObject);
             }
+            rootObject.put("modules", modulesArray);
+            OutputStream outputStream = context.getContentResolver().openOutputStream(uri);
+            GZIPOutputStream gzipOutputStream = new GZIPOutputStream(outputStream);
+            gzipOutputStream.write(rootObject.toString().getBytes());
+            gzipOutputStream.close();
+            outputStream.close();
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -49,24 +58,41 @@ public class BackupUtils {
     }
 
     public static boolean restore(Context context, Uri uri) {
-        try (ZipInputStream in = new ZipInputStream(context.getContentResolver().openInputStream(uri))) {
-            ZipEntry entry;
-            while ((entry = in.getNextEntry()) != null) {
-                if (entry.isDirectory()) {
-                    continue;
+        return restore(context, uri, null);
+    }
+
+    public static boolean restore(Context context, Uri uri, String packageName) {
+        try {
+            InputStream inputStream = context.getContentResolver().openInputStream(uri);
+            GZIPInputStream gzipInputStream = new GZIPInputStream(inputStream, 32);
+            StringBuilder string = new StringBuilder();
+            byte[] data = new byte[32];
+            int bytesRead;
+            while ((bytesRead = gzipInputStream.read(data)) != -1) {
+                string.append(new String(data, 0, bytesRead));
+            }
+            gzipInputStream.close();
+            inputStream.close();
+            JSONObject rootObject = new JSONObject(string.toString());
+            if (rootObject.getInt("version") == VERSION) {
+                JSONArray modules = rootObject.getJSONArray("modules");
+                for (int i = 0; i < modules.length(); i++) {
+                    JSONObject moduleObject = modules.getJSONObject(i);
+                    String name = moduleObject.getString("package");
+                    if (packageName != null && !name.equals(packageName)) {
+                        continue;
+                    }
+                    ModuleUtil.InstalledModule module = ModuleUtil.getInstance().getModule(name);
+                    if (module != null) {
+                        ModuleUtil.getInstance().setModuleEnabled(name, moduleObject.getBoolean("enable"));
+                        JSONArray scopeArray = moduleObject.getJSONArray("scope");
+                        List<String> scope = new ArrayList<>();
+                        for (int j = 0; j < scopeArray.length(); j++) {
+                            scope.add(scopeArray.getString(j));
+                        }
+                        AppHelper.saveScopeList(name, scope);
+                    }
                 }
-                String fileName = entry.getName();
-                if ((!fileName.endsWith(".list") && !fileName.endsWith(".conf")) || fileName.equals("modules.list")) {
-                    in.closeEntry();
-                    continue;
-                }
-                Path path = Paths.get(Constants.getConfDir() + "/" + fileName);
-                try {
-                    Files.copy(in, path, StandardCopyOption.REPLACE_EXISTING);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                in.closeEntry();
             }
             return true;
         } catch (Exception e) {
