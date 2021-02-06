@@ -51,6 +51,11 @@ jobs:
         with:
           name: manager-unsigned
           path: "app/build/outputs/apk/release/*.apk"
+      - name: Upload mappings
+        uses: actions/upload-artifact@v2
+        with:
+          name: mappings
+          path: "app/build/outputs/mapping"
       - name: Post to channel
         if: ${{ github.event_name != 'pull_request' && success() && github.ref == 'refs/heads/master' }}
         env:

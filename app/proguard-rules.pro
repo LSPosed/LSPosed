@@ -20,8 +20,3 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 -keep class io.github.lsposed.manager.Constants { *; }
--keepnames class io.github.lsposed.manager.adapters.* { *; }
--keepnames class io.github.lsposed.manager.receivers.* { *; }
--keepnames class io.github.lsposed.manager.ui.* { *; }
--keepnames class io.github.lsposed.manager.utils.* { *; }
--keepnames class io.github.lsposed.manager.* { *; }
