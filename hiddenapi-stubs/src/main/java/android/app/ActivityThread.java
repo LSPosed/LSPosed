@@ -19,6 +19,11 @@ public final class ActivityThread {
 	public final LoadedApk getPackageInfoNoCheck(ApplicationInfo ai, CompatibilityInfo compatInfo) {
 		throw new UnsupportedOperationException("STUB");
 	}
+
+	public static String currentProcessName() {
+		throw new UnsupportedOperationException("STUB");
+	}
+
 	public ContextImpl getSystemContext() {
 		throw new UnsupportedOperationException("STUB");
 	}
