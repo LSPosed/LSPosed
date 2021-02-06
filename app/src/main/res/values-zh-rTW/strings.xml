@@ -94,8 +94,6 @@
     <string name="compile_failed">最佳化失敗或返回值為空</string>
     <string name="compile_failed_with_info">最佳化失敗: </string>
     <string name="not_installed">未安裝</string>
-    <string name="pref_title_disable_modules_log">停用模組日誌</string>
-    <string name="pref_disable_modules_log_summary">模組產生的的異常堆疊仍將正常抓取</string>
     <string name="follow_system">跟隨系統</string>
     <string name="pure_black_dark_theme">使用純黑深色主題</string><![CDATA[>
     ]]>
