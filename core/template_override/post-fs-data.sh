@@ -55,7 +55,7 @@ PATH=${OLD_PATH}
 PATH_OWNER=$(echo "${PATH_INFO}" | awk -F " " '{print $3":"$4}')
 PATH_CONTEXT=$(echo "${PATH_INFO}" | awk -F " " '{print $5}')
 
-if [[ -f ${DISABLE_VERBOSE_LOG_FILE} ]]; then
+if [ "$(cat "${DISABLE_VERBOSE_LOG_FILE}")" = "1" ]; then
     LOG_VERBOSE=false
 fi
 

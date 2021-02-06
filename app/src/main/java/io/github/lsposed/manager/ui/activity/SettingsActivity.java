@@ -133,8 +133,7 @@ public class SettingsActivity extends BaseActivity {
 
     public static class SettingsFragment extends PreferenceFragmentCompat {
         private static final Path enableResourcesFlag = Paths.get(Constants.getBaseDir(), "conf/enable_resources");
-        private static final Path disableVerboseLogsFlag = Paths.get(Constants.getBaseDir(), "conf/disable_verbose_log");
-        private static final Path disableModulesLogsFlag = Paths.get(Constants.getBaseDir() + "conf/disable_modules_log");
+        private static final Path disableVerboseLogsFlag = Paths.get(Constants.getBaseDir()).getParent().resolve("disable_verbose_log");
         private static final Path variantFlag = Paths.get(Constants.getBaseDir()).getParent().resolve("variant");
         ActivityResultLauncher<String> backupLauncher = registerForActivityResult(new ActivityResultContracts.CreateDocument(),
                 uri -> {
@@ -198,16 +197,26 @@ public class SettingsActivity extends BaseActivity {
             boolean installed = Constants.getXposedVersion() != null;
             SwitchPreferenceCompat prefVerboseLogs = findPreference("disable_verbose_log");
             if (prefVerboseLogs != null) {
-                prefVerboseLogs.setEnabled(installed);
-                prefVerboseLogs.setChecked(Files.exists(disableVerboseLogsFlag));
-                prefVerboseLogs.setOnPreferenceChangeListener(new OnFlagChangeListener(disableVerboseLogsFlag));
-            }
-
-            SwitchPreferenceCompat prefModulesLogs = findPreference("disable_modules_log");
-            if (prefModulesLogs != null) {
-                prefModulesLogs.setEnabled(installed);
-                prefModulesLogs.setChecked(Files.exists(disableModulesLogsFlag));
-                prefModulesLogs.setOnPreferenceChangeListener(new OnFlagChangeListener(disableModulesLogsFlag));
+                if (requireActivity().getApplicationInfo().uid / 100000 != 0) {
+                    prefVerboseLogs.setVisible(false);
+                } else {
+                    prefVerboseLogs.setEnabled(installed);
+                    try {
+                        prefVerboseLogs.setChecked(Files.readAllBytes(disableVerboseLogsFlag)[0] == 49);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    prefVerboseLogs.setOnPreferenceChangeListener((preference, newValue) -> {
+                        try {
+                            Files.write(disableVerboseLogsFlag, ((boolean) newValue) ? new byte[]{49, 0} : new byte[]{48, 0});
+                            return true;
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
+                    });
+                }
             }
 
             SwitchPreferenceCompat prefEnableResources = findPreference("enable_resources");
