@@ -44,7 +44,7 @@ namespace lspd {
             return;
         }
         LOGI("Using api level %d", api_level);
-        InstallRiruHooks();
+        InstallRiruHooks(hook_func);
         // install ART hooks
         if (api_level >= __ANDROID_API_Q__) {
             // From Riru v22 we can't get ART handle by hooking dlopen, so we get libart.so from soinfo.
