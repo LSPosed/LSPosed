@@ -113,7 +113,7 @@ namespace lspd {
             return;
         }
         hook_func(sym, reinterpret_cast<void *>(decltype(__system_property_get)::replace),
-                  reinterpret_cast<void **>(decltype(__system_property_get)::backup));
+                  reinterpret_cast<void **>(&decltype(__system_property_get)::backup));
 
         if (GetAndroidApiLevel() >= __ANDROID_API_P__) {
             sym = DobbySymbolResolver(nullptr,
@@ -123,7 +123,7 @@ namespace lspd {
                 return;
             }
             hook_func(sym, reinterpret_cast<void *>(decltype(GetProperty)::replace),
-                      reinterpret_cast<void **>(decltype(GetProperty)::backup));
+                      reinterpret_cast<void **>(&decltype(GetProperty)::backup));
         }
 
         LOGI("Riru hooks installed");
