@@ -26,8 +26,8 @@ namespace lspd {
         CHECK_EQ(JNI_OK, jni_result);
     }
 
-#define REGISTER_EDXP_NATIVE_METHODS(class_name) \
-  RegisterNativeMethodsInternal(env, (class_name), gMethods, arraysize(gMethods))
+#define REGISTER_LSP_NATIVE_METHODS(class_name) \
+  RegisterNativeMethodsInternal(env, "io.github.lsposed.lspd.nativebridge." #class_name, gMethods, arraysize(gMethods))
 
 } // namespace lspd
 

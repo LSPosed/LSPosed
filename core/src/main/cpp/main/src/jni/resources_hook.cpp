@@ -1,18 +1,18 @@
 
 #include <jni.h>
-#include <native_util.h>
-#include <nativehelper/jni_macros.h>
 #include <resource_hook.h>
+#include "native_util.h"
+#include "nativehelper/jni_macros.h"
 #include "resources_hook.h"
 
 namespace lspd {
 
-    static jboolean ResourcesHook_initXResourcesNative(JNI_START) {
+    LSP_DEF_NATIVE_METHOD(jboolean, ResourcesHook, initXResourcesNative) {
         return XposedBridge_initXResourcesNative(env, clazz);
     }
 
     // @ApiSensitive(Level.MIDDLE)
-    static jboolean ResourcesHook_removeFinalFlagNative(JNI_START, jclass target_class) {
+    LSP_DEF_NATIVE_METHOD(jboolean, ResourcesHook, removeFinalFlagNative, jclass target_class) {
         if (target_class) {
             jclass class_clazz = JNI_FindClass(env, "java/lang/Class");
             jfieldID java_lang_Class_accessFlags = JNI_GetFieldID(
@@ -25,12 +25,12 @@ namespace lspd {
     }
 
     static JNINativeMethod gMethods[] = {
-            NATIVE_METHOD(ResourcesHook, initXResourcesNative, "()Z"),
-            NATIVE_METHOD(ResourcesHook, removeFinalFlagNative, "(Ljava/lang/Class;)Z"),
+            LSP_NATIVE_METHOD(ResourcesHook, initXResourcesNative, "()Z"),
+            LSP_NATIVE_METHOD(ResourcesHook, removeFinalFlagNative, "(Ljava/lang/Class;)Z"),
     };
 
     void RegisterEdxpResourcesHook(JNIEnv *env) {
-        REGISTER_EDXP_NATIVE_METHODS("io.github.lsposed.lspd.core.ResourcesHook");
+        REGISTER_LSP_NATIVE_METHODS(ResourcesHook);
     }
 
 }

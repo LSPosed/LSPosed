@@ -45,8 +45,7 @@ namespace lspd {
         pending_classes_.erase(clazz);
     }
 
-    static void
-    PendingHooks_recordPendingMethodNative(JNI_START, jobject method_ref, jclass class_ref) {
+    LSP_DEF_NATIVE_METHOD(void, PendingHooks, recordPendingMethodNative, jobject method_ref, jclass class_ref){
         auto *class_ptr = art::Thread::Current().DecodeJObject(class_ref);
         auto *method = getArtMethodYahfa(env, method_ref);
         art::mirror::Class mirror_class(class_ptr);
@@ -69,12 +68,12 @@ namespace lspd {
     }
 
     static JNINativeMethod gMethods[] = {
-            NATIVE_METHOD(PendingHooks, recordPendingMethodNative,
+            LSP_NATIVE_METHOD(PendingHooks, recordPendingMethodNative,
                           "(Ljava/lang/reflect/Method;Ljava/lang/Class;)V"),
     };
 
     void RegisterPendingHooks(JNIEnv *env) {
-        REGISTER_EDXP_NATIVE_METHODS("de.robv.android.xposed.PendingHooks");
+        REGISTER_LSP_NATIVE_METHODS(PendingHooks);
     }
 
     bool isHooked(void *art_method) {

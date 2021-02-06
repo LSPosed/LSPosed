@@ -2,7 +2,7 @@ package io.github.lsposed.lspd.yahfa.config;
 
 import io.github.lsposed.lspd.nativebridge.ClassLinker;
 import io.github.lsposed.lspd.config.BaseHookProvider;
-import io.github.lsposed.lspd.core.ResourcesHook;
+import io.github.lsposed.lspd.nativebridge.ResourcesHook;
 import io.github.lsposed.lspd.nativebridge.Yahfa;
 import io.github.lsposed.lspd.yahfa.dexmaker.DynamicBridge;
 

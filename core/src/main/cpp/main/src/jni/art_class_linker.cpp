@@ -29,7 +29,7 @@ namespace lspd {
     };
 
     void RegisterArtClassLinker(JNIEnv *env) {
-        REGISTER_EDXP_NATIVE_METHODS(kClassLinkerClassName.c_str());
+        REGISTER_LSP_NATIVE_METHODS(ClassLinker);
     }
 
 }

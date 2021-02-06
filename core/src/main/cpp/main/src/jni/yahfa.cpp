@@ -1,9 +1,8 @@
 
-#include "HookMain.h"
-#include <nativehelper/jni_macros.h>
-#include "jni.h"
-#include "native_util.h"
 #include "yahfa.h"
+#include "HookMain.h"
+#include "nativehelper/jni_macros.h"
+#include "native_util.h"
 #include "pending_hooks.h"
 #include "art/runtime/class_linker.h"
 
@@ -43,7 +42,7 @@ namespace lspd {
     };
 
     void RegisterEdxpYahfa(JNIEnv *env) {
-        REGISTER_EDXP_NATIVE_METHODS("io.github.lsposed.lspd.nativebridge.Yahfa");
+        REGISTER_LSP_NATIVE_METHODS(Yahfa);
     }
 
 }

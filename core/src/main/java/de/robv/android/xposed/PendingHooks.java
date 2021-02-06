@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 import static de.robv.android.xposed.XposedBridge.hookMethodNative;
+import static io.github.lsposed.lspd.nativebridge.PendingHooks.recordPendingMethodNative;
 
 public final class PendingHooks {
 
@@ -42,5 +43,4 @@ public final class PendingHooks {
         sPendingHooks.clear();
     }
 
-    private static native void recordPendingMethodNative(Method hookMethod, Class clazz);
 }

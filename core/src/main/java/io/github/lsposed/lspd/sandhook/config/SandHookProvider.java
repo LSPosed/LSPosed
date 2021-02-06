@@ -4,7 +4,7 @@ import android.util.Log;
 
 import io.github.lsposed.lspd.nativebridge.ClassLinker;
 import io.github.lsposed.lspd.config.BaseHookProvider;
-import io.github.lsposed.lspd.core.ResourcesHook;
+import io.github.lsposed.lspd.nativebridge.ResourcesHook;
 import io.github.lsposed.lspd.nativebridge.Yahfa;
 import com.swift.sandhook.xposedcompat.XposedCompat;
 import com.swift.sandhook.xposedcompat.methodgen.SandHookXposedBridge;

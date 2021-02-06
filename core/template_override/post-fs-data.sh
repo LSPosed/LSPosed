@@ -45,9 +45,8 @@ livePatch() {
 MISC_PATH=$(cat /data/adb/lspd/misc_path)
 BASE_PATH="/data/misc/$MISC_PATH"
 
-LOG_PATH="${BASE_PATH}/0/log"
-CONF_PATH="${BASE_PATH}/0/conf"
-DISABLE_VERBOSE_LOG_FILE="${CONF_PATH}/disable_verbose_log"
+LOG_PATH="${BASE_PATH}/log"
+DISABLE_VERBOSE_LOG_FILE="${BASE_PATH}/disable_verbose_log"
 LOG_VERBOSE=true
 OLD_PATH=${PATH}
 PATH=${PATH#*:}
@@ -117,12 +116,6 @@ start_log_cather () {
 # execute live patch if rule not found
 [[ -f "${MODDIR}/sepolicy.rule" ]] || livePatch
 
-# start_verbose_log_catcher
-start_log_cather all "LSPosed:V XSharedPreferences:V LSPosed-Bridge:V LSPosedManager:V *:F" true ${LOG_VERBOSE}
-
-# start_bridge_log_catcher
-start_log_cather error "XSharedPreferences:V LSPosed-Bridge:V" true true
-
 if [[ -f "/data/adb/riru/modules/lspd.prop" ]]; then
     CONFIG=$(cat "/data/adb/riru/modules/lspd.prop")
     [[ -d "${TARGET}/${CONFIG}" ]] || mkdir -p "${TARGET}/${CONFIG}"
@@ -139,5 +132,10 @@ if [[ ! -z "${MISC_PATH}" ]]; then
     chcon -R u:object_r:magisk_file:s0 "${BASE_PATH}"
     chmod 771 "${BASE_PATH}"
     chmod 777 "${BASE_PATH}/cache"
+    rm -rf ${LOG_PATH}.old
+    mv ${LOG_PATH} ${LOG_PATH}.old
+    mkdir -p ${LOG_PATH}
+    # start_verbose_log_catcher
+    start_log_cather all "LSPosed:V XSharedPreferences:V LSPosed-Bridge:V LSPosedManager:V *:F" true ${LOG_VERBOSE}
 fi
 rm -f /data/adb/lspd/new_install

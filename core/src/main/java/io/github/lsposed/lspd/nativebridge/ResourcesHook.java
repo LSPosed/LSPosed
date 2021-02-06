@@ -1,4 +1,4 @@
-package io.github.lsposed.lspd.core;
+package io.github.lsposed.lspd.nativebridge;
 
 public class ResourcesHook {
 

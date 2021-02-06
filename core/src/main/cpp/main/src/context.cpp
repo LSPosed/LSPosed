@@ -2,17 +2,17 @@
 #include <android-base/macros.h>
 #include <JNIHelper.h>
 #include <android-base/logging.h>
-#include <jni/config_manager.h>
-#include <jni/art_class_linker.h>
-#include <jni/art_heap.h>
-#include <jni/yahfa.h>
-#include <jni/resources_hook.h>
+#include "jni/config_manager.h"
+#include "jni/art_class_linker.h"
+#include "jni/art_heap.h"
+#include "jni/yahfa.h"
+#include "jni/resources_hook.h"
 #include <dl_util.h>
 #include <art/runtime/jni_env_ext.h>
 #include <art/runtime/mirror/class.h>
 #include <android-base/strings.h>
 #include <nativehelper/scoped_local_ref.h>
-#include <jni/pending_hooks.h>
+#include "jni/pending_hooks.h"
 #include <sandhook.h>
 #include <fstream>
 #include <sstream>
@@ -21,6 +21,7 @@
 #include "art/runtime/runtime.h"
 #include "art/runtime/gc/heap.h"
 #include "native_hook.h"
+#include "jni/logger.h"
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-value"
@@ -113,6 +114,7 @@ namespace lspd {
         entry_class_ = (jclass) (env->NewGlobalRef(
                 FindClassFromLoader(env, GetCurrentClassLoader(), kEntryClassName)));
 
+        RegisterLogger(env);
         RegisterEdxpResourcesHook(env);
         RegisterConfigManagerMethods(env);
         RegisterArtClassLinker(env);
