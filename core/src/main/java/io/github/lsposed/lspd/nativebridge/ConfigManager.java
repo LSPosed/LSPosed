@@ -6,8 +6,6 @@ public class ConfigManager {
     public static String niceName = "";
     public static String appProcessName = "";
 
-    public static native boolean isNoModuleLogEnabled();
-
     public static native boolean isResourcesHookEnabled();
 
     public static native String getInstallerPackageName();

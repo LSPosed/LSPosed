@@ -296,6 +296,9 @@ namespace lspd {
                     auto variant = GetVariantPath();
                     fs::permissions(variant, fs::perms::owner_all | fs::perms::group_all);
                     path_chown(variant, uid, 1000u);
+                    auto disable_verbose_log = misc_path_ / "disable_verbose_log";
+                    fs::permissions(disable_verbose_log, fs::perms::owner_all | fs::perms::group_all);
+                    path_chown(disable_verbose_log, uid, 1000u);
                 }
 
                 if (pkg_name == kPrimaryInstallerPkgName) {

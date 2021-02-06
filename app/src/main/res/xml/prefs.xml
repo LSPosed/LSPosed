@@ -72,14 +72,6 @@
             android:title="@string/pref_title_disable_verbose_log"
             android:persistent="false"
             app:iconSpaceReserved="false" />
-
-        <SwitchPreferenceCompat
-            android:defaultValue="false"
-            android:key="disable_modules_log"
-            android:summary="@string/pref_disable_modules_log_summary"
-            android:title="@string/pref_title_disable_modules_log"
-            android:persistent="false"
-            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory
