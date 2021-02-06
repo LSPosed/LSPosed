@@ -251,10 +251,11 @@ namespace lspd {
             }
             fs::permissions(log_path,
                             fs::perms::owner_all | fs::perms::group_all | fs::perms::others_all);
-            fs::permissions(modules_log_path,
-                            fs::perms::owner_read | fs::perms::owner_write | fs::perms::group_read |
-                            fs::perms::group_write | fs::perms::others_read |
-                            fs::perms::others_write);
+            recursive_permissions(log_path,
+                                  fs::perms::owner_read | fs::perms::owner_write |
+                                  fs::perms::group_read |
+                                  fs::perms::group_write | fs::perms::others_read |
+                                  fs::perms::others_write, fs::perm_options::add);
         } catch (const fs::filesystem_error &e) {
             LOGE("init: %s", e.what());
             return false;
@@ -297,7 +298,8 @@ namespace lspd {
                     fs::permissions(variant, fs::perms::owner_all | fs::perms::group_all);
                     path_chown(variant, uid, 1000u);
                     auto disable_verbose_log = misc_path_ / "disable_verbose_log";
-                    fs::permissions(disable_verbose_log, fs::perms::owner_all | fs::perms::group_all);
+                    fs::permissions(disable_verbose_log,
+                                    fs::perms::owner_all | fs::perms::group_all);
                     path_chown(disable_verbose_log, uid, 1000u);
                 }
 
