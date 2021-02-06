@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import android.app.ActivityThread;
 import android.app.AndroidAppHelper;
 import android.os.Process;
 
@@ -21,11 +22,9 @@ public class Logger {
         sb.append('-');
         sb.append(Process.myTid());
         sb.append('/');
-        try {
-            sb.append((String) Class.forName("android.app.ActivityThread").getDeclaredMethod("currentProcessName").invoke(null));
-        } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | IllegalAccessException ignored) {
-            sb.append("?");
-        }
+        String processName = ActivityThread.currentProcessName();
+        if (processName == null) sb.append("?");
+        else sb.append(processName);
         sb.append(' ');
         sb.append("LSPosedBridge: ");
         sb.append(str);
