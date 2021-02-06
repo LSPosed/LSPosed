@@ -132,9 +132,9 @@ public class SettingsActivity extends BaseActivity {
     }
 
     public static class SettingsFragment extends PreferenceFragmentCompat {
-        private static final Path enableResourcesFlag = Paths.get(Constants.getBaseDir(), "conf/enable_resources");
-        private static final Path disableVerboseLogsFlag = Paths.get(Constants.getBaseDir()).getParent().resolve("disable_verbose_log");
-        private static final Path variantFlag = Paths.get(Constants.getBaseDir()).getParent().resolve("variant");
+        private static final Path enableResourcesFlag = Paths.get(Constants.getConfDir(), "enable_resources");
+        private static final Path disableVerboseLogsFlag = Paths.get(Constants.getMiscDir(), "disable_verbose_log");
+        private static final Path variantFlag = Paths.get(Constants.getMiscDir(), "variant");
         ActivityResultLauncher<String> backupLauncher = registerForActivityResult(new ActivityResultContracts.CreateDocument(),
                 uri -> {
                     if (uri != null) {

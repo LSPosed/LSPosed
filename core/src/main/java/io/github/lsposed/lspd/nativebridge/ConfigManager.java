@@ -14,6 +14,10 @@ public class ConfigManager {
 
     public static native String getCachePath(String suffix);
 
+    public static native String getLogPath();
+
+    public static native String getMiscPath();
+
     public static native String getBaseConfigPath();
 
     public static native String getDataPathPrefix();

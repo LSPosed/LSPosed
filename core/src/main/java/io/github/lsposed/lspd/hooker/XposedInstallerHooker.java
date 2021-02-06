@@ -74,6 +74,18 @@ public class XposedInstallerHooker {
                     return ConfigManager.isPermissive();
                 }
             });
+            XposedHelpers.findAndHookMethod(ConstantsClass, "getLogDir", new XC_MethodReplacement() {
+                @Override
+                protected Object replaceHookedMethod(MethodHookParam param) {
+                    return ConfigManager.getLogPath();
+                }
+            });
+            XposedHelpers.findAndHookMethod(ConstantsClass, "getMiscDir", new XC_MethodReplacement() {
+                @Override
+                protected Object replaceHookedMethod(MethodHookParam param) {
+                    return ConfigManager.getMiscPath();
+                }
+            });
             Utils.logI("Hooked LSPosed Manager");
         } catch (Throwable t) {
             Utils.logW("Could not hook LSPosed Manager", t);
