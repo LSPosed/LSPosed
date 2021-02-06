@@ -95,8 +95,6 @@
     <string name="compile_failed">Optimization failed or return value is empty</string>
     <string name="compile_failed_with_info">Optimization failed: </string>
     <string name="not_installed">Not installed</string>
-    <string name="pref_title_disable_modules_log">Disable modules logs</string>
-    <string name="pref_disable_modules_log_summary">Exception stack thrown by the module will still be catched normally</string>
     <string name="pure_black_dark_theme">Use the pure black dark theme</string>
     <string name="follow_system">Follow system</string>
     <string name="transparent_status_bar">Transparent status bar</string>
