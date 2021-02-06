@@ -40,6 +40,14 @@ public class Constants {
         return App.getInstance().getApplicationInfo().deviceProtectedDataDir + "/";
     }
 
+    public static String getLogDir() {
+        return null;
+    }
+
+    public static String getMiscDir() {
+        return null;
+    }
+
     public static boolean isPermissive() {
         return true;
     }

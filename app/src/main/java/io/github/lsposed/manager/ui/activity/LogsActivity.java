@@ -26,17 +26,15 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Scanner;
+import java.util.List;
 
 import io.github.lsposed.manager.BuildConfig;
 import io.github.lsposed.manager.Constants;
@@ -47,15 +45,23 @@ import io.github.lsposed.manager.databinding.ItemLogBinding;
 import io.github.lsposed.manager.util.LinearLayoutManagerFix;
 
 public class LogsActivity extends BaseActivity {
-    private boolean allLog = false;
-    private final File fileErrorLog = new File(Constants.getBaseDir() + "log/error.log");
-    private final File fileErrorLogOld = new File(Constants.getBaseDir() + "log/error.log.old");
-    private final File fileAllLog = new File(Constants.getBaseDir() + "log/all.log");
-    private final File fileAllLogOld = new File(Constants.getBaseDir() + "log/all.log.old");
+    private int logType = 0;
+    private final Path modulesLog = Paths.get(Constants.getLogDir(), "modules.log");
+    private final Path allLog = Paths.get(Constants.getLogDir(), "all.log");
     private LogsAdapter adapter;
     private final Handler handler = new Handler(Looper.getMainLooper());
     private ActivityLogsBinding binding;
     private LinearLayoutManagerFix layoutManager;
+
+    private Path getLogFile() {
+        switch (logType) {
+            case 0:
+            default:
+                return modulesLog;
+            case 1:
+                return allLog;
+        }
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -87,13 +93,17 @@ public class LogsActivity extends BaseActivity {
         layoutManager = new LinearLayoutManagerFix(this);
         binding.recyclerView.setLayoutManager(layoutManager);
         setupRecyclerViewInsets(binding.recyclerView, binding.getRoot());
-        if (Files.exists(Paths.get(Constants.getBaseDir(), "conf/disable_verbose_log"))) {
-            binding.slidingTabs.setVisibility(View.GONE);
+        try {
+            if (Files.readAllBytes(Paths.get(Constants.getMiscDir(), "disable_verbose_log"))[0] == 49) {
+                binding.slidingTabs.setVisibility(View.GONE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         binding.slidingTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                allLog = tab.getPosition() != 0;
+                logType = tab.getPosition();
                 reloadErrorLog();
             }
 
@@ -159,15 +169,12 @@ public class LogsActivity extends BaseActivity {
     }
 
     private void reloadErrorLog() {
-        //noinspection deprecation
-        new LogsReader().execute(allLog ? fileAllLog : fileErrorLog);
+        new LogsReader().execute(getLogFile());
     }
 
     private void clear() {
         try {
-            new FileOutputStream(allLog ? fileAllLog : fileErrorLog).close();
-            //noinspection ResultOfMethodCallIgnored
-            (allLog ? fileAllLogOld : fileErrorLogOld).delete();
+            Files.write(getLogFile(), new byte[0]);
             adapter.setEmpty();
             Snackbar.make(binding.snackbar, R.string.logs_cleared, Snackbar.LENGTH_SHORT).show();
             reloadErrorLog();
@@ -177,7 +184,7 @@ public class LogsActivity extends BaseActivity {
     }
 
     private void send() {
-        Uri uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".fileprovider", allLog ? fileAllLog : fileErrorLog);
+        Uri uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".fileprovider", getLogFile().toFile());
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
@@ -215,13 +222,7 @@ public class LogsActivity extends BaseActivity {
                     try {
                         OutputStream os = getContentResolver().openOutputStream(uri);
                         if (os != null) {
-                            FileInputStream in = new FileInputStream(allLog ? fileAllLog : fileErrorLog);
-                            byte[] buffer = new byte[1024];
-                            int len;
-                            while ((len = in.read(buffer)) > 0) {
-                                os.write(buffer, 0, len);
-                            }
-                            os.close();
+                            Files.copy(getLogFile(), os);
                         }
                     } catch (Exception e) {
                         Snackbar.make(binding.snackbar, getResources().getString(R.string.logs_save_failed) + "\n" + e.getMessage(), Snackbar.LENGTH_LONG).show();
@@ -233,7 +234,7 @@ public class LogsActivity extends BaseActivity {
 
     @SuppressWarnings("deprecation")
     @SuppressLint("StaticFieldLeak")
-    private class LogsReader extends AsyncTask<File, Integer, ArrayList<String>> {
+    private class LogsReader extends AsyncTask<Path, Integer, List<String>> {
         private AlertDialog mProgressDialog;
         private final Runnable mRunnable = new Runnable() {
             @Override
@@ -253,18 +254,13 @@ public class LogsActivity extends BaseActivity {
         }
 
         @Override
-        protected ArrayList<String> doInBackground(File... log) {
+        protected List<String> doInBackground(Path... log) {
             Thread.currentThread().setPriority(Thread.NORM_PRIORITY + 2);
 
-            ArrayList<String> logs = new ArrayList<>();
+            List<String> logs = new ArrayList<>();
 
             try {
-                File logfile = log[0];
-                try (Scanner scanner = new Scanner(logfile)) {
-                    while (scanner.hasNextLine()) {
-                        logs.add(scanner.nextLine());
-                    }
-                }
+                logs = Files.readAllLines(log[0]);
                 return logs;
             } catch (IOException e) {
                 logs.add(LogsActivity.this.getResources().getString(R.string.logs_cannot_read));
@@ -277,7 +273,7 @@ public class LogsActivity extends BaseActivity {
         }
 
         @Override
-        protected void onPostExecute(ArrayList<String> logs) {
+        protected void onPostExecute(List<String> logs) {
             if (logs.size() == 0) {
                 adapter.setEmpty();
             } else {
@@ -314,7 +310,7 @@ public class LogsActivity extends BaseActivity {
 
         }
 
-        void setLogs(ArrayList<String> logs) {
+        void setLogs(List<String> logs) {
             this.logs.clear();
             this.logs.addAll(logs);
             notifyDataSetChanged();

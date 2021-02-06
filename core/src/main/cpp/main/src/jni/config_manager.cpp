@@ -19,6 +19,10 @@ namespace lspd {
         return env->NewStringUTF(ConfigManager::GetInstance()->GetDataPathPrefix().c_str());
     }
 
+    LSP_DEF_NATIVE_METHOD(jstring, ConfigManager, getLogPath) {
+        return env->NewStringUTF(ConfigManager::GetLogPath().c_str());
+    }
+
     LSP_DEF_NATIVE_METHOD(jstring, ConfigManager, getConfigPath, jstring jSuffix) {
         const char *suffix = env->GetStringUTFChars(jSuffix, JNI_FALSE);
         auto result = ConfigManager::GetInstance()->GetConfigPath(suffix);
@@ -68,6 +72,8 @@ namespace lspd {
             LSP_NATIVE_METHOD(ConfigManager, isResourcesHookEnabled, "()Z"),
             LSP_NATIVE_METHOD(ConfigManager, getInstallerPackageName, "()Ljava/lang/String;"),
             LSP_NATIVE_METHOD(ConfigManager, getDataPathPrefix, "()Ljava/lang/String;"),
+            LSP_NATIVE_METHOD(ConfigManager, getMiscPath, "()Ljava/lang/String;"),
+            LSP_NATIVE_METHOD(ConfigManager, getLogPath, "()Ljava/lang/String;"),
             LSP_NATIVE_METHOD(ConfigManager, getPrefsPath,
                               "(Ljava/lang/String;)Ljava/lang/String;"),
             LSP_NATIVE_METHOD(ConfigManager, getCachePath,
