@@ -217,7 +217,7 @@ else
 fi
 
 if [[ ! -e /data/misc/$MISC_PATH/disable_verbose_log ]]; then
-    echo "0" > /data/misc/$MISC_PATH/disable_verbose_log
+    echo "1" > /data/misc/$MISC_PATH/disable_verbose_log
 fi
 
 ui_print "- ${LANG_CUST_INST_COPY_LIB}"

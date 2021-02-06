@@ -72,24 +72,10 @@ loop_logcat() {
     done
 }
 
-start_log_cather () {
-    LOG_FILE_NAME=$1
-    LOG_TAG_FILTERS=$2
-    CLEAN_OLD=$3
-    START_NEW=$4
-    LOG_FILE="${LOG_PATH}/${LOG_FILE_NAME}.log"
-    PID_FILE="${LOG_PATH}/${LOG_FILE_NAME}.pid"
-    mkdir -p ${LOG_PATH}
-    if [[ ${CLEAN_OLD} == true ]]; then
-        rm "${LOG_FILE}.old"
-        mv "${LOG_FILE}" "${LOG_FILE}.old"
-    fi
-    rm "${LOG_PATH}/${LOG_FILE_NAME}.pid"
-    if [[ ${START_NEW} == false ]]; then
-        return
-    fi
+print_log_head() {
+    LOG_FILE=$1
     touch "${LOG_FILE}"
-    touch "${PID_FILE}"
+    chmod 666 "${LOG_FILE}"
     echo "LSPosed Log">>"${LOG_FILE}"
     echo "--------- beginning of information">>"${LOG_FILE}"
     echo "Manufacturer: ${MANUFACTURER}">>"${LOG_FILE}"
@@ -108,6 +94,26 @@ start_log_cather () {
     echo "Riru version: ${RIRU_VERSION} (${RIRU_VERCODE})">>"${LOG_FILE}"
     echo "Riru api: ${RIRU_APICODE}">>"${LOG_FILE}"
     echo "Magisk: ${MAGISK_VERSION%:*} (${MAGISK_VERCODE})">>"${LOG_FILE}"
+}
+
+start_log_catcher () {
+    LOG_FILE_NAME=$1
+    LOG_TAG_FILTERS=$2
+    CLEAN_OLD=$3
+    START_NEW=$4
+    LOG_FILE="${LOG_PATH}/${LOG_FILE_NAME}.log"
+    PID_FILE="${LOG_PATH}/${LOG_FILE_NAME}.pid"
+    mkdir -p ${LOG_PATH}
+    if [[ ${CLEAN_OLD} == true ]]; then
+        rm "${LOG_FILE}.old"
+        mv "${LOG_FILE}" "${LOG_FILE}.old"
+    fi
+    rm "${LOG_PATH}/${LOG_FILE_NAME}.pid"
+    if [[ ${START_NEW} == false ]]; then
+        return
+    fi
+    touch "${PID_FILE}"
+    print_log_head "${LOG_FILE}"
     loop_logcat -f "${LOG_FILE}" *:S "${LOG_TAG_FILTERS}" &
     LOG_PID=$!
     echo "${LOG_PID}">"${LOG_PATH}/${LOG_FILE_NAME}.pid"
@@ -135,7 +141,9 @@ if [[ ! -z "${MISC_PATH}" ]]; then
     rm -rf ${LOG_PATH}.old
     mv ${LOG_PATH} ${LOG_PATH}.old
     mkdir -p ${LOG_PATH}
+    chmod 771 ${LOG_PATH}
+    print_log_head "${LOG_PATH}/modules.log"
     # start_verbose_log_catcher
-    start_log_cather all "LSPosed:V XSharedPreferences:V LSPosed-Bridge:V LSPosedManager:V *:F" true ${LOG_VERBOSE}
+    start_log_catcher all "LSPosed:V XSharedPreferences:V LSPosed-Bridge:V LSPosedManager:V *:F" true ${LOG_VERBOSE}
 fi
 rm -f /data/adb/lspd/new_install
