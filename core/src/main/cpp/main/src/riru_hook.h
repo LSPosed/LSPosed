@@ -1,20 +1,6 @@
 
 #pragma once
-
-#define XHOOK_REGISTER(NAME) \
-    if (xhook_register(".*", #NAME, (void*) new_##NAME, (void **) &old_##NAME) == 0) { \
-        void *f = riru_get_func(#NAME); \
-        if (f != nullptr) { \
-            memcpy(&old_##NAME, &f, sizeof(void *)); \
-        } \
-        riru_set_func(#NAME, (void *) new_##NAME); \
-    } else { \
-        LOGE("failed to register riru hook " #NAME "."); \
-    }
-
-#define NEW_FUNC_DEF(ret, func, ...) \
-    static ret (*old_##func)(__VA_ARGS__); \
-    static ret new_##func(__VA_ARGS__)
+#include <base/object.h>
 
 namespace lspd {
 
@@ -30,6 +16,6 @@ namespace lspd {
     static constexpr const char *kPropValueCompilerFlagsWS = " --inline-max-code-units=0";
 
 
-    void InstallRiruHooks();
+    void InstallRiruHooks(HookFunType hook_func);
 
 }
