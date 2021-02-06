@@ -104,7 +104,7 @@
     <string name="settings_group_theme">主题</string>
     <string name="material_design_2">惨白设计</string>
     <string name="settings_enable_resources">启用资源钩子</string>
-    <string name="settings_enable_resources_summary"><b>警告: </b> 资源钩子已被弃用</string>
+    <string name="settings_enable_resources_summary"><b>警告: </b> 禁用该选项将导致修改资源的模块无法工作</string>
     <string name="settings_variant">变体</string>
     <string name="menu_show_system_apps">系统应用</string>
     <string name="menu_sort">排序…</string>
