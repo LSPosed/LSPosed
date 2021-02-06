@@ -130,8 +130,6 @@ namespace lspd {
 
         ConfigManager(uid_t uid, bool initialized = false);
 
-        static std::unordered_set<std::string> GetAppList(const std::filesystem::path &dir);
-
         std::string RetrieveInstallerPkgName() const;
 
         static std::string GetPackageNameFromBaseApkPath(const std::filesystem::path &path);

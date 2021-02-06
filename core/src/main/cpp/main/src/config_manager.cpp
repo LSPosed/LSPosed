@@ -214,12 +214,17 @@ namespace lspd {
     }
 
     fs::file_time_type ConfigManager::GetLastWriteTime() const {
-        auto config_path = GetConfigPath();
-        auto list_path = GetConfigPath("modules.list");
-        return std::max({path_exists<true>(config_path) ? fs::last_write_time(config_path)
-                                                        : fs::file_time_type{},
-                         path_exists<true>(list_path) ? fs::last_write_time(list_path)
-                                                      : fs::file_time_type{},});
+        auto last_write_time = [](std::string_view path) __attribute__((always_inline)) {
+            return path_exists<true>(path) ? fs::last_write_time(path) : fs::file_time_type{};
+        };
+        std::string config_path = GetConfigPath();
+        std::string list_path = GetConfigPath("modules.list");
+        std::string variant_path = GetVariantPath();
+        return std::max({
+                                last_write_time(config_path),
+                                last_write_time(list_path),
+                                last_write_time(variant_path)
+                        });
     }
 
     bool ConfigManager::InitConfigPath() const {
