@@ -20,7 +20,7 @@ namespace lspd {
     };
 
     void RegisterArtHeap(JNIEnv *env) {
-        REGISTER_EDXP_NATIVE_METHODS("io.github.lsposed.lspd.nativebridge.Heap");
+        REGISTER_LSP_NATIVE_METHODS(Heap);
     }
 
 }

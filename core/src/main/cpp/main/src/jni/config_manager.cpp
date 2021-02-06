@@ -83,7 +83,7 @@ namespace lspd {
     };
 
     void RegisterConfigManagerMethods(JNIEnv *env) {
-        REGISTER_EDXP_NATIVE_METHODS("io.github.lsposed.lspd.nativebridge.ConfigManager");
+        REGISTER_LSP_NATIVE_METHODS(ConfigManager);
     }
 
 }

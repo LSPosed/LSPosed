@@ -67,8 +67,8 @@ namespace lspd {
             return base_config_path_ / "conf" / suffix;
         }
 
-        inline auto GetLogPath(const std::string &suffix = {}) const {
-            return base_config_path_ / "log" / suffix;
+        inline static auto GetLogPath(const std::string &suffix = {}) {
+            return misc_path_ / "log" / suffix;
         }
 
         inline const auto &GetBaseConfigPath() const { return base_config_path_; }
@@ -83,6 +83,10 @@ namespace lspd {
 
         inline static std::filesystem::path GetSelinuxStatusPath() {
             return "/sys/fs/selinux/enforce";
+        }
+
+        inline static auto GetModulesLogPath() {
+            return GetLogPath("modules.log");
         }
 
         std::vector<std::string> GetAppModuleList(const std::string &pkg_name) const;
