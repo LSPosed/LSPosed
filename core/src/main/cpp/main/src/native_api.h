@@ -8,6 +8,7 @@
 #include <cstdint>
 
 typedef int (*HookFunType)(void *, void *, void **);  // For portability
+typedef void (*LsposedNativeOnModuleLoaded) (const char*);  // param=so name
 struct LsposedNativeAPIEntriesV1 {
     uint32_t version;
     HookFunType inlineHookFunc;
