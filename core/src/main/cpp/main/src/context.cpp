@@ -17,6 +17,7 @@
 #include "config_manager.h"
 #include "native_hook.h"
 #include "jni/logger.h"
+#include "jni/native_api.h"
 #include "symbol_cache.h"
 
 #pragma clang diagnostic push
@@ -117,6 +118,7 @@ namespace lspd {
         RegisterArtHeap(env);
         RegisterEdxpYahfa(env);
         RegisterPendingHooks(env);
+        RegisterNativeAPI(env);
 
         variant_ = Variant(ConfigManager::GetInstance()->GetVariant());
         LOGI("LSP Variant: %d", variant_);

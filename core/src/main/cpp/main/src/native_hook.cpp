@@ -10,6 +10,7 @@
 #include "bionic_linker_restriction.h"
 #include "utils.h"
 #include "logging.h"
+#include "native_api.h"
 #include "native_hook.h"
 #include "riru_hook.h"
 #include "art/runtime/mirror/class.h"
@@ -17,7 +18,6 @@
 #include "art/runtime/class_linker.h"
 #include "art/runtime/gc/heap.h"
 #include "art/runtime/hidden_api.h"
-#include "art/runtime/art_method.h"
 #include "art/runtime/instrumentation.h"
 #include "art/runtime/reflection.h"
 
@@ -68,6 +68,8 @@ namespace lspd {
             ScopedDlHandle art_handle(kLibArtLegacyPath.c_str());
             InstallArtHooks(art_handle.Get());
         }
+
+        InstallNativeAPI(hook_func);
     }
 
     void InstallArtHooks(void *art_handle) {

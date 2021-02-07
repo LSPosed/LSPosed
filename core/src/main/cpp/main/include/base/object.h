@@ -207,8 +207,7 @@ namespace lspd {
     };
 
     template<typename T>
-    inline static bool HookSym(void *handle, HookFunType hook_fun, T &arg) {
-        auto original = Dlsym(handle, arg.sym);
+    inline static bool HookSymNoHandle(void *original, HookFunType hook_fun, T &arg) {
         if (original) {
             if constexpr(is_instance<decltype(arg.backup), MemberFunction>::value) {
                 void *backup;
@@ -222,6 +221,12 @@ namespace lspd {
         } else {
             return false;
         }
+    }
+
+    template<typename T>
+    inline static bool HookSym(void *handle, HookFunType hook_fun, T &arg) {
+        auto original = Dlsym(handle, arg.sym);
+        return HookSymNoHandle(original, hook_fun, arg);
     }
 
     template<typename T, typename...Args>

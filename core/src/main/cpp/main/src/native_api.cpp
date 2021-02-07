@@ -6,6 +6,7 @@
 #include "symbol_cache.h"
 #include <dobby.h>
 #include <vector>
+#include <base/object.h>
 
 /*
  * Module: define xposed_native file in /assets, each line is a .so file name
@@ -24,9 +25,10 @@
 
 namespace lspd {
     static HookFunType hook_func = nullptr;
-    std::vector<LsposedNativeOnModuleLoaded *> moduleLoadedCallbacks;
+    std::vector<LsposedNativeOnModuleLoaded> moduleLoadedCallbacks;
+    std::vector<std::string> moduleNativeLibs;
 
-    LsposedNativeAPIEntriesV1 init(LsposedNativeOnModuleLoaded *onModuleLoaded) {
+    LsposedNativeAPIEntriesV1 init(LsposedNativeOnModuleLoaded onModuleLoaded) {
         if (onModuleLoaded != nullptr) moduleLoadedCallbacks.push_back(onModuleLoaded);
 
         LsposedNativeAPIEntriesV1 ret{
@@ -36,8 +38,48 @@ namespace lspd {
         return ret;
     }
 
+    void RegisterNativeLib(const std::string& library_name) {
+        LOGD("native_api: Registered %s", library_name.c_str());
+        moduleNativeLibs.push_back(library_name);
+    }
+
+    bool hasEnding(std::string_view fullString, std::string_view ending) {
+        if (fullString.length() >= ending.length()) {
+            return (0 == fullString.compare (fullString.length() - ending.length(), ending.length(), ending));
+        } else {
+            return false;
+        }
+    }
+
+    CREATE_HOOK_STUB_ENTRIES(
+            "__dl__Z9do_dlopenPKciPK17android_dlextinfoPKv",
+            void*, do_dlopen, (const char* name, int flags, const void* extinfo,
+                    const void* caller_addr), {
+                auto *handle = backup(name, flags, extinfo, caller_addr);
+                std::string ns(name);
+                LOGD("native_api: do_dlopen(%s)", name);
+                for (std::string_view module_lib: moduleNativeLibs) {
+                    // the so is a module so
+                    if (UNLIKELY(hasEnding(ns, module_lib))) {
+                        LOGI("Loading module native library %s", module_lib.data());
+                        void* native_init_sym = dlsym(handle, "native_init");
+                        if (UNLIKELY(native_init_sym == nullptr)) {
+                            LOGE("Failed to get symbol \"native_init\" from library %s", module_lib.data());
+                        }
+                        auto native_init = reinterpret_cast<NativeInit>(native_init_sym);
+                        native_init(reinterpret_cast<void*>(init));
+                    }
+                }
+
+                // Callbacks
+                for (LsposedNativeOnModuleLoaded callback: moduleLoadedCallbacks) {
+                    callback(name, handle);
+                }
+                return handle;
+            });
+
     void InstallNativeAPI(HookFunType hook_func_) {
         hook_func = hook_func_;
-        // hook_func(symbol_do_dlopen)
+        HookSymNoHandle(symbol_do_dlopen, hook_func, do_dlopen);
     }
 }

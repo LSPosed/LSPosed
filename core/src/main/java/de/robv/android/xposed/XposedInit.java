@@ -41,6 +41,7 @@ import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XC_InitZygote;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import de.robv.android.xposed.callbacks.XCallback;
+import io.github.lsposed.lspd.nativebridge.NativeAPI;
 
 import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
@@ -345,6 +346,7 @@ public final class XposedInit {
                     newLoadedApk.add(apk);
                 } else {
                     loadedModules.add(apk); // temporarily add it for XSharedPreference
+                    loadNativeLibs(apk);
                     boolean loadSuccess = loadModule(apk, topClassLoader, callInitZygote);
                     if (loadSuccess) {
                         newLoadedApk.add(apk);
@@ -389,6 +391,43 @@ public final class XposedInit {
                 }
             }
         }
+    }
+
+    /**
+     * Load all so from an APK by reading <code>assets/native_init</code>.
+     * It will only store the so names but not doing anything.
+     */
+    private static boolean loadNativeLibs(String apk) {
+        ZipFile zipFile = null;
+        InputStream is;
+        try {
+            zipFile = new ZipFile(apk);
+            ZipEntry zipEntry = zipFile.getEntry("assets/xposed_init");
+            if (zipEntry == null) {
+                Log.e(TAG, "  assets/xposed_init not found in the APK");
+                closeSilently(zipFile);
+                return false;
+            }
+            is = zipFile.getInputStream(zipEntry);
+        } catch (IOException e) {
+            Log.w(TAG, "  Cannot read assets/native_init in the APK. Maybe it doesn't support native API", e);
+            closeSilently(zipFile);
+            return false;
+        }
+        BufferedReader moduleLibraryReader = new BufferedReader(new InputStreamReader(is));
+        String moduleLibraryName;
+        try {
+            while ((moduleLibraryName = moduleLibraryReader.readLine()) != null) {
+                NativeAPI.recordNativeEntrypoint(moduleLibraryName);
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "  Failed to load native library list from " + apk, e);
+            return false;
+        } finally {
+            closeSilently(is);
+            closeSilently(zipFile);
+        }
+        return true;
     }
 
     /**
