@@ -14,4 +14,8 @@ struct LsposedNativeAPIEntriesV1 {
     HookFunType inlineHookFunc;
 };
 
+namespace lspd {
+    void InstallNativeAPI(HookFunType hook_func_);
+}
+
 #endif //LSPOSED_NATIVE_API_H

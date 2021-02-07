@@ -3,7 +3,8 @@
 //
 
 #include "native_api.h"
-#include "dobby.h"
+#include "symbol_cache.h"
+#include <dobby.h>
 #include <vector>
 
 /*
@@ -21,13 +22,22 @@
  *      callback will not work.
  */
 
-std::vector<LsposedNativeOnModuleLoaded *> moduleLoadedCallbacks;
-LsposedNativeAPIEntriesV1 init(LsposedNativeOnModuleLoaded *onModuleLoaded) {
-    if (onModuleLoaded != nullptr) moduleLoadedCallbacks.push_back(onModuleLoaded);
-    
-    LsposedNativeAPIEntriesV1 ret{
-            .version = 1,
-            .inlineHookFunc = DobbyHook
-    };
-    return ret;
+namespace lspd {
+    static HookFunType hook_func = nullptr;
+    std::vector<LsposedNativeOnModuleLoaded *> moduleLoadedCallbacks;
+
+    LsposedNativeAPIEntriesV1 init(LsposedNativeOnModuleLoaded *onModuleLoaded) {
+        if (onModuleLoaded != nullptr) moduleLoadedCallbacks.push_back(onModuleLoaded);
+
+        LsposedNativeAPIEntriesV1 ret{
+                .version = 1,
+                .inlineHookFunc = hook_func
+        };
+        return ret;
+    }
+
+    void InstallNativeAPI(HookFunType hook_func_) {
+        hook_func = hook_func_;
+        // hook_func(symbol_do_dlopen)
+    }
 }

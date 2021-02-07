@@ -1,7 +1,6 @@
 #include <jni.h>
 #include <android-base/macros.h>
 #include <JNIHelper.h>
-#include <android-base/logging.h>
 #include "jni/config_manager.h"
 #include "jni/art_class_linker.h"
 #include "jni/art_heap.h"
@@ -9,19 +8,16 @@
 #include "jni/resources_hook.h"
 #include <dl_util.h>
 #include <art/runtime/jni_env_ext.h>
-#include <art/runtime/mirror/class.h>
 #include <android-base/strings.h>
-#include <nativehelper/scoped_local_ref.h>
 #include "jni/pending_hooks.h"
 #include <sandhook.h>
 #include <fstream>
 #include <sstream>
 #include "context.h"
 #include "config_manager.h"
-#include "art/runtime/runtime.h"
-#include "art/runtime/gc/heap.h"
 #include "native_hook.h"
 #include "jni/logger.h"
+#include "symbol_cache.h"
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-value"
@@ -377,6 +373,7 @@ namespace lspd {
                                                jboolean is_child_zygote,
                                                jstring instruction_set,
                                                jstring app_data_dir) {
+        InitSymbolCache();
         const auto&[res, user, package_name] = GetAppInfoFromDir(env, app_data_dir, nice_name);
         app_data_dir_ = app_data_dir;
         nice_name_ = nice_name;

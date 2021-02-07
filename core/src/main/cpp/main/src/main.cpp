@@ -1,22 +1,12 @@
-#include <cstdio>
-#include <unistd.h>
-#include <fcntl.h>
 #include <jni.h>
 #include <cstring>
 #include <cstdlib>
-#include <sys/mman.h>
 #include <array>
-#include <thread>
-#include <vector>
-#include <utility>
-#include <string>
-#include <android-base/logging.h>
 #include "logging.h"
 #include "config.h"
 #include "context.h"
 #include <riru.h>
 #include "config_manager.h"
-#include "native_hook.h"
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-value"
