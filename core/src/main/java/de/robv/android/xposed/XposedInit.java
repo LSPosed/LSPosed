@@ -402,9 +402,9 @@ public final class XposedInit {
         InputStream is;
         try {
             zipFile = new ZipFile(apk);
-            ZipEntry zipEntry = zipFile.getEntry("assets/xposed_init");
+            ZipEntry zipEntry = zipFile.getEntry("assets/native_init");
             if (zipEntry == null) {
-                Log.e(TAG, "  assets/xposed_init not found in the APK");
+                Log.e(TAG, "  assets/native_init not found in the APK");
                 closeSilently(zipFile);
                 return false;
             }
