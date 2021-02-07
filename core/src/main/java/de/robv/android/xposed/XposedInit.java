@@ -442,7 +442,14 @@ public final class XposedInit {
             return false;
         }
 
-        ClassLoader mcl = new PathClassLoader(apk, topClassLoader);
+        // module can load it's own so
+        StringBuilder nativePath = new StringBuilder();
+        for (String i: Build.SUPPORTED_ABIS) {
+            nativePath.append(apk).append("!/lib/").append(i).append(File.pathSeparator);
+        }
+        // Log.d(TAG, "Allowed native path" + nativePath.toString());
+        ClassLoader mcl = new PathClassLoader(apk, nativePath.toString(), topClassLoader);
+
         try {
             if (mcl.loadClass(INSTANT_RUN_CLASS) != null) {
                 Log.e(TAG, "  Cannot load module, please disable \"Instant Run\" in Android Studio.");
