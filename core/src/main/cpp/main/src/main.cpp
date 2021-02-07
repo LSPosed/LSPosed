@@ -7,6 +7,7 @@
 #include "context.h"
 #include <riru.h>
 #include "config_manager.h"
+#include "symbol_cache.h"
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-value"
@@ -15,6 +16,7 @@ namespace lspd {
     static void onModuleLoaded() {
         LOGI("onModuleLoaded: welcome to LSPosed!");
         // rirud must be used in onModuleLoaded
+        InitSymbolCache();
         ConfigManager::Init();
     }
 

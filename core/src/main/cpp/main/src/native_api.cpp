@@ -65,6 +65,7 @@ namespace lspd {
                         void* native_init_sym = dlsym(handle, "native_init");
                         if (UNLIKELY(native_init_sym == nullptr)) {
                             LOGE("Failed to get symbol \"native_init\" from library %s", module_lib.data());
+                            break;
                         }
                         auto native_init = reinterpret_cast<NativeInit>(native_init_sym);
                         native_init(reinterpret_cast<void*>(init));
@@ -79,6 +80,8 @@ namespace lspd {
             });
 
     void InstallNativeAPI(HookFunType hook_func_) {
+        LOGD("InstallNativeAPI: %p", symbol_do_dlopen);
+        symbol_do_dlopen = DobbySymbolResolver(nullptr, "__dl__Z9do_dlopenPKciPK17android_dlextinfoPKv");
         hook_func = hook_func_;
         HookSymNoHandle(symbol_do_dlopen, hook_func, do_dlopen);
     }

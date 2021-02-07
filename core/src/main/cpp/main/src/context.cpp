@@ -18,7 +18,6 @@
 #include "native_hook.h"
 #include "jni/logger.h"
 #include "jni/native_api.h"
-#include "symbol_cache.h"
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-value"
@@ -375,7 +374,6 @@ namespace lspd {
                                                jboolean is_child_zygote,
                                                jstring instruction_set,
                                                jstring app_data_dir) {
-        InitSymbolCache();
         const auto&[res, user, package_name] = GetAppInfoFromDir(env, app_data_dir, nice_name);
         app_data_dir_ = app_data_dir;
         nice_name_ = nice_name;
