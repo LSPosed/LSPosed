@@ -79,13 +79,13 @@ public class AppListActivity extends BaseActivity {
         searchListener = new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                scopeAdapter.filter(query);
+                scopeAdapter.getFilter().filter(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                scopeAdapter.filter(newText);
+                scopeAdapter.getFilter().filter(newText);
                 return false;
             }
         };
