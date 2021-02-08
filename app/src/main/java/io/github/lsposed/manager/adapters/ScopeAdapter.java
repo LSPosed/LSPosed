@@ -61,7 +61,6 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
 
     private final AppListActivity activity;
     private final PackageManager pm;
-    private final ApplicationFilter filter;
     private final SharedPreferences preferences;
     private final String modulePackageName;
     private final String moduleName;
@@ -80,7 +79,6 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         preferences = App.getPreferences();
         fullList = showList = Collections.emptyList();
         checkedList = Collections.emptyList();
-        filter = new ApplicationFilter();
         pm = activity.getPackageManager();
         masterSwitch.setOnCheckedChangedListener(new MasterSwitch.OnCheckedChangeListener() {
             @Override
@@ -257,14 +255,14 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             return false;
         }
         int itemId = item.getItemId();
-        if (itemId == R.id.app_menu_launch) {
+        if (itemId == R.id.menu_launch) {
             Intent launchIntent = pm.getLaunchIntentForPackage(info.packageName);
             if (launchIntent != null) {
                 activity.startActivity(launchIntent);
             }
-        } else if (itemId == R.id.app_menu_compile_speed) {
+        } else if (itemId == R.id.menu_compile_speed) {
             CompileDialogFragment.speed(activity.getSupportFragmentManager(), info);
-        } else if (itemId == R.id.app_menu_store) {
+        } else if (itemId == R.id.menu_app_store) {
             Uri uri = Uri.parse("market://details?id=" + info.packageName);
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -273,7 +271,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else if (itemId == R.id.app_menu_info) {
+        } else if (itemId == R.id.menu_app_info) {
             activity.startActivity(new Intent(ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", info.packageName, null)));
         } else {
             return false;
@@ -364,11 +362,11 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             activity.getMenuInflater().inflate(R.menu.menu_app_item, menu);
             Intent launchIntent = pm.getLaunchIntentForPackage(info.packageName);
             if (launchIntent == null) {
-                menu.removeItem(R.id.app_menu_launch);
+                menu.removeItem(R.id.menu_launch);
             }
             if (android) {
-                menu.removeItem(R.id.app_menu_compile_speed);
-                menu.removeItem(R.id.app_menu_store);
+                menu.removeItem(R.id.menu_compile_speed);
+                menu.removeItem(R.id.menu_app_store);
             }
         });
 
@@ -398,10 +396,6 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     @Override
     public int getItemCount() {
         return showList.size();
-    }
-
-    public void filter(String constraint) {
-        filter.filter(constraint);
     }
 
     public void refresh() {
@@ -446,7 +440,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
 
     private class ApplicationFilter extends Filter {
 
-        private boolean lowercaseContains(String s, CharSequence filter) {
+        private boolean lowercaseContains(String s, String filter) {
             return !TextUtils.isEmpty(s) && s.toLowerCase().contains(filter);
         }
 

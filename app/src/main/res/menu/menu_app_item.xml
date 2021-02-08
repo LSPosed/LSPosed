@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/app_menu_launch"
+        android:id="@+id/menu_launch"
         android:title="@string/app_launch" />
     <item
-        android:id="@+id/app_menu_compile_speed"
+        android:id="@+id/menu_compile_speed"
         android:title="@string/compile_speed" />
     <item
-        android:id="@+id/app_menu_store"
+        android:id="@+id/menu_app_store"
         android:title="@string/modules_app_store" />
     <item
-        android:id="@+id/app_menu_info"
+        android:id="@+id/menu_app_info"
         android:title="@string/module_app_info" />
 </menu>
