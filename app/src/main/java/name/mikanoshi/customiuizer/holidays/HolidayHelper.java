@@ -53,7 +53,7 @@ public class HolidayHelper {
             view.setEmissionRate(rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270 ? 8 : 4);
             view.setFadeOutPercent(0.75f);
             view.setAngle(0);
-            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) view.getLayoutParams();
+            CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) view.getLayoutParams();
             lp.height = activity.getResources().getDisplayMetrics().heightPixels / (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270 ? 2 : 3);
             view.setLayoutParams(lp);
             setWeatherGenerator(new SnowGenerator(activity));
