@@ -187,6 +187,10 @@ public class AppListActivity extends BaseActivity {
         }
     }
 
+    public void makeSnackBar(String text, @Snackbar.Duration int duration) {
+        Snackbar.make(binding.snackbar, text, duration).show();
+    }
+
     public void makeSnackBar(@StringRes int text, @Snackbar.Duration int duration) {
         Snackbar.make(binding.snackbar, text, duration).show();
     }

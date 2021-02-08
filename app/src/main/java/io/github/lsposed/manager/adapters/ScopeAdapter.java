@@ -263,7 +263,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                 activity.startActivity(launchIntent);
             }
         } else if (itemId == R.id.app_menu_compile_speed) {
-            CompileDialogFragment.speed(activity, activity.getSupportFragmentManager(), info);
+            CompileDialogFragment.speed(activity.getSupportFragmentManager(), info);
         } else if (itemId == R.id.app_menu_store) {
             Uri uri = Uri.parse("market://details?id=" + info.packageName);
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);

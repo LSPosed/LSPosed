@@ -21,5 +21,6 @@
         android:id="@+id/message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical" />
+        android:layout_gravity="center_vertical"
+        android:text="@string/compile_speed_msg" />
 </LinearLayout>
