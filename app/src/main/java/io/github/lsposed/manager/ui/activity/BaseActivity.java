@@ -149,7 +149,7 @@ public class BaseActivity extends AppCompatActivity {
                 getWindow().setStatusBarColor(getThemedColor(R.attr.colorPrimaryDark));
             }
         } else {
-            getWindow().setStatusBarColor(getThemedColor(android.R.attr.colorBackground));
+            getWindow().setStatusBarColor(0);
         }
         if (!Objects.equals(theme, getTheme(this) + getCustomTheme() + preferences.getBoolean("md2", true))) {
             recreate();

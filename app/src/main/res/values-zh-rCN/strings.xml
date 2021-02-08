@@ -77,7 +77,6 @@
 
     <!-- LSPd related -->
     <string name="compile_speed_msg">优化中…</string>
-    <string name="done">完成！</string>
 
     <string name="pref_title_disable_verbose_log">禁用详细日志</string>
     <string name="logs_cannot_read">无法读取日志: \n</string>

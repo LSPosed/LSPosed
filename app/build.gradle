@@ -32,6 +32,7 @@ android {
 
     packagingOptions {
         exclude 'META-INF/**'
+        exclude 'kotlin/**'
         exclude 'org/**'
         exclude '**.properties'
         exclude '**.bin'
@@ -72,5 +73,9 @@ dependencies {
     implementation 'tech.rectifier.preferencex-android:preferencex-simplemenu:88f93154b2'
     implementation 'me.zhanghai.android.appiconloader:appiconloader-glide:1.2.0'
     implementation 'me.zhanghai.android.fastscroll:library:1.1.5'
+    //noinspection DifferentStdlibGradleVersion
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.21'
+    implementation 'com.github.jinatonic.confetti:confetti:1.1.2'
+    implementation files('libs/WeatherView-2.0.3.aar')
     compileOnly project(":hiddenapi-stubs")
 }

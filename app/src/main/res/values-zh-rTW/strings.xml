@@ -8,7 +8,7 @@
     <string name="Logs">日誌</string>
     <string name="Settings">設定</string>
     <string name="About">關於</string>
-    
+
     <!-- General/various strings -->
     <string name="menuSend">傳送</string>
     <string name="menuSaveToSd">儲存</string>
@@ -80,7 +80,6 @@
     <string name="android_sdk" translatable="false">Android %2$s (%1$s, API %3$d)</string>
     <string name="not_logcat">這裡是 LSPosed 框架和模組的日誌\n若您需要 Android 的 logcat，您可以嘗試我們 Log Catcher 的 Magisk 模組</string>
 
-    <string name="done">Done!</string>
     <!-- LSPd related -->
     <string name="compile_speed_msg">最佳化中…</string>
 
