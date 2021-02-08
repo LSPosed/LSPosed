@@ -16,24 +16,20 @@
     <string name="android_sdk">Android %2$s (%1$s, API %3$d)</string>
     <string name="app_destroyed">Эта программа прекратила работу, пожалуйста, убедитесь, что загрузили ее из официального источника.</string>
     <string name="app_launch">Запустить</string>
-    <string name="app_name">LSPosed Manager</string>
-    <string name="appbar_scrolling_view_behavior">com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior</string>
     <string name="colorized_action_bar">Цветной ActionBar</string>
     <string name="compile_failed">Ошибка оптимиз��ции или возвращено пустое значение</string>
     <string name="compile_failed_with_info">Ошибка оптимизации:</string>
     <string name="compile_speed">Повторная оптимизация</string>
-    <string name="compile_speed_msg">Оптимизация...</string>
+    <string name="compile_speed_msg">Оптимизация…</string>
     <string name="dont_show_again">Больше не показывать</string>
     <string name="enable_module">Включить модуль</string>
     <string name="failed_to_save_scope_list">Не удалось сохранить список областей</string>
     <string name="follow_system">Системная</string>
-    <string name="group_telegram_channel_link">http://t.me/LSPosed</string>
     <string name="info">Информация</string>
     <string name="install_warning_title">Осторожно!</string>
     <string name="loading">Загрузка…</string>
     <string name="log_is_empty">Пусто.</string>
-    <string name="logs_cannot_read">"Невозможно прочитать логи:
-"</string>
+    <string name="logs_cannot_read">Невозможно прочитать логи:</string>
     <string name="logs_clear_failed">Не удалось очистить логи:</string>
     <string name="logs_cleared">Логи успешно очищены.</string>
     <string name="logs_save_failed">Не удалось сохранить:</string>
@@ -44,12 +40,12 @@
     <string name="menuSaveToSd">Сохранить</string>
     <string name="menuSend">Отправить</string>
     <string name="menu_backup">Создать резервную копию</string>
-    <string name="menu_backup_and_restore">Создание резервной копии...</string>
+    <string name="menu_backup_and_restore">Создание резервной копии…</string>
     <string name="menu_restore">Восстановить</string>
     <string name="menu_show_games">Игры</string>
     <string name="menu_show_modules">Модули</string>
     <string name="menu_show_system_apps">Системные приложения</string>
-    <string name="menu_sort">Сортировка...</string>
+    <string name="menu_sort">Сортировка…</string>
     <string name="module_app_info">Информация о приложении</string>
     <string name="module_disabled_no_selection">Модуль %s отключен, так как ни одна программа не выбрана.</string>
     <string name="module_empty_description">(описание не представлено)</string>
@@ -66,9 +62,7 @@
     <string name="no_scope_selected">Вы не выбрали ни одного приложения. Продолжить?</string>
     <string name="no_scope_selected_has_recommended">Вы не выбрали ни одного приложения. Выбрать рекомендуемые приложения?</string>
     <string name="not_installed">Не установлено</string>
-    <string name="not_logcat">"Это логи LSPosed Framework и модулей,
-если вам нужен Android logcat, вы можете попробовать наш модуль Magisk Log Catcher"</string>
-    <string name="ok">OK</string>
+    <string name="not_logcat">Это логи LSPosed Framework и модулей, если вам нужен Android logcat, вы можете попробовать наш модуль Magisk Log Catcher</string>
     <string name="outdated_manager">Версия LSPosed Manager и LSPosed Core не согласуются. Пожалуйста, установите соответствующую версию.</string>
     <string name="pref_title_disable_verbose_log">Отключить подробные логи</string>
     <string name="primary_color">Основной цвет</string>
@@ -83,7 +77,7 @@
     <string name="settings_backup_and_restore_summery">Резервное копирование или восстановление списка модулей и списков областей.</string>
     <string name="settings_backup_failed">Не удалось сделать резервную копию</string>
     <string name="settings_backup_success">Резервное копирование завершено!</string>
-    <string name="settings_backuping">Резервное копирование...</string>
+    <string name="settings_backuping">Резервное копирование…</string>
     <string name="settings_enable_resources">Включить хуки ресурсов</string>
     <string name="settings_enable_resources_summary">ВНИМАНИЕ: хуки ресурсов устарели</string>
     <string name="settings_group_framework">Framework</string>
@@ -91,7 +85,7 @@
     <string name="settings_restore">Восстановление</string>
     <string name="settings_restore_failed">Не удалось восстановить</string>
     <string name="settings_restore_success">Восстановление завершено!</string>
-    <string name="settings_restoring">Восстановление...</string>
+    <string name="settings_restoring">Восстановление…</string>
     <string name="settings_theme">Тема</string>
     <string name="settings_theme_dark">Темная</string>
     <string name="settings_theme_light">Светлая</string>
