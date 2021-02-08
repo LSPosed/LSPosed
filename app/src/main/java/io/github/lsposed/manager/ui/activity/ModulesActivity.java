@@ -74,7 +74,17 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 }
             }
             Comparator<PackageInfo> cmp = AppHelper.getAppListComparator(0, pm);
-            fullList.sort((a, b) -> cmp.compare(a.pkg, b.pkg));
+            fullList.sort((a, b) -> {
+                boolean aChecked = moduleUtil.isModuleEnabled(a.packageName);
+                boolean bChecked = moduleUtil.isModuleEnabled(b.packageName);
+                if (aChecked == bChecked) {
+                    return cmp.compare(a.pkg, b.pkg);
+                } else if (aChecked) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            });
             adapter.addAll(showList);
             adapter.notifyDataSetChanged();
             moduleUtil.updateModulesList();
