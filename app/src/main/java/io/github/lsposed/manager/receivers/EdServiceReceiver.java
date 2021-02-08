@@ -28,9 +28,9 @@ public class EdServiceReceiver extends BroadcastReceiver {
         }
 
         if (intent.getAction().equals("io.github.lsposed.action.MODULE_NOT_ACTIVATAED")) {
-            NotificationUtil.showNotActivatedNotification(packageName, module.getAppName());
+            NotificationUtil.showNotification(context, packageName, module.getAppName(), false);
         } else if (intent.getAction().equals("io.github.lsposed.action.MODULE_UPDATED")) {
-            NotificationUtil.showModulesUpdatedNotification(module.getAppName());
+            NotificationUtil.showNotification(context, packageName, module.getAppName(), true);
         }
     }
 }
