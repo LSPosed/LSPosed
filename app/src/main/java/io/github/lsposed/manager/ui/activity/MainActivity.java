@@ -37,14 +37,17 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-            ViewCompat.setOnApplyWindowInsetsListener(binding.nestedScrollView, (v, insets) -> {
-                Insets insets1 = insets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.ime());
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+        ViewCompat.setOnApplyWindowInsetsListener(binding.nestedScrollView, (v, insets) -> {
+            Insets insets1 = insets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.ime());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 v.setPadding(insets1.left, insets1.top, insets1.right, insets1.bottom);
-                return WindowInsetsCompat.CONSUMED;
-            });
-        }
+            } else {
+                v.setPadding(0, insets1.top, 0, 0);
+                binding.getRoot().setPadding(insets1.left, 0, insets1.right, insets1.bottom);
+            }
+            return WindowInsetsCompat.CONSUMED;
+        });
         HolidayHelper.setup(this);
         binding.status.setOnClickListener(v -> {
             if (Constants.getXposedVersionCode() != -1) {
