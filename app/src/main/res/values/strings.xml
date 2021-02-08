@@ -80,10 +80,9 @@
     <string name="android_sdk" translatable="false">Android %2$s (%1$s, API %3$d)</string>
     <string name="not_logcat">This is the LSPosed Framework and modules log\nif you need a Android logcat, you can try our Log Catcher Magisk module</string>
 
-    <string name="done">Done!</string>
-
     <!-- LSPd related -->
-    <string name="compile_speed_msg">Optimizing …</string>
+    <string name="compile_speed_msg">Optimizing…</string>
+    <string name="compile_done">Optimization complete.</string>
 
     <string name="about_source" translatable="false">https://github.com/LSPosed/LSPosed/</string>
 
@@ -92,7 +91,7 @@
     <string name="pref_title_disable_verbose_log">Disable verbose logs</string>
     <string name="logs_cannot_read">Cannot read log: \n</string>
     <string name="app_launch">Launch it</string>
-    <string name="compile_failed">Optimization failed or return value is empty</string>
+    <string name="compile_failed">Optimization failed or return value is empty.</string>
     <string name="compile_failed_with_info">Optimization failed: </string>
     <string name="not_installed">Not installed</string>
     <string name="pure_black_dark_theme">Use the pure black dark theme</string>
