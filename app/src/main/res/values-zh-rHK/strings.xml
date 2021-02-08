@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+<resources>
     <string name="Activated">已激活</string>
     <string name="Install">安裝</string>
     <string name="InstallDetail">點按安裝 LSPosed</string>
@@ -11,20 +11,16 @@
     <!-- General/various strings -->
     <string name="menuSend">發送</string>
     <string name="menuSaveToSd">保存</string>
-
+    <string name="ok">OK</string>
     <!-- Welcome screen / main sections -->
-
     <!-- navigation view items -->
     <string name="nav_item_modules">模塊</string>
     <string name="nav_item_logs">詳細日誌</string>
     <string name="nav_item_logs_err">模塊日誌</string>
-
     <!-- Installer tab -->
     <string name="install_warning_title">請小心！</string>
     <string name="dont_show_again">不再提示</string>
-
     <!-- File operations -->
-
     <!-- Modules tab -->
     <string name="module_is_not_activated_yet">LSPosed 模塊尚未激活</string>
     <string name="module_is_not_activated_yet_detailed">%s 已安裝, 但尚未激活</string>
@@ -34,57 +30,47 @@
     <string name="warning_xposed_min_version">該模塊需要更新版本的 LSPosed(%d), 因此無法被激活</string>
     <string name="no_min_version_specified">該模塊未指定所需的 LSPosed 版本</string>
     <string name="warning_min_version_too_low">該模塊針對 LSPosed %1$d 版本構建 , 由於不兼容 %2$d 版本中的變更, 現已被停用</string>
-    <string name="module_app_info">應用信息</string>
     <string name="modules_app_store">在應用商店查看</string>
+    <string name="module_app_info">應用信息</string>
     <string name="module_uninstall">卸載</string>
-
     <!-- Download tab -->
     <string name="menuReload">重新加載</string>
-
     <!-- Settings tab -->
     <string name="settings_group_framework">框架</string>
+    <string name="settings_enable_resources">Enable resource hooks</string>
+    <string name="settings_enable_resources_summary"><b>WARNING:</b> Resource hooks are deprecated</string>
     <string name="settings_theme">主題</string>
     <string name="settings_theme_light">亮色</string>
     <string name="settings_theme_dark">暗色</string>
-
     <!-- Support tab -->
-
     <!-- Logs tab  -->
+    <string name="logs_save_failed">Failed to save:</string>
     <string name="menuClearLog">立即清理日誌</string>
     <string name="logs_cleared">日誌清理成功</string>
     <string name="logs_clear_failed">無法清理日誌: </string>
     <string name="log_is_empty">日誌為空</string>
-
     <!-- About tab -->
     <string name="about_source_label">源代碼</string>
-
     <!-- DownloadView -->
-
     <!-- DownloadUtils -->
-
     <!-- RepoLoader -->
-
     <string name="warning_installed_on_external_storage">此模塊因被安裝在 SD 卡中而導致無法加載, 請將其移動到內部存儲</string>
-
     <string name="info">信息</string>
-
     <string name="scroll_top">滾動到頂部</string>
     <string name="loading">正在加載…</string>
     <string name="scroll_bottom">滾動到底部</string>
     <string name="not_logcat">此處僅顯示 LSPosed 及模塊相關日誌信息\n如果您想抓取系統日誌, 可以嘗試我們的 Log Catcher Magisk 模塊</string>
-
     <!-- LSPd related -->
     <string name="compile_speed_msg">優化中…</string>
-
+    <string name="compile_done">Optimization complete.</string>
     <string name="pref_title_disable_verbose_log">禁用詳細日誌</string>
     <string name="logs_cannot_read">無法讀取日誌: \n</string>
     <string name="app_launch">運行</string>
     <string name="compile_failed">優化失敗或返回值為空</string>
+    <string name="compile_failed_with_info">Optimization failed: </string>
     <string name="not_installed">未安裝</string>
+    <string name="pure_black_dark_theme">使用純黑深色主題</string>
     <string name="follow_system">跟隨系統</string>
-    <string name="pure_black_dark_theme">使用純黑深色主題</string><![CDATA[>
-
-    ]]>
     <string name="transparent_status_bar">透明狀態欄</string>
     <string name="sort_by_name">應用名稱</string>
     <string name="sort_by_name_reverse">應用名稱（降序）</string>
@@ -98,4 +84,41 @@
     <string name="accent_color">強調色</string>
     <string name="colorized_action_bar">着色應用欄</string>
     <string name="settings_group_theme">主題</string>
+    <string name="material_design_2">Material Design 2</string>
+    <string name="settings_variant">Variant</string>
+    <string name="menu_show_system_apps">System apps</string>
+    <string name="menu_sort">Sorting…</string>
+    <string name="enable_module">Enable module</string>
+    <string name="no_scope_selected">You did not select any app. Continue?</string>
+    <string name="menu_show_games">Games</string>
+    <string name="menu_show_modules">Modules</string>
+    <string name="failed_to_save_scope_list">Failed save scope list</string>
+    <string name="module_settings">Module settings</string>
+    <string name="app_description">%s\nVersion: %s</string>
+    <string name="use_recommended">Recommended</string>
+    <string name="no_scope_selected_has_recommended">You did not select any app. Select recommended apps?</string>
+    <string name="use_recommended_message">Select recommended apps?</string>
+    <string name="requested_by_module">Recommended</string>
+    <string name="module_disabled_no_selection">Module %s has been disabled since no app selected.</string>
+    <string name="android_framework">System Framework</string>
+    <string name="app_destroyed">This application has been destroyed, please make sure you download it from the official source.</string>
+    <string name="compile_speed">Re-optimize</string>
+    <string name="selinux_permissive">&lt;b&gt;WARNING:&lt;\/b&gt; SELinux is not enforcing! the malicious program that attacks this can completely control your device and may cause your property damage and legal liability.</string>
+    <string name="selinux_permissive_summary">SELinux is not enforcing!</string>
+    <string name="outdated_manager">Version of LSPosed Manager and LSPosed Core are not consistent. Please re-install the corresponding version.</string>
+    <string name="lsposed_not_active">LSPosed is not currently installed or active.</string>
+    <string name="settings_backup_and_restore">Backup and restore</string>
+    <string name="settings_backup_and_restore_summery">Backup or restore module list and scope lists.</string>
+    <string name="settings_backup">Backup</string>
+    <string name="settings_backuping">Backing up…</string>
+    <string name="settings_backup_success">Backup finished!</string>
+    <string name="settings_backup_failed">Failed to backup</string>
+    <string name="settings_restore">Restore</string>
+    <string name="settings_restoring">Restoring…</string>
+    <string name="settings_restore_success">Restore finished!</string>
+    <string name="settings_restore_failed">Failed to restore</string>
+    <string name="menu_backup_and_restore">Backup…</string>
+    <string name="menu_backup">Backup</string>
+    <string name="menu_restore">Restore</string>
+    <string name="xposed_module_updated_notification_content">%s has been updated</string>
 </resources>
