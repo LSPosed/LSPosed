@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+<resources>
     <string name="Activated">已激活</string>
     <string name="Install">安装</string>
     <string name="InstallDetail">点按安装 LSPosed</string>
@@ -12,20 +12,15 @@
     <string name="menuSend">发送</string>
     <string name="menuSaveToSd">保存</string>
     <string name="ok">确定</string>
-
     <!-- Welcome screen / main sections -->
-
     <!-- navigation view items -->
     <string name="nav_item_modules">模块</string>
     <string name="nav_item_logs">详细日志</string>
     <string name="nav_item_logs_err">模块日志</string>
-
     <!-- Installer tab -->
     <string name="install_warning_title">请小心！</string>
     <string name="dont_show_again">不再提示</string>
-
     <!-- File operations -->
-
     <!-- Modules tab -->
     <string name="module_is_not_activated_yet">LSPosed 模块尚未激活</string>
     <string name="module_is_not_activated_yet_detailed">%s 已安装, 但尚未激活</string>
@@ -35,57 +30,47 @@
     <string name="warning_xposed_min_version">该模块需要更新版本的 LSPosed(%d), 因此无法被激活</string>
     <string name="no_min_version_specified">该模块未指定所需的 LSPosed 版本</string>
     <string name="warning_min_version_too_low">该模块针对 LSPosed %1$d 版本构建 , 由于不兼容 %2$d 版本中的变更, 现已被停用</string>
-    <string name="module_app_info">应用信息</string>
     <string name="modules_app_store">在应用商店查看</string>
+    <string name="module_app_info">应用信息</string>
     <string name="module_uninstall">卸载</string>
-
     <!-- Download tab -->
     <string name="menuReload">重新加载</string>
-
     <!-- Settings tab -->
     <string name="settings_group_framework">框架</string>
+    <string name="settings_enable_resources">启用资源钩子</string>
+    <string name="settings_enable_resources_summary"><b>警告: </b> 资源钩子已被弃用</string>
     <string name="settings_theme">主题</string>
     <string name="settings_theme_light">亮色</string>
     <string name="settings_theme_dark">暗色</string>
-
     <!-- Support tab -->
-
     <!-- Logs tab  -->
     <string name="logs_save_failed">保存失败：</string>
     <string name="menuClearLog">立即清理日志</string>
     <string name="logs_cleared">日志清理成功</string>
     <string name="logs_clear_failed">无法清理日志: </string>
     <string name="log_is_empty">日志为空</string>
-
     <!-- About tab -->
     <string name="about_source_label">源代码</string>
-
     <!-- DownloadView -->
-
     <!-- DownloadUtils -->
-
     <!-- RepoLoader -->
-
     <string name="warning_installed_on_external_storage">此模块因被安装在 SD 卡中而导致无法加载, 请将其移动到内部存储</string>
-
     <string name="info">信息</string>
-
     <string name="scroll_top">滚动到顶部</string>
     <string name="loading">正在加载…</string>
     <string name="scroll_bottom">滚动到底部</string>
     <string name="not_logcat">此处仅显示 LSPosed 及模块相关日志信息\n如果您想抓取系统日志, 可以尝试我们的 Log Catcher Magisk 模块</string>
-
     <!-- LSPd related -->
     <string name="compile_speed_msg">优化中…</string>
-
+    <string name="compile_done">优化完成</string>
     <string name="pref_title_disable_verbose_log">禁用详细日志</string>
     <string name="logs_cannot_read">无法读取日志: \n</string>
     <string name="app_launch">运行</string>
     <string name="compile_failed">优化失败或返回值为空</string>
     <string name="compile_failed_with_info">优化失败: </string>
     <string name="not_installed">未安装</string>
-    <string name="follow_system">跟随系统</string>
     <string name="pure_black_dark_theme">使用纯黑深色主题</string>
+    <string name="follow_system">跟随系统</string>
     <string name="transparent_status_bar">透明状态栏</string>
     <string name="sort_by_name">应用名称</string>
     <string name="sort_by_name_reverse">应用名称（降序）</string>
@@ -100,8 +85,6 @@
     <string name="colorized_action_bar">着色应用栏</string>
     <string name="settings_group_theme">主题</string>
     <string name="material_design_2">惨白设计</string>
-    <string name="settings_enable_resources">启用资源钩子</string>
-    <string name="settings_enable_resources_summary"><b>警告: </b> 资源钩子已被弃用</string>
     <string name="settings_variant">变体</string>
     <string name="menu_show_system_apps">系统应用</string>
     <string name="menu_sort">排序…</string>
@@ -138,5 +121,4 @@
     <string name="menu_backup">备份</string>
     <string name="menu_restore">恢复</string>
     <string name="xposed_module_updated_notification_content">%s 已更新</string>
-    <string name="compile_done">优化完成</string>
 </resources>
