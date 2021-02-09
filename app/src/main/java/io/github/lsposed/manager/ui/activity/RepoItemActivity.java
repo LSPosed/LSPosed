@@ -190,11 +190,9 @@ public class RepoItemActivity extends BaseActivity {
                 }
             }
             if (position == 0) {
-                binding.appBar.setLiftOnScrollTargetViewId(R.id.scrollView);
                 holder.textView.setTransformationMethod(new LinkTransformationMethod(RepoItemActivity.this));
                 markwon.setMarkdown(holder.textView, module.getReadme());
             } else {
-                binding.appBar.setLiftOnScrollTargetViewId(R.id.recyclerView);
                 ReleaseAdapter adapter = new ReleaseAdapter(module.getReleases());
                 holder.recyclerView.setAdapter(adapter);
                 holder.recyclerView.setLayoutManager(new LinearLayoutManagerFix(RepoItemActivity.this));
