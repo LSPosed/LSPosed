@@ -1,1 +1,2 @@
+rootProject.name = "LSPosed"
 include ':core', ':hiddenapi-stubs', ':sandhook-hooklib', ':sandhook-annotation', ':app', ':key-selector'
