@@ -1,5 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
-    <string name="app_name" translatable="false">LSPosed Manager</string>
+<resources xmlns:tools="http://schemas.android.com/tools" >
     <string name="Activated">已啟用</string>
     <string name="Install">安裝</string>
     <string name="InstallDetail">點選安裝 LSPosed</string>
