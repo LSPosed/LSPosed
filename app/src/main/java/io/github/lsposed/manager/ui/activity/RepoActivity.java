@@ -34,26 +34,17 @@ import androidx.appcompat.app.ActionBar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.Gson;
-
-import java.io.IOException;
-
-import io.github.lsposed.manager.App;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.databinding.ActivityAppListBinding;
 import io.github.lsposed.manager.repo.RepoLoader;
 import io.github.lsposed.manager.repo.model.OnlineModule;
 import io.github.lsposed.manager.util.LinearLayoutManagerFix;
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class RepoActivity extends BaseActivity implements RepoLoader.Listener {
+    private final RepoLoader repoLoader = RepoLoader.getInstance();
     private ActivityAppListBinding binding;
     private RepoAdapter adapter;
-    private RepoLoader repoLoader = RepoLoader.getInstance();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,15 +71,14 @@ public class RepoActivity extends BaseActivity implements RepoLoader.Listener {
         }
         repoLoader.addListener(this);
         fastScrollerBuilder.build();
-        binding.swipeRefreshLayout.setOnRefreshListener(() -> {
-            repoLoader.loadRemoteData();
-        });
+        binding.swipeRefreshLayout.setOnRefreshListener(repoLoader::loadRemoteData);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         adapter.setData(repoLoader.getOnlineModules());
+        binding.swipeRefreshLayout.setRefreshing(adapter.getItemCount() == 0);
     }
 
     @Override

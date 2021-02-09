@@ -22,6 +22,7 @@ package io.github.lsposed.manager.ui.activity;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.text.util.Linkify;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -49,9 +50,13 @@ import io.github.lsposed.manager.databinding.ItemRepoReleaseBinding;
 import io.github.lsposed.manager.databinding.ItemRepoReleasesBinding;
 import io.github.lsposed.manager.repo.model.OnlineModule;
 import io.github.lsposed.manager.repo.model.Release;
+import io.github.lsposed.manager.util.GlideApp;
 import io.github.lsposed.manager.util.LinearLayoutManagerFix;
 import io.github.lsposed.manager.util.NavUtil;
+import io.github.lsposed.manager.util.chrome.LinkTransformationMethod;
 import io.noties.markwon.Markwon;
+import io.noties.markwon.image.glide.GlideImagesPlugin;
+import io.noties.markwon.linkify.LinkifyPlugin;
 
 public class RepoItemActivity extends BaseActivity {
     ActivityModuleDetailBinding binding;
@@ -71,7 +76,10 @@ public class RepoItemActivity extends BaseActivity {
         bar.setTitle(module.getDescription());
         bar.setSubtitle(module.getName());
         bar.setDisplayHomeAsUpEnabled(true);
-        markwon = Markwon.create(this);
+        markwon = Markwon.builder(this)
+                .usePlugin(GlideImagesPlugin.create(GlideApp.with(this)))
+                .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
+                .build();
         binding.viewPager.setAdapter(new PagerAdapter());
         binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -83,7 +91,7 @@ public class RepoItemActivity extends BaseActivity {
                 }
             }
         });
-        int[] titles = new int[]{R.string.module_readme, R.string.module_readme};
+        int[] titles = new int[]{R.string.module_readme, R.string.module_releases};
         new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> tab.setText(titles[position])).attach();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
@@ -183,6 +191,7 @@ public class RepoItemActivity extends BaseActivity {
             }
             if (position == 0) {
                 binding.appBar.setLiftOnScrollTargetViewId(R.id.scrollView);
+                holder.textView.setTransformationMethod(new LinkTransformationMethod(RepoItemActivity.this));
                 markwon.setMarkdown(holder.textView, module.getReadme());
             } else {
                 binding.appBar.setLiftOnScrollTargetViewId(R.id.recyclerView);
