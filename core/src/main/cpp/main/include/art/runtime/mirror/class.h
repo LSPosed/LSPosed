@@ -55,13 +55,13 @@ namespace art {
             Class(void *thiz) : HookedObject(thiz) {}
 
             // @ApiSensitive(Level.MIDDLE)
-            static void Setup(void *handle, HookFunType hook_func) {
+            static void Setup(void *handle) {
                 RETRIEVE_MEM_FUNC_SYMBOL(GetDescriptor, "_ZN3art6mirror5Class13GetDescriptorEPNSt3__112"
                                                     "basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEE");
 
                 RETRIEVE_MEM_FUNC_SYMBOL(GetClassDef, "_ZN3art6mirror5Class11GetClassDefEv");
 
-                lspd::HookSyms(handle, hook_func, IsInSamePackage);
+                lspd::HookSyms(handle, IsInSamePackage);
             }
 
             const char *GetDescriptor(std::string *storage) {

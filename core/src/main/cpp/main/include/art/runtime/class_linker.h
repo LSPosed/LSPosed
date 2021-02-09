@@ -79,7 +79,7 @@ namespace art {
         }
 
         // @ApiSensitive(Level.MIDDLE)
-        static void Setup(void *handle, HookFunType hook_func) {
+        static void Setup(void *handle) {
             LOGD("Classlinker hook setup, handle=%p", handle);
             int api_level = lspd::GetAndroidApiLevel();
             size_t OFFSET_classlinker;  // Get offset from art::Runtime::RunRootClinits() call in IDA
@@ -128,7 +128,7 @@ namespace art {
             RETRIEVE_MEM_FUNC_SYMBOL(SetEntryPointsToInterpreter,
                                      "_ZNK3art11ClassLinker27SetEntryPointsToInterpreterEPNS_9ArtMethodE");
 
-            lspd::HookSyms(handle, hook_func, ShouldUseInterpreterEntrypoint);
+            lspd::HookSyms(handle, ShouldUseInterpreterEntrypoint);
 
             if (api_level >= __ANDROID_API_R__) {
                 // In android R, FixupStaticTrampolines won't be called unless it's marking it as
@@ -136,9 +136,9 @@ namespace art {
                 // So we miss some calls between initialized and visiblyInitialized.
                 // Therefore we hook the new introduced MarkClassInitialized instead
                 // This only happens on non-x86 devices
-                lspd::HookSyms(handle, hook_func, MarkClassInitialized);
+                lspd::HookSyms(handle, MarkClassInitialized);
             } else {
-                lspd::HookSyms(handle, hook_func, FixupStaticTrampolines);
+                lspd::HookSyms(handle, FixupStaticTrampolines);
             }
 
             // MakeInitializedClassesVisiblyInitialized will cause deadlock

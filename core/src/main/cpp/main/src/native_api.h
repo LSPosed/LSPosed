@@ -14,11 +14,11 @@ typedef void (*LsposedNativeOnModuleLoaded) (const char* name, void* handle);
 typedef void (*NativeInit)(void * init_func);
 struct LsposedNativeAPIEntriesV1 {
     uint32_t version;
-    HookFunType inlineHookFunc;
+    lspd::HookFunType inlineHookFunc;
 };
 
 namespace lspd {
-    void InstallNativeAPI(HookFunType hook_func_);
+    void InstallNativeAPI();
     void RegisterNativeLib(const std::string& library_name);
 }
 

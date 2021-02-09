@@ -26,7 +26,7 @@ namespace art {
             return Thread(CurrentFromGdb());
         }
 
-        static void Setup(void *handle, [[maybe_unused]] HookFunType hook_func) {
+        static void Setup(void *handle) {
             RETRIEVE_MEM_FUNC_SYMBOL(DecodeJObject,
                                  "_ZNK3art6Thread13DecodeJObjectEP8_jobject");
             RETRIEVE_FUNC_SYMBOL(CurrentFromGdb,

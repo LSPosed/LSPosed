@@ -24,7 +24,6 @@
  */
 
 namespace lspd {
-    static HookFunType hook_func = nullptr;
     std::vector<LsposedNativeOnModuleLoaded> moduleLoadedCallbacks;
     std::vector<std::string> moduleNativeLibs;
 
@@ -33,7 +32,7 @@ namespace lspd {
 
         LsposedNativeAPIEntriesV1 ret{
                 .version = 1,
-                .inlineHookFunc = hook_func
+                .inlineHookFunc = HookFunction
         };
         return ret;
     }
@@ -82,10 +81,9 @@ namespace lspd {
                 return handle;
             });
 
-    void InstallNativeAPI(HookFunType hook_func_) {
+    void InstallNativeAPI() {
         LOGD("InstallNativeAPI: %p", symbol_do_dlopen);
         symbol_do_dlopen = DobbySymbolResolver(nullptr, "__dl__Z9do_dlopenPKciPK17android_dlextinfoPKv");
-        hook_func = hook_func_;
-        HookSymNoHandle(symbol_do_dlopen, hook_func, do_dlopen);
+        HookSymNoHandle(symbol_do_dlopen, do_dlopen);
     }
 }

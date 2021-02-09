@@ -31,7 +31,7 @@ namespace art {
             }
 
             // @ApiSensitive(Level.MIDDLE)
-            static void Setup(void *handle, HookFunType hook_func) {
+            static void Setup(void *handle) {
                 int api_level = lspd::GetAndroidApiLevel();
                 size_t OFFSET_heap;  // Get offset from art::Runtime::RunRootClinits() call in IDA
                 switch (api_level) {

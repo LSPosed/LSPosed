@@ -22,8 +22,8 @@ namespace art {
                     }
                 });
 
-        static void DisableUpdateHookedMethodsCode(void *handle, HookFunType hook_func) {
-            lspd::HookSym(handle, hook_func, UpdateMethodsCode);
+        static void DisableUpdateHookedMethodsCode(void *handle) {
+            lspd::HookSym(handle, UpdateMethodsCode);
         }
     }
 }
