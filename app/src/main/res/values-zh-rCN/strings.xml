@@ -77,7 +77,6 @@
 
     <!-- LSPd related -->
     <string name="compile_speed_msg">优化中…</string>
-    <string name="done">完成！</string>
 
     <string name="pref_title_disable_verbose_log">禁用详细日志</string>
     <string name="logs_cannot_read">无法读取日志: \n</string>
@@ -138,4 +137,6 @@
     <string name="menu_backup_and_restore">备份…</string>
     <string name="menu_backup">备份</string>
     <string name="menu_restore">恢复</string>
+    <string name="xposed_module_updated_notification_content">%s 已更新</string>
+    <string name="compile_done">优化完成</string>
 </resources>

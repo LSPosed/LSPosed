@@ -11,7 +11,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import io.github.lsposed.manager.ui.activity.CrashReportActivity;
-import io.github.lsposed.manager.util.NotificationUtil;
 
 public class App extends Application {
     public static final String TAG = "LSPosedManager";
@@ -61,7 +60,5 @@ public class App extends Application {
         instance = this;
 
         pref = PreferenceManager.getDefaultSharedPreferences(this);
-
-        NotificationUtil.init();
     }
 }

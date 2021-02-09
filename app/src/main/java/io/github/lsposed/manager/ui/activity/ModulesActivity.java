@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,26 +20,30 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
-import java.util.Objects;
+import java.util.List;
 
 import io.github.lsposed.manager.Constants;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.adapters.AppHelper;
-import io.github.lsposed.manager.adapters.ScopeAdapter;
 import io.github.lsposed.manager.databinding.ActivityAppListBinding;
 import io.github.lsposed.manager.util.GlideApp;
 import io.github.lsposed.manager.util.LinearLayoutManagerFix;
@@ -50,52 +55,12 @@ import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
 public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleListener {
 
     ActivityAppListBinding binding;
-    private ApplicationFilter filter;
     private SearchView searchView;
     private SearchView.OnQueryTextListener mSearchListener;
     private PackageManager pm;
     private ModuleUtil moduleUtil;
     private ModuleAdapter adapter = null;
-    private final Runnable reloadModules = new Runnable() {
-        public void run() {
-            String queryStr = searchView != null ? searchView.getQuery().toString() : "";
-            ArrayList<ModuleUtil.InstalledModule> showList;
-            ArrayList<ModuleUtil.InstalledModule> fullList = new ArrayList<>(moduleUtil.getModules().values());
-            if (queryStr.length() == 0) {
-                showList = fullList;
-            } else {
-                showList = new ArrayList<>();
-                String filter = queryStr.toLowerCase();
-                for (ModuleUtil.InstalledModule info : fullList) {
-                    if (lowercaseContains(ScopeAdapter.getAppLabel(info.app, pm), filter)
-                            || lowercaseContains(info.packageName, filter)) {
-                        showList.add(info);
-                    }
-                }
-            }
-            Comparator<PackageInfo> cmp = AppHelper.getAppListComparator(0, pm);
-            fullList.sort((a, b) -> {
-                boolean aChecked = moduleUtil.isModuleEnabled(a.packageName);
-                boolean bChecked = moduleUtil.isModuleEnabled(b.packageName);
-                if (aChecked == bChecked) {
-                    return cmp.compare(a.pkg, b.pkg);
-                } else if (aChecked) {
-                    return -1;
-                } else {
-                    return 1;
-                }
-            });
-            adapter.addAll(showList);
-            adapter.notifyDataSetChanged();
-            moduleUtil.updateModulesList();
-            binding.swipeRefreshLayout.setRefreshing(false);
-        }
-    };
     private String selectedPackageName;
-
-    private void filter(String constraint) {
-        filter.filter(constraint);
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -109,7 +74,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         if (bar != null) {
             bar.setDisplayHomeAsUpEnabled(true);
         }
-        filter = new ApplicationFilter();
         moduleUtil = ModuleUtil.getInstance();
         pm = getPackageManager();
         adapter = new ModuleAdapter();
@@ -127,27 +91,26 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             fastScrollerBuilder.useMd2Style();
         }
         fastScrollerBuilder.build();
-        binding.swipeRefreshLayout.setOnRefreshListener(reloadModules::run);
+        binding.swipeRefreshLayout.setOnRefreshListener(() -> adapter.refresh(true));
         mSearchListener = new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                filter(query);
+                adapter.getFilter().filter(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                filter(newText);
+                adapter.getFilter().filter(newText);
                 return false;
             }
         };
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        reloadModules.run();
+        adapter.refresh();
     }
 
     @Override
@@ -162,13 +125,11 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
     public void onDestroy() {
         super.onDestroy();
         moduleUtil.removeListener(this);
-        binding.recyclerView.setAdapter(null);
-        adapter = null;
     }
 
     @Override
     public void onSingleInstalledModuleReloaded(ModuleUtil moduleUtil, String packageName, ModuleUtil.InstalledModule module) {
-        runOnUiThread(reloadModules);
+        adapter.refresh();
     }
 
     @Override
@@ -210,10 +171,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         return super.onContextItemSelected(item);
     }
 
-    private boolean lowercaseContains(String s, CharSequence filter) {
-        return !TextUtils.isEmpty(s) && s.toLowerCase().contains(filter);
-    }
-
     @Override
     public void onBackPressed() {
         if (searchView.isIconified()) {
@@ -223,8 +180,13 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         }
     }
 
-    private class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.ViewHolder> {
-        ArrayList<ModuleUtil.InstalledModule> items = new ArrayList<>();
+    private class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.ViewHolder> implements Filterable {
+        private List<ModuleUtil.InstalledModule> fullList, showList;
+
+        ModuleAdapter() {
+            fullList = showList = Collections.emptyList();
+            refresh();
+        }
 
         @NonNull
         @Override
@@ -235,39 +197,22 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            ModuleUtil.InstalledModule item = items.get(position);
-            boolean enabled = moduleUtil.isModuleEnabled(item.packageName);
-            holder.itemView.setOnClickListener(v -> {
-                Intent intent = new Intent(ModulesActivity.this, AppListActivity.class);
-                intent.putExtra("modulePackageName", item.packageName);
-                intent.putExtra("moduleName", item.getAppName());
-                startActivity(intent);
-            });
-
-            holder.itemView.setOnLongClickListener(v -> {
-                selectedPackageName = item.packageName;
-                return false;
-            });
-
-            holder.root.setAlpha(enabled ? 1.0f : .5f);
-
-            holder.itemView.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
-                getMenuInflater().inflate(R.menu.context_menu_modules, menu);
-                Intent intent = AppHelper.getSettingsIntent(item.packageName, pm);
-                if (intent == null) {
-                    menu.removeItem(R.id.menu_launch);
-                }
-            });
+            ModuleUtil.InstalledModule item = showList.get(position);
+            holder.root.setAlpha(moduleUtil.isModuleEnabled(item.packageName) ? 1.0f : .5f);
             holder.appName.setText(item.getAppName());
-
-            TextView version = holder.appVersion;
-            version.setText(Objects.requireNonNull(item).versionName);
-            version.setSelected(true);
-
             GlideApp.with(holder.appIcon)
                     .load(item.getPackageInfo())
-                    .into(holder.appIcon);
+                    .into(new CustomTarget<Drawable>() {
+                        @Override
+                        public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                            holder.appIcon.setImageDrawable(resource);
+                        }
 
+                        @Override
+                        public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                        }
+                    });
             SpannableStringBuilder sb = new SpannableStringBuilder();
             if (!item.getDescription().isEmpty()) {
                 sb.append(item.getDescription());
@@ -300,26 +245,78 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 sb.setSpan(foregroundColorSpan, sb.length() - warningText.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
             }
             holder.appDescription.setText(sb);
-        }
 
-        void addAll(ArrayList<ModuleUtil.InstalledModule> items) {
-            this.items = items;
-            notifyDataSetChanged();
+            holder.itemView.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
+                getMenuInflater().inflate(R.menu.context_menu_modules, menu);
+                Intent intent = AppHelper.getSettingsIntent(item.packageName, pm);
+                if (intent == null) {
+                    menu.removeItem(R.id.menu_launch);
+                }
+            });
+
+            holder.itemView.setOnClickListener(v -> {
+                Intent intent = new Intent(ModulesActivity.this, AppListActivity.class);
+                intent.putExtra("modulePackageName", item.packageName);
+                intent.putExtra("moduleName", item.getAppName());
+                startActivity(intent);
+            });
+
+            holder.itemView.setOnLongClickListener(v -> {
+                selectedPackageName = item.packageName;
+                return false;
+            });
+
+            holder.appVersion.setVisibility(View.VISIBLE);
+            holder.appVersion.setText(item.versionName);
+            holder.appVersion.setSelected(true);
         }
 
         @Override
         public int getItemCount() {
-            if (items != null) {
-                return items.size();
-            } else {
-                return 0;
-            }
+            return showList.size();
         }
 
         @Override
         public long getItemId(int position) {
-            return items.get(position).hashCode();
+            return showList.get(position).packageName.hashCode();
         }
+
+        @Override
+        public Filter getFilter() {
+            return new ApplicationFilter();
+        }
+
+        public void refresh() {
+            refresh(false);
+        }
+
+        public void refresh(boolean force) {
+            if (force) moduleUtil.reloadInstalledModules();
+            runOnUiThread(reloadModules);
+        }
+
+        private final Runnable reloadModules = new Runnable() {
+            public void run() {
+                fullList = new ArrayList<>(moduleUtil.getModules().values());
+                Comparator<PackageInfo> cmp = AppHelper.getAppListComparator(0, pm);
+                fullList.sort((a, b) -> {
+                    boolean aChecked = moduleUtil.isModuleEnabled(a.packageName);
+                    boolean bChecked = moduleUtil.isModuleEnabled(b.packageName);
+                    if (aChecked == bChecked) {
+                        return cmp.compare(a.pkg, b.pkg);
+                    } else if (aChecked) {
+                        return -1;
+                    } else {
+                        return 1;
+                    }
+                });
+                showList = fullList;
+                binding.swipeRefreshLayout.setRefreshing(false);
+                String queryStr = searchView != null ? searchView.getQuery().toString() : "";
+                runOnUiThread(() -> getFilter().filter(queryStr));
+                moduleUtil.updateModulesList();
+            }
+        };
 
         class ViewHolder extends RecyclerView.ViewHolder {
             View root;
@@ -336,23 +333,39 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 appName = itemView.findViewById(R.id.app_name);
                 appDescription = itemView.findViewById(R.id.description);
                 appVersion = itemView.findViewById(R.id.version_name);
-                appVersion.setVisibility(View.VISIBLE);
                 warningText = itemView.findViewById(R.id.warning);
             }
         }
-    }
 
-    class ApplicationFilter extends Filter {
+        class ApplicationFilter extends Filter {
 
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            runOnUiThread(reloadModules);
-            return null;
-        }
+            private boolean lowercaseContains(String s, String filter) {
+                return !TextUtils.isEmpty(s) && s.toLowerCase().contains(filter);
+            }
 
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            runOnUiThread(reloadModules);
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                if (constraint.toString().isEmpty()) {
+                    showList = fullList;
+                } else {
+                    ArrayList<ModuleUtil.InstalledModule> filtered = new ArrayList<>();
+                    String filter = constraint.toString().toLowerCase();
+                    for (ModuleUtil.InstalledModule info : fullList) {
+                        if (lowercaseContains(info.getAppName(), filter) ||
+                                lowercaseContains(info.packageName, filter) ||
+                                lowercaseContains(info.getDescription(), filter)) {
+                            filtered.add(info);
+                        }
+                    }
+                    showList = filtered;
+                }
+                return null;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                notifyDataSetChanged();
+            }
         }
     }
 }

@@ -79,13 +79,13 @@ public class AppListActivity extends BaseActivity {
         searchListener = new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                scopeAdapter.filter(query);
+                scopeAdapter.getFilter().filter(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                scopeAdapter.filter(newText);
+                scopeAdapter.getFilter().filter(newText);
                 return false;
             }
         };
@@ -185,6 +185,10 @@ public class AppListActivity extends BaseActivity {
         } else {
             searchView.setIconified(true);
         }
+    }
+
+    public void makeSnackBar(String text, @Snackbar.Duration int duration) {
+        Snackbar.make(binding.snackbar, text, duration).show();
     }
 
     public void makeSnackBar(@StringRes int text, @Snackbar.Duration int duration) {

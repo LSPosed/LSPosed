@@ -8,13 +8,15 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Lifecycle;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -23,25 +25,19 @@ import java.lang.ref.WeakReference;
 import io.github.lsposed.manager.App;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.databinding.FragmentCompileDialogBinding;
-import io.github.lsposed.manager.util.ToastUtil;
+import io.github.lsposed.manager.ui.activity.AppListActivity;
 
 @SuppressWarnings("deprecation")
 public class CompileDialogFragment extends AppCompatDialogFragment {
 
-    // TODO:
     private static final String[] COMPILE_RESET_COMMAND = new String[]{"cmd", "package", "compile", "-f", "-m", "speed", ""};
 
     private static final String KEY_APP_INFO = "app_info";
-    private static final String KEY_MSG = "msg";
     private ApplicationInfo appInfo;
 
-    public CompileDialogFragment() {
-    }
-
-    public static void speed(Context context, FragmentManager fragmentManager, ApplicationInfo info) {
+    public static void speed(FragmentManager fragmentManager, ApplicationInfo info) {
         Bundle arguments = new Bundle();
         arguments.putParcelable(KEY_APP_INFO, info);
-        arguments.putString(KEY_MSG, context.getString(R.string.compile_speed_msg));
         CompileDialogFragment fragment = new CompileDialogFragment();
         fragment.setArguments(arguments);
         fragment.setCancelable(false);
@@ -59,18 +55,15 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
         if (appInfo == null) {
             throw new IllegalStateException("appInfo should not be null.");
         }
-        String msg = arguments.getString(KEY_MSG, getString(R.string.compile_speed_msg));
+
+        FragmentCompileDialogBinding binding = FragmentCompileDialogBinding.inflate(LayoutInflater.from(requireActivity()), null, false);
         final PackageManager pm = requireContext().getPackageManager();
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext())
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireActivity())
                 .setIcon(appInfo.loadIcon(pm))
                 .setTitle(appInfo.loadLabel(pm))
-                .setCancelable(false);
-        FragmentCompileDialogBinding binding = FragmentCompileDialogBinding.inflate(LayoutInflater.from(requireContext()), null, false);
-        builder.setView(binding.getRoot());
-        binding.message.setText(msg);
-        AlertDialog alertDialog = builder.create();
-        alertDialog.setCanceledOnTouchOutside(false);
-        return alertDialog;
+                .setView(binding.getRoot());
+
+        return builder.create();
     }
 
     @Override
@@ -83,11 +76,7 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
             command[6] = appInfo.packageName;
             new CompileTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, command);
         } else {
-            try {
-                dismissAllowingStateLoss();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            dismissAllowingStateLoss();
         }
     }
 
@@ -101,9 +90,6 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
 
         @Override
         protected String doInBackground(String... commands) {
-            if (outerRef.get() == null) {
-                return "";
-            }
             try {
                 Process process = Runtime.getRuntime().exec(commands);
                 BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
@@ -138,19 +124,25 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
 
         @Override
         protected void onPostExecute(String result) {
-            try {
-                outerRef.get().dismissAllowingStateLoss();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
             Context context = App.getInstance();
+            String text;
             if (result.length() == 0) {
-                ToastUtil.showLongToast(context, R.string.compile_failed);
+                text = context.getString(R.string.compile_failed);
             } else if (result.length() >= 5 && "Error".equals(result.substring(0, 5))) {
-                ToastUtil.showLongToast(context, context.getString(R.string.compile_failed_with_info) + " " + result.substring(6));
+                text = context.getString(R.string.compile_failed_with_info) + " " + result.substring(6);
             } else {
-                ToastUtil.showLongToast(context, R.string.done);
+                text = context.getString(R.string.compile_done);
             }
+            CompileDialogFragment fragment = outerRef.get();
+            if (fragment != null) {
+                fragment.dismissAllowingStateLoss();
+                AppListActivity activity = (AppListActivity) fragment.getActivity();
+                if (activity != null && activity.getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
+                    activity.makeSnackBar(text, Snackbar.LENGTH_LONG);
+                    return;
+                }
+            }
+            Toast.makeText(context, text, Toast.LENGTH_LONG).show();
         }
     }
 }
