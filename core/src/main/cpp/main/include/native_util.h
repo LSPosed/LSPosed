@@ -36,7 +36,7 @@ namespace lspd {
                                                             jint method_count) {
 
         ScopedLocalRef<jclass> clazz(env,
-                                     Context::GetInstance()->FindClassFromLoader(env, class_name));
+                                     Context::GetInstance()->FindClassFromCurrentLoader(env, class_name));
         if (clazz.get() == nullptr) {
             LOG(FATAL) << "Couldn't find class: " << class_name;
             return;

@@ -53,8 +53,6 @@ namespace lspd {
 
         void CallOnPostFixupStaticTrampolines(void *class_ptr);
 
-        void PrepareJavaEnv(JNIEnv *env);
-
         void FindAndCall(JNIEnv *env, const char *method_name, const char *method_sig, ...) const;
 
         inline auto *GetJavaVM() const { return vm_; }
@@ -69,13 +67,9 @@ namespace lspd {
 
         inline auto GetAppModulesList() const { return app_modules_list_; }
 
-        inline jclass FindClassFromLoader(JNIEnv *env, const std::string &className) const {
-            return FindClassFromLoader(env, className.c_str());
-        };
-
-        inline jclass FindClassFromLoader(JNIEnv *env, const char *className) const {
+        inline jclass FindClassFromCurrentLoader(JNIEnv *env, std::string_view className) const {
             return FindClassFromLoader(env, GetCurrentClassLoader(), className);
-        }
+        };
 
         void OnNativeForkAndSpecializePre(JNIEnv *env, jclass clazz, jint uid, jint gid,
                                           jintArray gids, jint runtime_flags, jobjectArray rlimits,
@@ -93,13 +87,10 @@ namespace lspd {
                                          jlong permitted_capabilities,
                                          jlong effective_capabilities);
 
-        inline auto IsInitialized() const { return initialized_; }
-
         inline auto GetVariant() const { return variant_; };
 
     private:
         inline static std::unique_ptr<Context> instance_;
-        bool initialized_ = false;
         Variant variant_ = NONE;
         jobject inject_class_loader_ = nullptr;
         jclass entry_class_ = nullptr;
@@ -109,33 +100,29 @@ namespace lspd {
         jclass class_linker_class_ = nullptr;
         jmethodID post_fixup_static_mid_ = nullptr;
         bool skip_ = false;
-        std::vector<std::vector<signed char>> dexes;
-        std::vector<std::string> app_modules_list_;
+        std::vector<signed char> dex{};
+        std::vector<std::string> app_modules_list_{};
 
         Context() {}
 
         void PreLoadDex(const std::filesystem::path &dex_paths);
 
-        void InjectDexAndInit(JNIEnv *env);
+        void LoadDex(JNIEnv *env);
 
-        inline jclass FindClassFromLoader(JNIEnv *env, jobject class_loader,
-                                          const std::string &class_name) const {
-            return FindClassFromLoader(env, class_loader, class_name.c_str());
-        }
+        void Init(JNIEnv *env);
 
-        static jclass
-        FindClassFromLoader(JNIEnv *env, jobject class_loader, const char *class_name);
+        static jclass FindClassFromLoader(JNIEnv *env, jobject class_loader,
+                                          std::string_view class_name);
 
         static bool
         ShouldSkipInject(const std::string &package_name, uid_t user, uid_t uid, bool res,
-                         const std::function<bool()>& empty_list,
+                         const std::function<bool()> &empty_list,
                          bool is_child_zygote);
 
-        static std::tuple<bool, uid_t, std::string> GetAppInfoFromDir(JNIEnv *env, jstring dir, jstring nice_name);
+        static std::tuple<bool, uid_t, std::string>
+        GetAppInfoFromDir(JNIEnv *env, jstring dir, jstring nice_name);
 
         friend std::unique_ptr<Context> std::make_unique<Context>();
-
-        static void RegisterEdxpService(JNIEnv *env);
     };
 
 }

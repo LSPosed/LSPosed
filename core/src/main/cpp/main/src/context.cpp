@@ -37,6 +37,7 @@
 #include "native_hook.h"
 #include "jni/logger.h"
 #include "jni/native_api.h"
+#include "service.h"
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-value"
@@ -66,23 +67,19 @@ namespace lspd {
     }
 
     void Context::PreLoadDex(const fs::path &dex_path) {
-        if (LIKELY(!dexes.empty())) return;
+        if (LIKELY(!dex.empty())) return;
 
         std::ifstream is(dex_path, std::ios::binary);
         if (!is.good()) {
             LOGE("Cannot load path %s", dex_path.c_str());
             return;
         }
-        dexes.emplace_back(std::istreambuf_iterator<char>(is),
-                           std::istreambuf_iterator<char>());
-        LOGI("Loaded %s with size %zu", dex_path.c_str(), dexes.back().size());
+        dex.assign(std::istreambuf_iterator<char>(is),
+                   std::istreambuf_iterator<char>());
+        LOGI("Loaded %s with size %zu", dex_path.c_str(), dex.size());
     }
 
-    void Context::InjectDexAndInit(JNIEnv *env) {
-        if (LIKELY(initialized_)) {
-            return;
-        }
-
+    void Context::LoadDex(JNIEnv *env) {
         jclass classloader = JNI_FindClass(env, "java/lang/ClassLoader");
         jmethodID getsyscl_mid = JNI_GetStaticMethodID(
                 env, classloader, "getSystemClassLoader", "()Ljava/lang/ClassLoader;");
@@ -93,17 +90,12 @@ namespace lspd {
         }
         jclass in_memory_classloader = JNI_FindClass(env, "dalvik/system/InMemoryDexClassLoader");
         jmethodID initMid = JNI_GetMethodID(env, in_memory_classloader, "<init>",
-                                            "([Ljava/nio/ByteBuffer;Ljava/lang/ClassLoader;)V");
+                                            "(Ljava/nio/ByteBuffer;Ljava/lang/ClassLoader;)V");
         jclass byte_buffer_class = JNI_FindClass(env, "java/nio/ByteBuffer");
-        auto buffer_array = env->NewObjectArray(dexes.size(), byte_buffer_class, nullptr);
-        for (size_t i = 0; i != dexes.size(); ++i) {
-            auto &dex = dexes.at(i);
-            auto buffer = env->NewDirectByteBuffer(reinterpret_cast<void *>(dex.data()),
+        auto dex_buffer = env->NewDirectByteBuffer(reinterpret_cast<void *>(dex.data()),
                                                    dex.size());
-            env->SetObjectArrayElement(buffer_array, i, buffer);
-        }
         jobject my_cl = JNI_NewObject(env, in_memory_classloader, initMid,
-                                      buffer_array, sys_classloader);
+                                      dex_buffer, sys_classloader);
         env->DeleteLocalRef(classloader);
         env->DeleteLocalRef(sys_classloader);
         env->DeleteLocalRef(in_memory_classloader);
@@ -118,10 +110,15 @@ namespace lspd {
 
         env->DeleteLocalRef(my_cl);
 
-        // initialize pending methods related
         env->GetJavaVM(&vm_);
+
+        // Make sure config manager is always working
+        RegisterConfigManagerMethods(env);
+    }
+
+    void Context::Init(JNIEnv *env) {
         class_linker_class_ = (jclass) env->NewGlobalRef(
-                FindClassFromLoader(env, kClassLinkerClassName));
+                FindClassFromCurrentLoader(env, kClassLinkerClassName));
         post_fixup_static_mid_ = JNI_GetStaticMethodID(env, class_linker_class_,
                                                        "onPostFixupStaticTrampolines",
                                                        "(Ljava/lang/Class;)V");
@@ -131,7 +128,6 @@ namespace lspd {
 
         RegisterLogger(env);
         RegisterEdxpResourcesHook(env);
-        RegisterConfigManagerMethods(env);
         RegisterArtClassLinker(env);
         RegisterEdxpYahfa(env);
         RegisterPendingHooks(env);
@@ -140,13 +136,12 @@ namespace lspd {
         variant_ = Variant(ConfigManager::GetInstance()->GetVariant());
         LOGI("LSP Variant: %d", variant_);
 
-        initialized_ = true;
-
         if (variant_ == SANDHOOK) {
             //for SandHook variant
-            ScopedLocalRef sandhook_class(env, FindClassFromLoader(env, kSandHookClassName));
+            ScopedLocalRef sandhook_class(env, FindClassFromCurrentLoader(env, kSandHookClassName));
             ScopedLocalRef nevercall_class(env,
-                                           FindClassFromLoader(env, kSandHookNeverCallClassName));
+                                           FindClassFromCurrentLoader(env,
+                                                                      kSandHookNeverCallClassName));
             if (sandhook_class == nullptr || nevercall_class == nullptr) { // fail-fast
                 return;
             }
@@ -158,9 +153,10 @@ namespace lspd {
     }
 
     jclass
-    Context::FindClassFromLoader(JNIEnv *env, jobject class_loader, const char *class_name) {
-        jclass clz = JNI_GetObjectClass(env, class_loader);
-        jmethodID mid = JNI_GetMethodID(env, clz, "loadClass",
+    Context::FindClassFromLoader(JNIEnv *env, jobject class_loader, std::string_view class_name) {
+        if (class_loader == nullptr) return nullptr;
+        static jclass clz = JNI_FindClass(env, "dalvik/system/DexClassLoader");
+        static jmethodID mid = JNI_GetMethodID(env, clz, "loadClass",
                                         "(Ljava/lang/String;)Ljava/lang/Class;");
         jclass ret = nullptr;
         if (!mid) {
@@ -168,20 +164,15 @@ namespace lspd {
         }
         if (LIKELY(mid)) {
             jobject target = JNI_CallObjectMethod(env, class_loader, mid,
-                                                  env->NewStringUTF(class_name));
+                                                  env->NewStringUTF(class_name.data()));
             if (target) {
                 return (jclass) target;
             }
         } else {
             LOGE("No loadClass/findClass method found");
         }
-        LOGE("Class %s not found", class_name);
+        LOGE("Class %s not found", class_name.data());
         return ret;
-    }
-
-
-    inline void Context::PrepareJavaEnv(JNIEnv *env) {
-        InjectDexAndInit(env);
     }
 
     inline void Context::FindAndCall(JNIEnv *env, const char *method_name,
@@ -222,73 +213,8 @@ namespace lspd {
             skip_ = true;
             LOGD("skip injecting into android because no module hooks it");
         }
-        if (!skip_) {
-            PreLoadDex(ConfigManager::GetInjectDexPath());
-        }
+        PreLoadDex(ConfigManager::GetInjectDexPath());
         ConfigManager::GetInstance()->EnsurePermission("android", 1000);
-    }
-
-    void Context::RegisterEdxpService(JNIEnv *env) {
-        auto path = ConfigManager::GetFrameworkPath("lspd.dex");
-        std::ifstream is(path, std::ios::binary);
-        if (!is.good()) {
-            LOGE("Cannot load path %s", path.c_str());
-            return;
-        }
-        std::vector<unsigned char> dex{std::istreambuf_iterator<char>(is),
-                                       std::istreambuf_iterator<char>()};
-        LOGI("Loaded %s with size %zu", path.c_str(), dex.size());
-
-        jclass classloader = JNI_FindClass(env, "java/lang/ClassLoader");
-        jmethodID getsyscl_mid = JNI_GetStaticMethodID(
-                env, classloader, "getSystemClassLoader", "()Ljava/lang/ClassLoader;");
-        jobject sys_classloader = JNI_CallStaticObjectMethod(env, classloader, getsyscl_mid);
-
-        if (UNLIKELY(!sys_classloader)) {
-            LOGE("getSystemClassLoader failed!!!");
-            return;
-        }
-        // load dex
-        jobject bufferDex = env->NewDirectByteBuffer(reinterpret_cast<void *>(dex.data()),
-                                                     dex.size());
-
-        jclass in_memory_classloader = JNI_FindClass(env, "dalvik/system/InMemoryDexClassLoader");
-        jmethodID initMid = JNI_GetMethodID(env, in_memory_classloader, "<init>",
-                                            "(Ljava/nio/ByteBuffer;Ljava/lang/ClassLoader;)V");
-        jobject my_cl = JNI_NewObject(env, in_memory_classloader,
-                                      initMid,
-                                      bufferDex,
-                                      sys_classloader);
-
-        env->DeleteLocalRef(classloader);
-        env->DeleteLocalRef(sys_classloader);
-        env->DeleteLocalRef(in_memory_classloader);
-
-        if (UNLIKELY(my_cl == nullptr)) {
-            LOGE("InMemoryDexClassLoader creation failed!!!");
-            return;
-        }
-
-        auto service_class = (jclass) env->NewGlobalRef(
-                FindClassFromLoader(env, my_cl, "io.github.lsposed.lspd.service.ServiceProxy"));
-        if (LIKELY(service_class)) {
-            jfieldID path_fid = JNI_GetStaticFieldID(env, service_class, "CONFIG_PATH",
-                                                     "Ljava/lang/String;");
-            jfieldID pn_fid = JNI_GetStaticFieldID(env, service_class, "INSTALLER_PACKAGE_NAME",
-                                                   "Ljava/lang/String;");
-            if (LIKELY(path_fid) && LIKELY(pn_fid)) {
-                env->SetStaticObjectField(service_class, path_fid, env->NewStringUTF(
-                        ConfigManager::GetMiscPath().c_str()));
-                env->SetStaticObjectField(service_class, pn_fid, env->NewStringUTF(
-                        ConfigManager::GetInstance()->GetInstallerPackageName().c_str()));
-                jmethodID install_mid = JNI_GetStaticMethodID(env, service_class,
-                                                              "install", "()V");
-                if (LIKELY(install_mid)) {
-                    JNI_CallStaticVoidMethod(env, service_class, install_mid);
-                    LOGW("Installed LSPosed Service");
-                }
-            }
-        }
     }
 
     int
@@ -305,14 +231,15 @@ namespace lspd {
                     munmap(buf, 1);
                 }
             }
+            LoadDex(env);
             if (!skip_) {
                 InstallInlineHooks();
-                PrepareJavaEnv(env);
+                Init(env);
                 // only do work in child since FindAndCall would print log
                 FindAndCall(env, "forkSystemServerPost", "(II)V", res,
                             variant_);
             }
-            RegisterEdxpService(env);
+            InitService(*this, env);
         } else {
             // in zygote process, res is child zygote pid
             // don't print log here, see https://github.com/RikkaApps/Riru/blob/77adfd6a4a6a81bfd20569c910bc4854f2f84f5e/riru-core/jni/main/jni_native_method.cpp#L55-L66
@@ -414,8 +341,9 @@ namespace lspd {
         if (res == 0) {
             const JUTFString process_name(env, nice_name_);
             if (!skip_) {
+                LoadDex(env);
                 InstallInlineHooks();
-                PrepareJavaEnv(env);
+                Init(env);
                 LOGD("Done prepare");
                 FindAndCall(env, "forkAndSpecializePost",
                             "(ILjava/lang/String;Ljava/lang/String;I)V",
@@ -433,6 +361,7 @@ namespace lspd {
         }
         return 0;
     }
+
 
 }
 
