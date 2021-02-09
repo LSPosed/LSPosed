@@ -21,7 +21,7 @@ namespace art {
         JNIEnvExt(void *thiz) : HookedObject(thiz) {}
 
         // @ApiSensitive(Level.MIDDLE)
-        static void Setup(void *handle, HookFunType hook_func) {
+        static void Setup(void *handle) {
             RETRIEVE_MEM_FUNC_SYMBOL(NewLocalRef, "_ZN3art9JNIEnvExt11NewLocalRefEPNS_6mirror6ObjectE");
             RETRIEVE_MEM_FUNC_SYMBOL(DeleteLocalRef, "_ZN3art9JNIEnvExt14DeleteLocalRefEP8_jobject");
         }

@@ -7,6 +7,7 @@
 #include <dlfcn.h>
 #include <sys/mman.h>
 #include "config.h"
+#include "native_hook.h"
 
 #define _uintval(p)               reinterpret_cast<uintptr_t>(p)
 #define _ptr(p)                   reinterpret_cast<void *>(p)
@@ -18,8 +19,6 @@
 #define _make_rwx(p, n)           ::mprotect(_ptr_align(p), \
                                               _page_align(_uintval(p) + n) != _page_align(_uintval(p)) ? _page_align(n) + _page_size : _page_align(n), \
                                               PROT_READ | PROT_WRITE | PROT_EXEC)
-
-typedef void (*HookFunType)(void *, void *, void **);
 
 #define CONCATENATE(a, b) a##b
 
@@ -110,10 +109,9 @@ namespace lspd {
         return Dlsym(handle, last...);
     }
 
-    ALWAYS_INLINE inline static void HookFunction(HookFunType hook_fun, void *original,
-                                                  void *replace, void **backup) {
+    ALWAYS_INLINE inline static void HookFunction(void *original, void *replace, void **backup) {
         _make_rwx(original, _page_size);
-        hook_fun(original, replace, backup);
+        hook_func(original, replace, backup);
     }
 
     template<class, template<class, class...> class>
@@ -207,15 +205,14 @@ namespace lspd {
     };
 
     template<typename T>
-    inline static bool HookSym(void *handle, HookFunType hook_fun, T &arg) {
-        auto original = Dlsym(handle, arg.sym);
+    inline static bool HookSymNoHandle(void *original, T &arg) {
         if (original) {
             if constexpr(is_instance<decltype(arg.backup), MemberFunction>::value) {
                 void *backup;
-                HookFunction(hook_fun, original, reinterpret_cast<void *>(arg.replace), &backup);
+                HookFunction(original, reinterpret_cast<void *>(arg.replace), &backup);
                 arg.backup = reinterpret_cast<typename decltype(arg.backup)::FunType>(backup);
             } else {
-                HookFunction(hook_fun, original, reinterpret_cast<void *>(arg.replace),
+                HookFunction(original, reinterpret_cast<void *>(arg.replace),
                              reinterpret_cast<void **>(&arg.backup));
             }
             return true;
@@ -224,9 +221,15 @@ namespace lspd {
         }
     }
 
+    template<typename T>
+    inline static bool HookSym(void *handle, T &arg) {
+        auto original = Dlsym(handle, arg.sym);
+        return HookSymNoHandle(original, arg);
+    }
+
     template<typename T, typename...Args>
-    inline static bool HookSyms(void *handle, HookFunType hook_fun, T &first, Args &...rest) {
-        if (!(HookSym(handle, hook_fun, first) || ... || HookSym(handle, hook_fun, rest))) {
+    inline static bool HookSyms(void *handle, T &first, Args &...rest) {
+        if (!(HookSym(handle, first) || ... || HookSym(handle, rest))) {
             LOGW("Hook Fails: %s", first.sym);
             return false;
         }

@@ -41,6 +41,7 @@ import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XC_InitZygote;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import de.robv.android.xposed.callbacks.XCallback;
+import io.github.lsposed.lspd.nativebridge.NativeAPI;
 
 import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
@@ -345,6 +346,7 @@ public final class XposedInit {
                     newLoadedApk.add(apk);
                 } else {
                     loadedModules.add(apk); // temporarily add it for XSharedPreference
+                    loadNativeLibs(apk);
                     boolean loadSuccess = loadModule(apk, topClassLoader, callInitZygote);
                     if (loadSuccess) {
                         newLoadedApk.add(apk);
@@ -392,6 +394,45 @@ public final class XposedInit {
     }
 
     /**
+     * Load all so from an APK by reading <code>assets/native_init</code>.
+     * It will only store the so names but not doing anything.
+     */
+    private static boolean loadNativeLibs(String apk) {
+        ZipFile zipFile = null;
+        InputStream is;
+        try {
+            zipFile = new ZipFile(apk);
+            ZipEntry zipEntry = zipFile.getEntry("assets/native_init");
+            if (zipEntry == null) {
+                Log.e(TAG, "  assets/native_init not found in the APK");
+                closeSilently(zipFile);
+                return false;
+            }
+            is = zipFile.getInputStream(zipEntry);
+        } catch (IOException e) {
+            Log.w(TAG, "  Cannot read assets/native_init in the APK. Maybe it doesn't support native API", e);
+            closeSilently(zipFile);
+            return false;
+        }
+        BufferedReader moduleLibraryReader = new BufferedReader(new InputStreamReader(is));
+        String moduleLibraryName;
+        try {
+            while ((moduleLibraryName = moduleLibraryReader.readLine()) != null) {
+                if (!moduleLibraryName.startsWith("#") && moduleLibraryName.endsWith(".so")) {
+                    NativeAPI.recordNativeEntrypoint(moduleLibraryName);
+                }
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "  Failed to load native library list from " + apk, e);
+            return false;
+        } finally {
+            closeSilently(is);
+            closeSilently(zipFile);
+        }
+        return true;
+    }
+
+    /**
      * Load a module from an APK by calling the init(String) method for all classes defined
      * in <code>assets/xposed_init</code>.
      */
@@ -403,7 +444,14 @@ public final class XposedInit {
             return false;
         }
 
-        ClassLoader mcl = new PathClassLoader(apk, topClassLoader);
+        // module can load it's own so
+        StringBuilder nativePath = new StringBuilder();
+        for (String i: Build.SUPPORTED_ABIS) {
+            nativePath.append(apk).append("!/lib/").append(i).append(File.pathSeparator);
+        }
+        // Log.d(TAG, "Allowed native path" + nativePath.toString());
+        ClassLoader mcl = new PathClassLoader(apk, nativePath.toString(), topClassLoader);
+
         try {
             if (mcl.loadClass(INSTANT_RUN_CLASS) != null) {
                 Log.e(TAG, "  Cannot load module, please disable \"Instant Run\" in Android Studio.");

@@ -16,6 +16,6 @@ namespace lspd {
     static constexpr const char *kPropValueCompilerFlagsWS = " --inline-max-code-units=0";
 
 
-    void InstallRiruHooks(HookFunType hook_func);
+    void InstallRiruHooks();
 
 }

@@ -101,7 +101,7 @@ namespace lspd {
                 return res;
             });
 
-    void InstallRiruHooks(HookFunType hook_func) {
+    void InstallRiruHooks() {
 
         LOGI("Start to install Riru hook");
 
@@ -112,8 +112,7 @@ namespace lspd {
             LOGE("Failed to get symbol of __system_property_get");
             return;
         }
-        HookFunction(hook_func, sym, reinterpret_cast<void *>(decltype(__system_property_get)::replace),
-                  reinterpret_cast<void **>(&decltype(__system_property_get)::backup));
+        HookSymNoHandle(sym, __system_property_get);
 
         if (GetAndroidApiLevel() >= __ANDROID_API_P__) {
             sym = DobbySymbolResolver(nullptr,
@@ -122,8 +121,7 @@ namespace lspd {
                 LOGE("Failed to get symbol of _ZN7android4base11GetPropertyERKNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEES9_");
                 return;
             }
-            HookFunction(hook_func, sym, reinterpret_cast<void *>(decltype(GetProperty)::replace),
-                      reinterpret_cast<void **>(&decltype(GetProperty)::backup));
+            HookSymNoHandle(sym, GetProperty);
         }
 
         LOGI("Riru hooks installed");

@@ -39,17 +39,17 @@ namespace art {
                 });
 
         // @ApiSensitive(Level.HIGH)
-        static void DisableHiddenApi(void *handle, HookFunType hook_func) {
+        static void DisableHiddenApi(void *handle) {
             const int api_level = lspd::GetAndroidApiLevel();
             if (api_level < __ANDROID_API_P__) {
                 return;
             }
             if (api_level == __ANDROID_API_P__) {
-                lspd::HookSyms(handle, hook_func, GetMethodActionImpl);
-                lspd::HookSyms(handle, hook_func, GetFieldActionImpl);
+                lspd::HookSyms(handle, GetMethodActionImpl);
+                lspd::HookSyms(handle, GetFieldActionImpl);
             } else {
-                lspd::HookSyms(handle, hook_func, ShouldDenyAccessToMethodImpl);
-                lspd::HookSyms(handle, hook_func, ShouldDenyAccessToFieldImpl);
+                lspd::HookSyms(handle, ShouldDenyAccessToMethodImpl);
+                lspd::HookSyms(handle, ShouldDenyAccessToFieldImpl);
             }
         };
 

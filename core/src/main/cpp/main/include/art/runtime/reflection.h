@@ -21,8 +21,8 @@ namespace art {
                 return backup(obj, declaring_class, access_flags, calling_class);
             });
 
-    static void PermissiveAccessByReflection(void *handle, HookFunType hook_func) {
-        lspd::HookSym(handle, hook_func, VerifyAccess);
+    static void PermissiveAccessByReflection(void *handle) {
+        lspd::HookSym(handle, VerifyAccess);
     }
 }
 #endif //LSPOSED_REFLECTION_H

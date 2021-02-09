@@ -18,7 +18,7 @@ namespace art {
         }
 
         // @ApiSensitive(Level.LOW)
-        static void Setup(void *handle, HookFunType hook_func) {
+        static void Setup(void *handle) {
             RETRIEVE_FIELD_SYMBOL(instance, "_ZN3art7Runtime9instance_E");
             void * thiz = *reinterpret_cast<void**>(instance);
             LOGD("_ZN3art7Runtime9instance_E = %p", thiz);
