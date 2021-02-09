@@ -23,16 +23,26 @@ package io.github.lsposed.manager.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.databinding.ActivityAppListBinding;
@@ -43,6 +53,8 @@ import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 
 public class RepoActivity extends BaseActivity implements RepoLoader.Listener {
     private final RepoLoader repoLoader = RepoLoader.getInstance();
+    private SearchView searchView;
+    private SearchView.OnQueryTextListener searchListener;
     private ActivityAppListBinding binding;
     private RepoAdapter adapter;
 
@@ -72,13 +84,25 @@ public class RepoActivity extends BaseActivity implements RepoLoader.Listener {
         repoLoader.addListener(this);
         fastScrollerBuilder.build();
         binding.swipeRefreshLayout.setOnRefreshListener(repoLoader::loadRemoteData);
+        searchListener = new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                adapter.getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        };
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        adapter.setData(repoLoader.getOnlineModules());
-        binding.swipeRefreshLayout.setRefreshing(adapter.getItemCount() == 0);
+        adapter.initData();
     }
 
     @Override
@@ -89,8 +113,20 @@ public class RepoActivity extends BaseActivity implements RepoLoader.Listener {
         });
     }
 
-    private class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.ViewHolder> {
-        private OnlineModule[] modules = new OnlineModule[0];
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_modules, menu);
+        searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+        searchView.setOnQueryTextListener(searchListener);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.ViewHolder> implements Filterable {
+        private List<OnlineModule> fullList, showList;
+
+        RepoAdapter() {
+            fullList = showList = Collections.emptyList();
+        }
 
         @NonNull
         @Override
@@ -101,29 +137,46 @@ public class RepoActivity extends BaseActivity implements RepoLoader.Listener {
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            holder.appName.setText(modules[position].getDescription());
-            String summary = modules[position].getSummary();
+            OnlineModule module = showList.get(position);
+            holder.appName.setText(module.getDescription());
+            String summary = module.getSummary();
             if (summary != null) {
-                holder.appDescription.setText(modules[position].getSummary());
+                holder.appDescription.setText(module.getSummary());
             } else {
                 holder.appDescription.setVisibility(View.GONE);
             }
             holder.itemView.setOnClickListener(v -> {
                 Intent intent = new Intent();
                 intent.setClass(RepoActivity.this, RepoItemActivity.class);
-                intent.putExtra("module", (Parcelable) modules[position]);
+                intent.putExtra("module", (Parcelable) module);
                 startActivity(intent);
             });
         }
 
         @Override
         public int getItemCount() {
-            return modules.length;
+            return showList.size();
         }
 
         public void setData(OnlineModule[] modules) {
-            this.modules = modules;
-            notifyDataSetChanged();
+            fullList = Arrays.asList(modules);
+            String queryStr = searchView != null ? searchView.getQuery().toString() : "";
+            runOnUiThread(() -> getFilter().filter(queryStr));
+        }
+
+        public void initData() {
+            OnlineModule[] modules = repoLoader.getOnlineModules();
+            if (modules.length == 0) {
+                binding.swipeRefreshLayout.setRefreshing(true);
+                repoLoader.loadRemoteData();
+            } else {
+                adapter.setData(modules);
+            }
+        }
+
+        @Override
+        public Filter getFilter() {
+            return new ModuleFilter();
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
@@ -136,6 +189,37 @@ public class RepoActivity extends BaseActivity implements RepoLoader.Listener {
                 root = itemView.findViewById(R.id.item_root);
                 appName = itemView.findViewById(R.id.app_name);
                 appDescription = itemView.findViewById(R.id.description);
+            }
+        }
+
+        class ModuleFilter extends Filter {
+
+            private boolean lowercaseContains(String s, String filter) {
+                return !TextUtils.isEmpty(s) && s.toLowerCase().contains(filter);
+            }
+
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                if (constraint.toString().isEmpty()) {
+                    showList = fullList;
+                } else {
+                    ArrayList<OnlineModule> filtered = new ArrayList<>();
+                    String filter = constraint.toString().toLowerCase();
+                    for (OnlineModule info : fullList) {
+                        if (lowercaseContains(info.getDescription(), filter) ||
+                                lowercaseContains(info.getName(), filter) ||
+                                lowercaseContains(info.getSummary(), filter)) {
+                            filtered.add(info);
+                        }
+                    }
+                    showList = filtered;
+                }
+                return null;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                notifyDataSetChanged();
             }
         }
     }
