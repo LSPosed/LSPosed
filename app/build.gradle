@@ -76,7 +76,9 @@ dependencies {
     final def markwon_version = '4.6.2'
     implementation "io.noties.markwon:core:$markwon_version"
     implementation "io.noties.markwon:image:$markwon_version"
+    implementation "io.noties.markwon:image-glide:$markwon_version"
     implementation "io.noties.markwon:html:$markwon_version"
+    implementation "io.noties.markwon:linkify:$markwon_version"
     implementation 'rikka.insets:insets:1.0.1'
     implementation 'rikka.recyclerview:recyclerview-utils:1.2.0'
     implementation "rikka.widget:switchbar:1.0.2"
