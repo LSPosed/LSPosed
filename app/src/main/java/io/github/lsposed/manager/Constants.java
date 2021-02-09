@@ -1,27 +1,38 @@
 package io.github.lsposed.manager;
 
-import android.util.Log;
 import android.widget.Toast;
 
 public class Constants {
     public static int getXposedApiVersion() {
-        Log.e(App.TAG, "getXposedApiVersion: Xposed is not active");
-        return -1;
+        try {
+            return -1;
+        } catch (Throwable ignored) {
+            return -1;
+        }
     }
 
     public static String getXposedVersion() {
-        Log.e(App.TAG, "getXposedVersion: Xposed is not active");
-        return null;
+        try {
+            return null;
+        } catch (Throwable ignored) {
+            return null;
+        }
     }
 
     public static int getXposedVersionCode() {
-        Log.e(App.TAG, "getXposedVersionCode: Xposed is not active");
-        return -1;
+        try {
+            return -1;
+        } catch (Throwable ignored) {
+            return -1;
+        }
     }
 
     public static String getXposedVariant() {
-        Log.e(App.TAG, "getXposedVariant: Xposed is not active");
-        return null;
+        try {
+            return null;
+        } catch (Throwable ignored) {
+            return null;
+        }
     }
 
     public static String getEnabledModulesListFile() {
@@ -37,19 +48,35 @@ public class Constants {
     }
 
     public static String getBaseDir() {
-        return App.getInstance().getApplicationInfo().deviceProtectedDataDir + "/";
+        try {
+            return null;
+        } catch (Throwable ignored) {
+            return null;
+        }
     }
 
     public static String getLogDir() {
-        return null;
+        try {
+            return null;
+        } catch (Throwable ignored) {
+            return null;
+        }
     }
 
     public static String getMiscDir() {
-        return null;
+        try {
+            return null;
+        } catch (Throwable ignored) {
+            return null;
+        }
     }
 
     public static boolean isPermissive() {
-        return true;
+        try {
+            return true;
+        } catch (Throwable ignored) {
+            return true;
+        }
     }
 
     public static void showErrorToast(int type) {
