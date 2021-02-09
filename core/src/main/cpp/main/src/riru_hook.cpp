@@ -112,7 +112,7 @@ namespace lspd {
             LOGE("Failed to get symbol of __system_property_get");
             return;
         }
-        hook_func(sym, reinterpret_cast<void *>(decltype(__system_property_get)::replace),
+        HookFunction(hook_func, sym, reinterpret_cast<void *>(decltype(__system_property_get)::replace),
                   reinterpret_cast<void **>(&decltype(__system_property_get)::backup));
 
         if (GetAndroidApiLevel() >= __ANDROID_API_P__) {
@@ -122,7 +122,7 @@ namespace lspd {
                 LOGE("Failed to get symbol of _ZN7android4base11GetPropertyERKNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEES9_");
                 return;
             }
-            hook_func(sym, reinterpret_cast<void *>(decltype(GetProperty)::replace),
+            HookFunction(hook_func, sym, reinterpret_cast<void *>(decltype(GetProperty)::replace),
                       reinterpret_cast<void **>(&decltype(GetProperty)::backup));
         }
 
