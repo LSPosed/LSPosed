@@ -418,7 +418,9 @@ public final class XposedInit {
         String moduleLibraryName;
         try {
             while ((moduleLibraryName = moduleLibraryReader.readLine()) != null) {
-                NativeAPI.recordNativeEntrypoint(moduleLibraryName);
+                if (!moduleLibraryName.startsWith("#") && moduleLibraryName.endsWith(".so")) {
+                    NativeAPI.recordNativeEntrypoint(moduleLibraryName);
+                }
             }
         } catch (IOException e) {
             Log.e(TAG, "  Failed to load native library list from " + apk, e);
