@@ -58,6 +58,9 @@ namespace lspd {
                 auto *handle = backup(name, flags, extinfo, caller_addr);
                 std::string ns(name);
                 LOGD("native_api: do_dlopen(%s)", name);
+                if (handle == nullptr) {
+                    return nullptr;
+                }
                 for (std::string_view module_lib: moduleNativeLibs) {
                     // the so is a module so
                     if (UNLIKELY(hasEnding(ns, module_lib))) {
