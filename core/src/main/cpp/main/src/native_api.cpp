@@ -55,7 +55,12 @@ namespace lspd {
             void*, do_dlopen, (const char* name, int flags, const void* extinfo,
                     const void* caller_addr), {
                 auto *handle = backup(name, flags, extinfo, caller_addr);
-                std::string ns(name);
+                std::string ns;
+                if (name) {
+                    ns = std::string(name);
+                } else {
+                    ns = "NULL";
+                }
                 LOGD("native_api: do_dlopen(%s)", name);
                 if (handle == nullptr) {
                     return nullptr;
