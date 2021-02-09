@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">LSPosed Manager</string>
+    <string name="app_name" translatable="false">LSPosed</string>
     <string name="Activated">Activated</string>
     <string name="Install">Install</string>
     <string name="InstallDetail">Tap to install LSPosed</string>
