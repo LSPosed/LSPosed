@@ -23,6 +23,7 @@ package io.github.lsposed.manager.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -139,12 +140,13 @@ public class RepoActivity extends BaseActivity implements RepoLoader.Listener {
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             OnlineModule module = showList.get(position);
             holder.appName.setText(module.getDescription());
+            SpannableStringBuilder sb = new SpannableStringBuilder(module.getName());
             String summary = module.getSummary();
             if (summary != null) {
-                holder.appDescription.setText(module.getSummary());
-            } else {
-                holder.appDescription.setVisibility(View.GONE);
+                sb.append("\n");
+                sb.append(summary);
             }
+            holder.appDescription.setText(sb);
             holder.itemView.setOnClickListener(v -> {
                 Intent intent = new Intent();
                 intent.setClass(RepoActivity.this, RepoItemActivity.class);
