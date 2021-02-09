@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="io.github.lsposed.manager">
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
     <uses-permission
         android:name="android.permission.QUERY_ALL_PACKAGES"
@@ -26,6 +27,9 @@
             android:name=".ui.activity.LogsActivity"
             android:label="@string/Logs" />
         <activity android:name=".ui.activity.AppListActivity" />
+        <activity android:name=".ui.activity.RepoActivity"
+            android:label="@string/module_repo"/>
+        <activity android:name=".ui.activity.RepoItemActivity" />
         <activity
             android:name=".ui.activity.MainActivity"
             android:label="@string/app_name"
