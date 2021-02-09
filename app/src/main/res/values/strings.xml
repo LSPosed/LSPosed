@@ -146,4 +146,8 @@
     <string name="menu_backup">Backup</string>
     <string name="menu_restore">Restore</string>
     <string name="xposed_module_updated_notification_content">%s has been updated</string>
+    <string name="module_repo">Module repository</string>
+    <string name="module_repo_summary">repository</string>
+    <string name="module_readme">Readme</string>
+    <string name="module_releases">Releases</string>
 </resources>

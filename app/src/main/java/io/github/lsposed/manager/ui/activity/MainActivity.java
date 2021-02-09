@@ -44,6 +44,7 @@ public class MainActivity extends BaseActivity {
             }
         });
         binding.modules.setOnClickListener(new StartActivityListener(ModulesActivity.class, true));
+        binding.download.setOnClickListener(new StartActivityListener(RepoActivity.class, false));
         binding.logs.setOnClickListener(new StartActivityListener(LogsActivity.class, true));
         binding.settings.setOnClickListener(new StartActivityListener(SettingsActivity.class, false));
         binding.about.setOnClickListener(new StartActivityListener(AboutActivity.class, false));
