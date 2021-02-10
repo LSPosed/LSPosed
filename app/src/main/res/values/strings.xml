@@ -154,4 +154,6 @@
     <string name="module_information_homepage">Homepage</string>
     <string name="module_information_source_url">Source code</string>
     <string name="module_information_collaborators">Collaborators</string>
+    <string name="module_release_view_assets">Assets</string>
+    <string name="module_release_open_browser">Open in…</string>
 </resources>

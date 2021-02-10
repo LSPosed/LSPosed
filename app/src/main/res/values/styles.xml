@@ -27,6 +27,13 @@
         <item name="switchBarBackgroundDisabled">@color/switchbar_background_light</item>
     </style>
 
+    <style name="Widget.App.Button.OutlinedButton.IconOnly" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="iconPadding">0dp</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+        <item name="android:minWidth">48dp</item>
+    </style>
+
     <style name="Widget.MaterialComponents.CompoundButton.CheckBox" parent="Widget.AppCompat.CompoundButton.CheckBox" tools:override="true">
         <item name="enforceMaterialTheme">true</item>
         <item name="useMaterialThemeColors">true</item>

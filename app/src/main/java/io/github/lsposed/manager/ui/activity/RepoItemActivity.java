@@ -41,7 +41,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
@@ -52,6 +51,7 @@ import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.databinding.ActivityModuleDetailBinding;
 import io.github.lsposed.manager.databinding.ItemRepoReadmeBinding;
 import io.github.lsposed.manager.databinding.ItemRepoRecyclerviewBinding;
+import io.github.lsposed.manager.databinding.ItemRepoReleaseBinding;
 import io.github.lsposed.manager.databinding.ItemRepoTitleDescriptionBinding;
 import io.github.lsposed.manager.repo.RepoLoader;
 import io.github.lsposed.manager.repo.model.Collaborator;
@@ -117,7 +117,7 @@ public class RepoItemActivity extends BaseActivity {
         }
     }
 
-    private class InformationAdapter extends RecyclerView.Adapter<TitleDescriptionHolder> {
+    private class InformationAdapter extends RecyclerView.Adapter<InformationAdapter.ViewHolder> {
         private final OnlineModule module;
 
         private int rowCount = 0;
@@ -140,12 +140,12 @@ public class RepoItemActivity extends BaseActivity {
 
         @NonNull
         @Override
-        public TitleDescriptionHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new TitleDescriptionHolder(ItemRepoTitleDescriptionBinding.inflate(getLayoutInflater(), parent, false));
+        public InformationAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            return new InformationAdapter.ViewHolder(ItemRepoTitleDescriptionBinding.inflate(getLayoutInflater(), parent, false));
         }
 
         @Override
-        public void onBindViewHolder(@NonNull TitleDescriptionHolder holder, int position) {
+        public void onBindViewHolder(@NonNull InformationAdapter.ViewHolder holder, int position) {
             if (position == homepageRow) {
                 holder.title.setText(R.string.module_information_homepage);
                 holder.description.setText(module.getHomepageUrl());
@@ -183,15 +183,27 @@ public class RepoItemActivity extends BaseActivity {
                     NavUtil.startURL(RepoItemActivity.this, module.getSourceUrl());
                 }
             });
+
         }
 
         @Override
         public int getItemCount() {
             return rowCount;
         }
+
+        class ViewHolder extends RecyclerView.ViewHolder {
+            TextView title;
+            LinkifyTextView description;
+
+            public ViewHolder(ItemRepoTitleDescriptionBinding binding) {
+                super(binding.getRoot());
+                title = binding.title;
+                description = binding.description;
+            }
+        }
     }
 
-    private class ReleaseAdapter extends RecyclerView.Adapter<TitleDescriptionHolder> {
+    private class ReleaseAdapter extends RecyclerView.Adapter<ReleaseAdapter.ViewHolder> {
         private final List<Release> items;
 
         public ReleaseAdapter(List<Release> items) {
@@ -200,47 +212,50 @@ public class RepoItemActivity extends BaseActivity {
 
         @NonNull
         @Override
-        public TitleDescriptionHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new TitleDescriptionHolder(ItemRepoTitleDescriptionBinding.inflate(getLayoutInflater(), parent, false));
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            return new ViewHolder(ItemRepoReleaseBinding.inflate(getLayoutInflater(), parent, false));
         }
 
         @Override
-        public void onBindViewHolder(@NonNull TitleDescriptionHolder holder, int position) {
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             Release release = items.get(position);
             holder.title.setText(release.getName());
             holder.description.setText(release.getDescription());
-            holder.itemView.setOnClickListener(v -> {
-                List<ReleaseAsset> assets = release.getReleaseAssets();
-                if (assets != null && !assets.isEmpty()) {
+            holder.openInBrowser.setOnClickListener(v -> NavUtil.startURL(RepoItemActivity.this, release.getUrl()));
+            List<ReleaseAsset> assets = release.getReleaseAssets();
+            if (assets != null && !assets.isEmpty()) {
+                holder.viewAssets.setOnClickListener(v -> {
                     ArrayList<String> names = new ArrayList<>();
-                    release.getReleaseAssets().forEach(releaseAsset -> names.add(releaseAsset.getName()));
+                    assets.forEach(releaseAsset -> names.add(releaseAsset.getName()));
                     new MaterialAlertDialogBuilder(RepoItemActivity.this)
-                            .setItems(names.toArray(new String[0]), (dialog, which) -> NavUtil.startURL(RepoItemActivity.this, release.getReleaseAssets().get(which).getDownloadUrl()))
+                            .setItems(names.toArray(new String[0]), (dialog, which) -> NavUtil.startURL(RepoItemActivity.this, assets.get(which).getDownloadUrl()))
                             .show();
-                } else {
-                    Snackbar.make(binding.snackbar, "no assets", Snackbar.LENGTH_SHORT).show();
-                }
-            });
+                });
+            } else {
+                holder.viewAssets.setVisibility(View.GONE);
+            }
         }
 
         @Override
         public int getItemCount() {
             return items.size();
         }
-    }
 
+        class ViewHolder extends RecyclerView.ViewHolder {
+            TextView title;
+            TextView description;
+            View openInBrowser;
+            View viewAssets;
 
-    static class TitleDescriptionHolder extends RecyclerView.ViewHolder {
-        TextView title;
-        LinkifyTextView description;
-
-        public TitleDescriptionHolder(ItemRepoTitleDescriptionBinding binding) {
-            super(binding.getRoot());
-            title = binding.title;
-            description = binding.description;
+            public ViewHolder(ItemRepoReleaseBinding binding) {
+                super(binding.getRoot());
+                title = binding.title;
+                description = binding.description;
+                openInBrowser = binding.openInBrowser;
+                viewAssets = binding.viewAssets;
+            }
         }
     }
-
 
     private class PagerAdapter extends RecyclerView.Adapter<PagerAdapter.ViewHolder> {
 
