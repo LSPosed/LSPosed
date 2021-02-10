@@ -24,6 +24,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.text.util.Linkify;
 import android.view.Menu;
@@ -145,13 +146,13 @@ public class RepoItemActivity extends BaseActivity {
 
         public InformationAdapter(OnlineModule module) {
             this.module = module;
-            if (module.getHomepageUrl() != null) {
+            if (!TextUtils.isEmpty(module.getHomepageUrl())) {
                 homepageRow = rowCount++;
             }
-            if (module.getCollaborators() != null) {
+            if (module.getCollaborators() != null && !module.getCollaborators().isEmpty()) {
                 collaboratorsRow = rowCount++;
             }
-            if (module.getSourceUrl() != null) {
+            if (!TextUtils.isEmpty(module.getSourceUrl())) {
                 sourceUrlRow = rowCount++;
             }
         }
