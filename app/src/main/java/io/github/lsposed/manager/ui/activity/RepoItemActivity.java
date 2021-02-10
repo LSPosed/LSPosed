@@ -240,7 +240,9 @@ public class RepoItemActivity extends BaseActivity {
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             Release release = items.get(position);
             holder.title.setText(release.getName());
-            holder.description.setText(release.getDescription());
+            holder.description.setTransformationMethod(new LinkTransformationMethod(RepoItemActivity.this));
+            markwon.setMarkdown(holder.description, release.getDescription());
+            holder.description.setMovementMethod(null);
             holder.openInBrowser.setOnClickListener(v -> NavUtil.startURL(RepoItemActivity.this, release.getUrl()));
             List<ReleaseAsset> assets = release.getReleaseAssets();
             if (assets != null && !assets.isEmpty()) {
@@ -254,6 +256,14 @@ public class RepoItemActivity extends BaseActivity {
             } else {
                 holder.viewAssets.setVisibility(View.GONE);
             }
+            holder.itemView.setOnClickListener(v -> {
+                ClickableSpan span = holder.description.getCurrentSpan();
+                holder.description.clearCurrentSpan();
+
+                if (span instanceof CustomTabsURLSpan) {
+                    span.onClick(v);
+                }
+            });
         }
 
         @Override
@@ -263,7 +273,7 @@ public class RepoItemActivity extends BaseActivity {
 
         class ViewHolder extends RecyclerView.ViewHolder {
             TextView title;
-            TextView description;
+            LinkifyTextView description;
             View openInBrowser;
             View viewAssets;
 
