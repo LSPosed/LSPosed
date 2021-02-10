@@ -30,7 +30,7 @@ public class CustomTabsURLSpan extends URLSpan {
 
     private final BaseActivity activity;
 
-    CustomTabsURLSpan(BaseActivity activity, String url) {
+    public CustomTabsURLSpan(BaseActivity activity, String url) {
         super(url);
         this.activity = activity;
     }

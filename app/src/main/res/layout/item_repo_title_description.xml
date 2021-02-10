@@ -39,7 +39,7 @@
         tools:ignore="RtlSymmetry">
 
         <TextView
-            android:id="@+id/app_name"
+            android:id="@+id/title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceListItem"
@@ -50,7 +50,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             tools:text="@tools:sample/lorem" />
 
-        <TextView
+        <io.github.lsposed.manager.ui.widget.LinkifyTextView
             android:id="@+id/description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -58,8 +58,8 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/app_name"
-            app:layout_constraintTop_toBottomOf="@id/app_name"
+            app:layout_constraintStart_toStartOf="@+id/title"
+            app:layout_constraintTop_toBottomOf="@id/title"
             tools:text="@tools:sample/lorem" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -43,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.databinding.ActivityAppListBinding;
@@ -168,6 +169,7 @@ public class RepoActivity extends BaseActivity implements RepoLoader.Listener {
 
         public void setData(Collection<OnlineModule> modules) {
             fullList = new ArrayList<>(modules);
+            fullList = fullList.stream().filter((onlineModule -> !onlineModule.isHide())).collect(Collectors.toList());
             fullList.sort((o1, o2) -> o1.getDescription().compareToIgnoreCase(o2.getDescription()));
             String queryStr = searchView != null ? searchView.getQuery().toString() : "";
             runOnUiThread(() -> getFilter().filter(queryStr));

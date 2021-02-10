@@ -22,6 +22,9 @@ package io.github.lsposed.manager.ui.activity;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ClickableSpan;
 import android.text.util.Linkify;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,24 +41,31 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.databinding.ActivityModuleDetailBinding;
 import io.github.lsposed.manager.databinding.ItemRepoReadmeBinding;
-import io.github.lsposed.manager.databinding.ItemRepoReleaseBinding;
-import io.github.lsposed.manager.databinding.ItemRepoReleasesBinding;
+import io.github.lsposed.manager.databinding.ItemRepoRecyclerviewBinding;
+import io.github.lsposed.manager.databinding.ItemRepoTitleDescriptionBinding;
 import io.github.lsposed.manager.repo.RepoLoader;
+import io.github.lsposed.manager.repo.model.Collaborator;
 import io.github.lsposed.manager.repo.model.OnlineModule;
 import io.github.lsposed.manager.repo.model.Release;
+import io.github.lsposed.manager.repo.model.ReleaseAsset;
+import io.github.lsposed.manager.ui.widget.LinkifyTextView;
 import io.github.lsposed.manager.util.GlideApp;
 import io.github.lsposed.manager.util.LinearLayoutManagerFix;
 import io.github.lsposed.manager.util.NavUtil;
+import io.github.lsposed.manager.util.chrome.CustomTabsURLSpan;
 import io.github.lsposed.manager.util.chrome.LinkTransformationMethod;
 import io.noties.markwon.Markwon;
+import io.noties.markwon.html.HtmlPlugin;
 import io.noties.markwon.image.glide.GlideImagesPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
 
@@ -81,6 +91,7 @@ public class RepoItemActivity extends BaseActivity {
         markwon = Markwon.builder(this)
                 .usePlugin(GlideImagesPlugin.create(GlideApp.with(this)))
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
+                .usePlugin(HtmlPlugin.create())
                 .build();
         module = RepoLoader.getInstance().getOnlineModule(modulePackageName);
         binding.viewPager.setAdapter(new PagerAdapter());
@@ -94,7 +105,7 @@ public class RepoItemActivity extends BaseActivity {
                 }
             }
         });
-        int[] titles = new int[]{R.string.module_readme, R.string.module_releases};
+        int[] titles = new int[]{R.string.module_readme, R.string.module_releases, R.string.module_information};
         new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> tab.setText(titles[position])).attach();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
@@ -106,7 +117,81 @@ public class RepoItemActivity extends BaseActivity {
         }
     }
 
-    private class ReleaseAdapter extends RecyclerView.Adapter<ReleaseAdapter.ViewHolder> {
+    private class InformationAdapter extends RecyclerView.Adapter<TitleDescriptionHolder> {
+        private final OnlineModule module;
+
+        private int rowCount = 0;
+        private int homepageRow = -1;
+        private int collaboratorsRow = -1;
+        private int sourceUrlRow = -1;
+
+        public InformationAdapter(OnlineModule module) {
+            this.module = module;
+            if (module.getHomepageUrl() != null) {
+                homepageRow = rowCount++;
+            }
+            if (module.getCollaborators() != null) {
+                collaboratorsRow = rowCount++;
+            }
+            if (module.getSourceUrl() != null) {
+                sourceUrlRow = rowCount++;
+            }
+        }
+
+        @NonNull
+        @Override
+        public TitleDescriptionHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            return new TitleDescriptionHolder(ItemRepoTitleDescriptionBinding.inflate(getLayoutInflater(), parent, false));
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull TitleDescriptionHolder holder, int position) {
+            if (position == homepageRow) {
+                holder.title.setText(R.string.module_information_homepage);
+                holder.description.setText(module.getHomepageUrl());
+            } else if (position == collaboratorsRow) {
+                holder.title.setText(R.string.module_information_collaborators);
+                List<Collaborator> collaborators = module.getCollaborators();
+                SpannableStringBuilder sb = new SpannableStringBuilder();
+                ListIterator<Collaborator> iterator = collaborators.listIterator();
+                while (iterator.hasNext()) {
+                    Collaborator collaborator = iterator.next();
+                    String name = collaborator.getName() == null ? collaborator.getLogin() : collaborator.getName();
+                    sb.append(name);
+                    CustomTabsURLSpan span = new CustomTabsURLSpan(RepoItemActivity.this, String.format("https://github.com/%s", collaborator.getLogin()));
+                    sb.setSpan(span, sb.length() - name.length(), sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    if (iterator.hasNext()) {
+                        sb.append(", ");
+                    }
+                }
+                holder.description.setText(sb);
+            } else if (position == sourceUrlRow) {
+                holder.title.setText(R.string.module_information_source_url);
+                holder.description.setText(module.getSourceUrl());
+            }
+            holder.itemView.setOnClickListener(v -> {
+                if (position == homepageRow) {
+                    NavUtil.startURL(RepoItemActivity.this, module.getHomepageUrl());
+                } else if (position == collaboratorsRow) {
+                    ClickableSpan span = holder.description.getCurrentSpan();
+                    holder.description.clearCurrentSpan();
+
+                    if (span instanceof CustomTabsURLSpan) {
+                        span.onClick(v);
+                    }
+                } else if (position == sourceUrlRow) {
+                    NavUtil.startURL(RepoItemActivity.this, module.getSourceUrl());
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return rowCount;
+        }
+    }
+
+    private class ReleaseAdapter extends RecyclerView.Adapter<TitleDescriptionHolder> {
         private final List<Release> items;
 
         public ReleaseAdapter(List<Release> items) {
@@ -115,21 +200,26 @@ public class RepoItemActivity extends BaseActivity {
 
         @NonNull
         @Override
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new ViewHolder(ItemRepoReleaseBinding.inflate(getLayoutInflater(), parent, false));
+        public TitleDescriptionHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            return new TitleDescriptionHolder(ItemRepoTitleDescriptionBinding.inflate(getLayoutInflater(), parent, false));
         }
 
         @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull TitleDescriptionHolder holder, int position) {
             Release release = items.get(position);
             holder.title.setText(release.getName());
             holder.description.setText(release.getDescription());
             holder.itemView.setOnClickListener(v -> {
-                ArrayList<String> names = new ArrayList<>();
-                release.getReleaseAssets().forEach(releaseAsset -> names.add(releaseAsset.getName()));
-                new MaterialAlertDialogBuilder(RepoItemActivity.this)
-                        .setItems(names.toArray(new String[0]), (dialog, which) -> NavUtil.startURL(RepoItemActivity.this, release.getReleaseAssets().get(which).getDownloadUrl()))
-                        .show();
+                List<ReleaseAsset> assets = release.getReleaseAssets();
+                if (assets != null && !assets.isEmpty()) {
+                    ArrayList<String> names = new ArrayList<>();
+                    release.getReleaseAssets().forEach(releaseAsset -> names.add(releaseAsset.getName()));
+                    new MaterialAlertDialogBuilder(RepoItemActivity.this)
+                            .setItems(names.toArray(new String[0]), (dialog, which) -> NavUtil.startURL(RepoItemActivity.this, release.getReleaseAssets().get(which).getDownloadUrl()))
+                            .show();
+                } else {
+                    Snackbar.make(binding.snackbar, "no assets", Snackbar.LENGTH_SHORT).show();
+                }
             });
         }
 
@@ -137,19 +227,20 @@ public class RepoItemActivity extends BaseActivity {
         public int getItemCount() {
             return items.size();
         }
-
-        class ViewHolder extends RecyclerView.ViewHolder {
-            TextView title;
-            TextView description;
+    }
 
 
-            public ViewHolder(ItemRepoReleaseBinding binding) {
-                super(binding.getRoot());
-                title = binding.appName;
-                description = binding.description;
-            }
+    static class TitleDescriptionHolder extends RecyclerView.ViewHolder {
+        TextView title;
+        LinkifyTextView description;
+
+        public TitleDescriptionHolder(ItemRepoTitleDescriptionBinding binding) {
+            super(binding.getRoot());
+            title = binding.title;
+            description = binding.description;
         }
     }
+
 
     private class PagerAdapter extends RecyclerView.Adapter<PagerAdapter.ViewHolder> {
 
@@ -159,7 +250,7 @@ public class RepoItemActivity extends BaseActivity {
             if (viewType == 0) {
                 return new ViewHolder(ItemRepoReadmeBinding.inflate(getLayoutInflater(), parent, false).getRoot(), viewType);
             } else {
-                return new ViewHolder(ItemRepoReleasesBinding.inflate(getLayoutInflater(), parent, false).getRoot(), viewType);
+                return new ViewHolder(ItemRepoRecyclerviewBinding.inflate(getLayoutInflater(), parent, false).getRoot(), viewType);
             }
         }
 
@@ -192,24 +283,30 @@ public class RepoItemActivity extends BaseActivity {
                     });
                 }
             }
-            if (position == 0) {
-                holder.textView.setTransformationMethod(new LinkTransformationMethod(RepoItemActivity.this));
-                markwon.setMarkdown(holder.textView, module.getReadme());
-            } else {
-                ReleaseAdapter adapter = new ReleaseAdapter(module.getReleases());
-                holder.recyclerView.setAdapter(adapter);
-                holder.recyclerView.setLayoutManager(new LinearLayoutManagerFix(RepoItemActivity.this));
+            switch (position) {
+                case 0:
+                    holder.textView.setTransformationMethod(new LinkTransformationMethod(RepoItemActivity.this));
+                    markwon.setMarkdown(holder.textView, module.getReadme());
+                    break;
+                case 1:
+                    holder.recyclerView.setAdapter(new ReleaseAdapter(module.getReleases()));
+                    holder.recyclerView.setLayoutManager(new LinearLayoutManagerFix(RepoItemActivity.this));
+                    break;
+                case 2:
+                    holder.recyclerView.setAdapter(new InformationAdapter(module));
+                    holder.recyclerView.setLayoutManager(new LinearLayoutManagerFix(RepoItemActivity.this));
+                    break;
             }
         }
 
         @Override
         public int getItemCount() {
-            return 2;
+            return 3;
         }
 
         @Override
         public int getItemViewType(int position) {
-            return position;
+            return position == 0 ? 0 : 1;
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
