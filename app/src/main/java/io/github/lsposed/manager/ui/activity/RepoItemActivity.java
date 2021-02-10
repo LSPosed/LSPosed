@@ -26,6 +26,8 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ClickableSpan;
 import android.text.util.Linkify;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -115,6 +117,22 @@ public class RepoItemActivity extends BaseActivity {
                 return insets;
             });
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_repo_item, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.menu_open_in_browser) {
+            NavUtil.startURL(this, module.getUrl());
+            // TODO: replace with web version
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private class InformationAdapter extends RecyclerView.Adapter<InformationAdapter.ViewHolder> {
