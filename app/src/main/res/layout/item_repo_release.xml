@@ -29,7 +29,9 @@
     android:minHeight="?attr/listPreferredItemHeight"
     android:paddingVertical="16dp"
     android:paddingStart="16dp"
-    android:paddingEnd="24dp">
+    android:paddingEnd="24dp"
+    android:clipToPadding="false"
+    android:clipChildren="false">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/item_root"
