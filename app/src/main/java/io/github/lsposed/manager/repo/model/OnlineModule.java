@@ -68,6 +68,15 @@ public class OnlineModule implements Serializable, Parcelable {
     @SerializedName("additionalAuthors")
     @Expose
     private List<Object> additionalAuthors = null;
+    @SerializedName("updatedAt")
+    @Expose
+    private String updatedAt;
+    @SerializedName("createdAt")
+    @Expose
+    private String createdAt;
+    @SerializedName("stargazerCount")
+    @Expose
+    private Integer stargazerCount;
     public final static Creator<OnlineModule> CREATOR = new Creator<OnlineModule>() {
 
         public OnlineModule createFromParcel(Parcel in) {
@@ -79,7 +88,7 @@ public class OnlineModule implements Serializable, Parcelable {
         }
 
     };
-    private final static long serialVersionUID = -2294634398588027071L;
+    private final static long serialVersionUID = 3372849627722130087L;
 
     protected OnlineModule(Parcel in) {
         this.name = ((String) in.readValue((String.class.getClassLoader())));
@@ -94,6 +103,9 @@ public class OnlineModule implements Serializable, Parcelable {
         this.sourceUrl = ((String) in.readValue((String.class.getClassLoader())));
         this.hide = ((Boolean) in.readValue((Boolean.class.getClassLoader())));
         in.readList(this.additionalAuthors, (Object.class.getClassLoader()));
+        this.updatedAt = ((String) in.readValue((String.class.getClassLoader())));
+        this.createdAt = ((String) in.readValue((String.class.getClassLoader())));
+        this.stargazerCount = ((Integer) in.readValue((Integer.class.getClassLoader())));
     }
 
     public OnlineModule() {
@@ -179,7 +191,7 @@ public class OnlineModule implements Serializable, Parcelable {
         this.sourceUrl = sourceUrl;
     }
 
-    public Boolean getHide() {
+    public Boolean isHide() {
         return hide;
     }
 
@@ -195,6 +207,30 @@ public class OnlineModule implements Serializable, Parcelable {
         this.additionalAuthors = additionalAuthors;
     }
 
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Integer getStargazerCount() {
+        return stargazerCount;
+    }
+
+    public void setStargazerCount(Integer stargazerCount) {
+        this.stargazerCount = stargazerCount;
+    }
+
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(name);
         dest.writeValue(description);
@@ -208,6 +244,9 @@ public class OnlineModule implements Serializable, Parcelable {
         dest.writeValue(sourceUrl);
         dest.writeValue(hide);
         dest.writeList(additionalAuthors);
+        dest.writeValue(updatedAt);
+        dest.writeValue(createdAt);
+        dest.writeValue(stargazerCount);
     }
 
     public int describeContents() {

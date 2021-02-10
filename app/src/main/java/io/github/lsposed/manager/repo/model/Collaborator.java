@@ -35,7 +35,7 @@ public class Collaborator implements Serializable, Parcelable {
     private String login;
     @SerializedName("name")
     @Expose
-    private Object name;
+    private String name;
     public final static Creator<Collaborator> CREATOR = new Creator<Collaborator>() {
 
         public Collaborator createFromParcel(Parcel in) {
@@ -51,7 +51,7 @@ public class Collaborator implements Serializable, Parcelable {
 
     protected Collaborator(Parcel in) {
         this.login = ((String) in.readValue((String.class.getClassLoader())));
-        this.name = in.readValue((Object.class.getClassLoader()));
+        this.name = ((String) in.readValue((String.class.getClassLoader())));
     }
 
     public Collaborator() {
@@ -65,11 +65,11 @@ public class Collaborator implements Serializable, Parcelable {
         this.login = login;
     }
 
-    public Object getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(Object name) {
+    public void setName(String name) {
         this.name = name;
     }
 
