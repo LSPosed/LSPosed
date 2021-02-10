@@ -20,6 +20,8 @@
 
 package io.github.lsposed.manager.repo;
 
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 
 import com.google.gson.Gson;
@@ -29,12 +31,15 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import io.github.lsposed.manager.App;
 import io.github.lsposed.manager.repo.model.OnlineModule;
-import io.github.lsposed.manager.util.ModuleUtil;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;
@@ -43,10 +48,15 @@ import okhttp3.ResponseBody;
 
 public class RepoLoader {
     private static RepoLoader instance = null;
-    private OnlineModule[] onlineModules = new OnlineModule[0];
+    private Map<String, OnlineModule> onlineModules = new HashMap<>();
     private final Path repoFile = Paths.get(App.getInstance().getFilesDir().getAbsolutePath(), "repo.json");
     private final List<Listener> listeners = new CopyOnWriteArrayList<>();
     private boolean isLoading = false;
+    private boolean repoLoaded = false;
+
+    public boolean isRepoLoaded() {
+        return repoLoaded;
+    }
 
     public static synchronized RepoLoader getInstance() {
         if (instance == null) {
@@ -68,6 +78,7 @@ public class RepoLoader {
                 .build()).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Toast.makeText(App.getInstance(), e.getMessage(), Toast.LENGTH_LONG).show();
                 synchronized (this) {
                     isLoading = false;
                 }
@@ -79,7 +90,10 @@ public class RepoLoader {
                 if (body != null) {
                     String bodyString = body.string();
                     Gson gson = new Gson();
-                    onlineModules = gson.fromJson(bodyString, OnlineModule[].class);
+                    Map<String, OnlineModule> modules = new HashMap<>();
+                    OnlineModule[] repoModules = gson.fromJson(bodyString, OnlineModule[].class);
+                    Arrays.stream(repoModules).forEach(onlineModule -> modules.put(onlineModule.getName(), onlineModule));
+                    onlineModules = modules;
                     Files.write(repoFile, bodyString.getBytes(StandardCharsets.UTF_8));
                 }
                 for (Listener listener : listeners) {
@@ -87,6 +101,7 @@ public class RepoLoader {
                 }
                 synchronized (this) {
                     isLoading = false;
+                    repoLoaded = true;
                 }
             }
         });
@@ -101,8 +116,12 @@ public class RepoLoader {
         listeners.remove(listener);
     }
 
-    public OnlineModule[] getOnlineModules() {
-        return onlineModules;
+    public OnlineModule getOnlineModule(String packageName) {
+        return onlineModules.get(packageName);
+    }
+
+    public Collection<OnlineModule> getOnlineModules() {
+        return onlineModules.values();
     }
 
     public interface Listener {
