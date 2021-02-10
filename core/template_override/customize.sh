@@ -225,12 +225,6 @@ ui_print "- ${LANG_CUST_INST_COPY_LIB}"
 rm -rf "/data/misc/$MISC_PATH/framework"
 mv "${MODPATH}/system/framework" "/data/misc/$MISC_PATH/framework"
 
-
-mkdir -p "/data/misc/$MISC_PATH/framework/lib"
-if [ "$IS64BIT" = true ]; then
-  mkdir -p "/data/misc/$MISC_PATH/framework/lib64"
-fi
-
 set_perm_recursive /data/misc/$MISC_PATH/framework root root 0755 0644 "u:object_r:magisk_file:s0" || abortC "! ${LANG_CUST_ERR_PERM}"
 
 mkdir -p /data/misc/$MISC_PATH/cache

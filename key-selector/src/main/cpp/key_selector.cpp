@@ -19,7 +19,6 @@
 #include <cerrno>
 #include <cstdlib>
 #include <cstring>
-#include <dirent.h>
 #include <fcntl.h>
 #include <filesystem>
 #include <iostream>
@@ -30,6 +29,7 @@
 #include <sys/poll.h>
 #include <sys/system_properties.h>
 #include <unistd.h>
+#include <fstream>
 
 #include "Languages.h"
 #include "key_selector.h"
@@ -231,20 +231,24 @@ uint32_t get_event() {
     }
 }
 
+// for phone which has no button
+uint16_t timeout = 10;
+std::unique_ptr<Languages> l = nullptr;
+
 int main() {
     if (getuid() != 0) {
         std::cerr << "Root required" << std::endl;
         exit(1);
     }
 
-    // for phone which has no button
-    const uint16_t timeout = 20;
-    alarm(timeout);
-    auto sig_handler = [](int){
-        std::cout << "No operation after " << timeout << " seconds" << std::endl;
-        exit(static_cast<int>(Variant::YAHFA));
-    };
-    signal(SIGALRM, sig_handler);
+    // languages
+    char locale[256];
+    __system_property_get("persist.sys.locale", locale);
+    if (locale[0] == 'z' && locale[1] == 'h') {
+        l = std::make_unique<LanguageChinese>();
+    } else {
+        l = std::make_unique<Languages>();
+    }
 
     // get current arch
 #if defined(__arm__)
@@ -279,6 +283,46 @@ int main() {
 
     Variant cursor = Variant::YAHFA;
 
+    // Load current variant
+    std::filesystem::path lspd_folder;
+    bool found = false;
+    for (auto &item: std::filesystem::directory_iterator("/data/misc/")) {
+        if (item.is_directory() && item.path().string().starts_with("/data/misc/lspd")) {
+            lspd_folder = item;
+            found = true;
+            break;
+        }
+    }
+
+    if (found) {
+        const auto variant_file = lspd_folder / "variant";
+        if (std::filesystem::exists(variant_file)) {
+            std::ifstream ifs(variant_file);
+            if (ifs.good()) {
+                std::string line;
+                std::getline(ifs, line);
+                char* end;
+                int i = std::strtol(line.c_str(), &end, 10);
+                switch (i) {
+                    default:
+                    case 1:
+                        cursor = Variant::YAHFA;
+                        break;
+                    case 2:
+                        cursor = Variant::SandHook;
+                        break;
+                }
+                timeout = 5;
+            }
+        }
+    }
+
+    alarm(timeout);
+    signal(SIGALRM, [](int){
+        std::cout << l->timeout(timeout) << std::endl;
+        exit(static_cast<int>(Variant::YAHFA));
+    });
+
     auto print_status = [&cursor, variants, arch](){
         //std::cout << "\33[2K\r"; // clear this line
         std::stringstream ss;
@@ -287,23 +331,13 @@ int main() {
                 continue;
             }
             ss << "[";
-            ss << (cursor == i.first ? "x" : " ");
+            ss << (cursor == i.first ? "√" : " ");
             ss << "] ";
             ss << i.second.expression;
             ss << " ";
         }
         std::cout << ss.str() << std::endl;
     };
-
-    // languages
-    Languages* l;
-    char locale[256];
-    __system_property_get("persist.sys.locale", locale);
-    if (locale[0] == 'z' && locale[1] == 'h') {
-        l = new LanguageChinese();
-    } else {
-        l = new Languages();
-    }
 
     std::cout << l->desc_line_1() << std::endl;
     std::cout << l->desc_line_2(timeout) << std::endl;
@@ -328,6 +362,5 @@ int main() {
     }
 
     // std::cout << std::endl << cursor << std::endl;
-    delete l;
     return static_cast<int>(cursor);
 }
