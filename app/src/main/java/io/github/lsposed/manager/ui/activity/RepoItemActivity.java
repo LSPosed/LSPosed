@@ -69,6 +69,9 @@ import io.github.lsposed.manager.util.NavUtil;
 import io.github.lsposed.manager.util.chrome.CustomTabsURLSpan;
 import io.github.lsposed.manager.util.chrome.LinkTransformationMethod;
 import io.noties.markwon.Markwon;
+import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
+import io.noties.markwon.ext.tables.TablePlugin;
+import io.noties.markwon.ext.tasklist.TaskListPlugin;
 import io.noties.markwon.html.HtmlPlugin;
 import io.noties.markwon.image.glide.GlideImagesPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
@@ -93,9 +96,12 @@ public class RepoItemActivity extends BaseActivity {
         bar.setSubtitle(modulePackageName);
         bar.setDisplayHomeAsUpEnabled(true);
         markwon = Markwon.builder(this)
+                .usePlugin(StrikethroughPlugin.create())
+                .usePlugin(TablePlugin.create(this))
+                .usePlugin(TaskListPlugin.create(this))
+                .usePlugin(HtmlPlugin.create())
                 .usePlugin(GlideImagesPlugin.create(GlideApp.with(this)))
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
-                .usePlugin(HtmlPlugin.create())
                 .build();
         module = RepoLoader.getInstance().getOnlineModule(modulePackageName);
         binding.viewPager.setAdapter(new PagerAdapter());
