@@ -6,10 +6,9 @@ import android.os.Looper;
 import android.os.RemoteException;
 import android.util.Log;
 
-import java.util.List;
-
 import de.robv.android.xposed.XposedBridge;
 import io.github.xposed.xposedservice.IXposedService;
+import io.github.xposed.xposedservice.utils.ParceledListSlice;
 
 public class LSPosedService extends IXposedService.Stub {
     public static final String TAG = "LSPosedService";
@@ -55,7 +54,7 @@ public class LSPosedService extends IXposedService.Stub {
     }
 
     @Override
-    public List<PackageInfo> getInstalledPackagesFromAllUsers(int flags) throws RemoteException {
+    public ParceledListSlice<PackageInfo> getInstalledPackagesFromAllUsers(int flags) throws RemoteException {
         return PackageService.getInstalledPackagesFromAllUsers(flags);
     }
 }

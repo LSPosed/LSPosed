@@ -9,9 +9,9 @@ import android.os.ServiceManager;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import io.github.lsposed.lspd.nativebridge.ConfigManager;
+import io.github.xposed.xposedservice.utils.ParceledListSlice;
 
 public class PackageService {
     private static IPackageManager pm = null;
@@ -46,17 +46,13 @@ public class PackageService {
         return res;
     }
 
-    public static List<PackageInfo> getInstalledPackagesFromAllUsers(int flags) throws RemoteException {
-        if (!isInstaller(Binder.getCallingUid())) {
-            throw new RemoteException("Permission denied");
-        }
+    public static ParceledListSlice<PackageInfo> getInstalledPackagesFromAllUsers(int flags) throws RemoteException {
         ArrayList<PackageInfo> res = new ArrayList<>();
         IPackageManager pm = getPackageManager();
-        if (pm == null) return res;
+        if (pm == null) return new ParceledListSlice<>(res);
         for (int uid : UserService.getUsers()) {
-            Log.w("LSPosed", "uid: " + uid);
             res.addAll(pm.getInstalledPackages(flags, uid).getList());
         }
-        return res;
+        return new ParceledListSlice<>(res);
     }
 }
