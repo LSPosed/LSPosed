@@ -69,12 +69,14 @@ import io.github.lsposed.manager.util.NavUtil;
 import io.github.lsposed.manager.util.chrome.CustomTabsURLSpan;
 import io.github.lsposed.manager.util.chrome.LinkTransformationMethod;
 import io.noties.markwon.Markwon;
+import io.noties.markwon.SoftBreakAddsNewLinePlugin;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
 import io.noties.markwon.ext.tables.TablePlugin;
 import io.noties.markwon.ext.tasklist.TaskListPlugin;
 import io.noties.markwon.html.HtmlPlugin;
 import io.noties.markwon.image.glide.GlideImagesPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
+import io.noties.markwon.utils.NoCopySpannableFactory;
 
 public class RepoItemActivity extends BaseActivity {
     ActivityModuleDetailBinding binding;
@@ -102,6 +104,7 @@ public class RepoItemActivity extends BaseActivity {
                 .usePlugin(HtmlPlugin.create())
                 .usePlugin(GlideImagesPlugin.create(GlideApp.with(this)))
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
+                .usePlugin(SoftBreakAddsNewLinePlugin.create())
                 .build();
         module = RepoLoader.getInstance().getOnlineModule(modulePackageName);
         binding.viewPager.setAdapter(new PagerAdapter());
@@ -247,6 +250,7 @@ public class RepoItemActivity extends BaseActivity {
             Release release = items.get(position);
             holder.title.setText(release.getName());
             holder.description.setTransformationMethod(new LinkTransformationMethod(RepoItemActivity.this));
+            holder.description.setSpannableFactory(NoCopySpannableFactory.getInstance());
             markwon.setMarkdown(holder.description, release.getDescription());
             holder.description.setMovementMethod(null);
             holder.openInBrowser.setOnClickListener(v -> NavUtil.startURL(RepoItemActivity.this, release.getUrl()));
