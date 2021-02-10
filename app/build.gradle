@@ -144,7 +144,7 @@ dependencies {
     implementation 'me.zhanghai.android.fastscroll:library:1.1.5'
     implementation files('libs/WeatherView-2.0.3.aar')
     compileOnly project(":hiddenapi-stubs")
-    implementation project(path: ':service')
+    implementation project(":service")
 }
 
 configurations {

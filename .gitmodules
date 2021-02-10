@@ -1,3 +1,6 @@
 [submodule "core/src/main/cpp/external/Dobby"]
 	path = core/src/main/cpp/external/Dobby
 	url = https://github.com/jmpews/Dobby.git
+[submodule "service"]
+	path = service
+	url = https://github.com/Xposed-Modules-Repo/XposedService.git
