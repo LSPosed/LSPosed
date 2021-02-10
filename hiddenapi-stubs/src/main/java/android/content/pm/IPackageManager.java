@@ -19,10 +19,10 @@ public interface IPackageManager extends IInterface {
     String[] getPackagesForUid(int uid)
             throws RemoteException;
 
-    ParceledListSlice getInstalledPackages(int flags, int userId)
+    ParceledListSlice<PackageInfo> getInstalledPackages(int flags, int userId)
             throws RemoteException;
 
-    ParceledListSlice getInstalledApplications(int flags, int userId)
+    ParceledListSlice<ApplicationInfo> getInstalledApplications(int flags, int userId)
             throws RemoteException;
 
     int getUidForSharedUser(String sharedUserName)
