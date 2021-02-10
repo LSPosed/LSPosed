@@ -233,7 +233,7 @@ uint32_t get_event() {
 
 // for phone which has no button
 uint16_t timeout = 10;
-Languages* l = nullptr;
+std::shared_ptr<Languages> l = nullptr;
 
 int main() {
     if (getuid() != 0) {
@@ -245,9 +245,9 @@ int main() {
     char locale[256];
     __system_property_get("persist.sys.locale", locale);
     if (locale[0] == 'z' && locale[1] == 'h') {
-        l = new LanguageChinese();
+        l = std::make_shared<LanguageChinese>();
     } else {
-        l = new Languages();
+        l = std::make_shared<Languages>();
     }
 
     // get current arch
@@ -362,6 +362,6 @@ int main() {
     }
 
     // std::cout << std::endl << cursor << std::endl;
-    delete l; l = nullptr;
+    l.reset();
     return static_cast<int>(cursor);
 }
