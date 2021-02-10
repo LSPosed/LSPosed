@@ -48,6 +48,7 @@ import io.github.lsposed.manager.databinding.ActivityModuleDetailBinding;
 import io.github.lsposed.manager.databinding.ItemRepoReadmeBinding;
 import io.github.lsposed.manager.databinding.ItemRepoReleaseBinding;
 import io.github.lsposed.manager.databinding.ItemRepoReleasesBinding;
+import io.github.lsposed.manager.repo.RepoLoader;
 import io.github.lsposed.manager.repo.model.OnlineModule;
 import io.github.lsposed.manager.repo.model.Release;
 import io.github.lsposed.manager.util.GlideApp;
@@ -67,19 +68,21 @@ public class RepoItemActivity extends BaseActivity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityModuleDetailBinding.inflate(getLayoutInflater());
+        String modulePackageName = getIntent().getStringExtra("modulePackageName");
+        String moduleName = getIntent().getStringExtra("moduleName");
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);
-        module = getIntent().getParcelableExtra("module");
         binding.toolbar.setNavigationOnClickListener(view -> onBackPressed());
         ActionBar bar = getSupportActionBar();
         assert bar != null;
-        bar.setTitle(module.getDescription());
-        bar.setSubtitle(module.getName());
+        bar.setTitle(moduleName);
+        bar.setSubtitle(modulePackageName);
         bar.setDisplayHomeAsUpEnabled(true);
         markwon = Markwon.builder(this)
                 .usePlugin(GlideImagesPlugin.create(GlideApp.with(this)))
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
                 .build();
+        module = RepoLoader.getInstance().getOnlineModule(modulePackageName);
         binding.viewPager.setAdapter(new PagerAdapter());
         binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override

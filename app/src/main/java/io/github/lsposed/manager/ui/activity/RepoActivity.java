@@ -22,7 +22,6 @@ package io.github.lsposed.manager.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -41,7 +40,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -101,6 +100,12 @@ public class RepoActivity extends BaseActivity implements RepoLoader.Listener {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        repoLoader.removeListener(this);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         adapter.initData();
@@ -150,7 +155,8 @@ public class RepoActivity extends BaseActivity implements RepoLoader.Listener {
             holder.itemView.setOnClickListener(v -> {
                 Intent intent = new Intent();
                 intent.setClass(RepoActivity.this, RepoItemActivity.class);
-                intent.putExtra("module", (Parcelable) module);
+                intent.putExtra("modulePackageName", module.getName());
+                intent.putExtra("moduleName", module.getDescription());
                 startActivity(intent);
             });
         }
@@ -160,15 +166,16 @@ public class RepoActivity extends BaseActivity implements RepoLoader.Listener {
             return showList.size();
         }
 
-        public void setData(OnlineModule[] modules) {
-            fullList = Arrays.asList(modules);
+        public void setData(Collection<OnlineModule> modules) {
+            fullList = new ArrayList<>(modules);
+            fullList.sort((o1, o2) -> o1.getDescription().compareToIgnoreCase(o2.getDescription()));
             String queryStr = searchView != null ? searchView.getQuery().toString() : "";
             runOnUiThread(() -> getFilter().filter(queryStr));
         }
 
         public void initData() {
-            OnlineModule[] modules = repoLoader.getOnlineModules();
-            if (modules.length == 0) {
+            Collection<OnlineModule> modules = repoLoader.getOnlineModules();
+            if (!repoLoader.isRepoLoaded()) {
                 binding.swipeRefreshLayout.setRefreshing(true);
                 repoLoader.loadRemoteData();
             } else {
