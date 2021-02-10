@@ -27,7 +27,7 @@ public class LSPosedServiceClient {
 
         List<PackageInfo> ps = null;
         try {
-             ps = service.getInstalledPackagesFromAllUsers(0);
+             ps = service.getInstalledPackagesFromAllUsers(0).getList();
         } catch (RemoteException e) {
             e.printStackTrace();
         }
