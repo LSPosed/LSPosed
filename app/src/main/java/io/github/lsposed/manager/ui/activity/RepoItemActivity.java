@@ -40,6 +40,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -323,12 +324,13 @@ public class RepoItemActivity extends BaseActivity {
                     markwon.setMarkdown(holder.textView, module.getReadme());
                     break;
                 case 1:
-                    holder.recyclerView.setAdapter(new ReleaseAdapter(module.getReleases()));
-                    holder.recyclerView.setLayoutManager(new LinearLayoutManagerFix(RepoItemActivity.this));
-                    break;
                 case 2:
-                    holder.recyclerView.setAdapter(new InformationAdapter(module));
+                    holder.recyclerView.setAdapter(position == 1 ? new ReleaseAdapter(module.getReleases()) : new InformationAdapter(module));
                     holder.recyclerView.setLayoutManager(new LinearLayoutManagerFix(RepoItemActivity.this));
+                    if (!preferences.getBoolean("md2", true)) {
+                        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(RepoItemActivity.this, DividerItemDecoration.VERTICAL);
+                        holder.recyclerView.addItemDecoration(dividerItemDecoration);
+                    }
                     break;
             }
         }
