@@ -103,7 +103,7 @@ public class RepoItemActivity extends BaseActivity {
                 .usePlugin(TaskListPlugin.create(this))
                 .usePlugin(HtmlPlugin.create())
                 .usePlugin(GlideImagesPlugin.create(GlideApp.with(this)))
-                .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
+                .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS, true))
                 .usePlugin(SoftBreakAddsNewLinePlugin.create())
                 .build();
         module = RepoLoader.getInstance().getOnlineModule(modulePackageName);
