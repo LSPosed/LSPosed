@@ -63,6 +63,7 @@ dependencies {
     compileOnly 'androidx.annotation:annotation:1.1.0'
     implementation project(':interface')
     implementation project(':hiddenapi-bridge')
+    implementation project(':manager-service')
 }
 
 android {
