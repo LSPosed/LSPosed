@@ -147,7 +147,7 @@
     <string name="menu_restore">Restore</string>
     <string name="xposed_module_updated_notification_content">%s has been updated</string>
     <string name="module_repo">Repository</string>
-    <string name="module_repo_summary">Module repository</string>
+    <string name="module_repo_summary">Module repository (Alpha)</string>
     <string name="module_readme">Readme</string>
     <string name="module_releases">Releases</string>
     <string name="module_information">Info</string>

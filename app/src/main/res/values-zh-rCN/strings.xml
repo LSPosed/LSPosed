@@ -139,4 +139,14 @@
     <string name="menu_restore">恢复</string>
     <string name="xposed_module_updated_notification_content">%s 已更新</string>
     <string name="compile_done">优化完成</string>
+    <string name="module_repo">仓库</string>
+    <string name="module_repo_summary">模块仓库（Alpha）</string>
+    <string name="module_readme">读我</string>
+    <string name="module_releases">版本</string>
+    <string name="module_information">信息</string>
+    <string name="module_information_homepage">主页</string>
+    <string name="module_information_source_url">源代码</string>
+    <string name="module_information_collaborators">合作者</string>
+    <string name="module_release_view_assets">附件</string>
+    <string name="menu_open_in_browser">在浏览器中打开</string>
 </resources>
