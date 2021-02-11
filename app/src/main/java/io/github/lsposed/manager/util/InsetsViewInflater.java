@@ -24,21 +24,20 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import rikka.insets.WindowInsetsHelper;
 import rikka.layoutinflater.view.LayoutInflaterFactory;
 
 public class InsetsViewInflater extends LayoutInflaterFactory {
-    public InsetsViewInflater(@NotNull AppCompatDelegate delegate) {
+    public InsetsViewInflater(@NonNull AppCompatDelegate delegate) {
         super(delegate);
     }
 
     @Override
-    public void onViewCreated(@NotNull View view, @Nullable View parent, @NotNull String name, @NotNull Context context, @NotNull AttributeSet attrs) {
+    public void onViewCreated(@NonNull View view, @Nullable View parent, @NonNull String name, @NonNull Context context, @NonNull AttributeSet attrs) {
         WindowInsetsHelper.attach(view, attrs);
     }
 }

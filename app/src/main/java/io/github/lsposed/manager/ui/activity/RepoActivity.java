@@ -50,7 +50,7 @@ import io.github.lsposed.manager.databinding.ActivityAppListBinding;
 import io.github.lsposed.manager.repo.RepoLoader;
 import io.github.lsposed.manager.repo.model.OnlineModule;
 import io.github.lsposed.manager.util.LinearLayoutManagerFix;
-import me.zhanghai.android.fastscroll.FastScrollerBuilder;
+import rikka.recyclerview.RecyclerViewKt;
 
 public class RepoActivity extends BaseActivity implements RepoLoader.Listener {
     private final RepoLoader repoLoader = RepoLoader.getInstance();
@@ -71,19 +71,18 @@ public class RepoActivity extends BaseActivity implements RepoLoader.Listener {
         assert bar != null;
         bar.setDisplayHomeAsUpEnabled(true);
         adapter = new RepoAdapter();
+        adapter.setHasStableIds(true);
         binding.recyclerView.setAdapter(adapter);
+        binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManagerFix(this));
-        setupRecyclerViewInsets(binding.recyclerView, binding.getRoot());
-        FastScrollerBuilder fastScrollerBuilder = new FastScrollerBuilder(binding.recyclerView);
+        RecyclerViewKt.addFastScroller(binding.recyclerView, binding.swipeRefreshLayout);
+        RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
         if (!preferences.getBoolean("md2", true)) {
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
                     DividerItemDecoration.VERTICAL);
             binding.recyclerView.addItemDecoration(dividerItemDecoration);
-        } else {
-            fastScrollerBuilder.useMd2Style();
         }
         repoLoader.addListener(this);
-        fastScrollerBuilder.build();
         binding.swipeRefreshLayout.setOnRefreshListener(repoLoader::loadRemoteData);
         searchListener = new SearchView.OnQueryTextListener() {
             @Override
@@ -183,6 +182,11 @@ public class RepoActivity extends BaseActivity implements RepoLoader.Listener {
             } else {
                 adapter.setData(modules);
             }
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return showList.get(position).getName().hashCode();
         }
 
         @Override

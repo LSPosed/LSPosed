@@ -62,6 +62,7 @@ public class AppListActivity extends BaseActivity {
         scopeAdapter = new ScopeAdapter(this, moduleName, modulePackageName, binding.masterSwitch);
         scopeAdapter.setHasStableIds(true);
         binding.recyclerView.setAdapter(scopeAdapter);
+        binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManagerFix(this));
         RecyclerViewKt.addFastScroller(binding.recyclerView, binding.swipeRefreshLayout);
         RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
