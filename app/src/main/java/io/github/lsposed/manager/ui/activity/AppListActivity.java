@@ -16,7 +16,6 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
-import androidx.recyclerview.widget.DividerItemDecoration;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
@@ -27,7 +26,7 @@ import io.github.lsposed.manager.adapters.ScopeAdapter;
 import io.github.lsposed.manager.databinding.ActivityAppListBinding;
 import io.github.lsposed.manager.util.BackupUtils;
 import io.github.lsposed.manager.util.LinearLayoutManagerFix;
-import me.zhanghai.android.fastscroll.FastScrollerBuilder;
+import rikka.recyclerview.RecyclerViewKt;
 
 public class AppListActivity extends BaseActivity {
     private SearchView searchView;
@@ -61,18 +60,11 @@ public class AppListActivity extends BaseActivity {
         bar.setSubtitle(modulePackageName);
         scopeAdapter = new ScopeAdapter(this, moduleName, modulePackageName, binding.masterSwitch);
         scopeAdapter.setHasStableIds(true);
+        RecyclerViewKt.addFastScroller(binding.recyclerView, binding.swipeRefreshLayout);
+        RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
         binding.recyclerView.setAdapter(scopeAdapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManagerFix(this));
         setupRecyclerViewInsets(binding.recyclerView, binding.getRoot());
-        FastScrollerBuilder fastScrollerBuilder = new FastScrollerBuilder(binding.recyclerView);
-        if (!preferences.getBoolean("md2", true)) {
-            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
-                    DividerItemDecoration.VERTICAL);
-            binding.recyclerView.addItemDecoration(dividerItemDecoration);
-        } else {
-            fastScrollerBuilder.useMd2Style();
-        }
-        fastScrollerBuilder.build();
         handler.postDelayed(runnable, 300);
         binding.swipeRefreshLayout.setOnRefreshListener(scopeAdapter::refresh);
 

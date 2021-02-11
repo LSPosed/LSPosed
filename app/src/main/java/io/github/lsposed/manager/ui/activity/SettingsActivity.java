@@ -45,8 +45,8 @@ import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.databinding.ActivitySettingsBinding;
 import io.github.lsposed.manager.ui.fragment.StatusDialogBuilder;
 import io.github.lsposed.manager.ui.widget.IntegerListPreference;
-import io.github.lsposed.manager.ui.widget.RecyclerViewBugFixed;
 import io.github.lsposed.manager.util.BackupUtils;
+import rikka.recyclerview.RecyclerViewKt;
 
 public class SettingsActivity extends BaseActivity {
     private static final String KEY_PREFIX = SettingsActivity.class.getName() + '.';
@@ -396,7 +396,7 @@ public class SettingsActivity extends BaseActivity {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 RecyclerView recyclerView = getListView();
                 recyclerView.setClipToPadding(false);
-                recyclerView.setEdgeEffectFactory(new RecyclerViewBugFixed.AlwaysClipToPaddingEdgeEffectFactory());
+                RecyclerViewKt.fixEdgeEffect(recyclerView, false, true);
                 ViewCompat.setOnApplyWindowInsetsListener(recyclerView, (v, insets) -> {
                     Insets insets1 = insets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.ime());
                     v.setPadding(0, 0, 0, insets1.bottom);
