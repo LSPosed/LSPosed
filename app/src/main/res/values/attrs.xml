@@ -6,11 +6,4 @@
     <attr name="actionBarTheme" format="reference" />
     <attr name="actionBarPopupTheme" format="reference" />
     <attr name="tabLayoutTheme" format="reference" />
-
-    <declare-styleable name="MasterSwitch">
-        <attr name="masterSwitchTextAppearance" format="reference" />
-        <attr name="masterSwitchBackgroundOn" format="color" />
-        <attr name="masterSwitchBackgroundOff" format="color" />
-        <attr name="masterSwitchForeground" format="color" />
-    </declare-styleable>
 </resources>

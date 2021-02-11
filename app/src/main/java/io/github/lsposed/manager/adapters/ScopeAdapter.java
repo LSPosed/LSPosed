@@ -51,9 +51,9 @@ import io.github.lsposed.manager.BuildConfig;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.ui.activity.AppListActivity;
 import io.github.lsposed.manager.ui.fragment.CompileDialogFragment;
-import io.github.lsposed.manager.ui.widget.MasterSwitch;
 import io.github.lsposed.manager.util.GlideApp;
 import io.github.lsposed.manager.util.ModuleUtil;
+import rikka.widget.switchbar.SwitchBar;
 
 import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
 
@@ -64,14 +64,14 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     private final SharedPreferences preferences;
     private final String modulePackageName;
     private final String moduleName;
-    private final MasterSwitch masterSwitch;
+    private final SwitchBar masterSwitch;
     private List<PackageInfo> fullList, showList;
     private List<String> checkedList;
     private final List<String> recommendedList;
     private boolean enabled = true;
     private ApplicationInfo selectedInfo;
 
-    public ScopeAdapter(AppListActivity activity, String moduleName, String modulePackageName, MasterSwitch masterSwitch) {
+    public ScopeAdapter(AppListActivity activity, String moduleName, String modulePackageName, SwitchBar masterSwitch) {
         this.activity = activity;
         this.moduleName = moduleName;
         this.modulePackageName = modulePackageName;
@@ -80,13 +80,11 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         fullList = showList = Collections.emptyList();
         checkedList = Collections.emptyList();
         pm = activity.getPackageManager();
-        masterSwitch.setOnCheckedChangedListener(new MasterSwitch.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(boolean checked) {
-                enabled = checked;
-                ModuleUtil.getInstance().setModuleEnabled(modulePackageName, enabled);
-                notifyDataSetChanged();
-            }
+        masterSwitch.setOnCheckedChangeListener((view, isChecked) -> {
+            enabled = isChecked;
+            ModuleUtil.getInstance().setModuleEnabled(modulePackageName, enabled);
+            notifyDataSetChanged();
+            return true;
         });
         ModuleUtil.InstalledModule module = ModuleUtil.getInstance().getModule(modulePackageName);
         recommendedList = module.getScopeList();

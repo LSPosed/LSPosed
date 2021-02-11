@@ -26,12 +26,12 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:orientation="vertical">
 
-        <io.github.lsposed.manager.ui.widget.MasterSwitch
+        <rikka.widget.switchbar.SwitchBar
             android:id="@+id/master_switch"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:theme="@style/MasterSwitch"
-            android:foreground="?selectableItemBackground" />
+            app:switchOnText="@string/enable_module"
+            app:switchOffText="@string/enable_module" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefreshLayout"

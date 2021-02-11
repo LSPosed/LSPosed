@@ -21,6 +21,10 @@
         </item>
         <item name="tabLayoutTheme">@style/Widget.MaterialComponents.TabLayout</item>
         <item name="liftOnScroll">false</item>
+        <item name="switchBarStyle">@style/Widget.SwitchBar.Light</item>
+        <item name="switchBarTheme">@style/ThemeOverlay.SwitchBar</item>
+        <item name="switchBarBackgroundNormal">@color/switchbar_background_light</item>
+        <item name="switchBarBackgroundDisabled">@color/switchbar_background_light</item>
     </style>
 
     <style name="Widget.MaterialComponents.CompoundButton.CheckBox" parent="Widget.AppCompat.CompoundButton.CheckBox" tools:override="true">
@@ -34,23 +38,6 @@
     </style>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
-
-    <style name="MasterSwitch" parent="@style/ThemeOverlay.AppCompat.Dark">
-        <item name="masterSwitchBackgroundOff">#80868b</item>
-        <item name="masterSwitchBackgroundOn">?colorAccent</item>
-        <item name="masterSwitchTextAppearance">@style/MasterSwitch.TextAppearance</item>
-        <item name="switchStyle">@style/MasterSwitch.Switch</item>
-    </style>
-
-    <style name="MasterSwitch.Switch" parent="@style/Widget.AppCompat.CompoundButton.Switch">
-        <item name="trackTint">#33ffffff</item>
-        <item name="thumbTint">@android:color/white</item>
-    </style>
-
-    <style name="MasterSwitch.TextAppearance" parent="@style/TextAppearance.AppCompat.Body2">
-        <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@android:color/white</item>
-    </style>
 
     <style name="ThemeOverlay" />
 

@@ -10,5 +10,9 @@
         <item name="listItemBackground">@drawable/item_background_md2</item>
         <item name="roundBackground">@drawable/item_background_md2</item>
         <item name="liftOnScroll">true</item>
+        <item name="switchBarStyle">@style/Widget.SwitchBar</item>
+        <item name="switchBarTheme">@style/ThemeOverlay.SwitchBar</item>
+        <item name="switchBarBackgroundNormal">@color/switchbar_background_dark</item>
+        <item name="switchBarBackgroundDisabled">@color/switchbar_background_dark</item>
     </style>
 </resources>
