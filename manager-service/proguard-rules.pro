@@ -14,12 +14,8 @@
 
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
--keepattributes SourceFile,LineNumberTable
+#-keepattributes SourceFile,LineNumberTable
 
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
--renamesourcefileattribute
--keep class io.github.lsposed.manager.Constants { *; }
--keepclassmembers class io.github.lsposed.manager.receivers.LSPosedManagerServiceClient {
-    private static android.os.IBinder binder;
-}
+#-renamesourcefileattribute SourceFile

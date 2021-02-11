@@ -1,20 +1,25 @@
 package io.github.lsposed.manager.receivers;
 
 import android.content.pm.PackageInfo;
+import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
 
 import java.util.List;
 
+import io.github.lsposed.lspd.ILSPManagerService;
 import io.github.lsposed.manager.App;
-import io.github.xposed.xposedservice.XposedService;
 
-public class LSPosedServiceClient {
+public class LSPosedManagerServiceClient {
+
+    private static IBinder binder = null;
+    private static ILSPManagerService service = null;
 
     public static void testBinder() {
-        XposedService service = XposedService.getService();
+        if (service == null && binder != null) {
+            service = ILSPManagerService.Stub.asInterface(binder);
+        }
         if (service == null) {
-            Log.e(App.TAG, "Version fail");
             return;
         }
         int ver = -1;

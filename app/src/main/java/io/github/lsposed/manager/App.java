@@ -42,7 +42,7 @@ import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import rikka.material.app.DayNightDelegate;
 
-import static io.github.lsposed.manager.receivers.LSPosedServiceClient.testBinder;
+import static io.github.lsposed.manager.receivers.LSPosedManagerServiceClient.testBinder;
 
 public class App extends Application {
     public static final String TAG = "LSPosedManager";
