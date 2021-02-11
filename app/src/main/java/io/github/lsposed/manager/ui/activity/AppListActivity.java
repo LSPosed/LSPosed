@@ -27,7 +27,7 @@ import io.github.lsposed.manager.adapters.ScopeAdapter;
 import io.github.lsposed.manager.databinding.ActivityAppListBinding;
 import io.github.lsposed.manager.util.BackupUtils;
 import io.github.lsposed.manager.util.LinearLayoutManagerFix;
-import me.zhanghai.android.fastscroll.FastScrollerBuilder;
+import rikka.recyclerview.RecyclerViewKt;
 
 public class AppListActivity extends BaseActivity {
     private SearchView searchView;
@@ -63,16 +63,13 @@ public class AppListActivity extends BaseActivity {
         scopeAdapter.setHasStableIds(true);
         binding.recyclerView.setAdapter(scopeAdapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManagerFix(this));
-        setupRecyclerViewInsets(binding.recyclerView, binding.getRoot());
-        FastScrollerBuilder fastScrollerBuilder = new FastScrollerBuilder(binding.recyclerView);
+        RecyclerViewKt.addFastScroller(binding.recyclerView, binding.swipeRefreshLayout);
+        RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
         if (!preferences.getBoolean("md2", true)) {
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
                     DividerItemDecoration.VERTICAL);
             binding.recyclerView.addItemDecoration(dividerItemDecoration);
-        } else {
-            fastScrollerBuilder.useMd2Style();
         }
-        fastScrollerBuilder.build();
         handler.postDelayed(runnable, 300);
         binding.swipeRefreshLayout.setOnRefreshListener(scopeAdapter::refresh);
 

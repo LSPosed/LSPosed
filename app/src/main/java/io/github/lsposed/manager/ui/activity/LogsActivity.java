@@ -43,6 +43,7 @@ import io.github.lsposed.manager.databinding.ActivityLogsBinding;
 import io.github.lsposed.manager.databinding.DialogInstallWarningBinding;
 import io.github.lsposed.manager.databinding.ItemLogBinding;
 import io.github.lsposed.manager.util.LinearLayoutManagerFix;
+import rikka.recyclerview.RecyclerViewKt;
 
 public class LogsActivity extends BaseActivity {
     private int logType = 0;
@@ -89,10 +90,10 @@ public class LogsActivity extends BaseActivity {
                     .show();
         }
         adapter = new LogsAdapter();
+        RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
         binding.recyclerView.setAdapter(adapter);
         layoutManager = new LinearLayoutManagerFix(this);
         binding.recyclerView.setLayoutManager(layoutManager);
-        setupRecyclerViewInsets(binding.recyclerView, binding.getRoot());
         try {
             if (Files.readAllBytes(Paths.get(Constants.getMiscDir(), "disable_verbose_log"))[0] == 49) {
                 binding.slidingTabs.setVisibility(View.GONE);

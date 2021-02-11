@@ -70,6 +70,10 @@ dependencies {
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'com.takisoft.preferencex:preferencex:1.1.0'
     implementation 'com.takisoft.preferencex:preferencex-colorpicker:1.1.0'
+    implementation 'rikka.insets:insets:1.0.1'
+    implementation 'rikka.recyclerview:recyclerview-utils:1.2.0'
+    implementation "rikka.widget:switchbar:1.0.2"
+    implementation 'rikka.layoutinflater:layoutinflater:1.0.1'
     implementation 'tech.rectifier.preferencex-android:preferencex-simplemenu:88f93154b2'
     implementation 'me.zhanghai.android.appiconloader:appiconloader-glide:1.2.0'
     implementation 'me.zhanghai.android.fastscroll:library:1.1.5'

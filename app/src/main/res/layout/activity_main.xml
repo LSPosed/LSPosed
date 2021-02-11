@@ -3,7 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/snackbar"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    app:consumeSystemWindowsInsets="start|end"
+    app:edgeToEdge="true"
+    app:fitSystemWindowsInsets="start|end">
 
     <com.github.matteobattilana.weather.WeatherView
         android:id="@+id/weather_view"
@@ -30,6 +33,7 @@
         android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:fitSystemWindowsInsets="top|bottom"
         android:scrollbars="none">
 
         <LinearLayout

@@ -3,7 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/snackbar"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    app:consumeSystemWindowsInsets="top|start|end"
+    app:edgeToEdge="true"
+    app:fitSystemWindowsInsets="top|start|end">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -26,12 +29,12 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:orientation="vertical">
 
-        <io.github.lsposed.manager.ui.widget.MasterSwitch
+        <rikka.widget.switchbar.SwitchBar
             android:id="@+id/master_switch"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:theme="@style/MasterSwitch"
-            android:foreground="?selectableItemBackground" />
+            app:switchOnText="@string/enable_module"
+            app:switchOffText="@string/enable_module" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefreshLayout"
@@ -40,11 +43,12 @@
             android:orientation="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <io.github.lsposed.manager.ui.widget.RecyclerViewBugFixed
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:clipToPadding="false" />
+                android:clipToPadding="false"
+                app:fitSystemWindowsInsets="bottom" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

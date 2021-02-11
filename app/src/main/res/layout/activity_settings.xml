@@ -3,7 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/snackbar"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    app:consumeSystemWindowsInsets="top|start|end"
+    app:edgeToEdge="true"
+    app:fitSystemWindowsInsets="top|start|end">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
