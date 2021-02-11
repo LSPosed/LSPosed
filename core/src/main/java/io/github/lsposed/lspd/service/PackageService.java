@@ -2,16 +2,14 @@ package io.github.lsposed.lspd.service;
 
 import android.content.pm.IPackageManager;
 import android.content.pm.PackageInfo;
-import android.os.Binder;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.ServiceManager;
-import android.util.Log;
 
 import java.util.ArrayList;
 
 import io.github.lsposed.lspd.nativebridge.ConfigManager;
-import io.github.xposed.xposedservice.utils.ParceledListSlice;
+import io.github.lsposed.lspd.utils.ParceledListSlice;
 
 public class PackageService {
     private static IPackageManager pm = null;
@@ -26,13 +24,13 @@ public class PackageService {
     }
 
     public static PackageInfo getPackageInfo(String packageName, int flags, int uid) throws RemoteException {
-        pm = getPackageManager();
+        IPackageManager pm = getPackageManager();
         if (pm == null) return null;
         return pm.getPackageInfo(packageName, flags, uid);
     }
 
     public static String[] getPackagesForUid(int uid) throws RemoteException {
-        pm = getPackageManager();
+        IPackageManager pm = getPackageManager();
         if (pm == null) return new String[0];
         return pm.getPackagesForUid(uid);
     }

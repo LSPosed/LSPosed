@@ -28,11 +28,12 @@ import android.ddm.DdmHandleAppName;
 
 import io.github.lsposed.common.KeepAll;
 import io.github.lsposed.lspd.service.LSPosedService;
+import io.github.lsposed.lspd.service.Service;
 import io.github.lsposed.lspd.util.Utils;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import static io.github.lsposed.lspd.service.LSPosedService.TAG;
+import static io.github.lsposed.lspd.service.Service.TAG;
 
 @SuppressLint("DefaultLocale")
 public class Main implements KeepAll {
@@ -135,6 +136,6 @@ public class Main implements KeepAll {
         waitSystemService(Context.USER_SERVICE);
         waitSystemService(Context.APP_OPS_SERVICE);
 
-        LSPosedService.start();
+        Service.start();
     }
 }
