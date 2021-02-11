@@ -54,6 +54,7 @@ public class AppListActivity extends BaseActivity {
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);
         binding.toolbar.setNavigationOnClickListener(view -> onBackPressed());
+        binding.appBar.setLiftOnScroll(false);
         ActionBar bar = getSupportActionBar();
         assert bar != null;
         bar.setDisplayHomeAsUpEnabled(true);
