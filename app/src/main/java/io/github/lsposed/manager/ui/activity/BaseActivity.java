@@ -5,19 +5,14 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
+import android.view.LayoutInflater;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.StyleRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -29,6 +24,7 @@ import io.github.lsposed.manager.Constants;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.util.CustomThemeColor;
 import io.github.lsposed.manager.util.CustomThemeColors;
+import io.github.lsposed.manager.util.InsetsViewInflater;
 import io.github.lsposed.manager.util.NavUtil;
 import io.github.lsposed.manager.util.Version;
 
@@ -45,6 +41,10 @@ public class BaseActivity extends AppCompatActivity {
 
     public static boolean isBlackNightTheme() {
         return preferences.getBoolean("black_dark_theme", false);
+    }
+
+    private void onInstallViewFactory(LayoutInflater layoutInflater) {
+        layoutInflater.setFactory2(new InsetsViewInflater(getDelegate()));
     }
 
     public String getTheme(Context context) {
@@ -98,6 +98,7 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        onInstallViewFactory(LayoutInflater.from(this));
         super.onCreate(savedInstanceState);
         AppCompatDelegate.setDefaultNightMode(preferences.getInt("theme", -1));
         theme = getTheme(this) + getCustomTheme() + preferences.getBoolean("md2", true);
@@ -117,18 +118,6 @@ public class BaseActivity extends AppCompatActivity {
                         .setCancelable(false)
                         .show();
             }
-        }
-    }
-
-    protected void setupRecyclerViewInsets(View recyclerView, View root) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-            ViewCompat.setOnApplyWindowInsetsListener(recyclerView, (v, insets) -> {
-                Insets insets1 = insets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.ime());
-                root.setPadding(insets1.left, insets1.top, insets1.right, 0);
-                v.setPadding(0, 0, 0, insets1.bottom);
-                return WindowInsetsCompat.CONSUMED;
-            });
         }
     }
 

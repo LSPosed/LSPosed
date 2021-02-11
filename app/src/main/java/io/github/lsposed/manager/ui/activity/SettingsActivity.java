@@ -83,14 +83,6 @@ public class SettingsActivity extends BaseActivity {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new SettingsFragment()).commit();
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-            ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
-                Insets insets1 = insets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.ime());
-                binding.getRoot().setPadding(insets1.left, insets1.top, insets1.right, 0);
-                return insets;
-            });
-        }
         if (Constants.getXposedVersion() == null) {
             Snackbar.make(binding.snackbar, R.string.lsposed_not_active, Snackbar.LENGTH_LONG).show();
         }

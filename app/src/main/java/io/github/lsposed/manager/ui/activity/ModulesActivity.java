@@ -80,7 +80,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         moduleUtil.addListener(this);
         binding.recyclerView.setAdapter(adapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManagerFix(this));
-        setupRecyclerViewInsets(binding.recyclerView, binding.getRoot());
         RecyclerViewKt.addFastScroller(binding.recyclerView, binding.swipeRefreshLayout);
         RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
         binding.swipeRefreshLayout.setOnRefreshListener(() -> adapter.refresh(true));

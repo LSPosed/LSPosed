@@ -2,15 +2,10 @@ package io.github.lsposed.manager.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
@@ -37,17 +32,6 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-        ViewCompat.setOnApplyWindowInsetsListener(binding.nestedScrollView, (v, insets) -> {
-            Insets insets1 = insets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.ime());
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                v.setPadding(insets1.left, insets1.top, insets1.right, insets1.bottom);
-            } else {
-                v.setPadding(0, insets1.top, 0, 0);
-                binding.getRoot().setPadding(insets1.left, 0, insets1.right, insets1.bottom);
-            }
-            return WindowInsetsCompat.CONSUMED;
-        });
         HolidayHelper.setup(this);
         binding.status.setOnClickListener(v -> {
             if (Constants.getXposedVersionCode() != -1) {

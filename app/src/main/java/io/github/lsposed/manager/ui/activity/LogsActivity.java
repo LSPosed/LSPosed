@@ -94,7 +94,6 @@ public class LogsActivity extends BaseActivity {
         binding.recyclerView.setAdapter(adapter);
         layoutManager = new LinearLayoutManagerFix(this);
         binding.recyclerView.setLayoutManager(layoutManager);
-        setupRecyclerViewInsets(binding.recyclerView, binding.getRoot());
         try {
             if (Files.readAllBytes(Paths.get(Constants.getMiscDir(), "disable_verbose_log"))[0] == 49) {
                 binding.slidingTabs.setVisibility(View.GONE);

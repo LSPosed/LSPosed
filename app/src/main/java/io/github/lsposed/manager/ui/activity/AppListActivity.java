@@ -64,7 +64,6 @@ public class AppListActivity extends BaseActivity {
         RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
         binding.recyclerView.setAdapter(scopeAdapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManagerFix(this));
-        setupRecyclerViewInsets(binding.recyclerView, binding.getRoot());
         handler.postDelayed(runnable, 300);
         binding.swipeRefreshLayout.setOnRefreshListener(scopeAdapter::refresh);
 
