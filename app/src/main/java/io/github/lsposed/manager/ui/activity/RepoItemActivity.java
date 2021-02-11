@@ -20,7 +20,6 @@
 
 package io.github.lsposed.manager.ui.activity;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -36,10 +35,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
@@ -77,6 +72,7 @@ import io.noties.markwon.html.HtmlPlugin;
 import io.noties.markwon.image.glide.GlideImagesPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
 import io.noties.markwon.utils.NoCopySpannableFactory;
+import rikka.recyclerview.RecyclerViewKt;
 
 public class RepoItemActivity extends BaseActivity {
     ActivityModuleDetailBinding binding;
@@ -120,14 +116,6 @@ public class RepoItemActivity extends BaseActivity {
         });
         int[] titles = new int[]{R.string.module_readme, R.string.module_releases, R.string.module_information};
         new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> tab.setText(titles[position])).attach();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-            ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
-                Insets insets1 = insets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.ime());
-                v.setPadding(insets1.left, insets1.top, insets1.right, 0);
-                return insets;
-            });
-        }
     }
 
     @Override
@@ -311,33 +299,6 @@ public class RepoItemActivity extends BaseActivity {
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                ViewCompat.setOnApplyWindowInsetsListener(holder.itemView, (v, insets) -> {
-                    Insets insets1 = insets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.ime());
-                    if (position == 0) {
-                        v.setPadding(0, 0, 0, insets1.bottom);
-                    } else {
-                        holder.recyclerView.setPadding(0, 0, 0, insets1.bottom);
-                    }
-                    return WindowInsetsCompat.CONSUMED;
-                });
-                if (holder.itemView.isAttachedToWindow()) {
-                    holder.itemView.requestApplyInsets();
-                } else {
-                    holder.itemView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
-                        @Override
-                        public void onViewAttachedToWindow(View v) {
-                            v.removeOnAttachStateChangeListener(this);
-                            v.requestApplyInsets();
-                        }
-
-                        @Override
-                        public void onViewDetachedFromWindow(View v) {
-
-                        }
-                    });
-                }
-            }
             switch (position) {
                 case 0:
                     holder.textView.setTransformationMethod(new LinkTransformationMethod(RepoItemActivity.this));
@@ -351,6 +312,8 @@ public class RepoItemActivity extends BaseActivity {
                         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(RepoItemActivity.this, DividerItemDecoration.VERTICAL);
                         holder.recyclerView.addItemDecoration(dividerItemDecoration);
                     }
+                    RecyclerViewKt.fixEdgeEffect(holder.recyclerView, false, true);
+                    RecyclerViewKt.addFastScroller(holder.recyclerView, holder.itemView);
                     break;
             }
         }

@@ -18,8 +18,10 @@
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 
-<io.github.lsposed.manager.ui.widget.RecyclerViewBugFixed android:id="@+id/recyclerView"
+<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/recyclerView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipToPadding="false"
-    xmlns:android="http://schemas.android.com/apk/res/android" />
+    app:fitSystemWindowsInsets="bottom" />
