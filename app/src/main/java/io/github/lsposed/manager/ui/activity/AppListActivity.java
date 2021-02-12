@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -146,7 +147,7 @@ public class AppListActivity extends BaseActivity {
     }
 
     public void onDataReady() {
-        handler.post(() -> binding.progress.hide());
+        handler.post(() -> binding.progress.setIndeterminate(false));
         String queryStr = searchView != null ? searchView.getQuery().toString() : "";
         runOnUiThread(() -> scopeAdapter.getFilter().filter(queryStr));
     }
