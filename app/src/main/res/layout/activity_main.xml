@@ -132,6 +132,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
+                android:outlineAmbientShadowColor="#3A000000"
+                android:outlineSpotShadowColor="#3A000000"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="4dp"
                 app:cardPreventCornerOverlap="false">
@@ -183,6 +185,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
+                android:outlineAmbientShadowColor="#3A000000"
+                android:outlineSpotShadowColor="#3A000000"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="4dp"
                 app:cardPreventCornerOverlap="false">

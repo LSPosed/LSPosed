@@ -35,10 +35,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
@@ -254,7 +254,7 @@ public class RepoItemActivity extends BaseActivity {
                 holder.viewAssets.setOnClickListener(v -> {
                     ArrayList<String> names = new ArrayList<>();
                     assets.forEach(releaseAsset -> names.add(releaseAsset.getName()));
-                    new MaterialAlertDialogBuilder(RepoItemActivity.this)
+                    new AlertDialog.Builder(RepoItemActivity.this)
                             .setItems(names.toArray(new String[0]), (dialog, which) -> NavUtil.startURL(RepoItemActivity.this, assets.get(which).getDownloadUrl()))
                             .show();
                 });

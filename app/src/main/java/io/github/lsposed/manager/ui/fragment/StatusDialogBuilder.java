@@ -1,6 +1,7 @@
 package io.github.lsposed.manager.ui.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Build;
 import android.view.LayoutInflater;
@@ -8,8 +9,6 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.core.text.HtmlCompat;
-
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -24,7 +23,7 @@ import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.databinding.StatusInstallerBinding;
 
 @SuppressLint("StaticFieldLeak")
-public class StatusDialogBuilder extends MaterialAlertDialogBuilder {
+public class StatusDialogBuilder extends AlertDialog.Builder {
     private static final String CPU_ABI;
     private static final String CPU_ABI2;
 

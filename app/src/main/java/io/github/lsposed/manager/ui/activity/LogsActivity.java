@@ -22,7 +22,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
@@ -79,7 +78,7 @@ public class LogsActivity extends BaseActivity {
         }
         if (!preferences.getBoolean("hide_logcat_warning", false)) {
             DialogInstallWarningBinding binding = DialogInstallWarningBinding.inflate(getLayoutInflater());
-            new MaterialAlertDialogBuilder(this)
+            new AlertDialog.Builder(this)
                     .setTitle(R.string.install_warning_title)
                     .setMessage(R.string.not_logcat)
                     .setView(binding.getRoot())
@@ -251,7 +250,7 @@ public class LogsActivity extends BaseActivity {
 
         @Override
         protected void onPreExecute() {
-            mProgressDialog = new MaterialAlertDialogBuilder(LogsActivity.this).create();
+            mProgressDialog = new AlertDialog.Builder(LogsActivity.this).create();
             mProgressDialog.setMessage(getString(R.string.loading));
             mProgressDialog.setCancelable(false);
             handler.postDelayed(mRunnable, 300);
