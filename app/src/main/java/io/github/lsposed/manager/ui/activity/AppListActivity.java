@@ -17,7 +17,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 import io.github.lsposed.manager.BuildConfig;
@@ -84,7 +83,7 @@ public class AppListActivity extends BaseActivity {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        AlertDialog alertDialog = new MaterialAlertDialogBuilder(this)
+                        AlertDialog alertDialog = new AlertDialog.Builder(this)
                                 .setCancelable(false)
                                 .setMessage(R.string.settings_backuping)
                                 .show();
@@ -110,7 +109,7 @@ public class AppListActivity extends BaseActivity {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        AlertDialog alertDialog = new MaterialAlertDialogBuilder(this)
+                        AlertDialog alertDialog = new AlertDialog.Builder(this)
                                 .setCancelable(false)
                                 .setMessage(R.string.settings_restoring)
                                 .show();

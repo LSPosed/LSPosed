@@ -31,12 +31,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.checkbox.MaterialCheckBox;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -201,7 +201,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         int itemId = item.getItemId();
         if (itemId == R.id.use_recommended) {
             if (!checkedList.isEmpty()) {
-                new MaterialAlertDialogBuilder(activity)
+                new AlertDialog.Builder(activity)
                         .setTitle(R.string.use_recommended)
                         .setMessage(R.string.use_recommended_message)
                         .setPositiveButton(android.R.string.ok, (dialog, which) -> checkRecommended())
@@ -468,7 +468,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
 
     public boolean onBackPressed() {
         if (masterSwitch.isChecked() && checkedList.isEmpty()) {
-            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(activity);
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
             builder.setTitle(R.string.use_recommended);
             builder.setMessage(hasRecommended() ? R.string.no_scope_selected_has_recommended : R.string.no_scope_selected);
             if (hasRecommended()) {

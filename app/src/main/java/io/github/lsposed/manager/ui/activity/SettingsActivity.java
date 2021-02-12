@@ -21,7 +21,6 @@ import androidx.preference.Preference;
 import androidx.preference.SwitchPreference;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.takisoft.preferencex.PreferenceFragmentCompat;
 import com.takisoft.preferencex.SimpleMenuPreference;
@@ -133,7 +132,7 @@ public class SettingsActivity extends BaseActivity {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        AlertDialog alertDialog = new MaterialAlertDialogBuilder(requireActivity())
+                        AlertDialog alertDialog = new AlertDialog.Builder(requireActivity())
                                 .setCancelable(false)
                                 .setMessage(R.string.settings_backuping)
                                 .show();
@@ -160,7 +159,7 @@ public class SettingsActivity extends BaseActivity {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        AlertDialog alertDialog = new MaterialAlertDialogBuilder(requireActivity())
+                        AlertDialog alertDialog = new AlertDialog.Builder(requireActivity())
                                 .setCancelable(false)
                                 .setMessage(R.string.settings_restoring)
                                 .show();

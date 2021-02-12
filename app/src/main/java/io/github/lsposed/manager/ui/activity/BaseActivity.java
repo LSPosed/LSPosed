@@ -13,9 +13,8 @@ import android.view.Window;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StyleRes;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
-
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.Objects;
 
@@ -101,7 +100,7 @@ public class BaseActivity extends MaterialActivity {
             Version managerVersion = new Version(BuildConfig.VERSION_NAME);
             Version coreVersion = new Version(coreVersionStr);
             if (!managerVersion.equals(coreVersion)) {
-                new MaterialAlertDialogBuilder(this)
+                new AlertDialog.Builder(this)
                         .setMessage(R.string.outdated_manager)
                         .setPositiveButton(R.string.ok, (dialog, id) -> {
                             NavUtil.startURL(this, getString(R.string.about_source));
