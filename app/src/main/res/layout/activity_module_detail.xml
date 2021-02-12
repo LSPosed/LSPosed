@@ -22,46 +22,42 @@
     android:id="@+id/snackbar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:consumeSystemWindowsInsets="top|start|end"
+    app:consumeSystemWindowsInsets="start|end"
     app:edgeToEdge="true"
-    app:fitSystemWindowsInsets="top|start|end">
+    app:fitSystemWindowsInsets="start|end">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <rikka.material.widget.AppBarLayout
         android:id="@+id/app_bar"
+        style="?appBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="?actionBarTheme"
-        android:elevation="4dp">
+        android:fitsSystemWindows="true">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?colorActionBar"
-            app:popupTheme="?actionBarPopupTheme" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tab_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?colorActionBar"
-            style="?tabLayoutTheme">
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                android:background="?colorActionBar"
+                app:subtitleTextAppearance="@android:style/TextAppearance.Material.Widget.Toolbar.Subtitle"
+                app:titleTextAppearance="@android:style/TextAppearance.Material.Widget.Toolbar.Title"
+                app:popupTheme="?actionBarPopupTheme" />
 
-        </com.google.android.material.tabs.TabLayout>
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tab_layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/tab_layout_height"
+                android:background="?colorActionBar"
+                style="?tabLayoutTheme" />
+        </LinearLayout>
+    </rikka.material.widget.AppBarLayout>
 
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <LinearLayout
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/view_pager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </androidx.viewpager2.widget.ViewPager2>
-    </LinearLayout>
+        android:layout_height="match_parent" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

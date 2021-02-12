@@ -38,38 +38,45 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:padding="20dp"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="#000"
+                app:cardCornerRadius="0dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="#fff"
-                    android:textSize="48sp"
-                    android:paddingHorizontal="10dp"
-                    android:textStyle="bold"
-                    android:text="LS" />
-
-                <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingHorizontal="5dp"
-                    android:background="@drawable/ph_drawable"
-                    android:paddingVertical="7dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:padding="20dp"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="#000"
+                        android:textColor="#fff"
                         android:textSize="48sp"
+                        android:paddingHorizontal="10dp"
                         android:textStyle="bold"
-                        android:text="Posed" />
-                </FrameLayout>
-            </LinearLayout>
+                        android:text="LS" />
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="5dp"
+                        android:background="@drawable/ph_drawable"
+                        android:paddingVertical="7dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#000"
+                            android:textSize="48sp"
+                            android:textStyle="bold"
+                            android:text="Posed" />
+                    </FrameLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -93,6 +100,8 @@
                     <ImageView
                         android:layout_width="64dp"
                         android:layout_height="64dp"
+                        android:scaleX="1.2"
+                        android:scaleY="1.2"
                         app:srcCompat="@drawable/ic_telegram_2019_logo" />
 
                     <TextView
@@ -120,8 +129,7 @@
                     <ImageView
                         android:layout_width="64dp"
                         android:layout_height="64dp"
-                        android:scaleX="1.2"
-                        android:scaleY="1.2"
+                        app:tint="?colorControlNormal"
                         app:srcCompat="@drawable/ic_github" />
 
                     <TextView

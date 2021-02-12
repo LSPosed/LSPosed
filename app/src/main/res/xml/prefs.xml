@@ -6,7 +6,7 @@
         android:title="@string/group_network"
         app:iconSpaceReserved="false">
 
-        <SwitchPreferenceCompat
+        <SwitchPreference
             android:defaultValue="false"
             android:key="doh"
             android:summary="@string/dns_over_http_summary"
@@ -38,20 +38,20 @@
             android:summary="%s"
             android:title="@string/settings_theme"
             app:iconSpaceReserved="false" />
-        <SwitchPreferenceCompat
+        <SwitchPreference
             android:key="md2"
             android:title="@string/material_design_2"
             android:defaultValue="true"
             app:iconSpaceReserved="false" />
-        <SwitchPreferenceCompat
+        <SwitchPreference
             android:key="colorized_action_bar"
             android:title="@string/colorized_action_bar"
             app:iconSpaceReserved="false" />
-        <SwitchPreferenceCompat
+        <SwitchPreference
             android:key="transparent_status_bar"
             android:title="@string/transparent_status_bar"
             app:iconSpaceReserved="false" />
-        <SwitchPreferenceCompat
+        <SwitchPreference
             android:key="black_dark_theme"
             android:title="@string/pure_black_dark_theme"
             app:iconSpaceReserved="false" />
@@ -72,7 +72,7 @@
             android:persistent="false"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreferenceCompat
+        <SwitchPreference
             android:defaultValue="false"
             android:key="enable_resources"
             android:summary="@string/settings_enable_resources_summary"
@@ -80,7 +80,7 @@
             android:persistent="false"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreferenceCompat
+        <SwitchPreference
             android:defaultValue="false"
             android:key="disable_verbose_log"
             android:title="@string/pref_title_disable_verbose_log"

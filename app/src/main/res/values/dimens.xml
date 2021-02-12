@@ -1,3 +1,4 @@
 <resources>
-    <dimen name="app_icon_size">48dp</dimen>\
+    <dimen name="app_icon_size">48dp</dimen>
+    <dimen name="tab_layout_height">48dp</dimen>
 </resources>

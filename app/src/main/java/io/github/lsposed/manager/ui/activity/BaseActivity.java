@@ -6,12 +6,10 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StyleRes;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -24,11 +22,11 @@ import io.github.lsposed.manager.Constants;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.util.CustomThemeColor;
 import io.github.lsposed.manager.util.CustomThemeColors;
-import io.github.lsposed.manager.util.InsetsViewInflater;
 import io.github.lsposed.manager.util.NavUtil;
 import io.github.lsposed.manager.util.Version;
+import rikka.material.app.MaterialActivity;
 
-public class BaseActivity extends AppCompatActivity {
+public class BaseActivity extends MaterialActivity {
 
     private static final String THEME_DEFAULT = "DEFAULT";
     private static final String THEME_BLACK = "BLACK";
@@ -43,9 +41,6 @@ public class BaseActivity extends AppCompatActivity {
         return preferences.getBoolean("black_dark_theme", false);
     }
 
-    private void onInstallViewFactory(LayoutInflater layoutInflater) {
-        layoutInflater.setFactory2(new InsetsViewInflater(getDelegate()));
-    }
 
     public String getTheme(Context context) {
         if (isBlackNightTheme()
@@ -61,9 +56,6 @@ public class BaseActivity extends AppCompatActivity {
 
     @StyleRes
     public int getThemeStyleRes(Context context) {
-        if (this instanceof AboutActivity) {
-            return R.style.ThemeOverlay_Black;
-        }
         switch (getTheme(context)) {
             case THEME_BLACK:
                 return R.style.ThemeOverlay_Black;
@@ -98,9 +90,7 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        onInstallViewFactory(LayoutInflater.from(this));
         super.onCreate(savedInstanceState);
-        AppCompatDelegate.setDefaultNightMode(preferences.getInt("theme", -1));
         theme = getTheme(this) + getCustomTheme() + preferences.getBoolean("md2", true);
 
         // make sure the versions are consistent
@@ -131,22 +121,14 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (!(this instanceof MainActivity)) {
-            if (preferences.getBoolean("transparent_status_bar", false)) {
-                getWindow().setStatusBarColor(getThemedColor(R.attr.colorActionBar));
-            } else {
-                getWindow().setStatusBarColor(getThemedColor(R.attr.colorPrimaryDark));
-            }
-        } else {
-            getWindow().setStatusBarColor(0);
-        }
+        getWindow().setStatusBarColor(0);
         if (!Objects.equals(theme, getTheme(this) + getCustomTheme() + preferences.getBoolean("md2", true))) {
             recreate();
         }
     }
 
     @Override
-    protected void onApplyThemeResource(Resources.Theme theme, int resid, boolean first) {
+    protected void onApplyThemeResource(@NonNull Resources.Theme theme, int resid, boolean first) {
         // apply real style and our custom style
         if (getParent() == null) {
             theme.applyStyle(resid, true);
