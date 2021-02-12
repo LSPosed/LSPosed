@@ -61,9 +61,10 @@ android {
 dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.3.0-beta01'
+    implementation "androidx.activity:activity:1.3.0-alpha02"
     implementation 'androidx.browser:browser:1.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation "androidx.fragment:fragment:1.3.0"
     implementation "androidx.recyclerview:recyclerview:1.1.0"
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'com.caverock:androidsvg-aar:1.4'
@@ -84,8 +85,12 @@ dependencies {
     implementation "io.noties.markwon:html:$markwon_version"
     implementation "io.noties.markwon:image-glide:$markwon_version"
     implementation "io.noties.markwon:linkify:$markwon_version"
+    implementation "rikka.appcompat:appcompat:1.2.0-rc01"
+    implementation "rikka.core:core:1.3.0"
     implementation 'rikka.insets:insets:1.0.1'
+    implementation 'rikka.material:material:1.6.0'
     implementation 'rikka.recyclerview:recyclerview-utils:1.2.0'
+    implementation "rikka.widget:borderview:1.0.0"
     implementation "rikka.widget:switchbar:1.0.2"
     implementation 'rikka.layoutinflater:layoutinflater:1.0.1'
     implementation 'tech.rectifier.preferencex-android:preferencex-simplemenu:88f93154b2'
@@ -98,4 +103,5 @@ dependencies {
 configurations {
     cleanedAnnotations
     compile.exclude group: 'org.jetbrains' , module:'annotations'
+    compile.exclude group: 'androidx.appcompat', module: 'appcompat'
 }

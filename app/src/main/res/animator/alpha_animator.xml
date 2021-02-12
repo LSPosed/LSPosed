@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ This file is part of LSPosed.
   ~
@@ -18,14 +19,24 @@
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 
-<rikka.widget.borderview.BorderRecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/recyclerView"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clipToPadding="false"
-    android:paddingTop="104dp"
-    app:borderTopVisibility="whenTop"
-    app:borderTopDrawable="@null"
-    app:borderBottomVisibility="never"
-    app:fitSystemWindowsInsets="top|bottom" />
+<selector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item app:state_raised="true">
+        <set>
+            <objectAnimator
+                android:duration="@android:integer/config_mediumAnimTime"
+                android:propertyName="alpha"
+                android:valueTo="0.9"
+                android:valueType="floatType" />
+        </set>
+    </item>
+    <item>
+        <set>
+            <objectAnimator
+                android:duration="@android:integer/config_mediumAnimTime"
+                android:propertyName="alpha"
+                android:valueTo="1"
+                android:valueType="floatType" />
+        </set>
+    </item>
+</selector>

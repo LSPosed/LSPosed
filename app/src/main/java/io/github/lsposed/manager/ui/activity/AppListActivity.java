@@ -35,12 +35,6 @@ public class AppListActivity extends BaseActivity {
 
     private SearchView.OnQueryTextListener searchListener;
     private ActivityAppListBinding binding;
-    private final Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-            binding.swipeRefreshLayout.setRefreshing(true);
-        }
-    };
     private final Handler handler = new Handler(Looper.getMainLooper());
     public ActivityResultLauncher<String> backupLauncher;
     public ActivityResultLauncher<String[]> restoreLauncher;
@@ -52,9 +46,9 @@ public class AppListActivity extends BaseActivity {
         String moduleName = getIntent().getStringExtra("moduleName");
         binding = ActivityAppListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setSupportActionBar(binding.toolbar);
+        setAppBar(binding.appBar, binding.toolbar);
+        binding.appBar.setRaised(true);
         binding.toolbar.setNavigationOnClickListener(view -> onBackPressed());
-        binding.appBar.setLiftOnScroll(false);
         ActionBar bar = getSupportActionBar();
         assert bar != null;
         bar.setDisplayHomeAsUpEnabled(true);
@@ -65,15 +59,12 @@ public class AppListActivity extends BaseActivity {
         binding.recyclerView.setAdapter(scopeAdapter);
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManagerFix(this));
-        RecyclerViewKt.addFastScroller(binding.recyclerView, binding.swipeRefreshLayout);
         RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
         if (!preferences.getBoolean("md2", true)) {
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
                     DividerItemDecoration.VERTICAL);
             binding.recyclerView.addItemDecoration(dividerItemDecoration);
         }
-        handler.postDelayed(runnable, 300);
-        binding.swipeRefreshLayout.setOnRefreshListener(scopeAdapter::refresh);
 
         searchListener = new SearchView.OnQueryTextListener() {
             @Override
@@ -161,8 +152,6 @@ public class AppListActivity extends BaseActivity {
     }
 
     public void onDataReady() {
-        handler.removeCallbacks(runnable);
-        binding.swipeRefreshLayout.setRefreshing(false);
         String queryStr = searchView != null ? searchView.getQuery().toString() : "";
         runOnUiThread(() -> scopeAdapter.getFilter().filter(queryStr));
     }

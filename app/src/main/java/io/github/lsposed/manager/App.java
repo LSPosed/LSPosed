@@ -19,6 +19,7 @@ import io.github.lsposed.manager.ui.activity.CrashReportActivity;
 import io.github.lsposed.manager.util.DoHDNS;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
+import rikka.material.app.DayNightDelegate;
 
 public class App extends Application {
     public static final String TAG = "LSPosedManager";
@@ -71,6 +72,8 @@ public class App extends Application {
         instance = this;
 
         pref = PreferenceManager.getDefaultSharedPreferences(this);
+        DayNightDelegate.setApplicationContext(this);
+        DayNightDelegate.setDefaultNightMode(pref.getInt("theme", -1));
         RepoLoader.getInstance().loadRemoteData();
     }
 

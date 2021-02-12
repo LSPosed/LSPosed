@@ -1,4 +1,4 @@
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -18,27 +18,20 @@
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<rikka.widget.borderview.BorderRecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@android:id/list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipToPadding="false"
-    android:clipChildren="false"
-    android:paddingTop="104dp"
-    app:fitSystemWindowsInsets="top|bottom">
-
-    <rikka.widget.borderview.BorderNestedScrollView
-        android:id="@+id/scrollView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:borderTopVisibility="whenTop"
-        app:borderTopDrawable="@null"
-        app:borderBottomVisibility="never">
-
-        <TextView
-            android:id="@+id/readme"
-            android:padding="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </rikka.widget.borderview.BorderNestedScrollView>
-</FrameLayout>
+    android:fadeScrollbars="true"
+    android:paddingTop="?actionBarSize"
+    android:scrollbarStyle="outsideOverlay"
+    android:scrollbars="vertical"
+    app:borderBottomVisibility="never"
+    app:borderTopDrawable="@null"
+    app:borderTopVisibility="whenTop"
+    app:fitSystemWindowsInsets="bottom|top"
+    tools:ignore="UnusedResources"
+    tools:viewBindingIgnore="true" />

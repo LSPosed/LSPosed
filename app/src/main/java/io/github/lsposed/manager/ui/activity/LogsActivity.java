@@ -69,13 +69,14 @@ public class LogsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityLogsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setSupportActionBar(binding.toolbar);
-        binding.toolbar.setNavigationOnClickListener(view -> finish());
+        setAppBar(binding.appBar, binding.toolbar);
+        binding.getRoot().bringChildToFront(binding.appBar);
+        binding.toolbar.setNavigationOnClickListener(view -> onBackPressed());
+        binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setRaised(!top));
         ActionBar bar = getSupportActionBar();
         if (bar != null) {
             bar.setDisplayHomeAsUpEnabled(true);
         }
-
         if (!preferences.getBoolean("hide_logcat_warning", false)) {
             DialogInstallWarningBinding binding = DialogInstallWarningBinding.inflate(getLayoutInflater());
             new MaterialAlertDialogBuilder(this)
@@ -97,9 +98,11 @@ public class LogsActivity extends BaseActivity {
         try {
             if (Files.readAllBytes(Paths.get(Constants.getMiscDir(), "disable_verbose_log"))[0] == 49) {
                 binding.slidingTabs.setVisibility(View.GONE);
+            } else {
+                RecyclerViewKt.addVerticalPadding(binding.recyclerView, 48, 0);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            binding.slidingTabs.setVisibility(View.GONE);
         }
         binding.slidingTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
