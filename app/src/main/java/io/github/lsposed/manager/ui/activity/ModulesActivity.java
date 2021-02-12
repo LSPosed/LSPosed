@@ -69,6 +69,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);
         binding.toolbar.setNavigationOnClickListener(view -> onBackPressed());
+        binding.appBar.setLiftOnScrollTargetViewId(R.id.recyclerView);
         binding.masterSwitch.setVisibility(View.GONE);
         ActionBar bar = getSupportActionBar();
         if (bar != null) {
