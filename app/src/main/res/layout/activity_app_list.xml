@@ -39,7 +39,6 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?colorActionBar"
             app:subtitleTextAppearance="@android:style/TextAppearance.Material.Widget.Toolbar.Subtitle"
             app:titleTextAppearance="@android:style/TextAppearance.Material.Widget.Toolbar.Title"
             app:popupTheme="?actionBarPopupTheme" />

@@ -42,7 +42,6 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
-                android:background="?colorActionBar"
                 app:subtitleTextAppearance="@android:style/TextAppearance.Material.Widget.Toolbar.Subtitle"
                 app:titleTextAppearance="@android:style/TextAppearance.Material.Widget.Toolbar.Title"
                 app:popupTheme="?actionBarPopupTheme" />
@@ -51,7 +50,7 @@
                 android:id="@+id/tab_layout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/tab_layout_height"
-                android:background="?colorActionBar"
+                android:background="@android:color/transparent"
                 style="?tabLayoutTheme" />
         </LinearLayout>
     </rikka.material.widget.AppBarLayout>

@@ -36,7 +36,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -76,12 +75,8 @@ public class RepoActivity extends BaseActivity implements RepoLoader.Listener {
         binding.recyclerView.setAdapter(adapter);
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManagerFix(this));
+        RecyclerViewKt.addFastScroller(binding.recyclerView, binding.recyclerView);
         RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
-        if (!preferences.getBoolean("md2", true)) {
-            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
-                    DividerItemDecoration.VERTICAL);
-            binding.recyclerView.addItemDecoration(dividerItemDecoration);
-        }
         repoLoader.addListener(this);
         searchListener = new SearchView.OnQueryTextListener() {
             @Override

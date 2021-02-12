@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">@color/material_blue_700</color>
-    <color name="colorBackground">#fafafa</color>
-    <color name="colorPrimaryDark">#dddddd</color>
-    <color name="colorAccent">#e91e63</color>
-    <color name="colorActionBar">#F0F0F0</color>
+    <color name="colorBackground">#fff</color>
+    <color name="colorPrimaryDark">#fff</color>
+    <color name="colorAccent">@color/material_blue_700</color>
+    <color name="colorActionBar">#fff</color>
+    <color name="selectorTransparency">#34ffffff</color>
     <color name="navigationBarColor">@color/colorPrimary</color>
     <color name="navigationBarColorBlack">@android:color/black</color>
     <color name="colorError">@color/material_red_500</color>
     <color name="colorNormal">@color/material_green_500</color>
     <color name="colorInstall">@color/material_blue_500</color>
+
 </resources>

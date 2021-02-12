@@ -5,7 +5,10 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.Window;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -67,8 +70,7 @@ public class BaseActivity extends MaterialActivity {
 
     @StyleRes
     private int getCustomTheme() {
-        String baseThemeName = preferences.getBoolean("colorized_action_bar", false) && !preferences.getBoolean("md2", true) ?
-                "ThemeOverlay.ActionBarPrimaryColor" : "ThemeOverlay";
+        String baseThemeName = "ThemeOverlay";
         String customThemeName;
         String primaryColorEntryName = "colorPrimary";
         for (CustomThemeColor color : CustomThemeColors.Primary.values()) {
@@ -91,7 +93,7 @@ public class BaseActivity extends MaterialActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        theme = getTheme(this) + getCustomTheme() + preferences.getBoolean("md2", true);
+        theme = getTheme(this) + getCustomTheme();
 
         // make sure the versions are consistent
         String coreVersionStr = Constants.getXposedVersion();
@@ -121,8 +123,7 @@ public class BaseActivity extends MaterialActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        getWindow().setStatusBarColor(0);
-        if (!Objects.equals(theme, getTheme(this) + getCustomTheme() + preferences.getBoolean("md2", true))) {
+        if (!Objects.equals(theme, getTheme(this) + getCustomTheme())) {
             recreate();
         }
     }
@@ -141,14 +142,30 @@ public class BaseActivity extends MaterialActivity {
             theme.applyStyle(resid, false);
         }
         theme.applyStyle(getCustomTheme(), true);
-        if (preferences.getBoolean("md2", true) && !(this instanceof MainActivity)) {
-            theme.applyStyle(R.style.ThemeOverlay_Md2, true);
-        }
-        if (this instanceof MainActivity) {
-            theme.applyStyle(R.style.ThemeOverlay_ActivityMain, true);
-        }
         theme.applyStyle(getThemeStyleRes(this), true);
         // only pass theme style to super, so styled theme will not be overwritten
         super.onApplyThemeResource(theme, R.style.ThemeOverlay, first);
+    }
+
+    @Override
+    public void onApplyTranslucentSystemBars() {
+        super.onApplyTranslucentSystemBars();
+        Window window = getWindow();
+        window.setStatusBarColor(Color.TRANSPARENT);
+
+        window.getDecorView().post(() -> {
+            if (window.getDecorView().getRootWindowInsets().getSystemWindowInsetBottom() >= Resources.getSystem().getDisplayMetrics().density * 40) {
+                window.setNavigationBarColor(getThemedColor(android.R.attr.navigationBarColor) & 0x00ffffff | -0x20000000);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    window.setNavigationBarContrastEnforced(false);
+                }
+            } else {
+                window.setNavigationBarColor(Color.TRANSPARENT);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    window.setNavigationBarContrastEnforced(true);
+                }
+            }
+        });
+
     }
 }
