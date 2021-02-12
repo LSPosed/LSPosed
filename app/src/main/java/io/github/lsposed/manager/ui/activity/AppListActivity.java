@@ -146,6 +146,7 @@ public class AppListActivity extends BaseActivity {
     }
 
     public void onDataReady() {
+        handler.post(() -> binding.progress.hide());
         String queryStr = searchView != null ? searchView.getQuery().toString() : "";
         runOnUiThread(() -> scopeAdapter.getFilter().filter(queryStr));
     }
