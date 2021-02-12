@@ -75,6 +75,7 @@ dependencies {
     implementation 'com.takisoft.preferencex:preferencex:1.1.0'
     implementation 'com.takisoft.preferencex:preferencex-colorpicker:1.1.0'
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+    implementation 'com.squareup.okhttp3:okhttp-dnsoverhttps:4.9.0'
     final def markwon_version = '4.6.2'
     implementation "io.noties.markwon:core:$markwon_version"
     implementation "io.noties.markwon:ext-strikethrough:$markwon_version"

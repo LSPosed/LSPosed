@@ -16,6 +16,7 @@ import java.io.StringWriter;
 
 import io.github.lsposed.manager.repo.RepoLoader;
 import io.github.lsposed.manager.ui.activity.CrashReportActivity;
+import io.github.lsposed.manager.util.DoHDNS;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 
@@ -78,6 +79,7 @@ public class App extends Application {
         if (okHttpClient == null) {
             okHttpClient = new OkHttpClient.Builder()
                     .cache(getOkHttpCache())
+                    .dns(new DoHDNS())
                     .build();
         }
         return okHttpClient;

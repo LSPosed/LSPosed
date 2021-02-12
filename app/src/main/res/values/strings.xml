@@ -156,4 +156,7 @@
     <string name="module_information_collaborators">Collaborators</string>
     <string name="module_release_view_assets">Assets</string>
     <string name="menu_open_in_browser">Open in browser</string>
+    <string name="group_network">Network</string>
+    <string name="dns_over_http">DNS over HTTPS</string>
+    <string name="dns_over_http_summary">Workaround DNS poisoning in some nations</string>
 </resources>
