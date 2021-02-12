@@ -26,6 +26,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
@@ -75,6 +76,7 @@ public class RepoActivity extends BaseActivity implements RepoLoader.Listener {
         binding.recyclerView.setAdapter(adapter);
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManagerFix(this));
+        binding.progress.setVisibilityAfterHide(View.GONE);
         RecyclerViewKt.addFastScroller(binding.recyclerView, binding.recyclerView);
         RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
         repoLoader.addListener(this);
@@ -107,12 +109,25 @@ public class RepoActivity extends BaseActivity implements RepoLoader.Listener {
 
     @Override
     public void repoLoaded() {
-        runOnUiThread(() -> adapter.setData(repoLoader.getOnlineModules()));
+        runOnUiThread(() -> {
+            binding.progress.hide();
+            adapter.setData(repoLoader.getOnlineModules());
+        });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId == R.id.menu_refresh) {
+            binding.progress.show();
+            repoLoader.loadRemoteData();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_modules, menu);
+        getMenuInflater().inflate(R.menu.menu_repo, menu);
         searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
         searchView.setOnQueryTextListener(searchListener);
         return super.onCreateOptionsMenu(menu);
@@ -168,7 +183,7 @@ public class RepoActivity extends BaseActivity implements RepoLoader.Listener {
         public void initData() {
             Collection<OnlineModule> modules = repoLoader.getOnlineModules();
             if (!repoLoader.isRepoLoaded()) {
-                //binding.swipeRefreshLayout.setRefreshing(true);
+                binding.progress.show();
                 repoLoader.loadRemoteData();
             } else {
                 adapter.setData(modules);
