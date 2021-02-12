@@ -66,6 +66,7 @@ public class RepoActivity extends BaseActivity implements RepoLoader.Listener {
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);
         binding.toolbar.setNavigationOnClickListener(view -> onBackPressed());
+        binding.appBar.setLiftOnScrollTargetViewId(R.id.recyclerView);
         binding.masterSwitch.setVisibility(View.GONE);
         ActionBar bar = getSupportActionBar();
         assert bar != null;
