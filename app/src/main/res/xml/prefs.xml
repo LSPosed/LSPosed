@@ -2,6 +2,20 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory
+        android:key="group_network"
+        android:title="@string/group_network"
+        app:iconSpaceReserved="false">
+
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="doh"
+            android:summary="@string/dns_over_http_summary"
+            android:title="@string/dns_over_http"
+            android:persistent="false"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/settings_group_theme"
         app:iconSpaceReserved="false">
         <io.github.lsposed.manager.ui.widget.ThemeColorPreference
