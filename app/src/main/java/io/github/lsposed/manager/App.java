@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
@@ -24,6 +26,7 @@ public class App extends Application {
     private static OkHttpClient okHttpClient;
     private static Cache okHttpCache;
     private SharedPreferences pref;
+    private final Handler handler = new Handler(Looper.getMainLooper());
 
     public static App getInstance() {
         return instance;
@@ -86,5 +89,9 @@ public class App extends Application {
             okHttpCache = new Cache(new File(App.getInstance().getCacheDir(), "http_cache"), 50L * 1024L * 1024L);
         }
         return okHttpCache;
+    }
+
+    public void runOnUiThread(Runnable runnable) {
+        handler.post(runnable);
     }
 }
