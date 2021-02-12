@@ -74,7 +74,7 @@ import io.noties.markwon.utils.NoCopySpannableFactory;
 import rikka.recyclerview.RecyclerViewKt;
 import rikka.widget.borderview.BorderNestedScrollView;
 import rikka.widget.borderview.BorderRecyclerView;
-import rikka.widget.borderview.BorderViewDelegate;
+import rikka.widget.borderview.BorderView;
 
 public class RepoItemActivity extends BaseActivity {
     ActivityModuleDetailBinding binding;
@@ -110,15 +110,15 @@ public class RepoItemActivity extends BaseActivity {
         binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
-                BorderViewDelegate delegate;
+                BorderView borderView;
                 if (position == 0) {
-                    BorderNestedScrollView borderNestedScrollView = findViewById(R.id.scrollView);
-                    delegate = borderNestedScrollView.getBorderViewDelegate();
+                    borderView = findViewById(R.id.scrollView);
                 } else {
-                    BorderRecyclerView borderRecyclerView = findViewById(R.id.recyclerView);
-                    delegate = borderRecyclerView.getBorderViewDelegate();
+                    borderView = findViewById(R.id.recyclerView);
                 }
-                binding.appBar.setRaised(!delegate.isShowingTopBorder());
+                if (borderView != null) {
+                    binding.appBar.setRaised(!borderView.getBorderViewDelegate().isShowingTopBorder());
+                }
             }
         });
         int[] titles = new int[]{R.string.module_readme, R.string.module_releases, R.string.module_information};
