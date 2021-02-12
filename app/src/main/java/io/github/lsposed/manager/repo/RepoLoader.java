@@ -78,7 +78,7 @@ public class RepoLoader {
                 .build()).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                Toast.makeText(App.getInstance(), e.getMessage(), Toast.LENGTH_LONG).show();
+                App.getInstance().runOnUiThread(() -> Toast.makeText(App.getInstance(), e.getMessage(), Toast.LENGTH_LONG).show());
                 synchronized (this) {
                     isLoading = false;
                 }
