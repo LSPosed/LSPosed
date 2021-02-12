@@ -1,6 +1,6 @@
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:color="?colorControlHighlight"
+    android:color="?colorPrimary"
     tools:ignore="PrivateResource">
 
     <item
@@ -10,7 +10,7 @@
         android:left="8dp"
         android:top="4dp">
         <shape android:shape="rectangle">
-            <solid android:color="@android:color/white" />
+            <solid android:color="@color/selectorTransparency" />
             <corners android:radius="8dp" />
         </shape>
     </item>

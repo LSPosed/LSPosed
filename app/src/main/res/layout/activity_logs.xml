@@ -24,7 +24,6 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
-                android:background="?colorActionBar"
                 app:subtitleTextAppearance="@android:style/TextAppearance.Material.Widget.Toolbar.Subtitle"
                 app:titleTextAppearance="@android:style/TextAppearance.Material.Widget.Toolbar.Title"
                 app:popupTheme="?actionBarPopupTheme" />
@@ -33,7 +32,7 @@
                 android:id="@+id/sliding_tabs"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/tab_layout_height"
-                android:background="?colorActionBar"
+                android:background="@android:color/transparent"
                 app:tabMode="fixed"
                 style="?tabLayoutTheme">
 

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="colorActionBar" format="color" />
     <attr name="listItemBackground" format="reference" />
     <attr name="roundBackground" format="reference" />
     <attr name="actionBarTheme" format="reference" />

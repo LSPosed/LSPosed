@@ -16,7 +16,6 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
-import androidx.recyclerview.widget.DividerItemDecoration;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
@@ -59,12 +58,8 @@ public class AppListActivity extends BaseActivity {
         binding.recyclerView.setAdapter(scopeAdapter);
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManagerFix(this));
+        RecyclerViewKt.addFastScroller(binding.recyclerView, binding.recyclerView);
         RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
-        if (!preferences.getBoolean("md2", true)) {
-            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
-                    DividerItemDecoration.VERTICAL);
-            binding.recyclerView.addItemDecoration(dividerItemDecoration);
-        }
 
         searchListener = new SearchView.OnQueryTextListener() {
             @Override

@@ -14,7 +14,7 @@ public final class NavUtil {
         CustomTabsIntent.Builder customTabsIntent = new CustomTabsIntent.Builder();
         customTabsIntent.setShowTitle(true);
         CustomTabColorSchemeParams params = new CustomTabColorSchemeParams.Builder()
-                .setToolbarColor(activity.getThemedColor(R.attr.colorActionBar))
+                .setToolbarColor(activity.getThemedColor(R.attr.toolbarColor))
                 .setNavigationBarColor(activity.getThemedColor(android.R.attr.navigationBarColor))
                 .setNavigationBarDividerColor(0)
                 .build();

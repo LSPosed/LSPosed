@@ -1,34 +1,52 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
+    <style name="AppTheme" parent="Theme.Light" />
+
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Base.AppTheme.Light" parent="Theme.Material.Light.LightStatusBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="listItemBackground">@drawable/item_background</item>
+        <item name="roundBackground">@drawable/item_background</item>
+
+        <item name="actionBarStyle">@style/Widget.Material.ActionBar.Surface</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.ActionBar</item>
+        <item name="toolbarStyle">@style/Widget.Material.Toolbar</item>
+
+        <item name="appBarStyle">@style/Widget.AppBar.Surface.Raisable</item>
+
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Base.AppTheme" parent="Theme.Material">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorActionBar">@color/colorActionBar</item>
-        <item name="android:colorBackground">@color/colorBackground</item>
-        <item name="android:windowBackground">@color/colorBackground</item>
-        <item name="listItemBackground">?selectableItemBackground</item>
-        <item name="roundBackground">@drawable/item_background_round</item>
-        <item name="actionBarPopupTheme">@style/AppTheme.PopupOverlay</item>
-        <item name="android:windowLightStatusBar">@bool/lightSystemUI</item>
-        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">@bool/lightSystemUI
-        </item>
-        <item name="android:navigationBarColor">@color/navigationBarColor</item>
-        <item name="alertDialogTheme">@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog
-        </item>
-        <item name="tabLayoutTheme">@style/Widget.MaterialComponents.TabLayout</item>
-        <item name="liftOnScroll">false</item>
-        <item name="switchBarStyle">@style/Widget.SwitchBar.Light</item>
-        <item name="switchBarTheme">@style/ThemeOverlay.SwitchBar</item>
-        <item name="switchBarBackgroundNormal">@color/switchbar_background_light</item>
-        <item name="switchBarBackgroundDisabled">@color/switchbar_background_light</item>
+
+        <item name="listItemBackground">@drawable/item_background</item>
+        <item name="roundBackground">@drawable/item_background</item>
+
         <item name="actionBarStyle">@style/Widget.Material.ActionBar.Surface</item>
         <item name="actionBarTheme">@style/ThemeOverlay.ActionBar</item>
         <item name="toolbarStyle">@style/Widget.Material.Toolbar</item>
+
         <item name="appBarStyle">@style/Widget.AppBar.Surface.Raisable</item>
+
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
+
+    <style name="Theme.Light" parent="Base.AppTheme.Light" />
+
+    <style name="Theme" parent="Base.AppTheme" />
 
     <style name="Widget.AppBar" parent="">
         <item name="android:background">?toolbarColor</item>
@@ -75,34 +93,10 @@
         <item name="useMaterialThemeColors">true</item>
     </style>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
-
     <style name="ThemeOverlay" />
-
-    <style name="ThemeOverlay.Md2">
-        <item name="colorPrimaryDark">@color/colorPrimaryDark_md2</item>
-        <item name="colorActionBar">@color/colorActionBar_md2</item>
-        <item name="android:colorBackground">@color/colorBackground_md2</item>
-        <item name="android:windowBackground">@color/colorBackground_md2</item>
-        <item name="listItemBackground">@drawable/item_background_md2</item>
-        <item name="roundBackground">@drawable/item_background_md2</item>
-        <item name="liftOnScroll">true</item>
-    </style>
-
-    <style name="ThemeOverlay.ActionBarPrimaryColor">
-        <item name="actionBarTheme">@style/ThemeOverlay.MaterialComponents.Dark.ActionBar</item>
-        <item name="android:windowLightStatusBar">false</item>
-        <item name="tabLayoutTheme">@style/Widget.MaterialComponents.TabLayout.Colored</item>
-    </style>
-
-    <style name="ThemeOverlay.ActivityMain">
-        <item name="android:windowLightStatusBar">@bool/lightSystemUI</item>
-        <item name="colorPrimaryDark">?android:colorBackground</item>
-    </style>
 
     <style name="ThemeOverlay.Black">
         <item name="colorPrimaryDark">@android:color/black</item>
-        <item name="colorActionBar">@android:color/black</item>
         <item name="android:navigationBarColor">@color/navigationBarColorBlack</item>
         <item name="android:colorBackground">@android:color/black</item>
         <item name="android:windowBackground">@android:color/black</item>

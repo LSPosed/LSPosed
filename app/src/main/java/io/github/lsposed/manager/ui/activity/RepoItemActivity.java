@@ -35,7 +35,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -317,10 +316,6 @@ public class RepoItemActivity extends BaseActivity {
                 case 2:
                     holder.recyclerView.setAdapter(position == 1 ? new ReleaseAdapter(module.getReleases()) : new InformationAdapter(module));
                     holder.recyclerView.setLayoutManager(new LinearLayoutManagerFix(RepoItemActivity.this));
-                    if (!preferences.getBoolean("md2", true)) {
-                        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(RepoItemActivity.this, DividerItemDecoration.VERTICAL);
-                        holder.recyclerView.addItemDecoration(dividerItemDecoration);
-                    }
                     holder.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setRaised(!top));
                     RecyclerViewKt.fixEdgeEffect(holder.recyclerView, false, true);
                     RecyclerViewKt.addFastScroller(holder.recyclerView, holder.itemView);

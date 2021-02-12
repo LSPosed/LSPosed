@@ -262,22 +262,6 @@ public class SettingsActivity extends BaseActivity {
                 });
             }
 
-            SwitchPreference transparent = findPreference("transparent_status_bar");
-            if (transparent != null) {
-                transparent.setOnPreferenceChangeListener((preference, newValue) -> {
-                    boolean enabled = (Boolean) newValue;
-                    SettingsActivity activity = (SettingsActivity) getActivity();
-                    if (activity != null) {
-                        if (enabled) {
-                            activity.getWindow().setStatusBarColor(activity.getThemedColor(R.attr.colorActionBar));
-                        } else {
-                            activity.getWindow().setStatusBarColor(activity.getThemedColor(R.attr.colorPrimaryDark));
-                        }
-                    }
-                    return true;
-                });
-            }
-
             IntegerListPreference theme = findPreference("theme");
             if (theme != null) {
                 theme.setOnPreferenceChangeListener((preference, newValue) -> {
@@ -323,41 +307,6 @@ public class SettingsActivity extends BaseActivity {
                     }
                     return true;
                 });
-            }
-
-            Preference colorized_action_bar = findPreference("colorized_action_bar");
-            if (colorized_action_bar != null) {
-                colorized_action_bar.setOnPreferenceChangeListener((preference, newValue) -> {
-                    SettingsActivity activity = (SettingsActivity) getActivity();
-                    if (activity != null && !(isBlackNightTheme() && isNightMode(getResources().getConfiguration()))) {
-                        activity.restart();
-                    }
-                    return true;
-                });
-            }
-
-            SwitchPreference md2 = findPreference("md2");
-            if (md2 != null) {
-                md2.setOnPreferenceChangeListener((preference, newValue) -> {
-                    SettingsActivity activity = (SettingsActivity) getActivity();
-                    if (activity != null) {
-                        updatePreference(!md2.isChecked());
-                        activity.restart();
-                    }
-                    return true;
-                });
-                updatePreference(!md2.isChecked());
-            }
-        }
-
-        private void updatePreference(boolean show) {
-            Preference transparent_status_bar = findPreference("transparent_status_bar");
-            if (transparent_status_bar != null) {
-                transparent_status_bar.setVisible(show);
-            }
-            Preference colorized_action_bar = findPreference("colorized_action_bar");
-            if (colorized_action_bar != null) {
-                colorized_action_bar.setVisible(show);
             }
         }
 

@@ -1,18 +1,3 @@
 <resources>
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Dark" />
-
-    <style name="ThemeOverlay.Md2">
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorActionBar">@color/colorPrimaryDark</item>
-        <item name="android:colorBackground">@color/colorPrimaryDark</item>
-        <item name="android:windowBackground">@color/colorPrimaryDark</item>
-        <item name="listItemBackground">@drawable/item_background_md2</item>
-        <item name="roundBackground">@drawable/item_background_md2</item>
-        <item name="liftOnScroll">true</item>
-        <item name="switchBarStyle">@style/Widget.SwitchBar</item>
-        <item name="switchBarTheme">@style/ThemeOverlay.SwitchBar</item>
-        <item name="switchBarBackgroundNormal">@color/switchbar_background_dark</item>
-        <item name="switchBarBackgroundDisabled">@color/switchbar_background_dark</item>
-    </style>
+    <style name="AppTheme" parent="Theme"/>
 </resources>
