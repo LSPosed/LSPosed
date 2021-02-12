@@ -60,6 +60,13 @@
             app:switchOnText="@string/enable_module"
             app:switchOffText="@string/enable_module" />
 
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            app:hideAnimationBehavior="outward" />
+
         <rikka.widget.borderview.BorderRecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
