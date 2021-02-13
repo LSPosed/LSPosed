@@ -28,7 +28,6 @@
     <string name="ModulesDetail">%d модулі(в) увімкнено</string>
     <string name="Settings">Налаштування</string>
     <string name="about_source">https://github.com/LSPosed/LSPosed/</string>
-    <string name="about_source_label">Вихідний код</string>
     <string name="accent_color">Колір акценту</string>
     <string name="android_framework">System Framework</string>
     <string name="android_sdk">Android %2$s (%1$s, API %3$d)</string>
@@ -43,7 +42,6 @@
     <string name="enable_module">Увімкнути модуль</string>
     <string name="failed_to_save_scope_list">Не вдалося зберегти список областей</string>
     <string name="follow_system">Слідувати системі</string>
-    <string name="group_telegram_channel_link">http://t.me/LSPosed</string>
     <string name="info">Інформація</string>
     <string name="install_warning_title">Обережно!</string>
     <string name="loading">Завантаження…</string>

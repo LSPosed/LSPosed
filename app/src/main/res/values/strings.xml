@@ -81,7 +81,6 @@
     <string name="log_is_empty">Log is empty.</string>
 
     <!-- About tab -->
-    <string name="about_source_label">Source code</string>
 
     <!-- DownloadView -->
 
@@ -105,8 +104,6 @@
     <string name="compile_done">Optimization complete.</string>
 
     <string name="about_source" translatable="false">https://github.com/LSPosed/LSPosed/</string>
-
-    <string name="group_telegram_channel_link" translatable="false">http://t.me/LSPosed</string>
 
     <string name="pref_title_disable_verbose_log">Disable verbose logs</string>
     <string name="logs_cannot_read">Cannot read log: \n</string>
@@ -177,4 +174,5 @@
     <string name="group_network">Network</string>
     <string name="dns_over_http">DNS over HTTPS</string>
     <string name="dns_over_http_summary">Workaround DNS poisoning in some nations</string>
+    <string name="about_view_source_code"><![CDATA[View source code at %s<br/>Join our %s channel]]></string>
 </resources>
