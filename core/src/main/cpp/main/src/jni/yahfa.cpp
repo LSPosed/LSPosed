@@ -24,6 +24,10 @@
 #include "native_util.h"
 #include "pending_hooks.h"
 #include "art/runtime/class_linker.h"
+#include "art/runtime/thread_list.h"
+#include "art/runtime/thread.h"
+#include "art/runtime/gc/scoped_gc_critical_section.h"
+
 
 namespace lspd {
 
@@ -39,6 +43,8 @@ namespace lspd {
 
     LSP_DEF_NATIVE_METHOD(jboolean, Yahfa, backupAndHookNative, jobject target,
                                               jobject hook, jobject backup) {
+        art::gc::ScopedGCCriticalSection section(art::Thread::Current().Get(), art::gc::kGcCauseDebugger, art::gc::kCollectorTypeDebugger);
+        art::thread_list::ScopedSuspendAll suspend("Yahfa Hook", false);
         return Java_lab_galaxy_yahfa_HookMain_backupAndHookNative(env, clazz, target, hook, backup);
     }
 

@@ -7,6 +7,8 @@
 #include "../includes/log.h"
 #include "../includes/utils.h"
 #include "../includes/trampoline_manager.h"
+#include "../includes/art_collector_type.h"
+#include "../includes/art_gc_cause.h"
 
 extern int SDK_INT;
 
@@ -17,8 +19,10 @@ extern "C" {
     bool (*jitCompileMethod)(void*, void*, void*, bool) = nullptr;
     bool (*jitCompileMethodQ)(void*, void*, void*, bool, bool) = nullptr;
 
-    void (*innerSuspendVM)() = nullptr;
-    void (*innerResumeVM)() = nullptr;
+    void (*scoped_suspend_all_ctor)(void *, const char *, bool) = nullptr;
+    void (*scoped_suspend_all_dtor)(void *) = nullptr;
+    void (*scoped_gc_critical_section_ctor)(void *, void *, art::gc::GcCause, art::gc::CollectorType) = nullptr;
+    void (*scoped_gc_critical_section_dtor)(void *) = nullptr;
 
     jobject (*addWeakGlobalRef)(JavaVM *, void *, void *) = nullptr;
 
@@ -101,11 +105,14 @@ extern "C" {
 
 
         //init suspend
-        innerSuspendVM = reinterpret_cast<void (*)()>(getSymCompat(art_lib_path,
-                                                                         "_ZN3art3Dbg9SuspendVMEv"));
-        innerResumeVM = reinterpret_cast<void (*)()>(getSymCompat(art_lib_path,
-                                                                        "_ZN3art3Dbg8ResumeVMEv"));
-
+        scoped_suspend_all_ctor = reinterpret_cast<decltype(scoped_suspend_all_ctor)>(getSymCompat(art_lib_path,
+                                                                                                   "_ZN3art16ScopedSuspendAllC2EPKcb"));
+        scoped_suspend_all_dtor = reinterpret_cast<decltype(scoped_suspend_all_dtor)>(getSymCompat(art_lib_path,
+                                                                                                   "_ZN3art16ScopedSuspendAllD2Ev"));
+        scoped_gc_critical_section_ctor = reinterpret_cast<decltype(scoped_gc_critical_section_ctor)>(getSymCompat(art_lib_path,
+                                                                                                                   "_ZN3art2gc23ScopedGCCriticalSectionC2EPNS_6ThreadENS0_7GcCauseENS0_13CollectorTypeE"));
+        scoped_gc_critical_section_dtor = reinterpret_cast<decltype(scoped_gc_critical_section_dtor)>(getSymCompat(art_lib_path,
+                                                                                                                   "_ZN3art2gc23ScopedGCCriticalSectionD2Ev"));
 
         //init for getObject & JitCompiler
         const char* add_weak_ref_sym;
@@ -173,16 +180,18 @@ extern "C" {
         return ret;
     }
 
-    void suspendVM() {
-        if (innerSuspendVM == nullptr || innerResumeVM == nullptr)
+    void suspendVM(void * thiz) {
+        if (scoped_suspend_all_ctor == nullptr || scoped_suspend_all_dtor == nullptr || scoped_gc_critical_section_ctor == nullptr || scoped_gc_critical_section_dtor == nullptr)
             return;
-        innerSuspendVM();
+        scoped_gc_critical_section_ctor(thiz, getCurrentThread(), art::gc::kGcCauseDebugger, art::gc::kCollectorTypeDebugger);
+        scoped_suspend_all_ctor(thiz, "Sandhook", false);
     }
 
-    void resumeVM() {
-        if (innerSuspendVM == nullptr || innerResumeVM == nullptr)
+    void resumeVM(void * thiz) {
+        if (scoped_suspend_all_ctor == nullptr || scoped_suspend_all_dtor == nullptr || scoped_gc_critical_section_ctor == nullptr || scoped_gc_critical_section_dtor == nullptr)
             return;
-        innerResumeVM();
+        scoped_gc_critical_section_dtor(thiz);
+        scoped_suspend_all_dtor(thiz);
     }
 
     bool canGetObject() {

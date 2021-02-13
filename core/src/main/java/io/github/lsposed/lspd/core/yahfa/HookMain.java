@@ -51,13 +51,6 @@ public class HookMain {
             // backup is just a placeholder and the constraint could be less strict
             checkCompatibleMethods(target, backup, "Backup");
         }
-        // make sure GC completed before hook
-        int lastGcType = Heap.waitForGcToComplete();
-        if (lastGcType < 0) {
-            Utils.logW("waitForGcToComplete failed, using fallback");
-            Runtime.getRuntime().gc();
-        }
-
         if(!Yahfa.backupAndHookNative(target, hook, backup)){
             throw new RuntimeException("Failed to hook " + target + " with " + hook);
         } else {
