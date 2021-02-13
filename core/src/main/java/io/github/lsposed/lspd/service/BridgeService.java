@@ -1,7 +1,5 @@
 package io.github.lsposed.lspd.service;
 
-import android.app.ActivityThread;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Binder;
 import android.os.IBinder;
@@ -17,8 +15,9 @@ import java.lang.reflect.Field;
 import java.util.Map;
 
 import io.github.lsposed.lspd.nativebridge.ConfigManager;
-import io.github.lsposed.lspd.util.Utils;
+import io.github.xposed.xposedservice.IXposedService;
 
+import static android.os.Binder.getCallingUid;
 import static io.github.lsposed.lspd.service.LSPosedService.TAG;
 
 public class BridgeService {
@@ -30,7 +29,7 @@ public class BridgeService {
     private static final int ACTION_GET_BINDER = ACTION_SEND_BINDER + 1;
 
     private static IBinder serviceBinder = null;
-    private static ILSPosedService service = null;
+    private static IXposedService service = null;
 
     private static final IBinder.DeathRecipient BRIDGE_SERVICE_DEATH_RECIPIENT = () -> {
         Log.i(TAG, "service " + SERVICE_NAME + " is dead. ");
@@ -150,7 +149,7 @@ public class BridgeService {
         }
 
         serviceBinder = binder;
-        service = ILSPosedService.Stub.asInterface(serviceBinder);
+        service = IXposedService.Stub.asInterface(serviceBinder);
         try {
             serviceBinder.linkToDeath(LSPSERVICE_DEATH_RECIPIENT, 0);
         } catch (RemoteException ignored) {
@@ -166,24 +165,8 @@ public class BridgeService {
         sendToBridge(false);
     }
 
-    public static ILSPosedService getService() {
+    public static IXposedService getService() {
         return service;
-    }
-
-    private static PackageManager getPackageManager() {
-        if (pm != null) return pm;
-        ActivityThread activityThread = ActivityThread.currentActivityThread();
-        if (activityThread == null) {
-            Utils.logW("ActivityThread is null");
-            return null;
-        }
-        Context context = activityThread.getSystemContext();
-        if (context == null) {
-            Utils.logW("context is null");
-            return null;
-        }
-        pm = context.getPackageManager();
-        return pm;
     }
 
     public static IBinder requireBinder() {
@@ -229,17 +212,11 @@ public class BridgeService {
                 break;
             }
             case ACTION_GET_BINDER: {
-                String InstallerPackageName = ConfigManager.getInstallerPackageName();
-                boolean isInstaller = false;
-                PackageManager pm = getPackageManager();
-                if (pm == null) return false;
-                for (String pkg : pm.getPackagesForUid(Binder.getCallingUid())) {
-                    isInstaller = isInstaller || InstallerPackageName.equals(pkg);
-                }
-                if (!isInstaller) {
+                try {
+                    if (!PackageService.isInstaller(getCallingUid())) return false;
+                } catch (Throwable ignored) {
                     return false;
                 }
-
                 if (reply != null) {
                     reply.writeNoException();
                     Log.d(TAG, "saved binder is " + serviceBinder.toString());

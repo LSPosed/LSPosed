@@ -1,0 +1,5 @@
+apply plugin: 'java-library'
+
+dependencies {
+    compileOnly project(':hiddenapi-stubs')
+}

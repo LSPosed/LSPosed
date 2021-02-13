@@ -1,6 +1,1 @@
-apply plugin: 'com.android.library'
-
-android {
-    compileSdkVersion androidCompileSdkVersion.toInteger()
-    ndkVersion androidCompileNdkVersion
-}
+apply plugin: 'java-library'

@@ -1,14 +1,17 @@
 package io.github.lsposed.lspd.service;
 
-import android.os.Build;
+import android.content.pm.PackageInfo;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.RemoteException;
 import android.util.Log;
 
-import de.robv.android.xposed.XposedBridge;
+import java.util.List;
 
-public class LSPosedService extends ILSPosedService.Stub {
+import de.robv.android.xposed.XposedBridge;
+import io.github.xposed.xposedservice.IXposedService;
+
+public class LSPosedService extends IXposedService.Stub {
     public static final String TAG = "LSPosedService";
 
     // call by ourselves
@@ -49,5 +52,10 @@ public class LSPosedService extends ILSPosedService.Stub {
     @Override
     public int getVersion() {
         return XposedBridge.getXposedVersion();
+    }
+
+    @Override
+    public List<PackageInfo> getInstalledPackagesFromAllUsers(int flags) throws RemoteException {
+        return PackageService.getInstalledPackagesFromAllUsers(flags);
     }
 }
