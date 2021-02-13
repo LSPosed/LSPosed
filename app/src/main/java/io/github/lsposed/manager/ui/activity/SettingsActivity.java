@@ -56,9 +56,11 @@ import io.github.lsposed.manager.BuildConfig;
 import io.github.lsposed.manager.Constants;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.databinding.ActivitySettingsBinding;
+import io.github.lsposed.manager.ui.activity.base.BaseActivity;
 import io.github.lsposed.manager.ui.fragment.StatusDialogBuilder;
 import io.github.lsposed.manager.ui.widget.IntegerListPreference;
 import io.github.lsposed.manager.util.BackupUtils;
+import rikka.core.util.ResourceUtils;
 import rikka.material.app.DayNightDelegate;
 import rikka.recyclerview.RecyclerViewKt;
 import rikka.widget.borderview.BorderRecyclerView;
@@ -299,7 +301,7 @@ public class SettingsActivity extends BaseActivity {
             if (black_dark_theme != null) {
                 black_dark_theme.setOnPreferenceChangeListener((preference, newValue) -> {
                     SettingsActivity activity = (SettingsActivity) getActivity();
-                    if (activity != null && isNightMode(getResources().getConfiguration())) {
+                    if (activity != null && ResourceUtils.isNightMode(getResources().getConfiguration())) {
                         activity.restart();
                     }
                     return true;
