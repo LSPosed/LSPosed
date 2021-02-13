@@ -32,10 +32,13 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.IBinder;
+import android.os.ServiceManager;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.widget.Toast;
 
+import io.github.lsposed.lspd.nativebridge.ConfigManager;
 import io.github.lsposed.lspd.util.Utils;
 
 import java.io.File;
@@ -49,8 +52,6 @@ import java.util.Objects;
 import java.util.Scanner;
 
 import de.robv.android.xposed.XposedHelpers;
-
-import static io.github.lsposed.lspd.service.ServiceProxy.CONFIG_PATH;
 
 public class PackageReceiver {
     private static final BroadcastReceiver RECEIVER = new BroadcastReceiver() {
@@ -102,7 +103,7 @@ public class PackageReceiver {
         private Map<String, String> loadEnabledModules(int uid) {
             HashMap<String, String> result = new HashMap<>();
             try {
-                File enabledModules = new File(CONFIG_PATH, uid + "/" + ENABLED_MODULES_LIST_FILENAME);
+                File enabledModules = new File(ConfigManager.getMiscPath(), uid + "/" + ENABLED_MODULES_LIST_FILENAME);
                 if (!enabledModules.exists()) return result;
                 Scanner scanner = new Scanner(enabledModules);
                 while (scanner.hasNextLine()) {
@@ -125,8 +126,8 @@ public class PackageReceiver {
             if (!enabledModules.containsKey(packageName)) return false;
 
             try {
-                File moduleListFile = new File(CONFIG_PATH, uid + "/" + MODULES_LIST_FILENAME);
-                File enabledModuleListFile = new File(CONFIG_PATH, uid + "/" + ENABLED_MODULES_LIST_FILENAME);
+                File moduleListFile = new File(ConfigManager.getMiscPath(), uid + "/" + MODULES_LIST_FILENAME);
+                File enabledModuleListFile = new File(ConfigManager.getMiscPath(), uid + "/" + ENABLED_MODULES_LIST_FILENAME);
                 if (moduleListFile.exists() && !moduleListFile.canWrite()) {
                     moduleListFile.delete();
                     moduleListFile.createNewFile();
@@ -144,7 +145,7 @@ public class PackageReceiver {
                         enabledModulesList.println(module.getKey());
                     } else {
                         Utils.logI(String.format("remove obsolete package %s", packageName));
-                        File prefsDir = new File(CONFIG_PATH, uid + "/prefs/" + packageName);
+                        File prefsDir = new File(ConfigManager.getMiscPath(), uid + "/prefs/" + packageName);
                         File[] fileList = prefsDir.listFiles();
                         if (fileList != null) {
                             for (File childFile : fileList) {
@@ -212,9 +213,9 @@ public class PackageReceiver {
                             Intent broadCast = new Intent(activated ? MODULE_UPDATED : MODULE_NOT_ACTIVATAED);
                             broadCast.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES | 0x01000000);
                             broadCast.setData(intent.getData());
-                            broadCast.setPackage(ServiceProxy.INSTALLER_PACKAGE_NAME);
+                            broadCast.setPackage(ConfigManager.getInstallerPackageName());
                             XposedHelpers.callMethod(context, "sendBroadcastAsUser", broadCast, userHandle);
-                            Utils.logI("broadcast to " + ServiceProxy.INSTALLER_PACKAGE_NAME);
+                            Utils.logI("broadcast to " + ConfigManager.getInstallerPackageName());
                         } catch (Throwable t) {
                             Utils.logW("send broadcast failed", t);
                             Toast.makeText(context, "LSPosed: Updated " + packageName, Toast.LENGTH_SHORT).show();

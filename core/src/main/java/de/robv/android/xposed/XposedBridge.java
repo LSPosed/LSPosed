@@ -544,28 +544,6 @@ public final class XposedBridge {
 		return invokeOriginalMethodNative(method, methodId, parameterTypes, returnType, thisObject, args);
 	}
 
-	/*package*/ static void setObjectClass(Object obj, Class<?> clazz) {
-		if (clazz.isAssignableFrom(obj.getClass())) {
-			throw new IllegalArgumentException("Cannot transfer object from " + obj.getClass() + " to " + clazz);
-		}
-		setObjectClassNative(obj, clazz);
-	}
-
-	private static native void setObjectClassNative(Object obj, Class<?> clazz);
-	/*package*/ static native void dumpObjectNative(Object obj);
-
-	/*package*/ static Object cloneToSubclass(Object obj, Class<?> targetClazz) {
-		if (obj == null)
-			return null;
-
-		if (!obj.getClass().isAssignableFrom(targetClazz))
-			throw new ClassCastException(targetClazz + " doesn't extend " + obj.getClass());
-
-		return cloneToSubclassNative(obj, targetClazz);
-	}
-
-	private static native Object cloneToSubclassNative(Object obj, Class<?> targetClazz);
-
 	private static void removeFinalFlagNative(Class clazz) {
 		LSPdConfigGlobal.getHookProvider().removeFinalFlagNative(clazz);
 	}

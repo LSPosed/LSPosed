@@ -88,7 +88,7 @@ namespace lspd {
     }
 
     jboolean XposedBridge_initXResourcesNative(JNIEnv *env, jclass) {
-        classXResources = Context::GetInstance()->FindClassFromLoader(env, kXResourcesClassName);
+        classXResources = Context::GetInstance()->FindClassFromCurrentLoader(env, kXResourcesClassName);
         if (!classXResources) {
             LOGE("Error while loading XResources class '%s':", kXResourcesClassName);
             return JNI_FALSE;

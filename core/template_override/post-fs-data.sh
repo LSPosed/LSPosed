@@ -165,5 +165,6 @@ if [[ ! -z "${MISC_PATH}" ]]; then
     print_log_head "${LOG_PATH}/modules.log"
     # start_verbose_log_catcher
     start_log_catcher all "LSPosed:V XSharedPreferences:V LSPosed-Bridge:V LSPosedManager:V *:F" true ${LOG_VERBOSE}
+    echo 'starting service'
 fi
 rm -f /data/adb/lspd/new_install
