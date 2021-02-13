@@ -62,3 +62,7 @@ Notice: These community group don't accept any bug report, please use [Get help]
 - [SandHook](https://github.com/ganyao114/SandHook/): ART hooking framework for SandHook variant
 - [Dobby](https://github.com/jmpews/Dobby): used for inline hooking
 - [EdXposed](https://github.com/ElderDrivers/EdXposed): fork source
+
+## License
+
+LSPosed is licensed under the **GNU General Public License v3 (GPL-3)** (http://www.gnu.org/copyleft/gpl.html).
