@@ -1,24 +1,4 @@
-<!--
-  ~ This file is part of LSPosed.
-  ~
-  ~ LSPosed is free software: you can redistribute it and/or modify
-  ~ it under the terms of the GNU General Public License as published by
-  ~ the Free Software Foundation, either version 3 of the License, or
-  ~ (at your option) any later version.
-  ~
-  ~ LSPosed is distributed in the hope that it will be useful,
-  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ~ GNU General Public License for more details.
-  ~
-  ~ You should have received a copy of the GNU General Public License
-  ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
-  ~
-  ~ Copyright (C) 2020 EdXposed Contributors
-  ~ Copyright (C) 2021 LSPosed Contributors
-  -->
-
-<resources xmlns:tools="http://schemas.android.com/tools" >
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="Activated">已啟用</string>
     <string name="Install">安裝</string>
     <string name="InstallDetail">點選安裝 LSPosed</string>
@@ -111,7 +91,6 @@
     <string name="not_installed">未安裝</string>
     <string name="pure_black_dark_theme">使用純黑深色主題</string>
     <string name="follow_system">跟隨系統</string>
-    <string name="transparent_status_bar">透明狀態列</string>
     <string name="sort_by_name">程式名稱</string>
     <string name="sort_by_name_reverse">程式名稱（降序）</string>
     <string name="sort_by_package_name">包體名稱</string>
@@ -122,9 +101,7 @@
     <string name="sort_by_update_time_reverse">更新時間（降序）</string>
     <string name="primary_color">主要色</string>
     <string name="accent_color">強調色</string>
-    <string name="colorized_action_bar">著色應用程式欄位</string>
     <string name="settings_group_theme">主題</string>
-    <string name="material_design_2">慘白設計</string>
     <string name="settings_variant">變體</string>
     <string name="menu_show_system_apps">系統程式</string>
     <string name="menu_sort">排序…</string>

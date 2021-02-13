@@ -34,7 +34,6 @@
     <string name="android_sdk">Android %2$s (%1$s, API %3$d)</string>
     <string name="app_destroyed">Ця програма припинила роботу, будь ласка, переконайтесь, що завантажили її з офіційного джерела.</string>
     <string name="app_launch">Запустити</string>
-    <string name="colorized_action_bar">Кольоровий ActionBar</string>
     <string name="compile_failed">Помилка оптимізації або повернене значення порожнє</string>
     <string name="compile_failed_with_info">Помилка оптимізації:</string>
     <string name="compile_speed">Повторна оптимізація</string>
@@ -54,7 +53,6 @@
     <string name="logs_cleared">Звіт успішно очищено.</string>
     <string name="logs_save_failed">Не вдалося зберегти:</string>
     <string name="lsposed_not_active">LSPosed наразі не встановлений або не активний.</string>
-    <string name="material_design_2">Material Design 2</string>
     <string name="menuClearLog">Очистити звіт зараз</string>
     <string name="menuReload">Перезавантажити</string>
     <string name="menuSaveToSd">Зберегти</string>
@@ -118,7 +116,6 @@
     <string name="sort_by_package_name_reverse">Сортувати за назвою пакету (зворотній)</string>
     <string name="sort_by_update_time">Сортувати за часом оновлення</string>
     <string name="sort_by_update_time_reverse">Сортувати за часом оновлення (зворотній)</string>
-    <string name="transparent_status_bar">Прозорий рядок стану</string>
     <string name="use_recommended">Рекомендовано</string>
     <string name="use_recommended_message">Вибрати рекомендовані програми?</string>
     <string name="warning_installed_on_external_storage">Цей модуль не можна завантажити, оскільки він встановлений на SD-карті, перенесіть його у внутрішню пам’ять</string>

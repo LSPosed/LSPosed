@@ -36,7 +36,6 @@
     <string name="android_sdk">Android %2$s (%1$s, API %3$d)</string>
     <string name="app_destroyed">Эта программа прекратила работу, пожалуйста, убедитесь, что загрузили ее из официального источника.</string>
     <string name="app_launch">Запустить</string>
-    <string name="colorized_action_bar">Цветной ActionBar</string>
     <string name="compile_failed">Ошибка оптимиз��ции или возвращено пустое значение</string>
     <string name="compile_failed_with_info">Ошибка оптимизации:</string>
     <string name="compile_speed">Повторная оптимизация</string>
@@ -54,7 +53,6 @@
     <string name="logs_cleared">Логи успешно очищены.</string>
     <string name="logs_save_failed">Не удалось сохранить:</string>
     <string name="lsposed_not_active">LSPosed пока не установлен или не активен.</string>
-    <string name="material_design_2">Material Design 2</string>
     <string name="menuClearLog">Очистить логи сейчас</string>
     <string name="menuReload">Перезагрузить</string>
     <string name="menuSaveToSd">Сохранить</string>
@@ -118,7 +116,6 @@
     <string name="sort_by_package_name_reverse">Сортировать по названию пакета (обратный)</string>
     <string name="sort_by_update_time">Сортировать по времени обновления</string>
     <string name="sort_by_update_time_reverse">Сортировать по времени обновления (обратный)</string>
-    <string name="transparent_status_bar">Прозрачная строка состояния</string>
     <string name="use_recommended">Рекомендуется</string>
     <string name="use_recommended_message">Выбрать рекомендуемые приложения?</string>
     <string name="warning_installed_on_external_storage">Этот модуль нельзя загрузить, поскольку он установлен на SD-карте, перенесите его во внутреннюю память</string>

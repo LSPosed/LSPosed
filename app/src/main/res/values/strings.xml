@@ -116,7 +116,6 @@
     <string name="not_installed">Not installed</string>
     <string name="pure_black_dark_theme">Use the pure black dark theme</string>
     <string name="follow_system">Follow system</string>
-    <string name="transparent_status_bar">Transparent status bar</string>
     <string name="sort_by_name">Sort by application name</string>
     <string name="sort_by_name_reverse">Sort by application name (reverse)</string>
     <string name="sort_by_package_name">Sort by package name</string>
@@ -127,9 +126,7 @@
     <string name="sort_by_update_time_reverse">Sort by update time (reverse)</string>
     <string name="primary_color">Primary color</string>
     <string name="accent_color">Accent color</string>
-    <string name="colorized_action_bar">Colorized action bar</string>
     <string name="settings_group_theme">Theme</string>
-    <string name="material_design_2">Material Design 2</string>
     <string name="settings_variant">Variant</string>
     <string name="menu_show_system_apps">System apps</string>
     <string name="menu_sort">Sorting…</string>

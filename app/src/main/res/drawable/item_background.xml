@@ -30,7 +30,7 @@
         android:left="8dp"
         android:top="4dp">
         <shape android:shape="rectangle">
-            <solid android:color="@color/selectorTransparency" />
+            <solid android:color="?rippleTransparency" />
             <corners android:radius="8dp" />
         </shape>
     </item>

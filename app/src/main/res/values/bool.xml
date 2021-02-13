@@ -21,6 +21,4 @@
 
 <resources>
 
-    <bool name="lightSystemUI">true</bool>
-
 </resources>
