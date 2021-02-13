@@ -36,9 +36,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,6 +48,7 @@ import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.repo.RepoLoader;
 import io.github.lsposed.manager.repo.model.OnlineModule;
 import io.github.lsposed.manager.ui.activity.base.ListActivity;
+import rikka.core.util.LabelComparator;
 
 public class RepoActivity extends ListActivity implements RepoLoader.Listener {
     private final RepoLoader repoLoader = RepoLoader.getInstance();
@@ -93,6 +96,14 @@ public class RepoActivity extends ListActivity implements RepoLoader.Listener {
         if (itemId == R.id.menu_refresh) {
             binding.progress.show();
             repoLoader.loadRemoteData();
+        } else if (itemId == R.id.item_sort_by_name) {
+            item.setChecked(!item.isChecked());
+            preferences.edit().putInt("repo_sort", 0).apply();
+            adapter.setData(repoLoader.getOnlineModules());
+        } else if (itemId == R.id.item_sort_by_update_time) {
+            item.setChecked(!item.isChecked());
+            preferences.edit().putInt("repo_sort", 1).apply();
+            adapter.setData(repoLoader.getOnlineModules());
         }
         return super.onOptionsItemSelected(item);
     }
@@ -105,6 +116,7 @@ public class RepoActivity extends ListActivity implements RepoLoader.Listener {
 
     private class RepoAdapter extends BaseAdapter<RepoAdapter.ViewHolder> {
         private List<OnlineModule> fullList, showList;
+        private final LabelComparator labelComparator = new LabelComparator();
 
         RepoAdapter() {
             fullList = showList = Collections.emptyList();
@@ -145,7 +157,12 @@ public class RepoActivity extends ListActivity implements RepoLoader.Listener {
         public void setData(Collection<OnlineModule> modules) {
             fullList = new ArrayList<>(modules);
             fullList = fullList.stream().filter((onlineModule -> !onlineModule.isHide())).collect(Collectors.toList());
-            fullList.sort((o1, o2) -> o1.getDescription().compareToIgnoreCase(o2.getDescription()));
+            int sort = preferences.getInt("repo_sort", 0);
+            if (sort == 0) {
+                fullList.sort((o1, o2) -> labelComparator.compare(o1.getDescription(), o2.getDescription()));
+            } else if (sort == 1) {
+                fullList.sort(Comparator.comparing(o -> Instant.parse(o.getUpdatedAt())));
+            }
             String queryStr = searchView != null ? searchView.getQuery().toString() : "";
             runOnUiThread(() -> getFilter().filter(queryStr));
         }

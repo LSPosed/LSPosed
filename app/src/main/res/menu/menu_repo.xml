@@ -31,4 +31,22 @@
         android:title="@string/refresh"
         android:icon="@drawable/ic_refresh"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/item_list_sort"
+        android:title="@string/menu_sort"
+        app:showAsAction="never">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/item_sort_by_name"
+                    android:checked="true"
+                    android:title="@string/sort_by_name" />
+
+                <item
+                    android:id="@+id/item_sort_by_update_time"
+                    android:title="@string/sort_by_update_time" />
+            </group>
+        </menu>
+    </item>
 </menu>
