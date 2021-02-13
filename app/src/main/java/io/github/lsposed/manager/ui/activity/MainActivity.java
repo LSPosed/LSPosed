@@ -20,7 +20,6 @@
 
 package io.github.lsposed.manager.ui.activity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -45,6 +44,7 @@ import io.github.lsposed.manager.ui.fragment.StatusDialogBuilder;
 import io.github.lsposed.manager.util.GlideHelper;
 import io.github.lsposed.manager.util.ModuleUtil;
 import io.github.lsposed.manager.util.NavUtil;
+import io.github.lsposed.manager.util.chrome.LinkTransformationMethod;
 import name.mikanoshi.customiuizer.holidays.HolidayHelper;
 import name.mikanoshi.customiuizer.utils.Helpers;
 import rikka.core.res.ResourcesKt;
@@ -52,7 +52,6 @@ import rikka.core.res.ResourcesKt;
 public class MainActivity extends BaseActivity {
     ActivityMainBinding binding;
 
-    @SuppressLint({"PrivateResource", "ClickableViewAccessibility"})
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +75,7 @@ public class MainActivity extends BaseActivity {
         binding.about.setOnClickListener(v -> {
             DialogAboutBinding binding = DialogAboutBinding.inflate(LayoutInflater.from(this), null, false);
             binding.sourceCode.setMovementMethod(LinkMovementMethod.getInstance());
+            binding.sourceCode.setTransformationMethod(new LinkTransformationMethod(this));
             binding.sourceCode.setText(HtmlCompat.fromHtml(getString(
                     R.string.about_view_source_code,
                     "<b><a href=\"https://github.com/RikkaApps/Shizuku\">GitHub</a></b>",
