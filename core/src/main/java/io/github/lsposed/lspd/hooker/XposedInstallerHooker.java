@@ -55,7 +55,6 @@ public class XposedInstallerHooker {
                 XposedHelpers.setStaticIntField(ConstantsClass, "xposedApiVersion", XposedBridge.getXposedVersion());
                 XposedHelpers.setStaticObjectField(ConstantsClass, "xposedVersion", BuildConfig.VERSION_NAME);
                 XposedHelpers.setStaticIntField(ConstantsClass, "xposedVersionCode", BuildConfig.VERSION_CODE);
-                XposedHelpers.setStaticIntField(ConstantsClass, "xposedVersionCode", XposedBridge.getXposedVersion());
                 XposedHelpers.setStaticObjectField(ConstantsClass, "xposedVariant", variant);
                 XposedHelpers.setStaticObjectField(ConstantsClass, "baseDir", ConfigManager.getBaseConfigPath() + "/");
                 XposedHelpers.setStaticObjectField(ConstantsClass, "logDir", ConfigManager.getLogPath());
