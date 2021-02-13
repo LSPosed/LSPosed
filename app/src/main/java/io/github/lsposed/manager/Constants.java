@@ -23,36 +23,29 @@ package io.github.lsposed.manager;
 import android.widget.Toast;
 
 public class Constants {
+    private static int xposedApiVersion = -1;
+    private static String xposedVersion = null;
+    private static int xposedVersionCode = -1;
+    private static String xposedVariant = null;
+    private static String baseDir = null;
+    private static String logDir = null;
+    private static String miscDir = null;
+    private static boolean permissive = true;
+
     public static int getXposedApiVersion() {
-        try {
-            return -1;
-        } catch (Throwable ignored) {
-            return -1;
-        }
+        return xposedApiVersion;
     }
 
     public static String getXposedVersion() {
-        try {
-            return null;
-        } catch (Throwable ignored) {
-            return null;
-        }
+        return xposedVersion;
     }
 
     public static int getXposedVersionCode() {
-        try {
-            return -1;
-        } catch (Throwable ignored) {
-            return -1;
-        }
+        return xposedVersionCode;
     }
 
     public static String getXposedVariant() {
-        try {
-            return null;
-        } catch (Throwable ignored) {
-            return null;
-        }
+        return xposedVariant;
     }
 
     public static String getEnabledModulesListFile() {
@@ -68,35 +61,19 @@ public class Constants {
     }
 
     public static String getBaseDir() {
-        try {
-            return null;
-        } catch (Throwable ignored) {
-            return null;
-        }
+        return baseDir;
     }
 
     public static String getLogDir() {
-        try {
-            return null;
-        } catch (Throwable ignored) {
-            return null;
-        }
+        return logDir;
     }
 
     public static String getMiscDir() {
-        try {
-            return null;
-        } catch (Throwable ignored) {
-            return null;
-        }
+        return miscDir;
     }
 
     public static boolean isPermissive() {
-        try {
-            return true;
-        } catch (Throwable ignored) {
-            return true;
-        }
+        return permissive;
     }
 
     public static void showErrorToast(int type) {
