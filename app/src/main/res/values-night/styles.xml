@@ -19,5 +19,6 @@
   -->
 
 <resources>
-    <style name="AppTheme" parent="Theme"/>
+
+    <style name="AppTheme" parent="Theme" />
 </resources>

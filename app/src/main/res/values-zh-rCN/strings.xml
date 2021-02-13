@@ -106,7 +106,6 @@
     <string name="not_installed">未安装</string>
     <string name="follow_system">跟随系统</string>
     <string name="pure_black_dark_theme">使用纯黑深色主题</string>
-    <string name="transparent_status_bar">透明状态栏</string>
     <string name="sort_by_name">应用名称</string>
     <string name="sort_by_name_reverse">应用名称（降序）</string>
     <string name="sort_by_package_name">包体名称</string>
@@ -117,9 +116,7 @@
     <string name="sort_by_update_time_reverse">更新时间（降序）</string>
     <string name="primary_color">主要色</string>
     <string name="accent_color">强调色</string>
-    <string name="colorized_action_bar">着色应用栏</string>
     <string name="settings_group_theme">主题</string>
-    <string name="material_design_2">惨白设计</string>
     <string name="settings_enable_resources">启用资源钩子</string>
     <string name="settings_enable_resources_summary"><b>警告: </b> 资源钩子已被弃用</string>
     <string name="settings_variant">变体</string>

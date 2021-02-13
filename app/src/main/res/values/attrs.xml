@@ -20,9 +20,7 @@
   -->
 
 <resources>
-    <attr name="listItemBackground" format="reference" />
-    <attr name="roundBackground" format="reference" />
-    <attr name="actionBarTheme" format="reference" />
-    <attr name="actionBarPopupTheme" format="reference" />
-    <attr name="tabLayoutTheme" format="reference" />
+    <attr name="rippleTransparency" format="color" />
+    <attr name="colorNormal" format="color" />
+    <attr name="colorInstall" format="color" />
 </resources>

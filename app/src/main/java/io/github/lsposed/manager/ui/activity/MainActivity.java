@@ -43,6 +43,7 @@ import io.github.lsposed.manager.util.ModuleUtil;
 import io.github.lsposed.manager.util.NavUtil;
 import name.mikanoshi.customiuizer.holidays.HolidayHelper;
 import name.mikanoshi.customiuizer.utils.Helpers;
+import rikka.core.res.ResourcesKt;
 
 public class MainActivity extends BaseActivity {
     ActivityMainBinding binding;
@@ -79,19 +80,18 @@ public class MainActivity extends BaseActivity {
             if (!Constants.isPermissive()) {
                 if (Helpers.currentHoliday == Helpers.Holidays.LUNARNEWYEAR) {
                     cardBackgroundColor = 0xfff05654;
-
                 } else {
-                    cardBackgroundColor = ContextCompat.getColor(this, R.color.colorNormal);
+                    cardBackgroundColor = ResourcesKt.resolveColor(getTheme(), R.attr.colorNormal);
                 }
                 binding.statusIcon.setImageResource(R.drawable.ic_check_circle);
                 binding.statusSummary.setText(String.format(Locale.US, "%s (%d)", installedXposedVersion, Constants.getXposedVersionCode()));
             } else {
-                cardBackgroundColor = ContextCompat.getColor(this, R.color.colorError);
+                cardBackgroundColor = ResourcesKt.resolveColor(getTheme(), R.attr.colorError);
                 binding.statusIcon.setImageResource(R.drawable.ic_warning);
                 binding.statusSummary.setText(R.string.selinux_permissive_summary);
             }
         } else {
-            cardBackgroundColor = ContextCompat.getColor(this, R.color.colorInstall);
+            cardBackgroundColor = ResourcesKt.resolveColor(getTheme(), R.attr.colorInstall);
             binding.statusTitle.setText(R.string.Install);
             binding.statusSummary.setText(R.string.InstallDetail);
             binding.statusIcon.setImageResource(R.drawable.ic_error);
@@ -127,7 +127,6 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onResume() {
-
         super.onResume();
         binding.modulesSummary.setText(String.format(getString(R.string.ModulesDetail), ModuleUtil.getInstance().getEnabledModules().size()));
         HolidayHelper.onResume();
