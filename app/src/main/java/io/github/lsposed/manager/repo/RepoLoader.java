@@ -107,6 +107,32 @@ public class RepoLoader {
         });
     }
 
+    public void loadRemoteReleases(String packageName) {
+        App.getOkHttpClient().newCall(new Request.Builder()
+                .url(String.format("https://modules.lsposed.org/module/%s.json", packageName))
+                .build()).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                App.getInstance().runOnUiThread(() -> Toast.makeText(App.getInstance(), e.getMessage(), Toast.LENGTH_LONG).show());
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                ResponseBody body = response.body();
+                if (body != null) {
+                    String bodyString = body.string();
+                    Gson gson = new Gson();
+                    OnlineModule module = gson.fromJson(bodyString, OnlineModule.class);
+                    module.releasesLoaded = true;
+                    onlineModules.replace(packageName, module);
+                    for (Listener listener : listeners) {
+                        listener.moduleReleasesLoaded(module);
+                    }
+                }
+            }
+        });
+    }
+
     public void addListener(Listener listener) {
         if (!listeners.contains(listener))
             listeners.add(listener);
@@ -126,5 +152,7 @@ public class RepoLoader {
 
     public interface Listener {
         void repoLoaded();
+
+        void moduleReleasesLoaded(OnlineModule module);
     }
 }

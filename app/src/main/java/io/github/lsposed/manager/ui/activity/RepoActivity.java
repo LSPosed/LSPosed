@@ -83,6 +83,11 @@ public class RepoActivity extends ListActivity implements RepoLoader.Listener {
     }
 
     @Override
+    public void moduleReleasesLoaded(OnlineModule module) {
+
+    }
+
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.menu_refresh) {

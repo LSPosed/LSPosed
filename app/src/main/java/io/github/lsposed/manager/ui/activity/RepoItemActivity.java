@@ -39,6 +39,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.android.material.progressindicator.CircularProgressIndicator;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
@@ -47,6 +49,7 @@ import java.util.ListIterator;
 
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.databinding.ActivityModuleDetailBinding;
+import io.github.lsposed.manager.databinding.ItemRepoLoadmoreBinding;
 import io.github.lsposed.manager.databinding.ItemRepoReadmeBinding;
 import io.github.lsposed.manager.databinding.ItemRepoRecyclerviewBinding;
 import io.github.lsposed.manager.databinding.ItemRepoReleaseBinding;
@@ -77,13 +80,15 @@ import rikka.widget.borderview.BorderNestedScrollView;
 import rikka.widget.borderview.BorderRecyclerView;
 import rikka.widget.borderview.BorderView;
 
-public class RepoItemActivity extends BaseActivity {
+public class RepoItemActivity extends BaseActivity implements RepoLoader.Listener {
     ActivityModuleDetailBinding binding;
     private Markwon markwon;
     private OnlineModule module;
+    private ReleaseAdapter releaseAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        RepoLoader.getInstance().addListener(this);
         super.onCreate(savedInstanceState);
         binding = ActivityModuleDetailBinding.inflate(getLayoutInflater());
         String modulePackageName = getIntent().getStringExtra("modulePackageName");
@@ -136,10 +141,34 @@ public class RepoItemActivity extends BaseActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menu_open_in_browser) {
-            NavUtil.startURL(this, module.getUrl());
-            // TODO: replace with web version
+            NavUtil.startURL(this, "https://modules.lsposed.org/module/" + module.getName());
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void repoLoaded() {
+
+    }
+
+    @Override
+    public void moduleReleasesLoaded(OnlineModule module) {
+        this.module = module;
+        if (releaseAdapter != null) {
+            runOnUiThread(() -> {
+                if (module.getReleases().size() == 1) {
+                    Snackbar.make(binding.snackbar, R.string.module_release_no_more, Snackbar.LENGTH_SHORT).show();
+                }
+                releaseAdapter.loadItems();
+                releaseAdapter.notifyDataSetChanged();
+            });
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        RepoLoader.getInstance().removeListener(this);
     }
 
     private class InformationAdapter extends RecyclerView.Adapter<InformationAdapter.ViewHolder> {
@@ -229,52 +258,76 @@ public class RepoItemActivity extends BaseActivity {
     }
 
     private class ReleaseAdapter extends RecyclerView.Adapter<ReleaseAdapter.ViewHolder> {
-        private final List<Release> items;
+        private List<Release> items;
 
-        public ReleaseAdapter(List<Release> items) {
-            this.items = items;
+        public ReleaseAdapter() {
+            loadItems();
+        }
+
+        public void loadItems() {
+            this.items = module.getReleases();
+            notifyDataSetChanged();
         }
 
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new ViewHolder(ItemRepoReleaseBinding.inflate(getLayoutInflater(), parent, false));
+            if (viewType == 0) {
+                return new ViewHolder(ItemRepoReleaseBinding.inflate(getLayoutInflater(), parent, false).getRoot());
+            } else {
+                return new ViewHolder(ItemRepoLoadmoreBinding.inflate(getLayoutInflater(), parent, false).getRoot());
+            }
         }
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            Release release = items.get(position);
-            holder.title.setText(release.getName());
-            holder.description.setTransformationMethod(new LinkTransformationMethod(RepoItemActivity.this));
-            holder.description.setSpannableFactory(NoCopySpannableFactory.getInstance());
-            markwon.setMarkdown(holder.description, release.getDescription());
-            holder.description.setMovementMethod(null);
-            holder.openInBrowser.setOnClickListener(v -> NavUtil.startURL(RepoItemActivity.this, release.getUrl()));
-            List<ReleaseAsset> assets = release.getReleaseAssets();
-            if (assets != null && !assets.isEmpty()) {
-                holder.viewAssets.setOnClickListener(v -> {
-                    ArrayList<String> names = new ArrayList<>();
-                    assets.forEach(releaseAsset -> names.add(releaseAsset.getName()));
-                    new AlertDialog.Builder(RepoItemActivity.this)
-                            .setItems(names.toArray(new String[0]), (dialog, which) -> NavUtil.startURL(RepoItemActivity.this, assets.get(which).getDownloadUrl()))
-                            .show();
+            if (position == items.size()) {
+                holder.itemView.setOnClickListener(v -> {
+                    if (holder.progress.getVisibility() == View.GONE) {
+                        holder.title.setVisibility(View.GONE);
+                        holder.progress.show();
+                        RepoLoader.getInstance().loadRemoteReleases(module.getName());
+                    }
                 });
             } else {
-                holder.viewAssets.setVisibility(View.GONE);
-            }
-            holder.itemView.setOnClickListener(v -> {
-                ClickableSpan span = holder.description.getCurrentSpan();
-                holder.description.clearCurrentSpan();
-
-                if (span instanceof CustomTabsURLSpan) {
-                    span.onClick(v);
+                Release release = items.get(position);
+                holder.title.setText(release.getName());
+                holder.description.setTransformationMethod(new LinkTransformationMethod(RepoItemActivity.this));
+                holder.description.setSpannableFactory(NoCopySpannableFactory.getInstance());
+                markwon.setMarkdown(holder.description, release.getDescription());
+                holder.description.setMovementMethod(null);
+                holder.openInBrowser.setOnClickListener(v -> NavUtil.startURL(RepoItemActivity.this, release.getUrl()));
+                List<ReleaseAsset> assets = release.getReleaseAssets();
+                if (assets != null && !assets.isEmpty()) {
+                    holder.viewAssets.setOnClickListener(v -> {
+                        ArrayList<String> names = new ArrayList<>();
+                        assets.forEach(releaseAsset -> names.add(releaseAsset.getName()));
+                        new AlertDialog.Builder(RepoItemActivity.this)
+                                .setItems(names.toArray(new String[0]), (dialog, which) -> NavUtil.startURL(RepoItemActivity.this, assets.get(which).getDownloadUrl()))
+                                .show();
+                    });
+                } else {
+                    holder.viewAssets.setVisibility(View.GONE);
                 }
-            });
+                holder.itemView.setOnClickListener(v -> {
+                    ClickableSpan span = holder.description.getCurrentSpan();
+                    holder.description.clearCurrentSpan();
+
+                    if (span instanceof CustomTabsURLSpan) {
+                        span.onClick(v);
+                    }
+                });
+            }
         }
 
         @Override
         public int getItemCount() {
-            return items.size();
+            return items.size() + (module.releasesLoaded ? 0 : 1);
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            return !module.releasesLoaded && position == getItemCount() - 1 ? 1 : 0;
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
@@ -282,13 +335,15 @@ public class RepoItemActivity extends BaseActivity {
             LinkifyTextView description;
             View openInBrowser;
             View viewAssets;
+            CircularProgressIndicator progress;
 
-            public ViewHolder(ItemRepoReleaseBinding binding) {
-                super(binding.getRoot());
-                title = binding.title;
-                description = binding.description;
-                openInBrowser = binding.openInBrowser;
-                viewAssets = binding.viewAssets;
+            public ViewHolder(View view) {
+                super(view);
+                title = view.findViewById(R.id.title);
+                description = view.findViewById(R.id.description);
+                openInBrowser = view.findViewById(R.id.open_in_browser);
+                viewAssets = view.findViewById(R.id.view_assets);
+                progress = view.findViewById(R.id.progress);
             }
         }
     }
@@ -315,7 +370,11 @@ public class RepoItemActivity extends BaseActivity {
                     break;
                 case 1:
                 case 2:
-                    holder.recyclerView.setAdapter(position == 1 ? new ReleaseAdapter(module.getReleases()) : new InformationAdapter(module));
+                    if (position == 1) {
+                        holder.recyclerView.setAdapter(releaseAdapter = new ReleaseAdapter());
+                    } else {
+                        holder.recyclerView.setAdapter(new InformationAdapter(module));
+                    }
                     holder.recyclerView.setLayoutManager(new LinearLayoutManagerFix(RepoItemActivity.this));
                     holder.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setRaised(!top));
                     RecyclerViewKt.fixEdgeEffect(holder.recyclerView, false, true);
