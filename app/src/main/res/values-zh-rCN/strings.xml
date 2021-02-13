@@ -165,4 +165,11 @@
     <string name="module_information_collaborators">合作者</string>
     <string name="module_release_view_assets">附件</string>
     <string name="menu_open_in_browser">在浏览器中打开</string>
+    <string name="refresh">刷新</string>
+    <string name="group_network">网络</string>
+    <string name="dns_over_http">安全 DNS（DoH）</string>
+    <string name="dns_over_http_summary">解决某些地区的 DNS 污染问题</string>
+    <string name="about_view_source_code"><![CDATA[在 %s 查看源码<br/>加入我们的 %s 频道]]></string>
+    <string name="module_release_load_more">显示更旧的版本</string>
+    <string name="module_release_no_more">没有更旧的版本</string>
 </resources>
