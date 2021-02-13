@@ -49,6 +49,7 @@ import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.databinding.ActivityListBinding;
 import io.github.lsposed.manager.repo.RepoLoader;
 import io.github.lsposed.manager.repo.model.OnlineModule;
+import io.github.lsposed.manager.ui.activity.base.BaseActivity;
 import io.github.lsposed.manager.util.LinearLayoutManagerFix;
 import rikka.recyclerview.RecyclerViewKt;
 

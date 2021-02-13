@@ -56,6 +56,7 @@ import io.github.lsposed.manager.repo.model.Collaborator;
 import io.github.lsposed.manager.repo.model.OnlineModule;
 import io.github.lsposed.manager.repo.model.Release;
 import io.github.lsposed.manager.repo.model.ReleaseAsset;
+import io.github.lsposed.manager.ui.activity.base.BaseActivity;
 import io.github.lsposed.manager.ui.widget.LinkifyTextView;
 import io.github.lsposed.manager.util.GlideApp;
 import io.github.lsposed.manager.util.LinearLayoutManagerFix;
