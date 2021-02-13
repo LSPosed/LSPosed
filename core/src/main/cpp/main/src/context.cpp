@@ -23,7 +23,6 @@
 #include <JNIHelper.h>
 #include "jni/config_manager.h"
 #include "jni/art_class_linker.h"
-#include "jni/art_heap.h"
 #include "jni/yahfa.h"
 #include "jni/resources_hook.h"
 #include <dl_util.h>
@@ -134,7 +133,6 @@ namespace lspd {
         RegisterEdxpResourcesHook(env);
         RegisterConfigManagerMethods(env);
         RegisterArtClassLinker(env);
-        RegisterArtHeap(env);
         RegisterEdxpYahfa(env);
         RegisterPendingHooks(env);
         RegisterNativeAPI(env);
