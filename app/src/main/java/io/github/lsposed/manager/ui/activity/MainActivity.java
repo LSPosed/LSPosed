@@ -78,7 +78,7 @@ public class MainActivity extends BaseActivity {
             binding.sourceCode.setTransformationMethod(new LinkTransformationMethod(this));
             binding.sourceCode.setText(HtmlCompat.fromHtml(getString(
                     R.string.about_view_source_code,
-                    "<b><a href=\"https://github.com/RikkaApps/Shizuku\">GitHub</a></b>",
+                    "<b><a href=\"https://github.com/LSPosed/LSPosed\">GitHub</a></b>",
                     "<b><a href=\"https://t.me/LSPosed\">Telegram</a></b>"), HtmlCompat.FROM_HTML_MODE_LEGACY));
             new AlertDialog.Builder(this)
                     .setView(binding.getRoot())
