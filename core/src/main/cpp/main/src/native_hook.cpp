@@ -35,10 +35,12 @@
 #include "art/runtime/mirror/class.h"
 #include "art/runtime/art_method.h"
 #include "art/runtime/class_linker.h"
-#include "art/runtime/gc/heap.h"
+#include "art/runtime/thread.h"
 #include "art/runtime/hidden_api.h"
 #include "art/runtime/instrumentation.h"
 #include "art/runtime/reflection.h"
+#include "art/runtime/thread_list.h"
+#include "art/runtime/gc/scoped_gc_critical_section.h"
 
 std::vector<soinfo_t> linker_get_solist(); // Dobby but not in .h
 
@@ -96,7 +98,6 @@ namespace lspd {
         }
         art::hidden_api::DisableHiddenApi(art_handle);
         art::Runtime::Setup(art_handle);
-        art::gc::Heap::Setup(art_handle);
         art::art_method::Setup(art_handle);
         art::Thread::Setup(art_handle);
         art::ClassLinker::Setup(art_handle);
@@ -104,6 +105,8 @@ namespace lspd {
         art::JNIEnvExt::Setup(art_handle);
         art::instrumentation::DisableUpdateHookedMethodsCode(art_handle);
         art::PermissiveAccessByReflection(art_handle);
+        art::thread_list::ScopedSuspendAll::Setup(art_handle);
+        art::gc::ScopedGCCriticalSection::Setup(art_handle);
 
         art_hooks_installed = true;
         LOGI("ART hooks installed");

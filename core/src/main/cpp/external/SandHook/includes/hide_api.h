@@ -28,8 +28,8 @@ extern "C" {
     void initHideApi(JNIEnv *env);
     bool compileMethod(void *artMethod, void *thread);
 
-    void suspendVM();
-    void resumeVM();
+    void suspendVM(void *);
+    void resumeVM(void *);
 
     bool canGetObject();
     jobject getJavaObject(JNIEnv* env, void* thread, void* address);

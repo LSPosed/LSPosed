@@ -21,47 +21,51 @@
 
 namespace art {
     namespace gc {
+
 // What caused the GC?
         enum GcCause {
             // Invalid GC cause used as a placeholder.
-                    kGcCauseNone,
+            kGcCauseNone,
             // GC triggered by a failed allocation. Thread doing allocation is blocked waiting for GC before
             // retrying allocation.
-                    kGcCauseForAlloc,
+            kGcCauseForAlloc,
             // A background GC trying to ensure there is free memory ahead of allocations.
-                    kGcCauseBackground,
+            kGcCauseBackground,
             // An explicit System.gc() call.
-                    kGcCauseExplicit,
+            kGcCauseExplicit,
             // GC triggered for a native allocation when NativeAllocationGcWatermark is exceeded.
             // (This may be a blocking GC depending on whether we run a non-concurrent collector).
-                    kGcCauseForNativeAlloc,
+            kGcCauseForNativeAlloc,
             // GC triggered for a collector transition.
-                    kGcCauseCollectorTransition,
+            kGcCauseCollectorTransition,
             // Not a real GC cause, used when we disable moving GC (currently for GetPrimitiveArrayCritical).
-                    kGcCauseDisableMovingGc,
+            kGcCauseDisableMovingGc,
             // Not a real GC cause, used when we trim the heap.
-                    kGcCauseTrim,
+            kGcCauseTrim,
             // Not a real GC cause, used to implement exclusion between GC and instrumentation.
-                    kGcCauseInstrumentation,
+            kGcCauseInstrumentation,
             // Not a real GC cause, used to add or remove app image spaces.
-                    kGcCauseAddRemoveAppImageSpace,
+            kGcCauseAddRemoveAppImageSpace,
             // Not a real GC cause, used to implement exclusion between GC and debugger.
-                    kGcCauseDebugger,
+            kGcCauseDebugger,
             // GC triggered for background transition when both foreground and background collector are CMS.
-                    kGcCauseHomogeneousSpaceCompact,
+            kGcCauseHomogeneousSpaceCompact,
             // Class linker cause, used to guard filling art methods with special values.
-                    kGcCauseClassLinker,
+            kGcCauseClassLinker,
             // Not a real GC cause, used to implement exclusion between code cache metadata and GC.
-                    kGcCauseJitCodeCache,
+            kGcCauseJitCodeCache,
             // Not a real GC cause, used to add or remove system-weak holders.
-                    kGcCauseAddRemoveSystemWeakHolder,
+            kGcCauseAddRemoveSystemWeakHolder,
             // Not a real GC cause, used to prevent hprof running in the middle of GC.
-                    kGcCauseHprof,
+            kGcCauseHprof,
             // Not a real GC cause, used to prevent GetObjectsAllocated running in the middle of GC.
-                    kGcCauseGetObjectsAllocated,
+            kGcCauseGetObjectsAllocated,
             // GC cause for the profile saver.
-                    kGcCauseProfileSaver,
+            kGcCauseProfileSaver,
+            // GC cause for running an empty checkpoint.
+            kGcCauseRunEmptyCheckpoint,
         };
     }  // namespace gc
 }  // namespace art
+
 #endif  // ART_RUNTIME_GC_GC_CAUSE_H_
