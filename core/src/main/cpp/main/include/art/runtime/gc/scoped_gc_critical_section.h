@@ -21,7 +21,7 @@
 #define LSPOSED_SCOPED_GC_CRITICAL_SECTION_H
 
 #include "gc_cause.h"
-#include "collector/gc_type.h"
+#include "collector_type.h"
 
 namespace art {
     namespace gc {
