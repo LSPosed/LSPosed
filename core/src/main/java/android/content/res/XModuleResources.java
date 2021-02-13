@@ -28,6 +28,7 @@ import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.IXposedHookZygoteInit.StartupParam;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
+import hidden.HiddenApiBridge;
 
 /**
  * Provides access to resources from a certain path (usually the module's own path).
@@ -54,8 +55,7 @@ public class XModuleResources extends Resources {
 			throw new IllegalArgumentException("path must not be null");
 
 		AssetManager assets = new AssetManager();
-		XposedHelpers.callMethod(assets, "addAssetPath", path);
-		//assets.addAssetPath(path);
+		HiddenApiBridge.AssetManager_addAssetPath(assets, path);
 
 		XModuleResources res;
 		if (origRes != null)

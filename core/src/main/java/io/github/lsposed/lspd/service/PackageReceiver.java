@@ -32,10 +32,8 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.os.IBinder;
-import android.os.ServiceManager;
+import android.os.RemoteException;
 import android.os.UserHandle;
-import android.os.UserManager;
 import android.widget.Toast;
 
 import io.github.lsposed.lspd.nativebridge.ConfigManager;
@@ -46,7 +44,6 @@ import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
@@ -55,8 +52,6 @@ import de.robv.android.xposed.XposedHelpers;
 
 public class PackageReceiver {
     private static final BroadcastReceiver RECEIVER = new BroadcastReceiver() {
-
-        private PackageManager pm = null;
 
         private final String MODULES_LIST_FILENAME = "conf/modules.list";
         private final String ENABLED_MODULES_LIST_FILENAME = "conf/enabled_modules.list";
@@ -68,34 +63,15 @@ public class PackageReceiver {
             return (uri != null) ? uri.getSchemeSpecificPart() : null;
         }
 
-        private void getPackageManager() {
-            if (pm != null) return;
-            ActivityThread activityThread = ActivityThread.currentActivityThread();
-            if (activityThread == null) {
-                Utils.logW("ActivityThread is null");
-                return;
-            }
-            Context context = activityThread.getSystemContext();
-            if (context == null) {
-                Utils.logW("context is null");
-                return;
-            }
-            pm = context.getPackageManager();
-        }
 
         private boolean isXposedModule(ApplicationInfo app) {
             return app != null && app.enabled && app.metaData != null && app.metaData.containsKey("xposedmodule");
         }
 
-        private PackageInfo getPackageInfo(String packageName) {
-            getPackageManager();
-            if (pm == null) {
-                Utils.logW("PM is null");
-                return null;
-            }
+        private PackageInfo getPackageInfo(String packageName, int uid) {
             try {
-                return pm.getPackageInfo(packageName, PackageManager.GET_META_DATA);
-            } catch (PackageManager.NameNotFoundException e) {
+                return PackageService.getPackageInfo(packageName, PackageManager.GET_META_DATA, uid);
+            } catch (RemoteException e) {
                 return null;
             }
         }
@@ -108,7 +84,7 @@ public class PackageReceiver {
                 Scanner scanner = new Scanner(enabledModules);
                 while (scanner.hasNextLine()) {
                     String packageName = scanner.nextLine();
-                    PackageInfo info = getPackageInfo(packageName);
+                    PackageInfo info = getPackageInfo(packageName, 0);
                     if (info != null && isXposedModule(info.applicationInfo))
                         result.put(packageName, info.applicationInfo.sourceDir);
                     else if (info == null)
@@ -189,17 +165,12 @@ public class PackageReceiver {
                 }
             }
 
-            PackageInfo pkgInfo = getPackageInfo(packageName);
+            PackageInfo pkgInfo = getPackageInfo(packageName, intent.getIntExtra(Intent.EXTRA_USER, 0));
 
             if (pkgInfo != null && !isXposedModule(pkgInfo.applicationInfo)) return;
 
             try {
-                UserManager um = (UserManager) context.getSystemService(Context.USER_SERVICE);
-                @SuppressLint("DiscouragedPrivateApi")
-                Method m = UserManager.class.getDeclaredMethod("getUsers");
-                m.setAccessible(true);
-                for (Object uh : (List<Object>) m.invoke(um)) {
-                    int uid = (int) uh.getClass().getDeclaredField("id").get(uh);
+                for (int uid : UserService.getUsers()) {
                     Utils.logI("updating uid: " + uid);
                     boolean activated = updateModuleList(uid, packageName);
                     UserHandle userHandle = null;

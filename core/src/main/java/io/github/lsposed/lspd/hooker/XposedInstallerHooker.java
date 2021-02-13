@@ -115,12 +115,8 @@ public class XposedInstallerHooker {
                     return ConfigManager.getMiscPath();
                 }
             });
-            XposedHelpers.findAndHookMethod("io.github.lsposed.manager.receivers.LSPosedServiceClient", classLoader, "getBinder", new XC_MethodReplacement(){
-                @Override
-                protected Object replaceHookedMethod(MethodHookParam param) {
-                    return BridgeService.requireBinder();
-                }
-            });
+            Class<?> serviceClass = XposedHelpers.findClass("io.github.xposed.xposedservice.XposedService", classLoader);
+            XposedHelpers.setStaticObjectField(serviceClass, "serviceBinder", BridgeService.requireBinder());
 
             Utils.logI("Hooked LSPosed Manager");
         } catch (Throwable t) {
