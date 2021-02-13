@@ -27,6 +27,7 @@ import io.github.lsposed.lspd.BuildConfig;
 import io.github.lsposed.lspd.nativebridge.ConfigManager;
 import io.github.lsposed.lspd.core.EdxpImpl;
 import io.github.lsposed.lspd.core.Main;
+import io.github.lsposed.lspd.service.BridgeService;
 import io.github.lsposed.lspd.util.Utils;
 
 public class XposedInstallerHooker {
@@ -114,6 +115,13 @@ public class XposedInstallerHooker {
                     return ConfigManager.getMiscPath();
                 }
             });
+            XposedHelpers.findAndHookMethod("io.github.lsposed.manager.receivers.LSPosedServiceClient", classLoader, "getBinder", new XC_MethodReplacement(){
+                @Override
+                protected Object replaceHookedMethod(MethodHookParam param) {
+                    return BridgeService.requireBinder();
+                }
+            });
+
             Utils.logI("Hooked LSPosed Manager");
         } catch (Throwable t) {
             Utils.logW("Could not hook LSPosed Manager", t);

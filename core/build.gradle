@@ -58,6 +58,7 @@ dependencies {
     implementation 'rikka.ndk:riru:10'
     implementation 'com.android.tools.build:apksig:4.1.2'
     implementation project(path: ':sandhook-hooklib')
+    implementation project(path: ':service')
     compileOnly project(':hiddenapi-stubs')
     compileOnly project(':key-selector')
     compileOnly 'androidx.annotation:annotation:1.1.0'
