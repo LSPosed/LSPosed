@@ -30,13 +30,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -46,54 +43,23 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import io.github.lsposed.manager.R;
-import io.github.lsposed.manager.databinding.ActivityListBinding;
 import io.github.lsposed.manager.repo.RepoLoader;
 import io.github.lsposed.manager.repo.model.OnlineModule;
-import io.github.lsposed.manager.ui.activity.base.BaseActivity;
-import io.github.lsposed.manager.util.LinearLayoutManagerFix;
-import rikka.recyclerview.RecyclerViewKt;
+import io.github.lsposed.manager.ui.activity.base.ListActivity;
 
-public class RepoActivity extends BaseActivity implements RepoLoader.Listener {
+public class RepoActivity extends ListActivity implements RepoLoader.Listener {
     private final RepoLoader repoLoader = RepoLoader.getInstance();
-    private SearchView searchView;
-    private SearchView.OnQueryTextListener searchListener;
-    private ActivityListBinding binding;
     private RepoAdapter adapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = ActivityListBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        setAppBar(binding.appBar, binding.toolbar);
-        binding.getRoot().bringChildToFront(binding.appBar);
-        binding.toolbar.setNavigationOnClickListener(view -> onBackPressed());
-        binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setRaised(!top));
-        ActionBar bar = getSupportActionBar();
-        assert bar != null;
-        bar.setDisplayHomeAsUpEnabled(true);
-        adapter = new RepoAdapter();
-        adapter.setHasStableIds(true);
-        binding.recyclerView.setAdapter(adapter);
-        binding.recyclerView.setHasFixedSize(true);
-        binding.recyclerView.setLayoutManager(new LinearLayoutManagerFix(this));
-        binding.progress.setVisibilityAfterHide(View.GONE);
-        RecyclerViewKt.addFastScroller(binding.recyclerView, binding.recyclerView);
-        RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
         repoLoader.addListener(this);
-        searchListener = new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                adapter.getFilter().filter(query);
-                return false;
-            }
+        super.onCreate(savedInstanceState);
+    }
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                adapter.getFilter().filter(newText);
-                return false;
-            }
-        };
+    @Override
+    protected BaseAdapter<?> createAdapter() {
+        return adapter = new RepoAdapter();
     }
 
     @Override
@@ -129,12 +95,10 @@ public class RepoActivity extends BaseActivity implements RepoLoader.Listener {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_repo, menu);
-        searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
-        searchView.setOnQueryTextListener(searchListener);
         return super.onCreateOptionsMenu(menu);
     }
 
-    private class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.ViewHolder> implements Filterable {
+    private class RepoAdapter extends BaseAdapter<RepoAdapter.ViewHolder> {
         private List<OnlineModule> fullList, showList;
 
         RepoAdapter() {

@@ -40,14 +40,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -63,20 +60,14 @@ import java.util.List;
 import io.github.lsposed.manager.Constants;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.adapters.AppHelper;
-import io.github.lsposed.manager.databinding.ActivityListBinding;
-import io.github.lsposed.manager.ui.activity.base.BaseActivity;
+import io.github.lsposed.manager.ui.activity.base.ListActivity;
 import io.github.lsposed.manager.util.GlideApp;
-import io.github.lsposed.manager.util.LinearLayoutManagerFix;
 import io.github.lsposed.manager.util.ModuleUtil;
-import rikka.recyclerview.RecyclerViewKt;
 
 import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
 
-public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleListener {
+public class ModulesActivity extends ListActivity implements ModuleUtil.ModuleListener {
 
-    ActivityListBinding binding;
-    private SearchView searchView;
-    private SearchView.OnQueryTextListener mSearchListener;
     private PackageManager pm;
     private ModuleUtil moduleUtil;
     private ModuleAdapter adapter = null;
@@ -84,40 +75,10 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = ActivityListBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        setAppBar(binding.appBar, binding.toolbar);
-        binding.getRoot().bringChildToFront(binding.appBar);
-        binding.toolbar.setNavigationOnClickListener(view -> onBackPressed());
-        binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setRaised(!top));
-        ActionBar bar = getSupportActionBar();
-        if (bar != null) {
-            bar.setDisplayHomeAsUpEnabled(true);
-        }
         moduleUtil = ModuleUtil.getInstance();
         pm = getPackageManager();
-        adapter = new ModuleAdapter();
-        adapter.setHasStableIds(true);
         moduleUtil.addListener(this);
-        binding.recyclerView.setAdapter(adapter);
-        binding.recyclerView.setHasFixedSize(true);
-        binding.recyclerView.setLayoutManager(new LinearLayoutManagerFix(this));
-        RecyclerViewKt.addFastScroller(binding.recyclerView, binding.recyclerView);
-        RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
-        mSearchListener = new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                adapter.getFilter().filter(query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                adapter.getFilter().filter(newText);
-                return false;
-            }
-        };
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -129,8 +90,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_modules, menu);
-        searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
-        searchView.setOnQueryTextListener(mSearchListener);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -185,15 +144,11 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
     }
 
     @Override
-    public void onBackPressed() {
-        if (searchView.isIconified()) {
-            super.onBackPressed();
-        } else {
-            searchView.setIconified(true);
-        }
+    protected BaseAdapter<?> createAdapter() {
+        return adapter = new ModuleAdapter();
     }
 
-    private class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.ViewHolder> implements Filterable {
+    private class ModuleAdapter extends BaseAdapter<ModuleAdapter.ViewHolder> {
         private List<ModuleUtil.InstalledModule> fullList, showList;
 
         ModuleAdapter() {
@@ -324,7 +279,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                     }
                 });
                 showList = fullList;
-                //binding.swipeRefreshLayout.setRefreshing(false);
                 String queryStr = searchView != null ? searchView.getQuery().toString() : "";
                 runOnUiThread(() -> getFilter().filter(queryStr));
                 moduleUtil.updateModulesList();
