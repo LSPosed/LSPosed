@@ -175,4 +175,6 @@
     <string name="dns_over_http">DNS over HTTPS</string>
     <string name="dns_over_http_summary">Workaround DNS poisoning in some nations</string>
     <string name="about_view_source_code"><![CDATA[View source code at %s<br/>Join our %s channel]]></string>
+    <string name="module_release_load_more">Load more</string>
+    <string name="module_release_no_more">No more release</string>
 </resources>

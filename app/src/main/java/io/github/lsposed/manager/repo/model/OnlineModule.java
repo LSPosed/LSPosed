@@ -77,6 +77,7 @@ public class OnlineModule implements Serializable, Parcelable {
     @SerializedName("stargazerCount")
     @Expose
     private Integer stargazerCount;
+    public boolean releasesLoaded = false;
     public final static Creator<OnlineModule> CREATOR = new Creator<OnlineModule>() {
 
         public OnlineModule createFromParcel(Parcel in) {
