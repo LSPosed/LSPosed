@@ -24,9 +24,12 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
+import android.view.LayoutInflater;
 import android.view.View;
 
-import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.text.HtmlCompat;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
@@ -36,6 +39,7 @@ import java.util.Locale;
 import io.github.lsposed.manager.Constants;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.databinding.ActivityMainBinding;
+import io.github.lsposed.manager.databinding.DialogAboutBinding;
 import io.github.lsposed.manager.ui.activity.base.BaseActivity;
 import io.github.lsposed.manager.ui.fragment.StatusDialogBuilder;
 import io.github.lsposed.manager.util.GlideHelper;
@@ -69,7 +73,17 @@ public class MainActivity extends BaseActivity {
         binding.download.setOnClickListener(new StartActivityListener(RepoActivity.class, false));
         binding.logs.setOnClickListener(new StartActivityListener(LogsActivity.class, true));
         binding.settings.setOnClickListener(new StartActivityListener(SettingsActivity.class, false));
-        binding.about.setOnClickListener(new StartActivityListener(AboutActivity.class, false));
+        binding.about.setOnClickListener(v -> {
+            DialogAboutBinding binding = DialogAboutBinding.inflate(LayoutInflater.from(this), null, false);
+            binding.sourceCode.setMovementMethod(LinkMovementMethod.getInstance());
+            binding.sourceCode.setText(HtmlCompat.fromHtml(getString(
+                    R.string.about_view_source_code,
+                    "<b><a href=\"https://github.com/RikkaApps/Shizuku\">GitHub</a></b>",
+                    "<b><a href=\"https://t.me/LSPosed\">Telegram</a></b>"), HtmlCompat.FROM_HTML_MODE_LEGACY));
+            new AlertDialog.Builder(this)
+                    .setView(binding.getRoot())
+                    .show();
+        });
         Glide.with(binding.appIcon)
                 .load(GlideHelper.wrapApplicationInfoForIconLoader(getApplicationInfo()))
                 .into(binding.appIcon);

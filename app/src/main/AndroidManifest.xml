@@ -41,9 +41,6 @@
             android:name=".ui.activity.CrashReportActivity"
             android:process=":error_activity" />
         <activity
-            android:name=".ui.activity.AboutActivity"
-            android:label="@string/About" />
-        <activity
             android:name=".ui.activity.LogsActivity"
             android:label="@string/Logs" />
         <activity android:name=".ui.activity.AppListActivity" />

@@ -30,7 +30,6 @@
     <string name="ModulesDetail">%d модулей включено</string>
     <string name="Settings">Настройки</string>
     <string name="about_source">https://github.com/LSPosed/LSPosed/</string>
-    <string name="about_source_label">Исходный код</string>
     <string name="accent_color">Цвет акцента</string>
     <string name="android_framework">System Framework</string>
     <string name="android_sdk">Android %2$s (%1$s, API %3$d)</string>
