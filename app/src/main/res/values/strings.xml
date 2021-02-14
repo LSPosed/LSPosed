@@ -121,8 +121,6 @@
     <string name="sort_by_install_time_reverse">Sort by install time (reverse)</string>
     <string name="sort_by_update_time">Sort by update time</string>
     <string name="sort_by_update_time_reverse">Sort by update time (reverse)</string>
-    <string name="primary_color">Primary color</string>
-    <string name="accent_color">Accent color</string>
     <string name="settings_group_theme">Theme</string>
     <string name="settings_variant">Variant</string>
     <string name="menu_show_system_apps">System apps</string>
@@ -177,4 +175,5 @@
     <string name="about_view_source_code"><![CDATA[View source code at %s<br/>Join our %s channel]]></string>
     <string name="module_release_load_more">Show older versions</string>
     <string name="module_release_no_more">No more release</string>
+    <string name="theme_color">Theme color</string>
 </resources>

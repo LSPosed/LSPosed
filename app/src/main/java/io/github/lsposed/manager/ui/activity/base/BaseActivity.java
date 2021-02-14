@@ -36,8 +36,8 @@ import io.github.lsposed.manager.BuildConfig;
 import io.github.lsposed.manager.Constants;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.util.NavUtil;
-import io.github.lsposed.manager.util.ThemeUtil;
 import io.github.lsposed.manager.util.Version;
+import io.github.lsposed.manager.util.theme.ThemeUtil;
 import rikka.core.res.ResourcesKt;
 import rikka.material.app.MaterialActivity;
 
@@ -74,12 +74,12 @@ public class BaseActivity extends MaterialActivity {
     @Override
     public void onApplyUserThemeResource(@NonNull Resources.Theme theme, boolean isDecorView) {
         theme.applyStyle(ThemeUtil.getNightThemeStyleRes(this), true);
-        theme.applyStyle(ThemeUtil.getColorThemeStyleRes(this), true);
+        theme.applyStyle(ThemeUtil.getColorThemeStyleRes(), true);
     }
 
     @Override
     public String computeUserThemeKey() {
-        return ThemeUtil.getColorTheme(this) + ThemeUtil.getNightTheme(this);
+        return ThemeUtil.getColorTheme() + ThemeUtil.getNightTheme(this);
     }
 
     @Override

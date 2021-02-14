@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ This file is part of LSPosed.
+  ~
+  ~ LSPosed is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ LSPosed is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+  ~
+  ~ Copyright (C) 2021 LSPosed Contributors
+  -->
+
+<resources>
+
+    <style name="ThemeOverlay.color_primary">
+        <item name="colorPrimary">@color/color_primary</item>
+    </style>
+
+    <style name="ThemeOverlay.material_red">
+        <item name="colorPrimary">@color/material_red</item>
+    </style>
+
+    <style name="ThemeOverlay.material_pink">
+        <item name="colorPrimary">@color/material_pink</item>
+    </style>
+
+    <style name="ThemeOverlay.material_purple">
+        <item name="colorPrimary">@color/material_purple</item>
+    </style>
+
+    <style name="ThemeOverlay.material_deep_purple">
+        <item name="colorPrimary">@color/material_deep_purple</item>
+    </style>
+
+    <style name="ThemeOverlay.material_indigo">
+        <item name="colorPrimary">@color/material_indigo</item>
+    </style>
+
+    <style name="ThemeOverlay.material_blue">
+        <item name="colorPrimary">@color/material_blue</item>
+    </style>
+
+    <style name="ThemeOverlay.material_light_blue">
+        <item name="colorPrimary">@color/material_light_blue</item>
+    </style>
+
+    <style name="ThemeOverlay.material_cyan">
+        <item name="colorPrimary">@color/material_cyan</item>
+    </style>
+
+    <style name="ThemeOverlay.material_teal">
+        <item name="colorPrimary">@color/material_teal</item>
+    </style>
+
+    <style name="ThemeOverlay.material_green">
+        <item name="colorPrimary">@color/material_green</item>
+    </style>
+
+    <style name="ThemeOverlay.material_light_green">
+        <item name="colorPrimary">@color/material_light_green</item>
+    </style>
+
+    <style name="ThemeOverlay.material_lime">
+        <item name="colorPrimary">@color/material_lime</item>
+    </style>
+
+    <style name="ThemeOverlay.material_yellow">
+        <item name="colorPrimary">@color/material_yellow</item>
+    </style>
+
+    <style name="ThemeOverlay.material_amber">
+        <item name="colorPrimary">@color/material_amber</item>
+    </style>
+
+    <style name="ThemeOverlay.material_orange">
+        <item name="colorPrimary">@color/material_orange</item>
+    </style>
+
+    <style name="ThemeOverlay.material_deep_orange">
+        <item name="colorPrimary">@color/material_deep_orange</item>
+    </style>
+
+    <style name="ThemeOverlay.material_brown">
+        <item name="colorPrimary">@color/material_brown</item>
+    </style>
+
+    <style name="ThemeOverlay.material_grey">
+        <item name="colorPrimary">@color/material_grey</item>
+    </style>
+
+    <style name="ThemeOverlay.material_blue_grey">
+        <item name="colorPrimary">@color/material_blue_grey</item>
+    </style>
+</resources>

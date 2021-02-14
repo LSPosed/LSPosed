@@ -98,8 +98,6 @@
     <string name="sort_by_install_time_reverse">安裝時間（降序）</string>
     <string name="sort_by_update_time">更新時間</string>
     <string name="sort_by_update_time_reverse">更新時間（降序）</string>
-    <string name="primary_color">主要色</string>
-    <string name="accent_color">強調色</string>
     <string name="settings_group_theme">主題</string>
     <string name="settings_variant">變體</string>
     <string name="menu_show_system_apps">系統程式</string>

@@ -14,7 +14,6 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
   ~
-  ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 
@@ -23,11 +22,12 @@
     <style name="Base.AppTheme.Light" parent="Theme.Material.Light.LightStatusBar">
         <item name="android:statusBarColor">?android:colorBackground</item>
 
-        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/material_blue_700</item>
         <item name="colorPrimaryVariant">?colorPrimary</item>
         <item name="colorSecondary">?colorPrimary</item>
         <item name="colorSecondaryVariant">?colorPrimary</item>
         <item name="colorOnSecondary">@android:color/white</item>
+        <item name="colorSurface">@android:color/white</item>
         <item name="colorError">@color/material_red_500</item>
         <item name="colorNormal">@color/material_green_500</item>
         <item name="colorInstall">@color/material_blue_500</item>
@@ -48,11 +48,12 @@
     <style name="Theme.Light" parent="Base.AppTheme.Light" />
 
     <style name="Base.AppTheme" parent="Theme.Material">
-        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/material_blue_700</item>
         <item name="colorPrimaryVariant">?colorPrimary</item>
         <item name="colorSecondary">?colorPrimary</item>
         <item name="colorSecondaryVariant">?colorPrimary</item>
         <item name="colorOnSecondary">@android:color/black</item>
+        <item name="colorSurface">@color/google_grey_900</item>
         <item name="colorError">@color/material_red_700</item>
         <item name="colorNormal">@color/material_green_700</item>
         <item name="colorInstall">@color/material_blue_700</item>
