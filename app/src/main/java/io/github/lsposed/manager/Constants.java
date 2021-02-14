@@ -22,6 +22,7 @@ package io.github.lsposed.manager;
 
 import android.widget.Toast;
 
+@SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal", "unused"})
 public class Constants {
     private static int xposedApiVersion = -1;
     private static String xposedVersion = null;
