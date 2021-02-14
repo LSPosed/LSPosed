@@ -23,7 +23,6 @@ package io.github.lsposed.manager.ui.activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.os.Build;
 import android.os.Bundle;
@@ -38,8 +37,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 import io.github.lsposed.manager.BuildConfig;
 import io.github.lsposed.manager.R;
@@ -69,49 +66,23 @@ public class CrashReportActivity extends AppCompatActivity {
         Date currentDate = new Date();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 
-        String buildDateAsString = getBuildDateAsString(dateFormat);
-
         String versionName = getVersionName();
 
         String errorDetails = "";
 
         errorDetails += "Build version: " + versionName + " \n";
-        if (buildDateAsString != null) {
-            errorDetails += "Build date: " + buildDateAsString + " \n";
-        }
         errorDetails += "Current date: " + dateFormat.format(currentDate) + " \n";
         errorDetails += "Device: " + getDeviceModelName() + " \n \n";
+        errorDetails += "SDK: " + Build.VERSION.SDK_INT + " \n \n";
         errorDetails += "Stack trace:  \n";
         errorDetails += getStackTraceFromIntent(intent);
         return errorDetails;
     }
 
-    private String getBuildDateAsString(@NonNull DateFormat dateFormat) {
-        long buildDate;
-        try {
-            ApplicationInfo ai = getPackageManager().getApplicationInfo(getPackageName(), 0);
-            ZipFile zf = new ZipFile(ai.sourceDir);
-
-            ZipEntry ze = zf.getEntry("classes.dex");
-            buildDate = ze.getTime();
-
-
-            zf.close();
-        } catch (Exception e) {
-            buildDate = 0;
-        }
-
-        if (buildDate > 312764400000L) {
-            return dateFormat.format(new Date(buildDate));
-        } else {
-            return null;
-        }
-    }
-
     private String getVersionName() {
         try {
             PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-            return packageInfo.versionName;
+            return String.format("%s (%s)", packageInfo.versionName, packageInfo.versionCode);
         } catch (Exception e) {
             return "Unknown";
         }
