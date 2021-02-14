@@ -113,8 +113,6 @@
     <string name="sort_by_install_time_reverse">安装时间（降序）</string>
     <string name="sort_by_update_time">更新时间</string>
     <string name="sort_by_update_time_reverse">更新时间（降序）</string>
-    <string name="primary_color">主要色</string>
-    <string name="accent_color">强调色</string>
     <string name="settings_group_theme">主题</string>
     <string name="settings_enable_resources">启用资源钩子</string>
     <string name="settings_enable_resources_summary"><b>警告: </b> 资源钩子已被弃用</string>
@@ -172,4 +170,5 @@
     <string name="about_view_source_code"><![CDATA[在 %s 查看源码<br/>加入我们的 %s 频道]]></string>
     <string name="module_release_load_more">显示更旧的版本</string>
     <string name="module_release_no_more">没有更旧的版本</string>
+    <string name="theme_color">主题颜色</string>
 </resources>

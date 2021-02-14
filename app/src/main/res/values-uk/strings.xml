@@ -28,7 +28,6 @@
     <string name="ModulesDetail">%d модулі(в) увімкнено</string>
     <string name="Settings">Налаштування</string>
     <string name="about_source">https://github.com/LSPosed/LSPosed/</string>
-    <string name="accent_color">Колір акценту</string>
     <string name="android_framework">System Framework</string>
     <string name="android_sdk">Android %2$s (%1$s, API %3$d)</string>
     <string name="app_destroyed">Ця програма припинила роботу, будь ласка, переконайтесь, що завантажили її з офіційного джерела.</string>
@@ -81,7 +80,6 @@
     <string name="not_logcat">"Це звіт LSPosed Framework та модулів, якщо вам потрібен Android logcat, ви можете спробувати наш модуль Magisk Log Catcher"</string>
     <string name="outdated_manager">Версія LSPosed Manager і LSPosed Core не узгоджуються. Будь ласка, встановіть відповідну версію.</string>
     <string name="pref_title_disable_verbose_log">Вимкнути детальні звіти</string>
-    <string name="primary_color">Основний колір</string>
     <string name="pure_black_dark_theme">Використовувати чисто чорну темну тему</string>
     <string name="requested_by_module">Рекомендовано</string>
     <string name="scroll_bottom">Прокрутити донизу</string>

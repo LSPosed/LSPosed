@@ -278,7 +278,7 @@ public class SettingsActivity extends BaseActivity {
             if (restore != null) {
                 restore.setEnabled(installed);
                 restore.setOnPreferenceClickListener(preference -> {
-                    restoreLauncher.launch(new String[]{"*/*"});
+                    restoreLauncher.launch(new String[]{"*/*" });
                     return true;
                 });
             }
@@ -308,20 +308,9 @@ public class SettingsActivity extends BaseActivity {
                 });
             }
 
-            Preference primary_color = findPreference("primary_color");
+            Preference primary_color = findPreference("theme_color");
             if (primary_color != null) {
                 primary_color.setOnPreferenceChangeListener((preference, newValue) -> {
-                    SettingsActivity activity = (SettingsActivity) getActivity();
-                    if (activity != null) {
-                        activity.restart();
-                    }
-                    return true;
-                });
-            }
-
-            Preference accent_color = findPreference("accent_color");
-            if (accent_color != null) {
-                accent_color.setOnPreferenceChangeListener((preference, newValue) -> {
                     SettingsActivity activity = (SettingsActivity) getActivity();
                     if (activity != null) {
                         activity.restart();

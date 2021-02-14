@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ This file is part of LSPosed.
+  ~
+  ~ LSPosed is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ LSPosed is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+  ~
+  ~ Copyright (C) 2021 LSPosed Contributors
+  -->
+
+<resources>
+    <color name="material_red">@color/material_red_300</color>
+    <color name="material_pink">@color/material_pink_300</color>
+    <color name="material_purple">@color/material_purple_300</color>
+    <color name="material_deep_purple">@color/material_deep_purple_300</color>
+    <color name="material_indigo">@color/material_indigo_300</color>
+    <color name="material_blue">@color/material_blue_300</color>
+    <color name="material_light_blue">@color/material_light_blue_300</color>
+    <color name="material_cyan">@color/material_cyan_300</color>
+    <color name="material_teal">@color/material_teal_300</color>
+    <color name="material_green">@color/material_green_300</color>
+    <color name="material_light_green">@color/material_light_green_300</color>
+    <color name="material_lime">@color/material_lime_300</color>
+    <color name="material_yellow">@color/material_yellow_300</color>
+    <color name="material_amber">@color/material_amber_300</color>
+    <color name="material_orange">@color/material_orange_300</color>
+    <color name="material_deep_orange">@color/material_deep_orange_300</color>
+    <color name="material_brown">@color/material_brown_300</color>
+    <color name="material_grey">@color/material_grey_300</color>
+    <color name="material_blue_grey">@color/material_blue_grey_300</color>
+</resources>

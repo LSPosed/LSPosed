@@ -37,17 +37,11 @@
     <PreferenceCategory
         android:title="@string/settings_group_theme"
         app:iconSpaceReserved="false">
-        <io.github.lsposed.manager.ui.widget.ThemeColorPreference
-            android:defaultValue="#1976D2"
-            android:dialogTitle="@string/primary_color"
-            android:key="primary_color"
-            android:title="@string/primary_color"
-            app:iconSpaceReserved="false" />
-        <io.github.lsposed.manager.ui.widget.ThemeColorPreference
-            android:defaultValue="#e91e63"
-            android:dialogTitle="@string/accent_color"
-            android:key="accent_color"
-            android:title="@string/accent_color"
+        <io.github.lsposed.manager.util.theme.ThemeColorPreference
+            android:defaultValue=""
+            android:dialogTitle="@string/theme_color"
+            android:key="theme_color"
+            android:title="@string/theme_color"
             app:iconSpaceReserved="false" />
         <io.github.lsposed.manager.ui.widget.IntegerListPreference
             android:defaultValue="-1"
