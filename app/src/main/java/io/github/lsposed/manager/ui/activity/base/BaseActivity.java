@@ -36,7 +36,6 @@ import io.github.lsposed.manager.BuildConfig;
 import io.github.lsposed.manager.Constants;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.util.NavUtil;
-import io.github.lsposed.manager.util.Version;
 import io.github.lsposed.manager.util.theme.ThemeUtil;
 import rikka.core.res.ResourcesKt;
 import rikka.material.app.MaterialActivity;
@@ -56,9 +55,7 @@ public class BaseActivity extends MaterialActivity {
         // make sure the versions are consistent
         String coreVersionStr = Constants.getXposedVersion();
         if (coreVersionStr != null) {
-            Version managerVersion = new Version(BuildConfig.VERSION_NAME);
-            Version coreVersion = new Version(coreVersionStr);
-            if (!managerVersion.equals(coreVersion)) {
+            if (!BuildConfig.VERSION_NAME.equals(coreVersionStr)) {
                 new AlertDialog.Builder(this)
                         .setMessage(R.string.outdated_manager)
                         .setPositiveButton(R.string.ok, (dialog, id) -> {
