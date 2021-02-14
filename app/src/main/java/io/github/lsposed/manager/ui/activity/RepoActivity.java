@@ -167,7 +167,7 @@ public class RepoActivity extends ListActivity implements RepoLoader.Listener {
             if (sort == 0) {
                 fullList.sort((o1, o2) -> labelComparator.compare(o1.getDescription(), o2.getDescription()));
             } else if (sort == 1) {
-                fullList.sort(Comparator.comparing(o -> Instant.parse(o.getUpdatedAt())));
+                fullList.sort(Collections.reverseOrder(Comparator.comparing(o -> Instant.parse(o.getUpdatedAt()))));
             }
             String queryStr = searchView != null ? searchView.getQuery().toString() : "";
             runOnUiThread(() -> getFilter().filter(queryStr));
