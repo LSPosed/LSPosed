@@ -97,11 +97,11 @@ public class RepoActivity extends ListActivity implements RepoLoader.Listener {
             binding.progress.show();
             repoLoader.loadRemoteData();
         } else if (itemId == R.id.item_sort_by_name) {
-            item.setChecked(!item.isChecked());
+            item.setChecked(true);
             preferences.edit().putInt("repo_sort", 0).apply();
             adapter.setData(repoLoader.getOnlineModules());
         } else if (itemId == R.id.item_sort_by_update_time) {
-            item.setChecked(!item.isChecked());
+            item.setChecked(true);
             preferences.edit().putInt("repo_sort", 1).apply();
             adapter.setData(repoLoader.getOnlineModules());
         }
@@ -111,6 +111,12 @@ public class RepoActivity extends ListActivity implements RepoLoader.Listener {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_repo, menu);
+        int sort = preferences.getInt("repo_sort", 0);
+        if (sort == 0) {
+            menu.findItem(R.id.item_sort_by_name).setChecked(true);
+        } else if (sort == 1) {
+            menu.findItem(R.id.item_sort_by_update_time).setChecked(true);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
