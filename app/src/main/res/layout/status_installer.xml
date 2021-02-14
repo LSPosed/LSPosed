@@ -19,7 +19,7 @@
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<rikka.widget.borderview.BorderNestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="wrap_content"
     android:layout_width="match_parent">
@@ -114,4 +114,4 @@
             android:visibility="gone" />
 
     </LinearLayout>
-</ScrollView>
+</rikka.widget.borderview.BorderNestedScrollView>
