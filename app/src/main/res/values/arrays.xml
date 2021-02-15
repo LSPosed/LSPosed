@@ -22,15 +22,15 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
 
     <string-array name="theme_texts" translatable="false">
-        <item>@string/dark_theme_follow_system</item>
         <item>@string/dark_theme_off</item>
         <item>@string/dark_theme_on</item>
+        <item>@string/dark_theme_follow_system</item>
     </string-array>
 
     <string-array name="theme_values" translatable="false">
-        <item>-1</item>
-        <item>1</item>
-        <item>2</item>
+        <item>MODE_NIGHT_NO</item>
+        <item>MODE_NIGHT_YES</item>
+        <item>MODE_NIGHT_FOLLOW_SYSTEM</item>
     </string-array>
 
     <string-array name="variant_texts" translatable="false">

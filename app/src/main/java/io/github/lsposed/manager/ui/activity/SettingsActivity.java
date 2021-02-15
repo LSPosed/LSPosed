@@ -58,8 +58,8 @@ import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.databinding.ActivitySettingsBinding;
 import io.github.lsposed.manager.ui.activity.base.BaseActivity;
 import io.github.lsposed.manager.ui.fragment.StatusDialogBuilder;
-import io.github.lsposed.manager.ui.widget.IntegerListPreference;
 import io.github.lsposed.manager.util.BackupUtils;
+import io.github.lsposed.manager.util.theme.ThemeUtil;
 import rikka.core.util.ResourceUtils;
 import rikka.material.app.DayNightDelegate;
 import rikka.recyclerview.RecyclerViewKt;
@@ -278,16 +278,16 @@ public class SettingsActivity extends BaseActivity {
             if (restore != null) {
                 restore.setEnabled(installed);
                 restore.setOnPreferenceClickListener(preference -> {
-                    restoreLauncher.launch(new String[]{"*/*" });
+                    restoreLauncher.launch(new String[]{"*/*"});
                     return true;
                 });
             }
 
-            IntegerListPreference theme = findPreference("theme");
+            Preference theme = findPreference("dark_theme");
             if (theme != null) {
                 theme.setOnPreferenceChangeListener((preference, newValue) -> {
-                    if (preferences.getInt("theme", -1) != Integer.parseInt((String) newValue)) {
-                        DayNightDelegate.setDefaultNightMode(Integer.parseInt((String) newValue));
+                    if (!preferences.getString("dark_theme", ThemeUtil.MODE_NIGHT_FOLLOW_SYSTEM).equals(newValue)) {
+                        DayNightDelegate.setDefaultNightMode(ThemeUtil.getDarkTheme((String) newValue));
                         SettingsActivity activity = (SettingsActivity) getActivity();
                         if (activity != null) {
                             activity.restart();
@@ -297,7 +297,7 @@ public class SettingsActivity extends BaseActivity {
                 });
             }
 
-            SwitchPreference black_dark_theme = findPreference("black_dark_theme");
+            Preference black_dark_theme = findPreference("black_dark_theme");
             if (black_dark_theme != null) {
                 black_dark_theme.setOnPreferenceChangeListener((preference, newValue) -> {
                     SettingsActivity activity = (SettingsActivity) getActivity();
