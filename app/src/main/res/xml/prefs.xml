@@ -18,10 +18,9 @@
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 
-<!--suppress ALL -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <PreferenceCategory
+    <com.takisoft.preferencex.PreferenceCategory
         android:key="group_network"
         android:title="@string/group_network"
         app:iconSpaceReserved="false">
@@ -32,9 +31,9 @@
             android:summary="@string/dns_over_http_summary"
             android:title="@string/dns_over_http"
             app:iconSpaceReserved="false" />
-    </PreferenceCategory>
+    </com.takisoft.preferencex.PreferenceCategory>
 
-    <PreferenceCategory
+    <com.takisoft.preferencex.PreferenceCategory
         android:title="@string/settings_group_theme"
         app:iconSpaceReserved="false">
         <io.github.lsposed.manager.util.theme.ThemeColorPreference
@@ -49,20 +48,20 @@
             android:entryValues="@array/theme_values"
             android:key="theme"
             android:summary="%s"
-            android:title="@string/settings_theme"
+            android:title="@string/dark_theme"
             app:iconSpaceReserved="false" />
         <SwitchPreference
             android:key="black_dark_theme"
             android:title="@string/pure_black_dark_theme"
             app:iconSpaceReserved="false" />
-    </PreferenceCategory>
+    </com.takisoft.preferencex.PreferenceCategory>
 
-    <PreferenceCategory
+    <com.takisoft.preferencex.PreferenceCategory
         android:key="group_framework"
         android:title="@string/settings_group_framework"
         app:iconSpaceReserved="false">
 
-        <SimpleMenuPreference
+        <com.takisoft.preferencex.SimpleMenuPreference
             android:defaultValue="1"
             android:entries="@array/variant_texts"
             android:entryValues="@array/variant_values"
@@ -86,9 +85,9 @@
             android:title="@string/pref_title_disable_verbose_log"
             android:persistent="false"
             app:iconSpaceReserved="false" />
-    </PreferenceCategory>
+    </com.takisoft.preferencex.PreferenceCategory>
 
-    <PreferenceCategory
+    <com.takisoft.preferencex.PreferenceCategory
         android:key="group_backup"
         android:title="@string/settings_backup_and_restore"
         app:iconSpaceReserved="false">
@@ -103,5 +102,5 @@
         <Preference
             android:summary="@string/settings_backup_and_restore_summery"
             app:iconSpaceReserved="false" />
-    </PreferenceCategory>
+    </com.takisoft.preferencex.PreferenceCategory>
 </PreferenceScreen>

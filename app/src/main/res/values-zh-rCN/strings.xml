@@ -64,9 +64,6 @@
 
     <!-- Settings tab -->
     <string name="settings_group_framework">框架</string>
-    <string name="settings_theme">主题</string>
-    <string name="settings_theme_light">亮色</string>
-    <string name="settings_theme_dark">暗色</string>
 
     <!-- Support tab -->
 
@@ -103,7 +100,6 @@
     <string name="compile_failed">优化失败或返回值为空</string>
     <string name="compile_failed_with_info">优化失败: </string>
     <string name="not_installed">未安装</string>
-    <string name="follow_system">跟随系统</string>
     <string name="pure_black_dark_theme">使用纯黑深色主题</string>
     <string name="sort_by_name">应用名称</string>
     <string name="sort_by_name_reverse">应用名称（降序）</string>

@@ -22,9 +22,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
 
     <string-array name="theme_texts" translatable="false">
-        <item>@string/follow_system</item>
-        <item>@string/settings_theme_light</item>
-        <item>@string/settings_theme_dark</item>
+        <item>@string/dark_theme_follow_system</item>
+        <item>@string/dark_theme_off</item>
+        <item>@string/dark_theme_on</item>
     </string-array>
 
     <string-array name="theme_values" translatable="false">
