@@ -13,11 +13,7 @@ import androidx.annotation.Nullable;
 import java.lang.reflect.Field;
 import java.util.Map;
 
-import io.github.lsposed.lspd.ILSPManagerService;
-import io.github.xposed.xposedservice.IXposedService;
-
-import static android.os.Binder.getCallingUid;
-import static io.github.lsposed.lspd.service.Service.TAG;
+import static io.github.lsposed.lspd.service.ServiceManager.TAG;
 
 public class BridgeService {
     private static final int TRANSACTION_CODE = ('_' << 24) | ('L' << 16) | ('S' << 8) | 'P';
@@ -26,20 +22,19 @@ public class BridgeService {
 
     enum ACTION {
         ACTION_SEND_BINDER,
-        ACTION_SEND_MANAGER_BINDER,
         ACTION_GET_BINDER,
     }
 
+    // for client
     private static IBinder serviceBinder = null;
-    private static IXposedService service = null;
+    private static ILSPosedService service = null;
 
-    private static IBinder managerBinder = null;
-    private static ILSPManagerService manager = null;
-
+    // for service
     private static final IBinder.DeathRecipient BRIDGE_SERVICE_DEATH_RECIPIENT = () -> {
         Log.i(TAG, "service " + SERVICE_NAME + " is dead. ");
 
         try {
+            @SuppressWarnings("JavaReflectionMemberAccess")
             Field field = ServiceManager.class.getDeclaredField("sServiceManager");
             field.setAccessible(true);
             field.set(null, null);
@@ -57,15 +52,13 @@ public class BridgeService {
             Log.w(TAG, "clear ServiceManager: " + Log.getStackTraceString(e));
         }
 
-        sendToBridge(ACTION.ACTION_SEND_BINDER, serviceBinder, true);
-        sendToBridge(ACTION.ACTION_SEND_MANAGER_BINDER, managerBinder, true);
+        sendToBridge(serviceBinder, true);
     };
 
+    // for client
     private static final IBinder.DeathRecipient LSPSERVICE_DEATH_RECIPIENT = () -> {
         serviceBinder = null;
         service = null;
-        managerBinder = null;
-        manager = null;
         Log.e(TAG, "service is dead");
     };
 
@@ -78,7 +71,8 @@ public class BridgeService {
 
     private static Listener listener;
 
-    private static void sendToBridge(ACTION action, IBinder binder, boolean isRestart) {
+    // For service
+    private static void sendToBridge(IBinder binder, boolean isRestart) {
         IBinder bridgeService;
         do {
             bridgeService = ServiceManager.getService(SERVICE_NAME);
@@ -104,7 +98,7 @@ public class BridgeService {
             bridgeService.linkToDeath(BRIDGE_SERVICE_DEATH_RECIPIENT, 0);
         } catch (Throwable e) {
             Log.w(TAG, "linkToDeath " + Log.getStackTraceString(e));
-            sendToBridge(action, binder, false);
+            sendToBridge(binder, false);
             return;
         }
 
@@ -115,7 +109,7 @@ public class BridgeService {
         for (int i = 0; i < 3; i++) {
             try {
                 data.writeInterfaceToken(DESCRIPTOR);
-                data.writeInt(action.ordinal());
+                data.writeInt(ACTION.ACTION_SEND_BINDER.ordinal());
                 Log.v(TAG, "binder " + binder.toString());
                 data.writeStrongBinder(binder);
                 res = bridgeService.transact(TRANSACTION_CODE, data, reply, 0);
@@ -142,36 +136,24 @@ public class BridgeService {
         }
     }
 
-    private static void receiveFromBridge(ACTION action, IBinder binder) {
+    // For client
+    private static void receiveFromBridge(IBinder binder) {
         if (binder == null) {
             Log.e(TAG, "received empty binder");
             return;
         }
 
-        if(action == ACTION.ACTION_SEND_MANAGER_BINDER) {
-            if (managerBinder != null) {
-                managerBinder.unlinkToDeath(LSPSERVICE_DEATH_RECIPIENT, 0);
-            }
+        if (serviceBinder == null) {
+            PackageReceiver.register();
+        } else {
+            serviceBinder.unlinkToDeath(LSPSERVICE_DEATH_RECIPIENT, 0);
+        }
 
-            managerBinder = binder;
-            manager = LSPManagerService.Stub.asInterface(managerBinder);
-            try {
-                managerBinder.linkToDeath(LSPSERVICE_DEATH_RECIPIENT, 0);
-            } catch (RemoteException ignored) {
-            }
-        } else if (action == ACTION.ACTION_SEND_BINDER) {
-            if (serviceBinder == null) {
-                PackageReceiver.register();
-            } else {
-                serviceBinder.unlinkToDeath(LSPSERVICE_DEATH_RECIPIENT, 0);
-            }
-
-            serviceBinder = binder;
-            service = IXposedService.Stub.asInterface(serviceBinder);
-            try {
-                serviceBinder.linkToDeath(LSPSERVICE_DEATH_RECIPIENT, 0);
-            } catch (RemoteException ignored) {
-            }
+        serviceBinder = binder;
+        service = ILSPosedService.Stub.asInterface(serviceBinder);
+        try {
+            serviceBinder.linkToDeath(LSPSERVICE_DEATH_RECIPIENT, 0);
+        } catch (RemoteException ignored) {
         }
 
         Log.i(TAG, "binder received");
@@ -181,46 +163,11 @@ public class BridgeService {
         BridgeService.listener = listener;
         BridgeService.service = service;
         BridgeService.serviceBinder = service.asBinder();
-        sendToBridge(ACTION.ACTION_SEND_BINDER, serviceBinder, false);
+        sendToBridge(serviceBinder, false);
     }
 
-    public static void send(LSPManagerService service, Listener listener) {
-        BridgeService.listener = listener;
-        BridgeService.manager = service;
-        BridgeService.managerBinder = service.asBinder();
-        sendToBridge(ACTION.ACTION_SEND_MANAGER_BINDER, managerBinder, false);
-    }
-
-    public static IXposedService getService() {
+    public static ILSPosedService getService() {
         return service;
-    }
-
-    public static ILSPManagerService getManager() {
-        return manager;
-    }
-
-    public static IBinder requireBinder() {
-        IBinder binder = ServiceManager.getService(SERVICE_NAME);
-        if (binder == null) return null;
-
-        Parcel data = Parcel.obtain();
-        Parcel reply = Parcel.obtain();
-        try {
-            data.writeInterfaceToken(DESCRIPTOR);
-            data.writeInt(ACTION.ACTION_GET_BINDER.ordinal());
-            binder.transact(TRANSACTION_CODE, data, reply, 0);
-            reply.readException();
-            IBinder received = reply.readStrongBinder();
-            if (received != null) {
-                return received;
-            }
-        } catch (Throwable e) {
-            e.printStackTrace();
-        } finally {
-            data.recycle();
-            reply.recycle();
-        }
-        return null;
     }
 
     @SuppressWarnings({"unused", "RedundantSuppression"})
@@ -231,10 +178,9 @@ public class BridgeService {
         Log.d(TAG, "onTransact: action=" + action + ", callingUid=" + Binder.getCallingUid() + ", callingPid=" + Binder.getCallingPid());
 
         switch (action) {
-            case ACTION_SEND_BINDER:
-            case ACTION_SEND_MANAGER_BINDER: {
+            case ACTION_SEND_BINDER: {
                 if (Binder.getCallingUid() == 0) {
-                    receiveFromBridge(action, data.readStrongBinder());
+                    receiveFromBridge(data.readStrongBinder());
                     if (reply != null) {
                         reply.writeNoException();
                     }
@@ -243,22 +189,25 @@ public class BridgeService {
                 break;
             }
             case ACTION_GET_BINDER: {
+                IBinder binder = null;
                 try {
-                    if (!PackageService.isInstaller(getCallingUid())) return false;
-                } catch (Throwable ignored) {
-                    return false;
+                    binder = service.requestApplicationService(Binder.getCallingUid(), Binder.getCallingPid()).asBinder();
+                } catch (RemoteException e) {
+                    Log.e(TAG, Log.getStackTraceString(e));
                 }
-                if (reply != null) {
+                if (binder != null && reply != null) {
                     reply.writeNoException();
-                    Log.d(TAG, "saved binder is " + managerBinder.toString());
-                    reply.writeStrongBinder(managerBinder);
+                    Log.d(TAG, "got binder is " + binder);
+                    reply.writeStrongBinder(binder);
+                    return true;
                 }
-                return true;
+                return false;
             }
         }
         return false;
     }
 
+    @SuppressWarnings({"unused", "RedundantSuppression"})
     public static boolean execTransact(int code, long dataObj, long replyObj, int flags) {
         Log.d(TAG, String.valueOf(code));
         if (code != TRANSACTION_CODE) return false;
@@ -266,7 +215,7 @@ public class BridgeService {
         Parcel data = ParcelUtils.fromNativePointer(dataObj);
         Parcel reply = ParcelUtils.fromNativePointer(replyObj);
 
-        if (data == null) {
+        if (data == null || reply == null) {
             return false;
         }
 
@@ -290,8 +239,8 @@ public class BridgeService {
         }
 
         if (res) {
-            if (data != null) data.recycle();
-            if (reply != null) reply.recycle();
+            data.recycle();
+            reply.recycle();
         }
 
         return res;
