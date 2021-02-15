@@ -427,8 +427,9 @@ public final class XposedInit {
         } catch (IOException e) {
             Log.e(TAG, "  Failed to load native library list from " + apk, e);
             return false;
+        } finally {
+            closeSilently(is);
         }
-        closeSilently(is);
         return true;
 
     }
@@ -495,8 +496,9 @@ public final class XposedInit {
         } catch (IOException e) {
             Log.e(TAG, "  Failed to load module from " + apk, e);
             return false;
+        } finally {
+            closeSilently(is);
         }
-        closeSilently(is);
         return true;
     }
 
