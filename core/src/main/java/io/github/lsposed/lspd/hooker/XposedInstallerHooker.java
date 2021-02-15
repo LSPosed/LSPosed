@@ -116,7 +116,7 @@ public class XposedInstallerHooker {
                 }
             });
             Class<?> serviceClass = XposedHelpers.findClass("io.github.lsposed.manager.receivers.LSPosedManagerServiceClient", classLoader);
-            XposedHelpers.setStaticObjectField(serviceClass, "binder", BridgeService.requireBinder());
+//            XposedHelpers.setStaticObjectField(serviceClass, "binder", BridgeService.requireBinder());
 
             Utils.logI("Hooked LSPosed Manager");
         } catch (Throwable t) {

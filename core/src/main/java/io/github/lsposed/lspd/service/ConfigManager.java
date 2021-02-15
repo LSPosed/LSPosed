@@ -6,11 +6,13 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.database.sqlite.SQLiteStatement;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.FileObserver;
+import android.os.ParcelFileDescriptor;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
@@ -20,12 +22,16 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static io.github.lsposed.lspd.service.Service.TAG;
+import static io.github.lsposed.lspd.service.ServiceManager.TAG;
 
+// This config manager assume uid won't change when our service is off.
+// Otherwise, user should maintain it manually.
+// TODO: manager package name supports
 public class ConfigManager {
     static ConfigManager instance = null;
 
-    final private File configPath = new File("/data/adb/lspd/config");
+    final private File basePath = new File("/data/adb/lspd");
+    final private File configPath = new File(basePath, "config");
     final private SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(new File(configPath, "modules_config.db"), null);
 
     final private File resourceHookSwitch = new File(configPath, "enable_resources");
@@ -40,6 +46,10 @@ public class ConfigManager {
     final private File selinuxPath = new File("/sys/fs/selinux/enforce");
     // only check on boot
     final private boolean isPermissive;
+
+    final private File logPath = new File(basePath, "log");
+    final private File modulesLogPath = new File(logPath, "modules.log");
+    final private File verboseLogPath = new File(logPath, "verbose.log");
 
     final FileObserver configObserver = new FileObserver(configPath) {
         @Override
@@ -154,7 +164,7 @@ public class ConfigManager {
         ContentValues values = new ContentValues();
         values.put("apk_path", apkPath);
         int count = db.updateWithOnConflict("enabled_modules", values, "package_name = ?", new String[]{packageName}, SQLiteDatabase.CONFLICT_REPLACE);
-        if (count > 1) {
+        if (count >= 1) {
             cacheScopes();
             return true;
         }
@@ -214,9 +224,9 @@ public class ConfigManager {
         return true;
     }
 
-    public boolean removeApps(int uid) {
+    public boolean removeApp(int uid) {
         int count = db.delete("scope", "uid = ?", new String[]{String.valueOf(uid)});
-        if (count > 1) {
+        if (count >= 1) {
             cacheScopes();
             return true;
         }
@@ -249,5 +259,23 @@ public class ConfigManager {
 
     public int variant() {
         return variant;
+    }
+
+    public ParcelFileDescriptor getModulesLog() {
+        try {
+            return ParcelFileDescriptor.open(modulesLogPath, ParcelFileDescriptor.MODE_READ_ONLY);
+        } catch (FileNotFoundException e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+            return null;
+        }
+    }
+
+    public ParcelFileDescriptor getVerboseLog() {
+        try {
+            return ParcelFileDescriptor.open(verboseLogPath, ParcelFileDescriptor.MODE_READ_ONLY);
+        } catch (FileNotFoundException e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+            return null;
+        }
     }
 }

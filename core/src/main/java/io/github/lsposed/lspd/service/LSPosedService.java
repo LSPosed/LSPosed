@@ -1,16 +1,13 @@
 package io.github.lsposed.lspd.service;
 
+import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
-import de.robv.android.xposed.XposedBridge;
-import io.github.xposed.xposedservice.IXposedService;
+import static io.github.lsposed.lspd.service.ServiceManager.TAG;
 
-import static io.github.lsposed.lspd.service.Service.TAG;
-
-public class LSPosedService extends IXposedService.Stub {
-
-    public LSPosedService() {
+public class LSPosedService extends ILSPosedService.Stub {
+    LSPosedService() {
         BridgeService.send(this, new BridgeService.Listener() {
             @Override
             public void onSystemServerRestarted() {
@@ -29,12 +26,17 @@ public class LSPosedService extends IXposedService.Stub {
     }
 
     @Override
-    public IBinder asBinder() {
-        return this;
+    public ILSPApplicationService requestApplicationService(int uid, int pid) {
+        if (Binder.getCallingUid() != 1000) {
+            return null;
+        }
+        if (ConfigManager.getInstance().shouldSkipUid(uid)) {
+            return null;
+        }
+        if (ServiceManager.getApplicationService().hasRegister(uid, pid)) {
+            return null;
+        }
+        return ServiceManager.getApplicationService();
     }
 
-    @Override
-    public int getVersion() {
-        return XposedBridge.getXposedVersion();
-    }
 }

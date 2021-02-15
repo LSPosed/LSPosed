@@ -22,18 +22,16 @@ package io.github.lsposed.lspd.core;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.ServiceManager;
 import android.util.Log;
 import android.ddm.DdmHandleAppName;
 
 import io.github.lsposed.common.KeepAll;
-import io.github.lsposed.lspd.service.LSPosedService;
-import io.github.lsposed.lspd.service.Service;
+import io.github.lsposed.lspd.service.ServiceManager;
 import io.github.lsposed.lspd.util.Utils;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import static io.github.lsposed.lspd.service.Service.TAG;
+import static io.github.lsposed.lspd.service.ServiceManager.TAG;
 
 @SuppressLint("DefaultLocale")
 public class Main implements KeepAll {
@@ -115,7 +113,7 @@ public class Main implements KeepAll {
     }
 
     private static void waitSystemService(String name) {
-        while (ServiceManager.getService(name) == null) {
+        while (android.os.ServiceManager.getService(name) == null) {
             try {
                 Log.i(TAG, "service " + name + " is not started, wait 1s.");
                 Thread.sleep(1000);
@@ -136,6 +134,6 @@ public class Main implements KeepAll {
         waitSystemService(Context.USER_SERVICE);
         waitSystemService(Context.APP_OPS_SERVICE);
 
-        Service.start();
+        ServiceManager.start();
     }
 }
