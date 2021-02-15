@@ -33,6 +33,7 @@ import android.util.ArraySet;
 import android.util.Log;
 
 import com.android.internal.os.ZygoteInit;
+
 import io.github.lsposed.lspd.nativebridge.ConfigManager;
 import io.github.lsposed.lspd.config.LSPdConfigGlobal;
 
@@ -51,8 +52,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 import dalvik.system.PathClassLoader;
 import de.robv.android.xposed.annotation.ApiSensitive;
@@ -103,12 +102,10 @@ public final class XposedInit {
             setStaticLongField(ZygoteInit.class, "BOOT_START_TIME", XposedBridge.BOOT_START_TIME);
         }
         // Samsung
-        if (Build.VERSION.SDK_INT >= 24) {
-            Class<?> zygote = findClass("com.android.internal.os.Zygote", null);
-            try {
-                setStaticBooleanField(zygote, "isEnhancedZygoteASLREnabled", false);
-            } catch (NoSuchFieldError ignored) {
-            }
+        Class<?> zygote = findClass("com.android.internal.os.Zygote", null);
+        try {
+            setStaticBooleanField(zygote, "isEnhancedZygoteASLREnabled", false);
+        } catch (NoSuchFieldError ignored) {
         }
 
         hookResources();
@@ -154,7 +151,7 @@ public final class XposedInit {
             classGTLR = ActivityThread.class;
             classResKey = Class.forName("android.app.ActivityThread$ResourcesKey");
             createResourceMethod = "getOrCreateResources";
-        } else if (Build.VERSION.SDK_INT < 30){
+        } else if (Build.VERSION.SDK_INT < 30) {
             classGTLR = Class.forName("android.app.ResourcesManager");
             classResKey = Class.forName("android.content.res.ResourcesKey");
             createResourceMethod = "getOrCreateResources";
@@ -366,7 +363,6 @@ public final class XposedInit {
                     newLoadedApk.add(apk);
                 } else {
                     loadedModules.add(apk); // temporarily add it for XSharedPreference
-                    loadNativeLibs(apk);
                     boolean loadSuccess = loadModule(apk, topClassLoader, callInitZygote);
                     if (loadSuccess) {
                         newLoadedApk.add(apk);
@@ -417,23 +413,9 @@ public final class XposedInit {
      * Load all so from an APK by reading <code>assets/native_init</code>.
      * It will only store the so names but not doing anything.
      */
-    private static boolean loadNativeLibs(String apk) {
-        ZipFile zipFile = null;
-        InputStream is;
-        try {
-            zipFile = new ZipFile(apk);
-            ZipEntry zipEntry = zipFile.getEntry("assets/native_init");
-            if (zipEntry == null) {
-                Log.e(TAG, "  assets/native_init not found in the APK");
-                closeSilently(zipFile);
-                return false;
-            }
-            is = zipFile.getInputStream(zipEntry);
-        } catch (IOException e) {
-            Log.w(TAG, "  Cannot read assets/native_init in the APK. Maybe it doesn't support native API", e);
-            closeSilently(zipFile);
-            return false;
-        }
+    private static boolean initNativeModule(ClassLoader mcl, String apk) {
+        InputStream is = mcl.getResourceAsStream("assets/native_init");
+        if (is == null) return true;
         BufferedReader moduleLibraryReader = new BufferedReader(new InputStreamReader(is));
         String moduleLibraryName;
         try {
@@ -447,77 +429,16 @@ public final class XposedInit {
             return false;
         } finally {
             closeSilently(is);
-            closeSilently(zipFile);
         }
         return true;
+
     }
 
-    /**
-     * Load a module from an APK by calling the init(String) method for all classes defined
-     * in <code>assets/xposed_init</code>.
-     */
-    private static boolean loadModule(String apk, ClassLoader topClassLoader, boolean callInitZygote) {
-        Log.i(TAG, "Loading modules from " + apk);
-
-        if (!new File(apk).exists()) {
-            Log.e(TAG, "  File does not exist");
-            return false;
+    private static boolean initModule(ClassLoader mcl, String apk, boolean callInitZygote) {
+        InputStream is = mcl.getResourceAsStream("assets/xposed_init");
+        if (is == null) {
+            return true;
         }
-
-        // module can load it's own so
-        StringBuilder nativePath = new StringBuilder();
-        for (String i: Build.SUPPORTED_ABIS) {
-            nativePath.append(apk).append("!/lib/").append(i).append(File.pathSeparator);
-        }
-        // Log.d(TAG, "Allowed native path" + nativePath.toString());
-        ClassLoader mcl = new PathClassLoader(apk, nativePath.toString(), topClassLoader);
-
-        try {
-            if (mcl.loadClass(INSTANT_RUN_CLASS) != null) {
-                Log.e(TAG, "  Cannot load module, please disable \"Instant Run\" in Android Studio.");
-                return false;
-            }
-        } catch (ClassNotFoundException ignored) {
-        }
-
-        try {
-            if (mcl.loadClass(XposedBridge.class.getName()) != null) {
-                Log.e(TAG, "  Cannot load module:");
-                Log.e(TAG, "  The Xposed API classes are compiled into the module's APK.");
-                Log.e(TAG, "  This may cause strange issues and must be fixed by the module developer.");
-                Log.e(TAG, "  For details, see: http://api.xposed.info/using.html");
-                return false;
-            }
-        } catch (ClassNotFoundException ignored) {
-        }
-
-        try {
-            Field parentField = ClassLoader.class.getDeclaredField("parent");
-            parentField.setAccessible(true);
-            parentField.set(mcl, XposedInit.class.getClassLoader());
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            Log.e(TAG, "  Cannot load module:");
-            Log.e(TAG, "  Classloader cannot change parent.");
-            return false;
-        }
-
-        ZipFile zipFile = null;
-        InputStream is;
-        try {
-            zipFile = new ZipFile(apk);
-            ZipEntry zipEntry = zipFile.getEntry("assets/xposed_init");
-            if (zipEntry == null) {
-                Log.e(TAG, "  assets/xposed_init not found in the APK");
-                closeSilently(zipFile);
-                return false;
-            }
-            is = zipFile.getInputStream(zipEntry);
-        } catch (IOException e) {
-            Log.e(TAG, "  Cannot read assets/xposed_init in the APK", e);
-            closeSilently(zipFile);
-            return false;
-        }
-
         BufferedReader moduleClassesReader = new BufferedReader(new InputStreamReader(is));
         try {
             String moduleClassName;
@@ -572,14 +493,66 @@ public final class XposedInit {
                     return false;
                 }
             }
-            return true;
         } catch (IOException e) {
             Log.e(TAG, "  Failed to load module from " + apk, e);
             return false;
         } finally {
             closeSilently(is);
-            closeSilently(zipFile);
         }
+        return true;
+    }
+
+    /**
+     * Load a module from an APK by calling the init(String) method for all classes defined
+     * in <code>assets/xposed_init</code>.
+     */
+    private static boolean loadModule(String apk, ClassLoader topClassLoader, boolean callInitZygote) {
+        Log.i(TAG, "Loading modules from " + apk);
+
+        if (!new File(apk).exists()) {
+            Log.e(TAG, "  File does not exist");
+            return false;
+        }
+
+        // module can load it's own so
+        StringBuilder nativePath = new StringBuilder();
+        for (String i : Build.SUPPORTED_ABIS) {
+            nativePath.append(apk).append("!/lib/").append(i).append(File.pathSeparator);
+        }
+        // Log.d(TAG, "Allowed native path" + nativePath.toString());
+        ClassLoader mcl = new PathClassLoader(apk, nativePath.toString(), topClassLoader);
+
+        try {
+            if (mcl.loadClass(INSTANT_RUN_CLASS) != null) {
+                Log.e(TAG, "  Cannot load module, please disable \"Instant Run\" in Android Studio.");
+                return false;
+            }
+        } catch (ClassNotFoundException ignored) {
+        }
+
+        try {
+            if (mcl.loadClass(XposedBridge.class.getName()) != null) {
+                Log.e(TAG, "  Cannot load module:");
+                Log.e(TAG, "  The Xposed API classes are compiled into the module's APK.");
+                Log.e(TAG, "  This may cause strange issues and must be fixed by the module developer.");
+                Log.e(TAG, "  For details, see: http://api.xposed.info/using.html");
+                return false;
+            }
+        } catch (ClassNotFoundException ignored) {
+        }
+
+        try {
+            Field parentField = ClassLoader.class.getDeclaredField("parent");
+            parentField.setAccessible(true);
+            parentField.set(mcl, XposedInit.class.getClassLoader());
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            Log.e(TAG, "  Cannot load module:");
+            Log.e(TAG, "  Classloader cannot change parent.");
+            return false;
+        }
+        boolean res = initModule(mcl, apk, callInitZygote);
+        res = res && initNativeModule(mcl, apk);
+        return res;
     }
 
     public final static HashSet<String> loadedPackagesInProcess = new HashSet<>(1);

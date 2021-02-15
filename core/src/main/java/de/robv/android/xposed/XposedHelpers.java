@@ -1571,28 +1571,6 @@ public final class XposedHelpers {
 	}
 
 	/**
-	 * Invokes the {@link DexFile#close()} method, ignoring IOExceptions.
-	 */
-	/*package*/ static void closeSilently(DexFile dexFile) {
-		if (dexFile != null) {
-			try {
-				dexFile.close();
-			} catch (IOException ignored) {}
-		}
-	}
-
-	/**
-	 * Invokes the {@link ZipFile#close()} method, ignoring IOExceptions.
-	 */
-	/*package*/ static void closeSilently(ZipFile zipFile) {
-		if (zipFile != null) {
-			try {
-				zipFile.close();
-			} catch (IOException ignored) {}
-		}
-	}
-
-	/**
 	 * Returns the lowercase hex string representation of a file's MD5 hash sum.
 	 */
 	public static String getMD5Sum(String file) throws IOException {
