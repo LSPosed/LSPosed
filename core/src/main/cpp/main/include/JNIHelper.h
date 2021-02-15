@@ -87,6 +87,10 @@ ALWAYS_INLINE static int ClearException(JNIEnv *env) {
     env->CallVoidMethod(obj, __VA_ARGS__); \
     if (ClearException(env)) LOGE("CallVoidMethod " #obj " " #__VA_ARGS__)
 
+#define JNI_CallBooleanMethod(env, obj, ...) \
+    env->CallBooleanMethod(obj, __VA_ARGS__); \
+    if (ClearException(env)) LOGE("CallVoidMethod " #obj " " #__VA_ARGS__)
+
 #define JNI_GetStaticFieldID(env, class, name, sig) \
     env->GetStaticFieldID(class, name, sig); \
     if (ClearException(env)) LOGE("GetStaticFieldID " #name " " #sig)

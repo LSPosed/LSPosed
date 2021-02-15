@@ -20,7 +20,7 @@
 
 #include <jni.h>
 #include <android-base/macros.h>
-#include <JNIHelper.h>
+#include "JNIHelper.h"
 #include "jni/config_manager.h"
 #include "jni/art_class_linker.h"
 #include "jni/yahfa.h"
@@ -133,23 +133,23 @@ namespace lspd {
         RegisterPendingHooks(env);
         RegisterNativeAPI(env);
 
-        variant_ = Variant(ConfigManager::GetInstance()->GetVariant());
-        LOGI("LSP Variant: %d", variant_);
-
-        if (variant_ == SANDHOOK) {
-            //for SandHook variant
-            ScopedLocalRef sandhook_class(env, FindClassFromCurrentLoader(env, kSandHookClassName));
-            ScopedLocalRef nevercall_class(env,
-                                           FindClassFromCurrentLoader(env,
-                                                                      kSandHookNeverCallClassName));
-            if (sandhook_class == nullptr || nevercall_class == nullptr) { // fail-fast
-                return;
-            }
-            if (!JNI_Load_Ex(env, sandhook_class.get(), nevercall_class.get())) {
-                LOGE("SandHook: HookEntry class error. %d", getpid());
-            }
-
-        }
+//        variant_ = Variant(ConfigManager::GetInstance()->GetVariant());
+//        LOGI("LSP Variant: %d", variant_);
+//
+//        if (variant_ == SANDHOOK) {
+//            //for SandHook variant
+//            ScopedLocalRef sandhook_class(env, FindClassFromCurrentLoader(env, kSandHookClassName));
+//            ScopedLocalRef nevercall_class(env,
+//                                           FindClassFromCurrentLoader(env,
+//                                                                      kSandHookNeverCallClassName));
+//            if (sandhook_class == nullptr || nevercall_class == nullptr) { // fail-fast
+//                return;
+//            }
+//            if (!JNI_Load_Ex(env, sandhook_class.get(), nevercall_class.get())) {
+//                LOGE("SandHook: HookEntry class error. %d", getpid());
+//            }
+//
+//        }
     }
 
     jclass
@@ -202,108 +202,33 @@ namespace lspd {
                                          [[maybe_unused]] jobjectArray rlimits,
                                          [[maybe_unused]] jlong permitted_capabilities,
                                          [[maybe_unused]] jlong effective_capabilities) {
-        ConfigManager::SetCurrentUser(0u);
-        app_modules_list_ = ConfigManager::GetInstance()->GetAppModuleList(
-                "android"); // I don't think we need this, but anyway
-        skip_ = false;
-        if (!ConfigManager::GetInstance()->IsInitialized()) {
-            LOGE("skip injecting into android because configurations are not loaded properly");
-        }
-        if (!skip_ && app_modules_list_.empty()) {
-            skip_ = true;
-            LOGD("skip injecting into android because no module hooks it");
-        }
+        Service::instance()->InitService(env);
         PreLoadDex(ConfigManager::GetInjectDexPath());
-        ConfigManager::GetInstance()->EnsurePermission("android", 1000);
+        skip_ = false;
     }
 
-    int
-    Context::OnNativeForkSystemServerPost(JNIEnv *env, [[maybe_unused]] jclass clazz, jint res) {
-        if (res == 0) {
-            if (!skip_) {
-                if (void *buf = mmap(nullptr, 1, PROT_READ | PROT_WRITE | PROT_EXEC,
-                                     MAP_ANONYMOUS | MAP_PRIVATE, -1,
-                                     0);
-                        buf == MAP_FAILED) {
-                    skip_ = true;
-                    LOGE("skip injecting into android because sepolicy was not loaded properly");
-                } else {
-                    munmap(buf, 1);
-                }
+    void
+    Context::OnNativeForkSystemServerPost(JNIEnv *env, jint res) {
+        if (res != 0) return;
+        auto binder = Service::instance()->RequestBinder(env);
+        if (binder) {
+            if (void *buf = mmap(nullptr, 1, PROT_READ | PROT_WRITE | PROT_EXEC,
+                                 MAP_ANONYMOUS | MAP_PRIVATE, -1,
+                                 0);
+                    buf == MAP_FAILED) {
+                 skip_ = true;
+                LOGE("skip injecting into android because sepolicy was not loaded properly");
+            } else {
+                munmap(buf, 1);
             }
-            LoadDex(env);
-            if (!skip_) {
-                InstallInlineHooks();
-                Init(env);
-                // only do work in child since FindAndCall would print log
-                FindAndCall(env, "forkSystemServerPost", "(II)V", res,
-                            variant_);
-            }
-            InitService(*this, env);
-        } else {
-            // in zygote process, res is child zygote pid
-            // don't print log here, see https://github.com/RikkaApps/Riru/blob/77adfd6a4a6a81bfd20569c910bc4854f2f84f5e/riru-core/jni/main/jni_native_method.cpp#L55-L66
         }
-        return 0;
-    }
-
-    std::tuple<bool, uid_t, std::string>
-    Context::GetAppInfoFromDir(JNIEnv *env, jstring dir, jstring nice_name) {
-        uid_t uid = 0;
-        JUTFString app_data_dir(env, dir);
-        JUTFString name(env, nice_name);
-        if (!app_data_dir) return {false, 0, name.get()};
-        fs::path path(app_data_dir.get());
-        std::vector<std::string> splits(path.begin(), path.end());
-        if (splits.size() < 5u) {
-            LOGE("can't parse %s", path.c_str());
-            return {false, 0, name.get()};
+        LoadDex(env);
+        if (!skip_ && binder) {
+            InstallInlineHooks();
+            Init(env);
+            FindAndCall(env, "forkSystemServerPost", "(Landroid/os/IBinder;)V", binder);
         }
-        const auto &uid_str = splits[3];
-        const auto &package_name = splits[4];
-        try {
-            uid = stol(uid_str);
-        } catch (const std::invalid_argument &ignored) {
-            LOGE("can't parse %s", app_data_dir.get());
-            return {false, uid, {}};
-        }
-        return {true, uid, package_name};
-    }
-
-    bool Context::ShouldSkipInject(const std::string &package_name, uid_t user, uid_t uid,
-                                   bool info_res,
-                                   const std::function<bool()> &empty_list,
-                                   bool is_child_zygote) {
-        const auto app_id = uid % PER_USER_RANGE;
-        bool skip = false;
-        if (!ConfigManager::GetInstance()->IsInitialized()) {
-            LOGE("skip injecting into %s because configurations are not loaded properly",
-                 package_name.c_str());
-            skip = true;
-        }
-        if (!skip && !info_res) {
-            LOGD("skip injecting into %s because it has no data dir", package_name.c_str());
-            skip = true;
-        }
-        if (!skip && is_child_zygote) {
-            skip = true;
-            LOGD("skip injecting into %s because it's a child zygote", package_name.c_str());
-        }
-
-        if (!skip && ((app_id >= FIRST_ISOLATED_UID && app_id <= LAST_ISOLATED_UID) ||
-                      (app_id >= FIRST_APP_ZYGOTE_ISOLATED_UID &&
-                       app_id <= LAST_APP_ZYGOTE_ISOLATED_UID) ||
-                      app_id == SHARED_RELRO_UID)) {
-            skip = true;
-            LOGI("skip injecting into %s because it's isolated", package_name.c_str());
-        }
-
-        if (!skip && empty_list() && !ConfigManager::GetInstance()->IsInstaller(package_name)) {
-            skip = true;
-            LOGD("skip injecting xposed into %s because no module hooks it",
-                 package_name.c_str());
-        }
-        return skip;
+        Service::instance()->HookBridge(*this, env);
     }
 
     void Context::OnNativeForkAndSpecializePre(JNIEnv *env, jclass clazz,
@@ -319,50 +244,50 @@ namespace lspd {
                                                jboolean is_child_zygote,
                                                jstring instruction_set,
                                                jstring app_data_dir) {
-        const auto&[res, user, package_name] = GetAppInfoFromDir(env, app_data_dir, nice_name);
-        app_data_dir_ = app_data_dir;
-        nice_name_ = nice_name;
-        ConfigManager::SetCurrentUser(user);
-        skip_ = ShouldSkipInject(package_name, user, uid, res,
-                // Only obtains when needed
-                                 [this, &package_name = package_name]() {
-                                     app_modules_list_ = ConfigManager::GetInstance()->GetAppModuleList(
-                                             package_name);
-                                     return app_modules_list_.empty();
-                                 }, is_child_zygote);
-        if (!skip_) {
-            ConfigManager::GetInstance()->EnsurePermission(package_name, uid);
-            PreLoadDex(ConfigManager::GetInjectDexPath());
+        PreLoadDex(ConfigManager::GetInjectDexPath());
+        Service::instance()->InitService(env);
+        this->uid = uid;
+        const auto app_id = uid % PER_USER_RANGE;
+        skip_ = false;
+        if (!skip_ && !app_data_dir) {
+            LOGD("skip injecting into %d because it has no data dir", uid);
+            skip_ = true;
+        }
+        if (!skip_ && is_child_zygote) {
+            skip_ = true;
+            LOGD("skip injecting into %d because it's a child zygote", uid);
+        }
+
+        if (!skip_ && ((app_id >= FIRST_ISOLATED_UID && app_id <= LAST_ISOLATED_UID) ||
+                      (app_id >= FIRST_APP_ZYGOTE_ISOLATED_UID &&
+                       app_id <= LAST_APP_ZYGOTE_ISOLATED_UID) ||
+                      app_id == SHARED_RELRO_UID)) {
+            skip_ = true;
+            LOGI("skip injecting into %d because it's isolated", uid);
         }
     }
 
-    int
-    Context::OnNativeForkAndSpecializePost(JNIEnv *env, [[maybe_unused]]jclass clazz, jint res) {
-        if (res == 0) {
-            const JUTFString process_name(env, nice_name_);
-            if (!skip_) {
-                LoadDex(env);
-                InstallInlineHooks();
-                Init(env);
-                LOGD("Done prepare");
-                FindAndCall(env, "forkAndSpecializePost",
-                            "(ILjava/lang/String;Ljava/lang/String;I)V",
-                            res, app_data_dir_, nice_name_,
-                            variant_);
-                LOGD("injected xposed into %s", process_name.get());
-            } else {
-                [[maybe_unused]] auto config_manager = ConfigManager::ReleaseInstances();
-                auto context = Context::ReleaseInstance();
-                LOGD("skipped %s", process_name.get());
-            }
+    void
+    Context::OnNativeForkAndSpecializePost(JNIEnv *env) {
+        const JUTFString process_name(env, nice_name_);
+        auto binder = skip_? nullptr : Service::instance()->RequestBinder(env);
+        if (binder) {
+            LoadDex(env);
+            InstallInlineHooks();
+            Init(env);
+            LOGD("Done prepare");
+            // TODO: cache this method
+            FindAndCall(env, "forkAndSpecializePost",
+                        "(Ljava/lang/String;Ljava/lang/String;Landroid/os/IBinder;)V",
+                        app_data_dir_, nice_name_,
+                        binder);
+            LOGD("injected xposed into %s", process_name.get());
         } else {
-            // in zygote process, res is child zygote pid
-            // don't print log here, see https://github.com/RikkaApps/Riru/blob/77adfd6a4a6a81bfd20569c910bc4854f2f84f5e/riru-core/jni/main/jni_native_method.cpp#L55-L66
+            auto context = Context::ReleaseInstance();
+            auto service = Service::ReleaseInstance();
+            LOGD("skipped %s", process_name.get());
         }
-        return 0;
     }
-
-
 }
 
 #pragma clang diagnostic pop

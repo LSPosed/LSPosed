@@ -35,28 +35,17 @@ public class NormalProxy extends BaseProxy {
         super(router);
     }
 
-    public void forkAndSpecializePre(int uid, int gid, int[] gids, int debugFlags,
-                                     int[][] rlimits, int mountExternal, String seInfo,
-                                     String niceName, int[] fdsToClose, int[] fdsToIgnore,
-                                     boolean startChildZygote, String instructionSet,
-                                     String appDataDir) {
+    public void forkAndSpecializePost(String appDataDir, String niceName) {
+        forkPostCommon(false, appDataDir, niceName);
     }
 
-    public void forkAndSpecializePost(int pid, String appDataDir, String niceName) {
-        forkPostCommon(pid, false, appDataDir, niceName);
-    }
-
-    public void forkSystemServerPre(int uid, int gid, int[] gids, int debugFlags, int[][] rlimits,
-                                    long permittedCapabilities, long effectiveCapabilities) {
-    }
-
-    public void forkSystemServerPost(int pid) {
-        forkPostCommon(pid, true,
+    public void forkSystemServerPost() {
+        forkPostCommon(true,
                 getDataPathPrefix() + "android", "system_server");
     }
 
 
-    private void forkPostCommon(int pid, boolean isSystem, String appDataDir, String niceName) {
+    private void forkPostCommon(boolean isSystem, String appDataDir, String niceName) {
         SELinuxHelper.initOnce();
         mRouter.initResourcesHook();
         mRouter.prepare(isSystem);

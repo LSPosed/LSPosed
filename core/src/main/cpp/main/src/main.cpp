@@ -29,9 +29,6 @@
 #include "config_manager.h"
 #include "symbol_cache.h"
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-value"
-
 namespace lspd {
     static void onModuleLoaded() {
         LOGI("onModuleLoaded: welcome to LSPosed!");
@@ -63,7 +60,7 @@ namespace lspd {
     }
 
     static void nativeForkAndSpecializePost(JNIEnv *env, jclass clazz, jint res) {
-        Context::GetInstance()->OnNativeForkAndSpecializePost(env, clazz, res);
+        Context::GetInstance()->OnNativeForkAndSpecializePost(env);
     }
 
     static void nativeForkSystemServerPre(JNIEnv *env, jclass clazz, uid_t *uid, gid_t *gid,
@@ -77,8 +74,8 @@ namespace lspd {
         );
     }
 
-    static void nativeForkSystemServerPost(JNIEnv *env, jclass clazz, jint res) {
-        Context::GetInstance()->OnNativeForkSystemServerPost(env, clazz, res);
+    static void nativeForkSystemServerPost(JNIEnv *env, [[maybe_unused]] jclass clazz, jint res) {
+        Context::GetInstance()->OnNativeForkSystemServerPost(env, res);
     }
 
     /* method added in Android Q */
@@ -97,13 +94,12 @@ namespace lspd {
                                                              *app_data_dir);
     }
 
-    static void specializeAppProcessPost(JNIEnv *env, jclass clazz) {
-        Context::GetInstance()->OnNativeForkAndSpecializePost(env, clazz, 0);
+    static void specializeAppProcessPost(JNIEnv *env, [[maybe_unused]] jclass clazz) {
+        Context::GetInstance()->OnNativeForkAndSpecializePost(env);
     }
 }
 
 int riru_api_version;
-RiruApiV10 *riru_api_v10;
 
 RIRU_EXPORT void *init(void *arg) {
     static int step = 0;
@@ -122,8 +118,6 @@ RIRU_EXPORT void *init(void *arg) {
                 case 10:
                     [[fallthrough]];
                 case 9: {
-                    riru_api_v10 = (RiruApiV10 *) arg;
-
                     auto module = (RiruModuleInfoV10 *) malloc(sizeof(RiruModuleInfoV10));
                     memset(module, 0, sizeof(RiruModuleInfoV10));
                     _module = module;
@@ -156,5 +150,3 @@ RIRU_EXPORT void *init(void *arg) {
         }
     }
 }
-
-#pragma clang diagnostic pop
