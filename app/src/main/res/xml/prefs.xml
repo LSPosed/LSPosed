@@ -42,11 +42,11 @@
             android:key="theme_color"
             android:title="@string/theme_color"
             app:iconSpaceReserved="false" />
-        <io.github.lsposed.manager.ui.widget.IntegerListPreference
-            android:defaultValue="-1"
+        <com.takisoft.preferencex.SimpleMenuPreference
+            android:defaultValue="MODE_NIGHT_FOLLOW_SYSTEM"
             android:entries="@array/theme_texts"
             android:entryValues="@array/theme_values"
-            android:key="theme"
+            android:key="dark_theme"
             android:summary="%s"
             android:title="@string/dark_theme"
             app:iconSpaceReserved="false" />

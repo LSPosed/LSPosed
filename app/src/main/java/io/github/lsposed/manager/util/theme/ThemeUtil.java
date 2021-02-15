@@ -31,10 +31,15 @@ import java.util.Map;
 import io.github.lsposed.manager.App;
 import io.github.lsposed.manager.R;
 import rikka.core.util.ResourceUtils;
+import rikka.material.app.DayNightDelegate;
 
 public class ThemeUtil {
     private static final Map<String, Integer> colorThemeMap = new HashMap<>();
     private static final SharedPreferences preferences;
+
+    public static final String MODE_NIGHT_FOLLOW_SYSTEM = "MODE_NIGHT_FOLLOW_SYSTEM";
+    public static final String MODE_NIGHT_NO = "MODE_NIGHT_NO";
+    public static final String MODE_NIGHT_YES = "MODE_NIGHT_YES";
 
     static {
         preferences = App.getPreferences();
@@ -138,5 +143,21 @@ public class ThemeUtil {
         public int getResourceId() {
             return resourceId;
         }
+    }
+
+    public static int getDarkTheme(String mode) {
+        switch (mode) {
+            case MODE_NIGHT_FOLLOW_SYSTEM:
+            default:
+                return DayNightDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
+            case MODE_NIGHT_YES:
+                return DayNightDelegate.MODE_NIGHT_YES;
+            case MODE_NIGHT_NO:
+                return DayNightDelegate.MODE_NIGHT_NO;
+        }
+    }
+
+    public static int getDarkTheme() {
+        return getDarkTheme(preferences.getString("dark_theme", MODE_NIGHT_FOLLOW_SYSTEM));
     }
 }

@@ -37,6 +37,7 @@ import java.io.StringWriter;
 import io.github.lsposed.manager.repo.RepoLoader;
 import io.github.lsposed.manager.ui.activity.CrashReportActivity;
 import io.github.lsposed.manager.util.DoHDNS;
+import io.github.lsposed.manager.util.theme.ThemeUtil;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import rikka.material.app.DayNightDelegate;
@@ -93,7 +94,7 @@ public class App extends Application {
 
         pref = PreferenceManager.getDefaultSharedPreferences(this);
         DayNightDelegate.setApplicationContext(this);
-        DayNightDelegate.setDefaultNightMode(pref.getInt("theme", -1));
+        DayNightDelegate.setDefaultNightMode(ThemeUtil.getDarkTheme());
         RepoLoader.getInstance().loadRemoteData();
     }
 
