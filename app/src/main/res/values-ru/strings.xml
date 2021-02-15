@@ -41,7 +41,6 @@
     <string name="dont_show_again">Больше не показывать</string>
     <string name="enable_module">Включить модуль</string>
     <string name="failed_to_save_scope_list">Не удалось сохранить список областей</string>
-    <string name="follow_system">Системная</string>
     <string name="info">Информация</string>
     <string name="install_warning_title">Осторожно!</string>
     <string name="loading">Загрузка…</string>
@@ -101,9 +100,6 @@
     <string name="settings_restore_failed">Не удалось восстановить</string>
     <string name="settings_restore_success">Восстановление завершено!</string>
     <string name="settings_restoring">Восстановление…</string>
-    <string name="settings_theme">Тема</string>
-    <string name="settings_theme_dark">Темная</string>
-    <string name="settings_theme_light">Светлая</string>
     <string name="settings_variant">Вариант</string>
     <string name="sort_by_install_time">Сортировать по времени установки</string>
     <string name="sort_by_install_time_reverse">Сортировать по времени установки (обратный)</string>

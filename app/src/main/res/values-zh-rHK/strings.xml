@@ -63,9 +63,6 @@
 
     <!-- Settings tab -->
     <string name="settings_group_framework">框架</string>
-    <string name="settings_theme">主題</string>
-    <string name="settings_theme_light">亮色</string>
-    <string name="settings_theme_dark">暗色</string>
 
     <!-- Support tab -->
 
@@ -100,7 +97,6 @@
     <string name="app_launch">運行</string>
     <string name="compile_failed">優化失敗或返回值為空</string>
     <string name="not_installed">未安裝</string>
-    <string name="follow_system">跟隨系統</string>
     <string name="pure_black_dark_theme">使用純黑深色主題</string><![CDATA[>
 
 

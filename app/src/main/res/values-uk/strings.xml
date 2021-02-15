@@ -40,7 +40,6 @@
     <string name="dont_show_again">Не показувати знову</string>
     <string name="enable_module">Увімкнути модуль</string>
     <string name="failed_to_save_scope_list">Не вдалося зберегти список областей</string>
-    <string name="follow_system">Слідувати системі</string>
     <string name="info">Інформація</string>
     <string name="install_warning_title">Обережно!</string>
     <string name="loading">Завантаження…</string>
@@ -100,9 +99,6 @@
     <string name="settings_restore_failed">Не вдалося відновити</string>
     <string name="settings_restore_success">Відновлення закінчено!</string>
     <string name="settings_restoring">Відновлення…</string>
-    <string name="settings_theme">Тема</string>
-    <string name="settings_theme_dark">Темна</string>
-    <string name="settings_theme_light">Світла</string>
     <string name="settings_variant">Варіант</string>
     <string name="sort_by_install_time">Сортувати за часом встановлення</string>
     <string name="sort_by_install_time_reverse">Сортувати за часом встановлення (зворотній)</string>
