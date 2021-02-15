@@ -29,23 +29,32 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
         }, 0);
     }
 
+    @Override
+    public int getVariant() throws RemoteException {
+        ensureRegistered();
+        return ConfigManager.getInstance().variant();
+    }
+
     // TODO: check if module
     @Override
-    public IBinder requestModuleBinder() {
-        if (!hasRegister(Binder.getCallingUid(), Binder.getCallingPid()))
-            return null;
+    public IBinder requestModuleBinder() throws RemoteException {
+        ensureRegistered();
         return ServiceManager.getModuleService();
     }
 
     // TODO: check if manager
     @Override
-    public IBinder requestManagerBinder() {
-        if (!hasRegister(Binder.getCallingUid(), Binder.getCallingPid()))
-            return null;
+    public IBinder requestManagerBinder() throws RemoteException {
+        ensureRegistered();
         return ServiceManager.getManagerService();
     }
 
     public boolean hasRegister(int uid, int pid) {
         return cache.contains(new Pair<>(uid, pid));
+    }
+
+    private void ensureRegistered() throws RemoteException {
+        if (!hasRegister(Binder.getCallingUid(), Binder.getCallingPid()))
+            throw new RemoteException("Not registered");
     }
 }

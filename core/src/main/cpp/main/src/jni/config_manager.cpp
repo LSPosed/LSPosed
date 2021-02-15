@@ -74,13 +74,7 @@ namespace lspd {
     }
 
     LSP_DEF_NATIVE_METHOD(jstring, ConfigManager, getModulesList) {
-        auto module_list = Context::GetInstance()->GetAppModulesList();
-        std::ostringstream join;
-        std::copy(module_list.begin(), module_list.end(),
-                  std::ostream_iterator<std::string>(join, "\n"));
-        const auto &list = join.str();
-        LOGD("module list: %s", list.c_str());
-        return env->NewStringUTF(list.c_str());
+        return nullptr;
     }
 
     LSP_DEF_NATIVE_METHOD(jboolean, ConfigManager, isPermissive) {

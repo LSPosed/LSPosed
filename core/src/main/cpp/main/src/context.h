@@ -39,9 +39,6 @@ namespace lspd {
 
     public:
         inline static Context *GetInstance() {
-            if (!instance_) {
-                instance_ = std::make_unique<Context>();
-            }
             return instance_.get();
         }
 
@@ -55,18 +52,6 @@ namespace lspd {
 
         void FindAndCall(JNIEnv *env, const char *method_name, const char *method_sig, ...) const;
 
-        inline auto *GetJavaVM() const { return vm_; }
-
-        inline void SetAppDataDir(jstring app_data_dir) { app_data_dir_ = app_data_dir; }
-
-        inline void SetNiceName(jstring nice_name) { nice_name_ = nice_name; }
-
-        inline auto GetAppDataDir() const { return app_data_dir_; }
-
-        inline auto GetNiceName() const { return nice_name_; }
-
-        inline auto GetAppModulesList() const { return app_modules_list_; }
-
         inline jclass FindClassFromCurrentLoader(JNIEnv *env, std::string_view className) const {
             return FindClassFromLoader(env, GetCurrentClassLoader(), className);
         };
@@ -78,20 +63,18 @@ namespace lspd {
                                           jintArray fds_to_ignore, jboolean is_child_zygote,
                                           jstring instruction_set, jstring app_data_dir);
 
-        int OnNativeForkAndSpecializePost(JNIEnv *env, jclass clazz, jint res);
+        void OnNativeForkAndSpecializePost(JNIEnv *env);
 
-        int OnNativeForkSystemServerPost(JNIEnv *env, jclass clazz, jint res);
+        void OnNativeForkSystemServerPost(JNIEnv *env, jint res);
 
         void OnNativeForkSystemServerPre(JNIEnv *env, jclass clazz, uid_t uid, gid_t gid,
                                          jintArray gids, jint runtime_flags, jobjectArray rlimits,
                                          jlong permitted_capabilities,
                                          jlong effective_capabilities);
 
-        inline auto GetVariant() const { return variant_; };
 
     private:
-        inline static std::unique_ptr<Context> instance_;
-        Variant variant_ = NONE;
+        inline static std::unique_ptr<Context> instance_ = std::make_unique<Context>();
         jobject inject_class_loader_ = nullptr;
         jclass entry_class_ = nullptr;
         jstring app_data_dir_ = nullptr;
@@ -99,9 +82,9 @@ namespace lspd {
         JavaVM *vm_ = nullptr;
         jclass class_linker_class_ = nullptr;
         jmethodID post_fixup_static_mid_ = nullptr;
+        jint uid = -1;
         bool skip_ = false;
         std::vector<signed char> dex{};
-        std::vector<std::string> app_modules_list_{};
 
         Context() {}
 
@@ -113,14 +96,6 @@ namespace lspd {
 
         static jclass FindClassFromLoader(JNIEnv *env, jobject class_loader,
                                           std::string_view class_name);
-
-        static bool
-        ShouldSkipInject(const std::string &package_name, uid_t user, uid_t uid, bool res,
-                         const std::function<bool()> &empty_list,
-                         bool is_child_zygote);
-
-        static std::tuple<bool, uid_t, std::string>
-        GetAppInfoFromDir(JNIEnv *env, jstring dir, jstring nice_name);
 
         friend std::unique_ptr<Context> std::make_unique<Context>();
     };

@@ -3,7 +3,9 @@ package io.github.lsposed.lspd.service;
 interface ILSPApplicationService {
     void registerHeartBeat(IBinder handle) = 1;
 
-    IBinder requestModuleBinder() = 2;
+    int getVariant() = 2;
 
-    IBinder requestManagerBinder() = 3;
+    IBinder requestModuleBinder() = 3;
+
+    IBinder requestManagerBinder() = 4;
 }
