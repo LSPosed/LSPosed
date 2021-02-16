@@ -25,7 +25,6 @@ import android.content.res.TypedArray;
 import android.util.Log;
 
 import io.github.lsposed.lspd.BuildConfig;
-import io.github.lsposed.lspd.nativebridge.ConfigManager;
 import io.github.lsposed.lspd.config.LSPdConfigGlobal;
 
 import java.lang.reflect.AccessibleObject;
@@ -97,15 +96,6 @@ public final class XposedBridge {
 	/*package*/ static final CopyOnWriteSortedSet<XC_InitZygote> sInitZygoteCallbacks = new CopyOnWriteSortedSet<>();
 
 	private XposedBridge() {}
-
-	/**
-	 * Called when native methods and other things are initialized, but before preloading classes etc.
-	 * @hide
-	 */
-	@SuppressWarnings("deprecation")
-	public static void main(String[] args) {
-		// ed: moved
-	}
 
 	/** @hide */
 //	protected static final class ToolEntryPoint {

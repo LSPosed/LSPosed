@@ -36,7 +36,6 @@ import android.os.RemoteException;
 import android.os.UserHandle;
 import android.widget.Toast;
 
-import io.github.lsposed.lspd.nativebridge.ConfigManager;
 import io.github.lsposed.lspd.util.Utils;
 
 import java.io.File;
@@ -78,63 +77,65 @@ public class PackageReceiver {
 
         private Map<String, String> loadEnabledModules(int uid) {
             HashMap<String, String> result = new HashMap<>();
-            try {
-                File enabledModules = new File(ConfigManager.getMiscPath(), uid + "/" + ENABLED_MODULES_LIST_FILENAME);
-                if (!enabledModules.exists()) return result;
-                Scanner scanner = new Scanner(enabledModules);
-                while (scanner.hasNextLine()) {
-                    String packageName = scanner.nextLine();
-                    PackageInfo info = getPackageInfo(packageName, 0);
-                    if (info != null && isXposedModule(info.applicationInfo))
-                        result.put(packageName, info.applicationInfo.sourceDir);
-                    else if (info == null)
-                        result.put(packageName, null);
-                }
-            } catch (Throwable e) {
-                Utils.logE("Unable to read enabled modules", e);
-            }
+            // TODO: FIXME
+//            try {
+//                File enabledModules = new File(ConfigManager.getMiscPath(), uid + "/" + ENABLED_MODULES_LIST_FILENAME);
+//                if (!enabledModules.exists()) return result;
+//                Scanner scanner = new Scanner(enabledModules);
+//                while (scanner.hasNextLine()) {
+//                    String packageName = scanner.nextLine();
+//                    PackageInfo info = getPackageInfo(packageName, 0);
+//                    if (info != null && isXposedModule(info.applicationInfo))
+//                        result.put(packageName, info.applicationInfo.sourceDir);
+//                    else if (info == null)
+//                        result.put(packageName, null);
+//                }
+//            } catch (Throwable e) {
+//                Utils.logE("Unable to read enabled modules", e);
+//            }
             return result;
         }
 
         private boolean updateModuleList(int uid, String packageName) {
             Map<String, String> enabledModules = loadEnabledModules(uid);
-
-            if (!enabledModules.containsKey(packageName)) return false;
-
-            try {
-                File moduleListFile = new File(ConfigManager.getMiscPath(), uid + "/" + MODULES_LIST_FILENAME);
-                File enabledModuleListFile = new File(ConfigManager.getMiscPath(), uid + "/" + ENABLED_MODULES_LIST_FILENAME);
-                if (moduleListFile.exists() && !moduleListFile.canWrite()) {
-                    moduleListFile.delete();
-                    moduleListFile.createNewFile();
-                }
-                if (enabledModuleListFile.exists() && !enabledModuleListFile.canWrite()) {
-                    enabledModuleListFile.delete();
-                    enabledModuleListFile.createNewFile();
-                }
-                PrintWriter modulesList = new PrintWriter(moduleListFile);
-                PrintWriter enabledModulesList = new PrintWriter(enabledModuleListFile);
-                for (Map.Entry<String, String> module : enabledModules.entrySet()) {
-                    String apkPath = module.getValue();
-                    if (apkPath != null) {
-                        modulesList.println(module.getValue());
-                        enabledModulesList.println(module.getKey());
-                    } else {
-                        Utils.logI(String.format("remove obsolete package %s", packageName));
-                        File prefsDir = new File(ConfigManager.getMiscPath(), uid + "/prefs/" + packageName);
-                        File[] fileList = prefsDir.listFiles();
-                        if (fileList != null) {
-                            for (File childFile : fileList) {
-                                childFile.delete();
-                            }
-                        }
-                    }
-                }
-                modulesList.close();
-                enabledModulesList.close();
-            } catch (Throwable e) {
-                Utils.logE("Fail to update module list", e);
-            }
+            // TODO: FIXME
+//
+//            if (!enabledModules.containsKey(packageName)) return false;
+//
+//            try {
+//                File moduleListFile = new File(ConfigManager.getMiscPath(), uid + "/" + MODULES_LIST_FILENAME);
+//                File enabledModuleListFile = new File(ConfigManager.getMiscPath(), uid + "/" + ENABLED_MODULES_LIST_FILENAME);
+//                if (moduleListFile.exists() && !moduleListFile.canWrite()) {
+//                    moduleListFile.delete();
+//                    moduleListFile.createNewFile();
+//                }
+//                if (enabledModuleListFile.exists() && !enabledModuleListFile.canWrite()) {
+//                    enabledModuleListFile.delete();
+//                    enabledModuleListFile.createNewFile();
+//                }
+//                PrintWriter modulesList = new PrintWriter(moduleListFile);
+//                PrintWriter enabledModulesList = new PrintWriter(enabledModuleListFile);
+//                for (Map.Entry<String, String> module : enabledModules.entrySet()) {
+//                    String apkPath = module.getValue();
+//                    if (apkPath != null) {
+//                        modulesList.println(module.getValue());
+//                        enabledModulesList.println(module.getKey());
+//                    } else {
+//                        Utils.logI(String.format("remove obsolete package %s", packageName));
+//                        File prefsDir = new File(ConfigManager.getMiscPath(), uid + "/prefs/" + packageName);
+//                        File[] fileList = prefsDir.listFiles();
+//                        if (fileList != null) {
+//                            for (File childFile : fileList) {
+//                                childFile.delete();
+//                            }
+//                        }
+//                    }
+//                }
+//                modulesList.close();
+//                enabledModulesList.close();
+//            } catch (Throwable e) {
+//                Utils.logE("Fail to update module list", e);
+//            }
             return true;
         }
 
@@ -168,36 +169,37 @@ public class PackageReceiver {
             PackageInfo pkgInfo = getPackageInfo(packageName, intent.getIntExtra(Intent.EXTRA_USER, 0));
 
             if (pkgInfo != null && !isXposedModule(pkgInfo.applicationInfo)) return;
-
-            try {
-                for (int uid : UserService.getUsers()) {
-                    Utils.logI("updating uid: " + uid);
-                    boolean activated = updateModuleList(uid, packageName);
-                    UserHandle userHandle = null;
-                    try {
-                        userHandle = (UserHandle) XposedHelpers.callStaticMethod(UserHandle.class, "of", uid);
-                    } catch (Throwable t) {
-                        Utils.logW("get user handle failed", t);
-                    }
-                    if (userHandle != null) {
-                        try {
-                            Intent broadCast = new Intent(activated ? MODULE_UPDATED : MODULE_NOT_ACTIVATAED);
-                            broadCast.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES | 0x01000000);
-                            broadCast.setData(intent.getData());
-                            broadCast.setPackage(ConfigManager.getInstallerPackageName());
-                            XposedHelpers.callMethod(context, "sendBroadcastAsUser", broadCast, userHandle);
-                            Utils.logI("broadcast to " + ConfigManager.getInstallerPackageName());
-                        } catch (Throwable t) {
-                            Utils.logW("send broadcast failed", t);
-                            Toast.makeText(context, "LSPosed: Updated " + packageName, Toast.LENGTH_SHORT).show();
-                        }
-                    } else if (activated) {
-                        Toast.makeText(context, "LSPosed: Updated " + packageName, Toast.LENGTH_SHORT).show();
-                    }
-                }
-            } catch (Throwable e) {
-                Utils.logW("update failed", e);
-            }
+            // TODO: FIXME
+//
+//            try {
+//                for (int uid : UserService.getUsers()) {
+//                    Utils.logI("updating uid: " + uid);
+//                    boolean activated = updateModuleList(uid, packageName);
+//                    UserHandle userHandle = null;
+//                    try {
+//                        userHandle = (UserHandle) XposedHelpers.callStaticMethod(UserHandle.class, "of", uid);
+//                    } catch (Throwable t) {
+//                        Utils.logW("get user handle failed", t);
+//                    }
+//                    if (userHandle != null) {
+//                        try {
+//                            Intent broadCast = new Intent(activated ? MODULE_UPDATED : MODULE_NOT_ACTIVATAED);
+//                            broadCast.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES | 0x01000000);
+//                            broadCast.setData(intent.getData());
+//                            broadCast.setPackage(ConfigManager.getInstallerPackageName());
+//                            XposedHelpers.callMethod(context, "sendBroadcastAsUser", broadCast, userHandle);
+//                            Utils.logI("broadcast to " + ConfigManager.getInstallerPackageName());
+//                        } catch (Throwable t) {
+//                            Utils.logW("send broadcast failed", t);
+//                            Toast.makeText(context, "LSPosed: Updated " + packageName, Toast.LENGTH_SHORT).show();
+//                        }
+//                    } else if (activated) {
+//                        Toast.makeText(context, "LSPosed: Updated " + packageName, Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//            } catch (Throwable e) {
+//                Utils.logW("update failed", e);
+//            }
         }
     };
 

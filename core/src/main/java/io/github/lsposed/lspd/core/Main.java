@@ -29,12 +29,14 @@ import android.util.Log;
 import android.ddm.DdmHandleAppName;
 
 import io.github.lsposed.common.KeepAll;
+import io.github.lsposed.lspd.config.LSPApplicationServiceClient;
 import io.github.lsposed.lspd.service.ILSPApplicationService;
 import io.github.lsposed.lspd.service.ServiceManager;
 import io.github.lsposed.lspd.util.Utils;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+import static io.github.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
 import static io.github.lsposed.lspd.service.ServiceManager.TAG;
 
 @SuppressLint("DefaultLocale")
@@ -43,15 +45,9 @@ public class Main implements KeepAll {
     private static final Binder heartBeatBinder = new Binder();
 
     public static void forkAndSpecializePost(String appDataDir, String niceName, IBinder binder) {
-        ILSPApplicationService service = ILSPApplicationService.Stub.asInterface(binder);
-        final int variant;
-        try {
-            service.registerHeartBeat(heartBeatBinder);
-            variant = service.getVariant();
-        } catch (RemoteException e) {
-            Utils.logW("Register fail", e);
-            return;
-        }
+        LSPApplicationServiceClient.Init(binder);
+        serviceClient.registerHeartBeat(heartBeatBinder);
+        final int variant = serviceClient.getVariant();
         EdxpImpl lspd = getEdxpImpl(variant);
         if (lspd == null || !lspd.isInitialized()) {
             Utils.logE("Not started up");
@@ -61,15 +57,9 @@ public class Main implements KeepAll {
     }
 
     public static void forkSystemServerPost(IBinder binder) {
-        ILSPApplicationService service = ILSPApplicationService.Stub.asInterface(binder);
-        final int variant;
-        try {
-            service.registerHeartBeat(heartBeatBinder);
-            variant = service.getVariant();
-        } catch (RemoteException e) {
-            Utils.logW("Register fail", e);
-            return;
-        }
+        LSPApplicationServiceClient.Init(binder);
+        serviceClient.registerHeartBeat(heartBeatBinder);
+        final int variant = serviceClient.getVariant();
         EdxpImpl lspd = getEdxpImpl(variant);
         if (lspd == null || !lspd.isInitialized()) {
             return;

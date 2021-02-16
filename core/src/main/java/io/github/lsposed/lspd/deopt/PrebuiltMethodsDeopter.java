@@ -22,7 +22,6 @@ package io.github.lsposed.lspd.deopt;
 
 import android.text.TextUtils;
 
-import io.github.lsposed.lspd.nativebridge.ConfigManager;
 import io.github.lsposed.lspd.config.LSPdConfigGlobal;
 import io.github.lsposed.lspd.util.Utils;
 
@@ -30,6 +29,7 @@ import java.util.Arrays;
 
 import de.robv.android.xposed.XposedHelpers;
 
+import static io.github.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
 import static io.github.lsposed.lspd.deopt.InlinedMethodCallers.KEY_BOOT_IMAGE;
 import static io.github.lsposed.lspd.deopt.InlinedMethodCallers.KEY_BOOT_IMAGE_MIUI_RES;
 import static io.github.lsposed.lspd.deopt.InlinedMethodCallers.KEY_SYSTEM_SERVER;
@@ -62,7 +62,7 @@ public class PrebuiltMethodsDeopter {
         // todo check if has been done before
         deoptMethods(KEY_BOOT_IMAGE, null);
         if (!TextUtils.isEmpty(Utils.getSysProp("ro.miui.ui.version.code"))
-                && ConfigManager.isResourcesHookEnabled()) {
+                && serviceClient.isResourcesHookEnabled()) {
             //deopt these only for MIUI with resources hook enabled
             deoptMethods(KEY_BOOT_IMAGE_MIUI_RES, null);
         }

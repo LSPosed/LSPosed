@@ -20,14 +20,15 @@
 
 package io.github.lsposed.lspd.proxy;
 
-import io.github.lsposed.lspd.nativebridge.ConfigManager;
+import android.os.Environment;
+
+import java.io.File;
+
 import io.github.lsposed.lspd.deopt.PrebuiltMethodsDeopter;
 import io.github.lsposed.lspd.util.Utils;
 
 import de.robv.android.xposed.SELinuxHelper;
 import de.robv.android.xposed.XposedInit;
-
-import static io.github.lsposed.lspd.util.FileUtils.getDataPathPrefix;
 
 public class NormalProxy extends BaseProxy {
 
@@ -41,7 +42,7 @@ public class NormalProxy extends BaseProxy {
 
     public void forkSystemServerPost() {
         forkPostCommon(true,
-                getDataPathPrefix() + "android", "system_server");
+                new File(Environment.getDataDirectory(), "android").toString(), "system_server");
     }
 
 
@@ -50,10 +51,7 @@ public class NormalProxy extends BaseProxy {
         mRouter.initResourcesHook();
         mRouter.prepare(isSystem);
         PrebuiltMethodsDeopter.deoptBootMethods(); // do it once for secondary zygote
-        ConfigManager.appDataDir = appDataDir;
-        ConfigManager.niceName = niceName;
-        mRouter.installBootstrapHooks(isSystem);
-        XposedInit.prefsBasePath = ConfigManager.getPrefsPath("");
+        mRouter.installBootstrapHooks(isSystem, appDataDir);
         mRouter.onEnterChildProcess();
         Utils.logI("Loading modules for " + niceName);
         mRouter.loadModulesSafely(true);

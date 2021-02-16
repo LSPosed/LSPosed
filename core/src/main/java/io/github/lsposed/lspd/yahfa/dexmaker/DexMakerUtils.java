@@ -20,7 +20,6 @@
 
 package io.github.lsposed.lspd.yahfa.dexmaker;
 
-import io.github.lsposed.lspd.nativebridge.ConfigManager;
 import io.github.lsposed.lspd.util.Utils;
 
 import java.io.File;
@@ -33,15 +32,17 @@ import external.com.android.dx.Code;
 import external.com.android.dx.Local;
 import external.com.android.dx.TypeId;
 
+import static io.github.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
+
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class DexMakerUtils {
 
     public static boolean canCache = true;
 
     static {
-        File cacheDir = new File(ConfigManager.getCachePath(""));
+        File cacheDir = new File(serviceClient.getCachePath(""));
         if(!cacheDir.canRead() || !cacheDir.canWrite()) {
-            Utils.logW("Cache disabled");
+            Utils.logW("Cache disabled with path " + cacheDir.getAbsolutePath());
             canCache = false;
         }
     }

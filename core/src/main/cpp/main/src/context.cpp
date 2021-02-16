@@ -21,7 +21,6 @@
 #include <jni.h>
 #include <android-base/macros.h>
 #include "JNIHelper.h"
-#include "jni/config_manager.h"
 #include "jni/art_class_linker.h"
 #include "jni/yahfa.h"
 #include "jni/resources_hook.h"
@@ -32,12 +31,13 @@
 #include <sandhook.h>
 #include <fstream>
 #include <sstream>
+#include <nativehelper/scoped_local_ref.h>
 #include "context.h"
-#include "config_manager.h"
 #include "native_hook.h"
 #include "jni/logger.h"
 #include "jni/native_api.h"
 #include "service.h"
+#include "rirud_socket.h"
 
 namespace lspd {
     namespace fs = std::filesystem;
@@ -66,13 +66,14 @@ namespace lspd {
     void Context::PreLoadDex(const fs::path &dex_path) {
         if (LIKELY(!dex.empty())) return;
 
-        std::ifstream is(dex_path, std::ios::binary);
-        if (!is.good()) {
-            LOGE("Cannot load path %s", dex_path.c_str());
+        try {
+            RirudSocket socket;
+            auto dex_content = socket.ReadFile(dex_path);
+            dex.assign(dex_content.begin(), dex_content.end());
+        } catch (RirudSocket::RirudSocketException &e) {
+            LOGE("%s", e.what());
             return;
         }
-        dex.assign(std::istreambuf_iterator<char>(is),
-                   std::istreambuf_iterator<char>());
         LOGI("Loaded %s with size %zu", dex_path.c_str(), dex.size());
     }
 
@@ -108,9 +109,6 @@ namespace lspd {
         env->DeleteLocalRef(my_cl);
 
         env->GetJavaVM(&vm_);
-
-        // Make sure config manager is always working
-        RegisterConfigManagerMethods(env);
     }
 
     void Context::Init(JNIEnv *env) {
@@ -193,7 +191,6 @@ namespace lspd {
     void
     Context::OnNativeForkSystemServerPre(JNIEnv *env) {
         Service::instance()->InitService(env);
-        PreLoadDex(ConfigManager::GetInjectDexPath());
         skip_ = false;
     }
 
@@ -226,7 +223,6 @@ namespace lspd {
                                                jstring nice_name,
                                                jboolean is_child_zygote,
                                                jstring app_data_dir) {
-        PreLoadDex(ConfigManager::GetInjectDexPath());
         Service::instance()->InitService(env);
         const auto app_id = uid % PER_USER_RANGE;
         nice_name_ = nice_name;

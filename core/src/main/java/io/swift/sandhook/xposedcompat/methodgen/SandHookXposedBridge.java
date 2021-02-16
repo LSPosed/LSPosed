@@ -4,7 +4,6 @@ import android.os.Build;
 import android.os.Process;
 import android.os.Trace;
 
-import io.github.lsposed.lspd.nativebridge.ConfigManager;
 import io.github.lsposed.lspd.nativebridge.Yahfa;
 import io.github.lsposed.lspd.util.ClassLoaderUtils;
 import io.github.lsposed.lspd.util.FileUtils;

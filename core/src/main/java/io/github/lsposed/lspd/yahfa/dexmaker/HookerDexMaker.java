@@ -24,7 +24,6 @@ import android.annotation.TargetApi;
 import android.os.Build;
 
 import io.github.lsposed.lspd.BuildConfig;
-import io.github.lsposed.lspd.nativebridge.ConfigManager;
 import io.github.lsposed.lspd.core.yahfa.HookMain;
 import io.github.lsposed.lspd.util.ProxyClassLoader;
 
@@ -46,6 +45,7 @@ import external.com.android.dx.Local;
 import external.com.android.dx.MethodId;
 import external.com.android.dx.TypeId;
 
+import static io.github.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
 import static io.github.lsposed.lspd.yahfa.dexmaker.DexMakerUtils.autoBoxIfNecessary;
 import static io.github.lsposed.lspd.yahfa.dexmaker.DexMakerUtils.autoUnboxIfNecessary;
 import static io.github.lsposed.lspd.yahfa.dexmaker.DexMakerUtils.canCache;
@@ -167,17 +167,17 @@ public class HookerDexMaker {
                 String suffix = DexMakerUtils.getSha1Hex(mMember.toString());
                 className = className + suffix;
                 String dexFileName = className + ".jar";
-                File dexFile = new File(ConfigManager.getCachePath(dexFileName));
+                File dexFile = new File(serviceClient.getCachePath(dexFileName));
                 if (!dexFile.exists()) {
                     // if file exists, reuse it and skip generating
                     DexLog.d("Generating " + dexFileName);
                     doGenerate(className);
-                    loader = mDexMaker.generateAndLoad(mAppClassLoader, new File(ConfigManager.getCachePath("")), dexFileName, false);
+                    loader = mDexMaker.generateAndLoad(mAppClassLoader, new File(serviceClient.getCachePath("")), dexFileName, false);
                     dexFile.setWritable(true, false);
                     dexFile.setReadable(true, false);
                 } else {
                     DexLog.d("Using cache " + dexFileName);
-                    loader = mDexMaker.loadClassDirect(mAppClassLoader, new File(ConfigManager.getCachePath("")), dexFileName);
+                    loader = mDexMaker.loadClassDirect(mAppClassLoader, new File(serviceClient.getCachePath("")), dexFileName);
                 }
                 usedCache = true;
             } catch (Throwable ignored) {}

@@ -21,7 +21,7 @@
 package io.github.lsposed.lspd.sandhook.hooker;
 
 import io.github.lsposed.common.KeepMembers;
-import io.github.lsposed.lspd._hooker.impl.StartBootstrapServices;
+
 import com.swift.sandhook.SandHook;
 import com.swift.sandhook.annotation.HookMethod;
 import com.swift.sandhook.annotation.HookMethodBackup;
@@ -45,7 +45,7 @@ public class StartBootstrapServicesHooker implements KeepMembers {
 
     @HookMethod("startBootstrapServices")
     public static void hook(@ThisObject Object systemServer) throws Throwable {
-        final XC_MethodHook methodHook = new StartBootstrapServices();
+        final XC_MethodHook methodHook = new io.github.lsposed.lspd.hooker.StartBootstrapServicesHooker();
         final XC_MethodHook.MethodHookParam param = new XC_MethodHook.MethodHookParam();
         param.thisObject = systemServer;
         param.args = new Object[]{};

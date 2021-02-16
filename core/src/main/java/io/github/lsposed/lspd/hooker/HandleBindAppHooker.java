@@ -18,7 +18,7 @@
  * Copyright (C) 2021 LSPosed Contributors
  */
 
-package io.github.lsposed.lspd._hooker.impl;
+package io.github.lsposed.lspd.hooker;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityThread;
@@ -30,7 +30,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.res.CompatibilityInfo;
 import android.content.res.XResources;
 
-import io.github.lsposed.lspd.nativebridge.ConfigManager;
 import io.github.lsposed.lspd.util.Hookers;
 import io.github.lsposed.lspd.util.MetaDataReader;
 import io.github.lsposed.lspd.util.Utils;
@@ -46,8 +45,15 @@ import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.XposedInit;
 
+import static io.github.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
+
 // normal process initialization (for new Activity, Service, BroadcastReceiver etc.)
-public class HandleBindApp extends XC_MethodHook {
+public class HandleBindAppHooker extends XC_MethodHook {
+    String appDataDir = null;
+
+    public HandleBindAppHooker(String appDataDir) {
+        this.appDataDir = appDataDir;
+    }
 
     @Override
     protected void beforeHookedMethod(MethodHookParam param) {
@@ -57,10 +63,10 @@ public class HandleBindApp extends XC_MethodHook {
             Object bindData = param.args[0];
             final ApplicationInfo appInfo = (ApplicationInfo) XposedHelpers.getObjectField(bindData, "appInfo");
             // save app process name here for later use
-            ConfigManager.appProcessName = (String) XposedHelpers.getObjectField(bindData, "processName");
+            String appProcessName = (String) XposedHelpers.getObjectField(bindData, "processName");
             String reportedPackageName = appInfo.packageName.equals("android") ? "system" : appInfo.packageName;
-            Utils.logD("processName=" + ConfigManager.appProcessName +
-                    ", packageName=" + reportedPackageName + ", appDataDir=" + ConfigManager.appDataDir);
+            Utils.logD("processName=" + appProcessName +
+                    ", packageName=" + reportedPackageName + ", appDataDir=" + appDataDir);
 
             ComponentName instrumentationName = (ComponentName) XposedHelpers.getObjectField(bindData, "instrumentationName");
             if (instrumentationName != null) {
@@ -118,7 +124,7 @@ public class HandleBindApp extends XC_MethodHook {
                 XposedHelpers.findAndHookMethod(ContextImpl.class, "getPreferencesDir", new XC_MethodHook() {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) {
-                        File newDir = new File(ConfigManager.getPrefsPath(appInfo.packageName));
+                        File newDir = new File(serviceClient.getPrefsPath(appInfo.packageName));
                         if (migratePrefs) {
                             File oldDir = (File) param.getResult();
                             for (File oldFile : oldDir.listFiles()) {
@@ -143,7 +149,7 @@ public class HandleBindApp extends XC_MethodHook {
                     }
                 });
             }
-            LoadedApkGetCL hook = new LoadedApkGetCL(loadedApk, reportedPackageName,
+            LoadedApkGetCLHooker hook = new LoadedApkGetCLHooker(loadedApk, reportedPackageName,
                     processName, true);
             hook.setUnhook(XposedHelpers.findAndHookMethod(
                     LoadedApk.class, "getClassLoader", hook));

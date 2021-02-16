@@ -152,8 +152,10 @@ namespace lspd {
 
         jobject service = nullptr;
         if (res) {
-            JNI_CallVoidMethod(env, reply, readExceptionMethod_);
-            service = JNI_CallObjectMethod(env, reply, readStrongBinderMethod_);
+            env->CallVoidMethod(reply, readExceptionMethod_);
+            if (!ClearException(env)) {
+                service = JNI_CallObjectMethod(env, reply, readStrongBinderMethod_);
+            }
         }
         JNI_CallVoidMethod(env, data, recycleMethod_);
         JNI_CallVoidMethod(env, reply, recycleMethod_);

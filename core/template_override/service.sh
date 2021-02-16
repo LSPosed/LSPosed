@@ -27,7 +27,4 @@ if [[ -f "${MODDIR}/reboot_twice_flag" ]]; then
   reboot
 fi
 
-MISC_PATH=$(cat /data/adb/lspd/misc_path)
-BASE_PATH="/data/misc/$MISC_PATH"
-
-/system/bin/app_process -Djava.class.path=${BASE_PATH}/framework/lspd.dex /system/bin --nice-name=lspd io.github.lsposed.lspd.core.Main
+/system/bin/app_process -Djava.class.path=/data/adb/lspd/framework/lspd.dex /system/bin --nice-name=lspd io.github.lsposed.lspd.core.Main

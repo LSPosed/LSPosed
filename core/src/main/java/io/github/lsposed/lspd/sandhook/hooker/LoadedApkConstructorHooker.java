@@ -26,7 +26,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.res.CompatibilityInfo;
 
 import io.github.lsposed.common.KeepMembers;
-import io.github.lsposed.lspd._hooker.impl.LoadedApkCstr;
+import io.github.lsposed.lspd.hooker.LoadedApkCstrHooker;
 import com.swift.sandhook.SandHook;
 import com.swift.sandhook.annotation.HookClass;
 import com.swift.sandhook.annotation.HookMethod;
@@ -59,7 +59,7 @@ public class LoadedApkConstructorHooker implements KeepMembers {
                             ApplicationInfo aInfo, CompatibilityInfo compatInfo,
                             ClassLoader baseLoader, boolean securityViolation,
                             boolean includeCode, boolean registerPackage) throws Throwable {
-        final XC_MethodHook methodHook = new LoadedApkCstr();
+        final XC_MethodHook methodHook = new LoadedApkCstrHooker();
         final XC_MethodHook.MethodHookParam param = new XC_MethodHook.MethodHookParam();
         param.thisObject = thiz;
         param.args = new Object[]{activityThread, aInfo, compatInfo, baseLoader, securityViolation,

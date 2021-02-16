@@ -52,6 +52,8 @@ import java.util.Set;
 
 import de.robv.android.xposed.services.FileResult;
 
+import static io.github.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
+
 /**
  * This class is basically the same as SharedPreferencesImpl from AOSP, but
  * read-only and without listeners support. Instead, it is made to be
@@ -180,8 +182,9 @@ public final class XSharedPreferences implements SharedPreferences {
                 newModule = isModule && (xposedminversion > 92 || xposedsharedprefs);
             }
         }
-        if (newModule && XposedInit.prefsBasePath != null) {
-            mFile = new File(XposedInit.prefsBasePath, packageName + "/" + prefFileName + ".xml");
+        if (newModule) {
+
+            mFile = new File(serviceClient.getPrefsPath( packageName ), prefFileName + ".xml");
         } else {
             mFile = new File(Environment.getDataDirectory(), "data/" + packageName + "/shared_prefs/" + prefFileName + ".xml");
         }
@@ -198,7 +201,8 @@ public final class XSharedPreferences implements SharedPreferences {
             Path path = mFile.toPath();
             try {
                 if (sWatcher == null) {
-                    sWatcher = new File(XposedInit.prefsBasePath).toPath().getFileSystem().newWatchService();
+                    // TODO
+//                    sWatcher = new File(XposedInit.prefsBasePath).toPath().getFileSystem().newWatchService();
                     if (BuildConfig.DEBUG) Log.d(TAG, "Created WatchService instance");
                 }
                 mWatchKey = path.getParent().register(sWatcher, StandardWatchEventKinds.ENTRY_CREATE,
