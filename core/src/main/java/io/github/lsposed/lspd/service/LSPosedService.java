@@ -1,7 +1,6 @@
 package io.github.lsposed.lspd.service;
 
 import android.os.Binder;
-import android.os.IBinder;
 import android.util.Log;
 
 import static io.github.lsposed.lspd.service.ServiceManager.TAG;
@@ -28,14 +27,18 @@ public class LSPosedService extends ILSPosedService.Stub {
     @Override
     public ILSPApplicationService requestApplicationService(int uid, int pid) {
         if (Binder.getCallingUid() != 1000) {
+            Log.w(TAG, "Someone else got my binder!?");
             return null;
         }
         if (ConfigManager.getInstance().shouldSkipUid(uid)) {
+            Log.d(TAG, "Skipped uid " + uid);
             return null;
         }
         if (ServiceManager.getApplicationService().hasRegister(uid, pid)) {
+            Log.d(TAG, "Skipped duplicated request for uid " + uid + " pid " + pid);
             return null;
         }
+        Log.d(TAG, "returned service");
         return ServiceManager.getApplicationService();
     }
 

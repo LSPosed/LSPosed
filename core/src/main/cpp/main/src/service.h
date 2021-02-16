@@ -36,9 +36,7 @@ namespace lspd {
         inline static std::unique_ptr<Service> instance_ = std::make_unique<Service>();
         bool initialized_ = false;
 
-        Service() {
-
-        }
+        Service() = default;
 
         static jboolean
         call_boolean_method_va_replace(JNIEnv *env, jobject obj, jmethodID methodId, va_list args);

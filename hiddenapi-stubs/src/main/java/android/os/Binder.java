@@ -55,4 +55,8 @@ public class Binder implements IBinder {
                                  int flags) throws RemoteException {
         throw new RuntimeException("STUB");
     }
+
+    public static IBinder allowBlocking(IBinder binder){
+        throw new RuntimeException("STUB");
+    }
 }

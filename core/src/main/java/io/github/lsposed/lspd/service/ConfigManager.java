@@ -1,14 +1,17 @@
 package io.github.lsposed.lspd.service;
 
 import android.content.ContentValues;
+import android.content.pm.PackageInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.database.sqlite.SQLiteStatement;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.FileObserver;
 import android.os.ParcelFileDescriptor;
+import android.os.RemoteException;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.io.File;
@@ -43,6 +46,12 @@ public class ConfigManager {
     final private File verboseLogSwitch = new File(configPath, "verbose_log");
     private boolean verboseLog = false;
 
+    final private String DEFAULT_MANAGER_PACKAGE_NAME = "io.github.lsposed.manager";
+
+    final private File managerPath = new File(configPath, "manager");
+    private String manager = null;
+    private int managerUid = -1;
+
     final private File selinuxPath = new File("/sys/fs/selinux/enforce");
     // only check on boot
     final private boolean isPermissive;
@@ -59,41 +68,77 @@ public class ConfigManager {
         }
     };
 
-    int readInt(File file, int defaultValue) {
+    private String readText(@NonNull File file) throws IOException {
+        return new String(Files.readAllBytes(file.toPath()));
+    }
+
+    private String readText(@NonNull File file, String defaultValue) {
         try {
-            return Integer.parseInt(new String(Files.readAllBytes(file.toPath())));
+            if (!file.exists()) return defaultValue;
+            return readText(file);
+        } catch (IOException e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+        }
+        return defaultValue;
+    }
+
+    private void writeText(@NonNull File file, String value) {
+        try {
+            Files.write(file.toPath(), value.getBytes(), StandardOpenOption.CREATE_NEW);
+        } catch (IOException e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+        }
+    }
+
+    private int readInt(@NonNull File file, int defaultValue) {
+        try {
+            if (!file.exists()) return defaultValue;
+            return Integer.parseInt(readText(file));
         } catch (IOException | NumberFormatException e) {
             Log.e(TAG, Log.getStackTraceString(e));
         }
         return defaultValue;
     }
 
-    void writeInt(File file, int value) {
-        try {
-            Files.write(file.toPath(), String.valueOf(value).getBytes(), StandardOpenOption.CREATE_NEW);
-        } catch (IOException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
-        }
+    private void writeInt(@NonNull File file, int value) {
+        writeText(file, String.valueOf(value));
     }
 
-    void updateConfig() {
+    private synchronized void updateConfig() {
         resourceHook = resourceHookSwitch.exists();
         variant = readInt(variantSwitch, -1);
         verboseLog = readInt(verboseLogSwitch, 0) == 1;
+        updateManager();
     }
 
-    SQLiteStatement createEnabledModulesTable = db.compileStatement("CREATE TABLE IF NOT EXISTS enabled_modules (" +
-            "mid int PRIMARY KEY AUTOINCREMENT," +
+    public synchronized void updateManager() {
+        try {
+            PackageInfo info = PackageService.getPackageInfo(readText(managerPath, DEFAULT_MANAGER_PACKAGE_NAME), 0, 0);
+            if (info != null) {
+                managerUid = info.applicationInfo.uid;
+                manager = info.packageName;
+            }
+        } catch (RemoteException ignored) {
+        }
+    }
+
+    public synchronized void updateManager(@NonNull String packageName) {
+        writeText(managerPath, packageName);
+        updateManager();
+    }
+
+    private final SQLiteStatement createEnabledModulesTable = db.compileStatement("CREATE TABLE IF NOT EXISTS enabled_modules (" +
+            "mid integer PRIMARY KEY AUTOINCREMENT," +
             "package_name text NOT NULL UNIQUE," +
             "apk_path text NOT NULL" +
             ");");
-    SQLiteStatement createScopeTable = db.compileStatement("CREATE TABLE IF NOT EXISTS scope (" +
-            "mid int," +
-            "uid int," +
+    private final SQLiteStatement createScopeTable = db.compileStatement("CREATE TABLE IF NOT EXISTS scope (" +
+            "mid integer," +
+            "uid integer," +
             "PRIMARY KEY (mid, uid)" +
             ");");
 
-    ConcurrentHashMap<Integer, ArrayList<String>> modulesForUid;
+    private final ConcurrentHashMap<Integer, ArrayList<String>> modulesForUid = new ConcurrentHashMap<>();
 
     static ConfigManager getInstance() {
         if (instance == null)
@@ -105,6 +150,7 @@ public class ConfigManager {
         createTables();
         updateConfig();
         isPermissive = readInt(selinuxPath, 1) == 0;
+        configObserver.startWatching();
     }
 
     private void createTables() {
@@ -113,6 +159,7 @@ public class ConfigManager {
     }
 
     private synchronized void cacheScopes() {
+        modulesForUid.clear();
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
         builder.setTables("scope INNER JOIN enabled_modules ON scope.mid = enabled_modules.mid");
         Cursor cursor = builder.query(db, new String[]{"scope.uid", "enabled_modules.apk_path"},
@@ -132,13 +179,13 @@ public class ConfigManager {
 
     // This is called when a new process created, use the cached result
     public List<String> getModulesPathForUid(int uid) {
-        return modulesForUid.getOrDefault(uid, null);
+        return isManager(uid) ? new ArrayList<>() : modulesForUid.getOrDefault(uid, null);
     }
 
     // This is called when a new process created, use the cached result
     // The signature matches Riru's
     public boolean shouldSkipUid(int uid) {
-        return !modulesForUid.containsKey(uid);
+        return !modulesForUid.containsKey(uid) && !isManager(uid);
     }
 
     // This should only be called by manager, so we don't need to cache it
@@ -277,5 +324,13 @@ public class ConfigManager {
             Log.e(TAG, Log.getStackTraceString(e));
             return null;
         }
+    }
+
+    public boolean isManager(String package_name) {
+        return package_name.equals(manager);
+    }
+
+    public boolean isManager(int uid) {
+        return uid == managerUid;
     }
 }

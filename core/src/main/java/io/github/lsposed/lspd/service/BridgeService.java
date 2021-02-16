@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import java.lang.reflect.Field;
 import java.util.Map;
 
+import static hidden.HiddenApiBridge.Binder_allowBlocking;
 import static io.github.lsposed.lspd.service.ServiceManager.TAG;
 
 public class BridgeService {
@@ -21,6 +22,7 @@ public class BridgeService {
     private static final String SERVICE_NAME = "activity";
 
     enum ACTION {
+        ACTION_UNKNOWN,
         ACTION_SEND_BINDER,
         ACTION_GET_BINDER,
     }
@@ -149,7 +151,7 @@ public class BridgeService {
             serviceBinder.unlinkToDeath(LSPSERVICE_DEATH_RECIPIENT, 0);
         }
 
-        serviceBinder = binder;
+        serviceBinder = Binder_allowBlocking(binder);
         service = ILSPosedService.Stub.asInterface(serviceBinder);
         try {
             serviceBinder.linkToDeath(LSPSERVICE_DEATH_RECIPIENT, 0);
@@ -171,7 +173,7 @@ public class BridgeService {
     }
 
     @SuppressWarnings({"unused", "RedundantSuppression"})
-    public static boolean onTransact(int code, @NonNull Parcel data, @Nullable Parcel reply, int flags) {
+    public static boolean onTransact(@NonNull Parcel data, @Nullable Parcel reply, int flags) {
         data.enforceInterface(DESCRIPTOR);
 
         ACTION action = ACTION.values()[data.readInt()];
@@ -209,13 +211,13 @@ public class BridgeService {
 
     @SuppressWarnings({"unused", "RedundantSuppression"})
     public static boolean execTransact(int code, long dataObj, long replyObj, int flags) {
-        Log.d(TAG, String.valueOf(code));
         if (code != TRANSACTION_CODE) return false;
 
         Parcel data = ParcelUtils.fromNativePointer(dataObj);
         Parcel reply = ParcelUtils.fromNativePointer(replyObj);
 
         if (data == null || reply == null) {
+            Log.w(TAG, "Got transaction with null data or reply");
             return false;
         }
 
@@ -224,9 +226,8 @@ public class BridgeService {
         try {
             String descriptor = ParcelUtils.readInterfaceDescriptor(data);
             data.setDataPosition(0);
-
             if (descriptor.equals(DESCRIPTOR)) {
-                res = onTransact(code, data, reply, flags);
+                res = onTransact(data, reply, flags);
             }
         } catch (Exception e) {
             if ((flags & IBinder.FLAG_ONEWAY) != 0) {

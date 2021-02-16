@@ -20,7 +20,6 @@
 
 package io.github.lsposed.lspd.core.yahfa;
 
-import io.github.lsposed.lspd.nativebridge.Heap;
 import io.github.lsposed.lspd.nativebridge.Yahfa;
 import io.github.lsposed.lspd.util.Utils;
 
