@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.pm.PackageInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteQueryBuilder;
 import android.database.sqlite.SQLiteStatement;
 import android.os.FileObserver;
 import android.os.ParcelFileDescriptor;
@@ -188,10 +187,6 @@ public class ConfigManager {
     // This is called when a new process created, use the cached result
     // The signature matches Riru's
     public boolean shouldSkipUid(int uid) {
-        Log.d(TAG, modulesForUid.keySet().size() + "");
-        for (Integer id : modulesForUid.keySet()) {
-            Log.d(TAG, id.toString());
-        }
         return !modulesForUid.containsKey(uid) && !isManager(uid);
     }
 
@@ -270,7 +265,7 @@ public class ConfigManager {
     public String[] enabledModules() {
         try (Cursor cursor = db.query("modules", new String[]{"package_name"}, "enabled = ?", new String[]{"1"}, null, null, null)) {
             if (cursor == null) {
-                Log.e(TAG, "db cache failed");
+                Log.e(TAG, "query enabled modules failed");
                 return null;
             }
             int pkg_idx = cursor.getColumnIndex("package_name");

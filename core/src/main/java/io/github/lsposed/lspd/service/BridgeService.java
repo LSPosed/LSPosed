@@ -1,5 +1,8 @@
 package io.github.lsposed.lspd.service;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.Parcel;
@@ -146,7 +149,20 @@ public class BridgeService {
         }
 
         if (serviceBinder == null) {
-            PackageReceiver.register();
+            PackageReceiver.register(new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    if (service == null) {
+                        Log.e(TAG, "Service is dead, missing package changed: " + intent);
+                        return;
+                    }
+                    try {
+                        service.dispatchPackageChanged(intent);
+                    } catch (RemoteException e) {
+                        Log.e(TAG, Log.getStackTraceString(e));
+                    }
+                }
+            });
         } else {
             serviceBinder.unlinkToDeath(LSPSERVICE_DEATH_RECIPIENT, 0);
         }
