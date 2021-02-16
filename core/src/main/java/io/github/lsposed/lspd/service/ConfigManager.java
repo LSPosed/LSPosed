@@ -3,9 +3,9 @@ package io.github.lsposed.lspd.service;
 import android.content.ContentValues;
 import android.content.pm.PackageInfo;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.database.sqlite.SQLiteStatement;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.FileObserver;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
@@ -21,8 +21,6 @@ import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static io.github.lsposed.lspd.service.ServiceManager.TAG;
@@ -130,10 +128,12 @@ public class ConfigManager {
         updateManager();
     }
 
-    private final SQLiteStatement createEnabledModulesTable = db.compileStatement("CREATE TABLE IF NOT EXISTS enabled_modules (" +
+    private final SQLiteStatement createModulesTable = db.compileStatement("CREATE TABLE IF NOT EXISTS modules (" +
             "mid integer PRIMARY KEY AUTOINCREMENT," +
             "package_name text NOT NULL UNIQUE," +
-            "apk_path text NOT NULL" +
+            "apk_path text NOT NULL, " +
+            "enabled BOOLEAN DEFAULT 0 " +
+            "CHECK (enabled IN (0, 1))" +
             ");");
     private final SQLiteStatement createScopeTable = db.compileStatement("CREATE TABLE IF NOT EXISTS scope (" +
             "mid integer," +
@@ -154,96 +154,104 @@ public class ConfigManager {
         updateConfig();
         isPermissive = readInt(selinuxPath, 1) == 0;
         configObserver.startWatching();
+        cacheScopes();
     }
 
     private void createTables() {
-        createEnabledModulesTable.execute();
+        createModulesTable.execute();
         createScopeTable.execute();
     }
 
     private synchronized void cacheScopes() {
         modulesForUid.clear();
-        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
-        builder.setTables("scope INNER JOIN enabled_modules ON scope.mid = enabled_modules.mid");
-        Cursor cursor = builder.query(db, new String[]{"scope.uid", "enabled_modules.apk_path"},
-                null, null, null, null, null);
-        if (cursor == null) {
-            Log.e(TAG, "db cache failed");
-            return;
-        }
-        int uid_idx = cursor.getColumnIndex("scope.uid");
-        int apk_path_idx = cursor.getColumnIndex("enabled_modules.apk_path");
-        while (cursor.moveToNext()) {
-            int uid = cursor.getInt(uid_idx);
-            String apk_path = cursor.getString(apk_path_idx);
-            modulesForUid.computeIfAbsent(uid, ignored -> new ArrayList<>()).add(apk_path);
+        try (Cursor cursor = db.query("scope INNER JOIN modules ON scope.mid = modules.mid", new String[]{"uid", "apk_path"},
+                "enabled = ?", new String[]{"1"}, null, null, null)) {
+            if (cursor == null) {
+                Log.e(TAG, "db cache failed");
+                return;
+            }
+            int uid_idx = cursor.getColumnIndex("uid");
+            int apk_path_idx = cursor.getColumnIndex("apk_path");
+            while (cursor.moveToNext()) {
+                int uid = cursor.getInt(uid_idx);
+                String apk_path = cursor.getString(apk_path_idx);
+                modulesForUid.computeIfAbsent(uid, ignored -> new ArrayList<>()).add(apk_path);
+            }
         }
     }
 
     // This is called when a new process created, use the cached result
-    public List<String> getModulesPathForUid(int uid) {
-        return isManager(uid) ? new ArrayList<>() : modulesForUid.getOrDefault(uid, null);
+    public String[] getModulesPathForUid(int uid) {
+        return isManager(uid) ? new String[0] : modulesForUid.getOrDefault(uid, new ArrayList<>()).toArray(new String[0]);
     }
 
     // This is called when a new process created, use the cached result
     // The signature matches Riru's
     public boolean shouldSkipUid(int uid) {
+        Log.d(TAG, modulesForUid.keySet().size() + "");
+        for (Integer id : modulesForUid.keySet()) {
+            Log.d(TAG, id.toString());
+        }
         return !modulesForUid.containsKey(uid) && !isManager(uid);
     }
 
     // This should only be called by manager, so we don't need to cache it
-    public Set<Integer> getModuleScope(String packageName) {
-        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
-        builder.setTables("scope INNER JOIN enabled_modules ON scope.mid = enabled_modules.mid");
-        Cursor cursor = builder.query(db, new String[]{"scope.uid"},
-                null, null, null, null, null);
-        if (cursor == null) {
-            Log.e(TAG, "db cache failed");
-            return null;
+    public int[] getModuleScope(String packageName) {
+        int mid = getModuleId(packageName);
+        if (mid == -1) return null;
+        try (Cursor cursor = db.query("scope INNER JOIN modules ON scope.mid = modules.mid", new String[]{"uid"},
+                "scope.mid = ?", new String[]{String.valueOf(mid)}, null, null, null)) {
+            if (cursor == null) {
+                return null;
+            }
+            int uid_idx = cursor.getColumnIndex("uid");
+            HashSet<Integer> result = new HashSet<>();
+            while (cursor.moveToNext()) {
+                int uid = cursor.getInt(uid_idx);
+                result.add(uid);
+            }
+            return result.stream().mapToInt(i -> i).toArray();
         }
-        int uid_idx = cursor.getColumnIndex("scope.uid");
-        HashSet<Integer> result = new HashSet<>();
-        while (cursor.moveToNext()) {
-            int uid = cursor.getInt(uid_idx);
-            result.add(uid);
-        }
-        return result;
     }
 
     public boolean updateModuleApkPath(String packageName, String apkPath) {
+        if (db.inTransaction()) {
+            Log.w(TAG, "update module apk path should not be called inside transaction");
+            return false;
+        }
         ContentValues values = new ContentValues();
+        values.put("package_name", packageName);
         values.put("apk_path", apkPath);
-        int count = db.updateWithOnConflict("enabled_modules", values, "package_name = ?", new String[]{packageName}, SQLiteDatabase.CONFLICT_REPLACE);
+        int count = (int) db.insertWithOnConflict("modules", null, values, SQLiteDatabase.CONFLICT_IGNORE);
+        if (count < 0) {
+            count = db.updateWithOnConflict("modules", values, "package_name=?", new String[]{packageName}, SQLiteDatabase.CONFLICT_IGNORE);
+        }
         if (count >= 1) {
             cacheScopes();
-            return true;
         }
-        return false;
+        return count >= 0;
     }
 
     // Only be called before updating modules. No need to cache.
     private int getModuleId(String packageName) {
-        try {
-            db.beginTransaction();
-            SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
-            Cursor cursor = builder.query(db, new String[]{"mid"}, "package_name = ?", new String[]{packageName}, null, null, null);
+        if (db.inTransaction()) {
+            Log.w(TAG, "get module id should not be called inside transaction");
+            return -1;
+        }
+        try (Cursor cursor = db.query("modules", new String[]{"mid"}, "package_name=?", new String[]{packageName}, null, null, null)) {
             if (cursor == null) return -1;
             if (cursor.getCount() != 1) return -1;
             cursor.moveToFirst();
             return cursor.getInt(cursor.getColumnIndex("mid"));
-        } finally {
-            db.setTransactionSuccessful();
-            db.endTransaction();
         }
     }
 
-    public boolean setModuleScope(String packageName, String apkPath, List<Integer> uid) {
-        if (uid == null || uid.isEmpty()) return false;
-        updateModuleApkPath(packageName, apkPath);
+    public boolean setModuleScope(String packageName, int[] uid) {
+        if (uid == null || uid.length == 0) return false;
+        int mid = getModuleId(packageName);
+        if (mid == -1) return false;
         try {
             db.beginTransaction();
-            int mid = getModuleId(packageName);
-            if (mid == -1) return false;
             db.delete("scope", "mid = ?", new String[]{String.valueOf(mid)});
             for (int id : uid) {
                 ContentValues values = new ContentValues();
@@ -259,13 +267,61 @@ public class ConfigManager {
         return true;
     }
 
+    public String[] enabledModules() {
+        try (Cursor cursor = db.query("modules", new String[]{"package_name"}, "enabled = ?", new String[]{"1"}, null, null, null)) {
+            if (cursor == null) {
+                Log.e(TAG, "db cache failed");
+                return null;
+            }
+            int pkg_idx = cursor.getColumnIndex("package_name");
+            HashSet<String> result = new HashSet<>();
+            while (cursor.moveToNext()) {
+                result.add(cursor.getString(pkg_idx));
+            }
+            return result.toArray(new String[0]);
+        }
+    }
+
     public boolean removeModule(String packageName) {
+        int mid = getModuleId(packageName);
+        if (mid == -1) return false;
         try {
             db.beginTransaction();
-            int mid = getModuleId(packageName);
-            if (mid == -1) return false;
-            db.delete("enabled_modules", "mid = ?", new String[]{String.valueOf(mid)});
+            db.delete("modules", "mid = ?", new String[]{String.valueOf(mid)});
             db.delete("scope", "mid = ?", new String[]{String.valueOf(mid)});
+        } finally {
+            db.setTransactionSuccessful();
+            db.endTransaction();
+        }
+        cacheScopes();
+        return true;
+    }
+
+    public boolean disableModule(String packageName) {
+        int mid = getModuleId(packageName);
+        if (mid == -1) return false;
+        try {
+            db.beginTransaction();
+            ContentValues values = new ContentValues();
+            values.put("enabled", 0);
+            db.update("modules", values, "mid = ?", new String[]{String.valueOf(mid)});
+        } finally {
+            db.setTransactionSuccessful();
+            db.endTransaction();
+        }
+        cacheScopes();
+        return true;
+    }
+
+    public boolean enableModule(String packageName, String apkPath) {
+        if (!updateModuleApkPath(packageName, apkPath)) return false;
+        int mid = getModuleId(packageName);
+        if (mid == -1) return false;
+        try {
+            db.beginTransaction();
+            ContentValues values = new ContentValues();
+            values.put("enabled", 1);
+            db.update("modules", values, "mid = ?", new String[]{String.valueOf(mid)});
         } finally {
             db.setTransactionSuccessful();
             db.endTransaction();

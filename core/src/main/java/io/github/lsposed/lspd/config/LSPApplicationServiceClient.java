@@ -23,10 +23,15 @@ public class LSPApplicationServiceClient implements ILSPApplicationService {
         if (serviceClient == null && binder != null && serviceBinder == null && service == null) {
             serviceBinder = binder;
             try {
-                serviceBinder.linkToDeath(() -> {
-                    serviceBinder = null;
-                    service = null;
-                }, 0);
+                serviceBinder.linkToDeath(
+                        new IBinder.DeathRecipient() {
+                            @Override
+                            public void binderDied() {
+                                serviceBinder.unlinkToDeath(this, 0);
+                                serviceBinder = null;
+                                service = null;
+                            }
+                        }, 0);
             } catch (RemoteException e) {
                 Utils.logE("link to death error: ", e);
             }
@@ -84,12 +89,12 @@ public class LSPApplicationServiceClient implements ILSPApplicationService {
     }
 
     @Override
-    public List<String> getModulesList() {
+    public String[] getModulesList() {
         try {
             return service.getModulesList();
         } catch (RemoteException | NullPointerException ignored) {
         }
-        return Collections.emptyList();
+        return new String[0];
     }
 
     @Override

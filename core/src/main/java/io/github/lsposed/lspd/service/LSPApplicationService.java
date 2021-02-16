@@ -23,10 +23,14 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
         int uid = Binder.getCallingUid();
         int pid = Binder.getCallingPid();
         cache.add(new Pair<>(uid, pid));
-        handle.linkToDeath(() -> {
-            Log.d(TAG, "pid=" + pid + " uid=" + uid + " is dead.");
-            cache.remove(new Pair<>(uid, pid));
-            handles.remove(handle);
+        handle.linkToDeath(new DeathRecipient() {
+            @Override
+            public void binderDied() {
+                Log.d(TAG, "pid=" + pid + " uid=" + uid + " is dead.");
+                cache.remove(new Pair<>(uid, pid));
+                handles.remove(handle);
+                handle.unlinkToDeath(this, 0);
+            }
         }, 0);
     }
 
@@ -43,7 +47,7 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
     }
 
     @Override
-    public List<String> getModulesList() throws RemoteException {
+    public String[] getModulesList() throws RemoteException {
         ensureRegistered();
         return ConfigManager.getInstance().getModulesPathForUid(Binder.getCallingUid());
     }

@@ -23,30 +23,12 @@ package io.github.lsposed.lspd.hooker;
 import android.os.IBinder;
 
 import de.robv.android.xposed.XposedHelpers;
-import io.github.lsposed.lspd.core.EdxpImpl;
-import io.github.lsposed.lspd.core.Main;
 import io.github.lsposed.lspd.util.Utils;
 
 public class XposedInstallerHooker {
 
     public static void hookXposedInstaller(final ClassLoader classLoader, IBinder binder) {
-        final String variant;
-        switch (Main.getEdxpVariant()) {
-            case EdxpImpl.YAHFA:
-                variant = "YAHFA";
-                break;
-            case EdxpImpl.SANDHOOK:
-                variant = "SandHook";
-                break;
-            case EdxpImpl.NONE:
-            default:
-                variant = "Unknown";
-                break;
-        }
-
         Utils.logI("Found LSPosed Manager, hooking it");
-
-        // LSPosed Manager R
         try {
             Class<?> serviceClass = XposedHelpers.findClass("io.github.lsposed.manager.receivers.LSPosedManagerServiceClient", classLoader);
             XposedHelpers.setStaticObjectField(serviceClass, "binder", binder);
