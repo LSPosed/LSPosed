@@ -1,0 +1,175 @@
+<!--
+  ~ This file is part of LSPosed.
+  ~
+  ~ LSPosed is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ LSPosed is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+  ~
+  ~ Copyright (C) 2020 EdXposed Contributors
+  ~ Copyright (C) 2021 LSPosed Contributors
+  -->
+
+<resources>
+    <string name="app_name" translatable="false">LSPosed</string>
+    <string name="Activated">Geactiveerd</string>
+    <string name="Install">Installeer</string>
+    <string name="InstallDetail">Tik om LSPosed te installeren</string>
+    <string name="Modules">Modules</string>
+    <string name="ModulesDetail">%d modules ingeschakeld</string>
+    <string name="Logs">Logboeken</string>
+    <string name="Settings">Instellingen</string>
+    <string name="About">Over</string>
+
+    <!-- General/various strings -->
+    <string name="menuSend">versturen</string>
+    <string name="menuSaveToSd">Opslaan</string>
+    <string name="ok">Ok</string>
+
+    <!-- Welcome screen / main sections -->
+
+    <!-- navigation view items -->
+    <string name="nav_item_modules">Modules</string>
+    <string name="nav_item_logs">Uitgebreide logboeken</string>
+    <string name="nav_item_logs_err">Modules Logboeken</string>
+
+    <!-- Installer tab -->
+    <string name="install_warning_title">Doe voorzichtig!</string>
+    <string name="dont_show_again">Laat dit niet meer zien</string>
+
+    <!-- File operations -->
+
+    <!-- Modules tab -->
+    <string name="module_is_not_activated_yet">LSPosed module is nog niet geactiveerd</string>
+    <string name="module_is_not_activated_yet_detailed">%s is geïnstalleerd, maar is nog niet geactiveerd</string>
+    <string name="module_empty_description">(geen beschrijving gegeven)</string>
+    <string name="module_no_ui">Deze module biedt geen gebruikersinterface</string>
+    <string name="xposed_module_updated_notification_title">LSPosed module bijgewerkt</string>
+    <string name="warning_xposed_min_version">Deze module vereist een nieuwere versie van LSPosed (%d) en dit kan niet worden geactiveerd</string>
+    <string name="no_min_version_specified">Deze module specificeert niet de LSPosed-versie die het nodig heeft.</string>
+    <string name="warning_min_version_too_low">Deze module is gemaakt voor de LSPosed-versie %1$d, maar vanwege onverenigbare wijzigingen in de versie %2$d, het is uitgeschakeld</string>
+    <string name="modules_app_store">Bekijk in App winkel</string>
+    <string name="module_app_info">App info</string>
+    <string name="module_uninstall">Verwijderen</string>
+
+    <!-- Download tab -->
+    <string name="menuReload">Herlaad</string>
+
+    <!-- Settings tab -->
+    <string name="settings_group_framework">Framework</string>
+    <string name="settings_enable_resources">Schakel resource-hooks in</string>
+    <string name="settings_enable_resources_summary"><b>Waarschuwing:</b> Resource-hooks zijn verouderd</string>
+
+    <!-- Support tab -->
+
+    <!-- Logs tab  -->
+    <string name="logs_save_failed">Opslaan mislukt:</string>
+    <string name="menuClearLog">Log nu wissen</string>
+    <string name="logs_cleared">Log succesvol gewist.</string>
+    <string name="logs_clear_failed">Kan het logboek niet wissen:</string>
+    <string name="log_is_empty">Log is leeg.</string>
+
+    <!-- About tab -->
+
+    <!-- DownloadView -->
+
+    <!-- DownloadUtils -->
+
+    <!-- RepoLoader -->
+
+    <string name="warning_installed_on_external_storage">Deze module kan niet worden geladen omdat het geïnstalleerd is op de SD-kaart, verplaats deze dan naar de interne opslag</string>
+
+    <string name="info">Info</string>
+
+    <string name="scroll_top">Scroll naar boven</string>
+    <string name="loading">Laden…</string>
+    <string name="scroll_bottom">Scroll naaar beneden</string>
+
+    <string name="android_sdk" translatable="false">Android %2$s (%1$s, API %3$d)</string>
+    <string name="not_logcat">Dit is het LSPosed Framework en moduleslogboek\nals je een Android-logcat nodig hebt, kun je onze Log Catcher Magisk-module proberen</string>
+
+    <!-- LSPd related -->
+    <string name="compile_speed_msg">Optimaliseren…</string>
+    <string name="compile_done">Optimalisatie voltooid.</string>
+
+    <string name="about_source" translatable="false">https://github.com/LSPosed/LSPosed/</string>
+
+    <string name="pref_title_disable_verbose_log">Schakel uitgebreide logboeken uit</string>
+    <string name="logs_cannot_read">Kan logboek niet lezen: \n</string>
+    <string name="app_launch">Lanceer het</string>
+    <string name="compile_failed">Optimalisatie mislukt of retourwaarde is leeg.</string>
+    <string name="compile_failed_with_info">Optimalisatie is mislukt: </string>
+    <string name="not_installed">Niet geïnstalleerd</string>
+    <string name="pure_black_dark_theme">Gebruik het pure zwart donkere thema</string>
+    <string name="sort_by_name">Sorteer op toepassingsnaam</string>
+    <string name="sort_by_name_reverse">Sorteren op applicatienaam (omgekeerd)</string>
+    <string name="sort_by_package_name">Sorteer op pakketnaam</string>
+    <string name="sort_by_package_name_reverse">Sorteren op pakketnaam (omgekeerd)</string>
+    <string name="sort_by_install_time">Sorteer op installatietijd</string>
+    <string name="sort_by_install_time_reverse">Sorteer op installatietijd (omgekeerd)</string>
+    <string name="sort_by_update_time">Sorteer op updatetijd</string>
+    <string name="sort_by_update_time_reverse">Sorteer op updatetijd (omgekeerd)</string>
+    <string name="settings_group_theme">Thema</string>
+    <string name="settings_variant">Variant</string>
+    <string name="menu_show_system_apps">Systeem apps</string>
+    <string name="menu_sort">Sorteren…</string>
+    <string name="enable_module">Schakel module in</string>
+    <string name="no_scope_selected">U heeft geen app geselecteerd. Verder gaan?</string>
+    <string name="menu_show_games">Games</string>
+    <string name="menu_show_modules">Modules</string>
+    <string name="failed_to_save_scope_list">Scope-lijst opslaan is mislukt</string>
+    <string name="module_settings">Module instellingen</string>
+    <string name="app_description">%s\nVersie: %s</string>
+    <string name="use_recommended">Aanbevolen</string>
+    <string name="no_scope_selected_has_recommended">U heeft geen app geselecteerd. Selecteer aanbevolen apps?</string>
+    <string name="use_recommended_message">Selecteer aanbevolen apps?</string>
+    <string name="requested_by_module">Aanbevolen</string>
+    <string name="module_disabled_no_selection">Module %s is uitgeschakeld omdat er geen app is geselecteerd.</string>
+    <string name="android_framework">Systeem Framework</string>
+    <string name="app_destroyed">Deze applicatie is vernietigd, zorg ervoor dat u deze downloadt vanaf de officiële bron.</string>
+    <string name="compile_speed">Optimaliseer opnieuw</string>
+    <string name="selinux_permissive">&lt;b&gt;Waarschuwing:&lt;\/b&gt; SELinux dwingt niet af! het kwaadaardige programma dat dit aanvalt, kan uw apparaat volledig beheersen en kan uw eigendommen beschadigen en juridische aansprakelijkheid veroorzaken.</string>
+    <string name="selinux_permissive_summary">SELinux dwingt niet af!</string>
+    <string name="outdated_manager">De versie van LSPosed Manager en LSPosed Core zijn niet consistent. Installeer de overeenkomstige versie opnieuw.</string>
+    <string name="lsposed_not_active">LSPosed is momenteel niet geïnstalleerd of actief.</string>
+    <string name="settings_backup_and_restore">Backup en herstellen</string>
+    <string name="settings_backup_and_restore_summery">Back-up of herstel modulelijst en scooplijsten.</string>
+    <string name="settings_backup">Backup</string>
+    <string name="settings_backuping">Back up maken…</string>
+    <string name="settings_backup_success">Back-up voltooid!</string>
+    <string name="settings_backup_failed">Back-up maken mislukt</string>
+    <string name="settings_restore">Herstellen</string>
+    <string name="settings_restoring">Herstellen…</string>
+    <string name="settings_restore_success">Herstel voltooid!</string>
+    <string name="settings_restore_failed">Herstellen mislukt</string>
+    <string name="menu_backup_and_restore">Back-up…</string>
+    <string name="menu_backup">Back-up</string>
+    <string name="menu_restore">Herstellen</string>
+    <string name="xposed_module_updated_notification_content">%s is geupdate</string>
+    <string name="module_repo">Opslagplaats</string>
+    <string name="module_repo_summary">Module opslagplaats (Alpha)</string>
+    <string name="module_readme">Leesmij</string>
+    <string name="module_releases">Releases</string>
+    <string name="module_information">Info</string>
+    <string name="module_information_homepage">Startpagina</string>
+    <string name="module_information_source_url">Broncode</string>
+    <string name="module_information_collaborators">Medewerkers</string>
+    <string name="module_release_view_assets">Middelen</string>
+    <string name="menu_open_in_browser">Open in de browser</string>
+    <string name="refresh">Vernieuwen</string>
+    <string name="group_network">Netwerk</string>
+    <string name="dns_over_http">DNS via HTTPS</string>
+    <string name="dns_over_http_summary">Tijdelijke oplossing voor DNS-vergiftiging in sommige landen</string>
+    <string name="about_view_source_code"><![CDATA[Bekijk de broncode op %s<br/>Word lid van ons %s-kanaal]]></string>
+    <string name="module_release_load_more">Toon oudere versies</string>
+    <string name="module_release_no_more">Geen release meer</string>
+    <string name="theme_color">Thema kleur</string>
+</resources>
