@@ -4,5 +4,34 @@ import io.github.lsposed.lspd.utils.ParceledListSlice;
 
 interface ILSPManagerService {
     int getVersion() = 1;
+
     ParceledListSlice<PackageInfo> getInstalledPackagesFromAllUsers(int flags) = 2;
+
+    String[] enabledModules() = 3;
+
+    boolean enableModule(String packageName) = 4;
+
+    boolean disableModule(String packageName) = 5;
+
+    boolean setModuleScope(String packageName, in int[] uid) = 6;
+
+    int[] getModuleScope(String packageName) = 7;
+
+    boolean isResourceHook() = 9;
+
+    void setResourceHook(boolean enabled) = 10;
+
+    boolean isVerboseLog() = 11;
+
+    void setVerboseLog(boolean enabled) = 12;
+
+    int getVariant() = 13;
+
+    void setVariant(int variant) = 14;
+
+    boolean isPermissive() = 15;
+
+    ParcelFileDescriptor getVerboseLog() = 16;
+
+    ParcelFileDescriptor getModulesLog() = 17;
 }

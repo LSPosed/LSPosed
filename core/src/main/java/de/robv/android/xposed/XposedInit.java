@@ -353,7 +353,7 @@ public final class XposedInit {
                 topClassLoader = parent;
             }
 
-            List<String> moduleList = serviceClient.getModulesList();
+            String[] moduleList = serviceClient.getModulesList();
             ArraySet<String> newLoadedApk = new ArraySet<>();
             for (String apk : moduleList)
                 if (loadedModules.contains(apk)) {
