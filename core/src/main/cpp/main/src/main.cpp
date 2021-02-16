@@ -37,64 +37,58 @@ namespace lspd {
         ConfigManager::Init();
     }
 
-    static int shouldSkipUid(int uid) {
+    static int shouldSkipUid(int) {
         return 0;
     }
 
-    static void nativeForkAndSpecializePre(JNIEnv *env, jclass clazz, jint *_uid, jint *gid,
-                                           jintArray *gids, jint *runtime_flags,
-                                           jobjectArray *rlimits, jint *mount_external,
-                                           jstring *se_info, jstring *nice_name,
-                                           jintArray *fds_to_close, jintArray *fds_to_ignore,
-                                           jboolean *start_child_zygote, jstring *instruction_set,
-                                           jstring *app_data_dir, jboolean *is_top_app, jobjectArray *pkg_data_info_list,
-                                           jobjectArray *whitelisted_data_info_list, jboolean *bind_mount_app_data_dirs,
-                                           jboolean *bind_mount_app_storage_dirs) {
-        Context::GetInstance()->OnNativeForkAndSpecializePre(env, clazz, *_uid, *gid, *gids,
-                                                             *runtime_flags, *rlimits,
-                                                             *mount_external, *se_info, *nice_name,
-                                                             *fds_to_close,
-                                                             *fds_to_ignore,
-                                                             *start_child_zygote, *instruction_set,
+    static void nativeForkAndSpecializePre(JNIEnv *env, jclass, jint *_uid, jint *,
+                                           jintArray *, jint *,
+                                           jobjectArray *, jint *,
+                                           jstring *, jstring *nice_name,
+                                           jintArray *, jintArray *,
+                                           jboolean *start_child_zygote, jstring *,
+                                           jstring *app_data_dir, jboolean *,
+                                           jobjectArray *,
+                                           jobjectArray *,
+                                           jboolean *,
+                                           jboolean *) {
+        Context::GetInstance()->OnNativeForkAndSpecializePre(env, *_uid,
+                                                             *nice_name,
+                                                             *start_child_zygote,
                                                              *app_data_dir);
     }
 
-    static void nativeForkAndSpecializePost(JNIEnv *env, jclass clazz, jint res) {
-        Context::GetInstance()->OnNativeForkAndSpecializePost(env);
+    static void nativeForkAndSpecializePost(JNIEnv *env, jclass, jint res) {
+        if (res == 0)
+            Context::GetInstance()->OnNativeForkAndSpecializePost(env);
     }
 
-    static void nativeForkSystemServerPre(JNIEnv *env, jclass clazz, uid_t *uid, gid_t *gid,
-                                          jintArray *gids, jint *runtime_flags,
-                                          jobjectArray *rlimits, jlong *permitted_capabilities,
-                                          jlong *effective_capabilities) {
-        Context::GetInstance()->OnNativeForkSystemServerPre(env, clazz, *uid, *gid, *gids,
-                                                            *runtime_flags, *rlimits,
-                                                            *permitted_capabilities,
-                                                            *effective_capabilities
-        );
+    static void nativeForkSystemServerPre(JNIEnv *env, jclass, uid_t *, gid_t *,
+                                          jintArray *, jint *,
+                                          jobjectArray *, jlong *,
+                                          jlong *) {
+        Context::GetInstance()->OnNativeForkSystemServerPre(env);
     }
 
-    static void nativeForkSystemServerPost(JNIEnv *env, [[maybe_unused]] jclass clazz, jint res) {
+    static void nativeForkSystemServerPost(JNIEnv *env, jclass, jint res) {
         Context::GetInstance()->OnNativeForkSystemServerPost(env, res);
     }
 
     /* method added in Android Q */
-    static void specializeAppProcessPre(JNIEnv *env, jclass clazz, jint *uid, jint *gid,
-                                        jintArray *gids, jint *runtime_flags, jobjectArray *rlimits,
-                                        jint *mount_external, jstring *se_info, jstring *nice_name,
-                                        jboolean *start_child_zygote, jstring *instruction_set,
-                                        jstring *app_data_dir, jboolean *is_top_app, jobjectArray *pkg_data_info_list,
-                                        jobjectArray *whitelisted_data_info_list, jboolean *bind_mount_app_data_dirs,
-                                        jboolean *bind_mount_app_storage_dirs) {
-        Context::GetInstance()->OnNativeForkAndSpecializePre(env, clazz, *uid, *gid, *gids,
-                                                             *runtime_flags, *rlimits,
-                                                             *mount_external, *se_info, *nice_name,
-                                                             nullptr, nullptr,
-                                                             *start_child_zygote, *instruction_set,
+    static void specializeAppProcessPre(JNIEnv *env, jclass, jint *uid, jint *,
+                                        jintArray *, jint *, jobjectArray *,
+                                        jint *, jstring *, jstring *nice_name,
+                                        jboolean *start_child_zygote, jstring *,
+                                        jstring *app_data_dir, jboolean *,
+                                        jobjectArray *,
+                                        jobjectArray *,
+                                        jboolean *,
+                                        jboolean *) {
+        Context::GetInstance()->OnNativeForkAndSpecializePre(env, *uid, *nice_name, *start_child_zygote,
                                                              *app_data_dir);
     }
 
-    static void specializeAppProcessPost(JNIEnv *env, [[maybe_unused]] jclass clazz) {
+    static void specializeAppProcessPost(JNIEnv *env, jclass) {
         Context::GetInstance()->OnNativeForkAndSpecializePost(env);
     }
 }
@@ -110,7 +104,9 @@ RIRU_EXPORT void *init(void *arg) {
     switch (step) {
         case 1: {
             auto core_max_api_version = *(int *) arg;
-            riru_api_version = core_max_api_version <= RIRU_MODULE_API_VERSION ? core_max_api_version : RIRU_MODULE_API_VERSION;
+            riru_api_version =
+                    core_max_api_version <= RIRU_MODULE_API_VERSION ? core_max_api_version
+                                                                    : RIRU_MODULE_API_VERSION;
             return &riru_api_version;
         }
         case 2: {

@@ -46,7 +46,9 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
     @Override
     public IBinder requestManagerBinder() throws RemoteException {
         ensureRegistered();
-        return ServiceManager.getManagerService();
+        if (ConfigManager.getInstance().isManager(Binder.getCallingUid()))
+            return ServiceManager.getManagerService();
+        return null;
     }
 
     public boolean hasRegister(int uid, int pid) {

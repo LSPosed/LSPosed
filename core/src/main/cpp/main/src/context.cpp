@@ -39,9 +39,6 @@
 #include "jni/native_api.h"
 #include "service.h"
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-value"
-
 namespace lspd {
     namespace fs = std::filesystem;
 
@@ -132,6 +129,7 @@ namespace lspd {
         RegisterEdxpYahfa(env);
         RegisterPendingHooks(env);
         RegisterNativeAPI(env);
+// TODO: Recover this
 
 //        variant_ = Variant(ConfigManager::GetInstance()->GetVariant());
 //        LOGI("LSP Variant: %d", variant_);
@@ -193,15 +191,7 @@ namespace lspd {
     }
 
     void
-    Context::OnNativeForkSystemServerPre([[maybe_unused]] JNIEnv *env,
-                                         [[maybe_unused]] jclass clazz,
-                                         [[maybe_unused]]  uid_t uid,
-                                         [[maybe_unused]] gid_t gid,
-                                         [[maybe_unused]] jintArray gids,
-                                         [[maybe_unused]] jint runtime_flags,
-                                         [[maybe_unused]] jobjectArray rlimits,
-                                         [[maybe_unused]] jlong permitted_capabilities,
-                                         [[maybe_unused]] jlong effective_capabilities) {
+    Context::OnNativeForkSystemServerPre(JNIEnv *env) {
         Service::instance()->InitService(env);
         PreLoadDex(ConfigManager::GetInjectDexPath());
         skip_ = false;
@@ -231,31 +221,24 @@ namespace lspd {
         Service::instance()->HookBridge(*this, env);
     }
 
-    void Context::OnNativeForkAndSpecializePre(JNIEnv *env, jclass clazz,
-                                               jint uid, jint gid,
-                                               jintArray gids,
-                                               jint runtime_flags,
-                                               jobjectArray rlimits,
-                                               jint mount_external,
-                                               jstring se_info,
+    void Context::OnNativeForkAndSpecializePre(JNIEnv *env,
+                                               jint uid,
                                                jstring nice_name,
-                                               jintArray fds_to_close,
-                                               jintArray fds_to_ignore,
                                                jboolean is_child_zygote,
-                                               jstring instruction_set,
                                                jstring app_data_dir) {
         PreLoadDex(ConfigManager::GetInjectDexPath());
         Service::instance()->InitService(env);
-        this->uid = uid;
         const auto app_id = uid % PER_USER_RANGE;
+        nice_name_ = nice_name;
+        JUTFString process_name(env, nice_name);
         skip_ = false;
         if (!skip_ && !app_data_dir) {
-            LOGD("skip injecting into %d because it has no data dir", uid);
+            LOGD("skip injecting into %s because it has no data dir", process_name.get());
             skip_ = true;
         }
         if (!skip_ && is_child_zygote) {
             skip_ = true;
-            LOGD("skip injecting into %d because it's a child zygote", uid);
+            LOGD("skip injecting into %s because it's a child zygote", process_name.get());
         }
 
         if (!skip_ && ((app_id >= FIRST_ISOLATED_UID && app_id <= LAST_ISOLATED_UID) ||
@@ -263,7 +246,7 @@ namespace lspd {
                        app_id <= LAST_APP_ZYGOTE_ISOLATED_UID) ||
                       app_id == SHARED_RELRO_UID)) {
             skip_ = true;
-            LOGI("skip injecting into %d because it's isolated", uid);
+            LOGI("skip injecting into %s because it's isolated", process_name.get());
         }
     }
 
@@ -289,5 +272,3 @@ namespace lspd {
         }
     }
 }
-
-#pragma clang diagnostic pop
