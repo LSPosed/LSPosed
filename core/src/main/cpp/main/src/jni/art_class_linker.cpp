@@ -24,6 +24,7 @@
 #include <nativehelper/jni_macros.h>
 #include <vector>
 #include <HookMain.h>
+#include <unordered_set>
 #include "art_class_linker.h"
 
 namespace lspd {

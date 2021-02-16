@@ -3,7 +3,6 @@ package com.swift.sandhook.xposedcompat;
 import android.os.Process;
 import android.text.TextUtils;
 
-import io.github.lsposed.lspd.nativebridge.ConfigManager;
 import io.github.lsposed.lspd.util.FileUtils;
 import io.github.lsposed.lspd.util.ProcessUtils;
 import io.github.lsposed.lspd.util.ProxyClassLoader;
@@ -15,8 +14,6 @@ import java.io.File;
 import java.lang.reflect.Member;
 
 import de.robv.android.xposed.XposedBridge;
-
-import static io.github.lsposed.lspd.util.FileUtils.getDataPathPrefix;
 
 public class XposedCompat {
 
@@ -49,11 +46,12 @@ public class XposedCompat {
     }
 
     public static File getCacheDir() {
-        if (cacheDir == null) {
-            String fixedAppDataDir = getDataPathPrefix() + getPackageName(ConfigManager.appDataDir) + "/";
-            cacheDir = new File(fixedAppDataDir, "/cache/sandhook/"
-                    + ProcessUtils.getProcessName(Process.myPid()).replace(":", "_") + "/");
-        }
+        // TODO: cache path?
+//        if (cacheDir == null) {
+//            String fixedAppDataDir = getDataPathPrefix() + getPackageName(ConfigManager.appDataDir) + "/";
+//            cacheDir = new File(fixedAppDataDir, "/cache/sandhook/"
+//                    + ProcessUtils.getProcessName(Process.myPid()).replace(":", "_") + "/");
+//        }
         return cacheDir;
     }
 

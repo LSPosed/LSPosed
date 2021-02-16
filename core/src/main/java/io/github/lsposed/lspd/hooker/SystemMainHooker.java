@@ -18,7 +18,7 @@
  * Copyright (C) 2021 LSPosed Contributors
  */
 
-package io.github.lsposed.lspd._hooker.impl;
+package io.github.lsposed.lspd.hooker;
 
 import io.github.lsposed.lspd.core.Main;
 import io.github.lsposed.lspd.deopt.PrebuiltMethodsDeopter;
@@ -29,7 +29,7 @@ import de.robv.android.xposed.XposedBridge;
 
 // system_server initialization
 // ed: only support sdk >= 21 for now
-public class SystemMain extends XC_MethodHook {
+public class SystemMainHooker extends XC_MethodHook {
 
     public static volatile ClassLoader systemServerCL;
 

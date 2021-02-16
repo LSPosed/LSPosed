@@ -23,7 +23,7 @@ package io.github.lsposed.lspd.sandhook.hooker;
 import android.app.ActivityThread;
 
 import io.github.lsposed.common.KeepMembers;
-import io.github.lsposed.lspd._hooker.impl.SystemMain;
+
 import com.swift.sandhook.SandHook;
 import com.swift.sandhook.annotation.HookClass;
 import com.swift.sandhook.annotation.HookMethod;
@@ -53,7 +53,7 @@ public class SystemMainHooker implements KeepMembers {
 
     @HookMethod("systemMain")
     public static ActivityThread hook() throws Throwable {
-        final XC_MethodHook methodHook = new SystemMain();
+        final XC_MethodHook methodHook = new io.github.lsposed.lspd.hooker.SystemMainHooker();
         final XC_MethodHook.MethodHookParam param = new XC_MethodHook.MethodHookParam();
         param.thisObject = null;
         param.args = new Object[]{};

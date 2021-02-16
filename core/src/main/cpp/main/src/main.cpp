@@ -26,15 +26,14 @@
 #include "config.h"
 #include "context.h"
 #include <riru.h>
-#include "config_manager.h"
 #include "symbol_cache.h"
 
 namespace lspd {
     static void onModuleLoaded() {
         LOGI("onModuleLoaded: welcome to LSPosed!");
         // rirud must be used in onModuleLoaded
+        Context::GetInstance()->PreLoadDex(kDexPath);
         InitSymbolCache();
-        ConfigManager::Init();
     }
 
     static int shouldSkipUid(int) {

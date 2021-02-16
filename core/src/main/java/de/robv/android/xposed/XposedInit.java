@@ -34,7 +34,6 @@ import android.util.Log;
 
 import com.android.internal.os.ZygoteInit;
 
-import io.github.lsposed.lspd.nativebridge.ConfigManager;
 import io.github.lsposed.lspd.config.LSPdConfigGlobal;
 
 import java.io.BufferedReader;
@@ -49,6 +48,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -77,6 +77,7 @@ import static de.robv.android.xposed.XposedHelpers.getParameterIndexByType;
 import static de.robv.android.xposed.XposedHelpers.setStaticBooleanField;
 import static de.robv.android.xposed.XposedHelpers.setStaticLongField;
 import static de.robv.android.xposed.XposedHelpers.setStaticObjectField;
+import static io.github.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
 
 public final class XposedInit {
     private static final String TAG = XposedBridge.TAG;
@@ -86,7 +87,6 @@ public final class XposedInit {
     private static final String INSTANT_RUN_CLASS = "com.android.tools.fd.runtime.BootstrapApplication";
     public static volatile boolean disableResources = false;
     private static final String[] XRESOURCES_CONFLICTING_PACKAGES = {"com.sygic.aura"};
-    public static String prefsBasePath = null;
 
     private XposedInit() {
     }
@@ -113,7 +113,7 @@ public final class XposedInit {
 
     @ApiSensitive(Level.MIDDLE)
     private static void hookResources() throws Throwable {
-        if (!ConfigManager.isResourcesHookEnabled() || disableResources) {
+        if (!serviceClient.isResourcesHookEnabled() || disableResources) {
             return;
         }
 
@@ -353,12 +353,9 @@ public final class XposedInit {
                 topClassLoader = parent;
             }
 
-            String moduleList = ConfigManager.getModulesList();
-            InputStream stream = new ByteArrayInputStream(moduleList.getBytes());
-            BufferedReader apks = new BufferedReader(new InputStreamReader(stream));
+            List<String> moduleList = serviceClient.getModulesList();
             ArraySet<String> newLoadedApk = new ArraySet<>();
-            String apk;
-            while ((apk = apks.readLine()) != null) {
+            for (String apk : moduleList)
                 if (loadedModules.contains(apk)) {
                     newLoadedApk.add(apk);
                 } else {
@@ -368,10 +365,9 @@ public final class XposedInit {
                         newLoadedApk.add(apk);
                     }
                 }
-            }
+
             loadedModules.clear();
             loadedModules.addAll(newLoadedApk);
-            apks.close();
 
             // refresh callback according to current loaded module list
             pruneCallbacks(loadedModules);

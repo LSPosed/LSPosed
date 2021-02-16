@@ -18,7 +18,7 @@
  * Copyright (C) 2021 LSPosed Contributors
  */
 
-package io.github.lsposed.lspd._hooker.impl;
+package io.github.lsposed.lspd.hooker;
 
 import android.os.Build;
 
@@ -34,7 +34,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import static io.github.lsposed.lspd.util.Utils.logD;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 
-public class StartBootstrapServices extends XC_MethodHook {
+public class StartBootstrapServicesHooker extends XC_MethodHook {
 
     @Override
     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
@@ -50,7 +50,7 @@ public class StartBootstrapServices extends XC_MethodHook {
             XC_LoadPackage.LoadPackageParam lpparam = new XC_LoadPackage.LoadPackageParam(XposedBridge.sLoadedPackageCallbacks);
             lpparam.packageName = "android";
             lpparam.processName = "android"; // it's actually system_server, but other functions return this as well
-            lpparam.classLoader = SystemMain.systemServerCL;
+            lpparam.classLoader = SystemMainHooker.systemServerCL;
             lpparam.appInfo = null;
             lpparam.isFirstApplication = true;
             XC_LoadPackage.callAll(lpparam);
@@ -58,14 +58,14 @@ public class StartBootstrapServices extends XC_MethodHook {
             // Huawei
             try {
                 findAndHookMethod("com.android.server.pm.HwPackageManagerService",
-                        SystemMain.systemServerCL, "isOdexMode",
+                        SystemMainHooker.systemServerCL, "isOdexMode",
                         XC_MethodReplacement.returnConstant(false));
             } catch (XposedHelpers.ClassNotFoundError | NoSuchMethodError ignored) {
             }
 
             try {
                 String className = "com.android.server.pm." + (Build.VERSION.SDK_INT >= 23 ? "PackageDexOptimizer" : "PackageManagerService");
-                findAndHookMethod(className, SystemMain.systemServerCL,
+                findAndHookMethod(className, SystemMainHooker.systemServerCL,
                         "dexEntryExists", String.class,
                         XC_MethodReplacement.returnConstant(true));
             } catch (XposedHelpers.ClassNotFoundError | NoSuchMethodError ignored) {

@@ -1,6 +1,5 @@
 package com.swift.sandhook.xposedcompat.methodgen;
 
-import io.github.lsposed.lspd.nativebridge.ConfigManager;
 import com.swift.sandhook.SandHook;
 import com.swift.sandhook.wrapper.HookWrapper;
 import com.swift.sandhook.xposedcompat.hookstub.HookStubManager;
@@ -30,6 +29,7 @@ import static com.swift.sandhook.xposedcompat.utils.DexMakerUtils.canCache;
 import static com.swift.sandhook.xposedcompat.utils.DexMakerUtils.createResultLocals;
 import static com.swift.sandhook.xposedcompat.utils.DexMakerUtils.getObjTypeIdIfPrimitive;
 import static com.swift.sandhook.xposedcompat.utils.DexMakerUtils.getSha1Hex;
+import static io.github.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
 
 public class HookerDexMakerNew implements HookMaker {
 
@@ -148,7 +148,7 @@ public class HookerDexMakerNew implements HookMaker {
         HookWrapper.HookEntity hookEntity = null;
         //try load cache first
         try {
-            ClassLoader loader = mDexMaker.loadClassDirect(mAppClassLoader, new File(ConfigManager.getCachePath("")), dexName);
+            ClassLoader loader = mDexMaker.loadClassDirect(mAppClassLoader, new File(serviceClient.getCachePath("")), dexName);
             if (loader != null) {
                 hookEntity = loadHookerClass(loader, className);
             }
@@ -176,8 +176,8 @@ public class HookerDexMakerNew implements HookMaker {
         }
         // Create the dex file and load it.
         try {
-            loader = mDexMaker.generateAndLoad(mAppClassLoader, new File(ConfigManager.getCachePath("")), dexName, true);
-            File dexFile = new File(ConfigManager.getCachePath(dexName));
+            loader = mDexMaker.generateAndLoad(mAppClassLoader, new File(serviceClient.getCachePath("")), dexName, true);
+            File dexFile = new File(serviceClient.getCachePath(dexName));
             dexFile.setWritable(true, false);
             dexFile.setReadable(true, false);
         } catch (IOException e) {

@@ -22,8 +22,6 @@ package io.github.lsposed.lspd.util;
 
 import android.text.TextUtils;
 
-import io.github.lsposed.lspd.nativebridge.ConfigManager;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -89,9 +87,5 @@ public class FileUtils {
             return dataDir;
         }
         return dataDir.substring(lastIndex + 1);
-    }
-
-    public static String getDataPathPrefix() {
-        return ConfigManager.getDataPathPrefix() + "/";
     }
 }

@@ -26,13 +26,11 @@ public interface Router {
 
     void prepare(boolean isSystem);
 
-    String parsePackageName(String appDataDir);
-
-    void installBootstrapHooks(boolean isSystem);
+    void installBootstrapHooks(boolean isSystem, String appDataDir);
 
     void loadModulesSafely(boolean callInitZygote);
 
-    void startBootstrapHook(boolean isSystem);
+    void startBootstrapHook(boolean isSystem, String appDataDir);
 
     void startSystemServerHook();
 

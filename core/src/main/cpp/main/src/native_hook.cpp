@@ -21,7 +21,6 @@
 #include <dlfcn.h>
 #include <string>
 #include <vector>
-#include <config_manager.h>
 #include <art/runtime/runtime.h>
 #include <dl_util.h>
 #include <art/runtime/jni_env_ext.h>

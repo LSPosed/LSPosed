@@ -18,7 +18,7 @@
  * Copyright (C) 2021 LSPosed Contributors
  */
 
-package io.github.lsposed.lspd._hooker.impl;
+package io.github.lsposed.lspd.hooker;
 
 import android.app.AndroidAppHelper;
 import android.app.LoadedApk;
@@ -33,7 +33,7 @@ import de.robv.android.xposed.XposedInit;
 
 // when a package is loaded for an existing process, trigger the callbacks as well
 // ed: remove resources related hooking
-public class LoadedApkCstr extends XC_MethodHook {
+public class LoadedApkCstrHooker extends XC_MethodHook {
 
     @Override
     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
@@ -70,7 +70,7 @@ public class LoadedApkCstr extends XC_MethodHook {
                 return;
             }
 
-            LoadedApkGetCL hook = new LoadedApkGetCL(loadedApk, packageName,
+            LoadedApkGetCLHooker hook = new LoadedApkGetCLHooker(loadedApk, packageName,
                     AndroidAppHelper.currentProcessName(), false);
             hook.setUnhook(XposedHelpers.findAndHookMethod(
                     LoadedApk.class, "getClassLoader", hook));

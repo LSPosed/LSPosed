@@ -18,20 +18,22 @@
  * Copyright (C) 2021 LSPosed Contributors
  */
 
-package io.github.lsposed.lspd._hooker.impl;
+package io.github.lsposed.lspd.hooker;
 
 import android.app.LoadedApk;
+import android.os.IBinder;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import io.github.lsposed.lspd.hooker.XposedInstallerHooker;
-import io.github.lsposed.lspd.nativebridge.ConfigManager;
 import io.github.lsposed.lspd.util.Hookers;
 import io.github.lsposed.lspd.util.InstallerVerifier;
 
-public class LoadedApkGetCL extends XC_MethodHook {
+import static io.github.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
+
+public class LoadedApkGetCLHooker extends XC_MethodHook {
 
     private final LoadedApk loadedApk;
     private final String packageName;
@@ -39,8 +41,8 @@ public class LoadedApkGetCL extends XC_MethodHook {
     private final boolean isFirstApplication;
     private Unhook unhook;
 
-    public LoadedApkGetCL(LoadedApk loadedApk, String packageName, String processName,
-                          boolean isFirstApplication) {
+    public LoadedApkGetCLHooker(LoadedApk loadedApk, String packageName, String processName,
+                                boolean isFirstApplication) {
         this.loadedApk = loadedApk;
         this.packageName = packageName;
         this.processName = processName;
@@ -76,9 +78,10 @@ public class LoadedApkGetCL extends XC_MethodHook {
             lpparam.appInfo = loadedApk.getApplicationInfo();
             lpparam.isFirstApplication = this.isFirstApplication;
 
-            if (packageName.equals(ConfigManager.getInstallerPackageName())) {
+            IBinder binder = serviceClient.requestManagerBinder();
+            if (binder != null) {
                 if (InstallerVerifier.verifyInstallerSignature(loadedApk.getApplicationInfo())) {
-                    XposedInstallerHooker.hookXposedInstaller(lpparam.classLoader);
+                    XposedInstallerHooker.hookXposedInstaller(lpparam.classLoader, binder);
                 } else {
                     InstallerVerifier.hookXposedInstaller(classLoader);
                 }

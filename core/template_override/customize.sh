@@ -223,6 +223,10 @@ else
   fi
 fi
 touch /data/adb/lspd/new_install || abortC "! ${LANG_CUST_ERR_CONF_FIRST}"
+ui_print "- ${LANG_CUST_INST_COPY_LIB}"
+mkdir -p /data/adb/lspd/config
+rm -rf "/data/adb/lspd/framework"
+mv "${MODPATH}/system/framework" "/data/adb/lspd/framework"
 set_perm_recursive /data/adb/lspd root root 0700 0600 "u:object_r:magisk_file:s0" || abortC "! ${LANG_CUST_ERR_PERM}"
 mkdir -p /data/misc/$MISC_PATH/0/conf/ || abortC "! ${LANG_CUST_ERR_CONF_CREATE}"
 set_perm /data/misc/$MISC_PATH root root 0771 "u:object_r:magisk_file:s0" || abortC "! ${LANG_CUST_ERR_PERM}"
@@ -230,9 +234,9 @@ echo "rm -rf /data/misc/$MISC_PATH" >> "${MODPATH}/uninstall.sh" || abortC "! ${
 echo "[[ -f /data/adb/lspd/new_install ]] || rm -rf /data/adb/lspd" >> "${MODPATH}/uninstall.sh" || abortC "! ${LANG_CUST_ERR_CONF_UNINST}"
 
 if [ $VARIANT == 17 ]; then  # YAHFA
-  echo "1" > /data/misc/$MISC_PATH/variant
+  echo "1" > /data/adb/lspd/config/variant
 elif [ $VARIANT == 18 ]; then  # SandHook
-  echo "2" > /data/misc/$MISC_PATH/variant
+  echo "2" > /data/adb/lspd/config/variant
 else
   abortC "${LANG_UTIL_ERR_VARIANT_UNSUPPORT} ${VARIANT}"
 fi
@@ -241,12 +245,6 @@ if [[ ! -e /data/misc/$MISC_PATH/disable_verbose_log ]]; then
     echo "1" > /data/misc/$MISC_PATH/disable_verbose_log
 fi
 
-ui_print "- ${LANG_CUST_INST_COPY_LIB}"
-
-rm -rf "/data/misc/$MISC_PATH/framework"
-mv "${MODPATH}/system/framework" "/data/misc/$MISC_PATH/framework"
-
-set_perm_recursive /data/misc/$MISC_PATH/framework root root 0755 0644 "u:object_r:magisk_file:s0" || abortC "! ${LANG_CUST_ERR_PERM}"
 
 mkdir -p /data/misc/$MISC_PATH/cache
 rm /data/misc/$MISC_PATH/cache/*

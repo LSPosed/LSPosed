@@ -8,7 +8,6 @@ import android.os.ServiceManager;
 
 import java.util.ArrayList;
 
-import io.github.lsposed.lspd.nativebridge.ConfigManager;
 import io.github.lsposed.lspd.utils.ParceledListSlice;
 
 public class PackageService {
@@ -33,15 +32,6 @@ public class PackageService {
         IPackageManager pm = getPackageManager();
         if (pm == null) return new String[0];
         return pm.getPackagesForUid(uid);
-    }
-
-    public static boolean isInstaller(int uid) throws RemoteException {
-        boolean res = false;
-        String InstallerPackageName = ConfigManager.getInstallerPackageName();
-        for (String pkg : getPackagesForUid(uid)) {
-            res = res || InstallerPackageName.equals(pkg);
-        }
-        return res;
     }
 
     public static ParceledListSlice<PackageInfo> getInstalledPackagesFromAllUsers(int flags) throws RemoteException {

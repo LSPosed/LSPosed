@@ -29,7 +29,6 @@ import static io.github.lsposed.lspd.service.ServiceManager.TAG;
 
 // This config manager assume uid won't change when our service is off.
 // Otherwise, user should maintain it manually.
-// TODO: manager package name supports
 public class ConfigManager {
     static ConfigManager instance = null;
 
@@ -52,6 +51,9 @@ public class ConfigManager {
     private String manager = null;
     private int managerUid = -1;
 
+    final private File miscFile = new File(basePath, "misc_path");
+    private String miscPath = null;
+
     final private File selinuxPath = new File("/sys/fs/selinux/enforce");
     // only check on boot
     final private boolean isPermissive;
@@ -69,7 +71,7 @@ public class ConfigManager {
     };
 
     private String readText(@NonNull File file) throws IOException {
-        return new String(Files.readAllBytes(file.toPath()));
+        return new String(Files.readAllBytes(file.toPath())).trim();
     }
 
     private String readText(@NonNull File file, String defaultValue) {
@@ -108,6 +110,7 @@ public class ConfigManager {
         resourceHook = resourceHookSwitch.exists();
         variant = readInt(variantSwitch, -1);
         verboseLog = readInt(verboseLogSwitch, 0) == 1;
+        miscPath = "/data/misc/" + readText(miscFile, "lspd");
         updateManager();
     }
 
@@ -332,5 +335,13 @@ public class ConfigManager {
 
     public boolean isManager(int uid) {
         return uid == managerUid;
+    }
+
+    public String getCachePath(String fileName) {
+        return miscPath + File.separator + "cache" + File.separator + fileName;
+    }
+
+    public String getPrefsPath(String fileName) {
+        return miscPath + File.separator + "prefs" + File.separator + fileName;
     }
 }

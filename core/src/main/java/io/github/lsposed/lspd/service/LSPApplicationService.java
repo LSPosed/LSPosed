@@ -6,6 +6,7 @@ import android.os.RemoteException;
 import android.util.Log;
 import android.util.Pair;
 
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -35,6 +36,30 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
         return ConfigManager.getInstance().variant();
     }
 
+    @Override
+    public boolean isResourcesHookEnabled() throws RemoteException {
+        ensureRegistered();
+        return ConfigManager.getInstance().resourceHook();
+    }
+
+    @Override
+    public List<String> getModulesList() throws RemoteException {
+        ensureRegistered();
+        return ConfigManager.getInstance().getModulesPathForUid(Binder.getCallingUid());
+    }
+
+    @Override
+    public String getPrefsPath(String packageName) throws RemoteException {
+        ensureRegistered();
+        return ConfigManager.getInstance().getPrefsPath(packageName);
+    }
+
+    @Override
+    public String getCachePath(String fileName) throws RemoteException {
+        ensureRegistered();
+        return ConfigManager.getInstance().getCachePath(fileName);
+    }
+
     // TODO: check if module
     @Override
     public IBinder requestModuleBinder() throws RemoteException {
@@ -42,7 +67,6 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
         return ServiceManager.getModuleService();
     }
 
-    // TODO: check if manager
     @Override
     public IBinder requestManagerBinder() throws RemoteException {
         ensureRegistered();
