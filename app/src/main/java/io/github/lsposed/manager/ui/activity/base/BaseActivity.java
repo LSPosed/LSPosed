@@ -33,7 +33,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import io.github.lsposed.manager.App;
 import io.github.lsposed.manager.BuildConfig;
-import io.github.lsposed.manager.Constants;
+import io.github.lsposed.manager.ConfigManager;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.util.NavUtil;
 import io.github.lsposed.manager.util.theme.ThemeUtil;
@@ -53,7 +53,7 @@ public class BaseActivity extends MaterialActivity {
         super.onCreate(savedInstanceState);
 
         // make sure the versions are consistent
-        String coreVersionStr = Constants.getXposedVersion();
+        String coreVersionStr = ConfigManager.getXposedVersionName();
         if (coreVersionStr != null) {
             if (!BuildConfig.VERSION_NAME.equals(coreVersionStr)) {
                 new AlertDialog.Builder(this)

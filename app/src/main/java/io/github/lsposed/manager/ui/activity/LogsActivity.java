@@ -56,6 +56,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import io.github.lsposed.manager.BuildConfig;
+import io.github.lsposed.manager.ConfigManager;
 import io.github.lsposed.manager.Constants;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.databinding.ActivityLogsBinding;
@@ -115,14 +116,10 @@ public class LogsActivity extends BaseActivity {
         binding.recyclerView.setAdapter(adapter);
         layoutManager = new LinearLayoutManagerFix(this);
         binding.recyclerView.setLayoutManager(layoutManager);
-        try {
-            if (Files.readAllBytes(Paths.get(Constants.getMiscDir(), "disable_verbose_log"))[0] == 49) {
-                binding.slidingTabs.setVisibility(View.GONE);
-            } else {
-                RecyclerViewKt.addVerticalPadding(binding.recyclerView, 48, 0);
-            }
-        } catch (Exception e) {
+        if (!ConfigManager.isVerboseLogEnabled()) {
             binding.slidingTabs.setVisibility(View.GONE);
+        } else {
+            RecyclerViewKt.addVerticalPadding(binding.recyclerView, 48, 0);
         }
         binding.slidingTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override

@@ -143,8 +143,8 @@ dependencies {
     implementation 'me.zhanghai.android.appiconloader:appiconloader-glide:1.2.0'
     implementation 'me.zhanghai.android.fastscroll:library:1.1.5'
     implementation files('libs/WeatherView-2.0.3.aar')
-    compileOnly project(":hiddenapi-stubs")
     implementation project(':manager-service')
+    compileOnly project(":hiddenapi-stubs")
 }
 
 configurations {

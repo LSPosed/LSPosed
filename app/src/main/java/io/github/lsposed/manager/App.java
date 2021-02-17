@@ -42,8 +42,6 @@ import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import rikka.material.app.DayNightDelegate;
 
-import static io.github.lsposed.manager.receivers.LSPosedManagerServiceClient.testBinder;
-
 public class App extends Application {
     public static final String TAG = "LSPosedManager";
     @SuppressLint("StaticFieldLeak")
@@ -63,7 +61,6 @@ public class App extends Application {
 
     public void onCreate() {
         super.onCreate();
-        testBinder();
         if (!BuildConfig.DEBUG) {
             try {
                 Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {

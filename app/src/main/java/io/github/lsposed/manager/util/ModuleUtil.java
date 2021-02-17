@@ -25,12 +25,10 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -40,8 +38,7 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import io.github.lsposed.manager.App;
-import io.github.lsposed.manager.Constants;
-import io.github.lsposed.manager.adapters.AppHelper;
+import io.github.lsposed.manager.ConfigManager;
 import io.github.lsposed.manager.repo.RepoLoader;
 import io.github.lsposed.manager.repo.model.OnlineModule;
 
@@ -57,7 +54,7 @@ public final class ModuleUtil {
 
     private ModuleUtil() {
         pm = App.getInstance().getPackageManager();
-        enabledModules = AppHelper.getEnabledModuleList();
+        enabledModules = new ArrayList<>(Arrays.asList(ConfigManager.getEnabledModules()));
     }
 
     public static synchronized ModuleUtil getInstance() {
@@ -148,16 +145,18 @@ public final class ModuleUtil {
         return installedModules;
     }
 
-    public void setModuleEnabled(String packageName, boolean enabled) {
+    public boolean setModuleEnabled(String packageName, boolean enabled) {
+        if (!ConfigManager.setModuleEnabled(packageName, enabled)) {
+            return false;
+        }
         if (enabled) {
             if (!enabledModules.contains(packageName)) {
                 enabledModules.add(packageName);
-                updateModulesList();
             }
         } else {
             enabledModules.remove(packageName);
-            updateModulesList();
         }
+        return true;
     }
 
     public boolean isModuleEnabled(String packageName) {
@@ -179,7 +178,7 @@ public final class ModuleUtil {
     }
 
     public synchronized void updateModulesList() {
-        try {
+        /*try {
             Log.i(App.TAG, "ModuleUtil -> updating modules.list");
             PrintWriter modulesList = new PrintWriter(Constants.getModulesListFile());
             PrintWriter enabledModulesList = new PrintWriter(Constants.getEnabledModulesListFile());
@@ -192,7 +191,7 @@ public final class ModuleUtil {
             enabledModulesList.close();
         } catch (IOException e) {
             Log.e(App.TAG, "ModuleUtil -> cannot write " + Constants.getModulesListFile(), e);
-        }
+        }*/
     }
 
     public void addListener(ModuleListener listener) {
