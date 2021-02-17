@@ -28,7 +28,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.ParcelFileDescriptor;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -76,7 +75,7 @@ import rikka.recyclerview.RecyclerViewKt;
 
 @SuppressLint("NotifyDataSetChanged")
 public class LogsActivity extends BaseActivity {
-    private int logType = 0;
+    private boolean verbose = false;
     private LogsAdapter adapter;
     private final Handler handler = new Handler(Looper.getMainLooper());
     private ActivityLogsBinding binding;
@@ -96,7 +95,7 @@ public class LogsActivity extends BaseActivity {
                             if (os == null) {
                                 return;
                             }
-                            ParcelFileDescriptor parcelFileDescriptor = getLogFile();
+                            ParcelFileDescriptor parcelFileDescriptor = ConfigManager.getLogs(verbose);
                             if (parcelFileDescriptor == null) {
                                 return;
                             }
@@ -110,16 +109,6 @@ public class LogsActivity extends BaseActivity {
                     });
                 }
             });
-
-    private ParcelFileDescriptor getLogFile() {
-        switch (logType) {
-            case 0:
-            default:
-                return ConfigManager.getModulesLog();
-            case 1:
-                return ConfigManager.getVerboseLog();
-        }
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -160,7 +149,7 @@ public class LogsActivity extends BaseActivity {
         binding.slidingTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                logType = tab.getPosition();
+                verbose = tab.getPosition() == 1;
                 reloadErrorLog();
             }
 
@@ -192,7 +181,6 @@ public class LogsActivity extends BaseActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.menu_scroll_top) {
-            Log.e("Test", adapter.getItemCount() + "");
             if (layoutManager.findFirstVisibleItemPosition() > 1000) {
                 binding.recyclerView.scrollToPosition(0);
             } else {
@@ -226,30 +214,24 @@ public class LogsActivity extends BaseActivity {
     }
 
     private void reloadErrorLog() {
-        ParcelFileDescriptor parcelFileDescriptor = getLogFile();
+        ParcelFileDescriptor parcelFileDescriptor = ConfigManager.getLogs(verbose);
         if (parcelFileDescriptor != null) {
             new LogsReader().execute(parcelFileDescriptor.getFileDescriptor());
         }
     }
 
     private void clear() {
-        try {
-            ParcelFileDescriptor parcelFileDescriptor = getLogFile();
-            if (parcelFileDescriptor == null) {
-                return;
-            }
-            OutputStream os = new FileOutputStream(parcelFileDescriptor.getFileDescriptor());
-            os.close();
+        if (ConfigManager.clearLogs(verbose)) {
             adapter.setEmpty();
             Snackbar.make(binding.snackbar, R.string.logs_cleared, Snackbar.LENGTH_SHORT).show();
             reloadErrorLog();
-        } catch (IOException e) {
-            Snackbar.make(binding.snackbar, getResources().getString(R.string.logs_clear_failed) + "n" + e.getMessage(), Snackbar.LENGTH_LONG).show();
+        } else {
+            Snackbar.make(binding.snackbar, R.string.logs_clear_failed_2, Snackbar.LENGTH_SHORT).show();
         }
     }
 
     private void send() {
-        ParcelFileDescriptor parcelFileDescriptor = getLogFile();
+        ParcelFileDescriptor parcelFileDescriptor = ConfigManager.getLogs(verbose);
         if (parcelFileDescriptor == null) {
             return;
         }

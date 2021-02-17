@@ -38,4 +38,6 @@ interface ILSPManagerService {
     String getXposedVersionName() = 19;
 
     int getXposedApiVersion() = 20;
+
+    boolean clearLogs(boolean verbose) = 21;
 }

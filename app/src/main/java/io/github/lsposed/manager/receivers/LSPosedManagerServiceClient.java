@@ -119,4 +119,9 @@ public class LSPosedManagerServiceClient {
         ensureService();
         return service.getModulesLog();
     }
+
+    public static boolean clearLogs(boolean verbose) throws RemoteException, NullPointerException {
+        ensureService();
+        return service.clearLogs(verbose);
+    }
 }

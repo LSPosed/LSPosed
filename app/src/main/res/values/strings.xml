@@ -74,7 +74,6 @@
     <string name="logs_save_failed">Failed to save:</string>
     <string name="menuClearLog">Clear log now</string>
     <string name="logs_cleared">Log successfully cleared.</string>
-    <string name="logs_clear_failed">Could not clear the log:</string>
     <string name="log_is_empty">Log is empty.</string>
 
     <!-- About tab -->
@@ -172,4 +171,5 @@
     <string name="module_release_load_more">Show older versions</string>
     <string name="module_release_no_more">No more release</string>
     <string name="theme_color">Theme color</string>
+    <string name="logs_clear_failed_2">Could not clear the log</string>
 </resources>
