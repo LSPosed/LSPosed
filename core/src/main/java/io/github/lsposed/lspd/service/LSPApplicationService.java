@@ -2,6 +2,7 @@ package io.github.lsposed.lspd.service;
 
 import android.os.Binder;
 import android.os.IBinder;
+import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.util.Log;
 import android.util.Pair;
@@ -62,6 +63,12 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
     public String getCachePath(String fileName) throws RemoteException {
         ensureRegistered();
         return ConfigManager.getInstance().getCachePath(fileName);
+    }
+
+    @Override
+    public ParcelFileDescriptor getModuleLogger() throws RemoteException {
+        ensureRegistered();
+        return ConfigManager.getInstance().getModulesLog(ParcelFileDescriptor.MODE_WRITE_ONLY | ParcelFileDescriptor.MODE_APPEND);
     }
 
     // TODO: check if module

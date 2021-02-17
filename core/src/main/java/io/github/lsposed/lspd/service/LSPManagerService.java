@@ -111,7 +111,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     @Override
     public ParcelFileDescriptor getModulesLog() {
-        return ConfigManager.getInstance().getModulesLog();
+        return ConfigManager.getInstance().getModulesLog(ParcelFileDescriptor.MODE_READ_ONLY);
     }
 
     @Override

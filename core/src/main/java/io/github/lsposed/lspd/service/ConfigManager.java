@@ -367,9 +367,9 @@ public class ConfigManager {
         return variant;
     }
 
-    public ParcelFileDescriptor getModulesLog() {
+    public ParcelFileDescriptor getModulesLog(int mode) {
         try {
-            return ParcelFileDescriptor.open(modulesLogPath, ParcelFileDescriptor.MODE_READ_ONLY);
+            return ParcelFileDescriptor.open(modulesLogPath, mode | ParcelFileDescriptor.MODE_CREATE);
         } catch (FileNotFoundException e) {
             Log.e(TAG, Log.getStackTraceString(e));
             return null;

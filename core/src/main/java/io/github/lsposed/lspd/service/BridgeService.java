@@ -273,7 +273,7 @@ public class BridgeService {
         try {
             ILSPosedService service = ILSPosedService.Stub.asInterface(binder);
             ILSPApplicationService applicationService = service.requestApplicationService(Process.myUid(), Process.myPid());
-            if (applicationService != null) applicationService.asBinder();
+            if (applicationService != null) return applicationService.asBinder();
         } catch (Throwable e) {
             Log.e(TAG, Log.getStackTraceString(e));
         }

@@ -144,15 +144,16 @@ fi
 
 chcon -R u:object_r:system_file:s0 "${MODDIR}"
 chcon -R u:object_r:system_file:s0 "/data/adb/lspd"
+rm -rf ${LOG_PATH}.old
+mv ${LOG_PATH} ${LOG_PATH}.old
+mkdir -p ${LOG_PATH}
+chcon -R u:object_r:magisk_file:s0 ${LOG_PATH}
 
 if [[ ! -z "${MISC_PATH}" ]]; then
     mkdir -p "${BASE_PATH}/cache"
     chcon -R u:object_r:magisk_file:s0 "${BASE_PATH}"
     chmod 771 "${BASE_PATH}"
     chmod 777 "${BASE_PATH}/cache"
-    rm -rf ${LOG_PATH}.old
-    mv ${LOG_PATH} ${LOG_PATH}.old
-    mkdir -p ${LOG_PATH}
     print_log_head "${LOG_PATH}/modules.log"
     # start_verbose_log_catcher
     start_log_catcher all "LSPosed:V XSharedPreferences:V LSPosed-Bridge:V LSPosedManager:V *:F" true ${LOG_VERBOSE}

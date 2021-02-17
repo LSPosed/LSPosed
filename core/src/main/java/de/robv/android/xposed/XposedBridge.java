@@ -50,7 +50,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import de.robv.android.xposed.callbacks.XCallback;
 import external.com.android.dx.DexMaker;
 import external.com.android.dx.TypeId;
-import io.github.lsposed.lspd.nativebridge.Logger;
+import io.github.lsposed.lspd.nativebridge.ModuleLogger;
 
 import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
@@ -171,7 +171,7 @@ public final class XposedBridge {
 	 */
 	public synchronized static void log(String text) {
 		Log.i(TAG, text);
-		Logger.log(text);
+		ModuleLogger.log(text);
 	}
 
 	/**
@@ -185,7 +185,7 @@ public final class XposedBridge {
 	public synchronized static void log(Throwable t) {
 		String logStr = Log.getStackTraceString(t);
 		Log.e(TAG, logStr);
-		Logger.log(logStr);
+		ModuleLogger.log(logStr);
 	}
 
 	/**
