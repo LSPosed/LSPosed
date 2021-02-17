@@ -126,7 +126,7 @@
     <string name="menu_show_modules">Modules</string>
     <string name="failed_to_save_scope_list">Failed save scope list</string>
     <string name="module_settings">Module settings</string>
-    <string name="app_description">%s\nVersion: %s</string>
+    <string name="app_description">%s\nVersion %s</string>
     <string name="use_recommended">Recommended</string>
     <string name="no_scope_selected_has_recommended">You did not select any app. Select recommended apps?</string>
     <string name="use_recommended_message">Select recommended apps?</string>
@@ -171,5 +171,5 @@
     <string name="module_release_load_more">Show older versions</string>
     <string name="module_release_no_more">No more release</string>
     <string name="theme_color">Theme color</string>
-    <string name="logs_clear_failed_2">Could not clear the log</string>
+    <string name="logs_clear_failed_2">Failed to clear the log</string>
 </resources>
