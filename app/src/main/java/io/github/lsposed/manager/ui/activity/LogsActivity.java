@@ -74,10 +74,9 @@ import io.github.lsposed.manager.util.LinearLayoutManagerFix;
 import rikka.core.os.FileUtils;
 import rikka.recyclerview.RecyclerViewKt;
 
+@SuppressLint("NotifyDataSetChanged")
 public class LogsActivity extends BaseActivity {
     private int logType = 0;
-    private final ParcelFileDescriptor modulesLog = ConfigManager.getModulesLog();
-    private final ParcelFileDescriptor allLog = ConfigManager.getVerboseLog();
     private LogsAdapter adapter;
     private final Handler handler = new Handler(Looper.getMainLooper());
     private ActivityLogsBinding binding;
@@ -116,9 +115,9 @@ public class LogsActivity extends BaseActivity {
         switch (logType) {
             case 0:
             default:
-                return modulesLog;
+                return ConfigManager.getModulesLog();
             case 1:
-                return allLog;
+                return ConfigManager.getVerboseLog();
         }
     }
 
