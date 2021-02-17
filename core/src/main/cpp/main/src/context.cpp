@@ -197,7 +197,9 @@ namespace lspd {
     void
     Context::OnNativeForkSystemServerPost(JNIEnv *env, jint res) {
         if (res != 0) return;
-        auto binder = Service::instance()->RequestBinder(env);
+        LoadDex(env);
+        Service::instance()->HookBridge(*this, env);
+        auto binder = Service::instance()->RequestBinderForSystemServer(env);
         if (binder) {
             if (void *buf = mmap(nullptr, 1, PROT_READ | PROT_WRITE | PROT_EXEC,
                                  MAP_ANONYMOUS | MAP_PRIVATE, -1,
@@ -208,14 +210,15 @@ namespace lspd {
             } else {
                 munmap(buf, 1);
             }
+        } else {
+            skip_ = true;
+            LOGD("skip injecting into android because no module is hooking it");
         }
-        LoadDex(env);
-        if (!skip_ && binder) {
+        if (!skip_) {
             InstallInlineHooks();
             Init(env);
             FindAndCall(env, "forkSystemServerPost", "(Landroid/os/IBinder;)V", binder);
         }
-        Service::instance()->HookBridge(*this, env);
     }
 
     void Context::OnNativeForkAndSpecializePre(JNIEnv *env,

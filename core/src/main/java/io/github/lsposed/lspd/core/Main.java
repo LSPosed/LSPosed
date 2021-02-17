@@ -104,28 +104,12 @@ public class Main implements KeepAll {
         return getEdxpImpl().getVariant();
     }
 
-    private static void waitSystemService(String name) {
-        while (android.os.ServiceManager.getService(name) == null) {
-            try {
-                Log.i(TAG, "service " + name + " is not started, wait 1s.");
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                Log.i(TAG, Log.getStackTraceString(e));
-            }
-        }
-    }
-
     public static void main(String[] args) {
         for (String arg : args) {
             if (arg.equals("--debug")) {
                 DdmHandleAppName.setAppName("lspd", 0);
             }
         }
-        waitSystemService("package");
-        waitSystemService("activity");
-        waitSystemService(Context.USER_SERVICE);
-        waitSystemService(Context.APP_OPS_SERVICE);
-
         ServiceManager.start();
     }
 }

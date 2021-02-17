@@ -6,7 +6,6 @@ import android.os.RemoteException;
 import android.util.Log;
 import android.util.Pair;
 
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -22,6 +21,7 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
         handles.add(handle);
         int uid = Binder.getCallingUid();
         int pid = Binder.getCallingPid();
+
         cache.add(new Pair<>(uid, pid));
         handle.linkToDeath(new DeathRecipient() {
             @Override
