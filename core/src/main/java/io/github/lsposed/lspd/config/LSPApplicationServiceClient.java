@@ -1,10 +1,12 @@
 package io.github.lsposed.lspd.config;
 
 import android.os.IBinder;
+import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 
 import java.io.File;
 
+import io.github.lsposed.lspd.service.ConfigManager;
 import io.github.lsposed.lspd.service.ILSPApplicationService;
 import io.github.lsposed.lspd.util.Utils;
 
@@ -112,6 +114,15 @@ public class LSPApplicationServiceClient implements ILSPApplicationService {
             if (baseCachePath == null)
                 baseCachePath = service.getCachePath("");
             return baseCachePath + File.separator + fileName;
+        } catch (RemoteException | NullPointerException ignored) {
+        }
+        return null;
+    }
+
+    @Override
+    public ParcelFileDescriptor getModuleLogger() {
+        try {
+            return service.getModuleLogger();
         } catch (RemoteException | NullPointerException ignored) {
         }
         return null;

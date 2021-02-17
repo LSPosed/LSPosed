@@ -25,10 +25,12 @@ import android.os.Environment;
 import java.io.File;
 
 import io.github.lsposed.lspd.deopt.PrebuiltMethodsDeopter;
+import io.github.lsposed.lspd.nativebridge.ModuleLogger;
 import io.github.lsposed.lspd.util.Utils;
 
 import de.robv.android.xposed.SELinuxHelper;
-import de.robv.android.xposed.XposedInit;
+
+import static io.github.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
 
 public class NormalProxy extends BaseProxy {
 
@@ -47,6 +49,8 @@ public class NormalProxy extends BaseProxy {
 
 
     private void forkPostCommon(boolean isSystem, String appDataDir, String niceName) {
+        // init logger
+        ModuleLogger.initLogger(serviceClient.getModuleLogger());
         SELinuxHelper.initOnce();
         mRouter.initResourcesHook();
         mRouter.prepare(isSystem);

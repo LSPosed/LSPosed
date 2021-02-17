@@ -26,25 +26,23 @@
 #include <fcntl.h>
 
 namespace lspd {
-    LSP_DEF_NATIVE_METHOD(void, Logger, nativeLog, jstring jstr) {
-        // TODO: get log path
-//        static int fd = open(ConfigManager::GetModulesLogPath().c_str(), O_APPEND | O_WRONLY);
-//        if (fd < 0) {
-//            LOGD("Logger fail: %s", strerror(errno));
-//            return;
-//        }
-//        JUTFString str(env, jstr);
-//        int res = write(fd, str.get(), std::strlen(str.get()));
-//        if (res < 0) {
-//            LOGD("Logger fail: %s", strerror(errno));
-//        }
+    LSP_DEF_NATIVE_METHOD(void, ModuleLogger, nativeLog, int fd, jstring jstr) {
+        if (fd < 0) {
+            LOGE("fd is -1");
+            return;
+        }
+        JUTFString str(env, jstr);
+        int res = write(fd, str.get(), std::strlen(str.get()));
+        if (res < 0) {
+            LOGD("Logger fail: %s", strerror(errno));
+        }
     }
 
     static JNINativeMethod gMethods[] = {
-            LSP_NATIVE_METHOD(Logger, nativeLog, "(Ljava/lang/String;)V")
+            LSP_NATIVE_METHOD(ModuleLogger, nativeLog, "(ILjava/lang/String;)V")
     };
 
     void RegisterLogger(JNIEnv *env) {
-        REGISTER_LSP_NATIVE_METHODS(Logger);
+        REGISTER_LSP_NATIVE_METHODS(ModuleLogger);
     }
 }

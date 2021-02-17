@@ -20,21 +20,33 @@
 
 package io.github.lsposed.lspd.nativebridge;
 
-import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
 import android.app.ActivityThread;
-import android.app.AndroidAppHelper;
+import android.os.ParcelFileDescriptor;
 import android.os.Process;
 
-public class Logger {
-    static SimpleDateFormat logDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss", Locale.getDefault());
+import io.github.lsposed.lspd.util.Utils;
 
-    public static native void nativeLog(String str);
+public class ModuleLogger {
+    static SimpleDateFormat logDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss", Locale.getDefault());
+    static int fd = -1;
+
+    public static void initLogger(ParcelFileDescriptor fileDescriptor) {
+        if (fd == -1 && fileDescriptor!= null) {
+            fd = fileDescriptor.getFd();
+        }
+    }
+
+    private static native void nativeLog(int fd, String logStr);
 
     public static void log(String str) {
+        if (fd == -1) {
+            Utils.logE("Logger is not initialized");
+            return;
+        };
         StringBuilder sb = new StringBuilder();
         sb.append(logDateFormat.format(new Date()));
         sb.append(' ');
@@ -49,6 +61,6 @@ public class Logger {
         sb.append("LSPosedBridge: ");
         sb.append(str);
         sb.append('\n');
-        nativeLog(sb.toString());
+        nativeLog(fd, sb.toString());
     }
 }
