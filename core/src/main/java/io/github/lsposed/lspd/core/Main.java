@@ -43,7 +43,7 @@ public class Main implements KeepAll {
         LSPApplicationServiceClient.Init(binder);
         serviceClient.registerHeartBeat(heartBeatBinder);
         final int variant = serviceClient.getVariant();
-        Impl lspd = getEdxpImpl(variant);
+        Impl lspd = getImpl(variant);
         if (lspd == null || !lspd.isInitialized()) {
             Utils.logE("Not started up");
             return;
@@ -55,18 +55,18 @@ public class Main implements KeepAll {
         LSPApplicationServiceClient.Init(binder);
         serviceClient.registerHeartBeat(heartBeatBinder);
         final int variant = serviceClient.getVariant();
-        Impl lspd = getEdxpImpl(variant);
+        Impl lspd = getImpl(variant);
         if (lspd == null || !lspd.isInitialized()) {
             return;
         }
         lspd.getNormalProxy().forkSystemServerPost();
     }
 
-    public static synchronized boolean setEdxpImpl(Impl lspd) {
+    public static synchronized boolean setImpl(Impl lspd) {
         return lspdImplRef.compareAndSet(null, lspd);
     }
 
-    public static synchronized Impl getEdxpImpl(int variant) {
+    public static synchronized Impl getImpl(int variant) {
         Impl lspd = lspdImplRef.get();
         if (lspd != null) {
             return lspd;
@@ -90,13 +90,8 @@ public class Main implements KeepAll {
         return lspdImplRef.get();
     }
 
-    public static synchronized Impl getEdxpImpl() {
+    public static synchronized Impl getImpl() {
         return lspdImplRef.get();
-    }
-
-    @Impl.Variant
-    public static synchronized int getEdxpVariant() {
-        return getEdxpImpl().getVariant();
     }
 
     public static void main(String[] args) {

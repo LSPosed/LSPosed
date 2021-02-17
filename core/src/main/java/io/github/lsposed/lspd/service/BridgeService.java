@@ -37,30 +37,40 @@ public class BridgeService {
     private static ILSPosedService service = null;
 
     // for service
-    private static final IBinder.DeathRecipient BRIDGE_SERVICE_DEATH_RECIPIENT = () -> {
-        Log.i(TAG, "service " + SERVICE_NAME + " is dead. ");
+    static class BridgeServiceDeathRecipient implements IBinder.DeathRecipient {
+        private final IBinder bridgeService;
 
-        try {
-            @SuppressWarnings("JavaReflectionMemberAccess")
-            Field field = ServiceManager.class.getDeclaredField("sServiceManager");
-            field.setAccessible(true);
-            field.set(null, null);
-
-            //noinspection JavaReflectionMemberAccess
-            field = ServiceManager.class.getDeclaredField("sCache");
-            field.setAccessible(true);
-            Object sCache = field.get(null);
-            if (sCache instanceof Map) {
-                //noinspection rawtypes
-                ((Map) sCache).clear();
-            }
-            Log.i(TAG, "clear ServiceManager");
-        } catch (Throwable e) {
-            Log.w(TAG, "clear ServiceManager: " + Log.getStackTraceString(e));
+        BridgeServiceDeathRecipient(IBinder bridgeService) throws RemoteException {
+            this.bridgeService = bridgeService;
+            bridgeService.linkToDeath(this, 0);
         }
+        @Override
+        public void binderDied() {
+            Log.i(TAG, "service " + SERVICE_NAME + " is dead. ");
 
-        sendToBridge(serviceBinder, true);
-    };
+            try {
+                @SuppressWarnings("JavaReflectionMemberAccess")
+                Field field = ServiceManager.class.getDeclaredField("sServiceManager");
+                field.setAccessible(true);
+                field.set(null, null);
+
+                //noinspection JavaReflectionMemberAccess
+                field = ServiceManager.class.getDeclaredField("sCache");
+                field.setAccessible(true);
+                Object sCache = field.get(null);
+                if (sCache instanceof Map) {
+                    //noinspection rawtypes
+                    ((Map) sCache).clear();
+                }
+                Log.i(TAG, "clear ServiceManager");
+            } catch (Throwable e) {
+                Log.w(TAG, "clear ServiceManager: " + Log.getStackTraceString(e));
+            }
+
+            bridgeService.unlinkToDeath(this, 0);
+            sendToBridge(serviceBinder, true);
+        }
+    }
 
     // for client
     private static final IBinder.DeathRecipient LSPSERVICE_DEATH_RECIPIENT = () -> {
@@ -102,7 +112,7 @@ public class BridgeService {
         }
 
         try {
-            bridgeService.linkToDeath(BRIDGE_SERVICE_DEATH_RECIPIENT, 0);
+            new BridgeServiceDeathRecipient(bridgeService);
         } catch (Throwable e) {
             Log.w(TAG, "linkToDeath " + Log.getStackTraceString(e));
             sendToBridge(binder, false);
