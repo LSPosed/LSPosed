@@ -113,4 +113,9 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     public ParcelFileDescriptor getModulesLog() {
         return ConfigManager.getInstance().getModulesLog();
     }
+
+    @Override
+    public boolean clearLogs(boolean verbose) {
+        return ConfigManager.getInstance().clearLogs(verbose);
+    }
 }

@@ -22,6 +22,7 @@ package io.github.lsposed.manager;
 import android.content.pm.PackageInfo;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +35,7 @@ public class ConfigManager {
         try {
             return LSPosedManagerServiceClient.getXposedApiVersion();
         } catch (RemoteException | NullPointerException e) {
-            // TODO:
-            e.printStackTrace();
+            Log.e(App.TAG, Log.getStackTraceString(e));
             return -1;
         }
     }
@@ -44,8 +44,7 @@ public class ConfigManager {
         try {
             return LSPosedManagerServiceClient.getXposedVersionName();
         } catch (RemoteException | NullPointerException e) {
-            // TODO:
-            e.printStackTrace();
+            Log.e(App.TAG, Log.getStackTraceString(e));
             return null;
         }
     }
@@ -54,8 +53,7 @@ public class ConfigManager {
         try {
             return LSPosedManagerServiceClient.getXposedVersionCode();
         } catch (RemoteException | NullPointerException e) {
-            // TODO:
-            e.printStackTrace();
+            Log.e(App.TAG, Log.getStackTraceString(e));
             return -1;
         }
     }
@@ -65,8 +63,7 @@ public class ConfigManager {
         try {
             list.addAll(LSPosedManagerServiceClient.getInstalledPackagesFromAllUsers(flags));
         } catch (RemoteException | NullPointerException e) {
-            // TODO:
-            e.printStackTrace();
+            Log.e(App.TAG, Log.getStackTraceString(e));
         }
         return list;
     }
@@ -75,8 +72,7 @@ public class ConfigManager {
         try {
             return LSPosedManagerServiceClient.enabledModules();
         } catch (RemoteException | NullPointerException e) {
-            // TODO:
-            e.printStackTrace();
+            Log.e(App.TAG, Log.getStackTraceString(e));
             return new String[0];
         }
     }
@@ -85,8 +81,7 @@ public class ConfigManager {
         try {
             return enable ? LSPosedManagerServiceClient.enableModule(packageName) : LSPosedManagerServiceClient.disableModule(packageName);
         } catch (RemoteException | NullPointerException e) {
-            // TODO:
-            e.printStackTrace();
+            Log.e(App.TAG, Log.getStackTraceString(e));
             return false;
         }
     }
@@ -99,8 +94,7 @@ public class ConfigManager {
             }
             return LSPosedManagerServiceClient.setModuleScope(packageName, uids);
         } catch (RemoteException | NullPointerException e) {
-            // TODO:
-            e.printStackTrace();
+            Log.e(App.TAG, Log.getStackTraceString(e));
             return false;
         }
     }
@@ -112,8 +106,7 @@ public class ConfigManager {
                 list.add(uid);
             }
         } catch (RemoteException | NullPointerException e) {
-            // TODO:
-            e.printStackTrace();
+            Log.e(App.TAG, Log.getStackTraceString(e));
         }
         return list;
     }
@@ -122,8 +115,7 @@ public class ConfigManager {
         try {
             return LSPosedManagerServiceClient.isResourceHook();
         } catch (RemoteException | NullPointerException e) {
-            // TODO:
-            e.printStackTrace();
+            Log.e(App.TAG, Log.getStackTraceString(e));
             return false;
         }
     }
@@ -133,8 +125,7 @@ public class ConfigManager {
             LSPosedManagerServiceClient.setResourceHook(enabled);
             return true;
         } catch (RemoteException | NullPointerException e) {
-            // TODO:
-            e.printStackTrace();
+            Log.e(App.TAG, Log.getStackTraceString(e));
             return false;
         }
     }
@@ -143,8 +134,7 @@ public class ConfigManager {
         try {
             return LSPosedManagerServiceClient.isVerboseLog();
         } catch (RemoteException | NullPointerException e) {
-            // TODO:
-            e.printStackTrace();
+            Log.e(App.TAG, Log.getStackTraceString(e));
             return false;
         }
     }
@@ -154,8 +144,7 @@ public class ConfigManager {
             LSPosedManagerServiceClient.setVerboseLog(enabled);
             return true;
         } catch (RemoteException | NullPointerException e) {
-            // TODO:
-            e.printStackTrace();
+            Log.e(App.TAG, Log.getStackTraceString(e));
             return false;
         }
     }
@@ -164,8 +153,7 @@ public class ConfigManager {
         try {
             return LSPosedManagerServiceClient.getVariant();
         } catch (RemoteException | NullPointerException e) {
-            // TODO:
-            e.printStackTrace();
+            Log.e(App.TAG, Log.getStackTraceString(e));
             return 1;
         }
     }
@@ -187,8 +175,7 @@ public class ConfigManager {
             LSPosedManagerServiceClient.setVariant(variant);
             return true;
         } catch (RemoteException | NullPointerException e) {
-            // TODO:
-            e.printStackTrace();
+            Log.e(App.TAG, Log.getStackTraceString(e));
             return false;
         }
     }
@@ -197,29 +184,26 @@ public class ConfigManager {
         try {
             return LSPosedManagerServiceClient.isPermissive();
         } catch (RemoteException | NullPointerException e) {
-            // TODO:
-            e.printStackTrace();
+            Log.e(App.TAG, Log.getStackTraceString(e));
             return true;
         }
     }
 
-    public static ParcelFileDescriptor getVerboseLog() {
+    public static ParcelFileDescriptor getLogs(boolean verbose) {
         try {
-            return LSPosedManagerServiceClient.getVerboseLog();
+            return verbose ? LSPosedManagerServiceClient.getVerboseLog() : LSPosedManagerServiceClient.getModulesLog();
         } catch (RemoteException | NullPointerException e) {
-            // TODO:
-            e.printStackTrace();
+            Log.e(App.TAG, Log.getStackTraceString(e));
             return null;
         }
     }
 
-    public static ParcelFileDescriptor getModulesLog() {
+    public static boolean clearLogs(boolean verbose) {
         try {
-            return LSPosedManagerServiceClient.getModulesLog();
+            return LSPosedManagerServiceClient.clearLogs(verbose);
         } catch (RemoteException | NullPointerException e) {
-            // TODO:
-            e.printStackTrace();
-            return null;
+            Log.e(App.TAG, Log.getStackTraceString(e));
+            return false;
         }
     }
 }

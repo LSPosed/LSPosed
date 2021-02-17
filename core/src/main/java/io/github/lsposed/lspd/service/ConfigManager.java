@@ -15,7 +15,9 @@ import androidx.annotation.Nullable;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
@@ -380,6 +382,17 @@ public class ConfigManager {
         } catch (FileNotFoundException e) {
             Log.e(TAG, Log.getStackTraceString(e));
             return null;
+        }
+    }
+
+    public boolean clearLogs(boolean verbose) {
+        try {
+            OutputStream os = new FileOutputStream(verbose ? verboseLogPath : modulesLogPath);
+            os.close();
+            return true;
+        } catch (IOException e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+            return false;
         }
     }
 
