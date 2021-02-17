@@ -148,20 +148,20 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                 recommendedList.add(uid);
             }
 
-            AppInfo appInfo = new AppInfo();
-            appInfo.packageInfo = info;
+            if (shouldHideApp(info)) {
+                continue;
+            }
 
             if (info.sharedUserId != null) {
                 ArrayList<PackageInfo> packageInfos = sharedUidPackages.computeIfAbsent(info.sharedUserId, k -> new ArrayList<>());
                 packageInfos.add(info);
-                continue;
             } else {
+                AppInfo appInfo = new AppInfo();
+                appInfo.packageInfo = info;
                 appInfo.label = getAppLabel(info.applicationInfo, pm);
-            }
-
-            if (!shouldHideApp(info)) {
                 searchList.add(appInfo);
             }
+
         }
         for (List<PackageInfo> packageInfos : sharedUidPackages.values()) {
             AppInfo appInfo = new AppInfo();
