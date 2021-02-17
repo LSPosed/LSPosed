@@ -27,6 +27,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.ParcelFileDescriptor;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -35,6 +36,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -45,37 +48,71 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import io.github.lsposed.manager.BuildConfig;
 import io.github.lsposed.manager.ConfigManager;
-import io.github.lsposed.manager.Constants;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.databinding.ActivityLogsBinding;
 import io.github.lsposed.manager.databinding.DialogInstallWarningBinding;
 import io.github.lsposed.manager.databinding.ItemLogBinding;
 import io.github.lsposed.manager.ui.activity.base.BaseActivity;
 import io.github.lsposed.manager.util.LinearLayoutManagerFix;
+import rikka.core.os.FileUtils;
 import rikka.recyclerview.RecyclerViewKt;
 
 public class LogsActivity extends BaseActivity {
     private int logType = 0;
-    private final Path modulesLog = Paths.get(Constants.getLogDir(), "modules.log");
-    private final Path allLog = Paths.get(Constants.getLogDir(), "all.log");
+    private final ParcelFileDescriptor modulesLog = ConfigManager.getModulesLog();
+    private final ParcelFileDescriptor allLog = ConfigManager.getVerboseLog();
     private LogsAdapter adapter;
     private final Handler handler = new Handler(Looper.getMainLooper());
     private ActivityLogsBinding binding;
     private LinearLayoutManagerFix layoutManager;
+    ActivityResultLauncher<String> saveLogsLauncher = registerForActivityResult(new ActivityResultContracts.CreateDocument(),
+            uri -> {
+                if (uri != null) {
+                    try {
+                        // grantUriPermission might throw RemoteException on MIUI
+                        grantUriPermission(BuildConfig.APPLICATION_ID, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
+                        try {
+                            OutputStream os = getContentResolver().openOutputStream(uri);
+                            if (os == null) {
+                                return;
+                            }
+                            ParcelFileDescriptor parcelFileDescriptor = getLogFile();
+                            if (parcelFileDescriptor == null) {
+                                return;
+                            }
+                            InputStream is = new FileInputStream(parcelFileDescriptor.getFileDescriptor());
+                            FileUtils.copy(is, os);
+                            os.close();
+                            is.close();
+                        } catch (Exception e) {
+                            Snackbar.make(binding.snackbar, getResources().getString(R.string.logs_save_failed) + "\n" + e.getMessage(), Snackbar.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            });
 
-    private Path getLogFile() {
+    private ParcelFileDescriptor getLogFile() {
         switch (logType) {
             case 0:
             default:
@@ -190,12 +227,20 @@ public class LogsActivity extends BaseActivity {
     }
 
     private void reloadErrorLog() {
-        new LogsReader().execute(getLogFile());
+        ParcelFileDescriptor parcelFileDescriptor = getLogFile();
+        if (parcelFileDescriptor != null) {
+            new LogsReader().execute(parcelFileDescriptor.getFileDescriptor());
+        }
     }
 
     private void clear() {
         try {
-            Files.write(getLogFile(), new byte[0]);
+            ParcelFileDescriptor parcelFileDescriptor = getLogFile();
+            if (parcelFileDescriptor == null) {
+                return;
+            }
+            OutputStream os = new FileOutputStream(parcelFileDescriptor.getFileDescriptor());
+            os.close();
             adapter.setEmpty();
             Snackbar.make(binding.snackbar, R.string.logs_cleared, Snackbar.LENGTH_SHORT).show();
             reloadErrorLog();
@@ -205,7 +250,27 @@ public class LogsActivity extends BaseActivity {
     }
 
     private void send() {
-        Uri uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".fileprovider", getLogFile().toFile());
+        ParcelFileDescriptor parcelFileDescriptor = getLogFile();
+        if (parcelFileDescriptor == null) {
+            return;
+        }
+        Calendar now = Calendar.getInstance();
+        String filename = String.format(Locale.US,
+                "LSPosed_Verbose_%04d%02d%02d_%02d%02d%02d.log",
+                now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1,
+                now.get(Calendar.DAY_OF_MONTH), now.get(Calendar.HOUR_OF_DAY),
+                now.get(Calendar.MINUTE), now.get(Calendar.SECOND));
+        File cacheFile = new File(getCacheDir(), filename);
+        try {
+            OutputStream os = new FileOutputStream(cacheFile);
+            InputStream is = new FileInputStream(parcelFileDescriptor.getFileDescriptor());
+            FileUtils.copy(is, os);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        Uri uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".fileprovider", cacheFile);
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
@@ -214,48 +279,19 @@ public class LogsActivity extends BaseActivity {
         startActivity(Intent.createChooser(sendIntent, getResources().getString(R.string.menuSend)));
     }
 
-    @SuppressLint("DefaultLocale")
     private void save() {
         Calendar now = Calendar.getInstance();
-        String filename = String.format(
+        String filename = String.format(Locale.US,
                 "LSPosed_Verbose_%04d%02d%02d_%02d%02d%02d.log",
                 now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1,
                 now.get(Calendar.DAY_OF_MONTH), now.get(Calendar.HOUR_OF_DAY),
                 now.get(Calendar.MINUTE), now.get(Calendar.SECOND));
-
-        Intent exportIntent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-        exportIntent.addCategory(Intent.CATEGORY_OPENABLE);
-        exportIntent.setType("text/*");
-        exportIntent.putExtra(Intent.EXTRA_TITLE, filename);
-        startActivityForResult(exportIntent, 42);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != RESULT_OK) {
-            return;
-        }
-        if (requestCode == 42) {
-            if (data != null) {
-                Uri uri = data.getData();
-                if (uri != null) {
-                    try {
-                        OutputStream os = getContentResolver().openOutputStream(uri);
-                        if (os != null) {
-                            Files.copy(getLogFile(), os);
-                        }
-                    } catch (Exception e) {
-                        Snackbar.make(binding.snackbar, getResources().getString(R.string.logs_save_failed) + "\n" + e.getMessage(), Snackbar.LENGTH_LONG).show();
-                    }
-                }
-            }
-        }
+        saveLogsLauncher.launch(filename);
     }
 
     @SuppressWarnings("deprecation")
     @SuppressLint("StaticFieldLeak")
-    private class LogsReader extends AsyncTask<Path, Integer, List<String>> {
+    private class LogsReader extends AsyncTask<FileDescriptor, Integer, List<String>> {
         private AlertDialog mProgressDialog;
         private final Runnable mRunnable = new Runnable() {
             @Override
@@ -275,14 +311,16 @@ public class LogsActivity extends BaseActivity {
         }
 
         @Override
-        protected List<String> doInBackground(Path... log) {
+        protected List<String> doInBackground(FileDescriptor... log) {
             Thread.currentThread().setPriority(Thread.NORM_PRIORITY + 2);
 
             List<String> logs = new ArrayList<>();
 
-            try {
-                logs = Files.readAllLines(log[0]);
-                return logs;
+            try (InputStream inputStream = new FileInputStream(log[0]); BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    logs.add(line);
+                }
             } catch (IOException e) {
                 logs.add(LogsActivity.this.getResources().getString(R.string.logs_cannot_read));
                 if (e.getMessage() != null) {

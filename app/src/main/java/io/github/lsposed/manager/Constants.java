@@ -23,11 +23,6 @@ package io.github.lsposed.manager;
 import android.widget.Toast;
 
 public class Constants {
-    private static final String logDir = null;
-
-    public static String getLogDir() {
-        return logDir;
-    }
 
     public static void showErrorToast(int type) {
         Toast.makeText(App.getInstance(), R.string.app_destroyed, Toast.LENGTH_LONG).show();
