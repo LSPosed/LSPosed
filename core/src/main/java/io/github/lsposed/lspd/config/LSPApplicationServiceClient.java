@@ -4,8 +4,6 @@ import android.os.IBinder;
 import android.os.RemoteException;
 
 import java.io.File;
-import java.util.Collections;
-import java.util.List;
 
 import io.github.lsposed.lspd.service.ILSPApplicationService;
 import io.github.lsposed.lspd.util.Utils;

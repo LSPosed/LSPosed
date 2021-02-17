@@ -57,7 +57,7 @@ public class ConfigManager {
 
     final private File logPath = new File(basePath, "log");
     final private File modulesLogPath = new File(logPath, "modules.log");
-    final private File verboseLogPath = new File(logPath, "verbose.log");
+    final private File verboseLogPath = new File(logPath, "all.log");
 
     final FileObserver configObserver = new FileObserver(configPath) {
         @Override

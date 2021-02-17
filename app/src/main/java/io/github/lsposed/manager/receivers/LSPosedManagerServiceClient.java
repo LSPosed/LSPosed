@@ -16,33 +16,6 @@ public class LSPosedManagerServiceClient {
     private static IBinder binder = null;
     private static ILSPManagerService service = null;
 
-    /*
-        public static void testBinder() {
-            if (binder == null) {
-            }
-            if (service == null && binder != null) {
-                service = ILSPManagerService.Stub.asInterface(binder);
-            }
-            if (service == null) {
-                return;
-            }
-            int ver = -1;
-            try {
-                ver = service.getVersion();
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-            Log.i(App.TAG, "Got version " + ver);
-
-            List<PackageInfo> ps = null;
-            try {
-                ps = service.getInstalledPackagesFromAllUsers(0).getList();
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-            Log.i(App.TAG, String.valueOf(ps));
-        }
-    */
     private static void ensureService() throws NullPointerException {
         if (service == null) {
             if (binder != null) {
