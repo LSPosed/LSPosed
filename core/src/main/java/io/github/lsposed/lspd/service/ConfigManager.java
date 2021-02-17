@@ -126,6 +126,7 @@ public class ConfigManager {
 
     public synchronized void updateManager(@NonNull String packageName) {
         writeText(managerPath, packageName);
+        manager = packageName;
         updateManager();
     }
 
@@ -410,5 +411,13 @@ public class ConfigManager {
 
     public String getPrefsPath(String fileName) {
         return miscPath + File.separator + "prefs" + File.separator + fileName;
+    }
+
+    public void grantManagerPermission() {
+        try {
+            PackageService.grantRuntimePermission(manager, "android.permission.INTERACT_ACROSS_USERS", 0);
+        } catch (RemoteException e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+        }
     }
 }

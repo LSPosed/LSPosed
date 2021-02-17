@@ -55,6 +55,12 @@ public class ServiceManager {
             }
         });
 
+        try {
+            ConfigManager.getInstance().grantManagerPermission();
+        } catch (Throwable e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+        }
+
         Looper.loop();
 
         Log.i(TAG, "server exited");

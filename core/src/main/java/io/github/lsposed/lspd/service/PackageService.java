@@ -43,4 +43,9 @@ public class PackageService {
         }
         return new ParceledListSlice<>(res);
     }
+
+    public static void grantRuntimePermission(String packageName, String permissionName, int userId) throws RemoteException {
+        IPackageManager pm = getPackageManager();
+        pm.grantRuntimePermission(packageName, permissionName, userId);
+    }
 }

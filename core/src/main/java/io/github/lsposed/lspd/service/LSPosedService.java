@@ -37,6 +37,7 @@ public class LSPosedService extends ILSPosedService.Stub {
         String packageName = (uri != null) ? uri.getSchemeSpecificPart() : null;
         if (packageName == null) {
             Log.e(TAG, "Package name is null");
+            return;
         }
         int uid = intent.getIntExtra(Intent.EXTRA_UID, -1);
         boolean replacing = intent.getBooleanExtra(Intent.EXTRA_REPLACING, false);
@@ -50,6 +51,13 @@ public class LSPosedService extends ILSPosedService.Stub {
                 pkgInfo.applicationInfo.metaData.containsKey("xposedmodule");
         if (isXposedModule) {
             ConfigManager.getInstance().updateModuleApkPath(packageName, pkgInfo.applicationInfo.sourceDir);
+        }
+        if (!intent.getAction().equals(Intent.ACTION_PACKAGE_REMOVED) && uid > 0 && ConfigManager.getInstance().isManager(packageName)) {
+            try {
+                ConfigManager.getInstance().grantManagerPermission();
+            } catch (Throwable e) {
+                Log.e(TAG, Log.getStackTraceString(e));
+            }
         }
     }
 
