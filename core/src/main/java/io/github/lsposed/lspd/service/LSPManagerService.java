@@ -8,6 +8,7 @@ import android.os.RemoteException;
 import java.util.List;
 
 import de.robv.android.xposed.XposedBridge;
+import io.github.lsposed.lspd.BuildConfig;
 import io.github.lsposed.lspd.ILSPManagerService;
 import io.github.lsposed.lspd.utils.ParceledListSlice;
 
@@ -22,8 +23,18 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     }
 
     @Override
-    public int getVersion() {
+    public int getXposedApiVersion() {
         return XposedBridge.getXposedVersion();
+    }
+
+    @Override
+    public int getXposedVersionCode() {
+        return BuildConfig.VERSION_CODE;
+    }
+
+    @Override
+    public String getXposedVersionName() {
+        return BuildConfig.VERSION_NAME;
     }
 
     @Override

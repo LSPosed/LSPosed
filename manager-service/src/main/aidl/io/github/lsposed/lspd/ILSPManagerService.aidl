@@ -3,8 +3,6 @@ package io.github.lsposed.lspd;
 import io.github.lsposed.lspd.utils.ParceledListSlice;
 
 interface ILSPManagerService {
-    int getVersion() = 1;
-
     ParceledListSlice<PackageInfo> getInstalledPackagesFromAllUsers(int flags) = 2;
 
     String[] enabledModules() = 3;
@@ -34,4 +32,10 @@ interface ILSPManagerService {
     ParcelFileDescriptor getVerboseLog() = 16;
 
     ParcelFileDescriptor getModulesLog() = 17;
+
+    int getXposedVersionCode() = 18;
+
+    String getXposedVersionName() = 19;
+
+    int getXposedApiVersion() = 20;
 }
