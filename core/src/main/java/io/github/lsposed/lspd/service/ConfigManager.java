@@ -83,7 +83,7 @@ public class ConfigManager {
 
     private void writeText(@NonNull File file, String value) {
         try {
-            Files.write(file.toPath(), value.getBytes(), StandardOpenOption.CREATE_NEW);
+            Files.write(file.toPath(), value.getBytes(), StandardOpenOption.CREATE);
         } catch (IOException e) {
             Log.e(TAG, Log.getStackTraceString(e));
         }
@@ -104,7 +104,7 @@ public class ConfigManager {
     }
 
     private synchronized void updateConfig() {
-        resourceHook = resourceHookSwitch.exists();
+        resourceHook = readInt(resourceHookSwitch, 0) == 1;
         variant = readInt(variantSwitch, -1);
         verboseLog = readInt(verboseLogSwitch, 0) == 1;
         miscPath = "/data/misc/" + readText(miscFile, "lspd");
@@ -336,14 +336,17 @@ public class ConfigManager {
 
     public void setResourceHook(boolean resourceHook) {
         writeInt(resourceHookSwitch, resourceHook ? 1 : 0);
+        this.resourceHook = resourceHook;
     }
 
     public void setVerboseLog(boolean verboseLog) {
         writeInt(verboseLogSwitch, verboseLog ? 1 : 0);
+        this.verboseLog = verboseLog;
     }
 
     public void setVariant(int variant) {
         writeInt(variantSwitch, variant);
+        this.variant = variant;
     }
 
     public boolean isPermissive() {
