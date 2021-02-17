@@ -34,7 +34,7 @@ public class YahfaImpl extends BaseImpl {
 
     static {
         final Impl lspdImpl = new YahfaImpl();
-        if (Main.setEdxpImpl(lspdImpl)) {
+        if (Main.setImpl(lspdImpl)) {
             lspdImpl.init();
         }
     }

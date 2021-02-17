@@ -35,7 +35,7 @@ public class SandHookImpl extends BaseImpl {
 
     static {
         final Impl lspdImpl = new SandHookImpl();
-        if (Main.setEdxpImpl(lspdImpl)) {
+        if (Main.setImpl(lspdImpl)) {
             lspdImpl.init();
         }
     }
