@@ -25,7 +25,7 @@ import androidx.annotation.NonNull;
 import io.github.lsposed.lspd.proxy.NormalProxy;
 import io.github.lsposed.lspd.proxy.Router;
 
-public abstract class BaseEdxpImpl implements EdxpImpl {
+public abstract class BaseImpl implements Impl {
 
     protected Proxy mNormalProxy;
     protected Router mRouter;

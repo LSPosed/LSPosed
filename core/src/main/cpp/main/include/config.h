@@ -52,8 +52,6 @@ inline constexpr bool is64 = Is64();
     static const auto kClassLinkerClassName = "io.github.lsposed.lspd.nativebridge.ClassLinker"s;
     static const auto kBridgeServiceClassName = "io.github.lsposed.lspd.service.BridgeService"s;
     static const auto kDexPath = "/data/adb/lspd/framework/lspd.dex"s;
-    static const auto kSandHookClassName = "com.swift.sandhook.SandHook"s;
-    static const auto kSandHookNeverCallClassName = "com.swift.sandhook.ClassNeverCall"s;
 
     static const auto kLibArtName = "libart.so"s;
     static const auto kLibFwName = "libandroidfw.so"s;

@@ -27,7 +27,7 @@
 
 namespace lspd {
     LSP_DEF_NATIVE_METHOD(void, ModuleLogger, nativeLog, int fd, jstring jstr) {
-        if (fd < 0) {
+        if (UNLIKELY(fd < 0)) {
             LOGE("fd is -1");
             return;
         }

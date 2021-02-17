@@ -48,7 +48,7 @@ namespace lspd {
             LSP_NATIVE_METHOD(ResourcesHook, removeFinalFlagNative, "(Ljava/lang/Class;)Z"),
     };
 
-    void RegisterEdxpResourcesHook(JNIEnv *env) {
+    void RegisterResourcesHook(JNIEnv *env) {
         REGISTER_LSP_NATIVE_METHODS(ResourcesHook);
     }
 

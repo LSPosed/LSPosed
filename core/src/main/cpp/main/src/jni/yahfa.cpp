@@ -66,7 +66,7 @@ namespace lspd {
             LSP_NATIVE_METHOD(Yahfa, isHooked, "(Ljava/lang/reflect/Member;)Z")
     };
 
-    void RegisterEdxpYahfa(JNIEnv *env) {
+    void RegisterYahfa(JNIEnv *env) {
         REGISTER_LSP_NATIVE_METHODS(Yahfa);
     }
 

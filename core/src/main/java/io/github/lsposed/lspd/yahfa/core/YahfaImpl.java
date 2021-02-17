@@ -18,41 +18,47 @@
  * Copyright (C) 2021 LSPosed Contributors
  */
 
-package io.github.lsposed.lspd.sandhook.core;
+package io.github.lsposed.lspd.yahfa.core;
 
 import android.os.Build;
 
-import io.github.lsposed.lspd.core.BaseEdxpImpl;
-import io.github.lsposed.lspd.core.EdxpImpl;
+import io.github.lsposed.lspd.core.BaseImpl;
+import io.github.lsposed.lspd.core.Impl;
 import io.github.lsposed.lspd.core.Main;
+import io.github.lsposed.lspd.core.Proxy;
 import io.github.lsposed.lspd.nativebridge.Yahfa;
-import com.swift.sandhook.xposedcompat.methodgen.SandHookXposedBridge;
+import io.github.lsposed.lspd.proxy.NormalProxy;
+import io.github.lsposed.lspd.proxy.Router;
 
-public class SandHookEdxpImpl extends BaseEdxpImpl {
+public class YahfaImpl extends BaseImpl {
 
     static {
-        final EdxpImpl lspdImpl = new SandHookEdxpImpl();
+        final Impl lspdImpl = new YahfaImpl();
         if (Main.setEdxpImpl(lspdImpl)) {
             lspdImpl.init();
         }
     }
 
-    @Override
-    protected io.github.lsposed.lspd.proxy.Router createRouter() {
-        return new SandHookRouter();
-    }
-
     @Variant
     @Override
     public int getVariant() {
-        return SANDHOOK;
+        return YAHFA;
     }
 
     @Override
     public void init() {
         Yahfa.init(Build.VERSION.SDK_INT);
         getRouter().injectConfig();
-        SandHookXposedBridge.init();
         setInitialized();
+    }
+
+    @Override
+    protected Proxy createNormalProxy() {
+        return new NormalProxy(getRouter());
+    }
+
+    @Override
+    protected Router createRouter() {
+        return new YahfaRouter();
     }
 }

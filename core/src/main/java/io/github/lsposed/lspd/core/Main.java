@@ -21,34 +21,29 @@
 package io.github.lsposed.lspd.core;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Binder;
 import android.os.IBinder;
-import android.os.RemoteException;
-import android.util.Log;
 import android.ddm.DdmHandleAppName;
 
 import io.github.lsposed.common.KeepAll;
 import io.github.lsposed.lspd.config.LSPApplicationServiceClient;
-import io.github.lsposed.lspd.service.ILSPApplicationService;
 import io.github.lsposed.lspd.service.ServiceManager;
 import io.github.lsposed.lspd.util.Utils;
 
 import java.util.concurrent.atomic.AtomicReference;
 
 import static io.github.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
-import static io.github.lsposed.lspd.service.ServiceManager.TAG;
 
 @SuppressLint("DefaultLocale")
 public class Main implements KeepAll {
-    private static final AtomicReference<EdxpImpl> lspdImplRef = new AtomicReference<>(null);
+    private static final AtomicReference<Impl> lspdImplRef = new AtomicReference<>(null);
     private static final Binder heartBeatBinder = new Binder();
 
     public static void forkAndSpecializePost(String appDataDir, String niceName, IBinder binder) {
         LSPApplicationServiceClient.Init(binder);
         serviceClient.registerHeartBeat(heartBeatBinder);
         final int variant = serviceClient.getVariant();
-        EdxpImpl lspd = getEdxpImpl(variant);
+        Impl lspd = getEdxpImpl(variant);
         if (lspd == null || !lspd.isInitialized()) {
             Utils.logE("Not started up");
             return;
@@ -60,30 +55,30 @@ public class Main implements KeepAll {
         LSPApplicationServiceClient.Init(binder);
         serviceClient.registerHeartBeat(heartBeatBinder);
         final int variant = serviceClient.getVariant();
-        EdxpImpl lspd = getEdxpImpl(variant);
+        Impl lspd = getEdxpImpl(variant);
         if (lspd == null || !lspd.isInitialized()) {
             return;
         }
         lspd.getNormalProxy().forkSystemServerPost();
     }
 
-    public static synchronized boolean setEdxpImpl(EdxpImpl lspd) {
+    public static synchronized boolean setEdxpImpl(Impl lspd) {
         return lspdImplRef.compareAndSet(null, lspd);
     }
 
-    public static synchronized EdxpImpl getEdxpImpl(int variant) {
-        EdxpImpl lspd = lspdImplRef.get();
+    public static synchronized Impl getEdxpImpl(int variant) {
+        Impl lspd = lspdImplRef.get();
         if (lspd != null) {
             return lspd;
         }
         Utils.logD("Loading variant " + variant);
         try {
             switch (variant) {
-                case EdxpImpl.YAHFA:
-                    Class.forName("io.github.lsposed.lspd.yahfa.core.YahfaEdxpImpl");
+                case Impl.YAHFA:
+                    Class.forName("io.github.lsposed.lspd.yahfa.core.YahfaImpl");
                     break;
-                case EdxpImpl.SANDHOOK:
-                    Class.forName("io.github.lsposed.lspd.sandhook.core.SandHookEdxpImpl");
+                case Impl.SANDHOOK:
+                    Class.forName("io.github.lsposed.lspd.sandhook.core.SandHookImpl");
                     break;
                 default:
                     Utils.logE("Unsupported variant " + variant);
@@ -95,11 +90,11 @@ public class Main implements KeepAll {
         return lspdImplRef.get();
     }
 
-    public static synchronized EdxpImpl getEdxpImpl() {
+    public static synchronized Impl getEdxpImpl() {
         return lspdImplRef.get();
     }
 
-    @EdxpImpl.Variant
+    @Impl.Variant
     public static synchronized int getEdxpVariant() {
         return getEdxpImpl().getVariant();
     }

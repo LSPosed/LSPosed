@@ -18,14 +18,39 @@
  * Copyright (C) 2021 LSPosed Contributors
  */
 
-#pragma once
+package io.github.lsposed.lspd.core;
 
-#include "jni.h"
+import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
 
-namespace lspd {
+import io.github.lsposed.common.KeepAll;
+import io.github.lsposed.lspd.proxy.Router;
 
-    static constexpr uint32_t kAccFinal = 0x0010;
+import java.lang.annotation.Retention;
 
-    void RegisterResourcesHook(JNIEnv *);
+import static java.lang.annotation.RetentionPolicy.SOURCE;
 
-} // namespace lspd
+public interface Impl extends KeepAll {
+
+    int NONE = 0;
+    int YAHFA = 1;
+    int SANDHOOK = 2;
+
+    @NonNull
+    Proxy getNormalProxy();
+
+    @NonNull
+    Router getRouter();
+
+    @Variant
+    int getVariant();
+
+    void init();
+
+    boolean isInitialized();
+
+    @Retention(SOURCE)
+    @IntDef({NONE, YAHFA, SANDHOOK})
+    @interface Variant {
+    }
+}

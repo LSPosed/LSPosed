@@ -23,12 +23,12 @@
 #include "JNIHelper.h"
 #include "jni/art_class_linker.h"
 #include "jni/yahfa.h"
+#include "jni/sandhook.h"
 #include "jni/resources_hook.h"
 #include <dl_util.h>
 #include <art/runtime/jni_env_ext.h>
 #include <android-base/strings.h>
 #include "jni/pending_hooks.h"
-#include <sandhook.h>
 #include <fstream>
 #include <sstream>
 #include <nativehelper/scoped_local_ref.h>
@@ -122,30 +122,12 @@ namespace lspd {
                 FindClassFromLoader(env, GetCurrentClassLoader(), kEntryClassName)));
 
         RegisterLogger(env);
-        RegisterEdxpResourcesHook(env);
+        RegisterResourcesHook(env);
         RegisterArtClassLinker(env);
-        RegisterEdxpYahfa(env);
+        RegisterYahfa(env);
         RegisterPendingHooks(env);
         RegisterNativeAPI(env);
-// TODO: Recover this
-
-//        variant_ = Variant(ConfigManager::GetInstance()->GetVariant());
-//        LOGI("LSP Variant: %d", variant_);
-//
-//        if (variant_ == SANDHOOK) {
-//            //for SandHook variant
-//            ScopedLocalRef sandhook_class(env, FindClassFromCurrentLoader(env, kSandHookClassName));
-//            ScopedLocalRef nevercall_class(env,
-//                                           FindClassFromCurrentLoader(env,
-//                                                                      kSandHookNeverCallClassName));
-//            if (sandhook_class == nullptr || nevercall_class == nullptr) { // fail-fast
-//                return;
-//            }
-//            if (!JNI_Load_Ex(env, sandhook_class.get(), nevercall_class.get())) {
-//                LOGE("SandHook: HookEntry class error. %d", getpid());
-//            }
-//
-//        }
+        RegisterSandHook(env);
     }
 
     jclass
