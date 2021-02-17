@@ -36,7 +36,7 @@ public class ModuleLogger {
 
     public static void initLogger(ParcelFileDescriptor fileDescriptor) {
         if (fd == -1 && fileDescriptor!= null) {
-            fd = fileDescriptor.getFd();
+            fd = fileDescriptor.detachFd();
         }
     }
 
