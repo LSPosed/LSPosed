@@ -438,6 +438,11 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                     public void onLoadCleared(@Nullable Drawable placeholder) {
 
                     }
+
+                    @Override
+                    public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                        holder.appIcon.setImageDrawable(pm.getDefaultActivityIcon());
+                    }
                 });
         SpannableStringBuilder sb = new SpannableStringBuilder(android ? "" : activity.getString(R.string.app_description, appInfo.packageInfo.packageName, appInfo.packageInfo.versionName));
         holder.appDescription.setVisibility(View.VISIBLE);
