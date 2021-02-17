@@ -28,26 +28,15 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.view.MenuItem;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 
-import io.github.lsposed.manager.Constants;
 import io.github.lsposed.manager.R;
 
 public class AppHelper {
 
     public static final String SETTINGS_CATEGORY = "de.robv.android.xposed.category.MODULE_SETTINGS";
-    private static final String BASE_PATH = Constants.getBaseDir();
-    private static final String SCOPE_LIST_PATH = "conf/%s.conf";
-
-    private static final HashMap<String, List<String>> scopeList = new HashMap<>();
 
     public static Intent getSettingsIntent(String packageName, PackageManager packageManager) {
         // taken from
@@ -123,53 +112,5 @@ public class AppHelper {
             default:
                 return (PackageInfo a, PackageInfo b) -> displayNameComparator.compare(a.applicationInfo, b.applicationInfo);
         }
-    }
-
-    public static List<String> getEnabledModuleList() {
-        Path path = Paths.get(Constants.getEnabledModulesListFile());
-        List<String> s = new ArrayList<>();
-        try {
-            s = Files.readAllLines(path);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return s;
-    }
-
-    public static List<String> getScopeList(String modulePackageName) {
-        if (scopeList.containsKey(modulePackageName)) {
-            return scopeList.get(modulePackageName);
-        }
-        Path path = Paths.get(BASE_PATH + String.format(SCOPE_LIST_PATH, modulePackageName));
-        List<String> s = new ArrayList<>();
-        try {
-            s = Files.readAllLines(path);
-            scopeList.put(modulePackageName, s);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return s;
-    }
-
-    public static boolean saveScopeList(String modulePackageName, List<String> list) {
-        Path path = Paths.get(BASE_PATH + String.format(SCOPE_LIST_PATH, modulePackageName));
-        if (list.size() == 0) {
-            scopeList.put(modulePackageName, list);
-            try {
-                Files.delete(path);
-                return true;
-            } catch (IOException e) {
-                e.printStackTrace();
-                return false;
-            }
-        }
-        try {
-            Files.write(path, list);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-        scopeList.put(modulePackageName, list);
-        return true;
     }
 }

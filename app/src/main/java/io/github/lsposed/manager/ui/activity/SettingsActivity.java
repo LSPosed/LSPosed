@@ -29,7 +29,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -45,15 +44,11 @@ import com.google.android.material.snackbar.Snackbar;
 import com.takisoft.preferencex.PreferenceFragmentCompat;
 import com.takisoft.preferencex.SimpleMenuPreference;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.Locale;
 
 import io.github.lsposed.manager.BuildConfig;
-import io.github.lsposed.manager.Constants;
+import io.github.lsposed.manager.ConfigManager;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.databinding.ActivitySettingsBinding;
 import io.github.lsposed.manager.ui.activity.base.BaseActivity;
@@ -101,7 +96,7 @@ public class SettingsActivity extends BaseActivity {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new SettingsFragment()).commit();
         }
-        if (Constants.getXposedVersion() == null) {
+        if (ConfigManager.getXposedVersionName() == null) {
             Snackbar.make(binding.snackbar, R.string.lsposed_not_active, Snackbar.LENGTH_LONG).show();
         }
     }
@@ -142,9 +137,6 @@ public class SettingsActivity extends BaseActivity {
     }
 
     public static class SettingsFragment extends PreferenceFragmentCompat {
-        private static final Path enableResourcesFlag = Paths.get(Constants.getConfDir(), "enable_resources");
-        private static final Path disableVerboseLogsFlag = Paths.get(Constants.getMiscDir(), "disable_verbose_log");
-        private static final Path variantFlag = Paths.get(Constants.getMiscDir(), "variant");
         ActivityResultLauncher<String> backupLauncher = registerForActivityResult(new ActivityResultContracts.CreateDocument(),
                 uri -> {
                     if (uri != null) {
@@ -204,36 +196,23 @@ public class SettingsActivity extends BaseActivity {
         public void onCreatePreferencesFix(Bundle savedInstanceState, String rootKey) {
             addPreferencesFromResource(R.xml.prefs);
 
-            boolean installed = Constants.getXposedVersion() != null;
+            boolean installed = ConfigManager.getXposedVersionName() != null;
             SwitchPreference prefVerboseLogs = findPreference("disable_verbose_log");
             if (prefVerboseLogs != null) {
                 if (requireActivity().getApplicationInfo().uid / 100000 != 0) {
                     prefVerboseLogs.setVisible(false);
                 } else {
                     prefVerboseLogs.setEnabled(installed);
-                    try {
-                        prefVerboseLogs.setChecked(Files.readAllBytes(disableVerboseLogsFlag)[0] == 49);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    prefVerboseLogs.setOnPreferenceChangeListener((preference, newValue) -> {
-                        try {
-                            Files.write(disableVerboseLogsFlag, ((boolean) newValue) ? new byte[]{49, 0} : new byte[]{48, 0});
-                            return true;
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                            return false;
-                        }
-                    });
+                    prefVerboseLogs.setChecked(!ConfigManager.isVerboseLogEnabled());
+                    prefVerboseLogs.setOnPreferenceChangeListener((preference, newValue) -> ConfigManager.setVerboseLogEnabled(!(boolean) newValue));
                 }
             }
 
             SwitchPreference prefEnableResources = findPreference("enable_resources");
             if (prefEnableResources != null) {
                 prefEnableResources.setEnabled(installed);
-                prefEnableResources.setChecked(Files.exists(enableResourcesFlag));
-                prefEnableResources.setOnPreferenceChangeListener(new OnFlagChangeListener(enableResourcesFlag));
+                prefEnableResources.setChecked(ConfigManager.isResourceHookEnabled());
+                prefEnableResources.setOnPreferenceChangeListener((preference, newValue) -> ConfigManager.setResourceHookEnabled((boolean) newValue));
             }
 
             SimpleMenuPreference prefVariant = findPreference("variant");
@@ -242,21 +221,8 @@ public class SettingsActivity extends BaseActivity {
                     prefVariant.setVisible(false);
                 } else {
                     prefVariant.setEnabled(installed);
-                    try {
-                        prefVariant.setValue(new String(Files.readAllBytes(variantFlag)).trim());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    prefVariant.setOnPreferenceChangeListener((preference, newValue) -> {
-                        try {
-                            Files.write(variantFlag, ((String) newValue).getBytes());
-                            return true;
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                            return false;
-                        }
-                    });
+                    prefVariant.setValue(String.valueOf(ConfigManager.getVariant()));
+                    prefVariant.setOnPreferenceChangeListener((preference, newValue) -> ConfigManager.setVariant(Integer.parseInt((String) newValue)));
                 }
             }
 
@@ -317,30 +283,6 @@ public class SettingsActivity extends BaseActivity {
                     }
                     return true;
                 });
-            }
-        }
-
-        private class OnFlagChangeListener implements Preference.OnPreferenceChangeListener {
-            private final Path flag;
-
-            OnFlagChangeListener(Path flag) {
-                this.flag = flag;
-            }
-
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                boolean enabled = (Boolean) newValue;
-                try {
-                    if (enabled) {
-                        Files.createFile(flag);
-                    } else {
-                        Files.delete(flag);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-                return (enabled == Files.exists(flag));
             }
         }
 

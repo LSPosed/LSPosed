@@ -35,7 +35,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Locale;
 
-import io.github.lsposed.manager.Constants;
+import io.github.lsposed.manager.ConfigManager;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.databinding.ActivityMainBinding;
 import io.github.lsposed.manager.databinding.DialogAboutBinding;
@@ -59,7 +59,7 @@ public class MainActivity extends BaseActivity {
         setContentView(binding.getRoot());
         HolidayHelper.setup(this);
         binding.status.setOnClickListener(v -> {
-            if (Constants.getXposedVersionCode() != -1) {
+            if (ConfigManager.getXposedApiVersion() != -1) {
                 new StatusDialogBuilder(this)
                         .setTitle(R.string.info)
                         .setPositiveButton(android.R.string.ok, null)
@@ -87,18 +87,18 @@ public class MainActivity extends BaseActivity {
         Glide.with(binding.appIcon)
                 .load(GlideHelper.wrapApplicationInfoForIconLoader(getApplicationInfo()))
                 .into(binding.appIcon);
-        String installedXposedVersion = Constants.getXposedVersion();
+        String installedXposedVersion = ConfigManager.getXposedVersionName();
         int cardBackgroundColor;
         if (installedXposedVersion != null) {
-            binding.statusTitle.setText(String.format(Locale.US, "%s %s", getString(R.string.Activated), Constants.getXposedVariant()));
-            if (!Constants.isPermissive()) {
+            binding.statusTitle.setText(String.format(Locale.US, "%s %s", getString(R.string.Activated), ConfigManager.getVariantString()));
+            if (!ConfigManager.isPermissive()) {
                 if (Helpers.currentHoliday == Helpers.Holidays.LUNARNEWYEAR) {
                     cardBackgroundColor = 0xfff05654;
                 } else {
                     cardBackgroundColor = ResourcesKt.resolveColor(getTheme(), R.attr.colorNormal);
                 }
                 binding.statusIcon.setImageResource(R.drawable.ic_check_circle);
-                binding.statusSummary.setText(String.format(Locale.US, "%s (%d)", installedXposedVersion, Constants.getXposedVersionCode()));
+                binding.statusSummary.setText(String.format(Locale.US, "%s (%d)", installedXposedVersion, ConfigManager.getXposedVersionCode()));
             } else {
                 cardBackgroundColor = ResourcesKt.resolveColor(getTheme(), R.attr.colorError);
                 binding.statusIcon.setImageResource(R.drawable.ic_warning);
@@ -129,7 +129,7 @@ public class MainActivity extends BaseActivity {
 
         @Override
         public void onClick(View v) {
-            if (requireInstalled && Constants.getXposedVersion() == null) {
+            if (requireInstalled && ConfigManager.getXposedVersionName() == null) {
                 Snackbar.make(binding.snackbar, R.string.lsposed_not_active, Snackbar.LENGTH_LONG).show();
             } else {
                 Intent intent = new Intent();

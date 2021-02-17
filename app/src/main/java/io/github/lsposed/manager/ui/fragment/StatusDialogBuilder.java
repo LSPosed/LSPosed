@@ -38,7 +38,7 @@ import java.util.Locale;
 
 import dalvik.system.VMRuntime;
 import io.github.lsposed.manager.BuildConfig;
-import io.github.lsposed.manager.Constants;
+import io.github.lsposed.manager.ConfigManager;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.databinding.StatusInstallerBinding;
 
@@ -66,20 +66,20 @@ public class StatusDialogBuilder extends AlertDialog.Builder {
         super(context);
         StatusInstallerBinding binding = StatusInstallerBinding.inflate(LayoutInflater.from(context), null, false);
 
-        String installedXposedVersion = Constants.getXposedVersion();
+        String installedXposedVersion = ConfigManager.getXposedVersionName();
         String mAppVer = String.format("%s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE);
         binding.manager.setText(mAppVer);
 
         if (installedXposedVersion != null) {
-            binding.api.setText(String.format(Locale.US, "%s.0", Constants.getXposedApiVersion()));
-            binding.framework.setText(String.format(Locale.US, "%s (%s)", installedXposedVersion, Constants.getXposedVersionCode()));
+            binding.api.setText(String.format(Locale.US, "%s.0", ConfigManager.getXposedApiVersion()));
+            binding.framework.setText(String.format(Locale.US, "%s (%s)", installedXposedVersion, ConfigManager.getXposedVersionCode()));
         }
 
         binding.androidVersion.setText(context.getString(R.string.android_sdk, getAndroidVersion(), Build.VERSION.RELEASE, Build.VERSION.SDK_INT));
         binding.manufacturer.setText(getUIFramework());
         binding.cpu.setText(getCompleteArch());
 
-        if (Constants.isPermissive()) {
+        if (ConfigManager.isPermissive()) {
             binding.selinux.setVisibility(View.VISIBLE);
             binding.selinux.setText(HtmlCompat.fromHtml(context.getString(R.string.selinux_permissive), HtmlCompat.FROM_HTML_MODE_LEGACY));
         }

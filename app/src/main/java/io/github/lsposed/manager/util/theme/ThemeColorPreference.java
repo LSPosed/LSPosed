@@ -28,12 +28,10 @@ import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-import androidx.core.content.ContextCompat;
 import androidx.core.content.res.TypedArrayUtils;
 import androidx.preference.DialogPreference;
 import androidx.preference.PreferenceViewHolder;
 
-import com.takisoft.colorpicker.ColorStateDrawable;
 import com.takisoft.preferencex.PreferenceFragmentCompat;
 
 import io.github.lsposed.manager.R;
