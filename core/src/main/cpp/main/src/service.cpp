@@ -10,7 +10,9 @@
 #include "JNIHelper.h"
 
 namespace lspd {
-    jboolean Service::exec_transact_replace(jboolean *res, JNIEnv *env, [[maybe_unused]] jobject obj, va_list args) {
+    jboolean
+    Service::exec_transact_replace(jboolean *res, JNIEnv *env, [[maybe_unused]] jobject obj,
+                                   va_list args) {
         jint code;
 
         va_list copy;
@@ -44,39 +46,40 @@ namespace lspd {
         initialized_ = true;
 
         // ServiceManager
-        serviceManagerClass_ = env->FindClass("android/os/ServiceManager");
-        if (serviceManagerClass_) {
-            serviceManagerClass_ = (jclass) env->NewGlobalRef(serviceManagerClass_);
+        service_manager_class_ = env->FindClass("android/os/ServiceManager");
+        if (service_manager_class_) {
+            service_manager_class_ = (jclass) env->NewGlobalRef(service_manager_class_);
         } else {
             env->ExceptionClear();
             return;
         }
-        getServiceMethod_ = env->GetStaticMethodID(serviceManagerClass_, "getService",
-                                                   "(Ljava/lang/String;)Landroid/os/IBinder;");
-        if (!getServiceMethod_) {
+        get_service_method_ = env->GetStaticMethodID(service_manager_class_, "getService",
+                                                     "(Ljava/lang/String;)Landroid/os/IBinder;");
+        if (!get_service_method_) {
             env->ExceptionClear();
             return;
         }
 
         // IBinder
-        jclass iBinderClass = env->FindClass("android/os/IBinder");
-        transactMethod_ = env->GetMethodID(iBinderClass, "transact",
-                                           "(ILandroid/os/Parcel;Landroid/os/Parcel;I)Z");
+        jclass ibinder_class = env->FindClass("android/os/IBinder");
+        transact_method_ = env->GetMethodID(ibinder_class, "transact",
+                                            "(ILandroid/os/Parcel;Landroid/os/Parcel;I)Z");
 
         // Parcel
-        parcelClass_ = env->FindClass("android/os/Parcel");
-        if (parcelClass_) parcelClass_ = (jclass) env->NewGlobalRef(parcelClass_);
-        obtainMethod_ = env->GetStaticMethodID(parcelClass_, "obtain", "()Landroid/os/Parcel;");
-        recycleMethod_ = env->GetMethodID(parcelClass_, "recycle", "()V");
-        writeInterfaceTokenMethod_ = env->GetMethodID(parcelClass_, "writeInterfaceToken",
-                                                      "(Ljava/lang/String;)V");
-        writeIntMethod_ = env->GetMethodID(parcelClass_, "writeInt", "(I)V");
-        writeStringMethod_ = env->GetMethodID(parcelClass_, "writeString", "(Ljava/lang/String;)V");
-        readExceptionMethod_ = env->GetMethodID(parcelClass_, "readException", "()V");
-        readStrongBinderMethod_ = env->GetMethodID(parcelClass_, "readStrongBinder",
-                                                   "()Landroid/os/IBinder;");
-        createStringArray_ = env->GetMethodID(parcelClass_, "createStringArray",
-                                              "()[Ljava/lang/String;");
+        parcel_class_ = env->FindClass("android/os/Parcel");
+        if (parcel_class_) parcel_class_ = (jclass) env->NewGlobalRef(parcel_class_);
+        obtain_method_ = env->GetStaticMethodID(parcel_class_, "obtain", "()Landroid/os/Parcel;");
+        recycleMethod_ = env->GetMethodID(parcel_class_, "recycle", "()V");
+        write_interface_token_method_ = env->GetMethodID(parcel_class_, "writeInterfaceToken",
+                                                         "(Ljava/lang/String;)V");
+        write_int_method_ = env->GetMethodID(parcel_class_, "writeInt", "(I)V");
+//        writeStringMethod_ = env->GetMethodID(parcel_class_, "writeString",
+//                                              "(Ljava/lang/String;)V");
+        read_exception_method_ = env->GetMethodID(parcel_class_, "readException", "()V");
+        read_strong_binder_method_ = env->GetMethodID(parcel_class_, "readStrongBinder",
+                                                      "()Landroid/os/IBinder;");
+//        createStringArray_ = env->GetMethodID(parcel_class_, "createStringArray",
+//                                              "()[Ljava/lang/String;");
 
         deadObjectExceptionClass_ = env->FindClass("android/os/DeadObjectException");
         if (deadObjectExceptionClass_)
@@ -94,16 +97,16 @@ namespace lspd {
             return;
         }
         bridge_service_class_ = (jclass) env->NewGlobalRef(bridge_service_class_);
-        exec_transact_replace_methodID_ = env->GetStaticMethodID(bridge_service_class_,
-                                                                 "execTransact",
-                                                                 "(IJJI)Z");
+        exec_transact_replace_methodID_ = JNI_GetStaticMethodID(env, bridge_service_class_,
+                                                                "execTransact",
+                                                                "(IJJI)Z");
         if (!exec_transact_replace_methodID_) {
             LOGE("execTransact class not found");
             return;
         }
 
         ScopedLocalRef<jclass> binderClass(env, env->FindClass("android/os/Binder"));
-        exec_transact_backup_methodID_ = env->GetMethodID(binderClass.get(), "execTransact",
+        exec_transact_backup_methodID_ = JNI_GetMethodID(env, binderClass.get(), "execTransact",
                                                           "(IJJI)Z");
         auto set_table_override = reinterpret_cast<void (*)(
                 JNINativeInterface *)>(DobbySymbolResolver(nullptr,
@@ -129,37 +132,49 @@ namespace lspd {
             return nullptr;
         }
 
-
         auto bridgeServiceName = env->NewStringUTF(BRIDGE_SERVICE_NAME.data());
-        auto bridgeService = JNI_CallStaticObjectMethod(env, serviceManagerClass_,
-                                                        getServiceMethod_, bridgeServiceName);
+        auto bridgeService = JNI_CallStaticObjectMethod(env, service_manager_class_,
+                                                        get_service_method_, bridgeServiceName);
         if (!bridgeService) {
             LOGD("can't get %s", BRIDGE_SERVICE_NAME.data());
             return nullptr;
         }
 
-        auto data = JNI_CallStaticObjectMethod(env, parcelClass_, obtainMethod_);
-        auto reply = JNI_CallStaticObjectMethod(env, parcelClass_, obtainMethod_);
+        auto data = JNI_CallStaticObjectMethod(env, parcel_class_, obtain_method_);
+        auto reply = JNI_CallStaticObjectMethod(env, parcel_class_, obtain_method_);
 
         auto descriptor = env->NewStringUTF(BRIDGE_SERVICE_DESCRIPTOR.data());
-        JNI_CallVoidMethod(env, data, writeInterfaceTokenMethod_, descriptor);
-        JNI_CallVoidMethod(env, data, writeIntMethod_, BRIDGE_ACTION_GET_BINDER);
+        JNI_CallVoidMethod(env, data, write_interface_token_method_, descriptor);
+        JNI_CallVoidMethod(env, data, write_int_method_, BRIDGE_ACTION_GET_BINDER);
 
-        auto res = JNI_CallBooleanMethod(env, bridgeService, transactMethod_,
+        auto res = JNI_CallBooleanMethod(env, bridgeService, transact_method_,
                                          BRIDGE_TRANSACTION_CODE,
                                          data,
                                          reply, 0);
 
         jobject service = nullptr;
         if (res) {
-            env->CallVoidMethod(reply, readExceptionMethod_);
+            env->CallVoidMethod(reply, read_exception_method_);
             if (!ClearException(env)) {
-                service = JNI_CallObjectMethod(env, reply, readStrongBinderMethod_);
+                service = JNI_CallObjectMethod(env, reply, read_strong_binder_method_);
             }
         }
         JNI_CallVoidMethod(env, data, recycleMethod_);
         JNI_CallVoidMethod(env, reply, recycleMethod_);
 
         return service;
+    }
+
+    jobject Service::RequestBinderForSystemServer(JNIEnv *env) {
+        auto bridgeServiceName = env->NewStringUTF(SYSTEM_SERVER_BRIDGE_SERVICE_NAME.data());
+        auto binder = JNI_CallStaticObjectMethod(env, service_manager_class_,
+                                                        get_service_method_, bridgeServiceName);
+        if(!binder) {
+            LOGD("Fail to get binder for system server");
+            return nullptr;
+        }
+        auto method = JNI_GetStaticMethodID(env, bridge_service_class_, "getApplicationServiceForSystemServer", "(Landroid/os/IBinder;)Landroid/os/IBinder;");
+        auto app_binder = JNI_CallStaticObjectMethod(env, bridge_service_class_, method, binder);
+        return app_binder;
     }
 }

@@ -11,24 +11,6 @@ import android.util.Log;
 import static io.github.lsposed.lspd.service.ServiceManager.TAG;
 
 public class LSPosedService extends ILSPosedService.Stub {
-    LSPosedService() {
-        BridgeService.send(this, new BridgeService.Listener() {
-            @Override
-            public void onSystemServerRestarted() {
-                Log.w(TAG, "system restarted...");
-            }
-
-            @Override
-            public void onResponseFromBridgeService(boolean response) {
-                if (response) {
-                    Log.i(TAG, "sent service to bridge");
-                } else {
-                    Log.w(TAG, "no response from bridge");
-                }
-            }
-        });
-    }
-
     @Override
     public ILSPApplicationService requestApplicationService(int uid, int pid) {
         if (Binder.getCallingUid() != 1000) {

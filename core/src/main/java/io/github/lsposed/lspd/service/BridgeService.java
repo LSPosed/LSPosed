@@ -9,6 +9,7 @@ import android.os.Parcel;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.util.Log;
+import android.os.Process;
 
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
@@ -22,7 +23,7 @@ import static io.github.lsposed.lspd.service.ServiceManager.TAG;
 
 public class BridgeService {
     private static final int TRANSACTION_CODE = ('_' << 24) | ('L' << 16) | ('S' << 8) | 'P';
-    private static final String DESCRIPTOR = "android.app.IActivityManager";
+    private static final String DESCRIPTOR = "LSPosed";
     private static final String SERVICE_NAME = "activity";
 
     enum ACTION {
@@ -194,6 +195,7 @@ public class BridgeService {
         data.enforceInterface(DESCRIPTOR);
 
         ACTION action = ACTION.values()[data.readInt()];
+
         Log.d(TAG, "onTransact: action=" + action + ", callingUid=" + Binder.getCallingUid() + ", callingPid=" + Binder.getCallingPid());
 
         switch (action) {
@@ -263,5 +265,18 @@ public class BridgeService {
         }
 
         return res;
+    }
+
+    @Keep
+    public static IBinder getApplicationServiceForSystemServer(IBinder binder) {
+        if (binder == null) return null;
+        try {
+            ILSPosedService service = ILSPosedService.Stub.asInterface(binder);
+            ILSPApplicationService applicationService = service.requestApplicationService(Process.myUid(), Process.myPid());
+            if (applicationService != null) applicationService.asBinder();
+        } catch (Throwable e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+        }
+        return null;
     }
 }
