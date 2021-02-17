@@ -10,6 +10,7 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.util.Log;
 
+import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -226,6 +227,7 @@ public class BridgeService {
     }
 
     @SuppressWarnings({"unused", "RedundantSuppression"})
+    @Keep
     public static boolean execTransact(int code, long dataObj, long replyObj, int flags) {
         if (code != TRANSACTION_CODE) return false;
 
