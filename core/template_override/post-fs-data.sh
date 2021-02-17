@@ -65,18 +65,12 @@ livePatch() {
 MISC_PATH=$(cat /data/adb/lspd/misc_path)
 BASE_PATH="/data/misc/$MISC_PATH"
 
-LOG_PATH="${BASE_PATH}/log"
-DISABLE_VERBOSE_LOG_FILE="${BASE_PATH}/disable_verbose_log"
-LOG_VERBOSE=true
-OLD_PATH=${PATH}
-PATH=${PATH#*:}
-PATH_INFO=$(ls -ldZ "${BASE_PATH}")
-PATH=${OLD_PATH}
-PATH_OWNER=$(echo "${PATH_INFO}" | awk -F " " '{print $3":"$4}')
-PATH_CONTEXT=$(echo "${PATH_INFO}" | awk -F " " '{print $5}')
+LOG_PATH="/data/adb/lspd/log"
+ENABLE_VERBOSE_LOG_FILE="/data/adb/lspd/config/verbose_log"
+LOG_VERBOSE=false
 
-if [ "$(cat "${DISABLE_VERBOSE_LOG_FILE}")" = "1" ]; then
-    LOG_VERBOSE=false
+if [ "$(cat "${ENABLE_VERBOSE_LOG_FILE}")" = "1" ]; then
+    LOG_VERBOSE=true
 fi
 
 # If logcat client is kicked out by klogd server, we'll restart it.
@@ -149,9 +143,7 @@ if [[ -f "/data/adb/riru/modules/lspd.prop" ]]; then
 fi
 
 chcon -R u:object_r:system_file:s0 "${MODDIR}"
-chcon -R ${PATH_CONTEXT} "${LOG_PATH}"
-chown -R ${PATH_OWNER} "${LOG_PATH}"
-chmod -R 666 "${LOG_PATH}"
+chcon -R u:object_r:system_file:s0 "/data/adb/lspd"
 
 if [[ ! -z "${MISC_PATH}" ]]; then
     mkdir -p "${BASE_PATH}/cache"
@@ -161,10 +153,8 @@ if [[ ! -z "${MISC_PATH}" ]]; then
     rm -rf ${LOG_PATH}.old
     mv ${LOG_PATH} ${LOG_PATH}.old
     mkdir -p ${LOG_PATH}
-    chmod 771 ${LOG_PATH}
     print_log_head "${LOG_PATH}/modules.log"
     # start_verbose_log_catcher
     start_log_catcher all "LSPosed:V XSharedPreferences:V LSPosed-Bridge:V LSPosedManager:V *:F" true ${LOG_VERBOSE}
-    echo 'starting service'
 fi
 rm -f /data/adb/lspd/new_install

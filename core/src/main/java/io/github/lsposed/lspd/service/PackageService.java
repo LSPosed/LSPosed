@@ -38,8 +38,8 @@ public class PackageService {
         ArrayList<PackageInfo> res = new ArrayList<>();
         IPackageManager pm = getPackageManager();
         if (pm == null) return new ParceledListSlice<>(res);
-        for (int uid : UserService.getUsers()) {
-            res.addAll(pm.getInstalledPackages(flags, uid).getList());
+        for (int userId : UserService.getUsers()) {
+            res.addAll(pm.getInstalledPackages(flags, userId).getList());
         }
         return new ParceledListSlice<>(res);
     }

@@ -241,8 +241,8 @@ else
   abortC "${LANG_UTIL_ERR_VARIANT_UNSUPPORT} ${VARIANT}"
 fi
 
-if [[ ! -e /data/misc/$MISC_PATH/disable_verbose_log ]]; then
-    echo "1" > /data/misc/$MISC_PATH/disable_verbose_log
+if [[ ! -e /data/adb/lspd/config/verbose_log ]]; then
+    echo "0" > /data/adb/lspd/config/verbose_log
 fi
 
 
