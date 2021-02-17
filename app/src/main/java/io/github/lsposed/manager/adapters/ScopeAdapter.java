@@ -153,7 +153,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             }
 
             if (info.sharedUserId != null) {
-                ArrayList<PackageInfo> packageInfos = sharedUidPackages.computeIfAbsent(info.sharedUserId, k -> new ArrayList<>());
+                ArrayList<PackageInfo> packageInfos = sharedUidPackages.computeIfAbsent(info.sharedUserId + "!" + uid / 100000, k -> new ArrayList<>());
                 packageInfos.add(info);
             } else {
                 AppInfo appInfo = new AppInfo();
@@ -421,7 +421,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         CharSequence appName;
         int userId = appInfo.packageInfo.applicationInfo.uid / 100000;
         if (userId != 0) {
-            appName = String.format("%s (%s)", appInfo.label, userId);
+            appName = String.format("%s (%s)", android ? activity.getString(R.string.android_framework) : appInfo.label, userId);
         } else {
             appName = android ? activity.getString(R.string.android_framework) : appInfo.label;
         }
@@ -491,7 +491,8 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
 
     @Override
     public long getItemId(int position) {
-        return showList.get(position).packageInfo.packageName.hashCode();
+        PackageInfo info = showList.get(position).packageInfo;
+        return (info.packageName  + "!" + info.applicationInfo.uid / 100000).hashCode();
     }
 
     @Override
