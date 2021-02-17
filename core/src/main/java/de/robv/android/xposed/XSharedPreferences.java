@@ -201,8 +201,7 @@ public final class XSharedPreferences implements SharedPreferences {
             Path path = mFile.toPath();
             try {
                 if (sWatcher == null) {
-                    // TODO
-//                    sWatcher = new File(XposedInit.prefsBasePath).toPath().getFileSystem().newWatchService();
+                    sWatcher = new File(serviceClient.getPrefsPath("")).toPath().getFileSystem().newWatchService();
                     if (BuildConfig.DEBUG) Log.d(TAG, "Created WatchService instance");
                 }
                 mWatchKey = path.getParent().register(sWatcher, StandardWatchEventKinds.ENTRY_CREATE,
