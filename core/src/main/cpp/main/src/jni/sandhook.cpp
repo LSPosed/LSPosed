@@ -14,43 +14,25 @@
  * You should have received a copy of the GNU General Public License
  * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2020 EdXposed Contributors
  * Copyright (C) 2021 LSPosed Contributors
  */
 
-package io.github.lsposed.lspd.core;
+#include <sandhook.h>
+#include "sandhook.h"
+#include "native_util.h"
+#include "nativehelper/jni_macros.h"
 
-import androidx.annotation.IntDef;
-import androidx.annotation.NonNull;
+namespace lspd {
+    LSP_DEF_NATIVE_METHOD(bool, SandHook, init, jclass classSandHook, jclass classNeverCall) {
+        return JNI_Load_Ex(env, classSandHook, classNeverCall);
+    }
 
-import io.github.lsposed.common.KeepAll;
-import io.github.lsposed.lspd.proxy.Router;
+    static JNINativeMethod gMethods[] = {
+            LSP_NATIVE_METHOD(SandHook, init,
+                              "(Ljava/lang/Class;Ljava/lang/Class;)Z"),
+    };
 
-import java.lang.annotation.Retention;
-
-import static java.lang.annotation.RetentionPolicy.SOURCE;
-
-public interface EdxpImpl extends KeepAll {
-
-    int NONE = 0;
-    int YAHFA = 1;
-    int SANDHOOK = 2;
-
-    @NonNull
-    Proxy getNormalProxy();
-
-    @NonNull
-    Router getRouter();
-
-    @Variant
-    int getVariant();
-
-    void init();
-
-    boolean isInitialized();
-
-    @Retention(SOURCE)
-    @IntDef({NONE, YAHFA, SANDHOOK})
-    @interface Variant {
+    void RegisterSandHook(JNIEnv *env) {
+        REGISTER_LSP_NATIVE_METHODS(SandHook);
     }
 }

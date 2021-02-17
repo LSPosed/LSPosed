@@ -87,9 +87,9 @@ public class MainActivity extends BaseActivity {
         Glide.with(binding.appIcon)
                 .load(GlideHelper.wrapApplicationInfoForIconLoader(getApplicationInfo()))
                 .into(binding.appIcon);
-        String installedXposedVersion = ConfigManager.getXposedVersionName();
+        String installXposedVersion = ConfigManager.getXposedVersionName();
         int cardBackgroundColor;
-        if (installedXposedVersion != null) {
+        if (installXposedVersion != null) {
             binding.statusTitle.setText(String.format(Locale.US, "%s %s", getString(R.string.Activated), ConfigManager.getVariantString()));
             if (!ConfigManager.isPermissive()) {
                 if (Helpers.currentHoliday == Helpers.Holidays.LUNARNEWYEAR) {
@@ -98,7 +98,7 @@ public class MainActivity extends BaseActivity {
                     cardBackgroundColor = ResourcesKt.resolveColor(getTheme(), R.attr.colorNormal);
                 }
                 binding.statusIcon.setImageResource(R.drawable.ic_check_circle);
-                binding.statusSummary.setText(String.format(Locale.US, "%s (%d)", installedXposedVersion, ConfigManager.getXposedVersionCode()));
+                binding.statusSummary.setText(String.format(Locale.US, "%s (%d)", installXposedVersion, ConfigManager.getXposedVersionCode()));
             } else {
                 cardBackgroundColor = ResourcesKt.resolveColor(getTheme(), R.attr.colorError);
                 binding.statusIcon.setImageResource(R.drawable.ic_warning);

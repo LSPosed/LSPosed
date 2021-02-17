@@ -24,6 +24,6 @@
 
 namespace lspd {
 
-    void RegisterEdxpYahfa(JNIEnv *);
+    void RegisterYahfa(JNIEnv *);
 
 } // namespace lspd

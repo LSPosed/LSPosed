@@ -1,24 +1,15 @@
 package com.swift.sandhook.xposedcompat;
 
-import android.os.Process;
-import android.text.TextUtils;
-
-import io.github.lsposed.lspd.util.FileUtils;
-import io.github.lsposed.lspd.util.ProcessUtils;
 import io.github.lsposed.lspd.util.ProxyClassLoader;
 import com.swift.sandhook.wrapper.HookWrapper;
 import com.swift.sandhook.xposedcompat.methodgen.SandHookXposedBridge;
 import com.swift.sandhook.xposedcompat.utils.ApplicationUtils;
 
-import java.io.File;
 import java.lang.reflect.Member;
 
 import de.robv.android.xposed.XposedBridge;
 
 public class XposedCompat {
-
-    // TODO initialize these variables
-    public static volatile File cacheDir;
     public static volatile ClassLoader classLoader;
 
     //try to use internal stub hooker & backup method to speed up hook
@@ -40,19 +31,8 @@ public class XposedCompat {
     }
 
     public static void onForkProcess() {
-        cacheDir = null;
         classLoader = null;
         sandHookXposedClassLoader = null;
-    }
-
-    public static File getCacheDir() {
-        // TODO: cache path?
-//        if (cacheDir == null) {
-//            String fixedAppDataDir = getDataPathPrefix() + getPackageName(ConfigManager.appDataDir) + "/";
-//            cacheDir = new File(fixedAppDataDir, "/cache/sandhook/"
-//                    + ProcessUtils.getProcessName(Process.myPid()).replace(":", "_") + "/");
-//        }
-        return cacheDir;
     }
 
     public static ClassLoader getClassLoader() {
@@ -74,30 +54,4 @@ public class XposedCompat {
             return sandHookXposedClassLoader;
         }
     }
-
-    public static boolean clearCache() {
-        try {
-            FileUtils.delete(getCacheDir());
-            getCacheDir().mkdirs();
-            return true;
-        } catch (Throwable throwable) {
-            return false;
-        }
-    }
-
-    public static void clearOatCache() {
-        SandHookXposedBridge.clearOatFile();
-    }
-
-    public static String getPackageName(String dataDir) {
-        if (TextUtils.isEmpty(dataDir)) {
-            return "";
-        }
-        int lastIndex = dataDir.lastIndexOf("/");
-        if (lastIndex < 0) {
-            return dataDir;
-        }
-        return dataDir.substring(lastIndex + 1);
-    }
-
 }

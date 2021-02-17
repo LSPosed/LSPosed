@@ -66,13 +66,13 @@ public class StatusDialogBuilder extends AlertDialog.Builder {
         super(context);
         StatusInstallerBinding binding = StatusInstallerBinding.inflate(LayoutInflater.from(context), null, false);
 
-        String installedXposedVersion = ConfigManager.getXposedVersionName();
+        String installXposedVersion = ConfigManager.getXposedVersionName();
         String mAppVer = String.format("%s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE);
         binding.manager.setText(mAppVer);
 
-        if (installedXposedVersion != null) {
+        if (installXposedVersion != null) {
             binding.api.setText(String.format(Locale.US, "%s.0", ConfigManager.getXposedApiVersion()));
-            binding.framework.setText(String.format(Locale.US, "%s (%s)", installedXposedVersion, ConfigManager.getXposedVersionCode()));
+            binding.framework.setText(String.format(Locale.US, "%s (%s)", installXposedVersion, ConfigManager.getXposedVersionCode()));
         }
 
         binding.androidVersion.setText(context.getString(R.string.android_sdk, getAndroidVersion(), Build.VERSION.RELEASE, Build.VERSION.SDK_INT));

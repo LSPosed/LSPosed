@@ -83,18 +83,6 @@ public final class SandHookXposedBridge {
         }
     }
 
-    public static void clearOatFile() {
-        String fixedAppDataDir = XposedCompat.getCacheDir().getAbsolutePath();
-        File dexOatDir = new File(fixedAppDataDir, "/hookers/oat/");
-        if (!dexOatDir.exists())
-            return;
-        try {
-            FileUtils.delete(dexOatDir);
-            dexOatDir.mkdirs();
-        } catch (Throwable throwable) {
-        }
-    }
-
     private static boolean checkMember(Member member) {
 
         if (member instanceof Method) {
