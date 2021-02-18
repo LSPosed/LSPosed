@@ -221,7 +221,10 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         if (info.packageName.equals(BuildConfig.APPLICATION_ID)) {
             return true;
         }
-        if (checkedList.contains(info.applicationInfo.uid) || info.packageName.equals("android")) {
+        if (info.packageName.equals("android") && info.applicationInfo.uid / 100000 != 0) {
+            return true;
+        }
+        if (checkedList.contains(info.applicationInfo.uid)) {
             return false;
         }
         if (!preferences.getBoolean("show_modules", false)) {
