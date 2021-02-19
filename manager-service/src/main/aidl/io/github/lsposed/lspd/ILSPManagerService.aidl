@@ -1,6 +1,8 @@
 package io.github.lsposed.lspd;
 
 import io.github.lsposed.lspd.utils.ParceledListSlice;
+import io.github.lsposed.lspd.Application;
+
 
 interface ILSPManagerService {
     ParceledListSlice<PackageInfo> getInstalledPackagesFromAllUsers(int flags) = 2;
@@ -11,9 +13,9 @@ interface ILSPManagerService {
 
     boolean disableModule(String packageName) = 5;
 
-    boolean setModuleScope(String packageName, in int[] uid) = 6;
+    boolean setModuleScope(String packageName, in ParceledListSlice<Application> scope) = 6;
 
-    int[] getModuleScope(String packageName) = 7;
+    ParceledListSlice<Application> getModuleScope(String packageName) = 7;
 
     boolean isResourceHook() = 9;
 

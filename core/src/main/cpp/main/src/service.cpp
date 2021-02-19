@@ -73,8 +73,8 @@ namespace lspd {
         write_interface_token_method_ = env->GetMethodID(parcel_class_, "writeInterfaceToken",
                                                          "(Ljava/lang/String;)V");
         write_int_method_ = env->GetMethodID(parcel_class_, "writeInt", "(I)V");
-//        writeStringMethod_ = env->GetMethodID(parcel_class_, "writeString",
-//                                              "(Ljava/lang/String;)V");
+        write_string_method_ = env->GetMethodID(parcel_class_, "writeString",
+                                              "(Ljava/lang/String;)V");
         read_exception_method_ = env->GetMethodID(parcel_class_, "readException", "()V");
         read_strong_binder_method_ = env->GetMethodID(parcel_class_, "readStrongBinder",
                                                       "()Landroid/os/IBinder;");
@@ -126,7 +126,7 @@ namespace lspd {
         LOGD("Done InitService");
     }
 
-    jobject Service::RequestBinder(JNIEnv *env) {
+    jobject Service::RequestBinder(JNIEnv *env, jstring nice_name) {
         if (UNLIKELY(!initialized_)) {
             LOGE("Service not initialized");
             return nullptr;
@@ -146,6 +146,7 @@ namespace lspd {
         auto descriptor = env->NewStringUTF(BRIDGE_SERVICE_DESCRIPTOR.data());
         JNI_CallVoidMethod(env, data, write_interface_token_method_, descriptor);
         JNI_CallVoidMethod(env, data, write_int_method_, BRIDGE_ACTION_GET_BINDER);
+        JNI_CallVoidMethod(env, data, write_string_method_, nice_name);
 
         auto res = JNI_CallBooleanMethod(env, bridgeService, transact_method_,
                                          BRIDGE_TRANSACTION_CODE,

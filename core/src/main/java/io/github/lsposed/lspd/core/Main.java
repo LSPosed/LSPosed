@@ -40,7 +40,7 @@ public class Main implements KeepAll {
     private static final Binder heartBeatBinder = new Binder();
 
     public static void forkAndSpecializePost(String appDataDir, String niceName, IBinder binder) {
-        LSPApplicationServiceClient.Init(binder);
+        LSPApplicationServiceClient.Init(binder, niceName);
         serviceClient.registerHeartBeat(heartBeatBinder);
         final int variant = serviceClient.getVariant();
         Impl lspd = getImpl(variant);
@@ -52,7 +52,7 @@ public class Main implements KeepAll {
     }
 
     public static void forkSystemServerPost(IBinder binder) {
-        LSPApplicationServiceClient.Init(binder);
+        LSPApplicationServiceClient.Init(binder, "android");
         serviceClient.registerHeartBeat(heartBeatBinder);
         final int variant = serviceClient.getVariant();
         Impl lspd = getImpl(variant);

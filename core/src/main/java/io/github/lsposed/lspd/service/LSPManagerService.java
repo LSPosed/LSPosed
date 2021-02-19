@@ -5,11 +5,10 @@ import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 
-import java.util.List;
-
 import de.robv.android.xposed.XposedBridge;
 import io.github.lsposed.lspd.BuildConfig;
 import io.github.lsposed.lspd.ILSPManagerService;
+import io.github.lsposed.lspd.Application;
 import io.github.lsposed.lspd.utils.ParceledListSlice;
 
 public class LSPManagerService extends ILSPManagerService.Stub {
@@ -55,13 +54,13 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     }
 
     @Override
-    public boolean setModuleScope(String packageName, int[] uid) {
-        return ConfigManager.getInstance().setModuleScope(packageName, uid);
+    public boolean setModuleScope(String packageName, ParceledListSlice<Application> scope) {
+        return ConfigManager.getInstance().setModuleScope(packageName, scope.getList());
     }
 
     @Override
-    public int[] getModuleScope(String packageName) {
-        return ConfigManager.getInstance().getModuleScope(packageName);
+    public ParceledListSlice<Application> getModuleScope(String packageName) {
+        return new ParceledListSlice<Application>(ConfigManager.getInstance().getModuleScope(packageName));
     }
 
     @Override

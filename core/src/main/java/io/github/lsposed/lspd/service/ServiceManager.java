@@ -1,6 +1,7 @@
 package io.github.lsposed.lspd.service;
 
 import android.content.Context;
+import android.os.IBinder;
 import android.os.Looper;
 import android.util.Log;
 
@@ -32,7 +33,7 @@ public class ServiceManager {
         applicationService = new LSPApplicationService();
         managerService = new LSPManagerService();
 
-        android.os.ServiceManager.addService("serial", mainService);
+        android.os.ServiceManager.addService("serial", (IBinder) mainService);
 
         waitSystemService("package");
         waitSystemService("activity");
@@ -61,10 +62,15 @@ public class ServiceManager {
             Log.e(TAG, Log.getStackTraceString(e));
         }
 
-        Looper.loop();
-
-        Log.i(TAG, "server exited");
-        System.exit(0);
+        //noinspection InfiniteLoopStatement
+        while (true) {
+            try {
+                Looper.loop();
+            } catch (Throwable e) {
+                Log.i(TAG, "server exited with " + Log.getStackTraceString(e));
+                Log.i(TAG, "restarting");
+            }
+        }
     }
 
     public static LSPModuleService getModuleService() {

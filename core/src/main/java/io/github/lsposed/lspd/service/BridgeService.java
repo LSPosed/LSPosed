@@ -8,6 +8,7 @@ import android.os.IBinder;
 import android.os.Parcel;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.util.ArrayMap;
 import android.util.Log;
 import android.os.Process;
 
@@ -15,7 +16,15 @@ import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.android.server.LocalServices;
+import com.android.server.SystemService;
+import com.android.server.SystemServiceManager;
+import com.android.server.am.ActivityManagerService;
+import com.android.server.am.ProcessRecord;
+
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Map;
 
 import static hidden.HiddenApiBridge.Binder_allowBlocking;
@@ -44,6 +53,7 @@ public class BridgeService {
             this.bridgeService = bridgeService;
             bridgeService.linkToDeath(this, 0);
         }
+
         @Override
         public void binderDied() {
             Log.i(TAG, "service " + SERVICE_NAME + " is dead. ");
@@ -222,7 +232,8 @@ public class BridgeService {
             case ACTION_GET_BINDER: {
                 IBinder binder = null;
                 try {
-                    binder = service.requestApplicationService(Binder.getCallingUid(), Binder.getCallingPid()).asBinder();
+                    String processName = data.readString();
+                    binder = service.requestApplicationService(Binder.getCallingUid(), Binder.getCallingPid(), processName).asBinder();
                 } catch (RemoteException e) {
                     Log.e(TAG, Log.getStackTraceString(e));
                 }
@@ -282,11 +293,67 @@ public class BridgeService {
         if (binder == null) return null;
         try {
             ILSPosedService service = ILSPosedService.Stub.asInterface(binder);
-            ILSPApplicationService applicationService = service.requestApplicationService(Process.myUid(), Process.myPid());
+            ILSPApplicationService applicationService = service.requestApplicationService(Process.myUid(), Process.myPid(), "android");
             if (applicationService != null) return applicationService.asBinder();
         } catch (Throwable e) {
             Log.e(TAG, Log.getStackTraceString(e));
         }
         return null;
+    }
+    private static void tryGetActivityManagerServiceInstance() {
+        try {
+            Log.e(TAG, "Trying to get the ams");
+            Field localServiceField = LocalServices.class.getDeclaredField("sLocalServiceObjects");
+            localServiceField.setAccessible(true);
+            ArrayMap<Class<?>, Object> localServiceMap = (ArrayMap<Class<?>, Object>) localServiceField.get(null);
+            Class<?> systemServiceManagerClass = null;
+            for (Class<?> clazz : localServiceMap.keySet()) {
+                if (clazz.getName().equals("com.android.server.SystemServiceManager")) {
+                    systemServiceManagerClass = clazz;
+                }
+
+            }
+            Field parentField = ClassLoader.class.getDeclaredField("parent");
+            parentField.setAccessible(true);
+            parentField.set(BridgeService.class.getClassLoader(), systemServiceManagerClass.getClassLoader());
+            SystemServiceManager systemServiceManager = LocalServices.getService(SystemServiceManager.class);
+            ArrayList<SystemService> services;
+            try {
+                Field servicesField = systemServiceManagerClass.getDeclaredField("mServices");
+                servicesField.setAccessible(true);
+                services = (ArrayList<SystemService>) servicesField.get(systemServiceManager);
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                Log.e(TAG, Log.getStackTraceString(e));
+                return;
+            }
+
+            ActivityManagerService.Lifecycle lifecycle = null;
+
+            for (SystemService service : services) {
+                if (service instanceof ActivityManagerService.Lifecycle) {
+                    lifecycle = (ActivityManagerService.Lifecycle) service;
+                }
+            }
+            if (lifecycle == null) {
+                Log.e(TAG, "I cannot get the lifecycle...");
+            }
+            ActivityManagerService activityManagerService = lifecycle.getService();
+            if (activityManagerService != null) {
+                Log.e(TAG, "I got the ams!!!: " + activityManagerService);
+            } else {
+                Log.e(TAG, "I cannot get the ams");
+            }
+            Method findProcessLockedMethod = ActivityManagerService.class.getDeclaredMethod("findProcessLocked", String.class, int.class, String.class);
+            findProcessLockedMethod.setAccessible(true);
+            ProcessRecord record = (ProcessRecord) findProcessLockedMethod.invoke(activityManagerService, String.valueOf(Binder.getCallingPid()), 0, "LSPosed");
+            Field processNameField = ProcessRecord.class.getDeclaredField("processName");
+            processNameField.setAccessible(true);
+            if (record != null) {
+                Log.e(TAG, "I got the record!!!: " + record);
+                Log.e(TAG, "I got the process name: " + processNameField.get(record));
+            }
+        } catch (Throwable e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+        }
     }
 }

@@ -11,7 +11,7 @@ interface ILSPApplicationService {
 
     boolean isResourcesHookEnabled() = 5;
 
-    String[] getModulesList() = 6;
+    String[] getModulesList(String processName) = 6;
 
     String getPrefsPath(String packageName) = 7;
 

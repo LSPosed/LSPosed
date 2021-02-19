@@ -1,16 +1,25 @@
 package io.github.lsposed.lspd.service;
 
+import android.content.pm.ComponentInfo;
 import android.content.pm.IPackageManager;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ServiceInfo;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import io.github.lsposed.lspd.utils.ParceledListSlice;
 
+import static android.content.pm.ServiceInfo.FLAG_ISOLATED_PROCESS;
+
 public class PackageService {
+    public static final int PER_USER_RANGE = 100000;
+
     private static IPackageManager pm = null;
     private static IBinder binder = null;
 
@@ -34,6 +43,14 @@ public class PackageService {
         return pm.getPackagesForUid(uid);
     }
 
+    public static Set<String> getProcessesForUid(int uid) throws RemoteException {
+        HashSet<String> processNames = new HashSet<>();
+        for (String packageName : getPackagesForUid(uid)) {
+            processNames.addAll(fetchProcesses(packageName, uid / PER_USER_RANGE));
+        }
+        return processNames;
+    }
+
     public static ParceledListSlice<PackageInfo> getInstalledPackagesFromAllUsers(int flags) throws RemoteException {
         ArrayList<PackageInfo> res = new ArrayList<>();
         IPackageManager pm = getPackageManager();
@@ -46,6 +63,31 @@ public class PackageService {
 
     public static void grantRuntimePermission(String packageName, String permissionName, int userId) throws RemoteException {
         IPackageManager pm = getPackageManager();
+        if (pm == null) return;
         pm.grantRuntimePermission(packageName, permissionName, userId);
+    }
+
+    public static Set<String> fetchProcesses(PackageInfo pkgInfo) {
+        HashSet<String> processNames = new HashSet<>();
+        for (ComponentInfo[] componentInfos : new ComponentInfo[][]{pkgInfo.activities, pkgInfo.receivers, pkgInfo.providers}) {
+            for (ComponentInfo componentInfo : componentInfos) {
+                processNames.add(componentInfo.processName);
+            }
+        }
+        for (ServiceInfo service : pkgInfo.services) {
+            if ((service.flags & FLAG_ISOLATED_PROCESS) == 0) {
+                processNames.add(service.processName);
+            }
+        }
+        return processNames;
+    }
+
+    public static Set<String> fetchProcesses(String packageName, int userId) throws RemoteException {
+        IPackageManager pm = getPackageManager();
+        if (pm == null) return new HashSet<>();
+        PackageInfo pkgInfo = pm.getPackageInfo(packageName, PackageManager.MATCH_DISABLED_COMPONENTS |
+                PackageManager.MATCH_UNINSTALLED_PACKAGES | PackageManager.GET_ACTIVITIES |
+                PackageManager.GET_SERVICES | PackageManager.GET_RECEIVERS | PackageManager.GET_PROVIDERS, userId);
+        return fetchProcesses(pkgInfo);
     }
 }
