@@ -57,7 +57,7 @@ public class ServiceManager {
         });
 
         try {
-            ConfigManager.getInstance().grantManagerPermission();
+            ConfigManager.grantManagerPermission();
         } catch (Throwable e) {
             Log.e(TAG, Log.getStackTraceString(e));
         }

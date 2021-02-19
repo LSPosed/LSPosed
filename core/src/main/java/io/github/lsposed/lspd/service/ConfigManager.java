@@ -66,7 +66,7 @@ public class ConfigManager {
     static final private File modulesLogPath = new File(logPath, "modules.log");
     static final private File verboseLogPath = new File(logPath, "all.log");
 
-    final FileObserver configObserver = new FileObserver(configPath) {
+    final FileObserver configObserver = new FileObserver(configPath, FileObserver.MODIFY | FileObserver.DELETE | FileObserver.CREATE | FileObserver.MOVED_TO) {
         @Override
         public void onEvent(int event, @Nullable String path) {
             updateConfig();
@@ -90,6 +90,11 @@ public class ConfigManager {
                 return p.processName.equals(processName) && p.uid == uid;
             }
             return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return processName.hashCode() ^ uid;
         }
     }
 
@@ -210,7 +215,7 @@ public class ConfigManager {
         PackageInfo pkgInfo = PackageService.getPackageInfo(app.packageName, 0, app.userId);
         List<ProcessScope> processes = new ArrayList<>();
         if (pkgInfo != null && pkgInfo.applicationInfo != null) {
-            for (String process : PackageService.getProcessesForUid(pkgInfo.applicationInfo.uid)) {
+            for (String process : PackageService.getProcessesForUid(pkgInfo.applicationInfo.uid, app.userId)) {
                 processes.add(new ProcessScope(process, pkgInfo.applicationInfo.uid));
             }
         }
@@ -247,7 +252,15 @@ public class ConfigManager {
                 }
             }
             for (Application obsoletePackage : obsoletePackages) {
+                Log.d(TAG, "removing obsolete package: " + obsoletePackage.packageName + "/" + obsoletePackage.userId);
                 removeAppWithoutCache(obsoletePackage);
+            }
+        }
+        Log.d(TAG, "cached Scope");
+        for(ProcessScope ps : cachedScope.keySet()) {
+            Log.d(TAG, ps.processName + "/" + ps.uid);
+            for(String apk: cachedScope.get(ps)) {
+                Log.d(TAG, "\t" + apk);
             }
         }
     }
@@ -490,9 +503,9 @@ public class ConfigManager {
         return miscPath + File.separator + "prefs" + File.separator + fileName;
     }
 
-    public void grantManagerPermission() {
+    static public void grantManagerPermission() {
         try {
-            PackageService.grantRuntimePermission(manager, "android.permission.INTERACT_ACROSS_USERS", 0);
+            PackageService.grantRuntimePermission(readText(managerPath, DEFAULT_MANAGER_PACKAGE_NAME), "android.permission.INTERACT_ACROSS_USERS", 0);
         } catch (RemoteException e) {
             Log.e(TAG, Log.getStackTraceString(e));
         }

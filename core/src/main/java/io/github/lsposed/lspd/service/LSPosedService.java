@@ -26,7 +26,7 @@ public class LSPosedService extends ILSPosedService.Stub {
                 return ServiceManager.getApplicationService();
         }
         if (ConfigManager.getInstance().shouldSkipProcess(new ConfigManager.ProcessScope(processName, uid))) {
-            Log.d(TAG, "Skipped " + processName);
+            Log.d(TAG, "Skipped " + processName + "/" + uid);
             return null;
         }
         if (ServiceManager.getApplicationService().hasRegister(uid, pid)) {
@@ -66,7 +66,7 @@ public class LSPosedService extends ILSPosedService.Stub {
         }
         if (!intent.getAction().equals(Intent.ACTION_PACKAGE_REMOVED) && uid > 0 && ConfigManager.getInstance().isManager(packageName)) {
             try {
-                ConfigManager.getInstance().grantManagerPermission();
+                ConfigManager.grantManagerPermission();
             } catch (Throwable e) {
                 Log.e(TAG, Log.getStackTraceString(e));
             }
