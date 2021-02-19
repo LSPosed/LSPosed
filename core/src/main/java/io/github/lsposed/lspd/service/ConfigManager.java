@@ -21,8 +21,13 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
+import io.github.lsposed.lspd.Application;
 
 import static io.github.lsposed.lspd.service.ServiceManager.TAG;
 
@@ -31,35 +36,35 @@ import static io.github.lsposed.lspd.service.ServiceManager.TAG;
 public class ConfigManager {
     static ConfigManager instance = null;
 
-    final private File basePath = new File("/data/adb/lspd");
-    final private File configPath = new File(basePath, "config");
-    final private SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(new File(configPath, "modules_config.db"), null);
+    static final private File basePath = new File("/data/adb/lspd");
+    static final private File configPath = new File(basePath, "config");
+    static final private SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(new File(configPath, "modules_config.db"), null);
 
-    final private File resourceHookSwitch = new File(configPath, "enable_resources");
+    static final private File resourceHookSwitch = new File(configPath, "enable_resources");
     private boolean resourceHook = false;
 
-    final private File variantSwitch = new File(configPath, "variant");
+    static final private File variantSwitch = new File(configPath, "variant");
     private int variant = -1;
 
-    final private File verboseLogSwitch = new File(configPath, "verbose_log");
+    static final private File verboseLogSwitch = new File(configPath, "verbose_log");
     private boolean verboseLog = false;
 
-    final private String DEFAULT_MANAGER_PACKAGE_NAME = "io.github.lsposed.manager";
+    static final private String DEFAULT_MANAGER_PACKAGE_NAME = "io.github.lsposed.manager";
 
-    final private File managerPath = new File(configPath, "manager");
+    static final private File managerPath = new File(configPath, "manager");
     private String manager = null;
     private int managerUid = -1;
 
-    final private File miscFile = new File(basePath, "misc_path");
+    static final private File miscFile = new File(basePath, "misc_path");
     private String miscPath = null;
 
-    final private File selinuxPath = new File("/sys/fs/selinux/enforce");
+    static final private File selinuxPath = new File("/sys/fs/selinux/enforce");
     // only check on boot
     final private boolean isPermissive;
 
-    final private File logPath = new File(basePath, "log");
-    final private File modulesLogPath = new File(logPath, "modules.log");
-    final private File verboseLogPath = new File(logPath, "all.log");
+    static final private File logPath = new File(basePath, "log");
+    static final private File modulesLogPath = new File(logPath, "modules.log");
+    static final private File verboseLogPath = new File(logPath, "all.log");
 
     final FileObserver configObserver = new FileObserver(configPath) {
         @Override
@@ -69,11 +74,63 @@ public class ConfigManager {
         }
     };
 
-    private String readText(@NonNull File file) throws IOException {
+    static class ProcessScope {
+        String processName;
+        int uid;
+
+        ProcessScope(@NonNull String processName, int uid) {
+            this.processName = processName;
+            this.uid = uid;
+        }
+
+        @Override
+        public boolean equals(@Nullable Object o) {
+            if(o instanceof ProcessScope) {
+                ProcessScope p = (ProcessScope) o;
+                return p.processName.equals(processName) && p.uid == uid;
+            }
+            return false;
+        }
+    }
+
+    static private final SQLiteStatement createModulesTable = db.compileStatement("CREATE TABLE IF NOT EXISTS modules (" +
+            "mid integer PRIMARY KEY AUTOINCREMENT," +
+            "module_pkg_name text NOT NULL UNIQUE," +
+            "apk_path text NOT NULL, " +
+            "enabled BOOLEAN DEFAULT 0 " +
+            "CHECK (enabled IN (0, 1))" +
+            ");");
+    static private final SQLiteStatement createScopeTable = db.compileStatement("CREATE TABLE IF NOT EXISTS scope (" +
+            "mid integer," +
+            "app_pkg_name text NOT NULL," +
+            "user_id integer NOT NULL," +
+            "PRIMARY KEY (mid, app_pkg_name, user_id)" +
+            ");");
+
+    private final ConcurrentHashMap<ProcessScope, Set<String>> cachedScope = new ConcurrentHashMap<>();
+
+    public static boolean shouldSkipSystemServer() {
+        try(Cursor cursor = db.query("scope", new String[]{"mid"}, "app_pkg_name=?", new String[]{"android"}, null, null, null)){
+            return cursor == null || !cursor.moveToNext();
+        }
+    }
+
+    public static String[] getModulesPathForSystemServer() {
+        HashSet<String> modules = new HashSet<>();
+        try(Cursor cursor = db.query("scope INNER JOIN modules ON scope.mid = modules.mid", new String[]{"apk_path"}, "app_pkg_name=?", new String[]{"android"}, null, null, null)){
+            int apkPathIdx = cursor.getColumnIndex("apk_path");
+            while(cursor.moveToNext()) {
+                modules.add(cursor.getString(apkPathIdx));
+            }
+        }
+        return modules.toArray(new String[0]);
+    }
+
+    static private String readText(@NonNull File file) throws IOException {
         return new String(Files.readAllBytes(file.toPath())).trim();
     }
 
-    private String readText(@NonNull File file, String defaultValue) {
+    static private String readText(@NonNull File file, String defaultValue) {
         try {
             if (!file.exists()) return defaultValue;
             return readText(file);
@@ -83,7 +140,7 @@ public class ConfigManager {
         return defaultValue;
     }
 
-    private void writeText(@NonNull File file, String value) {
+    static private void writeText(@NonNull File file, String value) {
         try {
             Files.write(file.toPath(), value.getBytes(), StandardOpenOption.CREATE);
         } catch (IOException e) {
@@ -91,7 +148,7 @@ public class ConfigManager {
         }
     }
 
-    private int readInt(@NonNull File file, int defaultValue) {
+    static private int readInt(@NonNull File file, int defaultValue) {
         try {
             if (!file.exists()) return defaultValue;
             return Integer.parseInt(readText(file));
@@ -101,7 +158,7 @@ public class ConfigManager {
         return defaultValue;
     }
 
-    private void writeInt(@NonNull File file, int value) {
+    static private void writeInt(@NonNull File file, int value) {
         writeText(file, String.valueOf(value));
     }
 
@@ -130,21 +187,6 @@ public class ConfigManager {
         updateManager();
     }
 
-    private final SQLiteStatement createModulesTable = db.compileStatement("CREATE TABLE IF NOT EXISTS modules (" +
-            "mid integer PRIMARY KEY AUTOINCREMENT," +
-            "package_name text NOT NULL UNIQUE," +
-            "apk_path text NOT NULL, " +
-            "enabled BOOLEAN DEFAULT 0 " +
-            "CHECK (enabled IN (0, 1))" +
-            ");");
-    private final SQLiteStatement createScopeTable = db.compileStatement("CREATE TABLE IF NOT EXISTS scope (" +
-            "mid integer," +
-            "uid integer," +
-            "PRIMARY KEY (mid, uid)" +
-            ");");
-
-    private final ConcurrentHashMap<Integer, ArrayList<String>> modulesForUid = new ConcurrentHashMap<>();
-
     static ConfigManager getInstance() {
         if (instance == null)
             instance = new ConfigManager();
@@ -164,51 +206,81 @@ public class ConfigManager {
         createScopeTable.execute();
     }
 
+    private List<ProcessScope> getAssociatedProcesses(Application app) throws RemoteException {
+        PackageInfo pkgInfo = PackageService.getPackageInfo(app.packageName, 0, app.userId);
+        List<ProcessScope> processes = new ArrayList<>();
+        if (pkgInfo != null && pkgInfo.applicationInfo != null) {
+            for(String process: PackageService.getProcessesForUid(pkgInfo.applicationInfo.uid)){
+                processes.add(new ProcessScope(process, pkgInfo.applicationInfo.uid));
+            }
+        }
+        return processes;
+    }
+
     private synchronized void cacheScopes() {
-        modulesForUid.clear();
-        try (Cursor cursor = db.query("scope INNER JOIN modules ON scope.mid = modules.mid", new String[]{"uid", "apk_path"},
+        cachedScope.clear();
+        try (Cursor cursor = db.query("scope INNER JOIN modules ON scope.mid = modules.mid", new String[]{"app_pkg_name", "user_id", "apk_path"},
                 "enabled = ?", new String[]{"1"}, null, null, null)) {
             if (cursor == null) {
                 Log.e(TAG, "db cache failed");
                 return;
             }
-            int uid_idx = cursor.getColumnIndex("uid");
-            int apk_path_idx = cursor.getColumnIndex("apk_path");
+            int appPkgNameIdx = cursor.getColumnIndex("app_pkg_name");
+            int userIdIdx = cursor.getColumnIndex("user_id");
+            int apkPathIdx = cursor.getColumnIndex("apk_path");
+            HashSet<Application> obsoletePackages = new HashSet<>();
             while (cursor.moveToNext()) {
-                int uid = cursor.getInt(uid_idx);
-                String apk_path = cursor.getString(apk_path_idx);
-                modulesForUid.computeIfAbsent(uid, ignored -> new ArrayList<>()).add(apk_path);
+                Application app = new Application();
+                app.packageName = cursor.getString(appPkgNameIdx);
+                app.userId = cursor.getInt(userIdIdx);
+                String apk_path = cursor.getString(apkPathIdx);
+                try {
+                    List<ProcessScope> processesScope = getAssociatedProcesses(app);
+                    if (processesScope.isEmpty()) {
+                        obsoletePackages.add(app);
+                        continue;
+                    }
+                    for (ProcessScope processScope : processesScope)
+                        cachedScope.computeIfAbsent(processScope, ignored -> new HashSet<>()).add(apk_path);
+                } catch (RemoteException e) {
+                    Log.e(TAG, Log.getStackTraceString(e));
+                }
+            }
+            for (Application obsoletePackage : obsoletePackages) {
+                removeAppWithoutCache(obsoletePackage);
             }
         }
     }
 
     // This is called when a new process created, use the cached result
-    public String[] getModulesPathForUid(int uid) {
-        return isManager(uid) ? new String[0] : modulesForUid.getOrDefault(uid, new ArrayList<>()).toArray(new String[0]);
+    public String[] getModulesPathForProcess(String processName, int uid) {
+        return isManager(uid) ? new String[0] : cachedScope.getOrDefault(new ProcessScope(processName, uid), Collections.emptySet()).toArray(new String[0]);
     }
 
     // This is called when a new process created, use the cached result
-    // The signature matches Riru's
-    public boolean shouldSkipUid(int uid) {
-        return !modulesForUid.containsKey(uid) && !isManager(uid);
+    public boolean shouldSkipProcess(ProcessScope scope) {
+        return !cachedScope.containsKey(scope) && !isManager(scope.uid);
     }
 
     // This should only be called by manager, so we don't need to cache it
-    public int[] getModuleScope(String packageName) {
+    public List<Application> getModuleScope(String packageName) {
         int mid = getModuleId(packageName);
         if (mid == -1) return null;
-        try (Cursor cursor = db.query("scope INNER JOIN modules ON scope.mid = modules.mid", new String[]{"uid"},
+        try (Cursor cursor = db.query("scope INNER JOIN modules ON scope.mid = modules.mid", new String[]{"app_pkg_name", "user_id"},
                 "scope.mid = ?", new String[]{String.valueOf(mid)}, null, null, null)) {
             if (cursor == null) {
                 return null;
             }
-            int uid_idx = cursor.getColumnIndex("uid");
-            HashSet<Integer> result = new HashSet<>();
+            int userIdIdx = cursor.getColumnIndex("user_id");
+            int appPkgNameIdx = cursor.getColumnIndex("app_pkg_name");
+            ArrayList<Application> result = new ArrayList<>();
             while (cursor.moveToNext()) {
-                int uid = cursor.getInt(uid_idx);
-                result.add(uid);
+                Application scope = new Application();
+                scope.packageName = cursor.getString(appPkgNameIdx);
+                scope.userId = cursor.getInt(userIdIdx);
+                result.add(scope);
             }
-            return result.stream().mapToInt(i -> i).toArray();
+            return result;
         }
     }
 
@@ -218,11 +290,11 @@ public class ConfigManager {
             return false;
         }
         ContentValues values = new ContentValues();
-        values.put("package_name", packageName);
+        values.put("module_pkg_name", packageName);
         values.put("apk_path", apkPath);
         int count = (int) db.insertWithOnConflict("modules", null, values, SQLiteDatabase.CONFLICT_IGNORE);
         if (count < 0) {
-            count = db.updateWithOnConflict("modules", values, "package_name=?", new String[]{packageName}, SQLiteDatabase.CONFLICT_IGNORE);
+            count = db.updateWithOnConflict("modules", values, "module_pkg_name=?", new String[]{packageName}, SQLiteDatabase.CONFLICT_IGNORE);
         }
         if (count >= 1) {
             cacheScopes();
@@ -236,7 +308,7 @@ public class ConfigManager {
             Log.w(TAG, "get module id should not be called inside transaction");
             return -1;
         }
-        try (Cursor cursor = db.query("modules", new String[]{"mid"}, "package_name=?", new String[]{packageName}, null, null, null)) {
+        try (Cursor cursor = db.query("modules", new String[]{"mid"}, "module_pkg_name=?", new String[]{packageName}, null, null, null)) {
             if (cursor == null) return -1;
             if (cursor.getCount() != 1) return -1;
             cursor.moveToFirst();
@@ -244,17 +316,18 @@ public class ConfigManager {
         }
     }
 
-    public boolean setModuleScope(String packageName, int[] uid) {
-        if (uid == null || uid.length == 0) return false;
+    public boolean setModuleScope(String packageName, List<Application> scopes) {
+        if (scopes.isEmpty()) return false;
         int mid = getModuleId(packageName);
         if (mid == -1) return false;
         try {
             db.beginTransaction();
             db.delete("scope", "mid = ?", new String[]{String.valueOf(mid)});
-            for (int id : uid) {
+            for (Application app : scopes) {
                 ContentValues values = new ContentValues();
                 values.put("mid", mid);
-                values.put("uid", id);
+                values.put("app_pkg_name", app.packageName);
+                values.put("user_id", app.userId);
                 db.insertWithOnConflict("scope", null, values, SQLiteDatabase.CONFLICT_IGNORE);
             }
         } finally {
@@ -266,15 +339,15 @@ public class ConfigManager {
     }
 
     public String[] enabledModules() {
-        try (Cursor cursor = db.query("modules", new String[]{"package_name"}, "enabled = ?", new String[]{"1"}, null, null, null)) {
+        try (Cursor cursor = db.query("modules", new String[]{"module_pkg_name"}, "enabled = ?", new String[]{"1"}, null, null, null)) {
             if (cursor == null) {
                 Log.e(TAG, "query enabled modules failed");
                 return null;
             }
-            int pkg_idx = cursor.getColumnIndex("package_name");
+            int modulePkgNameIdx = cursor.getColumnIndex("module_pkg_name");
             HashSet<String> result = new HashSet<>();
             while (cursor.moveToNext()) {
-                result.add(cursor.getString(pkg_idx));
+                result.add(cursor.getString(modulePkgNameIdx));
             }
             return result.toArray(new String[0]);
         }
@@ -328,9 +401,13 @@ public class ConfigManager {
         return true;
     }
 
-    public boolean removeApp(int uid) {
-        int count = db.delete("scope", "uid = ?", new String[]{String.valueOf(uid)});
-        if (count >= 1) {
+    public boolean removeAppWithoutCache(Application app) {
+        int count = db.delete("scope", "app_pkg_name = ? AND user_id=?", new String[]{app.packageName, String.valueOf(app.userId)});
+        return count >= 1;
+    }
+
+    public boolean removeApp(Application scope) {
+        if (removeAppWithoutCache(scope)) {
             cacheScopes();
             return true;
         }
@@ -397,8 +474,8 @@ public class ConfigManager {
         }
     }
 
-    public boolean isManager(String package_name) {
-        return package_name.equals(manager);
+    public boolean isManager(String module_pkg_name) {
+        return module_pkg_name.equals(manager);
     }
 
     public boolean isManager(int uid) {

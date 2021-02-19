@@ -31,7 +31,7 @@ namespace lspd {
 
         void HookBridge(const Context& context, JNIEnv *env);
 
-        jobject RequestBinder(JNIEnv *env);
+        jobject RequestBinder(JNIEnv *env, jstring nice_name);
 
         jobject RequestBinderForSystemServer(JNIEnv *env);
 
@@ -65,6 +65,7 @@ namespace lspd {
         jmethodID recycleMethod_ = nullptr;
         jmethodID write_interface_token_method_ = nullptr;
         jmethodID write_int_method_ = nullptr;
+        jmethodID write_string_method_ = nullptr;
         jmethodID read_exception_method_ = nullptr;
         jmethodID read_strong_binder_method_ = nullptr;
 

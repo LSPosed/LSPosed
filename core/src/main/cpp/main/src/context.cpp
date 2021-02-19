@@ -234,7 +234,7 @@ namespace lspd {
     void
     Context::OnNativeForkAndSpecializePost(JNIEnv *env) {
         const JUTFString process_name(env, nice_name_);
-        auto binder = skip_? nullptr : Service::instance()->RequestBinder(env);
+        auto binder = skip_? nullptr : Service::instance()->RequestBinder(env, nice_name_);
         if (binder) {
             LoadDex(env);
             InstallInlineHooks();

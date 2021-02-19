@@ -8,17 +8,25 @@ import android.os.Binder;
 import android.os.RemoteException;
 import android.util.Log;
 
+import io.github.lsposed.lspd.Application;
+
 import static io.github.lsposed.lspd.service.ServiceManager.TAG;
 
 public class LSPosedService extends ILSPosedService.Stub {
     @Override
-    public ILSPApplicationService requestApplicationService(int uid, int pid) {
+    public ILSPApplicationService requestApplicationService(int uid, int pid, String processName) {
         if (Binder.getCallingUid() != 1000) {
             Log.w(TAG, "Someone else got my binder!?");
             return null;
         }
-        if (ConfigManager.getInstance().shouldSkipUid(uid)) {
-            Log.d(TAG, "Skipped uid " + uid);
+        if (uid == 1000 && processName.equals("android")) {
+            if (ConfigManager.shouldSkipSystemServer())
+                return null;
+            else
+                return ServiceManager.getApplicationService();
+        }
+        if (ConfigManager.getInstance().shouldSkipProcess(new ConfigManager.ProcessScope(processName, uid))) {
+            Log.d(TAG, "Skipped " + processName);
             return null;
         }
         if (ServiceManager.getApplicationService().hasRegister(uid, pid)) {
@@ -40,10 +48,14 @@ public class LSPosedService extends ILSPosedService.Stub {
             return;
         }
         int uid = intent.getIntExtra(Intent.EXTRA_UID, -1);
+        int userId = intent.getIntExtra(Intent.EXTRA_USER, -1);
         boolean replacing = intent.getBooleanExtra(Intent.EXTRA_REPLACING, false);
         if (intent.getAction().equals(Intent.ACTION_PACKAGE_REMOVED) && uid > 0 && !replacing) {
             ConfigManager.getInstance().removeModule(packageName);
-            ConfigManager.getInstance().removeApp(uid);
+            Application app = new Application();
+            app.packageName = packageName;
+            app.userId = userId;
+            ConfigManager.getInstance().removeApp(app);
         }
         PackageInfo pkgInfo = PackageService.getPackageInfo(packageName, PackageManager.GET_META_DATA, 0);
         boolean isXposedModule = pkgInfo != null && pkgInfo.applicationInfo != null &&

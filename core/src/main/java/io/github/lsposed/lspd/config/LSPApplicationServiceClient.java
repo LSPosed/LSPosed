@@ -16,12 +16,14 @@ public class LSPApplicationServiceClient implements ILSPApplicationService {
 
     static String baseCachePath = null;
     static String basePrefsPath = null;
+    static String processName = null;
 
     public static LSPApplicationServiceClient serviceClient = null;
 
-    public static void Init(IBinder binder) {
+    public static void Init(IBinder binder, String niceName) {
         if (serviceClient == null && binder != null && serviceBinder == null && service == null) {
             serviceBinder = binder;
+            processName = niceName;
             try {
                 serviceBinder.linkToDeath(
                         new IBinder.DeathRecipient() {
@@ -89,12 +91,16 @@ public class LSPApplicationServiceClient implements ILSPApplicationService {
     }
 
     @Override
-    public String[] getModulesList() {
+    public String[] getModulesList(String processName) {
         try {
-            return service.getModulesList();
+            return service.getModulesList(processName);
         } catch (RemoteException | NullPointerException ignored) {
         }
         return new String[0];
+    }
+
+    public String[] getModulesList(){
+        return getModulesList(processName);
     }
 
     @Override
