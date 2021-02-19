@@ -9,6 +9,7 @@ import android.os.FileObserver;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.util.Log;
+import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,6 +40,8 @@ public class ConfigManager {
     static final private File basePath = new File("/data/adb/lspd");
     static final private File configPath = new File(basePath, "config");
     static final private SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(new File(configPath, "modules_config.db"), null);
+
+    boolean packageStarted = false;
 
     static final private File resourceHookSwitch = new File(configPath, "enable_resources");
     private boolean resourceHook = false;
@@ -114,15 +117,16 @@ public class ConfigManager {
 
     private final ConcurrentHashMap<ProcessScope, Set<String>> cachedScope = new ConcurrentHashMap<>();
 
-    public static boolean shouldSkipSystemServer() {
-        try (Cursor cursor = db.query("scope", new String[]{"mid"}, "app_pkg_name=?", new String[]{"android"}, null, null, null)) {
+    // for system server, cache is not yet ready, we need to query database for it
+    public boolean shouldSkipSystemServer() {
+        try (Cursor cursor = db.query("scope INNER JOIN modules ON scope.mid = modules.mid", new String[]{"modules.mid"}, "app_pkg_name=? AND enabled=1", new String[]{"android"}, null, null, null)) {
             return cursor == null || !cursor.moveToNext();
         }
     }
 
-    public static String[] getModulesPathForSystemServer() {
+    public String[] getModulesPathForSystemServer() {
         HashSet<String> modules = new HashSet<>();
-        try (Cursor cursor = db.query("scope INNER JOIN modules ON scope.mid = modules.mid", new String[]{"apk_path"}, "app_pkg_name=?", new String[]{"android"}, null, null, null)) {
+        try (Cursor cursor = db.query("scope INNER JOIN modules ON scope.mid = modules.mid", new String[]{"apk_path"}, "app_pkg_name=? AND enabled=1", new String[]{"android"}, null, null, null)) {
             int apkPathIdx = cursor.getColumnIndex("apk_path");
             while (cursor.moveToNext()) {
                 modules.add(cursor.getString(apkPathIdx));
@@ -176,6 +180,7 @@ public class ConfigManager {
     }
 
     public synchronized void updateManager() {
+        if (!packageStarted) return;
         try {
             PackageInfo info = PackageService.getPackageInfo(readText(managerPath, DEFAULT_MANAGER_PACKAGE_NAME), 0, 0);
             if (info != null) {
@@ -195,6 +200,14 @@ public class ConfigManager {
     static ConfigManager getInstance() {
         if (instance == null)
             instance = new ConfigManager();
+        if (!instance.packageStarted) {
+            if (PackageService.getPackageManager() != null) {
+                Log.d(TAG, "pm is ready, updating cache");
+                instance.packageStarted = true;
+                instance.cacheScopes();
+                instance.updateManager();
+            }
+        }
         return instance;
     }
 
@@ -212,20 +225,20 @@ public class ConfigManager {
     }
 
     private List<ProcessScope> getAssociatedProcesses(Application app) throws RemoteException {
-        PackageInfo pkgInfo = PackageService.getPackageInfo(app.packageName, 0, app.userId);
+        Pair<Set<String>, Integer> result = PackageService.fetchProcessesWithUid(app);
         List<ProcessScope> processes = new ArrayList<>();
-        if (pkgInfo != null && pkgInfo.applicationInfo != null) {
-            for (String process : PackageService.getProcessesForUid(pkgInfo.applicationInfo.uid, app.userId)) {
-                processes.add(new ProcessScope(process, pkgInfo.applicationInfo.uid));
-            }
+        for (String processName : result.first) {
+            processes.add(new ProcessScope(processName, result.second));
         }
         return processes;
     }
 
     private synchronized void cacheScopes() {
+        // skip caching when pm is not yet available
+        if (!packageStarted) return;
         cachedScope.clear();
         try (Cursor cursor = db.query("scope INNER JOIN modules ON scope.mid = modules.mid", new String[]{"app_pkg_name", "user_id", "apk_path"},
-                "enabled = ?", new String[]{"1"}, null, null, null)) {
+                "enabled = 1", null, null, null, null)) {
             if (cursor == null) {
                 Log.e(TAG, "db cache failed");
                 return;
@@ -238,6 +251,8 @@ public class ConfigManager {
                 Application app = new Application();
                 app.packageName = cursor.getString(appPkgNameIdx);
                 app.userId = cursor.getInt(userIdIdx);
+                // system server always loads database
+                if (app.packageName.equals("android")) continue;
                 String apk_path = cursor.getString(apkPathIdx);
                 try {
                     List<ProcessScope> processesScope = getAssociatedProcesses(app);
@@ -253,13 +268,13 @@ public class ConfigManager {
             }
             for (Application obsoletePackage : obsoletePackages) {
                 Log.d(TAG, "removing obsolete package: " + obsoletePackage.packageName + "/" + obsoletePackage.userId);
-                removeAppWithoutCache(obsoletePackage);
+                removeApp(obsoletePackage);
             }
         }
         Log.d(TAG, "cached Scope");
-        for(ProcessScope ps : cachedScope.keySet()) {
+        for (ProcessScope ps : cachedScope.keySet()) {
             Log.d(TAG, ps.processName + "/" + ps.uid);
-            for(String apk: cachedScope.get(ps)) {
+            for (String apk : cachedScope.get(ps)) {
                 Log.d(TAG, "\t" + apk);
             }
         }
@@ -309,9 +324,6 @@ public class ConfigManager {
         if (count < 0) {
             count = db.updateWithOnConflict("modules", values, "module_pkg_name=?", new String[]{packageName}, SQLiteDatabase.CONFLICT_IGNORE);
         }
-        if (count >= 1) {
-            cacheScopes();
-        }
         return count >= 0;
     }
 
@@ -351,12 +363,11 @@ public class ConfigManager {
             db.setTransactionSuccessful();
             db.endTransaction();
         }
-        cacheScopes();
         return true;
     }
 
     public String[] enabledModules() {
-        try (Cursor cursor = db.query("modules", new String[]{"module_pkg_name"}, "enabled = ?", new String[]{"1"}, null, null, null)) {
+        try (Cursor cursor = db.query("modules", new String[]{"module_pkg_name"}, "enabled = 1", null, null, null, null)) {
             if (cursor == null) {
                 Log.e(TAG, "query enabled modules failed");
                 return null;
@@ -381,7 +392,6 @@ public class ConfigManager {
             db.setTransactionSuccessful();
             db.endTransaction();
         }
-        cacheScopes();
         return true;
     }
 
@@ -397,7 +407,6 @@ public class ConfigManager {
             db.setTransactionSuccessful();
             db.endTransaction();
         }
-        cacheScopes();
         return true;
     }
 
@@ -414,21 +423,12 @@ public class ConfigManager {
             db.setTransactionSuccessful();
             db.endTransaction();
         }
-        cacheScopes();
         return true;
     }
 
-    public boolean removeAppWithoutCache(Application app) {
+    public boolean removeApp(Application app) {
         int count = db.delete("scope", "app_pkg_name = ? AND user_id=?", new String[]{app.packageName, String.valueOf(app.userId)});
         return count >= 1;
-    }
-
-    public boolean removeApp(Application scope) {
-        if (removeAppWithoutCache(scope)) {
-            cacheScopes();
-            return true;
-        }
-        return false;
     }
 
     public void setResourceHook(boolean resourceHook) {
