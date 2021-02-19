@@ -62,6 +62,10 @@ public class ServiceManager {
             Log.e(TAG, Log.getStackTraceString(e));
         }
 
+        Thread.setDefaultUncaughtExceptionHandler((t, e)->{
+            Log.e(TAG, Log.getStackTraceString(e));
+        });
+
         //noinspection InfiniteLoopStatement
         while (true) {
             try {
