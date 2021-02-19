@@ -8,11 +8,14 @@ import android.content.pm.ServiceInfo;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.util.Pair;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import io.github.lsposed.lspd.Application;
 import io.github.lsposed.lspd.utils.ParceledListSlice;
 
 import static android.content.pm.ServiceInfo.FLAG_ISOLATED_PROCESS;
@@ -39,14 +42,6 @@ public class PackageService {
         IPackageManager pm = getPackageManager();
         if (pm == null) return new String[0];
         return pm.getPackagesForUid(uid);
-    }
-
-    public static Set<String> getProcessesForUid(int uid, int userId) throws RemoteException {
-        HashSet<String> processNames = new HashSet<>();
-        for (String packageName : getPackagesForUid(uid)) {
-            processNames.addAll(fetchProcesses(packageName, userId));
-        }
-        return processNames;
     }
 
     public static ParceledListSlice<PackageInfo> getInstalledPackagesFromAllUsers(int flags) throws RemoteException {
@@ -82,12 +77,14 @@ public class PackageService {
         return processNames;
     }
 
-    public static Set<String> fetchProcesses(String packageName, int userId) throws RemoteException {
+    public static Pair<Set<String>, Integer> fetchProcessesWithUid(Application app) throws RemoteException {
         IPackageManager pm = getPackageManager();
-        if (pm == null) return new HashSet<>();
-        PackageInfo pkgInfo = pm.getPackageInfo(packageName, PackageManager.MATCH_DISABLED_COMPONENTS |
+        if (pm == null) return new Pair<>(Collections.emptySet(), -1);
+        PackageInfo pkgInfo = pm.getPackageInfo(app.packageName, PackageManager.MATCH_DISABLED_COMPONENTS |
                 PackageManager.MATCH_UNINSTALLED_PACKAGES | PackageManager.GET_ACTIVITIES | PackageManager.MATCH_DIRECT_BOOT_AWARE | PackageManager.MATCH_DIRECT_BOOT_UNAWARE |
-                PackageManager.GET_SERVICES | PackageManager.GET_RECEIVERS | PackageManager.GET_PROVIDERS, userId);
-        return fetchProcesses(pkgInfo);
+                PackageManager.GET_SERVICES | PackageManager.GET_RECEIVERS | PackageManager.GET_PROVIDERS, app.userId);
+        if (pkgInfo == null || pkgInfo.applicationInfo == null)
+            return new Pair<>(Collections.emptySet(), -1);
+        return new Pair<>(fetchProcesses(pkgInfo), pkgInfo.applicationInfo.uid);
     }
 }

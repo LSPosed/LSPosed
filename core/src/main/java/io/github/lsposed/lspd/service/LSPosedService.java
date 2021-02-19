@@ -20,7 +20,7 @@ public class LSPosedService extends ILSPosedService.Stub {
             return null;
         }
         if (uid == 1000 && processName.equals("android")) {
-            if (ConfigManager.shouldSkipSystemServer())
+            if (ConfigManager.getInstance().shouldSkipSystemServer())
                 return null;
             else
                 return ServiceManager.getApplicationService();

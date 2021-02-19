@@ -52,7 +52,7 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
         ensureRegistered();
         int callingUid = Binder.getCallingUid();
         if (callingUid == 1000 && processName.equals("android")) {
-            ConfigManager.getModulesPathForSystemServer();
+            return ConfigManager.getInstance().getModulesPathForSystemServer();
         }
         return ConfigManager.getInstance().getModulesPathForProcess(processName, callingUid);
     }
