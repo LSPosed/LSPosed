@@ -333,6 +333,10 @@ public class ConfigManager {
         if (scopes.isEmpty()) return false;
         int mid = getModuleId(packageName);
         if (mid == -1) return false;
+        Application self = new Application();
+        self.packageName = packageName;
+        self.userId = 0;
+        scopes.add(self);
         try {
             db.beginTransaction();
             db.delete("scope", "mid = ?", new String[]{String.valueOf(mid)});
