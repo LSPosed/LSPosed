@@ -7,6 +7,7 @@ import android.os.RemoteException;
 
 import java.util.List;
 
+import io.github.lsposed.lspd.Application;
 import io.github.lsposed.lspd.ILSPManagerService;
 import io.github.lsposed.lspd.utils.ParceledListSlice;
 
@@ -65,12 +66,12 @@ public class LSPosedManagerServiceClient {
         return service.disableModule(packageName);
     }
 
-    public static boolean setModuleScope(String packageName, int[] uid) throws RemoteException, NullPointerException {
+    public static boolean setModuleScope(String packageName, ParceledListSlice<Application> list) throws RemoteException, NullPointerException {
         ensureService();
-        return service.setModuleScope(packageName, uid);
+        return service.setModuleScope(packageName, list);
     }
 
-    public static int[] getModuleScope(String packageName) throws RemoteException, NullPointerException {
+    public static ParceledListSlice<Application> getModuleScope(String packageName) throws RemoteException, NullPointerException {
         ensureService();
         return service.getModuleScope(packageName);
     }

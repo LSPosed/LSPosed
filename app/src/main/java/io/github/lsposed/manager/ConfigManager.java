@@ -27,6 +27,8 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.github.lsposed.lspd.Application;
+import io.github.lsposed.lspd.utils.ParceledListSlice;
 import io.github.lsposed.manager.receivers.LSPosedManagerServiceClient;
 
 public class ConfigManager {
@@ -86,25 +88,19 @@ public class ConfigManager {
         }
     }
 
-    public static boolean setModuleScope(String packageName, List<Integer> uidList) {
+    public static boolean setModuleScope(String packageName, List<Application> applications) {
         try {
-            int[] uids = new int[uidList.size()];
-            for (int i = 0; i < uidList.size(); i++) {
-                uids[i] = uidList.get(i);
-            }
-            return LSPosedManagerServiceClient.setModuleScope(packageName, uids);
+            return LSPosedManagerServiceClient.setModuleScope(packageName, new ParceledListSlice<>(applications));
         } catch (RemoteException | NullPointerException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
             return false;
         }
     }
 
-    public static List<Integer> getModuleScope(String packageName) {
-        List<Integer> list = new ArrayList<>();
+    public static List<Application> getModuleScope(String packageName) {
+        List<Application> list = new ArrayList<>();
         try {
-            for (int uid : LSPosedManagerServiceClient.getModuleScope(packageName)) {
-                list.add(uid);
-            }
+            list.addAll(LSPosedManagerServiceClient.getModuleScope(packageName).getList());
         } catch (RemoteException | NullPointerException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
         }
