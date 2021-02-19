@@ -63,11 +63,10 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
+import io.github.lsposed.lspd.Application;
 import io.github.lsposed.manager.App;
 import io.github.lsposed.manager.BuildConfig;
 import io.github.lsposed.manager.ConfigManager;
@@ -90,11 +89,11 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     private final String modulePackageName;
     private final String moduleName;
     private final SwitchBar masterSwitch;
-    private final List<Integer> moduleList = new ArrayList<>();
-    private final List<Integer> recommendedList = new ArrayList<>();
+    private final List<Application> moduleList = new ArrayList<>();
+    private final List<Application> recommendedList = new ArrayList<>();
+    private final List<Application> checkedList = new ArrayList<>();
     private final List<AppInfo> searchList = new ArrayList<>();
     private List<AppInfo> showList = new ArrayList<>();
-    private List<Integer> checkedList = new ArrayList<>();
     private boolean enabled = true;
     private ApplicationInfo selectedInfo;
 
@@ -125,7 +124,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
 
     private void loadApps() {
         List<PackageInfo> appList = ConfigManager.getInstalledPackagesFromAllUsers(PackageManager.GET_META_DATA);
-        checkedList = ConfigManager.getModuleScope(modulePackageName);
+        checkedList.clear();
         moduleList.clear();
         recommendedList.clear();
         searchList.clear();
@@ -134,76 +133,37 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         enabled = ModuleUtil.getInstance().isModuleEnabled(modulePackageName);
         activity.runOnUiThread(() -> masterSwitch.setChecked(enabled));
 
-        ArrayList<Integer> installedList = new ArrayList<>();
-        List<String> recommendedPackageNames = ModuleUtil.getInstance().getModule(modulePackageName).getScopeList();
-        Map<String, ArrayList<PackageInfo>> sharedUidPackages = new HashMap<>();
+        checkedList.addAll(ConfigManager.getModuleScope(modulePackageName));
+        ArrayList<Application> installedList = new ArrayList<>();
+        List<String> scopeList = ModuleUtil.getInstance().getModule(modulePackageName).getScopeList();
         for (PackageInfo info : appList) {
             int uid = info.applicationInfo.uid;
-            if (!installedList.contains(uid)) installedList.add(uid);
+            Application application = new Application();
+            application.userId = uid / 100000;
+            application.packageName = info.packageName;
+
+            if (!installedList.contains(application)) installedList.add(application);
+
             if (info.packageName.equals(this.modulePackageName)) {
-                if (!checkedList.contains(uid)) checkedList.add(uid);
-                if (!moduleList.contains(uid)) moduleList.add(uid);
-            }
-            if (recommendedPackageNames != null && recommendedPackageNames.contains(info.packageName) && !recommendedList.contains(uid)) {
-                recommendedList.add(uid);
+                if (!checkedList.contains(application)) checkedList.add(application);
+                if (!moduleList.contains(application)) moduleList.add(application);
             }
 
-            if (shouldHideApp(info)) {
+            if (scopeList != null && scopeList.contains(info.packageName)) {
+                recommendedList.add(application);
+            }
+
+            if (shouldHideApp(info, application)) {
                 continue;
             }
 
-            if (info.sharedUserId != null) {
-                ArrayList<PackageInfo> packageInfos = sharedUidPackages.computeIfAbsent(info.sharedUserId + "!" + uid / 100000, k -> new ArrayList<>());
-                packageInfos.add(info);
-            } else {
-                AppInfo appInfo = new AppInfo();
-                appInfo.packageInfo = info;
-                appInfo.label = getAppLabel(info.applicationInfo, pm);
-                searchList.add(appInfo);
-            }
-
-        }
-        for (List<PackageInfo> packageInfos : sharedUidPackages.values()) {
             AppInfo appInfo = new AppInfo();
-            String[] packageLabels = new String[packageInfos.size()];
-            String name = null;
-
-            for (int i = 0; i < packageLabels.length; i++) {
-                ApplicationInfo ai = packageInfos.get(i).applicationInfo;
-                CharSequence label = ai.loadLabel(pm);
-                if (label != null) {
-                    packageLabels[i] = label.toString();
-                }
-                if (ai.icon != 0) {
-                    appInfo.packageInfo = packageInfos.get(i);
-                    break;
-                }
-            }
-
-            if (packageLabels.length == 1) {
-                name = packageLabels[0];
-            } else {
-                for (PackageInfo packageInfo : packageInfos) {
-                    if (packageInfo.sharedUserLabel != 0) {
-                        final CharSequence nm = pm.getText(packageInfo.packageName, packageInfo.sharedUserLabel, packageInfo.applicationInfo);
-                        if (nm != null) {
-                            name = nm.toString();
-                            appInfo.packageInfo = packageInfo;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            if (name == null) {
-                name = packageInfos.get(0).sharedUserId;
-            }
-
-            appInfo.label = String.format("[SharedUID] %s", name);
-
-            if (appInfo.packageInfo != null) {
-                searchList.add(appInfo);
-            }
+            appInfo.packageInfo = info;
+            appInfo.label = getAppLabel(info.applicationInfo, pm);
+            appInfo.application = application;
+            appInfo.packageName = info.packageName;
+            appInfo.applicationInfo = info.applicationInfo;
+            searchList.add(appInfo);
         }
         checkedList.retainAll(installedList);
         if (selectedNothing() && hasRecommended()) {
@@ -213,7 +173,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         activity.onDataReady();
     }
 
-    private boolean shouldHideApp(PackageInfo info) {
+    private boolean shouldHideApp(PackageInfo info, Application app) {
         if (info.packageName.equals(this.modulePackageName)) {
             return true;
         }
@@ -221,10 +181,10 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         if (info.packageName.equals(BuildConfig.APPLICATION_ID)) {
             return true;
         }
-        if (info.packageName.equals("android") && info.applicationInfo.uid / 100000 != 0) {
-            return true;
+        if (info.packageName.equals("android")) {
+            return app.userId != 0;
         }
-        if (checkedList.contains(info.applicationInfo.uid)) {
+        if (checkedList.contains(app)) {
             return false;
         }
         if (!preferences.getBoolean("show_modules", false)) {
@@ -249,18 +209,18 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
 
     private List<AppInfo> sortApps(List<AppInfo> list) {
         Comparator<PackageInfo> comparator = AppHelper.getAppListComparator(preferences.getInt("list_sort", 0), pm);
-        Comparator<PackageInfo> frameworkComparator = (a, b) -> {
+        Comparator<AppInfo> frameworkComparator = (a, b) -> {
             if (a.packageName.equals("android") == b.packageName.equals("android")) {
-                return comparator.compare(a, b);
+                return comparator.compare(a.packageInfo, b.packageInfo);
             } else if (a.packageName.equals("android")) {
                 return -1;
             } else {
                 return 1;
             }
         };
-        Comparator<PackageInfo> recommendedComparator = (a, b) -> {
-            boolean aRecommended = hasRecommended() && recommendedList.contains(a.applicationInfo.uid);
-            boolean bRecommended = hasRecommended() && recommendedList.contains(b.applicationInfo.uid);
+        Comparator<AppInfo> recommendedComparator = (a, b) -> {
+            boolean aRecommended = hasRecommended() && recommendedList.contains(a.application);
+            boolean bRecommended = hasRecommended() && recommendedList.contains(b.application);
             if (aRecommended == bRecommended) {
                 return frameworkComparator.compare(a, b);
             } else if (aRecommended) {
@@ -270,10 +230,10 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             }
         };
         list.sort((a, b) -> {
-            boolean aChecked = checkedList.contains(a.packageInfo.applicationInfo.uid);
-            boolean bChecked = checkedList.contains(b.packageInfo.applicationInfo.uid);
+            boolean aChecked = checkedList.contains(a.application);
+            boolean bChecked = checkedList.contains(b.application);
             if (aChecked == bChecked) {
-                return recommendedComparator.compare(a.packageInfo, b.packageInfo);
+                return recommendedComparator.compare(a, b);
             } else if (aChecked) {
                 return -1;
             } else {
@@ -284,6 +244,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     }
 
     private void checkRecommended() {
+        checkedList.clear();
         checkedList.addAll(recommendedList);
         ConfigManager.setModuleScope(modulePackageName, checkedList);
     }
@@ -420,11 +381,11 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.root.setAlpha(enabled ? 1.0f : .5f);
         AppInfo appInfo = showList.get(position);
-        boolean android = appInfo.packageInfo.packageName.equals("android");
+        boolean android = appInfo.packageName.equals("android");
         CharSequence appName;
-        int userId = appInfo.packageInfo.applicationInfo.uid / 100000;
+        int userId = appInfo.applicationInfo.uid / 100000;
         if (userId != 0) {
-            appName = String.format("%s (%s)", android ? activity.getString(R.string.android_framework) : appInfo.label, userId);
+            appName = String.format("%s (%s)", appInfo.label, userId);
         } else {
             appName = android ? activity.getString(R.string.android_framework) : appInfo.label;
         }
@@ -447,9 +408,9 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                         holder.appIcon.setImageDrawable(pm.getDefaultActivityIcon());
                     }
                 });
-        SpannableStringBuilder sb = new SpannableStringBuilder(android ? "" : activity.getString(R.string.app_description, appInfo.packageInfo.packageName, appInfo.packageInfo.versionName));
+        SpannableStringBuilder sb = new SpannableStringBuilder(android ? "" : activity.getString(R.string.app_description, appInfo.packageName, appInfo.packageInfo.versionName));
         holder.appDescription.setVisibility(View.VISIBLE);
-        if (hasRecommended() && recommendedList.contains(appInfo.packageInfo.applicationInfo.uid)) {
+        if (hasRecommended() && recommendedList.contains(appInfo.application)) {
             if (!android) sb.append("\n");
             String recommended = activity.getString(R.string.requested_by_module);
             sb.append(recommended);
@@ -469,7 +430,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
 
         holder.itemView.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
             activity.getMenuInflater().inflate(R.menu.menu_app_item, menu);
-            Intent launchIntent = pm.getLaunchIntentForPackage(appInfo.packageInfo.packageName);
+            Intent launchIntent = pm.getLaunchIntentForPackage(appInfo.packageName);
             if (launchIntent == null) {
                 menu.removeItem(R.id.menu_launch);
             }
@@ -484,14 +445,14 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         });
 
         holder.checkbox.setOnCheckedChangeListener(null);
-        holder.checkbox.setChecked(checkedList.contains(appInfo.packageInfo.applicationInfo.uid));
+        holder.checkbox.setChecked(checkedList.contains(appInfo.application));
 
-        holder.checkbox.setOnCheckedChangeListener((v, isChecked) -> onCheckedChange(v, isChecked, appInfo.packageInfo.applicationInfo.uid));
+        holder.checkbox.setOnCheckedChangeListener((v, isChecked) -> onCheckedChange(v, isChecked, appInfo));
         holder.itemView.setOnClickListener(v -> {
             if (enabled) holder.checkbox.toggle();
         });
         holder.itemView.setOnLongClickListener(v -> {
-            selectedInfo = appInfo.packageInfo.applicationInfo;
+            selectedInfo = appInfo.applicationInfo;
             return false;
         });
     }
@@ -499,7 +460,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     @Override
     public long getItemId(int position) {
         PackageInfo info = showList.get(position).packageInfo;
-        return (info.packageName  + "!" + info.applicationInfo.uid / 100000).hashCode();
+        return (info.packageName + "!" + info.applicationInfo.uid / 100000).hashCode();
     }
 
     @Override
@@ -516,18 +477,18 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         AsyncTask.THREAD_POOL_EXECUTOR.execute(this::loadApps);
     }
 
-    protected void onCheckedChange(CompoundButton buttonView, boolean isChecked, int uid) {
+    protected void onCheckedChange(CompoundButton buttonView, boolean isChecked, AppInfo appInfo) {
         if (isChecked) {
-            checkedList.add(uid);
+            checkedList.add(appInfo.application);
         } else {
-            checkedList.remove((Integer) uid);
+            checkedList.remove(appInfo.application);
         }
         if (!ConfigManager.setModuleScope(modulePackageName, checkedList)) {
             activity.makeSnackBar(R.string.failed_to_save_scope_list, Snackbar.LENGTH_SHORT);
             if (!isChecked) {
-                checkedList.add(uid);
+                checkedList.add(appInfo.application);
             } else {
-                checkedList.remove((Integer) uid);
+                checkedList.remove(appInfo.application);
             }
             buttonView.setChecked(!isChecked);
         }
@@ -567,7 +528,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                 String filter = constraint.toString().toLowerCase();
                 for (AppInfo info : searchList) {
                     if (lowercaseContains(info.label.toString(), filter)
-                            || lowercaseContains(info.packageInfo.packageName, filter)) {
+                            || lowercaseContains(info.packageName, filter)) {
                         filtered.add(info);
                     }
                 }
@@ -583,7 +544,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     }
 
     private boolean selectedNothing() {
-        List<Integer> list = new ArrayList<>(checkedList);
+        List<Application> list = new ArrayList<>(checkedList);
         list.removeAll(moduleList);
         return list.isEmpty();
     }
@@ -619,6 +580,9 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
 
     public static class AppInfo {
         public PackageInfo packageInfo;
+        public Application application;
+        public ApplicationInfo applicationInfo;
+        public String packageName;
         public CharSequence label = null;
     }
 }
