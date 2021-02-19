@@ -85,7 +85,7 @@ public class ConfigManager {
 
         @Override
         public boolean equals(@Nullable Object o) {
-            if(o instanceof ProcessScope) {
+            if (o instanceof ProcessScope) {
                 ProcessScope p = (ProcessScope) o;
                 return p.processName.equals(processName) && p.uid == uid;
             }
@@ -110,16 +110,16 @@ public class ConfigManager {
     private final ConcurrentHashMap<ProcessScope, Set<String>> cachedScope = new ConcurrentHashMap<>();
 
     public static boolean shouldSkipSystemServer() {
-        try(Cursor cursor = db.query("scope", new String[]{"mid"}, "app_pkg_name=?", new String[]{"android"}, null, null, null)){
+        try (Cursor cursor = db.query("scope", new String[]{"mid"}, "app_pkg_name=?", new String[]{"android"}, null, null, null)) {
             return cursor == null || !cursor.moveToNext();
         }
     }
 
     public static String[] getModulesPathForSystemServer() {
         HashSet<String> modules = new HashSet<>();
-        try(Cursor cursor = db.query("scope INNER JOIN modules ON scope.mid = modules.mid", new String[]{"apk_path"}, "app_pkg_name=?", new String[]{"android"}, null, null, null)){
+        try (Cursor cursor = db.query("scope INNER JOIN modules ON scope.mid = modules.mid", new String[]{"apk_path"}, "app_pkg_name=?", new String[]{"android"}, null, null, null)) {
             int apkPathIdx = cursor.getColumnIndex("apk_path");
-            while(cursor.moveToNext()) {
+            while (cursor.moveToNext()) {
                 modules.add(cursor.getString(apkPathIdx));
             }
         }
@@ -210,7 +210,7 @@ public class ConfigManager {
         PackageInfo pkgInfo = PackageService.getPackageInfo(app.packageName, 0, app.userId);
         List<ProcessScope> processes = new ArrayList<>();
         if (pkgInfo != null && pkgInfo.applicationInfo != null) {
-            for(String process: PackageService.getProcessesForUid(pkgInfo.applicationInfo.uid)){
+            for (String process : PackageService.getProcessesForUid(pkgInfo.applicationInfo.uid)) {
                 processes.add(new ProcessScope(process, pkgInfo.applicationInfo.uid));
             }
         }
