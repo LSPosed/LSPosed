@@ -34,7 +34,7 @@
     <string name="android_sdk">Android %2$s (%1$s, API %3$d)</string>
     <string name="app_destroyed">Эта программа прекратила работу, пожалуйста, убедитесь, что загрузили ее из официального источника.</string>
     <string name="app_launch">Запустить</string>
-    <string name="compile_failed">Ошибка оптимиз��ции или возвращено пустое значение</string>
+    <string name="compile_failed">Ошибка оптимизации или возвращено пустое значение</string>
     <string name="compile_failed_with_info">Ошибка оптимизации:</string>
     <string name="compile_speed">Повторная оптимизация</string>
     <string name="compile_speed_msg">Оптимизация…</string>
@@ -84,7 +84,7 @@
     <string name="requested_by_module">Рекомендуется</string>
     <string name="scroll_bottom">Прокрутить вниз</string>
     <string name="scroll_top">Прокрутить вверх</string>
-    <string name="selinux_permissive">&lt;b>ВНИМАНИЕ:&lt;/b> Статус SELinux не Enforcing! Вредоносные приложения, которые пользуются этим, смогут полностью управлять вашим устройством и нанести ущерб вашим данным.</string>
+    <string name="selinux_permissive">&lt;b&gt;ВНИМАНИЕ:&lt;\/b&gt; Статус SELinux не Enforcing! Вредоносные приложения, которые пользуются этим, смогут полностью управлять вашим устройством и нанести ущерб вашим данным.</string>
     <string name="selinux_permissive_summary">Статус SELinux не Enforcing!</string>
     <string name="settings_backup">Резервное копирование</string>
     <string name="settings_backup_and_restore">Резервное копирование и восстановление</string>
@@ -112,7 +112,7 @@
     <string name="use_recommended">Рекомендуется</string>
     <string name="use_recommended_message">Выбрать рекомендуемые приложения?</string>
     <string name="warning_installed_on_external_storage">Этот модуль нельзя загрузить, поскольку он установлен на SD-карте, перенесите его во внутреннюю память</string>
-    <string name="warning_min_version_too_low">Этот модуль был создан для версии LSP %1$d, но из-за несовместимых изменений в версии %2$d был отключен</string>
+    <string name="warning_min_version_too_low">Этот модуль был создан для версии LSPosed %1$d, но из-за несовместимых изменений в версии %2$d был отключен</string>
     <string name="warning_xposed_min_version">Этот модуль требует более новой версии LSP (%d), поэтому его невозможно активировать</string>
     <string name="xposed_module_updated_notification_title">Модуль LSPosed обновлен</string>
 </resources>
