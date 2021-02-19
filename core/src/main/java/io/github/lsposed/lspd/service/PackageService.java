@@ -70,10 +70,12 @@ public class PackageService {
     public static Set<String> fetchProcesses(PackageInfo pkgInfo) {
         HashSet<String> processNames = new HashSet<>();
         for (ComponentInfo[] componentInfos : new ComponentInfo[][]{pkgInfo.activities, pkgInfo.receivers, pkgInfo.providers}) {
+            if (componentInfos == null) continue;
             for (ComponentInfo componentInfo : componentInfos) {
                 processNames.add(componentInfo.processName);
             }
         }
+        if (pkgInfo.services == null) return processNames;
         for (ServiceInfo service : pkgInfo.services) {
             if ((service.flags & FLAG_ISOLATED_PROCESS) == 0) {
                 processNames.add(service.processName);
