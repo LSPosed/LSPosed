@@ -183,7 +183,6 @@ public final class XSharedPreferences implements SharedPreferences {
             }
         }
         if (newModule) {
-
             mFile = new File(serviceClient.getPrefsPath( packageName ), prefFileName + ".xml");
         } else {
             mFile = new File(Environment.getDataDirectory(), "data/" + packageName + "/shared_prefs/" + prefFileName + ".xml");

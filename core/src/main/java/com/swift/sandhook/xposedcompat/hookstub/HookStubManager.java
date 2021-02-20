@@ -250,14 +250,6 @@ public class HookStubManager {
             thiz = originMethod.getDeclaringClass();
         }
 
-        if (XposedBridge.disableHooks) {
-            if (hasStubBackup) {
-                return callOrigin.call(stubArgs);
-            } else {
-                return callOrigin(entity, originMethod, thiz, args);
-            }
-        }
-
         DexLog.printMethodHookIn(originMethod);
 
         Object[] snapshot = additionalHookInfos[id].callbacks.getSnapshot();
@@ -336,10 +328,6 @@ public class HookStubManager {
 
     public static Object hookBridge(Member origin, Method backup, XposedBridge.AdditionalHookInfo additionalHookInfo, Object thiz, Object... args) throws Throwable {
 
-
-        if (XposedBridge.disableHooks) {
-            return SandHook.callOriginMethod(true, origin, backup, thiz, args);
-        }
 
         DexLog.printMethodHookIn(origin);
 

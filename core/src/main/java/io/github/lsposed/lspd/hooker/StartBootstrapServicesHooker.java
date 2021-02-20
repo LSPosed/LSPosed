@@ -38,10 +38,6 @@ public class StartBootstrapServicesHooker extends XC_MethodHook {
 
     @Override
     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-        if (XposedBridge.disableHooks) {
-            return;
-        }
-
         logD("SystemServer#startBootstrapServices() starts");
 
         try {

@@ -35,9 +35,6 @@ public class SystemMainHooker extends XC_MethodHook {
 
     @Override
     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-        if (XposedBridge.disableHooks) {
-            return;
-        }
         Hookers.logD("ActivityThread#systemMain() starts");
         try {
             // get system_server classLoader

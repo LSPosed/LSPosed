@@ -25,8 +25,6 @@ import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-import static de.robv.android.xposed.XposedBridge.disableHooks;
-
 public class LspHooker {
     private final XposedBridge.AdditionalHookInfo additionalInfo;
     private final Member method;
@@ -57,13 +55,6 @@ public class LspHooker {
             System.arraycopy(args, 1, param.args, 0, args.length - 1);
         }
 
-        if (disableHooks) {
-            try {
-                return backup.invoke(param.thisObject, param.args);
-            } catch (InvocationTargetException ite) {
-                throw ite.getCause();
-            }
-        }
         Object[] callbacksSnapshot = additionalInfo.callbacks.getSnapshot();
         final int callbacksLength = callbacksSnapshot.length;
         if (callbacksLength == 0) {
