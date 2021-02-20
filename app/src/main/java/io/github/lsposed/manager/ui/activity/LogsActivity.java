@@ -97,6 +97,7 @@ public class LogsActivity extends BaseActivity {
                             }
                             ParcelFileDescriptor parcelFileDescriptor = ConfigManager.getLogs(verbose);
                             if (parcelFileDescriptor == null) {
+                                os.close();
                                 return;
                             }
                             InputStream is = new FileInputStream(parcelFileDescriptor.getFileDescriptor());
