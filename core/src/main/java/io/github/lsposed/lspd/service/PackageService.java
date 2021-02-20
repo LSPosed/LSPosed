@@ -47,7 +47,7 @@ public class PackageService {
     public static ParceledListSlice<PackageInfo> getInstalledPackagesFromAllUsers(int flags) throws RemoteException {
         ArrayList<PackageInfo> res = new ArrayList<>();
         IPackageManager pm = getPackageManager();
-        if (pm == null) return new ParceledListSlice<>(res);
+        if (pm == null) return ParceledListSlice.emptyList();
         for (int userId : UserService.getUsers()) {
             res.addAll(pm.getInstalledPackages(flags, userId).getList());
         }

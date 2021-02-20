@@ -240,7 +240,6 @@ namespace lspd {
             InstallInlineHooks();
             Init(env);
             LOGD("Done prepare");
-            // TODO: cache this method
             FindAndCall(env, "forkAndSpecializePost",
                         "(Ljava/lang/String;Ljava/lang/String;Landroid/os/IBinder;)V",
                         app_data_dir_, nice_name_,
