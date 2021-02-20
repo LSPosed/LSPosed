@@ -75,11 +75,13 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
         return ConfigManager.getInstance().getModulesLog(ParcelFileDescriptor.MODE_WRITE_ONLY | ParcelFileDescriptor.MODE_APPEND);
     }
 
-    // TODO: check if module
     @Override
     public IBinder requestModuleBinder() throws RemoteException {
         ensureRegistered();
-        return ServiceManager.getModuleService();
+        if (ConfigManager.getInstance().isModule(Binder.getCallingUid())) {
+            ConfigManager.getInstance().ensureModulePrefsPermission(Binder.getCallingUid());
+            return ServiceManager.getModuleService();
+        } else return null;
     }
 
     @Override

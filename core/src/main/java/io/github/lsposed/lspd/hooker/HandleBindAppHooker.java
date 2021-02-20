@@ -29,6 +29,7 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.res.CompatibilityInfo;
 import android.content.res.XResources;
+import android.os.IBinder;
 
 import io.github.lsposed.lspd.util.Hookers;
 import io.github.lsposed.lspd.util.MetaDataReader;
@@ -68,12 +69,6 @@ public class HandleBindAppHooker extends XC_MethodHook {
             Utils.logD("processName=" + appProcessName +
                     ", packageName=" + reportedPackageName + ", appDataDir=" + appDataDir);
 
-            ComponentName instrumentationName = (ComponentName) XposedHelpers.getObjectField(bindData, "instrumentationName");
-            if (instrumentationName != null) {
-                Hookers.logD("Instrumentation detected, disabling framework for");
-                XposedBridge.disableHooks = true;
-                return;
-            }
             CompatibilityInfo compatInfo = (CompatibilityInfo) XposedHelpers.getObjectField(bindData, "compatInfo");
             if (appInfo.sourceDir == null) {
                 return;
@@ -87,14 +82,14 @@ public class HandleBindAppHooker extends XC_MethodHook {
             String processName = (String) XposedHelpers.getObjectField(bindData, "processName");
 
 
-            boolean isModule = false;
+            IBinder moduleBinder = serviceClient.requestModuleBinder();
+            boolean isModule = moduleBinder != null;
             int xposedminversion = -1;
             boolean xposedsharedprefs = false;
             boolean xposedmigrateprefs = false;
             try {
-                Map<String, Object> metaData = MetaDataReader.getMetaData(new File(appInfo.sourceDir));
-                isModule = metaData.containsKey("xposedmodule");
                 if (isModule) {
+                    Map<String, Object> metaData = MetaDataReader.getMetaData(new File(appInfo.sourceDir));
                     Object minVersionRaw = metaData.get("xposedminversion");
                     if (minVersionRaw instanceof Integer) {
                         xposedminversion = (Integer) minVersionRaw;
