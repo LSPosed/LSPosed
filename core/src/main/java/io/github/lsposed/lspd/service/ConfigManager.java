@@ -8,23 +8,32 @@ import android.database.sqlite.SQLiteStatement;
 import android.os.FileObserver;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
+import android.system.ErrnoException;
+import android.system.Os;
 import android.util.Log;
 import android.util.Pair;
 
+import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -515,7 +524,66 @@ public class ConfigManager {
         }
     }
 
+    // migrate setting
+    @Keep
     public static void main(String[] args) {
+        if (!miscFile.exists()) {
+            System.exit(1);
+        }
+        File miscPath = new File("/data/misc/" + readText(miscFile, "lspd"));
+        if (!miscPath.exists()) {
+            System.exit(2);
+        }
+        try {
+            HashMap<String, List<Application>> modulesScope = new HashMap<>();
+            for (File dir : miscPath.listFiles(File::isDirectory)) {
+                try {
+                    int userId = Integer.parseInt(dir.getName());
+                    System.out.println("Processing user: " + userId);
+                    File conf = new File(dir, "conf");
+                    if (!conf.exists()) System.exit(0);
+                    File enabledModules = new File(conf, "enabled_modules.list");
+                    if (!enabledModules.exists()) System.exit(0);
 
+                    System.out.println("updating modules...");
+
+                    try (InputStream inputStream = new FileInputStream(enabledModules); BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+                        String packageName;
+                        while ((packageName = reader.readLine()) != null) {
+                            System.out.println("\t" + packageName);
+                            PackageInfo pkgInfo = PackageService.getPackageInfo(packageName, 0, 0);
+                            if (pkgInfo == null || pkgInfo.applicationInfo == null) continue;
+                            getInstance().enableModule(packageName, pkgInfo.applicationInfo.sourceDir);
+                        }
+                    }
+                    System.out.println("updating scope...");
+
+                    for (File scopeConf : conf.listFiles(name -> name.getName().endsWith(".conf"))) {
+                        String packageName = scopeConf.getName().replaceAll(".conf$", "");
+                        System.out.println("\t" + packageName);
+                        List<Application> scope = modulesScope.computeIfAbsent(packageName, ignored -> new ArrayList<>());
+                        try (InputStream inputStream = new FileInputStream(scopeConf); BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+                            String line;
+                            while ((line = reader.readLine()) != null) {
+                                Application app = new Application();
+                                app.packageName = line;
+                                app.userId = userId;
+                                System.out.println("\t\t" + app.packageName);
+                                scope.add(app);
+                            }
+                        }
+                    }
+                } catch (NumberFormatException ignored) {
+                }
+            }
+
+            for (HashMap.Entry<String, List<Application>> entry : modulesScope.entrySet()) {
+                getInstance().setModuleScope(entry.getKey(), entry.getValue());
+            }
+        } catch (Throwable e) {
+            System.out.println(Log.getStackTraceString(e));
+            System.exit(3);
+        }
+        System.exit(0);
     }
 }
