@@ -85,9 +85,9 @@ public final class ModuleUtil {
         }
 
         Map<String, InstalledModule> modules = new HashMap<>();
-        for (PackageInfo pkg : pm.getInstalledPackages(PackageManager.GET_META_DATA)) {
+        for (PackageInfo pkg : ConfigManager.getInstalledPackagesFromAllUsers(PackageManager.GET_META_DATA)) {
             ApplicationInfo app = pkg.applicationInfo;
-            if (!app.enabled)
+            if (!app.enabled || app.uid / 100000 != 0)
                 continue;
 
             if (app.metaData != null && app.metaData.containsKey("xposedmodule")) {
