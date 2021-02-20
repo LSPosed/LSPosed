@@ -108,6 +108,7 @@ LANG_UTIL_ERR_ANDROID_UNSUPPORT_3="Learn more from our GitHub Wiki"
 LANG_UTIL_ERR_PLATFORM_UNSUPPORT="Unsupported platform"
 LANG_UTIL_ERR_VARIANT_SELECTION="Error occurred when selecting variant"
 LANG_UTIL_ERR_VARIANT_UNSUPPORT="Unsupported variant"
+LANG_CUST_INST_MIGRATE_CONF="Migrating configuration"
 
 # Load lang
 if [[ ${BOOTMODE} == true ]]; then
@@ -152,15 +153,6 @@ elif [ "${ARCH}" == "x64" ]; then
 else
   # unreachable
   abortC "${LANG_UTIL_ERR_PLATFORM_UNSUPPORT}"
-fi
-
-extract "${ZIPFILE}" "${BIN_PATH}/key_selector" "${TMPDIR}"
-SELECTOR_PATH="${TMPDIR}/${BIN_PATH}/key_selector"
-chmod 755 "${SELECTOR_PATH}"
-"${SELECTOR_PATH}"
-VARIANT=$?
-if [ VARIANT -lt 16 ]; then
-  abortC "${LANG_UTIL_ERR_VARIANT_SELECTION}"
 fi
 
 ui_print "- ${LANG_CUST_INST_EXT_FILES}"
@@ -224,14 +216,27 @@ else
 fi
 touch /data/adb/lspd/new_install || abortC "! ${LANG_CUST_ERR_CONF_FIRST}"
 ui_print "- ${LANG_CUST_INST_COPY_LIB}"
-mkdir -p /data/adb/lspd/config
 rm -rf "/data/adb/lspd/framework"
 mv "${MODPATH}/system/framework" "/data/adb/lspd/framework"
-set_perm_recursive /data/adb/lspd root root 0700 0600 "u:object_r:magisk_file:s0" || abortC "! ${LANG_CUST_ERR_PERM}"
-mkdir -p /data/misc/$MISC_PATH/0/conf/ || abortC "! ${LANG_CUST_ERR_CONF_CREATE}"
 set_perm /data/misc/$MISC_PATH root root 0771 "u:object_r:magisk_file:s0" || abortC "! ${LANG_CUST_ERR_PERM}"
+
+if [[ ! -d /data/adb/lspd/config ]]; then
+  mkdir -p /data/adb/lspd/config
+  ui_print "- ${LANG_CUST_INST_MIGRATE_CONF}"
+  cp -r /data/misc/$MISC_PATH/0/prefs /data/misc/$MISC_PATH/prefs
+  /system/bin/app_process -Djava.class.path=/data/adb/lspd/framework/lspd.dex /system/bin --nice-name=lspd_config io.github.lsposed.lspd.service.ConfigManager
+fi
 echo "rm -rf /data/misc/$MISC_PATH" >> "${MODPATH}/uninstall.sh" || abortC "! ${LANG_CUST_ERR_CONF_UNINST}"
 echo "[[ -f /data/adb/lspd/new_install ]] || rm -rf /data/adb/lspd" >> "${MODPATH}/uninstall.sh" || abortC "! ${LANG_CUST_ERR_CONF_UNINST}"
+
+extract "${ZIPFILE}" "${BIN_PATH}/key_selector" "${TMPDIR}"
+SELECTOR_PATH="${TMPDIR}/${BIN_PATH}/key_selector"
+chmod 755 "${SELECTOR_PATH}"
+"${SELECTOR_PATH}"
+VARIANT=$?
+if [ $VARIANT -lt 16 ]; then
+  abortC "${LANG_UTIL_ERR_VARIANT_SELECTION}"
+fi
 
 if [ $VARIANT == 17 ]; then  # YAHFA
   echo "1" > /data/adb/lspd/config/variant

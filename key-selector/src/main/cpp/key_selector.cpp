@@ -286,36 +286,27 @@ int main() {
     Variant cursor = Variant::YAHFA;
 
     // Load current variant
-    std::filesystem::path lspd_folder;
-    bool found = false;
-    for (auto &item: std::filesystem::directory_iterator("/data/misc/")) {
-        if (item.is_directory() && item.path().string().starts_with("/data/misc/lspd")) {
-            lspd_folder = item;
-            found = true;
-            break;
-        }
-    }
+    std::filesystem::path lspd_folder("/data/adb/lspd/config");
+    std::filesystem::create_directories(lspd_folder);
 
-    if (found) {
-        const auto variant_file = lspd_folder / "variant";
-        if (std::filesystem::exists(variant_file)) {
-            std::ifstream ifs(variant_file);
-            if (ifs.good()) {
-                std::string line;
-                std::getline(ifs, line);
-                char* end;
-                int i = std::strtol(line.c_str(), &end, 10);
-                switch (i) {
-                    default:
-                    case 1:
-                        cursor = Variant::YAHFA;
-                        break;
-                    case 2:
-                        cursor = Variant::SandHook;
-                        break;
-                }
-                timeout = 5;
+    const auto variant_file = lspd_folder / "variant";
+    if (std::filesystem::exists(variant_file)) {
+        std::ifstream ifs(variant_file);
+        if (ifs.good()) {
+            std::string line;
+            std::getline(ifs, line);
+            char* end;
+            int i = std::strtol(line.c_str(), &end, 10);
+            switch (i) {
+                default:
+                case 1:
+                    cursor = Variant::YAHFA;
+                    break;
+                case 2:
+                    cursor = Variant::SandHook;
+                    break;
             }
+            timeout = 5;
         }
     }
 
