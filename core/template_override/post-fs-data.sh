@@ -103,8 +103,7 @@ print_log_head() {
     echo "Android build: ${BUILD}">>"${LOG_FILE}"
     echo "Android version: ${ANDROID}">>"${LOG_FILE}"
     echo "Android sdk: ${ANDROID_SDK}">>"${LOG_FILE}"
-    echo "LSPosed version: ${
-LSPD_VERSION}">>"${LOG_FILE}"
+    echo "LSPosed version: ${LSPD_VERSION}">>"${LOG_FILE}"
     echo "LSPosed api: ${LSPD_APICODE}">>"${LOG_FILE}"
     echo "Riru version: ${RIRU_VERSION} (${RIRU_VERCODE})">>"${LOG_FILE}"
     echo "Riru api: ${RIRU_APICODE}">>"${LOG_FILE}"
