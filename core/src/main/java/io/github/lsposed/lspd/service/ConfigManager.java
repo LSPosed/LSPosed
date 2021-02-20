@@ -110,7 +110,7 @@ public class ConfigManager {
         }
     }
 
-    private final static SQLiteStatement createModulesTable = db.compileStatement("CREATE TABLE IF NOT EXISTS modules (" +
+    private static final SQLiteStatement createModulesTable = db.compileStatement("CREATE TABLE IF NOT EXISTS modules (" +
             "mid integer PRIMARY KEY AUTOINCREMENT," +
             "module_pkg_name text NOT NULL UNIQUE," +
             "apk_path text NOT NULL, " +
