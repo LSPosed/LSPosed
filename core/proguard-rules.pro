@@ -24,9 +24,3 @@
 -dontoptimize
 -keep class de.robv.android.xposed.** {*;}
 -keep class android.** { *; }
-
--keep interface io.github.lsposed.common.KeepAll
--keep interface io.github.lsposed.common.KeepMembers
-
--keep class * implements io.github.lsposed.common.KeepAll { *; }
--keepclassmembers class * implements io.github.lsposed.common.KeepMembers { *; }

@@ -20,9 +20,10 @@
 
 package io.github.lsposed.lspd.core;
 
-import io.github.lsposed.common.KeepAll;
+import androidx.annotation.Keep;
 
-public interface Proxy extends KeepAll {
+@Keep
+public interface Proxy {
 
     boolean init();
 

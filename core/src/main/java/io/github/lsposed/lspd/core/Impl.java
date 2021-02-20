@@ -21,16 +21,17 @@
 package io.github.lsposed.lspd.core;
 
 import androidx.annotation.IntDef;
+import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 
-import io.github.lsposed.common.KeepAll;
 import io.github.lsposed.lspd.proxy.Router;
 
 import java.lang.annotation.Retention;
 
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
-public interface Impl extends KeepAll {
+@Keep
+public interface Impl {
 
     int NONE = 0;
     int YAHFA = 1;

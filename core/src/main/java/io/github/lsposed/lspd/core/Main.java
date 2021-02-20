@@ -25,7 +25,8 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.ddm.DdmHandleAppName;
 
-import io.github.lsposed.common.KeepAll;
+import androidx.annotation.Keep;
+
 import io.github.lsposed.lspd.config.LSPApplicationServiceClient;
 import io.github.lsposed.lspd.service.ServiceManager;
 import io.github.lsposed.lspd.util.Utils;
@@ -35,7 +36,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import static io.github.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
 
 @SuppressLint("DefaultLocale")
-public class Main implements KeepAll {
+@Keep
+public class Main {
     private static final AtomicReference<Impl> lspdImplRef = new AtomicReference<>(null);
     private static final Binder heartBeatBinder = new Binder();
 

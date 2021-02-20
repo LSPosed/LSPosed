@@ -36,8 +36,4 @@ public abstract class BaseProxy implements Proxy {
     public boolean init() {
         return true;
     }
-
-    public static void onBlackListed() {
-        XposedBridge.clearAllCallbacks();
-    }
 }
