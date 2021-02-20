@@ -22,7 +22,11 @@ import android.os.Parcelable;
 import android.os.RemoteException;
 import android.util.Log;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import io.github.lsposed.lspd.managerservice.BuildConfig;
+
 /**
  * Transfer a large list of Parcelable objects across an IPC.  Splits into
  * multiple transactions if needed.
@@ -36,7 +40,7 @@ import java.util.List;
  */
 abstract class BaseParceledListSlice<T> implements Parcelable {
     private static String TAG = "ParceledListSlice";
-    private static boolean DEBUG = false;
+    private static boolean DEBUG = BuildConfig.DEBUG;
     /*
      * TODO get this number from somewhere else. For now set it to a quarter of
      * the 1MB limit.
@@ -46,7 +50,11 @@ abstract class BaseParceledListSlice<T> implements Parcelable {
     private int mInlineCountLimit = Integer.MAX_VALUE;
 
     public BaseParceledListSlice(List<T> list) {
-        mList = list;
+        if(list == null) {
+            mList = Collections.emptyList();
+        } else {
+            mList = list;
+        }
     }
 
     @SuppressWarnings("unchecked")

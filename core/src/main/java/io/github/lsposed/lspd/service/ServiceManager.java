@@ -27,6 +27,10 @@ public class ServiceManager {
     public static void start() {
         Log.i(TAG, "starting server...");
 
+        Thread.setDefaultUncaughtExceptionHandler((t, e)->{
+            Log.e(TAG, Log.getStackTraceString(e));
+        });
+
         Looper.prepare();
         mainService = new LSPosedService();
         moduleService = new LSPModuleService();
@@ -61,10 +65,6 @@ public class ServiceManager {
         } catch (Throwable e) {
             Log.e(TAG, Log.getStackTraceString(e));
         }
-
-        Thread.setDefaultUncaughtExceptionHandler((t, e)->{
-            Log.e(TAG, Log.getStackTraceString(e));
-        });
 
         //noinspection InfiniteLoopStatement
         while (true) {

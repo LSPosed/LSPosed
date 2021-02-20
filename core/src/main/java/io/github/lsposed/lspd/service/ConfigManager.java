@@ -37,37 +37,37 @@ import static io.github.lsposed.lspd.service.ServiceManager.TAG;
 public class ConfigManager {
     static ConfigManager instance = null;
 
-    static final private File basePath = new File("/data/adb/lspd");
-    static final private File configPath = new File(basePath, "config");
-    static final private SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(new File(configPath, "modules_config.db"), null);
+    private static final File basePath = new File("/data/adb/lspd");
+    private static final File configPath = new File(basePath, "config");
+    private static final SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(new File(configPath, "modules_config.db"), null);
 
     boolean packageStarted = false;
 
-    static final private File resourceHookSwitch = new File(configPath, "enable_resources");
+    private static final File resourceHookSwitch = new File(configPath, "enable_resources");
     private boolean resourceHook = false;
 
-    static final private File variantSwitch = new File(configPath, "variant");
+    private static final File variantSwitch = new File(configPath, "variant");
     private int variant = -1;
 
-    static final private File verboseLogSwitch = new File(configPath, "verbose_log");
+    private static final File verboseLogSwitch = new File(configPath, "verbose_log");
     private boolean verboseLog = false;
 
-    static final private String DEFAULT_MANAGER_PACKAGE_NAME = "io.github.lsposed.manager";
+    private static final String DEFAULT_MANAGER_PACKAGE_NAME = "io.github.lsposed.manager";
 
-    static final private File managerPath = new File(configPath, "manager");
+    private static final File managerPath = new File(configPath, "manager");
     private String manager = null;
     private int managerUid = -1;
 
-    static final private File miscFile = new File(basePath, "misc_path");
+    private static final File miscFile = new File(basePath, "misc_path");
     private String miscPath = null;
 
-    static final private File selinuxPath = new File("/sys/fs/selinux/enforce");
+    private static final File selinuxPath = new File("/sys/fs/selinux/enforce");
     // only check on boot
-    final private boolean isPermissive;
+    private final boolean isPermissive;
 
-    static final private File logPath = new File(basePath, "log");
-    static final private File modulesLogPath = new File(logPath, "modules.log");
-    static final private File verboseLogPath = new File(logPath, "all.log");
+    private static final File logPath = new File(basePath, "log");
+    private static final File modulesLogPath = new File(logPath, "modules.log");
+    private static final File verboseLogPath = new File(logPath, "all.log");
 
     final FileObserver configObserver = new FileObserver(configPath, FileObserver.MODIFY | FileObserver.DELETE | FileObserver.CREATE | FileObserver.MOVED_TO) {
         @Override
@@ -101,14 +101,14 @@ public class ConfigManager {
         }
     }
 
-    static private final SQLiteStatement createModulesTable = db.compileStatement("CREATE TABLE IF NOT EXISTS modules (" +
+    private final static SQLiteStatement createModulesTable = db.compileStatement("CREATE TABLE IF NOT EXISTS modules (" +
             "mid integer PRIMARY KEY AUTOINCREMENT," +
             "module_pkg_name text NOT NULL UNIQUE," +
             "apk_path text NOT NULL, " +
             "enabled BOOLEAN DEFAULT 0 " +
             "CHECK (enabled IN (0, 1))" +
             ");");
-    static private final SQLiteStatement createScopeTable = db.compileStatement("CREATE TABLE IF NOT EXISTS scope (" +
+    private static final SQLiteStatement createScopeTable = db.compileStatement("CREATE TABLE IF NOT EXISTS scope (" +
             "mid integer," +
             "app_pkg_name text NOT NULL," +
             "user_id integer NOT NULL," +
@@ -135,11 +135,11 @@ public class ConfigManager {
         return modules.toArray(new String[0]);
     }
 
-    static private String readText(@NonNull File file) throws IOException {
+    private static String readText(@NonNull File file) throws IOException {
         return new String(Files.readAllBytes(file.toPath())).trim();
     }
 
-    static private String readText(@NonNull File file, String defaultValue) {
+    private static String readText(@NonNull File file, String defaultValue) {
         try {
             if (!file.exists()) return defaultValue;
             return readText(file);
@@ -149,7 +149,7 @@ public class ConfigManager {
         return defaultValue;
     }
 
-    static private void writeText(@NonNull File file, String value) {
+    private static void writeText(@NonNull File file, String value) {
         try {
             Files.write(file.toPath(), value.getBytes(), StandardOpenOption.CREATE);
         } catch (IOException e) {
@@ -157,7 +157,7 @@ public class ConfigManager {
         }
     }
 
-    static private int readInt(@NonNull File file, int defaultValue) {
+    private static int readInt(@NonNull File file, int defaultValue) {
         try {
             if (!file.exists()) return defaultValue;
             return Integer.parseInt(readText(file));
@@ -167,7 +167,7 @@ public class ConfigManager {
         return defaultValue;
     }
 
-    static private void writeInt(@NonNull File file, int value) {
+    private static void writeInt(@NonNull File file, int value) {
         writeText(file, String.valueOf(value));
     }
 
@@ -342,7 +342,7 @@ public class ConfigManager {
     }
 
     public boolean setModuleScope(String packageName, List<Application> scopes) {
-        if (scopes.isEmpty()) return false;
+        if (scopes == null) return false;
         int mid = getModuleId(packageName);
         if (mid == -1) return false;
         Application self = new Application();
@@ -507,11 +507,15 @@ public class ConfigManager {
         return miscPath + File.separator + "prefs" + File.separator + fileName;
     }
 
-    static public void grantManagerPermission() {
+    public static void grantManagerPermission() {
         try {
             PackageService.grantRuntimePermission(readText(managerPath, DEFAULT_MANAGER_PACKAGE_NAME), "android.permission.INTERACT_ACROSS_USERS", 0);
         } catch (RemoteException e) {
             Log.e(TAG, Log.getStackTraceString(e));
         }
+    }
+
+    public static void main(String[] args) {
+
     }
 }
