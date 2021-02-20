@@ -15,7 +15,6 @@ public class LSPApplicationServiceClient implements ILSPApplicationService {
     static IBinder serviceBinder = null;
 
     static String baseCachePath = null;
-    static String basePrefsPath = null;
     static String processName = null;
 
     public static LSPApplicationServiceClient serviceClient = null;
@@ -99,16 +98,14 @@ public class LSPApplicationServiceClient implements ILSPApplicationService {
         return new String[0];
     }
 
-    public String[] getModulesList(){
+    public String[] getModulesList() {
         return getModulesList(processName);
     }
 
     @Override
     public String getPrefsPath(String packageName) {
         try {
-            if (basePrefsPath == null)
-                basePrefsPath = service.getPrefsPath("");
-            return basePrefsPath + File.separator + packageName;
+            return service.getPrefsPath(packageName);
         } catch (RemoteException | NullPointerException ignored) {
         }
         return null;

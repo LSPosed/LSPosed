@@ -33,7 +33,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -83,6 +82,7 @@ public class ConfigManager {
         public void onEvent(int event, @Nullable String path) {
             updateConfig();
             cacheScopes();
+            cacheModules();
         }
     };
 
@@ -125,6 +125,8 @@ public class ConfigManager {
             ");");
 
     private final ConcurrentHashMap<ProcessScope, Set<String>> cachedScope = new ConcurrentHashMap<>();
+
+    private final ConcurrentHashMap<Integer, String> cachedModule = new ConcurrentHashMap<>();
 
     // for system server, cache is not yet ready, we need to query database for it
     public boolean shouldSkipSystemServer() {
@@ -214,6 +216,7 @@ public class ConfigManager {
                 Log.d(TAG, "pm is ready, updating cache");
                 instance.packageStarted = true;
                 instance.cacheScopes();
+                instance.cacheModules();
                 instance.updateManager();
             }
         }
@@ -226,6 +229,7 @@ public class ConfigManager {
         isPermissive = readInt(selinuxPath, 1) == 0;
         configObserver.startWatching();
         cacheScopes();
+        cacheModules();
     }
 
     private void createTables() {
@@ -240,6 +244,41 @@ public class ConfigManager {
             processes.add(new ProcessScope(processName, result.second));
         }
         return processes;
+    }
+
+    private synchronized void cacheModules() {
+        // skip caching when pm is not yet available
+        if (!packageStarted) return;
+        cachedModule.clear();
+        try (Cursor cursor = db.query("modules", new String[]{"module_pkg_name"},
+                "enabled = 1", null, null, null, null)) {
+            if (cursor == null) {
+                Log.e(TAG, "db cache failed");
+                return;
+            }
+            int pkgNameIdx = cursor.getColumnIndex("module_pkg_name");
+            HashSet<String> obsoleteModules = new HashSet<>();
+            while (cursor.moveToNext()) {
+                String packageName = cursor.getString(pkgNameIdx);
+                try {
+                    PackageInfo pkgInfo = PackageService.getPackageInfo(packageName, 0, 0);
+                    if (pkgInfo != null && pkgInfo.applicationInfo != null) {
+                        cachedModule.put(pkgInfo.applicationInfo.uid, pkgInfo.packageName);
+                    } else {
+                        obsoleteModules.add(packageName);
+                    }
+                } catch (RemoteException e) {
+                    Log.e(TAG, Log.getStackTraceString(e));
+                }
+            }
+            for (String obsoleteModule : obsoleteModules) {
+                removeModule(obsoleteModule);
+            }
+        }
+        Log.d(TAG, "cached modules");
+        for (int uid : cachedModule.keySet()) {
+            Log.d(TAG, cachedModule.get(uid) + "/" + uid);
+        }
     }
 
     private synchronized void cacheScopes() {
@@ -524,6 +563,34 @@ public class ConfigManager {
         }
     }
 
+    public boolean isModule(int uid) {
+        return cachedModule.containsKey(uid);
+    }
+
+    private void recursivelyChown(File file, int uid, int gid) throws ErrnoException {
+        Os.chown(file.toString(), uid, gid);
+        if (file.isDirectory()) {
+            for (File subFile : file.listFiles()) {
+                recursivelyChown(subFile, uid, gid);
+            }
+        }
+    }
+
+    public boolean ensureModulePrefsPermission(int uid) {
+        String packageName = cachedModule.get(uid);
+        if (packageName == null) return false;
+        File path = new File(getPrefsPath(packageName));
+        try {
+            if (path.exists() && !path.isDirectory()) path.delete();
+            if (!path.exists()) Files.createDirectories(path.toPath());
+            recursivelyChown(path, uid, 1000);
+            return true;
+        } catch (IOException | ErrnoException e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+            return false;
+        }
+    }
+
     // migrate setting
     @Keep
     public static void main(String[] args) {
@@ -541,9 +608,9 @@ public class ConfigManager {
                     int userId = Integer.parseInt(dir.getName());
                     System.out.println("Processing user: " + userId);
                     File conf = new File(dir, "conf");
-                    if (!conf.exists()) System.exit(0);
+                    if (!conf.exists()) continue;
                     File enabledModules = new File(conf, "enabled_modules.list");
-                    if (!enabledModules.exists()) System.exit(0);
+                    if (!enabledModules.exists()) continue;
 
                     System.out.println("updating modules...");
 
@@ -577,6 +644,7 @@ public class ConfigManager {
                 }
             }
 
+            System.out.println("Applying scope");
             for (HashMap.Entry<String, List<Application>> entry : modulesScope.entrySet()) {
                 getInstance().setModuleScope(entry.getKey(), entry.getValue());
             }
