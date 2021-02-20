@@ -89,8 +89,8 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     private final String modulePackageName;
     private final String moduleName;
     private final SwitchBar masterSwitch;
-    private final List<Application> recommendedList = new ArrayList<>();
-    private final List<Application> checkedList = new ArrayList<>();
+    private final List<ApplicationWithEquals> recommendedList = new ArrayList<>();
+    private final List<ApplicationWithEquals> checkedList = new ArrayList<>();
     private final List<AppInfo> searchList = new ArrayList<>();
     private List<AppInfo> showList = new ArrayList<>();
     private ApplicationInfo selectedInfo;
@@ -132,14 +132,12 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         activity.runOnUiThread(() -> masterSwitch.setChecked(enabled));
 
         checkedList.addAll(ConfigManager.getModuleScope(modulePackageName));
-        ArrayList<Application> installedList = new ArrayList<>();
+        ArrayList<ApplicationWithEquals> installedList = new ArrayList<>();
         List<String> scopeList = ModuleUtil.getInstance().getModule(modulePackageName).getScopeList();
         boolean emptyCheckedList = checkedList.isEmpty();
         for (PackageInfo info : appList) {
             int uid = info.applicationInfo.uid;
-            Application application = new Application();
-            application.userId = uid / 100000;
-            application.packageName = info.packageName;
+            ApplicationWithEquals application = new ApplicationWithEquals(info.packageName, uid / 100000);
 
             if (!installedList.contains(application)) installedList.add(application);
 
@@ -170,7 +168,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         activity.onDataReady();
     }
 
-    private boolean shouldHideApp(PackageInfo info, Application app) {
+    private boolean shouldHideApp(PackageInfo info, ApplicationWithEquals app) {
         if (info.packageName.equals(this.modulePackageName)) {
             return true;
         }
@@ -567,9 +565,29 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
 
     public static class AppInfo {
         public PackageInfo packageInfo;
-        public Application application;
+        public ApplicationWithEquals application;
         public ApplicationInfo applicationInfo;
         public String packageName;
         public CharSequence label = null;
+    }
+
+    public static class ApplicationWithEquals extends Application {
+        public ApplicationWithEquals(String packageName, int userId) {
+            this.packageName = packageName;
+            this.userId = userId;
+        }
+
+        public ApplicationWithEquals(Application application) {
+            packageName = application.packageName;
+            userId = application.userId;
+        }
+
+        @Override
+        public boolean equals(@Nullable Object obj) {
+            if (!(obj instanceof Application)) {
+                return false;
+            }
+            return packageName.equals(((Application) obj).packageName) && userId == ((Application) obj).userId;
+        }
     }
 }

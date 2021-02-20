@@ -29,6 +29,7 @@ import java.util.List;
 
 import io.github.lsposed.lspd.Application;
 import io.github.lsposed.lspd.utils.ParceledListSlice;
+import io.github.lsposed.manager.adapters.ScopeAdapter;
 import io.github.lsposed.manager.receivers.LSPosedManagerServiceClient;
 
 public class ConfigManager {
@@ -88,19 +89,30 @@ public class ConfigManager {
         }
     }
 
-    public static boolean setModuleScope(String packageName, List<Application> applications) {
+    public static boolean setModuleScope(String packageName, List<ScopeAdapter.ApplicationWithEquals> applications) {
         try {
-            return LSPosedManagerServiceClient.setModuleScope(packageName, new ParceledListSlice<>(applications));
+            List<Application> list = new ArrayList<>();
+            applications.forEach(application -> {
+                Application app = new Application();
+                app.userId = application.userId;
+                app.packageName = application.packageName;
+                list.add(app);
+            });
+            return LSPosedManagerServiceClient.setModuleScope(packageName, new ParceledListSlice<>(list));
         } catch (RemoteException | NullPointerException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
             return false;
         }
     }
 
-    public static List<Application> getModuleScope(String packageName) {
-        List<Application> list = new ArrayList<>();
+    public static List<ScopeAdapter.ApplicationWithEquals> getModuleScope(String packageName) {
+        List<ScopeAdapter.ApplicationWithEquals> list = new ArrayList<>();
         try {
-            list.addAll(LSPosedManagerServiceClient.getModuleScope(packageName).getList());
+            List<Application> applications = LSPosedManagerServiceClient.getModuleScope(packageName).getList();
+            if (applications == null) {
+                return list;
+            }
+            applications.forEach(application -> list.add(new ScopeAdapter.ApplicationWithEquals(application)));
         } catch (RemoteException | NullPointerException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
         }
