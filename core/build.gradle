@@ -18,7 +18,6 @@
  * Copyright (C) 2021 LSPosed Contributors
  */
 
-import groovy.xml.XmlUtil
 import org.apache.tools.ant.filters.FixCrLfFilter
 import org.gradle.internal.os.OperatingSystem
 
@@ -133,49 +132,16 @@ android {
     }
 }
 
-task cleanTemplate(type: Delete) {
-    delete file(templateSystemx86Path)
-}
-
-preBuild.doLast {
-    def imlFile = file(project.name + ".iml")
-    try {
-        def parsedXml = (new XmlParser()).parse(imlFile)
-        def jdkNode = parsedXml.component[1].orderEntry.find { it.'@type' == 'jdk' }
-        parsedXml.component[1].remove(jdkNode)
-        def sdkString = "Android API " + android.compileSdkVersion.substring("android-".length()) + " Platform"
-        new Node(parsedXml.component[1], 'orderEntry', ['type': 'jdk', 'jdkName': sdkString, 'jdkType': 'Android SDK'])
-        XmlUtil.serialize(parsedXml, new FileOutputStream(imlFile))
-    } catch (FileNotFoundException ignored) {
-        // nop, iml not found
-    }
-}
-
 afterEvaluate {
-    task("copyCommonProperties", type: Copy) {
-        from file("${projectDir}/template_override/")
-        into file(templateRootPath)
-    }
 
     android.applicationVariants.all { variant ->
         def variantCapped = variant.name.capitalize()
         def variantLowered = variant.name.toLowerCase()
         def zipFileName = "${module_name}-${rootProject.ext.versionName}-${rootProject.ext.versionCode}-${variantLowered}.zip"
 
-        task("copyMainDex${variantCapped}", type: Copy) {
-            def dexOutPath = variant.name.contains("release") ?
-                    "${buildDir}/intermediates/dex/${variantLowered}/minify${variantCapped}WithR8" :
-                    "${buildDir}/intermediates/dex/${variantLowered}/mergeDex${variantCapped}"
-            from (dexOutPath){
-                rename("classes.dex", "lspd.dex")
-            }
-            destinationDir file(zipPathMagiskReleasePath + "system/framework/")
-            outputs.upToDateWhen { false }
-        }
-
         delete file(zipPathMagiskReleasePath)
 
-        def prepareMagiskFilesTask = task("prepareMagiskFiles${variantCapped}", type: Delete) {
+        def prepareMagiskFilesTask = task("prepareMagiskFiles${variantCapped}") {
             dependsOn "assemble${variantCapped}"
             dependsOn tasks.getByPath(":key-selector:copyKeySelector${variantCapped}LibraryToMagiskTemplate")
             doFirst {
@@ -195,7 +161,7 @@ afterEvaluate {
                 }
             }
             def libPathRelease = "${buildDir}/intermediates/cmake/${variantLowered}/obj"
-            def exclude_list = ["riru.sh"]
+            def exclude_list = ["util_functions.sh"]
             doLast {
                 def dexOutPath = variant.name.contains("release") ?
                         "${buildDir}/intermediates/dex/${variantLowered}/minify${variantCapped}WithR8" :
