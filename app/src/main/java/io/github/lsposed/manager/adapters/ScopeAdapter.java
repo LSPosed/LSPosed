@@ -134,6 +134,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         checkedList.addAll(ConfigManager.getModuleScope(modulePackageName));
         ArrayList<Application> installedList = new ArrayList<>();
         List<String> scopeList = ModuleUtil.getInstance().getModule(modulePackageName).getScopeList();
+        boolean emptyCheckedList = checkedList.isEmpty();
         for (PackageInfo info : appList) {
             int uid = info.applicationInfo.uid;
             Application application = new Application();
@@ -144,6 +145,9 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
 
             if (scopeList != null && scopeList.contains(info.packageName)) {
                 recommendedList.add(application);
+                if (emptyCheckedList) {
+                    checkedList.add(application);
+                }
             }
 
             if (shouldHideApp(info, application)) {
@@ -159,8 +163,8 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             searchList.add(appInfo);
         }
         checkedList.retainAll(installedList);
-        if (checkedList.isEmpty() && !recommendedList.isEmpty()) {
-            checkRecommended();
+        if (emptyCheckedList) {
+            ConfigManager.setModuleScope(modulePackageName, checkedList);
         }
         showList = sortApps(searchList);
         activity.onDataReady();
