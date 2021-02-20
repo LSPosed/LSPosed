@@ -25,6 +25,7 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import io.github.lsposed.lspd.Application;
@@ -89,7 +90,7 @@ public class ConfigManager {
         }
     }
 
-    public static boolean setModuleScope(String packageName, List<ScopeAdapter.ApplicationWithEquals> applications) {
+    public static boolean setModuleScope(String packageName, HashSet<ScopeAdapter.ApplicationWithEquals> applications) {
         try {
             List<Application> list = new ArrayList<>();
             applications.forEach(application -> {

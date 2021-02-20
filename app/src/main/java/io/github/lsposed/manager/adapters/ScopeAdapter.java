@@ -63,8 +63,10 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import io.github.lsposed.lspd.Application;
 import io.github.lsposed.manager.App;
@@ -89,8 +91,8 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     private final String modulePackageName;
     private final String moduleName;
     private final SwitchBar masterSwitch;
-    private final List<ApplicationWithEquals> recommendedList = new ArrayList<>();
-    private final List<ApplicationWithEquals> checkedList = new ArrayList<>();
+    private final HashSet<ApplicationWithEquals> recommendedList = new HashSet<>();
+    private final HashSet<ApplicationWithEquals> checkedList = new HashSet<>();
     private final List<AppInfo> searchList = new ArrayList<>();
     private List<AppInfo> showList = new ArrayList<>();
     private ApplicationInfo selectedInfo;
@@ -132,14 +134,14 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         activity.runOnUiThread(() -> masterSwitch.setChecked(enabled));
 
         checkedList.addAll(ConfigManager.getModuleScope(modulePackageName));
-        ArrayList<ApplicationWithEquals> installedList = new ArrayList<>();
+        HashSet<ApplicationWithEquals> installedList = new HashSet<>();
         List<String> scopeList = ModuleUtil.getInstance().getModule(modulePackageName).getScopeList();
         boolean emptyCheckedList = checkedList.isEmpty();
         for (PackageInfo info : appList) {
             int uid = info.applicationInfo.uid;
             ApplicationWithEquals application = new ApplicationWithEquals(info.packageName, uid / 100000);
 
-            if (!installedList.contains(application)) installedList.add(application);
+            installedList.add(application);
 
             if (scopeList != null && scopeList.contains(info.packageName)) {
                 recommendedList.add(application);
@@ -588,6 +590,11 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                 return false;
             }
             return packageName.equals(((Application) obj).packageName) && userId == ((Application) obj).userId;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(packageName, userId);
         }
     }
 }
