@@ -89,13 +89,12 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     private final String modulePackageName;
     private final String moduleName;
     private final SwitchBar masterSwitch;
-    private final List<Application> moduleList = new ArrayList<>();
     private final List<Application> recommendedList = new ArrayList<>();
     private final List<Application> checkedList = new ArrayList<>();
     private final List<AppInfo> searchList = new ArrayList<>();
     private List<AppInfo> showList = new ArrayList<>();
-    private boolean enabled = true;
     private ApplicationInfo selectedInfo;
+    private boolean enabled = true;
 
     public ScopeAdapter(AppListActivity activity, String moduleName, String modulePackageName, SwitchBar masterSwitch) {
         this.activity = activity;
@@ -125,7 +124,6 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     private void loadApps() {
         List<PackageInfo> appList = ConfigManager.getInstalledPackagesFromAllUsers(PackageManager.GET_META_DATA);
         checkedList.clear();
-        moduleList.clear();
         recommendedList.clear();
         searchList.clear();
         showList.clear();
@@ -144,11 +142,6 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
 
             if (!installedList.contains(application)) installedList.add(application);
 
-            if (info.packageName.equals(this.modulePackageName)) {
-                if (!checkedList.contains(application)) checkedList.add(application);
-                if (!moduleList.contains(application)) moduleList.add(application);
-            }
-
             if (scopeList != null && scopeList.contains(info.packageName)) {
                 recommendedList.add(application);
             }
@@ -166,7 +159,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             searchList.add(appInfo);
         }
         checkedList.retainAll(installedList);
-        if (selectedNothing() && hasRecommended()) {
+        if (checkedList.isEmpty() && !recommendedList.isEmpty()) {
             checkRecommended();
         }
         showList = sortApps(searchList);
@@ -219,8 +212,8 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             }
         };
         Comparator<AppInfo> recommendedComparator = (a, b) -> {
-            boolean aRecommended = hasRecommended() && recommendedList.contains(a.application);
-            boolean bRecommended = hasRecommended() && recommendedList.contains(b.application);
+            boolean aRecommended = !recommendedList.isEmpty() && recommendedList.contains(a.application);
+            boolean bRecommended = !recommendedList.isEmpty() && recommendedList.contains(b.application);
             if (aRecommended == bRecommended) {
                 return frameworkComparator.compare(a, b);
             } else if (aRecommended) {
@@ -247,10 +240,6 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         checkedList.clear();
         checkedList.addAll(recommendedList);
         ConfigManager.setModuleScope(modulePackageName, checkedList);
-    }
-
-    private boolean hasRecommended() {
-        return !recommendedList.isEmpty();
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -343,7 +332,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         if (intent == null) {
             menu.removeItem(R.id.menu_launch);
         }
-        if (!hasRecommended()) {
+        if (recommendedList.isEmpty()) {
             menu.removeItem(R.id.use_recommended);
         }
         menu.findItem(R.id.item_show_system).setChecked(preferences.getBoolean("show_system_apps", false));
@@ -410,7 +399,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                 });
         SpannableStringBuilder sb = new SpannableStringBuilder(android ? "" : activity.getString(R.string.app_description, appInfo.packageName, appInfo.packageInfo.versionName));
         holder.appDescription.setVisibility(View.VISIBLE);
-        if (hasRecommended() && recommendedList.contains(appInfo.application)) {
+        if (!recommendedList.isEmpty() && recommendedList.contains(appInfo.application)) {
             if (!android) sb.append("\n");
             String recommended = activity.getString(R.string.requested_by_module);
             sb.append(recommended);
@@ -543,18 +532,12 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         }
     }
 
-    private boolean selectedNothing() {
-        List<Application> list = new ArrayList<>(checkedList);
-        list.removeAll(moduleList);
-        return list.isEmpty();
-    }
-
     public boolean onBackPressed() {
-        if (masterSwitch.isChecked() && selectedNothing()) {
+        if (masterSwitch.isChecked() && checkedList.isEmpty()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(activity);
             builder.setTitle(R.string.use_recommended);
-            builder.setMessage(hasRecommended() ? R.string.no_scope_selected_has_recommended : R.string.no_scope_selected);
-            if (hasRecommended()) {
+            builder.setMessage(!recommendedList.isEmpty() ? R.string.no_scope_selected_has_recommended : R.string.no_scope_selected);
+            if (!recommendedList.isEmpty()) {
                 builder.setPositiveButton(android.R.string.ok, (dialog, which) -> {
                     checkRecommended();
                     notifyDataSetChanged();
@@ -562,7 +545,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             } else {
                 builder.setPositiveButton(android.R.string.cancel, null);
             }
-            builder.setNegativeButton(hasRecommended() ? android.R.string.cancel : android.R.string.ok, (dialog, which) -> {
+            builder.setNegativeButton(!recommendedList.isEmpty() ? android.R.string.cancel : android.R.string.ok, (dialog, which) -> {
                 ModuleUtil.getInstance().setModuleEnabled(modulePackageName, false);
                 Toast.makeText(activity, activity.getString(R.string.module_disabled_no_selection, moduleName), Toast.LENGTH_LONG).show();
                 activity.finish();
