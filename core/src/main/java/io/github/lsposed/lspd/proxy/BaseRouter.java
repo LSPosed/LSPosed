@@ -63,7 +63,6 @@ public abstract class BaseRouter implements Router {
             XposedInit.initForZygote(isSystem);
         } catch (Throwable t) {
             Utils.logE("error during Xposed initialization", t);
-            XposedBridge.disableHooks = true;
         }
     }
 

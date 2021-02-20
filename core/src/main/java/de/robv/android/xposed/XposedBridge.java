@@ -82,8 +82,6 @@ public final class XposedBridge {
 	private static final int RUNTIME_DALVIK = 1;
 	private static final int RUNTIME_ART = 2;
 
-	public static boolean disableHooks = false;
-
 	// This field is set "magically" on MIUI.
 	/*package*/ static long BOOT_START_TIME;
 
@@ -320,15 +318,6 @@ public final class XposedBridge {
 	public static Object handleHookedMethod(Member method, long originalMethodId, Object additionalInfoObj,
 			Object thisObject, Object[] args) throws Throwable {
 		AdditionalHookInfo additionalInfo = (AdditionalHookInfo) additionalInfoObj;
-
-		if (disableHooks) {
-			try {
-				return invokeOriginalMethodNative(method, originalMethodId, additionalInfo.parameterTypes,
-						additionalInfo.returnType, thisObject, args);
-			} catch (InvocationTargetException e) {
-				throw e.getCause();
-			}
-		}
 
 		Object[] callbacksSnapshot = additionalInfo.callbacks.getSnapshot();
 		final int callbacksLength = callbacksSnapshot.length;
