@@ -27,6 +27,7 @@ import android.content.pm.ServiceInfo;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.util.Log;
 import android.util.Pair;
 
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ import io.github.lsposed.lspd.Application;
 import io.github.lsposed.lspd.utils.ParceledListSlice;
 
 import static android.content.pm.ServiceInfo.FLAG_ISOLATED_PROCESS;
+import static io.github.lsposed.lspd.service.ServiceManager.TAG;
 
 public class PackageService {
     private static IPackageManager pm = null;
@@ -46,6 +48,20 @@ public class PackageService {
     public static IPackageManager getPackageManager() {
         if (binder == null && pm == null) {
             binder = ServiceManager.getService("package");
+            if (binder == null) return null;
+            try {
+                binder.linkToDeath(new IBinder.DeathRecipient() {
+                    @Override
+                    public void binderDied() {
+                        Log.w(TAG, "pm is dead");
+                        binder.unlinkToDeath(this, 0);
+                        binder = null;
+                        pm = null;
+                    }
+                }, 0);
+            } catch (RemoteException e) {
+                Log.e(TAG, Log.getStackTraceString(e));
+            }
             pm = IPackageManager.Stub.asInterface(binder);
         }
         return pm;
