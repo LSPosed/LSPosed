@@ -281,7 +281,6 @@ public class ModulesActivity extends ListActivity implements ModuleUtil.ModuleLi
                 showList = fullList;
                 String queryStr = searchView != null ? searchView.getQuery().toString() : "";
                 runOnUiThread(() -> getFilter().filter(queryStr));
-                moduleUtil.updateModulesList();
             }
         };
 

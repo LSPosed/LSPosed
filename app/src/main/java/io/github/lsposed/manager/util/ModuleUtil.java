@@ -177,23 +177,6 @@ public final class ModuleUtil {
         return result;
     }
 
-    public synchronized void updateModulesList() {
-        /*try {
-            Log.i(App.TAG, "ModuleUtil -> updating modules.list");
-            PrintWriter modulesList = new PrintWriter(Constants.getModulesListFile());
-            PrintWriter enabledModulesList = new PrintWriter(Constants.getEnabledModulesListFile());
-            List<InstalledModule> enabledModules = getEnabledModules();
-            for (InstalledModule module : enabledModules) {
-                modulesList.println(module.app.sourceDir);
-                enabledModulesList.println(module.app.packageName);
-            }
-            modulesList.close();
-            enabledModulesList.close();
-        } catch (IOException e) {
-            Log.e(App.TAG, "ModuleUtil -> cannot write " + Constants.getModulesListFile(), e);
-        }*/
-    }
-
     public void addListener(ModuleListener listener) {
         if (!listeners.contains(listener))
             listeners.add(listener);
