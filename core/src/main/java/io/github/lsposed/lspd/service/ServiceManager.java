@@ -42,6 +42,10 @@ public class ServiceManager {
         }
     }
 
+    private static void putBinderForSystemServer() {
+        android.os.ServiceManager.addService("serial", (IBinder) mainService);
+    }
+
     // call by ourselves
     public static void start() {
         Log.i(TAG, "starting server...");
@@ -56,7 +60,7 @@ public class ServiceManager {
         applicationService = new LSPApplicationService();
         managerService = new LSPManagerService();
 
-        android.os.ServiceManager.addService("serial", (IBinder) mainService);
+        putBinderForSystemServer();
 
         waitSystemService("package");
         waitSystemService("activity");
@@ -76,6 +80,12 @@ public class ServiceManager {
                 } else {
                     Log.w(TAG, "no response from bridge");
                 }
+            }
+
+            @Override
+            public void onSystemServerDied() {
+                Log.w(TAG, "system server died");
+                putBinderForSystemServer();
             }
         });
 

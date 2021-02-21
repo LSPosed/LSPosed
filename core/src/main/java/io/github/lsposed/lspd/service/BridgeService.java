@@ -97,6 +97,7 @@ public class BridgeService {
             }
 
             bridgeService.unlinkToDeath(this, 0);
+            listener.onSystemServerDied();
             sendToBridge(serviceBinder, true);
         }
     }
@@ -113,6 +114,8 @@ public class BridgeService {
         void onSystemServerRestarted();
 
         void onResponseFromBridgeService(boolean response);
+
+        void onSystemServerDied();
     }
 
     private static Listener listener;

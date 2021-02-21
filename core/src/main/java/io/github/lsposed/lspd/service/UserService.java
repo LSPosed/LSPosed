@@ -25,8 +25,11 @@ import android.os.IBinder;
 import android.os.IUserManager;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.util.Log;
 
 import java.util.List;
+
+import static io.github.lsposed.lspd.service.ServiceManager.TAG;
 
 public class UserService {
     private static IUserManager um = null;
@@ -35,6 +38,20 @@ public class UserService {
     public static IUserManager getUserManager() {
         if (binder == null && um == null) {
             binder = ServiceManager.getService("user");
+            if (binder == null) return null;
+            try {
+                binder.linkToDeath(new IBinder.DeathRecipient() {
+                    @Override
+                    public void binderDied() {
+                        Log.w(TAG, "um is dead");
+                        binder.unlinkToDeath(this, 0);
+                        binder = null;
+                        um = null;
+                    }
+                }, 0);
+            } catch (RemoteException e) {
+                Log.e(TAG, Log.getStackTraceString(e));
+            }
             um = IUserManager.Stub.asInterface(binder);
         }
         return um;
