@@ -211,7 +211,7 @@ else
   if [[ -d /data/user_de/0/io.github.lsposed.manager/conf/ ]]; then
     mkdir -p /data/misc/$MISC_PATH/0/conf
     cp -r /data/user_de/0/io.github.lsposed.manager/conf/* /data/misc/$MISC_PATH/0/conf/
-    set_perm_recursive /data/misc/$MISC_PATH root root 0771 0660 "u:object_r:magisk_file:s0" || abortC "! ${LANG_CUST_ERR_PERM}"
+    set_perm_recursive /data/misc/$MISC_PATH 0 0 0771 0660 "u:object_r:magisk_file:s0" || abortC "! ${LANG_CUST_ERR_PERM}"
   fi
 fi
 touch /data/adb/lspd/new_install || abortC "! ${LANG_CUST_ERR_CONF_FIRST}"
@@ -253,7 +253,7 @@ fi
 
 mkdir -p /data/misc/$MISC_PATH/cache
 rm /data/misc/$MISC_PATH/cache/*
-set_perm /data/misc/$MISC_PATH/cache root root 0777 "u:object_r:magisk_file:s0" || abortC "! ${LANG_CUST_ERR_PERM}"
+set_perm /data/misc/$MISC_PATH/cache 0 0 0777 "u:object_r:magisk_file:s0" || abortC "! ${LANG_CUST_ERR_PERM}"
 
 mv "${MODPATH}/system/lib/libriru_lspd.so" "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
 if [[ "${IS64BIT}" == true ]]; then
