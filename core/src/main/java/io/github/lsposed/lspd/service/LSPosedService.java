@@ -68,6 +68,7 @@ public class LSPosedService extends ILSPosedService.Stub {
             Log.e(TAG, "Package name is null");
             return;
         }
+        Log.d(TAG, "New installed: " + packageName);
         int uid = intent.getIntExtra(Intent.EXTRA_UID, -1);
         int userId = intent.getIntExtra(Intent.EXTRA_USER, -1);
         boolean replacing = intent.getBooleanExtra(Intent.EXTRA_REPLACING, false);
@@ -103,7 +104,9 @@ public class LSPosedService extends ILSPosedService.Stub {
             }
         }
         if (!intent.getAction().equals(Intent.ACTION_PACKAGE_REMOVED) && uid > 0 && ConfigManager.getInstance().isManager(packageName)) {
+            Log.d(TAG, "Manager updated");
             try {
+                ConfigManager.getInstance().updateManager();
                 ConfigManager.grantManagerPermission();
             } catch (Throwable e) {
                 Log.e(TAG, Log.getStackTraceString(e));

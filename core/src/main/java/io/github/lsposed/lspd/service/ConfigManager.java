@@ -216,6 +216,8 @@ public class ConfigManager {
             if (info != null) {
                 managerUid = info.applicationInfo.uid;
                 manager = info.packageName;
+            } else {
+                Log.w(TAG, "manager is not installed");
             }
         } catch (RemoteException ignored) {
         }
@@ -558,8 +560,8 @@ public class ConfigManager {
         }
     }
 
-    public boolean isManager(String module_pkg_name) {
-        return module_pkg_name.equals(manager);
+    public boolean isManager(String packageName) {
+        return packageName.equals(manager) || packageName.equals(DEFAULT_MANAGER_PACKAGE_NAME);
     }
 
     public boolean isManager(int uid) {
