@@ -43,6 +43,16 @@ extern "C" void Java_lab_galaxy_yahfa_HookMain_init(JNIEnv *env, jclass clazz, j
     jclass classExecutable;
     LOGI("init to SDK %d", sdkVersion);
     switch (sdkVersion) {
+        case __ANDROID_API_S__:
+            classExecutable = env->FindClass("java/lang/reflect/Executable");
+            fieldArtMethod = env->GetFieldID(classExecutable, "artMethod", "J");
+            kAccCompileDontBother = 0x02000000;
+            OFFSET_ArtMehod_in_Object = 0;
+            OFFSET_access_flags_in_ArtMethod = 4;
+            OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod =
+                    roundUpToPtrSize(4 * 3 + 2 * 2) + pointer_size;
+            ArtMethodSize = roundUpToPtrSize(4 * 3 + 2 * 2) + pointer_size * 2;
+            break;
         case __ANDROID_API_R__:
             classExecutable = env->FindClass("java/lang/reflect/Executable");
             fieldArtMethod = env->GetFieldID(classExecutable, "artMethod", "J");
@@ -194,7 +204,7 @@ void *getArtMethodYahfa(JNIEnv *env, jobject jmethod) {
         return artMethod;
     }
 
-    if (SDKVersion == __ANDROID_API_R__) {
+    if (SDKVersion >= __ANDROID_API_R__) {
         artMethod = (void *) env->GetLongField(jmethod, fieldArtMethod);
     } else {
         artMethod = (void *) env->FromReflectedMethod(jmethod);

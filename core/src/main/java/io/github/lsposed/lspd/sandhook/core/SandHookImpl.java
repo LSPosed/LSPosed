@@ -53,8 +53,11 @@ public class SandHookImpl extends BaseImpl {
 
     @Override
     public void init() {
-        SandHook.init(ClassNeverCall.class, com.swift.sandhook.SandHook.class);
-        Yahfa.init(Build.VERSION.SDK_INT);
+        int sdkVersion = Build.VERSION.SDK_INT;
+        if (Build.VERSION.PREVIEW_SDK_INT != 0) {
+            sdkVersion += 1;
+        }
+        Yahfa.init(sdkVersion);
         getRouter().injectConfig();
         SandHookXposedBridge.init();
         setInitialized();
