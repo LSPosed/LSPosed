@@ -28,14 +28,17 @@ import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import io.github.lsposed.manager.ConfigManager;
+import io.github.lsposed.manager.adapters.ScopeAdapter;
+
 public class BackupUtils {
-    private static final int VERSION = 1;
+    private static final int VERSION = 2;
 
     public static boolean backup(Context context, Uri uri) {
         return backup(context, uri, null);
@@ -54,11 +57,14 @@ public class BackupUtils {
                 JSONObject moduleObject = new JSONObject();
                 moduleObject.put("enable", ModuleUtil.getInstance().isModuleEnabled(module.packageName));
                 moduleObject.put("package", module.packageName);
-                //List<String> scope = AppHelper.getScopeList(module.packageName);
+                List<ScopeAdapter.ApplicationWithEquals> scope = ConfigManager.getModuleScope(module.packageName);
                 JSONArray scopeArray = new JSONArray();
-                //for (String s : scope) {
-                //    scopeArray.put(s);
-                //}
+                for (ScopeAdapter.ApplicationWithEquals s : scope) {
+                    JSONObject app = new JSONObject();
+                    app.put("package", s.packageName);
+                    app.put("userId", s.userId);
+                    scopeArray.put(app);
+                }
                 moduleObject.put("scope", scopeArray);
                 modulesArray.put(moduleObject);
             }
@@ -92,7 +98,8 @@ public class BackupUtils {
             gzipInputStream.close();
             inputStream.close();
             JSONObject rootObject = new JSONObject(string.toString());
-            if (rootObject.getInt("version") == VERSION) {
+            int version = rootObject.getInt("version");
+            if (version == VERSION || version == 1) {
                 JSONArray modules = rootObject.getJSONArray("modules");
                 for (int i = 0; i < modules.length(); i++) {
                     JSONObject moduleObject = modules.getJSONObject(i);
@@ -104,13 +111,20 @@ public class BackupUtils {
                     if (module != null) {
                         ModuleUtil.getInstance().setModuleEnabled(name, moduleObject.getBoolean("enable"));
                         JSONArray scopeArray = moduleObject.getJSONArray("scope");
-                        List<String> scope = new ArrayList<>();
+                        HashSet<ScopeAdapter.ApplicationWithEquals> scope = new HashSet<>();
                         for (int j = 0; j < scopeArray.length(); j++) {
-                            scope.add(scopeArray.getString(j));
+                            if (version == VERSION) {
+                                JSONObject app = scopeArray.getJSONObject(j);
+                                scope.add(new ScopeAdapter.ApplicationWithEquals(app.getString("package"), app.getInt("userId")));
+                            } else {
+                                scope.add(new ScopeAdapter.ApplicationWithEquals(scopeArray.getString(j), 0));
+                            }
                         }
-                        //AppHelper.saveScopeList(name, scope);
+                        ConfigManager.setModuleScope(name, scope);
                     }
                 }
+            } else {
+                return false;
             }
             return true;
         } catch (Exception e) {
