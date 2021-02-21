@@ -42,4 +42,6 @@ interface ILSPManagerService {
     int getXposedApiVersion() = 20;
 
     boolean clearLogs(boolean verbose) = 21;
+
+    PackageInfo getPackageInfo(String packageName, int flags, int uid) = 22;
 }

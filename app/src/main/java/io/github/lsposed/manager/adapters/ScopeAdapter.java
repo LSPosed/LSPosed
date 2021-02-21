@@ -124,14 +124,14 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     }
 
     private void loadApps() {
+        enabled = ModuleUtil.getInstance().isModuleEnabled(modulePackageName);
+        activity.runOnUiThread(() -> masterSwitch.setChecked(enabled));
+
         List<PackageInfo> appList = ConfigManager.getInstalledPackagesFromAllUsers(PackageManager.GET_META_DATA);
         checkedList.clear();
         recommendedList.clear();
         searchList.clear();
         showList.clear();
-
-        enabled = ModuleUtil.getInstance().isModuleEnabled(modulePackageName);
-        activity.runOnUiThread(() -> masterSwitch.setChecked(enabled));
 
         checkedList.addAll(ConfigManager.getModuleScope(modulePackageName));
         HashSet<ApplicationWithEquals> installedList = new HashSet<>();

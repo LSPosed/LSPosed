@@ -124,4 +124,9 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     public boolean clearLogs(boolean verbose) {
         return ConfigManager.getInstance().clearLogs(verbose);
     }
+
+    @Override
+    public PackageInfo getPackageInfo(String packageName, int flags, int uid) throws RemoteException {
+        return PackageService.getPackageInfo(packageName, flags, uid);
+    }
 }
