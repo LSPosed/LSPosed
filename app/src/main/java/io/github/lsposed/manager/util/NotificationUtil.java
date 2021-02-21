@@ -20,7 +20,6 @@
 
 package io.github.lsposed.manager.util;
 
-import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -34,7 +33,6 @@ import androidx.core.content.ContextCompat;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.ui.activity.AppListActivity;
 
-@SuppressLint("UnspecifiedImmutableFlag")
 public final class NotificationUtil {
 
     public static final int NOTIFICATION_MODULE_NOT_ACTIVATED_YET = 0;
@@ -60,7 +58,7 @@ public final class NotificationUtil {
                 .putExtra("moduleName", moduleName)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        PendingIntent contentIntent = PendingIntent.getActivity(context, PENDING_INTENT_OPEN_APP_LIST, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent contentIntent = PendingIntent.getActivity(context, PENDING_INTENT_OPEN_APP_LIST, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         NotificationCompat.BigTextStyle style = new NotificationCompat.BigTextStyle();
         style.bigText(content);
