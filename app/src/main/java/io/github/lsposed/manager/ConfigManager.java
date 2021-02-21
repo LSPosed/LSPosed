@@ -20,6 +20,7 @@
 package io.github.lsposed.manager;
 
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.util.Log;
@@ -213,6 +214,15 @@ public class ConfigManager {
         } catch (RemoteException | NullPointerException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
             return false;
+        }
+    }
+
+    public static PackageInfo getPackageInfo(String packageName, int flags) throws PackageManager.NameNotFoundException {
+        try {
+            return LSPosedManagerServiceClient.getPackageInfo(packageName, flags, 0);
+        } catch (RemoteException | NullPointerException e) {
+            Log.e(App.TAG, Log.getStackTraceString(e));
+            throw new PackageManager.NameNotFoundException();
         }
     }
 }

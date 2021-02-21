@@ -106,7 +106,7 @@ public final class ModuleUtil {
     public InstalledModule reloadSingleModule(String packageName) {
         PackageInfo pkg;
         try {
-            pkg = pm.getPackageInfo(packageName, PackageManager.GET_META_DATA);
+            pkg = ConfigManager.getPackageInfo(packageName, PackageManager.GET_META_DATA);
         } catch (NameNotFoundException e) {
             InstalledModule old = installedModules.remove(packageName);
             if (old != null) {

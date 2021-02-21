@@ -125,4 +125,9 @@ public class LSPosedManagerServiceClient {
         ensureService();
         return service.clearLogs(verbose);
     }
+
+    public static PackageInfo getPackageInfo(String packageName, int flags, int uid) throws RemoteException, NullPointerException {
+        ensureService();
+        return service.getPackageInfo(packageName, flags, uid);
+    }
 }

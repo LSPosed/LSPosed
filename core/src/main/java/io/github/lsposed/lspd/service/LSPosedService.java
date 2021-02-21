@@ -8,6 +8,8 @@ import android.os.Binder;
 import android.os.RemoteException;
 import android.util.Log;
 
+import java.util.Arrays;
+
 import io.github.lsposed.lspd.Application;
 
 import static io.github.lsposed.lspd.service.ServiceManager.TAG;
@@ -63,6 +65,23 @@ public class LSPosedService extends ILSPosedService.Stub {
                 pkgInfo.applicationInfo.metaData.containsKey("xposedmodule");
         if (isXposedModule) {
             ConfigManager.getInstance().updateModuleApkPath(packageName, pkgInfo.applicationInfo.sourceDir);
+
+            boolean enabled = Arrays.asList(ConfigManager.getInstance().enabledModules()).contains(packageName);
+            Intent broadcastIntent = new Intent(enabled ? "io.github.lsposed.action.MODULE_UPDATED" : "io.github.lsposed.action.MODULE_NOT_ACTIVATAED");
+            broadcastIntent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+            broadcastIntent.addFlags(0x01000000);
+            broadcastIntent.addFlags(0x00400000);
+            broadcastIntent.setData(intent.getData());
+            broadcastIntent.setPackage(ConfigManager.getInstance().getManagerPackageName());
+
+            try {
+                ActivityManagerService.broadcastIntentWithFeature(null, null, broadcastIntent,
+                        null, null, 0, null, null,
+                        null, -1, null, true, false,
+                        0);
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
         }
         if (!intent.getAction().equals(Intent.ACTION_PACKAGE_REMOVED) && uid > 0 && ConfigManager.getInstance().isManager(packageName)) {
             try {

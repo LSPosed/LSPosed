@@ -654,4 +654,8 @@ public class ConfigManager {
         }
         System.exit(0);
     }
+
+    public String getManagerPackageName() {
+        return manager;
+    }
 }
