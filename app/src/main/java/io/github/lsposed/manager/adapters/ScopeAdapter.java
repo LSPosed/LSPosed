@@ -336,7 +336,8 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         if (intent == null) {
             menu.removeItem(R.id.menu_launch);
         }
-        if (recommendedList.isEmpty()) {
+        List<String> scopeList = ModuleUtil.getInstance().getModule(modulePackageName).getScopeList();
+        if (scopeList == null || scopeList.isEmpty()) {
             menu.removeItem(R.id.use_recommended);
         }
         menu.findItem(R.id.item_show_system).setChecked(preferences.getBoolean("show_system_apps", false));
