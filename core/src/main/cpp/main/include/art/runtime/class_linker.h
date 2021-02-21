@@ -130,6 +130,7 @@ namespace art {
                     LOGE("No valid offset for art::Runtime::class_linker_ found. Using Android R.");
                     [[fallthrough]];
                 case __ANDROID_API_R__:
+                case __ANDROID_API_S__:
                     if constexpr(lspd::is64) {
                         OFFSET_classlinker = 472;
                     } else {
