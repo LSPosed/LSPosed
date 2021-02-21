@@ -27,6 +27,9 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.util.Log;
+
+import static io.github.lsposed.lspd.service.ServiceManager.TAG;
 
 public class ActivityManagerService {
     private static IActivityManager am = null;
@@ -35,6 +38,20 @@ public class ActivityManagerService {
     public static IActivityManager getActivityManager() {
         if (binder == null && am == null) {
             binder = ServiceManager.getService("activity");
+            if (binder == null) return null;
+            try {
+                binder.linkToDeath(new IBinder.DeathRecipient() {
+                    @Override
+                    public void binderDied() {
+                        Log.w(TAG, "am is dead");
+                        binder.unlinkToDeath(this, 0);
+                        binder = null;
+                        am = null;
+                    }
+                }, 0);
+            } catch (RemoteException e) {
+                Log.e(TAG, Log.getStackTraceString(e));
+            }
             am = IActivityManager.Stub.asInterface(binder);
         }
         return am;
