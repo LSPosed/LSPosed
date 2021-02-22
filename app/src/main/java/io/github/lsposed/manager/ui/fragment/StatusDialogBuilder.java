@@ -72,7 +72,12 @@ public class StatusDialogBuilder extends AlertDialog.Builder {
             binding.framework.setText(String.format(Locale.US, "%s (%s)", installXposedVersion, ConfigManager.getXposedVersionCode()));
         }
 
-        binding.androidVersion.setText(context.getString(R.string.android_sdk, getAndroidVersion(), Build.VERSION.RELEASE, Build.VERSION.SDK_INT));
+        if (Build.VERSION.PREVIEW_SDK_INT != 0) {
+            binding.androidVersion.setText(context.getString(R.string.android_sdk_preview, Build.VERSION.CODENAME));
+        } else {
+            binding.androidVersion.setText(context.getString(R.string.android_sdk, getAndroidVersion(), Build.VERSION.RELEASE, Build.VERSION.SDK_INT));
+        }
+
         binding.manufacturer.setText(getUIFramework());
         binding.cpu.setText(getCompleteArch());
 
@@ -134,6 +139,8 @@ public class StatusDialogBuilder extends AlertDialog.Builder {
                 return "Q";
             case 30:
                 return "R";
+            case 31:
+                return "S";
         }
         return "Unknown";
     }
