@@ -36,7 +36,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Locale;
 
-import dalvik.system.VMRuntime;
 import io.github.lsposed.manager.BuildConfig;
 import io.github.lsposed.manager.ConfigManager;
 import io.github.lsposed.manager.R;
@@ -48,10 +47,8 @@ public class StatusDialogBuilder extends AlertDialog.Builder {
     private static final String CPU_ABI2;
 
     static {
-        final String[] abiList;
-        if (VMRuntime.getRuntime().is64Bit()) {
-            abiList = Build.SUPPORTED_64_BIT_ABIS;
-        } else {
+        String[] abiList = Build.SUPPORTED_64_BIT_ABIS;
+        if (abiList.length == 0) {
             abiList = Build.SUPPORTED_32_BIT_ABIS;
         }
         CPU_ABI = abiList[0];
