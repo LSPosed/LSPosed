@@ -61,10 +61,14 @@ public class UserService {
         IUserManager um = getUserManager();
         if (um == null) return new int[0];
         List<UserInfo> users;
-        if(Build.VERSION.SDK_INT >= 30) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             users = um.getUsers(true, true, true);
         } else {
-            users = um.getUsers(true);
+            try {
+                users = um.getUsers(true);
+            } catch (NoSuchFieldError e) {
+                users = um.getUsers(true, true, true);
+            }
         }
         int[] userArray = new int[users.size()];
         for (int i = 0; i < users.size(); i++) {
