@@ -20,6 +20,7 @@
   -->
 
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="app_name" translatable="false">LSPosed</string>
     <string name="Activated">已激活</string>
     <string name="Install">安装</string>
     <string name="InstallDetail">点按安装 LSPosed</string>
@@ -28,6 +29,7 @@
     <string name="Logs">日志</string>
     <string name="Settings">设置</string>
     <string name="About">关于</string>
+
     <!-- General/various strings -->
     <string name="menuSend">发送</string>
     <string name="menuSaveToSd">保存</string>
@@ -55,8 +57,8 @@
     <string name="warning_xposed_min_version">该模块需要更新版本的 LSPosed(%d), 因此无法被激活</string>
     <string name="no_min_version_specified">该模块未指定所需的 LSPosed 版本</string>
     <string name="warning_min_version_too_low">该模块针对 LSPosed %1$d 版本构建 , 由于不兼容 %2$d 版本中的变更, 现已被停用</string>
-    <string name="module_app_info">应用信息</string>
     <string name="modules_app_store">在应用商店查看</string>
+    <string name="module_app_info">应用信息</string>
     <string name="module_uninstall">卸载</string>
 
     <!-- Download tab -->
@@ -64,6 +66,8 @@
 
     <!-- Settings tab -->
     <string name="settings_group_framework">框架</string>
+    <string name="settings_enable_resources">启用资源钩子</string>
+    <string name="settings_enable_resources_summary"><b>警告: </b> 资源钩子已被弃用</string>
 
     <!-- Support tab -->
 
@@ -71,7 +75,6 @@
     <string name="logs_save_failed">保存失败：</string>
     <string name="menuClearLog">立即清理日志</string>
     <string name="logs_cleared">日志清理成功</string>
-    <string name="logs_clear_failed">无法清理日志: </string>
     <string name="log_is_empty">日志为空</string>
 
     <!-- About tab -->
@@ -89,10 +92,16 @@
     <string name="scroll_top">滚动到顶部</string>
     <string name="loading">正在加载…</string>
     <string name="scroll_bottom">滚动到底部</string>
+
+    <string name="android_sdk" translatable="false">Android %2$s (%1$s, API %3$d)</string>
+    <string name="android_sdk_preview" translatable="false">Android %1$s Preview</string>
     <string name="not_logcat">此处仅显示 LSPosed 及模块相关日志信息\n如果您想抓取系统日志, 可以尝试我们的 Log Catcher Magisk 模块</string>
 
     <!-- LSPd related -->
     <string name="compile_speed_msg">优化中…</string>
+    <string name="compile_done">优化完成。</string>
+
+    <string name="about_source" translatable="false">https://github.com/LSPosed/LSPosed/</string>
 
     <string name="pref_title_disable_verbose_log">禁用详细日志</string>
     <string name="logs_cannot_read">无法读取日志: \n</string>
@@ -110,8 +119,6 @@
     <string name="sort_by_update_time">更新时间</string>
     <string name="sort_by_update_time_reverse">更新时间（降序）</string>
     <string name="settings_group_theme">主题</string>
-    <string name="settings_enable_resources">启用资源钩子</string>
-    <string name="settings_enable_resources_summary"><b>警告: </b> 资源钩子已被弃用</string>
     <string name="settings_variant">变体</string>
     <string name="menu_show_system_apps">系统应用</string>
     <string name="menu_sort">排序…</string>
@@ -148,10 +155,9 @@
     <string name="menu_backup">备份</string>
     <string name="menu_restore">恢复</string>
     <string name="xposed_module_updated_notification_content">%s 已更新</string>
-    <string name="compile_done">优化完成</string>
     <string name="module_repo">仓库</string>
     <string name="module_repo_summary">模块仓库（Alpha）</string>
-    <string name="module_readme">读我</string>
+    <string name="module_readme">自述文件</string>
     <string name="module_releases">版本</string>
     <string name="module_information">信息</string>
     <string name="module_information_homepage">主页</string>
@@ -167,4 +173,5 @@
     <string name="module_release_load_more">显示更旧的版本</string>
     <string name="module_release_no_more">没有更旧的版本</string>
     <string name="theme_color">主题颜色</string>
+    <string name="logs_clear_failed_2">日志清理失败</string>
 </resources>
