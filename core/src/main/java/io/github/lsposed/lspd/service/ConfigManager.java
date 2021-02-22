@@ -96,7 +96,7 @@ public class ConfigManager {
     private static final File modulesLogPath = new File(logPath, "modules.log");
     private static final File verboseLogPath = new File(logPath, "all.log");
 
-    final FileObserver configObserver = new FileObserver(configPath, FileObserver.MODIFY | FileObserver.DELETE | FileObserver.CREATE | FileObserver.MOVED_TO) {
+    final FileObserver configObserver = new FileObserver(configPath.getAbsolutePath(), FileObserver.MODIFY | FileObserver.DELETE | FileObserver.CREATE | FileObserver.MOVED_TO) {
         @Override
         public void onEvent(int event, @Nullable String path) {
             updateConfig();
