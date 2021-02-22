@@ -18,12 +18,20 @@
  * Copyright (C) 2021 LSPosed Contributors
  */
 
-/**
- * Contains the base classes for callbacks.
- *
- * <p>For historical reasons, {@link de.robv.android.xposed.XC_MethodHook} and
- * {@link de.robv.android.xposed.XC_MethodReplacement} are directly in the
- * {@code de.robv.android.xposed} package.
- */
-package de.robv.android.xposed.callbacks;
+package io.github.lsposed.lspd.annotation;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+/**
+ * Annotation that indicates a element is sensitive to Android API level.
+ * <p>
+ * Annotated elements' compatibility should be checked when adapting to new Android versions.
+ */
+@Retention(RetentionPolicy.SOURCE)
+@Target({ElementType.METHOD, ElementType.FIELD, ElementType.TYPE})
+public @interface ApiSensitive {
+    Level value() default Level.HIGH;
+}

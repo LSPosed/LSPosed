@@ -27,8 +27,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 import de.robv.android.xposed.XposedHelpers;
-import de.robv.android.xposed.annotation.ApiSensitive;
-import de.robv.android.xposed.annotation.Level;
+import io.github.lsposed.lspd.annotation.ApiSensitive;
+import io.github.lsposed.lspd.annotation.Level;
 
 public class ClassUtils {
 

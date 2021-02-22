@@ -20,10 +20,10 @@
 
 package de.robv.android.xposed;
 
-import android.app.ActivityThread;
 import android.app.AndroidAppHelper;
 import android.content.pm.ApplicationInfo;
 import android.content.res.Resources;
+import android.content.res.ResourcesImpl;
 import android.content.res.TypedArray;
 import android.content.res.XResources;
 import android.os.Build;
@@ -34,10 +34,10 @@ import android.util.Log;
 
 import com.android.internal.os.ZygoteInit;
 
+import hidden.HiddenApiBridge;
 import io.github.lsposed.lspd.config.LSPdConfigGlobal;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,21 +48,18 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import dalvik.system.PathClassLoader;
-import de.robv.android.xposed.annotation.ApiSensitive;
-import de.robv.android.xposed.annotation.Level;
+import io.github.lsposed.lspd.annotation.ApiSensitive;
+import io.github.lsposed.lspd.annotation.Level;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XC_InitZygote;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import de.robv.android.xposed.callbacks.XCallback;
 import io.github.lsposed.lspd.nativebridge.NativeAPI;
 
-import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedBridge.sInitPackageResourcesCallbacks;
 import static de.robv.android.xposed.XposedBridge.sInitZygoteCallbacks;
@@ -95,7 +92,7 @@ public final class XposedInit {
      * Hook some methods which we want to create an easier interface for developers.
      */
     /*package*/
-    public static void initForZygote(boolean isSystem) throws Throwable {
+    public static void initForZygote() throws Throwable {
         // TODO Are these still needed for us?
         // MIUI
         if (findFieldIfExists(ZygoteInit.class, "BOOT_START_TIME") != null) {
@@ -147,11 +144,7 @@ public final class XposedInit {
         final ThreadLocal<Object> latestResKey = new ThreadLocal<>();
         final String createResourceMethod;
 
-        if (Build.VERSION.SDK_INT <= 18) {
-            classGTLR = ActivityThread.class;
-            classResKey = Class.forName("android.app.ActivityThread$ResourcesKey");
-            createResourceMethod = "getOrCreateResources";
-        } else if (Build.VERSION.SDK_INT < 30) {
+        if (Build.VERSION.SDK_INT < 30) {
             classGTLR = Class.forName("android.app.ResourcesManager");
             classResKey = Class.forName("android.content.res.ResourcesKey");
             createResourceMethod = "getOrCreateResources";
@@ -161,106 +154,32 @@ public final class XposedInit {
             createResourceMethod = "createResources";
         }
 
-        if (Build.VERSION.SDK_INT >= 24) {
-            hookAllMethods(classGTLR, createResourceMethod, new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    // At least on OnePlus 5, the method has an additional parameter compared to AOSP.
-                    final int activityTokenIdx = getParameterIndexByType(param.method, IBinder.class);
-                    final int resKeyIdx = getParameterIndexByType(param.method, classResKey);
+        hookAllMethods(classGTLR, createResourceMethod, new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                // At least on OnePlus 5, the method has an additional parameter compared to AOSP.
+                final int activityTokenIdx = getParameterIndexByType(param.method, IBinder.class);
+                final int resKeyIdx = getParameterIndexByType(param.method, classResKey);
 
-                    String resDir = (String) getObjectField(param.args[resKeyIdx], "mResDir");
-                    XResources newRes = cloneToXResources(param, resDir);
-                    if (newRes == null) {
-                        return;
-                    }
-
-                    Object activityToken = param.args[activityTokenIdx];
-                    synchronized (param.thisObject) {
-                        ArrayList<WeakReference<Resources>> resourceReferences;
-                        if (activityToken != null) {
-                            Object activityResources = callMethod(param.thisObject, "getOrCreateActivityResourcesStructLocked", activityToken);
-                            resourceReferences = (ArrayList<WeakReference<Resources>>) getObjectField(activityResources, "activityResources");
-                        } else {
-                            resourceReferences = (ArrayList<WeakReference<Resources>>) getObjectField(param.thisObject, "mResourceReferences");
-                        }
-                        resourceReferences.add(new WeakReference(newRes));
-                    }
-                }
-            });
-        } else {
-            hookAllConstructors(classResKey, new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    latestResKey.set(param.thisObject);
-                }
-            });
-
-            hookAllMethods(classGTLR, "getTopLevelResources", new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                    latestResKey.set(null);
+                String resDir = (String) getObjectField(param.args[resKeyIdx], "mResDir");
+                XResources newRes = cloneToXResources(param, resDir);
+                if (newRes == null) {
+                    return;
                 }
 
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    Object key = latestResKey.get();
-                    if (key == null) {
-                        return;
+                Object activityToken = param.args[activityTokenIdx];
+                synchronized (param.thisObject) {
+                    ArrayList<WeakReference<Resources>> resourceReferences;
+                    if (activityToken != null) {
+                        Object activityResources = callMethod(param.thisObject, "getOrCreateActivityResourcesStructLocked", activityToken);
+                        resourceReferences = (ArrayList<WeakReference<Resources>>) getObjectField(activityResources, "activityResources");
+                    } else {
+                        resourceReferences = (ArrayList<WeakReference<Resources>>) getObjectField(param.thisObject, "mResourceReferences");
                     }
-                    latestResKey.set(null);
-
-                    String resDir = (String) getObjectField(key, "mResDir");
-                    XResources newRes = cloneToXResources(param, resDir);
-                    if (newRes == null) {
-                        return;
-                    }
-
-                    @SuppressWarnings("unchecked")
-                    Map<Object, WeakReference<Resources>> mActiveResources =
-                            (Map<Object, WeakReference<Resources>>) getObjectField(param.thisObject, "mActiveResources");
-                    Object lockObject = (Build.VERSION.SDK_INT <= 18)
-                            ? getObjectField(param.thisObject, "mPackages") : param.thisObject;
-
-                    synchronized (lockObject) {
-                        WeakReference<Resources> existing = mActiveResources.put(key, new WeakReference<Resources>(newRes));
-                        if (existing != null && existing.get() != null && existing.get().getAssets() != newRes.getAssets()) {
-                            existing.get().getAssets().close();
-                        }
-                    }
+                    resourceReferences.add(new WeakReference(newRes));
                 }
-            });
-
-            if (Build.VERSION.SDK_INT >= 19) {
-                // This method exists only on CM-based ROMs
-                hookAllMethods(classGTLR, "getTopLevelThemedResources", new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        String resDir = (String) param.args[0];
-                        cloneToXResources(param, resDir);
-                    }
-                });
             }
-        }
-
-        // Invalidate callers of methods overridden by XTypedArray
-//        if (Build.VERSION.SDK_INT >= 24) {
-//            Set<Method> methods = getOverriddenMethods(XResources.XTypedArray.class);
-//            XposedBridge.invalidateCallersNative(methods.toArray(new Member[methods.size()]));
-//        }
-
-        // Replace TypedArrays with XTypedArrays
-//        hookAllConstructors(TypedArray.class, new XC_MethodHook() {
-//            @Override
-//            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-//                TypedArray typedArray = (TypedArray) param.thisObject;
-//                Resources res = typedArray.getResources();
-//                if (res instanceof XResources) {
-//                    XResources.XTypedArray newTypedArray = new XResources.XTypedArray(res);
-//                    XposedBridge.setObjectClass(typedArray, XResources.XTypedArray.class);
-//                }
-//            }
-//        });
+        });
 
         findAndHookMethod(TypedArray.class, "obtain", Resources.class, int.class,
                 new XC_MethodHook() {
@@ -286,8 +205,7 @@ public final class XposedInit {
         // Replace system resources
         XResources systemRes = new XResources(
                 (ClassLoader) XposedHelpers.getObjectField(Resources.getSystem(), "mClassLoader"));
-        XposedHelpers.callMethod(systemRes, "setImpl", XposedHelpers.getObjectField(Resources.getSystem(), "mResourcesImpl"));
-        //systemRes.setImpl((ResourcesImpl) XposedHelpers.getObjectField(Resources.getSystem(), "mResourcesImpl"));
+        HiddenApiBridge.Resources_setImpl(systemRes, (ResourcesImpl) XposedHelpers.getObjectField(Resources.getSystem(), "mResourcesImpl"));
         systemRes.initObject(null);
         setStaticObjectField(Resources.class, "mSystem", systemRes);
 
@@ -305,8 +223,7 @@ public final class XposedInit {
         // Replace the returned resources with our subclass.
         XResources newRes = new XResources(
                 (ClassLoader) XposedHelpers.getObjectField(param.getResult(), "mClassLoader"));
-        XposedHelpers.callMethod(newRes, "setImpl", XposedHelpers.getObjectField(param.getResult(), "mResourcesImpl"));
-        //newRes.setImpl((ResourcesImpl) XposedHelpers.getObjectField(param.getResult(), "mResourcesImpl"));
+        HiddenApiBridge.Resources_setImpl(newRes, (ResourcesImpl) XposedHelpers.getObjectField(Resources.getSystem(), "mResourcesImpl"));
         newRes.initObject(resDir);
 
         // Invoke handleInitPackageResources().
@@ -320,11 +237,6 @@ public final class XposedInit {
 
         param.setResult(newRes);
         return newRes;
-    }
-
-    private static boolean needsToCloseFilesForFork() {
-        // ed: we always start to do our work after forking finishes
-        return false;
     }
 
     /**
@@ -457,34 +369,25 @@ public final class XposedInit {
                     }
 
                     final Object moduleInstance = moduleClass.newInstance();
-                    if (XposedBridge.isZygote) {
-                        if (moduleInstance instanceof IXposedHookZygoteInit) {
-                            IXposedHookZygoteInit.StartupParam param = new IXposedHookZygoteInit.StartupParam();
-                            param.modulePath = apk;
-                            param.startsSystemServer = startsSystemServer;
+                    if (moduleInstance instanceof IXposedHookZygoteInit) {
+                        IXposedHookZygoteInit.StartupParam param = new IXposedHookZygoteInit.StartupParam();
+                        param.modulePath = apk;
+                        param.startsSystemServer = startsSystemServer;
 
-                            XposedBridge.hookInitZygote(new IXposedHookZygoteInit.Wrapper(
-                                    (IXposedHookZygoteInit) moduleInstance, param));
-                            if (callInitZygote) {
-                                ((IXposedHookZygoteInit) moduleInstance).initZygote(param);
-                            }
-                        }
-
-                        if (moduleInstance instanceof IXposedHookLoadPackage)
-                            XposedBridge.hookLoadPackage(new IXposedHookLoadPackage.Wrapper(
-                                    (IXposedHookLoadPackage) moduleInstance, apk));
-
-                        if (moduleInstance instanceof IXposedHookInitPackageResources)
-                            XposedBridge.hookInitPackageResources(new IXposedHookInitPackageResources.Wrapper(
-                                    (IXposedHookInitPackageResources) moduleInstance, apk));
-                    } else {
-                        if (moduleInstance instanceof IXposedHookCmdInit) {
-                            IXposedHookCmdInit.StartupParam param = new IXposedHookCmdInit.StartupParam();
-                            param.modulePath = apk;
-                            param.startClassName = startClassName;
-                            ((IXposedHookCmdInit) moduleInstance).initCmdApp(param);
+                        XposedBridge.hookInitZygote(new IXposedHookZygoteInit.Wrapper(
+                                (IXposedHookZygoteInit) moduleInstance, param));
+                        if (callInitZygote) {
+                            ((IXposedHookZygoteInit) moduleInstance).initZygote(param);
                         }
                     }
+
+                    if (moduleInstance instanceof IXposedHookLoadPackage)
+                        XposedBridge.hookLoadPackage(new IXposedHookLoadPackage.Wrapper(
+                                (IXposedHookLoadPackage) moduleInstance, apk));
+
+                    if (moduleInstance instanceof IXposedHookInitPackageResources)
+                        XposedBridge.hookInitPackageResources(new IXposedHookInitPackageResources.Wrapper(
+                                (IXposedHookInitPackageResources) moduleInstance, apk));
                 } catch (Throwable t) {
                     Log.e(TAG, "    Failed to load class " + moduleClassName, t);
                     return false;

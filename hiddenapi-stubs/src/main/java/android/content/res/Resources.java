@@ -10,4 +10,9 @@ public class Resources {
 	public Resources(ClassLoader classLoader) {
 		throw new UnsupportedOperationException("STUB");
 	}
+
+	public void setImpl(ResourcesImpl impl) {
+		throw new UnsupportedOperationException("STUB");
+	}
+
 }

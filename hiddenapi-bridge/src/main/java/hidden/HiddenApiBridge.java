@@ -20,6 +20,8 @@
 package hidden;
 
 import android.content.res.AssetManager;
+import android.content.res.Resources;
+import android.content.res.ResourcesImpl;
 import android.os.Binder;
 import android.os.IBinder;
 
@@ -30,5 +32,9 @@ public class HiddenApiBridge {
 
     public static IBinder Binder_allowBlocking(IBinder binder) {
         return Binder.allowBlocking(binder);
+    }
+
+    public static void Resources_setImpl(Resources resources, ResourcesImpl impl) {
+        resources.setImpl(impl);
     }
 }
