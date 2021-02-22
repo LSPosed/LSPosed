@@ -22,8 +22,8 @@ package io.github.lsposed.lspd.deopt;
 
 import java.util.HashMap;
 
-import de.robv.android.xposed.annotation.ApiSensitive;
-import de.robv.android.xposed.annotation.Level;
+import io.github.lsposed.lspd.annotation.ApiSensitive;
+import io.github.lsposed.lspd.annotation.Level;
 
 /**
  * Providing a whitelist of methods which are the callers of the target methods we want to hook.

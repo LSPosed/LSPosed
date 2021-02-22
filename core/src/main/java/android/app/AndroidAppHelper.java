@@ -56,69 +56,16 @@ public final class AndroidAppHelper {
 	private static final boolean HAS_THEME_CONFIG_PARAMETER;
 
 	static {
-		CLASS_RESOURCES_KEY = (Build.VERSION.SDK_INT < 19) ?
-			  findClass("android.app.ActivityThread$ResourcesKey", null)
-			: findClass("android.content.res.ResourcesKey", null);
+		CLASS_RESOURCES_KEY = findClass("android.content.res.ResourcesKey", null);
 
 		HAS_IS_THEMEABLE = findFieldIfExists(CLASS_RESOURCES_KEY, "mIsThemeable") != null;
-		HAS_THEME_CONFIG_PARAMETER = HAS_IS_THEMEABLE && Build.VERSION.SDK_INT >= 21
-			&& findMethodExactIfExists("android.app.ResourcesManager", null, "getThemeConfig") != null;
+		HAS_THEME_CONFIG_PARAMETER = HAS_IS_THEMEABLE && findMethodExactIfExists("android.app.ResourcesManager", null, "getThemeConfig") != null;
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static Map<Object, WeakReference> getResourcesMap(ActivityThread activityThread) {
-		if (Build.VERSION.SDK_INT >= 24) {
-			Object resourcesManager = getObjectField(activityThread, "mResourcesManager");
-			return (Map) getObjectField(resourcesManager, "mResourceImpls");
-		} else if (Build.VERSION.SDK_INT >= 19) {
-			Object resourcesManager = getObjectField(activityThread, "mResourcesManager");
-			return (Map) getObjectField(resourcesManager, "mActiveResources");
-		} else {
-			return (Map) getObjectField(activityThread, "mActiveResources");
-		}
-	}
-
-	/* For SDK 15 & 16 */
-	private static Object createResourcesKey(String resDir, float scale) {
-		try {
-			if (HAS_IS_THEMEABLE)
-				return newInstance(CLASS_RESOURCES_KEY, resDir, scale, false);
-			else
-				return newInstance(CLASS_RESOURCES_KEY, resDir, scale);
-		} catch (Throwable t) {
-			XposedBridge.log(t);
-			return null;
-		}
-	}
-
-	/* For SDK 17 & 18 & 23 */
-	private static Object createResourcesKey(String resDir, int displayId, Configuration overrideConfiguration, float scale) {
-		try {
-			if (HAS_THEME_CONFIG_PARAMETER)
-				return newInstance(CLASS_RESOURCES_KEY, resDir, displayId, overrideConfiguration, scale, false, null);
-			else if (HAS_IS_THEMEABLE)
-				return newInstance(CLASS_RESOURCES_KEY, resDir, displayId, overrideConfiguration, scale, false);
-			else
-				return newInstance(CLASS_RESOURCES_KEY, resDir, displayId, overrideConfiguration, scale);
-		} catch (Throwable t) {
-			XposedBridge.log(t);
-			return null;
-		}
-	}
-
-	/* For SDK 19 - 22 */
-	private static Object createResourcesKey(String resDir, int displayId, Configuration overrideConfiguration, float scale, IBinder token) {
-		try {
-			if (HAS_THEME_CONFIG_PARAMETER)
-				return newInstance(CLASS_RESOURCES_KEY, resDir, displayId, overrideConfiguration, scale, false, null, token);
-			else if (HAS_IS_THEMEABLE)
-				return newInstance(CLASS_RESOURCES_KEY, resDir, displayId, overrideConfiguration, scale, false, token);
-			else
-				return newInstance(CLASS_RESOURCES_KEY, resDir, displayId, overrideConfiguration, scale, token);
-		} catch (Throwable t) {
-			XposedBridge.log(t);
-			return null;
-		}
+		Object resourcesManager = getObjectField(activityThread, "mResourcesManager");
+		return (Map) getObjectField(resourcesManager, "mResourceImpls");
 	}
 
 	/* For SDK 24+ */
@@ -144,27 +91,13 @@ public final class AndroidAppHelper {
 		}
 
 		Object resourcesKey;
-		if (Build.VERSION.SDK_INT >= 24) {
-			CompatibilityInfo compatInfo = (CompatibilityInfo) newInstance(CompatibilityInfo.class);
-			setFloatField(compatInfo, "applicationScale", resources.hashCode());
-			resourcesKey = createResourcesKey(resDir, null, null, null, Display.DEFAULT_DISPLAY, null, compatInfo);
-		} else if (Build.VERSION.SDK_INT == 23) {
-			resourcesKey = createResourcesKey(resDir, Display.DEFAULT_DISPLAY, null, resources.hashCode());
-		} else if (Build.VERSION.SDK_INT >= 19) {
-			resourcesKey = createResourcesKey(resDir, Display.DEFAULT_DISPLAY, null, resources.hashCode(), null);
-		} else if (Build.VERSION.SDK_INT >= 17) {
-			resourcesKey = createResourcesKey(resDir, Display.DEFAULT_DISPLAY, null, resources.hashCode());
-		} else {
-			resourcesKey = createResourcesKey(resDir, resources.hashCode());
-		}
+		CompatibilityInfo compatInfo = (CompatibilityInfo) newInstance(CompatibilityInfo.class);
+		setFloatField(compatInfo, "applicationScale", resources.hashCode());
+		resourcesKey = createResourcesKey(resDir, null, null, null, Display.DEFAULT_DISPLAY, null, compatInfo);
 
 		if (resourcesKey != null) {
-			if (Build.VERSION.SDK_INT >= 24) {
-				Object resImpl = getObjectField(resources, "mResourcesImpl");
-				getResourcesMap(thread).put(resourcesKey, new WeakReference<>(resImpl));
-			} else {
-				getResourcesMap(thread).put(resourcesKey, new WeakReference<>(resources));
-			}
+			Object resImpl = getObjectField(resources, "mResourcesImpl");
+			getResourcesMap(thread).put(resourcesKey, new WeakReference<>(resImpl));
 		}
 	}
 

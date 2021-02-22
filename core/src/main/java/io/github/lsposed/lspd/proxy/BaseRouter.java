@@ -37,8 +37,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.XposedInit;
-import de.robv.android.xposed.annotation.ApiSensitive;
-import de.robv.android.xposed.annotation.Level;
+import io.github.lsposed.lspd.annotation.ApiSensitive;
+import io.github.lsposed.lspd.annotation.Level;
 
 public abstract class BaseRouter implements Router {
 
@@ -60,7 +60,7 @@ public abstract class BaseRouter implements Router {
                 return;
             }
             startBootstrapHook(isSystem, appDataDir);
-            XposedInit.initForZygote(isSystem);
+            XposedInit.initForZygote();
         } catch (Throwable t) {
             Utils.logE("error during Xposed initialization", t);
         }

@@ -28,8 +28,8 @@ import java.lang.reflect.Field;
 
 import dalvik.system.BaseDexClassLoader;
 import dalvik.system.DexClassLoader;
-import de.robv.android.xposed.annotation.ApiSensitive;
-import de.robv.android.xposed.annotation.Level;
+import io.github.lsposed.lspd.annotation.ApiSensitive;
+import io.github.lsposed.lspd.annotation.Level;
 
 /**
  * For 6.0 only.

@@ -119,11 +119,7 @@ public class XResources extends XResourcesSuperClass {
 
 		if (resDir != null) {
 			synchronized (sReplacementsCacheMap) {
-				mReplacementsCache = sReplacementsCacheMap.get(resDir);
-				if (mReplacementsCache == null) {
-					mReplacementsCache = new byte[128];
-					sReplacementsCacheMap.put(resDir, mReplacementsCache);
-				}
+				mReplacementsCache = sReplacementsCacheMap.computeIfAbsent(resDir, k -> new byte[128]);
 			}
 		}
 
@@ -184,14 +180,10 @@ public class XResources extends XResourcesSuperClass {
 			return packageName;
 
 		PackageParser.PackageLite pkgInfo;
-		if (Build.VERSION.SDK_INT >= 21) {
-			try {
-				pkgInfo = PackageParser.parsePackageLite(new File(resDir), 0);
-			} catch (PackageParserException e) {
-				throw new IllegalStateException("Could not determine package name for " + resDir, e);
-			}
-		} else {
-			pkgInfo = PackageParser.parsePackageLite(resDir, 0);
+		try {
+			pkgInfo = PackageParser.parsePackageLite(new File(resDir), 0);
+		} catch (PackageParserException e) {
+			throw new IllegalStateException("Could not determine package name for " + resDir, e);
 		}
 		if (pkgInfo != null && pkgInfo.packageName != null) {
 //			Log.w(XposedBridge.TAG, "Package name for " + resDir + " had to be retrieved via parser");
@@ -265,7 +257,7 @@ public class XResources extends XResourcesSuperClass {
 				XMLInstanceDetails details = (XMLInstanceDetails) param.getObjectExtra(EXTRA_XML_INSTANCE_DETAILS);
 				if (details != null) {
 					LayoutInflatedParam liparam = new LayoutInflatedParam(details.callbacks);
-					ViewGroup group = (ViewGroup) param.args[(Build.VERSION.SDK_INT < 23) ? 1 : 2];
+					ViewGroup group = (ViewGroup) param.args[2];
 					liparam.view = group.getChildAt(group.getChildCount() - 1);
 					liparam.resNames = details.resNames;
 					liparam.variant = details.variant;
@@ -274,16 +266,8 @@ public class XResources extends XResourcesSuperClass {
 				}
 			}
 		};
-		if (Build.VERSION.SDK_INT < 21) {
-			findAndHookMethod(LayoutInflater.class, "parseInclude", XmlPullParser.class, View.class,
-					AttributeSet.class, parseIncludeHook);
-		} else if (Build.VERSION.SDK_INT < 23) {
-			findAndHookMethod(LayoutInflater.class, "parseInclude", XmlPullParser.class, View.class,
-					AttributeSet.class, boolean.class, parseIncludeHook);
-		} else {
-			findAndHookMethod(LayoutInflater.class, "parseInclude", XmlPullParser.class, Context.class,
-					View.class, AttributeSet.class, parseIncludeHook);
-		}
+		findAndHookMethod(LayoutInflater.class, "parseInclude", XmlPullParser.class, Context.class,
+				View.class, AttributeSet.class, parseIncludeHook);
 	}
 
 	/**
@@ -662,9 +646,7 @@ public class XResources extends XResourcesSuperClass {
 			XmlResourceParser result = repRes.getAnimation(repId);
 
 			if (!loadedFromCache) {
-				long parseState = (Build.VERSION.SDK_INT >= 21)
-					? getLongField(result, "mParseState")
-					: getIntField(result, "mParseState");
+				long parseState = getLongField(result, "mParseState");
 				rewriteXmlReferencesNative(parseState, this, repRes);
 			}
 
@@ -924,9 +906,7 @@ public class XResources extends XResourcesSuperClass {
 			result = repRes.getLayout(repId);
 
 			if (!loadedFromCache) {
-				long parseState = (Build.VERSION.SDK_INT >= 21)
-					? getLongField(result, "mParseState")
-					: getIntField(result, "mParseState");
+				long parseState = getLongField(result, "mParseState");
 				rewriteXmlReferencesNative(parseState, this, repRes);
 			}
 		} else {
@@ -1080,9 +1060,7 @@ public class XResources extends XResourcesSuperClass {
 			XmlResourceParser result = repRes.getXml(repId);
 
 			if (!loadedFromCache) {
-				long parseState = (Build.VERSION.SDK_INT >= 21)
-					? getLongField(result, "mParseState")
-					: getIntField(result, "mParseState");
+				long parseState = getLongField(result, "mParseState");
 				rewriteXmlReferencesNative(parseState, this, repRes);
 			}
 
