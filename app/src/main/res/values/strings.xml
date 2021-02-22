@@ -93,6 +93,7 @@
     <string name="scroll_bottom">Scroll to bottom</string>
 
     <string name="android_sdk" translatable="false">Android %2$s (%1$s, API %3$d)</string>
+    <string name="android_sdk_preview" translatable="false">Android %1$s Preview</string>
     <string name="not_logcat">This is the LSPosed Framework and modules log\nif you need a Android logcat, you can try our Log Catcher Magisk module</string>
 
     <!-- LSPd related -->
