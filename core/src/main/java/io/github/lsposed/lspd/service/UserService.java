@@ -66,7 +66,7 @@ public class UserService {
         } else {
             try {
                 users = um.getUsers(true);
-            } catch (NoSuchFieldError e) {
+            } catch (NoSuchMethodError e) {
                 users = um.getUsers(true, true, true);
             }
         }
