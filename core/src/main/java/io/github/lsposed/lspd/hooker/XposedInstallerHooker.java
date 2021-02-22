@@ -22,7 +22,9 @@ package io.github.lsposed.lspd.hooker;
 
 import android.os.IBinder;
 
+import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XposedHelpers;
+import io.github.lsposed.lspd.BuildConfig;
 import io.github.lsposed.lspd.util.Utils;
 
 public class XposedInstallerHooker {
@@ -36,6 +38,20 @@ public class XposedInstallerHooker {
             Utils.logI("Hooked LSPosed Manager");
         } catch (Throwable t) {
             Utils.logW("Could not hook LSPosed Manager", t);
+        }
+
+        // for showing the version mismatch dialog
+        try {
+            Class<?> ConstantsClass = XposedHelpers.findClass("io.github.lsposed.manager.Constants", classLoader);
+            try {
+                XposedHelpers.setStaticObjectField(ConstantsClass, "xposedVersion", BuildConfig.VERSION_NAME);
+                return;
+            } catch (Throwable ignore) {
+
+            }
+            XposedHelpers.findAndHookMethod(ConstantsClass, "getXposedVersion", XC_MethodReplacement.returnConstant(BuildConfig.VERSION_NAME));
+        } catch (Throwable ignore) {
+
         }
     }
 }
