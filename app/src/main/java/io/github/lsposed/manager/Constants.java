@@ -23,8 +23,15 @@ package io.github.lsposed.manager;
 import android.widget.Toast;
 
 public class Constants {
+    @SuppressWarnings("FieldMayBeFinal")
+    private static String xposedVersion = null;
 
     public static void showErrorToast(int type) {
         Toast.makeText(App.getInstance(), R.string.app_destroyed, Toast.LENGTH_LONG).show();
+    }
+
+    // for showing the version mismatch dialog
+    public static String getXposedVersion() {
+        return xposedVersion;
     }
 }
