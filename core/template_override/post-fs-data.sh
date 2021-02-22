@@ -156,6 +156,6 @@ if [[ ! -z "${MISC_PATH}" ]]; then
     chmod 777 "${BASE_PATH}/cache"
     print_log_head "${LOG_PATH}/modules.log"
     # start_verbose_log_catcher
-    start_log_catcher all "LSPosed:V XSharedPreferences:V LSPosed-Bridge:V LSPosedManager:V *:F" true ${LOG_VERBOSE}
+    start_log_catcher all "LSPosed:V XSharedPreferences:V LSPosed-Bridge:V LSPosedManager:V LSPosedService:V *:F" true ${LOG_VERBOSE}
 fi
 rm -f /data/adb/lspd/new_install
