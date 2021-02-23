@@ -74,6 +74,9 @@ namespace lspd {
         jclass bridge_service_class_ = nullptr;
         jmethodID exec_transact_replace_methodID_ = nullptr;
 
+        jclass binder_class_ = nullptr;
+        jmethodID binder_ctor_ = nullptr;
+
         jclass service_manager_class_ = nullptr;
         jmethodID get_service_method_ = nullptr;
 
@@ -87,6 +90,7 @@ namespace lspd {
         jmethodID write_string_method_ = nullptr;
         jmethodID read_exception_method_ = nullptr;
         jmethodID read_strong_binder_method_ = nullptr;
+        jmethodID write_strong_binder_method_ = nullptr;
 
         jclass deadObjectExceptionClass_ = nullptr;
 

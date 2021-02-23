@@ -255,7 +255,8 @@ public class BridgeService {
                 IBinder binder = null;
                 try {
                     String processName = data.readString();
-                    binder = service.requestApplicationService(Binder.getCallingUid(), Binder.getCallingPid(), processName).asBinder();
+                    IBinder heartBeat = data.readStrongBinder();
+                    binder = service.requestApplicationService(Binder.getCallingUid(), Binder.getCallingPid(), processName, heartBeat).asBinder();
                 } catch (RemoteException e) {
                     Log.e(TAG, Log.getStackTraceString(e));
                 }
@@ -311,17 +312,18 @@ public class BridgeService {
     }
 
     @Keep
-    public static IBinder getApplicationServiceForSystemServer(IBinder binder) {
-        if (binder == null) return null;
+    public static IBinder getApplicationServiceForSystemServer(IBinder binder, IBinder heartBeat) {
+        if (binder == null || heartBeat == null) return null;
         try {
             ILSPosedService service = ILSPosedService.Stub.asInterface(binder);
-            ILSPApplicationService applicationService = service.requestApplicationService(Process.myUid(), Process.myPid(), "android");
+            ILSPApplicationService applicationService = service.requestApplicationService(Process.myUid(), Process.myPid(), "android", heartBeat);
             if (applicationService != null) return applicationService.asBinder();
         } catch (Throwable e) {
             Log.e(TAG, Log.getStackTraceString(e));
         }
         return null;
     }
+
     private static void tryGetActivityManagerServiceInstance() {
         try {
             Log.e(TAG, "Trying to get the ams");
