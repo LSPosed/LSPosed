@@ -78,8 +78,6 @@
     <!-- LSPd related -->
     <string name="compile_speed_msg">最佳化中…</string>
     <string name="compile_done">最佳化完成</string>
-    
-    <string name="about_source" translatable="false">https://github.com/LSPosed/LSPosed/</string>
 
     <string name="pref_title_disable_verbose_log">停用詳細日誌</string>
     <string name="logs_cannot_read">無法讀取日誌: \n</string>
