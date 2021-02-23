@@ -61,18 +61,6 @@ public class LSPApplicationServiceClient implements ILSPApplicationService {
     }
 
     @Override
-    public void registerHeartBeat(IBinder handle) {
-        if (service == null || serviceBinder == null) {
-            Utils.logE("Register Failed: service is null");
-        }
-        try {
-            service.registerHeartBeat(handle);
-        } catch (RemoteException e) {
-            Utils.logE("register heart beat failed", e);
-        }
-    }
-
-    @Override
     public IBinder requestModuleBinder() {
         try {
             return service.requestModuleBinder();

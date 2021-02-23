@@ -39,11 +39,9 @@ import static io.github.lsposed.lspd.config.LSPApplicationServiceClient.serviceC
 @Keep
 public class Main {
     private static final AtomicReference<Impl> lspdImplRef = new AtomicReference<>(null);
-    private static final Binder heartBeatBinder = new Binder();
 
     public static void forkAndSpecializePost(String appDataDir, String niceName, IBinder binder) {
         LSPApplicationServiceClient.Init(binder, niceName);
-        serviceClient.registerHeartBeat(heartBeatBinder);
         final int variant = serviceClient.getVariant();
         Impl lspd = getImpl(variant);
         if (lspd == null || !lspd.isInitialized()) {
@@ -55,7 +53,6 @@ public class Main {
 
     public static void forkSystemServerPost(IBinder binder) {
         LSPApplicationServiceClient.Init(binder, "android");
-        serviceClient.registerHeartBeat(heartBeatBinder);
         final int variant = serviceClient.getVariant();
         Impl lspd = getImpl(variant);
         if (lspd == null || !lspd.isInitialized()) {

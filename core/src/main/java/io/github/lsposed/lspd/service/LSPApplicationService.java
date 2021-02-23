@@ -36,22 +36,24 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
     private final static Set<Pair<Integer, Integer>> cache = ConcurrentHashMap.newKeySet();
     private final static Set<IBinder> handles = ConcurrentHashMap.newKeySet();
 
-    @Override
-    public void registerHeartBeat(IBinder handle) throws RemoteException {
-        handles.add(handle);
-        int uid = Binder.getCallingUid();
-        int pid = Binder.getCallingPid();
-
-        cache.add(new Pair<>(uid, pid));
-        handle.linkToDeath(new DeathRecipient() {
-            @Override
-            public void binderDied() {
-                Log.d(TAG, "pid=" + pid + " uid=" + uid + " is dead.");
-                cache.remove(new Pair<>(uid, pid));
-                handles.remove(handle);
-                handle.unlinkToDeath(this, 0);
-            }
-        }, 0);
+    public boolean registerHeartBeat(int uid, int pid, IBinder handle) {
+        try {
+            handle.linkToDeath(new DeathRecipient() {
+                @Override
+                public void binderDied() {
+                    Log.d(TAG, "pid=" + pid + " uid=" + uid + " is dead.");
+                    cache.remove(new Pair<>(uid, pid));
+                    handles.remove(handle);
+                    handle.unlinkToDeath(this, 0);
+                }
+            }, 0);
+            handles.add(handle);
+            cache.add(new Pair<>(uid, pid));
+            return true;
+        } catch (RemoteException e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+            return false;
+        }
     }
 
     @Override

@@ -50,7 +50,7 @@ public class ServiceManager {
     public static void start() {
         Log.i(TAG, "starting server...");
 
-        Thread.setDefaultUncaughtExceptionHandler((t, e)->{
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
             Log.e(TAG, Log.getStackTraceString(e));
         });
 
@@ -112,6 +112,12 @@ public class ServiceManager {
 
     public static LSPApplicationService getApplicationService() {
         return applicationService;
+    }
+
+    public static LSPApplicationService requestApplicationService(int uid, int pid, IBinder heartBeat) {
+        if (applicationService.registerHeartBeat(uid, pid, heartBeat))
+            return applicationService;
+        else return null;
     }
 
     public static LSPManagerService getManagerService() {

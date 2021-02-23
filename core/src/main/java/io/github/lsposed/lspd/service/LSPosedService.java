@@ -24,6 +24,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Binder;
+import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
 
@@ -35,16 +36,17 @@ import static io.github.lsposed.lspd.service.ServiceManager.TAG;
 
 public class LSPosedService extends ILSPosedService.Stub {
     @Override
-    public ILSPApplicationService requestApplicationService(int uid, int pid, String processName) {
+    public ILSPApplicationService requestApplicationService(int uid, int pid, String processName, IBinder heartBeat) {
         if (Binder.getCallingUid() != 1000) {
             Log.w(TAG, "Someone else got my binder!?");
             return null;
         }
         if (uid == 1000 && processName.equals("android")) {
+            Log.e(TAG, "ZHEER");
             if (ConfigManager.getInstance().shouldSkipSystemServer())
                 return null;
             else
-                return ServiceManager.getApplicationService();
+                return ServiceManager.requestApplicationService(uid, pid, heartBeat);
         }
         if (ConfigManager.getInstance().shouldSkipProcess(new ConfigManager.ProcessScope(processName, uid))) {
             Log.d(TAG, "Skipped " + processName + "/" + uid);
@@ -55,7 +57,7 @@ public class LSPosedService extends ILSPosedService.Stub {
             return null;
         }
         Log.d(TAG, "returned service");
-        return ServiceManager.getApplicationService();
+        return ServiceManager.requestApplicationService(uid, pid, heartBeat);
     }
 
 
