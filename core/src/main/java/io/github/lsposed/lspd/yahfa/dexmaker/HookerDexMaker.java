@@ -170,7 +170,7 @@ public class HookerDexMaker {
                 try {
                     // if file exists, reuse it and skip generating
                     DexLog.d("Using cache " + dexFileName);
-                    ClassLoader loader = mDexMaker.loadClassDirect(mAppClassLoader, new File(serviceClient.getCachePath("")), dexFileName);
+                    ClassLoader loader = mDexMaker.loadClassDirect(mAppClassLoader, dexFile.getParentFile(), dexFileName);
                     hookClass = Class.forName(className.replace("/", "."), true, loader);
                 } catch (Throwable ignored) {
                 }
@@ -179,7 +179,7 @@ public class HookerDexMaker {
                 try {
                     DexLog.d("cache not hit, generating " + dexFileName);
                     doGenerate(className);
-                    ClassLoader loader = mDexMaker.generateAndLoad(mAppClassLoader, new File(serviceClient.getCachePath("")), dexFileName, false);
+                    ClassLoader loader = mDexMaker.generateAndLoad(mAppClassLoader, dexFile.getParentFile(), dexFileName, true);
                     dexFile.setWritable(true, false);
                     dexFile.setReadable(true, false);
                     hookClass = Class.forName(className.replace("/", "."), true, loader);
