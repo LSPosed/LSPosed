@@ -1,4 +1,25 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<!--
+  ~ This file is part of LSPosed.
+  ~
+  ~ LSPosed is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ LSPosed is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+  ~
+  ~ Copyright (C) 2020 EdXposed Contributors
+  ~ Copyright (C) 2021 LSPosed Contributors
+  -->
+
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="app_name" translatable="false">LSPosed</string>
     <string name="Activated">已啟用</string>
     <string name="Install">安裝</string>
     <string name="InstallDetail">點選安裝 LSPosed</string>
@@ -53,7 +74,6 @@
     <string name="logs_save_failed">儲存失敗：</string>
     <string name="menuClearLog">立即清理日誌</string>
     <string name="logs_cleared">日誌清理成功</string>
-    <string name="logs_clear_failed">無法清理日誌: </string>
     <string name="log_is_empty">日誌為空</string>
 
     <!-- About tab -->
@@ -73,11 +93,14 @@
     <string name="scroll_bottom">滾動到底部</string>
 
     <string name="android_sdk" translatable="false">Android %2$s (%1$s, API %3$d)</string>
+    <string name="android_sdk_preview" translatable="false">Android %1$s Preview</string>
     <string name="not_logcat">這裡是 LSPosed 框架和模組的日誌\n若您需要 Android 的 logcat，您可以嘗試我們 Log Catcher 的 Magisk 模組</string>
 
     <!-- LSPd related -->
     <string name="compile_speed_msg">最佳化中…</string>
     <string name="compile_done">最佳化完成</string>
+
+    <string name="about_source" translatable="false">https://github.com/LSPosed/LSPosed/</string>
 
     <string name="pref_title_disable_verbose_log">停用詳細日誌</string>
     <string name="logs_cannot_read">無法讀取日誌: \n</string>
