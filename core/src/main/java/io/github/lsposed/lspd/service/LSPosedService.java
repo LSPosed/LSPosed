@@ -75,14 +75,16 @@ public class LSPosedService extends ILSPosedService.Stub {
         int userId = intent.getIntExtra(Intent.EXTRA_USER, -1);
         boolean replacing = intent.getBooleanExtra(Intent.EXTRA_REPLACING, false);
         if (intent.getAction().equals(Intent.ACTION_PACKAGE_REMOVED) && uid > 0 && !replacing) {
-            ConfigManager.getInstance().removeModule(packageName);
+            if (userId == 0) {
+                ConfigManager.getInstance().removeModule(packageName);
+            }
             Application app = new Application();
             app.packageName = packageName;
             app.userId = userId;
             ConfigManager.getInstance().removeApp(app);
         }
         PackageInfo pkgInfo = PackageService.getPackageInfo(packageName, PackageManager.GET_META_DATA, 0);
-        boolean isXposedModule = pkgInfo != null && pkgInfo.applicationInfo != null &&
+        boolean isXposedModule = userId == 0 && pkgInfo != null && pkgInfo.applicationInfo != null &&
                 pkgInfo.applicationInfo.enabled && pkgInfo.applicationInfo.metaData != null &&
                 pkgInfo.applicationInfo.metaData.containsKey("xposedmodule");
         if (isXposedModule) {
