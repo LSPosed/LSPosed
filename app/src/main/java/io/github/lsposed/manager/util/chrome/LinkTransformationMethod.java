@@ -20,6 +20,7 @@
 
 package io.github.lsposed.manager.util.chrome;
 
+import android.app.Activity;
 import android.graphics.Rect;
 import android.text.Spannable;
 import android.text.Spanned;
@@ -28,13 +29,11 @@ import android.text.style.URLSpan;
 import android.view.View;
 import android.widget.TextView;
 
-import io.github.lsposed.manager.ui.activity.base.BaseActivity;
-
 public class LinkTransformationMethod implements TransformationMethod {
 
-    private final BaseActivity activity;
+    private final Activity activity;
 
-    public LinkTransformationMethod(BaseActivity activity) {
+    public LinkTransformationMethod(Activity activity) {
         this.activity = activity;
     }
 
