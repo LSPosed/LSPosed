@@ -24,7 +24,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.graphics.Bitmap;
 import android.graphics.drawable.AdaptiveIconDrawable;
-import android.graphics.drawable.PictureDrawable;
+import android.graphics.drawable.Drawable;
 
 import androidx.annotation.NonNull;
 
@@ -40,6 +40,7 @@ import java.io.InputStream;
 
 import io.github.lsposed.manager.App;
 import io.github.lsposed.manager.R;
+import io.github.lsposed.manager.util.svg.ExternalFileResolver;
 import io.github.lsposed.manager.util.svg.SvgDecoder;
 import io.github.lsposed.manager.util.svg.SvgDrawableTranscoder;
 import me.zhanghai.android.appiconloader.glide.AppIconModelLoader;
@@ -53,7 +54,8 @@ public class AppModule extends AppGlideModule {
                 context.getApplicationInfo().loadIcon(context.getPackageManager()) instanceof AdaptiveIconDrawable, context));
         OkHttpUrlLoader.Factory factory = new OkHttpUrlLoader.Factory(App.getOkHttpClient());
         registry.replace(GlideUrl.class, InputStream.class, factory);
-        registry.register(SVG.class, PictureDrawable.class, new SvgDrawableTranscoder())
+        SVG.registerExternalFileResolver(new ExternalFileResolver());
+        registry.register(SVG.class, Drawable.class, new SvgDrawableTranscoder(context))
                 .append(InputStream.class, SVG.class, new SvgDecoder());
     }
 }
