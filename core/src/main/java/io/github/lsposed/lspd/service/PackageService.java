@@ -33,7 +33,9 @@ import android.util.Pair;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import io.github.lsposed.lspd.Application;
 import io.github.lsposed.lspd.utils.ParceledListSlice;
@@ -79,13 +81,18 @@ public class PackageService {
         return pm.getPackagesForUid(uid);
     }
 
-    public static ParceledListSlice<PackageInfo> getInstalledPackagesFromAllUsers(int flags) throws RemoteException {
-        ArrayList<PackageInfo> res = new ArrayList<>();
+    public static ParceledListSlice<PackageInfo> getInstalledPackagesFromAllUsers(int flags, boolean filterNoProcess) throws RemoteException {
+        List<PackageInfo> res = new ArrayList<>();
         IPackageManager pm = getPackageManager();
         if (pm == null) return ParceledListSlice.emptyList();
+        if (filterNoProcess) flags = PackageManager.MATCH_DISABLED_COMPONENTS |
+                PackageManager.MATCH_UNINSTALLED_PACKAGES | PackageManager.GET_ACTIVITIES | PackageManager.MATCH_DIRECT_BOOT_AWARE | PackageManager.MATCH_DIRECT_BOOT_UNAWARE |
+                PackageManager.GET_SERVICES | PackageManager.GET_RECEIVERS | PackageManager.GET_PROVIDERS | flags;
         for (int userId : UserService.getUsers()) {
             res.addAll(pm.getInstalledPackages(flags, userId).getList());
         }
+        if (filterNoProcess)
+            res = res.stream().filter(pkgInfo -> !fetchProcesses(pkgInfo).isEmpty()).collect(Collectors.toList());
         return new ParceledListSlice<>(res);
     }
 

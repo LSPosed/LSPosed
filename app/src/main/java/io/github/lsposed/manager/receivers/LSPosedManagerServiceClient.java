@@ -43,9 +43,9 @@ public class LSPosedManagerServiceClient {
     }
 
 
-    public static List<PackageInfo> getInstalledPackagesFromAllUsers(int flags) throws RemoteException, NullPointerException {
+    public static List<PackageInfo> getInstalledPackagesFromAllUsers(int flags, boolean filterNoProcess) throws RemoteException, NullPointerException {
         ensureService();
-        ParceledListSlice<PackageInfo> parceledListSlice = service.getInstalledPackagesFromAllUsers(flags);
+        ParceledListSlice<PackageInfo> parceledListSlice = service.getInstalledPackagesFromAllUsers(flags, false);
         //
         return parceledListSlice.getList();
     }

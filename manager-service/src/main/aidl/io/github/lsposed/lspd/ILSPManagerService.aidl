@@ -5,7 +5,7 @@ import io.github.lsposed.lspd.Application;
 
 
 interface ILSPManagerService {
-    ParceledListSlice<PackageInfo> getInstalledPackagesFromAllUsers(int flags) = 2;
+    ParceledListSlice<PackageInfo> getInstalledPackagesFromAllUsers(int flags, boolean filterNoProcess) = 2;
 
     String[] enabledModules() = 3;
 

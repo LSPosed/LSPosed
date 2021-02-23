@@ -85,7 +85,7 @@ public final class ModuleUtil {
         }
 
         Map<String, InstalledModule> modules = new HashMap<>();
-        for (PackageInfo pkg : ConfigManager.getInstalledPackagesFromAllUsers(PackageManager.GET_META_DATA)) {
+        for (PackageInfo pkg : ConfigManager.getInstalledPackagesFromAllUsers(PackageManager.GET_META_DATA, false)) {
             ApplicationInfo app = pkg.applicationInfo;
             if (!app.enabled || app.uid / 100000 != 0)
                 continue;
