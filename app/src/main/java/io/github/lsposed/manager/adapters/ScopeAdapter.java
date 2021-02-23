@@ -127,7 +127,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         enabled = ModuleUtil.getInstance().isModuleEnabled(modulePackageName);
         activity.runOnUiThread(() -> masterSwitch.setChecked(enabled));
 
-        List<PackageInfo> appList = ConfigManager.getInstalledPackagesFromAllUsers(PackageManager.GET_META_DATA);
+        List<PackageInfo> appList = ConfigManager.getInstalledPackagesFromAllUsers(PackageManager.GET_META_DATA, true);
         checkedList.clear();
         recommendedList.clear();
         searchList.clear();
@@ -180,6 +180,9 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         }
         if (info.packageName.equals(BuildConfig.APPLICATION_ID)) {
             return true;
+        }
+        if (info.packageName.equals("android")) {
+            return false;
         }
         if (checkedList.contains(app)) {
             return false;

@@ -23,17 +23,14 @@ import android.content.pm.PackageInfo;
 import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
-import android.util.Log;
 
 import java.util.List;
 
 import de.robv.android.xposed.XposedBridge;
+import io.github.lsposed.lspd.Application;
 import io.github.lsposed.lspd.BuildConfig;
 import io.github.lsposed.lspd.ILSPManagerService;
-import io.github.lsposed.lspd.Application;
 import io.github.lsposed.lspd.utils.ParceledListSlice;
-
-import static io.github.lsposed.lspd.service.ServiceManager.TAG;
 
 public class LSPManagerService extends ILSPManagerService.Stub {
 
@@ -61,8 +58,8 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     }
 
     @Override
-    public ParceledListSlice<PackageInfo> getInstalledPackagesFromAllUsers(int flags) throws RemoteException {
-        return PackageService.getInstalledPackagesFromAllUsers(flags);
+    public ParceledListSlice<PackageInfo> getInstalledPackagesFromAllUsers(int flags, boolean filterNoProcess) throws RemoteException {
+        return PackageService.getInstalledPackagesFromAllUsers(flags, filterNoProcess);
     }
 
     @Override
