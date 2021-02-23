@@ -114,7 +114,11 @@ public class ConfigManager {
             if (applications == null) {
                 return list;
             }
-            applications.forEach(application -> list.add(new ScopeAdapter.ApplicationWithEquals(application)));
+            applications.forEach(application -> {
+                if (!application.packageName.equals(packageName)) {
+                    list.add(new ScopeAdapter.ApplicationWithEquals(application));
+                }
+            });
         } catch (RemoteException | NullPointerException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
         }
