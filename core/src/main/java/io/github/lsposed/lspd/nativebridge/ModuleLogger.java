@@ -28,8 +28,11 @@ import android.app.ActivityThread;
 import android.os.ParcelFileDescriptor;
 import android.os.Process;
 
+import androidx.annotation.Keep;
+
 import io.github.lsposed.lspd.util.Utils;
 
+@Keep
 public class ModuleLogger {
     static SimpleDateFormat logDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss", Locale.getDefault());
     static int fd = -1;
