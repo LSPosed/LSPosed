@@ -114,4 +114,22 @@
     <string name="warning_min_version_too_low">Цей модуль був створений для версії LSP %1$d, але через несумісні зміни у версії %2$d його було вимкнено</string>
     <string name="warning_xposed_min_version">Цей модуль вимагає новішої версії LSP (%d), тому його неможливо активувати</string>
     <string name="xposed_module_updated_notification_title">Модуль LSPosed оновлено</string>
+  <string name="module_repo">Репозиторій</string>
+    <string name="module_repo_summary">Репозиторій модулів</string>
+    <string name="module_readme">Readme</string>
+    <string name="module_releases">Релізи</string>
+    <string name="module_information">Інформація</string>
+    <string name="module_information_homepage">Домашня сторінка</string>
+    <string name="module_information_source_url">Вихідний код</string>
+    <string name="module_information_collaborators">Співучасники</string>
+    <string name="module_release_view_assets">Assets</string>
+    <string name="menu_open_in_browser">Відкрити в браузері</string>
+    <string name="refresh">Оновити</string>
+    <string name="group_network">Мережа</string>
+    <string name="dns_over_http">DNS поверх HTTPS</string>
+    <string name="dns_over_http_summary">Вирішення проблем із погіршенням DNS у деяких країнах</string>
+    <string name="about_view_source_code"><![CDATA[Перегляньте вихідний код на %s<br/>Приєднуйтесь до нашого каналу в %s]]></string>
+    <string name="module_release_load_more">Показувати старіші версії</string>
+    <string name="module_release_no_more">Більше релізів немає</string>
+    <string name="theme_color">Колір теми</string>
 </resources>
