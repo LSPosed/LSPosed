@@ -22,7 +22,7 @@
 
     <!-- Installer tab -->
     <string name="install_warning_title">請小心！</string>
-    <string name="dont_show_again">不再提示</string>
+    <string name="dont_show_again">不再提醒</string>
 
     <!-- File operations -->
 
@@ -131,4 +131,24 @@
     <string name="menu_backup">備份</string>
     <string name="menu_restore">還原</string>
     <string name="xposed_module_updated_notification_content">%s 已更新</string>
+    <string name="module_repo">倉庫</string>
+    <string name="module_repo_summary">模組倉庫（Alpha）</string>
+    <string name="module_readme">自述檔案</string>
+    <string name="module_releases">版本</string>
+    <string name="module_information">資訊</string>
+    <string name="module_information_homepage">主頁</string>
+    <string name="module_information_source_url">原始碼</string>
+    <string name="module_information_collaborators">合作者</string>
+    <string name="module_release_view_assets">附件</string>
+    <string name="menu_open_in_browser">在瀏覽器中開啟</string>
+    <string name="refresh">更新</string>
+    <string name="group_network">網路</string>
+    <string name="dns_over_http">安全 DNS（DoH）</string>
+    <string name="dns_over_http_summary">解決某些地區的 DNS 汙染問題</string>
+    <string name="about_view_source_code"><![CDATA[在 %s 查看原始碼<br/>加入我们的 %s 頻道]]></string>
+    <string name="module_release_load_more">顯示更早期的版本</string>
+    <string name="module_release_no_more">沒有更早期的版本</string>
+    <string name="theme_color">主題強調色</string>
+    <string name="logs_clear_failed_2">日誌清理失敗</string>
+    <string name="view_in_repo">在倉庫中觀看</string>
 </resources>
