@@ -42,7 +42,6 @@ public class LSPosedService extends ILSPosedService.Stub {
             return null;
         }
         if (uid == 1000 && processName.equals("android")) {
-            Log.e(TAG, "ZHEER");
             if (ConfigManager.getInstance().shouldSkipSystemServer())
                 return null;
             else
