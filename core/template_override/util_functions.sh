@@ -48,10 +48,6 @@ check_riru_version() {
 
 check_magisk_version() {
   ui_print "- Magisk ${LANG_CUST_INST_VERSION}: ${MAGISK_VER_CODE}"
-  # before Magisk 16e4c67, sepolicy.rule is copied on the second reboot
-  if [[ "$MAGISK_VER_CODE" -lt 21006 ]]; then
-    touch "${MODPATH}/reboot_twice_flag"
-  fi
 }
 
 require_new_android() {
