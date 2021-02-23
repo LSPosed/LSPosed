@@ -58,8 +58,8 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     }
 
     @Override
-    public ParceledListSlice<PackageInfo> getInstalledPackagesFromAllUsers(int flags, boolean filterNoProcesses) throws RemoteException {
-        return PackageService.getInstalledPackagesFromAllUsers(flags, filterNoProcesses);
+    public ParceledListSlice<PackageInfo> getInstalledPackagesFromAllUsers(int flags, boolean filterNoProcess) throws RemoteException {
+        return PackageService.getInstalledPackagesFromAllUsers(flags, filterNoProcess);
     }
 
     @Override

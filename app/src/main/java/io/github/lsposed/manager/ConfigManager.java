@@ -63,10 +63,10 @@ public class ConfigManager {
         }
     }
 
-    public static List<PackageInfo> getInstalledPackagesFromAllUsers(int flags, boolean filterNoProcesses) {
+    public static List<PackageInfo> getInstalledPackagesFromAllUsers(int flags, boolean filterNoProcess) {
         List<PackageInfo> list = new ArrayList<>();
         try {
-            list.addAll(LSPosedManagerServiceClient.getInstalledPackagesFromAllUsers(flags, filterNoProcesses));
+            list.addAll(LSPosedManagerServiceClient.getInstalledPackagesFromAllUsers(flags, filterNoProcess));
         } catch (RemoteException | NullPointerException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
         }

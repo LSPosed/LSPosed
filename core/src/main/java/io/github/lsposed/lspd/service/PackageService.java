@@ -81,17 +81,17 @@ public class PackageService {
         return pm.getPackagesForUid(uid);
     }
 
-    public static ParceledListSlice<PackageInfo> getInstalledPackagesFromAllUsers(int flags, boolean filterNoProcesses) throws RemoteException {
+    public static ParceledListSlice<PackageInfo> getInstalledPackagesFromAllUsers(int flags, boolean filterNoProcess) throws RemoteException {
         List<PackageInfo> res = new ArrayList<>();
         IPackageManager pm = getPackageManager();
         if (pm == null) return ParceledListSlice.emptyList();
-        if (filterNoProcesses) flags = PackageManager.MATCH_DISABLED_COMPONENTS |
+        if (filterNoProcess) flags = PackageManager.MATCH_DISABLED_COMPONENTS |
                 PackageManager.MATCH_UNINSTALLED_PACKAGES | PackageManager.GET_ACTIVITIES | PackageManager.MATCH_DIRECT_BOOT_AWARE | PackageManager.MATCH_DIRECT_BOOT_UNAWARE |
                 PackageManager.GET_SERVICES | PackageManager.GET_RECEIVERS | PackageManager.GET_PROVIDERS | flags;
         for (int userId : UserService.getUsers()) {
             res.addAll(pm.getInstalledPackages(flags, userId).getList());
         }
-        if (filterNoProcesses)
+        if (filterNoProcess)
             res = res.stream().filter(pkgInfo -> !fetchProcesses(pkgInfo).isEmpty()).collect(Collectors.toList());
         return new ParceledListSlice<>(res);
     }
