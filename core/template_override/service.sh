@@ -21,10 +21,3 @@
 #
 
 MODDIR=${0%/*}
-
-if [[ -f "${MODDIR}/reboot_twice_flag" ]]; then
-  rm -f "${MODDIR}/reboot_twice_flag"
-  reboot
-fi
-
-/system/bin/app_process -Djava.class.path=/data/adb/lspd/framework/lspd.dex /system/bin --nice-name=lspd io.github.lsposed.lspd.core.Main &
