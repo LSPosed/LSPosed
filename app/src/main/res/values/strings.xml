@@ -173,4 +173,5 @@
     <string name="module_release_no_more">No more release</string>
     <string name="theme_color">Theme color</string>
     <string name="logs_clear_failed_2">Failed to clear the log</string>
+    <string name="view_in_repo">View in Repo</string>
 </resources>

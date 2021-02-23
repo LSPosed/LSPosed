@@ -174,4 +174,5 @@
     <string name="module_release_no_more">没有更旧的版本</string>
     <string name="theme_color">主题颜色</string>
     <string name="logs_clear_failed_2">日志清理失败</string>
+    <string name="view_in_repo">在仓库中查看</string>
 </resources>
