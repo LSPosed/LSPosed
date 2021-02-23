@@ -139,6 +139,10 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         boolean emptyCheckedList = checkedList.isEmpty();
         for (PackageInfo info : appList) {
             int uid = info.applicationInfo.uid;
+            if (info.packageName.equals("android") && uid / 100000 != 0) {
+                continue;
+            }
+
             ApplicationWithEquals application = new ApplicationWithEquals(info.packageName, uid / 100000);
 
             installedList.add(application);
@@ -174,12 +178,8 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         if (info.packageName.equals(this.modulePackageName)) {
             return true;
         }
-
         if (info.packageName.equals(BuildConfig.APPLICATION_ID)) {
             return true;
-        }
-        if (info.packageName.equals("android")) {
-            return app.userId != 0;
         }
         if (checkedList.contains(app)) {
             return false;
