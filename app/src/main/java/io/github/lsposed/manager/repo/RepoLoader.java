@@ -25,6 +25,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -86,22 +87,29 @@ public class RepoLoader {
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                ResponseBody body = response.body();
-                if (body != null) {
-                    String bodyString = body.string();
-                    Gson gson = new Gson();
-                    Map<String, OnlineModule> modules = new HashMap<>();
-                    OnlineModule[] repoModules = gson.fromJson(bodyString, OnlineModule[].class);
-                    Arrays.stream(repoModules).forEach(onlineModule -> modules.put(onlineModule.getName(), onlineModule));
-                    onlineModules = modules;
-                    Files.write(repoFile, bodyString.getBytes(StandardCharsets.UTF_8));
-                }
-                for (Listener listener : listeners) {
-                    listener.repoLoaded();
-                }
-                synchronized (this) {
-                    isLoading = false;
-                    repoLoaded = true;
+                try {
+                    ResponseBody body = response.body();
+                    if (body != null) {
+                        String bodyString = body.string();
+                        Gson gson = new Gson();
+                        Map<String, OnlineModule> modules = new HashMap<>();
+                        OnlineModule[] repoModules = gson.fromJson(bodyString, OnlineModule[].class);
+                        Arrays.stream(repoModules).forEach(onlineModule -> modules.put(onlineModule.getName(), onlineModule));
+                        onlineModules = modules;
+                        Files.write(repoFile, bodyString.getBytes(StandardCharsets.UTF_8));
+                    }
+                    for (Listener listener : listeners) {
+                        listener.repoLoaded();
+                    }
+                    synchronized (this) {
+                        isLoading = false;
+                        repoLoaded = true;
+                    }
+                } catch (Throwable e) {
+                    if (e instanceof IOException)
+                        throw e;
+                    else
+                        throw new IOException(e.getMessage(), e.getCause());
                 }
             }
         });
