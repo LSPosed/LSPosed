@@ -97,6 +97,19 @@ public class PackageService {
                 } catch (RemoteException e) {
                     return true;
                 }
+            }).peek(packageInfo -> {
+                if ((flags & PackageManager.GET_ACTIVITIES) == 0) {
+                    packageInfo.activities = null;
+                }
+                if ((flags & PackageManager.GET_SERVICES) == 0) {
+                    packageInfo.services = null;
+                }
+                if ((flags & PackageManager.GET_RECEIVERS) == 0) {
+                    packageInfo.receivers = null;
+                }
+                if ((flags & PackageManager.GET_PROVIDERS) == 0) {
+                    packageInfo.providers = null;
+                }
             }).collect(Collectors.toList());
         }
         return new ParceledListSlice<>(res);
