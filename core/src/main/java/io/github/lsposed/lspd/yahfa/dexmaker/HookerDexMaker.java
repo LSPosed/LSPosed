@@ -155,45 +155,54 @@ public class HookerDexMaker {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @TargetApi(Build.VERSION_CODES.O)
     private void doMake(String hookedClassName) throws Exception {
-        ClassLoader loader = null;
+        Class<?> hookClass = null;
         // Generate a Hooker class.
         String className = CLASS_NAME_PREFIX;
-        boolean usedCache = false;
         if (canCache) {
-            try {
-                mDexMaker = new DexMaker();
-                // className is also used as dex file name
-                // so it should be different from each other
-                String suffix = DexMakerUtils.getSha1Hex(mMember.toString());
-                className = className + suffix;
-                String dexFileName = className + ".jar";
-                File dexFile = new File(serviceClient.getCachePath(dexFileName));
-                if (!dexFile.exists()) {
+            mDexMaker = new DexMaker();
+            // className is also used as dex file name
+            // so it should be different from each other
+            String suffix = DexMakerUtils.getSha1Hex(mMember.toString());
+            className = className + suffix;
+            String dexFileName = className + ".jar";
+            File dexFile = new File(serviceClient.getCachePath(dexFileName));
+            if (dexFile.exists()) {
+                try {
                     // if file exists, reuse it and skip generating
-                    DexLog.d("Generating " + dexFileName);
+                    DexLog.d("Using cache " + dexFileName);
+                    ClassLoader loader = mDexMaker.loadClassDirect(mAppClassLoader, dexFile.getParentFile(), dexFileName);
+                    hookClass = Class.forName(className.replace("/", "."), true, loader);
+                } catch (Throwable ignored) {
+                }
+            }
+            if (hookClass == null) {
+                try {
+                    DexLog.d("cache not hit, generating " + dexFileName);
                     doGenerate(className);
-                    loader = mDexMaker.generateAndLoad(mAppClassLoader, new File(serviceClient.getCachePath("")), dexFileName, false);
+                    ClassLoader loader = mDexMaker.generateAndLoad(mAppClassLoader, dexFile.getParentFile(), dexFileName, true);
                     dexFile.setWritable(true, false);
                     dexFile.setReadable(true, false);
-                } else {
-                    DexLog.d("Using cache " + dexFileName);
-                    loader = mDexMaker.loadClassDirect(mAppClassLoader, new File(serviceClient.getCachePath("")), dexFileName);
+                    hookClass = Class.forName(className.replace("/", "."), true, loader);
+                } catch (Throwable ignored) {
                 }
-                usedCache = true;
-            } catch (Throwable ignored) {}
+            }
         }
-        if (!usedCache) {
+        if (hookClass == null) {
             // do everything in memory
-            DexLog.d("Generating in memory");
+            DexLog.d("Falling back to generate in memory");
             if (BuildConfig.DEBUG)
                 className = className + hookedClassName.replace(".", "/");
             mDexMaker = new DexMaker();
             doGenerate(className);
             byte[] dexBytes = mDexMaker.generate();
-            loader = new InMemoryDexClassLoader(ByteBuffer.wrap(dexBytes), mAppClassLoader);
+            ClassLoader loader = new InMemoryDexClassLoader(ByteBuffer.wrap(dexBytes), mAppClassLoader);
+            hookClass = Class.forName(className.replace("/", "."), true, loader);
         }
 
-        Class<?> hookClass = Class.forName(className.replace("/", "."), true, loader);
+        if (hookClass == null) {
+            DexLog.e("Unable to generate hooker class. This should not happen. Skipping...");
+            return;
+        }
         // Execute our newly-generated code in-process.
         Method backupMethod = hookClass.getMethod(METHOD_NAME_BACKUP, mActualParameterTypes);
         mHooker = new LspHooker(mHookInfo, mMember, backupMethod);
@@ -212,7 +221,9 @@ public class HookerDexMaker {
         generateHookMethod();
     }
 
-    public LspHooker getHooker() {return mHooker;}
+    public LspHooker getHooker() {
+        return mHooker;
+    }
 
     private void generateFields() {
         mHookerFieldId = mHookerTypeId.getField(hookerTypeId, FIELD_NAME_HOOKER);
