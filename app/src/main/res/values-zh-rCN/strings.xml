@@ -25,7 +25,9 @@
     <string name="Install">安装</string>
     <string name="InstallDetail">点按安装 LSPosed</string>
     <string name="Modules">模块</string>
-    <string name="ModulesDetail">%d 模块已启用</string>
+    <plurals name="modules_enabled_count">
+        <item quantity="other">%s 模块已启用</item>
+    </plurals>
     <string name="Logs">日志</string>
     <string name="Settings">设置</string>
     <string name="About">关于</string>
@@ -33,17 +35,14 @@
     <!-- General/various strings -->
     <string name="menuSend">发送</string>
     <string name="menuSaveToSd">保存</string>
-    <string name="ok">确定</string>
 
     <!-- Welcome screen / main sections -->
 
     <!-- navigation view items -->
-    <string name="nav_item_modules">模块</string>
     <string name="nav_item_logs">详细日志</string>
     <string name="nav_item_logs_err">模块日志</string>
 
     <!-- Installer tab -->
-    <string name="install_warning_title">请小心！</string>
     <string name="dont_show_again">不再提示</string>
 
     <!-- File operations -->
@@ -109,7 +108,8 @@
     <string name="compile_failed">优化失败或返回值为空</string>
     <string name="compile_failed_with_info">优化失败: </string>
     <string name="not_installed">未安装</string>
-    <string name="pure_black_dark_theme">使用纯黑深色主题</string>
+    <string name="pure_black_dark_theme">黑色主题</string>
+    <string name="pure_black_dark_theme_summary">当深色主题启用时使用纯黑色主题</string>
     <string name="sort_by_name">应用名称</string>
     <string name="sort_by_name_reverse">应用名称（降序）</string>
     <string name="sort_by_package_name">包体名称</string>

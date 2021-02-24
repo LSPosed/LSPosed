@@ -53,6 +53,7 @@
         <SwitchPreference
             android:key="black_dark_theme"
             android:title="@string/pure_black_dark_theme"
+            android:summary="@string/pure_black_dark_theme_summary"
             app:iconSpaceReserved="false" />
     </com.takisoft.preferencex.PreferenceCategory>
 

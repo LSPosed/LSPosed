@@ -41,11 +41,9 @@
     <string name="enable_module">Увімкнути модуль</string>
     <string name="failed_to_save_scope_list">Не вдалося зберегти список областей</string>
     <string name="info">Інформація</string>
-    <string name="install_warning_title">Обережно!</string>
     <string name="loading">Завантаження…</string>
     <string name="log_is_empty">Звіт порожній.</string>
     <string name="logs_cannot_read">"Не вдається прочитати звіт: "</string>
-    <string name="logs_clear_failed">Не вдалося очистити звіт:</string>
     <string name="logs_cleared">Звіт успішно очищено.</string>
     <string name="logs_save_failed">Не вдалося зберегти:</string>
     <string name="lsposed_not_active">LSPosed наразі не встановлений або не активний.</string>
@@ -71,7 +69,6 @@
     <string name="modules_app_store">Переглянути в Play Store</string>
     <string name="nav_item_logs">Детальні звіти</string>
     <string name="nav_item_logs_err">Звіти модулів</string>
-    <string name="nav_item_modules">Модулі</string>
     <string name="no_min_version_specified">Цей модуль не визначає потрібну йому версію LSP.</string>
     <string name="no_scope_selected">Ви не вибрали жодної програми. Продовжити?</string>
     <string name="no_scope_selected_has_recommended">Ви не вибрали жодної програми. Вибрати рекомендовані програми?</string>
