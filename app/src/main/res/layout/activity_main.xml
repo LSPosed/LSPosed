@@ -197,7 +197,6 @@
                             android:layout_below="@id/modules_title"
                             android:layout_alignStart="@id/modules_title"
                             android:layout_marginTop="2dp"
-                            android:text="@string/ModulesDetail"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small"
                             android:textColor="@android:color/darker_gray" />
                     </RelativeLayout>

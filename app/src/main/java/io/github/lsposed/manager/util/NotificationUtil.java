@@ -45,7 +45,7 @@ public final class NotificationUtil {
 
         NotificationChannelCompat.Builder channel = new NotificationChannelCompat.Builder(NOTIFICATION_MODULES_CHANNEL,
                 NotificationManager.IMPORTANCE_HIGH)
-                .setName(context.getString(R.string.nav_item_modules))
+                .setName(context.getString(R.string.Modules))
                 .setSound(null, null)
                 .setVibrationPattern(null);
         notificationManager.createNotificationChannel(channel.build());

@@ -63,7 +63,7 @@ public class BaseActivity extends MaterialActivity {
             if (!BuildConfig.VERSION_NAME.equals(coreVersionStr)) {
                 new AlertDialog.Builder(this)
                         .setMessage(R.string.outdated_manager)
-                        .setPositiveButton(R.string.ok, (dialog, id) -> {
+                        .setPositiveButton(android.R.string.ok, (dialog, id) -> {
                             NavUtil.startURL(this, getString(R.string.about_source));
                             finish();
                         })
