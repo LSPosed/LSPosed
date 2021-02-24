@@ -174,4 +174,9 @@
     <string name="theme_color">Theme color</string>
     <string name="logs_clear_failed_2">Failed to clear the log</string>
     <string name="view_in_repo">View in Repo</string>
+    <string name="force_stop">Force stop</string>
+    <string name="force_stop_dlg_title">Force stop?</string>
+    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
+    <string name="reboot_required">Reboot is required for this change to apply</string>
+    <string name="reboot">Reboot</string>
 </resources>

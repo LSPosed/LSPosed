@@ -327,6 +327,17 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             }
         } else if (itemId == R.id.menu_app_info) {
             activity.startActivity(new Intent(ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", info.packageName, null)));
+        } else if (itemId == R.id.menu_force_stop) {
+            if (info.packageName.equals("android")) {
+                ConfigManager.reboot(false, null, false);
+            } else {
+                new AlertDialog.Builder(activity)
+                        .setTitle(R.string.force_stop_dlg_title)
+                        .setMessage(R.string.force_stop_dlg_text)
+                        .setPositiveButton(android.R.string.ok, (dialog, which) -> ConfigManager.forceStopPackage(info.packageName, info.uid / 100000))
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .show();
+            }
         } else {
             return false;
         }
@@ -488,6 +499,10 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                 checkedList.remove(appInfo.application);
             }
             buttonView.setChecked(!isChecked);
+        } else if (appInfo.packageName.equals("android")) {
+            Snackbar.make(activity.binding.snackbar, R.string.reboot_required, Snackbar.LENGTH_SHORT)
+                    .setAction(R.string.reboot, v -> ConfigManager.reboot(false, null, false))
+                    .show();
         }
     }
 

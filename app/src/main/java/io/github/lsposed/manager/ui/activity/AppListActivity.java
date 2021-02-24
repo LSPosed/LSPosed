@@ -53,7 +53,7 @@ public class AppListActivity extends BaseActivity {
     private ScopeAdapter scopeAdapter;
 
     private SearchView.OnQueryTextListener searchListener;
-    private ActivityAppListBinding binding;
+    public ActivityAppListBinding binding;
     private final Handler handler = new Handler(Looper.getMainLooper());
     public ActivityResultLauncher<String> backupLauncher;
     public ActivityResultLauncher<String[]> restoreLauncher;
