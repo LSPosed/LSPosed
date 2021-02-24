@@ -175,4 +175,9 @@
     <string name="theme_color">主题颜色</string>
     <string name="logs_clear_failed_2">日志清理失败</string>
     <string name="view_in_repo">在仓库中查看</string>
+    <string name="force_stop">强行停止</string>
+    <string name="force_stop_dlg_title">要强行停止吗？</string>
+    <string name="force_stop_dlg_text">强行停止某个应用可能会导致其出现异常。</string>
+    <string name="reboot_required">需要重新启动才能应用此更改</string>
+    <string name="reboot">重新启动</string>
 </resources>
