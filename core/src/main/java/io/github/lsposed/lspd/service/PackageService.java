@@ -128,7 +128,7 @@ public class PackageService {
     public static Pair<Set<String>, Integer> fetchProcessesWithUid(Application app) throws RemoteException {
         IPackageManager pm = getPackageManager();
         if (pm == null) return new Pair<>(Collections.emptySet(), -1);
-        int baseFlag = PackageManager.MATCH_DISABLED_COMPONENTS | PackageManager.MATCH_DIRECT_BOOT_AWARE | PackageManager.MATCH_DIRECT_BOOT_UNAWARE;
+        int baseFlag = PackageManager.MATCH_DISABLED_COMPONENTS | PackageManager.MATCH_UNINSTALLED_PACKAGES | PackageManager.MATCH_DIRECT_BOOT_AWARE | PackageManager.MATCH_DIRECT_BOOT_UNAWARE;
         PackageInfo pkgInfo = getPackageInfoWithComponents(app.packageName, baseFlag, app.userId);
         if (pkgInfo == null || pkgInfo.applicationInfo == null)
             return new Pair<>(Collections.emptySet(), -1);
@@ -138,7 +138,7 @@ public class PackageService {
     private static PackageInfo getPackageInfoWithComponents(String packageName, int flags, int userId) throws RemoteException {
         PackageInfo pkgInfo;
         try {
-            pkgInfo = pm.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES | PackageManager.GET_SERVICES | PackageManager.GET_RECEIVERS | PackageManager.GET_PROVIDERS, userId);
+            pkgInfo = pm.getPackageInfo(packageName, flags | PackageManager.GET_ACTIVITIES | PackageManager.GET_SERVICES | PackageManager.GET_RECEIVERS | PackageManager.GET_PROVIDERS, userId);
         } catch (Exception e) {
             pkgInfo = pm.getPackageInfo(packageName, flags, userId);
             try {
