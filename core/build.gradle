@@ -147,7 +147,7 @@ afterEvaluate {
             doFirst {
                 copy {
                     from "${projectDir}/tpl/module.prop.tpl"
-                    into templateRootPath
+                    into "${projectDir}/template_override"
                     rename "module.prop.tpl", "module.prop"
                     expand(moduleId: "$module_id",
                             versionName: "$rootProject.ext.versionName",
