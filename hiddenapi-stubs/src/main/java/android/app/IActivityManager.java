@@ -32,6 +32,8 @@ public interface IActivityManager extends IInterface {
                                    String resultData, Bundle map, String[] requiredPermissions,
                                    int appOp, Bundle options, boolean serialized, boolean sticky, int userId);
 
+    void forceStopPackage(String packageName, int userId);
+
     abstract class Stub extends Binder implements IActivityManager {
 
         public static IActivityManager asInterface(IBinder obj) {

@@ -145,4 +145,14 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     public PackageInfo getPackageInfo(String packageName, int flags, int uid) throws RemoteException {
         return PackageService.getPackageInfo(packageName, flags, uid);
     }
+
+    @Override
+    public void forceStopPackage(String packageName, int userId) throws RemoteException {
+        ActivityManagerService.forceStopPackage(packageName, userId);
+    }
+
+    @Override
+    public void reboot(boolean confirm, String reason, boolean wait) throws RemoteException {
+        PowerService.reboot(confirm, reason, wait);
+    }
 }
