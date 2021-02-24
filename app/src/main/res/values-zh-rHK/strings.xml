@@ -31,17 +31,14 @@
     <!-- General/various strings -->
     <string name="menuSend">發送</string>
     <string name="menuSaveToSd">保存</string>
-    <string name="ok">確定</string>
 
     <!-- Welcome screen / main sections -->
 
     <!-- navigation view items -->
-    <string name="nav_item_modules">模組</string>
     <string name="nav_item_logs">詳細日誌</string>
     <string name="nav_item_logs_err">模組日誌</string>
 
     <!-- Installer tab -->
-    <string name="install_warning_title">請小心！</string>
     <string name="dont_show_again">不再提示</string>
 
     <!-- File operations -->
@@ -71,7 +68,6 @@
     <string name="logs_save_failed">保存失敗：</string>
     <string name="menuClearLog">立即清理日誌</string>
     <string name="logs_cleared">日誌清理成功</string>
-    <string name="logs_clear_failed">無法清理日誌: </string>
     <string name="log_is_empty">日誌為空</string>
 
     <!-- About tab -->

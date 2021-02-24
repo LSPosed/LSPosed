@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -23,6 +22,9 @@
     <item
         android:id="@+id/menu_launch"
         android:title="@string/app_launch" />
+    <item
+        android:id="@+id/menu_force_stop"
+        android:title="@string/force_stop" />
     <item
         android:id="@+id/menu_compile_speed"
         android:title="@string/compile_speed" />

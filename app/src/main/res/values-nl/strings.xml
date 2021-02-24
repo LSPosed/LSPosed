@@ -32,17 +32,14 @@
     <!-- General/various strings -->
     <string name="menuSend">versturen</string>
     <string name="menuSaveToSd">Opslaan</string>
-    <string name="ok">Ok</string>
 
     <!-- Welcome screen / main sections -->
 
     <!-- navigation view items -->
-    <string name="nav_item_modules">Modules</string>
     <string name="nav_item_logs">Uitgebreide logboeken</string>
     <string name="nav_item_logs_err">Modules Logboeken</string>
 
     <!-- Installer tab -->
-    <string name="install_warning_title">Doe voorzichtig!</string>
     <string name="dont_show_again">Laat dit niet meer zien</string>
 
     <!-- File operations -->
@@ -74,7 +71,6 @@
     <string name="logs_save_failed">Opslaan mislukt:</string>
     <string name="menuClearLog">Log nu wissen</string>
     <string name="logs_cleared">Log succesvol gewist.</string>
-    <string name="logs_clear_failed">Kan het logboek niet wissen:</string>
     <string name="log_is_empty">Log is leeg.</string>
 
     <!-- About tab -->

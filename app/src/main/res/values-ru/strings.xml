@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -33,17 +32,14 @@
     <!-- General/various strings -->
     <string name="menuSend">Отправить</string>
     <string name="menuSaveToSd">Сохранить</string>
-    <string name="ok">ОК</string>
 
     <!-- Welcome screen / main sections -->
 
     <!-- navigation view items -->
-    <string name="nav_item_modules">Модули</string>
     <string name="nav_item_logs">Детальные логи</string>
     <string name="nav_item_logs_err">Логи модулей</string>
 
     <!-- Installer tab -->
-    <string name="install_warning_title">Осторожно!</string>
     <string name="dont_show_again">Больше не показывать</string>
 
     <!-- File operations -->
@@ -173,5 +169,4 @@
     <string name="module_release_load_more">Показать старые версии</string>
     <string name="module_release_no_more">Больше нет выпуска</string>
     <string name="theme_color">Цвет темы</string>
-    <string name="logs_clear_failed">Не удалось очистить логи:</string>
 </resources>

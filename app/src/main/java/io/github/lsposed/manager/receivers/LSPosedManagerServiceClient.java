@@ -130,4 +130,14 @@ public class LSPosedManagerServiceClient {
         ensureService();
         return service.getPackageInfo(packageName, flags, uid);
     }
+
+    public static void forceStopPackage(String packageName, int userId) throws RemoteException, NullPointerException {
+        ensureService();
+        service.forceStopPackage(packageName, userId);
+    }
+
+    public static void reboot(boolean confirm, String reason, boolean wait) throws RemoteException, NullPointerException {
+        ensureService();
+        service.reboot(confirm, reason, wait);
+    }
 }

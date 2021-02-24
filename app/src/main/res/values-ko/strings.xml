@@ -31,17 +31,14 @@
     <!-- General/various strings -->
     <string name="menuSend">전송</string>
     <string name="menuSaveToSd">저장</string>
-    <string name="ok">OK</string>
 
     <!-- Welcome screen / main sections -->
 
     <!-- navigation view items -->
-    <string name="nav_item_modules">모듈</string>
     <string name="nav_item_logs">상세 로그</string>
     <string name="nav_item_logs_err">모듈 로그</string>
 
     <!-- Installer tab -->
-    <string name="install_warning_title">조심하세요!</string>
     <string name="dont_show_again">다시 표시 안 함</string>
 
     <!-- File operations -->
@@ -73,7 +70,6 @@
     <string name="logs_save_failed">저장하지 못했습니다.:</string>
     <string name="menuClearLog">지금 로그 지우기</string>
     <string name="logs_cleared">로그를 성공적으로 지웠습니다.</string>
-    <string name="logs_clear_failed">로그를 지울 수 없습니다.:</string>
     <string name="log_is_empty">로그가 비어 있습니다.</string>
 
     <!-- About tab -->

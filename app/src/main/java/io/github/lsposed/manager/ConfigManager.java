@@ -229,4 +229,24 @@ public class ConfigManager {
             throw new PackageManager.NameNotFoundException();
         }
     }
+
+    public static boolean forceStopPackage(String packageName, int userId) {
+        try {
+            LSPosedManagerServiceClient.forceStopPackage(packageName, userId);
+            return true;
+        } catch (RemoteException | NullPointerException e) {
+            Log.e(App.TAG, Log.getStackTraceString(e));
+            return false;
+        }
+    }
+
+    public static boolean reboot(boolean confirm, String reason, boolean wait) {
+        try {
+            LSPosedManagerServiceClient.reboot(confirm, reason, wait);
+            return true;
+        } catch (RemoteException | NullPointerException e) {
+            Log.e(App.TAG, Log.getStackTraceString(e));
+            return false;
+        }
+    }
 }

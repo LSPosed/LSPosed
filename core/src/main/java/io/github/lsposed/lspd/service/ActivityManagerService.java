@@ -65,4 +65,10 @@ public class ActivityManagerService {
         if (am == null) return -1;
         return am.broadcastIntentWithFeature(caller, callingFeatureId, intent, resolvedType, resultTo, resultCode, resultData, map, requiredPermissions, appOp, options, serialized, sticky, userId);
     }
+
+    public static void forceStopPackage(String packageName, int userId) throws RemoteException {
+        IActivityManager am = getActivityManager();
+        if (am == null) return;
+        am.forceStopPackage(packageName, userId);
+    }
 }
