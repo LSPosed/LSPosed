@@ -85,14 +85,20 @@ public class PackageService {
         List<PackageInfo> res = new ArrayList<>();
         IPackageManager pm = getPackageManager();
         if (pm == null) return ParceledListSlice.emptyList();
-        if (filterNoProcess) flags = PackageManager.MATCH_DISABLED_COMPONENTS |
-                PackageManager.MATCH_UNINSTALLED_PACKAGES | PackageManager.GET_ACTIVITIES | PackageManager.MATCH_DIRECT_BOOT_AWARE | PackageManager.MATCH_DIRECT_BOOT_UNAWARE |
-                PackageManager.GET_SERVICES | PackageManager.GET_RECEIVERS | PackageManager.GET_PROVIDERS | flags;
         for (int userId : UserService.getUsers()) {
             res.addAll(pm.getInstalledPackages(flags, userId).getList());
         }
-        if (filterNoProcess)
-            res = res.stream().filter(pkgInfo -> !fetchProcesses(pkgInfo).isEmpty()).collect(Collectors.toList());
+        if (filterNoProcess) {
+            res = res.stream().filter(packageInfo -> {
+                int baseFlag = PackageManager.MATCH_DISABLED_COMPONENTS | PackageManager.MATCH_DIRECT_BOOT_AWARE | PackageManager.MATCH_DIRECT_BOOT_UNAWARE;
+                try {
+                    PackageInfo pkgInfo = getPackageInfoWithComponents(packageInfo.packageName, baseFlag, packageInfo.applicationInfo.uid / 100000);
+                    return !fetchProcesses(pkgInfo).isEmpty();
+                } catch (RemoteException e) {
+                    return true;
+                }
+            }).collect(Collectors.toList());
+        }
         return new ParceledListSlice<>(res);
     }
 
@@ -122,11 +128,40 @@ public class PackageService {
     public static Pair<Set<String>, Integer> fetchProcessesWithUid(Application app) throws RemoteException {
         IPackageManager pm = getPackageManager();
         if (pm == null) return new Pair<>(Collections.emptySet(), -1);
-        PackageInfo pkgInfo = pm.getPackageInfo(app.packageName, PackageManager.MATCH_DISABLED_COMPONENTS |
-                PackageManager.MATCH_UNINSTALLED_PACKAGES | PackageManager.GET_ACTIVITIES | PackageManager.MATCH_DIRECT_BOOT_AWARE | PackageManager.MATCH_DIRECT_BOOT_UNAWARE |
-                PackageManager.GET_SERVICES | PackageManager.GET_RECEIVERS | PackageManager.GET_PROVIDERS, app.userId);
+        int baseFlag = PackageManager.MATCH_DISABLED_COMPONENTS | PackageManager.MATCH_DIRECT_BOOT_AWARE | PackageManager.MATCH_DIRECT_BOOT_UNAWARE;
+        PackageInfo pkgInfo = getPackageInfoWithComponents(app.packageName, baseFlag, app.userId);
         if (pkgInfo == null || pkgInfo.applicationInfo == null)
             return new Pair<>(Collections.emptySet(), -1);
         return new Pair<>(fetchProcesses(pkgInfo), pkgInfo.applicationInfo.uid);
+    }
+
+    private static PackageInfo getPackageInfoWithComponents(String packageName, int flags, int userId) throws RemoteException {
+        PackageInfo pkgInfo;
+        try {
+            pkgInfo = pm.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES | PackageManager.GET_SERVICES | PackageManager.GET_RECEIVERS | PackageManager.GET_PROVIDERS, userId);
+        } catch (Exception e) {
+            pkgInfo = pm.getPackageInfo(packageName, flags, userId);
+            try {
+                pkgInfo.activities = pm.getPackageInfo(packageName, flags | PackageManager.GET_ACTIVITIES, userId).activities;
+            } catch (Exception ignored) {
+
+            }
+            try {
+                pkgInfo.services = pm.getPackageInfo(packageName, flags | PackageManager.GET_SERVICES, userId).services;
+            } catch (Exception ignored) {
+
+            }
+            try {
+                pkgInfo.receivers = pm.getPackageInfo(packageName, flags | PackageManager.GET_RECEIVERS, userId).receivers;
+            } catch (Exception ignored) {
+
+            }
+            try {
+                pkgInfo.providers = pm.getPackageInfo(packageName, flags | PackageManager.GET_PROVIDERS, userId).providers;
+            } catch (Exception ignored) {
+
+            }
+        }
+        return pkgInfo;
     }
 }
