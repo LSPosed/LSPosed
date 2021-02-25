@@ -25,7 +25,10 @@ jobs:
         with:
           java-version: 1.8
       - name: Build with Gradle
-        run:  bash ./gradlew :app:assembleRelease
+        id: buildRelease
+        run: |
+          bash ./gradlew :app:assembleRelease
+          echo "::set-output name=releaseName::`ls app/build/outputs/apk/release/LSPosed*-v*-release.apk | awk -F '(/|.apk)' '{print $6}'`"
       - name: Sign Manager Release
         if: ${{ github.event_name != 'pull_request' && success() && github.ref == 'refs/heads/master' }}
         id: sign
@@ -42,13 +45,13 @@ jobs:
         if: ${{ github.event_name != 'pull_request' && success() && github.ref == 'refs/heads/master' }}
         uses: actions/upload-artifact@v2
         with:
-          name: manager
+          name: '${{ steps.buildRelease.outputs.releaseName }}-signed'
           path: ${{ steps.sign.outputs.signedReleaseFile }}
       - name: Upload unsigned apk
         if: ${{ github.event_name == 'pull_request' || failure() }}
         uses: actions/upload-artifact@v2
         with:
-          name: manager-unsigned
+          name: '${{ steps.buildRelease.outputs.releaseName }}-unsigned'
           path: "app/build/outputs/apk/release/*.apk"
       - name: Upload mappings
         uses: actions/upload-artifact@v2

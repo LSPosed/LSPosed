@@ -29,18 +29,22 @@ jobs:
       run:  bash ./gradlew zipRelease zipDebug
     - name: Prepare artifact
       if: success()
-      run: unzip core/release/LSPosed-v*-release.zip -d LSPosed-release;
-           unzip core/release/LSPosed-v*-debug.zip -d LSPosed-debug;
+      id: prepareArtifact
+      run: |
+        releaseName=`ls core/release/LSPosed-v*-release.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=releaseName::$releaseName"
+        debugName=`ls core/release/LSPosed-v*-debug.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=debugName::$debugName"
+        unzip core/release/LSPosed-v*-release.zip -d LSPosed-release
+        unzip core/release/LSPosed-v*-debug.zip -d LSPosed-debug
     - name: Upload release
       uses: actions/upload-artifact@v2
       with:
-        name: LSPosed-release
+        name: ${{ steps.prepareArtifact.outputs.releaseName }}
         path: './LSPosed-release/*'
     - name: Upload debug
 #      if: ${{ github.event_name == 'pull_request' && success() }}
       uses: actions/upload-artifact@v2
       with:
-        name: LSPosed-debug
+        name: ${{ steps.prepareArtifact.outputs.debugName }}
         path: './LSPosed-debug/*'
     - name: Post to channel
       if: ${{ github.event_name != 'pull_request' && success() && github.ref == 'refs/heads/master' }}
