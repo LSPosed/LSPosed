@@ -44,6 +44,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
@@ -544,8 +545,13 @@ public class ConfigManager {
 
     public ParcelFileDescriptor getModulesLog(int mode) {
         try {
+            if (modulesLogPath.length() > 4000 * 1024) {
+                try (FileChannel outChan = new FileOutputStream(modulesLogPath, true).getChannel()) {
+                    outChan.truncate(1000 * 1024);
+                }
+            }
             return ParcelFileDescriptor.open(modulesLogPath, mode | ParcelFileDescriptor.MODE_CREATE);
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             Log.e(TAG, Log.getStackTraceString(e));
             return null;
         }
