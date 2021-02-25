@@ -150,7 +150,6 @@ public class ConfigManager {
     // for system server, cache is not yet ready, we need to query database for it
     public boolean shouldSkipSystemServer() {
         try (Cursor cursor = db.query("scope INNER JOIN modules ON scope.mid = modules.mid", new String[]{"modules.mid"}, "app_pkg_name=? AND enabled=1", new String[]{"android"}, null, null, null)) {
-            Log.e(TAG, "ZHEER2");
             return cursor == null || !cursor.moveToNext();
         }
     }
