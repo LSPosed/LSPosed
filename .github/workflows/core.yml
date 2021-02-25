@@ -20,17 +20,12 @@ jobs:
     - uses: actions/checkout@v2
       with:
         submodules: 'recursive'
+        fetch-depth: 0
     - name: set up JDK 1.8
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-    - name: Get version code
-      run: echo APPVEYOR_BUILD_NUMBER=$(expr $GITHUB_RUN_NUMBER + 4999) >> $GITHUB_ENV
     - name: Build with Gradle
-      env:
-        KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
-        ALIAS_NAME: ${{ secrets.ALIAS_NAME }}
-        ALIAS_PASS: ${{ secrets.ALIAS_PASS }}
       run:  bash ./gradlew zipRelease zipDebug
     - name: Prepare artifact
       if: success()

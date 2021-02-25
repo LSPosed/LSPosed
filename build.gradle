@@ -1,44 +1,25 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+import org.eclipse.jgit.internal.storage.file.FileRepository
+import org.eclipse.jgit.api.Git
 
 buildscript {
     repositories {
         google()
         jcenter()
-        
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.1.2'
-        
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+        classpath 'org.eclipse.jgit:org.eclipse.jgit:5.10.0.202012080955-r'
     }
 }
 
+def repo = new FileRepository(rootProject.file(".git"))
+def refId = repo.refDatabase.exactRef("refs/remotes/origin/master").objectId
+def commitCount = new Git(repo).log().add(refId).call().size()
+
 allprojects {
-    def buildVersionName = versionName
-    // Values set here will be overriden by AppVeyor, feel free to modify during development.
-    def buildVersionCode = 233
-
-    if (System.env.APPVEYOR_BUILD_VERSION != null) {
-        buildVersionName = "v${System.getenv('appveyor_build_version')}"
-    }
-
-    if (System.env.APPVEYOR_BUILD_NUMBER != null) {
-        // Split is necessary because PRs set the build number to "1234-something".
-        def parts = System.env.APPVEYOR_BUILD_NUMBER.split('-')
-        buildVersionCode = Integer.valueOf(parts[0])
-    }
     ext {
-        versionCode = buildVersionCode
-        versionName = buildVersionName
-        templateRootPath = project(":core").projectDir.path + "/template_override/"
-        templateSystemPath = templateRootPath + "/system/"
-        templateSystemx86Path = templateRootPath + "/system_x86/"
-        templateFrameworkPath = templateRootPath + "/system/framework/"
-        templateLibPath = templateRootPath + "/system/lib/"
-        templateLib64Path = templateRootPath + "/system/lib64/"
-        templateEtcPath = templateRootPath + "/system/etc/"
-        hiddenApiStubJarFilePath = project(":hiddenapi-stubs").buildDir.absolutePath + "/libs/framework-stub.jar"
+        versionCode = commitCount + 4200
+        versionName = versionName
         zipPathMagiskReleasePath = project(":core").projectDir.path + "/build/tmp/release/magisk/"
     }
     repositories {
