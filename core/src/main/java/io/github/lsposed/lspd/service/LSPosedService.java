@@ -20,7 +20,7 @@
 package io.github.lsposed.lspd.service;
 
 import android.content.Intent;
-import android.content.pm.PackageInfo;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Binder;
@@ -74,20 +74,26 @@ public class LSPosedService extends ILSPosedService.Stub {
         int userId = intent.getIntExtra(Intent.EXTRA_USER, -1);
         boolean replacing = intent.getBooleanExtra(Intent.EXTRA_REPLACING, false);
         if (intent.getAction().equals(Intent.ACTION_PACKAGE_REMOVED) && uid > 0 && !replacing) {
-            if (userId == 0) {
+            if (userId == 0 || userId == -1) {
                 ConfigManager.getInstance().removeModule(packageName);
             }
             Application app = new Application();
             app.packageName = packageName;
             app.userId = userId;
             ConfigManager.getInstance().removeApp(app);
+            return;
         }
-        PackageInfo pkgInfo = PackageService.getPackageInfo(packageName, PackageManager.GET_META_DATA, 0);
-        boolean isXposedModule = userId == 0 && pkgInfo != null && pkgInfo.applicationInfo != null &&
-                pkgInfo.applicationInfo.enabled && pkgInfo.applicationInfo.metaData != null &&
-                pkgInfo.applicationInfo.metaData.containsKey("xposedmodule");
+
+        ApplicationInfo applicationInfo = PackageService.getApplicationInfo(packageName, PackageManager.GET_META_DATA, 0);
+        boolean isXposedModule = (userId == 0 || userId == -1) &&
+                applicationInfo != null &&
+                applicationInfo.enabled &&
+                applicationInfo.metaData != null &&
+                applicationInfo.metaData.containsKey("xposedmodule");
+
         if (isXposedModule) {
-            ConfigManager.getInstance().updateModuleApkPath(packageName, pkgInfo.applicationInfo.sourceDir);
+            ConfigManager.getInstance().updateModuleApkPath(packageName, applicationInfo.sourceDir);
+            Log.d(TAG, "Updated module apk path: " + packageName);
 
             boolean enabled = Arrays.asList(ConfigManager.getInstance().enabledModules()).contains(packageName);
             Intent broadcastIntent = new Intent(enabled ? "io.github.lsposed.action.MODULE_UPDATED" : "io.github.lsposed.action.MODULE_NOT_ACTIVATAED");
@@ -103,7 +109,7 @@ public class LSPosedService extends ILSPosedService.Stub {
                         null, -1, null, true, false,
                         0);
             } catch (Throwable t) {
-                t.printStackTrace();
+                Log.e(TAG, "Broadcast to manager failed: ", t);
             }
         }
         if (!intent.getAction().equals(Intent.ACTION_PACKAGE_REMOVED) && uid > 0 && ConfigManager.getInstance().isManager(packageName)) {

@@ -19,6 +19,7 @@
 
 package io.github.lsposed.lspd.service;
 
+import android.content.pm.ApplicationInfo;
 import android.content.pm.ComponentInfo;
 import android.content.pm.IPackageManager;
 import android.content.pm.PackageInfo;
@@ -69,10 +70,16 @@ public class PackageService {
         return pm;
     }
 
-    public static PackageInfo getPackageInfo(String packageName, int flags, int uid) throws RemoteException {
+    public static PackageInfo getPackageInfo(String packageName, int flags, int userId) throws RemoteException {
         IPackageManager pm = getPackageManager();
         if (pm == null) return null;
-        return pm.getPackageInfo(packageName, flags, uid);
+        return pm.getPackageInfo(packageName, flags, userId);
+    }
+
+    public static ApplicationInfo getApplicationInfo(String packageName, int flags, int userId) throws RemoteException {
+        IPackageManager pm = getPackageManager();
+        if (pm == null) return null;
+        return pm.getApplicationInfo(packageName, flags, userId);
     }
 
     public static String[] getPackagesForUid(int uid) throws RemoteException {
