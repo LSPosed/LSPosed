@@ -24,7 +24,6 @@ import android.content.pm.PackageInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
-import android.os.FileObserver;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.system.ErrnoException;
@@ -96,15 +95,6 @@ public class ConfigManager {
     private static final File modulesLogPath = new File(logPath, "modules.log");
     private static final File verboseLogPath = new File(logPath, "all.log");
 
-    final FileObserver configObserver = new FileObserver(configPath.getAbsolutePath(), FileObserver.MODIFY | FileObserver.DELETE | FileObserver.CREATE | FileObserver.MOVED_TO) {
-        @Override
-        public void onEvent(int event, @Nullable String path) {
-            updateConfig();
-            cacheScopes();
-            cacheModules();
-        }
-    };
-
     static class ProcessScope {
         String processName;
         int uid;
@@ -146,6 +136,11 @@ public class ConfigManager {
     private final ConcurrentHashMap<ProcessScope, Set<String>> cachedScope = new ConcurrentHashMap<>();
 
     private final ConcurrentHashMap<Integer, String> cachedModule = new ConcurrentHashMap<>();
+
+    private void updateCaches() {
+        cacheScopes();
+        cacheModules();
+    }
 
     // for system server, cache is not yet ready, we need to query database for it
     public boolean shouldSkipSystemServer() {
@@ -248,7 +243,6 @@ public class ConfigManager {
         createTables();
         updateConfig();
         isPermissive = readInt(selinuxPath, 1) == 0;
-        configObserver.startWatching();
         cacheScopes();
         cacheModules();
     }
@@ -293,7 +287,7 @@ public class ConfigManager {
                 }
             }
             for (String obsoleteModule : obsoleteModules) {
-                removeModule(obsoleteModule);
+                removeModuleWithoutCache(obsoleteModule);
             }
         }
         Log.d(TAG, "cached modules");
@@ -337,7 +331,7 @@ public class ConfigManager {
             }
             for (Application obsoletePackage : obsoletePackages) {
                 Log.d(TAG, "removing obsolete package: " + obsoletePackage.packageName + "/" + obsoletePackage.userId);
-                removeApp(obsoletePackage);
+                removeAppWithoutCache(obsoletePackage);
             }
         }
         Log.d(TAG, "cached Scope");
@@ -393,6 +387,7 @@ public class ConfigManager {
         if (count < 0) {
             count = db.updateWithOnConflict("modules", values, "module_pkg_name=?", new String[]{packageName}, SQLiteDatabase.CONFLICT_IGNORE);
         }
+        updateCaches();
         return count >= 0;
     }
 
@@ -433,6 +428,7 @@ public class ConfigManager {
             db.setTransactionSuccessful();
             db.endTransaction();
         }
+        updateCaches();
         return true;
     }
 
@@ -452,6 +448,12 @@ public class ConfigManager {
     }
 
     public boolean removeModule(String packageName) {
+        boolean res = removeModuleWithoutCache(packageName);
+        updateCaches();
+        return res;
+    }
+
+    private boolean removeModuleWithoutCache(String packageName) {
         int mid = getModuleId(packageName);
         if (mid == -1) return false;
         try {
@@ -477,6 +479,7 @@ public class ConfigManager {
             db.setTransactionSuccessful();
             db.endTransaction();
         }
+        updateCaches();
         return true;
     }
 
@@ -493,10 +496,17 @@ public class ConfigManager {
             db.setTransactionSuccessful();
             db.endTransaction();
         }
+        updateCaches();
         return true;
     }
 
     public boolean removeApp(Application app) {
+        boolean res = removeAppWithoutCache(app);
+        updateCaches();
+        return res;
+    }
+
+    private boolean removeAppWithoutCache(Application app) {
         int count = db.delete("scope", "app_pkg_name = ? AND user_id=?", new String[]{app.packageName, String.valueOf(app.userId)});
         return count >= 1;
     }
