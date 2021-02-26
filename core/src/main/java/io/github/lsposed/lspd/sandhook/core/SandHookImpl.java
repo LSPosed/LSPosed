@@ -22,23 +22,14 @@ package io.github.lsposed.lspd.sandhook.core;
 
 import android.os.Build;
 
-import io.github.lsposed.lspd.core.BaseImpl;
-import io.github.lsposed.lspd.core.Impl;
-import io.github.lsposed.lspd.core.Main;
-import io.github.lsposed.lspd.nativebridge.SandHook;
-import io.github.lsposed.lspd.nativebridge.Yahfa;
-
 import com.swift.sandhook.ClassNeverCall;
 import com.swift.sandhook.xposedcompat.methodgen.SandHookXposedBridge;
 
-public class SandHookImpl extends BaseImpl {
+import io.github.lsposed.lspd.core.BaseImpl;
+import io.github.lsposed.lspd.nativebridge.SandHook;
+import io.github.lsposed.lspd.nativebridge.Yahfa;
 
-    static {
-        final Impl lspdImpl = new SandHookImpl();
-        if (Main.setImpl(lspdImpl)) {
-            lspdImpl.init();
-        }
-    }
+public class SandHookImpl extends BaseImpl {
 
     @Override
     protected io.github.lsposed.lspd.proxy.Router createRouter() {

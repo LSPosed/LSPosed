@@ -21,22 +21,20 @@
 package io.github.lsposed.lspd.core;
 
 import android.annotation.SuppressLint;
-import android.os.Binder;
-import android.os.IBinder;
 import android.ddm.DdmHandleAppName;
-
-import androidx.annotation.Keep;
-
-import io.github.lsposed.lspd.config.LSPApplicationServiceClient;
-import io.github.lsposed.lspd.service.ServiceManager;
-import io.github.lsposed.lspd.util.Utils;
+import android.os.IBinder;
 
 import java.util.concurrent.atomic.AtomicReference;
+
+import io.github.lsposed.lspd.config.LSPApplicationServiceClient;
+import io.github.lsposed.lspd.sandhook.core.SandHookImpl;
+import io.github.lsposed.lspd.service.ServiceManager;
+import io.github.lsposed.lspd.util.Utils;
+import io.github.lsposed.lspd.yahfa.core.YahfaImpl;
 
 import static io.github.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
 
 @SuppressLint("DefaultLocale")
-@Keep
 public class Main {
     private static final AtomicReference<Impl> lspdImplRef = new AtomicReference<>(null);
 
@@ -61,32 +59,28 @@ public class Main {
         lspd.getNormalProxy().forkSystemServerPost();
     }
 
-    public static synchronized boolean setImpl(Impl lspd) {
-        return lspdImplRef.compareAndSet(null, lspd);
-    }
-
     public static synchronized Impl getImpl(int variant) {
         Impl lspd = lspdImplRef.get();
         if (lspd != null) {
             return lspd;
         }
         Utils.logD("Loading variant " + variant);
-        try {
-            switch (variant) {
-                case Impl.YAHFA:
-                    Class.forName("io.github.lsposed.lspd.yahfa.core.YahfaImpl");
-                    break;
-                case Impl.SANDHOOK:
-                    Class.forName("io.github.lsposed.lspd.sandhook.core.SandHookImpl");
-                    break;
-                default:
-                    Utils.logE("Unsupported variant " + variant);
+        Impl impl = null;
+        switch (variant) {
+            case Impl.YAHFA:
+                impl = new YahfaImpl();
+                break;
+            case Impl.SANDHOOK:
+                impl = new SandHookImpl();
+                break;
+            default:
+                Utils.logE("Unsupported variant " + variant);
 
-            }
-        } catch (ClassNotFoundException e) {
-            Utils.logE("loadEdxpImpls: Class not found", e);
         }
-        return lspdImplRef.get();
+        if (impl != null && lspdImplRef.compareAndSet(null, impl)) {
+            impl.init();
+        }
+        return impl;
     }
 
     public static synchronized Impl getImpl() {

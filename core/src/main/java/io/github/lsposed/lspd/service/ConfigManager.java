@@ -31,7 +31,6 @@ import android.system.Os;
 import android.util.Log;
 import android.util.Pair;
 
-import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -630,7 +629,6 @@ public class ConfigManager {
     }
 
     // migrate setting
-    @Keep
     public static void main(String[] args) {
         if (!miscFile.exists()) {
             System.exit(1);
