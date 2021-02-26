@@ -21,11 +21,8 @@
 package io.github.lsposed.lspd.core;
 
 import android.annotation.SuppressLint;
-import android.os.Binder;
 import android.os.IBinder;
 import android.ddm.DdmHandleAppName;
-
-import androidx.annotation.Keep;
 
 import io.github.lsposed.lspd.config.LSPApplicationServiceClient;
 import io.github.lsposed.lspd.service.ServiceManager;
@@ -36,7 +33,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import static io.github.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
 
 @SuppressLint("DefaultLocale")
-@Keep
 public class Main {
     private static final AtomicReference<Impl> lspdImplRef = new AtomicReference<>(null);
 

@@ -21,16 +21,14 @@
 package io.github.lsposed.lspd.core;
 
 import androidx.annotation.IntDef;
-import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
-
-import io.github.lsposed.lspd.proxy.Router;
 
 import java.lang.annotation.Retention;
 
+import io.github.lsposed.lspd.proxy.Router;
+
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
-@Keep
 public interface Impl {
 
     int NONE = 0;

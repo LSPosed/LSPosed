@@ -25,13 +25,12 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.Parcel;
+import android.os.Process;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.util.ArrayMap;
 import android.util.Log;
-import android.os.Process;
 
-import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -272,8 +271,6 @@ public class BridgeService {
         return false;
     }
 
-    @SuppressWarnings({"unused", "RedundantSuppression"})
-    @Keep
     public static boolean execTransact(int code, long dataObj, long replyObj, int flags) {
         if (code != TRANSACTION_CODE) return false;
 
@@ -311,7 +308,6 @@ public class BridgeService {
         return res;
     }
 
-    @Keep
     public static IBinder getApplicationServiceForSystemServer(IBinder binder, IBinder heartBeat) {
         if (binder == null || heartBeat == null) return null;
         try {
