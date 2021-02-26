@@ -39,6 +39,9 @@ public:
         const char base[] = "No operation after %hu seconds.";
         return u16fmt(base, seconds);
     };
+    virtual const std::string deprecated() {
+        return "(Deprecated)";
+    };
 protected:
     std::string u16fmt(const char* base, std::uint16_t s){
         std::string out;
@@ -61,6 +64,9 @@ public:
         const char base[] = "在 %hu 秒内没有任何操作。";
         return u16fmt(base, seconds);
     }
+    virtual const std::string deprecated() override {
+        return "（已废弃）";
+    };
 };
 
 #endif //LSPOSED_LANGUAGES_H
