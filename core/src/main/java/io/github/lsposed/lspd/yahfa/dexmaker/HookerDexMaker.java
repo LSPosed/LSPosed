@@ -25,6 +25,7 @@ import android.os.Build;
 
 import io.github.lsposed.lspd.BuildConfig;
 import io.github.lsposed.lspd.core.yahfa.HookMain;
+import io.github.lsposed.lspd.nativebridge.Yahfa;
 import io.github.lsposed.lspd.util.ProxyClassLoader;
 
 import java.io.File;
@@ -70,10 +71,11 @@ public class HookerDexMaker {
             hookerTypeId.getMethod(TypeId.OBJECT, "handleHookedMethod", objArrayTypeId);
 
     private FieldId<?, LspHooker> mHookerFieldId;
+    private Class<?> mReturnType;
+    private Class<?>[] mActualParameterTypes;
 
     private TypeId<?> mHookerTypeId;
     private TypeId<?>[] mParameterTypeIds;
-    private Class<?>[] mActualParameterTypes;
     private TypeId<?> mReturnTypeId;
 
     private DexMaker mDexMaker;
@@ -112,15 +114,14 @@ public class HookerDexMaker {
 
     public void start(Member member, XposedBridge.AdditionalHookInfo hookInfo,
                       ClassLoader appClassLoader) throws Exception {
-        Class<?> returnType;
         boolean isStatic;
         if (member instanceof Method) {
             Method method = (Method) member;
             isStatic = Modifier.isStatic(method.getModifiers());
-            returnType = method.getReturnType();
-            if (returnType.equals(Void.class) || returnType.equals(void.class)
-                    || returnType.isPrimitive()) {
-                mReturnTypeId = TypeId.get(returnType);
+            mReturnType = method.getReturnType();
+            if (mReturnType.equals(Void.class) || mReturnType.equals(void.class)
+                    || mReturnType.isPrimitive()) {
+                mReturnTypeId = TypeId.get(mReturnType);
             } else {
                 // all others fallback to plain Object for convenience
                 mReturnTypeId = TypeId.OBJECT;
@@ -149,7 +150,11 @@ public class HookerDexMaker {
             mAppClassLoader = appClassLoader;
             mAppClassLoader = new ProxyClassLoader(mAppClassLoader, getClass().getClassLoader());
         }
+
+        long startTime = System.nanoTime();
         doMake(member.getDeclaringClass().getName());
+        long endTime = System.nanoTime();
+        DexLog.d("Hook time: " + (endTime - startTime) / 1e6 + "ms");
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -158,14 +163,16 @@ public class HookerDexMaker {
         Class<?> hookClass = null;
         // Generate a Hooker class.
         String className = CLASS_NAME_PREFIX;
-        if (canCache) {
-            mDexMaker = new DexMaker();
-            // className is also used as dex file name
-            // so it should be different from each other
+        hookClass = Yahfa.buildHooker(mAppClassLoader, mReturnType, mActualParameterTypes);
+        if (canCache && hookClass == null) {
             String suffix = DexMakerUtils.getSha1Hex(mMember.toString());
             className = className + suffix;
             String dexFileName = className + ".jar";
             File dexFile = new File(serviceClient.getCachePath(dexFileName));
+            DexLog.d("dex builder failed, generating " + dexFileName);
+            mDexMaker = new DexMaker();
+            // className is also used as dex file name
+            // so it should be different from each other
             if (dexFile.exists()) {
                 try {
                     // if file exists, reuse it and skip generating

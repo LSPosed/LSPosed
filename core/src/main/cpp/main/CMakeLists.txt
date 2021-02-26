@@ -29,4 +29,4 @@ add_library(riru_lspd SHARED ${SRC_LIST} ${SRC_JNI_LIST})
 
 find_package(riru REQUIRED CONFIG)
 find_library(log-lib log)
-target_link_libraries(riru_lspd yahfa riru::riru android dobby sandhook.lspd ${log-lib})
+target_link_libraries(riru_lspd yahfa riru::riru android dobby sandhook.lspd dex_builder ${log-lib})
