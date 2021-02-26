@@ -20,13 +20,11 @@
 
 package io.github.lsposed.lspd.core;
 
-import androidx.annotation.Keep;
-
-@Keep
 public interface Proxy {
 
     boolean init();
 
     void forkAndSpecializePost(String appDataDir, String niceName);
+
     void forkSystemServerPost();
 }

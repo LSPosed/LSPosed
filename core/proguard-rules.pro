@@ -20,7 +20,23 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--dontobfuscate
--dontoptimize
 -keep class de.robv.android.xposed.** {*;}
 -keep class android.** { *; }
+-keepclasseswithmembers class io.github.lsposed.lspd.core.Main {
+    public static void forkSystemServerPost(android.os.IBinder);
+    public static void forkAndSpecializePost(java.lang.String, java.lang.String, android.os.IBinder);
+    public static void main(java.lang.String[]);
+}
+-keepclasseswithmembers class io.github.lsposed.lspd.nativebridge.* {
+    native *;
+}
+-keepclasseswithmembers class io.github.lsposed.lspd.nativebridge.ClassLinker {
+    public static void onPostFixupStaticTrampolines(java.lang.Class);
+}
+-keepclasseswithmembers class io.github.lsposed.lspd.service.BridgeService {
+    public static boolean execTransact(int, long, long, int);
+    public static android.os.IBinder getApplicationServiceForSystemServer(android.os.IBinder, android.os.IBinder);
+}
+-keepclasseswithmembers class io.github.lsposed.lspd.service.ConfigManager {
+    public static void main(java.lang.String[]);
+}

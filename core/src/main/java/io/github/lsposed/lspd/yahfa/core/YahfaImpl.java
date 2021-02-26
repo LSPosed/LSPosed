@@ -23,21 +23,12 @@ package io.github.lsposed.lspd.yahfa.core;
 import android.os.Build;
 
 import io.github.lsposed.lspd.core.BaseImpl;
-import io.github.lsposed.lspd.core.Impl;
-import io.github.lsposed.lspd.core.Main;
 import io.github.lsposed.lspd.core.Proxy;
 import io.github.lsposed.lspd.nativebridge.Yahfa;
 import io.github.lsposed.lspd.proxy.NormalProxy;
 import io.github.lsposed.lspd.proxy.Router;
 
 public class YahfaImpl extends BaseImpl {
-
-    static {
-        final Impl lspdImpl = new YahfaImpl();
-        if (Main.setImpl(lspdImpl)) {
-            lspdImpl.init();
-        }
-    }
 
     @Variant
     @Override

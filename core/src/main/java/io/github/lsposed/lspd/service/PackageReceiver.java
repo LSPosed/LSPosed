@@ -30,10 +30,10 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.UserHandle;
 
-import io.github.lsposed.lspd.util.Utils;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+
+import io.github.lsposed.lspd.util.Utils;
 
 public class PackageReceiver {
     public static void register(BroadcastReceiver receiver) {

@@ -20,6 +20,7 @@
 
 package de.robv.android.xposed;
 
+import android.annotation.SuppressLint;
 import android.app.AndroidAppHelper;
 import android.content.pm.ApplicationInfo;
 import android.content.res.Resources;
@@ -34,16 +35,12 @@ import android.util.Log;
 
 import com.android.internal.os.ZygoteInit;
 
-import hidden.HiddenApiBridge;
-import io.github.lsposed.lspd.config.LSPdConfigGlobal;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,13 +48,15 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import dalvik.system.PathClassLoader;
-import io.github.lsposed.lspd.annotation.ApiSensitive;
-import io.github.lsposed.lspd.annotation.Level;
+import dalvik.system.DelegateLastClassLoader;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XC_InitZygote;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import de.robv.android.xposed.callbacks.XCallback;
+import hidden.HiddenApiBridge;
+import io.github.lsposed.lspd.annotation.ApiSensitive;
+import io.github.lsposed.lspd.annotation.Level;
+import io.github.lsposed.lspd.config.LSPdConfigGlobal;
 import io.github.lsposed.lspd.nativebridge.NativeAPI;
 
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
@@ -81,7 +80,6 @@ public final class XposedInit {
     public static boolean startsSystemServer = false;
     private static final String startClassName = ""; // ed: no support for tool process anymore
 
-    private static final String INSTANT_RUN_CLASS = "com.android.tools.fd.runtime.BootstrapApplication";
     public static volatile boolean disableResources = false;
     private static final String[] XRESOURCES_CONFLICTING_PACKAGES = {"com.sygic.aura"};
 
@@ -195,7 +193,7 @@ public final class XposedInit {
                                 new XResources.XTypedArray((Resources) param.args[0]);
                         int len = (int) param.args[1];
                         Method resizeMethod = XposedHelpers.findMethodBestMatch(
-                                TypedArray.class, "resize", new Class[]{int.class});
+                                TypedArray.class, "resize", int.class);
                         resizeMethod.setAccessible(true);
                         resizeMethod.invoke(newResult, len);
                         param.setResult(newResult);
@@ -259,12 +257,6 @@ public final class XposedInit {
             return false;
         }
         synchronized (moduleLoadLock) {
-            ClassLoader topClassLoader = XposedBridge.BOOTCLASSLOADER;
-            ClassLoader parent;
-            while ((parent = topClassLoader.getParent()) != null) {
-                topClassLoader = parent;
-            }
-
             // TODO: process name
             String[] moduleList = serviceClient.getModulesList();
             ArraySet<String> newLoadedApk = new ArraySet<>();
@@ -273,7 +265,7 @@ public final class XposedInit {
                     newLoadedApk.add(apk);
                 } else {
                     loadedModules.add(apk); // temporarily add it for XSharedPreference
-                    boolean loadSuccess = loadModule(apk, topClassLoader, callInitZygote);
+                    boolean loadSuccess = loadModule(apk, callInitZygote);
                     if (loadSuccess) {
                         newLoadedApk.add(apk);
                     }
@@ -406,7 +398,8 @@ public final class XposedInit {
      * Load a module from an APK by calling the init(String) method for all classes defined
      * in <code>assets/xposed_init</code>.
      */
-    private static boolean loadModule(String apk, ClassLoader topClassLoader, boolean callInitZygote) {
+    @SuppressLint("PrivateApi")
+    private static boolean loadModule(String apk, boolean callInitZygote) {
         Log.i(TAG, "Loading modules from " + apk);
 
         if (!new File(apk).exists()) {
@@ -420,18 +413,11 @@ public final class XposedInit {
             nativePath.append(apk).append("!/lib/").append(i).append(File.pathSeparator);
         }
         // Log.d(TAG, "Allowed native path" + nativePath.toString());
-        ClassLoader mcl = new PathClassLoader(apk, nativePath.toString(), topClassLoader);
+        ClassLoader initLoader = XposedInit.class.getClassLoader();
+        ClassLoader mcl = new DelegateLastClassLoader(apk, nativePath.toString(), initLoader);
 
         try {
-            if (mcl.loadClass(INSTANT_RUN_CLASS) != null) {
-                Log.e(TAG, "  Cannot load module, please disable \"Instant Run\" in Android Studio.");
-                return false;
-            }
-        } catch (ClassNotFoundException ignored) {
-        }
-
-        try {
-            if (mcl.loadClass(XposedBridge.class.getName()) != null) {
+            if (mcl.loadClass(XposedBridge.class.getName()).getClassLoader() != initLoader) {
                 Log.e(TAG, "  Cannot load module:");
                 Log.e(TAG, "  The Xposed API classes are compiled into the module's APK.");
                 Log.e(TAG, "  This may cause strange issues and must be fixed by the module developer.");
@@ -441,15 +427,6 @@ public final class XposedInit {
         } catch (ClassNotFoundException ignored) {
         }
 
-        try {
-            Field parentField = ClassLoader.class.getDeclaredField("parent");
-            parentField.setAccessible(true);
-            parentField.set(mcl, XposedInit.class.getClassLoader());
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            Log.e(TAG, "  Cannot load module:");
-            Log.e(TAG, "  Classloader cannot change parent.");
-            return false;
-        }
         boolean res = initModule(mcl, apk, callInitZygote);
         res = res && initNativeModule(mcl, apk);
         return res;

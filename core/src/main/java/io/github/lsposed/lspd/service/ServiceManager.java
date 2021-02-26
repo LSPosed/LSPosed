@@ -43,7 +43,7 @@ public class ServiceManager {
     }
 
     private static void putBinderForSystemServer() {
-        android.os.ServiceManager.addService("serial", (IBinder) mainService);
+        android.os.ServiceManager.addService("serial", mainService);
     }
 
     // call by ourselves
