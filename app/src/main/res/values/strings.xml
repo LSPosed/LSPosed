@@ -140,6 +140,8 @@
     <string name="settings_restoring">Restoring…</string>
     <string name="settings_restore_success">Restore finished!</string>
     <string name="settings_restore_failed">Failed to restore</string>
+    <string name="settings_variant_sandhook">SandHook (Deprecated)</string>
+    <string name="settings_sandhook_deprecated_warning">Warning: SandHook is deprecated and will be removed in the future. \nPlease consider migrating to YAHFA.</string>
     <string name="group_network">Network</string>
     <string name="dns_over_http">DNS over HTTPS</string>
     <string name="dns_over_http_summary">Workaround DNS poisoning in some nations</string>
