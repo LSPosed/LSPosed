@@ -78,7 +78,7 @@ namespace lspd {
             parameter_types.push_back(TypeDescriptor::FromDescriptor(descriptor));
         }
 
-        ClassBuilder cbuilder{dex_file.MakeClass("LSPHooker")};
+        ClassBuilder cbuilder{dex_file.MakeClass("LspHooker_")};
         cbuilder.set_source_file("LSP");
 
         auto hooker_type =
@@ -165,7 +165,7 @@ namespace lspd {
         if (!mid) {
             mid = JNI_GetMethodID(env, in_memory_classloader, "findClass", "(Ljava/lang/String;)Ljava/lang/Class;");
         }
-        jobject target = env->CallObjectMethod(my_cl, mid, env->NewStringUTF("LSPHooker"));
+        jobject target = env->CallObjectMethod(my_cl, mid, env->NewStringUTF("LspHooker_"));
 //        LOGD("Created %zd", image.size());
         if (target) {
             return (jclass) target;
