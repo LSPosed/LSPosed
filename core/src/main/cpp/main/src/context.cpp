@@ -133,7 +133,7 @@ namespace lspd {
     jclass
     Context::FindClassFromLoader(JNIEnv *env, jobject class_loader, std::string_view class_name) {
         if (class_loader == nullptr) return nullptr;
-        static jclass clz = JNI_FindClass(env, "dalvik/system/DexClassLoader");
+        static auto clz = (jclass)env->NewGlobalRef(env->FindClass( "dalvik/system/DexClassLoader"));
         static jmethodID mid = JNI_GetMethodID(env, clz, "loadClass",
                                         "(Ljava/lang/String;)Ljava/lang/Class;");
         jclass ret = nullptr;
