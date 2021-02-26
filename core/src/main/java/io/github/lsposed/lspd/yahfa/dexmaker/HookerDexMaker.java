@@ -30,6 +30,7 @@ import io.github.lsposed.lspd.util.ProxyClassLoader;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Executable;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -99,7 +100,8 @@ public class HookerDexMaker {
         return parameterTypeIds;
     }
 
-    private static Class<?>[] getParameterTypes(Class<?>[] parameterTypes, boolean isStatic) {
+    private static Class<?>[] getParameterTypes(Executable method, boolean isStatic) {
+        Class<?>[] parameterTypes = method.getParameterTypes();
         if (isStatic) {
             return parameterTypes;
         }
@@ -107,7 +109,7 @@ public class HookerDexMaker {
         int targetParameterSize = parameterSize + 1;
         Class<?>[] newParameterTypes = new Class<?>[targetParameterSize];
         int offset = 1;
-        newParameterTypes[0] = Object.class;
+        newParameterTypes[0] = method.getDeclaringClass();
         System.arraycopy(parameterTypes, 0, newParameterTypes, offset, parameterTypes.length);
         return newParameterTypes;
     }
@@ -127,13 +129,14 @@ public class HookerDexMaker {
                 mReturnTypeId = TypeId.OBJECT;
             }
             mParameterTypeIds = getParameterTypeIds(method.getParameterTypes(), isStatic);
-            mActualParameterTypes = getParameterTypes(method.getParameterTypes(), isStatic);
+            mActualParameterTypes = getParameterTypes(method, isStatic);
         } else if (member instanceof Constructor) {
             Constructor constructor = (Constructor) member;
             isStatic = false;
             mReturnTypeId = TypeId.VOID;
+            mReturnType = void.class;
             mParameterTypeIds = getParameterTypeIds(constructor.getParameterTypes(), isStatic);
-            mActualParameterTypes = getParameterTypes(constructor.getParameterTypes(), isStatic);
+            mActualParameterTypes = getParameterTypes(constructor, isStatic);
         } else if (member.getDeclaringClass().isInterface()) {
             throw new IllegalArgumentException("Cannot hook interfaces: " + member.toString());
         } else if (Modifier.isAbstract(member.getModifiers())) {
