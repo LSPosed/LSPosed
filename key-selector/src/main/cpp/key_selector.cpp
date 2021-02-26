@@ -267,6 +267,7 @@ int main() {
 #endif
 
     std::unordered_map<Variant, VariantDetail> variants;
+    std::string sandhook_deprecated = "SandHook " + l->deprecated();
     for (const auto i: AllVariants) {
         switch (i) {
             case Variant::YAHFA:
@@ -277,7 +278,7 @@ int main() {
                 break;
             case Variant::SandHook:
                 variants[i] = {
-                        .expression = "SandHook",
+                        .expression = sandhook_deprecated.c_str(),
                         .supported_arch = {ARM, ARM64}
                 };
                 break;

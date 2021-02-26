@@ -22,6 +22,7 @@ package io.github.lsposed.manager.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -222,7 +223,16 @@ public class SettingsActivity extends BaseActivity {
                 } else {
                     prefVariant.setEnabled(installed);
                     prefVariant.setValue(String.valueOf(ConfigManager.getVariant()));
-                    prefVariant.setOnPreferenceChangeListener((preference, newValue) -> ConfigManager.setVariant(Integer.parseInt((String) newValue)));
+                    prefVariant.setOnPreferenceChangeListener((preference, newValue) -> {
+                        if (newValue.equals("2")) {
+                            new AlertDialog.Builder(requireActivity())
+                                    .setCancelable(true)
+                                    .setMessage(R.string.settings_sandhook_deprecated_warning)
+                                    .setPositiveButton(android.R.string.ok, (di, i) -> {})
+                                    .show();
+                        }
+                        return ConfigManager.setVariant(Integer.parseInt((String) newValue));
+                    });
                 }
             }
 
