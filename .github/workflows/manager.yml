@@ -6,6 +6,7 @@ on:
     paths:
     - 'app/**'
     - '.github/workflows/manager.yml'
+    - 'gradle.properties'
   pull_request:
     paths:
     - 'app/**'
