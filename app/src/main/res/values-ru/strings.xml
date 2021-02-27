@@ -24,7 +24,6 @@
     <string name="Install">Установить</string>
     <string name="InstallDetail">Нажмите, чтобы установить LSPosed</string>
     <string name="Modules">Модули</string>
-    <string name="ModulesDetail">%d модулей включено</string>
     <string name="Logs">Логи</string>
     <string name="Settings">Настройки</string>
     <string name="About">О модификации</string>
@@ -91,7 +90,6 @@
 
     <string name="android_sdk" translatable="false">Android %2$s (%1$s, API %3$d)</string>
     <string name="android_sdk_preview" translatable="false">Android %1$s Preview</string>
-    <string name="not_logcat">Это логи LSPosed Framework и модулей, если вам нужен Android logcat, вы можете попробовать наш Magisk модуль Log Catcher</string>
 
     <!-- LSPd related -->
     <string name="compile_speed_msg">Оптимизация…</string>

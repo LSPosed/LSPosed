@@ -24,7 +24,6 @@
     <string name="Install">安裝</string>
     <string name="InstallDetail">點按安裝 LSPosed</string>
     <string name="Modules">模組</string>
-    <string name="ModulesDetail">%d 模組已啟用</string>
     <string name="Logs">日誌</string>
     <string name="Settings">設置</string>
     <string name="About">關於</string>
@@ -85,7 +84,6 @@
     <string name="scroll_top">滾動到頂部</string>
     <string name="loading">正在載入…</string>
     <string name="scroll_bottom">滾動到底部</string>
-    <string name="not_logcat">此處僅顯示 LSPosed 及模組相關日誌資訊\n如果您想抓取系統日誌, 可以嘗試我們的 Log Catcher Magisk 模組</string>
 
     <!-- LSPd related -->
     <string name="compile_speed_msg">優化中…</string>

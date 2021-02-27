@@ -126,12 +126,14 @@ public class LogsActivity extends BaseActivity {
         }
         if (!preferences.getBoolean("hide_logcat_warning", false)) {
             DialogInstallWarningBinding binding = DialogInstallWarningBinding.inflate(getLayoutInflater());
+            binding.getRoot().setOnClickListener(v -> binding.checkbox.toggle());
             new AlertDialog.Builder(this)
-                    .setMessage(R.string.not_logcat)
+                    .setMessage(R.string.not_logcat_2)
                     .setView(binding.getRoot())
                     .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                        if (binding.checkbox.isChecked())
+                        if (binding.checkbox.isChecked()) {
                             preferences.edit().putBoolean("hide_logcat_warning", true).apply();
+                        }
                     })
                     .setCancelable(false)
                     .show();
