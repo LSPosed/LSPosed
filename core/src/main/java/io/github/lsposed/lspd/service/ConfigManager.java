@@ -25,10 +25,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
+import android.os.SystemClock;
 import android.system.ErrnoException;
 import android.system.Os;
 import android.util.Log;
@@ -98,7 +100,7 @@ public class ConfigManager {
     private static final File modulesLogPath = new File(logPath, "modules.log");
     private static final File verboseLogPath = new File(logPath, "all.log");
 
-    private volatile Handler cacheHandler;
+    private final Handler cacheHandler;
 
     long lastModuleCacheTime = 0;
     long requestModuleCacheTime = 0;
@@ -150,7 +152,7 @@ public class ConfigManager {
 
     private void updateCaches(boolean sync) {
         synchronized (this) {
-            requestScopeCacheTime = requestModuleCacheTime = System.currentTimeMillis();
+            requestScopeCacheTime = requestModuleCacheTime = SystemClock.elapsedRealtime();
         }
         if (sync) {
             cacheModules();
@@ -259,20 +261,9 @@ public class ConfigManager {
     }
 
     private ConfigManager() {
-        new Thread() {
-            @Override
-            public synchronized void run() {
-                Looper.prepare();
-                cacheHandler = new Handler(Looper.myLooper()) {
-                    @Override
-                    public void handleMessage(@NonNull Message msg) {
-                    }
-                };
-                Looper.loop();
-            }
-        }.start();
-
-        while(cacheHandler != null) {}
+        HandlerThread cacheThread = new HandlerThread("cache");
+        cacheThread.start();
+        cacheHandler = new Handler(cacheThread.getLooper());
 
         createTables();
         updateConfig();
@@ -299,7 +290,7 @@ public class ConfigManager {
         // skip caching when pm is not yet available
         if (!packageStarted) return;
         if (lastModuleCacheTime >= requestModuleCacheTime) return;
-        else lastModuleCacheTime = System.currentTimeMillis();
+        else lastModuleCacheTime = SystemClock.elapsedRealtime();
         cachedModule.clear();
         try (Cursor cursor = db.query("modules", new String[]{"module_pkg_name"},
                 "enabled = 1", null, null, null, null)) {
@@ -336,7 +327,7 @@ public class ConfigManager {
         // skip caching when pm is not yet available
         if (!packageStarted) return;
         if (lastScopeCacheTime >= requestScopeCacheTime) return;
-        else lastScopeCacheTime = System.currentTimeMillis();
+        else lastScopeCacheTime = SystemClock.elapsedRealtime();
         cachedScope.clear();
         try (Cursor cursor = db.query("scope INNER JOIN modules ON scope.mid = modules.mid", new String[]{"app_pkg_name", "user_id", "apk_path"},
                 "enabled = 1", null, null, null, null)) {
