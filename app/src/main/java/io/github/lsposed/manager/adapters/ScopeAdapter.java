@@ -452,6 +452,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                 menu.removeItem(R.id.menu_app_info);
             }
             if (android) {
+                menu.findItem(R.id.menu_force_stop).setTitle(R.string.reboot);
                 menu.removeItem(R.id.menu_compile_speed);
                 menu.removeItem(R.id.menu_app_store);
             }
