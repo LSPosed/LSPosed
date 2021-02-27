@@ -27,6 +27,7 @@
     public static void forkAndSpecializePost(java.lang.String, java.lang.String, android.os.IBinder);
     public static void main(java.lang.String[]);
 }
+-keepnames class io.github.lsposed.lspd.hooker.HandleBindAppHooker
 -keepclasseswithmembers class io.github.lsposed.lspd.nativebridge.* {
     native *;
 }
