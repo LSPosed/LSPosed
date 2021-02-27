@@ -46,6 +46,11 @@ jobs:
       with:
         name: ${{ steps.prepareArtifact.outputs.debugName }}
         path: './LSPosed-debug/*'
+    - name: Upload mappings
+      uses: actions/upload-artifact@v2
+      with:
+        name: mappings
+        path: "core/build/outputs/mapping"
     - name: Post to channel
       if: ${{ github.event_name != 'pull_request' && success() && github.ref == 'refs/heads/master' }}
       env:
