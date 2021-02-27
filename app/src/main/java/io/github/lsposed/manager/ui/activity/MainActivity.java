@@ -27,7 +27,6 @@ import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.text.HtmlCompat;
 
 import com.bumptech.glide.Glide;
@@ -41,6 +40,7 @@ import io.github.lsposed.manager.databinding.ActivityMainBinding;
 import io.github.lsposed.manager.databinding.DialogAboutBinding;
 import io.github.lsposed.manager.ui.activity.base.BaseActivity;
 import io.github.lsposed.manager.ui.fragment.StatusDialogBuilder;
+import io.github.lsposed.manager.util.BlurBehindDialogBuilder;
 import io.github.lsposed.manager.util.GlideHelper;
 import io.github.lsposed.manager.util.ModuleUtil;
 import io.github.lsposed.manager.util.NavUtil;
@@ -80,7 +80,7 @@ public class MainActivity extends BaseActivity {
                     R.string.about_view_source_code,
                     "<b><a href=\"https://github.com/LSPosed/LSPosed\">GitHub</a></b>",
                     "<b><a href=\"https://t.me/LSPosed\">Telegram</a></b>"), HtmlCompat.FROM_HTML_MODE_LEGACY));
-            new AlertDialog.Builder(this)
+            new BlurBehindDialogBuilder(this)
                     .setView(binding.getRoot())
                     .show();
         });
