@@ -142,13 +142,12 @@ public final class XposedInit {
         final ThreadLocal<Object> latestResKey = new ThreadLocal<>();
         final String createResourceMethod;
 
+        classGTLR = android.app.ResourcesManager.class;
+        classResKey = android.content.res.ResourcesKey.class;
+
         if (Build.VERSION.SDK_INT < 30) {
-            classGTLR = android.app.ResourcesManager.class;
-            classResKey = android.content.res.ResourcesKey.class;
             createResourceMethod = "getOrCreateResources";
         } else {
-            classGTLR = android.app.ResourcesManager.class;
-            classResKey = android.content.res.ResourcesKey.class;
             createResourceMethod = "createResources";
         }
 

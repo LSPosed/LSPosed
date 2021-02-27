@@ -113,7 +113,7 @@ public final class XposedBridge {
 			ClassLoader myCL = XposedBridge.class.getClassLoader();
 			dummyClassLoader = ResourcesHook.buildDummyClassLoader(myCL.getParent(), resClass, taClass);
 			if (dummyClassLoader == null) {
-				XposedBridge.log("BU UI VE");
+				XposedBridge.log("Dexbuilder fails, fallback to dexmaker");
 				DexMaker dexMaker = new DexMaker();
 				dexMaker.declare(TypeId.get("Lxposed/dummy/XResourcesSuperClass;"),
 						"XResourcesSuperClass.java",
