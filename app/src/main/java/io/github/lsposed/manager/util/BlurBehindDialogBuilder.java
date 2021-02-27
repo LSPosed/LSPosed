@@ -20,6 +20,7 @@
 package io.github.lsposed.manager.util;
 
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.view.SurfaceControl;
@@ -31,8 +32,11 @@ import androidx.appcompat.app.AlertDialog;
 
 import java.lang.reflect.Method;
 
-@SuppressWarnings("JavaReflectionMemberAccess")
+@SuppressWarnings({"JavaReflectionMemberAccess", "ConstantConditions"})
+@SuppressLint("PrivateApi")
 public class BlurBehindDialogBuilder extends AlertDialog.Builder {
+    private static final boolean supportBlur = getSystemProperty("ro.surface_flinger.supports_background_blur", false) && getSystemProperty("persist.sys.sf.disable_blurs", false);
+
     public BlurBehindDialogBuilder(@NonNull Context context) {
         super(context);
     }
@@ -46,7 +50,7 @@ public class BlurBehindDialogBuilder extends AlertDialog.Builder {
     }
 
     private void setBackgroundBlurRadius(View view) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && supportBlur) {
             try {
                 Object viewRootImpl = view.getClass().getMethod("getViewRootImpl").invoke(view);
                 if (viewRootImpl == null) {
@@ -83,5 +87,17 @@ public class BlurBehindDialogBuilder extends AlertDialog.Builder {
                 t.printStackTrace();
             }
         }
+    }
+
+    public static boolean getSystemProperty(String key, boolean defaultValue) {
+        boolean value = defaultValue;
+        try {
+            Class<?> c = Class.forName("android.os.SystemProperties");
+            Method get = c.getMethod("getBoolean", String.class, boolean.class);
+            value = (boolean) get.invoke(c, key, defaultValue);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return value;
     }
 }
