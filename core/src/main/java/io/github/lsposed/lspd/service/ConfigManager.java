@@ -24,6 +24,9 @@ import android.content.pm.PackageInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.system.ErrnoException;
@@ -95,6 +98,14 @@ public class ConfigManager {
     private static final File modulesLogPath = new File(logPath, "modules.log");
     private static final File verboseLogPath = new File(logPath, "all.log");
 
+    private Handler cacheHandler;
+
+    long lastModuleCacheTime = 0;
+    long requestModuleCacheTime = 0;
+
+    long lastScopeCacheTime = 0;
+    long requestScopeCacheTime = 0;
+
     static class ProcessScope {
         String processName;
         int uid;
@@ -137,9 +148,17 @@ public class ConfigManager {
 
     private final ConcurrentHashMap<Integer, String> cachedModule = new ConcurrentHashMap<>();
 
-    private void updateCaches() {
-        cacheScopes();
-        cacheModules();
+    private void updateCaches(boolean sync) {
+        synchronized (this) {
+            requestScopeCacheTime = requestModuleCacheTime = System.currentTimeMillis();
+        }
+        if (sync) {
+            cacheModules();
+            cacheScopes();
+        } else {
+            cacheHandler.post(this::cacheModules);
+            cacheHandler.post(this::cacheScopes);
+        }
     }
 
     // for system server, cache is not yet ready, we need to query database for it
@@ -231,8 +250,8 @@ public class ConfigManager {
             if (PackageService.getPackageManager() != null) {
                 Log.d(TAG, "pm is ready, updating cache");
                 instance.packageStarted = true;
-                instance.cacheScopes();
-                instance.cacheModules();
+                // must ensure cache is valid for later usage
+                instance.updateCaches(true);
                 instance.updateManager();
             }
         }
@@ -240,11 +259,24 @@ public class ConfigManager {
     }
 
     private ConfigManager() {
+        new Thread() {
+            @Override
+            public synchronized void run() {
+                Looper.prepare();
+                cacheHandler = new Handler(Looper.myLooper()) {
+                    @Override
+                    public void handleMessage(@NonNull Message msg) {
+                    }
+                };
+                Looper.loop();
+            }
+        }.start();
+
         createTables();
         updateConfig();
         isPermissive = readInt(selinuxPath, 1) == 0;
-        cacheScopes();
-        cacheModules();
+        // must ensure cache is valid for later usage
+        updateCaches(true);
     }
 
     private void createTables() {
@@ -264,6 +296,8 @@ public class ConfigManager {
     private synchronized void cacheModules() {
         // skip caching when pm is not yet available
         if (!packageStarted) return;
+        if (lastModuleCacheTime >= requestModuleCacheTime) return;
+        else lastModuleCacheTime = System.currentTimeMillis();
         cachedModule.clear();
         try (Cursor cursor = db.query("modules", new String[]{"module_pkg_name"},
                 "enabled = 1", null, null, null, null)) {
@@ -299,6 +333,8 @@ public class ConfigManager {
     private synchronized void cacheScopes() {
         // skip caching when pm is not yet available
         if (!packageStarted) return;
+        if (lastScopeCacheTime >= requestScopeCacheTime) return;
+        else lastScopeCacheTime = System.currentTimeMillis();
         cachedScope.clear();
         try (Cursor cursor = db.query("scope INNER JOIN modules ON scope.mid = modules.mid", new String[]{"app_pkg_name", "user_id", "apk_path"},
                 "enabled = 1", null, null, null, null)) {
@@ -387,7 +423,8 @@ public class ConfigManager {
         if (count < 0) {
             count = db.updateWithOnConflict("modules", values, "module_pkg_name=?", new String[]{packageName}, SQLiteDatabase.CONFLICT_IGNORE);
         }
-        updateCaches();
+        // Called by oneway binder
+        updateCaches(true);
         return count >= 0;
     }
 
@@ -428,7 +465,8 @@ public class ConfigManager {
             db.setTransactionSuccessful();
             db.endTransaction();
         }
-        updateCaches();
+        // Called by manager, should be async
+        updateCaches(false);
         return true;
     }
 
@@ -449,7 +487,8 @@ public class ConfigManager {
 
     public boolean removeModule(String packageName) {
         boolean res = removeModuleWithoutCache(packageName);
-        updateCaches();
+        // called by oneway binder
+        updateCaches(true);
         return res;
     }
 
@@ -479,7 +518,8 @@ public class ConfigManager {
             db.setTransactionSuccessful();
             db.endTransaction();
         }
-        updateCaches();
+        // called by manager, should be async
+        updateCaches(false);
         return true;
     }
 
@@ -496,13 +536,15 @@ public class ConfigManager {
             db.setTransactionSuccessful();
             db.endTransaction();
         }
-        updateCaches();
+        // Called by manager, should be async
+        updateCaches(false);
         return true;
     }
 
     public boolean removeApp(Application app) {
         boolean res = removeAppWithoutCache(app);
-        updateCaches();
+        // Called by oneway binder
+        updateCaches(true);
         return res;
     }
 
