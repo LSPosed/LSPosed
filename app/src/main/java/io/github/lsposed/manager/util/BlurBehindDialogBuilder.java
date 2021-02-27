@@ -19,14 +19,19 @@
 
 package io.github.lsposed.manager.util;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.os.Build;
 import android.view.SurfaceControl;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
+import java.lang.reflect.Method;
+
+@SuppressWarnings("JavaReflectionMemberAccess")
 public class BlurBehindDialogBuilder extends AlertDialog.Builder {
     public BlurBehindDialogBuilder(@NonNull Context context) {
         super(context);
@@ -49,9 +54,31 @@ public class BlurBehindDialogBuilder extends AlertDialog.Builder {
                 }
                 SurfaceControl surfaceControl = (SurfaceControl) viewRootImpl.getClass().getMethod("getSurfaceControl").invoke(viewRootImpl);
 
-                SurfaceControl.Transaction transaction = new SurfaceControl.Transaction();
-                transaction.getClass().getDeclaredMethod("setBackgroundBlurRadius", SurfaceControl.class, int.class).invoke(transaction, surfaceControl, 150);
-                transaction.apply();
+                ValueAnimator animator = ValueAnimator.ofInt(1, 150);
+                animator.setInterpolator(new DecelerateInterpolator());
+                animator.setDuration(150);
+                Method setBackgroundBlurRadius = SurfaceControl.Transaction.class.getDeclaredMethod("setBackgroundBlurRadius", SurfaceControl.class, int.class);
+                animator.addUpdateListener(animation -> {
+                    try {
+                        SurfaceControl.Transaction transaction = new SurfaceControl.Transaction();
+                        setBackgroundBlurRadius.invoke(transaction, surfaceControl, animation.getAnimatedValue());
+                        transaction.apply();
+                    } catch (Throwable t) {
+                        t.printStackTrace();
+                    }
+                });
+                view.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+                    @Override
+                    public void onViewAttachedToWindow(View v) {
+
+                    }
+
+                    @Override
+                    public void onViewDetachedFromWindow(View v) {
+                        animator.cancel();
+                    }
+                });
+                animator.start();
             } catch (Throwable t) {
                 t.printStackTrace();
             }
