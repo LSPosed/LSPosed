@@ -33,6 +33,7 @@ import androidx.preference.PreferenceManager;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Locale;
 
 import io.github.lsposed.manager.repo.RepoLoader;
 import io.github.lsposed.manager.ui.activity.CrashReportActivity;
@@ -93,6 +94,11 @@ public class App extends Application {
         instance = this;
 
         pref = PreferenceManager.getDefaultSharedPreferences(this);
+        if ("CN".equals(Locale.getDefault().getCountry())) {
+            if (!pref.contains("doh")) {
+                pref.edit().putBoolean("doh", true).apply();
+            }
+        }
         DayNightDelegate.setApplicationContext(this);
         DayNightDelegate.setDefaultNightMode(ThemeUtil.getDarkTheme());
         RepoLoader.getInstance().loadRemoteData();

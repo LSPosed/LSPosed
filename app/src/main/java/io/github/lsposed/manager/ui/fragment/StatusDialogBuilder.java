@@ -27,7 +27,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.text.HtmlCompat;
 
 import java.io.BufferedReader;
@@ -40,9 +39,10 @@ import io.github.lsposed.manager.BuildConfig;
 import io.github.lsposed.manager.ConfigManager;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.databinding.StatusInstallerBinding;
+import io.github.lsposed.manager.util.BlurBehindDialogBuilder;
 
 @SuppressLint("StaticFieldLeak")
-public class StatusDialogBuilder extends AlertDialog.Builder {
+public class StatusDialogBuilder extends BlurBehindDialogBuilder {
     private static final String CPU_ABI;
     private static final String CPU_ABI2;
 
