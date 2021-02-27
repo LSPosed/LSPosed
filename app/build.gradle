@@ -37,7 +37,7 @@ android {
         targetSdkVersion androidTargetSdkVersion.toInteger()
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
-        resConfigs 'en', 'zh-rCN', 'zh-rTW', 'zh-rHK', 'ru', 'uk', 'nl', 'ko'
+        resConfigs 'en', 'zh-rCN', 'zh-rTW', 'zh-rHK', 'ru', 'uk', 'nl', 'ko', 'fr'
         resValue "string", "versionName", "${rootProject.ext.versionName}"
     }
 
