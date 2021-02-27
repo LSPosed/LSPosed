@@ -42,4 +42,6 @@
         <item name="enforceMaterialTheme">true</item>
         <item name="useMaterialThemeColors">true</item>
     </style>
+
+    <style name="ThemeOverlay.Material.Dialog.ColorPicker" parent="@style/ThemeOverlay.Material.Dialog" />
 </resources>
