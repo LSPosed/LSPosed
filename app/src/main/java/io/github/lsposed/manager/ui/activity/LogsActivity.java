@@ -219,6 +219,12 @@ public class LogsActivity extends BaseActivity {
         ParcelFileDescriptor parcelFileDescriptor = ConfigManager.getLogs(verbose);
         if (parcelFileDescriptor != null) {
             new LogsReader().execute(parcelFileDescriptor.getFileDescriptor());
+        } else {
+            binding.slidingTabs.selectTab(binding.slidingTabs.getTabAt(0));
+            new AlertDialog.Builder(this)
+                    .setMessage(R.string.verbose_log_not_avaliable)
+                    .setPositiveButton(android.R.string.ok, null)
+                    .show();
         }
     }
 
