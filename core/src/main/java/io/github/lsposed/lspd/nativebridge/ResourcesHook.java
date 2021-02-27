@@ -24,6 +24,7 @@ public class ResourcesHook {
 
     public static native boolean initXResourcesNative();
 
-    public static native boolean removeFinalFlagNative(Class clazz);
+    public static native boolean removeFinalFlagNative(Class<?> clazz);
 
+    public static native ClassLoader buildDummyClassLoader(ClassLoader parent, Class<?> resourceSuperClass, Class<?> typedArraySuperClass);
 }

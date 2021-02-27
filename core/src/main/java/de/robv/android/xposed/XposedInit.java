@@ -143,12 +143,12 @@ public final class XposedInit {
         final String createResourceMethod;
 
         if (Build.VERSION.SDK_INT < 30) {
-            classGTLR = Class.forName("android.app.ResourcesManager");
-            classResKey = Class.forName("android.content.res.ResourcesKey");
+            classGTLR = android.app.ResourcesManager.class;
+            classResKey = android.content.res.ResourcesKey.class;
             createResourceMethod = "getOrCreateResources";
         } else {
-            classGTLR = Class.forName("android.app.ResourcesManager");
-            classResKey = Class.forName("android.content.res.ResourcesKey");
+            classGTLR = android.app.ResourcesManager.class;
+            classResKey = android.content.res.ResourcesKey.class;
             createResourceMethod = "createResources";
         }
 
