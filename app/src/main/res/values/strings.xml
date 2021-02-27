@@ -166,4 +166,5 @@
     <string name="app_destroyed">This application has been destroyed, please make sure you download it from the official source.</string>
     <string name="outdated_manager">Version of LSPosed Manager and LSPosed Core are not consistent. Please re-install the corresponding version.</string>
     <string name="lsposed_not_active">LSPosed is not currently installed or active.</string>
+    <string name="verbose_log_not_avaliable">Verbose log is not available, if you just enabled it without reboot, try again after reboot.</string>
 </resources>

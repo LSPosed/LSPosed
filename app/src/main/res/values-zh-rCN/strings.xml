@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -182,4 +181,5 @@
     <string name="reboot_required">需要重新启动才能应用此更改</string>
     <string name="reboot">重新启动</string>
     <string name="not_logcat_2">如果有人要求您提供一份 Android 系统日志，那么您来错了地方。在此处显示的是 LSPosed 的日志信息；如果您想抓取系统日志，可前往 XDA 寻求所需的答案。</string>
+    <string name="verbose_log_not_avaliable">详细日志不可用，如果您只是启用了它而没有重新启动，请在重新启动后再试一次。</string>
 </resources>
