@@ -18,6 +18,7 @@ static uint32_t kAccPublic = 0x0001;  // class, field, method, ic
 static uint32_t kAccPrivate = 0x0002;  // field, method, ic
 static uint32_t kAccProtected = 0x0004;  // field, method, ic
 static uint32_t kAccStatic = 0x0008;  // field, method, ic
+static uint32_t kAccFastInterpreterToInterpreterInvoke = 0x40000000;
 
 
 static jfieldID fieldArtMethod = nullptr;
@@ -187,9 +188,11 @@ static int doBackupAndHook(JNIEnv *env, void *targetMethod, void *hookMethod, vo
 
     }
 
-    // set the target method to native so that Android O wouldn't invoke it with interpreter
-    if (SDKVersion >= __ANDROID_API_O__) {
-//        setNativeFlag(targetMethod, true);
+    if (SDKVersion >= __ANDROID_API_Q__) {
+        uint32_t access_flags = read32((char *) targetMethod + OFFSET_access_flags_in_ArtMethod);
+        // On API 29 whether to use the fast path or not is cached in the ART method structure
+        access_flags &= ~kAccFastInterpreterToInterpreterInvoke;
+        write32((char *) targetMethod + OFFSET_access_flags_in_ArtMethod, access_flags);
     }
 
     LOGI("hook and backup done");
