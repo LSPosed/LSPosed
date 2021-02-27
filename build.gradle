@@ -5,8 +5,12 @@ buildscript {
     repositories {
         google()
         jcenter()
+        maven {
+            url 'https://storage.googleapis.com/r8-releases/raw'
+        }
     }
     dependencies {
+        classpath 'com.android.tools:r8:3.0.25-dev'
         classpath 'com.android.tools.build:gradle:4.1.2'
         classpath 'org.eclipse.jgit:org.eclipse.jgit:5.10.0.202012080955-r'
     }
