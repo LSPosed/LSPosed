@@ -24,7 +24,6 @@
     <string name="Install">Installeer</string>
     <string name="InstallDetail">Tik om LSPosed te installeren</string>
     <string name="Modules">Modules</string>
-    <string name="ModulesDetail">%d modules ingeschakeld</string>
     <string name="Logs">Logboeken</string>
     <string name="Settings">Instellingen</string>
     <string name="About">Over</string>
@@ -90,7 +89,6 @@
     <string name="scroll_bottom">Scroll naaar beneden</string>
 
     <string name="android_sdk" translatable="false">Android %2$s (%1$s, API %3$d)</string>
-    <string name="not_logcat">Dit is het LSPosed Framework en moduleslogboek\nals je een Android-logcat nodig hebt, kun je onze Log Catcher Magisk-module proberen</string>
 
     <!-- LSPd related -->
     <string name="compile_speed_msg">Optimaliseren…</string>

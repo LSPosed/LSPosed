@@ -18,17 +18,23 @@
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:paddingHorizontal="?attr/dialogPreferredPadding"
+    android:minHeight="?listPreferredItemHeightSmall"
+    android:background="?selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
 
     <com.google.android.material.checkbox.MaterialCheckBox
         android:id="@+id/checkbox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="?attr/dialogPreferredPadding"
-        android:layout_marginRight="?attr/dialogPreferredPadding"
-        android:text="@string/dont_show_again" />
+        android:text="@string/dont_show_again"
+        android:focusable="false"
+        android:clickable="false"
+        android:layout_gravity="center_vertical"
+        android:background="@null" />
 
-</LinearLayout>
+</FrameLayout>

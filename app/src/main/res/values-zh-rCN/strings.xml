@@ -94,7 +94,6 @@
 
     <string name="android_sdk" translatable="false">Android %2$s (%1$s, API %3$d)</string>
     <string name="android_sdk_preview" translatable="false">Android %1$s Preview</string>
-    <string name="not_logcat">此处仅显示 LSPosed 及模块相关日志信息\n如果您想抓取系统日志, 可以尝试我们的 Log Catcher Magisk 模块</string>
 
     <!-- LSPd related -->
     <string name="compile_speed_msg">优化中…</string>
@@ -182,4 +181,5 @@
     <string name="force_stop_dlg_text">强行停止某个应用可能会导致其出现异常。</string>
     <string name="reboot_required">需要重新启动才能应用此更改</string>
     <string name="reboot">重新启动</string>
+    <string name="not_logcat_2">如果有人要求您提供一份 Android 系统日志，那么您来错了地方。在此处显示的是 LSPosed 的日志信息；如果您想抓取系统日志，可前往 XDA 寻求所需的答案。</string>
 </resources>

@@ -57,10 +57,10 @@
     <string name="scroll_top">Scroll to top</string>
     <string name="loading">Loading…</string>
     <string name="scroll_bottom">Scroll to bottom</string>
-    <string name="not_logcat">This is the LSPosed Framework and modules log\nif you need a Android logcat, you can try our Log Catcher Magisk module</string>
     <string name="logs_cannot_read">Cannot read log: \n</string>
     <string name="menuReload">Reload</string>
     <string name="logs_clear_failed_2">Failed to clear the log</string>
+    <string name="not_logcat_2">If someone asked you an Android Logcat, you\'re in the wrong section. This is the LSPosed log; if you need a logcat, on XDA you can find what you need.</string>
 
     <!-- Notification -->
     <string name="module_is_not_activated_yet">LSPosed module is not activated yet</string>

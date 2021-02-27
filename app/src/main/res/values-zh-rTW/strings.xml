@@ -57,7 +57,6 @@
     <string name="scroll_top">滑動到最上面</string>
     <string name="loading">正在載入…</string>
     <string name="scroll_bottom">滾動到底部</string>
-    <string name="not_logcat">這裡是 LSPosed 框架和模組的日誌\n若您需要 Android 的 logcat，您可以嘗試我們 Log Catcher 的 Magisk 模組</string>
     <string name="logs_cannot_read">無法讀取日誌: \n</string>
     <string name="menuReload">重新載入</string>
     <string name="logs_clear_failed_2">日誌清理失敗</string>

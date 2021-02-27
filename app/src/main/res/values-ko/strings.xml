@@ -23,7 +23,6 @@
     <string name="Install">설치</string>
     <string name="InstallDetail">LSPosed를 설치하려면 누르세요</string>
     <string name="Modules">모듈</string>
-    <string name="ModulesDetail">%d개가 활성화 됨</string>
     <string name="Logs">로그</string>
     <string name="Settings">설정</string>
     <string name="About">About</string>
@@ -87,8 +86,6 @@
     <string name="scroll_top">맨 위로 스크롤</string>
     <string name="loading">로딩 중…</string>
     <string name="scroll_bottom">아래로 스크롤</string>
-
-    <string name="not_logcat">이것은 LSPosed Framework 모듈 로그입니다.\nAndroid 로그캣이 필요하면 Log Catcher Magisk 모듈을 사용해 보십시오.</string>
 
     <!-- LSPd related -->
     <string name="compile_speed_msg">최적화 중…</string>
