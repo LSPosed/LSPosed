@@ -130,7 +130,6 @@ public class StatusDialogBuilder extends AlertDialog.Builder {
 
     private String getAndroidVersion() {
         switch (Build.VERSION.SDK_INT) {
-            case 26:
             case 27:
                 return "Oreo";
             case 28:
