@@ -32,11 +32,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import io.github.lsposed.manager.ConfigManager;
 import io.github.lsposed.manager.R;
 
 public class AppHelper {
 
     public static final String SETTINGS_CATEGORY = "de.robv.android.xposed.category.MODULE_SETTINGS";
+    private static List<PackageInfo> appList;
 
     public static Intent getSettingsIntent(String packageName, PackageManager packageManager) {
         // taken from
@@ -112,5 +114,12 @@ public class AppHelper {
             default:
                 return (PackageInfo a, PackageInfo b) -> displayNameComparator.compare(a.applicationInfo, b.applicationInfo);
         }
+    }
+
+    public static List<PackageInfo> getAppList(boolean force) {
+        if (appList == null || force) {
+            appList = ConfigManager.getInstalledPackagesFromAllUsers(PackageManager.GET_META_DATA, true);
+        }
+        return appList;
     }
 }

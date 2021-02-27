@@ -23,8 +23,6 @@ package io.github.lsposed.manager.ui.activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -54,7 +52,6 @@ public class AppListActivity extends BaseActivity {
 
     private SearchView.OnQueryTextListener searchListener;
     public ActivityAppListBinding binding;
-    private final Handler handler = new Handler(Looper.getMainLooper());
     public ActivityResultLauncher<String> backupLauncher;
     public ActivityResultLauncher<String[]> restoreLauncher;
 
@@ -73,7 +70,7 @@ public class AppListActivity extends BaseActivity {
         bar.setDisplayHomeAsUpEnabled(true);
         bar.setTitle(moduleName);
         bar.setSubtitle(modulePackageName);
-        scopeAdapter = new ScopeAdapter(this, moduleName, modulePackageName, binding.masterSwitch);
+        scopeAdapter = new ScopeAdapter(this, moduleName, modulePackageName);
         scopeAdapter.setHasStableIds(true);
         binding.recyclerView.setAdapter(scopeAdapter);
         binding.recyclerView.setHasFixedSize(true);
@@ -140,7 +137,7 @@ public class AppListActivity extends BaseActivity {
                                 runOnUiThread(() -> {
                                     alertDialog.dismiss();
                                     makeSnackBar(success ? R.string.settings_restore_success : R.string.settings_restore_failed, Snackbar.LENGTH_SHORT);
-                                    scopeAdapter.refresh();
+                                    scopeAdapter.refresh(false);
                                 });
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -167,9 +164,11 @@ public class AppListActivity extends BaseActivity {
     }
 
     public void onDataReady() {
-        handler.post(() -> binding.progress.setIndeterminate(false));
-        String queryStr = searchView != null ? searchView.getQuery().toString() : "";
-        runOnUiThread(() -> scopeAdapter.getFilter().filter(queryStr));
+        runOnUiThread(() -> {
+            binding.progress.setIndeterminate(false);
+            String queryStr = searchView != null ? searchView.getQuery().toString() : "";
+            scopeAdapter.getFilter().filter(queryStr);
+        });
     }
 
     @Override

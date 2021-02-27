@@ -34,6 +34,12 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/menu_refresh"
+        android:title="@string/refresh"
+        android:icon="@drawable/ic_refresh"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/use_recommended"
         android:title="@string/use_recommended" />
 
