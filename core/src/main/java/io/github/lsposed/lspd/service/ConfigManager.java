@@ -98,7 +98,7 @@ public class ConfigManager {
     private static final File modulesLogPath = new File(logPath, "modules.log");
     private static final File verboseLogPath = new File(logPath, "all.log");
 
-    private Handler cacheHandler;
+    private volatile Handler cacheHandler;
 
     long lastModuleCacheTime = 0;
     long requestModuleCacheTime = 0;
@@ -271,6 +271,8 @@ public class ConfigManager {
                 Looper.loop();
             }
         }.start();
+
+        while(cacheHandler != null) {}
 
         createTables();
         updateConfig();
