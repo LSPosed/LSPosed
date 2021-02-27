@@ -85,7 +85,7 @@ public class ModulesActivity extends ListActivity implements ModuleUtil.ModuleLi
     @Override
     protected void onResume() {
         super.onResume();
-        adapter.refresh();
+        adapter.refresh(true);
     }
 
     @Override
@@ -103,6 +103,15 @@ public class ModulesActivity extends ListActivity implements ModuleUtil.ModuleLi
     @Override
     public void onSingleInstalledModuleReloaded(ModuleUtil moduleUtil, String packageName, ModuleUtil.InstalledModule module) {
         adapter.refresh();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId == R.id.menu_refresh) {
+            adapter.refresh(true);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

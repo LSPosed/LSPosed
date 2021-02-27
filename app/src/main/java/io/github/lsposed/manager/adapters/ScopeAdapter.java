@@ -90,30 +90,32 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     private final SharedPreferences preferences;
     private final String modulePackageName;
     private final String moduleName;
-    private final SwitchBar masterSwitch;
     private final HashSet<ApplicationWithEquals> recommendedList = new HashSet<>();
     private final HashSet<ApplicationWithEquals> checkedList = new HashSet<>();
     private final List<AppInfo> searchList = new ArrayList<>();
-    private List<AppInfo> showList = new ArrayList<>();
-    private ApplicationInfo selectedInfo;
-    private boolean enabled = true;
-
-    public ScopeAdapter(AppListActivity activity, String moduleName, String modulePackageName, SwitchBar masterSwitch) {
-        this.activity = activity;
-        this.moduleName = moduleName;
-        this.modulePackageName = modulePackageName;
-        this.masterSwitch = masterSwitch;
-        preferences = App.getPreferences();
-        pm = activity.getPackageManager();
-        masterSwitch.setOnCheckedChangeListener((view, isChecked) -> {
+    private final SwitchBar.OnCheckedChangeListener switchBarOnCheckedChangeListener = new SwitchBar.OnCheckedChangeListener() {
+        @Override
+        public boolean onCheckedChanged(SwitchBar view, boolean isChecked) {
             if (!ModuleUtil.getInstance().setModuleEnabled(modulePackageName, isChecked)) {
                 return false;
             }
             enabled = isChecked;
             notifyDataSetChanged();
             return true;
-        });
-        refresh();
+        }
+    };
+    private List<AppInfo> showList = new ArrayList<>();
+    private ApplicationInfo selectedInfo;
+    private boolean refreshing = false;
+    private boolean enabled = true;
+
+    public ScopeAdapter(AppListActivity activity, String moduleName, String modulePackageName) {
+        this.activity = activity;
+        this.moduleName = moduleName;
+        this.modulePackageName = modulePackageName;
+        preferences = App.getPreferences();
+        pm = activity.getPackageManager();
+        refresh(false);
     }
 
     @NonNull
@@ -123,11 +125,8 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         return new ViewHolder(v);
     }
 
-    private void loadApps() {
-        enabled = ModuleUtil.getInstance().isModuleEnabled(modulePackageName);
-        activity.runOnUiThread(() -> masterSwitch.setChecked(enabled));
-
-        List<PackageInfo> appList = ConfigManager.getInstalledPackagesFromAllUsers(PackageManager.GET_META_DATA, true);
+    private void loadApps(boolean force) {
+        List<PackageInfo> appList = AppHelper.getAppList(force);
         checkedList.clear();
         recommendedList.clear();
         searchList.clear();
@@ -171,6 +170,9 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             ConfigManager.setModuleScope(modulePackageName, checkedList);
         }
         showList = sortApps(searchList);
+        synchronized (this) {
+            refreshing = false;
+        }
         activity.onDataReady();
     }
 
@@ -267,6 +269,9 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                 notifyDataSetChanged();
             }
             return true;
+        } else if (itemId == R.id.menu_refresh) {
+            refresh(true);
+            return true;
         } else if (itemId == R.id.item_show_system) {
             item.setChecked(!item.isChecked());
             preferences.edit().putBoolean("show_system_apps", item.isChecked()).apply();
@@ -299,7 +304,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         } else if (!AppHelper.onOptionsItemSelected(item, preferences)) {
             return false;
         }
-        refresh();
+        refresh(false);
         return true;
     }
 
@@ -481,8 +486,18 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         return showList.size();
     }
 
-    public void refresh() {
-        AsyncTask.THREAD_POOL_EXECUTOR.execute(this::loadApps);
+    public void refresh(boolean force) {
+        synchronized (this) {
+            if (refreshing) {
+                return;
+            }
+            refreshing = true;
+        }
+        enabled = ModuleUtil.getInstance().isModuleEnabled(modulePackageName);
+        activity.binding.masterSwitch.setOnCheckedChangeListener(null);
+        activity.binding.masterSwitch.setChecked(enabled);
+        activity.binding.masterSwitch.setOnCheckedChangeListener(switchBarOnCheckedChangeListener);
+        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> loadApps(force));
     }
 
     protected void onCheckedChange(CompoundButton buttonView, boolean isChecked, AppInfo appInfo) {
@@ -556,7 +571,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     }
 
     public boolean onBackPressed() {
-        if (masterSwitch.isChecked() && checkedList.isEmpty()) {
+        if (activity.binding.masterSwitch.isChecked() && checkedList.isEmpty()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(activity);
             builder.setTitle(R.string.use_recommended);
             builder.setMessage(!recommendedList.isEmpty() ? R.string.no_scope_selected_has_recommended : R.string.no_scope_selected);

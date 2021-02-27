@@ -26,4 +26,11 @@
         android:id="@+id/menu_search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_refresh"
+        android:title="@string/refresh"
+        android:icon="@drawable/ic_refresh"
+        app:showAsAction="ifRoom" />
+
 </menu>
