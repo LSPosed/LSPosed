@@ -49,6 +49,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import external.com.android.dx.DexMaker;
 import external.com.android.dx.TypeId;
 import io.github.lsposed.lspd.nativebridge.ModuleLogger;
+import io.github.lsposed.lspd.nativebridge.ResourcesHook;
 
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
 
@@ -97,8 +98,8 @@ public final class XposedBridge {
 		}
 		try {
 			Resources res = Resources.getSystem();
-			Class resClass = res.getClass();
-			Class taClass = TypedArray.class;
+			Class<?> resClass = res.getClass();
+			Class<?> taClass = TypedArray.class;
 			try {
 				TypedArray ta = res.obtainTypedArray(res.getIdentifier(
 						"preloaded_drawables", "array", "android"));
@@ -109,16 +110,20 @@ public final class XposedBridge {
 			}
 			XposedBridge.removeFinalFlagNative(resClass);
 			XposedBridge.removeFinalFlagNative(taClass);
-			DexMaker dexMaker = new DexMaker();
-			dexMaker.declare(TypeId.get("Lxposed/dummy/XResourcesSuperClass;"),
-					"XResourcesSuperClass.java",
-					Modifier.PUBLIC, TypeId.get(resClass));
-			dexMaker.declare(TypeId.get("Lxposed/dummy/XTypedArraySuperClass;"),
-					"XTypedArraySuperClass.java",
-					Modifier.PUBLIC, TypeId.get(taClass));
 			ClassLoader myCL = XposedBridge.class.getClassLoader();
-			dummyClassLoader = new InMemoryDexClassLoader(
-					ByteBuffer.wrap(dexMaker.generate()), myCL.getParent());
+			dummyClassLoader = ResourcesHook.buildDummyClassLoader(myCL.getParent(), resClass, taClass);
+			if (dummyClassLoader == null) {
+				XposedBridge.log("Dexbuilder fails, fallback to dexmaker");
+				DexMaker dexMaker = new DexMaker();
+				dexMaker.declare(TypeId.get("Lxposed/dummy/XResourcesSuperClass;"),
+						"XResourcesSuperClass.java",
+						Modifier.PUBLIC, TypeId.get(resClass));
+				dexMaker.declare(TypeId.get("Lxposed/dummy/XTypedArraySuperClass;"),
+						"XTypedArraySuperClass.java",
+						Modifier.PUBLIC, TypeId.get(taClass));
+				dummyClassLoader = new InMemoryDexClassLoader(
+						ByteBuffer.wrap(dexMaker.generate()), myCL.getParent());
+			}
 			dummyClassLoader.loadClass("xposed.dummy.XResourcesSuperClass");
 			dummyClassLoader.loadClass("xposed.dummy.XTypedArraySuperClass");
 			setObjectField(myCL, "parent", dummyClassLoader);

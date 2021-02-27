@@ -20,6 +20,9 @@
 
 #include <jni.h>
 #include <resource_hook.h>
+#include <dex_builder.h>
+#include <art/runtime/thread.h>
+#include <art/runtime/mirror/class.h>
 #include "native_util.h"
 #include "nativehelper/jni_macros.h"
 #include "resources_hook.h"
@@ -43,9 +46,34 @@ namespace lspd {
         return JNI_FALSE;
     }
 
+    LSP_DEF_NATIVE_METHOD(jobject, ResourcesHook, buildDummyClassLoader, jobject parent, jobject resource_super_class, jobject typed_array_super_class) {
+        using namespace startop::dex;
+        static auto in_memory_classloader = (jclass)env->NewGlobalRef(env->FindClass( "dalvik/system/InMemoryDexClassLoader"));
+        static jmethodID initMid = JNI_GetMethodID(env, in_memory_classloader, "<init>",
+                                                   "(Ljava/nio/ByteBuffer;Ljava/lang/ClassLoader;)V");
+        DexBuilder dex_file;
+
+        std::string storage;
+        auto current_thread = art::Thread::Current();
+        ClassBuilder xresource_builder{
+                dex_file.MakeClass("xposed.dummy.XResourcesSuperClass")};
+        xresource_builder.setSuperClass(TypeDescriptor::FromDescriptor(art::mirror::Class(current_thread.DecodeJObject(resource_super_class)).GetDescriptor(&storage)));
+
+        ClassBuilder xtypearray_builder{
+                dex_file.MakeClass("xposed.dummy.XTypedArraySuperClass")};
+        xtypearray_builder.setSuperClass(TypeDescriptor::FromDescriptor(art::mirror::Class(current_thread.DecodeJObject(typed_array_super_class)).GetDescriptor(&storage)));
+
+        slicer::MemView image{dex_file.CreateImage()};
+
+        auto dex_buffer = env->NewDirectByteBuffer(const_cast<void*>(image.ptr()), image.size());
+        return JNI_NewObject(env, in_memory_classloader, initMid,
+                                      dex_buffer, parent);
+    }
+
     static JNINativeMethod gMethods[] = {
             LSP_NATIVE_METHOD(ResourcesHook, initXResourcesNative, "()Z"),
             LSP_NATIVE_METHOD(ResourcesHook, removeFinalFlagNative, "(Ljava/lang/Class;)Z"),
+            LSP_NATIVE_METHOD(ResourcesHook, buildDummyClassLoader, "(Ljava/lang/ClassLoader;Ljava/lang/Class;Ljava/lang/Class;)Ljava/lang/ClassLoader;"),
     };
 
     void RegisterResourcesHook(JNIEnv *env) {

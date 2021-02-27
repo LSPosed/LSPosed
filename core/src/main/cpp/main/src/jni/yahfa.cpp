@@ -153,10 +153,8 @@ namespace lspd {
         auto *back_method = backup_builder.Encode();
 
         slicer::MemView image{dex_file.CreateImage()};
-        std::unique_ptr<char[]> buffer = std::make_unique<char[]>(image.size());
-        memcpy(buffer.get(), image.ptr(), image.size());
 
-        auto dex_buffer = env->NewDirectByteBuffer(buffer.get(), image.size());
+        auto dex_buffer = env->NewDirectByteBuffer(const_cast<void*>(image.ptr()), image.size());
         jobject my_cl = JNI_NewObject(env, in_memory_classloader, initMid,
                                       dex_buffer, app_class_loader);
 
