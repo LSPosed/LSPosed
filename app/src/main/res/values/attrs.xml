@@ -1,17 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <attr name="colorActionBar" format="color" />
-    <attr name="listItemBackground" format="reference" />
-    <attr name="roundBackground" format="reference" />
-    <attr name="actionBarTheme" format="reference" />
-    <attr name="modulesHorizontalPadding" format="dimension" />
-    <attr name="actionBarPopupTheme" format="reference" />
-    <attr name="tabLayoutTheme" format="reference" />
+<!--
+  ~ This file is part of LSPosed.
+  ~
+  ~ LSPosed is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ LSPosed is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+  ~
+  ~ Copyright (C) 2020 EdXposed Contributors
+  ~ Copyright (C) 2021 LSPosed Contributors
+  -->
 
-    <declare-styleable name="MasterSwitch">
-        <attr name="masterSwitchTextAppearance" format="reference" />
-        <attr name="masterSwitchBackgroundOn" format="color" />
-        <attr name="masterSwitchBackgroundOff" format="color" />
-        <attr name="masterSwitchForeground" format="color" />
-    </declare-styleable>
+<resources>
+    <attr name="rippleTransparency" format="color" />
+    <attr name="colorNormal" format="color" />
+    <attr name="colorInstall" format="color" />
 </resources>

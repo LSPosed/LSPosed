@@ -1,143 +1,77 @@
+/*
+ * This file is part of LSPosed.
+ *
+ * LSPosed is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LSPosed is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * Copyright (C) 2020 EdXposed Contributors
+ * Copyright (C) 2021 LSPosed Contributors
+ */
+
 package io.github.lsposed.manager.util;
 
-import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import androidx.core.app.NotificationChannelCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
-import com.topjohnwu.superuser.Shell;
-
-import io.github.lsposed.manager.App;
 import io.github.lsposed.manager.R;
-import io.github.lsposed.manager.ui.activity.MainActivity;
-import io.github.lsposed.manager.ui.activity.ModulesActivity;
+import io.github.lsposed.manager.ui.activity.AppListActivity;
 
-@SuppressLint("UnspecifiedImmutableFlag")
 public final class NotificationUtil {
 
     public static final int NOTIFICATION_MODULE_NOT_ACTIVATED_YET = 0;
     private static final int NOTIFICATION_MODULES_UPDATED = 1;
-    private static final int PENDING_INTENT_OPEN_MODULES = 0;
-    private static final int PENDING_INTENT_OPEN_INSTALL = 1;
-    private static final int PENDING_INTENT_SOFT_REBOOT = 2;
-    private static final int PENDING_INTENT_REBOOT = 3;
-
+    private static final int PENDING_INTENT_OPEN_APP_LIST = 0;
     private static final String NOTIFICATION_MODULES_CHANNEL = "modules_channel_2";
 
-    @SuppressLint("StaticFieldLeak")
-    private static Context context = null;
-    @SuppressLint("StaticFieldLeak")
-    private static NotificationManagerCompat notificationManager;
-
-    public static void init() {
-        if (context != null) {
-            return;
-        }
-
-        context = App.getInstance();
-        notificationManager = NotificationManagerCompat.from(context);
+    public static void showNotification(Context context, String modulePackageName, String moduleName, boolean enabled) {
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
 
         NotificationChannelCompat.Builder channel = new NotificationChannelCompat.Builder(NOTIFICATION_MODULES_CHANNEL,
                 NotificationManager.IMPORTANCE_HIGH)
-                .setName(context.getString(R.string.nav_item_modules))
+                .setName(context.getString(R.string.Modules))
                 .setSound(null, null)
                 .setVibrationPattern(null);
         notificationManager.createNotificationChannel(channel.build());
-    }
 
-    public static void cancel(String tag, int id) {
-        notificationManager.cancel(tag, id);
-    }
+        String title = context.getString(enabled ? R.string.xposed_module_updated_notification_title : R.string.module_is_not_activated_yet);
+        String content = context.getString(enabled ? R.string.xposed_module_updated_notification_content : R.string.module_is_not_activated_yet_detailed, moduleName);
 
-    public static void cancelAll() {
-        notificationManager.cancelAll();
-    }
-
-    public static void showNotActivatedNotification(String packageName, String appName) {
-        Intent intent = new Intent(context, ModulesActivity.class)
+        Intent intent = new Intent(context, AppListActivity.class)
+                .putExtra("modulePackageName", modulePackageName)
+                .putExtra("moduleName", moduleName)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        PendingIntent pModulesTab = PendingIntent.getActivity(context, PENDING_INTENT_OPEN_MODULES, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        String title = context.getString(R.string.module_is_not_activated_yet);
-        NotificationCompat.Builder builder = getNotificationBuilder(title, appName)
-                .setContentIntent(pModulesTab);
+        PendingIntent contentIntent = PendingIntent.getActivity(context, PENDING_INTENT_OPEN_APP_LIST, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         NotificationCompat.BigTextStyle style = new NotificationCompat.BigTextStyle();
-        style.setBigContentTitle(title);
-        style.bigText(context.getString(R.string.module_is_not_activated_yet_detailed, appName));
-        builder.setStyle(style);
+        style.bigText(content);
 
-        notificationManager.notify(packageName, NOTIFICATION_MODULE_NOT_ACTIVATED_YET, builder.build());
-    }
-
-    public static void showModulesUpdatedNotification(String appName) {
-        Intent intent = new Intent(context, MainActivity.class)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-        PendingIntent pInstallTab = PendingIntent.getActivity(context, PENDING_INTENT_OPEN_INSTALL, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        String title = context
-                .getString(R.string.xposed_module_updated_notification_title);
-        NotificationCompat.Builder builder = getNotificationBuilder(title, appName)
-                .setContentIntent(pInstallTab);
-
-        Intent iSoftReboot = new Intent(context, RebootReceiver.class);
-        iSoftReboot.putExtra(RebootReceiver.EXTRA_SOFT_REBOOT, true);
-        PendingIntent pSoftReboot = PendingIntent.getBroadcast(context, PENDING_INTENT_SOFT_REBOOT,
-                iSoftReboot, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        Intent iReboot = new Intent(context, RebootReceiver.class);
-        PendingIntent pReboot = PendingIntent.getBroadcast(context, PENDING_INTENT_REBOOT,
-                iReboot, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        builder.addAction(new NotificationCompat.Action.Builder(0, context.getString(R.string.reboot), pReboot).build());
-        builder.addAction(new NotificationCompat.Action.Builder(0, context.getString(R.string.soft_reboot), pSoftReboot).build());
-
-        notificationManager.notify(null, NOTIFICATION_MODULES_UPDATED, builder.build());
-    }
-
-    private static NotificationCompat.Builder getNotificationBuilder(String title, String message) {
-        return new NotificationCompat.Builder(context, NOTIFICATION_MODULES_CHANNEL)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_MODULES_CHANNEL)
                 .setContentTitle(title)
-                .setContentText(message)
-                .setSound(null)
-                .setVibrate(new long[]{0})
+                .setContentText(content)
                 .setAutoCancel(true)
                 .setSmallIcon(R.drawable.ic_notification)
-                .setColor(ContextCompat.getColor(context, R.color.colorPrimary));
-    }
+                .setColor(ContextCompat.getColor(context, R.color.color_primary))
+                .setContentIntent(contentIntent)
+                .setStyle(style);
 
-    public static class RebootReceiver extends BroadcastReceiver {
-        public static String EXTRA_SOFT_REBOOT = "soft";
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            /*
-             * Close the notification bar in order to see the toast that module
-             * was enabled successfully. Furthermore, if SU permissions haven't
-             * been granted yet, the SU dialog will be prompted behind the
-             * expanded notification panel and is therefore not visible to the
-             * user.
-             */
-            context.sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
-            cancelAll();
-
-            if (!Shell.rootAccess()) {
-                Log.e(App.TAG, "NotificationUtil -> Could not start root shell");
-                return;
-            }
-
-            boolean softReboot = intent.getBooleanExtra(EXTRA_SOFT_REBOOT, false);
-            RebootUtil.reboot(softReboot ? RebootUtil.RebootType.USERSPACE : RebootUtil.RebootType.NORMAL);
-        }
+        notificationManager.notify(modulePackageName, enabled ? NOTIFICATION_MODULES_UPDATED : NOTIFICATION_MODULE_NOT_ACTIVATED_YET, builder.build());
     }
 }

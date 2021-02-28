@@ -1,3 +1,22 @@
+/*
+ * This file is part of LSPosed.
+ *
+ * LSPosed is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LSPosed is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * Copyright (C) 2020 EdXposed Contributors
+ * Copyright (C) 2021 LSPosed Contributors
+ */
 
 #pragma once
 
@@ -39,17 +58,17 @@ namespace art {
                 });
 
         // @ApiSensitive(Level.HIGH)
-        static void DisableHiddenApi(void *handle, HookFunType hook_func) {
+        static void DisableHiddenApi(void *handle) {
             const int api_level = lspd::GetAndroidApiLevel();
             if (api_level < __ANDROID_API_P__) {
                 return;
             }
             if (api_level == __ANDROID_API_P__) {
-                lspd::HookSyms(handle, hook_func, GetMethodActionImpl);
-                lspd::HookSyms(handle, hook_func, GetFieldActionImpl);
+                lspd::HookSyms(handle, GetMethodActionImpl);
+                lspd::HookSyms(handle, GetFieldActionImpl);
             } else {
-                lspd::HookSyms(handle, hook_func, ShouldDenyAccessToMethodImpl);
-                lspd::HookSyms(handle, hook_func, ShouldDenyAccessToFieldImpl);
+                lspd::HookSyms(handle, ShouldDenyAccessToMethodImpl);
+                lspd::HookSyms(handle, ShouldDenyAccessToFieldImpl);
             }
         };
 

@@ -1,3 +1,23 @@
+/*
+ * This file is part of LSPosed.
+ *
+ * LSPosed is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LSPosed is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * Copyright (C) 2020 EdXposed Contributors
+ * Copyright (C) 2021 LSPosed Contributors
+ */
+
 package de.robv.android.xposed;
 
 import android.content.res.AssetManager;
@@ -1551,28 +1571,6 @@ public final class XposedHelpers {
 	}
 
 	/**
-	 * Invokes the {@link DexFile#close()} method, ignoring IOExceptions.
-	 */
-	/*package*/ static void closeSilently(DexFile dexFile) {
-		if (dexFile != null) {
-			try {
-				dexFile.close();
-			} catch (IOException ignored) {}
-		}
-	}
-
-	/**
-	 * Invokes the {@link ZipFile#close()} method, ignoring IOExceptions.
-	 */
-	/*package*/ static void closeSilently(ZipFile zipFile) {
-		if (zipFile != null) {
-			try {
-				zipFile.close();
-			} catch (IOException ignored) {}
-		}
-	}
-
-	/**
 	 * Returns the lowercase hex string representation of a file's MD5 hash sum.
 	 */
 	public static String getMD5Sum(String file) throws IOException {
@@ -1645,70 +1643,6 @@ public final class XposedHelpers {
 			}
 			return counter;
 		}
-	}
-
-	/*package*/ static boolean fileContains(File file, String str) throws IOException {
-		// There are certainly more efficient algorithms (e.g. Boyer-Moore used in grep),
-		// but the naive approach should be sufficient here.
-		BufferedReader in = null;
-		try {
-			in = new BufferedReader(new FileReader(file));
-			String line;
-			while ((line = in.readLine()) != null) {
-				if (line.contains(str)) {
-					return true;
-				}
-			}
-			return false;
-		} finally {
-			closeSilently(in);
-		}
-	}
-
-	//#################################################################################################
-
-	/**
-	 * Returns the method that is overridden by the given method.
-	 * It returns {@code null} if the method doesn't override another method or if that method is
-	 * abstract, i.e. if this is the first implementation in the hierarchy.
-	 */
-	/*package*/ static Method getOverriddenMethod(Method method) {
-		int modifiers = method.getModifiers();
-		if (Modifier.isStatic(modifiers) || Modifier.isPrivate(modifiers)) {
-			return null;
-		}
-
-		String name = method.getName();
-		Class<?>[] parameters = method.getParameterTypes();
-		Class<?> clazz = method.getDeclaringClass().getSuperclass();
-		while (clazz != null) {
-			try {
-				Method superMethod = clazz.getDeclaredMethod(name, parameters);
-				modifiers = superMethod.getModifiers();
-				if (!Modifier.isPrivate(modifiers) && !Modifier.isAbstract(modifiers)) {
-					return superMethod;
-				} else {
-					return null;
-				}
-			} catch (NoSuchMethodException ignored) {
-				clazz = clazz.getSuperclass();
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Returns all methods which this class overrides.
-	 */
-	/*package*/ static Set<Method> getOverriddenMethods(Class<?> clazz) {
-		Set<Method> methods = new HashSet<>();
-		for (Method method : clazz.getDeclaredMethods()) {
-			Method overridden = getOverriddenMethod(method);
-			if (overridden != null) {
-				methods.add(overridden);
-			}
-		}
-		return methods;
 	}
 
 	//#################################################################################################

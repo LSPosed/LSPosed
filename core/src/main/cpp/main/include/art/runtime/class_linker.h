@@ -1,3 +1,22 @@
+/*
+ * This file is part of LSPosed.
+ *
+ * LSPosed is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LSPosed is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * Copyright (C) 2020 EdXposed Contributors
+ * Copyright (C) 2021 LSPosed Contributors
+ */
 
 #pragma once
 
@@ -79,7 +98,7 @@ namespace art {
         }
 
         // @ApiSensitive(Level.MIDDLE)
-        static void Setup(void *handle, HookFunType hook_func) {
+        static void Setup(void *handle) {
             LOGD("Classlinker hook setup, handle=%p", handle);
             int api_level = lspd::GetAndroidApiLevel();
             size_t OFFSET_classlinker;  // Get offset from art::Runtime::RunRootClinits() call in IDA
@@ -111,6 +130,7 @@ namespace art {
                     LOGE("No valid offset for art::Runtime::class_linker_ found. Using Android R.");
                     [[fallthrough]];
                 case __ANDROID_API_R__:
+                case __ANDROID_API_S__:
                     if constexpr(lspd::is64) {
                         OFFSET_classlinker = 472;
                     } else {
@@ -128,7 +148,7 @@ namespace art {
             RETRIEVE_MEM_FUNC_SYMBOL(SetEntryPointsToInterpreter,
                                      "_ZNK3art11ClassLinker27SetEntryPointsToInterpreterEPNS_9ArtMethodE");
 
-            lspd::HookSyms(handle, hook_func, ShouldUseInterpreterEntrypoint);
+            lspd::HookSyms(handle, ShouldUseInterpreterEntrypoint);
 
             if (api_level >= __ANDROID_API_R__) {
                 // In android R, FixupStaticTrampolines won't be called unless it's marking it as
@@ -136,9 +156,9 @@ namespace art {
                 // So we miss some calls between initialized and visiblyInitialized.
                 // Therefore we hook the new introduced MarkClassInitialized instead
                 // This only happens on non-x86 devices
-                lspd::HookSyms(handle, hook_func, MarkClassInitialized);
+                lspd::HookSyms(handle, MarkClassInitialized);
             } else {
-                lspd::HookSyms(handle, hook_func, FixupStaticTrampolines);
+                lspd::HookSyms(handle, FixupStaticTrampolines);
             }
 
             // MakeInitializedClassesVisiblyInitialized will cause deadlock

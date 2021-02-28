@@ -1,15 +1,36 @@
+/*
+ * This file is part of LSPosed.
+ *
+ * LSPosed is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LSPosed is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * Copyright (C) 2020 EdXposed Contributors
+ * Copyright (C) 2021 LSPosed Contributors
+ */
+
 package io.github.lsposed.lspd.yahfa.dexmaker;
 
 import android.annotation.TargetApi;
 import android.os.Build;
 
 import io.github.lsposed.lspd.BuildConfig;
-import io.github.lsposed.lspd.nativebridge.ConfigManager;
 import io.github.lsposed.lspd.core.yahfa.HookMain;
+import io.github.lsposed.lspd.nativebridge.Yahfa;
 import io.github.lsposed.lspd.util.ProxyClassLoader;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Executable;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -26,6 +47,7 @@ import external.com.android.dx.Local;
 import external.com.android.dx.MethodId;
 import external.com.android.dx.TypeId;
 
+import static io.github.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
 import static io.github.lsposed.lspd.yahfa.dexmaker.DexMakerUtils.autoBoxIfNecessary;
 import static io.github.lsposed.lspd.yahfa.dexmaker.DexMakerUtils.autoUnboxIfNecessary;
 import static io.github.lsposed.lspd.yahfa.dexmaker.DexMakerUtils.canCache;
@@ -50,10 +72,11 @@ public class HookerDexMaker {
             hookerTypeId.getMethod(TypeId.OBJECT, "handleHookedMethod", objArrayTypeId);
 
     private FieldId<?, LspHooker> mHookerFieldId;
+    private Class<?> mReturnType;
+    private Class<?>[] mActualParameterTypes;
 
     private TypeId<?> mHookerTypeId;
     private TypeId<?>[] mParameterTypeIds;
-    private Class<?>[] mActualParameterTypes;
     private TypeId<?> mReturnTypeId;
 
     private DexMaker mDexMaker;
@@ -77,7 +100,8 @@ public class HookerDexMaker {
         return parameterTypeIds;
     }
 
-    private static Class<?>[] getParameterTypes(Class<?>[] parameterTypes, boolean isStatic) {
+    private static Class<?>[] getParameterTypes(Executable method, boolean isStatic) {
+        Class<?>[] parameterTypes = method.getParameterTypes();
         if (isStatic) {
             return parameterTypes;
         }
@@ -85,34 +109,34 @@ public class HookerDexMaker {
         int targetParameterSize = parameterSize + 1;
         Class<?>[] newParameterTypes = new Class<?>[targetParameterSize];
         int offset = 1;
-        newParameterTypes[0] = Object.class;
+        newParameterTypes[0] = method.getDeclaringClass();
         System.arraycopy(parameterTypes, 0, newParameterTypes, offset, parameterTypes.length);
         return newParameterTypes;
     }
 
     public void start(Member member, XposedBridge.AdditionalHookInfo hookInfo,
                       ClassLoader appClassLoader) throws Exception {
-        Class<?> returnType;
         boolean isStatic;
         if (member instanceof Method) {
             Method method = (Method) member;
             isStatic = Modifier.isStatic(method.getModifiers());
-            returnType = method.getReturnType();
-            if (returnType.equals(Void.class) || returnType.equals(void.class)
-                    || returnType.isPrimitive()) {
-                mReturnTypeId = TypeId.get(returnType);
+            mReturnType = method.getReturnType();
+            if (mReturnType.equals(Void.class) || mReturnType.equals(void.class)
+                    || mReturnType.isPrimitive()) {
+                mReturnTypeId = TypeId.get(mReturnType);
             } else {
                 // all others fallback to plain Object for convenience
                 mReturnTypeId = TypeId.OBJECT;
             }
             mParameterTypeIds = getParameterTypeIds(method.getParameterTypes(), isStatic);
-            mActualParameterTypes = getParameterTypes(method.getParameterTypes(), isStatic);
+            mActualParameterTypes = getParameterTypes(method, isStatic);
         } else if (member instanceof Constructor) {
             Constructor constructor = (Constructor) member;
             isStatic = false;
             mReturnTypeId = TypeId.VOID;
+            mReturnType = void.class;
             mParameterTypeIds = getParameterTypeIds(constructor.getParameterTypes(), isStatic);
-            mActualParameterTypes = getParameterTypes(constructor.getParameterTypes(), isStatic);
+            mActualParameterTypes = getParameterTypes(constructor, isStatic);
         } else if (member.getDeclaringClass().isInterface()) {
             throw new IllegalArgumentException("Cannot hook interfaces: " + member.toString());
         } else if (Modifier.isAbstract(member.getModifiers())) {
@@ -129,50 +153,66 @@ public class HookerDexMaker {
             mAppClassLoader = appClassLoader;
             mAppClassLoader = new ProxyClassLoader(mAppClassLoader, getClass().getClassLoader());
         }
+
+        long startTime = System.nanoTime();
         doMake(member.getDeclaringClass().getName());
+        long endTime = System.nanoTime();
+        DexLog.d("Hook time: " + (endTime - startTime) / 1e6 + "ms");
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @TargetApi(Build.VERSION_CODES.O)
     private void doMake(String hookedClassName) throws Exception {
-        mDexMaker = new DexMaker();
-        ClassLoader loader = null;
+        Class<?> hookClass = null;
         // Generate a Hooker class.
         String className = CLASS_NAME_PREFIX;
-        boolean usedCache = false;
-        if (canCache) {
-            try {
-                // className is also used as dex file name
-                // so it should be different from each other
-                String suffix = DexMakerUtils.getSha1Hex(mMember.toString());
-                className = className + suffix;
-                String dexFileName = className + ".jar";
-                File dexFile = new File(ConfigManager.getCachePath(dexFileName));
-                if (!dexFile.exists()) {
+        hookClass = Yahfa.buildHooker(mAppClassLoader, mReturnType, mActualParameterTypes);
+        if (canCache && hookClass == null) {
+            String suffix = DexMakerUtils.getSha1Hex(mMember.toString());
+            className = className + suffix;
+            String dexFileName = className + ".jar";
+            File dexFile = new File(serviceClient.getCachePath(dexFileName));
+            DexLog.d("dex builder failed, generating " + dexFileName);
+            mDexMaker = new DexMaker();
+            // className is also used as dex file name
+            // so it should be different from each other
+            if (dexFile.exists()) {
+                try {
                     // if file exists, reuse it and skip generating
-                    DexLog.d("Generating " + dexFileName);
+                    DexLog.d("Using cache " + dexFileName);
+                    ClassLoader loader = mDexMaker.loadClassDirect(mAppClassLoader, dexFile.getParentFile(), dexFileName);
+                    hookClass = Class.forName(className.replace("/", "."), true, loader);
+                } catch (Throwable ignored) {
+                }
+            }
+            if (hookClass == null) {
+                try {
+                    DexLog.d("cache not hit, generating " + dexFileName);
                     doGenerate(className);
-                    loader = mDexMaker.generateAndLoad(mAppClassLoader, new File(ConfigManager.getCachePath("")), dexFileName, false);
+                    ClassLoader loader = mDexMaker.generateAndLoad(mAppClassLoader, dexFile.getParentFile(), dexFileName, true);
                     dexFile.setWritable(true, false);
                     dexFile.setReadable(true, false);
-                } else {
-                    DexLog.d("Using cache " + dexFileName);
-                    loader = mDexMaker.loadClassDirect(mAppClassLoader, new File(ConfigManager.getCachePath("")), dexFileName);
+                    hookClass = Class.forName(className.replace("/", "."), true, loader);
+                } catch (Throwable ignored) {
                 }
-                usedCache = true;
-            } catch (Throwable ignored) {}
+            }
         }
-        if (!usedCache) {
+        if (hookClass == null) {
             // do everything in memory
-            DexLog.d("Generating in memory");
-            if(BuildConfig.DEBUG)
+            DexLog.d("Falling back to generate in memory");
+            if (BuildConfig.DEBUG)
                 className = className + hookedClassName.replace(".", "/");
+            mDexMaker = new DexMaker();
             doGenerate(className);
             byte[] dexBytes = mDexMaker.generate();
-            loader = new InMemoryDexClassLoader(ByteBuffer.wrap(dexBytes), mAppClassLoader);
+            ClassLoader loader = new InMemoryDexClassLoader(ByteBuffer.wrap(dexBytes), mAppClassLoader);
+            hookClass = Class.forName(className.replace("/", "."), true, loader);
         }
 
-        Class<?> hookClass = Class.forName(className.replace("/", "."), true, loader);
+        if (hookClass == null) {
+            DexLog.e("Unable to generate hooker class. This should not happen. Skipping...");
+            return;
+        }
         // Execute our newly-generated code in-process.
         Method backupMethod = hookClass.getMethod(METHOD_NAME_BACKUP, mActualParameterTypes);
         mHooker = new LspHooker(mHookInfo, mMember, backupMethod);
@@ -191,7 +231,9 @@ public class HookerDexMaker {
         generateHookMethod();
     }
 
-    public LspHooker getHooker() {return mHooker;}
+    public LspHooker getHooker() {
+        return mHooker;
+    }
 
     private void generateFields() {
         mHookerFieldId = mHookerTypeId.getField(hookerTypeId, FIELD_NAME_HOOKER);

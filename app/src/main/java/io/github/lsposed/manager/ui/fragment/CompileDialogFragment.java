@@ -1,3 +1,23 @@
+/*
+ * This file is part of LSPosed.
+ *
+ * LSPosed is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LSPosed is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * Copyright (C) 2020 EdXposed Contributors
+ * Copyright (C) 2021 LSPosed Contributors
+ */
+
 package io.github.lsposed.manager.ui.fragment;
 
 import android.app.Dialog;
@@ -8,56 +28,40 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Lifecycle;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.topjohnwu.superuser.Shell;
+import com.google.android.material.snackbar.Snackbar;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
 
 import io.github.lsposed.manager.App;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.databinding.FragmentCompileDialogBinding;
-import io.github.lsposed.manager.util.CompileUtil;
-import io.github.lsposed.manager.util.ToastUtil;
-import rikka.shizuku.ShizukuSystemProperties;
-
-import static android.content.pm.PackageManager.PERMISSION_DENIED;
-import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import io.github.lsposed.manager.ui.activity.AppListActivity;
 
 @SuppressWarnings("deprecation")
 public class CompileDialogFragment extends AppCompatDialogFragment {
 
-    // TODO:
-    private static final String COMPILE_COMMAND_PREFIX = "cmd package ";
-    private static final String COMPILE_RESET_COMMAND = COMPILE_COMMAND_PREFIX + "compile --reset ";
-    private static final String COMPILE_SPEED_COMMAND = COMPILE_COMMAND_PREFIX + "compile -f -m speed ";
-    private static final String COMPILE_DEXOPT_COMMAND = COMPILE_COMMAND_PREFIX + "force-dex-opt ";
+    private static final String[] COMPILE_RESET_COMMAND = new String[]{"cmd", "package", "compile", "-f", "-m", "speed", ""};
 
     private static final String KEY_APP_INFO = "app_info";
-    private static final String KEY_MSG = "msg";
-    private static final String KEY_TYPE = "type";
     private ApplicationInfo appInfo;
 
-
-    public CompileDialogFragment() {
-    }
-
-    public static CompileDialogFragment newInstance(ApplicationInfo appInfo,
-                                                    String msg, CompileUtil.CompileType type) {
+    public static void speed(FragmentManager fragmentManager, ApplicationInfo info) {
         Bundle arguments = new Bundle();
-        arguments.putParcelable(KEY_APP_INFO, appInfo);
-        arguments.putString(KEY_MSG, msg);
-        arguments.putInt(KEY_TYPE, type.ordinal());
+        arguments.putParcelable(KEY_APP_INFO, info);
         CompileDialogFragment fragment = new CompileDialogFragment();
         fragment.setArguments(arguments);
         fragment.setCancelable(false);
-        return fragment;
+        fragment.show(fragmentManager, "compile_dialog");
     }
 
     @Override
@@ -71,55 +75,15 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
         if (appInfo == null) {
             throw new IllegalStateException("appInfo should not be null.");
         }
-        String msg = arguments.getString(KEY_MSG, getString(R.string.compile_speed_msg));
+
+        FragmentCompileDialogBinding binding = FragmentCompileDialogBinding.inflate(LayoutInflater.from(requireActivity()), null, false);
         final PackageManager pm = requireContext().getPackageManager();
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext())
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity())
                 .setIcon(appInfo.loadIcon(pm))
                 .setTitle(appInfo.loadLabel(pm))
-                .setCancelable(false);
-        FragmentCompileDialogBinding binding = FragmentCompileDialogBinding.inflate(LayoutInflater.from(requireContext()), null, false);
-        builder.setView(binding.getRoot());
-        binding.message.setText(msg);
-        AlertDialog alertDialog = builder.create();
-        alertDialog.setCanceledOnTouchOutside(false);
-        return alertDialog;
-    }
+                .setView(binding.getRoot());
 
-    public void onRequestPermissionsResult(int requestCode, int grantResult) {
-        CompileUtil.CompileType mode = CompileUtil.CompileType.values()[requestCode];
-        if (grantResult == PERMISSION_GRANTED) {
-            AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
-                try {
-                    boolean checkProfiles = ShizukuSystemProperties.getBoolean("dalvik.vm.usejitprofiles", false);
-                    switch (mode) {
-                        case RESET:
-                            CompileUtil.PACKAGE_MANAGER.get().clearApplicationProfileData(appInfo.packageName);
-                            String filter = ShizukuSystemProperties.get("pm.dexopt.install");
-                            CompileUtil.PACKAGE_MANAGER.get().performDexOptMode(appInfo.packageName, checkProfiles, filter, true, true, null);
-                            break;
-                        case SPEED:
-                            CompileUtil.PACKAGE_MANAGER.get().performDexOptMode(appInfo.packageName, checkProfiles, "speed", true, true, null);
-                            break;
-                        case DEXOPT:
-                            CompileUtil.PACKAGE_MANAGER.get().forceDexOpt(appInfo.packageName);
-                            break;
-                    }
-                    App.runOnUiThread(() -> {
-                        ToastUtil.showLongToast(App.getInstance(), R.string.done);
-                        try {
-                            dismissAllowingStateLoss();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    });
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    compileWithShell(mode);
-                }
-            });
-        } else {
-            compileWithShell(mode);
-        }
+        return builder.create();
     }
 
     @Override
@@ -127,43 +91,12 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
         super.onAttach(context);
         Bundle arguments = getArguments();
         if (arguments != null) {
-            int type = arguments.getInt(KEY_TYPE);
             appInfo = arguments.getParcelable(KEY_APP_INFO);
-            int result = App.checkPermission(type, 1);
-            switch (result) {
-                case 0:
-                    onRequestPermissionsResult(type, PERMISSION_GRANTED);
-                    break;
-                case -2:
-                    onRequestPermissionsResult(type, PERMISSION_DENIED);
-                    break;
-            }
-        } else {
-            try {
-                dismissAllowingStateLoss();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void compileWithShell(CompileUtil.CompileType type) {
-        String command = null;
-        if (type == CompileUtil.CompileType.RESET) {
-            command = COMPILE_RESET_COMMAND + appInfo.packageName;
-        } else if (type == CompileUtil.CompileType.DEXOPT) {
-            command = COMPILE_DEXOPT_COMMAND + appInfo.packageName;
-        } else if (type == CompileUtil.CompileType.SPEED) {
-            command = COMPILE_SPEED_COMMAND + appInfo.packageName;
-        }
-        if (command != null) {
+            String[] command = COMPILE_RESET_COMMAND;
+            command[6] = appInfo.packageName;
             new CompileTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, command);
         } else {
-            try {
-                dismissAllowingStateLoss();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            dismissAllowingStateLoss();
         }
     }
 
@@ -177,37 +110,59 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
 
         @Override
         protected String doInBackground(String... commands) {
-            if (outerRef.get() == null) {
-                return App.getInstance().getString(R.string.compile_failed);
-            }
-            // Also get STDERR
-            List<String> stdout = new ArrayList<>();
-            List<String> stderr = new ArrayList<>();
-            Shell.Result result = Shell.su(commands).to(stdout, stderr).exec();
-            if (stderr.size() > 0) {
-                return "Error: " + TextUtils.join("\n", stderr);
-            } else if (!result.isSuccess()) { // they might don't write to stderr
-                return "Error: " + TextUtils.join("\n", stdout);
-            } else {
-                return TextUtils.join("\n", stdout);
+            try {
+                Process process = Runtime.getRuntime().exec(commands);
+                BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+                BufferedReader inputReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                int read;
+                char[] buffer = new char[4096];
+                StringBuilder err = new StringBuilder();
+                while ((read = errorReader.read(buffer)) > 0) {
+                    err.append(buffer, 0, read);
+                }
+                StringBuilder input = new StringBuilder();
+                while ((read = inputReader.read(buffer)) > 0) {
+                    input.append(buffer, 0, read);
+                }
+                errorReader.close();
+                inputReader.close();
+                process.waitFor();
+                String result = "";
+                if (process.exitValue() != 0) {
+                    result = "Error ";
+                }
+                if (TextUtils.isEmpty(err)) {
+                    return result + input.toString();
+                } else {
+                    return result + err.toString();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "Error " + e.getCause();
             }
         }
 
         @Override
         protected void onPostExecute(String result) {
-            try {
-                outerRef.get().dismissAllowingStateLoss();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
             Context context = App.getInstance();
+            String text;
             if (result.length() == 0) {
-                ToastUtil.showLongToast(context, R.string.compile_failed);
+                text = context.getString(R.string.compile_failed);
             } else if (result.length() >= 5 && "Error".equals(result.substring(0, 5))) {
-                ToastUtil.showLongToast(context, context.getString(R.string.compile_failed_with_info) + " " + result.substring(6));
+                text = context.getString(R.string.compile_failed_with_info) + " " + result.substring(6);
             } else {
-                ToastUtil.showLongToast(context, R.string.done);
+                text = context.getString(R.string.compile_done);
             }
+            CompileDialogFragment fragment = outerRef.get();
+            if (fragment != null) {
+                fragment.dismissAllowingStateLoss();
+                AppListActivity activity = (AppListActivity) fragment.getActivity();
+                if (activity != null && activity.getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
+                    activity.makeSnackBar(text, Snackbar.LENGTH_LONG);
+                    return;
+                }
+            }
+            Toast.makeText(context, text, Toast.LENGTH_LONG).show();
         }
     }
 }

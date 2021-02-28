@@ -10,20 +10,23 @@ A Riru module trying to provide an ART hooking framework (initially for Android 
 
 ## Supported Versions
 
-Android 8.1+
+Android 8 ~ 11
 
 ## Install
 
 1. Install Magisk v21+
 2. Install [Riru](https://github.com/RikkaApps/Riru/releases) v23+ from Magisk repo.
 3. [Download](#download) and install LSPosed in Magisk Manager
-4. Install LSPosed Manager
-4. Reboot.
-5. Have fun! :)
+4. Install [LSPosed Manager](https://github.com/LSPosed/LSPosed/releases)
+5. Reboot.
+6. Have fun! :)
 
 ## Download
 
-You can download LSPosed framework and LSPosed Manager from Github Action or Github Release
+For stable release, please go to [Github Release page](https://github.com/LSPosed/LSPosed/releases)
+For canary build, please check [Github Actions](https://github.com/LSPosed/LSPosed/actions)
+Note: debug build is only available on Github Actions. 
+
 ## Useful Links
 
 - [List of Xposed Modules For Android Pie Working With LSPosed](https://forum.xda-developers.com/xposed/list-xposed-modules-android-pie-ed-t3892768) (thanks to Uraniam9 @ xda-developers)
@@ -31,6 +34,7 @@ You can download LSPosed framework and LSPosed Manager from Github Action or Git
 ## Get Help
 
 - GitHub issues: [Issues](https://github.com/LSPosed/LSPosed/issues/)
+- (For Chinese speakers) 本项目只接受英语**标题**的issue。如果您不懂英语，请使用[翻译工具](https://www.deepl.com/zh/translator)
 
 ## For Developers
 
@@ -58,3 +62,7 @@ Notice: These community group don't accept any bug report, please use [Get help]
 - [SandHook](https://github.com/ganyao114/SandHook/): ART hooking framework for SandHook variant
 - [Dobby](https://github.com/jmpews/Dobby): used for inline hooking
 - [EdXposed](https://github.com/ElderDrivers/EdXposed): fork source
+
+## License
+
+LSPosed is licensed under the **GNU General Public License v3 (GPL-3)** (http://www.gnu.org/copyleft/gpl.html).

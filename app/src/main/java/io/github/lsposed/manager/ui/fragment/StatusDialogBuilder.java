@@ -1,40 +1,54 @@
+/*
+ * This file is part of LSPosed.
+ *
+ * LSPosed is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LSPosed is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * Copyright (C) 2020 EdXposed Contributors
+ * Copyright (C) 2021 LSPosed Contributors
+ */
+
 package io.github.lsposed.manager.ui.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import androidx.core.text.HtmlCompat;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.Locale;
 
-import dalvik.system.VMRuntime;
-import io.github.lsposed.manager.App;
 import io.github.lsposed.manager.BuildConfig;
-import io.github.lsposed.manager.Constants;
+import io.github.lsposed.manager.ConfigManager;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.databinding.StatusInstallerBinding;
+import io.github.lsposed.manager.util.BlurBehindDialogBuilder;
 
 @SuppressLint("StaticFieldLeak")
-public class StatusDialogBuilder extends MaterialAlertDialogBuilder {
+public class StatusDialogBuilder extends BlurBehindDialogBuilder {
     private static final String CPU_ABI;
     private static final String CPU_ABI2;
 
     static {
-        final String[] abiList;
-        if (VMRuntime.getRuntime().is64Bit()) {
-            abiList = Build.SUPPORTED_64_BIT_ABIS;
-        } else {
+        String[] abiList = Build.SUPPORTED_64_BIT_ABIS;
+        if (abiList.length == 0) {
             abiList = Build.SUPPORTED_32_BIT_ABIS;
         }
         CPU_ABI = abiList[0];
@@ -49,20 +63,28 @@ public class StatusDialogBuilder extends MaterialAlertDialogBuilder {
         super(context);
         StatusInstallerBinding binding = StatusInstallerBinding.inflate(LayoutInflater.from(context), null, false);
 
-        String installedXposedVersion = Constants.getXposedVersion();
+        String installXposedVersion = ConfigManager.getXposedVersionName();
         String mAppVer = String.format("%s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE);
         binding.manager.setText(mAppVer);
 
-        if (installedXposedVersion != null) {
-            binding.api.setText(String.format(Locale.US, "%s.0", Constants.getXposedApiVersion()));
-            binding.framework.setText(String.format(Locale.US, "%s (%s)", installedXposedVersion, Constants.getXposedVersionCode()));
+        if (installXposedVersion != null) {
+            binding.api.setText(String.format(Locale.US, "%s.0", ConfigManager.getXposedApiVersion()));
+            binding.framework.setText(String.format(Locale.US, "%s (%s)", installXposedVersion, ConfigManager.getXposedVersionCode()));
         }
 
-        binding.androidVersion.setText(context.getString(R.string.android_sdk, getAndroidVersion(), Build.VERSION.RELEASE, Build.VERSION.SDK_INT));
+        if (Build.VERSION.PREVIEW_SDK_INT != 0) {
+            binding.androidVersion.setText(context.getString(R.string.android_sdk_preview, Build.VERSION.CODENAME));
+        } else {
+            binding.androidVersion.setText(context.getString(R.string.android_sdk, getAndroidVersion(), Build.VERSION.RELEASE, Build.VERSION.SDK_INT));
+        }
+
         binding.manufacturer.setText(getUIFramework());
         binding.cpu.setText(getCompleteArch());
 
-        determineVerifiedBootState(binding);
+        if (ConfigManager.isPermissive()) {
+            binding.selinux.setVisibility(View.VISIBLE);
+            binding.selinux.setText(HtmlCompat.fromHtml(context.getString(R.string.selinux_permissive), HtmlCompat.FROM_HTML_MODE_LEGACY));
+        }
         setView(binding.getRoot());
     }
 
@@ -106,42 +128,8 @@ public class StatusDialogBuilder extends MaterialAlertDialogBuilder {
         }
     }
 
-    private void determineVerifiedBootState(StatusInstallerBinding binding) {
-        try {
-            @SuppressLint("PrivateApi") Class<?> c = Class.forName("android.os.SystemProperties");
-            Method m = c.getDeclaredMethod("get", String.class, String.class);
-            m.setAccessible(true);
-
-            String propSystemVerified = (String) m.invoke(null, "partition.system.verified", "0");
-            String propState = (String) m.invoke(null, "ro.boot.verifiedbootstate", "");
-            File fileDmVerityModule = new File("/sys/module/dm_verity");
-
-            boolean verified = false;
-            if (propSystemVerified != null) {
-                verified = !propSystemVerified.equals("0");
-            }
-            boolean detected = false;
-            if (propState != null) {
-                detected = !propState.isEmpty() || fileDmVerityModule.exists();
-            }
-
-            if (verified) {
-                binding.dmverity.setText(R.string.verified_boot_active);
-                binding.dmverity.setTextColor(ContextCompat.getColor(getContext(), R.color.warning));
-            } else if (detected) {
-                binding.dmverity.setText(R.string.verified_boot_deactivated);
-            } else {
-                binding.dmverity.setText(R.string.verified_boot_none);
-                binding.dmverity.setTextColor(ContextCompat.getColor(getContext(), R.color.warning));
-            }
-        } catch (Exception e) {
-            Log.e(App.TAG, "Could not detect Verified Boot state", e);
-        }
-    }
-
     private String getAndroidVersion() {
         switch (Build.VERSION.SDK_INT) {
-            case 26:
             case 27:
                 return "Oreo";
             case 28:
@@ -150,6 +138,8 @@ public class StatusDialogBuilder extends MaterialAlertDialogBuilder {
                 return "Q";
             case 30:
                 return "R";
+            case 31:
+                return "S";
         }
         return "Unknown";
     }

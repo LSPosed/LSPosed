@@ -1,3 +1,23 @@
+/*
+ * This file is part of LSPosed.
+ *
+ * LSPosed is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LSPosed is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * Copyright (C) 2020 EdXposed Contributors
+ * Copyright (C) 2021 LSPosed Contributors
+ */
+
 package io.github.lsposed.lspd.proxy;
 
 import android.app.ActivityThread;
@@ -5,10 +25,10 @@ import android.content.pm.ApplicationInfo;
 import android.content.res.CompatibilityInfo;
 import android.text.TextUtils;
 
-import io.github.lsposed.lspd._hooker.impl.HandleBindApp;
-import io.github.lsposed.lspd._hooker.impl.LoadedApkCstr;
-import io.github.lsposed.lspd._hooker.impl.StartBootstrapServices;
-import io.github.lsposed.lspd._hooker.impl.SystemMain;
+import io.github.lsposed.lspd.hooker.HandleBindAppHooker;
+import io.github.lsposed.lspd.hooker.LoadedApkCstrHooker;
+import io.github.lsposed.lspd.hooker.StartBootstrapServicesHooker;
+import io.github.lsposed.lspd.hooker.SystemMainHooker;
 import io.github.lsposed.lspd.util.Utils;
 import io.github.lsposed.lspd.util.Versions;
 
@@ -17,8 +37,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.XposedInit;
-import de.robv.android.xposed.annotation.ApiSensitive;
-import de.robv.android.xposed.annotation.Level;
+import io.github.lsposed.lspd.annotation.ApiSensitive;
+import io.github.lsposed.lspd.annotation.Level;
 
 public abstract class BaseRouter implements Router {
 
@@ -33,17 +53,16 @@ public abstract class BaseRouter implements Router {
         XposedInit.startsSystemServer = isSystem;
     }
 
-    public void installBootstrapHooks(boolean isSystem) {
+    public void installBootstrapHooks(boolean isSystem, String appDataDir) {
         // Initialize the Xposed framework
         try {
             if (!bootstrapHooked.compareAndSet(false, true)) {
                 return;
             }
-            startBootstrapHook(isSystem);
-            XposedInit.initForZygote(isSystem);
+            startBootstrapHook(isSystem, appDataDir);
+            XposedInit.initForZygote();
         } catch (Throwable t) {
             Utils.logE("error during Xposed initialization", t);
-            XposedBridge.disableHooks = true;
         }
     }
 
@@ -68,30 +87,30 @@ public abstract class BaseRouter implements Router {
 
 
     @ApiSensitive(Level.LOW)
-    public void startBootstrapHook(boolean isSystem) {
+    public void startBootstrapHook(boolean isSystem, String appDataDir) {
         Utils.logD("startBootstrapHook starts: isSystem = " + isSystem);
         ClassLoader classLoader = BaseRouter.class.getClassLoader();
         if (isSystem) {
             XposedHelpers.findAndHookMethod("android.app.ActivityThread", classLoader,
-                    "systemMain", new SystemMain());
+                    "systemMain", new SystemMainHooker());
         }
         XposedHelpers.findAndHookMethod("android.app.ActivityThread", classLoader,
                 "handleBindApplication",
                 "android.app.ActivityThread$AppBindData",
-                new HandleBindApp());
+                new HandleBindAppHooker(appDataDir));
         XposedHelpers.findAndHookConstructor("android.app.LoadedApk", classLoader,
                 ActivityThread.class, ApplicationInfo.class, CompatibilityInfo.class,
                 ClassLoader.class, boolean.class, boolean.class, boolean.class,
-                new LoadedApkCstr());
+                new LoadedApkCstrHooker());
     }
 
     public void startSystemServerHook() {
-        StartBootstrapServices sbsHooker = new StartBootstrapServices();
+        StartBootstrapServicesHooker sbsHooker = new StartBootstrapServicesHooker();
         Object[] paramTypesAndCallback = Versions.hasR() ?
                 new Object[]{"com.android.server.utils.TimingsTraceAndSlog", sbsHooker} :
                 new Object[]{sbsHooker};
         XposedHelpers.findAndHookMethod("com.android.server.SystemServer",
-                SystemMain.systemServerCL,
+                SystemMainHooker.systemServerCL,
                 "startBootstrapServices", paramTypesAndCallback);
     }
 }

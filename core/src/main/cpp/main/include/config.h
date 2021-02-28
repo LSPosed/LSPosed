@@ -1,3 +1,22 @@
+/*
+ * This file is part of LSPosed.
+ *
+ * LSPosed is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LSPosed is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * Copyright (C) 2020 EdXposed Contributors
+ * Copyright (C) 2021 LSPosed Contributors
+ */
 
 #pragma once
 
@@ -31,8 +50,8 @@ inline constexpr bool is64 = Is64();
 
     static const auto kEntryClassName = "io.github.lsposed.lspd.core.Main"s;
     static const auto kClassLinkerClassName = "io.github.lsposed.lspd.nativebridge.ClassLinker"s;
-    static const auto kSandHookClassName = "com.swift.sandhook.SandHook"s;
-    static const auto kSandHookNeverCallClassName = "com.swift.sandhook.ClassNeverCall"s;
+    static const auto kBridgeServiceClassName = "io.github.lsposed.lspd.service.BridgeService"s;
+    static const auto kDexPath = "/data/adb/lspd/framework/lspd.dex"s;
 
     static const auto kLibArtName = "libart.so"s;
     static const auto kLibFwName = "libandroidfw.so"s;

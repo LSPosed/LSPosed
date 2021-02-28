@@ -1,3 +1,23 @@
+/*
+ * This file is part of LSPosed.
+ *
+ * LSPosed is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LSPosed is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * Copyright (C) 2020 EdXposed Contributors
+ * Copyright (C) 2021 LSPosed Contributors
+ */
+
 package io.github.lsposed.manager.adapters;
 
 import android.content.Intent;
@@ -8,26 +28,17 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.view.MenuItem;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 
-import io.github.lsposed.manager.Constants;
+import io.github.lsposed.manager.ConfigManager;
 import io.github.lsposed.manager.R;
 
 public class AppHelper {
 
     public static final String SETTINGS_CATEGORY = "de.robv.android.xposed.category.MODULE_SETTINGS";
-    private static final String BASE_PATH = Constants.getBaseDir();
-    private static final String SCOPE_LIST_PATH = "conf/%s.conf";
-
-    private static final HashMap<String, List<String>> scopeList = new HashMap<>();
+    private static List<PackageInfo> appList;
 
     public static Intent getSettingsIntent(String packageName, PackageManager packageManager) {
         // taken from
@@ -105,51 +116,10 @@ public class AppHelper {
         }
     }
 
-    public static List<String> getEnabledModuleList() {
-        Path path = Paths.get(Constants.getEnabledModulesListFile());
-        List<String> s = new ArrayList<>();
-        try {
-            s = Files.readAllLines(path);
-        } catch (IOException e) {
-            e.printStackTrace();
+    public static List<PackageInfo> getAppList(boolean force) {
+        if (appList == null || force) {
+            appList = ConfigManager.getInstalledPackagesFromAllUsers(PackageManager.GET_META_DATA, true);
         }
-        return s;
-    }
-
-    public static List<String> getScopeList(String modulePackageName) {
-        if (scopeList.containsKey(modulePackageName)) {
-            return scopeList.get(modulePackageName);
-        }
-        Path path = Paths.get(BASE_PATH + String.format(SCOPE_LIST_PATH, modulePackageName));
-        List<String> s = new ArrayList<>();
-        try {
-            s = Files.readAllLines(path);
-            scopeList.put(modulePackageName, s);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return s;
-    }
-
-    static boolean saveScopeList(String modulePackageName, List<String> list) {
-        Path path = Paths.get(BASE_PATH + String.format(SCOPE_LIST_PATH, modulePackageName));
-        if (list.size() == 0) {
-            scopeList.put(modulePackageName, list);
-            try {
-                Files.delete(path);
-                return true;
-            } catch (IOException e) {
-                e.printStackTrace();
-                return false;
-            }
-        }
-        try {
-            Files.write(path, list);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-        scopeList.put(modulePackageName, list);
-        return true;
+        return appList;
     }
 }

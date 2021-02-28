@@ -1,3 +1,23 @@
+/*
+ * This file is part of LSPosed.
+ *
+ * LSPosed is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LSPosed is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * Copyright (C) 2020 EdXposed Contributors
+ * Copyright (C) 2021 LSPosed Contributors
+ */
+
 package io.github.lsposed.manager;
 
 import android.annotation.SuppressLint;
@@ -7,71 +27,33 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
 
+import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Locale;
 
+import io.github.lsposed.manager.repo.RepoLoader;
 import io.github.lsposed.manager.ui.activity.CrashReportActivity;
-import io.github.lsposed.manager.util.CompileUtil;
-import io.github.lsposed.manager.util.NotificationUtil;
-import io.github.lsposed.manager.util.RebootUtil;
-import rikka.shizuku.Shizuku;
-import rikka.sui.Sui;
-
-import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import io.github.lsposed.manager.util.DoHDNS;
+import io.github.lsposed.manager.util.theme.ThemeUtil;
+import okhttp3.Cache;
+import okhttp3.OkHttpClient;
+import rikka.material.app.DayNightDelegate;
 
 public class App extends Application {
     public static final String TAG = "LSPosedManager";
     @SuppressLint("StaticFieldLeak")
     private static App instance = null;
-    private static Thread uiThread;
-    private static Handler mainHandler;
+    private static OkHttpClient okHttpClient;
+    private static Cache okHttpCache;
     private SharedPreferences pref;
-
-    private final Shizuku.OnRequestPermissionResultListener REQUEST_PERMISSION_RESULT_LISTENER = this::onRequestPermissionsResult;
-
-    static {
-        Sui.init(BuildConfig.APPLICATION_ID);
-    }
-
-    private void onRequestPermissionsResult(int requestCode, int grantResult) {
-        if (requestCode < 10) {
-            RebootUtil.onRequestPermissionsResult(requestCode, grantResult);
-        } else {
-            CompileUtil.onRequestPermissionsResult(requestCode - 10, grantResult);
-        }
-    }
-
-    public static int checkPermission(int code, int from) {
-        int requestCode = code + from * 10;
-        try {
-            if (!Shizuku.isPreV11() && Shizuku.getVersion() >= 11) {
-                if (Shizuku.checkSelfPermission() == PERMISSION_GRANTED) {
-                    return 0;
-                } else if (Shizuku.shouldShowRequestPermissionRationale()) {
-                    return -1;
-                } else {
-                    Shizuku.requestPermission(requestCode);
-                    return -1;
-                }
-            }
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-        return -2;
-    }
+    private final Handler handler = new Handler(Looper.getMainLooper());
 
     public static App getInstance() {
         return instance;
-    }
-
-    public static void runOnUiThread(Runnable action) {
-        if (Thread.currentThread() != uiThread) {
-            mainHandler.post(action);
-        } else {
-            action.run();
-        }
     }
 
     public static SharedPreferences getPreferences() {
@@ -110,13 +92,38 @@ public class App extends Application {
         }
 
         instance = this;
-        uiThread = Thread.currentThread();
-        mainHandler = new Handler(Looper.getMainLooper());
 
         pref = PreferenceManager.getDefaultSharedPreferences(this);
+        if ("CN".equals(Locale.getDefault().getCountry())) {
+            if (!pref.contains("doh")) {
+                pref.edit().putBoolean("doh", true).apply();
+            }
+        }
+        DayNightDelegate.setApplicationContext(this);
+        DayNightDelegate.setDefaultNightMode(ThemeUtil.getDarkTheme());
+        RepoLoader.getInstance().loadRemoteData();
+    }
 
-        NotificationUtil.init();
+    @NonNull
+    public static OkHttpClient getOkHttpClient() {
+        if (okHttpClient == null) {
+            okHttpClient = new OkHttpClient.Builder()
+                    .cache(getOkHttpCache())
+                    .dns(new DoHDNS())
+                    .build();
+        }
+        return okHttpClient;
+    }
 
-        Shizuku.addRequestPermissionResultListener(REQUEST_PERMISSION_RESULT_LISTENER);
+    @NonNull
+    private static Cache getOkHttpCache() {
+        if (okHttpCache == null) {
+            okHttpCache = new Cache(new File(App.getInstance().getCacheDir(), "http_cache"), 50L * 1024L * 1024L);
+        }
+        return okHttpCache;
+    }
+
+    public void runOnUiThread(Runnable runnable) {
+        handler.post(runnable);
     }
 }

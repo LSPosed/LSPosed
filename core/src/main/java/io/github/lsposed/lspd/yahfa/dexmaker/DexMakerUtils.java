@@ -1,6 +1,25 @@
+/*
+ * This file is part of LSPosed.
+ *
+ * LSPosed is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LSPosed is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * Copyright (C) 2020 EdXposed Contributors
+ * Copyright (C) 2021 LSPosed Contributors
+ */
+
 package io.github.lsposed.lspd.yahfa.dexmaker;
 
-import io.github.lsposed.lspd.nativebridge.ConfigManager;
 import io.github.lsposed.lspd.util.Utils;
 
 import java.io.File;
@@ -13,15 +32,17 @@ import external.com.android.dx.Code;
 import external.com.android.dx.Local;
 import external.com.android.dx.TypeId;
 
+import static io.github.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
+
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class DexMakerUtils {
 
     public static boolean canCache = true;
 
     static {
-        File cacheDir = new File(ConfigManager.getCachePath(""));
+        File cacheDir = new File(serviceClient.getCachePath(""));
         if(!cacheDir.canRead() || !cacheDir.canWrite()) {
-            Utils.logW("Cache disabled");
+            Utils.logW("Cache disabled with path " + cacheDir.getAbsolutePath());
             canCache = false;
         }
     }

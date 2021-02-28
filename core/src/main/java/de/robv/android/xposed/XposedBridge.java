@@ -1,3 +1,23 @@
+/*
+ * This file is part of LSPosed.
+ *
+ * LSPosed is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LSPosed is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * Copyright (C) 2020 EdXposed Contributors
+ * Copyright (C) 2021 LSPosed Contributors
+ */
+
 package de.robv.android.xposed;
 
 import android.content.res.Resources;
@@ -5,7 +25,6 @@ import android.content.res.TypedArray;
 import android.util.Log;
 
 import io.github.lsposed.lspd.BuildConfig;
-import io.github.lsposed.lspd.nativebridge.ConfigManager;
 import io.github.lsposed.lspd.config.LSPdConfigGlobal;
 
 import java.lang.reflect.AccessibleObject;
@@ -22,17 +41,16 @@ import java.util.Map;
 import java.util.Set;
 
 import dalvik.system.InMemoryDexClassLoader;
-import de.robv.android.xposed.XC_MethodHook.MethodHookParam;
-import de.robv.android.xposed.annotation.ApiSensitive;
-import de.robv.android.xposed.annotation.Level;
+import io.github.lsposed.lspd.annotation.ApiSensitive;
+import io.github.lsposed.lspd.annotation.Level;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XC_InitZygote;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
-import de.robv.android.xposed.callbacks.XCallback;
 import external.com.android.dx.DexMaker;
 import external.com.android.dx.TypeId;
+import io.github.lsposed.lspd.nativebridge.ModuleLogger;
+import io.github.lsposed.lspd.nativebridge.ResourcesHook;
 
-import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
 
 /**
@@ -58,12 +76,6 @@ public final class XposedBridge {
 
 	/*package*/ static boolean isZygote = true; // ed: RuntimeInit.main() tool process not supported yet
 
-	private static int runtime = 2; // ed: only support art
-	private static final int RUNTIME_DALVIK = 1;
-	private static final int RUNTIME_ART = 2;
-
-	public static boolean disableHooks = false;
-
 	// This field is set "magically" on MIUI.
 	/*package*/ static long BOOT_START_TIME;
 
@@ -77,23 +89,6 @@ public final class XposedBridge {
 
 	private XposedBridge() {}
 
-	/**
-	 * Called when native methods and other things are initialized, but before preloading classes etc.
-	 * @hide
-	 */
-	@SuppressWarnings("deprecation")
-	public static void main(String[] args) {
-		// ed: moved
-	}
-
-	/** @hide */
-//	protected static final class ToolEntryPoint {
-//		protected static void main(String[] args) {
-//			isZygote = false;
-//			XposedBridge.main(args);
-//		}
-//	}
-
 	public static volatile ClassLoader dummyClassLoader = null;
 
 	@ApiSensitive(Level.MIDDLE)
@@ -103,8 +98,8 @@ public final class XposedBridge {
 		}
 		try {
 			Resources res = Resources.getSystem();
-			Class resClass = res.getClass();
-			Class taClass = TypedArray.class;
+			Class<?> resClass = res.getClass();
+			Class<?> taClass = TypedArray.class;
 			try {
 				TypedArray ta = res.obtainTypedArray(res.getIdentifier(
 						"preloaded_drawables", "array", "android"));
@@ -115,16 +110,20 @@ public final class XposedBridge {
 			}
 			XposedBridge.removeFinalFlagNative(resClass);
 			XposedBridge.removeFinalFlagNative(taClass);
-			DexMaker dexMaker = new DexMaker();
-			dexMaker.declare(TypeId.get("Lxposed/dummy/XResourcesSuperClass;"),
-					"XResourcesSuperClass.java",
-					Modifier.PUBLIC, TypeId.get(resClass));
-			dexMaker.declare(TypeId.get("Lxposed/dummy/XTypedArraySuperClass;"),
-					"XTypedArraySuperClass.java",
-					Modifier.PUBLIC, TypeId.get(taClass));
 			ClassLoader myCL = XposedBridge.class.getClassLoader();
-			dummyClassLoader = new InMemoryDexClassLoader(
-					ByteBuffer.wrap(dexMaker.generate()), myCL.getParent());
+			dummyClassLoader = ResourcesHook.buildDummyClassLoader(myCL.getParent(), resClass, taClass);
+			if (dummyClassLoader == null) {
+				XposedBridge.log("Dexbuilder fails, fallback to dexmaker");
+				DexMaker dexMaker = new DexMaker();
+				dexMaker.declare(TypeId.get("Lxposed/dummy/XResourcesSuperClass;"),
+						"XResourcesSuperClass.java",
+						Modifier.PUBLIC, TypeId.get(resClass));
+				dexMaker.declare(TypeId.get("Lxposed/dummy/XTypedArraySuperClass;"),
+						"XTypedArraySuperClass.java",
+						Modifier.PUBLIC, TypeId.get(taClass));
+				dummyClassLoader = new InMemoryDexClassLoader(
+						ByteBuffer.wrap(dexMaker.generate()), myCL.getParent());
+			}
 			dummyClassLoader.loadClass("xposed.dummy.XResourcesSuperClass");
 			dummyClassLoader.loadClass("xposed.dummy.XTypedArraySuperClass");
 			setObjectField(myCL, "parent", dummyClassLoader);
@@ -133,15 +132,6 @@ public final class XposedBridge {
 			XposedInit.disableResources = true;
 		}
 	}
-
-//	private static boolean hadInitErrors() {
-//		// ed: assuming never had errors
-//		return false;
-//	}
-//	private static native int getRuntime();
-//	/*package*/ static native boolean startsSystemServer();
-//	/*package*/ static native String getStartClassName();
-//	/*package*/ native static boolean initXResourcesNative();
 
 	/**
 	 * Returns the currently installed version of the Xposed framework.
@@ -159,10 +149,8 @@ public final class XposedBridge {
 	 * @param text The log message.
 	 */
 	public synchronized static void log(String text) {
-		if (ConfigManager.isNoModuleLogEnabled()) {
-			return;
-		}
 		Log.i(TAG, text);
+		ModuleLogger.log(text);
 	}
 
 	/**
@@ -174,7 +162,9 @@ public final class XposedBridge {
 	 * @param t The Throwable object for the stack trace.
 	 */
 	public synchronized static void log(Throwable t) {
-		Log.e(TAG, Log.getStackTraceString(t));
+		String logStr = Log.getStackTraceString(t);
+		Log.e(TAG, logStr);
+		ModuleLogger.log(logStr);
 	}
 
 	/**
@@ -218,28 +208,10 @@ public final class XposedBridge {
 		callbacks.add(callback);
 
 		if (newMethod) {
-			Class<?> declaringClass = hookMethod.getDeclaringClass();
-			int slot;
-			Class<?>[] parameterTypes;
-			Class<?> returnType;
-			if (runtime == RUNTIME_ART) {
-				slot = 0;
-				parameterTypes = null;
-				returnType = null;
-			} else if (hookMethod instanceof Method) {
-				slot = getIntField(hookMethod, "slot");
-				parameterTypes = ((Method) hookMethod).getParameterTypes();
-				returnType = ((Method) hookMethod).getReturnType();
-			} else {
-				slot = getIntField(hookMethod, "slot");
-				parameterTypes = ((Constructor<?>) hookMethod).getParameterTypes();
-				returnType = null;
-			}
-
-            AdditionalHookInfo additionalInfo = new AdditionalHookInfo(callbacks, parameterTypes, returnType);
+			AdditionalHookInfo additionalInfo = new AdditionalHookInfo(callbacks);
             Member reflectMethod = LSPdConfigGlobal.getHookProvider().findMethodNative(hookMethod);
             if (reflectMethod != null) {
-				hookMethodNative(reflectMethod, declaringClass, slot, additionalInfo);
+				LSPdConfigGlobal.getHookProvider().hookMethod(reflectMethod, (AdditionalHookInfo) additionalInfo);
 			} else {
 				PendingHooks.recordPendingMethod((Method)hookMethod, additionalInfo);
 			}
@@ -304,95 +276,6 @@ public final class XposedBridge {
 	}
 
 	/**
-	 * This method is called as a replacement for hooked methods.
-	 */
-	public static Object handleHookedMethod(Member method, long originalMethodId, Object additionalInfoObj,
-			Object thisObject, Object[] args) throws Throwable {
-		AdditionalHookInfo additionalInfo = (AdditionalHookInfo) additionalInfoObj;
-
-		if (disableHooks) {
-			try {
-				return invokeOriginalMethodNative(method, originalMethodId, additionalInfo.parameterTypes,
-						additionalInfo.returnType, thisObject, args);
-			} catch (InvocationTargetException e) {
-				throw e.getCause();
-			}
-		}
-
-		Object[] callbacksSnapshot = additionalInfo.callbacks.getSnapshot();
-		final int callbacksLength = callbacksSnapshot.length;
-		if (callbacksLength == 0) {
-			try {
-				return invokeOriginalMethodNative(method, originalMethodId, additionalInfo.parameterTypes,
-						additionalInfo.returnType, thisObject, args);
-			} catch (InvocationTargetException e) {
-				throw e.getCause();
-			}
-		}
-
-		MethodHookParam param = new MethodHookParam();
-		param.method = method;
-		param.thisObject = thisObject;
-		param.args = args;
-
-		// call "before method" callbacks
-		int beforeIdx = 0;
-		do {
-			try {
-				((XC_MethodHook) callbacksSnapshot[beforeIdx]).beforeHookedMethod(param);
-			} catch (Throwable t) {
-				XposedBridge.log(t);
-
-				// reset result (ignoring what the unexpectedly exiting callback did)
-				param.setResult(null);
-				param.returnEarly = false;
-				continue;
-			}
-
-			if (param.returnEarly) {
-				// skip remaining "before" callbacks and corresponding "after" callbacks
-				beforeIdx++;
-				break;
-			}
-		} while (++beforeIdx < callbacksLength);
-
-		// call original method if not requested otherwise
-		if (!param.returnEarly) {
-			try {
-				param.setResult(invokeOriginalMethodNative(method, originalMethodId,
-						additionalInfo.parameterTypes, additionalInfo.returnType, param.thisObject, param.args));
-			} catch (InvocationTargetException e) {
-				param.setThrowable(e.getCause());
-			}
-		}
-
-		// call "after method" callbacks
-		int afterIdx = beforeIdx - 1;
-		do {
-			Object lastResult =  param.getResult();
-			Throwable lastThrowable = param.getThrowable();
-
-			try {
-				((XC_MethodHook) callbacksSnapshot[afterIdx]).afterHookedMethod(param);
-			} catch (Throwable t) {
-				XposedBridge.log(t);
-
-				// reset to last result (ignoring what the unexpectedly exiting callback did)
-				if (lastThrowable == null)
-					param.setResult(lastResult);
-				else
-					param.setThrowable(lastThrowable);
-			}
-		} while (--afterIdx >= 0);
-
-		// return
-		if (param.hasThrowable())
-			throw param.getThrowable();
-		else
-			return param.getResult();
-	}
-
-	/**
 	 * Adds a callback to be executed when an app ("Android package") is loaded.
 	 *
 	 * <p class="note">You probably don't need to call this. Simply implement {@link IXposedHookLoadPackage}
@@ -428,50 +311,11 @@ public final class XposedBridge {
 		}
 	}
 
-	public static void clearInitPackageResources() {
-		synchronized (sInitPackageResourcesCallbacks) {
-			sInitPackageResourcesCallbacks.clear();
-		}
-	}
-
 	public static void hookInitZygote(XC_InitZygote callback) {
 		synchronized (sInitZygoteCallbacks) {
 			sInitZygoteCallbacks.add(callback);
 		}
 	}
-
-	public static void clearInitZygotes() {
-		synchronized (sInitZygoteCallbacks) {
-			sInitZygoteCallbacks.clear();
-		}
-	}
-
-	public static void callInitZygotes() {
-		XCallback.callAll(new IXposedHookZygoteInit.StartupParam(sInitZygoteCallbacks));
-	}
-
-	public static void clearAllCallbacks() {
-		clearLoadedPackages();
-		clearInitPackageResources();
-		clearInitZygotes();
-	}
-
-	/**
-	 * Intercept every call to the specified method and call a handler function instead.
-	 * @param method The method to intercept
-	 */
-	/*package*/ synchronized static void hookMethodNative(final Member method, Class<?> declaringClass,
-                                                      int slot, final Object additionalInfoObj) {
-		LSPdConfigGlobal.getHookProvider().hookMethod(method, (AdditionalHookInfo) additionalInfoObj);
-	}
-
-    private static Object invokeOriginalMethodNative(Member method, long methodId,
-                                                     Class<?>[] parameterTypes,
-                                                     Class<?> returnType,
-                                                     Object thisObject, Object[] args)
-            throws Throwable {
-        return LSPdConfigGlobal.getHookProvider().invokeOriginalMethod(method, methodId, thisObject, args);
-    }
 
 	/**
 	 * Basically the same as {@link Method#invoke}, but calls the original method
@@ -504,55 +348,17 @@ public final class XposedBridge {
 			args = EMPTY_ARRAY;
 		}
 
-		Class<?>[] parameterTypes;
-		Class<?> returnType;
-		if (runtime == RUNTIME_ART && (method instanceof Method || method instanceof Constructor)) {
-			parameterTypes = null;
-			returnType = null;
-		} else if (method instanceof Method) {
-			parameterTypes = ((Method) method).getParameterTypes();
-			returnType = ((Method) method).getReturnType();
-		} else if (method instanceof Constructor) {
-			parameterTypes = ((Constructor<?>) method).getParameterTypes();
-			returnType = null;
-		} else {
+		if (!(method instanceof Method) && !(method instanceof Constructor)) {
 			throw new IllegalArgumentException("method must be of type Method or Constructor");
 		}
 
 		long methodId = LSPdConfigGlobal.getHookProvider().getMethodId(method);
-		return invokeOriginalMethodNative(method, methodId, parameterTypes, returnType, thisObject, args);
+		return LSPdConfigGlobal.getHookProvider().invokeOriginalMethod(method, methodId, thisObject, args);
 	}
-
-	/*package*/ static void setObjectClass(Object obj, Class<?> clazz) {
-		if (clazz.isAssignableFrom(obj.getClass())) {
-			throw new IllegalArgumentException("Cannot transfer object from " + obj.getClass() + " to " + clazz);
-		}
-		setObjectClassNative(obj, clazz);
-	}
-
-	private static native void setObjectClassNative(Object obj, Class<?> clazz);
-	/*package*/ static native void dumpObjectNative(Object obj);
-
-	/*package*/ static Object cloneToSubclass(Object obj, Class<?> targetClazz) {
-		if (obj == null)
-			return null;
-
-		if (!obj.getClass().isAssignableFrom(targetClazz))
-			throw new ClassCastException(targetClazz + " doesn't extend " + obj.getClass());
-
-		return cloneToSubclassNative(obj, targetClazz);
-	}
-
-	private static native Object cloneToSubclassNative(Object obj, Class<?> targetClazz);
 
 	private static void removeFinalFlagNative(Class clazz) {
 		LSPdConfigGlobal.getHookProvider().removeFinalFlagNative(clazz);
 	}
-
-//	/*package*/ static native void closeFilesBeforeForkNative();
-//	/*package*/ static native void reopenFilesAfterForkNative();
-//
-//	/*package*/ static native void invalidateCallersNative(Member[] methods);
 
 	/** @hide */
 	public static final class CopyOnWriteSortedSet<E> {
@@ -604,13 +410,9 @@ public final class XposedBridge {
 
 	public static class AdditionalHookInfo {
 		public final CopyOnWriteSortedSet<XC_MethodHook> callbacks;
-		public final Class<?>[] parameterTypes;
-		public final Class<?> returnType;
 
-		private AdditionalHookInfo(CopyOnWriteSortedSet<XC_MethodHook> callbacks, Class<?>[] parameterTypes, Class<?> returnType) {
+		private AdditionalHookInfo(CopyOnWriteSortedSet<XC_MethodHook> callbacks) {
 			this.callbacks = callbacks;
-			this.parameterTypes = parameterTypes;
-			this.returnType = returnType;
 		}
 	}
 }

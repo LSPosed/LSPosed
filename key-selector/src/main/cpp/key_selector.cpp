@@ -1,25 +1,27 @@
 /*
+ * This file is part of LSPosed.
+ *
+ * LSPosed is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LSPosed is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+ *
  * Copyright (C) 2010 The Android Open Source Project
  * Copyright (C) 2015-2016 The CyanogenMod Project
- * Copyright (C) 2021 LSPosed
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright (C) 2021 LSPosed Contributors
  */
 
 #include <cerrno>
 #include <cstdlib>
 #include <cstring>
-#include <dirent.h>
 #include <fcntl.h>
 #include <filesystem>
 #include <iostream>
@@ -30,6 +32,7 @@
 #include <sys/poll.h>
 #include <sys/system_properties.h>
 #include <unistd.h>
+#include <fstream>
 
 #include "Languages.h"
 #include "key_selector.h"
@@ -231,20 +234,24 @@ uint32_t get_event() {
     }
 }
 
+// for phone which has no button
+uint16_t timeout = 10;
+std::unique_ptr<Languages> l = nullptr;
+
 int main() {
     if (getuid() != 0) {
         std::cerr << "Root required" << std::endl;
         exit(1);
     }
 
-    // for phone which has no button
-    const uint16_t timeout = 20;
-    alarm(timeout);
-    auto sig_handler = [](int){
-        std::cout << "No operation after " << timeout << " seconds" << std::endl;
-        exit(static_cast<int>(Variant::YAHFA));
-    };
-    signal(SIGALRM, sig_handler);
+    // languages
+    char locale[256];
+    __system_property_get("persist.sys.locale", locale);
+    if (locale[0] == 'z' && locale[1] == 'h') {
+        l = std::make_unique<LanguageChinese>();
+    } else {
+        l = std::make_unique<Languages>();
+    }
 
     // get current arch
 #if defined(__arm__)
@@ -260,6 +267,7 @@ int main() {
 #endif
 
     std::unordered_map<Variant, VariantDetail> variants;
+    std::string sandhook_deprecated = "SandHook " + l->deprecated();
     for (const auto i: AllVariants) {
         switch (i) {
             case Variant::YAHFA:
@@ -270,7 +278,7 @@ int main() {
                 break;
             case Variant::SandHook:
                 variants[i] = {
-                        .expression = "SandHook",
+                        .expression = sandhook_deprecated.c_str(),
                         .supported_arch = {ARM, ARM64}
                 };
                 break;
@@ -278,6 +286,37 @@ int main() {
     }
 
     Variant cursor = Variant::YAHFA;
+
+    // Load current variant
+    std::filesystem::path lspd_folder("/data/adb/lspd/config");
+    std::filesystem::create_directories(lspd_folder);
+
+    const auto variant_file = lspd_folder / "variant";
+    if (std::filesystem::exists(variant_file)) {
+        std::ifstream ifs(variant_file);
+        if (ifs.good()) {
+            std::string line;
+            std::getline(ifs, line);
+            char* end;
+            int i = std::strtol(line.c_str(), &end, 10);
+            switch (i) {
+                default:
+                case 1:
+                    cursor = Variant::YAHFA;
+                    break;
+                case 2:
+                    cursor = Variant::SandHook;
+                    break;
+            }
+            timeout = 5;
+        }
+    }
+
+    alarm(timeout);
+    signal(SIGALRM, [](int){
+        std::cout << l->timeout(timeout) << std::endl;
+        exit(static_cast<int>(Variant::YAHFA));
+    });
 
     auto print_status = [&cursor, variants, arch](){
         //std::cout << "\33[2K\r"; // clear this line
@@ -287,23 +326,13 @@ int main() {
                 continue;
             }
             ss << "[";
-            ss << (cursor == i.first ? "x" : " ");
+            ss << (cursor == i.first ? "√" : " ");
             ss << "] ";
             ss << i.second.expression;
             ss << " ";
         }
         std::cout << ss.str() << std::endl;
     };
-
-    // languages
-    Languages* l;
-    char locale[256];
-    __system_property_get("persist.sys.locale", locale);
-    if (locale[0] == 'z' && locale[1] == 'h') {
-        l = new LanguageChinese();
-    } else {
-        l = new Languages();
-    }
 
     std::cout << l->desc_line_1() << std::endl;
     std::cout << l->desc_line_2(timeout) << std::endl;
@@ -328,6 +357,5 @@ int main() {
     }
 
     // std::cout << std::endl << cursor << std::endl;
-    delete l;
     return static_cast<int>(cursor);
 }

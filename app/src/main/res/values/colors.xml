@@ -1,14 +1,28 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ This file is part of LSPosed.
+  ~
+  ~ LSPosed is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ LSPosed is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+  ~
+  ~ Copyright (C) 2020 EdXposed Contributors
+  ~ Copyright (C) 2021 LSPosed Contributors
+  -->
+
 <resources>
-    <color name="colorPrimary">@color/material_blue_700</color>
-    <color name="colorBackground">#fafafa</color>
-    <color name="colorPrimaryDark">#dddddd</color>
-    <color name="colorAccent">#e91e63</color>
-    <color name="colorActionBar">#F0F0F0</color>
-    <color name="red_500">#F44336</color>
-    <color name="warning">@color/red_500</color>
-    <color name="download_status_update_available">#4CAF50</color>
-    <color name="amber_500">#FFC107</color>
-    <color name="navigationBarColor">@color/colorPrimary</color>
-    <color name="navigationBarColorBlack">@android:color/black</color>
+    <color name="rippleTransparency_light">#34ffffff</color>
+    <color name="rippleTransparency_dark">#cbffffff</color>
+
+    <color name="color_primary_light">@color/google_blue_600</color>
+    <color name="color_primary_dark">@color/google_blue_300</color>
+    <color name="color_primary">@color/color_primary_light</color>
 </resources>

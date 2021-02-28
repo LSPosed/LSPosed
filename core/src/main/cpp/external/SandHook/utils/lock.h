@@ -21,8 +21,12 @@ namespace SandHook {
 
     class StopTheWorld {
     public:
-        inline StopTheWorld()  { suspendVM(); }
-        inline ~StopTheWorld() { resumeVM(); }
+        inline StopTheWorld()  { suspendVM(this); }
+        inline ~StopTheWorld() { resumeVM(this); }
+    private:
+        void* self_;
+        const char* section_name_;
+        const char* old_no_suspend_reason_;
     };
 
 }

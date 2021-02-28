@@ -1,3 +1,23 @@
+/*
+ * This file is part of LSPosed.
+ *
+ * LSPosed is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LSPosed is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * Copyright (C) 2020 EdXposed Contributors
+ * Copyright (C) 2021 LSPosed Contributors
+ */
+
 package io.github.lsposed.manager.ui.activity;
 
 import android.annotation.SuppressLint;
@@ -7,7 +27,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
+import android.os.ParcelFileDescriptor;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +35,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -22,78 +44,114 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Scanner;
+import java.util.List;
+import java.util.Locale;
 
 import io.github.lsposed.manager.BuildConfig;
-import io.github.lsposed.manager.Constants;
+import io.github.lsposed.manager.ConfigManager;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.databinding.ActivityLogsBinding;
 import io.github.lsposed.manager.databinding.DialogInstallWarningBinding;
 import io.github.lsposed.manager.databinding.ItemLogBinding;
+import io.github.lsposed.manager.ui.activity.base.BaseActivity;
 import io.github.lsposed.manager.util.LinearLayoutManagerFix;
+import rikka.core.os.FileUtils;
+import rikka.recyclerview.RecyclerViewKt;
 
+@SuppressLint("NotifyDataSetChanged")
 public class LogsActivity extends BaseActivity {
-    private boolean allLog = false;
-    private final File fileErrorLog = new File(Constants.getBaseDir() + "log/error.log");
-    private final File fileErrorLogOld = new File(Constants.getBaseDir() + "log/error.log.old");
-    private final File fileAllLog = new File(Constants.getBaseDir() + "log/all.log");
-    private final File fileAllLogOld = new File(Constants.getBaseDir() + "log/all.log.old");
+    private boolean verbose = false;
     private LogsAdapter adapter;
     private final Handler handler = new Handler(Looper.getMainLooper());
     private ActivityLogsBinding binding;
     private LinearLayoutManagerFix layoutManager;
+    ActivityResultLauncher<String> saveLogsLauncher = registerForActivityResult(new ActivityResultContracts.CreateDocument(),
+            uri -> {
+                if (uri != null) {
+                    try {
+                        // grantUriPermission might throw RemoteException on MIUI
+                        grantUriPermission(BuildConfig.APPLICATION_ID, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
+                        try {
+                            OutputStream os = getContentResolver().openOutputStream(uri);
+                            if (os == null) {
+                                return;
+                            }
+                            ParcelFileDescriptor parcelFileDescriptor = ConfigManager.getLogs(verbose);
+                            if (parcelFileDescriptor == null) {
+                                os.close();
+                                return;
+                            }
+                            InputStream is = new FileInputStream(parcelFileDescriptor.getFileDescriptor());
+                            FileUtils.copy(is, os);
+                            os.close();
+                            is.close();
+                        } catch (Exception e) {
+                            Snackbar.make(binding.snackbar, getResources().getString(R.string.logs_save_failed) + "\n" + e.getMessage(), Snackbar.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            });
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityLogsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setSupportActionBar(binding.toolbar);
-        binding.toolbar.setNavigationOnClickListener(view -> finish());
+        setAppBar(binding.appBar, binding.toolbar);
+        binding.getRoot().bringChildToFront(binding.appBar);
+        binding.toolbar.setNavigationOnClickListener(view -> onBackPressed());
+        binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setRaised(!top));
         ActionBar bar = getSupportActionBar();
         if (bar != null) {
             bar.setDisplayHomeAsUpEnabled(true);
         }
-
         if (!preferences.getBoolean("hide_logcat_warning", false)) {
             DialogInstallWarningBinding binding = DialogInstallWarningBinding.inflate(getLayoutInflater());
-            new MaterialAlertDialogBuilder(this)
-                    .setTitle(R.string.install_warning_title)
-                    .setMessage(R.string.not_logcat)
+            binding.getRoot().setOnClickListener(v -> binding.checkbox.toggle());
+            new AlertDialog.Builder(this)
+                    .setMessage(R.string.not_logcat_2)
                     .setView(binding.getRoot())
                     .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                        if (binding.checkbox.isChecked())
+                        if (binding.checkbox.isChecked()) {
                             preferences.edit().putBoolean("hide_logcat_warning", true).apply();
+                        }
                     })
                     .setCancelable(false)
                     .show();
         }
         adapter = new LogsAdapter();
+        RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
         binding.recyclerView.setAdapter(adapter);
         layoutManager = new LinearLayoutManagerFix(this);
         binding.recyclerView.setLayoutManager(layoutManager);
-        setupRecyclerViewInsets(binding.recyclerView, binding.getRoot());
-        if (Files.exists(Paths.get(Constants.getBaseDir(), "conf/disable_verbose_log"))) {
+        if (!ConfigManager.isVerboseLogEnabled()) {
             binding.slidingTabs.setVisibility(View.GONE);
+        } else {
+            RecyclerViewKt.addVerticalPadding(binding.recyclerView, 48, 0);
         }
         binding.slidingTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                allLog = tab.getPosition() != 0;
+                verbose = tab.getPosition() == 1;
                 reloadErrorLog();
             }
 
@@ -125,7 +183,6 @@ public class LogsActivity extends BaseActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.menu_scroll_top) {
-            Log.e("Test", adapter.getItemCount() + "");
             if (layoutManager.findFirstVisibleItemPosition() > 1000) {
                 binding.recyclerView.scrollToPosition(0);
             } else {
@@ -159,25 +216,51 @@ public class LogsActivity extends BaseActivity {
     }
 
     private void reloadErrorLog() {
-        //noinspection deprecation
-        new LogsReader().execute(allLog ? fileAllLog : fileErrorLog);
+        ParcelFileDescriptor parcelFileDescriptor = ConfigManager.getLogs(verbose);
+        if (parcelFileDescriptor != null) {
+            new LogsReader().execute(parcelFileDescriptor.getFileDescriptor());
+        } else {
+            binding.slidingTabs.selectTab(binding.slidingTabs.getTabAt(0));
+            new AlertDialog.Builder(this)
+                    .setMessage(R.string.verbose_log_not_avaliable)
+                    .setPositiveButton(android.R.string.ok, null)
+                    .show();
+        }
     }
 
     private void clear() {
-        try {
-            new FileOutputStream(allLog ? fileAllLog : fileErrorLog).close();
-            //noinspection ResultOfMethodCallIgnored
-            (allLog ? fileAllLogOld : fileErrorLogOld).delete();
+        if (ConfigManager.clearLogs(verbose)) {
             adapter.setEmpty();
             Snackbar.make(binding.snackbar, R.string.logs_cleared, Snackbar.LENGTH_SHORT).show();
             reloadErrorLog();
-        } catch (IOException e) {
-            Snackbar.make(binding.snackbar, getResources().getString(R.string.logs_clear_failed) + "n" + e.getMessage(), Snackbar.LENGTH_LONG).show();
+        } else {
+            Snackbar.make(binding.snackbar, R.string.logs_clear_failed_2, Snackbar.LENGTH_SHORT).show();
         }
     }
 
     private void send() {
-        Uri uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".fileprovider", allLog ? fileAllLog : fileErrorLog);
+        ParcelFileDescriptor parcelFileDescriptor = ConfigManager.getLogs(verbose);
+        if (parcelFileDescriptor == null) {
+            return;
+        }
+        Calendar now = Calendar.getInstance();
+        String filename = String.format(Locale.US,
+                "LSPosed_%s_%04d%02d%02d_%02d%02d%02d.log",
+                verbose ? "Verbose" : "Modules",
+                now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1,
+                now.get(Calendar.DAY_OF_MONTH), now.get(Calendar.HOUR_OF_DAY),
+                now.get(Calendar.MINUTE), now.get(Calendar.SECOND));
+        File cacheFile = new File(getCacheDir(), filename);
+        try {
+            OutputStream os = new FileOutputStream(cacheFile);
+            InputStream is = new FileInputStream(parcelFileDescriptor.getFileDescriptor());
+            FileUtils.copy(is, os);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        Uri uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".fileprovider", cacheFile);
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
@@ -186,84 +269,49 @@ public class LogsActivity extends BaseActivity {
         startActivity(Intent.createChooser(sendIntent, getResources().getString(R.string.menuSend)));
     }
 
-    @SuppressLint("DefaultLocale")
     private void save() {
         Calendar now = Calendar.getInstance();
-        String filename = String.format(
-                "LSPosed_Verbose_%04d%02d%02d_%02d%02d%02d.log",
+        String filename = String.format(Locale.US,
+                "LSPosed_%s_%04d%02d%02d_%02d%02d%02d.log",
+                verbose ? "Verbose" : "Modules",
                 now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1,
                 now.get(Calendar.DAY_OF_MONTH), now.get(Calendar.HOUR_OF_DAY),
                 now.get(Calendar.MINUTE), now.get(Calendar.SECOND));
-
-        Intent exportIntent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-        exportIntent.addCategory(Intent.CATEGORY_OPENABLE);
-        exportIntent.setType("text/*");
-        exportIntent.putExtra(Intent.EXTRA_TITLE, filename);
-        startActivityForResult(exportIntent, 42);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != RESULT_OK) {
-            return;
-        }
-        if (requestCode == 42) {
-            if (data != null) {
-                Uri uri = data.getData();
-                if (uri != null) {
-                    try {
-                        OutputStream os = getContentResolver().openOutputStream(uri);
-                        if (os != null) {
-                            FileInputStream in = new FileInputStream(allLog ? fileAllLog : fileErrorLog);
-                            byte[] buffer = new byte[1024];
-                            int len;
-                            while ((len = in.read(buffer)) > 0) {
-                                os.write(buffer, 0, len);
-                            }
-                            os.close();
-                        }
-                    } catch (Exception e) {
-                        Snackbar.make(binding.snackbar, getResources().getString(R.string.logs_save_failed) + "\n" + e.getMessage(), Snackbar.LENGTH_LONG).show();
-                    }
-                }
-            }
-        }
+        saveLogsLauncher.launch(filename);
     }
 
     @SuppressWarnings("deprecation")
     @SuppressLint("StaticFieldLeak")
-    private class LogsReader extends AsyncTask<File, Integer, ArrayList<String>> {
+    private class LogsReader extends AsyncTask<FileDescriptor, Integer, List<String>> {
         private AlertDialog mProgressDialog;
         private final Runnable mRunnable = new Runnable() {
             @Override
             public void run() {
-                mProgressDialog.show();
+                if (!isFinishing()) {
+                    mProgressDialog.show();
+                }
             }
         };
 
         @Override
         protected void onPreExecute() {
-            mProgressDialog = new MaterialAlertDialogBuilder(LogsActivity.this).create();
+            mProgressDialog = new AlertDialog.Builder(LogsActivity.this).create();
             mProgressDialog.setMessage(getString(R.string.loading));
             mProgressDialog.setCancelable(false);
             handler.postDelayed(mRunnable, 300);
         }
 
         @Override
-        protected ArrayList<String> doInBackground(File... log) {
+        protected List<String> doInBackground(FileDescriptor... log) {
             Thread.currentThread().setPriority(Thread.NORM_PRIORITY + 2);
 
-            ArrayList<String> logs = new ArrayList<>();
+            List<String> logs = new ArrayList<>();
 
-            try {
-                File logfile = log[0];
-                try (Scanner scanner = new Scanner(logfile)) {
-                    while (scanner.hasNextLine()) {
-                        logs.add(scanner.nextLine());
-                    }
+            try (InputStream inputStream = new FileInputStream(log[0]); BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    logs.add(line);
                 }
-                return logs;
             } catch (IOException e) {
                 logs.add(LogsActivity.this.getResources().getString(R.string.logs_cannot_read));
                 if (e.getMessage() != null) {
@@ -275,7 +323,7 @@ public class LogsActivity extends BaseActivity {
         }
 
         @Override
-        protected void onPostExecute(ArrayList<String> logs) {
+        protected void onPostExecute(List<String> logs) {
             if (logs.size() == 0) {
                 adapter.setEmpty();
             } else {
@@ -312,7 +360,7 @@ public class LogsActivity extends BaseActivity {
 
         }
 
-        void setLogs(ArrayList<String> logs) {
+        void setLogs(List<String> logs) {
             this.logs.clear();
             this.logs.addAll(logs);
             notifyDataSetChanged();

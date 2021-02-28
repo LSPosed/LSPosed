@@ -18,6 +18,7 @@ static uint32_t kAccPublic = 0x0001;  // class, field, method, ic
 static uint32_t kAccPrivate = 0x0002;  // field, method, ic
 static uint32_t kAccProtected = 0x0004;  // field, method, ic
 static uint32_t kAccStatic = 0x0008;  // field, method, ic
+static uint32_t kAccFastInterpreterToInterpreterInvoke = 0x40000000;
 
 
 static jfieldID fieldArtMethod = nullptr;
@@ -43,6 +44,16 @@ extern "C" void Java_lab_galaxy_yahfa_HookMain_init(JNIEnv *env, jclass clazz, j
     jclass classExecutable;
     LOGI("init to SDK %d", sdkVersion);
     switch (sdkVersion) {
+        case __ANDROID_API_S__:
+            classExecutable = env->FindClass("java/lang/reflect/Executable");
+            fieldArtMethod = env->GetFieldID(classExecutable, "artMethod", "J");
+            kAccCompileDontBother = 0x02000000;
+            OFFSET_ArtMehod_in_Object = 0;
+            OFFSET_access_flags_in_ArtMethod = 4;
+            OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod =
+                    roundUpToPtrSize(4 * 3 + 2 * 2) + pointer_size;
+            ArtMethodSize = roundUpToPtrSize(4 * 3 + 2 * 2) + pointer_size * 2;
+            break;
         case __ANDROID_API_R__:
             classExecutable = env->FindClass("java/lang/reflect/Executable");
             fieldArtMethod = env->GetFieldID(classExecutable, "artMethod", "J");
@@ -177,9 +188,11 @@ static int doBackupAndHook(JNIEnv *env, void *targetMethod, void *hookMethod, vo
 
     }
 
-    // set the target method to native so that Android O wouldn't invoke it with interpreter
-    if (SDKVersion >= __ANDROID_API_O__) {
-//        setNativeFlag(targetMethod, true);
+    if (SDKVersion >= __ANDROID_API_Q__) {
+        uint32_t access_flags = read32((char *) targetMethod + OFFSET_access_flags_in_ArtMethod);
+        // On API 29 whether to use the fast path or not is cached in the ART method structure
+        access_flags &= ~kAccFastInterpreterToInterpreterInvoke;
+        write32((char *) targetMethod + OFFSET_access_flags_in_ArtMethod, access_flags);
     }
 
     LOGI("hook and backup done");
@@ -194,7 +207,7 @@ void *getArtMethodYahfa(JNIEnv *env, jobject jmethod) {
         return artMethod;
     }
 
-    if (SDKVersion == __ANDROID_API_R__) {
+    if (SDKVersion >= __ANDROID_API_R__) {
         artMethod = (void *) env->GetLongField(jmethod, fieldArtMethod);
     } else {
         artMethod = (void *) env->FromReflectedMethod(jmethod);

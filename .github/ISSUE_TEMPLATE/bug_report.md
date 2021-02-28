@@ -1,8 +1,8 @@
 ---
 name: Bug report
-about: 错误反馈 / Bug report / 不使用此模板提交会被close / Your issue will be close if not following this template
+about: Bug report / Your issue will be close if you don't follow this template
 title: "[BUG] "
-labels: bug
+labels:
 assignees: ''
 ---
 
@@ -22,6 +22,11 @@ Such as bootloop, module not loaded, etc
 -->
 
 **Xposed模块列表/Xposed Module List**
+<!--
+如果为模块问题，请先确认出问题的具体是哪个模块。另外我们无法解决模块自身的问题，请直接联系模块作者。
+If a module not working, please narrow down which specific module not working.
+Mostly we can't help with module-specific issue, please contact their author first.
+-->
 
 
 **Magisk模块列表/Magisk Module List**
@@ -35,7 +40,7 @@ Magisk:
 
 Riru:
 
-LSPposed:
+LSPosed:
 
 **相关日志/Related Logs**
 

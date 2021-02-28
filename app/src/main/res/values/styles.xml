@@ -1,88 +1,24 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<!--
+  ~ This file is part of LSPosed.
+  ~
+  ~ LSPosed is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ LSPosed is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+  ~
+  ~ Copyright (C) 2020 EdXposed Contributors
+  ~ Copyright (C) 2021 LSPosed Contributors
+  -->
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorActionBar">@color/colorActionBar</item>
-        <item name="modulesHorizontalPadding">8dp</item>
-        <item name="actionBarTheme">@style/ThemeOverlay.MaterialComponents.ActionBar</item>
-        <item name="android:colorBackground">@color/colorBackground</item>
-        <item name="android:windowBackground">@color/colorBackground</item>
-        <item name="listItemBackground">?selectableItemBackground</item>
-        <item name="roundBackground">@drawable/item_background_round</item>
-        <item name="actionBarPopupTheme">@style/AppTheme.PopupOverlay</item>
-        <item name="android:windowLightStatusBar">@bool/lightSystemUI</item>
-        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">@bool/lightSystemUI
-        </item>
-        <item name="android:navigationBarColor">@color/navigationBarColor</item>
-        <item name="alertDialogTheme">@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog
-        </item>
-        <item name="tabLayoutTheme">@style/Widget.MaterialComponents.TabLayout</item>
-        <item name="liftOnScroll">false</item>
-    </style>
+<resources>
 
-    <style name="Widget.MaterialComponents.CompoundButton.CheckBox" parent="Widget.AppCompat.CompoundButton.CheckBox" tools:override="true">
-        <item name="enforceMaterialTheme">true</item>
-        <item name="useMaterialThemeColors">true</item>
-    </style>
-
-    <style name="Widget.MaterialComponents.CompoundButton.RadioButton" parent="Widget.AppCompat.CompoundButton.RadioButton" tools:override="true">
-        <item name="enforceMaterialTheme">true</item>
-        <item name="useMaterialThemeColors">true</item>
-    </style>
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
-
-    <style name="MasterSwitch" parent="@style/ThemeOverlay.AppCompat.Dark">
-        <item name="masterSwitchBackgroundOff">#80868b</item>
-        <item name="masterSwitchBackgroundOn">?colorAccent</item>
-        <item name="masterSwitchTextAppearance">@style/MasterSwitch.TextAppearance</item>
-        <item name="switchStyle">@style/MasterSwitch.Switch</item>
-    </style>
-
-    <style name="MasterSwitch.Switch" parent="@style/Widget.AppCompat.CompoundButton.Switch">
-        <item name="trackTint">#33ffffff</item>
-        <item name="thumbTint">@android:color/white</item>
-    </style>
-
-    <style name="MasterSwitch.TextAppearance" parent="@style/TextAppearance.AppCompat.Body2">
-        <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@android:color/white</item>
-    </style>
-
-    <style name="ThemeOverlay" />
-
-    <style name="ThemeOverlay.Md2">
-        <item name="colorPrimaryDark">@color/colorPrimaryDark_md2</item>
-        <item name="colorActionBar">@color/colorActionBar_md2</item>
-        <item name="android:colorBackground">@color/colorBackground_md2</item>
-        <item name="android:windowBackground">@color/colorBackground_md2</item>
-        <item name="modulesHorizontalPadding">16dp</item>
-        <item name="listItemBackground">@drawable/item_background_md2</item>
-        <item name="roundBackground">@drawable/item_background_md2</item>
-        <item name="liftOnScroll">true</item>
-    </style>
-
-    <style name="ThemeOverlay.ActionBarPrimaryColor">
-        <item name="actionBarTheme">@style/ThemeOverlay.MaterialComponents.Dark.ActionBar</item>
-        <item name="android:windowLightStatusBar">false</item>
-        <item name="tabLayoutTheme">@style/Widget.MaterialComponents.TabLayout.Colored</item>
-    </style>
-
-    <style name="ThemeOverlay.ActivityMain">
-        <item name="android:windowLightStatusBar">@bool/lightSystemUI</item>
-        <item name="colorPrimaryDark">?android:colorBackground</item>
-    </style>
-
-    <style name="ThemeOverlay.Black">
-        <item name="colorPrimaryDark">@android:color/black</item>
-        <item name="colorActionBar">@android:color/black</item>
-        <item name="android:navigationBarColor">@color/navigationBarColorBlack</item>
-        <item name="android:colorBackground">@android:color/black</item>
-        <item name="android:windowBackground">@android:color/black</item>
-        <item name="tabLayoutTheme">@style/Widget.MaterialComponents.TabLayout</item>
-    </style>
+    <style name="AppTheme" parent="Theme.Light" />
 </resources>

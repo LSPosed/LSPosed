@@ -1,3 +1,23 @@
+/*
+ * This file is part of LSPosed.
+ *
+ * LSPosed is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LSPosed is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * Copyright (C) 2020 EdXposed Contributors
+ * Copyright (C) 2021 LSPosed Contributors
+ */
+
 package de.robv.android.xposed;
 
 import android.annotation.SuppressLint;
@@ -31,6 +51,8 @@ import java.util.Map;
 import java.util.Set;
 
 import de.robv.android.xposed.services.FileResult;
+
+import static io.github.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
 
 /**
  * This class is basically the same as SharedPreferencesImpl from AOSP, but
@@ -160,8 +182,8 @@ public final class XSharedPreferences implements SharedPreferences {
                 newModule = isModule && (xposedminversion > 92 || xposedsharedprefs);
             }
         }
-        if (newModule && XposedInit.prefsBasePath != null) {
-            mFile = new File(XposedInit.prefsBasePath, packageName + "/" + prefFileName + ".xml");
+        if (newModule) {
+            mFile = new File(serviceClient.getPrefsPath( packageName ), prefFileName + ".xml");
         } else {
             mFile = new File(Environment.getDataDirectory(), "data/" + packageName + "/shared_prefs/" + prefFileName + ".xml");
         }
@@ -178,7 +200,7 @@ public final class XSharedPreferences implements SharedPreferences {
             Path path = mFile.toPath();
             try {
                 if (sWatcher == null) {
-                    sWatcher = new File(XposedInit.prefsBasePath).toPath().getFileSystem().newWatchService();
+                    sWatcher = new File(serviceClient.getPrefsPath("")).toPath().getFileSystem().newWatchService();
                     if (BuildConfig.DEBUG) Log.d(TAG, "Created WatchService instance");
                 }
                 mWatchKey = path.getParent().register(sWatcher, StandardWatchEventKinds.ENTRY_CREATE,

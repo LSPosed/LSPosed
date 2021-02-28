@@ -1,8 +1,26 @@
+/*
+ * This file is part of LSPosed.
+ *
+ * LSPosed is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LSPosed is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * Copyright (C) 2020 EdXposed Contributors
+ * Copyright (C) 2021 LSPosed Contributors
+ */
 
 #include <dlfcn.h>
 #include <string>
 #include <vector>
-#include <config_manager.h>
 #include <art/runtime/runtime.h>
 #include <dl_util.h>
 #include <art/runtime/jni_env_ext.h>
@@ -10,16 +28,18 @@
 #include "bionic_linker_restriction.h"
 #include "utils.h"
 #include "logging.h"
+#include "native_api.h"
 #include "native_hook.h"
 #include "riru_hook.h"
 #include "art/runtime/mirror/class.h"
 #include "art/runtime/art_method.h"
 #include "art/runtime/class_linker.h"
-#include "art/runtime/gc/heap.h"
+#include "art/runtime/thread.h"
 #include "art/runtime/hidden_api.h"
-#include "art/runtime/art_method.h"
 #include "art/runtime/instrumentation.h"
 #include "art/runtime/reflection.h"
+#include "art/runtime/thread_list.h"
+#include "art/runtime/gc/scoped_gc_critical_section.h"
 
 std::vector<soinfo_t> linker_get_solist(); // Dobby but not in .h
 
@@ -27,7 +47,6 @@ namespace lspd {
 
     static volatile bool installed = false;
     static volatile bool art_hooks_installed = false;
-    static HookFunType hook_func =  reinterpret_cast<HookFunType>(DobbyHook);
 
     void InstallArtHooks(void *art_handle);
 
@@ -68,22 +87,25 @@ namespace lspd {
             ScopedDlHandle art_handle(kLibArtLegacyPath.c_str());
             InstallArtHooks(art_handle.Get());
         }
+
+        InstallNativeAPI();
     }
 
     void InstallArtHooks(void *art_handle) {
         if (art_hooks_installed) {
             return;
         }
-        art::hidden_api::DisableHiddenApi(art_handle, hook_func);
-        art::Runtime::Setup(art_handle, hook_func);
-        art::gc::Heap::Setup(art_handle, hook_func);
-        art::art_method::Setup(art_handle, hook_func);
-        art::Thread::Setup(art_handle, hook_func);
-        art::ClassLinker::Setup(art_handle, hook_func);
-        art::mirror::Class::Setup(art_handle, hook_func);
-        art::JNIEnvExt::Setup(art_handle, hook_func);
-        art::instrumentation::DisableUpdateHookedMethodsCode(art_handle, hook_func);
-        art::PermissiveAccessByReflection(art_handle, hook_func);
+        art::hidden_api::DisableHiddenApi(art_handle);
+        art::Runtime::Setup(art_handle);
+        art::art_method::Setup(art_handle);
+        art::Thread::Setup(art_handle);
+        art::ClassLinker::Setup(art_handle);
+        art::mirror::Class::Setup(art_handle);
+        art::JNIEnvExt::Setup(art_handle);
+        art::instrumentation::DisableUpdateHookedMethodsCode(art_handle);
+        art::PermissiveAccessByReflection(art_handle);
+        art::thread_list::ScopedSuspendAll::Setup(art_handle);
+        art::gc::ScopedGCCriticalSection::Setup(art_handle);
 
         art_hooks_installed = true;
         LOGI("ART hooks installed");

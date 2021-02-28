@@ -1,4 +1,23 @@
-import groovy.xml.XmlUtil
+/*
+ * This file is part of LSPosed.
+ *
+ * LSPosed is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LSPosed is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * Copyright (C) 2020 EdXposed Contributors
+ * Copyright (C) 2021 LSPosed Contributors
+ */
+
 import org.apache.tools.ant.filters.FixCrLfFilter
 import org.gradle.internal.os.OperatingSystem
 
@@ -36,10 +55,14 @@ repositories {
 
 dependencies {
     implementation 'rikka.ndk:riru:10'
+    implementation 'com.android.tools.build:apksig:4.1.2'
     implementation project(path: ':sandhook-hooklib')
     compileOnly project(':hiddenapi-stubs')
     compileOnly project(':key-selector')
     compileOnly 'androidx.annotation:annotation:1.1.0'
+    implementation project(':interface')
+    implementation project(':hiddenapi-bridge')
+    implementation project(':manager-service')
 }
 
 android {
@@ -102,61 +125,29 @@ android {
         }
     }
     ndkVersion androidCompileNdkVersion
+    buildToolsVersion androidBuildToolsVersion
     compileOptions {
-        targetCompatibility JavaVersion.VERSION_1_7
-        sourceCompatibility JavaVersion.VERSION_1_7
-    }
-}
-
-task cleanTemplate(type: Delete) {
-    delete file(templateSystemx86Path)
-}
-
-preBuild.doLast {
-    def imlFile = file(project.name + ".iml")
-    try {
-        def parsedXml = (new XmlParser()).parse(imlFile)
-        def jdkNode = parsedXml.component[1].orderEntry.find { it.'@type' == 'jdk' }
-        parsedXml.component[1].remove(jdkNode)
-        def sdkString = "Android API " + android.compileSdkVersion.substring("android-".length()) + " Platform"
-        new Node(parsedXml.component[1], 'orderEntry', ['type': 'jdk', 'jdkName': sdkString, 'jdkType': 'Android SDK'])
-        XmlUtil.serialize(parsedXml, new FileOutputStream(imlFile))
-    } catch (FileNotFoundException ignored) {
-        // nop, iml not found
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
     }
 }
 
 afterEvaluate {
-    task("copyCommonProperties", type: Copy) {
-        from file("${projectDir}/template_override/")
-        into file(templateRootPath)
-    }
 
     android.applicationVariants.all { variant ->
         def variantCapped = variant.name.capitalize()
         def variantLowered = variant.name.toLowerCase()
         def zipFileName = "${module_name}-${rootProject.ext.versionName}-${rootProject.ext.versionCode}-${variantLowered}.zip"
 
-        task("copyMainDex${variantCapped}", type: Copy) {
-            def dexOutPath = variant.name.contains("release") ?
-                    "${buildDir}/intermediates/dex/${variantLowered}/minify${variantCapped}WithR8" :
-                    "${buildDir}/intermediates/dex/${variantLowered}/mergeDex${variantCapped}"
-            from (dexOutPath){
-                rename("classes.dex", "lspd.dex")
-            }
-            destinationDir file(zipPathMagiskReleasePath + "system/framework/")
-            outputs.upToDateWhen { false }
-        }
-
         delete file(zipPathMagiskReleasePath)
 
-        def prepareMagiskFilesTask = task("prepareMagiskFiles${variantCapped}", type: Delete) {
+        def prepareMagiskFilesTask = task("prepareMagiskFiles${variantCapped}") {
             dependsOn "assemble${variantCapped}"
             dependsOn tasks.getByPath(":key-selector:copyKeySelector${variantCapped}LibraryToMagiskTemplate")
             doFirst {
                 copy {
                     from "${projectDir}/tpl/module.prop.tpl"
-                    into templateRootPath
+                    into "${projectDir}/template_override"
                     rename "module.prop.tpl", "module.prop"
                     expand(moduleId: "$module_id",
                             versionName: "$rootProject.ext.versionName",
@@ -164,9 +155,13 @@ afterEvaluate {
                             apiCode: "$apiCode", minApi: "$moduleMinRiruApiVersion")
                     filter(FixCrLfFilter.class, eol: FixCrLfFilter.CrLf.newInstance("lf"))
                 }
+                copy {
+                    from ("${rootProject.projectDir}/README.md")
+                    into file(zipPathMagiskReleasePath)
+                }
             }
             def libPathRelease = "${buildDir}/intermediates/cmake/${variantLowered}/obj"
-            def exclude_list = ["riru.sh"]
+            def exclude_list = ["util_functions.sh"]
             doLast {
                 def dexOutPath = variant.name.contains("release") ?
                         "${buildDir}/intermediates/dex/${variantLowered}/minify${variantCapped}WithR8" :

@@ -1,11 +1,29 @@
+/*
+ * This file is part of LSPosed.
+ *
+ * LSPosed is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LSPosed is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * Copyright (C) 2020 EdXposed Contributors
+ * Copyright (C) 2021 LSPosed Contributors
+ */
+
 package de.robv.android.xposed;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-
-import static de.robv.android.xposed.XposedBridge.disableHooks;
 
 public class LspHooker {
     private final XposedBridge.AdditionalHookInfo additionalInfo;
@@ -37,13 +55,6 @@ public class LspHooker {
             System.arraycopy(args, 1, param.args, 0, args.length - 1);
         }
 
-        if (disableHooks) {
-            try {
-                return backup.invoke(param.thisObject, param.args);
-            } catch (InvocationTargetException ite) {
-                throw ite.getCause();
-            }
-        }
         Object[] callbacksSnapshot = additionalInfo.callbacks.getSnapshot();
         final int callbacksLength = callbacksSnapshot.length;
         if (callbacksLength == 0) {

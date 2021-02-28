@@ -1,65 +1,68 @@
-<?xml version="1.0" encoding="utf-8"?><!--suppress ALL -->
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ This file is part of LSPosed.
+  ~
+  ~ LSPosed is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ LSPosed is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+  ~
+  ~ Copyright (C) 2020 EdXposed Contributors
+  ~ Copyright (C) 2021 LSPosed Contributors
+  -->
+
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <PreferenceCategory
-        android:title="@string/settings_group_app"
+    <com.takisoft.preferencex.PreferenceCategory
+        android:key="group_network"
+        android:title="@string/group_network"
         app:iconSpaceReserved="false">
 
-        <SwitchPreferenceCompat
+        <SwitchPreference
             android:defaultValue="false"
-            android:key="skip_xposedminversion_check"
-            android:summary="@string/skip_xposedminversion_check_summ"
-            android:title="@string/skip_xposedminversion_check"
+            android:key="doh"
+            android:summary="@string/dns_over_http_summary"
+            android:title="@string/dns_over_http"
             app:iconSpaceReserved="false" />
-    </PreferenceCategory>
-    <PreferenceCategory
+    </com.takisoft.preferencex.PreferenceCategory>
+
+    <com.takisoft.preferencex.PreferenceCategory
         android:title="@string/settings_group_theme"
         app:iconSpaceReserved="false">
-        <io.github.lsposed.manager.ui.widget.ThemeColorPreference
-            android:defaultValue="#1976D2"
-            android:dialogTitle="@string/primary_color"
-            android:key="primary_color"
-            android:title="@string/primary_color"
+        <io.github.lsposed.manager.util.theme.ThemeColorPreference
+            android:defaultValue=""
+            android:dialogTitle="@string/theme_color"
+            android:key="theme_color"
+            android:title="@string/theme_color"
             app:iconSpaceReserved="false" />
-        <io.github.lsposed.manager.ui.widget.ThemeColorPreference
-            android:defaultValue="#e91e63"
-            android:dialogTitle="@string/accent_color"
-            android:key="accent_color"
-            android:title="@string/accent_color"
-            app:iconSpaceReserved="false" />
-        <io.github.lsposed.manager.ui.widget.IntegerListPreference
-            android:defaultValue="-1"
+        <com.takisoft.preferencex.SimpleMenuPreference
+            android:defaultValue="MODE_NIGHT_FOLLOW_SYSTEM"
             android:entries="@array/theme_texts"
             android:entryValues="@array/theme_values"
-            android:key="theme"
+            android:key="dark_theme"
             android:summary="%s"
-            android:title="@string/settings_theme"
+            android:title="@string/dark_theme"
             app:iconSpaceReserved="false" />
-        <SwitchPreferenceCompat
-            android:key="md2"
-            android:title="@string/material_design_2"
-            android:defaultValue="true"
-            app:iconSpaceReserved="false" />
-        <SwitchPreferenceCompat
-            android:key="colorized_action_bar"
-            android:title="@string/colorized_action_bar"
-            app:iconSpaceReserved="false" />
-        <SwitchPreferenceCompat
-            android:key="transparent_status_bar"
-            android:title="@string/transparent_status_bar"
-            app:iconSpaceReserved="false" />
-        <SwitchPreferenceCompat
+        <SwitchPreference
             android:key="black_dark_theme"
             android:title="@string/pure_black_dark_theme"
+            android:summary="@string/pure_black_dark_theme_summary"
             app:iconSpaceReserved="false" />
-    </PreferenceCategory>
+    </com.takisoft.preferencex.PreferenceCategory>
 
-    <PreferenceCategory
+    <com.takisoft.preferencex.PreferenceCategory
         android:key="group_framework"
         android:title="@string/settings_group_framework"
         app:iconSpaceReserved="false">
 
-        <SimpleMenuPreference
+        <com.takisoft.preferencex.SimpleMenuPreference
             android:defaultValue="1"
             android:entries="@array/variant_texts"
             android:entryValues="@array/variant_values"
@@ -69,7 +72,7 @@
             android:persistent="false"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreferenceCompat
+        <SwitchPreference
             android:defaultValue="false"
             android:key="enable_resources"
             android:summary="@string/settings_enable_resources_summary"
@@ -77,19 +80,28 @@
             android:persistent="false"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreferenceCompat
+        <SwitchPreference
             android:defaultValue="false"
             android:key="disable_verbose_log"
             android:title="@string/pref_title_disable_verbose_log"
             android:persistent="false"
             app:iconSpaceReserved="false" />
+    </com.takisoft.preferencex.PreferenceCategory>
 
-        <SwitchPreferenceCompat
-            android:defaultValue="false"
-            android:key="disable_modules_log"
-            android:summary="@string/pref_disable_modules_log_summary"
-            android:title="@string/pref_title_disable_modules_log"
-            android:persistent="false"
+    <com.takisoft.preferencex.PreferenceCategory
+        android:key="group_backup"
+        android:title="@string/settings_backup_and_restore"
+        app:iconSpaceReserved="false">
+        <Preference
+            android:key="backup"
+            android:title="@string/settings_backup"
             app:iconSpaceReserved="false" />
-    </PreferenceCategory>
+        <Preference
+            android:key="restore"
+            android:title="@string/settings_restore"
+            app:iconSpaceReserved="false" />
+        <Preference
+            android:summary="@string/settings_backup_and_restore_summery"
+            app:iconSpaceReserved="false" />
+    </com.takisoft.preferencex.PreferenceCategory>
 </PreferenceScreen>

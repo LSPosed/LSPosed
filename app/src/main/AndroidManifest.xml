@@ -1,12 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ This file is part of LSPosed.
+  ~
+  ~ LSPosed is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ LSPosed is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+  ~
+  ~ Copyright (C) 2020 EdXposed Contributors
+  ~ Copyright (C) 2021 LSPosed Contributors
+  -->
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="io.github.lsposed.manager">
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
-    <uses-permission
-        android:name="android.permission.QUERY_ALL_PACKAGES"
-        tools:ignore="QueryAllPackagesPermission" />
+    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS" />
+
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+        </intent>
+    </queries>
 
     <application
         android:name=".App"
@@ -20,12 +45,12 @@
             android:name=".ui.activity.CrashReportActivity"
             android:process=":error_activity" />
         <activity
-            android:name=".ui.activity.AboutActivity"
-            android:label="@string/About" />
-        <activity
             android:name=".ui.activity.LogsActivity"
             android:label="@string/Logs" />
         <activity android:name=".ui.activity.AppListActivity" />
+        <activity android:name=".ui.activity.RepoActivity"
+            android:label="@string/module_repo"/>
+        <activity android:name=".ui.activity.RepoItemActivity" />
         <activity
             android:name=".ui.activity.MainActivity"
             android:label="@string/app_name"
@@ -52,10 +77,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
-        <receiver
-            android:name=".util.NotificationUtil$RebootReceiver"
-            android:exported="false" />
 
         <receiver
             android:name=".receivers.EdServiceReceiver"

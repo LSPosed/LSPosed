@@ -1,97 +1,98 @@
-#include <cstdio>
-#include <unistd.h>
-#include <fcntl.h>
+/*
+ * This file is part of LSPosed.
+ *
+ * LSPosed is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LSPosed is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * Copyright (C) 2020 EdXposed Contributors
+ * Copyright (C) 2021 LSPosed Contributors
+ */
+
 #include <jni.h>
 #include <cstring>
 #include <cstdlib>
-#include <sys/mman.h>
 #include <array>
-#include <thread>
-#include <vector>
-#include <utility>
-#include <string>
-#include <android-base/logging.h>
 #include "logging.h"
 #include "config.h"
 #include "context.h"
 #include <riru.h>
-#include "config_manager.h"
-#include "native_hook.h"
-
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-value"
+#include "symbol_cache.h"
 
 namespace lspd {
     static void onModuleLoaded() {
         LOGI("onModuleLoaded: welcome to LSPosed!");
         // rirud must be used in onModuleLoaded
-        ConfigManager::Init();
+        Context::GetInstance()->PreLoadDex(kDexPath);
+        InitSymbolCache();
     }
 
-    static int shouldSkipUid(int uid) {
+    static int shouldSkipUid(int) {
         return 0;
     }
 
-    static void nativeForkAndSpecializePre(JNIEnv *env, jclass clazz, jint *_uid, jint *gid,
-                                           jintArray *gids, jint *runtime_flags,
-                                           jobjectArray *rlimits, jint *mount_external,
-                                           jstring *se_info, jstring *nice_name,
-                                           jintArray *fds_to_close, jintArray *fds_to_ignore,
-                                           jboolean *start_child_zygote, jstring *instruction_set,
-                                           jstring *app_data_dir, jboolean *is_top_app, jobjectArray *pkg_data_info_list,
-                                           jobjectArray *whitelisted_data_info_list, jboolean *bind_mount_app_data_dirs,
-                                           jboolean *bind_mount_app_storage_dirs) {
-        Context::GetInstance()->OnNativeForkAndSpecializePre(env, clazz, *_uid, *gid, *gids,
-                                                             *runtime_flags, *rlimits,
-                                                             *mount_external, *se_info, *nice_name,
-                                                             *fds_to_close,
-                                                             *fds_to_ignore,
-                                                             *start_child_zygote, *instruction_set,
+    static void nativeForkAndSpecializePre(JNIEnv *env, jclass, jint *_uid, jint *,
+                                           jintArray *, jint *,
+                                           jobjectArray *, jint *,
+                                           jstring *, jstring *nice_name,
+                                           jintArray *, jintArray *,
+                                           jboolean *start_child_zygote, jstring *,
+                                           jstring *app_data_dir, jboolean *,
+                                           jobjectArray *,
+                                           jobjectArray *,
+                                           jboolean *,
+                                           jboolean *) {
+        Context::GetInstance()->OnNativeForkAndSpecializePre(env, *_uid,
+                                                             *nice_name,
+                                                             *start_child_zygote,
                                                              *app_data_dir);
     }
 
-    static void nativeForkAndSpecializePost(JNIEnv *env, jclass clazz, jint res) {
-        Context::GetInstance()->OnNativeForkAndSpecializePost(env, clazz, res);
+    static void nativeForkAndSpecializePost(JNIEnv *env, jclass, jint res) {
+        if (res == 0)
+            Context::GetInstance()->OnNativeForkAndSpecializePost(env);
     }
 
-    static void nativeForkSystemServerPre(JNIEnv *env, jclass clazz, uid_t *uid, gid_t *gid,
-                                          jintArray *gids, jint *runtime_flags,
-                                          jobjectArray *rlimits, jlong *permitted_capabilities,
-                                          jlong *effective_capabilities) {
-        Context::GetInstance()->OnNativeForkSystemServerPre(env, clazz, *uid, *gid, *gids,
-                                                            *runtime_flags, *rlimits,
-                                                            *permitted_capabilities,
-                                                            *effective_capabilities
-        );
+    static void nativeForkSystemServerPre(JNIEnv *env, jclass, uid_t *, gid_t *,
+                                          jintArray *, jint *,
+                                          jobjectArray *, jlong *,
+                                          jlong *) {
+        Context::GetInstance()->OnNativeForkSystemServerPre(env);
     }
 
-    static void nativeForkSystemServerPost(JNIEnv *env, jclass clazz, jint res) {
-        Context::GetInstance()->OnNativeForkSystemServerPost(env, clazz, res);
+    static void nativeForkSystemServerPost(JNIEnv *env, jclass, jint res) {
+        Context::GetInstance()->OnNativeForkSystemServerPost(env, res);
     }
 
     /* method added in Android Q */
-    static void specializeAppProcessPre(JNIEnv *env, jclass clazz, jint *uid, jint *gid,
-                                        jintArray *gids, jint *runtime_flags, jobjectArray *rlimits,
-                                        jint *mount_external, jstring *se_info, jstring *nice_name,
-                                        jboolean *start_child_zygote, jstring *instruction_set,
-                                        jstring *app_data_dir, jboolean *is_top_app, jobjectArray *pkg_data_info_list,
-                                        jobjectArray *whitelisted_data_info_list, jboolean *bind_mount_app_data_dirs,
-                                        jboolean *bind_mount_app_storage_dirs) {
-        Context::GetInstance()->OnNativeForkAndSpecializePre(env, clazz, *uid, *gid, *gids,
-                                                             *runtime_flags, *rlimits,
-                                                             *mount_external, *se_info, *nice_name,
-                                                             nullptr, nullptr,
-                                                             *start_child_zygote, *instruction_set,
+    static void specializeAppProcessPre(JNIEnv *env, jclass, jint *uid, jint *,
+                                        jintArray *, jint *, jobjectArray *,
+                                        jint *, jstring *, jstring *nice_name,
+                                        jboolean *start_child_zygote, jstring *,
+                                        jstring *app_data_dir, jboolean *,
+                                        jobjectArray *,
+                                        jobjectArray *,
+                                        jboolean *,
+                                        jboolean *) {
+        Context::GetInstance()->OnNativeForkAndSpecializePre(env, *uid, *nice_name, *start_child_zygote,
                                                              *app_data_dir);
     }
 
-    static void specializeAppProcessPost(JNIEnv *env, jclass clazz) {
-        Context::GetInstance()->OnNativeForkAndSpecializePost(env, clazz, 0);
+    static void specializeAppProcessPost(JNIEnv *env, jclass) {
+        Context::GetInstance()->OnNativeForkAndSpecializePost(env);
     }
 }
 
 int riru_api_version;
-RiruApiV10 *riru_api_v10;
 
 RIRU_EXPORT void *init(void *arg) {
     static int step = 0;
@@ -102,7 +103,9 @@ RIRU_EXPORT void *init(void *arg) {
     switch (step) {
         case 1: {
             auto core_max_api_version = *(int *) arg;
-            riru_api_version = core_max_api_version <= RIRU_MODULE_API_VERSION ? core_max_api_version : RIRU_MODULE_API_VERSION;
+            riru_api_version =
+                    core_max_api_version <= RIRU_MODULE_API_VERSION ? core_max_api_version
+                                                                    : RIRU_MODULE_API_VERSION;
             return &riru_api_version;
         }
         case 2: {
@@ -110,8 +113,6 @@ RIRU_EXPORT void *init(void *arg) {
                 case 10:
                     [[fallthrough]];
                 case 9: {
-                    riru_api_v10 = (RiruApiV10 *) arg;
-
                     auto module = (RiruModuleInfoV10 *) malloc(sizeof(RiruModuleInfoV10));
                     memset(module, 0, sizeof(RiruModuleInfoV10));
                     _module = module;
@@ -144,5 +145,3 @@ RIRU_EXPORT void *init(void *arg) {
         }
     }
 }
-
-#pragma clang diagnostic pop

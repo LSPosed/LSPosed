@@ -1,3 +1,23 @@
+#
+# This file is part of LSPosed.
+#
+# LSPosed is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# LSPosed is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+#
+# Copyright (C) 2020 EdXposed Contributors
+# Copyright (C) 2021 LSPosed Contributors
+#
+
 SKIPUNZIP=1
 
 abortC() {
@@ -88,6 +108,7 @@ LANG_UTIL_ERR_ANDROID_UNSUPPORT_3="Learn more from our GitHub Wiki"
 LANG_UTIL_ERR_PLATFORM_UNSUPPORT="Unsupported platform"
 LANG_UTIL_ERR_VARIANT_SELECTION="Error occurred when selecting variant"
 LANG_UTIL_ERR_VARIANT_UNSUPPORT="Unsupported variant"
+LANG_CUST_INST_MIGRATE_CONF="Migrating configuration"
 
 # Load lang
 if [[ ${BOOTMODE} == true ]]; then
@@ -134,15 +155,6 @@ else
   abortC "${LANG_UTIL_ERR_PLATFORM_UNSUPPORT}"
 fi
 
-extract "${ZIPFILE}" "${BIN_PATH}/key_selector" "${TMPDIR}"
-SELECTOR_PATH="${TMPDIR}/${BIN_PATH}/key_selector"
-chmod 755 "${SELECTOR_PATH}"
-"${SELECTOR_PATH}"
-VARIANT=$?
-if [ VARIANT -lt 16 ]; then
-  abortC "${LANG_UTIL_ERR_VARIANT_SELECTION}"
-fi
-
 ui_print "- ${LANG_CUST_INST_EXT_FILES}"
 
 # extract module files
@@ -150,6 +162,7 @@ extract "${ZIPFILE}" 'module.prop' "${MODPATH}"
 extract "${ZIPFILE}" 'system.prop' "${MODPATH}"
 extract "${ZIPFILE}" 'sepolicy.rule' "${MODPATH}"
 extract "${ZIPFILE}" 'post-fs-data.sh' "${MODPATH}"
+extract "${ZIPFILE}" 'service.sh' "${MODPATH}"
 extract "${ZIPFILE}" 'uninstall.sh' "${MODPATH}"
 
 extract "${ZIPFILE}" 'system/framework/lspd.dex' "${MODPATH}"
@@ -198,40 +211,50 @@ else
   if [[ -d /data/user_de/0/io.github.lsposed.manager/conf/ ]]; then
     mkdir -p /data/misc/$MISC_PATH/0/conf
     cp -r /data/user_de/0/io.github.lsposed.manager/conf/* /data/misc/$MISC_PATH/0/conf/
-    set_perm_recursive /data/misc/$MISC_PATH root root 0771 0660 "u:object_r:magisk_file:s0" || abortC "! ${LANG_CUST_ERR_PERM}"
+    set_perm_recursive /data/misc/$MISC_PATH 0 0 0771 0660 "u:object_r:magisk_file:s0" || abortC "! ${LANG_CUST_ERR_PERM}"
   fi
 fi
 touch /data/adb/lspd/new_install || abortC "! ${LANG_CUST_ERR_CONF_FIRST}"
-set_perm_recursive /data/adb/lspd root root 0700 0600 "u:object_r:magisk_file:s0" || abortC "! ${LANG_CUST_ERR_PERM}"
-mkdir -p /data/misc/$MISC_PATH/0/conf/ || abortC "! ${LANG_CUST_ERR_CONF_CREATE}"
-set_perm /data/misc/$MISC_PATH root root 0771 "u:object_r:magisk_file:s0" || abortC "! ${LANG_CUST_ERR_PERM}"
+ui_print "- ${LANG_CUST_INST_COPY_LIB}"
+rm -rf "/data/adb/lspd/framework"
+mv "${MODPATH}/system/framework" "/data/adb/lspd/framework"
+mkdir -p /data/misc/$MISC_PATH
+set_perm /data/misc/$MISC_PATH 0 0 0771 "u:object_r:magisk_file:s0" || abortC "! ${LANG_CUST_ERR_PERM}"
+
+if [[ ! -d /data/adb/lspd/config ]]; then
+  mkdir -p /data/adb/lspd/config
+  ui_print "- ${LANG_CUST_INST_MIGRATE_CONF}"
+  cp -r /data/misc/$MISC_PATH/0/prefs /data/misc/$MISC_PATH/prefs
+  /system/bin/app_process -Djava.class.path=/data/adb/lspd/framework/lspd.dex /system/bin --nice-name=lspd_config io.github.lsposed.lspd.service.ConfigManager
+fi
 echo "rm -rf /data/misc/$MISC_PATH" >> "${MODPATH}/uninstall.sh" || abortC "! ${LANG_CUST_ERR_CONF_UNINST}"
 echo "[[ -f /data/adb/lspd/new_install ]] || rm -rf /data/adb/lspd" >> "${MODPATH}/uninstall.sh" || abortC "! ${LANG_CUST_ERR_CONF_UNINST}"
 
+extract "${ZIPFILE}" "${BIN_PATH}/key_selector" "${TMPDIR}"
+SELECTOR_PATH="${TMPDIR}/${BIN_PATH}/key_selector"
+chmod 755 "${SELECTOR_PATH}"
+"${SELECTOR_PATH}"
+VARIANT=$?
+if [ $VARIANT -lt 16 ]; then
+  abortC "${LANG_UTIL_ERR_VARIANT_SELECTION}"
+fi
+
 if [ $VARIANT == 17 ]; then  # YAHFA
-  echo "1" > /data/misc/$MISC_PATH/variant
+  echo "1" > /data/adb/lspd/config/variant
 elif [ $VARIANT == 18 ]; then  # SandHook
-  echo "2" > /data/misc/$MISC_PATH/variant
+  echo "2" > /data/adb/lspd/config/variant
 else
   abortC "${LANG_UTIL_ERR_VARIANT_UNSUPPORT} ${VARIANT}"
 fi
 
-ui_print "- ${LANG_CUST_INST_COPY_LIB}"
-
-rm -rf "/data/misc/$MISC_PATH/framework"
-mv "${MODPATH}/system/framework" "/data/misc/$MISC_PATH/framework"
-
-
-mkdir -p "/data/misc/$MISC_PATH/framework/lib"
-if [ "$IS64BIT" = true ]; then
-  mkdir -p "/data/misc/$MISC_PATH/framework/lib64"
+if [[ ! -e /data/adb/lspd/config/verbose_log ]]; then
+    echo "0" > /data/adb/lspd/config/verbose_log
 fi
 
-set_perm_recursive /data/misc/$MISC_PATH/framework root root 0755 0644 "u:object_r:magisk_file:s0" || abortC "! ${LANG_CUST_ERR_PERM}"
 
 mkdir -p /data/misc/$MISC_PATH/cache
 rm /data/misc/$MISC_PATH/cache/*
-set_perm /data/misc/$MISC_PATH/cache root root 0777 "u:object_r:magisk_file:s0" || abortC "! ${LANG_CUST_ERR_PERM}"
+set_perm /data/misc/$MISC_PATH/cache 0 0 0777 "u:object_r:magisk_file:s0" || abortC "! ${LANG_CUST_ERR_PERM}"
 
 mv "${MODPATH}/system/lib/libriru_lspd.so" "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
 if [[ "${IS64BIT}" == true ]]; then
