@@ -58,7 +58,6 @@ dependencies {
     implementation 'com.android.tools.build:apksig:4.1.2'
     implementation project(path: ':sandhook-hooklib')
     compileOnly project(':hiddenapi-stubs')
-    compileOnly project(':key-selector')
     compileOnly 'androidx.annotation:annotation:1.1.0'
     implementation project(':interface')
     implementation project(':hiddenapi-bridge')
@@ -80,8 +79,8 @@ android {
         externalNativeBuild {
             cmake {
                 abiFilters 'arm64-v8a', 'armeabi-v7a', 'x86', 'x86_64'
-                cppFlags "-std=c++17 -ffixed-x18 -Qunused-arguments -frtti -fomit-frame-pointer"
-                cFlags "-std=gnu99 -ffixed-x18 -Qunused-arguments -frtti -fomit-frame-pointer"
+                cppFlags "-std=c++17 -ffixed-x18 -Qunused-arguments -frtti -fomit-frame-pointer -fpie -fPIC"
+                cFlags "-std=gnu99 -ffixed-x18 -Qunused-arguments -frtti -fomit-frame-pointer -fpie -fPIC"
                 arguments "-DRIRU_MODULE_API_VERSION=$moduleMaxRiruApiVersion",
                         "-DRIRU_MODULE_VERSION=$rootProject.ext.versionCode",
                         "-DRIRU_MODULE_VERSION_NAME:STRING=\"$rootProject.ext.versionName\""
@@ -113,8 +112,8 @@ android {
 
             externalNativeBuild {
                 cmake {
-                    cppFlags "-fvisibility=hidden -fvisibility-inlines-hidden -O2 -s -Wno-unused-value -fomit-frame-pointer"
-                    cFlags "-fvisibility=hidden -fvisibility-inlines-hidden -O2 -s -Wno-unused-value -fomit-frame-pointer"
+                    cppFlags "-fvisibility=hidden -fvisibility-inlines-hidden -Os -Wno-unused-value -fomit-frame-pointer -ffunction-sections -fdata-sections -Wl,--gc-sections -Wl,--strip-all -fno-unwind-tables"
+                    cFlags "-fvisibility=hidden -fvisibility-inlines-hidden -Os -Wno-unused-value -fomit-frame-pointer -ffunction-sections -fdata-sections -Wl,--gc-sections -Wl,--strip-all -fno-unwind-tables"
                 }
             }
         }
@@ -143,7 +142,6 @@ afterEvaluate {
 
         def prepareMagiskFilesTask = task("prepareMagiskFiles${variantCapped}") {
             dependsOn "assemble${variantCapped}"
-            dependsOn tasks.getByPath(":key-selector:copyKeySelector${variantCapped}LibraryToMagiskTemplate")
             doFirst {
                 copy {
                     from "${projectDir}/tpl/module.prop.tpl"
@@ -190,22 +188,26 @@ afterEvaluate {
                             eol: FixCrLfFilter.CrLf.newInstance("lf"))
                 }
                 copy {
-                    include "libriru_lspd.so"
+                    include "riru_lspd"
+                    rename('riru_lspd', 'libriru_lspd.so')
                     from "$libPathRelease/armeabi-v7a"
                     into "$zipPathMagiskReleasePath/system/lib"
                 }
                 copy {
-                    include "libriru_lspd.so"
+                    include "riru_lspd"
+                    rename('riru_lspd', 'libriru_lspd.so')
                     from "$libPathRelease/arm64-v8a"
                     into "$zipPathMagiskReleasePath/system/lib64"
                 }
                 copy {
-                    include "libriru_lspd.so"
+                    include "riru_lspd"
+                    rename('riru_lspd', 'libriru_lspd.so')
                     from "$libPathRelease/x86"
                     into "$zipPathMagiskReleasePath/system_x86/lib"
                 }
                 copy {
-                    include "libriru_lspd.so"
+                    include "riru_lspd"
+                    rename('riru_lspd', 'libriru_lspd.so')
                     from "$libPathRelease/x86_64"
                     into "$zipPathMagiskReleasePath/system_x86/lib64"
                 }

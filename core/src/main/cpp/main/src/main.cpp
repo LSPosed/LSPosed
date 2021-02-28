@@ -28,6 +28,10 @@
 #include <riru.h>
 #include "symbol_cache.h"
 
+#ifndef _LIBCPP_DISABLE_VISIBILITY_ANNOTATIONS
+static_assert(false, "_LIBCPP_DISABLE_VISIBILITY_ANNOTATIONS should be set to reduce binary size");
+#endif
+
 namespace lspd {
     static void onModuleLoaded() {
         LOGI("onModuleLoaded: welcome to LSPosed!");
@@ -94,7 +98,7 @@ namespace lspd {
 
 int riru_api_version;
 
-RIRU_EXPORT void *init(void *arg) {
+RIRU_EXPORT __attribute__((noinline)) void *init(void *arg) {
     static int step = 0;
     step += 1;
 
@@ -144,4 +148,8 @@ RIRU_EXPORT void *init(void *arg) {
             return nullptr;
         }
     }
+}
+
+int main(){
+    init(nullptr);
 }

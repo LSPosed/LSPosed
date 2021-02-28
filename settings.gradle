@@ -1,5 +1,5 @@
 rootProject.name = "LSPosed"
-include ':core', ':hiddenapi-stubs', ':sandhook-hooklib', ':sandhook-annotation', ':app', ':key-selector', ':service', ':interface', ':hiddenapi-bridge', ':manager-service'
+include ':core', ':hiddenapi-stubs', ':sandhook-hooklib', ':sandhook-annotation', ':app', ':service', ':interface', ':hiddenapi-bridge', ':manager-service'
 
 def service_root = "service"
 project(':interface').projectDir = file("$service_root${File.separator}interface")

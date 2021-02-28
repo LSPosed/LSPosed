@@ -230,22 +230,7 @@ fi
 echo "rm -rf /data/misc/$MISC_PATH" >> "${MODPATH}/uninstall.sh" || abortC "! ${LANG_CUST_ERR_CONF_UNINST}"
 echo "[[ -f /data/adb/lspd/new_install ]] || rm -rf /data/adb/lspd" >> "${MODPATH}/uninstall.sh" || abortC "! ${LANG_CUST_ERR_CONF_UNINST}"
 
-extract "${ZIPFILE}" "${BIN_PATH}/key_selector" "${TMPDIR}"
-SELECTOR_PATH="${TMPDIR}/${BIN_PATH}/key_selector"
-chmod 755 "${SELECTOR_PATH}"
-"${SELECTOR_PATH}"
-VARIANT=$?
-if [ $VARIANT -lt 16 ]; then
-  abortC "${LANG_UTIL_ERR_VARIANT_SELECTION}"
-fi
-
-if [ $VARIANT == 17 ]; then  # YAHFA
-  echo "1" > /data/adb/lspd/config/variant
-elif [ $VARIANT == 18 ]; then  # SandHook
-  echo "2" > /data/adb/lspd/config/variant
-else
-  abortC "${LANG_UTIL_ERR_VARIANT_UNSUPPORT} ${VARIANT}"
-fi
+echo "1" > /data/adb/lspd/config/variant
 
 if [[ ! -e /data/adb/lspd/config/verbose_log ]]; then
     echo "0" > /data/adb/lspd/config/verbose_log

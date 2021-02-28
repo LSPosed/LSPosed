@@ -35,7 +35,7 @@ public:
 
     RirudSocket();
 
-    std::string ReadFile(const std::filesystem::path &path);
+    std::string ReadFile(const std::string &path);
 
 //    DirIter ReadDir(const std::filesystem::path &path);
 //    DirIter RecursiveReadDir(const std::filesystem::path &path);
