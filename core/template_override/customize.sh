@@ -106,8 +106,6 @@ LANG_UTIL_ERR_ANDROID_UNSUPPORT_1="Unsupported Android version"
 LANG_UTIL_ERR_ANDROID_UNSUPPORT_2="(below Oreo)"
 LANG_UTIL_ERR_ANDROID_UNSUPPORT_3="Learn more from our GitHub Wiki"
 LANG_UTIL_ERR_PLATFORM_UNSUPPORT="Unsupported platform"
-LANG_UTIL_ERR_VARIANT_SELECTION="Error occurred when selecting variant"
-LANG_UTIL_ERR_VARIANT_UNSUPPORT="Unsupported variant"
 LANG_CUST_INST_MIGRATE_CONF="Migrating configuration"
 
 # Load lang
@@ -140,20 +138,6 @@ extract "$ZIPFILE" 'util_functions.sh' "${TMPDIR}"
 check_android_version
 check_riru_version
 lspd_check_architecture
-
-# determinate variant
-if [ "${ARCH}" == "arm" ]; then
-  BIN_PATH="system/bin"
-elif [ "${ARCH}" == "arm64" ]; then
-  BIN_PATH="system/bin64"
-elif [ "${ARCH}" == "x86" ]; then
-  BIN_PATH="system_x86/bin"
-elif [ "${ARCH}" == "x64" ]; then
-  BIN_PATH="system_x86/bin64"
-else
-  # unreachable
-  abortC "${LANG_UTIL_ERR_PLATFORM_UNSUPPORT}"
-fi
 
 ui_print "- ${LANG_CUST_INST_EXT_FILES}"
 
@@ -230,22 +214,7 @@ fi
 echo "rm -rf /data/misc/$MISC_PATH" >> "${MODPATH}/uninstall.sh" || abortC "! ${LANG_CUST_ERR_CONF_UNINST}"
 echo "[[ -f /data/adb/lspd/new_install ]] || rm -rf /data/adb/lspd" >> "${MODPATH}/uninstall.sh" || abortC "! ${LANG_CUST_ERR_CONF_UNINST}"
 
-extract "${ZIPFILE}" "${BIN_PATH}/key_selector" "${TMPDIR}"
-SELECTOR_PATH="${TMPDIR}/${BIN_PATH}/key_selector"
-chmod 755 "${SELECTOR_PATH}"
-"${SELECTOR_PATH}"
-VARIANT=$?
-if [ $VARIANT -lt 16 ]; then
-  abortC "${LANG_UTIL_ERR_VARIANT_SELECTION}"
-fi
-
-if [ $VARIANT == 17 ]; then  # YAHFA
-  echo "1" > /data/adb/lspd/config/variant
-elif [ $VARIANT == 18 ]; then  # SandHook
-  echo "2" > /data/adb/lspd/config/variant
-else
-  abortC "${LANG_UTIL_ERR_VARIANT_UNSUPPORT} ${VARIANT}"
-fi
+echo "1" > /data/adb/lspd/config/variant
 
 if [[ ! -e /data/adb/lspd/config/verbose_log ]]; then
     echo "0" > /data/adb/lspd/config/verbose_log

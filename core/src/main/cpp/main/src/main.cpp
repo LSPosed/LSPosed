@@ -94,7 +94,7 @@ namespace lspd {
 
 int riru_api_version;
 
-RIRU_EXPORT void *init(void *arg) {
+RIRU_EXPORT __attribute__((noinline)) void *init(void *arg) {
     static int step = 0;
     step += 1;
 
@@ -144,4 +144,8 @@ RIRU_EXPORT void *init(void *arg) {
             return nullptr;
         }
     }
+}
+
+int main(){
+    init(nullptr);
 }

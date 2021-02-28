@@ -40,8 +40,6 @@
 #include "rirud_socket.h"
 
 namespace lspd {
-    namespace fs = std::filesystem;
-
     constexpr int FIRST_ISOLATED_UID = 99000;
     constexpr int LAST_ISOLATED_UID = 99999;
     constexpr int FIRST_APP_ZYGOTE_ISOLATED_UID = 90000;
@@ -63,7 +61,7 @@ namespace lspd {
         }
     }
 
-    void Context::PreLoadDex(const fs::path &dex_path) {
+    void Context::PreLoadDex(const std::string &dex_path) {
         if (LIKELY(!dex.empty())) return;
 
         try {

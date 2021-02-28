@@ -25,8 +25,6 @@
 #include <logging.h>
 #include <cerrno>
 
-namespace fs = std::filesystem;
-
 template<>
 void RirudSocket::Write<std::string>(const std::string &str) {
     auto count = str.size();
@@ -79,10 +77,10 @@ RirudSocket::~RirudSocket() {
         close(fd_);
 }
 
-std::string RirudSocket::ReadFile(const fs::path &path) {
+std::string RirudSocket::ReadFile(const std::string &path) {
     Write(ACTION_READ_FILE);
-    Write(static_cast<uint32_t>(path.string().size()));
-    Write(path.string());
+    Write(static_cast<uint32_t>(path.size()));
+    Write(path);
     int32_t rirud_errno;
     Read(rirud_errno);
     if(rirud_errno != 0) {
