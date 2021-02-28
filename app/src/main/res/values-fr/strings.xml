@@ -23,7 +23,7 @@
 
     <!-- MainActivity -->
     <string name="info">Info</string>
-    <string name="Activated">Activé</string>
+    <string name="Activated">Activé %s</string>
     <string name="Install">Installer</string>
     <string name="InstallDetail">Appuyez pour installer LSPosed</string>
     <string name="Modules">Modules</string>

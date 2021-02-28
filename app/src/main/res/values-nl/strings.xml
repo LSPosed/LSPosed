@@ -20,7 +20,7 @@
 
 <resources>
     <string name="app_name" translatable="false">LSPosed</string>
-    <string name="Activated">Geactiveerd</string>
+    <string name="Activated">%s Geactiveerd</string>
     <string name="Install">Installeer</string>
     <string name="InstallDetail">Tik om LSPosed te installeren</string>
     <string name="Modules">Modules</string>

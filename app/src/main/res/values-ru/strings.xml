@@ -20,7 +20,7 @@
 
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="app_name" translatable="false">LSPosed</string>
-    <string name="Activated">Активирован</string>
+    <string name="Activated">%s Активирован</string>
     <string name="Install">Установить</string>
     <string name="InstallDetail">Нажмите, чтобы установить LSPosed</string>
     <string name="Modules">Модули</string>

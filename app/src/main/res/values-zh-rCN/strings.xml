@@ -20,7 +20,7 @@
 
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="app_name" translatable="false">LSPosed</string>
-    <string name="Activated">已激活</string>
+    <string name="Activated">%s 已激活</string>
     <string name="Install">安装</string>
     <string name="InstallDetail">点按安装 LSPosed</string>
     <string name="Modules">模块</string>
