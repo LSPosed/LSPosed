@@ -17,8 +17,6 @@
  * Copyright (C) 2021 LSPosed Contributors
  */
 
-apply plugin: 'java-library'
-
-dependencies {
-    compileOnly project(':hiddenapi-stubs')
+plugins {
+    `java-library`
 }
