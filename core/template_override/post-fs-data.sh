@@ -165,8 +165,7 @@ rm -f /data/adb/lspd/new_install
 start_app_process() {
   while true
   do
-    COUNT=$(awk 1 /proc/**/cmdline | grep -c zygote)
-    if [[ "$COUNT" -ge 1 ]]; then
+    if [ -S "/dev/socket/zygote" ]; then
       /system/bin/app_process -Djava.class.path=/data/adb/lspd/framework/lspd.dex /system/bin --nice-name=lspd io.github.lsposed.lspd.core.Main
     fi
   done
