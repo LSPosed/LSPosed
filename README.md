@@ -4,13 +4,13 @@
 
 ## Introduction 
 
-A Riru module trying to provide an ART hooking framework (initially for Android Pie) which delivers consistent APIs with the OG Xposed, leveraging YAHFA and SandHook hooking framework, supports Android 8.0 ~ **11**.
+A Riru module trying to provide an ART hooking framework (initially for Android Pie) which delivers consistent APIs with the OG Xposed, leveraging YAHFA and SandHook hooking framework, supports Android 8.1 ~ **12 DP1**.
 
 > Xposed is a framework for modules that can change the behavior of the system and apps without touching any APKs. That's great because it means that modules can work for different versions and even ROMs without any changes (as long as the original code was not changed too much). It's also easy to undo. As all changes are done in the memory, you just need to deactivate the module and reboot to get your original system back. There are many other advantages, but here is just one more: Multiple modules can do changes to the same part of the system or app. With modified APKs, you to decide for one. No way to combine them, unless the author builds multiple APKs with different combinations.
 
 ## Supported Versions
 
-Android 8 ~ 11
+Android 8.1 ~ 12 DP1
 
 ## Install
 
@@ -42,9 +42,9 @@ Developers are welcomed to write Xposed modules with hooks based on LSPosed Fram
 
 - [Xposed Framework API](https://api.xposed.info/)
 
-We use the module repository of the original Xposed, so you simply upload the module to repository, then you can download your module in LSPosed.
+We use our own module repository. We welcome developers to submit modules to our repository, and then modules can be downloaded in LSPosed.
 
-- [Xposed Module Repository](https://repo.xposed.info/)
+- [LSPosed Module Repository](https://github.com/Xposed-Modules-Repo)
 
 ## Community Discussion
 

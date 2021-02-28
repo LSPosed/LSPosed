@@ -67,7 +67,7 @@ lspd_check_architecture() {
 }
 
 check_android_version() {
-    if [[ ${API} -ge 26 ]]; then
+    if [[ ${API} -ge 27 ]]; then
         ui_print "- Android SDK ${LANG_CUST_INST_VERSION}: ${API}"
     else
         require_new_android "${API}"
