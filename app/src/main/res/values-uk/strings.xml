@@ -20,7 +20,7 @@
 
 <resources>
     <string name="About">Про модифікацію</string>
-    <string name="Activated">Активовано</string>
+    <string name="Activated">%s Активовано</string>
     <string name="Install">Установити</string>
     <string name="InstallDetail">Натисніть для встановлення LSPosed</string>
     <string name="Logs">Звіти</string>

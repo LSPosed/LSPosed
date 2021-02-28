@@ -23,7 +23,7 @@
     
     <!-- MainActivity -->
     <string name="info">資訊</string>
-    <string name="Activated">已啟用</string>
+    <string name="Activated">%s 已啟用</string>
     <string name="Install">安裝</string>
     <string name="InstallDetail">點選安裝 LSPosed</string>
     <string name="Modules">模組</string>

@@ -23,7 +23,7 @@
 
     <!-- MainActivity -->
     <string name="info">Info</string>
-    <string name="Activated">Activated</string>
+    <string name="Activated">%s Activated</string>
     <string name="Install">Install</string>
     <string name="InstallDetail">Tap to install LSPosed</string>
     <string name="Modules">Modules</string>
