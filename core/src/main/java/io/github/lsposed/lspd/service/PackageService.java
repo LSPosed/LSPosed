@@ -117,6 +117,7 @@ public class PackageService {
 
     private static Set<String> fetchProcesses(PackageInfo pkgInfo) {
         HashSet<String> processNames = new HashSet<>();
+        if (pkgInfo == null) return processNames;
         for (ComponentInfo[] componentInfos : new ComponentInfo[][]{pkgInfo.activities, pkgInfo.receivers, pkgInfo.providers}) {
             if (componentInfos == null) continue;
             for (ComponentInfo componentInfo : componentInfos) {
@@ -148,6 +149,7 @@ public class PackageService {
             pkgInfo = pm.getPackageInfo(packageName, flags | PackageManager.GET_ACTIVITIES | PackageManager.GET_SERVICES | PackageManager.GET_RECEIVERS | PackageManager.GET_PROVIDERS, userId);
         } catch (Exception e) {
             pkgInfo = pm.getPackageInfo(packageName, flags, userId);
+            if (pkgInfo == null) return null;
             try {
                 pkgInfo.activities = pm.getPackageInfo(packageName, flags | PackageManager.GET_ACTIVITIES, userId).activities;
             } catch (Exception ignored) {
