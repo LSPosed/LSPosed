@@ -51,8 +51,8 @@ allprojects {
     repositories {
         google()
         jcenter()
-        maven(url="https://jitpack.io")
-        maven(url="https://dl.bintray.com/rikkaw/Libraries")
+        maven(url = "https://jitpack.io")
+        maven(url = "https://dl.bintray.com/rikkaw/Libraries")
     }
 }
 

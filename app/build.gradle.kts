@@ -30,8 +30,8 @@ android {
     val androidBuildToolsVersion: String by extra
     val androidCompileSdkVersion: Int by extra
     val androidCompileNdkVersion: String by extra
-    val androidSourceCompatibility:JavaVersion by extra
-    val androidTargetCompatibility:JavaVersion by extra
+    val androidSourceCompatibility: JavaVersion by extra
+    val androidTargetCompatibility: JavaVersion by extra
 
     compileSdkVersion(androidCompileSdkVersion)
     ndkVersion = androidCompileNdkVersion

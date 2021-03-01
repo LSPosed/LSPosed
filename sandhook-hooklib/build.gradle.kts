@@ -8,8 +8,8 @@ android {
     val androidCompileSdkVersion: Int by extra
     val androidMinSdkVersion: Int by extra
     val androidBuildToolsVersion: String by extra
-    val androidSourceCompatibility:JavaVersion by extra
-    val androidTargetCompatibility:JavaVersion by extra
+    val androidSourceCompatibility: JavaVersion by extra
+    val androidTargetCompatibility: JavaVersion by extra
 
     compileSdkVersion(androidCompileSdkVersion)
 
@@ -25,7 +25,7 @@ android {
 
     buildTypes {
         named("release") {
-            isMinifyEnabled=false
+            isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }
     }
