@@ -97,8 +97,8 @@ android {
         }
 
         buildConfigField("int", "API_CODE", "$apiCode")
-        buildConfigField("String", "VERSION_NAME", "\"$versionName\"")
-        buildConfigField("Integer", "VERSION_CODE", versionCode.toString())
+        buildConfigField("String", "VERSION_NAME", "\"${extra["versionName"]}\"")
+        buildConfigField("Integer", "VERSION_CODE", extra["versionCode"].toString())
     }
 
     lintOptions {
