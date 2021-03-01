@@ -20,23 +20,23 @@
   -->
 
 <resources>
-    <color name="material_red">@color/material_red_300</color>
-    <color name="material_pink">@color/material_pink_300</color>
-    <color name="material_purple">@color/material_purple_300</color>
-    <color name="material_deep_purple">@color/material_deep_purple_300</color>
-    <color name="material_indigo">@color/material_indigo_300</color>
-    <color name="material_blue">@color/material_blue_300</color>
-    <color name="material_light_blue">@color/material_light_blue_300</color>
-    <color name="material_cyan">@color/material_cyan_300</color>
-    <color name="material_teal">@color/material_teal_300</color>
-    <color name="material_green">@color/material_green_300</color>
-    <color name="material_light_green">@color/material_light_green_300</color>
-    <color name="material_lime">@color/material_lime_300</color>
-    <color name="material_yellow">@color/material_yellow_300</color>
-    <color name="material_amber">@color/material_amber_300</color>
-    <color name="material_orange">@color/material_orange_300</color>
-    <color name="material_deep_orange">@color/material_deep_orange_300</color>
-    <color name="material_brown">@color/material_brown_300</color>
-    <color name="material_grey">@color/material_grey_300</color>
-    <color name="material_blue_grey">@color/material_blue_grey_300</color>
+    <color name="material_red">@color/material_red_200</color>
+    <color name="material_pink">@color/material_pink_200</color>
+    <color name="material_purple">@color/material_purple_200</color>
+    <color name="material_deep_purple">@color/material_deep_purple_200</color>
+    <color name="material_indigo">@color/material_indigo_200</color>
+    <color name="material_blue">@color/material_blue_200</color>
+    <color name="material_light_blue">@color/material_light_blue_200</color>
+    <color name="material_cyan">@color/material_cyan_200</color>
+    <color name="material_teal">@color/material_teal_200</color>
+    <color name="material_green">@color/material_green_200</color>
+    <color name="material_light_green">@color/material_light_green_200</color>
+    <color name="material_lime">@color/material_lime_200</color>
+    <color name="material_yellow">@color/material_yellow_200</color>
+    <color name="material_amber">@color/material_amber_200</color>
+    <color name="material_orange">@color/material_orange_200</color>
+    <color name="material_deep_orange">@color/material_deep_orange_200</color>
+    <color name="material_brown">@color/material_brown_200</color>
+    <color name="material_grey">@color/material_grey_200</color>
+    <color name="material_blue_grey">@color/material_blue_grey_200</color>
 </resources>
