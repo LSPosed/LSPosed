@@ -84,9 +84,9 @@ android {
             isShrinkResources = false
         }
     }
-    applicationVariants.forEach { variant ->
-        variant.outputs.map { it as BaseVariantOutputImpl }.forEach { output ->
-            output.outputFileName = "LSPosedManager-${defaultConfig.versionName}-${defaultConfig.versionCode}-${variant.buildType.name}.apk"
+    applicationVariants.all {
+        outputs.map { it as BaseVariantOutputImpl }.forEach { output ->
+            output.outputFileName = "LSPosedManager-${defaultConfig.versionName}-${defaultConfig.versionCode}-${buildType.name}.apk"
         }
     }
 }

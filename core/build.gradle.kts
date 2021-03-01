@@ -97,8 +97,8 @@ android {
         }
 
         buildConfigField("int", "API_CODE", "$apiCode")
-        buildConfigField("String", "VERSION_NAME", "\"$versionName\"")
-        buildConfigField("Integer", "VERSION_CODE", versionCode.toString())
+        buildConfigField("String", "VERSION_NAME", "\"${extra["versionName"]}\"")
+        buildConfigField("Integer", "VERSION_CODE", extra["versionCode"].toString())
     }
 
     lintOptions {
@@ -174,8 +174,8 @@ afterEvaluate {
             val excludeList = arrayOf("util_functions.sh")
             doLast {
                 val dexOutPath = if (variant.name.contains("release"))
-                    "buildDir/intermediates/dex/variantLowered/minify${variantCapped}WithR8" else
-                    "buildDir/intermediates/dex/variantLowered/mergeDex$variantCapped"
+                    "$buildDir/intermediates/dex/$variantLowered/minify${variantCapped}WithR8" else
+                    "$buildDir/intermediates/dex/$variantLowered/mergeDex$variantCapped"
                 copy {
                     from(dexOutPath) {
                         rename("classes.dex", "lspd.dex")
