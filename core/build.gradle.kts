@@ -174,8 +174,8 @@ afterEvaluate {
             val excludeList = arrayOf("util_functions.sh")
             doLast {
                 val dexOutPath = if (variant.name.contains("release"))
-                    "buildDir/intermediates/dex/variantLowered/minify${variantCapped}WithR8" else
-                    "buildDir/intermediates/dex/variantLowered/mergeDex$variantCapped"
+                    "$buildDir/intermediates/dex/$variantLowered/minify${variantCapped}WithR8" else
+                    "$buildDir/intermediates/dex/$variantLowered/mergeDex$variantCapped"
                 copy {
                     from(dexOutPath) {
                         rename("classes.dex", "lspd.dex")
