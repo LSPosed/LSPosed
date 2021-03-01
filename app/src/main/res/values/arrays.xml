@@ -32,14 +32,4 @@
         <item>MODE_NIGHT_YES</item>
         <item>MODE_NIGHT_FOLLOW_SYSTEM</item>
     </string-array>
-
-    <string-array name="variant_texts">
-        <item>YAHFA</item>
-        <item>@string/settings_variant_sandhook</item>
-    </string-array>
-    <string-array name="variant_values" translatable="false">
-        <item>1</item>
-        <item>2</item>
-    </string-array>
-
 </resources>
