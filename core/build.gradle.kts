@@ -77,7 +77,7 @@ dependencies {
 }
 
 android {
-    compileSdkVersion(30)
+    compileSdkVersion(androidCompileSdkVersion)
     defaultConfig {
         applicationId("io.github.lsposed.lspd")
         minSdkVersion(androidMinSdkVersion)
