@@ -27,6 +27,7 @@ import android.os.Process;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import io.github.lsposed.lspd.util.Utils;
 
@@ -37,6 +38,7 @@ public class ModuleLogger {
     public static void initLogger(ParcelFileDescriptor fileDescriptor) {
         if (fd == -1 && fileDescriptor != null) {
             fd = fileDescriptor.detachFd();
+            logDateFormat.setTimeZone(TimeZone.getDefault());
         }
     }
 

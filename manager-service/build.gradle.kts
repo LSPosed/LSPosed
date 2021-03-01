@@ -18,27 +18,35 @@
  */
 
 plugins {
-    id 'com.android.library'
+    id("com.android.library")
+    kotlin("android")
 }
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    val androidTargetSdkVersion: Int by extra
+    val androidBuildToolsVersion: String by extra
+    val androidMinSdkVersion: Int by extra
+    val androidSourceCompatibility: JavaVersion by extra
+    val androidTargetCompatibility: JavaVersion by extra
+
+    compileSdkVersion(androidTargetSdkVersion)
+    buildToolsVersion(androidBuildToolsVersion)
 
     defaultConfig {
-        minSdkVersion 26
-        targetSdkVersion 30
-        consumerProguardFiles 'proguard-rules.pro'
+        minSdkVersion(androidMinSdkVersion)
+        targetSdkVersion(androidTargetSdkVersion)
+        consumerProguardFiles("proguard-rules.pro")
     }
 
     buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        named("release") {
+            isMinifyEnabled = false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
+
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility(androidSourceCompatibility)
+        targetCompatibility(androidTargetCompatibility)
     }
 }
