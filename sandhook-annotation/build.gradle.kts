@@ -3,6 +3,6 @@ plugins {
 }
 
 java {
-    sourceCompatibility = project.extra["androidSourceCompatibility"] as JavaVersion
-    targetCompatibility = project.extra["androidTargetCompatibility"] as JavaVersion
+    sourceCompatibility = extra["androidSourceCompatibility"] as JavaVersion
+    targetCompatibility = extra["androidTargetCompatibility"] as JavaVersion
 }

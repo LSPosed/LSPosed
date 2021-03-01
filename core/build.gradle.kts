@@ -47,7 +47,7 @@ val moduleMinRiruApiVersion = 10
 val moduleMinRiruVersionName = "v23.0"
 val moduleMaxRiruApiVersion = 10
 
-val apiCode: Int by project
+val apiCode: Int by extra
 
 val androidTargetSdkVersion: Int by extra
 val androidMinSdkVersion: Int by extra
@@ -59,11 +59,8 @@ val androidTargetCompatibility:JavaVersion by extra
 
 val zipPathMagiskReleasePath: String by extra
 
-repositories {
-    mavenLocal()
-    jcenter()
-    maven(url = "https://dl.bintray.com/rikkaw/Libraries")
-}
+val versionCode: Int by extra
+val versionName: String by extra
 
 dependencies {
     implementation("rikka.ndk:riru:10")
@@ -100,8 +97,8 @@ android {
         }
 
         buildConfigField("int", "API_CODE", "$apiCode")
-        buildConfigField("String", "VERSION_NAME", "\"${extra["versionName"]}\"")
-        buildConfigField("Integer", "VERSION_CODE", extra["versionCode"].toString())
+        buildConfigField("String", "VERSION_NAME", "\"$versionName\"")
+        buildConfigField("Integer", "VERSION_CODE", versionCode.toString())
     }
 
     lintOptions {
@@ -149,20 +146,20 @@ afterEvaluate {
     android.applicationVariants.forEach { variant ->
         val variantCapped = variant.name.capitalize()
         val variantLowered = variant.name.toLowerCase()
-        val zipFileName = "${moduleName}-${extra["versionName"]}-${extra["versionCode"]}-${variantLowered}.zip"
+        val zipFileName = "$moduleName-$versionName-$versionCode-$variantLowered.zip"
 
         delete(file(zipPathMagiskReleasePath))
 
-        val prepareMagiskFilesTask = task("prepareMagiskFiles${variantCapped}") {
-            dependsOn("assemble${variantCapped}")
+        val prepareMagiskFilesTask = task("prepareMagiskFiles$variantCapped") {
+            dependsOn("assemble$variantCapped")
             doFirst {
                 copy {
-                    from("${projectDir}/tpl/module.prop.tpl")
-                    into("${projectDir}/template_override")
+                    from("$projectDir/tpl/module.prop.tpl")
+                    into("$projectDir/template_override")
                     rename("module.prop.tpl", "module.prop")
                     expand("moduleId" to moduleId,
-                            "versionName" to "${extra["versionName"]}",
-                            "versionCode" to "${extra["versionCode"]}",
+                            "versionName" to versionName,
+                            "versionCode" to versionCode,
                             "authorList" to authors,
                             "apiCode" to apiCode,
                             "minApi" to "$moduleMinRiruApiVersion")
@@ -173,12 +170,12 @@ afterEvaluate {
                     into(file(zipPathMagiskReleasePath))
                 }
             }
-            val libPathRelease = "${buildDir}/intermediates/cmake/${variantLowered}/obj"
+            val libPathRelease = "${buildDir}/intermediates/cmake/$variantLowered/obj"
             val excludeList = arrayOf("util_functions.sh")
             doLast {
                 val dexOutPath = if (variant.name.contains("release"))
-                    "${buildDir}/intermediates/dex/${variantLowered}/minify${variantCapped}WithR8" else
-                    "${buildDir}/intermediates/dex/${variantLowered}/mergeDex${variantCapped}"
+                    "buildDir/intermediates/dex/variantLowered/minify${variantCapped}WithR8" else
+                    "buildDir/intermediates/dex/variantLowered/mergeDex$variantCapped"
                 copy {
                     from(dexOutPath) {
                         rename("classes.dex", "lspd.dex")

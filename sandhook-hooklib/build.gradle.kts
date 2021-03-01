@@ -4,10 +4,10 @@ plugins {
 }
 
 android {
-    val androidTargetSdkVersion: Int by project
-    val androidCompileSdkVersion: Int by project
-    val androidMinSdkVersion: Int by project
-    val androidBuildToolsVersion: String by project
+    val androidTargetSdkVersion: Int by extra
+    val androidCompileSdkVersion: Int by extra
+    val androidMinSdkVersion: Int by extra
+    val androidBuildToolsVersion: String by extra
     val androidSourceCompatibility:JavaVersion by extra
     val androidTargetCompatibility:JavaVersion by extra
 
