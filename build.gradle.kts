@@ -37,7 +37,7 @@ val commitCount = Git(repo).log().add(refId).call().count()
 
 allprojects {
     extra["versionCode"] = commitCount + 4200
-    extra["versionName"] = "v1.1.0"
+    extra["versionName"] = "v1.2.0"
     extra["androidTargetSdkVersion"] = 30
     extra["androidMinSdkVersion"] = 27
     extra["androidBuildToolsVersion"] = "30.0.3"
