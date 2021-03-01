@@ -149,8 +149,6 @@
     <string name="settings_restoring">恢复中…</string>
     <string name="settings_restore_success">恢复成功！</string>
     <string name="settings_restore_failed">恢复失败</string>
-    <string name="settings_variant_sandhook">SandHook（已废弃）</string>
-    <string name="settings_sandhook_deprecated_warning">警告：SandHook 现已废弃，并且将在以后的版本中移除。\n请考虑切换到 YAHFA。</string>
     <string name="menu_backup_and_restore">备份…</string>
     <string name="menu_backup">备份</string>
     <string name="menu_restore">恢复</string>

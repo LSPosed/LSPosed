@@ -62,16 +62,6 @@
         android:title="@string/settings_group_framework"
         app:iconSpaceReserved="false">
 
-        <com.takisoft.preferencex.SimpleMenuPreference
-            android:defaultValue="1"
-            android:entries="@array/variant_texts"
-            android:entryValues="@array/variant_values"
-            android:key="variant"
-            android:summary="%s"
-            android:title="@string/settings_variant"
-            android:persistent="false"
-            app:iconSpaceReserved="false" />
-
         <SwitchPreference
             android:defaultValue="false"
             android:key="enable_resources"

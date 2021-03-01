@@ -42,7 +42,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.takisoft.preferencex.PreferenceFragmentCompat;
-import com.takisoft.preferencex.SimpleMenuPreference;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -52,7 +51,6 @@ import io.github.lsposed.manager.ConfigManager;
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.databinding.ActivitySettingsBinding;
 import io.github.lsposed.manager.ui.activity.base.BaseActivity;
-import io.github.lsposed.manager.ui.fragment.StatusDialogBuilder;
 import io.github.lsposed.manager.util.BackupUtils;
 import io.github.lsposed.manager.util.theme.ThemeUtil;
 import rikka.core.util.ResourceUtils;
@@ -222,26 +220,6 @@ public class SettingsActivity extends BaseActivity {
                 prefEnableResources.setEnabled(installed);
                 prefEnableResources.setChecked(ConfigManager.isResourceHookEnabled());
                 prefEnableResources.setOnPreferenceChangeListener((preference, newValue) -> ConfigManager.setResourceHookEnabled((boolean) newValue));
-            }
-
-            SimpleMenuPreference prefVariant = findPreference("variant");
-            if (prefVariant != null) {
-                if (StatusDialogBuilder.getArch().contains("x86") || requireActivity().getApplicationInfo().uid / 100000 != 0) {
-                    prefVariant.setVisible(false);
-                } else {
-                    prefVariant.setEnabled(installed);
-                    prefVariant.setValue(String.valueOf(ConfigManager.getVariant()));
-                    prefVariant.setOnPreferenceChangeListener((preference, newValue) -> {
-                        if (newValue.equals("2")) {
-                            new AlertDialog.Builder(requireActivity())
-                                    .setCancelable(true)
-                                    .setMessage(R.string.settings_sandhook_deprecated_warning)
-                                    .setPositiveButton(android.R.string.ok, null)
-                                    .show();
-                        }
-                        return ConfigManager.setVariant(Integer.parseInt((String) newValue));
-                    });
-                }
             }
 
             Preference backup = findPreference("backup");

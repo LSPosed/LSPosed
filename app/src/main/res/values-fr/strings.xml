@@ -140,8 +140,6 @@
     <string name="settings_restoring">Restauration…</string>
     <string name="settings_restore_success">Restauration terminée!</string>
     <string name="settings_restore_failed">Échec de la restauration</string>
-    <string name="settings_variant_sandhook">SandHook (Déprécié)</string>
-    <string name="settings_sandhook_deprecated_warning">Avertissement: SandHook est déprécié et sera supprimé dans le future. \nMerci de prendre en considération de migrer vers YAHFA.</string>
     <string name="group_network">Réseau</string>
     <string name="dns_over_http">DNS sur HTTPS</string>
     <string name="dns_over_http_summary">Contourner la censure DNS dans certains pays</string>
