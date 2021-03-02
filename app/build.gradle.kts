@@ -91,12 +91,12 @@ android {
     }
 }
 
-val optimizeReleaseResources = task("optimizeReleaseResources").doLast {
+val optimizeReleaseResources = task("optimizeReleaseRes").doLast {
     val aapt2 = Paths.get(project.android.sdkDirectory.path, "build-tools", project.android.buildToolsVersion, "aapt2")
     val zip = Paths.get(project.buildDir.path, "intermediates", "processed_res", "release", "out", "resources-release.ap_")
     val optimized = File("${zip}.opt")
     val cmd = exec {
-        commandLine(aapt2, "optimize", "--collapse-resource-names", "--shorten-resource-paths", "-o", optimized, zip)
+        commandLine(aapt2, "optimize", "--collapse-resource-names", "-o", optimized, zip)
         isIgnoreExitValue = false
     }
     if (cmd.exitValue == 0) {
@@ -106,7 +106,7 @@ val optimizeReleaseResources = task("optimizeReleaseResources").doLast {
 }
 
 tasks.whenTaskAdded {
-    if (name == "processReleaseResources") {
+    if (name == "shrinkReleaseRes") {
         finalizedBy(optimizeReleaseResources)
     }
 }
@@ -153,9 +153,11 @@ dependencies {
     implementation(project(":manager-service"))
 }
 
-configurations {
-    compile.get().exclude(group = "org.jetbrains", module = "annotations")
-    compile.get().exclude(group = "androidx.appcompat", module = "appcompat")
+configurations.all {
+    resolutionStrategy {
+        exclude(group = "org.jetbrains", module = "annotations")
+        exclude(group = "androidx.appcompat", module = "appcompat")
+    }
 //    cleanedAnnotations()
 }
 

@@ -25,7 +25,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:4.1.2")
+        classpath("com.android.tools.build:gradle:7.0.0-alpha08")
         classpath("org.eclipse.jgit:org.eclipse.jgit:5.10.0.202012080955-r")
         classpath(kotlin("gradle-plugin", version = "1.4.31"))
     }
@@ -43,8 +43,8 @@ allprojects {
     extra["androidBuildToolsVersion"] = "30.0.3"
     extra["androidCompileSdkVersion"] = 30
     extra["androidCompileNdkVersion"] = "22.0.7026061"
-    extra["androidSourceCompatibility"] = JavaVersion.VERSION_1_8
-    extra["androidTargetCompatibility"] = JavaVersion.VERSION_1_8
+    extra["androidSourceCompatibility"] = JavaVersion.VERSION_11
+    extra["androidTargetCompatibility"] = JavaVersion.VERSION_11
     extra["apiCode"] = 93
     extra["zipPathMagiskReleasePath"] = project(":core").projectDir.path + "/build/tmp/release/magisk/"
 
