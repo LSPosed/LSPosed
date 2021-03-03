@@ -29,7 +29,7 @@
 }
 -keepnames class io.github.lsposed.lspd.hooker.HandleBindAppHooker
 -keepclasseswithmembers class io.github.lsposed.lspd.nativebridge.* {
-    native *;
+    native <methods>;
 }
 -keepclasseswithmembers class io.github.lsposed.lspd.nativebridge.ClassLinker {
     public static void onPostFixupStaticTrampolines(java.lang.Class);
@@ -40,4 +40,8 @@
 }
 -keepclasseswithmembers class io.github.lsposed.lspd.service.ConfigManager {
     public static void main(java.lang.String[]);
+}
+-assumenosideeffects class android.util.Log {
+    public static *** v(...);
+    public static *** d(...);
 }
