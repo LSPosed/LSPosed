@@ -165,4 +165,6 @@
     <string name="outdated_manager">Version of LSPosed Manager and LSPosed Core are not consistent. Please re-install the corresponding version.</string>
     <string name="lsposed_not_active">LSPosed is not currently installed or active.</string>
     <string name="verbose_log_not_avaliable">Verbose log is not available, if you just enabled it without reboot, try again after reboot.</string>
+    <string name="NotInstall">Not Installed</string>
+    <string name="NotInstallDetail">LSPosed is not Installed</string>
 </resources>
