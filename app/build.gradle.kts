@@ -17,22 +17,24 @@
  * Copyright (C) 2021 LSPosed Contributors
  */
 import com.android.build.gradle.internal.api.BaseVariantOutputImpl
-import java.nio.file.Paths;
+import java.nio.file.Paths
 
 plugins {
     id("com.android.application")
     kotlin("android")
 }
 
-android {
-    val androidTargetSdkVersion: Int by extra
-    val androidMinSdkVersion: Int by extra
-    val androidBuildToolsVersion: String by extra
-    val androidCompileSdkVersion: Int by extra
-    val androidCompileNdkVersion: String by extra
-    val androidSourceCompatibility: JavaVersion by extra
-    val androidTargetCompatibility: JavaVersion by extra
+val androidTargetSdkVersion: Int by rootProject.extra
+val androidMinSdkVersion: Int by rootProject.extra
+val androidBuildToolsVersion: String by rootProject.extra
+val androidCompileSdkVersion: Int by rootProject.extra
+val androidCompileNdkVersion: String by rootProject.extra
+val androidSourceCompatibility: JavaVersion by rootProject.extra
+val androidTargetCompatibility: JavaVersion by rootProject.extra
+val verCode: Int by rootProject.extra
+val verName: String by rootProject.extra
 
+android {
     compileSdkVersion(androidCompileSdkVersion)
     ndkVersion = androidCompileNdkVersion
     buildToolsVersion(androidBuildToolsVersion)
@@ -45,10 +47,10 @@ android {
         applicationId("io.github.lsposed.manager")
         minSdkVersion(androidMinSdkVersion)
         targetSdkVersion(androidTargetSdkVersion)
-        versionCode(extra["versionCode"] as Int)
-        versionName(extra["versionName"] as String)
+        versionCode(verCode)
+        versionName(verName)
         resConfigs("en", "zh-rCN", "zh-rTW", "zh-rHK", "ru", "uk", "nl", "ko", "fr")
-        resValue("string", "versionName", extra["versionName"] as String)
+        resValue("string", "versionName", verName)
     }
 
     compileOptions {
@@ -56,19 +58,21 @@ android {
         sourceCompatibility(androidSourceCompatibility)
     }
 
-    lintOptions {
-        disable("MissingTranslation")
-        disable("ExtraTranslation")
+    lint {
+        disable += "MissingTranslation"
+        disable += "ExtraTranslation"
         isAbortOnError = true
         isCheckReleaseBuilds = true
     }
 
     packagingOptions {
-        exclude("META-INF/**")
-        exclude("kotlin/**")
-        exclude("org/**")
-        exclude("**.properties")
-        exclude("**.bin")
+        resources {
+            excludes += "META-INF/**"
+            excludes += "kotlin/**"
+            excludes += "org/**"
+            excludes += "**.properties"
+            excludes += "**.bin"
+        }
     }
 
     dependenciesInfo.includeInApk = false
@@ -91,12 +95,12 @@ android {
     }
 }
 
-val optimizeReleaseResources = task("optimizeReleaseResources").doLast {
+val optimizeReleaseResources = task("optimizeReleaseRes").doLast {
     val aapt2 = Paths.get(project.android.sdkDirectory.path, "build-tools", project.android.buildToolsVersion, "aapt2")
     val zip = Paths.get(project.buildDir.path, "intermediates", "processed_res", "release", "out", "resources-release.ap_")
     val optimized = File("${zip}.opt")
     val cmd = exec {
-        commandLine(aapt2, "optimize", "--collapse-resource-names", "--shorten-resource-paths", "-o", optimized, zip)
+        commandLine(aapt2, "optimize", "--collapse-resource-names", "-o", optimized, zip)
         isIgnoreExitValue = false
     }
     if (cmd.exitValue == 0) {
@@ -106,7 +110,7 @@ val optimizeReleaseResources = task("optimizeReleaseResources").doLast {
 }
 
 tasks.whenTaskAdded {
-    if (name == "processReleaseResources") {
+    if (name == "shrinkReleaseRes") {
         finalizedBy(optimizeReleaseResources)
     }
 }
@@ -153,9 +157,10 @@ dependencies {
     implementation(project(":manager-service"))
 }
 
-configurations {
-    compile.get().exclude(group = "org.jetbrains", module = "annotations")
-    compile.get().exclude(group = "androidx.appcompat", module = "appcompat")
-//    cleanedAnnotations()
+configurations.all {
+    resolutionStrategy {
+        exclude(group = "org.jetbrains", module = "annotations")
+        exclude(group = "androidx.appcompat", module = "appcompat")
+    }
 }
 

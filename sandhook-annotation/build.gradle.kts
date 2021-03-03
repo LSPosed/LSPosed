@@ -2,7 +2,10 @@ plugins {
     `java-library`
 }
 
+val androidSourceCompatibility: JavaVersion by rootProject.extra
+val androidTargetCompatibility: JavaVersion by rootProject.extra
+
 java {
-    sourceCompatibility = extra["androidSourceCompatibility"] as JavaVersion
-    targetCompatibility = extra["androidTargetCompatibility"] as JavaVersion
+    sourceCompatibility = androidSourceCompatibility
+    targetCompatibility = androidTargetCompatibility
 }
