@@ -69,11 +69,10 @@ public class LSPosedService extends ILSPosedService.Stub {
             Log.e(TAG, "Package name is null");
             return;
         }
-        Log.d(TAG, "New installed: " + packageName);
+        Log.d(TAG, "Package changed: " + packageName);
         int uid = intent.getIntExtra(Intent.EXTRA_UID, -1);
         int userId = intent.getIntExtra(Intent.EXTRA_USER, -1);
-        boolean replacing = intent.getBooleanExtra(Intent.EXTRA_REPLACING, false);
-        if (intent.getAction().equals(Intent.ACTION_PACKAGE_REMOVED) && uid > 0 && !replacing) {
+        if (intent.getAction().equals(Intent.ACTION_PACKAGE_FULLY_REMOVED) && uid > 0) {
             if (userId == 0 || userId == -1) {
                 ConfigManager.getInstance().removeModule(packageName);
             }
