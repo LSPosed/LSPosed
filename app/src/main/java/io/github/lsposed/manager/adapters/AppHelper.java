@@ -118,7 +118,7 @@ public class AppHelper {
 
     public static List<PackageInfo> getAppList(boolean force) {
         if (appList == null || force) {
-            appList = ConfigManager.getInstalledPackagesFromAllUsers(PackageManager.GET_META_DATA, true);
+            appList = ConfigManager.getInstalledPackagesFromAllUsers(PackageManager.GET_META_DATA | PackageManager.MATCH_UNINSTALLED_PACKAGES, true);
         }
         return appList;
     }

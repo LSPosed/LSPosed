@@ -31,6 +31,7 @@ import android.os.ServiceManager;
 import android.util.Log;
 import android.util.Pair;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -97,7 +98,7 @@ public class PackageService {
         }
         if (filterNoProcess) {
             res = res.stream().filter(packageInfo -> {
-                int baseFlag = PackageManager.MATCH_DISABLED_COMPONENTS | PackageManager.MATCH_DIRECT_BOOT_AWARE | PackageManager.MATCH_DIRECT_BOOT_UNAWARE;
+                int baseFlag = PackageManager.MATCH_DISABLED_COMPONENTS | PackageManager.MATCH_DIRECT_BOOT_AWARE | PackageManager.MATCH_DIRECT_BOOT_UNAWARE | PackageManager.MATCH_UNINSTALLED_PACKAGES;
                 try {
                     PackageInfo pkgInfo = getPackageInfoWithComponents(packageInfo.packageName, baseFlag, packageInfo.applicationInfo.uid / 100000);
                     return !fetchProcesses(pkgInfo).isEmpty();
@@ -171,6 +172,8 @@ public class PackageService {
 
             }
         }
+        if (pkgInfo == null || pkgInfo.applicationInfo == null || pkgInfo.applicationInfo.sourceDir == null || pkgInfo.applicationInfo.deviceProtectedDataDir == null || !new File(pkgInfo.applicationInfo.sourceDir).exists() || !new File(pkgInfo.applicationInfo.deviceProtectedDataDir).exists())
+            return null;
         return pkgInfo;
     }
 }
