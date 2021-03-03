@@ -47,20 +47,20 @@ val moduleMinRiruApiVersion = 10
 val moduleMinRiruVersionName = "v23.0"
 val moduleMaxRiruApiVersion = 10
 
-val apiCode: Int by extra
+val apiCode: Int by rootProject.extra
 
-val androidTargetSdkVersion: Int by extra
-val androidMinSdkVersion: Int by extra
-val androidBuildToolsVersion: String by extra
-val androidCompileSdkVersion: Int by extra
-val androidCompileNdkVersion: String by extra
-val androidSourceCompatibility: JavaVersion by extra
-val androidTargetCompatibility: JavaVersion by extra
+val androidTargetSdkVersion: Int by rootProject.extra
+val androidMinSdkVersion: Int by rootProject.extra
+val androidBuildToolsVersion: String by rootProject.extra
+val androidCompileSdkVersion: Int by rootProject.extra
+val androidCompileNdkVersion: String by rootProject.extra
+val androidSourceCompatibility: JavaVersion by rootProject.extra
+val androidTargetCompatibility: JavaVersion by rootProject.extra
 
-val zipPathMagiskReleasePath: String by extra
+val zipPathMagiskReleasePath: String by rootProject.extra
 
-val versionCode: Int by extra
-val versionName: String by extra
+val verCode: Int by rootProject.extra
+val verName: String by rootProject.extra
 
 dependencies {
     implementation("rikka.ndk:riru:10")
@@ -75,15 +75,18 @@ dependencies {
 
 android {
     compileSdkVersion(androidCompileSdkVersion)
+    ndkVersion = androidCompileNdkVersion
+    buildToolsVersion(androidBuildToolsVersion)
+
+    buildFeatures {
+        prefab = true
+    }
+
     defaultConfig {
         applicationId("io.github.lsposed.lspd")
         minSdkVersion(androidMinSdkVersion)
         targetSdkVersion(androidTargetSdkVersion)
         multiDexEnabled = false
-
-        buildFeatures {
-            prefab = true
-        }
 
         externalNativeBuild {
             cmake {
@@ -91,17 +94,17 @@ android {
                 cppFlags("-std=c++17 -ffixed-x18 -Qunused-arguments -frtti -fomit-frame-pointer -fpie -fPIC")
                 cFlags("-std=gnu99 -ffixed-x18 -Qunused-arguments -frtti -fomit-frame-pointer -fpie -fPIC")
                 arguments("-DRIRU_MODULE_API_VERSION=$moduleMaxRiruApiVersion",
-                        "-DRIRU_MODULE_VERSION=${extra["versionCode"]}",
-                        "-DRIRU_MODULE_VERSION_NAME:STRING=\"${extra["versionName"]}\"")
+                        "-DRIRU_MODULE_VERSION=$verCode",
+                        "-DRIRU_MODULE_VERSION_NAME:STRING=\"$verName\"")
             }
         }
 
         buildConfigField("int", "API_CODE", "$apiCode")
-        buildConfigField("String", "VERSION_NAME", "\"${extra["versionName"]}\"")
-        buildConfigField("Integer", "VERSION_CODE", extra["versionCode"].toString())
+        buildConfigField("String", "VERSION_NAME", "\"$verName\"")
+        buildConfigField("Integer", "VERSION_CODE", verCode.toString())
     }
 
-    lintOptions {
+    lint {
         isAbortOnError = false
         isCheckReleaseBuilds = false
     }
@@ -132,8 +135,6 @@ android {
             path("src/main/cpp/CMakeLists.txt")
         }
     }
-    ndkVersion = androidCompileNdkVersion
-    buildToolsVersion(androidBuildToolsVersion)
 
     compileOptions {
         targetCompatibility(androidTargetCompatibility)
@@ -146,7 +147,7 @@ afterEvaluate {
     android.applicationVariants.forEach { variant ->
         val variantCapped = variant.name.capitalize()
         val variantLowered = variant.name.toLowerCase()
-        val zipFileName = "$moduleName-$versionName-$versionCode-$variantLowered.zip"
+        val zipFileName = "$moduleName-$verName-$verCode-$variantLowered.zip"
 
         delete(file(zipPathMagiskReleasePath))
 
@@ -158,8 +159,8 @@ afterEvaluate {
                     into("$projectDir/template_override")
                     rename("module.prop.tpl", "module.prop")
                     expand("moduleId" to moduleId,
-                            "versionName" to versionName,
-                            "versionCode" to versionCode,
+                            "versionName" to verName,
+                            "versionCode" to verCode,
                             "authorList" to authors,
                             "apiCode" to apiCode,
                             "minApi" to "$moduleMinRiruApiVersion")
