@@ -32,6 +32,8 @@ import androidx.core.text.HtmlCompat;
 import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.File;
+import java.util.Arrays;
 import java.util.Locale;
 
 import io.github.lsposed.manager.ConfigManager;
@@ -106,9 +108,12 @@ public class MainActivity extends BaseActivity {
             }
         } else {
             cardBackgroundColor = ResourcesKt.resolveColor(getTheme(), R.attr.colorInstall);
-            binding.statusTitle.setText(R.string.Install);
-            binding.statusSummary.setText(R.string.InstallDetail);
+            boolean isMagiskInstalled = Arrays.stream(System.getenv("PATH").split(File.pathSeparator)).anyMatch(str -> new File(str, "magisk").exists());
+            binding.statusTitle.setText(isMagiskInstalled ? R.string.Install : R.string.NotInstall);
+            binding.statusSummary.setText(isMagiskInstalled ? R.string.InstallDetail : R.string.NotInstallDetail);
+            if (!isMagiskInstalled) binding.status.setOnClickListener(null);
             binding.statusIcon.setImageResource(R.drawable.ic_error);
+            binding.download.setVisibility(View.GONE);
             Snackbar.make(binding.snackbar, R.string.lsposed_not_active, Snackbar.LENGTH_LONG).show();
         }
         binding.status.setCardBackgroundColor(cardBackgroundColor);
