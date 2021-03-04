@@ -108,12 +108,15 @@ public class MainActivity extends BaseActivity {
             }
         } else {
             cardBackgroundColor = ResourcesKt.resolveColor(getTheme(), R.attr.colorInstall);
-            boolean isMagiskInstalled = Arrays.stream(System.getenv("PATH").split(File.pathSeparator)).anyMatch(str -> new File(str, "magisk").exists());
+            boolean isMagiskInstalled = Arrays.stream(System.getenv("PATH").split(File.pathSeparator))
+                    .anyMatch(str -> new File(str, "magisk").exists());
             binding.statusTitle.setText(isMagiskInstalled ? R.string.Install : R.string.NotInstall);
             binding.statusSummary.setText(isMagiskInstalled ? R.string.InstallDetail : R.string.NotInstallDetail);
-            if (!isMagiskInstalled) binding.status.setOnClickListener(null);
+            if (!isMagiskInstalled) {
+                binding.status.setOnClickListener(null);
+                binding.download.setVisibility(View.GONE);
+            }
             binding.statusIcon.setImageResource(R.drawable.ic_error);
-            binding.download.setVisibility(View.GONE);
             Snackbar.make(binding.snackbar, R.string.lsposed_not_active, Snackbar.LENGTH_LONG).show();
         }
         binding.status.setCardBackgroundColor(cardBackgroundColor);

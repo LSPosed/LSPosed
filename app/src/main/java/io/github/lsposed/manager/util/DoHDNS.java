@@ -38,14 +38,16 @@ public class DoHDNS implements Dns {
 
     public DoHDNS() {
         DnsOverHttps.Builder builder = new DnsOverHttps.Builder()
+                .resolvePrivateAddresses(true)
+                .resolvePublicAddresses(true)
                 .client(new OkHttpClient.Builder().build())
                 .url(HttpUrl.get("https://cloudflare-dns.com/dns-query"));
         try {
-            builder.bootstrapDnsHosts(InetAddress.getByName("162.159.36.1"),
+            builder.bootstrapDnsHosts(
+                    InetAddress.getByName("162.159.36.1"),
                     InetAddress.getByName("162.159.46.1"),
                     InetAddress.getByName("1.1.1.1"),
                     InetAddress.getByName("1.0.0.1"),
-                    InetAddress.getByName("162.159.132.53"),
                     InetAddress.getByName("2606:4700:4700::1111"),
                     InetAddress.getByName("2606:4700:4700::1001"),
                     InetAddress.getByName("2606:4700:4700::0064"),
