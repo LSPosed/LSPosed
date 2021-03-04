@@ -36,5 +36,5 @@ public class Yahfa {
 
     public static native boolean isHooked(Member member);
 
-    public static native Class<?> buildHooker(ClassLoader appClassLoader, Class<?> returnType, Class<?>[] params);
+    public static native Class<?> buildHooker(ClassLoader appClassLoader, Class<?> returnType, Class<?>[] params, String methodName);
 }

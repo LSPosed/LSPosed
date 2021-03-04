@@ -155,19 +155,20 @@ public class HookerDexMaker {
         }
 
         long startTime = System.nanoTime();
-        doMake(member.getDeclaringClass().getName());
+        doMake(member.getDeclaringClass().getName(), member instanceof Constructor ? "constructor" : member.getName());
         long endTime = System.nanoTime();
         DexLog.d("Hook time: " + (endTime - startTime) / 1e6 + "ms");
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @TargetApi(Build.VERSION_CODES.O)
-    private void doMake(String hookedClassName) throws Exception {
+    private void doMake(String hookedClassName, String methodName) throws Exception {
         Class<?> hookClass = null;
         // Generate a Hooker class.
         String className = CLASS_NAME_PREFIX;
-        hookClass = Yahfa.buildHooker(mAppClassLoader, mReturnType, mActualParameterTypes);
+        hookClass = Yahfa.buildHooker(mAppClassLoader, mReturnType, mActualParameterTypes, methodName);
         if (canCache && hookClass == null) {
+            methodName = METHOD_NAME_HOOK;
             String suffix = DexMakerUtils.getSha1Hex(mMember.toString());
             className = className + suffix;
             String dexFileName = className + ".jar";
@@ -198,15 +199,18 @@ public class HookerDexMaker {
             }
         }
         if (hookClass == null) {
-            // do everything in memory
-            DexLog.d("Falling back to generate in memory");
-            if (BuildConfig.DEBUG)
-                className = className + hookedClassName.replace(".", "/");
-            mDexMaker = new DexMaker();
-            doGenerate(className);
-            byte[] dexBytes = mDexMaker.generate();
-            ClassLoader loader = new InMemoryDexClassLoader(ByteBuffer.wrap(dexBytes), mAppClassLoader);
-            hookClass = Class.forName(className.replace("/", "."), true, loader);
+            try {
+                // do everything in memory
+                DexLog.d("Falling back to generate in memory");
+                if (BuildConfig.DEBUG)
+                    className = className + hookedClassName.replace(".", "/");
+                mDexMaker = new DexMaker();
+                doGenerate(className);
+                byte[] dexBytes = mDexMaker.generate();
+                ClassLoader loader = new InMemoryDexClassLoader(ByteBuffer.wrap(dexBytes), mAppClassLoader);
+                hookClass = Class.forName(className.replace("/", "."), true, loader);
+            } catch (Throwable ignored) {
+            }
         }
 
         if (hookClass == null) {
@@ -217,7 +221,7 @@ public class HookerDexMaker {
         Method backupMethod = hookClass.getMethod(METHOD_NAME_BACKUP, mActualParameterTypes);
         mHooker = new LspHooker(mHookInfo, mMember, backupMethod);
         hookClass.getMethod(METHOD_NAME_SETUP, LspHooker.class).invoke(null, mHooker);
-        Method hookMethod = hookClass.getMethod(METHOD_NAME_HOOK, mActualParameterTypes);
+        Method hookMethod = hookClass.getMethod(methodName, mActualParameterTypes);
         HookMain.backupAndHook(mMember, hookMethod, backupMethod);
     }
 
