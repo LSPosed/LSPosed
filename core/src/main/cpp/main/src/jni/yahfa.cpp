@@ -59,7 +59,7 @@ namespace lspd {
         return lspd::isHooked(getArtMethodYahfa(env, member));
     }
 
-    LSP_DEF_NATIVE_METHOD(jclass, Yahfa, buildHooker, jobject app_class_loader, jclass return_class, jobjectArray classes) {
+    LSP_DEF_NATIVE_METHOD(jclass, Yahfa, buildHooker, jobject app_class_loader, jclass return_class, jobjectArray classes, jstring method_name) {
         static auto in_memory_classloader = (jclass)env->NewGlobalRef(env->FindClass( "dalvik/system/InMemoryDexClassLoader"));
         static jmethodID initMid = JNI_GetMethodID(env, in_memory_classloader, "<init>",
                                             "(Ljava/nio/ByteBuffer;Ljava/lang/ClassLoader;)V");
@@ -97,7 +97,7 @@ namespace lspd {
                 .Encode();
 
         auto hookBuilder{cbuilder.CreateMethod(
-                "hook", Prototype{return_type, parameter_types})};
+                JUTFString(env, method_name), Prototype{return_type, parameter_types})};
         // allocate tmp frist because of wide
         auto tmp{hookBuilder.AllocRegister()};
         hookBuilder.BuildConst(tmp, parameter_types.size());
@@ -179,7 +179,7 @@ namespace lspd {
                               "(Ljava/lang/Object;Ljava/lang/reflect/Method;Ljava/lang/reflect/Method;)Z"),
             LSP_NATIVE_METHOD(Yahfa, recordHooked, "(Ljava/lang/reflect/Member;)V"),
             LSP_NATIVE_METHOD(Yahfa, isHooked, "(Ljava/lang/reflect/Member;)Z"),
-            LSP_NATIVE_METHOD(Yahfa, buildHooker, "(Ljava/lang/ClassLoader;Ljava/lang/Class;[Ljava/lang/Class;)Ljava/lang/Class;"),
+            LSP_NATIVE_METHOD(Yahfa, buildHooker, "(Ljava/lang/ClassLoader;Ljava/lang/Class;[Ljava/lang/Class;Ljava/lang/String;)Ljava/lang/Class;"),
     };
 
     void RegisterYahfa(JNIEnv *env) {
