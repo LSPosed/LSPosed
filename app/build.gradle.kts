@@ -81,7 +81,8 @@ android {
         named("release") {
             isMinifyEnabled = true
             isShrinkResources = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.named("debug").get()
+            proguardFiles("proguard-rules.pro")
         }
         named("debug") {
             isMinifyEnabled = false
@@ -90,17 +91,36 @@ android {
     }
     applicationVariants.all {
         outputs.map { it as BaseVariantOutputImpl }.forEach { output ->
-            output.outputFileName = "LSPosedManager-${defaultConfig.versionName}-${defaultConfig.versionCode}-${buildType.name}.apk"
+            output.outputFileName = "LSPosedManager-${verName}-${verCode}-${buildType.name}.apk"
         }
     }
 }
 
-val optimizeReleaseResources = task("optimizeReleaseRes").doLast {
-    val aapt2 = Paths.get(project.android.sdkDirectory.path, "build-tools", project.android.buildToolsVersion, "aapt2")
-    val zip = Paths.get(project.buildDir.path, "intermediates", "processed_res", "release", "out", "resources-release.ap_")
+val optimizeReleaseRes = task("optimizeReleaseRes").doLast {
+    val aapt2 = Paths.get(
+        project.android.sdkDirectory.path,
+        "build-tools",
+        project.android.buildToolsVersion,
+        "aapt2"
+    )
+    val zip = Paths.get(
+        project.buildDir.path,
+        "intermediates",
+        "optimized_processed_res",
+        "release",
+        "resources-release-optimize.ap_"
+    )
     val optimized = File("${zip}.opt")
     val cmd = exec {
-        commandLine(aapt2, "optimize", "--collapse-resource-names", "-o", optimized, zip)
+        commandLine(
+            aapt2,
+            "optimize",
+            "--collapse-resource-names",
+            "--enable-sparse-encoding",
+            "-o",
+            optimized,
+            zip
+        )
         isIgnoreExitValue = false
     }
     if (cmd.exitValue == 0) {
@@ -110,8 +130,8 @@ val optimizeReleaseResources = task("optimizeReleaseRes").doLast {
 }
 
 tasks.whenTaskAdded {
-    if (name == "shrinkReleaseRes") {
-        finalizedBy(optimizeReleaseResources)
+    if (name == "optimizeReleaseResources") {
+        finalizedBy(optimizeReleaseRes)
     }
 }
 

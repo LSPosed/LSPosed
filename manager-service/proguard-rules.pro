@@ -20,3 +20,6 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 -keepclasseswithmembers class io.github.lsposed.lspd.Application { *; }
+-keepclassmembers class * implements android.os.Parcelable {
+    public static final ** CREATOR;
+}
