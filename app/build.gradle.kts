@@ -68,6 +68,7 @@ android {
     packagingOptions {
         resources {
             excludes += "META-INF/**"
+            excludes += "okhttp3/**"
             excludes += "kotlin/**"
             excludes += "org/**"
             excludes += "**.properties"
