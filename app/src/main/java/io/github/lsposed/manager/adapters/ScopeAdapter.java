@@ -37,6 +37,7 @@ import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -423,7 +424,12 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                 });
         SpannableStringBuilder sb = new SpannableStringBuilder(android ? "" : activity.getString(R.string.app_description, appInfo.packageName, appInfo.packageInfo.versionName));
         holder.appDescription.setVisibility(View.VISIBLE);
+        Log.e("xxx", "list count" + recommendedList.size());
+        for (ApplicationWithEquals applicationWithEquals : recommendedList) {
+            Log.e("XXXX", applicationWithEquals.packageName);
+        }
         if (!recommendedList.isEmpty() && recommendedList.contains(appInfo.application)) {
+            Log.e("xxxxx", "存在推荐应用" + appInfo.packageName);
             if (!android) sb.append("\n");
             String recommended = activity.getString(R.string.requested_by_module);
             sb.append(recommended);
