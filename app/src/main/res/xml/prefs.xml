@@ -42,7 +42,7 @@
             android:key="theme_color"
             android:title="@string/theme_color"
             app:iconSpaceReserved="false" />
-        <com.takisoft.preferencex.SimpleMenuPreference
+        <rikka.preference.SimpleMenuPreference
             android:defaultValue="MODE_NIGHT_FOLLOW_SYSTEM"
             android:entries="@array/theme_texts"
             android:entryValues="@array/theme_values"

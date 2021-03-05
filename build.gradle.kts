@@ -54,9 +54,8 @@ val zipPathMagiskReleasePath by extra(project(":core").projectDir.path + "/build
 allprojects {
     repositories {
         google()
+        mavenCentral()
         jcenter()
-        maven(url = "https://jitpack.io")
-        maven(url = "https://dl.bintray.com/rikkaw/Libraries")
     }
 }
 
