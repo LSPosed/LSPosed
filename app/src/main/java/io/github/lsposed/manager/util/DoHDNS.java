@@ -56,13 +56,13 @@ public class DoHDNS implements Dns {
     @Override
     public List<InetAddress> lookup(@NonNull String hostname) throws UnknownHostException {
         if (App.getPreferences().getBoolean("doh", false)) {
-            List<InetAddress> inetAddresses = cloudflare.lookup(hostname);
-            if (inetAddresses.size() > 0) {
-                return inetAddresses;
-            } else if ("CN".equals(Locale.getDefault().getCountry())) {
-                inetAddresses = alidns.lookup(hostname);
-                if (inetAddresses.size() > 0) {
-                    return inetAddresses;
+            try {
+                return cloudflare.lookup(hostname);
+            } catch (UnknownHostException e) {
+                try {
+                    if ("CN".equals(Locale.getDefault().getCountry()))
+                        return alidns.lookup(hostname);
+                } catch (UnknownHostException ignored) {
                 }
             }
         }
