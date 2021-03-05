@@ -161,7 +161,7 @@ dependencies {
     implementation("dev.rikka.rikkax.core:core:1.3.0")
     implementation("dev.rikka.rikkax.insets:insets:1.0.1")
     implementation("dev.rikka.rikkax.material:material:1.6.0")
-    implementation("dev.rikka.rikkax.preference:simplemenu-preference:1.0.0")
+    implementation("dev.rikka.rikkax.preference:simplemenu-preference:1.0.1")
     implementation("dev.rikka.rikkax.recyclerview:recyclerview-ktx:1.2.0")
     implementation("dev.rikka.rikkax.widget:borderview:1.0.1")
     implementation("dev.rikka.rikkax.widget:switchbar:1.0.2")
