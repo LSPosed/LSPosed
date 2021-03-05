@@ -20,15 +20,13 @@
 
 package io.github.lsposed.manager.util;
 
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
-import androidx.core.app.NotificationChannelCompat;
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-import androidx.core.content.ContextCompat;
 
 import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.ui.activity.AppListActivity;
@@ -41,14 +39,14 @@ public final class NotificationUtil {
     private static final String NOTIFICATION_MODULES_CHANNEL = "modules_channel_2";
 
     public static void showNotification(Context context, String modulePackageName, String moduleName, boolean enabled) {
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        NotificationChannelCompat.Builder channel = new NotificationChannelCompat.Builder(NOTIFICATION_MODULES_CHANNEL,
-                NotificationManager.IMPORTANCE_HIGH)
-                .setName(context.getString(R.string.Modules))
-                .setSound(null, null)
-                .setVibrationPattern(null);
-        notificationManager.createNotificationChannel(channel.build());
+        NotificationChannel channel = new NotificationChannel(NOTIFICATION_MODULES_CHANNEL,
+                context.getString(R.string.Modules),
+                NotificationManager.IMPORTANCE_HIGH);
+        channel.setSound(null, null);
+        channel.setVibrationPattern(null);
+        notificationManager.createNotificationChannel(channel);
 
         String title = context.getString(enabled ? R.string.xposed_module_updated_notification_title : R.string.module_is_not_activated_yet);
         String content = context.getString(enabled ? R.string.xposed_module_updated_notification_content : R.string.module_is_not_activated_yet_detailed, moduleName);
@@ -68,7 +66,7 @@ public final class NotificationUtil {
                 .setContentText(content)
                 .setAutoCancel(true)
                 .setSmallIcon(R.drawable.ic_notification)
-                .setColor(ContextCompat.getColor(context, R.color.color_primary))
+                .setColor(context.getColor(R.color.color_primary))
                 .setContentIntent(contentIntent)
                 .setStyle(style);
 
