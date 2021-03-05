@@ -44,6 +44,10 @@ public class DoHDNS implements Dns {
                 .url(HttpUrl.get("https://cloudflare-dns.com/dns-query"));
         try {
             builder.bootstrapDnsHosts(
+                    InetAddress.getByName("104.16.248.249"),
+                    InetAddress.getByName("104.16.249.249"),
+                    InetAddress.getByName("104.16.111.25"),
+                    InetAddress.getByName("104.16.112.25"),
                     InetAddress.getByName("162.159.36.1"),
                     InetAddress.getByName("162.159.46.1"),
                     InetAddress.getByName("1.1.1.1"),
