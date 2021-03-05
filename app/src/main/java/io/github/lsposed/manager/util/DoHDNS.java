@@ -36,11 +36,11 @@ public class DoHDNS implements Dns {
 
     private static DnsOverHttps dnsOverHttps;
 
-    public DoHDNS() {
+    public DoHDNS(OkHttpClient client) {
         DnsOverHttps.Builder builder = new DnsOverHttps.Builder()
                 .resolvePrivateAddresses(true)
                 .resolvePublicAddresses(true)
-                .client(new OkHttpClient.Builder().build())
+                .client(client)
                 .url(HttpUrl.get("https://cloudflare-dns.com/dns-query"));
         try {
             builder.bootstrapDnsHosts(
