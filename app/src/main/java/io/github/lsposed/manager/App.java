@@ -110,12 +110,10 @@ public class App extends Application {
     public static OkHttpClient getOkHttpClient() {
         if (okHttpClient == null) {
             OkHttpClient.Builder builder = new OkHttpClient.Builder().cache(getOkHttpCache());
-            if (BuildConfig.DEBUG) {
-                HttpLoggingInterceptor.Logger logger = s -> Log.v(TAG, s);
-                HttpLoggingInterceptor log = new HttpLoggingInterceptor(logger);
-                log.setLevel(HttpLoggingInterceptor.Level.HEADERS);
-                builder.addInterceptor(log);
-            }
+            HttpLoggingInterceptor.Logger logger = s -> Log.v(TAG, s);
+            HttpLoggingInterceptor log = new HttpLoggingInterceptor(logger);
+            log.setLevel(HttpLoggingInterceptor.Level.HEADERS);
+            if (BuildConfig.DEBUG) builder.addInterceptor(log);
             okHttpClient = builder.dns(new DoHDNS(builder.build())).build();
         }
         return okHttpClient;
