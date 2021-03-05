@@ -157,6 +157,7 @@ dependencies {
     implementation("com.takisoft.preferencex:preferencex-colorpicker:1.1.0")
     implementation("com.squareup.okhttp3:okhttp:$okhttpVersion")
     implementation("com.squareup.okhttp3:okhttp-dnsoverhttps:$okhttpVersion")
+    implementation("com.squareup.okhttp3:logging-interceptor:$okhttpVersion")
     implementation("dev.rikka.rikkax.appcompat:appcompat:1.2.0-rc01")
     implementation("dev.rikka.rikkax.core:core:1.3.0")
     implementation("dev.rikka.rikkax.insets:insets:1.0.1")

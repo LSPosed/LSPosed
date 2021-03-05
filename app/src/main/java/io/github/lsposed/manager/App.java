@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
@@ -41,6 +42,7 @@ import io.github.lsposed.manager.util.DoHDNS;
 import io.github.lsposed.manager.util.theme.ThemeUtil;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import rikka.material.app.DayNightDelegate;
 
 public class App extends Application {
@@ -107,10 +109,12 @@ public class App extends Application {
     @NonNull
     public static OkHttpClient getOkHttpClient() {
         if (okHttpClient == null) {
-            okHttpClient = new OkHttpClient.Builder()
-                    .cache(getOkHttpCache())
-                    .dns(new DoHDNS())
-                    .build();
+            OkHttpClient.Builder builder = new OkHttpClient.Builder().cache(getOkHttpCache());
+            HttpLoggingInterceptor.Logger logger = s -> Log.v(TAG, s);
+            HttpLoggingInterceptor log = new HttpLoggingInterceptor(logger);
+            log.setLevel(HttpLoggingInterceptor.Level.HEADERS);
+            if (BuildConfig.DEBUG) builder.addInterceptor(log);
+            okHttpClient = builder.dns(new DoHDNS(builder.build())).build();
         }
         return okHttpClient;
     }
