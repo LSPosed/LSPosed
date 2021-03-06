@@ -33,7 +33,7 @@ jobs:
           echo androidKeyAlias=${{ secrets.ALIAS }} >> gradle.properties
           echo androidKeyPassword=${{ secrets.KEY_PASSWORD }} >> gradle.properties
           echo androidStoreFile=key.jks >> gradle.properties
-          echo ${{ secrets.SIGNING_KEY }} | base64 --decode > key.jks
+          echo ${{ secrets.KEY_STORE }} | base64 --decode > key.jks
       - name: Build with Gradle
         id: buildRelease
         run: |
