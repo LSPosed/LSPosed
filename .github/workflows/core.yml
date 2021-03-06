@@ -15,7 +15,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     if: ${{ !startsWith(github.event.head_commit.message, '[skip ci]') }}
 
     steps:
