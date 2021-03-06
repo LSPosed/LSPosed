@@ -28,6 +28,8 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
@@ -42,10 +44,13 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.request.target.CustomTarget;
@@ -69,10 +74,17 @@ import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
 
 public class ModulesActivity extends ListActivity implements ModuleUtil.ModuleListener {
 
+    private static final Handler uninstallHandler;
     private PackageManager pm;
     private ModuleUtil moduleUtil;
     private ModuleAdapter adapter = null;
     private String selectedPackageName;
+
+    static {
+        HandlerThread uninstallThread = new HandlerThread("uninstall");
+        uninstallThread.start();
+        uninstallHandler = new Handler(uninstallThread.getLooper());
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -147,7 +159,23 @@ public class ModulesActivity extends ListActivity implements ModuleUtil.ModuleLi
             startActivity(new Intent(ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", module.packageName, null)));
             return true;
         } else if (itemId == R.id.menu_uninstall) {
-            startActivity(new Intent(Intent.ACTION_UNINSTALL_PACKAGE, Uri.fromParts("package", module.packageName, null)));
+            new AlertDialog.Builder(this)
+                    .setTitle(module.getAppName())
+                    .setMessage(R.string.module_uninstall_message)
+                    .setPositiveButton(android.R.string.ok, (dialog, which) ->
+                            uninstallHandler.post(() -> {
+                                boolean success = ConfigManager.uninstallPackage(module.packageName);
+                                runOnUiThread(() -> {
+                                    String text = success ? getString(R.string.module_uninstalled, module.getAppName()) : getString(R.string.module_uninstall_failed);
+                                    if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
+                                        Snackbar.make(binding.snackbar, text, Snackbar.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(ModulesActivity.this, text, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }))
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show();
             return true;
         } else if (itemId == R.id.menu_repo) {
             Intent intent = new Intent();

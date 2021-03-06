@@ -249,4 +249,13 @@ public class ConfigManager {
             return false;
         }
     }
+
+    public static boolean uninstallPackage(String packageName) {
+        try {
+            return LSPosedManagerServiceClient.uninstallPackage(packageName);
+        } catch (RemoteException | NullPointerException e) {
+            Log.e(App.TAG, Log.getStackTraceString(e));
+            return false;
+        }
+    }
 }

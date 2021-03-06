@@ -159,4 +159,9 @@ public class LSPosedManagerServiceClient {
         ensureService();
         service.reboot(confirm, reason, wait);
     }
+
+    public static boolean uninstallPackage(String packageName) throws RemoteException, NullPointerException {
+        ensureService();
+        return service.uninstallPackage(packageName);
+    }
 }
