@@ -19,12 +19,20 @@
 
 package io.github.lsposed.lspd.service;
 
+import android.content.IIntentReceiver;
+import android.content.IIntentSender;
+import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.ComponentInfo;
+import android.content.pm.IPackageInstaller;
 import android.content.pm.IPackageManager;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageInstaller;
 import android.content.pm.PackageManager;
 import android.content.pm.ServiceInfo;
+import android.content.pm.VersionedPackage;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.ServiceManager;
@@ -32,14 +40,23 @@ import android.util.Log;
 import android.util.Pair;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 
+import hidden.HiddenApiBridge;
 import io.github.lsposed.lspd.Application;
+import io.github.lsposed.lspd.BuildConfig;
+import io.github.lsposed.lspd.util.InstallerVerifier;
 import io.github.lsposed.lspd.utils.ParceledListSlice;
 
 import static android.content.pm.ServiceInfo.FLAG_ISOLATED_PROCESS;
@@ -145,6 +162,8 @@ public class PackageService {
     }
 
     private static PackageInfo getPackageInfoWithComponents(String packageName, int flags, int userId) throws RemoteException {
+        IPackageManager pm = getPackageManager();
+        if (pm == null) return null;
         PackageInfo pkgInfo;
         try {
             pkgInfo = pm.getPackageInfo(packageName, flags | PackageManager.GET_ACTIVITIES | PackageManager.GET_SERVICES | PackageManager.GET_RECEIVERS | PackageManager.GET_PROVIDERS, userId);
@@ -175,5 +194,88 @@ public class PackageService {
         if (pkgInfo == null || pkgInfo.applicationInfo == null || (!pkgInfo.packageName.equals("android") && (pkgInfo.applicationInfo.sourceDir == null || pkgInfo.applicationInfo.deviceProtectedDataDir == null || !new File(pkgInfo.applicationInfo.sourceDir).exists() || !new File(pkgInfo.applicationInfo.deviceProtectedDataDir).exists())))
             return null;
         return pkgInfo;
+    }
+
+    static abstract class IntentSenderAdaptor extends IIntentSender.Stub {
+        public abstract void send(Intent intent);
+
+        @Override
+        public int send(int code, Intent intent, String resolvedType, IIntentReceiver finishedReceiver, String requiredPermission, Bundle options) {
+            send(intent);
+            return 0;
+        }
+
+        @Override
+        public void send(int code, Intent intent, String resolvedType, IBinder whitelistToken, IIntentReceiver finishedReceiver, String requiredPermission, Bundle options) {
+            send(intent);
+        }
+
+        public IntentSender getIntentSender() throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException {
+            @SuppressWarnings("JavaReflectionMemberAccess")
+            Constructor<IntentSender> intentSenderConstructor = IntentSender.class.getConstructor(IIntentSender.class);
+            intentSenderConstructor.setAccessible(true);
+            return intentSenderConstructor.newInstance(this);
+        }
+    }
+
+    private static void uninstallPackage(VersionedPackage versionedPackage) throws RemoteException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        CountDownLatch latch = new CountDownLatch(1);
+        pm.getPackageInstaller().uninstallExistingPackage(versionedPackage, "com.android.shell", new IntentSenderAdaptor() {
+            @Override
+            public void send(Intent intent) {
+                latch.countDown();
+            }
+        }.getIntentSender(), 0);
+        latch.await();
+    }
+
+    public static synchronized boolean installManagerIfAbsent(String packageName, File apkFile) {
+        IPackageManager pm = getPackageManager();
+        if (pm == null) return false;
+
+        try {
+            PackageInfo pkgInfo = pm.getPackageInfo(packageName, 0, 0);
+            if (pkgInfo != null && pkgInfo.versionName != null && pkgInfo.versionName.equals(BuildConfig.VERSION_NAME) && pkgInfo.applicationInfo != null && InstallerVerifier.verifyInstallerSignature(pkgInfo.applicationInfo))
+                return false;
+            // manager is not installed or version not matched, install stub
+            if (pkgInfo != null) {
+                uninstallPackage(new VersionedPackage(pkgInfo.packageName, pkgInfo.versionCode));
+            }
+            IPackageInstaller installerService = pm.getPackageInstaller();
+            String installerPackageName = "com.android.shell";
+            @SuppressWarnings("JavaReflectionMemberAccess")
+            Constructor<PackageInstaller> installerConstructor = PackageInstaller.class.getConstructor(IPackageInstaller.class, String.class, int.class);
+            installerConstructor.setAccessible(true);
+            PackageInstaller installer = installerConstructor.newInstance(installerService, installerPackageName, 0);
+            PackageInstaller.SessionParams params = new PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL);
+            int installFlags = HiddenApiBridge.PackageInstaller_SessionParams_installFlags(params);
+            installFlags |= 0x00000004/*PackageManager.INSTALL_ALLOW_TEST*/ | 0x00000002/*PackageManager.INSTALL_REPLACE_EXISTING*/;
+            HiddenApiBridge.PackageInstaller_SessionParams_installFlags(params, installFlags);
+
+            int sessionId = installer.createSession(params);
+            try (PackageInstaller.Session session = installer.openSession(sessionId)) {
+                try (InputStream is = new FileInputStream(apkFile); OutputStream os = session.openWrite(apkFile.getName(), 0, -1)) {
+                    byte[] buf = new byte[8192];
+                    int len;
+                    while ((len = is.read(buf)) > 0) {
+                        os.write(buf, 0, len);
+                        os.flush();
+                        session.fsync(os);
+                    }
+                }
+                session.commit(new IntentSenderAdaptor() {
+                    @Override
+                    public void send(Intent result) {
+                        int status = result.getIntExtra(PackageInstaller.EXTRA_STATUS, PackageInstaller.STATUS_FAILURE);
+                        String message = result.getStringExtra(PackageInstaller.EXTRA_STATUS_MESSAGE);
+                        Log.d(TAG, status + " " + message);
+                    }
+                }.getIntentSender());
+            }
+            return true;
+        } catch (Throwable e) {
+            Log.e(TAG, e.getMessage(), e);
+            return false;
+        }
     }
 }

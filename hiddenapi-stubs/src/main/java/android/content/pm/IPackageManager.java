@@ -46,6 +46,8 @@ public interface IPackageManager extends IInterface {
     int checkUidPermission(String permName, int uid)
             throws RemoteException;
 
+    IPackageInstaller getPackageInstaller() throws RemoteException;
+
     abstract class Stub extends Binder implements IPackageManager {
 
         public static IPackageManager asInterface(IBinder obj) {

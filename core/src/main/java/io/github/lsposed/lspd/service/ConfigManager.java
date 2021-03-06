@@ -58,6 +58,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import io.github.lsposed.lspd.Application;
+import io.github.lsposed.lspd.BuildConfig;
 
 import static io.github.lsposed.lspd.service.ServiceManager.TAG;
 
@@ -80,8 +81,6 @@ public class ConfigManager {
 
     private static final File verboseLogSwitch = new File(configPath, "verbose_log");
     private boolean verboseLog = false;
-
-    private static final String DEFAULT_MANAGER_PACKAGE_NAME = "io.github.lsposed.manager";
 
     private static final File managerPath = new File(configPath, "manager");
     private String manager = null;
@@ -226,7 +225,7 @@ public class ConfigManager {
     public synchronized void updateManager() {
         if (!packageStarted) return;
         try {
-            PackageInfo info = PackageService.getPackageInfo(readText(managerPath, DEFAULT_MANAGER_PACKAGE_NAME), 0, 0);
+            PackageInfo info = PackageService.getPackageInfo(readText(managerPath, BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME), 0, 0);
             if (info != null) {
                 managerUid = info.applicationInfo.uid;
                 manager = info.packageName;
@@ -235,6 +234,15 @@ public class ConfigManager {
             }
         } catch (RemoteException ignored) {
         }
+    }
+
+    public void ensureManager() {
+        if (!packageStarted) return;
+        new Thread(() -> {
+            if (PackageService.installManagerIfAbsent(manager, new File("/data/adb/lspd/base.apk"))) {
+                updateManager(BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME);
+            }
+        }).start();
     }
 
     public synchronized void updateManager(@NonNull String packageName) {
@@ -610,7 +618,7 @@ public class ConfigManager {
     }
 
     public boolean isManager(String packageName) {
-        return packageName.equals(manager) || packageName.equals(DEFAULT_MANAGER_PACKAGE_NAME);
+        return packageName.equals(manager) || packageName.equals(BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME);
     }
 
     public boolean isManager(int uid) {
@@ -627,7 +635,7 @@ public class ConfigManager {
 
     public static void grantManagerPermission() {
         try {
-            PackageService.grantRuntimePermission(readText(managerPath, DEFAULT_MANAGER_PACKAGE_NAME), "android.permission.INTERACT_ACROSS_USERS", 0);
+            PackageService.grantRuntimePermission(readText(managerPath, BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME), "android.permission.INTERACT_ACROSS_USERS", 0);
         } catch (RemoteException e) {
             Log.e(TAG, Log.getStackTraceString(e));
         }

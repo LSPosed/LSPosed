@@ -31,6 +31,7 @@ import android.util.Log;
 import java.util.Arrays;
 
 import io.github.lsposed.lspd.Application;
+import pxb.android.arsc.Config;
 
 import static io.github.lsposed.lspd.service.ServiceManager.TAG;
 
@@ -122,4 +123,9 @@ public class LSPosedService extends ILSPosedService.Stub {
         }
     }
 
+
+    @Override
+    public void dispatchBootCompleted(Intent intent) throws RemoteException {
+        ConfigManager.getInstance().ensureManager();
+    }
 }

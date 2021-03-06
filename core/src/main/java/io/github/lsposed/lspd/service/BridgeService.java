@@ -206,6 +206,16 @@ public class BridgeService {
                     }
                 }
             });
+            BootReceiver.register(new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    try {
+                        service.dispatchBootCompleted(intent);
+                    } catch (RemoteException e) {
+                        Log.e(TAG, Log.getStackTraceString(e));
+                    }
+                }
+            });
         } else {
             serviceBinder.unlinkToDeath(LSPSERVICE_DEATH_RECIPIENT, 0);
         }

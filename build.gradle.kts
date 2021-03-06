@@ -39,6 +39,7 @@ val repo = FileRepository(rootProject.file(".git"))
 val refId = repo.refDatabase.exactRef("refs/remotes/origin/master").objectId!!
 val commitCount = Git(repo).log().add(refId).call().count()
 
+val defaultManagerPackageName by extra("io.github.lsposed.manager")
 val verCode by extra(commitCount + 4200)
 val verName by extra("v1.2.0")
 val androidTargetSdkVersion by extra(30)

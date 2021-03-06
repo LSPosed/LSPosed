@@ -19,6 +19,7 @@
 
 package hidden;
 
+import android.content.pm.PackageInstaller;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.content.res.ResourcesImpl;
@@ -36,5 +37,13 @@ public class HiddenApiBridge {
 
     public static void Resources_setImpl(Resources resources, ResourcesImpl impl) {
         resources.setImpl(impl);
+    }
+
+    public static int PackageInstaller_SessionParams_installFlags(PackageInstaller.SessionParams params) {
+        return params.installFlags;
+    }
+
+    public static void PackageInstaller_SessionParams_installFlags(PackageInstaller.SessionParams params, int flags) {
+        params.installFlags = flags;
     }
 }
