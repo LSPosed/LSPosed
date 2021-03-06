@@ -155,6 +155,7 @@ afterEvaluate {
 
         val prepareMagiskFilesTask = task("prepareMagiskFiles$variantCapped") {
             dependsOn("assemble$variantCapped")
+            dependsOn(":app:assemble$variantCapped")
             doFirst {
                 copy {
                     from("$projectDir/tpl/module.prop.tpl")
@@ -224,6 +225,12 @@ afterEvaluate {
                     rename("riru_lspd", "libriru_lspd.so")
                     from("$libPathRelease/x86_64")
                     into("$zipPathMagiskReleasePath/system_x86/lib64")
+                }
+                copy {
+                    from("${project(":app").projectDir}/build/outputs/apk/${variantLowered}")
+                    include("*.apk")
+                    rename(".*\\.apk", "manager.apk")
+                    into(zipPathMagiskReleasePath)
                 }
                 // generate sha1sum
                 fileTree(zipPathMagiskReleasePath).matching {

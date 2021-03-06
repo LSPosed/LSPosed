@@ -239,7 +239,7 @@ public class ConfigManager {
     public void ensureManager() {
         if (!packageStarted) return;
         new Thread(() -> {
-            if (PackageService.installManagerIfAbsent(manager, new File("/data/adb/lspd/base.apk"))) {
+            if (PackageService.installManagerIfAbsent(manager, new File(basePath, "manager.apk"))) {
                 updateManager(BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME);
             }
         }).start();
