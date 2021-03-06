@@ -218,15 +218,19 @@ public class PackageService {
         }
     }
 
-    public static void uninstallPackage(VersionedPackage versionedPackage) throws RemoteException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    public static boolean uninstallPackage(VersionedPackage versionedPackage) throws RemoteException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         CountDownLatch latch = new CountDownLatch(1);
+        final boolean[] result = {false};
         pm.getPackageInstaller().uninstallExistingPackage(versionedPackage, "com.android.shell", new IntentSenderAdaptor() {
             @Override
             public void send(Intent intent) {
+                int status = intent.getIntExtra(PackageInstaller.EXTRA_STATUS, PackageInstaller.STATUS_FAILURE);
+                result[0] = status == PackageInstaller.STATUS_SUCCESS;
                 latch.countDown();
             }
         }.getIntentSender(), 0);
         latch.await();
+        return result[0];
     }
 
     public static synchronized boolean installManagerIfAbsent(String packageName, File apkFile) {
@@ -235,11 +239,12 @@ public class PackageService {
 
         try {
             PackageInfo pkgInfo = pm.getPackageInfo(packageName, 0, 0);
-            if (pkgInfo != null && pkgInfo.versionName != null && pkgInfo.versionName.equals(BuildConfig.VERSION_NAME) && pkgInfo.applicationInfo != null && InstallerVerifier.verifyInstallerSignature(pkgInfo.applicationInfo))
-                return false;
-            // manager is not installed or version not matched, install stub
-            if (pkgInfo != null) {
-                uninstallPackage(new VersionedPackage(pkgInfo.packageName, pkgInfo.versionCode));
+            if (pkgInfo != null && pkgInfo.versionName != null && pkgInfo.applicationInfo != null) {
+                boolean versionMatch = pkgInfo.versionName.equals(BuildConfig.VERSION_NAME);
+                boolean signatureMatch = InstallerVerifier.verifyInstallerSignature(pkgInfo.applicationInfo);
+                if (versionMatch && signatureMatch) return false;
+                if (!signatureMatch || pkgInfo.versionCode > BuildConfig.VERSION_CODE)
+                    uninstallPackage(new VersionedPackage(pkgInfo.packageName, pkgInfo.versionCode));
             }
             IPackageInstaller installerService = pm.getPackageInstaller();
             String installerPackageName = "com.android.shell";
