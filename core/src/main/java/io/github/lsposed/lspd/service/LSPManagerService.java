@@ -20,10 +20,14 @@
 package io.github.lsposed.lspd.service;
 
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.VersionedPackage;
 import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
+import android.util.Log;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import de.robv.android.xposed.XposedBridge;
@@ -31,6 +35,8 @@ import io.github.lsposed.lspd.Application;
 import io.github.lsposed.lspd.BuildConfig;
 import io.github.lsposed.lspd.ILSPManagerService;
 import io.github.lsposed.lspd.utils.ParceledListSlice;
+
+import static io.github.lsposed.lspd.service.ServiceManager.TAG;
 
 public class LSPManagerService extends ILSPManagerService.Stub {
 
@@ -154,5 +160,16 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     @Override
     public void reboot(boolean confirm, String reason, boolean wait) throws RemoteException {
         PowerService.reboot(confirm, reason, wait);
+    }
+
+    @Override
+    public boolean uninstallPackage(String packageName) throws RemoteException {
+        try {
+            PackageService.uninstallPackage(new VersionedPackage(packageName, PackageManager.VERSION_CODE_HIGHEST));
+            return true;
+        } catch (InterruptedException | InvocationTargetException | NoSuchMethodException | InstantiationException | IllegalAccessException e) {
+            Log.e(TAG, e.getMessage(), e);
+            return false;
+        }
     }
 }
