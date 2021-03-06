@@ -29,10 +29,10 @@ jobs:
           java-version: 11
       - name: Write key
         run: |
-          echo androidStorePassword="${{ secrets.KEY_STORE_PASSWORD }}" >> gradle.properties
-          echo androidKeyAlias="${{ secrets.ALIAS }}" >> gradle.properties
-          echo androidKeyPassword="${{ secrets.KEY_PASSWORD }}" >> gradle.properties
-          echo androidStoreFile="key.jks" >> gradle.properties
+          echo androidStorePassword='${{ secrets.KEY_STORE_PASSWORD }}' >> gradle.properties
+          echo androidKeyAlias='${{ secrets.ALIAS }}' >> gradle.properties
+          echo androidKeyPassword='${{ secrets.KEY_PASSWORD }}' >> gradle.properties
+          echo androidStoreFile='key.jks' >> gradle.properties
           echo ${{ secrets.KEY_STORE }} | base64 --decode > key.jks
       - name: Build with Gradle
         id: buildRelease
