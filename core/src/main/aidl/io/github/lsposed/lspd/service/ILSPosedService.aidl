@@ -6,4 +6,5 @@ interface ILSPosedService {
     ILSPApplicationService requestApplicationService(int uid, int pid, String processName, IBinder heartBeat) = 1;
 
     oneway void dispatchPackageChanged(in Intent intent) = 2;
+    oneway void dispatchBootCompleted(in Intent intent) = 3;
 }

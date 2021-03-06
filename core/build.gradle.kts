@@ -47,6 +47,7 @@ val moduleMinRiruApiVersion = 10
 val moduleMinRiruVersionName = "v23.0"
 val moduleMaxRiruApiVersion = 10
 
+val defaultManagerPackageName: String by rootProject.extra
 val apiCode: Int by rootProject.extra
 
 val androidTargetSdkVersion: Int by rootProject.extra
@@ -102,6 +103,7 @@ android {
         buildConfigField("int", "API_CODE", "$apiCode")
         buildConfigField("String", "VERSION_NAME", "\"$verName\"")
         buildConfigField("Integer", "VERSION_CODE", verCode.toString())
+        buildConfigField("String", "DEFAULT_MANAGER_PACKAGE_NAME", "\"$defaultManagerPackageName\"")
     }
 
     lint {

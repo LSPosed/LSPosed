@@ -192,11 +192,6 @@ else
   ui_print "  - ${LANG_CUST_INST_CONF_NEW} ${MISC_RAND}"
   mkdir -p /data/adb/lspd || abortC "! ${LANG_CUST_ERR_CONF_CREATE}"
   echo "$MISC_PATH" > /data/adb/lspd/misc_path || abortC "! ${LANG_CUST_ERR_CONF_STORE}"
-  if [[ -d /data/user_de/0/io.github.lsposed.manager/conf/ ]]; then
-    mkdir -p /data/misc/$MISC_PATH/0/conf
-    cp -r /data/user_de/0/io.github.lsposed.manager/conf/* /data/misc/$MISC_PATH/0/conf/
-    set_perm_recursive /data/misc/$MISC_PATH 0 0 0771 0660 "u:object_r:magisk_file:s0" || abortC "! ${LANG_CUST_ERR_PERM}"
-  fi
 fi
 touch /data/adb/lspd/new_install || abortC "! ${LANG_CUST_ERR_CONF_FIRST}"
 ui_print "- ${LANG_CUST_INST_COPY_LIB}"
