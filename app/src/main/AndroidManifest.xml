@@ -24,7 +24,6 @@
     package="io.github.lsposed.manager">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
     <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS" />
 
     <queries>
