@@ -10,14 +10,16 @@ on:
   pull_request:
     paths:
     - 'app/**'
+    - '.github/workflows/manager.yml'
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     if: ${{ !startsWith(github.event.head_commit.message, '[skip ci]') }}
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
         with:
           submodules: 'recursive'
           fetch-depth: 0
@@ -25,46 +27,36 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+      - name: Write key
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
+        run: |
+          echo androidStorePassword='${{ secrets.KEY_STORE_PASSWORD }}' >> gradle.properties
+          echo androidKeyAlias='${{ secrets.ALIAS }}' >> gradle.properties
+          echo androidKeyPassword='${{ secrets.KEY_PASSWORD }}' >> gradle.properties
+          echo androidStoreFile='key.jks' >> gradle.properties
+          echo ${{ secrets.KEY_STORE }} | base64 --decode > key.jks
       - name: Build with Gradle
         id: buildRelease
         run: |
-          bash ./gradlew :app:assembleRelease
+          ./gradlew :app:assembleRelease
           echo "::set-output name=releaseName::`ls app/build/outputs/apk/release/LSPosed*-v*-release.apk | awk -F '(/|.apk)' '{print $6}'`"
-      - name: Sign Manager Release
-        if: ${{ github.event_name != 'pull_request' && success() && github.ref == 'refs/heads/master' }}
-        id: sign
-        uses: LSPosed/sign-android-release@v1.0.0
-        with:
-          releaseDirectory: app/build/outputs/apk/release
-          signingKeyBase64: ${{ secrets.SIGNING_KEY }}
-          alias: ${{ secrets.ALIAS }}
-          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
-          keyPassword: ${{ secrets.KEY_PASSWORD }}
-        env:
-          BUILD_TOOLS_VERSION: "30.0.3"
-      - name: Upload signed apk
-        if: ${{ github.event_name != 'pull_request' && success() && github.ref == 'refs/heads/master' }}
+      - name: Upload apk
+        if: success()
         uses: actions/upload-artifact@v2
         with:
-          name: '${{ steps.buildRelease.outputs.releaseName }}-signed'
-          path: ${{ steps.sign.outputs.signedReleaseFile }}
-      - name: Upload unsigned apk
-        if: ${{ github.event_name == 'pull_request' || failure() }}
-        uses: actions/upload-artifact@v2
-        with:
-          name: '${{ steps.buildRelease.outputs.releaseName }}-unsigned'
+          name: ${{ steps.buildRelease.outputs.releaseName }}
           path: "app/build/outputs/apk/release/*.apk"
       - name: Upload mappings
         uses: actions/upload-artifact@v2
         with:
-          name: mappings
-          path: "app/build/outputs/mapping"
+          name: ${{ steps.buildRelease.outputs.releaseName }}-mappings
+          path: "app/build/outputs"
       - name: Post to channel
-        if: ${{ github.event_name != 'pull_request' && success() && github.ref == 'refs/heads/master' }}
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
         env:
           CHANNEL_ID: ${{ secrets.CHANNEL_ID }}
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-          FILE: ${{ steps.sign.outputs.signedReleaseFile }}
+          FILE: "app/build/outputs/apk/release/${{ steps.buildRelease.outputs.releaseName }}.apk"
           COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
         run: |
           ESCAPED=`python3 -c 'import json,os,urllib.parse; print(urllib.parse.quote(json.dumps(os.environ["COMMIT_MESSAGE"])))'`
