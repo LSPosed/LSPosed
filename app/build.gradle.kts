@@ -34,6 +34,11 @@ val androidTargetCompatibility: JavaVersion by rootProject.extra
 val verCode: Int by rootProject.extra
 val verName: String by rootProject.extra
 
+val androidStoreFile: String? by rootProject
+val androidStorePassword: String? by rootProject
+val androidKeyAlias: String? by rootProject
+val androidKeyPassword: String? by rootProject
+
 android {
     compileSdkVersion(androidCompileSdkVersion)
     ndkVersion = androidCompileNdkVersion
@@ -78,18 +83,32 @@ android {
 
     dependenciesInfo.includeInApk = false
 
-    buildTypes {
-        named("release") {
-            isMinifyEnabled = true
-            isShrinkResources = true
-            signingConfig = signingConfigs.named("debug").get()
-            proguardFiles("proguard-rules.pro")
-        }
-        named("debug") {
-            isMinifyEnabled = false
-            isShrinkResources = false
+    signingConfigs {
+        create("config") {
+            androidStoreFile?.also {
+                storeFile = rootProject.file(it)
+                storePassword = androidStorePassword
+                keyAlias = androidKeyAlias
+                keyPassword = androidKeyPassword
+            }
         }
     }
+
+    buildTypes {
+        signingConfigs.named("config").get().also {
+            named("debug") {
+                if (it.storeFile?.exists() == true) signingConfig = it
+            }
+            named("release") {
+                signingConfig = if (it.storeFile?.exists() == true) it
+                else signingConfigs.named("debug").get()
+                isMinifyEnabled = true
+                isShrinkResources = true
+                proguardFiles("proguard-rules.pro")
+            }
+        }
+    }
+
     applicationVariants.all {
         outputs.map { it as BaseVariantOutputImpl }.forEach { output ->
             output.outputFileName = "LSPosedManager-${verName}-${verCode}-${buildType.name}.apk"
