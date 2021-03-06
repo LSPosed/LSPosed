@@ -34,7 +34,7 @@ public class PowerService {
         return pm;
     }
 
-    public static void reboot(boolean confirm, String reason, boolean wait) {
+    public static void reboot(boolean confirm, String reason, boolean wait) throws RemoteException {
         IPowerManager pm = getPowerManager();
         if (pm == null) return;
         pm.reboot(confirm, reason, wait);

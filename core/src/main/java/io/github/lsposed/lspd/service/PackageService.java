@@ -218,7 +218,7 @@ public class PackageService {
         }
     }
 
-    private static void uninstallPackage(VersionedPackage versionedPackage) throws RemoteException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    public static void uninstallPackage(VersionedPackage versionedPackage) throws RemoteException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         CountDownLatch latch = new CountDownLatch(1);
         pm.getPackageInstaller().uninstallExistingPackage(versionedPackage, "com.android.shell", new IntentSenderAdaptor() {
             @Override
