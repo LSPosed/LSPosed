@@ -197,6 +197,7 @@ touch /data/adb/lspd/new_install || abortC "! ${LANG_CUST_ERR_CONF_FIRST}"
 ui_print "- ${LANG_CUST_INST_COPY_LIB}"
 rm -rf "/data/adb/lspd/framework"
 mv "${MODPATH}/system/framework" "/data/adb/lspd/framework"
+extract "${ZIPFILE}" 'manager.apk' "/data/adb/lspd/"
 mkdir -p /data/misc/$MISC_PATH
 set_perm /data/misc/$MISC_PATH 0 0 0771 "u:object_r:magisk_file:s0" || abortC "! ${LANG_CUST_ERR_PERM}"
 
