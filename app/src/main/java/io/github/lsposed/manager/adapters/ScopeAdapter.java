@@ -269,9 +269,6 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                 notifyDataSetChanged();
             }
             return true;
-        } else if (itemId == R.id.menu_refresh) {
-            refresh(true);
-            return true;
         } else if (itemId == R.id.item_show_system) {
             item.setChecked(!item.isChecked());
             preferences.edit().putBoolean("show_system_apps", item.isChecked()).apply();
