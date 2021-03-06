@@ -77,6 +77,7 @@ public class AppListActivity extends BaseActivity {
         binding.recyclerView.setLayoutManager(new LinearLayoutManagerFix(this));
         RecyclerViewKt.addFastScroller(binding.recyclerView, binding.recyclerView);
         RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
+        binding.swipeRefreshLayout.setOnRefreshListener(() -> scopeAdapter.refresh(true));
 
         searchListener = new SearchView.OnQueryTextListener() {
             @Override
@@ -166,6 +167,7 @@ public class AppListActivity extends BaseActivity {
     public void onDataReady() {
         runOnUiThread(() -> {
             binding.progress.setIndeterminate(false);
+            binding.swipeRefreshLayout.setRefreshing(false);
             String queryStr = searchView != null ? searchView.getQuery().toString() : "";
             scopeAdapter.getFilter().filter(queryStr);
         });

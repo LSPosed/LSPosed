@@ -147,6 +147,7 @@ dependencies {
     implementation("androidx.core:core:1.3.2")
     implementation("androidx.fragment:fragment:1.3.0")
     implementation("androidx.recyclerview:recyclerview:1.1.0")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("com.caverock:androidsvg-aar:1.4")
     implementation("com.github.bumptech.glide:glide:$glideVersion")
     implementation("com.github.bumptech.glide:okhttp3-integration:$glideVersion")
