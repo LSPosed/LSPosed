@@ -6,10 +6,12 @@ on:
     paths-ignore:
     - 'app/**'
     - '**.md'
+    - '.github/workflows/manager.yml'
   pull_request:
     paths-ignore:
     - 'app/**'
     - '**.md'
+    - '.github/workflows/manager.yml'
 
 jobs:
   build:

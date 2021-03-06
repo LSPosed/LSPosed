@@ -10,6 +10,7 @@ on:
   pull_request:
     paths:
     - 'app/**'
+    - '.github/workflows/manager.yml'
 
 jobs:
   build:
@@ -27,7 +28,6 @@ jobs:
         with:
           java-version: 11
       - name: Write key
-        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
         run: |
           echo androidStorePassword=${{ secrets.KEY_STORE_PASSWORD }} >> gradle.properties
           echo androidKeyAlias=${{ secrets.ALIAS }} >> gradle.properties
@@ -51,7 +51,6 @@ jobs:
           name: ${{ steps.buildRelease.outputs.releaseName }}-mappings
           path: "app/build/outputs"
       - name: Post to channel
-        if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/master' }}
         env:
           CHANNEL_ID: ${{ secrets.CHANNEL_ID }}
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
