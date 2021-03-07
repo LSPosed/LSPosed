@@ -21,7 +21,8 @@
 #pragma once
 
 #include <jni.h>
-#include <art/base/macros.h>
+#include "macros.h"
+#include <string>
 #include "logging.h"
 
 #define JNI_START JNIEnv *env, [[maybe_unused]] jclass clazz
@@ -175,4 +176,56 @@ private:
     JUTFString(const JUTFString &) = delete;
 
     JUTFString &operator=(const JUTFString &) = delete;
+};
+
+template<typename T>
+class ScopedLocalRef {
+public:
+    ScopedLocalRef(JNIEnv* env, T localRef) : mEnv(env), mLocalRef(localRef) {
+    }
+    ScopedLocalRef(ScopedLocalRef&& s) noexcept : mEnv(s.mEnv), mLocalRef(s.release()) {
+    }
+    explicit ScopedLocalRef(JNIEnv* env) : mEnv(env), mLocalRef(nullptr) {
+    }
+    ~ScopedLocalRef() {
+        reset();
+    }
+    void reset(T ptr = NULL) {
+        if (ptr != mLocalRef) {
+            if (mLocalRef != NULL) {
+                mEnv->DeleteLocalRef(mLocalRef);
+            }
+            mLocalRef = ptr;
+        }
+    }
+    T release() __attribute__((warn_unused_result)) {
+        T localRef = mLocalRef;
+        mLocalRef = NULL;
+        return localRef;
+    }
+    T get() const {
+        return mLocalRef;
+    }
+    // We do not expose an empty constructor as it can easily lead to errors
+    // using common idioms, e.g.:
+    //   ScopedLocalRef<...> ref;
+    //   ref.reset(...);
+    // Move assignment operator.
+    ScopedLocalRef& operator=(ScopedLocalRef&& s) noexcept {
+        reset(s.release());
+        mEnv = s.mEnv;
+        return *this;
+    }
+    // Allows "if (scoped_ref == nullptr)"
+    bool operator==(std::nullptr_t) const {
+        return mLocalRef == nullptr;
+    }
+    // Allows "if (scoped_ref != nullptr)"
+    bool operator!=(std::nullptr_t) const {
+        return mLocalRef != nullptr;
+    }
+private:
+    JNIEnv* mEnv;
+    T mLocalRef;
+    DISALLOW_COPY_AND_ASSIGN(ScopedLocalRef);
 };

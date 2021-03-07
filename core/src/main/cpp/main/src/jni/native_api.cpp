@@ -22,9 +22,8 @@
 // Created by 双草酸酯 on 2/7/21.
 //
 #include "native_api.h"
-#include "nativehelper/jni_macros.h"
 #include "native_util.h"
-#include "JNIHelper.h"
+#include "jni_helper.h"
 #include "../native_api.h"
 
 namespace lspd {

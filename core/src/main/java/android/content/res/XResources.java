@@ -63,6 +63,7 @@ import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getLongField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.incrementMethodDepth;
+import static io.github.lsposed.lspd.nativebridge.ResourcesHook.rewriteXmlReferencesNative;
 
 /**
  * {@link android.content.res.Resources} subclass that allows replacing individual resources.
@@ -1079,8 +1080,6 @@ public class XResources extends XResourcesSuperClass {
 		}
 		return false;
 	}
-
-	private static native void rewriteXmlReferencesNative(long parserPtr, XResources origRes, Resources repRes);
 
 	/**
 	 * Used to replace reference IDs in XMLs.

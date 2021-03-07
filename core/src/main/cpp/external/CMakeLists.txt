@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.4.1)
 
 add_subdirectory(yahfa)
-add_subdirectory(android)
 
 macro(SET_OPTION option value)
     set(${option} ${value} CACHE INTERNAL "" FORCE)

@@ -23,14 +23,14 @@
 #pragma once
 
 #include <context.h>
-#include <art/base/macros.h>
-#include <nativehelper/scoped_local_ref.h>
-#include <android-base/logging.h>
-#include "JNIHelper.h"
+#include "macros.h"
+#include "jni_helper.h"
+#include "logging.h"
+#include <cassert>
 
 namespace lspd {
 
-    ALWAYS_INLINE inline void RegisterNativeMethodsInternal(JNIEnv *env,
+    ALWAYS_INLINE inline bool RegisterNativeMethodsInternal(JNIEnv *env,
                                                             const char *class_name,
                                                             const JNINativeMethod *methods,
                                                             jint method_count) {
@@ -38,12 +38,31 @@ namespace lspd {
         ScopedLocalRef<jclass> clazz(env,
                                      Context::GetInstance()->FindClassFromCurrentLoader(env, class_name));
         if (clazz.get() == nullptr) {
-            LOG(FATAL) << "Couldn't find class: " << class_name;
-            return;
+            LOGF("Couldn't find class: %s", class_name);
+            return false;
         }
-        jint jni_result = JNI_RegisterNatives(env, clazz.get(), methods, method_count);
-        CHECK_EQ(JNI_OK, jni_result);
+        return JNI_RegisterNatives(env, clazz.get(), methods, method_count);
     }
+#if defined(__cplusplus)
+#define _NATIVEHELPER_JNI_MACRO_CAST(to) \
+    reinterpret_cast<to>
+#else
+#define _NATIVEHELPER_JNI_MACRO_CAST(to) \
+    (to)
+#endif
+
+#ifndef LSP_NATIVE_METHOD
+#define LSP_NATIVE_METHOD(className, functionName, signature)                \
+  { #functionName,                                                       \
+    signature,                                                           \
+    _NATIVEHELPER_JNI_MACRO_CAST(void*) (Java_io_github_lsposed_lspd_nativebridge_## className ## _ ## functionName) \
+  }
+#endif
+
+#ifndef LSP_DEF_NATIVE_METHOD
+#define LSP_DEF_NATIVE_METHOD(ret, className,  functionName, ...)                \
+  extern "C" ret Java_io_github_lsposed_lspd_nativebridge_## className ## _ ## functionName (JNI_START, ##  __VA_ARGS__)
+#endif
 
 #define REGISTER_LSP_NATIVE_METHODS(class_name) \
   RegisterNativeMethodsInternal(env, "io.github.lsposed.lspd.nativebridge." #class_name, gMethods, arraysize(gMethods))

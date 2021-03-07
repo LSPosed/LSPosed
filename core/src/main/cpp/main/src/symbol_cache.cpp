@@ -24,7 +24,7 @@
 
 #include "symbol_cache.h"
 #include <dobby.h>
-#include <art/base/macros.h>
+#include "macros.h"
 #include <logging.h>
 
 namespace lspd {

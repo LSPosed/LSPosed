@@ -20,7 +20,6 @@
 
 #include "yahfa.h"
 #include "HookMain.h"
-#include "nativehelper/jni_macros.h"
 #include "native_util.h"
 #include "pending_hooks.h"
 #include "art/runtime/class_linker.h"
