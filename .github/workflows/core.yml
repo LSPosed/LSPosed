@@ -19,10 +19,19 @@ jobs:
     if: ${{ !startsWith(github.event.head_commit.message, '[skip ci]') }}
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v2
       with:
         submodules: 'recursive'
         fetch-depth: 0
+    - name: Write key
+      if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
+      run: |
+        echo androidStorePassword='${{ secrets.KEY_STORE_PASSWORD }}' >> gradle.properties
+        echo androidKeyAlias='${{ secrets.ALIAS }}' >> gradle.properties
+        echo androidKeyPassword='${{ secrets.KEY_PASSWORD }}' >> gradle.properties
+        echo androidStoreFile='key.jks' >> gradle.properties
+        echo ${{ secrets.KEY_STORE }} | base64 --decode > key.jks
     - name: set up JDK 11
       uses: actions/setup-java@v1
       with:
