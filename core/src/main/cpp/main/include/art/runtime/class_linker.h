@@ -166,7 +166,7 @@ namespace art {
                 // Therefore we hook the new introduced MarkClassInitialized instead
                 // This only happens on non-x86 devices
                 lspd::HookSyms(handle, MarkClassInitialized);
-                lspd::HookSyms(handle, FixupStaticTrampolinesWithThread);
+                lspd::HookSyms(handle, FixupStaticTrampolinesWithThread, FixupStaticTrampolines);
             } else {
                 lspd::HookSyms(handle, FixupStaticTrampolines);
             }
