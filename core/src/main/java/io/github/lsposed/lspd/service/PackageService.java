@@ -242,8 +242,8 @@ public class PackageService {
             if (pkgInfo != null && pkgInfo.versionName != null && pkgInfo.applicationInfo != null) {
                 boolean versionMatch = pkgInfo.versionName.equals(BuildConfig.VERSION_NAME);
                 boolean signatureMatch = InstallerVerifier.verifyInstallerSignature(pkgInfo.applicationInfo);
-                if (versionMatch && signatureMatch) return false;
-                if (!signatureMatch || pkgInfo.versionCode > BuildConfig.VERSION_CODE)
+                if (versionMatch && signatureMatch && pkgInfo.versionCode >= BuildConfig.VERSION_CODE) return false;
+                if (!signatureMatch || !versionMatch && pkgInfo.versionCode > BuildConfig.VERSION_CODE)
                     uninstallPackage(new VersionedPackage(pkgInfo.packageName, pkgInfo.versionCode));
             }
             IPackageInstaller installerService = pm.getPackageInstaller();
