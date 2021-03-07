@@ -107,6 +107,9 @@ public final class ModuleUtil {
         PackageInfo pkg;
         try {
             pkg = ConfigManager.getPackageInfo(packageName, PackageManager.GET_META_DATA);
+            if (pkg == null) {
+                throw new NameNotFoundException();
+            }
         } catch (NameNotFoundException e) {
             InstalledModule old = installedModules.remove(packageName);
             if (old != null) {
