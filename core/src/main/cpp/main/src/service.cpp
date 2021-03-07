@@ -199,7 +199,7 @@ namespace lspd {
     }
 
     jobject Service::RequestBinderForSystemServer(JNIEnv *env) {
-        if (UNLIKELY(!initialized_)) {
+        if (UNLIKELY(!initialized_ || !bridge_service_class_)) {
             LOGE("Service not initialized");
             return nullptr;
         }
