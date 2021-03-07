@@ -226,6 +226,7 @@ public class PackageService {
             public void send(Intent intent) {
                 int status = intent.getIntExtra(PackageInstaller.EXTRA_STATUS, PackageInstaller.STATUS_FAILURE);
                 result[0] = status == PackageInstaller.STATUS_SUCCESS;
+                Log.d(TAG, intent.getStringExtra(PackageInstaller.EXTRA_STATUS_MESSAGE));
                 latch.countDown();
             }
         }.getIntentSender(), 0);
@@ -242,7 +243,8 @@ public class PackageService {
             if (pkgInfo != null && pkgInfo.versionName != null && pkgInfo.applicationInfo != null) {
                 boolean versionMatch = pkgInfo.versionName.equals(BuildConfig.VERSION_NAME);
                 boolean signatureMatch = InstallerVerifier.verifyInstallerSignature(pkgInfo.applicationInfo);
-                if (versionMatch && signatureMatch && pkgInfo.versionCode >= BuildConfig.VERSION_CODE) return false;
+                if (versionMatch && signatureMatch && pkgInfo.versionCode >= BuildConfig.VERSION_CODE)
+                    return false;
                 if (!signatureMatch || !versionMatch && pkgInfo.versionCode > BuildConfig.VERSION_CODE)
                     uninstallPackage(new VersionedPackage(pkgInfo.packageName, pkgInfo.versionCode));
             }
