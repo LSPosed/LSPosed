@@ -1,33 +1,8 @@
-/*
- * Copyright (C) 2015 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 #pragma once
+
 #include <stddef.h>  // for size_t
 #include <unistd.h>  // for TEMP_FAILURE_RETRY
 #include <utility>
-// bionic and glibc both have TEMP_FAILURE_RETRY, but eg Mac OS' libc doesn't.
-#ifndef TEMP_FAILURE_RETRY
-#define TEMP_FAILURE_RETRY(exp)            \
-  ({                                       \
-    decltype(exp) _rc;                     \
-    do {                                   \
-      _rc = (exp);                         \
-    } while (_rc == -1 && errno == EINTR); \
-    _rc;                                   \
-  })
-#endif
 // A macro to disallow the copy constructor and operator= functions
 // This must be placed in the private: declarations for a class.
 //
@@ -132,3 +107,52 @@ void UNUSED(const T&...) {
 #elif defined(__mips__) && defined(__LP64__)
 #define ABI_STRING "mips64"
 #endif
+// A macro to disallow new and delete operators for a class. It goes in the private: declarations.
+// NOTE: Providing placement new (and matching delete) for constructing container elements.
+#define DISALLOW_ALLOCATION() \
+  public: \
+    NO_RETURN ALWAYS_INLINE void operator delete(void*, size_t) { UNREACHABLE(); } \
+    ALWAYS_INLINE void* operator new(size_t, void* ptr) noexcept { return ptr; } \
+    ALWAYS_INLINE void operator delete(void*, void*) noexcept { } \
+  private: \
+    void* operator new(size_t) = delete  // NOLINT
+#define ALIGNED(x) __attribute__ ((__aligned__(x)))
+#define PACKED(x) __attribute__ ((__aligned__(x), __packed__))
+// Stringify the argument.
+#define QUOTE(x) #x
+#define STRINGIFY(x) QUOTE(x)
+// Append tokens after evaluating.
+#define APPEND_TOKENS_AFTER_EVAL_2(a, b) a ## b
+#define APPEND_TOKENS_AFTER_EVAL(a, b) APPEND_TOKENS_AFTER_EVAL_2(a, b)
+#ifndef NDEBUG
+#define ALWAYS_INLINE
+#else
+#define ALWAYS_INLINE  __attribute__ ((always_inline))
+#endif
+// clang doesn't like attributes on lambda functions. It would be nice to say:
+//   #define ALWAYS_INLINE_LAMBDA ALWAYS_INLINE
+#define ALWAYS_INLINE_LAMBDA
+#define NO_INLINE __attribute__ ((noinline))
+#if defined (__APPLE__)
+#define HOT_ATTR
+#define COLD_ATTR
+#else
+#define HOT_ATTR __attribute__ ((hot))
+#define COLD_ATTR __attribute__ ((cold))
+#endif
+#define PURE __attribute__ ((__pure__))
+// Define that a position within code is unreachable, for example:
+//   int foo () { LOG(FATAL) << "Don't call me"; UNREACHABLE(); }
+// without the UNREACHABLE a return statement would be necessary.
+#define UNREACHABLE  __builtin_unreachable
+// Add the C++11 noreturn attribute.
+#define NO_RETURN [[ noreturn ]]  // NOLINT[whitespace/braces] [5]
+// Annotalysis thread-safety analysis support. Things that are not in base.
+#define LOCKABLE CAPABILITY("mutex")
+#define SHARED_LOCKABLE SHARED_CAPABILITY("mutex")
+
+// DISALLOW_COPY_AND_ASSIGN disallows the copy and operator= functions. It goes in the private:
+// declarations in a class.
+#define DISALLOW_COPY_AND_ASSIGN(TypeName) \
+  TypeName(const TypeName&) = delete;  \
+  void operator=(const TypeName&) = delete

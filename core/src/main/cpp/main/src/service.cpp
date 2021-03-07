@@ -21,12 +21,11 @@
 // Created by loves on 2/7/2021.
 //
 
-#include <nativehelper/scoped_local_ref.h>
 #include <dobby.h>
 #include "base/object.h"
 #include "service.h"
 #include "context.h"
-#include "JNIHelper.h"
+#include "jni_helper.h"
 
 namespace lspd {
     jboolean

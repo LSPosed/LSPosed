@@ -20,10 +20,9 @@
 
 #pragma once
 
-#include <JNIHelper.h>
+#include <jni_helper.h>
 #include <base/object.h>
 #include <art/runtime/mirror/class.h>
-#include <android-base/strings.h>
 #include "runtime.h"
 #include "config.h"
 #include "jni_env_ext.h"

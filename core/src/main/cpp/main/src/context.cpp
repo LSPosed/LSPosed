@@ -19,19 +19,16 @@
  */
 
 #include <jni.h>
-#include <android-base/macros.h>
-#include "JNIHelper.h"
+#include "jni_helper.h"
 #include "jni/art_class_linker.h"
 #include "jni/yahfa.h"
 #include "jni/sandhook.h"
 #include "jni/resources_hook.h"
 #include <dl_util.h>
 #include <art/runtime/jni_env_ext.h>
-#include <android-base/strings.h>
 #include "jni/pending_hooks.h"
 #include <fstream>
 #include <sstream>
-#include <nativehelper/scoped_local_ref.h>
 #include "context.h"
 #include "native_hook.h"
 #include "jni/logger.h"

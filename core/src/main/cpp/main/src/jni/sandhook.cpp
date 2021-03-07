@@ -20,7 +20,6 @@
 #include <sandhook.h>
 #include "sandhook.h"
 #include "native_util.h"
-#include "nativehelper/jni_macros.h"
 
 namespace lspd {
     LSP_DEF_NATIVE_METHOD(bool, SandHook, init, jclass classSandHook, jclass classNeverCall) {

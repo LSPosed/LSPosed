@@ -18,7 +18,6 @@
  * Copyright (C) 2021 LSPosed Contributors
  */
 
-#include <nativehelper/jni_macros.h>
 #include <string>
 #include <unordered_set>
 #include <shared_mutex>

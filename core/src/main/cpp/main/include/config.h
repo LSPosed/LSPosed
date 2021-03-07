@@ -23,7 +23,7 @@
 #include <jni.h>
 #include <sys/types.h>
 #include <string>
-#include "art/base/macros.h"
+#include "macros.h"
 #include "utils.h"
 
 namespace lspd {

@@ -20,6 +20,9 @@
 
 package io.github.lsposed.lspd.nativebridge;
 
+import android.content.res.Resources;
+import android.content.res.XResources;
+
 public class ResourcesHook {
 
     public static native boolean initXResourcesNative();
@@ -27,4 +30,6 @@ public class ResourcesHook {
     public static native boolean removeFinalFlagNative(Class<?> clazz);
 
     public static native ClassLoader buildDummyClassLoader(ClassLoader parent, Class<?> resourceSuperClass, Class<?> typedArraySuperClass);
+
+    public static native void rewriteXmlReferencesNative(long parserPtr, XResources origRes, Resources repRes);
 }

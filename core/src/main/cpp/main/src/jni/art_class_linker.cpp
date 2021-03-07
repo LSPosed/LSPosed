@@ -21,7 +21,6 @@
 #include <jni.h>
 #include <native_util.h>
 #include <art/runtime/class_linker.h>
-#include <nativehelper/jni_macros.h>
 #include <vector>
 #include <HookMain.h>
 #include <unordered_set>

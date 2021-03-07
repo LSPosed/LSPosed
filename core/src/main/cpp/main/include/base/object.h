@@ -23,7 +23,7 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wgnu-string-literal-operator-template"
 
-#include <art/base/macros.h>
+#include "macros.h"
 #include <dlfcn.h>
 #include <sys/mman.h>
 #include "config.h"

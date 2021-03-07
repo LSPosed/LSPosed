@@ -19,9 +19,8 @@
  */
 
 #include "logger.h"
-#include "nativehelper/jni_macros.h"
 #include "native_util.h"
-#include "JNIHelper.h"
+#include "jni_helper.h"
 #include <fstream>
 #include <fcntl.h>
 
