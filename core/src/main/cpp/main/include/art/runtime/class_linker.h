@@ -65,6 +65,14 @@ namespace art {
                 });
 
         CREATE_MEM_HOOK_STUB_ENTRIES(
+                "_ZN3art11ClassLinker22FixupStaticTrampolinesEPNS_6ThreadENS_6ObjPtrINS_6mirror5ClassEEE",
+                void, FixupStaticTrampolinesWithThread,
+                (void * thiz, void * self, void * clazz_ptr), {
+                    backup(thiz, self, clazz_ptr);
+                    MaybeDelayHook(clazz_ptr);
+                });
+
+        CREATE_MEM_HOOK_STUB_ENTRIES(
                 "_ZN3art11ClassLinker20MarkClassInitializedEPNS_6ThreadENS_6HandleINS_6mirror5ClassEEE",
                 void*, MarkClassInitialized, (void * thiz, void * self, uint32_t * clazz_ptr), {
                     void *result = backup(thiz, self, clazz_ptr);
@@ -84,7 +92,8 @@ namespace art {
                 "_ZN3art11ClassLinker30ShouldUseInterpreterEntrypointEPNS_9ArtMethodEPKv",
                 bool, ShouldUseInterpreterEntrypoint, (void * art_method,
                         const void *quick_code), {
-                    if (quick_code != nullptr && UNLIKELY(lspd::isHooked(art_method) || lspd::IsMethodPending(art_method))) {
+                    if (quick_code != nullptr &&
+                        UNLIKELY(lspd::isHooked(art_method) || lspd::IsMethodPending(art_method))) {
                         return false;
                     }
                     return backup(art_method, quick_code);
@@ -157,6 +166,7 @@ namespace art {
                 // Therefore we hook the new introduced MarkClassInitialized instead
                 // This only happens on non-x86 devices
                 lspd::HookSyms(handle, MarkClassInitialized);
+                lspd::HookSyms(handle, FixupStaticTrampolinesWithThread);
             } else {
                 lspd::HookSyms(handle, FixupStaticTrampolines);
             }
