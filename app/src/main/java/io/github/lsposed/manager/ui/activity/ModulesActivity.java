@@ -173,6 +173,7 @@ public class ModulesActivity extends ListActivity implements ModuleUtil.ModuleLi
                                         Toast.makeText(ModulesActivity.this, text, Toast.LENGTH_SHORT).show();
                                     }
                                 });
+                                if (success) moduleUtil.reloadSingleModule(module.packageName);
                             }))
                     .setNegativeButton(android.R.string.cancel, null)
                     .show();
