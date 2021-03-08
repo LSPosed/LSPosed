@@ -173,11 +173,11 @@ namespace lspd {
     static JNINativeMethod gMethods[] = {
             LSP_NATIVE_METHOD(Yahfa, init, "(I)V"),
             LSP_NATIVE_METHOD(Yahfa, findMethodNative,
-                              "(Ljava/lang/Class;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/reflect/Member;"),
+                              "(Ljava/lang/Class;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/reflect/Executable;"),
             LSP_NATIVE_METHOD(Yahfa, backupAndHookNative,
-                              "(Ljava/lang/Object;Ljava/lang/reflect/Method;Ljava/lang/reflect/Method;)Z"),
-            LSP_NATIVE_METHOD(Yahfa, recordHooked, "(Ljava/lang/reflect/Member;)V"),
-            LSP_NATIVE_METHOD(Yahfa, isHooked, "(Ljava/lang/reflect/Member;)Z"),
+                              "(Ljava/lang/reflect/Executable;Ljava/lang/reflect/Method;Ljava/lang/reflect/Method;)Z"),
+            LSP_NATIVE_METHOD(Yahfa, recordHooked, "(Ljava/lang/reflect/Executable;)V"),
+            LSP_NATIVE_METHOD(Yahfa, isHooked, "(Ljava/lang/reflect/Executable;)Z"),
             LSP_NATIVE_METHOD(Yahfa, buildHooker, "(Ljava/lang/ClassLoader;Ljava/lang/Class;[Ljava/lang/Class;Ljava/lang/String;)Ljava/lang/Class;"),
     };
 

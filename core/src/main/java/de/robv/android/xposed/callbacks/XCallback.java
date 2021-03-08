@@ -22,13 +22,12 @@ package de.robv.android.xposed.callbacks;
 
 import android.os.Bundle;
 
-import io.github.lsposed.lspd.config.LSPdConfigGlobal;
-
 import java.io.Serializable;
 
 import de.robv.android.xposed.IModuleContext;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedBridge.CopyOnWriteSortedSet;
+import io.github.lsposed.lspd.deopt.PrebuiltMethodsDeopter;
 
 /**
  * Base class for Xposed callbacks.
@@ -126,7 +125,7 @@ public abstract class XCallback implements Comparable<XCallback>, IModuleContext
 		    // deopt methods in system apps or priv-apps, this would be not necessary
             // only if we found out how to recompile their apks
 			XC_LoadPackage.LoadPackageParam lpp = (XC_LoadPackage.LoadPackageParam) param;
-			LSPdConfigGlobal.getHookProvider().deoptMethods(lpp.packageName, lpp.classLoader);
+			PrebuiltMethodsDeopter.deoptMethods(lpp.packageName, lpp.classLoader);
 		}
 
 		if (param.callbacks == null)

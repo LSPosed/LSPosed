@@ -20,25 +20,26 @@
 
 package de.robv.android.xposed;
 
+import java.lang.reflect.Executable;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import io.github.lsposed.lspd.config.LSPdConfigGlobal;
+import io.github.lsposed.lspd.yahfa.hooker.YahfaHooker;
 
 import static io.github.lsposed.lspd.nativebridge.PendingHooks.recordPendingMethodNative;
 
 public final class PendingHooks {
 
     // GuardedBy("PendingHooks.class")
-    private static final ConcurrentHashMap<Class<?>, ConcurrentHashMap<Member, XposedBridge.AdditionalHookInfo>>
+    private static final ConcurrentHashMap<Class<?>, ConcurrentHashMap<Executable, XposedBridge.AdditionalHookInfo>>
             sPendingHooks = new ConcurrentHashMap<>();
 
     public synchronized static void hookPendingMethod(Class<?> clazz) {
         if (sPendingHooks.containsKey(clazz)) {
-            for (Map.Entry<Member, XposedBridge.AdditionalHookInfo> hook : sPendingHooks.get(clazz).entrySet()) {
-                LSPdConfigGlobal.getHookProvider().hookMethod(hook.getKey(), hook.getValue());
+            for (Map.Entry<Executable, XposedBridge.AdditionalHookInfo> hook : sPendingHooks.get(clazz).entrySet()) {
+                YahfaHooker.hookMethod(hook.getKey(), hook.getValue());
             }
             sPendingHooks.remove(clazz);
         }
@@ -46,7 +47,7 @@ public final class PendingHooks {
 
     public synchronized static void recordPendingMethod(Method hookMethod,
                                                         XposedBridge.AdditionalHookInfo additionalInfo) {
-        ConcurrentHashMap<Member, XposedBridge.AdditionalHookInfo> pending =
+        ConcurrentHashMap<Executable, XposedBridge.AdditionalHookInfo> pending =
                 sPendingHooks.computeIfAbsent(hookMethod.getDeclaringClass(), aClass -> new ConcurrentHashMap<>());
 
         pending.put(hookMethod, additionalInfo);

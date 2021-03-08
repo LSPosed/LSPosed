@@ -22,12 +22,14 @@ package io.github.lsposed.lspd.deopt;
 
 import android.text.TextUtils;
 
-import io.github.lsposed.lspd.config.LSPdConfigGlobal;
+import io.github.lsposed.lspd.nativebridge.Yahfa;
 import io.github.lsposed.lspd.util.Utils;
 
+import java.lang.reflect.Executable;
 import java.util.Arrays;
 
 import de.robv.android.xposed.XposedHelpers;
+import io.github.lsposed.lspd.yahfa.hooker.YahfaHooker;
 
 import static io.github.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
 import static io.github.lsposed.lspd.deopt.InlinedMethodCallers.KEY_BOOT_IMAGE;
@@ -47,10 +49,9 @@ public class PrebuiltMethodsDeopter {
                 if (clazz == null) {
                     continue;
                 }
-                Object method = LSPdConfigGlobal.getHookProvider().findMethodNative(
-                        clazz, caller[1], caller[2]);
+                Executable method = Yahfa.findMethodNative(clazz, caller[1], caller[2]);
                 if (method != null) {
-                    LSPdConfigGlobal.getHookProvider().deoptMethodNative(method);
+                    YahfaHooker.deoptMethodNative(method);
                 }
             } catch (Throwable throwable) {
                 Utils.logE("error when deopting method: " + Arrays.toString(caller), throwable);

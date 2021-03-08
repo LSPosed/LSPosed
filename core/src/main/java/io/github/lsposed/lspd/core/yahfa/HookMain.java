@@ -21,16 +21,18 @@
 package io.github.lsposed.lspd.core.yahfa;
 
 import io.github.lsposed.lspd.nativebridge.Yahfa;
+import io.github.lsposed.lspd.util.Logger;
 import io.github.lsposed.lspd.util.Utils;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Member;
+import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
+
 public class HookMain {
-    public static void backupAndHook(Member target, Method hook, Method backup) {
+    public static void backupAndHook(Executable target, Method hook, Method backup) {
         Utils.logD(String.format("target=%s, hook=%s, backup=%s", target, hook, backup));
         if (target == null) {
             throw new IllegalArgumentException("null target method");
@@ -53,12 +55,12 @@ public class HookMain {
         if(!Yahfa.backupAndHookNative(target, hook, backup)){
             throw new RuntimeException("Failed to hook " + target + " with " + hook);
         } else {
+            Logger.e(target.toString());
             Yahfa.recordHooked(target);
-//            Yahfa.recordHooked(backup);
         }
     }
 
-    private static void checkCompatibleMethods(Object original, Method replacement, String replacementName) {
+    private static void checkCompatibleMethods(Executable original, Method replacement, String replacementName) {
         ArrayList<Class<?>> originalParams;
         if (original instanceof Method) {
             originalParams = new ArrayList<>(Arrays.asList(((Method) original).getParameterTypes()));

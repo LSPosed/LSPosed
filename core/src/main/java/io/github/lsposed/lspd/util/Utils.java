@@ -25,8 +25,6 @@ import android.util.Log;
 import io.github.lsposed.lspd.BuildConfig;
 
 import de.robv.android.xposed.XposedHelpers;
-import io.github.lsposed.lspd.annotation.ApiSensitive;
-import io.github.lsposed.lspd.annotation.Level;
 
 
 public class Utils {
@@ -67,7 +65,6 @@ public class Utils {
         Log.e(LOG_TAG, msg, throwable);
     }
 
-    @ApiSensitive(Level.LOW)
     public static String getSysProp(String key) {
         try {
             Class sysProps = XposedHelpers.findClassIfExists("android.os.SystemProperties", null);

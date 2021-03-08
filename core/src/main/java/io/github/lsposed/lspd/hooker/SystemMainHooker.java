@@ -41,7 +41,7 @@ public class SystemMainHooker extends XC_MethodHook {
             systemServerCL = Thread.currentThread().getContextClassLoader();
             // deopt methods in SYSTEMSERVERCLASSPATH
             PrebuiltMethodsDeopter.deoptSystemServerMethods(systemServerCL);
-            Main.getImpl().getRouter().startSystemServerHook();
+            Main.startSystemServerHook();
         } catch (Throwable t) {
             Hookers.logE("error when hooking systemMain", t);
         }

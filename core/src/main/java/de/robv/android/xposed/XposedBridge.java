@@ -25,31 +25,26 @@ import android.content.res.TypedArray;
 import android.util.Log;
 
 import io.github.lsposed.lspd.BuildConfig;
-import io.github.lsposed.lspd.config.LSPdConfigGlobal;
 
 import java.lang.reflect.AccessibleObject;
-import java.lang.reflect.Constructor;
+import java.lang.reflect.Executable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import dalvik.system.InMemoryDexClassLoader;
-import io.github.lsposed.lspd.annotation.ApiSensitive;
-import io.github.lsposed.lspd.annotation.Level;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XC_InitZygote;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
-import external.com.android.dx.DexMaker;
-import external.com.android.dx.TypeId;
 import io.github.lsposed.lspd.nativebridge.ModuleLogger;
 import io.github.lsposed.lspd.nativebridge.ResourcesHook;
+import io.github.lsposed.lspd.yahfa.dexmaker.DynamicBridge;
+import io.github.lsposed.lspd.yahfa.hooker.YahfaHooker;
 
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
 
@@ -91,7 +86,6 @@ public final class XposedBridge {
 
 	public static volatile ClassLoader dummyClassLoader = null;
 
-	@ApiSensitive(Level.MIDDLE)
 	public static void initXResources() {
         if (dummyClassLoader != null) {
         	return;
@@ -108,22 +102,10 @@ public final class XposedBridge {
 			} catch (Resources.NotFoundException nfe) {
 				XposedBridge.log(nfe);
 			}
-			XposedBridge.removeFinalFlagNative(resClass);
-			XposedBridge.removeFinalFlagNative(taClass);
+			ResourcesHook.removeFinalFlagNative(resClass);
+			ResourcesHook.removeFinalFlagNative(taClass);
 			ClassLoader myCL = XposedBridge.class.getClassLoader();
 			dummyClassLoader = ResourcesHook.buildDummyClassLoader(myCL.getParent(), resClass, taClass);
-			if (dummyClassLoader == null) {
-				XposedBridge.log("Dexbuilder fails, fallback to dexmaker");
-				DexMaker dexMaker = new DexMaker();
-				dexMaker.declare(TypeId.get("Lxposed/dummy/XResourcesSuperClass;"),
-						"XResourcesSuperClass.java",
-						Modifier.PUBLIC, TypeId.get(resClass));
-				dexMaker.declare(TypeId.get("Lxposed/dummy/XTypedArraySuperClass;"),
-						"XTypedArraySuperClass.java",
-						Modifier.PUBLIC, TypeId.get(taClass));
-				dummyClassLoader = new InMemoryDexClassLoader(
-						ByteBuffer.wrap(dexMaker.generate()), myCL.getParent());
-			}
 			dummyClassLoader.loadClass("xposed.dummy.XResourcesSuperClass");
 			dummyClassLoader.loadClass("xposed.dummy.XTypedArraySuperClass");
 			setObjectField(myCL, "parent", dummyClassLoader);
@@ -183,13 +165,15 @@ public final class XposedBridge {
 	 * @see #hookAllConstructors
 	 */
 	public static XC_MethodHook.Unhook hookMethod(Member hookMethod, XC_MethodHook callback) {
-		if (!(hookMethod instanceof Method) && !(hookMethod instanceof Constructor<?>)) {
+		if (!(hookMethod instanceof Executable)) {
 			throw new IllegalArgumentException("Only methods and constructors can be hooked: " + hookMethod.toString());
 		} else if (hookMethod.getDeclaringClass().isInterface()) {
 			throw new IllegalArgumentException("Cannot hook interfaces: " + hookMethod.toString());
 		} else if (Modifier.isAbstract(hookMethod.getModifiers())) {
 			throw new IllegalArgumentException("Cannot hook abstract methods: " + hookMethod.toString());
 		}
+
+		Executable targetMethod = (Executable) hookMethod;
 
 		if (callback == null) {
 			throw new IllegalArgumentException("callback should not be null!");
@@ -198,10 +182,10 @@ public final class XposedBridge {
 		boolean newMethod = false;
 		CopyOnWriteSortedSet<XC_MethodHook> callbacks;
 		synchronized (sHookedMethodCallbacks) {
-			callbacks = sHookedMethodCallbacks.get(hookMethod);
+			callbacks = sHookedMethodCallbacks.get(targetMethod);
 			if (callbacks == null) {
 				callbacks = new CopyOnWriteSortedSet<>();
-				sHookedMethodCallbacks.put(hookMethod, callbacks);
+				sHookedMethodCallbacks.put(targetMethod, callbacks);
 				newMethod = true;
 			}
 		}
@@ -209,9 +193,8 @@ public final class XposedBridge {
 
 		if (newMethod) {
 			AdditionalHookInfo additionalInfo = new AdditionalHookInfo(callbacks);
-            Member reflectMethod = LSPdConfigGlobal.getHookProvider().findMethodNative(hookMethod);
-            if (reflectMethod != null) {
-				LSPdConfigGlobal.getHookProvider().hookMethod(reflectMethod, (AdditionalHookInfo) additionalInfo);
+            if (!YahfaHooker.shouldDelayHook(targetMethod)) {
+				DynamicBridge.hookMethod(targetMethod, (AdditionalHookInfo) additionalInfo);
 			} else {
 				PendingHooks.recordPendingMethod((Method)hookMethod, additionalInfo);
 			}
@@ -231,7 +214,6 @@ public final class XposedBridge {
 	 */
 	@Deprecated
 	public static void unhookMethod(Member hookMethod, XC_MethodHook callback) {
-		LSPdConfigGlobal.getHookProvider().unhookMethod(hookMethod);
 		CopyOnWriteSortedSet<XC_MethodHook> callbacks;
 		synchronized (sHookedMethodCallbacks) {
 			callbacks = sHookedMethodCallbacks.get(hookMethod);
@@ -348,16 +330,11 @@ public final class XposedBridge {
 			args = EMPTY_ARRAY;
 		}
 
-		if (!(method instanceof Method) && !(method instanceof Constructor)) {
+		if (!(method instanceof Executable)) {
 			throw new IllegalArgumentException("method must be of type Method or Constructor");
 		}
 
-		long methodId = LSPdConfigGlobal.getHookProvider().getMethodId(method);
-		return LSPdConfigGlobal.getHookProvider().invokeOriginalMethod(method, methodId, thisObject, args);
-	}
-
-	private static void removeFinalFlagNative(Class clazz) {
-		LSPdConfigGlobal.getHookProvider().removeFinalFlagNative(clazz);
+		return YahfaHooker.invokeOriginalMethod((Executable) method, thisObject, args);
 	}
 
 	/** @hide */
