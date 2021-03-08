@@ -92,7 +92,7 @@ public class MainActivity extends BaseActivity {
         String installXposedVersion = ConfigManager.getXposedVersionName();
         int cardBackgroundColor;
         if (installXposedVersion != null) {
-            binding.statusTitle.setText(getString(R.string.Activated, ConfigManager.getVariantString()));
+            binding.statusTitle.setText(getString(R.string.Activated, "YAHFA"));
             if (!ConfigManager.isPermissive()) {
                 if (Helpers.currentHoliday == Helpers.Holidays.LUNARNEWYEAR) {
                     cardBackgroundColor = 0xfff05654;

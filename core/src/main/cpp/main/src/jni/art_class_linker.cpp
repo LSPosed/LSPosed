@@ -44,7 +44,7 @@ namespace lspd {
 
     static JNINativeMethod gMethods[] = {
             LSP_NATIVE_METHOD(ClassLinker, setEntryPointsToInterpreter,
-                              "(Ljava/lang/reflect/Member;)V")
+                              "(Ljava/lang/reflect/Executable;)V")
     };
 
     void RegisterArtClassLinker(JNIEnv *env) {

@@ -15,8 +15,5 @@ add_subdirectory(Dobby)
 target_include_directories(dobby PUBLIC Dobby/include)
 target_include_directories(dobby PUBLIC Dobby/builtin-plugin/BionicLinkerRestriction)
 
-add_subdirectory(SandHook)
-target_include_directories(sandhook.lspd PUBLIC SandHook)
-
 add_subdirectory(DexBuilder)
 target_include_directories(dex_builder PUBLIC DexBuilder)

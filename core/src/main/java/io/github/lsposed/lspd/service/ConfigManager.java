@@ -76,9 +76,6 @@ public class ConfigManager {
     private static final File resourceHookSwitch = new File(configPath, "enable_resources");
     private boolean resourceHook = false;
 
-    private static final File variantSwitch = new File(configPath, "variant");
-    private int variant = -1;
-
     private static final File verboseLogSwitch = new File(configPath, "verbose_log");
     private boolean verboseLog = false;
 
@@ -216,7 +213,6 @@ public class ConfigManager {
 
     private synchronized void updateConfig() {
         resourceHook = readInt(resourceHookSwitch, 0) == 1;
-        variant = readInt(variantSwitch, -1);
         verboseLog = readInt(verboseLogSwitch, 0) == 1;
         miscPath = "/data/misc/" + readText(miscFile, "lspd");
         updateManager();
@@ -562,11 +558,6 @@ public class ConfigManager {
         this.verboseLog = verboseLog;
     }
 
-    public void setVariant(int variant) {
-        writeInt(variantSwitch, variant);
-        this.variant = variant;
-    }
-
     public boolean isPermissive() {
         return isPermissive;
     }
@@ -577,10 +568,6 @@ public class ConfigManager {
 
     public boolean verboseLog() {
         return verboseLog;
-    }
-
-    public int variant() {
-        return variant;
     }
 
     public ParcelFileDescriptor getModulesLog(int mode) {

@@ -87,7 +87,7 @@
     <string name="settings_backup_success">Резервне копіювання закінчено!</string>
     <string name="settings_backuping">Резервне копіювання…</string>
     <string name="settings_enable_resources">Увімкнути хуки ресурсів</string>
-    <string name="settings_enable_resources_summary">УВАГА: Хуки ресурсів застаріли</string>
+    <string name="settings_enable_resources_summary">УВАГА: Хуки ресурсів Є експериментальним</string>
     <string name="settings_group_framework">Framework</string>
     <string name="settings_group_theme">Тема</string>
     <string name="settings_restore">Відновлення</string>

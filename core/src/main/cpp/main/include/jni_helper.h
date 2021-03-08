@@ -78,7 +78,7 @@ ALWAYS_INLINE static int ClearException(JNIEnv *env) {
 
 #define JNI_GetMethodID(env, class, name, sig) \
     env->GetMethodID(class, name, sig); \
-    if (ClearException(env)) LOGE("GetMethodID " #name)
+    //if (ClearException(env)) LOGE("GetMethodID " #name)
 
 #define JNI_CallObjectMethod(env, obj, ...) \
     env->CallObjectMethod(obj, __VA_ARGS__); \
