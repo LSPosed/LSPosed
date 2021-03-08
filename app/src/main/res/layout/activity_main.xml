@@ -255,12 +255,11 @@
                     </RelativeLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-
                 <LinearLayout
                     android:id="@+id/logs"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
+                    android:gravity="center_vertical"
                     android:layout_marginHorizontal="16dp"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/item_background_round_nopadding"
@@ -287,7 +286,7 @@
                     android:id="@+id/settings"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
+                    android:gravity="center_vertical"
                     android:layout_marginHorizontal="16dp"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/item_background_round_nopadding"
@@ -314,7 +313,7 @@
                     android:id="@+id/about"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
+                    android:gravity="center_vertical"
                     android:layout_marginHorizontal="16dp"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/item_background_round_nopadding"
