@@ -152,10 +152,8 @@ mkdir -p ${LOG_PATH}
 chcon -R u:object_r:magisk_file:s0 ${LOG_PATH}
 
 if [[ ! -z "${MISC_PATH}" ]]; then
-    mkdir -p "${BASE_PATH}/cache"
     chcon -R u:object_r:magisk_file:s0 "${BASE_PATH}"
     chmod 771 "${BASE_PATH}"
-    chmod 777 "${BASE_PATH}/cache"
     print_log_head "${LOG_PATH}/modules.log"
     # start_verbose_log_catcher
     start_log_catcher all "LSPosed:V XSharedPreferences:V LSPosed-Bridge:V LSPosedManager:V LSPosedService:V *:F" true ${LOG_VERBOSE}
