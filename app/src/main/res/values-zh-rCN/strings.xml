@@ -65,7 +65,7 @@
     <!-- Settings tab -->
     <string name="settings_group_framework">框架</string>
     <string name="settings_enable_resources">启用资源钩子</string>
-    <string name="settings_enable_resources_summary"><b>警告: </b> 资源钩子已被弃用</string>
+    <string name="settings_enable_resources_summary"><b>警告: </b> 资源钩子为实验性</string>
 
     <!-- Support tab -->
 
@@ -180,4 +180,7 @@
     <string name="reboot">重新启动</string>
     <string name="not_logcat_2">如果有人要求您提供一份 Android 系统日志，那么您来错了地方。在此处显示的是 LSPosed 的日志信息；如果您想抓取系统日志，可前往 XDA 寻求所需的答案。</string>
     <string name="verbose_log_not_avaliable">详细日志不可用，如果您只是启用了它而没有重新启动，请在重新启动后再试一次。</string>
+    <string name="module_uninstall_message">要卸载此模块吗？</string>
+    <string name="module_uninstalled">已卸载%1$s</string>
+    <string name="module_uninstall_failed">卸载失败</string>
 </resources>
