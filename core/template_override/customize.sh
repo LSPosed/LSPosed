@@ -217,10 +217,6 @@ if [[ ! -e /data/adb/lspd/config/verbose_log ]]; then
 fi
 
 
-mkdir -p /data/misc/$MISC_PATH/cache
-rm /data/misc/$MISC_PATH/cache/*
-set_perm /data/misc/$MISC_PATH/cache 0 0 0777 "u:object_r:magisk_file:s0" || abortC "! ${LANG_CUST_ERR_PERM}"
-
 mv "${MODPATH}/system/lib/libriru_lspd.so" "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
 if [[ "${IS64BIT}" == true ]]; then
     mv "${MODPATH}/system/lib64/libriru_lspd.so" "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
