@@ -5,8 +5,6 @@ interface ILSPApplicationService {
 
     IBinder requestManagerBinder() = 3;
 
-    int getVariant() = 4;
-
     boolean isResourcesHookEnabled() = 5;
 
     String[] getModulesList(String processName) = 6;

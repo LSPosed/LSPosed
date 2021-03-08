@@ -118,16 +118,6 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     }
 
     @Override
-    public int getVariant() {
-        return ConfigManager.getInstance().variant();
-    }
-
-    @Override
-    public void setVariant(int variant) {
-        ConfigManager.getInstance().setVariant(variant);
-    }
-
-    @Override
     public boolean isPermissive() {
         return ConfigManager.getInstance().isPermissive();
     }

@@ -22,9 +22,6 @@ package io.github.lsposed.lspd.deopt;
 
 import java.util.HashMap;
 
-import io.github.lsposed.lspd.annotation.ApiSensitive;
-import io.github.lsposed.lspd.annotation.Level;
-
 /**
  * Providing a whitelist of methods which are the callers of the target methods we want to hook.
  * Because the target methods are inlined into the callers, we deoptimize the callers to
@@ -33,7 +30,6 @@ import io.github.lsposed.lspd.annotation.Level;
  * Only for methods which are included in pre-compiled framework codes.
  * TODO recompile system apps and priv-apps since their original dex files are available
  */
-@ApiSensitive(Level.MIDDLE)
 public class InlinedMethodCallers {
 
     public static final String KEY_BOOT_IMAGE = "boot_image";

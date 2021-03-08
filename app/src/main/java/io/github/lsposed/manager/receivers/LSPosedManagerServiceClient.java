@@ -115,16 +115,6 @@ public class LSPosedManagerServiceClient {
         service.setVerboseLog(enabled);
     }
 
-    public static int getVariant() throws RemoteException, NullPointerException {
-        ensureService();
-        return service.getVariant();
-    }
-
-    public static void setVariant(int variant) throws RemoteException, NullPointerException {
-        ensureService();
-        service.setVariant(variant);
-    }
-
     public static boolean isPermissive() throws RemoteException, NullPointerException {
         ensureService();
         return service.isPermissive();

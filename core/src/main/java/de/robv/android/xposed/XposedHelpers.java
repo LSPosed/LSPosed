@@ -23,12 +23,9 @@ package de.robv.android.xposed;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
@@ -41,15 +38,11 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.zip.ZipFile;
 
-import dalvik.system.DexFile;
 import external.org.apache.commons.lang3.ClassUtils;
 import external.org.apache.commons.lang3.reflect.MemberUtils;
 

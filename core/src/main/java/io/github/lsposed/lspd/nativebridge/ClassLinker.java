@@ -20,15 +20,16 @@
 
 package io.github.lsposed.lspd.nativebridge;
 
+import java.lang.reflect.Executable;
 import java.lang.reflect.Member;
 
 import de.robv.android.xposed.PendingHooks;
 
 public class ClassLinker {
 
-    public static native void setEntryPointsToInterpreter(Member method);
+    public static native void setEntryPointsToInterpreter(Executable method);
 
-    public static void onPostFixupStaticTrampolines(Class clazz) {
+    public static void onPostFixupStaticTrampolines(Class<?> clazz) {
         // native flags will be re-set in hooking logic
         PendingHooks.hookPendingMethod(clazz);
     }

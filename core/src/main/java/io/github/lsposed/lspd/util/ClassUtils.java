@@ -27,12 +27,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 import de.robv.android.xposed.XposedHelpers;
-import io.github.lsposed.lspd.annotation.ApiSensitive;
-import io.github.lsposed.lspd.annotation.Level;
 
 public class ClassUtils {
-
-    @ApiSensitive(Level.MIDDLE)
     public static int getClassStatus(Class clazz, boolean isUnsigned) {
         if (clazz == null) {
             return 0;
@@ -52,7 +48,6 @@ public class ClassUtils {
      * 11.0+:   kInitialized = 14 uint8_t
      *          kVisiblyInitialized = 15 uint8_t
      */
-    @ApiSensitive(Level.MIDDLE)
     public static boolean isInitialized(Class clazz) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             return getClassStatus(clazz, true) >= 14;

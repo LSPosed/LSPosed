@@ -20,21 +20,22 @@
 
 package io.github.lsposed.lspd.nativebridge;
 
+import java.lang.reflect.Executable;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 
 public class Yahfa {
 
-    public static native boolean backupAndHookNative(Object target, Method hook, Method backup);
+    public static native boolean backupAndHookNative(Executable target, Method hook, Method backup);
 
     // JNI.ToReflectedMethod() could return either Method or Constructor
-    public static native Member findMethodNative(Class targetClass, String methodName, String methodSig);
+    public static native Executable findMethodNative(Class<?> targetClass, String methodName, String methodSig);
 
     public static native void init(int sdkVersion);
 
-    public static native void recordHooked(Member member);
+    public static native void recordHooked(Executable member);
 
-    public static native boolean isHooked(Member member);
+    public static native boolean isHooked(Executable member);
 
     public static native Class<?> buildHooker(ClassLoader appClassLoader, Class<?> returnType, Class<?>[] params, String methodName);
 }

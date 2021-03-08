@@ -66,7 +66,6 @@ val verName: String by rootProject.extra
 dependencies {
     implementation("dev.rikka.ndk:riru:10")
     implementation("com.android.tools.build:apksig:4.1.2")
-    implementation(project(":sandhook-hooklib"))
     compileOnly(project(":hiddenapi-stubs"))
     compileOnly("androidx.annotation:annotation:1.1.0")
     implementation(project(":interface"))

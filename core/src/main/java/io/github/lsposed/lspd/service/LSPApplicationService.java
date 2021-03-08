@@ -57,12 +57,6 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
     }
 
     @Override
-    public int getVariant() throws RemoteException {
-        ensureRegistered();
-        return ConfigManager.getInstance().variant();
-    }
-
-    @Override
     public boolean isResourcesHookEnabled() throws RemoteException {
         ensureRegistered();
         return ConfigManager.getInstance().resourceHook();
