@@ -23,7 +23,7 @@
 
     <!-- MainActivity -->
     <string name="info">Info</string>
-    <string name="Activated">Activé %s</string>
+    <string name="Activated">%s activé</string>
     <string name="Install">Installer</string>
     <string name="InstallDetail">Appuyez pour installer LSPosed</string>
     <string name="Modules">Modules</string>
@@ -36,7 +36,7 @@
     <string name="About">A propos</string>
     <string name="module_repo">Dépôt</string>
     <string name="module_repo_summary">Dépôts de modules (Alpha)</string>
-    <string name="about_view_source_code"><![CDATA[Voir le code source à %s<br/>Rejoindre notre canal %s]]></string>
+    <string name="about_view_source_code"><![CDATA[Voir le code source sur %s<br/>Rejoindre notre canal %s]]></string>
 
     <string name="not_installed">Non installé</string>
     <string name="selinux_permissive">&lt;b&gt;AVERTISSEMENT:&lt;\/b&gt; SELinux n\est pas renforcé! Le programme malveillant qui attaque peut contrôler complètement votre appareil et peut causer des dommages matériels et engager votre responsabilité légale.</string>
@@ -60,7 +60,7 @@
     <string name="logs_cannot_read">Lecture du journal impossible: \n</string>
     <string name="menuReload">Recharger</string>
     <string name="logs_clear_failed_2">Échec d\’effacement du journal</string>
-    <string name="not_logcat_2">Si on vous a demandé un Logcat Android, alors vous êtes dans la mauvaise section. Ici c\’est le journal LSPosed; si vous avez besoin d\’un logcat, sur XDA vous pouvez trouver ce dont vous avez besoin.</string>
+    <string name="not_logcat_2">Si l\'on vous a demandé un Logcat Android, alors vous êtes dans la mauvaise section. Ici c\’est le journal LSPosed; si vous avez besoin d\’un logcat, sur XDA vous pouvez trouver ce dont vous avez besoin.</string>
 
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Le module LSPosed n\’est pas encore actif</string>
