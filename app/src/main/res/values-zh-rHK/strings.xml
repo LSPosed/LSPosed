@@ -105,7 +105,7 @@
     <string name="sort_by_update_time_reverse">更新時間（降冪）</string>
     <string name="settings_group_theme">主題</string>
     <string name="settings_enable_resources">啟用資源鉤子</string>
-    <string name="settings_enable_resources_summary"><b>警告: </b> 資源鉤子已被棄用</string>
+    <string name="settings_enable_resources_summary"><b>警告: </b> 資源鈎子為實驗性的特性</string>
     <string name="settings_variant">變體</string>
     <string name="menu_show_system_apps">系統應用</string>
     <string name="menu_sort">排序…</string>

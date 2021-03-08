@@ -65,7 +65,7 @@
     <!-- Settings tab -->
     <string name="settings_group_framework">框架</string>
     <string name="settings_enable_resources">启用资源钩子</string>
-    <string name="settings_enable_resources_summary"><b>警告: </b> 资源钩子为实验性</string>
+    <string name="settings_enable_resources_summary"><b>警告: </b> 资源钩子为实验性的特性</string>
 
     <!-- Support tab -->
 

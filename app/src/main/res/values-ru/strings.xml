@@ -62,7 +62,7 @@
     <!-- Settings tab -->
     <string name="settings_group_framework">Структура</string>
     <string name="settings_enable_resources">Включить хуки ресурсов</string>
-    <string name="settings_enable_resources_summary">ВНИМАНИЕ: хуки ресурсов устарели</string>
+    <string name="settings_enable_resources_summary">ВНИМАНИЕ: хуки ресурсов Экспериментальный</string>
 
     <!-- Support tab -->
 
