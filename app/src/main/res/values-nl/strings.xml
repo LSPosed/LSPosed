@@ -25,10 +25,6 @@ resources>
     <string name="InstallDetail">Tik om LSPosed te installeren</string>
     <string name="Modules">Modules</string>
     <string name="ModulesDetail">%d modules ingeschakeld</string>
-    <plurals name="modules_enabled_count">
-        <item quantity="one">%d module ingeschakeld</item>
-        <item quantity="other">%d modules ingeschakeld</item>
-    </plurals>
     <string name="Logs">Logboeken</string>
     <string name="Settings">Instellingen</string>
     <string name="About">Over</string>
