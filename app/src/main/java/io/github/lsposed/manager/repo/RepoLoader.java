@@ -21,7 +21,6 @@
 package io.github.lsposed.manager.repo;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -80,7 +79,9 @@ public class RepoLoader {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 Log.e(App.TAG, Log.getStackTraceString(e));
-                App.getInstance().runOnUiThread(() -> Toast.makeText(App.getInstance(), e.getMessage(), Toast.LENGTH_LONG).show());
+                for (Listener listener : listeners) {
+                    listener.onThrowable(e);
+                }
                 synchronized (this) {
                     isLoading = false;
                 }
@@ -105,9 +106,11 @@ public class RepoLoader {
                             synchronized (this) {
                                 repoLoaded = true;
                             }
-                        } catch (Throwable e) {
-                            Log.e(App.TAG, Log.getStackTraceString(e));
-                            App.getInstance().runOnUiThread(() -> Toast.makeText(App.getInstance(), e.getMessage(), Toast.LENGTH_LONG).show());
+                        } catch (Throwable t) {
+                            Log.e(App.TAG, Log.getStackTraceString(t));
+                            for (Listener listener : listeners) {
+                                listener.onThrowable(t);
+                            }
                         }
                     }
                 }
@@ -125,7 +128,9 @@ public class RepoLoader {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 Log.e(App.TAG, Log.getStackTraceString(e));
-                App.getInstance().runOnUiThread(() -> Toast.makeText(App.getInstance(), e.getMessage(), Toast.LENGTH_LONG).show());
+                for (Listener listener : listeners) {
+                    listener.onThrowable(e);
+                }
             }
 
             @Override
@@ -142,9 +147,11 @@ public class RepoLoader {
                             for (Listener listener : listeners) {
                                 listener.moduleReleasesLoaded(module);
                             }
-                        } catch (Throwable e) {
-                            Log.e(App.TAG, Log.getStackTraceString(e));
-                            App.getInstance().runOnUiThread(() -> Toast.makeText(App.getInstance(), e.getMessage(), Toast.LENGTH_LONG).show());
+                        } catch (Throwable t) {
+                            Log.e(App.TAG, Log.getStackTraceString(t));
+                            for (Listener listener : listeners) {
+                                listener.onThrowable(t);
+                            }
                         }
                     }
                 }
@@ -173,5 +180,7 @@ public class RepoLoader {
         void repoLoaded();
 
         void moduleReleasesLoaded(OnlineModule module);
+
+        void onThrowable(Throwable t);
     }
 }

@@ -36,6 +36,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
+import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -156,12 +157,23 @@ public class RepoItemActivity extends BaseActivity implements RepoLoader.Listene
         this.module = module;
         if (releaseAdapter != null) {
             runOnUiThread(() -> {
-                if (module.getReleases().size() == 1) {
-                    Snackbar.make(binding.snackbar, R.string.module_release_no_more, Snackbar.LENGTH_SHORT).show();
-                }
                 releaseAdapter.loadItems();
-                releaseAdapter.notifyDataSetChanged();
             });
+            if (module.getReleases().size() == 1) {
+                Snackbar.make(binding.snackbar, R.string.module_release_no_more, Snackbar.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    @Override
+    public void onThrowable(Throwable t) {
+        if (releaseAdapter != null) {
+            runOnUiThread(() -> {
+                releaseAdapter.loadItems();
+            });
+        }
+        if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
+            Snackbar.make(binding.snackbar, getString(R.string.repo_load_failed, t.getLocalizedMessage()), Snackbar.LENGTH_SHORT).show();
         }
     }
 
@@ -282,6 +294,8 @@ public class RepoItemActivity extends BaseActivity implements RepoLoader.Listene
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             if (position == items.size()) {
+                holder.progress.setVisibility(View.GONE);
+                holder.title.setVisibility(View.VISIBLE);
                 holder.itemView.setOnClickListener(v -> {
                     if (holder.progress.getVisibility() == View.GONE) {
                         holder.title.setVisibility(View.GONE);

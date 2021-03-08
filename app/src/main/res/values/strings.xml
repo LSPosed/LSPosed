@@ -160,6 +160,8 @@
     <string name="refresh">Refresh</string>
     <string name="module_release_load_more">Show older versions</string>
     <string name="module_release_no_more">No more release</string>
+    <string name="repo_load_failed">Failed to load module repo: %s</string>
+    <string name="repo_load_more_failed">Failed to load older versions: %s</string>
 
 
     <string name="about_source" translatable="false">https://github.com/LSPosed/LSPosed/</string>
