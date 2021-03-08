@@ -166,4 +166,8 @@
     <string name="module_release_load_more">Toon oudere versies</string>
     <string name="module_release_no_more">Geen release meer</string>
     <string name="theme_color">Thema kleur</string>
+    <string name="dark_theme">Donkere thema</string>
+    <string name="follow_system">Volg het systeem</string>
+    <string name="always_off">Altijd uit</string>
+    <string name="always_on">Altijd aan</string>
 </resources>
