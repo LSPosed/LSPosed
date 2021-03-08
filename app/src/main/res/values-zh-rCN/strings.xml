@@ -183,4 +183,6 @@
     <string name="module_uninstall_message">要卸载此模块吗？</string>
     <string name="module_uninstalled">已卸载%1$s</string>
     <string name="module_uninstall_failed">卸载失败</string>
+    <string name="repo_load_failed">模块仓库加载失败：%s</string>
+    <string name="repo_load_more_failed">更旧的版本加载失败：%s</string>
 </resources>

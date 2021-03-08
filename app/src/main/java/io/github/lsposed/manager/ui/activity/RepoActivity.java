@@ -34,7 +34,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -88,6 +91,13 @@ public class RepoActivity extends ListActivity implements RepoLoader.Listener {
     @Override
     public void moduleReleasesLoaded(OnlineModule module) {
 
+    }
+
+    @Override
+    public void onThrowable(Throwable t) {
+        if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
+            Snackbar.make(binding.snackbar, getString(R.string.repo_load_failed, t.getLocalizedMessage()), Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     @Override
