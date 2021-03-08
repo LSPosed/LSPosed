@@ -122,7 +122,7 @@
 
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
-    <string name="settings_enable_resources">Abilita l'\hook delle risorse</string>
+    <string name="settings_enable_resources">Abilita l\'hook delle risorse</string>
     <string name="settings_enable_resources_summary"><b>ATTENZIONE:</b> l\'hook delle risorse è sperimentale</string>
     <string name="pref_title_disable_verbose_log">Disabilita i log verbosi</string>
     <string name="pure_black_dark_theme">Tema nero puro</string>
@@ -146,7 +146,7 @@
 
     <!-- Module Repo -->
     <string name="module_readme">Leggimi</string>
-    <string name="module_releases">Release</string>
+    <string name="module_releases">Versioni</string>
     <string name="module_information">Info</string>
     <string name="module_information_homepage">Homepage</string>
     <string name="module_information_source_url">Codice sorgente</string>
@@ -155,7 +155,7 @@
     <string name="menu_open_in_browser">Apri nel browser</string>
     <string name="refresh">Ricarica</string>
     <string name="module_release_load_more">Mostra le versioni precedenti</string>
-    <string name="module_release_no_more">Non ci sono altre release</string>
+    <string name="module_release_no_more">Non ci sono altre versioni</string>
     <string name="repo_load_failed">Impossibile caricare la repo: %s</string>
     <string name="repo_load_more_failed">Impossibile caricare le versioni precedenti: %s</string>
 
