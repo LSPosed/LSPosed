@@ -163,37 +163,6 @@ public class ConfigManager {
         }
     }
 
-    public static int getVariant() {
-        try {
-            return LSPosedManagerServiceClient.getVariant();
-        } catch (RemoteException | NullPointerException e) {
-            Log.e(App.TAG, Log.getStackTraceString(e));
-            return 1;
-        }
-    }
-
-    public static String getVariantString() {
-        int variant = getVariant();
-        switch (variant) {
-            case 1:
-                return "YAHFA";
-            case 2:
-                return "SandHook";
-            default:
-                return "Unknown";
-        }
-    }
-
-    public static boolean setVariant(int variant) {
-        try {
-            LSPosedManagerServiceClient.setVariant(variant);
-            return true;
-        } catch (RemoteException | NullPointerException e) {
-            Log.e(App.TAG, Log.getStackTraceString(e));
-            return false;
-        }
-    }
-
     public static boolean isPermissive() {
         try {
             return LSPosedManagerServiceClient.isPermissive();

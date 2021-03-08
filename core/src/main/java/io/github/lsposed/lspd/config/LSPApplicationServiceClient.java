@@ -79,15 +79,6 @@ public class LSPApplicationServiceClient implements ILSPApplicationService {
     }
 
     @Override
-    public int getVariant() {
-        try {
-            return service.getVariant();
-        } catch (RemoteException | NullPointerException ignored) {
-        }
-        return -1;
-    }
-
-    @Override
     public boolean isResourcesHookEnabled() {
         try {
             return service.isResourcesHookEnabled();
