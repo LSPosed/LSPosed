@@ -54,7 +54,7 @@ android {
         targetSdkVersion(androidTargetSdkVersion)
         versionCode(verCode)
         versionName(verName)
-        resConfigs("en", "zh-rCN", "zh-rTW", "zh-rHK", "ru", "uk", "nl", "ko", "fr", "de")
+        resConfigs("en", "zh-rCN", "zh-rTW", "zh-rHK", "ru", "uk", "nl", "ko", "fr", "de", "it")
         resValue("string", "versionName", verName)
     }
 
