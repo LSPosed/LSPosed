@@ -41,8 +41,6 @@
     <string name="not_installed">Non installé</string>
     <string name="selinux_permissive">&lt;b&gt;AVERTISSEMENT:&lt;\/b&gt; SELinux n\est pas renforcé! Le programme malveillant qui attaque peut contrôler complètement votre appareil et peut causer des dommages matériels et engager votre responsabilité légale.</string>
     <string name="selinux_permissive_summary">SELinux n\'est pas renforcé!</string>
-    <string name="android_sdk" translatable="false">Android %2$s (%1$s, API %3$d)</string>
-    <string name="android_sdk_preview" translatable="false">Android %1$s Preview</string>
 
     <!-- LogsActivity -->
     <string name="menuSend">Envoyer</string>
@@ -129,7 +127,6 @@
     <string name="pure_black_dark_theme">Thème noir et sombre</string>
     <string name="pure_black_dark_theme_summary">Utiliser le thème noir pûre si le thème noir est activé</string>
     <string name="settings_group_theme">Thème</string>
-    <string name="settings_variant">Variant</string>
     <string name="settings_backup_and_restore">Sauvegarder et restaurer</string>
     <string name="settings_backup_and_restore_summery">Sauvegarder ou restaurer la liste d\’applications et leurs listes de champs.</string>
     <string name="settings_backup">Sauvegarde</string>

@@ -28,7 +28,6 @@
     <string name="Settings">Налаштування</string>
     <string name="about_source">https://github.com/LSPosed/LSPosed/</string>
     <string name="android_framework">System Framework</string>
-    <string name="android_sdk">Android %2$s (%1$s, API %3$d)</string>
     <string name="app_destroyed">Ця програма припинила роботу, будь ласка, переконайтесь, що завантажили її з офіційного джерела.</string>
     <string name="app_launch">Запустити</string>
     <string name="compile_failed">Помилка оптимізації або повернене значення порожнє</string>
@@ -94,7 +93,6 @@
     <string name="settings_restore_failed">Не вдалося відновити</string>
     <string name="settings_restore_success">Відновлення закінчено!</string>
     <string name="settings_restoring">Відновлення…</string>
-    <string name="settings_variant">Варіант</string>
     <string name="sort_by_install_time">Сортувати за часом встановлення</string>
     <string name="sort_by_install_time_reverse">Сортувати за часом встановлення (зворотній)</string>
     <string name="sort_by_name">Сортувати за назвою програми</string>
@@ -109,7 +107,7 @@
     <string name="warning_min_version_too_low">Цей модуль був створений для версії LSP %1$d, але через несумісні зміни у версії %2$d його було вимкнено</string>
     <string name="warning_xposed_min_version">Цей модуль вимагає новішої версії LSP (%d), тому його неможливо активувати</string>
     <string name="xposed_module_updated_notification_title">Модуль LSPosed оновлено</string>
-  <string name="module_repo">Репозиторій</string>
+    <string name="module_repo">Репозиторій</string>
     <string name="module_repo_summary">Репозиторій модулів</string>
     <string name="module_readme">Readme</string>
     <string name="module_releases">Релізи</string>
