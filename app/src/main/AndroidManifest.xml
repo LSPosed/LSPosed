@@ -78,7 +78,7 @@
         </activity>
 
         <receiver
-            android:name=".receivers.EdServiceReceiver"
+            android:name=".receivers.ServiceReceiver"
             android:exported="true"
             android:permission="android.permission.INTERACT_ACROSS_USERS_FULL">
             <intent-filter>
