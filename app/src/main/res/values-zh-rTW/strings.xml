@@ -19,7 +19,7 @@
   -->
 
 <resources>
-    
+
 
     <!-- MainActivity -->
     <string name="info">資訊</string>
@@ -41,8 +41,7 @@
     <string name="not_installed">未安裝</string>
     <string name="selinux_permissive">&lt;b&gt;警告：&lt;\/b&gt;SELinux 未處於嚴格模式！對此進行攻擊的惡意程式可以完全控制你的裝置，並可能造成你的財產損失和法律責任。</string>
     <string name="selinux_permissive_summary">SELinux 未處於嚴格模式！</string>
-    
-    
+
 
     <!-- LogsActivity -->
     <string name="menuSend">傳送</string>
@@ -129,7 +128,6 @@
     <string name="pure_black_dark_theme">使用純黑深色主題</string>
     <string name="pure_black_dark_theme_summary">當深色主題啟用時使用純黑色主題</string>
     <string name="settings_group_theme">主題</string>
-    <string name="settings_variant">變體</string>
     <string name="settings_backup_and_restore">備份與還原</string>
     <string name="settings_backup_and_restore_summery">備份或還原模組列表和範圍清單。</string>
     <string name="settings_backup">備份</string>
@@ -157,8 +155,6 @@
     <string name="refresh">更新</string>
     <string name="module_release_load_more">顯示更早期的版本</string>
     <string name="module_release_no_more">沒有更早期的版本</string>
-
-
 
 
     <string name="app_destroyed">此應用程式已損毀，請確保您從官方來源下載該應用程式。</string>

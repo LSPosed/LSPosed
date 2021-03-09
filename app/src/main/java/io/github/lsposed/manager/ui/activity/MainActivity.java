@@ -41,8 +41,8 @@ import io.github.lsposed.manager.R;
 import io.github.lsposed.manager.databinding.ActivityMainBinding;
 import io.github.lsposed.manager.databinding.DialogAboutBinding;
 import io.github.lsposed.manager.ui.activity.base.BaseActivity;
-import io.github.lsposed.manager.ui.dialog.StatusDialogBuilder;
 import io.github.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
+import io.github.lsposed.manager.ui.dialog.StatusDialogBuilder;
 import io.github.lsposed.manager.util.GlideHelper;
 import io.github.lsposed.manager.util.ModuleUtil;
 import io.github.lsposed.manager.util.NavUtil;
@@ -64,7 +64,6 @@ public class MainActivity extends BaseActivity {
             if (ConfigManager.getXposedApiVersion() != -1) {
                 new StatusDialogBuilder(this)
                         .setTitle(R.string.info)
-                        .setPositiveButton(android.R.string.ok, null)
                         .show();
             } else {
                 NavUtil.startURL(this, getString(R.string.about_source));

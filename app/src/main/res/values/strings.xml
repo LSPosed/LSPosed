@@ -41,8 +41,12 @@
     <string name="not_installed">Not installed</string>
     <string name="selinux_permissive">&lt;b&gt;WARNING:&lt;\/b&gt; SELinux is not enforcing! the malicious program that attacks this can completely control your device and may cause your property damage and legal liability.</string>
     <string name="selinux_permissive_summary">SELinux is not enforcing!</string>
-    <string name="android_sdk" translatable="false">Android %2$s (%1$s, API %3$d)</string>
-    <string name="android_sdk_preview" translatable="false">Android %1$s Preview</string>
+    <string name="info_api_version">API version</string>
+    <string name="info_framework_version">Framework version</string>
+    <string name="info_manager_version">Manager version</string>
+    <string name="info_system_version">System version</string>
+    <string name="info_device">Device</string>
+    <string name="info_system_abi">System ABI</string>
 
     <!-- LogsActivity -->
     <string name="menuSend">Send</string>
@@ -132,7 +136,6 @@
     <string name="pure_black_dark_theme">Black dark theme</string>
     <string name="pure_black_dark_theme_summary">Use the pure black theme if dark theme is enabled</string>
     <string name="settings_group_theme">Theme</string>
-    <string name="settings_variant">Variant</string>
     <string name="settings_backup_and_restore">Backup and restore</string>
     <string name="settings_backup_and_restore_summery">Backup or restore module list and scope lists.</string>
     <string name="settings_backup">Backup</string>
@@ -161,7 +164,6 @@
     <string name="module_release_load_more">Show older versions</string>
     <string name="module_release_no_more">No more release</string>
     <string name="repo_load_failed">Failed to load module repo: %s</string>
-    <string name="repo_load_more_failed">Failed to load older versions: %s</string>
 
 
     <string name="about_source" translatable="false">https://github.com/LSPosed/LSPosed/</string>

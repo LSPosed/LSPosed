@@ -19,7 +19,6 @@
 
 package io.github.lsposed.manager.ui.dialog;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.view.LayoutInflater;
@@ -28,118 +27,50 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.core.text.HtmlCompat;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.Locale;
 
 import io.github.lsposed.manager.BuildConfig;
 import io.github.lsposed.manager.ConfigManager;
 import io.github.lsposed.manager.R;
-import io.github.lsposed.manager.databinding.StatusInstallerBinding;
+import io.github.lsposed.manager.databinding.DialogInfoBinding;
+import rikka.core.util.ClipboardUtils;
 
-@SuppressLint("StaticFieldLeak")
 public class StatusDialogBuilder extends BlurBehindDialogBuilder {
-    private static final String CPU_ABI;
-    private static final String CPU_ABI2;
-
-    static {
-        String[] abiList = Build.SUPPORTED_64_BIT_ABIS;
-        if (abiList.length == 0) {
-            abiList = Build.SUPPORTED_32_BIT_ABIS;
-        }
-        CPU_ABI = abiList[0];
-        if (abiList.length > 1) {
-            CPU_ABI2 = abiList[1];
-        } else {
-            CPU_ABI2 = "";
-        }
-    }
 
     public StatusDialogBuilder(@NonNull Context context) {
         super(context);
-        StatusInstallerBinding binding = StatusInstallerBinding.inflate(LayoutInflater.from(context), null, false);
+        DialogInfoBinding binding = DialogInfoBinding.inflate(LayoutInflater.from(context), null, false);
 
-        String installXposedVersion = ConfigManager.getXposedVersionName();
-        String mAppVer = String.format("%s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE);
-        binding.manager.setText(mAppVer);
-
-        if (installXposedVersion != null) {
-            binding.api.setText(String.format(Locale.US, "%s.0", ConfigManager.getXposedApiVersion()));
-            binding.framework.setText(String.format(Locale.US, "%s (%s)", installXposedVersion, ConfigManager.getXposedVersionCode()));
-        }
+        binding.apiVersion.setText(String.valueOf(ConfigManager.getXposedApiVersion()));
+        binding.frameworkVersion.setText(String.format(Locale.US, "%s (%s)", ConfigManager.getXposedVersionName(), ConfigManager.getXposedVersionCode()));
+        binding.managerVersion.setText(String.format(Locale.US, "%s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
 
         if (Build.VERSION.PREVIEW_SDK_INT != 0) {
-            binding.androidVersion.setText(context.getString(R.string.android_sdk_preview, Build.VERSION.CODENAME));
+            binding.systemVersion.setText(String.format(Locale.US, "%1$s Preview (API %2$d)", Build.VERSION.CODENAME, Build.VERSION.SDK_INT));
         } else {
-            binding.androidVersion.setText(context.getString(R.string.android_sdk, getAndroidVersion(), Build.VERSION.RELEASE, Build.VERSION.SDK_INT));
+            binding.systemVersion.setText(String.format(Locale.US, "%1$s (API %2$d)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT));
         }
 
-        binding.manufacturer.setText(getUIFramework());
-        binding.cpu.setText(getCompleteArch());
+        binding.device.setText(getUIFramework());
+        binding.systemAbi.setText(Build.SUPPORTED_ABIS[0]);
 
         if (ConfigManager.isPermissive()) {
             binding.selinux.setVisibility(View.VISIBLE);
             binding.selinux.setText(HtmlCompat.fromHtml(context.getString(R.string.selinux_permissive), HtmlCompat.FROM_HTML_MODE_LEGACY));
         }
+
         setView(binding.getRoot());
-    }
 
-    private static String getCompleteArch() {
-        String info = "";
-
-        try {
-            FileReader fr = new FileReader("/proc/cpuinfo");
-            BufferedReader br = new BufferedReader(fr);
-            String text;
-            while ((text = br.readLine()) != null) {
-                if (!text.startsWith("processor")) break;
-            }
-            br.close();
-            String[] array = text != null ? text.split(":\\s+", 2) : new String[0];
-            if (array.length >= 2) {
-                info += array[1] + " ";
-            }
-        } catch (IOException ignored) {
-        }
-
-        info += Build.SUPPORTED_ABIS[0];
-        return info + " (" + getArch() + ")";
-    }
-
-    public static String getArch() {
-        if (CPU_ABI.equals("arm64-v8a")) {
-            return "arm64";
-        } else if (CPU_ABI.equals("x86_64")) {
-            return "x86_64";
-        } else if (CPU_ABI.equals("mips64")) {
-            return "mips64";
-        } else if (CPU_ABI.startsWith("x86") || CPU_ABI2.startsWith("x86")) {
-            return "x86";
-        } else if (CPU_ABI.startsWith("mips")) {
-            return "mips";
-        } else if (CPU_ABI.startsWith("armeabi-v5") || CPU_ABI.startsWith("armeabi-v6")) {
-            return "armv5";
-        } else {
-            return "arm";
-        }
-    }
-
-    private String getAndroidVersion() {
-        switch (Build.VERSION.SDK_INT) {
-            case 27:
-                return "Oreo";
-            case 28:
-                return "Pie";
-            case 29:
-                return "Q";
-            case 30:
-                return "R";
-            case 31:
-                return "S";
-        }
-        return "Unknown";
+        setPositiveButton(android.R.string.ok, null);
+        setNeutralButton(android.R.string.copy, (dialog, which) -> ClipboardUtils.put(context,
+                String.format(Locale.US, "%s\n%s\n\n%s\n%s\n\n%s\n%s\n\n%s\n%s\n\n%s\n%s\n\n%s\n%s",
+                        context.getString(R.string.info_api_version), binding.apiVersion.getText(),
+                        context.getString(R.string.info_framework_version), binding.frameworkVersion.getText(),
+                        context.getString(R.string.info_manager_version), binding.managerVersion.getText(),
+                        context.getString(R.string.info_system_version), binding.systemVersion.getText(),
+                        context.getString(R.string.info_device), binding.device.getText(),
+                        context.getString(R.string.info_system_abi), binding.systemAbi.getText())));
     }
 
     private String getUIFramework() {
