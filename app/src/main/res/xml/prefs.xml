@@ -37,6 +37,7 @@
             android:dialogTitle="@string/theme_color"
             android:key="theme_color"
             android:title="@string/theme_color"
+            android:summary="@string/theme_color_summary"
             android:icon="@drawable/ic_outline_palette_24" />
         <rikka.preference.SimpleMenuPreference
             android:defaultValue="MODE_NIGHT_FOLLOW_SYSTEM"
@@ -75,7 +76,7 @@
         android:key="group_backup"
         android:title="@string/settings_backup_and_restore"
         android:summary="@string/settings_backup_and_restore_summery"
-        android:icon="@drawable/ic_baseline_settings_backup_restore_24" >
+        android:icon="@drawable/ic_baseline_settings_backup_restore_24">
         <Preference
             android:key="backup"
             android:title="@string/settings_backup" />

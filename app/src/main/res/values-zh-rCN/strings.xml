@@ -186,4 +186,5 @@
     <string name="info_system_version">系统版本</string>
     <string name="info_device">设备</string>
     <string name="info_system_abi">系统架构</string>
+    <string name="theme_color_summary">应用中最常见的颜色</string>
 </resources>
