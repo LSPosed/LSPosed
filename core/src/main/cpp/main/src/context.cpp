@@ -175,21 +175,7 @@ namespace lspd {
         LoadDex(env);
         Service::instance()->HookBridge(*this, env);
         auto binder = Service::instance()->RequestBinderForSystemServer(env);
-        if (binder) {
-            if (void *buf = mmap(nullptr, 1, PROT_READ | PROT_WRITE | PROT_EXEC,
-                                 MAP_ANONYMOUS | MAP_PRIVATE, -1,
-                                 0);
-                    buf == MAP_FAILED) {
-                 skip_ = true;
-                LOGE("skip injecting into android because sepolicy was not loaded properly");
-            } else {
-                munmap(buf, 1);
-            }
-        } else {
-            skip_ = true;
-            LOGD("skip injecting into android because no module is hooking it");
-        }
-        if (!skip_) {
+        if (binder && !skip_) {
             InstallInlineHooks();
             Init(env);
             FindAndCall(env, "forkSystemServerPost", "(Landroid/os/IBinder;)V", binder);

@@ -55,7 +55,6 @@ public class HookMain {
         if(!Yahfa.backupAndHookNative(target, hook, backup)){
             throw new RuntimeException("Failed to hook " + target + " with " + hook);
         } else {
-            Logger.e(target.toString());
             Yahfa.recordHooked(target);
         }
     }
