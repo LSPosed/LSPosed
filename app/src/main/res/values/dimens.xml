@@ -21,4 +21,5 @@
 <resources>
     <dimen name="app_icon_size">48dp</dimen>
     <dimen name="tab_layout_height">48dp</dimen>
+    <dimen name="colorpickerpreference_widget_size">32dp</dimen>
 </resources>

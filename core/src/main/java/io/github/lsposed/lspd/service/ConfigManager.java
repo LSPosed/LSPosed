@@ -28,6 +28,8 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
+import android.os.SELinux;
+import android.os.SharedMemory;
 import android.os.SystemClock;
 import android.system.ErrnoException;
 import android.system.Os;
@@ -56,6 +58,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 import io.github.lsposed.lspd.Application;
 import io.github.lsposed.lspd.BuildConfig;
@@ -96,11 +99,15 @@ public class ConfigManager {
 
     private final Handler cacheHandler;
 
-    long lastModuleCacheTime = 0;
-    long requestModuleCacheTime = 0;
+    private final ConcurrentHashMap<String, SharedMemory> moduleDexes = new ConcurrentHashMap<>();
 
-    long lastScopeCacheTime = 0;
-    long requestScopeCacheTime = 0;
+    private long lastModuleCacheTime = 0;
+    private long requestModuleCacheTime = 0;
+
+    private long lastScopeCacheTime = 0;
+    private long requestScopeCacheTime = 0;
+
+    private boolean sepolicyLoaded = true;
 
     static class ProcessScope {
         String processName;
@@ -157,8 +164,26 @@ public class ConfigManager {
         }
     }
 
+    private static boolean checkSepolicy() {
+        return SELinux.checkSELinuxAccess("u:r:system_server:s0", "u:r:system_server:s0", "process", "execmem");
+    }
+
     // for system server, cache is not yet ready, we need to query database for it
     public boolean shouldSkipSystemServer() {
+        if (!checkSepolicy()) {
+            Log.d(TAG, "sepolicy is not loaded, trying livepatch");
+            try {
+                Process p = Runtime.getRuntime().exec(new String[]{"supolicy", "--live",
+                        "allow system_server system_server process execmem"});
+                p.waitFor(5, TimeUnit.SECONDS);
+            } catch (Throwable ignored) {
+            }
+        }
+        if (!checkSepolicy()) {
+            sepolicyLoaded = false;
+            Log.e(TAG, "skip injecting into android because sepolicy was not loaded properly");
+            return true; // skip
+        }
         try (Cursor cursor = db.query("scope INNER JOIN modules ON scope.mid = modules.mid", new String[]{"modules.mid"}, "app_pkg_name=? AND enabled=1", new String[]{"android"}, null, null, null)) {
             return cursor == null || !cursor.moveToNext();
         }
@@ -721,5 +746,9 @@ public class ConfigManager {
 
     public String getManagerPackageName() {
         return manager;
+    }
+
+    public boolean isSepolicyLoaded() {
+        return sepolicyLoaded;
     }
 }

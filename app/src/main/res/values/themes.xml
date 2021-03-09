@@ -43,7 +43,12 @@
         <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+
+        <!-- MIUI -->
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+
+        <!-- Preference title -->
+        <item name="android:textAppearanceListItem">?textAppearanceSubtitle1</item>
     </style>
 
     <style name="Theme.Light" parent="Base.AppTheme.Light" />
@@ -70,7 +75,12 @@
         <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+
+        <!-- MIUI -->
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+
+        <!-- Preference title -->
+        <item name="android:textAppearanceListItem">?textAppearanceSubtitle1</item>
     </style>
 
     <style name="Theme" parent="Base.AppTheme" />
@@ -112,6 +122,18 @@
         <item name="android:paddingLeft">12dp</item>
         <item name="android:paddingRight">12dp</item>
         <item name="android:minWidth">48dp</item>
+    </style>
+
+    <style name="DeviceInfoDialogLabel">
+        <item name="android:textAlignment">viewStart</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body1</item>
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+    </style>
+
+    <style name="DeviceInfoDialogValue">
+        <item name="android:textAlignment">viewStart</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body2</item>
+        <item name="android:paddingBottom">24dp</item>
     </style>
 
 </resources>

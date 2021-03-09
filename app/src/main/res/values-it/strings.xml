@@ -1,0 +1,169 @@
+<!--
+  ~ This file is part of LSPosed.
+  ~
+  ~ LSPosed is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ LSPosed is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+  ~
+  ~ Copyright (C) 2020 EdXposed Contributors
+  ~ Copyright (C) 2021 LSPosed Contributors
+  -->
+
+<resources>
+    <!-- MainActivity -->
+    <string name="info">Info</string>
+    <string name="Activated">%s attivo</string>
+    <string name="Install">Installa</string>
+    <string name="InstallDetail">Premi per installare LSPosed</string>
+    <string name="Modules">Moduli</string>
+    <plurals name="modules_enabled_count">
+        <item quantity="one">%d modulo abilitato</item>
+        <item quantity="other">%d moduli abilitati</item>
+    </plurals>
+    <string name="Logs">Log</string>
+    <string name="Settings">Impostazioni</string>
+    <string name="About">Informazioni</string>
+    <string name="module_repo">Repository</string>
+    <string name="module_repo_summary">Repository moduli (Alpha)</string>
+    <string name="about_view_source_code"><![CDATA[Visualizza il codice sorgente su %s<br/>Unisciti al nostro canale %s]]></string>
+
+    <string name="not_installed">Non installato</string>
+    <string name="selinux_permissive">&lt;b&gt;ATTENZIONE:&lt;\/b&gt; SELinux non è in modalità enforcing! un programma dannoso che lo attacca può controllare completamente il tuo dispositivo e può causare danni alla tua proprietà e responsabilità legale.</string>
+    <string name="selinux_permissive_summary">SELinux non è in modalità enforcing!</string>
+
+    <!-- LogsActivity -->
+    <string name="menuSend">Invia</string>
+    <string name="menuSaveToSd">Salva</string>
+    <string name="nav_item_logs">Log Verbosi</string>
+    <string name="nav_item_logs_err">Log Moduli</string>
+    <string name="dont_show_again">Non mostrare di nuovo</string>
+    <string name="logs_save_failed">Impossibile salvare:</string>
+    <string name="menuClearLog">Cancella il log ora</string>
+    <string name="logs_cleared">Log correttamente pulito.</string>
+    <string name="log_is_empty">Il log è vuoto.</string>
+    <string name="scroll_top">Scorri in alto</string>
+    <string name="loading">Caricamento in corso…</string>
+    <string name="scroll_bottom">Scorri in basso</string>
+    <string name="logs_cannot_read">Impossibile leggere il log: \n</string>
+    <string name="menuReload">Ricarica</string>
+    <string name="logs_clear_failed_2">Impossibile cancellare il log</string>
+    <string name="not_logcat_2">Se qualcuno ti ha chiesto un Logcat Android, sei nella sezione sbagliata. Questo è il log di LSPosed; se hai bisogno di un logcat, su XDA puoi trovare quello che ti serve.</string>
+
+    <!-- Notification -->
+    <string name="module_is_not_activated_yet">Il modulo LSPosed non è ancora attivo</string>
+    <string name="module_is_not_activated_yet_detailed">%s è stato installato, ma non è stato ancora attivato</string>
+    <string name="xposed_module_updated_notification_content">%s è stato aggiornato</string>
+
+    <!-- ModulesActivity -->
+    <string name="module_empty_description">(nessuna descrizione fornita)</string>
+    <string name="module_no_ui">Questo modulo non fornisce un\'interfaccia utente</string>
+    <string name="xposed_module_updated_notification_title">Modulo LSPosed aggiornato</string>
+    <string name="warning_xposed_min_version">Questo modulo richiede una versione più recente di LSPosed (%d) e quindi non può essere attivato</string>
+    <string name="no_min_version_specified">Questo modulo non specifica la versione LSPosed di cui ha bisogno.</string>
+    <string name="warning_min_version_too_low">Questo modulo è stato creato per la versione %1$d di LSPosed, ma a causa di modifiche incompatibili nella versione %2$d, è stato disabilitato</string>
+    <string name="warning_installed_on_external_storage">Questo modulo non può essere caricato perché è installato sulla scheda SD, per favore spostalo nella memoria interna</string>
+    <string name="module_uninstall">Disinstalla</string>
+    <string name="module_settings">Impostazioni modulo</string>
+    <string name="view_in_repo">Visualizza nella Repo</string>
+    <string name="module_uninstall_message">Vuoi disinstallare questo modulo?</string>
+    <string name="module_uninstalled">%1$s disinstallato</string>
+    <string name="module_uninstall_failed">Disinstallazione non riuscita</string>
+
+    <!-- AppListActivity -->
+    <string name="compile_speed">Ottimizza nuovamente</string>
+    <string name="compile_speed_msg">Ottimizzando…</string>
+    <string name="compile_done">Ottimizzazione completata.</string>
+    <string name="app_launch">Avvialo</string>
+    <string name="compile_failed">Ottimizzazione non riuscita o il valore restituito è vuoto.</string>
+    <string name="compile_failed_with_info">Ottimizzazione fallita: </string>
+    <string name="sort_by_name">Ordina per nome dell\'applicazione</string>
+    <string name="sort_by_name_reverse">Ordina per nome dell\'applicazione (inverso)</string>
+    <string name="sort_by_package_name">Ordina per nome del pacchetto</string>
+    <string name="sort_by_package_name_reverse">Ordina per nome del pacchetto (inverso)</string>
+    <string name="sort_by_install_time">Ordina per data di installazione</string>
+    <string name="sort_by_install_time_reverse">Ordina per data di installazione (inverso)</string>
+    <string name="sort_by_update_time">Ordina per data di aggiornamento</string>
+    <string name="sort_by_update_time_reverse">Ordina per data di aggiornamento (inverso)</string>
+    <string name="menu_show_system_apps">Applicazioni di sistema</string>
+    <string name="menu_sort">Ordinando…</string>
+    <string name="enable_module">Abilita modulo</string>
+    <string name="no_scope_selected">Non hai selezionato alcuna app. Continuare?</string>
+    <string name="menu_show_games">Giochi</string>
+    <string name="menu_show_modules">Moduli</string>
+    <string name="failed_to_save_scope_list">Impossibile salvare l\'elenco degli ambiti</string>
+    <string name="app_description">%s\nVersione %s</string>
+    <string name="use_recommended">Consigliate</string>
+    <string name="no_scope_selected_has_recommended">Non hai selezionato alcuna app. Selezionare le app consigliate?</string>
+    <string name="use_recommended_message">Selezionare le app consigliate?</string>
+    <string name="requested_by_module">Consgiliate</string>
+    <string name="module_disabled_no_selection">Il modulo %s è stato disabilitato poiché nessuna app è stata selezionata.</string>
+    <string name="android_framework">Framework di sistema</string>
+    <string name="menu_backup_and_restore">Backup…</string>
+    <string name="menu_backup">Backup</string>
+    <string name="menu_restore">Ripristina</string>
+    <string name="force_stop">Interrompi forzatamente</string>
+    <string name="force_stop_dlg_title">Interrompere forzatamente?</string>
+    <string name="force_stop_dlg_text">Se forzi l\'interruzione di un\'app, potrebbe non funzionare correttamente.</string>
+    <string name="reboot_required">È necessario riavviare per applicare questa modifica</string>
+    <string name="reboot">Riavvia</string>
+
+    <!-- ModulesActivity and AppListActivity -->
+    <string name="modules_app_store">Visualizza nell\'App Store</string>
+    <string name="module_app_info">Info app</string>
+
+    <!-- SettingsActivity -->
+    <string name="settings_group_framework">Framework</string>
+    <string name="settings_enable_resources">Abilita l\'hook delle risorse</string>
+    <string name="settings_enable_resources_summary"><b>ATTENZIONE:</b> l\'hook delle risorse è sperimentale</string>
+    <string name="pref_title_disable_verbose_log">Disabilita i log verbosi</string>
+    <string name="pure_black_dark_theme">Tema nero puro</string>
+    <string name="pure_black_dark_theme_summary">Usa il tema nero puro se il tema scuro è abilitato</string>
+    <string name="settings_group_theme">Tema</string>
+    <string name="settings_variant">Variante</string>
+    <string name="settings_backup_and_restore">Backup e ripristino</string>
+    <string name="settings_backup_and_restore_summery">Backup o ripristino dell\'elenco dei moduli e degli elenchi degli ambiti.</string>
+    <string name="settings_backup">Backup</string>
+    <string name="settings_backuping">Backing in corso…</string>
+    <string name="settings_backup_success">Backup terminato!</string>
+    <string name="settings_backup_failed">Backup fallito</string>
+    <string name="settings_restore">Ripristina</string>
+    <string name="settings_restoring">Ripristino in corso…</string>
+    <string name="settings_restore_success">Ripristino terminato!</string>
+    <string name="settings_restore_failed">Ripristino fallito</string>
+    <string name="group_network">Rete</string>
+    <string name="dns_over_http">DNS over HTTPS</string>
+    <string name="dns_over_http_summary">Soluzione alternativa all\'avvelenamento della cache DNS in alcune nazioni</string>
+    <string name="theme_color">Colore tema</string>
+
+    <!-- Module Repo -->
+    <string name="module_readme">Leggimi</string>
+    <string name="module_releases">Versioni</string>
+    <string name="module_information">Info</string>
+    <string name="module_information_homepage">Homepage</string>
+    <string name="module_information_source_url">Codice sorgente</string>
+    <string name="module_information_collaborators">Collaboratori</string>
+    <string name="module_release_view_assets">Risorse</string>
+    <string name="menu_open_in_browser">Apri nel browser</string>
+    <string name="refresh">Ricarica</string>
+    <string name="module_release_load_more">Mostra le versioni precedenti</string>
+    <string name="module_release_no_more">Non ci sono altre versioni</string>
+    <string name="repo_load_failed">Impossibile caricare la repo: %s</string>
+    <string name="repo_load_more_failed">Impossibile caricare le versioni precedenti: %s</string>
+
+
+    <string name="app_destroyed">Questa applicazione è stata distrutta, assicurati di scaricarla dalla fonte ufficiale.</string>
+    <string name="outdated_manager">La versione di LSPosed Manager e LSPosed Core non sono coerenti. Per favore reinstalla la versione corrispondente.</string>
+    <string name="lsposed_not_active">LSPosed non è attualmente installato o attivo.</string>
+    <string name="verbose_log_not_avaliable">Il log verboso non è disponibile, se l\'hai appena abilitato senza riavviare, riprova dopo il riavvio.</string>
+    <string name="NotInstall">Non installato</string>
+    <string name="NotInstallDetail">LSPosed non è installato</string>
+</resources>

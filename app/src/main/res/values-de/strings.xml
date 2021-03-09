@@ -88,8 +88,6 @@
     <string name="loading">Laden…</string>
     <string name="scroll_bottom">Runterscrollen</string>
 
-    <string name="android_sdk" translatable="false">Android %2$s (%1$s, API %3$d)</string>
-
     <!-- LSPd related -->
     <string name="compile_speed_msg">Optimieren...</string>
     <string name="compile_done">Optimierung abgeschlossen.</string>
@@ -112,7 +110,6 @@
     <string name="sort_by_update_time">Nach Aktualisierungszeit sortieren</string>
     <string name="sort_by_update_time_reverse">Nach Aktualisierungszeit sortieren (umgekehrt)</string>
     <string name="settings_group_theme">Theme</string>
-    <string name="settings_variant">Variante</string>
     <string name="menu_show_system_apps">System-Apps</string>
     <string name="menu_sort">Sortieren…</string>
     <string name="enable_module">Modul einschalten</string>

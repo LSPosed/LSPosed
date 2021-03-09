@@ -88,9 +88,6 @@
     <string name="loading">Загрузка…</string>
     <string name="scroll_bottom">Прокрутить вниз</string>
 
-    <string name="android_sdk" translatable="false">Android %2$s (%1$s, API %3$d)</string>
-    <string name="android_sdk_preview" translatable="false">Android %1$s Preview</string>
-
     <!-- LSPd related -->
     <string name="compile_speed_msg">Оптимизация…</string>
     <string name="compile_done">Оптимизация завершена.</string>
@@ -113,7 +110,6 @@
     <string name="sort_by_update_time">Сортировать по времени обновления</string>
     <string name="sort_by_update_time_reverse">Сортировать по времени обновления (обратный)</string>
     <string name="settings_group_theme">Тема</string>
-    <string name="settings_variant">Вариант</string>
     <string name="menu_show_system_apps">Системные приложения</string>
     <string name="menu_sort">Сортировка…</string>
     <string name="enable_module">Включить модуль</string>
