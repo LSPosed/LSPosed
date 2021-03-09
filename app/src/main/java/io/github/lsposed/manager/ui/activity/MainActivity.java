@@ -42,7 +42,7 @@ import io.github.lsposed.manager.databinding.ActivityMainBinding;
 import io.github.lsposed.manager.databinding.DialogAboutBinding;
 import io.github.lsposed.manager.ui.activity.base.BaseActivity;
 import io.github.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
-import io.github.lsposed.manager.ui.dialog.StatusDialogBuilder;
+import io.github.lsposed.manager.ui.dialog.InfoDialogBuilder;
 import io.github.lsposed.manager.util.GlideHelper;
 import io.github.lsposed.manager.util.ModuleUtil;
 import io.github.lsposed.manager.util.NavUtil;
@@ -62,7 +62,7 @@ public class MainActivity extends BaseActivity {
         HolidayHelper.setup(this);
         binding.status.setOnClickListener(v -> {
             if (ConfigManager.getXposedApiVersion() != -1) {
-                new StatusDialogBuilder(this)
+                new InfoDialogBuilder(this)
                         .setTitle(R.string.info)
                         .show();
             } else {
