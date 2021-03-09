@@ -88,8 +88,6 @@
     <string name="loading">Laden…</string>
     <string name="scroll_bottom">Scroll naaar beneden</string>
 
-    <string name="android_sdk" translatable="false">Android %2$s (%1$s, API %3$d)</string>
-
     <!-- LSPd related -->
     <string name="compile_speed_msg">Optimaliseren…</string>
     <string name="compile_done">Optimalisatie voltooid.</string>
@@ -112,7 +110,6 @@
     <string name="sort_by_update_time">Sorteer op updatetijd</string>
     <string name="sort_by_update_time_reverse">Sorteer op updatetijd (omgekeerd)</string>
     <string name="settings_group_theme">Thema</string>
-    <string name="settings_variant">Variant</string>
     <string name="menu_show_system_apps">Systeem apps</string>
     <string name="menu_sort">Sorteren…</string>
     <string name="enable_module">Schakel module in</string>
@@ -167,7 +164,4 @@
     <string name="module_release_no_more">Geen release meer</string>
     <string name="theme_color">Thema kleur</string>
     <string name="dark_theme">Donkere thema</string>
-    <string name="follow_system">Volg het systeem</string>
-    <string name="always_off">Altijd uit</string>
-    <string name="always_on">Altijd aan</string>
 </resources>

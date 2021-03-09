@@ -125,7 +125,6 @@
     <string name="pure_black_dark_theme">블랙 다크 테마</string>
     <string name="pure_black_dark_theme_summary">다크 테마가 활성화된 경우 순수 검은색 테마를 사용합니다.</string>
     <string name="settings_group_theme">테마</string>
-    <string name="settings_variant">Variant</string>
     <string name="settings_backup_and_restore">백업 및 복원</string>
     <string name="settings_backup_and_restore_summery">모듈 목록 및 범위 목록을 백업 또는 복원합니다.</string>
     <string name="settings_backup">백업</string>
