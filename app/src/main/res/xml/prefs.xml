@@ -18,30 +18,26 @@
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <com.takisoft.preferencex.PreferenceCategory
         android:key="group_network"
-        android:title="@string/group_network"
-        app:iconSpaceReserved="false">
+        android:title="@string/group_network">
 
         <SwitchPreference
             android:defaultValue="false"
             android:key="doh"
             android:summary="@string/dns_over_http_summary"
             android:title="@string/dns_over_http"
-            app:iconSpaceReserved="false" />
+            android:icon="@drawable/ic_outline_dns_24" />
     </com.takisoft.preferencex.PreferenceCategory>
 
-    <com.takisoft.preferencex.PreferenceCategory
-        android:title="@string/settings_group_theme"
-        app:iconSpaceReserved="false">
+    <com.takisoft.preferencex.PreferenceCategory android:title="@string/settings_group_theme">
         <io.github.lsposed.manager.util.theme.ThemeColorPreference
             android:defaultValue=""
             android:dialogTitle="@string/theme_color"
             android:key="theme_color"
             android:title="@string/theme_color"
-            app:iconSpaceReserved="false" />
+            android:icon="@drawable/ic_outline_palette_24" />
         <rikka.preference.SimpleMenuPreference
             android:defaultValue="MODE_NIGHT_FOLLOW_SYSTEM"
             android:entries="@array/theme_texts"
@@ -49,18 +45,16 @@
             android:key="dark_theme"
             android:summary="%s"
             android:title="@string/dark_theme"
-            app:iconSpaceReserved="false" />
+            android:icon="@drawable/ic_outline_dark_mode_24" />
         <SwitchPreference
             android:key="black_dark_theme"
             android:title="@string/pure_black_dark_theme"
-            android:summary="@string/pure_black_dark_theme_summary"
-            app:iconSpaceReserved="false" />
+            android:summary="@string/pure_black_dark_theme_summary" />
     </com.takisoft.preferencex.PreferenceCategory>
 
     <com.takisoft.preferencex.PreferenceCategory
         android:key="group_framework"
-        android:title="@string/settings_group_framework"
-        app:iconSpaceReserved="false">
+        android:title="@string/settings_group_framework">
 
         <SwitchPreference
             android:defaultValue="false"
@@ -68,30 +62,25 @@
             android:summary="@string/settings_enable_resources_summary"
             android:title="@string/settings_enable_resources"
             android:persistent="false"
-            app:iconSpaceReserved="false" />
+            android:icon="@drawable/ic_outline_science_24" />
 
         <SwitchPreference
             android:defaultValue="false"
             android:key="disable_verbose_log"
             android:title="@string/pref_title_disable_verbose_log"
-            android:persistent="false"
-            app:iconSpaceReserved="false" />
+            android:persistent="false" />
     </com.takisoft.preferencex.PreferenceCategory>
 
     <com.takisoft.preferencex.PreferenceCategory
         android:key="group_backup"
         android:title="@string/settings_backup_and_restore"
-        app:iconSpaceReserved="false">
+        android:summary="@string/settings_backup_and_restore_summery"
+        android:icon="@drawable/ic_baseline_settings_backup_restore_24" >
         <Preference
             android:key="backup"
-            android:title="@string/settings_backup"
-            app:iconSpaceReserved="false" />
+            android:title="@string/settings_backup" />
         <Preference
             android:key="restore"
-            android:title="@string/settings_restore"
-            app:iconSpaceReserved="false" />
-        <Preference
-            android:summary="@string/settings_backup_and_restore_summery"
-            app:iconSpaceReserved="false" />
+            android:title="@string/settings_restore" />
     </com.takisoft.preferencex.PreferenceCategory>
 </PreferenceScreen>
