@@ -210,8 +210,6 @@ fi
 echo "rm -rf /data/misc/$MISC_PATH" >> "${MODPATH}/uninstall.sh" || abortC "! ${LANG_CUST_ERR_CONF_UNINST}"
 echo "[[ -f /data/adb/lspd/new_install ]] || rm -rf /data/adb/lspd" >> "${MODPATH}/uninstall.sh" || abortC "! ${LANG_CUST_ERR_CONF_UNINST}"
 
-echo "1" > /data/adb/lspd/config/variant
-
 if [[ ! -e /data/adb/lspd/config/verbose_log ]]; then
     echo "0" > /data/adb/lspd/config/verbose_log
 fi

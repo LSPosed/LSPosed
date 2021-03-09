@@ -57,12 +57,6 @@ RIRU_APICODE=$(cat "${RIRU_PATH}/api_version")
 MAGISK_VERSION=$(magisk -v)
 MAGISK_VERCODE=$(magisk -V)
 
-livePatch() {
-    # Should be deprecated now. This is for debug only.
-    supolicy --live "allow system_server system_server process execmem" \
-                    "allow system_server system_server memprotect mmap_zero"
-}
-
 MISC_PATH=$(cat /data/adb/lspd/misc_path)
 BASE_PATH="/data/misc/$MISC_PATH"
 
@@ -134,9 +128,6 @@ start_log_catcher () {
     LOG_PID=$!
     echo "${LOG_PID}">"${LOG_PATH}/${LOG_FILE_NAME}.pid"
 }
-
-# execute live patch if rule not found
-[[ -f "${MODDIR}/sepolicy.rule" ]] || livePatch
 
 if [[ -f "/data/adb/riru/modules/lspd.prop" ]]; then
     CONFIG=$(cat "/data/adb/riru/modules/lspd.prop")
