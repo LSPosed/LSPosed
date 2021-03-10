@@ -21,7 +21,6 @@
 <resources>
     <!-- MainActivity -->
     <string name="info">Info</string>
-    <string name="Activated">%s attivo</string>
     <string name="Install">Installa</string>
     <string name="InstallDetail">Premi per installare LSPosed</string>
     <string name="Modules">Moduli</string>
@@ -128,7 +127,6 @@
     <string name="pure_black_dark_theme">Tema nero puro</string>
     <string name="pure_black_dark_theme_summary">Usa il tema nero puro se il tema scuro è abilitato</string>
     <string name="settings_group_theme">Tema</string>
-    <string name="settings_variant">Variante</string>
     <string name="settings_backup_and_restore">Backup e ripristino</string>
     <string name="settings_backup_and_restore_summery">Backup o ripristino dell\'elenco dei moduli e degli elenchi degli ambiti.</string>
     <string name="settings_backup">Backup</string>
@@ -157,7 +155,6 @@
     <string name="module_release_load_more">Mostra le versioni precedenti</string>
     <string name="module_release_no_more">Non ci sono altre versioni</string>
     <string name="repo_load_failed">Impossibile caricare la repo: %s</string>
-    <string name="repo_load_more_failed">Impossibile caricare le versioni precedenti: %s</string>
 
 
     <string name="app_destroyed">Questa applicazione è stata distrutta, assicurati di scaricarla dalla fonte ufficiale.</string>

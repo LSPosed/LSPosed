@@ -227,4 +227,13 @@ public class ConfigManager {
             return false;
         }
     }
+
+    public static boolean isSepolicyLoaded() {
+        try {
+            return LSPosedManagerServiceClient.isSepolicyLoaded();
+        } catch (RemoteException | NullPointerException e) {
+            Log.e(App.TAG, Log.getStackTraceString(e));
+            return false;
+        }
+    }
 }

@@ -91,8 +91,18 @@ public class MainActivity extends BaseActivity {
         String installXposedVersion = ConfigManager.getXposedVersionName();
         int cardBackgroundColor;
         if (installXposedVersion != null) {
-            binding.statusTitle.setText(getString(R.string.Activated, "YAHFA"));
-            if (!ConfigManager.isPermissive()) {
+            if (ConfigManager.isPermissive()) {
+                cardBackgroundColor = ResourcesKt.resolveColor(getTheme(), R.attr.colorError);
+                binding.statusTitle.setText(R.string.activated);
+                binding.statusIcon.setImageResource(R.drawable.ic_warning);
+                binding.statusSummary.setText(R.string.selinux_permissive_summary);
+            } else if (!ConfigManager.isSepolicyLoaded()) {
+                binding.statusTitle.setText(R.string.partial_activated);
+                cardBackgroundColor = ResourcesKt.resolveColor(getTheme(), R.attr.colorWarning);
+                binding.statusIcon.setImageResource(R.drawable.ic_warning);
+                binding.statusSummary.setText(R.string.selinux_policy_not_loaded_summary);
+            } else {
+                binding.statusTitle.setText(R.string.activated);
                 if (Helpers.currentHoliday == Helpers.Holidays.LUNARNEWYEAR) {
                     cardBackgroundColor = 0xfff05654;
                 } else {
@@ -100,10 +110,6 @@ public class MainActivity extends BaseActivity {
                 }
                 binding.statusIcon.setImageResource(R.drawable.ic_check_circle);
                 binding.statusSummary.setText(String.format(Locale.US, "%s (%d)", installXposedVersion, ConfigManager.getXposedVersionCode()));
-            } else {
-                cardBackgroundColor = ResourcesKt.resolveColor(getTheme(), R.attr.colorError);
-                binding.statusIcon.setImageResource(R.drawable.ic_warning);
-                binding.statusSummary.setText(R.string.selinux_permissive_summary);
             }
         } else {
             cardBackgroundColor = ResourcesKt.resolveColor(getTheme(), R.attr.colorInstall);
