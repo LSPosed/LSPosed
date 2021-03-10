@@ -25,7 +25,6 @@
     <string name="Logs">Звіти</string>
     <string name="Modules">Модулі</string>
     <string name="Settings">Налаштування</string>
-    <string name="about_source">https://github.com/LSPosed/LSPosed/</string>
     <string name="android_framework">System Framework</string>
     <string name="app_destroyed">Ця програма припинила роботу, будь ласка, переконайтесь, що завантажили її з офіційного джерела.</string>
     <string name="app_launch">Запустити</string>

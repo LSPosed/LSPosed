@@ -19,7 +19,6 @@
   -->
 
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
-    <string name="app_name" translatable="false">LSPosed</string>
     <string name="Install">Установить</string>
     <string name="InstallDetail">Нажмите, чтобы установить LSPosed</string>
     <string name="Modules">Модули</string>
@@ -90,8 +89,6 @@
     <!-- LSPd related -->
     <string name="compile_speed_msg">Оптимизация…</string>
     <string name="compile_done">Оптимизация завершена.</string>
-
-    <string name="about_source" translatable="false">https://github.com/LSPosed/LSPosed/</string>
 
     <string name="pref_title_disable_verbose_log">Отключить подробные логи</string>
     <string name="logs_cannot_read">Невозможно прочитать логи:</string>
