@@ -28,8 +28,8 @@
         android:shortcutShortLabel="@string/Modules">
         <intent
             android:action="android.intent.action.MAIN"
-            android:targetClass="io.github.lsposed.manager.ui.activity.ModulesActivity"
-            android:targetPackage="io.github.lsposed.manager" />
+            android:targetClass="orrg.lsposed.manager.ui.activity.ModulesActivity"
+            android:targetPackage="orrg.lsposed.manager" />
     </shortcut>
     <shortcut
         android:enabled="true"
@@ -39,8 +39,8 @@
         android:shortcutShortLabel="@string/Logs">
         <intent
             android:action="android.intent.action.MAIN"
-            android:targetClass="io.github.lsposed.manager.ui.activity.LogsActivity"
-            android:targetPackage="io.github.lsposed.manager" />
+            android:targetClass="orrg.lsposed.manager.ui.activity.LogsActivity"
+            android:targetPackage="orrg.lsposed.manager" />
     </shortcut>
     <shortcut
         android:enabled="true"
@@ -50,7 +50,7 @@
         android:shortcutShortLabel="@string/module_repo">
         <intent
             android:action="android.intent.action.MAIN"
-            android:targetClass="io.github.lsposed.manager.ui.activity.RepoActivity"
-            android:targetPackage="io.github.lsposed.manager" />
+            android:targetClass="orrg.lsposed.manager.ui.activity.RepoActivity"
+            android:targetPackage="orrg.lsposed.manager" />
     </shortcut>
 </shortcuts>

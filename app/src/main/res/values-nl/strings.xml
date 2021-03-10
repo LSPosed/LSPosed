@@ -19,7 +19,6 @@
   -->
 
 <resources>
-    <string name="app_name" translatable="false">LSPosed</string>
 
     <!-- MainActivity -->
     <string name="info">Informatie</string>
@@ -173,8 +172,6 @@
     <string name="module_release_no_more">Geen release meer</string>
     <string name="repo_load_failed">Kan moduleopslagplaats niet laden: %s</string>
 
-
-    <string name="about_source" translatable="false">https://github.com/LSPosed/LSPosed/</string>
 
     <string name="app_destroyed">Deze applicatie is vernietigd, zorg ervoor dat u deze downloadt vanaf de officiële bron.</string>
     <string name="outdated_manager">De versie van LSPosed Manager en LSPosed Core zijn niet consistent. Installeer de corresponderende versie opnieuw.</string>
