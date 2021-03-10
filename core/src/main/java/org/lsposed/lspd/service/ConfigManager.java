@@ -202,7 +202,7 @@ public class ConfigManager {
 
     private static void writeText(@NonNull File file, String value) {
         try {
-            Files.write(file.toPath(), value.getBytes(), StandardOpenOption.CREATE);
+            Files.write(file.toPath(), value.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException e) {
             Log.e(TAG, Log.getStackTraceString(e));
         }
