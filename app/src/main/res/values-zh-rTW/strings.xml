@@ -160,4 +160,9 @@
     <string name="outdated_manager">LSPosed Manager 和 LSPosed 核心的版本不一致。請重新安裝對應的版本。</string>
     <string name="lsposed_not_active">LSPosed 未正確安裝或啟用。</string>
     <string name="verbose_log_not_avaliable">詳細日誌不可用，如果您只是啟用了它而沒有重新啟動，請在重新啟動後再試一次。</string>
+    <string name="partial_activated">部分啟動</string>
+    <string name="selinux_policy_not_loaded_summary">SEPolicy 未被正確載入</string>
+    <string name="selinux_policy_not_loaded">&lt;b&gt;警告:&lt;\\/b&gt; SEPolicy 未被正確載入，作用於系統框架的模組將不起作用。</string>
+    <string name="module_uninstall_message">要卸載此模組嗎？</string>
+    <string name="repo_load_failed">模組倉庫載入失敗：%s</string>
 </resources>

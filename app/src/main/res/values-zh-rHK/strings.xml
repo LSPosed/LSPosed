@@ -158,4 +158,7 @@
     <string name="module_release_load_more">顯示更舊的版本</string>
     <string name="module_release_no_more">沒有更舊的版本</string>
     <string name="theme_color">主題顏色</string>
+    <string name="partial_activated">部分啟動</string>
+    <string name="selinux_policy_not_loaded_summary">SEPolicy 未被正確加載</string>
+    <string name="selinux_policy_not_loaded">&lt;b&gt;警告:&lt;\\/b&gt; SEPolicy 未被正確加載，作用於系統框架的模塊將不起作用。</string>
 </resources>
