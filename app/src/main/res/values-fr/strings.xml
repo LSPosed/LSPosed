@@ -153,7 +153,7 @@
     <string name="dns_over_http">DNS sur HTTPS</string>
     <string name="dns_over_http_summary">Contourner la censure DNS dans certains pays</string>
     <string name="theme_color">Couleure du thème</string>
-    <string name="theme_color_summary">Couleure apparaissant fréquemment dans l'application</string>
+    <string name="theme_color_summary">Couleure apparaissant fréquemment dans l\'application</string>
 
     <!-- Module Repo -->
     <string name="module_readme">Lisez moi</string>
