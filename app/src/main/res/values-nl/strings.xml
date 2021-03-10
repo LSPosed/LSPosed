@@ -20,87 +20,83 @@
 
 <resources>
     <string name="app_name" translatable="false">LSPosed</string>
+
+    <!-- MainActivity -->
+    <string name="info">Informatie</string>
     <string name="Install">Installeer</string>
     <string name="InstallDetail">Tik om LSPosed te installeren</string>
     <string name="Modules">Modules</string>
+    <plurals name="modules_enabled_count">
+        <item quantity="one">%d module ingeschakeld</item>
+        <item quantity="other">%d modules ingeschakeld</item>
+    </plurals>
     <string name="Logs">Logboeken</string>
     <string name="Settings">Instellingen</string>
     <string name="About">Over</string>
+    <string name="module_repo">Opslagplaats</string>
+    <string name="module_repo_summary">Module opslagplaats (Alpha)</string>
+    <string name="about_view_source_code"><![CDATA[Bekijk de broncode op %s<br/>Sluit je aan bij onze %s kanaal]]></string>
 
-    <!-- General/various strings -->
-    <string name="menuSend">versturen</string>
+    <string name="activated">Geactiveerd</string>
+    <string name="not_installed">Niet geïnstalleerd</string>
+    <string name="selinux_permissive">&lt;b&gt;WAARSCHUWING:&lt;\/b&gt; SELinux dwingt niet af! het kwaadaardige programma dat dit aanvalt, kan uw apparaat volledig controleren en kan uw eigendommen beschadigen en juridische aansprakelijkheid veroorzaken.</string>
+    <string name="selinux_permissive_summary">SELinux dwingt niet af!</string>
+    <string name="partial_activated">Gedeeltelijk geactiveerd</string>
+    <string name="selinux_policy_not_loaded_summary">SEPolicy is niet correct geladen</string>
+    <string name="selinux_policy_not_loaded">&lt;b&gt;WAARSCHUWING:&lt;\/b&gt; SEPolicy is niet correct geladen, modules die System Framework haken zullen niet werken.</string>
+    <string name="info_api_version">API versie</string>
+    <string name="info_framework_version">Framework versie</string>
+    <string name="info_manager_version">Manager versie</string>
+    <string name="info_system_version">Systeem versie</string>
+    <string name="info_device">Apparaat</string>
+    <string name="info_system_abi">Systeem ABI</string>
+
+    <!-- LogsActivity -->
+    <string name="menuSend">Verstuur</string>
     <string name="menuSaveToSd">Opslaan</string>
-
-    <!-- Welcome screen / main sections -->
-
-    <!-- navigation view items -->
     <string name="nav_item_logs">Uitgebreide logboeken</string>
     <string name="nav_item_logs_err">Modules Logboeken</string>
-
-    <!-- Installer tab -->
     <string name="dont_show_again">Laat dit niet meer zien</string>
+    <string name="logs_save_failed">Opslaan mislukt:</string>
+    <string name="menuClearLog">Wis het logboek nu</string>
+    <string name="logs_cleared">Log succesvol gewist.</string>
+    <string name="log_is_empty">Log is leeg.</string>
+    <string name="scroll_top">Scroll naar boven</string>
+    <string name="loading">Laden…</string>
+    <string name="scroll_bottom">Scroll naar beneden</string>
+    <string name="logs_cannot_read">Kan logboek niet lezen: \n</string>
+    <string name="menuReload">Herlaad</string>
+    <string name="logs_clear_failed_2">Het logboek kan niet worden gewist</string>
+    <string name="not_logcat_2">Als iemand je een Android Logcat vraagt, dan ben je in de verkeerde sectie. Dit is het LSPosed-logboek; als je een logcat nodig hebt, kun je op XDA vinden wat je nodig hebt.</string>
 
-    <!-- File operations -->
-
-    <!-- Modules tab -->
+    <!-- Notification -->
     <string name="module_is_not_activated_yet">LSPosed module is nog niet geactiveerd</string>
     <string name="module_is_not_activated_yet_detailed">%s is geïnstalleerd, maar is nog niet geactiveerd</string>
+    <string name="xposed_module_updated_notification_content">%s is geupdate</string>
+
+    <!-- ModulesActivity -->
     <string name="module_empty_description">(geen beschrijving gegeven)</string>
     <string name="module_no_ui">Deze module biedt geen gebruikersinterface</string>
     <string name="xposed_module_updated_notification_title">LSPosed module bijgewerkt</string>
-    <string name="warning_xposed_min_version">Deze module vereist een nieuwere versie van LSPosed (%d) en dit kan niet worden geactiveerd</string>
+    <string name="warning_xposed_min_version">Deze module vereist een nieuwere versie van LSPosed (%d) en kan dus niet worden geactiveerd</string>
     <string name="no_min_version_specified">Deze module specificeert niet de LSPosed-versie die het nodig heeft.</string>
     <string name="warning_min_version_too_low">Deze module is gemaakt voor de LSPosed-versie %1$d, maar vanwege onverenigbare wijzigingen in de versie %2$d, het is uitgeschakeld</string>
-    <string name="modules_app_store">Bekijk in App winkel</string>
-    <string name="module_app_info">App info</string>
+    <string name="warning_installed_on_external_storage">Deze module kan niet worden geladen omdat deze op de SD-kaart is geïnstalleerd. Verplaats deze naar de interne opslag</string>
     <string name="module_uninstall">Verwijderen</string>
+    <string name="module_settings">Module instellingen</string>
+    <string name="view_in_repo">Bekijk in Repo</string>
+    <string name="module_uninstall_message">Wilt u deze module verwijderen?</string>
+    <string name="module_uninstalled">Gedeïnstalleerd %1$s</string>
+    <string name="module_uninstall_failed">Verwijderen mislukt</string>
 
-    <!-- Download tab -->
-    <string name="menuReload">Herlaad</string>
-
-    <!-- Settings tab -->
-    <string name="settings_group_framework">Framework</string>
-    <string name="settings_enable_resources">Schakel resource-hooks in</string>
-    <string name="settings_enable_resources_summary"><b>Waarschuwing:</b> Resource-hooks zijn experimenteel</string>
-
-    <!-- Support tab -->
-
-    <!-- Logs tab  -->
-    <string name="logs_save_failed">Opslaan mislukt:</string>
-    <string name="menuClearLog">Log nu wissen</string>
-    <string name="logs_cleared">Log succesvol gewist.</string>
-    <string name="log_is_empty">Log is leeg.</string>
-
-    <!-- About tab -->
-
-    <!-- DownloadView -->
-
-    <!-- DownloadUtils -->
-
-    <!-- RepoLoader -->
-
-    <string name="warning_installed_on_external_storage">Deze module kan niet worden geladen omdat het geïnstalleerd is op de SD-kaart, verplaats deze dan naar de interne opslag</string>
-
-    <string name="info">Info</string>
-
-    <string name="scroll_top">Scroll naar boven</string>
-    <string name="loading">Laden…</string>
-    <string name="scroll_bottom">Scroll naaar beneden</string>
-
-    <!-- LSPd related -->
+    <!-- AppListActivity -->
+    <string name="compile_speed">Opnieuw optimaliseren</string>
     <string name="compile_speed_msg">Optimaliseren…</string>
     <string name="compile_done">Optimalisatie voltooid.</string>
-
-    <string name="about_source" translatable="false">https://github.com/LSPosed/LSPosed/</string>
-
-    <string name="pref_title_disable_verbose_log">Schakel uitgebreide logboeken uit</string>
-    <string name="logs_cannot_read">Kan logboek niet lezen: \n</string>
     <string name="app_launch">Lanceer het</string>
-    <string name="compile_failed">Optimalisatie mislukt of retourwaarde is leeg.</string>
+    <string name="compile_failed">Optimalisatie mislukt of geretourneerde waarde is leeg.</string>
     <string name="compile_failed_with_info">Optimalisatie is mislukt: </string>
-    <string name="not_installed">Niet geïnstalleerd</string>
-    <string name="pure_black_dark_theme">Gebruik het pure zwart donkere thema</string>
-    <string name="sort_by_name">Sorteer op toepassingsnaam</string>
+    <string name="sort_by_name">Sorteer op applicatienaam</string>
     <string name="sort_by_name_reverse">Sorteren op applicatienaam (omgekeerd)</string>
     <string name="sort_by_package_name">Sorteer op pakketnaam</string>
     <string name="sort_by_package_name_reverse">Sorteren op pakketnaam (omgekeerd)</string>
@@ -108,44 +104,62 @@
     <string name="sort_by_install_time_reverse">Sorteer op installatietijd (omgekeerd)</string>
     <string name="sort_by_update_time">Sorteer op updatetijd</string>
     <string name="sort_by_update_time_reverse">Sorteer op updatetijd (omgekeerd)</string>
-    <string name="settings_group_theme">Thema</string>
     <string name="menu_show_system_apps">Systeem apps</string>
     <string name="menu_sort">Sorteren…</string>
     <string name="enable_module">Schakel module in</string>
-    <string name="no_scope_selected">U heeft geen app geselecteerd. Verder gaan?</string>
+    <string name="no_scope_selected">U heeft geen app geselecteerd. Doorgaan?</string>
     <string name="menu_show_games">Games</string>
     <string name="menu_show_modules">Modules</string>
-    <string name="failed_to_save_scope_list">Scope-lijst opslaan is mislukt</string>
-    <string name="module_settings">Module instellingen</string>
-    <string name="app_description">%s\nVersie: %s</string>
+    <string name="failed_to_save_scope_list">Scopelijst opslaan is mislukt</string>
+    <string name="app_description">%s\nVersie %s</string>
     <string name="use_recommended">Aanbevolen</string>
-    <string name="no_scope_selected_has_recommended">U heeft geen app geselecteerd. Selecteer aanbevolen apps?</string>
-    <string name="use_recommended_message">Selecteer aanbevolen apps?</string>
+    <string name="no_scope_selected_has_recommended">U heeft geen app geselecteerd. Aanbevolen apps selecteren?</string>
+    <string name="use_recommended_message">Aanbevolen apps selecteren?</string>
     <string name="requested_by_module">Aanbevolen</string>
     <string name="module_disabled_no_selection">Module %s is uitgeschakeld omdat er geen app is geselecteerd.</string>
     <string name="android_framework">Systeem Framework</string>
-    <string name="app_destroyed">Deze applicatie is vernietigd, zorg ervoor dat u deze downloadt vanaf de officiële bron.</string>
-    <string name="compile_speed">Optimaliseer opnieuw</string>
-    <string name="selinux_permissive">&lt;b&gt;Waarschuwing:&lt;\/b&gt; SELinux dwingt niet af! het kwaadaardige programma dat dit aanvalt, kan uw apparaat volledig beheersen en kan uw eigendommen beschadigen en juridische aansprakelijkheid veroorzaken.</string>
-    <string name="selinux_permissive_summary">SELinux dwingt niet af!</string>
-    <string name="outdated_manager">De versie van LSPosed Manager en LSPosed Core zijn niet consistent. Installeer de overeenkomstige versie opnieuw.</string>
-    <string name="lsposed_not_active">LSPosed is momenteel niet geïnstalleerd of actief.</string>
+    <string name="menu_backup_and_restore">Backup…</string>
+    <string name="menu_backup">Backup</string>
+    <string name="menu_restore">Herstellen</string>
+    <string name="force_stop">Forceer stop</string>
+    <string name="force_stop_dlg_title">Forceer stop?</string>
+    <string name="force_stop_dlg_text">Als u een app geforceerd stopt, kan deze zich misdragen.</string>
+    <string name="reboot_required">Opnieuw opstarten is vereist om deze wijziging door te voeren</string>
+    <string name="reboot">Herstart</string>
+
+    <!-- ModulesActivity and AppListActivity -->
+    <string name="modules_app_store">Bekijk in App Store</string>
+    <string name="module_app_info">App info</string>
+
+    <!-- SettingsActivity -->
+    <string name="settings_group_framework">Framework</string>
+    <string name="settings_enable_resources">Schakel resource-hooks in</string>
+    <string name="settings_enable_resources_summary"><b>WAARSCHUWING:</b> Resource-hooks zijn experimenteel</string>
+    <string name="pref_title_disable_verbose_log">Schakel uitgebreide logboeken uit</string>
+    <string name="pure_black_dark_theme">Zwarte donkere thema</string>
+    <string name="pure_black_dark_theme_summary">Gebruik het pure zwarte thema als het donkere thema is ingeschakeld</string>
+    <string name="settings_group_theme">Thema</string>
     <string name="settings_backup_and_restore">Backup en herstellen</string>
-    <string name="settings_backup_and_restore_summery">Back-up of herstel modulelijst en scooplijsten.</string>
+    <string name="settings_backup_and_restore_summery">Backup of herstel de modulelijst en scooplijsten.</string>
     <string name="settings_backup">Backup</string>
-    <string name="settings_backuping">Back up maken…</string>
-    <string name="settings_backup_success">Back-up voltooid!</string>
-    <string name="settings_backup_failed">Back-up maken mislukt</string>
+    <string name="settings_backuping">Ondersteunen…</string>
+    <string name="settings_backup_success">Backup voltooid!</string>
+    <string name="settings_backup_failed">Backup maken mislukt</string>
     <string name="settings_restore">Herstellen</string>
     <string name="settings_restoring">Herstellen…</string>
     <string name="settings_restore_success">Herstel voltooid!</string>
     <string name="settings_restore_failed">Herstellen mislukt</string>
-    <string name="menu_backup_and_restore">Back-up…</string>
-    <string name="menu_backup">Back-up</string>
-    <string name="menu_restore">Herstellen</string>
-    <string name="xposed_module_updated_notification_content">%s is geupdate</string>
-    <string name="module_repo">Opslagplaats</string>
-    <string name="module_repo_summary">Module opslagplaats (Alpha)</string>
+    <string name="group_network">Netwerk</string>
+    <string name="dns_over_http">DNS via HTTPS</string>
+    <string name="dns_over_http_summary">Tijdelijke oplossing voor DNS-vergiftiging in sommige landen</string>
+    <string name="theme_color">Thema kleur</string>
+    <string name="theme_color_summary">Kleur die het meest voorkomt in de app</string>
+    <string name="dark_theme">Donkere thema</string>
+    <string name="dark_theme_follow_system">Volg systeem</string>
+    <string name="dark_theme_off">Altijd uit</string>
+    <string name="dark_theme_on">Altijd aan</string>
+
+    <!-- Module Repo -->
     <string name="module_readme">Leesmij</string>
     <string name="module_releases">Releases</string>
     <string name="module_information">Info</string>
@@ -155,12 +169,17 @@
     <string name="module_release_view_assets">Middelen</string>
     <string name="menu_open_in_browser">Open in de browser</string>
     <string name="refresh">Vernieuwen</string>
-    <string name="group_network">Netwerk</string>
-    <string name="dns_over_http">DNS via HTTPS</string>
-    <string name="dns_over_http_summary">Tijdelijke oplossing voor DNS-vergiftiging in sommige landen</string>
-    <string name="about_view_source_code"><![CDATA[Bekijk de broncode op %s<br/>Word lid van ons %s-kanaal]]></string>
-    <string name="module_release_load_more">Toon oudere versies</string>
+    <string name="module_release_load_more">Laat oudere versies zien</string>
     <string name="module_release_no_more">Geen release meer</string>
-    <string name="theme_color">Thema kleur</string>
-    <string name="dark_theme">Donkere thema</string>
+    <string name="repo_load_failed">Kan moduleopslagplaats niet laden: %s</string>
+
+
+    <string name="about_source" translatable="false">https://github.com/LSPosed/LSPosed/</string>
+
+    <string name="app_destroyed">Deze applicatie is vernietigd, zorg ervoor dat u deze downloadt vanaf de officiële bron.</string>
+    <string name="outdated_manager">De versie van LSPosed Manager en LSPosed Core zijn niet consistent. Installeer de corresponderende versie opnieuw.</string>
+    <string name="lsposed_not_active">LSPosed is momenteel niet geïnstalleerd of actief.</string>
+    <string name="verbose_log_not_avaliable">Uitgebreid logboek is niet beschikbaar. Als u het net hebt ingeschakeld zonder opnieuw op te starten, probeer het dan opnieuw na het opnieuw opstarten.</string>
+    <string name="NotInstall">Niet geïnstalleerd</string>
+    <string name="NotInstallDetail">LSPosed is niet geïnstalleerd</string>
 </resources>
