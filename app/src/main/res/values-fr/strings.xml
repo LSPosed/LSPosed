@@ -87,7 +87,7 @@
     <string name="view_in_repo">Voir dans le dépôt</string>
     <string name="module_uninstall_message">Voulez-vous installer ce module?</string>
     <string name="module_uninstalled">Désinstallation de %1$s</string>
-    <string name="module_uninstall_failed">Échec de la déinstallation</string>
+    <string name="module_uninstall_failed">Échec de la désinstallation</string>
 
     <!-- AppListActivity -->
     <string name="compile_speed">Ré-optimiser</string>
