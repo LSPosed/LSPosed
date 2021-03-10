@@ -20,7 +20,6 @@
 
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="app_name" translatable="false">LSPosed</string>
-    <string name="Activated">%s 已激活</string>
     <string name="Install">安装</string>
     <string name="InstallDetail">点按安装 LSPosed</string>
     <string name="Modules">模块</string>
@@ -187,4 +186,8 @@
     <string name="info_device">设备</string>
     <string name="info_system_abi">系统架构</string>
     <string name="theme_color_summary">应用中最常见的颜色</string>
+    <string name="activated">已激活</string>
+    <string name="partial_activated">部分激活</string>
+    <string name="selinux_policy_not_loaded_summary">SEPolicy 未被正确加载</string>
+    <string name="selinux_policy_not_loaded">&lt;b&gt;警告:&lt;\/b&gt; SEPolicy 未被正确加载，作用于系统框架的模块将不起作用。</string>
 </resources>

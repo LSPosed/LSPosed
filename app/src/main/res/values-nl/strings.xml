@@ -3,7 +3,8 @@
 
     <!-- MainActivity -->
     <string name="info">Info</string>
-    <string name="Activated">%s Geactiveerd</string>
+    <string name="Activated">Geactiveerd</string>
+    <string name="Install">Installeer</string>
     <string name="Install">Installeer</string>
     <string name="InstallDetail">Tik om LSPosed te installeren</string>
     <string name="Modules">Modules</string>
@@ -71,7 +72,7 @@
     <string name="compile_speed_msg">Optimaliseren ...</string>
     <string name="compile_done">Optimalisatie voltooid.</string>
     <string name="app_launch">Lanceer het</string>
-    <string name="compile_failed">Optimalisatie mislukt of geretourneerde waarde is leeg.</string>
+    <string name="compile_failed">Optimalisatie mislukt of geretourneerde waarde is leeg. </string>
     <string name="compile_failed_with_info">Optimalisatie is mislukt:</string>
     <string name="sort_by_name">Sorteer op applicatienaam</string>
     <string name="sort_by_name_reverse">Sorteren op applicatienaam (omgekeerd)</string>

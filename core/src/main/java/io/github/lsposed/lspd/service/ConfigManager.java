@@ -58,7 +58,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 
 import io.github.lsposed.lspd.Application;
 import io.github.lsposed.lspd.BuildConfig;
@@ -164,22 +163,9 @@ public class ConfigManager {
         }
     }
 
-    private static boolean checkSepolicy() {
-        return SELinux.checkSELinuxAccess("u:r:system_server:s0", "u:r:system_server:s0", "process", "execmem");
-    }
-
     // for system server, cache is not yet ready, we need to query database for it
     public boolean shouldSkipSystemServer() {
-        if (!checkSepolicy()) {
-            Log.d(TAG, "sepolicy is not loaded, trying livepatch");
-            try {
-                Process p = Runtime.getRuntime().exec(new String[]{"supolicy", "--live",
-                        "allow system_server system_server process execmem"});
-                p.waitFor(5, TimeUnit.SECONDS);
-            } catch (Throwable ignored) {
-            }
-        }
-        if (!checkSepolicy()) {
+        if (!SELinux.checkSELinuxAccess("u:r:system_server:s0", "u:r:system_server:s0", "process", "execmem")) {
             sepolicyLoaded = false;
             Log.e(TAG, "skip injecting into android because sepolicy was not loaded properly");
             return true; // skip
