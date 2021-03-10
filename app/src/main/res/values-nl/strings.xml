@@ -22,7 +22,7 @@
     <string name="app_name" translatable="false">LSPosed</string>
 
     <!-- MainActivity -->
-    <string name="info">Info</string>
+    <string name="info">Informatie</string>
     <string name="Activated">Geactiveerd</string>
     <string name="Install">Installeer</string>
     <string name="InstallDetail">Tik om LSPosed te installeren</string>
@@ -155,10 +155,10 @@
     <string name="dns_over_http_summary">Tijdelijke oplossing voor DNS-vergiftiging in sommige landen</string>
     <string name="theme_color">Thema kleur</string>
     <string name="theme_color_summary">Kleur die het meest voorkomt in de app</string>
-	  <string name="dark_theme">Donkere thema</string>
-	  <string name="dark_theme_follow_system">Volg systeem</string>
-	  <string name="dark_theme_off">Altijd uit</string>
-	  <string name="dark_theme_on">Altijd aan</string>
+    <string name="dark_theme">Donkere thema</string>
+    <string name="dark_theme_follow_system">Volg systeem</string>
+    <string name="dark_theme_off">Altijd uit</string>
+    <string name="dark_theme_on">Altijd aan</string>
 
     <!-- Module Repo -->
     <string name="module_readme">Leesmij</string>
