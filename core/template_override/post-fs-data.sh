@@ -155,7 +155,7 @@ start_app_process() {
   while true
   do
     if [ -S "/dev/socket/zygote" ]; then
-      /system/bin/app_process -Djava.class.path=/data/adb/lspd/framework/lspd.dex /system/bin --nice-name=lspd io.github.lsposed.lspd.core.Main
+      /system/bin/app_process -Djava.class.path=/data/adb/lspd/framework/lspd.dex /system/bin --nice-name=lspd org.lsposed.lspd.core.Main
     fi
   done
 }

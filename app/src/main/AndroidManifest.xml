@@ -21,10 +21,11 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="io.github.lsposed.manager">
+    package="org.lsposed.manager">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS" />
+    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS"
+        tools:ignore="ProtectedPermissions" />
 
     <queries>
         <intent>
@@ -82,8 +83,8 @@
             android:exported="true"
             android:permission="android.permission.INTERACT_ACROSS_USERS_FULL">
             <intent-filter>
-                <action android:name="io.github.lsposed.action.MODULE_UPDATED" />
-                <action android:name="io.github.lsposed.action.MODULE_NOT_ACTIVATAED" />
+                <action android:name="org.lsposed.action.MODULE_UPDATED" />
+                <action android:name="org.lsposed.action.MODULE_NOT_ACTIVATAED" />
 
                 <data android:scheme="package" />
             </intent-filter>

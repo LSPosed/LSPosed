@@ -18,4 +18,4 @@
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 
-<manifest package="io.github.lsposed.lspd.hiddenapistubs" />
+<manifest package="org.lsposed.lspd.hiddenapistubs" />

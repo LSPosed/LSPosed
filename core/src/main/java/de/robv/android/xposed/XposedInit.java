@@ -54,8 +54,8 @@ import de.robv.android.xposed.callbacks.XC_InitZygote;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import de.robv.android.xposed.callbacks.XCallback;
 import hidden.HiddenApiBridge;
-import io.github.lsposed.lspd.nativebridge.NativeAPI;
-import io.github.lsposed.lspd.nativebridge.ResourcesHook;
+import org.lsposed.lspd.nativebridge.NativeAPI;
+import org.lsposed.lspd.nativebridge.ResourcesHook;
 
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedBridge.sInitPackageResourcesCallbacks;
@@ -71,7 +71,7 @@ import static de.robv.android.xposed.XposedHelpers.getParameterIndexByType;
 import static de.robv.android.xposed.XposedHelpers.setStaticBooleanField;
 import static de.robv.android.xposed.XposedHelpers.setStaticLongField;
 import static de.robv.android.xposed.XposedHelpers.setStaticObjectField;
-import static io.github.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
+import static org.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
 
 public final class XposedInit {
     private static final String TAG = XposedBridge.TAG;

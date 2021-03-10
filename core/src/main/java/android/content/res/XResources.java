@@ -27,7 +27,6 @@ import android.graphics.Color;
 import android.graphics.Movie;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.StrictMode;
 import android.text.Html;
 import android.util.AttributeSet;
@@ -63,7 +62,7 @@ import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getLongField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.incrementMethodDepth;
-import static io.github.lsposed.lspd.nativebridge.ResourcesHook.rewriteXmlReferencesNative;
+import static org.lsposed.lspd.nativebridge.ResourcesHook.rewriteXmlReferencesNative;
 
 /**
  * {@link android.content.res.Resources} subclass that allows replacing individual resources.

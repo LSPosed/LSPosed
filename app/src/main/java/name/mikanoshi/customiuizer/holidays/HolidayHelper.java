@@ -5,7 +5,6 @@ import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
@@ -17,7 +16,7 @@ import com.github.matteobattilana.weather.WeatherView;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 
-import io.github.lsposed.manager.R;
+import org.lsposed.manager.R;
 import name.mikanoshi.customiuizer.utils.GravitySensor;
 import name.mikanoshi.customiuizer.utils.Helpers;
 
