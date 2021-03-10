@@ -3,8 +3,7 @@
 
     <!-- MainActivity -->
     <string name="info">Info</string>
-    <string name="Activated">Geactiveerd</string>
-    <string name="Install">Installeer</string>
+    <string name="Activated">%s Geactiveerd</string>
     <string name="Install">Installeer</string>
     <string name="InstallDetail">Tik om LSPosed te installeren</string>
     <string name="Modules">Modules</string>
@@ -19,13 +18,17 @@
     <string name="module_repo_summary">Module opslagplaats (Alpha)</string>
     <string name="about_view_source_code"><![CDATA[Bekijk de broncode op %s<br/>Sluit je aan bij onze %s kanaal]]></string>
 
+    <string name="activated">Geactiveerd</string>
     <string name="not_installed">Niet geïnstalleerd</string>
     <string name="selinux_permissive">&lt;b&gt;WAARSCHUWING:&lt;\/b&gt; SELinux dwingt niet af! het kwaadaardige programma dat dit aanvalt, kan uw apparaat volledig controleren en kan uw eigendommen beschadigen en juridische aansprakelijkheid veroorzaken.</string>
     <string name="selinux_permissive_summary">SELinux dwingt niet af!</string>
+    <string name="partial_activated">Gedeeltelijk geactiveerd</string>
+    <string name="selinux_policy_not_loaded_summary">SEPolicy is niet correct geladen</string>
+    <string name="selinux_policy_not_loaded">&lt;b&gt;WAARSCHUWING:&lt;\/b&gt; SEPolicy is niet correct geladen, modules die System Framework haken zullen niet werken.</string>
     <string name="info_api_version">API versie</string>
     <string name="info_framework_version">Framework versie</string>
     <string name="info_manager_version">Manager versie</string>
-    <string name="info_system_version">System versie</string>
+    <string name="info_system_version">Systeem versie</string>
     <string name="info_device">Apparaat</string>
     <string name="info_system_abi">Systeem ABI</string>
 
@@ -69,11 +72,11 @@
 
     <!-- AppListActivity -->
     <string name="compile_speed">Opnieuw optimaliseren</string>
-    <string name="compile_speed_msg">Optimaliseren ...</string>
+    <string name="compile_speed_msg">Optimaliseren…</string>
     <string name="compile_done">Optimalisatie voltooid.</string>
     <string name="app_launch">Lanceer het</string>
-    <string name="compile_failed">Optimalisatie mislukt of geretourneerde waarde is leeg. </string>
-    <string name="compile_failed_with_info">Optimalisatie is mislukt:</string>
+    <string name="compile_failed">Optimalisatie mislukt of geretourneerde waarde is leeg.</string>
+    <string name="compile_failed_with_info">Optimalisatie is mislukt: </string>
     <string name="sort_by_name">Sorteer op applicatienaam</string>
     <string name="sort_by_name_reverse">Sorteren op applicatienaam (omgekeerd)</string>
     <string name="sort_by_package_name">Sorteer op pakketnaam</string>
@@ -103,7 +106,7 @@
     <string name="force_stop_dlg_title">Forceer stop?</string>
     <string name="force_stop_dlg_text">Als u een app geforceerd stopt, kan deze zich misdragen.</string>
     <string name="reboot_required">Opnieuw opstarten is vereist om deze wijziging door te voeren</string>
-    <string name="reboot">Reboot</string>
+    <string name="reboot">Herstart</string>
 
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_app_store">Bekijk in App Store</string>
@@ -132,10 +135,10 @@
     <string name="dns_over_http_summary">Tijdelijke oplossing voor DNS-vergiftiging in sommige landen</string>
     <string name="theme_color">Thema kleur</string>
     <string name="theme_color_summary">Kleur die het meest voorkomt in de app</string>
-    <string name="dark_theme">Donkere thema</string>
-    <string name="dark_theme_follow_system">Volg systeem</string>
-    <string name="dark_theme_off">Altijd uit</string>
-    <string name="dark_theme_on">Altijd aan</string>
+	<string name="dark_theme">Donkere thema</string>
+	<string name="dark_theme_follow_system">Volg systeem</string>
+	<string name="dark_theme_off">Altijd uit</string>
+	<string name="dark_theme_on">Altijd aan</string>
 
     <!-- Module Repo -->
     <string name="module_readme">Leesmij</string>
