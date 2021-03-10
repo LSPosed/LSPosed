@@ -23,7 +23,6 @@
 
     <!-- MainActivity -->
     <string name="info">Informatie</string>
-    <string name="Activated">Geactiveerd</string>
     <string name="Install">Installeer</string>
     <string name="InstallDetail">Tik om LSPosed te installeren</string>
     <string name="Modules">Modules</string>
