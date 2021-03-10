@@ -64,7 +64,7 @@ val verCode: Int by rootProject.extra
 val verName: String by rootProject.extra
 
 dependencies {
-    implementation("dev.rikka.ndk:riru:10")
+    implementation(files("libs/riru-24.0.0.aar"))
     implementation("com.android.tools.build:apksig:4.1.2")
     compileOnly(project(":hiddenapi-stubs"))
     compileOnly("androidx.annotation:annotation:1.1.0")

@@ -150,24 +150,26 @@ extract "${ZIPFILE}" 'service.sh' "${MODPATH}"
 extract "${ZIPFILE}" 'uninstall.sh' "${MODPATH}"
 
 extract "${ZIPFILE}" 'system/framework/lspd.dex' "${MODPATH}"
-
+mkdir ${MODPATH}/riru
 if [ "$ARCH" = "x86" ] || [ "$ARCH" = "x64" ]; then
   ui_print "- ${LANG_CUST_INST_EXT_LIB_X86}"
   extract "$ZIPFILE" 'system_x86/lib/libriru_lspd.so' "${MODPATH}"
-  mv "${MODPATH}/system_x86/lib" "${MODPATH}/system/lib"
+  mv "${MODPATH}/system_x86/lib" "${MODPATH}/riru/lib"
 
   if [ "$IS64BIT" = true ]; then
     ui_print "- ${LANG_CUST_INST_EXT_LIB_X64}"
     extract "$ZIPFILE" 'system_x86/lib64/libriru_lspd.so' "${MODPATH}"
-    mv "${MODPATH}/system_x86/lib64" "${MODPATH}/system/lib64"
+    mv "${MODPATH}/system_x86/lib64" "${MODPATH}/riru/lib64"
   fi
 else
   ui_print "- ${LANG_CUST_INST_EXT_LIB_ARM}"
   extract "$ZIPFILE" 'system/lib/libriru_lspd.so' "${MODPATH}"
+  mv "${MODPATH}/system/lib" "${MODPATH}/riru/lib"
 
   if [ "$IS64BIT" = true ]; then
     ui_print "- ${LANG_CUST_INST_EXT_LIB_ARM64}"
     extract "$ZIPFILE" 'system/lib64/libriru_lspd.so' "${MODPATH}"
+    mv "${MODPATH}/system/lib64" "${MODPATH}/riru/lib64"
   fi
 fi
 

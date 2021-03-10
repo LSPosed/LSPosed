@@ -83,7 +83,8 @@ namespace lspd {
                                         jobjectArray *,
                                         jboolean *,
                                         jboolean *) {
-        Context::GetInstance()->OnNativeForkAndSpecializePre(env, *uid, *nice_name, *start_child_zygote,
+        Context::GetInstance()->OnNativeForkAndSpecializePre(env, *uid, *nice_name,
+                                                             *start_child_zygote,
                                                              *app_data_dir);
     }
 
@@ -92,60 +93,33 @@ namespace lspd {
     }
 }
 
-int riru_api_version;
-
-RIRU_EXPORT __attribute__((noinline)) void *init(void *arg) {
-    static int step = 0;
-    step += 1;
-
-    static void *_module;
-
-    switch (step) {
-        case 1: {
-            auto core_max_api_version = *(int *) arg;
-            riru_api_version =
-                    core_max_api_version <= RIRU_MODULE_API_VERSION ? core_max_api_version
-                                                                    : RIRU_MODULE_API_VERSION;
-            return &riru_api_version;
+static RiruVersionedModuleInfo module{
+        .moduleApiVersion = 24,
+        .moduleInfo = RiruModuleInfo{
+                .supportHide = true,
+                .version = RIRU_MODULE_VERSION,
+                .versionName = STRINGIFY(RIRU_MODULE_VERSION_NAME),
+                .onModuleLoaded = lspd::onModuleLoaded,
+                .shouldSkipUid = lspd::shouldSkipUid,
+                .forkAndSpecializePre = lspd::nativeForkAndSpecializePre,
+                .forkAndSpecializePost = lspd::nativeForkAndSpecializePost,
+                .forkSystemServerPre = lspd::nativeForkSystemServerPre,
+                .forkSystemServerPost = lspd::nativeForkSystemServerPost,
+                .specializeAppProcessPre = lspd::specializeAppProcessPre,
+                .specializeAppProcessPost = lspd::specializeAppProcessPost,
         }
-        case 2: {
-            switch (riru_api_version) {
-                case 10:
-                    [[fallthrough]];
-                case 9: {
-                    auto module = (RiruModuleInfoV10 *) malloc(sizeof(RiruModuleInfoV10));
-                    memset(module, 0, sizeof(RiruModuleInfoV10));
-                    _module = module;
+};
 
-                    module->supportHide = true;
+static std::string magiskPath;
 
-                    module->version = RIRU_MODULE_VERSION;
-                    module->versionName = STRINGIFY(RIRU_MODULE_VERSION_NAME);
-                    module->onModuleLoaded = lspd::onModuleLoaded;
-                    module->shouldSkipUid = lspd::shouldSkipUid;
-                    module->forkAndSpecializePre = lspd::nativeForkAndSpecializePre;
-                    module->forkAndSpecializePost = lspd::nativeForkAndSpecializePost;
-                    module->specializeAppProcessPre = lspd::specializeAppProcessPre;
-                    module->specializeAppProcessPost = lspd::specializeAppProcessPost;
-                    module->forkSystemServerPre = lspd::nativeForkSystemServerPre;
-                    module->forkSystemServerPost = lspd::nativeForkSystemServerPost;
-                    return module;
-                }
-                default: {
-                    return nullptr;
-                }
-            }
-        }
-        case 3: {
-            free(_module);
-            return nullptr;
-        }
-        default: {
-            return nullptr;
-        }
-    }
+__attribute__((noinline)) RIRU_EXPORT RiruVersionedModuleInfo *init(Riru *riru) {
+    LOGD("riru %d", riru->riruApiVersion);
+    LOGD("Support hide: %d", module.moduleInfo.supportHide);
+    LOGD("module path: %s", riru->magiskModulePath);
+    magiskPath = riru->magiskModulePath;
+    return &module;
 }
 
-int main(){
+int main() {
     init(nullptr);
 }
