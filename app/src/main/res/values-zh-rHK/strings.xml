@@ -19,7 +19,6 @@
   -->
 
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
-    <string name="Activated">%s 已啟動</string>
     <string name="Install">安裝</string>
     <string name="InstallDetail">點按安裝 LSPosed</string>
     <string name="Modules">模組</string>

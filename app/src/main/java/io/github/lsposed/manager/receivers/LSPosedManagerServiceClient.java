@@ -154,4 +154,9 @@ public class LSPosedManagerServiceClient {
         ensureService();
         return service.uninstallPackage(packageName);
     }
+
+    public static boolean isSepolicyLoaded() throws RemoteException, NullPointerException {
+        ensureService();
+        return service.isSepolicyLoaded();
+    }
 }

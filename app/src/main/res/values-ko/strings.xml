@@ -21,7 +21,6 @@
 <resources>
     <!-- MainActivity -->
     <string name="info">정보</string>
-    <string name="Activated">%s 활성화됨</string>
     <string name="Install">설치</string>
     <string name="InstallDetail">LSPosed를 설치하려면 탭</string>
     <string name="Modules">모듈</string>
