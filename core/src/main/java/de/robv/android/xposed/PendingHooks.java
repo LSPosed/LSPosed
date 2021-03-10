@@ -21,14 +21,13 @@
 package de.robv.android.xposed;
 
 import java.lang.reflect.Executable;
-import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import io.github.lsposed.lspd.yahfa.hooker.YahfaHooker;
+import org.lsposed.lspd.yahfa.hooker.YahfaHooker;
 
-import static io.github.lsposed.lspd.nativebridge.PendingHooks.recordPendingMethodNative;
+import static org.lsposed.lspd.nativebridge.PendingHooks.recordPendingMethodNative;
 
 public final class PendingHooks {
 

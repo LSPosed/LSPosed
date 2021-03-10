@@ -49,7 +49,7 @@ android {
     }
 
     defaultConfig {
-        applicationId("io.github.lsposed.manager")
+        applicationId("org.lsposed.manager")
         minSdkVersion(androidMinSdkVersion)
         targetSdkVersion(androidTargetSdkVersion)
         versionCode(verCode)

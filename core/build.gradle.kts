@@ -83,7 +83,7 @@ android {
     }
 
     defaultConfig {
-        applicationId("io.github.lsposed.lspd")
+        applicationId("org.lsposed.lspd")
         minSdkVersion(androidMinSdkVersion)
         targetSdkVersion(androidTargetSdkVersion)
         multiDexEnabled = false

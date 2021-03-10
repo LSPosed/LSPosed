@@ -32,7 +32,7 @@
     </com.takisoft.preferencex.PreferenceCategory>
 
     <com.takisoft.preferencex.PreferenceCategory android:title="@string/settings_group_theme">
-        <io.github.lsposed.manager.util.theme.ThemeColorPreference
+        <org.lsposed.manager.util.theme.ThemeColorPreference
             android:defaultValue=""
             android:dialogTitle="@string/theme_color"
             android:key="theme_color"

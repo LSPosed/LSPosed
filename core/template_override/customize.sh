@@ -205,7 +205,7 @@ if [[ ! -d /data/adb/lspd/config ]]; then
   mkdir -p /data/adb/lspd/config
   ui_print "- ${LANG_CUST_INST_MIGRATE_CONF}"
   cp -r /data/misc/$MISC_PATH/0/prefs /data/misc/$MISC_PATH/prefs
-  /system/bin/app_process -Djava.class.path=/data/adb/lspd/framework/lspd.dex /system/bin --nice-name=lspd_config io.github.lsposed.lspd.service.ConfigManager
+  /system/bin/app_process -Djava.class.path=/data/adb/lspd/framework/lspd.dex /system/bin --nice-name=lspd_config org.lsposed.lspd.service.ConfigManager
 fi
 echo "rm -rf /data/misc/$MISC_PATH" >> "${MODPATH}/uninstall.sh" || abortC "! ${LANG_CUST_ERR_CONF_UNINST}"
 echo "[[ -f /data/adb/lspd/new_install ]] || rm -rf /data/adb/lspd" >> "${MODPATH}/uninstall.sh" || abortC "! ${LANG_CUST_ERR_CONF_UNINST}"
