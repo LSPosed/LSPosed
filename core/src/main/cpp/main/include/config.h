@@ -48,9 +48,9 @@ inline constexpr bool is64 = Is64();
 # define LP_SELECT(lp32, lp64) lp32
 #endif
 
-    static const auto kEntryClassName = "io.github.lsposed.lspd.core.Main"s;
-    static const auto kClassLinkerClassName = "io.github.lsposed.lspd.nativebridge.ClassLinker"s;
-    static const auto kBridgeServiceClassName = "io.github.lsposed.lspd.service.BridgeService"s;
+    static const auto kEntryClassName = "org.lsposed.lspd.core.Main"s;
+    static const auto kClassLinkerClassName = "org.lsposed.lspd.nativebridge.ClassLinker"s;
+    static const auto kBridgeServiceClassName = "org.lsposed.lspd.service.BridgeService"s;
     static const auto kDexPath = "/data/adb/lspd/framework/lspd.dex"s;
 
     static const auto kLibArtName = "libart.so"s;

@@ -24,7 +24,7 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.util.Log;
 
-import io.github.lsposed.lspd.BuildConfig;
+import org.lsposed.lspd.BuildConfig;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Executable;
@@ -41,10 +41,10 @@ import java.util.Set;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XC_InitZygote;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
-import io.github.lsposed.lspd.nativebridge.ModuleLogger;
-import io.github.lsposed.lspd.nativebridge.ResourcesHook;
-import io.github.lsposed.lspd.yahfa.dexmaker.DynamicBridge;
-import io.github.lsposed.lspd.yahfa.hooker.YahfaHooker;
+import org.lsposed.lspd.nativebridge.ModuleLogger;
+import org.lsposed.lspd.nativebridge.ResourcesHook;
+import org.lsposed.lspd.yahfa.dexmaker.DynamicBridge;
+import org.lsposed.lspd.yahfa.hooker.YahfaHooker;
 
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
 

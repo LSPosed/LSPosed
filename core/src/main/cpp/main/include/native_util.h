@@ -65,7 +65,7 @@ namespace lspd {
 #endif
 
 #define REGISTER_LSP_NATIVE_METHODS(class_name) \
-  RegisterNativeMethodsInternal(env, "io.github.lsposed.lspd.nativebridge." #class_name, gMethods, arraysize(gMethods))
+  RegisterNativeMethodsInternal(env, "org.lsposed.lspd.nativebridge." #class_name, gMethods, arraysize(gMethods))
 
 } // namespace lspd
 
