@@ -36,9 +36,19 @@
     <string name="module_repo_summary">Dépôts de modules (Alpha)</string>
     <string name="about_view_source_code"><![CDATA[Voir le code source sur %s<br/>Rejoindre notre canal %s]]></string>
 
+    <string name="activated">Activé</string>
     <string name="not_installed">Non installé</string>
     <string name="selinux_permissive">&lt;b&gt;AVERTISSEMENT:&lt;\/b&gt; SELinux n\est pas renforcé! Le programme malveillant qui attaque peut contrôler complètement votre appareil et peut causer des dommages matériels et engager votre responsabilité légale.</string>
     <string name="selinux_permissive_summary">SELinux n\'est pas renforcé!</string>
+    <string name="partial_activated">Partiellement activé</string>
+    <string name="selinux_policy_not_loaded_summary">SEPolicy n\'est pas chargé correctement</string>
+    <string name="selinux_policy_not_loaded">&lt;b&gt;AVERTISSEMENT:&lt;\/b&gt; SEPolicy n\'est pas chargé correctement, les modules qui modifient le sous-système ne fonctionneront pas.</string>
+    <string name="info_api_version">Version API</string>
+    <string name="info_framework_version">Version du framework</string>
+    <string name="info_manager_version">Version du gestionnaire</string>
+    <string name="info_system_version">Version du système</string>
+    <string name="info_device">Périphérique </string>
+    <string name="info_system_abi">ABI du système</string>  
 
     <!-- LogsActivity -->
     <string name="menuSend">Envoyer</string>
@@ -74,6 +84,9 @@
     <string name="module_uninstall">Désinstallation</string>
     <string name="module_settings">Réglages du module</string>
     <string name="view_in_repo">Voir dans le dépôt</string>
+    <string name="module_uninstall_message">Voulez-vous installer ce module?</string>
+    <string name="module_uninstalled">Désinstallation de %1$s</string>
+    <string name="module_uninstall_failed">Échec de la désinstallation</string>
 
     <!-- AppListActivity -->
     <string name="compile_speed">Ré-optimiser</string>
@@ -139,6 +152,7 @@
     <string name="dns_over_http">DNS sur HTTPS</string>
     <string name="dns_over_http_summary">Contourner la censure DNS dans certains pays</string>
     <string name="theme_color">Couleure du thème</string>
+    <string name="theme_color_summary">Couleure apparaissant fréquemment dans l\'application</string>
 
     <!-- Module Repo -->
     <string name="module_readme">Lisez moi</string>
@@ -152,10 +166,13 @@
     <string name="refresh">Rafraîchir</string>
     <string name="module_release_load_more">Afficher les anciennes versions</string>
     <string name="module_release_no_more">Pas d\'autres versions</string>
+    <string name="repo_load_failed">Échec de chargement du dépôt des modules: %s</string>
 
 
     <string name="app_destroyed">Cette application à été détruite, merci de vous assurer que vous l\'avez bien téléchargé depuis la source officielle.</string>
     <string name="outdated_manager">Version du Gestionnaire LSPosed et du noyau LSPosed ne sont pas cohérents. Merci de réinstaller la version correspondante.</string>
     <string name="lsposed_not_active">LSPosed n\'est pas installé ou n\'est pas actif.</string>
     <string name="verbose_log_not_avaliable">Journal détaillé indisponible, si vous l\'avez juste activé sans redémarrer, essayez à nouveau après avoir redémarré.</string>
+    <string name="NotInstall">Non installé</string>
+    <string name="NotInstallDetail">LSPosed n\'est pas installé</string>
 </resources>
