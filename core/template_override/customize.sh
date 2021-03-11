@@ -46,8 +46,6 @@ LANG_CUST_INST_CONF_OLD="Use previous path"
 LANG_CUST_DISABLE_EDXP="**WARNING**: This installation will disable edxposed because of incompatibility"
 LANG_CUST_INST_CONF_NEW="Use new path"
 LANG_CUST_INST_COPY_LIB="Copying framework libraries"
-LANG_CUST_INST_REM_OLDCONF="Removing old configuration"
-LANG_CUST_INST_COPT_EXTRA="Copying extra files"
 LANG_CUST_INST_DONE="Welcome to"
 
 LANG_CUST_ERR_VERIFY_FAIL="Unable to extract verify tool!"
@@ -56,7 +54,6 @@ LANG_CUST_ERR_CONF_CREATE="Can't create configuration path"
 LANG_CUST_ERR_CONF_STORE="Can't store configuration path"
 LANG_CUST_ERR_CONF_FIRST="Can't create first install flag"
 LANG_CUST_ERR_CONF_UNINST="Can't write uninstall script"
-LANG_CUST_ERR_EXTRA_CREATE="Can't create"
 
 # verify
 LANG_VERIFY_SUCCESS="Verified"
