@@ -28,28 +28,7 @@ abortC() {
   abort "$1"
 }
 
-getRandomNameExist() {
-    RAND_PATH=$4
-    RAND_SUFFIX=$3
-    RAND_PREFIX=$2
-    RAND_DIGIT=$1
-    RAND_RAND="$(cat /proc/sys/kernel/random/uuid|md5sum|cut -c 1-"${RAND_DIGIT}")"
-    RAND_PATH_EXIST=false
-    for TARGET in ${RAND_PATH}; do
-        if [ -e "${TARGET}/${RAND_PREFIX}${RAND_RAND}${RAND_SUFFIX}" ]; then
-            RAND_PATH_EXIST=true
-        fi
-    done
-    if [ "${RAND_PATH_EXIST}" == true ]; then
-        getRandomNameExist "${RAND_DIGIT}" "${RAND_PREFIX}" "${RAND_SUFFIX}" "${RAND_PATH}"
-    else
-        echo "${RAND_RAND}"
-    fi
-}
-
 POUNDS="*********************************************************"
-RIRU_PATH="/data/adb/riru"
-
 
 VERSION=$(grep_prop version "${TMPDIR}/module.prop")
 
