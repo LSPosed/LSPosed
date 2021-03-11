@@ -42,7 +42,6 @@ jobs:
         path: |
           ~/.gradle/caches
           ~/.gradle/wrapper
-          ~/.ccache
         key: gradle-core-${{ hashFiles('**/*.gradle.kts') }}
         restore-keys: |
           gradle-manager-${{ hashFiles('**/*.gradle.kts') }}
