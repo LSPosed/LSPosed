@@ -97,7 +97,7 @@ namespace lspd {
     }
 
     RiruVersionedModuleInfo module{
-            .moduleApiVersion = 24,
+            .moduleApiVersion = RIRU_MODULE_API_VERSION,
             .moduleInfo = RiruModuleInfo{
                     .supportHide = true,
                     .version = RIRU_MODULE_VERSION,
@@ -115,8 +115,7 @@ namespace lspd {
 }
 
 __attribute__((noinline)) RIRU_EXPORT RiruVersionedModuleInfo *init(Riru *riru) {
-    LOGD("riru %d", riru->riruApiVersion);
-    LOGD("Support hide: %d", lspd::module.moduleInfo.supportHide);
+    LOGD("Using riru %d", riru->riruApiVersion);
     LOGD("module path: %s", riru->magiskModulePath);
     lspd::magiskPath = riru->magiskModulePath;
     return &lspd::module;
