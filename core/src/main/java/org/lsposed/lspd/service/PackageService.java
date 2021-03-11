@@ -242,7 +242,7 @@ public class PackageService {
             // Uninstall old manager first
             PackageInfo oldPkgInfo = pm.getPackageInfo("io.github.lsposed.manager", 0, 0);
             if (oldPkgInfo != null && oldPkgInfo.versionName != null) {
-                uninstallPackage(new VersionedPackage(oldPkgInfo.packageName, oldPkgInfo.versionCode);
+                uninstallPackage(new VersionedPackage(oldPkgInfo.packageName, oldPkgInfo.versionCode));
             }
 
             // Uninstall manager on version or signature mismatch now
