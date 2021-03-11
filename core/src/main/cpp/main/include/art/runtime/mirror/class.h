@@ -50,8 +50,8 @@ namespace art {
                 // Note: these identifiers should be consistent with those in Java layer
                 if (strstr(thisDesc, "LspHooker_") != nullptr
                     || strstr(thatDesc, "LspHooker_") != nullptr
-                    || strstr(thisDesc, "io/github/lsposed/") != nullptr
-                    || strstr(thatDesc, "io/github/lsposed/") != nullptr) {
+                    || strstr(thisDesc, "org/lsposed/") != nullptr
+                    || strstr(thatDesc, "org/lsposed/") != nullptr) {
                     return true;
                 }
                 // for MIUI resources hooking
