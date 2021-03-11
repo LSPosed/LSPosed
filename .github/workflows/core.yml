@@ -36,8 +36,20 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 11
+    - name: Cache Gradle
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: gradle-${{ hashFiles('**/*.gradle.kts') }}
+        restore-keys: gradle-
     - name: Build with Gradle
-      run:  bash ./gradlew zipRelease zipDebug
+      run:  |
+        echo 'org.gradle.caching=true' >> gradle.properties
+        echo 'org.gradle.parallel=true' >> gradle.properties
+        echo 'org.gradle.vfs.watch=true' >> gradle.properties
+        ./gradlew zipRelease zipDebug
     - name: Prepare artifact
       if: success()
       id: prepareArtifact
