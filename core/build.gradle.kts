@@ -201,26 +201,26 @@ afterEvaluate {
                     filter(mapOf("eol" to FixCrLfFilter.CrLf.newInstance("lf")), FixCrLfFilter::class.java)
                 }
                 copy {
-                    include("riru_lspd")
-                    rename("riru_lspd", "liblspd.so")
+                    include("lspd")
+                    rename("lspd", "liblspd.so")
                     from("$libPathRelease/armeabi-v7a")
                     into("$zipPathMagiskReleasePath/riru/lib")
                 }
                 copy {
-                    include("riru_lspd")
-                    rename("riru_lspd", "liblspd.so")
+                    include("lspd")
+                    rename("lspd", "liblspd.so")
                     from("$libPathRelease/arm64-v8a")
                     into("$zipPathMagiskReleasePath/riru/lib64")
                 }
                 copy {
-                    include("riru_lspd")
-                    rename("riru_lspd", "liblspd.so")
+                    include("lspd")
+                    rename("lspd", "liblspd.so")
                     from("$libPathRelease/x86")
                     into("$zipPathMagiskReleasePath/riru_x86/lib")
                 }
                 copy {
-                    include("riru_lspd")
-                    rename("riru_lspd", "liblspd.so")
+                    include("lspd")
+                    rename("lspd", "liblspd.so")
                     from("$libPathRelease/x86_64")
                     into("$zipPathMagiskReleasePath/riru_x86/lib64")
                 }
