@@ -26,8 +26,6 @@
 #include <dl_util.h>
 #include <art/runtime/jni_env_ext.h>
 #include "jni/pending_hooks.h"
-#include <fstream>
-#include <sstream>
 #include "context.h"
 #include "native_hook.h"
 #include "jni/logger.h"
@@ -59,12 +57,15 @@ namespace lspd {
     void Context::PreLoadDex(const std::string &dex_path) {
         if (LIKELY(!dex.empty())) return;
 
-        std::ifstream is(dex_path);
-        if (!is.good()) {
-           LOGE("Failed to read dex");
-           return;
+        FILE *f = fopen(dex_path.c_str(), "rb");
+        fseek(f, 0, SEEK_END);
+        dex.resize(ftell(f));
+        rewind(f);
+        if (dex.size() != fread(dex.data(), 1, dex.size(), f)) {
+            LOGE("Read dex failed");
+            dex.resize(0);
         }
-        dex.assign(std::istreambuf_iterator<char>(is), std::istreambuf_iterator<char>());
+        fclose(f);
 
         LOGI("Loaded %s with size %zu", dex_path.c_str(), dex.size());
     }

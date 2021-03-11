@@ -70,7 +70,7 @@ namespace lspd {
         jclass class_linker_class_ = nullptr;
         jmethodID post_fixup_static_mid_ = nullptr;
         bool skip_ = false;
-        std::vector<signed char> dex{};
+        std::vector<char> dex{};
 
         Context() {}
 

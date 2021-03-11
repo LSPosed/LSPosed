@@ -90,8 +90,8 @@ android {
         externalNativeBuild {
             cmake {
                 abiFilters("arm64-v8a", "armeabi-v7a", "x86", "x86_64")
-                cppFlags("-std=c++17 -ffixed-x18 -Qunused-arguments -frtti -fomit-frame-pointer -fpie -fPIC")
-                cFlags("-std=gnu99 -ffixed-x18 -Qunused-arguments -frtti -fomit-frame-pointer -fpie -fPIC")
+                cppFlags("-std=c++20 -ffixed-x18 -Qunused-arguments -fno-rtti -fno-exceptions -fomit-frame-pointer -fpie -fPIC")
+                cFlags("-std=c11 -ffixed-x18 -Qunused-arguments -fno-rtti -fno-exceptions -fomit-frame-pointer -fpie -fPIC")
                 arguments("-DRIRU_MODULE_API_VERSION=$moduleMaxRiruApiVersion",
                         "-DRIRU_MODULE_VERSION=$verCode",
                         "-DRIRU_MODULE_VERSION_NAME:STRING=\"$verName\"")
