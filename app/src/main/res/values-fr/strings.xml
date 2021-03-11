@@ -21,7 +21,7 @@
 <resources>
 
     <!-- MainActivity -->
-    <string name="info">Info</string>
+    <string name="info">Infos</string>
     <string name="Install">Installer</string>
     <string name="InstallDetail">Appuyez pour installer LSPosed</string>
     <string name="Modules">Modules</string>
@@ -43,12 +43,12 @@
     <string name="partial_activated">Partiellement activé</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy n\'est pas chargé correctement</string>
     <string name="selinux_policy_not_loaded">&lt;b&gt;AVERTISSEMENT:&lt;\/b&gt; SEPolicy n\'est pas chargé correctement, les modules qui modifient le sous-système ne fonctionneront pas.</string>
-    <string name="info_api_version">Version API</string>
+    <string name="info_api_version">Version de l\'API</string>
     <string name="info_framework_version">Version du framework</string>
     <string name="info_manager_version">Version du gestionnaire</string>
     <string name="info_system_version">Version du système</string>
     <string name="info_device">Périphérique </string>
-    <string name="info_system_abi">ABI du système</string>  
+    <string name="info_system_abi">Architecture du système</string>  
 
     <!-- LogsActivity -->
     <string name="menuSend">Envoyer</string>
@@ -66,7 +66,7 @@
     <string name="logs_cannot_read">Lecture du journal impossible: \n</string>
     <string name="menuReload">Recharger</string>
     <string name="logs_clear_failed_2">Échec d\’effacement du journal</string>
-    <string name="not_logcat_2">Si l\'on vous a demandé un Logcat Android, alors vous êtes dans la mauvaise section. Ici c\’est le journal LSPosed; si vous avez besoin d\’un logcat, sur XDA vous pouvez trouver ce dont vous avez besoin.</string>
+    <string name="not_logcat_2">S\'il vous ai demandé un Logcat Android, alors vous êtes dans la mauvaise section. Ici il s\'agit du journal LSPosed; si vous avez besoin d\’un logcat, vous pourrez trouver ce dont vous avez besoin sur XDA.</string>
 
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Le module LSPosed n\’est pas encore actif</string>
@@ -117,7 +117,7 @@
     <string name="requested_by_module">Recommendé</string>
     <string name="module_disabled_no_selection">Le module %s à été désactivé étant donné qu\’aucune application n\’a été sélectionné.</string>
     <string name="android_framework">Cadre du sous-système</string>
-    <string name="menu_backup_and_restore">Sauvegarder…</string>
+    <string name="menu_backup_and_restore">Sauvegarde…</string>
     <string name="menu_backup">Sauvegarder</string>
     <string name="menu_restore">Restaurer</string>
     <string name="force_stop">Forcer l\’arrêt</string>
