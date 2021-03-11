@@ -51,7 +51,7 @@ inline constexpr bool is64 = Is64();
     static const auto kEntryClassName = "org.lsposed.lspd.core.Main"s;
     static const auto kClassLinkerClassName = "org.lsposed.lspd.nativebridge.ClassLinker"s;
     static const auto kBridgeServiceClassName = "org.lsposed.lspd.service.BridgeService"s;
-    static const auto kDexPath = "/data/adb/lspd/framework/lspd.dex"s;
+    static const auto kDexPath = "framework/lspd.dex"s;
 
     static const auto kLibArtName = "libart.so"s;
     static const auto kLibFwName = "libandroidfw.so"s;
