@@ -29,123 +29,98 @@
 #include "symbol_cache.h"
 
 namespace lspd {
-    static void onModuleLoaded() {
-        LOGI("onModuleLoaded: welcome to LSPosed!");
-        // rirud must be used in onModuleLoaded
-        Context::GetInstance()->PreLoadDex(kDexPath);
-        InitSymbolCache();
-    }
+    namespace {
+        std::string magiskPath;
 
-    static int shouldSkipUid(int) {
-        return 0;
-    }
+        void onModuleLoaded() {
+            LOGI("onModuleLoaded: welcome to LSPosed!");
+            // rirud must be used in onModuleLoaded
+            Context::GetInstance()->PreLoadDex(magiskPath + '/' + kDexPath);
+            InitSymbolCache();
+        }
 
-    static void nativeForkAndSpecializePre(JNIEnv *env, jclass, jint *_uid, jint *,
-                                           jintArray *, jint *,
-                                           jobjectArray *, jint *,
-                                           jstring *, jstring *nice_name,
-                                           jintArray *, jintArray *,
-                                           jboolean *start_child_zygote, jstring *,
-                                           jstring *app_data_dir, jboolean *,
-                                           jobjectArray *,
-                                           jobjectArray *,
-                                           jboolean *,
-                                           jboolean *) {
-        Context::GetInstance()->OnNativeForkAndSpecializePre(env, *_uid,
-                                                             *nice_name,
-                                                             *start_child_zygote,
-                                                             *app_data_dir);
-    }
+        int shouldSkipUid(int) {
+            return 0;
+        }
 
-    static void nativeForkAndSpecializePost(JNIEnv *env, jclass, jint res) {
-        if (res == 0)
-            Context::GetInstance()->OnNativeForkAndSpecializePost(env);
-    }
-
-    static void nativeForkSystemServerPre(JNIEnv *env, jclass, uid_t *, gid_t *,
-                                          jintArray *, jint *,
-                                          jobjectArray *, jlong *,
-                                          jlong *) {
-        Context::GetInstance()->OnNativeForkSystemServerPre(env);
-    }
-
-    static void nativeForkSystemServerPost(JNIEnv *env, jclass, jint res) {
-        Context::GetInstance()->OnNativeForkSystemServerPost(env, res);
-    }
-
-    /* method added in Android Q */
-    static void specializeAppProcessPre(JNIEnv *env, jclass, jint *uid, jint *,
-                                        jintArray *, jint *, jobjectArray *,
-                                        jint *, jstring *, jstring *nice_name,
+        void nativeForkAndSpecializePre(JNIEnv *env, jclass, jint *_uid, jint *,
+                                        jintArray *, jint *,
+                                        jobjectArray *, jint *,
+                                        jstring *, jstring *nice_name,
+                                        jintArray *, jintArray *,
                                         jboolean *start_child_zygote, jstring *,
                                         jstring *app_data_dir, jboolean *,
                                         jobjectArray *,
                                         jobjectArray *,
                                         jboolean *,
                                         jboolean *) {
-        Context::GetInstance()->OnNativeForkAndSpecializePre(env, *uid, *nice_name, *start_child_zygote,
-                                                             *app_data_dir);
-    }
-
-    static void specializeAppProcessPost(JNIEnv *env, jclass) {
-        Context::GetInstance()->OnNativeForkAndSpecializePost(env);
-    }
-}
-
-int riru_api_version;
-
-RIRU_EXPORT __attribute__((noinline)) void *init(void *arg) {
-    static int step = 0;
-    step += 1;
-
-    static void *_module;
-
-    switch (step) {
-        case 1: {
-            auto core_max_api_version = *(int *) arg;
-            riru_api_version =
-                    core_max_api_version <= RIRU_MODULE_API_VERSION ? core_max_api_version
-                                                                    : RIRU_MODULE_API_VERSION;
-            return &riru_api_version;
+            Context::GetInstance()->OnNativeForkAndSpecializePre(env, *_uid,
+                                                                 *nice_name,
+                                                                 *start_child_zygote,
+                                                                 *app_data_dir);
         }
-        case 2: {
-            switch (riru_api_version) {
-                case 10:
-                    [[fallthrough]];
-                case 9: {
-                    auto module = (RiruModuleInfoV10 *) malloc(sizeof(RiruModuleInfoV10));
-                    memset(module, 0, sizeof(RiruModuleInfoV10));
-                    _module = module;
 
-                    module->supportHide = true;
+        void nativeForkAndSpecializePost(JNIEnv *env, jclass, jint res) {
+            if (res == 0)
+                Context::GetInstance()->OnNativeForkAndSpecializePost(env);
+        }
 
-                    module->version = RIRU_MODULE_VERSION;
-                    module->versionName = STRINGIFY(RIRU_MODULE_VERSION_NAME);
-                    module->onModuleLoaded = lspd::onModuleLoaded;
-                    module->shouldSkipUid = lspd::shouldSkipUid;
-                    module->forkAndSpecializePre = lspd::nativeForkAndSpecializePre;
-                    module->forkAndSpecializePost = lspd::nativeForkAndSpecializePost;
-                    module->specializeAppProcessPre = lspd::specializeAppProcessPre;
-                    module->specializeAppProcessPost = lspd::specializeAppProcessPost;
-                    module->forkSystemServerPre = lspd::nativeForkSystemServerPre;
-                    module->forkSystemServerPost = lspd::nativeForkSystemServerPost;
-                    return module;
-                }
-                default: {
-                    return nullptr;
-                }
+        void nativeForkSystemServerPre(JNIEnv *env, jclass, uid_t *, gid_t *,
+                                       jintArray *, jint *,
+                                       jobjectArray *, jlong *,
+                                       jlong *) {
+            Context::GetInstance()->OnNativeForkSystemServerPre(env);
+        }
+
+        void nativeForkSystemServerPost(JNIEnv *env, jclass, jint res) {
+            Context::GetInstance()->OnNativeForkSystemServerPost(env, res);
+        }
+
+        /* method added in Android Q */
+        void specializeAppProcessPre(JNIEnv *env, jclass, jint *uid, jint *,
+                                     jintArray *, jint *, jobjectArray *,
+                                     jint *, jstring *, jstring *nice_name,
+                                     jboolean *start_child_zygote, jstring *,
+                                     jstring *app_data_dir, jboolean *,
+                                     jobjectArray *,
+                                     jobjectArray *,
+                                     jboolean *,
+                                     jboolean *) {
+            Context::GetInstance()->OnNativeForkAndSpecializePre(env, *uid, *nice_name,
+                                                                 *start_child_zygote,
+                                                                 *app_data_dir);
+        }
+
+        void specializeAppProcessPost(JNIEnv *env, jclass) {
+            Context::GetInstance()->OnNativeForkAndSpecializePost(env);
+        }
+    }
+
+    RiruVersionedModuleInfo module{
+            .moduleApiVersion = RIRU_MODULE_API_VERSION,
+            .moduleInfo = RiruModuleInfo{
+                    .supportHide = true,
+                    .version = RIRU_MODULE_VERSION,
+                    .versionName = STRINGIFY(RIRU_MODULE_VERSION_NAME),
+                    .onModuleLoaded = lspd::onModuleLoaded,
+                    .shouldSkipUid = lspd::shouldSkipUid,
+                    .forkAndSpecializePre = lspd::nativeForkAndSpecializePre,
+                    .forkAndSpecializePost = lspd::nativeForkAndSpecializePost,
+                    .forkSystemServerPre = lspd::nativeForkSystemServerPre,
+                    .forkSystemServerPost = lspd::nativeForkSystemServerPost,
+                    .specializeAppProcessPre = lspd::specializeAppProcessPre,
+                    .specializeAppProcessPost = lspd::specializeAppProcessPost,
             }
-        }
-        case 3: {
-            free(_module);
-            return nullptr;
-        }
-        default: {
-            return nullptr;
-        }
-    }
+    };
 }
 
-int main(){
+__attribute__((noinline)) RIRU_EXPORT RiruVersionedModuleInfo *init(Riru *riru) {
+    LOGD("Using riru %d", riru->riruApiVersion);
+    LOGD("module path: %s", riru->magiskModulePath);
+    lspd::magiskPath = riru->magiskModulePath;
+    return &lspd::module;
+}
+
+int main() {
     init(nullptr);
 }

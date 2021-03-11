@@ -37,15 +37,14 @@ fun calcSha256(file: File): String {
 }
 
 val moduleName = "LSPosed"
-val jarDestDir = "${projectDir}/template_override/system/framework/"
 val isWindows = OperatingSystem.current().isWindows
 val moduleId = "riru_lsposed"
 val authors = "LSPosed Developers"
 
 val riruModuleId = "lsposed"
-val moduleMinRiruApiVersion = 10
-val moduleMinRiruVersionName = "v23.0"
-val moduleMaxRiruApiVersion = 10
+val moduleMinRiruApiVersion = 24
+val moduleMinRiruVersionName = "v24.0.0"
+val moduleMaxRiruApiVersion = 24
 
 val defaultManagerPackageName: String by rootProject.extra
 val apiCode: Int by rootProject.extra
@@ -64,7 +63,7 @@ val verCode: Int by rootProject.extra
 val verName: String by rootProject.extra
 
 dependencies {
-    implementation("dev.rikka.ndk:riru:10")
+    implementation("dev.rikka.ndk:riru:24.0.0")
     implementation("com.android.tools.build:apksig:4.1.2")
     compileOnly(project(":hiddenapi-stubs"))
     compileOnly("androidx.annotation:annotation:1.1.0")
@@ -163,9 +162,7 @@ afterEvaluate {
                     expand("moduleId" to moduleId,
                             "versionName" to verName,
                             "versionCode" to verCode,
-                            "authorList" to authors,
-                            "apiCode" to apiCode,
-                            "minApi" to "$moduleMinRiruApiVersion")
+                            "authorList" to authors)
                     filter(mapOf("eol" to FixCrLfFilter.CrLf.newInstance("lf")), FixCrLfFilter::class.java)
                 }
                 copy {
@@ -183,7 +180,7 @@ afterEvaluate {
                     from(dexOutPath) {
                         rename("classes.dex", "lspd.dex")
                     }
-                    into(file(zipPathMagiskReleasePath + "system/framework/"))
+                    into(file(zipPathMagiskReleasePath + "framework/"))
                 }
                 copy {
                     from("${projectDir}/template_override")
@@ -196,34 +193,35 @@ afterEvaluate {
                     include("util_functions.sh")
                     filter { line ->
                         line.replace("%%%RIRU_MODULE_ID%%%", riruModuleId)
-                                .replace("%%%RIRU_MIN_API_VERSION%%%", moduleMinRiruApiVersion.toString())
-                                .replace("%%%RIRU_MIN_VERSION_NAME%%%", moduleMinRiruVersionName)
+                            .replace("%%%RIRU_MODULE_API_VERSION%%%", moduleMaxRiruApiVersion.toString())
+                            .replace("%%%RIRU_MODULE_MIN_API_VERSION%%%", moduleMinRiruApiVersion.toString())
+                            .replace("%%%RIRU_MODULE_MIN_RIRU_VERSION_NAME%%%", moduleMinRiruVersionName)
                     }
                     filter(mapOf("eol" to FixCrLfFilter.CrLf.newInstance("lf")), FixCrLfFilter::class.java)
                 }
                 copy {
-                    include("riru_lspd")
-                    rename("riru_lspd", "libriru_lspd.so")
+                    include("lspd")
+                    rename("lspd", "liblspd.so")
                     from("$libPathRelease/armeabi-v7a")
-                    into("$zipPathMagiskReleasePath/system/lib")
+                    into("$zipPathMagiskReleasePath/riru/lib")
                 }
                 copy {
-                    include("riru_lspd")
-                    rename("riru_lspd", "libriru_lspd.so")
+                    include("lspd")
+                    rename("lspd", "liblspd.so")
                     from("$libPathRelease/arm64-v8a")
-                    into("$zipPathMagiskReleasePath/system/lib64")
+                    into("$zipPathMagiskReleasePath/riru/lib64")
                 }
                 copy {
-                    include("riru_lspd")
-                    rename("riru_lspd", "libriru_lspd.so")
+                    include("lspd")
+                    rename("lspd", "liblspd.so")
                     from("$libPathRelease/x86")
-                    into("$zipPathMagiskReleasePath/system_x86/lib")
+                    into("$zipPathMagiskReleasePath/riru_x86/lib")
                 }
                 copy {
-                    include("riru_lspd")
-                    rename("riru_lspd", "libriru_lspd.so")
+                    include("lspd")
+                    rename("lspd", "liblspd.so")
                     from("$libPathRelease/x86_64")
-                    into("$zipPathMagiskReleasePath/system_x86/lib64")
+                    into("$zipPathMagiskReleasePath/riru_x86/lib64")
                 }
                 copy {
                     from("${project(":app").projectDir}/build/outputs/apk/${variantLowered}")
