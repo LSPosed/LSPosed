@@ -27,6 +27,10 @@ RIRU_MODULE_MIN_RIRU_VERSION_NAME="%%%RIRU_MODULE_MIN_RIRU_VERSION_NAME%%%"
 check_riru_version() {
   RIRU_CORE_MODULES_PATH=/data/adb/modules/riru-core
   RIRU_CORE_MODULES_UPDATE_PATH=/data/adb/modules_update/riru-core
+  if [ -n "$(magisk -v | grep lite)" ]; then
+    RIRU_CORE_MODULES_PATH=/data/adb/lite_modules/riru-core
+    RIRU_CORE_MODULES_UPDATE_PATH=/data/adb/lite_modules_update/riru-core
+  fi
   if [ ! -f "$RIRU_CORE_MODULES_UPDATE_PATH/api_version" ] && [ ! -f "$RIRU_CORE_MODULES_PATH/api_version" ]; then
     ui_print "*********************************************************"
     ui_print "! Riru $RIRU_MODULE_MIN_RIRU_VERSION_NAME or above is required"
