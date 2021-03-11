@@ -42,8 +42,11 @@ jobs:
         path: |
           ~/.gradle/caches
           ~/.gradle/wrapper
-        key: gradle-${{ hashFiles('**/*.gradle.kts') }}
-        restore-keys: gradle-
+        key: gradle-core-${{ hashFiles('**/*.gradle.kts') }}
+        restore-keys: |
+          gradle-manager-${{ hashFiles('**/*.gradle.kts') }}
+          gradle-core
+          gradle-
     - name: Build with Gradle
       run:  |
         echo 'org.gradle.caching=true' >> gradle.properties
