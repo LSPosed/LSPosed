@@ -24,7 +24,7 @@ grep_prop() {
     local REGEX="s/^$1=//p"
     shift
     local FILES="$@"
-    [[ -z "$FILES" ]] && FILES='/system/build.prop'
+    [ -z "$FILES" ] && FILES='/system/build.prop'
     sed -n "$REGEX" ${FILES} 2>/dev/null | head -n 1
 }
 
@@ -75,7 +75,7 @@ loop_logcat() {
     while true
     do
         logcat $*
-        if [[ $? -ne 1 ]]; then
+        if [ $? -ne 1 ]; then
             break
         fi
     done
@@ -114,12 +114,12 @@ start_log_catcher () {
     LOG_FILE="${LOG_PATH}/${LOG_FILE_NAME}.log"
     PID_FILE="${LOG_PATH}/${LOG_FILE_NAME}.pid"
     mkdir -p ${LOG_PATH}
-    if [[ ${CLEAN_OLD} == true ]]; then
+    if [ ${CLEAN_OLD} == true ]; then
         rm "${LOG_FILE}.old"
         mv "${LOG_FILE}" "${LOG_FILE}.old"
     fi
     rm "${LOG_PATH}/${LOG_FILE_NAME}.pid"
-    if [[ ${START_NEW} == false ]]; then
+    if [ ${START_NEW} == false ]; then
         return
     fi
     touch "${PID_FILE}"
@@ -129,9 +129,9 @@ start_log_catcher () {
     echo "${LOG_PID}">"${LOG_PATH}/${LOG_FILE_NAME}.pid"
 }
 
-if [[ -f "/data/adb/riru/modules/lspd.prop" ]]; then
+if [ -f "/data/adb/riru/modules/lspd.prop" ]; then
     CONFIG=$(cat "/data/adb/riru/modules/lspd.prop")
-    [[ -d "${TARGET}/${CONFIG}" ]] || mkdir -p "${TARGET}/${CONFIG}"
+    [ -d "${TARGET}/${CONFIG}" ] || mkdir -p "${TARGET}/${CONFIG}"
     cp "${MODDIR}/module.prop" "${TARGET}/${CONFIG}/module.prop"
 fi
 
@@ -142,7 +142,7 @@ mv ${LOG_PATH} ${LOG_PATH}.old
 mkdir -p ${LOG_PATH}
 chcon -R u:object_r:magisk_file:s0 ${LOG_PATH}
 
-if [[ ! -z "${MISC_PATH}" ]]; then
+if [ ! -z "${MISC_PATH}" ]; then
     chcon -R u:object_r:magisk_file:s0 "${BASE_PATH}"
     chmod 771 "${BASE_PATH}"
     print_log_head "${LOG_PATH}/modules.log"
@@ -155,7 +155,7 @@ start_app_process() {
   while true
   do
     if [ -S "/dev/socket/zygote" ]; then
-      /system/bin/app_process -Djava.class.path=/data/adb/lspd/framework/lspd.dex /system/bin --nice-name=lspd org.lsposed.lspd.core.Main
+      /system/bin/app_process -Djava.class.path=$(magisk --path)/.magisk/modules/riru_lsposed/framework/lspd.dex /system/bin --nice-name=lspd org.lsposed.lspd.core.Main
     fi
   done
 }

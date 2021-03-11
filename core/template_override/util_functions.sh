@@ -18,31 +18,29 @@
 # Copyright (C) 2021 LSPosed Contributors
 #
 
-RIRU_PATH="/data/adb/riru"
 RIRU_MODULE_ID="%%%RIRU_MODULE_ID%%%"
-RIRU_MODULE_PATH="$RIRU_PATH/modules/$RIRU_MODULE_ID"
-RIRU_SECONTEXT="u:object_r:magisk_file:s0"
+RIRU_MODULE_API_VERSION=%%%RIRU_MODULE_API_VERSION%%%
+RIRU_MODULE_MIN_API_VERSION=%%%RIRU_MODULE_MIN_API_VERSION%%%
+RIRU_MODULE_MIN_RIRU_VERSION_NAME="%%%RIRU_MODULE_MIN_RIRU_VERSION_NAME%%%"
+
 
 check_riru_version() {
-  RIRU_MIN_API_VERSION=%%%RIRU_MIN_API_VERSION%%%
-  RIRU_MIN_VERSION_NAME="%%%RIRU_MIN_VERSION_NAME%%%"
-
-  if [ ! -f "$RIRU_PATH/api_version" ] && [ ! -f "$RIRU_PATH/api_version.new" ]; then
-    ui_print "${POUNDS}"
-    ui_print "! ${LANG_UTIL_ERR_RIRU_NOT_FOUND_1}"
-    ui_print "! ${LANG_UTIL_ERR_RIRU_NOT_FOUND_2}"
-    [[ ${BOOTMODE} == true ]] && am start -a android.intent.action.VIEW -d https://github.com/RikkaApps/Riru/releases
-    abortC   "${POUNDS}"
+  RIRU_CORE_MODULES_PATH=/data/adb/modules/riru-core
+  RIRU_CORE_MODULES_UPDATE_PATH=/data/adb/modules_update/riru-core
+  if [ ! -f "$RIRU_CORE_MODULES_UPDATE_PATH/api_version" ] && [ ! -f "$RIRU_CORE_MODULES_PATH/api_version" ] && [ ! -f "/data/adb/riru/api_version" ] && [ ! -f "/data/adb/riru/api_version.new" ]; then
+    ui_print "*********************************************************"
+    ui_print "! Riru $RIRU_MODULE_MIN_RIRU_VERSION_NAME or above is required"
+    ui_print "! Please install Riru from Magisk Manager or https://github.com/RikkaApps/Riru/releases"
+    abort "*********************************************************"
   fi
-  RIRU_API_VERSION=$(cat "$RIRU_PATH/api_version.new") || RIRU_API_VERSION=$(cat "$RIRU_PATH/api_version") || RIRU_API_VERSION=0
-  [ "$RIRU_API_VERSION" -eq "$RIRU_API_VERSION" ] || RIRU_API_VERSION=0
-  ui_print "- Riru API ${LANG_CUST_INST_VERSION}: $RIRU_API_VERSION"
-  if [ "$RIRU_API_VERSION" -lt $RIRU_MIN_API_VERSION ]; then
-    ui_print "${POUNDS}"
-    ui_print "! Riru $RIRU_MIN_VERSION_NAME ${LANG_UTIL_ERR_RIRU_LOW_1}"
-    ui_print "! ${LANG_UTIL_ERR_RIRU_LOW_2}"
-    [[ ${BOOTMODE} == true ]] && am start -a android.intent.action.VIEW -d https://github.com/RikkaApps/Riru/releases
-    abortC   "${POUNDS}"
+  RIRU_API=$(cat "$RIRU_CORE_MODULES_UPDATE_PATH/api_version") || RIRU_API=$(cat "$RIRU_CORE_MODULES_PATH/api_version") || RIRU_API=$(cat "/data/adb/riru/api_version.new") || RIRU_API=$(cat "/data/adb/riru/api_version") || RIRU_API=0
+  [ "$RIRU_API" -eq "$RIRU_API" ] || RIRU_API=0
+  ui_print "- Riru API version: $RIRU_API"
+  if [ "$RIRU_API" -lt $RIRU_MODULE_MIN_API_VERSION ]; then
+    ui_print "*********************************************************"
+    ui_print "! Riru $RIRU_MODULE_MIN_RIRU_VERSION_NAME or above is required"
+    ui_print "! Please upgrade Riru from Magisk Manager or https://github.com/RikkaApps/Riru/releases"
+    abort "*********************************************************"
   fi
 }
 
@@ -54,12 +52,12 @@ require_new_android() {
     ui_print "${POUNDS}"
     ui_print "! ${LANG_UTIL_ERR_ANDROID_UNSUPPORT_1} ${1} ${LANG_UTIL_ERR_ANDROID_UNSUPPORT_2}"
     ui_print "! ${LANG_UTIL_ERR_ANDROID_UNSUPPORT_3}"
-    [[ ${BOOTMODE} == true ]] && am start -a android.intent.action.VIEW -d https://github.com/LSPosed/LSPosed/wiki/Available-Android-versions
+    [ ${BOOTMODE} == true ] && am start -a android.intent.action.VIEW -d https://github.com/LSPosed/LSPosed/wiki/Available-Android-versions
     abortC   "${POUNDS}"
 }
 
 lspd_check_architecture() {
-    if [[ "${ARCH}" != "arm" && "${ARCH}" != "arm64" && "${ARCH}" != "x86" && "${ARCH}" != "x64" ]]; then
+    if [ "${ARCH}" != "arm" && "${ARCH}" != "arm64" && "${ARCH}" != "x86" && "${ARCH}" != "x64" ]; then
         abortC "! ${LANG_UTIL_ERR_PLATFORM_UNSUPPORT}: ${ARCH}"
     else
         ui_print "- ${LANG_UTIL_PLATFORM}: ${ARCH}"
@@ -67,7 +65,7 @@ lspd_check_architecture() {
 }
 
 check_android_version() {
-    if [[ ${API} -ge 27 ]]; then
+    if [ ${API} -ge 27 ]; then
         ui_print "- Android SDK ${LANG_CUST_INST_VERSION}: ${API}"
     else
         require_new_android "${API}"

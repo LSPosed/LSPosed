@@ -33,7 +33,6 @@
 #include "jni/logger.h"
 #include "jni/native_api.h"
 #include "service.h"
-#include "rirud_socket.h"
 
 namespace lspd {
     constexpr int FIRST_ISOLATED_UID = 99000;
@@ -60,14 +59,13 @@ namespace lspd {
     void Context::PreLoadDex(const std::string &dex_path) {
         if (LIKELY(!dex.empty())) return;
 
-        try {
-            RirudSocket socket;
-            auto dex_content = socket.ReadFile(dex_path);
-            dex.assign(dex_content.begin(), dex_content.end());
-        } catch (RirudSocket::RirudSocketException &e) {
-            LOGE("%s", e.what());
-            return;
+        std::ifstream is(dex_path);
+        if (!is.good()) {
+           LOGE("Failed to read dex");
+           return;
         }
+        dex.assign(std::istreambuf_iterator<char>(is), std::istreambuf_iterator<char>());
+
         LOGI("Loaded %s with size %zu", dex_path.c_str(), dex.size());
     }
 
@@ -126,9 +124,10 @@ namespace lspd {
     jclass
     Context::FindClassFromLoader(JNIEnv *env, jobject class_loader, std::string_view class_name) {
         if (class_loader == nullptr) return nullptr;
-        static auto clz = (jclass)env->NewGlobalRef(env->FindClass( "dalvik/system/DexClassLoader"));
+        static auto clz = (jclass) env->NewGlobalRef(
+                env->FindClass("dalvik/system/DexClassLoader"));
         static jmethodID mid = JNI_GetMethodID(env, clz, "loadClass",
-                                        "(Ljava/lang/String;)Ljava/lang/Class;");
+                                               "(Ljava/lang/String;)Ljava/lang/Class;");
         jclass ret = nullptr;
         if (!mid) {
             mid = JNI_GetMethodID(env, clz, "findClass", "(Ljava/lang/String;)Ljava/lang/Class;");
@@ -202,9 +201,9 @@ namespace lspd {
         }
 
         if (!skip_ && ((app_id >= FIRST_ISOLATED_UID && app_id <= LAST_ISOLATED_UID) ||
-                      (app_id >= FIRST_APP_ZYGOTE_ISOLATED_UID &&
-                       app_id <= LAST_APP_ZYGOTE_ISOLATED_UID) ||
-                      app_id == SHARED_RELRO_UID)) {
+                       (app_id >= FIRST_APP_ZYGOTE_ISOLATED_UID &&
+                        app_id <= LAST_APP_ZYGOTE_ISOLATED_UID) ||
+                       app_id == SHARED_RELRO_UID)) {
             skip_ = true;
             LOGI("skip injecting into %s because it's isolated", process_name.get());
         }
@@ -213,7 +212,7 @@ namespace lspd {
     void
     Context::OnNativeForkAndSpecializePost(JNIEnv *env) {
         const JUTFString process_name(env, nice_name_);
-        auto binder = skip_? nullptr : Service::instance()->RequestBinder(env, nice_name_);
+        auto binder = skip_ ? nullptr : Service::instance()->RequestBinder(env, nice_name_);
         if (binder) {
             LoadDex(env);
             InstallInlineHooks();
