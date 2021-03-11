@@ -42,11 +42,14 @@ jobs:
         path: |
           ~/.gradle/caches
           ~/.gradle/wrapper
+          ~/.ccache
         key: gradle-core-${{ hashFiles('**/*.gradle.kts') }}
         restore-keys: |
           gradle-manager-${{ hashFiles('**/*.gradle.kts') }}
           gradle-core
           gradle-
+    - name: Install ccache
+      run: sudo apt-get install -y ccache
     - name: Build with Gradle
       run:  |
         echo 'org.gradle.caching=true' >> gradle.properties
