@@ -162,9 +162,7 @@ afterEvaluate {
                     expand("moduleId" to moduleId,
                             "versionName" to verName,
                             "versionCode" to verCode,
-                            "authorList" to authors,
-                            "apiCode" to apiCode,
-                            "minApi" to "$moduleMinRiruApiVersion")
+                            "authorList" to authors)
                     filter(mapOf("eol" to FixCrLfFilter.CrLf.newInstance("lf")), FixCrLfFilter::class.java)
                 }
                 copy {
@@ -195,8 +193,9 @@ afterEvaluate {
                     include("util_functions.sh")
                     filter { line ->
                         line.replace("%%%RIRU_MODULE_ID%%%", riruModuleId)
-                                .replace("%%%RIRU_MIN_API_VERSION%%%", moduleMinRiruApiVersion.toString())
-                                .replace("%%%RIRU_MIN_VERSION_NAME%%%", moduleMinRiruVersionName)
+                            .replace("%%%RIRU_MODULE_API_VERSION%%%", moduleMaxRiruApiVersion.toString())
+                            .replace("%%%RIRU_MODULE_MIN_API_VERSION%%%", moduleMinRiruApiVersion.toString())
+                            .replace("%%%RIRU_MODULE_MIN_RIRU_VERSION_NAME%%%", moduleMinRiruVersionName)
                     }
                     filter(mapOf("eol" to FixCrLfFilter.CrLf.newInstance("lf")), FixCrLfFilter::class.java)
                 }
