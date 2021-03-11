@@ -95,6 +95,7 @@ android {
                 arguments("-DRIRU_MODULE_API_VERSION=$moduleMaxRiruApiVersion",
                         "-DRIRU_MODULE_VERSION=$verCode",
                         "-DRIRU_MODULE_VERSION_NAME:STRING=\"$verName\"")
+                targets("lspd")
             }
         }
 

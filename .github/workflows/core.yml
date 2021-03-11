@@ -47,6 +47,14 @@ jobs:
           gradle-manager-${{ hashFiles('**/*.gradle.kts') }}
           gradle-core
           gradle-
+    - name: Cache Cmake
+      uses: actions/cache@v2
+      with:
+        path: ~/.ccache
+        key: ccache-${{ hashFiles('core/src/main/cpp') }}
+        restore-keys: ccache-
+    - name: Install ccache
+      run: sudo apt-get install -y ccache
     - name: Build with Gradle
       run:  |
         echo 'org.gradle.caching=true' >> gradle.properties
