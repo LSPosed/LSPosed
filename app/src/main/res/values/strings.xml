@@ -39,11 +39,11 @@
 
     <string name="activated">Activated</string>
     <string name="not_installed">Not installed</string>
-    <string name="selinux_permissive">&lt;b&gt;WARNING:&lt;\/b&gt; SELinux is not enforcing! the malicious program that attacks this can completely control your device and may cause your property damage and legal liability.</string>
+    <string name="selinux_permissive"><![CDATA[<b>WARNING:</b> SELinux is not enforcing! the malicious program that attacks this can completely control your device and may cause your property damage and legal liability.]]></string>
     <string name="selinux_permissive_summary">SELinux is not enforcing!</string>
     <string name="partial_activated">Partially activated</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy is not loaded properly</string>
-    <string name="selinux_policy_not_loaded">&lt;b&gt;WARNING:&lt;\/b&gt; SEPolicy is not loaded properly, modules that hook System Framework will not work.</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[<b>WARNING:</b> SEPolicy is not loaded properly, modules that hook System Framework will not work.<br>Please report this to <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> developer.]]></string>
     <string name="info_api_version">API version</string>
     <string name="info_framework_version">Framework version</string>
     <string name="info_manager_version">Manager version</string>
