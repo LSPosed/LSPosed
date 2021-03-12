@@ -48,19 +48,19 @@ inline constexpr bool is64 = Is64();
 # define LP_SELECT(lp32, lp64) lp32
 #endif
 
-    static const auto kEntryClassName = "org.lsposed.lspd.core.Main"s;
-    static const auto kClassLinkerClassName = "org.lsposed.lspd.nativebridge.ClassLinker"s;
-    static const auto kBridgeServiceClassName = "org.lsposed.lspd.service.BridgeService"s;
-    static const auto kDexPath = "framework/lspd.dex"s;
+    static constexpr auto kEntryClassName = "org.lsposed.lspd.core.Main"_tstr;
+    static constexpr auto kClassLinkerClassName = "org.lsposed.lspd.nativebridge.ClassLinker"_tstr;
+    static constexpr auto kBridgeServiceClassName = "org.lsposed.lspd.service.BridgeService"_tstr;
+    static constexpr auto kDexPath = "framework/lspd.dex"_tstr;
 
-    static const auto kLibArtName = "libart.so"s;
-    static const auto kLibFwName = "libandroidfw.so"s;
+    static constexpr auto kLibArtName = "libart.so"_tstr;
+    static constexpr auto kLibFwName = "libandroidfw.so"_tstr;
 
-    static const auto kLibBasePath =
-            LP_SELECT("/system/lib/"s,
-                      "/system/lib64/"s);
-    static const auto kLibArtLegacyPath = kLibBasePath + kLibArtName;
-    static const auto kLibFwPath = kLibBasePath + kLibFwName;
+    static constexpr auto kLibBasePath =
+            LP_SELECT("/system/lib/"_tstr,
+                      "/system/lib64/"_tstr);
+    static constexpr auto kLibArtLegacyPath = kLibBasePath + kLibArtName;
+    static constexpr auto kLibFwPath = kLibBasePath + kLibFwName;
 
     inline constexpr const char *const BoolToString(bool b) {
         return b ? "true" : "false";

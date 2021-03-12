@@ -20,9 +20,6 @@
 
 #pragma once
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wgnu-string-literal-operator-template"
-
 #include "macros.h"
 #include <dlfcn.h>
 #include <sys/mman.h>
@@ -199,13 +196,6 @@ namespace lspd {
     template<typename This, typename Return, typename...Args>
     MemberFunction(Return(This::*f)(Args...)) -> MemberFunction<Return(Args...), This>;
 
-    template<char... chars> using tstring = std::integer_sequence<char, chars...>;
-
-    template<typename T, T... chars>
-    constexpr tstring<chars...> operator ""_tstr() {
-        return {};
-    }
-
     template<typename, typename>
     struct Hooker;
 
@@ -259,5 +249,3 @@ namespace lspd {
 } // namespace lspd
 
 using lspd::operator ""_tstr;
-
-#pragma clang diagnostic pop
