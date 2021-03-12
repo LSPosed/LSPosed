@@ -254,7 +254,6 @@ public class PackageService {
                     return false;
                 if (packageName != BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME || !signatureMatch
                         || !versionMatch && pkgInfo.versionCode > BuildConfig.VERSION_CODE)
-                    Log.e(TAG, packageName);
                     uninstallPackage(new VersionedPackage(pkgInfo.packageName, pkgInfo.versionCode));
             }
 
