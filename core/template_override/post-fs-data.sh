@@ -30,13 +30,14 @@ grep_prop() {
 
 MODDIR=${0%/*}
 
-RIRU_PATH="/data/adb/riru"
-RIRU_PROP="$(magisk --path)/.magisk/modules/riru-core/module.prop"
-TARGET="${RIRU_PATH}/modules"
+MAGISK_VERSION=$(magisk -v)
+MAGISK_VER_CODE=$(magisk -V)
+
+[ ! -f "$MODDIR/riru.sh" ] && exit 1
+. $MODDIR/riru.sh
 
 LSPD_VERSION=$(grep_prop version "${MODDIR}/module.prop")
 LSPD_VERSIONCODE=$(grep_prop versionCode "${MODDIR}/module.prop")
-LSPD_APICODE=$(grep_prop api "${MODDIR}/module.prop")
 
 ANDROID_SDK=$(getprop ro.build.version.sdk)
 BUILD_DESC=$(getprop ro.build.description)
@@ -49,13 +50,6 @@ ARCH=$(getprop ro.product.cpu.abi)
 DEVICE=$(getprop ro.product.device)
 ANDROID=$(getprop ro.build.version.release)
 BUILD=$(getprop ro.build.id)
-
-RIRU_VERSION=$(grep_prop version $RIRU_PROP)
-RIRU_VERCODE=$(grep_prop versionCode $RIRU_PROP)
-RIRU_APICODE=$(cat "${RIRU_PATH}/api_version")
-
-MAGISK_VERSION=$(magisk -v)
-MAGISK_VERCODE=$(magisk -V)
 
 MISC_PATH=$(cat /data/adb/lspd/misc_path)
 BASE_PATH="/data/misc/$MISC_PATH"
@@ -98,12 +92,10 @@ print_log_head() {
     echo "Android build: ${BUILD}">>"${LOG_FILE}"
     echo "Android version: ${ANDROID}">>"${LOG_FILE}"
     echo "Android sdk: ${ANDROID_SDK}">>"${LOG_FILE}"
-    echo "LSPosed version: ${LSPD_VERSION}">>"${LOG_FILE}"
-    echo "LSPosed version code: ${LSPD_VERSIONCODE}">>"${LOG_FILE}"
-    echo "LSPosed api: ${LSPD_APICODE}">>"${LOG_FILE}"
-    echo "Riru version: ${RIRU_VERSION} (${RIRU_VERCODE})">>"${LOG_FILE}"
-    echo "Riru api: ${RIRU_APICODE}">>"${LOG_FILE}"
-    echo "Magisk: ${MAGISK_VERSION%:*} (${MAGISK_VERCODE})">>"${LOG_FILE}"
+    echo "LSPosed version: ${LSPD_VERSION} (${LSPD_VERSIONCODE})">>"${LOG_FILE}"
+    echo "Riru version: ${RIRU_VERSION_NAME} (${RIRU_VERSION_CODE})">>"${LOG_FILE}"
+    echo "Riru api: ${RIRU_API}">>"${LOG_FILE}"
+    echo "Magisk: ${MAGISK_VERSION%:*} (${MAGISK_VER_CODE})">>"${LOG_FILE}"
 }
 
 start_log_catcher () {
@@ -128,12 +120,6 @@ start_log_catcher () {
     LOG_PID=$!
     echo "${LOG_PID}">"${LOG_PATH}/${LOG_FILE_NAME}.pid"
 }
-
-if [ -f "/data/adb/riru/modules/lspd.prop" ]; then
-    CONFIG=$(cat "/data/adb/riru/modules/lspd.prop")
-    [ -d "${TARGET}/${CONFIG}" ] || mkdir -p "${TARGET}/${CONFIG}"
-    cp "${MODDIR}/module.prop" "${TARGET}/${CONFIG}/module.prop"
-fi
 
 chcon -R u:object_r:system_file:s0 "${MODDIR}"
 chcon -R u:object_r:system_file:s0 "/data/adb/lspd"
