@@ -19,6 +19,7 @@
   -->
 
 <resources>
+    <string name="app_name" translatable="false">LSPosed</string>
 
     <!-- MainActivity -->
     <string name="info">Infos</string>
@@ -35,6 +36,7 @@
     <string name="module_repo">Dépôt</string>
     <string name="module_repo_summary">Dépôts de modules (Alpha)</string>
     <string name="about_view_source_code"><![CDATA[Voir le code source sur %s<br/>Rejoindre notre canal %s]]></string>
+    <string name="about_translators">Traducteurs: %s</string>
 
     <string name="activated">Activé</string>
     <string name="not_installed">Non installé</string>
@@ -167,7 +169,8 @@
     <string name="module_release_load_more">Afficher les anciennes versions</string>
     <string name="module_release_no_more">Pas d\'autres versions</string>
     <string name="repo_load_failed">Échec de chargement du dépôt des modules: %s</string>
-
+  
+    <string name="about_source" translatable="false">https://github.com/LSPosed/LSPosed/</string>
 
     <string name="app_destroyed">Cette application à été détruite, merci de vous assurer que vous l\'avez bien téléchargé depuis la source officielle.</string>
     <string name="outdated_manager">Version du Gestionnaire LSPosed et du noyau LSPosed ne sont pas cohérents. Merci de réinstaller la version correspondante.</string>
@@ -175,4 +178,5 @@
     <string name="verbose_log_not_avaliable">Journal détaillé indisponible, si vous l\'avez juste activé sans redémarrer, essayez à nouveau après avoir redémarré.</string>
     <string name="NotInstall">Non installé</string>
     <string name="NotInstallDetail">LSPosed n\'est pas installé</string>
+    <string name="translators"><![CDATA[<a href="https://github.com/LSPosed/LSPosed">LSPosed</a>]]></string>
 </resources>
