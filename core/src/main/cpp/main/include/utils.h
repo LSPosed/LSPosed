@@ -42,12 +42,12 @@ namespace lspd {
 
     template<char... chars>
     struct tstring : public std::integer_sequence<char, chars...> {
-        const char* c_str() const {
-            static char str[] {chars..., '\0'};
+        const char *c_str() const {
+            static char str[]{chars..., '\0'};
             return str;
         }
 
-        operator std::string_view () const {
+        operator std::string_view() const {
             return c_str();
         }
     };
@@ -58,19 +58,20 @@ namespace lspd {
     }
 
 
-    template <char... as, char... bs>
-    inline constexpr tstring<as..., bs...> operator+(const tstring<as...> &, const tstring<bs...> &) {
-      return {};
+    template<char... as, char... bs>
+    inline constexpr tstring<as..., bs...>
+    operator+(const tstring<as...> &, const tstring<bs...> &) {
+        return {};
     }
 
-    template <char... as>
+    template<char... as>
     inline constexpr auto operator+(const std::string &a, const tstring<as...> &) {
-      return a + std::string{as..., '\0'};
+        return a + std::string{as..., '\0'};
     }
 
-    template <char... as>
+    template<char... as>
     inline constexpr auto operator+(const tstring<as...> &, const std::string &b) {
-      return std::string{as..., '\0'} + b;
+        return std::string{as..., '\0'} + b;
     }
 }
 
