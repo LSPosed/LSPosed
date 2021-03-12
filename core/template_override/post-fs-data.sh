@@ -134,7 +134,6 @@ if [ ! -z "${MISC_PATH}" ]; then
   # start_verbose_log_catcher
   start_log_catcher all "LSPosed:V XSharedPreferences:V LSPosed-Bridge:V LSPosedManager:V LSPosedService:V *:F" true ${LOG_VERBOSE}
 fi
-rm -f /data/adb/lspd/new_install
 
 start_app_process() {
   while true; do

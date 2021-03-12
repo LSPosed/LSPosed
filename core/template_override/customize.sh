@@ -117,7 +117,7 @@ else
   mkdir -p /data/adb/lspd || abortC "! Can't create configuration path"
   echo "$MISC_PATH" >/data/adb/lspd/misc_path || abortC "! Can't store configuration path"
 fi
-touch /data/adb/lspd/new_install || abortC "! Can't create first install flag"
+
 extract "${ZIPFILE}" 'manager.apk' "/data/adb/lspd/"
 mkdir -p /data/misc/$MISC_PATH
 set_perm /data/misc/$MISC_PATH 0 0 0771 "u:object_r:magisk_file:s0" || abortC "! Can't set permission"
@@ -130,7 +130,7 @@ if [ ! -d /data/adb/lspd/config ]; then
 fi
 
 echo "rm -rf /data/misc/$MISC_PATH" >>"${MODPATH}/uninstall.sh" || abortC "! Can't write uninstall script"
-echo "[ -f /data/adb/lspd/new_install ] || rm -rf /data/adb/lspd" >>"${MODPATH}/uninstall.sh" || abortC "! Can't write uninstall script"
+echo "rm -rf /data/adb/lspd" >>"${MODPATH}/uninstall.sh" || abortC "! Can't write uninstall script"
 
 if [ ! -e /data/adb/lspd/config/verbose_log ]; then
   echo "0" >/data/adb/lspd/config/verbose_log
