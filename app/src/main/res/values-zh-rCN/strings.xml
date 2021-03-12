@@ -189,4 +189,5 @@
     <string name="selinux_policy_not_loaded"><![CDATA[<b>警告：</b>SEPolicy 未被正确加载，作用于系统框架的模块将不起作用。<br>请将此报告给 <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> 开发者。]]></string>
     <string name="NotInstall">未安装</string>
     <string name="NotInstallDetail">LSPosed 未安装</string>
+    <string name="about_translators">译者：%s</string>
 </resources>
