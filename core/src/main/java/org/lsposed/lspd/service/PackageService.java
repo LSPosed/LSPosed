@@ -19,6 +19,9 @@
 
 package org.lsposed.lspd.service;
 
+import static android.content.pm.ServiceInfo.FLAG_ISOLATED_PROCESS;
+import static org.lsposed.lspd.service.ServiceManager.TAG;
+
 import android.content.IIntentReceiver;
 import android.content.IIntentSender;
 import android.content.Intent;
@@ -32,12 +35,18 @@ import android.content.pm.PackageInstaller;
 import android.content.pm.PackageManager;
 import android.content.pm.ServiceInfo;
 import android.content.pm.VersionedPackage;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.util.Log;
 import android.util.Pair;
+
+import org.lsposed.lspd.Application;
+import org.lsposed.lspd.BuildConfig;
+import org.lsposed.lspd.util.InstallerVerifier;
+import org.lsposed.lspd.utils.ParceledListSlice;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -54,13 +63,6 @@ import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 
 import hidden.HiddenApiBridge;
-import org.lsposed.lspd.Application;
-import org.lsposed.lspd.BuildConfig;
-import org.lsposed.lspd.util.InstallerVerifier;
-import org.lsposed.lspd.utils.ParceledListSlice;
-
-import static android.content.pm.ServiceInfo.FLAG_ISOLATED_PROCESS;
-import static org.lsposed.lspd.service.ServiceManager.TAG;
 
 public class PackageService {
     private static IPackageManager pm = null;
@@ -234,6 +236,7 @@ public class PackageService {
         return result[0];
     }
 
+    @SuppressWarnings("JavaReflectionMemberAccess")
     public static synchronized boolean installManagerIfAbsent(String packageName, File apkFile) {
         IPackageManager pm = getPackageManager();
         if (pm == null) return false;
@@ -248,6 +251,9 @@ public class PackageService {
             // Uninstall manager on version or signature mismatch now
             PackageInfo pkgInfo = pm.getPackageInfo(packageName, 0, 0);
             if (pkgInfo != null && pkgInfo.versionName != null && pkgInfo.applicationInfo != null) {
+                if ((pkgInfo.applicationInfo.flags & ApplicationInfo.FLAG_TEST_ONLY) != 0) {
+                    return false;
+                }
                 boolean versionMatch = pkgInfo.versionName.equals(BuildConfig.VERSION_NAME);
                 boolean signatureMatch = InstallerVerifier.verifyInstallerSignature(pkgInfo.applicationInfo);
                 if (versionMatch && signatureMatch && pkgInfo.versionCode >= BuildConfig.VERSION_CODE)
@@ -256,11 +262,17 @@ public class PackageService {
                     uninstallPackage(new VersionedPackage(pkgInfo.packageName, pkgInfo.versionCode));
             }
             IPackageInstaller installerService = pm.getPackageInstaller();
-            String installerPackageName = "com.android.shell";
-            @SuppressWarnings("JavaReflectionMemberAccess")
-            Constructor<PackageInstaller> installerConstructor = PackageInstaller.class.getConstructor(IPackageInstaller.class, String.class, int.class);
-            installerConstructor.setAccessible(true);
-            PackageInstaller installer = installerConstructor.newInstance(installerService, installerPackageName, 0);
+            PackageInstaller installer;
+            // S Preview
+            if (Build.VERSION.SDK_INT > 30 || Build.VERSION.SDK_INT == 30 && Build.VERSION.PREVIEW_SDK_INT != 0) {
+                Constructor<PackageInstaller> installerConstructor = PackageInstaller.class.getConstructor(IPackageInstaller.class, String.class, String.class, int.class);
+                installerConstructor.setAccessible(true);
+                installer = installerConstructor.newInstance(installerService, null, null, 0);
+            } else {
+                Constructor<PackageInstaller> installerConstructor = PackageInstaller.class.getConstructor(IPackageInstaller.class, String.class, int.class);
+                installerConstructor.setAccessible(true);
+                installer = installerConstructor.newInstance(installerService, null, 0);
+            }
             PackageInstaller.SessionParams params = new PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL);
             int installFlags = HiddenApiBridge.PackageInstaller_SessionParams_installFlags(params);
             installFlags |= 0x00000004/*PackageManager.INSTALL_ALLOW_TEST*/ | 0x00000002/*PackageManager.INSTALL_REPLACE_EXISTING*/;

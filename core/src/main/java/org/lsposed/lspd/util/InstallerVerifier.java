@@ -23,6 +23,7 @@ package org.lsposed.lspd.util;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.Toast;
 
 import com.android.apksig.ApkVerifier;
@@ -68,7 +69,7 @@ public class InstallerVerifier {
                         Utils.logW("showErrorToast: ", t);
                         Toast.makeText((Context) param.thisObject, "This application has been destroyed, please make sure you download it from the official source.", Toast.LENGTH_LONG).show();
                     }
-                    System.exit(0);
+                    new Handler().postDelayed(() -> System.exit(0), 50);
                 }
             });
         } catch (Throwable t) {
