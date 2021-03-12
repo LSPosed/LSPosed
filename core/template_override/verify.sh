@@ -24,8 +24,8 @@ mkdir "$TMPDIR_FOR_VERIFY"
 abort_verify() {
   ui_print "*********************************************************"
   ui_print "! $1"
-  ui_print "! ${LANG_VERIFY_ERR_NOTICE}"
-  abort    "*********************************************************"
+  ui_print "! This zip may be corrupted, please try downloading again"
+  abort "*********************************************************"
 }
 
 # extract <zip> <file> <target dir> <junk paths>
@@ -49,11 +49,11 @@ extract() {
   fi
 
   unzip $opts "$zip" "$file" -d "$dir" >&2
-  [ -f "$file_path" ] || abort_verify "$file ${LANG_VERIFY_ERR_NOT_EXIST}"
+  [ -f "$file_path" ] || abort_verify "$file not exists"
 
   unzip $opts "$zip" "$file.sha256" -d "$TMPDIR_FOR_VERIFY" >&2
-  [ -f "$hash_path" ] || abort_verify "$file.sha256 ${LANG_VERIFY_ERR_NOT_EXIST}"
+  [ -f "$hash_path" ] || abort_verify "$file.sha256 not exists"
 
-  (echo "$(cat "$hash_path")  $file_path" | sha256sum -c -s -) || abort_verify "${LANG_VERIFY_ERR_MISMATCH} $file"
-  ui_print "- ${LANG_VERIFY_SUCCESS} $file" >&1
+  (echo "$(cat "$hash_path")  $file_path" | sha256sum -c -s -) || abort_verify "Failed to verify $file"
+  ui_print "- Verified $file" >&1
 }
