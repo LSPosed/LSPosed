@@ -32,10 +32,6 @@ import androidx.core.text.HtmlCompat;
 import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.io.File;
-import java.util.Arrays;
-import java.util.Locale;
-
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.ActivityMainBinding;
@@ -47,6 +43,11 @@ import org.lsposed.manager.util.GlideHelper;
 import org.lsposed.manager.util.ModuleUtil;
 import org.lsposed.manager.util.NavUtil;
 import org.lsposed.manager.util.chrome.LinkTransformationMethod;
+
+import java.io.File;
+import java.util.Arrays;
+import java.util.Locale;
+
 import name.mikanoshi.customiuizer.holidays.HolidayHelper;
 import name.mikanoshi.customiuizer.utils.Helpers;
 import rikka.core.res.ResourcesKt;
@@ -81,6 +82,9 @@ public class MainActivity extends BaseActivity {
                     R.string.about_view_source_code,
                     "<b><a href=\"https://github.com/LSPosed/LSPosed\">GitHub</a></b>",
                     "<b><a href=\"https://t.me/LSPosed\">Telegram</a></b>"), HtmlCompat.FROM_HTML_MODE_LEGACY));
+            binding.translators.setMovementMethod(LinkMovementMethod.getInstance());
+            binding.translators.setTransformationMethod(new LinkTransformationMethod(this));
+            binding.translators.setText(HtmlCompat.fromHtml(getString(R.string.about_translators, getString(R.string.translators)), HtmlCompat.FROM_HTML_MODE_LEGACY));
             new BlurBehindDialogBuilder(this)
                     .setView(binding.getRoot())
                     .show();
