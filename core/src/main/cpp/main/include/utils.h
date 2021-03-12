@@ -43,13 +43,14 @@ namespace lspd {
     template<char... chars>
     struct tstring : public std::integer_sequence<char, chars...> {
         const char *c_str() const {
-            static char str[]{chars..., '\0'};
-            return str;
+            return str_;
         }
 
         operator std::string_view() const {
             return c_str();
         }
+    private:
+        constexpr static char str_[]{chars..., '\0'};
     };
 
     template<typename T, T... chars>
