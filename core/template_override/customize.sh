@@ -65,12 +65,8 @@ LANG_VERIFY_ERR_NOTICE="This zip may be corrupted, please try downloading again"
 # util_functions
 LANG_UTIL_PLATFORM="Device platform"
 
-LANG_UTIL_ERR_RIRU_NOT_FOUND_1="is not installed"
-LANG_UTIL_ERR_RIRU_NOT_FOUND_2="Please install Riru from Magisk Manager"
-LANG_UTIL_ERR_RIRU_LOW_1="or above is required"
-LANG_UTIL_ERR_RIRU_LOW_2="Please upgrade Riru from Magisk Manager"
 LANG_UTIL_ERR_ANDROID_UNSUPPORT_1="Unsupported Android version"
-LANG_UTIL_ERR_ANDROID_UNSUPPORT_2="(below Oreo)"
+LANG_UTIL_ERR_ANDROID_UNSUPPORT_2="(below Oreo MR1)"
 LANG_UTIL_ERR_ANDROID_UNSUPPORT_3="Learn more from our GitHub Wiki"
 LANG_UTIL_ERR_PLATFORM_UNSUPPORT="Unsupported platform"
 LANG_CUST_INST_MIGRATE_CONF="Migrating configuration"
@@ -103,7 +99,14 @@ extract "$ZIPFILE" 'util_functions.sh' "${TMPDIR}"
 . ${TMPDIR}/util_functions.sh
 
 check_android_version
+
+extract "$ZIPFILE" 'riru.sh' "$MODPATH"
+. $MODPATH/riru.sh
+
+# Functions from riru.sh
 check_riru_version
+enforce_install_from_magisk_app
+
 lspd_check_architecture
 
 ui_print "- ${LANG_CUST_INST_EXT_FILES}"

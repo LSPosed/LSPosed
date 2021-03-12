@@ -172,7 +172,6 @@ afterEvaluate {
                 }
             }
             val libPathRelease = "${buildDir}/intermediates/cmake/$variantLowered/obj"
-            val excludeList = arrayOf("util_functions.sh")
             doLast {
                 val dexOutPath = if (variant.name.contains("release"))
                     "$buildDir/intermediates/dex/$variantLowered/minify${variantCapped}WithR8" else
@@ -186,12 +185,12 @@ afterEvaluate {
                 copy {
                     from("${projectDir}/template_override")
                     into(zipPathMagiskReleasePath)
-                    exclude(*excludeList)
+                    exclude("riru.sh")
                 }
                 copy {
                     from("${projectDir}/template_override")
                     into(zipPathMagiskReleasePath)
-                    include("util_functions.sh")
+                    include("riru.sh")
                     filter { line ->
                         line.replace("%%%RIRU_MODULE_ID%%%", riruModuleId)
                             .replace("%%%RIRU_MODULE_API_VERSION%%%", moduleMaxRiruApiVersion.toString())
