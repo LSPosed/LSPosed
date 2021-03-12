@@ -251,6 +251,9 @@ public class PackageService {
             // Uninstall manager on version or signature mismatch now
             PackageInfo pkgInfo = pm.getPackageInfo(packageName, 0, 0);
             if (pkgInfo != null && pkgInfo.versionName != null && pkgInfo.applicationInfo != null) {
+                if ((pkgInfo.applicationInfo.flags & ApplicationInfo.FLAG_TEST_ONLY) != 0) {
+                    return false;
+                }
                 boolean versionMatch = pkgInfo.versionName.equals(BuildConfig.VERSION_NAME);
                 boolean signatureMatch = InstallerVerifier.verifyInstallerSignature(pkgInfo.applicationInfo);
                 if (versionMatch && signatureMatch && pkgInfo.versionCode >= BuildConfig.VERSION_CODE)
