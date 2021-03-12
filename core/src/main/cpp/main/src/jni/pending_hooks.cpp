@@ -42,14 +42,14 @@ namespace lspd {
 
     bool IsClassPending(void *clazz) {
         std::shared_lock lk(pending_classes_lock_);
-        return pending_classes_.count(clazz);
+        return pending_classes_.contains(clazz);
     }
 
     bool IsMethodPending(void *art_method) {
         bool result;
         {
             std::shared_lock lk(pending_methods_lock_);
-            result = pending_methods_.count(art_method);
+            result = pending_methods_.contains(art_method);
         }
         if (result) {
             std::unique_lock lk(pending_methods_lock_);
@@ -96,7 +96,7 @@ namespace lspd {
 
     bool isHooked(void *art_method) {
         std::shared_lock lk(hooked_methods_lock_);
-        return hooked_methods_.count(art_method);
+        return hooked_methods_.contains(art_method);
     }
 
     void recordHooked(void *art_method) {
