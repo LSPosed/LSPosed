@@ -242,13 +242,7 @@ public class PackageService {
         if (pm == null) return false;
 
         try {
-            // Uninstall old manager first
-            PackageInfo oldPkgInfo = pm.getPackageInfo("io.github.lsposed.manager", 0, 0);
-            if (oldPkgInfo != null && oldPkgInfo.versionName != null) {
-                uninstallPackage(new VersionedPackage(oldPkgInfo.packageName, oldPkgInfo.versionCode));
-            }
-
-            // Uninstall manager on version or signature mismatch now
+            // Uninstall manager when needed
             PackageInfo pkgInfo = pm.getPackageInfo(packageName, 0, 0);
             if (pkgInfo != null && pkgInfo.versionName != null && pkgInfo.applicationInfo != null) {
                 if ((pkgInfo.applicationInfo.flags & ApplicationInfo.FLAG_TEST_ONLY) != 0) {
@@ -258,9 +252,12 @@ public class PackageService {
                 boolean signatureMatch = InstallerVerifier.verifyInstallerSignature(pkgInfo.applicationInfo);
                 if (versionMatch && signatureMatch && pkgInfo.versionCode >= BuildConfig.VERSION_CODE)
                     return false;
-                if (!signatureMatch || !versionMatch && pkgInfo.versionCode > BuildConfig.VERSION_CODE)
+                if (packageName != BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME || !signatureMatch
+                        || !versionMatch && pkgInfo.versionCode > BuildConfig.VERSION_CODE)
                     uninstallPackage(new VersionedPackage(pkgInfo.packageName, pkgInfo.versionCode));
             }
+
+            // Install manager
             IPackageInstaller installerService = pm.getPackageInstaller();
             PackageInstaller installer;
             // S Preview
