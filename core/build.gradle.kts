@@ -43,7 +43,7 @@ val authors = "LSPosed Developers"
 
 val riruModuleId = "lsposed"
 val moduleMinRiruApiVersion = 24
-val moduleMinRiruVersionName = "v24.0.0"
+val moduleMinRiruVersionName = "v24.1.0"
 val moduleMaxRiruApiVersion = 24
 
 val defaultManagerPackageName: String by rootProject.extra
@@ -158,12 +158,13 @@ afterEvaluate {
             doFirst {
                 copy {
                     from("$projectDir/tpl/module.prop.tpl")
-                    into("$projectDir/template_override")
+                    into(zipPathMagiskReleasePath)
                     rename("module.prop.tpl", "module.prop")
                     expand("moduleId" to moduleId,
                             "versionName" to verName,
                             "versionCode" to verCode,
-                            "authorList" to authors)
+                            "authorList" to authors,
+                            "minRiruVersionName" to moduleMinRiruVersionName)
                     filter(mapOf("eol" to FixCrLfFilter.CrLf.newInstance("lf")), FixCrLfFilter::class.java)
                 }
                 copy {
@@ -172,7 +173,6 @@ afterEvaluate {
                 }
             }
             val libPathRelease = "${buildDir}/intermediates/cmake/$variantLowered/obj"
-            val excludeList = arrayOf("util_functions.sh")
             doLast {
                 val dexOutPath = if (variant.name.contains("release"))
                     "$buildDir/intermediates/dex/$variantLowered/minify${variantCapped}WithR8" else
@@ -186,12 +186,12 @@ afterEvaluate {
                 copy {
                     from("${projectDir}/template_override")
                     into(zipPathMagiskReleasePath)
-                    exclude(*excludeList)
+                    exclude("riru.sh")
                 }
                 copy {
                     from("${projectDir}/template_override")
                     into(zipPathMagiskReleasePath)
-                    include("util_functions.sh")
+                    include("riru.sh")
                     filter { line ->
                         line.replace("%%%RIRU_MODULE_ID%%%", riruModuleId)
                             .replace("%%%RIRU_MODULE_API_VERSION%%%", moduleMaxRiruApiVersion.toString())
