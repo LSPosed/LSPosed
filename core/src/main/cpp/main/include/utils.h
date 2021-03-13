@@ -49,6 +49,7 @@ namespace lspd {
         operator std::string_view() const {
             return c_str();
         }
+
     private:
         constexpr static char str_[]{chars..., '\0'};
     };
@@ -67,12 +68,14 @@ namespace lspd {
 
     template<char... as>
     inline constexpr auto operator+(const std::string &a, const tstring<as...> &) {
-        return a + std::string{as..., '\0'};
+        char b[]{as..., '\0'};
+        return a + b;
     }
 
     template<char... as>
     inline constexpr auto operator+(const tstring<as...> &, const std::string &b) {
-        return std::string{as..., '\0'} + b;
+        char a[]{as..., '\0'};
+        return a + b;
     }
 }
 
