@@ -55,13 +55,13 @@ namespace lspd {
 #define LSP_NATIVE_METHOD(className, functionName, signature)                \
   { #functionName,                                                       \
     signature,                                                           \
-    _NATIVEHELPER_JNI_MACRO_CAST(void*) (Java_io_github_lsposed_lspd_nativebridge_## className ## _ ## functionName) \
+    _NATIVEHELPER_JNI_MACRO_CAST(void*) (Java_org_lsposed_lspd_nativebridge_## className ## _ ## functionName) \
   }
 #endif
 
 #ifndef LSP_DEF_NATIVE_METHOD
 #define LSP_DEF_NATIVE_METHOD(ret, className,  functionName, ...)                \
-  extern "C" ret Java_io_github_lsposed_lspd_nativebridge_## className ## _ ## functionName (JNI_START, ##  __VA_ARGS__)
+  extern "C" ret Java_org_lsposed_lspd_nativebridge_## className ## _ ## functionName (JNI_START, ##  __VA_ARGS__)
 #endif
 
 #define REGISTER_LSP_NATIVE_METHODS(class_name) \
