@@ -20,6 +20,9 @@
 
 #pragma once
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wgnu-string-literal-operator-template"
+
 #include <string>
 #include <filesystem>
 #include <sys/system_properties.h>
@@ -35,4 +38,45 @@ namespace lspd {
         __system_property_get("ro.build.version.sdk", prop_value);
         return atoi(prop_value);
     }
+
+
+    template<char... chars>
+    struct tstring : public std::integer_sequence<char, chars...> {
+        const char *c_str() const {
+            return str_;
+        }
+
+        operator std::string_view() const {
+            return c_str();
+        }
+
+    private:
+        constexpr static char str_[]{chars..., '\0'};
+    };
+
+    template<typename T, T... chars>
+    inline constexpr tstring<chars...> operator ""_tstr() {
+        return {};
+    }
+
+
+    template<char... as, char... bs>
+    inline constexpr tstring<as..., bs...>
+    operator+(const tstring<as...> &, const tstring<bs...> &) {
+        return {};
+    }
+
+    template<char... as>
+    inline constexpr auto operator+(const std::string &a, const tstring<as...> &) {
+        char b[]{as..., '\0'};
+        return a + b;
+    }
+
+    template<char... as>
+    inline constexpr auto operator+(const tstring<as...> &, const std::string &b) {
+        char a[]{as..., '\0'};
+        return a + b;
+    }
 }
+
+#pragma clang diagnostic pop
