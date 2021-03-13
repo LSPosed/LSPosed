@@ -34,10 +34,21 @@
     <string name="module_repo">저장소</string>
     <string name="module_repo_summary">모듈 저장소 (Alpha)</string>
     <string name="about_view_source_code"><![CDATA[%s에서 소스 코드 보기<br/>%s 채널에 가입하십시오.]]></string>
+    <string name="about_translators">번역가: %s</string>
 
+    <string name="activated">활성화됨</string>
     <string name="not_installed">설치되지 않음</string>
-    <string name="selinux_permissive">&lt;b&gt;경고:&lt;\/b&gt; SELinux가 시행되고 있지 않습니다! 이 취약성을 공격하는 악성 프로그램은 장치를 완전히 제어할 수 있으며 재산상의 손해와 법적 책임을 초래할 수 있습니다.</string>
+    <string name="selinux_permissive"><![CDATA[<b>주의:</b> SELinux가 시행되고 있지 않습니다! 이 취약성을 공격하는 악성 프로그램은 장치를 완전히 제어할 수 있으며 재산상의 손해와 법적 책임을 초래할 수 있습니다.]]></string>
     <string name="selinux_permissive_summary">SELinux가 시행되고 있지 않습니다!</string>
+    <string name="partial_activated">부분적으로 활성화됨</string>
+    <string name="selinux_policy_not_loaded_summary">SEPolicy가 제대로 로드되지 않았습니다.</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[<b>주의:</b> SEPolicy가 제대로 로드되지 않아 시스템 프레임워크를 후크하는 모듈이 작동하지 않습니다.<br><a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> 개발자에게 보고하십시오.]]></string>
+    <string name="info_api_version">API 버전</string>
+    <string name="info_framework_version">Framework 버전</string>
+    <string name="info_manager_version">Manager 버전</string>
+    <string name="info_system_version">System 버전</string>
+    <string name="info_device">장치</string>
+    <string name="info_system_abi">System ABI</string>
 
     <!-- LogsActivity -->
     <string name="menuSend">전송</string>
@@ -73,6 +84,9 @@
     <string name="module_uninstall">제거</string>
     <string name="module_settings">모듈 설정</string>
     <string name="view_in_repo">저장소에서 보기</string>
+    <string name="module_uninstall_message">이 모듈을 제거하시겠습니까?</string>
+    <string name="module_uninstalled">%1$s 제거됨</string>
+    <string name="module_uninstall_failed">제거 실패</string>
 
     <!-- AppListActivity -->
     <string name="compile_speed">다시 최적화</string>
@@ -138,6 +152,7 @@
     <string name="dns_over_http">DNS over HTTPS</string>
     <string name="dns_over_http_summary">일부 국가의 DNS 포이즈닝 문제를 해결합니다</string>
     <string name="theme_color">테마 색</string>
+    <string name="theme_color_summary">앱에서 가장 자주 나타나는 색</string>
 
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
@@ -151,10 +166,13 @@
     <string name="refresh">새로고침</string>
     <string name="module_release_load_more">이전 버전 표시</string>
     <string name="module_release_no_more">No more release</string>
-
+    <string name="repo_load_failed">모듈 저장소를 로드하지 못함: %s</string>
 
     <string name="app_destroyed">이 응용 프로그램이 삭제되었습니다. 공식 소스에서 다운로드했는지 확인하십시오.</string>
     <string name="outdated_manager">LSPosed Manager 및 LSPosed Core 버전이 일치하지 않습니다. 해당 버전을 다시 설치하십시오.</string>
     <string name="lsposed_not_active">LSPosed가 현재 설치되어 있지 않거나 활성화되어 있지 않습니다.</string>
     <string name="verbose_log_not_avaliable">상세 로그를 사용할 수 없습니다. 재부팅하지 않고 방금 사용하도록 설정한 경우 재부팅 후 다시 시도하십시오.</string>
+    <string name="NotInstall">설치되지 않음</string>
+    <string name="NotInstallDetail">LSPosed가 설치되지 않음</string>
+    <string name="translators"><![CDATA[<a href="https://github.com/green1052">green1052</a>]]></string>
 </resources>
