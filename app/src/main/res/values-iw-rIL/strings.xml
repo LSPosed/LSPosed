@@ -34,7 +34,7 @@
     <string name="About">אודות</string>
     <string name="module_repo">רפוסיטורי</string>
     <string name="module_repo_summary">רפוסיטורי מודולים (אלפא)</string>
-    <string name="about_view_source_code"><![CDATA[View source code at %s<br/>Join our %s channel]]></string>
+    <string name="about_view_source_code"><![CDATA[הצג קוד מקור ב-%s<br/>הצטרף לערוץ ה-%s שלנו]]></string>
 
     <string name="activated">הופעל</string>
     <string name="not_installed">לא מותקן</string>
@@ -42,7 +42,7 @@
     <string name="selinux_permissive_summary">SELinux is not enforcing!</string>
     <string name="partial_activated">הופעל חלקית</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy לא נטען כמו שצריך</string>
-    <string name="selinux_policy_not_loaded">&lt;b&gt;אזהרה:&lt;\/b&gt; SEPolicy is not loaded properly, modules that hook System Framework will not work.</string>
+    <string name="selinux_policy_not_loaded">&lt;b&gt;אזהרה:&lt;\/b&gt; SEPolicy לא טעון כמו שצריך, מודולים שמתחברים ל-System Framework לא יעבדו.</string>
     <string name="info_api_version">גרסת API</string>
     <string name="info_framework_version">גרסת Framework</string>
     <string name="info_manager_version">גרסת Manager</string>
@@ -155,17 +155,17 @@
     <string name="theme_color_summary">הצבע שמופיע הכי הרבה באפליקציה</string>
 
     <!-- Module Repo -->
-    <string name="module_readme">Readme</string>
-    <string name="module_releases">Releases</string>
+    <string name="module_readme">קרא אותי</string>
+    <string name="module_releases">גרסאות</string>
     <string name="module_information">אודות</string>
     <string name="module_information_homepage">דף בית</string>
     <string name="module_information_source_url">קוד מקור</string>
     <string name="module_information_collaborators">מפתחים</string>
-    <string name="module_release_view_assets">Assets</string>
+    <string name="module_release_view_assets">קבצים</string>
     <string name="menu_open_in_browser">פתח בדפדפן</string>
     <string name="refresh">רענן</string>
     <string name="module_release_load_more">הראה גרסאות ישנות</string>
-    <string name="module_release_no_more">No more release</string>
+    <string name="module_release_no_more">אין עוד גרסאות</string>
     <string name="repo_load_failed">נשכל לטעון מודול: %s</string>
 
     <string name="app_destroyed">האפליקציה הושמדה. אנא ודא שהורדת אותה מהמקור הרשמי.</string>
