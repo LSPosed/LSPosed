@@ -69,7 +69,7 @@ namespace lspd {
             linker_iterate_soinfo([](auto soinfo) {
                 const char *real_path = linker_soinfo_get_realpath(soinfo);
                 if (real_path != nullptr &&
-                    std::string(real_path).find(kLibArtName) != std::string::npos) {
+                        strstr(real_path, kLibArtName.c_str()) != nullptr){
                     InstallArtHooks(soinfo);
                     return 1;
                 }
