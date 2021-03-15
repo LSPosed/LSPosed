@@ -171,7 +171,7 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:$glideVersion")
     implementation("com.github.bumptech.glide:okhttp3-integration:$glideVersion")
     implementation("com.github.jinatonic.confetti:confetti:1.1.2")
-    implementation("com.github.MatteoBattilana:WeatherView:3.0.0")
+    implementation("com.github.MatteoBattilana:WeatherView:2.0.3")
     implementation("com.google.android.material:material:1.3.0")
     implementation("com.google.code.gson:gson:2.8.6")
     implementation("com.takisoft.preferencex:preferencex:1.1.0")
