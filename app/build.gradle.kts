@@ -22,6 +22,7 @@ import java.nio.file.Paths
 plugins {
     id("com.android.application")
     kotlin("android")
+    kotlin("kapt")
 }
 
 val androidTargetSdkVersion: Int by rootProject.extra
@@ -159,12 +160,12 @@ dependencies {
     val glideVersion = "4.12.0"
     val markwonVersion = "4.6.2"
     val okhttpVersion = "4.9.1"
-    annotationProcessor("com.github.bumptech.glide:compiler:$glideVersion")
-    implementation("androidx.activity:activity:1.2.0")
+    kapt("com.github.bumptech.glide:compiler:$glideVersion")
+    implementation("androidx.activity:activity:1.2.1")
     implementation("androidx.browser:browser:1.3.0")
     implementation("androidx.constraintlayout:constraintlayout:2.0.4")
     implementation("androidx.core:core:1.3.2")
-    implementation("androidx.fragment:fragment:1.3.0")
+    implementation("androidx.fragment:fragment:1.3.1")
     implementation("androidx.recyclerview:recyclerview:1.1.0")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("com.caverock:androidsvg-aar:1.4")
