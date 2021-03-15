@@ -123,22 +123,29 @@ val optimizeReleaseRes = task("optimizeReleaseRes").doLast {
         project.android.buildToolsVersion,
         "aapt2"
     )
+    val mapping = Paths.get(
+        project.buildDir.path,
+        "outputs",
+        "mapping",
+        "release",
+        "shortening.txt"
+    )
     val zip = Paths.get(
         project.buildDir.path,
         "intermediates",
-        "optimized_processed_res",
+        "shrunk_processed_res",
         "release",
-        "resources-release-optimize.ap_"
+        "resources-release-stripped.ap_"
     )
     val optimized = File("${zip}.opt")
     val cmd = exec {
         commandLine(
-            aapt2,
-            "optimize",
+            aapt2, "optimize",
             "--collapse-resource-names",
             "--enable-sparse-encoding",
-            "-o",
-            optimized,
+            "--shorten-resource-paths",
+            "--resource-path-shortening-map", mapping,
+            "-o", optimized,
             zip
         )
         isIgnoreExitValue = false
@@ -150,7 +157,7 @@ val optimizeReleaseRes = task("optimizeReleaseRes").doLast {
 }
 
 tasks.whenTaskAdded {
-    if (name == "optimizeReleaseResources") {
+    if (name == "shrinkReleaseRes") {
         finalizedBy(optimizeReleaseRes)
     }
 }
