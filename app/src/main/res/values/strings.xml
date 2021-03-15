@@ -23,7 +23,6 @@
 
     <!-- MainActivity -->
     <string name="info">Info</string>
-    <string name="Activated">%s Activated</string>
     <string name="Install">Install</string>
     <string name="InstallDetail">Tap to install LSPosed</string>
     <string name="Modules">Modules</string>
@@ -37,10 +36,15 @@
     <string name="module_repo">Repository</string>
     <string name="module_repo_summary">Module repository (Alpha)</string>
     <string name="about_view_source_code"><![CDATA[View source code at %s<br/>Join our %s channel]]></string>
+    <string name="about_translators">Translators: %s</string>
 
+    <string name="activated">Activated</string>
     <string name="not_installed">Not installed</string>
-    <string name="selinux_permissive">&lt;b&gt;WARNING:&lt;\/b&gt; SELinux is not enforcing! the malicious program that attacks this can completely control your device and may cause your property damage and legal liability.</string>
+    <string name="selinux_permissive"><![CDATA[<b>WARNING:</b> SELinux is not enforcing! the malicious program that attacks this can completely control your device and may cause your property damage and legal liability.]]></string>
     <string name="selinux_permissive_summary">SELinux is not enforcing!</string>
+    <string name="partial_activated">Partially activated</string>
+    <string name="selinux_policy_not_loaded_summary">SEPolicy is not loaded properly</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[<b>WARNING:</b> SEPolicy is not loaded properly, modules that hook System Framework will not work.<br>Please report this to <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> developer.]]></string>
     <string name="info_api_version">API version</string>
     <string name="info_framework_version">Framework version</string>
     <string name="info_manager_version">Manager version</string>
@@ -166,7 +170,6 @@
     <string name="module_release_no_more">No more release</string>
     <string name="repo_load_failed">Failed to load module repo: %s</string>
 
-
     <string name="about_source" translatable="false">https://github.com/LSPosed/LSPosed/</string>
 
     <string name="app_destroyed">This application has been destroyed, please make sure you download it from the official source.</string>
@@ -175,4 +178,5 @@
     <string name="verbose_log_not_avaliable">Verbose log is not available, if you just enabled it without reboot, try again after reboot.</string>
     <string name="NotInstall">Not Installed</string>
     <string name="NotInstallDetail">LSPosed is not Installed</string>
+    <string name="translators"><![CDATA[<a href="https://github.com/LSPosed/LSPosed">LSPosed</a>]]></string>
 </resources>

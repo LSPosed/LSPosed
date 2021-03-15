@@ -14,7 +14,7 @@ import com.github.matteobattilana.weather.confetti.ConfettoInfo;
 
 import java.util.Random;
 
-import io.github.lsposed.manager.R;
+import org.lsposed.manager.R;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class FlowerParticle extends Confetto {

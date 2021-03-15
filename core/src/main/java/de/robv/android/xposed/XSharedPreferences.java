@@ -28,8 +28,8 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.android.internal.util.XmlUtils;
-import io.github.lsposed.lspd.BuildConfig;
-import io.github.lsposed.lspd.util.MetaDataReader;
+import org.lsposed.lspd.BuildConfig;
+import org.lsposed.lspd.util.MetaDataReader;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -52,7 +52,7 @@ import java.util.Set;
 
 import de.robv.android.xposed.services.FileResult;
 
-import static io.github.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
+import static org.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
 
 /**
  * This class is basically the same as SharedPreferencesImpl from AOSP, but

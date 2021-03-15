@@ -27,7 +27,7 @@ import java.io.Serializable;
 import de.robv.android.xposed.IModuleContext;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedBridge.CopyOnWriteSortedSet;
-import io.github.lsposed.lspd.deopt.PrebuiltMethodsDeopter;
+import org.lsposed.lspd.deopt.PrebuiltMethodsDeopter;
 
 /**
  * Base class for Xposed callbacks.
