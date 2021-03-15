@@ -29,7 +29,7 @@ import java.lang.reflect.Modifier;
 import de.robv.android.xposed.XposedHelpers;
 
 public class ClassUtils {
-    public static int getClassStatus(Class clazz, boolean isUnsigned) {
+    private static int getClassStatus(Class<?> clazz, boolean isUnsigned) {
         if (clazz == null) {
             return 0;
         }
@@ -48,11 +48,9 @@ public class ClassUtils {
      * 11.0+:   kInitialized = 14 uint8_t
      *          kVisiblyInitialized = 15 uint8_t
      */
-    public static boolean isInitialized(Class clazz) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+    private static boolean isInitialized(Class<?> clazz) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             return getClassStatus(clazz, true) >= 14;
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            return getClassStatus(clazz, true) == 14;
         } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O_MR1) {
             return getClassStatus(clazz, false) == 11;
         } else {
@@ -64,7 +62,7 @@ public class ClassUtils {
         if (!(hookMethod instanceof Method)) {
             return false;
         }
-        Class declaringClass = hookMethod.getDeclaringClass();
+        Class<?> declaringClass = hookMethod.getDeclaringClass();
         return Modifier.isStatic(hookMethod.getModifiers())
                 && !ClassUtils.isInitialized(declaringClass);
     }
