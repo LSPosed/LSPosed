@@ -64,6 +64,7 @@ val verName: String by rootProject.extra
 
 dependencies {
     implementation("dev.rikka.ndk:riru:24.0.0")
+    implementation(files("libs/dobby_prefab.aar"))
     implementation("com.android.tools.build:apksig:4.1.2")
     compileOnly(project(":hiddenapi-stubs"))
     compileOnly("androidx.annotation:annotation:1.1.0")
