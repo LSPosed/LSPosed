@@ -63,8 +63,8 @@ jobs:
       - name: Upload mappings
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ steps.buildRelease.outputs.releaseName }}-mappings
-          path: "app/build/outputs"
+          name: mappings
+          path: "app/build/outputs/mapping/release"
       - name: Post to channel
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
         env:
