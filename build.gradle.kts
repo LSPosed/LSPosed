@@ -23,9 +23,7 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        maven {
-            setUrl("https://storage.googleapis.com/r8-releases/raw")
-        }
+        maven("https://storage.googleapis.com/r8-releases/raw")
     }
     dependencies {
         classpath("com.android.tools:r8:3.0.27-dev")
@@ -56,7 +54,8 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        jcenter()
+        maven("https://jcenter.bintray.com")
+        maven("https://jitpack.io")
     }
 }
 
