@@ -16,7 +16,7 @@ public class FlowerGenerator implements ConfettoGenerator {
     public FlowerGenerator(Context ctx) {
         super();
         this.context = ctx;
-        this.confettoInfo = new ConfettoInfo(PrecipType.SNOW, 1.0f, null);
+        this.confettoInfo = new ConfettoInfo(PrecipType.SNOW);
     }
 
     public Confetto generateConfetto(Random random) {

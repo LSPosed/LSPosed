@@ -16,7 +16,7 @@ public class SnowGenerator implements ConfettoGenerator {
     public SnowGenerator(Context ctx) {
         super();
         this.context = ctx;
-        this.confettoInfo = new ConfettoInfo(PrecipType.SNOW, 1.0f, null);
+        this.confettoInfo = new ConfettoInfo(PrecipType.SNOW);
     }
 
     public Confetto generateConfetto(Random random) {
