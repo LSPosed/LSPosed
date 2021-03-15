@@ -23,9 +23,7 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        maven {
-            setUrl("https://storage.googleapis.com/r8-releases/raw")
-        }
+        maven("https://storage.googleapis.com/r8-releases/raw")
     }
     dependencies {
         classpath("com.android.tools:r8:3.0.27-dev")
