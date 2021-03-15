@@ -28,5 +28,6 @@ add_executable(lspd ${SRC_LIST} ${SRC_JNI_LIST})
 SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -Wl,--dynamic-list=${CMAKE_SOURCE_DIR}/dynamic_list")
 
 find_package(riru REQUIRED CONFIG)
+find_package(dobby REQUIRED CONFIG)
 find_library(log-lib log)
-target_link_libraries(lspd yahfa riru::riru android dobby dex_builder ${log-lib})
+target_link_libraries(lspd yahfa riru::riru android dobby::dobby dex_builder ${log-lib})

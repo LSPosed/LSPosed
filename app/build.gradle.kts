@@ -67,7 +67,7 @@ android {
         disable += "MissingTranslation"
         disable += "ExtraTranslation"
         isAbortOnError = true
-        isCheckReleaseBuilds = true
+        isCheckReleaseBuilds = false
     }
 
     packagingOptions {

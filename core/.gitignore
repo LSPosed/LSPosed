@@ -1,6 +1,5 @@
 /.externalNativeBuild
 /build
-/libs
 /obj
 /release
 /template_override/module.prop
