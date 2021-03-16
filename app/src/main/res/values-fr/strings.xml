@@ -35,7 +35,7 @@
     <string name="module_repo">Dépôt</string>
     <string name="module_repo_summary">Dépôts de modules (Alpha)</string>
     <string name="about_view_source_code"><![CDATA[Voir le code source sur %s<br/>Rejoindre notre canal %s]]></string>
-    <string name="about_translators">Traducteurs: %s</string>
+    <string name="about_translators">Traducteur: %s</string>
 
     <string name="activated">Activé</string>
     <string name="not_installed">Non installé</string>
