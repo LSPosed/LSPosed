@@ -80,6 +80,7 @@ namespace lspd {
 
         static jclass FindClassFromLoader(JNIEnv *env, jobject class_loader,
                                           std::string_view class_name);
+        static void setAllowUnload(bool unload);
 
         friend std::unique_ptr<Context> std::make_unique<Context>();
     };
