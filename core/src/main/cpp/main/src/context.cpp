@@ -33,6 +33,8 @@
 #include "service.h"
 
 namespace lspd {
+    extern int *allowUnload;
+
     constexpr int FIRST_ISOLATED_UID = 99000;
     constexpr int LAST_ISOLATED_UID = 99999;
     constexpr int FIRST_APP_ZYGOTE_ISOLATED_UID = 90000;
@@ -167,6 +169,7 @@ namespace lspd {
     Context::OnNativeForkSystemServerPre(JNIEnv *env) {
         Service::instance()->InitService(env);
         skip_ = false;
+        setAllowUnload(false);
     }
 
     void
@@ -180,6 +183,7 @@ namespace lspd {
             Init(env);
             FindAndCall(env, "forkSystemServerPost", "(Landroid/os/IBinder;)V", binder);
         }
+        setAllowUnload(false);
     }
 
     void Context::OnNativeForkAndSpecializePre(JNIEnv *env,
@@ -208,6 +212,7 @@ namespace lspd {
             skip_ = true;
             LOGI("skip injecting into %s because it's isolated", process_name.get());
         }
+        setAllowUnload(skip_);
     }
 
     void
@@ -224,10 +229,18 @@ namespace lspd {
                         app_data_dir_, nice_name_,
                         binder);
             LOGD("injected xposed into %s", process_name.get());
+            setAllowUnload(false);
         } else {
             auto context = Context::ReleaseInstance();
             auto service = Service::ReleaseInstance();
             LOGD("skipped %s", process_name.get());
+            setAllowUnload(true);
+        }
+    }
+
+    void Context::setAllowUnload(bool unload) {
+        if (allowUnload) {
+            *allowUnload = unload ? 1 : 0;
         }
     }
 }

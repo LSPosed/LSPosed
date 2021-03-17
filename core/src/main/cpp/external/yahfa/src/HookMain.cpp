@@ -8,10 +8,10 @@
 #include "HookMain.h"
 
 int SDKVersion;
-static int OFFSET_entry_point_from_interpreter_in_ArtMethod;
-int OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod;
-static int OFFSET_ArtMehod_in_Object;
-static int OFFSET_access_flags_in_ArtMethod;
+static size_t OFFSET_entry_point_from_interpreter_in_ArtMethod;
+size_t OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod;
+static size_t OFFSET_ArtMehod_in_Object;
+static size_t OFFSET_access_flags_in_ArtMethod;
 static size_t ArtMethodSize;
 static uint32_t kAccCompileDontBother = 0x01000000;
 static uint32_t kAccPublic = 0x0001;  // class, field, method, ic
