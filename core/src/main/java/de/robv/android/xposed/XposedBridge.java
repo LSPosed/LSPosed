@@ -33,6 +33,8 @@ import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -77,7 +79,7 @@ public final class XposedBridge {
 	private static final Object[] EMPTY_ARRAY = new Object[0];
 
 	// built-in handlers
-	public static final Map<Member, CopyOnWriteSortedSet<XC_MethodHook>> sHookedMethodCallbacks = new HashMap<>();
+	private static final Map<Member, CopyOnWriteSortedSet<XC_MethodHook>> sHookedMethodCallbacks = new NoValuesHashMap<>();
 	public static final CopyOnWriteSortedSet<XC_LoadPackage> sLoadedPackageCallbacks = new CopyOnWriteSortedSet<>();
 	/*package*/ static final CopyOnWriteSortedSet<XC_InitPackageResources> sInitPackageResourcesCallbacks = new CopyOnWriteSortedSet<>();
 	/*package*/ static final CopyOnWriteSortedSet<XC_InitZygote> sInitZygoteCallbacks = new CopyOnWriteSortedSet<>();
@@ -335,6 +337,38 @@ public final class XposedBridge {
 		}
 
 		return YahfaHooker.invokeOriginalMethod((Executable) method, thisObject, args);
+	}
+
+	private static class NoValuesHashMap<K,V> extends HashMap<K,V> {
+		@Override
+		public Collection values() {
+			return Collections.EMPTY_LIST;
+		}
+
+		@Override
+		public void clear() {
+
+		}
+
+		@Override
+		public Set<K> keySet() {
+			return Collections.EMPTY_SET;
+		}
+
+		@Override
+		public Set<Entry<K, V>> entrySet() {
+			return Collections.EMPTY_SET;
+		}
+
+		@Override
+		public int size() {
+			return 0;
+		}
+
+		@Override
+		public boolean isEmpty() {
+			return true;
+		}
 	}
 
 	/** @hide */
