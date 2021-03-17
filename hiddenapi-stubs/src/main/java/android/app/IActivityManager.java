@@ -25,12 +25,21 @@ import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.IInterface;
+import android.os.RemoteException;
+
+import androidx.annotation.RequiresApi;
 
 public interface IActivityManager extends IInterface {
+    @RequiresApi(30)
     int broadcastIntentWithFeature(IApplicationThread caller, String callingFeatureId,
                                    Intent intent, String resolvedType, IIntentReceiver resultTo, int resultCode,
                                    String resultData, Bundle map, String[] requiredPermissions,
-                                   int appOp, Bundle options, boolean serialized, boolean sticky, int userId);
+                                   int appOp, Bundle options, boolean serialized, boolean sticky, int userId) throws RemoteException;
+
+    int broadcastIntent(IApplicationThread caller, Intent intent,
+                        String resolvedType, IIntentReceiver resultTo, int resultCode,
+                        String resultData, Bundle map, String[] requiredPermissions,
+                        int appOp, Bundle options, boolean serialized, boolean sticky, int userId) throws RemoteException;
 
     void forceStopPackage(String packageName, int userId);
 
