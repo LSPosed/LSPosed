@@ -64,7 +64,7 @@ public class ActivityManagerService {
                                                  int appOp, Bundle options, boolean serialized, boolean sticky, int userId) throws RemoteException {
         IActivityManager am = getActivityManager();
         if (am == null) return -1;
-        if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.R) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             return am.broadcastIntentWithFeature(caller, callingFeatureId, intent, resolvedType, resultTo, resultCode, resultData, map, requiredPermissions, appOp, options, serialized, sticky, userId);
         } else {
             return am.broadcastIntent(caller, intent, resolvedType, resultTo, resultCode, resultData, map, requiredPermissions, appOp, options, serialized, sticky, userId);
