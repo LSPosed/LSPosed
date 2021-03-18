@@ -19,6 +19,7 @@
 
 package org.lsposed.lspd.service;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -31,7 +32,6 @@ import android.util.Log;
 import java.util.Arrays;
 
 import org.lsposed.lspd.Application;
-import pxb.android.arsc.Config;
 
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 
@@ -101,7 +101,7 @@ public class LSPosedService extends ILSPosedService.Stub {
             broadcastIntent.addFlags(0x01000000);
             broadcastIntent.addFlags(0x00400000);
             broadcastIntent.setData(intent.getData());
-            broadcastIntent.setPackage(ConfigManager.getInstance().getManagerPackageName());
+            broadcastIntent.setComponent(ComponentName.unflattenFromString(ConfigManager.getInstance().getManagerPackageName() + "/.receivers.ServiceReceiver"));
 
             try {
                 ActivityManagerService.broadcastIntentWithFeature(null, null, broadcastIntent,

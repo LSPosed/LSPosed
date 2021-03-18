@@ -23,6 +23,7 @@ import android.app.IActivityManager;
 import android.app.IApplicationThread;
 import android.content.IIntentReceiver;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
@@ -63,7 +64,11 @@ public class ActivityManagerService {
                                                  int appOp, Bundle options, boolean serialized, boolean sticky, int userId) throws RemoteException {
         IActivityManager am = getActivityManager();
         if (am == null) return -1;
-        return am.broadcastIntentWithFeature(caller, callingFeatureId, intent, resolvedType, resultTo, resultCode, resultData, map, requiredPermissions, appOp, options, serialized, sticky, userId);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            return am.broadcastIntentWithFeature(caller, callingFeatureId, intent, resolvedType, resultTo, resultCode, resultData, map, requiredPermissions, appOp, options, serialized, sticky, userId);
+        } else {
+            return am.broadcastIntent(caller, intent, resolvedType, resultTo, resultCode, resultData, map, requiredPermissions, appOp, options, serialized, sticky, userId);
+        }
     }
 
     public static void forceStopPackage(String packageName, int userId) throws RemoteException {
