@@ -95,7 +95,8 @@ android {
                 cFlags("-std=c11 -ffixed-x18 -Qunused-arguments -fno-rtti -fno-exceptions -fomit-frame-pointer -fpie -fPIC")
                 arguments("-DRIRU_MODULE_API_VERSION=$moduleMaxRiruApiVersion",
                         "-DRIRU_MODULE_VERSION=$verCode",
-                        "-DRIRU_MODULE_VERSION_NAME:STRING=\"$verName\"")
+                        "-DRIRU_MODULE_VERSION_NAME:STRING=\"$verName\"",
+                        "-DMODULE_NAME:STRING=riru_$riruModuleId")
                 targets("lspd")
             }
         }
