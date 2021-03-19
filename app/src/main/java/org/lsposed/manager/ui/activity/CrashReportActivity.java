@@ -54,7 +54,7 @@ public class CrashReportActivity extends AppCompatActivity {
             ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
             //Are there any devices without clipboard...?
             if (clipboard != null) {
-                ClipData clip = ClipData.newPlainText("edcrash", getAllErrorDetailsFromIntent(getIntent()));
+                ClipData clip = ClipData.newPlainText("LSPManagerCrashInfo", getAllErrorDetailsFromIntent(getIntent()));
                 clipboard.setPrimaryClip(clip);
                 Snackbar.make(binding.snackbar, R.string.copy_toast_msg, Snackbar.LENGTH_SHORT).show();
             }
