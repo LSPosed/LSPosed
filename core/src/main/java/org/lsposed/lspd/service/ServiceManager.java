@@ -20,9 +20,12 @@
 package org.lsposed.lspd.service;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.Looper;
 import android.util.Log;
+
+import org.lsposed.lspd.BuildConfig;
 
 public class ServiceManager {
     private static LSPosedService mainService = null;
@@ -49,6 +52,7 @@ public class ServiceManager {
     // call by ourselves
     public static void start() {
         Log.i(TAG, "starting server...");
+        Log.i(TAG, String.format("version %s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_NAME));
 
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
             Log.e(TAG, Log.getStackTraceString(e));
