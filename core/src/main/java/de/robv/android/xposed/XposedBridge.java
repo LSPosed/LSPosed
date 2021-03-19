@@ -24,7 +24,7 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.util.Log;
 
-import io.github.lsposed.lspd.BuildConfig;
+import org.lsposed.lspd.BuildConfig;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Executable;
@@ -33,6 +33,8 @@ import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -41,10 +43,10 @@ import java.util.Set;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XC_InitZygote;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
-import io.github.lsposed.lspd.nativebridge.ModuleLogger;
-import io.github.lsposed.lspd.nativebridge.ResourcesHook;
-import io.github.lsposed.lspd.yahfa.dexmaker.DynamicBridge;
-import io.github.lsposed.lspd.yahfa.hooker.YahfaHooker;
+import org.lsposed.lspd.nativebridge.ModuleLogger;
+import org.lsposed.lspd.nativebridge.ResourcesHook;
+import org.lsposed.lspd.yahfa.dexmaker.DynamicBridge;
+import org.lsposed.lspd.yahfa.hooker.YahfaHooker;
 
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
 
@@ -77,7 +79,7 @@ public final class XposedBridge {
 	private static final Object[] EMPTY_ARRAY = new Object[0];
 
 	// built-in handlers
-	public static final Map<Member, CopyOnWriteSortedSet<XC_MethodHook>> sHookedMethodCallbacks = new HashMap<>();
+	private static final Map<Member, CopyOnWriteSortedSet<XC_MethodHook>> sHookedMethodCallbacks = new NoValuesHashMap<>();
 	public static final CopyOnWriteSortedSet<XC_LoadPackage> sLoadedPackageCallbacks = new CopyOnWriteSortedSet<>();
 	/*package*/ static final CopyOnWriteSortedSet<XC_InitPackageResources> sInitPackageResourcesCallbacks = new CopyOnWriteSortedSet<>();
 	/*package*/ static final CopyOnWriteSortedSet<XC_InitZygote> sInitZygoteCallbacks = new CopyOnWriteSortedSet<>();
@@ -335,6 +337,38 @@ public final class XposedBridge {
 		}
 
 		return YahfaHooker.invokeOriginalMethod((Executable) method, thisObject, args);
+	}
+
+	private static class NoValuesHashMap<K,V> extends HashMap<K,V> {
+		@Override
+		public Collection values() {
+			return Collections.EMPTY_LIST;
+		}
+
+		@Override
+		public void clear() {
+
+		}
+
+		@Override
+		public Set<K> keySet() {
+			return Collections.EMPTY_SET;
+		}
+
+		@Override
+		public Set<Entry<K, V>> entrySet() {
+			return Collections.EMPTY_SET;
+		}
+
+		@Override
+		public int size() {
+			return 0;
+		}
+
+		@Override
+		public boolean isEmpty() {
+			return true;
+		}
 	}
 
 	/** @hide */

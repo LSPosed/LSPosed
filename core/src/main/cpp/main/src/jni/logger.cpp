@@ -21,7 +21,6 @@
 #include "logger.h"
 #include "native_util.h"
 #include "jni_helper.h"
-#include <fstream>
 #include <fcntl.h>
 
 namespace lspd {

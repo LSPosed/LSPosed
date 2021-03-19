@@ -26,16 +26,15 @@
 #include <dl_util.h>
 #include <art/runtime/jni_env_ext.h>
 #include "jni/pending_hooks.h"
-#include <fstream>
-#include <sstream>
 #include "context.h"
 #include "native_hook.h"
 #include "jni/logger.h"
 #include "jni/native_api.h"
 #include "service.h"
-#include "rirud_socket.h"
 
 namespace lspd {
+    extern int *allowUnload;
+
     constexpr int FIRST_ISOLATED_UID = 99000;
     constexpr int LAST_ISOLATED_UID = 99999;
     constexpr int FIRST_APP_ZYGOTE_ISOLATED_UID = 90000;
@@ -60,14 +59,16 @@ namespace lspd {
     void Context::PreLoadDex(const std::string &dex_path) {
         if (LIKELY(!dex.empty())) return;
 
-        try {
-            RirudSocket socket;
-            auto dex_content = socket.ReadFile(dex_path);
-            dex.assign(dex_content.begin(), dex_content.end());
-        } catch (RirudSocket::RirudSocketException &e) {
-            LOGE("%s", e.what());
-            return;
+        FILE *f = fopen(dex_path.c_str(), "rb");
+        fseek(f, 0, SEEK_END);
+        dex.resize(ftell(f));
+        rewind(f);
+        if (dex.size() != fread(dex.data(), 1, dex.size(), f)) {
+            LOGE("Read dex failed");
+            dex.resize(0);
         }
+        fclose(f);
+
         LOGI("Loaded %s with size %zu", dex_path.c_str(), dex.size());
     }
 
@@ -126,9 +127,10 @@ namespace lspd {
     jclass
     Context::FindClassFromLoader(JNIEnv *env, jobject class_loader, std::string_view class_name) {
         if (class_loader == nullptr) return nullptr;
-        static auto clz = (jclass)env->NewGlobalRef(env->FindClass( "dalvik/system/DexClassLoader"));
+        static auto clz = (jclass) env->NewGlobalRef(
+                env->FindClass("dalvik/system/DexClassLoader"));
         static jmethodID mid = JNI_GetMethodID(env, clz, "loadClass",
-                                        "(Ljava/lang/String;)Ljava/lang/Class;");
+                                               "(Ljava/lang/String;)Ljava/lang/Class;");
         jclass ret = nullptr;
         if (!mid) {
             mid = JNI_GetMethodID(env, clz, "findClass", "(Ljava/lang/String;)Ljava/lang/Class;");
@@ -167,6 +169,7 @@ namespace lspd {
     Context::OnNativeForkSystemServerPre(JNIEnv *env) {
         Service::instance()->InitService(env);
         skip_ = false;
+        setAllowUnload(false);
     }
 
     void
@@ -180,6 +183,7 @@ namespace lspd {
             Init(env);
             FindAndCall(env, "forkSystemServerPost", "(Landroid/os/IBinder;)V", binder);
         }
+        setAllowUnload(false);
     }
 
     void Context::OnNativeForkAndSpecializePre(JNIEnv *env,
@@ -202,18 +206,19 @@ namespace lspd {
         }
 
         if (!skip_ && ((app_id >= FIRST_ISOLATED_UID && app_id <= LAST_ISOLATED_UID) ||
-                      (app_id >= FIRST_APP_ZYGOTE_ISOLATED_UID &&
-                       app_id <= LAST_APP_ZYGOTE_ISOLATED_UID) ||
-                      app_id == SHARED_RELRO_UID)) {
+                       (app_id >= FIRST_APP_ZYGOTE_ISOLATED_UID &&
+                        app_id <= LAST_APP_ZYGOTE_ISOLATED_UID) ||
+                       app_id == SHARED_RELRO_UID)) {
             skip_ = true;
             LOGI("skip injecting into %s because it's isolated", process_name.get());
         }
+        setAllowUnload(skip_);
     }
 
     void
     Context::OnNativeForkAndSpecializePost(JNIEnv *env) {
         const JUTFString process_name(env, nice_name_);
-        auto binder = skip_? nullptr : Service::instance()->RequestBinder(env, nice_name_);
+        auto binder = skip_ ? nullptr : Service::instance()->RequestBinder(env, nice_name_);
         if (binder) {
             LoadDex(env);
             InstallInlineHooks();
@@ -224,10 +229,18 @@ namespace lspd {
                         app_data_dir_, nice_name_,
                         binder);
             LOGD("injected xposed into %s", process_name.get());
+            setAllowUnload(false);
         } else {
             auto context = Context::ReleaseInstance();
             auto service = Service::ReleaseInstance();
             LOGD("skipped %s", process_name.get());
+            setAllowUnload(true);
+        }
+    }
+
+    void Context::setAllowUnload(bool unload) {
+        if (allowUnload) {
+            *allowUnload = unload ? 1 : 0;
         }
     }
 }

@@ -70,7 +70,7 @@ namespace lspd {
         jclass class_linker_class_ = nullptr;
         jmethodID post_fixup_static_mid_ = nullptr;
         bool skip_ = false;
-        std::vector<signed char> dex{};
+        std::vector<char> dex{};
 
         Context() {}
 
@@ -80,6 +80,7 @@ namespace lspd {
 
         static jclass FindClassFromLoader(JNIEnv *env, jobject class_loader,
                                           std::string_view class_name);
+        static void setAllowUnload(bool unload);
 
         friend std::unique_ptr<Context> std::make_unique<Context>();
     };

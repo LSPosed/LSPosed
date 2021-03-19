@@ -49,7 +49,7 @@ android {
     }
 
     defaultConfig {
-        applicationId("io.github.lsposed.manager")
+        applicationId("org.lsposed.manager")
         minSdkVersion(androidMinSdkVersion)
         targetSdkVersion(androidTargetSdkVersion)
         versionCode(verCode)
@@ -67,7 +67,7 @@ android {
         disable += "MissingTranslation"
         disable += "ExtraTranslation"
         isAbortOnError = true
-        isCheckReleaseBuilds = true
+        isCheckReleaseBuilds = false
     }
 
     packagingOptions {
@@ -123,22 +123,29 @@ val optimizeReleaseRes = task("optimizeReleaseRes").doLast {
         project.android.buildToolsVersion,
         "aapt2"
     )
+    val mapping = Paths.get(
+        project.buildDir.path,
+        "outputs",
+        "mapping",
+        "release",
+        "shortening.txt"
+    )
     val zip = Paths.get(
         project.buildDir.path,
         "intermediates",
-        "optimized_processed_res",
+        "shrunk_processed_res",
         "release",
-        "resources-release-optimize.ap_"
+        "resources-release-stripped.ap_"
     )
     val optimized = File("${zip}.opt")
     val cmd = exec {
         commandLine(
-            aapt2,
-            "optimize",
+            aapt2, "optimize",
             "--collapse-resource-names",
             "--enable-sparse-encoding",
-            "-o",
-            optimized,
+            "--shorten-resource-paths",
+            "--resource-path-shortening-map", mapping,
+            "-o", optimized,
             zip
         )
         isIgnoreExitValue = false
@@ -150,7 +157,7 @@ val optimizeReleaseRes = task("optimizeReleaseRes").doLast {
 }
 
 tasks.whenTaskAdded {
-    if (name == "optimizeReleaseResources") {
+    if (name == "shrinkReleaseRes") {
         finalizedBy(optimizeReleaseRes)
     }
 }
@@ -160,17 +167,18 @@ dependencies {
     val markwonVersion = "4.6.2"
     val okhttpVersion = "4.9.1"
     annotationProcessor("com.github.bumptech.glide:compiler:$glideVersion")
-    implementation("androidx.activity:activity:1.2.0")
+    implementation("androidx.activity:activity:1.2.1")
     implementation("androidx.browser:browser:1.3.0")
     implementation("androidx.constraintlayout:constraintlayout:2.0.4")
     implementation("androidx.core:core:1.3.2")
-    implementation("androidx.fragment:fragment:1.3.0")
+    implementation("androidx.fragment:fragment:1.3.1")
     implementation("androidx.recyclerview:recyclerview:1.1.0")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("com.caverock:androidsvg-aar:1.4")
     implementation("com.github.bumptech.glide:glide:$glideVersion")
     implementation("com.github.bumptech.glide:okhttp3-integration:$glideVersion")
     implementation("com.github.jinatonic.confetti:confetti:1.1.2")
+    implementation("com.github.MatteoBattilana:WeatherView:2.0.3")
     implementation("com.google.android.material:material:1.3.0")
     implementation("com.google.code.gson:gson:2.8.6")
     implementation("com.takisoft.preferencex:preferencex:1.1.0")
@@ -182,7 +190,7 @@ dependencies {
     implementation("dev.rikka.rikkax.core:core:1.3.0")
     implementation("dev.rikka.rikkax.insets:insets:1.0.1")
     implementation("dev.rikka.rikkax.material:material:1.6.0")
-    implementation("dev.rikka.rikkax.preference:simplemenu-preference:1.0.1")
+    implementation("dev.rikka.rikkax.preference:simplemenu-preference:1.0.2")
     implementation("dev.rikka.rikkax.recyclerview:recyclerview-ktx:1.2.0")
     implementation("dev.rikka.rikkax.widget:borderview:1.0.1")
     implementation("dev.rikka.rikkax.widget:switchbar:1.0.2")
@@ -196,7 +204,6 @@ dependencies {
     implementation("io.noties.markwon:linkify:$markwonVersion")
     implementation("me.zhanghai.android.appiconloader:appiconloader-glide:1.2.0")
     implementation("me.zhanghai.android.fastscroll:library:1.1.5")
-    implementation(files("libs/WeatherView-2.0.3.aar"))
     implementation(project(":manager-service"))
 }
 

@@ -36,11 +36,21 @@
     <string name="module_repo">倉庫</string>
     <string name="module_repo_summary">模組倉庫（Alpha）</string>
     <string name="about_view_source_code"><![CDATA[在 %s 查看原始碼<br/>加入我们的 %s 頻道]]></string>
+    <string name="about_translators">譯者：%s</string>
 
+    <string name="activated">已啟用</string>
     <string name="not_installed">未安裝</string>
     <string name="selinux_permissive">&lt;b&gt;警告：&lt;\/b&gt;SELinux 未處於嚴格模式！對此進行攻擊的惡意程式可以完全控制你的裝置，並可能造成你的財產損失和法律責任。</string>
     <string name="selinux_permissive_summary">SELinux 未處於嚴格模式！</string>
-
+    <string name="partial_activated">部分啟用</string>
+    <string name="selinux_policy_not_loaded_summary">SEPolicy 未被正確載入</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[<b>警告：</b>SEPolicy 未被正確載入，作用於系統框架的模組將不起作用。<br>請將此報告給 <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> 開發者。]]></string>
+    <string name="info_api_version">API 版本</string>
+    <string name="info_framework_version">框架版本</string>
+    <string name="info_manager_version">管理器版本</string>
+    <string name="info_system_version">系統版本</string>
+    <string name="info_device">裝置</string>
+    <string name="info_system_abi">系統架構</string>
 
     <!-- LogsActivity -->
     <string name="menuSend">傳送</string>
@@ -76,6 +86,9 @@
     <string name="module_uninstall">解除安裝</string>
     <string name="module_settings">模組設定</string>
     <string name="view_in_repo">在倉庫中查看</string>
+    <string name="module_uninstall_message">要移除此模組嗎？</string>
+    <string name="module_uninstalled">已移除 %1$s</string>
+    <string name="module_uninstall_failed">移除失敗</string>
 
     <!-- AppListActivity -->
     <string name="compile_speed">重新最佳化</string>
@@ -141,6 +154,7 @@
     <string name="dns_over_http">安全 DNS（DoH）</string>
     <string name="dns_over_http_summary">解決某些地區的 DNS 汙染問題</string>
     <string name="theme_color">主題強調色</string>
+    <string name="theme_color_summary">應用程式中最常見的顏色</string>
 
     <!-- Module Repo -->
     <string name="module_readme">自述檔案</string>
@@ -154,10 +168,14 @@
     <string name="refresh">更新</string>
     <string name="module_release_load_more">顯示更早期的版本</string>
     <string name="module_release_no_more">沒有更早期的版本</string>
+    <string name="repo_load_failed">模組倉庫載入失敗：%s</string>
 
 
     <string name="app_destroyed">此應用程式已損毀，請確保您從官方來源下載該應用程式。</string>
     <string name="outdated_manager">LSPosed Manager 和 LSPosed 核心的版本不一致。請重新安裝對應的版本。</string>
     <string name="lsposed_not_active">LSPosed 未正確安裝或啟用。</string>
     <string name="verbose_log_not_avaliable">詳細日誌不可用，如果您只是啟用了它而沒有重新啟動，請在重新啟動後再試一次。</string>
+    <string name="NotInstall">尚未安裝</string>
+    <string name="NotInstallDetail">未安裝 LSPosed</string>
+    <string name="translators"><![CDATA[<a href="https://github.com/david082321">david082321</a>]]></string>
 </resources>

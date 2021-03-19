@@ -1,5 +1,5 @@
--keep class io.github.lsposed.manager.Constants { *; }
--keepclasseswithmembers class io.github.lsposed.manager.receivers.LSPosedManagerServiceClient {
+-keep class org.lsposed.manager.Constants { *; }
+-keepclasseswithmembers class org.lsposed.manager.receivers.LSPosedManagerServiceClient {
     private static android.os.IBinder binder;
 }
 

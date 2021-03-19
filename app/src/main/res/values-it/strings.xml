@@ -34,10 +34,21 @@
     <string name="module_repo">Repository</string>
     <string name="module_repo_summary">Repository moduli (Alpha)</string>
     <string name="about_view_source_code"><![CDATA[Visualizza il codice sorgente su %s<br/>Unisciti al nostro canale %s]]></string>
+    <string name="about_translators">Traduttori: %s</string>
 
+    <string name="activated">Attivo</string>
     <string name="not_installed">Non installato</string>
     <string name="selinux_permissive">&lt;b&gt;ATTENZIONE:&lt;\/b&gt; SELinux non è in modalità enforcing! un programma dannoso che lo attacca può controllare completamente il tuo dispositivo e può causare danni alla tua proprietà e responsabilità legale.</string>
     <string name="selinux_permissive_summary">SELinux non è in modalità enforcing!</string>
+    <string name="partial_activated">Parzialmente attivo</string>
+    <string name="selinux_policy_not_loaded_summary">SEPolicy non è caricato correttamente</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[<b>WARNING:</b> SEPolicy non è caricato correttamente, i moduli che agganciano il Framework di Sistema non funzioneranno.<br>Per favore segnalalo allo sviluppatore di <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>.]]></string>
+    <string name="info_api_version">Versione API</string>
+    <string name="info_framework_version">Versione Framework</string>
+    <string name="info_manager_version">Versione Manager</string>
+    <string name="info_system_version">Versione di sistema</string>
+    <string name="info_device">Dispositivo</string>
+    <string name="info_system_abi">ABI di sistema</string>
 
     <!-- LogsActivity -->
     <string name="menuSend">Invia</string>
@@ -141,6 +152,7 @@
     <string name="dns_over_http">DNS over HTTPS</string>
     <string name="dns_over_http_summary">Soluzione alternativa all\'avvelenamento della cache DNS in alcune nazioni</string>
     <string name="theme_color">Colore tema</string>
+    <string name="theme_color_summary">Colore che appare più frequentemente nell\'app</string>
 
     <!-- Module Repo -->
     <string name="module_readme">Leggimi</string>
@@ -163,4 +175,5 @@
     <string name="verbose_log_not_avaliable">Il log verboso non è disponibile, se l\'hai appena abilitato senza riavviare, riprova dopo il riavvio.</string>
     <string name="NotInstall">Non installato</string>
     <string name="NotInstallDetail">LSPosed non è installato</string>
+    <string name="translators"><![CDATA[<a href="https://twitter.com/alex193a">alex193a</a>]]></string>
 </resources>

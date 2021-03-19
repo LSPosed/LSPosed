@@ -19,7 +19,6 @@
   -->
 
 <resources>
-    <string name="app_name" translatable="false">LSPosed</string>
     <string name="Install">Installieren</string>
     <string name="InstallDetail">Tippen Sie hier, um LSPosed zu installieren</string>
     <string name="Modules">Modules</string>
@@ -90,8 +89,6 @@
     <!-- LSPd related -->
     <string name="compile_speed_msg">Optimieren...</string>
     <string name="compile_done">Optimierung abgeschlossen.</string>
-
-    <string name="about_source" translatable="false">https://github.com/LSPosed/LSPosed/</string>
 
     <string name="pref_title_disable_verbose_log">Deaktivieren Sie ausführliche Protokolle</string>
     <string name="logs_cannot_read">Protokoll kann nicht gelesen werden: \n</string>

@@ -23,13 +23,11 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        maven {
-            setUrl("https://storage.googleapis.com/r8-releases/raw")
-        }
+        maven("https://storage.googleapis.com/r8-releases/raw")
     }
     dependencies {
-        classpath("com.android.tools:r8:3.0.26-dev")
-        classpath("com.android.tools.build:gradle:7.0.0-alpha08")
+        classpath("com.android.tools:r8:3.0.27-dev")
+        classpath("com.android.tools.build:gradle:7.0.0-alpha10")
         classpath("org.eclipse.jgit:org.eclipse.jgit:5.10.0.202012080955-r")
         classpath(kotlin("gradle-plugin", version = "1.4.31"))
     }
@@ -39,9 +37,9 @@ val repo = FileRepository(rootProject.file(".git"))
 val refId = repo.refDatabase.exactRef("refs/remotes/origin/master").objectId!!
 val commitCount = Git(repo).log().add(refId).call().count()
 
-val defaultManagerPackageName by extra("io.github.lsposed.manager")
+val defaultManagerPackageName by extra("org.lsposed.manager")
 val verCode by extra(commitCount + 4200)
-val verName by extra("v1.3.1")
+val verName by extra("v1.3.3")
 val androidTargetSdkVersion by extra(30)
 val androidMinSdkVersion by extra(27)
 val androidBuildToolsVersion by extra("30.0.3")
@@ -56,7 +54,8 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        jcenter()
+        maven("https://jcenter.bintray.com")
+        maven("https://jitpack.io")
     }
 }
 

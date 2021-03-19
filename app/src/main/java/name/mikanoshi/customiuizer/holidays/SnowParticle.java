@@ -10,7 +10,7 @@ import android.graphics.Paint;
 import com.github.jinatonic.confetti.confetto.Confetto;
 import com.github.matteobattilana.weather.confetti.ConfettoInfo;
 
-import io.github.lsposed.manager.R;
+import org.lsposed.manager.R;
 
 public class SnowParticle extends Confetto {
     private Float prevX;

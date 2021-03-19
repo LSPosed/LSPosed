@@ -20,6 +20,15 @@
 
 cmake_minimum_required(VERSION 3.4.1)
 
+find_program( CCACHE ccache )
+
+if ( CCACHE )
+    set( CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE} )
+    set( CMAKE_C_COMPILER_LAUNCHER ${CCACHE} )
+else()
+    message( WARNING "Could not find CCache program." )
+endif()
+
 link_libraries("-ffixed-x18")
 
 add_definitions(-DRIRU_MODULE)
