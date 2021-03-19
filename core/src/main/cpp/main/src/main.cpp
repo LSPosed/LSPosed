@@ -116,6 +116,10 @@ __attribute__((noinline)) RIRU_EXPORT RiruVersionedModuleInfo *init(Riru *riru) 
     LOGD("using riru %d", riru->riruApiVersion);
     LOGD("module path: %s", riru->magiskModulePath);
     lspd::magiskPath = riru->magiskModulePath;
+    if (lspd::magiskPath.find(STRINGIFY(MODULE_NAME)) == std::string::npos) {
+        LOGE("who am i");
+        return nullptr;
+    }
     lspd::allowUnload = riru->allowUnload;
     return &lspd::module;
 }
