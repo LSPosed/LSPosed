@@ -13,7 +13,7 @@ namespace {
     size_t ArtMethodSize;
     constexpr size_t OFFSET_access_flags_in_ArtMethod = 4;
     constexpr uint32_t kAccCompileDontBother = 0x02000000;
-    constexpr uint32_t kAccPreCompiled = 0x00100000 | 0x00200000;
+    constexpr uint32_t kAccPreCompiled = 0x00200000;
     constexpr uint32_t kAccPublic = 0x0001;  // class, field, method, ic
     constexpr uint32_t kAccPrivate = 0x0002;  // field, method, ic
     constexpr uint32_t kAccProtected = 0x0004;  // field, method, ic
