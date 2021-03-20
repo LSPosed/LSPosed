@@ -42,7 +42,8 @@ namespace {
         uint32_t access_flags = read32((char *) method + OFFSET_access_flags_in_ArtMethod);
         LOGI("setNonCompilable: access flags is 0x%x", access_flags);
         access_flags |= kAccCompileDontBother;
-        access_flags &= ~kAccPreCompiled;
+        if (SDKVersion >= __ANDROID_API_R__)
+            access_flags &= ~kAccPreCompiled;
         write32((char *) method + OFFSET_access_flags_in_ArtMethod, access_flags);
     }
 
