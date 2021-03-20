@@ -134,7 +134,7 @@ public final class XposedBridge {
 	 */
 	public synchronized static void log(String text) {
 		Log.i(TAG, text);
-		ModuleLogger.log(text);
+		ModuleLogger.log(text, false);
 	}
 
 	/**
@@ -148,7 +148,7 @@ public final class XposedBridge {
 	public synchronized static void log(Throwable t) {
 		String logStr = Log.getStackTraceString(t);
 		Log.e(TAG, logStr);
-		ModuleLogger.log(logStr);
+		ModuleLogger.log(logStr, true);
 	}
 
 	/**
