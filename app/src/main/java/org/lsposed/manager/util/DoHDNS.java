@@ -36,7 +36,7 @@ import okhttp3.dnsoverhttps.DnsOverHttps;
 public class DoHDNS implements Dns {
 
     private static DnsOverHttps cloudflare;
-    private static DnsOverHttps alidns;
+    private static DnsOverHttps tuna;
 
     public DoHDNS(OkHttpClient client) {
         cloudflare = new DnsOverHttps.Builder()
@@ -45,10 +45,10 @@ public class DoHDNS implements Dns {
                 .url(HttpUrl.get("https://cloudflare-dns.com/dns-query"))
                 .build();
 
-        alidns = new DnsOverHttps.Builder()
+        tuna = new DnsOverHttps.Builder()
                 .resolvePrivateAddresses(true)
                 .client(client)
-                .url(HttpUrl.get("https://dns.alidns.com/dns-query"))
+                .url(HttpUrl.get("https://101.6.6.6:8443/dns-query"))
                 .build();
     }
 
@@ -61,7 +61,7 @@ public class DoHDNS implements Dns {
             } catch (UnknownHostException e) {
                 try {
                     if ("CN".equals(Locale.getDefault().getCountry()))
-                        return alidns.lookup(hostname);
+                        return tuna.lookup(hostname);
                 } catch (UnknownHostException ignored) {
                 }
             }
