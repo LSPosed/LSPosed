@@ -21,24 +21,21 @@
 package org.lsposed.lspd.nativebridge;
 
 import android.app.ActivityThread;
+import android.icu.text.SimpleDateFormat;
 import android.os.ParcelFileDescriptor;
 import android.os.Process;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
+import java.util.Calendar;
 
 import org.lsposed.lspd.util.Utils;
 
 public class ModuleLogger {
-    static SimpleDateFormat logDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss", Locale.getDefault());
+    static SimpleDateFormat logDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss");
     static int fd = -1;
 
     public static void initLogger(ParcelFileDescriptor fileDescriptor) {
         if (fd == -1 && fileDescriptor != null) {
             fd = fileDescriptor.detachFd();
-            logDateFormat.setTimeZone(TimeZone.getDefault());
         }
     }
 
@@ -50,7 +47,7 @@ public class ModuleLogger {
             return;
         }
         StringBuilder sb = new StringBuilder();
-        sb.append(logDateFormat.format(new Date()));
+        sb.append(logDateFormat.format(Calendar.getInstance().getTime()));
         sb.append(' ');
         sb.append(Process.myPid());
         sb.append('-');
