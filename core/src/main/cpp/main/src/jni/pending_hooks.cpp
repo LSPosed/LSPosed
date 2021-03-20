@@ -65,7 +65,7 @@ namespace lspd {
 
     LSP_DEF_NATIVE_METHOD(void, PendingHooks, recordPendingMethodNative, jobject method_ref, jclass class_ref){
         auto *class_ptr = art::Thread::Current().DecodeJObject(class_ref);
-        auto *method = getArtMethodYahfa(env, method_ref);
+        auto *method = yahfa::getArtMethod(env, method_ref);
         art::mirror::Class mirror_class(class_ptr);
         if (auto def = mirror_class.GetClassDef(); LIKELY(def)) {
             LOGD("record pending: %p (%s) with %p", class_ptr, mirror_class.GetDescriptor().c_str(),

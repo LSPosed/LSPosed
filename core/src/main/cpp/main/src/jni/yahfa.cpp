@@ -32,13 +32,13 @@
 namespace lspd {
     using namespace startop::dex;
     LSP_DEF_NATIVE_METHOD(void, Yahfa, init, jint sdkVersion) {
-        Java_lab_galaxy_yahfa_HookMain_init(env, clazz, sdkVersion);
+        yahfa::init(env, clazz, sdkVersion);
     }
 
     LSP_DEF_NATIVE_METHOD(jobject, Yahfa, findMethodNative, jclass targetClass,
                           jstring methodName, jstring methodSig) {
-        return Java_lab_galaxy_yahfa_HookMain_findMethodNative(env, clazz, targetClass, methodName,
-                                                               methodSig);
+        return yahfa::findMethodNative(env, clazz, targetClass, methodName,
+                                methodSig);
     }
 
     LSP_DEF_NATIVE_METHOD(jboolean, Yahfa, backupAndHookNative, jobject target,
@@ -47,21 +47,23 @@ namespace lspd {
                                                  art::gc::kGcCauseDebugger,
                                                  art::gc::kCollectorTypeDebugger);
         art::thread_list::ScopedSuspendAll suspend("Yahfa Hook", false);
-        return Java_lab_galaxy_yahfa_HookMain_backupAndHookNative(env, clazz, target, hook, backup);
+        return yahfa::backupAndHookNative(env, clazz, target, hook, backup);
     }
 
     LSP_DEF_NATIVE_METHOD(void, Yahfa, recordHooked, jobject member) {
-        lspd::recordHooked(getArtMethodYahfa(env, member));
+        lspd::recordHooked(yahfa::getArtMethod(env, member));
     }
 
     LSP_DEF_NATIVE_METHOD(jboolean, Yahfa, isHooked, jobject member) {
-        return lspd::isHooked(getArtMethodYahfa(env, member));
+        return lspd::isHooked(yahfa::getArtMethod(env, member));
     }
 
-    LSP_DEF_NATIVE_METHOD(jclass, Yahfa, buildHooker, jobject app_class_loader, jclass return_class, jobjectArray classes, jstring method_name) {
-        static auto in_memory_classloader = (jclass)env->NewGlobalRef(env->FindClass( "dalvik/system/InMemoryDexClassLoader"));
+    LSP_DEF_NATIVE_METHOD(jclass, Yahfa, buildHooker, jobject app_class_loader, jclass return_class,
+                          jobjectArray classes, jstring method_name) {
+        static auto in_memory_classloader = (jclass) env->NewGlobalRef(
+                env->FindClass("dalvik/system/InMemoryDexClassLoader"));
         static jmethodID initMid = JNI_GetMethodID(env, in_memory_classloader, "<init>",
-                                            "(Ljava/nio/ByteBuffer;Ljava/lang/ClassLoader;)V");
+                                                   "(Ljava/nio/ByteBuffer;Ljava/lang/ClassLoader;)V");
         DexBuilder dex_file;
 
         auto parameter_length = env->GetArrayLength(classes);
@@ -69,7 +71,9 @@ namespace lspd {
         parameter_types.reserve(parameter_length);
         std::string storage;
         auto current_thread = art::Thread::Current();
-        auto return_type = TypeDescriptor::FromDescriptor(art::mirror::Class(current_thread.DecodeJObject(return_class)).GetDescriptor(&storage));
+        auto return_type = TypeDescriptor::FromDescriptor(
+                art::mirror::Class(current_thread.DecodeJObject(return_class)).GetDescriptor(
+                        &storage));
         for (int i = 0; i < parameter_length; ++i) {
             auto param = (jclass) env->GetObjectArrayElement(classes, i);
             auto *param_ref = current_thread.DecodeJObject(param);
@@ -153,14 +157,15 @@ namespace lspd {
 
         slicer::MemView image{dex_file.CreateImage()};
 
-        auto dex_buffer = env->NewDirectByteBuffer(const_cast<void*>(image.ptr()), image.size());
+        auto dex_buffer = env->NewDirectByteBuffer(const_cast<void *>(image.ptr()), image.size());
         jobject my_cl = JNI_NewObject(env, in_memory_classloader, initMid,
                                       dex_buffer, app_class_loader);
 
         static jmethodID mid = JNI_GetMethodID(env, in_memory_classloader, "loadClass",
                                                "(Ljava/lang/String;)Ljava/lang/Class;");
         if (!mid) {
-            mid = JNI_GetMethodID(env, in_memory_classloader, "findClass", "(Ljava/lang/String;)Ljava/lang/Class;");
+            mid = JNI_GetMethodID(env, in_memory_classloader, "findClass",
+                                  "(Ljava/lang/String;)Ljava/lang/Class;");
         }
         jobject target = env->CallObjectMethod(my_cl, mid, env->NewStringUTF("LspHooker_"));
 //        LOGD("Created %zd", image.size());
@@ -178,7 +183,8 @@ namespace lspd {
                               "(Ljava/lang/reflect/Executable;Ljava/lang/reflect/Method;Ljava/lang/reflect/Method;)Z"),
             LSP_NATIVE_METHOD(Yahfa, recordHooked, "(Ljava/lang/reflect/Executable;)V"),
             LSP_NATIVE_METHOD(Yahfa, isHooked, "(Ljava/lang/reflect/Executable;)Z"),
-            LSP_NATIVE_METHOD(Yahfa, buildHooker, "(Ljava/lang/ClassLoader;Ljava/lang/Class;[Ljava/lang/Class;Ljava/lang/String;)Ljava/lang/Class;"),
+            LSP_NATIVE_METHOD(Yahfa, buildHooker,
+                              "(Ljava/lang/ClassLoader;Ljava/lang/Class;[Ljava/lang/Class;Ljava/lang/String;)Ljava/lang/Class;"),
     };
 
     void RegisterYahfa(JNIEnv *env) {
