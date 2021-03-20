@@ -39,9 +39,6 @@ namespace {
     }
 
     void setNonCompilable(void *method) {
-        if (SDKVersion < __ANDROID_API_N__) {
-            return;
-        }
         uint32_t access_flags = read32((char *) method + OFFSET_access_flags_in_ArtMethod);
         LOGI("setNonCompilable: access flags is 0x%x", access_flags);
         access_flags |= kAccCompileDontBother;
@@ -76,10 +73,8 @@ namespace {
 
         // set kAccCompileDontBother for a method we do not want the compiler to compile
         // so that we don't need to worry about hotness_count_
-        if (SDKVersion >= __ANDROID_API_N__) {
-            setNonCompilable(targetMethod);
-            setNonCompilable(hookMethod);
-        }
+        setNonCompilable(targetMethod);
+        setNonCompilable(hookMethod);
 
         if (backupMethod) {// do method backup
             // have to copy the whole target ArtMethod here
@@ -141,7 +136,6 @@ namespace yahfa {
                 ArtMethodSize = roundUpToPtrSize(4 * 4 + 2 * 2) + pointer_size * 2;
                 break;
             case __ANDROID_API_O_MR1__:
-            case __ANDROID_API_O__:
                 OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod =
                         roundUpToPtrSize(4 * 4 + 2 * 2) + pointer_size * 2;
                 ArtMethodSize = roundUpToPtrSize(4 * 4 + 2 * 2) + pointer_size * 3;
