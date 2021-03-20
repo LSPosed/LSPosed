@@ -2,8 +2,7 @@
     <string name="app_name" translatable="false">LSPosed</string>
 
     <!-- MainActivity -->
-    <string name="info">Info</string>
-    <string name="Activated">%s Geactiveerd</string>
+    <string name="info">Informatie</string>
     <string name="Install">Installeer</string>
     <string name="InstallDetail">Tik om LSPosed te installeren</string>
     <string name="Modules">Modules</string>
@@ -163,4 +162,5 @@
     <string name="verbose_log_not_avaliable">Uitgebreid logboek is niet beschikbaar. Als u het net hebt ingeschakeld zonder opnieuw op te starten, probeer het dan opnieuw na het opnieuw opstarten.</string>
     <string name="NotInstall">Niet geïnstalleerd</string>
     <string name="NotInstallDetail">LSPosed is niet geïnstalleerd</string>
+    <string name="translators"><![CDATA[<a href="https://github.com/Pandemic-XDA">Pandemic</a>]]></string>
 </resources>
