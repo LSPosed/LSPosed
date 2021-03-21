@@ -31,6 +31,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,6 +39,12 @@ import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
+
+import org.lsposed.manager.ConfigManager;
+import org.lsposed.manager.R;
+import org.lsposed.manager.repo.RepoLoader;
+import org.lsposed.manager.repo.model.OnlineModule;
+import org.lsposed.manager.ui.activity.base.ListActivity;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -47,10 +54,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.lsposed.manager.R;
-import org.lsposed.manager.repo.RepoLoader;
-import org.lsposed.manager.repo.model.OnlineModule;
-import org.lsposed.manager.ui.activity.base.ListActivity;
 import rikka.core.util.LabelComparator;
 
 public class RepoActivity extends ListActivity implements RepoLoader.Listener {
@@ -61,6 +64,10 @@ public class RepoActivity extends ListActivity implements RepoLoader.Listener {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         repoLoader.addListener(this);
         super.onCreate(savedInstanceState);
+        if (!ConfigManager.isMagiskInstalled()) {
+            Toast.makeText(this, R.string.lsposed_not_active, Toast.LENGTH_LONG).show();
+            finish();
+        }
     }
 
     @Override

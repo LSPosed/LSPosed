@@ -25,7 +25,9 @@ import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.util.Log;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -235,5 +237,10 @@ public class ConfigManager {
             Log.e(App.TAG, Log.getStackTraceString(e));
             return false;
         }
+    }
+
+    public static boolean isMagiskInstalled() {
+        return Arrays.stream(System.getenv("PATH").split(File.pathSeparator))
+                .anyMatch(str -> new File(str, "magisk").exists());
     }
 }
