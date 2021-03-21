@@ -187,7 +187,7 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp-dnsoverhttps:$okhttpVersion")
     implementation("com.squareup.okhttp3:logging-interceptor:$okhttpVersion")
     implementation("dev.rikka.rikkax.appcompat:appcompat:1.2.0-rc01")
-    implementation("dev.rikka.rikkax.core:core:1.3.0")
+    implementation("dev.rikka.rikkax.core:core:1.3.1")
     implementation("dev.rikka.rikkax.insets:insets:1.0.1")
     implementation("dev.rikka.rikkax.material:material:1.6.0")
     implementation("dev.rikka.rikkax.preference:simplemenu-preference:1.0.2")
