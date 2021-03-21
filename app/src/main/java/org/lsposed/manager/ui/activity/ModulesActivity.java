@@ -20,6 +20,8 @@
 
 package org.lsposed.manager.ui.activity;
 
+import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
+
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -57,11 +59,6 @@ import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.adapters.AppHelper;
@@ -70,7 +67,10 @@ import org.lsposed.manager.ui.activity.base.ListActivity;
 import org.lsposed.manager.util.GlideApp;
 import org.lsposed.manager.util.ModuleUtil;
 
-import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class ModulesActivity extends ListActivity implements ModuleUtil.ModuleListener {
 
@@ -92,6 +92,10 @@ public class ModulesActivity extends ListActivity implements ModuleUtil.ModuleLi
         pm = getPackageManager();
         moduleUtil.addListener(this);
         super.onCreate(savedInstanceState);
+        if (ConfigManager.getXposedVersionName() == null) {
+            Toast.makeText(this, R.string.lsposed_not_active, Toast.LENGTH_LONG).show();
+            finish();
+        }
     }
 
     @Override
