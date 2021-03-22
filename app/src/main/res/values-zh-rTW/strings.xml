@@ -170,7 +170,6 @@
     <string name="module_release_no_more">沒有更早期的版本</string>
     <string name="repo_load_failed">模組倉庫載入失敗：%s</string>
 
-    
 
     <string name="app_destroyed">此應用程式已損毀，請確保您從官方來源下載該應用程式。</string>
     <string name="outdated_manager">LSPosed Manager 和 LSPosed 核心的版本不一致。請重新安裝對應的版本。</string>

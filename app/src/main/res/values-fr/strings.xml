@@ -49,7 +49,7 @@
     <string name="info_manager_version">Version du gestionnaire</string>
     <string name="info_system_version">Version du système</string>
     <string name="info_device">Périphérique </string>
-    <string name="info_system_abi">Architecture du système</string>  
+    <string name="info_system_abi">Architecture du système</string>
 
     <!-- LogsActivity -->
     <string name="menuSend">Envoyer</string>
