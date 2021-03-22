@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -24,7 +23,8 @@
     package="org.lsposed.manager">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS"
+    <uses-permission
+        android:name="android.permission.INTERACT_ACROSS_USERS"
         tools:ignore="ProtectedPermissions" />
 
     <queries>
@@ -48,13 +48,15 @@
             android:name=".ui.activity.LogsActivity"
             android:label="@string/Logs" />
         <activity android:name=".ui.activity.AppListActivity" />
-        <activity android:name=".ui.activity.RepoActivity"
-            android:label="@string/module_repo"/>
+        <activity
+            android:name=".ui.activity.RepoActivity"
+            android:label="@string/module_repo" />
         <activity android:name=".ui.activity.RepoItemActivity" />
         <activity
             android:name=".ui.activity.MainActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -70,7 +72,8 @@
             android:label="@string/Modules" />
         <activity
             android:name=".ui.activity.SettingsActivity"
-            android:label="@string/Settings">
+            android:label="@string/Settings"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
 
