@@ -202,7 +202,7 @@ dependencies {
     implementation("io.noties.markwon:html:$markwonVersion")
     implementation("io.noties.markwon:image-glide:$markwonVersion")
     implementation("io.noties.markwon:linkify:$markwonVersion")
-    implementation("me.zhanghai.android.appiconloader:appiconloader-glide:1.2.0")
+    implementation("me.zhanghai.android.appiconloader:appiconloader-glide:1.3.1")
     implementation("me.zhanghai.android.fastscroll:library:1.1.5")
     implementation(project(":manager-service"))
 }
