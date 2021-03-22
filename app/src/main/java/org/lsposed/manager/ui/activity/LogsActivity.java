@@ -47,6 +47,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
+import org.lsposed.manager.BuildConfig;
+import org.lsposed.manager.ConfigManager;
+import org.lsposed.manager.R;
+import org.lsposed.manager.databinding.ActivityLogsBinding;
+import org.lsposed.manager.databinding.DialogInstallWarningBinding;
+import org.lsposed.manager.databinding.ItemLogBinding;
+import org.lsposed.manager.ui.activity.base.BaseActivity;
+import org.lsposed.manager.util.LinearLayoutManagerFix;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileDescriptor;
@@ -62,14 +71,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import org.lsposed.manager.BuildConfig;
-import org.lsposed.manager.ConfigManager;
-import org.lsposed.manager.R;
-import org.lsposed.manager.databinding.ActivityLogsBinding;
-import org.lsposed.manager.databinding.DialogInstallWarningBinding;
-import org.lsposed.manager.databinding.ItemLogBinding;
-import org.lsposed.manager.ui.activity.base.BaseActivity;
-import org.lsposed.manager.util.LinearLayoutManagerFix;
 import rikka.core.os.FileUtils;
 import rikka.recyclerview.RecyclerViewKt;
 
