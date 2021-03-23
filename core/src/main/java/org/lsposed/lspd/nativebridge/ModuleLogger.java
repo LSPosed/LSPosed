@@ -44,23 +44,25 @@ public class ModuleLogger {
 
     private static native void nativeLog(int fd, String logStr);
 
-    public static void log(String str) {
+    public static void log(String str, boolean isThrowable) {
         if (fd == -1) {
             Utils.logE("Logger is not initialized");
             return;
         }
         StringBuilder sb = new StringBuilder();
+        String processName = ActivityThread.currentProcessName();
+
         sb.append(logDateFormat.format(new Date()));
         sb.append(' ');
+        sb.append(isThrowable ? "E" : "I");
+        sb.append('/');
+        sb.append(processName == null ? "?" : processName);
+        sb.append('(');
         sb.append(Process.myPid());
         sb.append('-');
         sb.append(Process.myTid());
-        sb.append('/');
-        String processName = ActivityThread.currentProcessName();
-        if (processName == null) sb.append("?");
-        else sb.append(processName);
-        sb.append(' ');
-        sb.append("LSPosedBridge: ");
+        sb.append(')');
+        sb.append(": ");
         sb.append(str);
         sb.append('\n');
         nativeLog(fd, sb.toString());

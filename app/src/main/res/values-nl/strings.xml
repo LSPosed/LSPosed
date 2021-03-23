@@ -19,7 +19,6 @@
   -->
 
 <resources>
-
     <!-- MainActivity -->
     <string name="info">Informatie</string>
     <string name="Install">Installeer</string>
@@ -35,6 +34,7 @@
     <string name="module_repo">Opslagplaats</string>
     <string name="module_repo_summary">Module opslagplaats (Alpha)</string>
     <string name="about_view_source_code"><![CDATA[Bekijk de broncode op %s<br/>Sluit je aan bij onze %s kanaal]]></string>
+    <string name="about_translators">Vertaler: %s</string>
 
     <string name="activated">Geactiveerd</string>
     <string name="not_installed">Niet geïnstalleerd</string>
@@ -153,10 +153,6 @@
     <string name="dns_over_http_summary">Tijdelijke oplossing voor DNS-vergiftiging in sommige landen</string>
     <string name="theme_color">Thema kleur</string>
     <string name="theme_color_summary">Kleur die het meest voorkomt in de app</string>
-    <string name="dark_theme">Donkere thema</string>
-    <string name="dark_theme_follow_system">Volg systeem</string>
-    <string name="dark_theme_off">Altijd uit</string>
-    <string name="dark_theme_on">Altijd aan</string>
 
     <!-- Module Repo -->
     <string name="module_readme">Leesmij</string>
@@ -172,11 +168,11 @@
     <string name="module_release_no_more">Geen release meer</string>
     <string name="repo_load_failed">Kan moduleopslagplaats niet laden: %s</string>
 
-
     <string name="app_destroyed">Deze applicatie is vernietigd, zorg ervoor dat u deze downloadt vanaf de officiële bron.</string>
     <string name="outdated_manager">De versie van LSPosed Manager en LSPosed Core zijn niet consistent. Installeer de corresponderende versie opnieuw.</string>
     <string name="lsposed_not_active">LSPosed is momenteel niet geïnstalleerd of actief.</string>
     <string name="verbose_log_not_avaliable">Uitgebreid logboek is niet beschikbaar. Als u het net hebt ingeschakeld zonder opnieuw op te starten, probeer het dan opnieuw na het opnieuw opstarten.</string>
     <string name="NotInstall">Niet geïnstalleerd</string>
     <string name="NotInstallDetail">LSPosed is niet geïnstalleerd</string>
+    <string name="translators"><![CDATA[<a href="https://github.com/Pandemic-XDA">Pandemic (Pandemic-XDA)</a>]]></string>
 </resources>

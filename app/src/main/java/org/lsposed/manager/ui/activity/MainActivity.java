@@ -44,8 +44,6 @@ import org.lsposed.manager.util.ModuleUtil;
 import org.lsposed.manager.util.NavUtil;
 import org.lsposed.manager.util.chrome.LinkTransformationMethod;
 
-import java.io.File;
-import java.util.Arrays;
 import java.util.Locale;
 
 import name.mikanoshi.customiuizer.holidays.HolidayHelper;
@@ -117,8 +115,7 @@ public class MainActivity extends BaseActivity {
             }
         } else {
             cardBackgroundColor = ResourcesKt.resolveColor(getTheme(), R.attr.colorInstall);
-            boolean isMagiskInstalled = Arrays.stream(System.getenv("PATH").split(File.pathSeparator))
-                    .anyMatch(str -> new File(str, "magisk").exists());
+            boolean isMagiskInstalled = ConfigManager.isMagiskInstalled();
             binding.statusTitle.setText(isMagiskInstalled ? R.string.Install : R.string.NotInstall);
             binding.statusSummary.setText(isMagiskInstalled ? R.string.InstallDetail : R.string.NotInstallDetail);
             if (!isMagiskInstalled) {
@@ -126,7 +123,7 @@ public class MainActivity extends BaseActivity {
                 binding.download.setVisibility(View.GONE);
             }
             binding.statusIcon.setImageResource(R.drawable.ic_error);
-            Snackbar.make(binding.snackbar, R.string.lsposed_not_active, Snackbar.LENGTH_LONG).show();
+            Snackbar.make(binding.snackbar, R.string.lsposed_not_active, Snackbar.LENGTH_INDEFINITE).show();
         }
         binding.status.setCardBackgroundColor(cardBackgroundColor);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {

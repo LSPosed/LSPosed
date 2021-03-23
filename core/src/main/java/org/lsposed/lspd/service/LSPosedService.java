@@ -19,6 +19,7 @@
 
 package org.lsposed.lspd.service;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -31,7 +32,6 @@ import android.util.Log;
 import java.util.Arrays;
 
 import org.lsposed.lspd.Application;
-import pxb.android.arsc.Config;
 
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 
@@ -84,6 +84,23 @@ public class LSPosedService extends ILSPosedService.Stub {
             return;
         }
 
+        if (intent.getAction().equals(Intent.ACTION_PACKAGE_CHANGED)) {
+            // make sure that the change is for the complete package, not only a
+            // component
+            String[] components = intent.getStringArrayExtra(Intent.EXTRA_CHANGED_COMPONENT_NAME_LIST);
+            if (components != null) {
+                boolean isForPackage = false;
+                for (String component : components) {
+                    if (packageName.equals(component)) {
+                        isForPackage = true;
+                        break;
+                    }
+                }
+                if (!isForPackage)
+                    return;
+            }
+        }
+
         ApplicationInfo applicationInfo = PackageService.getApplicationInfo(packageName, PackageManager.GET_META_DATA, 0);
         boolean isXposedModule = (userId == 0 || userId == -1) &&
                 applicationInfo != null &&
@@ -101,7 +118,7 @@ public class LSPosedService extends ILSPosedService.Stub {
             broadcastIntent.addFlags(0x01000000);
             broadcastIntent.addFlags(0x00400000);
             broadcastIntent.setData(intent.getData());
-            broadcastIntent.setPackage(ConfigManager.getInstance().getManagerPackageName());
+            broadcastIntent.setComponent(ComponentName.unflattenFromString(ConfigManager.getInstance().getManagerPackageName() + "/.receivers.ServiceReceiver"));
 
             try {
                 ActivityManagerService.broadcastIntentWithFeature(null, null, broadcastIntent,

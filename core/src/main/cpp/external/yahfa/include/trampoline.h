@@ -8,7 +8,7 @@
 extern "C" {
 #endif
 extern int SDKVersion;
-extern int OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod;
+extern size_t OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod;
 
 extern unsigned int hookCap; // capacity for trampolines
 extern unsigned int hookCount; // current count of used trampolines

@@ -3,26 +3,18 @@
 
 #include <jni.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+namespace yahfa {
+    void init(JNIEnv *env, jclass clazz, jint sdkVersion);
 
-void Java_lab_galaxy_yahfa_HookMain_init(JNIEnv *env, jclass clazz, jint sdkVersion);
+    jobject findMethodNative(JNIEnv *env, jclass clazz,
+                             jclass targetClass, jstring methodName,
+                             jstring methodSig);
 
-jobject Java_lab_galaxy_yahfa_HookMain_findMethodNative(JNIEnv *env, jclass clazz,
-                                                        jclass targetClass, jstring methodName,
-                                                        jstring methodSig);
+    jboolean backupAndHookNative(JNIEnv *env, jclass clazz,
+                                 jobject target, jobject hook,
+                                 jobject backup);
 
-jboolean Java_lab_galaxy_yahfa_HookMain_backupAndHookNative(JNIEnv *env, jclass clazz,
-                                                            jobject target, jobject hook,
-                                                            jobject backup);
-
-void setNonCompilable(void *method);
-
-void *getArtMethodYahfa(JNIEnv *env, jobject jmethod);
-
-#ifdef __cplusplus
+    void *getArtMethod(JNIEnv *env, jobject jmethod);
 }
-#endif
 
 #endif // HOOK_MAIN_H

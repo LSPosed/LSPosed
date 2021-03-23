@@ -31,7 +31,7 @@ namespace lspd {
     static std::unordered_set<void *> deopted_methods;
 
     LSP_DEF_NATIVE_METHOD(void, ClassLinker, setEntryPointsToInterpreter, jobject method) {
-        void *reflected_method = getArtMethodYahfa(env, method);
+        void *reflected_method = yahfa::getArtMethod(env, method);
         if (deopted_methods.contains(reflected_method)) {
             LOGD("method %p has been deopted before, skip...", reflected_method);
             return;

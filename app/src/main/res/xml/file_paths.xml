@@ -19,11 +19,7 @@
   -->
 
 <paths>
-    <external-cache-path
-        name="downloads"
-        path="/downloads" />
-    <!--suppress AndroidElementNotAllowed -->
-    <root-path
+    <cache-path
         name="log"
-        path="/" />
+        path="." />
 </paths>

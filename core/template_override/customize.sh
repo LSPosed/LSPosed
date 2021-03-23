@@ -31,8 +31,9 @@ abortC() {
 POUNDS="*********************************************************"
 
 VERSION=$(grep_prop version "${TMPDIR}/module.prop")
+VERSION_CODE=$(grep_prop versionCode "${TMPDIR}/module.prop")
 
-ui_print "- LSPosed version ${VERSION}"
+ui_print "- LSPosed version ${VERSION} (${VERSION_CODE})"
 
 # Extract verify.sh
 ui_print "- Extracting verify.sh"
@@ -72,7 +73,6 @@ extract "${ZIPFILE}" 'module.prop' "${MODPATH}"
 extract "${ZIPFILE}" 'system.prop' "${MODPATH}"
 extract "${ZIPFILE}" 'sepolicy.rule' "${MODPATH}"
 extract "${ZIPFILE}" 'post-fs-data.sh' "${MODPATH}"
-#extract "${ZIPFILE}" 'service.sh' "${MODPATH}"
 extract "${ZIPFILE}" 'uninstall.sh' "${MODPATH}"
 extract "${ZIPFILE}" 'framework/lspd.dex' "${MODPATH}"
 
@@ -137,4 +137,4 @@ if [ ! -e /data/adb/lspd/config/verbose_log ]; then
 fi
 
 set_perm_recursive "${MODPATH}" 0 0 0755 0644
-ui_print "- Welcome to LSPosed ${VERSION}!"
+ui_print "- Welcome to LSPosed!"

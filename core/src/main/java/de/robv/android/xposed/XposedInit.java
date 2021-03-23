@@ -21,7 +21,6 @@
 package de.robv.android.xposed;
 
 import android.annotation.SuppressLint;
-import android.app.AndroidAppHelper;
 import android.content.pm.ApplicationInfo;
 import android.content.res.Resources;
 import android.content.res.ResourcesImpl;
@@ -43,7 +42,6 @@ import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -79,7 +77,6 @@ public final class XposedInit {
     private static final String startClassName = ""; // ed: no support for tool process anymore
 
     public static volatile boolean disableResources = false;
-    private static final String[] XRESOURCES_CONFLICTING_PACKAGES = {"com.sygic.aura"};
 
     private XposedInit() {
     }
@@ -208,8 +205,7 @@ public final class XposedInit {
 
     private static XResources cloneToXResources(XC_MethodHook.MethodHookParam param, String resDir) {
         Object result = param.getResult();
-        if (result == null || result instanceof XResources ||
-                Arrays.binarySearch(XRESOURCES_CONFLICTING_PACKAGES, AndroidAppHelper.currentPackageName()) == 0) {
+        if (result == null || result instanceof XResources) {
             return null;
         }
 

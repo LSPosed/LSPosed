@@ -42,9 +42,9 @@ val moduleId = "riru_lsposed"
 val authors = "LSPosed Developers"
 
 val riruModuleId = "lsposed"
-val moduleMinRiruApiVersion = 24
-val moduleMinRiruVersionName = "v24.1.0"
-val moduleMaxRiruApiVersion = 24
+val moduleMinRiruApiVersion = 25
+val moduleMinRiruVersionName = "25.0.0"
+val moduleMaxRiruApiVersion = 25
 
 val defaultManagerPackageName: String by rootProject.extra
 val apiCode: Int by rootProject.extra
@@ -63,9 +63,9 @@ val verCode: Int by rootProject.extra
 val verName: String by rootProject.extra
 
 dependencies {
-    implementation("dev.rikka.ndk:riru:24.0.0")
+    implementation("dev.rikka.ndk:riru:${moduleMinRiruVersionName}")
     implementation(files("libs/dobby_prefab.aar"))
-    implementation("com.android.tools.build:apksig:4.1.2")
+    implementation("com.android.tools.build:apksig:4.1.3")
     compileOnly(project(":hiddenapi-stubs"))
     compileOnly("androidx.annotation:annotation:1.1.0")
     implementation(project(":interface"))
@@ -95,7 +95,8 @@ android {
                 cFlags("-std=c11 -ffixed-x18 -Qunused-arguments -fno-rtti -fno-exceptions -fomit-frame-pointer -fpie -fPIC")
                 arguments("-DRIRU_MODULE_API_VERSION=$moduleMaxRiruApiVersion",
                         "-DRIRU_MODULE_VERSION=$verCode",
-                        "-DRIRU_MODULE_VERSION_NAME:STRING=\"$verName\"")
+                        "-DRIRU_MODULE_VERSION_NAME:STRING=\"$verName\"",
+                        "-DMODULE_NAME:STRING=riru_$riruModuleId")
                 targets("lspd")
             }
         }

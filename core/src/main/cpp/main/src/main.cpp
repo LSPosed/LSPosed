@@ -29,18 +29,17 @@
 #include "symbol_cache.h"
 
 namespace lspd {
+    int *allowUnload = nullptr;
+
     namespace {
         std::string magiskPath;
 
         void onModuleLoaded() {
             LOGI("onModuleLoaded: welcome to LSPosed!");
+            LOGI("onModuleLoaded: version %s (%d)", RIRU_MODULE_VERSION_NAME, RIRU_MODULE_VERSION);
             // rirud must be used in onModuleLoaded
             Context::GetInstance()->PreLoadDex(magiskPath + '/' + kDexPath);
             InitSymbolCache();
-        }
-
-        int shouldSkipUid(int) {
-            return 0;
         }
 
         void nativeForkAndSpecializePre(JNIEnv *env, jclass, jint *_uid, jint *,
@@ -103,7 +102,6 @@ namespace lspd {
                     .version = RIRU_MODULE_VERSION,
                     .versionName = STRINGIFY(RIRU_MODULE_VERSION_NAME),
                     .onModuleLoaded = lspd::onModuleLoaded,
-                    .shouldSkipUid = lspd::shouldSkipUid,
                     .forkAndSpecializePre = lspd::nativeForkAndSpecializePre,
                     .forkAndSpecializePost = lspd::nativeForkAndSpecializePost,
                     .forkSystemServerPre = lspd::nativeForkSystemServerPre,
@@ -115,9 +113,14 @@ namespace lspd {
 }
 
 __attribute__((noinline)) RIRU_EXPORT RiruVersionedModuleInfo *init(Riru *riru) {
-    LOGD("Using riru %d", riru->riruApiVersion);
+    LOGD("using riru %d", riru->riruApiVersion);
     LOGD("module path: %s", riru->magiskModulePath);
     lspd::magiskPath = riru->magiskModulePath;
+    if (lspd::magiskPath.find(STRINGIFY(MODULE_NAME)) == std::string::npos) {
+        LOGE("who am i");
+        return nullptr;
+    }
+    lspd::allowUnload = riru->allowUnload;
     return &lspd::module;
 }
 
