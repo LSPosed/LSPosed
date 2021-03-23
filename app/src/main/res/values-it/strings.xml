@@ -104,7 +104,7 @@
     <string name="sort_by_update_time">Ordina per data di aggiornamento</string>
     <string name="sort_by_update_time_reverse">Ordina per data di aggiornamento (inverso)</string>
     <string name="menu_show_system_apps">Applicazioni di sistema</string>
-    <string name="menu_sort">Ordinando…</string>
+    <string name="menu_sort">Ordina…</string>
     <string name="enable_module">Abilita modulo</string>
     <string name="no_scope_selected">Non hai selezionato alcuna app. Continuare?</string>
     <string name="menu_show_games">Giochi</string>
