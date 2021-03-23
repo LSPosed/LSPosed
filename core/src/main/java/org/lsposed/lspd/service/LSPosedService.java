@@ -143,6 +143,7 @@ public class LSPosedService extends ILSPosedService.Stub {
 
     @Override
     public void dispatchBootCompleted(Intent intent) throws RemoteException {
+        Log.d(TAG, "boot completed");
         ConfigManager.getInstance().ensureManager();
     }
 }

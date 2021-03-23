@@ -36,7 +36,7 @@ public class BootReceiver {
             @SuppressLint("DiscouragedPrivateApi")
             Method method = Context.class.getDeclaredMethod("registerReceiver", BroadcastReceiver.class, IntentFilter.class, String.class, Handler.class);
             method.invoke(context, receiver, intentFilter, null, handler);
-            Utils.logI("registered package receiver");
+            Utils.logI("registered boot receiver");
         } catch (Throwable e) {
             Utils.logW("registerReceiver failed", e);
         }

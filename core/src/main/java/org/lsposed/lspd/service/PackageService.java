@@ -245,11 +245,9 @@ public class PackageService {
             // Uninstall manager when needed
             PackageInfo pkgInfo = pm.getPackageInfo(packageName, 0, 0);
             if (pkgInfo != null && pkgInfo.versionName != null && pkgInfo.applicationInfo != null) {
-                if ((pkgInfo.applicationInfo.flags & ApplicationInfo.FLAG_TEST_ONLY) != 0) {
-                    return false;
-                }
                 boolean versionMatch = pkgInfo.versionName.equals(BuildConfig.VERSION_NAME);
-                boolean signatureMatch = InstallerVerifier.verifyInstallerSignature(pkgInfo.applicationInfo);
+                boolean signatureMatch = InstallerVerifier.verifyInstallerSignature(pkgInfo.applicationInfo) ||
+                        (pkgInfo.applicationInfo.flags & ApplicationInfo.FLAG_TEST_ONLY) != 0;
                 if (versionMatch && signatureMatch && pkgInfo.versionCode >= BuildConfig.VERSION_CODE)
                     return false;
                 if (!BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME.equals(packageName) || !signatureMatch
