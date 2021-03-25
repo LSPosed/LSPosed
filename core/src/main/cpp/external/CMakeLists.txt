@@ -4,3 +4,21 @@ add_subdirectory(yahfa)
 
 add_subdirectory(DexBuilder)
 target_include_directories(dex_builder PUBLIC DexBuilder)
+target_include_directories(dex_builder PRIVATE libcxx/include)
+
+macro(SET_OPTION option value)
+    set(${option} ${value} CACHE INTERNAL "" FORCE)
+endmacro()
+
+SET_OPTION(DOBBY_GENERATE_SHARED OFF)
+SET_OPTION(Plugin.Android.BionicLinkerRestriction ON)
+if (NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
+    SET_OPTION(DOBBY_DEBUG OFF)
+endif (NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
+add_subdirectory(Dobby)
+target_include_directories(dobby PUBLIC Dobby/include)
+target_include_directories(dobby PUBLIC Dobby/builtin-plugin/BionicLinkerRestriction)
+target_include_directories(dobby PRIVATE libcxx/include)
+
+add_library(libcxx STATIC IMPORTED GLOBAL)
+set_property(TARGET libcxx PROPERTY IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/../../../../build/intermediates/ndk/obj/local/${CMAKE_ANDROID_ARCH_ABI}/libcxx.a)
