@@ -20,6 +20,7 @@
 import org.apache.tools.ant.filters.FixCrLfFilter
 import org.gradle.internal.os.OperatingSystem
 import org.jetbrains.kotlin.daemon.common.toHexString
+import java.nio.file.Paths
 
 import java.security.MessageDigest
 
@@ -148,11 +149,24 @@ android {
     }
 }
 
+fun isFoundInPath(file: String): Boolean {
+    val pathEnv = System.getenv("PATH")
+    return pathEnv.split(File.pathSeparator).fold(false) { p, folder ->
+        p || Paths.get("${folder}${File.separator}${file}").toFile().exists()
+    }
+}
+
 task("buildLibcxx", Exec::class) {
     val ndkDir = android.ndkDirectory
     executable = "$ndkDir/${if (isWindows) "ndk-build.cmd" else "ndk-build"}"
     workingDir = projectDir
-    println(projectDir)
+    if (isFoundInPath("ccache")) {
+        environment("NDK_CCACHE", "ccache")
+        environment("USE_CCACHE", "1")
+    } else {
+        println("not using ccache")
+    }
+
     setArgs(
         arrayListOf(
             "NDK_PROJECT_PATH=build/intermediates/ndk",
