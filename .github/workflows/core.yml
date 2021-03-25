@@ -52,11 +52,11 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/.ccache
-        key: ccache-core-${{ github.sha }}
+        key: ccache-${{ github.sha }}
+        # cache without - is a temporary workaround
         restore-keys: |
-          ccache-core-${{ github.sha }}
-          ccache-core-
-          ccache-
+          ccache-${{ github.sha }}
+          ccache
     - name: Install ccache
       run: sudo apt-get install -y ccache
     - name: Build with Gradle

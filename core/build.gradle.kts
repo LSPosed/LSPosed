@@ -176,7 +176,8 @@ task("buildLibcxx", Exec::class) {
             "NDK_PROJECT_PATH=build/intermediates/ndk",
             "APP_BUILD_SCRIPT=$projectDir/src/main/cpp/external/libcxx/Android.mk",
             "APP_CPPFLAGS=-std=c++20",
-            "APP_STL=none"
+            "APP_STL=none",
+            "-j${Runtime.getRuntime().availableProcessors()}"
         )
     )
 }
