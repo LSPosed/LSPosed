@@ -42,23 +42,21 @@ jobs:
         path: |
           ~/.gradle/caches
           ~/.gradle/wrapper
-        key: gradle-core-${{ hashFiles('**/*.gradle.kts') }}
+        key: gradle-core-${{ github.sha }}
         restore-keys: |
-          gradle-manager-${{ hashFiles('**/*.gradle.kts') }}
-          gradle-core
+          gradle-core-${{ github.sha }}
+          gradle-core-
+          gradle-manager-
           gradle-
-    - name: Prepare ccache timestamp
-      id: ccache_cache_timestamp
-      shell: cmake -P {0}
-      run: |
-        string(TIMESTAMP current_date "%Y-%m-%d-%H;%M;%S" UTC)
-        message("::set-output name=timestamp::${current_date}")
     - name: Cache Cmake
       uses: actions/cache@v2
       with:
         path: ~/.ccache
-        key: ccache-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
-        restore-keys: ccache-
+        key: ccache-core-${{ github.sha }}
+        restore-keys: |
+          ccache-core-${{ github.sha }}
+          ccache-core-
+          ccache-
     - name: Install ccache
       run: sudo apt-get install -y ccache
     - name: Build with Gradle
