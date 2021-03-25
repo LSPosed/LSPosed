@@ -149,21 +149,25 @@ android {
     }
 }
 
-fun isFoundInPath(file: String): Boolean {
+fun findInPath(executable: String): String? {
     val pathEnv = System.getenv("PATH")
-    return pathEnv.split(File.pathSeparator).fold(false) { p, folder ->
-        p || Paths.get("${folder}${File.separator}${file}").toFile().exists()
-    }
+    return pathEnv.split(File.pathSeparator).map { folder ->
+        Paths.get("${folder}${File.separator}${executable}").toFile()
+    }.firstOrNull { path ->
+        path.exists()
+    }?.absolutePath
 }
 
 task("buildLibcxx", Exec::class) {
     val ndkDir = android.ndkDirectory
     executable = "$ndkDir/${if (isWindows) "ndk-build.cmd" else "ndk-build"}"
     workingDir = projectDir
-    if (isFoundInPath("ccache")) {
-        environment("NDK_CCACHE", "ccache")
+    findInPath("ccache")?.let {
+        println("using ccache $it")
+        environment("NDK_CCACHE", it)
         environment("USE_CCACHE", "1")
-    } else {
+        environment("CCACHE_COMPILERCHECK", "content")
+    } ?: run {
         println("not using ccache")
     }
 
@@ -171,7 +175,7 @@ task("buildLibcxx", Exec::class) {
         arrayListOf(
             "NDK_PROJECT_PATH=build/intermediates/ndk",
             "APP_BUILD_SCRIPT=$projectDir/src/main/cpp/external/libcxx/Android.mk",
-            "APP_CPPFLAGS=-std=c++17",
+            "APP_CPPFLAGS=-std=c++20",
             "APP_STL=none"
         )
     )
