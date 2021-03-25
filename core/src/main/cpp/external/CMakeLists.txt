@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.4.1)
 
 add_subdirectory(yahfa)
+target_include_directories(yahfa PRIVATE libcxx/include)
 
 add_subdirectory(DexBuilder)
 target_include_directories(dex_builder PUBLIC DexBuilder)

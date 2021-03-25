@@ -99,7 +99,7 @@ android {
                     "-DRIRU_MODULE_VERSION=$verCode",
                     "-DRIRU_MODULE_VERSION_NAME:STRING=\"$verName\"",
                     "-DMODULE_NAME:STRING=riru_$riruModuleId",
-                    "-DANDROID_STL=system"
+                    "-DANDROID_STL=none"
                 )
                 targets("lspd")
             }
