@@ -67,7 +67,7 @@ dependencies {
     implementation(files("libs/dobby_prefab.aar"))
     implementation("com.android.tools.build:apksig:4.1.3")
     compileOnly(project(":hiddenapi-stubs"))
-    compileOnly("androidx.annotation:annotation:1.1.0")
+    compileOnly("androidx.annotation:annotation:1.2.0")
     implementation(project(":interface"))
     implementation(project(":hiddenapi-bridge"))
     implementation(project(":manager-service"))

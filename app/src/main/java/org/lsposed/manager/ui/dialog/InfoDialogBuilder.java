@@ -65,14 +65,30 @@ public class InfoDialogBuilder extends BlurBehindDialogBuilder {
         setView(binding.getRoot());
 
         setPositiveButton(android.R.string.ok, null);
-        setNeutralButton(android.R.string.copy, (dialog, which) -> ClipboardUtils.put(context,
-                String.format(Locale.US, "%s\n%s\n\n%s\n%s\n\n%s\n%s\n\n%s\n%s\n\n%s\n%s\n\n%s\n%s",
-                        context.getString(R.string.info_api_version), binding.apiVersion.getText(),
-                        context.getString(R.string.info_framework_version), binding.frameworkVersion.getText(),
-                        context.getString(R.string.info_manager_version), binding.managerVersion.getText(),
-                        context.getString(R.string.info_system_version), binding.systemVersion.getText(),
-                        context.getString(R.string.info_device), binding.device.getText(),
-                        context.getString(R.string.info_system_abi), binding.systemAbi.getText())));
+        String info = context.getString(R.string.info_api_version) +
+                "\n" +
+                binding.apiVersion.getText() +
+                "\n\n" +
+                context.getString(R.string.info_framework_version) +
+                "\n" +
+                binding.frameworkVersion.getText() +
+                "\n\n" +
+                context.getString(R.string.info_manager_version) +
+                "\n" +
+                binding.managerVersion.getText() +
+                "\n\n" +
+                context.getString(R.string.info_system_version) +
+                "\n" +
+                binding.systemVersion.getText() +
+                "\n\n" +
+                context.getString(R.string.info_device) +
+                "\n" +
+                binding.device.getText() +
+                "\n\n" +
+                context.getString(R.string.info_system_abi) +
+                "\n" +
+                binding.systemAbi.getText();
+        setNeutralButton(android.R.string.copy, (dialog, which) -> ClipboardUtils.put(context, info));
     }
 
     private String getDevice() {
