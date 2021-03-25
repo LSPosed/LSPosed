@@ -41,10 +41,11 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: gradle-manager-${{ hashFiles('**/*.gradle.kts') }}
+          key: gradle-manager-${{ github.sha }}
           restore-keys: |
-            gradle-core-${{ hashFiles('**/*.gradle.kts') }}
-            gradle-manager
+            gradle-core-${{ github.sha }}
+            gradle-manager-${{ github.sha }}
+            gradle-manager-
             gradle-
       - name: Build with Gradle
         id: buildRelease

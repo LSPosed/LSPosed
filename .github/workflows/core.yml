@@ -44,6 +44,7 @@ jobs:
           ~/.gradle/wrapper
         key: gradle-core-${{ github.sha }}
         restore-keys: |
+          gradle-manager-${{ github.sha }}
           gradle-core-${{ github.sha }}
           gradle-core-
           gradle-manager-
