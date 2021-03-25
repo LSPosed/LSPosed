@@ -64,7 +64,7 @@ public class RepoActivity extends ListActivity implements RepoLoader.Listener {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         repoLoader.addListener(this);
         super.onCreate(savedInstanceState);
-        if (!ConfigManager.isMagiskInstalled()) {
+        if (ConfigManager.getXposedVersionName() == null && !ConfigManager.isMagiskInstalled()) {
             Toast.makeText(this, R.string.lsposed_not_active, Toast.LENGTH_LONG).show();
             finish();
         }
