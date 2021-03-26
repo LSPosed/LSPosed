@@ -42,17 +42,17 @@ jobs:
         path: |
           ~/.gradle/caches
           ~/.gradle/wrapper
-        key: gradle-core-${{ hashFiles('**/*.gradle.kts') }}
+        key: gradle-core-${{ github.sha }}
         restore-keys: |
-          gradle-manager-${{ hashFiles('**/*.gradle.kts') }}
-          gradle-core
+          gradle-core-${{ github.sha }}
+          gradle-manager-${{ github.sha }}
           gradle-
     - name: Cache Cmake
       uses: actions/cache@v2
       with:
         path: ~/.ccache
-        key: ccache-${{ hashFiles('core/src/main/cpp') }}
-        restore-keys: ccache-
+        key: ccache-${{ github.sha }}
+        restore-keys: ccache
     - name: Install ccache
       run: sudo apt-get install -y ccache
     - name: Build with Gradle

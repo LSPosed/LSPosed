@@ -167,6 +167,7 @@ task("buildLibcxx", Exec::class) {
         environment("NDK_CCACHE", it)
         environment("USE_CCACHE", "1")
         environment("CCACHE_COMPILERCHECK", "content")
+        environment("CCACHE_MAXSIZE", "100M")
     } ?: run {
         println("not using ccache")
     }
