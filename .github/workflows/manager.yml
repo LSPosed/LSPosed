@@ -45,7 +45,6 @@ jobs:
           restore-keys: |
             gradle-core-${{ github.sha }}
             gradle-manager-${{ github.sha }}
-            gradle-manager-
             gradle-
       - name: Build with Gradle
         id: buildRelease

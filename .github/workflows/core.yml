@@ -46,8 +46,6 @@ jobs:
         restore-keys: |
           gradle-manager-${{ github.sha }}
           gradle-core-${{ github.sha }}
-          gradle-core-
-          gradle-manager-
           gradle-
     - name: Cache Cmake
       uses: actions/cache@v2
