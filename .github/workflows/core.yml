@@ -44,12 +44,18 @@ jobs:
         restore-keys: ccache-
     - name: Install ccache
       run: sudo apt-get install -y ccache
-    - name: Build with Gradle
-      run:  |
-        echo 'org.gradle.caching=true' >> gradle.properties
-        echo 'org.gradle.parallel=true' >> gradle.properties
-        echo 'org.gradle.vfs.watch=true' >> gradle.properties
-        ./gradlew zipRelease zipDebug
+    - uses: burrunan/gradle-cache-action@v1
+      name: Build with Gradle
+      with:
+        job-id: core
+        arguments: | 
+            zipRelease
+            zipDebug
+        gradle-version: wrapper
+        properties: |
+            org.gradle.caching=true
+            org.gradle.parallel=true
+            org.gradle.vfs.watch=true
     - name: Prepare artifact
       if: success()
       id: prepareArtifact
