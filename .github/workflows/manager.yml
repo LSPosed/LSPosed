@@ -41,6 +41,7 @@ jobs:
           job-id: manager
           arguments: ":app:assembleRelease"
           gradle-version: wrapper
+          concurrent: true
           properties: |
              org.gradle.caching=true
              org.gradle.parallel=true
