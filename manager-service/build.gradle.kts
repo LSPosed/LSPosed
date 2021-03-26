@@ -50,3 +50,9 @@ android {
         targetCompatibility = androidTargetCompatibility
     }
 }
+
+configurations.all {
+    resolutionStrategy {
+        exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib")
+    }
+}
