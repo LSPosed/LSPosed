@@ -22,21 +22,9 @@ package org.lsposed.manager;
 
 import android.widget.Toast;
 
-@SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal"})
 public class Constants {
-    private static int xposedApiVersion = -1;
-    private static String xposedVersion = null;
 
     public static void showErrorToast(int type) {
         Toast.makeText(App.getInstance(), R.string.app_destroyed, Toast.LENGTH_LONG).show();
-    }
-
-    // for showing the version mismatch dialog
-    public static String getXposedVersion() {
-        return xposedVersion;
-    }
-
-    public static int getXposedApiVersion() {
-        return xposedApiVersion;
     }
 }
