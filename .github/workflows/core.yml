@@ -36,6 +36,15 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 11
+    - name: Cache Gradle
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: gradle-core-${{ github.sha }}
+        restore-keys: |
+          gradle-
     - name: Cache Cmake
       uses: actions/cache@v2
       with:
@@ -44,19 +53,13 @@ jobs:
         restore-keys: ccache
     - name: Install ccache
       run: sudo apt-get install -y ccache
-    - uses: burrunan/gradle-cache-action@v1
-      name: Build with Gradle
-      with:
-        job-id: core
-        arguments: | 
-            zipRelease
-            zipDebug
-        gradle-version: wrapper
-        concurrent: true
-        properties: |
-            org.gradle.caching=true
-            org.gradle.parallel=true
-            org.gradle.vfs.watch=true
+    - name: Build with Gradle
+      run:  |
+        echo 'org.gradle.caching=true' >> gradle.properties
+        echo 'org.gradle.parallel=true' >> gradle.properties
+        echo 'org.gradle.vfs.watch=true' >> gradle.properties
+        echo 'org.gradle.jvmargs=-Xmx2048m' >> gradle.properties
+        ./gradlew zipRelease zipDebug
     - name: Prepare artifact
       if: success()
       id: prepareArtifact

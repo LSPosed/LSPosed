@@ -20,14 +20,16 @@
 
 cmake_minimum_required(VERSION 3.4.1)
 
-find_program( CCACHE ccache )
+find_program(CCACHE ccache)
 
-if ( CCACHE )
-    set( CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE} )
-    set( CMAKE_C_COMPILER_LAUNCHER ${CCACHE} )
-else()
-    message( WARNING "Could not find CCache program." )
-endif()
+if (CCACHE)
+    set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE})
+    set(CMAKE_C_COMPILER_LAUNCHER ${CCACHE})
+    set(ENV{CCACHE_COMPILERCHECK} "content")
+    set(ENV{CCACHE_MAXSIZE} "100M")
+else ()
+    message(WARNING "Could not find CCache program.")
+endif ()
 
 link_libraries("-ffixed-x18")
 

@@ -35,20 +35,23 @@ jobs:
           echo androidKeyPassword='${{ secrets.KEY_PASSWORD }}' >> gradle.properties
           echo androidStoreFile='key.jks' >> gradle.properties
           echo ${{ secrets.KEY_STORE }} | base64 --decode > key.jks
-      - uses: burrunan/gradle-cache-action@v1
-        name: Build with Gradle
+      - name: Cache Gradle
+        uses: actions/cache@v2
         with:
-          job-id: manager
-          arguments: ":app:assembleRelease"
-          gradle-version: wrapper
-          concurrent: true
-          properties: |
-             org.gradle.caching=true
-             org.gradle.parallel=true
-             org.gradle.vfs.watch=true
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-manager-${{ github.sha }}
+          restore-keys: |
+            gradle-
       - name: Build with Gradle
         id: buildRelease
         run: |
+          echo 'org.gradle.caching=true' >> gradle.properties
+          echo 'org.gradle.parallel=true' >> gradle.properties
+          echo 'org.gradle.vfs.watch=true' >> gradle.properties
+          echo 'org.gradle.jvmargs=-Xmx2048m' >> gradle.properties
+          ./gradlew :app:assembleRelease
           echo "::set-output name=releaseName::`ls app/build/outputs/apk/release/LSPosed*-v*-release.apk | awk -F '(/|.apk)' '{print $6}'`"
       - name: Upload apk
         if: success()
