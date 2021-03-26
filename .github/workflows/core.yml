@@ -52,6 +52,7 @@ jobs:
             zipRelease
             zipDebug
         gradle-version: wrapper
+        concurrent: true
         properties: |
             org.gradle.caching=true
             org.gradle.parallel=true
