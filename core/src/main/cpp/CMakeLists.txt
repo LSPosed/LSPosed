@@ -37,5 +37,7 @@ add_definitions(-DRIRU_MODULE_VERSION=${RIRU_MODULE_VERSION})
 add_definitions(-DRIRU_MODULE_VERSION_NAME=${RIRU_MODULE_VERSION_NAME})
 add_definitions(-DMODULE_NAME=${MODULE_NAME})
 
+include_directories(external/libcxx/include)
+
 add_subdirectory(main)
 add_subdirectory(external)

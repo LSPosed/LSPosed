@@ -20,6 +20,7 @@
 import org.apache.tools.ant.filters.FixCrLfFilter
 import org.gradle.internal.os.OperatingSystem
 import org.jetbrains.kotlin.daemon.common.toHexString
+import java.nio.file.Paths
 
 import java.security.MessageDigest
 
@@ -64,7 +65,7 @@ val verName: String by rootProject.extra
 
 dependencies {
     implementation("dev.rikka.ndk:riru:${moduleMinRiruVersionName}")
-    implementation(files("libs/dobby_prefab.aar"))
+//    implementation(files("libs/dobby_prefab.aar"))
     implementation("com.android.tools.build:apksig:4.1.3")
     compileOnly(project(":hiddenapi-stubs"))
     compileOnly("androidx.annotation:annotation:1.2.0")
@@ -93,10 +94,13 @@ android {
                 abiFilters("arm64-v8a", "armeabi-v7a", "x86", "x86_64")
                 cppFlags("-std=c++20 -ffixed-x18 -Qunused-arguments -fno-rtti -fno-exceptions -fomit-frame-pointer -fpie -fPIC")
                 cFlags("-std=c11 -ffixed-x18 -Qunused-arguments -fno-rtti -fno-exceptions -fomit-frame-pointer -fpie -fPIC")
-                arguments("-DRIRU_MODULE_API_VERSION=$moduleMaxRiruApiVersion",
-                        "-DRIRU_MODULE_VERSION=$verCode",
-                        "-DRIRU_MODULE_VERSION_NAME:STRING=\"$verName\"",
-                        "-DMODULE_NAME:STRING=riru_$riruModuleId")
+                arguments(
+                    "-DRIRU_MODULE_API_VERSION=$moduleMaxRiruApiVersion",
+                    "-DRIRU_MODULE_VERSION=$verCode",
+                    "-DRIRU_MODULE_VERSION_NAME:STRING=\"$verName\"",
+                    "-DMODULE_NAME:STRING=riru_$riruModuleId",
+                    "-DANDROID_STL=none"
+                )
                 targets("lspd")
             }
         }
@@ -145,6 +149,41 @@ android {
     }
 }
 
+fun findInPath(executable: String): String? {
+    val pathEnv = System.getenv("PATH")
+    return pathEnv.split(File.pathSeparator).map { folder ->
+        Paths.get("${folder}${File.separator}${executable}").toFile()
+    }.firstOrNull { path ->
+        path.exists()
+    }?.absolutePath
+}
+
+task("buildLibcxx", Exec::class) {
+    val ndkDir = android.ndkDirectory
+    executable = "$ndkDir/${if (isWindows) "ndk-build.cmd" else "ndk-build"}"
+    workingDir = projectDir
+    findInPath("ccache")?.let {
+        println("using ccache $it")
+        environment("NDK_CCACHE", it)
+        environment("USE_CCACHE", "1")
+        environment("CCACHE_COMPILERCHECK", "content")
+    } ?: run {
+        println("not using ccache")
+    }
+
+    setArgs(
+        arrayListOf(
+            "NDK_PROJECT_PATH=build/intermediates/ndk",
+            "APP_BUILD_SCRIPT=$projectDir/src/main/cpp/external/libcxx/Android.mk",
+            "APP_CPPFLAGS=-std=c++20",
+            "APP_STL=none",
+            "-j${Runtime.getRuntime().availableProcessors()}"
+        )
+    )
+}
+
+tasks.getByName("preBuild").dependsOn("buildLibcxx")
+
 afterEvaluate {
 
     android.applicationVariants.forEach { variant ->
@@ -162,12 +201,17 @@ afterEvaluate {
                     from("$projectDir/tpl/module.prop.tpl")
                     into(zipPathMagiskReleasePath)
                     rename("module.prop.tpl", "module.prop")
-                    expand("moduleId" to moduleId,
-                            "versionName" to verName,
-                            "versionCode" to verCode,
-                            "authorList" to authors,
-                            "minRiruVersionName" to moduleMinRiruVersionName)
-                    filter(mapOf("eol" to FixCrLfFilter.CrLf.newInstance("lf")), FixCrLfFilter::class.java)
+                    expand(
+                        "moduleId" to moduleId,
+                        "versionName" to verName,
+                        "versionCode" to verCode,
+                        "authorList" to authors,
+                        "minRiruVersionName" to moduleMinRiruVersionName
+                    )
+                    filter(
+                        mapOf("eol" to FixCrLfFilter.CrLf.newInstance("lf")),
+                        FixCrLfFilter::class.java
+                    )
                 }
                 copy {
                     from("${rootProject.projectDir}/README.md")
@@ -196,11 +240,23 @@ afterEvaluate {
                     include("riru.sh")
                     filter { line ->
                         line.replace("%%%RIRU_MODULE_ID%%%", riruModuleId)
-                            .replace("%%%RIRU_MODULE_API_VERSION%%%", moduleMaxRiruApiVersion.toString())
-                            .replace("%%%RIRU_MODULE_MIN_API_VERSION%%%", moduleMinRiruApiVersion.toString())
-                            .replace("%%%RIRU_MODULE_MIN_RIRU_VERSION_NAME%%%", moduleMinRiruVersionName)
+                            .replace(
+                                "%%%RIRU_MODULE_API_VERSION%%%",
+                                moduleMaxRiruApiVersion.toString()
+                            )
+                            .replace(
+                                "%%%RIRU_MODULE_MIN_API_VERSION%%%",
+                                moduleMinRiruApiVersion.toString()
+                            )
+                            .replace(
+                                "%%%RIRU_MODULE_MIN_RIRU_VERSION_NAME%%%",
+                                moduleMinRiruVersionName
+                            )
                     }
-                    filter(mapOf("eol" to FixCrLfFilter.CrLf.newInstance("lf")), FixCrLfFilter::class.java)
+                    filter(
+                        mapOf("eol" to FixCrLfFilter.CrLf.newInstance("lf")),
+                        FixCrLfFilter::class.java
+                    )
                 }
                 copy {
                     include("lspd")
@@ -252,9 +308,11 @@ afterEvaluate {
         task("push${variantCapped}", Exec::class) {
             dependsOn(zipTask)
             workingDir("${projectDir}/release")
-            val commands = arrayOf(android.adbExecutable, "push",
-                    zipFileName,
-                    "/data/local/tmp/")
+            val commands = arrayOf(
+                android.adbExecutable, "push",
+                zipFileName,
+                "/data/local/tmp/"
+            )
             if (isWindows) {
                 commandLine("cmd", "/c", commands.joinToString(" "))
             } else {
@@ -264,8 +322,10 @@ afterEvaluate {
         task("flash${variantCapped}", Exec::class) {
             dependsOn(tasks.getByPath("push${variantCapped}"))
             workingDir("${projectDir}/release")
-            val commands = arrayOf(android.adbExecutable, "shell", "su", "-c",
-                    "magisk --install-module /data/local/tmp/${zipFileName}")
+            val commands = arrayOf(
+                android.adbExecutable, "shell", "su", "-c",
+                "magisk --install-module /data/local/tmp/${zipFileName}"
+            )
             if (isWindows) {
                 commandLine("cmd", "/c", commands.joinToString(" "))
             } else {
