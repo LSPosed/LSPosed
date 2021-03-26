@@ -25,8 +25,6 @@ aux_source_directory(src/jni SRC_JNI_LIST)
 include_directories(include src)
 add_executable(lspd ${SRC_LIST} ${SRC_JNI_LIST})
 
-set(ENV{CCACHE_COMPILERCHECK} "content")
-
 SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -Wl,--dynamic-list=${CMAKE_SOURCE_DIR}/dynamic_list")
 
 find_package(riru REQUIRED CONFIG)
