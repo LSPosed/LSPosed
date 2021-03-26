@@ -39,19 +39,5 @@ public class XposedInstallerHooker {
         } catch (Throwable t) {
             Utils.logW("Could not hook LSPosed Manager", t);
         }
-
-        // for showing the version mismatch dialog
-        try {
-            Class<?> ConstantsClass = XposedHelpers.findClass("org.lsposed.manager.Constants", classLoader);
-            try {
-                XposedHelpers.setStaticObjectField(ConstantsClass, "xposedVersion", BuildConfig.VERSION_NAME);
-                return;
-            } catch (Throwable ignore) {
-
-            }
-            XposedHelpers.findAndHookMethod(ConstantsClass, "getXposedVersion", XC_MethodReplacement.returnConstant(BuildConfig.VERSION_NAME));
-        } catch (Throwable ignore) {
-
-        }
     }
 }
