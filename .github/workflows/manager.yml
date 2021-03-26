@@ -43,8 +43,6 @@ jobs:
             ~/.gradle/wrapper
           key: gradle-manager-${{ github.sha }}
           restore-keys: |
-            gradle-manager-${{ github.sha }}
-            gradle-core-${{ github.sha }}
             gradle-
       - name: Build with Gradle
         id: buildRelease
@@ -52,6 +50,7 @@ jobs:
           echo 'org.gradle.caching=true' >> gradle.properties
           echo 'org.gradle.parallel=true' >> gradle.properties
           echo 'org.gradle.vfs.watch=true' >> gradle.properties
+          echo 'org.gradle.jvmargs=-Xmx2048m' >> gradle.properties
           ./gradlew :app:assembleRelease
           echo "::set-output name=releaseName::`ls app/build/outputs/apk/release/LSPosed*-v*-release.apk | awk -F '(/|.apk)' '{print $6}'`"
       - name: Upload apk

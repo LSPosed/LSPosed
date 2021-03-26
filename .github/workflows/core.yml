@@ -44,8 +44,6 @@ jobs:
           ~/.gradle/wrapper
         key: gradle-core-${{ github.sha }}
         restore-keys: |
-          gradle-core-${{ github.sha }}
-          gradle-manager-${{ github.sha }}
           gradle-
     - name: Cache Cmake
       uses: actions/cache@v2
@@ -60,6 +58,7 @@ jobs:
         echo 'org.gradle.caching=true' >> gradle.properties
         echo 'org.gradle.parallel=true' >> gradle.properties
         echo 'org.gradle.vfs.watch=true' >> gradle.properties
+        echo 'org.gradle.jvmargs=-Xmx2048m' >> gradle.properties
         ./gradlew zipRelease zipDebug
     - name: Prepare artifact
       if: success()
