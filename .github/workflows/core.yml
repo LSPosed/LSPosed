@@ -49,8 +49,8 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/.ccache
-        key: ccache-${{ github.sha }}
-        restore-keys: ccache
+        key: ccache-cache-${{ github.sha }}
+        restore-keys: ccache-cache-
     - name: Install ccache
       run: sudo apt-get install -y ccache
     - name: Build with Gradle
