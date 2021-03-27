@@ -56,10 +56,10 @@ public final class DynamicBridge {
     }
 
     private static boolean checkMember(Executable member) {
-        if (member.getDeclaringClass().isInterface()) {
+        /*if (member.getDeclaringClass().isInterface()) {
             Logger.e("Cannot hook interfaces: " + member.toString());
             return false;
-        } else if (Modifier.isAbstract(member.getModifiers())) {
+        } else */ if (Modifier.isAbstract(member.getModifiers())) {
             Logger.e("Cannot hook abstract methods: " + member.toString());
             return false;
         }
