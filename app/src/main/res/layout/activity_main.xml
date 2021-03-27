@@ -28,15 +28,6 @@
     app:edgeToEdge="true"
     app:fitSystemWindowsInsets="start|end">
 
-    <com.github.matteobattilana.weather.WeatherView
-        android:id="@+id/weather_view"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:translationZ="101dp"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:visibility="gone" />
-
     <ImageView
         android:id="@+id/holiday_header"
         android:layout_width="match_parent"
