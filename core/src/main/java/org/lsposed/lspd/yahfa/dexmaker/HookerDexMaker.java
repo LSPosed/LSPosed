@@ -63,11 +63,6 @@ public class HookerDexMaker {
 
     public void start(Executable member, XposedBridge.AdditionalHookInfo hookInfo,
                       ClassLoader appClassLoader) throws Exception {
-        if (member.getDeclaringClass().isInterface()) {
-            throw new IllegalArgumentException("Cannot hook interfaces: " + member.toString());
-        } else if (Modifier.isAbstract(member.getModifiers())) {
-            throw new IllegalArgumentException("Cannot hook abstract methods: " + member.toString());
-        }
         if (member instanceof Method) {
             Method method = (Method) member;
             mReturnType = method.getReturnType();
