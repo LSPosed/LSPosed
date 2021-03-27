@@ -28,6 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import de.robv.android.xposed.LspHooker;
 import de.robv.android.xposed.XposedBridge;
+
 import org.lsposed.lspd.util.Logger;
 
 public final class DynamicBridge {
@@ -56,10 +57,12 @@ public final class DynamicBridge {
     }
 
     private static boolean checkMember(Executable member) {
+        // No check interface because there may be default methods
         /*if (member.getDeclaringClass().isInterface()) {
             Logger.e("Cannot hook interfaces: " + member.toString());
             return false;
-        } else */ if (Modifier.isAbstract(member.getModifiers())) {
+        } else */
+        if (Modifier.isAbstract(member.getModifiers())) {
             Logger.e("Cannot hook abstract methods: " + member.toString());
             return false;
         }

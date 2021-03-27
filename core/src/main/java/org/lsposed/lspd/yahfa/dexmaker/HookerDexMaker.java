@@ -63,9 +63,11 @@ public class HookerDexMaker {
 
     public void start(Executable member, XposedBridge.AdditionalHookInfo hookInfo,
                       ClassLoader appClassLoader) throws Exception {
+        // No check interface because there may be default methods
         /*if (member.getDeclaringClass().isInterface()) {
             throw new IllegalArgumentException("Cannot hook interfaces: " + member.toString());
-        } else */ if (Modifier.isAbstract(member.getModifiers())) {
+        } else */
+        if (Modifier.isAbstract(member.getModifiers())) {
             throw new IllegalArgumentException("Cannot hook abstract methods: " + member.toString());
         }
         if (member instanceof Method) {
