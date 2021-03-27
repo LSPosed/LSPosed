@@ -26,6 +26,7 @@
 #include "service.h"
 #include "context.h"
 #include "jni_helper.h"
+#include "symbol_cache.h"
 
 namespace lspd {
     jboolean
@@ -84,7 +85,7 @@ namespace lspd {
                                             "(ILandroid/os/Parcel;Landroid/os/Parcel;I)Z");
 
         binder_class_ = env->FindClass("android/os/Binder");
-        if (binder_class_) binder_class_ = (jclass)env->NewGlobalRef(binder_class_);
+        if (binder_class_) binder_class_ = (jclass) env->NewGlobalRef(binder_class_);
         binder_ctor_ = env->GetMethodID(binder_class_, "<init>", "()V");
 
         // Parcel
@@ -133,8 +134,8 @@ namespace lspd {
         exec_transact_backup_methodID_ = JNI_GetMethodID(env, binderClass.get(), "execTransact",
                                                          "(IJJI)Z");
         auto set_table_override = reinterpret_cast<void (*)(
-                JNINativeInterface *)>(DobbySymbolResolver(nullptr,
-                                                           "_ZN3art9JNIEnvExt16SetTableOverrideEPK18JNINativeInterface"));
+                JNINativeInterface *)>(Dlsym(handle_libart,
+                                             "_ZN3art9JNIEnvExt16SetTableOverrideEPK18JNINativeInterface"));
         if (!set_table_override) {
             LOGE("set table override not found");
         }

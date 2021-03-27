@@ -31,6 +31,7 @@
 #include "jni/logger.h"
 #include "jni/native_api.h"
 #include "service.h"
+#include "symbol_cache.h"
 
 namespace lspd {
     extern int *allowUnload;
@@ -168,22 +169,24 @@ namespace lspd {
     void
     Context::OnNativeForkSystemServerPre(JNIEnv *env) {
         Service::instance()->InitService(env);
-        skip_ = false;
-        setAllowUnload(false);
+        skip_ = !sym_initialized;
+        setAllowUnload(skip_);
     }
 
     void
     Context::OnNativeForkSystemServerPost(JNIEnv *env, jint res) {
         if (res != 0) return;
-        LoadDex(env);
-        Service::instance()->HookBridge(*this, env);
-        auto binder = Service::instance()->RequestBinderForSystemServer(env);
-        if (binder && !skip_) {
-            InstallInlineHooks();
-            Init(env);
-            FindAndCall(env, "forkSystemServerPost", "(Landroid/os/IBinder;)V", binder);
+        if (!skip_) {
+            LoadDex(env);
+            Service::instance()->HookBridge(*this, env);
+            auto binder = Service::instance()->RequestBinderForSystemServer(env);
+            if (binder) {
+                InstallInlineHooks();
+                Init(env);
+                FindAndCall(env, "forkSystemServerPost", "(Landroid/os/IBinder;)V", binder);
+            }
         }
-        setAllowUnload(false);
+        setAllowUnload(skip_);
     }
 
     void Context::OnNativeForkAndSpecializePre(JNIEnv *env,
@@ -195,7 +198,7 @@ namespace lspd {
         const auto app_id = uid % PER_USER_RANGE;
         nice_name_ = nice_name;
         JUTFString process_name(env, nice_name);
-        skip_ = false;
+        skip_ = !sym_initialized;
         if (!skip_ && !app_data_dir) {
             LOGD("skip injecting into %s because it has no data dir", process_name.get());
             skip_ = true;
