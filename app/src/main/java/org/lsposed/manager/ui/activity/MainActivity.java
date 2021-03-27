@@ -158,18 +158,5 @@ public class MainActivity extends BaseActivity {
         super.onResume();
         int moduleCount = ModuleUtil.getInstance().getEnabledModules().size();
         binding.modulesSummary.setText(getResources().getQuantityString(R.plurals.modules_enabled_count, moduleCount, moduleCount));
-        HolidayHelper.onResume();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        HolidayHelper.onDestroy();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        HolidayHelper.onPause();
     }
 }
