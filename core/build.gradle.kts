@@ -166,7 +166,6 @@ task("buildLibcxx", Exec::class) {
         println("using ccache $it")
         environment("NDK_CCACHE", it)
         environment("USE_CCACHE", "1")
-        environment("CCACHE_COMPILERCHECK", "content")
     } ?: run {
         println("not using ccache")
     }
