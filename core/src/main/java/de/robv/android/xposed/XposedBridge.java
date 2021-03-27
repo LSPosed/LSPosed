@@ -199,7 +199,7 @@ public final class XposedBridge {
 		if (newMethod) {
 			AdditionalHookInfo additionalInfo = new AdditionalHookInfo(callbacks);
             if (!YahfaHooker.shouldDelayHook(targetMethod)) {
-				DynamicBridge.hookMethod(targetMethod, (AdditionalHookInfo) additionalInfo);
+				YahfaHooker.hookMethod(targetMethod, additionalInfo);
 			} else {
 				PendingHooks.recordPendingMethod((Method)hookMethod, additionalInfo);
 			}
