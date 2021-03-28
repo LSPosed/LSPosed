@@ -65,7 +65,6 @@ val verName: String by rootProject.extra
 
 dependencies {
     implementation("dev.rikka.ndk:riru:${moduleMinRiruVersionName}")
-//    implementation(files("libs/dobby_prefab.aar"))
     implementation("com.android.tools.build:apksig:4.1.3")
     compileOnly(project(":hiddenapi-stubs"))
     compileOnly("androidx.annotation:annotation:1.2.0")
@@ -92,15 +91,21 @@ android {
         externalNativeBuild {
             cmake {
                 abiFilters("arm64-v8a", "armeabi-v7a", "x86", "x86_64")
-                cppFlags("-std=c++20 -ffixed-x18 -Qunused-arguments -fno-rtti -fno-exceptions -fomit-frame-pointer -fpie -fPIC")
-                cFlags("-std=c11 -ffixed-x18 -Qunused-arguments -fno-rtti -fno-exceptions -fomit-frame-pointer -fpie -fPIC")
-                arguments(
+                val flags = arrayOf(
+                    "-ffixed-x18",
+                    "-Qunused-arguments",
+                    "-fno-rtti", "-fno-exceptions",
+                    "-fomit-frame-pointer",
+                    "-fpie", "-fPIC",
+                    "-DRIRU_MODULE",
                     "-DRIRU_MODULE_API_VERSION=$moduleMaxRiruApiVersion",
                     "-DRIRU_MODULE_VERSION=$verCode",
-                    "-DRIRU_MODULE_VERSION_NAME:STRING=\"$verName\"",
-                    "-DMODULE_NAME:STRING=riru_$riruModuleId",
-                    "-DANDROID_STL=none"
+                    """-DRIRU_MODULE_VERSION_NAME=\"$verName\"""",
+                    """-DMODULE_NAME=\"$riruModuleId\""""
                 )
+                cppFlags("-std=c++20", *flags)
+                cFlags("-std=c18", *flags)
+                arguments("-DANDROID_STL=none")
                 targets("lspd")
             }
         }
@@ -120,8 +125,11 @@ android {
         named("debug") {
             externalNativeBuild {
                 cmake {
-                    cppFlags("-O0")
-                    cFlags("-O0")
+                    val flags = arrayOf(
+                        "-O0"
+                    )
+                    cppFlags.addAll(flags)
+                    cFlags.addAll(flags)
                 }
             }
         }
@@ -131,8 +139,19 @@ android {
 
             externalNativeBuild {
                 cmake {
-                    cppFlags("-fvisibility=hidden -fvisibility-inlines-hidden -Os -Wno-unused-value -fomit-frame-pointer -ffunction-sections -fdata-sections -Wl,--gc-sections -Wl,--strip-all -fno-unwind-tables")
-                    cFlags("-fvisibility=hidden -fvisibility-inlines-hidden -Os -Wno-unused-value -fomit-frame-pointer -ffunction-sections -fdata-sections -Wl,--gc-sections -Wl,--strip-all -fno-unwind-tables")
+                    val flags = arrayOf(
+                        "-fvisibility=hidden",
+                        "-fvisibility-inlines-hidden",
+                        "-Os",
+                        "-Wno-unused-value",
+                        "-ffunction-sections",
+                        "-fdata-sections",
+                        "-Wl,--gc-sections",
+                        "-Wl,--strip-all",
+                        "-fno-unwind-tables"
+                    )
+                    cppFlags.addAll(flags)
+                    cFlags.addAll(flags)
                 }
             }
         }
