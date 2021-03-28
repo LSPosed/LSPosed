@@ -95,11 +95,14 @@ android {
                     "-ffixed-x18",
                     "-Qunused-arguments",
                     "-fno-rtti", "-fno-exceptions",
+                    "-fno-stack-protector",
                     "-fomit-frame-pointer",
                     "-fpie", "-fPIC",
+                    "-Wno-builtin-macro-redefined",
                     "-DRIRU_MODULE",
                     "-DRIRU_MODULE_API_VERSION=$moduleMaxRiruApiVersion",
                     "-DRIRU_MODULE_VERSION=$verCode",
+                    "-D__FILE__=__FILE_NAME__",
                     """-DRIRU_MODULE_VERSION_NAME=\"$verName\"""",
                     """-DMODULE_NAME=\"$riruModuleId\""""
                 )
@@ -148,7 +151,8 @@ android {
                         "-fdata-sections",
                         "-Wl,--gc-sections",
                         "-Wl,--strip-all",
-                        "-fno-unwind-tables"
+                        "-fno-unwind-tables",
+                        "-fno-asynchronous-unwind-tables"
                     )
                     cppFlags.addAll(flags)
                     cFlags.addAll(flags)
