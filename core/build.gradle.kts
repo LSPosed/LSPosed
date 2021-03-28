@@ -95,6 +95,7 @@ android {
                     "-ffixed-x18",
                     "-Qunused-arguments",
                     "-fno-rtti", "-fno-exceptions",
+                    "-fno-stack-protector",
                     "-fomit-frame-pointer",
                     "-fpie", "-fPIC",
                     "-Wno-builtin-macro-redefined",
