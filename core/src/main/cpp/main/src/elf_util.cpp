@@ -175,7 +175,7 @@ ElfW(Addr) ElfImg::LinearLookup(std::string_view name) const {
                 const char *st_name = offsetOf<const char *>(header, symstr_offset_for_symtab +
                                                                      symtab_start[i].st_name);
                 if ((st_type == STT_FUNC || st_type == STT_OBJECT) && symtab_start[i].st_size) {
-                    symtabs_.insert({st_name, &symtab_start[i]});
+                    symtabs_.emplace(st_name, &symtab_start[i]);
                 }
             }
         }
