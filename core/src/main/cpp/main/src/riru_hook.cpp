@@ -25,7 +25,7 @@
 #include <logging.h>
 #include "utils.h"
 #include "riru_hook.h"
-#include <dobby.h>
+#include "symbol_cache.h"
 
 namespace lspd {
 
@@ -123,21 +123,18 @@ namespace lspd {
 
         api_level = GetAndroidApiLevel();
 
-        auto *sym = DobbySymbolResolver(nullptr, "__system_property_get");
-        if (!sym) {
+        if (!sym_system_property_get) {
             LOGE("Failed to get symbol of __system_property_get");
             return;
         }
-        HookSymNoHandle(sym, __system_property_get);
+        HookSymNoHandle(sym_system_property_get, __system_property_get);
 
         if (GetAndroidApiLevel() >= __ANDROID_API_P__) {
-            sym = DobbySymbolResolver(nullptr,
-                                      "_ZN7android4base11GetPropertyERKNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEES9_");
-            if (!sym) {
+            if (!sym_get_property) {
                 LOGE("Failed to get symbol of _ZN7android4base11GetPropertyERKNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEES9_");
                 return;
             }
-            HookSymNoHandle(sym, GetProperty);
+            HookSymNoHandle(sym_get_property, GetProperty);
         }
 
         LOGI("Riru hooks installed");

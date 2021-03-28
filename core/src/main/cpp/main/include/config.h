@@ -32,15 +32,15 @@ namespace lspd {
 //#define DEBUG
 
 
-inline bool constexpr Is64() {
+    inline bool constexpr Is64() {
 #if defined(__LP64__)
-    return true;
+        return true;
 #else
-    return false;
+        return false;
 #endif
-}
+    }
 
-inline constexpr bool is64 = Is64();
+    inline constexpr bool is64 = Is64();
 
 #if defined(__LP64__)
 # define LP_SELECT(lp32, lp64) lp64
@@ -55,12 +55,20 @@ inline constexpr bool is64 = Is64();
 
     static constexpr auto kLibArtName = "libart.so"_tstr;
     static constexpr auto kLibFwName = "libandroidfw.so"_tstr;
+    static constexpr auto kLinkerName = LP_SELECT("linker"_tstr, "linker64"_tstr);
+    static constexpr auto kLibcName = "libc.so"_tstr;
+    static constexpr auto kLibbaseName = "libbase.so"_tstr;
 
     static constexpr auto kLibBasePath =
             LP_SELECT("/system/lib/"_tstr,
                       "/system/lib64/"_tstr);
-    static constexpr auto kLibArtLegacyPath = kLibBasePath + kLibArtName;
+
+    static constexpr auto kBinBasePath = "/system/bin/"_tstr;
+
     static constexpr auto kLibFwPath = kLibBasePath + kLibFwName;
+    static constexpr auto kLinkerPath = kBinBasePath + kLinkerName;
+    static constexpr auto kLibcPath = kLibBasePath + kLibcName;
+    static constexpr auto kLibbasePath = kLibBasePath + kLibbaseName;
 
     inline constexpr const char *const BoolToString(bool b) {
         return b ? "true" : "false";

@@ -25,8 +25,8 @@
 #include <dl_util.h>
 #include <art/runtime/jni_env_ext.h>
 #include <dobby.h>
-#include "bionic_linker_restriction.h"
 #include "utils.h"
+#include "symbol_cache.h"
 #include "logging.h"
 #include "native_api.h"
 #include "native_hook.h"
@@ -63,28 +63,7 @@ namespace lspd {
         LOGI("Using api level %d", api_level);
         InstallRiruHooks();
         // install ART hooks
-        if (api_level >= __ANDROID_API_Q__) {
-            // From Riru v22 we can't get ART handle by hooking dlopen, so we get libart.so from soinfo.
-            // Ref: https://android.googlesource.com/platform/bionic/+/master/linker/linker_soinfo.h
-            linker_iterate_soinfo([](auto soinfo) {
-                const char *real_path = linker_soinfo_get_realpath(soinfo);
-                if (real_path != nullptr &&
-                        strstr(real_path, kLibArtName.c_str()) != nullptr){
-                    InstallArtHooks(soinfo);
-                    return 1;
-                }
-                return 0;
-            });
-            if (!art_hooks_installed) {
-                LOGE("Android 10+ detected and libart.so can't be found in memory.");
-                return;
-            }
-        } else {
-            // do dlopen directly in Android 9-
-            ScopedDlHandle art_handle(kLibArtLegacyPath.c_str());
-            InstallArtHooks(art_handle.Get());
-        }
-
+        InstallArtHooks(handle_libart);
         InstallNativeAPI();
     }
 
