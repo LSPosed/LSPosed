@@ -56,7 +56,7 @@ ElfImg::ElfImg(std::string_view elf) : elf(elf) {
 
     section_header = offsetOf<decltype(section_header)>(header, header->e_shoff);
 
-    auto shoff = reinterpret_cast<size_t>(section_header);
+    auto shoff = reinterpret_cast<uintptr_t>(section_header);
     char *section_str = offsetOf<char *>(header, section_header[header->e_shstrndx].sh_offset);
 
     for (int i = 0; i < header->e_shnum; i++, shoff += header->e_shentsize) {
@@ -64,7 +64,7 @@ ElfImg::ElfImg(std::string_view elf) : elf(elf) {
         char *sname = section_h->sh_name + section_str;
         auto entsize = section_h->sh_entsize;
         switch (section_h->sh_type) {
-            case SHT_DYNSYM:
+            case SHT_DYNSYM: {
                 if (bias == -4396) {
                     dynsym = section_h;
                     dynsym_offset = section_h->sh_offset;
@@ -73,7 +73,8 @@ ElfImg::ElfImg(std::string_view elf) : elf(elf) {
                     dynsym_start = offsetOf<decltype(dynsym_start)>(header, dynsym_offset);
                 }
                 break;
-            case SHT_SYMTAB:
+            }
+            case SHT_SYMTAB: {
                 if (strcmp(sname, ".symtab") == 0) {
                     symtab = section_h;
                     symtab_offset = section_h->sh_offset;
@@ -82,7 +83,8 @@ ElfImg::ElfImg(std::string_view elf) : elf(elf) {
                     symtab_start = offsetOf<decltype(symtab_start)>(header, symtab_offset);
                 }
                 break;
-            case SHT_STRTAB:
+            }
+            case SHT_STRTAB: {
                 if (bias == -4396) {
                     strtab = section_h;
                     symstr_offset = section_h->sh_offset;
@@ -92,12 +94,14 @@ ElfImg::ElfImg(std::string_view elf) : elf(elf) {
                     symstr_offset_for_symtab = section_h->sh_offset;
                 }
                 break;
-            case SHT_PROGBITS:
+            }
+            case SHT_PROGBITS: {
                 if (strtab == nullptr || dynsym == nullptr) break;
                 if (bias == -4396) {
                     bias = (off_t) section_h->sh_addr - (off_t) section_h->sh_offset;
                 }
                 break;
+            }
             case SHT_HASH: {
                 auto *d_un = offsetOf<ElfW(Word)>(header, section_h->sh_offset);
                 nbucket_ = d_un[0];
