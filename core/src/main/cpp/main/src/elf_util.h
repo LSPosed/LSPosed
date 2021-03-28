@@ -25,35 +25,46 @@
 #include <linux/elf.h>
 #include <sys/types.h>
 #include <link.h>
+#include "config.h"
 
 #define SHT_GNU_HASH 0x6ffffff6
 
 namespace SandHook {
-
     class ElfImg {
     public:
 
         ElfImg(std::string_view elf);
 
-        ElfW(Addr) getSymbOffset(std::string_view name) const;
+        constexpr ElfW(Addr) getSymbOffset(std::string_view name) const {
+            return getSymbOffset(name, GnuHash(name), ElfHash(name));
+        }
 
         void *getModuleBase() const;
 
-        ElfW(Addr) getSymbAddress(std::string_view name) const;
+        constexpr ElfW(Addr) getSymbAddress(std::string_view name) const {
+            ElfW(Addr) offset = getSymbOffset(name);
+            if (offset > 0 && base != nullptr) {
+                return static_cast<ElfW(Addr)>((uintptr_t) base + offset - bias);
+            } else {
+                LOGE("fail to get symbol %s from %s ", name.data(), elf.data());
+                return 0;
+            }
+        }
 
         ~ElfImg();
 
     private:
+        ElfW(Addr) getSymbOffset(std::string_view name, uint32_t gnu_hash, uint32_t elf_hash) const;
 
-        ElfW(Addr) ElfLookup(std::string_view name) const;
+        ElfW(Addr) ElfLookup(std::string_view name, uint32_t hash) const;
 
-        ElfW(Addr) GnuLookup(std::string_view name) const;
+        ElfW(Addr) GnuLookup(std::string_view name, uint32_t hash) const;
 
         ElfW(Addr) LinearLookup(std::string_view name) const;
 
-        static uint32_t ElfHash(std::string_view name);
+        constexpr static uint32_t ElfHash(std::string_view name);
 
-        static uint32_t GnuHash(std::string_view name);
+        constexpr static uint32_t GnuHash(std::string_view name);
 
         std::string_view elf;
         void *base = nullptr;
@@ -65,7 +76,6 @@ namespace SandHook {
         ElfW(Shdr) *symtab = nullptr;
         ElfW(Shdr) *strtab = nullptr;
         ElfW(Shdr) *dynsym = nullptr;
-        ElfW(Off) dynsym_count = 0;
         ElfW(Sym) *symtab_start = nullptr;
         ElfW(Sym) *dynsym_start = nullptr;
         ElfW(Sym) *strtab_start = nullptr;
@@ -92,6 +102,24 @@ namespace SandHook {
         mutable std::unordered_map<std::string_view, ElfW(Sym) *> symtabs_;
     };
 
+    constexpr uint32_t ElfImg::ElfHash(std::string_view name) {
+        uint32_t h = 0, g;
+        for (unsigned char p: name) {
+            h = (h << 4) + p;
+            g = h & 0xf0000000;
+            h ^= g;
+            h ^= g >> 24;
+        }
+        return h;
+    }
+
+    constexpr uint32_t ElfImg::GnuHash(std::string_view name) {
+        uint32_t h = 5381;
+        for (unsigned char p: name) {
+            h += (h << 5) + p;
+        }
+        return h;
+    }
 }
 
 #endif //SANDHOOK_ELF_UTIL_H

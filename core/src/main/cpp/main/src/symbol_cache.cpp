@@ -43,8 +43,8 @@ namespace lspd {
     soinfo *somain = nullptr;
 
     template<typename T>
-    inline T *getStaticVariable(const SandHook::ElfImg &linker, std::string_view name) {
-        auto *addr = reinterpret_cast<T **>(linker.getSymbAddress(name.data()));
+    constexpr inline T *getStaticVariable(const SandHook::ElfImg &linker, std::string_view name) {
+        auto *addr = reinterpret_cast<T **>(linker.getSymbAddress(name));
         return addr == nullptr ? nullptr : *addr;
     }
 

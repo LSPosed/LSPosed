@@ -69,7 +69,6 @@ ElfImg::ElfImg(std::string_view elf) : elf(elf) {
                     dynsym = section_h;
                     dynsym_offset = section_h->sh_offset;
                     dynsym_size = section_h->sh_size;
-                    dynsym_count = dynsym_size / entsize;
                     dynsym_start = offsetOf<decltype(dynsym_start)>(header, dynsym_offset);
                 }
                 break;
@@ -129,9 +128,8 @@ ElfImg::ElfImg(std::string_view elf) : elf(elf) {
     base = getModuleBase();
 }
 
-ElfW(Addr) ElfImg::ElfLookup(std::string_view name) const {
+ElfW(Addr) ElfImg::ElfLookup(std::string_view name, uint32_t hash) const {
     if (nbucket_ == 0) return 0;
-    auto hash = ElfHash(name);
 
     char *strings = (char *) strtab_start;
 
@@ -144,12 +142,11 @@ ElfW(Addr) ElfImg::ElfLookup(std::string_view name) const {
     return 0;
 }
 
-ElfW(Addr) ElfImg::GnuLookup(std::string_view name) const {
+ElfW(Addr) ElfImg::GnuLookup(std::string_view name, uint32_t hash) const {
     static constexpr auto bloom_mask_bits = sizeof(ElfW(Addr)) * 8;
 
     if (gnu_nbucket_ == 0 || gnu_bloom_size_ == 0) return 0;
 
-    uint32_t hash = GnuHash(name);
     auto bloom_word = gnu_bloom_filter_[(hash / bloom_mask_bits) % gnu_bloom_size_];
     uintptr_t mask = 0
                      | (uintptr_t) 1 << (hash % bloom_mask_bits)
@@ -204,12 +201,12 @@ ElfImg::~ElfImg() {
     }
 }
 
-ElfW(Addr) ElfImg::getSymbOffset(std::string_view name) const {
-    if (auto offset = GnuLookup(name); offset > 0) {
+ElfW(Addr) ElfImg::getSymbOffset(std::string_view name, uint32_t gnu_hash, uint32_t elf_hash) const {
+    if (auto offset = GnuLookup(name, gnu_hash); offset > 0) {
         LOGD("found %s %p in %s in dynsym by gnuhash", name.data(),
              reinterpret_cast<void *>(offset), elf.data());
         return offset;
-    } else if (offset = ElfLookup(name); offset > 0) {
+    } else if (offset = ElfLookup(name, elf_hash); offset > 0) {
         LOGD("found %s %p in %s in dynsym by elfhash", name.data(),
              reinterpret_cast<void *>(offset), elf.data());
         return offset;
@@ -221,16 +218,6 @@ ElfW(Addr) ElfImg::getSymbOffset(std::string_view name) const {
         return 0;
     }
 
-}
-
-ElfW(Addr) ElfImg::getSymbAddress(std::string_view name) const {
-    ElfW(Addr) offset = getSymbOffset(name);
-    if (offset > 0 && base != nullptr) {
-        return static_cast<ElfW(Addr)>((uintptr_t) base + offset - bias);
-    } else {
-        LOGE("fail to get symbol %s from %s ", name.data(), elf.data());
-        return 0;
-    }
 }
 
 void *ElfImg::getModuleBase() const {
@@ -286,21 +273,3 @@ void *ElfImg::getModuleBase() const {
     return reinterpret_cast<void *>(load_addr);
 }
 
-uint32_t ElfImg::ElfHash(std::string_view name) {
-    uint32_t h = 0, g;
-    for (unsigned char p: name) {
-        h = (h << 4) + p;
-        g = h & 0xf0000000;
-        h ^= g;
-        h ^= g >> 24;
-    }
-    return h;
-}
-
-uint32_t ElfImg::GnuHash(std::string_view name) {
-    uint32_t h = 5381;
-    for (unsigned char p: name) {
-        h += (h << 5) + p;
-    }
-    return h;
-}
