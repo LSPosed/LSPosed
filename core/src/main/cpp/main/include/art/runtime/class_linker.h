@@ -148,7 +148,7 @@ namespace art {
             }
 
             void *thiz = *reinterpret_cast<void **>(
-                    reinterpret_cast<size_t>(Runtime::Current()->Get()) + OFFSET_classlinker);
+                    reinterpret_cast<uintptr_t>(Runtime::Current()->Get()) + OFFSET_classlinker);
             // ClassLinker* GetClassLinker() but inlined
             LOGD("Classlinker object: %p", thiz);
             instance_ = new ClassLinker(thiz);

@@ -25,8 +25,6 @@ find_program(CCACHE ccache)
 if (CCACHE)
     set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE})
     set(CMAKE_C_COMPILER_LAUNCHER ${CCACHE})
-else ()
-    message(WARNING "Could not find CCache program.")
 endif ()
 
 include_directories(external/libcxx/include)

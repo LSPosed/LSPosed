@@ -1,74 +1,125 @@
-// From https://github.com/ganyao114/SandHook/blob/master/hooklib/src/main/cpp/includes/elf_util.h
-//
-// Created by Swift Gan on 2019/3/14.
-//
+/*
+ * This file is part of LSPosed.
+ *
+ * LSPosed is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LSPosed is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * Copyright (C) 2019 Swift Gan
+ * Copyright (C) 2021 LSPosed Contributors
+ */
 #ifndef SANDHOOK_ELF_UTIL_H
 #define SANDHOOK_ELF_UTIL_H
 
+#include <string_view>
+#include <unordered_map>
 #include <linux/elf.h>
 #include <sys/types.h>
+#include <link.h>
+#include "config.h"
 
-#if defined(__LP64__)
-typedef Elf64_Ehdr Elf_Ehdr;
-typedef Elf64_Shdr Elf_Shdr;
-typedef Elf64_Addr Elf_Addr;
-typedef Elf64_Dyn Elf_Dyn;
-typedef Elf64_Rela Elf_Rela;
-typedef Elf64_Sym Elf_Sym;
-typedef Elf64_Off Elf_Off;
-
-#define ELF_R_SYM(i) ELF64_R_SYM(i)
-#else
-typedef Elf32_Ehdr Elf_Ehdr;
-typedef Elf32_Shdr Elf_Shdr;
-typedef Elf32_Addr Elf_Addr;
-typedef Elf32_Dyn Elf_Dyn;
-typedef Elf32_Rel Elf_Rela;
-typedef Elf32_Sym Elf_Sym;
-typedef Elf32_Off Elf_Off;
-
-#define ELF_R_SYM(i) ELF32_R_SYM(i)
-#endif
+#define SHT_GNU_HASH 0x6ffffff6
 
 namespace SandHook {
-
     class ElfImg {
     public:
 
-        ElfImg(const char* elf);
+        ElfImg(std::string_view elf);
 
-        Elf_Addr getSymbOffset(const char* name) const;
+        constexpr ElfW(Addr) getSymbOffset(std::string_view name) const {
+            return getSymbOffset(name, GnuHash(name), ElfHash(name));
+        }
 
-        void* getModuleBase() const;
+        void *getModuleBase() const;
 
-        Elf_Addr getSymbAddress(const char* name) const;
+        constexpr ElfW(Addr) getSymbAddress(std::string_view name) const {
+            ElfW(Addr) offset = getSymbOffset(name);
+            if (offset > 0 && base != nullptr) {
+                return static_cast<ElfW(Addr)>((uintptr_t) base + offset - bias);
+            } else {
+                LOGE("fail to get symbol %s from %s ", name.data(), elf.data());
+                return 0;
+            }
+        }
 
         ~ElfImg();
 
     private:
-        const char* elf = nullptr;
-        void* base = nullptr;
-        char* buffer = nullptr;
+        ElfW(Addr) getSymbOffset(std::string_view name, uint32_t gnu_hash, uint32_t elf_hash) const;
+
+        ElfW(Addr) ElfLookup(std::string_view name, uint32_t hash) const;
+
+        ElfW(Addr) GnuLookup(std::string_view name, uint32_t hash) const;
+
+        ElfW(Addr) LinearLookup(std::string_view name) const;
+
+        constexpr static uint32_t ElfHash(std::string_view name);
+
+        constexpr static uint32_t GnuHash(std::string_view name);
+
+        std::string_view elf;
+        void *base = nullptr;
+        char *buffer = nullptr;
         off_t size = 0;
         off_t bias = -4396;
-        Elf_Ehdr* header = nullptr;
-        Elf_Shdr* section_header = nullptr;
-        Elf_Shdr* symtab = nullptr;
-        Elf_Shdr* strtab = nullptr;
-        Elf_Shdr* dynsym = nullptr;
-        Elf_Off dynsym_count = 0;
-        Elf_Sym* symtab_start = nullptr;
-        Elf_Sym* dynsym_start = nullptr;
-        Elf_Sym* strtab_start = nullptr;
-        Elf_Off symtab_count = 0;
-        Elf_Off symstr_offset = 0;
-        Elf_Off symstr_offset_for_symtab = 0;
-        Elf_Off symtab_offset = 0;
-        Elf_Off dynsym_offset = 0;
-        Elf_Off symtab_size = 0;
-        Elf_Off dynsym_size = 0;
+        ElfW(Ehdr) *header = nullptr;
+        ElfW(Shdr) *section_header = nullptr;
+        ElfW(Shdr) *symtab = nullptr;
+        ElfW(Shdr) *strtab = nullptr;
+        ElfW(Shdr) *dynsym = nullptr;
+        ElfW(Sym) *symtab_start = nullptr;
+        ElfW(Sym) *dynsym_start = nullptr;
+        ElfW(Sym) *strtab_start = nullptr;
+        ElfW(Off) symtab_count = 0;
+        ElfW(Off) symstr_offset = 0;
+        ElfW(Off) symstr_offset_for_symtab = 0;
+        ElfW(Off) symtab_offset = 0;
+        ElfW(Off) dynsym_offset = 0;
+        ElfW(Off) symtab_size = 0;
+        ElfW(Off) dynsym_size = 0;
+
+        uint32_t nbucket_{};
+        uint32_t *bucket_ = nullptr;
+        uint32_t *chain_ = nullptr;
+
+        uint32_t gnu_nbucket_{};
+        uint32_t gnu_symndx_{};
+        uint32_t gnu_bloom_size_;
+        uint32_t gnu_shift2_;
+        uintptr_t *gnu_bloom_filter_;
+        uint32_t *gnu_bucket_;
+        uint32_t *gnu_chain_;
+
+        mutable std::unordered_map<std::string_view, ElfW(Sym) *> symtabs_;
     };
 
+    constexpr uint32_t ElfImg::ElfHash(std::string_view name) {
+        uint32_t h = 0, g;
+        for (unsigned char p: name) {
+            h = (h << 4) + p;
+            g = h & 0xf0000000;
+            h ^= g;
+            h ^= g >> 24;
+        }
+        return h;
+    }
+
+    constexpr uint32_t ElfImg::GnuHash(std::string_view name) {
+        uint32_t h = 5381;
+        for (unsigned char p: name) {
+            h += (h << 5) + p;
+        }
+        return h;
+    }
 }
 
 #endif //SANDHOOK_ELF_UTIL_H

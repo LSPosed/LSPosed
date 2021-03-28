@@ -42,11 +42,11 @@ namespace lspd {
 
     template<char... chars>
     struct tstring : public std::integer_sequence<char, chars...> {
-        const char *c_str() const {
+        constexpr const char *c_str() const {
             return str_;
         }
 
-        operator std::string_view() const {
+        constexpr operator std::string_view() const {
             return c_str();
         }
 
