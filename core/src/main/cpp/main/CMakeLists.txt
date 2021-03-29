@@ -32,4 +32,5 @@ find_library(log-lib log)
 target_link_libraries(lspd yahfa riru::riru android dobby dex_builder libcxx ${log-lib})
 
 add_custom_command(TARGET lspd POST_BUILD
-        COMMAND ${CMAKE_STRIP} --remove-section=.preinit_array "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/lspd")
+        COMMAND ${CMAKE_STRIP} --remove-section=.preinit_array --remove-section=.comment
+        -g "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/lspd")
