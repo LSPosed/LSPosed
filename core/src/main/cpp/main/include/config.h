@@ -42,6 +42,16 @@ namespace lspd {
 
     inline constexpr bool is64 = Is64();
 
+    inline bool constexpr IsDebug() {
+#ifdef NDEBUG
+        return false;
+#else
+        return true;
+#endif
+    }
+
+    inline constexpr bool isDebug = IsDebug();
+
 #if defined(__LP64__)
 # define LP_SELECT(lp32, lp64) lp64
 #else

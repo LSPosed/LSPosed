@@ -98,7 +98,7 @@ namespace lspd {
     RiruVersionedModuleInfo module{
             .moduleApiVersion = RIRU_MODULE_API_VERSION,
             .moduleInfo = RiruModuleInfo{
-                    .supportHide = true,
+                    .supportHide = !isDebug,
                     .version = RIRU_MODULE_VERSION,
                     .versionName = RIRU_MODULE_VERSION_NAME,
                     .onModuleLoaded = lspd::onModuleLoaded,
