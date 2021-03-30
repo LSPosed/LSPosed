@@ -2,5 +2,5 @@
 
 namespace lspd {
     const int versionCode = ${VERSION_CODE};
-    extern const char* const versionName = "${VERSION_NAME}";
+    const char* const versionName = "${VERSION_NAME}";
 }
