@@ -85,7 +85,6 @@ namespace SandHook {
         ElfW(Off) symtab_offset = 0;
         ElfW(Off) dynsym_offset = 0;
         ElfW(Off) symtab_size = 0;
-        ElfW(Off) dynsym_size = 0;
 
         uint32_t nbucket_{};
         uint32_t *bucket_ = nullptr;
