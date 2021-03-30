@@ -54,7 +54,7 @@ jobs:
     - name: Install ccache
       run: |
         sudo apt-get install -y ccache
-        ccache -o max_size=100M
+        ccache -o max_size=2G
         ccache -o hash_dir=false
     - name: Build with Gradle
       run: |
