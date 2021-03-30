@@ -36,7 +36,7 @@ namespace lspd {
 
         void onModuleLoaded() {
             LOGI("onModuleLoaded: welcome to LSPosed!");
-            LOGI("onModuleLoaded: version %s (%d)", RIRU_MODULE_VERSION_NAME, RIRU_MODULE_VERSION);
+            LOGI("onModuleLoaded: version %s (%d)", versionName, versionCode);
             // rirud must be used in onModuleLoaded
             Context::GetInstance()->PreLoadDex(magiskPath + '/' + kDexPath);
             InitSymbolCache();
@@ -99,8 +99,8 @@ namespace lspd {
             .moduleApiVersion = RIRU_MODULE_API_VERSION,
             .moduleInfo = RiruModuleInfo{
                     .supportHide = !isDebug,
-                    .version = RIRU_MODULE_VERSION,
-                    .versionName = RIRU_MODULE_VERSION_NAME,
+                    .version = versionCode,
+                    .versionName = versionName,
                     .onModuleLoaded = lspd::onModuleLoaded,
                     .forkAndSpecializePre = lspd::nativeForkAndSpecializePre,
                     .forkAndSpecializePost = lspd::nativeForkAndSpecializePost,

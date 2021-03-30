@@ -58,29 +58,32 @@ namespace lspd {
 # define LP_SELECT(lp32, lp64) lp32
 #endif
 
-    static constexpr auto kEntryClassName = "org.lsposed.lspd.core.Main"_tstr;
-    static constexpr auto kClassLinkerClassName = "org.lsposed.lspd.nativebridge.ClassLinker"_tstr;
-    static constexpr auto kBridgeServiceClassName = "org.lsposed.lspd.service.BridgeService"_tstr;
-    static constexpr auto kDexPath = "framework/lspd.dex"_tstr;
+    inline static constexpr auto kEntryClassName = "org.lsposed.lspd.core.Main"_tstr;
+    inline static constexpr auto kClassLinkerClassName = "org.lsposed.lspd.nativebridge.ClassLinker"_tstr;
+    inline static constexpr auto kBridgeServiceClassName = "org.lsposed.lspd.service.BridgeService"_tstr;
+    inline static constexpr auto kDexPath = "framework/lspd.dex"_tstr;
 
-    static constexpr auto kLibArtName = "libart.so"_tstr;
-    static constexpr auto kLibFwName = "libandroidfw.so"_tstr;
-    static constexpr auto kLinkerName = LP_SELECT("linker"_tstr, "linker64"_tstr);
-    static constexpr auto kLibcName = "libc.so"_tstr;
-    static constexpr auto kLibbaseName = "libbase.so"_tstr;
+    inline static constexpr auto kLibArtName = "libart.so"_tstr;
+    inline static constexpr auto kLibFwName = "libandroidfw.so"_tstr;
+    inline static constexpr auto kLinkerName = LP_SELECT("linker"_tstr, "linker64"_tstr);
+    inline static constexpr auto kLibcName = "libc.so"_tstr;
+    inline static constexpr auto kLibbaseName = "libbase.so"_tstr;
 
-    static constexpr auto kLibBasePath =
+    inline static constexpr auto kLibBasePath =
             LP_SELECT("/system/lib/"_tstr,
                       "/system/lib64/"_tstr);
 
-    static constexpr auto kBinBasePath = "/system/bin/"_tstr;
+    inline static constexpr auto kBinBasePath = "/system/bin/"_tstr;
 
-    static constexpr auto kLibFwPath = kLibBasePath + kLibFwName;
-    static constexpr auto kLinkerPath = kBinBasePath + kLinkerName;
-    static constexpr auto kLibcPath = kLibBasePath + kLibcName;
-    static constexpr auto kLibbasePath = kLibBasePath + kLibbaseName;
+    inline static constexpr auto kLibFwPath = kLibBasePath + kLibFwName;
+    inline static constexpr auto kLinkerPath = kBinBasePath + kLinkerName;
+    inline static constexpr auto kLibcPath = kLibBasePath + kLibcName;
+    inline static constexpr auto kLibbasePath = kLibBasePath + kLibbaseName;
 
-    inline constexpr const char *const BoolToString(bool b) {
+    inline constexpr const char *BoolToString(bool b) {
         return b ? "true" : "false";
     }
+
+    extern const int versionCode;
+    extern const char* const versionName;
 }

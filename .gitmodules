@@ -9,4 +9,4 @@
 	url = https://github.com/topjohnwu/libcxx.git
 [submodule "core/src/main/cpp/external/Dobby"]
 	path = core/src/main/cpp/external/Dobby
-	url = https://github.com/jmpews/Dobby.git
+	url = https://github.com/LSPosed/Dobby.git
