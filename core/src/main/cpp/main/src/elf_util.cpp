@@ -23,16 +23,14 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <cassert>
-#include <filesystem>
 #include <sys/stat.h>
 #include "logging.h"
 #include "elf_util.h"
 
 using namespace SandHook;
-namespace fs = std::filesystem;
 
 template<typename T>
-inline auto offsetOf(ElfW(Ehdr) *head, ElfW(Off) off) {
+inline constexpr auto offsetOf(ElfW(Ehdr) *head, ElfW(Off) off) {
     return reinterpret_cast<std::conditional_t<std::is_pointer_v<T>, T, T *>>(
             reinterpret_cast<uintptr_t>(head) + off);
 }
@@ -68,7 +66,6 @@ ElfImg::ElfImg(std::string_view elf) : elf(elf) {
                 if (bias == -4396) {
                     dynsym = section_h;
                     dynsym_offset = section_h->sh_offset;
-                    dynsym_size = section_h->sh_size;
                     dynsym_start = offsetOf<decltype(dynsym_start)>(header, dynsym_offset);
                 }
                 break;
@@ -116,8 +113,8 @@ ElfImg::ElfImg(std::string_view elf) : elf(elf) {
                 gnu_bloom_size_ = d_buf[2];
                 gnu_shift2_ = d_buf[3];
                 gnu_bloom_filter_ = reinterpret_cast<decltype(gnu_bloom_filter_)>(d_buf + 4);
-                gnu_bucket_ = d_buf + 4 + gnu_bloom_size_ *
-                                          (header->e_ident[EI_CLASS] == ELFCLASS64 ? 2 : 1);
+                gnu_bucket_ = reinterpret_cast<decltype(gnu_bucket_)>(gnu_bloom_filter_ +
+                                                                      gnu_bloom_size_);
                 gnu_chain_ = gnu_bucket_ + gnu_nbucket_ - gnu_symndx_;
                 break;
             }
@@ -201,7 +198,8 @@ ElfImg::~ElfImg() {
     }
 }
 
-ElfW(Addr) ElfImg::getSymbOffset(std::string_view name, uint32_t gnu_hash, uint32_t elf_hash) const {
+ElfW(Addr)
+ElfImg::getSymbOffset(std::string_view name, uint32_t gnu_hash, uint32_t elf_hash) const {
     if (auto offset = GnuLookup(name, gnu_hash); offset > 0) {
         LOGD("found %s %p in %s in dynsym by gnuhash", name.data(),
              reinterpret_cast<void *>(offset), elf.data());
