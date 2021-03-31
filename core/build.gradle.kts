@@ -179,7 +179,8 @@ android {
 fun findInPath(executable: String): String? {
     val pathEnv = System.getenv("PATH")
     return pathEnv.split(File.pathSeparator).map { folder ->
-        Paths.get("${folder}${File.separator}${executable}").toFile()
+        Paths.get("${folder}${File.separator}${executable}${if (isWindows) ".exe" else ""}")
+            .toFile()
     }.firstOrNull { path ->
         path.exists()
     }?.absolutePath
