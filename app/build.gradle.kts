@@ -167,7 +167,7 @@ dependencies {
     val markwonVersion = "4.6.2"
     val okhttpVersion = "4.9.1"
     annotationProcessor("com.github.bumptech.glide:compiler:$glideVersion")
-    implementation("androidx.activity:activity:1.2.1")
+    implementation("androidx.activity:activity:1.2.2")
     implementation("androidx.browser:browser:1.3.0")
     implementation("androidx.constraintlayout:constraintlayout:2.0.4")
     implementation("androidx.core:core:1.3.2")
