@@ -91,20 +91,14 @@ public class LogsActivity extends BaseActivity {
                         e.printStackTrace();
                     }
                     AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
-                        try {
-                            OutputStream os = getContentResolver().openOutputStream(uri);
-                            if (os == null) {
-                                return;
-                            }
+                        try (var os = getContentResolver().openOutputStream(uri)) {
                             ParcelFileDescriptor parcelFileDescriptor = ConfigManager.getLogs(verbose);
                             if (parcelFileDescriptor == null) {
-                                os.close();
                                 return;
                             }
-                            InputStream is = new FileInputStream(parcelFileDescriptor.getFileDescriptor());
-                            FileUtils.copy(is, os);
-                            os.close();
-                            is.close();
+                            try (var is = new FileInputStream(parcelFileDescriptor.getFileDescriptor())) {
+                                FileUtils.copy(is, os);
+                            }
                         } catch (Exception e) {
                             Snackbar.make(binding.snackbar, getResources().getString(R.string.logs_save_failed) + "\n" + e.getMessage(), Snackbar.LENGTH_LONG).show();
                         }
@@ -252,9 +246,7 @@ public class LogsActivity extends BaseActivity {
                 now.get(Calendar.DAY_OF_MONTH), now.get(Calendar.HOUR_OF_DAY),
                 now.get(Calendar.MINUTE), now.get(Calendar.SECOND));
         File cacheFile = new File(getCacheDir(), filename);
-        try {
-            OutputStream os = new FileOutputStream(cacheFile);
-            InputStream is = new FileInputStream(parcelFileDescriptor.getFileDescriptor());
+        try (var os = new FileOutputStream(cacheFile); var is = new FileInputStream(parcelFileDescriptor.getFileDescriptor())) {
             FileUtils.copy(is, os);
         } catch (IOException e) {
             e.printStackTrace();

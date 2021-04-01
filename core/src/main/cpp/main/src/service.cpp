@@ -130,7 +130,7 @@ namespace lspd {
             return;
         }
 
-        ScopedLocalRef<jclass> binderClass(env, env->FindClass("android/os/Binder"));
+        ScopedLocalRef binderClass(env, env->FindClass("android/os/Binder"));
         exec_transact_backup_methodID_ = JNI_GetMethodID(env, binderClass.get(), "execTransact",
                                                          "(IJJI)Z");
         auto set_table_override = reinterpret_cast<void (*)(
@@ -183,10 +183,8 @@ namespace lspd {
 
         jobject service = nullptr;
         if (res) {
-            env->CallVoidMethod(reply, read_exception_method_);
-            if (!ClearException(env)) {
-                service = JNI_CallObjectMethod(env, reply, read_strong_binder_method_);
-            }
+            JNI_CallVoidMethod(env, reply, read_exception_method_);
+            service = JNI_CallObjectMethod(env, reply, read_strong_binder_method_);
         }
         JNI_CallVoidMethod(env, data, recycleMethod_);
         JNI_CallVoidMethod(env, reply, recycleMethod_);
