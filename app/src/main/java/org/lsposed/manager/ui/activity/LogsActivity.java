@@ -256,6 +256,8 @@ public class LogsActivity extends BaseActivity {
             OutputStream os = new FileOutputStream(cacheFile);
             InputStream is = new FileInputStream(parcelFileDescriptor.getFileDescriptor());
             FileUtils.copy(is, os);
+            os.close();
+            is.close();
         } catch (IOException e) {
             e.printStackTrace();
             return;
