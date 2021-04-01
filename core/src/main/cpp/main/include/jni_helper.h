@@ -133,22 +133,26 @@ public:
         return mLocalRef != nullptr;
     }
 
+    operator bool() const {
+        return mLocalRef;
+    }
+
 private:
     JNIEnv *mEnv;
     T mLocalRef;
     DISALLOW_COPY_AND_ASSIGN(ScopedLocalRef);
 };
 
-inline jstring ClearException(JNIEnv *env) {
+inline ScopedLocalRef<jstring> ClearException(JNIEnv *env) {
     if (auto exception = env->ExceptionOccurred()) {
         env->ExceptionClear();
         static jmethodID toString = env->GetMethodID(env->FindClass("java/lang/Object"), "toString",
                                                      "()Ljava/lang/String;");
         auto str = (jstring) env->CallObjectMethod(exception, toString);
         env->DeleteLocalRef(exception);
-        return str;
+        return {env, str};
     }
-    return nullptr;
+    return {env, nullptr};
 }
 
 template<typename T>
@@ -167,7 +171,7 @@ inline auto JNI_SafeInvoke(JNIEnv *env, Func f, Args &&... args) {
 
         ~finally() {
             if (auto exception = ClearException(env_)) {
-                LOGE("%s", JUTFString(env_, exception).get());
+                LOGE("%s", JUTFString(env_, exception.get()).get());
             }
         }
 
