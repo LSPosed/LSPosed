@@ -139,38 +139,14 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScopedLocalRef);
 };
 
-[[maybe_unused]]
-inline void JNIExceptionClear(JNIEnv *env) {
-    if (env->ExceptionCheck()) {
-        env->ExceptionClear();
-    }
-}
-
-[[maybe_unused]]
-inline bool JNIExceptionCheck(JNIEnv *env) {
-    if (env->ExceptionCheck()) {
-        jthrowable e = env->ExceptionOccurred();
-        env->Throw(e);
-        env->DeleteLocalRef(e);
-        return true;
-    }
-    return false;
-}
-
-[[maybe_unused]]
-inline void JNIExceptionClearAndDescribe(JNIEnv *env) {
-    if (env->ExceptionCheck()) {
-        env->ExceptionDescribe();
-        env->ExceptionClear();
-    }
-}
-
 inline jstring ClearException(JNIEnv *env) {
-    static jmethodID toString = env->GetMethodID(env->FindClass("java/lang/Object"), "toString",
-                                                 "()Ljava/lang/String;");
     if (auto exception = env->ExceptionOccurred()) {
         env->ExceptionClear();
-        return (jstring) env->CallObjectMethod(exception, toString);
+        static jmethodID toString = env->GetMethodID(env->FindClass("java/lang/Object"), "toString",
+                                                     "()Ljava/lang/String;");
+        auto str = (jstring) env->CallObjectMethod(exception, toString);
+        env->DeleteLocalRef(exception);
+        return str;
     }
     return nullptr;
 }
