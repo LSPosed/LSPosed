@@ -266,7 +266,7 @@ public class BridgeService {
                     String processName = data.readString();
                     IBinder heartBeat = data.readStrongBinder();
                     var applicationService = service.requestApplicationService(Binder.getCallingUid(), Binder.getCallingPid(), processName, heartBeat);
-                    if (applicationService != null) binder = service.asBinder();
+                    if (applicationService != null) binder = applicationService.asBinder();
                 } catch (RemoteException e) {
                     Log.e(TAG, Log.getStackTraceString(e));
                 }
