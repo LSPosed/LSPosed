@@ -114,7 +114,7 @@
     <string name="use_recommended">Consigliate</string>
     <string name="no_scope_selected_has_recommended">Non hai selezionato alcuna app. Selezionare le app consigliate?</string>
     <string name="use_recommended_message">Selezionare le app consigliate?</string>
-    <string name="requested_by_module">Consgiliate</string>
+    <string name="requested_by_module">Consigliate</string>
     <string name="module_disabled_no_selection">Il modulo %s è stato disabilitato poiché nessuna app è stata selezionata.</string>
     <string name="android_framework">Framework di sistema</string>
     <string name="menu_backup_and_restore">Backup…</string>
