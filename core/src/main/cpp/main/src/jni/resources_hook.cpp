@@ -69,9 +69,10 @@ namespace lspd {
     }
 
     LSP_DEF_NATIVE_METHOD(jboolean, ResourcesHook, initXResourcesNative) {
-        classXResources = Context::GetInstance()->FindClassFromCurrentLoader(env,
-                                                                             kXResourcesClassName);
-        if (!classXResources) {
+        if (auto classXResources_ = Context::GetInstance()->FindClassFromCurrentLoader(env,
+                                                                                       kXResourcesClassName)) {
+            classXResources = JNI_NewGlobalRef(env, classXResources_);
+        } else {
             LOGE("Error while loading XResources class '%s':", kXResourcesClassName);
             return JNI_FALSE;
         }
@@ -90,14 +91,13 @@ namespace lspd {
         if (!PrepareSymbols()) {
             return JNI_FALSE;
         }
-        classXResources = reinterpret_cast<jclass>(env->NewGlobalRef(classXResources));
         return JNI_TRUE;
     }
 
     // @ApiSensitive(Level.MIDDLE)
     LSP_DEF_NATIVE_METHOD(jboolean, ResourcesHook, removeFinalFlagNative, jclass target_class) {
         if (target_class) {
-            jclass class_clazz = JNI_FindClass(env, "java/lang/Class");
+            auto class_clazz = JNI_FindClass(env, "java/lang/Class");
             jfieldID java_lang_Class_accessFlags = JNI_GetFieldID(
                     env, class_clazz, "accessFlags", "I");
             jint access_flags = env->GetIntField(target_class, java_lang_Class_accessFlags);
@@ -110,8 +110,8 @@ namespace lspd {
     LSP_DEF_NATIVE_METHOD(jobject, ResourcesHook, buildDummyClassLoader, jobject parent,
                           jobject resource_super_class, jobject typed_array_super_class) {
         using namespace startop::dex;
-        static auto in_memory_classloader = (jclass) env->NewGlobalRef(
-                env->FindClass("dalvik/system/InMemoryDexClassLoader"));
+        static auto in_memory_classloader = JNI_NewGlobalRef(env, JNI_FindClass(env,
+                                                                                "dalvik/system/InMemoryDexClassLoader"));
         static jmethodID initMid = JNI_GetMethodID(env, in_memory_classloader, "<init>",
                                                    "(Ljava/nio/ByteBuffer;Ljava/lang/ClassLoader;)V");
         DexBuilder dex_file;
@@ -132,7 +132,7 @@ namespace lspd {
 
         auto dex_buffer = env->NewDirectByteBuffer(const_cast<void *>(image.ptr()), image.size());
         return JNI_NewObject(env, in_memory_classloader, initMid,
-                             dex_buffer, parent);
+                             dex_buffer, parent).release();
     }
 
     LSP_DEF_NATIVE_METHOD(void, ResourcesHook, rewriteXmlReferencesNative,

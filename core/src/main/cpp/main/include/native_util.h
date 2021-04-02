@@ -35,13 +35,12 @@ namespace lspd {
                                                             const JNINativeMethod *methods,
                                                             jint method_count) {
 
-        ScopedLocalRef clazz(env,
-                             Context::GetInstance()->FindClassFromCurrentLoader(env, class_name));
+        auto clazz = Context::GetInstance()->FindClassFromCurrentLoader(env, class_name);
         if (clazz.get() == nullptr) {
             LOGF("Couldn't find class: %s", class_name);
             return false;
         }
-        return JNI_RegisterNatives(env, clazz.get(), methods, method_count);
+        return JNI_RegisterNatives(env, clazz, methods, method_count);
     }
 
 #if defined(__cplusplus)
