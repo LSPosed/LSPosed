@@ -32,7 +32,7 @@
     <color name="material_green">@color/material_green_200</color>
     <color name="material_light_green">@color/material_light_green_200</color>
     <color name="material_lime">@color/material_lime_200</color>
-    <color name="material_yellow">@color/material_yellow_200</color>
+    <color name="material_yellow">#ffa0ab</color>
     <color name="material_amber">@color/material_amber_200</color>
     <color name="material_orange">@color/material_orange_200</color>
     <color name="material_deep_orange">@color/material_deep_orange_200</color>
