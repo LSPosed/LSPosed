@@ -122,6 +122,7 @@ namespace yahfa {
         SDKVersion = sdkVersion;
         jclass classExecutable = env->FindClass("java/lang/reflect/Executable");
         fieldArtMethod = env->GetFieldID(classExecutable, "artMethod", "J");
+        env->DeleteLocalRef(classExecutable);
         LOGI("init to SDK %d", sdkVersion);
         switch (sdkVersion) {
             case __ANDROID_API_S__:

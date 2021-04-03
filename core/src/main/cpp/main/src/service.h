@@ -49,10 +49,9 @@ namespace lspd {
         void InitService(JNIEnv *env);
 
         void HookBridge(const Context& context, JNIEnv *env);
+        ScopedLocalRef<jobject> RequestBinder(JNIEnv *env, jstring nice_name);
 
-        jobject RequestBinder(JNIEnv *env, jstring nice_name);
-
-        jobject RequestBinderForSystemServer(JNIEnv *env);
+        ScopedLocalRef<jobject> RequestBinderForSystemServer(JNIEnv *env);
 
     private:
         inline static std::unique_ptr<Service> instance_ = std::make_unique<Service>();

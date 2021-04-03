@@ -27,6 +27,7 @@
 #include <tuple>
 #include <string_view>
 #include "utils.h"
+#include "jni_helper.h"
 
 namespace lspd {
     class Context {
@@ -44,9 +45,7 @@ namespace lspd {
 
         void CallOnPostFixupStaticTrampolines(void *class_ptr);
 
-        void FindAndCall(JNIEnv *env, const char *method_name, const char *method_sig, ...) const;
-
-        inline jclass FindClassFromCurrentLoader(JNIEnv *env, std::string_view className) const {
+        inline ScopedLocalRef<jclass> FindClassFromCurrentLoader(JNIEnv *env, std::string_view className) const {
             return FindClassFromLoader(env, GetCurrentClassLoader(), className);
         };
 
@@ -78,9 +77,12 @@ namespace lspd {
 
         void Init(JNIEnv *env);
 
-        static jclass FindClassFromLoader(JNIEnv *env, jobject class_loader,
+        static ScopedLocalRef<jclass> FindClassFromLoader(JNIEnv *env, jobject class_loader,
                                           std::string_view class_name);
         static void setAllowUnload(bool unload);
+
+        template<typename ...Args>
+        void FindAndCall(JNIEnv *env, std::string_view method_name, std::string_view method_sig, Args&&... args) const;
 
         friend std::unique_ptr<Context> std::make_unique<Context>();
     };
