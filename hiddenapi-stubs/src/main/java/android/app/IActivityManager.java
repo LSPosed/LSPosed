@@ -42,6 +42,16 @@ public interface IActivityManager extends IInterface {
                         String resultData, Bundle map, String[] requiredPermissions,
                         int appOp, Bundle options, boolean serialized, boolean sticky, int userId) throws RemoteException;
 
+    int startActivity(IApplicationThread caller, String callingPackage, Intent intent,
+                      String resolvedType, IBinder resultTo, String resultWho, int requestCode,
+                      int flags, ProfilerInfo profilerInfo, Bundle options) throws RemoteException;
+
+    @RequiresApi(30)
+    int startActivityWithFeature(IApplicationThread caller, String callingPackage,
+                                 String callingFeatureId, Intent intent, String resolvedType,
+                                 IBinder resultTo, String resultWho, int requestCode, int flags,
+                                 ProfilerInfo profilerInfo, Bundle options) throws RemoteException;
+
     void forceStopPackage(String packageName, int userId);
 
     boolean startUserInBackground(int userid);
