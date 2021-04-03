@@ -19,6 +19,7 @@
   -->
 
 <resources>
+    <string name="app_name" translatable="false">LSPosed</string>
 
     <!-- MainActivity -->
     <string name="info">Infos</string>
@@ -168,6 +169,8 @@
     <string name="module_release_load_more">Afficher les anciennes versions</string>
     <string name="module_release_no_more">Pas d\'autres versions</string>
     <string name="repo_load_failed">Échec de chargement du dépôt des modules: %s</string>
+  
+    <string name="about_source" translatable="false">https://github.com/LSPosed/LSPosed/</string>
 
     <string name="app_destroyed">Cette application à été détruite, merci de vous assurer que vous l\'avez bien téléchargé depuis la source officielle.</string>
     <string name="outdated_manager">Version du Gestionnaire LSPosed et du noyau LSPosed ne sont pas cohérents. Merci de réinstaller la version correspondante.</string>
@@ -176,4 +179,5 @@
     <string name="NotInstall">Non installé</string>
     <string name="NotInstallDetail">LSPosed n\'est pas installé</string>
     <string name="translators"><![CDATA[<a href="https://forum.xda-developers.com/member.php?u=5332893">Rom</a>]]></string>
+    <string name="copy_toast_msg">Copié</string>
 </resources>
