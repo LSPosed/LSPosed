@@ -176,4 +176,5 @@
     <string name="NotInstall">Non installé</string>
     <string name="NotInstallDetail">LSPosed n\'est pas installé</string>
     <string name="translators"><![CDATA[<a href="https://forum.xda-developers.com/member.php?u=5332893">Rom</a>]]></string>
+    <string name="copy_toast_msg">Copié</string>
 </resources>
