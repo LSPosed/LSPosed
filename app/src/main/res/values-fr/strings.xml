@@ -19,7 +19,6 @@
   -->
 
 <resources>
-
     <!-- MainActivity -->
     <string name="info">Infos</string>
     <string name="Install">Installer</string>
