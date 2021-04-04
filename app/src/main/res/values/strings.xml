@@ -19,8 +19,6 @@
   -->
 
 <resources>
-    <string name="app_name" translatable="false">LSPosed</string>
-
     <!-- MainActivity -->
     <string name="info">Info</string>
     <string name="Install">Install</string>
@@ -169,8 +167,6 @@
     <string name="module_release_load_more">Show older versions</string>
     <string name="module_release_no_more">No more release</string>
     <string name="repo_load_failed">Failed to load module repo: %s</string>
-
-    <string name="about_source" translatable="false">https://github.com/LSPosed/LSPosed/</string>
 
     <string name="app_destroyed">This application has been destroyed, please make sure you download it from the official source.</string>
     <string name="outdated_manager">Version of LSPosed Manager and LSPosed Core are not consistent. Please re-install the corresponding version.</string>
