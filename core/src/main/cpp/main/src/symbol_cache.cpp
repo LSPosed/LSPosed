@@ -91,7 +91,7 @@ namespace lspd {
 
 #ifdef __LP64__
         inline static size_t solist_next_offset = 0x30;
-            constexpr static size_t solist_realpath_offset = 0x1a8;
+        constexpr static size_t solist_realpath_offset = 0x1a8;
 #else
         inline static size_t solist_next_offset = 0xa4;
         constexpr static size_t solist_realpath_offset = 0x174;

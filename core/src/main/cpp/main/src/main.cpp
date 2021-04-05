@@ -37,8 +37,11 @@ namespace lspd {
         void onModuleLoaded() {
             LOGI("onModuleLoaded: welcome to LSPosed!");
             LOGI("onModuleLoaded: version %s (%d)", versionName, versionCode);
-            // rirud must be used in onModuleLoaded
-            Context::GetInstance()->PreLoadDex(magiskPath + '/' + kDexPath);
+            if constexpr (isDebug) {
+                Context::GetInstance()->PreLoadDex("/system/" + kDexPath);
+            } else {
+                Context::GetInstance()->PreLoadDex(magiskPath + '/' + kDexPath);
+            }
             InitSymbolCache();
         }
 
@@ -116,7 +119,7 @@ RIRU_EXPORT RiruVersionedModuleInfo *init(Riru *riru) {
     LOGD("using riru %d", riru->riruApiVersion);
     LOGD("module path: %s", riru->magiskModulePath);
     lspd::magiskPath = riru->magiskModulePath;
-    if (lspd::magiskPath.find(MODULE_NAME) == std::string::npos) {
+    if (!lspd::isDebug && lspd::magiskPath.find(MODULE_NAME) == std::string::npos) {
         LOGE("who am i");
         return nullptr;
     }
