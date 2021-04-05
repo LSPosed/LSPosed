@@ -279,6 +279,10 @@ afterEvaluate {
                                 "%%%RIRU_MODULE_MIN_RIRU_VERSION_NAME%%%",
                                 moduleMinRiruVersionName
                             )
+                            .replace(
+                                "%%RIRU_MODULE_DEBUG%%",
+                                if (variantLowered == "debug") "true" else "false"
+                            )
                     }
                     filter(
                         mapOf("eol" to FixCrLfFilter.CrLf.newInstance("lf")),
