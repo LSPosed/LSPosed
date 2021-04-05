@@ -132,11 +132,10 @@ android {
         named("debug") {
             externalNativeBuild {
                 cmake {
-                    val flags = arrayOf(
-                        "-O0"
-                    )
-                    cppFlags.addAll(flags)
-                    cFlags.addAll(flags)
+                    arguments.addAll(arrayOf(
+                        "-DCMAKE_CXX_FLAGS_DEBUG=-Og",
+                        "-DCMAKE_C_FLAGS_DEBUG=-Og"
+                    ))
                 }
             }
         }
@@ -149,7 +148,6 @@ android {
                     val flags = arrayOf(
                         "-fvisibility=hidden",
                         "-fvisibility-inlines-hidden",
-                        "-Os",
                         "-Wno-unused-value",
                         "-ffunction-sections",
                         "-fdata-sections",
@@ -160,6 +158,12 @@ android {
                     )
                     cppFlags.addAll(flags)
                     cFlags.addAll(flags)
+                    arguments.addAll(arrayOf(
+                        "-DCMAKE_CXX_FLAGS_RELEASE=-Oz",
+                        "-DCMAKE_CXX_FLAGS_RELWITHDEBINFO=-Oz",
+                        "-DCMAKE_C_FLAGS_RELEASE=-Oz",
+                        "-DCMAKE_C_FLAGS_RELWITHDEBINFO=-Oz"
+                    ))
                 }
             }
         }
