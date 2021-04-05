@@ -20,6 +20,11 @@
 
 check_magisk_version() {
   ui_print "- Magisk version: ${MAGISK_VER_CODE}"
+  if [ "$MAGISK_VER_CODE" -lt 21000 ]; then
+      ui_print "${POUNDS}"
+      ui_print "Please install Magisk v21+!"
+      abortC "${POUNDS}"
+  fi
 }
 
 require_new_android() {

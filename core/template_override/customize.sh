@@ -51,6 +51,7 @@ extract "$ZIPFILE" 'util_functions.sh' "${TMPDIR}"
 . ${TMPDIR}/util_functions.sh
 
 check_android_version
+check_magisk_version
 
 extract "$ZIPFILE" 'riru.sh' "$TMPDIR"
 . $TMPDIR/riru.sh
