@@ -126,6 +126,3 @@ RIRU_EXPORT RiruVersionedModuleInfo *init(Riru *riru) {
     lspd::allowUnload = riru->allowUnload;
     return &lspd::module;
 }
-
-int main() {
-}
