@@ -57,10 +57,14 @@ namespace lspd {
         }
     }
 
-    void Context::PreLoadDex(const std::string &dex_path) {
+    void Context::PreLoadDex(std::string_view dex_path) {
         if (LIKELY(!dex.empty())) return;
 
-        FILE *f = fopen(dex_path.c_str(), "rb");
+        FILE *f = fopen(dex_path.data(), "rb");
+        if (!f) {
+            LOGE("Fail to open dex from %s", dex_path.data());
+            return;
+        }
         fseek(f, 0, SEEK_END);
         dex.resize(ftell(f));
         rewind(f);
@@ -70,7 +74,7 @@ namespace lspd {
         }
         fclose(f);
 
-        LOGI("Loaded %s with size %zu", dex_path.c_str(), dex.size());
+        LOGI("Loaded %s with size %zu", dex_path.data(), dex.size());
     }
 
     void Context::LoadDex(JNIEnv *env) {

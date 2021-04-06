@@ -158,11 +158,15 @@ android {
                     )
                     cppFlags.addAll(flags)
                     cFlags.addAll(flags)
+                    val configFlags = arrayOf(
+                        "-Oz",
+                        "-DNDEBUG"
+                    ).joinToString(" ")
                     arguments.addAll(arrayOf(
-                        "-DCMAKE_CXX_FLAGS_RELEASE=-Oz",
-                        "-DCMAKE_CXX_FLAGS_RELWITHDEBINFO=-Oz",
-                        "-DCMAKE_C_FLAGS_RELEASE=-Oz",
-                        "-DCMAKE_C_FLAGS_RELWITHDEBINFO=-Oz"
+                        "-DCMAKE_CXX_FLAGS_RELEASE=$configFlags",
+                        "-DCMAKE_CXX_FLAGS_RELWITHDEBINFO=$configFlags",
+                        "-DCMAKE_C_FLAGS_RELEASE=$configFlags",
+                        "-DCMAKE_C_FLAGS_RELWITHDEBINFO=$configFlags"
                     ))
                 }
             }
