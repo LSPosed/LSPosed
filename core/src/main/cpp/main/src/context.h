@@ -57,7 +57,7 @@ namespace lspd {
 
         void OnNativeForkSystemServerPre(JNIEnv *env);
 
-        void PreLoadDex(const std::string &dex_paths);
+        void PreLoadDex(std::string_view dex_paths);
 
     private:
         inline static std::unique_ptr<Context> instance_ = std::make_unique<Context>();
