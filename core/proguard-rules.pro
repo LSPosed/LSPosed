@@ -20,6 +20,8 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+-keepattributes *Annotation*
+
 -keep class de.robv.android.xposed.** {*;}
 -keep class android.** { *; }
 -keepclassmembers class * implements android.os.Parcelable {

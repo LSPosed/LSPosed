@@ -20,6 +20,9 @@
 
 package org.lsposed.lspd.nativebridge;
 
+import dalvik.annotation.optimization.FastNative;
+
 public class NativeAPI {
+    @FastNative
     public static native void recordNativeEntrypoint(String library_name);
 }
