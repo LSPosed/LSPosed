@@ -31,6 +31,8 @@ import java.util.TimeZone;
 
 import org.lsposed.lspd.util.Utils;
 
+import dalvik.annotation.optimization.FastNative;
+
 public class ModuleLogger {
     static SimpleDateFormat logDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss", Locale.getDefault());
     static int fd = -1;
@@ -42,6 +44,7 @@ public class ModuleLogger {
         }
     }
 
+    @FastNative
     private static native void nativeLog(int fd, String logStr);
 
     public static void log(String str, boolean isThrowable) {

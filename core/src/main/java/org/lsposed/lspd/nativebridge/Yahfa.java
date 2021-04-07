@@ -23,18 +23,26 @@ package org.lsposed.lspd.nativebridge;
 import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
 
+import dalvik.annotation.optimization.FastNative;
+
 public class Yahfa {
 
+    @FastNative
     public static native boolean backupAndHookNative(Executable target, Method hook, Method backup);
 
     // JNI.ToReflectedMethod() could return either Method or Constructor
+    @FastNative
     public static native Executable findMethodNative(Class<?> targetClass, String methodName, String methodSig);
 
+    @FastNative
     public static native void init(int sdkVersion);
 
+    @FastNative
     public static native void recordHooked(Executable member);
 
+    @FastNative
     public static native boolean isHooked(Executable member);
 
+    @FastNative
     public static native Class<?> buildHooker(ClassLoader appClassLoader, Class<?> returnType, Class<?>[] params, String methodName);
 }
