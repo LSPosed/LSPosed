@@ -23,19 +23,13 @@ package org.lsposed.lspd.nativebridge;
 import android.content.res.Resources;
 import android.content.res.XResources;
 
-import dalvik.annotation.optimization.FastNative;
-
 public class ResourcesHook {
 
-    @FastNative
     public static native boolean initXResourcesNative();
 
-    @FastNative
     public static native boolean removeFinalFlagNative(Class<?> clazz);
 
-    @FastNative
     public static native ClassLoader buildDummyClassLoader(ClassLoader parent, Class<?> resourceSuperClass, Class<?> typedArraySuperClass);
 
-    @FastNative
     public static native void rewriteXmlReferencesNative(long parserPtr, XResources origRes, Resources repRes);
 }

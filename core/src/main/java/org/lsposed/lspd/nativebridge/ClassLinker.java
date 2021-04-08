@@ -22,12 +22,10 @@ package org.lsposed.lspd.nativebridge;
 
 import java.lang.reflect.Executable;
 
-import dalvik.annotation.optimization.FastNative;
 import de.robv.android.xposed.PendingHooks;
 
 public class ClassLinker {
 
-    @FastNative
     public static native void setEntryPointsToInterpreter(Executable method);
 
     public static void onPostFixupStaticTrampolines(Class<?> clazz) {
