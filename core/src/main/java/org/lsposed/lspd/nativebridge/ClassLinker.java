@@ -30,7 +30,6 @@ public class ClassLinker {
     @FastNative
     public static native void setEntryPointsToInterpreter(Executable method);
 
-    @FastNative
     public static void onPostFixupStaticTrampolines(Class<?> clazz) {
         // native flags will be re-set in hooking logic
         PendingHooks.hookPendingMethod(clazz);
