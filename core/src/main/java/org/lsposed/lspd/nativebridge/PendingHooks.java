@@ -22,9 +22,6 @@ package org.lsposed.lspd.nativebridge;
 
 import java.lang.reflect.Method;
 
-import dalvik.annotation.optimization.FastNative;
-
 public class PendingHooks {
-    @FastNative
-    public static native void recordPendingMethodNative(Method hookMethod, Class<?> clazz);
+    public static native void recordPendingMethodNative(Method hookMethod, Class clazz);
 }
