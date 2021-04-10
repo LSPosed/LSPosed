@@ -26,8 +26,8 @@ buildscript {
         maven("https://storage.googleapis.com/r8-releases/raw")
     }
     dependencies {
-        classpath("com.android.tools:r8:3.0.32-dev")
-        classpath("com.android.tools.build:gradle:7.0.0-alpha13")
+        classpath("com.android.tools:r8:3.0.33-dev")
+        classpath("com.android.tools.build:gradle:7.0.0-alpha14")
         classpath("org.eclipse.jgit:org.eclipse.jgit:5.10.0.202012080955-r")
         classpath(kotlin("gradle-plugin", version = "1.4.32"))
     }
