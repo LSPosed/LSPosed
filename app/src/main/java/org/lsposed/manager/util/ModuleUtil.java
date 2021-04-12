@@ -28,19 +28,17 @@ import android.os.Build;
 
 import androidx.annotation.NonNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 import org.lsposed.manager.App;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.repo.model.OnlineModule;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public final class ModuleUtil {
     // xposedminversion below this
@@ -48,13 +46,13 @@ public final class ModuleUtil {
     private static ModuleUtil instance = null;
     private final PackageManager pm;
     private final List<ModuleListener> listeners = new CopyOnWriteArrayList<>();
-    private final List<String> enabledModules;
+    private final HashSet<String> enabledModules;
     private Map<String, InstalledModule> installedModules;
     private boolean isReloading = false;
 
     private ModuleUtil() {
         pm = App.getInstance().getPackageManager();
-        enabledModules = new ArrayList<>(Arrays.asList(ConfigManager.getEnabledModules()));
+        enabledModules = new HashSet<>(Arrays.asList(ConfigManager.getEnabledModules()));
     }
 
     public static synchronized ModuleUtil getInstance() {
@@ -153,9 +151,7 @@ public final class ModuleUtil {
             return false;
         }
         if (enabled) {
-            if (!enabledModules.contains(packageName)) {
-                enabledModules.add(packageName);
-            }
+            enabledModules.add(packageName);
         } else {
             enabledModules.remove(packageName);
         }
@@ -166,18 +162,8 @@ public final class ModuleUtil {
         return enabledModules.contains(packageName);
     }
 
-    public List<InstalledModule> getEnabledModules() {
-        LinkedList<InstalledModule> result = new LinkedList<>();
-        Iterator<String> iterator = enabledModules.iterator();
-        while (iterator.hasNext()) {
-            InstalledModule module = getModule(iterator.next());
-            if (module != null) {
-                result.add(module);
-            } else {
-                iterator.remove();
-            }
-        }
-        return result;
+    public int getEnabledModulesCount() {
+        return enabledModules.size();
     }
 
     public void addListener(ModuleListener listener) {

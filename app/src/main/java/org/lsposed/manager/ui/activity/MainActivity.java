@@ -156,7 +156,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        int moduleCount = ModuleUtil.getInstance().getEnabledModules().size();
+        int moduleCount = ModuleUtil.getInstance().getEnabledModulesCount();
         binding.modulesSummary.setText(getResources().getQuantityString(R.plurals.modules_enabled_count, moduleCount, moduleCount));
     }
 }
