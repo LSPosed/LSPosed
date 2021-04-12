@@ -67,6 +67,7 @@ dependencies {
     implementation("dev.rikka.ndk:riru:${moduleMinRiruVersionName}")
     implementation("com.android.tools.build:apksig:4.1.3")
     implementation("org.apache.commons:commons-lang3:3.12.0")
+    implementation("de.upb.cs.swt:axml:2.1.1")
     compileOnly(project(":hiddenapi-stubs"))
     compileOnly("androidx.annotation:annotation:1.2.0")
     implementation(project(":interface"))
