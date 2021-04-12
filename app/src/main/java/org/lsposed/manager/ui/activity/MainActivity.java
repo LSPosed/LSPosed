@@ -32,6 +32,7 @@ import androidx.core.text.HtmlCompat;
 import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
 
+import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.ActivityMainBinding;
@@ -83,6 +84,7 @@ public class MainActivity extends BaseActivity {
             binding.translators.setMovementMethod(LinkMovementMethod.getInstance());
             binding.translators.setTransformationMethod(new LinkTransformationMethod(this));
             binding.translators.setText(HtmlCompat.fromHtml(getString(R.string.about_translators, getString(R.string.translators)), HtmlCompat.FROM_HTML_MODE_LEGACY));
+            binding.version.setText(String.format(Locale.US, "%s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
             new BlurBehindDialogBuilder(this)
                     .setView(binding.getRoot())
                     .show();

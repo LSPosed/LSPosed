@@ -77,9 +77,9 @@
         android:paddingBottom="?android:dialogPreferredPadding">
 
         <TextView
+            android:id="@+id/version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/versionName"
             android:textSize="14sp" />
 
         <TextView
