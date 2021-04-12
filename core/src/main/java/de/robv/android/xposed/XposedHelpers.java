@@ -43,8 +43,8 @@ import java.util.List;
 import java.util.WeakHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import external.org.apache.commons.lang3.ClassUtils;
-import external.org.apache.commons.lang3.reflect.MemberUtils;
+import org.apache.commons.lang3.ClassUtils;
+import org.apache.commons.lang3.reflect.MemberUtilsX;
 
 /**
  * Helpers that simplify hooking and calling methods/constructors, getting and settings fields, ...
@@ -437,9 +437,9 @@ public final class XposedHelpers {
 				// compare name and parameters
 				if (method.getName().equals(methodName) && ClassUtils.isAssignable(parameterTypes, method.getParameterTypes(), true)) {
 					// get accessible version of method
-					if (bestMatch == null || MemberUtils.compareParameterTypes(
-							method.getParameterTypes(),
-							bestMatch.getParameterTypes(),
+					if (bestMatch == null || MemberUtilsX.compareMethodFit(
+							method,
+							bestMatch,
 							parameterTypes) < 0) {
 						bestMatch = method;
 					}
@@ -671,9 +671,9 @@ public final class XposedHelpers {
 			// compare name and parameters
 			if (ClassUtils.isAssignable(parameterTypes, constructor.getParameterTypes(), true)) {
 				// get accessible version of method
-				if (bestMatch == null || MemberUtils.compareParameterTypes(
-						constructor.getParameterTypes(),
-						bestMatch.getParameterTypes(),
+				if (bestMatch == null || MemberUtilsX.compareConstructorFit(
+						constructor,
+						bestMatch,
 						parameterTypes) < 0) {
 					bestMatch = constructor;
 				}
