@@ -65,7 +65,7 @@ public final class NotificationUtil {
                 .setContentTitle(title)
                 .setContentText(content)
                 .setAutoCancel(true)
-                .setSmallIcon(R.drawable.ic_notification)
+                .setSmallIcon(R.drawable.ic_extension)
                 .setColor(context.getColor(R.color.color_primary))
                 .setContentIntent(contentIntent)
                 .setStyle(style);

@@ -19,9 +19,6 @@
   -->
 
 <resources>
-    <color name="rippleTransparency_light">#34ffffff</color>
-    <color name="rippleTransparency_dark">#cbffffff</color>
-
     <color name="color_primary_light">@color/google_blue_600</color>
     <color name="color_primary_dark">@color/google_blue_300</color>
     <color name="color_primary">@color/color_primary_light</color>
