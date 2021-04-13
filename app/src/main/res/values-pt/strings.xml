@@ -33,7 +33,7 @@
     <string name="About">Sobre</string>
     <string name="module_repo">Repositório</string>
     <string name="module_repo_summary">Repositório dos Módulos (Alpha)</string>
-    <string name="about_view_source_code"><![CDATA[Veja o código fonte em %s<br/>Entre em nosso canal no %s]]></string>
+    <string name="about_view_source_code"><![CDATA[Veja o código fonte no %s<br/>Entre em nosso canal no %s]]></string>
     <string name="about_translators">Tradutores: %s</string>
 
     <string name="activated">Ativado</string>
@@ -60,9 +60,9 @@
     <string name="menuClearLog">Limpar registro</string>
     <string name="logs_cleared">Registro limpo com sucesso.</string>
     <string name="log_is_empty">Registro vazio.</string>
-    <string name="scroll_top">Arrastar para cima</string>
+    <string name="scroll_top">Mover para início</string>
     <string name="loading">Carregando…</string>
-    <string name="scroll_bottom">Arrastar para baixo</string>
+    <string name="scroll_bottom">Mover para fim</string>
     <string name="logs_cannot_read">Não foi possível ler o registro: \n</string>
     <string name="menuReload">Recarregar</string>
     <string name="logs_clear_failed_2">Falha ao limpar o registro</string>
