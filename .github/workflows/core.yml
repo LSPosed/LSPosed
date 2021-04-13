@@ -42,24 +42,26 @@ jobs:
         path: |
           ~/.gradle/caches
           ~/.gradle/wrapper
-        key: gradle-core-${{ hashFiles('**/*.gradle.kts') }}
+        key: gradle-core-${{ github.sha }}
         restore-keys: |
-          gradle-manager-${{ hashFiles('**/*.gradle.kts') }}
-          gradle-core
           gradle-
     - name: Cache Cmake
       uses: actions/cache@v2
       with:
         path: ~/.ccache
-        key: ccache-${{ hashFiles('core/src/main/cpp') }}
-        restore-keys: ccache-
+        key: ccache-cache-${{ github.sha }}
+        restore-keys: ccache-cache-
     - name: Install ccache
-      run: sudo apt-get install -y ccache
+      run: |
+        sudo apt-get install -y ccache
+        ccache -o max_size=2G
+        ccache -o hash_dir=false
     - name: Build with Gradle
-      run:  |
+      run: |
         echo 'org.gradle.caching=true' >> gradle.properties
         echo 'org.gradle.parallel=true' >> gradle.properties
         echo 'org.gradle.vfs.watch=true' >> gradle.properties
+        echo 'org.gradle.jvmargs=-Xmx2048m' >> gradle.properties
         ./gradlew zipRelease zipDebug
     - name: Prepare artifact
       if: success()

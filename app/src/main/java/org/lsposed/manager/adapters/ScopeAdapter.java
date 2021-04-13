@@ -20,6 +20,8 @@
 
 package org.lsposed.manager.adapters;
 
+import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -60,14 +62,6 @@ import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-
 import org.lsposed.lspd.Application;
 import org.lsposed.manager.App;
 import org.lsposed.manager.BuildConfig;
@@ -77,10 +71,17 @@ import org.lsposed.manager.ui.activity.AppListActivity;
 import org.lsposed.manager.ui.fragment.CompileDialogFragment;
 import org.lsposed.manager.util.GlideApp;
 import org.lsposed.manager.util.ModuleUtil;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+
 import rikka.core.res.ResourcesKt;
 import rikka.widget.switchbar.SwitchBar;
-
-import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
 
 @SuppressLint("NotifyDataSetChanged")
 public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> implements Filterable {
@@ -256,7 +257,6 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         if (itemId == R.id.use_recommended) {
             if (!checkedList.isEmpty()) {
                 new AlertDialog.Builder(activity)
-                        .setTitle(R.string.use_recommended)
                         .setMessage(R.string.use_recommended_message)
                         .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                             checkRecommended();
@@ -572,9 +572,8 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     }
 
     public boolean onBackPressed() {
-        if (activity.binding.masterSwitch.isChecked() && checkedList.isEmpty()) {
+        if (!refreshing && activity.binding.masterSwitch.isChecked() && checkedList.isEmpty()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-            builder.setTitle(R.string.use_recommended);
             builder.setMessage(!recommendedList.isEmpty() ? R.string.no_scope_selected_has_recommended : R.string.no_scope_selected);
             if (!recommendedList.isEmpty()) {
                 builder.setPositiveButton(android.R.string.ok, (dialog, which) -> {

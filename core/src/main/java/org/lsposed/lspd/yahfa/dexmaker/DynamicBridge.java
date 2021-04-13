@@ -28,6 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import de.robv.android.xposed.LspHooker;
 import de.robv.android.xposed.XposedBridge;
+
 import org.lsposed.lspd.util.Logger;
 
 public final class DynamicBridge {
@@ -36,9 +37,6 @@ public final class DynamicBridge {
 
     public static synchronized void hookMethod(Executable hookMethod, XposedBridge.AdditionalHookInfo additionalHookInfo) {
         Logger.d("hooking " + hookMethod);
-        if (!checkMember(hookMethod)) {
-            return;
-        }
 
         if (hookedInfo.containsKey(hookMethod)) {
             Logger.w("already hook method:" + hookMethod.toString());
@@ -53,17 +51,6 @@ public final class DynamicBridge {
         } catch (Throwable e) {
             Logger.e("error occur when generating dex.", e);
         }
-    }
-
-    private static boolean checkMember(Executable member) {
-        if (member.getDeclaringClass().isInterface()) {
-            Logger.e("Cannot hook interfaces: " + member.toString());
-            return false;
-        } else if (Modifier.isAbstract(member.getModifiers())) {
-            Logger.e("Cannot hook abstract methods: " + member.toString());
-            return false;
-        }
-        return true;
     }
 
     public static Object invokeOriginalMethod(Member method, Object thisObject, Object[] args)

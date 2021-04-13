@@ -57,14 +57,15 @@ namespace lspd {
         return ret;
     }
 
-    void RegisterNativeLib(const std::string& library_name) {
+    void RegisterNativeLib(const std::string &library_name) {
         LOGD("native_api: Registered %s", library_name.c_str());
         moduleNativeLibs.push_back(library_name);
     }
 
     bool hasEnding(std::string_view fullString, std::string_view ending) {
         if (fullString.length() >= ending.length()) {
-            return (0 == fullString.compare (fullString.length() - ending.length(), ending.length(), ending));
+            return (0 == fullString.compare(fullString.length() - ending.length(), ending.length(),
+                                            ending));
         } else {
             return false;
         }
@@ -89,13 +90,14 @@ namespace lspd {
                     // the so is a module so
                     if (UNLIKELY(hasEnding(ns, module_lib))) {
                         LOGI("Loading module native library %s", module_lib.data());
-                        void* native_init_sym = dlsym(handle, "native_init");
+                        void *native_init_sym = dlsym(handle, "native_init");
                         if (UNLIKELY(native_init_sym == nullptr)) {
-                            LOGE("Failed to get symbol \"native_init\" from library %s", module_lib.data());
+                            LOGE("Failed to get symbol \"native_init\" from library %s",
+                                 module_lib.data());
                             break;
                         }
                         auto native_init = reinterpret_cast<NativeInit>(native_init_sym);
-                        native_init(reinterpret_cast<void*>(init));
+                        native_init(reinterpret_cast<void *>(init));
                     }
                 }
 
@@ -107,8 +109,8 @@ namespace lspd {
             });
 
     void InstallNativeAPI() {
-        symbol_do_dlopen = DobbySymbolResolver(nullptr, "__dl__Z9do_dlopenPKciPK17android_dlextinfoPKv");
-        LOGD("InstallNativeAPI: %p", symbol_do_dlopen);
-        HookSymNoHandle(symbol_do_dlopen, do_dlopen);
+        LOGD("InstallNativeAPI: %p", sym_do_dlopen);
+        if (sym_do_dlopen)
+            HookSymNoHandle(sym_do_dlopen, do_dlopen);
     }
 }

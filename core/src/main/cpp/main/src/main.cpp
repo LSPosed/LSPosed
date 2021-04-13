@@ -36,9 +36,12 @@ namespace lspd {
 
         void onModuleLoaded() {
             LOGI("onModuleLoaded: welcome to LSPosed!");
-            LOGI("onModuleLoaded: version %s (%d)", RIRU_MODULE_VERSION_NAME, RIRU_MODULE_VERSION);
-            // rirud must be used in onModuleLoaded
-            Context::GetInstance()->PreLoadDex(magiskPath + '/' + kDexPath);
+            LOGI("onModuleLoaded: version %s (%d)", versionName, versionCode);
+            if constexpr (isDebug) {
+                Context::GetInstance()->PreLoadDex("/system/" + kDexPath);
+            } else {
+                Context::GetInstance()->PreLoadDex(magiskPath + '/' + kDexPath);
+            }
             InitSymbolCache();
         }
 
@@ -98,9 +101,9 @@ namespace lspd {
     RiruVersionedModuleInfo module{
             .moduleApiVersion = RIRU_MODULE_API_VERSION,
             .moduleInfo = RiruModuleInfo{
-                    .supportHide = true,
-                    .version = RIRU_MODULE_VERSION,
-                    .versionName = STRINGIFY(RIRU_MODULE_VERSION_NAME),
+                    .supportHide = !isDebug,
+                    .version = versionCode,
+                    .versionName = versionName,
                     .onModuleLoaded = lspd::onModuleLoaded,
                     .forkAndSpecializePre = lspd::nativeForkAndSpecializePre,
                     .forkAndSpecializePost = lspd::nativeForkAndSpecializePost,
@@ -112,18 +115,14 @@ namespace lspd {
     };
 }
 
-__attribute__((noinline)) RIRU_EXPORT RiruVersionedModuleInfo *init(Riru *riru) {
+RIRU_EXPORT RiruVersionedModuleInfo *init(Riru *riru) {
     LOGD("using riru %d", riru->riruApiVersion);
     LOGD("module path: %s", riru->magiskModulePath);
     lspd::magiskPath = riru->magiskModulePath;
-    if (lspd::magiskPath.find(STRINGIFY(MODULE_NAME)) == std::string::npos) {
+    if (!lspd::isDebug && lspd::magiskPath.find(MODULE_NAME) == std::string::npos) {
         LOGE("who am i");
         return nullptr;
     }
     lspd::allowUnload = riru->allowUnload;
     return &lspd::module;
-}
-
-int main() {
-    init(nullptr);
 }

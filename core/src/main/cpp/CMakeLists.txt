@@ -20,22 +20,14 @@
 
 cmake_minimum_required(VERSION 3.4.1)
 
-find_program( CCACHE ccache )
+find_program(CCACHE ccache)
 
-if ( CCACHE )
-    set( CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE} )
-    set( CMAKE_C_COMPILER_LAUNCHER ${CCACHE} )
-else()
-    message( WARNING "Could not find CCache program." )
-endif()
+if (CCACHE)
+    set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE})
+    set(CMAKE_C_COMPILER_LAUNCHER ${CCACHE})
+endif ()
 
-link_libraries("-ffixed-x18")
-
-add_definitions(-DRIRU_MODULE)
-add_definitions(-DRIRU_MODULE_API_VERSION=${RIRU_MODULE_API_VERSION})
-add_definitions(-DRIRU_MODULE_VERSION=${RIRU_MODULE_VERSION})
-add_definitions(-DRIRU_MODULE_VERSION_NAME=${RIRU_MODULE_VERSION_NAME})
-add_definitions(-DMODULE_NAME=${MODULE_NAME})
+include_directories(external/libcxx/include)
 
 add_subdirectory(main)
 add_subdirectory(external)

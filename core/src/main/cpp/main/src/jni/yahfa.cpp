@@ -38,7 +38,7 @@ namespace lspd {
     LSP_DEF_NATIVE_METHOD(jobject, Yahfa, findMethodNative, jclass targetClass,
                           jstring methodName, jstring methodSig) {
         return yahfa::findMethodNative(env, clazz, targetClass, methodName,
-                                methodSig);
+                                       methodSig);
     }
 
     LSP_DEF_NATIVE_METHOD(jboolean, Yahfa, backupAndHookNative, jobject target,
@@ -60,8 +60,8 @@ namespace lspd {
 
     LSP_DEF_NATIVE_METHOD(jclass, Yahfa, buildHooker, jobject app_class_loader, jclass return_class,
                           jobjectArray classes, jstring method_name) {
-        static auto in_memory_classloader = (jclass) env->NewGlobalRef(
-                env->FindClass("dalvik/system/InMemoryDexClassLoader"));
+        static auto in_memory_classloader = JNI_NewGlobalRef(env, JNI_FindClass(env,
+                                                                                "dalvik/system/InMemoryDexClassLoader"));
         static jmethodID initMid = JNI_GetMethodID(env, in_memory_classloader, "<init>",
                                                    "(Ljava/nio/ByteBuffer;Ljava/lang/ClassLoader;)V");
         DexBuilder dex_file;
@@ -158,8 +158,9 @@ namespace lspd {
         slicer::MemView image{dex_file.CreateImage()};
 
         auto dex_buffer = env->NewDirectByteBuffer(const_cast<void *>(image.ptr()), image.size());
-        jobject my_cl = JNI_NewObject(env, in_memory_classloader, initMid,
-                                      dex_buffer, app_class_loader);
+        auto my_cl = JNI_NewObject(env, in_memory_classloader, initMid,
+                                   dex_buffer, app_class_loader);
+        env->DeleteLocalRef(dex_buffer);
 
         static jmethodID mid = JNI_GetMethodID(env, in_memory_classloader, "loadClass",
                                                "(Ljava/lang/String;)Ljava/lang/Class;");
@@ -167,10 +168,10 @@ namespace lspd {
             mid = JNI_GetMethodID(env, in_memory_classloader, "findClass",
                                   "(Ljava/lang/String;)Ljava/lang/Class;");
         }
-        jobject target = env->CallObjectMethod(my_cl, mid, env->NewStringUTF("LspHooker_"));
+        auto target = JNI_CallObjectMethod(env, my_cl, mid, env->NewStringUTF("LspHooker_"));
 //        LOGD("Created %zd", image.size());
         if (target) {
-            return (jclass) target;
+            return (jclass) target.release();
         }
         return nullptr;
     }

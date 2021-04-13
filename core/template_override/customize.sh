@@ -51,9 +51,10 @@ extract "$ZIPFILE" 'util_functions.sh' "${TMPDIR}"
 . ${TMPDIR}/util_functions.sh
 
 check_android_version
+check_magisk_version
 
-extract "$ZIPFILE" 'riru.sh' "$MODPATH"
-. $MODPATH/riru.sh
+extract "$ZIPFILE" 'riru.sh' "$TMPDIR"
+. $TMPDIR/riru.sh
 
 # Functions from riru.sh
 check_riru_version
@@ -134,6 +135,14 @@ echo "rm -rf /data/adb/lspd" >>"${MODPATH}/uninstall.sh" || abortC "! Can't writ
 
 if [ ! -e /data/adb/lspd/config/verbose_log ]; then
   echo "0" >/data/adb/lspd/config/verbose_log
+fi
+
+if [ "$RIRU_MODULE_DEBUG" = true ]; then
+  mv ${MODPATH}/riru ${MODPATH}/system
+  mv ${MODPATH}/system/lib/liblspd.so ${MODPATH}/system/lib/libriru_lspd.so
+  mv ${MODPATH}/system/lib64/liblspd.so ${MODPATH}/system/lib64/libriru_lspd.so
+  cp -r ${MODPATH}/framework ${MODPATH}/system/framework
+  mkdir -p /data/adb/riru/modules/lspd
 fi
 
 set_perm_recursive "${MODPATH}" 0 0 0755 0644

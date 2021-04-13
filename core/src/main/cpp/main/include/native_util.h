@@ -35,14 +35,14 @@ namespace lspd {
                                                             const JNINativeMethod *methods,
                                                             jint method_count) {
 
-        ScopedLocalRef<jclass> clazz(env,
-                                     Context::GetInstance()->FindClassFromCurrentLoader(env, class_name));
+        auto clazz = Context::GetInstance()->FindClassFromCurrentLoader(env, class_name);
         if (clazz.get() == nullptr) {
             LOGF("Couldn't find class: %s", class_name);
             return false;
         }
-        return JNI_RegisterNatives(env, clazz.get(), methods, method_count);
+        return JNI_RegisterNatives(env, clazz, methods, method_count);
     }
+
 #if defined(__cplusplus)
 #define _NATIVEHELPER_JNI_MACRO_CAST(to) \
     reinterpret_cast<to>
@@ -60,7 +60,7 @@ namespace lspd {
 #endif
 
 #ifndef LSP_DEF_NATIVE_METHOD
-#define LSP_DEF_NATIVE_METHOD(ret, className,  functionName, ...)                \
+#define LSP_DEF_NATIVE_METHOD(ret, className, functionName, ...)                \
   extern "C" ret Java_org_lsposed_lspd_nativebridge_## className ## _ ## functionName (JNI_START, ##  __VA_ARGS__)
 #endif
 

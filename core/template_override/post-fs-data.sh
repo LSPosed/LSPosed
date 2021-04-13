@@ -33,8 +33,8 @@ MODDIR=${0%/*}
 MAGISK_VERSION=$(magisk -v)
 MAGISK_VER_CODE=$(magisk -V)
 
-[ ! -f "$MODDIR/riru.sh" ] && exit 1
-. $MODDIR/riru.sh
+[ ! -f $(magisk --path)/.magisk/modules/riru-core/util_functions.sh ] && exit 1
+. $(magisk --path)/.magisk/modules/riru-core/util_functions.sh
 
 LSPD_VERSION=$(grep_prop version "${MODDIR}/module.prop")
 LSPD_VERSIONCODE=$(grep_prop versionCode "${MODDIR}/module.prop")
