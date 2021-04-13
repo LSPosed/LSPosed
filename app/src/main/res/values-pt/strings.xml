@@ -32,9 +32,9 @@
     <string name="Settings">Configurações</string>
     <string name="About">Sobre</string>
     <string name="module_repo">Repositório</string>
-    <string name="module_repo_summary">Repositório dos Módulos (Alpha)</string>
+    <string name="module_repo_summary">Repositório de Módulos (Alpha)</string>
     <string name="about_view_source_code"><![CDATA[Veja o código fonte no %s<br/>Entre em nosso canal no %s]]></string>
-    <string name="about_translators">Tradutores: %s</string>
+    <string name="about_translators">Tradutor: %s</string>
 
     <string name="activated">Ativado</string>
     <string name="not_installed">Não instalado</string>
@@ -166,7 +166,7 @@
     <string name="refresh">Atualizar</string>
     <string name="module_release_load_more">Mostrar versões anteriores</string>
     <string name="module_release_no_more">Não há mais versões</string>
-    <string name="repo_load_failed">Falha ao carregar o repositório dos módulos: %s</string>
+    <string name="repo_load_failed">Falha ao carregar o repositório de módulos: %s</string>
 
     <string name="app_destroyed">Este app foi destruído, certifique-se de que você baixou da fonte oficial.</string>
     <string name="outdated_manager">A versão do app do LSPosed e do módulo do LSPosed são inconsistentes. Por favor, reinstale a versão correspondente.</string>
