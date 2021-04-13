@@ -31,7 +31,6 @@
         <item name="colorError">@color/material_red_500</item>
         <item name="colorNormal">@color/material_green_500</item>
         <item name="colorInstall">@color/material_blue_500</item>
-        <item name="rippleTransparency">@color/rippleTransparency_light</item>
 
         <item name="actionBarStyle">@style/Widget.Material.ActionBar.Surface</item>
         <item name="actionBarTheme">@style/ThemeOverlay.ActionBar</item>
@@ -63,7 +62,6 @@
         <item name="colorError">@color/material_red_200</item>
         <item name="colorNormal">@color/material_green_200</item>
         <item name="colorInstall">@color/material_blue_200</item>
-        <item name="rippleTransparency">@color/rippleTransparency_dark</item>
 
         <item name="actionBarStyle">@style/Widget.Material.ActionBar.Surface</item>
         <item name="actionBarTheme">@style/ThemeOverlay.ActionBar</item>
