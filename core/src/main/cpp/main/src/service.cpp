@@ -22,6 +22,7 @@
 //
 
 #include <dobby.h>
+#include <thread>
 #include "base/object.h"
 #include "service.h"
 #include "context.h"
@@ -199,10 +200,22 @@ namespace lspd {
             return {env, nullptr};
         }
         auto bridgeServiceName = env->NewStringUTF(SYSTEM_SERVER_BRIDGE_SERVICE_NAME.data());
-        auto binder = JNI_CallStaticObjectMethod(env, service_manager_class_,
-                                                 get_service_method_, bridgeServiceName);
+        ScopedLocalRef<jobject> binder{env, nullptr};
+        for (int i = 0; i < 3; ++i) {
+            binder = JNI_CallStaticObjectMethod(env, service_manager_class_,
+                                                get_service_method_, bridgeServiceName);
+            if (binder) {
+                LOGD("Got binder for system server");
+                break;
+            } else {
+                LOGI("Fail to get binder for system server, try again in 1s");
+                using namespace std::chrono_literals;
+                std::this_thread::sleep_for(1s);
+            }
+
+        }
         if (!binder) {
-            LOGD("Fail to get binder for system server");
+            LOGW("Fail to get binder for system server");
             return {env, nullptr};
         }
         auto method = JNI_GetStaticMethodID(env, bridge_service_class_,
