@@ -491,9 +491,11 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             }
             refreshing = true;
         }
-        activity.binding.progress.setVisibility(View.INVISIBLE);
-        activity.binding.progress.setIndeterminate(true);
-        activity.binding.progress.setVisibility(View.VISIBLE);
+        if (!force) {
+            activity.binding.progress.setVisibility(View.INVISIBLE);
+            activity.binding.progress.setIndeterminate(true);
+            activity.binding.progress.setVisibility(View.VISIBLE);
+        }
         enabled = ModuleUtil.getInstance().isModuleEnabled(modulePackageName);
         activity.binding.masterSwitch.setOnCheckedChangeListener(null);
         activity.binding.masterSwitch.setChecked(enabled);
