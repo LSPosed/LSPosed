@@ -33,8 +33,8 @@
     <string name="About">Sobre</string>
     <string name="module_repo">Repositório</string>
     <string name="module_repo_summary">Repositório de Módulos (Alpha)</string>
-    <string name="about_view_source_code"><![CDATA[Veja o código fonte em %s<br/>Entre em nosso canal no %s]]></string>
-    <string name="about_translators">Tradutores: %s</string>
+    <string name="about_view_source_code"><![CDATA[Veja o código fonte no %s<br/>Entre em nosso canal no %s]]></string>
+    <string name="about_translators">Tradutor: %s</string>
 
     <string name="activated">Ativado</string>
     <string name="not_installed">Não instalado</string>
@@ -60,17 +60,17 @@
     <string name="menuClearLog">Limpar registro</string>
     <string name="logs_cleared">Registro limpo com sucesso.</string>
     <string name="log_is_empty">Registro vazio.</string>
-    <string name="scroll_top">Arrastar para cima</string>
+    <string name="scroll_top">Mover para início</string>
     <string name="loading">Carregando…</string>
-    <string name="scroll_bottom">Arrastar para baixo</string>
+    <string name="scroll_bottom">Mover para fim</string>
     <string name="logs_cannot_read">Não foi possível ler o registro: \n</string>
     <string name="menuReload">Recarregar</string>
     <string name="logs_clear_failed_2">Falha ao limpar o registro</string>
     <string name="not_logcat_2">Se alguém lhe perguntou pelo Logcat do Android, você está na seção errada. Este é o registro do LSPosed; se você precisa do logcat, no XDA você pode encontrar o que precisa.</string>
 
     <!-- Notification -->
-    <string name="module_is_not_activated_yet">O módulo do LSPosed ainda não está ativado</string>
-    <string name="module_is_not_activated_yet_detailed">%s foi instalado, mas ainda não está ativado</string>
+    <string name="module_is_not_activated_yet">O módulo do LSPosed ainda não está ativo</string>
+    <string name="module_is_not_activated_yet_detailed">%s foi instalado, mas ainda não está ativo</string>
     <string name="xposed_module_updated_notification_content">%s foi atualizado.</string>
 
     <!-- ModulesActivity -->
@@ -80,7 +80,7 @@
     <string name="warning_xposed_min_version">Este módulo exige uma versão mais recente do LSPosed (%d) e, por isso, não pode ser ativado</string>
     <string name="no_min_version_specified">Este módulo não cita qual a versão necessária para o LSPosed.</string>
     <string name="warning_min_version_too_low">Este módulo foi criado para a versão %1$d do LSPosed, mas devido mudanças incompatíveis na versão %2$d, ele foi desativado</string>
-    <string name="warning_installed_on_external_storage">Este módulo não pode ser carregado porque está instalado no cartão de memória, por favor, mova para o armazenamento interno</string>
+    <string name="warning_installed_on_external_storage">Este módulo não pode ser carregado porque está instalado no cartão de memória. Por favor, mova para o armazenamento interno</string>
     <string name="module_uninstall">Desinstalar</string>
     <string name="module_settings">Configurações do módulo</string>
     <string name="view_in_repo">Ver no Repositório</string>
@@ -104,7 +104,7 @@
     <string name="sort_by_update_time">Ordenar pela data de atualização</string>
     <string name="sort_by_update_time_reverse">Ordenar pela data de atualização (reverso)</string>
     <string name="menu_show_system_apps">Apps do Sistema</string>
-    <string name="menu_sort">Ordenando…</string>
+    <string name="menu_sort">Ordenar…</string>
     <string name="enable_module">Ativar módulo</string>
     <string name="no_scope_selected">Você não selecionou nenhum app. Quer continuar?</string>
     <string name="menu_show_games">Jogos</string>
@@ -118,8 +118,8 @@
     <string name="module_disabled_no_selection">O módulo %s foi desativado porque nenhum app foi selecionado.</string>
     <string name="android_framework">Framework do Sistema</string>
     <string name="menu_backup_and_restore">Backup…</string>
-    <string name="menu_backup">Backup</string>
-    <string name="menu_restore">Restaurar</string>
+    <string name="menu_backup">Fazer backup</string>
+    <string name="menu_restore">Restaurar backup</string>
     <string name="force_stop">Forçar parada</string>
     <string name="force_stop_dlg_title">Forçar parada?</string>
     <string name="force_stop_dlg_text">Se forçar a parada de um app, ele pode apresentar mau funcionamento.</string>
@@ -144,13 +144,13 @@
     <string name="settings_backuping">Fazendo Backup…</string>
     <string name="settings_backup_success">Backup concluído!</string>
     <string name="settings_backup_failed">Falha ao fazer Backup</string>
-    <string name="settings_restore">Restaurar</string>
+    <string name="settings_restore">Restaurar Backup</string>
     <string name="settings_restoring">Restaurando…</string>
     <string name="settings_restore_success">Restauração concluída!</string>
     <string name="settings_restore_failed">Falha ao restaurar</string>
     <string name="group_network">Rede</string>
-    <string name="dns_over_http">DNS usando HTTPS</string>
-    <string name="dns_over_http_summary">Solução alternativa para ataque de DNS em alguns países</string>
+    <string name="dns_over_http">DNS sobre HTTPS</string>
+    <string name="dns_over_http_summary">Solução alternativa para envenenamento de DNS em alguns países</string>
     <string name="theme_color">Cor do tema</string>
     <string name="theme_color_summary">Cor que aparece com mais frequência no app</string>
 
@@ -166,14 +166,14 @@
     <string name="refresh">Atualizar</string>
     <string name="module_release_load_more">Mostrar versões anteriores</string>
     <string name="module_release_no_more">Não há mais versões</string>
-    <string name="repo_load_failed">Falha ao carregar repositório de módulos: %s</string>
+    <string name="repo_load_failed">Falha ao carregar o repositório de módulos: %s</string>
 
     <string name="app_destroyed">Este app foi destruído, certifique-se de que você baixou da fonte oficial.</string>
     <string name="outdated_manager">A versão do app do LSPosed e do módulo do LSPosed são inconsistentes. Por favor, reinstale a versão correspondente.</string>
-    <string name="lsposed_not_active">LSPosed não está instalado ou ativo neste momento.</string>
-    <string name="verbose_log_not_avaliable">O registro detalhado não está disponível, se você apenas ativou sem reiniciar, tente novamente após reiniciar.</string>
+    <string name="lsposed_not_active">O módulo do LSPosed não está instalado ou está desativado.</string>
+    <string name="verbose_log_not_avaliable">O registro detalhado não está disponível. Se você ativou e ainda não reiniciou, tente novamente após reiniciar.</string>
     <string name="NotInstall">Não instalado</string>
     <string name="NotInstallDetail">LSPosed não está instalado</string>
-    <string name="translators"><![CDATA[<a href="https://forum.xda-developers.com/m/vd171.4699873/">VD171</a>]]></string>
+    <string name="translators"><![CDATA[<a href="https://forum.xda-developers.com/m/vd171.4699873/#about">VD171</a>]]></string>
     <string name="copy_toast_msg">Copiado</string>
 </resources>
