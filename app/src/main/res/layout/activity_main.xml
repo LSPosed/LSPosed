@@ -170,7 +170,7 @@
                             android:layout_height="28dp"
                             android:layout_centerVertical="true"
                             android:contentDescription="@string/Modules"
-                            app:srcCompat="@drawable/ic_modules" />
+                            app:srcCompat="@drawable/ic_extension" />
 
                         <TextView
                             android:id="@+id/modules_title"

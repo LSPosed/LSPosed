@@ -24,7 +24,7 @@
     <foreground>
         <!-- 44dp icon scaled to 52dp in 72dp, padding = (1-52/44*24/72)/2 -->
         <inset
-            android:drawable="@drawable/ic_modules"
+            android:drawable="@drawable/ic_extension"
             android:inset="30.303%" />
     </foreground>
 </adaptive-icon>
