@@ -28,18 +28,6 @@
     app:edgeToEdge="true"
     app:fitSystemWindowsInsets="start|end">
 
-    <ImageView
-        android:id="@+id/holiday_header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scaleType="fitStart"
-        android:adjustViewBounds="true"
-        android:translationZ="100dp"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:visibility="gone"
-        tools:ignore="ContentDescription" />
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -94,7 +82,7 @@
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/status"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="86dp"
                     android:layout_marginHorizontal="16dp"
                     android:clickable="true"
                     android:focusable="true"
@@ -103,6 +91,16 @@
                     app:cardCornerRadius="8dp"
                     app:cardElevation="4dp"
                     app:cardPreventCornerOverlap="false">
+
+                    <ImageView
+                        android:id="@+id/holiday_header"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:visibility="gone"
+                        tools:ignore="ContentDescription" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
