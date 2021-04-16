@@ -40,7 +40,7 @@ check_riru_version() {
 
 # This function will be used when util_functions.sh not exists
 enforce_install_from_magisk_app() {
-  if $BOOTMOE; then
+  if $BOOTMODE; then
     ui_print "- Installing from Magisk app"
   else
     ui_print "*********************************************************"
