@@ -25,7 +25,7 @@ abort_verify() {
   ui_print "*********************************************************"
   ui_print "! $1"
   ui_print "! This zip may be corrupted, please try downloading again"
-  abort "*********************************************************"
+  abort    "*********************************************************"
 }
 
 # extract <zip> <file> <target dir> <junk paths>

@@ -58,7 +58,7 @@ val androidCompileNdkVersion: String by rootProject.extra
 val androidSourceCompatibility: JavaVersion by rootProject.extra
 val androidTargetCompatibility: JavaVersion by rootProject.extra
 
-val zipPathMagiskReleasePath: String by rootProject.extra
+val magiskDir: String by rootProject.extra
 
 val verCode: Int by rootProject.extra
 val verName: String by rootProject.extra
@@ -222,22 +222,31 @@ task("buildLibcxx", Exec::class) {
 tasks.getByName("preBuild").dependsOn("buildLibcxx")
 
 afterEvaluate {
-
     android.applicationVariants.forEach { variant ->
         val variantCapped = variant.name.capitalize()
         val variantLowered = variant.name.toLowerCase()
         val zipFileName = "$moduleName-$verName-$verCode-$variantLowered.zip"
 
-        delete(file(zipPathMagiskReleasePath))
-
         val prepareMagiskFilesTask = task("prepareMagiskFiles$variantCapped") {
             dependsOn("assemble$variantCapped")
             dependsOn(":app:assemble$variantCapped")
-            doFirst {
+            doLast {
+                delete {
+                    delete(magiskDir)
+                }
                 copy {
-                    from("$projectDir/tpl/module.prop.tpl")
-                    into(zipPathMagiskReleasePath)
-                    rename("module.prop.tpl", "module.prop")
+                    from("${rootProject.projectDir}/README.md")
+                    into(magiskDir)
+                }
+                copy {
+                    from("$projectDir/magisk_module")
+                    exclude("riru.sh", "module.prop")
+                    into(magiskDir)
+                }
+                copy {
+                    from("$projectDir/magisk_module")
+                    include("module.prop")
+                    into(magiskDir)
                     expand(
                         "moduleId" to moduleId,
                         "versionName" to verName,
@@ -251,32 +260,11 @@ afterEvaluate {
                     )
                 }
                 copy {
-                    from("${rootProject.projectDir}/README.md")
-                    into(file(zipPathMagiskReleasePath))
-                }
-            }
-            val libPathRelease = "${buildDir}/intermediates/cmake/$variantLowered/obj"
-            doLast {
-                val dexOutPath = if (variant.name.contains("release"))
-                    "$buildDir/intermediates/dex/$variantLowered/minify${variantCapped}WithR8" else
-                    "$buildDir/intermediates/dex/$variantLowered/mergeDex$variantCapped"
-                copy {
-                    from(dexOutPath) {
-                        rename("classes.dex", "lspd.dex")
-                    }
-                    into(file(zipPathMagiskReleasePath + "framework/"))
-                }
-                copy {
-                    from("${projectDir}/template_override")
-                    into(zipPathMagiskReleasePath)
-                    exclude("riru.sh")
-                }
-                copy {
-                    from("${projectDir}/template_override")
-                    into(zipPathMagiskReleasePath)
+                    from("${projectDir}/magisk_module")
                     include("riru.sh")
+                    into(magiskDir)
                     filter { line ->
-                        line.replace("%%%RIRU_MODULE_ID%%%", riruModuleId)
+                        line.replace("%%%RIRU_MODULE_LIB_NAME%%%", "lspd")
                             .replace(
                                 "%%%RIRU_MODULE_API_VERSION%%%",
                                 moduleMaxRiruApiVersion.toString()
@@ -300,33 +288,26 @@ afterEvaluate {
                     )
                 }
                 copy {
-                    include("liblspd.so")
-                    from("$libPathRelease/armeabi-v7a")
-                    into("$zipPathMagiskReleasePath/riru/lib")
+                    from("${buildDir}/intermediates/cmake/$variantLowered/obj")
+                    exclude("**/*.txt")
+                    into("$magiskDir/lib")
                 }
+                val dexOutPath = if (variant.name.contains("release"))
+                    "$buildDir/intermediates/dex/$variantLowered/minify${variantCapped}WithR8" else
+                    "$buildDir/intermediates/dex/$variantLowered/mergeDex$variantCapped"
                 copy {
-                    include("liblspd.so")
-                    from("$libPathRelease/arm64-v8a")
-                    into("$zipPathMagiskReleasePath/riru/lib64")
-                }
-                copy {
-                    include("liblspd.so")
-                    from("$libPathRelease/x86")
-                    into("$zipPathMagiskReleasePath/riru_x86/lib")
-                }
-                copy {
-                    include("liblspd.so")
-                    from("$libPathRelease/x86_64")
-                    into("$zipPathMagiskReleasePath/riru_x86/lib64")
+                    from(dexOutPath)
+                    rename("classes.dex", "lspd.dex")
+                    into("$magiskDir/framework")
                 }
                 copy {
                     from("${project(":app").projectDir}/build/outputs/apk/${variantLowered}")
                     include("*.apk")
                     rename(".*\\.apk", "manager.apk")
-                    into(zipPathMagiskReleasePath)
+                    into(magiskDir)
                 }
                 // generate sha1sum
-                fileTree(zipPathMagiskReleasePath).matching {
+                fileTree(magiskDir).matching {
                     exclude("README.md", "META-INF")
                 }.visit {
                     if (isDirectory) return@visit
@@ -339,10 +320,10 @@ afterEvaluate {
             dependsOn(prepareMagiskFilesTask)
             archiveFileName.set(zipFileName)
             destinationDirectory.set(file("$projectDir/release"))
-            from(zipPathMagiskReleasePath)
+            from(magiskDir)
         }
 
-        task("push${variantCapped}", Exec::class) {
+        val pushTask = task("push${variantCapped}", Exec::class) {
             dependsOn(zipTask)
             workingDir("${projectDir}/release")
             val commands = arrayOf(
@@ -356,8 +337,8 @@ afterEvaluate {
                 commandLine(commands)
             }
         }
-        task("flash${variantCapped}", Exec::class) {
-            dependsOn(tasks.getByPath("push${variantCapped}"))
+        val flashTask = task("flash${variantCapped}", Exec::class) {
+            dependsOn(pushTask)
             workingDir("${projectDir}/release")
             val commands = arrayOf(
                 android.adbExecutable, "shell", "su", "-c",
@@ -370,7 +351,7 @@ afterEvaluate {
             }
         }
         task("flashAndReboot${variantCapped}", Exec::class) {
-            dependsOn(tasks.getByPath("flash${variantCapped}"))
+            dependsOn(flashTask)
             workingDir("${projectDir}/release")
             val commands = arrayOf(android.adbExecutable, "shell", "reboot")
             if (isWindows) {

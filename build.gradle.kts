@@ -26,7 +26,7 @@ buildscript {
         maven("https://storage.googleapis.com/r8-releases/raw")
     }
     dependencies {
-        classpath("com.android.tools:r8:3.0.33-dev")
+        classpath("com.android.tools:r8:3.0.34-dev")
         classpath("com.android.tools.build:gradle:7.0.0-alpha14")
         classpath("org.eclipse.jgit:org.eclipse.jgit:5.10.0.202012080955-r")
         classpath(kotlin("gradle-plugin", version = "1.4.32"))
@@ -48,7 +48,7 @@ val androidCompileNdkVersion by extra("22.1.7171670")
 val androidSourceCompatibility by extra(JavaVersion.VERSION_11)
 val androidTargetCompatibility by extra(JavaVersion.VERSION_11)
 val apiCode by extra(93)
-val zipPathMagiskReleasePath by extra(project(":core").projectDir.path + "/build/tmp/release/magisk/")
+val magiskDir by extra(project(":core").projectDir.path + "/build/tmp/magisk/")
 
 allprojects {
     repositories {
