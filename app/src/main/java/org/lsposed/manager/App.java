@@ -107,6 +107,11 @@ public class App extends Application {
     public static OkHttpClient getOkHttpClient() {
         if (okHttpClient == null) {
             OkHttpClient.Builder builder = new OkHttpClient.Builder().cache(getOkHttpCache());
+            builder.addInterceptor(chain -> {
+                var request = chain.request().newBuilder();
+                request.header("User-Agent", TAG);
+                return chain.proceed(request.build());
+            });
             HttpLoggingInterceptor.Logger logger = s -> Log.v(TAG, s);
             HttpLoggingInterceptor log = new HttpLoggingInterceptor(logger);
             log.setLevel(HttpLoggingInterceptor.Level.HEADERS);
