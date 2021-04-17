@@ -19,26 +19,26 @@
 #
 
 check_magisk_version() {
-  ui_print "- Magisk version: ${MAGISK_VER_CODE}"
+  ui_print "- Magisk version: $MAGISK_VER_CODE"
   if [ "$MAGISK_VER_CODE" -lt 21000 ]; then
-      ui_print "${POUNDS}"
-      ui_print "Please install Magisk v21+!"
-      abortC "${POUNDS}"
+      ui_print "*********************************************************"
+      ui_print "! Please install Magisk v21+"
+      abortC   "*********************************************************"
   fi
 }
 
 require_new_android() {
-  ui_print "${POUNDS}"
+  ui_print "*********************************************************"
   ui_print "! Unsupported Android version ${1} (below Oreo MR1)"
   ui_print "! Learn more from our GitHub Wiki"
-  [ ${BOOTMODE} == true ] && am start -a android.intent.action.VIEW -d https://github.com/LSPosed/LSPosed/wiki/Available-Android-versions
-  abortC "${POUNDS}"
+  [ "$BOOTMODE" == "true" ] && am start -a android.intent.action.VIEW -d https://github.com/LSPosed/LSPosed/wiki/Available-Android-versions
+  abortC   "*********************************************************"
 }
 
 check_android_version() {
-  if [ ${API} -ge 27 ]; then
-    ui_print "- Android SDK version: ${API}"
+  if [ "$API" -ge 27 ]; then
+    ui_print "- Android SDK version: $API"
   else
-    require_new_android "${API}"
+    require_new_android "$API"
   fi
 }

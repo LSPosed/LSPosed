@@ -50,3 +50,4 @@
 }
 -repackageclasses
 -allowaccessmodification
+-dontwarn org.slf4j.impl.StaticLoggerBinder

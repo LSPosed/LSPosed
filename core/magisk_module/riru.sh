@@ -1,5 +1,5 @@
 #!/sbin/sh
-RIRU_MODULE_ID="%%%RIRU_MODULE_ID%%%"
+RIRU_MODULE_LIB_NAME="%%%RIRU_MODULE_LIB_NAME%%%"
 
 # Variables for customize.sh
 RIRU_API=0
