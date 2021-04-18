@@ -48,7 +48,6 @@ val androidCompileNdkVersion by extra("22.1.7171670")
 val androidSourceCompatibility by extra(JavaVersion.VERSION_11)
 val androidTargetCompatibility by extra(JavaVersion.VERSION_11)
 val apiCode by extra(93)
-val magiskDir by extra(project(":core").projectDir.path + "/build/tmp/magisk/")
 
 allprojects {
     repositories {
