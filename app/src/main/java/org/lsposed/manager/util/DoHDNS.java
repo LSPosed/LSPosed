@@ -37,19 +37,13 @@ public class DoHDNS implements Dns {
 
     private static DnsOverHttps cloudflare;
     private static DnsOverHttps tuna;
+    private static DnsOverHttps dnspod;
 
     public DoHDNS(OkHttpClient client) {
-        cloudflare = new DnsOverHttps.Builder()
-                .resolvePrivateAddresses(true)
-                .client(client)
-                .url(HttpUrl.get("https://cloudflare-dns.com/dns-query"))
-                .build();
-
-        tuna = new DnsOverHttps.Builder()
-                .resolvePrivateAddresses(true)
-                .client(client)
-                .url(HttpUrl.get("https://101.6.6.6:8443/dns-query"))
-                .build();
+        var builder = new DnsOverHttps.Builder().resolvePrivateAddresses(true).client(client);
+        cloudflare = builder.url(HttpUrl.get("https://cloudflare-dns.com/dns-query")).build();
+        tuna = builder.url(HttpUrl.get("https://101.6.6.6:8443/dns-query")).build();
+        dnspod = builder.url(HttpUrl.get("https://doh.pub/dns-query")).build();
     }
 
     @NonNull
@@ -62,7 +56,11 @@ public class DoHDNS implements Dns {
                 try {
                     if ("CN".equals(Locale.getDefault().getCountry()))
                         return tuna.lookup(hostname);
-                } catch (UnknownHostException ignored) {
+                } catch (UnknownHostException exception) {
+                    try {
+                        return dnspod.lookup(hostname);
+                    } catch (UnknownHostException ignored) {
+                    }
                 }
             }
         }
