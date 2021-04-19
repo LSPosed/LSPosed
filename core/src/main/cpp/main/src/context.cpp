@@ -68,7 +68,7 @@ namespace lspd {
         fseek(f, 0, SEEK_END);
         dex.resize(ftell(f));
         rewind(f);
-        if (dex.size() != fread(dex.data(), 1, dex.size(), f)) {
+        if (dex.size() != fread(dex.data(), sizeof(decltype(dex)::value_type), dex.size(), f)) {
             LOGE("Read dex failed");
             dex.resize(0);
         }
@@ -90,8 +90,7 @@ namespace lspd {
         auto initMid = JNI_GetMethodID(env, in_memory_classloader, "<init>",
                                        "(Ljava/nio/ByteBuffer;Ljava/lang/ClassLoader;)V");
         auto byte_buffer_class = JNI_FindClass(env, "java/nio/ByteBuffer");
-        auto dex_buffer = env->NewDirectByteBuffer(reinterpret_cast<void *>(dex.data()),
-                                                   dex.size());
+        auto dex_buffer = env->NewDirectByteBuffer(dex.data(), dex.size());
         if (auto my_cl = JNI_NewObject(env, in_memory_classloader, initMid,
                                        dex_buffer, sys_classloader)) {
             inject_class_loader_ = JNI_NewGlobalRef(env, my_cl);

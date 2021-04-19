@@ -58,6 +58,11 @@ namespace lspd {
     }
 
     void RegisterNativeLib(const std::string &library_name) {
+        static bool initialized = []() {
+            InstallNativeAPI();
+            return true;
+        }();
+        if (UNLIKELY(!initialized)) return;
         LOGD("native_api: Registered %s", library_name.c_str());
         moduleNativeLibs.push_back(library_name);
     }

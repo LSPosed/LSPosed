@@ -69,7 +69,7 @@ namespace lspd {
         jclass class_linker_class_ = nullptr;
         jmethodID post_fixup_static_mid_ = nullptr;
         bool skip_ = false;
-        std::vector<char> dex{};
+        std::vector<std::byte> dex{};
 
         Context() {}
 
