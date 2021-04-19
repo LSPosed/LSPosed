@@ -28,7 +28,7 @@
 #include <jni.h>
 
 namespace lspd {
-    void RegisterNativeAPI(JNIEnv*);
+    void RegisterNativeAPI(JNIEnv *);
 }
 
 

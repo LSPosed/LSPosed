@@ -64,7 +64,7 @@ namespace lspd {
         InstallRiruHooks();
         // install ART hooks
         InstallArtHooks(handle_libart);
-        InstallNativeAPI();
+//        InstallNativeAPI();
     }
 
     void InstallArtHooks(void *art_handle) {
