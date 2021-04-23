@@ -4,9 +4,6 @@
 [submodule "core/src/main/cpp/external/DexBuilder"]
 	path = core/src/main/cpp/external/DexBuilder
 	url = https://github.com/LSPosed/DexBuilder.git
-[submodule "core/src/main/cpp/external/libcxx"]
-	path = core/src/main/cpp/external/libcxx
-	url = https://github.com/topjohnwu/libcxx.git
 [submodule "core/src/main/cpp/external/Dobby"]
 	path = core/src/main/cpp/external/Dobby
 	url = https://github.com/LSPosed/Dobby.git

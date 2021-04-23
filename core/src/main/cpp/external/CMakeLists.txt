@@ -15,6 +15,3 @@ if (NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif (NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
 add_subdirectory(Dobby)
 target_include_directories(dobby PUBLIC Dobby/include)
-
-add_library(libcxx STATIC IMPORTED GLOBAL)
-set_property(TARGET libcxx PROPERTY IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/../../../../build/intermediates/ndk/obj/local/${CMAKE_ANDROID_ARCH_ABI}/libcxx.a)

@@ -23,7 +23,6 @@ import org.apache.tools.ant.filters.FixCrLfFilter
 import org.gradle.internal.os.OperatingSystem
 import org.jetbrains.kotlin.daemon.common.toHexString
 import java.io.PrintStream
-import java.nio.file.Paths
 import java.security.MessageDigest
 
 plugins {
@@ -65,6 +64,7 @@ val verName: String by rootProject.extra
 
 dependencies {
     implementation("dev.rikka.ndk:riru:${moduleMinRiruVersionName}")
+    implementation("dev.rikka.ndk.thirdparty:cxx:1.1.0")
     implementation("com.android.tools.build:apksig:4.1.3")
     implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("de.upb.cs.swt:axml:2.1.1")
@@ -185,41 +185,6 @@ android {
         sourceCompatibility(androidSourceCompatibility)
     }
 }
-
-fun findInPath(executable: String): String? {
-    val pathEnv = System.getenv("PATH")
-    return pathEnv.split(File.pathSeparator).map { folder ->
-        Paths.get("${folder}${File.separator}${executable}${if (isWindows) ".exe" else ""}")
-            .toFile()
-    }.firstOrNull { path ->
-        path.exists()
-    }?.absolutePath
-}
-
-task("buildLibcxx", Exec::class) {
-    val ndkDir = android.ndkDirectory
-    executable = "$ndkDir/${if (isWindows) "ndk-build.cmd" else "ndk-build"}"
-    workingDir = projectDir
-    findInPath("ccache")?.let {
-        println("using ccache $it")
-        environment("NDK_CCACHE", it)
-        environment("USE_CCACHE", "1")
-    } ?: run {
-        println("not using ccache")
-    }
-
-    setArgs(
-        arrayListOf(
-            "NDK_PROJECT_PATH=build/intermediates/ndk",
-            "APP_BUILD_SCRIPT=$projectDir/src/main/cpp/external/libcxx/Android.mk",
-            "APP_CPPFLAGS=-std=c++20",
-            "APP_STL=none",
-            "-j${Runtime.getRuntime().availableProcessors()}"
-        )
-    )
-}
-
-tasks.getByName("preBuild").dependsOn("buildLibcxx")
 
 android.applicationVariants.all {
     val variantCapped = name.capitalize()
