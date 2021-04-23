@@ -27,7 +27,8 @@ if (CCACHE)
     set(CMAKE_C_COMPILER_LAUNCHER ${CCACHE})
 endif ()
 
-include_directories(external/libcxx/include)
+find_package(cxx REQUIRED CONFIG)
+link_libraries(cxx::cxx)
 
 add_subdirectory(main)
 add_subdirectory(external)
