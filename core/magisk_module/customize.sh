@@ -46,6 +46,7 @@ fi
 . "$TMPDIR/verify.sh"
 
 extract "$ZIPFILE" 'customize.sh' "$TMPDIR"
+extract "$ZIPFILE" 'verify.sh' "$TMPDIR"
 extract "$ZIPFILE" 'util_functions.sh' "$TMPDIR"
 . "$TMPDIR/util_functions.sh"
 

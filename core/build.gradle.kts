@@ -288,9 +288,7 @@ android.applicationVariants.all {
                     rename("classes.dex", "lspd.dex")
                 }
             }
-            fileTree(magiskDir).matching {
-                exclude("README.md", "META-INF")
-            }.visit {
+            fileTree(magiskDir).visit {
                 if (isDirectory) return@visit
                 file(file.path + ".sha256").writeText(calcSha256(file))
             }
