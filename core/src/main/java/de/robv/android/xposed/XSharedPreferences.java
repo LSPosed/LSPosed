@@ -28,6 +28,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.android.internal.util.XmlUtils;
+
 import org.lsposed.lspd.BuildConfig;
 import org.lsposed.lspd.util.MetaDataReader;
 
@@ -99,7 +100,8 @@ public final class XSharedPreferences implements SharedPreferences {
                         Path dir = (Path) key.watchable();
                         Path path = dir.resolve((Path) event.context());
                         String pathStr = path.toString();
-                        if (BuildConfig.DEBUG) Log.v(TAG, "File " + path.toString() + " event: " + kind.name());
+                        if (BuildConfig.DEBUG)
+                            Log.v(TAG, "File " + path.toString() + " event: " + kind.name());
                         // We react to both real and backup files due to rare race conditions
                         if (pathStr.endsWith(".bak")) {
                             if (kind != StandardWatchEventKinds.ENTRY_DELETE) {
@@ -114,7 +116,8 @@ public final class XSharedPreferences implements SharedPreferences {
                                 try {
                                     l.onSharedPreferenceChanged(data.mPrefs, null);
                                 } catch (Throwable t) {
-                                    if (BuildConfig.DEBUG) Log.e(TAG, "Fail in preference change listener", t);
+                                    if (BuildConfig.DEBUG)
+                                        Log.e(TAG, "Fail in preference change listener", t);
                                 }
                             }
                         }
@@ -183,7 +186,7 @@ public final class XSharedPreferences implements SharedPreferences {
             }
         }
         if (newModule) {
-            mFile = new File(serviceClient.getPrefsPath( packageName ), prefFileName + ".xml");
+            mFile = new File(serviceClient.getPrefsPath(packageName), prefFileName + ".xml");
         } else {
             mFile = new File(Environment.getDataDirectory(), "data/" + packageName + "/shared_prefs/" + prefFileName + ".xml");
         }
@@ -209,7 +212,8 @@ public final class XSharedPreferences implements SharedPreferences {
                 if (sWatcherDaemon == null || !sWatcherDaemon.isAlive()) {
                     initWatcherDaemon();
                 }
-                if (BuildConfig.DEBUG) Log.d(TAG, "tryRegisterWatcher: registered file watcher for " + path);
+                if (BuildConfig.DEBUG)
+                    Log.d(TAG, "tryRegisterWatcher: registered file watcher for " + path);
             } catch (AccessDeniedException accDeniedEx) {
                 if (BuildConfig.DEBUG) Log.e(TAG, "tryRegisterWatcher: access denied to " + path);
             } catch (Exception e) {
@@ -232,7 +236,8 @@ public final class XSharedPreferences implements SharedPreferences {
             if (!atLeastOneValid) {
                 try {
                     sWatcher.close();
-                } catch (Exception ignore) { }
+                } catch (Exception ignore) {
+                }
             }
         }
     }
@@ -522,7 +527,7 @@ public final class XSharedPreferences implements SharedPreferences {
         if (listener == null)
             throw new IllegalArgumentException("listener cannot be null");
 
-        synchronized(this) {
+        synchronized (this) {
             if (mListeners.put(listener, sContent) == null) {
                 tryRegisterWatcher();
             }
@@ -537,7 +542,7 @@ public final class XSharedPreferences implements SharedPreferences {
      */
     @Override
     public void unregisterOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener) {
-        synchronized(this) {
+        synchronized (this) {
             if (mListeners.remove(listener) != null && mListeners.isEmpty()) {
                 tryUnregisterWatcher();
             }

@@ -20,6 +20,18 @@
 
 package de.robv.android.xposed;
 
+import static org.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
+import static de.robv.android.xposed.XposedBridge.hookAllMethods;
+import static de.robv.android.xposed.XposedBridge.sInitPackageResourcesCallbacks;
+import static de.robv.android.xposed.XposedBridge.sInitZygoteCallbacks;
+import static de.robv.android.xposed.XposedBridge.sLoadedPackageCallbacks;
+import static de.robv.android.xposed.XposedHelpers.callMethod;
+import static de.robv.android.xposed.XposedHelpers.closeSilently;
+import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
+import static de.robv.android.xposed.XposedHelpers.getObjectField;
+import static de.robv.android.xposed.XposedHelpers.getParameterIndexByType;
+import static de.robv.android.xposed.XposedHelpers.setStaticObjectField;
+
 import android.annotation.SuppressLint;
 import android.content.pm.ApplicationInfo;
 import android.content.res.Resources;
@@ -32,7 +44,8 @@ import android.os.Process;
 import android.util.ArraySet;
 import android.util.Log;
 
-import com.android.internal.os.ZygoteInit;
+import org.lsposed.lspd.nativebridge.NativeAPI;
+import org.lsposed.lspd.nativebridge.ResourcesHook;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -52,56 +65,14 @@ import de.robv.android.xposed.callbacks.XC_InitZygote;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import de.robv.android.xposed.callbacks.XCallback;
 import hidden.HiddenApiBridge;
-import org.lsposed.lspd.nativebridge.NativeAPI;
-import org.lsposed.lspd.nativebridge.ResourcesHook;
-
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedBridge.sInitPackageResourcesCallbacks;
-import static de.robv.android.xposed.XposedBridge.sInitZygoteCallbacks;
-import static de.robv.android.xposed.XposedBridge.sLoadedPackageCallbacks;
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.closeSilently;
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
-import static de.robv.android.xposed.XposedHelpers.findFieldIfExists;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
-import static de.robv.android.xposed.XposedHelpers.getParameterIndexByType;
-import static de.robv.android.xposed.XposedHelpers.setStaticBooleanField;
-import static de.robv.android.xposed.XposedHelpers.setStaticLongField;
-import static de.robv.android.xposed.XposedHelpers.setStaticObjectField;
-import static org.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
 
 public final class XposedInit {
     private static final String TAG = XposedBridge.TAG;
     public static boolean startsSystemServer = false;
-    private static final String startClassName = ""; // ed: no support for tool process anymore
 
     public static volatile boolean disableResources = false;
 
-    private XposedInit() {
-    }
-
-    /**
-     * Hook some methods which we want to create an easier interface for developers.
-     */
-    /*package*/
-    public static void initForZygote() throws Throwable {
-        // TODO Are these still needed for us?
-        // MIUI
-        if (findFieldIfExists(ZygoteInit.class, "BOOT_START_TIME") != null) {
-            setStaticLongField(ZygoteInit.class, "BOOT_START_TIME", XposedBridge.BOOT_START_TIME);
-        }
-        // Samsung
-        Class<?> zygote = findClass("com.android.internal.os.Zygote", null);
-        try {
-            setStaticBooleanField(zygote, "isEnhancedZygoteASLREnabled", false);
-        } catch (NoSuchFieldError ignored) {
-        }
-
-        hookResources();
-    }
-
-    private static void hookResources() throws Throwable {
+    public static void hookResources() throws Throwable {
         if (!serviceClient.isResourcesHookEnabled() || disableResources) {
             return;
         }
@@ -242,7 +213,7 @@ public final class XposedInit {
         }
     }
 
-    public static boolean loadModules(boolean callInitZygote) throws IOException {
+    public static boolean loadModules() throws IOException {
         boolean hasLoaded = !modulesLoaded.compareAndSet(false, true);
         if (hasLoaded) {
             return false;
@@ -256,7 +227,7 @@ public final class XposedInit {
                     newLoadedApk.add(apk);
                 } else {
                     loadedModules.add(apk); // temporarily add it for XSharedPreference
-                    boolean loadSuccess = loadModule(apk, callInitZygote);
+                    boolean loadSuccess = loadModule(apk);
                     if (loadSuccess) {
                         newLoadedApk.add(apk);
                     }
@@ -326,7 +297,7 @@ public final class XposedInit {
 
     }
 
-    private static boolean initModule(ClassLoader mcl, String apk, boolean callInitZygote) {
+    private static boolean initModule(ClassLoader mcl, String apk) {
         InputStream is = mcl.getResourceAsStream("assets/xposed_init");
         if (is == null) {
             return true;
@@ -359,9 +330,7 @@ public final class XposedInit {
 
                         XposedBridge.hookInitZygote(new IXposedHookZygoteInit.Wrapper(
                                 (IXposedHookZygoteInit) moduleInstance, param));
-                        if (callInitZygote) {
-                            ((IXposedHookZygoteInit) moduleInstance).initZygote(param);
-                        }
+                        ((IXposedHookZygoteInit) moduleInstance).initZygote(param);
                     }
 
                     if (moduleInstance instanceof IXposedHookLoadPackage)
@@ -390,7 +359,7 @@ public final class XposedInit {
      * in <code>assets/xposed_init</code>.
      */
     @SuppressLint("PrivateApi")
-    private static boolean loadModule(String apk, boolean callInitZygote) {
+    private static boolean loadModule(String apk) {
         Log.i(TAG, "Loading modules from " + apk);
 
         if (!new File(apk).exists()) {
@@ -418,7 +387,7 @@ public final class XposedInit {
         } catch (ClassNotFoundException ignored) {
         }
 
-        boolean res = initModule(mcl, apk, callInitZygote);
+        boolean res = initModule(mcl, apk);
         res = res && initNativeModule(mcl, apk);
         return res;
     }

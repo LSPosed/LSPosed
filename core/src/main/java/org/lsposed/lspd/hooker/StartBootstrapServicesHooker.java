@@ -20,8 +20,6 @@
 
 package org.lsposed.lspd.hooker;
 
-import android.os.Build;
-
 import org.lsposed.lspd.util.Hookers;
 
 import de.robv.android.xposed.XC_MethodHook;
@@ -60,7 +58,7 @@ public class StartBootstrapServicesHooker extends XC_MethodHook {
             }
 
             try {
-                String className = "com.android.server.pm." + (Build.VERSION.SDK_INT >= 23 ? "PackageDexOptimizer" : "PackageManagerService");
+                String className = "com.android.server.pm.PackageDexOptimizer";
                 findAndHookMethod(className, SystemMainHooker.systemServerCL,
                         "dexEntryExists", String.class,
                         XC_MethodReplacement.returnConstant(true));
