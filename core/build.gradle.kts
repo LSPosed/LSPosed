@@ -30,14 +30,6 @@ plugins {
     kotlin("android")
 }
 
-fun calcSha256(file: File): String {
-    val md = MessageDigest.getInstance("SHA-256")
-    file.forEachBlock(4096) { bytes, size ->
-        md.update(bytes, 0, size)
-    }
-    return md.digest().toHexString()
-}
-
 val moduleName = "LSPosed"
 val isWindows = OperatingSystem.current().isWindows
 val moduleId = "riru_lsposed"
@@ -88,6 +80,8 @@ android {
         applicationId("org.lsposed.lspd")
         minSdkVersion(androidMinSdkVersion)
         targetSdkVersion(androidTargetSdkVersion)
+        versionCode(verCode)
+        versionName(verName)
         multiDexEnabled = false
 
         externalNativeBuild {
@@ -120,8 +114,6 @@ android {
         }
 
         buildConfigField("int", "API_CODE", "$apiCode")
-        buildConfigField("String", "VERSION_NAME", "\"$verName\"")
-        buildConfigField("Integer", "VERSION_CODE", verCode.toString())
         buildConfigField("String", "DEFAULT_MANAGER_PACKAGE_NAME", "\"$defaultManagerPackageName\"")
     }
 
@@ -288,11 +280,13 @@ android.applicationVariants.all {
                     rename("classes.dex", "lspd.dex")
                 }
             }
-            fileTree(magiskDir).matching {
-                exclude("README.md", "META-INF")
-            }.visit {
+            fileTree(magiskDir).visit {
                 if (isDirectory) return@visit
-                file(file.path + ".sha256").writeText(calcSha256(file))
+                val md = MessageDigest.getInstance("SHA-256")
+                file.forEachBlock(4096) { bytes, size ->
+                    md.update(bytes, 0, size)
+                }
+                file(file.path + ".sha256").writeText(md.digest().toHexString())
             }
         }
     }

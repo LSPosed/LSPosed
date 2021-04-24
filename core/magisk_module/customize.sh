@@ -21,17 +21,8 @@
 # shellcheck disable=SC2034
 SKIPUNZIP=1
 
-abortC() {
-  rm -rf "$MODPATH"
-  if [ ! -f /data/adb/lspd/misc_path ]; then
-    [ -d "$MISC_PATH" ] && rm -rf "$MISC_PATH"
-  fi
-  abort "$1"
-}
-
 VERSION=$(grep_prop version "${TMPDIR}/module.prop")
 VERSION_CODE=$(grep_prop versionCode "${TMPDIR}/module.prop")
-
 ui_print "- LSPosed version ${VERSION} (${VERSION_CODE})"
 
 # Extract verify.sh
@@ -41,19 +32,19 @@ if [ ! -f "$TMPDIR/verify.sh" ]; then
   ui_print "*********************************************************"
   ui_print "! Unable to extract verify.sh!"
   ui_print "! This zip may be corrupted, please try downloading again"
-  abortC   "*********************************************************"
+  abort    "*********************************************************"
 fi
 . "$TMPDIR/verify.sh"
 
+# Base check
 extract "$ZIPFILE" 'customize.sh' "$TMPDIR"
+extract "$ZIPFILE" 'verify.sh' "$TMPDIR"
 extract "$ZIPFILE" 'util_functions.sh' "$TMPDIR"
 . "$TMPDIR/util_functions.sh"
-
 check_android_version
 check_magisk_version
 
 # Extract riru.sh
-
 extract "$ZIPFILE" 'riru.sh' "$TMPDIR"
 . "$TMPDIR/riru.sh"
 
@@ -77,6 +68,7 @@ extract "$ZIPFILE" 'sepolicy.rule'      "$MODPATH"
 extract "$ZIPFILE" 'post-fs-data.sh'    "$MODPATH"
 extract "$ZIPFILE" 'uninstall.sh'       "$MODPATH"
 extract "$ZIPFILE" 'framework/lspd.dex' "$MODPATH"
+extract "$ZIPFILE" 'manager.apk'        '/data/adb/lspd/'
 
 mkdir "$MODPATH/riru"
 mkdir "$MODPATH/riru/lib"
@@ -112,6 +104,7 @@ fi
 
 set_perm_recursive "$MODPATH" 0 0 0755 0644
 
+# Lsposed config
 ui_print "- Creating configuration directories"
 if [ -f /data/adb/lspd/misc_path ]; then
   # read current MISC_PATH
@@ -126,26 +119,15 @@ else
   MISC_RAND=$(tr -cd 'A-Za-z0-9' </dev/urandom | head -c16)
   MISC_PATH="lspd_${MISC_RAND}"
   ui_print "  - Use new path ${MISC_RAND}"
-  mkdir -p /data/adb/lspd || abortC "! Can't create configuration path"
-  echo "$MISC_PATH" >/data/adb/lspd/misc_path || abortC "! Can't store configuration path"
+  mkdir -p /data/adb/lspd || abort "! Can't create configuration path"
+  echo "$MISC_PATH" >/data/adb/lspd/misc_path || abort "! Can't store configuration path"
 fi
 
-extract "${ZIPFILE}" 'manager.apk' "/data/adb/lspd/"
 mkdir -p "/data/misc/$MISC_PATH"
-set_perm "/data/misc/$MISC_PATH" 0 0 0771 "u:object_r:magisk_file:s0" || abortC "! Can't set permission"
+set_perm "/data/misc/$MISC_PATH" 0 0 0771 "u:object_r:magisk_file:s0" || abort "! Can't set permission"
+echo "rm -rf /data/misc/$MISC_PATH" >>"${MODPATH}/uninstall.sh" || abort "! Can't write uninstall script"
 
-if [ ! -d /data/adb/lspd/config ]; then
-  mkdir -p /data/adb/lspd/config
-  ui_print "- Migrating configuration"
-  cp -r "/data/misc/$MISC_PATH/0/prefs" "/data/misc/$MISC_PATH/prefs"
-  /system/bin/app_process -Djava.class.path=/data/adb/lspd/framework/lspd.dex /system/bin --nice-name=lspd_config org.lsposed.lspd.service.ConfigManager
-fi
-
-echo "rm -rf /data/misc/$MISC_PATH" >>"${MODPATH}/uninstall.sh" || abortC "! Can't write uninstall script"
-echo "rm -rf /data/adb/lspd" >>"${MODPATH}/uninstall.sh" || abortC "! Can't write uninstall script"
-
-if [ ! -e /data/adb/lspd/config/verbose_log ]; then
-  echo "0" >/data/adb/lspd/config/verbose_log
-fi
+[ -d /data/adb/lspd/config ] || mkdir -p /data/adb/lspd/config
+[ -f /data/adb/lspd/config/verbose_log ] || echo "0" >/data/adb/lspd/config/verbose_log
 
 ui_print "- Welcome to LSPosed!"
