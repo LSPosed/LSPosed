@@ -127,15 +127,7 @@ mkdir -p "/data/misc/$MISC_PATH"
 set_perm "/data/misc/$MISC_PATH" 0 0 0771 "u:object_r:magisk_file:s0" || abort "! Can't set permission"
 echo "rm -rf /data/misc/$MISC_PATH" >>"${MODPATH}/uninstall.sh" || abort "! Can't write uninstall script"
 
-if [ ! -d /data/adb/lspd/config ]; then
-  mkdir -p /data/adb/lspd/config
-  ui_print "- Migrating configuration"
-  cp -r "/data/misc/$MISC_PATH/0/prefs" "/data/misc/$MISC_PATH/prefs"
-  /system/bin/app_process -Djava.class.path=/data/adb/lspd/framework/lspd.dex /system/bin --nice-name=lspd_config org.lsposed.lspd.service.ConfigManager
-fi
-
-if [ ! -f /data/adb/lspd/config/verbose_log ]; then
-  echo "0" >/data/adb/lspd/config/verbose_log
-fi
+[ -d /data/adb/lspd/config ] || mkdir -p /data/adb/lspd/config
+[ -f /data/adb/lspd/config/verbose_log ] || echo "0" >/data/adb/lspd/config/verbose_log
 
 ui_print "- Welcome to LSPosed!"
