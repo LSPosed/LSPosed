@@ -48,7 +48,7 @@ import static org.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
 
 // normal process initialization (for new Activity, Service, BroadcastReceiver etc.)
 public class HandleBindAppHooker extends XC_MethodHook {
-    String appDataDir = null;
+    String appDataDir;
 
     public HandleBindAppHooker(String appDataDir) {
         this.appDataDir = appDataDir;

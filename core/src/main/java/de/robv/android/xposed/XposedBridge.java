@@ -20,11 +20,16 @@
 
 package de.robv.android.xposed;
 
+import static de.robv.android.xposed.XposedHelpers.setObjectField;
+
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.util.Log;
 
 import org.lsposed.lspd.BuildConfig;
+import org.lsposed.lspd.nativebridge.ModuleLogger;
+import org.lsposed.lspd.nativebridge.ResourcesHook;
+import org.lsposed.lspd.yahfa.hooker.YahfaHooker;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Executable;
@@ -43,13 +48,6 @@ import java.util.Set;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XC_InitZygote;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
-
-import org.lsposed.lspd.nativebridge.ModuleLogger;
-import org.lsposed.lspd.nativebridge.ResourcesHook;
-import org.lsposed.lspd.yahfa.dexmaker.DynamicBridge;
-import org.lsposed.lspd.yahfa.hooker.YahfaHooker;
-
-import static de.robv.android.xposed.XposedHelpers.setObjectField;
 
 /**
  * This class contains most of Xposed's central logic, such as initialization and callbacks used by
@@ -75,11 +73,6 @@ public final class XposedBridge {
      */
     @Deprecated
     public static int XPOSED_BRIDGE_VERSION;
-
-    /*package*/ static boolean isZygote = true; // ed: RuntimeInit.main() tool process not supported yet
-
-    // This field is set "magically" on MIUI.
-    /*package*/ static long BOOT_START_TIME;
 
     private static final Object[] EMPTY_ARRAY = new Object[0];
 

@@ -79,15 +79,15 @@ public class Main {
         // Initialize the Xposed framework
         try {
             startBootstrapHook(isSystem, appDataDir);
-            XposedInit.initForZygote();
+            XposedInit.hookResources();
         } catch (Throwable t) {
             Utils.logE("error during Xposed initialization", t);
         }
     }
 
-    private static void loadModulesSafely(boolean callInitZygote) {
+    private static void loadModulesSafely() {
         try {
-            XposedInit.loadModules(callInitZygote);
+            XposedInit.loadModules();
         } catch (Exception exception) {
             Utils.logE("error loading module list", exception);
         }
@@ -101,7 +101,7 @@ public class Main {
         PrebuiltMethodsDeopter.deoptBootMethods(); // do it once for secondary zygote
         installBootstrapHooks(isSystem, appDataDir);
         Utils.logI("Loading modules for " + niceName);
-        loadModulesSafely(true);
+        loadModulesSafely();
     }
 
     public static void forkAndSpecializePost(String appDataDir, String niceName, IBinder binder) {
