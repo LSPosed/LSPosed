@@ -35,16 +35,20 @@ import de.robv.android.xposed.callbacks.XCallback;
  * <p>If you want to hook one/multiple specific apps, use {@link IXposedHookLoadPackage} instead.
  */
 public interface IXposedHookZygoteInit extends IXposedMod {
-	/**
-	 * Called very early during startup of Zygote.
-	 * @param startupParam Details about the module itself and the started process.
-	 * @throws Throwable everything is caught, but will prevent further initialization of the module.
-	 */
-	void initZygote(StartupParam startupParam) throws Throwable;
+    /**
+     * Called very early during startup of Zygote.
+     *
+     * @param startupParam Details about the module itself and the started process.
+     * @throws Throwable everything is caught, but will prevent further initialization of the module.
+     */
+    void initZygote(StartupParam startupParam) throws Throwable;
 
-	/** Data holder for {@link #initZygote}. */
-	final class StartupParam extends XCallback.Param {
-		/*package*/ StartupParam() {}
+    /**
+     * Data holder for {@link #initZygote}.
+     */
+    final class StartupParam extends XCallback.Param {
+        /*package*/ StartupParam() {
+        }
 
         /**
          * @param callbacks
@@ -54,15 +58,17 @@ public interface IXposedHookZygoteInit extends IXposedMod {
             super(callbacks);
         }
 
-		/** The path to the module's APK. */
-		public String modulePath;
+        /**
+         * The path to the module's APK.
+         */
+        public String modulePath;
 
-		/**
-		 * Always {@code true} on 32-bit ROMs. On 64-bit, it's only {@code true} for the primary
-		 * process that starts the system_server.
-		 */
-		public boolean startsSystemServer;
-	}
+        /**
+         * Always {@code true} on 32-bit ROMs. On 64-bit, it's only {@code true} for the primary
+         * process that starts the system_server.
+         */
+        public boolean startsSystemServer;
+    }
 
     /**
      * @hide
@@ -83,9 +89,9 @@ public interface IXposedHookZygoteInit extends IXposedMod {
             instance.initZygote(this.startupParam);
         }
 
-		@Override
-		public String getApkPath() {
-			return startupParam.modulePath;
-		}
-	}
+        @Override
+        public String getApkPath() {
+            return startupParam.modulePath;
+        }
+    }
 }
