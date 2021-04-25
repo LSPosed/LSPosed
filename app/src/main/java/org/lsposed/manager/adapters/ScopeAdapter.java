@@ -269,15 +269,15 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                 notifyDataSetChanged();
             }
             return true;
-        } else if (itemId == R.id.item_show_system) {
+        } else if (itemId == R.id.item_filter_system) {
             item.setChecked(!item.isChecked());
-            preferences.edit().putBoolean("show_system_apps", item.isChecked()).apply();
-        } else if (itemId == R.id.item_show_games) {
+            preferences.edit().putBoolean("filter_system_apps", item.isChecked()).apply();
+        } else if (itemId == R.id.item_filter_games) {
             item.setChecked(!item.isChecked());
-            preferences.edit().putBoolean("show_games", item.isChecked()).apply();
-        } else if (itemId == R.id.item_show_modules) {
+            preferences.edit().putBoolean("filter_games", item.isChecked()).apply();
+        } else if (itemId == R.id.item_filter_modules) {
             item.setChecked(!item.isChecked());
-            preferences.edit().putBoolean("show_modules", item.isChecked()).apply();
+            preferences.edit().putBoolean("filter_modules", item.isChecked()).apply();
         } else if (itemId == R.id.menu_launch) {
             Intent launchIntent = AppHelper.getSettingsIntent(modulePackageName, pm);
             if (launchIntent != null) {
@@ -356,9 +356,9 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         if (scopeList == null || scopeList.isEmpty()) {
             menu.removeItem(R.id.use_recommended);
         }
-        menu.findItem(R.id.item_show_system).setChecked(preferences.getBoolean("show_system_apps", false));
-        menu.findItem(R.id.item_show_games).setChecked(preferences.getBoolean("show_games", false));
-        menu.findItem(R.id.item_show_modules).setChecked(preferences.getBoolean("show_modules", false));
+        menu.findItem(R.id.item_filter_system).setChecked(preferences.getBoolean("filter_system_apps", true));
+        menu.findItem(R.id.item_filter_games).setChecked(preferences.getBoolean("filter_games", true));
+        menu.findItem(R.id.item_filter_modules).setChecked(preferences.getBoolean("filter_modules", true));
         switch (preferences.getInt("list_sort", 0)) {
             case 7:
                 menu.findItem(R.id.item_sort_by_update_time_reverse).setChecked(true);
