@@ -74,7 +74,6 @@ public class LSPosedManagerServiceClient {
         return service.enabledModules();
     }
 
-
     public static boolean enableModule(String packageName) throws RemoteException, NullPointerException {
         ensureService();
         return service.enableModule(packageName);
@@ -113,11 +112,6 @@ public class LSPosedManagerServiceClient {
     public static void setVerboseLog(boolean enabled) throws RemoteException, NullPointerException {
         ensureService();
         service.setVerboseLog(enabled);
-    }
-
-    public static boolean isPermissive() throws RemoteException, NullPointerException {
-        ensureService();
-        return service.isPermissive();
     }
 
     public static ParcelFileDescriptor getVerboseLog() throws RemoteException, NullPointerException {
