@@ -38,8 +38,6 @@
 
     <string name="activated">Geactiveerd</string>
     <string name="not_installed">Niet geïnstalleerd</string>
-    <string name="selinux_permissive">&lt;b&gt;WAARSCHUWING:&lt;\/b&gt; SELinux dwingt niet af! het kwaadaardige programma dat dit aanvalt, kan uw apparaat volledig controleren en kan uw eigendommen beschadigen en juridische aansprakelijkheid veroorzaken.</string>
-    <string name="selinux_permissive_summary">SELinux dwingt niet af!</string>
     <string name="partial_activated">Gedeeltelijk geactiveerd</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy is niet correct geladen</string>
     <string name="selinux_policy_not_loaded">&lt;b&gt;WAARSCHUWING:&lt;\/b&gt; SEPolicy is niet correct geladen, modules die System Framework haken zullen niet werken.</string>

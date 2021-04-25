@@ -165,15 +165,6 @@ public class ConfigManager {
         }
     }
 
-    public static boolean isPermissive() {
-        try {
-            return LSPosedManagerServiceClient.isPermissive();
-        } catch (RemoteException | NullPointerException e) {
-            Log.e(App.TAG, Log.getStackTraceString(e));
-            return true;
-        }
-    }
-
     public static ParcelFileDescriptor getLogs(boolean verbose) {
         try {
             return verbose ? LSPosedManagerServiceClient.getVerboseLog() : LSPosedManagerServiceClient.getModulesLog();

@@ -95,12 +95,7 @@ public class MainActivity extends BaseActivity {
         String installXposedVersion = ConfigManager.getXposedVersionName();
         int cardBackgroundColor;
         if (installXposedVersion != null) {
-            if (ConfigManager.isPermissive()) {
-                cardBackgroundColor = ResourcesKt.resolveColor(getTheme(), R.attr.colorError);
-                binding.statusTitle.setText(R.string.activated);
-                binding.statusIcon.setImageResource(R.drawable.ic_warning);
-                binding.statusSummary.setText(R.string.selinux_permissive_summary);
-            } else if (!ConfigManager.isSepolicyLoaded()) {
+            if (!ConfigManager.isSepolicyLoaded()) {
                 binding.statusTitle.setText(R.string.partial_activated);
                 cardBackgroundColor = ResourcesKt.resolveColor(getTheme(), R.attr.colorWarning);
                 binding.statusIcon.setImageResource(R.drawable.ic_warning);
