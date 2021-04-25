@@ -83,10 +83,6 @@ public class ConfigManager {
     private static final File miscFile = new File(basePath, "misc_path");
     private String miscPath = null;
 
-    private static final File selinuxPath = new File("/sys/fs/selinux/enforce");
-    // only check on boot
-    private final boolean isPermissive;
-
     private static final File logPath = new File(basePath, "log");
     private static final File modulesLogPath = new File(logPath, "modules.log");
     private static final File verboseLogPath = new File(logPath, "all.log");
@@ -275,7 +271,6 @@ public class ConfigManager {
 
         createTables();
         updateConfig();
-        isPermissive = readInt(selinuxPath, 1) == 0;
         // must ensure cache is valid for later usage
         updateCaches(true);
     }
@@ -562,10 +557,6 @@ public class ConfigManager {
     public void setVerboseLog(boolean verboseLog) {
         writeInt(verboseLogSwitch, verboseLog ? 1 : 0);
         this.verboseLog = verboseLog;
-    }
-
-    public boolean isPermissive() {
-        return isPermissive;
     }
 
     public boolean resourceHook() {

@@ -118,11 +118,6 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     }
 
     @Override
-    public boolean isPermissive() {
-        return ConfigManager.getInstance().isPermissive();
-    }
-
-    @Override
     public ParcelFileDescriptor getVerboseLog() {
         return ConfigManager.getInstance().getVerboseLog();
     }
