@@ -123,7 +123,8 @@
     <string name="force_stop_dlg_text">Se forçar a parada de um app, ele pode apresentar mau funcionamento.</string>
     <string name="reboot_required">Necessário reiniciar para aplicar alteração</string>
     <string name="reboot">Reiniciar</string>
-
+    <string name="menu_filter">Filtrar…</string>
+  
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_app_store">Ver na Loja de Apps</string>
     <string name="module_app_info">Info do App</string>
