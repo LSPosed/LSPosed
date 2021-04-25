@@ -75,8 +75,6 @@
     <string name="requested_by_module">Рекомендовано</string>
     <string name="scroll_bottom">Прокрутити донизу</string>
     <string name="scroll_top">Прокрутити догори</string>
-    <string name="selinux_permissive"><b>УВАГА:</b> Статус SELinux не Enforcing! Шкідливі програми, які користуються цим, зможуть повністю керувати вашим пристроєм і спричинити шкоду вашим даним.</string>
-    <string name="selinux_permissive_summary">Статус SELinux не Enforcing!</string>
     <string name="settings_backup">Резервне копіювання</string>
     <string name="settings_backup_and_restore">Резервне копіювання і відновлення</string>
     <string name="settings_backup_and_restore_summery">Резервне копіювання або відновлення списку модулів та списків областей.</string>

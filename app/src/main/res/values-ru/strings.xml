@@ -123,8 +123,6 @@
     <string name="android_framework">Системная Структура</string>
     <string name="app_destroyed">Эта программа прекратила работу, пожалуйста, убедитесь, что загрузили ее из официального источника.</string>
     <string name="compile_speed">Повторная оптимизация</string>
-    <string name="selinux_permissive">&lt;b&gt;ВНИМАНИЕ:&lt;\/b&gt; Статус SELinux не Enforcing! Вредоносные приложения, которые пользуются этим, смогут полностью управлять вашим устройством и нанести ущерб вашим данным.</string>
-    <string name="selinux_permissive_summary">Статус SELinux не принудительные!</string>
     <string name="outdated_manager">Версия LSPosed Manager и LSPosed Core не согласуются. Пожалуйста, установите соответствующую версию.</string>
     <string name="lsposed_not_active">LSPosed пока не установлен или не активен.</string>
     <string name="settings_backup_and_restore">Резервное копирование и восстановление</string>

@@ -38,8 +38,6 @@
 
     <string name="activated">Activé</string>
     <string name="not_installed">Non installé</string>
-    <string name="selinux_permissive">&lt;b&gt;AVERTISSEMENT:&lt;\/b&gt; SELinux n\est pas renforcé! Le programme malveillant qui attaque peut contrôler complètement votre appareil et peut causer des dommages matériels et engager votre responsabilité légale.</string>
-    <string name="selinux_permissive_summary">SELinux n\'est pas renforcé!</string>
     <string name="partial_activated">Partiellement activé</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy n\'est pas chargé correctement</string>
     <string name="selinux_policy_not_loaded">&lt;b&gt;AVERTISSEMENT:&lt;\/b&gt; SEPolicy n\'est pas chargé correctement, les modules qui modifient le sous-système ne fonctionneront pas.</string>

@@ -127,8 +127,6 @@
     <string name="android_framework">系统框架</string>
     <string name="app_destroyed">此应用程序已被损坏，请确保您从官方来源下载该应用程序。</string>
     <string name="compile_speed">重新优化</string>
-    <string name="selinux_permissive">&lt;b&gt;警告：&lt;\/b&gt;SELinux 未处于严格模式！对此进行攻击的恶意程序可以完全控制你的设备，并可能造成你的财产损失和法律责任。</string>
-    <string name="selinux_permissive_summary">SELinux 未处于严格模式！</string>
     <string name="outdated_manager">LSPosed Manager 和 LSPosed Core 的版本不一致。请重新安装对应的版本。</string>
     <string name="lsposed_not_active">LSPosed 未安装或未激活</string>
     <string name="settings_backup_and_restore">备份与恢复</string>

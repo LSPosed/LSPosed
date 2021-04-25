@@ -38,8 +38,6 @@
 
     <string name="activated">הופעל</string>
     <string name="not_installed">לא מותקן</string>
-    <string name="selinux_permissive">&lt;b&gt;אזהרה:&lt;\/b&gt; SELinux is not enforcing! the malicious program that attacks this can completely control your device and may cause your property damage and legal liability.</string>
-    <string name="selinux_permissive_summary">SELinux is not enforcing!</string>
     <string name="partial_activated">הופעל חלקית</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy לא נטען כמו שצריך</string>
     <string name="selinux_policy_not_loaded">&lt;b&gt;אזהרה:&lt;\/b&gt; SEPolicy לא טעון כמו שצריך, מודולים שמתחברים ל-System Framework לא יעבדו.</string>

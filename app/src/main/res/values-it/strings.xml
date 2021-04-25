@@ -38,8 +38,6 @@
 
     <string name="activated">Attivo</string>
     <string name="not_installed">Non installato</string>
-    <string name="selinux_permissive">&lt;b&gt;ATTENZIONE:&lt;\/b&gt; SELinux non è in modalità enforcing! un programma dannoso che lo attacca può controllare completamente il tuo dispositivo e può causare danni alla tua proprietà e responsabilità legale.</string>
-    <string name="selinux_permissive_summary">SELinux non è in modalità enforcing!</string>
     <string name="partial_activated">Parzialmente attivo</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy non è caricato correttamente</string>
     <string name="selinux_policy_not_loaded"><![CDATA[<b>WARNING:</b> SEPolicy non è caricato correttamente, i moduli che agganciano il Framework di Sistema non funzioneranno.<br>Per favore segnalalo allo sviluppatore di <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>.]]></string>

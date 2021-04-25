@@ -38,8 +38,6 @@
 
     <string name="activated">활성화됨</string>
     <string name="not_installed">설치되지 않음</string>
-    <string name="selinux_permissive"><![CDATA[<b>주의:</b> SELinux가 시행되고 있지 않습니다! 이 취약성을 공격하는 악성 프로그램은 장치를 완전히 제어할 수 있으며 재산상의 손해와 법적 책임을 초래할 수 있습니다.]]></string>
-    <string name="selinux_permissive_summary">SELinux가 시행되고 있지 않습니다!</string>
     <string name="partial_activated">부분적으로 활성화됨</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy가 제대로 로드되지 않았습니다.</string>
     <string name="selinux_policy_not_loaded"><![CDATA[<b>주의:</b> SEPolicy가 제대로 로드되지 않아 시스템 프레임워크를 후크하는 모듈이 작동하지 않습니다.<br><a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> 개발자에게 보고하십시오.]]></string>

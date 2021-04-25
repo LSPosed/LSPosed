@@ -54,10 +54,7 @@ public class InfoDialogBuilder extends BlurBehindDialogBuilder {
         binding.device.setText(getDevice());
         binding.systemAbi.setText(Build.SUPPORTED_ABIS[0]);
 
-        if (ConfigManager.isPermissive()) {
-            binding.selinux.setVisibility(View.VISIBLE);
-            binding.selinux.setText(HtmlCompat.fromHtml(context.getString(R.string.selinux_permissive), HtmlCompat.FROM_HTML_MODE_LEGACY));
-        } else if (!ConfigManager.isSepolicyLoaded()) {
+        if (!ConfigManager.isSepolicyLoaded()) {
             binding.selinux.setVisibility(View.VISIBLE);
             binding.selinux.setText(HtmlCompat.fromHtml(context.getString(R.string.selinux_policy_not_loaded), HtmlCompat.FROM_HTML_MODE_LEGACY));
         }

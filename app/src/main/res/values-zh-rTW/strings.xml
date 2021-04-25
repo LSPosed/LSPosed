@@ -40,8 +40,6 @@
 
     <string name="activated">已啟用</string>
     <string name="not_installed">未安裝</string>
-    <string name="selinux_permissive">&lt;b&gt;警告：&lt;\/b&gt;SELinux 未處於嚴格模式！對此進行攻擊的惡意程式可以完全控制你的裝置，並可能造成你的財產損失和法律責任。</string>
-    <string name="selinux_permissive_summary">SELinux 未處於嚴格模式！</string>
     <string name="partial_activated">部分啟用</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy 未被正確讀取</string>
     <string name="selinux_policy_not_loaded"><![CDATA[<b>警告：</b>SEPolicy 沒有被正確讀取，掛鉤系統框架的模組將無法運作。<br>請回報這類問題給<a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>開發者]]></string>

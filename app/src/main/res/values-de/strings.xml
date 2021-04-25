@@ -123,8 +123,6 @@
     <string name="android_framework">System Framework</string>
     <string name="app_destroyed">Diese Anwendung wurde deinstalliert. Laden Sie sie unbedingt von der offiziellen Quelle herunter.</string>
     <string name="compile_speed">Erneut optimieren</string>
-    <string name="selinux_permissive">&lt;b&gt;Warnung:&lt;\/b&gt; SELinux ist nicht auf enforcing gestellt! Bösartige Programm, können auf Ihrem Gerät ausgeführt werden.</string>
-    <string name="selinux_permissive_summary">SELinux ist nicht enforcing</string>
     <string name="outdated_manager">Die Version von LSPosed Manager und LSPosed Core stimmen nicht überein. Installieren Sie die entsprechende Version neu.</string>
     <string name="lsposed_not_active">LSPosed ist derzeit nicht installiert oder läuft nicht.</string>
     <string name="settings_backup_and_restore">Sichern und Wiederherstellen</string>
