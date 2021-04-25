@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -38,25 +37,31 @@
         android:title="@string/use_recommended" />
 
     <item
-        android:id="@+id/item_show_games"
-        android:checkable="true"
-        android:checked="true"
-        android:title="@string/menu_show_games" />
+        android:title="@string/menu_filter"
+        app:showAsAction="never">
+        <menu>
+
+            <item
+                android:id="@+id/item_filter_games"
+                android:checkable="true"
+                android:checked="true"
+                android:title="@string/menu_show_games" />
+
+            <item
+                android:id="@+id/item_filter_modules"
+                android:checkable="true"
+                android:checked="true"
+                android:title="@string/menu_show_modules" />
+
+            <item
+                android:id="@+id/item_filter_system"
+                android:checkable="true"
+                android:checked="true"
+                android:title="@string/menu_show_system_apps" />
+        </menu>
+    </item>
 
     <item
-        android:id="@+id/item_show_modules"
-        android:checkable="true"
-        android:checked="true"
-        android:title="@string/menu_show_modules" />
-
-    <item
-        android:id="@+id/item_show_system"
-        android:checkable="true"
-        android:checked="true"
-        android:title="@string/menu_show_system_apps" />
-
-    <item
-        android:id="@+id/item_list_sort"
         android:title="@string/menu_sort"
         app:showAsAction="never">
         <menu>
