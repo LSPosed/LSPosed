@@ -96,7 +96,7 @@ print_log_head() {
     echo "Riru version: ${RIRU_VERSION_NAME} (${RIRU_VERSION_CODE})"
     echo "Riru api: ${RIRU_API}"
     echo "Magisk: ${MAGISK_VERSION%:*} (${MAGISK_VER_CODE})"
-  } >> "${LOG_FILE}"
+  } >>"${LOG_FILE}"
 }
 
 start_log_catcher() {
@@ -140,7 +140,8 @@ fi
 start_app_process() {
   while true; do
     if [ -S "/dev/socket/zygote" ]; then
-      /system/bin/app_process -Djava.class.path=$(magisk --path)/.magisk/modules/riru_lsposed/framework/lspd.dex /system/bin --nice-name=lspd org.lsposed.lspd.core.Main
+      nohup /system/bin/app_process -Djava.class.path=$(magisk --path)/.magisk/modules/riru_lsposed/framework/lspd.dex /system/bin --nice-name=lspd org.lsposed.lspd.core.Main >/dev/null 2>&1 &
+      return
     fi
   done
 }
