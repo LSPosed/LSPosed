@@ -25,8 +25,6 @@ interface ILSPManagerService {
 
     void setVerboseLog(boolean enabled) = 12;
 
-    boolean isPermissive() = 15;
-
     ParcelFileDescriptor getVerboseLog() = 16;
 
     ParcelFileDescriptor getModulesLog() = 17;
