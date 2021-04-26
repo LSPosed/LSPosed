@@ -189,4 +189,5 @@
     <string name="NotInstallDetail">LSPosed 未安装</string>
     <string name="about_translators">译者：%s</string>
     <string name="copy_toast_msg">已复制</string>
+    <string name="menu_filter">过滤…</string>
 </resources>
