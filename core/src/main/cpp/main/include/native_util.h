@@ -30,7 +30,8 @@
 
 namespace lspd {
 
-    ALWAYS_INLINE inline bool RegisterNativeMethodsInternal(JNIEnv *env,
+    [[gnu::always_inline]]
+    inline bool RegisterNativeMethodsInternal(JNIEnv *env,
                                                             const char *class_name,
                                                             const JNINativeMethod *methods,
                                                             jint method_count) {

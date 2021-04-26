@@ -44,7 +44,8 @@ namespace art {
                 SetEntryPointsToInterpreterSym(thiz, art_method);
         }
 
-        ALWAYS_INLINE static void MaybeDelayHook(void *clazz_ptr) {
+        [[gnu::always_inline]]
+        static void MaybeDelayHook(void *clazz_ptr) {
             art::mirror::Class mirror_class(clazz_ptr);
             auto class_def = mirror_class.GetClassDef();
             bool should_intercept = class_def && lspd::IsClassPending(class_def);
@@ -180,13 +181,15 @@ namespace art {
 
         }
 
-        ALWAYS_INLINE void MakeInitializedClassesVisiblyInitialized(void *self, bool wait) const {
+        [[gnu::always_inline]]
+        void MakeInitializedClassesVisiblyInitialized(void *self, bool wait) const {
             LOGD("MakeInitializedClassesVisiblyInitialized start, thiz=%p, self=%p", thiz_, self);
             if (LIKELY(thiz_))
                 MakeInitializedClassesVisiblyInitialized(thiz_, self, wait);
         }
 
-        ALWAYS_INLINE void SetEntryPointsToInterpreter(void *art_method) const {
+        [[gnu::always_inline]]
+        void SetEntryPointsToInterpreter(void *art_method) const {
             LOGD("SetEntryPointsToInterpreter start, thiz=%p, art_method=%p", thiz_, art_method);
             if (LIKELY(thiz_))
                 SetEntryPointsToInterpreter(thiz_, art_method);

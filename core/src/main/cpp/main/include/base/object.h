@@ -79,15 +79,18 @@ namespace lspd {
         ShadowObject(void *thiz) : thiz_(thiz) {
         }
 
-        ALWAYS_INLINE inline void *Get() {
+        [[gnu::always_inline]]
+        inline void *Get() {
             return thiz_;
         }
 
-        ALWAYS_INLINE inline void Reset(void *thiz) {
+        [[gnu::always_inline]]
+        inline void Reset(void *thiz) {
             thiz_ = thiz;
         }
 
-        ALWAYS_INLINE inline operator bool() const {
+        [[gnu::always_inline]]
+        inline operator bool() const {
             return thiz_ != nullptr;
         }
 
@@ -100,21 +103,14 @@ namespace lspd {
     public:
 
         HookedObject(void *thiz) : ShadowObject(thiz) {}
-
-        static void SetupSymbols(void *handle) {
-
-        }
-
-        static void SetupHooks(void *handle, HookFunType hook_fun) {
-
-        }
     };
 
     struct ObjPtr {
         void *data;
     };
 
-    ALWAYS_INLINE static void *Dlsym(void *handle, const char *name) {
+    [[gnu::always_inline]]
+    static void *Dlsym(void *handle, const char *name) {
         return dlsym(handle, name);
     }
 
@@ -127,7 +123,7 @@ namespace lspd {
         return Dlsym(handle, last...);
     }
 
-    ALWAYS_INLINE inline static void HookFunction(void *original, void *replace, void **backup) {
+    static void HookFunction(void *original, void *replace, void **backup) {
         _make_rwx(original, _page_size);
         hook_func(original, replace, backup);
     }

@@ -115,7 +115,8 @@ namespace lspd {
     };
 }
 
-RIRU_EXPORT RiruVersionedModuleInfo *init(Riru *riru) {
+[[gnu::visibility("default")]] [[gnu::used]]
+RiruVersionedModuleInfo *init(Riru *riru) {
     LOGD("using riru %d", riru->riruApiVersion);
     LOGD("module path: %s", riru->magiskModulePath);
     lspd::magiskPath = riru->magiskModulePath;
