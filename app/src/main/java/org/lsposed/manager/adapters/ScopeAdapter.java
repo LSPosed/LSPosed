@@ -190,12 +190,12 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         if (checkedList.contains(app)) {
             return false;
         }
-        if (!preferences.getBoolean("show_modules", false)) {
+        if (!preferences.getBoolean("filter_modules", true)) {
             if (info.applicationInfo.metaData != null && info.applicationInfo.metaData.containsKey("xposedmodule")) {
                 return true;
             }
         }
-        if (!preferences.getBoolean("show_games", false)) {
+        if (!preferences.getBoolean("filter_games", true)) {
             if (info.applicationInfo.category == ApplicationInfo.CATEGORY_GAME) {
                 return true;
             }
@@ -207,7 +207,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         if ((info.applicationInfo.flags & ApplicationInfo.FLAG_HAS_CODE) == 0) {
             return true;
         }
-        return !preferences.getBoolean("show_system_apps", false) && (info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0;
+        return !preferences.getBoolean("filter_system_apps", true) && (info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0;
     }
 
     private List<AppInfo> sortApps(List<AppInfo> list) {
