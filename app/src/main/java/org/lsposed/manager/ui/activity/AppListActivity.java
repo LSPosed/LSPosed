@@ -44,10 +44,11 @@ import org.lsposed.manager.databinding.ActivityAppListBinding;
 import org.lsposed.manager.ui.activity.base.BaseActivity;
 import org.lsposed.manager.util.BackupUtils;
 import org.lsposed.manager.util.LinearLayoutManagerFix;
+
 import rikka.recyclerview.RecyclerViewKt;
 
 public class AppListActivity extends BaseActivity {
-    private SearchView searchView;
+    public SearchView searchView;
     private ScopeAdapter scopeAdapter;
 
     private SearchView.OnQueryTextListener searchListener;
@@ -162,15 +163,6 @@ public class AppListActivity extends BaseActivity {
         searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
         searchView.setOnQueryTextListener(searchListener);
         return super.onCreateOptionsMenu(menu);
-    }
-
-    public void onDataReady() {
-        runOnUiThread(() -> {
-            binding.progress.setIndeterminate(false);
-            binding.swipeRefreshLayout.setRefreshing(false);
-            String queryStr = searchView != null ? searchView.getQuery().toString() : "";
-            scopeAdapter.getFilter().filter(queryStr);
-        });
     }
 
     @Override
