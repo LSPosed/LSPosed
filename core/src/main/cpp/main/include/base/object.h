@@ -110,12 +110,12 @@ namespace lspd {
     };
 
     [[gnu::always_inline]]
-    static void *Dlsym(void *handle, const char *name) {
+    inline void *Dlsym(void *handle, const char *name) {
         return dlsym(handle, name);
     }
 
     template<class T, class ... Args>
-    static void *Dlsym(void *handle, T first, Args... last) {
+    inline void *Dlsym(void *handle, T first, Args... last) {
         auto ret = Dlsym(handle, first);
         if (ret) {
             return ret;
@@ -123,9 +123,27 @@ namespace lspd {
         return Dlsym(handle, last...);
     }
 
-    static void HookFunction(void *original, void *replace, void **backup) {
+    inline int HookFunction(void *original, void *replace, void **backup) {
         _make_rwx(original, _page_size);
-        hook_func(original, replace, backup);
+        if constexpr (isDebug) {
+            Dl_info info;
+            dladdr(original, &info);
+            LOGD("Hooking %s (%p) from %s (%p)",
+                 info.dli_sname ? info.dli_sname : "(unknown symbol)", info.dli_saddr,
+                 info.dli_fname ? info.dli_fname : "(unknown file)", info.dli_fbase);
+        }
+        return DobbyHook(original, replace, backup);
+    }
+
+    inline int UnhookFunction(void *original) {
+        if constexpr (isDebug) {
+            Dl_info info;
+            dladdr(original, &info);
+            LOGD("Unhooking %s (%p) from %s (%p)",
+                 info.dli_sname ? info.dli_sname : "(unknown symbol)", info.dli_saddr,
+                 info.dli_fname ? info.dli_fname : "(unknown file)", info.dli_fbase);
+        }
+        return DobbyDestroy(original);
     }
 
     template<class, template<class, class...> class>

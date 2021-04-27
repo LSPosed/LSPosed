@@ -44,18 +44,8 @@
  */
 
 namespace lspd {
-    std::vector<LsposedNativeOnModuleLoaded> moduleLoadedCallbacks;
+    std::vector<NativeOnModuleLoaded> moduleLoadedCallbacks;
     std::vector<std::string> moduleNativeLibs;
-
-    LsposedNativeAPIEntriesV1 init(LsposedNativeOnModuleLoaded onModuleLoaded) {
-        if (onModuleLoaded != nullptr) moduleLoadedCallbacks.push_back(onModuleLoaded);
-
-        LsposedNativeAPIEntriesV1 ret{
-                .version = 1,
-                .inlineHookFunc = HookFunction
-        };
-        return ret;
-    }
 
     void RegisterNativeLib(const std::string &library_name) {
         static bool initialized = []() {
@@ -102,12 +92,21 @@ namespace lspd {
                             break;
                         }
                         auto native_init = reinterpret_cast<NativeInit>(native_init_sym);
-                        native_init(reinterpret_cast<void *>(init));
+                        auto *callback = native_init(NativeAPIEntries{
+                                .version = 2,
+                                .hookFunc = HookFunction,
+                                .unhookFunc = UnhookFunction
+                        });
+                        if (callback) {
+                            moduleLoadedCallbacks.push_back(callback);
+                            // return directly to avoid module interaction
+                            return handle;
+                        }
                     }
                 }
 
                 // Callbacks
-                for (LsposedNativeOnModuleLoaded callback: moduleLoadedCallbacks) {
+                for (auto &callback: moduleLoadedCallbacks) {
                     callback(name, handle);
                 }
                 return handle;
