@@ -188,7 +188,7 @@ android.applicationVariants.all {
     val outSrcDir = file("$buildDir/generated/source/signInfo/${variantLowered}")
     val outSrc = file("$outSrcDir/org/lsposed/lspd/util/SignInfo.java")
     val signInfoTask = tasks.register("generate${variantCapped}SignInfo") {
-        dependsOn("validateSigning${variantCapped}")
+        dependsOn(":app:validateSigning${variantCapped}")
         outputs.file(outSrc)
         doLast {
             val sign = app.buildTypes.named(buildType.name).get().signingConfig
