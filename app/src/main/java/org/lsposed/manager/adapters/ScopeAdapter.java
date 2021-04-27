@@ -77,6 +77,7 @@ import org.lsposed.manager.util.ModuleUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -100,7 +101,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     private final HashSet<ApplicationWithEquals> recommendedList = new HashSet<>();
     private final HashSet<ApplicationWithEquals> checkedList = new HashSet<>();
     private final List<AppInfo> searchList = new ArrayList<>();
-    private List<AppInfo> showList = new ArrayList<>();
+    private final List<AppInfo> showList = new ArrayList<>();
 
     private final SwitchBar.OnCheckedChangeListener switchBarOnCheckedChangeListener = new SwitchBar.OnCheckedChangeListener() {
         @Override
@@ -182,7 +183,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         return preferences.getBoolean("filter_system_apps", true) && (info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0;
     }
 
-    private List<AppInfo> sortApps(List<AppInfo> list) {
+    private void sortApps(List<AppInfo> list) {
         Comparator<PackageInfo> comparator = AppHelper.getAppListComparator(preferences.getInt("list_sort", 0), pm);
         Comparator<AppInfo> frameworkComparator = (a, b) -> {
             if (a.packageName.equals("android") == b.packageName.equals("android")) {
@@ -215,7 +216,6 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                 return 1;
             }
         });
-        return list;
     }
 
     private void checkRecommended() {
@@ -546,7 +546,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             if (emptyCheckedList) {
                 ConfigManager.setModuleScope(modulePackageName, checkedList);
             }
-            showList = sortApps(searchList);
+            sortApps(searchList);
             synchronized (dataReadyRunnable) {
                 synchronized (this) {
                     refreshing = false;
@@ -588,10 +588,11 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
+            FilterResults filterResults = new FilterResults();
+            List<AppInfo> filtered = new ArrayList<>();
             if (constraint.toString().isEmpty()) {
-                showList = searchList;
+                filtered.addAll(searchList);
             } else {
-                ArrayList<AppInfo> filtered = new ArrayList<>();
                 String filter = constraint.toString().toLowerCase();
                 for (AppInfo info : searchList) {
                     if (lowercaseContains(info.label.toString(), filter)
@@ -599,13 +600,17 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                         filtered.add(info);
                     }
                 }
-                showList = filtered;
             }
-            return null;
+            filterResults.values = filtered;
+            filterResults.count = filtered.size();
+            return filterResults;
         }
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
+            showList.clear();
+            //noinspection unchecked
+            showList.addAll((Collection<AppInfo>) results.values);
             notifyDataSetChanged();
         }
     }
