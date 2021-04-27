@@ -42,7 +42,6 @@
 #include "art/runtime/gc/scoped_gc_critical_section.h"
 
 namespace lspd {
-
     static volatile bool installed = false;
     static volatile bool art_hooks_installed = false;
 

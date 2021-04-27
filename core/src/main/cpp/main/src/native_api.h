@@ -29,17 +29,24 @@
 #include <string>
 #include <base/object.h>
 
-// typedef int (*HookFunType)(void *, void *, void **);  // For portability
-typedef void (*LsposedNativeOnModuleLoaded) (const char* name, void* handle);
-typedef void (*NativeInit)(void * init_func);
-struct LsposedNativeAPIEntriesV1 {
+typedef int (*HookFunType)(void *func, void *replace, void **backup);
+
+typedef int (*UnhookFunType)(void *func);
+
+typedef void (*NativeOnModuleLoaded)(const char *name, void *handle);
+
+typedef struct {
     uint32_t version;
-    lspd::HookFunType inlineHookFunc;
-};
+    HookFunType hookFunc;
+    UnhookFunType unhookFunc;
+} NativeAPIEntries;
+
+typedef NativeOnModuleLoaded (*NativeInit)(const NativeAPIEntries *entries);
 
 namespace lspd {
     void InstallNativeAPI();
-    void RegisterNativeLib(const std::string& library_name);
+
+    void RegisterNativeLib(const std::string &library_name);
 }
 
 #endif //LSPOSED_NATIVE_API_H

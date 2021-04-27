@@ -44,18 +44,22 @@
  */
 
 namespace lspd {
-    std::vector<LsposedNativeOnModuleLoaded> moduleLoadedCallbacks;
+    std::vector<NativeOnModuleLoaded> moduleLoadedCallbacks;
     std::vector<std::string> moduleNativeLibs;
+    std::unique_ptr<void, std::function<void(void *)>> protected_page(
+            mmap(nullptr, _page_size, PROT_READ | PROT_WRITE, MAP_ANONYMOUS | MAP_SHARED, -1, 0),
+            [](void *ptr) { munmap(ptr, _page_size); });
 
-    LsposedNativeAPIEntriesV1 init(LsposedNativeOnModuleLoaded onModuleLoaded) {
-        if (onModuleLoaded != nullptr) moduleLoadedCallbacks.push_back(onModuleLoaded);
-
-        LsposedNativeAPIEntriesV1 ret{
-                .version = 1,
-                .inlineHookFunc = HookFunction
+    const auto[entries] = []() {
+        auto *entries = new(protected_page.get()) NativeAPIEntries{
+                .version = 2,
+                .hookFunc = HookFunction,
+                .unhookFunc = UnhookFunction
         };
-        return ret;
-    }
+
+        mprotect(protected_page.get(), _page_size, PROT_READ);
+        return std::make_tuple(entries);
+    }();
 
     void RegisterNativeLib(const std::string &library_name) {
         static bool initialized = []() {
@@ -102,12 +106,17 @@ namespace lspd {
                             break;
                         }
                         auto native_init = reinterpret_cast<NativeInit>(native_init_sym);
-                        native_init(reinterpret_cast<void *>(init));
+                        auto *callback = native_init(entries);
+                        if (callback) {
+                            moduleLoadedCallbacks.push_back(callback);
+                            // return directly to avoid module interaction
+                            return handle;
+                        }
                     }
                 }
 
                 // Callbacks
-                for (LsposedNativeOnModuleLoaded callback: moduleLoadedCallbacks) {
+                for (auto &callback: moduleLoadedCallbacks) {
                     callback(name, handle);
                 }
                 return handle;
