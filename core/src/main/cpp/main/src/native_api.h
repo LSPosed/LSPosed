@@ -41,7 +41,7 @@ typedef struct {
     UnhookFunType unhookFunc;
 } NativeAPIEntries;
 
-typedef NativeOnModuleLoaded (*NativeInit)(const NativeAPIEntries entries);
+typedef NativeOnModuleLoaded (*NativeInit)(const NativeAPIEntries *entries);
 
 namespace lspd {
     void InstallNativeAPI();

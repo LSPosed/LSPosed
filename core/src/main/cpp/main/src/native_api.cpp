@@ -46,6 +46,11 @@
 namespace lspd {
     std::vector<NativeOnModuleLoaded> moduleLoadedCallbacks;
     std::vector<std::string> moduleNativeLibs;
+    const NativeAPIEntries entries{
+            .version = 2,
+            .hookFunc = HookFunction,
+            .unhookFunc = UnhookFunction
+    };
 
     void RegisterNativeLib(const std::string &library_name) {
         static bool initialized = []() {
@@ -92,11 +97,7 @@ namespace lspd {
                             break;
                         }
                         auto native_init = reinterpret_cast<NativeInit>(native_init_sym);
-                        auto *callback = native_init(NativeAPIEntries{
-                                .version = 2,
-                                .hookFunc = HookFunction,
-                                .unhookFunc = UnhookFunction
-                        });
+                        auto *callback = native_init(&entries);
                         if (callback) {
                             moduleLoadedCallbacks.push_back(callback);
                             // return directly to avoid module interaction
