@@ -507,7 +507,6 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             checkedList.clear();
             recommendedList.clear();
             searchList.clear();
-            showList.clear();
 
             checkedList.addAll(ConfigManager.getModuleScope(modulePackageName));
             HashSet<ApplicationWithEquals> installedList = new HashSet<>();
