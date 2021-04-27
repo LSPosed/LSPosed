@@ -37,7 +37,7 @@ val authors = "LSPosed Developers"
 
 val riruModuleId = "lsposed"
 val moduleMinRiruApiVersion = 25
-val moduleMinRiruVersionName = "25.0.0"
+val moduleMinRiruVersionName = "25.0.1"
 val moduleMaxRiruApiVersion = 25
 
 val defaultManagerPackageName: String by rootProject.extra
