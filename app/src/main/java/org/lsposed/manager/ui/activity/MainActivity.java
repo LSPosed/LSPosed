@@ -45,7 +45,6 @@ import org.lsposed.manager.util.GlideHelper;
 import org.lsposed.manager.util.ModuleUtil;
 import org.lsposed.manager.util.NavUtil;
 import org.lsposed.manager.util.chrome.LinkTransformationMethod;
-import org.lsposed.manager.util.holiday.HolidayHelper;
 
 import java.util.Locale;
 
@@ -59,7 +58,6 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        HolidayHelper.setup(this);
         binding.status.setOnClickListener(v -> {
             if (ConfigManager.getXposedApiVersion() != -1) {
                 new InfoDialogBuilder(this)
@@ -102,17 +100,7 @@ public class MainActivity extends BaseActivity {
                 binding.statusSummary.setText(R.string.selinux_policy_not_loaded_summary);
             } else {
                 binding.statusTitle.setText(R.string.activated);
-                HolidayHelper.CardColors cardColors = HolidayHelper.getHolidayColors();
-                if (cardColors.textColor != 0) {
-                    binding.statusIcon.setImageTintList(ColorStateList.valueOf(cardColors.textColor));
-                    binding.statusTitle.setTextColor(ColorStateList.valueOf(cardColors.textColor));
-                    binding.statusSummary.setTextColor(ColorStateList.valueOf(cardColors.textColor));
-                }
-                if (cardColors.backgroundColor != 0) {
-                    cardBackgroundColor = cardColors.backgroundColor;
-                } else {
-                    cardBackgroundColor = ResourcesKt.resolveColor(getTheme(), R.attr.colorNormal);
-                }
+                cardBackgroundColor = ResourcesKt.resolveColor(getTheme(), R.attr.colorNormal);
                 binding.statusIcon.setImageResource(R.drawable.ic_check_circle);
                 binding.statusSummary.setText(String.format(Locale.US, "%s (%d)", installXposedVersion, ConfigManager.getXposedVersionCode()));
             }
