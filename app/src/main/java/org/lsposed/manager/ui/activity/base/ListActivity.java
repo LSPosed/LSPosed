@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.ActivityListBinding;
 import org.lsposed.manager.util.LinearLayoutManagerFix;
+
 import rikka.recyclerview.RecyclerViewKt;
 
 public abstract class ListActivity extends BaseActivity {

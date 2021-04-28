@@ -37,6 +37,7 @@ import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.util.NavUtil;
 import org.lsposed.manager.util.theme.ThemeUtil;
+
 import rikka.core.res.ResourcesKt;
 import rikka.material.app.MaterialActivity;
 

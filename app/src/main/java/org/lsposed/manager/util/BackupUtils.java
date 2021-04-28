@@ -25,6 +25,8 @@ import android.net.Uri;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.lsposed.manager.ConfigManager;
+import org.lsposed.manager.adapters.ScopeAdapter;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -33,9 +35,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-
-import org.lsposed.manager.ConfigManager;
-import org.lsposed.manager.adapters.ScopeAdapter;
 
 public class BackupUtils {
     private static final int VERSION = 2;

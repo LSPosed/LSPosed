@@ -20,8 +20,6 @@
 package org.lsposed.manager.util.holiday;
 
 import android.app.Activity;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.view.View;
 import android.view.ViewGroup;

@@ -27,12 +27,13 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.core.text.HtmlCompat;
 
-import java.util.Locale;
-
 import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.DialogInfoBinding;
+
+import java.util.Locale;
+
 import rikka.core.util.ClipboardUtils;
 
 public class InfoDialogBuilder extends BlurBehindDialogBuilder {

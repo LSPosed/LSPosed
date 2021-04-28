@@ -38,14 +38,14 @@ import androidx.lifecycle.Lifecycle;
 
 import com.google.android.material.snackbar.Snackbar;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.lang.ref.WeakReference;
-
 import org.lsposed.manager.App;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.FragmentCompileDialogBinding;
 import org.lsposed.manager.ui.activity.AppListActivity;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.lang.ref.WeakReference;
 
 @SuppressWarnings("deprecation")
 public class CompileDialogFragment extends AppCompatDialogFragment {

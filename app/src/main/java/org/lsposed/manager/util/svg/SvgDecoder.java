@@ -19,6 +19,8 @@
 
 package org.lsposed.manager.util.svg;
 
+import static com.bumptech.glide.request.target.Target.SIZE_ORIGINAL;
+
 import androidx.annotation.NonNull;
 
 import com.bumptech.glide.load.Options;
@@ -30,8 +32,6 @@ import com.caverock.androidsvg.SVGParseException;
 
 import java.io.IOException;
 import java.io.InputStream;
-
-import static com.bumptech.glide.request.target.Target.SIZE_ORIGINAL;
 
 /**
  * Decodes an SVG internal representation from an {@link InputStream}.

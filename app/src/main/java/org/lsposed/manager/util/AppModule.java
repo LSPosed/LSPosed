@@ -36,13 +36,14 @@ import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.module.AppGlideModule;
 import com.caverock.androidsvg.SVG;
 
-import java.io.InputStream;
-
 import org.lsposed.manager.App;
 import org.lsposed.manager.R;
 import org.lsposed.manager.util.svg.ExternalFileResolver;
 import org.lsposed.manager.util.svg.SvgDecoder;
 import org.lsposed.manager.util.svg.SvgDrawableTranscoder;
+
+import java.io.InputStream;
+
 import me.zhanghai.android.appiconloader.glide.AppIconModelLoader;
 
 @GlideModule

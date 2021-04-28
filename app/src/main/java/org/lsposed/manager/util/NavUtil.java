@@ -26,6 +26,7 @@ import androidx.browser.customtabs.CustomTabColorSchemeParams;
 import androidx.browser.customtabs.CustomTabsIntent;
 
 import org.lsposed.manager.ui.activity.base.BaseActivity;
+
 import rikka.core.res.ResourcesKt;
 import rikka.core.util.ResourceUtils;
 
