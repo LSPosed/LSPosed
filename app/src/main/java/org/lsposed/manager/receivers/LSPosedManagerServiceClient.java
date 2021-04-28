@@ -24,11 +24,11 @@ import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 
-import java.util.List;
-
 import org.lsposed.lspd.Application;
 import org.lsposed.lspd.ILSPManagerService;
 import org.lsposed.lspd.utils.ParceledListSlice;
+
+import java.util.List;
 
 public class LSPosedManagerServiceClient {
 

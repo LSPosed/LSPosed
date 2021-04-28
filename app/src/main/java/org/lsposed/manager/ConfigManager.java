@@ -25,16 +25,16 @@ import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.util.Log;
 
+import org.lsposed.lspd.Application;
+import org.lsposed.lspd.utils.ParceledListSlice;
+import org.lsposed.manager.adapters.ScopeAdapter;
+import org.lsposed.manager.receivers.LSPosedManagerServiceClient;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-
-import org.lsposed.lspd.Application;
-import org.lsposed.lspd.utils.ParceledListSlice;
-import org.lsposed.manager.adapters.ScopeAdapter;
-import org.lsposed.manager.receivers.LSPosedManagerServiceClient;
 
 public class ConfigManager {
 

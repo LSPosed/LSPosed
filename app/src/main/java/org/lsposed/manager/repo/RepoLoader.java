@@ -26,6 +26,9 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.Gson;
 
+import org.lsposed.manager.App;
+import org.lsposed.manager.repo.model.OnlineModule;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -38,8 +41,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.lsposed.manager.App;
-import org.lsposed.manager.repo.model.OnlineModule;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;

@@ -199,7 +199,7 @@ public class ModulesActivity extends ListActivity implements ModuleUtil.ModuleLi
 
     private class ModuleAdapter extends BaseAdapter<ModuleAdapter.ViewHolder> {
         private final List<ModuleUtil.InstalledModule> searchList = new ArrayList<>();
-        private List<ModuleUtil.InstalledModule> showList = new ArrayList<>();
+        private final List<ModuleUtil.InstalledModule> showList = new ArrayList<>();
 
         ModuleAdapter() {
             refresh();
@@ -265,6 +265,7 @@ public class ModulesActivity extends ListActivity implements ModuleUtil.ModuleLi
 
             holder.itemView.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
                 getMenuInflater().inflate(R.menu.context_menu_modules, menu);
+                menu.setHeaderTitle(item.getAppName());
                 Intent intent = AppHelper.getSettingsIntent(item.packageName, pm);
                 if (intent == null) {
                     menu.removeItem(R.id.menu_launch);

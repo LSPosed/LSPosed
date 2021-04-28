@@ -22,12 +22,13 @@ package org.lsposed.manager.util;
 
 import androidx.annotation.NonNull;
 
+import org.lsposed.manager.App;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Locale;
 
-import org.lsposed.manager.App;
 import okhttp3.Dns;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;

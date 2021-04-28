@@ -412,6 +412,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
 
         holder.itemView.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
             activity.getMenuInflater().inflate(R.menu.menu_app_item, menu);
+            menu.setHeaderTitle(appName);
             Intent launchIntent = pm.getLaunchIntentForPackage(appInfo.packageName);
             if (launchIntent == null) {
                 menu.removeItem(R.id.menu_launch);

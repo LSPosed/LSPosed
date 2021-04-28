@@ -25,11 +25,12 @@ import android.content.SharedPreferences;
 import androidx.annotation.ColorRes;
 import androidx.annotation.StyleRes;
 
+import org.lsposed.manager.App;
+import org.lsposed.manager.R;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import org.lsposed.manager.App;
-import org.lsposed.manager.R;
 import rikka.core.util.ResourceUtils;
 import rikka.material.app.DayNightDelegate;
 

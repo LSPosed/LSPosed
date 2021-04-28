@@ -28,12 +28,12 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.view.MenuItem;
 
+import org.lsposed.manager.ConfigManager;
+import org.lsposed.manager.R;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
-import org.lsposed.manager.ConfigManager;
-import org.lsposed.manager.R;
 
 public class AppHelper {
 

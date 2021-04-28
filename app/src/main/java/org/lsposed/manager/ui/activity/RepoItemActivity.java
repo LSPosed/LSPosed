@@ -44,10 +44,6 @@ import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ListIterator;
-
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.ActivityModuleDetailBinding;
 import org.lsposed.manager.databinding.ItemRepoLoadmoreBinding;
@@ -67,6 +63,11 @@ import org.lsposed.manager.util.LinearLayoutManagerFix;
 import org.lsposed.manager.util.NavUtil;
 import org.lsposed.manager.util.chrome.CustomTabsURLSpan;
 import org.lsposed.manager.util.chrome.LinkTransformationMethod;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
+
 import io.noties.markwon.Markwon;
 import io.noties.markwon.SoftBreakAddsNewLinePlugin;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
