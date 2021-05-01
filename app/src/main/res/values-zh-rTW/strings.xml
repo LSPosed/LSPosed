@@ -19,15 +19,13 @@
   -->
 
 <resources>
-
-
     <!-- MainActivity -->
     <string name="info">資訊</string>
     <string name="Install">安裝</string>
     <string name="InstallDetail">點選安裝 LSPosed</string>
     <string name="Modules">模組</string>
     <plurals name="modules_enabled_count">
-        <item quantity="one">%d 個模組已啟用</item>
+
         <item quantity="other">%d 個模組已啟用</item>
     </plurals>
     <string name="Logs">日誌</string>
