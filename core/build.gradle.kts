@@ -139,7 +139,6 @@ android {
     }
 
     buildTypes {
-
         signingConfigs.named("config").get().also {
             named("debug") {
                 if (it.storeFile?.exists() == true) signingConfig = it

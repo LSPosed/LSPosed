@@ -16,8 +16,10 @@
  *
  * Copyright (C) 2021 LSPosed Contributors
  */
-import com.android.build.gradle.internal.api.BaseVariantOutputImpl
+
 import java.nio.file.Paths
+import com.android.build.gradle.internal.dsl.BuildType
+import com.android.build.api.variant.impl.VariantOutputImpl
 
 plugins {
     id("com.android.application")
@@ -117,18 +119,23 @@ android {
                 signingConfig = if (it.storeFile?.exists() == true) it
                 else signingConfigs.named("debug").get()
                 isMinifyEnabled = true
-//                isShrinkResources = true
+                (this as BuildType).isShrinkResources = true
                 proguardFiles("proguard-rules.pro")
             }
         }
     }
+}
 
-    buildOutputs.map {
-        it as BaseVariantOutputImpl
-    }.forEach { output ->
-        output.outputFileName = "LSPosedManager-${verName}-${verCode}.apk"
+androidComponents {
+    onVariants { variant ->
+        variant.outputs.map {
+            it as VariantOutputImpl
+        }.forEach {
+            it.outputFileName.set("LSPosedManager-${verName}-${verCode}-${variant.name}.apk")
+        }
     }
 }
+
 
 val optimizeReleaseRes = task("optimizeReleaseRes").doLast {
     val aapt2 = File(
