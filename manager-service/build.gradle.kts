@@ -29,17 +29,17 @@ val androidSourceCompatibility: JavaVersion by rootProject.extra
 val androidTargetCompatibility: JavaVersion by rootProject.extra
 
 android {
-    compileSdkVersion(androidTargetSdkVersion)
-    buildToolsVersion(androidBuildToolsVersion)
+    compileSdk = androidTargetSdkVersion
+    buildToolsVersion = androidBuildToolsVersion
 
     defaultConfig {
-        minSdkVersion(androidMinSdkVersion)
-        targetSdkVersion(androidTargetSdkVersion)
+        minSdk = androidMinSdkVersion
+        targetSdk = androidTargetSdkVersion
         consumerProguardFiles("proguard-rules.pro")
     }
 
     buildTypes {
-        named("release") {
+        release {
             isMinifyEnabled = false
             proguardFiles("proguard-rules.pro")
         }

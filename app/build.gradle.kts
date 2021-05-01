@@ -17,9 +17,9 @@
  * Copyright (C) 2021 LSPosed Contributors
  */
 
-import java.nio.file.Paths
+import com.android.build.api.variant.impl.ApplicationVariantImpl
 import com.android.build.gradle.internal.dsl.BuildType
-import com.android.build.api.variant.impl.VariantOutputImpl
+import java.nio.file.Paths
 
 plugins {
     id("com.android.application")
@@ -70,7 +70,7 @@ android {
             "fr",
             "de",
             "it",
-            "pt"
+            "pt",
         )
     }
 
@@ -112,10 +112,10 @@ android {
 
     buildTypes {
         signingConfigs.named("config").get().also {
-            named("debug") {
+            debug {
                 if (it.storeFile?.exists() == true) signingConfig = it
             }
-            named("release") {
+            release {
                 signingConfig = if (it.storeFile?.exists() == true) it
                 else signingConfigs.named("debug").get()
                 isMinifyEnabled = true
@@ -126,13 +126,10 @@ android {
     }
 }
 
-androidComponents {
-    onVariants { variant ->
-        variant.outputs.map {
-            it as VariantOutputImpl
-        }.forEach {
-            it.outputFileName.set("LSPosedManager-${verName}-${verCode}-${variant.name}.apk")
-        }
+androidComponents.onVariants { v ->
+    val variant = v as ApplicationVariantImpl
+    variant.outputs.forEach {
+        it.outputFileName.set("LSPosedManager-${verName}-${verCode}-${variant.name}.apk")
     }
 }
 
