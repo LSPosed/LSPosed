@@ -64,7 +64,6 @@ fi
 
 # If logcat client is kicked out by klogd server, we'll restart it.
 # However, if it is killed manually or by LSPosed Manager, we'll exit.
-# Refer to https://github.com/ElderDrivers/LSPosed/pull/575 for more information.
 loop_logcat() {
   while true; do
     logcat $*
