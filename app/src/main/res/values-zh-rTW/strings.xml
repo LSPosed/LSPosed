@@ -19,15 +19,13 @@
   -->
 
 <resources>
-
-
     <!-- MainActivity -->
     <string name="info">資訊</string>
     <string name="Install">安裝</string>
     <string name="InstallDetail">點選安裝 LSPosed</string>
     <string name="Modules">模組</string>
     <plurals name="modules_enabled_count">
-        <item quantity="one">%d 個模組已啟用</item>
+
         <item quantity="other">%d 個模組已啟用</item>
     </plurals>
     <string name="Logs">日誌</string>
@@ -125,6 +123,7 @@
     <string name="force_stop_dlg_text">如果您強行停止應用程式，可能導致行為異常。</string>
     <string name="reboot_required">需要重新啟動手機才能套用此修改</string>
     <string name="reboot">重新啟動</string>
+    <string name="menu_filter">過濾…</string>
 
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_app_store">在 Play 商店檢視</string>
@@ -167,7 +166,6 @@
     <string name="module_release_load_more">顯示更早期的版本</string>
     <string name="module_release_no_more">沒有更早期的版本</string>
     <string name="repo_load_failed">模組倉庫載入失敗：%s</string>
-
 
     <string name="app_destroyed">此應用程式已損毀，請確保您從官方來源下載該應用程式。</string>
     <string name="outdated_manager">LSPosed Manager 和 LSPosed 核心的版本不一致。請重新安裝對應的版本。</string>

@@ -19,88 +19,80 @@
   -->
 
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <!-- MainActivity -->
+    <string name="info">信息</string>
     <string name="Install">安装</string>
     <string name="InstallDetail">点按安装 LSPosed</string>
     <string name="Modules">模块</string>
     <plurals name="modules_enabled_count">
-        <item quantity="other">%s 模块已启用</item>
+
+        <item quantity="other">%d 模块已启用</item>
     </plurals>
     <string name="Logs">日志</string>
     <string name="Settings">设置</string>
     <string name="About">关于</string>
+    <string name="module_repo">仓库</string>
+    <string name="module_repo_summary">模块仓库（Alpha）</string>
+    <string name="about_view_source_code"><![CDATA[在 %s 查看源码<br/>加入我们的 %s 频道]]></string>
+    <string name="about_translators">译者：%s</string>
+  
+    <string name="activated">已激活</string>
+    <string name="not_installed">未安装</string>
+    <string name="partial_activated">部分激活</string>
+    <string name="selinux_policy_not_loaded_summary">SEPolicy 未被正确加载</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[<b>警告：</b>SEPolicy 未被正确加载，作用于系统框架的模块将不起作用。<br>请将此报告给 <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> 开发者。]]></string>
+    <string name="info_api_version">API 版本</string>
+    <string name="info_framework_version">框架版本</string>
+    <string name="info_manager_version">管理器版本</string>
+    <string name="info_system_version">系统版本</string>
+    <string name="info_device">设备</string>
+    <string name="info_system_abi">系统架构</string>
 
-    <!-- General/various strings -->
+    <!-- LogsActivity -->
     <string name="menuSend">发送</string>
     <string name="menuSaveToSd">保存</string>
-
-    <!-- Welcome screen / main sections -->
-
-    <!-- navigation view items -->
     <string name="nav_item_logs">详细日志</string>
     <string name="nav_item_logs_err">模块日志</string>
-
-    <!-- Installer tab -->
     <string name="dont_show_again">不再提示</string>
+    <string name="logs_save_failed">保存失败：</string>
+    <string name="menuClearLog">立即清理日志</string>
+    <string name="logs_cleared">日志清理成功</string>
+    <string name="log_is_empty">日志为空</string>
+    <string name="scroll_top">滚动到顶部</string>
+    <string name="loading">正在加载…</string>
+    <string name="scroll_bottom">滚动到底部</string>
+    <string name="logs_cannot_read">无法读取日志: \n</string>
+    <string name="menuReload">重新加载</string>
+    <string name="logs_clear_failed_2">日志清理失败</string>
+    <string name="not_logcat_2">如果有人要求您提供一份 Android 系统日志，那么您来错了地方。在此处显示的是 LSPosed 的日志信息；如果您想抓取系统日志，可前往 XDA 寻求所需的答案。</string>
 
-    <!-- File operations -->
-
-    <!-- Modules tab -->
+    <!-- Notification -->
     <string name="module_is_not_activated_yet">LSPosed 模块尚未激活</string>
     <string name="module_is_not_activated_yet_detailed">%s 已安装, 但尚未激活</string>
+    <string name="xposed_module_updated_notification_content">%s 已更新</string>
+
+    <!-- ModulesActivity -->
     <string name="module_empty_description">(未提供介绍)</string>
     <string name="module_no_ui">该模块未提供用户界面</string>
     <string name="xposed_module_updated_notification_title">LSPosed 模块已更新</string>
     <string name="warning_xposed_min_version">该模块需要更新版本的 LSPosed(%d), 因此无法被激活</string>
     <string name="no_min_version_specified">该模块未指定所需的 LSPosed 版本</string>
     <string name="warning_min_version_too_low">该模块针对 LSPosed %1$d 版本构建 , 由于不兼容 %2$d 版本中的变更, 现已被停用</string>
-    <string name="modules_app_store">在应用商店查看</string>
-    <string name="module_app_info">应用信息</string>
-    <string name="module_uninstall">卸载</string>
-
-    <!-- Download tab -->
-    <string name="menuReload">重新加载</string>
-
-    <!-- Settings tab -->
-    <string name="settings_group_framework">框架</string>
-    <string name="settings_enable_resources">启用资源钩子</string>
-    <string name="settings_enable_resources_summary"><b>警告: </b> 资源钩子为实验性的特性</string>
-
-    <!-- Support tab -->
-
-    <!-- Logs tab  -->
-    <string name="logs_save_failed">保存失败：</string>
-    <string name="menuClearLog">立即清理日志</string>
-    <string name="logs_cleared">日志清理成功</string>
-    <string name="log_is_empty">日志为空</string>
-
-    <!-- About tab -->
-
-    <!-- DownloadView -->
-
-    <!-- DownloadUtils -->
-
-    <!-- RepoLoader -->
-
     <string name="warning_installed_on_external_storage">此模块因被安装在 SD 卡中而导致无法加载, 请将其移动到内部存储</string>
+    <string name="module_uninstall">卸载</string>
+    <string name="module_settings">模块设置</string>
+    <string name="view_in_repo">在仓库中查看</string>
+    <string name="module_uninstall_message">要卸载此模块吗？</string>
+    <string name="module_uninstalled">已卸载%1$s</string>
+    <string name="module_uninstall_failed">卸载失败</string>
 
-    <string name="info">信息</string>
-
-    <string name="scroll_top">滚动到顶部</string>
-    <string name="loading">正在加载…</string>
-    <string name="scroll_bottom">滚动到底部</string>
-
-    <!-- LSPd related -->
+    <!-- AppListActivity -->
+    <string name="compile_speed">重新优化</string>
     <string name="compile_speed_msg">优化中…</string>
     <string name="compile_done">优化完成。</string>
-
-    <string name="pref_title_disable_verbose_log">禁用详细日志</string>
-    <string name="logs_cannot_read">无法读取日志: \n</string>
     <string name="app_launch">运行</string>
     <string name="compile_failed">优化失败或返回值为空</string>
     <string name="compile_failed_with_info">优化失败: </string>
-    <string name="not_installed">未安装</string>
-    <string name="pure_black_dark_theme">黑色主题</string>
-    <string name="pure_black_dark_theme_summary">当深色主题启用时使用纯黑色主题</string>
     <string name="sort_by_name">应用名称</string>
     <string name="sort_by_name_reverse">应用名称（降序）</string>
     <string name="sort_by_package_name">包体名称</string>
@@ -109,7 +101,6 @@
     <string name="sort_by_install_time_reverse">安装时间（降序）</string>
     <string name="sort_by_update_time">更新时间</string>
     <string name="sort_by_update_time_reverse">更新时间（降序）</string>
-    <string name="settings_group_theme">主题</string>
     <string name="menu_show_system_apps">系统应用</string>
     <string name="menu_sort">排序…</string>
     <string name="enable_module">启用模块</string>
@@ -117,7 +108,6 @@
     <string name="menu_show_games">游戏</string>
     <string name="menu_show_modules">模块</string>
     <string name="failed_to_save_scope_list">作用域列表保存失败</string>
-    <string name="module_settings">模块设置</string>
     <string name="app_description">%s\n版本：%s</string>
     <string name="use_recommended">推荐应用</string>
     <string name="no_scope_selected_has_recommended">未选择任何应用。选择推荐的应用？</string>
@@ -125,10 +115,28 @@
     <string name="requested_by_module">推荐的应用</string>
     <string name="module_disabled_no_selection">由于未选择任何应用，模块 %s 已被禁用。</string>
     <string name="android_framework">系统框架</string>
-    <string name="app_destroyed">此应用程序已被损坏，请确保您从官方来源下载该应用程序。</string>
-    <string name="compile_speed">重新优化</string>
-    <string name="outdated_manager">LSPosed Manager 和 LSPosed Core 的版本不一致。请重新安装对应的版本。</string>
-    <string name="lsposed_not_active">LSPosed 未安装或未激活</string>
+    <string name="menu_backup_and_restore">备份…</string>
+    <string name="menu_backup">备份</string>
+    <string name="menu_restore">恢复</string>
+    <string name="force_stop">强行停止</string>
+    <string name="force_stop_dlg_title">要强行停止吗？</string>
+    <string name="force_stop_dlg_text">强行停止某个应用可能会导致其出现异常。</string>
+    <string name="reboot_required">需要重新启动才能应用此更改</string>
+    <string name="reboot">重新启动</string>
+    <string name="menu_filter">过滤…</string>
+
+    <!-- ModulesActivity and AppListActivity -->
+    <string name="modules_app_store">在应用商店查看</string>
+    <string name="module_app_info">应用信息</string>
+
+    <!-- SettingsActivity -->
+    <string name="settings_group_framework">框架</string>
+    <string name="settings_enable_resources">启用资源钩子</string>
+    <string name="settings_enable_resources_summary"><b>警告: </b> 资源钩子为实验性的特性</string>
+    <string name="pref_title_disable_verbose_log">禁用详细日志</string>
+    <string name="pure_black_dark_theme">黑色主题</string>
+    <string name="pure_black_dark_theme_summary">当深色主题启用时使用纯黑色主题</string>
+    <string name="settings_group_theme">主题</string>
     <string name="settings_backup_and_restore">备份与恢复</string>
     <string name="settings_backup_and_restore_summery">备份或恢复模块列表与作用域列表</string>
     <string name="settings_backup">备份</string>
@@ -139,12 +147,13 @@
     <string name="settings_restoring">恢复中…</string>
     <string name="settings_restore_success">恢复成功！</string>
     <string name="settings_restore_failed">恢复失败</string>
-    <string name="menu_backup_and_restore">备份…</string>
-    <string name="menu_backup">备份</string>
-    <string name="menu_restore">恢复</string>
-    <string name="xposed_module_updated_notification_content">%s 已更新</string>
-    <string name="module_repo">仓库</string>
-    <string name="module_repo_summary">模块仓库（Alpha）</string>
+    <string name="group_network">网络</string>
+    <string name="dns_over_http">安全 DNS（DoH）</string>
+    <string name="dns_over_http_summary">解决某些地区的 DNS 污染问题</string>
+    <string name="theme_color">主题颜色</string>
+    <string name="theme_color_summary">应用中最常见的颜色</string>
+
+    <!-- Module Repo -->
     <string name="module_readme">自述文件</string>
     <string name="module_releases">版本</string>
     <string name="module_information">信息</string>
@@ -154,40 +163,16 @@
     <string name="module_release_view_assets">附件</string>
     <string name="menu_open_in_browser">在浏览器中打开</string>
     <string name="refresh">刷新</string>
-    <string name="group_network">网络</string>
-    <string name="dns_over_http">安全 DNS（DoH）</string>
-    <string name="dns_over_http_summary">解决某些地区的 DNS 污染问题</string>
-    <string name="about_view_source_code"><![CDATA[在 %s 查看源码<br/>加入我们的 %s 频道]]></string>
     <string name="module_release_load_more">显示更旧的版本</string>
     <string name="module_release_no_more">没有更旧的版本</string>
-    <string name="theme_color">主题颜色</string>
-    <string name="logs_clear_failed_2">日志清理失败</string>
-    <string name="view_in_repo">在仓库中查看</string>
-    <string name="force_stop">强行停止</string>
-    <string name="force_stop_dlg_title">要强行停止吗？</string>
-    <string name="force_stop_dlg_text">强行停止某个应用可能会导致其出现异常。</string>
-    <string name="reboot_required">需要重新启动才能应用此更改</string>
-    <string name="reboot">重新启动</string>
-    <string name="not_logcat_2">如果有人要求您提供一份 Android 系统日志，那么您来错了地方。在此处显示的是 LSPosed 的日志信息；如果您想抓取系统日志，可前往 XDA 寻求所需的答案。</string>
-    <string name="verbose_log_not_avaliable">详细日志不可用，如果您只是启用了它而没有重新启动，请在重新启动后再试一次。</string>
-    <string name="module_uninstall_message">要卸载此模块吗？</string>
-    <string name="module_uninstalled">已卸载%1$s</string>
-    <string name="module_uninstall_failed">卸载失败</string>
     <string name="repo_load_failed">模块仓库加载失败：%s</string>
-    <string name="info_api_version">API 版本</string>
-    <string name="info_framework_version">框架版本</string>
-    <string name="info_manager_version">管理器版本</string>
-    <string name="info_system_version">系统版本</string>
-    <string name="info_device">设备</string>
-    <string name="info_system_abi">系统架构</string>
-    <string name="theme_color_summary">应用中最常见的颜色</string>
-    <string name="activated">已激活</string>
-    <string name="partial_activated">部分激活</string>
-    <string name="selinux_policy_not_loaded_summary">SEPolicy 未被正确加载</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[<b>警告：</b>SEPolicy 未被正确加载，作用于系统框架的模块将不起作用。<br>请将此报告给 <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> 开发者。]]></string>
+
+    <string name="app_destroyed">此应用程序已被损坏，请确保您从官方来源下载该应用程序。</string>
+    <string name="outdated_manager">LSPosed Manager 和 LSPosed Core 的版本不一致。请重新安装对应的版本。</string>
+    <string name="lsposed_not_active">LSPosed 未安装或未激活</string>
+    <string name="verbose_log_not_avaliable">详细日志不可用，如果您只是启用了它而没有重新启动，请在重新启动后再试一次。</string>
     <string name="NotInstall">未安装</string>
     <string name="NotInstallDetail">LSPosed 未安装</string>
-    <string name="about_translators">译者：%s</string>
+    <string name="translators"><![CDATA[<a href="https://github.com/LSPosed/LSPosed">LSPosed</a>]]></string>
     <string name="copy_toast_msg">已复制</string>
-    <string name="menu_filter">过滤…</string>
 </resources>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -18,81 +18,81 @@
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 
-<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+<resources>
+    <!-- MainActivity -->
+    <string name="info">信息</string>
     <string name="Install">安裝</string>
     <string name="InstallDetail">點按安裝 LSPosed</string>
     <string name="Modules">模組</string>
+    <plurals name="modules_enabled_count">
+
+        <item quantity="other">%d modules enabled</item>
+    </plurals>
     <string name="Logs">日誌</string>
     <string name="Settings">設置</string>
     <string name="About">關於</string>
-    <!-- General/various strings -->
+    <string name="module_repo">倉庫</string>
+    <string name="module_repo_summary">模組倉庫（Alpha）</string>
+    <string name="about_view_source_code"><![CDATA[在 %s 查看源碼<br/>加入我們的 %s 頻道]]></string>
+    <string name="about_translators">Translators: %s</string>
+
+    <string name="activated">Activated</string>
+    <string name="not_installed">未安裝</string>
+    <string name="partial_activated">Partially activated</string>
+    <string name="selinux_policy_not_loaded_summary">SEPolicy is not loaded properly</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[<b>WARNING:</b> SEPolicy is not loaded properly, modules that hook System Framework will not work.<br>Please report this to <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> developer.]]></string>
+    <string name="info_api_version">API version</string>
+    <string name="info_framework_version">Framework version</string>
+    <string name="info_manager_version">Manager version</string>
+    <string name="info_system_version">System version</string>
+    <string name="info_device">Device</string>
+    <string name="info_system_abi">System ABI</string>
+
+    <!-- LogsActivity -->
     <string name="menuSend">發送</string>
     <string name="menuSaveToSd">保存</string>
-
-    <!-- Welcome screen / main sections -->
-
-    <!-- navigation view items -->
     <string name="nav_item_logs">詳細日誌</string>
     <string name="nav_item_logs_err">模組日誌</string>
-
-    <!-- Installer tab -->
     <string name="dont_show_again">不再提示</string>
+    <string name="logs_save_failed">保存失敗：</string>
+    <string name="menuClearLog">立即清理日誌</string>
+    <string name="logs_cleared">日誌清理成功</string>
+    <string name="log_is_empty">日誌為空</string>
+    <string name="scroll_top">滾動到頂部</string>
+    <string name="loading">正在載入…</string>
+    <string name="scroll_bottom">滾動到底部</string>
+    <string name="logs_cannot_read">無法讀取日誌: \n</string>
+    <string name="menuReload">重新載入</string>
+    <string name="logs_clear_failed_2">Failed to clear the log</string>
+    <string name="not_logcat_2">If someone asked you an Android Logcat, you\'re in the wrong section. This is the LSPosed log; if you need a logcat, on XDA you can find what you need.</string>
 
-    <!-- File operations -->
-
-    <!-- Modules tab -->
+    <!-- Notification -->
     <string name="module_is_not_activated_yet">LSPosed 模組尚未啟動</string>
     <string name="module_is_not_activated_yet_detailed">%s 已安裝, 但尚未啟動</string>
+    <string name="xposed_module_updated_notification_content">%s 已更新</string>
+
+    <!-- ModulesActivity -->
     <string name="module_empty_description">(未提供介紹)</string>
     <string name="module_no_ui">該模組未提供使用者介面</string>
     <string name="xposed_module_updated_notification_title">LSPosed 模組已更新</string>
     <string name="warning_xposed_min_version">該模組需要更新版本的 LSPosed(%d), 因此無法被啟動</string>
     <string name="no_min_version_specified">該模組未指定所需的 LSPosed 版本</string>
     <string name="warning_min_version_too_low">該模組針對 LSPosed %1$d 版本構建 , 由於不相容 %2$d 版本中的變更, 現已被停用</string>
-    <string name="module_app_info">應用資訊</string>
-    <string name="modules_app_store">在應用商店查看</string>
-    <string name="module_uninstall">卸載</string>
-
-    <!-- Download tab -->
-    <string name="menuReload">重新載入</string>
-
-    <!-- Settings tab -->
-    <string name="settings_group_framework">框架</string>
-
-    <!-- Support tab -->
-
-    <!-- Logs tab  -->
-    <string name="logs_save_failed">保存失敗：</string>
-    <string name="menuClearLog">立即清理日誌</string>
-    <string name="logs_cleared">日誌清理成功</string>
-    <string name="log_is_empty">日誌為空</string>
-
-    <!-- About tab -->
-
-    <!-- DownloadView -->
-
-    <!-- DownloadUtils -->
-
-    <!-- RepoLoader -->
-
     <string name="warning_installed_on_external_storage">此模組因被安裝在 SD 卡中而導致無法載入, 請將其移動到內部存儲</string>
+    <string name="module_uninstall">卸載</string>
+    <string name="module_settings">模組設置</string>
+    <string name="view_in_repo">View in Repo</string>
+    <string name="module_uninstall_message">Do you want to uninstall this module?</string>
+    <string name="module_uninstalled">Uninstalled %1$s</string>
+    <string name="module_uninstall_failed">Uninstall unsuccessful</string>
 
-    <string name="info">信息</string>
-
-    <string name="scroll_top">滾動到頂部</string>
-    <string name="loading">正在載入…</string>
-    <string name="scroll_bottom">滾動到底部</string>
-
-    <!-- LSPd related -->
+    <!-- AppListActivity -->
+    <string name="compile_speed">重新優化</string>
     <string name="compile_speed_msg">優化中…</string>
-
-    <string name="pref_title_disable_verbose_log">禁用詳細日誌</string>
-    <string name="logs_cannot_read">無法讀取日誌: \n</string>
+    <string name="compile_done">優化完成</string>
     <string name="app_launch">運行</string>
     <string name="compile_failed">優化失敗或返回值為空</string>
     <string name="compile_failed_with_info">優化失敗: </string>
-    <string name="not_installed">未安裝</string>
-    <string name="pure_black_dark_theme">使用純黑深色主題</string>
     <string name="sort_by_name">應用名稱</string>
     <string name="sort_by_name_reverse">應用名稱（降冪）</string>
     <string name="sort_by_package_name">包體名稱</string>
@@ -101,9 +101,6 @@
     <string name="sort_by_install_time_reverse">安裝時間（降冪）</string>
     <string name="sort_by_update_time">更新時間</string>
     <string name="sort_by_update_time_reverse">更新時間（降冪）</string>
-    <string name="settings_group_theme">主題</string>
-    <string name="settings_enable_resources">啟用資源鉤子</string>
-    <string name="settings_enable_resources_summary"><b>警告: </b> 資源鈎子為實驗性的特性</string>
     <string name="menu_show_system_apps">系統應用</string>
     <string name="menu_sort">排序…</string>
     <string name="enable_module">啟用模組</string>
@@ -111,7 +108,6 @@
     <string name="menu_show_games">遊戲</string>
     <string name="menu_show_modules">模組</string>
     <string name="failed_to_save_scope_list">作用域列表保存失敗</string>
-    <string name="module_settings">模組設置</string>
     <string name="app_description">%s\n版本：%s</string>
     <string name="use_recommended">推薦應用</string>
     <string name="no_scope_selected_has_recommended">未選擇任何應用。選擇推薦的應用？</string>
@@ -119,10 +115,28 @@
     <string name="requested_by_module">推薦的應用</string>
     <string name="module_disabled_no_selection">由於未選擇任何應用，模組 %s 已被禁用。</string>
     <string name="android_framework">系統框架</string>
-    <string name="app_destroyed">此應用程式已被損壞，請確保您從官方來源下載該應用程式。</string>
-    <string name="compile_speed">重新優化</string>
-    <string name="outdated_manager">LSPosed Manager 和 LSPosed Core 的版本不一致。請重新安裝對應的版本。</string>
-    <string name="lsposed_not_active">LSPosed 未安裝或未啟動</string>
+    <string name="menu_backup_and_restore">備份…</string>
+    <string name="menu_backup">備份</string>
+    <string name="menu_restore">恢復</string>
+    <string name="force_stop">Force stop</string>
+    <string name="force_stop_dlg_title">Force stop?</string>
+    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
+    <string name="reboot_required">Reboot is required for this change to apply</string>
+    <string name="reboot">Reboot</string>
+    <string name="menu_filter">Filter…</string>
+
+    <!-- ModulesActivity and AppListActivity -->
+    <string name="modules_app_store">在應用商店查看</string>
+    <string name="module_app_info">應用資訊</string>
+
+    <!-- SettingsActivity -->
+    <string name="settings_group_framework">框架</string>
+    <string name="settings_enable_resources">啟用資源鉤子</string>
+    <string name="settings_enable_resources_summary"><b>警告: </b> 資源鈎子為實驗性的特性</string>
+    <string name="pref_title_disable_verbose_log">禁用詳細日誌</string>
+    <string name="pure_black_dark_theme">使用純黑深色主題</string>
+    <string name="pure_black_dark_theme_summary">Use the pure black theme if dark theme is enabled</string>
+    <string name="settings_group_theme">主題</string>
     <string name="settings_backup_and_restore">備份與恢復</string>
     <string name="settings_backup_and_restore_summery">備份或恢復模組清單與作用域清單</string>
     <string name="settings_backup">備份</string>
@@ -133,13 +147,13 @@
     <string name="settings_restoring">恢復中…</string>
     <string name="settings_restore_success">恢復成功！</string>
     <string name="settings_restore_failed">恢復失敗</string>
-    <string name="menu_backup_and_restore">備份…</string>
-    <string name="menu_backup">備份</string>
-    <string name="menu_restore">恢復</string>
-    <string name="xposed_module_updated_notification_content">%s 已更新</string>
-    <string name="compile_done">優化完成</string>
-    <string name="module_repo">倉庫</string>
-    <string name="module_repo_summary">模組倉庫（Alpha）</string>
+    <string name="group_network">網路</string>
+    <string name="dns_over_http">安全 DNS（DoH）</string>
+    <string name="dns_over_http_summary">解決某些地區的 DNS 污染問題</string>
+    <string name="theme_color">主題顏色</string>
+    <string name="theme_color_summary">Color that appears most frequently in the app</string>
+
+    <!-- Module Repo -->
     <string name="module_readme">讀我檔案</string>
     <string name="module_releases">版本</string>
     <string name="module_information">信息</string>
@@ -149,11 +163,16 @@
     <string name="module_release_view_assets">附件</string>
     <string name="menu_open_in_browser">在流覽器中打開</string>
     <string name="refresh">刷新</string>
-    <string name="group_network">網路</string>
-    <string name="dns_over_http">安全 DNS（DoH）</string>
-    <string name="dns_over_http_summary">解決某些地區的 DNS 污染問題</string>
-    <string name="about_view_source_code"><![CDATA[在 %s 查看源碼<br/>加入我們的 %s 頻道]]></string>
     <string name="module_release_load_more">顯示更舊的版本</string>
     <string name="module_release_no_more">沒有更舊的版本</string>
-    <string name="theme_color">主題顏色</string>
+    <string name="repo_load_failed">Failed to load module repo: %s</string>
+
+    <string name="app_destroyed">此應用程式已被損壞，請確保您從官方來源下載該應用程式。</string>
+    <string name="outdated_manager">LSPosed Manager 和 LSPosed Core 的版本不一致。請重新安裝對應的版本。</string>
+    <string name="lsposed_not_active">LSPosed 未安裝或未啟動</string>
+    <string name="verbose_log_not_avaliable">Verbose log is not available, if you just enabled it without reboot, try again after reboot.</string>
+    <string name="NotInstall">Not Installed</string>
+    <string name="NotInstallDetail">LSPosed is not Installed</string>
+    <string name="translators"><![CDATA[<a href="https://github.com/LSPosed/LSPosed">LSPosed</a>]]></string>
+    <string name="copy_toast_msg">Copied</string>
 </resources>
