@@ -25,7 +25,7 @@
     <string name="InstallDetail">點按安裝 LSPosed</string>
     <string name="Modules">模組</string>
     <plurals name="modules_enabled_count">
-        <item quantity="one">%d module enabled</item>
+
         <item quantity="other">%d modules enabled</item>
     </plurals>
     <string name="Logs">日誌</string>
