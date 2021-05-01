@@ -17,6 +17,7 @@
  * Copyright (C) 2021 LSPosed Contributors
  */
 
+import com.android.build.api.variant.impl.ApplicationVariantImpl
 import com.android.build.gradle.BaseExtension
 import com.android.ide.common.signing.KeystoreHelper
 import org.apache.tools.ant.filters.FixCrLfFilter
@@ -68,20 +69,20 @@ dependencies {
 }
 
 android {
-    compileSdkVersion(androidCompileSdkVersion)
+    compileSdk = androidCompileSdkVersion
     ndkVersion = androidCompileNdkVersion
-    buildToolsVersion(androidBuildToolsVersion)
+    buildToolsVersion = androidBuildToolsVersion
 
     buildFeatures {
         prefab = true
     }
 
     defaultConfig {
-        applicationId("org.lsposed.lspd")
-        minSdkVersion(androidMinSdkVersion)
-        targetSdkVersion(androidTargetSdkVersion)
-        versionCode(verCode)
-        versionName(verName)
+        applicationId = "org.lsposed.lspd"
+        minSdk = androidMinSdkVersion
+        targetSdk = androidTargetSdkVersion
+        versionCode = verCode
+        versionName = verName
         multiDexEnabled = false
 
         externalNativeBuild {
@@ -123,17 +124,19 @@ android {
     }
 
     buildTypes {
-        named("debug") {
+        debug {
             externalNativeBuild {
                 cmake {
-                    arguments.addAll(arrayOf(
-                        "-DCMAKE_CXX_FLAGS_DEBUG=-Og",
-                        "-DCMAKE_C_FLAGS_DEBUG=-Og"
-                    ))
+                    arguments.addAll(
+                        arrayOf(
+                            "-DCMAKE_CXX_FLAGS_DEBUG=-Og",
+                            "-DCMAKE_C_FLAGS_DEBUG=-Og"
+                        )
+                    )
                 }
             }
         }
-        named("release") {
+        release {
             isMinifyEnabled = true
             proguardFiles("proguard-rules.pro")
 
@@ -156,12 +159,14 @@ android {
                         "-Oz",
                         "-DNDEBUG"
                     ).joinToString(" ")
-                    arguments.addAll(arrayOf(
-                        "-DCMAKE_CXX_FLAGS_RELEASE=$configFlags",
-                        "-DCMAKE_CXX_FLAGS_RELWITHDEBINFO=$configFlags",
-                        "-DCMAKE_C_FLAGS_RELEASE=$configFlags",
-                        "-DCMAKE_C_FLAGS_RELWITHDEBINFO=$configFlags"
-                    ))
+                    arguments.addAll(
+                        arrayOf(
+                            "-DCMAKE_CXX_FLAGS_RELEASE=$configFlags",
+                            "-DCMAKE_CXX_FLAGS_RELWITHDEBINFO=$configFlags",
+                            "-DCMAKE_C_FLAGS_RELEASE=$configFlags",
+                            "-DCMAKE_C_FLAGS_RELWITHDEBINFO=$configFlags"
+                        )
+                    )
                 }
             }
         }
@@ -176,30 +181,32 @@ android {
         targetCompatibility(androidTargetCompatibility)
         sourceCompatibility(androidSourceCompatibility)
     }
+
 }
 
-android.applicationVariants.all {
-    val variantCapped = name.capitalize()
-    val variantLowered = name.toLowerCase()
+androidComponents.onVariants { v ->
+    val variant = v as ApplicationVariantImpl
+    val variantCapped = variant.name.capitalize()
+    val variantLowered = variant.name.toLowerCase()
     val zipFileName = "$moduleName-$verName-$verCode-$variantLowered.zip"
     val magiskDir = "$buildDir/magisk/$variantLowered"
 
-    val app = rootProject.project(":app").extensions.getByName<BaseExtension>("android")
-    val outSrcDir = file("$buildDir/generated/source/signInfo/${variantLowered}")
-    val outSrc = file("$outSrcDir/org/lsposed/lspd/util/SignInfo.java")
-    val signInfoTask = tasks.register("generate${variantCapped}SignInfo") {
-        dependsOn(":app:validateSigning${variantCapped}")
-        outputs.file(outSrc)
-        doLast {
-            val sign = app.buildTypes.named(buildType.name).get().signingConfig
-            if (sign?.isSigningReady == true) {
+    afterEvaluate {
+        val app = rootProject.project(":app").extensions.getByName<BaseExtension>("android")
+        val outSrcDir = file("$buildDir/generated/source/signInfo/${variantLowered}")
+        val outSrc = file("$outSrcDir/org/lsposed/lspd/util/SignInfo.java")
+        val signInfoTask = tasks.register("generate${variantCapped}SignInfo") {
+            dependsOn(":app:validateSigning${variantCapped}")
+            outputs.file(outSrc)
+            doLast {
+                val sign = app.buildTypes.named(variantLowered).get().signingConfig
                 outSrc.parentFile.mkdirs()
                 val certificateInfo = KeystoreHelper.getCertificateInfo(
-                    sign.storeType,
-                    sign.storeFile,
-                    sign.storePassword,
-                    sign.keyPassword,
-                    sign.keyAlias
+                    sign?.storeType,
+                    sign?.storeFile,
+                    sign?.storePassword,
+                    sign?.keyPassword,
+                    sign?.keyAlias
                 )
                 PrintStream(outSrc).apply {
                     println("package org.lsposed.lspd.util;")
@@ -212,8 +219,8 @@ android.applicationVariants.all {
                 }
             }
         }
+        variant.variantData.registerJavaGeneratingTask(signInfoTask, arrayListOf(outSrcDir))
     }
-    registerJavaGeneratingTask(signInfoTask.get(), outSrcDir)
 
     val prepareMagiskFilesTask = task("prepareMagiskFiles$variantCapped") {
         dependsOn("assemble$variantCapped")
@@ -257,7 +264,7 @@ android.applicationVariants.all {
                             )
                             .replace(
                                 "%%RIRU_MODULE_DEBUG%%",
-                                if (buildType.name == "debug") "true" else "false"
+                                if (variantLowered == "debug") "true" else "false"
                             )
                     }
                     filter(
@@ -273,7 +280,7 @@ android.applicationVariants.all {
                     from("${buildDir}/intermediates/cmake/$variantLowered/obj")
                     exclude("**/*.txt")
                 }
-                val dexOutPath = if (buildType.name == "release")
+                val dexOutPath = if (variantLowered == "release")
                     "$buildDir/intermediates/dex/$variantLowered/minify${variantCapped}WithR8" else
                     "$buildDir/intermediates/dex/$variantLowered/mergeDex$variantCapped"
                 into("framework") {
@@ -299,14 +306,11 @@ android.applicationVariants.all {
         from(magiskDir)
     }
 
+    val adb = androidComponents.sdkComponents.adb.get().asFile.absolutePath
     val pushTask = task("push${variantCapped}", Exec::class) {
         dependsOn(zipTask)
         workingDir("${projectDir}/release")
-        val commands = arrayOf(
-            android.adbExecutable, "push",
-            zipFileName,
-            "/data/local/tmp/"
-        )
+        val commands = arrayOf(adb, "push", zipFileName, "/data/local/tmp/")
         if (isWindows) {
             commandLine("cmd", "/c", commands.joinToString(" "))
         } else {
@@ -317,7 +321,7 @@ android.applicationVariants.all {
         dependsOn(pushTask)
         workingDir("${projectDir}/release")
         val commands = arrayOf(
-            android.adbExecutable, "shell", "su", "-c",
+            adb, "shell", "su", "-c",
             "magisk --install-module /data/local/tmp/${zipFileName}"
         )
         if (isWindows) {
@@ -329,7 +333,7 @@ android.applicationVariants.all {
     task("flashAndReboot${variantCapped}", Exec::class) {
         dependsOn(flashTask)
         workingDir("${projectDir}/release")
-        val commands = arrayOf(android.adbExecutable, "shell", "reboot")
+        val commands = arrayOf(adb, "shell", "reboot")
         if (isWindows) {
             commandLine("cmd", "/c", commands.joinToString(" "))
         } else {
