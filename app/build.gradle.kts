@@ -41,21 +41,35 @@ val androidKeyAlias: String? by rootProject
 val androidKeyPassword: String? by rootProject
 
 android {
-    compileSdkVersion(androidCompileSdkVersion)
+    compileSdk = androidCompileSdkVersion
     ndkVersion = androidCompileNdkVersion
-    buildToolsVersion(androidBuildToolsVersion)
+    buildToolsVersion = androidBuildToolsVersion
 
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 
     defaultConfig {
-        applicationId(defaultManagerPackageName)
-        minSdkVersion(androidMinSdkVersion)
-        targetSdkVersion(androidTargetSdkVersion)
-        versionCode(verCode)
-        versionName(verName)
-        resConfigs("en", "zh-rCN", "zh-rTW", "zh-rHK", "ru", "uk", "nl", "ko", "fr", "de", "it", "pt")
+        applicationId = defaultManagerPackageName
+        minSdk = androidMinSdkVersion
+        targetSdk = androidTargetSdkVersion
+        versionCode = verCode
+        versionName = verName
+        resourceConfigurations += arrayOf(
+            "en",
+            "zh-rCN",
+            "zh-rTW",
+            "zh-rHK",
+            "ru",
+            "uk",
+            "nl",
+            "ko",
+            "fr",
+            "de",
+            "it",
+            "pt"
+        )
     }
 
     compileOptions {
@@ -103,25 +117,23 @@ android {
                 signingConfig = if (it.storeFile?.exists() == true) it
                 else signingConfigs.named("debug").get()
                 isMinifyEnabled = true
-                isShrinkResources = true
+//                isShrinkResources = true
                 proguardFiles("proguard-rules.pro")
             }
         }
     }
 
-    applicationVariants.all {
-        outputs.map { it as BaseVariantOutputImpl }.forEach { output ->
-            output.outputFileName = "LSPosedManager-${verName}-${verCode}-${buildType.name}.apk"
-        }
+    buildOutputs.map {
+        it as BaseVariantOutputImpl
+    }.forEach { output ->
+        output.outputFileName = "LSPosedManager-${verName}-${verCode}.apk"
     }
 }
 
 val optimizeReleaseRes = task("optimizeReleaseRes").doLast {
-    val aapt2 = Paths.get(
-        project.android.sdkDirectory.path,
-        "build-tools",
-        project.android.buildToolsVersion,
-        "aapt2"
+    val aapt2 = File(
+        androidComponents.sdkComponents.sdkDirectory.get().asFile,
+        "build-tools/${androidBuildToolsVersion}/aapt2"
     )
     val zip = Paths.get(
         project.buildDir.path,
@@ -162,7 +174,7 @@ dependencies {
     implementation("androidx.browser:browser:1.3.0")
     implementation("androidx.constraintlayout:constraintlayout:2.0.4")
     implementation("androidx.core:core:1.3.2")
-    implementation("androidx.fragment:fragment:1.3.2")
+    implementation("androidx.fragment:fragment:1.3.3")
     implementation("androidx.recyclerview:recyclerview:1.2.0")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("com.caverock:androidsvg-aar:1.4")
