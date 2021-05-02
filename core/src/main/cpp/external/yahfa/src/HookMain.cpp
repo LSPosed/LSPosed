@@ -10,15 +10,16 @@
 int SDKVersion;
 size_t OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod;
 namespace {
-    size_t ArtMethodSize;
     constexpr size_t OFFSET_access_flags_in_ArtMethod = 4;
     constexpr uint32_t kAccCompileDontBother = 0x02000000;
-    constexpr uint32_t kAccPreCompiled = 0x00200000;
     constexpr uint32_t kAccPublic = 0x0001;  // class, field, method, ic
     constexpr uint32_t kAccPrivate = 0x0002;  // field, method, ic
     constexpr uint32_t kAccProtected = 0x0004;  // field, method, ic
     constexpr uint32_t kAccStatic = 0x0008;  // field, method, ic
     constexpr uint32_t kAccFastInterpreterToInterpreterInvoke = 0x40000000;
+
+    size_t ArtMethodSize;
+    uint32_t kAccPreCompiled = 0x00200000;
 
     jfieldID fieldArtMethod = nullptr;
 
@@ -129,6 +130,7 @@ namespace yahfa {
                 OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod =
                         roundUpToPtrSize(4 * 3 + 2 * 2) + pointer_size;
                 ArtMethodSize = roundUpToPtrSize(4 * 3 + 2 * 2) + pointer_size * 2;
+                kAccPreCompiled = 0x00800000;
                 break;
             case __ANDROID_API_R__:
             case __ANDROID_API_Q__:
