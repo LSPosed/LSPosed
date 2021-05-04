@@ -387,8 +387,8 @@ public final class XposedInit {
         } catch (ClassNotFoundException ignored) {
         }
 
-        boolean res = initModule(mcl, apk);
-        res = res && initNativeModule(mcl, apk);
+        boolean res = initNativeModule(mcl, apk);
+        res = res && initModule(mcl, apk);
         return res;
     }
 
