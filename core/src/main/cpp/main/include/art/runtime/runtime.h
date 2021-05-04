@@ -27,6 +27,11 @@ namespace art {
     class Runtime : public lspd::HookedObject {
     private:
         inline static Runtime *instance_;
+        CREATE_MEM_FUNC_SYMBOL_ENTRY(void, SetJavaDebuggable, void *thiz, bool value) {
+            if (LIKELY(SetJavaDebuggableSym)) {
+                SetJavaDebuggableSym(thiz, value);
+            }
+        }
 
     public:
         Runtime(void *thiz) : HookedObject(thiz) {}
@@ -35,10 +40,15 @@ namespace art {
             return instance_;
         }
 
+        void SetJavaDebuggable(bool value) {
+            SetJavaDebuggable(thiz_, value);
+        }
+
         // @ApiSensitive(Level.LOW)
         static void Setup(void *handle) {
             RETRIEVE_FIELD_SYMBOL(instance, "_ZN3art7Runtime9instance_E");
-            void * thiz = *reinterpret_cast<void**>(instance);
+            RETRIEVE_MEM_FUNC_SYMBOL(SetJavaDebuggable, "_ZN3art7Runtime17SetJavaDebuggableEb");
+            void *thiz = *reinterpret_cast<void **>(instance);
             LOGD("_ZN3art7Runtime9instance_E = %p", thiz);
             instance_ = new Runtime(thiz);
         }

@@ -220,8 +220,8 @@ namespace lspd {
         auto binder = skip_ ? ScopedLocalRef<jobject>{env, nullptr}
                             : Service::instance()->RequestBinder(env, nice_name_);
         if (binder) {
-            LoadDex(env);
             InstallInlineHooks();
+            LoadDex(env);
             Init(env);
             LOGD("Done prepare");
             FindAndCall(env, "forkAndSpecializePost",

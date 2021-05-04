@@ -31,6 +31,9 @@ namespace lspd {
     extern void *sym_system_property_get;
     extern void *sym_get_property;
     extern void *handle_libart;
+    extern void *sym_openInMemoryDexFilesNative;
+    extern void *sym_openDexFileNative;
+    extern void *sym_setTrusted;
 
     void InitSymbolCache();
 }

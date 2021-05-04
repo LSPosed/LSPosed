@@ -41,7 +41,7 @@ namespace lspd {
             return std::move(instance_);
         }
 
-        inline auto GetCurrentClassLoader() const { return inject_class_loader_; }
+        inline jobject GetCurrentClassLoader() const { return inject_class_loader_; }
 
         void CallOnPostFixupStaticTrampolines(void *class_ptr);
 
