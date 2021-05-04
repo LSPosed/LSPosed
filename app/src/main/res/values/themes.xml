@@ -17,7 +17,7 @@
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <style name="Base.AppTheme.Light" parent="Theme.Material.Light.LightStatusBar">
         <item name="android:statusBarColor">?android:colorBackground</item>
@@ -42,9 +42,6 @@
         <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-
-        <!-- MIUI -->
-        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
 
         <!-- Preference title -->
         <item name="android:textAppearanceListItem">?textAppearanceSubtitle1</item>
@@ -73,9 +70,6 @@
         <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-
-        <!-- MIUI -->
-        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
 
         <!-- Preference title -->
         <item name="android:textAppearanceListItem">?textAppearanceSubtitle1</item>
