@@ -53,7 +53,6 @@ public final class NotificationUtil {
 
         Intent intent = new Intent(context, AppListActivity.class)
                 .putExtra("modulePackageName", modulePackageName)
-                .putExtra("moduleName", moduleName)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         PendingIntent contentIntent = PendingIntent.getActivity(context, PENDING_INTENT_OPEN_APP_LIST, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);

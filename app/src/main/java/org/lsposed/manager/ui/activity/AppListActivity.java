@@ -44,6 +44,7 @@ import org.lsposed.manager.databinding.ActivityAppListBinding;
 import org.lsposed.manager.ui.activity.base.BaseActivity;
 import org.lsposed.manager.util.BackupUtils;
 import org.lsposed.manager.util.LinearLayoutManagerFix;
+import org.lsposed.manager.util.ModuleUtil;
 
 import rikka.recyclerview.RecyclerViewKt;
 
@@ -60,18 +61,23 @@ public class AppListActivity extends BaseActivity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String modulePackageName = getIntent().getStringExtra("modulePackageName");
-        String moduleName = getIntent().getStringExtra("moduleName");
         binding = ActivityAppListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setAppBar(binding.appBar, binding.toolbar);
         binding.appBar.setRaised(true);
         binding.toolbar.setNavigationOnClickListener(view -> onBackPressed());
+        ModuleUtil.InstalledModule module = ModuleUtil.getInstance().getModule(modulePackageName);
+        if (module == null) {
+            finish();
+            return;
+        }
         ActionBar bar = getSupportActionBar();
-        assert bar != null;
-        bar.setDisplayHomeAsUpEnabled(true);
-        bar.setTitle(moduleName);
-        bar.setSubtitle(modulePackageName);
-        scopeAdapter = new ScopeAdapter(this, moduleName, modulePackageName);
+        if (bar != null) {
+            bar.setDisplayHomeAsUpEnabled(true);
+            bar.setTitle(module.getAppName());
+            bar.setSubtitle(module.packageName);
+        }
+        scopeAdapter = new ScopeAdapter(this, module);
         scopeAdapter.setHasStableIds(true);
         binding.recyclerView.setAdapter(scopeAdapter);
         binding.recyclerView.setHasFixedSize(true);
@@ -147,6 +153,12 @@ public class AppListActivity extends BaseActivity {
                         });
                     }
                 });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        scopeAdapter.refresh(false);
     }
 
     @Override

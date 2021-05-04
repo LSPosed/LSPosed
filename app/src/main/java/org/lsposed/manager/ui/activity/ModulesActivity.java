@@ -278,7 +278,6 @@ public class ModulesActivity extends ListActivity implements ModuleUtil.ModuleLi
             holder.itemView.setOnClickListener(v -> {
                 Intent intent = new Intent(ModulesActivity.this, AppListActivity.class);
                 intent.putExtra("modulePackageName", item.packageName);
-                intent.putExtra("moduleName", item.getAppName());
                 startActivity(intent);
             });
 
