@@ -25,7 +25,7 @@
 #include "native_api.h"
 #include "symbol_cache.h"
 #include <dobby.h>
-#include <vector>
+#include <list>
 #include <base/object.h>
 
 /*
@@ -44,8 +44,8 @@
  */
 
 namespace lspd {
-    std::vector<NativeOnModuleLoaded> moduleLoadedCallbacks;
-    std::vector<std::string> moduleNativeLibs;
+    std::list<NativeOnModuleLoaded> moduleLoadedCallbacks;
+    std::list<std::string> moduleNativeLibs;
     std::unique_ptr<void, std::function<void(void *)>> protected_page(
             mmap(nullptr, _page_size, PROT_READ | PROT_WRITE, MAP_ANONYMOUS | MAP_SHARED, -1, 0),
             [](void *ptr) { munmap(ptr, _page_size); });
