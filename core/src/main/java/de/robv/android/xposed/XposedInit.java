@@ -387,9 +387,7 @@ public final class XposedInit {
         } catch (ClassNotFoundException ignored) {
         }
 
-        boolean res = initNativeModule(mcl, apk);
-        res = res && initModule(mcl, apk);
-        return res;
+        return initNativeModule(mcl, apk) && initModule(mcl, apk);
     }
 
     public final static HashSet<String> loadedPackagesInProcess = new HashSet<>(1);
