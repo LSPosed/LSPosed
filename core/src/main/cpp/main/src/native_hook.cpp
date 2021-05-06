@@ -70,8 +70,8 @@ namespace lspd {
         if (art_hooks_installed) {
             return;
         }
-        art::hidden_api::DisableHiddenApi(art_handle);
         art::Runtime::Setup(art_handle);
+        art::hidden_api::DisableHiddenApi(art_handle);
         art::art_method::Setup(art_handle);
         art::Thread::Setup(art_handle);
         art::ClassLinker::Setup(art_handle);

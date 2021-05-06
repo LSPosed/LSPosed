@@ -34,7 +34,6 @@ namespace lspd {
     Service::exec_transact_replace(jboolean *res, JNIEnv *env, [[maybe_unused]] jobject obj,
                                    va_list args) {
         jint code;
-
         va_list copy;
         va_copy(copy, args);
         code = va_arg(copy, jint);

@@ -20,56 +20,84 @@
 
 #pragma once
 
+#include "symbol_cache.h"
 #include "base/object.h"
+#include "context.h"
+#include "runtime.h"
 
 namespace art {
 
     namespace hidden_api {
 
-        enum Action {
-            kAllow,
-            kAllowButWarn,
-            kAllowButWarnAndToast,
-            kDeny
+        CREATE_FUNC_SYMBOL_ENTRY(void, DexFile_setTrusted, JNIEnv *env, jclass clazz,
+                                 jobject j_cookie) {
+            if (LIKELY(DexFile_setTrustedSym != nullptr)) {
+                Runtime::Current()->SetJavaDebuggable(true);
+                DexFile_setTrustedSym(env, clazz, j_cookie);
+                Runtime::Current()->SetJavaDebuggable(false);
+            }
         };
 
-        CREATE_HOOK_STUB_ENTRIES(
-                "_ZN3art9hiddenapi6detail19GetMemberActionImplINS_9ArtMethodEEENS0_6ActionEPT_NS_20HiddenApiAccessFlags7ApiListES4_NS0_12AccessMethodE",
-                Action, GetMethodActionImpl, (), {
-                    return Action::kAllow;
-                });
+        inline void
+        maybeSetTrusted(JNIEnv *env, jclass clazz, jobject class_loader, jobject j_cookie) {
+            static auto get_parent = env->GetMethodID(env->FindClass("java/lang/ClassLoader"),
+                                                      "getParent", "()Ljava/lang/ClassLoader;");
+            for (auto current = lspd::Context::GetInstance()->GetCurrentClassLoader();
+                 class_loader != nullptr;
+                 class_loader = env->CallObjectMethod(class_loader, get_parent)) {
+                if (!current || env->IsSameObject(class_loader, current)) {
+                    DexFile_setTrusted(env, clazz, j_cookie);
+                    LOGD("Set classloader as trusted");
+                    return;
+                }
+            }
+        }
 
         CREATE_HOOK_STUB_ENTRIES(
-                "_ZN3art9hiddenapi6detail19GetMemberActionImplINS_8ArtFieldEEENS0_6ActionEPT_NS_20HiddenApiAccessFlags7ApiListES4_NS0_12AccessMethodE",
-                Action, GetFieldActionImpl, (), {
-                    return Action::kAllow;
-                });
+                "_ZN3artL25DexFile_openDexFileNativeEP7_JNIEnvP7_jclassP8_jstringS5_iP8_jobjectP13_jobjectArray",
+                jobject, DexFile_openDexFileNative, (JNIEnv * env,
+                jclass clazz,
+                jstring javaSourceName,
+                jstring javaOutputName,
+                jint flags,
+                jobject class_loader,
+                jobjectArray dex_elements), {
+                    auto j_cookie = backup(env, clazz, javaSourceName, javaOutputName, flags,
+                                           class_loader,
+                                           dex_elements);
+                    maybeSetTrusted(env, clazz, class_loader, j_cookie);
+                    return j_cookie;
+                }
+        );
 
         CREATE_HOOK_STUB_ENTRIES(
-                "_ZN3art9hiddenapi6detail28ShouldDenyAccessToMemberImplINS_9ArtMethodEEEbPT_NS0_7ApiListENS0_12AccessMethodE",
-                bool, ShouldDenyAccessToMethodImpl, (), {
-                    return false;
-                });
+                "_ZN3artL34DexFile_openInMemoryDexFilesNativeEP7_JNIEnvP7_jclassP13_jobjectArrayS5_P10_jintArrayS7_P8_jobjectS5_",
+                jobject, DexFile_openInMemoryDexFilesNative, (JNIEnv * env,
+                jclass clazz,
+                jobjectArray buffers,
+                jobjectArray arrays,
+                jintArray jstarts,
+                jintArray jends,
+                jobject class_loader,
+                jobjectArray dex_elements), {
+                    auto j_cookie = backup(env, clazz, buffers, arrays, jstarts, jends,
+                                           class_loader,
+                                           dex_elements);
+                    maybeSetTrusted(env, clazz, class_loader, j_cookie);
+                    return j_cookie;
+                }
+        );
 
-        CREATE_HOOK_STUB_ENTRIES(
-                "_ZN3art9hiddenapi6detail28ShouldDenyAccessToMemberImplINS_8ArtFieldEEEbPT_NS0_7ApiListENS0_12AccessMethodE",
-                bool, ShouldDenyAccessToFieldImpl, (), {
-                    return false;
-                });
-
-        // @ApiSensitive(Level.HIGH)
         static void DisableHiddenApi(void *handle) {
+
             const int api_level = lspd::GetAndroidApiLevel();
             if (api_level < __ANDROID_API_P__) {
                 return;
             }
-            if (api_level == __ANDROID_API_P__) {
-                lspd::HookSyms(handle, GetMethodActionImpl);
-                lspd::HookSyms(handle, GetFieldActionImpl);
-            } else {
-                lspd::HookSyms(handle, ShouldDenyAccessToMethodImpl);
-                lspd::HookSyms(handle, ShouldDenyAccessToFieldImpl);
-            }
+            DexFile_setTrustedSym = reinterpret_cast<decltype(DexFile_setTrustedSym)>(lspd::sym_setTrusted);
+            lspd::HookSymNoHandle(lspd::sym_openDexFileNative, DexFile_openDexFileNative);
+            lspd::HookSymNoHandle(lspd::sym_openInMemoryDexFilesNative,
+                                  DexFile_openInMemoryDexFilesNative);
         };
 
     }
