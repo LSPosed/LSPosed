@@ -283,7 +283,7 @@ public final class XposedInit {
         String moduleLibraryName;
         try {
             while ((moduleLibraryName = moduleLibraryReader.readLine()) != null) {
-                if (!moduleLibraryName.startsWith("#") && moduleLibraryName.endsWith(".so")) {
+                if (!moduleLibraryName.startsWith("#")) {
                     NativeAPI.recordNativeEntrypoint(moduleLibraryName);
                 }
             }
