@@ -88,6 +88,32 @@ namespace art {
                 }
         );
 
+        CREATE_HOOK_STUB_ENTRIES(
+                "_ZN3artL29DexFile_createCookieWithArrayEP7_JNIEnvP7_jclassP11_jbyteArrayii",
+                jobject, DexFile_createCookieWithArray, (JNIEnv * env,
+                jclass clazz,
+                jbyteArray buffer,
+                jint start,
+                jint end), {
+                    auto j_cookie = backup(env, clazz, buffer, start, end);
+                    DexFile_setTrusted(env, clazz, j_cookie);
+                    return j_cookie;
+                }
+        );
+
+        CREATE_HOOK_STUB_ENTRIES(
+                "_ZN3artL36DexFile_createCookieWithDirectBufferEP7_JNIEnvP7_jclassP8_jobjectii",
+                jobject, DexFile_createCookieWithDirectBuffer, (JNIEnv * env,
+                jclass clazz,
+                jobject buffer,
+                jint start,
+                jint end), {
+                    auto j_cookie = backup(env, clazz, buffer, start, end);
+                    DexFile_setTrusted(env, clazz, j_cookie);
+                    return j_cookie;
+                }
+        );
+
         static void DisableHiddenApi(void *handle) {
 
             const int api_level = lspd::GetAndroidApiLevel();
@@ -98,6 +124,12 @@ namespace art {
             lspd::HookSymNoHandle(lspd::sym_openDexFileNative, DexFile_openDexFileNative);
             lspd::HookSymNoHandle(lspd::sym_openInMemoryDexFilesNative,
                                   DexFile_openInMemoryDexFilesNative);
+            if (api_level == __ANDROID_API_P__) {
+                lspd::HookSymNoHandle(lspd::sym_createCookieWithArray,
+                                      DexFile_createCookieWithArray);
+                lspd::HookSymNoHandle(lspd::sym_createCookieWithDirectBuffer,
+                                      DexFile_createCookieWithDirectBuffer);
+            }
         };
 
     }
