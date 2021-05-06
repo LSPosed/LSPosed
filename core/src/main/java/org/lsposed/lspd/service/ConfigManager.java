@@ -53,6 +53,7 @@ import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -62,6 +63,11 @@ import java.util.concurrent.ConcurrentHashMap;
 // This config manager assume uid won't change when our service is off.
 // Otherwise, user should maintain it manually.
 public class ConfigManager {
+    private static final String[] MANAGER_PERMISSIONS_TO_GRANT = new String[]{
+            "android.permission.INTERACT_ACROSS_USERS",
+            "android.permission.WRITE_SECURE_SETTINGS"
+    };
+
     static ConfigManager instance = null;
 
     private static final File basePath = new File("/data/adb/lspd");
@@ -618,11 +624,14 @@ public class ConfigManager {
     }
 
     public static void grantManagerPermission() {
-        try {
-            PackageService.grantRuntimePermission(readText(managerPath, BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME), "android.permission.INTERACT_ACROSS_USERS", 0);
-        } catch (RemoteException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
-        }
+        String managerPackageName = readText(managerPath, BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME);
+        Arrays.stream(MANAGER_PERMISSIONS_TO_GRANT).forEach(permission -> {
+            try {
+                PackageService.grantRuntimePermission(managerPackageName, permission, 0);
+            } catch (RemoteException e) {
+                Log.e(TAG, Log.getStackTraceString(e));
+            }
+        });
     }
 
     public boolean isModule(int uid) {
