@@ -42,17 +42,14 @@ namespace art {
         maybeSetTrusted(JNIEnv *env, jclass clazz, jobject class_loader, jobject j_cookie) {
             static auto get_parent = env->GetMethodID(env->FindClass("java/lang/ClassLoader"),
                                                       "getParent", "()Ljava/lang/ClassLoader;");
-            static auto equals = env->GetMethodID(env->FindClass("java/lang/Object"),
-                                                  "equals", "(Ljava/lang/Object;)Z");
-            while (class_loader != nullptr) {
-                if (lspd::Context::GetInstance()->GetCurrentClassLoader() == nullptr ||
-                    env->CallBooleanMethod(class_loader, equals,
-                                           lspd::Context::GetInstance()->GetCurrentClassLoader())) {
+            for (auto current = lspd::Context::GetInstance()->GetCurrentClassLoader();
+                 class_loader != nullptr;
+                 class_loader = env->CallObjectMethod(class_loader, get_parent)) {
+                if (!current || env->IsSameObject(class_loader, current)) {
                     DexFile_setTrusted(env, clazz, j_cookie);
                     LOGD("Set classloader as trusted");
                     return;
                 }
-                class_loader = env->CallObjectMethod(class_loader, get_parent);
             }
         }
 
