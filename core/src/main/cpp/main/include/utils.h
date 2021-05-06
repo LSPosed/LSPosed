@@ -33,10 +33,13 @@
 namespace lspd {
     using namespace std::literals::string_literals;
 
-    static inline int32_t GetAndroidApiLevel() {
-        char prop_value[PROP_VALUE_MAX];
-        __system_property_get("ro.build.version.sdk", prop_value);
-        return atoi(prop_value);
+    inline int32_t GetAndroidApiLevel() {
+        static int32_t api_level = []() {
+            char prop_value[PROP_VALUE_MAX];
+            __system_property_get("ro.build.version.sdk", prop_value);
+            return atoi(prop_value);
+        }();
+        return api_level;
     }
 
 
