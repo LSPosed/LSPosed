@@ -287,10 +287,13 @@ public class SettingsActivity extends BaseActivity {
             }
 
             SwitchPreference prefShowHiddenIcons = findPreference("show_hidden_icon_apps_enabled");
-            if (prefShowHiddenIcons != null) {
-                prefShowHiddenIcons.setVisible(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && requireActivity().checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) == PackageManager.PERMISSION_GRANTED);
-                prefShowHiddenIcons.setChecked(Settings.Global.getInt(requireActivity().getContentResolver(), "show_hidden_icon_apps_enabled", 0) != 0);
-                prefShowHiddenIcons.setOnPreferenceChangeListener((preference, newValue) -> Settings.Global.putInt(requireActivity().getContentResolver(), "show_hidden_icon_apps_enabled", (boolean) newValue ? 1 : 0));
+            if (prefShowHiddenIcons != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+                    && requireActivity().checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) == PackageManager.PERMISSION_GRANTED) {
+                prefShowHiddenIcons.setVisible(true);
+                prefShowHiddenIcons.setChecked(Settings.Global.getInt(
+                        requireActivity().getContentResolver(), "show_hidden_icon_apps_enabled", 1) != 0);
+                prefShowHiddenIcons.setOnPreferenceChangeListener((preference, newValue) -> Settings.Global.putInt(requireActivity().getContentResolver(),
+                        "show_hidden_icon_apps_enabled", (boolean) newValue ? 1 : 0));
             }
         }
 

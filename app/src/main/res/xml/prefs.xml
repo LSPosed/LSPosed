@@ -80,12 +80,14 @@
             android:key="restore"
             android:title="@string/settings_restore" />
     </com.takisoft.preferencex.PreferenceCategory>
+
     <com.takisoft.preferencex.PreferenceCategory
         android:title="@string/settings_group_system">
     <SwitchPreference
-        android:defaultValue="false"
+        android:defaultValue="true"
         android:key="show_hidden_icon_apps_enabled"
         android:title="@string/settings_show_hidden_icon_apps_enabled"
-        android:persistent="false" />
+        android:persistent="false"
+        android:visible="false" />
     </com.takisoft.preferencex.PreferenceCategory>
 </PreferenceScreen>
