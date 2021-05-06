@@ -152,6 +152,8 @@
     <string name="dns_over_http_summary">解决某些地区的 DNS 污染问题</string>
     <string name="theme_color">主题颜色</string>
     <string name="theme_color_summary">应用中最常见的颜色</string>
+    <string name="settings_show_hidden_icon_apps_enabled">Android10+ 系统的强制显示应用桌面图标功能</string>
+    <string name="settings_group_system">系统</string>
 
     <!-- Module Repo -->
     <string name="module_readme">自述文件</string>

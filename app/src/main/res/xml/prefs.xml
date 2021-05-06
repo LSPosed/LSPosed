@@ -18,10 +18,9 @@
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <com.takisoft.preferencex.PreferenceCategory
-        android:key="group_network"
-        android:title="@string/group_network">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.takisoft.preferencex.PreferenceCategory android:title="@string/group_network">
 
         <SwitchPreference
             android:defaultValue="false"
@@ -53,9 +52,7 @@
             android:summary="@string/pure_black_dark_theme_summary" />
     </com.takisoft.preferencex.PreferenceCategory>
 
-    <com.takisoft.preferencex.PreferenceCategory
-        android:key="group_framework"
-        android:title="@string/settings_group_framework">
+    <com.takisoft.preferencex.PreferenceCategory android:title="@string/settings_group_framework">
 
         <SwitchPreference
             android:defaultValue="false"
@@ -73,7 +70,6 @@
     </com.takisoft.preferencex.PreferenceCategory>
 
     <com.takisoft.preferencex.PreferenceCategory
-        android:key="group_backup"
         android:title="@string/settings_backup_and_restore"
         android:summary="@string/settings_backup_and_restore_summery"
         android:icon="@drawable/ic_baseline_settings_backup_restore_24">
@@ -83,5 +79,15 @@
         <Preference
             android:key="restore"
             android:title="@string/settings_restore" />
+    </com.takisoft.preferencex.PreferenceCategory>
+
+    <com.takisoft.preferencex.PreferenceCategory
+        android:title="@string/settings_group_system">
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="show_hidden_icon_apps_enabled"
+        android:title="@string/settings_show_hidden_icon_apps_enabled"
+        android:persistent="false"
+        android:visible="false" />
     </com.takisoft.preferencex.PreferenceCategory>
 </PreferenceScreen>

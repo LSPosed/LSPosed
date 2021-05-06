@@ -34,7 +34,6 @@ namespace lspd {
     extern void *sym_openInMemoryDexFilesNative;
     extern void *sym_createCookieWithArray;
     extern void *sym_createCookieWithDirectBuffer;
-    extern void *sym_openInMemoryDexFilesNative;
     extern void *sym_openDexFileNative;
     extern void *sym_setTrusted;
 

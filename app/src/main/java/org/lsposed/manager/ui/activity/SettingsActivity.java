@@ -20,11 +20,15 @@
 
 package org.lsposed.manager.ui.activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -280,6 +284,16 @@ public class SettingsActivity extends BaseActivity {
                     }
                     return true;
                 });
+            }
+
+            SwitchPreference prefShowHiddenIcons = findPreference("show_hidden_icon_apps_enabled");
+            if (prefShowHiddenIcons != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+                    && requireActivity().checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) == PackageManager.PERMISSION_GRANTED) {
+                prefShowHiddenIcons.setVisible(true);
+                prefShowHiddenIcons.setChecked(Settings.Global.getInt(
+                        requireActivity().getContentResolver(), "show_hidden_icon_apps_enabled", 1) != 0);
+                prefShowHiddenIcons.setOnPreferenceChangeListener((preference, newValue) -> Settings.Global.putInt(requireActivity().getContentResolver(),
+                        "show_hidden_icon_apps_enabled", (boolean) newValue ? 1 : 0));
             }
         }
 

@@ -152,6 +152,8 @@
     <string name="dns_over_http_summary">Workaround DNS poisoning in some nations</string>
     <string name="theme_color">Theme color</string>
     <string name="theme_color_summary">Color that appears most frequently in the app</string>
+    <string name="settings_show_hidden_icon_apps_enabled">Forced display of the application launcher icon on Android 10+</string>
+    <string name="settings_group_system">System</string>
 
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
