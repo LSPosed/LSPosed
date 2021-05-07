@@ -82,6 +82,7 @@
     </com.takisoft.preferencex.PreferenceCategory>
 
     <com.takisoft.preferencex.PreferenceCategory
+        android:key="settings_group_system"                                    
         android:title="@string/settings_group_system"
         app:isPreferenceVisible="false">
     <SwitchPreference
