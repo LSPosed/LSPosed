@@ -82,7 +82,9 @@
     </com.takisoft.preferencex.PreferenceCategory>
 
     <com.takisoft.preferencex.PreferenceCategory
-        android:title="@string/settings_group_system">
+        android:key="settings_group_system"                                    
+        android:title="@string/settings_group_system"
+        app:isPreferenceVisible="false">
     <SwitchPreference
         android:defaultValue="true"
         android:key="show_hidden_icon_apps_enabled"

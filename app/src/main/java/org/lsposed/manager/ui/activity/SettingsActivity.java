@@ -45,6 +45,7 @@ import androidx.preference.SwitchPreference;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.takisoft.preferencex.PreferenceCategory;
 import com.takisoft.preferencex.PreferenceFragmentCompat;
 
 import org.lsposed.manager.BuildConfig;
@@ -286,9 +287,11 @@ public class SettingsActivity extends BaseActivity {
                 });
             }
 
+            PreferenceCategory prefGroupSystem = findPreference("settings_group_system");
             SwitchPreference prefShowHiddenIcons = findPreference("show_hidden_icon_apps_enabled");
-            if (prefShowHiddenIcons != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+            if (prefGroupSystem != null && prefShowHiddenIcons != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
                     && requireActivity().checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) == PackageManager.PERMISSION_GRANTED) {
+                prefGroupSystem.setVisible(true);
                 prefShowHiddenIcons.setVisible(true);
                 prefShowHiddenIcons.setChecked(Settings.Global.getInt(
                         requireActivity().getContentResolver(), "show_hidden_icon_apps_enabled", 1) != 0);
