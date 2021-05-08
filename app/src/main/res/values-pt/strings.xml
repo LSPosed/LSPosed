@@ -152,6 +152,8 @@
     <string name="dns_over_http_summary">Solução alternativa para envenenamento de DNS em alguns países</string>
     <string name="theme_color">Cor do tema</string>
     <string name="theme_color_summary">Cor que aparece com mais frequência no app</string>
+    <string name="settings_show_hidden_icon_apps_enabled">Exibição forçada do ícone do aplicativo no Android 10+</string>
+    <string name="settings_group_system">Sistema</string>
 
     <!-- Module Repo -->
     <string name="module_readme">Leia-me</string>
