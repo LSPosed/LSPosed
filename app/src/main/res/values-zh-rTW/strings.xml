@@ -152,6 +152,8 @@
     <string name="dns_over_http_summary">解決某些地區的 DNS 汙染問題</string>
     <string name="theme_color">主題強調色</string>
     <string name="theme_color_summary">應用程式中最常見的顏色</string>
+    <string name="settings_show_hidden_icon_apps_enabled">Android 10+ 系統中強制顯示應用程式桌面圖示功能</string>
+    <string name="settings_group_system">系統</string>
 
     <!-- Module Repo -->
     <string name="module_readme">自述檔案</string>
