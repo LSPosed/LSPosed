@@ -86,19 +86,7 @@ public class AppListActivity extends BaseActivity {
         RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
         binding.swipeRefreshLayout.setOnRefreshListener(() -> scopeAdapter.refresh(true));
 
-        searchListener = new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                scopeAdapter.getFilter().filter(query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                scopeAdapter.getFilter().filter(newText);
-                return false;
-            }
-        };
+        searchListener = scopeAdapter.getSearchListener();
 
         backupLauncher = registerForActivityResult(new ActivityResultContracts.CreateDocument(),
                 uri -> {
