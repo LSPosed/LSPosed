@@ -88,7 +88,7 @@ public final class ModuleUtil {
             if (!app.enabled || app.uid / 100000 != 0)
                 continue;
 
-            if (app.metaData != null && app.metaData.containsKey("xposedmodule")) {
+            if (app.metaData != null && app.metaData.containsKey("xposedminversion")) {
                 InstalledModule installed = new InstalledModule(pkg, false);
                 modules.put(pkg.packageName, installed);
             }
@@ -119,7 +119,7 @@ public final class ModuleUtil {
         }
 
         ApplicationInfo app = pkg.applicationInfo;
-        if (app.enabled && app.metaData != null && app.metaData.containsKey("xposedmodule")) {
+        if (app.enabled && app.metaData != null && app.metaData.containsKey("xposedminversion")) {
             InstalledModule module = new InstalledModule(pkg, false);
             installedModules.put(packageName, module);
             for (ModuleListener listener : listeners) {
@@ -262,6 +262,10 @@ public final class ModuleUtil {
                     int scopeListResourceId = app.metaData.getInt("xposedscope");
                     if (scopeListResourceId != 0) {
                         scopeList = Arrays.asList(pm.getResourcesForApplication(app).getStringArray(scopeListResourceId));
+                    } else {
+                        String scopeListString = app.metaData.getString("xposedscope");
+                        if (scopeListString != null)
+                            scopeList = Arrays.asList(scopeListString.split(";"));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

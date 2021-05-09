@@ -164,7 +164,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             return false;
         }
         if (preferences.getBoolean("filter_modules", true)) {
-            if (info.applicationInfo.metaData != null && info.applicationInfo.metaData.containsKey("xposedmodule")) {
+            if (info.applicationInfo.metaData != null && info.applicationInfo.metaData.containsKey("xposedminversion")) {
                 return true;
             }
         }
