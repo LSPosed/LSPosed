@@ -88,7 +88,7 @@ public final class ModuleUtil {
             if (!app.enabled || app.uid / 100000 != 0)
                 continue;
 
-            if (app.metaData != null && app.metaData.containsKey("xposedmodule")) {
+            if (app.metaData != null && app.metaData.containsKey("xposedminversion")) {
                 InstalledModule installed = new InstalledModule(pkg, false);
                 modules.put(pkg.packageName, installed);
             }
@@ -119,7 +119,7 @@ public final class ModuleUtil {
         }
 
         ApplicationInfo app = pkg.applicationInfo;
-        if (app.enabled && app.metaData != null && app.metaData.containsKey("xposedmodule")) {
+        if (app.enabled && app.metaData != null && app.metaData.containsKey("xposedminversion")) {
             InstalledModule module = new InstalledModule(pkg, false);
             installedModules.put(packageName, module);
             for (ModuleListener listener : listeners) {
