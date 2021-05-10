@@ -21,9 +21,9 @@
 check_magisk_version() {
   ui_print "- Magisk version: $MAGISK_VER_CODE"
   if [ "$MAGISK_VER_CODE" -lt 21000 ]; then
-      ui_print "*********************************************************"
-      ui_print "! Please install Magisk v21+"
-      abort   "*********************************************************"
+    ui_print "*********************************************************"
+    ui_print "! Please install Magisk v21+"
+    abort    "*********************************************************"
   fi
 }
 
@@ -32,7 +32,7 @@ require_new_android() {
   ui_print "! Unsupported Android version ${1} (below Oreo MR1)"
   ui_print "! Learn more from our GitHub Wiki"
   [ "$BOOTMODE" == "true" ] && am start -a android.intent.action.VIEW -d https://github.com/LSPosed/LSPosed/wiki/Available-Android-versions
-  abort   "*********************************************************"
+  abort    "*********************************************************"
 }
 
 check_android_version() {
@@ -40,5 +40,18 @@ check_android_version() {
     ui_print "- Android SDK version: $API"
   else
     require_new_android "$API"
+  fi
+}
+
+check_incompatible_module() {
+  MODULEDIR="$(magisk --path)/.magisk/modules"
+  FINDMODULE=false
+  for id in "riru_dreamland" "riru_edxposed" "riru_edxposed_sandhook" "taichi"; do
+    [ -d $MODULEDIR/$id ] && [ ! -f $MODULEDIR/$id/disable ] && FINDMODULE=true
+  done
+  if $FINDMODULE; then
+    ui_print "*********************************************************"
+    ui_print "! Please disable or uninstall incompatible frameworks (Dreamland, EdXposed or Taichi)"
+    abort    "*********************************************************"
   fi
 }
