@@ -106,7 +106,7 @@ public class LSPosedService extends ILSPosedService.Stub {
                 applicationInfo != null &&
                 applicationInfo.enabled &&
                 applicationInfo.metaData != null &&
-                applicationInfo.metaData.containsKey("xposedmodule");
+                applicationInfo.metaData.containsKey("xposedminversion");
 
         if (isXposedModule) {
             ConfigManager.getInstance().updateModuleApkPath(packageName, applicationInfo.sourceDir);
