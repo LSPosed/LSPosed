@@ -21,9 +21,9 @@
 check_magisk_version() {
   ui_print "- Magisk version: $MAGISK_VER_CODE"
   if [ "$MAGISK_VER_CODE" -lt 21000 ]; then
-      ui_print "*********************************************************"
-      ui_print "! Please install Magisk v21+"
-      abort    "*********************************************************"
+    ui_print "*********************************************************"
+    ui_print "! Please install Magisk v21+"
+    abort    "*********************************************************"
   fi
 }
 
@@ -46,13 +46,12 @@ check_android_version() {
 check_incompatible_module() {
   MODULEDIR="$(magisk --path)/.magisk/modules"
   FINDMODULE=false
-  [ -d $MODULEDIR/riru_dreamland ] && [ ! -f $MODULEDIR/riru_dreamland/disable ] && FINDMODULE=true
-  [ -d $MODULEDIR/riru_exposed ] && [ ! -f $MODULEDIR/riru_edxposed/disable ] && FINDMODULE=true
-  [ -d $MODULEDIR/riru_edxposed_sandhook ] && [ ! -f $MODULEDIR/riru_edxposed_sandhook/disable ] && FINDMODULE=true
-  [ -d $MODULEDIR/taichi ] && [ ! -f $MODULEDIR/taichi/disable ] && FINDMODULE=true
+  for id in "riru_dreamland" "riru_edxposed" "riru_edxposed_sandhook" "taichi"; do
+    [ -d $MODULEDIR/$id ] && [ ! -f $MODULEDIR/$id/disable ] && FINDMODULE=true
+  done
   if $FINDMODULE; then
-      ui_print "*********************************************************"
-      ui_print "! Please disable or uninstall incompatible frameworks (Dreamland, EdXposed or Taichi)"
-      abort    "*********************************************************"
+    ui_print "*********************************************************"
+    ui_print "! Please disable or uninstall incompatible frameworks (Dreamland, EdXposed or Taichi)"
+    abort    "*********************************************************"
   fi
 }
