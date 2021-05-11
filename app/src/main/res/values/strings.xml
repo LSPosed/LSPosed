@@ -67,17 +67,17 @@
     <string name="not_logcat_2">If someone asked you an Android Logcat, you\'re in the wrong section. This is the LSPosed log; if you need a logcat, on XDA you can find what you need.</string>
 
     <!-- Notification -->
-    <string name="module_is_not_activated_yet">LSPosed module is not activated yet</string>
+    <string name="module_is_not_activated_yet">Xposed module is not activated yet</string>
     <string name="module_is_not_activated_yet_detailed">%s has been installed, but is not activated yet</string>
     <string name="xposed_module_updated_notification_content">%s has been updated</string>
 
     <!-- ModulesActivity -->
     <string name="module_empty_description">(no description provided)</string>
     <string name="module_no_ui">This module does not provide a user interface</string>
-    <string name="xposed_module_updated_notification_title">LSPosed module updated</string>
-    <string name="warning_xposed_min_version">This module requires a newer LSPosed version (%d) and thus cannot be activated</string>
-    <string name="no_min_version_specified">This module does not specify the LSPosed version it needs.</string>
-    <string name="warning_min_version_too_low">This module was created for LSPosed version %1$d, but due to incompatible changes in version %2$d, it has been disabled</string>
+    <string name="xposed_module_updated_notification_title">Xposed module updated</string>
+    <string name="warning_xposed_min_version">This module requires a newer Xposed version (%d) and thus cannot be activated</string>
+    <string name="no_min_version_specified">This module does not specify the Xposed version it needs.</string>
+    <string name="warning_min_version_too_low">This module was created for Xposed version %1$d, but due to incompatible changes in version %2$d, it has been disabled</string>
     <string name="warning_installed_on_external_storage">This module cannot be loaded because it\'s installed on the SD card, please move it to internal storage</string>
     <string name="module_uninstall">Uninstall</string>
     <string name="module_settings">Module settings</string>
@@ -153,7 +153,7 @@
     <string name="theme_color">Theme color</string>
     <string name="theme_color_summary">Color that appears most frequently in the app</string>
     <string name="theme_color_system_accent">System accent color</string>
-    <string name="settings_show_hidden_icon_apps_enabled">Forced display of the application launcher icon on Android 10+</string>
+    <string name="settings_show_hidden_icon_apps_enabled">(Android 10+) Limit apps to hide their launcher icons</string>
     <string name="settings_group_system">System</string>
 
     <!-- Module Repo -->

@@ -18,7 +18,7 @@
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 
-<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+<resources>
     <!-- MainActivity -->
     <string name="info">信息</string>
     <string name="Install">安装</string>
@@ -35,7 +35,7 @@
     <string name="module_repo_summary">模块仓库（Alpha）</string>
     <string name="about_view_source_code"><![CDATA[在 %s 查看源码<br/>加入我们的 %s 频道]]></string>
     <string name="about_translators">译者：%s</string>
-  
+
     <string name="activated">已激活</string>
     <string name="not_installed">未安装</string>
     <string name="partial_activated">部分激活</string>
@@ -67,17 +67,17 @@
     <string name="not_logcat_2">如果有人要求您提供一份 Android 系统日志，那么您来错了地方。在此处显示的是 LSPosed 的日志信息；如果您想抓取系统日志，可前往 XDA 寻求所需的答案。</string>
 
     <!-- Notification -->
-    <string name="module_is_not_activated_yet">LSPosed 模块尚未激活</string>
+    <string name="module_is_not_activated_yet">Xposed 模块尚未激活</string>
     <string name="module_is_not_activated_yet_detailed">%s 已安装, 但尚未激活</string>
     <string name="xposed_module_updated_notification_content">%s 已更新</string>
 
     <!-- ModulesActivity -->
     <string name="module_empty_description">(未提供介绍)</string>
     <string name="module_no_ui">该模块未提供用户界面</string>
-    <string name="xposed_module_updated_notification_title">LSPosed 模块已更新</string>
-    <string name="warning_xposed_min_version">该模块需要更新版本的 LSPosed(%d), 因此无法被激活</string>
-    <string name="no_min_version_specified">该模块未指定所需的 LSPosed 版本</string>
-    <string name="warning_min_version_too_low">该模块针对 LSPosed %1$d 版本构建 , 由于不兼容 %2$d 版本中的变更, 现已被停用</string>
+    <string name="xposed_module_updated_notification_title">Xposed 模块已更新</string>
+    <string name="warning_xposed_min_version">该模块需要更新版本的 Xposed(%d), 因此无法被激活</string>
+    <string name="no_min_version_specified">该模块未指定所需的 Xposed 版本</string>
+    <string name="warning_min_version_too_low">该模块针对 Xposed %1$d 版本构建 , 由于不兼容 %2$d 版本中的变更, 现已被停用</string>
     <string name="warning_installed_on_external_storage">此模块因被安装在 SD 卡中而导致无法加载, 请将其移动到内部存储</string>
     <string name="module_uninstall">卸载</string>
     <string name="module_settings">模块设置</string>
@@ -152,7 +152,7 @@
     <string name="dns_over_http_summary">解决某些地区的 DNS 污染问题</string>
     <string name="theme_color">主题颜色</string>
     <string name="theme_color_summary">应用中最常见的颜色</string>
-    <string name="settings_show_hidden_icon_apps_enabled">Android10+ 系统的强制显示应用桌面图标功能</string>
+    <string name="settings_show_hidden_icon_apps_enabled">（Android 10+）限制应用隐藏其启动器图标</string>
     <string name="settings_group_system">系统</string>
 
     <!-- Module Repo -->
