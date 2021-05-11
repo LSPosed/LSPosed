@@ -298,6 +298,21 @@ public class SettingsActivity extends BaseActivity {
                 prefShowHiddenIcons.setOnPreferenceChangeListener((preference, newValue) -> Settings.Global.putInt(requireActivity().getContentResolver(),
                         "show_hidden_icon_apps_enabled", (boolean) newValue ? 1 : 0));
             }
+
+            SwitchPreference prefFollowSystemAccent = findPreference("follow_system_accent");
+            if (prefFollowSystemAccent != null && (Build.VERSION.SDK_INT >= 31 || Build.VERSION.SDK_INT == 30 && Build.VERSION.PREVIEW_SDK_INT != 0)) {
+                if (primary_color != null) {
+                    primary_color.setVisible(!prefFollowSystemAccent.isChecked());
+                }
+                prefFollowSystemAccent.setVisible(true);
+                prefFollowSystemAccent.setOnPreferenceChangeListener((preference, newValue) -> {
+                    SettingsActivity activity = (SettingsActivity) getActivity();
+                    if (activity != null) {
+                        activity.restart();
+                    }
+                    return true;
+                });
+            }
         }
 
         @Override

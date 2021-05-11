@@ -21,6 +21,7 @@ package org.lsposed.manager.util.theme;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 
 import androidx.annotation.ColorRes;
 import androidx.annotation.StyleRes;
@@ -73,6 +74,10 @@ public class ThemeUtil {
         return preferences.getBoolean("black_dark_theme", false);
     }
 
+    private static boolean isSystemAccent() {
+        return preferences.getBoolean("follow_system_accent", true);
+    }
+
     public static String getNightTheme(Context context) {
         if (isBlackNightTheme()
                 && ResourceUtils.isNightMode(context.getResources().getConfiguration()))
@@ -105,6 +110,9 @@ public class ThemeUtil {
 
     @StyleRes
     public static int getColorThemeStyleRes() {
+        if ((Build.VERSION.SDK_INT >= 31 || Build.VERSION.SDK_INT == 30 && Build.VERSION.PREVIEW_SDK_INT != 0) && isSystemAccent()) {
+            return R.style.ThemeOverlay_system;
+        }
         Integer theme = colorThemeMap.get(getColorTheme());
         if (theme == null) {
             return R.style.ThemeOverlay_color_primary;
