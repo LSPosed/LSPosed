@@ -45,13 +45,13 @@ check_android_version() {
 
 check_incompatible_module() {
   MODULEDIR="$(magisk --path)/.magisk/modules"
-  FINDMODULE=false
   for id in "riru_dreamland" "riru_edxposed" "riru_edxposed_sandhook" "taichi"; do
-    [ -d $MODULEDIR/$id ] && [ ! -f $MODULEDIR/$id/disable ] && FINDMODULE=true
+    if [ -d "$MODULEDIR/$id" ] && [ ! -f "$MODULEDIR/$id/disable" ]; then
+      ui_print "*********************************************************"
+      ui_print "! Please disable or uninstall incompatible frameworks:"
+      ui_print "! $id"
+      abort    "*********************************************************"
+      break
+    fi
   done
-  if $FINDMODULE; then
-    ui_print "*********************************************************"
-    ui_print "! Please disable or uninstall incompatible frameworks (Dreamland, EdXposed or Taichi)"
-    abort    "*********************************************************"
-  fi
 }
