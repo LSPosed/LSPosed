@@ -16,10 +16,10 @@ Android 8.1 ~ 12 DP3
 ## Install
 
 1. Install Magisk v23+
-2. Install [Riru](https://github.com/RikkaApps/Riru/releases) v25+ from Magisk repo.
-3. [Download](#download) and install LSPosed in Magisk Manager
-4. Reboot.
-5. Have fun! :)
+1. Install [Riru](https://github.com/RikkaApps/Riru/releases) v25+ from Magisk repo.
+1. [Download](#download) and install LSPosed in Magisk Manager
+1. Reboot.
+1. Have fun! :)
 
 ## Download
 
