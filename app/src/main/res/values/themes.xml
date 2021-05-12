@@ -118,13 +118,13 @@
 
     <style name="DeviceInfoDialogLabel">
         <item name="android:textAlignment">viewStart</item>
-        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body1</item>
+        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Body1</item>
         <item name="android:textColor">?android:attr/textColorSecondary</item>
     </style>
 
     <style name="DeviceInfoDialogValue">
         <item name="android:textAlignment">viewStart</item>
-        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body2</item>
+        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Body2</item>
         <item name="android:paddingBottom">24dp</item>
     </style>
 
