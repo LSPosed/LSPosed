@@ -31,6 +31,11 @@
     </com.takisoft.preferencex.PreferenceCategory>
 
     <com.takisoft.preferencex.PreferenceCategory android:title="@string/settings_group_theme">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="follow_system_accent"
+            android:title="@string/theme_color_system_accent"
+            app:isPreferenceVisible="false" />
         <org.lsposed.manager.util.theme.ThemeColorPreference
             android:defaultValue=""
             android:dialogTitle="@string/theme_color"
@@ -82,14 +87,14 @@
     </com.takisoft.preferencex.PreferenceCategory>
 
     <com.takisoft.preferencex.PreferenceCategory
-        android:key="settings_group_system"                                    
+        android:key="settings_group_system"
         android:title="@string/settings_group_system"
         app:isPreferenceVisible="false">
-    <SwitchPreference
-        android:defaultValue="true"
-        android:key="show_hidden_icon_apps_enabled"
-        android:title="@string/settings_show_hidden_icon_apps_enabled"
-        android:persistent="false"
-        app:isPreferenceVisible="false" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="show_hidden_icon_apps_enabled"
+            android:title="@string/settings_show_hidden_icon_apps_enabled"
+            android:persistent="false"
+            app:isPreferenceVisible="false" />
     </com.takisoft.preferencex.PreferenceCategory>
 </PreferenceScreen>

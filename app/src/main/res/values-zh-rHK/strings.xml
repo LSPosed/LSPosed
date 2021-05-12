@@ -67,17 +67,17 @@
     <string name="not_logcat_2">If someone asked you an Android Logcat, you\'re in the wrong section. This is the LSPosed log; if you need a logcat, on XDA you can find what you need.</string>
 
     <!-- Notification -->
-    <string name="module_is_not_activated_yet">LSPosed 模組尚未啟動</string>
+    <string name="module_is_not_activated_yet">Xposed 模組尚未啟動</string>
     <string name="module_is_not_activated_yet_detailed">%s 已安裝, 但尚未啟動</string>
     <string name="xposed_module_updated_notification_content">%s 已更新</string>
 
     <!-- ModulesActivity -->
     <string name="module_empty_description">(未提供介紹)</string>
     <string name="module_no_ui">該模組未提供使用者介面</string>
-    <string name="xposed_module_updated_notification_title">LSPosed 模組已更新</string>
-    <string name="warning_xposed_min_version">該模組需要更新版本的 LSPosed(%d), 因此無法被啟動</string>
-    <string name="no_min_version_specified">該模組未指定所需的 LSPosed 版本</string>
-    <string name="warning_min_version_too_low">該模組針對 LSPosed %1$d 版本構建 , 由於不相容 %2$d 版本中的變更, 現已被停用</string>
+    <string name="xposed_module_updated_notification_title">Xposed 模組已更新</string>
+    <string name="warning_xposed_min_version">該模組需要更新版本的 Xposed(%d), 因此無法被啟動</string>
+    <string name="no_min_version_specified">該模組未指定所需的 Xposed 版本</string>
+    <string name="warning_min_version_too_low">該模組針對 Xposed %1$d 版本構建 , 由於不相容 %2$d 版本中的變更, 現已被停用</string>
     <string name="warning_installed_on_external_storage">此模組因被安裝在 SD 卡中而導致無法載入, 請將其移動到內部存儲</string>
     <string name="module_uninstall">卸載</string>
     <string name="module_settings">模組設置</string>
@@ -151,7 +151,9 @@
     <string name="dns_over_http">安全 DNS（DoH）</string>
     <string name="dns_over_http_summary">解決某些地區的 DNS 污染問題</string>
     <string name="theme_color">主題顏色</string>
-    <string name="theme_color_summary">Color that appears most frequently in the app</string>
+    <string name="theme_color_summary">應用程式中最常見的顏色</string>
+    <string name="settings_show_hidden_icon_apps_enabled">（Android 10+）限制應用隱藏其啟動器圖標</string>
+    <string name="settings_group_system">系統</string>
 
     <!-- Module Repo -->
     <string name="module_readme">讀我檔案</string>

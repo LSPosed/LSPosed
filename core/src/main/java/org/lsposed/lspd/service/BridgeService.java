@@ -191,6 +191,7 @@ public class BridgeService {
             return;
         }
 
+        var token = Binder.clearCallingIdentity();
         if (serviceBinder == null) {
             PackageReceiver.register(new BroadcastReceiver() {
                 @Override
@@ -219,6 +220,7 @@ public class BridgeService {
         } else {
             serviceBinder.unlinkToDeath(LSPSERVICE_DEATH_RECIPIENT, 0);
         }
+        Binder.restoreCallingIdentity(token);
 
         serviceBinder = Binder_allowBlocking(binder);
         service = ILSPosedService.Stub.asInterface(serviceBinder);

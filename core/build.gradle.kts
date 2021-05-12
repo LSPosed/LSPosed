@@ -47,7 +47,7 @@ val apiCode: Int by rootProject.extra
 val androidTargetSdkVersion: Int by rootProject.extra
 val androidMinSdkVersion: Int by rootProject.extra
 val androidBuildToolsVersion: String by rootProject.extra
-val androidCompileSdkVersion: Int by rootProject.extra
+val androidCompileSdkVersion: String by rootProject.extra
 val androidCompileNdkVersion: String by rootProject.extra
 val androidSourceCompatibility: JavaVersion by rootProject.extra
 val androidTargetCompatibility: JavaVersion by rootProject.extra
@@ -69,7 +69,7 @@ dependencies {
 }
 
 android {
-    compileSdk = androidCompileSdkVersion
+    compileSdkPreview = androidCompileSdkVersion
     ndkVersion = androidCompileNdkVersion
     buildToolsVersion = androidBuildToolsVersion
 
