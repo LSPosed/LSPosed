@@ -102,8 +102,7 @@ public class LSPosedService extends ILSPosedService.Stub {
         }
 
         ApplicationInfo applicationInfo = PackageService.getApplicationInfo(packageName, PackageManager.GET_META_DATA, 0);
-        boolean isXposedModule = (userId == 0 || userId == -1) &&
-                applicationInfo != null &&
+        boolean isXposedModule = applicationInfo != null &&
                 applicationInfo.enabled &&
                 applicationInfo.metaData != null &&
                 applicationInfo.metaData.containsKey("xposedminversion");
@@ -118,6 +117,7 @@ public class LSPosedService extends ILSPosedService.Stub {
             broadcastIntent.addFlags(0x01000000);
             broadcastIntent.addFlags(0x00400000);
             broadcastIntent.setData(intent.getData());
+            broadcastIntent.putExtras(intent.getExtras());
             broadcastIntent.setComponent(ComponentName.unflattenFromString(ConfigManager.getInstance().getManagerPackageName() + "/.receivers.ServiceReceiver"));
 
             try {
