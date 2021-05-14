@@ -85,6 +85,7 @@
     <string name="module_uninstall_message">Do you want to uninstall this module?</string>
     <string name="module_uninstalled">Uninstalled %1$s</string>
     <string name="module_uninstall_failed">Uninstall unsuccessful</string>
+    <string name="user_title">User %d</string>
 
     <!-- AppListActivity -->
     <string name="compile_speed">Re-optimize</string>

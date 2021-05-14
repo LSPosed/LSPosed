@@ -230,6 +230,15 @@ public class ConfigManager {
         }
     }
 
+    public static int[] getUsers() {
+        try {
+            return LSPosedManagerServiceClient.getUsers();
+        } catch (RemoteException | NullPointerException e) {
+            Log.e(App.TAG, Log.getStackTraceString(e));
+            return null;
+        }
+    }
+
     public static boolean isMagiskInstalled() {
         return Arrays.stream(System.getenv("PATH").split(File.pathSeparator))
                 .anyMatch(str -> new File(str, "magisk").exists());

@@ -46,6 +46,7 @@ public class AppHelper {
         // first looks for an Xposed-specific category, falls back to
         // getLaunchIntentForPackage
 
+        //TODO:multiuser
         Intent intentToResolve = new Intent(Intent.ACTION_MAIN);
         intentToResolve.addCategory(SETTINGS_CATEGORY);
         intentToResolve.setPackage(packageName);
