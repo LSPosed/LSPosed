@@ -35,18 +35,22 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
     // <uid, pid>
     private final static Set<Pair<Integer, Integer>> cache = ConcurrentHashMap.newKeySet();
     private final static Set<IBinder> handles = ConcurrentHashMap.newKeySet();
+    private final static Set<IBinder.DeathRecipient> recipients = ConcurrentHashMap.newKeySet();
 
     public boolean registerHeartBeat(int uid, int pid, IBinder handle) {
         try {
-            handle.linkToDeath(new DeathRecipient() {
+            var recipient = new DeathRecipient() {
                 @Override
                 public void binderDied() {
                     Log.d(TAG, "pid=" + pid + " uid=" + uid + " is dead.");
                     cache.remove(new Pair<>(uid, pid));
                     handles.remove(handle);
                     handle.unlinkToDeath(this, 0);
+                    recipients.remove(this);
                 }
-            }, 0);
+            };
+            recipients.add(recipient);
+            handle.linkToDeath(recipient, 0);
             handles.add(handle);
             cache.add(new Pair<>(uid, pid));
             return true;
