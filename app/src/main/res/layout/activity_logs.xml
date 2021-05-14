@@ -71,14 +71,15 @@
         android:id="@+id/horizontalScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fillViewport="true"
         android:scrollbars="none">
 
-        <rikka.widget.borderview.BorderRecyclerView
+        <org.lsposed.manager.ui.widget.EmptyStateRecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:paddingTop="?actionBarSize"
+            android:paddingTop="104dp"
             app:borderTopVisibility="whenTop"
             app:borderTopDrawable="@null"
             app:borderBottomVisibility="never"

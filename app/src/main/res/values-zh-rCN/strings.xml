@@ -85,6 +85,7 @@
     <string name="module_uninstall_message">要卸载此模块吗？</string>
     <string name="module_uninstalled">已卸载%1$s</string>
     <string name="module_uninstall_failed">卸载失败</string>
+    <string name="user_title">用户 %d</string>
 
     <!-- AppListActivity -->
     <string name="compile_speed">重新优化</string>
@@ -177,4 +178,5 @@
     <string name="NotInstallDetail">LSPosed 未安装</string>
     <string name="translators"><![CDATA[<a href="https://github.com/LSPosed/LSPosed">LSPosed</a>]]></string>
     <string name="copy_toast_msg">已复制</string>
+    <string name="list_empty">¯\\\\_(ツ)_\/¯\n空空如也</string>
 </resources>

@@ -71,6 +71,8 @@ import java.util.List;
 import java.util.Locale;
 
 import rikka.core.os.FileUtils;
+import rikka.core.res.ResourcesKt;
+import rikka.insets.WindowInsetsHelperKt;
 import rikka.recyclerview.RecyclerViewKt;
 
 @SuppressLint("NotifyDataSetChanged")
@@ -132,16 +134,15 @@ public class LogsActivity extends BaseActivity {
                     .setCancelable(false)
                     .show();
         }
+        if (!ConfigManager.isVerboseLogEnabled()) {
+            WindowInsetsHelperKt.setInitialPadding(binding.recyclerView, 0, ResourcesKt.resolveDimensionPixelOffset(getTheme(), R.attr.actionBarSize, 0), 0, 0);
+            binding.slidingTabs.setVisibility(View.GONE);
+        }
         adapter = new LogsAdapter();
         RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
         binding.recyclerView.setAdapter(adapter);
         layoutManager = new LinearLayoutManagerFix(this);
         binding.recyclerView.setLayoutManager(layoutManager);
-        if (!ConfigManager.isVerboseLogEnabled()) {
-            binding.slidingTabs.setVisibility(View.GONE);
-        } else {
-            RecyclerViewKt.addVerticalPadding(binding.recyclerView, 48, 0);
-        }
         binding.slidingTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -224,7 +225,6 @@ public class LogsActivity extends BaseActivity {
 
     private void clear() {
         if (ConfigManager.clearLogs(verbose)) {
-            adapter.setEmpty();
             Snackbar.make(binding.snackbar, R.string.logs_cleared, Snackbar.LENGTH_SHORT).show();
             reloadErrorLog();
         } else {
@@ -316,11 +316,8 @@ public class LogsActivity extends BaseActivity {
 
         @Override
         protected void onPostExecute(List<String> logs) {
-            if (logs.size() == 0) {
-                adapter.setEmpty();
-            } else {
-                adapter.setLogs(logs);
-            }
+            adapter.setLogs(logs);
+
             handler.removeCallbacks(mRunnable);//It loaded so fast that no need to show progress
             if (mProgressDialog.isShowing()) {
                 mProgressDialog.dismiss();
@@ -349,18 +346,11 @@ public class LogsActivity extends BaseActivity {
             if (binding.recyclerView.getWidth() < desiredWidth) {
                 binding.recyclerView.requestLayout();
             }
-
         }
 
         void setLogs(List<String> logs) {
             this.logs.clear();
             this.logs.addAll(logs);
-            notifyDataSetChanged();
-        }
-
-        void setEmpty() {
-            logs.clear();
-            logs.add(getString(R.string.log_is_empty));
             notifyDataSetChanged();
         }
 

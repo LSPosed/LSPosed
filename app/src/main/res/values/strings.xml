@@ -179,4 +179,5 @@
     <string name="NotInstallDetail">LSPosed is not Installed</string>
     <string name="translators"><![CDATA[<a href="https://github.com/LSPosed/LSPosed">LSPosed</a>]]></string>
     <string name="copy_toast_msg">Copied</string>
+    <string name="list_empty">¯\\\\_(ツ)_\/¯\nNothing here</string>
 </resources>

@@ -18,7 +18,7 @@
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 
-<rikka.widget.borderview.BorderRecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+<org.lsposed.manager.ui.widget.EmptyStateRecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/recyclerView"
     android:layout_width="match_parent"
