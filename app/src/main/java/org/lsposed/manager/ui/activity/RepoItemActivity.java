@@ -118,12 +118,8 @@ public class RepoItemActivity extends BaseActivity implements RepoLoader.Listene
         binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
-                BorderView borderView;
-                if (position == 0) {
-                    borderView = findViewById(R.id.scrollView);
-                } else {
-                    borderView = findViewById(R.id.recyclerView);
-                }
+                BorderView borderView = binding.viewPager.findViewWithTag(position);
+
                 if (borderView != null) {
                     binding.appBar.setRaised(!borderView.getBorderViewDelegate().isShowingTopBorder());
                 }
@@ -381,6 +377,7 @@ public class RepoItemActivity extends BaseActivity implements RepoLoader.Listene
                 case 0:
                     holder.textView.setTransformationMethod(new LinkTransformationMethod(RepoItemActivity.this));
                     holder.scrollView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setRaised(!top));
+                    holder.scrollView.setTag(position);
                     markwon.setMarkdown(holder.textView, module.getReadme());
                     break;
                 case 1:
@@ -390,6 +387,7 @@ public class RepoItemActivity extends BaseActivity implements RepoLoader.Listene
                     } else {
                         holder.recyclerView.setAdapter(new InformationAdapter(module));
                     }
+                    holder.recyclerView.setTag(position);
                     holder.recyclerView.setLayoutManager(new LinearLayoutManagerFix(RepoItemActivity.this));
                     holder.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setRaised(!top));
                     RecyclerViewKt.fixEdgeEffect(holder.recyclerView, false, true);

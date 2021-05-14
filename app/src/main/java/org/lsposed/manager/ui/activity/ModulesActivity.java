@@ -81,6 +81,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import rikka.core.res.ResourcesKt;
+import rikka.insets.WindowInsetsHelperKt;
 import rikka.recyclerview.RecyclerViewKt;
 import rikka.widget.borderview.BorderRecyclerView;
 
@@ -118,11 +120,10 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
-                BorderRecyclerView recyclerView = findViewById(R.id.recyclerView);
+                BorderRecyclerView recyclerView = binding.viewPager.findViewWithTag(position);
 
                 if (recyclerView != null) {
                     binding.appBar.setRaised(!recyclerView.getBorderViewDelegate().isShowingTopBorder());
-
                 }
             }
         });
@@ -146,24 +147,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         moduleUtil = ModuleUtil.getInstance();
         pm = getPackageManager();
         moduleUtil.addListener(this);
-        int[] users = ConfigManager.getUsers();
-        if (users != null) {
-            if (users.length != 1) {
-                ArrayList<String> titles = new ArrayList<>();
-                for (int userId : users) {
-                    var adapter = new ModuleAdapter(userId);
-                    adapter.setHasStableIds(true);
-                    adapters.add(adapter);
-                    titles.add(getString(R.string.user_title, userId));
-                }
-                new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> tab.setText(titles.get(position))).attach();
-            } else {
-                var adapter = new ModuleAdapter(0);
-                adapter.setHasStableIds(true);
-                adapters.add(adapter);
-                binding.tabLayout.setVisibility(View.GONE);
-            }
-        }
         if (ConfigManager.getXposedVersionName() == null) {
             Toast.makeText(this, R.string.lsposed_not_active, Toast.LENGTH_LONG).show();
             finish();
@@ -189,6 +172,28 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
     @Override
     protected void onResume() {
         super.onResume();
+        int[] users = ConfigManager.getUsers();
+        if (users != null) {
+            adapters.clear();
+            if (users.length != 1) {
+                binding.viewPager.setUserInputEnabled(true);
+                ArrayList<String> titles = new ArrayList<>();
+                for (int userId : users) {
+                    var adapter = new ModuleAdapter(userId);
+                    adapter.setHasStableIds(true);
+                    adapters.add(adapter);
+                    titles.add(getString(R.string.user_title, userId));
+                }
+                new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> tab.setText(titles.get(position))).attach();
+                binding.tabLayout.setVisibility(View.VISIBLE);
+            } else {
+                binding.viewPager.setUserInputEnabled(false);
+                var adapter = new ModuleAdapter(0);
+                adapter.setHasStableIds(true);
+                adapters.add(adapter);
+                binding.tabLayout.setVisibility(View.GONE);
+            }
+        }
         adapters.forEach(ModuleAdapter::refresh);
     }
 
@@ -291,6 +296,10 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
 
         @Override
         public void onBindViewHolder(@NonNull PagerAdapter.ViewHolder holder, int position) {
+            if (getItemCount() == 1) {
+                WindowInsetsHelperKt.setInitialPadding(holder.recyclerView, 0, ResourcesKt.resolveDimensionPixelOffset(getTheme(), R.attr.actionBarSize, 0), 0, 0);
+            }
+            holder.recyclerView.setTag(position);
             holder.recyclerView.setAdapter(adapters.get(position));
             holder.recyclerView.setLayoutManager(new LinearLayoutManagerFix(ModulesActivity.this));
             holder.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setRaised(!top));
@@ -320,7 +329,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
 
         ModuleAdapter(int userId) {
             this.userId = userId;
-            refresh();
         }
 
         @NonNull
