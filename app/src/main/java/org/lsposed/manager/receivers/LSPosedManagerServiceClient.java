@@ -153,4 +153,9 @@ public class LSPosedManagerServiceClient {
         ensureService();
         return service.isSepolicyLoaded();
     }
+
+    public static int[] getUsers() throws RemoteException, NullPointerException {
+        ensureService();
+        return service.getUsers();
+    }
 }

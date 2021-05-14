@@ -68,6 +68,8 @@ public class ConfigManager {
             "android.permission.WRITE_SECURE_SETTINGS"
     };
 
+    private static final int PER_USER_RANGE = 100000;
+
     static ConfigManager instance = null;
 
     private static final File basePath = new File("/data/adb/lspd");
@@ -312,9 +314,9 @@ public class ConfigManager {
             while (cursor.moveToNext()) {
                 String packageName = cursor.getString(pkgNameIdx);
                 try {
-                    PackageInfo pkgInfo = PackageService.getPackageInfo(packageName, 0, 0);
+                    PackageInfo pkgInfo = PackageService.getPackageInfoFromAllUsers(packageName, 0);
                     if (pkgInfo != null && pkgInfo.applicationInfo != null) {
-                        cachedModule.put(pkgInfo.applicationInfo.uid, pkgInfo.packageName);
+                        cachedModule.put(pkgInfo.applicationInfo.uid % PER_USER_RANGE, pkgInfo.packageName);
                     } else {
                         obsoleteModules.add(packageName);
                     }
@@ -635,7 +637,7 @@ public class ConfigManager {
     }
 
     public boolean isModule(int uid) {
-        return cachedModule.containsKey(uid);
+        return cachedModule.containsKey(uid % PER_USER_RANGE);
     }
 
     private void recursivelyChown(File file, int uid, int gid) throws ErrnoException {

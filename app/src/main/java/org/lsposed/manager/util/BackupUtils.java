@@ -32,7 +32,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -48,7 +47,7 @@ public class BackupUtils {
             JSONObject rootObject = new JSONObject();
             rootObject.put("version", VERSION);
             JSONArray modulesArray = new JSONArray();
-            Map<String, ModuleUtil.InstalledModule> modules = ModuleUtil.getInstance().getModules();
+            var modules = ModuleUtil.getInstance().getModules();
             for (ModuleUtil.InstalledModule module : modules.values()) {
                 if (packageName != null && !module.packageName.equals(packageName)) {
                     continue;

@@ -38,7 +38,7 @@ public final class NotificationUtil {
     private static final int PENDING_INTENT_OPEN_APP_LIST = 0;
     private static final String NOTIFICATION_MODULES_CHANNEL = "modules_channel_2";
 
-    public static void showNotification(Context context, String modulePackageName, String moduleName, boolean enabled) {
+    public static void showNotification(Context context, String modulePackageName, String moduleName, int moduleUserId, boolean enabled) {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         NotificationChannel channel = new NotificationChannel(NOTIFICATION_MODULES_CHANNEL,
@@ -53,6 +53,7 @@ public final class NotificationUtil {
 
         Intent intent = new Intent(context, AppListActivity.class)
                 .putExtra("modulePackageName", modulePackageName)
+                .putExtra("moduleUserId", moduleUserId)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         PendingIntent contentIntent = PendingIntent.getActivity(context, PENDING_INTENT_OPEN_APP_LIST, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);

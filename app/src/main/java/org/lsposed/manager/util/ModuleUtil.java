@@ -27,6 +27,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
+import androidx.core.util.Pair;
 
 import org.lsposed.manager.App;
 import org.lsposed.manager.ConfigManager;
@@ -47,7 +48,7 @@ public final class ModuleUtil {
     private final PackageManager pm;
     private final List<ModuleListener> listeners = new CopyOnWriteArrayList<>();
     private final HashSet<String> enabledModules;
-    private Map<String, InstalledModule> installedModules;
+    private Map<Pair<String, Integer>, InstalledModule> installedModules;
     private boolean isReloading = false;
 
     private ModuleUtil() {
@@ -82,15 +83,15 @@ public final class ModuleUtil {
             isReloading = true;
         }
 
-        Map<String, InstalledModule> modules = new HashMap<>();
+        Map<Pair<String, Integer>, InstalledModule> modules = new HashMap<>();
         for (PackageInfo pkg : ConfigManager.getInstalledPackagesFromAllUsers(PackageManager.GET_META_DATA, false)) {
             ApplicationInfo app = pkg.applicationInfo;
-            if (!app.enabled || app.uid / 100000 != 0)
+            if (!app.enabled)
                 continue;
 
             if (app.metaData != null && app.metaData.containsKey("xposedminversion")) {
                 InstalledModule installed = new InstalledModule(pkg, false);
-                modules.put(pkg.packageName, installed);
+                modules.put(Pair.create(pkg.packageName, app.uid / 100000), installed);
             }
         }
 
@@ -101,10 +102,10 @@ public final class ModuleUtil {
         }
     }
 
-    public InstalledModule reloadSingleModule(String packageName) {
+    public InstalledModule reloadSingleModule(String packageName, int userId) {
         PackageInfo pkg;
         try {
-            pkg = ConfigManager.getPackageInfo(packageName, PackageManager.GET_META_DATA);
+            pkg = ConfigManager.getPackageInfo(packageName, PackageManager.GET_META_DATA, userId);
             if (pkg == null) {
                 throw new NameNotFoundException();
             }
@@ -112,7 +113,7 @@ public final class ModuleUtil {
             InstalledModule old = installedModules.remove(packageName);
             if (old != null) {
                 for (ModuleListener listener : listeners) {
-                    listener.onSingleInstalledModuleReloaded(instance, packageName, null);
+                    listener.onSingleInstalledModuleReloaded();
                 }
             }
             return null;
@@ -121,28 +122,31 @@ public final class ModuleUtil {
         ApplicationInfo app = pkg.applicationInfo;
         if (app.enabled && app.metaData != null && app.metaData.containsKey("xposedminversion")) {
             InstalledModule module = new InstalledModule(pkg, false);
-            installedModules.put(packageName, module);
+            installedModules.put(Pair.create(packageName, userId), module);
             for (ModuleListener listener : listeners) {
-                listener.onSingleInstalledModuleReloaded(instance, packageName,
-                        module);
+                listener.onSingleInstalledModuleReloaded();
             }
             return module;
         } else {
-            InstalledModule old = installedModules.remove(packageName);
+            InstalledModule old = installedModules.remove(Pair.create(packageName, userId));
             if (old != null) {
                 for (ModuleListener listener : listeners) {
-                    listener.onSingleInstalledModuleReloaded(instance, packageName, null);
+                    listener.onSingleInstalledModuleReloaded();
                 }
             }
             return null;
         }
     }
 
-    public InstalledModule getModule(String packageName) {
-        return installedModules.get(packageName);
+    public InstalledModule getModule(String packageName, int userId) {
+        return installedModules.get(Pair.create(packageName, userId));
     }
 
-    public Map<String, InstalledModule> getModules() {
+    public InstalledModule getModule(String packageName) {
+        return getModule(packageName, 0);
+    }
+
+    public Map<Pair<String, Integer>, InstalledModule> getModules() {
         return installedModules;
     }
 
@@ -180,11 +184,12 @@ public final class ModuleUtil {
          * Called whenever one (previously or now) installed module has been
          * reloaded
          */
-        void onSingleInstalledModuleReloaded(ModuleUtil moduleUtil, String packageName, InstalledModule module);
+        void onSingleInstalledModuleReloaded();
     }
 
     public class InstalledModule {
         //private static final int FLAG_FORWARD_LOCK = 1 << 29;
+        public final int userId;
         public final String packageName;
         public final String versionName;
         public final long versionCode;
@@ -201,6 +206,7 @@ public final class ModuleUtil {
         private InstalledModule(PackageInfo pkg, boolean isFramework) {
             this.app = pkg.applicationInfo;
             this.pkg = pkg;
+            this.userId = pkg.applicationInfo.uid / 100000;
             this.packageName = pkg.packageName;
             this.isFramework = isFramework;
             this.versionName = pkg.versionName;

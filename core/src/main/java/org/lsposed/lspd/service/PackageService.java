@@ -96,6 +96,16 @@ public class PackageService {
         return pm.getPackageInfo(packageName, flags, userId);
     }
 
+    public static PackageInfo getPackageInfoFromAllUsers(String packageName, int flags) throws RemoteException {
+        IPackageManager pm = getPackageManager();
+        if (pm == null) return null;
+        for (int userId : UserService.getUsers()) {
+            var info = pm.getPackageInfo(packageName, flags, userId);
+            if (info != null) return info;
+        }
+        return null;
+    }
+
     public static ApplicationInfo getApplicationInfo(String packageName, int flags, int userId) throws RemoteException {
         IPackageManager pm = getPackageManager();
         if (pm == null) return null;

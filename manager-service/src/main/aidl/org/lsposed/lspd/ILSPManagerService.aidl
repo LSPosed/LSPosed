@@ -46,4 +46,6 @@ interface ILSPManagerService {
     boolean uninstallPackage(String packageName) = 25;
 
     boolean isSepolicyLoaded() = 26;
+
+    int[] getUsers() = 27;
 }

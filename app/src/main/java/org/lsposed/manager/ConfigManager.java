@@ -183,9 +183,9 @@ public class ConfigManager {
         }
     }
 
-    public static PackageInfo getPackageInfo(String packageName, int flags) throws PackageManager.NameNotFoundException {
+    public static PackageInfo getPackageInfo(String packageName, int flags, int userId) throws PackageManager.NameNotFoundException {
         try {
-            return LSPosedManagerServiceClient.getPackageInfo(packageName, flags, 0);
+            return LSPosedManagerServiceClient.getPackageInfo(packageName, flags, userId);
         } catch (RemoteException | NullPointerException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
             throw new PackageManager.NameNotFoundException();
@@ -227,6 +227,15 @@ public class ConfigManager {
         } catch (RemoteException | NullPointerException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
             return false;
+        }
+    }
+
+    public static int[] getUsers() {
+        try {
+            return LSPosedManagerServiceClient.getUsers();
+        } catch (RemoteException | NullPointerException e) {
+            Log.e(App.TAG, Log.getStackTraceString(e));
+            return null;
         }
     }
 
