@@ -83,7 +83,6 @@ import java.util.stream.Collectors;
 
 import rikka.recyclerview.RecyclerViewKt;
 import rikka.widget.borderview.BorderRecyclerView;
-import rikka.widget.borderview.BorderView;
 
 public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleListener {
 
@@ -159,6 +158,9 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 }
                 new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> tab.setText(titles.get(position))).attach();
             } else {
+                var adapter = new ModuleAdapter(0);
+                adapter.setHasStableIds(true);
+                adapters.add(adapter);
                 binding.tabLayout.setVisibility(View.GONE);
             }
         }
