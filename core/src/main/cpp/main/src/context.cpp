@@ -28,7 +28,6 @@
 #include "jni/pending_hooks.h"
 #include "context.h"
 #include "native_hook.h"
-#include "jni/logger.h"
 #include "jni/native_api.h"
 #include "service.h"
 #include "symbol_cache.h"
@@ -116,7 +115,6 @@ namespace lspd {
             entry_class_ = JNI_NewGlobalRef(env, entry_class);
         }
 
-        RegisterLogger(env);
         RegisterResourcesHook(env);
         RegisterArtClassLinker(env);
         RegisterYahfa(env);
