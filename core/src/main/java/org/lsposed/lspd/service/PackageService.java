@@ -67,21 +67,22 @@ import hidden.HiddenApiBridge;
 public class PackageService {
     private static IPackageManager pm = null;
     private static IBinder binder = null;
+    private static final IBinder.DeathRecipient recipient = new IBinder.DeathRecipient() {
+        @Override
+        public void binderDied() {
+            Log.w(TAG, "pm is dead");
+            binder.unlinkToDeath(this, 0);
+            binder = null;
+            pm = null;
+        }
+    };
 
     public static IPackageManager getPackageManager() {
         if (binder == null && pm == null) {
             binder = ServiceManager.getService("package");
             if (binder == null) return null;
             try {
-                binder.linkToDeath(new IBinder.DeathRecipient() {
-                    @Override
-                    public void binderDied() {
-                        Log.w(TAG, "pm is dead");
-                        binder.unlinkToDeath(this, 0);
-                        binder = null;
-                        pm = null;
-                    }
-                }, 0);
+                binder.linkToDeath(recipient, 0);
             } catch (RemoteException e) {
                 Log.e(TAG, Log.getStackTraceString(e));
             }

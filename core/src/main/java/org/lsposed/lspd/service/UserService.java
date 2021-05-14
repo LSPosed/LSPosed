@@ -34,21 +34,22 @@ import static org.lsposed.lspd.service.ServiceManager.TAG;
 public class UserService {
     private static IUserManager um = null;
     private static IBinder binder = null;
+    private static IBinder.DeathRecipient recipient = new IBinder.DeathRecipient() {
+        @Override
+        public void binderDied() {
+            Log.w(TAG, "um is dead");
+            binder.unlinkToDeath(this, 0);
+            binder = null;
+            um = null;
+        }
+    };
 
     public static IUserManager getUserManager() {
         if (binder == null && um == null) {
             binder = ServiceManager.getService("user");
             if (binder == null) return null;
             try {
-                binder.linkToDeath(new IBinder.DeathRecipient() {
-                    @Override
-                    public void binderDied() {
-                        Log.w(TAG, "um is dead");
-                        binder.unlinkToDeath(this, 0);
-                        binder = null;
-                        um = null;
-                    }
-                }, 0);
+                binder.linkToDeath(recipient, 0);
             } catch (RemoteException e) {
                 Log.e(TAG, Log.getStackTraceString(e));
             }

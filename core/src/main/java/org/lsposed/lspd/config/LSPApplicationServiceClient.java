@@ -36,21 +36,21 @@ public class LSPApplicationServiceClient implements ILSPApplicationService {
     static String processName = null;
 
     public static LSPApplicationServiceClient serviceClient = null;
+    private static final IBinder.DeathRecipient recipient = new IBinder.DeathRecipient() {
+        @Override
+        public void binderDied() {
+            serviceBinder.unlinkToDeath(this, 0);
+            serviceBinder = null;
+            service = null;
+        }
+    };
 
     public static void Init(IBinder binder, String niceName) {
         if (serviceClient == null && binder != null && serviceBinder == null && service == null) {
             serviceBinder = binder;
             processName = niceName;
             try {
-                serviceBinder.linkToDeath(
-                        new IBinder.DeathRecipient() {
-                            @Override
-                            public void binderDied() {
-                                serviceBinder.unlinkToDeath(this, 0);
-                                serviceBinder = null;
-                                service = null;
-                            }
-                        }, 0);
+                serviceBinder.linkToDeath(recipient, 0);
             } catch (RemoteException e) {
                 Utils.logE("link to death error: ", e);
             }

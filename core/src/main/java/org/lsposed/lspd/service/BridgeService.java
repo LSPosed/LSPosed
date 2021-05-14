@@ -64,13 +64,8 @@ public class BridgeService {
     private static ILSPosedService service = null;
 
     // for service
-    static class BridgeServiceDeathRecipient implements IBinder.DeathRecipient {
-        private final IBinder bridgeService;
-
-        BridgeServiceDeathRecipient(IBinder bridgeService) throws RemoteException {
-            this.bridgeService = bridgeService;
-            bridgeService.linkToDeath(this, 0);
-        }
+    private static IBinder bridgeService;
+    private static final IBinder.DeathRecipient bridgeRecipient = new IBinder.DeathRecipient() {
 
         @Override
         public void binderDied() {
@@ -96,16 +91,21 @@ public class BridgeService {
             }
 
             bridgeService.unlinkToDeath(this, 0);
+            bridgeService = null;
             listener.onSystemServerDied();
             sendToBridge(serviceBinder, true);
         }
-    }
+    };
 
     // for client
-    private static final IBinder.DeathRecipient LSPSERVICE_DEATH_RECIPIENT = () -> {
-        serviceBinder = null;
-        service = null;
-        Log.e(TAG, "service is dead");
+    private static final IBinder.DeathRecipient serviceRecipient = new IBinder.DeathRecipient() {
+        @Override
+        public void binderDied() {
+            serviceBinder.unlinkToDeath(this, 0);
+            serviceBinder = null;
+            service = null;
+            Log.e(TAG, "service is dead");
+        }
     };
 
     public interface Listener {
@@ -121,7 +121,6 @@ public class BridgeService {
 
     // For service
     private static void sendToBridge(IBinder binder, boolean isRestart) {
-        IBinder bridgeService;
         do {
             bridgeService = ServiceManager.getService(SERVICE_NAME);
             if (bridgeService != null && bridgeService.pingBinder()) {
@@ -143,7 +142,7 @@ public class BridgeService {
         }
 
         try {
-            new BridgeServiceDeathRecipient(bridgeService);
+            bridgeService.linkToDeath(bridgeRecipient, 0);
         } catch (Throwable e) {
             Log.w(TAG, "linkToDeath " + Log.getStackTraceString(e));
             sendToBridge(binder, false);
@@ -218,15 +217,16 @@ public class BridgeService {
                 }
             });
         } else {
-            serviceBinder.unlinkToDeath(LSPSERVICE_DEATH_RECIPIENT, 0);
+            serviceBinder.unlinkToDeath(serviceRecipient, 0);
         }
         Binder.restoreCallingIdentity(token);
 
         serviceBinder = Binder_allowBlocking(binder);
         service = ILSPosedService.Stub.asInterface(serviceBinder);
         try {
-            serviceBinder.linkToDeath(LSPSERVICE_DEATH_RECIPIENT, 0);
-        } catch (RemoteException ignored) {
+            serviceBinder.linkToDeath(serviceRecipient, 0);
+        } catch (Throwable e) {
+            Log.e(TAG, "service link to death: ", e);
         }
 
         Log.i(TAG, "binder received");
@@ -324,8 +324,8 @@ public class BridgeService {
     public static IBinder getApplicationServiceForSystemServer(IBinder binder, IBinder heartBeat) {
         if (binder == null || heartBeat == null) return null;
         try {
-            ILSPosedService service = ILSPosedService.Stub.asInterface(binder);
-            ILSPApplicationService applicationService = service.requestApplicationService(Process.myUid(), Process.myPid(), "android", heartBeat);
+            var service = ILSPSystemServerService.Stub.asInterface(binder);
+            var applicationService = service.requestApplicationService(Process.myUid(), Process.myPid(), "android", heartBeat);
             if (applicationService != null) return applicationService.asBinder();
         } catch (Throwable e) {
             Log.e(TAG, Log.getStackTraceString(e));

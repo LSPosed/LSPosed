@@ -34,22 +34,25 @@ import static org.lsposed.lspd.service.ServiceManager.TAG;
 
 public class ActivityManagerService {
     private static IActivityManager am = null;
+
     private static IBinder binder = null;
+
+    private static final IBinder.DeathRecipient deathRecipient = new IBinder.DeathRecipient() {
+        @Override
+        public void binderDied() {
+            Log.w(TAG, "am is dead");
+            binder.unlinkToDeath(this, 0);
+            binder = null;
+            am = null;
+        }
+    };
 
     public static IActivityManager getActivityManager() {
         if (binder == null && am == null) {
             binder = ServiceManager.getService("activity");
             if (binder == null) return null;
             try {
-                binder.linkToDeath(new IBinder.DeathRecipient() {
-                    @Override
-                    public void binderDied() {
-                        Log.w(TAG, "am is dead");
-                        binder.unlinkToDeath(this, 0);
-                        binder = null;
-                        am = null;
-                    }
-                }, 0);
+                binder.linkToDeath(deathRecipient, 0);
             } catch (RemoteException e) {
                 Log.e(TAG, Log.getStackTraceString(e));
             }

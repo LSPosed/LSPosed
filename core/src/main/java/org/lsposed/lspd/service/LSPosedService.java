@@ -42,12 +42,6 @@ public class LSPosedService extends ILSPosedService.Stub {
             Log.w(TAG, "Someone else got my binder!?");
             return null;
         }
-        if (uid == 1000 && processName.equals("android")) {
-            if (ConfigManager.getInstance().shouldSkipSystemServer())
-                return null;
-            else
-                return ServiceManager.requestApplicationService(uid, pid, heartBeat);
-        }
         if (ConfigManager.getInstance().shouldSkipProcess(new ConfigManager.ProcessScope(processName, uid))) {
             Log.d(TAG, "Skipped " + processName + "/" + uid);
             return null;
@@ -59,7 +53,6 @@ public class LSPosedService extends ILSPosedService.Stub {
         Log.d(TAG, "returned service");
         return ServiceManager.requestApplicationService(uid, pid, heartBeat);
     }
-
 
     @Override
     public void dispatchPackageChanged(Intent intent) throws RemoteException {
