@@ -46,6 +46,7 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
                     cache.remove(new Pair<>(uid, pid));
                     handles.remove(handle);
                     handle.unlinkToDeath(this, 0);
+                    recipients.remove(this);
                 }
             };
             recipients.add(recipient);
