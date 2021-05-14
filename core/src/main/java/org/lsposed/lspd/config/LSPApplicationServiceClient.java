@@ -109,17 +109,6 @@ public class LSPApplicationServiceClient implements ILSPApplicationService {
     }
 
     @Override
-    public String getCachePath(String fileName) {
-        try {
-            if (baseCachePath == null)
-                baseCachePath = service.getCachePath("");
-            return baseCachePath + File.separator + fileName;
-        } catch (RemoteException | NullPointerException ignored) {
-        }
-        return null;
-    }
-
-    @Override
     public ParcelFileDescriptor getModuleLogger() {
         try {
             return service.getModuleLogger();

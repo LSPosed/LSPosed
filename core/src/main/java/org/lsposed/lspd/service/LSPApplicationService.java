@@ -79,13 +79,7 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
     @Override
     public String getPrefsPath(String packageName) throws RemoteException {
         ensureRegistered();
-        return ConfigManager.getInstance().getPrefsPath(packageName);
-    }
-
-    @Override
-    public String getCachePath(String fileName) throws RemoteException {
-        ensureRegistered();
-        return ConfigManager.getInstance().getCachePath(fileName);
+        return ConfigManager.getInstance().getPrefsPath(packageName, Binder.getCallingUid());
     }
 
     @Override

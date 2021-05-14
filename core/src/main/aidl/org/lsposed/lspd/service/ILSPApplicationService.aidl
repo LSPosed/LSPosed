@@ -11,7 +11,5 @@ interface ILSPApplicationService {
 
     String getPrefsPath(String packageName) = 7;
 
-    String getCachePath(String fileName) = 8;
-
     ParcelFileDescriptor getModuleLogger() = 9;
 }
