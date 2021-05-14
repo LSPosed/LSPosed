@@ -85,6 +85,7 @@
     <string name="module_uninstall_message">Você quer desinstalar este módulo?</string>
     <string name="module_uninstalled">Desinstalado %1$s</string>
     <string name="module_uninstall_failed">Falha ao desinstalar</string>
+    <string name="user_title">Usuário %d</string>
 
     <!-- AppListActivity -->
     <string name="compile_speed">Re-otimizar</string>
@@ -178,4 +179,5 @@
     <string name="NotInstallDetail">LSPosed não está instalado</string>
     <string name="translators"><![CDATA[<a href="https://forum.xda-developers.com/m/vd171.4699873/#about">VD171</a>]]></string>
     <string name="copy_toast_msg">Copiado</string>
+    <string name="list_empty">¯\\\\_(ツ)_\/¯\nNada encontrado</string>
 </resources>
