@@ -72,6 +72,7 @@ import org.lsposed.manager.databinding.ActivityModuleDetailBinding;
 import org.lsposed.manager.databinding.ItemRepoRecyclerviewBinding;
 import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.ui.activity.base.BaseActivity;
+import org.lsposed.manager.ui.widget.EmptyStateRecyclerView;
 import org.lsposed.manager.util.GlideApp;
 import org.lsposed.manager.util.LinearLayoutManagerFix;
 import org.lsposed.manager.util.ModuleUtil;
@@ -211,14 +212,18 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
 
     @Override
     public void onSingleInstalledModuleReloaded() {
-        adapters.forEach(ModuleAdapter::refresh);
+        adapters.forEach(adapter -> {
+            adapter.refresh(true);
+        });
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.menu_refresh) {
-            adapters.forEach(ModuleAdapter::refresh);
+            adapters.forEach(adapter -> {
+                adapter.refresh(true);
+            });
         }
         return super.onOptionsItemSelected(item);
     }
@@ -322,10 +327,11 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         }
     }
 
-    private class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.ViewHolder> implements Filterable {
+    private class ModuleAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<ModuleAdapter.ViewHolder> implements Filterable {
         private final List<ModuleUtil.InstalledModule> searchList = new ArrayList<>();
         private final List<ModuleUtil.InstalledModule> showList = new ArrayList<>();
         private final int userId;
+        private boolean isLoaded;
 
         ModuleAdapter(int userId) {
             this.userId = userId;
@@ -470,6 +476,11 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             }
         };
 
+        @Override
+        public boolean isLoaded() {
+            return isLoaded;
+        }
+
         class ViewHolder extends RecyclerView.ViewHolder {
             View root;
             ImageView appIcon;
@@ -522,6 +533,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 showList.clear();
                 //noinspection unchecked
                 showList.addAll((List<ModuleUtil.InstalledModule>) results.values);
+                isLoaded = true;
                 notifyDataSetChanged();
             }
         }
