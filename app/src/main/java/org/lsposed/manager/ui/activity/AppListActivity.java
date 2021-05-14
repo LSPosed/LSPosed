@@ -61,12 +61,13 @@ public class AppListActivity extends BaseActivity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String modulePackageName = getIntent().getStringExtra("modulePackageName");
+        int moduleUserId = getIntent().getIntExtra("moduleUserId", -1);
         binding = ActivityAppListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setAppBar(binding.appBar, binding.toolbar);
         binding.appBar.setRaised(true);
         binding.toolbar.setNavigationOnClickListener(view -> onBackPressed());
-        ModuleUtil.InstalledModule module = ModuleUtil.getInstance().getModule(modulePackageName);
+        ModuleUtil.InstalledModule module = ModuleUtil.getInstance().getModule(modulePackageName, moduleUserId);
         if (module == null) {
             finish();
             return;

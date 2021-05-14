@@ -78,7 +78,7 @@ public class ModulesActivity extends ListActivity implements ModuleUtil.ModuleLi
     private PackageManager pm;
     private ModuleUtil moduleUtil;
     private ModuleAdapter adapter = null;
-    private String selectedPackageName;
+    private ModuleUtil.InstalledModule selectedModule;
 
     static {
         HandlerThread uninstallThread = new HandlerThread("uninstall");
@@ -117,7 +117,7 @@ public class ModulesActivity extends ListActivity implements ModuleUtil.ModuleLi
     }
 
     @Override
-    public void onSingleInstalledModuleReloaded(ModuleUtil moduleUtil, String packageName, ModuleUtil.InstalledModule module) {
+    public void onSingleInstalledModuleReloaded() {
         adapter.refresh();
     }
 
@@ -132,7 +132,7 @@ public class ModulesActivity extends ListActivity implements ModuleUtil.ModuleLi
 
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
-        ModuleUtil.InstalledModule module = ModuleUtil.getInstance().getModule(selectedPackageName);
+        ModuleUtil.InstalledModule module = ModuleUtil.getInstance().getModule(selectedModule.packageName, selectedModule.userId);
         if (module == null) {
             return false;
         }
@@ -142,7 +142,7 @@ public class ModulesActivity extends ListActivity implements ModuleUtil.ModuleLi
             if (packageName == null) {
                 return false;
             }
-            Intent intent = AppHelper.getSettingsIntent(packageName, pm);
+            Intent intent = AppHelper.getSettingsIntent(packageName, module.userId, pm);
             if (intent != null) {
                 startActivity(intent);
             } else {
@@ -177,7 +177,8 @@ public class ModulesActivity extends ListActivity implements ModuleUtil.ModuleLi
                                         Toast.makeText(ModulesActivity.this, text, Toast.LENGTH_SHORT).show();
                                     }
                                 });
-                                if (success) moduleUtil.reloadSingleModule(module.packageName);
+                                if (success)
+                                    moduleUtil.reloadSingleModule(module.packageName, module.userId);
                             }))
                     .setNegativeButton(android.R.string.cancel, null)
                     .show();
@@ -216,7 +217,13 @@ public class ModulesActivity extends ListActivity implements ModuleUtil.ModuleLi
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             ModuleUtil.InstalledModule item = showList.get(position);
             holder.root.setAlpha(moduleUtil.isModuleEnabled(item.packageName) ? 1.0f : .5f);
-            holder.appName.setText(item.getAppName());
+            String appName;
+            if (item.userId != 0) {
+                appName = String.format("%s (%s)", item.getAppName(), item.userId);
+            } else {
+                appName = item.getAppName();
+            }
+            holder.appName.setText(appName);
             GlideApp.with(holder.appIcon)
                     .load(item.getPackageInfo())
                     .into(new CustomTarget<Drawable>() {
@@ -266,7 +273,7 @@ public class ModulesActivity extends ListActivity implements ModuleUtil.ModuleLi
             holder.itemView.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
                 getMenuInflater().inflate(R.menu.context_menu_modules, menu);
                 menu.setHeaderTitle(item.getAppName());
-                Intent intent = AppHelper.getSettingsIntent(item.packageName, pm);
+                Intent intent = AppHelper.getSettingsIntent(item.packageName, item.userId, pm);
                 if (intent == null) {
                     menu.removeItem(R.id.menu_launch);
                 }
@@ -278,11 +285,12 @@ public class ModulesActivity extends ListActivity implements ModuleUtil.ModuleLi
             holder.itemView.setOnClickListener(v -> {
                 Intent intent = new Intent(ModulesActivity.this, AppListActivity.class);
                 intent.putExtra("modulePackageName", item.packageName);
+                intent.putExtra("moduleUserId", item.userId);
                 startActivity(intent);
             });
 
             holder.itemView.setOnLongClickListener(v -> {
-                selectedPackageName = item.packageName;
+                selectedModule = item;
                 return false;
             });
 
@@ -298,7 +306,8 @@ public class ModulesActivity extends ListActivity implements ModuleUtil.ModuleLi
 
         @Override
         public long getItemId(int position) {
-            return showList.get(position).packageName.hashCode();
+            var module = showList.get(position);
+            return (module.packageName + "!" + module.userId).hashCode();
         }
 
         @Override

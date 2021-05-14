@@ -37,20 +37,21 @@ public class ServiceReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
+        int userId = intent.getIntExtra(Intent.EXTRA_USER, 0);
         String packageName = getPackageName(intent);
         if (packageName == null) {
             return;
         }
 
-        ModuleUtil.InstalledModule module = ModuleUtil.getInstance().reloadSingleModule(packageName);
+        ModuleUtil.InstalledModule module = ModuleUtil.getInstance().reloadSingleModule(packageName, userId);
         if (module == null) {
             return;
         }
 
         if (intent.getAction().equals("org.lsposed.action.MODULE_NOT_ACTIVATAED")) {
-            NotificationUtil.showNotification(context, packageName, module.getAppName(), false);
+            NotificationUtil.showNotification(context, packageName, module.getAppName(), userId, false);
         } else if (intent.getAction().equals("org.lsposed.action.MODULE_UPDATED")) {
-            NotificationUtil.showNotification(context, packageName, module.getAppName(), true);
+            NotificationUtil.showNotification(context, packageName, module.getAppName(), userId, true);
         }
     }
 }

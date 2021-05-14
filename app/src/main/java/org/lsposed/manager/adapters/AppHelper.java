@@ -40,7 +40,7 @@ public class AppHelper {
     public static final String SETTINGS_CATEGORY = "de.robv.android.xposed.category.MODULE_SETTINGS";
     private static List<PackageInfo> appList;
 
-    public static Intent getSettingsIntent(String packageName, PackageManager packageManager) {
+    public static Intent getSettingsIntent(String packageName, int userId, PackageManager packageManager) {
         // taken from
         // ApplicationPackageManager.getLaunchIntentForPackage(String)
         // first looks for an Xposed-specific category, falls back to

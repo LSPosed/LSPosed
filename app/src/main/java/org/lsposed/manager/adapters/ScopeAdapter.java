@@ -151,6 +151,9 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     }
 
     private boolean shouldHideApp(PackageInfo info, ApplicationWithEquals app) {
+        if (app.userId != module.userId) {
+            return true;
+        }
         if (info.packageName.equals(this.module.packageName)) {
             return true;
         }
@@ -251,7 +254,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             item.setChecked(!item.isChecked());
             preferences.edit().putBoolean("filter_modules", item.isChecked()).apply();
         } else if (itemId == R.id.menu_launch) {
-            Intent launchIntent = AppHelper.getSettingsIntent(module.packageName, pm);
+            Intent launchIntent = AppHelper.getSettingsIntent(module.packageName, module.userId, pm);
             if (launchIntent != null) {
                 activity.startActivity(launchIntent);
             } else {
@@ -320,7 +323,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
 
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.menu_app_list, menu);
-        Intent intent = AppHelper.getSettingsIntent(module.packageName, pm);
+        Intent intent = AppHelper.getSettingsIntent(module.packageName, module.userId, pm);
         if (intent == null) {
             menu.removeItem(R.id.menu_launch);
         }
@@ -366,11 +369,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         boolean android = appInfo.packageName.equals("android");
         CharSequence appName;
         int userId = appInfo.applicationInfo.uid / 100000;
-        if (userId != 0) {
-            appName = String.format("%s (%s)", appInfo.label, userId);
-        } else {
-            appName = android ? activity.getString(R.string.android_framework) : appInfo.label;
-        }
+        appName = android ? activity.getString(R.string.android_framework) : appInfo.label;
         holder.appName.setText(appName);
         GlideApp.with(holder.appIcon)
                 .load(appInfo.packageInfo)
