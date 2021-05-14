@@ -161,4 +161,9 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     public boolean isSepolicyLoaded() throws RemoteException {
         return ConfigManager.getInstance().isSepolicyLoaded();
     }
+
+    @Override
+    public int[] getUsers() throws RemoteException {
+        return UserService.getUsers();
+    }
 }
