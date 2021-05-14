@@ -69,7 +69,7 @@ extract "$ZIPFILE" 'sepolicy.rule'      "$MODPATH"
 extract "$ZIPFILE" 'post-fs-data.sh'    "$MODPATH"
 extract "$ZIPFILE" 'uninstall.sh'       "$MODPATH"
 extract "$ZIPFILE" 'framework/lspd.dex' "$MODPATH"
-extract "$ZIPFILE" 'manager.apk'        '/data/adb/lspd/'
+extract "$ZIPFILE" 'manager.apk'        '/data/adb/lspd'
 
 mkdir "$MODPATH/riru"
 mkdir "$MODPATH/riru/lib"
