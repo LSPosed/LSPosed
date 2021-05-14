@@ -24,28 +24,29 @@ import android.app.ActivityThread;
 import android.os.ParcelFileDescriptor;
 import android.os.Process;
 
+import org.lsposed.lspd.util.Utils;
+
+import java.io.FileDescriptor;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import org.lsposed.lspd.util.Utils;
-
 public class ModuleLogger {
     static SimpleDateFormat logDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss", Locale.getDefault());
-    static int fd = -1;
+    static FileDescriptor fd = null;
 
     public static void initLogger(ParcelFileDescriptor fileDescriptor) {
-        if (fd == -1 && fileDescriptor != null) {
-            fd = fileDescriptor.detachFd();
+        if (fd == null && fileDescriptor != null) {
+            fd = fileDescriptor.getFileDescriptor();
             logDateFormat.setTimeZone(TimeZone.getDefault());
         }
     }
 
-    private static native void nativeLog(int fd, String logStr);
-
     public static void log(String str, boolean isThrowable) {
-        if (fd == -1) {
+        if (fd == null) {
             Utils.logE("Logger is not initialized");
             return;
         }
@@ -65,6 +66,13 @@ public class ModuleLogger {
         sb.append(": ");
         sb.append(str);
         sb.append('\n');
-        nativeLog(fd, sb.toString());
+        try {
+            var log = sb.toString();
+            var writer = new FileWriter(fd);
+            writer.write(log, 0, log.length());
+            writer.flush();
+        } catch (IOException e) {
+            Utils.logE("Unable to write to module log file", e);
+        }
     }
 }
