@@ -43,7 +43,7 @@ interface ILSPManagerService {
 
     void reboot(boolean confirm, String reason, boolean wait) = 24;
 
-    boolean uninstallPackage(String packageName) = 25;
+    boolean uninstallPackage(String packageName, int userId) = 25;
 
     boolean isSepolicyLoaded() = 26;
 

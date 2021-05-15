@@ -616,10 +616,6 @@ public class ConfigManager {
         return uid == managerUid;
     }
 
-    public String getCachePath(String fileName) {
-        return miscPath + File.separator + "cache" + File.separator + fileName;
-    }
-
     public String getPrefsPath(String fileName, int uid) {
         int userId = uid / PER_USER_RANGE;
         return miscPath + File.separator + "prefs" + (userId == 0 ? "" : String.valueOf(userId)) + File.separator + fileName;

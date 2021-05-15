@@ -96,7 +96,6 @@ public class LSPosedService extends ILSPosedService.Stub {
 
         ApplicationInfo applicationInfo = PackageService.getApplicationInfo(packageName, PackageManager.GET_META_DATA, 0);
         boolean isXposedModule = applicationInfo != null &&
-                applicationInfo.enabled &&
                 applicationInfo.metaData != null &&
                 applicationInfo.metaData.containsKey("xposedminversion");
 

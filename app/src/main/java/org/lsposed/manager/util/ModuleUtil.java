@@ -86,11 +86,9 @@ public final class ModuleUtil {
         Map<Pair<String, Integer>, InstalledModule> modules = new HashMap<>();
         for (PackageInfo pkg : ConfigManager.getInstalledPackagesFromAllUsers(PackageManager.GET_META_DATA, false)) {
             ApplicationInfo app = pkg.applicationInfo;
-            if (!app.enabled)
-                continue;
 
             if (app.metaData != null && app.metaData.containsKey("xposedminversion")) {
-                InstalledModule installed = new InstalledModule(pkg, false);
+                InstalledModule installed = new InstalledModule(pkg);
                 modules.put(Pair.create(pkg.packageName, app.uid / 100000), installed);
             }
         }
@@ -120,8 +118,8 @@ public final class ModuleUtil {
         }
 
         ApplicationInfo app = pkg.applicationInfo;
-        if (app.enabled && app.metaData != null && app.metaData.containsKey("xposedminversion")) {
-            InstalledModule module = new InstalledModule(pkg, false);
+        if (app.metaData != null && app.metaData.containsKey("xposedminversion")) {
+            InstalledModule module = new InstalledModule(pkg);
             installedModules.put(Pair.create(packageName, userId), module);
             for (ModuleListener listener : listeners) {
                 listener.onSingleInstalledModuleReloaded();
@@ -196,19 +194,17 @@ public final class ModuleUtil {
         public final int minVersion;
         public final long installTime;
         public final long updateTime;
-        final boolean isFramework;
         public ApplicationInfo app;
         public PackageInfo pkg;
         private String appName; // loaded lazyily
         private String description; // loaded lazyily
         private List<String> scopeList; // loaded lazyily
 
-        private InstalledModule(PackageInfo pkg, boolean isFramework) {
+        private InstalledModule(PackageInfo pkg) {
             this.app = pkg.applicationInfo;
             this.pkg = pkg;
             this.userId = pkg.applicationInfo.uid / 100000;
             this.packageName = pkg.packageName;
-            this.isFramework = isFramework;
             this.versionName = pkg.versionName;
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
                 this.versionCode = pkg.versionCode;
@@ -218,18 +214,13 @@ public final class ModuleUtil {
             this.installTime = pkg.firstInstallTime;
             this.updateTime = pkg.lastUpdateTime;
 
-            if (isFramework) {
-                this.minVersion = 0;
-                this.description = "";
+            Object minVersionRaw = app.metaData.get("xposedminversion");
+            if (minVersionRaw instanceof Integer) {
+                this.minVersion = (Integer) minVersionRaw;
+            } else if (minVersionRaw instanceof String) {
+                this.minVersion = extractIntPart((String) minVersionRaw);
             } else {
-                Object minVersionRaw = app.metaData.get("xposedminversion");
-                if (minVersionRaw instanceof Integer) {
-                    this.minVersion = (Integer) minVersionRaw;
-                } else if (minVersionRaw instanceof String) {
-                    this.minVersion = extractIntPart((String) minVersionRaw);
-                } else {
-                    this.minVersion = 0;
-                }
+                this.minVersion = 0;
             }
         }
 

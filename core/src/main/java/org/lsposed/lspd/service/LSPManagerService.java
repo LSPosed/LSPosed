@@ -148,9 +148,9 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     }
 
     @Override
-    public boolean uninstallPackage(String packageName) throws RemoteException {
+    public boolean uninstallPackage(String packageName, int userId) throws RemoteException {
         try {
-            return PackageService.uninstallPackage(new VersionedPackage(packageName, PackageManager.VERSION_CODE_HIGHEST));
+            return PackageService.uninstallPackage(new VersionedPackage(packageName, PackageManager.VERSION_CODE_HIGHEST), userId);
         } catch (InterruptedException | InvocationTargetException | NoSuchMethodException | InstantiationException | IllegalAccessException e) {
             Log.e(TAG, e.getMessage(), e);
             return false;

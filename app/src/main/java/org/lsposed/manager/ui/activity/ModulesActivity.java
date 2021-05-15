@@ -224,9 +224,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
 
     @Override
     public void onSingleInstalledModuleReloaded() {
-        adapters.forEach(adapter -> {
-            adapter.refresh(true);
-        });
+        adapters.forEach(adapter -> adapter.refresh(true));
     }
 
     @Override
@@ -278,7 +276,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                     .setMessage(R.string.module_uninstall_message)
                     .setPositiveButton(android.R.string.ok, (dialog, which) ->
                             uninstallHandler.post(() -> {
-                                boolean success = ConfigManager.uninstallPackage(module.packageName);
+                                boolean success = ConfigManager.uninstallPackage(module.packageName, module.userId);
                                 runOnUiThread(() -> {
                                     String text = success ? getString(R.string.module_uninstalled, module.getAppName()) : getString(R.string.module_uninstall_failed);
                                     if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
@@ -424,6 +422,9 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 }
                 if (RepoLoader.getInstance().getOnlineModule(item.packageName) == null) {
                     menu.removeItem(R.id.menu_repo);
+                }
+                if (userHandle == null) {
+                    menu.removeItem(R.id.menu_app_info);
                 }
             });
 

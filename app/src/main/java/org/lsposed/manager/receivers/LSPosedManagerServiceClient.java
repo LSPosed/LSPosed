@@ -144,9 +144,9 @@ public class LSPosedManagerServiceClient {
         service.reboot(confirm, reason, wait);
     }
 
-    public static boolean uninstallPackage(String packageName) throws RemoteException, NullPointerException {
+    public static boolean uninstallPackage(String packageName, int userId) throws RemoteException, NullPointerException {
         ensureService();
-        return service.uninstallPackage(packageName);
+        return service.uninstallPackage(packageName, userId);
     }
 
     public static boolean isSepolicyLoaded() throws RemoteException, NullPointerException {
