@@ -64,6 +64,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -306,7 +307,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         @NonNull
         @Override
         public PagerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new PagerAdapter.ViewHolder(ItemRepoRecyclerviewBinding.inflate(getLayoutInflater(), parent, false).getRoot());
+            return new PagerAdapter.ViewHolder(ItemRepoRecyclerviewBinding.inflate(getLayoutInflater(), parent, false));
         }
 
         @Override
@@ -318,6 +319,14 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             holder.recyclerView.setAdapter(adapters.get(position));
             holder.recyclerView.setLayoutManager(new LinearLayoutManagerFix(ModulesActivity.this));
             holder.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setRaised(!top));
+            if (position > 0) {
+                holder.btn.setVisibility(View.VISIBLE);
+                holder.btn.setOnClickListener(view -> new AlertDialog.Builder(ModulesActivity.this)
+                        .setTitle("Add module to this user")
+                        .setPositiveButton(android.R.string.ok, null)
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .show());
+            }
             RecyclerViewKt.fixEdgeEffect(holder.recyclerView, false, true);
             RecyclerViewKt.addFastScroller(holder.recyclerView, holder.itemView);
         }
@@ -329,10 +338,12 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
 
         class ViewHolder extends RecyclerView.ViewHolder {
             BorderRecyclerView recyclerView;
+            FloatingActionButton btn;
 
-            public ViewHolder(@NonNull View itemView) {
-                super(itemView);
-                recyclerView = itemView.findViewById(R.id.recyclerView);
+            public ViewHolder(@NonNull ItemRepoRecyclerviewBinding binding) {
+                super(binding.getRoot());
+                recyclerView = binding.recyclerView;
+                btn = binding.fab;
             }
         }
     }
