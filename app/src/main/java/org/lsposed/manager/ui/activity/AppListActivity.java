@@ -23,6 +23,7 @@ package org.lsposed.manager.ui.activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.UserHandle;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -46,6 +47,8 @@ import org.lsposed.manager.util.BackupUtils;
 import org.lsposed.manager.util.LinearLayoutManagerFix;
 import org.lsposed.manager.util.ModuleUtil;
 
+import java.util.Locale;
+
 import rikka.recyclerview.RecyclerViewKt;
 
 public class AppListActivity extends BaseActivity {
@@ -62,6 +65,7 @@ public class AppListActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         String modulePackageName = getIntent().getStringExtra("modulePackageName");
         int moduleUserId = getIntent().getIntExtra("moduleUserId", -1);
+        UserHandle userHandle = getIntent().getParcelableExtra("userHandle");
         binding = ActivityAppListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setAppBar(binding.appBar, binding.toolbar);
@@ -75,10 +79,14 @@ public class AppListActivity extends BaseActivity {
         ActionBar bar = getSupportActionBar();
         if (bar != null) {
             bar.setDisplayHomeAsUpEnabled(true);
-            bar.setTitle(module.getAppName());
+            if (module.userId != 0) {
+                bar.setTitle(String.format(Locale.US, "%s (%d)", module.getAppName(), module.userId));
+            } else {
+                bar.setTitle(module.getAppName());
+            }
             bar.setSubtitle(module.packageName);
         }
-        scopeAdapter = new ScopeAdapter(this, module);
+        scopeAdapter = new ScopeAdapter(this, module, userHandle);
         scopeAdapter.setHasStableIds(true);
         binding.recyclerView.setAdapter(scopeAdapter);
         binding.recyclerView.setHasFixedSize(true);
