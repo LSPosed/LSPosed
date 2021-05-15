@@ -636,6 +636,10 @@ public class ConfigManager {
         return cachedModule.containsKey(uid % PER_USER_RANGE);
     }
 
+    public boolean isModule(String packageName) {
+        return cachedModule.containsValue(packageName);
+    }
+
     private void recursivelyChown(File file, int uid, int gid) throws ErrnoException {
         Os.chown(file.toString(), uid, gid);
         if (file.isDirectory()) {

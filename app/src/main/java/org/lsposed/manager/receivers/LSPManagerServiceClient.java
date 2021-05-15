@@ -30,7 +30,7 @@ import org.lsposed.lspd.utils.ParceledListSlice;
 
 import java.util.List;
 
-public class LSPosedManagerServiceClient {
+public class LSPManagerServiceClient {
 
     @SuppressWarnings("FieldMayBeFinal")
     private static IBinder binder = null;
@@ -157,5 +157,9 @@ public class LSPosedManagerServiceClient {
     public static int[] getUsers() throws RemoteException, NullPointerException {
         ensureService();
         return service.getUsers();
+    }
+    public static int installExistingPackageAsUser(String packageName, int userId) throws RemoteException, NullPointerException {
+        ensureService();
+        return service.installExistingPackageAsUser(packageName, userId);
     }
 }

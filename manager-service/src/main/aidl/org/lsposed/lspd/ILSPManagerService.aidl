@@ -48,4 +48,6 @@ interface ILSPManagerService {
     boolean isSepolicyLoaded() = 26;
 
     int[] getUsers() = 27;
+
+    int installExistingPackageAsUser(String packageName, int userId) = 28;
 }

@@ -65,6 +65,13 @@ import java.util.stream.Collectors;
 import hidden.HiddenApiBridge;
 
 public class PackageService {
+
+    static final int INSTALL_FAILED_INTERNAL_ERROR = -110;
+    static final int INSTALL_REASON_UNKNOWN = 0;
+    static final int INSTALL_ALL_WHITELIST_RESTRICTED_PERMISSIONS = 0x00400000;
+    static final int INSTALL_PARSE_FAILED_BAD_PACKAGE_NAME = -106;
+
+
     private static IPackageManager pm = null;
     private static IBinder binder = null;
     private static final IBinder.DeathRecipient recipient = new IBinder.DeathRecipient() {
@@ -246,6 +253,16 @@ public class PackageService {
         }.getIntentSender(), userId == -1 ? 0 : userId);
         latch.await();
         return result[0];
+    }
+
+    public static int installExistingPackageAsUser(String packageName, int userId) {
+        IPackageManager pm = getPackageManager();
+        if (pm == null) return INSTALL_FAILED_INTERNAL_ERROR;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            return pm.installExistingPackageAsUser(packageName, userId, INSTALL_REASON_UNKNOWN, INSTALL_ALL_WHITELIST_RESTRICTED_PERMISSIONS, null);
+        } else {
+            return pm.installExistingPackageAsUser(packageName, userId, INSTALL_REASON_UNKNOWN, INSTALL_ALL_WHITELIST_RESTRICTED_PERMISSIONS);
+        }
     }
 
     @SuppressWarnings("JavaReflectionMemberAccess")

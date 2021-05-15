@@ -1,7 +1,7 @@
 -keep class org.lsposed.manager.Constants {
     public static void showErrorToast(int);
 }
--keepclasseswithmembers class org.lsposed.manager.receivers.LSPosedManagerServiceClient {
+-keepclasseswithmembers class org.lsposed.manager.receivers.LSPManagerServiceClient {
     private static android.os.IBinder binder;
 }
 
