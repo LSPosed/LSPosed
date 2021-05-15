@@ -85,6 +85,11 @@
     <string name="module_uninstall_message">您確定要移除此模組嗎？</string>
     <string name="module_uninstalled">已移除 %1$s</string>
     <string name="module_uninstall_failed">移除失敗</string>
+    <string name="user_title">使用者 %d</string>
+    <string name="install_to_user">安裝到使用者 %d</string>
+    <string name="install_to_user_message">要安裝 %1$s 到使用者 %2$d 嗎？建議手動安裝或多開，透過 LSPosed 強制安裝可能會出現問題。</string>
+    <string name="module_installed">已安裝 %1$s</string>
+    <string name="module_install_failed">安裝失敗</string>
 
     <!-- AppListActivity -->
     <string name="compile_speed">重新最佳化</string>
@@ -152,7 +157,9 @@
     <string name="dns_over_http_summary">解決某些地區的 DNS 汙染問題</string>
     <string name="theme_color">主題強調色</string>
     <string name="theme_color_summary">應用程式中最常見的顏色</string>
-    <string name="settings_show_hidden_icon_apps_enabled">（Android 10+）限制應用隱藏其啟動器圖標</string>
+    <string name="theme_color_system_accent">System accent color</string>
+    <string name="settings_show_hidden_icon_apps_enabled">強制程式在啟動器中顯示圖示</string>
+    <string name="settings_show_hidden_icon_apps_enabled_summary">在 Android 10 之後，程式（特別是 Xposed 模組）不被允許隱藏啟動器圖示。關閉本選項以禁用此功能。</string>
     <string name="settings_group_system">系統</string>
 
     <!-- Module Repo -->
@@ -177,4 +184,5 @@
     <string name="NotInstallDetail">未安裝 LSPosed</string>
     <string name="translators"><![CDATA[<a href="https://github.com/tony8077616">孟武.尼德霍格.龍</a>、<a href="https://github.com/david082321">david082321</a>]]></string>
     <string name="copy_toast_msg">已複製</string>
+    <string name="list_empty">¯\\\\_(ツ)_\/¯\n空空如也</string>
 </resources>
