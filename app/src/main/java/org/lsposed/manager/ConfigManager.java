@@ -239,6 +239,15 @@ public class ConfigManager {
         }
     }
 
+    public static int installExistingPackageAsUser(String packageName, int userId) {
+        try {
+            return LSPManagerServiceClient.installExistingPackageAsUser(packageName, userId);
+        } catch (RemoteException | NullPointerException e) {
+            Log.e(App.TAG, Log.getStackTraceString(e));
+            return -1;
+        }
+    }
+
     public static boolean isMagiskInstalled() {
         return Arrays.stream(System.getenv("PATH").split(File.pathSeparator))
                 .anyMatch(str -> new File(str, "magisk").exists());
