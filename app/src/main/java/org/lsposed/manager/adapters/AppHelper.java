@@ -20,12 +20,14 @@
 
 package org.lsposed.manager.adapters;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.os.UserHandle;
 import android.view.MenuItem;
 
 import org.lsposed.manager.ConfigManager;
@@ -47,6 +49,16 @@ public class AppHelper {
             return intent;
         }
         return getIntentForCategory(packageName, userId, packageManager, Intent.CATEGORY_LAUNCHER);
+    }
+
+    public static void startActivityAsUser(Activity activity, Intent intent, UserHandle user) {
+        try {
+            //noinspection JavaReflectionMemberAccess
+            var startActivityAsUserMethod = Activity.class.getMethod("startActivityAsUser", Intent.class, UserHandle.class);
+            startActivityAsUserMethod.invoke(activity, intent, user);
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
     }
 
     public static Intent getIntentForCategory(String packageName, int userId, PackageManager packageManager, String category) {
