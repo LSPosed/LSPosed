@@ -257,9 +257,9 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 Snackbar.make(binding.snackbar, R.string.module_no_ui, Snackbar.LENGTH_LONG).show();
             }
             return true;
-        } else if (itemId == R.id.menu_app_store) {
-            Uri uri = Uri.parse("market://details?id=" + module.packageName);
-            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        } else if (itemId == R.id.menu_other_app) {
+            var intent = new Intent(Intent.ACTION_SHOW_APP_INFO);
+            intent.putExtra(Intent.EXTRA_PACKAGE_NAME, module.packageName);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             try {
                 startActivity(intent);

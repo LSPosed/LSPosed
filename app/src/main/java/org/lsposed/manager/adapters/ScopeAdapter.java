@@ -296,9 +296,9 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             }
         } else if (itemId == R.id.menu_compile_speed) {
             CompileDialogFragment.speed(activity.getSupportFragmentManager(), info);
-        } else if (itemId == R.id.menu_app_store) {
-            Uri uri = Uri.parse("market://details?id=" + info.packageName);
-            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        } else if (itemId == R.id.menu_other_app) {
+            var intent = new Intent(Intent.ACTION_SHOW_APP_INFO);
+            intent.putExtra(Intent.EXTRA_PACKAGE_NAME, module.packageName);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             try {
                 activity.startActivity(intent);
@@ -422,7 +422,6 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             if (android) {
                 menu.findItem(R.id.menu_force_stop).setTitle(R.string.reboot);
                 menu.removeItem(R.id.menu_compile_speed);
-                menu.removeItem(R.id.menu_app_store);
             }
         });
 
