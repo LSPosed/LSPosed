@@ -196,12 +196,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                     ArrayList<String> titles = new ArrayList<>();
                     for (int userId : userIds) {
                         var adapter = new ModuleAdapter(userId, handles.get(userId));
-                        if (userId == 0) {
-                            adapter.setProfiles(users.stream()
-                                    .filter(u -> u.hashCode() != 0)
-                                    .mapToInt(UserHandle::hashCode)
-                                    .toArray());
-                        }
                         adapter.setHasStableIds(true);
                         adapters.add(adapter);
                         titles.add(getString(R.string.user_title, userId));
@@ -247,6 +241,28 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             });
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void installModuleToUser(ModuleUtil.InstalledModule module, int userId) {
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.install_to_user, userId))
+                .setMessage(getString(R.string.install_to_user_message, module.getAppName(), userId))
+                .setPositiveButton(android.R.string.ok, (dialog, which) ->
+                        workHandler.post(() -> {
+                            var success = ConfigManager.installExistingPackageAsUser(module.packageName, userId);
+                            runOnUiThread(() -> {
+                                String text = success ? getString(R.string.module_installed, module.getAppName(), userId) : getString(R.string.module_install_failed);
+                                if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
+                                    Snackbar.make(binding.snackbar, text, Snackbar.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(ModulesActivity.this, text, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            if (success)
+                                moduleUtil.reloadSingleModule(module.packageName, userId);
+                        }))
+                .setNegativeButton(android.R.string.cancel, null)
+                .show();
     }
 
     @Override
@@ -310,25 +326,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             startActivity(intent);
             return true;
         } else if (item.getGroupId() == 1) {
-            new AlertDialog.Builder(this)
-                    .setTitle(getString(R.string.install_to_user, itemId))
-                    .setMessage(getString(R.string.install_to_user_message, module.getAppName(), itemId))
-                    .setPositiveButton(android.R.string.ok, (dialog, which) ->
-                            workHandler.post(() -> {
-                                var success = ConfigManager.installExistingPackageAsUser(module.packageName, itemId);
-                                runOnUiThread(() -> {
-                                    String text = success ? getString(R.string.module_installed, module.getAppName(), itemId) : getString(R.string.module_install_failed);
-                                    if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
-                                        Snackbar.make(binding.snackbar, text, Snackbar.LENGTH_SHORT).show();
-                                    } else {
-                                        Toast.makeText(ModulesActivity.this, text, Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                                if (success)
-                                    moduleUtil.reloadSingleModule(module.packageName, itemId);
-                            }))
-                    .setNegativeButton(android.R.string.cancel, null)
-                    .show();
+            installModuleToUser(module, itemId);
             return true;
         }
         return super.onContextItemSelected(item);
@@ -358,35 +356,21 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 holder.btn.setOnClickListener(view -> {
                     var pickAdaptor = new ModuleAdapter(0, null, true);
                     var snapshot = adapters.get(position).snapshot().stream().map(m -> m.packageName).collect(Collectors.toSet());
+                    var userId = adapters.get(position).userId;
                     pickAdaptor.setFilter(m -> !snapshot.contains(m.packageName));
                     pickAdaptor.refresh();
                     var v = new RecyclerView(ModulesActivity.this);
                     v.setAdapter(pickAdaptor);
                     v.setLayoutManager(new LinearLayoutManagerFix(ModulesActivity.this));
                     var dialog = new AlertDialog.Builder(ModulesActivity.this)
-                            .setTitle("Add module to this user")
+                            .setTitle(getResources().getString(R.string.add_module_to_user))
                             .setView(v)
                             .setNegativeButton(android.R.string.cancel, null)
                             .show();
                     pickAdaptor.setOnPickListener(picked -> {
                         var module = (ModuleUtil.InstalledModule) picked.getTag();
-                        var moduleName = module.getAppName();
-                        var packageName = module.packageName;
-                        var userId = adapters.get(position).userId;
-                        workHandler.post(() -> {
-                            var success = ConfigManager.installExistingPackageAsUser(packageName, userId);
-                            runOnUiThread(() -> {
-                                String text = success ? getString(R.string.module_installed, moduleName, userId) : getString(R.string.module_install_failed);
-                                if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
-                                    Snackbar.make(binding.snackbar, text, Snackbar.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(ModulesActivity.this, text, Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                            dialog.dismiss();
-                            if (success)
-                                moduleUtil.reloadSingleModule(packageName, userId);
-                        });
+                        installModuleToUser(module, userId);
+                        dialog.dismiss();
                     });
                 });
             }
@@ -438,10 +422,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
 
         public int getUserId() {
             return userId;
-        }
-
-        public void setProfiles(int[] profiles) {
-            this.profiles = profiles;
         }
 
         @NonNull
