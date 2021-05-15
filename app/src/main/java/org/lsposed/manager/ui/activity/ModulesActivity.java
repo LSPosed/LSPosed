@@ -92,21 +92,22 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
     protected ActivityModuleDetailBinding binding;
     protected SearchView searchView;
     private SearchView.OnQueryTextListener mSearchListener;
+    private final PagerAdapter pagerAdapter = new PagerAdapter();
     private final ArrayList<ModuleAdapter> adapters = new ArrayList<>();
 
-    private static final Handler uninstallHandler;
+    private Handler uninstallHandler;
     private PackageManager pm;
     private ModuleUtil moduleUtil;
     private ModuleUtil.InstalledModule selectedModule;
 
-    static {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         HandlerThread uninstallThread = new HandlerThread("uninstall");
         uninstallThread.start();
         uninstallHandler = new Handler(uninstallThread.getLooper());
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+        moduleUtil = ModuleUtil.getInstance();
+        pm = getPackageManager();
+        moduleUtil.addListener(this);
         super.onCreate(savedInstanceState);
         binding = ActivityModuleDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -116,28 +117,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         ActionBar bar = getSupportActionBar();
         if (bar != null) {
             bar.setDisplayHomeAsUpEnabled(true);
-        }
-        int[] users = ConfigManager.getUsers();
-        if (users != null) {
-            adapters.clear();
-            if (users.length != 1) {
-                binding.viewPager.setUserInputEnabled(true);
-                ArrayList<String> titles = new ArrayList<>();
-                for (int userId : users) {
-                    var adapter = new ModuleAdapter(userId);
-                    adapter.setHasStableIds(true);
-                    adapters.add(adapter);
-                    titles.add(getString(R.string.user_title, userId));
-                }
-                new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> tab.setText(titles.get(position))).attach();
-                binding.tabLayout.setVisibility(View.VISIBLE);
-            } else {
-                binding.viewPager.setUserInputEnabled(false);
-                var adapter = new ModuleAdapter(0);
-                adapter.setHasStableIds(true);
-                adapters.add(adapter);
-                binding.tabLayout.setVisibility(View.GONE);
-            }
         }
         binding.viewPager.setAdapter(new PagerAdapter());
         binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
@@ -167,9 +146,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 return false;
             }
         };
-        moduleUtil = ModuleUtil.getInstance();
-        pm = getPackageManager();
-        moduleUtil.addListener(this);
         if (ConfigManager.getXposedVersionName() == null) {
             Toast.makeText(this, R.string.lsposed_not_active, Toast.LENGTH_LONG).show();
             finish();
@@ -195,6 +171,31 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
     @Override
     protected void onResume() {
         super.onResume();
+        int[] users = ConfigManager.getUsers();
+        if (users != null) {
+            if (users.length != adapters.size()) {
+                adapters.clear();
+                if (users.length != 1) {
+                    binding.viewPager.setUserInputEnabled(true);
+                    ArrayList<String> titles = new ArrayList<>();
+                    for (int userId : users) {
+                        var adapter = new ModuleAdapter(userId);
+                        adapter.setHasStableIds(true);
+                        adapters.add(adapter);
+                        titles.add(getString(R.string.user_title, userId));
+                    }
+                    new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> tab.setText(titles.get(position))).attach();
+                    binding.tabLayout.setVisibility(View.VISIBLE);
+                } else {
+                    binding.viewPager.setUserInputEnabled(false);
+                    var adapter = new ModuleAdapter(0);
+                    adapter.setHasStableIds(true);
+                    adapters.add(adapter);
+                    binding.tabLayout.setVisibility(View.GONE);
+                }
+                pagerAdapter.notifyDataSetChanged();
+            }
+        }
         adapters.forEach(ModuleAdapter::refresh);
     }
 
