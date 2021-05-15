@@ -126,7 +126,7 @@
     <string name="menu_filter">Filter…</string>
 
     <!-- ModulesActivity and AppListActivity -->
-    <string name="modules_app_store">在應用商店查看</string>
+    <string name="modules_other_app">在其他應用中查看</string>
     <string name="module_app_info">應用資訊</string>
 
     <!-- SettingsActivity -->

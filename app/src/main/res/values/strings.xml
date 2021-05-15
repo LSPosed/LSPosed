@@ -127,7 +127,7 @@
     <string name="menu_filter">Filter…</string>
 
     <!-- ModulesActivity and AppListActivity -->
-    <string name="modules_app_store">View in App Store</string>
+    <string name="modules_other_app">View in other app</string>
     <string name="module_app_info">App info</string>
 
     <!-- SettingsActivity -->
