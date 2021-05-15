@@ -21,24 +21,23 @@ public class LSPSystemServerService extends ILSPSystemServerService.Stub impleme
         binderDied();
     }
 
-    private final IServiceCallback serviceCallback = new IServiceCallback.Stub() {
-        @Override
-        public void onRegistration(String name, IBinder binder) {
-            if (name.equals(PROXY_SERVICE_NAME) && binder != null && binder != LSPSystemServerService.this) {
-                Log.d(TAG, "Register " + name + " " + binder);
-                originService = binder;
-                LSPSystemServerService.this.linkToDeath();
-            }
-        }
-
-        @Override
-        public IBinder asBinder() {
-            return this;
-        }
-    };
-
     public LSPSystemServerService() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            var serviceCallback = new IServiceCallback.Stub() {
+                @Override
+                public void onRegistration(String name, IBinder binder) {
+                    if (name.equals(PROXY_SERVICE_NAME) && binder != null && binder != LSPSystemServerService.this) {
+                        Log.d(TAG, "Register " + name + " " + binder);
+                        originService = binder;
+                        LSPSystemServerService.this.linkToDeath();
+                    }
+                }
+
+                @Override
+                public IBinder asBinder() {
+                    return this;
+                }
+            };
             try {
                 getSystemServiceManager().registerForNotifications(PROXY_SERVICE_NAME, serviceCallback);
             } catch (Throwable e) {

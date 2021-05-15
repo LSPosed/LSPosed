@@ -32,7 +32,6 @@ public class LSPApplicationServiceClient implements ILSPApplicationService {
     static ILSPApplicationService service = null;
     static IBinder serviceBinder = null;
 
-    static String baseCachePath = null;
     static String processName = null;
 
     public static LSPApplicationServiceClient serviceClient = null;
