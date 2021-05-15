@@ -94,6 +94,7 @@
             android:defaultValue="true"
             android:key="show_hidden_icon_apps_enabled"
             android:title="@string/settings_show_hidden_icon_apps_enabled"
+            android:summary="@string/settings_show_hidden_icon_apps_enabled_summary"
             android:persistent="false"
             app:isPreferenceVisible="false" />
     </com.takisoft.preferencex.PreferenceCategory>
