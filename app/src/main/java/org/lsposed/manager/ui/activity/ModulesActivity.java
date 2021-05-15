@@ -103,7 +103,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
     private final PagerAdapter pagerAdapter = new PagerAdapter();
     private final ArrayList<ModuleAdapter> adapters = new ArrayList<>();
 
-    private Handler pmHandler;
+    private Handler workHandler;
     private PackageManager pm;
     private ModuleUtil moduleUtil;
     private ModuleUtil.InstalledModule selectedModule;
@@ -112,9 +112,9 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        HandlerThread pmThread = new HandlerThread("pm");
-        pmThread.start();
-        pmHandler = new Handler(pmThread.getLooper());
+        HandlerThread workThread = new HandlerThread("ModulesActivity WorkHandler");
+        workThread.start();
+        workHandler = new Handler(workThread.getLooper());
         moduleUtil = ModuleUtil.getInstance();
         pm = getPackageManager();
         moduleUtil.addListener(this);
@@ -196,6 +196,12 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                     ArrayList<String> titles = new ArrayList<>();
                     for (int userId : userIds) {
                         var adapter = new ModuleAdapter(userId, handles.get(userId));
+                        if (userId == 0) {
+                            adapter.setProfiles(users.stream()
+                                    .filter(u -> u.hashCode() != 0)
+                                    .mapToInt(UserHandle::hashCode)
+                                    .toArray());
+                        }
                         adapter.setHasStableIds(true);
                         adapters.add(adapter);
                         titles.add(getString(R.string.user_title, userId));
@@ -280,7 +286,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                     .setTitle(module.getAppName())
                     .setMessage(R.string.module_uninstall_message)
                     .setPositiveButton(android.R.string.ok, (dialog, which) ->
-                            pmHandler.post(() -> {
+                            workHandler.post(() -> {
                                 boolean success = ConfigManager.uninstallPackage(module.packageName, module.userId);
                                 runOnUiThread(() -> {
                                     String text = success ? getString(R.string.module_uninstalled, module.getAppName()) : getString(R.string.module_uninstall_failed);
@@ -302,6 +308,28 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             intent.putExtra("modulePackageName", module.packageName);
             intent.putExtra("moduleName", module.getAppName());
             startActivity(intent);
+            return true;
+        } else if (item.getGroupId() == 1) {
+            new AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.install_to_user, itemId))
+                    .setMessage(getString(R.string.install_to_user_message, module.getAppName(), itemId))
+                    .setPositiveButton(android.R.string.ok, (dialog, which) ->
+                            workHandler.post(() -> {
+                                var success = ConfigManager.installExistingPackageAsUser(module.packageName, itemId);
+                                runOnUiThread(() -> {
+                                    String text = success ? getString(R.string.module_installed, module.getAppName()) : getString(R.string.module_install_failed);
+                                    if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
+                                        Snackbar.make(binding.snackbar, text, Snackbar.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(ModulesActivity.this, text, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                if (success)
+                                    moduleUtil.reloadSingleModule(module.packageName, itemId);
+                            }))
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show();
+            return true;
         }
         return super.onContextItemSelected(item);
     }
@@ -345,11 +373,10 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                         var moduleName = module.getAppName();
                         var packageName = module.packageName;
                         var userId = adapters.get(position).userId;
-                        pmHandler.post(() -> {
-                            var code = ConfigManager.installExistingPackageAsUser(packageName, userId);
-                            boolean success = code == INSTALL_SUCCEEDED;
+                        workHandler.post(() -> {
+                            var success = ConfigManager.installExistingPackageAsUser(packageName, userId);
                             runOnUiThread(() -> {
-                                String text = success ? getString(R.string.module_installed, moduleName, userId) : getString(R.string.module_install_failed, code);
+                                String text = success ? getString(R.string.module_installed, moduleName, userId) : getString(R.string.module_install_failed);
                                 if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
                                     Snackbar.make(binding.snackbar, text, Snackbar.LENGTH_SHORT).show();
                                 } else {
@@ -399,6 +426,8 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
 
         private Predicate<ModuleUtil.InstalledModule> customFilter = m -> true;
 
+        private int[] profiles;
+
         ModuleAdapter(int userId, UserHandle userHandle) {
             this(userId, userHandle, false);
         }
@@ -411,6 +440,10 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
 
         public int getUserId() {
             return userId;
+        }
+
+        public void setProfiles(int[] profiles) {
+            this.profiles = profiles;
         }
 
         @NonNull
@@ -487,6 +520,14 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 }
                 if (userHandle == null) {
                     menu.removeItem(R.id.menu_app_info);
+                }
+                if (item.userId == 0) {
+                    Log.d(App.TAG, "len of profiles" + profiles.length);
+                    for (int profile : profiles) {
+                        if (ModuleUtil.getInstance().getModule(item.packageName, profile) == null) {
+                            menu.add(1, profile, 0, getString(R.string.install_to_user, profile));
+                        }
+                    }
                 }
             });
 

@@ -239,12 +239,14 @@ public class ConfigManager {
         }
     }
 
-    public static int installExistingPackageAsUser(String packageName, int userId) {
+    public static boolean installExistingPackageAsUser(String packageName, int userId) {
+        final int INSTALL_SUCCEEDED = 1;
         try {
-            return LSPManagerServiceClient.installExistingPackageAsUser(packageName, userId);
+            var ret = LSPManagerServiceClient.installExistingPackageAsUser(packageName, userId);
+            return ret == INSTALL_SUCCEEDED;
         } catch (RemoteException | NullPointerException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
-            return -1;
+            return false;
         }
     }
 
