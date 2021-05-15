@@ -41,7 +41,7 @@ import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -64,13 +64,17 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import org.lsposed.manager.App;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.adapters.AppHelper;
 import org.lsposed.manager.databinding.ActivityModuleDetailBinding;
+import org.lsposed.manager.databinding.ItemModuleBinding;
 import org.lsposed.manager.databinding.ItemRepoRecyclerviewBinding;
 import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.ui.activity.base.BaseActivity;
@@ -83,6 +87,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import rikka.core.res.ResourcesKt;
@@ -312,7 +317,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                             workHandler.post(() -> {
                                 var success = ConfigManager.installExistingPackageAsUser(module.packageName, itemId);
                                 runOnUiThread(() -> {
-                                    String text = success ? getString(R.string.module_installed, module.getAppName()) : getString(R.string.module_install_failed);
+                                    String text = success ? getString(R.string.module_installed, module.getAppName(), itemId) : getString(R.string.module_install_failed);
                                     if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
                                         Snackbar.make(binding.snackbar, text, Snackbar.LENGTH_SHORT).show();
                                     } else {
@@ -331,10 +336,12 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
 
     private class PagerAdapter extends RecyclerView.Adapter<PagerAdapter.ViewHolder> {
 
+        private static final int INSTALL_SUCCEEDED = 1;
+
         @NonNull
         @Override
         public PagerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new PagerAdapter.ViewHolder(ItemRepoRecyclerviewBinding.inflate(getLayoutInflater(), parent, false).getRoot());
+            return new PagerAdapter.ViewHolder(ItemRepoRecyclerviewBinding.inflate(getLayoutInflater(), parent, false));
         }
 
         @Override
@@ -346,6 +353,43 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             holder.recyclerView.setAdapter(adapters.get(position));
             holder.recyclerView.setLayoutManager(new LinearLayoutManagerFix(ModulesActivity.this));
             holder.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setRaised(!top));
+            if (position > 0) {
+                holder.btn.setVisibility(View.VISIBLE);
+                holder.btn.setOnClickListener(view -> {
+                    var pickAdaptor = new ModuleAdapter(0, null, true);
+                    var snapshot = adapters.get(position).snapshot().stream().map(m -> m.packageName).collect(Collectors.toSet());
+                    pickAdaptor.setFilter(m -> !snapshot.contains(m.packageName));
+                    pickAdaptor.refresh();
+                    var v = new RecyclerView(ModulesActivity.this);
+                    v.setAdapter(pickAdaptor);
+                    v.setLayoutManager(new LinearLayoutManagerFix(ModulesActivity.this));
+                    var dialog = new AlertDialog.Builder(ModulesActivity.this)
+                            .setTitle("Add module to this user")
+                            .setView(v)
+                            .setNegativeButton(android.R.string.cancel, null)
+                            .show();
+                    pickAdaptor.setOnPickListener(picked -> {
+                        var module = (ModuleUtil.InstalledModule) picked.getTag();
+                        var moduleName = module.getAppName();
+                        var packageName = module.packageName;
+                        var userId = adapters.get(position).userId;
+                        workHandler.post(() -> {
+                            var success = ConfigManager.installExistingPackageAsUser(packageName, userId);
+                            runOnUiThread(() -> {
+                                String text = success ? getString(R.string.module_installed, moduleName, userId) : getString(R.string.module_install_failed);
+                                if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
+                                    Snackbar.make(binding.snackbar, text, Snackbar.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(ModulesActivity.this, text, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            dialog.dismiss();
+                            if (success)
+                                moduleUtil.reloadSingleModule(packageName, userId);
+                        });
+                    });
+                });
+            }
             RecyclerViewKt.fixEdgeEffect(holder.recyclerView, false, true);
             RecyclerViewKt.addFastScroller(holder.recyclerView, holder.itemView);
         }
@@ -357,10 +401,16 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
 
         class ViewHolder extends RecyclerView.ViewHolder {
             BorderRecyclerView recyclerView;
+            FloatingActionButton btn;
 
-            public ViewHolder(@NonNull View itemView) {
-                super(itemView);
-                recyclerView = itemView.findViewById(R.id.recyclerView);
+            public ViewHolder(@NonNull ItemRepoRecyclerviewBinding binding) {
+                super(binding.getRoot());
+                recyclerView = binding.recyclerView;
+                btn = binding.fab;
+                var height = ModulesActivity.this.getResources().getIdentifier("navigation_bar_height", "dimen", "android");
+                var params = (ViewGroup.MarginLayoutParams) btn.getLayoutParams();
+                params.bottomMargin = ModulesActivity.this.getResources().getDimensionPixelSize(height) + params.bottomMargin;
+                btn.setLayoutParams(params);
             }
         }
     }
@@ -370,12 +420,24 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         private final List<ModuleUtil.InstalledModule> showList = new ArrayList<>();
         private final int userId;
         private final UserHandle userHandle;
+        private final boolean isPick;
         private boolean isLoaded;
-        private int[] profiles;
+        private View.OnClickListener onPickListener;
+
+        private Predicate<ModuleUtil.InstalledModule> customFilter = m -> true;
 
         ModuleAdapter(int userId, UserHandle userHandle) {
+            this(userId, userHandle, false);
+        }
+
+        ModuleAdapter(int userId, UserHandle userHandle, boolean isPick) {
             this.userId = userId;
             this.userHandle = userHandle;
+            this.isPick = isPick;
+        }
+
+        public int getUserId() {
+            return userId;
         }
 
         public void setProfiles(int[] profiles) {
@@ -385,14 +447,12 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_module, parent, false);
-            return new ViewHolder(v);
+            return new ViewHolder(ItemModuleBinding.inflate(getLayoutInflater(), parent, false));
         }
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             ModuleUtil.InstalledModule item = showList.get(position);
-            holder.root.setAlpha(moduleUtil.isModuleEnabled(item.packageName) ? 1.0f : .5f);
             String appName;
             if (item.userId != 0) {
                 appName = String.format("%s (%s)", item.getAppName(), item.userId);
@@ -460,7 +520,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                     menu.removeItem(R.id.menu_app_info);
                 }
                 if (item.userId == 0) {
-                    for (int profile : profiles) {
+                    for (int profile : ConfigManager.getUsers()) {
                         if (ModuleUtil.getInstance().getModule(item.packageName, profile) == null) {
                             menu.add(1, profile, 0, getString(R.string.install_to_user, profile));
                         }
@@ -468,23 +528,30 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 }
             });
 
-            holder.itemView.setOnClickListener(v -> {
-                Intent intent = new Intent(ModulesActivity.this, AppListActivity.class);
-                intent.putExtra("modulePackageName", item.packageName);
-                intent.putExtra("moduleUserId", item.userId);
-                intent.putExtra("userHandle", userHandle);
-                startActivity(intent);
-            });
+            if (!isPick) {
+                holder.root.setAlpha(moduleUtil.isModuleEnabled(item.packageName) ? 1.0f : .5f);
+                holder.itemView.setOnClickListener(v -> {
+                    Intent intent = new Intent(ModulesActivity.this, AppListActivity.class);
+                    intent.putExtra("modulePackageName", item.packageName);
+                    intent.putExtra("moduleUserId", item.userId);
+                    intent.putExtra("userHandle", userHandle);
+                    startActivity(intent);
+                });
 
-            holder.itemView.setOnLongClickListener(v -> {
-                selectedModule = item;
-                selectedModuleUser = userHandle;
-                return false;
-            });
-
-            holder.appVersion.setVisibility(View.VISIBLE);
-            holder.appVersion.setText(item.versionName);
-            holder.appVersion.setSelected(true);
+                holder.itemView.setOnLongClickListener(v -> {
+                    selectedModule = item;
+                    selectedModuleUser = userHandle;
+                    return false;
+                });
+                holder.appVersion.setVisibility(View.VISIBLE);
+                holder.appVersion.setText(item.versionName);
+                holder.appVersion.setSelected(true);
+            } else {
+                holder.itemView.setTag(item);
+                holder.itemView.setOnClickListener(v -> {
+                    if (onPickListener != null) onPickListener.onClick(v);
+                });
+            }
         }
 
         @Override
@@ -503,6 +570,20 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             return new ApplicationFilter();
         }
 
+        public void setFilter(@NonNull Predicate<ModuleUtil.InstalledModule> filter) {
+            this.customFilter = filter;
+        }
+
+        public void setOnPickListener(View.OnClickListener onPickListener) {
+            this.onPickListener = onPickListener;
+        }
+
+        public List<ModuleUtil.InstalledModule> snapshot() {
+            List<ModuleUtil.InstalledModule> list = new ArrayList<>();
+            list.addAll(searchList);
+            return list;
+        }
+
         public void refresh() {
             refresh(false);
         }
@@ -515,7 +596,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         private final Runnable reloadModules = new Runnable() {
             public void run() {
                 searchList.clear();
-                searchList.addAll(moduleUtil.getModules().values().stream().filter(module -> module.userId == userId).collect(Collectors.toList()));
+                searchList.addAll(moduleUtil.getModules().values().stream().filter(module -> module.userId == userId).filter(customFilter).collect(Collectors.toList()));
                 Comparator<PackageInfo> cmp = AppHelper.getAppListComparator(0, pm);
                 searchList.sort((a, b) -> {
                     boolean aChecked = moduleUtil.isModuleEnabled(a.packageName);
@@ -544,16 +625,16 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             TextView appName;
             TextView appDescription;
             TextView appVersion;
-            TextView warningText;
+            MaterialCheckBox checkBox;
 
-            ViewHolder(View itemView) {
-                super(itemView);
-                root = itemView.findViewById(R.id.item_root);
-                appIcon = itemView.findViewById(R.id.app_icon);
-                appName = itemView.findViewById(R.id.app_name);
-                appDescription = itemView.findViewById(R.id.description);
-                appVersion = itemView.findViewById(R.id.version_name);
-                warningText = itemView.findViewById(R.id.warning);
+            ViewHolder(ItemModuleBinding binding) {
+                super(binding.getRoot());
+                root = binding.itemRoot;
+                appIcon = binding.appIcon;
+                appName = binding.appName;
+                appDescription = binding.description;
+                appVersion = binding.versionName;
+                checkBox = binding.checkbox;
             }
         }
 

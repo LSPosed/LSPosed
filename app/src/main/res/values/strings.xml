@@ -85,11 +85,11 @@
     <string name="module_uninstall_message">Do you want to uninstall this module?</string>
     <string name="module_uninstalled">Uninstalled %1$s</string>
     <string name="module_uninstall_failed">Uninstall unsuccessful</string>
+    <string name="module_installed">Added %1$s to user %2$d</string>
+    <string name="module_install_failed">Adding module failed</string>
     <string name="user_title">User %d</string>
     <string name="install_to_user">Install to user %d</string>
     <string name="install_to_user_message">Want to install %1$s to user %2$d? It is recommended to install manually, forcing installation via LSPosed may cause problems.</string>
-    <string name="module_installed">%1$s installed</string>
-    <string name="module_install_failed">install failed</string>
 
     <!-- AppListActivity -->
     <string name="compile_speed">Re-optimize</string>
@@ -185,4 +185,5 @@
     <string name="translators"><![CDATA[<a href="https://github.com/LSPosed/LSPosed">LSPosed</a>]]></string>
     <string name="copy_toast_msg">Copied</string>
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nNothing here</string>
+    <string name="add_module_to_user">Add module to user</string>
 </resources>
