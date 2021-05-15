@@ -22,7 +22,6 @@ package org.lsposed.lspd.service;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.VersionedPackage;
-import android.graphics.Bitmap;
 import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
@@ -37,7 +36,6 @@ import org.lsposed.lspd.BuildConfig;
 import org.lsposed.lspd.ILSPManagerService;
 import org.lsposed.lspd.utils.ParceledListSlice;
 
-import static org.lsposed.lspd.service.PackageService.INSTALL_PARSE_FAILED_BAD_PACKAGE_NAME;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 
 public class LSPManagerService extends ILSPManagerService.Stub {
@@ -171,9 +169,6 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     @Override
     public int installExistingPackageAsUser(String packageName, int userid) {
-        if (ConfigManager.getInstance().isModule(packageName)) {
-            return PackageService.installExistingPackageAsUser(packageName, userid);
-        }
-        return INSTALL_PARSE_FAILED_BAD_PACKAGE_NAME;
+        return PackageService.installExistingPackageAsUser(packageName, userid);
     }
 }
