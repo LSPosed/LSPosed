@@ -260,7 +260,7 @@ public class PackageService {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             return pm.installExistingPackageAsUser(packageName, userId, 0, INSTALL_REASON_UNKNOWN, null);
         } else {
-            return pm.installExistingPackageAsUser(packageName, userId, 0, INSTALL_REASON_UNKNOWN );
+            return pm.installExistingPackageAsUser(packageName, userId, 0, INSTALL_REASON_UNKNOWN);
         }
     }
 
