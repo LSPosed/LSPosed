@@ -154,7 +154,8 @@
     <string name="theme_color">Theme color</string>
     <string name="theme_color_summary">Color that appears most frequently in the app</string>
     <string name="theme_color_system_accent">System accent color</string>
-    <string name="settings_show_hidden_icon_apps_enabled">(Android 10+) Limit apps to hide their launcher icons</string>
+    <string name="settings_show_hidden_icon_apps_enabled">Force apps to show launcher icons</string>
+    <string name="settings_show_hidden_icon_apps_enabled_summary">After Android 10, apps (especially Xposed modules) are not allowed to hide their launcher icons. Turn off the toggle to disable this feature.</string>
     <string name="settings_group_system">System</string>
 
     <!-- Module Repo -->
