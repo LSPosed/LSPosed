@@ -65,6 +65,12 @@ import java.util.stream.Collectors;
 import hidden.HiddenApiBridge;
 
 public class PackageService {
+
+    static final int INSTALL_FAILED_INTERNAL_ERROR = -110;
+    static final int INSTALL_REASON_UNKNOWN = 0;
+    static final int INSTALL_PARSE_FAILED_BAD_PACKAGE_NAME = -106;
+
+
     private static IPackageManager pm = null;
     private static IBinder binder = null;
     private static final IBinder.DeathRecipient recipient = new IBinder.DeathRecipient() {
@@ -231,10 +237,11 @@ public class PackageService {
         }
     }
 
-    public static boolean uninstallPackage(VersionedPackage versionedPackage) throws RemoteException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    public static boolean uninstallPackage(VersionedPackage versionedPackage, int userId) throws RemoteException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         CountDownLatch latch = new CountDownLatch(1);
         final boolean[] result = {false};
-        pm.getPackageInstaller().uninstall(versionedPackage, null, 0x00000002, new IntentSenderAdaptor() {
+        var flag = userId == -1 ? 0x00000002 : 0; //PackageManager.DELETE_ALL_USERS = 0x00000002; UserHandle ALL = new UserHandle(-1);
+        pm.getPackageInstaller().uninstall(versionedPackage, null, flag, new IntentSenderAdaptor() {
             @Override
             public void send(Intent intent) {
                 int status = intent.getIntExtra(PackageInstaller.EXTRA_STATUS, PackageInstaller.STATUS_FAILURE);
@@ -242,9 +249,19 @@ public class PackageService {
                 Log.d(TAG, intent.getStringExtra(PackageInstaller.EXTRA_STATUS_MESSAGE));
                 latch.countDown();
             }
-        }.getIntentSender(), 0);
+        }.getIntentSender(), userId == -1 ? 0 : userId);
         latch.await();
         return result[0];
+    }
+
+    public static int installExistingPackageAsUser(String packageName, int userId) {
+        IPackageManager pm = getPackageManager();
+        if (pm == null) return INSTALL_FAILED_INTERNAL_ERROR;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            return pm.installExistingPackageAsUser(packageName, userId, 0, INSTALL_REASON_UNKNOWN, null);
+        } else {
+            return pm.installExistingPackageAsUser(packageName, userId, 0, INSTALL_REASON_UNKNOWN);
+        }
     }
 
     @SuppressWarnings("JavaReflectionMemberAccess")
@@ -264,7 +281,7 @@ public class PackageService {
                 if (versionMatch && signatureMatch && pkgInfo.versionCode >= BuildConfig.VERSION_CODE)
                     return false;
                 if (!signatureMatch || !versionMatch && pkgInfo.versionCode > BuildConfig.VERSION_CODE)
-                    uninstallPackage(new VersionedPackage(pkgInfo.packageName, pkgInfo.versionCode));
+                    uninstallPackage(new VersionedPackage(pkgInfo.packageName, pkgInfo.versionCode), -1);
             }
 
             // Install manager
@@ -282,7 +299,7 @@ public class PackageService {
             }
             PackageInstaller.SessionParams params = new PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL);
             int installFlags = HiddenApiBridge.PackageInstaller_SessionParams_installFlags(params);
-            installFlags |= 0x00000004/*PackageManager.INSTALL_ALLOW_TEST*/ | 0x00000002/*PackageManager.INSTALL_REPLACE_EXISTING*/;
+            installFlags |= 0x00000002/*PackageManager.INSTALL_REPLACE_EXISTING*/;
             HiddenApiBridge.PackageInstaller_SessionParams_installFlags(params, installFlags);
 
             int sessionId = installer.createSession(params);

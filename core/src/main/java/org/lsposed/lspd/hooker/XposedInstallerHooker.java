@@ -32,7 +32,7 @@ public class XposedInstallerHooker {
     public static void hookXposedInstaller(final ClassLoader classLoader, IBinder binder) {
         Utils.logI("Found LSPosed Manager, hooking it");
         try {
-            Class<?> serviceClass = XposedHelpers.findClass("org.lsposed.manager.receivers.LSPosedManagerServiceClient", classLoader);
+            Class<?> serviceClass = XposedHelpers.findClass("org.lsposed.manager.receivers.LSPManagerServiceClient", classLoader);
             XposedHelpers.setStaticObjectField(serviceClass, "binder", binder);
 
             Utils.logI("Hooked LSPosed Manager");

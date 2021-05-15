@@ -22,6 +22,7 @@ package org.lsposed.lspd.service;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.VersionedPackage;
+import android.graphics.Bitmap;
 import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
@@ -36,6 +37,7 @@ import org.lsposed.lspd.BuildConfig;
 import org.lsposed.lspd.ILSPManagerService;
 import org.lsposed.lspd.utils.ParceledListSlice;
 
+import static org.lsposed.lspd.service.PackageService.INSTALL_PARSE_FAILED_BAD_PACKAGE_NAME;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 
 public class LSPManagerService extends ILSPManagerService.Stub {
@@ -148,9 +150,9 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     }
 
     @Override
-    public boolean uninstallPackage(String packageName) throws RemoteException {
+    public boolean uninstallPackage(String packageName, int userId) throws RemoteException {
         try {
-            return PackageService.uninstallPackage(new VersionedPackage(packageName, PackageManager.VERSION_CODE_HIGHEST));
+            return PackageService.uninstallPackage(new VersionedPackage(packageName, PackageManager.VERSION_CODE_HIGHEST), userId);
         } catch (InterruptedException | InvocationTargetException | NoSuchMethodException | InstantiationException | IllegalAccessException e) {
             Log.e(TAG, e.getMessage(), e);
             return false;
@@ -165,5 +167,13 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     @Override
     public int[] getUsers() throws RemoteException {
         return UserService.getUsers();
+    }
+
+    @Override
+    public int installExistingPackageAsUser(String packageName, int userid) {
+        if (ConfigManager.getInstance().isModule(packageName)) {
+            return PackageService.installExistingPackageAsUser(packageName, userid);
+        }
+        return INSTALL_PARSE_FAILED_BAD_PACKAGE_NAME;
     }
 }

@@ -616,10 +616,6 @@ public class ConfigManager {
         return uid == managerUid;
     }
 
-    public String getCachePath(String fileName) {
-        return miscPath + File.separator + "cache" + File.separator + fileName;
-    }
-
     public String getPrefsPath(String fileName, int uid) {
         int userId = uid / PER_USER_RANGE;
         return miscPath + File.separator + "prefs" + (userId == 0 ? "" : String.valueOf(userId)) + File.separator + fileName;
@@ -638,6 +634,10 @@ public class ConfigManager {
 
     public boolean isModule(int uid) {
         return cachedModule.containsKey(uid % PER_USER_RANGE);
+    }
+
+    public boolean isModule(String packageName) {
+        return cachedModule.containsValue(packageName);
     }
 
     private void recursivelyChown(File file, int uid, int gid) throws ErrnoException {
