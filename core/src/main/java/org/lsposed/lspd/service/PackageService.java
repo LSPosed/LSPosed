@@ -68,6 +68,7 @@ public class PackageService {
 
     static final int INSTALL_FAILED_INTERNAL_ERROR = -110;
     static final int INSTALL_REASON_UNKNOWN = 0;
+    static final int INSTALL_REPLACE_EXISTING = 0x00000002;
     static final int INSTALL_PARSE_FAILED_BAD_PACKAGE_NAME = -106;
 
 
@@ -258,9 +259,9 @@ public class PackageService {
         IPackageManager pm = getPackageManager();
         if (pm == null) return INSTALL_FAILED_INTERNAL_ERROR;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            return pm.installExistingPackageAsUser(packageName, userId, 0, INSTALL_REASON_UNKNOWN, null);
+            return pm.installExistingPackageAsUser(packageName, userId, INSTALL_REPLACE_EXISTING, INSTALL_REASON_UNKNOWN, null);
         } else {
-            return pm.installExistingPackageAsUser(packageName, userId, 0, INSTALL_REASON_UNKNOWN);
+            return pm.installExistingPackageAsUser(packageName, userId, INSTALL_REPLACE_EXISTING, INSTALL_REASON_UNKNOWN);
         }
     }
 
