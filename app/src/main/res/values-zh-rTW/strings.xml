@@ -126,7 +126,7 @@
     <string name="menu_filter">過濾…</string>
 
     <!-- ModulesActivity and AppListActivity -->
-    <string name="modules_app_store">在 Play 商店檢視</string>
+    <string name="modules_other_app">在其他應用程式中檢視</string>
     <string name="module_app_info">程式資訊</string>
 
     <!-- SettingsActivity -->
