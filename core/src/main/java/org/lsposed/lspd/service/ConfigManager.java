@@ -620,8 +620,9 @@ public class ConfigManager {
         return miscPath + File.separator + "cache" + File.separator + fileName;
     }
 
-    public String getPrefsPath(String fileName) {
-        return miscPath + File.separator + "prefs" + File.separator + fileName;
+    public String getPrefsPath(String fileName, int uid) {
+        int userId = uid % PER_USER_RANGE;
+        return miscPath + File.separator + "prefs" + (userId == 0 ? "" : String.valueOf(userId)) + File.separator + fileName + File.separator;
     }
 
     public static void grantManagerPermission() {
@@ -651,7 +652,7 @@ public class ConfigManager {
     public boolean ensureModulePrefsPermission(int uid) {
         String packageName = cachedModule.get(uid);
         if (packageName == null) return false;
-        File path = new File(getPrefsPath(packageName));
+        File path = new File(getPrefsPath(packageName, uid));
         try {
             if (path.exists() && !path.isDirectory()) path.delete();
             if (!path.exists()) Files.createDirectories(path.toPath());

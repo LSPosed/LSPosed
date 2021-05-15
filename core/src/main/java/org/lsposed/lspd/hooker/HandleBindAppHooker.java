@@ -36,8 +36,6 @@ import org.lsposed.lspd.util.Utils;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Map;
 
 import de.robv.android.xposed.XC_MethodHook;
@@ -84,7 +82,6 @@ public class HandleBindAppHooker extends XC_MethodHook {
             boolean isModule = moduleBinder != null;
             int xposedminversion = -1;
             boolean xposedsharedprefs = false;
-            boolean xposedmigrateprefs = false;
             try {
                 if (isModule) {
                     Map<String, Object> metaData = MetaDataReader.getMetaData(new File(appInfo.sourceDir));
@@ -95,7 +92,6 @@ public class HandleBindAppHooker extends XC_MethodHook {
                         xposedminversion = MetaDataReader.extractIntPart((String) minVersionRaw);
                     }
                     xposedsharedprefs = metaData.containsKey("xposedsharedprefs");
-                    xposedmigrateprefs = metaData.containsKey("xposedmigrateprefs");
                 }
             } catch (NumberFormatException | IOException e) {
                 Hookers.logE("ApkParser fails", e);
@@ -113,32 +109,10 @@ public class HandleBindAppHooker extends XC_MethodHook {
                         }
                     }
                 });
-                final boolean migratePrefs = xposedmigrateprefs;
                 XposedHelpers.findAndHookMethod(ContextImpl.class, "getPreferencesDir", new XC_MethodHook() {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) {
-                        File newDir = new File(serviceClient.getPrefsPath(appInfo.packageName));
-                        if (migratePrefs) {
-                            File oldDir = (File) param.getResult();
-                            for (File oldFile : oldDir.listFiles()) {
-                                Path oldPath = oldFile.toPath();
-                                if (!Files.isSymbolicLink(oldPath)) {
-                                    Utils.logD("Migrating prefs file: " + oldFile.getAbsolutePath());
-                                    Path newPath = new File(newDir, oldFile.getName()).toPath();
-                                    try {
-                                        Files.move(oldPath, newPath);
-                                        try {
-                                            Files.createSymbolicLink(oldPath, newPath);
-                                        } catch (IOException e) {
-                                            Utils.logD("Symlink creation failed", e);
-                                        }
-                                    } catch (IOException e) {
-                                        Utils.logD("File move operation failed", e);
-                                    }
-                                }
-                            }
-                        }
-                        param.setResult(newDir);
+                        param.setResult(new File(serviceClient.getPrefsPath(appInfo.packageName)));
                     }
                 });
             }
