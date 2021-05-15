@@ -103,7 +103,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
     private final PagerAdapter pagerAdapter = new PagerAdapter();
     private final ArrayList<ModuleAdapter> adapters = new ArrayList<>();
 
-    private Handler uninstallHandler;
+    private Handler pmHandler;
     private PackageManager pm;
     private ModuleUtil moduleUtil;
     private ModuleUtil.InstalledModule selectedModule;
@@ -112,9 +112,9 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        HandlerThread uninstallThread = new HandlerThread("uninstall");
-        uninstallThread.start();
-        uninstallHandler = new Handler(uninstallThread.getLooper());
+        HandlerThread pmThread = new HandlerThread("pm");
+        pmThread.start();
+        pmHandler = new Handler(pmThread.getLooper());
         moduleUtil = ModuleUtil.getInstance();
         pm = getPackageManager();
         moduleUtil.addListener(this);
@@ -280,7 +280,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                     .setTitle(module.getAppName())
                     .setMessage(R.string.module_uninstall_message)
                     .setPositiveButton(android.R.string.ok, (dialog, which) ->
-                            uninstallHandler.post(() -> {
+                            pmHandler.post(() -> {
                                 boolean success = ConfigManager.uninstallPackage(module.packageName, module.userId);
                                 runOnUiThread(() -> {
                                     String text = success ? getString(R.string.module_uninstalled, module.getAppName()) : getString(R.string.module_uninstall_failed);
@@ -307,6 +307,8 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
     }
 
     private class PagerAdapter extends RecyclerView.Adapter<PagerAdapter.ViewHolder> {
+
+        private static final int INSTALL_SUCCEEDED = 1;
 
         @NonNull
         @Override
@@ -339,8 +341,25 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                             .setNegativeButton(android.R.string.cancel, null)
                             .show();
                     pickAdaptor.setOnPickListener(picked -> {
-                        dialog.dismiss();
-                        ConfigManager.installExistingPackageAsUser(picked.getTag().toString(), adapters.get(position).userId);
+                        var module = (ModuleUtil.InstalledModule) picked.getTag();
+                        var moduleName = module.getAppName();
+                        var packageName = module.packageName;
+                        var userId = adapters.get(position).userId;
+                        pmHandler.post(() -> {
+                            var code = ConfigManager.installExistingPackageAsUser(packageName, userId);
+                            boolean success = code == INSTALL_SUCCEEDED;
+                            runOnUiThread(() -> {
+                                String text = success ? getString(R.string.module_installed, moduleName, userId) : getString(R.string.module_install_failed, code);
+                                if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
+                                    Snackbar.make(binding.snackbar, text, Snackbar.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(ModulesActivity.this, text, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            dialog.dismiss();
+                            if (success)
+                                moduleUtil.reloadSingleModule(packageName, userId);
+                        });
                     });
                 });
             }
@@ -490,7 +509,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 holder.appVersion.setText(item.versionName);
                 holder.appVersion.setSelected(true);
             } else {
-                holder.itemView.setTag(item.packageName);
+                holder.itemView.setTag(item);
                 holder.itemView.setOnClickListener(v -> {
                     if (onPickListener != null) onPickListener.onClick(v);
                 });
@@ -521,7 +540,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             this.onPickListener = onPickListener;
         }
 
-        public List<ModuleUtil.InstalledModule> snapshot(){
+        public List<ModuleUtil.InstalledModule> snapshot() {
             List<ModuleUtil.InstalledModule> list = new ArrayList<>();
             list.addAll(searchList);
             return list;
