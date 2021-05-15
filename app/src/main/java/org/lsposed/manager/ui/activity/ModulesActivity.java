@@ -196,12 +196,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                     ArrayList<String> titles = new ArrayList<>();
                     for (int userId : userIds) {
                         var adapter = new ModuleAdapter(userId, handles.get(userId));
-                        if (userId == 0) {
-                            adapter.setProfiles(users.stream()
-                                    .filter(u -> u.hashCode() != 0)
-                                    .mapToInt(UserHandle::hashCode)
-                                    .toArray());
-                        }
                         adapter.setHasStableIds(true);
                         adapters.add(adapter);
                         titles.add(getString(R.string.user_title, userId));
@@ -317,7 +311,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                             workHandler.post(() -> {
                                 var success = ConfigManager.installExistingPackageAsUser(module.packageName, itemId);
                                 runOnUiThread(() -> {
-                                    String text = success ? getString(R.string.module_installed, module.getAppName()) : getString(R.string.module_install_failed);
+                                    String text = success ? getString(R.string.module_installed, module.getAppName(), itemId) : getString(R.string.module_install_failed);
                                     if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
                                         Snackbar.make(binding.snackbar, text, Snackbar.LENGTH_SHORT).show();
                                     } else {
@@ -426,8 +420,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
 
         private Predicate<ModuleUtil.InstalledModule> customFilter = m -> true;
 
-        private int[] profiles;
-
         ModuleAdapter(int userId, UserHandle userHandle) {
             this(userId, userHandle, false);
         }
@@ -440,10 +432,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
 
         public int getUserId() {
             return userId;
-        }
-
-        public void setProfiles(int[] profiles) {
-            this.profiles = profiles;
         }
 
         @NonNull
@@ -522,8 +510,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                     menu.removeItem(R.id.menu_app_info);
                 }
                 if (item.userId == 0) {
-                    Log.d(App.TAG, "len of profiles" + profiles.length);
-                    for (int profile : profiles) {
+                    for (int profile : ConfigManager.getUsers()) {
                         if (ModuleUtil.getInstance().getModule(item.packageName, profile) == null) {
                             menu.add(1, profile, 0, getString(R.string.install_to_user, profile));
                         }
