@@ -344,6 +344,10 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 super(binding.getRoot());
                 recyclerView = binding.recyclerView;
                 btn = binding.fab;
+                var height = ModulesActivity.this.getResources().getIdentifier("navigation_bar_height", "dimen", "android");
+                var params = (ViewGroup.MarginLayoutParams)btn.getLayoutParams();
+                params.bottomMargin = ModulesActivity.this.getResources().getDimensionPixelSize(height) + params.bottomMargin;
+                btn.setLayoutParams(params);
             }
         }
     }
