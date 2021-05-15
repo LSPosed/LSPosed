@@ -621,8 +621,8 @@ public class ConfigManager {
     }
 
     public String getPrefsPath(String fileName, int uid) {
-        int userId = uid % PER_USER_RANGE;
-        return miscPath + File.separator + "prefs" + (userId == 0 ? "" : String.valueOf(userId)) + File.separator + fileName + File.separator;
+        int userId = uid / PER_USER_RANGE;
+        return miscPath + File.separator + "prefs" + (userId == 0 ? "" : String.valueOf(userId)) + File.separator + fileName;
     }
 
     public static void grantManagerPermission() {
