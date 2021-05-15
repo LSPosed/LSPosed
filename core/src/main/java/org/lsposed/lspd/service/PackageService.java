@@ -258,9 +258,9 @@ public class PackageService {
         IPackageManager pm = getPackageManager();
         if (pm == null) return INSTALL_FAILED_INTERNAL_ERROR;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            return pm.installExistingPackageAsUser(packageName, userId, INSTALL_REASON_UNKNOWN, 0, null);
+            return pm.installExistingPackageAsUser(packageName, userId, 0, INSTALL_REASON_UNKNOWN, null);
         } else {
-            return pm.installExistingPackageAsUser(packageName, userId, INSTALL_REASON_UNKNOWN, 0);
+            return pm.installExistingPackageAsUser(packageName, userId, 0, INSTALL_REASON_UNKNOWN );
         }
     }
 
