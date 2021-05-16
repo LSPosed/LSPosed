@@ -71,6 +71,7 @@ android {
             "de",
             "it",
             "pt",
+            "es",
         )
     }
 
