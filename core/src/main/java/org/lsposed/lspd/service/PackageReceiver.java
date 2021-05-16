@@ -58,11 +58,14 @@ public class PackageReceiver {
             return;
         }
 
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
-        intentFilter.addAction(Intent.ACTION_PACKAGE_CHANGED);
-        intentFilter.addAction(Intent.ACTION_PACKAGE_FULLY_REMOVED);
-        intentFilter.addDataScheme("package");
+        IntentFilter packageFilter = new IntentFilter();
+        packageFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
+        packageFilter.addAction(Intent.ACTION_PACKAGE_CHANGED);
+        packageFilter.addAction(Intent.ACTION_PACKAGE_FULLY_REMOVED);
+        packageFilter.addDataScheme("package");
+
+        IntentFilter uidFilter = new IntentFilter();
+        uidFilter.addAction(Intent.ACTION_UID_REMOVED);
 
         HandlerThread thread = new HandlerThread("lspd-PackageReceiver");
         thread.start();
@@ -71,7 +74,8 @@ public class PackageReceiver {
         try {
             @SuppressLint("DiscouragedPrivateApi")
             Method method = Context.class.getDeclaredMethod("registerReceiverAsUser", BroadcastReceiver.class, UserHandle.class, IntentFilter.class, String.class, Handler.class);
-            method.invoke(context, receiver, userHandleAll, intentFilter, null, handler);
+            method.invoke(context, receiver, userHandleAll, packageFilter, null, handler);
+            method.invoke(context, receiver, userHandleAll, uidFilter, null, handler);
             Utils.logI("registered package receiver");
         } catch (Throwable e) {
             Utils.logW("registerReceiver failed", e);
