@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,6 +43,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
+import org.lsposed.manager.databinding.ItemOnlinemoduleBinding;
 import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.repo.model.OnlineModule;
 import org.lsposed.manager.ui.activity.base.ListActivity;
@@ -148,8 +150,7 @@ public class RepoActivity extends ListActivity implements RepoLoader.Listener {
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_onlinemodule, parent, false);
-            return new ViewHolder(v);
+            return new ViewHolder(ItemOnlinemoduleBinding.inflate(getLayoutInflater(), parent, false));
         }
 
         @Override
@@ -211,15 +212,15 @@ public class RepoActivity extends ListActivity implements RepoLoader.Listener {
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
-            View root;
+            ConstraintLayout root;
             TextView appName;
             TextView appDescription;
 
-            ViewHolder(View itemView) {
-                super(itemView);
-                root = itemView.findViewById(R.id.item_root);
-                appName = itemView.findViewById(R.id.app_name);
-                appDescription = itemView.findViewById(R.id.description);
+            ViewHolder(ItemOnlinemoduleBinding binding) {
+                super(binding.getRoot());
+                root = binding.itemRoot;
+                appName = binding.appName;
+                appDescription = binding.description;
             }
         }
 

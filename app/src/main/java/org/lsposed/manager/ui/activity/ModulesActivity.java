@@ -57,6 +57,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.RecyclerView;
@@ -334,8 +335,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
 
     private class PagerAdapter extends RecyclerView.Adapter<PagerAdapter.ViewHolder> {
 
-        private static final int INSTALL_SUCCEEDED = 1;
-
         @NonNull
         @Override
         public PagerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -600,7 +599,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
-            View root;
+            ConstraintLayout root;
             ImageView appIcon;
             TextView appName;
             TextView appDescription;
