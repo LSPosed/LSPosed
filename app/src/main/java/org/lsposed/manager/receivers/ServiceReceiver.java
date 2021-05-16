@@ -37,11 +37,12 @@ public class ServiceReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
-        int userId = intent.getIntExtra(Intent.EXTRA_USER, 0);
         String packageName = getPackageName(intent);
-        if (packageName == null) {
+        int uid = intent.getIntExtra(Intent.EXTRA_UID, 0);
+        if (packageName == null || uid == 0) {
             return;
         }
+        int userId = uid / 100000;
 
         ModuleUtil.InstalledModule module = ModuleUtil.getInstance().reloadSingleModule(packageName, userId);
         if (module == null) {
