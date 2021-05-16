@@ -371,7 +371,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         private final int userId;
         private final UserHandle userHandle;
         private boolean isLoaded;
-        private int[] profiles;
+        private int[] profiles = new int[0];
 
         ModuleAdapter(int userId, UserHandle userHandle) {
             this.userId = userId;
