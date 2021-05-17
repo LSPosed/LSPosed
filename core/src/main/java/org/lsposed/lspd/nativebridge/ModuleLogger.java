@@ -26,6 +26,7 @@ import android.os.Process;
 
 import org.lsposed.lspd.util.Utils;
 
+import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -36,11 +37,11 @@ import java.util.TimeZone;
 
 public class ModuleLogger {
     static SimpleDateFormat logDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss", Locale.getDefault());
-    static FileDescriptor fd = null;
+    static ParcelFileDescriptor fd = null;
 
     public static void initLogger(ParcelFileDescriptor fileDescriptor) {
         if (fd == null && fileDescriptor != null) {
-            fd = fileDescriptor.getFileDescriptor();
+            fd = fileDescriptor;
             logDateFormat.setTimeZone(TimeZone.getDefault());
         }
     }
@@ -68,7 +69,7 @@ public class ModuleLogger {
         sb.append('\n');
         try {
             var log = sb.toString();
-            var writer = new FileWriter(fd);
+            var writer = new FileWriter(fd.getFileDescriptor());
             writer.write(log, 0, log.length());
             writer.flush();
         } catch (IOException e) {
