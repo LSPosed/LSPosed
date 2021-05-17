@@ -24,6 +24,7 @@
     android:layout_height="match_parent"
     app:consumeSystemWindowsInsets="start|end"
     app:edgeToEdge="true"
+    android:animateLayoutChanges="true"
     app:fitSystemWindowsInsets="start|end">
 
     <rikka.material.widget.AppBarLayout
