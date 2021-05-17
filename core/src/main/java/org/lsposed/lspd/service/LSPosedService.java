@@ -95,6 +95,12 @@ public class LSPosedService extends ILSPosedService.Stub {
                 break;
             }
             case Intent.ACTION_PACKAGE_CHANGED: {
+                // make sure that the change is for the complete package, not only a
+                // component
+                String[] components = intent.getStringArrayExtra(Intent.EXTRA_CHANGED_COMPONENT_NAME_LIST);
+                if (components != null && !Arrays.stream(components).reduce(false, (p, c) -> p || c.equals(moduleName), Boolean::logicalOr)) {
+                    return;
+                }
                 // when package is changed, we may need to update cache (module cache or process cache)
                 if (isXposedModule) {
                     ConfigManager.getInstance().updateModuleApkPath(moduleName, applicationInfo.sourceDir);

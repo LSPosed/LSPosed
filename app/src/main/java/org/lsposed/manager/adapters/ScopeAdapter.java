@@ -43,7 +43,6 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -60,6 +59,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.request.target.CustomTarget;
@@ -72,6 +72,7 @@ import org.lsposed.manager.App;
 import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
+import org.lsposed.manager.databinding.ItemModuleBinding;
 import org.lsposed.manager.ui.activity.AppListActivity;
 import org.lsposed.manager.ui.fragment.CompileDialogFragment;
 import org.lsposed.manager.util.GlideApp;
@@ -149,8 +150,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(activity).inflate(R.layout.item_module, parent, false);
-        return new ViewHolder(v);
+        return new ViewHolder(ItemModuleBinding.inflate(activity.getLayoutInflater(), parent, false));
     }
 
     private boolean shouldHideApp(PackageInfo info, ApplicationWithEquals app) {
@@ -559,20 +559,19 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-
-        View root;
+        ConstraintLayout root;
         ImageView appIcon;
         TextView appName;
         TextView appDescription;
         MaterialCheckBox checkbox;
 
-        ViewHolder(View itemView) {
-            super(itemView);
-            root = itemView.findViewById(R.id.item_root);
-            appIcon = itemView.findViewById(R.id.app_icon);
-            appName = itemView.findViewById(R.id.app_name);
-            appDescription = itemView.findViewById(R.id.description);
-            checkbox = itemView.findViewById(R.id.checkbox);
+        ViewHolder(ItemModuleBinding binding) {
+            super(binding.getRoot());
+            root = binding.itemRoot;
+            appIcon = binding.appIcon;
+            appName = binding.appName;
+            appDescription = binding.description;
+            checkbox = binding.checkbox;
             checkbox.setVisibility(View.VISIBLE);
         }
     }

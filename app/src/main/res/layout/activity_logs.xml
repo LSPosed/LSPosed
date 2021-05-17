@@ -52,7 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/tab_layout_height"
                 android:background="@android:color/transparent"
-                app:tabMode="fixed">
+                app:tabIndicatorAnimationMode="elastic">
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
