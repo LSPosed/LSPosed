@@ -23,6 +23,7 @@ import static org.lsposed.lspd.service.ServiceManager.TAG;
 
 import android.content.ContentValues;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
@@ -314,7 +315,7 @@ public class ConfigManager {
             while (cursor.moveToNext()) {
                 String packageName = cursor.getString(pkgNameIdx);
                 try {
-                    PackageInfo pkgInfo = PackageService.getPackageInfoFromAllUsers(packageName, 0);
+                    PackageInfo pkgInfo = PackageService.getPackageInfoFromAllUsers(packageName, PackageManager.MATCH_DISABLED_COMPONENTS | PackageManager.MATCH_UNINSTALLED_PACKAGES);
                     if (pkgInfo != null && pkgInfo.applicationInfo != null) {
                         cachedModule.put(pkgInfo.applicationInfo.uid % PER_USER_RANGE, pkgInfo.packageName);
                     } else {
@@ -550,13 +551,6 @@ public class ConfigManager {
         // Called by manager, should be async
         updateCaches(false);
         return true;
-    }
-
-    public void uninstalledApp(Application app) {
-        if (removeAppWithoutCache(app)) {
-            // Called by oneway binder
-            cacheScopes();
-        }
     }
 
     public void updateAppCache() {
