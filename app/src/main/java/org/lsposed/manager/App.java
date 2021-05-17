@@ -24,11 +24,13 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
+import org.lsposed.hiddenapibypass.HiddenApiBypass;
 import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.ui.activity.CrashReportActivity;
 import org.lsposed.manager.util.DoHDNS;
@@ -45,6 +47,13 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import rikka.material.app.DayNightDelegate;
 
 public class App extends Application {
+
+    static {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            HiddenApiBypass.setHiddenApiExemptions("L");
+        }
+    }
+
     public static final String TAG = "LSPosedManager";
     @SuppressLint("StaticFieldLeak")
     private static App instance = null;

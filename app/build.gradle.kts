@@ -219,6 +219,7 @@ dependencies {
     implementation("io.noties.markwon:linkify:$markwonVersion")
     implementation("me.zhanghai.android.appiconloader:appiconloader-glide:1.3.1")
     implementation("me.zhanghai.android.fastscroll:library:1.1.5")
+    implementation("org.lsposed.hiddenapibypass:hiddenapibypass:1.1")
     implementation(project(":manager-service"))
 }
 
