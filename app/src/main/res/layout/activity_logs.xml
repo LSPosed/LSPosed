@@ -25,7 +25,7 @@
     android:layout_height="match_parent"
     app:consumeSystemWindowsInsets="start|end"
     app:edgeToEdge="true"
-    app:fitSystemWindowsInsets="start|end">
+    app:fitsSystemWindowsInsets="start|end">
 
     <rikka.material.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -83,6 +83,6 @@
             app:borderTopVisibility="whenTop"
             app:borderTopDrawable="@null"
             app:borderBottomVisibility="never"
-            app:fitSystemWindowsInsets="top|bottom" />
+            app:fitsSystemWindowsInsets="top|bottom" />
     </HorizontalScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

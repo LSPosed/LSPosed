@@ -25,7 +25,7 @@
     android:layout_height="match_parent"
     app:consumeSystemWindowsInsets="start|end"
     app:edgeToEdge="true"
-    app:fitSystemWindowsInsets="start|end">
+    app:fitsSystemWindowsInsets="start|end">
 
     <rikka.material.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -52,7 +52,7 @@
         android:visibility="gone"
         app:hideAnimationBehavior="outward"
         android:layout_marginTop="?actionBarSize"
-        app:layout_fitSystemWindowsInsets="top" />
+        app:layout_fitsSystemWindowsInsets="top" />
 
     <org.lsposed.manager.ui.widget.EmptyStateRecyclerView
         android:id="@+id/recyclerView"
@@ -63,5 +63,5 @@
         app:borderTopVisibility="whenTop"
         app:borderTopDrawable="@null"
         app:borderBottomVisibility="never"
-        app:fitSystemWindowsInsets="top|bottom" />
+        app:fitsSystemWindowsInsets="top|bottom" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
