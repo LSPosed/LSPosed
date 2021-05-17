@@ -40,6 +40,7 @@ import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -282,9 +283,9 @@ public class RepoItemActivity extends BaseActivity implements RepoLoader.Listene
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             if (viewType == 0) {
-                return new ViewHolder(ItemRepoReleaseBinding.inflate(getLayoutInflater(), parent, false).getRoot());
+                return new ReleaseViewHolder(ItemRepoReleaseBinding.inflate(getLayoutInflater(), parent, false));
             } else {
-                return new ViewHolder(ItemRepoLoadmoreBinding.inflate(getLayoutInflater(), parent, false).getRoot());
+                return new LoadmoreViewHolder(ItemRepoLoadmoreBinding.inflate(getLayoutInflater(), parent, false));
             }
         }
 
@@ -344,17 +345,30 @@ public class RepoItemActivity extends BaseActivity implements RepoLoader.Listene
         class ViewHolder extends RecyclerView.ViewHolder {
             TextView title;
             LinkifyTextView description;
-            View openInBrowser;
-            View viewAssets;
+            MaterialButton openInBrowser;
+            MaterialButton viewAssets;
             CircularProgressIndicator progress;
 
-            public ViewHolder(View view) {
-                super(view);
-                title = view.findViewById(R.id.title);
-                description = view.findViewById(R.id.description);
-                openInBrowser = view.findViewById(R.id.open_in_browser);
-                viewAssets = view.findViewById(R.id.view_assets);
-                progress = view.findViewById(R.id.progress);
+            public ViewHolder(@NonNull View itemView) {
+                super(itemView);
+            }
+        }
+
+        class ReleaseViewHolder extends ViewHolder {
+            public ReleaseViewHolder(ItemRepoReleaseBinding binding) {
+                super(binding.getRoot());
+                title = binding.title;
+                description = binding.description;
+                openInBrowser = binding.openInBrowser;
+                viewAssets = binding.viewAssets;
+            }
+        }
+
+        class LoadmoreViewHolder extends ViewHolder {
+            public LoadmoreViewHolder(ItemRepoLoadmoreBinding binding) {
+                super(binding.getRoot());
+                title = binding.title;
+                progress = binding.progress;
             }
         }
     }
@@ -365,9 +379,9 @@ public class RepoItemActivity extends BaseActivity implements RepoLoader.Listene
         @Override
         public PagerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             if (viewType == 0) {
-                return new ViewHolder(ItemRepoReadmeBinding.inflate(getLayoutInflater(), parent, false).getRoot(), viewType);
+                return new ReadmeViewHolder(ItemRepoReadmeBinding.inflate(getLayoutInflater(), parent, false));
             } else {
-                return new ViewHolder(ItemRepoRecyclerviewBinding.inflate(getLayoutInflater(), parent, false).getRoot(), viewType);
+                return new RecyclerviewBinding(ItemRepoRecyclerviewBinding.inflate(getLayoutInflater(), parent, false));
             }
         }
 
@@ -411,14 +425,23 @@ public class RepoItemActivity extends BaseActivity implements RepoLoader.Listene
             BorderNestedScrollView scrollView;
             BorderRecyclerView recyclerView;
 
-            public ViewHolder(@NonNull View itemView, int viewType) {
+            public ViewHolder(@NonNull View itemView) {
                 super(itemView);
-                if (viewType == 0) {
-                    textView = itemView.findViewById(R.id.readme);
-                    scrollView = itemView.findViewById(R.id.scrollView);
-                } else {
-                    recyclerView = itemView.findViewById(R.id.recyclerView);
-                }
+            }
+        }
+
+        class ReadmeViewHolder extends ViewHolder {
+            public ReadmeViewHolder(ItemRepoReadmeBinding binding) {
+                super(binding.getRoot());
+                textView = binding.readme;
+                scrollView = binding.scrollView;
+            }
+        }
+
+        class RecyclerviewBinding extends ViewHolder {
+            public RecyclerviewBinding(ItemRepoRecyclerviewBinding binding) {
+                super(binding.getRoot());
+                recyclerView = binding.recyclerView;
             }
         }
     }

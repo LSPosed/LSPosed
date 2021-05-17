@@ -240,7 +240,7 @@ public class ConfigManager {
     }
 
     public static boolean installExistingPackageAsUser(String packageName, int userId) {
-        int INSTALL_SUCCEEDED = 1;
+        final int INSTALL_SUCCEEDED = 1;
         try {
             var ret = LSPManagerServiceClient.installExistingPackageAsUser(packageName, userId);
             return ret == INSTALL_SUCCEEDED;
