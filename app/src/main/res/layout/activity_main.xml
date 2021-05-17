@@ -26,14 +26,14 @@
     android:layout_height="match_parent"
     app:consumeSystemWindowsInsets="start|end"
     app:edgeToEdge="true"
-    app:fitSystemWindowsInsets="start|end">
+    app:fitsSystemWindowsInsets="start|end">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:clipChildren="false"
-        app:fitSystemWindowsInsets="top|bottom"
+        app:fitsSystemWindowsInsets="top|bottom"
         tools:ignore="MissingPrefix">
 
         <androidx.core.widget.NestedScrollView

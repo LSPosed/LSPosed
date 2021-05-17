@@ -25,7 +25,7 @@
     android:clipToPadding="false"
     android:clipChildren="false"
     android:paddingTop="104dp"
-    app:fitSystemWindowsInsets="top|bottom">
+    app:fitsSystemWindowsInsets="top|bottom">
 
     <rikka.widget.borderview.BorderNestedScrollView
         android:id="@+id/scrollView"
