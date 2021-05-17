@@ -141,6 +141,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 else binding.fab.hide();
             }
         });
+
         binding.fab.setOnClickListener(view -> {
             var pickAdaptor = new ModuleAdapter(0, null, true);
             var position = binding.viewPager.getCurrentItem();
@@ -162,6 +163,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                 dialog.dismiss();
             });
         });
+
         mSearchListener = new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -371,6 +373,15 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             holder.recyclerView.setAdapter(adapters.get(position));
             holder.recyclerView.setLayoutManager(new LinearLayoutManagerFix(ModulesActivity.this));
             holder.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setRaised(!top));
+            holder.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE && holder.getBindingAdapterPosition() > 0)
+                        binding.fab.show();
+                    else binding.fab.hide();
+                    super.onScrollStateChanged(recyclerView, newState);
+                }
+            });
             RecyclerViewKt.fixEdgeEffect(holder.recyclerView, false, true);
             RecyclerViewKt.addFastScroller(holder.recyclerView, holder.itemView);
         }
@@ -382,7 +393,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
 
         class ViewHolder extends RecyclerView.ViewHolder {
             BorderRecyclerView recyclerView;
-            FloatingActionButton btn;
 
             public ViewHolder(@NonNull ItemRepoRecyclerviewBinding binding) {
                 super(binding.getRoot());
