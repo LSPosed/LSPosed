@@ -50,7 +50,8 @@
                 android:id="@+id/tab_layout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/tab_layout_height"
-                android:background="@android:color/transparent" />
+                android:background="@android:color/transparent"
+                app:tabIndicatorAnimationMode="elastic" />
         </LinearLayout>
     </rikka.material.widget.AppBarLayout>
 
