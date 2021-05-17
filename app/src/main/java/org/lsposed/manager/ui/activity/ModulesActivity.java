@@ -73,6 +73,7 @@ import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.adapters.AppHelper;
 import org.lsposed.manager.databinding.ActivityModuleDetailBinding;
+import org.lsposed.manager.databinding.DialogRecyclerviewBinding;
 import org.lsposed.manager.databinding.ItemModuleBinding;
 import org.lsposed.manager.databinding.ItemRepoRecyclerviewBinding;
 import org.lsposed.manager.repo.RepoLoader;
@@ -149,7 +150,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             var userId = adapters.get(position).getUserId();
             pickAdaptor.setFilter(m -> !snapshot.contains(m.packageName));
             pickAdaptor.refresh();
-            var v = new RecyclerView(ModulesActivity.this);
+            var v = DialogRecyclerviewBinding.inflate(getLayoutInflater()).getRoot();
             v.setAdapter(pickAdaptor);
             v.setLayoutManager(new LinearLayoutManagerFix(ModulesActivity.this));
             var dialog = new AlertDialog.Builder(ModulesActivity.this)
