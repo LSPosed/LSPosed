@@ -94,6 +94,7 @@ public class LSPosedService extends ILSPosedService.Stub {
                     ConfigManager.getInstance().removeModule(moduleName);
                 break;
             }
+            case Intent.ACTION_PACKAGE_ADDED:
             case Intent.ACTION_PACKAGE_CHANGED: {
                 // make sure that the change is for the complete package, not only a
                 // component
