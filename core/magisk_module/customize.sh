@@ -22,8 +22,7 @@
 SKIPUNZIP=1
 
 VERSION=$(grep_prop version "${TMPDIR}/module.prop")
-VERSION_CODE=$(grep_prop versionCode "${TMPDIR}/module.prop")
-ui_print "- LSPosed version ${VERSION} (${VERSION_CODE})"
+ui_print "- LSPosed version ${VERSION}"
 
 # Extract verify.sh
 ui_print "- Extracting verify.sh"
