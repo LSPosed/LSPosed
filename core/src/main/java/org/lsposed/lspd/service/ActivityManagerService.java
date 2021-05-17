@@ -79,4 +79,10 @@ public class ActivityManagerService {
         if (am == null) return;
         am.forceStopPackage(packageName, userId);
     }
+
+    public static boolean startUserInBackground(int userId) throws RemoteException {
+        IActivityManager am = getActivityManager();
+        if (am == null) return false;
+        return am.startUserInBackground(userId);
+    }
 }

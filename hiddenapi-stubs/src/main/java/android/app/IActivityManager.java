@@ -43,6 +43,8 @@ public interface IActivityManager extends IInterface {
 
     void forceStopPackage(String packageName, int userId);
 
+    boolean startUserInBackground(int userid);
+
     abstract class Stub extends Binder implements IActivityManager {
 
         public static IActivityManager asInterface(IBinder obj) {

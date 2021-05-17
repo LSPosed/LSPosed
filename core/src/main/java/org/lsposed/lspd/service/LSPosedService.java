@@ -31,11 +31,13 @@ import android.util.Log;
 
 import java.util.Arrays;
 
-import org.lsposed.lspd.Application;
-
+import static org.lsposed.lspd.service.ConfigManager.PER_USER_RANGE;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 
 public class LSPosedService extends ILSPosedService.Stub {
+    private static final int AID_NOBODY = 9999;
+    private static final int USER_NULL = -10000;
+
     @Override
     public ILSPApplicationService requestApplicationService(int uid, int pid, String processName, IBinder heartBeat) {
         if (Binder.getCallingUid() != 1000) {
@@ -54,62 +56,74 @@ public class LSPosedService extends ILSPosedService.Stub {
         return ServiceManager.requestApplicationService(uid, pid, heartBeat);
     }
 
+    /**
+     * This part is quite complex.
+     * For modules, we never care about its user id, we only care about its apk path.
+     * So we will only process module's removal when it's removed from all users.
+     * And FULLY_REMOVE is exactly the one.
+     * <p>
+     * For applications, we care about its user id.
+     * So we will process application's removal when it's removed from every single user.
+     * However, PACKAGE_REMOVED will be triggered by `pm hide`, so we use UID_REMOVED instead.
+     */
+
     @Override
     public void dispatchPackageChanged(Intent intent) throws RemoteException {
         if (Binder.getCallingUid() != 1000 || intent == null) return;
+        int uid = intent.getIntExtra(Intent.EXTRA_UID, AID_NOBODY);
+        if (uid == AID_NOBODY || uid <= 0) return;
+        int userId = intent.getIntExtra("android.intent.extra.user_handle", USER_NULL);
+        if (userId == USER_NULL) userId = uid % PER_USER_RANGE;
+
         Uri uri = intent.getData();
-        String packageName = (uri != null) ? uri.getSchemeSpecificPart() : null;
-        if (packageName == null) {
-            Log.e(TAG, "Package name is null");
-            return;
-        }
-        Log.d(TAG, "Package changed: " + packageName);
-        int uid = intent.getIntExtra(Intent.EXTRA_UID, -1);
-        int userId = intent.getIntExtra(Intent.EXTRA_USER, -1);
-        if (intent.getAction().equals(Intent.ACTION_PACKAGE_FULLY_REMOVED) && uid > 0) {
-            if (userId == 0 || userId == -1) {
-                ConfigManager.getInstance().removeModule(packageName);
-            }
-            Application app = new Application();
-            app.packageName = packageName;
-            app.userId = userId;
-            ConfigManager.getInstance().removeApp(app);
-            return;
-        }
+        String moduleName = (uri != null) ? uri.getSchemeSpecificPart() : null;
 
-        if (intent.getAction().equals(Intent.ACTION_PACKAGE_CHANGED)) {
-            // make sure that the change is for the complete package, not only a
-            // component
-            String[] components = intent.getStringArrayExtra(Intent.EXTRA_CHANGED_COMPONENT_NAME_LIST);
-            if (components != null) {
-                boolean isForPackage = false;
-                for (String component : components) {
-                    if (packageName.equals(component)) {
-                        isForPackage = true;
-                        break;
-                    }
-                }
-                if (!isForPackage)
-                    return;
-            }
-        }
+        ApplicationInfo applicationInfo = moduleName != null ? PackageService.getApplicationInfo(moduleName, PackageManager.GET_META_DATA, 0) : null;
 
-        ApplicationInfo applicationInfo = PackageService.getApplicationInfo(packageName, PackageManager.GET_META_DATA, 0);
         boolean isXposedModule = applicationInfo != null &&
                 applicationInfo.metaData != null &&
                 applicationInfo.metaData.containsKey("xposedminversion");
 
-        if (isXposedModule) {
-            ConfigManager.getInstance().updateModuleApkPath(packageName, applicationInfo.sourceDir);
-            Log.d(TAG, "Updated module apk path: " + packageName);
+        Log.d(TAG, "Package changed: uid=" + uid + " userId=" + userId + " action=" + intent.getAction() + " isXposedModule=" + isXposedModule);
 
-            boolean enabled = Arrays.asList(ConfigManager.getInstance().enabledModules()).contains(packageName);
+        switch (intent.getAction()) {
+            case Intent.ACTION_PACKAGE_FULLY_REMOVED: {
+                // for module, remove module
+                // because we only care about when the apk is gone
+                if (moduleName != null)
+                    ConfigManager.getInstance().removeModule(moduleName);
+                break;
+            }
+            case Intent.ACTION_PACKAGE_CHANGED: {
+                // when package is changed, we may need to update cache (module cache or process cache)
+                if (isXposedModule) {
+                    ConfigManager.getInstance().updateModuleApkPath(moduleName, applicationInfo.sourceDir);
+                    Log.d(TAG, "Updated module apk path: " + moduleName);
+                } else if (ConfigManager.getInstance().isUidHooked(uid)) {
+                    // it will automatically remove obsolete app from database
+                    ConfigManager.getInstance().updateAppCache();
+                }
+                break;
+            }
+            case Intent.ACTION_UID_REMOVED: {
+                // when a package is removed (rather than hide) for a single user
+                // (apk may still be there because of multi-user)
+                if (ConfigManager.getInstance().isUidHooked(uid)) {
+                    // it will automatically remove obsolete app from database
+                    ConfigManager.getInstance().updateAppCache();
+                }
+                break;
+            }
+        }
+        if (isXposedModule) {
+            boolean enabled = Arrays.asList(ConfigManager.getInstance().enabledModules()).contains(moduleName);
             Intent broadcastIntent = new Intent(enabled ? "org.lsposed.action.MODULE_UPDATED" : "org.lsposed.action.MODULE_NOT_ACTIVATAED");
             broadcastIntent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
             broadcastIntent.addFlags(0x01000000);
             broadcastIntent.addFlags(0x00400000);
             broadcastIntent.setData(intent.getData());
             broadcastIntent.putExtras(intent.getExtras());
+            broadcastIntent.putExtra(Intent.EXTRA_USER, userId);
             broadcastIntent.setComponent(ComponentName.unflattenFromString(ConfigManager.getInstance().getManagerPackageName() + "/.receivers.ServiceReceiver"));
 
             try {
@@ -121,7 +135,8 @@ public class LSPosedService extends ILSPosedService.Stub {
                 Log.e(TAG, "Broadcast to manager failed: ", t);
             }
         }
-        if (!intent.getAction().equals(Intent.ACTION_PACKAGE_REMOVED) && uid > 0 && ConfigManager.getInstance().isManager(packageName)) {
+
+        if (moduleName != null && ConfigManager.getInstance().isManager(moduleName) && userId == 0) {
             Log.d(TAG, "Manager updated");
             try {
                 ConfigManager.getInstance().updateManager();
