@@ -37,7 +37,6 @@ MAGISK_VER_CODE=$(magisk -V)
 . $(magisk --path)/.magisk/modules/riru-core/util_functions.sh
 
 LSPD_VERSION=$(grep_prop version "${MODDIR}/module.prop")
-LSPD_VERSIONCODE=$(grep_prop versionCode "${MODDIR}/module.prop")
 
 ANDROID_SDK=$(getprop ro.build.version.sdk)
 BUILD_DESC=$(getprop ro.build.description)
@@ -91,7 +90,7 @@ print_log_head() {
     echo "Android build: ${BUILD}"
     echo "Android version: ${ANDROID}"
     echo "Android sdk: ${ANDROID_SDK}"
-    echo "LSPosed version: ${LSPD_VERSION} (${LSPD_VERSIONCODE})"
+    echo "LSPosed version: ${LSPD_VERSION}"
     echo "Riru version: ${RIRU_VERSION_NAME} (${RIRU_VERSION_CODE})"
     echo "Riru api: ${RIRU_API}"
     echo "Magisk: ${MAGISK_VERSION%:*} (${MAGISK_VER_CODE})"
