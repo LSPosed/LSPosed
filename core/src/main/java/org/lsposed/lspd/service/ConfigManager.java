@@ -23,7 +23,6 @@ import static org.lsposed.lspd.service.ServiceManager.TAG;
 
 import android.content.ContentValues;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
@@ -352,7 +351,7 @@ public class ConfigManager {
                 int userId = cursor.getInt(userIdIdx);
                 var pkgInfo = modules.computeIfAbsent(packageName, m -> {
                     try {
-                        return PackageService.getPackageInfoFromAllUsers(m, PackageManager.MATCH_DISABLED_COMPONENTS | PackageManager.MATCH_UNINSTALLED_PACKAGES);
+                        return PackageService.getPackageInfoFromAllUsers(m, 0);
                     } catch (Throwable e) {
                         Log.e(TAG, Log.getStackTraceString(e));
                         return Collections.emptyMap();
