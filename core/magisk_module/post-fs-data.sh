@@ -138,7 +138,7 @@ fi
 start_app_process() {
   while true; do
     if [ -S "/dev/socket/zygote" ]; then
-      nohup /system/bin/app_process -Djava.class.path=$(magisk --path)/.magisk/modules/riru_lsposed/framework/lspd.dex /system/bin --nice-name=lspd org.lsposed.lspd.core.Main >/dev/null 2>&1 & echo $! > /data/adb/lspd/daemon.pid
+      nohup /system/bin/app_process -Djava.class.path=$(magisk --path)/.magisk/modules/riru_lsposed/framework/lspd.dex /system/bin org.lsposed.lspd.core.Main --nice-name=lspd >/dev/null 2>&1 & echo $! > /data/adb/lspd/daemon.pid
       return
     fi
   done
