@@ -254,4 +254,12 @@ public class ConfigManager {
         return Arrays.stream(System.getenv("PATH").split(File.pathSeparator))
                 .anyMatch(str -> new File(str, "magisk").exists());
     }
+
+    public static boolean systemServerRequested() {
+        try {
+            return LSPManagerServiceClient.systemServerRequested();
+        } catch (Throwable e) {
+            return false;
+        }
+    }
 }

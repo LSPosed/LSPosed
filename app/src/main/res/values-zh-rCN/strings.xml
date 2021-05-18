@@ -41,6 +41,8 @@
     <string name="partial_activated">部分激活</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy 未被正确加载</string>
     <string name="selinux_policy_not_loaded"><![CDATA[<b>警告：</b>SEPolicy 未被正确加载，作用于系统框架的模块将不起作用。<br>请将此报告给 <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> 开发者。]]></string>
+    <string name="system_inject_fail_summary">系统框架注入失败</string>
+    <string name="system_inject_fail"><![CDATA[<b>警告：</b>系统注入失败。<br/>这是极罕见的情况，可能是由 <b>Magisk</b> 或低质 Magisk 模块导致。<br/>请尝试禁用除 Riru 和 LSPosed 外的 Magisk 模块，或向开发者提供完整日志。]]></string>
     <string name="info_api_version">API 版本</string>
     <string name="info_framework_version">框架版本</string>
     <string name="info_manager_version">管理器版本</string>

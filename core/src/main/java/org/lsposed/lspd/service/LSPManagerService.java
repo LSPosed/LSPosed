@@ -180,4 +180,9 @@ public class LSPManagerService extends ILSPManagerService.Stub {
             return PackageService.INSTALL_FAILED_INTERNAL_ERROR;
         }
     }
+
+    @Override
+    public boolean systemServerRequested() throws RemoteException {
+        return ServiceManager.systemServerRequested();
+    }
 }
