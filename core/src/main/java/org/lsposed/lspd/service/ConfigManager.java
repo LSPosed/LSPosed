@@ -63,7 +63,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.locks.Lock;
 
 // This config manager assume uid won't change when our service is off.
 // Otherwise, user should maintain it manually.
