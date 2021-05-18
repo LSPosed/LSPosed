@@ -50,6 +50,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
@@ -61,6 +63,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.Lock;
 
 // This config manager assume uid won't change when our service is off.
 // Otherwise, user should maintain it manually.
@@ -97,6 +100,8 @@ public class ConfigManager {
     private static final File modulesLog = new File(logPath, "modules.log");
     private static final File oldModulesLog = new File(logPath, "modules.old.log");
     private static final File verboseLogPath = new File(logPath, "all.log");
+    private static final File lockPath = new File("/data/adb/lspd/lock");
+    private static FileLock locker = null;
 
     private final Handler cacheHandler;
 
@@ -162,6 +167,16 @@ public class ConfigManager {
         } else {
             cacheHandler.post(this::cacheModules);
             cacheHandler.post(this::cacheScopes);
+        }
+    }
+
+    public boolean tryLock() {
+        try {
+            var lockChannel = FileChannel.open(lockPath.toPath(), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+            locker = lockChannel.tryLock();
+            return locker.isValid();
+        } catch (Throwable e) {
+            return false;
         }
     }
 
