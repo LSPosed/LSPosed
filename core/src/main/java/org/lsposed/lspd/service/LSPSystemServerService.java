@@ -15,6 +15,11 @@ public class LSPSystemServerService extends ILSPSystemServerService.Stub impleme
     public static final String PROXY_SERVICE_NAME = "serial";
 
     private IBinder originService = null;
+    private boolean requested = false;
+
+    public boolean systemServerRequested() {
+        return requested;
+    }
 
     public void putBinderForSystemServer() {
         android.os.ServiceManager.addService(PROXY_SERVICE_NAME, this);
@@ -48,6 +53,7 @@ public class LSPSystemServerService extends ILSPSystemServerService.Stub impleme
 
     @Override
     public ILSPApplicationService requestApplicationService(int uid, int pid, String processName, IBinder heartBeat) throws RemoteException {
+        requested = true;
         if (ConfigManager.getInstance().shouldSkipSystemServer() || uid != 1000 || heartBeat == null || !"android".equals(processName))
             return null;
         else
@@ -77,5 +83,6 @@ public class LSPSystemServerService extends ILSPSystemServerService.Stub impleme
             originService.unlinkToDeath(this, 0);
             originService = null;
         }
+        requested = false;
     }
 }

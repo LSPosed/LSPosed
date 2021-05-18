@@ -97,6 +97,11 @@ public class MainActivity extends BaseActivity {
                 cardBackgroundColor = ResourcesKt.resolveColor(getTheme(), R.attr.colorWarning);
                 binding.statusIcon.setImageResource(R.drawable.ic_warning);
                 binding.statusSummary.setText(R.string.selinux_policy_not_loaded_summary);
+            } else if (!ConfigManager.systemServerRequested()) {
+                binding.statusTitle.setText(R.string.partial_activated);
+                cardBackgroundColor = ResourcesKt.resolveColor(getTheme(), R.attr.colorWarning);
+                binding.statusIcon.setImageResource(R.drawable.ic_warning);
+                binding.statusSummary.setText(R.string.system_inject_fail_summary);
             } else {
                 binding.statusTitle.setText(R.string.activated);
                 cardBackgroundColor = ResourcesKt.resolveColor(getTheme(), R.attr.colorNormal);

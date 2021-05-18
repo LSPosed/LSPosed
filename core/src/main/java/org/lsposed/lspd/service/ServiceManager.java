@@ -134,4 +134,7 @@ public class ServiceManager {
         return managerService;
     }
 
+    public static boolean systemServerRequested() {
+        return systemServerService.systemServerRequested();
+    }
 }
