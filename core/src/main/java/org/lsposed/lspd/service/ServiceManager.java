@@ -20,6 +20,7 @@
 package org.lsposed.lspd.service;
 
 import android.content.Context;
+import android.ddm.DdmHandleAppName;
 import android.os.IBinder;
 import android.os.IServiceManager;
 import android.os.Looper;
@@ -28,6 +29,11 @@ import android.util.Log;
 import com.android.internal.os.BinderInternal;
 
 import org.lsposed.lspd.BuildConfig;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
+import java.nio.file.StandardOpenOption;
 
 import hidden.HiddenApiBridge;
 
@@ -55,64 +61,79 @@ public class ServiceManager {
     }
 
     // call by ourselves
-    public static void start() {
-        Log.i(TAG, "starting server...");
-        Log.i(TAG, String.format("version %s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_NAME));
-
-        Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
-            Log.e(TAG, Log.getStackTraceString(e));
-        });
-
-        Looper.prepare();
-        mainService = new LSPosedService();
-        moduleService = new LSPModuleService();
-        applicationService = new LSPApplicationService();
-        managerService = new LSPManagerService();
-        systemServerService = new LSPSystemServerService();
-
-        systemServerService.putBinderForSystemServer();
-
-        waitSystemService("package");
-        waitSystemService("activity");
-        waitSystemService(Context.USER_SERVICE);
-        waitSystemService(Context.APP_OPS_SERVICE);
-
-        BridgeService.send(mainService, new BridgeService.Listener() {
-            @Override
-            public void onSystemServerRestarted() {
-                Log.w(TAG, "system restarted...");
-            }
-
-            @Override
-            public void onResponseFromBridgeService(boolean response) {
-                if (response) {
-                    Log.i(TAG, "sent service to bridge");
-                } else {
-                    Log.w(TAG, "no response from bridge");
+    public static void start(String[] args) {
+        try (var lockChannel = FileChannel.open(new File("/data/adb/lspd/lock").toPath(), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+             var lock = lockChannel.tryLock()) {
+            if (!lock.isValid()) return;
+            android.os.Process.killProcess(android.system.Os.getppid());
+            for (String arg : args) {
+                if (arg.equals("--debug")) {
+                    DdmHandleAppName.setAppName("lspd", 0);
+                }
+                if (arg.equals("--from-service")) {
+                    Log.w("LSPosedService", "LSPosed daemon is not started properly. Try for a late start...");
                 }
             }
+            Log.i(TAG, "starting server...");
+            Log.i(TAG, String.format("version %s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_NAME));
 
-            @Override
-            public void onSystemServerDied() {
-                Log.w(TAG, "system server died");
-                systemServerService.putBinderForSystemServer();
+            Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
+                Log.e(TAG, Log.getStackTraceString(e));
+            });
+
+            Looper.prepare();
+            mainService = new LSPosedService();
+            moduleService = new LSPModuleService();
+            applicationService = new LSPApplicationService();
+            managerService = new LSPManagerService();
+            systemServerService = new LSPSystemServerService();
+
+            systemServerService.putBinderForSystemServer();
+
+            waitSystemService("package");
+            waitSystemService("activity");
+            waitSystemService(Context.USER_SERVICE);
+            waitSystemService(Context.APP_OPS_SERVICE);
+
+            BridgeService.send(mainService, new BridgeService.Listener() {
+                @Override
+                public void onSystemServerRestarted() {
+                    Log.w(TAG, "system restarted...");
+                }
+
+                @Override
+                public void onResponseFromBridgeService(boolean response) {
+                    if (response) {
+                        Log.i(TAG, "sent service to bridge");
+                    } else {
+                        Log.w(TAG, "no response from bridge");
+                    }
+                }
+
+                @Override
+                public void onSystemServerDied() {
+                    Log.w(TAG, "system server died");
+                    systemServerService.putBinderForSystemServer();
+                }
+            });
+
+            try {
+                ConfigManager.grantManagerPermission();
+            } catch (Throwable e) {
+                Log.e(TAG, Log.getStackTraceString(e));
             }
-        });
 
-        try {
-            ConfigManager.grantManagerPermission();
+            //noinspection InfiniteLoopStatement
+            while (true) {
+                try {
+                    Looper.loop();
+                } catch (Throwable e) {
+                    Log.i(TAG, "server exited with " + Log.getStackTraceString(e));
+                    Log.i(TAG, "restarting");
+                }
+            }
         } catch (Throwable e) {
             Log.e(TAG, Log.getStackTraceString(e));
-        }
-
-        //noinspection InfiniteLoopStatement
-        while (true) {
-            try {
-                Looper.loop();
-            } catch (Throwable e) {
-                Log.i(TAG, "server exited with " + Log.getStackTraceString(e));
-                Log.i(TAG, "restarting");
-            }
         }
     }
 

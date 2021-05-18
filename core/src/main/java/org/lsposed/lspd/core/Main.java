@@ -24,16 +24,10 @@ import android.annotation.SuppressLint;
 import android.app.ActivityThread;
 import android.content.pm.ApplicationInfo;
 import android.content.res.CompatibilityInfo;
-import android.ddm.DdmHandleAppName;
 import android.os.Environment;
 import android.os.IBinder;
-import android.util.Log;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.channels.FileChannel;
-import java.nio.channels.FileLock;
-import java.nio.file.StandardOpenOption;
 
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
@@ -124,21 +118,6 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        try (var lockChannel = FileChannel.open(new File("/data/adb/lspd/lock").toPath(), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
-             var lock = lockChannel.tryLock()) {
-            if (!lock.isValid()) return;
-            android.os.Process.killProcess(android.system.Os.getppid());
-            for (String arg : args) {
-                if (arg.equals("--debug")) {
-                    DdmHandleAppName.setAppName("lspd", 0);
-                }
-                if (arg.equals("--from-service")) {
-                    Log.w("LSPosedService", "LSPosed daemon is not started properly. Try for a late start...");
-                }
-            }
-            ServiceManager.start();
-        } catch (IOException e) {
-            Log.e("LSPosedService", Log.getStackTraceString(e));
-        }
+        ServiceManager.start(args);
     }
 }
