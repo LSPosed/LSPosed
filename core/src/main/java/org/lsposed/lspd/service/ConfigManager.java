@@ -182,7 +182,6 @@ public class ConfigManager {
     public boolean tryLock() {
         var openOptions = new HashSet<OpenOption>();
         openOptions.add(StandardOpenOption.CREATE);
-        openOptions.add(StandardOpenOption.DELETE_ON_CLOSE);
         openOptions.add(StandardOpenOption.WRITE);
         var p = PosixFilePermissions.fromString("rw-------");
         var permissions = PosixFilePermissions.asFileAttribute(p);
