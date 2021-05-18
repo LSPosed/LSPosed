@@ -27,12 +27,18 @@ import android.content.res.CompatibilityInfo;
 import android.ddm.DdmHandleAppName;
 import android.os.Environment;
 import android.os.IBinder;
+import android.util.Log;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
+import java.nio.file.StandardOpenOption;
 
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.XposedInit;
+
 import org.lsposed.lspd.config.LSPApplicationServiceClient;
 import org.lsposed.lspd.deopt.PrebuiltMethodsDeopter;
 import org.lsposed.lspd.hooker.HandleBindAppHooker;
@@ -75,6 +81,7 @@ public class Main {
                 SystemMainHooker.systemServerCL,
                 "startBootstrapServices", paramTypesAndCallback);
     }
+
     private static void installBootstrapHooks(boolean isSystem, String appDataDir) {
         // Initialize the Xposed framework
         try {
@@ -92,6 +99,7 @@ public class Main {
             Utils.logE("error loading module list", exception);
         }
     }
+
     private static void forkPostCommon(boolean isSystem, String appDataDir, String niceName) {
         // init logger
         YahfaHooker.init();
@@ -116,11 +124,21 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        for (String arg : args) {
-            if (arg.equals("--debug")) {
-                DdmHandleAppName.setAppName("lspd", 0);
+        try (var lockChannel = FileChannel.open(new File("/data/adb/lspd/lock").toPath(), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+             var lock = lockChannel.tryLock()) {
+            if (!lock.isValid()) return;
+            android.os.Process.killProcess(android.system.Os.getppid());
+            for (String arg : args) {
+                if (arg.equals("--debug")) {
+                    DdmHandleAppName.setAppName("lspd", 0);
+                }
+                if (arg.equals("--from-service")) {
+                    Log.w("LSPosedService", "LSPosed daemon is not started properly. Try for a late start...");
+                }
             }
+            ServiceManager.start();
+        } catch (IOException e) {
+            Log.e("LSPosedService", Log.getStackTraceString(e));
         }
-        ServiceManager.start();
     }
 }
