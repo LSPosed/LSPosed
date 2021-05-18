@@ -25,7 +25,8 @@ CMDLINE="$(cat /proc/$(cat /data/adb/lspd/daemon.pid)/cmdline)"
 # $(magisk --path)/.magisk/busybox/busyboxsh/data/adb/modules/riru_lsposed/post-fs-data.sh
 # if service started, cmdline should be lspd
 # for other cases, post-fs-data.sh may not be executed properly
-if [ "${CMDLINE##*riru_lsposed/}" != "post-fs-data.sh" ] && [ "$CMDLINE" != "lspd" ]; then
+if [ "${CMDLINE##*riru_lsposed/}" != "post-fs-data.sh" ] && [ "${CMDLINE##*=}" != "lspd" ]; then
+  log -pw -t "LSPosedService" "Got $CMDLINE"
   log -pw -t "LSPosedService" "LSPosed daemon is not started properly. Try for a late start..."
-  nohup /system/bin/app_process -Djava.class.path=$(magisk --path)/.magisk/modules/riru_lsposed/framework/lspd.dex /system/bin --nice-name=lspd org.lsposed.lspd.core.Main >/dev/null 2>&1 & echo $! > /data/adb/lspd/daemon.pid
+  nohup /system/bin/app_process -Djava.class.path=$(magisk --path)/.magisk/modules/riru_lsposed/framework/lspd.dex /system/bin org.lsposed.lspd.core.Main --nice-name=lspd >/dev/null 2>&1 & echo $! > /data/adb/lspd/daemon.pid
 fi
