@@ -50,8 +50,12 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.StandardOpenOption;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -76,6 +80,7 @@ public class ConfigManager {
 
     private static final File basePath = new File("/data/adb/lspd");
     private static final File configPath = new File(basePath, "config");
+    private static final File lockPath = new File(basePath, "lock");
     private static final SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(new File(configPath, "modules_config.db"), null);
 
     boolean packageStarted = false;
@@ -97,6 +102,15 @@ public class ConfigManager {
     private static final File modulesLog = new File(logPath, "modules.log");
     private static final File oldModulesLog = new File(logPath, "modules.old.log");
     private static final File verboseLogPath = new File(logPath, "all.log");
+    private static FileLock locker = null;
+
+    static {
+        try {
+            Files.createDirectories(basePath.toPath());
+        } catch (IOException e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+        }
+    }
 
     private final Handler cacheHandler;
 
@@ -162,6 +176,23 @@ public class ConfigManager {
         } else {
             cacheHandler.post(this::cacheModules);
             cacheHandler.post(this::cacheScopes);
+        }
+    }
+
+    public boolean tryLock() {
+        var openOptions = new HashSet<OpenOption>();
+        openOptions.add(StandardOpenOption.CREATE);
+        openOptions.add(StandardOpenOption.DELETE_ON_CLOSE);
+        openOptions.add(StandardOpenOption.WRITE);
+        var p = PosixFilePermissions.fromString("rw-------");
+        var permissions = PosixFilePermissions.asFileAttribute(p);
+
+        try {
+            var lockChannel = FileChannel.open(lockPath.toPath(), openOptions, permissions);
+            locker = lockChannel.tryLock();
+            return locker != null && locker.isValid();
+        } catch (Throwable e) {
+            return false;
         }
     }
 

@@ -135,12 +135,4 @@ if [ ! -z "${MISC_PATH}" ]; then
   start_log_catcher all "LSPosed:V XSharedPreferences:V LSPosed-Bridge:V LSPosedManager:V LSPosedService:V *:F" true ${LOG_VERBOSE}
 fi
 
-start_app_process() {
-  while true; do
-    if [ -S "/dev/socket/zygote" ]; then
-      nohup /system/bin/app_process -Djava.class.path=$(magisk --path)/.magisk/modules/riru_lsposed/framework/lspd.dex /system/bin org.lsposed.lspd.core.Main --nice-name=lspd >/dev/null 2>&1 & echo $! > /data/adb/lspd/daemon.pid
-      return
-    fi
-  done
-}
-start_app_process & echo $! > /data/adb/lspd/daemon.pid
+nohup /system/bin/app_process -Djava.class.path=$(magisk --path)/.magisk/modules/riru_lsposed/framework/lspd.dex /system/bin org.lsposed.lspd.core.Main --nice-name=lspd >/dev/null 2>&1

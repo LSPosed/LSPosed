@@ -24,7 +24,6 @@ import android.annotation.SuppressLint;
 import android.app.ActivityThread;
 import android.content.pm.ApplicationInfo;
 import android.content.res.CompatibilityInfo;
-import android.ddm.DdmHandleAppName;
 import android.os.Environment;
 import android.os.IBinder;
 
@@ -33,6 +32,7 @@ import java.io.File;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.XposedInit;
+
 import org.lsposed.lspd.config.LSPApplicationServiceClient;
 import org.lsposed.lspd.deopt.PrebuiltMethodsDeopter;
 import org.lsposed.lspd.hooker.HandleBindAppHooker;
@@ -75,6 +75,7 @@ public class Main {
                 SystemMainHooker.systemServerCL,
                 "startBootstrapServices", paramTypesAndCallback);
     }
+
     private static void installBootstrapHooks(boolean isSystem, String appDataDir) {
         // Initialize the Xposed framework
         try {
@@ -92,6 +93,7 @@ public class Main {
             Utils.logE("error loading module list", exception);
         }
     }
+
     private static void forkPostCommon(boolean isSystem, String appDataDir, String niceName) {
         // init logger
         YahfaHooker.init();
@@ -116,11 +118,6 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        for (String arg : args) {
-            if (arg.equals("--debug")) {
-                DdmHandleAppName.setAppName("lspd", 0);
-            }
-        }
-        ServiceManager.start();
+        ServiceManager.start(args);
     }
 }
