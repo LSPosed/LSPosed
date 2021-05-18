@@ -17,8 +17,7 @@ public interface IPackageManager extends IInterface {
     PackageInfo getPackageInfo(String packageName, int flags, int userId)
             throws RemoteException;
 
-    int getPackageUid(String packageName, int userId)
-            throws RemoteException;
+    int getPackageUid(String packageName, int flags, int userId) throws RemoteException;
 
     String[] getPackagesForUid(int uid)
             throws RemoteException;
