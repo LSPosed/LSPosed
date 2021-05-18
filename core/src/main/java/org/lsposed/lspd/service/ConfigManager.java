@@ -103,6 +103,14 @@ public class ConfigManager {
     private static final File lockPath = new File("/data/adb/lspd/lock");
     private static FileLock locker = null;
 
+    static {
+        try {
+            Files.createDirectories(basePath.toPath());
+        } catch (IOException e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+        }
+    }
+
     private final Handler cacheHandler;
 
     private final ConcurrentHashMap<String, SharedMemory> moduleDexes = new ConcurrentHashMap<>();
