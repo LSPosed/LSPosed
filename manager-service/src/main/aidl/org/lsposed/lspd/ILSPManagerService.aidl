@@ -50,4 +50,6 @@ interface ILSPManagerService {
     int[] getUsers() = 27;
 
     int installExistingPackageAsUser(String packageName, int userId) = 28;
+
+    boolean systemServerRequested() = 29;
 }

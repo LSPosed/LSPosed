@@ -158,8 +158,14 @@ public class LSPManagerServiceClient {
         ensureService();
         return service.getUsers();
     }
+
     public static int installExistingPackageAsUser(String packageName, int userId) throws RemoteException, NullPointerException {
         ensureService();
         return service.installExistingPackageAsUser(packageName, userId);
+    }
+
+    public static boolean systemServerRequested() throws RemoteException, NullPointerException {
+        ensureService();
+        return service.systemServerRequested();
     }
 }
