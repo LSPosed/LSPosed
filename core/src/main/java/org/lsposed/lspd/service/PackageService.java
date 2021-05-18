@@ -43,6 +43,8 @@ import android.os.ServiceManager;
 import android.util.Log;
 import android.util.Pair;
 
+import androidx.annotation.NonNull;
+
 import org.lsposed.lspd.Application;
 import org.lsposed.lspd.BuildConfig;
 import org.lsposed.lspd.util.InstallerVerifier;
@@ -56,8 +58,10 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
@@ -102,14 +106,15 @@ public class PackageService {
         return pm.getPackageInfo(packageName, flags, userId);
     }
 
-    public static PackageInfo getPackageInfoFromAllUsers(String packageName, int flags) throws RemoteException {
+    public static @NonNull Map<Integer, PackageInfo> getPackageInfoFromAllUsers(String packageName, int flags) throws RemoteException {
         IPackageManager pm = getPackageManager();
-        if (pm == null) return null;
+        Map<Integer, PackageInfo> res = new HashMap<>();
+        if (pm == null) return res;
         for (int userId : UserService.getUsers()) {
             var info = pm.getPackageInfo(packageName, flags, userId);
-            if (info != null) return info;
+            if (info != null && info.applicationInfo != null) res.put(userId, info);
         }
-        return null;
+        return res;
     }
 
     public static ApplicationInfo getApplicationInfo(String packageName, int flags, int userId) throws RemoteException {
@@ -328,4 +333,5 @@ public class PackageService {
             return false;
         }
     }
+
 }
