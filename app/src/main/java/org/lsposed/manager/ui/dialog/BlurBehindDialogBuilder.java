@@ -45,47 +45,55 @@ public class BlurBehindDialogBuilder extends AlertDialog.Builder {
     @Override
     public AlertDialog create() {
         AlertDialog dialog = super.create();
-        dialog.setOnShowListener(d -> setBackgroundBlurRadius(dialog.getWindow().getDecorView()));
+        dialog.setOnShowListener(d -> setBackgroundBlurRadius(dialog));
         return dialog;
     }
 
-    private void setBackgroundBlurRadius(View view) {
+    private void setBackgroundBlurRadius(AlertDialog dialog) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && supportBlur) {
-            try {
-                Object viewRootImpl = view.getClass().getMethod("getViewRootImpl").invoke(view);
-                if (viewRootImpl == null) {
-                    return;
-                }
-                SurfaceControl surfaceControl = (SurfaceControl) viewRootImpl.getClass().getMethod("getSurfaceControl").invoke(viewRootImpl);
-
-                ValueAnimator animator = ValueAnimator.ofInt(1, 150);
-                animator.setInterpolator(new DecelerateInterpolator());
-                animator.setDuration(150);
-                Method setBackgroundBlurRadius = SurfaceControl.Transaction.class.getDeclaredMethod("setBackgroundBlurRadius", SurfaceControl.class, int.class);
+            ValueAnimator animator = ValueAnimator.ofInt(1, 150);
+            animator.setInterpolator(new DecelerateInterpolator());
+            animator.setDuration(150);
+            View view = dialog.getWindow().getDecorView();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S || Build.VERSION.SDK_INT == Build.VERSION_CODES.R && Build.VERSION.PREVIEW_SDK_INT != 0) {
                 animator.addUpdateListener(animation -> {
-                    try {
-                        SurfaceControl.Transaction transaction = new SurfaceControl.Transaction();
-                        setBackgroundBlurRadius.invoke(transaction, surfaceControl, animation.getAnimatedValue());
-                        transaction.apply();
-                    } catch (Throwable t) {
-                        t.printStackTrace();
-                    }
+                    dialog.getWindow().setBackgroundBlurRadius((Integer) animation.getAnimatedValue());
                 });
-                view.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
-                    @Override
-                    public void onViewAttachedToWindow(View v) {
-
+            } else {
+                try {
+                    Object viewRootImpl = view.getClass().getMethod("getViewRootImpl").invoke(view);
+                    if (viewRootImpl == null) {
+                        return;
                     }
+                    SurfaceControl surfaceControl = (SurfaceControl) viewRootImpl.getClass().getMethod("getSurfaceControl").invoke(viewRootImpl);
 
-                    @Override
-                    public void onViewDetachedFromWindow(View v) {
-                        animator.cancel();
-                    }
-                });
-                animator.start();
-            } catch (Throwable t) {
-                t.printStackTrace();
+
+                    Method setBackgroundBlurRadius = SurfaceControl.Transaction.class.getDeclaredMethod("setBackgroundBlurRadius", SurfaceControl.class, int.class);
+                    animator.addUpdateListener(animation -> {
+                        try {
+                            SurfaceControl.Transaction transaction = new SurfaceControl.Transaction();
+                            setBackgroundBlurRadius.invoke(transaction, surfaceControl, animation.getAnimatedValue());
+                            transaction.apply();
+                        } catch (Throwable t) {
+                            t.printStackTrace();
+                        }
+                    });
+                } catch (Throwable t) {
+                    t.printStackTrace();
+                }
             }
+            view.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+                @Override
+                public void onViewAttachedToWindow(View v) {
+
+                }
+
+                @Override
+                public void onViewDetachedFromWindow(View v) {
+                    animator.cancel();
+                }
+            });
+            animator.start();
         }
     }
 
