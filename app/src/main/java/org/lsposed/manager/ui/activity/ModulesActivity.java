@@ -579,7 +579,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
 
         private final Runnable reloadModules = new Runnable() {
             public void run() {
-                var tmpList = moduleUtil.getModules().values().stream().filter(module -> module.userId == userId).filter(customFilter).collect(Collectors.toList());
+                var tmpList = moduleUtil.getModules().values().stream().filter(module -> module.userId == userId).filter(customFilter).collect(Collectors.toCollection(ArrayList::new));
                 Comparator<PackageInfo> cmp = AppHelper.getAppListComparator(0, pm);
                 tmpList.sort((a, b) -> {
                     boolean aChecked = moduleUtil.isModuleEnabled(a.packageName);
