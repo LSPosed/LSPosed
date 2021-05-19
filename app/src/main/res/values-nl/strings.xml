@@ -180,7 +180,6 @@
     <string name="copy_toast_msg">Gekopieerd</string>
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nNiets hier</string>
     <string name="add_module_to_user">Module toevoegen aan gebruiker</string>
-	  <string name="compile_speed">Opnieuw optimaliseren</string>
     <string name="module_uninstall_message">Wilt u deze module verwijderen??</string>
     <string name="module_uninstalled">Gedeïnstalleerd %1$s</string>
     <string name="module_uninstall_failed">Verwijderen mislukt</string>
