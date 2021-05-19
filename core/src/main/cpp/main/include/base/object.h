@@ -127,10 +127,10 @@ namespace lspd {
         _make_rwx(original, _page_size);
         if constexpr (isDebug) {
             Dl_info info;
-            dladdr(original, &info);
-            LOGD("Hooking %s (%p) from %s (%p)",
-                 info.dli_sname ? info.dli_sname : "(unknown symbol)", info.dli_saddr,
-                 info.dli_fname ? info.dli_fname : "(unknown file)", info.dli_fbase);
+            if (dladdr(original, &info))
+                LOGD("Hooking %s (%p) from %s (%p)",
+                     info.dli_sname ? info.dli_sname : "(unknown symbol)", info.dli_saddr,
+                     info.dli_fname ? info.dli_fname : "(unknown file)", info.dli_fbase);
         }
         return DobbyHook(original, replace, backup);
     }
@@ -138,10 +138,10 @@ namespace lspd {
     inline int UnhookFunction(void *original) {
         if constexpr (isDebug) {
             Dl_info info;
-            dladdr(original, &info);
-            LOGD("Unhooking %s (%p) from %s (%p)",
-                 info.dli_sname ? info.dli_sname : "(unknown symbol)", info.dli_saddr,
-                 info.dli_fname ? info.dli_fname : "(unknown file)", info.dli_fbase);
+            if (dladdr(original, &info))
+                LOGD("Unhooking %s (%p) from %s (%p)",
+                     info.dli_sname ? info.dli_sname : "(unknown symbol)", info.dli_saddr,
+                     info.dli_fname ? info.dli_fname : "(unknown file)", info.dli_fbase);
         }
         return DobbyDestroy(original);
     }

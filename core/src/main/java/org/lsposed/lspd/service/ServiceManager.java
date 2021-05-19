@@ -20,6 +20,7 @@
 package org.lsposed.lspd.service;
 
 import android.content.Context;
+import android.ddm.DdmHandleAppName;
 import android.os.IBinder;
 import android.os.IServiceManager;
 import android.os.Looper;
@@ -55,7 +56,18 @@ public class ServiceManager {
     }
 
     // call by ourselves
-    public static void start() {
+    public static void start(String[] args) {
+        if (!ConfigManager.getInstance().tryLock()) return;
+
+        android.os.Process.killProcess(android.system.Os.getppid());
+        for (String arg : args) {
+            if (arg.equals("--debug")) {
+                DdmHandleAppName.setAppName("lspd", 0);
+            }
+            if (arg.equals("--from-service")) {
+                Log.w(TAG, "LSPosed daemon is not started properly. Try for a late start...");
+            }
+        }
         Log.i(TAG, "starting server...");
         Log.i(TAG, String.format("version %s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_NAME));
 
