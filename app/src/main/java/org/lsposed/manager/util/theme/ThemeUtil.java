@@ -98,6 +98,9 @@ public class ThemeUtil {
     }
 
     public static String getColorTheme() {
+        if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.S || Build.VERSION.SDK_INT == Build.VERSION_CODES.R && Build.VERSION.PREVIEW_SDK_INT != 0) && isSystemAccent()) {
+            return "system";
+        }
         String primaryColorEntryName = "COLOR_PRIMARY";
         String colorPrimary = preferences.getString("theme_color", "COLOR_PRIMARY");
         for (CustomThemeColors color : CustomThemeColors.values()) {

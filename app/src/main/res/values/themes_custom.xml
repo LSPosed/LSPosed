@@ -99,7 +99,5 @@
         <item name="colorPrimary">@color/material_blue_grey</item>
     </style>
 
-    <style name="ThemeOverlay.system">
-        <item name="colorPrimary">@color/system</item>
-    </style>
+    <style name="ThemeOverlay.system" />
 </resources>
