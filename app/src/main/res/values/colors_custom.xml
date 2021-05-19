@@ -40,4 +40,5 @@
     <color name="material_grey">@color/material_grey_500</color>
     <color name="material_blue_grey">@color/material_blue_grey_500</color>
     <color name="system">@color/material_blue</color>
+    <color name="system_background">@color/material_blue</color>
 </resources>

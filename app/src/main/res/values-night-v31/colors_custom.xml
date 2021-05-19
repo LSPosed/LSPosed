@@ -21,4 +21,5 @@
 
 <resources>
     <color name="system">@android:color/system_accent1_200</color>
+    <color name="system_background">@android:color/system_neutral1_800</color>
 </resources>
