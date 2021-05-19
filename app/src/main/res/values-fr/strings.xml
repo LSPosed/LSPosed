@@ -33,7 +33,7 @@
     <string name="About">A propos</string>
     <string name="module_repo">Dépôt</string>
     <string name="module_repo_summary">Dépôts de modules (Alpha)</string>
-    <string name="about_view_source_code"><![CDATA[Voir le code source sur %s<br/>Rejoindre notre canal %s]]></string>
+    <string name="about_view_source_code"><![CDATA[Voir le code source sur %1$s<br/>Rejoindre notre canal %2$s]]></string>
     <string name="about_translators">Traducteur: %s</string>
 
     <string name="activated">Activé</string>
@@ -59,8 +59,7 @@
     <string name="logs_save_failed">Échec de la sauvegarde:</string>
     <string name="menuClearLog">Éffacer le journal maintenant</string>
     <string name="logs_cleared">Journal éffacé avec succès.</string>
-    <string name="log_is_empty">Le journal est vide.</string>
-    <string name="scroll_top">Haut de page</string>
+  <string name="scroll_top">Haut de page</string>
     <string name="loading">Chargement…</string>
     <string name="scroll_bottom">Pied de page</string>
     <string name="logs_cannot_read">Lecture du journal impossible: \n</string>
@@ -115,7 +114,7 @@
     <string name="menu_show_games">Jeux</string>
     <string name="menu_show_modules">Modules</string>
     <string name="failed_to_save_scope_list">Échec de la sauvegarde de la liste des champs d\’application</string>
-    <string name="app_description">%s\nVersion %s</string>
+    <string name="app_description">%1$s\nVersion %2$s</string>
     <string name="use_recommended">Recommendé</string>
     <string name="no_scope_selected_has_recommended">Vous n\’avez sélectionné aucune application. Sélectionner les applications recommandées?</string>
     <string name="use_recommended_message">Sélectionner les applications recommandées?</string>
@@ -133,8 +132,7 @@
     <string name="menu_filter">Filtre…</string>
 
     <!-- ModulesActivity and AppListActivity -->
-    <string name="modules_app_store">Voir dans le magasin d\’applications</string>
-    <string name="module_app_info">Informations d\’application</string>
+  <string name="module_app_info">Informations d\’application</string>
 
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Sous-système</string>

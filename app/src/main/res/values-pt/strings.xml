@@ -57,7 +57,6 @@
     <string name="logs_save_failed">Falha ao salvar:</string>
     <string name="menuClearLog">Limpar registro</string>
     <string name="logs_cleared">Registro limpo com sucesso.</string>
-    <string name="log_is_empty">Registro vazio.</string>
     <string name="scroll_top">Mover para início</string>
     <string name="loading">Carregando…</string>
     <string name="scroll_bottom">Mover para fim</string>
@@ -109,7 +108,7 @@
     <string name="menu_show_games">Jogos</string>
     <string name="menu_show_modules">Módulos</string>
     <string name="failed_to_save_scope_list">Falha ao salvar lista de escopos</string>
-    <string name="app_description">%s\nVersão %s</string>
+    <string name="app_description">%1$s\nVersão %2$s</string>
     <string name="use_recommended">Recomendados</string>
     <string name="no_scope_selected_has_recommended">Você não selecionou nenhum app. Quer selecionar os apps recomendados?</string>
     <string name="use_recommended_message">Selecionar os apps recomendados?</string>
@@ -127,7 +126,6 @@
     <string name="menu_filter">Filtrar…</string>
 
     <!-- ModulesActivity and AppListActivity -->
-    <string name="modules_app_store">Ver na Loja de Apps</string>
     <string name="module_app_info">Info do App</string>
 
     <!-- SettingsActivity -->

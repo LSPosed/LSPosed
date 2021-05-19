@@ -38,7 +38,6 @@
     <string name="failed_to_save_scope_list">Не вдалося зберегти список областей</string>
     <string name="info">Інформація</string>
     <string name="loading">Завантаження…</string>
-    <string name="log_is_empty">Звіт порожній.</string>
     <string name="logs_cannot_read">"Не вдається прочитати звіт: "</string>
     <string name="logs_cleared">Звіт успішно очищено.</string>
     <string name="logs_save_failed">Не вдалося зберегти:</string>
@@ -62,7 +61,6 @@
     <string name="module_no_ui">Цей модуль не надає інтерфейсу користувача</string>
     <string name="module_settings">Налаштування модуля</string>
     <string name="module_uninstall">Видалити</string>
-    <string name="modules_app_store">Переглянути в Play Store</string>
     <string name="nav_item_logs">Детальні звіти</string>
     <string name="nav_item_logs_err">Звіти модулів</string>
     <string name="no_min_version_specified">Цей модуль не визначає потрібну йому версію LSP.</string>
@@ -117,7 +115,7 @@
     <string name="group_network">Мережа</string>
     <string name="dns_over_http">DNS поверх HTTPS</string>
     <string name="dns_over_http_summary">Вирішення проблем із погіршенням DNS у деяких країнах</string>
-    <string name="about_view_source_code"><![CDATA[Перегляньте вихідний код на %s<br/>Приєднуйтесь до нашого каналу в %s]]></string>
+    <string name="about_view_source_code"><![CDATA[Перегляньте вихідний код на %1$s<br/>Приєднуйтесь до нашого каналу в %2$s]]></string>
     <string name="module_release_load_more">Показувати старіші версії</string>
     <string name="module_release_no_more">Більше релізів немає</string>
     <string name="theme_color">Колір теми</string>

@@ -59,7 +59,6 @@
     <string name="logs_save_failed">儲存失敗：</string>
     <string name="menuClearLog">立即清理日誌</string>
     <string name="logs_cleared">日誌清理成功</string>
-    <string name="log_is_empty">日誌為空</string>
     <string name="scroll_top">滑動到最上面</string>
     <string name="loading">正在載入……</string>
     <string name="scroll_bottom">滾動到底部</string>
@@ -115,7 +114,7 @@
     <string name="menu_show_games">遊戲</string>
     <string name="menu_show_modules">模組</string>
     <string name="failed_to_save_scope_list">作用域列表儲存失敗</string>
-    <string name="app_description">%s\n版本 %s</string>
+    <string name="app_description">%1$s\n版本 %2$s</string>
     <string name="use_recommended">推薦程式</string>
     <string name="no_scope_selected_has_recommended">未選擇任何程式。選擇推薦的程式？</string>
     <string name="use_recommended_message">選擇推薦的程式？</string>

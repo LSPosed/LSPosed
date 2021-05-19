@@ -33,7 +33,7 @@
     <string name="About">Informazioni</string>
     <string name="module_repo">Repository</string>
     <string name="module_repo_summary">Repository moduli (Alpha)</string>
-    <string name="about_view_source_code"><![CDATA[Visualizza il codice sorgente su %s<br/>Unisciti al nostro canale %s]]></string>
+    <string name="about_view_source_code"><![CDATA[Visualizza il codice sorgente su %1$s<br/>Unisciti al nostro canale %2$s]]></string>
     <string name="about_translators">Traduttori: %s</string>
 
     <string name="activated">Attivo</string>
@@ -57,7 +57,6 @@
     <string name="logs_save_failed">Impossibile salvare:</string>
     <string name="menuClearLog">Cancella il log ora</string>
     <string name="logs_cleared">Log correttamente pulito.</string>
-    <string name="log_is_empty">Il log è vuoto.</string>
     <string name="scroll_top">Scorri in alto</string>
     <string name="loading">Caricamento in corso…</string>
     <string name="scroll_bottom">Scorri in basso</string>
@@ -108,7 +107,7 @@
     <string name="menu_show_games">Giochi</string>
     <string name="menu_show_modules">Moduli</string>
     <string name="failed_to_save_scope_list">Impossibile salvare l\'elenco degli ambiti</string>
-    <string name="app_description">%s\nVersione %s</string>
+    <string name="app_description">%1$s\nVersione %2$s</string>
     <string name="use_recommended">Consigliate</string>
     <string name="no_scope_selected_has_recommended">Non hai selezionato alcuna app. Selezionare le app consigliate?</string>
     <string name="use_recommended_message">Selezionare le app consigliate?</string>
@@ -125,7 +124,6 @@
     <string name="reboot">Riavvia</string>
 
     <!-- ModulesActivity and AppListActivity -->
-    <string name="modules_app_store">Visualizza nell\'App Store</string>
     <string name="module_app_info">Info app</string>
 
     <!-- SettingsActivity -->

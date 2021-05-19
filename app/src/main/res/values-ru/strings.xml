@@ -50,7 +50,6 @@
     <string name="warning_xposed_min_version">Этот модуль требует более новой версии LSPosed (%d), поэтому его невозможно активировать</string>
     <string name="no_min_version_specified">Этот модуль не определяет нужную ему версию LSPosed.</string>
     <string name="warning_min_version_too_low">Этот модуль был создан для версии LSPosed %1$d, но из-за несовместимых изменений в версии %2$d был отключен</string>
-    <string name="modules_app_store">Просмотреть в Play Store</string>
     <string name="module_app_info">Информация о приложении</string>
     <string name="module_uninstall">Удалить</string>
 
@@ -68,7 +67,6 @@
     <string name="logs_save_failed">Не удалось сохранить:</string>
     <string name="menuClearLog">Очистить логи сейчас</string>
     <string name="logs_cleared">Логи успешно очищены.</string>
-    <string name="log_is_empty">Пусто.</string>
 
     <!-- About tab -->
 
@@ -114,7 +112,7 @@
     <string name="menu_show_modules">Модули</string>
     <string name="failed_to_save_scope_list">Не удалось сохранить список областей</string>
     <string name="module_settings">Настройки модуля</string>
-    <string name="app_description">%s\nВерсия %s</string>
+    <string name="app_description">%1$s\nВерсия %2$s</string>
     <string name="use_recommended">Рекомендуется</string>
     <string name="no_scope_selected_has_recommended">Вы не выбрали ни одного приложения. Выбрать рекомендуемые приложения?</string>
     <string name="use_recommended_message">Выбрать рекомендуемые приложения?</string>
@@ -153,7 +151,7 @@
     <string name="group_network">Сеть</string>
     <string name="dns_over_http">DNS поверх HTTPS</string>
     <string name="dns_over_http_summary">Обходное DNS-травление в некоторых странах</string>
-    <string name="about_view_source_code"><![CDATA[Просмотреть исходный код по %s<br/>Присоединяйтесь к нашему %s каналу]]></string>
+    <string name="about_view_source_code"><![CDATA[Просмотреть исходный код по %1$s<br/>Присоединяйтесь к нашему %2$s каналу]]></string>
     <string name="module_release_load_more">Показать старые версии</string>
     <string name="module_release_no_more">Больше нет выпуска</string>
     <string name="theme_color">Цвет темы</string>
