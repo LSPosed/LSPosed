@@ -300,7 +300,7 @@ public class SettingsActivity extends BaseActivity {
             }
 
             SwitchPreference prefFollowSystemAccent = findPreference("follow_system_accent");
-            if (prefFollowSystemAccent != null && (Build.VERSION.SDK_INT >= 31 || Build.VERSION.SDK_INT == 30 && Build.VERSION.PREVIEW_SDK_INT != 0)) {
+            if (prefFollowSystemAccent != null && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S || Build.VERSION.SDK_INT == Build.VERSION_CODES.R && Build.VERSION.PREVIEW_SDK_INT != 0)) {
                 if (primary_color != null) {
                     primary_color.setVisible(!prefFollowSystemAccent.isChecked());
                 }

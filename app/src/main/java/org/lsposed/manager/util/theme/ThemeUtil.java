@@ -110,7 +110,7 @@ public class ThemeUtil {
 
     @StyleRes
     public static int getColorThemeStyleRes() {
-        if ((Build.VERSION.SDK_INT >= 31 || Build.VERSION.SDK_INT == 30 && Build.VERSION.PREVIEW_SDK_INT != 0) && isSystemAccent()) {
+        if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.S || Build.VERSION.SDK_INT == Build.VERSION_CODES.R && Build.VERSION.PREVIEW_SDK_INT != 0) && isSystemAccent()) {
             return R.style.ThemeOverlay_system;
         }
         Integer theme = colorThemeMap.get(getColorTheme());
