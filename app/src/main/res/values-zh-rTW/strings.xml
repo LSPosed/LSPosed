@@ -42,7 +42,7 @@
     <string name="selinux_policy_not_loaded_summary">SEPolicy 未被正確讀取</string>
     <string name="selinux_policy_not_loaded"><![CDATA[<b>警告：</b>SEPolicy 沒有被正確讀取，掛鉤系統框架的模組將無法運作。<br>請回報這類問題給<a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>開發者]]></string>
     <string name="system_inject_fail_summary">系統框架注入失敗</string>
-    <string name="system_inject_fail"><![CDATA[<b>警告：</b>系統注入失敗。<br/>這是極罕見的情況，可能是由 <b>Magisk</b> 或低質 Magisk 模組導致。<br/>請嘗試禁用除 Riru 和 LSPosed 以外的 Magisk 模組，或向開發者提供完整日誌。]]></string>
+    <string name="system_inject_fail"><![CDATA[<b>警告：</b>系統注入失敗。<br/>這是極罕見的情況，可能是由 <b>Magisk</b> 或低品質 Magisk 模組導致。<br/>請嘗試禁用除 Riru 和 LSPosed 以外的 Magisk 模組，或向開發者提供完整日誌。]]></string>
     <string name="info_api_version">API 版本</string>
     <string name="info_framework_version">框架版本</string>
     <string name="info_manager_version">管理器版本</string>
@@ -159,7 +159,7 @@
     <string name="dns_over_http_summary">解決某些地區的 DNS 汙染問題</string>
     <string name="theme_color">主題強調色</string>
     <string name="theme_color_summary">應用程式中最常見的顏色</string>
-    <string name="theme_color_system_accent">System accent color</string>
+    <string name="theme_color_system_accent">系統強調色</string>
     <string name="settings_show_hidden_icon_apps_enabled">強制應用程式在啟動器中顯示圖示</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">在 Android 10 之後，應用（特別是 Xposed 模組）不被允許隱藏啟動器圖示。關閉本選項以停用此功能。</string>
     <string name="settings_group_system">系統</string>
