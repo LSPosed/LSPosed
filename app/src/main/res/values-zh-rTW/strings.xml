@@ -41,6 +41,8 @@
     <string name="partial_activated">部分啟用</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy 未被正確讀取</string>
     <string name="selinux_policy_not_loaded"><![CDATA[<b>警告：</b>SEPolicy 沒有被正確讀取，掛鉤系統框架的模組將無法運作。<br>請回報這類問題給<a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>開發者]]></string>
+    <string name="system_inject_fail_summary">系統框架注入失敗</string>
+    <string name="system_inject_fail"><![CDATA[<b>警告：</b>系統注入失敗。<br/>這是極罕見的情況，可能是由 <b>Magisk</b> 或低品質 Magisk 模組導致。<br/>請嘗試禁用除 Riru 和 LSPosed 以外的 Magisk 模組，或向開發者提供完整日誌。]]></string>
     <string name="info_api_version">API 版本</string>
     <string name="info_framework_version">框架版本</string>
     <string name="info_manager_version">管理器版本</string>
@@ -61,7 +63,7 @@
     <string name="scroll_top">滑動到最上面</string>
     <string name="loading">正在載入……</string>
     <string name="scroll_bottom">滾動到底部</string>
-    <string name="logs_cannot_read">無法讀取日誌: \n</string>
+    <string name="logs_cannot_read">無法讀取日誌：\n</string>
     <string name="menuReload">重新載入</string>
     <string name="logs_clear_failed_2">日誌清理失敗</string>
     <string name="not_logcat_2">如果有人要求您提供一份 Android 系統日誌，那麼您來錯了地方。在此處顯示的是 LSPosed 的日誌；如果您想抓取系統日誌，可前往 XDA 尋求所需的答案。</string>
@@ -85,6 +87,11 @@
     <string name="module_uninstall_message">您確定要移除此模組嗎？</string>
     <string name="module_uninstalled">已移除 %1$s</string>
     <string name="module_uninstall_failed">移除失敗</string>
+    <string name="module_installed">已安裝 %1$s 到使用者 %2$d</string>
+    <string name="module_install_failed">安裝模組失敗</string>
+    <string name="user_title">使用者 %d</string>
+    <string name="install_to_user">安裝到使用者 %d</string>
+    <string name="install_to_user_message">要安裝 %1$s 到使用者 %2$d 嗎？建議手動安裝或多開，透過 LSPosed 強制安裝可能會出現問題。</string>
 
     <!-- AppListActivity -->
     <string name="compile_speed">重新最佳化</string>
@@ -132,7 +139,7 @@
     <!-- SettingsActivity -->
     <string name="settings_group_framework">框架</string>
     <string name="settings_enable_resources">啟用資源鉤子</string>
-    <string name="settings_enable_resources_summary"><b>警告: </b> 資源鉤子為實驗性的特性</string>
+    <string name="settings_enable_resources_summary"><b>警告：</b> 資源鉤子為實驗性的特性</string>
     <string name="pref_title_disable_verbose_log">停用詳細日誌</string>
     <string name="pure_black_dark_theme">使用純黑深色主題</string>
     <string name="pure_black_dark_theme_summary">當深色主題啟用時使用純黑色主題</string>
@@ -152,7 +159,9 @@
     <string name="dns_over_http_summary">解決某些地區的 DNS 汙染問題</string>
     <string name="theme_color">主題強調色</string>
     <string name="theme_color_summary">應用程式中最常見的顏色</string>
-    <string name="settings_show_hidden_icon_apps_enabled">（Android 10+）限制應用隱藏其啟動器圖標</string>
+    <string name="theme_color_system_accent">系統強調色</string>
+    <string name="settings_show_hidden_icon_apps_enabled">強制應用程式在啟動器中顯示圖示</string>
+    <string name="settings_show_hidden_icon_apps_enabled_summary">在 Android 10 之後，應用（特別是 Xposed 模組）不被允許隱藏啟動器圖示。關閉本選項以停用此功能。</string>
     <string name="settings_group_system">系統</string>
 
     <!-- Module Repo -->
@@ -177,4 +186,6 @@
     <string name="NotInstallDetail">未安裝 LSPosed</string>
     <string name="translators"><![CDATA[<a href="https://github.com/tony8077616">孟武.尼德霍格.龍</a>、<a href="https://github.com/david082321">david082321</a>]]></string>
     <string name="copy_toast_msg">已複製</string>
+    <string name="list_empty">¯\\\\_(ツ)_\/¯\n空空如也</string>
+    <string name="add_module_to_user">新增模組到使用者</string>
 </resources>
