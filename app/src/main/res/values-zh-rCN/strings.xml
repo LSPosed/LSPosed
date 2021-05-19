@@ -33,7 +33,7 @@
     <string name="About">关于</string>
     <string name="module_repo">仓库</string>
     <string name="module_repo_summary">模块仓库（Alpha）</string>
-    <string name="about_view_source_code"><![CDATA[在 %s 查看源码<br/>加入我们的 %s 频道]]></string>
+    <string name="about_view_source_code"><![CDATA[在 %1$s 查看源码<br/>加入我们的 %2$s 频道]]></string>
     <string name="about_translators">译者：%s</string>
 
     <string name="activated">已激活</string>
@@ -59,7 +59,6 @@
     <string name="logs_save_failed">保存失败：</string>
     <string name="menuClearLog">立即清理日志</string>
     <string name="logs_cleared">日志清理成功</string>
-    <string name="log_is_empty">日志为空</string>
     <string name="scroll_top">滚动到顶部</string>
     <string name="loading">正在加载…</string>
     <string name="scroll_bottom">滚动到底部</string>
@@ -115,7 +114,7 @@
     <string name="menu_show_games">游戏</string>
     <string name="menu_show_modules">模块</string>
     <string name="failed_to_save_scope_list">作用域列表保存失败</string>
-    <string name="app_description">%s\n版本：%s</string>
+    <string name="app_description">%1$s\n版本：%2$s</string>
     <string name="use_recommended">推荐应用</string>
     <string name="no_scope_selected_has_recommended">未选择任何应用。选择推荐的应用？</string>
     <string name="use_recommended_message">选择推荐的应用?</string>

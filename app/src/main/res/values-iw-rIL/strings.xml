@@ -25,16 +25,11 @@
     <string name="Install">התקן</string>
     <string name="InstallDetail">הקש כדי להתקין את LSPosed</string>
     <string name="Modules">מודולים</string>
-    <plurals name="modules_enabled_count">
-        <item quantity="one">%d מודול מופעל</item>
-        <item quantity="other">%d מודולים מופעלים</item>
-    </plurals>
     <string name="Logs">לוגים</string>
     <string name="Settings">הגדרות</string>
     <string name="About">אודות</string>
     <string name="module_repo">רפוסיטורי</string>
     <string name="module_repo_summary">רפוסיטורי מודולים (אלפא)</string>
-    <string name="about_view_source_code"><![CDATA[הצג קוד מקור ב-%s<br/>הצטרף לערוץ ה-%s שלנו]]></string>
 
     <string name="activated">הופעל</string>
     <string name="not_installed">לא מותקן</string>
@@ -57,7 +52,6 @@
     <string name="logs_save_failed">נכשל לשמור:</string>
     <string name="menuClearLog">נקה לוגים עכשיו</string>
     <string name="logs_cleared">לוגים נוקו בהצלחה.</string>
-    <string name="log_is_empty">לוג ריקים.</string>
     <string name="scroll_top">גלגל להתחלה</string>
     <string name="loading">טוען…</string>
     <string name="scroll_bottom">גלגל לסוף</string>
@@ -108,7 +102,6 @@
     <string name="menu_show_games">משחקים</string>
     <string name="menu_show_modules">מודולים</string>
     <string name="failed_to_save_scope_list">נכשל לשמור רשימת תחומים</string>
-    <string name="app_description">%s\nגרסה %s</string>
     <string name="use_recommended">מומלץ</string>
     <string name="no_scope_selected_has_recommended">אתה לא בחרת שום אפליקציה. לבחור אפליקציות מומלצות?</string>
     <string name="use_recommended_message">בחר אפליקציות מומלצות?</string>
@@ -125,7 +118,6 @@
     <string name="reboot">הפעל מחדש</string>
 
     <!-- ModulesActivity and AppListActivity -->
-    <string name="modules_app_store">הצג בחנות האפליקציות</string>
     <string name="module_app_info">מידע על האפליקציה</string>
 
     <!-- SettingsActivity -->

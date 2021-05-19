@@ -50,7 +50,6 @@
     <string name="warning_xposed_min_version">Dieses Modul erfordert eine neuere Version von LSPosed (%d) und kann nicht aktiviert werden</string>
     <string name="no_min_version_specified">Dieses Modul gibt nicht die benötigte LSPosed-Version an.</string>
     <string name="warning_min_version_too_low">Dieses Modul wurde für die LSPosed-Version %1$d erstellt, wurde jedoch aufgrund inkompatibler Änderungen in der Version %2$d deaktiviert</string>
-    <string name="modules_app_store">Im App Store anzeigen</string>
     <string name="module_app_info">App-Information</string>
     <string name="module_uninstall">Deinstallieren</string>
 
@@ -68,7 +67,6 @@
     <string name="logs_save_failed">Speichern fehlgeschlagen:</string>
     <string name="menuClearLog">Protokoll jetzt löschen</string>
     <string name="logs_cleared">Protokoll erfolgreich gelöscht.</string>
-    <string name="log_is_empty">Protokoll ist leer.</string>
 
     <!-- About tab -->
 
@@ -114,7 +112,7 @@
     <string name="menu_show_modules">Module</string>
     <string name="failed_to_save_scope_list">Das Speichern der Bereichsliste ist fehlgeschlagen</string>
     <string name="module_settings">Moduleinstellungen</string>
-    <string name="app_description">%s\nAusführung: %s</string>
+    <string name="app_description">%1$s\nAusführung: %2$s</string>
     <string name="use_recommended">Empfohlen</string>
     <string name="no_scope_selected_has_recommended">Sie haben keine App ausgewählt. Empfohlene Apps auswählen?</string>
     <string name="use_recommended_message">Empfohlene Apps auswählen?</string>
@@ -153,7 +151,7 @@
     <string name="group_network">Netzwerk</string>
     <string name="dns_over_http">DNS via HTTPS</string>
     <string name="dns_over_http_summary">Problemumgehung für DNS-Vergiftungen in einigen Ländern</string>
-    <string name="about_view_source_code"><![CDATA[Den Quellcode finden Sie unter %s<br/>Begleiten Sie uns %s-Kanal]]></string>
+    <string name="about_view_source_code"><![CDATA[Den Quellcode finden Sie unter %1$s<br/>Begleiten Sie uns %2$s-Kanal]]></string>
     <string name="module_release_load_more">Ältere Versionen anzeigen</string>
     <string name="module_release_no_more">Keine Veröffentlichung mehr</string>
     <string name="theme_color">Themenfarbe</string>
