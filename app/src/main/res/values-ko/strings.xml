@@ -25,8 +25,8 @@
     <string name="InstallDetail">LSPosed를 설치하려면 탭</string>
     <string name="Modules">모듈</string>
     <plurals name="modules_enabled_count">
-        <item quantity="one">모듈 %d개 활성화됨</item>
-        <item quantity="other">모듈 %d개 활성화됨</item>
+        <item quantity="one">모듈 %d개가 활성화됨</item>
+        <item quantity="other">모듈 %d개가 활성화됨</item>
     </plurals>
     <string name="Logs">로그</string>
     <string name="Settings">설정</string>
@@ -35,12 +35,14 @@
     <string name="module_repo_summary">모듈 저장소 (Alpha)</string>
     <string name="about_view_source_code"><![CDATA[%s에서 소스 코드 보기<br/>%s 채널에 가입하십시오.]]></string>
     <string name="about_translators">번역가: %s</string>
-
+    
     <string name="activated">활성화됨</string>
     <string name="not_installed">설치되지 않음</string>
     <string name="partial_activated">부분적으로 활성화됨</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy가 제대로 로드되지 않았습니다.</string>
     <string name="selinux_policy_not_loaded"><![CDATA[<b>주의:</b> SEPolicy가 제대로 로드되지 않아 시스템 프레임워크를 후크하는 모듈이 작동하지 않습니다.<br><a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> 개발자에게 보고하십시오.]]></string>
+    <string name="system_inject_fail_summary">System Framework 주입 실패</string>
+    <string name="system_inject_fail"><![CDATA[<b>주의:</b> System Framework 주입 실패.<br/>이는 드물게 발생하며, Magisk 또는 일부 저품질 <b>Magisk</b> 모듈 때문일 수 있습니다.<br/>Riru 및 LSPosed 이외의 Magisk 모듈을 비활성화하거나 전체 로그를 개발자에게 제출하십시오.]]></string>
     <string name="info_api_version">API 버전</string>
     <string name="info_framework_version">Framework 버전</string>
     <string name="info_manager_version">Manager 버전</string>
@@ -85,6 +87,12 @@
     <string name="module_uninstall_message">이 모듈을 제거하시겠습니까?</string>
     <string name="module_uninstalled">%1$s 제거됨</string>
     <string name="module_uninstall_failed">제거 실패</string>
+    
+    <string name="module_installed">%2$d 사용자에 %1$s 추가</string>
+    <string name="module_install_failed">모듈 추가 실패</string>
+    <string name="user_title">사용자 %d</string>
+    <string name="install_to_user">%d 사용자에게 설치</string>
+    <string name="install_to_user_message">%2$d 사용자에게 %1$s을(를) 설치하시겠습니까? 수동으로 설치하는 것이 좋습니다. LSPosed를 통해 강제로 설치하면 문제가 발생할 수 있습니다.</string>
 
     <!-- AppListActivity -->
     <string name="compile_speed">다시 최적화</string>
@@ -119,10 +127,11 @@
     <string name="menu_backup">백업</string>
     <string name="menu_restore">복원</string>
     <string name="force_stop">강제 중지</string>
-    <string name="force_stop_dlg_title">강제 정지?</string>
+    <string name="force_stop_dlg_title">강제 중지?</string>
     <string name="force_stop_dlg_text">앱을 강제로 중지하면 잘못된 동작이 발생할 수 있습니다.</string>
     <string name="reboot_required">이 변경 내용을 적용하려면 재부팅해야 합니다.</string>
     <string name="reboot">재부팅</string>
+    <string name="menu_filter">필터…</string>
 
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_app_store">앱 스토어에서 보기</string>
@@ -151,6 +160,10 @@
     <string name="dns_over_http_summary">일부 국가의 DNS 포이즈닝 문제를 해결합니다</string>
     <string name="theme_color">테마 색</string>
     <string name="theme_color_summary">앱에서 가장 자주 나타나는 색</string>
+    <string name="theme_color_system_accent">System 강조 색</string>
+    <string name="settings_show_hidden_icon_apps_enabled">앱에서 시작 프로그램 아이콘 표시</string>
+    <string name="settings_show_hidden_icon_apps_enabled_summary">Android 10 이후 앱(특히 Xposed 모듈)은 시작 프로그램 아이콘을 숨길 수 없습니다. 이 기능을 비활성화하려면 토글을 끄십시오.</string>
+    <string name="settings_group_system">System</string>
 
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
@@ -173,4 +186,7 @@
     <string name="NotInstall">설치되지 않음</string>
     <string name="NotInstallDetail">LSPosed가 설치되지 않음</string>
     <string name="translators"><![CDATA[<a href="https://github.com/green1052">green1052</a>]]></string>
+    <string name="copy_toast_msg">복사됨</string>
+    <string name="list_empty">¯\\\\_(ツ)_\/¯\n아무것도 없음</string>
+    <string name="add_module_to_user">사용자에게 모듈 추가</string>
 </resources>
