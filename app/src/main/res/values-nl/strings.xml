@@ -172,9 +172,8 @@
     <string name="verbose_log_not_avaliable">Uitgebreid logboek is niet beschikbaar. Als u het net hebt ingeschakeld zonder opnieuw op te starten, probeer het dan opnieuw na het opnieuw opstarten.</string>
     <string name="NotInstall">Niet geïnstalleerd</string>
     <string name="NotInstallDetail">LSPosed is niet geïnstalleerd</string>
-    <string name="settings_show_hidden_icon_apps_enabled">(Android 10+) Beperk apps om hun opstartpictogrammen te verbergen</string>
     <string name="settings_show_hidden_icon_apps_enabled">Forceer apps om launcher-pictogrammen weer te geven</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">Na Android 10 mogen apps (vooral Xposed-modules) hun opstartpictogrammen niet verbergen. Schakel de schakelaar uit om deze functie uit te schakelen.</string>
     <string name="settings_group_system">Systeem</string>
-    <string name="translators"><![CDATA[<a href="https://github.com/Pandemic-XDA">Pandemic</a>]]></string>
+    <string name="translators"><![CDATA[<a href="https://github.com/Pandemic-XDA">Pandemic-XDA</a>]]></string>
 </resources>
