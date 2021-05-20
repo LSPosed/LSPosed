@@ -19,6 +19,7 @@
 
 package hidden;
 
+import android.content.Context;
 import android.content.pm.PackageInstaller;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
@@ -45,5 +46,9 @@ public class HiddenApiBridge {
 
     public static void PackageInstaller_SessionParams_installFlags(PackageInstaller.SessionParams params, int flags) {
         params.installFlags = flags;
+    }
+
+    public static IBinder Context_getActivityToken(Context ctx) {
+        return ctx.getActivityToken();
     }
 }

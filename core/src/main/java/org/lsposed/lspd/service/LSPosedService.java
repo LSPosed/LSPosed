@@ -19,12 +19,16 @@
 
 package org.lsposed.lspd.service;
 
+import android.app.IApplicationThread;
 import android.content.ComponentName;
+import android.content.IIntentReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Binder;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
@@ -67,9 +71,8 @@ public class LSPosedService extends ILSPosedService.Stub {
      * However, PACKAGE_REMOVED will be triggered by `pm hide`, so we use UID_REMOVED instead.
      */
 
-    @Override
-    public void dispatchPackageChanged(Intent intent) throws RemoteException {
-        if (Binder.getCallingUid() != 1000 || intent == null) return;
+    synchronized public void dispatchPackageChanged(Intent intent) {
+        if (intent == null) return;
         int uid = intent.getIntExtra(Intent.EXTRA_UID, AID_NOBODY);
         if (uid == AID_NOBODY || uid <= 0) return;
         int userId = intent.getIntExtra("android.intent.extra.user_handle", USER_NULL);
@@ -78,7 +81,13 @@ public class LSPosedService extends ILSPosedService.Stub {
         Uri uri = intent.getData();
         String moduleName = (uri != null) ? uri.getSchemeSpecificPart() : null;
 
-        ApplicationInfo applicationInfo = moduleName != null ? PackageService.getApplicationInfo(moduleName, PackageManager.GET_META_DATA, 0) : null;
+        ApplicationInfo applicationInfo = null;
+        if (moduleName != null) {
+            try {
+                applicationInfo = PackageService.getApplicationInfo(moduleName, PackageManager.GET_META_DATA, 0);
+            } catch (Throwable ignored) {
+            }
+        }
 
         boolean isXposedModule = applicationInfo != null &&
                 applicationInfo.metaData != null &&
@@ -137,7 +146,7 @@ public class LSPosedService extends ILSPosedService.Stub {
             broadcastIntent.setComponent(ComponentName.unflattenFromString(ConfigManager.getInstance().getManagerPackageName() + "/.receivers.ServiceReceiver"));
 
             try {
-                ActivityManagerService.broadcastIntentWithFeature(null, null, broadcastIntent,
+                ActivityManagerService.broadcastIntentWithFeature(null, broadcastIntent,
                         null, null, 0, null, null,
                         null, -1, null, true, false,
                         0);
@@ -158,8 +167,55 @@ public class LSPosedService extends ILSPosedService.Stub {
     }
 
 
-    @Override
-    public void dispatchBootCompleted(Intent intent) throws RemoteException {
+    synchronized public void dispatchBootCompleted(Intent intent) {
         ConfigManager.getInstance().ensureManager();
+    }
+
+    private void registerPackageReceiver() {
+        try {
+            IntentFilter packageFilter = new IntentFilter();
+            packageFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
+            packageFilter.addAction(Intent.ACTION_PACKAGE_CHANGED);
+            packageFilter.addAction(Intent.ACTION_PACKAGE_FULLY_REMOVED);
+            packageFilter.addDataScheme("package");
+
+            IntentFilter uidFilter = new IntentFilter();
+            uidFilter.addAction(Intent.ACTION_UID_REMOVED);
+
+            var receiver = new IIntentReceiver.Stub() {
+                @Override
+                public void performReceive(Intent intent, int resultCode, String data, Bundle extras, boolean ordered, boolean sticky, int sendingUser) {
+                    new Thread(() -> dispatchPackageChanged(intent)).start();
+                }
+            };
+
+            ActivityManagerService.registerReceiver("android", null, receiver, packageFilter, null, -1, 0);
+            ActivityManagerService.registerReceiver("android", null, receiver, uidFilter, null, -1, 0);
+        } catch (Throwable e) {
+            Log.e(TAG, "register package receiver", e);
+        }
+    }
+
+    private void registerBootReceiver() {
+        try {
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(Intent.ACTION_LOCKED_BOOT_COMPLETED);
+
+            ActivityManagerService.registerReceiver("android", null, new IIntentReceiver.Stub() {
+                @Override
+                public void performReceive(Intent intent, int resultCode, String data, Bundle extras, boolean ordered, boolean sticky, int sendingUser) {
+                    new Thread(() -> dispatchBootCompleted(intent)).start();
+                }
+            }, intentFilter, null, 0, 0);
+        } catch (Throwable e) {
+            Log.e(TAG, "register boot receiver", e);
+        }
+    }
+
+    @Override
+    public void dispatchSystemServerContext(IBinder activityThread, IBinder activityToken) throws RemoteException {
+        ActivityManagerService.onSystemServerContext(IApplicationThread.Stub.asInterface(activityThread), activityToken);
+        registerBootReceiver();
+        registerPackageReceiver();
     }
 }

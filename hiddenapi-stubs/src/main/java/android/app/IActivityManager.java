@@ -21,6 +21,7 @@ package android.app;
 
 import android.content.IIntentReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -44,6 +45,19 @@ public interface IActivityManager extends IInterface {
     void forceStopPackage(String packageName, int userId);
 
     boolean startUserInBackground(int userid);
+
+    Intent registerReceiver(IApplicationThread caller, String callerPackage,
+                            IIntentReceiver receiver, IntentFilter filter,
+                            String requiredPermission, int userId, int flags);
+    Intent registerReceiverWithFeature(IApplicationThread caller, String callerPackage,
+                                       String callingFeatureId, IIntentReceiver receiver, IntentFilter filter,
+                                       String requiredPermission, int userId, int flags);
+
+    int bindService(IApplicationThread caller, IBinder token, Intent service,
+                    String resolvedType, IServiceConnection connection, int flags,
+                    String callingPackage, int userId);
+
+    boolean unbindService(IServiceConnection connection);
 
     abstract class Stub extends Binder implements IActivityManager {
 
