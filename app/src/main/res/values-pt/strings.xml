@@ -132,6 +132,7 @@
     <string name="menu_filter">Filtrar…</string>
 
     <!-- ModulesActivity and AppListActivity -->
+    <string name="modules_other_app">Ver em outro app</string>
     <string name="module_app_info">Info do App</string>
 
     <!-- SettingsActivity -->
