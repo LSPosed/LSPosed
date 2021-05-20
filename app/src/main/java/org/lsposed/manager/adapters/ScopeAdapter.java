@@ -86,6 +86,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import rikka.core.res.ResourcesKt;
 import rikka.widget.switchbar.SwitchBar;
@@ -104,7 +105,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
 
     private final HashSet<ApplicationWithEquals> recommendedList = new HashSet<>();
     private final HashSet<ApplicationWithEquals> checkedList = new HashSet<>();
-    private final List<AppInfo> searchList = new ArrayList<>();
+    private final ConcurrentLinkedQueue<AppInfo> searchList = new ConcurrentLinkedQueue<>();
     private final List<AppInfo> showList = new ArrayList<>();
 
     private final SwitchBar.OnCheckedChangeListener switchBarOnCheckedChangeListener = new SwitchBar.OnCheckedChangeListener() {
@@ -504,8 +505,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             List<PackageInfo> appList = AppHelper.getAppList((Boolean) msg.obj);
             checkedList.clear();
             recommendedList.clear();
-            searchList.clear();
-
+            var tmpList = new ArrayList<AppInfo>();
             checkedList.addAll(ConfigManager.getModuleScope(module.packageName));
             HashSet<ApplicationWithEquals> installedList = new HashSet<>();
             List<String> scopeList = module.getScopeList();
@@ -537,13 +537,15 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                 appInfo.application = application;
                 appInfo.packageName = info.packageName;
                 appInfo.applicationInfo = info.applicationInfo;
-                searchList.add(appInfo);
+                tmpList.add(appInfo);
             }
             checkedList.retainAll(installedList);
             if (emptyCheckedList) {
                 ConfigManager.setModuleScope(module.packageName, checkedList);
             }
-            sortApps(searchList);
+            sortApps(tmpList);
+            searchList.clear();
+            searchList.addAll(tmpList);
             synchronized (dataReadyRunnable) {
                 synchronized (this) {
                     refreshing = false;

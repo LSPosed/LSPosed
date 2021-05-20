@@ -87,6 +87,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -403,7 +404,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
     }
 
     private class ModuleAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<ModuleAdapter.ViewHolder> implements Filterable {
-        private final List<ModuleUtil.InstalledModule> searchList = new ArrayList<>();
+        private final ConcurrentLinkedQueue<ModuleUtil.InstalledModule> searchList = new ConcurrentLinkedQueue<>();
         private final List<ModuleUtil.InstalledModule> showList = new ArrayList<>();
         private final int userId;
         private final UserHandle userHandle;
@@ -578,10 +579,9 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
 
         private final Runnable reloadModules = new Runnable() {
             public void run() {
-                searchList.clear();
-                searchList.addAll(moduleUtil.getModules().values().stream().filter(module -> module.userId == userId).filter(customFilter).collect(Collectors.toList()));
+                var tmpList = moduleUtil.getModules().values().stream().filter(module -> module.userId == userId).filter(customFilter).collect(Collectors.toCollection(ArrayList::new));
                 Comparator<PackageInfo> cmp = AppHelper.getAppListComparator(0, pm);
-                searchList.sort((a, b) -> {
+                tmpList.sort((a, b) -> {
                     boolean aChecked = moduleUtil.isModuleEnabled(a.packageName);
                     boolean bChecked = moduleUtil.isModuleEnabled(b.packageName);
                     if (aChecked == bChecked) {
@@ -592,6 +592,8 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                         return 1;
                     }
                 });
+                searchList.clear();
+                searchList.addAll(tmpList);
                 String queryStr = searchView != null ? searchView.getQuery().toString() : "";
                 runOnUiThread(() -> getFilter().filter(queryStr));
             }
