@@ -58,7 +58,7 @@ val verName: String by rootProject.extra
 dependencies {
     implementation("dev.rikka.ndk:riru:${moduleMinRiruVersionName}")
     implementation("dev.rikka.ndk.thirdparty:cxx:1.1.0")
-    implementation("com.android.tools.build:apksig:4.1.3")
+    implementation("com.android.tools.build:apksig:4.2.1")
     implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("de.upb.cs.swt:axml:2.1.1")
     compileOnly(project(":hiddenapi-stubs"))
