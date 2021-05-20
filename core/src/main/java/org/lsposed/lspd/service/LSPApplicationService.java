@@ -67,13 +67,13 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
     }
 
     @Override
-    public String[] getModulesList(String processName) throws RemoteException {
+    public Map<String, String> getModulesList(String processName) throws RemoteException {
         ensureRegistered();
         int callingUid = getCallingUid();
         if (callingUid == 1000 && processName.equals("android")) {
-            return ConfigManager.getInstance().getModulesPathForSystemServer();
+            return ConfigManager.getInstance().getModulesForSystemServer();
         }
-        return ConfigManager.getInstance().getModulesPathForProcess(processName, callingUid);
+        return ConfigManager.getInstance().getModulesForProcess(processName, callingUid);
     }
 
     @Override

@@ -219,25 +219,25 @@ public final class XposedInit {
             return false;
         }
         synchronized (moduleLoadLock) {
-            // TODO: process name
-            String[] moduleList = serviceClient.getModulesList();
+            var moduleList = serviceClient.getModulesList();
             ArraySet<String> newLoadedApk = new ArraySet<>();
-            for (String apk : moduleList)
+            moduleList.forEach((name, apk) -> {
                 if (loadedModules.contains(apk)) {
                     newLoadedApk.add(apk);
                 } else {
                     loadedModules.add(apk); // temporarily add it for XSharedPreference
-                    boolean loadSuccess = loadModule(apk);
+                    boolean loadSuccess = loadModule(name, apk);
                     if (loadSuccess) {
                         newLoadedApk.add(apk);
                     }
                 }
 
-            loadedModules.clear();
-            loadedModules.addAll(newLoadedApk);
+                loadedModules.clear();
+                loadedModules.addAll(newLoadedApk);
 
-            // refresh callback according to current loaded module list
-            pruneCallbacks(loadedModules);
+                // refresh callback according to current loaded module list
+                pruneCallbacks(loadedModules);
+            });
         }
         return true;
     }
@@ -276,7 +276,7 @@ public final class XposedInit {
      * Load all so from an APK by reading <code>assets/native_init</code>.
      * It will only store the so names but not doing anything.
      */
-    private static boolean initNativeModule(ClassLoader mcl, String apk) {
+    private static boolean initNativeModule(ClassLoader mcl, String name) {
         InputStream is = mcl.getResourceAsStream("assets/native_init");
         if (is == null) return true;
         BufferedReader moduleLibraryReader = new BufferedReader(new InputStreamReader(is));
@@ -288,7 +288,7 @@ public final class XposedInit {
                 }
             }
         } catch (IOException e) {
-            Log.e(TAG, "  Failed to load native library list from " + apk, e);
+            Log.e(TAG, "  Failed to load native library list from " + name, e);
             return false;
         } finally {
             closeSilently(is);
@@ -297,7 +297,7 @@ public final class XposedInit {
 
     }
 
-    private static boolean initModule(ClassLoader mcl, String apk) {
+    private static boolean initModule(ClassLoader mcl, String name, String apk) {
         InputStream is = mcl.getResourceAsStream("assets/xposed_init");
         if (is == null) {
             return true;
@@ -346,7 +346,7 @@ public final class XposedInit {
                 }
             }
         } catch (IOException e) {
-            Log.e(TAG, "  Failed to load module from " + apk, e);
+            Log.e(TAG, "  Failed to load module " + name + " from " + apk, e);
             return false;
         } finally {
             closeSilently(is);
@@ -359,8 +359,8 @@ public final class XposedInit {
      * in <code>assets/xposed_init</code>.
      */
     @SuppressLint("PrivateApi")
-    private static boolean loadModule(String apk) {
-        Log.i(TAG, "Loading modules from " + apk);
+    private static boolean loadModule(String name, String apk) {
+        Log.i(TAG, "Loading module " + name + " from " + apk);
 
         if (!new File(apk).exists()) {
             Log.e(TAG, "  File does not exist");
@@ -378,7 +378,7 @@ public final class XposedInit {
 
         try {
             if (mcl.loadClass(XposedBridge.class.getName()).getClassLoader() != initLoader) {
-                Log.e(TAG, "  Cannot load module:");
+                Log.e(TAG, "  Cannot load module: " + name);
                 Log.e(TAG, "  The Xposed API classes are compiled into the module's APK.");
                 Log.e(TAG, "  This may cause strange issues and must be fixed by the module developer.");
                 Log.e(TAG, "  For details, see: http://api.xposed.info/using.html");
@@ -387,7 +387,7 @@ public final class XposedInit {
         } catch (ClassNotFoundException ignored) {
         }
 
-        return initNativeModule(mcl, apk) && initModule(mcl, apk);
+        return initNativeModule(mcl, apk) && initModule(mcl, name, apk);
     }
 
     public final static HashSet<String> loadedPackagesInProcess = new HashSet<>(1);
