@@ -414,8 +414,16 @@ public class ConfigManager {
                         obsoletePackages.add(app);
                         continue;
                     }
-                    for (ProcessScope processScope : processesScope)
+                    for (ProcessScope processScope : processesScope) {
                         cachedScope.computeIfAbsent(processScope, ignored -> new HashMap<>()).put(module_pkg, apk_path);
+                        if (module_pkg.equals(app.packageName)) {
+                            var appId = processScope.uid % PER_USER_RANGE;
+                            for (var user : UserService.getUsers()) {
+                                cachedScope.computeIfAbsent(new ProcessScope(processScope.processName, user * PER_USER_RANGE + appId),
+                                        ignored -> new HashMap<>()).put(module_pkg, apk_path);
+                            }
+                        }
+                    }
                 } catch (RemoteException e) {
                     Log.e(TAG, Log.getStackTraceString(e));
                 }
