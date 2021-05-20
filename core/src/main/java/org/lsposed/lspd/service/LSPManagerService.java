@@ -19,6 +19,11 @@
 
 package org.lsposed.lspd.service;
 
+import static android.content.Context.BIND_AUTO_CREATE;
+
+import android.app.IServiceConnection;
+import android.content.ComponentName;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.VersionedPackage;
@@ -31,6 +36,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import de.robv.android.xposed.XposedBridge;
+
 import org.lsposed.lspd.Application;
 import org.lsposed.lspd.BuildConfig;
 import org.lsposed.lspd.ILSPManagerService;
@@ -39,6 +45,41 @@ import org.lsposed.lspd.utils.ParceledListSlice;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 
 public class LSPManagerService extends ILSPManagerService.Stub {
+
+    public Object guard = null;
+
+    public class ManagerGuard implements IBinder.DeathRecipient {
+        private final IBinder binder;
+        private final IServiceConnection connection = new IServiceConnection.Stub() {
+            @Override
+            public void connected(ComponentName name, IBinder service, boolean dead) {
+            }
+        };
+
+        public ManagerGuard(IBinder binder) {
+            guard = this;
+            this.binder = binder;
+            try {
+                this.binder.linkToDeath(this, 0);
+                var intent = new Intent();
+                intent.setComponent(ComponentName.unflattenFromString("com.miui.securitycore/com.miui.xspace.service.XSpaceService"));
+                ActivityManagerService.bindService(intent, intent.getType(), connection, BIND_AUTO_CREATE, "android", 0);
+            } catch (Throwable e) {
+                Log.e(TAG, "manager guard", e);
+            }
+        }
+
+        @Override
+        public void binderDied() {
+            try {
+                if (binder != null) binder.unlinkToDeath(this, 0);
+                ActivityManagerService.unbindService(connection);
+            } catch (Throwable e) {
+                Log.e(TAG, "manager guard", e);
+            }
+            guard = null;
+        }
+    }
 
     LSPManagerService() {
     }
