@@ -19,9 +19,14 @@
 
 package org.lsposed.lspd.service;
 
+import static android.content.Context.BIND_AUTO_CREATE;
+
+import android.app.ActivityThread;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.Parcel;
@@ -216,6 +221,21 @@ public class BridgeService {
                     }
                 }
             });
+            try {
+                // For miui dual
+                var intent = new Intent();
+                intent.setComponent(ComponentName.unflattenFromString("com.miui.securitycore/com.miui.xspace.service.XSpaceService"));
+                ActivityThread.currentActivityThread().getSystemContext().bindService(intent, new ServiceConnection() {
+                    @Override
+                    public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+                    }
+
+                    @Override
+                    public void onServiceDisconnected(ComponentName componentName) {
+                    }
+                }, BIND_AUTO_CREATE);
+            } catch (Throwable ignored) {
+            }
         } else {
             serviceBinder.unlinkToDeath(serviceRecipient, 0);
         }
