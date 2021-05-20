@@ -113,7 +113,7 @@ public class ConfigManager {
 
     private final Handler cacheHandler;
 
-    private final ConcurrentHashMap<String, SharedMemory> moduleDexes = new ConcurrentHashMap<>();
+    private final Map<String, SharedMemory> moduleDexes = new ConcurrentHashMap<>();
 
     private long lastModuleCacheTime = 0;
     private long requestModuleCacheTime = 0;
@@ -161,9 +161,9 @@ public class ConfigManager {
             "PRIMARY KEY (mid, app_pkg_name, user_id)" +
             ");");
 
-    private final ConcurrentHashMap<ProcessScope, Set<String>> cachedScope = new ConcurrentHashMap<>();
+    private final Map<ProcessScope, Map<String, String>> cachedScope = new ConcurrentHashMap<>();
 
-    private final ConcurrentHashMap<Integer, String> cachedModule = new ConcurrentHashMap<>();
+    private final Map<Integer, String> cachedModule = new ConcurrentHashMap<>();
 
     private void updateCaches(boolean sync) {
         synchronized (this) {
@@ -206,15 +206,16 @@ public class ConfigManager {
         }
     }
 
-    public String[] getModulesPathForSystemServer() {
-        HashSet<String> modules = new HashSet<>();
-        try (Cursor cursor = db.query("scope INNER JOIN modules ON scope.mid = modules.mid", new String[]{"apk_path"}, "app_pkg_name=? AND enabled=1", new String[]{"android"}, null, null, null)) {
+    public Map<String, String> getModulesForSystemServer() {
+        HashMap<String, String> modules = new HashMap<>();
+        try (Cursor cursor = db.query("scope INNER JOIN modules ON scope.mid = modules.mid", new String[]{"module_pkg_name", "apk_path"}, "app_pkg_name=? AND enabled=1", new String[]{"android"}, null, null, null)) {
             int apkPathIdx = cursor.getColumnIndex("apk_path");
+            int pkgNameIdx = cursor.getColumnIndex("module_pkg_name");
             while (cursor.moveToNext()) {
-                modules.add(cursor.getString(apkPathIdx));
+                modules.put(cursor.getString(pkgNameIdx), cursor.getString(apkPathIdx));
             }
         }
-        return modules.toArray(new String[0]);
+        return modules;
     }
 
     private static String readText(@NonNull File file) throws IOException {
@@ -388,13 +389,14 @@ public class ConfigManager {
         if (lastScopeCacheTime >= requestScopeCacheTime) return;
         else lastScopeCacheTime = SystemClock.elapsedRealtime();
         cachedScope.clear();
-        try (Cursor cursor = db.query("scope INNER JOIN modules ON scope.mid = modules.mid", new String[]{"app_pkg_name", "user_id", "apk_path"},
+        try (Cursor cursor = db.query("scope INNER JOIN modules ON scope.mid = modules.mid", new String[]{"app_pkg_name", "module_pkg_name", "user_id", "apk_path"},
                 "enabled = 1", null, null, null, null)) {
             if (cursor == null) {
                 Log.e(TAG, "db cache failed");
                 return;
             }
             int appPkgNameIdx = cursor.getColumnIndex("app_pkg_name");
+            int modulePkgNameIdx = cursor.getColumnIndex("module_pkg_name");
             int userIdIdx = cursor.getColumnIndex("user_id");
             int apkPathIdx = cursor.getColumnIndex("apk_path");
             HashSet<Application> obsoletePackages = new HashSet<>();
@@ -405,6 +407,7 @@ public class ConfigManager {
                 // system server always loads database
                 if (app.packageName.equals("android")) continue;
                 String apk_path = cursor.getString(apkPathIdx);
+                String module_pkg = cursor.getString(modulePkgNameIdx);
                 try {
                     List<ProcessScope> processesScope = getAssociatedProcesses(app);
                     if (processesScope.isEmpty()) {
@@ -412,7 +415,7 @@ public class ConfigManager {
                         continue;
                     }
                     for (ProcessScope processScope : processesScope)
-                        cachedScope.computeIfAbsent(processScope, ignored -> new HashSet<>()).add(apk_path);
+                        cachedScope.computeIfAbsent(processScope, ignored -> new HashMap<>()).put(module_pkg, apk_path);
                 } catch (RemoteException e) {
                     Log.e(TAG, Log.getStackTraceString(e));
                 }
@@ -423,17 +426,17 @@ public class ConfigManager {
             }
         }
         Log.d(TAG, "cached Scope");
-        for (ProcessScope ps : cachedScope.keySet()) {
+        cachedScope.forEach((ps, module) -> {
             Log.d(TAG, ps.processName + "/" + ps.uid);
-            for (String apk : cachedScope.get(ps)) {
-                Log.d(TAG, "\t" + apk);
-            }
-        }
+            module.forEach((pkg_name, apk_path) -> {
+                Log.d(TAG, "\t" + pkg_name);
+            });
+        });
     }
 
     // This is called when a new process created, use the cached result
-    public String[] getModulesPathForProcess(String processName, int uid) {
-        return isManager(uid) ? new String[0] : cachedScope.getOrDefault(new ProcessScope(processName, uid), Collections.emptySet()).toArray(new String[0]);
+    public Map<String, String> getModulesForProcess(String processName, int uid) {
+        return isManager(uid) ? Collections.emptyMap() : cachedScope.getOrDefault(new ProcessScope(processName, uid), Collections.emptyMap());
     }
 
     // This is called when a new process created, use the cached result
