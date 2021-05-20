@@ -2,11 +2,17 @@ package android.app;
 
 import android.content.pm.ApplicationInfo;
 import android.content.res.CompatibilityInfo;
+import android.os.IBinder;
 
 public final class ActivityThread {
 	public static ActivityThread currentActivityThread() {
 		throw new UnsupportedOperationException("STUB");
 	}
+
+	public ApplicationThread getApplicationThread() {
+		throw new UnsupportedOperationException("STUB");
+	}
+
 
 	public static Application currentApplication() {
 		throw new UnsupportedOperationException("STUB");
@@ -26,5 +32,12 @@ public final class ActivityThread {
 
 	public ContextImpl getSystemContext() {
 		throw new UnsupportedOperationException("STUB");
+	}
+
+	private class ApplicationThread extends IApplicationThread.Stub{
+		@Override
+		public IBinder asBinder() {
+			return null;
+		}
 	}
 }
