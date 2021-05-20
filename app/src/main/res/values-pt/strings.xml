@@ -33,14 +33,16 @@
     <string name="About">Sobre</string>
     <string name="module_repo">Repositório</string>
     <string name="module_repo_summary">Repositório de Módulos (Alpha)</string>
-    <string name="about_view_source_code"><![CDATA[Veja o código fonte no %s<br/>Entre em nosso canal no %s]]></string>
+    <string name="about_view_source_code"><![CDATA[Veja o código fonte no %1$s<br/>Entre em nosso canal no %2$s]]></string>
     <string name="about_translators">Tradutor: %s</string>
 
     <string name="activated">Ativado</string>
     <string name="not_installed">Não instalado</string>
     <string name="partial_activated">Parcialmente ativado</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy não está carregado corretamente</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[<b>AVISO:</b> SEPolicy não está carregado corretamente, módulos que aplicam hooks do Framework do Sistema não funcionarão.<br>Por favor, relate isso para o desenvolvedor do <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>.]]></string>
+    <string name="selinux_policy_not_loaded"><![CDATA[<b>AVISO:</b> SEPolicy não está carregado corretamente, módulos que aplicam hooks do Framework do Sistema não funcionarão.<br/>Por favor, relate isso para o desenvolvedor do <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>.]]></string>
+    <string name="system_inject_fail_summary">A injeção do Framework do Sistema falhou</string>
+    <string name="system_inject_fail"><![CDATA[<b>WARNING:</b> Falha na injeção do Framework do Sistema<br/>Isso é raro e pode ter sido causado pelo <b>Magisk</b> ou por algum módulo do Magisk de baixa qualidade.<br/>Por favor, tente desabilitar os módulos do Magisk que não sejam o Riru e o LSPosed ou envie o log completo para os desenvolvedores.]]></string>
     <string name="info_api_version">Versão da API</string>
     <string name="info_framework_version">Versão do Framework</string>
     <string name="info_manager_version">Versão do App</string>
@@ -84,7 +86,11 @@
     <string name="module_uninstall_message">Você quer desinstalar este módulo?</string>
     <string name="module_uninstalled">Desinstalado %1$s</string>
     <string name="module_uninstall_failed">Falha ao desinstalar</string>
+    <string name="module_installed">Adicionado %1$s ao usuário %2$d</string>
+    <string name="module_install_failed">Falha ao adicinar módulo</string>
     <string name="user_title">Usuário %d</string>
+    <string name="install_to_user">Instalar ao usuário %d</string>
+    <string name="install_to_user_message">Deseja instalar %1$s ao usuário %2$d? Recomenda-se instalar manualmente, forçar a instalação via LSPosed pode causar problemas.</string>
 
     <!-- AppListActivity -->
     <string name="compile_speed">Re-otimizar</string>
@@ -152,7 +158,8 @@
     <string name="theme_color">Cor do tema</string>
     <string name="theme_color_summary">Cor que aparece com mais frequência no app</string>
     <string name="theme_color_system_accent">Cor de realce do sistema</string>
-    <string name="settings_show_hidden_icon_apps_enabled">(Android 10+) Limitar aplicativos a esconderem seus ícones do lançador</string>
+    <string name="settings_show_hidden_icon_apps_enabled">Forçar apps à exibirem ícones do lançador</string>
+    <string name="settings_show_hidden_icon_apps_enabled_summary">Após o Android 10, alguns aplicativos (especialmente alguns módulos do Xposed) não estão autorizados à ocultarem seus ícones do lançador. Desative esta opção para desligar este recurso.</string>
     <string name="settings_group_system">Sistema</string>
 
     <!-- Module Repo -->
@@ -178,4 +185,5 @@
     <string name="translators"><![CDATA[<a href="https://forum.xda-developers.com/m/vd171.4699873/#about">VD171</a>]]></string>
     <string name="copy_toast_msg">Copiado</string>
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nNada encontrado</string>
+    <string name="add_module_to_user">Adicionar módulo ao usuário</string>
 </resources>
