@@ -258,7 +258,7 @@ public class PackageService {
         return result[0];
     }
 
-    public static int installExistingPackageAsUser(String packageName, int userId) {
+    public static int installExistingPackageAsUser(String packageName, int userId) throws RemoteException {
         IPackageManager pm = getPackageManager();
         Log.d(TAG, "about to install existing package " + packageName + "/" + userId);
         if (pm == null) return INSTALL_FAILED_INTERNAL_ERROR;
@@ -267,6 +267,12 @@ public class PackageService {
         } else {
             return pm.installExistingPackageAsUser(packageName, userId, 0, INSTALL_REASON_UNKNOWN);
         }
+    }
+
+    public static android.content.pm.ParceledListSlice queryIntentActivities(android.content.Intent intent, java.lang.String resolvedType, int flags, int userId) throws RemoteException {
+        IPackageManager pm = getPackageManager();
+        if (pm == null) return null;
+        return pm.queryIntentActivities(intent, resolvedType, flags, userId);
     }
 
     @SuppressWarnings("JavaReflectionMemberAccess")

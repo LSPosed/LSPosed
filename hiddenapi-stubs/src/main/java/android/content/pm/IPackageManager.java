@@ -52,11 +52,13 @@ public interface IPackageManager extends IInterface {
     IPackageInstaller getPackageInstaller() throws RemoteException;
 
     int installExistingPackageAsUser(String packageName, int userId, int installFlags,
-                                     int installReason);
+                                     int installReason) throws RemoteException;;
 
     @RequiresApi(29)
     int installExistingPackageAsUser(String packageName, int userId, int installFlags,
-                                     int installReason, List<String> whiteListedPermissions);
+                                     int installReason, List<String> whiteListedPermissions) throws RemoteException;;
+
+    android.content.pm.ParceledListSlice queryIntentActivities(android.content.Intent intent, java.lang.String resolvedType, int flags, int userId) throws RemoteException;
 
     abstract class Stub extends Binder implements IPackageManager {
 
