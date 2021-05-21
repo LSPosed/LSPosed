@@ -58,6 +58,13 @@ if [ ! -d $MAGISK_CURRENT_RIRU_MODULE_PATH ]; then
   abort "*********************************************************"
 fi
 
+if [ -f "$MAGISK_CURRENT_RIRU_MODULE_PATH/disable" ] || [ -f "$MAGISK_CURRENT_RIRU_MODULE_PATH/remove" ]; then
+  ui_print "*********************************************************"
+  ui_print "! Riru is not enabled or will be removed"
+  ui_print "! Please enable Riru in Magisk first"
+  abort "*********************************************************"
+fi
+
 if [ -f $MAGISK_CURRENT_RIRU_MODULE_PATH/util_functions.sh ]; then
   ui_print "- Load $MAGISK_CURRENT_RIRU_MODULE_PATH/util_functions.sh"
   # shellcheck disable=SC1090
