@@ -291,26 +291,25 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
 
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
-        ModuleUtil.InstalledModule module = ModuleUtil.getInstance().getModule(selectedModule.packageName, selectedModule.userId);
-        if (module == null) {
+        if (selectedModule == null) {
             return false;
         }
         int itemId = item.getItemId();
         if (itemId == R.id.menu_launch) {
-            String packageName = module.packageName;
+            String packageName = selectedModule.packageName;
             if (packageName == null) {
                 return false;
             }
-            Intent intent = AppHelper.getSettingsIntent(packageName, module.userId);
+            Intent intent = AppHelper.getSettingsIntent(packageName, selectedModule.userId);
             if (intent != null) {
-                ConfigManager.startActivityAsUserWithFeature(intent, module.userId);
+                ConfigManager.startActivityAsUserWithFeature(intent, selectedModule.userId);
             } else {
                 Snackbar.make(binding.snackbar, R.string.module_no_ui, Snackbar.LENGTH_LONG).show();
             }
             return true;
         } else if (itemId == R.id.menu_other_app) {
             var intent = new Intent(Intent.ACTION_SHOW_APP_INFO);
-            intent.putExtra(Intent.EXTRA_PACKAGE_NAME, module.packageName);
+            intent.putExtra(Intent.EXTRA_PACKAGE_NAME, selectedModule.packageName);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             try {
                 startActivity(intent);
@@ -319,17 +318,17 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             }
             return true;
         } else if (itemId == R.id.menu_app_info) {
-            ConfigManager.startActivityAsUserWithFeature(new Intent(ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", module.packageName, null)), module.userId);
+            ConfigManager.startActivityAsUserWithFeature(new Intent(ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", selectedModule.packageName, null)), selectedModule.userId);
             return true;
         } else if (itemId == R.id.menu_uninstall) {
             new AlertDialog.Builder(this)
-                    .setTitle(module.getAppName())
+                    .setTitle(selectedModule.getAppName())
                     .setMessage(R.string.module_uninstall_message)
                     .setPositiveButton(android.R.string.ok, (dialog, which) ->
                             workHandler.post(() -> {
-                                boolean success = ConfigManager.uninstallPackage(module.packageName, module.userId);
+                                boolean success = ConfigManager.uninstallPackage(selectedModule.packageName, selectedModule.userId);
                                 runOnUiThread(() -> {
-                                    String text = success ? getString(R.string.module_uninstalled, module.getAppName()) : getString(R.string.module_uninstall_failed);
+                                    String text = success ? getString(R.string.module_uninstalled, selectedModule.getAppName()) : getString(R.string.module_uninstall_failed);
                                     if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
                                         Snackbar.make(binding.snackbar, text, Snackbar.LENGTH_SHORT).show();
                                     } else {
@@ -337,7 +336,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                                     }
                                 });
                                 if (success)
-                                    moduleUtil.reloadSingleModule(module.packageName, module.userId);
+                                    moduleUtil.reloadSingleModule(selectedModule.packageName, selectedModule.userId);
                             }))
                     .setNegativeButton(android.R.string.cancel, null)
                     .show();
@@ -345,12 +344,12 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         } else if (itemId == R.id.menu_repo) {
             Intent intent = new Intent();
             intent.setClass(this, RepoItemActivity.class);
-            intent.putExtra("modulePackageName", module.packageName);
-            intent.putExtra("moduleName", module.getAppName());
+            intent.putExtra("modulePackageName", selectedModule.packageName);
+            intent.putExtra("moduleName", selectedModule.getAppName());
             startActivity(intent);
             return true;
         } else if (item.getGroupId() == 1) {
-            installModuleToUser(module, itemId);
+            installModuleToUser(selectedModule, itemId);
             return true;
         }
         return super.onContextItemSelected(item);
@@ -488,31 +487,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             }
             holder.appDescription.setText(sb);
 
-            holder.itemView.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
-                getMenuInflater().inflate(R.menu.context_menu_modules, menu);
-                menu.setHeaderTitle(item.getAppName());
-                Intent intent = AppHelper.getSettingsIntent(item.packageName, item.userId);
-                if (intent == null) {
-                    menu.removeItem(R.id.menu_launch);
-                }
-                if (RepoLoader.getInstance().getOnlineModule(item.packageName) == null) {
-                    menu.removeItem(R.id.menu_repo);
-                }
-                if (userHandle == null) {
-                    menu.removeItem(R.id.menu_app_info);
-                }
-                if (item.userId == 0) {
-                    int[] users = ConfigManager.getUsers();
-                    if (users != null) {
-                        for (int profile : users) {
-                            if (ModuleUtil.getInstance().getModule(item.packageName, profile) == null) {
-                                menu.add(1, profile, 0, getString(R.string.install_to_user, profile));
-                            }
-                        }
-                    }
-                }
-            });
-
             if (!isPick) {
                 holder.root.setAlpha(moduleUtil.isModuleEnabled(item.packageName) ? 1.0f : .5f);
                 holder.itemView.setOnClickListener(v -> {
@@ -521,10 +495,33 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                     intent.putExtra("moduleUserId", item.userId);
                     startActivity(intent);
                 });
-
                 holder.itemView.setOnLongClickListener(v -> {
                     selectedModule = item;
                     return false;
+                });
+                holder.itemView.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
+                    getMenuInflater().inflate(R.menu.context_menu_modules, menu);
+                    menu.setHeaderTitle(item.getAppName());
+                    Intent intent = AppHelper.getSettingsIntent(item.packageName, item.userId);
+                    if (intent == null) {
+                        menu.removeItem(R.id.menu_launch);
+                    }
+                    if (RepoLoader.getInstance().getOnlineModule(item.packageName) == null) {
+                        menu.removeItem(R.id.menu_repo);
+                    }
+                    if (userHandle == null) {
+                        menu.removeItem(R.id.menu_app_info);
+                    }
+                    if (item.userId == 0) {
+                        int[] users = ConfigManager.getUsers();
+                        if (users != null) {
+                            for (int profile : users) {
+                                if (ModuleUtil.getInstance().getModule(item.packageName, profile) == null) {
+                                    menu.add(1, profile, 0, getString(R.string.install_to_user, profile));
+                                }
+                            }
+                        }
+                    }
                 });
                 holder.appVersion.setVisibility(View.VISIBLE);
                 holder.appVersion.setText(item.versionName);
