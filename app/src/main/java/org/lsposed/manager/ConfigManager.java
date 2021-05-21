@@ -19,8 +19,10 @@
 
 package org.lsposed.manager;
 
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.util.Log;
@@ -261,5 +263,24 @@ public class ConfigManager {
         } catch (Throwable e) {
             return false;
         }
+    }
+
+    public static int startActivityAsUserWithFeature(Intent intent, int userId) {
+        try {
+            return LSPManagerServiceClient.startActivityAsUserWithFeature(intent, userId);
+        } catch (Throwable e) {
+            Log.e(App.TAG, Log.getStackTraceString(e));
+            return -1;
+        }
+    }
+
+    public static List<ResolveInfo> queryIntentActivitiesAsUser(Intent intent, int flags, int userId) {
+        List<ResolveInfo> list = new ArrayList<>();
+        try {
+            list.addAll(LSPManagerServiceClient.queryIntentActivitiesAsUser(intent, flags, userId).getList());
+        } catch (Throwable e) {
+            Log.e(App.TAG, Log.getStackTraceString(e));
+        }
+        return list;
     }
 }

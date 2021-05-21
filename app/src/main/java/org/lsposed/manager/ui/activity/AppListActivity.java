@@ -23,7 +23,6 @@ package org.lsposed.manager.ui.activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.UserHandle;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -65,7 +64,6 @@ public class AppListActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         String modulePackageName = getIntent().getStringExtra("modulePackageName");
         int moduleUserId = getIntent().getIntExtra("moduleUserId", -1);
-        UserHandle userHandle = getIntent().getParcelableExtra("userHandle");
         binding = ActivityAppListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setAppBar(binding.appBar, binding.toolbar);
@@ -86,7 +84,7 @@ public class AppListActivity extends BaseActivity {
             }
             bar.setSubtitle(module.packageName);
         }
-        scopeAdapter = new ScopeAdapter(this, module, userHandle);
+        scopeAdapter = new ScopeAdapter(this, module);
         scopeAdapter.setHasStableIds(true);
         binding.recyclerView.setAdapter(scopeAdapter);
         binding.recyclerView.setHasFixedSize(true);

@@ -65,7 +65,6 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.checkbox.MaterialCheckBox;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -108,7 +107,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
     private PackageManager pm;
     private ModuleUtil moduleUtil;
     private ModuleUtil.InstalledModule selectedModule;
-    private UserHandle selectedModuleUser;
     private UserManager userManager;
 
     @Override
@@ -305,7 +303,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             }
             Intent intent = AppHelper.getSettingsIntent(packageName, module.userId, pm);
             if (intent != null) {
-                AppHelper.startActivityAsUser(this, intent, selectedModuleUser);
+                ConfigManager.startActivityAsUserWithFeature(intent, module.userId);
             } else {
                 Snackbar.make(binding.snackbar, R.string.module_no_ui, Snackbar.LENGTH_LONG).show();
             }
@@ -321,7 +319,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             }
             return true;
         } else if (itemId == R.id.menu_app_info) {
-            AppHelper.startActivityAsUser(this, (new Intent(ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", module.packageName, null))), selectedModuleUser);
+            ConfigManager.startActivityAsUserWithFeature(new Intent(ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", module.packageName, null)), module.userId);
             return true;
         } else if (itemId == R.id.menu_uninstall) {
             new AlertDialog.Builder(this)
@@ -504,9 +502,12 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                     menu.removeItem(R.id.menu_app_info);
                 }
                 if (item.userId == 0) {
-                    for (int profile : ConfigManager.getUsers()) {
-                        if (ModuleUtil.getInstance().getModule(item.packageName, profile) == null) {
-                            menu.add(1, profile, 0, getString(R.string.install_to_user, profile));
+                    int[] users = ConfigManager.getUsers();
+                    if (users != null) {
+                        for (int profile : users) {
+                            if (ModuleUtil.getInstance().getModule(item.packageName, profile) == null) {
+                                menu.add(1, profile, 0, getString(R.string.install_to_user, profile));
+                            }
                         }
                     }
                 }
@@ -518,13 +519,11 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                     Intent intent = new Intent(ModulesActivity.this, AppListActivity.class);
                     intent.putExtra("modulePackageName", item.packageName);
                     intent.putExtra("moduleUserId", item.userId);
-                    intent.putExtra("userHandle", userHandle);
                     startActivity(intent);
                 });
 
                 holder.itemView.setOnLongClickListener(v -> {
                     selectedModule = item;
-                    selectedModuleUser = userHandle;
                     return false;
                 });
                 holder.appVersion.setVisibility(View.VISIBLE);
