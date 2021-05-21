@@ -60,6 +60,7 @@
             android:name=".ui.activity.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
+            android:showForAllUsers="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
