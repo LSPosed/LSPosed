@@ -49,6 +49,7 @@ extract "$ZIPFILE" 'riru.sh' "$TMPDIR"
 . "$TMPDIR/riru.sh"
 
 # Functions from riru.sh
+check_riru_installed
 check_riru_version
 enforce_install_from_magisk_app
 

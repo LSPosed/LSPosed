@@ -19,6 +19,15 @@ else
   MAGISK_CURRENT_RIRU_MODULE_PATH=/sbin/.magisk/modules/riru-core
 fi
 
+check_riru_installed() {
+  if [ ! -d $MAGISK_CURRENT_RIRU_MODULE_PATH ]; then
+    ui_print "*********************************************************"
+    ui_print "! Riru is not installed"
+    ui_print "! Please install Riru from Magisk Manager or https://github.com/RikkaApps/Riru/releases"
+    abort "*********************************************************"
+  fi
+}
+
 # This function will be used when util_functions.sh not exists
 check_riru_version() {
   if [ ! -f "$MAGISK_CURRENT_RIRU_MODULE_PATH/api_version" ] && [ ! -f "/data/adb/riru/api_version" ] && [ ! -f "/data/adb/riru/api_version.new" ]; then
