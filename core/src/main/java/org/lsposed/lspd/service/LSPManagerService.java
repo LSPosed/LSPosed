@@ -230,6 +230,14 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     @Override
     public int startActivityAsUserWithFeature(Intent intent, int userId) throws RemoteException {
+        if (!intent.getBooleanExtra("lsp_no_switch_to_user", false)) {
+            intent.removeExtra("lsp_no_switch_to_user");
+            var currentUser = ActivityManagerService.getCurrentUser();
+            if (currentUser == null) return -1;
+            var parent = UserService.getProfileParent(userId);
+            if (parent < 0) return -1;
+            if (currentUser.id != parent && !ActivityManagerService.switchUser(parent)) return -1;
+        }
         return ActivityManagerService.startActivityAsUserWithFeature("android", null, intent, intent.getType(), null, null, 0, 0, null, null, userId);
     }
 

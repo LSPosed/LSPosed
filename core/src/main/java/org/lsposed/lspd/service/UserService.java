@@ -78,4 +78,10 @@ public class UserService {
         }
         return userArray;
     }
+
+    public static int getProfileParent(int userId) throws RemoteException {
+        IUserManager um = getUserManager();
+        if (um == null) return -1;
+        return um.getProfileParentId(userId);
+    }
 }

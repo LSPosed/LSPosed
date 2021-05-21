@@ -22,6 +22,7 @@ package android.app;
 import android.content.IIntentReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.UserInfo;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -70,6 +71,8 @@ public interface IActivityManager extends IInterface {
     Intent registerReceiver(IApplicationThread caller, String callerPackage,
                             IIntentReceiver receiver, IntentFilter filter,
                             String requiredPermission, int userId, int flags);
+
+    @RequiresApi(30)
     Intent registerReceiverWithFeature(IApplicationThread caller, String callerPackage,
                                        String callingFeatureId, IIntentReceiver receiver, IntentFilter filter,
                                        String requiredPermission, int userId, int flags) throws RemoteException;
@@ -79,6 +82,10 @@ public interface IActivityManager extends IInterface {
                     String callingPackage, int userId) throws RemoteException;
 
     boolean unbindService(IServiceConnection connection) throws RemoteException;
+
+    boolean switchUser(int userid) throws RemoteException;
+
+    UserInfo getCurrentUser() throws RemoteException;
 
     abstract class Stub extends Binder implements IActivityManager {
 
