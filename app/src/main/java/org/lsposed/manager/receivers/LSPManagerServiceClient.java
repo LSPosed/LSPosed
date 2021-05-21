@@ -19,7 +19,9 @@
 
 package org.lsposed.manager.receivers;
 
+import android.content.Intent;
 import android.content.pm.PackageInfo;
+import android.content.pm.ResolveInfo;
 import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
@@ -167,5 +169,15 @@ public class LSPManagerServiceClient {
     public static boolean systemServerRequested() throws RemoteException, NullPointerException {
         ensureService();
         return service.systemServerRequested();
+    }
+
+    public static int startActivityAsUserWithFeature(Intent intent, int userId) throws RemoteException, NullPointerException {
+        ensureService();
+        return service.startActivityAsUserWithFeature(intent, userId);
+    }
+
+    public static ParceledListSlice<ResolveInfo> queryIntentActivitiesAsUser(Intent intent, int flags, int userId) throws RemoteException, NullPointerException {
+        ensureService();
+        return service.queryIntentActivitiesAsUser(intent, flags, userId);
     }
 }

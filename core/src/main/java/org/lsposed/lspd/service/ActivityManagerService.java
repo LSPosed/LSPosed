@@ -119,16 +119,16 @@ public class ActivityManagerService {
         return am.unbindService(connection);
     }
 
-    public static int startActivityAsUserWithFeature(IApplicationThread caller, String callingPackage,
+    public static int startActivityAsUserWithFeature(String callingPackage,
                                    String callingFeatureId, Intent intent, String resolvedType,
                                    IBinder resultTo, String resultWho, int requestCode, int flags,
                                    ProfilerInfo profilerInfo, Bundle options, int userId) throws RemoteException {
         IActivityManager am = getActivityManager();
         if (am == null || thread == null) return -1;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            return am.startActivityAsUserWithFeature(caller, callingPackage, callingFeatureId, intent, resolvedType, resultTo, resultWho, requestCode, flags, profilerInfo, options, userId);
+            return am.startActivityAsUserWithFeature(thread, callingPackage, callingFeatureId, intent, resolvedType, resultTo, resultWho, requestCode, flags, profilerInfo, options, userId);
         } else {
-            return am.startActivityAsUser(caller, callingPackage, intent, resolvedType, resultTo, resultWho, requestCode, flags, profilerInfo, options, userId);
+            return am.startActivityAsUser(thread, callingPackage, intent, resolvedType, resultTo, resultWho, requestCode, flags, profilerInfo, options, userId);
         }
     }
 

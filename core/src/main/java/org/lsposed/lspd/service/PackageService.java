@@ -33,6 +33,7 @@ import android.content.pm.IPackageManager;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageInstaller;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
 import android.content.pm.VersionedPackage;
 import android.os.Build;
@@ -106,7 +107,8 @@ public class PackageService {
         return pm.getPackageInfo(packageName, flags, userId);
     }
 
-    public static @NonNull Map<Integer, PackageInfo> getPackageInfoFromAllUsers(String packageName, int flags) throws RemoteException {
+    public static @NonNull
+    Map<Integer, PackageInfo> getPackageInfoFromAllUsers(String packageName, int flags) throws RemoteException {
         IPackageManager pm = getPackageManager();
         Map<Integer, PackageInfo> res = new HashMap<>();
         if (pm == null) return res;
@@ -269,10 +271,11 @@ public class PackageService {
         }
     }
 
-    public static android.content.pm.ParceledListSlice queryIntentActivities(android.content.Intent intent, java.lang.String resolvedType, int flags, int userId) throws RemoteException {
+    public static ParceledListSlice<ResolveInfo> queryIntentActivities(android.content.Intent intent, java.lang.String resolvedType, int flags, int userId) throws RemoteException {
         IPackageManager pm = getPackageManager();
         if (pm == null) return null;
-        return pm.queryIntentActivities(intent, resolvedType, flags, userId);
+        //noinspection unchecked
+        return new ParceledListSlice<ResolveInfo>(pm.queryIntentActivities(intent, resolvedType, flags, userId).getList());
     }
 
     @SuppressWarnings("JavaReflectionMemberAccess")

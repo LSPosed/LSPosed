@@ -69,6 +69,8 @@
         android:src="@drawable/ic_baseline_add_24"
         android:layout_margin="16dp"
         android:visibility="invisible"
+        android:outlineAmbientShadowColor="?colorAccent"
+        android:outlineSpotShadowColor="?colorAccent"
         app:layout_fitsSystemWindowsInsets="bottom"
         android:contentDescription="@string/add_module_to_user" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

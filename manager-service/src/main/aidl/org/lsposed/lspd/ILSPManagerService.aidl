@@ -52,4 +52,8 @@ interface ILSPManagerService {
     int installExistingPackageAsUser(String packageName, int userId) = 28;
 
     boolean systemServerRequested() = 29;
+
+    int startActivityAsUserWithFeature(in Intent intent,  int userId) = 30;
+
+    ParceledListSlice<ResolveInfo> queryIntentActivitiesAsUser(in Intent intent, int flags,  int userId) = 31;
 }

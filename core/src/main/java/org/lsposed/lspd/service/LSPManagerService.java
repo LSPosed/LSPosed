@@ -26,6 +26,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.pm.VersionedPackage;
 import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
@@ -225,5 +226,15 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     @Override
     public boolean systemServerRequested() throws RemoteException {
         return ServiceManager.systemServerRequested();
+    }
+
+    @Override
+    public int startActivityAsUserWithFeature(Intent intent, int userId) throws RemoteException {
+        return ActivityManagerService.startActivityAsUserWithFeature("android", null, intent, intent.getType(), null, null, 0, 0, null, null, userId);
+    }
+
+    @Override
+    public ParceledListSlice<ResolveInfo> queryIntentActivitiesAsUser(Intent intent, int flags, int userId) throws RemoteException {
+        return PackageService.queryIntentActivities(intent, intent.getType(), flags, userId);
     }
 }
