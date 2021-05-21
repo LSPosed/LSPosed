@@ -22,6 +22,7 @@ package org.lsposed.lspd.service;
 import android.app.IActivityManager;
 import android.app.IApplicationThread;
 import android.app.IServiceConnection;
+import android.app.ProfilerInfo;
 import android.content.IIntentReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -105,17 +106,30 @@ public class ActivityManagerService {
 
     public static int bindService(Intent service,
                                   String resolvedType, IServiceConnection connection, int flags,
-                                  String callingPackage, int userId) {
+                                  String callingPackage, int userId) throws RemoteException {
 
         IActivityManager am = getActivityManager();
         if (am == null || thread == null) return -1;
         return am.bindService(thread, token, service, resolvedType, connection, flags, callingPackage, userId);
     }
 
-    public static boolean unbindService(IServiceConnection connection) {
+    public static boolean unbindService(IServiceConnection connection) throws RemoteException {
         IActivityManager am = getActivityManager();
         if (am == null) return false;
         return am.unbindService(connection);
+    }
+
+    public static int startActivityAsUserWithFeature(IApplicationThread caller, String callingPackage,
+                                   String callingFeatureId, Intent intent, String resolvedType,
+                                   IBinder resultTo, String resultWho, int requestCode, int flags,
+                                   ProfilerInfo profilerInfo, Bundle options, int userId) throws RemoteException {
+        IActivityManager am = getActivityManager();
+        if (am == null || thread == null) return -1;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            return am.startActivityAsUserWithFeature(caller, callingPackage, callingFeatureId, intent, resolvedType, resultTo, resultWho, requestCode, flags, profilerInfo, options, userId);
+        } else {
+            return am.startActivityAsUser(caller, callingPackage, intent, resolvedType, resultTo, resultWho, requestCode, flags, profilerInfo, options, userId);
+        }
     }
 
     public static void onSystemServerContext(IApplicationThread thread, IBinder token) {
