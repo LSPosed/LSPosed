@@ -26,6 +26,7 @@ import android.app.ProfilerInfo;
 import android.content.IIntentReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.UserInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -120,9 +121,9 @@ public class ActivityManagerService {
     }
 
     public static int startActivityAsUserWithFeature(String callingPackage,
-                                   String callingFeatureId, Intent intent, String resolvedType,
-                                   IBinder resultTo, String resultWho, int requestCode, int flags,
-                                   ProfilerInfo profilerInfo, Bundle options, int userId) throws RemoteException {
+                                                     String callingFeatureId, Intent intent, String resolvedType,
+                                                     IBinder resultTo, String resultWho, int requestCode, int flags,
+                                                     ProfilerInfo profilerInfo, Bundle options, int userId) throws RemoteException {
         IActivityManager am = getActivityManager();
         if (am == null || thread == null) return -1;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -135,5 +136,17 @@ public class ActivityManagerService {
     public static void onSystemServerContext(IApplicationThread thread, IBinder token) {
         ActivityManagerService.thread = thread;
         ActivityManagerService.token = token;
+    }
+
+    public static boolean switchUser(int userid) throws RemoteException {
+        IActivityManager am = getActivityManager();
+        if (am == null) return false;
+        return am.switchUser(userid);
+    }
+
+    public static UserInfo getCurrentUser() throws RemoteException {
+        IActivityManager am = getActivityManager();
+        if (am == null) return null;
+        return am.getCurrentUser();
     }
 }

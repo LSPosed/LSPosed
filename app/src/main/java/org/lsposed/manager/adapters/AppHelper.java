@@ -38,6 +38,7 @@ import java.util.List;
 public class AppHelper {
 
     public static final String SETTINGS_CATEGORY = "de.robv.android.xposed.category.MODULE_SETTINGS";
+    public static final int FLAG_SHOW_FOR_ALL_USERS = 0x0400;
     private static List<PackageInfo> appList;
 
     public static Intent getSettingsIntent(String packageName, int userId) {
@@ -55,6 +56,7 @@ public class AppHelper {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setClassName(ris.get(0).activityInfo.packageName,
                 ris.get(0).activityInfo.name);
+        intent.putExtra("lsp_no_switch_to_user", (ris.get(0).activityInfo.flags & FLAG_SHOW_FOR_ALL_USERS) != 0);
         return intent;
     }
 
@@ -79,6 +81,7 @@ public class AppHelper {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setClassName(ris.get(0).activityInfo.packageName,
                 ris.get(0).activityInfo.name);
+        intent.putExtra("lsp_no_switch_to_user", (ris.get(0).activityInfo.flags & FLAG_SHOW_FOR_ALL_USERS) != 0);
         return intent;
     }
 
