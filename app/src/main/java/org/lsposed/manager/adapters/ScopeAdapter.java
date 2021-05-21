@@ -255,7 +255,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             item.setChecked(!item.isChecked());
             preferences.edit().putBoolean("filter_modules", item.isChecked()).apply();
         } else if (itemId == R.id.menu_launch) {
-            Intent launchIntent = AppHelper.getSettingsIntent(module.packageName, module.userId, pm);
+            Intent launchIntent = AppHelper.getSettingsIntent(module.packageName, module.userId);
             if (launchIntent != null) {
                 ConfigManager.startActivityAsUserWithFeature(launchIntent, module.userId);
             } else {
@@ -288,7 +288,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         }
         int itemId = item.getItemId();
         if (itemId == R.id.menu_launch) {
-            Intent launchIntent = pm.getLaunchIntentForPackage(info.packageName);
+            Intent launchIntent = AppHelper.getLaunchIntentForPackage(info.packageName, info.uid / 100000);
             if (launchIntent != null) {
                 ConfigManager.startActivityAsUserWithFeature(launchIntent, module.userId);
             }
@@ -324,7 +324,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
 
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.menu_app_list, menu);
-        Intent intent = AppHelper.getSettingsIntent(module.packageName, module.userId, pm);
+        Intent intent = AppHelper.getSettingsIntent(module.packageName, module.userId);
         if (intent == null) {
             menu.removeItem(R.id.menu_launch);
         }

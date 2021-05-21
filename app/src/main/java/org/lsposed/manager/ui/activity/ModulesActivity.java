@@ -301,7 +301,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             if (packageName == null) {
                 return false;
             }
-            Intent intent = AppHelper.getSettingsIntent(packageName, module.userId, pm);
+            Intent intent = AppHelper.getSettingsIntent(packageName, module.userId);
             if (intent != null) {
                 ConfigManager.startActivityAsUserWithFeature(intent, module.userId);
             } else {
@@ -491,7 +491,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             holder.itemView.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
                 getMenuInflater().inflate(R.menu.context_menu_modules, menu);
                 menu.setHeaderTitle(item.getAppName());
-                Intent intent = AppHelper.getSettingsIntent(item.packageName, item.userId, pm);
+                Intent intent = AppHelper.getSettingsIntent(item.packageName, item.userId);
                 if (intent == null) {
                     menu.removeItem(R.id.menu_launch);
                 }

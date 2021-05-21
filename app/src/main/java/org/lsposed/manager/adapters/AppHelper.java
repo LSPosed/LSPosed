@@ -40,7 +40,7 @@ public class AppHelper {
     public static final String SETTINGS_CATEGORY = "de.robv.android.xposed.category.MODULE_SETTINGS";
     private static List<PackageInfo> appList;
 
-    public static Intent getSettingsIntent(String packageName, int userId, PackageManager packageManager) {
+    public static Intent getSettingsIntent(String packageName, int userId) {
         Intent intentToResolve = new Intent(Intent.ACTION_MAIN);
         intentToResolve.addCategory(SETTINGS_CATEGORY);
         intentToResolve.setPackage(packageName);
@@ -79,23 +79,6 @@ public class AppHelper {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setClassName(ris.get(0).activityInfo.packageName,
                 ris.get(0).activityInfo.name);
-        return intent;
-    }
-
-    public static Intent getIntentForCategory(String packageName, int userId, PackageManager packageManager, String category) {
-        Intent intentToResolve = new Intent(Intent.ACTION_MAIN);
-        intentToResolve.addCategory(category);
-        intentToResolve.setPackage(packageName);
-
-        List<ResolveInfo> ris = ConfigManager.queryIntentActivitiesAsUser(intentToResolve, 0, userId);
-
-        if (ris.size() <= 0) {
-            return null;
-        }
-
-        Intent intent = new Intent(intentToResolve);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.setClassName(ris.get(0).activityInfo.packageName, ris.get(0).activityInfo.name);
         return intent;
     }
 
