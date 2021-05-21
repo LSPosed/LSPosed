@@ -19,9 +19,13 @@
 
 package org.lsposed.lspd.service;
 
+import static org.lsposed.lspd.service.ServiceManager.TAG;
+
 import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
+import android.os.SystemProperties;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 
@@ -29,13 +33,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static org.lsposed.lspd.service.ServiceManager.TAG;
-
 public class LSPApplicationService extends ILSPApplicationService.Stub {
     // <uid, pid>
     private final static Set<Pair<Integer, Integer>> cache = ConcurrentHashMap.newKeySet();
     private final static Map<Integer, IBinder> handles = new ConcurrentHashMap<>();
     private final static Set<IBinder.DeathRecipient> recipients = ConcurrentHashMap.newKeySet();
+    private final static boolean isMIUI = !TextUtils.isEmpty(SystemProperties.get("ro.miui.ui.version.name"));
 
     public boolean registerHeartBeat(int uid, int pid, IBinder handle) {
         try {
@@ -103,7 +106,9 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
         ensureRegistered();
         if (ConfigManager.getInstance().isManager(getCallingUid())) {
             var service = ServiceManager.getManagerService();
-            service.new ManagerGuard(handles.get(getCallingPid()));
+            if (isMIUI) {
+                service.new ManagerGuard(handles.get(getCallingPid()));
+            }
             return service;
         }
         return null;
