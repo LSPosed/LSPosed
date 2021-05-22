@@ -53,7 +53,6 @@ public final class ModuleUtil {
 
     private ModuleUtil() {
         pm = App.getInstance().getPackageManager();
-        enabledModules = new HashSet<>(Arrays.asList(ConfigManager.getEnabledModules()));
     }
 
     public static synchronized ModuleUtil getInstance() {
@@ -93,8 +92,10 @@ public final class ModuleUtil {
             }
         }
 
-
         installedModules = modules;
+
+        enabledModules = new HashSet<>(Arrays.asList(ConfigManager.getEnabledModules()));
+
         synchronized (this) {
             isReloading = false;
         }
