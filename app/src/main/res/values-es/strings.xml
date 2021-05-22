@@ -87,7 +87,7 @@
     <string name="user_title">Usuario %d</string>
     <string name="install_to_user">Instalar al usuario %d</string>
     <string name="install_to_user_message">¿Quieres instalar %1$s al usuario %2$d? Se recomienda que lo instales manualmente; forzar la instalación a través de LSPosed puede causar problemas.</string>
-    <string name="module_installed">%1$s instalado</string>
+    <string name="module_installed">%1$s instalado %2$d</string>
     <string name="module_install_failed">Fallo en la instalación</string>
 
     <!-- AppListActivity -->

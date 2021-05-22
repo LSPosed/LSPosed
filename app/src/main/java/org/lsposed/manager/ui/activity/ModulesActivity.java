@@ -33,7 +33,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.os.UserManager;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
@@ -105,7 +104,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
     private PackageManager pm;
     private ModuleUtil moduleUtil;
     private ModuleUtil.InstalledModule selectedModule;
-    private UserManager userManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -115,7 +113,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         moduleUtil = ModuleUtil.getInstance();
         pm = getPackageManager();
         moduleUtil.addListener(this);
-        userManager = getSystemService(UserManager.class);
         super.onCreate(savedInstanceState);
         binding = ActivityModuleDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -165,17 +162,13 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         mSearchListener = new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                adapters.forEach(adapter -> {
-                    adapter.getFilter().filter(query);
-                });
+                adapters.forEach(adapter -> adapter.getFilter().filter(query));
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                adapters.forEach(adapter -> {
-                    adapter.getFilter().filter(newText);
-                });
+                adapters.forEach(adapter -> adapter.getFilter().filter(newText));
                 return false;
             }
         };
@@ -253,9 +246,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.menu_refresh) {
-            adapters.forEach(adapter -> {
-                adapter.refresh(true);
-            });
+            adapters.forEach(adapter -> adapter.refresh(true));
         }
         return super.onOptionsItemSelected(item);
     }
@@ -547,9 +538,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         }
 
         public List<ModuleUtil.InstalledModule> snapshot() {
-            List<ModuleUtil.InstalledModule> list = new ArrayList<>();
-            list.addAll(searchList);
-            return list;
+            return new ArrayList<>(searchList);
         }
 
         public void refresh() {
