@@ -38,9 +38,6 @@ import de.robv.android.xposed.XposedHelpers;
 
 public class InstallerVerifier {
     public static boolean verifyInstallerSignature(ApplicationInfo appInfo) {
-        if ((appInfo.flags & ApplicationInfo.FLAG_TEST_ONLY) != 0) {
-            return true;
-        }
         ApkVerifier verifier = new ApkVerifier.Builder(new File(appInfo.sourceDir))
                 .setMinCheckedPlatformVersion(26)
                 .build();
