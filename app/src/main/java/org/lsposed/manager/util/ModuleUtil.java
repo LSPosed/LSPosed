@@ -47,7 +47,7 @@ public final class ModuleUtil {
     private static ModuleUtil instance = null;
     private final PackageManager pm;
     private final List<ModuleListener> listeners = new CopyOnWriteArrayList<>();
-    private final HashSet<String> enabledModules;
+    private HashSet<String> enabledModules;
     private Map<Pair<String, Integer>, InstalledModule> installedModules;
     private boolean isReloading = false;
 
