@@ -522,10 +522,10 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                     if (emptyCheckedList) {
                         checkedList.add(application);
                     }
-                }
-
-                if (shouldHideApp(info, application)) {
-                    continue;
+                } else {
+                    if (shouldHideApp(info, application)) {
+                        continue;
+                    }
                 }
 
                 AppInfo appInfo = new AppInfo();
