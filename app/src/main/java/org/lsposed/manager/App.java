@@ -50,7 +50,8 @@ public class App extends Application {
 
     static {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            HiddenApiBypass.setHiddenApiExemptions("L");
+            // TODO: set specific class name instead of `L`
+            HiddenApiBypass.addHiddenApiExemptions("L");
         }
     }
 
