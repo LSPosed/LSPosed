@@ -47,13 +47,12 @@ public final class ModuleUtil {
     private static ModuleUtil instance = null;
     private final PackageManager pm;
     private final List<ModuleListener> listeners = new CopyOnWriteArrayList<>();
-    private final HashSet<String> enabledModules;
+    private HashSet<String> enabledModules;
     private Map<Pair<String, Integer>, InstalledModule> installedModules;
     private boolean isReloading = false;
 
     private ModuleUtil() {
         pm = App.getInstance().getPackageManager();
-        enabledModules = new HashSet<>(Arrays.asList(ConfigManager.getEnabledModules()));
     }
 
     public static synchronized ModuleUtil getInstance() {
@@ -93,8 +92,10 @@ public final class ModuleUtil {
             }
         }
 
-
         installedModules = modules;
+
+        enabledModules = new HashSet<>(Arrays.asList(ConfigManager.getEnabledModules()));
+
         synchronized (this) {
             isReloading = false;
         }
