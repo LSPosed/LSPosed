@@ -501,8 +501,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             for (PackageInfo info : appList) {
                 int userId = info.applicationInfo.uid / 100000;
                 String packageName = info.packageName;
-                if (userId != module.userId ||
-                        packageName.equals("android") && userId != 0 ||
+                if (packageName.equals("android") && userId != 0 ||
                         packageName.equals(module.packageName) ||
                         packageName.equals(BuildConfig.APPLICATION_ID)) {
                     continue;
@@ -511,6 +510,10 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                 ApplicationWithEquals application = new ApplicationWithEquals(packageName, userId);
 
                 installedList.add(application);
+
+                if (userId != module.userId) {
+                    continue;
+                }
 
                 if (scopeList != null && scopeList.contains(packageName)) {
                     recommendedList.add(application);
