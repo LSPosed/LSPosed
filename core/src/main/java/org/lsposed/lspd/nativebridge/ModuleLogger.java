@@ -58,7 +58,7 @@ public class ModuleLogger {
         sb.append(' ');
         sb.append(isThrowable ? "E" : "I");
         sb.append('/');
-        sb.append(processName == null ? "?" : processName);
+        sb.append(processName == null ? "android" : processName);
         sb.append('(');
         sb.append(Process.myPid());
         sb.append('-');
