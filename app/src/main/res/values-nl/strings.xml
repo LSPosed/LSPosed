@@ -33,8 +33,8 @@
     <string name="About">Over</string>
     <string name="module_repo">Opslagplaats</string>
     <string name="module_repo_summary">Module opslagplaats (Alpha)</string>
-    <string name="about_view_source_code"><![CDATA[Bekijk de broncode op %1$s<br/>Sluit je aan bij onze %2%s kanaal]]></string>
-    <string name="about_translators">Vertaler: %s</string>
+    <string name="about_view_source_code"><![CDATA[Bekijk de broncode op %1$s<br/>Sluit je aan bij onze %2$s kanaal]]></string>
+    <string name="about_translators">Vertaler: %1$s</string>
 
     <string name="activated">Geactiveerd</string>
     <string name="not_installed">Niet geïnstalleerd</string>
@@ -67,8 +67,8 @@
 
     <!-- Notification -->
     <string name="module_is_not_activated_yet">LSPosed module is nog niet geactiveerd</string>
-    <string name="module_is_not_activated_yet_detailed">%s is geïnstalleerd, maar is nog niet geactiveerd</string>
-    <string name="xposed_module_updated_notification_content">%s is geupdate</string>
+    <string name="module_is_not_activated_yet_detailed">%1$s is geïnstalleerd, maar is nog niet geactiveerd</string>
+    <string name="xposed_module_updated_notification_content">%1$s is geupdate</string>
 
     <!-- ModulesActivity -->
     <string name="module_empty_description">(geen beschrijving gegeven)</string>
@@ -112,7 +112,7 @@
     <string name="no_scope_selected_has_recommended">U heeft geen app geselecteerd. Aanbevolen apps selecteren?</string>
     <string name="use_recommended_message">Aanbevolen apps selecteren?</string>
     <string name="requested_by_module">Aanbevolen</string>
-    <string name="module_disabled_no_selection">Module %s is uitgeschakeld omdat er geen app is geselecteerd.</string>
+    <string name="module_disabled_no_selection">Module %1$s is uitgeschakeld omdat er geen app is geselecteerd.</string>
     <string name="android_framework">Systeem Framework</string>
     <string name="menu_backup_and_restore">Backup…</string>
     <string name="menu_backup">Backup</string>
@@ -162,7 +162,7 @@
     <string name="refresh">Vernieuwen</string>
     <string name="module_release_load_more">Laat oudere versies zien</string>
     <string name="module_release_no_more">Geen release meer</string>
-    <string name="repo_load_failed">Kan moduleopslagplaats niet laden: %s</string>
+    <string name="repo_load_failed">Kan moduleopslagplaats niet laden: %1$s</string>
 
     <string name="app_destroyed">Deze applicatie is vernietigd, zorg ervoor dat u deze downloadt vanaf de officiële bron.</string>
     <string name="outdated_manager">De versie van LSPosed Manager en LSPosed Core zijn niet consistent. Installeer de corresponderende versie opnieuw.</string>

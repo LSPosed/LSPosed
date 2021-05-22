@@ -154,9 +154,7 @@ public class RepoItemActivity extends BaseActivity implements RepoLoader.Listene
     public void moduleReleasesLoaded(OnlineModule module) {
         this.module = module;
         if (releaseAdapter != null) {
-            runOnUiThread(() -> {
-                releaseAdapter.loadItems();
-            });
+            runOnUiThread(() -> releaseAdapter.loadItems());
             if (module.getReleases().size() == 1) {
                 Snackbar.make(binding.snackbar, R.string.module_release_no_more, Snackbar.LENGTH_SHORT).show();
             }

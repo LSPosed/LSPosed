@@ -56,9 +56,7 @@ public class BlurBehindDialogBuilder extends AlertDialog.Builder {
             animator.setDuration(150);
             View view = dialog.getWindow().getDecorView();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S || Build.VERSION.SDK_INT == Build.VERSION_CODES.R && Build.VERSION.PREVIEW_SDK_INT != 0) {
-                animator.addUpdateListener(animation -> {
-                    dialog.getWindow().setBackgroundBlurRadius((Integer) animation.getAnimatedValue());
-                });
+                animator.addUpdateListener(animation -> dialog.getWindow().setBackgroundBlurRadius((Integer) animation.getAnimatedValue()));
             } else {
                 try {
                     Object viewRootImpl = view.getClass().getMethod("getViewRootImpl").invoke(view);
