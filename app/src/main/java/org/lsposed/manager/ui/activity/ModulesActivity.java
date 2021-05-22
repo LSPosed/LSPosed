@@ -33,7 +33,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.os.UserHandle;
 import android.os.UserManager;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -84,7 +83,6 @@ import org.lsposed.manager.util.ModuleUtil;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Predicate;
@@ -143,7 +141,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         });
 
         binding.fab.setOnClickListener(view -> {
-            var pickAdaptor = new ModuleAdapter(0, null, true);
+            var pickAdaptor = new ModuleAdapter(0, true);
             var position = binding.viewPager.getCurrentItem();
             var snapshot = adapters.get(position).snapshot().stream().map(m -> m.packageName).collect(Collectors.toSet());
             var userId = adapters.get(position).getUserId();
@@ -208,18 +206,13 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         super.onResume();
         int[] userIds = ConfigManager.getUsers();
         if (userIds != null) {
-            List<UserHandle> users = userManager.getUserProfiles();
-            HashMap<Integer, UserHandle> handles = new HashMap<>();
-            for (UserHandle handle : users) {
-                handles.put(handle.hashCode(), handle);
-            }
             if (userIds.length != adapters.size()) {
                 adapters.clear();
-                if (users.size() != 1) {
+                if (userIds.length != 1) {
                     binding.viewPager.setUserInputEnabled(true);
                     ArrayList<String> titles = new ArrayList<>();
                     for (int userId : userIds) {
-                        var adapter = new ModuleAdapter(userId, handles.get(userId));
+                        var adapter = new ModuleAdapter(userId);
                         adapter.setHasStableIds(true);
                         adapters.add(adapter);
                         titles.add(getString(R.string.user_title, userId));
@@ -228,7 +221,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                     binding.tabLayout.setVisibility(View.VISIBLE);
                 } else {
                     binding.viewPager.setUserInputEnabled(false);
-                    var adapter = new ModuleAdapter(0, users.get(0));
+                    var adapter = new ModuleAdapter(0);
                     adapter.setHasStableIds(true);
                     adapters.add(adapter);
                     binding.tabLayout.setVisibility(View.GONE);
@@ -404,20 +397,18 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         private final ConcurrentLinkedQueue<ModuleUtil.InstalledModule> searchList = new ConcurrentLinkedQueue<>();
         private final List<ModuleUtil.InstalledModule> showList = new ArrayList<>();
         private final int userId;
-        private final UserHandle userHandle;
         private final boolean isPick;
         private boolean isLoaded;
         private View.OnClickListener onPickListener;
 
         private Predicate<ModuleUtil.InstalledModule> customFilter = m -> true;
 
-        ModuleAdapter(int userId, UserHandle userHandle) {
-            this(userId, userHandle, false);
+        ModuleAdapter(int userId) {
+            this(userId, false);
         }
 
-        ModuleAdapter(int userId, UserHandle userHandle, boolean isPick) {
+        ModuleAdapter(int userId, boolean isPick) {
             this.userId = userId;
-            this.userHandle = userHandle;
             this.isPick = isPick;
         }
 
@@ -508,9 +499,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                     }
                     if (RepoLoader.getInstance().getOnlineModule(item.packageName) == null) {
                         menu.removeItem(R.id.menu_repo);
-                    }
-                    if (userHandle == null) {
-                        menu.removeItem(R.id.menu_app_info);
                     }
                     if (item.userId == 0) {
                         int[] users = ConfigManager.getUsers();
