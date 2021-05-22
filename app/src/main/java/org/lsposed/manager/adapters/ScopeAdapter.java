@@ -152,15 +152,6 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     }
 
     private boolean shouldHideApp(PackageInfo info, ApplicationWithEquals app) {
-        if (app.userId != module.userId) {
-            return true;
-        }
-        if (info.packageName.equals(this.module.packageName)) {
-            return true;
-        }
-        if (info.packageName.equals(BuildConfig.APPLICATION_ID)) {
-            return true;
-        }
         if (info.packageName.equals("android")) {
             return false;
         }
@@ -508,16 +499,20 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             List<String> scopeList = module.getScopeList();
             boolean emptyCheckedList = checkedList.isEmpty();
             for (PackageInfo info : appList) {
-                int uid = info.applicationInfo.uid;
-                if (info.packageName.equals("android") && uid / 100000 != 0) {
+                int userId = info.applicationInfo.uid / 100000;
+                String packageName = info.packageName;
+                if (userId != module.userId ||
+                        packageName.equals("android") && userId != 0 ||
+                        packageName.equals(module.packageName) ||
+                        packageName.equals(BuildConfig.APPLICATION_ID)) {
                     continue;
                 }
 
-                ApplicationWithEquals application = new ApplicationWithEquals(info.packageName, uid / 100000);
+                ApplicationWithEquals application = new ApplicationWithEquals(packageName, userId);
 
                 installedList.add(application);
 
-                if (scopeList != null && scopeList.contains(info.packageName)) {
+                if (scopeList != null && scopeList.contains(packageName)) {
                     recommendedList.add(application);
                     if (emptyCheckedList) {
                         checkedList.add(application);
