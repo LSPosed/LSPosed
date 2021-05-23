@@ -20,16 +20,16 @@
 
 package org.lsposed.lspd.util;
 
+import android.os.SystemProperties;
+import android.text.TextUtils;
 import android.util.Log;
 
 import org.lsposed.lspd.BuildConfig;
 
-import de.robv.android.xposed.XposedHelpers;
-
-
 public class Utils {
 
     public static final String LOG_TAG = "LSPosed";
+    public static final boolean isMIUI = !TextUtils.isEmpty(SystemProperties.get("ro.miui.ui.version.name"));
 
     public static void logD(Object msg) {
         if (BuildConfig.DEBUG)
@@ -63,17 +63,5 @@ public class Utils {
 
     public static void logE(String msg, Throwable throwable) {
         Log.e(LOG_TAG, msg, throwable);
-    }
-
-    public static String getSysProp(String key) {
-        try {
-            Class sysProps = XposedHelpers.findClassIfExists("android.os.SystemProperties", null);
-            if (sysProps != null) {
-                return (String) XposedHelpers.callStaticMethod(sysProps, "get", key);
-            }
-        } catch (Throwable throwable) {
-            Utils.logE("error when get sys prop", throwable);
-        }
-        return "";
     }
 }

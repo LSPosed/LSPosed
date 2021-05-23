@@ -25,8 +25,6 @@ import static org.lsposed.lspd.deopt.InlinedMethodCallers.KEY_BOOT_IMAGE;
 import static org.lsposed.lspd.deopt.InlinedMethodCallers.KEY_BOOT_IMAGE_MIUI_RES;
 import static org.lsposed.lspd.deopt.InlinedMethodCallers.KEY_SYSTEM_SERVER;
 
-import android.text.TextUtils;
-
 import org.lsposed.lspd.nativebridge.Yahfa;
 import org.lsposed.lspd.util.Utils;
 import org.lsposed.lspd.yahfa.hooker.YahfaHooker;
@@ -62,8 +60,7 @@ public class PrebuiltMethodsDeopter {
     public static void deoptBootMethods() {
         // todo check if has been done before
         deoptMethods(KEY_BOOT_IMAGE, null);
-        if (!TextUtils.isEmpty(Utils.getSysProp("ro.miui.ui.version.code"))
-                && serviceClient.isResourcesHookEnabled()) {
+        if (Utils.isMIUI && serviceClient.isResourcesHookEnabled()) {
             //deopt these only for MIUI with resources hook enabled
             deoptMethods(KEY_BOOT_IMAGE_MIUI_RES, null);
         }
