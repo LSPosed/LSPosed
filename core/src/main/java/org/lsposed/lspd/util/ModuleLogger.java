@@ -18,7 +18,7 @@
  * Copyright (C) 2021 LSPosed Contributors
  */
 
-package org.lsposed.lspd.nativebridge;
+package org.lsposed.lspd.util;
 
 import android.app.ActivityThread;
 import android.os.ParcelFileDescriptor;
