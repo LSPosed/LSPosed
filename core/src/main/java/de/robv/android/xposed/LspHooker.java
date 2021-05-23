@@ -34,6 +34,7 @@ public class LspHooker {
         this.additionalInfo = info;
         this.method = origin;
         this.backup = backup;
+        this.backup.setAccessible(true);
     }
 
     public Object invokeOriginalMethod(Object thisObject, Object[] args) throws InvocationTargetException, IllegalAccessException {

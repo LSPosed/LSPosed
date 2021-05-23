@@ -36,7 +36,6 @@
 #include "art/runtime/thread.h"
 #include "art/runtime/hidden_api.h"
 #include "art/runtime/instrumentation.h"
-#include "art/runtime/reflection.h"
 #include "art/runtime/thread_list.h"
 #include "art/runtime/gc/scoped_gc_critical_section.h"
 
@@ -69,7 +68,6 @@ namespace lspd {
         art::mirror::Class::Setup(art_handle);
         art::JNIEnvExt::Setup(art_handle);
         art::instrumentation::DisableUpdateHookedMethodsCode(art_handle);
-        art::PermissiveAccessByReflection(art_handle);
         art::thread_list::ScopedSuspendAll::Setup(art_handle);
         art::gc::ScopedGCCriticalSection::Setup(art_handle);
 
