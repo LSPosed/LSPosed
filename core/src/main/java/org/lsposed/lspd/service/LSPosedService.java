@@ -19,6 +19,9 @@
 
 package org.lsposed.lspd.service;
 
+import static org.lsposed.lspd.service.ConfigManager.PER_USER_RANGE;
+import static org.lsposed.lspd.service.ServiceManager.TAG;
+
 import android.app.IApplicationThread;
 import android.content.ComponentName;
 import android.content.IIntentReceiver;
@@ -34,9 +37,6 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import java.util.Arrays;
-
-import static org.lsposed.lspd.service.ConfigManager.PER_USER_RANGE;
-import static org.lsposed.lspd.service.ServiceManager.TAG;
 
 public class LSPosedService extends ILSPosedService.Stub {
     private static final int AID_NOBODY = 9999;

@@ -23,6 +23,9 @@ package de.robv.android.xposed;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 
+import org.apache.commons.lang3.ClassUtils;
+import org.apache.commons.lang3.reflect.MemberUtilsX;
+
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.FileInputStream;
@@ -42,9 +45,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.WeakHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import org.apache.commons.lang3.ClassUtils;
-import org.apache.commons.lang3.reflect.MemberUtilsX;
 
 /**
  * Helpers that simplify hooking and calling methods/constructors, getting and settings fields, ...

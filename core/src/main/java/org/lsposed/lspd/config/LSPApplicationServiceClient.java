@@ -23,12 +23,11 @@ import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 
-import java.io.File;
-import java.util.Collections;
-import java.util.Map;
-
 import org.lsposed.lspd.service.ILSPApplicationService;
 import org.lsposed.lspd.util.Utils;
+
+import java.util.Collections;
+import java.util.Map;
 
 public class LSPApplicationServiceClient implements ILSPApplicationService {
     static ILSPApplicationService service = null;

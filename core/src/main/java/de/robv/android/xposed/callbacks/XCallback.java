@@ -22,13 +22,13 @@ package de.robv.android.xposed.callbacks;
 
 import android.os.Bundle;
 
+import org.lsposed.lspd.deopt.PrebuiltMethodsDeopter;
+
 import java.io.Serializable;
 
 import de.robv.android.xposed.IModuleContext;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedBridge.CopyOnWriteSortedSet;
-
-import org.lsposed.lspd.deopt.PrebuiltMethodsDeopter;
 
 /**
  * Base class for Xposed callbacks.

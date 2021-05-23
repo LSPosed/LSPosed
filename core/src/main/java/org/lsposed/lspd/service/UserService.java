@@ -19,6 +19,8 @@
 
 package org.lsposed.lspd.service;
 
+import static org.lsposed.lspd.service.ServiceManager.TAG;
+
 import android.content.pm.UserInfo;
 import android.os.Build;
 import android.os.IBinder;
@@ -28,8 +30,6 @@ import android.os.ServiceManager;
 import android.util.Log;
 
 import java.util.List;
-
-import static org.lsposed.lspd.service.ServiceManager.TAG;
 
 public class UserService {
     private static IUserManager um = null;

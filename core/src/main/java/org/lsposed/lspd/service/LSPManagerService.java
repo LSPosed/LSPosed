@@ -20,6 +20,7 @@
 package org.lsposed.lspd.service;
 
 import static android.content.Context.BIND_AUTO_CREATE;
+import static org.lsposed.lspd.service.ServiceManager.TAG;
 
 import android.app.IServiceConnection;
 import android.content.ComponentName;
@@ -33,17 +34,15 @@ import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.util.Log;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
-
-import de.robv.android.xposed.XposedBridge;
-
 import org.lsposed.lspd.Application;
 import org.lsposed.lspd.BuildConfig;
 import org.lsposed.lspd.ILSPManagerService;
 import org.lsposed.lspd.utils.ParceledListSlice;
 
-import static org.lsposed.lspd.service.ServiceManager.TAG;
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+
+import de.robv.android.xposed.XposedBridge;
 
 public class LSPManagerService extends ILSPManagerService.Stub {
 

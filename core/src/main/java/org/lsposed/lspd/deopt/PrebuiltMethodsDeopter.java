@@ -20,21 +20,21 @@
 
 package org.lsposed.lspd.deopt;
 
+import static org.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
+import static org.lsposed.lspd.deopt.InlinedMethodCallers.KEY_BOOT_IMAGE;
+import static org.lsposed.lspd.deopt.InlinedMethodCallers.KEY_BOOT_IMAGE_MIUI_RES;
+import static org.lsposed.lspd.deopt.InlinedMethodCallers.KEY_SYSTEM_SERVER;
+
 import android.text.TextUtils;
 
 import org.lsposed.lspd.nativebridge.Yahfa;
 import org.lsposed.lspd.util.Utils;
+import org.lsposed.lspd.yahfa.hooker.YahfaHooker;
 
 import java.lang.reflect.Executable;
 import java.util.Arrays;
 
 import de.robv.android.xposed.XposedHelpers;
-import org.lsposed.lspd.yahfa.hooker.YahfaHooker;
-
-import static org.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
-import static org.lsposed.lspd.deopt.InlinedMethodCallers.KEY_BOOT_IMAGE;
-import static org.lsposed.lspd.deopt.InlinedMethodCallers.KEY_BOOT_IMAGE_MIUI_RES;
-import static org.lsposed.lspd.deopt.InlinedMethodCallers.KEY_SYSTEM_SERVER;
 
 public class PrebuiltMethodsDeopter {
 
