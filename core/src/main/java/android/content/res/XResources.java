@@ -20,6 +20,13 @@
 
 package android.content.res;
 
+import static org.lsposed.lspd.nativebridge.ResourcesHook.rewriteXmlReferencesNative;
+import static de.robv.android.xposed.XposedHelpers.decrementMethodDepth;
+import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
+import static de.robv.android.xposed.XposedHelpers.getLongField;
+import static de.robv.android.xposed.XposedHelpers.getObjectField;
+import static de.robv.android.xposed.XposedHelpers.incrementMethodDepth;
+
 import android.content.Context;
 import android.content.pm.PackageParser;
 import android.content.pm.PackageParser.PackageParserException;
@@ -55,14 +62,6 @@ import de.robv.android.xposed.callbacks.XC_LayoutInflated.LayoutInflatedParam;
 import de.robv.android.xposed.callbacks.XCallback;
 import xposed.dummy.XResourcesSuperClass;
 import xposed.dummy.XTypedArraySuperClass;
-
-import static de.robv.android.xposed.XposedHelpers.decrementMethodDepth;
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
-import static de.robv.android.xposed.XposedHelpers.getIntField;
-import static de.robv.android.xposed.XposedHelpers.getLongField;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
-import static de.robv.android.xposed.XposedHelpers.incrementMethodDepth;
-import static org.lsposed.lspd.nativebridge.ResourcesHook.rewriteXmlReferencesNative;
 
 /**
  * {@link android.content.res.Resources} subclass that allows replacing individual resources.

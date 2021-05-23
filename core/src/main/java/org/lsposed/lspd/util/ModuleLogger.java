@@ -24,10 +24,6 @@ import android.app.ActivityThread;
 import android.os.ParcelFileDescriptor;
 import android.os.Process;
 
-import org.lsposed.lspd.util.Utils;
-
-import java.io.File;
-import java.io.FileDescriptor;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;

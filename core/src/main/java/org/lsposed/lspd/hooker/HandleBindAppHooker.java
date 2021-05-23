@@ -20,6 +20,8 @@
 
 package org.lsposed.lspd.hooker;
 
+import static org.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
+
 import android.annotation.SuppressLint;
 import android.app.ActivityThread;
 import android.app.ContextImpl;
@@ -41,8 +43,6 @@ import java.util.Map;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.XposedInit;
-
-import static org.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
 
 // normal process initialization (for new Activity, Service, BroadcastReceiver etc.)
 public class HandleBindAppHooker extends XC_MethodHook {

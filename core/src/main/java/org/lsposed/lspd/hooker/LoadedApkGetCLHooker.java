@@ -20,18 +20,18 @@
 
 package org.lsposed.lspd.hooker;
 
+import static org.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
+
 import android.app.LoadedApk;
 import android.os.IBinder;
+
+import org.lsposed.lspd.util.Hookers;
+import org.lsposed.lspd.util.InstallerVerifier;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
-
-import org.lsposed.lspd.util.Hookers;
-import org.lsposed.lspd.util.InstallerVerifier;
-
-import static org.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
 
 public class LoadedApkGetCLHooker extends XC_MethodHook {
 

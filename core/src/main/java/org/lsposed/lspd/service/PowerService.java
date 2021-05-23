@@ -1,12 +1,12 @@
 package org.lsposed.lspd.service;
 
+import static org.lsposed.lspd.service.ServiceManager.TAG;
+
 import android.os.IBinder;
 import android.os.IPowerManager;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.util.Log;
-
-import static org.lsposed.lspd.service.ServiceManager.TAG;
 
 public class PowerService {
     private static IPowerManager pm = null;

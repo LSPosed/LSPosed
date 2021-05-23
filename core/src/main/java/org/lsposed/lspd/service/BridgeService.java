@@ -19,15 +19,13 @@
 
 package org.lsposed.lspd.service;
 
-import static android.content.Context.BIND_AUTO_CREATE;
+import static org.lsposed.lspd.service.ServiceManager.TAG;
+import static hidden.HiddenApiBridge.Binder_allowBlocking;
+import static hidden.HiddenApiBridge.Context_getActivityToken;
 
 import android.app.ActivityThread;
 import android.app.IApplicationThread;
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.Parcel;
@@ -50,10 +48,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Map;
-
-import static hidden.HiddenApiBridge.Binder_allowBlocking;
-import static hidden.HiddenApiBridge.Context_getActivityToken;
-import static org.lsposed.lspd.service.ServiceManager.TAG;
 
 public class BridgeService {
     private static final int TRANSACTION_CODE = ('_' << 24) | ('L' << 16) | ('S' << 8) | 'P';

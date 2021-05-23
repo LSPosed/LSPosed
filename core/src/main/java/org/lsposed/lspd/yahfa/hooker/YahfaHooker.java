@@ -21,13 +21,14 @@ package org.lsposed.lspd.yahfa.hooker;
 
 import android.os.Build;
 
+import org.lsposed.lspd.nativebridge.ClassLinker;
+import org.lsposed.lspd.nativebridge.Yahfa;
+import org.lsposed.lspd.util.ClassUtils;
+import org.lsposed.lspd.yahfa.dexmaker.DynamicBridge;
+
 import java.lang.reflect.Executable;
 
 import de.robv.android.xposed.XposedBridge.AdditionalHookInfo;
-import org.lsposed.lspd.nativebridge.ClassLinker;
-import org.lsposed.lspd.nativebridge.Yahfa;
-import org.lsposed.lspd.yahfa.dexmaker.DynamicBridge;
-import org.lsposed.lspd.util.ClassUtils;
 
 public class YahfaHooker {
     public static void init() {

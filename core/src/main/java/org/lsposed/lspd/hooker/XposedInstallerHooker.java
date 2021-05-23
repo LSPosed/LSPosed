@@ -22,10 +22,9 @@ package org.lsposed.lspd.hooker;
 
 import android.os.IBinder;
 
-import de.robv.android.xposed.XC_MethodReplacement;
-import de.robv.android.xposed.XposedHelpers;
-import org.lsposed.lspd.BuildConfig;
 import org.lsposed.lspd.util.Utils;
+
+import de.robv.android.xposed.XposedHelpers;
 
 public class XposedInstallerHooker {
 
