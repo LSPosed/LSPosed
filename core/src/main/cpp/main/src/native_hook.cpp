@@ -25,7 +25,6 @@
 #include <dl_util.h>
 #include <art/runtime/jni_env_ext.h>
 #include <dobby.h>
-#include "utils.h"
 #include "symbol_cache.h"
 #include "logging.h"
 #include "native_api.h"
@@ -54,16 +53,8 @@ namespace lspd {
         }
         installed = true;
         LOGI("Start to install inline hooks");
-        int api_level = GetAndroidApiLevel();
-        if (UNLIKELY(api_level < __ANDROID_API_L__)) {
-            LOGE("API level not supported: %d, skip inline hooks", api_level);
-            return;
-        }
-        LOGI("Using api level %d", api_level);
         InstallRiruHooks();
-        // install ART hooks
         InstallArtHooks(handle_libart);
-//        InstallNativeAPI();
     }
 
     void InstallArtHooks(void *art_handle) {
