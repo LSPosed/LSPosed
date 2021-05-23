@@ -27,7 +27,7 @@ import android.content.res.TypedArray;
 import android.util.Log;
 
 import org.lsposed.lspd.BuildConfig;
-import org.lsposed.lspd.nativebridge.ModuleLogger;
+import org.lsposed.lspd.util.ModuleLogger;
 import org.lsposed.lspd.nativebridge.ResourcesHook;
 import org.lsposed.lspd.yahfa.hooker.YahfaHooker;
 

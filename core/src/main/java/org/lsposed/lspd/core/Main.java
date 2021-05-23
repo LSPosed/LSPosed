@@ -39,7 +39,7 @@ import org.lsposed.lspd.hooker.HandleBindAppHooker;
 import org.lsposed.lspd.hooker.LoadedApkCstrHooker;
 import org.lsposed.lspd.hooker.StartBootstrapServicesHooker;
 import org.lsposed.lspd.hooker.SystemMainHooker;
-import org.lsposed.lspd.nativebridge.ModuleLogger;
+import org.lsposed.lspd.util.ModuleLogger;
 import org.lsposed.lspd.service.ServiceManager;
 import org.lsposed.lspd.util.Utils;
 import org.lsposed.lspd.util.Versions;
