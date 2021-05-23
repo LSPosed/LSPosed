@@ -58,8 +58,8 @@ public final class ModuleUtil {
     public static synchronized ModuleUtil getInstance() {
         if (instance == null) {
             instance = new ModuleUtil();
-            instance.reloadInstalledModules();
         }
+        instance.reloadInstalledModules();
         return instance;
     }
 
@@ -103,9 +103,6 @@ public final class ModuleUtil {
 
     public InstalledModule reloadSingleModule(String packageName, int userId) {
         PackageInfo pkg;
-
-        // Call getEnabledModules() here to let backend handle enabled status
-        enabledModules = new HashSet<>(Arrays.asList(ConfigManager.getEnabledModules()));
 
         try {
             pkg = ConfigManager.getPackageInfo(packageName, PackageManager.GET_META_DATA, userId);
