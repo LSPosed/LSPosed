@@ -57,7 +57,7 @@ public class ServiceManager {
 
     // call by ourselves
     public static void start(String[] args) {
-        if (!ConfigManager.getInstance().tryLock()) return;
+        if (!ConfigManager.getInstance().tryLock()) System.exit(0);
 
         android.os.Process.killProcess(android.system.Os.getppid());
         for (String arg : args) {
