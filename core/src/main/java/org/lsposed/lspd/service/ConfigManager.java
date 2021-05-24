@@ -124,8 +124,8 @@ public class ConfigManager {
     private boolean sepolicyLoaded = true;
 
     static class ProcessScope {
-        String processName;
-        int uid;
+        final String processName;
+        final int uid;
 
         ProcessScope(@NonNull String processName, int uid) {
             this.processName = processName;
@@ -367,6 +367,7 @@ public class ConfigManager {
                     obsoleteScopes.add(module);
                 } else {
                     var info = pkgInfo.get(userId);
+                    assert info != null;
                     cachedModule.computeIfAbsent(info.applicationInfo.uid % PER_USER_RANGE, k -> info.packageName);
                 }
             }
@@ -436,9 +437,7 @@ public class ConfigManager {
         Log.d(TAG, "cached Scope");
         cachedScope.forEach((ps, module) -> {
             Log.d(TAG, ps.processName + "/" + ps.uid);
-            module.forEach((pkg_name, apk_path) -> {
-                Log.d(TAG, "\t" + pkg_name);
-            });
+            module.forEach((pkg_name, apk_path) -> Log.d(TAG, "\t" + pkg_name));
         });
     }
 
@@ -508,7 +507,7 @@ public class ConfigManager {
             if (cursor == null) return -1;
             if (cursor.getCount() != 1) return -1;
             cursor.moveToFirst();
-            return cursor.getInt(cursor.getColumnIndex("mid"));
+            return cursor.getInt(cursor.getColumnIndexOrThrow("mid"));
         }
     }
 
