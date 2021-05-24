@@ -132,7 +132,8 @@
     <string name="menu_filter">Filtre…</string>
 
     <!-- ModulesActivity and AppListActivity -->
-  <string name="module_app_info">Informations d\’application</string>
+    <string name="modules_other_app">Voir dans une autre application</string>
+    <string name="module_app_info">Informations d\’application</string>
 
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Sous-système</string>
