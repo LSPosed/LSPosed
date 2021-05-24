@@ -69,13 +69,13 @@ public class ServiceManager {
             }
         }
         Log.i(TAG, "starting server...");
-        Log.i(TAG, String.format("version %s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_NAME));
+        Log.i(TAG, String.format("version %s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
 
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
             Log.e(TAG, Log.getStackTraceString(e));
         });
 
-        Looper.prepare();
+        Looper.prepareMainLooper();
         mainService = new LSPosedService();
         moduleService = new LSPModuleService();
         applicationService = new LSPApplicationService();
