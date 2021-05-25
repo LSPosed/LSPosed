@@ -28,8 +28,6 @@
 namespace lspd {
     extern bool sym_initialized;
     extern void *sym_do_dlopen;
-    extern void *sym_system_property_get;
-    extern void *sym_get_property;
     extern void *handle_libart;
     extern void *sym_openInMemoryDexFilesNative;
     extern void *sym_createCookieWithArray;
