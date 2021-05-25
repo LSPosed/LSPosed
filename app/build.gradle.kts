@@ -22,8 +22,22 @@ import com.android.build.gradle.internal.dsl.BuildType
 import java.nio.file.Paths
 
 plugins {
+    id("org.gradle.idea")
     id("com.android.application")
     kotlin("android")
+}
+
+// workaround for AS.
+val dataBinding = file("${project.buildDir}/generated/data_binding_base_class_source_out/debug/out")
+sourceSets {
+    create("dataBinding") {
+        java.srcDir(dataBinding)
+    }
+}
+idea {
+    module {
+        generatedSourceDirs.add(dataBinding)
+    }
 }
 
 val androidTargetSdkVersion: Int by rootProject.extra
@@ -229,4 +243,3 @@ configurations.all {
         exclude(group = "androidx.appcompat", module = "appcompat")
     }
 }
-
