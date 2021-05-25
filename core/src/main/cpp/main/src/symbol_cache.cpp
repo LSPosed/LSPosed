@@ -33,8 +33,6 @@
 namespace lspd {
     bool sym_initialized = false;
     void *sym_do_dlopen = nullptr;
-    void *sym_system_property_get = nullptr;
-    void *sym_get_property = nullptr;
     void *handle_libart = nullptr;
     void *sym_openInMemoryDexFilesNative = nullptr;
     void *sym_createCookieWithArray = nullptr;
@@ -156,10 +154,6 @@ namespace lspd {
                           (somain = getStaticVariable<soinfo>(linker, "__dl__ZL6somain")) &&
                           (sym_do_dlopen = reinterpret_cast<void *>(linker.getSymbAddress(
                                   "__dl__Z9do_dlopenPKciPK17android_dlextinfoPKv"))) &&
-                          (sym_system_property_get = reinterpret_cast<void *>(libc.getSymbAddress(
-                                  "__system_property_get"))) &&
-                          (sym_get_property = reinterpret_cast<void *>(libbase.getSymbAddress(
-                                  "_ZN7android4base11GetPropertyERKNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEES9_"))) &&
                           soinfo::setup(linker) && (handle_libart = findLibArt());
         if (UNLIKELY(!sym_initialized)) {
             LOGE("Init symbol cache failed");
