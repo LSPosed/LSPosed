@@ -295,11 +295,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             var intent = new Intent(Intent.ACTION_SHOW_APP_INFO);
             intent.putExtra(Intent.EXTRA_PACKAGE_NAME, selectedModule.packageName);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            try {
-                startActivity(intent);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            ConfigManager.startActivityAsUserWithFeature(intent, selectedModule.userId);
             return true;
         } else if (itemId == R.id.menu_app_info) {
             ConfigManager.startActivityAsUserWithFeature(new Intent(ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", selectedModule.packageName, null)), selectedModule.userId);
