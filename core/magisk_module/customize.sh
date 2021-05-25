@@ -126,5 +126,8 @@ echo "rm -rf /data/misc/$MISC_PATH" >>"${MODPATH}/uninstall.sh" || abort "! Can'
 
 [ -d /data/adb/lspd/config ] || mkdir -p /data/adb/lspd/config
 [ -f /data/adb/lspd/config/verbose_log ] || echo "0" >/data/adb/lspd/config/verbose_log
+if [ ${API} -le 30 ]; then
+  [ -f /data/adb/lspd/config/enable_resources ] || echo "1" >/data/adb/lspd/config/enable_resources
+fi
 
 ui_print "- Welcome to LSPosed!"
