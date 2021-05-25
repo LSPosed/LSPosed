@@ -302,9 +302,12 @@ public class PackageService {
             PackageInstaller installer = null;
             // S Preview
             if (Build.VERSION.SDK_INT > 30 || Build.VERSION.SDK_INT == 30 && Build.VERSION.PREVIEW_SDK_INT != 0) {
-                Constructor<PackageInstaller> installerConstructor = PackageInstaller.class.getConstructor(IPackageInstaller.class, String.class, String.class, int.class);
-                installerConstructor.setAccessible(true);
-                installer = installerConstructor.newInstance(installerService, null, null, 0);
+                try {
+                    Constructor<PackageInstaller> installerConstructor = PackageInstaller.class.getConstructor(IPackageInstaller.class, String.class, String.class, int.class);
+                    installerConstructor.setAccessible(true);
+                    installer = installerConstructor.newInstance(installerService, null, null, 0);
+                } catch (Throwable ignored) {
+                }
             }
             if (installer == null) {
                 Constructor<PackageInstaller> installerConstructor = PackageInstaller.class.getConstructor(IPackageInstaller.class, String.class, int.class);
