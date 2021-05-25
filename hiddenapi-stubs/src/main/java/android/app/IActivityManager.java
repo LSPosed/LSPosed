@@ -77,6 +77,11 @@ public interface IActivityManager extends IInterface {
                                        String callingFeatureId, IIntentReceiver receiver, IntentFilter filter,
                                        String requiredPermission, int userId, int flags) throws RemoteException;
 
+    @RequiresApi(31)
+    Intent registerReceiverWithFeature(IApplicationThread caller, String callerPackage, String callingFeatureId,
+                                       String receiverId, IIntentReceiver receiver, IntentFilter filter,
+                                       String requiredPermission, int userId, int flags) throws RemoteException;
+
     int bindService(IApplicationThread caller, IBinder token, Intent service,
                     String resolvedType, IServiceConnection connection, int flags,
                     String callingPackage, int userId) throws RemoteException;
