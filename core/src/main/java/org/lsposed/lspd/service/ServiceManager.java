@@ -71,7 +71,8 @@ public class ServiceManager {
         Log.i(TAG, String.format("version %s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
 
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Log.e(TAG, "Uncaught exception", e);
+            System.exit(1);
         });
 
         Looper.prepareMainLooper();
