@@ -59,7 +59,6 @@ public class ServiceManager {
     public static void start(String[] args) {
         if (!ConfigManager.getInstance().tryLock()) System.exit(0);
 
-        android.os.Process.killProcess(android.system.Os.getppid());
         for (String arg : args) {
             if (arg.equals("--debug")) {
                 DdmHandleAppName.setAppName("lspd", 0);
@@ -72,7 +71,8 @@ public class ServiceManager {
         Log.i(TAG, String.format("version %s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
 
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Log.e(TAG, "Uncaught exception", e);
+            System.exit(1);
         });
 
         Looper.prepareMainLooper();
@@ -83,6 +83,8 @@ public class ServiceManager {
         systemServerService = new LSPSystemServerService();
 
         systemServerService.putBinderForSystemServer();
+
+        android.os.Process.killProcess(android.system.Os.getppid());
 
         waitSystemService("package");
         waitSystemService("activity");
