@@ -186,6 +186,11 @@ public class LSPosedService extends ILSPosedService.Stub {
                 @Override
                 public void performReceive(Intent intent, int resultCode, String data, Bundle extras, boolean ordered, boolean sticky, int sendingUser) {
                     new Thread(() -> dispatchPackageChanged(intent)).start();
+                    try {
+                        ActivityManagerService.finishReceiver(this, resultCode, data, extras, false, intent.getFlags());
+                    } catch (Throwable e) {
+                        Log.e(TAG, "finish receiver", e);
+                    }
                 }
             };
 
@@ -205,6 +210,11 @@ public class LSPosedService extends ILSPosedService.Stub {
                 @Override
                 public void performReceive(Intent intent, int resultCode, String data, Bundle extras, boolean ordered, boolean sticky, int sendingUser) {
                     new Thread(() -> dispatchBootCompleted(intent)).start();
+                    try {
+                        ActivityManagerService.finishReceiver(this, resultCode, data, extras, false, intent.getFlags());
+                    } catch (Throwable e) {
+                        Log.e(TAG, "finish receiver", e);
+                    }
                 }
             }, intentFilter, null, 0, 0);
         } catch (Throwable e) {
