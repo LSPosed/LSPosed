@@ -110,6 +110,13 @@ public class ActivityManagerService {
         }
     }
 
+    public static void finishReceiver(IBinder who, int resultCode, String resultData, Bundle map,
+                                      boolean abortBroadcast, int flags) throws RemoteException {
+        IActivityManager am = getActivityManager();
+        if (am == null || thread == null) return;
+        am.finishReceiver(who, resultCode, resultData, map, abortBroadcast, flags);
+    }
+
     public static int bindService(Intent service,
                                   String resolvedType, IServiceConnection connection, int flags,
                                   String callingPackage, int userId) throws RemoteException {
