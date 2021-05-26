@@ -20,4 +20,4 @@
 #
 
 # post-fs-data.sh may be blocked by other modules. retry to start this
-nohup /system/bin/app_process -Djava.class.path=$(magisk --path)/.magisk/modules/riru_lsposed/framework/lspd.dex /system/bin --nice-name=lspd org.lsposed.lspd.core.Main --from-service >/dev/null 2>&1
+/system/bin/app_process -Djava.class.path=$(magisk --path)/.magisk/modules/riru_lsposed/framework/lspd.dex /system/bin --nice-name=lspd org.lsposed.lspd.core.Main --from-service >/dev/null 2>&1
