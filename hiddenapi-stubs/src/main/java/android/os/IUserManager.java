@@ -7,9 +7,6 @@ import androidx.annotation.RequiresApi;
 import java.util.List;
 
 public interface IUserManager extends IInterface {
-
-    int getProfileParentId(int userId) throws RemoteException;
-
     @RequiresApi(26)
     boolean isUserUnlocked(int userId)
             throws RemoteException;
@@ -19,6 +16,8 @@ public interface IUserManager extends IInterface {
 
     List<UserInfo> getUsers(boolean excludePartial, boolean excludeDying, boolean excludePreCreated)
             throws RemoteException;
+
+    UserInfo getProfileParent(int userId) throws RemoteException;
 
     abstract class Stub extends Binder implements IUserManager {
 
