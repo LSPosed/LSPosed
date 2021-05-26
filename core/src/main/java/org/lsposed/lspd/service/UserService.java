@@ -82,6 +82,8 @@ public class UserService {
     public static int getProfileParent(int userId) throws RemoteException {
         IUserManager um = getUserManager();
         if (um == null) return -1;
-        return um.getProfileParentId(userId);
+        var userInfo = um.getProfileParent(userId);
+        if (userInfo == null) return userId;
+        else return userInfo.id;
     }
 }
