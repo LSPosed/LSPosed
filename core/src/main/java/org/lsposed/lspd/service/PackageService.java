@@ -125,12 +125,6 @@ public class PackageService {
         return pm.getApplicationInfo(packageName, flags, userId);
     }
 
-    public static String[] getPackagesForUid(int uid) throws RemoteException {
-        IPackageManager pm = getPackageManager();
-        if (pm == null) return new String[0];
-        return pm.getPackagesForUid(uid);
-    }
-
     public static ParceledListSlice<PackageInfo> getInstalledPackagesFromAllUsers(int flags, boolean filterNoProcess) throws RemoteException {
         List<PackageInfo> res = new ArrayList<>();
         IPackageManager pm = getPackageManager();

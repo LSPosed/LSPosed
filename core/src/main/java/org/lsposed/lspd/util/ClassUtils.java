@@ -51,10 +51,8 @@ public class ClassUtils {
     private static boolean isInitialized(Class<?> clazz) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             return getClassStatus(clazz, true) >= 14;
-        } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O_MR1) {
-            return getClassStatus(clazz, false) == 11;
         } else {
-            return getClassStatus(clazz, false) == 10;
+            return getClassStatus(clazz, false) == 11;
         }
     }
 

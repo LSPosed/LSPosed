@@ -30,7 +30,6 @@
     public static void forkAndSpecializePost(java.lang.String, java.lang.String, android.os.IBinder);
     public static void main(java.lang.String[]);
 }
--keepnames class org.lsposed.lspd.hooker.HandleBindAppHooker
 -keepclasseswithmembers,includedescriptorclasses class * {
     native <methods>;
 }
