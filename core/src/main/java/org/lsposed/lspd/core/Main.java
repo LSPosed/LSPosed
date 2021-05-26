@@ -120,7 +120,7 @@ public class Main {
     public static void main(String[] args) {
         try {
             ServiceManager.start(args);
-        }catch (Throwable e) {
+        } catch (Throwable e) {
             System.exit(1);
         }
     }
