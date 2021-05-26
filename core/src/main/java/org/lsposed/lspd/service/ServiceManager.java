@@ -59,7 +59,6 @@ public class ServiceManager {
     public static void start(String[] args) {
         if (!ConfigManager.getInstance().tryLock()) System.exit(0);
 
-        android.os.Process.killProcess(android.system.Os.getppid());
         for (String arg : args) {
             if (arg.equals("--debug")) {
                 DdmHandleAppName.setAppName("lspd", 0);
@@ -83,6 +82,8 @@ public class ServiceManager {
         systemServerService = new LSPSystemServerService();
 
         systemServerService.putBinderForSystemServer();
+
+        android.os.Process.killProcess(android.system.Os.getppid());
 
         waitSystemService("package");
         waitSystemService("activity");
