@@ -69,9 +69,9 @@ public class LSPApplicationServiceClient implements ILSPApplicationService {
     }
 
     @Override
-    public IBinder requestManagerBinder() {
+    public IBinder requestManagerBinder(String packageName) {
         try {
-            return service.requestManagerBinder();
+            return service.requestManagerBinder(packageName);
         } catch (RemoteException | NullPointerException ignored) {
         }
         return null;

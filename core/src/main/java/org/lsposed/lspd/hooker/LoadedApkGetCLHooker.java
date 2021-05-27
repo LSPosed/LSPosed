@@ -78,7 +78,7 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
             lpparam.appInfo = loadedApk.getApplicationInfo();
             lpparam.isFirstApplication = this.isFirstApplication;
 
-            IBinder binder = serviceClient.requestManagerBinder();
+            IBinder binder = loadedApk.getApplicationInfo() != null ? serviceClient.requestManagerBinder(loadedApk.getApplicationInfo().packageName) : null;
             if (binder != null) {
                 if (InstallerVerifier.verifyInstallerSignature(loadedApk.getApplicationInfo())) {
                     XposedInstallerHooker.hookXposedInstaller(lpparam.classLoader, binder);
