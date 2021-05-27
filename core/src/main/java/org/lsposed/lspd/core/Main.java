@@ -28,6 +28,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.res.CompatibilityInfo;
 import android.os.Environment;
 import android.os.IBinder;
+import android.os.Process;
 
 import org.lsposed.lspd.config.LSPApplicationServiceClient;
 import org.lsposed.lspd.deopt.PrebuiltMethodsDeopter;
@@ -102,7 +103,7 @@ public class Main {
         XposedInit.startsSystemServer = isSystem;
         PrebuiltMethodsDeopter.deoptBootMethods(); // do it once for secondary zygote
         installBootstrapHooks(isSystem, appDataDir);
-        Utils.logI("Loading modules for " + niceName);
+        Utils.logI("Loading modules for " + niceName + "/" + Process.myUid());
         loadModulesSafely();
     }
 

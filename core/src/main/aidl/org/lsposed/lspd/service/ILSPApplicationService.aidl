@@ -3,7 +3,7 @@ package org.lsposed.lspd.service;
 interface ILSPApplicationService {
     IBinder requestModuleBinder() = 2;
 
-    IBinder requestManagerBinder() = 3;
+    IBinder requestManagerBinder(String packageName) = 3;
 
     boolean isResourcesHookEnabled() = 5;
 
