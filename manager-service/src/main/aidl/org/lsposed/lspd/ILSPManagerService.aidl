@@ -1,8 +1,8 @@
 package org.lsposed.lspd;
 
 import org.lsposed.lspd.utils.ParceledListSlice;
-import org.lsposed.lspd.utils.UserInfo;
-import org.lsposed.lspd.Application;
+import org.lsposed.lspd.models.UserInfo;
+import org.lsposed.lspd.models.Application;
 
 
 interface ILSPManagerService {

@@ -26,10 +26,10 @@ import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 
-import org.lsposed.lspd.Application;
 import org.lsposed.lspd.ILSPManagerService;
+import org.lsposed.lspd.models.Application;
+import org.lsposed.lspd.models.UserInfo;
 import org.lsposed.lspd.utils.ParceledListSlice;
-import org.lsposed.lspd.utils.UserInfo;
 
 import java.util.List;
 

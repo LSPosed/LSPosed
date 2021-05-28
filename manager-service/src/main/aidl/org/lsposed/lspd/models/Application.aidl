@@ -1,4 +1,4 @@
-package org.lsposed.lspd;
+package org.lsposed.lspd.models;
 
 parcelable Application {
     String packageName;
