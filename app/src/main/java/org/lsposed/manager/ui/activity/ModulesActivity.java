@@ -66,6 +66,7 @@ import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import org.lsposed.lspd.utils.UserInfo;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.adapters.AppHelper;
@@ -138,23 +139,23 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         });
 
         binding.fab.setOnClickListener(view -> {
-            var pickAdaptor = new ModuleAdapter(0, true);
+            var pickAdaptor = new ModuleAdapter(null, true);
             var position = binding.viewPager.getCurrentItem();
             var snapshot = adapters.get(position).snapshot().stream().map(m -> m.packageName).collect(Collectors.toSet());
-            var userId = adapters.get(position).getUserId();
+            var user = adapters.get(position).getUser();
             pickAdaptor.setFilter(m -> !snapshot.contains(m.packageName));
             pickAdaptor.refresh();
             var v = DialogRecyclerviewBinding.inflate(getLayoutInflater()).getRoot();
             v.setAdapter(pickAdaptor);
             v.setLayoutManager(new LinearLayoutManagerFix(ModulesActivity.this));
             var dialog = new AlertDialog.Builder(ModulesActivity.this)
-                    .setTitle(getString(R.string.install_to_user, userId))
+                    .setTitle(getString(R.string.install_to_user, user.name))
                     .setView(v)
                     .setNegativeButton(android.R.string.cancel, null)
                     .show();
             pickAdaptor.setOnPickListener(picked -> {
                 var module = (ModuleUtil.InstalledModule) picked.getTag();
-                installModuleToUser(module, userId);
+                installModuleToUser(module, user);
                 dialog.dismiss();
             });
         });
@@ -197,24 +198,24 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
     @Override
     protected void onResume() {
         super.onResume();
-        int[] userIds = ConfigManager.getUsers();
-        if (userIds != null) {
-            if (userIds.length != adapters.size()) {
+        var users = ConfigManager.getUsers();
+        if (users != null) {
+            if (users.size() != adapters.size()) {
                 adapters.clear();
-                if (userIds.length != 1) {
+                if (users.size() != 1) {
                     binding.viewPager.setUserInputEnabled(true);
                     ArrayList<String> titles = new ArrayList<>();
-                    for (int userId : userIds) {
-                        var adapter = new ModuleAdapter(userId);
+                    for (var user : users) {
+                        var adapter = new ModuleAdapter(user);
                         adapter.setHasStableIds(true);
                         adapters.add(adapter);
-                        titles.add(getString(R.string.user_title, userId));
+                        titles.add(user.name);
                     }
                     new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> tab.setText(titles.get(position))).attach();
                     binding.tabLayout.setVisibility(View.VISIBLE);
                 } else {
                     binding.viewPager.setUserInputEnabled(false);
-                    var adapter = new ModuleAdapter(0);
+                    var adapter = new ModuleAdapter(null);
                     adapter.setHasStableIds(true);
                     adapters.add(adapter);
                     binding.tabLayout.setVisibility(View.GONE);
@@ -251,15 +252,15 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
         return super.onOptionsItemSelected(item);
     }
 
-    private void installModuleToUser(ModuleUtil.InstalledModule module, int userId) {
+    private void installModuleToUser(ModuleUtil.InstalledModule module, UserInfo user) {
         new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.install_to_user, userId))
-                .setMessage(getString(R.string.install_to_user_message, module.getAppName(), userId))
+                .setTitle(getString(R.string.install_to_user, user.name))
+                .setMessage(getString(R.string.install_to_user_message, module.getAppName(), user.name))
                 .setPositiveButton(android.R.string.ok, (dialog, which) ->
                         workHandler.post(() -> {
-                            var success = ConfigManager.installExistingPackageAsUser(module.packageName, userId);
+                            var success = ConfigManager.installExistingPackageAsUser(module.packageName, user.id);
                             runOnUiThread(() -> {
-                                String text = success ? getString(R.string.module_installed, module.getAppName(), userId) : getString(R.string.module_install_failed);
+                                String text = success ? getString(R.string.module_installed, module.getAppName(), user.name) : getString(R.string.module_install_failed);
                                 if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
                                     Snackbar.make(binding.snackbar, text, Snackbar.LENGTH_SHORT).show();
                                 } else {
@@ -267,7 +268,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                                 }
                             });
                             if (success)
-                                moduleUtil.reloadSingleModule(module.packageName, userId);
+                                moduleUtil.reloadSingleModule(module.packageName, user.id);
                         }))
                 .setNegativeButton(android.R.string.cancel, null)
                 .show();
@@ -328,9 +329,6 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
             intent.putExtra("moduleName", selectedModule.getAppName());
             startActivity(intent);
             return true;
-        } else if (item.getGroupId() == 1) {
-            installModuleToUser(selectedModule, itemId);
-            return true;
         }
         return super.onContextItemSelected(item);
     }
@@ -383,24 +381,24 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
     private class ModuleAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<ModuleAdapter.ViewHolder> implements Filterable {
         private final ConcurrentLinkedQueue<ModuleUtil.InstalledModule> searchList = new ConcurrentLinkedQueue<>();
         private final List<ModuleUtil.InstalledModule> showList = new ArrayList<>();
-        private final int userId;
+        private final UserInfo user;
         private final boolean isPick;
         private boolean isLoaded;
         private View.OnClickListener onPickListener;
 
         private Predicate<ModuleUtil.InstalledModule> customFilter = m -> true;
 
-        ModuleAdapter(int userId) {
-            this(userId, false);
+        ModuleAdapter(UserInfo user) {
+            this(user, false);
         }
 
-        ModuleAdapter(int userId, boolean isPick) {
-            this.userId = userId;
+        ModuleAdapter(UserInfo user, boolean isPick) {
+            this.user = user;
             this.isPick = isPick;
         }
 
-        public int getUserId() {
-            return userId;
+        public UserInfo getUser() {
+            return user;
         }
 
         @NonNull
@@ -488,11 +486,14 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
                         menu.removeItem(R.id.menu_repo);
                     }
                     if (item.userId == 0) {
-                        int[] users = ConfigManager.getUsers();
+                        var users = ConfigManager.getUsers();
                         if (users != null) {
-                            for (int profile : users) {
-                                if (ModuleUtil.getInstance().getModule(item.packageName, profile) == null) {
-                                    menu.add(1, profile, 0, getString(R.string.install_to_user, profile));
+                            for (var user : users) {
+                                if (ModuleUtil.getInstance().getModule(item.packageName, user.id) == null) {
+                                    menu.add(1, user.id, 0, getString(R.string.install_to_user, user.name)).setOnMenuItemClickListener(i -> {
+                                        installModuleToUser(selectedModule, user);
+                                        return true;
+                                    });
                                 }
                             }
                         }
@@ -548,7 +549,7 @@ public class ModulesActivity extends BaseActivity implements ModuleUtil.ModuleLi
 
         private final Runnable reloadModules = new Runnable() {
             public void run() {
-                var tmpList = moduleUtil.getModules().values().stream().filter(module -> module.userId == userId).filter(customFilter).collect(Collectors.toCollection(ArrayList::new));
+                var tmpList = moduleUtil.getModules().values().stream().filter(module -> user == null || module.userId == user.id).filter(customFilter).collect(Collectors.toCollection(ArrayList::new));
                 Comparator<PackageInfo> cmp = AppHelper.getAppListComparator(0, pm);
                 tmpList.sort((a, b) -> {
                     boolean aChecked = moduleUtil.isModuleEnabled(a.packageName);

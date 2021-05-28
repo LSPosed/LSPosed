@@ -178,10 +178,10 @@
     <string name="copy_toast_msg">Gekopieerd</string>
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nNiets hier</string>
     <string name="add_module_to_user">Module toevoegen aan gebruiker</string>
-    <string name="module_installed">Toegevoegd %1$s naar gebruiker %2$d</string>
+    <string name="module_installed">Toegevoegd %1$s naar gebruiker %2$s</string>
     <string name="module_install_failed">Het toevoegen van de module is mislukt</string>
     <string name="user_title">Gebruiker %d</string>
-    <string name="install_to_user">Installeer naar gebruiker %d</string>
-    <string name="install_to_user_message">Wil je installeren %1$s naar gebruiker %2$d? Het wordt aanbevolen om handmatig te installeren, het forceren van installatie via LSPosed kan problemen veroorzaken.</string>
+    <string name="install_to_user">Installeer naar gebruiker %s</string>
+    <string name="install_to_user_message">Wil je installeren %1$s naar gebruiker %2$s? Het wordt aanbevolen om handmatig te installeren, het forceren van installatie via LSPosed kan problemen veroorzaken.</string>
     <string name="translators"><![CDATA[<a href="https://github.com/Pandemic-XDA">Pandemic-XDA</a>]]></string>
 </resources>

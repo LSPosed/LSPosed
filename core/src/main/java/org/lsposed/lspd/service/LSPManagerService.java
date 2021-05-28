@@ -38,8 +38,10 @@ import org.lsposed.lspd.Application;
 import org.lsposed.lspd.BuildConfig;
 import org.lsposed.lspd.ILSPManagerService;
 import org.lsposed.lspd.utils.ParceledListSlice;
+import org.lsposed.lspd.utils.UserInfo;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.LinkedList;
 import java.util.List;
 
 import de.robv.android.xposed.XposedBridge;
@@ -206,8 +208,15 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     }
 
     @Override
-    public int[] getUsers() throws RemoteException {
-        return UserService.getUsers();
+    public List<UserInfo> getUsers() throws RemoteException {
+        var users = new LinkedList<UserInfo>();
+        for(var user: UserService.getUsers()){
+            var info = new UserInfo();
+            info.id = user.id;
+            info.name = user.name;
+            users.add(info);
+        }
+        return users;
     }
 
     @Override

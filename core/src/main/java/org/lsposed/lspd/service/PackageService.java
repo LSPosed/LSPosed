@@ -112,9 +112,9 @@ public class PackageService {
         IPackageManager pm = getPackageManager();
         Map<Integer, PackageInfo> res = new HashMap<>();
         if (pm == null) return res;
-        for (int userId : UserService.getUsers()) {
-            var info = pm.getPackageInfo(packageName, flags, userId);
-            if (info != null && info.applicationInfo != null) res.put(userId, info);
+        for (var user : UserService.getUsers()) {
+            var info = pm.getPackageInfo(packageName, flags, user.id);
+            if (info != null && info.applicationInfo != null) res.put(user.id, info);
         }
         return res;
     }
@@ -135,8 +135,8 @@ public class PackageService {
         List<PackageInfo> res = new ArrayList<>();
         IPackageManager pm = getPackageManager();
         if (pm == null) return ParceledListSlice.emptyList();
-        for (int userId : UserService.getUsers()) {
-            res.addAll(pm.getInstalledPackages(flags, userId).getList());
+        for (var user : UserService.getUsers()) {
+            res.addAll(pm.getInstalledPackages(flags, user.id).getList());
         }
         if (filterNoProcess) {
             res = res.stream().filter(packageInfo -> {

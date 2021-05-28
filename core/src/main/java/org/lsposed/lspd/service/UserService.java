@@ -29,6 +29,8 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.util.Log;
 
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 public class UserService {
@@ -58,10 +60,10 @@ public class UserService {
         return um;
     }
 
-    public static int[] getUsers() throws RemoteException {
+    public static List<UserInfo> getUsers() throws RemoteException {
         IUserManager um = getUserManager();
-        if (um == null) return new int[0];
-        List<UserInfo> users;
+        List<UserInfo> users = new LinkedList<>();
+        if (um == null) return users;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             users = um.getUsers(true, true, true);
         } else {
@@ -71,12 +73,7 @@ public class UserService {
                 users = um.getUsers(true, true, true);
             }
         }
-        int[] userArray = new int[users.size()];
-        for (int i = 0; i < users.size(); i++) {
-            UserInfo uh = users.get(i);
-            userArray[i] = uh.id;
-        }
-        return userArray;
+        return users;
     }
 
     public static int getProfileParent(int userId) throws RemoteException {
