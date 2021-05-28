@@ -66,7 +66,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.snackbar.Snackbar;
 
-import org.lsposed.lspd.Application;
+import org.lsposed.lspd.models.Application;
 import org.lsposed.manager.App;
 import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;

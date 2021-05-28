@@ -66,7 +66,7 @@ import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-import org.lsposed.lspd.utils.UserInfo;
+import org.lsposed.lspd.models.UserInfo;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.adapters.AppHelper;

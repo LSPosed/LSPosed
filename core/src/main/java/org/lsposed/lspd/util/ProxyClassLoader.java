@@ -31,7 +31,7 @@ public class ProxyClassLoader extends ClassLoader {
 
     @Override
     protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
-        Class clazz = null;
+        Class<?> clazz = null;
 
         try {
             clazz = mClassLoader.loadClass(name);

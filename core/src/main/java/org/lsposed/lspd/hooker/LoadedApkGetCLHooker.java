@@ -27,8 +27,15 @@ import android.os.IBinder;
 
 import org.lsposed.lspd.util.Hookers;
 import org.lsposed.lspd.util.InstallerVerifier;
+import org.lsposed.lspd.util.MetaDataReader;
+import org.lsposed.lspd.util.Utils;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Map;
 
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
@@ -50,7 +57,7 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
     }
 
     @Override
-    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+    protected void afterHookedMethod(MethodHookParam param) {
 
         try {
 
@@ -78,6 +85,11 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
             lpparam.appInfo = loadedApk.getApplicationInfo();
             lpparam.isFirstApplication = this.isFirstApplication;
 
+            IBinder moduleBinder = serviceClient.requestModuleBinder();
+            if (moduleBinder != null) {
+                hookNewXSP(lpparam);
+            }
+
             IBinder binder = loadedApk.getApplicationInfo() != null ? serviceClient.requestManagerBinder(loadedApk.getApplicationInfo().packageName) : null;
             if (binder != null) {
                 if (InstallerVerifier.verifyInstallerSignature(loadedApk.getApplicationInfo())) {
@@ -98,11 +110,42 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
         }
     }
 
-    public void setUnhook(Unhook unhook) {
-        this.unhook = unhook;
+    private void hookNewXSP(XC_LoadPackage.LoadPackageParam lpparam) {
+        int xposedminversion = -1;
+        boolean xposedsharedprefs = false;
+        try {
+            Map<String, Object> metaData = MetaDataReader.getMetaData(new File(lpparam.appInfo.sourceDir));
+            Object minVersionRaw = metaData.get("xposedminversion");
+            if (minVersionRaw instanceof Integer) {
+                xposedminversion = (Integer) minVersionRaw;
+            } else if (minVersionRaw instanceof String) {
+                xposedminversion = MetaDataReader.extractIntPart((String) minVersionRaw);
+            }
+            xposedsharedprefs = metaData.containsKey("xposedsharedprefs");
+        } catch (NumberFormatException | IOException e) {
+            Hookers.logE("ApkParser fails", e);
+        }
+
+        if (xposedminversion > 92 || xposedsharedprefs) {
+            Utils.logW("New modules detected, hook preferences");
+            XposedHelpers.findAndHookMethod("android.app.ContextImpl", lpparam.classLoader, "checkMode", int.class, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) {
+                    if (((int) param.args[0] & 1/*Context.MODE_WORLD_READABLE*/) != 0) {
+                        param.setThrowable(null);
+                    }
+                }
+            });
+            XposedHelpers.findAndHookMethod("android.app.ContextImpl", lpparam.classLoader, "getPreferencesDir", new XC_MethodReplacement() {
+                @Override
+                protected Object replaceHookedMethod(MethodHookParam param) {
+                    return new File(serviceClient.getPrefsPath(lpparam.packageName));
+                }
+            });
+        }
     }
 
-    public Unhook getUnhook() {
-        return unhook;
+    public void setUnhook(Unhook unhook) {
+        this.unhook = unhook;
     }
 }

@@ -27,9 +27,9 @@ import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.util.Log;
 
-import org.lsposed.lspd.Application;
+import org.lsposed.lspd.models.Application;
+import org.lsposed.lspd.models.UserInfo;
 import org.lsposed.lspd.utils.ParceledListSlice;
-import org.lsposed.lspd.utils.UserInfo;
 import org.lsposed.manager.adapters.ScopeAdapter;
 import org.lsposed.manager.receivers.LSPManagerServiceClient;
 

@@ -20,25 +20,14 @@
 
 package org.lsposed.lspd.hooker;
 
-import static org.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
-
-import android.annotation.SuppressLint;
 import android.app.ActivityThread;
-import android.app.ContextImpl;
 import android.app.LoadedApk;
-import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.res.CompatibilityInfo;
 import android.content.res.XResources;
-import android.os.IBinder;
 
 import org.lsposed.lspd.util.Hookers;
-import org.lsposed.lspd.util.MetaDataReader;
 import org.lsposed.lspd.util.Utils;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.Map;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
@@ -77,45 +66,6 @@ public class HandleBindAppHooker extends XC_MethodHook {
 
             String processName = (String) XposedHelpers.getObjectField(bindData, "processName");
 
-
-            IBinder moduleBinder = serviceClient.requestModuleBinder();
-            boolean isModule = moduleBinder != null;
-            int xposedminversion = -1;
-            boolean xposedsharedprefs = false;
-            try {
-                if (isModule) {
-                    Map<String, Object> metaData = MetaDataReader.getMetaData(new File(appInfo.sourceDir));
-                    Object minVersionRaw = metaData.get("xposedminversion");
-                    if (minVersionRaw instanceof Integer) {
-                        xposedminversion = (Integer) minVersionRaw;
-                    } else if (minVersionRaw instanceof String) {
-                        xposedminversion = MetaDataReader.extractIntPart((String) minVersionRaw);
-                    }
-                    xposedsharedprefs = metaData.containsKey("xposedsharedprefs");
-                }
-            } catch (NumberFormatException | IOException e) {
-                Hookers.logE("ApkParser fails", e);
-            }
-
-            if (isModule && (xposedminversion > 92 || xposedsharedprefs)) {
-                Utils.logW("New modules detected, hook preferences");
-                XposedHelpers.findAndHookMethod(ContextImpl.class, "checkMode", int.class, new XC_MethodHook() {
-                    @SuppressWarnings("deprecation")
-                    @SuppressLint("WorldReadableFiles")
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) {
-                        if (((int) param.args[0] & Context.MODE_WORLD_READABLE) != 0) {
-                            param.setThrowable(null);
-                        }
-                    }
-                });
-                XposedHelpers.findAndHookMethod(ContextImpl.class, "getPreferencesDir", new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) {
-                        param.setResult(new File(serviceClient.getPrefsPath(appInfo.packageName)));
-                    }
-                });
-            }
             LoadedApkGetCLHooker hook = new LoadedApkGetCLHooker(loadedApk, reportedPackageName,
                     processName, true);
             hook.setUnhook(XposedHelpers.findAndHookMethod(

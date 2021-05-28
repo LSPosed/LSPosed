@@ -46,8 +46,8 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
-import org.lsposed.lspd.Application;
 import org.lsposed.lspd.BuildConfig;
+import org.lsposed.lspd.models.Application;
 import org.lsposed.lspd.util.InstallerVerifier;
 import org.lsposed.lspd.utils.ParceledListSlice;
 
@@ -123,12 +123,6 @@ public class PackageService {
         IPackageManager pm = getPackageManager();
         if (pm == null) return null;
         return pm.getApplicationInfo(packageName, flags, userId);
-    }
-
-    public static String[] getPackagesForUid(int uid) throws RemoteException {
-        IPackageManager pm = getPackageManager();
-        if (pm == null) return new String[0];
-        return pm.getPackagesForUid(uid);
     }
 
     public static ParceledListSlice<PackageInfo> getInstalledPackagesFromAllUsers(int flags, boolean filterNoProcess) throws RemoteException {

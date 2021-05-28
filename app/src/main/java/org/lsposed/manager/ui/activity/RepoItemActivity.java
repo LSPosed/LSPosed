@@ -164,9 +164,7 @@ public class RepoItemActivity extends BaseActivity implements RepoLoader.Listene
     @Override
     public void onThrowable(Throwable t) {
         if (releaseAdapter != null) {
-            runOnUiThread(() -> {
-                releaseAdapter.loadItems();
-            });
+            runOnUiThread(() -> releaseAdapter.loadItems());
         }
         if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
             Snackbar.make(binding.snackbar, getString(R.string.repo_load_failed, t.getLocalizedMessage()), Snackbar.LENGTH_SHORT).show();
