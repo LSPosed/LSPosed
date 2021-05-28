@@ -103,8 +103,8 @@ public final class XposedBridge {
             } catch (Resources.NotFoundException nfe) {
                 XposedBridge.log(nfe);
             }
-            ResourcesHook.removeFinalFlagNative(resClass);
-            ResourcesHook.removeFinalFlagNative(taClass);
+            ResourcesHook.makeInheritable(resClass, resClass.getDeclaredConstructors());
+            ResourcesHook.makeInheritable(taClass, taClass.getDeclaredConstructors());
             ClassLoader myCL = XposedBridge.class.getClassLoader();
             dummyClassLoader = ResourcesHook.buildDummyClassLoader(myCL.getParent(), resClass, taClass);
             dummyClassLoader.loadClass("xposed.dummy.XResourcesSuperClass");

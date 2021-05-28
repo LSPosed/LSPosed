@@ -41,29 +41,6 @@ namespace art {
                     return "";
             }
 
-            CREATE_MEM_HOOK_STUB_ENTRIES("_ZN3art6mirror5Class15IsInSamePackageENS_6ObjPtrIS1_EE",
-                    bool, IsInSamePackage, (void *thiz, void* that), {
-                std::string storage1;
-                std::string storage2;
-                const char *thisDesc = GetDescriptor(thiz, &storage1);
-                const char *thatDesc = GetDescriptor(that, &storage2);
-                // Note: these identifiers should be consistent with those in Java layer
-                if (strstr(thisDesc, "LspHooker_") != nullptr
-                    || strstr(thatDesc, "LspHooker_") != nullptr
-                    || strstr(thisDesc, "org/lsposed/") != nullptr
-                    || strstr(thatDesc, "org/lsposed/") != nullptr) {
-                    return true;
-                }
-                // for MIUI resources hooking
-                if (strstr(thisDesc, "android/content/res/MiuiTypedArray") != nullptr
-                    || strstr(thatDesc, "android/content/res/MiuiTypedArray") != nullptr
-                    || strstr(thisDesc, "android/content/res/XResources$XTypedArray") != nullptr
-                    || strstr(thatDesc, "android/content/res/XResources$XTypedArray") != nullptr) {
-                    return true;
-                }
-                return backup(thiz, that);
-            });
-
             CREATE_MEM_FUNC_SYMBOL_ENTRY(void*, GetClassDef, void* thiz) {
                 if (LIKELY(GetClassDefSym))
                     return GetClassDefSym(thiz);
@@ -77,10 +54,7 @@ namespace art {
             static void Setup(void *handle) {
                 RETRIEVE_MEM_FUNC_SYMBOL(GetDescriptor, "_ZN3art6mirror5Class13GetDescriptorEPNSt3__112"
                                                     "basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEE");
-
                 RETRIEVE_MEM_FUNC_SYMBOL(GetClassDef, "_ZN3art6mirror5Class11GetClassDefEv");
-
-                lspd::HookSyms(handle, IsInSamePackage);
             }
 
             const char *GetDescriptor(std::string *storage) {

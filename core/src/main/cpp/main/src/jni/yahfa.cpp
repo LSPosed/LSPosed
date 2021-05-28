@@ -58,8 +58,8 @@ namespace lspd {
         return lspd::isHooked(yahfa::getArtMethod(env, member));
     }
 
-    LSP_DEF_NATIVE_METHOD(jclass, Yahfa, buildHooker, jobject app_class_loader, jclass return_class,
-                          jobjectArray classes, jstring method_name) {
+    LSP_DEF_NATIVE_METHOD(jclass, Yahfa, buildHooker, jobject app_class_loader, jchar return_class,
+                          jcharArray classes, jstring method_name) {
         static auto in_memory_classloader = JNI_NewGlobalRef(env, JNI_FindClass(env,
                                                                                 "dalvik/system/InMemoryDexClassLoader"));
         static jmethodID initMid = JNI_GetMethodID(env, in_memory_classloader, "<init>",
@@ -70,15 +70,14 @@ namespace lspd {
         auto parameter_types = std::vector<TypeDescriptor>();
         parameter_types.reserve(parameter_length);
         std::string storage;
-        auto current_thread = art::Thread::Current();
-        auto return_type = TypeDescriptor::FromDescriptor(
-                art::mirror::Class(current_thread.DecodeJObject(return_class)).GetDescriptor(
-                        &storage));
+        auto return_type =
+                return_class == 'L' ? TypeDescriptor::Object : TypeDescriptor::FromDescriptor(
+                        (char) return_class);
+        auto params = env->GetCharArrayElements(classes, nullptr);
         for (int i = 0; i < parameter_length; ++i) {
-            auto param = (jclass) env->GetObjectArrayElement(classes, i);
-            auto *param_ref = current_thread.DecodeJObject(param);
-            auto descriptor = art::mirror::Class(param_ref).GetDescriptor(&storage);
-            parameter_types.push_back(TypeDescriptor::FromDescriptor(descriptor));
+            parameter_types.push_back(
+                    params[i] == 'L' ? TypeDescriptor::Object : TypeDescriptor::FromDescriptor(
+                            (char) params[i]));
         }
 
         ClassBuilder cbuilder{dex_file.MakeClass("LspHooker_")};
@@ -136,7 +135,7 @@ namespace lspd {
                     Instruction::Cast(tmp, Value::Type(type_def->orig_index)));
             hookBuilder.BuildReturn(tmp, true);
         }
-        auto *hook_method = hookBuilder.Encode();
+        [[maybe_unused]] auto *hook_method = hookBuilder.Encode();
 
         auto backup_builder{
                 cbuilder.CreateMethod("backup", Prototype{return_type, parameter_types})};
@@ -153,7 +152,7 @@ namespace lspd {
             backup_builder.BuildConst(zero, 0);
             backup_builder.BuildReturn(zero, /*is_object=*/!return_type.is_primitive(), false);
         }
-        auto *back_method = backup_builder.Encode();
+        [[maybe_unused]] auto *back_method = backup_builder.Encode();
 
         slicer::MemView image{dex_file.CreateImage()};
 
@@ -185,7 +184,7 @@ namespace lspd {
             LSP_NATIVE_METHOD(Yahfa, recordHooked, "(Ljava/lang/reflect/Executable;)V"),
             LSP_NATIVE_METHOD(Yahfa, isHooked, "(Ljava/lang/reflect/Executable;)Z"),
             LSP_NATIVE_METHOD(Yahfa, buildHooker,
-                              "(Ljava/lang/ClassLoader;Ljava/lang/Class;[Ljava/lang/Class;Ljava/lang/String;)Ljava/lang/Class;"),
+                              "(Ljava/lang/ClassLoader;C[CLjava/lang/String;)Ljava/lang/Class;"),
     };
 
     void RegisterYahfa(JNIEnv *env) {

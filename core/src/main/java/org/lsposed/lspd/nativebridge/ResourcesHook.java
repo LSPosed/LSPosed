@@ -23,11 +23,13 @@ package org.lsposed.lspd.nativebridge;
 import android.content.res.Resources;
 import android.content.res.XResources;
 
+import java.lang.reflect.Constructor;
+
 public class ResourcesHook {
 
     public static native boolean initXResourcesNative();
 
-    public static native boolean removeFinalFlagNative(Class<?> clazz);
+    public static native boolean makeInheritable(Class<?> clazz, Constructor<?>[] constructors);
 
     public static native ClassLoader buildDummyClassLoader(ClassLoader parent, Class<?> resourceSuperClass, Class<?> typedArraySuperClass);
 
