@@ -58,15 +58,6 @@ namespace yahfa {
         }
 
         int doBackupAndHook(void *targetMethod, void *hookMethod, void *backupMethod) {
-            if (hookCount >= hookCap) {
-                LOGI("not enough capacity. Allocating...");
-                if (doInitHookCap(DEFAULT_CAP)) {
-                    LOGE("cannot hook method");
-                    return 1;
-                }
-                LOGI("Allocating done");
-            }
-
             LOGI("target method is at %p, hook method is at %p, backup method is at %p",
                  targetMethod, hookMethod, backupMethod);
 
@@ -111,7 +102,6 @@ namespace yahfa {
             }
 
             LOGI("hook and backup done");
-            hookCount += 1;
             return 0;
         }
 

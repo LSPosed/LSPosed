@@ -14,12 +14,6 @@
 #include "common.h"
 #include "trampoline.h"
 
-static unsigned char *trampolineCode; // place where trampolines are saved
-static unsigned int trampolineSize; // trampoline size required for each hook
-
-unsigned int hookCap = 0;
-unsigned int hookCount = 0;
-
 // trampoline:
 // 1. set eax/r0/x0 to the hook ArtMethod addr
 // 2. jump into its entry point
@@ -74,9 +68,12 @@ static inline void FlushCache(void *addr, size_t size) {
 }
 
 void *genTrampoline(void *hookMethod) {
-    void *targetAddr;
-
-    targetAddr = trampolineCode + trampolineSize * hookCount;
+    unsigned char *targetAddr = mmap(NULL, trampolineSize, PROT_READ | PROT_WRITE | PROT_EXEC,
+                              MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
+    if (targetAddr == MAP_FAILED) {
+        LOGE("mmap failed, errno = %s", strerror(errno));
+        return NULL;
+    }
     memcpy(targetAddr, trampoline,
            sizeof(trampoline)); // do not use trampolineSize since it's a rounded size
 
@@ -116,25 +113,4 @@ void setupTrampoline() {
 #else
 #error Unsupported architecture
 #endif
-}
-
-int doInitHookCap(unsigned int cap) {
-    if (cap == 0) {
-        LOGE("invalid capacity: %d", cap);
-        return 1;
-    }
-    if (hookCap) {
-        LOGI("allocating new space for trampoline code");
-    }
-    unsigned int allSize = trampolineSize * cap;
-    unsigned char *buf = mmap(NULL, allSize, PROT_READ | PROT_WRITE | PROT_EXEC,
-                              MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-    if (buf == MAP_FAILED) {
-        LOGE("mmap failed, errno = %s", strerror(errno));
-        return 1;
-    }
-    hookCap = cap;
-    hookCount = 0;
-    trampolineCode = buf;
-    return 0;
 }
