@@ -86,11 +86,11 @@
     <string name="module_uninstall_message">您確定要移除此模組嗎？</string>
     <string name="module_uninstalled">已移除 %1$s</string>
     <string name="module_uninstall_failed">移除失敗</string>
-    <string name="module_installed">已安裝 %1$s 到使用者 %2$d</string>
+    <string name="module_installed">已安裝 %1$s 到使用者 %2$s</string>
     <string name="module_install_failed">安裝模組失敗</string>
     <string name="user_title">使用者 %d</string>
-    <string name="install_to_user">安裝到使用者 %d</string>
-    <string name="install_to_user_message">要安裝 %1$s 到使用者 %2$d 嗎？建議手動安裝或多開，透過 LSPosed 強制安裝可能會出現問題。</string>
+    <string name="install_to_user">安裝到使用者 %s</string>
+    <string name="install_to_user_message">要安裝 %1$s 到使用者 %2$s 嗎？建議手動安裝或多開，透過 LSPosed 強制安裝可能會出現問題。</string>
 
     <!-- AppListActivity -->
     <string name="compile_speed">重新最佳化</string>

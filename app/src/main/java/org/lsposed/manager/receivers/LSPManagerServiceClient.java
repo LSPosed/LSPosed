@@ -29,6 +29,7 @@ import android.os.RemoteException;
 import org.lsposed.lspd.Application;
 import org.lsposed.lspd.ILSPManagerService;
 import org.lsposed.lspd.utils.ParceledListSlice;
+import org.lsposed.lspd.utils.UserInfo;
 
 import java.util.List;
 
@@ -156,7 +157,7 @@ public class LSPManagerServiceClient {
         return service.isSepolicyLoaded();
     }
 
-    public static int[] getUsers() throws RemoteException, NullPointerException {
+    public static List<UserInfo> getUsers() throws RemoteException, NullPointerException {
         ensureService();
         return service.getUsers();
     }

@@ -420,7 +420,7 @@ public class ConfigManager {
                         if (module_pkg.equals(app.packageName)) {
                             var appId = processScope.uid % PER_USER_RANGE;
                             for (var user : UserService.getUsers()) {
-                                cachedScope.computeIfAbsent(new ProcessScope(processScope.processName, user * PER_USER_RANGE + appId),
+                                cachedScope.computeIfAbsent(new ProcessScope(processScope.processName, user.id * PER_USER_RANGE + appId),
                                         ignored -> new HashMap<>()).put(module_pkg, apk_path);
                             }
                         }
