@@ -29,6 +29,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.HashMap;
 
 import de.robv.android.xposed.LspHooker;
 import de.robv.android.xposed.XposedBridge;
@@ -38,6 +39,18 @@ public class HookerDexMaker {
 
     public static final String METHOD_NAME_BACKUP = "backup";
     public static final String METHOD_NAME_SETUP = "setup";
+    private static final HashMap<Class<?>, Character> descriptors = new HashMap<>() {{
+        put(int.class, 'I');
+        put(boolean.class, 'Z');
+        put(char.class, 'C');
+        put(long.class, 'J');
+        put(short.class, 'S');
+        put(float.class, 'F');
+        put(double.class, 'D');
+        put(byte.class, 'B');
+        put(void.class, 'V');
+        put(Object.class, 'L');
+    }};
 
     private Class<?> mReturnType;
     private Class<?>[] mActualParameterTypes;
@@ -49,16 +62,29 @@ public class HookerDexMaker {
 
     private static Class<?>[] getParameterTypes(Executable method, boolean isStatic) {
         Class<?>[] parameterTypes = method.getParameterTypes();
+        for (int i = 0; i < parameterTypes.length; ++i) {
+            parameterTypes[i] = parameterTypes[i].isPrimitive() ? parameterTypes[i] : Object.class;
+        }
         if (isStatic) {
             return parameterTypes;
         }
         int parameterSize = parameterTypes.length;
-        int targetParameterSize = parameterSize + 1;
-        Class<?>[] newParameterTypes = new Class<?>[targetParameterSize];
-        int offset = 1;
-        newParameterTypes[0] = method.getDeclaringClass();
-        System.arraycopy(parameterTypes, 0, newParameterTypes, offset, parameterTypes.length);
+        Class<?>[] newParameterTypes = new Class<?>[parameterSize + 1];
+        newParameterTypes[0] = Object.class;
+        System.arraycopy(parameterTypes, 0, newParameterTypes, 1, parameterSize);
         return newParameterTypes;
+    }
+
+    private static char getDescriptor(Class<?> clazz) {
+        return descriptors.getOrDefault(clazz, 'L');
+    }
+
+    private static char[] getDescriptors(Class<?>[] classes) {
+        var descriptors = new char[classes.length];
+        for (int i = 0; i < classes.length; ++i) {
+            descriptors[i] = getDescriptor(classes[i]);
+        }
+        return descriptors;
     }
 
     public void start(Executable member, XposedBridge.AdditionalHookInfo hookInfo,
@@ -89,7 +115,7 @@ public class HookerDexMaker {
     }
 
     private void doMake(String methodName) throws Exception {
-        Class<?> hookClass = Yahfa.buildHooker(mAppClassLoader, mReturnType, mActualParameterTypes, methodName);
+        Class<?> hookClass = Yahfa.buildHooker(mAppClassLoader, getDescriptor(mReturnType), getDescriptors(mActualParameterTypes), methodName);
         // Execute our newly-generated code in-process.
         Method backupMethod = hookClass.getMethod(METHOD_NAME_BACKUP, mActualParameterTypes);
         mHooker = new LspHooker(mHookInfo, mMember, backupMethod);

@@ -9,115 +9,103 @@
 
 int SDKVersion;
 size_t OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod;
-namespace {
-    constexpr size_t OFFSET_access_flags_in_ArtMethod = 4;
-    constexpr uint32_t kAccCompileDontBother = 0x02000000;
-    constexpr uint32_t kAccPublic = 0x0001;  // class, field, method, ic
-    constexpr uint32_t kAccPrivate = 0x0002;  // field, method, ic
-    constexpr uint32_t kAccProtected = 0x0004;  // field, method, ic
-    constexpr uint32_t kAccStatic = 0x0008;  // field, method, ic
-    constexpr uint32_t kAccFastInterpreterToInterpreterInvoke = 0x40000000;
-
-    size_t ArtMethodSize;
-    uint32_t kAccPreCompiled = 0x00200000;
-
-    jfieldID fieldArtMethod = nullptr;
-
-    constexpr inline uint32_t read32(void *addr) {
-        return *((uint32_t *) addr);
-    }
-
-    constexpr inline void write32(void *addr, uint32_t value) {
-        *((uint32_t *) addr) = value;
-    }
-
-    constexpr inline void *readAddr(void *addr) {
-        return *((void **) addr);
-    }
-
-    constexpr inline void writeAddr(void *addr, void *value) {
-        *((void **) addr) = value;
-    }
-
-    void setNonCompilable(void *method) {
-        uint32_t access_flags = read32((char *) method + OFFSET_access_flags_in_ArtMethod);
-        LOGI("setNonCompilable: access flags is 0x%x", access_flags);
-        access_flags |= kAccCompileDontBother;
-        if (SDKVersion >= __ANDROID_API_R__)
-            access_flags &= ~kAccPreCompiled;
-        write32((char *) method + OFFSET_access_flags_in_ArtMethod, access_flags);
-    }
-
-    void setPrivate(void *method) {
-        uint32_t access_flags = read32((char *) method + OFFSET_access_flags_in_ArtMethod);
-        if (!(access_flags & kAccStatic)) {
-            LOGI("setPrivate: access flags is 0x%x", access_flags);
-            access_flags |= kAccPrivate;
-            access_flags &= ~kAccProtected;
-            access_flags &= ~kAccPublic;
-            write32((char *) method + OFFSET_access_flags_in_ArtMethod, access_flags);
-        }
-    }
-
-    int doBackupAndHook(void *targetMethod, void *hookMethod, void *backupMethod) {
-        if (hookCount >= hookCap) {
-            LOGI("not enough capacity. Allocating...");
-            if (doInitHookCap(DEFAULT_CAP)) {
-                LOGE("cannot hook method");
-                return 1;
-            }
-            LOGI("Allocating done");
-        }
-
-        LOGI("target method is at %p, hook method is at %p, backup method is at %p",
-             targetMethod, hookMethod, backupMethod);
-
-
-        // set kAccCompileDontBother for a method we do not want the compiler to compile
-        // so that we don't need to worry about hotness_count_
-        setNonCompilable(targetMethod);
-        setNonCompilable(hookMethod);
-
-        if (backupMethod) {// do method backup
-            // have to copy the whole target ArtMethod here
-            // if the target method calls other methods which are to be resolved
-            // then ToDexPC would be invoked for the caller(origin method)
-            // in which case ToDexPC would use the entrypoint as a base for mapping pc to dex offset
-            // so any changes to the target method's entrypoint would result in a wrong dex offset
-            // and artQuickResolutionTrampoline would fail for methods called by the origin method
-            memcpy(backupMethod, targetMethod, ArtMethodSize);
-            setPrivate(backupMethod);
-        }
-
-        // replace entry point
-        void *newEntrypoint = genTrampoline(hookMethod);
-        LOGI("origin ep is %p, new ep is %p",
-             readAddr((char *) targetMethod + OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod),
-             newEntrypoint
-        );
-        if (newEntrypoint) {
-            writeAddr((char *) targetMethod + OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod,
-                      newEntrypoint);
-        } else {
-            LOGE("failed to allocate space for trampoline of target method");
-            return 1;
-        }
-
-        if (SDKVersion >= __ANDROID_API_Q__) {
-            uint32_t access_flags = read32((char *) targetMethod + OFFSET_access_flags_in_ArtMethod);
-            // On API 29 whether to use the fast path or not is cached in the ART method structure
-            access_flags &= ~kAccFastInterpreterToInterpreterInvoke;
-            write32((char *) targetMethod + OFFSET_access_flags_in_ArtMethod, access_flags);
-        }
-
-        LOGI("hook and backup done");
-        hookCount += 1;
-        return 0;
-    }
-
-}
 
 namespace yahfa {
+    namespace {
+        constexpr size_t OFFSET_access_flags_in_ArtMethod = 4;
+        constexpr uint32_t kAccCompileDontBother = 0x02000000;
+        constexpr uint32_t kAccFastInterpreterToInterpreterInvoke = 0x40000000;
+
+        size_t ArtMethodSize;
+        uint32_t kAccPreCompiled = 0x00200000;
+
+        jfieldID fieldArtMethod = nullptr;
+
+        constexpr inline uint32_t read32(void *addr) {
+            return *((uint32_t *) addr);
+        }
+
+        constexpr inline void write32(void *addr, uint32_t value) {
+            *((uint32_t *) addr) = value;
+        }
+
+        constexpr inline void *readAddr(void *addr) {
+            return *((void **) addr);
+        }
+
+        constexpr inline void writeAddr(void *addr, void *value) {
+            *((void **) addr) = value;
+        }
+
+        void setNonCompilable(void *method) {
+            uint32_t access_flags = getAccessFlags(method);
+            LOGI("setNonCompilable: access flags is 0x%x", access_flags);
+            access_flags |= kAccCompileDontBother;
+            if (SDKVersion >= __ANDROID_API_R__)
+                access_flags &= ~kAccPreCompiled;
+            setAccessFlags(method, access_flags);
+        }
+
+        void setPrivate(void *method) {
+            uint32_t access_flags = getAccessFlags(method);
+            if (!(access_flags & kAccStatic)) {
+                LOGI("setPrivate: access flags is 0x%x", access_flags);
+                access_flags |= kAccPrivate;
+                access_flags &= ~kAccProtected;
+                access_flags &= ~kAccPublic;
+                setAccessFlags(method, access_flags);
+            }
+        }
+
+        int doBackupAndHook(void *targetMethod, void *hookMethod, void *backupMethod) {
+            LOGI("target method is at %p, hook method is at %p, backup method is at %p",
+                 targetMethod, hookMethod, backupMethod);
+
+
+            // set kAccCompileDontBother for a method we do not want the compiler to compile
+            // so that we don't need to worry about hotness_count_
+            setNonCompilable(targetMethod);
+            setNonCompilable(hookMethod);
+
+            if (backupMethod) {// do method backup
+                // have to copy the whole target ArtMethod here
+                // if the target method calls other methods which are to be resolved
+                // then ToDexPC would be invoked for the caller(origin method)
+                // in which case ToDexPC would use the entrypoint as a base for mapping pc to dex offset
+                // so any changes to the target method's entrypoint would result in a wrong dex offset
+                // and artQuickResolutionTrampoline would fail for methods called by the origin method
+                memcpy(backupMethod, targetMethod, ArtMethodSize);
+                setPrivate(backupMethod);
+            }
+
+            // replace entry point
+            void *newEntrypoint = genTrampoline(hookMethod);
+            LOGI("origin ep is %p, new ep is %p",
+                 readAddr((char *) targetMethod +
+                          OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod),
+                 newEntrypoint
+            );
+            if (newEntrypoint) {
+                writeAddr((char *) targetMethod +
+                          OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod,
+                          newEntrypoint);
+            } else {
+                LOGE("failed to allocate space for trampoline of target method");
+                return 1;
+            }
+
+            if (SDKVersion >= __ANDROID_API_Q__) {
+                uint32_t access_flags = getAccessFlags(targetMethod);
+                // On API 29 whether to use the fast path or not is cached in the ART method structure
+                access_flags &= ~kAccFastInterpreterToInterpreterInvoke;
+                setAccessFlags(targetMethod, access_flags);
+            }
+
+            LOGI("hook and backup done");
+            return 0;
+        }
+
+    }
 
     void init(JNIEnv *env, [[maybe_unused]] jclass clazz, jint sdkVersion) {
         SDKVersion = sdkVersion;
@@ -158,6 +146,16 @@ namespace yahfa {
         } else {
             return (void *) env->GetLongField(jmethod, fieldArtMethod);
         }
+    }
+
+    uint32_t getAccessFlags(void *art_method) {
+
+        return read32((char *) art_method + OFFSET_access_flags_in_ArtMethod);
+        // On API 29 whether to use the fast path or not is cached in the ART method structure
+    }
+
+    void setAccessFlags(void *art_method, uint32_t access_flags) {
+        write32((char *) art_method + OFFSET_access_flags_in_ArtMethod, access_flags);
     }
 
     jobject findMethodNative(JNIEnv *env, [[maybe_unused]] jclass clazz,

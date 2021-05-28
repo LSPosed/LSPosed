@@ -25,6 +25,7 @@
 #include <dl_util.h>
 #include <framework/androidfw/resource_types.h>
 #include <byte_order.h>
+#include <HookMain.h>
 #include "native_util.h"
 #include "resources_hook.h"
 
@@ -95,13 +96,24 @@ namespace lspd {
     }
 
     // @ApiSensitive(Level.MIDDLE)
-    LSP_DEF_NATIVE_METHOD(jboolean, ResourcesHook, removeFinalFlagNative, jclass target_class) {
+    LSP_DEF_NATIVE_METHOD(jboolean, ResourcesHook, makeInheritable, jclass target_class,
+                          jobjectArray constructors) {
         if (target_class) {
-            auto class_clazz = JNI_FindClass(env, "java/lang/Class");
-            jfieldID java_lang_Class_accessFlags = JNI_GetFieldID(
+            static auto class_clazz = JNI_NewGlobalRef(env, JNI_FindClass(env, "java/lang/Class"));
+            static jfieldID java_lang_Class_accessFlags = JNI_GetFieldID(
                     env, class_clazz, "accessFlags", "I");
             jint access_flags = env->GetIntField(target_class, java_lang_Class_accessFlags);
             env->SetIntField(target_class, java_lang_Class_accessFlags, access_flags & ~kAccFinal);
+            for (auto i = 0u; i < env->GetArrayLength(constructors); ++i) {
+                auto constructor = env->GetObjectArrayElement(constructors, i);
+                void *method = yahfa::getArtMethod(env, constructor);
+                uint32_t flags = yahfa::getAccessFlags(method);
+                if ((flags & yahfa::kAccPublic) == 0 && (flags & yahfa::kAccProtected) == 0) {
+                    flags |= yahfa::kAccProtected;
+                    flags &= ~yahfa::kAccPrivate;
+                }
+                yahfa::setAccessFlags(method, flags);
+            }
             return JNI_TRUE;
         }
         return JNI_FALSE;
@@ -208,7 +220,8 @@ namespace lspd {
 
     static JNINativeMethod gMethods[] = {
             LSP_NATIVE_METHOD(ResourcesHook, initXResourcesNative, "()Z"),
-            LSP_NATIVE_METHOD(ResourcesHook, removeFinalFlagNative, "(Ljava/lang/Class;)Z"),
+            LSP_NATIVE_METHOD(ResourcesHook, makeInheritable,
+                              "(Ljava/lang/Class;[Ljava/lang/reflect/Constructor;)Z"),
             LSP_NATIVE_METHOD(ResourcesHook, buildDummyClassLoader,
                               "(Ljava/lang/ClassLoader;Ljava/lang/Class;Ljava/lang/Class;)Ljava/lang/ClassLoader;"),
             LSP_NATIVE_METHOD(ResourcesHook, rewriteXmlReferencesNative,
