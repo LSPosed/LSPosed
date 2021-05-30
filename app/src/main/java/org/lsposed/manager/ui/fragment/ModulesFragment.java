@@ -297,7 +297,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             Bundle bundle = new Bundle();
             bundle.putString("modulePackageName", selectedModule.packageName);
             bundle.putString("moduleName", selectedModule.getAppName());
-            getNavController().navigate(R.id.action_modules_fragment_to_repo_item_fragment, bundle);
+            getNavController().navigate(R.id.action_modules_fragment_to_repo_item_fragment, bundle, getNavOptions());
             return true;
         }
         return super.onContextItemSelected(item);
@@ -439,7 +439,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                     Bundle bundle = new Bundle();
                     bundle.putString("modulePackageName", item.packageName);
                     bundle.putInt("moduleUserId", item.userId);
-                    getNavController().navigate(R.id.action_modules_fragment_to_app_list_fragment, bundle);
+                    getNavController().navigate(R.id.action_modules_fragment_to_app_list_fragment, bundle, getNavOptions());
                 });
                 holder.itemView.setOnLongClickListener(v -> {
                     selectedModule = item;

@@ -1,6 +1,5 @@
 package org.lsposed.manager.ui.fragment;
 
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
@@ -121,18 +120,6 @@ public class HomeFragment extends BaseFragment {
         }
     }
 
-    protected NavOptions getNavOptions() {
-
-        NavOptions navOptions = new NavOptions.Builder()
-                .setEnterAnim(R.anim.nav_default_enter_anim)
-                .setExitAnim(R.anim.nav_default_exit_anim)
-                .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
-                .setPopExitAnim(R.anim.nav_default_pop_exit_anim)
-                .build();
-
-        return navOptions;
-    }
-
     private class StartFragmentListener implements View.OnClickListener {
         boolean requireInstalled;
         int fragment;
@@ -147,28 +134,7 @@ public class HomeFragment extends BaseFragment {
             if (requireInstalled && ConfigManager.getXposedVersionName() == null) {
                 Snackbar.make(snackbar, R.string.lsposed_not_active, Snackbar.LENGTH_LONG).show();
             } else {
-                getNavController().navigate(fragment);
-            }
-        }
-    }
-
-    private class StartActivityListener implements View.OnClickListener {
-        boolean requireInstalled;
-        Class<?> clazz;
-
-        StartActivityListener(Class<?> clazz, boolean requireInstalled) {
-            this.clazz = clazz;
-            this.requireInstalled = requireInstalled;
-        }
-
-        @Override
-        public void onClick(View v) {
-            if (requireInstalled && ConfigManager.getXposedVersionName() == null) {
-                Snackbar.make(snackbar, R.string.lsposed_not_active, Snackbar.LENGTH_LONG).show();
-            } else {
-                Intent intent = new Intent();
-                intent.setClass(requireContext(), clazz);
-                startActivity(intent);
+                getNavController().navigate(fragment, null, getNavOptions());
             }
         }
     }
