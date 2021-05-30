@@ -10,7 +10,14 @@
     <fragment
         android:id="@+id/modules_fragment"
         android:name="org.lsposed.manager.ui.fragment.ModulesFragment"
-        android:label="modules" />
+        android:label="modules" >
+        <action
+            android:id="@+id/action_modules_fragment_to_app_list_fragment"
+            app:destination="@id/app_list_fragment" />
+        <action
+            android:id="@+id/action_modules_fragment_to_repo_item_fragment"
+            app:destination="@id/repo_item_fragment" />
+    </fragment>
     <fragment
         android:id="@+id/settings_fragment"
         android:name="org.lsposed.manager.ui.fragment.SettingsFragment"
@@ -22,7 +29,11 @@
     <fragment
         android:id="@+id/repo_fragment"
         android:name="org.lsposed.manager.ui.fragment.RepoFragment"
-        android:label="repo" />
+        android:label="repo" >
+        <action
+            android:id="@+id/action_repo_fragment_to_repo_item_fragment"
+            app:destination="@id/repo_item_fragment" />
+    </fragment>
     <fragment
         android:id="@+id/repo_item_fragment"
         android:name="org.lsposed.manager.ui.fragment.RepoItemFragment"
