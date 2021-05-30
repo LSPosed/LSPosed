@@ -48,7 +48,7 @@
         <activity
             android:name=".ui.activity.MainActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTop"
+            android:launchMode="singleInstance"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
