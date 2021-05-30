@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
@@ -67,6 +68,18 @@ public class MainActivity extends BaseActivity {
             bundle.putString("modulePackageName", intent.getStringExtra("modulePackageName"));
             bundle.putInt("moduleUserId", intent.getIntExtra("moduleUserId", -1));
             navController.navigate(R.id.app_list_fragment, bundle);
+        } else if (!TextUtils.isEmpty(intent.getDataString())) {
+            switch (intent.getDataString()) {
+                case "modules":
+                    navController.navigate(R.id.modules_fragment);
+                    break;
+                case "logs":
+                    navController.navigate(R.id.logs_fragment);
+                    break;
+                case "repo":
+                    navController.navigate(R.id.repo_fragment);
+                    break;
+            }
         }
     }
 
