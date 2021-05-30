@@ -29,8 +29,6 @@ import android.text.style.URLSpan;
 import android.view.View;
 import android.widget.TextView;
 
-import org.lsposed.manager.ui.activity.base.BaseActivity;
-
 public class LinkTransformationMethod implements TransformationMethod {
 
     private final Activity activity;
