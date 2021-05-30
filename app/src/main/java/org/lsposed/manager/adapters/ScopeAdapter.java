@@ -23,6 +23,7 @@ package org.lsposed.manager.adapters;
 import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
@@ -72,7 +73,7 @@ import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.ItemModuleBinding;
-import org.lsposed.manager.ui.activity.AppListActivity;
+import org.lsposed.manager.ui.fragment.AppListFragment;
 import org.lsposed.manager.ui.fragment.CompileDialogFragment;
 import org.lsposed.manager.util.GlideApp;
 import org.lsposed.manager.util.ModuleUtil;
@@ -93,7 +94,8 @@ import rikka.widget.switchbar.SwitchBar;
 @SuppressLint("NotifyDataSetChanged")
 public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> implements Filterable, Handler.Callback {
 
-    private final AppListActivity activity;
+    private final Activity activity;
+    private final AppListFragment fragment;
     private final PackageManager pm;
     private final SharedPreferences preferences;
     private final Handler loadAppListHandler;
@@ -121,9 +123,9 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         @Override
         public void run() {
             synchronized (this) {
-                activity.binding.progress.setIndeterminate(false);
-                activity.binding.swipeRefreshLayout.setRefreshing(false);
-                String queryStr = activity.searchView != null ? activity.searchView.getQuery().toString() : "";
+                fragment.binding.progress.setIndeterminate(false);
+                fragment.binding.swipeRefreshLayout.setRefreshing(false);
+                String queryStr = fragment.searchView != null ? fragment.searchView.getQuery().toString() : "";
                 getFilter().filter(queryStr);
                 this.notify();
             }
@@ -134,8 +136,9 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     private boolean refreshing = false;
     private boolean enabled = true;
 
-    public ScopeAdapter(AppListActivity activity, ModuleUtil.InstalledModule module) {
-        this.activity = activity;
+    public ScopeAdapter(AppListFragment fragment, ModuleUtil.InstalledModule module) {
+        this.fragment = fragment;
+        this.activity = fragment.requireActivity();
         this.module = module;
         moduleUtil = ModuleUtil.getInstance();
         HandlerThread handlerThread = new HandlerThread("appList");
@@ -250,12 +253,12 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             if (launchIntent != null) {
                 ConfigManager.startActivityAsUserWithFeature(launchIntent, module.userId);
             } else {
-                activity.makeSnackBar(R.string.module_no_ui, Snackbar.LENGTH_LONG);
+                fragment.makeSnackBar(R.string.module_no_ui, Snackbar.LENGTH_LONG);
             }
             return true;
         } else if (itemId == R.id.backup) {
             Calendar now = Calendar.getInstance();
-            activity.backupLauncher.launch(String.format(Locale.US,
+            fragment.backupLauncher.launch(String.format(Locale.US,
                     "%s_%04d%02d%02d_%02d%02d%02d.lsp",
                     module.getAppName(),
                     now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1,
@@ -263,7 +266,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                     now.get(Calendar.MINUTE), now.get(Calendar.SECOND)));
             return true;
         } else if (itemId == R.id.restore) {
-            activity.restoreLauncher.launch(new String[]{"*/*"});
+            fragment.restoreLauncher.launch(new String[]{"*/*"});
             return true;
         } else if (!AppHelper.onOptionsItemSelected(item, preferences)) {
             return false;
@@ -284,7 +287,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                 ConfigManager.startActivityAsUserWithFeature(launchIntent, module.userId);
             }
         } else if (itemId == R.id.menu_compile_speed) {
-            CompileDialogFragment.speed(activity.getSupportFragmentManager(), info);
+            CompileDialogFragment.speed(fragment.getChildFragmentManager(), info);
         } else if (itemId == R.id.menu_other_app) {
             var intent = new Intent(Intent.ACTION_SHOW_APP_INFO);
             intent.putExtra(Intent.EXTRA_PACKAGE_NAME, module.packageName);
@@ -309,8 +312,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         return true;
     }
 
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_app_list, menu);
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
         Intent intent = AppHelper.getSettingsIntent(module.packageName, module.userId);
         if (intent == null) {
             menu.removeItem(R.id.menu_launch);
@@ -448,14 +450,14 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         }
         loadAppListHandler.removeMessages(0);
         if (!force) {
-            activity.binding.progress.setVisibility(View.INVISIBLE);
-            activity.binding.progress.setIndeterminate(true);
-            activity.binding.progress.setVisibility(View.VISIBLE);
+            fragment.binding.progress.setVisibility(View.INVISIBLE);
+            fragment.binding.progress.setIndeterminate(true);
+            fragment.binding.progress.setVisibility(View.VISIBLE);
         }
         enabled = moduleUtil.isModuleEnabled(module.packageName);
-        activity.binding.masterSwitch.setOnCheckedChangeListener(null);
-        activity.binding.masterSwitch.setChecked(enabled);
-        activity.binding.masterSwitch.setOnCheckedChangeListener(switchBarOnCheckedChangeListener);
+        fragment.binding.masterSwitch.setOnCheckedChangeListener(null);
+        fragment.binding.masterSwitch.setChecked(enabled);
+        fragment.binding.masterSwitch.setOnCheckedChangeListener(switchBarOnCheckedChangeListener);
         loadAppListHandler.sendMessage(Message.obtain(loadAppListHandler, 0, force));
     }
 
@@ -466,7 +468,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             checkedList.remove(appInfo.application);
         }
         if (!ConfigManager.setModuleScope(module.packageName, checkedList)) {
-            activity.makeSnackBar(R.string.failed_to_save_scope_list, Snackbar.LENGTH_SHORT);
+            fragment.makeSnackBar(R.string.failed_to_save_scope_list, Snackbar.LENGTH_SHORT);
             if (!isChecked) {
                 checkedList.add(appInfo.application);
             } else {
@@ -474,7 +476,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             }
             buttonView.setChecked(!isChecked);
         } else if (appInfo.packageName.equals("android")) {
-            Snackbar.make(activity.binding.snackbar, R.string.reboot_required, Snackbar.LENGTH_SHORT)
+            Snackbar.make(fragment.binding.snackbar, R.string.reboot_required, Snackbar.LENGTH_SHORT)
                     .setAction(R.string.reboot, v -> ConfigManager.reboot(false, null, false))
                     .show();
         }
@@ -619,7 +621,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     }
 
     public boolean onBackPressed() {
-        if (!refreshing && activity.binding.masterSwitch.isChecked() && checkedList.isEmpty()) {
+        if (!refreshing && fragment.binding.masterSwitch.isChecked() && checkedList.isEmpty()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(activity);
             builder.setMessage(!recommendedList.isEmpty() ? R.string.no_scope_selected_has_recommended : R.string.no_scope_selected);
             if (!recommendedList.isEmpty()) {

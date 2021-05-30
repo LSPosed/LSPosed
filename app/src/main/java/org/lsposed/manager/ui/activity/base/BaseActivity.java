@@ -55,7 +55,7 @@ public class BaseActivity extends MaterialActivity {
 
         // make sure the versions are consistent
         String coreVersionStr = ConfigManager.getXposedVersionName();
-        if (coreVersionStr != null) {
+        /*if (coreVersionStr != null) {
             if (!BuildConfig.VERSION_NAME.equals(coreVersionStr)) {
                 new AlertDialog.Builder(this)
                         .setMessage(R.string.outdated_manager)
@@ -66,7 +66,7 @@ public class BaseActivity extends MaterialActivity {
                         .setCancelable(false)
                         .show();
             }
-        }
+        }*/
     }
 
     @Override

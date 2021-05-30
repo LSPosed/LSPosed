@@ -1,0 +1,325 @@
+<!--
+  ~ This file is part of LSPosed.
+  ~
+  ~ LSPosed is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ LSPosed is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+  ~
+  ~ Copyright (C) 2020 EdXposed Contributors
+  ~ Copyright (C) 2021 LSPosed Contributors
+  -->
+
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:clipChildren="false"
+        app:fitsSystemWindowsInsets="top|bottom"
+        tools:ignore="MissingPrefix">
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:animateLayoutChanges="true"
+                android:orientation="vertical"
+                tools:context=".ui.activity.MainActivity">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="10dp"
+                    android:clipChildren="false"
+                    android:clipToPadding="false">
+
+                    <ImageView
+                        android:id="@+id/app_icon"
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="16dp"
+                        android:contentDescription="@string/app_name" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_toEndOf="@id/app_icon"
+                        android:contentDescription="@string/app_name"
+                        android:text="@string/app_name"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                        android:textSize="20sp"
+                        tools:ignore="RelativeOverlap" />
+                </RelativeLayout>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/status"
+                    android:layout_width="match_parent"
+                    android:layout_height="86dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardBackgroundColor="#4CAF50"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp"
+                    app:cardPreventCornerOverlap="false">
+
+                    <ImageView
+                        android:id="@+id/holiday_header"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:visibility="gone"
+                        tools:ignore="ContentDescription" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="18dp"
+                        android:paddingTop="20dp"
+                        android:paddingEnd="18dp"
+                        android:paddingBottom="20dp">
+
+                        <ImageView
+                            android:id="@+id/status_icon"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:layout_centerVertical="true"
+                            app:srcCompat="@drawable/ic_check_circle"
+                            app:tint="?android:attr/textColorPrimaryInverse" />
+
+                        <TextView
+                            android:id="@+id/status_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="25dp"
+                            android:layout_toEndOf="@id/status_icon"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="?android:attr/textColorPrimaryInverse" />
+
+                        <TextView
+                            android:id="@+id/status_summary"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/status_title"
+                            android:layout_alignStart="@id/status_title"
+                            android:layout_marginTop="5dp"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                            android:textColor="?android:attr/textColorPrimaryInverse" />
+                    </RelativeLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/modules"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="10dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:outlineAmbientShadowColor="#3A000000"
+                    android:outlineSpotShadowColor="#3A000000"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp"
+                    app:cardPreventCornerOverlap="false">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="18dp"
+                        android:paddingTop="16dp"
+                        android:paddingEnd="18dp"
+                        android:paddingBottom="16dp">
+
+                        <ImageView
+                            android:id="@+id/modules_icon"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:layout_centerVertical="true"
+                            android:contentDescription="@string/Modules"
+                            app:srcCompat="@drawable/ic_extension" />
+
+                        <TextView
+                            android:id="@+id/modules_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="25dp"
+                            android:layout_toEndOf="@id/modules_icon"
+                            android:text="@string/Modules"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                        <TextView
+                            android:id="@+id/modules_summary"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/modules_title"
+                            android:layout_alignStart="@id/modules_title"
+                            android:layout_marginTop="2dp"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                            android:textColor="@android:color/darker_gray" />
+                    </RelativeLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/download"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="10dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:outlineAmbientShadowColor="#3A000000"
+                    android:outlineSpotShadowColor="#3A000000"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp"
+                    app:cardPreventCornerOverlap="false">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="18dp"
+                        android:paddingTop="16dp"
+                        android:paddingEnd="18dp"
+                        android:paddingBottom="16dp">
+
+                        <ImageView
+                            android:id="@+id/download_icon"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:layout_centerVertical="true"
+                            android:contentDescription="@string/module_repo"
+                            app:srcCompat="@drawable/ic_get_app" />
+
+                        <TextView
+                            android:id="@+id/download_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="25dp"
+                            android:layout_toEndOf="@id/download_icon"
+                            android:text="@string/module_repo"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                        <TextView
+                            android:id="@+id/download_summary"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/download_title"
+                            android:layout_alignStart="@id/download_title"
+                            android:layout_marginTop="2dp"
+                            android:text="@string/module_repo_summary"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                            android:textColor="@android:color/darker_gray" />
+                    </RelativeLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <LinearLayout
+                    android:id="@+id/logs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/item_background_round_nopadding"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:orientation="horizontal"
+                    android:padding="18dp">
+
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:contentDescription="@string/Logs"
+                        app:srcCompat="@drawable/ic_assignment" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="25dp"
+                        android:text="@string/Logs"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/settings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/item_background_round_nopadding"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:orientation="horizontal"
+                    android:padding="18dp">
+
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:contentDescription="@string/Settings"
+                        app:srcCompat="@drawable/ic_settings" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="25dp"
+                        android:text="@string/Settings"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/about"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/item_background_round_nopadding"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:orientation="horizontal"
+                    android:padding="18dp">
+
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:contentDescription="@string/About"
+                        app:srcCompat="@drawable/ic_info" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="25dp"
+                        android:text="@string/About"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </FrameLayout>
+</merge>

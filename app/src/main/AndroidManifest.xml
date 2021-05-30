@@ -46,17 +46,6 @@
         tools:ignore="AllowBackup,GoogleAppIndexingWarning"
         tools:targetApi="q">
         <activity
-            android:name=".ui.activity.CrashReportActivity"
-            android:process=":error_activity" />
-        <activity
-            android:name=".ui.activity.LogsActivity"
-            android:label="@string/Logs" />
-        <activity android:name=".ui.activity.AppListActivity" />
-        <activity
-            android:name=".ui.activity.RepoActivity"
-            android:label="@string/module_repo" />
-        <activity android:name=".ui.activity.RepoItemActivity" />
-        <activity
             android:name=".ui.activity.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
@@ -66,14 +55,17 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
             <meta-data
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
         </activity>
         <activity
-            android:name=".ui.activity.ModulesActivity"
-            android:label="@string/Modules" />
+            android:name=".ui.activity.CrashReportActivity"
+            android:process=":error_activity" />
+        <activity
+            android:name=".ui.activity.RepoActivity"
+            android:label="@string/module_repo" />
+        <activity android:name=".ui.activity.RepoItemActivity" />
         <activity
             android:name=".ui.activity.SettingsActivity"
             android:label="@string/Settings"

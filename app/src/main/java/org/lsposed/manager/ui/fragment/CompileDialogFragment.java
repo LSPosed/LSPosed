@@ -41,7 +41,6 @@ import com.google.android.material.snackbar.Snackbar;
 import org.lsposed.manager.App;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.FragmentCompileDialogBinding;
-import org.lsposed.manager.ui.activity.AppListActivity;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -156,9 +155,9 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
             CompileDialogFragment fragment = outerRef.get();
             if (fragment != null) {
                 fragment.dismissAllowingStateLoss();
-                AppListActivity activity = (AppListActivity) fragment.getActivity();
-                if (activity != null && activity.getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
-                    activity.makeSnackBar(text, Snackbar.LENGTH_LONG);
+                AppListFragment appListFragment = (AppListFragment) fragment.getParentFragment();
+                if (appListFragment != null && appListFragment.getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
+                    appListFragment.makeSnackBar(text, Snackbar.LENGTH_LONG);
                     return;
                 }
             }

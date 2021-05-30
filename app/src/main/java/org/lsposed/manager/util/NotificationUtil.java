@@ -29,7 +29,7 @@ import android.content.Intent;
 import androidx.core.app.NotificationCompat;
 
 import org.lsposed.manager.R;
-import org.lsposed.manager.ui.activity.AppListActivity;
+import org.lsposed.manager.ui.activity.MainActivity;
 
 public final class NotificationUtil {
 
@@ -51,7 +51,7 @@ public final class NotificationUtil {
         String title = context.getString(enabled ? R.string.xposed_module_updated_notification_title : R.string.module_is_not_activated_yet);
         String content = context.getString(enabled ? R.string.xposed_module_updated_notification_content : R.string.module_is_not_activated_yet_detailed, moduleName);
 
-        Intent intent = new Intent(context, AppListActivity.class)
+        Intent intent = new Intent(context, MainActivity.class)
                 .putExtra("modulePackageName", modulePackageName)
                 .putExtra("moduleUserId", moduleUserId)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
