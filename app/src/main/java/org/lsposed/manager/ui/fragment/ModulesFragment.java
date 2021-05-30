@@ -55,7 +55,6 @@ import org.lsposed.manager.databinding.FragmentPagerBinding;
 import org.lsposed.manager.databinding.ItemModuleBinding;
 import org.lsposed.manager.databinding.ItemRepoRecyclerviewBinding;
 import org.lsposed.manager.repo.RepoLoader;
-import org.lsposed.manager.ui.activity.RepoItemActivity;
 import org.lsposed.manager.ui.widget.EmptyStateRecyclerView;
 import org.lsposed.manager.util.GlideApp;
 import org.lsposed.manager.util.LinearLayoutManagerFix;
@@ -295,11 +294,10 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                     .show();
             return true;
         } else if (itemId == R.id.menu_repo) {
-            Intent intent = new Intent();
-            intent.setClass(requireActivity(), RepoItemActivity.class);
-            intent.putExtra("modulePackageName", selectedModule.packageName);
-            intent.putExtra("moduleName", selectedModule.getAppName());
-            startActivity(intent);
+            Bundle bundle = new Bundle();
+            bundle.putString("modulePackageName", selectedModule.packageName);
+            bundle.putString("moduleName", selectedModule.getAppName());
+            getNavController().navigate(R.id.action_modules_fragment_to_repo_item_fragment, bundle);
             return true;
         }
         return super.onContextItemSelected(item);
@@ -441,7 +439,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                     Bundle bundle = new Bundle();
                     bundle.putString("modulePackageName", item.packageName);
                     bundle.putInt("moduleUserId", item.userId);
-                    getNavController().navigate(R.id.app_list_fragment, bundle);
+                    getNavController().navigate(R.id.action_modules_fragment_to_app_list_fragment, bundle);
                 });
                 holder.itemView.setOnLongClickListener(v -> {
                     selectedModule = item;

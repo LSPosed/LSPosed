@@ -26,7 +26,8 @@
     <uses-permission
         android:name="android.permission.INTERACT_ACROSS_USERS"
         tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS"
+    <uses-permission
+        android:name="android.permission.WRITE_SECURE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
 
     <queries>
@@ -52,6 +53,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
@@ -62,20 +64,6 @@
         <activity
             android:name=".ui.activity.CrashReportActivity"
             android:process=":error_activity" />
-        <activity
-            android:name=".ui.activity.RepoActivity"
-            android:label="@string/module_repo" />
-        <activity android:name=".ui.activity.RepoItemActivity" />
-        <activity
-            android:name=".ui.activity.SettingsActivity"
-            android:label="@string/Settings"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
 
         <receiver
             android:name=".receivers.ServiceReceiver"

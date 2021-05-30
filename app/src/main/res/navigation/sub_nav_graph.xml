@@ -1,21 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/nav_graph_details">
-
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph_details"
+    app:startDestination="@id/modules_fragment">
     <fragment
         android:id="@+id/logs_fragment"
         android:name="org.lsposed.manager.ui.fragment.LogsFragment"
-        android:label="logs"/>
+        android:label="logs" />
     <fragment
         android:id="@+id/modules_fragment"
         android:name="org.lsposed.manager.ui.fragment.ModulesFragment"
-        android:label="modules"/>
+        android:label="modules" />
     <fragment
         android:id="@+id/settings_fragment"
         android:name="org.lsposed.manager.ui.fragment.SettingsFragment"
-        android:label="settings"/>
+        android:label="settings" />
     <fragment
         android:id="@+id/app_list_fragment"
         android:name="org.lsposed.manager.ui.fragment.AppListFragment"
-        android:label="app_list"/>
+        android:label="app_list" />
+    <fragment
+        android:id="@+id/repo_fragment"
+        android:name="org.lsposed.manager.ui.fragment.RepoFragment"
+        android:label="repo" />
+    <fragment
+        android:id="@+id/repo_item_fragment"
+        android:name="org.lsposed.manager.ui.fragment.RepoItemFragment"
+        android:label="repo_item" />
 </navigation>

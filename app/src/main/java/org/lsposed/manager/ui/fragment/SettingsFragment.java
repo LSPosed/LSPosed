@@ -31,7 +31,6 @@ import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.FragmentSettingsBinding;
 import org.lsposed.manager.ui.activity.MainActivity;
-import org.lsposed.manager.ui.activity.SettingsActivity;
 import org.lsposed.manager.util.BackupUtils;
 import org.lsposed.manager.util.theme.ThemeUtil;
 
@@ -112,10 +111,10 @@ public class SettingsFragment extends BaseFragment {
                         AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
                             boolean success = BackupUtils.restore(requireContext(), uri);
                             try {
-                                SettingsActivity activity = (SettingsActivity) requireActivity();
-                                activity.runOnUiThread(() -> {
+                                SettingsFragment fragment = (SettingsFragment) getParentFragment();
+                                requireActivity().runOnUiThread(() -> {
                                     alertDialog.dismiss();
-                                    activity.makeSnackBar(success ? R.string.settings_restore_success : R.string.settings_restore_failed, Snackbar.LENGTH_SHORT);
+                                    fragment.makeSnackBar(success ? R.string.settings_restore_success : R.string.settings_restore_failed, Snackbar.LENGTH_SHORT);
                                 });
                             } catch (Exception e) {
                                 e.printStackTrace();

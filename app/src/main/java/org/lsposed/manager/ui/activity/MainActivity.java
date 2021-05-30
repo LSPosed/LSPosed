@@ -6,11 +6,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.ActivityMainBinding;
@@ -43,7 +43,7 @@ public class MainActivity extends BaseActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        if (getIntent() != null) {
+        if (savedInstanceState == null) {
             handleIntent(getIntent());
         }
     }
@@ -55,18 +55,17 @@ public class MainActivity extends BaseActivity {
     }
 
     private void handleIntent(Intent intent) {
-        if (intent.hasExtra("modulePackageName")) {
-            View tabletFragmentContainer = binding.getRoot().findViewById(R.id.tablet_nav_container);
-            NavController navController;
-            if (tabletFragmentContainer != null) {
-                navController = Navigation.findNavController(tabletFragmentContainer);
-            } else {
-                navController = Navigation.findNavController(binding.navHostFragment);
-            }
-
+        if (intent == null) {
+            return;
+        }
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        NavController navController = navHostFragment.getNavController();
+        if (intent.getAction().equals("android.intent.action.APPLICATION_PREFERENCES")) {
+            navController.navigate(R.id.settings_fragment);
+        } else if (intent.hasExtra("modulePackageName")) {
             Bundle bundle = new Bundle();
-            bundle.putString("modulePackageName", getIntent().getStringExtra("modulePackageName"));
-            bundle.putInt("moduleUserId", getIntent().getIntExtra("moduleUserId", -1));
+            bundle.putString("modulePackageName", intent.getStringExtra("modulePackageName"));
+            bundle.putInt("moduleUserId", intent.getIntExtra("moduleUserId", -1));
             navController.navigate(R.id.app_list_fragment, bundle);
         }
     }

@@ -21,7 +21,6 @@ import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.DialogAboutBinding;
 import org.lsposed.manager.databinding.FragmentHomeBinding;
 import org.lsposed.manager.databinding.FragmentMainBinding;
-import org.lsposed.manager.ui.activity.RepoActivity;
 import org.lsposed.manager.ui.activity.base.BaseActivity;
 import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
 import org.lsposed.manager.ui.dialog.InfoDialogBuilder;
@@ -61,10 +60,10 @@ public class HomeFragment extends BaseFragment {
                 NavUtil.startURL(activity, getString(R.string.about_source));
             }
         });
-        binding.modules.setOnClickListener(new StartFragmentListener(R.id.modules_fragment, true));
-        binding.download.setOnClickListener(new StartActivityListener(RepoActivity.class, false));
-        binding.logs.setOnClickListener(new StartFragmentListener(R.id.logs_fragment, true));
-        binding.settings.setOnClickListener(new StartFragmentListener(R.id.settings_fragment, false));
+        binding.modules.setOnClickListener(new StartFragmentListener(R.id.action_main_fragment_to_modules_fragment, true));
+        binding.download.setOnClickListener(new StartFragmentListener(R.id.action_main_fragment_to_repo_fragment, false));
+        binding.logs.setOnClickListener(new StartFragmentListener(R.id.action_main_fragment_to_logs_fragment, true));
+        binding.settings.setOnClickListener(new StartFragmentListener(R.id.action_main_fragment_to_settings_fragment, false));
         binding.about.setOnClickListener(v -> {
             DialogAboutBinding binding = DialogAboutBinding.inflate(LayoutInflater.from(requireActivity()), null, false);
             binding.sourceCode.setMovementMethod(LinkMovementMethod.getInstance());
