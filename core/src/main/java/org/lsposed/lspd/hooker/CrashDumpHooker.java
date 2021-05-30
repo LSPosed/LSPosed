@@ -11,7 +11,7 @@ public class CrashDumpHooker extends XC_MethodHook {
         try {
             var e = (Throwable) param.args[0];
             XposedBridge.log("Crash unexpectedly: " + Log.getStackTraceString(e));
-        }catch (Throwable ignored) {
+        } catch (Throwable ignored) {
         }
     }
 }
