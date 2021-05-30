@@ -29,9 +29,13 @@ import android.view.Window;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 
 import org.lsposed.manager.App;
+import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
+import org.lsposed.manager.R;
+import org.lsposed.manager.util.NavUtil;
 import org.lsposed.manager.util.theme.ThemeUtil;
 
 import rikka.core.res.ResourcesKt;
@@ -51,7 +55,7 @@ public class BaseActivity extends MaterialActivity {
 
         // make sure the versions are consistent
         String coreVersionStr = ConfigManager.getXposedVersionName();
-        /*if (coreVersionStr != null) {
+        if (coreVersionStr != null) {
             if (!BuildConfig.VERSION_NAME.equals(coreVersionStr)) {
                 new AlertDialog.Builder(this)
                         .setMessage(R.string.outdated_manager)
@@ -62,7 +66,7 @@ public class BaseActivity extends MaterialActivity {
                         .setCancelable(false)
                         .show();
             }
-        }*/
+        }
     }
 
     @Override
