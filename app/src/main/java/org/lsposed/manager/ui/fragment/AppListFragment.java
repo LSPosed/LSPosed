@@ -1,37 +1,19 @@
-/*
- * This file is part of LSPosed.
- *
- * LSPosed is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * LSPosed is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
- *
- * Copyright (C) 2020 EdXposed Contributors
- * Copyright (C) 2021 LSPosed Contributors
- */
-
-package org.lsposed.manager.ui.activity;
+package org.lsposed.manager.ui.fragment;
 
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
 
@@ -40,8 +22,7 @@ import com.google.android.material.snackbar.Snackbar;
 import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.R;
 import org.lsposed.manager.adapters.ScopeAdapter;
-import org.lsposed.manager.databinding.ActivityAppListBinding;
-import org.lsposed.manager.ui.activity.base.BaseActivity;
+import org.lsposed.manager.databinding.FragmentAppListBinding;
 import org.lsposed.manager.util.BackupUtils;
 import org.lsposed.manager.util.LinearLayoutManagerFix;
 import org.lsposed.manager.util.ModuleUtil;
@@ -50,68 +31,74 @@ import java.util.Locale;
 
 import rikka.recyclerview.RecyclerViewKt;
 
-public class AppListActivity extends BaseActivity {
+public class AppListFragment extends BaseFragment {
+
     public SearchView searchView;
     private ScopeAdapter scopeAdapter;
+    private ModuleUtil.InstalledModule module;
 
     private SearchView.OnQueryTextListener searchListener;
-    public ActivityAppListBinding binding;
+    public FragmentAppListBinding binding;
     public ActivityResultLauncher<String> backupLauncher;
     public ActivityResultLauncher<String[]> restoreLauncher;
 
+    @Nullable
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        String modulePackageName = getIntent().getStringExtra("modulePackageName");
-        int moduleUserId = getIntent().getIntExtra("moduleUserId", -1);
-        binding = ActivityAppListBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        setAppBar(binding.appBar, binding.toolbar);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = FragmentAppListBinding.inflate(getLayoutInflater(), container, false);
         binding.appBar.setRaised(true);
-        binding.toolbar.setNavigationOnClickListener(view -> onBackPressed());
-        ModuleUtil.InstalledModule module = ModuleUtil.getInstance().getModule(modulePackageName, moduleUserId);
-        if (module == null) {
-            finish();
-            return;
+        String title;
+        if (module.userId != 0) {
+            title = String.format(Locale.US, "%s (%d)", module.getAppName(), module.userId);
+        } else {
+            title = module.getAppName();
         }
-        ActionBar bar = getSupportActionBar();
-        if (bar != null) {
-            bar.setDisplayHomeAsUpEnabled(true);
-            if (module.userId != 0) {
-                bar.setTitle(String.format(Locale.US, "%s (%d)", module.getAppName(), module.userId));
-            } else {
-                bar.setTitle(module.getAppName());
-            }
-            bar.setSubtitle(module.packageName);
-        }
+        binding.toolbar.setSubtitle(module.packageName);
+
         scopeAdapter = new ScopeAdapter(this, module);
         scopeAdapter.setHasStableIds(true);
         binding.recyclerView.setAdapter(scopeAdapter);
         binding.recyclerView.setHasFixedSize(true);
-        binding.recyclerView.setLayoutManager(new LinearLayoutManagerFix(this));
+        binding.recyclerView.setLayoutManager(new LinearLayoutManagerFix(requireActivity()));
         RecyclerViewKt.addFastScroller(binding.recyclerView, binding.recyclerView);
         RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
         binding.swipeRefreshLayout.setOnRefreshListener(() -> scopeAdapter.refresh(true));
 
         searchListener = scopeAdapter.getSearchListener();
 
+        setupToolbar(binding.toolbar, title, R.menu.menu_app_list);
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        String modulePackageName = getArguments().getString("modulePackageName");
+        int moduleUserId = getArguments().getInt("moduleUserId", -1);
+
+        module = ModuleUtil.getInstance().getModule(modulePackageName, moduleUserId);
+        if (module == null) {
+            getNavController().navigateUp();
+            return;
+        }
+
         backupLauncher = registerForActivityResult(new ActivityResultContracts.CreateDocument(),
                 uri -> {
                     if (uri != null) {
                         try {
                             // grantUriPermission might throw RemoteException on MIUI
-                            grantUriPermission(BuildConfig.APPLICATION_ID, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                            requireActivity().grantUriPermission(BuildConfig.APPLICATION_ID, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                        AlertDialog alertDialog = new AlertDialog.Builder(requireActivity())
                                 .setCancelable(false)
                                 .setMessage(R.string.settings_backuping)
                                 .show();
                         AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
-                            boolean success = BackupUtils.backup(this, uri, modulePackageName);
+                            boolean success = BackupUtils.backup(requireActivity(), uri, modulePackageName);
                             try {
-                                runOnUiThread(() -> {
+                                requireActivity().runOnUiThread(() -> {
                                     alertDialog.dismiss();
                                     makeSnackBar(success ? R.string.settings_backup_success : R.string.settings_backup_failed, Snackbar.LENGTH_SHORT);
                                 });
@@ -126,18 +113,18 @@ public class AppListActivity extends BaseActivity {
                     if (uri != null) {
                         try {
                             // grantUriPermission might throw RemoteException on MIUI
-                            grantUriPermission(BuildConfig.APPLICATION_ID, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                            requireActivity().grantUriPermission(BuildConfig.APPLICATION_ID, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                        AlertDialog alertDialog = new AlertDialog.Builder(requireActivity())
                                 .setCancelable(false)
                                 .setMessage(R.string.settings_restoring)
                                 .show();
                         AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
-                            boolean success = BackupUtils.restore(this, uri, modulePackageName);
+                            boolean success = BackupUtils.restore(requireActivity(), uri, modulePackageName);
                             try {
-                                runOnUiThread(() -> {
+                                requireActivity().runOnUiThread(() -> {
                                     alertDialog.dismiss();
                                     makeSnackBar(success ? R.string.settings_restore_success : R.string.settings_restore_failed, Snackbar.LENGTH_SHORT);
                                     scopeAdapter.refresh(false);
@@ -151,7 +138,7 @@ public class AppListActivity extends BaseActivity {
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         scopeAdapter.refresh(false);
     }
@@ -165,11 +152,11 @@ public class AppListActivity extends BaseActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
-        scopeAdapter.onCreateOptionsMenu(menu, getMenuInflater());
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        super.onPrepareOptionsMenu(menu);
         searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
         searchView.setOnQueryTextListener(searchListener);
-        return super.onCreateOptionsMenu(menu);
+        scopeAdapter.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -178,17 +165,6 @@ public class AppListActivity extends BaseActivity {
             return true;
         }
         return super.onContextItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (searchView.isIconified()) {
-            if (scopeAdapter.onBackPressed()) {
-                super.onBackPressed();
-            }
-        } else {
-            searchView.setIconified(true);
-        }
     }
 
     public void makeSnackBar(String text, @Snackbar.Duration int duration) {

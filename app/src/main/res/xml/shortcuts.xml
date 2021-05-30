@@ -28,29 +28,32 @@
         android:shortcutShortLabel="@string/Modules">
         <intent
             android:action="android.intent.action.MAIN"
-            android:targetClass="org.lsposed.manager.ui.activity.ModulesActivity"
+            android:targetClass="org.lsposed.manager.ui.activity.MainActivity"
+            android:data="modules"
             android:targetPackage="org.lsposed.manager" />
     </shortcut>
     <shortcut
         android:enabled="true"
         android:icon="@drawable/shortcut_ic_logs"
-        android:shortcutId="log"
+        android:shortcutId="logs"
         android:shortcutLongLabel="@string/Logs"
         android:shortcutShortLabel="@string/Logs">
         <intent
             android:action="android.intent.action.MAIN"
-            android:targetClass="org.lsposed.manager.ui.activity.LogsActivity"
+            android:targetClass="org.lsposed.manager.ui.activity.MainActivity"
+            android:data="logs"
             android:targetPackage="org.lsposed.manager" />
     </shortcut>
     <shortcut
         android:enabled="true"
         android:icon="@drawable/shortcut_ic_repo"
-        android:shortcutId="Repo"
+        android:shortcutId="repo"
         android:shortcutLongLabel="@string/module_repo"
         android:shortcutShortLabel="@string/module_repo">
         <intent
             android:action="android.intent.action.MAIN"
-            android:targetClass="org.lsposed.manager.ui.activity.RepoActivity"
+            android:targetClass="org.lsposed.manager.ui.activity.MainActivity"
+            android:data="repo"
             android:targetPackage="org.lsposed.manager" />
     </shortcut>
 </shortcuts>

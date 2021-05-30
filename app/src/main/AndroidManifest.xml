@@ -26,7 +26,8 @@
     <uses-permission
         android:name="android.permission.INTERACT_ACROSS_USERS"
         tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS"
+    <uses-permission
+        android:name="android.permission.WRITE_SECURE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
 
     <queries>
@@ -46,44 +47,23 @@
         tools:ignore="AllowBackup,GoogleAppIndexingWarning"
         tools:targetApi="q">
         <activity
-            android:name=".ui.activity.CrashReportActivity"
-            android:process=":error_activity" />
-        <activity
-            android:name=".ui.activity.LogsActivity"
-            android:label="@string/Logs" />
-        <activity android:name=".ui.activity.AppListActivity" />
-        <activity
-            android:name=".ui.activity.RepoActivity"
-            android:label="@string/module_repo" />
-        <activity android:name=".ui.activity.RepoItemActivity" />
-        <activity
             android:name=".ui.activity.MainActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTop"
+            android:launchMode="singleInstance"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
             <meta-data
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
         </activity>
         <activity
-            android:name=".ui.activity.ModulesActivity"
-            android:label="@string/Modules" />
-        <activity
-            android:name=".ui.activity.SettingsActivity"
-            android:label="@string/Settings"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
+            android:name=".ui.activity.CrashReportActivity"
+            android:process=":error_activity" />
 
         <receiver
             android:name=".receivers.ServiceReceiver"

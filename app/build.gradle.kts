@@ -197,12 +197,15 @@ dependencies {
     val glideVersion = "4.12.0"
     val markwonVersion = "4.6.2"
     val okhttpVersion = "4.9.1"
+    val navVersion = "2.3.5"
     annotationProcessor("com.github.bumptech.glide:compiler:$glideVersion")
     implementation("androidx.activity:activity:1.2.3")
     implementation("androidx.browser:browser:1.3.0")
     implementation("androidx.constraintlayout:constraintlayout:2.0.4")
     implementation("androidx.core:core:1.5.0")
     implementation("androidx.fragment:fragment:1.3.4")
+    implementation("androidx.navigation:navigation-fragment:$navVersion")
+    implementation("androidx.navigation:navigation-ui:$navVersion")
     implementation("androidx.recyclerview:recyclerview:1.2.0")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("com.caverock:androidsvg-aar:1.4")

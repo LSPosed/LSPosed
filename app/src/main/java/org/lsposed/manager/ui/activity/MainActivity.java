@@ -1,157 +1,126 @@
-/*
- * This file is part of LSPosed.
- *
- * LSPosed is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * LSPosed is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
- *
- * Copyright (C) 2020 EdXposed Contributors
- * Copyright (C) 2021 LSPosed Contributors
- */
-
 package org.lsposed.manager.ui.activity;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.text.method.LinkMovementMethod;
-import android.view.LayoutInflater;
-import android.view.View;
+import android.text.TextUtils;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 
-import androidx.core.text.HtmlCompat;
+import androidx.annotation.NonNull;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
-import com.bumptech.glide.Glide;
-import com.google.android.material.snackbar.Snackbar;
-
-import org.lsposed.manager.BuildConfig;
-import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.ActivityMainBinding;
-import org.lsposed.manager.databinding.DialogAboutBinding;
 import org.lsposed.manager.ui.activity.base.BaseActivity;
-import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
-import org.lsposed.manager.ui.dialog.InfoDialogBuilder;
-import org.lsposed.manager.util.GlideHelper;
-import org.lsposed.manager.util.ModuleUtil;
-import org.lsposed.manager.util.NavUtil;
-import org.lsposed.manager.util.chrome.LinkTransformationMethod;
-
-import java.util.Locale;
-
-import rikka.core.res.ResourcesKt;
 
 public class MainActivity extends BaseActivity {
-    ActivityMainBinding binding;
+    private static final String KEY_PREFIX = MainActivity.class.getName() + '.';
+    private static final String EXTRA_SAVED_INSTANCE_STATE = KEY_PREFIX + "SAVED_INSTANCE_STATE";
+    private boolean restarting;
+    private ActivityMainBinding binding;
+
+    @NonNull
+    public static Intent newIntent(@NonNull Context context) {
+        return new Intent(context, MainActivity.class);
+    }
+
+    @NonNull
+    private static Intent newIntent(@NonNull Bundle savedInstanceState, @NonNull Context context) {
+        return newIntent(context)
+                .putExtra(EXTRA_SAVED_INSTANCE_STATE, savedInstanceState);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        if (savedInstanceState == null) {
+            savedInstanceState = getIntent().getBundleExtra(EXTRA_SAVED_INSTANCE_STATE);
+        }
         super.onCreate(savedInstanceState);
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        binding.status.setOnClickListener(v -> {
-            if (ConfigManager.getXposedApiVersion() != -1) {
-                new InfoDialogBuilder(this)
-                        .setTitle(R.string.info)
-                        .show();
-            } else {
-                NavUtil.startURL(this, getString(R.string.about_source));
-            }
-        });
-        binding.modules.setOnClickListener(new StartActivityListener(ModulesActivity.class, true));
-        binding.download.setOnClickListener(new StartActivityListener(RepoActivity.class, false));
-        binding.logs.setOnClickListener(new StartActivityListener(LogsActivity.class, true));
-        binding.settings.setOnClickListener(new StartActivityListener(SettingsActivity.class, false));
-        binding.about.setOnClickListener(v -> {
-            DialogAboutBinding binding = DialogAboutBinding.inflate(LayoutInflater.from(this), null, false);
-            binding.sourceCode.setMovementMethod(LinkMovementMethod.getInstance());
-            binding.sourceCode.setTransformationMethod(new LinkTransformationMethod(this));
-            binding.sourceCode.setText(HtmlCompat.fromHtml(getString(
-                    R.string.about_view_source_code,
-                    "<b><a href=\"https://github.com/LSPosed/LSPosed\">GitHub</a></b>",
-                    "<b><a href=\"https://t.me/LSPosed\">Telegram</a></b>"), HtmlCompat.FROM_HTML_MODE_LEGACY));
-            binding.translators.setMovementMethod(LinkMovementMethod.getInstance());
-            binding.translators.setTransformationMethod(new LinkTransformationMethod(this));
-            binding.translators.setText(HtmlCompat.fromHtml(getString(R.string.about_translators, getString(R.string.translators)), HtmlCompat.FROM_HTML_MODE_LEGACY));
-            binding.version.setText(String.format(Locale.US, "%s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
-            new BlurBehindDialogBuilder(this)
-                    .setView(binding.getRoot())
-                    .show();
-        });
-        Glide.with(binding.appIcon)
-                .load(GlideHelper.wrapApplicationInfoForIconLoader(getApplicationInfo()))
-                .into(binding.appIcon);
-        String installXposedVersion = ConfigManager.getXposedVersionName();
-        int cardBackgroundColor;
-        if (installXposedVersion != null) {
-            if (!ConfigManager.isSepolicyLoaded()) {
-                binding.statusTitle.setText(R.string.partial_activated);
-                cardBackgroundColor = ResourcesKt.resolveColor(getTheme(), R.attr.colorWarning);
-                binding.statusIcon.setImageResource(R.drawable.ic_warning);
-                binding.statusSummary.setText(R.string.selinux_policy_not_loaded_summary);
-            } else if (!ConfigManager.systemServerRequested()) {
-                binding.statusTitle.setText(R.string.partial_activated);
-                cardBackgroundColor = ResourcesKt.resolveColor(getTheme(), R.attr.colorWarning);
-                binding.statusIcon.setImageResource(R.drawable.ic_warning);
-                binding.statusSummary.setText(R.string.system_inject_fail_summary);
-            } else {
-                binding.statusTitle.setText(R.string.activated);
-                cardBackgroundColor = ResourcesKt.resolveColor(getTheme(), R.attr.colorNormal);
-                binding.statusIcon.setImageResource(R.drawable.ic_check_circle);
-                binding.statusSummary.setText(String.format(Locale.US, "%s (%d)", installXposedVersion, ConfigManager.getXposedVersionCode()));
-            }
-        } else {
-            cardBackgroundColor = ResourcesKt.resolveColor(getTheme(), R.attr.colorInstall);
-            boolean isMagiskInstalled = ConfigManager.isMagiskInstalled();
-            binding.statusTitle.setText(isMagiskInstalled ? R.string.Install : R.string.NotInstall);
-            binding.statusSummary.setText(isMagiskInstalled ? R.string.InstallDetail : R.string.NotInstallDetail);
-            if (!isMagiskInstalled) {
-                binding.status.setOnClickListener(null);
-                binding.download.setVisibility(View.GONE);
-            }
-            binding.statusIcon.setImageResource(R.drawable.ic_error);
-            Snackbar.make(binding.snackbar, R.string.lsposed_not_active, Snackbar.LENGTH_INDEFINITE).show();
-        }
-        binding.status.setCardBackgroundColor(cardBackgroundColor);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            binding.status.setOutlineSpotShadowColor(cardBackgroundColor);
-            binding.status.setOutlineAmbientShadowColor(cardBackgroundColor);
+
+        if (savedInstanceState == null) {
+            handleIntent(getIntent());
         }
     }
 
-    private class StartActivityListener implements View.OnClickListener {
-        boolean requireInstalled;
-        Class<?> clazz;
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleIntent(intent);
+    }
 
-        StartActivityListener(Class<?> clazz, boolean requireInstalled) {
-            this.clazz = clazz;
-            this.requireInstalled = requireInstalled;
+    private void handleIntent(Intent intent) {
+        if (intent == null) {
+            return;
         }
-
-        @Override
-        public void onClick(View v) {
-            if (requireInstalled && ConfigManager.getXposedVersionName() == null) {
-                Snackbar.make(binding.snackbar, R.string.lsposed_not_active, Snackbar.LENGTH_LONG).show();
-            } else {
-                Intent intent = new Intent();
-                intent.setClass(MainActivity.this, clazz);
-                startActivity(intent);
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        NavController navController = navHostFragment.getNavController();
+        if (intent.getAction().equals("android.intent.action.APPLICATION_PREFERENCES")) {
+            navController.navigate(R.id.settings_fragment);
+        } else if (intent.hasExtra("modulePackageName")) {
+            Bundle bundle = new Bundle();
+            bundle.putString("modulePackageName", intent.getStringExtra("modulePackageName"));
+            bundle.putInt("moduleUserId", intent.getIntExtra("moduleUserId", -1));
+            navController.navigate(R.id.app_list_fragment, bundle);
+        } else if (!TextUtils.isEmpty(intent.getDataString())) {
+            switch (intent.getDataString()) {
+                case "modules":
+                    navController.navigate(R.id.modules_fragment);
+                    break;
+                case "logs":
+                    navController.navigate(R.id.logs_fragment);
+                    break;
+                case "repo":
+                    navController.navigate(R.id.repo_fragment);
+                    break;
             }
         }
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        int moduleCount = ModuleUtil.getInstance().getEnabledModulesCount();
-        binding.modulesSummary.setText(getResources().getQuantityString(R.plurals.modules_enabled_count, moduleCount, moduleCount));
+    public boolean onSupportNavigateUp() {
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        return navController.navigateUp() || super.onSupportNavigateUp();
+    }
+
+    public void restart() {
+        Bundle savedInstanceState = new Bundle();
+        onSaveInstanceState(savedInstanceState);
+        finish();
+        startActivity(newIntent(savedInstanceState, this));
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        restarting = true;
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(@NonNull KeyEvent event) {
+        return restarting || super.dispatchKeyEvent(event);
+    }
+
+    @SuppressLint("RestrictedApi")
+    @Override
+    public boolean dispatchKeyShortcutEvent(@NonNull KeyEvent event) {
+        return restarting || super.dispatchKeyShortcutEvent(event);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(@NonNull MotionEvent event) {
+        return restarting || super.dispatchTouchEvent(event);
+    }
+
+    @Override
+    public boolean dispatchTrackballEvent(@NonNull MotionEvent event) {
+        return restarting || super.dispatchTrackballEvent(event);
+    }
+
+    @Override
+    public boolean dispatchGenericMotionEvent(@NonNull MotionEvent event) {
+        return restarting || super.dispatchGenericMotionEvent(event);
     }
 }

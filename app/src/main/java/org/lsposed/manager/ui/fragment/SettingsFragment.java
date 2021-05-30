@@ -1,44 +1,21 @@
-/*
- * This file is part of LSPosed.
- *
- * LSPosed is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * LSPosed is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
- *
- * Copyright (C) 2020 EdXposed Contributors
- * Copyright (C) 2021 LSPosed Contributors
- */
-
-package org.lsposed.manager.ui.activity;
+package org.lsposed.manager.ui.fragment;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.preference.Preference;
 import androidx.preference.SwitchPreference;
@@ -48,11 +25,12 @@ import com.google.android.material.snackbar.Snackbar;
 import com.takisoft.preferencex.PreferenceCategory;
 import com.takisoft.preferencex.PreferenceFragmentCompat;
 
+import org.lsposed.manager.App;
 import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.FragmentSettingsBinding;
-import org.lsposed.manager.ui.activity.base.BaseActivity;
+import org.lsposed.manager.ui.activity.MainActivity;
 import org.lsposed.manager.util.BackupUtils;
 import org.lsposed.manager.util.theme.ThemeUtil;
 
@@ -64,83 +42,32 @@ import rikka.material.app.DayNightDelegate;
 import rikka.recyclerview.RecyclerViewKt;
 import rikka.widget.borderview.BorderRecyclerView;
 
-public class SettingsActivity extends BaseActivity {
-    private static final String KEY_PREFIX = SettingsActivity.class.getName() + '.';
-    private static final String EXTRA_SAVED_INSTANCE_STATE = KEY_PREFIX + "SAVED_INSTANCE_STATE";
+public class SettingsFragment extends BaseFragment {
     FragmentSettingsBinding binding;
-    private boolean restarting;
 
-    @NonNull
-    public static Intent newIntent(@NonNull Context context) {
-        return new Intent(context, SettingsActivity.class);
-    }
-
-    @NonNull
-    private static Intent newIntent(@NonNull Bundle savedInstanceState, @NonNull Context context) {
-        return newIntent(context)
-                .putExtra(EXTRA_SAVED_INSTANCE_STATE, savedInstanceState);
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = FragmentSettingsBinding.inflate(inflater, container, false);
+        binding.getRoot().bringChildToFront(binding.appBar);
+        setupToolbar(binding.toolbar, R.string.Settings);
+        if (savedInstanceState == null) {
+            getChildFragmentManager().beginTransaction()
+                    .add(R.id.container, new PreferenceFragment()).commit();
+        }
+        return binding.getRoot();
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        if (savedInstanceState == null) {
-            savedInstanceState = getIntent().getBundleExtra(EXTRA_SAVED_INSTANCE_STATE);
-        }
-        super.onCreate(savedInstanceState);
-        binding = FragmentSettingsBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        setAppBar(binding.appBar, binding.toolbar);
-        binding.getRoot().bringChildToFront(binding.appBar);
-        binding.toolbar.setNavigationOnClickListener(view -> finish());
-        ActionBar bar = getSupportActionBar();
-        if (bar != null) {
-            bar.setDisplayHomeAsUpEnabled(true);
-        }
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new SettingsFragment()).commit();
-        }
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         if (ConfigManager.getXposedVersionName() == null) {
             Snackbar.make(binding.snackbar, R.string.lsposed_not_active, Snackbar.LENGTH_LONG).show();
         }
     }
 
-    private void restart() {
-        Bundle savedInstanceState = new Bundle();
-        onSaveInstanceState(savedInstanceState);
-        finish();
-        startActivity(newIntent(savedInstanceState, this));
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-        restarting = true;
-    }
 
-    @Override
-    public boolean dispatchKeyEvent(@NonNull KeyEvent event) {
-        return restarting || super.dispatchKeyEvent(event);
-    }
-
-    @SuppressLint("RestrictedApi")
-    @Override
-    public boolean dispatchKeyShortcutEvent(@NonNull KeyEvent event) {
-        return restarting || super.dispatchKeyShortcutEvent(event);
-    }
-
-    @Override
-    public boolean dispatchTouchEvent(@NonNull MotionEvent event) {
-        return restarting || super.dispatchTouchEvent(event);
-    }
-
-    @Override
-    public boolean dispatchTrackballEvent(@NonNull MotionEvent event) {
-        return restarting || super.dispatchTrackballEvent(event);
-    }
-
-    @Override
-    public boolean dispatchGenericMotionEvent(@NonNull MotionEvent event) {
-        return restarting || super.dispatchGenericMotionEvent(event);
-    }
-
-    public static class SettingsFragment extends PreferenceFragmentCompat {
+    public static class PreferenceFragment extends PreferenceFragmentCompat {
         ActivityResultLauncher<String> backupLauncher = registerForActivityResult(new ActivityResultContracts.CreateDocument(),
                 uri -> {
                     if (uri != null) {
@@ -157,10 +84,10 @@ public class SettingsActivity extends BaseActivity {
                         AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
                             boolean success = BackupUtils.backup(requireContext(), uri);
                             try {
-                                SettingsActivity activity = (SettingsActivity) requireActivity();
-                                activity.runOnUiThread(() -> {
+                                SettingsFragment fragment = (SettingsFragment) getParentFragment();
+                                requireActivity().runOnUiThread(() -> {
                                     alertDialog.dismiss();
-                                    activity.makeSnackBar(success ? R.string.settings_backup_success : R.string.settings_backup_failed, Snackbar.LENGTH_SHORT);
+                                    fragment.makeSnackBar(success ? R.string.settings_backup_success : R.string.settings_backup_failed, Snackbar.LENGTH_SHORT);
                                 });
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -184,10 +111,10 @@ public class SettingsActivity extends BaseActivity {
                         AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
                             boolean success = BackupUtils.restore(requireContext(), uri);
                             try {
-                                SettingsActivity activity = (SettingsActivity) requireActivity();
-                                activity.runOnUiThread(() -> {
+                                SettingsFragment fragment = (SettingsFragment) getParentFragment();
+                                requireActivity().runOnUiThread(() -> {
                                     alertDialog.dismiss();
-                                    activity.makeSnackBar(success ? R.string.settings_restore_success : R.string.settings_restore_failed, Snackbar.LENGTH_SHORT);
+                                    fragment.makeSnackBar(success ? R.string.settings_restore_success : R.string.settings_restore_failed, Snackbar.LENGTH_SHORT);
                                 });
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -210,9 +137,9 @@ public class SettingsActivity extends BaseActivity {
                     prefVerboseLogs.setChecked(!ConfigManager.isVerboseLogEnabled());
                     prefVerboseLogs.setOnPreferenceChangeListener((preference, newValue) -> {
                         boolean result = ConfigManager.setVerboseLogEnabled(!(boolean) newValue);
-                        SettingsActivity activity = (SettingsActivity) getActivity();
-                        if (result && activity != null) {
-                            Snackbar.make(activity.binding.snackbar, R.string.reboot_required, Snackbar.LENGTH_SHORT)
+                        SettingsFragment fragment = (SettingsFragment) getParentFragment();
+                        if (result && fragment != null) {
+                            Snackbar.make(fragment.binding.snackbar, R.string.reboot_required, Snackbar.LENGTH_SHORT)
                                     .setAction(R.string.reboot, v -> ConfigManager.reboot(false, null, false))
                                     .show();
                         }
@@ -254,9 +181,9 @@ public class SettingsActivity extends BaseActivity {
             Preference theme = findPreference("dark_theme");
             if (theme != null) {
                 theme.setOnPreferenceChangeListener((preference, newValue) -> {
-                    if (!preferences.getString("dark_theme", ThemeUtil.MODE_NIGHT_FOLLOW_SYSTEM).equals(newValue)) {
+                    if (!App.getPreferences().getString("dark_theme", ThemeUtil.MODE_NIGHT_FOLLOW_SYSTEM).equals(newValue)) {
                         DayNightDelegate.setDefaultNightMode(ThemeUtil.getDarkTheme((String) newValue));
-                        SettingsActivity activity = (SettingsActivity) getActivity();
+                        MainActivity activity = (MainActivity) getActivity();
                         if (activity != null) {
                             activity.restart();
                         }
@@ -268,7 +195,7 @@ public class SettingsActivity extends BaseActivity {
             Preference black_dark_theme = findPreference("black_dark_theme");
             if (black_dark_theme != null) {
                 black_dark_theme.setOnPreferenceChangeListener((preference, newValue) -> {
-                    SettingsActivity activity = (SettingsActivity) getActivity();
+                    MainActivity activity = (MainActivity) getActivity();
                     if (activity != null && ResourceUtils.isNightMode(getResources().getConfiguration())) {
                         activity.restart();
                     }
@@ -279,7 +206,7 @@ public class SettingsActivity extends BaseActivity {
             Preference primary_color = findPreference("theme_color");
             if (primary_color != null) {
                 primary_color.setOnPreferenceChangeListener((preference, newValue) -> {
-                    SettingsActivity activity = (SettingsActivity) getActivity();
+                    MainActivity activity = (MainActivity) getActivity();
                     if (activity != null) {
                         activity.restart();
                     }
@@ -306,7 +233,7 @@ public class SettingsActivity extends BaseActivity {
                 }
                 prefFollowSystemAccent.setVisible(true);
                 prefFollowSystemAccent.setOnPreferenceChangeListener((preference, newValue) -> {
-                    SettingsActivity activity = (SettingsActivity) getActivity();
+                    MainActivity activity = (MainActivity) getActivity();
                     if (activity != null) {
                         activity.restart();
                     }
@@ -320,9 +247,9 @@ public class SettingsActivity extends BaseActivity {
             BorderRecyclerView recyclerView = (BorderRecyclerView) super.onCreateRecyclerView(inflater, parent, savedInstanceState);
             RecyclerViewKt.fixEdgeEffect(recyclerView, false, true);
             recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> {
-                SettingsActivity activity = (SettingsActivity) getActivity();
-                if (activity != null) {
-                    activity.binding.appBar.setRaised(!top);
+                SettingsFragment fragment = (SettingsFragment) getParentFragment();
+                if (fragment != null) {
+                    fragment.binding.appBar.setRaised(!top);
                 }
             });
             return recyclerView;

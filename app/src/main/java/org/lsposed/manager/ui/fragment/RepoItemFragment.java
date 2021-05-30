@@ -1,24 +1,4 @@
-/*
- * This file is part of LSPosed.
- *
- * LSPosed is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * LSPosed is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
- *
- * Copyright (C) 2020 EdXposed Contributors
- * Copyright (C) 2021 LSPosed Contributors
- */
-
-package org.lsposed.manager.ui.activity;
+package org.lsposed.manager.ui.fragment;
 
 import android.os.Bundle;
 import android.text.Spannable;
@@ -26,7 +6,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.text.util.Linkify;
-import android.view.Menu;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +14,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.RecyclerView;
@@ -46,7 +25,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import org.lsposed.manager.R;
-import org.lsposed.manager.databinding.ActivityModuleDetailBinding;
+import org.lsposed.manager.databinding.FragmentPagerBinding;
 import org.lsposed.manager.databinding.ItemRepoLoadmoreBinding;
 import org.lsposed.manager.databinding.ItemRepoReadmeBinding;
 import org.lsposed.manager.databinding.ItemRepoRecyclerviewBinding;
@@ -57,7 +36,6 @@ import org.lsposed.manager.repo.model.Collaborator;
 import org.lsposed.manager.repo.model.OnlineModule;
 import org.lsposed.manager.repo.model.Release;
 import org.lsposed.manager.repo.model.ReleaseAsset;
-import org.lsposed.manager.ui.activity.base.BaseActivity;
 import org.lsposed.manager.ui.widget.LinkifyTextView;
 import org.lsposed.manager.util.GlideApp;
 import org.lsposed.manager.util.LinearLayoutManagerFix;
@@ -83,38 +61,21 @@ import rikka.widget.borderview.BorderNestedScrollView;
 import rikka.widget.borderview.BorderRecyclerView;
 import rikka.widget.borderview.BorderView;
 
-public class RepoItemActivity extends BaseActivity implements RepoLoader.Listener {
-    ActivityModuleDetailBinding binding;
+public class RepoItemFragment extends BaseFragment implements RepoLoader.Listener {
+    FragmentPagerBinding binding;
     private Markwon markwon;
     private OnlineModule module;
     private ReleaseAdapter releaseAdapter;
 
+    @Nullable
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        RepoLoader.getInstance().addListener(this);
-        super.onCreate(savedInstanceState);
-        binding = ActivityModuleDetailBinding.inflate(getLayoutInflater());
-        String modulePackageName = getIntent().getStringExtra("modulePackageName");
-        String moduleName = getIntent().getStringExtra("moduleName");
-        setContentView(binding.getRoot());
-        setAppBar(binding.appBar, binding.toolbar);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = FragmentPagerBinding.inflate(getLayoutInflater(), container, false);
+        String modulePackageName = getArguments().getString("modulePackageName");
+        String moduleName = getArguments().getString("moduleName");
         binding.getRoot().bringChildToFront(binding.appBar);
-        binding.toolbar.setNavigationOnClickListener(view -> onBackPressed());
-        ActionBar bar = getSupportActionBar();
-        assert bar != null;
-        bar.setTitle(moduleName);
-        bar.setSubtitle(modulePackageName);
-        bar.setDisplayHomeAsUpEnabled(true);
-        markwon = Markwon.builder(this)
-                .usePlugin(StrikethroughPlugin.create())
-                .usePlugin(TablePlugin.create(this))
-                .usePlugin(TaskListPlugin.create(this))
-                .usePlugin(HtmlPlugin.create())
-                .usePlugin(GlideImagesPlugin.create(GlideApp.with(this)))
-                .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS, true))
-                .usePlugin(SoftBreakAddsNewLinePlugin.create())
-                .build();
-        module = RepoLoader.getInstance().getOnlineModule(modulePackageName);
+        setupToolbar(binding.toolbar, moduleName, R.menu.menu_repo_item);
+        binding.toolbar.setSubtitle(modulePackageName);
         binding.viewPager.setAdapter(new PagerAdapter());
         binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -128,19 +89,38 @@ public class RepoItemActivity extends BaseActivity implements RepoLoader.Listene
         });
         int[] titles = new int[]{R.string.module_readme, R.string.module_releases, R.string.module_information};
         new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> tab.setText(titles[position])).attach();
+        return binding.getRoot();
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_repo_item, menu);
-        return super.onCreateOptionsMenu(menu);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        RepoLoader.getInstance().addListener(this);
+        super.onCreate(savedInstanceState);
+
+        markwon = Markwon.builder(requireActivity())
+                .usePlugin(StrikethroughPlugin.create())
+                .usePlugin(TablePlugin.create(requireActivity()))
+                .usePlugin(TaskListPlugin.create(requireActivity()))
+                .usePlugin(HtmlPlugin.create())
+                .usePlugin(GlideImagesPlugin.create(GlideApp.with(this)))
+                .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS, true))
+                .usePlugin(SoftBreakAddsNewLinePlugin.create())
+                .build();
+        String modulePackageName = getArguments().getString("modulePackageName");
+        module = RepoLoader.getInstance().getOnlineModule(modulePackageName);
+
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menu_open_in_browser) {
-            NavUtil.startURL(this, "https://modules.lsposed.org/module/" + module.getName());
+            NavUtil.startURL(requireActivity(), "https://modules.lsposed.org/module/" + module.getName());
         }
         return super.onOptionsItemSelected(item);
     }
@@ -154,7 +134,7 @@ public class RepoItemActivity extends BaseActivity implements RepoLoader.Listene
     public void moduleReleasesLoaded(OnlineModule module) {
         this.module = module;
         if (releaseAdapter != null) {
-            runOnUiThread(() -> releaseAdapter.loadItems());
+            requireActivity().runOnUiThread(() -> releaseAdapter.loadItems());
             if (module.getReleases().size() == 1) {
                 Snackbar.make(binding.snackbar, R.string.module_release_no_more, Snackbar.LENGTH_SHORT).show();
             }
@@ -164,7 +144,7 @@ public class RepoItemActivity extends BaseActivity implements RepoLoader.Listene
     @Override
     public void onThrowable(Throwable t) {
         if (releaseAdapter != null) {
-            runOnUiThread(() -> releaseAdapter.loadItems());
+            requireActivity().runOnUiThread(() -> releaseAdapter.loadItems());
         }
         if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
             Snackbar.make(binding.snackbar, getString(R.string.repo_load_failed, t.getLocalizedMessage()), Snackbar.LENGTH_SHORT).show();
@@ -172,7 +152,7 @@ public class RepoItemActivity extends BaseActivity implements RepoLoader.Listene
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         RepoLoader.getInstance().removeListener(this);
     }
@@ -218,7 +198,7 @@ public class RepoItemActivity extends BaseActivity implements RepoLoader.Listene
                     Collaborator collaborator = iterator.next();
                     String name = collaborator.getName() == null ? collaborator.getLogin() : collaborator.getName();
                     sb.append(name);
-                    CustomTabsURLSpan span = new CustomTabsURLSpan(RepoItemActivity.this, String.format("https://github.com/%s", collaborator.getLogin()));
+                    CustomTabsURLSpan span = new CustomTabsURLSpan(requireActivity(), String.format("https://github.com/%s", collaborator.getLogin()));
                     sb.setSpan(span, sb.length() - name.length(), sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     if (iterator.hasNext()) {
                         sb.append(", ");
@@ -231,7 +211,7 @@ public class RepoItemActivity extends BaseActivity implements RepoLoader.Listene
             }
             holder.itemView.setOnClickListener(v -> {
                 if (position == homepageRow) {
-                    NavUtil.startURL(RepoItemActivity.this, module.getHomepageUrl());
+                    NavUtil.startURL(requireActivity(), module.getHomepageUrl());
                 } else if (position == collaboratorsRow) {
                     ClickableSpan span = holder.description.getCurrentSpan();
                     holder.description.clearCurrentSpan();
@@ -240,7 +220,7 @@ public class RepoItemActivity extends BaseActivity implements RepoLoader.Listene
                         span.onClick(v);
                     }
                 } else if (position == sourceUrlRow) {
-                    NavUtil.startURL(RepoItemActivity.this, module.getSourceUrl());
+                    NavUtil.startURL(requireActivity(), module.getSourceUrl());
                 }
             });
 
@@ -277,16 +257,16 @@ public class RepoItemActivity extends BaseActivity implements RepoLoader.Listene
 
         @NonNull
         @Override
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        public ReleaseAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             if (viewType == 0) {
-                return new ReleaseViewHolder(ItemRepoReleaseBinding.inflate(getLayoutInflater(), parent, false));
+                return new ReleaseAdapter.ReleaseViewHolder(ItemRepoReleaseBinding.inflate(getLayoutInflater(), parent, false));
             } else {
-                return new LoadmoreViewHolder(ItemRepoLoadmoreBinding.inflate(getLayoutInflater(), parent, false));
+                return new ReleaseAdapter.LoadmoreViewHolder(ItemRepoLoadmoreBinding.inflate(getLayoutInflater(), parent, false));
             }
         }
 
         @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull ReleaseAdapter.ViewHolder holder, int position) {
             if (position == items.size()) {
                 holder.progress.setVisibility(View.GONE);
                 holder.title.setVisibility(View.VISIBLE);
@@ -300,18 +280,18 @@ public class RepoItemActivity extends BaseActivity implements RepoLoader.Listene
             } else {
                 Release release = items.get(position);
                 holder.title.setText(release.getName());
-                holder.description.setTransformationMethod(new LinkTransformationMethod(RepoItemActivity.this));
+                holder.description.setTransformationMethod(new LinkTransformationMethod(requireActivity()));
                 holder.description.setSpannableFactory(NoCopySpannableFactory.getInstance());
                 markwon.setMarkdown(holder.description, release.getDescription());
                 holder.description.setMovementMethod(null);
-                holder.openInBrowser.setOnClickListener(v -> NavUtil.startURL(RepoItemActivity.this, release.getUrl()));
+                holder.openInBrowser.setOnClickListener(v -> NavUtil.startURL(requireActivity(), release.getUrl()));
                 List<ReleaseAsset> assets = release.getReleaseAssets();
                 if (assets != null && !assets.isEmpty()) {
                     holder.viewAssets.setOnClickListener(v -> {
                         ArrayList<String> names = new ArrayList<>();
                         assets.forEach(releaseAsset -> names.add(releaseAsset.getName()));
-                        new AlertDialog.Builder(RepoItemActivity.this)
-                                .setItems(names.toArray(new String[0]), (dialog, which) -> NavUtil.startURL(RepoItemActivity.this, assets.get(which).getDownloadUrl()))
+                        new AlertDialog.Builder(requireActivity())
+                                .setItems(names.toArray(new String[0]), (dialog, which) -> NavUtil.startURL(requireActivity(), assets.get(which).getDownloadUrl()))
                                 .show();
                     });
                 } else {
@@ -350,7 +330,7 @@ public class RepoItemActivity extends BaseActivity implements RepoLoader.Listene
             }
         }
 
-        class ReleaseViewHolder extends ViewHolder {
+        class ReleaseViewHolder extends ReleaseAdapter.ViewHolder {
             public ReleaseViewHolder(ItemRepoReleaseBinding binding) {
                 super(binding.getRoot());
                 title = binding.title;
@@ -360,7 +340,7 @@ public class RepoItemActivity extends BaseActivity implements RepoLoader.Listene
             }
         }
 
-        class LoadmoreViewHolder extends ViewHolder {
+        class LoadmoreViewHolder extends ReleaseAdapter.ViewHolder {
             public LoadmoreViewHolder(ItemRepoLoadmoreBinding binding) {
                 super(binding.getRoot());
                 title = binding.title;
@@ -375,17 +355,17 @@ public class RepoItemActivity extends BaseActivity implements RepoLoader.Listene
         @Override
         public PagerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             if (viewType == 0) {
-                return new ReadmeViewHolder(ItemRepoReadmeBinding.inflate(getLayoutInflater(), parent, false));
+                return new PagerAdapter.ReadmeViewHolder(ItemRepoReadmeBinding.inflate(getLayoutInflater(), parent, false));
             } else {
-                return new RecyclerviewBinding(ItemRepoRecyclerviewBinding.inflate(getLayoutInflater(), parent, false));
+                return new PagerAdapter.RecyclerviewBinding(ItemRepoRecyclerviewBinding.inflate(getLayoutInflater(), parent, false));
             }
         }
 
         @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull PagerAdapter.ViewHolder holder, int position) {
             switch (position) {
                 case 0:
-                    holder.textView.setTransformationMethod(new LinkTransformationMethod(RepoItemActivity.this));
+                    holder.textView.setTransformationMethod(new LinkTransformationMethod(requireActivity()));
                     holder.scrollView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setRaised(!top));
                     holder.scrollView.setTag(position);
                     markwon.setMarkdown(holder.textView, module.getReadme());
@@ -398,7 +378,7 @@ public class RepoItemActivity extends BaseActivity implements RepoLoader.Listene
                         holder.recyclerView.setAdapter(new InformationAdapter(module));
                     }
                     holder.recyclerView.setTag(position);
-                    holder.recyclerView.setLayoutManager(new LinearLayoutManagerFix(RepoItemActivity.this));
+                    holder.recyclerView.setLayoutManager(new LinearLayoutManagerFix(requireActivity()));
                     holder.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setRaised(!top));
                     RecyclerViewKt.fixEdgeEffect(holder.recyclerView, false, true);
                     RecyclerViewKt.addFastScroller(holder.recyclerView, holder.itemView);
@@ -426,7 +406,7 @@ public class RepoItemActivity extends BaseActivity implements RepoLoader.Listene
             }
         }
 
-        class ReadmeViewHolder extends ViewHolder {
+        class ReadmeViewHolder extends PagerAdapter.ViewHolder {
             public ReadmeViewHolder(ItemRepoReadmeBinding binding) {
                 super(binding.getRoot());
                 textView = binding.readme;
@@ -434,7 +414,7 @@ public class RepoItemActivity extends BaseActivity implements RepoLoader.Listene
             }
         }
 
-        class RecyclerviewBinding extends ViewHolder {
+        class RecyclerviewBinding extends PagerAdapter.ViewHolder {
             public RecyclerviewBinding(ItemRepoRecyclerviewBinding binding) {
                 super(binding.getRoot());
                 recyclerView = binding.recyclerView;
