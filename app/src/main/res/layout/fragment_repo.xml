@@ -60,6 +60,7 @@
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:paddingTop="?actionBarSize"
+        android:scrollbars="none"
         app:borderTopVisibility="whenTop"
         app:borderTopDrawable="@null"
         app:borderBottomVisibility="never"

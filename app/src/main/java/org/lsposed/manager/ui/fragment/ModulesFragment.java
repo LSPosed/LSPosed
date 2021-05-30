@@ -179,25 +179,26 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             if (users.size() != adapters.size()) {
                 adapters.clear();
                 if (users.size() != 1) {
-                    binding.viewPager.setUserInputEnabled(true);
                     for (var user : users) {
                         var adapter = new ModuleAdapter(user);
                         adapter.setHasStableIds(true);
                         adapters.add(adapter);
                         titles.add(user.name);
                     }
-                    binding.tabLayout.setVisibility(View.VISIBLE);
                 } else {
-                    binding.viewPager.setUserInputEnabled(false);
                     var adapter = new ModuleAdapter(null);
                     adapter.setHasStableIds(true);
                     adapters.add(adapter);
-                    binding.tabLayout.setVisibility(View.GONE);
                 }
                 pagerAdapter.notifyDataSetChanged();
             }
             if (users.size() != 1) {
+                binding.viewPager.setUserInputEnabled(true);
                 new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> tab.setText(titles.get(position))).attach();
+                binding.tabLayout.setVisibility(View.VISIBLE);
+            } else {
+                binding.viewPager.setUserInputEnabled(false);
+                binding.tabLayout.setVisibility(View.GONE);
             }
         }
         adapters.forEach(ModuleAdapter::refresh);
