@@ -79,8 +79,11 @@ public class MainActivity extends BaseActivity {
             return;
         }
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        if (navHostFragment == null) {
+            return;
+        }
         NavController navController = navHostFragment.getNavController();
-        if (intent.getAction().equals("android.intent.action.APPLICATION_PREFERENCES")) {
+        if (intent.getAction() != null && intent.getAction().equals("android.intent.action.APPLICATION_PREFERENCES")) {
             navController.navigate(R.id.settings_fragment);
         } else if (intent.hasExtra("modulePackageName")) {
             Bundle bundle = new Bundle();
