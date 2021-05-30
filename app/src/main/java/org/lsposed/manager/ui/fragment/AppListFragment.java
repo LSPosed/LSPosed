@@ -22,7 +22,7 @@ import com.google.android.material.snackbar.Snackbar;
 import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.R;
 import org.lsposed.manager.adapters.ScopeAdapter;
-import org.lsposed.manager.databinding.ActivityAppListBinding;
+import org.lsposed.manager.databinding.FragmentAppListBinding;
 import org.lsposed.manager.util.BackupUtils;
 import org.lsposed.manager.util.LinearLayoutManagerFix;
 import org.lsposed.manager.util.ModuleUtil;
@@ -38,14 +38,14 @@ public class AppListFragment extends BaseFragment {
     private ModuleUtil.InstalledModule module;
 
     private SearchView.OnQueryTextListener searchListener;
-    public ActivityAppListBinding binding;
+    public FragmentAppListBinding binding;
     public ActivityResultLauncher<String> backupLauncher;
     public ActivityResultLauncher<String[]> restoreLauncher;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = ActivityAppListBinding.inflate(getLayoutInflater(), container, false);
+        binding = FragmentAppListBinding.inflate(getLayoutInflater(), container, false);
         binding.appBar.setRaised(true);
         String title;
         if (module.userId != 0) {

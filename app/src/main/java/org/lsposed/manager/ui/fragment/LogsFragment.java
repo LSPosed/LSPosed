@@ -49,8 +49,8 @@ import org.lsposed.manager.App;
 import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
-import org.lsposed.manager.databinding.ActivityLogsBinding;
 import org.lsposed.manager.databinding.DialogInstallWarningBinding;
+import org.lsposed.manager.databinding.FragmentLogsBinding;
 import org.lsposed.manager.databinding.ItemLogBinding;
 import org.lsposed.manager.util.LinearLayoutManagerFix;
 
@@ -78,7 +78,7 @@ public class LogsFragment extends BaseFragment {
     private boolean verbose = false;
     private LogsAdapter adapter;
     private final Handler handler = new Handler(Looper.getMainLooper());
-    private ActivityLogsBinding binding;
+    private FragmentLogsBinding binding;
     private LinearLayoutManagerFix layoutManager;
     ActivityResultLauncher<String> saveLogsLauncher = registerForActivityResult(new ActivityResultContracts.CreateDocument(),
             uri -> {
@@ -108,7 +108,7 @@ public class LogsFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = ActivityLogsBinding.inflate(inflater, container, false);
+        binding = FragmentLogsBinding.inflate(inflater, container, false);
         binding.getRoot().bringChildToFront(binding.appBar);
         setupToolbar(binding.toolbar, R.string.Logs, R.menu.menu_logs);
         binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setRaised(!top));

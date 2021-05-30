@@ -29,13 +29,9 @@ import android.view.Window;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 
 import org.lsposed.manager.App;
-import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
-import org.lsposed.manager.R;
-import org.lsposed.manager.util.NavUtil;
 import org.lsposed.manager.util.theme.ThemeUtil;
 
 import rikka.core.res.ResourcesKt;

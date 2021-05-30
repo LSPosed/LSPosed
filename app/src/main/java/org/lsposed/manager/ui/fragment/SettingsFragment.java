@@ -29,9 +29,9 @@ import org.lsposed.manager.App;
 import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
-import org.lsposed.manager.databinding.ActivitySettingsBinding;
-import org.lsposed.manager.ui.activity.SettingsActivity;
+import org.lsposed.manager.databinding.FragmentSettingsBinding;
 import org.lsposed.manager.ui.activity.MainActivity;
+import org.lsposed.manager.ui.activity.SettingsActivity;
 import org.lsposed.manager.util.BackupUtils;
 import org.lsposed.manager.util.theme.ThemeUtil;
 
@@ -44,12 +44,12 @@ import rikka.recyclerview.RecyclerViewKt;
 import rikka.widget.borderview.BorderRecyclerView;
 
 public class SettingsFragment extends BaseFragment {
-    ActivitySettingsBinding binding;
+    FragmentSettingsBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = ActivitySettingsBinding.inflate(inflater, container, false);
+        binding = FragmentSettingsBinding.inflate(inflater, container, false);
         binding.getRoot().bringChildToFront(binding.appBar);
         setupToolbar(binding.toolbar, R.string.Settings);
         if (savedInstanceState == null) {

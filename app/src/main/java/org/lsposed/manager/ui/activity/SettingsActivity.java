@@ -51,7 +51,7 @@ import com.takisoft.preferencex.PreferenceFragmentCompat;
 import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
-import org.lsposed.manager.databinding.ActivitySettingsBinding;
+import org.lsposed.manager.databinding.FragmentSettingsBinding;
 import org.lsposed.manager.ui.activity.base.BaseActivity;
 import org.lsposed.manager.util.BackupUtils;
 import org.lsposed.manager.util.theme.ThemeUtil;
@@ -67,7 +67,7 @@ import rikka.widget.borderview.BorderRecyclerView;
 public class SettingsActivity extends BaseActivity {
     private static final String KEY_PREFIX = SettingsActivity.class.getName() + '.';
     private static final String EXTRA_SAVED_INSTANCE_STATE = KEY_PREFIX + "SAVED_INSTANCE_STATE";
-    ActivitySettingsBinding binding;
+    FragmentSettingsBinding binding;
     private boolean restarting;
 
     @NonNull
@@ -87,7 +87,7 @@ public class SettingsActivity extends BaseActivity {
             savedInstanceState = getIntent().getBundleExtra(EXTRA_SAVED_INSTANCE_STATE);
         }
         super.onCreate(savedInstanceState);
-        binding = ActivitySettingsBinding.inflate(getLayoutInflater());
+        binding = FragmentSettingsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setAppBar(binding.appBar, binding.toolbar);
         binding.getRoot().bringChildToFront(binding.appBar);

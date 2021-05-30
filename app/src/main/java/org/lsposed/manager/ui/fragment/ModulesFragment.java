@@ -50,8 +50,8 @@ import org.lsposed.lspd.models.UserInfo;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.adapters.AppHelper;
-import org.lsposed.manager.databinding.ActivityModuleDetailBinding;
 import org.lsposed.manager.databinding.DialogRecyclerviewBinding;
+import org.lsposed.manager.databinding.FragmentPagerBinding;
 import org.lsposed.manager.databinding.ItemModuleBinding;
 import org.lsposed.manager.databinding.ItemRepoRecyclerviewBinding;
 import org.lsposed.manager.repo.RepoLoader;
@@ -75,7 +75,7 @@ import rikka.widget.borderview.BorderRecyclerView;
 
 public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleListener {
 
-    protected ActivityModuleDetailBinding binding;
+    protected FragmentPagerBinding binding;
     protected SearchView searchView;
     private SearchView.OnQueryTextListener mSearchListener;
     private final PagerAdapter pagerAdapter = new PagerAdapter();
@@ -114,7 +114,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = ActivityModuleDetailBinding.inflate(inflater, container, false);
+        binding = FragmentPagerBinding.inflate(inflater, container, false);
 
         binding.getRoot().bringChildToFront(binding.appBar);
         setupToolbar(binding.toolbar, R.string.Modules, R.menu.menu_modules);

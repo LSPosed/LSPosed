@@ -46,7 +46,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import org.lsposed.manager.R;
-import org.lsposed.manager.databinding.ActivityModuleDetailBinding;
+import org.lsposed.manager.databinding.FragmentPagerBinding;
 import org.lsposed.manager.databinding.ItemRepoLoadmoreBinding;
 import org.lsposed.manager.databinding.ItemRepoReadmeBinding;
 import org.lsposed.manager.databinding.ItemRepoRecyclerviewBinding;
@@ -84,7 +84,7 @@ import rikka.widget.borderview.BorderRecyclerView;
 import rikka.widget.borderview.BorderView;
 
 public class RepoItemActivity extends BaseActivity implements RepoLoader.Listener {
-    ActivityModuleDetailBinding binding;
+    FragmentPagerBinding binding;
     private Markwon markwon;
     private OnlineModule module;
     private ReleaseAdapter releaseAdapter;
@@ -93,7 +93,7 @@ public class RepoItemActivity extends BaseActivity implements RepoLoader.Listene
     public void onCreate(@Nullable Bundle savedInstanceState) {
         RepoLoader.getInstance().addListener(this);
         super.onCreate(savedInstanceState);
-        binding = ActivityModuleDetailBinding.inflate(getLayoutInflater());
+        binding = FragmentPagerBinding.inflate(getLayoutInflater());
         String modulePackageName = getIntent().getStringExtra("modulePackageName");
         String moduleName = getIntent().getStringExtra("moduleName");
         setContentView(binding.getRoot());
