@@ -24,6 +24,7 @@ import static org.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityThread;
+import android.app.LoadedApk;
 import android.content.pm.ApplicationInfo;
 import android.content.res.CompatibilityInfo;
 import android.os.Environment;
@@ -32,6 +33,7 @@ import android.os.Process;
 
 import org.lsposed.lspd.config.LSPApplicationServiceClient;
 import org.lsposed.lspd.deopt.PrebuiltMethodsDeopter;
+import org.lsposed.lspd.hooker.CrashDumpHooker;
 import org.lsposed.lspd.hooker.HandleBindAppHooker;
 import org.lsposed.lspd.hooker.LoadedApkCstrHooker;
 import org.lsposed.lspd.hooker.StartBootstrapServicesHooker;
@@ -52,16 +54,17 @@ import de.robv.android.xposed.XposedInit;
 public class Main {
     public static void startBootstrapHook(boolean isSystem, String appDataDir) {
         Utils.logD("startBootstrapHook starts: isSystem = " + isSystem);
-        ClassLoader classLoader = Main.class.getClassLoader();
+        XposedHelpers.findAndHookMethod(Thread.class, "dispatchUncaughtException",
+                Throwable.class, new CrashDumpHooker());
         if (isSystem) {
-            XposedHelpers.findAndHookMethod("android.app.ActivityThread", classLoader,
+            XposedHelpers.findAndHookMethod(ActivityThread.class,
                     "systemMain", new SystemMainHooker());
         }
-        XposedHelpers.findAndHookMethod("android.app.ActivityThread", classLoader,
+        XposedHelpers.findAndHookMethod(ActivityThread.class,
                 "handleBindApplication",
                 "android.app.ActivityThread$AppBindData",
                 new HandleBindAppHooker(appDataDir));
-        XposedHelpers.findAndHookConstructor("android.app.LoadedApk", classLoader,
+        XposedHelpers.findAndHookConstructor(LoadedApk.class,
                 ActivityThread.class, ApplicationInfo.class, CompatibilityInfo.class,
                 ClassLoader.class, boolean.class, boolean.class, boolean.class,
                 new LoadedApkCstrHooker());
