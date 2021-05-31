@@ -130,7 +130,6 @@
     <string name="force_stop_dlg_text">앱을 강제로 중지하면 잘못된 동작이 발생할 수 있습니다.</string>
     <string name="reboot_required">이 변경 내용을 적용하려면 재부팅해야 합니다.</string>
     <string name="reboot">재부팅</string>
-    <string name="menu_filter">필터…</string>
 
     <!-- ModulesActivity and AppListActivity -->
     <string name="module_app_info">앱 정보</string>

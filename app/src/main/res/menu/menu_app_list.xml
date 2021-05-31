@@ -37,7 +37,7 @@
         android:title="@string/use_recommended" />
 
     <item
-        android:title="@string/menu_filter"
+        android:title="@string/menu_hide"
         app:showAsAction="never">
         <menu>
 

@@ -122,7 +122,6 @@
     <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
     <string name="reboot_required">Reboot is required for this change to apply</string>
     <string name="reboot">Reboot</string>
-    <string name="menu_filter">Filter…</string>
 
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">在其他應用中查看</string>

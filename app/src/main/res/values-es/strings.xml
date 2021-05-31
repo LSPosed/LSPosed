@@ -127,7 +127,6 @@
     <string name="force_stop_dlg_text">Si fuerzas la detención de una aplicación puede que esta se comporte de manera indefinida.</string>
     <string name="reboot_required">Necesitas reiniciar la aplicación para aplicar este cambio</string>
     <string name="reboot">Reiniciar</string>
-    <string name="menu_filter">Filtrar…</string>
 
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">Ver en otra aplicación</string>

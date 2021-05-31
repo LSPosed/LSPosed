@@ -129,7 +129,6 @@
     <string name="force_stop_dlg_text">Si vous forcez l\’arrêt d\’une application, elle peut mal se comporter.</string>
     <string name="reboot_required">Redémarrage requis pour les changements prennent effet</string>
     <string name="reboot">Redémarrage</string>
-    <string name="menu_filter">Filtre…</string>
 
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">Voir dans une autre application</string>

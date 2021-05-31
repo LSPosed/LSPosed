@@ -129,7 +129,6 @@
     <string name="force_stop_dlg_text">如果您強行停止應用程式，可能導致行為異常。</string>
     <string name="reboot_required">需要重新啟動手機才能套用此修改</string>
     <string name="reboot">重新啟動</string>
-    <string name="menu_filter">過濾…</string>
 
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">在其他應用程式中檢視</string>
