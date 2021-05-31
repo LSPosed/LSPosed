@@ -206,7 +206,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
                 Bundle bundle = new Bundle();
                 bundle.putString("modulePackageName", module.getName());
                 bundle.putString("moduleName", module.getDescription());
-                getNavController().navigate(R.id.action_repo_fragment_to_repo_item_fragment, bundle, getNavOptions());
+                getNavController().navigate(R.id.action_repo_fragment_to_repo_item_fragment, bundle);
             });
         }
 

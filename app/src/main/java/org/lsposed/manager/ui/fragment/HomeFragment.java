@@ -152,7 +152,7 @@ public class HomeFragment extends BaseFragment {
             if (requireInstalled && ConfigManager.getXposedVersionName() == null) {
                 Snackbar.make(snackbar, R.string.lsposed_not_active, Snackbar.LENGTH_LONG).show();
             } else {
-                getNavController().navigate(fragment, null, getNavOptions());
+                getNavController().navigate(fragment);
             }
         }
     }
