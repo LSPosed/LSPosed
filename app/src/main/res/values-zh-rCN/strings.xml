@@ -129,7 +129,7 @@
     <string name="force_stop_dlg_text">强行停止某个应用可能会导致其出现异常。</string>
     <string name="reboot_required">需要重新启动才能应用此更改</string>
     <string name="reboot">重新启动</string>
-    <string name="menu_filter">过滤…</string>
+    <string name="menu_hide">隐藏…</string>
 
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">在其它应用中查看</string>
