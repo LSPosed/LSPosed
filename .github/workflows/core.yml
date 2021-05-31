@@ -34,15 +34,24 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 11
-    - name: Cache Gradle
+    - name: Cache Gradle Dependencies
       uses: actions/cache@v2
       with:
         path: |
           ~/.gradle/caches
           ~/.gradle/wrapper
-        key: gradle-core-${{ github.sha }}
+          !~/.gradle/caches/build-cache-*
+        key: gradle-deps-core-${{ hashFiles('**/build.gradle.kts') }}
         restore-keys: |
-          gradle-
+          gradle-deps
+    - name: Cache Gradle Build
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.gradle/caches/build-cache-*
+        key: gradle-builds-core-${{ github.sha }}
+        restore-keys: |
+          gradle-builds
     - name: Cache Cmake
       uses: actions/cache@v2
       with:
