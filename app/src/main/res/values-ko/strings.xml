@@ -35,7 +35,7 @@
     <string name="module_repo_summary">모듈 저장소 (Alpha)</string>
     <string name="about_view_source_code"><![CDATA[%1$s에서 소스 코드 보기<br/>%2$s 채널에 가입하십시오.]]></string>
     <string name="about_translators">번역가: %s</string>
-    
+
     <string name="activated">활성화됨</string>
     <string name="not_installed">설치되지 않음</string>
     <string name="partial_activated">부분적으로 활성화됨</string>
@@ -86,7 +86,7 @@
     <string name="module_uninstall_message">이 모듈을 제거하시겠습니까?</string>
     <string name="module_uninstalled">%1$s 제거됨</string>
     <string name="module_uninstall_failed">제거 실패</string>
-    
+
     <string name="module_installed">%2$s 사용자에 %1$s 추가</string>
     <string name="module_install_failed">모듈 추가 실패</string>
     <string name="user_title">사용자 %d</string>

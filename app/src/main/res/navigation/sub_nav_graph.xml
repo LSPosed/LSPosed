@@ -75,7 +75,7 @@
     <fragment
         android:id="@+id/repo_item_fragment"
         android:name="org.lsposed.manager.ui.fragment.RepoItemFragment"
-        android:label="repo_item" >
+        android:label="repo_item">
         <argument
             android:name="modulePackageName"
             app:argType="string" />
