@@ -99,12 +99,24 @@
         android:label="repo">
         <action
             android:id="@+id/action_repo_fragment_to_repo_item_fragment"
-            app:destination="@id/repo_item_fragment" />
+            app:destination="@id/repo_item_fragment"
+            app:enterAnim="@anim/fragment_enter"
+            app:exitAnim="@anim/fragment_exit"
+            app:popEnterAnim="@anim/fragment_enter_pop"
+            app:popExitAnim="@anim/fragment_exit_pop" />
     </fragment>
     <fragment
         android:id="@+id/repo_item_fragment"
         android:name="org.lsposed.manager.ui.fragment.RepoItemFragment"
-        android:label="repo_item" />
+        android:label="repo_item" >
+        <argument
+            android:name="modulePackageName"
+            app:argType="string" />
+
+        <argument
+            android:name="moduleName"
+            app:argType="string" />
+    </fragment>
     <action
         android:id="@+id/action_settings_fragment"
         app:destination="@id/settings_fragment"

@@ -24,6 +24,7 @@ import java.nio.file.Paths
 plugins {
     id("org.gradle.idea")
     id("com.android.application")
+    id("androidx.navigation.safeargs")
     kotlin("android")
 }
 
