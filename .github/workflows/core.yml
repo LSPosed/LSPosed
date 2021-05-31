@@ -34,15 +34,24 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 11
-    - name: Cache Gradle
+    - name: Cache Gradle Dependencies
       uses: actions/cache@v2
       with:
         path: |
           ~/.gradle/caches
           ~/.gradle/wrapper
-        key: gradle-core-${{ github.sha }}
+          !~/.gradle/caches/build-cache-*
+        key: gradle-deps-core-${{ hashFiles('**/build.gradle.kts') }}
         restore-keys: |
-          gradle-
+          gradle-deps
+    - name: Cache Gradle Build
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.gradle/caches/build-cache-*
+        key: gradle-builds-core-${{ github.sha }}
+        restore-keys: |
+          gradle-builds
     - name: Cache Cmake
       uses: actions/cache@v2
       with:
@@ -56,8 +65,8 @@ jobs:
         ccache -o hash_dir=false
     - name: Build with Gradle
       run: |
-        [ $(du -s ~/.gradle/wrapper | awk '{ print $1 }') -gt 250000 ] && rm -rf ~/.gradle/wrapper/*
-        find ~/.gradle/caches -exec touch -d "2 days ago" {} +
+        [ $(du -s ~/.gradle/wrapper | awk '{ print $1 }') -gt 250000 ] && rm -rf ~/.gradle/wrapper/* || true
+        find ~/.gradle/caches -exec touch -d "2 days ago" {} + || true
         echo 'org.gradle.caching=true' >> gradle.properties
         echo 'org.gradle.parallel=true' >> gradle.properties
         echo 'org.gradle.vfs.watch=true' >> gradle.properties

@@ -35,15 +35,24 @@ jobs:
           echo androidKeyPassword='${{ secrets.KEY_PASSWORD }}' >> gradle.properties
           echo androidStoreFile='key.jks' >> gradle.properties
           echo ${{ secrets.KEY_STORE }} | base64 --decode > key.jks
-      - name: Cache Gradle
+      - name: Cache Gradle Dependencies
         uses: actions/cache@v2
         with:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: gradle-manager-${{ github.sha }}
+            !~/.gradle/caches/build-cache-*
+          key: gradle-deps-manager-${{ hashFiles('**/build.gradle.kts') }}
           restore-keys: |
-            gradle-
+            gradle-deps
+      - name: Cache Gradle Build
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches/build-cache-*
+          key: gradle-builds-manager-${{ github.sha }}
+          restore-keys: |
+            gradle-builds
       - name: Build with Gradle
         id: buildRelease
         run: |
