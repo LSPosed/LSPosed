@@ -57,6 +57,7 @@ jobs:
     - name: Build with Gradle
       run: |
         [ $(du -s ~/.gradle/wrapper | awk '{ print $1 }') -gt 250000 ] && rm -rf ~/.gradle/wrapper/*
+        find ~/.gradle/caches -exec touch -d "2 days ago" {} +
         echo 'org.gradle.caching=true' >> gradle.properties
         echo 'org.gradle.parallel=true' >> gradle.properties
         echo 'org.gradle.vfs.watch=true' >> gradle.properties
