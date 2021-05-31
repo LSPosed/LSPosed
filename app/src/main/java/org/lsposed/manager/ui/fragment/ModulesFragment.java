@@ -452,9 +452,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
             if (!isPick) {
                 holder.root.setAlpha(moduleUtil.isModuleEnabled(item.packageName) ? 1.0f : .5f);
-                holder.itemView.setOnClickListener(v -> {
-                    getNavController().navigate(ModulesFragmentDirections.actionModulesFragmentToAppListFragment(item.packageName, item.userId));
-                });
+                holder.itemView.setOnClickListener(v -> getNavController().navigate(ModulesFragmentDirections.actionModulesFragmentToAppListFragment(item.packageName, item.userId)));
                 holder.itemView.setOnLongClickListener(v -> {
                     selectedModule = item;
                     return false;

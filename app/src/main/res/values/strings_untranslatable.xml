@@ -17,7 +17,7 @@
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@drawable/afs_*">
     <string name="app_name" translatable="false">LSPosed</string>
     <string name="about_source" translatable="false">https://github.com/LSPosed/LSPosed/</string>
 </resources>
