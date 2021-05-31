@@ -539,7 +539,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
         private final Runnable reloadModules = new Runnable() {
             public void run() {
-                var tmpList = moduleUtil.getModules().values().stream().filter(module -> user == null || module.userId == user.id).filter(customFilter).collect(Collectors.toCollection(ArrayList::new));
+                var tmpList = moduleUtil.getModules().values().stream().filter(module -> user == null ? module.userId == 0 : module.userId == user.id).filter(customFilter).collect(Collectors.toCollection(ArrayList::new));
                 Comparator<PackageInfo> cmp = AppHelper.getAppListComparator(0, pm);
                 tmpList.sort((a, b) -> {
                     boolean aChecked = moduleUtil.isModuleEnabled(a.packageName);
