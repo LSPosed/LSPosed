@@ -122,7 +122,6 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        android.util.Log.i("lspd", "test cache");
         ServiceManager.start(args);
     }
 }
