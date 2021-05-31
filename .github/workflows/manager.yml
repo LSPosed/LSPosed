@@ -42,7 +42,7 @@ jobs:
             ~/.gradle/caches
             ~/.gradle/wrapper
             !~/.gradle/caches/build-cache-*
-          key: gradle-deps-core-${{ hashFiles('**/build.gradle.kts') }}
+          key: gradle-deps-manager-${{ hashFiles('**/build.gradle.kts') }}
           restore-keys: |
             gradle-deps
       - name: Cache Gradle Build
@@ -50,7 +50,7 @@ jobs:
         with:
           path: |
             ~/.gradle/caches/build-cache-*
-          key: gradle-builds-core-${{ github.sha }}
+          key: gradle-builds-manager-${{ github.sha }}
           restore-keys: |
             gradle-builds
       - name: Build with Gradle
