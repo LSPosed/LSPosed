@@ -32,6 +32,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
+import org.lsposed.manager.NavGraphDirections;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.ActivityMainBinding;
 import org.lsposed.manager.ui.activity.base.BaseActivity;
@@ -84,22 +85,19 @@ public class MainActivity extends BaseActivity {
         }
         NavController navController = navHostFragment.getNavController();
         if (intent.getAction() != null && intent.getAction().equals("android.intent.action.APPLICATION_PREFERENCES")) {
-            navController.navigate(R.id.settings_fragment);
+            navController.navigate(R.id.action_settings_fragment);
         } else if (intent.hasExtra("modulePackageName")) {
-            Bundle bundle = new Bundle();
-            bundle.putString("modulePackageName", intent.getStringExtra("modulePackageName"));
-            bundle.putInt("moduleUserId", intent.getIntExtra("moduleUserId", -1));
-            navController.navigate(R.id.app_list_fragment, bundle);
+            navController.navigate(NavGraphDirections.actionAppListFragment(intent.getStringExtra("modulePackageName"), intent.getIntExtra("moduleUserId", -1)));
         } else if (!TextUtils.isEmpty(intent.getDataString())) {
             switch (intent.getDataString()) {
                 case "modules":
-                    navController.navigate(R.id.modules_fragment);
+                    navController.navigate(R.id.action_modules_fragment);
                     break;
                 case "logs":
-                    navController.navigate(R.id.logs_fragment);
+                    navController.navigate(R.id.action_logs_fragment);
                     break;
                 case "repo":
-                    navController.navigate(R.id.repo_fragment);
+                    navController.navigate(R.id.action_repo_fragment);
                     break;
             }
         }
