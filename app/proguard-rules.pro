@@ -19,7 +19,8 @@
 }
 
 -repackageclasses
--allowaccessmodification
+# temporarily disable it: https://issuetracker.google.com/issues/155606069 
+# -allowaccessmodification
 -overloadaggressively
 
 # Gson uses generic type information stored in a class file when working with fields. Proguard
