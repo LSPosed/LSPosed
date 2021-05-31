@@ -77,10 +77,10 @@ public class HomeFragment extends BaseFragment {
                 NavUtil.startURL(activity, getString(R.string.about_source));
             }
         });
-        binding.modules.setOnClickListener(new StartFragmentListener(R.id.action_main_fragment_to_modules_fragment, true));
-        binding.download.setOnClickListener(new StartFragmentListener(R.id.action_main_fragment_to_repo_fragment, false));
-        binding.logs.setOnClickListener(new StartFragmentListener(R.id.action_main_fragment_to_logs_fragment, true));
-        binding.settings.setOnClickListener(new StartFragmentListener(R.id.action_main_fragment_to_settings_fragment, false));
+        binding.modules.setOnClickListener(new StartFragmentListener(R.id.action_modules_fragment, true));
+        binding.download.setOnClickListener(new StartFragmentListener(R.id.action_repo_fragment, false));
+        binding.logs.setOnClickListener(new StartFragmentListener(R.id.action_logs_fragment, true));
+        binding.settings.setOnClickListener(new StartFragmentListener(R.id.action_settings_fragment, false));
         binding.about.setOnClickListener(v -> {
             DialogAboutBinding binding = DialogAboutBinding.inflate(LayoutInflater.from(requireActivity()), null, false);
             binding.sourceCode.setMovementMethod(LinkMovementMethod.getInstance());
@@ -152,7 +152,7 @@ public class HomeFragment extends BaseFragment {
             if (requireInstalled && ConfigManager.getXposedVersionName() == null) {
                 Snackbar.make(snackbar, R.string.lsposed_not_active, Snackbar.LENGTH_LONG).show();
             } else {
-                getNavController().navigate(fragment, null, getNavOptions());
+                getNavController().navigate(fragment);
             }
         }
     }

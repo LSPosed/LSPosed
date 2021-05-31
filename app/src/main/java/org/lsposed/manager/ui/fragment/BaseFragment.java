@@ -24,7 +24,6 @@ import android.view.View;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
-import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
 import org.lsposed.manager.R;
@@ -64,14 +63,5 @@ public class BaseFragment extends Fragment {
             toolbar.setOnMenuItemClickListener(this::onOptionsItemSelected);
             onPrepareOptionsMenu(toolbar.getMenu());
         }
-    }
-
-    public NavOptions getNavOptions() {
-        return new NavOptions.Builder()
-                .setEnterAnim(R.anim.nav_default_enter_anim)
-                .setExitAnim(R.anim.nav_default_exit_anim)
-                .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
-                .setPopExitAnim(R.anim.nav_default_pop_exit_anim)
-                .build();
     }
 }

@@ -92,8 +92,9 @@ public class AppListFragment extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String modulePackageName = getArguments().getString("modulePackageName");
-        int moduleUserId = getArguments().getInt("moduleUserId", -1);
+        AppListFragmentArgs args = AppListFragmentArgs.fromBundle(getArguments());
+        String modulePackageName = args.getModulePackageName();
+        int moduleUserId = args.getModuleUserId();
 
         module = ModuleUtil.getInstance().getModule(modulePackageName, moduleUserId);
         if (module == null) {

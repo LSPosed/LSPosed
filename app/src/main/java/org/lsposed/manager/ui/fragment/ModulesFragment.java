@@ -314,10 +314,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                     .show();
             return true;
         } else if (itemId == R.id.menu_repo) {
-            Bundle bundle = new Bundle();
-            bundle.putString("modulePackageName", selectedModule.packageName);
-            bundle.putString("moduleName", selectedModule.getAppName());
-            getNavController().navigate(R.id.action_modules_fragment_to_repo_item_fragment, bundle, getNavOptions());
+            getNavController().navigate(ModulesFragmentDirections.actionModulesFragmentToRepoItemFragment(selectedModule.packageName, selectedModule.getAppName()));
             return true;
         }
         return super.onContextItemSelected(item);
@@ -456,10 +453,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             if (!isPick) {
                 holder.root.setAlpha(moduleUtil.isModuleEnabled(item.packageName) ? 1.0f : .5f);
                 holder.itemView.setOnClickListener(v -> {
-                    Bundle bundle = new Bundle();
-                    bundle.putString("modulePackageName", item.packageName);
-                    bundle.putInt("moduleUserId", item.userId);
-                    getNavController().navigate(R.id.action_modules_fragment_to_app_list_fragment, bundle, getNavOptions());
+                    getNavController().navigate(ModulesFragmentDirections.actionModulesFragmentToAppListFragment(item.packageName, item.userId));
                 });
                 holder.itemView.setOnLongClickListener(v -> {
                     selectedModule = item;

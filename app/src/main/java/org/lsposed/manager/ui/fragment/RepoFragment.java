@@ -203,10 +203,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
             }
             holder.appDescription.setText(sb);
             holder.itemView.setOnClickListener(v -> {
-                Bundle bundle = new Bundle();
-                bundle.putString("modulePackageName", module.getName());
-                bundle.putString("moduleName", module.getDescription());
-                getNavController().navigate(R.id.action_repo_fragment_to_repo_item_fragment, bundle, getNavOptions());
+                getNavController().navigate(RepoFragmentDirections.actionRepoFragmentToRepoItemFragment(module.getName(), module.getDescription()));
             });
         }
 
