@@ -37,7 +37,8 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
             app:subtitleTextAppearance="@android:style/TextAppearance.Material.Widget.Toolbar.Subtitle"
             app:titleTextAppearance="@android:style/TextAppearance.Material.Widget.Toolbar.Title"
             app:popupTheme="?actionBarPopupTheme" />
