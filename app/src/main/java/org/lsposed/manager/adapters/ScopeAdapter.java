@@ -122,6 +122,9 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         @Override
         public void run() {
             synchronized (this) {
+                if (fragment == null || fragment.binding == null) {
+                    return;
+                }
                 fragment.binding.progress.setIndeterminate(false);
                 fragment.binding.swipeRefreshLayout.setRefreshing(false);
                 String queryStr = fragment.searchView != null ? fragment.searchView.getQuery().toString() : "";
