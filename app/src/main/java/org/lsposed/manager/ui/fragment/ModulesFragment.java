@@ -66,6 +66,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import org.lsposed.lspd.models.UserInfo;
+import org.lsposed.manager.App;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.adapters.AppHelper;
@@ -93,28 +94,29 @@ import rikka.widget.borderview.BorderRecyclerView;
 
 public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleListener {
 
+    private static final Handler workHandler;
+    private static final PackageManager pm = App.getInstance().getPackageManager();
+    private static final ModuleUtil moduleUtil = ModuleUtil.getInstance();
+
     protected FragmentPagerBinding binding;
     protected SearchView searchView;
-    private SearchView.OnQueryTextListener mSearchListener;
+    private SearchView.OnQueryTextListener searchListener;
     private final PagerAdapter pagerAdapter = new PagerAdapter();
     private final ArrayList<ModuleAdapter> adapters = new ArrayList<>();
-    private final ArrayList<String> titles = new ArrayList<>();
 
-    private Handler workHandler;
-    private PackageManager pm;
-    private ModuleUtil moduleUtil;
     private ModuleUtil.InstalledModule selectedModule;
+
+    static {
+        HandlerThread workThread = new HandlerThread("ModulesActivity WorkHandler");
+        workThread.start();
+        workHandler = new Handler(workThread.getLooper());
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        HandlerThread workThread = new HandlerThread("ModulesActivity WorkHandler");
-        workThread.start();
-        workHandler = new Handler(workThread.getLooper());
-        moduleUtil = ModuleUtil.getInstance();
-        pm = requireContext().getPackageManager();
         moduleUtil.addListener(this);
-        mSearchListener = new SearchView.OnQueryTextListener() {
+        searchListener = new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 adapters.forEach(adapter -> adapter.getFilter().filter(query));
@@ -187,7 +189,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
-        searchView.setOnQueryTextListener(mSearchListener);
+        searchView.setOnQueryTextListener(searchListener);
     }
 
     @Override
@@ -198,26 +200,24 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             if (users.size() != adapters.size()) {
                 adapters.clear();
                 if (users.size() != 1) {
+                    ArrayList<String> titles = new ArrayList<>();
                     for (var user : users) {
                         var adapter = new ModuleAdapter(user);
                         adapter.setHasStableIds(true);
                         adapters.add(adapter);
                         titles.add(user.name);
                     }
+                    binding.viewPager.setUserInputEnabled(true);
+                    new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> tab.setText(titles.get(position))).attach();
+                    binding.tabLayout.setVisibility(View.VISIBLE);
                 } else {
                     var adapter = new ModuleAdapter(null);
                     adapter.setHasStableIds(true);
                     adapters.add(adapter);
+                    binding.viewPager.setUserInputEnabled(false);
+                    binding.tabLayout.setVisibility(View.GONE);
                 }
                 pagerAdapter.notifyDataSetChanged();
-            }
-            if (users.size() != 1) {
-                binding.viewPager.setUserInputEnabled(true);
-                new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> tab.setText(titles.get(position))).attach();
-                binding.tabLayout.setVisibility(View.VISIBLE);
-            } else {
-                binding.viewPager.setUserInputEnabled(false);
-                binding.tabLayout.setVisibility(View.GONE);
             }
         }
         adapters.forEach(ModuleAdapter::refresh);
@@ -318,6 +318,14 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             return true;
         }
         return super.onContextItemSelected(item);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        binding = null;
+        adapters.clear();
     }
 
     private class PagerAdapter extends RecyclerView.Adapter<PagerAdapter.ViewHolder> {

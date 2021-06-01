@@ -85,6 +85,12 @@ public class SettingsFragment extends BaseFragment {
         }
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        binding = null;
+    }
 
     public static class PreferenceFragment extends PreferenceFragmentCompat {
         ActivityResultLauncher<String> backupLauncher = registerForActivityResult(new ActivityResultContracts.CreateDocument(),

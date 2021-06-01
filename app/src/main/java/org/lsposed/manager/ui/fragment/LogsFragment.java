@@ -208,6 +208,13 @@ public class LogsFragment extends BaseFragment {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        binding = null;
+    }
+
     private void reloadErrorLog() {
         ParcelFileDescriptor parcelFileDescriptor = ConfigManager.getLogs(verbose);
         if (parcelFileDescriptor != null) {

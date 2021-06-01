@@ -28,6 +28,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -85,7 +86,7 @@ public class AppListFragment extends BaseFragment {
 
         searchListener = scopeAdapter.getSearchListener();
 
-        setupToolbar(binding.toolbar, title, R.menu.menu_app_list);
+        setupToolbar(binding.toolbar, title, R.menu.menu_app_list, view -> requireActivity().getOnBackPressedDispatcher().onBackPressed());
         return binding.getRoot();
     }
 
@@ -155,12 +156,26 @@ public class AppListFragment extends BaseFragment {
                         });
                     }
                 });
+
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                scopeAdapter.onBackPressed();
+            }
+        });
     }
 
     @Override
     public void onResume() {
         super.onResume();
         scopeAdapter.refresh(false);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        binding = null;
     }
 
     @Override
