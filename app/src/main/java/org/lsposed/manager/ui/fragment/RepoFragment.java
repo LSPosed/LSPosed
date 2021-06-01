@@ -177,6 +177,13 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        binding = null;
+    }
+
     private class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.ViewHolder> implements Filterable {
         private List<OnlineModule> fullList, showList;
         private final LabelComparator labelComparator = new LabelComparator();

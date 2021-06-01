@@ -176,6 +176,13 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
         RepoLoader.getInstance().removeListener(this);
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        binding = null;
+    }
+
     private class InformationAdapter extends RecyclerView.Adapter<InformationAdapter.ViewHolder> {
         private final OnlineModule module;
 
