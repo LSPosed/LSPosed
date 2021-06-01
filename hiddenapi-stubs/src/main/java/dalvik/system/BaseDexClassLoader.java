@@ -7,10 +7,15 @@ package dalvik.system;
 
 import java.io.File;
 import java.net.URL;
+import java.nio.ByteBuffer;
 import java.util.Enumeration;
 
 public class BaseDexClassLoader extends ClassLoader {
     public BaseDexClassLoader(String dexPath, File optimizedDirectory, String librarySearchPath, ClassLoader parent) {
+        throw new RuntimeException("Stub!");
+    }
+
+    public BaseDexClassLoader(ByteBuffer[] dexFiles, String librarySearchPath, ClassLoader parent) {
         throw new RuntimeException("Stub!");
     }
 
