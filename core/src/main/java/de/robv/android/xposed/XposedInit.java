@@ -345,6 +345,7 @@ public final class XposedInit {
             var init = apkFile.getEntry("assets/inmemory_xposed_init");
             ClassLoader mcl;
             if (init != null) {
+                Log.i(TAG, "Loading in-memory module " + name+ ", skip parsing xposed_init");
                 mcl = InMemoryDelegateLastClassLoader.loadApk(new File(apk), librarySearchPath, parent);
             } else {
                 init = apkFile.getEntry("assets/xposed_init");
