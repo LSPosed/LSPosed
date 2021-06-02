@@ -26,7 +26,6 @@ import static de.robv.android.xposed.XposedBridge.sInitPackageResourcesCallbacks
 import static de.robv.android.xposed.XposedBridge.sInitZygoteCallbacks;
 import static de.robv.android.xposed.XposedBridge.sLoadedPackageCallbacks;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.closeSilently;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.getParameterIndexByType;
@@ -51,7 +50,6 @@ import org.lsposed.lspd.util.InMemoryDelegateLastClassLoader;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
@@ -59,7 +57,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.zip.ZipFile;
 
+import dalvik.system.DelegateLastClassLoader;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XC_InitZygote;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
@@ -276,82 +276,101 @@ public final class XposedInit {
      * Load all so from an APK by reading <code>assets/native_init</code>.
      * It will only store the so names but not doing anything.
      */
-    private static boolean initNativeModule(ClassLoader mcl, String name) {
-        InputStream is = mcl.getResourceAsStream("assets/native_init");
-        if (is == null) return true;
-        BufferedReader moduleLibraryReader = new BufferedReader(new InputStreamReader(is));
-        String moduleLibraryName;
-        try {
+    private static boolean initNativeModule(String apk) {
+        try (var apkFile = new ZipFile(apk)) {
+            var init = apkFile.getEntry("assets/native_init");
+            if (init == null) return true;
+            var is = apkFile.getInputStream(init);
+            var moduleLibraryReader = new BufferedReader(new InputStreamReader(is));
+            String moduleLibraryName;
             while ((moduleLibraryName = moduleLibraryReader.readLine()) != null) {
                 if (!moduleLibraryName.startsWith("#")) {
                     NativeAPI.recordNativeEntrypoint(moduleLibraryName);
                 }
             }
         } catch (IOException e) {
-            Log.e(TAG, "  Failed to load native library list from " + name, e);
+            Log.e(TAG, "  Failed to load native library list from " + apk, e);
             return false;
-        } finally {
-            closeSilently(is);
         }
         return true;
-
     }
 
-    private static boolean initModule(ClassLoader mcl, String name, String apk) {
-        InputStream is = mcl.getResourceAsStream("assets/xposed_init");
-        if (is == null) {
-            return true;
-        }
-        BufferedReader moduleClassesReader = new BufferedReader(new InputStreamReader(is));
-        try {
-            String moduleClassName;
-            while ((moduleClassName = moduleClassesReader.readLine()) != null) {
-                moduleClassName = moduleClassName.trim();
-                if (moduleClassName.isEmpty() || moduleClassName.startsWith("#"))
+    private static boolean loadModule(ClassLoader mcl, BufferedReader reader, String apk) throws IOException {
+        String moduleClassName;
+        while ((moduleClassName = reader.readLine()) != null) {
+            moduleClassName = moduleClassName.trim();
+            if (moduleClassName.isEmpty() || moduleClassName.startsWith("#"))
+                continue;
+
+            try {
+                Log.i(TAG, "  Loading class " + moduleClassName);
+                Class<?> moduleClass = mcl.loadClass(moduleClassName);
+
+                if (!IXposedMod.class.isAssignableFrom(moduleClass)) {
+                    Log.e(TAG, "    This class doesn't implement any sub-interface of IXposedMod, skipping it");
                     continue;
+                } else if (disableResources && IXposedHookInitPackageResources.class.isAssignableFrom(moduleClass)) {
+                    Log.e(TAG, "    This class requires resource-related hooks (which are disabled), skipping it.");
+                    continue;
+                }
 
-                try {
-                    Log.i(TAG, "  Loading class " + moduleClassName);
-                    Class<?> moduleClass = mcl.loadClass(moduleClassName);
+                final Object moduleInstance = moduleClass.newInstance();
+                if (moduleInstance instanceof IXposedHookZygoteInit) {
+                    IXposedHookZygoteInit.StartupParam param = new IXposedHookZygoteInit.StartupParam();
+                    param.modulePath = apk;
+                    param.startsSystemServer = startsSystemServer;
 
-                    if (!IXposedMod.class.isAssignableFrom(moduleClass)) {
-                        Log.e(TAG, "    This class doesn't implement any sub-interface of IXposedMod, skipping it");
-                        continue;
-                    } else if (disableResources && IXposedHookInitPackageResources.class.isAssignableFrom(moduleClass)) {
-                        Log.e(TAG, "    This class requires resource-related hooks (which are disabled), skipping it.");
-                        continue;
-                    }
+                    XposedBridge.hookInitZygote(new IXposedHookZygoteInit.Wrapper(
+                            (IXposedHookZygoteInit) moduleInstance, param));
+                    ((IXposedHookZygoteInit) moduleInstance).initZygote(param);
+                }
 
-                    final Object moduleInstance = moduleClass.newInstance();
-                    if (moduleInstance instanceof IXposedHookZygoteInit) {
-                        IXposedHookZygoteInit.StartupParam param = new IXposedHookZygoteInit.StartupParam();
-                        param.modulePath = apk;
-                        param.startsSystemServer = startsSystemServer;
+                if (moduleInstance instanceof IXposedHookLoadPackage)
+                    XposedBridge.hookLoadPackage(new IXposedHookLoadPackage.Wrapper(
+                            (IXposedHookLoadPackage) moduleInstance, apk));
 
-                        XposedBridge.hookInitZygote(new IXposedHookZygoteInit.Wrapper(
-                                (IXposedHookZygoteInit) moduleInstance, param));
-                        ((IXposedHookZygoteInit) moduleInstance).initZygote(param);
-                    }
+                if (moduleInstance instanceof IXposedHookInitPackageResources)
+                    XposedBridge.hookInitPackageResources(new IXposedHookInitPackageResources.Wrapper(
+                            (IXposedHookInitPackageResources) moduleInstance, apk));
+            } catch (Throwable t) {
+                Log.e(TAG, "    Failed to load class " + moduleClassName, t);
+                return false;
+            }
+        }
+        return true;
+    }
 
-                    if (moduleInstance instanceof IXposedHookLoadPackage)
-                        XposedBridge.hookLoadPackage(new IXposedHookLoadPackage.Wrapper(
-                                (IXposedHookLoadPackage) moduleInstance, apk));
-
-                    if (moduleInstance instanceof IXposedHookInitPackageResources)
-                        XposedBridge.hookInitPackageResources(new IXposedHookInitPackageResources.Wrapper(
-                                (IXposedHookInitPackageResources) moduleInstance, apk));
-                } catch (Throwable t) {
-                    Log.e(TAG, "    Failed to load class " + moduleClassName, t);
+    private static boolean initModule(String name, String apk, String librarySearchPath, ClassLoader parent) {
+        try (var apkFile = new ZipFile(apk)) {
+            var init = apkFile.getEntry("assets/inmemory_xposed_init");
+            ClassLoader mcl;
+            if (init != null) {
+                mcl = InMemoryDelegateLastClassLoader.loadApk(new File(apk), librarySearchPath, parent);
+            } else {
+                init = apkFile.getEntry("assets/xposed_init");
+                if (init == null) return true;
+                mcl = new DelegateLastClassLoader(apk, librarySearchPath, parent);
+            }
+            try {
+                if (mcl.loadClass(XposedBridge.class.getName()).getClassLoader() != parent) {
+                    Log.e(TAG, "  Cannot load module: " + name);
+                    Log.e(TAG, "  The Xposed API classes are compiled into the module's APK.");
+                    Log.e(TAG, "  This may cause strange issues and must be fixed by the module developer.");
+                    Log.e(TAG, "  For details, see: http://api.xposed.info/using.html");
                     return false;
                 }
+            } catch (ClassNotFoundException e) {
+                Log.e(TAG, "  Failed to load module " + name + " from " + apk, e);
+                return false;
             }
+            var is = apkFile.getInputStream(init);
+            return loadModule(mcl, new BufferedReader(new InputStreamReader(is)), apk);
         } catch (IOException e) {
             Log.e(TAG, "  Failed to load module " + name + " from " + apk, e);
             return false;
         } finally {
-            closeSilently(is);
+            System.gc();
         }
-        return true;
     }
 
     /**
@@ -373,20 +392,7 @@ public final class XposedInit {
             nativePath.append(apk).append("!/lib/").append(i).append(File.pathSeparator);
         }
         ClassLoader initLoader = XposedInit.class.getClassLoader();
-        ClassLoader mcl = InMemoryDelegateLastClassLoader.loadApk(new File(apk), nativePath.toString(), initLoader);
-
-        try {
-            if (mcl.loadClass(XposedBridge.class.getName()).getClassLoader() != initLoader) {
-                Log.e(TAG, "  Cannot load module: " + name);
-                Log.e(TAG, "  The Xposed API classes are compiled into the module's APK.");
-                Log.e(TAG, "  This may cause strange issues and must be fixed by the module developer.");
-                Log.e(TAG, "  For details, see: http://api.xposed.info/using.html");
-                return false;
-            }
-        } catch (ClassNotFoundException ignored) {
-        }
-
-        return initNativeModule(mcl, apk) && initModule(mcl, name, apk);
+        return initNativeModule(apk) && initModule(name, apk, nativePath.toString(), initLoader);
     }
 
     public final static HashSet<String> loadedPackagesInProcess = new HashSet<>(1);

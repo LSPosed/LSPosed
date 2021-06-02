@@ -6,22 +6,16 @@ import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.zip.ZipFile;
 
-import dalvik.system.DelegateLastClassLoader;
 import hidden.ByteBufferDexClassLoader;
 
 public final class InMemoryDelegateLastClassLoader extends ByteBufferDexClassLoader {
-    private final DelegateLastClassLoader resources;
-
-    private InMemoryDelegateLastClassLoader(ByteBuffer[] dexBuffers, DelegateLastClassLoader resourcesClassLoader, String librarySearchPath, ClassLoader parent) {
+    public InMemoryDelegateLastClassLoader(ByteBuffer[] dexBuffers, String librarySearchPath, ClassLoader parent) {
         super(dexBuffers, librarySearchPath, parent);
-        resources = resourcesClassLoader;
     }
 
     @Override
@@ -48,16 +42,6 @@ public final class InMemoryDelegateLastClassLoader extends ByteBufferDexClassLoa
         }
     }
 
-    @Override
-    public URL getResource(String name) {
-        return resources.getResource(name);
-    }
-
-    @Override
-    public Enumeration<URL> getResources(String name) throws IOException {
-        return resources.getResources(name);
-    }
-
     public static InMemoryDelegateLastClassLoader loadApk(File apk, String librarySearchPath, ClassLoader parent) {
         var byteBuffers = new ArrayList<ByteBuffer>();
         try (var apkFile = new ZipFile(apk)) {
@@ -78,7 +62,6 @@ public final class InMemoryDelegateLastClassLoader extends ByteBufferDexClassLoa
             Log.e(TAG, "Can not open " + apk, e);
         }
         var dexBuffers = new ByteBuffer[byteBuffers.size()];
-        var resources = new DelegateLastClassLoader(apk.getPath(), librarySearchPath, parent);
-        return new InMemoryDelegateLastClassLoader(byteBuffers.toArray(dexBuffers), resources, librarySearchPath, parent);
+        return new InMemoryDelegateLastClassLoader(byteBuffers.toArray(dexBuffers), librarySearchPath, parent);
     }
 }
