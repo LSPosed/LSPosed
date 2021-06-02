@@ -138,7 +138,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
         binding.getRoot().bringChildToFront(binding.appBar);
         setupToolbar(binding.toolbar, R.string.Modules, R.menu.menu_modules);
-        binding.viewPager.setAdapter(new PagerAdapter());
+        binding.viewPager.setAdapter(pagerAdapter);
         binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -325,7 +325,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         super.onDestroyView();
 
         binding = null;
-        adapters.clear();
     }
 
     private class PagerAdapter extends RecyclerView.Adapter<PagerAdapter.ViewHolder> {
