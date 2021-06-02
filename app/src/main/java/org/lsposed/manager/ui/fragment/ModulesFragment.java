@@ -325,7 +325,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         super.onDestroyView();
 
         binding = null;
-        adapters.clear();
     }
 
     private class PagerAdapter extends RecyclerView.Adapter<PagerAdapter.ViewHolder> {
