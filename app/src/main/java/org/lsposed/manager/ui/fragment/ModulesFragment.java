@@ -55,8 +55,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.request.target.CustomTarget;
@@ -101,8 +104,8 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     protected FragmentPagerBinding binding;
     protected SearchView searchView;
     private SearchView.OnQueryTextListener searchListener;
-    private final PagerAdapter pagerAdapter = new PagerAdapter();
     private final ArrayList<ModuleAdapter> adapters = new ArrayList<>();
+    private final ArrayList<String> tabTitles = new ArrayList<>();
 
     private ModuleUtil.InstalledModule selectedModule;
 
@@ -138,7 +141,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
         binding.getRoot().bringChildToFront(binding.appBar);
         setupToolbar(binding.toolbar, R.string.Modules, R.menu.menu_modules);
-        binding.viewPager.setAdapter(pagerAdapter);
+        binding.viewPager.setAdapter(new PagerAdapter(requireActivity()));
         binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -147,10 +150,41 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 if (recyclerView != null) {
                     binding.appBar.setRaised(!recyclerView.getBorderViewDelegate().isShowingTopBorder());
                 }
-                if (position > 0) binding.fab.show();
-                else binding.fab.hide();
+
+                if (position > 0) {
+                    binding.fab.show();
+                } else {
+                    binding.fab.hide();
+                }
             }
         });
+
+        var users = ConfigManager.getUsers();
+        if (users != null) {
+            adapters.clear();
+            if (users.size() != 1) {
+                tabTitles.clear();
+                for (var user : users) {
+                    var adapter = new ModuleAdapter(user);
+                    adapter.setHasStableIds(true);
+                    adapters.add(adapter);
+                    tabTitles.add(user.name);
+                }
+                new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> {
+                    if (position < tabTitles.size()) {
+                        tab.setText(tabTitles.get(position));
+                    }
+                }).attach();
+                binding.viewPager.setUserInputEnabled(true);
+                binding.tabLayout.setVisibility(View.VISIBLE);
+            } else {
+                var adapter = new ModuleAdapter(null);
+                adapter.setHasStableIds(true);
+                adapters.add(adapter);
+                binding.viewPager.setUserInputEnabled(false);
+                binding.tabLayout.setVisibility(View.GONE);
+            }
+        }
 
         binding.fab.setOnClickListener(v -> {
             var pickAdaptor = new ModuleAdapter(null, true);
@@ -195,31 +229,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     @Override
     public void onResume() {
         super.onResume();
-        var users = ConfigManager.getUsers();
-        if (users != null) {
-            if (users.size() != adapters.size()) {
-                adapters.clear();
-                if (users.size() != 1) {
-                    ArrayList<String> titles = new ArrayList<>();
-                    for (var user : users) {
-                        var adapter = new ModuleAdapter(user);
-                        adapter.setHasStableIds(true);
-                        adapters.add(adapter);
-                        titles.add(user.name);
-                    }
-                    binding.viewPager.setUserInputEnabled(true);
-                    new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> tab.setText(titles.get(position))).attach();
-                    binding.tabLayout.setVisibility(View.VISIBLE);
-                } else {
-                    var adapter = new ModuleAdapter(null);
-                    adapter.setHasStableIds(true);
-                    adapters.add(adapter);
-                    binding.viewPager.setUserInputEnabled(false);
-                    binding.tabLayout.setVisibility(View.GONE);
-                }
-                pagerAdapter.notifyDataSetChanged();
-            }
-        }
         adapters.forEach(ModuleAdapter::refresh);
     }
 
@@ -327,48 +336,58 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         binding = null;
     }
 
-    private class PagerAdapter extends RecyclerView.Adapter<PagerAdapter.ViewHolder> {
+    public static class ModuleListFragment extends Fragment {
+        private final int position;
+        private final ModulesFragment fragment;
+
+        public ModuleListFragment(int position, ModulesFragment fragment) {
+            this.position = position;
+            this.fragment = fragment;
+        }
+
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            ItemRepoRecyclerviewBinding binding = ItemRepoRecyclerviewBinding.inflate(getLayoutInflater(), container, false);
+            if (fragment.adapters.size() == 1) {
+                WindowInsetsHelperKt.setInitialPadding(binding.recyclerView, 0, ResourcesKt.resolveDimensionPixelOffset(requireActivity().getTheme(), R.attr.actionBarSize, 0), 0, 0);
+            }
+            binding.recyclerView.setTag(position);
+            binding.recyclerView.setAdapter(fragment.adapters.get(position));
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManagerFix(requireActivity());
+            binding.recyclerView.setLayoutManager(layoutManager);
+            binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> fragment.binding.appBar.setRaised(!top));
+            binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE && position > 0) {
+                        fragment.binding.fab.show();
+                    } else {
+                        fragment.binding.fab.hide();
+                    }
+                }
+            });
+            RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
+            RecyclerViewKt.addFastScroller(binding.recyclerView, binding.recyclerView);
+            return binding.getRoot();
+        }
+    }
+
+    private class PagerAdapter extends FragmentStateAdapter {
+
+        public PagerAdapter(@NonNull FragmentActivity fragmentActivity) {
+            super(fragmentActivity);
+        }
 
         @NonNull
         @Override
-        public PagerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new PagerAdapter.ViewHolder(ItemRepoRecyclerviewBinding.inflate(getLayoutInflater(), parent, false));
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull PagerAdapter.ViewHolder holder, int position) {
-            if (getItemCount() == 1) {
-                WindowInsetsHelperKt.setInitialPadding(holder.recyclerView, 0, ResourcesKt.resolveDimensionPixelOffset(requireActivity().getTheme(), R.attr.actionBarSize, 0), 0, 0);
-            }
-            holder.recyclerView.setTag(position);
-            holder.recyclerView.setAdapter(adapters.get(position));
-            holder.recyclerView.setLayoutManager(new LinearLayoutManagerFix(requireActivity()));
-            holder.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setRaised(!top));
-            holder.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                    if (newState == RecyclerView.SCROLL_STATE_IDLE && holder.getBindingAdapterPosition() > 0)
-                        binding.fab.show();
-                    else binding.fab.hide();
-                    super.onScrollStateChanged(recyclerView, newState);
-                }
-            });
-            RecyclerViewKt.fixEdgeEffect(holder.recyclerView, false, true);
-            RecyclerViewKt.addFastScroller(holder.recyclerView, holder.itemView);
+        public Fragment createFragment(int position) {
+            return new ModuleListFragment(position, ModulesFragment.this);
         }
 
         @Override
         public int getItemCount() {
             return adapters.size();
-        }
-
-        class ViewHolder extends RecyclerView.ViewHolder {
-            BorderRecyclerView recyclerView;
-
-            public ViewHolder(@NonNull ItemRepoRecyclerviewBinding binding) {
-                super(binding.getRoot());
-                recyclerView = binding.recyclerView;
-            }
         }
     }
 
