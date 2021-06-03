@@ -118,7 +118,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     @Override
     public boolean enableModule(String packageName) throws RemoteException {
-        PackageInfo pkgInfo = PackageService.getPackageInfo(packageName, 0, 0);
+        PackageInfo pkgInfo = PackageService.getPackageInfo(packageName, PackageManager.MATCH_DISABLED_COMPONENTS | PackageManager.MATCH_UNINSTALLED_PACKAGES | PackageManager.MATCH_DIRECT_BOOT_AWARE | PackageManager.MATCH_DIRECT_BOOT_UNAWARE, 0);
         if (pkgInfo == null) return false;
         return ConfigManager.getInstance().enableModule(packageName, pkgInfo.applicationInfo.sourceDir);
     }
@@ -210,7 +210,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     @Override
     public List<UserInfo> getUsers() throws RemoteException {
         var users = new LinkedList<UserInfo>();
-        for(var user: UserService.getUsers()){
+        for (var user : UserService.getUsers()) {
             var info = new UserInfo();
             info.id = user.id;
             info.name = user.name;
