@@ -42,8 +42,7 @@ namespace art {
             return PrettyMethod(thiz, true);
         }
 
-        static void Setup(void *handle) {
-            LOGD("art_method hook setup, handle=%p", handle);
+        static void Setup(const SandHook::ElfImg &handle) {
             RETRIEVE_MEM_FUNC_SYMBOL(PrettyMethod, "_ZN3art9ArtMethod12PrettyMethodEb");
         }
     }

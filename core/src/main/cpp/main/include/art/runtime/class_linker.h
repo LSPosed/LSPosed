@@ -107,8 +107,7 @@ namespace art {
         }
 
         // @ApiSensitive(Level.MIDDLE)
-        static void Setup(void *handle) {
-            LOGD("Classlinker hook setup, handle=%p", handle);
+        static void Setup(const SandHook::ElfImg &handle) {
             int api_level = lspd::GetAndroidApiLevel();
             size_t OFFSET_classlinker;  // Get offset from art::Runtime::RunRootClinits() call in IDA
             switch (api_level) {

@@ -115,7 +115,7 @@ namespace art {
                 }
         );
 
-        static void DisableHiddenApi(void *handle) {
+        static void DisableHiddenApi(const SandHook::ElfImg &handle) {
 
             const int api_level = lspd::GetAndroidApiLevel();
             if (api_level < __ANDROID_API_P__) {

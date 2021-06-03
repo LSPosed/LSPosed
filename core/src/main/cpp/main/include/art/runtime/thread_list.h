@@ -42,7 +42,7 @@ namespace art {
                 destructor(this);
             }
 
-            static void Setup(void *handle) {
+            static void Setup(const SandHook::ElfImg &handle) {
                 RETRIEVE_MEM_FUNC_SYMBOL(constructor, "_ZN3art16ScopedSuspendAllC2EPKcb");
                 RETRIEVE_MEM_FUNC_SYMBOL(destructor, "_ZN3art16ScopedSuspendAllD2Ev");
             }

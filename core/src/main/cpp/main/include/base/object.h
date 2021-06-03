@@ -25,6 +25,7 @@
 #include <sys/mman.h>
 #include "config.h"
 #include "native_hook.h"
+#include "elf_util.h"
 #include <concepts>
 
 #define _uintval(p)               reinterpret_cast<uintptr_t>(p)
@@ -114,13 +115,18 @@ namespace lspd {
         return dlsym(handle, name);
     }
 
-    template<class T, class ... Args>
-    inline void *Dlsym(void *handle, T first, Args... last) {
-        auto ret = Dlsym(handle, first);
+    [[gnu::always_inline]]
+    inline void *Dlsym(const SandHook::ElfImg &handle, const char *name) {
+        return handle.getSymbAddress<void *>(name);
+    }
+
+    template<class H, class T, class ... Args>
+    inline void *Dlsym(H &&handle, T first, Args... last) {
+        auto ret = Dlsym(std::forward<H>(handle), first);
         if (ret) {
             return ret;
         }
-        return Dlsym(handle, last...);
+        return Dlsym(std::forward<H>(handle), last...);
     }
 
     inline int HookFunction(void *original, void *replace, void **backup) {
@@ -250,15 +256,16 @@ namespace lspd {
         }
     }
 
-    template<HookerType T>
-    inline static bool HookSym(void *handle, T &arg) {
-        auto original = Dlsym(handle, arg.sym);
+    template<typename H, HookerType T>
+    inline static bool HookSym(H &&handle, T &arg) {
+        auto original = Dlsym(std::forward<H>(handle), arg.sym);
         return HookSymNoHandle(original, arg);
     }
 
-    template<HookerType T, HookerType...Args>
-    inline static bool HookSyms(void *handle, T &first, Args &...rest) {
-        if (!(HookSym(handle, first) || ... || HookSym(handle, rest))) {
+    template<typename H, HookerType T, HookerType...Args>
+    inline static bool HookSyms(H &&handle, T &first, Args &...rest) {
+        if (!(HookSym(std::forward<H>(handle), first) || ... || HookSym(std::forward<H>(handle),
+                                                                        rest))) {
             LOGW("Hook Fails: %s", first.sym);
             return false;
         }
