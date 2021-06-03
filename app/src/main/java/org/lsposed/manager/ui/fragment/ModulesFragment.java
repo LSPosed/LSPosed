@@ -56,7 +56,6 @@ import androidx.appcompat.widget.SearchView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
@@ -141,7 +140,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
         binding.getRoot().bringChildToFront(binding.appBar);
         setupToolbar(binding.toolbar, R.string.Modules, R.menu.menu_modules);
-        binding.viewPager.setAdapter(new PagerAdapter(requireActivity()));
+        binding.viewPager.setAdapter(new PagerAdapter(this));
         binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -337,17 +336,16 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     }
 
     public static class ModuleListFragment extends Fragment {
-        private final int position;
-        private final ModulesFragment fragment;
-
-        public ModuleListFragment(int position, ModulesFragment fragment) {
-            this.position = position;
-            this.fragment = fragment;
-        }
 
         @Nullable
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            ModulesFragment fragment = (ModulesFragment) getParentFragment();
+            Bundle arguments = getArguments();
+            if (fragment == null || arguments == null) {
+                return null;
+            }
+            int position = arguments.getInt("position");
             ItemRepoRecyclerviewBinding binding = ItemRepoRecyclerviewBinding.inflate(getLayoutInflater(), container, false);
             if (fragment.adapters.size() == 1) {
                 WindowInsetsHelperKt.setInitialPadding(binding.recyclerView, 0, ResourcesKt.resolveDimensionPixelOffset(requireActivity().getTheme(), R.attr.actionBarSize, 0), 0, 0);
@@ -375,19 +373,28 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
     private class PagerAdapter extends FragmentStateAdapter {
 
-        public PagerAdapter(@NonNull FragmentActivity fragmentActivity) {
-            super(fragmentActivity);
+        public PagerAdapter(@NonNull Fragment fragment) {
+            super(fragment);
         }
 
         @NonNull
         @Override
         public Fragment createFragment(int position) {
-            return new ModuleListFragment(position, ModulesFragment.this);
+            Bundle bundle = new Bundle();
+            bundle.putInt("position", position);
+            Fragment fragment = new ModuleListFragment();
+            fragment.setArguments(bundle);
+            return fragment;
         }
 
         @Override
         public int getItemCount() {
             return adapters.size();
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
         }
     }
 

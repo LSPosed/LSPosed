@@ -86,7 +86,6 @@
     <string name="module_uninstall_message">要卸载此模块吗？</string>
     <string name="module_uninstalled">已卸载%1$s</string>
     <string name="module_uninstall_failed">卸载失败</string>
-    <string name="user_title">用户 %d</string>
     <string name="install_to_user">安装到用户 %s</string>
     <string name="install_to_user_message">要安装 %1$s 到用户 %2$s 吗？建议手动安装或多开，通过 LSPosed 强制安装可能会出现问题。</string>
     <string name="module_installed">已安装 %1$s 到用户 %2$s</string>

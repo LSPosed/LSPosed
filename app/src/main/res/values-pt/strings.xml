@@ -88,7 +88,6 @@
     <string name="module_uninstall_failed">Falha ao desinstalar</string>
     <string name="module_installed">Adicionado %1$s ao usuário %2$s</string>
     <string name="module_install_failed">Falha ao adicinar módulo</string>
-    <string name="user_title">Usuário %d</string>
     <string name="install_to_user">Instalar ao usuário %s</string>
     <string name="install_to_user_message">Deseja instalar %1$s ao usuário %2$s? Recomenda-se instalar manualmente, forçar a instalação via LSPosed pode causar problemas.</string>
 
