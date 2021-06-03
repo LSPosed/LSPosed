@@ -219,7 +219,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     }
 
     private void checkRecommended() {
-        checkedList.clear();
+        checkedList.removeIf(i -> i.userId == module.userId);
         checkedList.addAll(recommendedList);
         ConfigManager.setModuleScope(module.packageName, checkedList);
     }
