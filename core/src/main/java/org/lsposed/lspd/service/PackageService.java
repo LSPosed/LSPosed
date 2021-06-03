@@ -74,6 +74,7 @@ public class PackageService {
     static final int INSTALL_FAILED_INTERNAL_ERROR = -110;
     static final int INSTALL_REASON_UNKNOWN = 0;
 
+    static final int MATCH_ALL_FLAGS = PackageManager.MATCH_DISABLED_COMPONENTS | PackageManager.MATCH_DIRECT_BOOT_AWARE | PackageManager.MATCH_DIRECT_BOOT_UNAWARE | PackageManager.MATCH_UNINSTALLED_PACKAGES;
 
     private static IPackageManager pm = null;
     private static IBinder binder = null;
@@ -134,9 +135,8 @@ public class PackageService {
         }
         if (filterNoProcess) {
             res = res.stream().filter(packageInfo -> {
-                int baseFlag = PackageManager.MATCH_DISABLED_COMPONENTS | PackageManager.MATCH_DIRECT_BOOT_AWARE | PackageManager.MATCH_DIRECT_BOOT_UNAWARE | PackageManager.MATCH_UNINSTALLED_PACKAGES;
                 try {
-                    PackageInfo pkgInfo = getPackageInfoWithComponents(packageInfo.packageName, baseFlag, packageInfo.applicationInfo.uid / 100000);
+                    PackageInfo pkgInfo = getPackageInfoWithComponents(packageInfo.packageName, MATCH_ALL_FLAGS, packageInfo.applicationInfo.uid / 100000);
                     return !fetchProcesses(pkgInfo).isEmpty();
                 } catch (RemoteException e) {
                     return true;
@@ -173,8 +173,7 @@ public class PackageService {
     public static Pair<Set<String>, Integer> fetchProcessesWithUid(Application app) throws RemoteException {
         IPackageManager pm = getPackageManager();
         if (pm == null) return new Pair<>(Collections.emptySet(), -1);
-        int baseFlag = PackageManager.MATCH_DISABLED_COMPONENTS | PackageManager.MATCH_UNINSTALLED_PACKAGES | PackageManager.MATCH_DIRECT_BOOT_AWARE | PackageManager.MATCH_DIRECT_BOOT_UNAWARE;
-        PackageInfo pkgInfo = getPackageInfoWithComponents(app.packageName, baseFlag, app.userId);
+        PackageInfo pkgInfo = getPackageInfoWithComponents(app.packageName, MATCH_ALL_FLAGS, app.userId);
         if (pkgInfo == null || pkgInfo.applicationInfo == null)
             return new Pair<>(Collections.emptySet(), -1);
         return new Pair<>(fetchProcesses(pkgInfo), pkgInfo.applicationInfo.uid);
