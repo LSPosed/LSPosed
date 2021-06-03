@@ -88,7 +88,6 @@
     <string name="module_uninstall_failed">Échec de la désinstallation</string>
     <string name="module_installed">Ajout de %1$s à l’utilisateur %2$s</string>
     <string name="module_install_failed">Échec de l\’ajout du module</string>
-    <string name="user_title">Utilisateur %d</string>
     <string name="install_to_user">Installation dans utilisateur %s</string>
     <string name="install_to_user_message">Vous voulez installer %1$s dans l’utilisateur %2$s? Il est recommandé de l’installer manuellement, fercer l’installation via LSPosed pourrait causer des problèmes.</string>
 

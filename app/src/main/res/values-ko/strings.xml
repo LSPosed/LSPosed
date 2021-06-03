@@ -89,7 +89,6 @@
 
     <string name="module_installed">%2$s 사용자에 %1$s 추가</string>
     <string name="module_install_failed">모듈 추가 실패</string>
-    <string name="user_title">사용자 %d</string>
     <string name="install_to_user">%s 사용자에게 설치</string>
     <string name="install_to_user_message">%2$s 사용자에게 %1$s을(를) 설치하시겠습니까? 수동으로 설치하는 것이 좋습니다. LSPosed를 통해 강제로 설치하면 문제가 발생할 수 있습니다.</string>
 
