@@ -47,6 +47,10 @@ namespace lspd {
             return;
         }
         LOGD("Start to install inline hooks");
+        SandHook::ElfImg &handle_libart = *art_img;
+        if (!handle_libart.isValid()) {
+            LOGE("Failed to fetch libart.so");
+        }
         art::Runtime::Setup(handle_libart);
         art::hidden_api::DisableHiddenApi(handle_libart);
         art::art_method::Setup(handle_libart);
@@ -57,6 +61,7 @@ namespace lspd {
         art::instrumentation::DisableUpdateHookedMethodsCode(handle_libart);
         art::thread_list::ScopedSuspendAll::Setup(handle_libart);
         art::gc::ScopedGCCriticalSection::Setup(handle_libart);
+        art_img.reset();
         LOGD("Inline hooks installed");
     }
 }

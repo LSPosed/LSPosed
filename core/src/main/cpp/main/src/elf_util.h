@@ -39,16 +39,23 @@ namespace SandHook {
             return getSymbOffset(name, GnuHash(name), ElfHash(name));
         }
 
-        void *getModuleBase() const;
-
         constexpr ElfW(Addr) getSymbAddress(std::string_view name) const {
             ElfW(Addr) offset = getSymbOffset(name);
             if (offset > 0 && base != nullptr) {
                 return static_cast<ElfW(Addr)>((uintptr_t) base + offset - bias);
             } else {
-                LOGE("fail to get symbol %s from %s ", name.data(), elf.data());
                 return 0;
             }
+        }
+
+        template<typename T>
+        requires(std::is_pointer_v<T>)
+        constexpr T getSymbAddress(std::string_view name) const {
+            return reinterpret_cast<T>(getSymbAddress(name));
+        }
+
+        bool isValid() const {
+            return base != nullptr;
         }
 
         ~ElfImg();
@@ -66,7 +73,9 @@ namespace SandHook {
 
         constexpr static uint32_t GnuHash(std::string_view name);
 
-        std::string_view elf;
+        bool findModuleBase();
+
+        std::string elf;
         void *base = nullptr;
         char *buffer = nullptr;
         off_t size = 0;

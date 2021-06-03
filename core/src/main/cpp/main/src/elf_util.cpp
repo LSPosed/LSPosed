@@ -35,7 +35,12 @@ inline constexpr auto offsetOf(ElfW(Ehdr) *head, ElfW(Off) off) {
             reinterpret_cast<uintptr_t>(head) + off);
 }
 
-ElfImg::ElfImg(std::string_view elf) : elf(elf) {
+ElfImg::ElfImg(std::string_view base_name) : elf(base_name) {
+    if (!findModuleBase()) {
+        base = nullptr;
+        return;
+    }
+
     //load elf
     int fd = open(elf.data(), O_RDONLY);
     if (fd < 0) {
@@ -120,9 +125,6 @@ ElfImg::ElfImg(std::string_view elf) : elf(elf) {
             }
         }
     }
-
-    //load module base
-    base = getModuleBase();
 }
 
 ElfW(Addr) ElfImg::ElfLookup(std::string_view name, uint32_t hash) const {
@@ -218,56 +220,44 @@ ElfImg::getSymbOffset(std::string_view name, uint32_t gnu_hash, uint32_t elf_has
 
 }
 
-void *ElfImg::getModuleBase() const {
+bool ElfImg::findModuleBase() {
     char buff[256];
     off_t load_addr;
     int found = 0;
     FILE *maps = fopen("/proc/self/maps", "r");
 
-    char name[PATH_MAX] = {'\0'};
-
-    strncpy(name, elf.data(), PATH_MAX);
-    {
-        struct stat buf{};
-        while (lstat(name, &buf) == 0 && S_ISLNK(buf.st_mode)) {
-            if (auto s = readlink(name, name, PATH_MAX); s >= 0) {
-                name[s] = '\0';
-            } else {
-                fclose(maps);
-                LOGE("cannot read link for %s with %s", name, strerror(errno));
-                return nullptr;
-            }
-        }
-    }
-
-//    fs::path name(elf);
-//    std::error_code ec;
-//    while(fs::is_symlink(name, ec) && !ec) {
-//        name = fs::read_symlink(name);
-//    }
 
     while (fgets(buff, sizeof(buff), maps)) {
-        if ((strstr(buff, "r-xp") || strstr(buff, "r--p")) && strstr(buff, name)) {
+        if ((strstr(buff, "r-xp") || strstr(buff, "r--p")) && strstr(buff, elf.data())) {
             found = 1;
             LOGD("found: %s", buff);
+            std::string_view b = buff;
+            if (auto begin = b.find_last_of(' '); begin != std::string_view::npos) {
+                elf = b.substr(begin + 1);
+                if (elf.back() == '\n') elf.pop_back();
+            } else {
+                return false;
+            }
+            LOGD("update path: %s", elf.data());
             break;
         }
     }
 
     if (!found) {
-        LOGE("failed to read load address for %s", name);
+        LOGE("failed to read load address for %s", elf.data());
         fclose(maps);
-        return nullptr;
+        return false;
     }
 
     if (char *next = buff; load_addr = strtoul(buff, &next, 16), next == buff) {
-        LOGE("failed to read load address for %s", name);
+        LOGE("failed to read load address for %s", elf.data());
     }
 
     fclose(maps);
 
-    LOGD("get module base %s: %lx", name, load_addr);
+    LOGD("get module base %s: %lx", elf.data(), load_addr);
 
-    return reinterpret_cast<void *>(load_addr);
+    base = reinterpret_cast<void *>(load_addr);
+    return true;
 }
 

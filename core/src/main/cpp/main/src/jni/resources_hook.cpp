@@ -26,6 +26,7 @@
 #include <framework/androidfw/resource_types.h>
 #include <byte_order.h>
 #include <HookMain.h>
+#include <elf_util.h>
 #include "native_util.h"
 #include "resources_hook.h"
 
@@ -49,24 +50,24 @@ namespace lspd {
     static TYPE_GET_ATTR_NAME_ID ResXMLParser_getAttributeNameID = nullptr;
 
     static bool PrepareSymbols() {
-        ScopedDlHandle fw_handle(kLibFwPath.c_str());
-        if (!fw_handle.IsValid()) {
+        SandHook::ElfImg fw(kLibFwName);
+        if (!fw.isValid()) {
             return false;
         };
-        if (!(ResXMLParser_next = fw_handle.DlSym<TYPE_NEXT>(
+        if (!(ResXMLParser_next = fw.getSymbAddress<TYPE_NEXT>(
                 "_ZN7android12ResXMLParser4nextEv"))) {
             return false;
         }
-        if (!(ResXMLParser_restart = fw_handle.DlSym<TYPE_RESTART>(
+        if (!(ResXMLParser_restart = fw.getSymbAddress<TYPE_RESTART>(
                 "_ZN7android12ResXMLParser7restartEv"))) {
             return false;
         };
-        if (!(ResXMLParser_getAttributeNameID = fw_handle.DlSym<TYPE_GET_ATTR_NAME_ID>(
+        if (!(ResXMLParser_getAttributeNameID = fw.getSymbAddress<TYPE_GET_ATTR_NAME_ID>(
                 LP_SELECT("_ZNK7android12ResXMLParser18getAttributeNameIDEj",
                           "_ZNK7android12ResXMLParser18getAttributeNameIDEm")))) {
             return false;
         }
-        return android::ResStringPool::setup(fw_handle.Get());
+        return android::ResStringPool::setup(fw);
     }
 
     LSP_DEF_NATIVE_METHOD(jboolean, ResourcesHook, initXResourcesNative) {

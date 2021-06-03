@@ -65,20 +65,6 @@ namespace lspd {
 
     inline static constexpr auto kLibArtName = "libart.so"_tstr;
     inline static constexpr auto kLibFwName = "libandroidfw.so"_tstr;
-    inline static constexpr auto kLinkerName = LP_SELECT("linker"_tstr, "linker64"_tstr);
-    inline static constexpr auto kLibcName = "libc.so"_tstr;
-    inline static constexpr auto kLibbaseName = "libbase.so"_tstr;
-
-    inline static constexpr auto kLibBasePath =
-            LP_SELECT("/system/lib/"_tstr,
-                      "/system/lib64/"_tstr);
-
-    inline static constexpr auto kBinBasePath = "/system/bin/"_tstr;
-
-    inline static constexpr auto kLibFwPath = kLibBasePath + kLibFwName;
-    inline static constexpr auto kLinkerPath = kBinBasePath + kLinkerName;
-    inline static constexpr auto kLibcPath = kLibBasePath + kLibcName;
-    inline static constexpr auto kLibbasePath = kLibBasePath + kLibbaseName;
 
     inline constexpr const char *BoolToString(bool b) {
         return b ? "true" : "false";
