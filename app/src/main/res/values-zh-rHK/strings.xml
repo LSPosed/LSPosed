@@ -41,6 +41,8 @@
     <string name="partial_activated">Partially activated</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy is not loaded properly</string>
     <string name="selinux_policy_not_loaded"><![CDATA[<b>WARNING:</b> SEPolicy is not loaded properly, modules that hook System Framework will not work.<br>Please report this to <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> developer.]]></string>
+    <string name="system_inject_fail_summary">System Framework injection failed</string>
+    <string name="system_inject_fail"><![CDATA[<b>WARNING:</b> System Framework inject failed.<br/>This is rare and may be caused by <b>Magisk</b> or some low-quality Magisk modules.<br/>Please try to disable Magisk modules other than Riru and LSPosed or submit full log to developers.]]></string>
     <string name="info_api_version">API version</string>
     <string name="info_framework_version">Framework version</string>
     <string name="info_manager_version">Manager version</string>
@@ -84,6 +86,10 @@
     <string name="module_uninstall_message">Do you want to uninstall this module?</string>
     <string name="module_uninstalled">Uninstalled %1$s</string>
     <string name="module_uninstall_failed">Uninstall unsuccessful</string>
+    <string name="module_installed">Added %1$s to user %2$s</string>
+    <string name="module_install_failed">Adding module failed</string>
+    <string name="install_to_user">Install to user %s</string>
+    <string name="install_to_user_message">Want to install %1$s to user %2$s? It is recommended to install manually, forcing installation via LSPosed may cause problems.</string>
 
     <!-- AppListActivity -->
     <string name="compile_speed">重新優化</string>
@@ -122,6 +128,7 @@
     <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
     <string name="reboot_required">Reboot is required for this change to apply</string>
     <string name="reboot">Reboot</string>
+    <string name="menu_hide">Hide…</string>
 
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">在其他應用中查看</string>
@@ -150,7 +157,9 @@
     <string name="dns_over_http_summary">解決某些地區的 DNS 污染問題</string>
     <string name="theme_color">主題顏色</string>
     <string name="theme_color_summary">應用程式中最常見的顏色</string>
-    <string name="settings_show_hidden_icon_apps_enabled">（Android 10+）限制應用隱藏其啟動器圖標</string>
+    <string name="theme_color_system_accent">System accent color</string>
+    <string name="settings_show_hidden_icon_apps_enabled">Force apps to show launcher icons</string>
+    <string name="settings_show_hidden_icon_apps_enabled_summary">After Android 10, apps (especially Xposed modules) are not allowed to hide their launcher icons. Turn off the toggle to disable this feature.</string>
     <string name="settings_group_system">系統</string>
 
     <!-- Module Repo -->
@@ -175,4 +184,6 @@
     <string name="NotInstallDetail">LSPosed is not Installed</string>
     <string name="translators"><![CDATA[<a href="https://github.com/LSPosed/LSPosed">LSPosed</a>]]></string>
     <string name="copy_toast_msg">Copied</string>
+    <string name="list_empty">¯\\\\_(ツ)_\/¯\nNothing here</string>
+    <string name="add_module_to_user">Add module to user</string>
 </resources>
