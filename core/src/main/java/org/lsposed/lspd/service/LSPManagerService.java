@@ -32,6 +32,7 @@ import android.content.pm.VersionedPackage;
 import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
+import android.os.SystemProperties;
 import android.util.Log;
 
 import org.lsposed.lspd.BuildConfig;
@@ -49,6 +50,9 @@ import de.robv.android.xposed.XposedBridge;
 public class LSPManagerService extends ILSPManagerService.Stub {
 
     public Object guard = null;
+
+    private static final String PROP_NAME = "dalvik.vm.dex2oat-flags";
+    private static final String PROP_VALUE = "--inline-max-code-units=0";
 
     public class ManagerGuard implements IBinder.DeathRecipient {
         private final IBinder binder;
@@ -203,7 +207,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     }
 
     @Override
-    public boolean isSepolicyLoaded() throws RemoteException {
+    public boolean isSepolicyLoaded() {
         return ConfigManager.getInstance().isSepolicyLoaded();
     }
 
@@ -252,5 +256,13 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     @Override
     public ParceledListSlice<ResolveInfo> queryIntentActivitiesAsUser(Intent intent, int flags, int userId) throws RemoteException {
         return PackageService.queryIntentActivities(intent, intent.getType(), flags, userId);
+    }
+
+    @Override
+    public boolean dex2oatFlagsLoaded() {
+//        var splitFlags = new ArrayList<>(Arrays.asList(flags.split(" ")));
+//        splitFlags.add(PROP_VALUE);
+//        SystemProperties.set(PROP_NAME, String.join(" ", splitFlags));
+        return SystemProperties.get(PROP_NAME).contains(PROP_VALUE);
     }
 }

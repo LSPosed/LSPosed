@@ -61,6 +61,9 @@ public class InfoDialogBuilder extends BlurBehindDialogBuilder {
         } else if (!ConfigManager.systemServerRequested()) {
             binding.note.setVisibility(View.VISIBLE);
             binding.note.setText(HtmlCompat.fromHtml(context.getString(R.string.system_inject_fail), HtmlCompat.FROM_HTML_MODE_LEGACY));
+        } else if (!ConfigManager.dex2oatFlagsLoaded()) {
+            binding.note.setVisibility(View.VISIBLE);
+            binding.note.setText(HtmlCompat.fromHtml(context.getString(R.string.system_prop_incorrect), HtmlCompat.FROM_HTML_MODE_LEGACY));
         }
 
         setView(binding.getRoot());

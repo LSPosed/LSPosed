@@ -181,4 +181,9 @@ public class LSPManagerServiceClient {
         ensureService();
         return service.queryIntentActivitiesAsUser(intent, flags, userId);
     }
+
+    public static boolean dex2oatFlagsLoaded() throws RemoteException, NullPointerException {
+        ensureService();
+        return service.dex2oatFlagsLoaded();
+    }
 }
