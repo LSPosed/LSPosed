@@ -43,6 +43,8 @@
     <string name="selinux_policy_not_loaded"><![CDATA[<b>WARNING:</b> SEPolicy is not loaded properly, modules that hook System Framework will not work.<br/>Please report this to <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> developer.]]></string>
     <string name="system_inject_fail_summary">System Framework injection failed</string>
     <string name="system_inject_fail"><![CDATA[<b>WARNING:</b> System Framework inject failed.<br/>This is rare and may be caused by <b>Magisk</b> or some low-quality Magisk modules.<br/>Please try to disable Magisk modules other than Riru and LSPosed or submit full log to developers.]]></string>
+    <string name="system_prop_incorrect_summary">System prop incorrect</string>
+    <string name="system_prop_incorrect"><![CDATA[<b>WARNING:</b> System prop incorrect.<br/>Some necessary system properties deleted or modified.<br/>Modules may invalidate occasionally.]]></string>
     <string name="info_api_version">API version</string>
     <string name="info_framework_version">Framework version</string>
     <string name="info_manager_version">Manager version</string>

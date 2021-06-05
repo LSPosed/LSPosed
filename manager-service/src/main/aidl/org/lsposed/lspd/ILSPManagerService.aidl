@@ -57,4 +57,6 @@ interface ILSPManagerService {
     int startActivityAsUserWithFeature(in Intent intent,  int userId) = 30;
 
     ParceledListSlice<ResolveInfo> queryIntentActivitiesAsUser(in Intent intent, int flags, int userId) = 31;
+
+    boolean dex2oatFlagsLoaded() = 32;
 }

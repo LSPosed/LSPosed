@@ -266,6 +266,14 @@ public class ConfigManager {
         }
     }
 
+    public static boolean dex2oatFlagsLoaded() {
+        try {
+            return LSPManagerServiceClient.dex2oatFlagsLoaded();
+        } catch (Throwable e) {
+            return false;
+        }
+    }
+
     public static int startActivityAsUserWithFeature(Intent intent, int userId) {
         try {
             return LSPManagerServiceClient.startActivityAsUserWithFeature(intent, userId);
