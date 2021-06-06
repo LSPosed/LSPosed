@@ -221,7 +221,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
 
         public void setData(Collection<OnlineModule> modules) {
             fullList = new ArrayList<>(modules);
-            fullList = fullList.stream().filter((onlineModule -> !onlineModule.isHide())).collect(Collectors.toList());
+            fullList = fullList.stream().filter((onlineModule -> !onlineModule.isHide() && !onlineModule.getReleases().isEmpty())).collect(Collectors.toList());
             int sort = App.getPreferences().getInt("repo_sort", 0);
             if (sort == 0) {
                 fullList.sort((o1, o2) -> labelComparator.compare(o1.getDescription(), o2.getDescription()));
