@@ -94,7 +94,7 @@ public class BridgeService {
             bridgeService.unlinkToDeath(this, 0);
             bridgeService = null;
             listener.onSystemServerDied();
-            sendToBridge(serviceBinder, true);
+            new Thread(()-> sendToBridge(serviceBinder, true)).start();
         }
     };
 
