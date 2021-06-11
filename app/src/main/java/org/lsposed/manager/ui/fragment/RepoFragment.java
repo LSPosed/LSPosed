@@ -71,7 +71,6 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        repoLoader.addListener(this);
         mSearchListener = new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -103,6 +102,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
         RecyclerViewKt.addFastScroller(binding.recyclerView, binding.recyclerView);
         RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
         binding.progress.setVisibilityAfterHide(View.GONE);
+        repoLoader.addListener(this);
         return binding.getRoot();
     }
 
