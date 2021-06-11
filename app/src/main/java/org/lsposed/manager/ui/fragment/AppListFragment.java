@@ -66,6 +66,9 @@ public class AppListFragment extends BaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentAppListBinding.inflate(getLayoutInflater(), container, false);
+        if (module == null) {
+            return binding.getRoot();
+        }
         binding.appBar.setRaised(true);
         String title;
         if (module.userId != 0) {
@@ -99,7 +102,7 @@ public class AppListFragment extends BaseFragment {
 
         module = ModuleUtil.getInstance().getModule(modulePackageName, moduleUserId);
         if (module == null) {
-            getNavController().navigateUp();
+            getNavController().navigate(R.id.action_modules_fragment);
             return;
         }
 

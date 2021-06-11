@@ -25,6 +25,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import org.lsposed.manager.R;
 
@@ -36,7 +37,7 @@ public class BaseFragment extends Fragment {
     public NavController getNavController() {
         View view = getView();
         if (view == null) {
-            return null;
+            return NavHostFragment.findNavController(this);
         }
         View tabletFragmentContainer = view.findViewById(R.id.tablet_nav_container);
         if (tabletFragmentContainer != null) {
