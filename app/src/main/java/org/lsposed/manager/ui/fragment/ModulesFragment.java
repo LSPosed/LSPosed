@@ -368,7 +368,9 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                     }
                 }
             });
-            binding.recyclerView.onApplyWindowInsets(requireActivity().getWindow().getDecorView().getRootWindowInsets());
+            var insets = requireActivity().getWindow().getDecorView().getRootWindowInsets();
+            if (insets != null)
+                binding.recyclerView.onApplyWindowInsets(insets);
             RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
             RecyclerViewKt.addFastScroller(binding.recyclerView, binding.recyclerView);
             return binding.getRoot();
