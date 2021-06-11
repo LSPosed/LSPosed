@@ -406,7 +406,9 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
                     holder.recyclerView.setTag(position);
                     holder.recyclerView.setLayoutManager(new LinearLayoutManagerFix(requireActivity()));
                     holder.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setRaised(!top));
-                    holder.recyclerView.onApplyWindowInsets(requireActivity().getWindow().getDecorView().getRootWindowInsets());
+                    var insets = requireActivity().getWindow().getDecorView().getRootWindowInsets();
+                    if (insets != null)
+                        holder.recyclerView.onApplyWindowInsets(insets);
                     RecyclerViewKt.fixEdgeEffect(holder.recyclerView, false, true);
                     RecyclerViewKt.addFastScroller(holder.recyclerView, holder.itemView);
                     break;
