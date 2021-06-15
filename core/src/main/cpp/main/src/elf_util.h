@@ -58,6 +58,10 @@ namespace SandHook {
             return base != nullptr;
         }
 
+        const std::string name() const {
+            return elf;
+        }
+
         ~ElfImg();
 
     private:

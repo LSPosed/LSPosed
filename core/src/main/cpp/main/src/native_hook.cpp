@@ -47,7 +47,7 @@ namespace lspd {
             return;
         }
         LOGD("Start to install inline hooks");
-        SandHook::ElfImg &handle_libart = *art_img;
+        const auto &handle_libart = *art_img;
         if (!handle_libart.isValid()) {
             LOGE("Failed to fetch libart.so");
         }
