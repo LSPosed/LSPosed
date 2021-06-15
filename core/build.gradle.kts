@@ -99,16 +99,14 @@ android {
                     "-D__FILE__=__FILE_NAME__",
                     "-DRIRU_MODULE",
                     "-DRIRU_MODULE_API_VERSION=$moduleMaxRiruApiVersion",
-                    """-DMODULE_NAME=\"$riruModuleId\""""
-//                    "-DRIRU_MODULE_VERSION=$verCode", // this will stop ccache from hitting
-//                    """-DRIRU_MODULE_VERSION_NAME=\"$verName\"""",
+                    """-DMODULE_NAME=\"$riruModuleId\"""",
                 )
                 cppFlags("-std=c++20", *flags)
                 cFlags("-std=c18", *flags)
                 arguments(
                     "-DANDROID_STL=none",
                     "-DVERSION_CODE=$verCode",
-                    "-DVERSION_NAME=$verName"
+                    "-DVERSION_NAME=$verName",
                 )
                 targets("lspd")
             }

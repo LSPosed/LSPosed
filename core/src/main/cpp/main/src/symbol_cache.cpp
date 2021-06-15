@@ -39,7 +39,7 @@ namespace lspd {
     void *sym_openDexFileNative = nullptr;
     void *sym_setTrusted = nullptr;
     void *sym_set_table_override = nullptr;
-    std::unique_ptr<SandHook::ElfImg> art_img = nullptr;
+    std::unique_ptr<const SandHook::ElfImg> art_img = nullptr;
 
     bool findLibArt() {
         art_img = std::make_unique<SandHook::ElfImg>(kLibArtName);

@@ -18,6 +18,7 @@
 ## Copyright (C) 2021 LSPosed Contributors
 ##
 
+project(libcxx)
 cmake_minimum_required(VERSION 3.4.1)
 
 find_program(CCACHE ccache)

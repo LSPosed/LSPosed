@@ -231,6 +231,7 @@ namespace lspd {
         } else {
             auto context = Context::ReleaseInstance();
             auto service = Service::ReleaseInstance();
+            art_img.reset();
             LOGD("skipped %s", process_name.get());
             setAllowUnload(true);
         }
