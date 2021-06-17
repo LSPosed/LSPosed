@@ -18,6 +18,7 @@
  */
 
 import com.android.build.api.variant.impl.ApplicationVariantImpl
+import com.android.build.api.component.analytics.AnalyticsEnabledApplicationVariant
 import com.android.build.gradle.BaseExtension
 import com.android.ide.common.signing.KeystoreHelper
 import org.apache.tools.ant.filters.FixCrLfFilter
@@ -183,7 +184,9 @@ android {
 }
 
 androidComponents.onVariants { v ->
-    val variant = v as ApplicationVariantImpl
+    val variant: ApplicationVariantImpl =
+        if (v is ApplicationVariantImpl) v
+        else (v as AnalyticsEnabledApplicationVariant).delegate as ApplicationVariantImpl
     val variantCapped = variant.name.capitalize()
     val variantLowered = variant.name.toLowerCase()
     val zipFileName = "$moduleName-$verName-$verCode-$variantLowered.zip"

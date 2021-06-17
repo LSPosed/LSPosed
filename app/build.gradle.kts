@@ -18,6 +18,7 @@
  */
 
 import com.android.build.api.variant.impl.ApplicationVariantImpl
+import com.android.build.api.component.analytics.AnalyticsEnabledApplicationVariant
 import com.android.build.gradle.internal.dsl.BuildType
 import java.nio.file.Paths
 
@@ -143,7 +144,9 @@ android {
 }
 
 androidComponents.onVariants { v ->
-    val variant = v as ApplicationVariantImpl
+    val variant: ApplicationVariantImpl =
+        if (v is ApplicationVariantImpl) v
+        else (v as AnalyticsEnabledApplicationVariant).delegate as ApplicationVariantImpl
     variant.outputs.forEach {
         it.outputFileName.set("LSPosedManager-${verName}-${verCode}-${variant.name}.apk")
     }
