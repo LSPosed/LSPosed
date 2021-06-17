@@ -23,7 +23,6 @@
 #include "jni/art_class_linker.h"
 #include "jni/yahfa.h"
 #include "jni/resources_hook.h"
-#include <dl_util.h>
 #include <art/runtime/jni_env_ext.h>
 #include "jni/pending_hooks.h"
 #include "context.h"

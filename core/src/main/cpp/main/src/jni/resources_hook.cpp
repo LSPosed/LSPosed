@@ -22,9 +22,7 @@
 #include <dex_builder.h>
 #include <art/runtime/thread.h>
 #include <art/runtime/mirror/class.h>
-#include <dl_util.h>
 #include <framework/androidfw/resource_types.h>
-#include <byte_order.h>
 #include <HookMain.h>
 #include <elf_util.h>
 #include "native_util.h"
@@ -164,18 +162,18 @@ namespace lspd {
             switch (ResXMLParser_next(parser)) {
                 case android::ResXMLParser::START_TAG:
                     tag = (android::ResXMLTree_attrExt *) parser->mCurExt;
-                    attrCount = dtohs(tag->attributeCount);
+                    attrCount = tag->attributeCount;
                     for (int idx = 0; idx < attrCount; idx++) {
                         auto attr = (android::ResXMLTree_attribute *)
                                 (((const uint8_t *) tag)
-                                 + dtohs(tag->attributeStart)
-                                 + (dtohs(tag->attributeSize) * idx));
+                                 + tag->attributeStart
+                                 + tag->attributeSize * idx);
 
                         // find resource IDs for attribute names
                         int32_t attrNameID = ResXMLParser_getAttributeNameID(parser, idx);
                         // only replace attribute name IDs for app packages
                         if (attrNameID >= 0 && (size_t) attrNameID < mTree.mNumResIds &&
-                            dtohl(mResIds[attrNameID]) >= 0x7f000000) {
+                            mResIds[attrNameID] >= 0x7f000000) {
                             auto attrName = mTree.mStrings.stringAt(attrNameID);
                             jint attrResID = env->CallStaticIntMethod(classXResources,
                                                                       methodXResourcesTranslateAttrId,
@@ -186,14 +184,14 @@ namespace lspd {
                             if (env->ExceptionCheck())
                                 goto leave;
 
-                            mResIds[attrNameID] = htodl(attrResID);
+                            mResIds[attrNameID] = attrResID;
                         }
 
                         // find original resource IDs for reference values (app packages only)
                         if (attr->typedValue.dataType != android::Res_value::TYPE_REFERENCE)
                             continue;
 
-                        jint oldValue = dtohl(attr->typedValue.data);
+                        jint oldValue = attr->typedValue.data;
                         if (oldValue < 0x7f000000)
                             continue;
 
@@ -204,7 +202,7 @@ namespace lspd {
                             goto leave;
 
                         if (newValue != oldValue)
-                            attr->typedValue.data = htodl(newValue);
+                            attr->typedValue.data = newValue;
                     }
                     continue;
                 case android::ResXMLParser::END_DOCUMENT:
