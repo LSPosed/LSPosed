@@ -94,6 +94,14 @@ public class AppListFragment extends BaseFragment {
     }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (module == null) {
+            getNavController().navigate(R.id.action_app_list_fragment_to_modules_fragment);
+        }
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AppListFragmentArgs args = AppListFragmentArgs.fromBundle(getArguments());
@@ -101,10 +109,6 @@ public class AppListFragment extends BaseFragment {
         int moduleUserId = args.getModuleUserId();
 
         module = ModuleUtil.getInstance().getModule(modulePackageName, moduleUserId);
-        if (module == null) {
-            getNavController().navigate(R.id.action_modules_fragment);
-            return;
-        }
 
         backupLauncher = registerForActivityResult(new ActivityResultContracts.CreateDocument(),
                 uri -> {
