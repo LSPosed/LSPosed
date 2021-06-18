@@ -29,8 +29,9 @@ include_directories(include src)
 add_library(lspd SHARED ${SRC_LIST} ${SRC_JNI_LIST} ${CMAKE_CURRENT_BINARY_DIR}/src/config.cpp)
 
 find_package(riru REQUIRED CONFIG)
+find_package(dobby REQUIRED CONFIG)
 find_library(log-lib log)
-target_link_libraries(lspd yahfa riru::riru android dobby dex_builder ${log-lib})
+target_link_libraries(lspd yahfa riru::riru dobby::dobby dex_builder ${log-lib})
 
 add_custom_command(TARGET lspd POST_BUILD
         COMMAND ${CMAKE_STRIP} --remove-section=.comment -g "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/liblspd.so")
