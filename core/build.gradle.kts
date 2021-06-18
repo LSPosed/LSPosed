@@ -29,7 +29,6 @@ import java.security.MessageDigest
 
 plugins {
     id("com.android.application")
-    kotlin("android")
 }
 
 val moduleName = "LSPosed"

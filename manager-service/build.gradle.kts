@@ -19,7 +19,6 @@
 
 plugins {
     id("com.android.library")
-    kotlin("android")
 }
 
 val androidTargetSdkVersion: Int by rootProject.extra
