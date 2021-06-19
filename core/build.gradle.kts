@@ -216,8 +216,7 @@ androidComponents.onVariants { v ->
                     rename(".*\\.apk", "manager.apk")
                 }
                 into("lib") {
-                    from("${buildDir}/intermediates/cmake/$variantLowered/obj")
-                    exclude("**/*.txt")
+                    from("${buildDir}/intermediates/stripped_native_libs/$variantLowered/out/lib")
                 }
                 val dexOutPath = if (variantLowered == "release")
                     "$buildDir/intermediates/dex/$variantLowered/minify${variantCapped}WithR8" else
