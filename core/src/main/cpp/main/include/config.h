@@ -70,7 +70,6 @@ namespace lspd {
         return b ? "true" : "false";
     }
 
-#define _str(s) #s
-    const int versionCode = VERSION_CODE;
-    const char *const versionName = _str(VERSION_NAME);
+    extern const int versionCode;
+    extern const char* const versionName;
 }
