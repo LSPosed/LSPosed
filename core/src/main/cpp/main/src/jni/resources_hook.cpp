@@ -103,7 +103,7 @@ namespace lspd {
                     env, class_clazz, "accessFlags", "I");
             jint access_flags = env->GetIntField(target_class, java_lang_Class_accessFlags);
             env->SetIntField(target_class, java_lang_Class_accessFlags, access_flags & ~kAccFinal);
-            for (auto i = 0u; i < env->GetArrayLength(constructors); ++i) {
+            for (auto i = 0; i < env->GetArrayLength(constructors); ++i) {
                 auto constructor = env->GetObjectArrayElement(constructors, i);
                 void *method = yahfa::getArtMethod(env, constructor);
                 uint32_t flags = yahfa::getAccessFlags(method);

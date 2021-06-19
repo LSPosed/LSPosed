@@ -170,7 +170,7 @@ ElfW(Addr) ElfImg::LinearLookup(std::string_view name) const {
     if (symtabs_.empty()) {
         symtabs_.reserve(symtab_count);
         if (symtab_start != nullptr && symstr_offset_for_symtab != 0) {
-            for (int i = 0; i < symtab_count; i++) {
+            for (ElfW(Off) i = 0; i < symtab_count; i++) {
                 unsigned int st_type = ELF_ST_TYPE(symtab_start[i].st_info);
                 const char *st_name = offsetOf<const char *>(header, symstr_offset_for_symtab +
                                                                      symtab_start[i].st_name);
@@ -260,4 +260,3 @@ bool ElfImg::findModuleBase() {
     base = reinterpret_cast<void *>(load_addr);
     return true;
 }
-
