@@ -90,8 +90,6 @@ android {
             ndkBuild {
                 arguments += "RIRU_MODULE_API_VERSION=$moduleMaxRiruApiVersion"
                 arguments += "MODULE_NAME=$riruModuleId"
-                arguments += "VERSION_CODE=$verCode"
-                arguments += "VERSION_NAME=$verName"
             }
         }
 
@@ -282,3 +280,13 @@ androidComponents.onVariants { v ->
         }
     }
 }
+
+val generateVersion = task("generateVersion", Copy::class) {
+    inputs.property("VERSION_CODE", verCode)
+    inputs.property("VERSION_NAME", verName)
+    from("${projectDir}/src/main/cpp/main/template")
+    include("config.cpp")
+    expand("VERSION_CODE" to verCode, "VERSION_NAME" to verName)
+    into("${projectDir}/src/main/cpp/main/src")
+}
+tasks.getByName("preBuild").dependsOn(generateVersion)
