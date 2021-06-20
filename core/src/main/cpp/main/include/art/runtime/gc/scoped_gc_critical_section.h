@@ -28,8 +28,8 @@ namespace art {
 
         class GCCriticalSection {
         private:
-            void* self_;
-            const char* section_name_;
+            [[maybe_unused]] void* self_;
+            [[maybe_unused]] const char* section_name_;
         };
 
         class ScopedGCCriticalSection {
@@ -56,8 +56,8 @@ namespace art {
                 RETRIEVE_MEM_FUNC_SYMBOL(destructor, "_ZN3art2gc23ScopedGCCriticalSectionD2Ev");
             }
         private:
-            GCCriticalSection critical_section_;
-            const char* old_no_suspend_reason_;
+            [[maybe_unused]] GCCriticalSection critical_section_;
+            [[maybe_unused]] const char* old_no_suspend_reason_;
         };
     }
 }
