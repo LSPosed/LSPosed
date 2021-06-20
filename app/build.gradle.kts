@@ -26,7 +26,6 @@ plugins {
     id("org.gradle.idea")
     id("com.android.application")
     id("androidx.navigation.safeargs")
-    kotlin("android")
 }
 
 // workaround for AS.
@@ -210,7 +209,7 @@ dependencies {
     implementation("androidx.fragment:fragment:1.3.4")
     implementation("androidx.navigation:navigation-fragment:$navVersion")
     implementation("androidx.navigation:navigation-ui:$navVersion")
-    implementation("androidx.recyclerview:recyclerview:1.2.0")
+    implementation("androidx.recyclerview:recyclerview:1.2.1")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("com.caverock:androidsvg-aar:1.4")
     implementation("com.github.bumptech.glide:glide:$glideVersion")

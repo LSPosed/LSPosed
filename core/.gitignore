@@ -4,3 +4,4 @@
 /release
 *.iml
 /.cxx
+src/main/cpp/main/src/config.cpp

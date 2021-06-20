@@ -52,7 +52,7 @@ jobs:
         key: gradle-builds-core-${{ github.sha }}
         restore-keys: |
           gradle-builds
-    - name: Cache Cmake
+    - name: Cache Ccache
       uses: actions/cache@v2
       with:
         path: ~/.ccache
@@ -64,6 +64,8 @@ jobs:
         ccache -o max_size=2G
         ccache -o hash_dir=false
     - name: Build with Gradle
+      env:
+        NDK_CCACHE: ccache
       run: |
         [ $(du -s ~/.gradle/wrapper | awk '{ print $1 }') -gt 250000 ] && rm -rf ~/.gradle/wrapper/* || true
         find ~/.gradle/caches -exec touch -d "2 days ago" {} + || true

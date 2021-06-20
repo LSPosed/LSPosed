@@ -28,7 +28,6 @@ buildscript {
         classpath("com.android.tools.build:gradle:7.0.0-beta04")
         classpath("org.eclipse.jgit:org.eclipse.jgit:5.10.0.202012080955-r")
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.3.5")
-        classpath(kotlin("gradle-plugin", version = "1.4.32"))
     }
 }
 

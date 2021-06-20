@@ -17,8 +17,8 @@
  * Copyright (C) 2021 LSPosed Contributors
  */
 
-import com.android.build.api.variant.impl.ApplicationVariantImpl
 import com.android.build.api.component.analytics.AnalyticsEnabledApplicationVariant
+import com.android.build.api.variant.impl.ApplicationVariantImpl
 import com.android.build.gradle.BaseExtension
 import com.android.ide.common.signing.KeystoreHelper
 import org.apache.tools.ant.filters.FixCrLfFilter
@@ -29,7 +29,6 @@ import java.security.MessageDigest
 
 plugins {
     id("com.android.application")
-    kotlin("android")
 }
 
 val moduleName = "LSPosed"
@@ -59,6 +58,7 @@ val verName: String by rootProject.extra
 dependencies {
     implementation("dev.rikka.ndk:riru:${moduleMinRiruVersionName}")
     implementation("dev.rikka.ndk.thirdparty:cxx:1.1.0")
+    implementation("io.github.vvb2060.ndk:dobby:1.0")
     implementation("com.android.tools.build:apksig:7.0.0-beta03")
     implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("de.upb.cs.swt:axml:2.1.1")
@@ -87,29 +87,9 @@ android {
         multiDexEnabled = false
 
         externalNativeBuild {
-            cmake {
-                abiFilters("arm64-v8a", "armeabi-v7a", "x86", "x86_64")
-                val flags = arrayOf(
-                    "-ffixed-x18",
-                    "-Qunused-arguments",
-                    "-fno-rtti", "-fno-exceptions",
-                    "-fno-stack-protector",
-                    "-fomit-frame-pointer",
-                    "-Wno-builtin-macro-redefined",
-                    "-Wl,--exclude-libs,ALL",
-                    "-D__FILE__=__FILE_NAME__",
-                    "-DRIRU_MODULE",
-                    "-DRIRU_MODULE_API_VERSION=$moduleMaxRiruApiVersion",
-                    """-DMODULE_NAME=\"$riruModuleId\"""",
-                )
-                cppFlags("-std=c++20", *flags)
-                cFlags("-std=c18", *flags)
-                arguments(
-                    "-DANDROID_STL=none",
-                    "-DVERSION_CODE=$verCode",
-                    "-DVERSION_NAME=$verName",
-                )
-                targets("lspd")
+            ndkBuild {
+                arguments += "RIRU_MODULE_API_VERSION=$moduleMaxRiruApiVersion"
+                arguments += "MODULE_NAME=$riruModuleId"
             }
         }
 
@@ -123,56 +103,14 @@ android {
     }
 
     buildTypes {
-        debug {
-            externalNativeBuild {
-                cmake {
-                    arguments.addAll(
-                        arrayOf(
-                            "-DCMAKE_CXX_FLAGS_DEBUG=-Og",
-                            "-DCMAKE_C_FLAGS_DEBUG=-Og"
-                        )
-                    )
-                }
-            }
-        }
         release {
             isMinifyEnabled = true
             proguardFiles("proguard-rules.pro")
-
-            externalNativeBuild {
-                cmake {
-                    val flags = arrayOf(
-                        "-fvisibility=hidden",
-                        "-fvisibility-inlines-hidden",
-                        "-Wno-unused-value",
-                        "-ffunction-sections",
-                        "-fdata-sections",
-                        "-Wl,--gc-sections",
-                        "-Wl,--strip-all",
-                        "-fno-unwind-tables",
-                        "-fno-asynchronous-unwind-tables"
-                    )
-                    cppFlags.addAll(flags)
-                    cFlags.addAll(flags)
-                    val configFlags = arrayOf(
-                        "-Oz",
-                        "-DNDEBUG"
-                    ).joinToString(" ")
-                    arguments.addAll(
-                        arrayOf(
-                            "-DCMAKE_CXX_FLAGS_RELEASE=$configFlags",
-                            "-DCMAKE_CXX_FLAGS_RELWITHDEBINFO=$configFlags",
-                            "-DCMAKE_C_FLAGS_RELEASE=$configFlags",
-                            "-DCMAKE_C_FLAGS_RELWITHDEBINFO=$configFlags"
-                        )
-                    )
-                }
-            }
         }
     }
     externalNativeBuild {
-        cmake {
-            path("src/main/cpp/CMakeLists.txt")
+        ndkBuild {
+            path("src/main/cpp/Android.mk")
         }
     }
 
@@ -278,8 +216,7 @@ androidComponents.onVariants { v ->
                     rename(".*\\.apk", "manager.apk")
                 }
                 into("lib") {
-                    from("${buildDir}/intermediates/cmake/$variantLowered/obj")
-                    exclude("**/*.txt")
+                    from("${buildDir}/intermediates/stripped_native_libs/$variantLowered/out/lib")
                 }
                 val dexOutPath = if (variantLowered == "release")
                     "$buildDir/intermediates/dex/$variantLowered/minify${variantCapped}WithR8" else
@@ -342,3 +279,13 @@ androidComponents.onVariants { v ->
         }
     }
 }
+
+val generateVersion = task("generateVersion", Copy::class) {
+    inputs.property("VERSION_CODE", verCode)
+    inputs.property("VERSION_NAME", verName)
+    from("${projectDir}/src/main/cpp/main/template")
+    include("config.cpp")
+    expand("VERSION_CODE" to verCode, "VERSION_NAME" to verName)
+    into("${projectDir}/src/main/cpp/main/src")
+}
+tasks.getByName("preBuild").dependsOn(generateVersion)
