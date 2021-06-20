@@ -43,6 +43,8 @@
     <string name="selinux_policy_not_loaded"><![CDATA[<b>警告：</b>SEPolicy 沒有被正確讀取，掛鉤系統框架的模組將無法運作。<br>請回報這類問題給<a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>開發者]]></string>
     <string name="system_inject_fail_summary">系統框架注入失敗</string>
     <string name="system_inject_fail"><![CDATA[<b>警告：</b>系統注入失敗。<br/>這是極罕見的情況，可能是由 <b>Magisk</b> 或低品質 Magisk 模組導致。<br/>請嘗試禁用除 Riru 和 LSPosed 以外的 Magisk 模組，或向開發者提供完整日誌。]]></string>
+    <string name="system_prop_incorrect_summary">系統屬性異常</string>
+    <string name="system_prop_incorrect"><![CDATA[<b>警告：</b>系統屬性異常。<br/>一些必須的系統屬性被刪除或被修改。<br/>模組可能會隨機失效。]]></string>
     <string name="info_api_version">API 版本</string>
     <string name="info_framework_version">框架版本</string>
     <string name="info_manager_version">管理器版本</string>
@@ -61,7 +63,7 @@
     <string name="logs_cleared">日誌清理成功</string>
     <string name="scroll_top">滑動到最上面</string>
     <string name="loading">正在載入……</string>
-    <string name="scroll_bottom">滾動到底部</string>
+    <string name="scroll_bottom">滑動到底部</string>
     <string name="logs_cannot_read">無法讀取日誌：\n</string>
     <string name="menuReload">重新載入</string>
     <string name="logs_clear_failed_2">日誌清理失敗</string>
@@ -128,6 +130,7 @@
     <string name="force_stop_dlg_text">如果您強行停止應用程式，可能導致行為異常。</string>
     <string name="reboot_required">需要重新啟動手機才能套用此修改</string>
     <string name="reboot">重新啟動</string>
+    <string name="menu_hide">隱藏…</string>
 
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">在其他應用程式中檢視</string>
