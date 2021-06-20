@@ -115,7 +115,8 @@ namespace lspd {
     };
 }
 
-#define str(s) #s
+#define quote(s) #s
+#define str(s) quote(s)
 
 RIRU_EXPORT RiruVersionedModuleInfo *init(Riru *riru) {
     LOGD("using riru %d", riru->riruApiVersion);

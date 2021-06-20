@@ -90,6 +90,7 @@ android {
             ndkBuild {
                 arguments += "RIRU_MODULE_API_VERSION=$moduleMaxRiruApiVersion"
                 arguments += "MODULE_NAME=$riruModuleId"
+                arguments += "-j${Runtime.getRuntime().availableProcessors()}"
             }
         }
 
