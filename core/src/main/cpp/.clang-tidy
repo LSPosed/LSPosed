@@ -12,9 +12,6 @@ Checks: >
   llvm-include-order,
   -modernize-use-trailing-return-type,
 
-# Turn all the warnings from the checks above into errors.
-WarningsAsErrors: "*"
-
 CheckOptions:
   - key:             readability-identifier-naming.ClassCase
     value:           CamelCase
@@ -61,4 +58,6 @@ CheckOptions:
   - key:             readability-implicit-bool-conversion.AllowIntegerConditions
     value:           1
   - key:             readability-implicit-bool-conversion.AllowPointerConditions
+    value:           1
+  - key:             readability-braces-around-statements.ShortStatementLines
     value:           1
