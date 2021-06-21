@@ -29,13 +29,12 @@ import org.lsposed.lspd.util.Utils;
 import java.util.Collections;
 import java.util.Map;
 
-public class LSPApplicationServiceClient implements ILSPApplicationService {
+public class LSPApplicationServiceClient extends ApplicationServiceClient {
     static ILSPApplicationService service = null;
     static IBinder serviceBinder = null;
 
     static String processName = null;
 
-    public static LSPApplicationServiceClient serviceClient = null;
     private static final IBinder.DeathRecipient recipient = new IBinder.DeathRecipient() {
         @Override
         public void binderDied() {
@@ -96,6 +95,7 @@ public class LSPApplicationServiceClient implements ILSPApplicationService {
         return Collections.emptyMap();
     }
 
+    @Override
     public Map<String, String> getModulesList() {
         return getModulesList(processName);
     }
