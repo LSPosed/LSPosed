@@ -98,7 +98,7 @@ public class Main {
         }
     }
 
-    private static void forkPostCommon(boolean isSystem, String appDataDir, String niceName) {
+    public static void forkPostCommon(boolean isSystem, String appDataDir, String niceName) {
         // init logger
         YahfaHooker.init();
         ModuleLogger.initLogger(serviceClient.getModuleLogger());
