@@ -32,7 +32,6 @@ import de.robv.android.xposed.XposedBridge;
 
 public final class DynamicBridge {
     private static final ConcurrentHashMap<Executable, LspHooker> hookedInfo = new ConcurrentHashMap<>();
-    private static final HookerDexMaker dexMaker = new HookerDexMaker();
 
     public static synchronized void hookMethod(Executable hookMethod, XposedBridge.AdditionalHookInfo additionalHookInfo) {
         Logger.d("hooking " + hookMethod);
@@ -44,6 +43,7 @@ public final class DynamicBridge {
 
         Logger.d("start to generate class for: " + hookMethod);
         try {
+            final HookerDexMaker dexMaker = new HookerDexMaker();
             dexMaker.start(hookMethod, additionalHookInfo,
                     hookMethod.getDeclaringClass().getClassLoader());
             hookedInfo.put(hookMethod, dexMaker.getHooker());
