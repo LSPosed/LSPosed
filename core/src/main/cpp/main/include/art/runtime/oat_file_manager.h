@@ -50,7 +50,10 @@ namespace art {
 
 
     static void DisableBackgroundVerification(const SandHook::ElfImg &handle) {
-        lspd::HookSyms(handle, RunBackgroundVerificationWithContext, RunBackgroundVerification);
+        const int api_level = lspd::GetAndroidApiLevel();
+        if (api_level >= __ANDROID_API_Q__) {
+            lspd::HookSyms(handle, RunBackgroundVerificationWithContext, RunBackgroundVerification);
+        }
     }
 }
 
