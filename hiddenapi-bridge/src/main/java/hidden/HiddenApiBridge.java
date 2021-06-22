@@ -25,7 +25,10 @@ import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.content.res.ResourcesImpl;
 import android.os.Binder;
+import android.os.Environment;
 import android.os.IBinder;
+
+import java.io.File;
 
 public class HiddenApiBridge {
     public static int AssetManager_addAssetPath(AssetManager am, String path) {
@@ -50,5 +53,9 @@ public class HiddenApiBridge {
 
     public static IBinder Context_getActivityToken(Context ctx) {
         return ctx.getActivityToken();
+    }
+
+    public static File Environment_getDataProfilesDePackageDirectory(int userId, String packageName) {
+        return Environment.getDataProfilesDePackageDirectory(userId, packageName);
     }
 }
