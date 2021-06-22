@@ -36,7 +36,7 @@
 #include "art/runtime/instrumentation.h"
 #include "art/runtime/thread_list.h"
 #include "art/runtime/gc/scoped_gc_critical_section.h"
-#include "art/runtim/oat_file_manager.h"
+#include "art/runtime/oat_file_manager.h"
 
 namespace lspd {
     static std::atomic_bool installed = false;
