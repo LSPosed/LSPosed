@@ -33,11 +33,21 @@
     android:clipToPadding="false"
     android:clipChildren="false">
 
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progress"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:indeterminate="true"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:showAnimationBehavior="outward"
+        app:hideAnimationBehavior="inward" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/item_root"
         android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         tools:ignore="RtlSymmetry">
 
         <TextView
@@ -52,7 +62,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             tools:text="@tools:sample/lorem" />
 
-        <org.lsposed.manager.ui.widget.LinkifyTextView
+        <WebView
             android:id="@+id/description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -62,6 +72,7 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="@+id/title"
             app:layout_constraintTop_toBottomOf="@id/title"
+            android:scrollbars="none"
             tools:text="@tools:sample/lorem" />
 
         <com.google.android.material.button.MaterialButton
