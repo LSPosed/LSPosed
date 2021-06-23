@@ -46,7 +46,7 @@
     <string name="system_inject_fail"><![CDATA[<b>WARNING:</b> System Framework inject failed.<br/>This is rare and may be caused by <b>Magisk</b> or some low-quality Magisk modules.<br/>Please try to disable Magisk modules other than Riru and LSPosed or submit full log to developers.]]></string>
     <string name="system_prop_incorrect_summary">System prop incorrect</string>
     <string name="system_prop_incorrect"><![CDATA[<b>WARNING:</b> System prop incorrect.<br/>Some necessary system properties deleted or modified.<br/>Modules may invalidate occasionally.]]></string>
-    <string name="please_update_summary">Please install the new version of LSPosed</string>
+    <string name="please_update_summary">Please install the latest version of LSPosed</string>
     <string name="info_api_version">API version</string>
     <string name="info_framework_version">Framework version</string>
     <string name="info_manager_version">Manager version</string>
