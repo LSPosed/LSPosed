@@ -32,6 +32,7 @@ import androidx.core.text.HtmlCompat;
 import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
 
+import org.lsposed.manager.App;
 import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
@@ -118,6 +119,11 @@ public class HomeFragment extends BaseFragment {
                 cardBackgroundColor = ResourcesKt.resolveColor(activity.getTheme(), R.attr.colorWarning);
                 binding.statusIcon.setImageResource(R.drawable.ic_warning);
                 binding.statusSummary.setText(R.string.system_prop_incorrect_summary);
+            } else if (App.needUpdate()) {
+                binding.statusTitle.setText(R.string.need_update);
+                cardBackgroundColor = ResourcesKt.resolveColor(activity.getTheme(), R.attr.colorWarning);
+                binding.statusIcon.setImageResource(R.drawable.ic_warning);
+                binding.statusSummary.setText(R.string.please_update_summary);
             } else {
                 binding.statusTitle.setText(R.string.activated);
                 cardBackgroundColor = ResourcesKt.resolveColor(activity.getTheme(), R.attr.colorNormal);

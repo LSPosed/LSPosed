@@ -148,11 +148,6 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
     }
 
     @Override
-    public void moduleReleasesLoaded(OnlineModule module) {
-
-    }
-
-    @Override
     public void onThrowable(Throwable t) {
         if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
             Snackbar.make(binding.snackbar, getString(R.string.repo_load_failed, t.getLocalizedMessage()), Snackbar.LENGTH_SHORT).show();
@@ -202,9 +197,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
                 sb.append(summary);
             }
             holder.appDescription.setText(sb);
-            holder.itemView.setOnClickListener(v -> {
-                getNavController().navigate(RepoFragmentDirections.actionRepoFragmentToRepoItemFragment(module.getName(), module.getDescription()));
-            });
+            holder.itemView.setOnClickListener(v -> getNavController().navigate(RepoFragmentDirections.actionRepoFragmentToRepoItemFragment(module.getName(), module.getDescription())));
         }
 
         @Override

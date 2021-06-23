@@ -196,11 +196,6 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
     }
 
     @Override
-    public void repoLoaded() {
-
-    }
-
-    @Override
     public void moduleReleasesLoaded(OnlineModule module) {
         this.module = module;
         if (releaseAdapter != null) {

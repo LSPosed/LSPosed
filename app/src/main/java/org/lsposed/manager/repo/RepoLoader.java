@@ -178,9 +178,11 @@ public class RepoLoader {
     }
 
     public interface Listener {
-        void repoLoaded();
+        default void repoLoaded() {
+        }
 
-        void moduleReleasesLoaded(OnlineModule module);
+        default void moduleReleasesLoaded(OnlineModule module) {
+        }
 
         void onThrowable(Throwable t);
     }
