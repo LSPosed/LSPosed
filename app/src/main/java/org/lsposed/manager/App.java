@@ -42,6 +42,7 @@ import java.io.StringWriter;
 import java.util.Locale;
 
 import okhttp3.Cache;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import rikka.material.app.DayNightDelegate;
@@ -61,6 +62,10 @@ public class App extends Application {
     private static OkHttpClient okHttpClient;
     private static Cache okHttpCache;
     private SharedPreferences pref;
+
+    public static final MediaType JSON
+            = MediaType.get("application/json; charset=utf-8");
+
 
     public static App getInstance() {
         return instance;
