@@ -31,9 +31,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.RenderProcessGoneDetail;
 import android.webkit.WebResourceRequest;
-import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -193,11 +191,6 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
             NavUtil.startURL(requireActivity(), "https://modules.lsposed.org/module/" + module.getName());
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void repoLoaded() {
-
     }
 
     @Override

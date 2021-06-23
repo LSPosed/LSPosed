@@ -23,7 +23,6 @@ package org.lsposed.manager.ui.activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -51,7 +50,7 @@ public class CrashReportActivity extends AppCompatActivity {
         binding = ActivityCrashReportBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         binding.copyLogs.setOnClickListener(v -> {
-            ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+            var clipboard = getSystemService(ClipboardManager.class);
             //Are there any devices without clipboard...?
             if (clipboard != null) {
                 ClipData clip = ClipData.newPlainText("LSPManagerCrashInfo", getAllErrorDetailsFromIntent(getIntent()));
@@ -66,26 +65,29 @@ public class CrashReportActivity extends AppCompatActivity {
         Date currentDate = new Date();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 
-        String versionName = getVersionName();
+        String versionName = String.format("%s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE);
 
         String errorDetails = "";
 
         errorDetails += "Build version: " + versionName + " \n";
         errorDetails += "Current date: " + dateFormat.format(currentDate) + " \n";
-        errorDetails += "Device: " + getDeviceModelName() + " \n \n";
+        errorDetails += "Device: " + getDeviceModelName() + " \n";
+        errorDetails += "Fingerprint: " + getFingerprint() + " \n \n";
         errorDetails += "SDK: " + Build.VERSION.SDK_INT + " \n \n";
         errorDetails += "Stack trace:  \n";
         errorDetails += getStackTraceFromIntent(intent);
         return errorDetails;
     }
 
-    private String getVersionName() {
-        try {
-            PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-            return String.format("%s (%s)", packageInfo.versionName, packageInfo.versionCode);
-        } catch (Exception e) {
-            return "Unknown";
-        }
+    private String getFingerprint() {
+        return Build.BRAND + '/' +
+                Build.PRODUCT + '/' +
+                Build.DEVICE + ':' +
+                Build.VERSION.RELEASE + '/' +
+                Build.ID + '/' +
+                Build.VERSION.INCREMENTAL + ':' +
+                Build.TYPE + '/' +
+                Build.TAGS;
     }
 
     private String getDeviceModelName() {

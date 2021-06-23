@@ -30,6 +30,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
+import com.google.gson.JsonParser;
+
 import org.lsposed.hiddenapibypass.HiddenApiBypass;
 import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.ui.activity.CrashReportActivity;
@@ -37,13 +39,20 @@ import org.lsposed.manager.util.DoHDNS;
 import org.lsposed.manager.util.theme.ThemeUtil;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Locale;
 
 import okhttp3.Cache;
-import okhttp3.MediaType;
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import rikka.material.app.DayNightDelegate;
 
@@ -62,9 +71,6 @@ public class App extends Application {
     private static OkHttpClient okHttpClient;
     private static Cache okHttpCache;
     private SharedPreferences pref;
-
-    public static final MediaType JSON
-            = MediaType.get("application/json; charset=utf-8");
 
 
     public static App getInstance() {
@@ -117,6 +123,7 @@ public class App extends Application {
         DayNightDelegate.setApplicationContext(this);
         DayNightDelegate.setDefaultNightMode(ThemeUtil.getDarkTheme());
         RepoLoader.getInstance().loadRemoteData();
+        loadRemoteVersion();
     }
 
     @NonNull
@@ -143,5 +150,52 @@ public class App extends Application {
             okHttpCache = new Cache(new File(App.getInstance().getCacheDir(), "http_cache"), 50L * 1024L * 1024L);
         }
         return okHttpCache;
+    }
+
+    private void loadRemoteVersion() {
+        var request = new Request.Builder()
+                .url("https://api.github.com/repos/LSPosed/LSPosed/releases/latest")
+                .addHeader("Accept", "application/vnd.github.v3+json")
+                .build();
+        var callback = new Callback() {
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) {
+                if (!response.isSuccessful()) return;
+                var body = response.body();
+                if (body == null) return;
+                try {
+                    var info = JsonParser.parseReader(body.charStream()).getAsJsonObject();
+                    var published = info.get("published_at").getAsString();
+                    var time = LocalDateTime.parse(published).toInstant(ZoneOffset.UTC).getEpochSecond();
+                    var now = Instant.now().getEpochSecond();
+                    pref.edit().putLong("latest_release", time).putLong("latest_check", now).apply();
+                } catch (Throwable t) {
+                    Log.e(App.TAG, t.getMessage(), t);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Log.e(App.TAG, e.getMessage(), e);
+            }
+        };
+        getOkHttpClient().newCall(request).enqueue(callback);
+    }
+
+    public static boolean needUpdate() {
+        var now = Instant.now();
+        var buildTime = Instant.ofEpochSecond(BuildConfig.BUILD_TIME);
+        var check = getPreferences().getLong("latest_check", 0);
+        if (check > 0) {
+            var checkTime = Instant.ofEpochSecond(check);
+            if (checkTime.atOffset(ZoneOffset.UTC).plusDays(30).toInstant().isBefore(now))
+                return true;
+            var release = getPreferences().getLong("latest_release", 0);
+            if (release > 0) {
+                var releaseTime = Instant.ofEpochSecond(release);
+                return releaseTime.atOffset(ZoneOffset.UTC).minusDays(1).toInstant().isAfter(buildTime);
+            }
+        }
+        return buildTime.atOffset(ZoneOffset.UTC).plusDays(30).toInstant().isBefore(now);
     }
 }
