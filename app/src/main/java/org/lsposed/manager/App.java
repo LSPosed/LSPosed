@@ -193,7 +193,7 @@ public class App extends Application {
             var release = getPreferences().getLong("latest_release", 0);
             if (release > 0) {
                 var releaseTime = Instant.ofEpochSecond(release);
-                return releaseTime.isAfter(now);
+                return releaseTime.atOffset(ZoneOffset.UTC).minusDays(1).toInstant().isAfter(buildTime);
             }
         }
         return buildTime.atOffset(ZoneOffset.UTC).plusDays(30).toInstant().isBefore(now);
