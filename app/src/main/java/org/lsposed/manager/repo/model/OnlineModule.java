@@ -53,6 +53,9 @@ public class OnlineModule implements Serializable, Parcelable {
     @SerializedName("readme")
     @Expose
     private String readme;
+    @SerializedName("readmeHTML")
+    @Expose
+    private String readmeHTML;
     @SerializedName("summary")
     @Expose
     private String summary;
@@ -107,6 +110,7 @@ public class OnlineModule implements Serializable, Parcelable {
         this.updatedAt = ((String) in.readValue((String.class.getClassLoader())));
         this.createdAt = ((String) in.readValue((String.class.getClassLoader())));
         this.stargazerCount = ((Integer) in.readValue((Integer.class.getClassLoader())));
+        this.readmeHTML = ((String) in.readValue((String.class.getClassLoader())));
     }
 
     public OnlineModule() {
@@ -167,6 +171,15 @@ public class OnlineModule implements Serializable, Parcelable {
     public void setReadme(String readme) {
         this.readme = readme;
     }
+
+    public String getReadmeHTML() {
+        return readmeHTML;
+    }
+
+    public void setReadmeHTML(String readmeHTML) {
+        this.readmeHTML = readmeHTML;
+    }
+
 
     public String getSummary() {
         return summary;
@@ -248,6 +261,7 @@ public class OnlineModule implements Serializable, Parcelable {
         dest.writeValue(updatedAt);
         dest.writeValue(createdAt);
         dest.writeValue(stargazerCount);
+        dest.writeValue(readmeHTML);
     }
 
     public int describeContents() {

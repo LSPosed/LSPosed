@@ -33,16 +33,6 @@
     android:clipToPadding="false"
     android:clipChildren="false">
 
-    <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/progress"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:indeterminate="true"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        app:showAnimationBehavior="outward"
-        app:hideAnimationBehavior="inward" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/item_root"
         android:layout_gravity="center"
