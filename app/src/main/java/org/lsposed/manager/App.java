@@ -43,7 +43,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Locale;
 
@@ -165,10 +164,10 @@ public class App extends Application {
                 if (body == null) return;
                 try {
                     var info = JsonParser.parseReader(body.charStream()).getAsJsonObject();
-                    var published = info.get("published_at").getAsString();
-                    var time = LocalDateTime.parse(published).toInstant(ZoneOffset.UTC).getEpochSecond();
+                    var name = info.getAsJsonArray("assets").get(0).getAsJsonObject().get("name").getAsString();
+                    var code = Integer.parseInt(name.split("-", 4)[2]);
                     var now = Instant.now().getEpochSecond();
-                    pref.edit().putLong("latest_release", time).putLong("latest_check", now).apply();
+                    pref.edit().putInt("latest_version", code).putLong("latest_check", now).apply();
                 } catch (Throwable t) {
                     Log.e(App.TAG, t.getMessage(), t);
                 }
@@ -190,11 +189,8 @@ public class App extends Application {
             var checkTime = Instant.ofEpochSecond(check);
             if (checkTime.atOffset(ZoneOffset.UTC).plusDays(30).toInstant().isBefore(now))
                 return true;
-            var release = getPreferences().getLong("latest_release", 0);
-            if (release > 0) {
-                var releaseTime = Instant.ofEpochSecond(release);
-                return releaseTime.atOffset(ZoneOffset.UTC).minusDays(1).toInstant().isAfter(buildTime);
-            }
+            var code = getPreferences().getInt("latest_version", 0);
+            return code > BuildConfig.VERSION_CODE;
         }
         return buildTime.atOffset(ZoneOffset.UTC).plusDays(30).toInstant().isBefore(now);
     }
