@@ -17,8 +17,8 @@
  * Copyright (C) 2021 LSPosed Contributors
  */
 
-import com.android.build.api.variant.impl.ApplicationVariantImpl
 import com.android.build.api.component.analytics.AnalyticsEnabledApplicationVariant
+import com.android.build.api.variant.impl.ApplicationVariantImpl
 import com.android.build.gradle.internal.dsl.BuildType
 import java.nio.file.Paths
 import java.time.Instant
@@ -75,19 +75,8 @@ android {
         versionCode = verCode
         versionName = verName
         resourceConfigurations += arrayOf(
-            "en",
-            "zh-rCN",
-            "zh-rTW",
-            "zh-rHK",
-            "ru",
-            "uk",
-            "nl",
-            "ko",
-            "fr",
-            "de",
-            "it",
-            "pt",
-            "es",
+            "en", "zh-rCN", "zh-rTW", "zh-rHK", "ru", "uk", "nl", "ko", "fr", "de",
+            "it", "pt", "es",
         )
         buildConfigField("long", "BUILD_TIME", Instant.now().epochSecond.toString())
     }
@@ -99,7 +88,6 @@ android {
 
     lint {
         disable += "MissingTranslation"
-        disable += "ExtraTranslation"
         isAbortOnError = true
         isCheckReleaseBuilds = false
     }
@@ -200,7 +188,6 @@ tasks.whenTaskAdded {
 
 dependencies {
     val glideVersion = "4.12.0"
-    val markwonVersion = "4.6.2"
     val okhttpVersion = "4.9.1"
     val navVersion = "2.3.5"
     annotationProcessor("com.github.bumptech.glide:compiler:$glideVersion")

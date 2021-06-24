@@ -22,6 +22,7 @@ import com.android.build.api.variant.impl.ApplicationVariantImpl
 import com.android.build.gradle.BaseExtension
 import com.android.ide.common.signing.KeystoreHelper
 import org.apache.tools.ant.filters.FixCrLfFilter
+import org.apache.tools.ant.filters.ReplaceTokens
 import org.gradle.internal.os.OperatingSystem
 import org.jetbrains.kotlin.daemon.common.toHexString
 import java.io.PrintStream
@@ -162,71 +163,52 @@ androidComponents.onVariants { v ->
         variant.variantData.registerJavaGeneratingTask(signInfoTask, arrayListOf(outSrcDir))
     }
 
-    val prepareMagiskFilesTask = task("prepareMagiskFiles$variantCapped") {
+    val prepareMagiskFilesTask = task("prepareMagiskFiles$variantCapped", Sync::class) {
         dependsOn("assemble$variantCapped")
         dependsOn(":app:assemble$variantCapped")
+        into(magiskDir)
+        from("${rootProject.projectDir}/README.md")
+        from("$projectDir/magisk_module") {
+            exclude("riru.sh", "module.prop")
+        }
+        from("$projectDir/magisk_module") {
+            include("module.prop")
+            expand(
+                "moduleId" to moduleId,
+                "versionName" to verName,
+                "versionCode" to verCode,
+                "authorList" to authors,
+                "minRiruVersionName" to moduleMinRiruVersionName
+            )
+            filter<FixCrLfFilter>("eol" to FixCrLfFilter.CrLf.newInstance("lf"))
+        }
+        from("${projectDir}/magisk_module") {
+            include("riru.sh")
+            val tokens = mapOf(
+                "RIRU_MODULE_LIB_NAME" to "lspd",
+                "RIRU_MODULE_API_VERSION" to moduleMaxRiruApiVersion.toString(),
+                "RIRU_MODULE_MIN_API_VERSION" to moduleMinRiruApiVersion.toString(),
+                "RIRU_MODULE_MIN_RIRU_VERSION_NAME" to moduleMinRiruVersionName,
+                "RIRU_MODULE_DEBUG" to if (variantLowered == "debug") "true" else "false",
+            )
+            filter<ReplaceTokens>("tokens" to tokens)
+            filter<FixCrLfFilter>("eol" to FixCrLfFilter.CrLf.newInstance("lf"))
+        }
+        from("${project(":app").buildDir}/outputs/apk/${variantLowered}") {
+            include("*.apk")
+            rename(".*\\.apk", "manager.apk")
+        }
+        into("lib") {
+            from("${buildDir}/intermediates/stripped_native_libs/$variantLowered/out/lib")
+        }
+        val dexOutPath = if (variantLowered == "release")
+            "$buildDir/intermediates/dex/$variantLowered/minify${variantCapped}WithR8" else
+            "$buildDir/intermediates/dex/$variantLowered/mergeDex$variantCapped"
+        into("framework") {
+            from(dexOutPath)
+            rename("classes.dex", "lspd.dex")
+        }
         doLast {
-            sync {
-                into(magiskDir)
-                from("${rootProject.projectDir}/README.md")
-                from("$projectDir/magisk_module") {
-                    exclude("riru.sh", "module.prop")
-                }
-                from("$projectDir/magisk_module") {
-                    include("module.prop")
-                    expand(
-                        "moduleId" to moduleId,
-                        "versionName" to verName,
-                        "versionCode" to verCode,
-                        "authorList" to authors,
-                        "minRiruVersionName" to moduleMinRiruVersionName
-                    )
-                    filter(
-                        mapOf("eol" to FixCrLfFilter.CrLf.newInstance("lf")),
-                        FixCrLfFilter::class.java
-                    )
-                }
-                from("${projectDir}/magisk_module") {
-                    include("riru.sh")
-                    filter { line ->
-                        line.replace("%%%RIRU_MODULE_LIB_NAME%%%", "lspd")
-                            .replace(
-                                "%%%RIRU_MODULE_API_VERSION%%%",
-                                moduleMaxRiruApiVersion.toString()
-                            )
-                            .replace(
-                                "%%%RIRU_MODULE_MIN_API_VERSION%%%",
-                                moduleMinRiruApiVersion.toString()
-                            )
-                            .replace(
-                                "%%%RIRU_MODULE_MIN_RIRU_VERSION_NAME%%%",
-                                moduleMinRiruVersionName
-                            )
-                            .replace(
-                                "%%RIRU_MODULE_DEBUG%%",
-                                if (variantLowered == "debug") "true" else "false"
-                            )
-                    }
-                    filter(
-                        mapOf("eol" to FixCrLfFilter.CrLf.newInstance("lf")),
-                        FixCrLfFilter::class.java
-                    )
-                }
-                from("${project(":app").buildDir}/outputs/apk/${variantLowered}") {
-                    include("*.apk")
-                    rename(".*\\.apk", "manager.apk")
-                }
-                into("lib") {
-                    from("${buildDir}/intermediates/stripped_native_libs/$variantLowered/out/lib")
-                }
-                val dexOutPath = if (variantLowered == "release")
-                    "$buildDir/intermediates/dex/$variantLowered/minify${variantCapped}WithR8" else
-                    "$buildDir/intermediates/dex/$variantLowered/mergeDex$variantCapped"
-                into("framework") {
-                    from(dexOutPath)
-                    rename("classes.dex", "lspd.dex")
-                }
-            }
             fileTree(magiskDir).visit {
                 if (isDirectory) return@visit
                 val md = MessageDigest.getInstance("SHA-256")
@@ -249,35 +231,20 @@ androidComponents.onVariants { v ->
     val pushTask = task("push${variantCapped}", Exec::class) {
         dependsOn(zipTask)
         workingDir("${projectDir}/release")
-        val commands = arrayOf(adb, "push", zipFileName, "/data/local/tmp/")
-        if (isWindows) {
-            commandLine("cmd", "/c", commands.joinToString(" "))
-        } else {
-            commandLine(commands)
-        }
+        commandLine(adb, "push", zipFileName, "/data/local/tmp/")
     }
     val flashTask = task("flash${variantCapped}", Exec::class) {
         dependsOn(pushTask)
         workingDir("${projectDir}/release")
-        val commands = arrayOf(
+        commandLine(
             adb, "shell", "su", "-c",
             "magisk --install-module /data/local/tmp/${zipFileName}"
         )
-        if (isWindows) {
-            commandLine("cmd", "/c", commands.joinToString(" "))
-        } else {
-            commandLine(commands)
-        }
     }
     task("flashAndReboot${variantCapped}", Exec::class) {
         dependsOn(flashTask)
         workingDir("${projectDir}/release")
-        val commands = arrayOf(adb, "shell", "reboot")
-        if (isWindows) {
-            commandLine("cmd", "/c", commands.joinToString(" "))
-        } else {
-            commandLine(commands)
-        }
+        commandLine(adb, "shell", "reboot")
     }
 }
 
