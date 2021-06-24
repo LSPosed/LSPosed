@@ -39,12 +39,14 @@
     <string name="activated">Ativado</string>
     <string name="not_installed">Não instalado</string>
     <string name="partial_activated">Parcialmente ativado</string>
+    <string name="need_update">Necessário atualizar</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy não está carregado corretamente</string>
     <string name="selinux_policy_not_loaded"><![CDATA[<b>AVISO:</b> SEPolicy não está carregado corretamente, módulos que aplicam hooks do Framework do Sistema não funcionarão.<br/>Por favor, relate isso para o desenvolvedor do <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>.]]></string>
     <string name="system_inject_fail_summary">A injeção do Framework do Sistema falhou</string>
     <string name="system_inject_fail"><![CDATA[<b>AVISO:</b> Falha na injeção do Framework do Sistema<br/>Isso é raro e pode ter sido causado pelo <b>Magisk</b> ou por algum módulo do Magisk de baixa qualidade.<br/>Por favor, tente desabilitar os módulos do Magisk que não sejam o Riru e o LSPosed ou envie o log completo para os desenvolvedores.]]></string>
     <string name="system_prop_incorrect_summary">Propriedade do sistema incorreta</string>
     <string name="system_prop_incorrect"><![CDATA[<b>AVISO:</b> Propriedade do sistema incorreta.<br/>Algumas propriedades do sistema necessárias foram excluídas ou modificadas.<br/>Algum módulo pode ser invalidado ocasionalmente.]]></string>
+    <string name="please_update_summary">Por favor, instale a versão mais recente do LSPosed</string>
     <string name="info_api_version">Versão da API</string>
     <string name="info_framework_version">Versão do Framework</string>
     <string name="info_manager_version">Versão do App</string>
