@@ -27,16 +27,6 @@
     android:paddingTop="104dp"
     app:fitsSystemWindowsInsets="top|bottom">
 
-    <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/progress"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:indeterminate="true"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        app:showAnimationBehavior="outward"
-        app:hideAnimationBehavior="inward" />
-
     <rikka.widget.borderview.BorderNestedScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"

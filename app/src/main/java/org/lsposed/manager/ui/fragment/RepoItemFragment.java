@@ -35,7 +35,6 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -71,7 +70,6 @@ import org.lsposed.manager.util.LinearLayoutManagerFix;
 import org.lsposed.manager.util.NavUtil;
 import org.lsposed.manager.util.chrome.CustomTabsURLSpan;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -126,7 +124,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
 
     }
 
-    private void renderGithubMarkdown(WebView view, String text, ProgressBar progressBar) {
+    private void renderGithubMarkdown(WebView view, String text) {
         try {
             var json = new JSONObject();
             json.put("text", text);
@@ -150,35 +148,14 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
             setting.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
             view.setWebViewClient(new WebViewClient() {
                 @Override
-                public void onPageFinished(WebView view, String url) {
-                    if (progressBar != null)
-                        progressBar.setVisibility(ProgressBar.GONE);
-                    super.onPageFinished(view, url);
-                }
-
-                @Override
                 public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                    if (request.getUrl().toString().equals("https://api.github.com/markdown")) return false;
                     Intent i = new Intent(Intent.ACTION_VIEW, request.getUrl());
                     startActivity(i);
                     return true;
                 }
             });
-
-            // wrapper for https://api.github.com/markdown
-            /*
-            async function handleRequest(request) {
-              let response = await fetch("https://api.github.com/markdown", request);
-              if (!response.ok) return response;
-              response = new Response(`<html><head><style>body{overflow-wrap: anywhere;font-size: 3vw;}</style></head><body>${await response.text()}</body></html>`, response);
-              response.headers.set(
-                "Content-Security-Policy",
-                "img-src *;"
-              )
-              return response;
-            }
-            */
-            view.postUrl("https://render.lsposed.workers.dev/", json.toString().getBytes(StandardCharsets.UTF_8));
+            view.loadDataWithBaseURL(null, "<html><head><style>body{overflow-wrap: anywhere;font-size: 3vw;}code{word-break: break-all;}</style></head><body>" + text + "</body></html>",
+                    "text/html; charset=utf-8", "utf-8", null);
         } catch (Throwable e) {
             android.util.Log.e(App.TAG, "render readme", e);
         }
@@ -350,8 +327,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
             } else {
                 Release release = items.get(position);
                 holder.title.setText(release.getName());
-                holder.progress.show();
-                renderGithubMarkdown(holder.description, release.getDescription(), holder.progress);
+                renderGithubMarkdown(holder.description, release.getDescriptionHTML());
                 holder.openInBrowser.setOnClickListener(v -> NavUtil.startURL(requireActivity(), release.getUrl()));
                 List<ReleaseAsset> assets = release.getReleaseAssets();
                 if (assets != null && !assets.isEmpty()) {
@@ -397,7 +373,6 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
                 description = binding.description;
                 openInBrowser = binding.openInBrowser;
                 viewAssets = binding.viewAssets;
-                progress = binding.progress;
             }
         }
 
@@ -428,9 +403,8 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
                 case 0:
                     holder.scrollView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setRaised(!top));
                     holder.scrollView.setTag(position);
-                    holder.progress.show();
                     if (module != null)
-                        renderGithubMarkdown(holder.webView, module.getReadme(), holder.progress);
+                        renderGithubMarkdown(holder.webView, module.getReadmeHTML());
                     break;
                 case 1:
                 case 2:
@@ -465,7 +439,6 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
             WebView webView;
             BorderNestedScrollView scrollView;
             BorderRecyclerView recyclerView;
-            CircularProgressIndicator progress;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -477,7 +450,6 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
                 super(binding.getRoot());
                 webView = binding.readme;
                 scrollView = binding.scrollView;
-                progress = binding.progress;
             }
         }
 
