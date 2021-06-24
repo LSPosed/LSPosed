@@ -43,9 +43,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 import okhttp3.Cache;
 import okhttp3.Call;
@@ -53,6 +53,7 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import rikka.material.app.DayNightDelegate;
 
@@ -72,6 +73,60 @@ public class App extends Application {
     private static Cache okHttpCache;
     private SharedPreferences pref;
 
+    private static final Pattern extractCommitCounts = Pattern.compile("^.*\"next\".*&page=(?<count>[0-9]*).*\"last\".*");
+
+    private static abstract class SafeCallback implements Callback {
+        @Override
+        public final void onFailure(@NonNull Call call, @NonNull IOException e) {
+            Log.e(App.TAG, e.getMessage(), e);
+        }
+
+        @Override
+        public final void onResponse(@NonNull Call call, @NonNull Response response) {
+            try {
+                if (!response.isSuccessful()) return;
+                var body = response.body();
+                if (body == null) return;
+                onResponse(call, response, body);
+            } catch (Throwable e) {
+                Log.e(App.TAG, e.getMessage(), e);
+            }
+        }
+
+        protected abstract void onResponse(@NonNull Call call, @NonNull Response response, @NonNull ResponseBody body) throws IOException;
+
+    }
+
+    private static final Callback versionCallback = new SafeCallback() {
+        @Override
+        protected void onResponse(@NonNull Call call, @NonNull Response response, @NonNull ResponseBody body) {
+            var link = response.header("link", null);
+            if (link == null) return;
+            var matcher = extractCommitCounts.matcher(link);
+            String countStr = null;
+            if (matcher.matches())
+                countStr = matcher.group("count");
+            if (countStr == null) return;
+            var latestBuild = Long.parseLong(countStr) + 4200;
+            Log.e(TAG, String.valueOf(latestBuild));
+            var now = Instant.now().getEpochSecond();
+            App.instance.pref.edit().putLong("latest_build", latestBuild).putLong("latest_check", now).apply();
+        }
+    };
+
+    private static final Callback releaseCallback = new SafeCallback() {
+        @Override
+        public void onResponse(@NonNull Call call, @NonNull Response response, @NonNull ResponseBody body) {
+            var info = JsonParser.parseReader(body.charStream()).getAsJsonObject();
+            var tag = info.get("tag_name").getAsString();
+            var request = new Request.Builder()
+                    .url("https://api.github.com/repos/LSPosed/LSPosed/commits?per_page=1&sha=" + tag)
+                    .addHeader("Accept", "application/vnd.github.v3+json")
+                    .tag(tag)
+                    .build();
+            getOkHttpClient().newCall(request).enqueue(versionCallback);
+        }
+    };
 
     public static App getInstance() {
         return instance;
@@ -157,29 +212,7 @@ public class App extends Application {
                 .url("https://api.github.com/repos/LSPosed/LSPosed/releases/latest")
                 .addHeader("Accept", "application/vnd.github.v3+json")
                 .build();
-        var callback = new Callback() {
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) {
-                if (!response.isSuccessful()) return;
-                var body = response.body();
-                if (body == null) return;
-                try {
-                    var info = JsonParser.parseReader(body.charStream()).getAsJsonObject();
-                    var published = info.get("published_at").getAsString();
-                    var time = LocalDateTime.parse(published).toInstant(ZoneOffset.UTC).getEpochSecond();
-                    var now = Instant.now().getEpochSecond();
-                    pref.edit().putLong("latest_release", time).putLong("latest_check", now).apply();
-                } catch (Throwable t) {
-                    Log.e(App.TAG, t.getMessage(), t);
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                Log.e(App.TAG, e.getMessage(), e);
-            }
-        };
-        getOkHttpClient().newCall(request).enqueue(callback);
+        getOkHttpClient().newCall(request).enqueue(releaseCallback);
     }
 
     public static boolean needUpdate() {
@@ -190,11 +223,8 @@ public class App extends Application {
             var checkTime = Instant.ofEpochSecond(check);
             if (checkTime.atOffset(ZoneOffset.UTC).plusDays(30).toInstant().isBefore(now))
                 return true;
-            var release = getPreferences().getLong("latest_release", 0);
-            if (release > 0) {
-                var releaseTime = Instant.ofEpochSecond(release);
-                return releaseTime.atOffset(ZoneOffset.UTC).minusDays(1).toInstant().isAfter(buildTime);
-            }
+            var latestBuild = getPreferences().getLong("latest_build", 0);
+            if (latestBuild > BuildConfig.VERSION_CODE) return true;
         }
         return buildTime.atOffset(ZoneOffset.UTC).plusDays(30).toInstant().isBefore(now);
     }
