@@ -155,6 +155,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
             setting.setAllowFileAccess(false);
             setting.setGeolocationEnabled(false);
             setting.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+            setting.setTextZoom(80);
             String body;
             int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
             if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {

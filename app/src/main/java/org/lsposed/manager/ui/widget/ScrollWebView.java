@@ -42,7 +42,7 @@ public class ScrollWebView extends WebView {
 
     @Override
     protected void onOverScrolled(int scrollX, int scrollY, boolean clampedX, boolean clampedY) {
-        if (clampedX) {
+        if (clampedX || clampedY) {
             var viewParent = findViewParentIfNeeds(this);
             if (viewParent != null) viewParent.requestDisallowInterceptTouchEvent(false);
         }
