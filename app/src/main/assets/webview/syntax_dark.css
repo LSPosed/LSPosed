@@ -1,0 +1,124 @@
+/* From https://github.com/primer/github-syntax-dark/blob/master/lib/github-dark.css */
+.pl-c /* comment, punctuation.definition.comment, string.comment */ {
+  color: #959da5;
+}
+
+.pl-c1 /* constant, entity.name.constant, variable.other.constant, variable.language, support, meta.property-name, support.constant, support.variable, meta.module-reference, markup.quote, markup.raw, meta.diff.header */,
+.pl-s .pl-v /* string variable */ {
+  color: #c8e1ff;
+}
+
+.pl-e /* entity */,
+.pl-en /* entity.name */ {
+  color: #b392f0;
+}
+
+.pl-smi /* variable.parameter.function, storage.modifier.package, storage.modifier.import, storage.type.java, variable.other */,
+.pl-s .pl-s1 /* string source */ {
+  color: #f6f8fa;
+}
+
+.pl-ent /* entity.name.tag */ {
+  color: #7bcc72;
+}
+
+.pl-k /* keyword, storage, storage.type */ {
+  color: #ea4a5a;
+}
+
+.pl-s /* string */,
+.pl-pds /* punctuation.definition.string, source.regexp, string.regexp.character-class */,
+.pl-s .pl-pse .pl-s1 /* string punctuation.section.embedded source */,
+.pl-sr /* string.regexp */,
+.pl-sr .pl-cce /* string.regexp constant.character.escape */,
+.pl-sr .pl-sre /* string.regexp source.ruby.embedded */,
+.pl-sr .pl-sra /* string.regexp string.regexp.arbitrary-repitition */ {
+  color: #79b8ff;
+}
+
+.pl-v /* variable */,
+.pl-ml /* markup.list, sublimelinter.mark.warning */ {
+  color: #fb8532;
+}
+
+.pl-bu /* invalid.broken, invalid.deprecated, invalid.unimplemented, message.error, brackethighlighter.unmatched, sublimelinter.mark.error */ {
+  color: #d73a49;
+}
+
+.pl-ii /* invalid.illegal */ {
+  color: #fafbfc;
+  background-color: #d73a49;
+}
+
+.pl-c2 /* carriage-return */ {
+  color: #fafbfc;
+  background-color: #d73a49;
+}
+
+.pl-c2::before /* carriage-return */ {
+  content: "^M";
+}
+
+.pl-sr .pl-cce /* string.regexp constant.character.escape */ {
+  font-weight: bold;
+  color: #7bcc72;
+}
+
+.pl-mh /* markup.heading */,
+.pl-mh .pl-en /* markup.heading entity.name */,
+.pl-ms /* meta.separator */ {
+  font-weight: bold;
+  color: #0366d6;
+}
+
+.pl-mi /* markup.italic */ {
+  font-style: italic;
+  color: #f6f8fa;
+}
+
+.pl-mb /* markup.bold */ {
+  font-weight: bold;
+  color: #f6f8fa;
+}
+
+.pl-md /* markup.deleted, meta.diff.header.from-file, punctuation.definition.deleted */ {
+  color: #ffdcd7;
+  background-color: #67060c;
+}
+
+.pl-mi1 /* markup.inserted, meta.diff.header.to-file, punctuation.definition.inserted */ {
+  color: #aff5b4;
+  background-color: #033a16;
+}
+
+.pl-mc /* markup.changed, punctuation.definition.changed */ {
+  color: #b08800;
+  background-color: #fffdef;
+}
+
+.pl-mi2 /* markup.ignored, markup.untracked */ {
+  color: #2f363d;
+  background-color: #959da5;
+}
+
+.pl-mdr /* meta.diff.range */ {
+  font-weight: bold;
+  color: #b392f0;
+}
+
+.pl-mo /* meta.output */ {
+  color: #0366d6;
+}
+
+.pl-ba /* brackethighlighter.tag, brackethighlighter.curly, brackethighlighter.round, brackethighlighter.square, brackethighlighter.angle, brackethighlighter.quote */ {
+  color: #ffeef0;
+}
+
+.pl-sg /* sublimelinter.gutter-mark */ {
+  color: #6a737d;
+}
+
+.pl-corl /* constant.other.reference.link, string.other.link */ {
+  text-decoration: underline;
+  color: #79b8ff;
+}

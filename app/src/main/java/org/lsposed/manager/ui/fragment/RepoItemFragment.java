@@ -27,6 +27,7 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ClickableSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,15 +44,12 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
-import androidx.webkit.WebSettingsCompat;
-import androidx.webkit.WebViewFeature;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-import org.json.JSONObject;
 import org.lsposed.manager.App;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.FragmentPagerBinding;
@@ -70,6 +68,9 @@ import org.lsposed.manager.util.LinearLayoutManagerFix;
 import org.lsposed.manager.util.NavUtil;
 import org.lsposed.manager.util.chrome.CustomTabsURLSpan;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -80,9 +81,26 @@ import rikka.widget.borderview.BorderRecyclerView;
 import rikka.widget.borderview.BorderView;
 
 public class RepoItemFragment extends BaseFragment implements RepoLoader.Listener {
+    private static final String HTML_TEMPLATE = readWebviewHTML("template.html");
+    private static final String HTML_TEMPLATE_DARK = readWebviewHTML("template_dark.html");
     FragmentPagerBinding binding;
     private OnlineModule module;
     private ReleaseAdapter releaseAdapter;
+
+    private static String readWebviewHTML(String name) {
+        try {
+            var input = App.getInstance().getAssets().open("webview/" + name);
+            var result = new ByteArrayOutputStream(1024);
+            var buffer = new byte[1024];
+            for (int length; (length = input.read(buffer)) != -1; ) {
+                result.write(buffer, 0, length);
+            }
+            return result.toString(StandardCharsets.UTF_8.name());
+        } catch (IOException e) {
+            Log.e(App.TAG, "read webview HTML", e);
+            return "<html><body>@body@</body></html>";
+        }
+    }
 
     @Nullable
     @Override
@@ -126,26 +144,26 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
 
     private void renderGithubMarkdown(WebView view, String text) {
         try {
-            var json = new JSONObject();
-            json.put("text", text);
             view.setBackgroundColor(Color.TRANSPARENT);
             var setting = view.getSettings();
+            setting.setOffscreenPreRaster(true);
             setting.setDomStorageEnabled(true);
             setting.setAppCacheEnabled(true);
             setting.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
             setting.setAllowContentAccess(false);
+            setting.setAllowFileAccessFromFileURLs(true);
             setting.setAllowFileAccess(false);
             setting.setGeolocationEnabled(false);
-            if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
-                int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-                if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
-                    WebSettingsCompat.setForceDark(setting, WebSettingsCompat.FORCE_DARK_ON);
-                }
-            }
-            if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK_STRATEGY)) {
-                WebSettingsCompat.setForceDarkStrategy(setting, WebSettingsCompat.DARK_STRATEGY_PREFER_WEB_THEME_OVER_USER_AGENT_DARKENING);
-            }
             setting.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+            String body;
+            int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+            if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
+                body = HTML_TEMPLATE_DARK.replace("@body@", text);
+            } else {
+                body = HTML_TEMPLATE.replace("@body@", text);
+            }
+            body = body.replace("src=\"/", "src=\"/Xposed-Modules-Repo/" + module.getName() + "/raw/main/")
+                    .replace("href=\"/", "href=\"/Xposed-Modules-Repo/" + module.getName() + "/blob/main/");
             view.setWebViewClient(new WebViewClient() {
                 @Override
                 public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
@@ -154,10 +172,10 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
                     return true;
                 }
             });
-            view.loadDataWithBaseURL(null, "<html><head><style>body{overflow-wrap: anywhere;font-size: 3vw;}code{word-break: break-all;}</style></head><body>" + text + "</body></html>",
-                    "text/html; charset=utf-8", "utf-8", null);
+            view.loadDataWithBaseURL("https://github.com", body, "text/html",
+                    StandardCharsets.UTF_8.name(), null);
         } catch (Throwable e) {
-            android.util.Log.e(App.TAG, "render readme", e);
+            Log.e(App.TAG, "render readme", e);
         }
     }
 
