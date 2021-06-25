@@ -52,7 +52,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             tools:text="@tools:sample/lorem" />
 
-        <WebView
+        <org.lsposed.manager.ui.widget.ScrollWebView
             android:id="@+id/description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

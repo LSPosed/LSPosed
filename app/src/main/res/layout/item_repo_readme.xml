@@ -35,7 +35,7 @@
         app:borderTopDrawable="@null"
         app:borderBottomVisibility="never">
 
-        <WebView
+        <org.lsposed.manager.ui.widget.ScrollWebView
             android:id="@+id/readme"
             android:padding="16dp"
             android:layout_width="match_parent"

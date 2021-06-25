@@ -162,8 +162,6 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
             } else {
                 body = HTML_TEMPLATE.replace("@body@", text);
             }
-            body = body.replace("src=\"/", "src=\"/Xposed-Modules-Repo/" + module.getName() + "/raw/main/")
-                    .replace("href=\"/", "href=\"/Xposed-Modules-Repo/" + module.getName() + "/blob/main/");
             view.setWebViewClient(new WebViewClient() {
                 @Override
                 public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
