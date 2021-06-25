@@ -138,7 +138,7 @@
     <string name="menu_restore">Восстановить</string>
     <string name="xposed_module_updated_notification_content">%s обновлён</string>
     <string name="module_repo">Репозиторий</string>
-    <string name="module_repo_summary">Репозиторий модулей (Альфа)</string>
+    <string name="module_repo_summary">Репозиторий модулей (Бета)</string>
     <string name="module_readme">Readme</string>
     <string name="module_releases">Релизаты</string>
     <string name="module_information">Информация</string>

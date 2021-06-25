@@ -138,7 +138,7 @@
     <string name="menu_restore">Wiederherstellen</string>
     <string name="xposed_module_updated_notification_content">%s wurde aktualisiert</string>
     <string name="module_repo">Module Repo</string>
-    <string name="module_repo_summary">Modul-Repository (Alpha)</string>
+    <string name="module_repo_summary">Modul-Repository (Beta)</string>
     <string name="module_readme">Liesmich</string>
     <string name="module_releases">Veröffentlichungen</string>
     <string name="module_information">Info</string>

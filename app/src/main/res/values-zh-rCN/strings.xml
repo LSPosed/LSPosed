@@ -32,7 +32,7 @@
     <string name="Settings">设置</string>
     <string name="About">关于</string>
     <string name="module_repo">仓库</string>
-    <string name="module_repo_summary">模块仓库（Alpha）</string>
+    <string name="module_repo_summary">模块仓库（Beta）</string>
     <string name="about_view_source_code"><![CDATA[在 %1$s 查看源码<br/>加入我们的 %2$s 频道]]></string>
     <string name="about_translators">译者：%s</string>
 
@@ -122,6 +122,7 @@
     <string name="no_scope_selected_has_recommended">未选择任何应用。选择推荐的应用？</string>
     <string name="use_recommended_message">选择推荐的应用?</string>
     <string name="requested_by_module">推荐的应用</string>
+    <string name="update_available">可用更新：%1$s</string>
     <string name="module_disabled_no_selection">由于未选择任何应用，模块 %s 已被禁用。</string>
     <string name="android_framework">系统框架</string>
     <string name="menu_backup_and_restore">备份…</string>

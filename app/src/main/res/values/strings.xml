@@ -32,7 +32,7 @@
     <string name="Settings">Settings</string>
     <string name="About">About</string>
     <string name="module_repo">Repository</string>
-    <string name="module_repo_summary">Module repository (Alpha)</string>
+    <string name="module_repo_summary">Module repository (Beta)</string>
     <string name="about_view_source_code"><![CDATA[View source code at %1$s<br/>Join our %2$s channel]]></string>
     <string name="about_translators">Translators: %s</string>
 
@@ -122,6 +122,7 @@
     <string name="no_scope_selected_has_recommended">You did not select any app. Select recommended apps?</string>
     <string name="use_recommended_message">Select recommended apps?</string>
     <string name="requested_by_module">Recommended</string>
+    <string name="update_available">Update available: %1$s</string>
     <string name="module_disabled_no_selection">Module %s has been disabled since no app selected.</string>
     <string name="android_framework">System Framework</string>
     <string name="menu_backup_and_restore">Backup…</string>
