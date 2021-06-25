@@ -200,7 +200,6 @@ dependencies {
     implementation("androidx.navigation:navigation-ui:$navVersion")
     implementation("androidx.recyclerview:recyclerview:1.2.1")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
-    implementation("androidx.webkit:webkit:1.4.0")
     implementation("com.caverock:androidsvg-aar:1.4")
     implementation("com.github.bumptech.glide:glide:$glideVersion")
     implementation("com.github.bumptech.glide:okhttp3-integration:$glideVersion")
