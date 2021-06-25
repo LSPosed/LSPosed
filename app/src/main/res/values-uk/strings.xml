@@ -102,7 +102,7 @@
     <string name="warning_xposed_min_version">Цей модуль вимагає новішої версії LSP (%d), тому його неможливо активувати</string>
     <string name="xposed_module_updated_notification_title">Модуль LSPosed оновлено</string>
     <string name="module_repo">Репозиторій</string>
-    <string name="module_repo_summary">Репозиторій модулів</string>
+    <string name="module_repo_summary">Репозиторій модулів (Бета)</string>
     <string name="module_readme">Readme</string>
     <string name="module_releases">Релізи</string>
     <string name="module_information">Інформація</string>
