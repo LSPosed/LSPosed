@@ -184,6 +184,8 @@ public class RepoLoader {
         default void moduleReleasesLoaded(OnlineModule module) {
         }
 
-        void onThrowable(Throwable t);
+        default void onThrowable(Throwable t) {
+            Log.e(App.TAG, "load repo failed", t);
+        }
     }
 }
