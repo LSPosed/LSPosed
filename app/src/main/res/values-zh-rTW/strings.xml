@@ -39,12 +39,14 @@
     <string name="activated">已啟用</string>
     <string name="not_installed">未安裝</string>
     <string name="partial_activated">部分啟用</string>
+    <string name="need_update">需要更新</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy 未被正確讀取</string>
     <string name="selinux_policy_not_loaded"><![CDATA[<b>警告：</b>SEPolicy 沒有被正確讀取，掛鉤系統框架的模組將無法運作。<br>請回報這類問題給<a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>開發者]]></string>
     <string name="system_inject_fail_summary">系統框架注入失敗</string>
     <string name="system_inject_fail"><![CDATA[<b>警告：</b>系統注入失敗。<br/>這是極罕見的情況，可能是由 <b>Magisk</b> 或低品質 Magisk 模組導致。<br/>請嘗試禁用除 Riru 和 LSPosed 以外的 Magisk 模組，或向開發者提供完整日誌。]]></string>
     <string name="system_prop_incorrect_summary">系統屬性異常</string>
     <string name="system_prop_incorrect"><![CDATA[<b>警告：</b>系統屬性異常。<br/>一些必須的系統屬性被刪除或被修改。<br/>模組可能會隨機失效。]]></string>
+    <string name="please_update_summary">請安裝新版 LSPosed</string>
     <string name="info_api_version">API 版本</string>
     <string name="info_framework_version">框架版本</string>
     <string name="info_manager_version">管理器版本</string>
@@ -120,6 +122,7 @@
     <string name="no_scope_selected_has_recommended">未選擇任何程式。選擇推薦的程式？</string>
     <string name="use_recommended_message">選擇推薦的程式？</string>
     <string name="requested_by_module">推薦的程式</string>
+    <string name="update_available">可用更新：%1$s</string>
     <string name="module_disabled_no_selection">由於未選擇任何程式，模組 %s 已被停用。</string>
     <string name="android_framework">系統框架</string>
     <string name="menu_backup_and_restore">備份……</string>
