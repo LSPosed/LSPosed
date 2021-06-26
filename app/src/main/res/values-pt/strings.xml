@@ -122,6 +122,7 @@
     <string name="no_scope_selected_has_recommended">Você não selecionou nenhum app. Quer selecionar os apps recomendados?</string>
     <string name="use_recommended_message">Selecionar os apps recomendados?</string>
     <string name="requested_by_module">Recomendados</string>
+    <string name="update_available">Atualização disponível: %1$s</string>
     <string name="module_disabled_no_selection">O módulo %s foi desativado porque nenhum app foi selecionado.</string>
     <string name="android_framework">Framework do Sistema</string>
     <string name="menu_backup_and_restore">Backup…</string>
