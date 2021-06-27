@@ -41,7 +41,7 @@ namespace lspd {
     void *sym_set_table_override = nullptr;
     std::unique_ptr<const SandHook::ElfImg> art_img = nullptr;
 
-    bool findLibArt() {
+    bool FindLibArt() {
         art_img = std::make_unique<SandHook::ElfImg>(kLibArtName);
         if (!art_img->isValid()) return false;
         auto api_level = GetAndroidApiLevel();
@@ -67,10 +67,13 @@ namespace lspd {
     void InitSymbolCache() {
         if (UNLIKELY(sym_initialized)) return;
         LOGD("InitSymbolCache");
-        sym_initialized = findLibArt();
+        sym_initialized =
+                FindLibArt() && (sym_do_dlopen = SandHook::ElfImg("linker").getSymbAddress<void *>(
+                        "__dl__Z9do_dlopenPKciPK17android_dlextinfoPKv"));
         if (UNLIKELY(!sym_initialized)) {
+            sym_initialized = false;
             art_img.reset();
             LOGE("Init symbol cache failed");
         }
     }
-}
+}  // namespace lspd

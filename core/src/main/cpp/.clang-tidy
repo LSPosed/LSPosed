@@ -11,6 +11,7 @@ Checks: >
   clang-analyzer-*,
   llvm-include-order,
   -modernize-use-trailing-return-type,
+  -readability-implicit-bool-conversion,
 
 CheckOptions:
   - key:             readability-identifier-naming.ClassCase
@@ -54,10 +55,6 @@ CheckOptions:
   - key:             readability-identifier-naming.VariableCase
     value:           lower_case
   - key:             readability-identifier-naming.IgnoreMainLikeFunctions
-    value:           1
-  - key:             readability-implicit-bool-conversion.AllowIntegerConditions
-    value:           1
-  - key:             readability-implicit-bool-conversion.AllowPointerConditions
     value:           1
   - key:             readability-braces-around-statements.ShortStatementLines
     value:           1
