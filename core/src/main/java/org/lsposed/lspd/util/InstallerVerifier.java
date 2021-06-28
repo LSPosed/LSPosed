@@ -26,6 +26,7 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.widget.Toast;
 
 import com.android.apksig.ApkVerifier;
@@ -70,6 +71,18 @@ public class InstallerVerifier {
             });
         } catch (Throwable t) {
             Utils.logW("hookXposedInstaller: ", t);
+        }
+    }
+
+    public static void hookXposedInstaller(final ClassLoader classLoader, IBinder binder) {
+        Utils.logI("Found LSPosed Manager, hooking it");
+        try {
+            Class<?> serviceClass = XposedHelpers.findClass("org.lsposed.manager.receivers.LSPManagerServiceClient", classLoader);
+            XposedHelpers.setStaticObjectField(serviceClass, "binder", binder);
+
+            Utils.logI("Hooked LSPosed Manager");
+        } catch (Throwable t) {
+            Utils.logW("Could not hook LSPosed Manager", t);
         }
     }
 }
