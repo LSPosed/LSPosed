@@ -1,0 +1,19 @@
+#!/system/bin/sh
+
+dir=${0%/*}
+if [ -d "$dir/system" ]; then
+  java_options="-Djava.class.path=$dir/system/framework/lspd.dex"
+  os_version=$(getprop ro.build.version.sdk)
+  if [ "$os_version" -eq "27" ]; then
+    java_options="$java_options -Xrunjdwp:transport=dt_android_adb,suspend=n,server=y -Xcompiler-option --debuggable"
+  elif [ "$os_version" -eq "28" ]; then
+    java_options="$java_options -XjdwpProvider:adbconnection -XjdwpOptions:suspend=n,server=y -Xcompiler-option --debuggable"
+  else
+    java_options="$java_options -XjdwpProvider:adbconnection -XjdwpOptions:suspend=n,server=y"
+  fi
+else
+  java_options="-Djava.class.path=$dir/framework/lspd.dex"
+fi
+
+# shellcheck disable=SC2086
+exec /system/bin/app_process $java_options /system/bin --nice-name=lspd org.lsposed.lspd.core.Main "$@" >/dev/null 2>&1

@@ -69,6 +69,7 @@ extract "$ZIPFILE" 'post-fs-data.sh'    "$MODPATH"
 extract "$ZIPFILE" 'service.sh'         "$MODPATH"
 extract "$ZIPFILE" 'uninstall.sh'       "$MODPATH"
 extract "$ZIPFILE" 'framework/lspd.dex' "$MODPATH"
+extract "$ZIPFILE" 'lspd'               "$MODPATH"
 extract "$ZIPFILE" 'manager.apk'        '/data/adb/lspd'
 
 mkdir "$MODPATH/riru"
@@ -99,11 +100,12 @@ if [ "$RIRU_MODULE_DEBUG" = true ]; then
   mv "$MODPATH/riru" "$MODPATH/system"
   mv "$MODPATH/system/lib/liblspd.so" "$MODPATH/system/lib/libriru_lspd.so"
   mv "$MODPATH/system/lib64/liblspd.so" "$MODPATH/system/lib64/libriru_lspd.so"
-  cp -r "$MODPATH/framework" "$MODPATH/system/framework"
+  mv "$MODPATH/framework" "$MODPATH/system/framework"
   mkdir -p "/data/adb/riru/modules/lspd"
 fi
 
 set_perm_recursive "$MODPATH" 0 0 0755 0644
+chmod 0744 "$MODPATH/lspd"
 
 # Lsposed config
 ui_print "- Creating configuration directories"
