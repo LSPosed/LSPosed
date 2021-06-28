@@ -32,11 +32,10 @@ import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.XposedInit;
 
 // when a package is loaded for an existing process, trigger the callbacks as well
-// ed: remove resources related hooking
 public class LoadedApkCstrHooker extends XC_MethodHook {
 
     @Override
-    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+    protected void afterHookedMethod(MethodHookParam param) {
         Hookers.logD("LoadedApk#<init> starts");
 
         try {

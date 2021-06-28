@@ -367,21 +367,13 @@ public final class XposedInit {
             return false;
         }
 
-        // module can load it's own so
-        StringBuilder nativePath = new StringBuilder();
-        // Compatible with applications with 32-bit native libraries only
-        if (android.os.Process.is64Bit()) {
-           for (String i : Build.SUPPORTED_64_BIT_ABIS) {
-                nativePath.append(apk).append("!/lib/").append(i).append(File.pathSeparator);
-           }
-        } else {
-            for (String i : Build.SUPPORTED_32_BIT_ABIS) {
-                nativePath.append(apk).append("!/lib/").append(i).append(File.pathSeparator);
-            }
+        var librarySearchPath = new StringBuilder();
+        var abis = Process.is64Bit() ? Build.SUPPORTED_64_BIT_ABIS : Build.SUPPORTED_32_BIT_ABIS;
+        for (String abi : abis) {
+            librarySearchPath.append(apk).append("!/lib/").append(abi).append(File.pathSeparator);
         }
-        // Log.d(TAG, "Allowed native path" + nativePath.toString());
         ClassLoader initLoader = XposedInit.class.getClassLoader();
-        ClassLoader mcl = new DelegateLastClassLoader(apk, nativePath.toString(), initLoader);
+        ClassLoader mcl = new DelegateLastClassLoader(apk, librarySearchPath.toString(), initLoader);
 
         try {
             if (mcl.loadClass(XposedBridge.class.getName()).getClassLoader() != initLoader) {

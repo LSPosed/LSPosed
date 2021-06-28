@@ -22,8 +22,7 @@ package org.lsposed.lspd.yahfa.dexmaker;
 
 import org.lsposed.lspd.core.yahfa.HookMain;
 import org.lsposed.lspd.nativebridge.Yahfa;
-import org.lsposed.lspd.util.Logger;
-import org.lsposed.lspd.util.ProxyClassLoader;
+import org.lsposed.lspd.util.Utils;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
@@ -57,7 +56,6 @@ public class HookerDexMaker {
 
     private Executable mMember;
     private XposedBridge.AdditionalHookInfo mHookInfo;
-    private ClassLoader mAppClassLoader;
     private LspHooker mHooker;
 
     private static Class<?>[] getParameterTypes(Executable method, boolean isStatic) {
@@ -87,8 +85,7 @@ public class HookerDexMaker {
         return descriptors;
     }
 
-    public void start(Executable member, XposedBridge.AdditionalHookInfo hookInfo,
-                      ClassLoader appClassLoader) throws Exception {
+    public void start(Executable member, XposedBridge.AdditionalHookInfo hookInfo) throws Exception {
         if (member instanceof Method) {
             Method method = (Method) member;
             mReturnType = method.getReturnType();
@@ -100,22 +97,15 @@ public class HookerDexMaker {
         }
         mMember = member;
         mHookInfo = hookInfo;
-        if (appClassLoader == null
-                || appClassLoader.getClass().getName().equals("java.lang.BootClassLoader")) {
-            mAppClassLoader = getClass().getClassLoader();
-        } else {
-            mAppClassLoader = appClassLoader;
-            mAppClassLoader = new ProxyClassLoader(mAppClassLoader, getClass().getClassLoader());
-        }
 
         long startTime = System.nanoTime();
         doMake(member instanceof Constructor ? "constructor" : member.getName());
         long endTime = System.nanoTime();
-        Logger.d("Hook time: " + (endTime - startTime) / 1e6 + "ms");
+        Utils.logD("Hook time: " + (endTime - startTime) / 1e6 + "ms");
     }
 
     private void doMake(String methodName) throws Exception {
-        Class<?> hookClass = Yahfa.buildHooker(mAppClassLoader, getDescriptor(mReturnType), getDescriptors(mActualParameterTypes), methodName);
+        Class<?> hookClass = Yahfa.buildHooker(LspHooker.class.getClassLoader(), getDescriptor(mReturnType), getDescriptors(mActualParameterTypes), methodName);
         // Execute our newly-generated code in-process.
         Method backupMethod = hookClass.getMethod(METHOD_NAME_BACKUP, mActualParameterTypes);
         mHooker = new LspHooker(mHookInfo, mMember, backupMethod);
