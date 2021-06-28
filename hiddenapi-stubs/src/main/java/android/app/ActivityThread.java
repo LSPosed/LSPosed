@@ -34,6 +34,10 @@ public final class ActivityThread {
 		throw new UnsupportedOperationException("STUB");
 	}
 
+	public static ActivityThread systemMain() {
+		throw new UnsupportedOperationException("STUB");
+	}
+
 	private class ApplicationThread extends IApplicationThread.Stub{
 		@Override
 		public IBinder asBinder() {

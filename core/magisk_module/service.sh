@@ -19,5 +19,6 @@
 # Copyright (C) 2021 LSPosed Contributors
 #
 
+MODDIR=${0%/*}
 # post-fs-data.sh may be blocked by other modules. retry to start this
-/system/bin/app_process -Djava.class.path=$(magisk --path)/.magisk/modules/riru_lsposed/framework/lspd.dex /system/bin --nice-name=lspd org.lsposed.lspd.core.Main --from-service >/dev/null 2>&1
+"$MODDIR/lspd" --from-service

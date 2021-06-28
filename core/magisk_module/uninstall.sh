@@ -16,9 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
 #
-# Copyright (C) 2020 EdXposed Contributors
 # Copyright (C) 2021 LSPosed Contributors
 #
 
-MODDIR=${0%/*}
 rm -rf /data/adb/lspd

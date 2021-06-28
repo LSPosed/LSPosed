@@ -135,4 +135,4 @@ if [ ! -z "${MISC_PATH}" ]; then
   start_log_catcher all "LSPosed:V XSharedPreferences:V LSPosed-Bridge:V LSPosedManager:V LSPosedService:V *:F" true ${LOG_VERBOSE}
 fi
 
-/system/bin/app_process -Djava.class.path=$(magisk --path)/.magisk/modules/riru_lsposed/framework/lspd.dex /system/bin --nice-name=lspd org.lsposed.lspd.core.Main >/dev/null 2>&1
+"$MODDIR/lspd"

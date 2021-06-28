@@ -19,6 +19,7 @@
 
 package org.lsposed.lspd.service;
 
+import android.app.ActivityThread;
 import android.content.Context;
 import android.ddm.DdmHandleAppName;
 import android.os.IBinder;
@@ -38,6 +39,7 @@ public class ServiceManager {
     private static LSPApplicationService applicationService = null;
     private static LSPManagerService managerService = null;
     private static LSPSystemServerService systemServerService = null;
+    private static Context systemContext = null;
     public static final String TAG = "LSPosedService";
 
     private static void waitSystemService(String name) {
@@ -60,9 +62,6 @@ public class ServiceManager {
         if (!ConfigManager.getInstance().tryLock()) System.exit(0);
 
         for (String arg : args) {
-            if (arg.equals("--debug")) {
-                DdmHandleAppName.setAppName("lspd", 0);
-            }
             if (arg.equals("--from-service")) {
                 Log.w(TAG, "LSPosed daemon is not started properly. Try for a late start...");
             }
@@ -85,6 +84,8 @@ public class ServiceManager {
         systemServerService.putBinderForSystemServer();
 
         android.os.Process.killProcess(android.system.Os.getppid());
+
+        createSystemContext();
 
         waitSystemService("package");
         waitSystemService("activity");
@@ -150,5 +151,16 @@ public class ServiceManager {
 
     public static boolean systemServerRequested() {
         return systemServerService.systemServerRequested();
+    }
+
+    private static void createSystemContext() {
+        ActivityThread activityThread = ActivityThread.systemMain();
+        systemContext = activityThread.getSystemContext();
+        systemContext.setTheme(android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
+        DdmHandleAppName.setAppName("lspd", 0);
+    }
+
+    public static Context getSystemContext() {
+        return systemContext;
     }
 }
