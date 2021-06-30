@@ -25,6 +25,7 @@ import android.ddm.DdmHandleAppName;
 import android.os.IBinder;
 import android.os.IServiceManager;
 import android.os.Looper;
+import android.os.StrictMode;
 import android.util.Log;
 
 import com.android.internal.os.BinderInternal;
@@ -158,6 +159,9 @@ public class ServiceManager {
         systemContext = activityThread.getSystemContext();
         systemContext.setTheme(android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
         DdmHandleAppName.setAppName("lspd", 0);
+        var vmPolicy = new StrictMode.VmPolicy.Builder();
+        if (BuildConfig.DEBUG) vmPolicy.detectAll().penaltyLog();
+        StrictMode.setVmPolicy(vmPolicy.build());
     }
 
     public static Context getSystemContext() {
