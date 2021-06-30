@@ -42,14 +42,17 @@ import android.util.Pair;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.lsposed.lspd.BuildConfig;
 import org.lsposed.lspd.models.Application;
+import org.lsposed.lspd.service.Module;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.nio.file.Files;
@@ -61,6 +64,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -184,10 +188,20 @@ public class ConfigManager {
             "user_id integer NOT NULL," +
             "PRIMARY KEY (mid, app_pkg_name, user_id)" +
             ");");
+    private static final SQLiteStatement createConfigTable = db.compileStatement("CREATE TABLE IF NOT EXISTS config (" +
+            "module_pkg_name text NOT NULL," +
+            "user_id integer NOT NULL," +
+            "`group` text NOT NULL," +
+            "`key` text NOT NULL," +
+            "data blob NOT NULL," +
+            "PRIMARY KEY (module_pkg_name, user_id)" +
+            ");");
 
-    private final Map<ProcessScope, Map<String, String>> cachedScope = new ConcurrentHashMap<>();
+    private final Map<ProcessScope, List<Module>> cachedScope = new ConcurrentHashMap<>();
 
     private final Map<Integer, String> cachedModule = new ConcurrentHashMap<>();
+
+    private final Map<Pair<String, Integer>, Map<String, ConcurrentHashMap<String, Object>>> cachedConfig = new ConcurrentHashMap<>();
 
     private void updateCaches(boolean sync) {
         synchronized (this) {
@@ -230,13 +244,17 @@ public class ConfigManager {
         }
     }
 
-    public Map<String, String> getModulesForSystemServer() {
-        HashMap<String, String> modules = new HashMap<>();
+    public List<Module> getModulesForSystemServer() {
+        List<Module> modules = new LinkedList<>();
         try (Cursor cursor = db.query("scope INNER JOIN modules ON scope.mid = modules.mid", new String[]{"module_pkg_name", "apk_path"}, "app_pkg_name=? AND enabled=1", new String[]{"android"}, null, null, null)) {
             int apkPathIdx = cursor.getColumnIndex("apk_path");
             int pkgNameIdx = cursor.getColumnIndex("module_pkg_name");
             while (cursor.moveToNext()) {
-                modules.put(cursor.getString(pkgNameIdx), cursor.getString(apkPathIdx));
+                var module = new Module();
+                module.name = cursor.getString(pkgNameIdx);
+                module.apk = cursor.getString(apkPathIdx);
+                module.config = null;
+                modules.add(module);
             }
         }
         return modules;
@@ -343,6 +361,7 @@ public class ConfigManager {
     private void createTables() {
         createModulesTable.execute();
         createScopeTable.execute();
+        createConfigTable.execute();
     }
 
     private List<ProcessScope> getAssociatedProcesses(Application app) throws RemoteException {
@@ -352,6 +371,52 @@ public class ConfigManager {
             processes.add(new ProcessScope(processName, result.second));
         }
         return processes;
+    }
+
+    private @NonNull
+    Map<String, ConcurrentHashMap<String, Object>> fetchModuleConfig(String name, int user_id) {
+        var config = new ConcurrentHashMap<String, ConcurrentHashMap<String, Object>>();
+
+        try (Cursor cursor = db.query("config", new String[]{"group", "key", "data"},
+                "module_pkg_name = ? and user_id = ?", new String[]{name, String.valueOf(user_id)}, null, null, null)) {
+            if (cursor == null) {
+                Log.e(TAG, "db cache failed");
+                return config;
+            }
+            int groupIdx = cursor.getColumnIndex("group");
+            int keyIdx = cursor.getColumnIndex("key");
+            int dataIdx = cursor.getColumnIndex("data");
+            while (cursor.moveToNext()) {
+                var group = cursor.getString(groupIdx);
+                var key = cursor.getString(keyIdx);
+                var data = cursor.getBlob(dataIdx);
+                var object = SerializationUtils.deserialize(data);
+                if (object == null) continue;
+                config.computeIfAbsent(group, g -> new ConcurrentHashMap<>()).put(key, object);
+            }
+        }
+        return config;
+    }
+
+    public void updateModulePrefs(String moduleName, int userId, String group, String key, Object value) {
+        var config = cachedConfig.computeIfAbsent(new Pair<>(moduleName, userId), module -> fetchModuleConfig(module.first, module.second));
+        var prefs = config.computeIfAbsent(group, g -> new ConcurrentHashMap<>());
+        if (value instanceof Serializable) {
+            prefs.put(key, value);
+            var values = new ContentValues();
+            values.put("group", group);
+            values.put("key", key);
+            values.put("value", SerializationUtils.serialize((Serializable) value));
+            db.updateWithOnConflict("config", values, "module_pkg_name=? and user_id=?", new String[]{moduleName, String.valueOf(userId)}, SQLiteDatabase.CONFLICT_REPLACE);
+        } else {
+            prefs.remove(key);
+            db.delete("config", "module_pkg_name=? and user_id=?", new String[]{moduleName, String.valueOf(userId)});
+        }
+    }
+
+    public ConcurrentHashMap<String, Object> getModulePrefs(String moduleName, int userId, String group) {
+        var config = cachedConfig.computeIfAbsent(new Pair<>(moduleName, userId), module -> fetchModuleConfig(module.first, module.second));
+        return config.getOrDefault(group, null);
     }
 
     private synchronized void cacheModules() {
@@ -440,12 +505,16 @@ public class ConfigManager {
                         continue;
                     }
                     for (ProcessScope processScope : processesScope) {
-                        cachedScope.computeIfAbsent(processScope, ignored -> new HashMap<>()).put(module_pkg, apk_path);
+                        var module = new Module();
+                        module.name = module_pkg;
+                        module.apk = apk_path;
+                        module.config = null;
+                        cachedScope.computeIfAbsent(processScope, ignored -> new LinkedList<>()).add(module);
                         if (module_pkg.equals(app.packageName)) {
                             var appId = processScope.uid % PER_USER_RANGE;
                             for (var user : UserService.getUsers()) {
                                 cachedScope.computeIfAbsent(new ProcessScope(processScope.processName, user.id * PER_USER_RANGE + appId),
-                                        ignored -> new HashMap<>()).put(module_pkg, apk_path);
+                                        ignored -> new LinkedList<>()).add(module);
                             }
                         }
                     }
@@ -459,15 +528,15 @@ public class ConfigManager {
             }
         }
         Log.d(TAG, "cached Scope");
-        cachedScope.forEach((ps, module) -> {
+        cachedScope.forEach((ps, modules) -> {
             Log.d(TAG, ps.processName + "/" + ps.uid);
-            module.forEach((pkg_name, apk_path) -> Log.d(TAG, "\t" + pkg_name));
+            modules.forEach(module -> Log.d(TAG, "\t" + module.name));
         });
     }
 
     // This is called when a new process created, use the cached result
-    public Map<String, String> getModulesForProcess(String processName, int uid) {
-        return isManager(uid) ? Collections.emptyMap() : cachedScope.getOrDefault(new ProcessScope(processName, uid), Collections.emptyMap());
+    public List<Module> getModulesForProcess(String processName, int uid) {
+        return isManager(uid) ? Collections.emptyList() : cachedScope.getOrDefault(new ProcessScope(processName, uid), Collections.emptyList());
     }
 
     // This is called when a new process created, use the cached result
@@ -759,8 +828,8 @@ public class ConfigManager {
         return cachedModule.containsKey(uid % PER_USER_RANGE);
     }
 
-    public boolean isModule(String packageName) {
-        return cachedModule.containsValue(packageName);
+    public boolean isModule(int uid, String name) {
+        return name.equals(cachedModule.getOrDefault(uid % PER_USER_RANGE, null));
     }
 
     private void recursivelyChown(File file, int uid, int gid) throws ErrnoException {

@@ -26,7 +26,10 @@ import io.github.xposed.xposedservice.IXposedService;
 
 public class LSPModuleService extends IXposedService.Stub {
 
-    public LSPModuleService() {
+    final private String name;
+
+    public LSPModuleService(String name) {
+        this.name = name;
     }
 
     @Override

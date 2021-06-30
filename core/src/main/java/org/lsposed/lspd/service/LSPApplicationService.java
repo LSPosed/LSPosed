@@ -19,6 +19,7 @@
 
 package org.lsposed.lspd.service;
 
+import android.os.Bundle;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 
 import android.os.IBinder;
@@ -71,7 +72,7 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
     }
 
     @Override
-    public Map<String, String> getModulesList(String processName) throws RemoteException {
+    public List<Module> getModulesList(String processName) throws RemoteException {
         ensureRegistered();
         int callingUid = getCallingUid();
         if (callingUid == 1000 && processName.equals("android")) {
@@ -93,13 +94,18 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
     }
 
     @Override
-    public IBinder requestModuleBinder() throws RemoteException {
+    public Bundle requestRemotePreference(String packageName, int userId, IBinder callback) throws RemoteException {
         ensureRegistered();
-        if (ConfigManager.getInstance().isModule(getCallingUid())) {
-            ConfigManager.getInstance().ensureModulePrefsPermission(getCallingUid());
-            return ServiceManager.getModuleService();
-        }
         return null;
+    }
+
+    @Override
+    public IBinder requestModuleBinder(String name) throws RemoteException {
+        ensureRegistered();
+        if (ConfigManager.getInstance().isModule(getCallingUid(), name)) {
+            ConfigManager.getInstance().ensureModulePrefsPermission(getCallingUid());
+            return ServiceManager.getModuleService(name);
+        } else return null;
     }
 
     @Override
