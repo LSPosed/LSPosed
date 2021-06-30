@@ -22,6 +22,7 @@ package org.lsposed.lspd.service;
 import android.app.ActivityThread;
 import android.content.Context;
 import android.ddm.DdmHandleAppName;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.IServiceManager;
 import android.os.Looper;
@@ -160,7 +161,13 @@ public class ServiceManager {
         systemContext.setTheme(android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
         DdmHandleAppName.setAppName("lspd", 0);
         var vmPolicy = new StrictMode.VmPolicy.Builder();
-        if (BuildConfig.DEBUG) vmPolicy.detectAll().penaltyLog();
+        if (BuildConfig.DEBUG) {
+            vmPolicy.detectAll().penaltyLog();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                vmPolicy.penaltyListener(systemContext.getMainExecutor(),
+                        v -> Log.w(TAG, v.getMessage(), v));
+            }
+        }
         StrictMode.setVmPolicy(vmPolicy.build());
     }
 
