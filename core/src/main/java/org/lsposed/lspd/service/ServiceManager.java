@@ -26,7 +26,9 @@ import android.os.Build;
 import android.os.IBinder;
 import android.os.IServiceManager;
 import android.os.Looper;
+import android.os.Process;
 import android.os.StrictMode;
+import android.system.Os;
 import android.util.Log;
 
 import com.android.internal.os.BinderInternal;
@@ -76,6 +78,7 @@ public class ServiceManager {
             System.exit(1);
         });
 
+        Process.setThreadPriority(Process.THREAD_PRIORITY_FOREGROUND);
         Looper.prepareMainLooper();
         mainService = new LSPosedService();
         moduleService = new LSPModuleService();
@@ -85,7 +88,7 @@ public class ServiceManager {
 
         systemServerService.putBinderForSystemServer();
 
-        android.os.Process.killProcess(android.system.Os.getppid());
+        Process.killProcess(Os.getppid());
 
         createSystemContext();
 
@@ -122,15 +125,8 @@ public class ServiceManager {
             Log.e(TAG, Log.getStackTraceString(e));
         }
 
-        //noinspection InfiniteLoopStatement
-        while (true) {
-            try {
-                Looper.loop();
-            } catch (Throwable e) {
-                Log.i(TAG, "server exited with " + Log.getStackTraceString(e));
-                Log.i(TAG, "restarting");
-            }
-        }
+        Looper.loop();
+        throw new RuntimeException("Main thread loop unexpectedly exited");
     }
 
     public static LSPModuleService getModuleService() {
