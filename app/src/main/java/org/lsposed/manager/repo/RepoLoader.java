@@ -54,6 +54,9 @@ public class RepoLoader {
     private final List<Listener> listeners = new CopyOnWriteArrayList<>();
     private boolean isLoading = false;
     private boolean repoLoaded = false;
+    private static final String originRepoUrl = "https://modules.lsposed.org/";
+    private static final String backupRepoUrl = "https://cdn.jsdelivr.net/gh/Xposed-Modules-Repo/modules@gh-pages/";
+    private static String repoUrl = originRepoUrl;
 
     public boolean isRepoLoaded() {
         return repoLoaded;
@@ -75,7 +78,7 @@ public class RepoLoader {
             isLoading = true;
         }
         App.getOkHttpClient().newCall(new Request.Builder()
-                .url("https://modules.lsposed.org/modules.json")
+                .url(repoUrl + "modules.json")
                 .build()).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
@@ -85,6 +88,10 @@ public class RepoLoader {
                 }
                 synchronized (this) {
                     isLoading = false;
+                    if (!repoUrl.equals(backupRepoUrl)) {
+                        repoUrl = backupRepoUrl;
+                        loadRemoteData();
+                    }
                 }
             }
 
@@ -124,13 +131,18 @@ public class RepoLoader {
 
     public void loadRemoteReleases(String packageName) {
         App.getOkHttpClient().newCall(new Request.Builder()
-                .url(String.format("https://modules.lsposed.org/module/%s.json", packageName))
+                .url(String.format(repoUrl + "module/%s.json", packageName))
                 .build()).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 Log.e(App.TAG, Log.getStackTraceString(e));
-                for (Listener listener : listeners) {
-                    listener.onThrowable(e);
+                if (!repoUrl.equals(backupRepoUrl)) {
+                    repoUrl = backupRepoUrl;
+                    loadRemoteReleases(packageName);
+                } else {
+                    for (Listener listener : listeners) {
+                        listener.onThrowable(e);
+                    }
                 }
             }
 
