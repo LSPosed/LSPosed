@@ -101,7 +101,29 @@ public class ConfigManager {
     private static final File modulesLog = new File(logPath, "modules.log");
     private static final File oldModulesLog = new File(logPath, "modules.old.log");
     private static final File verboseLogPath = new File(logPath, "all.log");
-    private static FileLock locker = null;
+
+    static class FileLocker {
+        private final FileChannel lockChannel;
+        private final FileLock locker;
+
+        FileLocker(@NonNull FileChannel lockChannel) throws IOException {
+            this.lockChannel = lockChannel;
+            this.locker = lockChannel.tryLock();
+        }
+
+        boolean isValid() {
+            return this.locker != null && this.locker.isValid();
+        }
+
+        @Override
+        protected void finalize() throws Throwable {
+            this.locker.release();
+            this.lockChannel.close();
+        }
+    }
+
+    static FileLocker locker = null;
+
 
     static {
         try {
@@ -187,8 +209,8 @@ public class ConfigManager {
 
         try {
             var lockChannel = FileChannel.open(lockPath.toPath(), openOptions, permissions);
-            locker = lockChannel.tryLock();
-            return locker != null && locker.isValid();
+            locker = new FileLocker(lockChannel);
+            return locker.isValid();
         } catch (Throwable e) {
             return false;
         }
