@@ -363,7 +363,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             String pkgName = module.getName();
             latestVersion.put(pkgName, new Pair<>(verCode, verName));
         }
-        adapters.forEach(ModuleAdapter::notifyDataSetChanged);
+        requireActivity().runOnUiThread(() -> adapters.forEach(ModuleAdapter::notifyDataSetChanged));
     }
 
     public static class ModuleListFragment extends Fragment {
