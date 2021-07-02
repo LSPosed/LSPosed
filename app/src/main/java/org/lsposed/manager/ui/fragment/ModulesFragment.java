@@ -23,6 +23,7 @@ import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
 import static androidx.recyclerview.widget.RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -122,7 +123,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        moduleUtil.addListener(this);
         searchListener = new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -137,7 +137,19 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             }
         };
         RepoLoader.getInstance().addListener(this);
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        moduleUtil.addListener(this);
         repoLoaded();
+    }
+
+    @Override
+    public void onDetach() {
+        moduleUtil.removeListener(this);
+        super.onDetach();
     }
 
     @Nullable
