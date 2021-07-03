@@ -103,6 +103,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     private static final Handler workHandler;
     private static final PackageManager pm = App.getInstance().getPackageManager();
     private static final ModuleUtil moduleUtil = ModuleUtil.getInstance();
+    private static final RepoLoader repoLoader = RepoLoader.getInstance();
 
     protected FragmentPagerBinding binding;
     protected SearchView searchView;
@@ -136,19 +137,20 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 return false;
             }
         };
-        RepoLoader.getInstance().addListener(this);
     }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         moduleUtil.addListener(this);
+        repoLoader.addListener(this);
         repoLoaded();
     }
 
     @Override
     public void onDetach() {
         moduleUtil.removeListener(this);
+        repoLoader.removeListener(this);
         super.onDetach();
     }
 
