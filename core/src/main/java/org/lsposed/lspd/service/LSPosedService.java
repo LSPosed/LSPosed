@@ -113,8 +113,8 @@ public class LSPosedService extends ILSPosedService.Stub {
                 }
                 // when package is changed, we may need to update cache (module cache or process cache)
                 if (isXposedModule) {
-                    ConfigManager.getInstance().updateModuleApkPath(moduleName, applicationInfo.sourceDir);
-                    Log.d(TAG, "Updated module apk path: " + moduleName);
+                    var ret = ConfigManager.getInstance().updateModuleApkPath(moduleName, applicationInfo);
+                    if (ret) Log.i(TAG, "Updated module apk path: " + moduleName);
                 } else if (ConfigManager.getInstance().isUidHooked(uid)) {
                     // it will automatically remove obsolete app from database
                     ConfigManager.getInstance().updateAppCache();
