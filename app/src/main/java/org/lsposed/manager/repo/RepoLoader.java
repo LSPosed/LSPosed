@@ -182,7 +182,7 @@ public class RepoLoader {
     }
 
     public OnlineModule getOnlineModule(String packageName) {
-        return onlineModules.get(packageName);
+        return packageName == null ? null : onlineModules.get(packageName);
     }
 
     public Collection<OnlineModule> getOnlineModules() {

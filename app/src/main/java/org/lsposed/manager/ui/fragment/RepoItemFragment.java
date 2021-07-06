@@ -138,9 +138,10 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
         RepoLoader.getInstance().addListener(this);
         super.onCreate(savedInstanceState);
 
-        String modulePackageName = getArguments().getString("modulePackageName");
+        String modulePackageName = getArguments() == null ? null : getArguments().getString("modulePackageName");
         module = RepoLoader.getInstance().getOnlineModule(modulePackageName);
-        if (module == null) getNavController().navigate(R.id.action_repo_fragment);
+        if (module == null)
+            getNavController().navigate(R.id.action_repo_item_fragment_to_repo_fragment);
     }
 
     private void renderGithubMarkdown(WebView view, String text) {
