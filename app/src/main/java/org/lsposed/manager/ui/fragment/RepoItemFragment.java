@@ -106,8 +106,9 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentPagerBinding.inflate(getLayoutInflater(), container, false);
-        String modulePackageName = getArguments().getString("modulePackageName");
-        String moduleName = getArguments().getString("moduleName");
+        if (module == null) return binding.getRoot();
+        String modulePackageName = module.getName();
+        String moduleName = module.getDescription();
         binding.getRoot().bringChildToFront(binding.appBar);
         setupToolbar(binding.toolbar, moduleName, R.menu.menu_repo_item);
         binding.toolbar.setSubtitle(modulePackageName);
@@ -139,7 +140,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
 
         String modulePackageName = getArguments().getString("modulePackageName");
         module = RepoLoader.getInstance().getOnlineModule(modulePackageName);
-
+        if (module == null) getNavController().navigate(R.id.action_repo_fragment);
     }
 
     private void renderGithubMarkdown(WebView view, String text) {
