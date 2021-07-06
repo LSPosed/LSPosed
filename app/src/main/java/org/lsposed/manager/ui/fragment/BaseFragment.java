@@ -35,16 +35,7 @@ public class BaseFragment extends Fragment {
     }
 
     public NavController getNavController() {
-        View view = getView();
-        if (view == null) {
-            return NavHostFragment.findNavController(this);
-        }
-        View tabletFragmentContainer = view.findViewById(R.id.tablet_nav_container);
-        if (tabletFragmentContainer != null) {
-            return Navigation.findNavController(tabletFragmentContainer);
-        } else {
-            return Navigation.findNavController(view);
-        }
+        return NavHostFragment.findNavController(this);
     }
 
     public void setupToolbar(Toolbar toolbar, int title) {

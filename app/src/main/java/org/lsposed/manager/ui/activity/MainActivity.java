@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
@@ -84,6 +85,15 @@ public class MainActivity extends BaseActivity {
             return;
         }
         NavController navController = navHostFragment.getNavController();
+        if (binding.homeFragment != null) {
+            navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+                if (destination.getId() == R.id.main_fragment) {
+                    binding.navHostFragment.setVisibility(View.GONE);
+                } else {
+                    binding.navHostFragment.setVisibility(View.VISIBLE);
+                }
+            });
+        }
         if (intent.getAction() != null && intent.getAction().equals("android.intent.action.APPLICATION_PREFERENCES")) {
             navController.navigate(R.id.action_settings_fragment);
         } else if (intent.hasExtra("modulePackageName")) {
