@@ -76,7 +76,7 @@ android {
         versionName = verName
         resourceConfigurations += arrayOf(
             "en", "zh-rCN", "zh-rTW", "zh-rHK", "ru", "uk", "nl", "ko", "fr", "de",
-            "it", "pt", "es",
+            "it", "pt", "es", "jp",
         )
         buildConfigField("long", "BUILD_TIME", Instant.now().epochSecond.toString())
     }
