@@ -99,7 +99,7 @@
     <string name="compile_speed">最適化</string>
     <string name="compile_speed_msg">最適化中…</string>
     <string name="compile_done">最適化を完了しました。</string>
-    <string name="app_launch">Launch it</string>
+    <string name="app_launch">起動する</string>
     <string name="compile_failed">最適化に失敗 もしくは 戻り値が空です。</string>
     <string name="compile_failed_with_info">最適化に失敗: </string>
     <string name="sort_by_name">アプリ名でソート</string>
@@ -120,7 +120,7 @@
     <string name="app_description">%1$s\nバージョン %2$s</string>
     <string name="use_recommended">お勧め</string>
     <string name="no_scope_selected_has_recommended">アプリが未選択です。お勧めアプリを選択しますか?</string>
-    <string name="use_recommended_message">Select recommended apps?</string>
+    <string name="use_recommended_message">おすすめアプリを選択?</string>
     <string name="requested_by_module">お勧め</string>
     <string name="update_available">アップデート可能: %1$s</string>
     <string name="module_disabled_no_selection">アプリが未選択のため モジュール %s は無効化されました。</string>
@@ -187,7 +187,7 @@
     <string name="verbose_log_not_avaliable">詳細ログが存在しません。ログ出力有効化に再起動を行っていない場合、再起動して下さい。</string>
     <string name="NotInstall">未インストール</string>
     <string name="NotInstallDetail">LSPosed が未インストールです</string>
-    <string name="translators"><![CDATA[<a href="https://github.com/LSPosed/LSPosed">LSPosed</a>]]></string>
+    <string name="translators"><![CDATA[<a href="https://github.com/yoshi818">yoshi818</a>]]></string>
     <string name="copy_toast_msg">複写済</string>
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nリストは空です</string>
     <string name="add_module_to_user">ユーザへモジュールを追加</string>
