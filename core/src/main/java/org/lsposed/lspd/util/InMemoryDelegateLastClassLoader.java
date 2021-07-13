@@ -2,10 +2,13 @@ package org.lsposed.lspd.util;
 
 import static de.robv.android.xposed.XposedBridge.TAG;
 
+import android.os.Build;
 import android.system.ErrnoException;
 import android.system.Os;
 import android.system.OsConstants;
 import android.util.Log;
+
+import androidx.annotation.RequiresApi;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,7 +29,7 @@ import hidden.ByteBufferDexClassLoader;
 public final class InMemoryDelegateLastClassLoader extends ByteBufferDexClassLoader {
     private static final String zipSeparator = "!/";
     private final String apk;
-    private final List<File> nativeLibraryDirs;
+    private final List<File> nativeLibraryDirs = new ArrayList<>();
 
     private static List<File> splitPaths(String searchPath) {
         var result = new ArrayList<File>();
@@ -38,12 +41,24 @@ public final class InMemoryDelegateLastClassLoader extends ByteBufferDexClassLoa
     }
 
     private InMemoryDelegateLastClassLoader(ByteBuffer[] dexBuffers,
-                                            String librarySearchPath,
                                             ClassLoader parent,
                                             String apk) {
         super(dexBuffers, parent);
         this.apk = apk;
-        nativeLibraryDirs = new ArrayList<>(splitPaths(librarySearchPath));
+    }
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private InMemoryDelegateLastClassLoader(ByteBuffer[] dexBuffers,
+                                            String librarySearchPath,
+                                            ClassLoader parent,
+                                            String apk) {
+        super(dexBuffers, librarySearchPath, parent);
+        initNativeLibraryDirs(librarySearchPath);
+        this.apk = apk;
+    }
+
+    private void initNativeLibraryDirs(String librarySearchPath) {
+        nativeLibraryDirs.addAll(splitPaths(librarySearchPath));
         nativeLibraryDirs.addAll(splitPaths(System.getProperty("java.library.path")));
     }
 
@@ -157,7 +172,14 @@ public final class InMemoryDelegateLastClassLoader extends ByteBufferDexClassLoa
             Log.e(TAG, "Can not open " + apk, e);
         }
         var dexBuffers = new ByteBuffer[byteBuffers.size()];
-        return new InMemoryDelegateLastClassLoader(byteBuffers.toArray(dexBuffers),
-                librarySearchPath, parent, apk.getAbsolutePath());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            return new InMemoryDelegateLastClassLoader(byteBuffers.toArray(dexBuffers),
+                    librarySearchPath, parent, apk.getAbsolutePath());
+        } else {
+            var cl = new InMemoryDelegateLastClassLoader(byteBuffers.toArray(dexBuffers),
+                    parent, apk.getAbsolutePath());
+            cl.initNativeLibraryDirs(librarySearchPath);
+            return cl;
+        }
     }
 }

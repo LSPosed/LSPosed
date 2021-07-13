@@ -19,6 +19,10 @@ public class BaseDexClassLoader extends ClassLoader {
         throw new RuntimeException("Stub!");
     }
 
+    public BaseDexClassLoader(ByteBuffer[] dexFiles, String librarySearchPath, ClassLoader parent) {
+        throw new RuntimeException("Stub!");
+    }
+
     protected Class<?> findClass(String name) throws ClassNotFoundException {
         throw new RuntimeException("Stub!");
     }
