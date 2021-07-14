@@ -8,6 +8,7 @@ import android.system.Os;
 import android.system.OsConstants;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import java.io.File;
@@ -16,6 +17,7 @@ import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
@@ -162,6 +164,15 @@ public final class InMemoryDelegateLastClassLoader extends ByteBufferDexClassLoa
                 findResources(name),
                 getParent() == null ? null : getParent().getResources(name)};
         return new CompoundEnumeration<>(resources);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "LspModuleClassLoader[" +
+                "module=" + apk + "," +
+                "nativeLibraryDirs=" + Arrays.toString(nativeLibraryDirs.toArray()) + "," +
+                super.toString() + "]";
     }
 
     public static InMemoryDelegateLastClassLoader loadApk(File apk,
