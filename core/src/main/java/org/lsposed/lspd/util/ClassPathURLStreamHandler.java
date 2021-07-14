@@ -14,16 +14,16 @@ import java.util.zip.ZipEntry;
 
 import sun.net.www.ParseUtil;
 
-public final class ClassPathURLStreamHandler extends Handler {
+final class ClassPathURLStreamHandler extends Handler {
     private final String fileUri;
     private final JarFile jarFile;
 
-    public ClassPathURLStreamHandler(String jarFileName) throws IOException {
+    ClassPathURLStreamHandler(String jarFileName) throws IOException {
         jarFile = new JarFile(jarFileName);
         fileUri = new File(jarFileName).toURI().toString();
     }
 
-    public URL getEntryUrlOrNull(String entryName) {
+    URL getEntryUrlOrNull(String entryName) {
         if (jarFile.getEntry(entryName) != null) {
             try {
                 String encodedName = ParseUtil.encodePath(entryName, false);
@@ -40,7 +40,12 @@ public final class ClassPathURLStreamHandler extends Handler {
         return new ClassPathURLConnection(url);
     }
 
-    private class ClassPathURLConnection extends JarURLConnection {
+    @Override
+    protected void finalize() throws Throwable {
+        jarFile.close();
+    }
+
+    private final class ClassPathURLConnection extends JarURLConnection {
         private JarFile connectionJarFile = null;
         private ZipEntry jarEntry = null;
         private InputStream jarInput = null;
@@ -48,6 +53,12 @@ public final class ClassPathURLStreamHandler extends Handler {
 
         private ClassPathURLConnection(URL url) throws MalformedURLException {
             super(url);
+            setUseCaches(false);
+        }
+
+        @Override
+        public void setUseCaches(boolean usecaches) {
+            super.setUseCaches(false);
         }
 
         @Override
