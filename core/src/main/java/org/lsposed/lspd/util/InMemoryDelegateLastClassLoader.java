@@ -115,6 +115,18 @@ public final class InMemoryDelegateLastClassLoader extends ByteBufferDexClassLoa
     }
 
     @Override
+    public String getLdLibraryPath() {
+        var result = new StringBuilder();
+        for (var directory : nativeLibraryDirs) {
+            if (result.length() > 0) {
+                result.append(':');
+            }
+            result.append(directory);
+        }
+        return result.toString();
+    }
+
+    @Override
     protected URL findResource(String name) {
         try {
             var urlHandler = new ClassPathURLStreamHandler(apk);
@@ -152,12 +164,14 @@ public final class InMemoryDelegateLastClassLoader extends ByteBufferDexClassLoa
         return new CompoundEnumeration<>(resources);
     }
 
-    public static InMemoryDelegateLastClassLoader loadApk(File apk, String librarySearchPath, ClassLoader parent) {
+    public static InMemoryDelegateLastClassLoader loadApk(File apk,
+                                                          String librarySearchPath,
+                                                          ClassLoader parent) {
         var byteBuffers = new ArrayList<ByteBuffer>();
         try (var apkFile = new ZipFile(apk)) {
-            int secondaryNumber = 2;
+            int secondary = 2;
             for (var dexFile = apkFile.getEntry("classes.dex"); dexFile != null;
-                 dexFile = apkFile.getEntry("classes" + secondaryNumber + ".dex"), secondaryNumber++) {
+                 dexFile = apkFile.getEntry("classes" + secondary + ".dex"), secondary++) {
                 try (var in = apkFile.getInputStream(dexFile)) {
                     var byteBuffer = ByteBuffer.allocate(in.available());
                     byteBuffer.mark();
