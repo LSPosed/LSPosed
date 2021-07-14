@@ -12,4 +12,8 @@ public class ByteBufferDexClassLoader extends BaseDexClassLoader {
     public ByteBufferDexClassLoader(ByteBuffer[] dexFiles, String librarySearchPath, ClassLoader parent) {
         super(dexFiles, librarySearchPath, parent);
     }
+
+    public String getLdLibraryPath() {
+        return super.getLdLibraryPath();
+    }
 }
