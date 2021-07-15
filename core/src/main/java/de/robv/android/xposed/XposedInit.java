@@ -46,7 +46,7 @@ import android.util.Log;
 
 import org.lsposed.lspd.nativebridge.NativeAPI;
 import org.lsposed.lspd.nativebridge.ResourcesHook;
-import org.lsposed.lspd.util.InMemoryDelegateLastClassLoader;
+import org.lsposed.lspd.util.LspModuleClassLoader;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -60,7 +60,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import dalvik.system.DelegateLastClassLoader;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XC_InitZygote;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
@@ -374,7 +373,7 @@ public final class XposedInit {
             librarySearchPath.append(apk).append("!/lib/").append(abi).append(File.pathSeparator);
         }
         ClassLoader initLoader = XposedInit.class.getClassLoader();
-        ClassLoader mcl = InMemoryDelegateLastClassLoader.loadApk(new File(apk), librarySearchPath.toString(), initLoader);
+        ClassLoader mcl = LspModuleClassLoader.loadApk(new File(apk), librarySearchPath.toString(), initLoader);
 
         try {
             if (mcl.loadClass(XposedBridge.class.getName()).getClassLoader() != initLoader) {

@@ -21,10 +21,10 @@ import com.android.build.api.component.analytics.AnalyticsEnabledApplicationVari
 import com.android.build.api.variant.impl.ApplicationVariantImpl
 import com.android.build.gradle.BaseExtension
 import com.android.ide.common.signing.KeystoreHelper
+import org.apache.commons.codec.binary.Hex
 import org.apache.tools.ant.filters.FixCrLfFilter
 import org.apache.tools.ant.filters.ReplaceTokens
 import org.gradle.internal.os.OperatingSystem
-import org.jetbrains.kotlin.daemon.common.toHexString
 import java.io.PrintStream
 import java.security.MessageDigest
 
@@ -48,7 +48,7 @@ val apiCode: Int by rootProject.extra
 val androidTargetSdkVersion: Int by rootProject.extra
 val androidMinSdkVersion: Int by rootProject.extra
 val androidBuildToolsVersion: String by rootProject.extra
-val androidCompileSdkVersion: String by rootProject.extra
+val androidCompileSdkVersion: Int by rootProject.extra
 val androidCompileNdkVersion: String by rootProject.extra
 val androidSourceCompatibility: JavaVersion by rootProject.extra
 val androidTargetCompatibility: JavaVersion by rootProject.extra
@@ -71,7 +71,7 @@ dependencies {
 }
 
 android {
-    compileSdkPreview = androidCompileSdkVersion
+    compileSdk = androidCompileSdkVersion
     ndkVersion = androidCompileNdkVersion
     buildToolsVersion = androidBuildToolsVersion
 
@@ -215,7 +215,7 @@ androidComponents.onVariants { v ->
                 file.forEachBlock(4096) { bytes, size ->
                     md.update(bytes, 0, size)
                 }
-                file(file.path + ".sha256").writeText(md.digest().toHexString())
+                file(file.path + ".sha256").writeText(Hex.encodeHexString(md.digest()))
             }
         }
     }
