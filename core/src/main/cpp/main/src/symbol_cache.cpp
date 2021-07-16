@@ -67,9 +67,9 @@ namespace lspd {
     void InitSymbolCache() {
         if (UNLIKELY(sym_initialized)) return;
         LOGD("InitSymbolCache");
-        sym_initialized =
-                FindLibArt() && (sym_do_dlopen = SandHook::ElfImg("linker").getSymbAddress<void *>(
-                        "__dl__Z9do_dlopenPKciPK17android_dlextinfoPKv"));
+        sym_initialized = FindLibArt();
+        sym_do_dlopen = SandHook::ElfImg("linker").getSymbAddress<void *>(
+                        "__dl__Z9do_dlopenPKciPK17android_dlextinfoPKv");
         if (UNLIKELY(!sym_initialized)) {
             sym_initialized = false;
             art_img.reset();
