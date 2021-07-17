@@ -32,8 +32,10 @@ plugins {
     id("com.android.application")
 }
 
-val moduleName = "LSPosed"
+val adb: String = androidComponents.sdkComponents.adb.get().asFile.absolutePath
 val isWindows = OperatingSystem.current().isWindows
+
+val moduleName = "LSPosed"
 val moduleId = "riru_lsposed"
 val authors = "LSPosed Developers"
 
@@ -227,7 +229,6 @@ androidComponents.onVariants { v ->
         from(magiskDir)
     }
 
-    val adb = androidComponents.sdkComponents.adb.get().asFile.absolutePath
     val pushTask = task("push${variantCapped}", Exec::class) {
         dependsOn(zipTask)
         workingDir("${projectDir}/release")
@@ -235,7 +236,6 @@ androidComponents.onVariants { v ->
     }
     val flashTask = task("flash${variantCapped}", Exec::class) {
         dependsOn(pushTask)
-        workingDir("${projectDir}/release")
         commandLine(
             adb, "shell", "su", "-c",
             "magisk --install-module /data/local/tmp/${zipFileName}"
@@ -243,9 +243,23 @@ androidComponents.onVariants { v ->
     }
     task("flashAndReboot${variantCapped}", Exec::class) {
         dependsOn(flashTask)
-        workingDir("${projectDir}/release")
         commandLine(adb, "shell", "reboot")
     }
+}
+
+val killLspd = task("killLspd", Exec::class) {
+    commandLine(adb, "shell", "su", "-c", "killall -w lspd")
+}
+val pushLspd = task("pushLspd", Exec::class) {
+    dependsOn("mergeDexDebug")
+    workingDir("$buildDir/intermediates/dex/debug/mergeDexDebug")
+    commandLine(adb, "push", "classes.dex", "/data/local/tmp/lspd.dex")
+}
+task("reRunLspd", Exec::class) {
+    dependsOn(pushLspd)
+    dependsOn(killLspd)
+    commandLine(adb, "shell", "su", "-c", "sh /data/adb/modules/riru_lsposed/service.sh&")
+    isIgnoreExitValue = true
 }
 
 val generateVersion = task("generateVersion", Copy::class) {

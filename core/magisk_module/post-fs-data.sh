@@ -135,4 +135,5 @@ if [ ! -z "${MISC_PATH}" ]; then
   start_log_catcher all "LSPosed:V XSharedPreferences:V LSPosed-Bridge:V LSPosedManager:V LSPosedService:V *:F" true ${LOG_VERBOSE}
 fi
 
+rm -f "/data/local/tmp/lspd.dex"
 "$MODDIR/lspd"
