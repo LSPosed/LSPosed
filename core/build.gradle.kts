@@ -32,9 +32,6 @@ plugins {
     id("com.android.application")
 }
 
-val adb: String = androidComponents.sdkComponents.adb.get().asFile.absolutePath
-val isWindows = OperatingSystem.current().isWindows
-
 val moduleName = "LSPosed"
 val moduleId = "riru_lsposed"
 val authors = "LSPosed Developers"
@@ -229,6 +226,7 @@ androidComponents.onVariants { v ->
         from(magiskDir)
     }
 
+    val adb: String = androidComponents.sdkComponents.adb.get().asFile.absolutePath
     val pushTask = task("push${variantCapped}", Exec::class) {
         dependsOn(zipTask)
         workingDir("${projectDir}/release")
@@ -247,6 +245,7 @@ androidComponents.onVariants { v ->
     }
 }
 
+val adb: String = androidComponents.sdkComponents.adb.get().asFile.absolutePath
 val killLspd = task("killLspd", Exec::class) {
     commandLine(adb, "shell", "su", "-c", "killall -w lspd")
 }
