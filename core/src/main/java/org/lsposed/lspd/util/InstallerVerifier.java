@@ -38,8 +38,8 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 
 public class InstallerVerifier {
-    public static boolean verifyInstallerSignature(ApplicationInfo appInfo) {
-        ApkVerifier verifier = new ApkVerifier.Builder(new File(appInfo.sourceDir))
+    public static boolean verifyInstallerSignature(String path) {
+        ApkVerifier verifier = new ApkVerifier.Builder(new File(path))
                 .setMinCheckedPlatformVersion(27)
                 .build();
         try {

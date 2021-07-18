@@ -68,12 +68,12 @@ public class LSPApplicationServiceClient extends ApplicationServiceClient {
     }
 
     @Override
-    public IBinder requestManagerBinder(String packageName) {
+    public boolean requestManagerBinder(String packageName, String path, IBinder[] binder) {
         try {
-            return service.requestManagerBinder(packageName);
+            return service.requestManagerBinder(packageName, path, binder);
         } catch (RemoteException | NullPointerException ignored) {
         }
-        return null;
+        return false;
     }
 
     @Override
