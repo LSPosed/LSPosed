@@ -32,6 +32,7 @@ import org.lsposed.lspd.util.Utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Map;
 
 import de.robv.android.xposed.XC_MethodHook;
@@ -90,7 +91,7 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
                 hookNewXSP(lpparam);
             }
 
-            var binder = new IBinder[1];
+            var binder = new ArrayList<IBinder>();
             var blocked = false;
             var info = loadedApk.getApplicationInfo();
             if (info != null) {
@@ -98,8 +99,8 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
                 var path = info.sourceDir;
                 blocked = serviceClient.requestManagerBinder(packageName, path, binder);
             }
-            if (binder[0] != null) {
-                InstallerVerifier.hookXposedInstaller(lpparam.classLoader, binder[0]);
+            if (binder.get(0) != null) {
+                InstallerVerifier.hookXposedInstaller(lpparam.classLoader, binder.get(0));
             } else if (blocked) {
                 InstallerVerifier.hookXposedInstaller(classLoader);
             } else {

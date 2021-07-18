@@ -27,6 +27,7 @@ import org.lsposed.lspd.service.ILSPApplicationService;
 import org.lsposed.lspd.util.Utils;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 public class LSPApplicationServiceClient extends ApplicationServiceClient {
@@ -68,7 +69,7 @@ public class LSPApplicationServiceClient extends ApplicationServiceClient {
     }
 
     @Override
-    public boolean requestManagerBinder(String packageName, String path, IBinder[] binder) {
+    public boolean requestManagerBinder(String packageName, String path, List<IBinder> binder) {
         try {
             return service.requestManagerBinder(packageName, path, binder);
         } catch (RemoteException | NullPointerException ignored) {
