@@ -77,7 +77,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="4dp"
-            android:text="Copy logs"
+            android:text="@android:string/copy"
             android:theme="@style/Widget.AppCompat.Button.Colored" />
     </LinearLayout>
 
