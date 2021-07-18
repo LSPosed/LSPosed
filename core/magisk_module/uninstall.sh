@@ -20,3 +20,5 @@
 #
 
 rm -rf /data/adb/lspd
+rm -rf /data/adb/riru/modules/lspd
+

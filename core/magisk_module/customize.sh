@@ -101,7 +101,14 @@ if [ "$RIRU_MODULE_DEBUG" = true ]; then
   mv "$MODPATH/system/lib/liblspd.so" "$MODPATH/system/lib/libriru_lspd.so"
   mv "$MODPATH/system/lib64/liblspd.so" "$MODPATH/system/lib64/libriru_lspd.so"
   mv "$MODPATH/framework" "$MODPATH/system/framework"
-  mkdir -p "/data/adb/riru/modules/lspd"
+  if [ "$RIRU_API" -ge 26 ]; then
+    mkdir -p "$MODPATH/riru/lib"
+    mkdir -p "$MODPATH/riru/lib64"
+    touch "$MODPATH/riru/lib/libriru_lspd"
+    touch "$MODPATH/riru/lib64/libriru_lspd"
+  else
+    mkdir -p "/data/adb/riru/modules/lspd"
+  fi
 fi
 
 set_perm_recursive "$MODPATH" 0 0 0755 0644
