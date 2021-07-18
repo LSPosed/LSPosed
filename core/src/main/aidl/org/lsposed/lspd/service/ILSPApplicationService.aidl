@@ -1,15 +1,15 @@
 package org.lsposed.lspd.service;
 
 interface ILSPApplicationService {
-    IBinder requestModuleBinder() = 2;
+    IBinder requestModuleBinder();
 
-    IBinder requestManagerBinder(String packageName) = 3;
+    boolean requestManagerBinder(String packageName, String path, out IBinder[] binder);
 
-    boolean isResourcesHookEnabled() = 5;
+    boolean isResourcesHookEnabled();
 
-    Map getModulesList(String processName) = 6;
+    Map getModulesList(String processName);
 
-    String getPrefsPath(String packageName) = 7;
+    String getPrefsPath(String packageName);
 
-    ParcelFileDescriptor getModuleLogger() = 9;
+    ParcelFileDescriptor getModuleLogger();
 }

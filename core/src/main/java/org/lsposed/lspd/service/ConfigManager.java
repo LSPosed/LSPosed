@@ -77,14 +77,14 @@ public class ConfigManager {
             "android.permission.WRITE_SECURE_SETTINGS"
     };
 
-    static ConfigManager instance = null;
+    private static ConfigManager instance = null;
 
     private static final File basePath = new File("/data/adb/lspd");
     private static final File configPath = new File(basePath, "config");
     private static final File lockPath = new File(basePath, "lock");
     private static final SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(new File(configPath, "modules_config.db"), null);
 
-    boolean packageStarted = false;
+    private boolean packageStarted = false;
 
     private static final File resourceHookSwitch = new File(configPath, "enable_resources");
     private boolean resourceHook = false;
@@ -732,6 +732,11 @@ public class ConfigManager {
 
     public boolean isManager(int uid) {
         return uid == managerUid;
+    }
+
+    public boolean shouldBlock(String packageName) {
+        return packageName.equals("io.github.lsposed.manager") ||
+                packageName.equals(BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME);
     }
 
     public String getPrefsPath(String fileName, int uid) {
