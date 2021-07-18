@@ -3,7 +3,8 @@ package org.lsposed.lspd.service;
 interface ILSPApplicationService {
     IBinder requestModuleBinder();
 
-    boolean requestManagerBinder(String packageName, String path, out IBinder[] binder);
+    //TODO: after array copy bug fixed, use array instead of list
+    boolean requestManagerBinder(String packageName, String path, out List<IBinder> binder);
 
     boolean isResourcesHookEnabled();
 

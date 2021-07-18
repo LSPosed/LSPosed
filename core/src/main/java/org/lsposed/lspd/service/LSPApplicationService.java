@@ -30,6 +30,7 @@ import android.util.Pair;
 import org.lsposed.lspd.util.InstallerVerifier;
 import org.lsposed.lspd.util.Utils;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -102,7 +103,7 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
     }
 
     @Override
-    public boolean requestManagerBinder(String packageName, String path, IBinder[] binder) throws RemoteException {
+    public boolean requestManagerBinder(String packageName, String path, List<IBinder> binder) throws RemoteException {
         ensureRegistered();
         if (ConfigManager.getInstance().isManager(getCallingUid()) &&
                 ConfigManager.getInstance().isManager(packageName) &&
@@ -111,7 +112,7 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
             if (Utils.isMIUI) {
                 service.new ManagerGuard(handles.get(getCallingPid()));
             }
-            binder[0] = service;
+            binder.add(service);
             return false;
         }
         return ConfigManager.getInstance().shouldBlock(packageName);
