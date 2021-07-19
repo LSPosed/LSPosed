@@ -99,7 +99,7 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
                 var path = info.sourceDir;
                 blocked = serviceClient.requestManagerBinder(packageName, path, binder);
             }
-            if (binder.get(0) != null) {
+            if (binder.size() != 0 && binder.get(0) != null) {
                 InstallerVerifier.hookXposedInstaller(lpparam.classLoader, binder.get(0));
             } else if (blocked) {
                 InstallerVerifier.hookXposedInstaller(classLoader);
