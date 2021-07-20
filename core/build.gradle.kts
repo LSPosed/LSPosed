@@ -24,7 +24,6 @@ import com.android.ide.common.signing.KeystoreHelper
 import org.apache.commons.codec.binary.Hex
 import org.apache.tools.ant.filters.FixCrLfFilter
 import org.apache.tools.ant.filters.ReplaceTokens
-import org.gradle.internal.os.OperatingSystem
 import java.io.PrintStream
 import java.security.MessageDigest
 
