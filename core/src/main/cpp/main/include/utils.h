@@ -34,11 +34,11 @@ namespace lspd {
     using namespace std::literals::string_literals;
 
     inline int32_t GetAndroidApiLevel() {
-        static int32_t api_level = []() {
-            char prop_value[PROP_VALUE_MAX];
-            __system_property_get("ro.build.version.sdk", prop_value);
-            return atoi(prop_value);
-        }();
+        static int32_t api_level;
+        __system_property_read_callback(__system_property_find("ro.build.version.sdk"),
+                                        [](void *cookie, const char *, const char *prop_value,
+                                           uint32_t) { *(int *) cookie = atoi(prop_value); },
+                                        &api_level);
         return api_level;
     }
 
