@@ -33,8 +33,8 @@ MODDIR=${0%/*}
 MAGISK_VERSION=$(magisk -v)
 MAGISK_VER_CODE=$(magisk -V)
 
-[ ! -f $(magisk --path)/.magisk/modules/riru-core/util_functions.sh ] && exit 1
-. $(magisk --path)/.magisk/modules/riru-core/util_functions.sh
+[ -f "$MODDIR/../riru-core/util_functions.sh" ] || exit 1
+. "$MODDIR/../riru-core/util_functions.sh"
 
 LSPD_VERSION=$(grep_prop version "${MODDIR}/module.prop")
 
@@ -133,6 +133,11 @@ if [ ! -z "${MISC_PATH}" ]; then
   print_log_head "${LOG_PATH}/modules.log"
   # start_verbose_log_catcher
   start_log_catcher all "LSPosed:V XSharedPreferences:V LSPosed-Bridge:V LSPosedManager:V LSPosedService:V *:F" true ${LOG_VERBOSE}
+fi
+
+if [ ! -f "$MODDIR/../../mirror/sepolicy.rules/riru_lsposed/sepolicy.rule" ]; then
+    log -p w -t "LSPosed" "Magisk does not load sepolicy rules! Start live patch"
+    magiskpolicy --live --apply "$MODDIR/sepolicy.rule"
 fi
 
 rm -f "/data/local/tmp/lspd.dex"
