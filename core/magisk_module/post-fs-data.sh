@@ -135,7 +135,7 @@ if [ ! -z "${MISC_PATH}" ]; then
   start_log_catcher all "LSPosed:V XSharedPreferences:V LSPosed-Bridge:V LSPosedManager:V LSPosedService:V *:F" true ${LOG_VERBOSE}
 fi
 
-if [ ! -f "$MODDIR/../../mirror/sepolicy.rules/riru_lsposed/sepolicy.rule" ]; then
+if [ ! -f "$(magisk --path)/.magisk/mirror/sepolicy.rules/riru_lsposed/sepolicy.rule" ]; then
     log -p w -t "LSPosed" "Magisk does not load sepolicy rules! Start live patch"
     magiskpolicy --live --apply "$MODDIR/sepolicy.rule"
 fi
