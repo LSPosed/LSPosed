@@ -29,19 +29,6 @@ plugins {
     id("androidx.navigation.safeargs")
 }
 
-// workaround for AS.
-val dataBinding = file("${project.buildDir}/generated/data_binding_base_class_source_out/debug/out")
-sourceSets {
-    create("dataBinding") {
-        java.srcDir(dataBinding)
-    }
-}
-idea {
-    module {
-        generatedSourceDirs.add(dataBinding)
-    }
-}
-
 val androidTargetSdkVersion: Int by rootProject.extra
 val androidMinSdkVersion: Int by rootProject.extra
 val androidBuildToolsVersion: String by rootProject.extra
