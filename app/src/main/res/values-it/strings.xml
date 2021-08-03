@@ -20,7 +20,7 @@
 
 <resources>
     <!-- MainActivity -->
-    <string name="info">Info</string>
+    <string name="info">Informazioni</string>
     <string name="Install">Installa</string>
     <string name="InstallDetail">Premi per installare LSPosed</string>
     <string name="Modules">Moduli</string>
@@ -32,64 +32,74 @@
     <string name="Settings">Impostazioni</string>
     <string name="About">Informazioni</string>
     <string name="module_repo">Repository</string>
-    <string name="module_repo_summary">Repository moduli (Beta)</string>
+    <string name="module_repo_summary">Repository dei moduli (Beta)</string>
     <string name="about_view_source_code"><![CDATA[Visualizza il codice sorgente su %1$s<br/>Unisciti al nostro canale %2$s]]></string>
     <string name="about_translators">Traduttori: %s</string>
 
     <string name="activated">Attivo</string>
     <string name="not_installed">Non installato</string>
     <string name="partial_activated">Parzialmente attivo</string>
+    <string name="need_update">Richiede l\'aggiornamento</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy non è caricato correttamente</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[<b>WARNING:</b> SEPolicy non è caricato correttamente, i moduli che agganciano il Framework di Sistema non funzioneranno.<br>Per favore segnalalo allo sviluppatore di <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>.]]></string>
+    <string name="selinux_policy_not_loaded"><![CDATA[<b>WARNING:</b> SEPolicy non è caricato correttamente, i moduli che effettuano l\'hook del framework di sistema non funzioneranno.<br>Segnala il problema allo sviluppatore di <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>.]]></string>
+    <string name="system_inject_fail_summary">Injection del framework di sistema fallita</string>
+    <string name="system_inject_fail"><![CDATA[<b>ATTENZIONE:</b> L\'injection del framework di sistema è fallita.<br/>Questo problema si verifica raramente e può essere causato da <b>Magisk</b> o da alcuni moduli Magisk di scarsa qualità.<br/>Prova a disabilitare i moduli Magisk tranne Riru e LSPosed o invia il log completo agli sviluppatori.]]></string>
+    <string name="system_prop_incorrect_summary">Proprietà di sistema errate</string>
+    <string name="system_prop_incorrect"><![CDATA[<b>ATTENZIONE:</b> Proprietà di sistema errate.<br/>Alcune proprietà di sistema necessarie sono state cancellate o modificate.<br/>In alcuni casi i moduli potrebbero risultare non validi.]]></string>
+    <string name="please_update_summary">Installa la versione più recente di LSPosed</string>
     <string name="info_api_version">Versione API</string>
     <string name="info_framework_version">Versione Framework</string>
     <string name="info_manager_version">Versione Manager</string>
-    <string name="info_system_version">Versione di sistema</string>
+    <string name="info_system_version">Versione del sistema</string>
     <string name="info_device">Dispositivo</string>
-    <string name="info_system_abi">ABI di sistema</string>
+    <string name="info_system_abi">ABI del sistema</string>
 
     <!-- LogsActivity -->
     <string name="menuSend">Invia</string>
     <string name="menuSaveToSd">Salva</string>
-    <string name="nav_item_logs">Log Verbosi</string>
-    <string name="nav_item_logs_err">Log Moduli</string>
+    <string name="nav_item_logs">Log verboso</string>
+    <string name="nav_item_logs_err">Log moduli</string>
     <string name="dont_show_again">Non mostrare di nuovo</string>
-    <string name="logs_save_failed">Impossibile salvare:</string>
+    <string name="logs_save_failed">Impossibile effettuare il salvataggio:</string>
     <string name="menuClearLog">Cancella il log ora</string>
-    <string name="logs_cleared">Log correttamente pulito.</string>
+    <string name="logs_cleared">Log cancellato correttamente.</string>
     <string name="scroll_top">Scorri in alto</string>
     <string name="loading">Caricamento in corso…</string>
     <string name="scroll_bottom">Scorri in basso</string>
     <string name="logs_cannot_read">Impossibile leggere il log: \n</string>
     <string name="menuReload">Ricarica</string>
     <string name="logs_clear_failed_2">Impossibile cancellare il log</string>
-    <string name="not_logcat_2">Se qualcuno ti ha chiesto un Logcat Android, sei nella sezione sbagliata. Questo è il log di LSPosed; se hai bisogno di un logcat, su XDA puoi trovare quello che ti serve.</string>
+    <string name="not_logcat_2">Se qualcuno ti ha chiesto un logcat di Android, sei nella sezione sbagliata. Questo è il log di LSPosed; se hai bisogno di un logcat, su XDA puoi trovare quello che ti serve.</string>
 
     <!-- Notification -->
-    <string name="module_is_not_activated_yet">Il modulo LSPosed non è ancora attivo</string>
+    <string name="module_is_not_activated_yet">Il modulo Xposed non è ancora attivo</string>
     <string name="module_is_not_activated_yet_detailed">%s è stato installato, ma non è stato ancora attivato</string>
     <string name="xposed_module_updated_notification_content">%s è stato aggiornato</string>
 
     <!-- ModulesActivity -->
     <string name="module_empty_description">(nessuna descrizione fornita)</string>
     <string name="module_no_ui">Questo modulo non fornisce un\'interfaccia utente</string>
-    <string name="xposed_module_updated_notification_title">Modulo LSPosed aggiornato</string>
-    <string name="warning_xposed_min_version">Questo modulo richiede una versione più recente di LSPosed (%d) e quindi non può essere attivato</string>
-    <string name="no_min_version_specified">Questo modulo non specifica la versione LSPosed di cui ha bisogno.</string>
-    <string name="warning_min_version_too_low">Questo modulo è stato creato per la versione %1$d di LSPosed, ma a causa di modifiche incompatibili nella versione %2$d, è stato disabilitato</string>
-    <string name="warning_installed_on_external_storage">Questo modulo non può essere caricato perché è installato sulla scheda SD, per favore spostalo nella memoria interna</string>
+    <string name="xposed_module_updated_notification_title">Modulo Xposed aggiornato</string>
+    <string name="warning_xposed_min_version">Questo modulo richiede una versione più recente di Xposed (%d) e quindi non può essere attivato</string>
+    <string name="no_min_version_specified">Questo modulo non specifica la versione di Xposed di cui ha bisogno.</string>
+    <string name="warning_min_version_too_low">Questo modulo è stato creato per la versione %1$d di Xposed ma, a causa di modifiche incompatibili nella versione %2$d, è stato disabilitato</string>
+    <string name="warning_installed_on_external_storage">Questo modulo non può essere caricato perché è installato sulla scheda SD, spostalo nella memoria interna</string>
     <string name="module_uninstall">Disinstalla</string>
     <string name="module_settings">Impostazioni modulo</string>
-    <string name="view_in_repo">Visualizza nella Repo</string>
+    <string name="view_in_repo">Visualizza nel repository</string>
     <string name="module_uninstall_message">Vuoi disinstallare questo modulo?</string>
     <string name="module_uninstalled">%1$s disinstallato</string>
     <string name="module_uninstall_failed">Disinstallazione non riuscita</string>
+    <string name="module_installed">%1$s aggiunto all\'utente %2$s</string>
+    <string name="module_install_failed">Aggiunta del modulo fallita</string>
+    <string name="install_to_user">Installa per l\'utente %s</string>
+    <string name="install_to_user_message">Vuoi installare %1$s per l\'utente %2$s? Si consiglia di farlo manualmente, forzare l\'installazione da LSPosed potrebbe causare problemi.</string>
 
     <!-- AppListActivity -->
     <string name="compile_speed">Ottimizza nuovamente</string>
-    <string name="compile_speed_msg">Ottimizzando…</string>
+    <string name="compile_speed_msg">Ottimizzazione in corso…</string>
     <string name="compile_done">Ottimizzazione completata.</string>
-    <string name="app_launch">Avvialo</string>
+    <string name="app_launch">Avvia</string>
     <string name="compile_failed">Ottimizzazione non riuscita o il valore restituito è vuoto.</string>
     <string name="compile_failed_with_info">Ottimizzazione fallita: </string>
     <string name="sort_by_name">Ordina per nome dell\'applicazione</string>
@@ -103,15 +113,16 @@
     <string name="menu_show_system_apps">Applicazioni di sistema</string>
     <string name="menu_sort">Ordina…</string>
     <string name="enable_module">Abilita modulo</string>
-    <string name="no_scope_selected">Non hai selezionato alcuna app. Continuare?</string>
+    <string name="no_scope_selected">Non hai selezionato alcuna app. Vuoi continuare?</string>
     <string name="menu_show_games">Giochi</string>
     <string name="menu_show_modules">Moduli</string>
     <string name="failed_to_save_scope_list">Impossibile salvare l\'elenco degli ambiti</string>
     <string name="app_description">%1$s\nVersione %2$s</string>
-    <string name="use_recommended">Consigliate</string>
-    <string name="no_scope_selected_has_recommended">Non hai selezionato alcuna app. Selezionare le app consigliate?</string>
-    <string name="use_recommended_message">Selezionare le app consigliate?</string>
-    <string name="requested_by_module">Consigliate</string>
+    <string name="use_recommended">Seleziona consigliate</string>
+    <string name="no_scope_selected_has_recommended">Non hai selezionato alcuna app. Vuoi selezionare le app consigliate?</string>
+    <string name="use_recommended_message">Vuoi selezionare le app consigliate?</string>
+    <string name="requested_by_module">Consigliata</string>
+    <string name="update_available">Aggiornamento disponibile: %1$s</string>
     <string name="module_disabled_no_selection">Il modulo %s è stato disabilitato poiché nessuna app è stata selezionata.</string>
     <string name="android_framework">Framework di sistema</string>
     <string name="menu_backup_and_restore">Backup…</string>
@@ -122,22 +133,24 @@
     <string name="force_stop_dlg_text">Se forzi l\'interruzione di un\'app, potrebbe non funzionare correttamente.</string>
     <string name="reboot_required">È necessario riavviare per applicare questa modifica</string>
     <string name="reboot">Riavvia</string>
+    <string name="menu_hide">Nascondi…</string>
 
     <!-- ModulesActivity and AppListActivity -->
-    <string name="module_app_info">Info app</string>
+    <string name="modules_other_app">Mostra in un\'altra app</string>
+    <string name="module_app_info">Informazioni app</string>
 
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
     <string name="settings_enable_resources">Abilita l\'hook delle risorse</string>
     <string name="settings_enable_resources_summary"><b>ATTENZIONE:</b> l\'hook delle risorse è sperimentale</string>
-    <string name="pref_title_disable_verbose_log">Disabilita i log verbosi</string>
+    <string name="pref_title_disable_verbose_log">Disabilita il log verboso</string>
     <string name="pure_black_dark_theme">Tema nero puro</string>
     <string name="pure_black_dark_theme_summary">Usa il tema nero puro se il tema scuro è abilitato</string>
     <string name="settings_group_theme">Tema</string>
     <string name="settings_backup_and_restore">Backup e ripristino</string>
     <string name="settings_backup_and_restore_summery">Backup o ripristino dell\'elenco dei moduli e degli elenchi degli ambiti.</string>
     <string name="settings_backup">Backup</string>
-    <string name="settings_backuping">Backing in corso…</string>
+    <string name="settings_backuping">Backup in corso…</string>
     <string name="settings_backup_success">Backup terminato!</string>
     <string name="settings_backup_failed">Backup fallito</string>
     <string name="settings_restore">Ripristina</string>
@@ -147,8 +160,12 @@
     <string name="group_network">Rete</string>
     <string name="dns_over_http">DNS over HTTPS</string>
     <string name="dns_over_http_summary">Soluzione alternativa all\'avvelenamento della cache DNS in alcune nazioni</string>
-    <string name="theme_color">Colore tema</string>
+    <string name="theme_color">Colore del tema</string>
     <string name="theme_color_summary">Colore che appare più frequentemente nell\'app</string>
+    <string name="theme_color_system_accent">Colore primario del sistema</string>
+    <string name="settings_show_hidden_icon_apps_enabled">Costringi le app a mostrare le icone nel launcher</string>
+    <string name="settings_show_hidden_icon_apps_enabled_summary">A partire da Android 10, le app (specialmente i moduli Xposed) non possono più nascondere le loro icone nel launcher. Disabilita l\'opzione per disattivare questa funzionalità.</string>
+    <string name="settings_group_system">Sistema</string>
 
     <!-- Module Repo -->
     <string name="module_readme">Leggimi</string>
@@ -162,14 +179,16 @@
     <string name="refresh">Ricarica</string>
     <string name="module_release_load_more">Mostra le versioni precedenti</string>
     <string name="module_release_no_more">Non ci sono altre versioni</string>
-    <string name="repo_load_failed">Impossibile caricare la repo: %s</string>
-
+    <string name="repo_load_failed">Impossibile caricare il repository dei moduli: %s</string>
 
     <string name="app_destroyed">Questa applicazione è stata distrutta, assicurati di scaricarla dalla fonte ufficiale.</string>
-    <string name="outdated_manager">La versione di LSPosed Manager e LSPosed Core non sono coerenti. Per favore reinstalla la versione corrispondente.</string>
+    <string name="outdated_manager">Le versioni di LSPosed Manager e LSPosed Core non sono coerenti. Reinstalla la versione corrispondente.</string>
     <string name="lsposed_not_active">LSPosed non è attualmente installato o attivo.</string>
-    <string name="verbose_log_not_avaliable">Il log verboso non è disponibile, se l\'hai appena abilitato senza riavviare, riprova dopo il riavvio.</string>
+    <string name="verbose_log_not_avaliable">Il log verboso non è disponibile. Se l\'hai appena abilitato senza riavviare, riprova dopo il riavvio.</string>
     <string name="NotInstall">Non installato</string>
     <string name="NotInstallDetail">LSPosed non è installato</string>
-    <string name="translators"><![CDATA[<a href="https://twitter.com/alex193a">alex193a</a>]]></string>
+    <string name="translators"><![CDATA[<a href="https://twitter.com/alex193a">alex193a</a>, <a href="https://github.com/Fs00">Fs00</a>]]></string>
+    <string name="copy_toast_msg">Copiato</string>
+    <string name="list_empty">¯\\\\_(ツ)_\\/¯\nNon c\'è nulla qui</string>
+    <string name="add_module_to_user">Aggiungi modulo all\'utente</string>
 </resources>
