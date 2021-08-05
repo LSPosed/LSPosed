@@ -33,6 +33,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
+import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.NavGraphDirections;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.ActivityMainBinding;
@@ -101,12 +102,15 @@ public class MainActivity extends BaseActivity {
         } else if (!TextUtils.isEmpty(intent.getDataString())) {
             switch (intent.getDataString()) {
                 case "modules":
+                    if (!ConfigManager.isBinderAlive()) break;
                     navController.navigate(R.id.action_modules_fragment);
                     break;
                 case "logs":
+                    if (!ConfigManager.isBinderAlive()) break;
                     navController.navigate(R.id.action_logs_fragment);
                     break;
                 case "repo":
+                    if (!ConfigManager.isBinderAlive() && !ConfigManager.isMagiskInstalled()) break;
                     navController.navigate(R.id.action_repo_fragment);
                     break;
             }

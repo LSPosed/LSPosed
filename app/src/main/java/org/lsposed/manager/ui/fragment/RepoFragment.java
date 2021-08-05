@@ -30,7 +30,6 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -42,7 +41,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.lsposed.manager.App;
-import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.FragmentRepoBinding;
 import org.lsposed.manager.databinding.ItemOnlinemoduleBinding;
@@ -104,15 +102,6 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
         binding.progress.setVisibilityAfterHide(View.GONE);
         repoLoader.addListener(this);
         return binding.getRoot();
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        if (ConfigManager.getXposedVersionName() == null && !ConfigManager.isMagiskInstalled()) {
-            Toast.makeText(requireActivity(), R.string.lsposed_not_active, Toast.LENGTH_LONG).show();
-            getNavController().navigateUp();
-        }
     }
 
     @Override

@@ -31,7 +31,7 @@ import org.lsposed.lspd.models.Application;
 import org.lsposed.lspd.models.UserInfo;
 import org.lsposed.lspd.utils.ParceledListSlice;
 import org.lsposed.manager.adapters.ScopeAdapter;
-import org.lsposed.manager.receivers.LSPManagerServiceClient;
+import org.lsposed.manager.receivers.LSPManagerServiceHolder;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -41,10 +41,14 @@ import java.util.List;
 
 public class ConfigManager {
 
+    public static boolean isBinderAlive() {
+        return LSPManagerServiceHolder.getService() != null;
+    }
+
     public static int getXposedApiVersion() {
         try {
-            return LSPManagerServiceClient.getXposedApiVersion();
-        } catch (RemoteException | NullPointerException e) {
+            return LSPManagerServiceHolder.getService().getXposedApiVersion();
+        } catch (RemoteException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
             return -1;
         }
@@ -52,8 +56,8 @@ public class ConfigManager {
 
     public static String getXposedVersionName() {
         try {
-            return LSPManagerServiceClient.getXposedVersionName();
-        } catch (RemoteException | NullPointerException e) {
+            return LSPManagerServiceHolder.getService().getXposedVersionName();
+        } catch (RemoteException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
             return null;
         }
@@ -61,8 +65,8 @@ public class ConfigManager {
 
     public static int getXposedVersionCode() {
         try {
-            return LSPManagerServiceClient.getXposedVersionCode();
-        } catch (RemoteException | NullPointerException e) {
+            return LSPManagerServiceHolder.getService().getXposedVersionCode();
+        } catch (RemoteException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
             return -1;
         }
@@ -71,8 +75,8 @@ public class ConfigManager {
     public static List<PackageInfo> getInstalledPackagesFromAllUsers(int flags, boolean filterNoProcess) {
         List<PackageInfo> list = new ArrayList<>();
         try {
-            list.addAll(LSPManagerServiceClient.getInstalledPackagesFromAllUsers(flags, filterNoProcess));
-        } catch (RemoteException | NullPointerException e) {
+            list.addAll(LSPManagerServiceHolder.getService().getInstalledPackagesFromAllUsers(flags, filterNoProcess).getList());
+        } catch (RemoteException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
         }
         return list;
@@ -80,8 +84,8 @@ public class ConfigManager {
 
     public static String[] getEnabledModules() {
         try {
-            return LSPManagerServiceClient.enabledModules();
-        } catch (RemoteException | NullPointerException e) {
+            return LSPManagerServiceHolder.getService().enabledModules();
+        } catch (RemoteException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
             return new String[0];
         }
@@ -89,8 +93,8 @@ public class ConfigManager {
 
     public static boolean setModuleEnabled(String packageName, boolean enable) {
         try {
-            return enable ? LSPManagerServiceClient.enableModule(packageName) : LSPManagerServiceClient.disableModule(packageName);
-        } catch (RemoteException | NullPointerException e) {
+            return enable ? LSPManagerServiceHolder.getService().enableModule(packageName) : LSPManagerServiceHolder.getService().disableModule(packageName);
+        } catch (RemoteException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
             return false;
         }
@@ -105,8 +109,8 @@ public class ConfigManager {
                 app.packageName = application.packageName;
                 list.add(app);
             });
-            return LSPManagerServiceClient.setModuleScope(packageName, new ParceledListSlice<>(list));
-        } catch (RemoteException | NullPointerException e) {
+            return LSPManagerServiceHolder.getService().setModuleScope(packageName, new ParceledListSlice<>(list));
+        } catch (RemoteException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
             return false;
         }
@@ -115,7 +119,7 @@ public class ConfigManager {
     public static List<ScopeAdapter.ApplicationWithEquals> getModuleScope(String packageName) {
         List<ScopeAdapter.ApplicationWithEquals> list = new ArrayList<>();
         try {
-            List<Application> applications = LSPManagerServiceClient.getModuleScope(packageName).getList();
+            List<Application> applications = LSPManagerServiceHolder.getService().getModuleScope(packageName).getList();
             if (applications == null) {
                 return list;
             }
@@ -124,7 +128,7 @@ public class ConfigManager {
                     list.add(new ScopeAdapter.ApplicationWithEquals(application));
                 }
             });
-        } catch (RemoteException | NullPointerException e) {
+        } catch (RemoteException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
         }
         return list;
@@ -132,8 +136,8 @@ public class ConfigManager {
 
     public static boolean isResourceHookEnabled() {
         try {
-            return LSPManagerServiceClient.isResourceHook();
-        } catch (RemoteException | NullPointerException e) {
+            return LSPManagerServiceHolder.getService().isResourceHook();
+        } catch (RemoteException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
             return false;
         }
@@ -141,9 +145,9 @@ public class ConfigManager {
 
     public static boolean setResourceHookEnabled(boolean enabled) {
         try {
-            LSPManagerServiceClient.setResourceHook(enabled);
+            LSPManagerServiceHolder.getService().setResourceHook(enabled);
             return true;
-        } catch (RemoteException | NullPointerException e) {
+        } catch (RemoteException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
             return false;
         }
@@ -151,8 +155,8 @@ public class ConfigManager {
 
     public static boolean isVerboseLogEnabled() {
         try {
-            return LSPManagerServiceClient.isVerboseLog();
-        } catch (RemoteException | NullPointerException e) {
+            return LSPManagerServiceHolder.getService().isVerboseLog();
+        } catch (RemoteException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
             return false;
         }
@@ -160,9 +164,9 @@ public class ConfigManager {
 
     public static boolean setVerboseLogEnabled(boolean enabled) {
         try {
-            LSPManagerServiceClient.setVerboseLog(enabled);
+            LSPManagerServiceHolder.getService().setVerboseLog(enabled);
             return true;
-        } catch (RemoteException | NullPointerException e) {
+        } catch (RemoteException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
             return false;
         }
@@ -170,8 +174,8 @@ public class ConfigManager {
 
     public static ParcelFileDescriptor getLogs(boolean verbose) {
         try {
-            return verbose ? LSPManagerServiceClient.getVerboseLog() : LSPManagerServiceClient.getModulesLog();
-        } catch (RemoteException | NullPointerException e) {
+            return verbose ? LSPManagerServiceHolder.getService().getVerboseLog() : LSPManagerServiceHolder.getService().getModulesLog();
+        } catch (RemoteException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
             return null;
         }
@@ -179,8 +183,8 @@ public class ConfigManager {
 
     public static boolean clearLogs(boolean verbose) {
         try {
-            return LSPManagerServiceClient.clearLogs(verbose);
-        } catch (RemoteException | NullPointerException e) {
+            return LSPManagerServiceHolder.getService().clearLogs(verbose);
+        } catch (RemoteException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
             return false;
         }
@@ -188,8 +192,8 @@ public class ConfigManager {
 
     public static PackageInfo getPackageInfo(String packageName, int flags, int userId) throws PackageManager.NameNotFoundException {
         try {
-            return LSPManagerServiceClient.getPackageInfo(packageName, flags, userId);
-        } catch (RemoteException | NullPointerException e) {
+            return LSPManagerServiceHolder.getService().getPackageInfo(packageName, flags, userId);
+        } catch (RemoteException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
             throw new PackageManager.NameNotFoundException();
         }
@@ -197,9 +201,9 @@ public class ConfigManager {
 
     public static boolean forceStopPackage(String packageName, int userId) {
         try {
-            LSPManagerServiceClient.forceStopPackage(packageName, userId);
+            LSPManagerServiceHolder.getService().forceStopPackage(packageName, userId);
             return true;
-        } catch (RemoteException | NullPointerException e) {
+        } catch (RemoteException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
             return false;
         }
@@ -207,9 +211,9 @@ public class ConfigManager {
 
     public static boolean reboot(boolean confirm, String reason, boolean wait) {
         try {
-            LSPManagerServiceClient.reboot(confirm, reason, wait);
+            LSPManagerServiceHolder.getService().reboot(confirm, reason, wait);
             return true;
-        } catch (RemoteException | NullPointerException e) {
+        } catch (RemoteException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
             return false;
         }
@@ -217,8 +221,8 @@ public class ConfigManager {
 
     public static boolean uninstallPackage(String packageName, int userId) {
         try {
-            return LSPManagerServiceClient.uninstallPackage(packageName, userId);
-        } catch (RemoteException | NullPointerException e) {
+            return LSPManagerServiceHolder.getService().uninstallPackage(packageName, userId);
+        } catch (RemoteException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
             return false;
         }
@@ -226,8 +230,8 @@ public class ConfigManager {
 
     public static boolean isSepolicyLoaded() {
         try {
-            return LSPManagerServiceClient.isSepolicyLoaded();
-        } catch (RemoteException | NullPointerException e) {
+            return LSPManagerServiceHolder.getService().isSepolicyLoaded();
+        } catch (RemoteException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
             return false;
         }
@@ -235,8 +239,8 @@ public class ConfigManager {
 
     public static List<UserInfo> getUsers() {
         try {
-            return LSPManagerServiceClient.getUsers();
-        } catch (RemoteException | NullPointerException e) {
+            return LSPManagerServiceHolder.getService().getUsers();
+        } catch (RemoteException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
             return null;
         }
@@ -245,9 +249,9 @@ public class ConfigManager {
     public static boolean installExistingPackageAsUser(String packageName, int userId) {
         final int INSTALL_SUCCEEDED = 1;
         try {
-            var ret = LSPManagerServiceClient.installExistingPackageAsUser(packageName, userId);
+            var ret = LSPManagerServiceHolder.getService().installExistingPackageAsUser(packageName, userId);
             return ret == INSTALL_SUCCEEDED;
-        } catch (RemoteException | NullPointerException e) {
+        } catch (RemoteException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
             return false;
         }
@@ -260,24 +264,24 @@ public class ConfigManager {
 
     public static boolean systemServerRequested() {
         try {
-            return LSPManagerServiceClient.systemServerRequested();
-        } catch (Throwable e) {
+            return LSPManagerServiceHolder.getService().systemServerRequested();
+        } catch (RemoteException e) {
             return false;
         }
     }
 
     public static boolean dex2oatFlagsLoaded() {
         try {
-            return LSPManagerServiceClient.dex2oatFlagsLoaded();
-        } catch (Throwable e) {
+            return LSPManagerServiceHolder.getService().dex2oatFlagsLoaded();
+        } catch (RemoteException e) {
             return false;
         }
     }
 
     public static int startActivityAsUserWithFeature(Intent intent, int userId) {
         try {
-            return LSPManagerServiceClient.startActivityAsUserWithFeature(intent, userId);
-        } catch (Throwable e) {
+            return LSPManagerServiceHolder.getService().startActivityAsUserWithFeature(intent, userId);
+        } catch (RemoteException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
             return -1;
         }
@@ -286,8 +290,8 @@ public class ConfigManager {
     public static List<ResolveInfo> queryIntentActivitiesAsUser(Intent intent, int flags, int userId) {
         List<ResolveInfo> list = new ArrayList<>();
         try {
-            list.addAll(LSPManagerServiceClient.queryIntentActivitiesAsUser(intent, flags, userId).getList());
-        } catch (Throwable e) {
+            list.addAll(LSPManagerServiceHolder.getService().queryIntentActivitiesAsUser(intent, flags, userId).getList());
+        } catch (RemoteException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
         }
         return list;

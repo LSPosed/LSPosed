@@ -78,14 +78,6 @@ public class SettingsFragment extends BaseFragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        if (ConfigManager.getXposedVersionName() == null) {
-            Snackbar.make(binding.snackbar, R.string.lsposed_not_active, Snackbar.LENGTH_LONG).show();
-        }
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
 
@@ -152,14 +144,14 @@ public class SettingsFragment extends BaseFragment {
         public void onCreatePreferencesFix(Bundle savedInstanceState, String rootKey) {
             addPreferencesFromResource(R.xml.prefs);
 
-            boolean installed = ConfigManager.getXposedVersionName() != null;
+            boolean installed = ConfigManager.isBinderAlive();
             SwitchPreference prefVerboseLogs = findPreference("disable_verbose_log");
             if (prefVerboseLogs != null) {
                 if (requireActivity().getApplicationInfo().uid / 100000 != 0) {
                     prefVerboseLogs.setVisible(false);
                 } else {
                     prefVerboseLogs.setEnabled(installed);
-                    prefVerboseLogs.setChecked(!ConfigManager.isVerboseLogEnabled());
+                    prefVerboseLogs.setChecked(!installed || !ConfigManager.isVerboseLogEnabled());
                     prefVerboseLogs.setOnPreferenceChangeListener((preference, newValue) -> {
                         boolean result = ConfigManager.setVerboseLogEnabled(!(boolean) newValue);
                         SettingsFragment fragment = (SettingsFragment) getParentFragment();
@@ -176,7 +168,7 @@ public class SettingsFragment extends BaseFragment {
             SwitchPreference prefEnableResources = findPreference("enable_resources");
             if (prefEnableResources != null) {
                 prefEnableResources.setEnabled(installed);
-                prefEnableResources.setChecked(ConfigManager.isResourceHookEnabled());
+                prefEnableResources.setChecked(installed && ConfigManager.isResourceHookEnabled());
                 prefEnableResources.setOnPreferenceChangeListener((preference, newValue) -> ConfigManager.setResourceHookEnabled((boolean) newValue));
             }
 

@@ -1,8 +1,6 @@
 -keep class org.lsposed.manager.Constants {
     public static void showErrorToast(int);
-}
--keepclasseswithmembers class org.lsposed.manager.receivers.LSPManagerServiceClient {
-    private static android.os.IBinder binder;
+    public static void setBinder(android.os.IBinder);
 }
 
 -keepclassmembers class * implements android.os.Parcelable {
@@ -19,7 +17,7 @@
 }
 
 -repackageclasses
-# temporarily disable it: https://issuetracker.google.com/issues/155606069 
+# temporarily disable it: https://issuetracker.google.com/issues/155606069
 # -allowaccessmodification
 -overloadaggressively
 
