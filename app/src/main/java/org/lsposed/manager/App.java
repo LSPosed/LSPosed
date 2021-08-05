@@ -167,7 +167,11 @@ public class App extends Application {
                     var name = info.getAsJsonArray("assets").get(0).getAsJsonObject().get("name").getAsString();
                     var code = Integer.parseInt(name.split("-", 4)[2]);
                     var now = Instant.now().getEpochSecond();
-                    pref.edit().putInt("latest_version", code).putLong("latest_check", now).apply();
+                    pref.edit()
+                            .putInt("latest_version", code)
+                            .putLong("latest_check", now)
+                            .putBoolean("checked", true)
+                            .apply();
                 } catch (Throwable t) {
                     Log.e(App.TAG, t.getMessage(), t);
                 }
@@ -176,20 +180,24 @@ public class App extends Application {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 Log.e(App.TAG, e.getMessage(), e);
+                if (pref.getBoolean("checked", false)) return;
+                pref.edit().putBoolean("checked", true).apply();
             }
         };
         getOkHttpClient().newCall(request).enqueue(callback);
     }
 
     public static boolean needUpdate() {
+        var pref = getPreferences();
+        if (!pref.getBoolean("checked", false)) return false;
         var now = Instant.now();
         var buildTime = Instant.ofEpochSecond(BuildConfig.BUILD_TIME);
-        var check = getPreferences().getLong("latest_check", 0);
+        var check = pref.getLong("latest_check", 0);
         if (check > 0) {
             var checkTime = Instant.ofEpochSecond(check);
             if (checkTime.atOffset(ZoneOffset.UTC).plusDays(30).toInstant().isBefore(now))
                 return true;
-            var code = getPreferences().getInt("latest_version", 0);
+            var code = pref.getInt("latest_version", 0);
             return code > BuildConfig.VERSION_CODE;
         }
         return buildTime.atOffset(ZoneOffset.UTC).plusDays(30).toInstant().isBefore(now);
