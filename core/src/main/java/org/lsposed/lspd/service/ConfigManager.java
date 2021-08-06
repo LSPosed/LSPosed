@@ -557,9 +557,7 @@ public class ConfigManager {
                 try (var in = apkFile.getInputStream(dexFile)) {
                     var memory = SharedMemory.create(null, in.available());
                     var byteBuffer = memory.mapReadWrite();
-                    byteBuffer.mark();
                     Channels.newChannel(in).read(byteBuffer);
-                    byteBuffer.reset();
                     SharedMemory.unmap(byteBuffer);
                     memory.setProtect(OsConstants.PROT_READ);
                     sharedMemories.add(memory);
