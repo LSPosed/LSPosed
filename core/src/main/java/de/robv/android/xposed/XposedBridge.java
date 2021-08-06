@@ -174,6 +174,8 @@ public final class XposedBridge {
 		}*/
         else if (Modifier.isAbstract(hookMethod.getModifiers())) {
             throw new IllegalArgumentException("Cannot hook abstract methods: " + hookMethod.toString());
+        } else if (hookMethod.getDeclaringClass().getClassLoader() == XposedBridge.class.getClassLoader()) {
+            throw new IllegalArgumentException("Do not allow hooking inner methods");
         }
 
         Executable targetMethod = (Executable) hookMethod;
