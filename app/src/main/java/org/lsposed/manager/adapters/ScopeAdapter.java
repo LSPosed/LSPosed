@@ -77,8 +77,8 @@ import org.lsposed.manager.ui.fragment.CompileDialogFragment;
 import org.lsposed.manager.util.GlideApp;
 import org.lsposed.manager.util.ModuleUtil;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -259,13 +259,9 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             }
             return true;
         } else if (itemId == R.id.backup) {
-            Calendar now = Calendar.getInstance();
-            fragment.backupLauncher.launch(String.format(Locale.US,
-                    "%s_%04d%02d%02d_%02d%02d%02d.lsp",
-                    module.getAppName(),
-                    now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1,
-                    now.get(Calendar.DAY_OF_MONTH), now.get(Calendar.HOUR_OF_DAY),
-                    now.get(Calendar.MINUTE), now.get(Calendar.SECOND)));
+            LocalDateTime now = LocalDateTime.now();
+            fragment.backupLauncher.launch(String.format(Locale.ROOT,
+                    "%s_%s.lsp", module.getAppName(), now.toString()));
             return true;
         } else if (itemId == R.id.restore) {
             fragment.restoreLauncher.launch(new String[]{"*/*"});

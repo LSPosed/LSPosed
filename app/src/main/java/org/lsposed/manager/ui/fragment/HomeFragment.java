@@ -81,10 +81,8 @@ public class HomeFragment extends BaseFragment {
 
         BaseActivity activity = (BaseActivity) requireActivity();
         binding.status.setOnClickListener(v -> {
-            if (ConfigManager.getXposedApiVersion() != -1) {
-                new InfoDialogBuilder(activity)
-                        .setTitle(R.string.info)
-                        .show();
+            if (ConfigManager.isBinderAlive()) {
+                new InfoDialogBuilder(activity).setTitle(R.string.info).show();
             } else {
                 NavUtil.startURL(activity, getString(R.string.about_source));
             }
@@ -112,9 +110,8 @@ public class HomeFragment extends BaseFragment {
         Glide.with(binding.appIcon)
                 .load(wrap(activity.getApplicationInfo(), getResources().getConfiguration().hashCode()))
                 .into(binding.appIcon);
-        String installXposedVersion = ConfigManager.getXposedVersionName();
         int cardBackgroundColor;
-        if (installXposedVersion != null) {
+        if (ConfigManager.isBinderAlive()) {
             if (!ConfigManager.isSepolicyLoaded()) {
                 binding.statusTitle.setText(R.string.partial_activated);
                 cardBackgroundColor = ResourcesKt.resolveColor(activity.getTheme(), R.attr.colorWarning);
@@ -139,7 +136,8 @@ public class HomeFragment extends BaseFragment {
                 binding.statusTitle.setText(R.string.activated);
                 cardBackgroundColor = ResourcesKt.resolveColor(activity.getTheme(), R.attr.colorNormal);
                 binding.statusIcon.setImageResource(R.drawable.ic_check_circle);
-                binding.statusSummary.setText(String.format(Locale.US, "%s (%d)", installXposedVersion, ConfigManager.getXposedVersionCode()));
+                binding.statusSummary.setText(String.format(Locale.ROOT, "%s (%d)",
+                        ConfigManager.getXposedVersionName(), ConfigManager.getXposedVersionCode()));
             }
         } else {
             cardBackgroundColor = ResourcesKt.resolveColor(activity.getTheme(), R.attr.colorInstall);
@@ -171,7 +169,7 @@ public class HomeFragment extends BaseFragment {
 
         @Override
         public void onClick(View v) {
-            if (requireInstalled && ConfigManager.getXposedVersionName() == null) {
+            if (requireInstalled && !ConfigManager.isBinderAlive()) {
                 Snackbar.make(snackbar, R.string.lsposed_not_active, Snackbar.LENGTH_LONG).show();
             } else {
                 getNavController().navigate(fragment);
@@ -182,7 +180,12 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        int moduleCount = ModuleUtil.getInstance().getEnabledModulesCount();
+        int moduleCount;
+        if (ConfigManager.isBinderAlive()) {
+            moduleCount = ModuleUtil.getInstance().getEnabledModulesCount();
+        } else {
+            moduleCount = 0;
+        }
         binding.modulesSummary.setText(getResources().getQuantityString(R.plurals.modules_enabled_count, moduleCount, moduleCount));
     }
 
