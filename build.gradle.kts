@@ -26,7 +26,7 @@ buildscript {
     }
     dependencies {
         classpath("com.android.tools.build:gradle:7.0.0")
-        classpath("org.eclipse.jgit:org.eclipse.jgit:5.10.0.202012080955-r")
+        classpath("org.eclipse.jgit:org.eclipse.jgit:5.12.0.202106070339-r")
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.3.5")
     }
 }
