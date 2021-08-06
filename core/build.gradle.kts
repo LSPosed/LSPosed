@@ -55,7 +55,7 @@ val verCode: Int by rootProject.extra
 val verName: String by rootProject.extra
 
 dependencies {
-    implementation("dev.rikka.ndk:riru:${moduleMinRiruVersionName}")
+    implementation("dev.rikka.ndk:riru:26.0.0")
     implementation("dev.rikka.ndk.thirdparty:cxx:1.1.0")
     implementation("io.github.vvb2060.ndk:dobby:1.2")
     implementation("com.android.tools.build:apksig:7.0.0")
