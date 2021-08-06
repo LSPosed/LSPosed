@@ -25,6 +25,10 @@
 -keepclassmembers class * implements android.os.Parcelable {
     public static final ** CREATOR;
 }
+# Fix R8 bug
+-keepclassmembers class * implements android.os.Parcelable$Creator {
+    <methods>;
+}
 -keepclasseswithmembers class org.lsposed.lspd.core.Main {
     public static void forkSystemServerPost(android.os.IBinder);
     public static void forkAndSpecializePost(java.lang.String, java.lang.String, android.os.IBinder);
