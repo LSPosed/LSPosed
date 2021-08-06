@@ -1,1 +1,1 @@
--keepnames class org.lsposed.lspd.models.*
+-keepnames class * implements android.os.Parcelable
