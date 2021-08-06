@@ -38,11 +38,11 @@ namespace art {
             else return "null sym";
         }
 
-        inline static std::string PrettyMethod(void *thiz) {
+        inline std::string PrettyMethod(void *thiz) {
             return PrettyMethod(thiz, true);
         }
 
-        static void Setup(const SandHook::ElfImg &handle) {
+        inline void Setup(const SandHook::ElfImg &handle) {
             RETRIEVE_MEM_FUNC_SYMBOL(PrettyMethod, "_ZN3art9ArtMethod12PrettyMethodEb");
         }
     }

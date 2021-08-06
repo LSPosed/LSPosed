@@ -47,6 +47,11 @@ public final class LspModuleClassLoader extends ByteBufferDexClassLoader {
                                  String apk) {
         super(dexBuffers, parent);
         this.apk = apk;
+        try {
+            fixDexName(apk);
+        } catch (Throwable e) {
+            Utils.logE("fix name", e);
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -57,6 +62,11 @@ public final class LspModuleClassLoader extends ByteBufferDexClassLoader {
         super(dexBuffers, librarySearchPath, parent);
         initNativeLibraryDirs(librarySearchPath);
         this.apk = apk;
+        try {
+            fixDexName(apk);
+        } catch (Throwable e) {
+            Utils.logE("fix name", e);
+        }
     }
 
     private void initNativeLibraryDirs(String librarySearchPath) {
@@ -158,8 +168,7 @@ public final class LspModuleClassLoader extends ByteBufferDexClassLoader {
 
     @Override
     public Enumeration<URL> getResources(String name) throws IOException {
-        @SuppressWarnings("unchecked")
-        final var resources = (Enumeration<URL>[]) new Enumeration<?>[]{
+        @SuppressWarnings("unchecked") final var resources = (Enumeration<URL>[]) new Enumeration<?>[]{
                 Object.class.getClassLoader().getResources(name),
                 findResources(name),
                 getParent() == null ? null : getParent().getResources(name)};

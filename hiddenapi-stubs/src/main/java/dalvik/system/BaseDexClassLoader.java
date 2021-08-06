@@ -9,6 +9,7 @@ import java.io.File;
 import java.nio.ByteBuffer;
 
 public class BaseDexClassLoader extends ClassLoader {
+    private Object pathList;
     public BaseDexClassLoader(String dexPath, File optimizedDirectory, String librarySearchPath, ClassLoader parent) {
         throw new RuntimeException("Stub!");
     }
