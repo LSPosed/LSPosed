@@ -16,8 +16,6 @@
  *
  * Copyright (C) 2021 LSPosed Contributors
  */
-import org.eclipse.jgit.api.Git
-import org.eclipse.jgit.internal.storage.file.FileRepository
 
 buildscript {
     repositories {
@@ -26,14 +24,11 @@ buildscript {
     }
     dependencies {
         classpath("com.android.tools.build:gradle:7.0.0")
-        classpath("org.eclipse.jgit:org.eclipse.jgit:5.12.0.202106070339-r")
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.3.5")
     }
 }
 
-val repo = FileRepository(rootProject.file(".git"))
-val refId = repo.refDatabase.exactRef("refs/remotes/origin/master").objectId!!
-val commitCount = Git(repo).log().add(refId).call().count()
+val commitCount = "git rev-list --count origin/master".exec().toInt()
 
 val defaultManagerPackageName by extra("org.lsposed.manager")
 val verCode by extra(commitCount + 4200)
