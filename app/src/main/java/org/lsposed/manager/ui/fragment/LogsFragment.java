@@ -34,6 +34,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -79,6 +80,32 @@ public class LogsFragment extends BaseFragment {
     private final Handler handler = new Handler(Looper.getMainLooper());
     private FragmentLogsBinding binding;
     private LinearLayoutManagerFix layoutManager;
+    private final ActivityResultLauncher<String> saveLogsLauncher = registerForActivityResult(
+            new ActivityResultContracts.CreateDocument(),
+            uri -> {
+                if (uri == null) return;
+                try {
+                    // grantUriPermission might throw RemoteException on MIUI
+                    requireContext().grantUriPermission(BuildConfig.APPLICATION_ID, uri,
+                            Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
+                    var parcelFileDescriptor = ConfigManager.getLogs(verbose);
+                    if (parcelFileDescriptor == null) {
+                        return;
+                    }
+                    try (var os = requireContext().getContentResolver().openOutputStream(uri);
+                         var is = new FileInputStream(parcelFileDescriptor.getFileDescriptor())) {
+                        FileUtils.copy(is, os);
+                    } catch (IOException e) {
+                        var str = getResources().getString(R.string.logs_save_failed);
+                        Snackbar.make(binding.snackbar, str + "\n" + e.getMessage(),
+                                Snackbar.LENGTH_LONG).show();
+                    }
+                });
+            });
 
     @Nullable
     @Override
@@ -245,32 +272,6 @@ public class LogsFragment extends BaseFragment {
                 "LSPosed_%s_%s.log",
                 verbose ? "Verbose" : "Modules",
                 now.toString());
-        var contract = new ActivityResultContracts.CreateDocument();
-        var saveLogsLauncher = registerForActivityResult(contract,
-                uri -> {
-                    if (uri == null) return;
-                    try {
-                        // grantUriPermission might throw RemoteException on MIUI
-                        requireContext().grantUriPermission(BuildConfig.APPLICATION_ID, uri,
-                                Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
-                        try (var os = requireContext().getContentResolver().openOutputStream(uri)) {
-                            ParcelFileDescriptor parcelFileDescriptor = ConfigManager.getLogs(verbose);
-                            if (parcelFileDescriptor == null) {
-                                return;
-                            }
-                            try (var is = new FileInputStream(parcelFileDescriptor.getFileDescriptor())) {
-                                FileUtils.copy(is, os);
-                            }
-                        } catch (Exception e) {
-                            Snackbar.make(binding.snackbar, getResources().getString(R.string.logs_save_failed) + "\n" +
-                                    e.getMessage(), Snackbar.LENGTH_LONG).show();
-                        }
-                    });
-                });
         saveLogsLauncher.launch(filename);
     }
 
