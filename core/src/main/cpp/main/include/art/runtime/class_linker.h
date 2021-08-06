@@ -102,12 +102,12 @@ namespace art {
     public:
         ClassLinker(void *thiz) : HookedObject(thiz) {}
 
-        static ClassLinker *Current() {
+        inline static ClassLinker *Current() {
             return instance_;
         }
 
         // @ApiSensitive(Level.MIDDLE)
-        static void Setup(const SandHook::ElfImg &handle) {
+        inline static void Setup(const SandHook::ElfImg &handle) {
             int api_level = lspd::GetAndroidApiLevel();
             size_t OFFSET_classlinker;  // Get offset from art::Runtime::RunRootClinits() call in IDA
             switch (api_level) {

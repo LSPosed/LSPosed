@@ -141,7 +141,7 @@ namespace yahfa {
     }
 
     void *getArtMethod(JNIEnv *env, jobject jmethod) {
-        if (jmethod == nullptr) {
+        if (jmethod == nullptr || fieldArtMethod == nullptr) {
             return nullptr;
         } else {
             return (void *) env->GetLongField(jmethod, fieldArtMethod);

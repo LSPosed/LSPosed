@@ -36,7 +36,7 @@ namespace art {
     public:
         Runtime(void *thiz) : HookedObject(thiz) {}
 
-        static Runtime *Current() {
+        inline static Runtime *Current() {
             return instance_;
         }
 
@@ -45,7 +45,7 @@ namespace art {
         }
 
         // @ApiSensitive(Level.LOW)
-        static void Setup(const SandHook::ElfImg &handle) {
+        inline static void Setup(const SandHook::ElfImg &handle) {
             RETRIEVE_FIELD_SYMBOL(instance, "_ZN3art7Runtime9instance_E");
             RETRIEVE_MEM_FUNC_SYMBOL(SetJavaDebuggable, "_ZN3art7Runtime17SetJavaDebuggableEb");
             void *thiz = *reinterpret_cast<void **>(instance);
