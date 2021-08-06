@@ -1,5 +1,5 @@
-package org.lsposed.lspd.service;
-import org.lsposed.lspd.service.ModuleConfig;
+package org.lsposed.lspd.models;
+import org.lsposed.lspd.models.ModuleConfig;
 
 parcelable Module {
     String name;

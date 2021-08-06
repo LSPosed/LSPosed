@@ -3,8 +3,9 @@ package org.lsposed.lspd.config;
 import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
 
+import org.lsposed.lspd.models.Module;
 import org.lsposed.lspd.service.ILSPApplicationService;
-import org.lsposed.lspd.service.Module;
+
 import java.util.List;
 
 abstract public class ApplicationServiceClient implements ILSPApplicationService {
