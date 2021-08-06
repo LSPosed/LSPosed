@@ -43,11 +43,11 @@ namespace art {
     public:
         Thread(void *thiz) : HookedObject(thiz) {}
 
-        static Thread Current() {
+        inline static Thread Current() {
             return Thread(CurrentFromGdb());
         }
 
-        static void Setup(const SandHook::ElfImg &handle) {
+        inline static void Setup(const SandHook::ElfImg &handle) {
             RETRIEVE_MEM_FUNC_SYMBOL(DecodeJObject,
                                      "_ZNK3art6Thread13DecodeJObjectEP8_jobject");
             RETRIEVE_FUNC_SYMBOL(CurrentFromGdb,

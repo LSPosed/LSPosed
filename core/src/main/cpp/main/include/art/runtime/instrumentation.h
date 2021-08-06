@@ -38,7 +38,7 @@ namespace art {
                     }
                 });
 
-        static void DisableUpdateHookedMethodsCode(const SandHook::ElfImg &handle) {
+        inline void DisableUpdateHookedMethodsCode(const SandHook::ElfImg &handle) {
             lspd::HookSym(handle, UpdateMethodsCode);
         }
     }
