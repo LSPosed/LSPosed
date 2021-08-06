@@ -216,11 +216,9 @@ public class ConfigManager {
         if (sync) {
             cacheModules();
             cacheScopes();
-            cleanModuleDexes();
         } else {
             cacheHandler.post(this::cacheModules);
             cacheHandler.post(this::cacheScopes);
-            cacheHandler.post(this::cleanModuleDexes);
         }
     }
 
@@ -478,6 +476,7 @@ public class ConfigManager {
             for (var obsoleteScope : obsoleteScopes) {
                 removeModuleScopeWithoutCache(obsoleteScope);
             }
+            cleanModuleDexes();
         }
         Log.d(TAG, "cached modules");
         for (int uid : cachedModule.keySet()) {
@@ -571,26 +570,20 @@ public class ConfigManager {
         return sharedMemories.toArray(new SharedMemory[0]);
     }
 
-    private synchronized SharedMemory[] getModuleDexes(String path) {
-        var cached = cachedDexes.get(path);
-        if (cached == null) {
-            var loaded = loadModuleDexes(path);
-            cachedDexes.put(path, loaded);
-            return loaded;
-        } else {
-            return cached;
-        }
+    private SharedMemory[] getModuleDexes(String path) {
+        return cachedDexes.computeIfAbsent(path, this::loadModuleDexes);
     }
 
-    private synchronized void cleanModuleDexes() {
-        for (var path : cachedDexes.keySet()) {
+    private void cleanModuleDexes() {
+        cachedDexes.entrySet().removeIf(entry -> {
+            var path = entry.getKey();
+            var dexes = entry.getValue();
             if (!new File(path).exists()) {
-                var dexes = cachedDexes.get(path);
-                assert dexes != null;
                 Arrays.stream(dexes).parallel().forEach(SharedMemory::close);
-                cachedDexes.remove(path);
+                return true;
             }
-        }
+            return false;
+        });
     }
 
     // This is called when a new process created, use the cached result
