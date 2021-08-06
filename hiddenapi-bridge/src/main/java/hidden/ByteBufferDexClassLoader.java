@@ -35,9 +35,10 @@ public class ByteBufferDexClassLoader extends BaseDexClassLoader {
         super(dexFiles, librarySearchPath, parent);
     }
 
-    // Some stupid modules get their module paths from this variable
-    // temporarily compatible with them
-    // TODO: removed in the next major release
+    // Some modules get their module paths from this variable
+    // They should use `initZygote.modulePath` instead
+    // Temporarily workaround
+    // TODO(vvb2060): removed in the next major release
     public void setDexName(String name){
         try {
             nameField.set(dexFileField.get(((Object[]) dexElementsField.get(pathListField.get(this)))[0]), name);
