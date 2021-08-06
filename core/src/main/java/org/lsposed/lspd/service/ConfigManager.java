@@ -36,6 +36,7 @@ import android.os.SharedMemory;
 import android.os.SystemClock;
 import android.system.ErrnoException;
 import android.system.Os;
+import android.system.OsConstants;
 import android.util.Log;
 import android.util.Pair;
 
@@ -46,6 +47,7 @@ import org.apache.commons.lang3.SerializationUtils;
 import org.lsposed.lspd.BuildConfig;
 import org.lsposed.lspd.models.Application;
 import org.lsposed.lspd.models.Module;
+import org.lsposed.lspd.models.ModuleConfig;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -53,6 +55,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.nio.file.Files;
@@ -141,8 +144,6 @@ public class ConfigManager {
 
     private final Handler cacheHandler;
 
-    private final Map<String, SharedMemory> moduleDexes = new ConcurrentHashMap<>();
-
     private long lastModuleCacheTime = 0;
     private long requestModuleCacheTime = 0;
 
@@ -199,8 +200,13 @@ public class ConfigManager {
 
     private final Map<ProcessScope, List<Module>> cachedScope = new ConcurrentHashMap<>();
 
+    // apkPath, dexes
+    private final Map<String, SharedMemory[]> cachedDexes = new ConcurrentHashMap<>();
+
+    // appId, packageName
     private final Map<Integer, String> cachedModule = new ConcurrentHashMap<>();
 
+    // packageName, userId, group, key, value
     private final Map<Pair<String, Integer>, Map<String, ConcurrentHashMap<String, Object>>> cachedConfig = new ConcurrentHashMap<>();
 
     private void updateCaches(boolean sync) {
@@ -251,9 +257,12 @@ public class ConfigManager {
             int pkgNameIdx = cursor.getColumnIndex("module_pkg_name");
             while (cursor.moveToNext()) {
                 var module = new Module();
+                var config = new ModuleConfig();
+                var path = cursor.getString(apkPathIdx);
+                config.preLoadedDexes = getModuleDexes(path);
                 module.name = cursor.getString(pkgNameIdx);
-                module.apk = cursor.getString(apkPathIdx);
-                module.config = null;
+                module.apk = path;
+                module.config = config;
                 modules.add(module);
             }
         }
@@ -433,6 +442,7 @@ public class ConfigManager {
             }
             int pkgNameIdx = cursor.getColumnIndex("module_pkg_name");
             int userIdIdx = cursor.getColumnIndex("user_id");
+            // packageName, userId, packageInfo
             Map<String, Map<Integer, PackageInfo>> modules = new HashMap<>();
             Set<String> obsoleteModules = new HashSet<>();
             Set<Application> obsoleteScopes = new HashSet<>();
@@ -466,6 +476,7 @@ public class ConfigManager {
             for (var obsoleteScope : obsoleteScopes) {
                 removeModuleScopeWithoutCache(obsoleteScope);
             }
+            cleanModuleDexes();
         }
         Log.d(TAG, "cached modules");
         for (int uid : cachedModule.keySet()) {
@@ -506,9 +517,11 @@ public class ConfigManager {
                     }
                     for (ProcessScope processScope : processesScope) {
                         var module = new Module();
+                        var config = new ModuleConfig();
+                        config.preLoadedDexes = getModuleDexes(apk_path);
                         module.name = module_pkg;
                         module.apk = apk_path;
-                        module.config = null;
+                        module.config = config;
                         cachedScope.computeIfAbsent(processScope, ignored -> new LinkedList<>()).add(module);
                         if (module_pkg.equals(app.packageName)) {
                             var appId = processScope.uid % PER_USER_RANGE;
@@ -531,6 +544,45 @@ public class ConfigManager {
         cachedScope.forEach((ps, modules) -> {
             Log.d(TAG, ps.processName + "/" + ps.uid);
             modules.forEach(module -> Log.d(TAG, "\t" + module.name));
+        });
+    }
+
+    private SharedMemory[] loadModuleDexes(String path) {
+        var sharedMemories = new ArrayList<SharedMemory>();
+        try (var apkFile = new ZipFile(path)) {
+            int secondary = 2;
+            for (var dexFile = apkFile.getEntry("classes.dex"); dexFile != null;
+                 dexFile = apkFile.getEntry("classes" + secondary + ".dex"), secondary++) {
+                try (var in = apkFile.getInputStream(dexFile)) {
+                    var memory = SharedMemory.create(null, in.available());
+                    var byteBuffer = memory.mapReadWrite();
+                    Channels.newChannel(in).read(byteBuffer);
+                    SharedMemory.unmap(byteBuffer);
+                    memory.setProtect(OsConstants.PROT_READ);
+                    sharedMemories.add(memory);
+                } catch (IOException | ErrnoException e) {
+                    Log.w(TAG, "Can not load " + dexFile + " in " + path, e);
+                }
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "Can not open " + path, e);
+        }
+        return sharedMemories.toArray(new SharedMemory[0]);
+    }
+
+    private SharedMemory[] getModuleDexes(String path) {
+        return cachedDexes.computeIfAbsent(path, this::loadModuleDexes);
+    }
+
+    private void cleanModuleDexes() {
+        cachedDexes.entrySet().removeIf(entry -> {
+            var path = entry.getKey();
+            var dexes = entry.getValue();
+            if (!new File(path).exists()) {
+                Arrays.stream(dexes).parallel().forEach(SharedMemory::close);
+                return true;
+            }
+            return false;
         });
     }
 
