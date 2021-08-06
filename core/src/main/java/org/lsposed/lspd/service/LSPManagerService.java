@@ -39,13 +39,13 @@ import org.lsposed.lspd.BuildConfig;
 import org.lsposed.lspd.ILSPManagerService;
 import org.lsposed.lspd.models.Application;
 import org.lsposed.lspd.models.UserInfo;
-import org.lsposed.lspd.utils.ParceledListSlice;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
 
 import de.robv.android.xposed.XposedBridge;
+import io.github.xposed.xposedservice.utils.ParceledListSlice;
 
 public class LSPManagerService extends ILSPManagerService.Stub {
 

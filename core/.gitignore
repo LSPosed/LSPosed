@@ -1,7 +1,3 @@
-/.externalNativeBuild
 /build
-/obj
 /release
-*.iml
-/.cxx
-src/main/cpp/main/src/config.cpp
+/src/main/cpp/main/src/config.cpp

@@ -29,7 +29,6 @@ import android.util.Log;
 
 import org.lsposed.lspd.models.Application;
 import org.lsposed.lspd.models.UserInfo;
-import org.lsposed.lspd.utils.ParceledListSlice;
 import org.lsposed.manager.adapters.ScopeAdapter;
 import org.lsposed.manager.receivers.LSPManagerServiceHolder;
 
@@ -38,6 +37,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+
+import io.github.xposed.xposedservice.utils.ParceledListSlice;
 
 public class ConfigManager {
 

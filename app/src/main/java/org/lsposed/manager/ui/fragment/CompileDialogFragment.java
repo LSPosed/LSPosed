@@ -131,9 +131,9 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
                     result = "Error ";
                 }
                 if (TextUtils.isEmpty(err)) {
-                    return result + input.toString();
+                    return result + input;
                 } else {
-                    return result + err.toString();
+                    return result + err;
                 }
             } catch (Exception e) {
                 e.printStackTrace();

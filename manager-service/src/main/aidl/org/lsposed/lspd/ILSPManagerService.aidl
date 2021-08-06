@@ -1,6 +1,6 @@
 package org.lsposed.lspd;
 
-import org.lsposed.lspd.utils.ParceledListSlice;
+import io.github.xposed.xposedservice.utils.ParceledListSlice;
 import org.lsposed.lspd.models.UserInfo;
 import org.lsposed.lspd.models.Application;
 
