@@ -84,7 +84,7 @@ public class InstallerVerifier {
         Utils.logI("Found LSPosed Manager, hooking it");
         try {
             var clazz = XposedHelpers.findClass("org.lsposed.manager.Constants", classLoader);
-            XposedHelpers.callStaticMethod(clazz, "setBinder", IBinder.class, binder);
+            XposedHelpers.callStaticMethod(clazz, "setBinder", new Class[]{IBinder.class}, binder);
             Utils.logI("Hooked LSPosed Manager");
         } catch (Throwable t) {
             Utils.logW("Could not hook LSPosed Manager", t);
