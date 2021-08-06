@@ -1,6 +1,6 @@
 package org.lsposed.lspd.service;
 
-import org.lsposed.lspd.models.Module;
+import org.lsposed.lspd.service.Module;
 
 interface ILSPApplicationService {
     IBinder requestModuleBinder(String name);
