@@ -47,11 +47,7 @@ public final class LspModuleClassLoader extends ByteBufferDexClassLoader {
                                  String apk) {
         super(dexBuffers, parent);
         this.apk = apk;
-        try {
-            fixDexName(apk);
-        } catch (Throwable e) {
-            Utils.logE("fix name", e);
-        }
+        setDexName(apk);
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -62,11 +58,7 @@ public final class LspModuleClassLoader extends ByteBufferDexClassLoader {
         super(dexBuffers, librarySearchPath, parent);
         initNativeLibraryDirs(librarySearchPath);
         this.apk = apk;
-        try {
-            fixDexName(apk);
-        } catch (Throwable e) {
-            Utils.logE("fix name", e);
-        }
+        setDexName(apk);
     }
 
     private void initNativeLibraryDirs(String librarySearchPath) {
