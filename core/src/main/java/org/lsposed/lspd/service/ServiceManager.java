@@ -35,11 +35,12 @@ import com.android.internal.os.BinderInternal;
 
 import org.lsposed.lspd.BuildConfig;
 
+import java.util.concurrent.ConcurrentHashMap;
 import hidden.HiddenApiBridge;
 
 public class ServiceManager {
     private static LSPosedService mainService = null;
-    private static LSPModuleService moduleService = null;
+    final private static ConcurrentHashMap<String, LSPModuleService> moduleServices = new ConcurrentHashMap<>();
     private static LSPApplicationService applicationService = null;
     private static LSPManagerService managerService = null;
     private static LSPSystemServerService systemServerService = null;
@@ -81,7 +82,6 @@ public class ServiceManager {
         Process.setThreadPriority(Process.THREAD_PRIORITY_FOREGROUND);
         Looper.prepareMainLooper();
         mainService = new LSPosedService();
-        moduleService = new LSPModuleService();
         applicationService = new LSPApplicationService();
         managerService = new LSPManagerService();
         systemServerService = new LSPSystemServerService();
@@ -129,8 +129,8 @@ public class ServiceManager {
         throw new RuntimeException("Main thread loop unexpectedly exited");
     }
 
-    public static LSPModuleService getModuleService() {
-        return moduleService;
+    public static LSPModuleService getModuleService(String module) {
+        return moduleServices.computeIfAbsent(module, LSPModuleService::new);
     }
 
     public static LSPApplicationService getApplicationService() {

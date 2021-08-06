@@ -19,16 +19,17 @@
 
 package org.lsposed.lspd.config;
 
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 
 import org.lsposed.lspd.service.ILSPApplicationService;
+import org.lsposed.lspd.service.Module;
 import org.lsposed.lspd.util.Utils;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 public class LSPApplicationServiceClient extends ApplicationServiceClient {
     static ILSPApplicationService service = null;
@@ -60,9 +61,9 @@ public class LSPApplicationServiceClient extends ApplicationServiceClient {
     }
 
     @Override
-    public IBinder requestModuleBinder() {
+    public IBinder requestModuleBinder(String name) {
         try {
-            return service.requestModuleBinder();
+            return service.requestModuleBinder(name);
         } catch (RemoteException | NullPointerException ignored) {
         }
         return null;
@@ -87,17 +88,15 @@ public class LSPApplicationServiceClient extends ApplicationServiceClient {
     }
 
     @Override
-    public Map<String, String> getModulesList(String processName) {
+    public List<Module> getModulesList(String processName) {
         try {
-            //noinspection unchecked
             return service.getModulesList(processName);
         } catch (RemoteException | NullPointerException ignored) {
         }
-        return Collections.emptyMap();
+        return Collections.emptyList();
     }
 
-    @Override
-    public Map<String, String> getModulesList() {
+    public List<Module> getModulesList() {
         return getModulesList(processName);
     }
 
@@ -116,6 +115,11 @@ public class LSPApplicationServiceClient extends ApplicationServiceClient {
             return service.getModuleLogger();
         } catch (RemoteException | NullPointerException ignored) {
         }
+        return null;
+    }
+
+    @Override
+    public Bundle requestRemotePreference(String packageName, int userId, IBinder callback) throws RemoteException {
         return null;
     }
 
