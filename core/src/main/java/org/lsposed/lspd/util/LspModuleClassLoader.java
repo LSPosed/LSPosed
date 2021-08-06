@@ -197,6 +197,7 @@ public final class LspModuleClassLoader extends ByteBufferDexClassLoader {
             cl.initNativeLibraryDirs(librarySearchPath);
         }
         Arrays.stream(dexBuffers).parallel().forEach(SharedMemory::unmap);
+        Arrays.stream(dexes).parallel().forEach(SharedMemory::close);
         return cl;
     }
 }

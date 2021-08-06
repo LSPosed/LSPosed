@@ -36,6 +36,7 @@ import android.os.SharedMemory;
 import android.os.SystemClock;
 import android.system.ErrnoException;
 import android.system.Os;
+import android.system.OsConstants;
 import android.util.Log;
 import android.util.Pair;
 
@@ -518,7 +519,7 @@ public class ConfigManager {
                     for (ProcessScope processScope : processesScope) {
                         var module = new Module();
                         var config = new ModuleConfig();
-                        config.preLoadedDexes = getModuleDexes(module_pkg);
+                        config.preLoadedDexes = getModuleDexes(apk_path);
                         module.name = module_pkg;
                         module.apk = apk_path;
                         module.config = config;
@@ -560,6 +561,7 @@ public class ConfigManager {
                     Channels.newChannel(in).read(byteBuffer);
                     byteBuffer.reset();
                     SharedMemory.unmap(byteBuffer);
+                    memory.setProtect(OsConstants.PROT_READ);
                     sharedMemories.add(memory);
                 } catch (IOException | ErrnoException e) {
                     Log.w(TAG, "Can not load " + dexFile + " in " + path, e);
