@@ -45,7 +45,7 @@ public class LSPManagerServiceHolder implements IBinder.DeathRecipient {
         service = ILSPManagerService.Stub.asInterface(binder);
     }
 
-    void linkToDeath(IBinder binder) {
+    private void linkToDeath(IBinder binder) {
         try {
             binder.linkToDeath(this, 0);
         } catch (RemoteException e) {
