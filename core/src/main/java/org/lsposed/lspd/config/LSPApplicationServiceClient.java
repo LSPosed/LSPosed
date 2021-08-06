@@ -24,8 +24,8 @@ import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 
+import org.lsposed.lspd.models.Module;
 import org.lsposed.lspd.service.ILSPApplicationService;
-import org.lsposed.lspd.service.Module;
 import org.lsposed.lspd.util.Utils;
 
 import java.util.Collections;

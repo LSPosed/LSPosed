@@ -45,7 +45,7 @@ import androidx.annotation.Nullable;
 import org.apache.commons.lang3.SerializationUtils;
 import org.lsposed.lspd.BuildConfig;
 import org.lsposed.lspd.models.Application;
-import org.lsposed.lspd.service.Module;
+import org.lsposed.lspd.models.Module;
 
 import java.io.File;
 import java.io.FileNotFoundException;

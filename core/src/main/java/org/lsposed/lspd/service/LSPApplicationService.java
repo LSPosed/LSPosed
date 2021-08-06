@@ -19,15 +19,16 @@
 
 package org.lsposed.lspd.service;
 
-import android.os.Bundle;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.util.Log;
 import android.util.Pair;
 
+import org.lsposed.lspd.models.Module;
 import org.lsposed.lspd.util.InstallerVerifier;
 import org.lsposed.lspd.util.Utils;
 
