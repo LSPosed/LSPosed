@@ -41,6 +41,7 @@ import android.content.res.XResources;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Process;
+import android.os.SharedMemory;
 import android.util.ArraySet;
 import android.util.Log;
 
@@ -224,11 +225,12 @@ public final class XposedInit {
             moduleList.forEach(module -> {
                 var apk = module.apk;
                 var name = module.name;
+                var dexes = module.config.preLoadedDexes;
                 if (loadedModules.contains(apk)) {
                     newLoadedApk.add(apk);
                 } else {
                     loadedModules.add(apk); // temporarily add it for XSharedPreference
-                    boolean loadSuccess = loadModule(name, apk);
+                    boolean loadSuccess = loadModule(name, apk, dexes);
                     if (loadSuccess) {
                         newLoadedApk.add(apk);
                     }
@@ -361,7 +363,7 @@ public final class XposedInit {
      * in <code>assets/xposed_init</code>.
      */
     @SuppressLint("PrivateApi")
-    private static boolean loadModule(String name, String apk) {
+    private static boolean loadModule(String name, String apk, SharedMemory[] dexes) {
         Log.i(TAG, "Loading module " + name + " from " + apk);
 
         if (!new File(apk).exists()) {
@@ -375,7 +377,7 @@ public final class XposedInit {
             librarySearchPath.append(apk).append("!/lib/").append(abi).append(File.pathSeparator);
         }
         ClassLoader initLoader = XposedInit.class.getClassLoader();
-        ClassLoader mcl = LspModuleClassLoader.loadApk(new File(apk), librarySearchPath.toString(), initLoader);
+        ClassLoader mcl = LspModuleClassLoader.loadApk(new File(apk), dexes, librarySearchPath.toString(), initLoader);
 
         try {
             if (mcl.loadClass(XposedBridge.class.getName()).getClassLoader() != initLoader) {
