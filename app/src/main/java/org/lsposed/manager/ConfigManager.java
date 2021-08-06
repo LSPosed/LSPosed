@@ -119,11 +119,11 @@ public class ConfigManager {
     public static List<ScopeAdapter.ApplicationWithEquals> getModuleScope(String packageName) {
         List<ScopeAdapter.ApplicationWithEquals> list = new ArrayList<>();
         try {
-            List<Application> applications = LSPManagerServiceHolder.getService().getModuleScope(packageName).getList();
+            var applications = LSPManagerServiceHolder.getService().getModuleScope(packageName);
             if (applications == null) {
                 return list;
             }
-            applications.forEach(application -> {
+            applications.getList().forEach(application -> {
                 if (!application.packageName.equals(packageName)) {
                     list.add(new ScopeAdapter.ApplicationWithEquals(application));
                 }
