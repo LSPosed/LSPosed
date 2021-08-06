@@ -53,7 +53,7 @@ import org.lsposed.manager.ui.activity.MainActivity;
 import org.lsposed.manager.util.BackupUtils;
 import org.lsposed.manager.util.theme.ThemeUtil;
 
-import java.util.Calendar;
+import java.time.LocalDateTime;
 import java.util.Locale;
 
 import rikka.core.util.ResourceUtils;
@@ -176,12 +176,9 @@ public class SettingsFragment extends BaseFragment {
             if (backup != null) {
                 backup.setEnabled(installed);
                 backup.setOnPreferenceClickListener(preference -> {
-                    Calendar now = Calendar.getInstance();
-                    backupLauncher.launch(String.format(Locale.US,
-                            "LSPosed_%04d%02d%02d_%02d%02d%02d.lsp",
-                            now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1,
-                            now.get(Calendar.DAY_OF_MONTH), now.get(Calendar.HOUR_OF_DAY),
-                            now.get(Calendar.MINUTE), now.get(Calendar.SECOND)));
+                    LocalDateTime now = LocalDateTime.now();
+                    backupLauncher.launch(String.format(Locale.ROOT,
+                            "LSPosed_%s.lsp", now.toString()));
                     return true;
                 });
             }
