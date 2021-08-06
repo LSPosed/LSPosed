@@ -3,7 +3,7 @@
 /local.properties
 /.idea
 .DS_Store
-/build
+build
 /captures
 /release
 .externalNativeBuild
@@ -16,3 +16,4 @@ elf-cleaner.sh
 .vscode/
 
 .cxx
+**.iml
