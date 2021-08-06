@@ -65,7 +65,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
-import java.util.stream.Collectors;
 
 import hidden.HiddenApiBridge;
 
@@ -209,7 +208,7 @@ public class PackageService {
 
             }
         }
-        if (pkgInfo == null || pkgInfo.applicationInfo == null || (!pkgInfo.packageName.equals("android") && (pkgInfo.applicationInfo.sourceDir == null || pkgInfo.applicationInfo.deviceProtectedDataDir == null || !new File(pkgInfo.applicationInfo.sourceDir).exists())))
+        if (pkgInfo.applicationInfo == null ||(!pkgInfo.packageName.equals("android") && (pkgInfo.applicationInfo.sourceDir == null || !new File(pkgInfo.applicationInfo.sourceDir).exists() || (!pm.isPackageAvailable(packageName, userId) && !pm.getApplicationHiddenSettingAsUser(packageName, userId)))))
             return null;
         return pkgInfo;
     }
