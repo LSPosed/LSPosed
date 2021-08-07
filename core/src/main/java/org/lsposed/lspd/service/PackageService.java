@@ -208,7 +208,7 @@ public class PackageService {
 
             }
         }
-        if (pkgInfo.applicationInfo == null ||(!pkgInfo.packageName.equals("android") && (pkgInfo.applicationInfo.sourceDir == null || !new File(pkgInfo.applicationInfo.sourceDir).exists() || (!pm.isPackageAvailable(packageName, userId) && !pm.getApplicationHiddenSettingAsUser(packageName, userId)))))
+        if (pkgInfo == null || pkgInfo.applicationInfo == null || (!pkgInfo.packageName.equals("android") && (pkgInfo.applicationInfo.sourceDir == null || !new File(pkgInfo.applicationInfo.sourceDir).exists() || (!pm.isPackageAvailable(packageName, userId) && !pm.getApplicationHiddenSettingAsUser(packageName, userId)))))
             return null;
         return pkgInfo;
     }
