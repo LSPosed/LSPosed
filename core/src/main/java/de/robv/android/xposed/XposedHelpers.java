@@ -1657,19 +1657,6 @@ public final class XposedHelpers {
     }
 
     /**
-     * Invokes the {@link Closeable#close()} method, ignoring IOExceptions.
-     */
-    /*package*/
-    static void closeSilently(Closeable c) {
-        if (c != null) {
-            try {
-                c.close();
-            } catch (IOException ignored) {
-            }
-        }
-    }
-
-    /**
      * Returns the lowercase hex string representation of a file's MD5 hash sum.
      */
     public static String getMD5Sum(String file) throws IOException {
