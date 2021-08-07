@@ -91,7 +91,7 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
                 hookNewXSP(lpparam);
             }
 
-            var binder = new ArrayList<IBinder>();
+            var binder = new ArrayList<IBinder>(1);
             var blocked = false;
             var info = loadedApk.getApplicationInfo();
             if (info != null) {

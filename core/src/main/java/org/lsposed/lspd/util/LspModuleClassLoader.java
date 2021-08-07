@@ -177,10 +177,10 @@ public final class LspModuleClassLoader extends ByteBufferDexClassLoader {
     }
 
     public static LspModuleClassLoader loadApk(File apk,
-                                               SharedMemory[] dexes,
+                                               List<SharedMemory> dexes,
                                                String librarySearchPath,
                                                ClassLoader parent) {
-        var dexBuffers = Arrays.stream(dexes).parallel().map(dex -> {
+        var dexBuffers = dexes.stream().parallel().map(dex -> {
             try {
                 return dex.mapReadOnly();
             } catch (ErrnoException e) {
@@ -197,7 +197,7 @@ public final class LspModuleClassLoader extends ByteBufferDexClassLoader {
             cl.initNativeLibraryDirs(librarySearchPath);
         }
         Arrays.stream(dexBuffers).parallel().forEach(SharedMemory::unmap);
-        Arrays.stream(dexes).parallel().forEach(SharedMemory::close);
+        dexes.stream().parallel().forEach(SharedMemory::close);
         return cl;
     }
 }

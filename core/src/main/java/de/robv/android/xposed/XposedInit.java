@@ -57,6 +57,7 @@ import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -355,7 +356,7 @@ public final class XposedInit {
      * in <code>assets/xposed_init</code>.
      */
     @SuppressLint("PrivateApi")
-    private static boolean loadModule(String name, String apk, SharedMemory[] dexes) {
+    private static boolean loadModule(String name, String apk, List<SharedMemory> dexes) {
         Log.i(TAG, "Loading module " + name + " from " + apk);
 
         if (!new File(apk).exists()) {
