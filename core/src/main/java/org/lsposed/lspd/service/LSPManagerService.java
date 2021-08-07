@@ -25,6 +25,7 @@ import static org.lsposed.lspd.service.ServiceManager.TAG;
 import android.app.IServiceConnection;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -123,8 +124,18 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     @Override
     public boolean enableModule(String packageName) throws RemoteException {
         PackageInfo pkgInfo = PackageService.getPackageInfo(packageName, PackageService.MATCH_ALL_FLAGS, 0);
-        if (pkgInfo == null) return false;
-        return ConfigManager.getInstance().enableModule(packageName, pkgInfo.applicationInfo);
+        if (pkgInfo != null) {
+            ApplicationInfo appInfo;
+            try {
+                appInfo = pkgInfo.applicationInfo;
+            } catch (Throwable t) {
+                Log.wtf(TAG, t);
+                throw t;
+            }
+            return ConfigManager.getInstance().enableModule(packageName, appInfo);
+        } else {
+            return false;
+        }
     }
 
     @Override
