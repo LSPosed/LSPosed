@@ -61,9 +61,9 @@ public class HookMain {
     private static void checkCompatibleMethods(Executable original, Method replacement, String replacementName) {
         ArrayList<Class<?>> originalParams;
         if (original instanceof Method) {
-            originalParams = new ArrayList<>(Arrays.asList(((Method) original).getParameterTypes()));
+            originalParams = new ArrayList<>(Arrays.asList(original.getParameterTypes()));
         } else if (original instanceof Constructor) {
-            originalParams = new ArrayList<>(Arrays.asList(((Constructor<?>) original).getParameterTypes()));
+            originalParams = new ArrayList<>(Arrays.asList(original.getParameterTypes()));
         } else {
             throw new IllegalArgumentException("Type of target method is wrong");
         }
@@ -71,8 +71,8 @@ public class HookMain {
         ArrayList<Class<?>> replacementParams = new ArrayList<>(Arrays.asList(replacement.getParameterTypes()));
 
         if (original instanceof Method
-                && !Modifier.isStatic(((Method) original).getModifiers())) {
-            originalParams.add(0, ((Method) original).getDeclaringClass());
+                && !Modifier.isStatic(original.getModifiers())) {
+            originalParams.add(0, original.getDeclaringClass());
         } else if (original instanceof Constructor) {
             originalParams.add(0, ((Constructor<?>) original).getDeclaringClass());
         }

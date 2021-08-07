@@ -49,7 +49,6 @@ import androidx.annotation.NonNull;
 import org.lsposed.lspd.BuildConfig;
 import org.lsposed.lspd.models.Application;
 import org.lsposed.lspd.util.InstallerVerifier;
-import org.lsposed.lspd.utils.ParceledListSlice;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -67,6 +66,7 @@ import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
 import hidden.HiddenApiBridge;
+import io.github.xposed.xposedservice.utils.ParceledListSlice;
 
 public class PackageService {
 

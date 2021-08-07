@@ -63,7 +63,6 @@ dependencies {
     implementation("de.upb.cs.swt:axml:2.1.1")
     compileOnly("androidx.annotation:annotation:1.2.0")
     compileOnly(project(":hiddenapi-stubs"))
-    implementation(project(":interface"))
     implementation(project(":hiddenapi-bridge"))
     implementation(project(":manager-service"))
 }

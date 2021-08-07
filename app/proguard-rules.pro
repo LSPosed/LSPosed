@@ -2,11 +2,6 @@
     public static void showErrorToast(int);
     public static void setBinder(android.os.IBinder);
 }
-
--keepclassmembers class * implements android.os.Parcelable {
-    public static final ** CREATOR;
-}
-
 -assumenosideeffects class kotlin.jvm.internal.Intrinsics {
     public static void check*(...);
     public static void throw*(...);

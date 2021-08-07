@@ -49,8 +49,6 @@ android {
     }
 }
 
-configurations.all {
-    resolutionStrategy {
-        exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib")
-    }
+dependencies {
+    api(project(":interface"))
 }
