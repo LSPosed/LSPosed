@@ -26,7 +26,6 @@ import static de.robv.android.xposed.XposedBridge.sInitPackageResourcesCallbacks
 import static de.robv.android.xposed.XposedBridge.sInitZygoteCallbacks;
 import static de.robv.android.xposed.XposedBridge.sLoadedPackageCallbacks;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.closeSilently;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.getParameterIndexByType;
@@ -281,24 +280,20 @@ public final class XposedInit {
      * It will only store the so names but not doing anything.
      */
     private static boolean initNativeModule(ClassLoader mcl, String name) {
-        InputStream is = mcl.getResourceAsStream("assets/native_init");
-        if (is == null) return true;
-        BufferedReader moduleLibraryReader = new BufferedReader(new InputStreamReader(is));
-        String moduleLibraryName;
-        try {
+        try (InputStream is = mcl.getResourceAsStream("assets/native_init")) {
+            if (is == null) return true;
+            BufferedReader moduleLibraryReader = new BufferedReader(new InputStreamReader(is));
+            String moduleLibraryName;
             while ((moduleLibraryName = moduleLibraryReader.readLine()) != null) {
                 if (!moduleLibraryName.startsWith("#")) {
                     NativeAPI.recordNativeEntrypoint(moduleLibraryName);
                 }
             }
+            return true;
         } catch (IOException e) {
             Log.e(TAG, "  Failed to load native library list from " + name, e);
             return false;
-        } finally {
-            closeSilently(is);
         }
-        return true;
-
     }
 
     private static boolean initModule(ClassLoader mcl, String name, String apk) {
@@ -306,8 +301,7 @@ public final class XposedInit {
         if (is == null) {
             return true;
         }
-        BufferedReader moduleClassesReader = new BufferedReader(new InputStreamReader(is));
-        try {
+        try (BufferedReader moduleClassesReader = new BufferedReader(new InputStreamReader(is))) {
             String moduleClassName;
             while ((moduleClassName = moduleClassesReader.readLine()) != null) {
                 moduleClassName = moduleClassName.trim();
@@ -349,13 +343,11 @@ public final class XposedInit {
                     return false;
                 }
             }
+            return true;
         } catch (IOException e) {
             Log.e(TAG, "  Failed to load module " + name + " from " + apk, e);
             return false;
-        } finally {
-            closeSilently(is);
         }
-        return true;
     }
 
     /**
