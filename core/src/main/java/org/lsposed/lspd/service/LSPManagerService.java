@@ -130,7 +130,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                 appInfo = pkgInfo.applicationInfo;
             } catch (Throwable t) {
                 Log.wtf(TAG, t);
-                throw new RuntimeException(t);
+                throw t;
             }
             return ConfigManager.getInstance().enableModule(packageName, appInfo);
         } else {
