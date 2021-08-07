@@ -73,7 +73,7 @@ public class BridgeService {
             Log.i(TAG, "service " + SERVICE_NAME + " is dead. ");
 
             try {
-                @SuppressWarnings("JavaReflectionMemberAccess")
+                //noinspection JavaReflectionMemberAccess
                 Field field = ServiceManager.class.getDeclaredField("sServiceManager");
                 field.setAccessible(true);
                 field.set(null, null);
@@ -91,10 +91,25 @@ public class BridgeService {
                 Log.w(TAG, "clear ServiceManager: " + Log.getStackTraceString(e));
             }
 
+            try {
+                //noinspection JavaReflectionMemberAccess
+                Field field = ActivityThread.class.getDeclaredField("sPackageManager");
+                field.setAccessible(true);
+                field.set(null, null);
+
+                //noinspection JavaReflectionMemberAccess
+                field = ActivityThread.class.getDeclaredField("sPermissionManager");
+                field.setAccessible(true);
+                field.set(null, null);
+                Log.i(TAG, "clear ActivityThread");
+            } catch (Throwable e) {
+                Log.w(TAG, "clear ActivityThread: " + Log.getStackTraceString(e));
+            }
+
             bridgeService.unlinkToDeath(this, 0);
             bridgeService = null;
             listener.onSystemServerDied();
-            new Thread(()-> sendToBridge(serviceBinder, true)).start();
+            new Thread(() -> sendToBridge(serviceBinder, true)).start();
         }
     };
 
