@@ -201,7 +201,7 @@ public class ConfigManager {
     private final Map<ProcessScope, List<Module>> cachedScope = new ConcurrentHashMap<>();
 
     // apkPath, dexes
-    private final Map<String, SharedMemory[]> cachedDexes = new ConcurrentHashMap<>();
+    private final Map<String, List<SharedMemory>> cachedDexes = new ConcurrentHashMap<>();
 
     // appId, packageName
     private final Map<Integer, String> cachedModule = new ConcurrentHashMap<>();
@@ -547,7 +547,7 @@ public class ConfigManager {
         });
     }
 
-    private SharedMemory[] loadModuleDexes(String path) {
+    private List<SharedMemory> loadModuleDexes(String path) {
         var sharedMemories = new ArrayList<SharedMemory>();
         try (var apkFile = new ZipFile(path)) {
             int secondary = 2;
@@ -567,10 +567,10 @@ public class ConfigManager {
         } catch (IOException e) {
             Log.e(TAG, "Can not open " + path, e);
         }
-        return sharedMemories.toArray(new SharedMemory[0]);
+        return sharedMemories;
     }
 
-    private SharedMemory[] getModuleDexes(String path) {
+    private List<SharedMemory> getModuleDexes(String path) {
         return cachedDexes.computeIfAbsent(path, this::loadModuleDexes);
     }
 
@@ -579,7 +579,7 @@ public class ConfigManager {
             var path = entry.getKey();
             var dexes = entry.getValue();
             if (!new File(path).exists()) {
-                Arrays.stream(dexes).parallel().forEach(SharedMemory::close);
+                dexes.stream().parallel().forEach(SharedMemory::close);
                 return true;
             }
             return false;
@@ -856,8 +856,7 @@ public class ConfigManager {
     }
 
     public boolean shouldBlock(String packageName) {
-        return packageName.equals("io.github.lsposed.manager") ||
-                packageName.equals(BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME);
+        return packageName.equals("io.github.lsposed.manager") || isManager(packageName);
     }
 
     public String getPrefsPath(String fileName, int uid) {

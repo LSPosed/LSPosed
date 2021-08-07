@@ -5,7 +5,6 @@ import org.lsposed.lspd.models.Module;
 interface ILSPApplicationService {
     IBinder requestModuleBinder(String name);
 
-    //TODO: after array copy bug fixed, use array instead of list
     boolean requestManagerBinder(String packageName, String path, out List<IBinder> binder);
 
     boolean isResourcesHookEnabled();

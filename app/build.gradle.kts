@@ -24,7 +24,6 @@ import java.nio.file.Paths
 import java.time.Instant
 
 plugins {
-    id("org.gradle.idea")
     id("com.android.application")
     id("androidx.navigation.safeargs")
 }
