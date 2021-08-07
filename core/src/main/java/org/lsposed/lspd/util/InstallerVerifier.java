@@ -45,10 +45,6 @@ public class InstallerVerifier {
                 .setMinCheckedPlatformVersion(27)
                 .build();
         try {
-            var appInfo = ServiceManager.getSystemContext().getPackageManager().getPackageArchiveInfo(path, 0).applicationInfo;
-            if ((appInfo.flags & ApplicationInfo.FLAG_TEST_ONLY) != 0) {
-                return true;
-            }
             ApkVerifier.Result result = verifier.verify();
             if (!result.isVerified()) {
                 return false;
