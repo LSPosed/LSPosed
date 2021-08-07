@@ -91,21 +91,6 @@ public class BridgeService {
                 Log.w(TAG, "clear ServiceManager: " + Log.getStackTraceString(e));
             }
 
-            try {
-                //noinspection JavaReflectionMemberAccess
-                Field field = ActivityThread.class.getDeclaredField("sPackageManager");
-                field.setAccessible(true);
-                field.set(null, null);
-
-                //noinspection JavaReflectionMemberAccess
-                field = ActivityThread.class.getDeclaredField("sPermissionManager");
-                field.setAccessible(true);
-                field.set(null, null);
-                Log.i(TAG, "clear ActivityThread");
-            } catch (Throwable e) {
-                Log.w(TAG, "clear ActivityThread: " + Log.getStackTraceString(e));
-            }
-
             bridgeService.unlinkToDeath(this, 0);
             bridgeService = null;
             listener.onSystemServerDied();
