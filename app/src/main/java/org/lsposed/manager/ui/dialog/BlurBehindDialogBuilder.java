@@ -20,7 +20,6 @@
 package org.lsposed.manager.ui.dialog;
 
 import android.animation.ValueAnimator;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.view.SurfaceControl;
@@ -29,11 +28,11 @@ import android.view.animation.DecelerateInterpolator;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.os.BuildCompat;
 
 import java.lang.reflect.Method;
 
 @SuppressWarnings({"JavaReflectionMemberAccess", "ConstantConditions"})
-@SuppressLint("PrivateApi")
 public class BlurBehindDialogBuilder extends AlertDialog.Builder {
     private static final boolean supportBlur = getSystemProperty("ro.surface_flinger.supports_background_blur", false) && !getSystemProperty("persist.sys.sf.disable_blurs", false);
 
@@ -55,7 +54,7 @@ public class BlurBehindDialogBuilder extends AlertDialog.Builder {
             animator.setInterpolator(new DecelerateInterpolator());
             animator.setDuration(150);
             View view = dialog.getWindow().getDecorView();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S || Build.VERSION.SDK_INT == Build.VERSION_CODES.R && Build.VERSION.PREVIEW_SDK_INT != 0) {
+            if (BuildCompat.isAtLeastS()) {
                 animator.addUpdateListener(animation -> dialog.getWindow().setBackgroundBlurRadius((Integer) animation.getAnimatedValue()));
             } else {
                 try {
