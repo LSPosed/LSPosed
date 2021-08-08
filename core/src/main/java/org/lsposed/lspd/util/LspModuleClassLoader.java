@@ -176,7 +176,7 @@ public final class LspModuleClassLoader extends ByteBufferDexClassLoader {
                 super.toString() + "]";
     }
 
-    public static LspModuleClassLoader loadApk(File apk,
+    public static LspModuleClassLoader loadApk(String apk,
                                                List<SharedMemory> dexes,
                                                String librarySearchPath,
                                                ClassLoader parent) {
@@ -191,9 +191,9 @@ public final class LspModuleClassLoader extends ByteBufferDexClassLoader {
         LspModuleClassLoader cl;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             cl = new LspModuleClassLoader(dexBuffers, librarySearchPath,
-                    parent, apk.getAbsolutePath());
+                    parent, apk);
         } else {
-            cl = new LspModuleClassLoader(dexBuffers, parent, apk.getAbsolutePath());
+            cl = new LspModuleClassLoader(dexBuffers, parent, apk);
             cl.initNativeLibraryDirs(librarySearchPath);
         }
         Arrays.stream(dexBuffers).parallel().forEach(SharedMemory::unmap);

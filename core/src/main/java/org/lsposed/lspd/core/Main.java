@@ -78,14 +78,6 @@ public class Main {
         }
     }
 
-    private static void loadModulesSafely() {
-        try {
-            XposedInit.loadModules();
-        } catch (Exception exception) {
-            Utils.logE("error loading module list", exception);
-        }
-    }
-
     public static void forkPostCommon(boolean isSystem, String appDataDir, String niceName) {
         // init logger
         YahfaHooker.init();
@@ -95,7 +87,7 @@ public class Main {
         PrebuiltMethodsDeopter.deoptBootMethods(); // do it once for secondary zygote
         installBootstrapHooks(isSystem, appDataDir);
         Utils.logI("Loading modules for " + niceName + "/" + Process.myUid());
-        loadModulesSafely();
+        XposedInit.loadModules();
     }
 
     public static void forkAndSpecializePost(String appDataDir, String niceName, IBinder binder) {

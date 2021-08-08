@@ -1,8 +1,8 @@
 package org.lsposed.lspd.models;
-import org.lsposed.lspd.models.ModuleConfig;
+import org.lsposed.lspd.models.PreLoadedApk;
 
 parcelable Module {
-    String name;
-    String apk;
-    ModuleConfig config;
+    String packageName;
+    String apkPath;
+    PreLoadedApk file;
 }
