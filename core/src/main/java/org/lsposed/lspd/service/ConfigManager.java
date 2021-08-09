@@ -256,7 +256,7 @@ public class ConfigManager {
             while (cursor.moveToNext()) {
                 var path = cursor.getString(apkPathIdx);
                 var packageName = cursor.getString(pkgNameIdx);
-                cachedModule.computeIfAbsent(packageName, p -> {
+                var m = cachedModule.computeIfAbsent(packageName, p -> {
                     var module = new Module();
                     var file = loadModule(path);
                     if (file == null) {
@@ -269,6 +269,7 @@ public class ConfigManager {
                     module.appId = -1;
                     return module;
                 });
+                if (m != null) modules.add(m);
             }
         }
         return modules;
