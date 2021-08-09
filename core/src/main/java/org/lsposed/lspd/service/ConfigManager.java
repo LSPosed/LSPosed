@@ -486,6 +486,7 @@ public class ConfigManager {
                 var file = loadModule(path);
                 if (file == null) {
                     Log.w(TAG, "failed to load module " + packageName);
+                    obsoleteModules.add(packageName);
                     continue;
                 }
                 var module = new Module();
