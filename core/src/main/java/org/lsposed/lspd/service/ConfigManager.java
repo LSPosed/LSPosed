@@ -496,9 +496,7 @@ public class ConfigManager {
                 module.appId = pkgInfo.applicationInfo.uid;
                 cachedModule.put(packageName, module);
             }
-            for (var obsoleteModule : obsoleteModules) {
-                removeModuleWithoutCache(obsoleteModule);
-            }
+            obsoleteModules.forEach(this::removeModuleWithoutCache);
             obsoletePaths.forEach(this::updateModuleApkPath);
         }
         Log.d(TAG, "cached modules");
