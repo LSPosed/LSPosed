@@ -74,6 +74,7 @@ public class PackageService {
     static final int INSTALL_REASON_UNKNOWN = 0;
 
     static final int MATCH_ALL_FLAGS = PackageManager.MATCH_DISABLED_COMPONENTS | PackageManager.MATCH_DIRECT_BOOT_AWARE | PackageManager.MATCH_DIRECT_BOOT_UNAWARE | PackageManager.MATCH_UNINSTALLED_PACKAGES;
+    public static final int PER_USER_RANGE = 100000;
 
     private static IPackageManager pm = null;
     private static IBinder binder = null;
@@ -135,7 +136,7 @@ public class PackageService {
         if (filterNoProcess) {
             res.removeIf(packageInfo -> {
                 try {
-                    PackageInfo pkgInfo = getPackageInfoWithComponents(packageInfo.packageName, MATCH_ALL_FLAGS, packageInfo.applicationInfo.uid / 100000);
+                    PackageInfo pkgInfo = getPackageInfoWithComponents(packageInfo.packageName, MATCH_ALL_FLAGS, packageInfo.applicationInfo.uid / PER_USER_RANGE);
                     return fetchProcesses(pkgInfo).isEmpty();
                 } catch (RemoteException e) {
                     return false;
@@ -178,6 +179,10 @@ public class PackageService {
         return new Pair<>(fetchProcesses(pkgInfo), pkgInfo.applicationInfo.uid);
     }
 
+    public static boolean isPackageAvailable(String packageName, int userId, boolean ignoreHidden) throws RemoteException {
+        return pm.isPackageAvailable(packageName, userId) && (!ignoreHidden || pm.getApplicationHiddenSettingAsUser(packageName, userId));
+    }
+
     private static PackageInfo getPackageInfoWithComponents(String packageName, int flags, int userId) throws RemoteException {
         IPackageManager pm = getPackageManager();
         if (pm == null) return null;
@@ -208,7 +213,7 @@ public class PackageService {
 
             }
         }
-        if (pkgInfo == null || pkgInfo.applicationInfo == null || (!pkgInfo.packageName.equals("android") && (pkgInfo.applicationInfo.sourceDir == null || !new File(pkgInfo.applicationInfo.sourceDir).exists() || (!pm.isPackageAvailable(packageName, userId) && !pm.getApplicationHiddenSettingAsUser(packageName, userId)))))
+        if (pkgInfo == null || pkgInfo.applicationInfo == null || (!pkgInfo.packageName.equals("android") && (pkgInfo.applicationInfo.sourceDir == null || !new File(pkgInfo.applicationInfo.sourceDir).exists() || isPackageAvailable(packageName, userId, true))))
             return null;
         return pkgInfo;
     }

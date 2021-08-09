@@ -104,7 +104,7 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
     public IBinder requestModuleBinder(String name) throws RemoteException {
         ensureRegistered();
         if (ConfigManager.getInstance().isModule(getCallingUid(), name)) {
-            ConfigManager.getInstance().ensureModulePrefsPermission(getCallingUid());
+            ConfigManager.getInstance().ensureModulePrefsPermission(getCallingUid(), name);
             return ServiceManager.getModuleService(name);
         } else return null;
     }

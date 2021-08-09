@@ -19,7 +19,7 @@
 
 package org.lsposed.lspd.service;
 
-import static org.lsposed.lspd.service.ConfigManager.PER_USER_RANGE;
+import static org.lsposed.lspd.service.PackageService.PER_USER_RANGE;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 
 import android.app.IApplicationThread;
@@ -113,8 +113,7 @@ public class LSPosedService extends ILSPosedService.Stub {
                 }
                 // when package is changed, we may need to update cache (module cache or process cache)
                 if (isXposedModule) {
-                    var ret = ConfigManager.getInstance().updateModuleApkPath(moduleName, applicationInfo);
-                    if (ret) Log.i(TAG, "Updated module apk path: " + moduleName);
+                    ConfigManager.getInstance().updateCache();
                 } else if (ConfigManager.getInstance().isUidHooked(uid)) {
                     // it will automatically remove obsolete app from database
                     ConfigManager.getInstance().updateAppCache();
