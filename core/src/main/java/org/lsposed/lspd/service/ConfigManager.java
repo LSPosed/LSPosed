@@ -958,7 +958,7 @@ public class ConfigManager {
         }
     }
 
-    public boolean ensureModulePrefsPermission(String packageName, int uid) {
+    public boolean ensureModulePrefsPermission(int uid, String packageName) {
         if (packageName == null) return false;
         File path = new File(getPrefsPath(packageName, uid));
         try {
