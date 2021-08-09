@@ -554,7 +554,6 @@ public class ConfigManager {
                         continue;
                     }
                     var module = cachedModule.get(modulePackageName);
-                    assert module != null;
                     for (ProcessScope processScope : processesScope) {
                         cachedScope.computeIfAbsent(processScope,
                                 ignored -> new LinkedList<>()).add(module);
@@ -696,7 +695,8 @@ public class ConfigManager {
         return apkPath.orElse(null);
     }
 
-    public boolean updateModuleApkPath(String packageName, @NonNull String apkPath) {
+    public boolean updateModuleApkPath(String packageName, String apkPath) {
+        if (apkPath == null) return false;
         if (db.inTransaction()) {
             Log.w(TAG, "update module apk path should not be called inside transaction");
             return false;
