@@ -47,12 +47,14 @@ import org.apache.commons.lang3.SerializationUtils;
 import org.lsposed.lspd.BuildConfig;
 import org.lsposed.lspd.models.Application;
 import org.lsposed.lspd.models.Module;
-import org.lsposed.lspd.models.ModuleConfig;
+import org.lsposed.lspd.models.PreLoadedApk;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.nio.channels.Channels;
@@ -200,8 +202,8 @@ public class ConfigManager {
 
     private final Map<ProcessScope, List<Module>> cachedScope = new ConcurrentHashMap<>();
 
-    // apkPath, dexes
-    private final Map<String, List<SharedMemory>> cachedDexes = new ConcurrentHashMap<>();
+    // apkPath, PreLoadedApk
+    private final Map<String, PreLoadedApk> cachedApkFile = new ConcurrentHashMap<>();
 
     // appId, packageName
     private final Map<Integer, String> cachedModule = new ConcurrentHashMap<>();
@@ -256,14 +258,17 @@ public class ConfigManager {
             int apkPathIdx = cursor.getColumnIndex("apk_path");
             int pkgNameIdx = cursor.getColumnIndex("module_pkg_name");
             while (cursor.moveToNext()) {
-                var module = new Module();
-                var config = new ModuleConfig();
                 var path = cursor.getString(apkPathIdx);
-                config.preLoadedDexes = getModuleDexes(path);
-                module.name = cursor.getString(pkgNameIdx);
-                module.apk = path;
-                module.config = config;
-                modules.add(module);
+                var file = getCachedApkFile(path);
+                if (file != null) {
+                    var module = new Module();
+                    module.packageName = cursor.getString(pkgNameIdx);
+                    module.apkPath = path;
+                    module.file = file;
+                    modules.add(module);
+                } else {
+                    Log.w(TAG, "Can not load " + path + ", skip!");
+                }
             }
         }
         return modules;
@@ -476,7 +481,7 @@ public class ConfigManager {
             for (var obsoleteScope : obsoleteScopes) {
                 removeModuleScopeWithoutCache(obsoleteScope);
             }
-            cleanModuleDexes();
+            checkCachedApkFile();
         }
         Log.d(TAG, "cached modules");
         for (int uid : cachedModule.keySet()) {
@@ -507,26 +512,35 @@ public class ConfigManager {
                 app.userId = cursor.getInt(userIdIdx);
                 // system server always loads database
                 if (app.packageName.equals("android")) continue;
-                String apk_path = cursor.getString(apkPathIdx);
-                String module_pkg = cursor.getString(modulePkgNameIdx);
                 try {
                     List<ProcessScope> processesScope = getAssociatedProcesses(app);
                     if (processesScope.isEmpty()) {
                         obsoletePackages.add(app);
                         continue;
                     }
+                    var apkPath = cursor.getString(apkPathIdx);
+                    var modulePackageName = cursor.getString(modulePkgNameIdx);
+                    var file = getCachedApkFile(apkPath);
+                    Module module;
+                    if (file != null) {
+                        module = new Module();
+                        module.packageName = modulePackageName;
+                        module.apkPath = apkPath;
+                        module.file = file;
+                    } else {
+                        Log.w(TAG, "Can not load " + apkPath + ", skip!");
+                        continue;
+                    }
                     for (ProcessScope processScope : processesScope) {
-                        var module = new Module();
-                        var config = new ModuleConfig();
-                        config.preLoadedDexes = getModuleDexes(apk_path);
-                        module.name = module_pkg;
-                        module.apk = apk_path;
-                        module.config = config;
-                        cachedScope.computeIfAbsent(processScope, ignored -> new LinkedList<>()).add(module);
-                        if (module_pkg.equals(app.packageName)) {
+                        cachedScope.computeIfAbsent(processScope,
+                                ignored -> new LinkedList<>()).add(module);
+                        // Always allow the module to inject itself
+                        if (modulePackageName.equals(app.packageName)) {
                             var appId = processScope.uid % PER_USER_RANGE;
                             for (var user : UserService.getUsers()) {
-                                cachedScope.computeIfAbsent(new ProcessScope(processScope.processName, user.id * PER_USER_RANGE + appId),
+                                var moduleUid = user.id * PER_USER_RANGE + appId;
+                                var moduleSelf = new ProcessScope(processScope.processName, moduleUid);
+                                cachedScope.computeIfAbsent(moduleSelf,
                                         ignored -> new LinkedList<>()).add(module);
                             }
                         }
@@ -543,43 +557,76 @@ public class ConfigManager {
         Log.d(TAG, "cached Scope");
         cachedScope.forEach((ps, modules) -> {
             Log.d(TAG, ps.processName + "/" + ps.uid);
-            modules.forEach(module -> Log.d(TAG, "\t" + module.name));
+            modules.forEach(module -> Log.d(TAG, "\t" + module.packageName));
         });
     }
 
-    private List<SharedMemory> loadModuleDexes(String path) {
-        var sharedMemories = new ArrayList<SharedMemory>();
-        try (var apkFile = new ZipFile(path)) {
-            int secondary = 2;
-            for (var dexFile = apkFile.getEntry("classes.dex"); dexFile != null;
-                 dexFile = apkFile.getEntry("classes" + secondary + ".dex"), secondary++) {
-                try (var in = apkFile.getInputStream(dexFile)) {
-                    var memory = SharedMemory.create(null, in.available());
-                    var byteBuffer = memory.mapReadWrite();
-                    Channels.newChannel(in).read(byteBuffer);
-                    SharedMemory.unmap(byteBuffer);
-                    memory.setProtect(OsConstants.PROT_READ);
-                    sharedMemories.add(memory);
-                } catch (IOException | ErrnoException e) {
-                    Log.w(TAG, "Can not load " + dexFile + " in " + path, e);
-                }
+    private void readDexes(ZipFile apkFile, List<SharedMemory> preLoadedDexes) {
+        int secondary = 2;
+        for (var dexFile = apkFile.getEntry("classes.dex"); dexFile != null;
+             dexFile = apkFile.getEntry("classes" + secondary + ".dex"), secondary++) {
+            try (var in = apkFile.getInputStream(dexFile)) {
+                var memory = SharedMemory.create(null, in.available());
+                var byteBuffer = memory.mapReadWrite();
+                Channels.newChannel(in).read(byteBuffer);
+                SharedMemory.unmap(byteBuffer);
+                memory.setProtect(OsConstants.PROT_READ);
+                preLoadedDexes.add(memory);
+            } catch (IOException | ErrnoException e) {
+                Log.w(TAG, "Can not load " + dexFile + " in " + apkFile, e);
+            }
+        }
+    }
+
+    private void readName(ZipFile apkFile, String initName, List<String> names) {
+        var initEntry = apkFile.getEntry(initName);
+        if (initEntry == null) return;
+        try (var in = apkFile.getInputStream(initEntry)) {
+            var reader = new BufferedReader(new InputStreamReader(in));
+            String name;
+            while ((name = reader.readLine()) != null) {
+                name = name.trim();
+                if (name.isEmpty() || name.startsWith("#")) continue;
+                names.add(name);
             }
         } catch (IOException e) {
-            Log.e(TAG, "Can not open " + path, e);
+            Log.e(TAG, "Can not open " + initEntry, e);
         }
-        return sharedMemories;
     }
 
-    private List<SharedMemory> getModuleDexes(String path) {
-        return cachedDexes.computeIfAbsent(path, this::loadModuleDexes);
+    @Nullable
+    private PreLoadedApk loadModule(String path) {
+        var file = new PreLoadedApk();
+        var preLoadedDexes = new ArrayList<SharedMemory>();
+        var moduleClassNames = new ArrayList<String>(1);
+        var moduleLibraryNames = new ArrayList<String>(1);
+        try (var apkFile = new ZipFile(path)) {
+            readDexes(apkFile, preLoadedDexes);
+            readName(apkFile, "assets/xposed_init", moduleClassNames);
+            readName(apkFile, "assets/native_init", moduleLibraryNames);
+        } catch (IOException e) {
+            Log.e(TAG, "Can not open " + path, e);
+            return null;
+        }
+        if (preLoadedDexes.isEmpty()) return null;
+        if (moduleClassNames.isEmpty()) return null;
+        file.preLoadedDexes = preLoadedDexes;
+        file.moduleClassNames = moduleClassNames;
+        file.moduleLibraryNames = moduleLibraryNames;
+        return file;
     }
 
-    private void cleanModuleDexes() {
-        cachedDexes.entrySet().removeIf(entry -> {
+    @Nullable
+    private PreLoadedApk getCachedApkFile(String path) {
+        return cachedApkFile.computeIfAbsent(path, this::loadModule);
+    }
+
+    private void checkCachedApkFile() {
+        cachedApkFile.entrySet().removeIf(entry -> {
             var path = entry.getKey();
-            var dexes = entry.getValue();
+            var file = entry.getValue();
             if (!new File(path).exists()) {
-                dexes.stream().parallel().forEach(SharedMemory::close);
+                file.preLoadedDexes.stream().parallel().forEach(SharedMemory::close);
                 return true;
             }
             return false;
