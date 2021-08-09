@@ -531,7 +531,7 @@ public class ConfigManager {
                 if (!moduleAvailability.computeIfAbsent(new Pair<>(modulePackageName, app.userId), n -> {
                     var available = false;
                     try {
-                        available = PackageService.isPackageAvailable(n.first, n.second, true);
+                        available = PackageService.isPackageAvailable(n.first, n.second, true) && cachedModule.containsKey(modulePackageName);
                     } catch (Throwable e) {
                         Log.w(TAG, "check package availability ", e);
                     }
@@ -554,10 +554,7 @@ public class ConfigManager {
                         continue;
                     }
                     var module = cachedModule.get(modulePackageName);
-                    if (module == null) {
-                        Log.w(TAG, "Can not load " + modulePackageName + ", skip!");
-                        continue;
-                    }
+                    assert module != null;
                     for (ProcessScope processScope : processesScope) {
                         cachedScope.computeIfAbsent(processScope,
                                 ignored -> new LinkedList<>()).add(module);
