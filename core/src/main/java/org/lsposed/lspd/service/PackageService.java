@@ -180,7 +180,7 @@ public class PackageService {
     }
 
     public static boolean isPackageAvailable(String packageName, int userId, boolean ignoreHidden) throws RemoteException {
-        return pm.isPackageAvailable(packageName, userId) && (!ignoreHidden || pm.getApplicationHiddenSettingAsUser(packageName, userId));
+        return pm.isPackageAvailable(packageName, userId) || (ignoreHidden && pm.getApplicationHiddenSettingAsUser(packageName, userId));
     }
 
     private static PackageInfo getPackageInfoWithComponents(String packageName, int flags, int userId) throws RemoteException {
@@ -213,7 +213,7 @@ public class PackageService {
 
             }
         }
-        if (pkgInfo == null || pkgInfo.applicationInfo == null || (!pkgInfo.packageName.equals("android") && (pkgInfo.applicationInfo.sourceDir == null || !new File(pkgInfo.applicationInfo.sourceDir).exists() || isPackageAvailable(packageName, userId, true))))
+        if (pkgInfo == null || pkgInfo.applicationInfo == null || (!pkgInfo.packageName.equals("android") && (pkgInfo.applicationInfo.sourceDir == null || !new File(pkgInfo.applicationInfo.sourceDir).exists() || !isPackageAvailable(packageName, userId, true))))
             return null;
         return pkgInfo;
     }
