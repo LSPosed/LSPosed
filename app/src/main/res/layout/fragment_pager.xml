@@ -22,9 +22,9 @@
     android:id="@+id/snackbar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     app:consumeSystemWindowsInsets="start|end"
     app:edgeToEdge="true"
-    android:animateLayoutChanges="true"
     app:fitsSystemWindowsInsets="start|end">
 
     <rikka.material.widget.AppBarLayout
@@ -44,18 +44,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="?attr/actionBarSize"
+                app:popupTheme="?actionBarPopupTheme"
                 app:subtitleTextAppearance="@android:style/TextAppearance.Material.Widget.Toolbar.Subtitle"
-                app:titleTextAppearance="@android:style/TextAppearance.Material.Widget.Toolbar.Title"
-                app:popupTheme="?actionBarPopupTheme" />
+                app:titleTextAppearance="@android:style/TextAppearance.Material.Widget.Toolbar.Title" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tab_layout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/tab_layout_height"
-                app:tabMode="scrollable"
-                app:tabGravity="center"
                 android:background="@android:color/transparent"
-                app:tabIndicatorAnimationMode="elastic" />
+                app:tabGravity="center"
+                app:tabIndicatorAnimationMode="elastic"
+                app:tabMode="scrollable" />
         </LinearLayout>
     </rikka.material.widget.AppBarLayout>
 
@@ -69,11 +69,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
-        android:src="@drawable/ic_baseline_add_24"
         android:layout_margin="16dp"
-        android:visibility="invisible"
+        android:contentDescription="@string/add_module_to_user"
         android:outlineAmbientShadowColor="?colorAccent"
         android:outlineSpotShadowColor="?colorAccent"
-        app:layout_fitsSystemWindowsInsets="bottom"
-        android:contentDescription="@string/add_module_to_user" />
+        android:src="@drawable/ic_baseline_add_24"
+        android:visibility="invisible"
+        app:layout_fitsSystemWindowsInsets="bottom" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

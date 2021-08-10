@@ -189,4 +189,6 @@
     <string name="translators"><![CDATA[<a href="https://github.com/LSPosed/LSPosed">LSPosed</a>]]></string>
     <string name="copy_toast_msg">已复制</string>
     <string name="list_empty">¯\\\\_(ツ)_\/¯\n空空如也</string>
+    <string name="add_module_to_user">安装模块到用户</string>
+    <string name="theme_color_system_accent">系统强调色</string>
 </resources>
