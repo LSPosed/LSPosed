@@ -68,6 +68,7 @@ import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import org.lsposed.lspd.models.UserInfo;
@@ -213,8 +214,8 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             ViewGroup vg = (ViewGroup) binding.tabLayout.getChildAt(0);
             int tabLayoutWidth = IntStream.range(0, binding.tabLayout.getTabCount()).map(i -> vg.getChildAt(i).getWidth()).sum();
             if (tabLayoutWidth <= binding.getRoot().getWidth()) {
-                binding.tabLayout.setTabMode(binding.tabLayout.MODE_FIXED);
-                binding.tabLayout.setTabGravity(binding.tabLayout.GRAVITY_FILL);
+                binding.tabLayout.setTabMode(TabLayout.MODE_FIXED);
+                binding.tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
             }
         });
 
@@ -371,7 +372,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     @Override
     synchronized public void repoLoaded() {
         latestVersion.clear();
-        for (var module : RepoLoader.getInstance().getOnlineModules()) {
+        for (var module : repoLoader.getOnlineModules()) {
             var release = module.getLatestRelease();
             if (release == null || release.isEmpty()) continue;
             var splits = release.split("-", 2);
@@ -572,14 +573,14 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                     if (intent == null) {
                         menu.removeItem(R.id.menu_launch);
                     }
-                    if (RepoLoader.getInstance().getOnlineModule(item.packageName) == null) {
+                    if (repoLoader.getOnlineModule(item.packageName) == null) {
                         menu.removeItem(R.id.menu_repo);
                     }
                     if (item.userId == 0) {
                         var users = ConfigManager.getUsers();
                         if (users != null) {
                             for (var user : users) {
-                                if (ModuleUtil.getInstance().getModule(item.packageName, user.id) == null) {
+                                if (moduleUtil.getModule(item.packageName, user.id) == null) {
                                     menu.add(1, user.id, 0, getString(R.string.install_to_user, user.name)).setOnMenuItemClickListener(i -> {
                                         installModuleToUser(selectedModule, user);
                                         return true;
