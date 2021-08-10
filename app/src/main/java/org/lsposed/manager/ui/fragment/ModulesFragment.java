@@ -93,6 +93,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import rikka.core.res.ResourcesKt;
 import rikka.insets.WindowInsetsHelperKt;
@@ -207,6 +208,15 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 binding.tabLayout.setVisibility(View.GONE);
             }
         }
+
+        binding.tabLayout.addOnLayoutChangeListener((view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+            ViewGroup vg = (ViewGroup) binding.tabLayout.getChildAt(0);
+            int tabLayoutWidth = IntStream.range(0, binding.tabLayout.getTabCount()).map(i -> vg.getChildAt(i).getWidth()).sum();
+            if (tabLayoutWidth <= binding.getRoot().getWidth()) {
+                binding.tabLayout.setTabMode(binding.tabLayout.MODE_FIXED);
+                binding.tabLayout.setTabGravity(binding.tabLayout.GRAVITY_FILL);
+            }
+        });
 
         binding.fab.setOnClickListener(v -> {
             var pickAdaptor = new ModuleAdapter(null, true);

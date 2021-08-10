@@ -52,6 +52,8 @@
                 android:id="@+id/tab_layout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/tab_layout_height"
+                app:tabMode="scrollable"
+                app:tabGravity="center"
                 android:background="@android:color/transparent"
                 app:tabIndicatorAnimationMode="elastic" />
         </LinearLayout>
