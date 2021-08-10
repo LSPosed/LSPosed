@@ -22,7 +22,7 @@ abstract public class ApplicationServiceClient implements ILSPApplicationService
     abstract public boolean isResourcesHookEnabled();
 
     @Override
-    abstract public List getModulesList(String processName);
+    abstract public List<Module> getModulesList(String processName);
 
     abstract public List<Module> getModulesList();
 

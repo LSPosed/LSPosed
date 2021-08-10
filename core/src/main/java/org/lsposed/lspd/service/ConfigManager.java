@@ -478,10 +478,8 @@ public class ConfigManager {
                 var path = apkPath;
                 if (!new File(path).exists()) {
                     path = getModuleApkPath(pkgInfo.applicationInfo);
-                    if (path == null)
-                        obsoleteModules.add(packageName);
-                    else
-                        obsoletePaths.put(packageName, path);
+                    if (path == null) obsoleteModules.add(packageName);
+                    else obsoletePaths.put(packageName, path);
                 }
                 var file = loadModule(path);
                 if (file == null) {
@@ -679,13 +677,14 @@ public class ConfigManager {
         }
     }
 
+    @Nullable
     public String getModuleApkPath(ApplicationInfo info) {
         String[] apks;
         if (info.splitSourceDirs != null) {
             apks = Arrays.copyOf(info.splitSourceDirs, info.splitSourceDirs.length + 1);
             apks[info.splitSourceDirs.length] = info.sourceDir;
         } else apks = new String[]{info.sourceDir};
-        var apkPath = Arrays.stream(apks).filter(apk -> {
+        var apkPath = Arrays.stream(apks).parallel().filter(apk -> {
             try (var zip = new ZipFile(apk)) {
                 return zip.getEntry("assets/xposed_init") != null;
             } catch (IOException e) {
