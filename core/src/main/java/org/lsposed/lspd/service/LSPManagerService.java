@@ -25,7 +25,6 @@ import static org.lsposed.lspd.service.ServiceManager.TAG;
 import android.app.IServiceConnection;
 import android.content.ComponentName;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -240,7 +239,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     }
 
     @Override
-    public boolean systemServerRequested() throws RemoteException {
+    public boolean systemServerRequested() {
         return ServiceManager.systemServerRequested();
     }
 
@@ -264,9 +263,6 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     @Override
     public boolean dex2oatFlagsLoaded() {
-//        var splitFlags = new ArrayList<>(Arrays.asList(flags.split(" ")));
-//        splitFlags.add(PROP_VALUE);
-//        SystemProperties.set(PROP_NAME, String.join(" ", splitFlags));
         return SystemProperties.get(PROP_NAME).contains(PROP_VALUE);
     }
 }
