@@ -162,6 +162,7 @@
     <string name="dns_over_http_summary">解决某些地区的 DNS 污染问题</string>
     <string name="theme_color">主题颜色</string>
     <string name="theme_color_summary">应用中最常见的颜色</string>
+    <string name="theme_color_system_accent">系统强调色</string>
     <string name="settings_show_hidden_icon_apps_enabled">强制应用在启动器中显示图标</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">在 Android 10 之后，应用（特别是 Xposed 模块）不被允许隐藏启动器图标。关闭本选项以禁用此功能。</string>
     <string name="settings_group_system">系统</string>
@@ -189,4 +190,5 @@
     <string name="translators"><![CDATA[<a href="https://github.com/LSPosed/LSPosed">LSPosed</a>]]></string>
     <string name="copy_toast_msg">已复制</string>
     <string name="list_empty">¯\\\\_(ツ)_\/¯\n空空如也</string>
+    <string name="add_module_to_user">安装模块到用户</string>
 </resources>
