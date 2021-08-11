@@ -329,7 +329,11 @@ public class PackageService {
                     public void send(Intent result) {
                         int status = result.getIntExtra(PackageInstaller.EXTRA_STATUS, PackageInstaller.STATUS_FAILURE);
                         String message = result.getStringExtra(PackageInstaller.EXTRA_STATUS_MESSAGE);
-                        Log.d(TAG, status + " " + message);
+                        if (status != PackageInstaller.STATUS_SUCCESS) {
+                            Log.w(TAG, "installation failed: " + status + " " + message);
+                        } else {
+                            Log.i(TAG, "installed manager successfully");
+                        }
                     }
                 }.getIntentSender());
             }
