@@ -337,11 +337,14 @@ public class ConfigManager {
         new Thread(() -> {
             if (PackageService.installManagerIfAbsent(manager, new File(basePath, "manager.apk"))) {
                 updateManager(BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME);
+            } else {
+                Log.w(TAG, "Can not install manager");
             }
         }).start();
     }
 
     public synchronized void updateManager(@NonNull String packageName) {
+        Log.i(TAG, "Now manager is " + packageName);
         writeText(managerPath, packageName);
         manager = packageName;
         updateManager();
