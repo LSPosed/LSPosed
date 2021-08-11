@@ -124,15 +124,8 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     @Override
     public boolean enableModule(String packageName) throws RemoteException {
         PackageInfo pkgInfo = PackageService.getPackageInfo(packageName, PackageService.MATCH_ALL_FLAGS, 0);
-        if (pkgInfo != null) {
-            ApplicationInfo appInfo;
-            try {
-                appInfo = pkgInfo.applicationInfo;
-            } catch (Throwable t) {
-                Log.wtf(TAG, t);
-                throw t;
-            }
-            return ConfigManager.getInstance().enableModule(packageName, appInfo);
+        if (pkgInfo != null && pkgInfo.applicationInfo != null) {
+            return ConfigManager.getInstance().enableModule(packageName, pkgInfo.applicationInfo);
         } else {
             return false;
         }

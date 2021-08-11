@@ -476,7 +476,7 @@ public class ConfigManager {
                     continue;
                 }
                 var path = apkPath;
-                if (!new File(path).exists()) {
+                if (path == null || !new File(path).exists()) {
                     path = getModuleApkPath(pkgInfo.applicationInfo);
                     if (path == null) obsoleteModules.add(packageName);
                     else obsoletePaths.put(packageName, path);
@@ -621,6 +621,7 @@ public class ConfigManager {
 
     @Nullable
     private PreLoadedApk loadModule(String path) {
+        if (path == null) return null;
         var file = new PreLoadedApk();
         var preLoadedDexes = new ArrayList<SharedMemory>();
         var moduleClassNames = new ArrayList<String>(1);
@@ -685,6 +686,10 @@ public class ConfigManager {
             apks[info.splitSourceDirs.length] = info.sourceDir;
         } else apks = new String[]{info.sourceDir};
         var apkPath = Arrays.stream(apks).parallel().filter(apk -> {
+            if (apk == null) {
+                Log.w(TAG, info.packageName + " has null apk path???");
+                return false;
+            }
             try (var zip = new ZipFile(apk)) {
                 return zip.getEntry("assets/xposed_init") != null;
             } catch (IOException e) {
