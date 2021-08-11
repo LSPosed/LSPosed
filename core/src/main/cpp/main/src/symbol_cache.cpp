@@ -65,12 +65,11 @@ namespace lspd {
     }
 
     void InitSymbolCache() {
-        if (UNLIKELY(sym_initialized)) return;
         LOGD("InitSymbolCache");
         sym_initialized = FindLibArt();
         sym_do_dlopen = SandHook::ElfImg("linker").getSymbAddress<void *>(
-                        "__dl__Z9do_dlopenPKciPK17android_dlextinfoPKv");
-        if (UNLIKELY(!sym_initialized)) {
+                "__dl__Z9do_dlopenPKciPK17android_dlextinfoPKv");
+        if (!sym_initialized) [[unlikely]] {
             sym_initialized = false;
             art_img.reset();
             LOGE("Init symbol cache failed");

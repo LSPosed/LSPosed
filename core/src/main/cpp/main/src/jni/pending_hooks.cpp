@@ -67,7 +67,7 @@ namespace lspd {
         auto *class_ptr = art::Thread::Current().DecodeJObject(class_ref);
         auto *method = yahfa::getArtMethod(env, method_ref);
         art::mirror::Class mirror_class(class_ptr);
-        if (auto def = mirror_class.GetClassDef(); LIKELY(def)) {
+        if (auto def = mirror_class.GetClassDef(); def) [[likely]] {
             LOGD("record pending: %p (%s) with %p", class_ptr, mirror_class.GetDescriptor().c_str(),
                  method);
             // Add it for ShouldUseInterpreterEntrypoint

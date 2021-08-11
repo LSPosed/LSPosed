@@ -34,13 +34,13 @@ namespace art {
 
         class ScopedGCCriticalSection {
             CREATE_MEM_FUNC_SYMBOL_ENTRY(void, constructor, void *thiz, void* self, GcCause cause, CollectorType collector_type) {
-                if (UNLIKELY(thiz == nullptr)) return;
-                if (LIKELY(constructorSym))
+                if (thiz == nullptr) [[unlikely]] return;
+                if (constructorSym) [[likely]]
                     return constructorSym(thiz, self, cause, collector_type);
             }
             CREATE_MEM_FUNC_SYMBOL_ENTRY(void, destructor, void *thiz) {
-                if (UNLIKELY(thiz == nullptr)) return;
-                if (LIKELY(destructorSym))
+                if (thiz == nullptr) [[unlikely]] return;
+                if (destructorSym) [[likely]]
                     return destructorSym(thiz);
             }
         public:
