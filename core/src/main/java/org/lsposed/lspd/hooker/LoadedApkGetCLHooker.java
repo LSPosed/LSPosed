@@ -100,9 +100,10 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
                 blocked = serviceClient.requestManagerBinder(packageName, path, binder);
             }
             if (binder.size() != 0 && binder.get(0) != null) {
-                InstallerVerifier.hookXposedInstaller(lpparam.classLoader, binder.get(0));
+                var ret = InstallerVerifier.sendBinderToManager(lpparam.classLoader, binder.get(0));
+                if (!ret) InstallerVerifier.hookBadManager(classLoader);
             } else if (blocked) {
-                InstallerVerifier.hookXposedInstaller(classLoader);
+                InstallerVerifier.hookBadManager(classLoader);
             } else {
                 XC_LoadPackage.callAll(lpparam);
             }

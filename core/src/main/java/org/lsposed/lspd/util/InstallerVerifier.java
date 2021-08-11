@@ -23,15 +23,12 @@ package org.lsposed.lspd.util;
 import static org.lsposed.lspd.util.SignInfo.CERTIFICATE;
 
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.widget.Toast;
 
 import com.android.apksig.ApkVerifier;
-
-import org.lsposed.lspd.service.ServiceManager;
 
 import java.io.File;
 import java.util.Arrays;
@@ -56,7 +53,7 @@ public class InstallerVerifier {
         }
     }
 
-    public static void hookXposedInstaller(final ClassLoader classLoader) {
+    public static void hookBadManager(final ClassLoader classLoader) {
         try {
             Class<?> ConstantsClass = XposedHelpers.findClass("org.lsposed.manager.Constants", classLoader);
             XposedHelpers.findAndHookMethod(android.app.Activity.class, "onCreate", Bundle.class, new XC_MethodHook() {
@@ -72,18 +69,21 @@ public class InstallerVerifier {
                 }
             });
         } catch (Throwable t) {
-            Utils.logW("hookXposedInstaller: ", t);
+            Utils.logW("hookBadManager: ", t);
         }
     }
 
-    public static void hookXposedInstaller(final ClassLoader classLoader, IBinder binder) {
-        Utils.logI("Found LSPosed Manager, hooking it");
+    public static boolean sendBinderToManager(final ClassLoader classLoader, IBinder binder) {
+        Utils.logI("Found LSPosed Manager");
         try {
             var clazz = XposedHelpers.findClass("org.lsposed.manager.Constants", classLoader);
-            XposedHelpers.callStaticMethod(clazz, "setBinder", new Class[]{IBinder.class}, binder);
-            Utils.logI("Hooked LSPosed Manager");
+            var ret = (boolean) XposedHelpers.callStaticMethod(clazz, "setBinder",
+                    new Class[]{IBinder.class}, binder);
+            Utils.logI("Send binder to LSPosed Manager: " + ret);
+            return ret;
         } catch (Throwable t) {
-            Utils.logW("Could not hook LSPosed Manager", t);
+            Utils.logW("Could not send binder to LSPosed Manager", t);
+            return false;
         }
     }
 }
