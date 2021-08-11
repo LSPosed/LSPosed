@@ -772,11 +772,13 @@ public class ConfigManager {
         }
     }
 
-    public void removeModule(String packageName) {
+    public boolean removeModule(String packageName) {
         if (removeModuleWithoutCache(packageName)) {
             // called by oneway binder
             updateCaches(true);
+            return true;
         }
+        return false;
     }
 
     private boolean removeModuleWithoutCache(String packageName) {
@@ -936,11 +938,11 @@ public class ConfigManager {
     }
 
     // this is slow, avoid using it
-    public boolean isModule(int uid) {
+    public String getModule(int uid) {
         for (var module : cachedModule.values()) {
-            if (module.appId == uid % PER_USER_RANGE) return true;
+            if (module.appId == uid % PER_USER_RANGE) return module.packageName;
         }
-        return false;
+        return null;
     }
 
     public boolean isModule(int uid, String name) {
