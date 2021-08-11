@@ -44,7 +44,7 @@ typedef struct {
 typedef NativeOnModuleLoaded (*NativeInit)(const NativeAPIEntries *entries);
 
 namespace lspd {
-    void InstallNativeAPI();
+    bool InstallNativeAPI();
 
     void RegisterNativeLib(const std::string &library_name);
 }

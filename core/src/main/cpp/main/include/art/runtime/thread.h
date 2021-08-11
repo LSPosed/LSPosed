@@ -34,7 +34,7 @@ namespace art {
         }
 
         CREATE_FUNC_SYMBOL_ENTRY(void *, CurrentFromGdb) {
-            if (LIKELY(CurrentFromGdbSym))
+            if (CurrentFromGdbSym) [[likely]]
                 return CurrentFromGdbSym();
             else
                 return nullptr;
@@ -55,7 +55,7 @@ namespace art {
         }
 
         void *DecodeJObject(jobject obj) {
-            if (LIKELY(thiz_ && DecodeJObjectSym)) {
+            if (thiz_ && DecodeJObjectSym) [[likely]] {
                 return DecodeJObject(thiz_, obj).data;
             }
             return nullptr;

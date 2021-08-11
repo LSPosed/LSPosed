@@ -25,13 +25,13 @@ namespace art {
 
         class ScopedSuspendAll {
             CREATE_MEM_FUNC_SYMBOL_ENTRY(void, constructor, void *thiz, const char * cause, bool long_suspend) {
-                if (UNLIKELY(thiz == nullptr)) return;
-                if (LIKELY(constructorSym))
+                if (thiz == nullptr) [[unlikely]] return;
+                if (constructorSym) [[likely]]
                     return constructorSym(thiz, cause, long_suspend);
             }
             CREATE_MEM_FUNC_SYMBOL_ENTRY(void, destructor, void *thiz) {
-                if (UNLIKELY(thiz == nullptr)) return;
-                if (LIKELY(destructorSym))
+                if (thiz == nullptr) [[unlikely]] return;
+                if (destructorSym) [[likely]]
                     return destructorSym(thiz);
             }
         public:

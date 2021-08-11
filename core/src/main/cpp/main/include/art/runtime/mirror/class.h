@@ -42,7 +42,7 @@ namespace art {
             }
 
             CREATE_MEM_FUNC_SYMBOL_ENTRY(void*, GetClassDef, void* thiz) {
-                if (LIKELY(GetClassDefSym))
+                if (GetClassDefSym) [[likely]]
                     return GetClassDefSym(thiz);
                 return nullptr;
             }

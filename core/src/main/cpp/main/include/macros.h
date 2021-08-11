@@ -20,14 +20,9 @@
 // used in defining new arrays, for example.  If you use arraysize on
 // a pointer by mistake, you will get a compile-time error.
 template<typename T, size_t N>
-[[gnu::always_inline]] constexpr size_t arraysize(T(&)[N]) {
+[[gnu::always_inline]] constexpr inline size_t arraysize(T(&)[N]) {
   return N;
 }
-// Changing this definition will cause you a lot of pain.  A majority of
-// vendor code defines LIKELY and UNLIKELY this way, and includes
-// this header through an indirect path.
-#define LIKELY( exp )       (__builtin_expect( (exp) != 0, true  ))
-#define UNLIKELY( exp )     (__builtin_expect( (exp) != 0, false ))
 // Current ABI string
 #if defined(__arm__)
 #define ABI_STRING "arm"

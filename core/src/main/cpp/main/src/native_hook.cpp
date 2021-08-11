@@ -41,7 +41,7 @@ namespace lspd {
     static std::atomic_bool installed = false;
 
     void InstallInlineHooks() {
-        if (installed.exchange(true)) {
+        if (installed.exchange(true)) [[unlikely]] {
             LOGD("Inline hooks have been installed, skip");
             return;
         }

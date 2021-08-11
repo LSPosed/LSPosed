@@ -63,10 +63,9 @@ namespace lspd {
 
     void RegisterNativeLib(const std::string &library_name) {
         static bool initialized = []() {
-            InstallNativeAPI();
-            return true;
+            return InstallNativeAPI();
         }();
-        if (UNLIKELY(!initialized)) return;
+        if (!initialized) [[unlikely]] return;
         LOGD("native_api: Registered %s", library_name.c_str());
         moduleNativeLibs.push_back(library_name);
     }
@@ -97,10 +96,10 @@ namespace lspd {
                 }
                 for (std::string_view module_lib: moduleNativeLibs) {
                     // the so is a module so
-                    if (UNLIKELY(hasEnding(ns, module_lib))) {
+                    if (hasEnding(ns, module_lib)) [[unlikely]] {
                         LOGD("Loading module native library %s", module_lib.data());
                         void *native_init_sym = dlsym(handle, "native_init");
-                        if (UNLIKELY(native_init_sym == nullptr)) {
+                        if (native_init_sym == nullptr) [[unlikely]] {
                             LOGD("Failed to get symbol \"native_init\" from library %s",
                                  module_lib.data());
                             break;
@@ -122,9 +121,12 @@ namespace lspd {
                 return handle;
             });
 
-    void InstallNativeAPI() {
+    bool InstallNativeAPI() {
         LOGD("InstallNativeAPI: %p", sym_do_dlopen);
-        if (sym_do_dlopen)
+        if (sym_do_dlopen) [[likely]] {
             HookSymNoHandle(sym_do_dlopen, do_dlopen);
+            return true;
+        }
+        return false;
     }
 }

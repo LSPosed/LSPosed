@@ -29,7 +29,7 @@ namespace art {
         CREATE_MEM_HOOK_STUB_ENTRIES(
                 "_ZN3art15instrumentation15Instrumentation21UpdateMethodsCodeImplEPNS_9ArtMethodEPKv",
                 void, UpdateMethodsCode, (void * thiz, void * art_method, const void *quick_code), {
-                    if (UNLIKELY(lspd::isHooked(art_method))) {
+                    if (lspd::isHooked(art_method)) [[unlikely]] {
                         LOGD("Skip update method code for hooked method %s",
                              art_method::PrettyMethod(art_method).c_str());
                         return;

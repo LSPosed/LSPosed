@@ -28,7 +28,7 @@ namespace art {
     private:
         inline static Runtime *instance_;
         CREATE_MEM_FUNC_SYMBOL_ENTRY(void, SetJavaDebuggable, void *thiz, bool value) {
-            if (LIKELY(SetJavaDebuggableSym)) {
+            if (SetJavaDebuggableSym) [[likely]] {
                 SetJavaDebuggableSym(thiz, value);
             }
         }

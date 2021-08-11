@@ -42,7 +42,7 @@ namespace lspd {
     constexpr int PER_USER_RANGE = 100000;
 
     void Context::CallOnPostFixupStaticTrampolines(void *class_ptr) {
-        if (UNLIKELY(!class_ptr || !class_linker_class_ || !post_fixup_static_mid_)) {
+        if (!class_ptr || !class_linker_class_ || !post_fixup_static_mid_) [[unlikely]] {
             return;
         }
 
@@ -56,7 +56,7 @@ namespace lspd {
     }
 
     void Context::PreLoadDex(std::string_view dex_path) {
-        if (LIKELY(!dex.empty())) return;
+        if (!dex.empty()) [[unlikely]] return;
 
         FILE *f = fopen(dex_path.data(), "rb");
         if (!f) {
@@ -80,7 +80,7 @@ namespace lspd {
         auto getsyscl_mid = JNI_GetStaticMethodID(
                 env, classloader, "getSystemClassLoader", "()Ljava/lang/ClassLoader;");
         auto sys_classloader = JNI_CallStaticObjectMethod(env, classloader, getsyscl_mid);
-        if (UNLIKELY(!sys_classloader)) {
+        if (!sys_classloader) [[unlikely]] {
             LOGE("getSystemClassLoader failed!!!");
             return;
         }
@@ -130,7 +130,7 @@ namespace lspd {
         if (!mid) {
             mid = JNI_GetMethodID(env, clz, "findClass", "(Ljava/lang/String;)Ljava/lang/Class;");
         }
-        if (LIKELY(mid)) {
+        if (mid) [[likely]] {
             auto target = JNI_CallObjectMethod(env, class_loader, mid,
                                                env->NewStringUTF(class_name.data()));
             if (target) {
@@ -147,12 +147,12 @@ namespace lspd {
     void
     Context::FindAndCall(JNIEnv *env, std::string_view method_name, std::string_view method_sig,
                          Args &&... args) const {
-        if (UNLIKELY(!entry_class_)) {
+        if (!entry_class_) [[unlikely]] {
             LOGE("cannot call method %s, entry class is null", method_name.data());
             return;
         }
         jmethodID mid = JNI_GetStaticMethodID(env, entry_class_, method_name, method_sig);
-        if (LIKELY(mid)) {
+        if (mid) [[likely]] {
             JNI_CallStaticVoidMethod(env, entry_class_, mid, std::forward<Args>(args)...);
         } else {
             LOGE("method %s id is null", method_name.data());

@@ -40,7 +40,7 @@ namespace art {
 
         CREATE_MEM_FUNC_SYMBOL_ENTRY(void, SetEntryPointsToInterpreter, void *thiz,
                                      void *art_method) {
-            if (LIKELY(SetEntryPointsToInterpreterSym))
+            if (SetEntryPointsToInterpreterSym) [[likely]]
                 SetEntryPointsToInterpreterSym(thiz, art_method);
         }
 
@@ -49,7 +49,7 @@ namespace art {
             art::mirror::Class mirror_class(clazz_ptr);
             auto class_def = mirror_class.GetClassDef();
             bool should_intercept = class_def && lspd::IsClassPending(class_def);
-            if (UNLIKELY(should_intercept)) {
+            if (should_intercept) [[unlikely]] {
                 LOGD("Pending hook for %p (%s)", clazz_ptr,
                      art::mirror::Class(clazz_ptr).GetDescriptor().c_str());
                 lspd::Context::GetInstance()->CallOnPostFixupStaticTrampolines(clazz_ptr);
@@ -83,7 +83,7 @@ namespace art {
 
         CREATE_MEM_FUNC_SYMBOL_ENTRY(void, MakeInitializedClassesVisiblyInitialized, void *thiz,
                                      void *self, bool wait) {
-            if (LIKELY(MakeInitializedClassesVisiblyInitializedSym))
+            if (MakeInitializedClassesVisiblyInitializedSym) [[likely]]
                 MakeInitializedClassesVisiblyInitializedSym(thiz, self, wait);
         }
 
@@ -93,7 +93,7 @@ namespace art {
                 bool, ShouldUseInterpreterEntrypoint, (void * art_method,
                         const void *quick_code), {
                     if (quick_code != nullptr &&
-                        UNLIKELY(lspd::isHooked(art_method) || lspd::IsMethodPending(art_method))) {
+                        lspd::isHooked(art_method) || lspd::IsMethodPending(art_method)) [[unlikely]] {
                         return false;
                     }
                     return backup(art_method, quick_code);
@@ -183,14 +183,14 @@ namespace art {
         [[gnu::always_inline]]
         void MakeInitializedClassesVisiblyInitialized(void *self, bool wait) const {
             LOGD("MakeInitializedClassesVisiblyInitialized start, thiz=%p, self=%p", thiz_, self);
-            if (LIKELY(thiz_))
+            if (thiz_) [[likely]]
                 MakeInitializedClassesVisiblyInitialized(thiz_, self, wait);
         }
 
         [[gnu::always_inline]]
         void SetEntryPointsToInterpreter(void *art_method) const {
             LOGD("SetEntryPointsToInterpreter start, thiz=%p, art_method=%p", thiz_, art_method);
-            if (LIKELY(thiz_))
+            if (thiz_) [[likely]]
                 SetEntryPointsToInterpreter(thiz_, art_method);
         }
 

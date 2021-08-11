@@ -39,7 +39,7 @@ namespace lspd {
         code = va_arg(copy, jint);
         va_end(copy);
 
-        if (UNLIKELY(code == BRIDGE_TRANSACTION_CODE)) {
+        if (code == BRIDGE_TRANSACTION_CODE) [[unlikely]] {
             *res = env->CallStaticBooleanMethodV(instance()->bridge_service_class_,
                                                  instance()->exec_transact_replace_methodID_,
                                                  args);
@@ -52,16 +52,16 @@ namespace lspd {
     jboolean
     Service::call_boolean_method_va_replace(JNIEnv *env, jobject obj, jmethodID methodId,
                                             va_list args) {
-        if (UNLIKELY(methodId == instance()->exec_transact_backup_methodID_)) {
+        if (methodId == instance()->exec_transact_backup_methodID_) [[unlikely]] {
             jboolean res = false;
-            if (LIKELY(exec_transact_replace(&res, env, obj, args))) return res;
+            if (exec_transact_replace(&res, env, obj, args)) [[unlikely]] return res;
             // else fallback to backup
         }
         return instance()->call_boolean_method_va_backup_(env, obj, methodId, args);
     }
 
     void Service::InitService(JNIEnv *env) {
-        if (LIKELY(initialized_)) return;
+        if (initialized_) [[unlikely]] return;
 
         // ServiceManager
         if (auto service_manager_class = JNI_FindClass(env, "android/os/ServiceManager"))
@@ -110,8 +110,8 @@ namespace lspd {
     void Service::HookBridge(const Context &context, JNIEnv *env) {
         static bool hooked = false;
         // This should only be ran once, so unlikely
-        if (UNLIKELY(hooked)) return;
-        if (UNLIKELY(!initialized_)) return;
+        if (hooked) [[unlikely]] return;
+        if (!initialized_) [[unlikely]] return;
         hooked = true;
         if (auto bridge_service_class = context.FindClassFromCurrentLoader(env,
                                                                            kBridgeServiceClassName))
@@ -148,7 +148,7 @@ namespace lspd {
     }
 
     ScopedLocalRef<jobject> Service::RequestBinder(JNIEnv *env, jstring nice_name) {
-        if (UNLIKELY(!initialized_)) {
+        if (!initialized_) [[unlikely]] {
             LOGE("Service not initialized");
             return {env, nullptr};
         }
@@ -192,7 +192,7 @@ namespace lspd {
     }
 
     ScopedLocalRef<jobject> Service::RequestBinderForSystemServer(JNIEnv *env) {
-        if (UNLIKELY(!initialized_ || !bridge_service_class_)) {
+        if (!initialized_ || !bridge_service_class_) [[unlikely]] {
             LOGE("Service not initialized");
             return {env, nullptr};
         }
