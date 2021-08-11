@@ -112,6 +112,7 @@ public final class ModuleUtil {
         } catch (NameNotFoundException e) {
             InstalledModule old = installedModules.remove(Pair.create(packageName, userId));
             if (old != null) {
+                enabledModules.remove(packageName);
                 for (ModuleListener listener : listeners) {
                     listener.onSingleInstalledModuleReloaded();
                 }
