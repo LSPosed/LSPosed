@@ -31,7 +31,8 @@ public class Constants {
         Toast.makeText(App.getInstance(), R.string.app_destroyed, Toast.LENGTH_LONG).show();
     }
 
-    public static void setBinder(IBinder binder) {
+    public static boolean setBinder(IBinder binder) {
         LSPManagerServiceHolder.init(binder);
+        return LSPManagerServiceHolder.getService().asBinder().isBinderAlive();
     }
 }
