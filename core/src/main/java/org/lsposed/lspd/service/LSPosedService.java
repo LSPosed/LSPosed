@@ -201,6 +201,7 @@ public class LSPosedService extends ILSPosedService.Stub {
         } catch (Throwable e) {
             Log.e(TAG, "register package receiver", e);
         }
+        Log.d(TAG, "registered package receiver");
     }
 
     private void registerBootReceiver() {
@@ -222,10 +223,12 @@ public class LSPosedService extends ILSPosedService.Stub {
         } catch (Throwable e) {
             Log.e(TAG, "register boot receiver", e);
         }
+        Log.d(TAG, "registered boot receiver");
     }
 
     @Override
     public void dispatchSystemServerContext(IBinder activityThread, IBinder activityToken) throws RemoteException {
+        Log.d(TAG, "received system context");
         ActivityManagerService.onSystemServerContext(IApplicationThread.Stub.asInterface(activityThread), activityToken);
         registerBootReceiver();
         registerPackageReceiver();
