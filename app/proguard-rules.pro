@@ -1,6 +1,6 @@
 -keep class org.lsposed.manager.Constants {
     public static void showErrorToast(int);
-    public static void setBinder(android.os.IBinder);
+    public static boolean setBinder(android.os.IBinder);
 }
 -assumenosideeffects class kotlin.jvm.internal.Intrinsics {
     public static void check*(...);
