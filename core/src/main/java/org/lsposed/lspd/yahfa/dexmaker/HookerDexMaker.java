@@ -37,7 +37,7 @@ import de.robv.android.xposed.XposedBridge;
 public class HookerDexMaker {
 
     public static final String METHOD_NAME_BACKUP = "backup";
-    public static final String METHOD_NAME_SETUP = "setup";
+    public static final String FIELD_NAME_HOOKER = "hooker";
     private static final HashMap<Class<?>, Character> descriptors = new HashMap<>() {{
         put(int.class, 'I');
         put(boolean.class, 'Z');
@@ -109,7 +109,9 @@ public class HookerDexMaker {
         // Execute our newly-generated code in-process.
         Method backupMethod = hookClass.getMethod(METHOD_NAME_BACKUP, mActualParameterTypes);
         mHooker = new LspHooker(mHookInfo, mMember, backupMethod);
-        hookClass.getMethod(METHOD_NAME_SETUP, LspHooker.class).invoke(null, mHooker);
+        var hooker = hookClass.getDeclaredField(FIELD_NAME_HOOKER);
+        hooker.setAccessible(true);
+        hooker.set(null, mHooker);
         Method hookMethod = hookClass.getMethod(methodName, mActualParameterTypes);
         HookMain.backupAndHook(mMember, hookMethod, backupMethod);
     }
