@@ -85,8 +85,6 @@ public class ServiceManager {
 
         systemServerService.putBinderForSystemServer();
 
-        Process.killProcess(Os.getppid());
-
         DdmHandleAppName.setAppName("lspd", 0);
 
         waitSystemService("package");
