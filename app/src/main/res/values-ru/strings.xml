@@ -21,8 +21,6 @@
 <resources>
     <!-- MainActivity -->
     <string name="info">Информация</string>
-    <string name="install">Установить</string>
-    <string name="install_summary">Нажмите, чтобы установить LSPosed</string>
     <string name="Modules">Установленные модули</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d модуль включен</item>
@@ -36,19 +34,24 @@
     <string name="module_repo">Репозиторий</string>
     <string name="module_repo_summary">Репозиторий модулей (Бета)</string>
     <string name="about_view_source_code"><![CDATA[Просмотреть исходный код на %1$s<br/>Присоединяйтесь к нашему %2$s каналу]]></string>
-    <string name="about_translators">Переводчики: %s</string>
+    <string name="about_translators">Переводчик: %s</string>
+    <string name="translators"><![CDATA[<a href="https://github.com/Alexey71">Alexey</a>]]></string>
 
-    <string name="activated">Активирован!</string>
+    <string name="install">Установить</string>
+    <string name="install_summary">Нажмите, чтобы установить LSPosed</string>
     <string name="not_installed">Не установлен</string>
-    <string name="partial_activated">Частично активирован!</string>
-    <string name="need_update">Требуется обновление</string>
+    <string name="not_install_summary">LSPosed не установлен!</string>
+    <string name="activated">Активирован</string>
+    <string name="partial_activated">Частично активирован</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy не загружен должным образом</string>
     <string name="selinux_policy_not_loaded"><![CDATA[<b>ВНИМАНИЕ:</b> SEPolicy не загружается должным образом, модули, которые подключают Framework в систему, не будут работать.<br/>Пожалуйста, сообщите об этом сюда <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> разработчик.]]></string>
     <string name="system_inject_fail_summary">Ошибка внедрения Framework в систему</string>
     <string name="system_inject_fail"><![CDATA[<b>ВНИМАНИЕ:</b> Ошибка внедрения Framework в систему.<br/>Это редкость и может быть вызвано <b>Magisk</b> или несовместимыми модулями Magisk.<br/>Пожалуйста, попрорбуйте отключить модули Magisk кроме Riru и LSPosed или пришлите полные логи разработчику.]]></string>
     <string name="system_prop_incorrect_summary">Не правильные системные настройки</string>
     <string name="system_prop_incorrect"><![CDATA[<b>ВНИМАНИЕ:</b> Не правильные системные настройки.<br/>Некоторые системные настройки нужные для работы удалены или изменены.<br/>Модули могут не работать должным образом.]]></string>
-    <string name="please_update_summary">Пожалуйста, установите последнюю версию LSPosed</string>
+    <string name="need_update">Требуется обновление</string>
+    <string name="please_update_summary">Установите последнюю версию LSPosed!</string>
+    <string name="lsposed_not_active">LSPosed не установлен или не активирован!</string>
     <string name="info_api_version">Версия API</string>
     <string name="info_framework_version">Версия Framework</string>
     <string name="info_manager_version">Версия менеджера</string>
@@ -59,7 +62,7 @@
     <!-- LogsActivity -->
     <string name="menuSend">Отправить</string>
     <string name="menuSaveToSd">Сохранить</string>
-    <string name="nav_item_logs_lsp">Подробные логи</string>
+    <string name="nav_item_logs_lsp">Логи LSPosed</string>
     <string name="nav_item_logs_module">Логи модулей</string>
     <string name="dont_show_again">Больше не показывать это сообщение</string>
     <string name="logs_save_failed">Ошибка сохранения:</string>
@@ -71,7 +74,7 @@
     <string name="logs_cannot_read">Невозможно прочитать логи: \n</string>
     <string name="menuReload">Обновить</string>
     <string name="logs_clear_failed_2">Не удалось очистить логи</string>
-    <string name="not_logcat_2">Это логи LSPosed и модулей. Если вам нужны логи Android, вы можете попробовать модуль Log Catcher для Magisk или спросить на 4pda</string>
+    <string name="verbose_log_not_avaliable">Подробные логи не доступны. Если вы только что включили их, для применения требуется перезагрузка</string>
 
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Модуль еще не включен</string>
@@ -92,6 +95,7 @@
     <string name="module_uninstall_message">Вы точно хотите удалить это модуль?</string>
     <string name="module_uninstalled">Модуль %1$s удален!</string>
     <string name="module_uninstall_failed">Удаление прервано</string>
+    <string name="add_module_to_user">Добавить модуль пользователю</string>
     <string name="module_installed">Добавить %1$s для пользователя %2$s</string>
     <string name="module_install_failed">Добавление модуля не удалось</string>
     <string name="install_to_user">Установить пользователю %s</string>
@@ -100,18 +104,15 @@
     <!-- AppListActivity -->
     <string name="compile_speed">Повторная оптимизация</string>
     <string name="compile_speed_msg">Оптимизация…</string>
-    <string name="compile_done">Оптимизация завершена</string>
+    <string name="compile_done">Оптимизация завершена!</string>
     <string name="app_launch">Запустить</string>
-    <string name="compile_failed">Ошибка оптимизации или возвращено пустое значение</string>
+    <string name="compile_failed">Ошибка оптимизации: возвращено пустое значение!</string>
     <string name="compile_failed_with_info">Ошибка оптимизации: </string>
     <string name="sort_by_name">По названию приложения</string>
-    <string name="sort_by_name_reverse">По названию приложения (обратный)</string>
     <string name="sort_by_package_name">По названию пакета</string>
-    <string name="sort_by_package_name_reverse">По названию пакета (обратный)</string>
     <string name="sort_by_install_time">По времени установки</string>
-    <string name="sort_by_install_time_reverse">По времени установки (обратный)</string>
     <string name="sort_by_update_time">По времени обновления</string>
-    <string name="sort_by_update_time_reverse">По времени обновления (обратный)</string>
+    <string name="sort_reverse">Обратная</string>
     <string name="menu_show_system_apps">Системные</string>
     <string name="menu_sort">Сортировать</string>
     <string name="enable_module">Включить модуль</string>
@@ -140,6 +141,7 @@
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">Магазин приложений</string>
     <string name="module_app_info">О приложении</string>
+    <string name="list_empty">¯\\\\_(ツ)_\/¯\nЗдесь ничего нет</string>
 
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
@@ -166,31 +168,28 @@
     <string name="theme_color_summary">Цвет, который чаще всего появляется в приложении</string>
     <string name="theme_color_system_accent">Системный цвет акцента</string>
     <string name="settings_show_hidden_icon_apps_enabled">Принудительно показывать иконку запуска</string>
-    <string name="settings_show_hidden_icon_apps_enabled_summary">После Android 10, приложения (особенно модули LSPosed) не могут скрывать иконку запуска в лаунчер. Выключите переключатель, чтобы отключить эту функцию</string>
+    <string name="settings_show_hidden_icon_apps_enabled_summary">После Android 10, приложения не могут скрывать иконку запуска в лаунчер. Выключите переключатель, чтобы отключить эту системную функцию</string>
     <string name="settings_group_system">Система</string>
 
     <!-- Module Repo -->
     <string name="module_readme">Описание</string>
     <string name="module_releases">Версии</string>
     <string name="module_information">Информация</string>
-    <string name="module_information_homepage">Homepage</string>
+    <string name="module_information_homepage">Домашняя страница</string>
     <string name="module_information_source_url">Исходный код</string>
     <string name="module_information_collaborators">Разработчик</string>
-    <string name="module_release_view_assets">Вложения</string>
+    <string name="module_release_view_assets">Установить</string>
     <string name="menu_open_in_browser">Открыть в браузере</string>
     <string name="refresh">Обновить</string>
     <string name="module_release_load_more">Показать старые версии</string>
     <string name="module_release_no_more">Больше нет других версий</string>
     <string name="repo_load_failed">Не удалось загрузить репозиторий модуля: %s</string>
 
+    <!-- CrashReportActivity -->
     <string name="app_destroyed">Эта приложение повреждено. Убедитесь, что загрузили ее из официального источника</string>
-    <string name="outdated_manager">Версия LSPosed Manager и LSPosed Core не подходят. Пожалуйста, установите соответствующую версию</string>
-    <string name="lsposed_not_active">LSPosed не установлен или не активирован!</string>
-    <string name="verbose_log_not_avaliable">Подробные логи не доступны. Если вы только что включили их, для применения требуется перезагрузка</string>
-    <string name="NotInstall">Не установлен!</string>
-    <string name="NotInstallDetail">LSPosed не установлен!</string>
-    <string name="translators"><![CDATA[<a href="https://github.com/LSPosed/LSPosed">LSPosed</a>]]></string>
+    <string name="outdated_core">Приложение LSPosed новее, чем Framework. Обновите LSPosed Framework</string>
+    <string name="outdated_manager">LSPosed Framework новее, чем приложение LSPosed. Обновите приложение вручную из /data/adb/lspd/manager.apk</string>
+    <string name="manager_crashed">Manager crashed</string>
+    <string name="cpoy_crash_info">Скопировать информацию о сбое</string>
     <string name="copy_toast_msg">Скопировано</string>
-    <string name="list_empty">¯\\\\_(ツ)_\/¯\nЗдесь ничего нет</string>
-    <string name="add_module_to_user">Добавить модуль пользователю</string>
 </resources>
