@@ -103,13 +103,10 @@
     <string name="compile_failed">最適化に失敗 もしくは 戻り値が空です。</string>
     <string name="compile_failed_with_info">最適化に失敗: </string>
     <string name="sort_by_name">アプリ名でソート</string>
-    <string name="sort_by_name_reverse">アプリ名でソート (逆順)</string>
     <string name="sort_by_package_name">パッケージ名でソート</string>
-    <string name="sort_by_package_name_reverse">パッケージ名でソート (逆順)</string>
     <string name="sort_by_install_time">インストール日時でソート</string>
-    <string name="sort_by_install_time_reverse">インストール日時でソート (逆順)</string>
     <string name="sort_by_update_time">更新日時でソート</string>
-    <string name="sort_by_update_time_reverse">更新日時でソート (逆順)</string>
+    <string name="sort_reverse">逆順</string>
     <string name="menu_show_system_apps">システムアプリ</string>
     <string name="menu_sort">ソート中…</string>
     <string name="enable_module">モジュールの有効化</string>

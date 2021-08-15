@@ -97,13 +97,9 @@
     <string name="compile_failed">La optimización falló o devolvió un valor vacío.</string>
     <string name="compile_failed_with_info">Fallo en la optimización: </string>
     <string name="sort_by_name">Filtrar por nombre de aplicación</string>
-    <string name="sort_by_name_reverse">Filtrar por nombre de aplicación (al revés)</string>
     <string name="sort_by_package_name">Filtrar por nombre de paquete</string>
-    <string name="sort_by_package_name_reverse">Filtrar por nombre de paquete (al revés)</string>
     <string name="sort_by_install_time">Filtrar por fecha de instalación</string>
-    <string name="sort_by_install_time_reverse">Filtrar por fecha de instalación (al revés)</string>
     <string name="sort_by_update_time">Filtrar por fecha de actualización</string>
-    <string name="sort_by_update_time_reverse">Filtrar por fecha de actualización (al revés)</string>
     <string name="menu_show_system_apps">Aplicaciones del sistema</string>
     <string name="menu_sort">Filtrando…</string>
     <string name="enable_module">Activar módulo</string>

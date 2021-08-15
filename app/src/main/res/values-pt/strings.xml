@@ -103,13 +103,9 @@
     <string name="compile_failed">A otimização falhou ou não houve nenhum retorno.</string>
     <string name="compile_failed_with_info">Falha na otimização: </string>
     <string name="sort_by_name">Ordenar pelo nome do aplicativo</string>
-    <string name="sort_by_name_reverse">Ordenar pelo nome do aplicativo (reverso)</string>
     <string name="sort_by_package_name">Ordenar pelo nome do pacote</string>
-    <string name="sort_by_package_name_reverse">Ordenar pelo nome do pacote (reverso)</string>
     <string name="sort_by_install_time">Ordenar pela data de instalação</string>
-    <string name="sort_by_install_time_reverse">Ordenar pela data de instalação (reverso)</string>
     <string name="sort_by_update_time">Ordenar pela data de atualização</string>
-    <string name="sort_by_update_time_reverse">Ordenar pela data de atualização (reverso)</string>
     <string name="menu_show_system_apps">Apps do Sistema</string>
     <string name="menu_sort">Ordenar…</string>
     <string name="enable_module">Ativar módulo</string>

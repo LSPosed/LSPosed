@@ -88,13 +88,9 @@
     <string name="settings_restore_success">Відновлення закінчено!</string>
     <string name="settings_restoring">Відновлення…</string>
     <string name="sort_by_install_time">Сортувати за часом встановлення</string>
-    <string name="sort_by_install_time_reverse">Сортувати за часом встановлення (зворотній)</string>
     <string name="sort_by_name">Сортувати за назвою програми</string>
-    <string name="sort_by_name_reverse">Сортувати за назвою програми (зворотній)</string>
     <string name="sort_by_package_name">Сортувати за назвою пакета</string>
-    <string name="sort_by_package_name_reverse">Сортувати за назвою пакету (зворотній)</string>
     <string name="sort_by_update_time">Сортувати за часом оновлення</string>
-    <string name="sort_by_update_time_reverse">Сортувати за часом оновлення (зворотній)</string>
     <string name="use_recommended">Рекомендовано</string>
     <string name="use_recommended_message">Вибрати рекомендовані програми?</string>
     <string name="warning_installed_on_external_storage">Цей модуль не можна завантажити, оскільки він встановлений на SD-карті, перенесіть його у внутрішню пам’ять</string>

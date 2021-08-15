@@ -100,13 +100,10 @@
     <string name="compile_failed">최적화에 실패했거나 반환 값이 비어 있습니다.</string>
     <string name="compile_failed_with_info">최적화 실패: </string>
     <string name="sort_by_name">응용 프로그램 이름별로 정렬</string>
-    <string name="sort_by_name_reverse">응용 프로그램 이름별로 정렬 (역순)</string>
     <string name="sort_by_package_name">패키지 이름별로 정렬</string>
-    <string name="sort_by_package_name_reverse">패키지 이름별로 정렬 (역순)</string>
     <string name="sort_by_install_time">설치 시간별로 정렬</string>
-    <string name="sort_by_install_time_reverse">설치 시간별로 정렬 (역순)</string>
     <string name="sort_by_update_time">업데이트 시간별로 정렬</string>
-    <string name="sort_by_update_time_reverse">업데이트 시간별로 정렬 (역순)</string>
+    <string name="sort_reverse">역순</string>
     <string name="menu_show_system_apps">시스템 앱</string>
     <string name="menu_sort">정렬…</string>
     <string name="enable_module">모듈 활성화</string>

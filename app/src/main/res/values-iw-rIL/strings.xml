@@ -88,13 +88,9 @@
     <string name="compile_failed">אופטימיזציה נכשלה או שהערך המוחזר הוא ריק.</string>
     <string name="compile_failed_with_info">אופטימיזציה נכשלה: </string>
     <string name="sort_by_name">מיין על פי שם האפליקציה</string>
-    <string name="sort_by_name_reverse">מיין על פי שם האפליקציה (בסדר הפוך)</string>
     <string name="sort_by_package_name">מיין על פי שם החבילה</string>
-    <string name="sort_by_package_name_reverse">מיין על פי שם החבילה (בסדר הפוך)</string>
     <string name="sort_by_install_time">מיין על פי זמן ההתקנה</string>
-    <string name="sort_by_install_time_reverse">מיין על פי זמן ההתקנה (בסדר הפוך)</string>
     <string name="sort_by_update_time">מיין על פי זמן העדכון</string>
-    <string name="sort_by_update_time_reverse">מיין על פי זמן העדכון (בסדר הפוך)</string>
     <string name="menu_show_system_apps">אפליקציות מערכת</string>
     <string name="menu_sort">ממיין…</string>
     <string name="enable_module">הפעל מודול</string>

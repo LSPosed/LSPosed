@@ -103,13 +103,9 @@
     <string name="compile_failed">Échec de l\’optimisation ou la valeure de retour est vide..</string>
     <string name="compile_failed_with_info">Échec de l\’optimisation: </string>
     <string name="sort_by_name">Trier par nom d\’application</string>
-    <string name="sort_by_name_reverse">Trier par nom d\’application (inversé)</string>
     <string name="sort_by_package_name">Trier par nom de paquet</string>
-    <string name="sort_by_package_name_reverse">Trier par nom de paquet (inversé)</string>
     <string name="sort_by_install_time">Trier par date d\’installation</string>
-    <string name="sort_by_install_time_reverse">Trier par date d\’installation (inversé)</string>
     <string name="sort_by_update_time">Trier par heure de mise à jour</string>
-    <string name="sort_by_update_time_reverse">Trier par heure de mise à jour (inversé)</string>
     <string name="menu_show_system_apps">Applications système</string>
     <string name="menu_sort">Trie…</string>
     <string name="enable_module">Activer module</string>

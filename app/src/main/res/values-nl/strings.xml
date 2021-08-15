@@ -93,13 +93,9 @@
     <string name="compile_failed">Optimalisatie mislukt of geretourneerde waarde is leeg.</string>
     <string name="compile_failed_with_info">Optimalisatie is mislukt: </string>
     <string name="sort_by_name">Sorteer op applicatienaam</string>
-    <string name="sort_by_name_reverse">Sorteren op applicatienaam (omgekeerd)</string>
     <string name="sort_by_package_name">Sorteer op pakketnaam</string>
-    <string name="sort_by_package_name_reverse">Sorteren op pakketnaam (omgekeerd)</string>
     <string name="sort_by_install_time">Sorteer op installatietijd</string>
-    <string name="sort_by_install_time_reverse">Sorteer op installatietijd (omgekeerd)</string>
     <string name="sort_by_update_time">Sorteer op updatetijd</string>
-    <string name="sort_by_update_time_reverse">Sorteer op updatetijd (omgekeerd)</string>
     <string name="menu_show_system_apps">Systeem apps</string>
     <string name="menu_sort">Sorteren…</string>
     <string name="enable_module">Schakel module in</string>

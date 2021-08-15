@@ -96,13 +96,9 @@
     <string name="not_installed">Nicht installiert</string>
     <string name="pure_black_dark_theme">Verwenden Sie das dunkel schwarze Theme</string>
     <string name="sort_by_name">Nach Anwendungsname sortieren</string>
-    <string name="sort_by_name_reverse">Nach Anwendungsname sortieren (umgekehrt)</string>
     <string name="sort_by_package_name">Nach Paketnamen sortieren</string>
-    <string name="sort_by_package_name_reverse">Sortieren nach Paketname (umgekehrt)</string>
     <string name="sort_by_install_time">Nach Installationszeit sortieren</string>
-    <string name="sort_by_install_time_reverse">Nach Installationszeit sortieren (umgekehrt)</string>
     <string name="sort_by_update_time">Nach Aktualisierungszeit sortieren</string>
-    <string name="sort_by_update_time_reverse">Nach Aktualisierungszeit sortieren (umgekehrt)</string>
     <string name="settings_group_theme">Theme</string>
     <string name="menu_show_system_apps">System-Apps</string>
     <string name="menu_sort">Sortieren…</string>

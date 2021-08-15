@@ -103,13 +103,9 @@
     <string name="compile_failed">Ottimizzazione non riuscita o il valore restituito è vuoto.</string>
     <string name="compile_failed_with_info">Ottimizzazione fallita: </string>
     <string name="sort_by_name">Ordina per nome dell\'applicazione</string>
-    <string name="sort_by_name_reverse">Ordina per nome dell\'applicazione (inverso)</string>
     <string name="sort_by_package_name">Ordina per nome del pacchetto</string>
-    <string name="sort_by_package_name_reverse">Ordina per nome del pacchetto (inverso)</string>
     <string name="sort_by_install_time">Ordina per data di installazione</string>
-    <string name="sort_by_install_time_reverse">Ordina per data di installazione (inverso)</string>
     <string name="sort_by_update_time">Ordina per data di aggiornamento</string>
-    <string name="sort_by_update_time_reverse">Ordina per data di aggiornamento (inverso)</string>
     <string name="menu_show_system_apps">Applicazioni di sistema</string>
     <string name="menu_sort">Ordina…</string>
     <string name="enable_module">Abilita modulo</string>
