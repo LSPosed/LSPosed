@@ -21,6 +21,7 @@ package org.lsposed.lspd.service;
 
 import static android.content.pm.ServiceInfo.FLAG_ISOLATED_PROCESS;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
+import static org.lsposed.lspd.service.ServiceManager.existsInGlobalNamespace;
 
 import android.content.IIntentReceiver;
 import android.content.IIntentSender;
@@ -213,7 +214,7 @@ public class PackageService {
 
             }
         }
-        if (pkgInfo == null || pkgInfo.applicationInfo == null || (!pkgInfo.packageName.equals("android") && (pkgInfo.applicationInfo.sourceDir == null || !new File(pkgInfo.applicationInfo.sourceDir).exists() || !isPackageAvailable(packageName, userId, true))))
+        if (pkgInfo == null || pkgInfo.applicationInfo == null || (!pkgInfo.packageName.equals("android") && (pkgInfo.applicationInfo.sourceDir == null || !existsInGlobalNamespace(pkgInfo.applicationInfo.sourceDir) || !isPackageAvailable(packageName, userId, true))))
             return null;
         return pkgInfo;
     }
