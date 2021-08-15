@@ -21,8 +21,6 @@
 <resources>
     <!-- MainActivity -->
     <string name="info">Info</string>
-    <string name="Install">Install</string>
-    <string name="InstallDetail">Tap to install LSPosed</string>
     <string name="Modules">Modules</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d module enabled</item>
@@ -35,18 +33,23 @@
     <string name="module_repo_summary">Module repository (Beta)</string>
     <string name="about_view_source_code"><![CDATA[View source code at %1$s<br/>Join our %2$s channel]]></string>
     <string name="about_translators">Translators: %s</string>
+    <string name="translators"><![CDATA[<a href="https://github.com/LSPosed/LSPosed">LSPosed</a>]]></string>
 
-    <string name="activated">Activated</string>
+    <string name="install">Install</string>
+    <string name="install_summary">Tap to install LSPosed</string>
     <string name="not_installed">Not installed</string>
+    <string name="not_install_summary">LSPosed is not Installed</string>
+    <string name="activated">Activated</string>
     <string name="partial_activated">Partially activated</string>
-    <string name="need_update">Need to update</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy is not loaded properly</string>
     <string name="selinux_policy_not_loaded"><![CDATA[<b>WARNING:</b> SEPolicy is not loaded properly, modules that hook System Framework will not work.<br/>Please report this to <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> developer.]]></string>
     <string name="system_inject_fail_summary">System Framework injection failed</string>
     <string name="system_inject_fail"><![CDATA[<b>WARNING:</b> System Framework inject failed.<br/>This is rare and may be caused by <b>Magisk</b> or some low-quality Magisk modules.<br/>Please try to disable Magisk modules other than Riru and LSPosed or submit full log to developers.]]></string>
     <string name="system_prop_incorrect_summary">System prop incorrect</string>
     <string name="system_prop_incorrect"><![CDATA[<b>WARNING:</b> System prop incorrect.<br/>Some necessary system properties deleted or modified.<br/>Modules may invalidate occasionally.]]></string>
+    <string name="need_update">Need to update</string>
     <string name="please_update_summary">Please install the latest version of LSPosed</string>
+    <string name="lsposed_not_active">LSPosed is not currently installed or active.</string>
     <string name="info_api_version">API version</string>
     <string name="info_framework_version">Framework version</string>
     <string name="info_manager_version">Manager version</string>
@@ -57,8 +60,8 @@
     <!-- LogsActivity -->
     <string name="menuSend">Send</string>
     <string name="menuSaveToSd">Save</string>
-    <string name="nav_item_logs">Verbose Logs</string>
-    <string name="nav_item_logs_err">Modules Logs</string>
+    <string name="nav_item_logs_lsp">LSPosed Logs</string>
+    <string name="nav_item_logs_module">Modules Logs</string>
     <string name="dont_show_again">Don\'t show this again</string>
     <string name="logs_save_failed">Failed to save:</string>
     <string name="menuClearLog">Clear log now</string>
@@ -69,7 +72,7 @@
     <string name="logs_cannot_read">Cannot read log: \n</string>
     <string name="menuReload">Reload</string>
     <string name="logs_clear_failed_2">Failed to clear the log</string>
-    <string name="not_logcat_2">If someone asked you an Android Logcat, you\'re in the wrong section. This is the LSPosed log; if you need a logcat, on XDA you can find what you need.</string>
+    <string name="verbose_log_not_avaliable">Verbose log is not available, if you just enabled it without reboot, try again after reboot.</string>
 
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Xposed module is not activated yet</string>
@@ -90,6 +93,7 @@
     <string name="module_uninstall_message">Do you want to uninstall this module?</string>
     <string name="module_uninstalled">Uninstalled %1$s</string>
     <string name="module_uninstall_failed">Uninstall unsuccessful</string>
+    <string name="add_module_to_user">Add module to user</string>
     <string name="module_installed">Added %1$s to user %2$s</string>
     <string name="module_install_failed">Adding module failed</string>
     <string name="install_to_user">Install to user %s</string>
@@ -98,9 +102,9 @@
     <!-- AppListActivity -->
     <string name="compile_speed">Re-optimize</string>
     <string name="compile_speed_msg">Optimizing…</string>
-    <string name="compile_done">Optimization complete.</string>
+    <string name="compile_done">Optimization complete</string>
     <string name="app_launch">Launch it</string>
-    <string name="compile_failed">Optimization failed or return value is empty.</string>
+    <string name="compile_failed">Optimization failed: return value is empty</string>
     <string name="compile_failed_with_info">Optimization failed: </string>
     <string name="sort_by_name">Application name</string>
     <string name="sort_by_package_name">Package name</string>
@@ -135,6 +139,7 @@
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">View in other app</string>
     <string name="module_app_info">App info</string>
+    <string name="list_empty">¯\\\\_(ツ)_\/¯\nNothing here</string>
 
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
@@ -161,7 +166,7 @@
     <string name="theme_color_summary">Color that appears most frequently in the app</string>
     <string name="theme_color_system_accent">System accent color</string>
     <string name="settings_show_hidden_icon_apps_enabled">Force apps to show launcher icons</string>
-    <string name="settings_show_hidden_icon_apps_enabled_summary">After Android 10, apps (especially Xposed modules) are not allowed to hide their launcher icons. Turn off the toggle to disable this feature.</string>
+    <string name="settings_show_hidden_icon_apps_enabled_summary">After Android 10, apps are not allowed to hide their launcher icons. Turn off the toggle to disable this system feature.</string>
     <string name="settings_group_system">System</string>
 
     <!-- Module Repo -->
@@ -178,14 +183,10 @@
     <string name="module_release_no_more">No more release</string>
     <string name="repo_load_failed">Failed to load module repo: %s</string>
 
-    <string name="app_destroyed">This application has been destroyed, please make sure you download it from the official source.</string>
+    <!-- CrashReportActivity -->
+    <string name="app_destroyed">This app may be destroyed, please download the latest version of this app from the official source.</string>
     <string name="outdated_manager">Version of LSPosed Manager and LSPosed Core are not consistent. Please re-install the corresponding version.</string>
-    <string name="lsposed_not_active">LSPosed is not currently installed or active.</string>
-    <string name="verbose_log_not_avaliable">Verbose log is not available, if you just enabled it without reboot, try again after reboot.</string>
-    <string name="NotInstall">Not Installed</string>
-    <string name="NotInstallDetail">LSPosed is not Installed</string>
-    <string name="translators"><![CDATA[<a href="https://github.com/LSPosed/LSPosed">LSPosed</a>]]></string>
+    <string name="manager_crashed">Manager crashed</string>
+    <string name="cpoy_crash_info">Copy crash info</string>
     <string name="copy_toast_msg">Copied</string>
-    <string name="list_empty">¯\\\\_(ツ)_\/¯\nNothing here</string>
-    <string name="add_module_to_user">Add module to user</string>
 </resources>

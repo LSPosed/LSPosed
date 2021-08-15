@@ -142,8 +142,8 @@ public class HomeFragment extends BaseFragment {
         } else {
             cardBackgroundColor = ResourcesKt.resolveColor(activity.getTheme(), R.attr.colorInstall);
             boolean isMagiskInstalled = ConfigManager.isMagiskInstalled();
-            binding.statusTitle.setText(isMagiskInstalled ? R.string.Install : R.string.NotInstall);
-            binding.statusSummary.setText(isMagiskInstalled ? R.string.InstallDetail : R.string.NotInstallDetail);
+            binding.statusTitle.setText(isMagiskInstalled ? R.string.install : R.string.not_installed);
+            binding.statusSummary.setText(isMagiskInstalled ? R.string.install_summary : R.string.not_install_summary);
             if (!isMagiskInstalled) {
                 binding.status.setOnClickListener(null);
                 binding.download.setVisibility(View.GONE);

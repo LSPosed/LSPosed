@@ -21,8 +21,8 @@
 <resources>
     <!-- MainActivity -->
     <string name="info">Infos</string>
-    <string name="Install">Installer</string>
-    <string name="InstallDetail">Appuyez pour installer LSPosed</string>
+    <string name="install">Installer</string>
+    <string name="install_summary">Appuyez pour installer LSPosed</string>
     <string name="Modules">Modules</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d module activé</item>
@@ -57,8 +57,8 @@
     <!-- LogsActivity -->
     <string name="menuSend">Envoyer</string>
     <string name="menuSaveToSd">Sauvegarder</string>
-    <string name="nav_item_logs">Journaux détaillés</string>
-    <string name="nav_item_logs_err">Journeaux Modules</string>
+    <string name="nav_item_logs_lsp">Journaux détaillés</string>
+    <string name="nav_item_logs_module">Journeaux Modules</string>
     <string name="dont_show_again">Ne plus afficher</string>
     <string name="logs_save_failed">Échec de la sauvegarde:</string>
     <string name="menuClearLog">Éffacer le journal maintenant</string>
@@ -182,7 +182,7 @@
     <string name="lsposed_not_active">LSPosed n\’est pas installé ou n\’est pas actif.</string>
     <string name="verbose_log_not_avaliable">Journal détaillé indisponible, si vous l\’avez juste activé sans redémarrer, essayez à nouveau après avoir redémarré.</string>
     <string name="NotInstall">Non installé</string>
-    <string name="NotInstallDetail">LSPosed n\’est pas installé</string>
+    <string name="not_install_summary">LSPosed n\’est pas installé</string>
     <string name="translators"><![CDATA[<a href="https://forum.xda-developers.com/member.php?u=5332893">Rom</a>]]></string>
     <string name="copy_toast_msg">Copié</string>
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nIl n\’y a rien ici</string>

@@ -22,8 +22,8 @@
 
     <!-- MainActivity -->
     <string name="info">מידע</string>
-    <string name="Install">התקן</string>
-    <string name="InstallDetail">הקש כדי להתקין את LSPosed</string>
+    <string name="install">התקן</string>
+    <string name="install_summary">הקש כדי להתקין את LSPosed</string>
     <string name="Modules">מודולים</string>
     <string name="Logs">לוגים</string>
     <string name="Settings">הגדרות</string>
@@ -46,8 +46,8 @@
     <!-- LogsActivity -->
     <string name="menuSend">שלח</string>
     <string name="menuSaveToSd">שמור</string>
-    <string name="nav_item_logs">Verbose Logs</string>
-    <string name="nav_item_logs_err">Modules Logs</string>
+    <string name="nav_item_logs_lsp">Verbose Logs</string>
+    <string name="nav_item_logs_module">Modules Logs</string>
     <string name="dont_show_again">אל תראה שוב</string>
     <string name="logs_save_failed">נכשל לשמור:</string>
     <string name="menuClearLog">נקה לוגים עכשיו</string>
@@ -159,5 +159,5 @@
     <string name="lsposed_not_active">LSPosed כרגע לא מותקן או מופעל.</string>
     <string name="verbose_log_not_avaliable">Verbose log is not available, if you just enabled it without reboot, try again after reboot.</string>
     <string name="NotInstall">לא מותקן</string>
-    <string name="NotInstallDetail">LSPosed לא מותקן</string>
+    <string name="not_install_summary">LSPosed לא מותקן</string>
 </resources>

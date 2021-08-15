@@ -20,8 +20,8 @@
 
 <resources>
     <string name="About">Про модифікацію</string>
-    <string name="Install">Установити</string>
-    <string name="InstallDetail">Натисніть для встановлення LSPosed</string>
+    <string name="install">Установити</string>
+    <string name="install_summary">Натисніть для встановлення LSPosed</string>
     <string name="Logs">Звіти</string>
     <string name="Modules">Модулі</string>
     <string name="Settings">Налаштування</string>
@@ -61,8 +61,8 @@
     <string name="module_no_ui">Цей модуль не надає інтерфейсу користувача</string>
     <string name="module_settings">Налаштування модуля</string>
     <string name="module_uninstall">Видалити</string>
-    <string name="nav_item_logs">Детальні звіти</string>
-    <string name="nav_item_logs_err">Звіти модулів</string>
+    <string name="nav_item_logs_lsp">Детальні звіти</string>
+    <string name="nav_item_logs_module">Звіти модулів</string>
     <string name="no_min_version_specified">Цей модуль не визначає потрібну йому версію LSP.</string>
     <string name="no_scope_selected">Ви не вибрали жодної програми. Продовжити?</string>
     <string name="no_scope_selected_has_recommended">Ви не вибрали жодної програми. Вибрати рекомендовані програми?</string>
