@@ -45,11 +45,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
-import org.lsposed.manager.App;
 import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
-import org.lsposed.manager.databinding.DialogInstallWarningBinding;
 import org.lsposed.manager.databinding.FragmentLogsBinding;
 import org.lsposed.manager.databinding.ItemLogBinding;
 import org.lsposed.manager.util.LinearLayoutManagerFix;
@@ -145,27 +143,6 @@ public class LogsFragment extends BaseFragment {
         layoutManager = new LinearLayoutManagerFix(requireActivity());
         binding.recyclerView.setLayoutManager(layoutManager);
         return binding.getRoot();
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        if (!App.getPreferences().getBoolean("hide_logcat_warning", false)) {
-            DialogInstallWarningBinding binding = DialogInstallWarningBinding.inflate(getLayoutInflater());
-            binding.getRoot().setOnClickListener(v -> binding.checkbox.toggle());
-            new AlertDialog.Builder(requireActivity())
-                    .setMessage(R.string.not_logcat_2)
-                    .setView(binding.getRoot())
-                    .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                        if (binding.checkbox.isChecked()) {
-                            App.getPreferences().edit().putBoolean("hide_logcat_warning", true).apply();
-                        }
-                    })
-                    .setCancelable(false)
-                    .show();
-        }
-
     }
 
     @Override

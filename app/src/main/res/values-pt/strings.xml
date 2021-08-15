@@ -21,8 +21,8 @@
 <resources>
     <!-- MainActivity -->
     <string name="info">Info</string>
-    <string name="Install">Instalar</string>
-    <string name="InstallDetail">Aperte para instalar o LSPosed</string>
+    <string name="install">Instalar</string>
+    <string name="install_summary">Aperte para instalar o LSPosed</string>
     <string name="Modules">Módulos</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d módulo ativo</item>
@@ -57,8 +57,8 @@
     <!-- LogsActivity -->
     <string name="menuSend">Enviar</string>
     <string name="menuSaveToSd">Salvar</string>
-    <string name="nav_item_logs">Registros Detalhados</string>
-    <string name="nav_item_logs_err">Registros dos Módulos</string>
+    <string name="nav_item_logs_lsp">Registros Detalhados</string>
+    <string name="nav_item_logs_module">Registros dos Módulos</string>
     <string name="dont_show_again">Não mostrar novamente</string>
     <string name="logs_save_failed">Falha ao salvar:</string>
     <string name="menuClearLog">Limpar registro</string>
@@ -182,7 +182,7 @@
     <string name="lsposed_not_active">O módulo do LSPosed não está instalado ou está desativado.</string>
     <string name="verbose_log_not_avaliable">O registro detalhado não está disponível. Se você ativou e ainda não reiniciou, tente novamente após reiniciar.</string>
     <string name="NotInstall">Não instalado</string>
-    <string name="NotInstallDetail">LSPosed não está instalado</string>
+    <string name="not_install_summary">LSPosed não está instalado</string>
     <string name="translators"><![CDATA[<a href="https://forum.xda-developers.com/m/vd171.4699873/#about">VD171</a>]]></string>
     <string name="copy_toast_msg">Copiado</string>
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nNada encontrado</string>
