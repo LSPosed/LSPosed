@@ -21,8 +21,6 @@
 <resources>
     <!-- MainActivity -->
     <string name="info">資訊</string>
-    <string name="install">安裝</string>
-    <string name="install_summary">點選安裝 LSPosed</string>
     <string name="Modules">模組</string>
     <plurals name="modules_enabled_count">
 
@@ -35,18 +33,23 @@
     <string name="module_repo_summary">模組倉庫（Beta）</string>
     <string name="about_view_source_code"><![CDATA[在 %1$s 檢視原始碼<br/>加入我們的 %2$s 頻道]]></string>
     <string name="about_translators">翻譯者：%s</string>
+    <string name="translators"><![CDATA[<a href="https://github.com/tony8077616">孟武.尼德霍格.龍</a>、<a href="https://github.com/david082321">david082321</a>]]></string>
 
-    <string name="activated">已啟用</string>
+    <string name="install">安裝</string>
+    <string name="install_summary">點選安裝 LSPosed</string>
     <string name="not_installed">未安裝</string>
+    <string name="not_install_summary">未安裝 LSPosed</string>
+    <string name="activated">已啟用</string>
     <string name="partial_activated">部分啟用</string>
-    <string name="need_update">需要更新</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy 未被正確讀取</string>
     <string name="selinux_policy_not_loaded"><![CDATA[<b>警告：</b>SEPolicy 沒有被正確讀取，掛鉤系統框架的模組將無法運作。<br>請回報這類問題給<a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>開發者]]></string>
     <string name="system_inject_fail_summary">系統框架注入失敗</string>
     <string name="system_inject_fail"><![CDATA[<b>警告：</b>系統注入失敗。<br/>這是極罕見的情況，可能是由 <b>Magisk</b> 或低品質 Magisk 模組導致。<br/>請嘗試禁用除 Riru 和 LSPosed 以外的 Magisk 模組，或向開發者提供完整日誌。]]></string>
     <string name="system_prop_incorrect_summary">系統屬性異常</string>
     <string name="system_prop_incorrect"><![CDATA[<b>警告：</b>系統屬性異常。<br/>一些必須的系統屬性被刪除或被修改。<br/>模組可能會隨機失效。]]></string>
+    <string name="need_update">需要更新</string>
     <string name="please_update_summary">請安裝新版 LSPosed</string>
+    <string name="lsposed_not_active">LSPosed 未正確安裝或啟用。</string>
     <string name="info_api_version">API 版本</string>
     <string name="info_framework_version">框架版本</string>
     <string name="info_manager_version">管理器版本</string>
@@ -69,7 +72,7 @@
     <string name="logs_cannot_read">無法讀取日誌：\n</string>
     <string name="menuReload">重新載入</string>
     <string name="logs_clear_failed_2">日誌清理失敗</string>
-    <string name="not_logcat_2">如果有人要求您提供一份 Android 系統日誌，那麼您來錯了地方。在此處顯示的是 LSPosed 的日誌；如果您想抓取系統日誌，可前往 XDA 尋求所需的答案。</string>
+    <string name="verbose_log_not_avaliable">詳細日誌不可用，如果您只是啟用了它而沒有重新啟動，請在重新啟動後再試一次。</string>
 
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Xposed 模組尚未啟用</string>
@@ -90,6 +93,7 @@
     <string name="module_uninstall_message">您確定要移除此模組嗎？</string>
     <string name="module_uninstalled">已移除 %1$s</string>
     <string name="module_uninstall_failed">移除失敗</string>
+    <string name="add_module_to_user">新增模組到使用者</string>
     <string name="module_installed">已安裝 %1$s 到使用者 %2$s</string>
     <string name="module_install_failed">安裝模組失敗</string>
     <string name="install_to_user">安裝到使用者 %s</string>
@@ -135,13 +139,14 @@
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">在其他應用程式中檢視</string>
     <string name="module_app_info">程式資訊</string>
+    <string name="list_empty">¯\\\\_(ツ)_\/¯\n空空如也</string>
 
     <!-- SettingsActivity -->
     <string name="settings_group_framework">框架</string>
     <string name="settings_enable_resources">啟用資源鉤子</string>
     <string name="settings_enable_resources_summary"><b>警告：</b> 資源鉤子為實驗性的特性</string>
     <string name="pref_title_disable_verbose_log">停用詳細日誌</string>
-    <string name="pure_black_dark_theme">使用純黑深色主題</string>
+    <string name="pure_black_dark_theme">黑色主題</string>
     <string name="pure_black_dark_theme_summary">當深色主題啟用時使用純黑色主題</string>
     <string name="settings_group_theme">主題</string>
     <string name="settings_backup_and_restore">備份與還原</string>
@@ -178,14 +183,11 @@
     <string name="module_release_no_more">沒有更早期的版本</string>
     <string name="repo_load_failed">模組倉庫載入失敗：%s</string>
 
-    <string name="app_destroyed">此應用程式已損毀，請確保您從官方來源下載該應用程式。</string>
-    <string name="outdated_manager">LSPosed Manager 和 LSPosed 核心的版本不一致。請重新安裝對應的版本。</string>
-    <string name="lsposed_not_active">LSPosed 未正確安裝或啟用。</string>
-    <string name="verbose_log_not_avaliable">詳細日誌不可用，如果您只是啟用了它而沒有重新啟動，請在重新啟動後再試一次。</string>
-    <string name="NotInstall">尚未安裝</string>
-    <string name="not_install_summary">未安裝 LSPosed</string>
-    <string name="translators"><![CDATA[<a href="https://github.com/tony8077616">孟武.尼德霍格.龍</a>、<a href="https://github.com/david082321">david082321</a>]]></string>
+    <!-- CrashReportActivity -->
+    <string name="app_destroyed">此應用程式可能已毀損，請從官方來源下載該應用程式的最新版本。</string>
+    <string name="outdated_core">LSPosed 應用程式的版本高於框架。請更新 LSPosed 框架。</string>
+    <string name="outdated_manager">LSPosed 框架的版本高於應用程式。請從 /data/adb/lspd/manager.apk 更新 LSPosed 應用程式。</string>
+    <string name="manager_crashed">應用程式出現未知錯誤</string>
+    <string name="cpoy_crash_info">複製錯誤訊息</string>
     <string name="copy_toast_msg">已複製</string>
-    <string name="list_empty">¯\\\\_(ツ)_\/¯\n空空如也</string>
-    <string name="add_module_to_user">新增模組到使用者</string>
 </resources>
