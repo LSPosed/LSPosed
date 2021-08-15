@@ -102,16 +102,13 @@
     <string name="app_launch">Launch it</string>
     <string name="compile_failed">Optimization failed or return value is empty.</string>
     <string name="compile_failed_with_info">Optimization failed: </string>
-    <string name="sort_by_name">Sort by application name</string>
-    <string name="sort_by_name_reverse">Sort by application name (reverse)</string>
-    <string name="sort_by_package_name">Sort by package name</string>
-    <string name="sort_by_package_name_reverse">Sort by package name (reverse)</string>
-    <string name="sort_by_install_time">Sort by install time</string>
-    <string name="sort_by_install_time_reverse">Sort by install time (reverse)</string>
-    <string name="sort_by_update_time">Sort by update time</string>
-    <string name="sort_by_update_time_reverse">Sort by update time (reverse)</string>
+    <string name="sort_by_name">Application name</string>
+    <string name="sort_by_package_name">Package name</string>
+    <string name="sort_by_install_time">Install time</string>
+    <string name="sort_by_update_time">Update time</string>
+    <string name="sort_reverse">Reverse</string>
     <string name="menu_show_system_apps">System apps</string>
-    <string name="menu_sort">Sorting…</string>
+    <string name="menu_sort">Sorting</string>
     <string name="enable_module">Enable module</string>
     <string name="no_scope_selected">You did not select any app. Continue?</string>
     <string name="menu_show_games">Games</string>
@@ -125,7 +122,7 @@
     <string name="update_available">Update available: %1$s</string>
     <string name="module_disabled_no_selection">Module %s has been disabled since no app selected.</string>
     <string name="android_framework">System Framework</string>
-    <string name="menu_backup_and_restore">Backup…</string>
+    <string name="menu_backup_and_restore">Backup</string>
     <string name="menu_backup">Backup</string>
     <string name="menu_restore">Restore</string>
     <string name="force_stop">Force stop</string>
@@ -133,7 +130,7 @@
     <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
     <string name="reboot_required">Reboot is required for this change to apply</string>
     <string name="reboot">Reboot</string>
-    <string name="menu_hide">Hide…</string>
+    <string name="menu_hide">Hide</string>
 
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">View in other app</string>

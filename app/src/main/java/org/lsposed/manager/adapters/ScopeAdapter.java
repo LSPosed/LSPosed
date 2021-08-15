@@ -324,25 +324,29 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         menu.findItem(R.id.item_filter_modules).setChecked(preferences.getBoolean("filter_modules", true));
         switch (preferences.getInt("list_sort", 0)) {
             case 7:
-                menu.findItem(R.id.item_sort_by_update_time_reverse).setChecked(true);
+                menu.findItem(R.id.item_sort_by_update_time).setChecked(true);
+                menu.findItem(R.id.reverse).setChecked(true);
                 break;
             case 6:
                 menu.findItem(R.id.item_sort_by_update_time).setChecked(true);
                 break;
             case 5:
-                menu.findItem(R.id.item_sort_by_install_time_reverse).setChecked(true);
+                menu.findItem(R.id.item_sort_by_install_time).setChecked(true);
+                menu.findItem(R.id.reverse).setChecked(true);
                 break;
             case 4:
                 menu.findItem(R.id.item_sort_by_install_time).setChecked(true);
                 break;
             case 3:
-                menu.findItem(R.id.item_sort_by_package_name_reverse).setChecked(true);
+                menu.findItem(R.id.item_sort_by_package_name).setChecked(true);
+                menu.findItem(R.id.reverse).setChecked(true);
                 break;
             case 2:
                 menu.findItem(R.id.item_sort_by_package_name).setChecked(true);
                 break;
             case 1:
-                menu.findItem(R.id.item_sort_by_name_reverse).setChecked(true);
+                menu.findItem(R.id.item_sort_by_name).setChecked(true);
+                menu.findItem(R.id.reverse).setChecked(true);
                 break;
             case 0:
                 menu.findItem(R.id.item_sort_by_name).setChecked(true);
