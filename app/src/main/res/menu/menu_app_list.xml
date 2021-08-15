@@ -68,6 +68,7 @@
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/item_sort_by_name"
+                    android:checked="true"
                     android:title="@string/sort_by_name" />
                 <item
                     android:id="@+id/item_sort_by_package_name"
