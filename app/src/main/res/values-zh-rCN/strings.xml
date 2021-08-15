@@ -182,7 +182,8 @@
     <string name="repo_load_failed">模块仓库加载失败：%s</string>
 
     <string name="app_destroyed">此应用程序已被损坏，请确保您从官方来源下载该应用程序。</string>
-    <string name="outdated_manager">LSPosed Manager 和 LSPosed Core 的版本不一致。请重新安装对应的版本。</string>
+    <string name="outdated_core">LSPosed Manager 的版本高于 LSPosed Core。请更新 LSPosed Core。</string>
+    <string name="outdated_manager">LSPosed Core 的版本高于 LSPosed Manager。请手动从 /data/adb/lspd/manager.apk 安装 LSPosed Manager。</string>
     <string name="lsposed_not_active">LSPosed 未安装或未激活</string>
     <string name="verbose_log_not_avaliable">详细日志不可用，如果您只是启用了它而没有重新启动，请在重新启动后再试一次。</string>
     <string name="NotInstall">未安装</string>
