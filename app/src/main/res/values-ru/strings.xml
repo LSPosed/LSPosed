@@ -21,8 +21,8 @@
 <resources>
     <!-- MainActivity -->
     <string name="info">Информация</string>
-    <string name="Install">Установить</string>
-    <string name="InstallDetail">Нажмите, чтобы установить LSPosed</string>
+    <string name="install">Установить</string>
+    <string name="install_summary">Нажмите, чтобы установить LSPosed</string>
     <string name="Modules">Установленные модули</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d модуль включен</item>
@@ -59,8 +59,8 @@
     <!-- LogsActivity -->
     <string name="menuSend">Отправить</string>
     <string name="menuSaveToSd">Сохранить</string>
-    <string name="nav_item_logs">Подробные логи</string>
-    <string name="nav_item_logs_err">Логи модулей</string>
+    <string name="nav_item_logs_lsp">Подробные логи</string>
+    <string name="nav_item_logs_module">Логи модулей</string>
     <string name="dont_show_again">Больше не показывать это сообщение</string>
     <string name="logs_save_failed">Ошибка сохранения:</string>
     <string name="menuClearLog">Очистить логи</string>

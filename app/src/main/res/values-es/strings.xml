@@ -21,8 +21,8 @@
 <resources>
     <!-- MainActivity -->
     <string name="info">Información</string>
-    <string name="Install">Instalar</string>
-    <string name="InstallDetail">Pulsa para instalar LSPosed</string>
+    <string name="install">Instalar</string>
+    <string name="install_summary">Pulsa para instalar LSPosed</string>
     <string name="Modules">Módulos</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d módulo activado</item>
@@ -51,8 +51,8 @@
     <!-- LogsActivity -->
     <string name="menuSend">Enviar</string>
     <string name="menuSaveToSd">Guardar</string>
-    <string name="nav_item_logs">Registros detallados</string>
-    <string name="nav_item_logs_err">Registros de módulos</string>
+    <string name="nav_item_logs_lsp">Registros detallados</string>
+    <string name="nav_item_logs_module">Registros de módulos</string>
     <string name="dont_show_again">No volver a mostrar esto</string>
     <string name="logs_save_failed">Fallo a la hora de guardar:</string>
     <string name="menuClearLog">Limpiar los registros</string>
@@ -174,7 +174,7 @@
     <string name="lsposed_not_active">LSPosed no está instalado o activado actualmente.</string>
     <string name="verbose_log_not_avaliable">Los registros detallados no están disponibles. Si los activaste sin reiniciar, intenta de nuevo luego de reiniciar.</string>
     <string name="NotInstall">No instalado</string>
-    <string name="NotInstallDetail">LSPosed no está instalado</string>
+    <string name="not_install_summary">LSPosed no está instalado</string>
     <string name="translators"><![CDATA[<a href="https://github.com/JoseDeFreitas">José De Freitas</a>]]></string>
     <string name="copy_toast_msg">Copiado</string>
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nNo hay nada por aquí</string>

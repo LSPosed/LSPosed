@@ -21,8 +21,8 @@
 <resources>
     <!-- MainActivity -->
     <string name="info">資訊</string>
-    <string name="Install">安裝</string>
-    <string name="InstallDetail">點選安裝 LSPosed</string>
+    <string name="install">安裝</string>
+    <string name="install_summary">點選安裝 LSPosed</string>
     <string name="Modules">模組</string>
     <plurals name="modules_enabled_count">
 
@@ -57,8 +57,8 @@
     <!-- LogsActivity -->
     <string name="menuSend">傳送</string>
     <string name="menuSaveToSd">儲存</string>
-    <string name="nav_item_logs">詳細日誌</string>
-    <string name="nav_item_logs_err">模組日誌</string>
+    <string name="nav_item_logs_lsp">詳細日誌</string>
+    <string name="nav_item_logs_module">模組日誌</string>
     <string name="dont_show_again">不再提醒</string>
     <string name="logs_save_failed">儲存失敗：</string>
     <string name="menuClearLog">立即清理日誌</string>
@@ -183,7 +183,7 @@
     <string name="lsposed_not_active">LSPosed 未正確安裝或啟用。</string>
     <string name="verbose_log_not_avaliable">詳細日誌不可用，如果您只是啟用了它而沒有重新啟動，請在重新啟動後再試一次。</string>
     <string name="NotInstall">尚未安裝</string>
-    <string name="NotInstallDetail">未安裝 LSPosed</string>
+    <string name="not_install_summary">未安裝 LSPosed</string>
     <string name="translators"><![CDATA[<a href="https://github.com/tony8077616">孟武.尼德霍格.龍</a>、<a href="https://github.com/david082321">david082321</a>]]></string>
     <string name="copy_toast_msg">已複製</string>
     <string name="list_empty">¯\\\\_(ツ)_\/¯\n空空如也</string>

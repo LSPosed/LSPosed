@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -21,8 +21,6 @@
 <resources>
     <!-- MainActivity -->
     <string name="info">信息</string>
-    <string name="Install">安装</string>
-    <string name="InstallDetail">点按安装 LSPosed</string>
     <string name="Modules">模块</string>
     <plurals name="modules_enabled_count">
 
@@ -35,18 +33,23 @@
     <string name="module_repo_summary">模块仓库（Beta）</string>
     <string name="about_view_source_code"><![CDATA[在 %1$s 查看源码<br/>加入我们的 %2$s 频道]]></string>
     <string name="about_translators">译者：%s</string>
+    <string name="translators"><![CDATA[<a href="https://github.com/LSPosed/LSPosed">LSPosed</a>]]></string>
 
-    <string name="activated">已激活</string>
+    <string name="install">安装</string>
+    <string name="install_summary">点按安装 LSPosed</string>
     <string name="not_installed">未安装</string>
+    <string name="not_install_summary">LSPosed 未安装</string>
+    <string name="activated">已激活</string>
     <string name="partial_activated">部分激活</string>
-    <string name="need_update">需要更新</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy 未被正确加载</string>
     <string name="selinux_policy_not_loaded"><![CDATA[<b>警告：</b>SEPolicy 未被正确加载，作用于系统框架的模块将不起作用。<br>请将此报告给 <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> 开发者。]]></string>
     <string name="system_inject_fail_summary">系统框架注入失败</string>
     <string name="system_inject_fail"><![CDATA[<b>警告：</b>系统注入失败。<br/>这是极罕见的情况，可能是由 <b>Magisk</b> 或低质 Magisk 模块导致。<br/>请尝试禁用除 Riru 和 LSPosed 外的 Magisk 模块，或向开发者提供完整日志。]]></string>
     <string name="system_prop_incorrect_summary">系统属性异常</string>
     <string name="system_prop_incorrect"><![CDATA[<b>警告：</b>系统属性异常。<br/>一些必须的系统属性被删除或被修改。<br/>模块可能会随机失效。]]></string>
+    <string name="need_update">需要更新</string>
     <string name="please_update_summary">请安装新版 LSPosed</string>
+    <string name="lsposed_not_active">LSPosed 未安装或未激活</string>
     <string name="info_api_version">API 版本</string>
     <string name="info_framework_version">框架版本</string>
     <string name="info_manager_version">管理器版本</string>
@@ -57,19 +60,19 @@
     <!-- LogsActivity -->
     <string name="menuSend">发送</string>
     <string name="menuSaveToSd">保存</string>
-    <string name="nav_item_logs">详细日志</string>
-    <string name="nav_item_logs_err">模块日志</string>
+    <string name="nav_item_logs_lsp">LSPosed 日志</string>
+    <string name="nav_item_logs_module">模块运行日志</string>
     <string name="dont_show_again">不再提示</string>
     <string name="logs_save_failed">保存失败：</string>
     <string name="menuClearLog">立即清理日志</string>
     <string name="logs_cleared">日志清理成功</string>
     <string name="scroll_top">滚动到顶部</string>
-    <string name="loading">正在加载…</string>
+    <string name="loading">加载中</string>
     <string name="scroll_bottom">滚动到底部</string>
     <string name="logs_cannot_read">无法读取日志: \n</string>
     <string name="menuReload">重新加载</string>
     <string name="logs_clear_failed_2">日志清理失败</string>
-    <string name="not_logcat_2">如果有人要求您提供一份 Android 系统日志，那么您来错了地方。在此处显示的是 LSPosed 的日志信息；如果您想抓取系统日志，可前往 XDA 寻求所需的答案。</string>
+    <string name="verbose_log_not_avaliable">详细日志不可用，如果您只是启用了它而没有重新启动，请在重新启动后再试一次。</string>
 
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Xposed 模块尚未激活</string>
@@ -90,17 +93,18 @@
     <string name="module_uninstall_message">要卸载此模块吗？</string>
     <string name="module_uninstalled">已卸载%1$s</string>
     <string name="module_uninstall_failed">卸载失败</string>
-    <string name="install_to_user">安装到用户 %s</string>
-    <string name="install_to_user_message">要安装 %1$s 到用户 %2$s 吗？建议手动安装或多开，通过 LSPosed 强制安装可能会出现问题。</string>
+    <string name="add_module_to_user">安装模块到用户</string>
     <string name="module_installed">已安装 %1$s 到用户 %2$s</string>
     <string name="module_install_failed">安装失败</string>
+    <string name="install_to_user">安装到用户 %s</string>
+    <string name="install_to_user_message">要安装 %1$s 到用户 %2$s 吗？建议手动安装或多开，通过 LSPosed 强制安装可能会出现问题。</string>
 
     <!-- AppListActivity -->
     <string name="compile_speed">重新优化</string>
-    <string name="compile_speed_msg">优化中…</string>
-    <string name="compile_done">优化完成。</string>
+    <string name="compile_speed_msg">优化中</string>
+    <string name="compile_done">优化完成</string>
     <string name="app_launch">运行</string>
-    <string name="compile_failed">优化失败或返回值为空</string>
+    <string name="compile_failed">优化失败：返回值为空</string>
     <string name="compile_failed_with_info">优化失败: </string>
     <string name="sort_by_name">应用名称</string>
     <string name="sort_by_package_name">包体名称</string>
@@ -135,6 +139,7 @@
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">在其它应用中查看</string>
     <string name="module_app_info">应用信息</string>
+    <string name="list_empty">¯\\\\_(ツ)_\/¯\n空空如也</string>
 
     <!-- SettingsActivity -->
     <string name="settings_group_framework">框架</string>
@@ -147,12 +152,12 @@
     <string name="settings_backup_and_restore">备份与恢复</string>
     <string name="settings_backup_and_restore_summery">备份或恢复模块列表与作用域列表</string>
     <string name="settings_backup">备份</string>
-    <string name="settings_backuping">备份中…</string>
-    <string name="settings_backup_success">备份成功！</string>
+    <string name="settings_backuping">备份中</string>
+    <string name="settings_backup_success">备份完成</string>
     <string name="settings_backup_failed">备份失败</string>
     <string name="settings_restore">恢复</string>
-    <string name="settings_restoring">恢复中…</string>
-    <string name="settings_restore_success">恢复成功！</string>
+    <string name="settings_restoring">恢复中</string>
+    <string name="settings_restore_success">恢复完成</string>
     <string name="settings_restore_failed">恢复失败</string>
     <string name="group_network">网络</string>
     <string name="dns_over_http">安全 DNS（DoH）</string>
@@ -161,7 +166,7 @@
     <string name="theme_color_summary">应用中最常见的颜色</string>
     <string name="theme_color_system_accent">系统强调色</string>
     <string name="settings_show_hidden_icon_apps_enabled">强制应用在启动器中显示图标</string>
-    <string name="settings_show_hidden_icon_apps_enabled_summary">在 Android 10 之后，应用（特别是 Xposed 模块）不被允许隐藏启动器图标。关闭本选项以禁用此功能。</string>
+    <string name="settings_show_hidden_icon_apps_enabled_summary">在 Android 10 之后，应用不被允许隐藏启动器图标。关闭本选项可禁用此系统功能。</string>
     <string name="settings_group_system">系统</string>
 
     <!-- Module Repo -->
@@ -178,14 +183,10 @@
     <string name="module_release_no_more">没有更旧的版本</string>
     <string name="repo_load_failed">模块仓库加载失败：%s</string>
 
-    <string name="app_destroyed">此应用程序已被损坏，请确保您从官方来源下载该应用程序。</string>
+    <!-- CrashReportActivity -->
+    <string name="app_destroyed">此应用可能被损坏，请从官方来源下载该应用的最新版本。</string>
     <string name="outdated_manager">LSPosed Manager 和 LSPosed Core 的版本不一致。请重新安装对应的版本。</string>
-    <string name="lsposed_not_active">LSPosed 未安装或未激活</string>
-    <string name="verbose_log_not_avaliable">详细日志不可用，如果您只是启用了它而没有重新启动，请在重新启动后再试一次。</string>
-    <string name="NotInstall">未安装</string>
-    <string name="NotInstallDetail">LSPosed 未安装</string>
-    <string name="translators"><![CDATA[<a href="https://github.com/LSPosed/LSPosed">LSPosed</a>]]></string>
+    <string name="manager_crashed">应用出现未知错误</string>
+    <string name="cpoy_crash_info">复制错误信息</string>
     <string name="copy_toast_msg">已复制</string>
-    <string name="list_empty">¯\\\\_(ツ)_\/¯\n空空如也</string>
-    <string name="add_module_to_user">安装模块到用户</string>
 </resources>

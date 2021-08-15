@@ -58,12 +58,12 @@
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/nav_item_logs_err" />
+                    android:text="@string/nav_item_logs_module" />
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/nav_item_logs" />
+                    android:text="@string/nav_item_logs_lsp" />
             </com.google.android.material.tabs.TabLayout>
         </LinearLayout>
     </rikka.material.widget.AppBarLayout>

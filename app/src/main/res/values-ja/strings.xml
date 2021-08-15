@@ -21,8 +21,8 @@
 <resources>
     <!-- MainActivity -->
     <string name="info">情報</string>
-    <string name="Install">インストール</string>
-    <string name="InstallDetail">タップし LSPosed をインストール</string>
+    <string name="install">インストール</string>
+    <string name="install_summary">タップし LSPosed をインストール</string>
     <string name="Modules">モジュール</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d 個のモジュール有効化済</item>
@@ -57,8 +57,8 @@
     <!-- LogsActivity -->
     <string name="menuSend">送信</string>
     <string name="menuSaveToSd">保存</string>
-    <string name="nav_item_logs">詳細ログ</string>
-    <string name="nav_item_logs_err">モジュールログ</string>
+    <string name="nav_item_logs_lsp">詳細ログ</string>
+    <string name="nav_item_logs_module">モジュールログ</string>
     <string name="dont_show_again">二度と表示しない</string>
     <string name="logs_save_failed">保存に失敗:</string>
     <string name="menuClearLog">直ちにログを消去</string>
@@ -183,7 +183,7 @@
     <string name="lsposed_not_active">LSPosed が未インストールもしくは有効化されていません。</string>
     <string name="verbose_log_not_avaliable">詳細ログが存在しません。ログ出力有効化に再起動を行っていない場合、再起動して下さい。</string>
     <string name="NotInstall">未インストール</string>
-    <string name="NotInstallDetail">LSPosed が未インストールです</string>
+    <string name="not_install_summary">LSPosed が未インストールです</string>
     <string name="translators"><![CDATA[<a href="https://github.com/yoshi818">yoshi818</a>]]></string>
     <string name="copy_toast_msg">複写済</string>
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nリストは空です</string>

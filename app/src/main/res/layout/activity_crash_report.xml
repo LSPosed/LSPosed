@@ -60,7 +60,7 @@
                     android:layout_below="@+id/warning"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="16dp"
-                    android:text="Manager crashed"
+                    android:text="@string/manager_crashed"
                     android:textAlignment="center"
                     android:textAllCaps="true"
                     android:textSize="36sp"
@@ -77,7 +77,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="4dp"
-            android:text="@android:string/copy"
+            android:text="@string/cpoy_crash_info"
             android:theme="@style/Widget.AppCompat.Button.Colored" />
     </LinearLayout>
 

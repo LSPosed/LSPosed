@@ -21,8 +21,8 @@
 <resources>
     <!-- MainActivity -->
     <string name="info">Informazioni</string>
-    <string name="Install">Installa</string>
-    <string name="InstallDetail">Premi per installare LSPosed</string>
+    <string name="install">Installa</string>
+    <string name="install_summary">Premi per installare LSPosed</string>
     <string name="Modules">Moduli</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d modulo abilitato</item>
@@ -57,8 +57,8 @@
     <!-- LogsActivity -->
     <string name="menuSend">Invia</string>
     <string name="menuSaveToSd">Salva</string>
-    <string name="nav_item_logs">Log verboso</string>
-    <string name="nav_item_logs_err">Log moduli</string>
+    <string name="nav_item_logs_lsp">Log verboso</string>
+    <string name="nav_item_logs_module">Log moduli</string>
     <string name="dont_show_again">Non mostrare di nuovo</string>
     <string name="logs_save_failed">Impossibile effettuare il salvataggio:</string>
     <string name="menuClearLog">Cancella il log ora</string>
@@ -182,7 +182,7 @@
     <string name="lsposed_not_active">LSPosed non è attualmente installato o attivo.</string>
     <string name="verbose_log_not_avaliable">Il log verboso non è disponibile. Se l\'hai appena abilitato senza riavviare, riprova dopo il riavvio.</string>
     <string name="NotInstall">Non installato</string>
-    <string name="NotInstallDetail">LSPosed non è installato</string>
+    <string name="not_install_summary">LSPosed non è installato</string>
     <string name="translators"><![CDATA[<a href="https://twitter.com/alex193a">alex193a</a>, <a href="https://github.com/Fs00">Fs00</a>]]></string>
     <string name="copy_toast_msg">Copiato</string>
     <string name="list_empty">¯\\\\_(ツ)_\\/¯\nNon c\'è nulla qui</string>

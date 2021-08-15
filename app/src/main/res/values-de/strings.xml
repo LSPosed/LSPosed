@@ -19,8 +19,8 @@
   -->
 
 <resources>
-    <string name="Install">Installieren</string>
-    <string name="InstallDetail">Tippen Sie hier, um LSPosed zu installieren</string>
+    <string name="install">Installieren</string>
+    <string name="install_summary">Tippen Sie hier, um LSPosed zu installieren</string>
     <string name="Modules">Modules</string>
     <string name="Logs">Protokolle</string>
     <string name="Settings">Einstellungen</string>
@@ -33,8 +33,8 @@
     <!-- Welcome screen / main sections -->
 
     <!-- navigation view items -->
-    <string name="nav_item_logs">Umfangreiche Protokolle</string>
-    <string name="nav_item_logs_err">Protokollmodule</string>
+    <string name="nav_item_logs_lsp">Umfangreiche Protokolle</string>
+    <string name="nav_item_logs_module">Protokollmodule</string>
 
     <!-- Installer tab -->
     <string name="dont_show_again">Nicht mehr anzeigen</string>

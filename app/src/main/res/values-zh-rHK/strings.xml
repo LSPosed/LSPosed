@@ -21,8 +21,8 @@
 <resources>
     <!-- MainActivity -->
     <string name="info">信息</string>
-    <string name="Install">安裝</string>
-    <string name="InstallDetail">點按安裝 LSPosed</string>
+    <string name="install">安裝</string>
+    <string name="install_summary">點按安裝 LSPosed</string>
     <string name="Modules">模組</string>
     <plurals name="modules_enabled_count">
 
@@ -51,8 +51,8 @@
     <!-- LogsActivity -->
     <string name="menuSend">發送</string>
     <string name="menuSaveToSd">保存</string>
-    <string name="nav_item_logs">詳細日誌</string>
-    <string name="nav_item_logs_err">模組日誌</string>
+    <string name="nav_item_logs_lsp">詳細日誌</string>
+    <string name="nav_item_logs_module">模組日誌</string>
     <string name="dont_show_again">不再提示</string>
     <string name="logs_save_failed">保存失敗：</string>
     <string name="menuClearLog">立即清理日誌</string>
@@ -169,7 +169,7 @@
     <string name="lsposed_not_active">LSPosed 未安裝或未啟動</string>
     <string name="verbose_log_not_avaliable">Verbose log is not available, if you just enabled it without reboot, try again after reboot.</string>
     <string name="NotInstall">Not Installed</string>
-    <string name="NotInstallDetail">LSPosed is not Installed</string>
+    <string name="not_install_summary">LSPosed is not Installed</string>
     <string name="translators"><![CDATA[<a href="https://github.com/LSPosed/LSPosed">LSPosed</a>]]></string>
     <string name="copy_toast_msg">Copied</string>
 </resources>

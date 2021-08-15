@@ -21,8 +21,8 @@
 <resources>
     <!-- MainActivity -->
     <string name="info">정보</string>
-    <string name="Install">설치</string>
-    <string name="InstallDetail">LSPosed를 설치하려면 탭</string>
+    <string name="install">설치</string>
+    <string name="install_summary">LSPosed를 설치하려면 탭</string>
     <string name="Modules">모듈</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">모듈 %d개가 활성화됨</item>
@@ -53,8 +53,8 @@
     <!-- LogsActivity -->
     <string name="menuSend">전송</string>
     <string name="menuSaveToSd">저장</string>
-    <string name="nav_item_logs">상세 로그</string>
-    <string name="nav_item_logs_err">모듈 로그</string>
+    <string name="nav_item_logs_lsp">상세 로그</string>
+    <string name="nav_item_logs_module">모듈 로그</string>
     <string name="dont_show_again">다시 표시 안 함</string>
     <string name="logs_save_failed">저장 실패:</string>
     <string name="menuClearLog">로그 지우기</string>
@@ -177,7 +177,7 @@
     <string name="lsposed_not_active">LSPosed가 현재 설치되어 있지 않거나 활성화되어 있지 않습니다.</string>
     <string name="verbose_log_not_avaliable">상세 로그를 사용할 수 없습니다. 재부팅하지 않고 방금 사용하도록 설정한 경우 재부팅 후 다시 시도하십시오.</string>
     <string name="NotInstall">설치되지 않음</string>
-    <string name="NotInstallDetail">LSPosed가 설치되지 않음</string>
+    <string name="not_install_summary">LSPosed가 설치되지 않음</string>
     <string name="translators"><![CDATA[<a href="https://github.com/green1052">green1052</a>]]></string>
     <string name="copy_toast_msg">복사됨</string>
     <string name="list_empty">¯\\\\_(ツ)_\/¯\n아무것도 없음</string>
