@@ -22,6 +22,8 @@ package org.lsposed.lspd.service;
 import static org.lsposed.lspd.service.PackageService.MATCH_ALL_FLAGS;
 import static org.lsposed.lspd.service.PackageService.PER_USER_RANGE;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
+import static org.lsposed.lspd.service.ServiceManager.existsInGlobalNamespace;
+import static org.lsposed.lspd.service.ServiceManager.toGlobalNamespace;
 
 import android.content.ContentValues;
 import android.content.pm.ApplicationInfo;
@@ -453,7 +455,7 @@ public class ConfigManager {
             Set<String> obsoleteModules = new HashSet<>();
             // packageName, apkPath
             Map<String, String> obsoletePaths = new HashMap<>();
-            cachedModule.values().removeIf(m -> m.apkPath == null || !new File(m.apkPath).exists());
+            cachedModule.values().removeIf(m -> m.apkPath == null || !existsInGlobalNamespace(m.apkPath));
             while (cursor.moveToNext()) {
                 String packageName = cursor.getString(pkgNameIdx);
                 String apkPath = cursor.getString(apkPathIdx);
@@ -479,7 +481,7 @@ public class ConfigManager {
                     continue;
                 }
                 var path = apkPath;
-                if (path == null || !new File(path).exists()) {
+                if (path == null || !existsInGlobalNamespace(path)) {
                     path = getModuleApkPath(pkgInfo.applicationInfo);
                     if (path == null) obsoleteModules.add(packageName);
                     else obsoletePaths.put(packageName, path);
@@ -629,7 +631,7 @@ public class ConfigManager {
         var preLoadedDexes = new ArrayList<SharedMemory>();
         var moduleClassNames = new ArrayList<String>(1);
         var moduleLibraryNames = new ArrayList<String>(1);
-        try (var apkFile = new ZipFile(path)) {
+        try (var apkFile = new ZipFile(toGlobalNamespace(path))) {
             readDexes(apkFile, preLoadedDexes);
             readName(apkFile, "assets/xposed_init", moduleClassNames);
             readName(apkFile, "assets/native_init", moduleLibraryNames);
@@ -688,12 +690,13 @@ public class ConfigManager {
             apks = Arrays.copyOf(info.splitSourceDirs, info.splitSourceDirs.length + 1);
             apks[info.splitSourceDirs.length] = info.sourceDir;
         } else apks = new String[]{info.sourceDir};
-        var apkPath = Arrays.stream(apks).parallel().filter(apk -> {
+        var apkPath = Arrays.stream(apks).parallel()
+                .filter(apk -> {
             if (apk == null) {
                 Log.w(TAG, info.packageName + " has null apk path???");
                 return false;
             }
-            try (var zip = new ZipFile(apk)) {
+            try (var zip = new ZipFile(toGlobalNamespace(apk))) {
                 return zip.getEntry("assets/xposed_init") != null;
             } catch (IOException e) {
                 return false;

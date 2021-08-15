@@ -25,13 +25,13 @@ import android.os.IBinder;
 import android.os.IServiceManager;
 import android.os.Looper;
 import android.os.Process;
-import android.system.Os;
 import android.util.Log;
 
 import com.android.internal.os.BinderInternal;
 
 import org.lsposed.lspd.BuildConfig;
 
+import java.io.File;
 import java.util.concurrent.ConcurrentHashMap;
 
 import hidden.HiddenApiBridge;
@@ -43,6 +43,7 @@ public class ServiceManager {
     private static LSPManagerService managerService = null;
     private static LSPSystemServerService systemServerService = null;
     public static final String TAG = "LSPosedService";
+    private static final File globalNamespace = new File("/proc/1/root");
 
     private static void waitSystemService(String name) {
         while (android.os.ServiceManager.getService(name) == null) {
@@ -146,4 +147,21 @@ public class ServiceManager {
         return systemServerService.systemServerRequested();
     }
 
+    public static File toGlobalNamespace(File file) {
+        return new File(globalNamespace, file.getAbsolutePath());
+    }
+
+    public static File toGlobalNamespace(String path) {
+        if (path == null) return null;
+        if (path.startsWith("/")) return new File(globalNamespace, path);
+        else return toGlobalNamespace(new File(path));
+    }
+
+    public static boolean existsInGlobalNamespace(File file) {
+        return toGlobalNamespace(file).exists();
+    }
+
+    public static boolean existsInGlobalNamespace(String path) {
+        return toGlobalNamespace(path).exists();
+    }
 }
