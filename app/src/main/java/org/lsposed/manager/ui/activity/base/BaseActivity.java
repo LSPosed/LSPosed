@@ -57,7 +57,8 @@ public class BaseActivity extends MaterialActivity {
         if (!ConfigManager.isBinderAlive()) return;
         if (BuildConfig.VERSION_NAME.equals(ConfigManager.getXposedVersionName())) return;
         new AlertDialog.Builder(this)
-                .setMessage(R.string.outdated_manager)
+                .setMessage(BuildConfig.VERSION_NAME.compareTo(ConfigManager.getXposedVersionName()) > 0 ?
+                    R.string.outdated_core : R.string.outdated_manager)
                 .setPositiveButton(android.R.string.ok, (dialog, id) -> {
                     NavUtil.startURL(this, getString(R.string.about_source));
                     finish();
