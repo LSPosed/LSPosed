@@ -21,12 +21,12 @@
 <resources>
     <!-- MainActivity -->
     <string name="info">Информация</string>
-    <string name="Modules">Установленные модули</string>
+    <string name="Modules">Модули</string>
     <plurals name="modules_enabled_count">
-        <item quantity="one">%d модуль включен</item>
-        <item quantity="few">%d модуля включены</item>
-        <item quantity="many">%d модулей включено</item>
-        <item quantity="other">%d модулей включено</item>
+        <item quantity="one">Включен %d модуль</item>
+        <item quantity="few">Включены %d модуля</item>
+        <item quantity="many">Включены %d модулей</item>
+        <item quantity="other">Включены %d модулей</item>
     </plurals>
     <string name="Logs">Логи</string>
     <string name="Settings">Настройки</string>
@@ -53,8 +53,8 @@
     <string name="please_update_summary">Установите последнюю версию LSPosed!</string>
     <string name="lsposed_not_active">LSPosed не установлен или не активирован!</string>
     <string name="info_api_version">Версия API</string>
-    <string name="info_framework_version">Версия Framework</string>
-    <string name="info_manager_version">Версия менеджера</string>
+    <string name="info_framework_version">Версия LSPosed Framework</string>
+    <string name="info_manager_version">Версия приложения LSPosed</string>
     <string name="info_system_version">Версия Android</string>
     <string name="info_device">Устройство</string>
     <string name="info_system_abi">Разрядность системы ABI</string>
@@ -112,7 +112,7 @@
     <string name="sort_by_package_name">По названию пакета</string>
     <string name="sort_by_install_time">По времени установки</string>
     <string name="sort_by_update_time">По времени обновления</string>
-    <string name="sort_reverse">Обратная</string>
+    <string name="sort_reverse">Обратная сортировка</string>
     <string name="menu_show_system_apps">Системные</string>
     <string name="menu_sort">Сортировать</string>
     <string name="enable_module">Включить модуль</string>
@@ -135,7 +135,7 @@
     <string name="force_stop_dlg_title">Остановить приложение?</string>
     <string name="force_stop_dlg_text">Принудительная остановка приложения выгружает его из запущенных</string>
     <string name="reboot_required">Для применения этого изменения требуется перезагрузка</string>
-    <string name="reboot">Перезагрузка</string>
+    <string name="reboot">Перезагрузить</string>
     <string name="menu_hide">Скрыть приложения</string>
 
     <!-- ModulesActivity and AppListActivity -->
@@ -186,10 +186,10 @@
     <string name="repo_load_failed">Не удалось загрузить репозиторий модуля: %s</string>
 
     <!-- CrashReportActivity -->
-    <string name="app_destroyed">Эта приложение повреждено. Убедитесь, что загрузили ее из официального источника</string>
-    <string name="outdated_core">Приложение LSPosed новее, чем Framework. Обновите LSPosed Framework</string>
+    <string name="app_destroyed">Это приложение повреждено. Убедитесь, что загрузили его из официального источника</string>
+    <string name="outdated_core">Приложение LSPosed новее, чем LSPosed Framework. Обновите LSPosed Framework</string>
     <string name="outdated_manager">LSPosed Framework новее, чем приложение LSPosed. Обновите приложение вручную из /data/adb/lspd/manager.apk</string>
-    <string name="manager_crashed">Manager crashed</string>
+    <string name="manager_crashed">Сбой приложения</string>
     <string name="cpoy_crash_info">Скопировать информацию о сбое</string>
     <string name="copy_toast_msg">Скопировано</string>
 </resources>
