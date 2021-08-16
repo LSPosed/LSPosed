@@ -136,16 +136,26 @@ public class LSPosedService extends ILSPosedService.Stub {
         }
         if (isXposedModule) {
             Log.d(TAG, "module " + moduleName + " changed, dispatching to manager");
-            boolean enabled = Arrays.asList(ConfigManager.getInstance().enabledModules()).contains(moduleName);
-            boolean removed = intent.getAction().equals(Intent.ACTION_PACKAGE_FULLY_REMOVED) || intent.getAction().equals(Intent.ACTION_UID_REMOVED);
-            Intent broadcastIntent = new Intent(enabled || removed ? "org.lsposed.action.MODULE_UPDATED" : "org.lsposed.action.MODULE_NOT_ACTIVATAED");
+            var enabledModules = ConfigManager.getInstance().enabledModules();
+            var scope = ConfigManager.getInstance().getModuleScope(moduleName);
+            boolean systemModule = scope != null &&
+                    scope.parallelStream().anyMatch(app -> app.packageName.equals("android"));
+            boolean enabled = Arrays.asList(enabledModules).contains(moduleName);
+            boolean removed = intent.getAction().equals(Intent.ACTION_PACKAGE_FULLY_REMOVED) ||
+                    intent.getAction().equals(Intent.ACTION_UID_REMOVED);
+            var action = enabled || removed ? "org.lsposed.action.MODULE_UPDATED" :
+                    "org.lsposed.action.MODULE_NOT_ACTIVATAED";
+            Intent broadcastIntent = new Intent(action);
             broadcastIntent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
             broadcastIntent.addFlags(0x01000000);
             broadcastIntent.addFlags(0x00400000);
             broadcastIntent.setData(intent.getData());
             broadcastIntent.putExtras(intent.getExtras());
             broadcastIntent.putExtra(Intent.EXTRA_USER, userId);
-            broadcastIntent.setComponent(ComponentName.unflattenFromString(ConfigManager.getInstance().getManagerPackageName() + "/.receivers.ServiceReceiver"));
+            broadcastIntent.putExtra("systemModule", systemModule);
+            var manager = ConfigManager.getInstance().getManagerPackageName();
+            var component = ComponentName.createRelative(manager, ".receivers.ServiceReceiver");
+            broadcastIntent.setComponent(component);
 
             try {
                 ActivityManagerService.broadcastIntentWithFeature(null, broadcastIntent,

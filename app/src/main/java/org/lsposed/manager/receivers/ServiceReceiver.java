@@ -48,10 +48,8 @@ public class ServiceReceiver extends BroadcastReceiver {
             return;
         }
 
-        if (intent.getAction().equals("org.lsposed.action.MODULE_NOT_ACTIVATAED")) {
-            NotificationUtil.showNotification(context, packageName, module.getAppName(), userId, false);
-        } else if (intent.getAction().equals("org.lsposed.action.MODULE_UPDATED")) {
-            NotificationUtil.showNotification(context, packageName, module.getAppName(), userId, true);
-        }
+        var enabled = "org.lsposed.action.MODULE_UPDATED".equals(intent.getAction());
+        var systemModule = intent.getBooleanExtra("systemModule", false);
+        NotificationUtil.showNotification(context, packageName, module.getAppName(), userId, enabled, systemModule);
     }
 }

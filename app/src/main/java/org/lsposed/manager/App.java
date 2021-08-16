@@ -25,6 +25,8 @@ import android.app.Application;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.Process;
+import android.system.Os;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -80,35 +82,36 @@ public class App extends Application {
         return instance.pref;
     }
 
+    private void setCrashReport() {
+        Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
+
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            throwable.printStackTrace(pw);
+            String stackTraceString = sw.toString();
+
+            //Reduce data to 128KB so we don't get a TransactionTooLargeException when sending the intent.
+            //The limit is 1MB on Android but some devices seem to have it lower.
+            //See: http://developer.android.com/reference/android/os/TransactionTooLargeException.html
+            //And: http://stackoverflow.com/questions/11451393/what-to-do-on-transactiontoolargeexception#comment46697371_12809171
+            if (stackTraceString.length() > 131071) {
+                String disclaimer = " [stack trace too large]";
+                stackTraceString = stackTraceString.substring(0, 131071 - disclaimer.length()) + disclaimer;
+            }
+            Intent intent = new Intent(App.this, CrashReportActivity.class);
+            intent.putExtra(BuildConfig.APPLICATION_ID + ".EXTRA_STACK_TRACE", stackTraceString);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            App.this.startActivity(intent);
+            System.exit(10);
+            Process.killProcess(Os.getpid());
+        });
+    }
+
+    @Override
     public void onCreate() {
         super.onCreate();
         if (!BuildConfig.DEBUG) {
-            try {
-                Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
-
-                    StringWriter sw = new StringWriter();
-                    PrintWriter pw = new PrintWriter(sw);
-                    throwable.printStackTrace(pw);
-                    String stackTraceString = sw.toString();
-
-                    //Reduce data to 128KB so we don't get a TransactionTooLargeException when sending the intent.
-                    //The limit is 1MB on Android but some devices seem to have it lower.
-                    //See: http://developer.android.com/reference/android/os/TransactionTooLargeException.html
-                    //And: http://stackoverflow.com/questions/11451393/what-to-do-on-transactiontoolargeexception#comment46697371_12809171
-                    if (stackTraceString.length() > 131071) {
-                        String disclaimer = " [stack trace too large]";
-                        stackTraceString = stackTraceString.substring(0, 131071 - disclaimer.length()) + disclaimer;
-                    }
-                    Intent intent = new Intent(App.this, CrashReportActivity.class);
-                    intent.putExtra(BuildConfig.APPLICATION_ID + ".EXTRA_STACK_TRACE", stackTraceString);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    App.this.startActivity(intent);
-                    android.os.Process.killProcess(android.os.Process.myPid());
-                    System.exit(10);
-                });
-            } catch (Throwable t) {
-                t.printStackTrace();
-            }
+            setCrashReport();
         }
 
         instance = this;
@@ -121,8 +124,9 @@ public class App extends Application {
         }
         DayNightDelegate.setApplicationContext(this);
         DayNightDelegate.setDefaultNightMode(ThemeUtil.getDarkTheme());
-        RepoLoader.getInstance().loadRemoteData();
+
         loadRemoteVersion();
+        RepoLoader.getInstance().loadRemoteData();
     }
 
     @NonNull
@@ -134,8 +138,7 @@ public class App extends Application {
                 request.header("User-Agent", TAG);
                 return chain.proceed(request.build());
             });
-            HttpLoggingInterceptor.Logger logger = s -> Log.v(TAG, s);
-            HttpLoggingInterceptor log = new HttpLoggingInterceptor(logger);
+            HttpLoggingInterceptor log = new HttpLoggingInterceptor();
             log.setLevel(HttpLoggingInterceptor.Level.HEADERS);
             if (BuildConfig.DEBUG) builder.addInterceptor(log);
             okHttpClient = builder.dns(new DoHDNS(builder.build())).build();

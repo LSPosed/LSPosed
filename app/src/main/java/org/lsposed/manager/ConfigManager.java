@@ -193,7 +193,9 @@ public class ConfigManager {
 
     public static PackageInfo getPackageInfo(String packageName, int flags, int userId) throws PackageManager.NameNotFoundException {
         try {
-            return LSPManagerServiceHolder.getService().getPackageInfo(packageName, flags, userId);
+            var info = LSPManagerServiceHolder.getService().getPackageInfo(packageName, flags, userId);
+            if (info == null) throw new PackageManager.NameNotFoundException();
+            return info;
         } catch (RemoteException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
             throw new PackageManager.NameNotFoundException();

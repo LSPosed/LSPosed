@@ -654,14 +654,16 @@ public class ConfigManager {
 
     // This is called when a new process created, use the cached result
     public boolean shouldSkipProcess(ProcessScope scope) {
-        return !cachedScope.containsKey(scope) && !isManager(scope.uid);
+        return !cachedScope.containsKey(scope) &&
+                !isManager(scope.uid) &&
+                !shouldBlock(scope.processName);
     }
 
     public boolean isUidHooked(int uid) {
         return cachedScope.keySet().stream().reduce(false, (p, scope) -> p || scope.uid == uid, Boolean::logicalOr);
     }
 
-    // This should only be called by manager, so we don't need to cache it
+    @Nullable
     public List<Application> getModuleScope(String packageName) {
         int mid = getModuleId(packageName);
         if (mid == -1) return null;
@@ -690,8 +692,7 @@ public class ConfigManager {
             apks = Arrays.copyOf(info.splitSourceDirs, info.splitSourceDirs.length + 1);
             apks[info.splitSourceDirs.length] = info.sourceDir;
         } else apks = new String[]{info.sourceDir};
-        var apkPath = Arrays.stream(apks).parallel()
-                .filter(apk -> {
+        var apkPath = Arrays.stream(apks).parallel().filter(apk -> {
             if (apk == null) {
                 Log.w(TAG, info.packageName + " has null apk path???");
                 return false;
