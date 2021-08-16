@@ -451,7 +451,6 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
                     if (insets != null)
                         holder.recyclerView.onApplyWindowInsets(insets);
                     RecyclerViewKt.fixEdgeEffect(holder.recyclerView, false, true);
-                    RecyclerViewKt.addFastScroller(holder.recyclerView, holder.itemView);
                     break;
             }
         }

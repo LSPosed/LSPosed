@@ -424,7 +424,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             if (insets != null)
                 binding.recyclerView.onApplyWindowInsets(insets);
             RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
-            RecyclerViewKt.addFastScroller(binding.recyclerView, binding.recyclerView);
             return binding.getRoot();
         }
     }
