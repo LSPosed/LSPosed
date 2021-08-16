@@ -62,7 +62,7 @@ public class HomeFragment extends BaseFragment {
         packageInfo.applicationInfo = applicationInfo;
         packageInfo.versionCode = longVersionCode;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            packageInfo.setLongVersionCode(System.currentTimeMillis());
+            packageInfo.setLongVersionCode(longVersionCode);
         }
         return packageInfo;
     }
