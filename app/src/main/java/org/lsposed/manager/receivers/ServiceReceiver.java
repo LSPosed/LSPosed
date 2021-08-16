@@ -23,22 +23,17 @@ package org.lsposed.manager.receivers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 
 import org.lsposed.manager.util.ModuleUtil;
 import org.lsposed.manager.util.NotificationUtil;
 
 public class ServiceReceiver extends BroadcastReceiver {
 
-    private static String getPackageName(Intent intent) {
-        Uri uri = intent.getData();
-        return (uri != null) ? uri.getSchemeSpecificPart() : null;
-    }
-
     @Override
     public void onReceive(final Context context, final Intent intent) {
         int userId = intent.getIntExtra(Intent.EXTRA_USER, 0);
-        String packageName = getPackageName(intent);
+
+        String packageName = intent.getStringExtra("moduleName");
         if (packageName == null) {
             return;
         }

@@ -23,7 +23,6 @@ import static org.lsposed.lspd.service.PackageService.PER_USER_RANGE;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 
 import android.app.IApplicationThread;
-import android.content.ComponentName;
 import android.content.IIntentReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -142,8 +141,8 @@ public class LSPosedService extends ILSPosedService.Stub {
             broadcastIntent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
             broadcastIntent.addFlags(0x01000000);
             broadcastIntent.addFlags(0x00400000);
-            broadcastIntent.setData(intent.getData());
             broadcastIntent.putExtras(intent.getExtras());
+            broadcastIntent.putExtra("moduleName", moduleName);
             broadcastIntent.putExtra(Intent.EXTRA_USER, userId);
             broadcastIntent.setPackage(ConfigManager.getInstance().getManagerPackageName());
 
