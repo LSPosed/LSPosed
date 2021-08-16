@@ -20,11 +20,9 @@
 
 package org.lsposed.manager;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.util.Log;
@@ -35,7 +33,6 @@ import androidx.preference.PreferenceManager;
 import com.google.gson.JsonParser;
 
 import org.lsposed.hiddenapibypass.HiddenApiBypass;
-import org.lsposed.manager.receivers.ServiceReceiver;
 import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.ui.activity.CrashReportActivity;
 import org.lsposed.manager.util.DoHDNS;
@@ -124,14 +121,8 @@ public class App extends Application {
         }
         DayNightDelegate.setApplicationContext(this);
         DayNightDelegate.setDefaultNightMode(ThemeUtil.getDarkTheme());
-
-        var filter = new IntentFilter();
-        filter.addAction("org.lsposed.action.MODULE_UPDATED");
-        filter.addAction("org.lsposed.action.MODULE_NOT_ACTIVATAED");
-        registerReceiver(new ServiceReceiver(), filter, Manifest.permission.ACCOUNT_MANAGER, null);
-
-        loadRemoteVersion();
         RepoLoader.getInstance().loadRemoteData();
+        loadRemoteVersion();
     }
 
     @NonNull

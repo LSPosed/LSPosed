@@ -145,7 +145,7 @@ public class LSPosedService extends ILSPosedService.Stub {
             broadcastIntent.setData(intent.getData());
             broadcastIntent.putExtras(intent.getExtras());
             broadcastIntent.putExtra(Intent.EXTRA_USER, userId);
-            broadcastIntent.setPackage(ConfigManager.getInstance().getManagerPackageName());
+            broadcastIntent.setComponent(ComponentName.unflattenFromString(ConfigManager.getInstance().getManagerPackageName() + "/.receivers.ServiceReceiver"));
 
             try {
                 ActivityManagerService.broadcastIntentWithFeature(null, broadcastIntent,
