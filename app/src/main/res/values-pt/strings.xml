@@ -77,12 +77,14 @@
     <!-- Notification -->
     <string name="module_is_not_activated_yet">O módulo do Xposed ainda não está ativo</string>
     <string name="module_is_not_activated_yet_detailed">%s foi instalado, mas ainda não está ativo</string>
-    <string name="xposed_module_updated_notification_content">%s foi atualizado.</string>
+    <string name="xposed_module_updated_notification_title">Módulo do Xposed atualizado</string>
+    <string name="xposed_module_updated_notification_content">%s foi atualizado, por favor force a parada e reinicie os apps que estão em seu escopo</string>
+    <string name="xposed_module_updated_notification_title_system">Módulo do Xposed atualizado, necessário reiniciar o sistema</string>
+    <string name="xposed_module_updated_notification_content_system">%s foi atualizado, como o escopo contém o Framework do Sistema, é necessário reiniciar para aplicar as alterações</string>
 
     <!-- ModulesActivity -->
     <string name="module_empty_description">(nenhuma descrição fornecida)</string>
     <string name="module_no_ui">Este módulo não fornece uma interface do usuário</string>
-    <string name="xposed_module_updated_notification_title">Módulo do Xposed atualizado</string>
     <string name="warning_xposed_min_version">Este módulo exige uma versão mais recente do Xposed (%d) e, por isso, não pode ser ativado</string>
     <string name="no_min_version_specified">Este módulo não cita qual a versão necessária para o Xposed.</string>
     <string name="warning_min_version_too_low">Este módulo foi criado para a versão %1$d do Xposed, mas devido mudanças incompatíveis na versão %2$d, ele foi desativado</string>
