@@ -21,12 +21,10 @@
 <resources>
     <!-- MainActivity -->
     <string name="info">Infos</string>
-    <string name="install">Installer</string>
-    <string name="install_summary">Appuyez pour installer LSPosed</string>
     <string name="Modules">Modules</string>
     <plurals name="modules_enabled_count">
-        <item quantity="one">%d module activé</item>
-        <item quantity="other">%d modules activés</item>
+        <item quantity="one">%d module actif</item>
+        <item quantity="other">%d modules actifs</item>
     </plurals>
     <string name="Logs">Journaux</string>
     <string name="Settings">Réglages</string>
@@ -35,18 +33,23 @@
     <string name="module_repo_summary">Dépôts de modules (Beta)</string>
     <string name="about_view_source_code"><![CDATA[Voir le code source sur %1$s<br/>Rejoindre notre canal %2$s]]></string>
     <string name="about_translators">Traducteur: %s</string>
+    <string name="translators"><![CDATA[<a href="https://github.com/LSPosed/LSPosed">LSPosed</a>]]></string>
 
-    <string name="activated">Activé</string>
+    <string name="install">Installer</string>
+    <string name="install_summary">Appuyer pour installer LSPosed</string>
     <string name="not_installed">Non installé</string>
+    <string name="not_install_summary">LSPosed n\’est pas installé</string>
+    <string name="activated">Activé</string>
     <string name="partial_activated">Partiellement activé</string>
-    <string name="need_update">Mise à jour nécessaire</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy n\’est pas chargé correctement</string>
     <string name="selinux_policy_not_loaded">&lt;b&gt;AVERTISSEMENT:&lt;\/b&gt; SEPolicy n\’est pas chargé correctement, les modules qui modifient le sous-système ne fonctionneront pas.</string>
     <string name="system_inject_fail_summary">Échec de l\’injection du sous système</string>
     <string name="system_inject_fail"><![CDATA[<b>AVERTISSEMENT:</b> Échec de l\’injection du sous système.<br/>Ceci est rare et peut être causé par <b>Magisk</b> ou certains modules Magisk de basse qualité.<br/>Éssayez de désactiver les modules Magisk autres que Riru et LSPosed ou envoyez le journal complet aux développeurs.]]></string>
     <string name="system_prop_incorrect_summary">Propriétés système incorrectes</string>
     <string name="system_prop_incorrect"><![CDATA[<b>AVERTISSEMENT:</b> Propriétés système incorrectes.<br/>Certaines propriétés nécessaires au système ont été supprimées ou modifiées.<br/>Les modules peuvent s\'invalider occasionnellement.]]></string>
+    <string name="need_update">Besoin de mettre à jour</string>
     <string name="please_update_summary">Merci d\’installer la dernière version de LSPosed</string>
+    <string name="lsposed_not_active">LSPosed n\’est actuellement pas installé ou activé.</string>
     <string name="info_api_version">Version de l\’API</string>
     <string name="info_framework_version">Version du framework</string>
     <string name="info_manager_version">Version du gestionnaire</string>
@@ -69,17 +72,19 @@
     <string name="logs_cannot_read">Lecture du journal impossible: \n</string>
     <string name="menuReload">Recharger</string>
     <string name="logs_clear_failed_2">Échec d\’effacement du journal</string>
-    <string name="not_logcat_2">S\’il vous ai demandé un Logcat Android, alors vous êtes dans la mauvaise section. Ici il s\’agit du journal LSPosed; si vous avez besoin d\’un logcat, vous pourrez trouver ce dont vous avez besoin sur XDA.</string>
+    <string name="verbose_log_not_avaliable">Le journal verbeux n’est pas disponible, si vous l\’avez activé sans avoir redémarré, essayez à nouveau après avoir redémarrer.</string>
 
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Le module LSPosed n\’est pas encore actif</string>
     <string name="module_is_not_activated_yet_detailed">%s à été installé, mais il n\’est pas encore installé</string>
-    <string name="xposed_module_updated_notification_content">%s à été mis à jour</string>
+    <string name="xposed_module_updated_notification_title">Module Xposed mis à jour</string>
+    <string name="xposed_module_updated_notification_content">%s à été mis à jour, merci de forcer l\’arrêt ou de redémarrer les applis dans leurs champs d\’application</string>
+    <string name="xposed_module_updated_notification_title_system">Module Xposed à jour, redémarrage du système requis</string>
+    <string name="xposed_module_updated_notification_content_system">%s à été mis à jour, puisque le champ d\’application contient le Sous Système, le redémarrage est nécessaire pour appliquer les changements</string>
 
     <!-- ModulesActivity -->
     <string name="module_empty_description">(aucune description fournie)</string>
     <string name="module_no_ui">Ce module ne fournit pas d\’interface utilisateur</string>
-    <string name="xposed_module_updated_notification_title">Module LSPosedmis à jour</string>
     <string name="warning_xposed_min_version">Ce module requière une nouvelle version de LSPosed (%d) et n\’a donc pas pue être activé</string>
     <string name="no_min_version_specified">Ce module ne spécifie la version de LSPosed qu\’il a besoin.</string>
     <string name="warning_min_version_too_low">Ce module à été créé pour la version %1$d de LSPosed, mais à cause de changements incompatibles dans la version %2$d, il à été désactivé</string>
@@ -90,6 +95,7 @@
     <string name="module_uninstall_message">Voulez-vous installer ce module?</string>
     <string name="module_uninstalled">Désinstallation de %1$s</string>
     <string name="module_uninstall_failed">Échec de la désinstallation</string>
+    <string name="add_module_to_user">Ajouter le module à l\’utilisateur</string>
     <string name="module_installed">Ajout de %1$s à l’utilisateur %2$s</string>
     <string name="module_install_failed">Échec de l\’ajout du module</string>
     <string name="install_to_user">Installation dans utilisateur %s</string>
@@ -106,6 +112,7 @@
     <string name="sort_by_package_name">Trier par nom de paquet</string>
     <string name="sort_by_install_time">Trier par date d\’installation</string>
     <string name="sort_by_update_time">Trier par heure de mise à jour</string>
+    <string name="sort_reverse">Inverser</string>
     <string name="menu_show_system_apps">Applications système</string>
     <string name="menu_sort">Trie…</string>
     <string name="enable_module">Activer module</string>
@@ -134,6 +141,7 @@
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">Voir dans une autre application</string>
     <string name="module_app_info">Informations d\’application</string>
+    <string name="list_empty">¯\\\\_(ツ)_\/¯\nIl n\’y a rien ici</string>
 
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Sous-système</string>
@@ -177,14 +185,11 @@
     <string name="module_release_no_more">Pas d\’autres versions</string>
     <string name="repo_load_failed">Échec de chargement du dépôt des modules: %s</string>
 
+    <!-- CrashReportActivity -->
     <string name="app_destroyed">Cette application à été détruite, merci de vous assurer que vous l\’avez bien téléchargé depuis la source officielle.</string>
+    <string name="outdated_core">L\’appli LSPosed est plus réçente que le Sous Système. Merci de mettre à jour le Sous Système LSPosed.</string>
     <string name="outdated_manager">Version du Gestionnaire LSPosed et du noyau LSPosed ne sont pas cohérents. Merci de réinstaller la version correspondante.</string>
-    <string name="lsposed_not_active">LSPosed n\’est pas installé ou n\’est pas actif.</string>
-    <string name="verbose_log_not_avaliable">Journal détaillé indisponible, si vous l\’avez juste activé sans redémarrer, essayez à nouveau après avoir redémarré.</string>
-    <string name="NotInstall">Non installé</string>
-    <string name="not_install_summary">LSPosed n\’est pas installé</string>
-    <string name="translators"><![CDATA[<a href="https://forum.xda-developers.com/member.php?u=5332893">Rom</a>]]></string>
+    <string name="manager_crashed">Le Gestionnaire à planté</string>
+    <string name="cpoy_crash_info">Copier les infos du plantage</string>
     <string name="copy_toast_msg">Copié</string>
-    <string name="list_empty">¯\\\\_(ツ)_\/¯\nIl n\’y a rien ici</string>
-    <string name="add_module_to_user">Ajout du module à l\’utilisateurAdd module to user</string>
 </resources>
