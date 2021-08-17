@@ -198,6 +198,9 @@ dependencies {
     implementation("me.zhanghai.android.appiconloader:appiconloader-glide:1.3.1")
     implementation("org.lsposed.hiddenapibypass:hiddenapibypass:2.0")
     implementation(project(":manager-service"))
+    
+    // TODO(vvb2060): workaround for Samsung Folds. Remove it after stable.
+    implementation("androidx.window:window:1.0.0-alpha10")
 }
 
 configurations.all {
