@@ -95,7 +95,7 @@
     <string name="module_uninstall_message">Voulez-vous installer ce module?</string>
     <string name="module_uninstalled">Désinstallation de %1$s</string>
     <string name="module_uninstall_failed">Échec de la désinstallation</string>
-    <string name="add_module_to_user">Ajouter module à l\’utilisateur</string>
+    <string name="add_module_to_user">Ajouter le module à l\’utilisateur</string>
     <string name="module_installed">Ajout de %1$s à l’utilisateur %2$s</string>
     <string name="module_install_failed">Échec de l\’ajout du module</string>
     <string name="install_to_user">Installation dans utilisateur %s</string>
