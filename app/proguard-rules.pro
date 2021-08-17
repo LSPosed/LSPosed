@@ -11,9 +11,14 @@
     public static *** d(...);
 }
 
+#TODO(vvb2060): Remove it after Slidingpanelayout 1.2.0 stable.
+-keepclassmembers class androidx.window.SidecarCompat** {
+    void onDeviceStateChanged(...);
+    void onWindowLayoutChanged(...);
+}
+
 -repackageclasses
-# temporarily disable it: https://issuetracker.google.com/issues/155606069
-# -allowaccessmodification
+-allowaccessmodification
 -overloadaggressively
 
 # Gson uses generic type information stored in a class file when working with fields. Proguard
