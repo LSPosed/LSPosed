@@ -80,7 +80,7 @@
     <string name="xposed_module_updated_notification_title">Module Xposed mis à jour</string>
     <string name="xposed_module_updated_notification_content">%s à été mis à jour, merci de forcer l\’arrêt ou de redémarrer les applis dans leurs champs d\’application</string>
     <string name="xposed_module_updated_notification_title_system">Module Xposed à jour, redémarrage du système requis</string>
-    <string name="xposed_module_updated_notification_content_system">%s à été mis à jour, puisque le champ d'application contient le Sous Système, le redémarrage est nécessaire pour appliquer les changements</string>
+    <string name="xposed_module_updated_notification_content_system">%s à été mis à jour, puisque le champ d\’application contient le Sous Système, le redémarrage est nécessaire pour appliquer les changements</string>
 
     <!-- ModulesActivity -->
     <string name="module_empty_description">(aucune description fournie)</string>
