@@ -85,7 +85,6 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(aucune description fournie)</string>
     <string name="module_no_ui">Ce module ne fournit pas d\’interface utilisateur</string>
-    <string name="xposed_module_updated_notification_title">Module LSPosedmis à jour</string>
     <string name="warning_xposed_min_version">Ce module requière une nouvelle version de LSPosed (%d) et n\’a donc pas pue être activé</string>
     <string name="no_min_version_specified">Ce module ne spécifie la version de LSPosed qu\’il a besoin.</string>
     <string name="warning_min_version_too_low">Ce module à été créé pour la version %1$d de LSPosed, mais à cause de changements incompatibles dans la version %2$d, il à été désactivé</string>
@@ -96,6 +95,7 @@
     <string name="module_uninstall_message">Voulez-vous installer ce module?</string>
     <string name="module_uninstalled">Désinstallation de %1$s</string>
     <string name="module_uninstall_failed">Échec de la désinstallation</string>
+    <string name="add_module_to_user">Ajouter module à l\’utilisateur</string>
     <string name="module_installed">Ajout de %1$s à l’utilisateur %2$s</string>
     <string name="module_install_failed">Échec de l\’ajout du module</string>
     <string name="install_to_user">Installation dans utilisateur %s</string>
