@@ -59,4 +59,6 @@ interface ILSPManagerService {
     ParceledListSlice<ResolveInfo> queryIntentActivitiesAsUser(in Intent intent, int flags, int userId) = 31;
 
     boolean dex2oatFlagsLoaded() = 32;
+
+    void setHiddenIcon(boolean hide) = 33;
 }
