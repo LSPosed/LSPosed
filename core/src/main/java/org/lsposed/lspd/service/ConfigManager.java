@@ -85,7 +85,6 @@ import java.util.zip.ZipFile;
 public class ConfigManager {
 
     private static final String[] MANAGER_PERMISSIONS_TO_GRANT = new String[]{
-            "android.permission.INTERACT_ACROSS_USERS",
             "android.permission.WRITE_SECURE_SETTINGS"
     };
 
@@ -327,6 +326,7 @@ public class ConfigManager {
             if (info != null) {
                 managerUid = info.applicationInfo.uid;
                 manager = info.packageName;
+                grantManagerPermission();
             } else {
                 Log.w(TAG, "manager is not installed");
             }
@@ -938,7 +938,7 @@ public class ConfigManager {
         return miscPath + File.separator + "prefs" + (userId == 0 ? "" : String.valueOf(userId)) + File.separator + fileName;
     }
 
-    public static void grantManagerPermission() {
+    private void grantManagerPermission() {
         String managerPackageName = readText(managerPath, BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME);
         Arrays.stream(MANAGER_PERMISSIONS_TO_GRANT).forEach(permission -> {
             try {

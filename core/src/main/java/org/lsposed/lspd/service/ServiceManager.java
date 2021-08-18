@@ -115,12 +115,6 @@ public class ServiceManager {
             }
         });
 
-        try {
-            ConfigManager.grantManagerPermission();
-        } catch (Throwable e) {
-            Log.e(TAG, Log.getStackTraceString(e));
-        }
-
         Looper.loop();
         throw new RuntimeException("Main thread loop unexpectedly exited");
     }
