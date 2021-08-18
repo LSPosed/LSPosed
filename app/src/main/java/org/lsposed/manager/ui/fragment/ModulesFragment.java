@@ -245,15 +245,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (ConfigManager.getXposedVersionName() == null) {
-            Toast.makeText(requireContext(), R.string.lsposed_not_active, Toast.LENGTH_LONG).show();
-            getNavController().navigateUp();
-        }
-    }
-
-    @Override
     public void onPrepareOptionsMenu(Menu menu) {
         searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
         searchView.setOnQueryTextListener(searchListener);

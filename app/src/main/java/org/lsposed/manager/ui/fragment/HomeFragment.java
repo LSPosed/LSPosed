@@ -80,8 +80,10 @@ public class HomeFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         BaseActivity activity = (BaseActivity) requireActivity();
+        boolean isBinderAlive = ConfigManager.isBinderAlive();
+        boolean needUpdate = App.needUpdate();
         binding.status.setOnClickListener(v -> {
-            if (ConfigManager.isBinderAlive()) {
+            if (isBinderAlive && !needUpdate) {
                 new InfoDialogBuilder(activity).setTitle(R.string.info).show();
             } else {
                 NavUtil.startURL(activity, getString(R.string.about_source));
@@ -111,7 +113,7 @@ public class HomeFragment extends BaseFragment {
                 .load(wrap(activity.getApplicationInfo(), getResources().getConfiguration().hashCode()))
                 .into(binding.appIcon);
         int cardBackgroundColor;
-        if (ConfigManager.isBinderAlive()) {
+        if (isBinderAlive) {
             if (!ConfigManager.isSepolicyLoaded()) {
                 binding.statusTitle.setText(R.string.partial_activated);
                 cardBackgroundColor = ResourcesKt.resolveColor(activity.getTheme(), R.attr.colorWarning);
@@ -127,7 +129,7 @@ public class HomeFragment extends BaseFragment {
                 cardBackgroundColor = ResourcesKt.resolveColor(activity.getTheme(), R.attr.colorWarning);
                 binding.statusIcon.setImageResource(R.drawable.ic_warning);
                 binding.statusSummary.setText(R.string.system_prop_incorrect_summary);
-            } else if (App.needUpdate()) {
+            } else if (needUpdate) {
                 binding.statusTitle.setText(R.string.need_update);
                 cardBackgroundColor = ResourcesKt.resolveColor(activity.getTheme(), R.attr.colorWarning);
                 binding.statusIcon.setImageResource(R.drawable.ic_warning);

@@ -60,7 +60,7 @@ public class ConfigManager {
             return LSPManagerServiceHolder.getService().getXposedVersionName();
         } catch (RemoteException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
-            return null;
+            return "";
         }
     }
 
