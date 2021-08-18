@@ -34,8 +34,6 @@ import com.bumptech.glide.module.AppGlideModule;
 
 import org.lsposed.manager.R;
 
-import me.zhanghai.android.appiconloader.glide.AppIconModelLoader;
-
 @GlideModule
 public class AppModule extends AppGlideModule {
     @Override
