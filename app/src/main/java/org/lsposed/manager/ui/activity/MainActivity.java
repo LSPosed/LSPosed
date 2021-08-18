@@ -97,7 +97,7 @@ public class MainActivity extends BaseActivity {
         }
         if (intent.getAction() != null && intent.getAction().equals("android.intent.action.APPLICATION_PREFERENCES")) {
             navController.navigate(R.id.action_settings_fragment);
-        } else if (intent.hasExtra("modulePackageName")) {
+        } else if (intent.hasExtra("modulePackageName") && ConfigManager.isBinderAlive()) {
             navController.navigate(NavGraphDirections.actionAppListFragment(intent.getStringExtra("modulePackageName"), intent.getIntExtra("moduleUserId", -1)));
         } else if (!TextUtils.isEmpty(intent.getDataString())) {
             switch (intent.getDataString()) {
