@@ -295,7 +295,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             ConfigManager.startActivityAsUserWithFeature(new Intent(ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", info.packageName, null)), module.userId);
         } else if (itemId == R.id.menu_force_stop) {
             if (info.packageName.equals("android")) {
-                ConfigManager.reboot(false, null, false);
+                ConfigManager.reboot(false);
             } else {
                 new AlertDialog.Builder(activity)
                         .setTitle(R.string.force_stop_dlg_title)
@@ -479,7 +479,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             buttonView.setChecked(!isChecked);
         } else if (appInfo.packageName.equals("android")) {
             Snackbar.make(fragment.binding.snackbar, R.string.reboot_required, Snackbar.LENGTH_SHORT)
-                    .setAction(R.string.reboot, v -> ConfigManager.reboot(false, null, false))
+                    .setAction(R.string.reboot, v -> ConfigManager.reboot(false))
                     .show();
         }
     }

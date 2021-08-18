@@ -41,6 +41,7 @@ import org.lsposed.lspd.ILSPManagerService;
 import org.lsposed.lspd.models.Application;
 import org.lsposed.lspd.models.UserInfo;
 
+import java.io.FileDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
@@ -194,8 +195,9 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     }
 
     @Override
-    public void reboot(boolean confirm, String reason, boolean wait) throws RemoteException {
-        PowerService.reboot(confirm, reason, wait);
+    public void reboot(boolean shutdown) {
+        var value = shutdown ? "shutdown" : "reboot";
+        SystemProperties.set("sys.powerctl", value);
     }
 
     @Override

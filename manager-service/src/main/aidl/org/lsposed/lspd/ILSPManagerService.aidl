@@ -42,7 +42,7 @@ interface ILSPManagerService {
 
     void forceStopPackage(String packageName, int userId) = 23;
 
-    void reboot(boolean confirm, String reason, boolean wait) = 24;
+    void reboot(boolean shutdown) = 24;
 
     boolean uninstallPackage(String packageName, int userId) = 25;
 
