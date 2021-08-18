@@ -171,7 +171,6 @@ public class LSPosedService extends ILSPosedService.Stub {
             Log.d(TAG, "Manager updated");
             try {
                 ConfigManager.getInstance().updateManager();
-                ConfigManager.grantManagerPermission();
             } catch (Throwable e) {
                 Log.e(TAG, Log.getStackTraceString(e));
             }
