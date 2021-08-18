@@ -32,6 +32,7 @@ import android.content.pm.VersionedPackage;
 import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
+import android.os.ResultReceiver;
 import android.os.SystemProperties;
 import android.util.Log;
 
@@ -264,5 +265,18 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     @Override
     public boolean dex2oatFlagsLoaded() {
         return SystemProperties.get(PROP_NAME).contains(PROP_VALUE);
+    }
+
+    @Override
+    public void setHiddenIcon(boolean hide) {
+        var settings = new ServiceShellCommand("settings");
+        var enable = hide ? "0" : "1";
+        var args = new String[]{"put", "global", "show_hidden_icon_apps_enabled", enable};
+        try {
+            settings.shellCommand(FileDescriptor.in, FileDescriptor.out, FileDescriptor.err,
+                    args, new ResultReceiver(null));
+        } catch (RemoteException e) {
+            Log.w(TAG, "setHiddenIcon: ", e);
+        }
     }
 }
