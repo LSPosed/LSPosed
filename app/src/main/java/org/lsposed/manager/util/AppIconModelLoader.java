@@ -60,16 +60,16 @@ public class AppIconModelLoader implements ModelLoader<PackageInfo, Bitmap> {
     @Override
     public LoadData<Bitmap> buildLoadData(@NonNull PackageInfo model, int width, int height,
                                           @NonNull Options options) {
-        var applicationInfo = new ApplicationInfo(model.applicationInfo);
-        applicationInfo.uid = applicationInfo.uid % PER_USER_RANGE;
-        var primaryUserInfo = new PackageInfo();
-        primaryUserInfo.applicationInfo = applicationInfo;
-        primaryUserInfo.versionCode = model.versionCode;
+        var warpApplicationInfo = new ApplicationInfo(model.applicationInfo);
+        warpApplicationInfo.uid = warpApplicationInfo.uid % PER_USER_RANGE;
+        var warpPackageInfo = new PackageInfo();
+        warpPackageInfo.applicationInfo = warpApplicationInfo;
+        warpPackageInfo.versionCode = model.versionCode;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            primaryUserInfo.setLongVersionCode(model.getLongVersionCode());
+            warpPackageInfo.setLongVersionCode(model.getLongVersionCode());
         }
-        return new LoadData<>(new ObjectKey(AppIconLoader.getIconKey(primaryUserInfo, mContext)),
-                new Fetcher(mLoader, applicationInfo));
+        return new LoadData<>(new ObjectKey(AppIconLoader.getIconKey(warpPackageInfo, mContext)),
+                new Fetcher(mLoader, warpApplicationInfo));
     }
 
     private static class Fetcher implements DataFetcher<Bitmap> {
