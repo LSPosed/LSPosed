@@ -154,7 +154,7 @@ public class SettingsFragment extends BaseFragment {
                         SettingsFragment fragment = (SettingsFragment) getParentFragment();
                         if (result && fragment != null) {
                             Snackbar.make(fragment.binding.snackbar, R.string.reboot_required, Snackbar.LENGTH_SHORT)
-                                    .setAction(R.string.reboot, v -> ConfigManager.reboot(false, null, false))
+                                    .setAction(R.string.reboot, v -> ConfigManager.reboot(false))
                                     .show();
                         }
                         return result;
