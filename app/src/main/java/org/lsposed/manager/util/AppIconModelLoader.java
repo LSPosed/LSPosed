@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.graphics.Bitmap;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -59,9 +60,15 @@ public class AppIconModelLoader implements ModelLoader<PackageInfo, Bitmap> {
     @Override
     public LoadData<Bitmap> buildLoadData(@NonNull PackageInfo model, int width, int height,
                                           @NonNull Options options) {
-        var applicationInfo = model.applicationInfo;
+        var applicationInfo = new ApplicationInfo(model.applicationInfo);
         applicationInfo.uid = applicationInfo.uid % PER_USER_RANGE;
-        return new LoadData<>(new ObjectKey(AppIconLoader.getIconKey(model, mContext)),
+        var primaryUserInfo = new PackageInfo();
+        primaryUserInfo.applicationInfo = applicationInfo;
+        primaryUserInfo.versionCode = model.versionCode;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            primaryUserInfo.setLongVersionCode(model.getLongVersionCode());
+        }
+        return new LoadData<>(new ObjectKey(AppIconLoader.getIconKey(primaryUserInfo, mContext)),
                 new Fetcher(mLoader, applicationInfo));
     }
 
