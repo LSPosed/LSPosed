@@ -36,10 +36,8 @@ import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.ActivityCrashReportBinding;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
 
 public class CrashReportActivity extends AppCompatActivity {
     ActivityCrashReportBinding binding;
@@ -62,21 +60,16 @@ public class CrashReportActivity extends AppCompatActivity {
     }
 
     public String getAllErrorDetailsFromIntent(@NonNull Intent intent) {
-        Date currentDate = new Date();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
-
+        var dateFormat = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
         String versionName = String.format("%s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE);
 
-        String errorDetails = "";
-
-        errorDetails += "Build version: " + versionName + " \n";
-        errorDetails += "Current date: " + dateFormat.format(currentDate) + " \n";
-        errorDetails += "Device: " + getDeviceModelName() + " \n";
-        errorDetails += "Fingerprint: " + getFingerprint() + " \n \n";
-        errorDetails += "SDK: " + Build.VERSION.SDK_INT + " \n \n";
-        errorDetails += "Stack trace:  \n";
-        errorDetails += getStackTraceFromIntent(intent);
-        return errorDetails;
+        return "Build version: " + versionName + " \n" +
+                "Current date: " + dateFormat.format(Instant.now()) + " \n" +
+                "Device: " + getDeviceModelName() + " \n" +
+                "Fingerprint: " + getFingerprint() + " \n \n" +
+                "SDK: " + Build.VERSION.SDK_INT + " \n \n" +
+                "Stack trace:  \n" +
+                getStackTraceFromIntent(intent);
     }
 
     private String getFingerprint() {

@@ -182,7 +182,7 @@ public class App extends Application {
 
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                Log.e(App.TAG, e.getMessage(), e);
+                Log.e(App.TAG, "loadRemoteVersion: " + e.getMessage());
                 if (pref.getBoolean("checked", false)) return;
                 pref.edit().putBoolean("checked", true).apply();
             }
