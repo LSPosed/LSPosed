@@ -422,6 +422,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             if (enabled) holder.checkbox.toggle();
         });
         holder.itemView.setOnLongClickListener(v -> {
+            fragment.searchView.clearFocus();
             selectedInfo = appInfo.applicationInfo;
             return false;
         });
@@ -623,6 +624,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     }
 
     public void onBackPressed() {
+        fragment.searchView.clearFocus();
         if (!refreshing && fragment.binding.masterSwitch.isChecked() && checkedList.isEmpty()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(activity);
             builder.setMessage(!recommendedList.isEmpty() ? R.string.no_scope_selected_has_recommended : R.string.no_scope_selected);
