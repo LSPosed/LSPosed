@@ -83,11 +83,6 @@ import java.util.zip.ZipFile;
 // This config manager assume uid won't change when our service is off.
 // Otherwise, user should maintain it manually.
 public class ConfigManager {
-
-    private static final String[] MANAGER_PERMISSIONS_TO_GRANT = new String[]{
-            "android.permission.WRITE_SECURE_SETTINGS"
-    };
-
     private static ConfigManager instance = null;
 
     private static final File basePath = new File("/data/adb/lspd");
@@ -326,7 +321,6 @@ public class ConfigManager {
             if (info != null) {
                 managerUid = info.applicationInfo.uid;
                 manager = info.packageName;
-                grantManagerPermission();
             } else {
                 Log.w(TAG, "manager is not installed");
             }
@@ -339,8 +333,6 @@ public class ConfigManager {
         new Thread(() -> {
             if (PackageService.installManagerIfAbsent(manager, new File(basePath, "manager.apk"))) {
                 updateManager(BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME);
-            } else {
-                Log.w(TAG, "Can not install manager");
             }
         }).start();
     }
@@ -936,17 +928,6 @@ public class ConfigManager {
     public String getPrefsPath(String fileName, int uid) {
         int userId = uid / PER_USER_RANGE;
         return miscPath + File.separator + "prefs" + (userId == 0 ? "" : String.valueOf(userId)) + File.separator + fileName;
-    }
-
-    private void grantManagerPermission() {
-        String managerPackageName = readText(managerPath, BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME);
-        Arrays.stream(MANAGER_PERMISSIONS_TO_GRANT).forEach(permission -> {
-            try {
-                PackageService.grantRuntimePermission(managerPackageName, permission, 0);
-            } catch (RemoteException e) {
-                Log.e(TAG, Log.getStackTraceString(e));
-            }
-        });
     }
 
     // this is slow, avoid using it
