@@ -83,11 +83,6 @@ import java.util.zip.ZipFile;
 // This config manager assume uid won't change when our service is off.
 // Otherwise, user should maintain it manually.
 public class ConfigManager {
-
-    private static final String[] MANAGER_PERMISSIONS_TO_GRANT = new String[]{
-            "android.permission.WRITE_SECURE_SETTINGS"
-    };
-
     private static ConfigManager instance = null;
 
     private static final File basePath = new File("/data/adb/lspd");
