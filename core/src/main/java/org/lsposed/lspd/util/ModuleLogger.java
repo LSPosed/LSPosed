@@ -23,22 +23,25 @@ package org.lsposed.lspd.util;
 import android.app.ActivityThread;
 import android.os.ParcelFileDescriptor;
 import android.os.Process;
+import android.os.SystemProperties;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
-import java.util.TimeZone;
 
 public class ModuleLogger {
-    static SimpleDateFormat logDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss", Locale.getDefault());
-    static ParcelFileDescriptor fd = null;
+    private static DateTimeFormatter logDateFormat;
+    private static ParcelFileDescriptor fd = null;
 
     public static void initLogger(ParcelFileDescriptor fileDescriptor) {
         if (fd == null && fileDescriptor != null) {
             fd = fileDescriptor;
-            logDateFormat.setTimeZone(TimeZone.getDefault());
+            var zone = ZoneId.of(SystemProperties.get("persist.sys.timezone"));
+            var pattern = "yyyy-MM-dd HH:mm:ss.SSS";
+            logDateFormat = DateTimeFormatter.ofPattern(pattern, Locale.ROOT).withZone(zone);
         }
     }
 
@@ -50,7 +53,7 @@ public class ModuleLogger {
         StringBuilder sb = new StringBuilder();
         String processName = ActivityThread.currentProcessName();
 
-        sb.append(logDateFormat.format(new Date()));
+        sb.append(logDateFormat.format(Instant.now()));
         sb.append(' ');
         sb.append(isThrowable ? "E" : "I");
         sb.append('/');
