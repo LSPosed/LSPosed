@@ -38,7 +38,12 @@ public final class NotificationUtil {
     private static final int PENDING_INTENT_OPEN_APP_LIST = 0;
     private static final String NOTIFICATION_MODULES_CHANNEL = "modules_channel_2";
 
-    public static void showNotification(Context context, String modulePackageName, String moduleName, int moduleUserId, boolean enabled) {
+    public static void showNotification(Context context,
+                                        String modulePackageName,
+                                        String moduleName,
+                                        int moduleUserId,
+                                        boolean enabled,
+                                        boolean systemModule) {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         NotificationChannel channel = new NotificationChannel(NOTIFICATION_MODULES_CHANNEL,
@@ -48,8 +53,14 @@ public final class NotificationUtil {
         channel.setVibrationPattern(null);
         notificationManager.createNotificationChannel(channel);
 
-        String title = context.getString(enabled ? R.string.xposed_module_updated_notification_title : R.string.module_is_not_activated_yet);
-        String content = context.getString(enabled ? R.string.xposed_module_updated_notification_content : R.string.module_is_not_activated_yet_detailed, moduleName);
+        String title = context.getString(enabled ? systemModule ?
+                R.string.xposed_module_updated_notification_title_system :
+                R.string.xposed_module_updated_notification_title :
+                R.string.module_is_not_activated_yet);
+        String content = context.getString(enabled ? systemModule ?
+                R.string.xposed_module_updated_notification_content_system :
+                R.string.xposed_module_updated_notification_content :
+                R.string.module_is_not_activated_yet_detailed, moduleName);
 
         Intent intent = new Intent(context, MainActivity.class)
                 .putExtra("modulePackageName", modulePackageName)

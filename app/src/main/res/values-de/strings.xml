@@ -19,8 +19,8 @@
   -->
 
 <resources>
-    <string name="Install">Installieren</string>
-    <string name="InstallDetail">Tippen Sie hier, um LSPosed zu installieren</string>
+    <string name="install">Installieren</string>
+    <string name="install_summary">Tippen Sie hier, um LSPosed zu installieren</string>
     <string name="Modules">Modules</string>
     <string name="Logs">Protokolle</string>
     <string name="Settings">Einstellungen</string>
@@ -33,8 +33,8 @@
     <!-- Welcome screen / main sections -->
 
     <!-- navigation view items -->
-    <string name="nav_item_logs">Umfangreiche Protokolle</string>
-    <string name="nav_item_logs_err">Protokollmodule</string>
+    <string name="nav_item_logs_lsp">Umfangreiche Protokolle</string>
+    <string name="nav_item_logs_module">Protokollmodule</string>
 
     <!-- Installer tab -->
     <string name="dont_show_again">Nicht mehr anzeigen</string>
@@ -96,13 +96,9 @@
     <string name="not_installed">Nicht installiert</string>
     <string name="pure_black_dark_theme">Verwenden Sie das dunkel schwarze Theme</string>
     <string name="sort_by_name">Nach Anwendungsname sortieren</string>
-    <string name="sort_by_name_reverse">Nach Anwendungsname sortieren (umgekehrt)</string>
     <string name="sort_by_package_name">Nach Paketnamen sortieren</string>
-    <string name="sort_by_package_name_reverse">Sortieren nach Paketname (umgekehrt)</string>
     <string name="sort_by_install_time">Nach Installationszeit sortieren</string>
-    <string name="sort_by_install_time_reverse">Nach Installationszeit sortieren (umgekehrt)</string>
     <string name="sort_by_update_time">Nach Aktualisierungszeit sortieren</string>
-    <string name="sort_by_update_time_reverse">Nach Aktualisierungszeit sortieren (umgekehrt)</string>
     <string name="settings_group_theme">Theme</string>
     <string name="menu_show_system_apps">System-Apps</string>
     <string name="menu_sort">Sortieren…</string>
@@ -138,7 +134,7 @@
     <string name="menu_restore">Wiederherstellen</string>
     <string name="xposed_module_updated_notification_content">%s wurde aktualisiert</string>
     <string name="module_repo">Module Repo</string>
-    <string name="module_repo_summary">Modul-Repository (Alpha)</string>
+    <string name="module_repo_summary">Modul-Repository (Beta)</string>
     <string name="module_readme">Liesmich</string>
     <string name="module_releases">Veröffentlichungen</string>
     <string name="module_information">Info</string>

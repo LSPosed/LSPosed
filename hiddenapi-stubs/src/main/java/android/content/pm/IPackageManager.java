@@ -12,6 +12,10 @@ import java.util.List;
 
 public interface IPackageManager extends IInterface {
 
+    boolean isPackageAvailable(String packageName, int userId) throws RemoteException;
+
+    boolean getApplicationHiddenSettingAsUser(String packageName, int userId) throws RemoteException;
+
     ApplicationInfo getApplicationInfo(String packageName, int flags, int userId)
             throws RemoteException;
 

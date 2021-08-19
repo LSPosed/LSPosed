@@ -83,7 +83,6 @@ public class AppListFragment extends BaseFragment {
         binding.recyclerView.setAdapter(scopeAdapter);
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManagerFix(requireActivity()));
-        RecyclerViewKt.addFastScroller(binding.recyclerView, binding.recyclerView);
         RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
         binding.swipeRefreshLayout.setOnRefreshListener(() -> scopeAdapter.refresh(true));
 

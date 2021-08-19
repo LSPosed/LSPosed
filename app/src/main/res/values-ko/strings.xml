@@ -21,8 +21,8 @@
 <resources>
     <!-- MainActivity -->
     <string name="info">정보</string>
-    <string name="Install">설치</string>
-    <string name="InstallDetail">LSPosed를 설치하려면 탭</string>
+    <string name="install">설치</string>
+    <string name="install_summary">LSPosed를 설치하려면 탭</string>
     <string name="Modules">모듈</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">모듈 %d개가 활성화됨</item>
@@ -32,7 +32,7 @@
     <string name="Settings">설정</string>
     <string name="About">About</string>
     <string name="module_repo">저장소</string>
-    <string name="module_repo_summary">모듈 저장소 (Alpha)</string>
+    <string name="module_repo_summary">모듈 저장소 (Beta)</string>
     <string name="about_view_source_code"><![CDATA[%1$s에서 소스 코드 보기<br/>%2$s 채널에 가입하십시오.]]></string>
     <string name="about_translators">번역가: %s</string>
 
@@ -53,8 +53,8 @@
     <!-- LogsActivity -->
     <string name="menuSend">전송</string>
     <string name="menuSaveToSd">저장</string>
-    <string name="nav_item_logs">상세 로그</string>
-    <string name="nav_item_logs_err">모듈 로그</string>
+    <string name="nav_item_logs_lsp">상세 로그</string>
+    <string name="nav_item_logs_module">모듈 로그</string>
     <string name="dont_show_again">다시 표시 안 함</string>
     <string name="logs_save_failed">저장 실패:</string>
     <string name="menuClearLog">로그 지우기</string>
@@ -100,13 +100,10 @@
     <string name="compile_failed">최적화에 실패했거나 반환 값이 비어 있습니다.</string>
     <string name="compile_failed_with_info">최적화 실패: </string>
     <string name="sort_by_name">응용 프로그램 이름별로 정렬</string>
-    <string name="sort_by_name_reverse">응용 프로그램 이름별로 정렬 (역순)</string>
     <string name="sort_by_package_name">패키지 이름별로 정렬</string>
-    <string name="sort_by_package_name_reverse">패키지 이름별로 정렬 (역순)</string>
     <string name="sort_by_install_time">설치 시간별로 정렬</string>
-    <string name="sort_by_install_time_reverse">설치 시간별로 정렬 (역순)</string>
     <string name="sort_by_update_time">업데이트 시간별로 정렬</string>
-    <string name="sort_by_update_time_reverse">업데이트 시간별로 정렬 (역순)</string>
+    <string name="sort_reverse">역순</string>
     <string name="menu_show_system_apps">시스템 앱</string>
     <string name="menu_sort">정렬…</string>
     <string name="enable_module">모듈 활성화</string>
@@ -180,7 +177,7 @@
     <string name="lsposed_not_active">LSPosed가 현재 설치되어 있지 않거나 활성화되어 있지 않습니다.</string>
     <string name="verbose_log_not_avaliable">상세 로그를 사용할 수 없습니다. 재부팅하지 않고 방금 사용하도록 설정한 경우 재부팅 후 다시 시도하십시오.</string>
     <string name="NotInstall">설치되지 않음</string>
-    <string name="NotInstallDetail">LSPosed가 설치되지 않음</string>
+    <string name="not_install_summary">LSPosed가 설치되지 않음</string>
     <string name="translators"><![CDATA[<a href="https://github.com/green1052">green1052</a>]]></string>
     <string name="copy_toast_msg">복사됨</string>
     <string name="list_empty">¯\\\\_(ツ)_\/¯\n아무것도 없음</string>

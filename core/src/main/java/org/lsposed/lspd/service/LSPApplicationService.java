@@ -21,14 +21,18 @@ package org.lsposed.lspd.service;
 
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.util.Log;
 import android.util.Pair;
 
+import org.lsposed.lspd.models.Module;
+import org.lsposed.lspd.util.InstallerVerifier;
 import org.lsposed.lspd.util.Utils;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -69,7 +73,7 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
     }
 
     @Override
-    public Map<String, String> getModulesList(String processName) throws RemoteException {
+    public List<Module> getModulesList(String processName) throws RemoteException {
         ensureRegistered();
         int callingUid = getCallingUid();
         if (callingUid == 1000 && processName.equals("android")) {
@@ -91,26 +95,34 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
     }
 
     @Override
-    public IBinder requestModuleBinder() throws RemoteException {
+    public Bundle requestRemotePreference(String packageName, int userId, IBinder callback) throws RemoteException {
         ensureRegistered();
-        if (ConfigManager.getInstance().isModule(getCallingUid())) {
-            ConfigManager.getInstance().ensureModulePrefsPermission(getCallingUid());
-            return ServiceManager.getModuleService();
-        }
         return null;
     }
 
     @Override
-    public IBinder requestManagerBinder(String packageName) throws RemoteException {
+    public IBinder requestModuleBinder(String name) throws RemoteException {
         ensureRegistered();
-        if (ConfigManager.getInstance().isManager(getCallingUid()) && ConfigManager.getInstance().isManager(packageName)) {
+        if (ConfigManager.getInstance().isModule(getCallingUid(), name)) {
+            ConfigManager.getInstance().ensureModulePrefsPermission(getCallingUid(), name);
+            return ServiceManager.getModuleService(name);
+        } else return null;
+    }
+
+    @Override
+    public boolean requestManagerBinder(String packageName, String path, List<IBinder> binder) throws RemoteException {
+        ensureRegistered();
+        if (ConfigManager.getInstance().isManager(getCallingUid()) &&
+                ConfigManager.getInstance().isManager(packageName) &&
+                InstallerVerifier.verifyInstallerSignature(path)) {
             var service = ServiceManager.getManagerService();
             if (Utils.isMIUI) {
                 service.new ManagerGuard(handles.get(getCallingPid()));
             }
-            return service;
+            binder.add(service);
+            return false;
         }
-        return null;
+        return ConfigManager.getInstance().shouldBlock(packageName);
     }
 
     public boolean hasRegister(int uid, int pid) {

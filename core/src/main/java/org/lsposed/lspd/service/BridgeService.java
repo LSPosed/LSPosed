@@ -27,7 +27,9 @@ import android.app.ActivityThread;
 import android.app.IApplicationThread;
 import android.content.Context;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Parcel;
 import android.os.Process;
 import android.os.RemoteException;
@@ -73,7 +75,7 @@ public class BridgeService {
             Log.i(TAG, "service " + SERVICE_NAME + " is dead. ");
 
             try {
-                @SuppressWarnings("JavaReflectionMemberAccess")
+                //noinspection JavaReflectionMemberAccess
                 Field field = ServiceManager.class.getDeclaredField("sServiceManager");
                 field.setAccessible(true);
                 field.set(null, null);
@@ -94,7 +96,7 @@ public class BridgeService {
             bridgeService.unlinkToDeath(this, 0);
             bridgeService = null;
             listener.onSystemServerDied();
-            new Thread(()-> sendToBridge(serviceBinder, true)).start();
+            new Handler(Looper.getMainLooper()).post(() -> sendToBridge(serviceBinder, true));
         }
     };
 
@@ -121,7 +123,7 @@ public class BridgeService {
     private static Listener listener;
 
     // For service
-    private static void sendToBridge(IBinder binder, boolean isRestart) {
+    private static synchronized void sendToBridge(IBinder binder, boolean isRestart) {
         do {
             bridgeService = ServiceManager.getService(SERVICE_NAME);
             if (bridgeService != null && bridgeService.pingBinder()) {
@@ -160,6 +162,7 @@ public class BridgeService {
                 data.writeInt(ACTION.ACTION_SEND_BINDER.ordinal());
                 Log.v(TAG, "binder " + binder.toString());
                 data.writeStrongBinder(binder);
+                if (bridgeService == null) break;
                 res = bridgeService.transact(TRANSACTION_CODE, data, reply, 0);
                 reply.readException();
             } catch (Throwable e) {

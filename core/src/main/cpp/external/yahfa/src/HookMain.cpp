@@ -141,7 +141,7 @@ namespace yahfa {
     }
 
     void *getArtMethod(JNIEnv *env, jobject jmethod) {
-        if (jmethod == nullptr) {
+        if (jmethod == nullptr || fieldArtMethod == nullptr) {
             return nullptr;
         } else {
             return (void *) env->GetLongField(jmethod, fieldArtMethod);
@@ -149,9 +149,7 @@ namespace yahfa {
     }
 
     uint32_t getAccessFlags(void *art_method) {
-
         return read32((char *) art_method + OFFSET_access_flags_in_ArtMethod);
-        // On API 29 whether to use the fast path or not is cached in the ART method structure
     }
 
     void setAccessFlags(void *art_method, uint32_t access_flags) {

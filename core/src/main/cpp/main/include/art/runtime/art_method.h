@@ -31,18 +31,18 @@
 namespace art {
     namespace art_method {
         CREATE_MEM_FUNC_SYMBOL_ENTRY(std::string, PrettyMethod, void *thiz, bool with_signature) {
-            if (UNLIKELY(thiz == nullptr))
+            if (thiz == nullptr) [[unlikely]]
                 return "null";
-            if (LIKELY(PrettyMethodSym))
+            if (PrettyMethodSym) [[likely]]
                 return PrettyMethodSym(thiz, with_signature);
             else return "null sym";
         }
 
-        inline static std::string PrettyMethod(void *thiz) {
+        inline std::string PrettyMethod(void *thiz) {
             return PrettyMethod(thiz, true);
         }
 
-        static void Setup(const SandHook::ElfImg &handle) {
+        inline void Setup(const SandHook::ElfImg &handle) {
             RETRIEVE_MEM_FUNC_SYMBOL(PrettyMethod, "_ZN3art9ArtMethod12PrettyMethodEb");
         }
     }

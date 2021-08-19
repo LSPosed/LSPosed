@@ -52,23 +52,20 @@ public class BaseActivity extends MaterialActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (!BuildConfig.DEBUG) {
-            // make sure the versions are consistent
-            String coreVersionStr = ConfigManager.getXposedVersionName();
-            if (coreVersionStr != null) {
-                if (!BuildConfig.VERSION_NAME.equals(coreVersionStr)) {
-                    new AlertDialog.Builder(this)
-                            .setMessage(R.string.outdated_manager)
-                            .setPositiveButton(android.R.string.ok, (dialog, id) -> {
-                                NavUtil.startURL(this, getString(R.string.about_source));
-                                finish();
-                            })
-                            .setCancelable(false)
-                            .show();
-                }
-            }
-        }
+        // make sure the versions are consistent
+        if (BuildConfig.DEBUG) return;
+        if (!ConfigManager.isBinderAlive()) return;
+        var version = ConfigManager.getXposedVersionName();
+        if (BuildConfig.VERSION_NAME.equals(version)) return;
+        new AlertDialog.Builder(this)
+                .setMessage(BuildConfig.VERSION_NAME.compareTo(version) > 0 ?
+                        R.string.outdated_core : R.string.outdated_manager)
+                .setPositiveButton(android.R.string.ok, (dialog, id) -> {
+                    NavUtil.startURL(this, getString(R.string.about_source));
+                    finish();
+                })
+                .setCancelable(false)
+                .show();
     }
 
     @Override

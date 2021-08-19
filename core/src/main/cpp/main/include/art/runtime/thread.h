@@ -34,7 +34,7 @@ namespace art {
         }
 
         CREATE_FUNC_SYMBOL_ENTRY(void *, CurrentFromGdb) {
-            if (LIKELY(CurrentFromGdbSym))
+            if (CurrentFromGdbSym) [[likely]]
                 return CurrentFromGdbSym();
             else
                 return nullptr;
@@ -43,11 +43,11 @@ namespace art {
     public:
         Thread(void *thiz) : HookedObject(thiz) {}
 
-        static Thread Current() {
+        inline static Thread Current() {
             return Thread(CurrentFromGdb());
         }
 
-        static void Setup(const SandHook::ElfImg &handle) {
+        inline static void Setup(const SandHook::ElfImg &handle) {
             RETRIEVE_MEM_FUNC_SYMBOL(DecodeJObject,
                                      "_ZNK3art6Thread13DecodeJObjectEP8_jobject");
             RETRIEVE_FUNC_SYMBOL(CurrentFromGdb,
@@ -55,7 +55,7 @@ namespace art {
         }
 
         void *DecodeJObject(jobject obj) {
-            if (LIKELY(thiz_ && DecodeJObjectSym)) {
+            if (thiz_ && DecodeJObjectSym) [[likely]] {
                 return DecodeJObject(thiz_, obj).data;
             }
             return nullptr;

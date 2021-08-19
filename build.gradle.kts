@@ -25,8 +25,8 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:7.0.0-beta04")
-        classpath("org.eclipse.jgit:org.eclipse.jgit:5.10.0.202012080955-r")
+        classpath("com.android.tools.build:gradle:7.0.0")
+        classpath("org.eclipse.jgit:org.eclipse.jgit:5.12.0.202106070339-r")
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.3.5")
     }
 }
@@ -37,23 +37,15 @@ val commitCount = Git(repo).log().add(refId).call().count()
 
 val defaultManagerPackageName by extra("org.lsposed.manager")
 val verCode by extra(commitCount + 4200)
-val verName by extra("v1.4.5")
-val androidTargetSdkVersion by extra(30)
+val verName by extra("v1.5.1")
+val androidTargetSdkVersion by extra(31)
 val androidMinSdkVersion by extra(27)
-val androidBuildToolsVersion by extra("30.0.3")
-val androidCompileSdkVersion by extra("android-S")
-val androidCompileNdkVersion by extra("22.1.7171670")
+val androidBuildToolsVersion by extra("31.0.0")
+val androidCompileSdkVersion by extra(31)
+val androidCompileNdkVersion by extra("23.0.7599858")
 val androidSourceCompatibility by extra(JavaVersion.VERSION_11)
 val androidTargetCompatibility by extra(JavaVersion.VERSION_11)
 val apiCode by extra(93)
-
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-        maven("https://jcenter.bintray.com")
-    }
-}
 
 tasks.register("Delete", Delete::class) {
     delete(rootProject.buildDir)

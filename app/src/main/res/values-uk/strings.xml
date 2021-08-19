@@ -20,8 +20,8 @@
 
 <resources>
     <string name="About">Про модифікацію</string>
-    <string name="Install">Установити</string>
-    <string name="InstallDetail">Натисніть для встановлення LSPosed</string>
+    <string name="install">Установити</string>
+    <string name="install_summary">Натисніть для встановлення LSPosed</string>
     <string name="Logs">Звіти</string>
     <string name="Modules">Модулі</string>
     <string name="Settings">Налаштування</string>
@@ -61,8 +61,8 @@
     <string name="module_no_ui">Цей модуль не надає інтерфейсу користувача</string>
     <string name="module_settings">Налаштування модуля</string>
     <string name="module_uninstall">Видалити</string>
-    <string name="nav_item_logs">Детальні звіти</string>
-    <string name="nav_item_logs_err">Звіти модулів</string>
+    <string name="nav_item_logs_lsp">Детальні звіти</string>
+    <string name="nav_item_logs_module">Звіти модулів</string>
     <string name="no_min_version_specified">Цей модуль не визначає потрібну йому версію LSP.</string>
     <string name="no_scope_selected">Ви не вибрали жодної програми. Продовжити?</string>
     <string name="no_scope_selected_has_recommended">Ви не вибрали жодної програми. Вибрати рекомендовані програми?</string>
@@ -88,13 +88,9 @@
     <string name="settings_restore_success">Відновлення закінчено!</string>
     <string name="settings_restoring">Відновлення…</string>
     <string name="sort_by_install_time">Сортувати за часом встановлення</string>
-    <string name="sort_by_install_time_reverse">Сортувати за часом встановлення (зворотній)</string>
     <string name="sort_by_name">Сортувати за назвою програми</string>
-    <string name="sort_by_name_reverse">Сортувати за назвою програми (зворотній)</string>
     <string name="sort_by_package_name">Сортувати за назвою пакета</string>
-    <string name="sort_by_package_name_reverse">Сортувати за назвою пакету (зворотній)</string>
     <string name="sort_by_update_time">Сортувати за часом оновлення</string>
-    <string name="sort_by_update_time_reverse">Сортувати за часом оновлення (зворотній)</string>
     <string name="use_recommended">Рекомендовано</string>
     <string name="use_recommended_message">Вибрати рекомендовані програми?</string>
     <string name="warning_installed_on_external_storage">Цей модуль не можна завантажити, оскільки він встановлений на SD-карті, перенесіть його у внутрішню пам’ять</string>
@@ -102,7 +98,7 @@
     <string name="warning_xposed_min_version">Цей модуль вимагає новішої версії LSP (%d), тому його неможливо активувати</string>
     <string name="xposed_module_updated_notification_title">Модуль LSPosed оновлено</string>
     <string name="module_repo">Репозиторій</string>
-    <string name="module_repo_summary">Репозиторій модулів</string>
+    <string name="module_repo_summary">Репозиторій модулів (Бета)</string>
     <string name="module_readme">Readme</string>
     <string name="module_releases">Релізи</string>
     <string name="module_information">Інформація</string>

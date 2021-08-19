@@ -28,7 +28,7 @@ namespace art {
     private:
         inline static Runtime *instance_;
         CREATE_MEM_FUNC_SYMBOL_ENTRY(void, SetJavaDebuggable, void *thiz, bool value) {
-            if (LIKELY(SetJavaDebuggableSym)) {
+            if (SetJavaDebuggableSym) [[likely]] {
                 SetJavaDebuggableSym(thiz, value);
             }
         }
@@ -36,7 +36,7 @@ namespace art {
     public:
         Runtime(void *thiz) : HookedObject(thiz) {}
 
-        static Runtime *Current() {
+        inline static Runtime *Current() {
             return instance_;
         }
 
@@ -45,7 +45,7 @@ namespace art {
         }
 
         // @ApiSensitive(Level.LOW)
-        static void Setup(const SandHook::ElfImg &handle) {
+        inline static void Setup(const SandHook::ElfImg &handle) {
             RETRIEVE_FIELD_SYMBOL(instance, "_ZN3art7Runtime9instance_E");
             RETRIEVE_MEM_FUNC_SYMBOL(SetJavaDebuggable, "_ZN3art7Runtime17SetJavaDebuggableEb");
             void *thiz = *reinterpret_cast<void **>(instance);

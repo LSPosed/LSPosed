@@ -20,27 +20,33 @@
 
 package org.lsposed.lspd.hooker;
 
-import org.lsposed.lspd.core.Main;
+import android.os.Build;
+
 import org.lsposed.lspd.deopt.PrebuiltMethodsDeopter;
 import org.lsposed.lspd.util.Hookers;
 
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XposedHelpers;
 
 // system_server initialization
-// ed: only support sdk >= 21 for now
 public class SystemMainHooker extends XC_MethodHook {
 
     public static volatile ClassLoader systemServerCL;
 
     @Override
-    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+    protected void afterHookedMethod(MethodHookParam param) {
         Hookers.logD("ActivityThread#systemMain() starts");
         try {
             // get system_server classLoader
             systemServerCL = Thread.currentThread().getContextClassLoader();
             // deopt methods in SYSTEMSERVERCLASSPATH
             PrebuiltMethodsDeopter.deoptSystemServerMethods(systemServerCL);
-            Main.startSystemServerHook();
+            var sbsHooker = new StartBootstrapServicesHooker();
+            Object[] paramTypesAndCallback = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R ?
+                    new Object[]{"com.android.server.utils.TimingsTraceAndSlog", sbsHooker} :
+                    new Object[]{sbsHooker};
+            XposedHelpers.findAndHookMethod("com.android.server.SystemServer",
+                    systemServerCL, "startBootstrapServices", paramTypesAndCallback);
         } catch (Throwable t) {
             Hookers.logE("error when hooking systemMain", t);
         }

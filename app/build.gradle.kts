@@ -24,28 +24,14 @@ import java.nio.file.Paths
 import java.time.Instant
 
 plugins {
-    id("org.gradle.idea")
     id("com.android.application")
     id("androidx.navigation.safeargs")
-}
-
-// workaround for AS.
-val dataBinding = file("${project.buildDir}/generated/data_binding_base_class_source_out/debug/out")
-sourceSets {
-    create("dataBinding") {
-        java.srcDir(dataBinding)
-    }
-}
-idea {
-    module {
-        generatedSourceDirs.add(dataBinding)
-    }
 }
 
 val androidTargetSdkVersion: Int by rootProject.extra
 val androidMinSdkVersion: Int by rootProject.extra
 val androidBuildToolsVersion: String by rootProject.extra
-val androidCompileSdkVersion: String by rootProject.extra
+val androidCompileSdkVersion: Int by rootProject.extra
 val androidCompileNdkVersion: String by rootProject.extra
 val androidSourceCompatibility: JavaVersion by rootProject.extra
 val androidTargetCompatibility: JavaVersion by rootProject.extra
@@ -59,7 +45,7 @@ val androidKeyAlias: String? by rootProject
 val androidKeyPassword: String? by rootProject
 
 android {
-    compileSdkPreview = androidCompileSdkVersion
+    compileSdk = androidCompileSdkVersion
     ndkVersion = androidCompileNdkVersion
     buildToolsVersion = androidBuildToolsVersion
 
@@ -76,7 +62,7 @@ android {
         versionName = verName
         resourceConfigurations += arrayOf(
             "en", "zh-rCN", "zh-rTW", "zh-rHK", "ru", "uk", "nl", "ko", "fr", "de",
-            "it", "pt", "es",
+            "it", "pt", "es", "jp",
         )
         buildConfigField("long", "BUILD_TIME", Instant.now().epochSecond.toString())
     }
@@ -147,19 +133,12 @@ val optimizeReleaseRes = task("optimizeReleaseRes").doLast {
         androidComponents.sdkComponents.sdkDirectory.get().asFile,
         "build-tools/${androidBuildToolsVersion}/aapt2"
     )
-    val mapping = Paths.get(
-        project.buildDir.path,
-        "outputs",
-        "mapping",
-        "release",
-        "shortening.txt"
-    )
     val zip = Paths.get(
         project.buildDir.path,
         "intermediates",
-        "shrunk_processed_res",
+        "optimized_processed_res",
         "release",
-        "resources-release-stripped.ap_"
+        "resources-release-optimize.ap_"
     )
     val optimized = File("${zip}.opt")
     val cmd = exec {
@@ -167,8 +146,6 @@ val optimizeReleaseRes = task("optimizeReleaseRes").doLast {
             aapt2, "optimize",
             "--collapse-resource-names",
             "--enable-sparse-encoding",
-            "--shorten-resource-paths",
-            "--resource-path-shortening-map", mapping,
             "-o", optimized,
             zip
         )
@@ -181,7 +158,7 @@ val optimizeReleaseRes = task("optimizeReleaseRes").doLast {
 }
 
 tasks.whenTaskAdded {
-    if (name == "shrinkReleaseRes") {
+    if (name == "optimizeReleaseResources") {
         finalizedBy(optimizeReleaseRes)
     }
 }
@@ -191,19 +168,18 @@ dependencies {
     val okhttpVersion = "4.9.1"
     val navVersion = "2.3.5"
     annotationProcessor("com.github.bumptech.glide:compiler:$glideVersion")
-    implementation("androidx.activity:activity:1.2.3")
+    implementation("androidx.activity:activity:1.3.1")
     implementation("androidx.browser:browser:1.3.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.0.4")
-    implementation("androidx.core:core:1.5.0")
-    implementation("androidx.fragment:fragment:1.3.5")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.0")
+    implementation("androidx.core:core:1.6.0")
+    implementation("androidx.fragment:fragment:1.3.6")
     implementation("androidx.navigation:navigation-fragment:$navVersion")
     implementation("androidx.navigation:navigation-ui:$navVersion")
     implementation("androidx.recyclerview:recyclerview:1.2.1")
+    implementation("androidx.slidingpanelayout:slidingpanelayout:1.2.0-alpha03")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
-    implementation("com.caverock:androidsvg-aar:1.4")
     implementation("com.github.bumptech.glide:glide:$glideVersion")
-    implementation("com.github.bumptech.glide:okhttp3-integration:$glideVersion")
-    implementation("com.google.android.material:material:1.3.0")
+    implementation("com.google.android.material:material:1.4.0")
     implementation("com.google.code.gson:gson:2.8.7")
     implementation("com.takisoft.preferencex:preferencex:1.1.0")
     implementation("com.takisoft.preferencex:preferencex-colorpicker:1.1.0")
@@ -219,8 +195,7 @@ dependencies {
     implementation("dev.rikka.rikkax.widget:borderview:1.0.1")
     implementation("dev.rikka.rikkax.widget:switchbar:1.0.2")
     implementation("dev.rikka.rikkax.layoutinflater:layoutinflater:1.0.1")
-    implementation("me.zhanghai.android.appiconloader:appiconloader-glide:1.3.1")
-    implementation("me.zhanghai.android.fastscroll:library:1.1.6")
+    implementation("me.zhanghai.android.appiconloader:appiconloader:1.3.1")
     implementation("org.lsposed.hiddenapibypass:hiddenapibypass:2.0")
     implementation(project(":manager-service"))
 }

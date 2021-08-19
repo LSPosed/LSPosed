@@ -24,21 +24,26 @@ import android.ddm.DdmHandleAppName;
 import android.os.IBinder;
 import android.os.IServiceManager;
 import android.os.Looper;
+import android.os.Process;
 import android.util.Log;
 
 import com.android.internal.os.BinderInternal;
 
 import org.lsposed.lspd.BuildConfig;
 
+import java.io.File;
+import java.util.concurrent.ConcurrentHashMap;
+
 import hidden.HiddenApiBridge;
 
 public class ServiceManager {
     private static LSPosedService mainService = null;
-    private static LSPModuleService moduleService = null;
+    final private static ConcurrentHashMap<String, LSPModuleService> moduleServices = new ConcurrentHashMap<>();
     private static LSPApplicationService applicationService = null;
     private static LSPManagerService managerService = null;
     private static LSPSystemServerService systemServerService = null;
     public static final String TAG = "LSPosedService";
+    private static final File globalNamespace = new File("/proc/1/root");
 
     private static void waitSystemService(String name) {
         while (android.os.ServiceManager.getService(name) == null) {
@@ -60,9 +65,6 @@ public class ServiceManager {
         if (!ConfigManager.getInstance().tryLock()) System.exit(0);
 
         for (String arg : args) {
-            if (arg.equals("--debug")) {
-                DdmHandleAppName.setAppName("lspd", 0);
-            }
             if (arg.equals("--from-service")) {
                 Log.w(TAG, "LSPosed daemon is not started properly. Try for a late start...");
             }
@@ -75,16 +77,16 @@ public class ServiceManager {
             System.exit(1);
         });
 
+        Process.setThreadPriority(Process.THREAD_PRIORITY_FOREGROUND);
         Looper.prepareMainLooper();
         mainService = new LSPosedService();
-        moduleService = new LSPModuleService();
         applicationService = new LSPApplicationService();
         managerService = new LSPManagerService();
         systemServerService = new LSPSystemServerService();
 
         systemServerService.putBinderForSystemServer();
 
-        android.os.Process.killProcess(android.system.Os.getppid());
+        DdmHandleAppName.setAppName("lspd", 0);
 
         waitSystemService("package");
         waitSystemService("activity");
@@ -113,25 +115,12 @@ public class ServiceManager {
             }
         });
 
-        try {
-            ConfigManager.grantManagerPermission();
-        } catch (Throwable e) {
-            Log.e(TAG, Log.getStackTraceString(e));
-        }
-
-        //noinspection InfiniteLoopStatement
-        while (true) {
-            try {
-                Looper.loop();
-            } catch (Throwable e) {
-                Log.i(TAG, "server exited with " + Log.getStackTraceString(e));
-                Log.i(TAG, "restarting");
-            }
-        }
+        Looper.loop();
+        throw new RuntimeException("Main thread loop unexpectedly exited");
     }
 
-    public static LSPModuleService getModuleService() {
-        return moduleService;
+    public static LSPModuleService getModuleService(String module) {
+        return moduleServices.computeIfAbsent(module, LSPModuleService::new);
     }
 
     public static LSPApplicationService getApplicationService() {
@@ -150,5 +139,23 @@ public class ServiceManager {
 
     public static boolean systemServerRequested() {
         return systemServerService.systemServerRequested();
+    }
+
+    public static File toGlobalNamespace(File file) {
+        return new File(globalNamespace, file.getAbsolutePath());
+    }
+
+    public static File toGlobalNamespace(String path) {
+        if (path == null) return null;
+        if (path.startsWith("/")) return new File(globalNamespace, path);
+        else return toGlobalNamespace(new File(path));
+    }
+
+    public static boolean existsInGlobalNamespace(File file) {
+        return toGlobalNamespace(file).exists();
+    }
+
+    public static boolean existsInGlobalNamespace(String path) {
+        return toGlobalNamespace(path).exists();
     }
 }

@@ -1,15 +1,19 @@
 package org.lsposed.lspd.service;
 
+import org.lsposed.lspd.models.Module;
+
 interface ILSPApplicationService {
-    IBinder requestModuleBinder() = 2;
+    IBinder requestModuleBinder(String name);
 
-    IBinder requestManagerBinder(String packageName) = 3;
+    boolean requestManagerBinder(String packageName, String path, out List<IBinder> binder);
 
-    boolean isResourcesHookEnabled() = 5;
+    boolean isResourcesHookEnabled();
 
-    Map getModulesList(String processName) = 6;
+    List<Module> getModulesList(String processName);
 
-    String getPrefsPath(String packageName) = 7;
+    String getPrefsPath(String packageName);
 
-    ParcelFileDescriptor getModuleLogger() = 9;
+    ParcelFileDescriptor getModuleLogger();
+
+    Bundle requestRemotePreference(String packageName, int userId, IBinder callback);
 }

@@ -31,7 +31,7 @@ namespace art {
 
         CREATE_FUNC_SYMBOL_ENTRY(void, DexFile_setTrusted, JNIEnv *env, jclass clazz,
                                  jobject j_cookie) {
-            if (LIKELY(DexFile_setTrustedSym != nullptr)) {
+            if (DexFile_setTrustedSym != nullptr) [[likely]] {
                 Runtime::Current()->SetJavaDebuggable(true);
                 DexFile_setTrustedSym(env, clazz, j_cookie);
                 Runtime::Current()->SetJavaDebuggable(false);
@@ -115,7 +115,7 @@ namespace art {
                 }
         );
 
-        static void DisableHiddenApi([[maybe_unused]] const SandHook::ElfImg &handle) {
+        inline void DisableHiddenApi([[maybe_unused]] const SandHook::ElfImg &handle) {
 
             const int api_level = lspd::GetAndroidApiLevel();
             if (api_level < __ANDROID_API_P__) {

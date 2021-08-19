@@ -1,6 +1,6 @@
 [submodule "service"]
 	path = service
-	url = https://github.com/Xposed-Modules-Repo/XposedService.git
+	url = https://github.com/libxposed/XposedService.git
 [submodule "core/src/main/cpp/external/DexBuilder"]
 	path = core/src/main/cpp/external/DexBuilder
 	url = https://github.com/LSPosed/DexBuilder.git

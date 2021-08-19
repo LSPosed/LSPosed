@@ -32,7 +32,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 public class StartBootstrapServicesHooker extends XC_MethodHook {
 
     @Override
-    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+    protected void beforeHookedMethod(MethodHookParam param) {
         logD("SystemServer#startBootstrapServices() starts");
 
         try {

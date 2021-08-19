@@ -19,9 +19,7 @@
 
 package org.lsposed.manager.ui.fragment;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -41,7 +39,6 @@ import androidx.preference.SwitchPreference;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.takisoft.preferencex.PreferenceCategory;
 import com.takisoft.preferencex.PreferenceFragmentCompat;
 
 import org.lsposed.manager.App;
@@ -53,7 +50,7 @@ import org.lsposed.manager.ui.activity.MainActivity;
 import org.lsposed.manager.util.BackupUtils;
 import org.lsposed.manager.util.theme.ThemeUtil;
 
-import java.util.Calendar;
+import java.time.LocalDateTime;
 import java.util.Locale;
 
 import rikka.core.util.ResourceUtils;
@@ -75,14 +72,6 @@ public class SettingsFragment extends BaseFragment {
                     .add(R.id.container, new PreferenceFragment()).commit();
         }
         return binding.getRoot();
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        if (ConfigManager.getXposedVersionName() == null) {
-            Snackbar.make(binding.snackbar, R.string.lsposed_not_active, Snackbar.LENGTH_LONG).show();
-        }
     }
 
     @Override
@@ -152,20 +141,20 @@ public class SettingsFragment extends BaseFragment {
         public void onCreatePreferencesFix(Bundle savedInstanceState, String rootKey) {
             addPreferencesFromResource(R.xml.prefs);
 
-            boolean installed = ConfigManager.getXposedVersionName() != null;
+            boolean installed = ConfigManager.isBinderAlive();
             SwitchPreference prefVerboseLogs = findPreference("disable_verbose_log");
             if (prefVerboseLogs != null) {
                 if (requireActivity().getApplicationInfo().uid / 100000 != 0) {
                     prefVerboseLogs.setVisible(false);
                 } else {
                     prefVerboseLogs.setEnabled(installed);
-                    prefVerboseLogs.setChecked(!ConfigManager.isVerboseLogEnabled());
+                    prefVerboseLogs.setChecked(!installed || !ConfigManager.isVerboseLogEnabled());
                     prefVerboseLogs.setOnPreferenceChangeListener((preference, newValue) -> {
                         boolean result = ConfigManager.setVerboseLogEnabled(!(boolean) newValue);
                         SettingsFragment fragment = (SettingsFragment) getParentFragment();
                         if (result && fragment != null) {
                             Snackbar.make(fragment.binding.snackbar, R.string.reboot_required, Snackbar.LENGTH_SHORT)
-                                    .setAction(R.string.reboot, v -> ConfigManager.reboot(false, null, false))
+                                    .setAction(R.string.reboot, v -> ConfigManager.reboot(false))
                                     .show();
                         }
                         return result;
@@ -176,7 +165,7 @@ public class SettingsFragment extends BaseFragment {
             SwitchPreference prefEnableResources = findPreference("enable_resources");
             if (prefEnableResources != null) {
                 prefEnableResources.setEnabled(installed);
-                prefEnableResources.setChecked(ConfigManager.isResourceHookEnabled());
+                prefEnableResources.setChecked(installed && ConfigManager.isResourceHookEnabled());
                 prefEnableResources.setOnPreferenceChangeListener((preference, newValue) -> ConfigManager.setResourceHookEnabled((boolean) newValue));
             }
 
@@ -184,12 +173,9 @@ public class SettingsFragment extends BaseFragment {
             if (backup != null) {
                 backup.setEnabled(installed);
                 backup.setOnPreferenceClickListener(preference -> {
-                    Calendar now = Calendar.getInstance();
-                    backupLauncher.launch(String.format(Locale.US,
-                            "LSPosed_%04d%02d%02d_%02d%02d%02d.lsp",
-                            now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1,
-                            now.get(Calendar.DAY_OF_MONTH), now.get(Calendar.HOUR_OF_DAY),
-                            now.get(Calendar.MINUTE), now.get(Calendar.SECOND)));
+                    LocalDateTime now = LocalDateTime.now();
+                    backupLauncher.launch(String.format(Locale.ROOT,
+                            "LSPosed_%s.lsp", now.toString()));
                     return true;
                 });
             }
@@ -239,16 +225,15 @@ public class SettingsFragment extends BaseFragment {
                 });
             }
 
-            PreferenceCategory prefGroupSystem = findPreference("settings_group_system");
             SwitchPreference prefShowHiddenIcons = findPreference("show_hidden_icon_apps_enabled");
-            if (prefGroupSystem != null && prefShowHiddenIcons != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
-                    && requireActivity().checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) == PackageManager.PERMISSION_GRANTED) {
-                prefGroupSystem.setVisible(true);
-                prefShowHiddenIcons.setVisible(true);
+            if (prefShowHiddenIcons != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                if (ConfigManager.isBinderAlive()) {
+                    prefShowHiddenIcons.setEnabled(true);
+                    prefShowHiddenIcons.setOnPreferenceChangeListener((preference, newValue) ->
+                            ConfigManager.setHiddenIcon(!(boolean) newValue));
+                }
                 prefShowHiddenIcons.setChecked(Settings.Global.getInt(
                         requireActivity().getContentResolver(), "show_hidden_icon_apps_enabled", 1) != 0);
-                prefShowHiddenIcons.setOnPreferenceChangeListener((preference, newValue) -> Settings.Global.putInt(requireActivity().getContentResolver(),
-                        "show_hidden_icon_apps_enabled", (boolean) newValue ? 1 : 0));
             }
 
             SwitchPreference prefFollowSystemAccent = findPreference("follow_system_accent");

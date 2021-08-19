@@ -58,8 +58,8 @@ public final class ModuleUtil {
     public static synchronized ModuleUtil getInstance() {
         if (instance == null) {
             instance = new ModuleUtil();
+            instance.reloadInstalledModules();
         }
-        instance.reloadInstalledModules();
         return instance;
     }
 
@@ -106,12 +106,10 @@ public final class ModuleUtil {
 
         try {
             pkg = ConfigManager.getPackageInfo(packageName, PackageManager.GET_META_DATA, userId);
-            if (pkg == null) {
-                throw new NameNotFoundException();
-            }
         } catch (NameNotFoundException e) {
             InstalledModule old = installedModules.remove(Pair.create(packageName, userId));
             if (old != null) {
+                enabledModules.remove(packageName);
                 for (ModuleListener listener : listeners) {
                     listener.onSingleInstalledModuleReloaded();
                 }

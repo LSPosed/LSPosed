@@ -40,7 +40,6 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles("proguard-rules.pro")
         }
     }
 
@@ -50,8 +49,6 @@ android {
     }
 }
 
-configurations.all {
-    resolutionStrategy {
-        exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib")
-    }
+dependencies {
+    api(project(":interface"))
 }

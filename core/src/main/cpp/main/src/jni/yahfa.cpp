@@ -60,9 +60,9 @@ namespace lspd {
 
     LSP_DEF_NATIVE_METHOD(jclass, Yahfa, buildHooker, jobject app_class_loader, jchar return_class,
                           jcharArray classes, jstring method_name) {
-        static auto in_memory_classloader = JNI_NewGlobalRef(env, JNI_FindClass(env,
+        static auto *kInMemoryClassloader = JNI_NewGlobalRef(env, JNI_FindClass(env,
                                                                                 "dalvik/system/InMemoryDexClassLoader"));
-        static jmethodID initMid = JNI_GetMethodID(env, in_memory_classloader, "<init>",
+        static jmethodID kInitMid = JNI_GetMethodID(env, kInMemoryClassloader, "<init>",
                                                    "(Ljava/nio/ByteBuffer;Ljava/lang/ClassLoader;)V");
         DexBuilder dex_file;
 
@@ -73,7 +73,7 @@ namespace lspd {
         auto return_type =
                 return_class == 'L' ? TypeDescriptor::Object : TypeDescriptor::FromDescriptor(
                         (char) return_class);
-        auto params = env->GetCharArrayElements(classes, nullptr);
+        auto *params = env->GetCharArrayElements(classes, nullptr);
         for (int i = 0; i < parameter_length; ++i) {
             parameter_types.push_back(
                     params[i] == 'L' ? TypeDescriptor::Object : TypeDescriptor::FromDescriptor(
@@ -90,52 +90,44 @@ namespace lspd {
                 .access_flags(dex::kAccStatic)
                 .Encode();
 
-        auto setupBuilder{cbuilder.CreateMethod(
-                "setup", Prototype{TypeDescriptor::Void, hooker_type})};
-        setupBuilder
-                .AddInstruction(Instruction::SetStaticObjectField(
-                        hooker_field->decl->orig_index, Value::Parameter(0)))
-                .BuildReturn()
-                .Encode();
-
-        auto hookBuilder{cbuilder.CreateMethod(
+        auto hook_builder{cbuilder.CreateMethod(
                 JUTFString(env, method_name), Prototype{return_type, parameter_types})};
         // allocate tmp frist because of wide
-        auto tmp{hookBuilder.AllocRegister()};
-        hookBuilder.BuildConst(tmp, parameter_types.size());
-        auto hook_params_array{hookBuilder.AllocRegister()};
-        hookBuilder.BuildNewArray(hook_params_array, TypeDescriptor::Object, tmp);
-        for (size_t i = 0u, j = 0u; i < parameter_types.size(); ++i, ++j) {
-            hookBuilder.BuildBoxIfPrimitive(Value::Parameter(j), parameter_types[i],
+        auto tmp{hook_builder.AllocRegister()};
+        hook_builder.BuildConst(tmp, parameter_types.size());
+        auto hook_params_array{hook_builder.AllocRegister()};
+        hook_builder.BuildNewArray(hook_params_array, TypeDescriptor::Object, tmp);
+        for (size_t i = 0U, j = 0U; i < parameter_types.size(); ++i, ++j) {
+            hook_builder.BuildBoxIfPrimitive(Value::Parameter(j), parameter_types[i],
                                             Value::Parameter(j));
-            hookBuilder.BuildConst(tmp, i);
-            hookBuilder.BuildAput(Instruction::Op::kAputObject, hook_params_array,
+            hook_builder.BuildConst(tmp, i);
+            hook_builder.BuildAput(Instruction::Op::kAputObject, hook_params_array,
                                   Value::Parameter(j), tmp);
             if (parameter_types[i].is_wide()) ++j;
         }
         auto handle_hook_method{dex_file.GetOrDeclareMethod(
                 hooker_type, "handleHookedMethod",
                 Prototype{TypeDescriptor::Object, TypeDescriptor::Object.ToArray()})};
-        hookBuilder.AddInstruction(
+        hook_builder.AddInstruction(
                 Instruction::GetStaticObjectField(hooker_field->decl->orig_index, tmp));
-        hookBuilder.AddInstruction(Instruction::InvokeVirtualObject(
+        hook_builder.AddInstruction(Instruction::InvokeVirtualObject(
                 handle_hook_method.id, tmp, tmp, hook_params_array));
         if (return_type == TypeDescriptor::Void) {
-            hookBuilder.BuildReturn();
+            hook_builder.BuildReturn();
         } else if (return_type.is_primitive()) {
             auto box_type{return_type.ToBoxType()};
             const ir::Type *type_def = dex_file.GetOrAddType(box_type);
-            hookBuilder.AddInstruction(
+            hook_builder.AddInstruction(
                     Instruction::Cast(tmp, Value::Type(type_def->orig_index)));
-            hookBuilder.BuildUnBoxIfPrimitive(tmp, box_type, tmp);
-            hookBuilder.BuildReturn(tmp, false, return_type.is_wide());
+            hook_builder.BuildUnBoxIfPrimitive(tmp, box_type, tmp);
+            hook_builder.BuildReturn(tmp, false, return_type.is_wide());
         } else {
             const ir::Type *type_def = dex_file.GetOrAddType(return_type);
-            hookBuilder.AddInstruction(
+            hook_builder.AddInstruction(
                     Instruction::Cast(tmp, Value::Type(type_def->orig_index)));
-            hookBuilder.BuildReturn(tmp, true);
+            hook_builder.BuildReturn(tmp, true);
         }
-        [[maybe_unused]] auto *hook_method = hookBuilder.Encode();
+        [[maybe_unused]] auto *hook_method = hook_builder.Encode();
 
         auto backup_builder{
                 cbuilder.CreateMethod("backup", Prototype{return_type, parameter_types})};
@@ -156,18 +148,18 @@ namespace lspd {
 
         slicer::MemView image{dex_file.CreateImage()};
 
-        auto dex_buffer = env->NewDirectByteBuffer(const_cast<void *>(image.ptr()), image.size());
-        auto my_cl = JNI_NewObject(env, in_memory_classloader, initMid,
+        auto *dex_buffer = env->NewDirectByteBuffer(const_cast<void *>(image.ptr()), image.size());
+        auto my_cl = JNI_NewObject(env, kInMemoryClassloader, kInitMid,
                                    dex_buffer, app_class_loader);
         env->DeleteLocalRef(dex_buffer);
 
-        static jmethodID mid = JNI_GetMethodID(env, in_memory_classloader, "loadClass",
+        static jmethodID kMid = JNI_GetMethodID(env, kInMemoryClassloader, "loadClass",
                                                "(Ljava/lang/String;)Ljava/lang/Class;");
-        if (!mid) {
-            mid = JNI_GetMethodID(env, in_memory_classloader, "findClass",
+        if (!kMid) {
+            kMid = JNI_GetMethodID(env, kInMemoryClassloader, "findClass",
                                   "(Ljava/lang/String;)Ljava/lang/Class;");
         }
-        auto target = JNI_CallObjectMethod(env, my_cl, mid, env->NewStringUTF("LspHooker_"));
+        auto target = JNI_CallObjectMethod(env, my_cl, kMid, env->NewStringUTF("LspHooker_"));
 //        LOGD("Created %zd", image.size());
         if (target) {
             return (jclass) target.release();
@@ -191,4 +183,4 @@ namespace lspd {
         REGISTER_LSP_NATIVE_METHODS(Yahfa);
     }
 
-}
+}  // namespace lspd

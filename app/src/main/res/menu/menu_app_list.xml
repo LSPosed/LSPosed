@@ -18,27 +18,27 @@
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/menu_search"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"
-        app:showAsAction="ifRoom" />
+        android:actionViewClass="androidx.appcompat.widget.SearchView"
+        android:showAsAction="ifRoom"
+        android:title="" />
 
     <item
         android:id="@+id/menu_launch"
-        android:title="@string/module_settings"
         android:icon="@drawable/ic_settings"
-        app:showAsAction="ifRoom" />
+        android:showAsAction="ifRoom"
+        android:title="@string/module_settings" />
 
     <item
         android:id="@+id/use_recommended"
         android:title="@string/use_recommended" />
 
     <item
-        android:title="@string/menu_hide"
-        app:showAsAction="never">
+        android:showAsAction="never"
+        android:title="@string/menu_hide">
         <menu>
 
             <item
@@ -62,48 +62,34 @@
     </item>
 
     <item
-        android:title="@string/menu_sort"
-        app:showAsAction="never">
+        android:showAsAction="never"
+        android:title="@string/menu_sort">
         <menu>
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/item_sort_by_name"
                     android:checked="true"
                     android:title="@string/sort_by_name" />
-
-                <item
-                    android:id="@+id/item_sort_by_name_reverse"
-                    android:title="@string/sort_by_name_reverse" />
-
                 <item
                     android:id="@+id/item_sort_by_package_name"
                     android:title="@string/sort_by_package_name" />
-
-                <item
-                    android:id="@+id/item_sort_by_package_name_reverse"
-                    android:title="@string/sort_by_package_name_reverse" />
-
                 <item
                     android:id="@+id/item_sort_by_install_time"
                     android:title="@string/sort_by_install_time" />
-
-                <item
-                    android:id="@+id/item_sort_by_install_time_reverse"
-                    android:title="@string/sort_by_install_time_reverse" />
                 <item
                     android:id="@+id/item_sort_by_update_time"
                     android:title="@string/sort_by_update_time" />
-
-                <item
-                    android:id="@+id/item_sort_by_update_time_reverse"
-                    android:title="@string/sort_by_update_time_reverse" />
             </group>
+            <item
+                android:id="@+id/reverse"
+                android:checkable="true"
+                android:title="@string/sort_reverse" />
         </menu>
     </item>
 
     <item
-        android:title="@string/menu_backup_and_restore"
-        app:showAsAction="never">
+        android:showAsAction="never"
+        android:title="@string/menu_backup_and_restore">
         <menu>
             <item
                 android:id="@+id/backup"

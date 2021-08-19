@@ -24,10 +24,10 @@
 
         <SwitchPreference
             android:defaultValue="false"
+            android:icon="@drawable/ic_outline_dns_24"
             android:key="doh"
             android:summary="@string/dns_over_http_summary"
-            android:title="@string/dns_over_http"
-            android:icon="@drawable/ic_outline_dns_24" />
+            android:title="@string/dns_over_http" />
     </com.takisoft.preferencex.PreferenceCategory>
 
     <com.takisoft.preferencex.PreferenceCategory android:title="@string/settings_group_theme">
@@ -39,45 +39,45 @@
         <org.lsposed.manager.util.theme.ThemeColorPreference
             android:defaultValue=""
             android:dialogTitle="@string/theme_color"
+            android:icon="@drawable/ic_outline_palette_24"
             android:key="theme_color"
-            android:title="@string/theme_color"
             android:summary="@string/theme_color_summary"
-            android:icon="@drawable/ic_outline_palette_24" />
+            android:title="@string/theme_color" />
         <rikka.preference.SimpleMenuPreference
             android:defaultValue="MODE_NIGHT_FOLLOW_SYSTEM"
             android:entries="@array/theme_texts"
             android:entryValues="@array/theme_values"
+            android:icon="@drawable/ic_outline_dark_mode_24"
             android:key="dark_theme"
             android:summary="%s"
-            android:title="@string/dark_theme"
-            android:icon="@drawable/ic_outline_dark_mode_24" />
+            android:title="@string/dark_theme" />
         <SwitchPreference
             android:key="black_dark_theme"
-            android:title="@string/pure_black_dark_theme"
-            android:summary="@string/pure_black_dark_theme_summary" />
+            android:summary="@string/pure_black_dark_theme_summary"
+            android:title="@string/pure_black_dark_theme" />
     </com.takisoft.preferencex.PreferenceCategory>
 
     <com.takisoft.preferencex.PreferenceCategory android:title="@string/settings_group_framework">
 
         <SwitchPreference
             android:defaultValue="false"
+            android:icon="@drawable/ic_outline_science_24"
             android:key="enable_resources"
-            android:summary="@string/settings_enable_resources_summary"
-            android:title="@string/settings_enable_resources"
             android:persistent="false"
-            android:icon="@drawable/ic_outline_science_24" />
+            android:summary="@string/settings_enable_resources_summary"
+            android:title="@string/settings_enable_resources" />
 
         <SwitchPreference
             android:defaultValue="false"
             android:key="disable_verbose_log"
-            android:title="@string/pref_title_disable_verbose_log"
-            android:persistent="false" />
+            android:persistent="false"
+            android:title="@string/pref_title_disable_verbose_log" />
     </com.takisoft.preferencex.PreferenceCategory>
 
     <com.takisoft.preferencex.PreferenceCategory
-        android:title="@string/settings_backup_and_restore"
+        android:icon="@drawable/ic_baseline_settings_backup_restore_24"
         android:summary="@string/settings_backup_and_restore_summery"
-        android:icon="@drawable/ic_baseline_settings_backup_restore_24">
+        android:title="@string/settings_backup_and_restore">
         <Preference
             android:key="backup"
             android:title="@string/settings_backup" />
@@ -88,14 +88,13 @@
 
     <com.takisoft.preferencex.PreferenceCategory
         android:key="settings_group_system"
-        android:title="@string/settings_group_system"
-        app:isPreferenceVisible="false">
+        android:title="@string/settings_group_system">
         <SwitchPreference
             android:defaultValue="true"
+            android:enabled="false"
             android:key="show_hidden_icon_apps_enabled"
-            android:title="@string/settings_show_hidden_icon_apps_enabled"
-            android:summary="@string/settings_show_hidden_icon_apps_enabled_summary"
             android:persistent="false"
-            app:isPreferenceVisible="false" />
+            android:summary="@string/settings_show_hidden_icon_apps_enabled_summary"
+            android:title="@string/settings_show_hidden_icon_apps_enabled" />
     </com.takisoft.preferencex.PreferenceCategory>
 </PreferenceScreen>

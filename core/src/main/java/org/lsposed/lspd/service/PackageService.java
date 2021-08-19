@@ -21,6 +21,7 @@ package org.lsposed.lspd.service;
 
 import static android.content.pm.ServiceInfo.FLAG_ISOLATED_PROCESS;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
+import static org.lsposed.lspd.service.ServiceManager.existsInGlobalNamespace;
 
 import android.content.IIntentReceiver;
 import android.content.IIntentSender;
@@ -49,7 +50,6 @@ import androidx.annotation.NonNull;
 import org.lsposed.lspd.BuildConfig;
 import org.lsposed.lspd.models.Application;
 import org.lsposed.lspd.util.InstallerVerifier;
-import org.lsposed.lspd.utils.ParceledListSlice;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -65,9 +65,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
-import java.util.stream.Collectors;
 
 import hidden.HiddenApiBridge;
+import io.github.xposed.xposedservice.utils.ParceledListSlice;
 
 public class PackageService {
 
@@ -75,6 +75,7 @@ public class PackageService {
     static final int INSTALL_REASON_UNKNOWN = 0;
 
     static final int MATCH_ALL_FLAGS = PackageManager.MATCH_DISABLED_COMPONENTS | PackageManager.MATCH_DIRECT_BOOT_AWARE | PackageManager.MATCH_DIRECT_BOOT_UNAWARE | PackageManager.MATCH_UNINSTALLED_PACKAGES;
+    public static final int PER_USER_RANGE = 100000;
 
     private static IPackageManager pm = null;
     private static IBinder binder = null;
@@ -134,14 +135,14 @@ public class PackageService {
             res.addAll(pm.getInstalledPackages(flags, user.id).getList());
         }
         if (filterNoProcess) {
-            res = res.stream().filter(packageInfo -> {
+            res.removeIf(packageInfo -> {
                 try {
-                    PackageInfo pkgInfo = getPackageInfoWithComponents(packageInfo.packageName, MATCH_ALL_FLAGS, packageInfo.applicationInfo.uid / 100000);
-                    return !fetchProcesses(pkgInfo).isEmpty();
+                    PackageInfo pkgInfo = getPackageInfoWithComponents(packageInfo.packageName, MATCH_ALL_FLAGS, packageInfo.applicationInfo.uid / PER_USER_RANGE);
+                    return fetchProcesses(pkgInfo).isEmpty();
                 } catch (RemoteException e) {
-                    return true;
+                    return false;
                 }
-            }).collect(Collectors.toList());
+            });
         }
         return new ParceledListSlice<>(res);
     }
@@ -179,6 +180,10 @@ public class PackageService {
         return new Pair<>(fetchProcesses(pkgInfo), pkgInfo.applicationInfo.uid);
     }
 
+    public static boolean isPackageAvailable(String packageName, int userId, boolean ignoreHidden) throws RemoteException {
+        return pm.isPackageAvailable(packageName, userId) || (ignoreHidden && pm.getApplicationHiddenSettingAsUser(packageName, userId));
+    }
+
     private static PackageInfo getPackageInfoWithComponents(String packageName, int flags, int userId) throws RemoteException {
         IPackageManager pm = getPackageManager();
         if (pm == null) return null;
@@ -209,7 +214,7 @@ public class PackageService {
 
             }
         }
-        if (pkgInfo == null || pkgInfo.applicationInfo == null || (!pkgInfo.packageName.equals("android") && (pkgInfo.applicationInfo.sourceDir == null || pkgInfo.applicationInfo.deviceProtectedDataDir == null || !new File(pkgInfo.applicationInfo.sourceDir).exists() || !new File(pkgInfo.applicationInfo.deviceProtectedDataDir).exists())))
+        if (pkgInfo == null || pkgInfo.applicationInfo == null || (!pkgInfo.packageName.equals("android") && (pkgInfo.applicationInfo.sourceDir == null || !existsInGlobalNamespace(pkgInfo.applicationInfo.sourceDir) || !isPackageAvailable(packageName, userId, true))))
             return null;
         return pkgInfo;
     }
@@ -279,11 +284,8 @@ public class PackageService {
             // Uninstall manager when needed
             PackageInfo pkgInfo = pm.getPackageInfo(packageName, 0, 0);
             if (pkgInfo != null && pkgInfo.versionName != null && pkgInfo.applicationInfo != null) {
-                if ((pkgInfo.applicationInfo.flags & ApplicationInfo.FLAG_TEST_ONLY) != 0) {
-                    return false;
-                }
                 boolean versionMatch = pkgInfo.versionName.equals(BuildConfig.VERSION_NAME);
-                boolean signatureMatch = InstallerVerifier.verifyInstallerSignature(pkgInfo.applicationInfo);
+                boolean signatureMatch = InstallerVerifier.verifyInstallerSignature(pkgInfo.applicationInfo.sourceDir);
                 if (versionMatch && signatureMatch && pkgInfo.versionCode >= BuildConfig.VERSION_CODE)
                     return false;
                 if (!signatureMatch || !versionMatch && pkgInfo.versionCode > BuildConfig.VERSION_CODE)
@@ -328,7 +330,11 @@ public class PackageService {
                     public void send(Intent result) {
                         int status = result.getIntExtra(PackageInstaller.EXTRA_STATUS, PackageInstaller.STATUS_FAILURE);
                         String message = result.getStringExtra(PackageInstaller.EXTRA_STATUS_MESSAGE);
-                        Log.d(TAG, status + " " + message);
+                        if (status != PackageInstaller.STATUS_SUCCESS) {
+                            Log.w(TAG, "installation failed: " + status + " " + message);
+                        } else {
+                            Log.i(TAG, "installed manager successfully");
+                        }
                     }
                 }.getIntentSender());
             }

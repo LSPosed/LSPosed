@@ -87,33 +87,24 @@ public class AppHelper {
 
     public static boolean onOptionsItemSelected(MenuItem item, SharedPreferences preferences) {
         int itemId = item.getItemId();
+        int i = preferences.getInt("list_sort", 0);
         if (itemId == R.id.item_sort_by_name) {
-            item.setChecked(true);
-            preferences.edit().putInt("list_sort", 0).apply();
-        } else if (itemId == R.id.item_sort_by_name_reverse) {
-            item.setChecked(true);
-            preferences.edit().putInt("list_sort", 1).apply();
+            i = (i % 2 == 0) ? 0 : 1;
         } else if (itemId == R.id.item_sort_by_package_name) {
-            item.setChecked(true);
-            preferences.edit().putInt("list_sort", 2).apply();
-        } else if (itemId == R.id.item_sort_by_package_name_reverse) {
-            item.setChecked(true);
-            preferences.edit().putInt("list_sort", 3).apply();
+            i = (i % 2 == 0) ? 2 : 3;
         } else if (itemId == R.id.item_sort_by_install_time) {
-            item.setChecked(true);
-            preferences.edit().putInt("list_sort", 4).apply();
-        } else if (itemId == R.id.item_sort_by_install_time_reverse) {
-            item.setChecked(true);
-            preferences.edit().putInt("list_sort", 5).apply();
+            i = (i % 2 == 0) ? 4 : 5;
         } else if (itemId == R.id.item_sort_by_update_time) {
-            item.setChecked(true);
-            preferences.edit().putInt("list_sort", 6).apply();
-        } else if (itemId == R.id.item_sort_by_update_time_reverse) {
-            item.setChecked(true);
-            preferences.edit().putInt("list_sort", 7).apply();
+            i = (i % 2 == 0) ? 6 : 7;
+        } else if (itemId == R.id.reverse) {
+            if (i % 2 == 0) i++;
+            else i--;
         } else {
             return false;
         }
+        preferences.edit().putInt("list_sort", i).apply();
+        if (item.isCheckable())
+            item.setChecked(!item.isChecked());
         return true;
     }
 

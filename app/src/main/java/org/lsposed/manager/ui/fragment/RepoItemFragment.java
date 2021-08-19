@@ -48,6 +48,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import org.lsposed.manager.App;
@@ -74,6 +75,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.stream.IntStream;
 
 import rikka.recyclerview.RecyclerViewKt;
 import rikka.widget.borderview.BorderNestedScrollView;
@@ -106,8 +108,9 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentPagerBinding.inflate(getLayoutInflater(), container, false);
-        String modulePackageName = getArguments().getString("modulePackageName");
-        String moduleName = getArguments().getString("moduleName");
+        if (module == null) return binding.getRoot();
+        String modulePackageName = module.getName();
+        String moduleName = module.getDescription();
         binding.getRoot().bringChildToFront(binding.appBar);
         setupToolbar(binding.toolbar, moduleName, R.menu.menu_repo_item);
         binding.toolbar.setSubtitle(modulePackageName);
@@ -124,6 +127,16 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
         });
         int[] titles = new int[]{R.string.module_readme, R.string.module_releases, R.string.module_information};
         new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> tab.setText(titles[position])).attach();
+
+        binding.tabLayout.addOnLayoutChangeListener((view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+            ViewGroup vg = (ViewGroup) binding.tabLayout.getChildAt(0);
+            int tabLayoutWidth = IntStream.range(0, binding.tabLayout.getTabCount()).map(i -> vg.getChildAt(i).getWidth()).sum();
+            if (tabLayoutWidth <= binding.getRoot().getWidth()) {
+                binding.tabLayout.setTabMode(TabLayout.MODE_FIXED);
+                binding.tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+            }
+        });
+
         return binding.getRoot();
     }
 
@@ -137,9 +150,10 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
         RepoLoader.getInstance().addListener(this);
         super.onCreate(savedInstanceState);
 
-        String modulePackageName = getArguments().getString("modulePackageName");
+        String modulePackageName = getArguments() == null ? null : getArguments().getString("modulePackageName");
         module = RepoLoader.getInstance().getOnlineModule(modulePackageName);
-
+        if (module == null)
+            getNavController().navigate(R.id.action_repo_item_fragment_to_repo_fragment);
     }
 
     private void renderGithubMarkdown(WebView view, String text) {
@@ -155,6 +169,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
             setting.setAllowFileAccess(false);
             setting.setGeolocationEnabled(false);
             setting.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+            setting.setTextZoom(80);
             String body;
             int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
             if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
@@ -162,8 +177,6 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
             } else {
                 body = HTML_TEMPLATE.replace("@body@", text);
             }
-            body = body.replace("src=\"/", "src=\"/Xposed-Modules-Repo/" + module.getName() + "/raw/main/")
-                    .replace("href=\"/", "href=\"/Xposed-Modules-Repo/" + module.getName() + "/blob/main/");
             view.setWebViewClient(new WebViewClient() {
                 @Override
                 public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
@@ -438,7 +451,6 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
                     if (insets != null)
                         holder.recyclerView.onApplyWindowInsets(insets);
                     RecyclerViewKt.fixEdgeEffect(holder.recyclerView, false, true);
-                    RecyclerViewKt.addFastScroller(holder.recyclerView, holder.itemView);
                     break;
             }
         }

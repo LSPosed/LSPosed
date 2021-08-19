@@ -21,8 +21,8 @@
 <resources>
     <!-- MainActivity -->
     <string name="info">Informatie</string>
-    <string name="Install">Installeer</string>
-    <string name="InstallDetail">Tik om LSPosed te installeren</string>
+    <string name="install">Installeer</string>
+    <string name="install_summary">Tik om LSPosed te installeren</string>
     <string name="Modules">Modules</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d module ingeschakeld</item>
@@ -32,7 +32,7 @@
     <string name="Settings">Instellingen</string>
     <string name="About">Over</string>
     <string name="module_repo">Opslagplaats</string>
-    <string name="module_repo_summary">Module opslagplaats (Alpha)</string>
+    <string name="module_repo_summary">Module opslagplaats (Beta)</string>
     <string name="about_view_source_code"><![CDATA[Bekijk de broncode op %1$s<br/>Sluit je aan bij onze %2$s kanaal]]></string>
     <string name="about_translators">Vertaler: %1$s</string>
 
@@ -51,8 +51,8 @@
     <!-- LogsActivity -->
     <string name="menuSend">Verstuur</string>
     <string name="menuSaveToSd">Opslaan</string>
-    <string name="nav_item_logs">Uitgebreide logboeken</string>
-    <string name="nav_item_logs_err">Modules Logboeken</string>
+    <string name="nav_item_logs_lsp">Uitgebreide logboeken</string>
+    <string name="nav_item_logs_module">Modules Logboeken</string>
     <string name="dont_show_again">Laat dit niet meer zien</string>
     <string name="logs_save_failed">Opslaan mislukt:</string>
     <string name="menuClearLog">Wis het logboek nu</string>
@@ -93,13 +93,9 @@
     <string name="compile_failed">Optimalisatie mislukt of geretourneerde waarde is leeg.</string>
     <string name="compile_failed_with_info">Optimalisatie is mislukt: </string>
     <string name="sort_by_name">Sorteer op applicatienaam</string>
-    <string name="sort_by_name_reverse">Sorteren op applicatienaam (omgekeerd)</string>
     <string name="sort_by_package_name">Sorteer op pakketnaam</string>
-    <string name="sort_by_package_name_reverse">Sorteren op pakketnaam (omgekeerd)</string>
     <string name="sort_by_install_time">Sorteer op installatietijd</string>
-    <string name="sort_by_install_time_reverse">Sorteer op installatietijd (omgekeerd)</string>
     <string name="sort_by_update_time">Sorteer op updatetijd</string>
-    <string name="sort_by_update_time_reverse">Sorteer op updatetijd (omgekeerd)</string>
     <string name="menu_show_system_apps">Systeem apps</string>
     <string name="menu_sort">Sorteren…</string>
     <string name="enable_module">Schakel module in</string>
@@ -169,7 +165,7 @@
     <string name="lsposed_not_active">LSPosed is momenteel niet geïnstalleerd of actief.</string>
     <string name="verbose_log_not_avaliable">Uitgebreid logboek is niet beschikbaar. Als u het net hebt ingeschakeld zonder opnieuw op te starten, probeer het dan opnieuw na het opnieuw opstarten.</string>
     <string name="NotInstall">Niet geïnstalleerd</string>
-    <string name="NotInstallDetail">LSPosed is niet geïnstalleerd</string>
+    <string name="not_install_summary">LSPosed is niet geïnstalleerd</string>
     <string name="settings_show_hidden_icon_apps_enabled">Forceer apps om launcher-pictogrammen weer te geven</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">Na Android 10 mogen apps (vooral Xposed-modules) hun opstartpictogrammen niet verbergen. Schakel de schakelaar uit om deze functie uit te schakelen.</string>
     <string name="settings_group_system">Systeem</string>

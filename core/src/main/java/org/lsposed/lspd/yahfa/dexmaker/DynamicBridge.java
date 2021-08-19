@@ -20,7 +20,7 @@
 
 package org.lsposed.lspd.yahfa.dexmaker;
 
-import org.lsposed.lspd.util.Logger;
+import org.lsposed.lspd.util.Utils;
 
 import java.lang.reflect.Executable;
 import java.lang.reflect.InvocationTargetException;
@@ -34,21 +34,20 @@ public final class DynamicBridge {
     private static final ConcurrentHashMap<Executable, LspHooker> hookedInfo = new ConcurrentHashMap<>();
 
     public static synchronized void hookMethod(Executable hookMethod, XposedBridge.AdditionalHookInfo additionalHookInfo) {
-        Logger.d("hooking " + hookMethod);
+        Utils.logD("hooking " + hookMethod);
 
         if (hookedInfo.containsKey(hookMethod)) {
-            Logger.w("already hook method:" + hookMethod.toString());
+            Utils.logW("already hook method:" + hookMethod);
             return;
         }
 
-        Logger.d("start to generate class for: " + hookMethod);
+        Utils.logD("start to generate class for: " + hookMethod);
         try {
             final HookerDexMaker dexMaker = new HookerDexMaker();
-            dexMaker.start(hookMethod, additionalHookInfo,
-                    hookMethod.getDeclaringClass().getClassLoader());
+            dexMaker.start(hookMethod, additionalHookInfo);
             hookedInfo.put(hookMethod, dexMaker.getHooker());
         } catch (Throwable e) {
-            Logger.e("error occur when generating dex.", e);
+            Utils.logE("error occur when generating dex.", e);
         }
     }
 
@@ -64,5 +63,3 @@ public final class DynamicBridge {
         return hooker.invokeOriginalMethod(thisObject, args);
     }
 }
-
-

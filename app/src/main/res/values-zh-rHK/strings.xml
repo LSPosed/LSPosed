@@ -21,8 +21,8 @@
 <resources>
     <!-- MainActivity -->
     <string name="info">信息</string>
-    <string name="Install">安裝</string>
-    <string name="InstallDetail">點按安裝 LSPosed</string>
+    <string name="install">安裝</string>
+    <string name="install_summary">點按安裝 LSPosed</string>
     <string name="Modules">模組</string>
     <plurals name="modules_enabled_count">
 
@@ -32,7 +32,7 @@
     <string name="Settings">設置</string>
     <string name="About">關於</string>
     <string name="module_repo">倉庫</string>
-    <string name="module_repo_summary">模組倉庫（Alpha）</string>
+    <string name="module_repo_summary">模組倉庫（Beta）</string>
     <string name="about_view_source_code"><![CDATA[在 %1$s 查看源碼<br/>加入我們的 %2$s 頻道]]></string>
     <string name="about_translators">Translators: %s</string>
 
@@ -51,8 +51,8 @@
     <!-- LogsActivity -->
     <string name="menuSend">發送</string>
     <string name="menuSaveToSd">保存</string>
-    <string name="nav_item_logs">詳細日誌</string>
-    <string name="nav_item_logs_err">模組日誌</string>
+    <string name="nav_item_logs_lsp">詳細日誌</string>
+    <string name="nav_item_logs_module">模組日誌</string>
     <string name="dont_show_again">不再提示</string>
     <string name="logs_save_failed">保存失敗：</string>
     <string name="menuClearLog">立即清理日誌</string>
@@ -93,15 +93,12 @@
     <string name="compile_failed">優化失敗或返回值為空</string>
     <string name="compile_failed_with_info">優化失敗: </string>
     <string name="sort_by_name">應用名稱</string>
-    <string name="sort_by_name_reverse">應用名稱（降冪）</string>
     <string name="sort_by_package_name">包體名稱</string>
-    <string name="sort_by_package_name_reverse">包體名稱（降冪）</string>
     <string name="sort_by_install_time">安裝時間</string>
-    <string name="sort_by_install_time_reverse">安裝時間（降冪）</string>
     <string name="sort_by_update_time">更新時間</string>
-    <string name="sort_by_update_time_reverse">更新時間（降冪）</string>
+    <string name="sort_reverse">降冪</string>
     <string name="menu_show_system_apps">系統應用</string>
-    <string name="menu_sort">排序…</string>
+    <string name="menu_sort">排序</string>
     <string name="enable_module">啟用模組</string>
     <string name="no_scope_selected">未選擇任何應用。繼續？</string>
     <string name="menu_show_games">遊戲</string>
@@ -114,7 +111,7 @@
     <string name="requested_by_module">推薦的應用</string>
     <string name="module_disabled_no_selection">由於未選擇任何應用，模組 %s 已被禁用。</string>
     <string name="android_framework">系統框架</string>
-    <string name="menu_backup_and_restore">備份…</string>
+    <string name="menu_backup_and_restore">備份</string>
     <string name="menu_backup">備份</string>
     <string name="menu_restore">恢復</string>
     <string name="force_stop">Force stop</string>
@@ -172,7 +169,7 @@
     <string name="lsposed_not_active">LSPosed 未安裝或未啟動</string>
     <string name="verbose_log_not_avaliable">Verbose log is not available, if you just enabled it without reboot, try again after reboot.</string>
     <string name="NotInstall">Not Installed</string>
-    <string name="NotInstallDetail">LSPosed is not Installed</string>
+    <string name="not_install_summary">LSPosed is not Installed</string>
     <string name="translators"><![CDATA[<a href="https://github.com/LSPosed/LSPosed">LSPosed</a>]]></string>
     <string name="copy_toast_msg">Copied</string>
 </resources>

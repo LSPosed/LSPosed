@@ -125,6 +125,16 @@
         <argument
             android:name="moduleName"
             app:argType="string" />
+
+        <action
+            android:id="@+id/action_repo_item_fragment_to_repo_fragment"
+            app:destination="@id/repo_fragment"
+            app:enterAnim="@anim/fragment_enter"
+            app:exitAnim="@anim/fragment_exit"
+            app:popEnterAnim="@anim/fragment_enter_pop"
+            app:popExitAnim="@anim/fragment_exit_pop"
+            app:popUpTo="@id/main_fragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <action
         android:id="@+id/action_settings_fragment"
@@ -132,28 +142,36 @@
         app:enterAnim="@anim/fragment_enter"
         app:exitAnim="@anim/fragment_exit"
         app:popEnterAnim="@anim/fragment_enter_pop"
-        app:popExitAnim="@anim/fragment_exit_pop" />
+        app:popExitAnim="@anim/fragment_exit_pop"
+        app:popUpTo="@id/settings_fragment"
+        app:popUpToInclusive="true" />
     <action
         android:id="@+id/action_logs_fragment"
         app:destination="@id/logs_fragment"
         app:enterAnim="@anim/fragment_enter"
         app:exitAnim="@anim/fragment_exit"
         app:popEnterAnim="@anim/fragment_enter_pop"
-        app:popExitAnim="@anim/fragment_exit_pop" />
+        app:popExitAnim="@anim/fragment_exit_pop"
+        app:popUpTo="@id/logs_fragment"
+        app:popUpToInclusive="true" />
     <action
         android:id="@+id/action_repo_fragment"
         app:destination="@id/repo_fragment"
         app:enterAnim="@anim/fragment_enter"
         app:exitAnim="@anim/fragment_exit"
         app:popEnterAnim="@anim/fragment_enter_pop"
-        app:popExitAnim="@anim/fragment_exit_pop" />
+        app:popExitAnim="@anim/fragment_exit_pop"
+        app:popUpTo="@id/repo_fragment"
+        app:popUpToInclusive="true" />
     <action
         android:id="@+id/action_modules_fragment"
         app:destination="@id/modules_fragment"
         app:enterAnim="@anim/fragment_enter"
         app:exitAnim="@anim/fragment_exit"
         app:popEnterAnim="@anim/fragment_enter_pop"
-        app:popExitAnim="@anim/fragment_exit_pop" />
+        app:popExitAnim="@anim/fragment_exit_pop"
+        app:popUpTo="@id/modules_fragment"
+        app:popUpToInclusive="true" />
     <action
         android:id="@+id/action_app_list_fragment"
         app:destination="@id/app_list_fragment"
