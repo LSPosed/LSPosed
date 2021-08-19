@@ -26,19 +26,16 @@ import android.os.Process;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class ModuleLogger {
-    static SimpleDateFormat logDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss", Locale.getDefault());
+    static DateTimeFormatter logDateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
     static ParcelFileDescriptor fd = null;
 
     public static void initLogger(ParcelFileDescriptor fileDescriptor) {
         if (fd == null && fileDescriptor != null) {
             fd = fileDescriptor;
-            logDateFormat.setTimeZone(TimeZone.getDefault());
         }
     }
 
@@ -50,7 +47,7 @@ public class ModuleLogger {
         StringBuilder sb = new StringBuilder();
         String processName = ActivityThread.currentProcessName();
 
-        sb.append(logDateFormat.format(new Date()));
+        sb.append(ZonedDateTime.now().format(logDateFormat));
         sb.append(' ');
         sb.append(isThrowable ? "E" : "I");
         sb.append('/');
