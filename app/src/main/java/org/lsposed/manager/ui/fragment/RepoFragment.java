@@ -185,7 +185,11 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
                 sb.append(summary);
             }
             holder.appDescription.setText(sb);
-            holder.itemView.setOnClickListener(v -> getNavController().navigate(RepoFragmentDirections.actionRepoFragmentToRepoItemFragment(module.getName(), module.getDescription())));
+            holder.itemView.setOnClickListener(v -> {
+                searchView.clearFocus();
+                searchView.onActionViewCollapsed();
+                getNavController().navigate(RepoFragmentDirections.actionRepoFragmentToRepoItemFragment(module.getName(), module.getDescription()));
+            });
         }
 
         @Override
