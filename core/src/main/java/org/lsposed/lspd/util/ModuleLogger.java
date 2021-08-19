@@ -30,7 +30,6 @@ import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 
 public class ModuleLogger {
     private static DateTimeFormatter logDateFormat;
@@ -39,9 +38,8 @@ public class ModuleLogger {
     public static void initLogger(ParcelFileDescriptor fileDescriptor) {
         if (fd == null && fileDescriptor != null) {
             fd = fileDescriptor;
-            var zone = ZoneId.of(SystemProperties.get("persist.sys.timezone"));
-            var pattern = "yyyy-MM-dd HH:mm:ss.SSS";
-            logDateFormat = DateTimeFormatter.ofPattern(pattern, Locale.ROOT).withZone(zone);
+            var zone = ZoneId.of(SystemProperties.get("persist.sys.timezone", "GMT"));
+            logDateFormat = DateTimeFormatter.ISO_LOCAL_DATE_TIME.withZone(zone);
         }
     }
 

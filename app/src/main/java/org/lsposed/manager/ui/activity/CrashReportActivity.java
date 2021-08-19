@@ -36,8 +36,7 @@ import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.ActivityCrashReportBinding;
 
-import java.time.Instant;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 
 public class CrashReportActivity extends AppCompatActivity {
     ActivityCrashReportBinding binding;
@@ -60,11 +59,10 @@ public class CrashReportActivity extends AppCompatActivity {
     }
 
     public String getAllErrorDetailsFromIntent(@NonNull Intent intent) {
-        var dateFormat = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
         String versionName = String.format("%s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE);
 
         return "Build version: " + versionName + " \n" +
-                "Current date: " + dateFormat.format(Instant.now()) + " \n" +
+                "Current date: " + LocalDateTime.now() + " \n" +
                 "Device: " + getDeviceModelName() + " \n" +
                 "Fingerprint: " + getFingerprint() + " \n \n" +
                 "SDK: " + Build.VERSION.SDK_INT + " \n \n" +
