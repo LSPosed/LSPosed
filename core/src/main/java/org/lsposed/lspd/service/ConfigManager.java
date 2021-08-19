@@ -76,6 +76,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.zip.ZipFile;
@@ -453,10 +454,6 @@ public class ConfigManager {
                 String apkPath = cursor.getString(apkPathIdx);
                 // if still present after removeIf, this package did not change.
                 var oldModule = cachedModule.get(packageName);
-                if (oldModule != null && oldModule.appId != -1) {
-                    Log.d(TAG, packageName + " did not change, skip caching it");
-                    continue;
-                }
                 PackageInfo pkgInfo = null;
                 try {
                     pkgInfo = PackageService.getPackageInfo(packageName, MATCH_ALL_FLAGS, 0);
@@ -467,9 +464,17 @@ public class ConfigManager {
                     obsoleteModules.add(packageName);
                     continue;
                 }
-                // cache from system server, keep it and set only the appId
-                if (oldModule != null) {
-                    oldModule.appId = pkgInfo.applicationInfo.uid;
+                if (oldModule != null &&
+                        pkgInfo.applicationInfo.sourceDir != null &&
+                        apkPath != null && oldModule.apkPath != null &&
+                        Objects.equals(apkPath, oldModule.apkPath) &&
+                        Objects.equals(new File(pkgInfo.applicationInfo.sourceDir).getParent(), new File(apkPath).getParent())) {
+                    if (oldModule.appId != -1) {
+                        Log.d(TAG, packageName + " did not change, skip caching it");
+                    } else {
+                        // cache from system server, keep it and set only the appId
+                        oldModule.appId = pkgInfo.applicationInfo.uid;
+                    }
                     continue;
                 }
                 var path = apkPath;
