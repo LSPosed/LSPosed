@@ -6,6 +6,20 @@
 
 #include "logcat.h"
 
+constexpr size_t kMaxLogSize = 32 * 1024 * 1024;
+
+constexpr std::array<char, ANDROID_LOG_SILENT + 1> kLogChar = {
+        /*ANDROID_LOG_UNKNOWN*/'?',
+        /*ANDROID_LOG_DEFAULT*/ '?',
+        /*ANDROID_LOG_VERBOSE*/ 'V',
+        /*ANDROID_LOG_DEBUG*/ 'D',
+        /*ANDROID_LOG_INFO*/'I',
+        /*ANDROID_LOG_WARN*/'W',
+        /*ANDROID_LOG_ERROR*/ 'E',
+        /*ANDROID_LOG_FATAL*/ 'F',
+        /*ANDROID_LOG_SILENT*/ 'S',
+};
+
 class UniqueFile : public std::unique_ptr<FILE, std::function<void(FILE *)>> {
     inline static deleter_type deleter = [](auto f) { f && f != stdout && fclose(f); };
 public:
@@ -24,13 +38,11 @@ public:
     void Run();
 
 private:
-    void RefreshFd();
+    inline void RefreshFd();
 
     bool ProcessBuffer(struct log_msg *buf);
 
-    static char FilterPriToChar(android_LogPriority pri);
-
-    static void PrintLogLine(FILE *out, const AndroidLogEntry *entry);
+    void PrintLogLine(const AndroidLogEntry &entry);
 
     JNIEnv *env_;
     jobject thiz_;
@@ -39,51 +51,29 @@ private:
 
     UniqueFile out_file_{};
     size_t print_count_ = 0;
-
-    constexpr static size_t kMaxCount = 500;
-    constexpr static uint32_t kSetLogSize = 32 * 1024 * 1024;
 };
 
-char Logcat::FilterPriToChar(android_LogPriority pri) {
-    switch (pri) {
-        case ANDROID_LOG_VERBOSE:
-            return 'V';
-        case ANDROID_LOG_DEBUG:
-            return 'D';
-        case ANDROID_LOG_INFO:
-            return 'I';
-        case ANDROID_LOG_WARN:
-            return 'W';
-        case ANDROID_LOG_ERROR:
-            return 'E';
-        case ANDROID_LOG_FATAL:
-            return 'F';
-        case ANDROID_LOG_SILENT:
-            return 'S';
-        case ANDROID_LOG_DEFAULT:
-        case ANDROID_LOG_UNKNOWN:
-        default:
-            return '?';
-    }
-}
-
-void Logcat::PrintLogLine(FILE *out, const AndroidLogEntry *entry) {
-    if (!out) return;
+void Logcat::PrintLogLine(const AndroidLogEntry &entry) {
+    if (!out_file_) return;
     constexpr static size_t kMaxTimeBuff = 64;
     struct tm tm{};
     std::array<char, kMaxTimeBuff> time_buff;
 
-    auto now = entry->tv_sec;
-    auto nsec = entry->tv_nsec;
+    auto now = entry.tv_sec;
+    auto nsec = entry.tv_nsec;
     if (now < 0) {
         nsec = NS_PER_SEC - nsec;
     }
     localtime_r(&now, &tm);
     strftime(time_buff.data(), time_buff.size(), "%Y-%m-%dT%H:%M:%S", &tm);
-    fprintf(out, "[ %s.%03ld %8d:%6d:%6d %c/%-15.*s ] %.*s\n", time_buff.data(), nsec / MS_PER_NSEC,
-            entry->uid, entry->pid, entry->tid,
-            FilterPriToChar(entry->priority), static_cast<int>(entry->tagLen), entry->tag,
-            static_cast<int>(entry->messageLen), entry->message);
+    print_count_ +=
+            fprintf(out_file_.get(), "[ %s.%03ld %8d:%6d:%6d %c/%-15.*s ] %.*s\n",
+                    time_buff.data(),
+                    nsec / MS_PER_NSEC,
+                    entry.uid, entry.pid, entry.tid,
+                    kLogChar[entry.priority], static_cast<int>(entry.tagLen),
+                    entry.tag,
+                    static_cast<int>(entry.messageLen), entry.message);
 }
 
 void Logcat::RefreshFd() {
@@ -102,8 +92,7 @@ bool Logcat::ProcessBuffer(struct log_msg *buf) {
         tag.starts_with("Riru") ||
         tag.starts_with("LSPosed") ||
         tag == "XSharedPreferences") {
-        ++print_count_;
-        PrintLogLine(out_file_.get(), &entry);
+        PrintLogLine(entry);
     }
     return entry.pid == getpid() &&
            tag == "LSPosedLogcat" &&
@@ -121,7 +110,7 @@ void Logcat::Run() {
         if (logger == nullptr) {
             continue;
         }
-        android_logger_set_log_size(logger, kSetLogSize);
+        android_logger_set_log_size(logger, kMaxLogSize);
     }
 
     while (true) {
@@ -138,7 +127,7 @@ void Logcat::Run() {
 
         fflush(out_file_.get());
 
-        if (print_count_ > kMaxCount) {
+        if (print_count_ >= kMaxLogSize) {
             RefreshFd();
             print_count_ = 0;
         }
@@ -147,6 +136,7 @@ void Logcat::Run() {
 
 extern "C"
 JNIEXPORT void JNICALL
+// NOLINTNEXTLINE
 Java_org_lsposed_lspd_service_LogcatService_runLogcat(JNIEnv *env, jobject thiz, jlong tid) {
     jclass clazz = env->GetObjectClass(thiz);
     jmethodID method = env->GetMethodID(clazz, "refreshFd", "()I");
