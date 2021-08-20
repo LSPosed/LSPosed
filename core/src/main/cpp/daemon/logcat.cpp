@@ -1,8 +1,8 @@
 #include <jni.h>
 #include <unistd.h>
 #include <string>
-
 #include <android/log.h>
+#include <array>
 
 #include "logcat.h"
 
@@ -20,22 +20,18 @@ private:
 
     static char FilterPriToChar(android_LogPriority pri);
 
-    static int PrintLogLine(int fd, const AndroidLogEntry *entry);
-
-    static char *FormatLogLine(char *defaultBuffer,
-                               size_t defaultBufferSize,
-                               const AndroidLogEntry *entry,
-                               size_t *outLength);
+    static int PrintLogLine(FILE *out, const AndroidLogEntry *entry);
 
     JNIEnv *env_;
     jobject thiz_;
     jmethodID refresh_fd_method_;
     jlong tid_;
 
-    int output_fd_ = 1;
-    size_t max_count_ = 500;
+    FILE *out_file_{nullptr};
     size_t print_count_ = 0;
-    unsigned long set_log_size_ = 32 * 1024 * 1024;
+
+    constexpr static size_t kMaxCount = 500;
+    constexpr static uint32_t kSetLogSize = 32 * 1024 * 1024;
 };
 
 char Logcat::FilterPriToChar(android_LogPriority pri) {
@@ -61,89 +57,26 @@ char Logcat::FilterPriToChar(android_LogPriority pri) {
     }
 }
 
-char *Logcat::FormatLogLine(char *defaultBuffer,
-                            size_t defaultBufferSize,
-                            const AndroidLogEntry *entry,
-                            size_t *outLength) {
-    struct tm tmBuf{};
-    struct tm *ptm;
-    char timeBuf[64];
-    char prefixBuf[128];
-    char priChar;
-    char *ret;
-    time_t now;
-    unsigned long nsec;
-    priChar = FilterPriToChar(entry->priority);
-    size_t prefixLen = 0;
-    size_t len;
+int Logcat::PrintLogLine(FILE *out, const AndroidLogEntry *entry) {
+    constexpr static size_t kMaxTimeBuff = 64;
+    struct tm ptm{};
+    std::array<char, kMaxTimeBuff> time_buff;
 
-    now = entry->tv_sec;
-    nsec = entry->tv_nsec;
+    auto now = entry->tv_sec;
+    auto nsec = entry->tv_nsec;
     if (now < 0) {
         nsec = NS_PER_SEC - nsec;
     }
-    ptm = localtime_r(&now, &tmBuf);
-    strftime(timeBuf, sizeof(timeBuf), "%Y-%m-%dT%H:%M:%S", ptm);
-    len = strlen(timeBuf);
-    snprintf(timeBuf + len, sizeof(timeBuf) - len, ".%03ld", nsec / MS_PER_NSEC);
-
-    len = snprintf(prefixBuf, sizeof(prefixBuf),
-                   "[ %s %5d:%5d:%5d %c/%-15.*s ] ", timeBuf, entry->uid, entry->pid, entry->tid,
-                   priChar, static_cast<int>(entry->tagLen), entry->tag);
-
-    prefixLen += len;
-    if (prefixLen >= sizeof(prefixBuf)) {
-        prefixLen = sizeof(prefixBuf) - 1;
-        prefixBuf[sizeof(prefixBuf) - 1] = '\0';
-    }
-
-    char *p;
-    size_t bufferSize;
-    bufferSize = prefixLen + 2;
-    bufferSize += entry->messageLen;
-
-    if (defaultBufferSize >= bufferSize) {
-        ret = defaultBuffer;
-    } else {
-        ret = (char *) malloc(bufferSize);
-        if (ret == nullptr) {
-            return ret;
-        }
-    }
-
-    ret[0] = '\0';
-    p = ret;
-    strcat(p, prefixBuf);
-    p += prefixLen;
-    strncat(p, entry->message, entry->messageLen);
-    p += entry->messageLen;
-    strcat(p, "\n");
-    p += 1;
-
-    if (outLength != nullptr) {
-        *outLength = p - ret;
-    }
-
-    return ret;
-}
-
-int Logcat::PrintLogLine(int fd, const AndroidLogEntry *entry) {
-    int ret;
-    char defaultBuffer[512];
-    char *outBuffer;
-    size_t totalLen;
-    outBuffer = FormatLogLine(defaultBuffer, sizeof(defaultBuffer), entry, &totalLen);
-    if (!outBuffer) return -1;
-    do {
-        ret = write(fd, outBuffer, totalLen);
-    } while (ret < 0 && errno == EINTR);
-    if (ret < 0) ret = 0;
-    if (outBuffer != defaultBuffer) free(outBuffer);
-    return ret;
+    localtime_r(&now, &ptm);
+    strftime(time_buff.data(), time_buff.size(), "%Y-%m-%dT%H:%M:%S", &ptm);
+    fprintf(out, "[ %s.%03ld %5d:%5d:%5d %c/%-15.*s ] %.*s\n", time_buff.data(), nsec / MS_PER_NSEC,
+            entry->uid, entry->pid, entry->tid,
+            FilterPriToChar(entry->priority), static_cast<int>(entry->tagLen), entry->tag,
+            entry->messageLen, entry->message);
 }
 
 void Logcat::RefreshFd() {
-    output_fd_ = env_->CallIntMethod(thiz_, refresh_fd_method_);
+    out_file_ = fdopen(env_->CallIntMethod(thiz_, refresh_fd_method_), "w");
 }
 
 bool Logcat::ProcessBuffer(struct log_msg *buf) {
@@ -158,8 +91,8 @@ bool Logcat::ProcessBuffer(struct log_msg *buf) {
         tag.starts_with("Riru") ||
         tag.starts_with("LSPosed") ||
         tag == "XSharedPreferences") {
-        print_count_++;
-        PrintLogLine(output_fd_, &entry);
+        ++print_count_;
+        PrintLogLine(out_file_, &entry);
     }
     return entry.pid == getpid() &&
            tag == "LSPosedLogcat" &&
@@ -177,7 +110,7 @@ void Logcat::Run() {
         if (logger == nullptr) {
             continue;
         }
-        android_logger_set_log_size(logger, set_log_size_);
+        android_logger_set_log_size(logger, kSetLogSize);
     }
 
     while (true) {
@@ -192,7 +125,7 @@ void Logcat::Run() {
             break;
         }
 
-        if (print_count_ > max_count_) {
+        if (print_count_ > kMaxCount) {
             RefreshFd();
             print_count_ = 0;
         }

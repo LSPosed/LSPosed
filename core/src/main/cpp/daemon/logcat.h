@@ -38,10 +38,10 @@ struct logger_entry {
 };
 
 struct log_msg {
-    union {
+    union alignas(4) {
         unsigned char buf[LOGGER_ENTRY_MAX_LEN + 1];
         struct logger_entry entry;
-    } __attribute__((aligned(4)));
+    };
 #ifdef __cplusplus
     log_id_t id() {
         return static_cast<log_id_t>(entry.lid);
