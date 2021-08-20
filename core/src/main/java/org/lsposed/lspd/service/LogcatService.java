@@ -1,23 +1,27 @@
 package org.lsposed.lspd.service;
 
 import android.os.ParcelFileDescriptor;
+import android.os.SystemProperties;
 import android.util.Log;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 public class LogcatService implements Runnable {
     private static final String TAG = "LSPosedLogcat";
     private Thread thread;
-    private final File log;
-    private final File oldLod;
-    private ParcelFileDescriptor fd;
+    private final File logPath;
+    private File log = null;
+    private static DateTimeFormatter logTimeFormat;
 
     public LogcatService(File logPath) {
         System.loadLibrary("daemon");
-        log = new File(logPath, "logcat.txt");
-        oldLod = new File(logPath, "logcat.old.txt");
+        this.logPath = logPath;
+        var zone = ZoneId.of(SystemProperties.get("persist.sys.timezone", "GMT"));
+        logTimeFormat = DateTimeFormatter.ISO_LOCAL_DATE_TIME.withZone(zone);
     }
 
     @Override
@@ -31,31 +35,18 @@ public class LogcatService implements Runnable {
 
     @SuppressWarnings("unused")
     private int refreshFd() {
-        if (log.length() > 32 * 1024 * 1024) {
-            //noinspection ResultOfMethodCallIgnored
-            log.renameTo(oldLod);
-
-            if (fd != null) {
-                try {
-                    fd.close();
-                } catch (IOException ignored) {
-                }
-                fd = null;
-            }
+        if (log == null || log.length() > 32 * 1024 * 1024) {
+            log = new File(logPath, logTimeFormat.format(Instant.now()) + ".log");
         }
 
-        if (fd == null) {
-            var mode = ParcelFileDescriptor.MODE_WRITE_ONLY | ParcelFileDescriptor.MODE_CREATE |
-                    ParcelFileDescriptor.MODE_TRUNCATE | ParcelFileDescriptor.MODE_APPEND;
-            try {
-                fd = ParcelFileDescriptor.open(log, mode);
-            } catch (FileNotFoundException e) {
-                Log.w(TAG, "someone chattr +i ?", e); //TODO: Random file name
-                return 1; // FileDescriptor.out
-            }
+        var mode = ParcelFileDescriptor.MODE_WRITE_ONLY | ParcelFileDescriptor.MODE_CREATE |
+                ParcelFileDescriptor.MODE_TRUNCATE | ParcelFileDescriptor.MODE_APPEND;
+        try {
+            return ParcelFileDescriptor.open(log, mode).detachFd();
+        } catch (FileNotFoundException e) {
+            Log.w(TAG, "someone chattr +i ?", e);
+            return -1; // FileDescriptor.out
         }
-
-        return fd.getFd();
     }
 
     public void start() {

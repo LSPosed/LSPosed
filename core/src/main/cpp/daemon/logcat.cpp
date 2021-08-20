@@ -6,6 +6,16 @@
 
 #include "logcat.h"
 
+class UniqueFile : public std::unique_ptr<FILE, std::function<void(FILE *)>> {
+    inline static deleter_type deleter = [](auto f) { f && f != stdout && fclose(f); };
+public:
+    explicit UniqueFile(FILE *f) : std::unique_ptr<FILE, std::function<void(FILE *)>>(f, deleter) {}
+
+    UniqueFile(int fd, const char *mode) : UniqueFile(fd > 0 ? fdopen(fd, mode) : stdout) {};
+
+    UniqueFile() : UniqueFile(nullptr) {};
+};
+
 class Logcat {
 public:
     explicit Logcat(JNIEnv *env, jobject thiz, jmethodID method, jlong tid) :
@@ -20,14 +30,14 @@ private:
 
     static char FilterPriToChar(android_LogPriority pri);
 
-    static int PrintLogLine(FILE *out, const AndroidLogEntry *entry);
+    static void PrintLogLine(FILE *out, const AndroidLogEntry *entry);
 
     JNIEnv *env_;
     jobject thiz_;
     jmethodID refresh_fd_method_;
     jlong tid_;
 
-    FILE *out_file_{nullptr};
+    UniqueFile out_file_{};
     size_t print_count_ = 0;
 
     constexpr static size_t kMaxCount = 500;
@@ -57,9 +67,10 @@ char Logcat::FilterPriToChar(android_LogPriority pri) {
     }
 }
 
-int Logcat::PrintLogLine(FILE *out, const AndroidLogEntry *entry) {
+void Logcat::PrintLogLine(FILE *out, const AndroidLogEntry *entry) {
+    if (!out) return;
     constexpr static size_t kMaxTimeBuff = 64;
-    struct tm ptm{};
+    struct tm tm{};
     std::array<char, kMaxTimeBuff> time_buff;
 
     auto now = entry->tv_sec;
@@ -67,16 +78,16 @@ int Logcat::PrintLogLine(FILE *out, const AndroidLogEntry *entry) {
     if (now < 0) {
         nsec = NS_PER_SEC - nsec;
     }
-    localtime_r(&now, &ptm);
-    strftime(time_buff.data(), time_buff.size(), "%Y-%m-%dT%H:%M:%S", &ptm);
-    fprintf(out, "[ %s.%03ld %5d:%5d:%5d %c/%-15.*s ] %.*s\n", time_buff.data(), nsec / MS_PER_NSEC,
+    localtime_r(&now, &tm);
+    strftime(time_buff.data(), time_buff.size(), "%Y-%m-%dT%H:%M:%S", &tm);
+    fprintf(out, "[ %s.%03ld %8d:%6d:%6d %c/%-15.*s ] %.*s\n", time_buff.data(), nsec / MS_PER_NSEC,
             entry->uid, entry->pid, entry->tid,
             FilterPriToChar(entry->priority), static_cast<int>(entry->tagLen), entry->tag,
-            entry->messageLen, entry->message);
+            static_cast<int>(entry->messageLen), entry->message);
 }
 
 void Logcat::RefreshFd() {
-    out_file_ = fdopen(env_->CallIntMethod(thiz_, refresh_fd_method_), "w");
+    out_file_ = UniqueFile(env_->CallIntMethod(thiz_, refresh_fd_method_), "w");
 }
 
 bool Logcat::ProcessBuffer(struct log_msg *buf) {
@@ -92,7 +103,7 @@ bool Logcat::ProcessBuffer(struct log_msg *buf) {
         tag.starts_with("LSPosed") ||
         tag == "XSharedPreferences") {
         ++print_count_;
-        PrintLogLine(out_file_, &entry);
+        PrintLogLine(out_file_.get(), &entry);
     }
     return entry.pid == getpid() &&
            tag == "LSPosedLogcat" &&
@@ -124,6 +135,8 @@ void Logcat::Run() {
         if (ProcessBuffer(&msg)) {
             break;
         }
+
+        fflush(out_file_.get());
 
         if (print_count_ > kMaxCount) {
             RefreshFd();
