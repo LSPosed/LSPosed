@@ -156,7 +156,7 @@ concept ScopeOrObject = ScopeOrRaw<jobject, T>;
 inline ScopedLocalRef<jstring> ClearException(JNIEnv *env) {
     if (auto exception = env->ExceptionOccurred()) {
         env->ExceptionClear();
-        static jclass log = env->FindClass("android/util/Log");
+        static jclass log = (jclass) env->NewGlobalRef(env->FindClass("android/util/Log"));
         static jmethodID toString = env->GetStaticMethodID(log, "getStackTraceString",
                                                            "(Ljava/lang/Throwable;)Ljava/lang/String;");
         auto str = (jstring) env->CallStaticObjectMethod(log, toString, exception);
