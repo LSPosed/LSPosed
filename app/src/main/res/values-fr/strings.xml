@@ -28,9 +28,9 @@
     </plurals>
     <string name="Logs">Journaux</string>
     <string name="Settings">Réglages</string>
-    <string name="About">A propos</string>
+    <string name="About">À propos</string>
     <string name="module_repo">Dépôt</string>
-    <string name="module_repo_summary">Dépôts de modules (Beta)</string>
+    <string name="module_repo_summary">Dépôts des modules (Béta)</string>
     <string name="about_view_source_code"><![CDATA[Voir le code source sur %1$s<br/>Rejoindre notre canal %2$s]]></string>
     <string name="about_translators">Traducteur: %s</string>
     <string name="translators"><![CDATA[<a href="https://github.com/LSPosed/LSPosed">LSPosed</a>]]></string>
@@ -47,21 +47,21 @@
     <string name="system_inject_fail"><![CDATA[<b>AVERTISSEMENT:</b> Échec de l\’injection du sous système.<br/>Ceci est rare et peut être causé par <b>Magisk</b> ou certains modules Magisk de basse qualité.<br/>Éssayez de désactiver les modules Magisk autres que Riru et LSPosed ou envoyez le journal complet aux développeurs.]]></string>
     <string name="system_prop_incorrect_summary">Propriétés système incorrectes</string>
     <string name="system_prop_incorrect"><![CDATA[<b>AVERTISSEMENT:</b> Propriétés système incorrectes.<br/>Certaines propriétés nécessaires au système ont été supprimées ou modifiées.<br/>Les modules peuvent s\'invalider occasionnellement.]]></string>
-    <string name="need_update">Besoin de mettre à jour</string>
+    <string name="need_update">Mise à jour nécessaire</string>
     <string name="please_update_summary">Merci d\’installer la dernière version de LSPosed</string>
     <string name="lsposed_not_active">LSPosed n\’est actuellement pas installé ou activé.</string>
     <string name="info_api_version">Version de l\’API</string>
     <string name="info_framework_version">Version du framework</string>
     <string name="info_manager_version">Version du gestionnaire</string>
     <string name="info_system_version">Version du système</string>
-    <string name="info_device">Périphérique </string>
+    <string name="info_device">Périphérique</string>
     <string name="info_system_abi">Architecture du système</string>
 
     <!-- LogsActivity -->
     <string name="menuSend">Envoyer</string>
     <string name="menuSaveToSd">Sauvegarder</string>
     <string name="nav_item_logs_lsp">Journaux détaillés</string>
-    <string name="nav_item_logs_module">Journeaux Modules</string>
+    <string name="nav_item_logs_module">Journeaux des Modules</string>
     <string name="dont_show_again">Ne plus afficher</string>
     <string name="logs_save_failed">Échec de la sauvegarde:</string>
     <string name="menuClearLog">Éffacer le journal maintenant</string>
@@ -85,7 +85,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(aucune description fournie)</string>
     <string name="module_no_ui">Ce module ne fournit pas d\’interface utilisateur</string>
-    <string name="warning_xposed_min_version">Ce module requière une nouvelle version de LSPosed (%d) et n\’a donc pas pue être activé</string>
+    <string name="warning_xposed_min_version">Ce module requière une nouvelle version de LSPosed (%d) et n\’a donc pas pu être activé</string>
     <string name="no_min_version_specified">Ce module ne spécifie la version de LSPosed qu\’il a besoin.</string>
     <string name="warning_min_version_too_low">Ce module à été créé pour la version %1$d de LSPosed, mais à cause de changements incompatibles dans la version %2$d, il à été désactivé</string>
     <string name="warning_installed_on_external_storage">Ce module ne peut pas être chargé parce qu\’il à été installé sur la carte microSD, Merci de la déplacer dans la stockage interne</string>
@@ -99,7 +99,7 @@
     <string name="module_installed">Ajout de %1$s à l’utilisateur %2$s</string>
     <string name="module_install_failed">Échec de l\’ajout du module</string>
     <string name="install_to_user">Installation dans utilisateur %s</string>
-    <string name="install_to_user_message">Vous voulez installer %1$s dans l’utilisateur %2$s? Il est recommandé de l’installer manuellement, fercer l’installation via LSPosed pourrait causer des problèmes.</string>
+    <string name="install_to_user_message">Vous voulez installer %1$s dans l’utilisateur %2$s? Il est recommandé de l’installer manuellement, forcer l’installation via LSPosed pourrait causer des problèmes.</string>
 
     <!-- AppListActivity -->
     <string name="compile_speed">Ré-optimiser</string>
@@ -126,14 +126,14 @@
     <string name="use_recommended_message">Sélectionner les applications recommandées?</string>
     <string name="requested_by_module">Recommendé</string>
     <string name="update_available">Mise à jour disponible: %1$s</string>
-    <string name="module_disabled_no_selection">Le module %s à été désactivé étant donné qu\’aucune application n\’a été sélectionné.</string>
+    <string name="module_disabled_no_selection">Le module %s à été désactivé étant donné qu\’aucune application n\’ai été sélectionné.</string>
     <string name="android_framework">Cadre du sous-système</string>
     <string name="menu_backup_and_restore">Sauvegarde…</string>
     <string name="menu_backup">Sauvegarder</string>
     <string name="menu_restore">Restaurer</string>
     <string name="force_stop">Forcer l\’arrêt</string>
     <string name="force_stop_dlg_title">Forcer l\’arrêt?</string>
-    <string name="force_stop_dlg_text">Si vous forcez l\’arrêt d\’une application, elle peut mal se comporter.</string>
+    <string name="force_stop_dlg_text">Si vous forcez l\’arrêt d\’une application, celle-ci peut mal se comporter.</string>
     <string name="reboot_required">Redémarrage requis pour les changements prennent effet</string>
     <string name="reboot">Redémarrage</string>
     <string name="menu_hide">Masquage…</string>
