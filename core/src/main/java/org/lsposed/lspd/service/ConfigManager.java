@@ -96,8 +96,7 @@ public class ConfigManager {
     private static final File resourceHookSwitch = new File(configPath, "enable_resources");
     private boolean resourceHook = false;
 
-    private static final File verboseLogSwitch = new File(configPath, "verbose_log");
-    private boolean verboseLog = false;
+    private boolean logcat = true;
 
     private static final File managerPath = new File(configPath, "manager");
     private String manager = null;
@@ -107,9 +106,8 @@ public class ConfigManager {
     private String miscPath = null;
 
     private static final File logPath = new File(basePath, "log");
-    private static final File modulesLog = new File(logPath, "modules.log");
-    private static final File oldModulesLog = new File(logPath, "modules.old.log");
-    private static final File verboseLogPath = new File(logPath, "all.log");
+    private static final File modulesLog = new File(logPath, "modules.txt");
+    private static final File oldModulesLog = new File(logPath, "modules.old.txt");
 
     static class FileLocker {
         private final FileChannel lockChannel;
@@ -136,7 +134,7 @@ public class ConfigManager {
 
     static {
         try {
-            Files.createDirectories(basePath.toPath());
+            Files.createDirectories(logPath.toPath());
         } catch (IOException e) {
             Log.e(TAG, Log.getStackTraceString(e));
         }
@@ -310,7 +308,6 @@ public class ConfigManager {
 
     private synchronized void updateConfig() {
         resourceHook = readInt(resourceHookSwitch, 0) == 1;
-        verboseLog = readInt(verboseLogSwitch, 0) == 1;
         miscPath = "/data/misc/" + readText(miscFile, "lspd");
         updateManager();
     }
@@ -870,9 +867,14 @@ public class ConfigManager {
         this.resourceHook = resourceHook;
     }
 
-    public void setVerboseLog(boolean verboseLog) {
-        writeInt(verboseLogSwitch, verboseLog ? 1 : 0);
-        this.verboseLog = verboseLog;
+    public void setVerboseLog(boolean on) {
+        var logcatService = ServiceManager.getLogcatService();
+        if (on) {
+            logcatService.start();
+        } else {
+            logcatService.stop();
+        }
+        logcat = on;
     }
 
     public boolean resourceHook() {
@@ -880,7 +882,11 @@ public class ConfigManager {
     }
 
     public boolean verboseLog() {
-        return verboseLog;
+        return logcat;
+    }
+
+    public static File getLogPath() {
+        return logPath;
     }
 
     public ParcelFileDescriptor getModulesLog(int mode) {
@@ -898,7 +904,8 @@ public class ConfigManager {
 
     public ParcelFileDescriptor getVerboseLog() {
         try {
-            return ParcelFileDescriptor.open(verboseLogPath, ParcelFileDescriptor.MODE_READ_ONLY);
+            var logcat = ServiceManager.getLogcatService().getLog();
+            return ParcelFileDescriptor.open(logcat, ParcelFileDescriptor.MODE_READ_ONLY);
         } catch (FileNotFoundException e) {
             Log.e(TAG, Log.getStackTraceString(e));
             return null;
@@ -907,7 +914,8 @@ public class ConfigManager {
 
     public boolean clearLogs(boolean verbose) {
         try {
-            OutputStream os = new FileOutputStream(verbose ? verboseLogPath : modulesLog);
+            var logcat = ServiceManager.getLogcatService().getLog();
+            OutputStream os = new FileOutputStream(verbose ? logcat : modulesLog);
             os.close();
             return true;
         } catch (IOException e) {

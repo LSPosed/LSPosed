@@ -15,6 +15,9 @@
     public static boolean execTransact(int, long, long, int);
     public static android.os.IBinder getApplicationServiceForSystemServer(android.os.IBinder, android.os.IBinder);
 }
+-keepclasseswithmembers class org.lsposed.lspd.service.LogcatService {
+    private int refreshFd();
+}
 -assumenosideeffects class android.util.Log {
     public static *** v(...);
     public static *** d(...);

@@ -22,7 +22,6 @@ package org.lsposed.lspd.core;
 
 import static org.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
 
-import android.annotation.SuppressLint;
 import android.app.ActivityThread;
 import android.app.LoadedApk;
 import android.content.pm.ApplicationInfo;
@@ -48,7 +47,6 @@ import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.XposedInit;
 
-@SuppressLint("DefaultLocale")
 public class Main {
     public static void startBootstrapHook(boolean isSystem, String appDataDir) {
         Utils.logD("startBootstrapHook starts: isSystem = " + isSystem);

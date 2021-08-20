@@ -37,13 +37,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import hidden.HiddenApiBridge;
 
 public class ServiceManager {
+    public static final String TAG = "LSPosedService";
+    private static final ConcurrentHashMap<String, LSPModuleService> moduleServices = new ConcurrentHashMap<>();
+    private static final File globalNamespace = new File("/proc/1/root");
     private static LSPosedService mainService = null;
-    final private static ConcurrentHashMap<String, LSPModuleService> moduleServices = new ConcurrentHashMap<>();
     private static LSPApplicationService applicationService = null;
     private static LSPManagerService managerService = null;
     private static LSPSystemServerService systemServerService = null;
-    public static final String TAG = "LSPosedService";
-    private static final File globalNamespace = new File("/proc/1/root");
+    private static LogcatService logcatService = null;
 
     private static void waitSystemService(String name) {
         while (android.os.ServiceManager.getService(name) == null) {
@@ -76,6 +77,9 @@ public class ServiceManager {
             Log.e(TAG, "Uncaught exception", e);
             System.exit(1);
         });
+
+        logcatService = new LogcatService(ConfigManager.getLogPath());
+        logcatService.start();
 
         Process.setThreadPriority(Process.THREAD_PRIORITY_FOREGROUND);
         Looper.prepareMainLooper();
@@ -135,6 +139,10 @@ public class ServiceManager {
 
     public static LSPManagerService getManagerService() {
         return managerService;
+    }
+
+    public static LogcatService getLogcatService() {
+        return logcatService;
     }
 
     public static boolean systemServerRequested() {
