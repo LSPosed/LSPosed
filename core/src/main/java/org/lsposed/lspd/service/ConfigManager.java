@@ -467,6 +467,7 @@ public class ConfigManager {
                 if (oldModule != null &&
                         pkgInfo.applicationInfo.sourceDir != null &&
                         apkPath != null && oldModule.apkPath != null &&
+                        existsInGlobalNamespace(apkPath) &&
                         Objects.equals(apkPath, oldModule.apkPath) &&
                         Objects.equals(new File(pkgInfo.applicationInfo.sourceDir).getParent(), new File(apkPath).getParent())) {
                     if (oldModule.appId != -1) {
@@ -477,20 +478,17 @@ public class ConfigManager {
                     }
                     continue;
                 }
-                var path = apkPath;
-                if (path == null || !existsInGlobalNamespace(path)) {
-                    path = getModuleApkPath(pkgInfo.applicationInfo);
-                    if (path == null) obsoleteModules.add(packageName);
-                    else obsoletePaths.put(packageName, path);
-                }
-                var file = loadModule(path);
+                apkPath = getModuleApkPath(pkgInfo.applicationInfo);
+                if (apkPath == null) obsoleteModules.add(packageName);
+                else obsoletePaths.put(packageName, apkPath);
+                var file = loadModule(apkPath);
                 if (file == null) {
                     Log.w(TAG, "failed to load module " + packageName);
                     obsoleteModules.add(packageName);
                     continue;
                 }
                 var module = new Module();
-                module.apkPath = path;
+                module.apkPath = apkPath;
                 module.packageName = packageName;
                 module.file = file;
                 module.appId = pkgInfo.applicationInfo.uid;
