@@ -45,7 +45,7 @@ public class LogcatService implements Runnable {
             return ParcelFileDescriptor.open(log, mode).detachFd();
         } catch (FileNotFoundException e) {
             Log.w(TAG, "someone chattr +i ?", e);
-            return -1; // FileDescriptor.out
+            return -1;
         }
     }
 
