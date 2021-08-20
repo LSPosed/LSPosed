@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 public class ModuleLogger {
     private static DateTimeFormatter logDateFormat;
@@ -39,7 +40,8 @@ public class ModuleLogger {
         if (fd == null && fileDescriptor != null) {
             fd = fileDescriptor;
             var zone = ZoneId.of(SystemProperties.get("persist.sys.timezone", "GMT"));
-            logDateFormat = DateTimeFormatter.ISO_LOCAL_DATE_TIME.withZone(zone);
+            var pattern = "uuuu-MM-dd'T'HH:mm:ss.SSS"; // DateTimeFormatter.ISO_LOCAL_DATE_TIME
+            logDateFormat = DateTimeFormatter.ofPattern(pattern, Locale.ROOT).withZone(zone);
         }
     }
 
@@ -48,24 +50,16 @@ public class ModuleLogger {
             Utils.logE("Logger is not initialized");
             return;
         }
-        StringBuilder sb = new StringBuilder();
         String processName = ActivityThread.currentProcessName();
-
-        sb.append(logDateFormat.format(Instant.now()));
-        sb.append(' ');
-        sb.append(isThrowable ? "E" : "I");
-        sb.append('/');
-        sb.append(processName == null ? "android" : processName);
-        sb.append('(');
-        sb.append(Process.myPid());
-        sb.append('-');
-        sb.append(Process.myTid());
-        sb.append(')');
-        sb.append(": ");
-        sb.append(str);
-        sb.append('\n');
+        var log = String.format(Locale.ROOT, "[ %s %5d:%5d:%5d %c/%s ] %s\n",
+                logDateFormat.format(Instant.now()),
+                Process.myUid(),
+                Process.myPid(),
+                Process.myTid(),
+                isThrowable ? 'E' : 'I',
+                processName == null ? "android" : processName,
+                str);
         try {
-            var log = sb.toString();
             var writer = new FileWriter(fd.getFileDescriptor());
             writer.write(log, 0, log.length());
             writer.flush();

@@ -252,8 +252,14 @@ val pushLspd = task("pushLspd", Exec::class) {
     workingDir("$buildDir/intermediates/dex/debug/mergeDexDebug")
     commandLine(adb, "push", "classes.dex", "/data/local/tmp/lspd.dex")
 }
+val pushLspdNative = task("pushLspdNative", Exec::class) {
+    dependsOn("mergeDebugNativeLibs")
+    workingDir("$buildDir/intermediates/merged_native_libs/debug/out/lib/arm64-v8a")
+    commandLine(adb, "push", "libdaemon.so", "/data/local/tmp/libdaemon.so")
+}
 task("reRunLspd", Exec::class) {
     dependsOn(pushLspd)
+    dependsOn(pushLspdNative)
     dependsOn(killLspd)
     commandLine(adb, "shell", "su", "-c", "sh /data/adb/modules/riru_lsposed/service.sh&")
     isIgnoreExitValue = true

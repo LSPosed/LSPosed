@@ -144,22 +144,10 @@ public class SettingsFragment extends BaseFragment {
             boolean installed = ConfigManager.isBinderAlive();
             SwitchPreference prefVerboseLogs = findPreference("disable_verbose_log");
             if (prefVerboseLogs != null) {
-                if (requireActivity().getApplicationInfo().uid / 100000 != 0) {
-                    prefVerboseLogs.setVisible(false);
-                } else {
-                    prefVerboseLogs.setEnabled(installed);
-                    prefVerboseLogs.setChecked(!installed || !ConfigManager.isVerboseLogEnabled());
-                    prefVerboseLogs.setOnPreferenceChangeListener((preference, newValue) -> {
-                        boolean result = ConfigManager.setVerboseLogEnabled(!(boolean) newValue);
-                        SettingsFragment fragment = (SettingsFragment) getParentFragment();
-                        if (result && fragment != null) {
-                            Snackbar.make(fragment.binding.snackbar, R.string.reboot_required, Snackbar.LENGTH_SHORT)
-                                    .setAction(R.string.reboot, v -> ConfigManager.reboot(false))
-                                    .show();
-                        }
-                        return result;
-                    });
-                }
+                prefVerboseLogs.setEnabled(installed);
+                prefVerboseLogs.setChecked(!installed || !ConfigManager.isVerboseLogEnabled());
+                prefVerboseLogs.setOnPreferenceChangeListener((preference, newValue) ->
+                        ConfigManager.setVerboseLogEnabled(!(boolean) newValue));
             }
 
             SwitchPreference prefEnableResources = findPreference("enable_resources");
