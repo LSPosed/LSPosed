@@ -6,6 +6,7 @@
 #include <android/log.h>
 
 #define NS_PER_SEC 1000000000ULL
+#define MS_PER_NSEC 1000000
 #define LOGGER_ENTRY_MAX_LEN (5 * 1024)
 
 #ifdef __cplusplus

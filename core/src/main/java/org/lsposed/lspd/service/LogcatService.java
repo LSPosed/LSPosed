@@ -29,6 +29,7 @@ public class LogcatService implements Runnable {
 
     private native void runLogcat(long tid);
 
+    @SuppressWarnings("unused")
     private int refreshFd() {
         if (log.length() > 32 * 1024 * 1024) {
             //noinspection ResultOfMethodCallIgnored
@@ -44,8 +45,8 @@ public class LogcatService implements Runnable {
         }
 
         if (fd == null) {
-            var mode = ParcelFileDescriptor.MODE_WRITE_ONLY | ParcelFileDescriptor.MODE_APPEND |
-                    ParcelFileDescriptor.MODE_CREATE;
+            var mode = ParcelFileDescriptor.MODE_WRITE_ONLY | ParcelFileDescriptor.MODE_CREATE |
+                    ParcelFileDescriptor.MODE_TRUNCATE | ParcelFileDescriptor.MODE_APPEND;
             try {
                 fd = ParcelFileDescriptor.open(log, mode);
             } catch (FileNotFoundException e) {
@@ -69,6 +70,7 @@ public class LogcatService implements Runnable {
     }
 
     public void stop() {
+        // logcat thread is listening for this keyword
         Log.i(TAG, "!!stop!!" + thread.getId());
     }
 

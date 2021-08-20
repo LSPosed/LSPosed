@@ -8,8 +8,8 @@
 
 class Logcat {
 public:
-    explicit Logcat(JNIEnv *env, jobject thiz, jmethodID method, jlong javaTid) :
-            env(env), thiz(thiz), refreshFd_method(method), javaTid(javaTid) { RefreshFd(); };
+    explicit Logcat(JNIEnv *env, jobject thiz, jmethodID method, jlong tid) :
+            env_(env), thiz_(thiz), refresh_fd_method_(method), tid_(tid) { RefreshFd(); };
 
     void Run();
 
@@ -18,27 +18,27 @@ private:
 
     bool ProcessBuffer(struct log_msg *buf);
 
-    static char filterPriToChar(android_LogPriority pri);
+    static char FilterPriToChar(android_LogPriority pri);
 
     static int PrintLogLine(int fd, const AndroidLogEntry *entry);
 
-    static char *formatLogLine(char *defaultBuffer,
+    static char *FormatLogLine(char *defaultBuffer,
                                size_t defaultBufferSize,
                                const AndroidLogEntry *entry,
-                               size_t *p_outLength);
+                               size_t *outLength);
 
-    JNIEnv *env;
-    jobject thiz;
-    jmethodID refreshFd_method;
-    jlong javaTid;
+    JNIEnv *env_;
+    jobject thiz_;
+    jmethodID refresh_fd_method_;
+    jlong tid_;
 
-    int output_fd = 0;
-    size_t max_count = 500;
-    size_t print_count = 0;
-    unsigned long set_log_size = 32 * 1024 * 1024;
+    int output_fd_ = 1;
+    size_t max_count_ = 500;
+    size_t print_count_ = 0;
+    unsigned long set_log_size_ = 32 * 1024 * 1024;
 };
 
-char Logcat::filterPriToChar(android_LogPriority pri) {
+char Logcat::FilterPriToChar(android_LogPriority pri) {
     switch (pri) {
         case ANDROID_LOG_VERBOSE:
             return 'V';
@@ -61,10 +61,10 @@ char Logcat::filterPriToChar(android_LogPriority pri) {
     }
 }
 
-char *Logcat::formatLogLine(char *defaultBuffer,
+char *Logcat::FormatLogLine(char *defaultBuffer,
                             size_t defaultBufferSize,
                             const AndroidLogEntry *entry,
-                            size_t *p_outLength) {
+                            size_t *outLength) {
     struct tm tmBuf{};
     struct tm *ptm;
     char timeBuf[64];
@@ -73,7 +73,7 @@ char *Logcat::formatLogLine(char *defaultBuffer,
     char *ret;
     time_t now;
     unsigned long nsec;
-    priChar = filterPriToChar(entry->priority);
+    priChar = FilterPriToChar(entry->priority);
     size_t prefixLen = 0;
     size_t len;
 
@@ -82,21 +82,14 @@ char *Logcat::formatLogLine(char *defaultBuffer,
     if (now < 0) {
         nsec = NS_PER_SEC - nsec;
     }
-    char uid[16];
-    uid[0] = '\0';
-    if (entry->uid >= 0) {
-        snprintf(uid, sizeof(uid), "%5d:", entry->uid);
-    } else {
-        snprintf(uid, sizeof(uid), "      ");
-    }
     ptm = localtime_r(&now, &tmBuf);
     strftime(timeBuf, sizeof(timeBuf), "%Y-%m-%dT%H:%M:%S", ptm);
     len = strlen(timeBuf);
-    snprintf(timeBuf + len, sizeof(timeBuf) - len, ".%03ld", nsec / 1000000);
+    snprintf(timeBuf + len, sizeof(timeBuf) - len, ".%03ld", nsec / MS_PER_NSEC);
 
     len = snprintf(prefixBuf, sizeof(prefixBuf),
-                   "[ %s %s%5d:%5d %c/%-8.*s ] ", timeBuf, uid, entry->pid, entry->tid, priChar,
-                   (int) entry->tagLen, entry->tag);
+                   "[ %s %5d:%5d:%5d %c/%-15.*s ] ", timeBuf, entry->uid, entry->pid, entry->tid,
+                   priChar, static_cast<int>(entry->tagLen), entry->tag);
 
     prefixLen += len;
     if (prefixLen >= sizeof(prefixBuf)) {
@@ -127,8 +120,8 @@ char *Logcat::formatLogLine(char *defaultBuffer,
     strcat(p, "\n");
     p += 1;
 
-    if (p_outLength != nullptr) {
-        *p_outLength = p - ret;
+    if (outLength != nullptr) {
+        *outLength = p - ret;
     }
 
     return ret;
@@ -139,7 +132,7 @@ int Logcat::PrintLogLine(int fd, const AndroidLogEntry *entry) {
     char defaultBuffer[512];
     char *outBuffer;
     size_t totalLen;
-    outBuffer = formatLogLine(defaultBuffer, sizeof(defaultBuffer), entry, &totalLen);
+    outBuffer = FormatLogLine(defaultBuffer, sizeof(defaultBuffer), entry, &totalLen);
     if (!outBuffer) return -1;
     do {
         ret = write(fd, outBuffer, totalLen);
@@ -150,7 +143,7 @@ int Logcat::PrintLogLine(int fd, const AndroidLogEntry *entry) {
 }
 
 void Logcat::RefreshFd() {
-    output_fd = env->CallIntMethod(thiz, refreshFd_method);
+    output_fd_ = env_->CallIntMethod(thiz_, refresh_fd_method_);
 }
 
 bool Logcat::ProcessBuffer(struct log_msg *buf) {
@@ -165,16 +158,12 @@ bool Logcat::ProcessBuffer(struct log_msg *buf) {
         tag.starts_with("Riru") ||
         tag.starts_with("LSPosed") ||
         tag == "XSharedPreferences") {
-        print_count++;
-        PrintLogLine(output_fd, &entry);
+        print_count_++;
+        PrintLogLine(output_fd_, &entry);
     }
-    if (entry.pid == getpid() &&
-        tag == "LSPosedLogcat" &&
-        std::string_view(entry.message) == "!!stop!!" + std::to_string(javaTid)) {
-        return true;
-    } else {
-        return false;
-    }
+    return entry.pid == getpid() &&
+           tag == "LSPosedLogcat" &&
+           std::string_view(entry.message) == "!!stop!!" + std::to_string(tid_);
 }
 
 void Logcat::Run() {
@@ -184,11 +173,11 @@ void Logcat::Run() {
     logger_list.reset(android_logger_list_alloc(0, 0, 0));
 
     for (log_id id:{LOG_ID_MAIN, LOG_ID_CRASH}) {
-        auto logger = android_logger_open(logger_list.get(), id);
+        auto *logger = android_logger_open(logger_list.get(), id);
         if (logger == nullptr) {
             continue;
         }
-        android_logger_set_log_size(logger, set_log_size);
+        android_logger_set_log_size(logger, set_log_size_);
     }
 
     while (true) {
@@ -203,9 +192,9 @@ void Logcat::Run() {
             break;
         }
 
-        if (print_count > max_count) {
+        if (print_count_ > max_count_) {
             RefreshFd();
-            print_count = 0;
+            print_count_ = 0;
         }
     }
 }
