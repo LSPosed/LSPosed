@@ -29,6 +29,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.core.os.BuildCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
@@ -124,12 +125,16 @@ public class MainActivity extends BaseActivity {
     }
 
     public void restart() {
-        Bundle savedInstanceState = new Bundle();
-        onSaveInstanceState(savedInstanceState);
-        finish();
-        startActivity(newIntent(savedInstanceState, this));
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-        restarting = true;
+        if (BuildCompat.isAtLeastS()) {
+            recreate();
+        } else {
+            Bundle savedInstanceState = new Bundle();
+            onSaveInstanceState(savedInstanceState);
+            finish();
+            startActivity(newIntent(savedInstanceState, this));
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            restarting = true;
+        }
     }
 
     @Override
