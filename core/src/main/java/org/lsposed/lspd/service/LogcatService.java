@@ -1,5 +1,6 @@
 package org.lsposed.lspd.service;
 
+import android.annotation.SuppressLint;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
 
@@ -19,8 +20,10 @@ public class LogcatService implements Runnable {
     private File log = null;
     private Thread thread = null;
 
+    @SuppressLint("UnsafeDynamicallyLoadedCode")
     public LogcatService(File logPath) {
-        System.loadLibrary("daemon");
+        String libraryPath = System.getProperty("lsp.library.path");
+        System.load(libraryPath + "/" + System.mapLibraryName("daemon"));
         this.logPath = logPath;
         logTimeFormat = DateTimeFormatter.ISO_LOCAL_DATE_TIME.withZone(Utils.getZoneId());
     }
