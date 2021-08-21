@@ -4,18 +4,20 @@ import android.os.ParcelFileDescriptor;
 import android.os.SystemProperties;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
+
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 public class LogcatService implements Runnable {
     private static final String TAG = "LSPosedLogcat";
-    private Thread thread;
     private final File logPath;
+    private final DateTimeFormatter logTimeFormat;
     private File log = null;
-    private static DateTimeFormatter logTimeFormat;
+    private Thread thread = null;
 
     public LogcatService(File logPath) {
         System.loadLibrary("daemon");
@@ -39,9 +41,9 @@ public class LogcatService implements Runnable {
 
         var mode = ParcelFileDescriptor.MODE_WRITE_ONLY | ParcelFileDescriptor.MODE_CREATE |
                 ParcelFileDescriptor.MODE_TRUNCATE | ParcelFileDescriptor.MODE_APPEND;
-        try {
-            return ParcelFileDescriptor.open(log, mode).detachFd();
-        } catch (FileNotFoundException e) {
+        try (var fd = ParcelFileDescriptor.open(log, mode)) {
+            return fd.detachFd();
+        } catch (IOException e) {
             Log.w(TAG, "someone chattr +i ?", e);
             return -1;
         }
@@ -67,6 +69,7 @@ public class LogcatService implements Runnable {
         return thread != null && thread.isAlive();
     }
 
+    @Nullable
     public File getLog() {
         return log;
     }
