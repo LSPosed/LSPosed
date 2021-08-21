@@ -35,9 +35,7 @@ public class LogcatService implements Runnable {
 
     @SuppressWarnings("unused")
     private int refreshFd() {
-        if (log == null || log.length() > 32 * 1024 * 1024) {
-            log = new File(logPath, logTimeFormat.format(Instant.now()) + ".log");
-        }
+        log = new File(logPath, logTimeFormat.format(Instant.now()) + ".log");
 
         var mode = ParcelFileDescriptor.MODE_WRITE_ONLY | ParcelFileDescriptor.MODE_CREATE |
                 ParcelFileDescriptor.MODE_TRUNCATE | ParcelFileDescriptor.MODE_APPEND;
