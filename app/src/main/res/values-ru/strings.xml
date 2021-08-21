@@ -44,16 +44,16 @@
     <string name="activated">Активирован</string>
     <string name="partial_activated">Частично активирован</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy не загружен должным образом</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[<b>ВНИМАНИЕ:</b> SEPolicy не загружается должным образом, модули, которые подключают Framework в систему, не будут работать.<br/>Пожалуйста, сообщите об этом сюда <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> разработчик.]]></string>
-    <string name="system_inject_fail_summary">Ошибка внедрения Framework в систему</string>
-    <string name="system_inject_fail"><![CDATA[<b>ВНИМАНИЕ:</b> Ошибка внедрения Framework в систему.<br/>Это редкость и может быть вызвано <b>Magisk</b> или несовместимыми модулями Magisk.<br/>Пожалуйста, попрорбуйте отключить модули Magisk кроме Riru и LSPosed или пришлите полные логи разработчику.]]></string>
+    <string name="selinux_policy_not_loaded"><![CDATA[<b>ВНИМАНИЕ:</b> SEPolicy не загружается должным образом, модули которым нужен системный фреймворк, не будут работать.<br/>Пожалуйста, сообщите об этом сюда <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> разработчик.]]></string>
+    <string name="system_inject_fail_summary">Ошибка внедрения системного фреймворка</string>
+    <string name="system_inject_fail"><![CDATA[<b>ВНИМАНИЕ:</b> Ошибка внедрения системного фреймворка.<br/>Это редкость и может быть вызвано <b>Magisk</b> или несовместимыми модулями Magisk.<br/>Пожалуйста, попрорбуйте отключить модули Magisk кроме Riru и LSPosed или пришлите полные логи разработчику.]]></string>
     <string name="system_prop_incorrect_summary">Не правильные системные настройки</string>
     <string name="system_prop_incorrect"><![CDATA[<b>ВНИМАНИЕ:</b> Не правильные системные настройки.<br/>Некоторые системные настройки нужные для работы удалены или изменены.<br/>Модули могут не работать должным образом.]]></string>
     <string name="need_update">Требуется обновление</string>
     <string name="please_update_summary">Установите последнюю версию LSPosed!</string>
     <string name="lsposed_not_active">LSPosed не установлен или не активирован!</string>
     <string name="info_api_version">Версия API</string>
-    <string name="info_framework_version">Версия LSPosed Framework</string>
+    <string name="info_framework_version">Версия фреймворк LSPosed</string>
     <string name="info_manager_version">Версия приложения LSPosed</string>
     <string name="info_system_version">Версия Android</string>
     <string name="info_device">Устройство</string>
@@ -77,12 +77,12 @@
     <string name="verbose_log_not_avaliable">Подробные логи не доступны. Если вы только что включили их, для применения требуется перезагрузка</string>
 
     <!-- Notification -->
-    <string name="module_is_not_activated_yet">Модуль еще не включен</string>
+    <string name="module_is_not_activated_yet">Модуль установлен</string>
     <string name="module_is_not_activated_yet_detailed">Модуль %s установлен но не включен</string>
     <string name="xposed_module_updated_notification_title">Модуль обновлен</string>
     <string name="xposed_module_updated_notification_content">%s обновлен, остановите и запустите приложения выбранные для модуля</string>
     <string name="xposed_module_updated_notification_title_system">Модуль обновлен, требуется перезагрузка</string>
-    <string name="xposed_module_updated_notification_content_system">%s обновлен, так как выбран системный Framework для модуля, требуется перезагрузка для применения изменений</string>
+    <string name="xposed_module_updated_notification_content_system">%s обновлен, так как выбран системный фреймворк для модуля, требуется перезагрузка для применения изменений</string>
 
     <!-- ModulesActivity -->
     <string name="module_empty_description">(описание отсутствует)</string>
@@ -129,14 +129,14 @@
     <string name="requested_by_module">Рекомендуемые</string>
     <string name="update_available">Доступно обновление: %1$s</string>
     <string name="module_disabled_no_selection">Модуль %s выключен, так как ни одно приложение не выбрано</string>
-    <string name="android_framework">Системный Framework</string>
+    <string name="android_framework">Системный фреймворк</string>
     <string name="menu_backup_and_restore">Резервная копия</string>
     <string name="menu_backup">Создать</string>
     <string name="menu_restore">Восстановить</string>
     <string name="force_stop">Остановить</string>
     <string name="force_stop_dlg_title">Остановить приложение?</string>
     <string name="force_stop_dlg_text">Принудительная остановка приложения выгружает его из запущенных</string>
-    <string name="reboot_required">Для применения этого изменения требуется перезагрузка</string>
+    <string name="reboot_required">Для применения требуется перезагрузка</string>
     <string name="reboot">Перезагрузить</string>
     <string name="menu_hide">Скрыть приложения</string>
 
@@ -146,7 +146,7 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nЗдесь ничего нет</string>
 
     <!-- SettingsActivity -->
-    <string name="settings_group_framework">Framework</string>
+    <string name="settings_group_framework">Фреймворк</string>
     <string name="settings_enable_resources">Включить перехват ресурсов</string>
     <string name="settings_enable_resources_summary"><b>ВНИМАНИЕ:</b> Перехват ресурсов работает в экспериментальном режиме</string>
     <string name="pref_title_disable_verbose_log">Выключить подробные логи</string>
@@ -154,7 +154,7 @@
     <string name="pure_black_dark_theme_summary">Использовать черную тему, когда включена темная</string>
     <string name="settings_group_theme">Тема</string>
     <string name="settings_backup_and_restore">Резервное копирование и восстановление</string>
-    <string name="settings_backup_and_restore_summery">Списка модулей и включенных приложений для модуля</string>
+    <string name="settings_backup_and_restore_summery">Список модулей и включенных приложений</string>
     <string name="settings_backup">Создать</string>
     <string name="settings_backuping">Резервное копирование…</string>
     <string name="settings_backup_success">Резервное копирование завершено!</string>
@@ -169,8 +169,8 @@
     <string name="theme_color">Акцент темы</string>
     <string name="theme_color_summary">Цвет, который чаще всего появляется в приложении</string>
     <string name="theme_color_system_accent">Системный цвет акцента</string>
-    <string name="settings_show_hidden_icon_apps_enabled">Принудительно показывать иконку запуска</string>
-    <string name="settings_show_hidden_icon_apps_enabled_summary">После Android 10, приложения не могут скрывать иконку запуска в лаунчер. Выключите переключатель, чтобы отключить эту системную функцию</string>
+    <string name="settings_show_hidden_icon_apps_enabled">Принудительно показывать иконку модуля</string>
+    <string name="settings_show_hidden_icon_apps_enabled_summary">После Android 10, модули не могут скрывать иконку в лаунчер. Выключите переключатель, чтобы отключить эту системную функцию</string>
     <string name="settings_group_system">Система</string>
 
     <!-- Module Repo -->
@@ -189,8 +189,8 @@
 
     <!-- CrashReportActivity -->
     <string name="app_destroyed">Это приложение повреждено. Убедитесь, что загрузили его из официального источника</string>
-    <string name="outdated_core">Приложение LSPosed новее, чем LSPosed Framework. Обновите LSPosed Framework</string>
-    <string name="outdated_manager">LSPosed Framework новее, чем приложение LSPosed. Обновите приложение вручную из /data/adb/lspd/manager.apk</string>
+    <string name="outdated_core">Приложение LSPosed новее, чем фреймворк LSPosed. Обновите фреймворк LSPosed</string>
+    <string name="outdated_manager">Фреймворк LSPosed новее, чем приложение LSPosed. Обновите приложение вручную из /data/adb/lspd/manager.apk</string>
     <string name="manager_crashed">Сбой приложения</string>
     <string name="cpoy_crash_info">Скопировать информацию о сбое</string>
     <string name="copy_toast_msg">Скопировано</string>
