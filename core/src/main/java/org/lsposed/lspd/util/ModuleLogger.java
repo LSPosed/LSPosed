@@ -23,12 +23,10 @@ package org.lsposed.lspd.util;
 import android.app.ActivityThread;
 import android.os.ParcelFileDescriptor;
 import android.os.Process;
-import android.os.SystemProperties;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.Instant;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
@@ -39,7 +37,7 @@ public class ModuleLogger {
     public static void initLogger(ParcelFileDescriptor fileDescriptor) {
         if (fd == null && fileDescriptor != null) {
             fd = fileDescriptor;
-            var zone = ZoneId.of(SystemProperties.get("persist.sys.timezone", "GMT"));
+            var zone = Utils.getZoneId();
             var pattern = "uuuu-MM-dd'T'HH:mm:ss.SSS"; // DateTimeFormatter.ISO_LOCAL_DATE_TIME
             logDateFormat = DateTimeFormatter.ofPattern(pattern, Locale.ROOT).withZone(zone);
         }

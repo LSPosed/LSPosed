@@ -1,15 +1,15 @@
 package org.lsposed.lspd.service;
 
 import android.os.ParcelFileDescriptor;
-import android.os.SystemProperties;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import org.lsposed.lspd.util.Utils;
+
 import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 public class LogcatService implements Runnable {
@@ -22,8 +22,7 @@ public class LogcatService implements Runnable {
     public LogcatService(File logPath) {
         System.loadLibrary("daemon");
         this.logPath = logPath;
-        var zone = ZoneId.of(SystemProperties.get("persist.sys.timezone", "GMT"));
-        logTimeFormat = DateTimeFormatter.ISO_LOCAL_DATE_TIME.withZone(zone);
+        logTimeFormat = DateTimeFormatter.ISO_LOCAL_DATE_TIME.withZone(Utils.getZoneId());
     }
 
     @Override
