@@ -58,7 +58,7 @@ dependencies {
     implementation("dev.rikka.ndk:riru:26.0.0")
     implementation("dev.rikka.ndk.thirdparty:cxx:1.1.0")
     implementation("io.github.vvb2060.ndk:dobby:1.2")
-    implementation("com.android.tools.build:apksig:7.0.0")
+    implementation("com.android.tools.build:apksig:7.0.1")
     implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("de.upb.cs.swt:axml:2.1.1")
     compileOnly("androidx.annotation:annotation:1.2.0")

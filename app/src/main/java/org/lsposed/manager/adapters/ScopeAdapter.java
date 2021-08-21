@@ -453,9 +453,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         }
         loadAppListHandler.removeMessages(0);
         if (!force) {
-            fragment.binding.progress.setVisibility(View.INVISIBLE);
             fragment.binding.progress.setIndeterminate(true);
-            fragment.binding.progress.setVisibility(View.VISIBLE);
         }
         enabled = moduleUtil.isModuleEnabled(module.packageName);
         fragment.binding.masterSwitch.setOnCheckedChangeListener(null);
