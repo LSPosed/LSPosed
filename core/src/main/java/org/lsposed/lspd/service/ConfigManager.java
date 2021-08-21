@@ -905,6 +905,7 @@ public class ConfigManager {
     public ParcelFileDescriptor getVerboseLog() {
         try {
             var logcat = ServiceManager.getLogcatService().getLog();
+            if (logcat == null) return null;
             return ParcelFileDescriptor.open(logcat, ParcelFileDescriptor.MODE_READ_ONLY);
         } catch (FileNotFoundException e) {
             Log.e(TAG, Log.getStackTraceString(e));
@@ -915,6 +916,7 @@ public class ConfigManager {
     public boolean clearLogs(boolean verbose) {
         try {
             var logcat = ServiceManager.getLogcatService().getLog();
+            if (verbose && logcat == null) return true;
             OutputStream os = new FileOutputStream(verbose ? logcat : modulesLog);
             os.close();
             return true;
