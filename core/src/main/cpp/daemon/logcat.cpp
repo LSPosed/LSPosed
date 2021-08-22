@@ -33,9 +33,9 @@ public:
 class Logcat {
 public:
     explicit Logcat(JNIEnv *env, jobject thiz, jmethodID method, jlong tid) :
-            env_(env), thiz_(thiz), refresh_fd_method_(method), tid_(tid) { RefreshFd(); };
+            env_(env), thiz_(thiz), refresh_fd_method_(method), tid_(tid) {};
 
-    void Run();
+    [[noreturn]] void Run();
 
 private:
     inline void RefreshFd();
@@ -100,37 +100,36 @@ bool Logcat::ProcessBuffer(struct log_msg *buf) {
 }
 
 void Logcat::Run() {
-    std::unique_ptr<logger_list, decltype(&android_logger_list_free)> logger_list{
-            nullptr, &android_logger_list_free};
-
-    logger_list.reset(android_logger_list_alloc(0, 0, 0));
-
-    for (log_id id:{LOG_ID_MAIN, LOG_ID_CRASH}) {
-        auto *logger = android_logger_open(logger_list.get(), id);
-        if (logger == nullptr) {
-            continue;
-        }
-        android_logger_set_log_size(logger, kMaxLogSize);
-    }
-
     while (true) {
+        std::unique_ptr<logger_list, decltype(&android_logger_list_free)> logger_list{
+                android_logger_list_alloc(0, 0, 0), &android_logger_list_free};
+
+        for (log_id id:{LOG_ID_MAIN, LOG_ID_CRASH}) {
+            auto *logger = android_logger_open(logger_list.get(), id);
+            if (logger == nullptr) {
+                continue;
+            }
+            android_logger_set_log_size(logger, kMaxLogSize);
+        }
+
+        RefreshFd();
+
         struct log_msg msg{};
-        int ret = android_logger_list_read(logger_list.get(), &msg);
 
-        if (ret <= 0) {
-            continue;
+        while (true) {
+            if (android_logger_list_read(logger_list.get(), &msg) <= 0 || ProcessBuffer(&msg)) {
+                break;
+            }
+
+            fflush(out_file_.get());
+
+            if (print_count_ >= kMaxLogSize) {
+                RefreshFd();
+                print_count_ = 0;
+            }
         }
-
-        if (ProcessBuffer(&msg)) {
-            break;
-        }
-
-        fflush(out_file_.get());
-
-        if (print_count_ >= kMaxLogSize) {
-            RefreshFd();
-            print_count_ = 0;
-        }
+        fprintf(out_file_.get(), "=== Logcat crashed, retrying in 1s... ===");
+        sleep(1);
     }
 }
 
