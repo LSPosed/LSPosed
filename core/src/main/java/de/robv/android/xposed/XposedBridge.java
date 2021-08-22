@@ -133,7 +133,7 @@ public final class XposedBridge {
      */
     public synchronized static void log(String text) {
         Log.i(TAG, text);
-        ModuleLogger.log(text, false);
+        ModuleLogger.log(text + "\n", false);
     }
 
     /**
