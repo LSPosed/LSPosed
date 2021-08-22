@@ -37,7 +37,6 @@ import org.lsposed.lspd.hooker.HandleBindAppHooker;
 import org.lsposed.lspd.hooker.LoadedApkCstrHooker;
 import org.lsposed.lspd.hooker.SystemMainHooker;
 import org.lsposed.lspd.service.ServiceManager;
-import org.lsposed.lspd.util.ModuleLogger;
 import org.lsposed.lspd.util.Utils;
 import org.lsposed.lspd.yahfa.hooker.YahfaHooker;
 
@@ -79,7 +78,6 @@ public class Main {
     public static void forkPostCommon(boolean isSystem, String appDataDir, String niceName) {
         // init logger
         YahfaHooker.init();
-        ModuleLogger.initLogger(serviceClient.getModuleLogger());
         XposedBridge.initXResources();
         XposedInit.startsSystemServer = isSystem;
         PrebuiltMethodsDeopter.deoptBootMethods(); // do it once for secondary zygote

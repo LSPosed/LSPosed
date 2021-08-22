@@ -89,12 +89,6 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
     }
 
     @Override
-    public ParcelFileDescriptor getModuleLogger() throws RemoteException {
-        ensureRegistered();
-        return ConfigManager.getInstance().getModulesLog(ParcelFileDescriptor.MODE_WRITE_ONLY | ParcelFileDescriptor.MODE_APPEND);
-    }
-
-    @Override
     public Bundle requestRemotePreference(String packageName, int userId, IBinder callback) throws RemoteException {
         ensureRegistered();
         return null;

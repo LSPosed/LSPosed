@@ -13,7 +13,5 @@ interface ILSPApplicationService {
 
     String getPrefsPath(String packageName);
 
-    ParcelFileDescriptor getModuleLogger();
-
     Bundle requestRemotePreference(String packageName, int userId, IBinder callback);
 }
