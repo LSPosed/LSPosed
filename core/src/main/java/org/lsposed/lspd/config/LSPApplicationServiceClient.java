@@ -110,15 +110,6 @@ public class LSPApplicationServiceClient extends ApplicationServiceClient {
     }
 
     @Override
-    public ParcelFileDescriptor getModuleLogger() {
-        try {
-            return service.getModuleLogger();
-        } catch (RemoteException | NullPointerException ignored) {
-        }
-        return null;
-    }
-
-    @Override
     public Bundle requestRemotePreference(String packageName, int userId, IBinder callback) throws RemoteException {
         return null;
     }

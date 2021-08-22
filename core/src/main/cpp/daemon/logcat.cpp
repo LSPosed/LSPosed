@@ -3,8 +3,7 @@
 #include <string>
 #include <android/log.h>
 #include <array>
-#include <inttypes.h>
-
+#include <cinttypes>
 #include "logcat.h"
 
 constexpr size_t kMaxLogSize = 32 * 1024 * 1024;
@@ -33,30 +32,41 @@ public:
 
 class Logcat {
 public:
-    explicit Logcat(JNIEnv *env, jobject thiz, jmethodID method, jlong tid) :
-            env_(env), thiz_(thiz), refresh_fd_method_(method), tid_(tid) {};
+    explicit Logcat(JNIEnv *env, jobject thiz, jmethodID method, jlong tid, jint fd,
+                    jboolean verbose) :
+            env_(env), thiz_(thiz), refresh_fd_method_(method), tid_(tid), module_file_(fd, "w"),
+            verbose_(verbose),
+            stop_verbose_inst_("!!stop_verbose!!" + std::to_string(tid_)),
+            start_verbose_inst_("!!start_verbose!!" + std::to_string(tid_)) {}
 
-    void Run();
+    [[noreturn]] void Run();
 
 private:
     inline void RefreshFd();
 
-    bool ProcessBuffer(struct log_msg *buf);
+    void ProcessBuffer(struct log_msg *buf);
 
-    void PrintLogLine(const AndroidLogEntry &entry);
+    static int PrintLogLine(const AndroidLogEntry &entry, FILE *out);
 
     JNIEnv *env_;
     jobject thiz_;
     jmethodID refresh_fd_method_;
     jlong tid_;
+    UniqueFile module_file_{};
+    size_t module_count_ = 0;
 
     UniqueFile out_file_{};
     size_t print_count_ = 0;
     size_t file_count_ = 1;
+
+    bool verbose_ = true;
+
+    const std::string stop_verbose_inst_;
+    const std::string start_verbose_inst_;
 };
 
-void Logcat::PrintLogLine(const AndroidLogEntry &entry) {
-    if (!out_file_) return;
+int Logcat::PrintLogLine(const AndroidLogEntry &entry, FILE *out) {
+    if (!out) return 0;
     constexpr static size_t kMaxTimeBuff = 64;
     struct tm tm{};
     std::array<char, kMaxTimeBuff> time_buff;
@@ -73,13 +83,12 @@ void Logcat::PrintLogLine(const AndroidLogEntry &entry) {
     }
     localtime_r(&now, &tm);
     strftime(time_buff.data(), time_buff.size(), "%Y-%m-%dT%H:%M:%S", &tm);
-    print_count_ +=
-            fprintf(out_file_.get(), "[ %s.%03ld %8d:%6d:%6d %c/%-15.*s ] %.*s\n",
-                    time_buff.data(),
-                    nsec / MS_PER_NSEC,
-                    entry.uid, entry.pid, entry.tid,
-                    kLogChar[entry.priority], static_cast<int>(entry.tagLen),
-                    entry.tag, static_cast<int>(message_len), message);
+    return fprintf(out, "[ %s.%03ld %8d:%6d:%6d %c/%-15.*s ] %.*s\n",
+                   time_buff.data(),
+                   nsec / MS_PER_NSEC,
+                   entry.uid, entry.pid, entry.tid,
+                   kLogChar[entry.priority], static_cast<int>(entry.tagLen),
+                   entry.tag, static_cast<int>(message_len), message);
 }
 
 void Logcat::RefreshFd() {
@@ -89,21 +98,26 @@ void Logcat::RefreshFd() {
     file_count_++;
 }
 
-bool Logcat::ProcessBuffer(struct log_msg *buf) {
+void Logcat::ProcessBuffer(struct log_msg *buf) {
     AndroidLogEntry entry;
-    if (android_log_processLogBuffer(&buf->entry, &entry) < 0) return false;
+    if (android_log_processLogBuffer(&buf->entry, &entry) < 0) return;
 
     std::string_view tag(entry.tag);
-    if (buf->id() == log_id::LOG_ID_CRASH ||
-        tag == "Magisk" ||
-        tag.starts_with("Riru") ||
-        tag.starts_with("LSPosed") ||
-        tag == "XSharedPreferences") {
-        PrintLogLine(entry);
+    bool skip = false;
+    if (tag == "LSPosed-Bridge" || tag == "XSharedPreferences") [[unlikely]] {
+        module_count_ += PrintLogLine(entry, module_file_.get());
+        skip = true;
     }
-    return entry.pid == getpid() &&
-           tag == "LSPosedLogcat" &&
-           std::string_view(entry.message) == "!!stop!!" + std::to_string(tid_);
+    if (verbose_ && (skip || buf->id() == log_id::LOG_ID_CRASH ||
+                     tag == "Magisk" ||
+                     tag.starts_with("Riru") ||
+                     tag.starts_with("LSPosed"))) [[unlikely]] {
+        print_count_ += PrintLogLine(entry, out_file_.get());
+    }
+    if (entry.pid == getpid() && tag == "LSPosedLogcat") [[unlikely]] {
+        if (std::string_view(entry.message) == stop_verbose_inst_) verbose_ = false;
+        if (std::string_view(entry.message) == start_verbose_inst_) verbose_ = true;
+    }
 }
 
 void Logcat::Run() {
@@ -128,13 +142,19 @@ void Logcat::Run() {
         while (true) {
             if (android_logger_list_read(logger_list.get(), &msg) <= 0) [[unlikely]] break;
 
-            if (ProcessBuffer(&msg)) [[unlikely]] return;
+            ProcessBuffer(&msg);
 
             fflush(out_file_.get());
+            fflush(module_file_.get());
 
             if (print_count_ >= kMaxLogSize) [[unlikely]] RefreshFd();
+            if (module_count_ >= kMaxLogSize) [[unlikely]] {
+                ftruncate(fileno(module_file_.get()), 0);
+                module_count_ = 0;
+            }
         }
-        fprintf(out_file_.get(), "\nLogd maybe crashed, retrying in %" PRId64 "-%zu file after 1s\n",
+        fprintf(out_file_.get(),
+                "\nLogd maybe crashed, retrying in %" PRId64 "-%zu file after 1s\n",
                 tid_, file_count_ + 1);
         sleep(1);
     }
@@ -143,9 +163,10 @@ void Logcat::Run() {
 extern "C"
 JNIEXPORT void JNICALL
 // NOLINTNEXTLINE
-Java_org_lsposed_lspd_service_LogcatService_runLogcat(JNIEnv *env, jobject thiz, jlong tid) {
+Java_org_lsposed_lspd_service_LogcatService_runLogcat(JNIEnv *env, jobject thiz, jlong tid,
+                                                      jint fd, jboolean verbose) {
     jclass clazz = env->GetObjectClass(thiz);
     jmethodID method = env->GetMethodID(clazz, "refreshFd", "()I");
-    Logcat logcat(env, thiz, method, tid);
+    Logcat logcat(env, thiz, method, tid, fd, verbose);
     logcat.Run();
 }

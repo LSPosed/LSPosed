@@ -28,7 +28,4 @@ abstract public class ApplicationServiceClient implements ILSPApplicationService
 
     @Override
     abstract public String getPrefsPath(String packageName);
-
-    @Override
-    abstract public ParcelFileDescriptor getModuleLogger();
 }
