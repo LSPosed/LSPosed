@@ -51,6 +51,7 @@ private:
 
     UniqueFile out_file_{};
     size_t print_count_ = 0;
+    size_t file_count_ = 1;
 };
 
 void Logcat::PrintLogLine(const AndroidLogEntry &entry) {
@@ -61,8 +62,13 @@ void Logcat::PrintLogLine(const AndroidLogEntry &entry) {
 
     auto now = entry.tv_sec;
     auto nsec = entry.tv_nsec;
+    auto message_len = entry.messageLen;
+    const auto *message = entry.message;
     if (now < 0) {
         nsec = NS_PER_SEC - nsec;
+    }
+    if (message[message_len - 1] == '\n') {
+        message_len--;
     }
     localtime_r(&now, &tm);
     strftime(time_buff.data(), time_buff.size(), "%Y-%m-%dT%H:%M:%S", &tm);
@@ -72,12 +78,13 @@ void Logcat::PrintLogLine(const AndroidLogEntry &entry) {
                     nsec / MS_PER_NSEC,
                     entry.uid, entry.pid, entry.tid,
                     kLogChar[entry.priority], static_cast<int>(entry.tagLen),
-                    entry.tag,
-                    static_cast<int>(entry.messageLen), entry.message);
+                    entry.tag, message_len, message);
 }
 
 void Logcat::RefreshFd() {
     out_file_ = UniqueFile(env_->CallIntMethod(thiz_, refresh_fd_method_), "w");
+    fprintf(out_file_.get(), "%lld-%d\n", tid_, file_count_);
+    file_count_++;
 }
 
 bool Logcat::ProcessBuffer(struct log_msg *buf) {
@@ -102,6 +109,7 @@ bool Logcat::ProcessBuffer(struct log_msg *buf) {
 void Logcat::Run() {
     constexpr size_t tail_after_crash = 10U;
     size_t tail = 0;
+
     while (true) {
         std::unique_ptr<logger_list, decltype(&android_logger_list_free)> logger_list{
                 android_logger_list_alloc(0, tail, 0), &android_logger_list_free};
@@ -135,7 +143,8 @@ void Logcat::Run() {
                 print_count_ = 0;
             }
         }
-        fprintf(out_file_.get(), "=== Logcat crashed, retrying in 1s... ===");
+        fprintf(out_file_.get(), "\nLogd maybe crashed, retrying in %lld-%d file after 1s\n",
+                tid_, file_count_ + 1);
         sleep(1);
     }
 }
