@@ -109,10 +109,9 @@ void Logcat::ProcessBuffer(struct log_msg *buf) {
         skip = true;
     }
     if (verbose_ && (skip || buf->id() == log_id::LOG_ID_CRASH ||
-        tag == "Magisk" ||
-        tag.starts_with("Riru") ||
-        tag.starts_with("LSPosed") ||
-        tag == "XSharedPreferences")) [[unlikely]] {
+                     tag == "Magisk" ||
+                     tag.starts_with("Riru") ||
+                     tag.starts_with("LSPosed"))) [[unlikely]] {
         print_count_ += PrintLogLine(entry, out_file_.get());
     }
     if (entry.pid == getpid() && tag == "LSPosedLogcat") [[unlikely]] {
