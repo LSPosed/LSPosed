@@ -3,6 +3,7 @@
 #include <string>
 #include <android/log.h>
 #include <array>
+#include <inttypes.h>
 
 #include "logcat.h"
 
@@ -33,7 +34,7 @@ public:
 class Logcat {
 public:
     explicit Logcat(JNIEnv *env, jobject thiz, jmethodID method, jlong tid) :
-            env_(env), thiz_(thiz), refresh_fd_method_(method), tid_(tid) { RefreshFd(); };
+            env_(env), thiz_(thiz), refresh_fd_method_(method), tid_(tid) {};
 
     void Run();
 
@@ -51,6 +52,7 @@ private:
 
     UniqueFile out_file_{};
     size_t print_count_ = 0;
+    size_t file_count_ = 1;
 };
 
 void Logcat::PrintLogLine(const AndroidLogEntry &entry) {
@@ -61,8 +63,13 @@ void Logcat::PrintLogLine(const AndroidLogEntry &entry) {
 
     auto now = entry.tv_sec;
     auto nsec = entry.tv_nsec;
+    auto message_len = entry.messageLen;
+    const auto *message = entry.message;
     if (now < 0) {
         nsec = NS_PER_SEC - nsec;
+    }
+    if (message_len >= 1 && message[message_len - 1] == '\n') {
+        --message_len;
     }
     localtime_r(&now, &tm);
     strftime(time_buff.data(), time_buff.size(), "%Y-%m-%dT%H:%M:%S", &tm);
@@ -72,19 +79,19 @@ void Logcat::PrintLogLine(const AndroidLogEntry &entry) {
                     nsec / MS_PER_NSEC,
                     entry.uid, entry.pid, entry.tid,
                     kLogChar[entry.priority], static_cast<int>(entry.tagLen),
-                    entry.tag,
-                    static_cast<int>(entry.messageLen), entry.message);
+                    entry.tag, static_cast<int>(message_len), message);
 }
 
 void Logcat::RefreshFd() {
+    print_count_ = 0;
     out_file_ = UniqueFile(env_->CallIntMethod(thiz_, refresh_fd_method_), "w");
+    fprintf(out_file_.get(), "%" PRId64 "-%zu\n", tid_, file_count_);
+    file_count_++;
 }
 
 bool Logcat::ProcessBuffer(struct log_msg *buf) {
-    int err;
     AndroidLogEntry entry;
-    err = android_log_processLogBuffer(&buf->entry, &entry);
-    if (err < 0) return false;
+    if (android_log_processLogBuffer(&buf->entry, &entry) < 0) return false;
 
     std::string_view tag(entry.tag);
     if (buf->id() == log_id::LOG_ID_CRASH ||
@@ -100,37 +107,36 @@ bool Logcat::ProcessBuffer(struct log_msg *buf) {
 }
 
 void Logcat::Run() {
-    std::unique_ptr<logger_list, decltype(&android_logger_list_free)> logger_list{
-            nullptr, &android_logger_list_free};
-
-    logger_list.reset(android_logger_list_alloc(0, 0, 0));
-
-    for (log_id id:{LOG_ID_MAIN, LOG_ID_CRASH}) {
-        auto *logger = android_logger_open(logger_list.get(), id);
-        if (logger == nullptr) {
-            continue;
-        }
-        android_logger_set_log_size(logger, kMaxLogSize);
-    }
+    constexpr size_t tail_after_crash = 10U;
+    size_t tail = 0;
 
     while (true) {
+        std::unique_ptr<logger_list, decltype(&android_logger_list_free)> logger_list{
+                android_logger_list_alloc(0, tail, 0), &android_logger_list_free};
+        tail = tail_after_crash;
+
+        for (log_id id:{LOG_ID_MAIN, LOG_ID_CRASH}) {
+            auto *logger = android_logger_open(logger_list.get(), id);
+            if (logger == nullptr) continue;
+            android_logger_set_log_size(logger, kMaxLogSize);
+        }
+
+        RefreshFd();
+
         struct log_msg msg{};
-        int ret = android_logger_list_read(logger_list.get(), &msg);
 
-        if (ret <= 0) {
-            continue;
+        while (true) {
+            if (android_logger_list_read(logger_list.get(), &msg) <= 0) [[unlikely]] break;
+
+            if (ProcessBuffer(&msg)) [[unlikely]] return;
+
+            fflush(out_file_.get());
+
+            if (print_count_ >= kMaxLogSize) [[unlikely]] RefreshFd();
         }
-
-        if (ProcessBuffer(&msg)) {
-            break;
-        }
-
-        fflush(out_file_.get());
-
-        if (print_count_ >= kMaxLogSize) {
-            RefreshFd();
-            print_count_ = 0;
-        }
+        fprintf(out_file_.get(), "\nLogd maybe crashed, retrying in %" PRId64 "-%zu file after 1s\n",
+                tid_, file_count_ + 1);
+        sleep(1);
     }
 }
 
