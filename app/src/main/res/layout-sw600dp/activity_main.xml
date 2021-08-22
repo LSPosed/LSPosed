@@ -28,7 +28,7 @@
         android:id="@+id/snackbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:animateLayoutChanges="true" >
+        android:animateLayoutChanges="true">
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/home_fragment"
@@ -38,7 +38,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:name="org.lsposed.manager.ui.fragment.HomeFragment"/>
+            android:name="org.lsposed.manager.ui.fragment.HomeFragment" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/nav_host_fragment"

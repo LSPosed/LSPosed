@@ -34,8 +34,6 @@ import androidx.preference.PreferenceViewHolder;
 
 import com.takisoft.preferencex.PreferenceFragmentCompat;
 
-import org.lsposed.manager.R;
-
 public class ThemeColorPreference extends DialogPreference {
 
     static {
@@ -53,7 +51,7 @@ public class ThemeColorPreference extends DialogPreference {
 
         colors = ThemeUtil.CustomThemeColors.values();
 
-        setWidgetLayoutResource(R.layout.preference_widget_color_swatch);
+        setWidgetLayoutResource(com.takisoft.preferencex.colorpicker.R.layout.preference_widget_color_swatch);
     }
 
     public ThemeColorPreference(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -62,7 +60,7 @@ public class ThemeColorPreference extends DialogPreference {
 
     @SuppressLint("RestrictedApi")
     public ThemeColorPreference(Context context, AttributeSet attrs) {
-        this(context, attrs, TypedArrayUtils.getAttr(context, R.attr.dialogPreferenceStyle,
+        this(context, attrs, TypedArrayUtils.getAttr(context, androidx.preference.R.attr.dialogPreferenceStyle,
                 android.R.attr.dialogPreferenceStyle));
     }
 
@@ -74,7 +72,7 @@ public class ThemeColorPreference extends DialogPreference {
     public void onBindViewHolder(PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
 
-        colorWidget = (ImageView) holder.findViewById(R.id.color_picker_widget);
+        colorWidget = (ImageView) holder.findViewById(com.takisoft.preferencex.colorpicker.R.id.color_picker_widget);
         setColorOnWidget(color);
     }
 
@@ -82,7 +80,7 @@ public class ThemeColorPreference extends DialogPreference {
         if (colorWidget == null) {
             return;
         }
-        Drawable drawable = getContext().getDrawable(R.drawable.colorpickerpreference_pref_swatch);
+        Drawable drawable = getContext().getDrawable(com.takisoft.preferencex.colorpicker.R.drawable.colorpickerpreference_pref_swatch);
         drawable.setTint(getContext().getColor(color.getResourceId()));
         colorWidget.setImageDrawable(drawable);
     }

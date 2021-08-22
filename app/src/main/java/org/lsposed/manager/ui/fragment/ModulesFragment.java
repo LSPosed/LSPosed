@@ -394,7 +394,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             int position = arguments.getInt("position");
             ItemRepoRecyclerviewBinding binding = ItemRepoRecyclerviewBinding.inflate(getLayoutInflater(), container, false);
             if (fragment.adapters.size() == 1) {
-                WindowInsetsHelperKt.setInitialPadding(binding.recyclerView, 0, ResourcesKt.resolveDimensionPixelOffset(requireActivity().getTheme(), R.attr.actionBarSize, 0), 0, 0);
+                WindowInsetsHelperKt.setInitialPadding(binding.recyclerView, 0, ResourcesKt.resolveDimensionPixelOffset(requireActivity().getTheme(), androidx.appcompat.R.attr.actionBarSize, 0), 0, 0);
             }
             binding.recyclerView.setTag(position);
             binding.recyclerView.setAdapter(fragment.adapters.get(position));
@@ -519,7 +519,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             if (warningText != null) {
                 sb.append("\n");
                 sb.append(warningText);
-                final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ContextCompat.getColor(requireActivity(), R.color.material_red_500));
+                final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ContextCompat.getColor(requireActivity(), rikka.material.R.color.material_red_500));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     final TypefaceSpan typefaceSpan = new TypefaceSpan(Typeface.create("sans-serif-medium", Typeface.NORMAL));
                     sb.setSpan(typefaceSpan, sb.length() - warningText.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
@@ -536,7 +536,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                     sb.append("\n");
                     String recommended = getString(R.string.update_available, ver.second);
                     sb.append(recommended);
-                    final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ResourcesKt.resolveColor(requireActivity().getTheme(), R.attr.colorAccent));
+                    final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ResourcesKt.resolveColor(requireActivity().getTheme(), androidx.appcompat.R.attr.colorAccent));
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                         final TypefaceSpan typefaceSpan = new TypefaceSpan(Typeface.create("sans-serif-medium", Typeface.NORMAL));
                         sb.setSpan(typefaceSpan, sb.length() - recommended.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);

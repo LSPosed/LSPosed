@@ -180,8 +180,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
             view.setWebViewClient(new WebViewClient() {
                 @Override
                 public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                    Intent i = new Intent(Intent.ACTION_VIEW, request.getUrl());
-                    startActivity(i);
+                    NavUtil.startURL(requireActivity(), request.getUrl());
                     return true;
                 }
             });
