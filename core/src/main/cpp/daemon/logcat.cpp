@@ -3,6 +3,7 @@
 #include <string>
 #include <android/log.h>
 #include <array>
+#include <inttypes.h>
 
 #include "logcat.h"
 
@@ -67,8 +68,8 @@ void Logcat::PrintLogLine(const AndroidLogEntry &entry) {
     if (now < 0) {
         nsec = NS_PER_SEC - nsec;
     }
-    if (message[message_len - 1] == '\n') {
-        message_len--;
+    if (message_len >= 1 && message[message_len - 1] == '\n') {
+        --message_len;
     }
     localtime_r(&now, &tm);
     strftime(time_buff.data(), time_buff.size(), "%Y-%m-%dT%H:%M:%S", &tm);
@@ -78,21 +79,19 @@ void Logcat::PrintLogLine(const AndroidLogEntry &entry) {
                     nsec / MS_PER_NSEC,
                     entry.uid, entry.pid, entry.tid,
                     kLogChar[entry.priority], static_cast<int>(entry.tagLen),
-                    entry.tag, message_len, message);
+                    entry.tag, static_cast<int>(message_len), message);
 }
 
 void Logcat::RefreshFd() {
     print_count_ = 0;
     out_file_ = UniqueFile(env_->CallIntMethod(thiz_, refresh_fd_method_), "w");
-    fprintf(out_file_.get(), "%lld-%d\n", tid_, file_count_);
+    fprintf(out_file_.get(), "%" PRId64 "-%d\n", tid_, file_count_);
     file_count_++;
 }
 
 bool Logcat::ProcessBuffer(struct log_msg *buf) {
-    int err;
     AndroidLogEntry entry;
-    err = android_log_processLogBuffer(&buf->entry, &entry);
-    if (err < 0) return false;
+    if (android_log_processLogBuffer(&buf->entry, &entry) < 0) return false;
 
     std::string_view tag(entry.tag);
     if (buf->id() == log_id::LOG_ID_CRASH ||
@@ -135,7 +134,7 @@ void Logcat::Run() {
 
             if (print_count_ >= kMaxLogSize) [[unlikely]] RefreshFd();
         }
-        fprintf(out_file_.get(), "\nLogd maybe crashed, retrying in %lld-%d file after 1s\n",
+        fprintf(out_file_.get(), "\nLogd maybe crashed, retrying in %lld-%zu file after 1s\n",
                 tid_, file_count_ + 1);
         sleep(1);
     }
