@@ -62,7 +62,6 @@
     <string name="menuSaveToSd">Sauvegarder</string>
     <string name="nav_item_logs_lsp">Journaux détaillés</string>
     <string name="nav_item_logs_module">Journeaux des Modules</string>
-    <string name="dont_show_again">Ne plus afficher</string>
     <string name="logs_save_failed">Échec de la sauvegarde:</string>
     <string name="menuClearLog">Éffacer le journal maintenant</string>
     <string name="logs_cleared">Journal éffacé avec succès.</string>

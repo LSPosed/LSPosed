@@ -59,7 +59,6 @@
     <string name="menuSaveToSd">Salva</string>
     <string name="nav_item_logs_lsp">Log verboso</string>
     <string name="nav_item_logs_module">Log moduli</string>
-    <string name="dont_show_again">Non mostrare di nuovo</string>
     <string name="logs_save_failed">Impossibile effettuare il salvataggio:</string>
     <string name="menuClearLog">Cancella il log ora</string>
     <string name="logs_cleared">Log cancellato correttamente.</string>
@@ -69,7 +68,6 @@
     <string name="logs_cannot_read">Impossibile leggere il log: \n</string>
     <string name="menuReload">Ricarica</string>
     <string name="logs_clear_failed_2">Impossibile cancellare il log</string>
-    <string name="not_logcat_2">Se qualcuno ti ha chiesto un logcat di Android, sei nella sezione sbagliata. Questo è il log di LSPosed; se hai bisogno di un logcat, su XDA puoi trovare quello che ti serve.</string>
 
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Il modulo Xposed non è ancora attivo</string>
@@ -181,7 +179,6 @@
     <string name="outdated_manager">Le versioni di LSPosed Manager e LSPosed Core non sono coerenti. Reinstalla la versione corrispondente.</string>
     <string name="lsposed_not_active">LSPosed non è attualmente installato o attivo.</string>
     <string name="verbose_log_not_avaliable">Il log verboso non è disponibile. Se l\'hai appena abilitato senza riavviare, riprova dopo il riavvio.</string>
-    <string name="NotInstall">Non installato</string>
     <string name="not_install_summary">LSPosed non è installato</string>
     <string name="translators"><![CDATA[<a href="https://twitter.com/alex193a">alex193a</a>, <a href="https://github.com/Fs00">Fs00</a>]]></string>
     <string name="copy_toast_msg">Copiato</string>

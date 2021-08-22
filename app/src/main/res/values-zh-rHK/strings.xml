@@ -53,7 +53,6 @@
     <string name="menuSaveToSd">保存</string>
     <string name="nav_item_logs_lsp">詳細日誌</string>
     <string name="nav_item_logs_module">模組日誌</string>
-    <string name="dont_show_again">不再提示</string>
     <string name="logs_save_failed">保存失敗：</string>
     <string name="menuClearLog">立即清理日誌</string>
     <string name="logs_cleared">日誌清理成功</string>
@@ -63,7 +62,6 @@
     <string name="logs_cannot_read">無法讀取日誌: \n</string>
     <string name="menuReload">重新載入</string>
     <string name="logs_clear_failed_2">Failed to clear the log</string>
-    <string name="not_logcat_2">If someone asked you an Android Logcat, you\'re in the wrong section. This is the LSPosed log; if you need a logcat, on XDA you can find what you need.</string>
 
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Xposed 模組尚未啟動</string>
@@ -168,7 +166,6 @@
     <string name="outdated_manager">LSPosed Manager 和 LSPosed Core 的版本不一致。請重新安裝對應的版本。</string>
     <string name="lsposed_not_active">LSPosed 未安裝或未啟動</string>
     <string name="verbose_log_not_avaliable">Verbose log is not available, if you just enabled it without reboot, try again after reboot.</string>
-    <string name="NotInstall">Not Installed</string>
     <string name="not_install_summary">LSPosed is not Installed</string>
     <string name="translators"><![CDATA[<a href="https://github.com/LSPosed/LSPosed">LSPosed</a>]]></string>
     <string name="copy_toast_msg">Copied</string>

@@ -62,7 +62,6 @@
     <string name="menuSaveToSd">保存</string>
     <string name="nav_item_logs_lsp">LSPosed 日志</string>
     <string name="nav_item_logs_module">模块运行日志</string>
-    <string name="dont_show_again">不再提示</string>
     <string name="logs_save_failed">保存失败：</string>
     <string name="menuClearLog">立即清理日志</string>
     <string name="logs_cleared">日志清理成功</string>

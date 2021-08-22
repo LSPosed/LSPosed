@@ -53,7 +53,6 @@
     <string name="menuSaveToSd">Opslaan</string>
     <string name="nav_item_logs_lsp">Uitgebreide logboeken</string>
     <string name="nav_item_logs_module">Modules Logboeken</string>
-    <string name="dont_show_again">Laat dit niet meer zien</string>
     <string name="logs_save_failed">Opslaan mislukt:</string>
     <string name="menuClearLog">Wis het logboek nu</string>
     <string name="logs_cleared">Log succesvol gewist.</string>
@@ -63,7 +62,6 @@
     <string name="logs_cannot_read">Kan logboek niet lezen: \n</string>
     <string name="menuReload">Herlaad</string>
     <string name="logs_clear_failed_2">Het logboek kan niet worden gewist</string>
-    <string name="not_logcat_2">Als iemand je een Android Logcat vraagt, dan ben je in de verkeerde sectie. Dit is het LSPosed-logboek; als je een logcat nodig hebt, kun je op XDA vinden wat je nodig hebt.</string>
 
     <!-- Notification -->
     <string name="module_is_not_activated_yet">LSPosed module is nog niet geactiveerd</string>
@@ -164,7 +162,6 @@
     <string name="outdated_manager">De versie van LSPosed Manager en LSPosed Core zijn niet consistent. Installeer de corresponderende versie opnieuw.</string>
     <string name="lsposed_not_active">LSPosed is momenteel niet geïnstalleerd of actief.</string>
     <string name="verbose_log_not_avaliable">Uitgebreid logboek is niet beschikbaar. Als u het net hebt ingeschakeld zonder opnieuw op te starten, probeer het dan opnieuw na het opnieuw opstarten.</string>
-    <string name="NotInstall">Niet geïnstalleerd</string>
     <string name="not_install_summary">LSPosed is niet geïnstalleerd</string>
     <string name="settings_show_hidden_icon_apps_enabled">Forceer apps om launcher-pictogrammen weer te geven</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">Na Android 10 mogen apps (vooral Xposed-modules) hun opstartpictogrammen niet verbergen. Schakel de schakelaar uit om deze functie uit te schakelen.</string>

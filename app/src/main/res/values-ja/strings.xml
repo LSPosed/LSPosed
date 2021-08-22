@@ -59,7 +59,6 @@
     <string name="menuSaveToSd">保存</string>
     <string name="nav_item_logs_lsp">詳細ログ</string>
     <string name="nav_item_logs_module">モジュールログ</string>
-    <string name="dont_show_again">二度と表示しない</string>
     <string name="logs_save_failed">保存に失敗:</string>
     <string name="menuClearLog">直ちにログを消去</string>
     <string name="logs_cleared">ログの消去に成功しました。</string>
@@ -69,7 +68,6 @@
     <string name="logs_cannot_read">ログの読み込みに失敗: \n</string>
     <string name="menuReload">再読込</string>
     <string name="logs_clear_failed_2">ログの消去に失敗</string>
-    <string name="not_logcat_2">これは LSPosed のログであり、Android の Logcat ではありません。logcat が必要な場合、XDA 等でそれについて調べて下さい。</string>
 
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Xposed モジュールが有効化されていません</string>
@@ -182,7 +180,6 @@
     <string name="outdated_manager">LSPosed Manager と LSPosed Core のバージョンが一致していません。対応バージョンを再インストールして下さい。</string>
     <string name="lsposed_not_active">LSPosed が未インストールもしくは有効化されていません。</string>
     <string name="verbose_log_not_avaliable">詳細ログが存在しません。ログ出力有効化に再起動を行っていない場合、再起動して下さい。</string>
-    <string name="NotInstall">未インストール</string>
     <string name="not_install_summary">LSPosed が未インストールです</string>
     <string name="translators"><![CDATA[<a href="https://github.com/yoshi818">yoshi818</a>]]></string>
     <string name="copy_toast_msg">複写済</string>
