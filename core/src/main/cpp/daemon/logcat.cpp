@@ -85,7 +85,7 @@ void Logcat::PrintLogLine(const AndroidLogEntry &entry) {
 void Logcat::RefreshFd() {
     print_count_ = 0;
     out_file_ = UniqueFile(env_->CallIntMethod(thiz_, refresh_fd_method_), "w");
-    fprintf(out_file_.get(), "%" PRId64 "-%d\n", tid_, file_count_);
+    fprintf(out_file_.get(), "%" PRId64 "-%zu\n", tid_, file_count_);
     file_count_++;
 }
 
@@ -134,7 +134,7 @@ void Logcat::Run() {
 
             if (print_count_ >= kMaxLogSize) [[unlikely]] RefreshFd();
         }
-        fprintf(out_file_.get(), "\nLogd maybe crashed, retrying in %lld-%zu file after 1s\n",
+        fprintf(out_file_.get(), "\nLogd maybe crashed, retrying in %" PRId64 "-%zu file after 1s\n",
                 tid_, file_count_ + 1);
         sleep(1);
     }
