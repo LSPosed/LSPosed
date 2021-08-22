@@ -37,7 +37,7 @@ val commitCount = Git(repo).log().add(refId).call().count()
 
 val defaultManagerPackageName by extra("org.lsposed.manager")
 val verCode by extra(commitCount + 4200)
-val verName by extra("v1.5.1")
+val verName by extra("v1.5.2")
 val androidTargetSdkVersion by extra(31)
 val androidMinSdkVersion by extra(27)
 val androidBuildToolsVersion by extra("31.0.0")
