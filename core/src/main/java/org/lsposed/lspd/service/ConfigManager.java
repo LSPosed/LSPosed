@@ -23,6 +23,7 @@ import static org.lsposed.lspd.service.PackageService.MATCH_ALL_FLAGS;
 import static org.lsposed.lspd.service.PackageService.PER_USER_RANGE;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 import static org.lsposed.lspd.service.ServiceManager.existsInGlobalNamespace;
+import static org.lsposed.lspd.service.ServiceManager.getLogcatService;
 import static org.lsposed.lspd.service.ServiceManager.toGlobalNamespace;
 
 import android.content.ContentValues;
@@ -106,8 +107,6 @@ public class ConfigManager {
     private String miscPath = null;
 
     private static final File logPath = new File(basePath, "log");
-    private static final File modulesLog = new File(logPath, "modules.txt");
-    private static final File oldModulesLog = new File(logPath, "modules.old.txt");
 
     static class FileLocker {
         private final FileChannel lockChannel;
@@ -890,12 +889,9 @@ public class ConfigManager {
     }
 
     public ParcelFileDescriptor getModulesLog(int mode) {
+        var modulesLog = getLogcatService().getModulesLog();
         try {
-            if (modulesLog.length() > 16 * 1024 * 1024) {
-                //noinspection ResultOfMethodCallIgnored
-                modulesLog.renameTo(oldModulesLog);
-            }
-            return ParcelFileDescriptor.open(modulesLog, mode | ParcelFileDescriptor.MODE_CREATE);
+            return ParcelFileDescriptor.open(modulesLog, mode);
         } catch (IOException e) {
             Log.e(TAG, Log.getStackTraceString(e));
             return null;
@@ -916,8 +912,9 @@ public class ConfigManager {
     public boolean clearLogs(boolean verbose) {
         try {
             var logcat = ServiceManager.getLogcatService().getLog();
+            var moduleLog = ServiceManager.getLogcatService().getModulesLog();
             if (verbose && logcat == null) return true;
-            OutputStream os = new FileOutputStream(verbose ? logcat : modulesLog);
+            OutputStream os = new FileOutputStream(verbose ? logcat : moduleLog);
             os.close();
             return true;
         } catch (IOException e) {

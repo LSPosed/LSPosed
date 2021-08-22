@@ -28,7 +28,6 @@ import android.util.Log;
 
 import org.lsposed.lspd.BuildConfig;
 import org.lsposed.lspd.nativebridge.ResourcesHook;
-import org.lsposed.lspd.util.ModuleLogger;
 import org.lsposed.lspd.yahfa.hooker.YahfaHooker;
 
 import java.lang.reflect.AccessibleObject;
@@ -133,7 +132,6 @@ public final class XposedBridge {
      */
     public synchronized static void log(String text) {
         Log.i(TAG, text);
-        ModuleLogger.log(text, false);
     }
 
     /**
@@ -147,7 +145,6 @@ public final class XposedBridge {
     public synchronized static void log(Throwable t) {
         String logStr = Log.getStackTraceString(t);
         Log.e(TAG, logStr);
-        ModuleLogger.log(logStr, true);
     }
 
     /**
