@@ -82,6 +82,7 @@ void Logcat::PrintLogLine(const AndroidLogEntry &entry) {
 }
 
 void Logcat::RefreshFd() {
+    print_count_ = 0;
     out_file_ = UniqueFile(env_->CallIntMethod(thiz_, refresh_fd_method_), "w");
     fprintf(out_file_.get(), "%lld-%d\n", tid_, file_count_);
     file_count_++;
@@ -117,9 +118,7 @@ void Logcat::Run() {
 
         for (log_id id:{LOG_ID_MAIN, LOG_ID_CRASH}) {
             auto *logger = android_logger_open(logger_list.get(), id);
-            if (logger == nullptr) {
-                continue;
-            }
+            if (logger == nullptr) continue;
             android_logger_set_log_size(logger, kMaxLogSize);
         }
 
@@ -128,20 +127,13 @@ void Logcat::Run() {
         struct log_msg msg{};
 
         while (true) {
-            if (android_logger_list_read(logger_list.get(), &msg) <= 0) {
-                break;
-            }
+            if (android_logger_list_read(logger_list.get(), &msg) <= 0) [[unlikely]] break;
 
-            if (ProcessBuffer(&msg)) {
-                return;
-            }
+            if (ProcessBuffer(&msg)) [[unlikely]] return;
 
             fflush(out_file_.get());
 
-            if (print_count_ >= kMaxLogSize) {
-                RefreshFd();
-                print_count_ = 0;
-            }
+            if (print_count_ >= kMaxLogSize) [[unlikely]] RefreshFd();
         }
         fprintf(out_file_.get(), "\nLogd maybe crashed, retrying in %lld-%d file after 1s\n",
                 tid_, file_count_ + 1);
