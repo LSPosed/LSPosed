@@ -53,7 +53,6 @@
     <string name="menuSaveToSd">Guardar</string>
     <string name="nav_item_logs_lsp">Registros detallados</string>
     <string name="nav_item_logs_module">Registros de módulos</string>
-    <string name="dont_show_again">No volver a mostrar esto</string>
     <string name="logs_save_failed">Fallo a la hora de guardar:</string>
     <string name="menuClearLog">Limpiar los registros</string>
     <string name="logs_cleared">Registros limpiados satisfactoriamente.</string>
@@ -63,7 +62,6 @@
     <string name="logs_cannot_read">No se pudo leer los registros: \n</string>
     <string name="menuReload">Recargar</string>
     <string name="logs_clear_failed_2">Fallo al limpiar los registros</string>
-    <string name="not_logcat_2">Si alguien te preguntó por Android Logcat, estás en la sección equivocada. Estos son los registros de LSPosed; si necesitas un Logcat puedes encontrar lo que necesites en XDA.</string>
 
     <!-- Notification -->
     <string name="module_is_not_activated_yet">El módulo Xposed no está activado aún</string>
@@ -173,7 +171,6 @@
     <string name="outdated_manager">Las versiones de LSPosed Manager y LSPosed Core no son consistentes. Por favor, reinstala la versión correspondiente.</string>
     <string name="lsposed_not_active">LSPosed no está instalado o activado actualmente.</string>
     <string name="verbose_log_not_avaliable">Los registros detallados no están disponibles. Si los activaste sin reiniciar, intenta de nuevo luego de reiniciar.</string>
-    <string name="NotInstall">No instalado</string>
     <string name="not_install_summary">LSPosed no está instalado</string>
     <string name="translators"><![CDATA[<a href="https://github.com/JoseDeFreitas">José De Freitas</a>]]></string>
     <string name="copy_toast_msg">Copiado</string>

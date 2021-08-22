@@ -115,7 +115,7 @@ public class LogsFragment extends BaseFragment {
 
 
         if (!ConfigManager.isVerboseLogEnabled()) {
-            WindowInsetsHelperKt.setInitialPadding(binding.recyclerView, 0, ResourcesKt.resolveDimensionPixelOffset(requireActivity().getTheme(), R.attr.actionBarSize, 0), 0, 0);
+            WindowInsetsHelperKt.setInitialPadding(binding.recyclerView, 0, ResourcesKt.resolveDimensionPixelOffset(requireActivity().getTheme(), androidx.appcompat.R.attr.actionBarSize, 0), 0, 0);
             binding.slidingTabs.setVisibility(View.GONE);
         } else {
             binding.slidingTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

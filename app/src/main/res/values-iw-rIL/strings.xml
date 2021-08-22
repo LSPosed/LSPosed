@@ -48,7 +48,6 @@
     <string name="menuSaveToSd">שמור</string>
     <string name="nav_item_logs_lsp">Verbose Logs</string>
     <string name="nav_item_logs_module">Modules Logs</string>
-    <string name="dont_show_again">אל תראה שוב</string>
     <string name="logs_save_failed">נכשל לשמור:</string>
     <string name="menuClearLog">נקה לוגים עכשיו</string>
     <string name="logs_cleared">לוגים נוקו בהצלחה.</string>
@@ -58,7 +57,6 @@
     <string name="logs_cannot_read">לא מצליח לקרוא לוגים: \n</string>
     <string name="menuReload">רענן</string>
     <string name="logs_clear_failed_2">נכשל בניקוי הלוגים</string>
-    <string name="not_logcat_2">If someone asked you an Android Logcat, you\'re in the wrong section. This is the LSPosed log; if you need a logcat, on XDA you can find what you need.</string>
 
     <!-- Notification -->
     <string name="module_is_not_activated_yet">מודול LSPosed עדיין לא הופעל</string>
@@ -158,6 +156,5 @@
     <string name="outdated_manager">הגרסה של LSPosed Manager ו- LSPosed Core לא תואמות. אנא התקן מחדש גרסאות תואמות.</string>
     <string name="lsposed_not_active">LSPosed כרגע לא מותקן או מופעל.</string>
     <string name="verbose_log_not_avaliable">Verbose log is not available, if you just enabled it without reboot, try again after reboot.</string>
-    <string name="NotInstall">לא מותקן</string>
     <string name="not_install_summary">LSPosed לא מותקן</string>
 </resources>

@@ -62,7 +62,6 @@
     <string name="menuSaveToSd">Save</string>
     <string name="nav_item_logs_lsp">LSPosed Logs</string>
     <string name="nav_item_logs_module">Modules Logs</string>
-    <string name="dont_show_again">Don\'t show this again</string>
     <string name="logs_save_failed">Failed to save:</string>
     <string name="menuClearLog">Clear log now</string>
     <string name="logs_cleared">Log successfully cleared.</string>

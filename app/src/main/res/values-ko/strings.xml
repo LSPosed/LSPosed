@@ -55,7 +55,6 @@
     <string name="menuSaveToSd">저장</string>
     <string name="nav_item_logs_lsp">상세 로그</string>
     <string name="nav_item_logs_module">모듈 로그</string>
-    <string name="dont_show_again">다시 표시 안 함</string>
     <string name="logs_save_failed">저장 실패:</string>
     <string name="menuClearLog">로그 지우기</string>
     <string name="logs_cleared">로그를 성공적으로 지웠습니다.</string>
@@ -65,7 +64,6 @@
     <string name="logs_cannot_read">로그를 읽지 못함: \n</string>
     <string name="menuReload">리로드</string>
     <string name="logs_clear_failed_2">로그를 지우지 못했습니다.</string>
-    <string name="not_logcat_2">다른 사용자가 Android Logcat을 요청했다면 섹션이 잘못되어 있습니다. 이것은 LSPosed 로그입니다. logcat이 필요한 경우 XDA에서 필요한 정보를 찾을 수 있습니다.</string>
 
     <!-- Notification -->
     <string name="module_is_not_activated_yet">LSPosed 모듈이 아직 활성화되지 않았습니다.</string>
@@ -176,7 +174,6 @@
     <string name="outdated_manager">LSPosed Manager 및 LSPosed Core 버전이 일치하지 않습니다. 해당 버전을 다시 설치하십시오.</string>
     <string name="lsposed_not_active">LSPosed가 현재 설치되어 있지 않거나 활성화되어 있지 않습니다.</string>
     <string name="verbose_log_not_avaliable">상세 로그를 사용할 수 없습니다. 재부팅하지 않고 방금 사용하도록 설정한 경우 재부팅 후 다시 시도하십시오.</string>
-    <string name="NotInstall">설치되지 않음</string>
     <string name="not_install_summary">LSPosed가 설치되지 않음</string>
     <string name="translators"><![CDATA[<a href="https://github.com/green1052">green1052</a>]]></string>
     <string name="copy_toast_msg">복사됨</string>

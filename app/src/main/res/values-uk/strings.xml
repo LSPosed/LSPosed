@@ -33,7 +33,6 @@
     <string name="compile_speed">Повторна оптимізація</string>
     <string name="compile_speed_msg">Оптимізація…</string>
     <string name="copy_toast_msg">Посилання скопійовано в буфер обміну</string>
-    <string name="dont_show_again">Не показувати знову</string>
     <string name="enable_module">Увімкнути модуль</string>
     <string name="failed_to_save_scope_list">Не вдалося зберегти список областей</string>
     <string name="info">Інформація</string>

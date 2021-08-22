@@ -62,7 +62,6 @@
     <string name="menuSaveToSd">儲存</string>
     <string name="nav_item_logs_lsp">詳細日誌</string>
     <string name="nav_item_logs_module">模組日誌</string>
-    <string name="dont_show_again">不再提醒</string>
     <string name="logs_save_failed">儲存失敗：</string>
     <string name="menuClearLog">立即清理日誌</string>
     <string name="logs_cleared">日誌清理成功</string>
