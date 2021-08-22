@@ -27,7 +27,7 @@ public:
 
     UniqueFile(int fd, const char *mode) : UniqueFile(fd > 0 ? fdopen(fd, mode) : stdout) {};
 
-    UniqueFile() : UniqueFile(nullptr) {};
+    UniqueFile() : UniqueFile(stdout) {};
 };
 
 class Logcat {

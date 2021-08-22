@@ -296,7 +296,7 @@ public class ConfigManager {
     Map<String, ConcurrentHashMap<String, Object>> fetchModuleConfig(String name, int user_id) {
         var config = new ConcurrentHashMap<String, ConcurrentHashMap<String, Object>>();
 
-        try (Cursor cursor = db.query("config", new String[]{"group", "key", "data"},
+        try (Cursor cursor = db.query("config", new String[]{"`group`", "`key`", "data"},
                 "module_pkg_name = ? and user_id = ?", new String[]{name, String.valueOf(user_id)}, null, null, null)) {
             if (cursor == null) {
                 Log.e(TAG, "db cache failed");
@@ -323,9 +323,9 @@ public class ConfigManager {
         if (value instanceof Serializable) {
             prefs.put(key, value);
             var values = new ContentValues();
-            values.put("group", group);
-            values.put("key", key);
-            values.put("value", SerializationUtils.serialize((Serializable) value));
+            values.put("`group`", group);
+            values.put("`key`", key);
+            values.put("data", SerializationUtils.serialize((Serializable) value));
             db.updateWithOnConflict("config", values, "module_pkg_name=? and user_id=?", new String[]{moduleName, String.valueOf(userId)}, SQLiteDatabase.CONFLICT_REPLACE);
         } else {
             prefs.remove(key);
@@ -335,7 +335,7 @@ public class ConfigManager {
 
     public ConcurrentHashMap<String, Object> getModulePrefs(String moduleName, int userId, String group) {
         var config = cachedConfig.computeIfAbsent(new Pair<>(moduleName, userId), module -> fetchModuleConfig(module.first, module.second));
-        return config.getOrDefault(group, null);
+        return config.getOrDefault(group, new ConcurrentHashMap<>());
     }
 
     private synchronized void cacheModules() {
