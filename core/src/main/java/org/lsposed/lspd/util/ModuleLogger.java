@@ -49,7 +49,7 @@ public class ModuleLogger {
             return;
         }
         String processName = ActivityThread.currentProcessName();
-        var log = String.format(Locale.ROOT, "[ %s %5d:%5d:%5d %c/%s ] %s\n",
+        var log = String.format(Locale.ROOT, "[ %s %5d:%5d:%5d %c/%s ] %s",
                 logDateFormat.format(Instant.now()),
                 Process.myUid(),
                 Process.myPid(),
