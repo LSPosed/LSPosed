@@ -100,11 +100,12 @@ bool Logcat::ProcessBuffer(struct log_msg *buf) {
 }
 
 void Logcat::Run() {
+    constexpr size_t tail_after_crash = 10U;
     size_t tail = 0;
     while (true) {
         std::unique_ptr<logger_list, decltype(&android_logger_list_free)> logger_list{
                 android_logger_list_alloc(0, tail, 0), &android_logger_list_free};
-        tail = 1;
+        tail = tail_after_crash;
 
         for (log_id id:{LOG_ID_MAIN, LOG_ID_CRASH}) {
             auto *logger = android_logger_open(logger_list.get(), id);
