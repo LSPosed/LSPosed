@@ -35,7 +35,7 @@ public:
     explicit Logcat(JNIEnv *env, jobject thiz, jmethodID method, jlong tid) :
             env_(env), thiz_(thiz), refresh_fd_method_(method), tid_(tid) {};
 
-    [[noreturn]] void Run();
+    void Run();
 
 private:
     inline void RefreshFd();
@@ -117,8 +117,12 @@ void Logcat::Run() {
         struct log_msg msg{};
 
         while (true) {
-            if (android_logger_list_read(logger_list.get(), &msg) <= 0 || ProcessBuffer(&msg)) {
+            if (android_logger_list_read(logger_list.get(), &msg) <= 0) {
                 break;
+            }
+
+            if (ProcessBuffer(&msg)) {
+                return;
             }
 
             fflush(out_file_.get());
