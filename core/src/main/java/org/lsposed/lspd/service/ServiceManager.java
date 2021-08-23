@@ -40,7 +40,6 @@ public class ServiceManager {
     public static final String TAG = "LSPosedService";
     private static final ConcurrentHashMap<String, LSPModuleService> moduleServices = new ConcurrentHashMap<>();
     private static final File globalNamespace = new File("/proc/1/root");
-    @SuppressWarnings("FieldCanBeLocal")
     private static LSPosedService mainService = null;
     private static LSPApplicationService applicationService = null;
     private static LSPManagerService managerService = null;
@@ -51,7 +50,6 @@ public class ServiceManager {
         while (android.os.ServiceManager.getService(name) == null) {
             try {
                 Log.i(TAG, "service " + name + " is not started, wait 1s.");
-                //noinspection BusyWait
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 Log.i(TAG, Log.getStackTraceString(e));
@@ -65,7 +63,7 @@ public class ServiceManager {
 
     // call by ourselves
     public static void start(String[] args) {
-        if (!ConfigFileManager.tryLock()) System.exit(0);
+        if (!ConfigManager.getInstance().tryLock()) System.exit(0);
 
         for (String arg : args) {
             if (arg.equals("--from-service")) {
@@ -80,11 +78,8 @@ public class ServiceManager {
             System.exit(1);
         });
 
-        logcatService = new LogcatService();
+        logcatService = new LogcatService(ConfigManager.getLogPath());
         logcatService.start();
-        if (ConfigManager.getInstance().verboseLog()) {
-            logcatService.startVerbose();
-        }
 
         Process.setThreadPriority(Process.THREAD_PRIORITY_FOREGROUND);
         Looper.prepareMainLooper();

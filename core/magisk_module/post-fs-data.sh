@@ -1,3 +1,5 @@
+#!/system/bin/sh
+
 #
 # This file is part of LSPosed.
 #
@@ -19,6 +21,23 @@
 #
 
 MODDIR=${0%/*}
+
+MISC_PATH=$(cat /data/adb/lspd/misc_path)
+BASE_PATH="/data/misc/$MISC_PATH"
+
+LOG_PATH="/data/adb/lspd/log"
+
+chcon -R u:object_r:system_file:s0 "${MODDIR}"
+chcon -R u:object_r:system_file:s0 "/data/adb/lspd"
+rm -rf ${LOG_PATH}.old
+mv ${LOG_PATH} ${LOG_PATH}.old
+mkdir -p ${LOG_PATH}
+chcon -R u:object_r:magisk_file:s0 ${LOG_PATH}
+
+if [ ! -z "${MISC_PATH}" ]; then
+  chcon -R u:object_r:magisk_file:s0 "${BASE_PATH}"
+  chmod 771 "${BASE_PATH}"
+fi
 
 rm -f "/data/local/tmp/lspd.dex"
 unshare -m sh -c "$MODDIR/lspd &"

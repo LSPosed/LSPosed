@@ -246,7 +246,6 @@ androidComponents.onVariants { v ->
 val adb: String = androidComponents.sdkComponents.adb.get().asFile.absolutePath
 val killLspd = task("killLspd", Exec::class) {
     commandLine(adb, "shell", "su", "-c", "killall -w lspd")
-    isIgnoreExitValue = true
 }
 val pushLspd = task("pushLspd", Exec::class) {
     dependsOn("mergeDexDebug")
