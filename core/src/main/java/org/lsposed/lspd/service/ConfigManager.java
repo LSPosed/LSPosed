@@ -140,14 +140,15 @@ public class ConfigManager {
             "user_id integer NOT NULL," +
             "PRIMARY KEY (mid, app_pkg_name, user_id)" +
             ");");
-    private final SQLiteStatement createConfigTable = db.compileStatement("CREATE TABLE IF NOT EXISTS config (" +
+    private final SQLiteStatement createConfigTable = db.compileStatement("CREATE TABLE IF NOT EXISTS configs (" +
             "module_pkg_name text NOT NULL," +
             "user_id integer NOT NULL," +
             "`group` text NOT NULL," +
             "`key` text NOT NULL," +
             "data blob NOT NULL," +
-            "PRIMARY KEY (module_pkg_name, user_id)" +
+            "PRIMARY KEY (module_pkg_name, user_id, `group`, `key`)" +
             ");");
+    private final SQLiteStatement createConfigIndex = db.compileStatement("CREATE INDEX IF NOT EXISTS configs_idx ON configs (module_pkg_name, user_id);");
 
     private final Map<ProcessScope, List<Module>> cachedScope = new ConcurrentHashMap<>();
 
@@ -287,6 +288,7 @@ public class ConfigManager {
         createModulesTable.execute();
         createScopeTable.execute();
         createConfigTable.execute();
+        createConfigIndex.execute();
     }
 
     private List<ProcessScope> getAssociatedProcesses(Application app) throws RemoteException {
@@ -302,7 +304,7 @@ public class ConfigManager {
     Map<String, ConcurrentHashMap<String, Object>> fetchModuleConfig(String name, int user_id) {
         var config = new ConcurrentHashMap<String, ConcurrentHashMap<String, Object>>();
 
-        try (Cursor cursor = db.query("config", new String[]{"`group`", "`key`", "data"},
+        try (Cursor cursor = db.query("configs", new String[]{"`group`", "`key`", "data"},
                 "module_pkg_name = ? and user_id = ?", new String[]{name, String.valueOf(user_id)}, null, null, null)) {
             if (cursor == null) {
                 Log.e(TAG, "db cache failed");
@@ -334,10 +336,10 @@ public class ConfigManager {
             values.put("data", SerializationUtils.serialize((Serializable) value));
             values.put("module_pkg_name", moduleName);
             values.put("user_id", String.valueOf(userId));
-            db.insertWithOnConflict("config", null, values, SQLiteDatabase.CONFLICT_REPLACE);
+            db.insertWithOnConflict("configs", null, values, SQLiteDatabase.CONFLICT_REPLACE);
         } else {
             prefs.remove(key);
-            db.delete("config", "module_pkg_name=? and user_id=? and `group`=? and `key`=?", new String[]{moduleName, String.valueOf(userId), group, key});
+            db.delete("configs", "module_pkg_name=? and user_id=? and `group`=? and `key`=?", new String[]{moduleName, String.valueOf(userId), group, key});
         }
     }
 
