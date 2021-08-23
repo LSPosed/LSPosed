@@ -18,7 +18,6 @@ public class LogcatService implements Runnable {
     private File modulesLog = null;
     private File verboseLog = null;
     private Thread thread = null;
-    private int id = 0;
 
     @SuppressLint("UnsafeDynamicallyLoadedCode")
     public LogcatService() {
@@ -26,12 +25,12 @@ public class LogcatService implements Runnable {
         System.load(libraryPath + "/" + System.mapLibraryName("daemon"));
     }
 
-    private native void runLogcat();
+    private native void runLogcat(long loggerId);
 
     @Override
     public void run() {
         Log.i(TAG, "start running");
-        runLogcat();
+        runLogcat(thread.getId());
         Log.i(TAG, "stoped");
     }
 
@@ -46,7 +45,6 @@ public class LogcatService implements Runnable {
             log = modulesLog;
         }
         try (var fd = ParcelFileDescriptor.open(log, mode)) {
-            Log.i(TAG, "New " + (isVerboseLog ? "verbose log" : "modules log") + " file: " + log);
             return fd.detachFd();
         } catch (IOException e) {
             Log.w(TAG, "someone chattr +i ?", e);
@@ -71,12 +69,11 @@ public class LogcatService implements Runnable {
     }
 
     public void startVerbose() {
-        Log.i(TAG, "!!start_verbose!!" + id);
+        Log.i(TAG, "!!start_verbose!!" + thread.getId());
     }
 
     public void stopVerbose() {
-        Log.i(TAG, "!!stop_verbose!!" + id);
-        id++;
+        Log.i(TAG, "!!stop_verbose!!" + thread.getId());
     }
 
     @Nullable
