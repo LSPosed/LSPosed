@@ -1,7 +1,11 @@
 package android.os;
 
 public class SELinux {
-    public static final boolean checkSELinuxAccess(String scon, String tcon, String tclass, String perm){
+    public static boolean checkSELinuxAccess(String scon, String tcon, String tclass, String perm) {
+        throw new UnsupportedOperationException("Stub");
+    }
+
+    public static boolean setFileContext(String path, String context) {
         throw new UnsupportedOperationException("Stub");
     }
 }

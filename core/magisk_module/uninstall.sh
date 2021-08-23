@@ -1,5 +1,3 @@
-#!/sbin/sh
-
 #
 # This file is part of LSPosed.
 #
@@ -21,4 +19,3 @@
 
 rm -rf /data/adb/lspd
 rm -rf /data/adb/riru/modules/lspd
-
