@@ -26,6 +26,7 @@ class ConfigFileManager {
     private static final File configDirPath = new File(basePath, "config");
     static final File dbPath = new File(configDirPath, "modules_config.db");
     private static final File logDirPath = new File(basePath, "log");
+    private static final File oldLogDirPath = new File(basePath, "log.old");
     private static final DateTimeFormatter formatter =
             DateTimeFormatter.ISO_LOCAL_DATE_TIME.withZone(Utils.getZoneId());
     @SuppressWarnings("FieldCanBeLocal")
@@ -36,6 +37,8 @@ class ConfigFileManager {
             Files.createDirectories(basePath.toPath());
             SELinux.setFileContext(basePath.getPath(), "u:object_r:system_file:s0");
             Files.createDirectories(configDirPath.toPath());
+            Files.deleteIfExists(oldLogDirPath.toPath());
+            Files.move(logDirPath.toPath(), oldLogDirPath.toPath());
             Files.createDirectories(logDirPath.toPath());
         } catch (IOException e) {
             Log.e(TAG, Log.getStackTraceString(e));
