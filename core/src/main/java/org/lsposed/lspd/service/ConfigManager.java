@@ -148,7 +148,6 @@ public class ConfigManager {
             "data blob NOT NULL," +
             "PRIMARY KEY (module_pkg_name, user_id, `group`, `key`)" +
             ");");
-    private final SQLiteStatement createConfigIndex = db.compileStatement("CREATE INDEX IF NOT EXISTS configs_idx ON configs (module_pkg_name, user_id);");
 
     private final Map<ProcessScope, List<Module>> cachedScope = new ConcurrentHashMap<>();
 
@@ -288,7 +287,6 @@ public class ConfigManager {
         createModulesTable.execute();
         createScopeTable.execute();
         createConfigTable.execute();
-        createConfigIndex.execute();
     }
 
     private List<ProcessScope> getAssociatedProcesses(Application app) throws RemoteException {
@@ -876,8 +874,11 @@ public class ConfigManager {
     private void recursivelyChown(File file, int uid, int gid) throws ErrnoException {
         Os.chown(file.toString(), uid, gid);
         if (file.isDirectory()) {
-            for (File subFile : file.listFiles()) {
-                recursivelyChown(subFile, uid, gid);
+            File[] fileList = file.listFiles();
+            if (fileList != null) {
+                for (File subFile : fileList) {
+                    recursivelyChown(subFile, uid, gid);
+                }
             }
         }
     }
