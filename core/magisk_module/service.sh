@@ -1,3 +1,5 @@
+#!/system/bin/sh
+
 #
 # This file is part of LSPosed.
 #
@@ -19,4 +21,4 @@
 
 MODDIR=${0%/*}
 # post-fs-data.sh may be blocked by other modules. retry to start this
-unshare -m "$MODDIR/lspd" --from-service &
+unshare -m $MODDIR/lspd --from-service &
