@@ -120,26 +120,4 @@ fi
 set_perm_recursive "$MODPATH" 0 0 0755 0644
 chmod 0744 "$MODPATH/lspd"
 
-# Lsposed config
-ui_print "- Creating configuration directories"
-if [ -f /data/adb/lspd/misc_path ]; then
-  # read current MISC_PATH
-  MISC_PATH=$(cat /data/adb/lspd/misc_path)
-  ui_print "  - Use previous path $MISC_PATH"
-else
-  # generate random MISC_PATH
-  MISC_RAND=$(tr -cd 'A-Za-z0-9' </dev/urandom | head -c16)
-  MISC_PATH="lspd_${MISC_RAND}"
-  ui_print "  - Use new path ${MISC_RAND}"
-  mkdir -p /data/adb/lspd || abort "! Can't create configuration path"
-  echo "$MISC_PATH" >/data/adb/lspd/misc_path || abort "! Can't store configuration path"
-fi
-
-mkdir -p "/data/misc/$MISC_PATH"
-set_perm "/data/misc/$MISC_PATH" 0 0 0771 "u:object_r:magisk_file:s0" || abort "! Can't set permission"
-echo "rm -rf /data/misc/$MISC_PATH" >>"${MODPATH}/uninstall.sh" || abort "! Can't write uninstall script"
-
-[ -d /data/adb/lspd/config ] || mkdir -p /data/adb/lspd/config
-[ -f /data/adb/lspd/config/verbose_log ] || echo "0" >/data/adb/lspd/config/verbose_log
-
 ui_print "- Welcome to LSPosed!"

@@ -27,22 +27,20 @@ public:
 
     UniqueFile(int fd, const char *mode) : UniqueFile(fd > 0 ? fdopen(fd, mode) : stdout) {};
 
-    UniqueFile() : UniqueFile(nullptr) {};
+    UniqueFile() : UniqueFile(stdout) {};
 };
 
 class Logcat {
 public:
-    explicit Logcat(JNIEnv *env, jobject thiz, jmethodID method, jlong tid, jint fd,
-                    jboolean verbose) :
-            env_(env), thiz_(thiz), refresh_fd_method_(method), tid_(tid), module_file_(fd, "w"),
-            verbose_(verbose),
-            stop_verbose_inst_("!!stop_verbose!!" + std::to_string(tid_)),
-            start_verbose_inst_("!!start_verbose!!" + std::to_string(tid_)) {}
+    explicit Logcat(JNIEnv *env, jobject thiz, jmethodID method, jlong logger_id) :
+            env_(env), thiz_(thiz), refresh_fd_method_(method), logger_id_(logger_id),
+            stop_verbose_inst_("!!stop_verbose!!" + std::to_string(logger_id_)),
+            start_verbose_inst_("!!start_verbose!!" + std::to_string(logger_id_)) {}
 
     [[noreturn]] void Run();
 
 private:
-    inline void RefreshFd();
+    inline void RefreshFd(bool is_verbose);
 
     void ProcessBuffer(struct log_msg *buf);
 
@@ -51,15 +49,17 @@ private:
     JNIEnv *env_;
     jobject thiz_;
     jmethodID refresh_fd_method_;
-    jlong tid_;
-    UniqueFile module_file_{};
-    size_t module_count_ = 0;
+    jlong logger_id_;
 
-    UniqueFile out_file_{};
-    size_t print_count_ = 0;
-    size_t file_count_ = 1;
+    UniqueFile modules_file_{};
+    size_t modules_file_part_ = 0;
+    size_t modules_print_count_ = 0;
 
-    bool verbose_ = true;
+    UniqueFile verbose_file_{};
+    size_t verbose_file_part_ = 0;
+    size_t verbose_print_count_ = 0;
+
+    bool verbose_ = false;
 
     const std::string stop_verbose_inst_;
     const std::string start_verbose_inst_;
@@ -91,11 +91,22 @@ int Logcat::PrintLogLine(const AndroidLogEntry &entry, FILE *out) {
                    entry.tag, static_cast<int>(message_len), message);
 }
 
-void Logcat::RefreshFd() {
-    print_count_ = 0;
-    out_file_ = UniqueFile(env_->CallIntMethod(thiz_, refresh_fd_method_), "w");
-    fprintf(out_file_.get(), "%" PRId64 "-%zu\n", tid_, file_count_);
-    file_count_++;
+void Logcat::RefreshFd(bool is_verbose) {
+    constexpr const char *start_info = "----%" PRId64 "-%zu start----\n";
+    constexpr const char *stop_info = "----%" PRId64 "-%zu end----\n";
+    if (is_verbose) {
+        verbose_print_count_ = 0;
+        fprintf(verbose_file_.get(), stop_info, logger_id_, verbose_file_part_);
+        verbose_file_ = UniqueFile(env_->CallIntMethod(thiz_, refresh_fd_method_, JNI_TRUE), "w");
+        verbose_file_part_++;
+        fprintf(verbose_file_.get(), start_info, logger_id_, verbose_file_part_);
+    } else {
+        modules_print_count_ = 0;
+        fprintf(modules_file_.get(), stop_info, logger_id_, modules_file_part_);
+        modules_file_ = UniqueFile(env_->CallIntMethod(thiz_, refresh_fd_method_, JNI_FALSE), "w");
+        modules_file_part_++;
+        fprintf(modules_file_.get(), start_info, logger_id_, modules_file_part_);
+    }
 }
 
 void Logcat::ProcessBuffer(struct log_msg *buf) {
@@ -103,27 +114,31 @@ void Logcat::ProcessBuffer(struct log_msg *buf) {
     if (android_log_processLogBuffer(&buf->entry, &entry) < 0) return;
 
     std::string_view tag(entry.tag);
-    bool skip = false;
+    bool shortcut = false;
     if (tag == "LSPosed-Bridge" || tag == "XSharedPreferences") [[unlikely]] {
-        module_count_ += PrintLogLine(entry, module_file_.get());
-        skip = true;
+        modules_print_count_ += PrintLogLine(entry, modules_file_.get());
+        shortcut = true;
     }
-    if (verbose_ && (skip || buf->id() == log_id::LOG_ID_CRASH ||
+    if (verbose_ && (shortcut || buf->id() == log_id::LOG_ID_CRASH ||
                      tag == "Magisk" ||
                      tag.starts_with("Riru") ||
                      tag.starts_with("LSPosed"))) [[unlikely]] {
-        print_count_ += PrintLogLine(entry, out_file_.get());
+        verbose_print_count_ += PrintLogLine(entry, verbose_file_.get());
     }
     if (entry.pid == getpid() && tag == "LSPosedLogcat") [[unlikely]] {
-        if (std::string_view(entry.message) == stop_verbose_inst_) verbose_ = false;
-        if (std::string_view(entry.message) == start_verbose_inst_) verbose_ = true;
+        if (std::string_view(entry.message) == stop_verbose_inst_) {
+            verbose_ = false;
+        } else if (std::string_view(entry.message) == start_verbose_inst_) {
+            RefreshFd(true);
+            verbose_ = true;
+        }
     }
 }
 
 void Logcat::Run() {
     constexpr size_t tail_after_crash = 10U;
     size_t tail = 0;
-
+    RefreshFd(false);
     while (true) {
         std::unique_ptr<logger_list, decltype(&android_logger_list_free)> logger_list{
                 android_logger_list_alloc(0, tail, 0), &android_logger_list_free};
@@ -135,8 +150,6 @@ void Logcat::Run() {
             android_logger_set_log_size(logger, kMaxLogSize);
         }
 
-        RefreshFd();
-
         struct log_msg msg{};
 
         while (true) {
@@ -144,18 +157,14 @@ void Logcat::Run() {
 
             ProcessBuffer(&msg);
 
-            fflush(out_file_.get());
-            fflush(module_file_.get());
+            fflush(verbose_file_.get());
+            fflush(modules_file_.get());
 
-            if (print_count_ >= kMaxLogSize) [[unlikely]] RefreshFd();
-            if (module_count_ >= kMaxLogSize) [[unlikely]] {
-                ftruncate(fileno(module_file_.get()), 0);
-                module_count_ = 0;
-            }
+            if (verbose_print_count_ >= kMaxLogSize) [[unlikely]] RefreshFd(true);
+            if (modules_print_count_ >= kMaxLogSize) [[unlikely]] RefreshFd(false);
         }
-        fprintf(out_file_.get(),
-                "\nLogd maybe crashed, retrying in %" PRId64 "-%zu file after 1s\n",
-                tid_, file_count_ + 1);
+        fprintf(verbose_file_.get(), "\nLogd maybe crashed, retrying in 1s...\n");
+        fprintf(modules_file_.get(), "\nLogd maybe crashed, retrying in 1s...\n");
         sleep(1);
     }
 }
@@ -163,10 +172,9 @@ void Logcat::Run() {
 extern "C"
 JNIEXPORT void JNICALL
 // NOLINTNEXTLINE
-Java_org_lsposed_lspd_service_LogcatService_runLogcat(JNIEnv *env, jobject thiz, jlong tid,
-                                                      jint fd, jboolean verbose) {
+Java_org_lsposed_lspd_service_LogcatService_runLogcat(JNIEnv *env, jobject thiz, jlong logger_id) {
     jclass clazz = env->GetObjectClass(thiz);
-    jmethodID method = env->GetMethodID(clazz, "refreshFd", "()I");
-    Logcat logcat(env, thiz, method, tid, fd, verbose);
+    jmethodID method = env->GetMethodID(clazz, "refreshFd", "(Z)I");
+    Logcat logcat(env, thiz, method, logger_id);
     logcat.Run();
 }
