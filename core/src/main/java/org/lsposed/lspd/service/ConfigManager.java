@@ -326,10 +326,12 @@ public class ConfigManager {
             values.put("`group`", group);
             values.put("`key`", key);
             values.put("data", SerializationUtils.serialize((Serializable) value));
-            db.updateWithOnConflict("config", values, "module_pkg_name=? and user_id=?", new String[]{moduleName, String.valueOf(userId)}, SQLiteDatabase.CONFLICT_REPLACE);
+            values.put("module_pkg_name", moduleName);
+            values.put("user_id", String.valueOf(userId));
+            db.insertWithOnConflict("config", null, values, SQLiteDatabase.CONFLICT_REPLACE);
         } else {
             prefs.remove(key);
-            db.delete("config", "module_pkg_name=? and user_id=?", new String[]{moduleName, String.valueOf(userId)});
+            db.delete("config", "module_pkg_name=? and user_id=? and `group`=? and `key`=?", new String[]{moduleName, String.valueOf(userId), group, key});
         }
     }
 
@@ -613,9 +615,11 @@ public class ConfigManager {
             Log.w(TAG, "update module apk path should not be called inside transaction");
             return false;
         }
+
         ContentValues values = new ContentValues();
         values.put("module_pkg_name", packageName);
         values.put("apk_path", apkPath);
+        // insert or update in two step since insert or replace will change the autoincrement mid
         int count = (int) db.insertWithOnConflict("modules", null, values, SQLiteDatabase.CONFLICT_IGNORE);
         if (count < 0) {
             count = db.updateWithOnConflict("modules", values, "module_pkg_name=?", new String[]{packageName}, SQLiteDatabase.CONFLICT_IGNORE);
