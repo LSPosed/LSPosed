@@ -105,7 +105,7 @@ class ConfigFileManager {
 
         if (miscPath.exists()) {
             try {
-                var s = readText(miscPath);
+                var s = "/data/misc/" + readText(miscPath);
                 configManager.updateModulePrefs("lspd", 0, "config", "misc_path", s);
                 miscPath.delete();
             } catch (IOException ignored) {

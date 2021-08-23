@@ -220,7 +220,6 @@ public class ConfigManager {
         // Don't migrate to ConfigFileManager, as XSharedPreferences will be restored soon
         String string = (String) config.get("misc_path");
         if (string == null) {
-            Log.d(TAG, "misc_path:null! ");
             miscPath = "/data/misc/" + UUID.randomUUID().toString();
             updateModulePrefs("lspd", 0, "config", "misc_path", miscPath);
         } else {
@@ -317,7 +316,6 @@ public class ConfigManager {
                 var key = cursor.getString(keyIdx);
                 var data = cursor.getBlob(dataIdx);
                 var object = SerializationUtils.deserialize(data);
-                Log.d(TAG, "read "+group+" "+key+" "+object);
                 if (object == null) continue;
                 config.computeIfAbsent(group, g -> new ConcurrentHashMap<>()).put(key, object);
             }
@@ -336,11 +334,9 @@ public class ConfigManager {
             values.put("data", SerializationUtils.serialize((Serializable) value));
             values.put("module_pkg_name", moduleName);
             values.put("user_id", String.valueOf(userId));
-            Log.d(TAG, "put "+group+" "+key+" "+value);
             db.insertWithOnConflict("config", null, values, SQLiteDatabase.CONFLICT_REPLACE);
         } else {
             prefs.remove(key);
-            Log.d(TAG, "remove  "+group+" "+key+" "+value);
             db.delete("config", "module_pkg_name=? and user_id=? and `group`=? and `key`=?", new String[]{moduleName, String.valueOf(userId), group, key});
         }
     }
@@ -884,11 +880,11 @@ public class ConfigManager {
         }
     }
 
-    private void recursivelyContext(File file,String context) {
+    private void recursivelyContext(File file, String context) {
         SELinux.setFileContext(file.getPath(), context);
         if (file.isDirectory()) {
             for (File subFile : file.listFiles()) {
-                recursivelyContext(subFile,context);
+                recursivelyContext(subFile, context);
             }
         }
     }
