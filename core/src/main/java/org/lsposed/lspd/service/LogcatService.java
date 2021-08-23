@@ -25,7 +25,7 @@ public class LogcatService implements Runnable {
         System.load(libraryPath + "/" + System.mapLibraryName("daemon"));
     }
 
-    private native void runLogcat(long tid);
+    private native void runLogcat(long loggerId);
 
     @Override
     public void run() {

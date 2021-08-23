@@ -32,10 +32,10 @@ public:
 
 class Logcat {
 public:
-    explicit Logcat(JNIEnv *env, jobject thiz, jmethodID method, jlong tid) :
-            env_(env), thiz_(thiz), refresh_fd_method_(method), tid_(tid),
-            stop_verbose_inst_("!!stop_verbose!!" + std::to_string(tid_)),
-            start_verbose_inst_("!!start_verbose!!" + std::to_string(tid_)) {}
+    explicit Logcat(JNIEnv *env, jobject thiz, jmethodID method, jlong logger_id) :
+            env_(env), thiz_(thiz), refresh_fd_method_(method), logger_id_(logger_id),
+            stop_verbose_inst_("!!stop_verbose!!" + std::to_string(logger_id_)),
+            start_verbose_inst_("!!start_verbose!!" + std::to_string(logger_id_)) {}
 
     [[noreturn]] void Run();
 
@@ -49,14 +49,14 @@ private:
     JNIEnv *env_;
     jobject thiz_;
     jmethodID refresh_fd_method_;
-    jlong tid_;
+    jlong logger_id_;
 
     UniqueFile modules_file_{};
-    size_t modules_file_count_ = 1;
+    size_t modules_file_part_ = 0;
     size_t modules_print_count_ = 0;
 
     UniqueFile verbose_file_{};
-    size_t verbose_file_count_ = 1;
+    size_t verbose_file_part_ = 0;
     size_t verbose_print_count_ = 0;
 
     bool verbose_ = false;
@@ -92,18 +92,20 @@ int Logcat::PrintLogLine(const AndroidLogEntry &entry, FILE *out) {
 }
 
 void Logcat::RefreshFd(bool is_verbose) {
+    constexpr const char *start_info = "----%" PRId64 "-%zu start----\n";
+    constexpr const char *stop_info = "----%" PRId64 "-%zu end----\n";
     if (is_verbose) {
         verbose_print_count_ = 0;
-        fprintf(verbose_file_.get(), "----%" PRId64 "-%zu end----\n", tid_, verbose_file_count_);
+        fprintf(verbose_file_.get(), stop_info, logger_id_, verbose_file_part_);
         verbose_file_ = UniqueFile(env_->CallIntMethod(thiz_, refresh_fd_method_, JNI_TRUE), "w");
-        verbose_file_count_++;
-        fprintf(verbose_file_.get(), "----%" PRId64 "-%zu start----\n", tid_, verbose_file_count_);
+        verbose_file_part_++;
+        fprintf(verbose_file_.get(), start_info, logger_id_, verbose_file_part_);
     } else {
         modules_print_count_ = 0;
-        fprintf(modules_file_.get(), "----%" PRId64 "-%zu end----\n", tid_, modules_file_count_);
+        fprintf(modules_file_.get(), stop_info, logger_id_, modules_file_part_);
         modules_file_ = UniqueFile(env_->CallIntMethod(thiz_, refresh_fd_method_, JNI_FALSE), "w");
-        modules_file_count_++;
-        fprintf(modules_file_.get(), "----%" PRId64 "-%zu start----\n", tid_, modules_file_count_);
+        modules_file_part_++;
+        fprintf(modules_file_.get(), start_info, logger_id_, modules_file_part_);
     }
 }
 
@@ -170,9 +172,9 @@ void Logcat::Run() {
 extern "C"
 JNIEXPORT void JNICALL
 // NOLINTNEXTLINE
-Java_org_lsposed_lspd_service_LogcatService_runLogcat(JNIEnv *env, jobject thiz, jlong tid) {
+Java_org_lsposed_lspd_service_LogcatService_runLogcat(JNIEnv *env, jobject thiz, jlong logger_id) {
     jclass clazz = env->GetObjectClass(thiz);
     jmethodID method = env->GetMethodID(clazz, "refreshFd", "(Z)I");
-    Logcat logcat(env, thiz, method, tid);
+    Logcat logcat(env, thiz, method, logger_id);
     logcat.Run();
 }
