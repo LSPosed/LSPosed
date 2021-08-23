@@ -63,6 +63,7 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.nio.channels.Channels;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -224,7 +225,12 @@ public class ConfigManager {
         } else {
             miscPath = string;
         }
-        SELinux.setFileContext(miscPath, "u:object_r:magisk_file:s0");
+        try {
+            Files.createDirectories(Paths.get(miscPath));
+            SELinux.setFileContext(miscPath, "u:object_r:magisk_file:s0");
+        } catch (IOException e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+        }
 
         updateManager();
     }
