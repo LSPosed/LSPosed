@@ -1,5 +1,3 @@
-#!/sbin/sh
-
 #################
 # Initialization
 #################
@@ -22,8 +20,6 @@ require_new_magisk() {
 
 OUTFD=$2
 ZIPFILE=$3
-
-mount /data 2>/dev/null
 
 [ -f /data/adb/magisk/util_functions.sh ] || require_new_magisk
 . /data/adb/magisk/util_functions.sh
