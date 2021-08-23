@@ -11,9 +11,13 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.OpenOption;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardOpenOption;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
@@ -37,8 +41,7 @@ class ConfigFileManager {
             Files.createDirectories(basePath.toPath());
             SELinux.setFileContext(basePath.getPath(), "u:object_r:system_file:s0");
             Files.createDirectories(configDirPath.toPath());
-            Files.deleteIfExists(oldLogDirPath.toPath());
-            Files.move(logDirPath.toPath(), oldLogDirPath.toPath());
+            moveFolderIfExists(logDirPath.toPath(), oldLogDirPath.toPath());
             Files.createDirectories(logDirPath.toPath());
         } catch (IOException e) {
             Log.e(TAG, Log.getStackTraceString(e));
@@ -75,6 +78,32 @@ class ConfigFileManager {
 
     private static String readText(File file) throws IOException {
         return new String(Files.readAllBytes(file.toPath())).trim();
+    }
+
+    private static void moveFolderIfExists(Path source, Path target) throws IOException {
+        if (!Files.exists(source)) return;
+        if (Files.exists(target)) {
+            Files.walkFileTree(target, new SimpleFileVisitor<>() {
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+                        throws IOException {
+                    Files.delete(file);
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult postVisitDirectory(Path dir, IOException e)
+                        throws IOException {
+                    if (e == null) {
+                        Files.delete(dir);
+                        return FileVisitResult.CONTINUE;
+                    } else {
+                        throw e;
+                    }
+                }
+            });
+        }
+        Files.move(source, target);
     }
 
     // TODO: Remove after next release
