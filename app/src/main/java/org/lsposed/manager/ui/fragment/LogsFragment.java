@@ -67,8 +67,6 @@ import java.util.List;
 import java.util.Locale;
 
 import rikka.core.os.FileUtils;
-import rikka.core.res.ResourcesKt;
-import rikka.insets.WindowInsetsHelperKt;
 import rikka.recyclerview.RecyclerViewKt;
 
 @SuppressLint("NotifyDataSetChanged")
@@ -114,28 +112,23 @@ public class LogsFragment extends BaseFragment {
         binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setRaised(!top));
 
 
-        if (!ConfigManager.isVerboseLogEnabled()) {
-            WindowInsetsHelperKt.setInitialPadding(binding.recyclerView, 0, ResourcesKt.resolveDimensionPixelOffset(requireActivity().getTheme(), androidx.appcompat.R.attr.actionBarSize, 0), 0, 0);
-            binding.slidingTabs.setVisibility(View.GONE);
-        } else {
-            binding.slidingTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-                @Override
-                public void onTabSelected(TabLayout.Tab tab) {
-                    verbose = tab.getPosition() == 1;
-                    reloadErrorLog();
-                }
+        binding.slidingTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                verbose = tab.getPosition() == 1;
+                reloadErrorLog();
+            }
 
-                @Override
-                public void onTabUnselected(TabLayout.Tab tab) {
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
 
-                }
+            }
 
-                @Override
-                public void onTabReselected(TabLayout.Tab tab) {
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
 
-                }
-            });
-        }
+            }
+        });
 
         adapter = new LogsAdapter();
         RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);

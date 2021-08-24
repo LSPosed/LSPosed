@@ -82,9 +82,6 @@ public class ServiceManager {
 
         logcatService = new LogcatService();
         logcatService.start();
-        if (ConfigManager.getInstance().verboseLog()) {
-            logcatService.startVerbose();
-        }
 
         Process.setThreadPriority(Process.THREAD_PRIORITY_FOREGROUND);
         Looper.prepareMainLooper();
@@ -123,6 +120,11 @@ public class ServiceManager {
                 systemServerService.putBinderForSystemServer();
             }
         });
+
+        // Force logging on boot, now let's see if we need to stop logging
+        if (!ConfigManager.getInstance().verboseLog()) {
+            logcatService.stopVerbose();
+        }
 
         Looper.loop();
         throw new RuntimeException("Main thread loop unexpectedly exited");

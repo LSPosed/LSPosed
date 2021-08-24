@@ -57,7 +57,7 @@ private:
     size_t verbose_file_part_ = 0;
     size_t verbose_print_count_ = 0;
 
-    bool verbose_ = false;
+    bool verbose_ = true;
 
     const std::string start_verbose_inst_ = "!!start_verbose!!";
     const std::string stop_verbose_inst_ = "!!stop_verbose!!";
@@ -124,8 +124,8 @@ void Logcat::ProcessBuffer(struct log_msg *buf) {
     if (entry.pid == getpid() && tag == "LSPosedLogcat") [[unlikely]] {
         if (std::string_view(entry.message).starts_with(start_verbose_inst_)) {
             verbose_ = true;
-            RefreshFd(true);
             id_ = std::string(entry.message, start_verbose_inst_.length(), std::string::npos);
+            verbose_print_count_ += PrintLogLine(entry, verbose_file_.get());
         } else if (std::string_view(entry.message) == stop_verbose_inst_ + id_) {
             verbose_ = false;
         }
@@ -135,6 +135,7 @@ void Logcat::ProcessBuffer(struct log_msg *buf) {
 void Logcat::Run() {
     constexpr size_t tail_after_crash = 10U;
     size_t tail = 0;
+    RefreshFd(true);
     RefreshFd(false);
     while (true) {
         std::unique_ptr<logger_list, decltype(&android_logger_list_free)> logger_list{
