@@ -35,8 +35,10 @@ import org.lsposed.manager.receivers.LSPManagerServiceHolder;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import io.github.xposed.xposedservice.utils.ParceledListSlice;
 
@@ -173,7 +175,7 @@ public class ConfigManager {
         }
     }
 
-    public static ParcelFileDescriptor getLogs(boolean verbose) {
+    public static ParcelFileDescriptor getLog(boolean verbose) {
         try {
             return verbose ? LSPManagerServiceHolder.getService().getVerboseLog() : LSPManagerServiceHolder.getService().getModulesLog();
         } catch (RemoteException e) {
@@ -307,6 +309,15 @@ public class ConfigManager {
         } catch (RemoteException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
             return false;
+        }
+    }
+
+    public static Map<String, ParcelFileDescriptor> getLogs() {
+        try {
+            return LSPManagerServiceHolder.getService().getLogs();
+        } catch (RemoteException e) {
+            Log.e(App.TAG, Log.getStackTraceString(e));
+            return new HashMap<>();
         }
     }
 }

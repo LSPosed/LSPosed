@@ -61,4 +61,6 @@ interface ILSPManagerService {
     boolean dex2oatFlagsLoaded() = 32;
 
     void setHiddenIcon(boolean hide) = 33;
+
+    Map<String,ParcelFileDescriptor> getLogs() = 34;
 }

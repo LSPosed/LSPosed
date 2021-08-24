@@ -45,6 +45,7 @@ import java.io.FileDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import de.robv.android.xposed.XposedBridge;
 import io.github.xposed.xposedservice.utils.ParceledListSlice;
@@ -280,5 +281,10 @@ public class LSPManagerService extends ILSPManagerService.Stub {
         } catch (RemoteException e) {
             Log.w(TAG, "setHiddenIcon: ", e);
         }
+    }
+
+    @Override
+    public Map<String, ParcelFileDescriptor> getLogs() {
+        return ConfigFileManager.getLogs();
     }
 }

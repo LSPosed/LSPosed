@@ -20,14 +20,15 @@
 
 package org.lsposed.manager.ui.fragment;
 
+import static org.lsposed.manager.App.TAG;
+
 import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.ParcelFileDescriptor;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,13 +40,11 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
-import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.FragmentLogsBinding;
@@ -53,10 +52,8 @@ import org.lsposed.manager.databinding.ItemLogBinding;
 import org.lsposed.manager.util.LinearLayoutManagerFix;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -65,6 +62,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.zip.Deflater;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import rikka.core.os.FileUtils;
 import rikka.recyclerview.RecyclerViewKt;
@@ -80,21 +80,11 @@ public class LogsFragment extends BaseFragment {
             new ActivityResultContracts.CreateDocument(),
             uri -> {
                 if (uri == null) return;
-                try {
-                    // grantUriPermission might throw RemoteException on MIUI
-                    requireContext().grantUriPermission(BuildConfig.APPLICATION_ID, uri,
-                            Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
                 AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
-                    var parcelFileDescriptor = ConfigManager.getLogs(verbose);
-                    if (parcelFileDescriptor == null) {
-                        return;
-                    }
-                    try (var os = requireContext().getContentResolver().openOutputStream(uri);
-                         var is = new FileInputStream(parcelFileDescriptor.getFileDescriptor())) {
-                        FileUtils.copy(is, os);
+                    try (var os = new ZipOutputStream(requireContext().getContentResolver().openOutputStream(uri))) {
+                        os.setLevel(Deflater.BEST_COMPRESSION);
+                        zipLogs(os);
+                        os.finish();
                     } catch (IOException e) {
                         var str = getResources().getString(R.string.logs_save_failed);
                         Snackbar.make(binding.snackbar, str + "\n" + e.getMessage(),
@@ -163,13 +153,6 @@ public class LogsFragment extends BaseFragment {
         } else if (itemId == R.id.menu_refresh) {
             reloadErrorLog();
             return true;
-        } else if (itemId == R.id.menu_send) {
-            try {
-                send();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return true;
         } else if (itemId == R.id.menu_save) {
             save();
             return true;
@@ -188,7 +171,7 @@ public class LogsFragment extends BaseFragment {
     }
 
     private void reloadErrorLog() {
-        ParcelFileDescriptor parcelFileDescriptor = ConfigManager.getLogs(verbose);
+        ParcelFileDescriptor parcelFileDescriptor = ConfigManager.getLog(verbose);
         if (parcelFileDescriptor != null) {
             new LogsReader().execute(parcelFileDescriptor.getFileDescriptor());
         } else {
@@ -209,40 +192,41 @@ public class LogsFragment extends BaseFragment {
         }
     }
 
-    private void send() {
-        ParcelFileDescriptor parcelFileDescriptor = ConfigManager.getLogs(verbose);
-        if (parcelFileDescriptor == null) {
-            return;
-        }
-        LocalDateTime now = LocalDateTime.now();
-        String filename = String.format(Locale.US,
-                "LSPosed_%s_%s.log",
-                verbose ? "Verbose" : "Modules",
-                now.toString());
-        File cacheFile = new File(requireActivity().getCacheDir(), filename);
-        try (var os = new FileOutputStream(cacheFile); var is = new FileInputStream(parcelFileDescriptor.getFileDescriptor())) {
-            FileUtils.copy(is, os);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-
-        Uri uri = FileProvider.getUriForFile(requireActivity(), BuildConfig.APPLICATION_ID + ".fileprovider", cacheFile);
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
-        sendIntent.setDataAndType(uri, "text/plain");
-        sendIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        startActivity(Intent.createChooser(sendIntent, getResources().getString(R.string.menuSend)));
-    }
-
     private void save() {
         LocalDateTime now = LocalDateTime.now();
-        String filename = String.format(Locale.US,
-                "LSPosed_%s_%s.log",
-                verbose ? "Verbose" : "Modules",
-                now.toString());
+        String filename = String.format(Locale.ROOT, "LSPosed_%s.zip", now.toString());
         saveLogsLauncher.launch(filename);
+    }
+
+    private static void zipLogs(ZipOutputStream os) {
+        var logs = ConfigManager.getLogs();
+        logs.forEach((name, fd) -> {
+            try (var is = new FileInputStream(fd.getFileDescriptor())) {
+                os.putNextEntry(new ZipEntry(name));
+                FileUtils.copy(is, os);
+                os.closeEntry();
+            } catch (IOException e) {
+                Log.w(TAG, name, e);
+            }
+        });
+
+        try (var is = Runtime.getRuntime().exec("getprop").getInputStream()) {
+            os.putNextEntry(new ZipEntry("system_props.txt"));
+            FileUtils.copy(is, os);
+            os.closeEntry();
+        } catch (IOException e) {
+            Log.w(TAG, "system_props.txt", e);
+        }
+
+        var now = LocalDateTime.now();
+        var name = "app_" + now.toString() + ".txt";
+        try (var is = Runtime.getRuntime().exec("logcat -d").getInputStream()) {
+            os.putNextEntry(new ZipEntry(name));
+            FileUtils.copy(is, os);
+            os.closeEntry();
+        } catch (IOException e) {
+            Log.w(TAG, name, e);
+        }
     }
 
     @SuppressWarnings("deprecation")
