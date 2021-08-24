@@ -7,4 +7,6 @@ public class VMRuntime {
     }
 
     public native boolean is64Bit();
+    
+    public native String vmInstructionSet();
 }
