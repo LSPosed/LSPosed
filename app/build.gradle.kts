@@ -166,7 +166,7 @@ tasks.whenTaskAdded {
 dependencies {
     val glideVersion = "4.12.0"
     val okhttpVersion = "4.9.1"
-    val navVersion = "2.3.5"
+    val navVersion = "2.4.0-alpha07"
     annotationProcessor("com.github.bumptech.glide:compiler:$glideVersion")
     implementation("androidx.activity:activity:1.3.1")
     implementation("androidx.browser:browser:1.3.0")
