@@ -148,7 +148,6 @@ public class ConfigManager {
             "data blob NOT NULL," +
             "PRIMARY KEY (module_pkg_name, user_id, `group`, `key`)" +
             ");");
-    private final SQLiteStatement createConfigIndex = db.compileStatement("CREATE INDEX IF NOT EXISTS configs_idx ON configs (module_pkg_name, user_id);");
 
     private final Map<ProcessScope, List<Module>> cachedScope = new ConcurrentHashMap<>();
 
@@ -285,10 +284,14 @@ public class ConfigManager {
     }
 
     private void createTables() {
-        createModulesTable.execute();
-        createScopeTable.execute();
-        createConfigTable.execute();
-        createConfigIndex.execute();
+        try {
+            createModulesTable.execute();
+            createScopeTable.execute();
+            createConfigTable.execute();
+            db.compileStatement("CREATE INDEX IF NOT EXISTS configs_idx ON configs (module_pkg_name, user_id);").execute();
+        } catch (Throwable e) {
+            Log.e(TAG, "init db", e);
+        }
     }
 
     private List<ProcessScope> getAssociatedProcesses(Application app) throws RemoteException {
