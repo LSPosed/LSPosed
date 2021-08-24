@@ -20,17 +20,13 @@
 
 package org.lsposed.manager.repo.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OnlineModule implements Serializable, Parcelable {
+public class OnlineModule {
 
     @SerializedName("name")
     @Expose
@@ -84,41 +80,6 @@ public class OnlineModule implements Serializable, Parcelable {
     @Expose
     private Integer stargazerCount;
     public boolean releasesLoaded = false;
-    public final static Creator<OnlineModule> CREATOR = new Creator<OnlineModule>() {
-
-        public OnlineModule createFromParcel(Parcel in) {
-            return new OnlineModule(in);
-        }
-
-        public OnlineModule[] newArray(int size) {
-            return (new OnlineModule[size]);
-        }
-
-    };
-    private final static long serialVersionUID = 3372849627722130087L;
-
-    protected OnlineModule(Parcel in) {
-        this.name = ((String) in.readValue((String.class.getClassLoader())));
-        this.description = ((String) in.readValue((String.class.getClassLoader())));
-        this.url = ((String) in.readValue((String.class.getClassLoader())));
-        this.homepageUrl = ((String) in.readValue((String.class.getClassLoader())));
-        in.readList(this.collaborators, (Collaborator.class.getClassLoader()));
-        in.readList(this.releases, (Release.class.getClassLoader()));
-        this.readme = ((String) in.readValue((String.class.getClassLoader())));
-        this.summary = ((String) in.readValue((String.class.getClassLoader())));
-        in.readList(this.scope, (String.class.getClassLoader()));
-        this.sourceUrl = ((String) in.readValue((String.class.getClassLoader())));
-        this.hide = ((Boolean) in.readValue((Boolean.class.getClassLoader())));
-        in.readList(this.additionalAuthors, (Object.class.getClassLoader()));
-        this.updatedAt = ((String) in.readValue((String.class.getClassLoader())));
-        this.createdAt = ((String) in.readValue((String.class.getClassLoader())));
-        this.stargazerCount = ((Integer) in.readValue((Integer.class.getClassLoader())));
-        this.readmeHTML = ((String) in.readValue((String.class.getClassLoader())));
-        this.latestRelease = ((String) in.readValue((String.class.getClassLoader())));
-    }
-
-    public OnlineModule() {
-    }
 
     public String getName() {
         return name;
@@ -247,30 +208,6 @@ public class OnlineModule implements Serializable, Parcelable {
 
     public void setStargazerCount(Integer stargazerCount) {
         this.stargazerCount = stargazerCount;
-    }
-
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(name);
-        dest.writeValue(description);
-        dest.writeValue(url);
-        dest.writeValue(homepageUrl);
-        dest.writeList(collaborators);
-        dest.writeList(releases);
-        dest.writeValue(readme);
-        dest.writeValue(summary);
-        dest.writeList(scope);
-        dest.writeValue(sourceUrl);
-        dest.writeValue(hide);
-        dest.writeList(additionalAuthors);
-        dest.writeValue(updatedAt);
-        dest.writeValue(createdAt);
-        dest.writeValue(stargazerCount);
-        dest.writeValue(readmeHTML);
-        dest.writeValue(latestRelease);
-    }
-
-    public int describeContents() {
-        return 0;
     }
 
     public String getLatestRelease() {

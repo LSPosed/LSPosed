@@ -20,15 +20,10 @@
 
 package org.lsposed.manager.repo.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
-
-public class Collaborator implements Serializable, Parcelable {
+public class Collaborator {
 
     @SerializedName("login")
     @Expose
@@ -36,26 +31,6 @@ public class Collaborator implements Serializable, Parcelable {
     @SerializedName("name")
     @Expose
     private String name;
-    public final static Creator<Collaborator> CREATOR = new Creator<Collaborator>() {
-
-        public Collaborator createFromParcel(Parcel in) {
-            return new Collaborator(in);
-        }
-
-        public Collaborator[] newArray(int size) {
-            return (new Collaborator[size]);
-        }
-
-    };
-    private final static long serialVersionUID = -7125602393430154154L;
-
-    protected Collaborator(Parcel in) {
-        this.login = ((String) in.readValue((String.class.getClassLoader())));
-        this.name = ((String) in.readValue((String.class.getClassLoader())));
-    }
-
-    public Collaborator() {
-    }
 
     public String getLogin() {
         return login;
@@ -72,14 +47,4 @@ public class Collaborator implements Serializable, Parcelable {
     public void setName(String name) {
         this.name = name;
     }
-
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(login);
-        dest.writeValue(name);
-    }
-
-    public int describeContents() {
-        return 0;
-    }
-
 }
