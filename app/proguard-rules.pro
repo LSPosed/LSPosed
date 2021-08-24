@@ -17,8 +17,8 @@
     void onWindowLayoutChanged(...);
 }
 
--keepclasseswithmembers class org.lsposed.manager.repo.model.* {
-    private java.util.List *;
+-keepclasseswithmembers,allowobfuscation class * {
+  @com.google.gson.annotations.SerializedName <fields>;
 }
 
 -repackageclasses
