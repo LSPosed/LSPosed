@@ -17,6 +17,10 @@
     void onWindowLayoutChanged(...);
 }
 
+-keepclasseswithmembers class org.lsposed.manager.repo.model.* {
+    private java.util.List *;
+}
+
 -repackageclasses
 -allowaccessmodification
 -overloadaggressively
