@@ -2,6 +2,7 @@ package org.lsposed.lspd.service;
 
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 
+import android.os.ParcelFileDescriptor;
 import android.os.SELinux;
 import android.util.Log;
 
@@ -22,6 +23,8 @@ import java.nio.file.attribute.PosixFilePermissions;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 class ConfigFileManager {
     static final File basePath = new File("/data/adb/lspd");
@@ -83,7 +86,7 @@ class ConfigFileManager {
     }
 
     private static String getNewLogFileName(String prefix) {
-        return prefix + "-" + formatter.format(Instant.now()) + ".txt";
+        return prefix + "_" + formatter.format(Instant.now()) + ".txt";
     }
 
     static File getNewVerboseLogPath() {
@@ -92,6 +95,28 @@ class ConfigFileManager {
 
     static File getNewModulesLogPath() {
         return new File(logDirPath, getNewLogFileName("modules"));
+    }
+
+    static Map<String, ParcelFileDescriptor> getLogs() {
+        var map = new LinkedHashMap<String, ParcelFileDescriptor>();
+        try {
+            putFds(map, logDirPath.toPath());
+            putFds(map, oldLogDirPath.toPath());
+        } catch (IOException e) {
+            Log.e(TAG, "getLogs", e);
+        }
+        return map;
+    }
+
+    private static void putFds(Map<String, ParcelFileDescriptor> map, Path path) throws IOException {
+        Files.walkFileTree(path, new SimpleFileVisitor<>() {
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                var name = path.relativize(file).toString();
+                var fd = ParcelFileDescriptor.open(file.toFile(), ParcelFileDescriptor.MODE_READ_ONLY);
+                map.put(name, fd);
+                return FileVisitResult.CONTINUE;
+            }
+        });
     }
 
     private static String readText(File file) throws IOException {

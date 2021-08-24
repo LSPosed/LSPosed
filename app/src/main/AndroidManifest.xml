@@ -37,7 +37,6 @@
         <activity
             android:name=".ui.activity.MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -54,16 +53,6 @@
             android:process=":error" />
 
         <receiver android:name=".receivers.ServiceReceiver" />
-
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>
     </application>
 
 </manifest>
