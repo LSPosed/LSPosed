@@ -102,7 +102,6 @@ class ConfigFileManager {
     static void migrateOldConfig(ConfigManager configManager) {
         var miscPath = new File(basePath, "misc_path");
         var enableResources = new File(configDirPath, "enable_resources");
-        var verboseLog = new File(configDirPath, "verbose_log");
         boolean migrationFailed = false;
 
         if (miscPath.exists()) {
@@ -127,18 +126,6 @@ class ConfigFileManager {
                 Log.e(TAG, Log.getStackTraceString(e));
             }
             if (!migrationFailed) enableResources.delete();
-            if (verboseLog.exists()) {
-                try {
-                    migrationFailed = false;
-                    var s = readText(verboseLog);
-                    var i = Integer.parseInt(s);
-                    configManager.updateModulePrefs("lspd", 0, "config", "enable_verbose_log", i == 1);
-                } catch (IOException e) {
-                    migrationFailed = true;
-                    Log.e(TAG, Log.getStackTraceString(e));
-                }
-                if (!migrationFailed) verboseLog.delete();
-            }
         }
     }
 
