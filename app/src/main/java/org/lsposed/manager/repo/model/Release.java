@@ -20,17 +20,13 @@
 
 package org.lsposed.manager.repo.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Release implements Serializable, Parcelable {
+public class Release {
 
     @SerializedName("name")
     @Expose
@@ -62,34 +58,6 @@ public class Release implements Serializable, Parcelable {
     @SerializedName("releaseAssets")
     @Expose
     private List<ReleaseAsset> releaseAssets = new ArrayList<>();
-    public final static Creator<Release> CREATOR = new Creator<Release>() {
-
-        public Release createFromParcel(Parcel in) {
-            return new Release(in);
-        }
-
-        public Release[] newArray(int size) {
-            return (new Release[size]);
-        }
-
-    };
-    private final static long serialVersionUID = 1047772731795034659L;
-
-    protected Release(Parcel in) {
-        this.name = ((String) in.readValue((String.class.getClassLoader())));
-        this.url = ((String) in.readValue((String.class.getClassLoader())));
-        this.description = ((String) in.readValue((String.class.getClassLoader())));
-        this.descriptionHTML = ((String) in.readValue((String.class.getClassLoader())));
-        this.createdAt = ((String) in.readValue((String.class.getClassLoader())));
-        this.publishedAt = ((String) in.readValue((String.class.getClassLoader())));
-        this.updatedAt = ((String) in.readValue((String.class.getClassLoader())));
-        this.tagName = ((String) in.readValue((String.class.getClassLoader())));
-        this.isPrerelease = ((Boolean) in.readValue((Boolean.class.getClassLoader())));
-        in.readList(this.releaseAssets, (ReleaseAsset.class.getClassLoader()));
-    }
-
-    public Release() {
-    }
 
     public String getName() {
         return name;
@@ -170,22 +138,4 @@ public class Release implements Serializable, Parcelable {
     public void setReleaseAssets(List<ReleaseAsset> releaseAssets) {
         this.releaseAssets = releaseAssets;
     }
-
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(name);
-        dest.writeValue(url);
-        dest.writeValue(description);
-        dest.writeValue(descriptionHTML);
-        dest.writeValue(createdAt);
-        dest.writeValue(publishedAt);
-        dest.writeValue(updatedAt);
-        dest.writeValue(tagName);
-        dest.writeValue(isPrerelease);
-        dest.writeList(releaseAssets);
-    }
-
-    public int describeContents() {
-        return 0;
-    }
-
 }
