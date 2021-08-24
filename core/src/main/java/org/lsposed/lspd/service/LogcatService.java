@@ -80,7 +80,6 @@ public class LogcatService implements Runnable {
         id++;
     }
 
-    @Nullable
     public File getVerboseLog() {
         return verboseLog;
     }
