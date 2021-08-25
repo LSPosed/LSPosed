@@ -79,6 +79,11 @@ public class PackageService {
 
     private static IPackageManager pm = null;
     private static IBinder binder = null;
+
+    static boolean isAlive() {
+        return binder != null && binder.isBinderAlive();
+    }
+
     private static final IBinder.DeathRecipient recipient = new IBinder.DeathRecipient() {
         @Override
         public void binderDied() {
@@ -89,7 +94,7 @@ public class PackageService {
         }
     };
 
-    public static IPackageManager getPackageManager() {
+    private static IPackageManager getPackageManager() {
         if (binder == null && pm == null) {
             binder = ServiceManager.getService("package");
             if (binder == null) return null;

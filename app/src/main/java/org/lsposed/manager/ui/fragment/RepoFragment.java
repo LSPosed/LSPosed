@@ -66,6 +66,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
     protected FragmentRepoBinding binding;
     protected SearchView searchView;
     private SearchView.OnQueryTextListener mSearchListener;
+    private Handler mHandler = new Handler(Looper.getMainLooper());
     private boolean preLoadWebview = true;
 
     private final RepoLoader repoLoader = RepoLoader.getInstance();
@@ -130,11 +131,17 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
         super.onResume();
         adapter.initData();
         if (preLoadWebview) {
-            new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                if (!isRemoving()) new WebView(requireContext());
+            mHandler.postDelayed(() -> {
+                new WebView(requireContext());
             }, 500);
             preLoadWebview = false;
         }
+    }
+
+    @Override
+    public void onDetach() {
+        mHandler.removeCallbacksAndMessages(null);
+        super.onDetach();
     }
 
     @Override
