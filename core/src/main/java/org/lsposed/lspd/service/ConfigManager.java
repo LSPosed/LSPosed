@@ -84,8 +84,6 @@ public class ConfigManager {
     private final SQLiteDatabase db =
             SQLiteDatabase.openOrCreateDatabase(ConfigFileManager.dbPath, null);
 
-    private boolean packageStarted = false;
-
     private boolean resourceHook = false;
     private boolean verboseLog = true;
     private String miscPath = null;
@@ -236,7 +234,7 @@ public class ConfigManager {
     }
 
     public synchronized void updateManager() {
-        if (!packageStarted) return;
+        if (!PackageService.isAlive()) return;
         try {
             PackageInfo info = PackageService.getPackageInfo(manager, 0, 0);
             if (info != null) {
@@ -249,7 +247,7 @@ public class ConfigManager {
     }
 
     public void ensureManager() {
-        if (!packageStarted) return;
+        if (!PackageService.isAlive()) return;
         new Thread(() -> {
             if (PackageService.installManagerIfAbsent(manager, ConfigFileManager.managerApkPath)) {
                 updateManager();
@@ -260,10 +258,9 @@ public class ConfigManager {
     static ConfigManager getInstance() {
         if (instance == null)
             instance = new ConfigManager();
-        if (!instance.packageStarted) {
-            if (PackageService.getPackageManager() != null) {
+        if (instance.lastModuleCacheTime == 0 || instance.lastScopeCacheTime == 0) {
+            if (PackageService.isAlive()) {
                 Log.d(TAG, "pm is ready, updating cache");
-                instance.packageStarted = true;
                 // must ensure cache is valid for later usage
                 instance.updateCaches(true);
                 instance.updateManager();
@@ -351,9 +348,16 @@ public class ConfigManager {
         return config.getOrDefault(group, new ConcurrentHashMap<>());
     }
 
+    private synchronized void clearCache() {
+        lastScopeCacheTime = 0;
+        lastModuleCacheTime = 0;
+        cachedModule.clear();
+        cachedScope.clear();
+    }
+
     private synchronized void cacheModules() {
         // skip caching when pm is not yet available
-        if (!packageStarted) return;
+        if (!PackageService.isAlive()) return;
         if (lastModuleCacheTime >= requestModuleCacheTime) return;
         else lastModuleCacheTime = SystemClock.elapsedRealtime();
         try (Cursor cursor = db.query(true, "modules", new String[]{"module_pkg_name", "apk_path"},
@@ -413,8 +417,14 @@ public class ConfigManager {
                 module.appId = pkgInfo.applicationInfo.uid;
                 cachedModule.put(packageName, module);
             }
-            obsoleteModules.forEach(this::removeModuleWithoutCache);
-            obsoletePaths.forEach(this::updateModuleApkPath);
+            if (PackageService.isAlive()) {
+                obsoleteModules.forEach(this::removeModuleWithoutCache);
+                obsoletePaths.forEach(this::updateModuleApkPath);
+            } else {
+                Log.w(TAG, "pm is dead while caching. invalidating...");
+                clearCache();
+                return;
+            }
         }
         Log.d(TAG, "cached modules");
         for (String module : cachedModule.keySet()) {
@@ -425,7 +435,7 @@ public class ConfigManager {
 
     private synchronized void cacheScopes() {
         // skip caching when pm is not yet available
-        if (!packageStarted) return;
+        if (!PackageService.isAlive()) return;
         if (lastScopeCacheTime >= requestScopeCacheTime) return;
         else lastScopeCacheTime = SystemClock.elapsedRealtime();
         cachedScope.clear();
@@ -489,13 +499,19 @@ public class ConfigManager {
                     Log.e(TAG, Log.getStackTraceString(e));
                 }
             }
-            for (Application obsoletePackage : obsoletePackages) {
-                Log.d(TAG, "removing obsolete package: " + obsoletePackage.packageName + "/" + obsoletePackage.userId);
-                removeAppWithoutCache(obsoletePackage);
-            }
-            for (Application obsoleteModule : obsoleteModules) {
-                Log.d(TAG, "removing obsolete module: " + obsoleteModule.packageName + "/" + obsoleteModule.userId);
-                removeModuleScopeWithoutCache(obsoleteModule);
+            if (PackageService.isAlive()) {
+                for (Application obsoletePackage : obsoletePackages) {
+                    Log.d(TAG, "removing obsolete package: " + obsoletePackage.packageName + "/" + obsoletePackage.userId);
+                    removeAppWithoutCache(obsoletePackage);
+                }
+                for (Application obsoleteModule : obsoleteModules) {
+                    Log.d(TAG, "removing obsolete module: " + obsoleteModule.packageName + "/" + obsoleteModule.userId);
+                    removeModuleScopeWithoutCache(obsoleteModule);
+                }
+            } else {
+                Log.w(TAG, "pm is dead while caching. invalidating...");
+                clearCache();
+                return;
             }
         }
         Log.d(TAG, "cached Scope");
