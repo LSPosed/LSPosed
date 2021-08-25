@@ -60,6 +60,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
@@ -83,7 +84,6 @@ import org.lsposed.manager.databinding.ItemRepoRecyclerviewBinding;
 import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.ui.widget.EmptyStateRecyclerView;
 import org.lsposed.manager.util.GlideApp;
-import org.lsposed.manager.util.LinearLayoutManagerFix;
 import org.lsposed.manager.util.ModuleUtil;
 
 import java.util.ArrayList;
@@ -228,7 +228,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             pickAdaptor.refresh();
             var rv = DialogRecyclerviewBinding.inflate(getLayoutInflater()).getRoot();
             rv.setAdapter(pickAdaptor);
-            rv.setLayoutManager(new LinearLayoutManagerFix(requireActivity()));
+            rv.setLayoutManager(new LinearLayoutManager(requireActivity()));
             var dialog = new AlertDialog.Builder(requireActivity())
                     .setTitle(getString(R.string.install_to_user, user.name))
                     .setView(rv)
@@ -398,7 +398,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             }
             binding.recyclerView.setTag(position);
             binding.recyclerView.setAdapter(fragment.adapters.get(position));
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManagerFix(requireActivity());
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireActivity());
             binding.recyclerView.setLayoutManager(layoutManager);
             binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> fragment.binding.appBar.setRaised(!top));
             binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
