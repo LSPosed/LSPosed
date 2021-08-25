@@ -20,6 +20,8 @@
 package org.lsposed.manager.ui.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -27,6 +29,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
@@ -63,6 +66,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
     protected FragmentRepoBinding binding;
     protected SearchView searchView;
     private SearchView.OnQueryTextListener mSearchListener;
+    private boolean preLoadWebview = true;
 
     private final RepoLoader repoLoader = RepoLoader.getInstance();
     private RepoAdapter adapter;
@@ -119,6 +123,16 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
     public void onDestroy() {
         super.onDestroy();
         repoLoader.removeListener(this);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (preLoadWebview) {
+            new Handler(Looper.getMainLooper()).post(() ->
+                    new WebView(RepoFragment.this.requireContext()));
+            preLoadWebview = false;
+        }
     }
 
     @Override
