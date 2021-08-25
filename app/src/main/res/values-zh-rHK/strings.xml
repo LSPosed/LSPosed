@@ -49,11 +49,9 @@
     <string name="info_system_abi">System ABI</string>
 
     <!-- LogsActivity -->
-    <string name="menuSend">發送</string>
     <string name="menuSaveToSd">保存</string>
     <string name="nav_item_logs_lsp">詳細日誌</string>
     <string name="nav_item_logs_module">模組日誌</string>
-    <string name="logs_save_failed">保存失敗：</string>
     <string name="menuClearLog">立即清理日誌</string>
     <string name="logs_cleared">日誌清理成功</string>
     <string name="scroll_top">滾動到頂部</string>
@@ -133,13 +131,7 @@
     <string name="settings_backup_and_restore">備份與恢復</string>
     <string name="settings_backup_and_restore_summery">備份或恢復模組清單與作用域清單</string>
     <string name="settings_backup">備份</string>
-    <string name="settings_backuping">備份中…</string>
-    <string name="settings_backup_success">備份成功！</string>
-    <string name="settings_backup_failed">備份失敗</string>
     <string name="settings_restore">恢復</string>
-    <string name="settings_restoring">恢復中…</string>
-    <string name="settings_restore_success">恢復成功！</string>
-    <string name="settings_restore_failed">恢復失敗</string>
     <string name="group_network">網路</string>
     <string name="dns_over_http">安全 DNS（DoH）</string>
     <string name="dns_over_http_summary">解決某些地區的 DNS 污染問題</string>

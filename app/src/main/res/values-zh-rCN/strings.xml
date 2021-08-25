@@ -58,11 +58,9 @@
     <string name="info_system_abi">系统架构</string>
 
     <!-- LogsActivity -->
-    <string name="menuSend">发送</string>
     <string name="menuSaveToSd">保存</string>
     <string name="nav_item_logs_lsp">LSPosed 日志</string>
     <string name="nav_item_logs_module">模块运行日志</string>
-    <string name="logs_save_failed">保存失败：</string>
     <string name="menuClearLog">立即清理日志</string>
     <string name="logs_cleared">日志清理成功</string>
     <string name="scroll_top">滚动到顶部</string>
@@ -153,13 +151,7 @@
     <string name="settings_backup_and_restore">备份与恢复</string>
     <string name="settings_backup_and_restore_summery">备份或恢复模块列表与作用域列表</string>
     <string name="settings_backup">备份</string>
-    <string name="settings_backuping">备份中</string>
-    <string name="settings_backup_success">备份完成</string>
-    <string name="settings_backup_failed">备份失败</string>
     <string name="settings_restore">恢复</string>
-    <string name="settings_restoring">恢复中</string>
-    <string name="settings_restore_success">恢复完成</string>
-    <string name="settings_restore_failed">恢复失败</string>
     <string name="group_network">网络</string>
     <string name="dns_over_http">安全 DNS（DoH）</string>
     <string name="dns_over_http_summary">解决某些地区的 DNS 污染问题</string>

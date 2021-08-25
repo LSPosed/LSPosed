@@ -49,11 +49,9 @@
     <string name="info_system_abi">Systeem ABI</string>
 
     <!-- LogsActivity -->
-    <string name="menuSend">Verstuur</string>
     <string name="menuSaveToSd">Opslaan</string>
     <string name="nav_item_logs_lsp">Uitgebreide logboeken</string>
     <string name="nav_item_logs_module">Modules Logboeken</string>
-    <string name="logs_save_failed">Opslaan mislukt:</string>
     <string name="menuClearLog">Wis het logboek nu</string>
     <string name="logs_cleared">Log succesvol gewist.</string>
     <string name="scroll_top">Scroll naar boven</string>
@@ -131,13 +129,7 @@
     <string name="settings_backup_and_restore">Backup en herstellen</string>
     <string name="settings_backup_and_restore_summery">Backup of herstel de modulelijst en scooplijsten.</string>
     <string name="settings_backup">Backup</string>
-    <string name="settings_backuping">Ondersteunen…</string>
-    <string name="settings_backup_success">Backup voltooid!</string>
-    <string name="settings_backup_failed">Backup maken mislukt</string>
     <string name="settings_restore">Herstellen</string>
-    <string name="settings_restoring">Herstellen…</string>
-    <string name="settings_restore_success">Herstel voltooid!</string>
-    <string name="settings_restore_failed">Herstellen mislukt</string>
     <string name="group_network">Netwerk</string>
     <string name="dns_over_http">DNS via HTTPS</string>
     <string name="dns_over_http_summary">Tijdelijke oplossing voor DNS-vergiftiging in sommige landen</string>
