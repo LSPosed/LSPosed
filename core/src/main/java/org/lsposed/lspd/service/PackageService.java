@@ -81,7 +81,8 @@ public class PackageService {
     private static IBinder binder = null;
 
     static boolean isAlive() {
-        return binder != null && binder.isBinderAlive();
+        var pm = getPackageManager();
+        return pm != null && pm.asBinder().isBinderAlive();
     }
 
     private static final IBinder.DeathRecipient recipient = new IBinder.DeathRecipient() {
