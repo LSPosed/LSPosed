@@ -23,10 +23,13 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 
 import androidx.annotation.NonNull;
 import androidx.core.text.HtmlCompat;
@@ -56,6 +59,7 @@ public class HomeFragment extends BaseFragment {
 
     private FragmentHomeBinding binding;
     private View snackbar;
+    private boolean preLoadWebview = true;
 
     private static PackageInfo wrap(ApplicationInfo applicationInfo, int longVersionCode) {
         PackageInfo packageInfo = new PackageInfo();
@@ -176,6 +180,16 @@ public class HomeFragment extends BaseFragment {
             } else {
                 getNavController().navigate(fragment);
             }
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (preLoadWebview) {
+            new Handler(Looper.getMainLooper()).postDelayed(() ->
+                    new WebView(HomeFragment.this.requireContext()), 500L);
+            preLoadWebview = false;
         }
     }
 
