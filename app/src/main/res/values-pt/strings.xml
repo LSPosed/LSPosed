@@ -58,11 +58,9 @@
     <string name="info_system_abi">Sistema ABI</string>
 
     <!-- LogsActivity -->
-    <string name="menuSend">Enviar</string>
     <string name="menuSaveToSd">Salvar</string>
     <string name="nav_item_logs_lsp">Registros LSPosed</string>
     <string name="nav_item_logs_module">Registros dos Módulos</string>
-    <string name="logs_save_failed">Falha ao salvar:</string>
     <string name="menuClearLog">Limpar registro</string>
     <string name="logs_cleared">Registro limpo com sucesso.</string>
     <string name="scroll_top">Mover para início</string>
@@ -153,13 +151,7 @@
     <string name="settings_backup_and_restore">Backup e restauração</string>
     <string name="settings_backup_and_restore_summery">Fazer backup ou restauração da lista de módulos e da lista de escopos.</string>
     <string name="settings_backup">Fazer Backup</string>
-    <string name="settings_backuping">Fazendo Backup…</string>
-    <string name="settings_backup_success">Backup concluído!</string>
-    <string name="settings_backup_failed">Falha ao fazer Backup</string>
     <string name="settings_restore">Restaurar Backup</string>
-    <string name="settings_restoring">Restaurando…</string>
-    <string name="settings_restore_success">Restauração concluída!</string>
-    <string name="settings_restore_failed">Falha ao restaurar</string>
     <string name="group_network">Rede</string>
     <string name="dns_over_http">DNS sobre HTTPS</string>
     <string name="dns_over_http_summary">Solução alternativa para envenenamento de DNS em alguns países</string>

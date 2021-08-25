@@ -58,11 +58,9 @@
     <string name="info_system_abi">Architecture du système</string>
 
     <!-- LogsActivity -->
-    <string name="menuSend">Envoyer</string>
     <string name="menuSaveToSd">Sauvegarder</string>
     <string name="nav_item_logs_lsp">Journaux détaillés</string>
     <string name="nav_item_logs_module">Journeaux des Modules</string>
-    <string name="logs_save_failed">Échec de la sauvegarde:</string>
     <string name="menuClearLog">Éffacer le journal maintenant</string>
     <string name="logs_cleared">Journal éffacé avec succès.</string>
     <string name="scroll_top">Haut de page</string>
@@ -153,13 +151,7 @@
     <string name="settings_backup_and_restore">Sauvegarder et restaurer</string>
     <string name="settings_backup_and_restore_summery">Sauvegarder ou restaurer la liste d\’applications et leurs listes de champs.</string>
     <string name="settings_backup">Sauvegarde</string>
-    <string name="settings_backuping">Sauvegarde des données…</string>
-    <string name="settings_backup_success">Sauvegarde terminée!</string>
-    <string name="settings_backup_failed">Failed to backup</string>
     <string name="settings_restore">Restaurer</string>
-    <string name="settings_restoring">Restauration…</string>
-    <string name="settings_restore_success">Restauration terminée!</string>
-    <string name="settings_restore_failed">Échec de la restauration</string>
     <string name="group_network">Réseau</string>
     <string name="dns_over_http">DNS sur HTTPS</string>
     <string name="dns_over_http_summary">Contourner la censure DNS dans certains pays</string>
