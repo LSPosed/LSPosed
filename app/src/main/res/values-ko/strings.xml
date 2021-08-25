@@ -51,11 +51,9 @@
     <string name="info_system_abi">System ABI</string>
 
     <!-- LogsActivity -->
-    <string name="menuSend">전송</string>
     <string name="menuSaveToSd">저장</string>
     <string name="nav_item_logs_lsp">상세 로그</string>
     <string name="nav_item_logs_module">모듈 로그</string>
-    <string name="logs_save_failed">저장 실패:</string>
     <string name="menuClearLog">로그 지우기</string>
     <string name="logs_cleared">로그를 성공적으로 지웠습니다.</string>
     <string name="scroll_top">맨 위로 스크롤</string>
@@ -139,13 +137,7 @@
     <string name="settings_backup_and_restore">백업 및 복원</string>
     <string name="settings_backup_and_restore_summery">모듈 목록 및 범위 목록을 백업 또는 복원합니다.</string>
     <string name="settings_backup">백업</string>
-    <string name="settings_backuping">백업 중…</string>
-    <string name="settings_backup_success">백업 완료!</string>
-    <string name="settings_backup_failed">백업 실패</string>
     <string name="settings_restore">복원</string>
-    <string name="settings_restoring">복원 중…</string>
-    <string name="settings_restore_success">복원 완료!!</string>
-    <string name="settings_restore_failed">복원 실패</string>
     <string name="group_network">네트워크</string>
     <string name="dns_over_http">DNS over HTTPS</string>
     <string name="dns_over_http_summary">일부 국가의 DNS 포이즈닝 문제를 해결합니다</string>

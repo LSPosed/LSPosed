@@ -60,11 +60,9 @@
     <string name="info_system_abi">Разрядность системы ABI</string>
 
     <!-- LogsActivity -->
-    <string name="menuSend">Отправить</string>
     <string name="menuSaveToSd">Сохранить</string>
     <string name="nav_item_logs_lsp">Логи LSPosed</string>
     <string name="nav_item_logs_module">Логи модулей</string>
-    <string name="logs_save_failed">Ошибка сохранения:</string>
     <string name="menuClearLog">Очистить логи</string>
     <string name="logs_cleared">Логи успешно очищены</string>
     <string name="scroll_top">Прокрутить вверх</string>
@@ -155,13 +153,7 @@
     <string name="settings_backup_and_restore">Резервное копирование и восстановление</string>
     <string name="settings_backup_and_restore_summery">Список модулей и включенных приложений</string>
     <string name="settings_backup">Создать</string>
-    <string name="settings_backuping">Резервное копирование…</string>
-    <string name="settings_backup_success">Резервное копирование завершено!</string>
-    <string name="settings_backup_failed">Не удалось сделать резервную копию</string>
     <string name="settings_restore">Восстановить</string>
-    <string name="settings_restoring">Восстановление…</string>
-    <string name="settings_restore_success">Восстановление завершено!</string>
-    <string name="settings_restore_failed">Не удалось восстановить</string>
     <string name="group_network">Сеть</string>
     <string name="dns_over_http">DNS через HTTPS</string>
     <string name="dns_over_http_summary">Протокол для выполнения разрешения DNS по протоколу HTTPS. Целью этого метода является повышение конфиденциальности и безопасности пользователей путем предотвращения перехвата и манипулирования данными DNS с помощью атак типа «Атака посредника»</string>

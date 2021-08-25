@@ -34,22 +34,24 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
+import org.lsposed.manager.App;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.FragmentLogsBinding;
 import org.lsposed.manager.databinding.ItemLogBinding;
-import org.lsposed.manager.util.LinearLayoutManagerFix;
 
 import java.io.BufferedReader;
 import java.io.FileDescriptor;
@@ -75,20 +77,23 @@ public class LogsFragment extends BaseFragment {
     private LogsAdapter adapter;
     private final Handler handler = new Handler(Looper.getMainLooper());
     private FragmentLogsBinding binding;
-    private LinearLayoutManagerFix layoutManager;
+    private LinearLayoutManager layoutManager;
     private final ActivityResultLauncher<String> saveLogsLauncher = registerForActivityResult(
             new ActivityResultContracts.CreateDocument(),
             uri -> {
                 if (uri == null) return;
-                AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
+                runAsync(() -> {
                     try (var os = new ZipOutputStream(requireContext().getContentResolver().openOutputStream(uri))) {
                         os.setLevel(Deflater.BEST_COMPRESSION);
                         zipLogs(os);
                         os.finish();
                     } catch (IOException e) {
-                        var str = getResources().getString(R.string.logs_save_failed);
-                        Snackbar.make(binding.snackbar, str + "\n" + e.getMessage(),
-                                Snackbar.LENGTH_LONG).show();
+                        var text = App.getInstance().getString(R.string.logs_save_failed2, e.getMessage());
+                        if (binding != null && isResumed()) {
+                            Snackbar.make(binding.snackbar, text, Snackbar.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(App.getInstance(), text, Toast.LENGTH_LONG).show();
+                        }
                     }
                 });
             });
@@ -123,7 +128,7 @@ public class LogsFragment extends BaseFragment {
         adapter = new LogsAdapter();
         RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
         binding.recyclerView.setAdapter(adapter);
-        layoutManager = new LinearLayoutManagerFix(requireActivity());
+        layoutManager = new LinearLayoutManager(requireActivity());
         binding.recyclerView.setLayoutManager(layoutManager);
         return binding.getRoot();
     }

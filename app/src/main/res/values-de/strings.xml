@@ -27,7 +27,6 @@
     <string name="About">Mehr Erfahren</string>
 
     <!-- General/various strings -->
-    <string name="menuSend">senden</string>
     <string name="menuSaveToSd">speichern</string>
 
     <!-- Welcome screen / main sections -->
@@ -63,7 +62,6 @@
     <!-- Support tab -->
 
     <!-- Logs tab  -->
-    <string name="logs_save_failed">Speichern fehlgeschlagen:</string>
     <string name="menuClearLog">Protokoll jetzt löschen</string>
     <string name="logs_cleared">Protokoll erfolgreich gelöscht.</string>
 
@@ -121,13 +119,7 @@
     <string name="settings_backup_and_restore">Sichern und Wiederherstellen</string>
     <string name="settings_backup_and_restore_summery">Modul- und Bereichslisten sichern oder wiederherstellen.</string>
     <string name="settings_backup">Backup</string>
-    <string name="settings_backuping">Backup erstellen...</string>
-    <string name="settings_backup_success">Backup komplett!</string>
-    <string name="settings_backup_failed">Backup fehlgeschlagen</string>
     <string name="settings_restore">Wiederherstellen</string>
-    <string name="settings_restoring">Wiederherstellen…</string>
-    <string name="settings_restore_success">Wiederherstellung abgeschlossen!</string>
-    <string name="settings_restore_failed">Wiederherstellung fehlgeschlagen</string>
     <string name="menu_backup_and_restore">Back-up…</string>
     <string name="menu_backup">Back-up</string>
     <string name="menu_restore">Wiederherstellen</string>

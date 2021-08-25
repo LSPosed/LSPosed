@@ -55,11 +55,9 @@
     <string name="info_system_abi">システム ABI</string>
 
     <!-- LogsActivity -->
-    <string name="menuSend">送信</string>
     <string name="menuSaveToSd">保存</string>
     <string name="nav_item_logs_lsp">詳細ログ</string>
     <string name="nav_item_logs_module">モジュールログ</string>
-    <string name="logs_save_failed">保存に失敗:</string>
     <string name="menuClearLog">直ちにログを消去</string>
     <string name="logs_cleared">ログの消去に成功しました。</string>
     <string name="scroll_top">ログの先頭行にスクロール</string>
@@ -145,13 +143,7 @@
     <string name="settings_backup_and_restore">バックアップと復元</string>
     <string name="settings_backup_and_restore_summery">モジュールリストのバックアップ/復元とリストへのアクセス</string>
     <string name="settings_backup">バックアップ</string>
-    <string name="settings_backuping">バックアップ中…</string>
-    <string name="settings_backup_success">バックアップ完了!</string>
-    <string name="settings_backup_failed">バックアップに失敗</string>
     <string name="settings_restore">復元</string>
-    <string name="settings_restoring">復元中…</string>
-    <string name="settings_restore_success">復元完了!</string>
-    <string name="settings_restore_failed">復元に失敗</string>
     <string name="group_network">ネットワーク</string>
     <string name="dns_over_http">DNS over HTTPS</string>
     <string name="dns_over_http_summary">一部の国向けの DNSポイズニング 回避策</string>

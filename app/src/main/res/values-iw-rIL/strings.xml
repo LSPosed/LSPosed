@@ -44,11 +44,9 @@
     <string name="info_system_abi">ABI מערכת</string>
 
     <!-- LogsActivity -->
-    <string name="menuSend">שלח</string>
     <string name="menuSaveToSd">שמור</string>
     <string name="nav_item_logs_lsp">Verbose Logs</string>
     <string name="nav_item_logs_module">Modules Logs</string>
-    <string name="logs_save_failed">נכשל לשמור:</string>
     <string name="menuClearLog">נקה לוגים עכשיו</string>
     <string name="logs_cleared">לוגים נוקו בהצלחה.</string>
     <string name="scroll_top">גלגל להתחלה</string>
@@ -125,13 +123,7 @@
     <string name="settings_backup_and_restore">גיבוי ושחזור</string>
     <string name="settings_backup_and_restore_summery">שחזר או גבה רשימת מודולים ורשימת תחומים.</string>
     <string name="settings_backup">גבה</string>
-    <string name="settings_backuping">מגבה…</string>
-    <string name="settings_backup_success">גיבוי הסתיים!</string>
-    <string name="settings_backup_failed">נכשל לגבות</string>
     <string name="settings_restore">שחזר</string>
-    <string name="settings_restoring">משחזר…</string>
-    <string name="settings_restore_success">שחזור הושלם!</string>
-    <string name="settings_restore_failed">נכשל לשחזר</string>
     <string name="group_network">רשת</string>
     <string name="dns_over_http">DNS על פני HTTPS</string>
     <string name="dns_over_http_summary">Workaround DNS poisoning in some nations</string>

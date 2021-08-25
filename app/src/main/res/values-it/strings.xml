@@ -55,11 +55,9 @@
     <string name="info_system_abi">ABI del sistema</string>
 
     <!-- LogsActivity -->
-    <string name="menuSend">Invia</string>
     <string name="menuSaveToSd">Salva</string>
     <string name="nav_item_logs_lsp">Log verboso</string>
     <string name="nav_item_logs_module">Log moduli</string>
-    <string name="logs_save_failed">Impossibile effettuare il salvataggio:</string>
     <string name="menuClearLog">Cancella il log ora</string>
     <string name="logs_cleared">Log cancellato correttamente.</string>
     <string name="scroll_top">Scorri in alto</string>
@@ -144,13 +142,7 @@
     <string name="settings_backup_and_restore">Backup e ripristino</string>
     <string name="settings_backup_and_restore_summery">Backup o ripristino dell\'elenco dei moduli e degli elenchi degli ambiti.</string>
     <string name="settings_backup">Backup</string>
-    <string name="settings_backuping">Backup in corso…</string>
-    <string name="settings_backup_success">Backup terminato!</string>
-    <string name="settings_backup_failed">Backup fallito</string>
     <string name="settings_restore">Ripristina</string>
-    <string name="settings_restoring">Ripristino in corso…</string>
-    <string name="settings_restore_success">Ripristino terminato!</string>
-    <string name="settings_restore_failed">Ripristino fallito</string>
     <string name="group_network">Rete</string>
     <string name="dns_over_http">DNS over HTTPS</string>
     <string name="dns_over_http_summary">Soluzione alternativa all\'avvelenamento della cache DNS in alcune nazioni</string>

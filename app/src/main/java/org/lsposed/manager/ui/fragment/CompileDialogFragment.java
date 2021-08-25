@@ -34,7 +34,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.Lifecycle;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -93,7 +92,7 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
             appInfo = arguments.getParcelable(KEY_APP_INFO);
             String[] command = COMPILE_RESET_COMMAND;
             command[6] = appInfo.packageName;
-            new CompileTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, command);
+            new CompileTask(this).executeOnExecutor(App.getExecutorService(), command);
         } else {
             dismissAllowingStateLoss();
         }
@@ -156,8 +155,8 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
             if (fragment != null) {
                 fragment.dismissAllowingStateLoss();
                 AppListFragment appListFragment = (AppListFragment) fragment.getParentFragment();
-                if (appListFragment != null && appListFragment.getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
-                    appListFragment.makeSnackBar(text, Snackbar.LENGTH_LONG);
+                if (appListFragment != null && appListFragment.binding != null && appListFragment.isResumed()) {
+                    Snackbar.make(appListFragment.binding.snackbar, text, Snackbar.LENGTH_LONG).show();
                     return;
                 }
             }
