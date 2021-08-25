@@ -255,7 +255,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             if (launchIntent != null) {
                 ConfigManager.startActivityAsUserWithFeature(launchIntent, module.userId);
             } else {
-                fragment.makeSnackBar(R.string.module_no_ui, Snackbar.LENGTH_LONG);
+                Snackbar.make(fragment.binding.snackbar, R.string.module_no_ui, Snackbar.LENGTH_LONG).show();
             }
             return true;
         } else if (itemId == R.id.backup) {
@@ -469,7 +469,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             checkedList.remove(appInfo.application);
         }
         if (!ConfigManager.setModuleScope(module.packageName, checkedList)) {
-            fragment.makeSnackBar(R.string.failed_to_save_scope_list, Snackbar.LENGTH_SHORT);
+            Snackbar.make(fragment.binding.snackbar, R.string.failed_to_save_scope_list, Snackbar.LENGTH_SHORT).show();
             if (!isChecked) {
                 checkedList.add(appInfo.application);
             } else {

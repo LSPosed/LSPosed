@@ -20,16 +20,16 @@
 
 package org.lsposed.manager.util;
 
-import android.content.Context;
 import android.net.Uri;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+import org.lsposed.manager.App;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.adapters.ScopeAdapter;
 
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
@@ -38,55 +38,45 @@ import java.util.zip.GZIPOutputStream;
 public class BackupUtils {
     private static final int VERSION = 2;
 
-    public static boolean backup(Context context, Uri uri) {
-        return backup(context, uri, null);
+    public static void backup(Uri uri) throws JSONException, IOException {
+        backup(uri, null);
     }
 
-    public static boolean backup(Context context, Uri uri, String packageName) {
-        try {
-            JSONObject rootObject = new JSONObject();
-            rootObject.put("version", VERSION);
-            JSONArray modulesArray = new JSONArray();
-            var modules = ModuleUtil.getInstance().getModules();
-            for (ModuleUtil.InstalledModule module : modules.values()) {
-                if (packageName != null && !module.packageName.equals(packageName)) {
-                    continue;
-                }
-                JSONObject moduleObject = new JSONObject();
-                moduleObject.put("enable", ModuleUtil.getInstance().isModuleEnabled(module.packageName));
-                moduleObject.put("package", module.packageName);
-                List<ScopeAdapter.ApplicationWithEquals> scope = ConfigManager.getModuleScope(module.packageName);
-                JSONArray scopeArray = new JSONArray();
-                for (ScopeAdapter.ApplicationWithEquals s : scope) {
-                    JSONObject app = new JSONObject();
-                    app.put("package", s.packageName);
-                    app.put("userId", s.userId);
-                    scopeArray.put(app);
-                }
-                moduleObject.put("scope", scopeArray);
-                modulesArray.put(moduleObject);
+    public static void backup(Uri uri, String packageName) throws IOException, JSONException {
+        JSONObject rootObject = new JSONObject();
+        rootObject.put("version", VERSION);
+        JSONArray modulesArray = new JSONArray();
+        var modules = ModuleUtil.getInstance().getModules();
+        for (ModuleUtil.InstalledModule module : modules.values()) {
+            if (packageName != null && !module.packageName.equals(packageName)) {
+                continue;
             }
-            rootObject.put("modules", modulesArray);
-            OutputStream outputStream = context.getContentResolver().openOutputStream(uri);
-            GZIPOutputStream gzipOutputStream = new GZIPOutputStream(outputStream);
-            gzipOutputStream.write(rootObject.toString().getBytes());
-            gzipOutputStream.close();
-            outputStream.close();
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
+            JSONObject moduleObject = new JSONObject();
+            moduleObject.put("enable", ModuleUtil.getInstance().isModuleEnabled(module.packageName));
+            moduleObject.put("package", module.packageName);
+            List<ScopeAdapter.ApplicationWithEquals> scope = ConfigManager.getModuleScope(module.packageName);
+            JSONArray scopeArray = new JSONArray();
+            for (ScopeAdapter.ApplicationWithEquals s : scope) {
+                JSONObject app = new JSONObject();
+                app.put("package", s.packageName);
+                app.put("userId", s.userId);
+                scopeArray.put(app);
+            }
+            moduleObject.put("scope", scopeArray);
+            modulesArray.put(moduleObject);
         }
-        return false;
+        rootObject.put("modules", modulesArray);
+        try (GZIPOutputStream gzipOutputStream = new GZIPOutputStream(App.getInstance().getContentResolver().openOutputStream(uri))) {
+            gzipOutputStream.write(rootObject.toString().getBytes());
+        }
     }
 
-    public static boolean restore(Context context, Uri uri) {
-        return restore(context, uri, null);
+    public static void restore(Uri uri) throws JSONException, IOException {
+        restore(uri, null);
     }
 
-    public static boolean restore(Context context, Uri uri, String packageName) {
-        try {
-            InputStream inputStream = context.getContentResolver().openInputStream(uri);
-            GZIPInputStream gzipInputStream = new GZIPInputStream(inputStream, 32);
+    public static void restore(Uri uri, String packageName) throws IOException, JSONException {
+        try (GZIPInputStream gzipInputStream = new GZIPInputStream(App.getInstance().getContentResolver().openInputStream(uri), 32)) {
             StringBuilder string = new StringBuilder();
             byte[] data = new byte[32];
             int bytesRead;
@@ -94,7 +84,6 @@ public class BackupUtils {
                 string.append(new String(data, 0, bytesRead));
             }
             gzipInputStream.close();
-            inputStream.close();
             JSONObject rootObject = new JSONObject(string.toString());
             int version = rootObject.getInt("version");
             if (version == VERSION || version == 1) {
@@ -122,12 +111,8 @@ public class BackupUtils {
                     }
                 }
             } else {
-                return false;
+                throw new IllegalArgumentException("Unknown backup file version");
             }
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        return false;
     }
 }

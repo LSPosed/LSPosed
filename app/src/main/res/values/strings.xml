@@ -62,7 +62,7 @@
     <string name="menuSaveToSd">Save</string>
     <string name="nav_item_logs_lsp">LSPosed Logs</string>
     <string name="nav_item_logs_module">Modules Logs</string>
-    <string name="logs_save_failed">Failed to save:</string>
+    <string name="logs_save_failed2">Failed to save:\n%s</string>
     <string name="menuClearLog">Clear log now</string>
     <string name="logs_cleared">Log successfully cleared.</string>
     <string name="scroll_top">Scroll to top</string>
@@ -72,6 +72,8 @@
     <string name="menuReload">Reload</string>
     <string name="logs_clear_failed_2">Failed to clear the log</string>
     <string name="verbose_log_not_avaliable">Verbose log is not available, if you just enabled it without reboot, try again after reboot.</string>
+    <string name="logs_saving">Saving logs…</string>
+    <string name="logs_saved">Logs saved!</string>
 
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Xposed module is not activated yet</string>
@@ -155,11 +157,11 @@
     <string name="settings_backup">Backup</string>
     <string name="settings_backuping">Backing up…</string>
     <string name="settings_backup_success">Backup finished!</string>
-    <string name="settings_backup_failed">Failed to backup</string>
+    <string name="settings_backup_failed2">Failed to backup:\n%s</string>
     <string name="settings_restore">Restore</string>
     <string name="settings_restoring">Restoring…</string>
     <string name="settings_restore_success">Restore finished!</string>
-    <string name="settings_restore_failed">Failed to restore</string>
+    <string name="settings_restore_failed2">Failed to restore:\n%s</string>
     <string name="group_network">Network</string>
     <string name="dns_over_http">DNS over HTTPS</string>
     <string name="dns_over_http_summary">Workaround DNS poisoning in some nations</string>

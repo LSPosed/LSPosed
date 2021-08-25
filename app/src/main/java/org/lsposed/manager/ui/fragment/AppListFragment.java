@@ -19,28 +19,25 @@
 
 package org.lsposed.manager.ui.fragment;
 
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.snackbar.Snackbar;
 
-import org.lsposed.manager.BuildConfig;
+import org.lsposed.manager.App;
 import org.lsposed.manager.R;
 import org.lsposed.manager.adapters.ScopeAdapter;
 import org.lsposed.manager.databinding.FragmentAppListBinding;
@@ -111,56 +108,35 @@ public class AppListFragment extends BaseFragment {
 
         backupLauncher = registerForActivityResult(new ActivityResultContracts.CreateDocument(),
                 uri -> {
-                    if (uri != null) {
+                    if (uri == null) return;
+                    runAsync(() -> {
                         try {
-                            // grantUriPermission might throw RemoteException on MIUI
-                            requireActivity().grantUriPermission(BuildConfig.APPLICATION_ID, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                            BackupUtils.backup(uri, modulePackageName);
                         } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        AlertDialog alertDialog = new AlertDialog.Builder(requireActivity())
-                                .setCancelable(false)
-                                .setMessage(R.string.settings_backuping)
-                                .show();
-                        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
-                            boolean success = BackupUtils.backup(requireActivity(), uri, modulePackageName);
-                            try {
-                                requireActivity().runOnUiThread(() -> {
-                                    alertDialog.dismiss();
-                                    makeSnackBar(success ? R.string.settings_backup_success : R.string.settings_backup_failed, Snackbar.LENGTH_SHORT);
-                                });
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                            var text = App.getInstance().getString(R.string.settings_backup_failed2, e.getMessage());
+                            if (binding != null && isResumed()) {
+                                Snackbar.make(binding.snackbar, text, Snackbar.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(App.getInstance(), text, Toast.LENGTH_LONG).show();
                             }
-                        });
-                    }
+                        }
+                    });
                 });
         restoreLauncher = registerForActivityResult(new ActivityResultContracts.OpenDocument(),
                 uri -> {
-                    if (uri != null) {
+                    if (uri == null) return;
+                    runAsync(() -> {
                         try {
-                            // grantUriPermission might throw RemoteException on MIUI
-                            requireActivity().grantUriPermission(BuildConfig.APPLICATION_ID, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                            BackupUtils.restore(uri, modulePackageName);
                         } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        AlertDialog alertDialog = new AlertDialog.Builder(requireActivity())
-                                .setCancelable(false)
-                                .setMessage(R.string.settings_restoring)
-                                .show();
-                        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
-                            boolean success = BackupUtils.restore(requireActivity(), uri, modulePackageName);
-                            try {
-                                requireActivity().runOnUiThread(() -> {
-                                    alertDialog.dismiss();
-                                    makeSnackBar(success ? R.string.settings_restore_success : R.string.settings_restore_failed, Snackbar.LENGTH_SHORT);
-                                    scopeAdapter.refresh(false);
-                                });
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                            var text = App.getInstance().getString(R.string.settings_restore_failed2, e.getMessage());
+                            if (binding != null && isResumed()) {
+                                Snackbar.make(binding.snackbar, text, Snackbar.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(App.getInstance(), text, Toast.LENGTH_LONG).show();
                             }
-                        });
-                    }
+                        }
+                    });
                 });
 
         requireActivity().getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
@@ -206,13 +182,5 @@ public class AppListFragment extends BaseFragment {
             return true;
         }
         return super.onContextItemSelected(item);
-    }
-
-    public void makeSnackBar(String text, @Snackbar.Duration int duration) {
-        Snackbar.make(binding.snackbar, text, duration).show();
-    }
-
-    public void makeSnackBar(@StringRes int text, @Snackbar.Duration int duration) {
-        Snackbar.make(binding.snackbar, text, duration).show();
     }
 }
