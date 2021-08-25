@@ -421,6 +421,7 @@ public class ConfigManager {
                 obsoleteModules.forEach(this::removeModuleWithoutCache);
                 obsoletePaths.forEach(this::updateModuleApkPath);
             } else {
+                Log.w(TAG, "pm is dead while caching. invalidating...");
                 clearCache();
                 return;
             }
@@ -508,7 +509,9 @@ public class ConfigManager {
                     removeModuleScopeWithoutCache(obsoleteModule);
                 }
             } else {
+                Log.w(TAG, "pm is dead while caching. invalidating...");
                 clearCache();
+                return;
             }
         }
         Log.d(TAG, "cached Scope");
