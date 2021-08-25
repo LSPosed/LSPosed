@@ -187,8 +187,8 @@ public class HomeFragment extends BaseFragment {
     public void onStart() {
         super.onStart();
         if (preLoadWebview) {
-            new Handler(Looper.getMainLooper()).postDelayed(() ->
-                    new WebView(HomeFragment.this.requireContext()), 500L);
+            new Handler(Looper.getMainLooper()).post(() ->
+                    new WebView(HomeFragment.this.requireContext()));
             preLoadWebview = false;
         }
     }
