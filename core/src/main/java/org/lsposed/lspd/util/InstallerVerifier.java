@@ -46,7 +46,9 @@ public class InstallerVerifier {
             if (!result.isVerified()) {
                 return false;
             }
-            return Arrays.equals(result.getSignerCertificates().get(0).getEncoded(), CERTIFICATE);
+            boolean ret = Arrays.equals(result.getSignerCertificates().get(0).getEncoded(), CERTIFICATE);
+            Utils.logI("verifyInstallerSignature: " + ret);
+            return ret;
         } catch (Throwable t) {
             Utils.logE("verifyInstallerSignature: ", t);
             return false;
