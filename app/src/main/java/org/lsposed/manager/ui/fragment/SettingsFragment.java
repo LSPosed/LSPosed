@@ -19,21 +19,20 @@
 
 package org.lsposed.manager.ui.fragment;
 
-import android.content.Intent;
-import android.os.AsyncTask;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
-import androidx.appcompat.app.AlertDialog;
 import androidx.preference.Preference;
 import androidx.preference.SwitchPreference;
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,7 +41,6 @@ import com.google.android.material.snackbar.Snackbar;
 import com.takisoft.preferencex.PreferenceFragmentCompat;
 
 import org.lsposed.manager.App;
-import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.FragmentSettingsBinding;
@@ -82,60 +80,54 @@ public class SettingsFragment extends BaseFragment {
     }
 
     public static class PreferenceFragment extends PreferenceFragmentCompat {
+        private SettingsFragment parentFragment;
+
         ActivityResultLauncher<String> backupLauncher = registerForActivityResult(new ActivityResultContracts.CreateDocument(),
                 uri -> {
-                    if (uri != null) {
+                    if (uri == null || parentFragment == null) return;
+                    parentFragment.runAsync(() -> {
                         try {
-                            // grantUriPermission might throw RemoteException on MIUI
-                            requireActivity().grantUriPermission(BuildConfig.APPLICATION_ID, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                            BackupUtils.backup(uri);
                         } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        AlertDialog alertDialog = new AlertDialog.Builder(requireActivity())
-                                .setCancelable(false)
-                                .setMessage(R.string.settings_backuping)
-                                .show();
-                        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
-                            boolean success = BackupUtils.backup(requireContext(), uri);
-                            try {
-                                SettingsFragment fragment = (SettingsFragment) getParentFragment();
-                                requireActivity().runOnUiThread(() -> {
-                                    alertDialog.dismiss();
-                                    fragment.makeSnackBar(success ? R.string.settings_backup_success : R.string.settings_backup_failed, Snackbar.LENGTH_SHORT);
-                                });
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                            var text = App.getInstance().getString(R.string.settings_backup_failed2, e.getMessage());
+                            if (parentFragment != null && parentFragment.binding != null && isResumed()) {
+                                Snackbar.make(parentFragment.binding.snackbar, text, Snackbar.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(App.getInstance(), text, Toast.LENGTH_LONG).show();
                             }
-                        });
-                    }
+                        }
+                    });
                 });
         ActivityResultLauncher<String[]> restoreLauncher = registerForActivityResult(new ActivityResultContracts.OpenDocument(),
                 uri -> {
-                    if (uri != null) {
+                    if (uri == null || parentFragment == null) return;
+                    parentFragment.runAsync(() -> {
                         try {
-                            // grantUriPermission might throw RemoteException on MIUI
-                            requireActivity().grantUriPermission(BuildConfig.APPLICATION_ID, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                            BackupUtils.restore(uri);
                         } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        AlertDialog alertDialog = new AlertDialog.Builder(requireActivity())
-                                .setCancelable(false)
-                                .setMessage(R.string.settings_restoring)
-                                .show();
-                        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
-                            boolean success = BackupUtils.restore(requireContext(), uri);
-                            try {
-                                SettingsFragment fragment = (SettingsFragment) getParentFragment();
-                                requireActivity().runOnUiThread(() -> {
-                                    alertDialog.dismiss();
-                                    fragment.makeSnackBar(success ? R.string.settings_restore_success : R.string.settings_restore_failed, Snackbar.LENGTH_SHORT);
-                                });
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                            var text = App.getInstance().getString(R.string.settings_restore_failed2, e.getMessage());
+                            if (parentFragment != null && parentFragment.binding != null && isResumed()) {
+                                Snackbar.make(parentFragment.binding.snackbar, text, Snackbar.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(App.getInstance(), text, Toast.LENGTH_LONG).show();
                             }
-                        });
-                    }
+                        }
+                    });
                 });
+
+        @Override
+        public void onAttach(@NonNull Context context) {
+            super.onAttach(context);
+
+            parentFragment = (SettingsFragment) requireParentFragment();
+        }
+
+        @Override
+        public void onDetach() {
+            super.onDetach();
+
+            parentFragment = null;
+        }
 
         @Override
         public void onCreatePreferencesFix(Bundle savedInstanceState, String rootKey) {

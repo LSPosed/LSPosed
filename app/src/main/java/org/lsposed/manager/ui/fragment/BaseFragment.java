@@ -26,7 +26,10 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
+import org.lsposed.manager.App;
 import org.lsposed.manager.R;
+
+import java.util.concurrent.Future;
 
 public class BaseFragment extends Fragment {
     public void navigateUp() {
@@ -58,5 +61,9 @@ public class BaseFragment extends Fragment {
             toolbar.setOnMenuItemClickListener(this::onOptionsItemSelected);
             onPrepareOptionsMenu(toolbar.getMenu());
         }
+    }
+
+    public Future<?> runAsync(Runnable runnable) {
+        return App.getExecutorService().submit(runnable);
     }
 }

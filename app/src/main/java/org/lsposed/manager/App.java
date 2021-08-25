@@ -20,7 +20,6 @@
 
 package org.lsposed.manager;
 
-import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,6 +29,7 @@ import android.system.Os;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import androidx.preference.PreferenceManager;
 
 import com.google.gson.JsonParser;
@@ -47,6 +47,8 @@ import java.io.StringWriter;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import okhttp3.Cache;
 import okhttp3.Call;
@@ -67,12 +69,11 @@ public class App extends Application {
     }
 
     public static final String TAG = "LSPosedManager";
-    @SuppressLint("StaticFieldLeak")
     private static App instance = null;
     private static OkHttpClient okHttpClient;
     private static Cache okHttpCache;
     private SharedPreferences pref;
-
+    private ExecutorService executorService;
 
     public static App getInstance() {
         return instance;
@@ -80,6 +81,10 @@ public class App extends Application {
 
     public static SharedPreferences getPreferences() {
         return instance.pref;
+    }
+
+    public static ExecutorService getExecutorService() {
+        return instance.executorService;
     }
 
     private void setCrashReport() {
@@ -115,6 +120,8 @@ public class App extends Application {
         }
 
         instance = this;
+
+        executorService = Executors.newCachedThreadPool();
 
         pref = PreferenceManager.getDefaultSharedPreferences(this);
         if ("CN".equals(Locale.getDefault().getCountry())) {
