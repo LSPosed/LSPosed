@@ -124,9 +124,12 @@ class ConfigFileManager {
     }
 
     // TODO: Remove after next release
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     static void migrateOldConfig(ConfigManager configManager) {
         var miscPath = new File(basePath, "misc_path");
         var enableResources = new File(configDirPath, "enable_resources");
+        var manager = new File(configDirPath, "manager");
+        var verboseLog = new File(configDirPath, "verbose_log");
 
         if (miscPath.exists()) {
             try {
@@ -145,6 +148,8 @@ class ConfigFileManager {
             } catch (IOException ignored) {
             }
         }
+        manager.delete();
+        verboseLog.delete();
     }
 
     static boolean tryLock() {
