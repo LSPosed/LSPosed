@@ -130,8 +130,9 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
         super.onResume();
         adapter.initData();
         if (preLoadWebview) {
-            new Handler(Looper.getMainLooper()).postDelayed(() ->
-                    new WebView(RepoFragment.this.requireContext()), 500);
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                if (!isRemoving()) new WebView(requireContext());
+            }, 500);
             preLoadWebview = false;
         }
     }
