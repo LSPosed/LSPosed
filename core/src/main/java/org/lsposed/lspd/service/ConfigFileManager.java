@@ -50,29 +50,32 @@ class ConfigFileManager {
         }
     }
 
+    static void deleteFolderIfExists(Path target) throws IOException {
+        if (!Files.exists(target)) return;
+        Files.walkFileTree(target, new SimpleFileVisitor<>() {
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+                    throws IOException {
+                Files.delete(file);
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult postVisitDirectory(Path dir, IOException e)
+                    throws IOException {
+                if (e == null) {
+                    Files.delete(dir);
+                    return FileVisitResult.CONTINUE;
+                } else {
+                    throw e;
+                }
+            }
+        });
+    }
+
     private static void moveFolderIfExists(Path source, Path target) throws IOException {
         if (!Files.exists(source)) return;
-        if (Files.exists(target)) {
-            Files.walkFileTree(target, new SimpleFileVisitor<>() {
-                @Override
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
-                        throws IOException {
-                    Files.delete(file);
-                    return FileVisitResult.CONTINUE;
-                }
-
-                @Override
-                public FileVisitResult postVisitDirectory(Path dir, IOException e)
-                        throws IOException {
-                    if (e == null) {
-                        Files.delete(dir);
-                        return FileVisitResult.CONTINUE;
-                    } else {
-                        throw e;
-                    }
-                }
-            });
-        }
+        deleteFolderIfExists(target);
         Files.move(source, target);
     }
 
