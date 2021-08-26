@@ -35,14 +35,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.os.Message;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -91,12 +89,13 @@ import rikka.core.res.ResourcesKt;
 import rikka.widget.switchbar.SwitchBar;
 
 @SuppressLint("NotifyDataSetChanged")
-public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> implements Filterable, Handler.Callback {
+public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> implements Filterable {
 
     private final Activity activity;
     private final AppListFragment fragment;
     private final PackageManager pm;
     private final SharedPreferences preferences;
+    private final HandlerThread handlerThread = new HandlerThread("appList");
     private final Handler loadAppListHandler;
     private final ModuleUtil moduleUtil;
 
@@ -143,9 +142,8 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         this.activity = fragment.requireActivity();
         this.module = module;
         moduleUtil = ModuleUtil.getInstance();
-        HandlerThread handlerThread = new HandlerThread("appList");
         handlerThread.start();
-        loadAppListHandler = new Handler(handlerThread.getLooper(), this);
+        loadAppListHandler = new Handler(handlerThread.getLooper());
         preferences = App.getPreferences();
         pm = activity.getPackageManager();
     }
@@ -269,7 +267,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         } else if (!AppHelper.onOptionsItemSelected(item, preferences)) {
             return false;
         }
-        refresh(false);
+        refresh();
         return true;
     }
 
@@ -444,52 +442,27 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         return showList.size();
     }
 
-    public void refresh(boolean force) {
+    public void onDestroy() {
+        loadAppListHandler.removeCallbacksAndMessages(null);
+        handlerThread.quit();
+    }
+
+    public void refresh() {
         synchronized (this) {
             if (refreshing) {
                 return;
             }
             refreshing = true;
         }
-        loadAppListHandler.removeMessages(0);
-        if (!force) {
-            fragment.binding.progress.setIndeterminate(true);
-        }
+        loadAppListHandler.removeCallbacksAndMessages(null);
+        boolean force = fragment.binding.swipeRefreshLayout.isRefreshing();
+        if (!force) fragment.binding.progress.setIndeterminate(true);
         enabled = moduleUtil.isModuleEnabled(module.packageName);
         fragment.binding.masterSwitch.setOnCheckedChangeListener(null);
         fragment.binding.masterSwitch.setChecked(enabled);
         fragment.binding.masterSwitch.setOnCheckedChangeListener(switchBarOnCheckedChangeListener);
-        loadAppListHandler.sendMessage(Message.obtain(loadAppListHandler, 0, force));
-    }
-
-    protected void onCheckedChange(CompoundButton buttonView, boolean isChecked, AppInfo appInfo) {
-        if (isChecked) {
-            checkedList.add(appInfo.application);
-        } else {
-            checkedList.remove(appInfo.application);
-        }
-        if (!ConfigManager.setModuleScope(module.packageName, checkedList)) {
-            Snackbar.make(fragment.binding.snackbar, R.string.failed_to_save_scope_list, Snackbar.LENGTH_SHORT).show();
-            if (!isChecked) {
-                checkedList.add(appInfo.application);
-            } else {
-                checkedList.remove(appInfo.application);
-            }
-            buttonView.setChecked(!isChecked);
-        } else if (appInfo.packageName.equals("android")) {
-            Snackbar.make(fragment.binding.snackbar, R.string.reboot_required, Snackbar.LENGTH_SHORT)
-                    .setAction(R.string.reboot, v -> ConfigManager.reboot(false))
-                    .show();
-        }
-    }
-
-    @Override
-    public boolean handleMessage(@NonNull Message msg) {
-        if (msg.what != 0) {
-            return false;
-        }
-        try {
-            List<PackageInfo> appList = AppHelper.getAppList((Boolean) msg.obj);
+        loadAppListHandler.post(() -> {
+            List<PackageInfo> appList = AppHelper.getAppList(force);
             checkedList.clear();
             recommendedList.clear();
             var tmpList = new ArrayList<AppInfo>();
@@ -543,12 +516,33 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                     refreshing = false;
                 }
                 activity.runOnUiThread(dataReadyRunnable);
-                dataReadyRunnable.wait();
+                try {
+                    dataReadyRunnable.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-            return true;
-        } catch (Exception e) {
-            Log.e(App.TAG, Log.getStackTraceString(e));
-            return false;
+        });
+    }
+
+    protected void onCheckedChange(CompoundButton buttonView, boolean isChecked, AppInfo appInfo) {
+        if (isChecked) {
+            checkedList.add(appInfo.application);
+        } else {
+            checkedList.remove(appInfo.application);
+        }
+        if (!ConfigManager.setModuleScope(module.packageName, checkedList)) {
+            Snackbar.make(fragment.binding.snackbar, R.string.failed_to_save_scope_list, Snackbar.LENGTH_SHORT).show();
+            if (!isChecked) {
+                checkedList.add(appInfo.application);
+            } else {
+                checkedList.remove(appInfo.application);
+            }
+            buttonView.setChecked(!isChecked);
+        } else if (appInfo.packageName.equals("android")) {
+            Snackbar.make(fragment.binding.snackbar, R.string.reboot_required, Snackbar.LENGTH_SHORT)
+                    .setAction(R.string.reboot, v -> ConfigManager.reboot(false))
+                    .show();
         }
     }
 
@@ -609,13 +603,13 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         return new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                refresh(false);
+                refresh();
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                refresh(false);
+                refresh();
                 return true;
             }
         };

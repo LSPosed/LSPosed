@@ -280,11 +280,17 @@ public class LogsFragment extends BaseFragment {
         protected void onPostExecute(List<String> logs) {
             adapter.setLogs(logs);
 
-            handler.removeCallbacks(mRunnable);//It loaded so fast that no need to show progress
+            handler.removeCallbacks(mRunnable);
             if (mProgressDialog.isShowing()) {
                 mProgressDialog.dismiss();
             }
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        handler.removeCallbacksAndMessages(null);
+        super.onDestroy();
     }
 
     private class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.ViewHolder> {

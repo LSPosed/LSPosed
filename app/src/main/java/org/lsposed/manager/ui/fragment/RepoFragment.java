@@ -66,7 +66,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
     protected FragmentRepoBinding binding;
     protected SearchView searchView;
     private SearchView.OnQueryTextListener mSearchListener;
-    private Handler mHandler = new Handler(Looper.getMainLooper());
+    private final Handler mHandler = new Handler(Looper.getMainLooper());
     private boolean preLoadWebview = true;
 
     private final RepoLoader repoLoader = RepoLoader.getInstance();
@@ -122,6 +122,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
 
     @Override
     public void onDestroy() {
+        mHandler.removeCallbacksAndMessages(null);
         super.onDestroy();
         repoLoader.removeListener(this);
     }
@@ -136,12 +137,6 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
             }, 500);
             preLoadWebview = false;
         }
-    }
-
-    @Override
-    public void onDetach() {
-        mHandler.removeCallbacksAndMessages(null);
-        super.onDetach();
     }
 
     @Override

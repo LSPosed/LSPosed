@@ -32,8 +32,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
@@ -59,7 +57,6 @@ import androidx.appcompat.widget.SearchView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
@@ -102,7 +99,6 @@ import rikka.recyclerview.RecyclerViewKt;
 import rikka.widget.borderview.BorderRecyclerView;
 
 public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleListener, RepoLoader.Listener {
-    private static final Handler workHandler;
     private static final PackageManager pm = App.getInstance().getPackageManager();
     private static final ModuleUtil moduleUtil = ModuleUtil.getInstance();
     private static final RepoLoader repoLoader = RepoLoader.getInstance();
@@ -116,12 +112,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     private final Map<String, Pair<Integer, String>> latestVersion = new ConcurrentHashMap<>();
 
     private ModuleUtil.InstalledModule selectedModule;
-
-    static {
-        HandlerThread workThread = new HandlerThread("ModulesActivity WorkHandler");
-        workThread.start();
-        workHandler = new Handler(workThread.getLooper());
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -281,16 +271,16 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 .setTitle(getString(R.string.install_to_user, user.name))
                 .setMessage(getString(R.string.install_to_user_message, module.getAppName(), user.name))
                 .setPositiveButton(android.R.string.ok, (dialog, which) ->
-                        workHandler.post(() -> {
+                        runAsync(() -> {
                             var success = ConfigManager.installExistingPackageAsUser(module.packageName, user.id);
-                            requireActivity().runOnUiThread(() -> {
-                                String text = success ? getString(R.string.module_installed, module.getAppName(), user.name) : getString(R.string.module_install_failed);
-                                if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
-                                    Snackbar.make(binding.snackbar, text, Snackbar.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(requireActivity(), text, Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                            String text = success ?
+                                    getString(R.string.module_installed, module.getAppName(), user.name) :
+                                    getString(R.string.module_install_failed);
+                            if (binding != null && isResumed()) {
+                                Snackbar.make(binding.snackbar, text, Snackbar.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(App.getInstance(), text, Toast.LENGTH_LONG).show();
+                            }
                             if (success)
                                 moduleUtil.reloadSingleModule(module.packageName, user.id);
                         }))
@@ -330,16 +320,14 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                     .setTitle(selectedModule.getAppName())
                     .setMessage(R.string.module_uninstall_message)
                     .setPositiveButton(android.R.string.ok, (dialog, which) ->
-                            workHandler.post(() -> {
+                            runAsync(() -> {
                                 boolean success = ConfigManager.uninstallPackage(selectedModule.packageName, selectedModule.userId);
-                                requireActivity().runOnUiThread(() -> {
-                                    String text = success ? getString(R.string.module_uninstalled, selectedModule.getAppName()) : getString(R.string.module_uninstall_failed);
-                                    if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
-                                        Snackbar.make(binding.snackbar, text, Snackbar.LENGTH_SHORT).show();
-                                    } else {
-                                        Toast.makeText(requireActivity(), text, Toast.LENGTH_SHORT).show();
-                                    }
-                                });
+                                String text = success ? getString(R.string.module_uninstalled, selectedModule.getAppName()) : getString(R.string.module_uninstall_failed);
+                                if (binding != null && isResumed()) {
+                                    Snackbar.make(binding.snackbar, text, Snackbar.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(App.getInstance(), text, Toast.LENGTH_LONG).show();
+                                }
                                 if (success)
                                     moduleUtil.reloadSingleModule(selectedModule.packageName, selectedModule.userId);
                             }))
@@ -379,7 +367,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             String pkgName = module.getName();
             latestVersion.put(pkgName, new Pair<>(verCode, verName));
         }
-        requireActivity().runOnUiThread(() -> adapters.forEach(ModuleAdapter::notifyDataSetChanged));
+        runOnUiThread(() -> adapters.forEach(ModuleAdapter::notifyDataSetChanged));
     }
 
     public static class ModuleListFragment extends Fragment {
@@ -630,7 +618,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
         public void refresh(boolean force) {
             if (force) moduleUtil.reloadInstalledModules();
-            requireActivity().runOnUiThread(reloadModules);
+            runOnUiThread(reloadModules);
         }
 
         private final Runnable reloadModules = new Runnable() {
@@ -651,7 +639,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 searchList.clear();
                 searchList.addAll(tmpList);
                 String queryStr = searchView != null ? searchView.getQuery().toString() : "";
-                requireActivity().runOnUiThread(() -> getFilter().filter(queryStr));
+                runOnUiThread(() -> getFilter().filter(queryStr));
             }
         };
 
