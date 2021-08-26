@@ -47,8 +47,8 @@ public final class ModuleUtil {
     private static ModuleUtil instance = null;
     private final PackageManager pm;
     private final List<ModuleListener> listeners = new CopyOnWriteArrayList<>();
-    private HashSet<String> enabledModules;
-    private Map<Pair<String, Integer>, InstalledModule> installedModules;
+    private HashSet<String> enabledModules = new HashSet<>();
+    private Map<Pair<String, Integer>, InstalledModule> installedModules = new HashMap<>();
     private boolean isReloading = false;
 
     private ModuleUtil() {
@@ -80,6 +80,12 @@ public final class ModuleUtil {
             if (isReloading)
                 return;
             isReloading = true;
+        }
+        if (!ConfigManager.isBinderAlive()) {
+            synchronized (this) {
+                isReloading = false;
+            }
+            return;
         }
 
         Map<Pair<String, Integer>, InstalledModule> modules = new HashMap<>();
