@@ -756,8 +756,13 @@ public class ConfigManager {
             db.setTransactionSuccessful();
             db.endTransaction();
         }
-        removeModulePrefs(module.userId, module.packageName);
-        return true;
+        try {
+            removeModulePrefs(module.userId, module.packageName);
+            return true;
+        } catch (IOException e) {
+            Log.w(TAG, "removeModulePrefs", e);
+            return false;
+        }
     }
 
     public boolean disableModule(String packageName) {
@@ -932,10 +937,10 @@ public class ConfigManager {
         }
     }
 
-    public boolean removeModulePrefs(int uid, String packageName) {
-        if (packageName == null) return false;
-        File path = new File(getPrefsPath(packageName, uid));
-        return ConfigFileManager.deleteRecursive(path);
+    private void removeModulePrefs(int uid, String packageName) throws IOException {
+        if (packageName == null) return;
+        var path = Paths.get(getPrefsPath(packageName, uid));
+        ConfigFileManager.deleteFolderIfExists(path);
     }
 
     public String getManagerPackageName() {

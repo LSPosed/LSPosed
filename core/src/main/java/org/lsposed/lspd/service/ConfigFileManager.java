@@ -50,41 +50,32 @@ class ConfigFileManager {
         }
     }
 
-    public static boolean deleteRecursive(File path) {
-        if (!path.exists()) return false;
-        boolean ret = true;
-        if (path.isDirectory()) {
-            for (File f : path.listFiles()) {
-                ret = ret && deleteRecursive(f);
+    static void deleteFolderIfExists(Path target) throws IOException {
+        if (!Files.exists(target)) return;
+        Files.walkFileTree(target, new SimpleFileVisitor<>() {
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+                    throws IOException {
+                Files.delete(file);
+                return FileVisitResult.CONTINUE;
             }
-        }
-        return ret && path.delete();
-    }
 
+            @Override
+            public FileVisitResult postVisitDirectory(Path dir, IOException e)
+                    throws IOException {
+                if (e == null) {
+                    Files.delete(dir);
+                    return FileVisitResult.CONTINUE;
+                } else {
+                    throw e;
+                }
+            }
+        });
+    }
 
     private static void moveFolderIfExists(Path source, Path target) throws IOException {
         if (!Files.exists(source)) return;
-        if (Files.exists(target)) {
-            Files.walkFileTree(target, new SimpleFileVisitor<>() {
-                @Override
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
-                        throws IOException {
-                    Files.delete(file);
-                    return FileVisitResult.CONTINUE;
-                }
-
-                @Override
-                public FileVisitResult postVisitDirectory(Path dir, IOException e)
-                        throws IOException {
-                    if (e == null) {
-                        Files.delete(dir);
-                        return FileVisitResult.CONTINUE;
-                    } else {
-                        throw e;
-                    }
-                }
-            });
-        }
+        deleteFolderIfExists(target);
         Files.move(source, target);
     }
 
