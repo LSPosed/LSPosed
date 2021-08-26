@@ -736,6 +736,13 @@ public class ConfigManager {
             db.setTransactionSuccessful();
             db.endTransaction();
         }
+        try {
+            for (var user : UserService.getUsers()) {
+                removeModulePrefs(user.id, packageName);
+            }
+        } catch (Throwable e) {
+            Log.w(TAG, "remove module prefs for " + packageName);
+        }
         return true;
     }
 
@@ -749,6 +756,7 @@ public class ConfigManager {
             db.setTransactionSuccessful();
             db.endTransaction();
         }
+        removeModulePrefs(module.userId, module.packageName);
         return true;
     }
 
@@ -922,6 +930,12 @@ public class ConfigManager {
             Log.e(TAG, Log.getStackTraceString(e));
             return false;
         }
+    }
+
+    public boolean removeModulePrefs(int uid, String packageName) {
+        if (packageName == null) return false;
+        File path = new File(getPrefsPath(packageName, uid));
+        return ConfigFileManager.deleteRecursive(path);
     }
 
     public String getManagerPackageName() {
