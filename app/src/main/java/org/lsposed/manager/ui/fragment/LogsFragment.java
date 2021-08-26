@@ -22,6 +22,8 @@ package org.lsposed.manager.ui.fragment;
 
 import static org.lsposed.manager.App.TAG;
 
+import static java.lang.Math.max;
+
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -153,7 +155,7 @@ public class LogsFragment extends BaseFragment {
             if (adapter.getItemCount() - layoutManager.findLastVisibleItemPosition() > 1000) {
                 binding.recyclerView.scrollToPosition(adapter.getItemCount() - 1);
             } else {
-                binding.recyclerView.smoothScrollToPosition(adapter.getItemCount() - 1);
+                binding.recyclerView.smoothScrollToPosition(max(adapter.getItemCount() - 1, 0));
             }
         } else if (itemId == R.id.menu_refresh) {
             reloadErrorLog();
