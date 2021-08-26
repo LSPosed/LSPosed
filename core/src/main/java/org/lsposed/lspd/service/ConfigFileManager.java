@@ -16,6 +16,7 @@ import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -27,13 +28,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 class ConfigFileManager {
-    static final File basePath = new File("/data/adb/lspd");
-    static final File managerApkPath = new File(basePath, "manager.apk");
-    private static final File lockPath = new File(basePath, "lock");
-    private static final File configDirPath = new File(basePath, "config");
-    static final File dbPath = new File(configDirPath, "modules_config.db");
-    private static final File logDirPath = new File(basePath, "log");
-    private static final File oldLogDirPath = new File(basePath, "log.old");
+    static final Path basePath = Paths.get("/data/adb/lspd");
+    static final File managerApkPath = basePath.resolve("manager.apk").toFile();
+    private static final Path lockPath = basePath.resolve("lock");
+    private static final Path configDirPath = basePath.resolve("config");
+    static final File dbPath = configDirPath.resolve("modules_config.db").toFile();
+    private static final Path logDirPath = basePath.resolve("log");
+    private static final Path oldLogDirPath = basePath.resolve("log.old");
     private static final DateTimeFormatter formatter =
             DateTimeFormatter.ISO_LOCAL_DATE_TIME.withZone(Utils.getZoneId());
     @SuppressWarnings("FieldCanBeLocal")
@@ -41,17 +42,17 @@ class ConfigFileManager {
 
     static {
         try {
-            Files.createDirectories(basePath.toPath());
-            SELinux.setFileContext(basePath.getPath(), "u:object_r:system_file:s0");
-            Files.createDirectories(configDirPath.toPath());
-            Files.createDirectories(logDirPath.toPath());
+            Files.createDirectories(basePath);
+            SELinux.setFileContext(basePath.toString(), "u:object_r:system_file:s0");
+            Files.createDirectories(configDirPath);
+            Files.createDirectories(logDirPath);
         } catch (IOException e) {
             Log.e(TAG, Log.getStackTraceString(e));
         }
     }
 
     static void deleteFolderIfExists(Path target) throws IOException {
-        if (!Files.exists(target)) return;
+        if (Files.notExists(target)) return;
         Files.walkFileTree(target, new SimpleFileVisitor<>() {
             @Override
             public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
@@ -73,16 +74,13 @@ class ConfigFileManager {
         });
     }
 
-    private static void moveFolderIfExists(Path source, Path target) throws IOException {
-        if (!Files.exists(source)) return;
-        deleteFolderIfExists(target);
-        Files.move(source, target);
-    }
-
     static void moveLogDir() {
         try {
-            moveFolderIfExists(logDirPath.toPath(), oldLogDirPath.toPath());
-            Files.createDirectories(logDirPath.toPath());
+            if (Files.exists(logDirPath)) {
+                deleteFolderIfExists(oldLogDirPath);
+                Files.move(logDirPath, oldLogDirPath);
+            }
+            Files.createDirectories(logDirPath);
         } catch (IOException e) {
             Log.e(TAG, Log.getStackTraceString(e));
         }
@@ -93,18 +91,18 @@ class ConfigFileManager {
     }
 
     static File getNewVerboseLogPath() {
-        return new File(logDirPath, getNewLogFileName("verbose"));
+        return logDirPath.resolve(getNewLogFileName("verbose")).toFile();
     }
 
     static File getNewModulesLogPath() {
-        return new File(logDirPath, getNewLogFileName("modules"));
+        return logDirPath.resolve(getNewLogFileName("modules")).toFile();
     }
 
     static Map<String, ParcelFileDescriptor> getLogs() {
         var map = new LinkedHashMap<String, ParcelFileDescriptor>();
         try {
-            putFds(map, logDirPath.toPath());
-            putFds(map, oldLogDirPath.toPath());
+            putFds(map, logDirPath);
+            putFds(map, oldLogDirPath);
         } catch (IOException e) {
             Log.e(TAG, "getLogs", e);
         }
@@ -122,37 +120,39 @@ class ConfigFileManager {
         });
     }
 
-    private static String readText(File file) throws IOException {
-        return new String(Files.readAllBytes(file.toPath())).trim();
+    private static String readText(Path file) throws IOException {
+        return new String(Files.readAllBytes(file)).trim();
     }
 
     // TODO: Remove after next release
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     static void migrateOldConfig(ConfigManager configManager) {
-        var miscPath = new File(basePath, "misc_path");
-        var enableResources = new File(configDirPath, "enable_resources");
-        var manager = new File(configDirPath, "manager");
-        var verboseLog = new File(configDirPath, "verbose_log");
+        var miscPath = basePath.resolve("misc_path");
+        var enableResources = configDirPath.resolve("enable_resources");
+        var manager = configDirPath.resolve("manager");
+        var verboseLog = configDirPath.resolve("verbose_log");
 
-        if (miscPath.exists()) {
+        if (Files.exists(miscPath)) {
             try {
                 var s = "/data/misc/" + readText(miscPath);
                 configManager.updateModulePrefs("lspd", 0, "config", "misc_path", s);
-                miscPath.delete();
+                Files.delete(miscPath);
             } catch (IOException ignored) {
             }
         }
-        if (enableResources.exists()) {
+        if (Files.exists(enableResources)) {
             try {
                 var s = readText(enableResources);
                 var i = Integer.parseInt(s);
                 configManager.updateModulePrefs("lspd", 0, "config", "enable_resources", i == 1);
-                enableResources.delete();
+                Files.delete(enableResources);
             } catch (IOException ignored) {
             }
         }
-        manager.delete();
-        verboseLog.delete();
+        try {
+            Files.deleteIfExists(manager);
+            Files.deleteIfExists(verboseLog);
+        } catch (IOException ignored) {
+        }
     }
 
     static boolean tryLock() {
@@ -163,7 +163,7 @@ class ConfigFileManager {
         var permissions = PosixFilePermissions.asFileAttribute(p);
 
         try {
-            var lockChannel = FileChannel.open(lockPath.toPath(), openOptions, permissions);
+            var lockChannel = FileChannel.open(lockPath, openOptions, permissions);
             locker = new FileLocker(lockChannel);
             return locker.isValid();
         } catch (Throwable e) {
