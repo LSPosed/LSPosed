@@ -204,8 +204,8 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
     public void moduleReleasesLoaded(OnlineModule module) {
         this.module = module;
         if (releaseAdapter != null) {
-            requireActivity().runOnUiThread(() -> releaseAdapter.loadItems());
-            if (module.getReleases().size() == 1) {
+            runOnUiThread(() -> releaseAdapter.loadItems());
+            if (isResumed() && module.getReleases().size() == 1) {
                 Snackbar.make(binding.snackbar, R.string.module_release_no_more, Snackbar.LENGTH_SHORT).show();
             }
         }
@@ -214,23 +214,18 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
     @Override
     public void onThrowable(Throwable t) {
         if (releaseAdapter != null) {
-            requireActivity().runOnUiThread(() -> releaseAdapter.loadItems());
+            runOnUiThread(() -> releaseAdapter.loadItems());
+            if (isResumed()) {
+                Snackbar.make(binding.snackbar, getString(R.string.repo_load_failed, t.getLocalizedMessage()), Snackbar.LENGTH_SHORT).show();
+            }
         }
-        if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
-            Snackbar.make(binding.snackbar, getString(R.string.repo_load_failed, t.getLocalizedMessage()), Snackbar.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        RepoLoader.getInstance().removeListener(this);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
 
+        RepoLoader.getInstance().removeListener(this);
         binding = null;
     }
 

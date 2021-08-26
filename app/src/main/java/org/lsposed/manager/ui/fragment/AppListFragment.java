@@ -81,7 +81,7 @@ public class AppListFragment extends BaseFragment {
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
         RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
-        binding.swipeRefreshLayout.setOnRefreshListener(() -> scopeAdapter.refresh(true));
+        binding.swipeRefreshLayout.setOnRefreshListener(() -> scopeAdapter.refresh());
 
         searchListener = scopeAdapter.getSearchListener();
 
@@ -150,7 +150,14 @@ public class AppListFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        scopeAdapter.refresh(false);
+        scopeAdapter.refresh();
+    }
+
+    @Override
+    public void onDestroy() {
+        scopeAdapter.onDestroy();
+
+        super.onDestroy();
     }
 
     @Override

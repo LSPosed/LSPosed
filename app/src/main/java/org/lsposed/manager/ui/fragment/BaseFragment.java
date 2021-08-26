@@ -19,6 +19,7 @@
 
 package org.lsposed.manager.ui.fragment;
 
+import android.app.Activity;
 import android.view.View;
 
 import androidx.appcompat.widget.Toolbar;
@@ -65,5 +66,12 @@ public class BaseFragment extends Fragment {
 
     public Future<?> runAsync(Runnable runnable) {
         return App.getExecutorService().submit(runnable);
+    }
+
+    public void runOnUiThread(Runnable runnable) {
+        Activity activity = getActivity();
+        if (activity != null && !activity.isFinishing()) {
+            activity.runOnUiThread(runnable);
+        }
     }
 }
