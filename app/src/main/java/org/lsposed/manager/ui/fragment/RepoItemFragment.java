@@ -222,15 +222,10 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        RepoLoader.getInstance().removeListener(this);
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
 
+        RepoLoader.getInstance().removeListener(this);
         binding = null;
     }
 

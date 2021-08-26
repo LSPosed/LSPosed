@@ -21,6 +21,7 @@
 package org.lsposed.manager.repo;
 
 import android.util.Log;
+import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
@@ -39,6 +40,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import okhttp3.Call;
@@ -50,6 +52,7 @@ import okhttp3.ResponseBody;
 public class RepoLoader {
     private static RepoLoader instance = null;
     private Map<String, OnlineModule> onlineModules = new HashMap<>();
+    private final Map<String, Pair<Integer, String>> latestVersion = new ConcurrentHashMap<>();
     private final Path repoFile = Paths.get(App.getInstance().getFilesDir().getAbsolutePath(), "repo.json");
     private final List<Listener> listeners = new CopyOnWriteArrayList<>();
     private boolean isLoading = false;
@@ -106,6 +109,25 @@ public class RepoLoader {
                             Map<String, OnlineModule> modules = new HashMap<>();
                             OnlineModule[] repoModules = gson.fromJson(bodyString, OnlineModule[].class);
                             Arrays.stream(repoModules).forEach(onlineModule -> modules.put(onlineModule.getName(), onlineModule));
+
+                            latestVersion.clear();
+                            for (var module : repoModules) {
+                                var release = module.getLatestRelease();
+                                if (release == null || release.isEmpty()) continue;
+                                var splits = release.split("-", 2);
+                                if (splits.length < 2) continue;
+                                int verCode;
+                                String verName;
+                                try {
+                                    verCode = Integer.parseInt(splits[0]);
+                                    verName = splits[1];
+                                } catch (NumberFormatException ignored) {
+                                    continue;
+                                }
+                                String pkgName = module.getName();
+                                latestVersion.put(pkgName, new Pair<>(verCode, verName));
+                            }
+
                             onlineModules = modules;
                             Files.write(repoFile, bodyString.getBytes(StandardCharsets.UTF_8));
                             for (Listener listener : listeners) {
@@ -127,6 +149,10 @@ public class RepoLoader {
                 }
             }
         });
+    }
+
+    public Pair<Integer, String> getModuleLatestVersion(String packageName) {
+        return latestVersion.get(packageName);
     }
 
     public void loadRemoteReleases(String packageName) {
