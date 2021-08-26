@@ -82,7 +82,7 @@
             android:clipToPadding="false"
             android:fadeScrollbars="true"
             android:paddingTop="104dp"
-            android:scrollbarStyle="outsideOverlay"
+            android:scrollbarStyle="insideOverlay"
             android:scrollbars="vertical"
             app:borderTopVisibility="whenTop"
             app:borderTopDrawable="@null"
