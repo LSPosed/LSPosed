@@ -58,10 +58,10 @@ private:
 
     bool verbose_ = true;
 
-    const std::string start_verbose_inst_ = "!!start_verbose!!";
-    const std::string stop_verbose_inst_ = "!!stop_verbose!!";
-    const std::string refresh_verbose_inst_ = "!!refresh_verbose!!";
-    const std::string refresh_modules_inst_ = "!!refresh_modules!!";
+    const auto start_verbose_inst_ = "!!start_verbose!!";
+    const auto stop_verbose_inst_ = "!!stop_verbose!!";
+    const auto refresh_verbose_inst_ = "!!refresh_verbose!!";
+    const auto refresh_modules_inst_ = "!!refresh_modules!!";
 };
 
 int Logcat::PrintLogLine(const AndroidLogEntry &entry, FILE *out) {
