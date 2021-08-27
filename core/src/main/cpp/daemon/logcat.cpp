@@ -5,6 +5,9 @@
 #include <array>
 #include <cinttypes>
 #include "logcat.h"
+#include <string_view>
+
+using namespace std::string_view_literals;
 
 constexpr size_t kMaxLogSize = 32 * 1024 * 1024;
 
@@ -58,10 +61,10 @@ private:
 
     bool verbose_ = true;
 
-    constexpr inline static auto start_verbose_inst_ = "!!start_verbose!!";
-    constexpr inline static auto stop_verbose_inst_ = "!!stop_verbose!!";
-    constexpr inline static auto refresh_verbose_inst_ = "!!refresh_verbose!!";
-    constexpr inline static auto refresh_modules_inst_ = "!!refresh_modules!!";
+    constexpr inline static auto kStartVerboseInst = "!!start_verbose!!"sv;
+    constexpr inline static auto kStopVerboseInst = "!!stop_verbose!!"sv;
+    constexpr inline static auto kRefreshVerboseInst = "!!refresh_verbose!!"sv;
+    constexpr inline static auto kRefreshModulesInst = "!!refresh_modules!!"sv;
 };
 
 int Logcat::PrintLogLine(const AndroidLogEntry &entry, FILE *out) {
@@ -114,26 +117,26 @@ void Logcat::ProcessBuffer(struct log_msg *buf) {
 
     std::string_view tag(entry.tag, entry.tagLen);
     bool shortcut = false;
-    if (tag == "LSPosed-Bridge" || tag == "XSharedPreferences") [[unlikely]] {
+    if (tag == "LSPosed-Bridge"sv || tag == "XSharedPreferences"sv) [[unlikely]] {
         modules_print_count_ += PrintLogLine(entry, modules_file_.get());
         shortcut = true;
     }
     if (verbose_ && (shortcut || buf->id() == log_id::LOG_ID_CRASH ||
-                     tag == "Magisk" ||
-                     tag.starts_with("Riru") ||
-                     tag.starts_with("LSPosed"))) [[unlikely]] {
+                     tag == "Magisk"sv ||
+                     tag.starts_with("Riru"sv) ||
+                     tag.starts_with("LSPosed"sv))) [[unlikely]] {
         verbose_print_count_ += PrintLogLine(entry, verbose_file_.get());
     }
-    if (entry.pid == getpid() && tag == "LSPosedLogcat") [[unlikely]] {
+    if (entry.pid == getpid() && tag == "LSPosedLogcat"sv) [[unlikely]] {
         std::string_view msg(entry.message, entry.messageLen);
-        if (msg == start_verbose_inst_) {
+        if (msg == kStartVerboseInst) {
             verbose_ = true;
             verbose_print_count_ += PrintLogLine(entry, verbose_file_.get());
-        } else if (msg == stop_verbose_inst_) {
+        } else if (msg == kStopVerboseInst) {
             verbose_ = false;
-        } else if (msg == refresh_modules_inst_) {
+        } else if (msg == kRefreshModulesInst) {
             RefreshFd(false);
-        } else if (msg == refresh_verbose_inst_) {
+        } else if (msg == kRefreshVerboseInst) {
             RefreshFd(true);
         }
     }
