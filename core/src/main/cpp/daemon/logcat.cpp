@@ -47,7 +47,6 @@ private:
     JNIEnv *env_;
     jobject thiz_;
     jmethodID refresh_fd_method_;
-    std::string id_ = "0";
 
     UniqueFile modules_file_{};
     size_t modules_file_part_ = 0;
@@ -61,6 +60,8 @@ private:
 
     const std::string start_verbose_inst_ = "!!start_verbose!!";
     const std::string stop_verbose_inst_ = "!!stop_verbose!!";
+    const std::string refresh_verbose_inst_ = "!!refresh_verbose!!";
+    const std::string refresh_modules_inst_ = "!!refresh_modules!!";
 };
 
 int Logcat::PrintLogLine(const AndroidLogEntry &entry, FILE *out) {
@@ -90,18 +91,20 @@ int Logcat::PrintLogLine(const AndroidLogEntry &entry, FILE *out) {
 }
 
 void Logcat::RefreshFd(bool is_verbose) {
+    constexpr auto start = "----part %zu start----\n";
+    constexpr auto end = "-----part %zu end----\n";
     if (is_verbose) {
         verbose_print_count_ = 0;
-        fprintf(verbose_file_.get(), "----%s-%zu end----\n", id_.data(), verbose_file_part_);
+        fprintf(verbose_file_.get(), end, verbose_file_part_);
         verbose_file_ = UniqueFile(env_->CallIntMethod(thiz_, refresh_fd_method_, JNI_TRUE), "a");
         verbose_file_part_++;
-        fprintf(verbose_file_.get(), "----%s-%zu start----\n", id_.data(), verbose_file_part_);
+        fprintf(verbose_file_.get(), start, verbose_file_part_);
     } else {
         modules_print_count_ = 0;
-        fprintf(modules_file_.get(), "----%zu end----\n", modules_file_part_);
+        fprintf(modules_file_.get(), end, modules_file_part_);
         modules_file_ = UniqueFile(env_->CallIntMethod(thiz_, refresh_fd_method_, JNI_FALSE), "a");
         modules_file_part_++;
-        fprintf(modules_file_.get(), "----%zu start----\n", modules_file_part_);
+        fprintf(modules_file_.get(), start, modules_file_part_);
     }
 }
 
@@ -122,12 +125,16 @@ void Logcat::ProcessBuffer(struct log_msg *buf) {
         verbose_print_count_ += PrintLogLine(entry, verbose_file_.get());
     }
     if (entry.pid == getpid() && tag == "LSPosedLogcat") [[unlikely]] {
-        if (std::string_view(entry.message).starts_with(start_verbose_inst_)) {
+        std::string_view msg(entry.message);
+        if (msg == start_verbose_inst_) {
             verbose_ = true;
-            id_ = std::string(entry.message, start_verbose_inst_.length(), std::string::npos);
             verbose_print_count_ += PrintLogLine(entry, verbose_file_.get());
-        } else if (std::string_view(entry.message) == stop_verbose_inst_ + id_) {
+        } else if (msg == stop_verbose_inst_) {
             verbose_ = false;
+        } else if (msg == refresh_modules_inst_) {
+            RefreshFd(false);
+        } else if (msg == refresh_verbose_inst_) {
+            RefreshFd(true);
         }
     }
 }

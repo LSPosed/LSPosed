@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
 
-import androidx.annotation.Nullable;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -18,7 +16,6 @@ public class LogcatService implements Runnable {
     private File modulesLog = null;
     private File verboseLog = null;
     private Thread thread = null;
-    private int id = 0;
 
     @SuppressLint("UnsafeDynamicallyLoadedCode")
     public LogcatService() {
@@ -72,12 +69,19 @@ public class LogcatService implements Runnable {
     }
 
     public void startVerbose() {
-        Log.i(TAG, "!!start_verbose!!" + id);
+        Log.i(TAG, "!!start_verbose!!");
     }
 
     public void stopVerbose() {
-        Log.i(TAG, "!!stop_verbose!!" + id);
-        id++;
+        Log.i(TAG, "!!stop_verbose!!");
+    }
+
+    public void refresh(boolean isVerboseLog) {
+        if (isVerboseLog) {
+            Log.i(TAG, "!!refresh_verbose!!");
+        } else {
+            Log.i(TAG, "!!refresh_modules!!");
+        }
     }
 
     public File getVerboseLog() {
