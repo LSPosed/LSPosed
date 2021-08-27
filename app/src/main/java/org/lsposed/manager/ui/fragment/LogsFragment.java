@@ -21,7 +21,6 @@
 package org.lsposed.manager.ui.fragment;
 
 import static org.lsposed.manager.App.TAG;
-
 import static java.lang.Math.max;
 
 import android.annotation.SuppressLint;
@@ -193,7 +192,7 @@ public class LogsFragment extends BaseFragment {
     private void clear() {
         if (ConfigManager.clearLogs(verbose)) {
             Snackbar.make(binding.snackbar, R.string.logs_cleared, Snackbar.LENGTH_SHORT).show();
-            reloadErrorLog();
+            adapter.clearLogs();
         } else {
             Snackbar.make(binding.snackbar, R.string.logs_clear_failed_2, Snackbar.LENGTH_SHORT).show();
         }
@@ -322,6 +321,11 @@ public class LogsFragment extends BaseFragment {
             this.logs.clear();
             this.logs.addAll(logs);
             notifyDataSetChanged();
+        }
+
+        void clearLogs() {
+            logs.clear();
+            notifyItemRangeRemoved(0, logs.size());
         }
 
         @Override

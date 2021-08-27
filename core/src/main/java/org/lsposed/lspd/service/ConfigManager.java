@@ -56,10 +56,8 @@ import org.lsposed.lspd.models.PreLoadedApk;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.Serializable;
 import java.nio.channels.Channels;
 import java.nio.file.FileVisitResult;
@@ -866,17 +864,8 @@ public class ConfigManager {
     }
 
     public boolean clearLogs(boolean verbose) {
-        var logcatService = ServiceManager.getLogcatService();
-        File logFile = verbose ? logcatService.getVerboseLog() : logcatService.getModulesLog();
-        if (logFile == null) return true;
-        try {
-            OutputStream os = new FileOutputStream(logFile);
-            os.close();
-            return true;
-        } catch (IOException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
-            return false;
-        }
+        ServiceManager.getLogcatService().refresh(verbose);
+        return true;
     }
 
     public boolean isManager(String packageName) {

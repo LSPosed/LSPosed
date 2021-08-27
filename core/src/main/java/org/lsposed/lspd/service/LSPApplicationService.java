@@ -23,7 +23,6 @@ import static org.lsposed.lspd.service.ServiceManager.TAG;
 
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.util.Log;
 import android.util.Pair;

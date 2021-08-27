@@ -26,6 +26,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.widget.Toast;
 
 import com.android.apksig.ApkVerifier;
@@ -68,7 +69,7 @@ public class InstallerVerifier {
                         Utils.logW("showErrorToast: ", t);
                         Toast.makeText((Context) param.thisObject, str, Toast.LENGTH_LONG).show();
                     }
-                    new Handler().postDelayed(() -> System.exit(0), 50);
+                    new Handler(Looper.getMainLooper()).postDelayed(() -> System.exit(0), 1000);
                 }
             });
         } catch (Throwable t) {
