@@ -29,14 +29,13 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.util.Log;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 public class UserService {
     private static IUserManager um = null;
     private static IBinder binder = null;
-    private static IBinder.DeathRecipient recipient = new IBinder.DeathRecipient() {
+    private static final IBinder.DeathRecipient recipient = new IBinder.DeathRecipient() {
         @Override
         public void binderDied() {
             Log.w(TAG, "um is dead");
