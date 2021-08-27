@@ -58,10 +58,10 @@ private:
 
     bool verbose_ = true;
 
-    const auto start_verbose_inst_ = "!!start_verbose!!";
-    const auto stop_verbose_inst_ = "!!stop_verbose!!";
-    const auto refresh_verbose_inst_ = "!!refresh_verbose!!";
-    const auto refresh_modules_inst_ = "!!refresh_modules!!";
+    constexpr inline static auto start_verbose_inst_ = "!!start_verbose!!";
+    constexpr inline static auto stop_verbose_inst_ = "!!stop_verbose!!";
+    constexpr inline static auto refresh_verbose_inst_ = "!!refresh_verbose!!";
+    constexpr inline static auto refresh_modules_inst_ = "!!refresh_modules!!";
 };
 
 int Logcat::PrintLogLine(const AndroidLogEntry &entry, FILE *out) {
@@ -112,7 +112,7 @@ void Logcat::ProcessBuffer(struct log_msg *buf) {
     AndroidLogEntry entry;
     if (android_log_processLogBuffer(&buf->entry, &entry) < 0) return;
 
-    std::string_view tag(entry.tag);
+    std::string_view tag(entry.tag, entry.tagLen);
     bool shortcut = false;
     if (tag == "LSPosed-Bridge" || tag == "XSharedPreferences") [[unlikely]] {
         modules_print_count_ += PrintLogLine(entry, modules_file_.get());
@@ -125,7 +125,7 @@ void Logcat::ProcessBuffer(struct log_msg *buf) {
         verbose_print_count_ += PrintLogLine(entry, verbose_file_.get());
     }
     if (entry.pid == getpid() && tag == "LSPosedLogcat") [[unlikely]] {
-        std::string_view msg(entry.message);
+        std::string_view msg(entry.message, entry.messageLen);
         if (msg == start_verbose_inst_) {
             verbose_ = true;
             verbose_print_count_ += PrintLogLine(entry, verbose_file_.get());
