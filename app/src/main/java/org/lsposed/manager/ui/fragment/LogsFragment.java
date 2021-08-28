@@ -112,7 +112,7 @@ public class LogsFragment extends BaseFragment {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 verbose = tab.getPosition() == 1;
-                reloadErrorLog();
+                reloadLogs();
             }
 
             @Override
@@ -137,7 +137,7 @@ public class LogsFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        reloadErrorLog();
+        reloadLogs();
     }
 
     @Override
@@ -157,7 +157,7 @@ public class LogsFragment extends BaseFragment {
                 binding.recyclerView.smoothScrollToPosition(max(adapter.getItemCount() - 1, 0));
             }
         } else if (itemId == R.id.menu_refresh) {
-            reloadErrorLog();
+            reloadLogs();
             return true;
         } else if (itemId == R.id.menu_save) {
             save();
@@ -176,7 +176,7 @@ public class LogsFragment extends BaseFragment {
         binding = null;
     }
 
-    private void reloadErrorLog() {
+    private void reloadLogs() {
         ParcelFileDescriptor parcelFileDescriptor = ConfigManager.getLog(verbose);
         if (parcelFileDescriptor != null) {
             new LogsReader().execute(parcelFileDescriptor.getFileDescriptor());
@@ -324,8 +324,8 @@ public class LogsFragment extends BaseFragment {
         }
 
         void clearLogs() {
-            logs.clear();
             notifyItemRangeRemoved(0, logs.size());
+            logs.clear();
         }
 
         @Override
