@@ -85,7 +85,7 @@ public class RepoLoader {
                 .build()).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                Log.e(App.TAG, Log.getStackTraceString(e));
+                Log.e(App.TAG, call.request().url() + e.getMessage());
                 for (Listener listener : listeners) {
                     listener.onThrowable(e);
                 }
@@ -161,7 +161,7 @@ public class RepoLoader {
                 .build()).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                Log.e(App.TAG, Log.getStackTraceString(e));
+                Log.e(App.TAG, call.request().url() + e.getMessage());
                 if (!repoUrl.equals(backupRepoUrl)) {
                     repoUrl = backupRepoUrl;
                     loadRemoteReleases(packageName);
