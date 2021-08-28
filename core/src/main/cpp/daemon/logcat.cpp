@@ -60,11 +60,6 @@ private:
     size_t verbose_print_count_ = 0;
 
     bool verbose_ = true;
-
-    constexpr inline static auto kStartVerboseInst = "!!start_verbose!!"sv;
-    constexpr inline static auto kStopVerboseInst = "!!stop_verbose!!"sv;
-    constexpr inline static auto kRefreshVerboseInst = "!!refresh_verbose!!"sv;
-    constexpr inline static auto kRefreshModulesInst = "!!refresh_modules!!"sv;
 };
 
 int Logcat::PrintLogLine(const AndroidLogEntry &entry, FILE *out) {
@@ -115,9 +110,7 @@ void Logcat::ProcessBuffer(struct log_msg *buf) {
     AndroidLogEntry entry;
     if (android_log_processLogBuffer(&buf->entry, &entry) < 0) return;
 
-    if (entry.tagLen >= 1 && entry.tag[entry.tagLen - 1] == '\0') [[likely]] {
-        --entry.tagLen;
-    }
+    entry.tagLen--;
 
     std::string_view tag(entry.tag, entry.tagLen);
     bool shortcut = false;
@@ -133,14 +126,14 @@ void Logcat::ProcessBuffer(struct log_msg *buf) {
     }
     if (entry.pid == getpid() && tag == "LSPosedLogcat"sv) [[unlikely]] {
         std::string_view msg(entry.message, entry.messageLen);
-        if (msg == kStartVerboseInst) {
+        if (msg == "!!start_verbose!!"sv) {
             verbose_ = true;
             verbose_print_count_ += PrintLogLine(entry, verbose_file_.get());
-        } else if (msg == kStopVerboseInst) {
+        } else if (msg == "!!stop_verbose!!"sv) {
             verbose_ = false;
-        } else if (msg == kRefreshModulesInst) {
+        } else if (msg == "!!refresh_modules!!"sv) {
             RefreshFd(false);
-        } else if (msg == kRefreshVerboseInst) {
+        } else if (msg == "!!refresh_verbose!!"sv) {
             RefreshFd(true);
         }
     }
