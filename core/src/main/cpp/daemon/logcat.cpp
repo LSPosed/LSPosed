@@ -6,6 +6,7 @@
 #include <cinttypes>
 #include "logcat.h"
 #include <string_view>
+#include <sys/system_properties.h>
 
 using namespace std::string_view_literals;
 
@@ -141,9 +142,12 @@ void Logcat::ProcessBuffer(struct log_msg *buf) {
 
 void Logcat::Run() {
     constexpr size_t tail_after_crash = 10U;
+    constexpr size_t kMaxRestartLogdWait = 1024U;
     size_t tail = 0;
     RefreshFd(true);
     RefreshFd(false);
+    size_t logd_crash_times = 0;
+    size_t logd_restart_wait = 8;
     while (true) {
         std::unique_ptr<logger_list, decltype(&android_logger_list_free)> logger_list{
                 android_logger_list_alloc(0, tail, 0), &android_logger_list_free};
@@ -168,6 +172,15 @@ void Logcat::Run() {
             if (verbose_print_count_ >= kMaxLogSize) [[unlikely]] RefreshFd(true);
             if (modules_print_count_ >= kMaxLogSize) [[unlikely]] RefreshFd(false);
         }
+        logd_crash_times++;
+        if (logd_crash_times >= logd_restart_wait) {
+                fprintf(verbose_file_.get(), "\nLogd crashed too many times, trying mannually start...\n");
+                fprintf(modules_file_.get(), "\nLogd crashed too many times, trying mannually start...\n");
+                __system_property_set("ctl.restart", "logd");
+                if (logd_restart_wait < kMaxRestartLogdWait) logd_restart_wait *= 2;
+                else logd_crash_times = 0;
+        }
+        
         fprintf(verbose_file_.get(), "\nLogd maybe crashed, retrying in 1s...\n");
         fprintf(modules_file_.get(), "\nLogd maybe crashed, retrying in 1s...\n");
         sleep(1);
