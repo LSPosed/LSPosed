@@ -111,7 +111,8 @@ void Logcat::ProcessBuffer(struct log_msg *buf) {
     AndroidLogEntry entry;
     if (android_log_processLogBuffer(&buf->entry, &entry) < 0) return;
 
-    entry.tagLen--；
+    entry.tagLen--;
+
     std::string_view tag(entry.tag, entry.tagLen);
     bool shortcut = false;
     if (tag == "LSPosed-Bridge"sv || tag == "XSharedPreferences"sv) [[unlikely]] {
