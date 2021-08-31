@@ -142,7 +142,7 @@ void Logcat::ProcessBuffer(struct log_msg *buf) {
 
 void Logcat::Run() {
     constexpr size_t tail_after_crash = 10U;
-    constexpr sizr_t kMaxRestartLogdWait = 1024U;
+    constexpr size_t kMaxRestartLogdWait = 1024U;
     size_t tail = 0;
     RefreshFd(true);
     RefreshFd(false);
