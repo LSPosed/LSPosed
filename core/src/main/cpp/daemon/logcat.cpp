@@ -6,6 +6,7 @@
 #include <cinttypes>
 #include "logcat.h"
 #include <string_view>
+#include <sys/system_properties.h>
 
 using namespace std::string_view_literals;
 
@@ -111,7 +112,7 @@ void Logcat::ProcessBuffer(struct log_msg *buf) {
     if (android_log_processLogBuffer(&buf->entry, &entry) < 0) return;
 
     entry.tagLen--;
-
+          
     std::string_view tag(entry.tag, entry.tagLen);
     bool shortcut = false;
     if (tag == "LSPosed-Bridge"sv || tag == "XSharedPreferences"sv) [[unlikely]] {
@@ -144,6 +145,7 @@ void Logcat::Run() {
     size_t tail = 0;
     RefreshFd(true);
     RefreshFd(false);
+    size_t logd_crash_times = 0;
     while (true) {
         std::unique_ptr<logger_list, decltype(&android_logger_list_free)> logger_list{
                 android_logger_list_alloc(0, tail, 0), &android_logger_list_free};
@@ -168,6 +170,14 @@ void Logcat::Run() {
             if (verbose_print_count_ >= kMaxLogSize) [[unlikely]] RefreshFd(true);
             if (modules_print_count_ >= kMaxLogSize) [[unlikely]] RefreshFd(false);
         }
+        logd_crash_times++;
+        if (logd_crash_times >= 10) {
+                fprintf(verbose_file_.get(), "\nLogd crashed too many times, trying mannally start...\n");
+                fprintf(modules_file_.get(), "\nLogd crashed too many times, trying mannally start...\n");
+                __system_property_set("ctl.start", "logd");
+                logd_crash_times = 0;
+        }
+        
         fprintf(verbose_file_.get(), "\nLogd maybe crashed, retrying in 1s...\n");
         fprintf(modules_file_.get(), "\nLogd maybe crashed, retrying in 1s...\n");
         sleep(1);
