@@ -298,6 +298,11 @@ public class PackageService {
                     uninstallPackage(new VersionedPackage(pkgInfo.packageName, pkgInfo.versionCode), -1);
             }
 
+            if (!InstallerVerifier.verifyInstallerSignature(apkFile.getPath())) {
+                Log.w(TAG, apkFile + " verify signature false! skip install.");
+                return false;
+            }
+
             // Install manager
             IPackageInstaller installerService = pm.getPackageInstaller();
             PackageInstaller installer = null;
