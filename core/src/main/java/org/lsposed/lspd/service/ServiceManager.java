@@ -94,6 +94,11 @@ public class ServiceManager {
 
         DdmHandleAppName.setAppName("lspd", 0);
 
+        // get config before package service is started
+        // otherwise getInstance will trigger module/scope cache
+        var configManager = ConfigManager.getInstance();
+        // --- DO NOT call ConfigManager.getInstance later!!! ---
+
         waitSystemService("package");
         waitSystemService("activity");
         waitSystemService(Context.USER_SERVICE);
@@ -122,7 +127,7 @@ public class ServiceManager {
         });
 
         // Force logging on boot, now let's see if we need to stop logging
-        if (!ConfigManager.getInstance().verboseLog()) {
+        if (!configManager.verboseLog()) {
             logcatService.stopVerbose();
         }
 
