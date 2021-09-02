@@ -90,11 +90,13 @@ class ConfigFileManager {
         return prefix + "_" + formatter.format(Instant.now()) + ".txt";
     }
 
-    static File getNewVerboseLogPath() {
+    static File getNewVerboseLogPath() throws IOException {
+        Files.createDirectories(logDirPath);
         return logDirPath.resolve(getNewLogFileName("verbose")).toFile();
     }
 
-    static File getNewModulesLogPath() {
+    static File getNewModulesLogPath() throws IOException {
+        Files.createDirectories(logDirPath);
         return logDirPath.resolve(getNewLogFileName("modules")).toFile();
     }
 
