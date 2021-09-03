@@ -10,7 +10,7 @@
 
 using namespace std::string_view_literals;
 
-constexpr size_t kMaxLogSize = 32 * 1024 * 1024;
+constexpr size_t kMaxLogSize = 4 * 1024 * 1024;
 
 constexpr std::array<char, ANDROID_LOG_SILENT + 1> kLogChar = {
         /*ANDROID_LOG_UNKNOWN*/'?',
