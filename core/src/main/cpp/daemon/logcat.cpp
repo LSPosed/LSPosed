@@ -10,11 +10,8 @@
 
 using namespace std::string_view_literals;
 
-#ifndef NDEBUG
-    constexpr size_t kMaxLogSize = 4 * 1024 * 1024;
-#else
-    constexpr size_t kMaxLogSize = 256 * 1024;
-#endif
+constexpr size_t kMaxLogSize = 16 * 1024 * 1024;
+constexpr size_t LogBuffersize = 256 * 1024;
 
 constexpr std::array<char, ANDROID_LOG_SILENT + 1> kLogChar = {
         /*ANDROID_LOG_UNKNOWN*/'?',
@@ -162,7 +159,7 @@ void Logcat::Run() {
         for (log_id id:{LOG_ID_MAIN, LOG_ID_CRASH}) {
             auto *logger = android_logger_open(logger_list.get(), id);
             if (logger == nullptr) continue;
-            android_logger_set_log_size(logger, kMaxLogSize);
+            android_logger_set_log_size(logger, LogBuffersize);
         }
 
         struct log_msg msg{};
