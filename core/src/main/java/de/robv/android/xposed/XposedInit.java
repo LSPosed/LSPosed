@@ -340,8 +340,9 @@ public final class XposedInit {
             try {
                 var runtime = XposedHelpers.callStaticMethod(Class.forName("dalvik.system.VMRuntime"), "getRuntime");
                 var arch = (String) XposedHelpers.callMethod(runtime, "vmInstructionSet");
+                var hostDir = file.hostApk.substring(0, file.hostApk.lastIndexOf('/'));
                 for (String abi : abis) {
-                    sb.append(file.hostApk.substring(0, file.hostApk.lastIndexOf('/'))).append("/lib/").append(arch).append("/").append(name).append(".so!/lib/").append(abi).append(File.pathSeparator);
+                    sb.append(hostDir).append("/lib/").append(arch).append("/").append(name).append(".so!/lib/").append(abi).append(File.pathSeparator);
                 }
             } catch (ClassNotFoundException e) {
                 Log.e(TAG, "  Cannot load module: " + name, e);
