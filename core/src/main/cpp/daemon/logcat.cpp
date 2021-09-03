@@ -10,7 +10,7 @@
 
 using namespace std::string_view_literals;
 
-#ifdef NDEBUG
+#ifndef NDEBUG
     constexpr size_t kMaxLogSize = 4 * 1024 * 1024;
 #else
     constexpr size_t kMaxLogSize = 256 * 1024;
