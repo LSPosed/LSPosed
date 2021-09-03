@@ -340,7 +340,7 @@ public final class XposedInit {
             try {
                 var runtime = XposedHelpers.callStaticMethod(Class.forName("dalvik.system.VMRuntime"), "getRuntime");
                 var arch = (String) XposedHelpers.callMethod(runtime, "vmInstructionSet");
-                var hostDir = file.hostApk.substring(0, file.hostApk.lastIndexOf('/'));
+                var hostDir = new File(file.hostApk).getParent();
                 for (String abi : abis) {
                     sb.append(hostDir).append("/lib/").append(arch).append("/").append(name).append(".so!/lib/").append(abi).append(File.pathSeparator);
                 }
