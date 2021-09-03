@@ -30,7 +30,7 @@ public class LogcatService implements Runnable {
     public void run() {
         Log.i(TAG, "start running");
         runLogcat();
-        Log.i(TAG, "stoped");
+        Log.i(TAG, "stopped");
     }
 
     @SuppressWarnings("unused")
