@@ -60,10 +60,6 @@ android {
         targetSdk = androidTargetSdkVersion
         versionCode = verCode
         versionName = verName
-        resourceConfigurations += arrayOf(
-            "en", "zh-rCN", "zh-rTW", "zh-rHK", "ru", "uk", "nl", "ko", "fr", "de",
-            "it", "pt", "es", "ja", "tr"
-        )
         buildConfigField("long", "BUILD_TIME", Instant.now().epochSecond.toString())
     }
 
