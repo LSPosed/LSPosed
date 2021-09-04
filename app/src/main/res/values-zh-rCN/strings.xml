@@ -32,11 +32,15 @@
     <string name="module_repo_summary">模块仓库（Beta）</string>
     <string name="about_view_source_code"><![CDATA[在 %1$s 查看源码<br/>加入我们的 %2$s 频道]]></string>
     <string name="about_translators">译者：%s</string>
+    <string name="translators"><![CDATA[<a href="https://github.com/LSPosed/LSPosed">LSposed</a>]]></string>
+    <string name="install">安装</string>
+    <string name="install_summary">点击安装 LSPosed</string>
     <string name="not_installed">未安装</string>
+    <string name="not_install_summary">LSPosed 未安装</string>
     <string name="activated">已激活</string>
     <string name="partial_activated">部分激活</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy 未被正确加载</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[<b>警告：</b>SEPolicy 未被正确加载，作用于系统框架的模块将不起作用。<br>请将此报告给 <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> 开发者。]]></string>
+    <string name="selinux_policy_not_loaded"><![CDATA[<b>警告：</b>SEPolicy 未被正确加载，作用于系统框架的模块将不起作用。<br/>请将此报告给 <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> 开发者。]]></string>
     <string name="system_inject_fail_summary">系统框架注入失败</string>
     <string name="system_inject_fail"><![CDATA[<b>警告：</b>系统注入失败。<br/>这是极罕见的情况，可能是由 <b>Magisk</b> 或低质 Magisk 模块导致。<br/>请尝试禁用除 Riru 和 LSPosed 外的 Magisk 模块，或向开发者提供完整日志。]]></string>
     <string name="system_prop_incorrect_summary">系统属性异常</string>
@@ -52,6 +56,9 @@
     <string name="info_system_abi">系统架构</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">保存</string>
+    <string name="nav_item_logs_lsp">LSPosed 日志</string>
+    <string name="nav_item_logs_module">模块日志</string>
+    <string name="logs_save_failed2">保存失败：\n%s</string>
     <string name="menuClearLog">立即清理日志</string>
     <string name="logs_cleared">日志清理成功</string>
     <string name="scroll_top">滚动到顶部</string>
@@ -66,12 +73,14 @@
     <string name="module_is_not_activated_yet_detailed">%s 已安装, 但尚未激活</string>
     <string name="xposed_module_updated_notification_title">Xposed 模块已更新</string>
     <string name="xposed_module_updated_notification_content">%s 已更新，请强行停止并重新打开其作用域内的应用</string>
+    <string name="xposed_module_updated_notification_title_system">Xposed 模块已更新，需要重启系统</string>
+    <string name="xposed_module_updated_notification_content_system">%s 已被更新，因为范围包含系统框架，需要重启以应用更改</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(未提供介绍)</string>
     <string name="module_no_ui">该模块未提供用户界面</string>
     <string name="warning_xposed_min_version">该模块需要更新版本的 Xposed(%d), 因此无法被激活</string>
     <string name="no_min_version_specified">该模块未指定所需的 Xposed 版本</string>
-    <string name="warning_min_version_too_low">该模块针对 Xposed %1$d 版本构建 , 由于不兼容 %2$d 版本中的变更, 现已被停用</string>
+    <string name="warning_min_version_too_low">该模块针对 Xposed %1$d 版本构建，由于不兼容 %2$d 版本中的变更，现已被停用</string>
     <string name="warning_installed_on_external_storage">此模块因被安装在 SD 卡中而导致无法加载, 请将其移动到内部存储</string>
     <string name="module_uninstall">卸载</string>
     <string name="module_settings">模块设置</string>
@@ -95,6 +104,7 @@
     <string name="sort_by_package_name">包体名称</string>
     <string name="sort_by_install_time">安装时间</string>
     <string name="sort_by_update_time">更新时间</string>
+    <string name="sort_reverse">倒序</string>
     <string name="menu_show_system_apps">系统应用</string>
     <string name="menu_sort">排序</string>
     <string name="enable_module">启用模块</string>
@@ -134,7 +144,9 @@
     <string name="settings_backup_and_restore">备份与恢复</string>
     <string name="settings_backup_and_restore_summery">备份或恢复模块列表与作用域列表</string>
     <string name="settings_backup">备份</string>
+    <string name="settings_backup_failed2">备份失败：\n%s</string>
     <string name="settings_restore">恢复</string>
+    <string name="settings_restore_failed2">恢复失败：\n%s</string>
     <string name="group_network">网络</string>
     <string name="dns_over_http">安全 DNS（DoH）</string>
     <string name="dns_over_http_summary">解决某些地区的 DNS 污染问题</string>
@@ -159,6 +171,9 @@
     <string name="repo_load_failed">模块仓库加载失败：%s</string>
     <!-- CrashReportActivity -->
     <string name="app_destroyed">此应用可能被损坏，请从官方来源下载该应用的最新版本。</string>
+    <string name="outdated_core">LSPosed 应用比框架更新。请更新 LSPosed 框架。</string>
     <string name="outdated_manager">LSPosed 框架的版本高于应用。请从 /data/adb/lspd/manager.apk 更新 LSPosed 应用。</string>
+    <string name="manager_crashed">管理器已崩溃</string>
+    <string name="copy_crash_info">复制崩溃信息</string>
     <string name="copy_toast_msg">已复制</string>
 </resources>
