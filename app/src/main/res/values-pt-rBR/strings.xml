@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ This file is part of LSPosed.
   ~
@@ -17,10 +18,8 @@
   ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
-
 <resources>
     <!-- MainActivity -->
-    <string name="info">Info</string>
     <string name="Modules">Módulos</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d módulo ativo</item>
@@ -34,11 +33,7 @@
     <string name="about_view_source_code"><![CDATA[Veja o código fonte no %1$s<br/>Entre em nosso canal no %2$s]]></string>
     <string name="about_translators">Tradutor: %s</string>
     <string name="translators"><![CDATA[<a href="https://forum.xda-developers.com/m/vd171.4699873/#about">VD171</a>]]></string>
-
-    <string name="install">Instalar</string>
-    <string name="install_summary">Aperte para instalar o LSPosed</string>
     <string name="not_installed">Não instalado</string>
-    <string name="not_install_summary">LSPosed não está instalado</string>
     <string name="activated">Ativado</string>
     <string name="partial_activated">Parcialmente ativado</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy não está carregado corretamente</string>
@@ -56,11 +51,8 @@
     <string name="info_system_version">Versão do Sistema</string>
     <string name="info_device">Aparelho</string>
     <string name="info_system_abi">Sistema ABI</string>
-
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Salvar</string>
-    <string name="nav_item_logs_lsp">Registros LSPosed</string>
-    <string name="nav_item_logs_module">Registros dos Módulos</string>
     <string name="menuClearLog">Limpar registro</string>
     <string name="logs_cleared">Registro limpo com sucesso.</string>
     <string name="scroll_top">Mover para início</string>
@@ -70,15 +62,11 @@
     <string name="menuReload">Recarregar</string>
     <string name="logs_clear_failed_2">Falha ao limpar o registro</string>
     <string name="verbose_log_not_avaliable">O registro detalhado não está disponível, se você apenas ativou sem reiniciar, tente novamente após reiniciar.</string>
-
     <!-- Notification -->
     <string name="module_is_not_activated_yet">O módulo do Xposed ainda não está ativo</string>
     <string name="module_is_not_activated_yet_detailed">%s foi instalado, mas ainda não está ativo</string>
     <string name="xposed_module_updated_notification_title">Módulo do Xposed atualizado</string>
     <string name="xposed_module_updated_notification_content">%s foi atualizado, por favor force a parada e reinicie os apps que estão em seu escopo</string>
-    <string name="xposed_module_updated_notification_title_system">Módulo do Xposed atualizado, necessário reiniciar o sistema</string>
-    <string name="xposed_module_updated_notification_content_system">%s foi atualizado, como o escopo contém o Framework do Sistema, é necessário reiniciar para aplicar as alterações</string>
-
     <!-- ModulesActivity -->
     <string name="module_empty_description">(nenhuma descrição fornecida)</string>
     <string name="module_no_ui">Este módulo não fornece uma interface do usuário</string>
@@ -97,7 +85,6 @@
     <string name="module_install_failed">Falha ao adicinar módulo</string>
     <string name="install_to_user">Instalar ao usuário %s</string>
     <string name="install_to_user_message">Deseja instalar %1$s ao usuário %2$s? Recomenda-se instalar manualmente, forçar a instalação via LSPosed pode causar problemas.</string>
-
     <!-- AppListActivity -->
     <string name="compile_speed">Re-otimizar</string>
     <string name="compile_speed_msg">Otimizando…</string>
@@ -109,7 +96,6 @@
     <string name="sort_by_package_name">Nome do pacote</string>
     <string name="sort_by_install_time">Data de instalação</string>
     <string name="sort_by_update_time">Data de atualização</string>
-    <string name="sort_reverse">Reverso</string>
     <string name="menu_show_system_apps">Apps do Sistema</string>
     <string name="menu_sort">Ordenar</string>
     <string name="enable_module">Ativar módulo</string>
@@ -125,7 +111,7 @@
     <string name="update_available">Atualização disponível: %1$s</string>
     <string name="module_disabled_no_selection">O módulo %s foi desativado porque nenhum app foi selecionado.</string>
     <string name="android_framework">Framework do Sistema</string>
-    <string name="menu_backup_and_restore">Backup</string>
+    <string name="menu_backup_and_restore">Fazer backup</string>
     <string name="menu_backup">Fazer backup</string>
     <string name="menu_restore">Restaurar backup</string>
     <string name="force_stop">Forçar parada</string>
@@ -134,14 +120,11 @@
     <string name="reboot_required">Necessário reiniciar para aplicar alteração</string>
     <string name="reboot">Reiniciar</string>
     <string name="menu_hide">Esconder</string>
-
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">Ver em outro app</string>
     <string name="module_app_info">Info do App</string>
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nNada encontrado</string>
-
     <!-- SettingsActivity -->
-    <string name="settings_group_framework">Framework</string>
     <string name="settings_enable_resources">Ativar hooks de recursos</string>
     <string name="settings_enable_resources_summary"><b>AVISO:</b> Hooks de recursos são experimentais</string>
     <string name="pref_title_disable_verbose_log">Desativar registros detalhados</string>
@@ -150,8 +133,8 @@
     <string name="settings_group_theme">Tema</string>
     <string name="settings_backup_and_restore">Backup e restauração</string>
     <string name="settings_backup_and_restore_summery">Fazer backup ou restauração da lista de módulos e da lista de escopos.</string>
-    <string name="settings_backup">Fazer Backup</string>
-    <string name="settings_restore">Restaurar Backup</string>
+    <string name="settings_backup">Fazer backup</string>
+    <string name="settings_restore">Restaurar backup</string>
     <string name="group_network">Rede</string>
     <string name="dns_over_http">DNS sobre HTTPS</string>
     <string name="dns_over_http_summary">Solução alternativa para envenenamento de DNS em alguns países</string>
@@ -161,26 +144,19 @@
     <string name="settings_show_hidden_icon_apps_enabled">Forçar apps à exibirem ícones do lançador</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">Após o Android 10, alguns aplicativos não estão autorizados à ocultarem seus ícones do lançador. Desative esta opção para desligar este recurso do sistema.</string>
     <string name="settings_group_system">Sistema</string>
-
     <!-- Module Repo -->
     <string name="module_readme">Leia-me</string>
     <string name="module_releases">Lançamentos</string>
-    <string name="module_information">Info</string>
     <string name="module_information_homepage">Site</string>
     <string name="module_information_source_url">Código fonte</string>
     <string name="module_information_collaborators">Colaboradores</string>
-    <string name="module_release_view_assets">Assets</string>
     <string name="menu_open_in_browser">Abrir no navegador</string>
     <string name="refresh">Atualizar</string>
     <string name="module_release_load_more">Mostrar versões anteriores</string>
     <string name="module_release_no_more">Não há mais versões</string>
     <string name="repo_load_failed">Falha ao carregar o repositório de módulos: %s</string>
-
     <!-- CrashReportActivity -->
     <string name="app_destroyed">Este app foi destruído, certifique-se de que você baixou da fonte oficial.</string>
-    <string name="outdated_core">O app do LSPosed é mais recente que o framework. Por favor, atualize o framework do LSPosed.</string>
     <string name="outdated_manager">O framework do LSPosed é mais recente que o app. Por favor, atualize o app manualmente em /data/adb/lspd/manager.apk.</string>
-    <string name="manager_crashed">Gerenciador travou</string>
-    <string name="copy_crash_info">Copiar detalhes do travamento</string>
     <string name="copy_toast_msg">Copiado</string>
 </resources>

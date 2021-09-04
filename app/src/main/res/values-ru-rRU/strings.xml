@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -17,7 +18,6 @@
   ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
-
 <resources>
     <!-- MainActivity -->
     <string name="info">Информация</string>
@@ -36,11 +36,7 @@
     <string name="about_view_source_code"><![CDATA[Просмотреть исходный код на %1$s<br/>Присоединяйтесь к нашему %2$s каналу]]></string>
     <string name="about_translators">Переводчик: %s</string>
     <string name="translators"><![CDATA[<a href="https://github.com/Alexey71">Alexey</a>]]></string>
-
-    <string name="install">Установить</string>
-    <string name="install_summary">Нажмите, чтобы установить LSPosed</string>
     <string name="not_installed">Не установлен</string>
-    <string name="not_install_summary">LSPosed не установлен!</string>
     <string name="activated">Активирован</string>
     <string name="partial_activated">Частично активирован</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy не загружен должным образом</string>
@@ -58,12 +54,8 @@
     <string name="info_system_version">Версия Android</string>
     <string name="info_device">Устройство</string>
     <string name="info_system_abi">Разрядность системы ABI</string>
-
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Сохранить</string>
-    <string name="nav_item_logs_lsp">Логи LSPosed</string>
-    <string name="nav_item_logs_module">Логи модулей</string>
-    <string name="logs_save_failed2">Ошибка сохранения:\n%s</string>
     <string name="menuClearLog">Очистить логи</string>
     <string name="logs_cleared">Логи успешно очищены</string>
     <string name="scroll_top">Прокрутить вверх</string>
@@ -73,15 +65,11 @@
     <string name="menuReload">Обновить</string>
     <string name="logs_clear_failed_2">Не удалось очистить логи</string>
     <string name="verbose_log_not_avaliable">Подробные логи не доступны. Если вы только что включили их, для применения требуется перезагрузка</string>
-
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Модуль установлен</string>
     <string name="module_is_not_activated_yet_detailed">Модуль %s установлен но не включен</string>
     <string name="xposed_module_updated_notification_title">Модуль обновлен</string>
     <string name="xposed_module_updated_notification_content">%s обновлен, остановите и запустите приложения выбранные для модуля</string>
-    <string name="xposed_module_updated_notification_title_system">Модуль обновлен, требуется перезагрузка</string>
-    <string name="xposed_module_updated_notification_content_system">%s обновлен, так как выбран системный фреймворк для модуля, требуется перезагрузка для применения изменений</string>
-
     <!-- ModulesActivity -->
     <string name="module_empty_description">(описание отсутствует)</string>
     <string name="module_no_ui">Этот модуль не содержит пользовательского интерфейса</string>
@@ -100,7 +88,6 @@
     <string name="module_install_failed">Добавление модуля не удалось</string>
     <string name="install_to_user">Установить пользователю %s</string>
     <string name="install_to_user_message">Хотите установить %1$s пользователю %2$s? Рекомендуется устанавливать вручную, принудительная установка через LSPosed может вызвать проблемы</string>
-
     <!-- AppListActivity -->
     <string name="compile_speed">Повторная оптимизация</string>
     <string name="compile_speed_msg">Оптимизация…</string>
@@ -112,13 +99,12 @@
     <string name="sort_by_package_name">По названию пакета</string>
     <string name="sort_by_install_time">По времени установки</string>
     <string name="sort_by_update_time">По времени обновления</string>
-    <string name="sort_reverse">Обратная сортировка</string>
     <string name="menu_show_system_apps">Системные</string>
     <string name="menu_sort">Сортировать</string>
     <string name="enable_module">Включить модуль</string>
     <string name="no_scope_selected">Вы не выбрали ни одного приложения. Продолжить?</string>
     <string name="menu_show_games">Игры</string>
-    <string name="menu_show_modules">Модули</string>
+    <string name="menu_show_modules">Мои модули</string>
     <string name="failed_to_save_scope_list">Не удалось сохранить список включенных приложений для модуля</string>
     <string name="app_description">%1$s\nВерсия: %2$s</string>
     <string name="use_recommended">Рекомендуемые</string>
@@ -137,12 +123,10 @@
     <string name="reboot_required">Для применения требуется перезагрузка</string>
     <string name="reboot">Перезагрузить</string>
     <string name="menu_hide">Скрыть приложения</string>
-
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">Магазин приложений</string>
     <string name="module_app_info">О приложении</string>
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nЗдесь ничего нет</string>
-
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Фреймворк</string>
     <string name="settings_enable_resources">Включить перехват ресурсов</string>
@@ -154,9 +138,7 @@
     <string name="settings_backup_and_restore">Резервное копирование и восстановление</string>
     <string name="settings_backup_and_restore_summery">Список модулей и включенных приложений</string>
     <string name="settings_backup">Создать</string>
-    <string name="settings_backup_failed2">Не удалось сделать резервную копию:\n%s</string>
     <string name="settings_restore">Восстановить</string>
-    <string name="settings_restore_failed2">Не удалось восстановить:\n%s</string>
     <string name="group_network">Сеть</string>
     <string name="dns_over_http">DNS через HTTPS</string>
     <string name="dns_over_http_summary">Протокол для выполнения разрешения DNS по протоколу HTTPS. Целью этого метода является повышение конфиденциальности и безопасности пользователей путем предотвращения перехвата и манипулирования данными DNS с помощью атак типа «Атака посредника»</string>
@@ -166,7 +148,6 @@
     <string name="settings_show_hidden_icon_apps_enabled">Принудительно показывать иконку модуля</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">После Android 10, модули не могут скрывать иконку в лаунчер. Выключите переключатель, чтобы отключить эту системную функцию</string>
     <string name="settings_group_system">Система</string>
-
     <!-- Module Repo -->
     <string name="module_readme">Описание</string>
     <string name="module_releases">Версии</string>
@@ -180,12 +161,8 @@
     <string name="module_release_load_more">Показать старые версии</string>
     <string name="module_release_no_more">Больше нет других версий</string>
     <string name="repo_load_failed">Не удалось загрузить репозиторий модуля: %s</string>
-
     <!-- CrashReportActivity -->
     <string name="app_destroyed">Это приложение повреждено. Убедитесь, что загрузили его из официального источника</string>
-    <string name="outdated_core">Приложение LSPosed новее, чем фреймворк LSPosed. Обновите фреймворк LSPosed</string>
     <string name="outdated_manager">Фреймворк LSPosed новее, чем приложение LSPosed. Обновите приложение вручную из /data/adb/lspd/manager.apk</string>
-    <string name="manager_crashed">Сбой приложения</string>
-    <string name="copy_crash_info">Скопировать информацию о сбое</string>
     <string name="copy_toast_msg">Скопировано</string>
 </resources>
