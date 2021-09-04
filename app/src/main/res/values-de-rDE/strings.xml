@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ This file is part of LSPosed.
   ~
@@ -17,129 +18,92 @@
   ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
-
 <resources>
-    <string name="install">Installieren</string>
-    <string name="install_summary">Tippen Sie hier, um LSPosed zu installieren</string>
-    <string name="Modules">Modules</string>
+    <!-- MainActivity -->
     <string name="Logs">Protokolle</string>
     <string name="Settings">Einstellungen</string>
     <string name="About">Mehr Erfahren</string>
-
-    <!-- General/various strings -->
+    <string name="module_repo">Module Repo</string>
+    <string name="module_repo_summary">Modul-Repository (Beta)</string>
+    <string name="about_view_source_code"><![CDATA[Den Quellcode finden Sie unter %1$s<br/>Begleiten Sie uns %2$s-Kanal]]></string>
+    <string name="not_installed">Nicht installiert</string>
+    <string name="lsposed_not_active">LSPosed ist derzeit nicht installiert oder läuft nicht.</string>
+    <!-- LogsActivity -->
     <string name="menuSaveToSd">speichern</string>
-
-    <!-- Welcome screen / main sections -->
-
-    <!-- navigation view items -->
-    <string name="nav_item_logs_lsp">Umfangreiche Protokolle</string>
-    <string name="nav_item_logs_module">Protokollmodule</string>
-
-    <!-- Installer tab -->
-
-    <!-- File operations -->
-
-    <!-- Modules tab -->
-    <string name="module_is_not_activated_yet">Das LSPosed-Modul wurde noch nicht aktiviert</string>
-    <string name="module_is_not_activated_yet_detailed">%s installiert, aber noch nicht aktiviert</string>
-    <string name="module_empty_description">(keine Beschreibung angegeben)</string>
-    <string name="module_no_ui">Dieses Modul bietet keine Benutzeroberfläche</string>
-    <string name="xposed_module_updated_notification_title">Aktualisiertes LSPosed-Modul</string>
-    <string name="warning_xposed_min_version">Dieses Modul erfordert eine neuere Version von LSPosed (%d) und kann nicht aktiviert werden</string>
-    <string name="no_min_version_specified">Dieses Modul gibt nicht die benötigte LSPosed-Version an.</string>
-    <string name="warning_min_version_too_low">Dieses Modul wurde für die LSPosed-Version %1$d erstellt, wurde jedoch aufgrund inkompatibler Änderungen in der Version %2$d deaktiviert</string>
-    <string name="module_app_info">App-Information</string>
-    <string name="module_uninstall">Deinstallieren</string>
-
-    <!-- Download tab -->
-    <string name="menuReload">Erneut laden</string>
-
-    <!-- Settings tab -->
-    <string name="settings_group_framework">Framework</string>
-    <string name="settings_enable_resources">Aktivieren Sie die Ressourcen-Hooks</string>
-    <string name="settings_enable_resources_summary"><b>Warnung:</b> Ressourcen-Hooks sind experimentell</string>
-
-    <!-- Support tab -->
-
-    <!-- Logs tab  -->
     <string name="menuClearLog">Protokoll jetzt löschen</string>
     <string name="logs_cleared">Protokoll erfolgreich gelöscht.</string>
-
-    <!-- About tab -->
-
-    <!-- DownloadView -->
-
-    <!-- DownloadUtils -->
-
-    <!-- RepoLoader -->
-
-    <string name="warning_installed_on_external_storage">Dieses Modul kann nicht geladen werden, da es auf der SD-Karte installiert ist. Bitte verschieben Sie es in den internen Speicher</string>
-
-    <string name="info">Info</string>
-
     <string name="scroll_top">Hochscrollen</string>
     <string name="loading">Laden…</string>
     <string name="scroll_bottom">Runterscrollen</string>
-
-    <!-- LSPd related -->
+    <string name="logs_cannot_read">Protokoll kann nicht gelesen werden: \n</string>
+    <string name="menuReload">Erneut laden</string>
+    <!-- Notification -->
+    <string name="module_is_not_activated_yet">Das LSPosed-Modul wurde noch nicht aktiviert</string>
+    <string name="module_is_not_activated_yet_detailed">%s installiert, aber noch nicht aktiviert</string>
+    <string name="xposed_module_updated_notification_title">Aktualisiertes LSPosed-Modul</string>
+    <string name="xposed_module_updated_notification_content">%s wurde aktualisiert</string>
+    <!-- ModulesActivity -->
+    <string name="module_empty_description">(keine Beschreibung angegeben)</string>
+    <string name="module_no_ui">Dieses Modul bietet keine Benutzeroberfläche</string>
+    <string name="warning_xposed_min_version">Dieses Modul erfordert eine neuere Version von LSPosed (%d) und kann nicht aktiviert werden</string>
+    <string name="no_min_version_specified">Dieses Modul gibt nicht die benötigte LSPosed-Version an.</string>
+    <string name="warning_min_version_too_low">Dieses Modul wurde für die LSPosed-Version %1$d erstellt, wurde jedoch aufgrund inkompatibler Änderungen in der Version %2$d deaktiviert</string>
+    <string name="warning_installed_on_external_storage">Dieses Modul kann nicht geladen werden, da es auf der SD-Karte installiert ist. Bitte verschieben Sie es in den internen Speicher</string>
+    <string name="module_uninstall">Deinstallieren</string>
+    <string name="module_settings">Moduleinstellungen</string>
+    <!-- AppListActivity -->
+    <string name="compile_speed">Erneut optimieren</string>
     <string name="compile_speed_msg">Optimieren...</string>
     <string name="compile_done">Optimierung abgeschlossen.</string>
-
-    <string name="pref_title_disable_verbose_log">Deaktivieren Sie ausführliche Protokolle</string>
-    <string name="logs_cannot_read">Protokoll kann nicht gelesen werden: \n</string>
     <string name="app_launch">Starten Sie es</string>
     <string name="compile_failed">Optimierung fehlgeschlagen oder Rückgabewert ist leer.</string>
     <string name="compile_failed_with_info">Optimierung fehlgeschlagen: </string>
-    <string name="not_installed">Nicht installiert</string>
-    <string name="pure_black_dark_theme">Verwenden Sie das dunkel schwarze Theme</string>
     <string name="sort_by_name">Nach Anwendungsname sortieren</string>
     <string name="sort_by_package_name">Nach Paketnamen sortieren</string>
     <string name="sort_by_install_time">Nach Installationszeit sortieren</string>
     <string name="sort_by_update_time">Nach Aktualisierungszeit sortieren</string>
-    <string name="settings_group_theme">Theme</string>
     <string name="menu_show_system_apps">System-Apps</string>
     <string name="menu_sort">Sortieren…</string>
     <string name="enable_module">Modul einschalten</string>
     <string name="no_scope_selected">Sie haben keine App ausgewählt. Fortsetzen?</string>
     <string name="menu_show_games">Spiele</string>
-    <string name="menu_show_modules">Module</string>
     <string name="failed_to_save_scope_list">Das Speichern der Bereichsliste ist fehlgeschlagen</string>
-    <string name="module_settings">Moduleinstellungen</string>
     <string name="app_description">%1$s\nAusführung: %2$s</string>
     <string name="use_recommended">Empfohlen</string>
     <string name="no_scope_selected_has_recommended">Sie haben keine App ausgewählt. Empfohlene Apps auswählen?</string>
     <string name="use_recommended_message">Empfohlene Apps auswählen?</string>
     <string name="requested_by_module">Empfohlen</string>
     <string name="module_disabled_no_selection">Modul %s ist deaktiviert, da keine App ausgewählt ist.</string>
-    <string name="android_framework">System Framework</string>
-    <string name="app_destroyed">Diese Anwendung wurde deinstalliert. Laden Sie sie unbedingt von der offiziellen Quelle herunter.</string>
-    <string name="compile_speed">Erneut optimieren</string>
-    <string name="outdated_manager">Die Version von LSPosed Manager und LSPosed Core stimmen nicht überein. Installieren Sie die entsprechende Version neu.</string>
-    <string name="lsposed_not_active">LSPosed ist derzeit nicht installiert oder läuft nicht.</string>
-    <string name="settings_backup_and_restore">Sichern und Wiederherstellen</string>
-    <string name="settings_backup_and_restore_summery">Modul- und Bereichslisten sichern oder wiederherstellen.</string>
-    <string name="settings_backup">Backup</string>
-    <string name="settings_restore">Wiederherstellen</string>
     <string name="menu_backup_and_restore">Back-up…</string>
     <string name="menu_backup">Back-up</string>
     <string name="menu_restore">Wiederherstellen</string>
-    <string name="xposed_module_updated_notification_content">%s wurde aktualisiert</string>
-    <string name="module_repo">Module Repo</string>
-    <string name="module_repo_summary">Modul-Repository (Beta)</string>
+    <!-- ModulesActivity and AppListActivity -->
+    <string name="module_app_info">App-Information</string>
+    <!-- SettingsActivity -->
+    <string name="settings_enable_resources">Aktivieren Sie die Ressourcen-Hooks</string>
+    <string name="settings_enable_resources_summary"><b>Warnung:</b> Ressourcen-Hooks sind experimentell</string>
+    <string name="pref_title_disable_verbose_log">Deaktivieren Sie ausführliche Protokolle</string>
+    <string name="pure_black_dark_theme">Verwenden Sie das dunkel schwarze Theme</string>
+    <string name="settings_backup_and_restore">Sichern und Wiederherstellen</string>
+    <string name="settings_backup_and_restore_summery">Modul- und Bereichslisten sichern oder wiederherstellen.</string>
+    <string name="settings_backup">Back-up</string>
+    <string name="settings_restore">Wiederherstellen</string>
+    <string name="group_network">Netzwerk</string>
+    <string name="dns_over_http">DNS via HTTPS</string>
+    <string name="dns_over_http_summary">Problemumgehung für DNS-Vergiftungen in einigen Ländern</string>
+    <string name="theme_color">Themenfarbe</string>
+    <!-- Module Repo -->
     <string name="module_readme">Liesmich</string>
     <string name="module_releases">Veröffentlichungen</string>
-    <string name="module_information">Info</string>
     <string name="module_information_homepage">Startseite</string>
     <string name="module_information_source_url">Quellcode</string>
     <string name="module_information_collaborators">Mitarbeiter</string>
     <string name="module_release_view_assets">Ressourcen</string>
     <string name="menu_open_in_browser">Im Browser öffnen</string>
     <string name="refresh">Aktualisieren</string>
-    <string name="group_network">Netzwerk</string>
-    <string name="dns_over_http">DNS via HTTPS</string>
-    <string name="dns_over_http_summary">Problemumgehung für DNS-Vergiftungen in einigen Ländern</string>
-    <string name="about_view_source_code"><![CDATA[Den Quellcode finden Sie unter %1$s<br/>Begleiten Sie uns %2$s-Kanal]]></string>
     <string name="module_release_load_more">Ältere Versionen anzeigen</string>
     <string name="module_release_no_more">Keine Veröffentlichung mehr</string>
-    <string name="theme_color">Themenfarbe</string>
+    <!-- CrashReportActivity -->
+    <string name="app_destroyed">Diese Anwendung wurde deinstalliert. Laden Sie sie unbedingt von der offiziellen Quelle herunter.</string>
+    <string name="outdated_manager">Die Version von LSPosed Manager und LSPosed Core stimmen nicht überein. Installieren Sie die entsprechende Version neu.</string>
 </resources>
