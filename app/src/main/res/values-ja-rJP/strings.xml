@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ This file is part of LSPosed.
   ~
@@ -17,15 +18,11 @@
   ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
-
 <resources>
     <!-- MainActivity -->
     <string name="info">情報</string>
-    <string name="install">インストール</string>
-    <string name="install_summary">タップし LSPosed をインストール</string>
     <string name="Modules">モジュール</string>
     <plurals name="modules_enabled_count">
-        <item quantity="one">%d 個のモジュール有効化済</item>
         <item quantity="other">%d 個のモジュール有効化済</item>
     </plurals>
     <string name="Logs">ログ</string>
@@ -35,29 +32,27 @@
     <string name="module_repo_summary">モジュール リポジトリ (Beta)</string>
     <string name="about_view_source_code"><![CDATA[%1$s でソースコードを閲覧<br/>%2$s チャンネルに参加]]></string>
     <string name="about_translators">翻訳者: %s</string>
-
-    <string name="activated">有効化済</string>
+    <string name="translators"><![CDATA[<a href="https://github.com/yoshi818">yoshi818</a>]]></string>
     <string name="not_installed">未インストール</string>
+    <string name="activated">有効化済</string>
     <string name="partial_activated">部分的に有効化済</string>
-    <string name="need_update">アップデート要</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy が正しく読み込まれていません</string>
     <string name="selinux_policy_not_loaded"><![CDATA[<b>警告:</b> SEPolicy が正しく読み込まれておらず、システムフレームワークをフックするためのモジュールが動作しません。<br/>本障害について<a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> 開発者に報告して下さい。]]></string>
     <string name="system_inject_fail_summary">システムフレームワークへのパッチに失敗しました</string>
     <string name="system_inject_fail"><![CDATA[<b>警告:</b> システムフレームワークへのパッチに失敗しました。<br/>本現象はごく稀に発生し、<b>Magisk</b> もしくは低品質な Magisk モジュールが起因で発生します。<br/>Riru, LSPosed 以外の Magiskモジュールの一時無効化の試行 または 開発者へフルログを提出して下さい。]]></string>
     <string name="system_prop_incorrect_summary">誤ったシステム設定</string>
     <string name="system_prop_incorrect"><![CDATA[<b>警告:</b> システム設定に誤りがあります。<br/>幾つかの必須システム設定が削除もしくは変更されています。<br/>モジュールが無効化される場合があります。]]></string>
+    <string name="need_update">アップデート要</string>
     <string name="please_update_summary">最新バージョンの LSPosed をインストールして下さい</string>
+    <string name="lsposed_not_active">LSPosed が未インストールもしくは有効化されていません。</string>
     <string name="info_api_version">API バージョン</string>
     <string name="info_framework_version">Framework バージョン</string>
     <string name="info_manager_version">Manager バージョン</string>
     <string name="info_system_version">System バージョン</string>
     <string name="info_device">デバイス</string>
     <string name="info_system_abi">システム ABI</string>
-
     <!-- LogsActivity -->
     <string name="menuSaveToSd">保存</string>
-    <string name="nav_item_logs_lsp">詳細ログ</string>
-    <string name="nav_item_logs_module">モジュールログ</string>
     <string name="menuClearLog">直ちにログを消去</string>
     <string name="logs_cleared">ログの消去に成功しました。</string>
     <string name="scroll_top">ログの先頭行にスクロール</string>
@@ -66,16 +61,15 @@
     <string name="logs_cannot_read">ログの読み込みに失敗: \n</string>
     <string name="menuReload">再読込</string>
     <string name="logs_clear_failed_2">ログの消去に失敗</string>
-
+    <string name="verbose_log_not_avaliable">詳細ログが存在しません。ログ出力有効化に再起動を行っていない場合、再起動して下さい。</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Xposed モジュールが有効化されていません</string>
     <string name="module_is_not_activated_yet_detailed">%s がインストール済みですが、有効化されていません</string>
+    <string name="xposed_module_updated_notification_title">Xposed モジュールアップデート</string>
     <string name="xposed_module_updated_notification_content">%s がアップデートされました</string>
-
     <!-- ModulesActivity -->
     <string name="module_empty_description">(詳細説明なし)</string>
     <string name="module_no_ui">本モジュールではユーザインタフェースが存在しません</string>
-    <string name="xposed_module_updated_notification_title">Xposed モジュールアップデート</string>
     <string name="warning_xposed_min_version">本モジュールでは 最新の Xposed バージョン (%d) が必要なため、有効化されません</string>
     <string name="no_min_version_specified">本モジュールに必要な Xposed バージョンが特定出来ません</string>
     <string name="warning_min_version_too_low">本モジュールは Xposed バージョン %1$d 向けに開発されましたが、%2$d での非互換変更に伴い無効化されました</string>
@@ -86,11 +80,11 @@
     <string name="module_uninstall_message">本モジュールをアンインストールしますか?</string>
     <string name="module_uninstalled">%1$s をアンインインストールしました</string>
     <string name="module_uninstall_failed">アンインストールに成功</string>
+    <string name="add_module_to_user">ユーザへモジュールを追加</string>
     <string name="module_installed">ユーザ %2$s へ %1$s を追加</string>
     <string name="module_install_failed">モジュールの追加に失敗</string>
     <string name="install_to_user">ユーザ %s でのインストール</string>
     <string name="install_to_user_message">ユーザ %2$s へ %1$s をインストールしますか?手動でのインストールをお勧めします。LSPosed 経由での強制インストールでは、問題が発生する可能性があります。</string>
-
     <!-- AppListActivity -->
     <string name="compile_speed">最適化</string>
     <string name="compile_speed_msg">最適化中…</string>
@@ -102,7 +96,6 @@
     <string name="sort_by_package_name">パッケージ名でソート</string>
     <string name="sort_by_install_time">インストール日時でソート</string>
     <string name="sort_by_update_time">更新日時でソート</string>
-    <string name="sort_reverse">逆順</string>
     <string name="menu_show_system_apps">システムアプリ</string>
     <string name="menu_sort">ソート中…</string>
     <string name="enable_module">モジュールの有効化</string>
@@ -127,11 +120,10 @@
     <string name="reboot_required">本変更適用後に再起動が必要です</string>
     <string name="reboot">再起動</string>
     <string name="menu_hide">隠す…</string>
-
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">他のアプリで表示</string>
     <string name="module_app_info">アプリの情報</string>
-
+    <string name="list_empty">¯\\\\_(ツ)_\/¯\nリストは空です</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">フレームワーク</string>
     <string name="settings_enable_resources">リソースフックを有効化</string>
@@ -143,9 +135,8 @@
     <string name="settings_backup_and_restore">バックアップと復元</string>
     <string name="settings_backup_and_restore_summery">モジュールリストのバックアップ/復元とリストへのアクセス</string>
     <string name="settings_backup">バックアップ</string>
-    <string name="settings_restore">復元</string>
+    <string name="settings_restore">レストア</string>
     <string name="group_network">ネットワーク</string>
-    <string name="dns_over_http">DNS over HTTPS</string>
     <string name="dns_over_http_summary">一部の国向けの DNSポイズニング 回避策</string>
     <string name="theme_color">テーマカラー</string>
     <string name="theme_color_summary">本アプリで最も表示される色</string>
@@ -153,9 +144,7 @@
     <string name="settings_show_hidden_icon_apps_enabled">ランチャーアイコンを強制的に表示</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">Android 10 以降ではアプリ(特に Xposed モジュール)ではランチャーアイコンを隠すことが出来ません。本機能を無効にするには、トグルをオフにして下さい。</string>
     <string name="settings_group_system">システム</string>
-
     <!-- Module Repo -->
-    <string name="module_readme">Readme</string>
     <string name="module_releases">リリース</string>
     <string name="module_information">情報</string>
     <string name="module_information_homepage">ホームページ</string>
@@ -167,14 +156,8 @@
     <string name="module_release_load_more">以前のバージョンを表示</string>
     <string name="module_release_no_more">これ以上のリリースはありません</string>
     <string name="repo_load_failed">モジュールリポジトリの読み込みに失敗: %s</string>
-
+    <!-- CrashReportActivity -->
     <string name="app_destroyed">本アプリケーションの内部で壊れています。公式ソースからダウンロードされたものであるかを確認して下さい。</string>
     <string name="outdated_manager">LSPosed Manager と LSPosed Core のバージョンが一致していません。対応バージョンを再インストールして下さい。</string>
-    <string name="lsposed_not_active">LSPosed が未インストールもしくは有効化されていません。</string>
-    <string name="verbose_log_not_avaliable">詳細ログが存在しません。ログ出力有効化に再起動を行っていない場合、再起動して下さい。</string>
-    <string name="not_install_summary">LSPosed が未インストールです</string>
-    <string name="translators"><![CDATA[<a href="https://github.com/yoshi818">yoshi818</a>]]></string>
     <string name="copy_toast_msg">複写済</string>
-    <string name="list_empty">¯\\\\_(ツ)_\/¯\nリストは空です</string>
-    <string name="add_module_to_user">ユーザへモジュールを追加</string>
 </resources>
