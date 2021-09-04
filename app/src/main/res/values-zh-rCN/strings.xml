@@ -32,8 +32,11 @@
     <string name="module_repo_summary">模块仓库（Beta）</string>
     <string name="about_view_source_code"><![CDATA[在 %1$s 查看源码<br/>加入我们的 %2$s 频道]]></string>
     <string name="about_translators">译者：%s</string>
+    <string name="translators"><![CDATA[<a href="https://github.com/LSPosed/LSPosed">LSposed</a>]]></string>
     <string name="install">安装</string>
+    <string name="install_summary">点击安装 LSPosed</string>
     <string name="not_installed">未安装</string>
+    <string name="not_install_summary">LSPosed 未安装</string>
     <string name="activated">已激活</string>
     <string name="partial_activated">部分激活</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy 未被正确加载</string>
@@ -53,6 +56,9 @@
     <string name="info_system_abi">系统架构</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">保存</string>
+    <string name="nav_item_logs_lsp">LSPosed 日志</string>
+    <string name="nav_item_logs_module">模块日志</string>
+    <string name="logs_save_failed2">保存失败：\n%s</string>
     <string name="menuClearLog">立即清理日志</string>
     <string name="logs_cleared">日志清理成功</string>
     <string name="scroll_top">滚动到顶部</string>
@@ -67,6 +73,8 @@
     <string name="module_is_not_activated_yet_detailed">%s 已安装, 但尚未激活</string>
     <string name="xposed_module_updated_notification_title">Xposed 模块已更新</string>
     <string name="xposed_module_updated_notification_content">%s 已更新，请强行停止并重新打开其作用域内的应用</string>
+    <string name="xposed_module_updated_notification_title_system">Xposed 模块已更新，需要重启系统</string>
+    <string name="xposed_module_updated_notification_content_system">%s 已被更新，因为范围包含系统框架，需要重启以应用更改</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(未提供介绍)</string>
     <string name="module_no_ui">该模块未提供用户界面</string>
@@ -96,6 +104,7 @@
     <string name="sort_by_package_name">包体名称</string>
     <string name="sort_by_install_time">安装时间</string>
     <string name="sort_by_update_time">更新时间</string>
+    <string name="sort_reverse">倒序</string>
     <string name="menu_show_system_apps">系统应用</string>
     <string name="menu_sort">排序</string>
     <string name="enable_module">启用模块</string>
