@@ -87,8 +87,76 @@
     <string name="install_to_user_message">Deseja instalar %1$s ao usuário %2$s? Recomenda-se instalar manualmente, forçar a instalação via LSPosed pode causar problemas.</string>
     <!-- AppListActivity -->
     <string name="compile_speed">Re-otimizar</string>
+    <string name="compile_speed_msg">Otimizando…</string>
+    <string name="compile_done">Otimização completa</string>
+    <string name="app_launch">Abrir</string>
+    <string name="compile_failed">A otimização falhou: não houve nenhum retorno.</string>
+    <string name="compile_failed_with_info">Falha na otimização: </string>
+    <string name="sort_by_name">Nome do app</string>
+    <string name="sort_by_package_name">Nome do pacote</string>
+    <string name="sort_by_install_time">Data de instalação</string>
+    <string name="sort_by_update_time">Data de atualização</string>
+    <string name="menu_show_system_apps">Apps do Sistema</string>
+    <string name="menu_sort">Ordenar</string>
+    <string name="enable_module">Ativar módulo</string>
+    <string name="no_scope_selected">Você não selecionou nenhum app. Quer continuar?</string>
+    <string name="menu_show_games">Jogos</string>
+    <string name="menu_show_modules">Módulos</string>
+    <string name="failed_to_save_scope_list">Falha ao salvar lista de escopos</string>
+    <string name="app_description">%1$s\nVersão %2$s</string>
+    <string name="use_recommended">Recomendados</string>
+    <string name="no_scope_selected_has_recommended">Você não selecionou nenhum app. Quer selecionar os apps recomendados?</string>
+    <string name="use_recommended_message">Selecionar os apps recomendados?</string>
+    <string name="requested_by_module">Recomendados</string>
+    <string name="update_available">Atualização disponível: %1$s</string>
+    <string name="module_disabled_no_selection">O módulo %s foi desativado porque nenhum app foi selecionado.</string>
+    <string name="android_framework">Framework do Sistema</string>
+    <string name="menu_backup_and_restore">Fazer backup</string>
+    <string name="menu_backup">Fazer backup</string>
+    <string name="menu_restore">Restaurar backup</string>
+    <string name="force_stop">Forçar parada</string>
+    <string name="force_stop_dlg_title">Forçar parada?</string>
+    <string name="force_stop_dlg_text">Se forçar a parada de um app, ele pode apresentar mau funcionamento.</string>
+    <string name="reboot_required">Necessário reiniciar para aplicar alteração</string>
+    <string name="reboot">Reiniciar</string>
+    <string name="menu_hide">Esconder</string>
     <!-- ModulesActivity and AppListActivity -->
+    <string name="modules_other_app">Ver em outro app</string>
+    <string name="module_app_info">Info do App</string>
+    <string name="list_empty">¯\\\\_(ツ)_\/¯\nNada encontrado</string>
     <!-- SettingsActivity -->
+    <string name="settings_enable_resources">Ativar hooks de recursos</string>
+    <string name="settings_enable_resources_summary"><b>AVISO:</b> Hooks de recursos são experimentais</string>
+    <string name="pref_title_disable_verbose_log">Desativar registros detalhados</string>
+    <string name="pure_black_dark_theme">Tema preto puro</string>
+    <string name="pure_black_dark_theme_summary">Use o tema preto puro se o tema noturno estiver ativo</string>
+    <string name="settings_group_theme">Tema</string>
+    <string name="settings_backup_and_restore">Backup e restauração</string>
+    <string name="settings_backup_and_restore_summery">Fazer backup ou restauração da lista de módulos e da lista de escopos.</string>
+    <string name="settings_backup">Fazer backup</string>
+    <string name="settings_restore">Restaurar backup</string>
+    <string name="group_network">Rede</string>
+    <string name="dns_over_http">DNS sobre HTTPS</string>
+    <string name="dns_over_http_summary">Solução alternativa para envenenamento de DNS em alguns países</string>
+    <string name="theme_color">Cor do tema</string>
+    <string name="theme_color_summary">Cor que aparece com mais frequência no app</string>
+    <string name="theme_color_system_accent">Cor de realce do sistema</string>
+    <string name="settings_show_hidden_icon_apps_enabled">Forçar apps à exibirem ícones do lançador</string>
+    <string name="settings_show_hidden_icon_apps_enabled_summary">Após o Android 10, alguns aplicativos não estão autorizados à ocultarem seus ícones do lançador. Desative esta opção para desligar este recurso do sistema.</string>
+    <string name="settings_group_system">Sistema</string>
     <!-- Module Repo -->
+    <string name="module_readme">Leia-me</string>
+    <string name="module_releases">Lançamentos</string>
+    <string name="module_information_homepage">Site</string>
+    <string name="module_information_source_url">Código fonte</string>
+    <string name="module_information_collaborators">Colaboradores</string>
+    <string name="menu_open_in_browser">Abrir no navegador</string>
+    <string name="refresh">Atualizar</string>
+    <string name="module_release_load_more">Mostrar versões anteriores</string>
+    <string name="module_release_no_more">Não há mais versões</string>
+    <string name="repo_load_failed">Falha ao carregar o repositório de módulos: %s</string>
     <!-- CrashReportActivity -->
+    <string name="app_destroyed">Este app foi destruído, certifique-se de que você baixou da fonte oficial.</string>
+    <string name="outdated_manager">O framework do LSPosed é mais recente que o app. Por favor, atualize o app manualmente em /data/adb/lspd/manager.apk.</string>
+    <string name="copy_toast_msg">Copiado</string>
 </resources>
