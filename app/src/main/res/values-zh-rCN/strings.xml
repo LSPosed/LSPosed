@@ -181,6 +181,6 @@
     <string name="outdated_core">LSPosed 应用的版本高于框架。请更新 LSPosed 框架。</string>
     <string name="outdated_manager">LSPosed 框架的版本高于应用。请从 /data/adb/lspd/manager.apk 更新 LSPosed 应用。</string>
     <string name="manager_crashed">应用出现未知错误</string>
-    <string name="cpoy_crash_info">复制错误信息</string>
+    <string name="copy_crash_info">复制错误信息</string>
     <string name="copy_toast_msg">已复制</string>
 </resources>

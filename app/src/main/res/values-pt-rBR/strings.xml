@@ -181,6 +181,6 @@
     <string name="outdated_core">O app do LSPosed é mais recente que o framework. Por favor, atualize o framework do LSPosed.</string>
     <string name="outdated_manager">O framework do LSPosed é mais recente que o app. Por favor, atualize o app manualmente em /data/adb/lspd/manager.apk.</string>
     <string name="manager_crashed">Gerenciador travou</string>
-    <string name="cpoy_crash_info">Copiar detalhes do travamento</string>
+    <string name="copy_crash_info">Copiar detalhes do travamento</string>
     <string name="copy_toast_msg">Copiado</string>
 </resources>

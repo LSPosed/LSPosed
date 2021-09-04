@@ -181,6 +181,6 @@
     <string name="outdated_core">L\’appli LSPosed est plus réçente que le Sous Système. Merci de mettre à jour le Sous Système LSPosed.</string>
     <string name="outdated_manager">Version du Gestionnaire LSPosed et du noyau LSPosed ne sont pas cohérents. Merci de réinstaller la version correspondante.</string>
     <string name="manager_crashed">Le Gestionnaire à planté</string>
-    <string name="cpoy_crash_info">Copier les infos du plantage</string>
+    <string name="copy_crash_info">Copier les infos du plantage</string>
     <string name="copy_toast_msg">Copié</string>
 </resources>

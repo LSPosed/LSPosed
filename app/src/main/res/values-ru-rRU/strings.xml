@@ -186,6 +186,6 @@
     <string name="outdated_core">Приложение LSPosed новее, чем фреймворк LSPosed. Обновите фреймворк LSPosed</string>
     <string name="outdated_manager">Фреймворк LSPosed новее, чем приложение LSPosed. Обновите приложение вручную из /data/adb/lspd/manager.apk</string>
     <string name="manager_crashed">Сбой приложения</string>
-    <string name="cpoy_crash_info">Скопировать информацию о сбое</string>
+    <string name="copy_crash_info">Скопировать информацию о сбое</string>
     <string name="copy_toast_msg">Скопировано</string>
 </resources>
