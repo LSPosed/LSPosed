@@ -153,7 +153,7 @@ public class ConfigManager {
     private final Map<Pair<String, Integer>, Map<String, ConcurrentHashMap<String, Object>>> cachedConfig = new ConcurrentHashMap<>();
 
     private void updateCaches(boolean sync) {
-        synchronized (this) {
+        synchronized (cacheHandler) {
             requestScopeCacheTime = requestModuleCacheTime = SystemClock.elapsedRealtime();
         }
         if (sync) {
@@ -256,7 +256,11 @@ public class ConfigManager {
     static ConfigManager getInstance() {
         if (instance == null)
             instance = new ConfigManager();
-        if (instance.lastModuleCacheTime == 0 || instance.lastScopeCacheTime == 0) {
+        boolean needCached;
+        synchronized (instance.cacheHandler) {
+            needCached = instance.lastModuleCacheTime == 0 || instance.lastScopeCacheTime == 0;
+        }
+        if (needCached) {
             if (PackageService.isAlive()) {
                 Log.d(TAG, "pm is ready, updating cache");
                 // must ensure cache is valid for later usage
@@ -347,8 +351,10 @@ public class ConfigManager {
     }
 
     private synchronized void clearCache() {
-        lastScopeCacheTime = 0;
-        lastModuleCacheTime = 0;
+        synchronized (cacheHandler) {
+            lastScopeCacheTime = 0;
+            lastModuleCacheTime = 0;
+        }
         cachedModule.clear();
         cachedScope.clear();
     }
@@ -356,8 +362,10 @@ public class ConfigManager {
     private synchronized void cacheModules() {
         // skip caching when pm is not yet available
         if (!PackageService.isAlive()) return;
-        if (lastModuleCacheTime >= requestModuleCacheTime) return;
-        else lastModuleCacheTime = SystemClock.elapsedRealtime();
+        synchronized (cacheHandler) {
+            if (lastModuleCacheTime >= requestModuleCacheTime) return;
+            else lastModuleCacheTime = SystemClock.elapsedRealtime();
+        }
         try (Cursor cursor = db.query(true, "modules", new String[]{"module_pkg_name", "apk_path"},
                 "enabled = 1", null, null, null, null, null)) {
             if (cursor == null) {
@@ -434,8 +442,10 @@ public class ConfigManager {
     private synchronized void cacheScopes() {
         // skip caching when pm is not yet available
         if (!PackageService.isAlive()) return;
-        if (lastScopeCacheTime >= requestScopeCacheTime) return;
-        else lastScopeCacheTime = SystemClock.elapsedRealtime();
+        synchronized (cacheHandler) {
+            if (lastScopeCacheTime >= requestScopeCacheTime) return;
+            else lastScopeCacheTime = SystemClock.elapsedRealtime();
+        }
         cachedScope.clear();
         try (Cursor cursor = db.query("scope INNER JOIN modules ON scope.mid = modules.mid", new String[]{"app_pkg_name", "module_pkg_name", "user_id"},
                 "enabled = 1", null, null, null, null)) {
