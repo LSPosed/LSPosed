@@ -36,11 +36,9 @@ import android.os.HandlerThread;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.os.SELinux;
-import android.os.SharedMemory;
 import android.os.SystemClock;
 import android.system.ErrnoException;
 import android.system.Os;
-import android.system.OsConstants;
 import android.util.Log;
 import android.util.Pair;
 
@@ -51,15 +49,11 @@ import org.apache.commons.lang3.SerializationUtils;
 import org.lsposed.lspd.BuildConfig;
 import org.lsposed.lspd.models.Application;
 import org.lsposed.lspd.models.Module;
-import org.lsposed.lspd.models.PreLoadedApk;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.Serializable;
-import java.nio.channels.Channels;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -191,7 +185,7 @@ public class ConfigManager {
                 var packageName = cursor.getString(pkgNameIdx);
                 var m = cachedModule.computeIfAbsent(packageName, p -> {
                     var module = new Module();
-                    var file = loadModule(path);
+                    var file = ConfigFileManager.loadModule(path);
                     if (file == null) {
                         Log.w(TAG, "Can not load " + path + ", skip!");
                         return null;
@@ -408,7 +402,7 @@ public class ConfigManager {
                 apkPath = getModuleApkPath(pkgInfo.applicationInfo);
                 if (apkPath == null) obsoleteModules.add(packageName);
                 else obsoletePaths.put(packageName, apkPath);
-                var file = loadModule(apkPath);
+                var file = ConfigFileManager.loadModule(apkPath);
                 if (file == null) {
                     Log.w(TAG, "failed to load module " + packageName);
                     obsoleteModules.add(packageName);
@@ -523,62 +517,6 @@ public class ConfigManager {
             Log.d(TAG, ps.processName + "/" + ps.uid);
             modules.forEach(module -> Log.d(TAG, "\t" + module.packageName));
         });
-    }
-
-    private void readDexes(ZipFile apkFile, List<SharedMemory> preLoadedDexes) {
-        int secondary = 2;
-        for (var dexFile = apkFile.getEntry("classes.dex"); dexFile != null;
-             dexFile = apkFile.getEntry("classes" + secondary + ".dex"), secondary++) {
-            try (var in = apkFile.getInputStream(dexFile)) {
-                var memory = SharedMemory.create(null, in.available());
-                var byteBuffer = memory.mapReadWrite();
-                Channels.newChannel(in).read(byteBuffer);
-                SharedMemory.unmap(byteBuffer);
-                memory.setProtect(OsConstants.PROT_READ);
-                preLoadedDexes.add(memory);
-            } catch (IOException | ErrnoException e) {
-                Log.w(TAG, "Can not load " + dexFile + " in " + apkFile, e);
-            }
-        }
-    }
-
-    private void readName(ZipFile apkFile, String initName, List<String> names) {
-        var initEntry = apkFile.getEntry(initName);
-        if (initEntry == null) return;
-        try (var in = apkFile.getInputStream(initEntry)) {
-            var reader = new BufferedReader(new InputStreamReader(in));
-            String name;
-            while ((name = reader.readLine()) != null) {
-                name = name.trim();
-                if (name.isEmpty() || name.startsWith("#")) continue;
-                names.add(name);
-            }
-        } catch (IOException e) {
-            Log.e(TAG, "Can not open " + initEntry, e);
-        }
-    }
-
-    @Nullable
-    private PreLoadedApk loadModule(String path) {
-        if (path == null) return null;
-        var file = new PreLoadedApk();
-        var preLoadedDexes = new ArrayList<SharedMemory>();
-        var moduleClassNames = new ArrayList<String>(1);
-        var moduleLibraryNames = new ArrayList<String>(1);
-        try (var apkFile = new ZipFile(toGlobalNamespace(path))) {
-            readDexes(apkFile, preLoadedDexes);
-            readName(apkFile, "assets/xposed_init", moduleClassNames);
-            readName(apkFile, "assets/native_init", moduleLibraryNames);
-        } catch (IOException e) {
-            Log.e(TAG, "Can not open " + path, e);
-            return null;
-        }
-        if (preLoadedDexes.isEmpty()) return null;
-        if (moduleClassNames.isEmpty()) return null;
-        file.preLoadedDexes = preLoadedDexes;
-        file.moduleClassNames = moduleClassNames;
-        file.moduleLibraryNames = moduleLibraryNames;
-        return file;
     }
 
     // This is called when a new process created, use the cached result
