@@ -169,7 +169,7 @@ class ConfigFileManager {
     }
 
     @Nullable
-    static PreLoadedApk loadModule(String path) {
+    public static PreLoadedApk loadModule(String path) {
         if (path == null) return null;
         var file = new PreLoadedApk();
         var preLoadedDexes = new ArrayList<SharedMemory>();
