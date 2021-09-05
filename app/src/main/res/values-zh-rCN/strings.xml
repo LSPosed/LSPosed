@@ -18,11 +18,13 @@
   ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
+
 <resources>
     <!-- MainActivity -->
     <string name="info">信息</string>
     <string name="Modules">模块</string>
     <plurals name="modules_enabled_count">
+
         <item quantity="other">%d 模块已启用</item>
     </plurals>
     <string name="Logs">日志</string>
@@ -32,9 +34,10 @@
     <string name="module_repo_summary">模块仓库（Beta）</string>
     <string name="about_view_source_code"><![CDATA[在 %1$s 查看源码<br/>加入我们的 %2$s 频道]]></string>
     <string name="about_translators">译者：%s</string>
-    <string name="translators"><![CDATA[<a href="https://github.com/LSPosed/LSPosed">LSposed</a>]]></string>
+    <string name="translators"><![CDATA[<a href="https://github.com/LSPosed/LSPosed">LSPosed</a>]]></string>
+
     <string name="install">安装</string>
-    <string name="install_summary">点击安装 LSPosed</string>
+    <string name="install_summary">点按安装 LSPosed</string>
     <string name="not_installed">未安装</string>
     <string name="not_install_summary">LSPosed 未安装</string>
     <string name="activated">已激活</string>
@@ -54,6 +57,7 @@
     <string name="info_system_version">系统版本</string>
     <string name="info_device">设备</string>
     <string name="info_system_abi">系统架构</string>
+
     <!-- LogsActivity -->
     <string name="menuSaveToSd">保存</string>
     <string name="nav_item_logs_lsp">LSPosed 日志</string>
@@ -68,13 +72,15 @@
     <string name="menuReload">重新加载</string>
     <string name="logs_clear_failed_2">日志清理失败</string>
     <string name="verbose_log_not_avaliable">详细日志不可用，如果您只是启用了它而没有重新启动，请在重新启动后再试一次。</string>
+
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Xposed 模块尚未激活</string>
     <string name="module_is_not_activated_yet_detailed">%s 已安装, 但尚未激活</string>
     <string name="xposed_module_updated_notification_title">Xposed 模块已更新</string>
     <string name="xposed_module_updated_notification_content">%s 已更新，请强行停止并重新打开其作用域内的应用</string>
-    <string name="xposed_module_updated_notification_title_system">Xposed 模块已更新，需要重启系统</string>
-    <string name="xposed_module_updated_notification_content_system">%s 已被更新，因为范围包含系统框架，需要重启以应用更改</string>
+    <string name="xposed_module_updated_notification_title_system">Xposed 模块已更新，需要重新启动</string>
+    <string name="xposed_module_updated_notification_content_system">%s 已更新，由于作用域包含系统框架，需要重启设备以应用更改</string>
+
     <!-- ModulesActivity -->
     <string name="module_empty_description">(未提供介绍)</string>
     <string name="module_no_ui">该模块未提供用户界面</string>
@@ -93,6 +99,7 @@
     <string name="module_install_failed">安装失败</string>
     <string name="install_to_user">安装到用户 %s</string>
     <string name="install_to_user_message">要安装 %1$s 到用户 %2$s 吗？建议手动安装或多开，通过 LSPosed 强制安装可能会出现问题。</string>
+
     <!-- AppListActivity -->
     <string name="compile_speed">重新优化</string>
     <string name="compile_speed_msg">优化中</string>
@@ -104,7 +111,7 @@
     <string name="sort_by_package_name">包体名称</string>
     <string name="sort_by_install_time">安装时间</string>
     <string name="sort_by_update_time">更新时间</string>
-    <string name="sort_reverse">倒序</string>
+    <string name="sort_reverse">降序</string>
     <string name="menu_show_system_apps">系统应用</string>
     <string name="menu_sort">排序</string>
     <string name="enable_module">启用模块</string>
@@ -116,7 +123,7 @@
     <string name="use_recommended">推荐应用</string>
     <string name="no_scope_selected_has_recommended">未选择任何应用。选择推荐的应用？</string>
     <string name="use_recommended_message">选择推荐的应用?</string>
-    <string name="requested_by_module">推荐应用</string>
+    <string name="requested_by_module">推荐的应用</string>
     <string name="update_available">可用更新：%1$s</string>
     <string name="module_disabled_no_selection">由于未选择任何应用，模块 %s 已被禁用。</string>
     <string name="android_framework">系统框架</string>
@@ -129,10 +136,12 @@
     <string name="reboot_required">需要重新启动才能应用此更改</string>
     <string name="reboot">重新启动</string>
     <string name="menu_hide">隐藏</string>
+
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">在其它应用中查看</string>
     <string name="module_app_info">应用信息</string>
     <string name="list_empty">¯\\\\_(ツ)_\/¯\n空空如也</string>
+
     <!-- SettingsActivity -->
     <string name="settings_group_framework">框架</string>
     <string name="settings_enable_resources">启用资源钩子</string>
@@ -156,6 +165,7 @@
     <string name="settings_show_hidden_icon_apps_enabled">强制应用在启动器中显示图标</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">在 Android 10 之后，应用不被允许隐藏启动器图标。关闭本选项可禁用此系统功能。</string>
     <string name="settings_group_system">系统</string>
+
     <!-- Module Repo -->
     <string name="module_readme">自述文件</string>
     <string name="module_releases">版本</string>
@@ -169,11 +179,12 @@
     <string name="module_release_load_more">显示更旧的版本</string>
     <string name="module_release_no_more">没有更旧的版本</string>
     <string name="repo_load_failed">模块仓库加载失败：%s</string>
+
     <!-- CrashReportActivity -->
     <string name="app_destroyed">此应用可能被损坏，请从官方来源下载该应用的最新版本。</string>
-    <string name="outdated_core">LSPosed 应用比框架更新。请更新 LSPosed 框架。</string>
+    <string name="outdated_core">LSPosed 应用的版本高于框架。请更新 LSPosed 框架。</string>
     <string name="outdated_manager">LSPosed 框架的版本高于应用。请从 /data/adb/lspd/manager.apk 更新 LSPosed 应用。</string>
-    <string name="manager_crashed">管理器已崩溃</string>
-    <string name="copy_crash_info">复制崩溃信息</string>
+    <string name="manager_crashed">应用出现未知错误</string>
+    <string name="copy_crash_info">复制错误信息</string>
     <string name="copy_toast_msg">已复制</string>
 </resources>
