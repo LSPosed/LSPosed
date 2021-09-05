@@ -71,5 +71,5 @@ namespace lspd {
     }
 
     extern const int versionCode;
-    extern const char* const versionName;
+    extern const char *const versionName;
 }

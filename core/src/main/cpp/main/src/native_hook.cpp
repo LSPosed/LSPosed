@@ -36,6 +36,8 @@
 #include "art/runtime/instrumentation.h"
 #include "art/runtime/thread_list.h"
 #include "art/runtime/gc/scoped_gc_critical_section.h"
+#include "art/runtime/jit/profile_saver.h"
+#include "art/runtime/oat_file_manager.h"
 
 namespace lspd {
     static std::atomic_bool installed = false;
@@ -60,6 +62,8 @@ namespace lspd {
         art::instrumentation::DisableUpdateHookedMethodsCode(handle_libart);
         art::thread_list::ScopedSuspendAll::Setup(handle_libart);
         art::gc::ScopedGCCriticalSection::Setup(handle_libart);
+        art::DisableInline(handle_libart);
+        art::DisableBackgroundVerification(handle_libart);
         art_img.reset();
         LOGD("Inline hooks installed");
     }

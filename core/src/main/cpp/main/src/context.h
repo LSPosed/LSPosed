@@ -59,6 +59,8 @@ namespace lspd {
 
         void PreLoadDex(std::string_view dex_paths);
 
+        void InitLess(JNIEnv* env);
+
     private:
         inline static std::unique_ptr<Context> instance_ = std::make_unique<Context>();
         jobject inject_class_loader_ = nullptr;

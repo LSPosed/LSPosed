@@ -336,8 +336,22 @@ public final class XposedInit {
 
         var sb = new StringBuilder();
         var abis = Process.is64Bit() ? Build.SUPPORTED_64_BIT_ABIS : Build.SUPPORTED_32_BIT_ABIS;
-        for (String abi : abis) {
-            sb.append(apk).append("!/lib/").append(abi).append(File.pathSeparator);
+        if (file.hostApk != null) {
+            try {
+                var runtime = XposedHelpers.callStaticMethod(Class.forName("dalvik.system.VMRuntime"), "getRuntime");
+                var arch = (String) XposedHelpers.callMethod(runtime, "vmInstructionSet");
+                var hostDir = new File(file.hostApk).getParent();
+                for (String abi : abis) {
+                    sb.append(hostDir).append("/lib/").append(arch).append("/").append(name).append(".so!/lib/").append(abi).append(File.pathSeparator);
+                }
+            } catch (ClassNotFoundException e) {
+                Log.e(TAG, "  Cannot load module: " + name, e);
+                return false;
+            }
+        } else {
+            for (String abi : abis) {
+                sb.append(apk).append("!/lib/").append(abi).append(File.pathSeparator);
+            }
         }
         var librarySearchPath = sb.toString();
 

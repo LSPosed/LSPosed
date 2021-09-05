@@ -28,7 +28,7 @@ import java.io.PrintStream
 import java.security.MessageDigest
 
 plugins {
-    id("com.android.application")
+    id("com.android.library")
 }
 
 val moduleName = "LSPosed"
@@ -77,11 +77,8 @@ android {
     }
 
     defaultConfig {
-        applicationId = "org.lsposed.lspd"
         minSdk = androidMinSdkVersion
         targetSdk = androidTargetSdkVersion
-        versionCode = verCode
-        versionName = verName
         multiDexEnabled = false
 
         externalNativeBuild {
@@ -94,6 +91,8 @@ android {
 
         buildConfigField("int", "API_CODE", "$apiCode")
         buildConfigField("String", "DEFAULT_MANAGER_PACKAGE_NAME", "\"$defaultManagerPackageName\"")
+        buildConfigField("int", "VERSION_CODE", "$verCode")
+        buildConfigField("String", "VERSION_NAME", "\"$verName\"")
     }
 
     lint {
@@ -118,12 +117,13 @@ android {
         sourceCompatibility(androidSourceCompatibility)
     }
 
+    aidlPackagedList("org/lsposed/lspd/models/Module.aidl")
 }
 
 androidComponents.onVariants { v ->
-    val variant: ApplicationVariantImpl =
-        if (v is ApplicationVariantImpl) v
-        else (v as AnalyticsEnabledApplicationVariant).delegate as ApplicationVariantImpl
+    val variant: LibraryVariantImpl =
+        if (v is LibraryVariantImpl) v
+        else (v as AnalyticsEnabledLibraryVariant).delegate as LibraryVariantImpl
     val variantCapped = variant.name.capitalize()
     val variantLowered = variant.name.toLowerCase()
     val zipFileName = "$moduleName-v$verName-$verCode-$variantLowered.zip"
