@@ -64,6 +64,9 @@ public class ConfigFileManager {
         }
     }
 
+    private ConfigFileManager() {
+    }
+
     static void deleteFolderIfExists(Path target) throws IOException {
         if (Files.notExists(target)) return;
         Files.walkFileTree(target, new SimpleFileVisitor<>() {
