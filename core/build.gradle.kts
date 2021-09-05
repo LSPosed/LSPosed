@@ -17,8 +17,8 @@
  * Copyright (C) 2021 LSPosed Contributors
  */
 
-import com.android.build.api.component.analytics.AnalyticsEnabledApplicationVariant
-import com.android.build.api.variant.impl.ApplicationVariantImpl
+import com.android.build.api.component.analytics.AnalyticsEnabledLibraryVariant
+import com.android.build.api.variant.impl.LibraryVariantImpl
 import com.android.build.gradle.BaseExtension
 import com.android.ide.common.signing.KeystoreHelper
 import org.apache.commons.codec.binary.Hex
