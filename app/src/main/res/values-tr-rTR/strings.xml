@@ -48,7 +48,7 @@
     <string name="system_prop_incorrect"><![CDATA[<b>UYARI:</b> Sistem desteği yanlış.<br/>Bazı gerekli sistem özellikleri silindi veya değiştirildi.<br/>Modüller zaman geçersiz olabilir.]]></string>
     <string name="need_update">Güncelleme gerekiyor</string>
     <string name="please_update_summary">Lütfen LSPosed\'in en son sürümünü yükleyin</string>
-    <string name="lsposed_not_active">Lsposed şu anda yüklü veya etkin değil.</string>
+    <string name="lsposed_not_active">LSPosed şu anda yüklü veya etkin değil.</string>
     <string name="info_api_version">API sürümü</string>
     <string name="info_framework_version">Çerçeve sürümü</string>
     <string name="info_manager_version">Yönetici sürümü</string>
@@ -59,13 +59,13 @@
     <string name="menuSaveToSd">Kaydetme</string>
     <string name="nav_item_logs_lsp">LSPosed Günlüğü</string>
     <string name="nav_item_logs_module">Modül Günlükleri</string>
-    <string name="logs_save_failed2">kaydedilemedi:\n%s</string>
+    <string name="logs_save_failed2">Kaydedilemedi:\n%s</string>
     <string name="menuClearLog">Günlüğü şimdi temizle</string>
     <string name="logs_cleared">Günlük başarıyla temizlendi.</string>
     <string name="scroll_top">Yukarı kaydır</string>
     <string name="loading">Yükleniyor…</string>
     <string name="scroll_bottom">Aşağı kaydır</string>
-    <string name="logs_cannot_read">günlük okunamıyor: \n</string>
+    <string name="logs_cannot_read">Günlük okunamıyor: \n</string>
     <string name="menuReload">Tekrar yükle</string>
     <string name="logs_clear_failed_2">Günlük temizlenemedi</string>
     <string name="verbose_log_not_avaliable">Ayrıntılı günlük mevcut değil, yeniden başlatmadan etkinleştirdiyseniz, yeniden başlattıktan sonra tekrar deneyin.</string>
@@ -75,11 +75,11 @@
     <string name="xposed_module_updated_notification_title">Xposed modül güncellemesi</string>
     <string name="xposed_module_updated_notification_content">%s güncellendi, lütfen kapsamındaki uygulamaları durdurmaya ve yeniden başlatmaya zorlayın</string>
     <string name="xposed_module_updated_notification_title_system">Xposed modülü güncellendi, sistemin yeniden başlatılması gerekiyor</string>
-    <string name="xposed_module_updated_notification_content_system">%s Güncelleme kapsamı Sistem Çerçevesi içerdiğinden , değişiklikleri uygulamak için yeniden başlatma gereklidir</string>
+    <string name="xposed_module_updated_notification_content_system">%s Güncelleme kapsamı Sistem Çerçevesi içerdiğinden, değişiklikleri uygulamak için yeniden başlatma gereklidir</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(açıklama yapılmadı)</string>
     <string name="module_no_ui">Bu modül bir kullanıcı arayüzü sağlamaz</string>
-    <string name="warning_xposed_min_version">Bu modül daha yeni bir lsposed sürümü gerektiriyor (%d) ve bu nedenle etkinleştirilemez</string>
+    <string name="warning_xposed_min_version">Bu modül daha yeni bir Xposed sürümü gerektiriyor (%d) ve bu nedenle etkinleştirilemez</string>
     <string name="no_min_version_specified">Bu modül, ihtiyaç duyduğu Xposed sürümünü belirtmiyor.</string>
     <string name="warning_min_version_too_low">Bu modül Xposed sürümü için oluşturuldu %1$d, ancak sürümdeki uyumsuz değişiklikler nedeniyle %2$d, devre dışı bırakıldı</string>
     <string name="warning_installed_on_external_storage">Bu modül yüklenemiyor çünkü SD kartta yüklü, lütfen dahili depolama birimine taşıyın veya SD kart erişimine izin verin</string>
