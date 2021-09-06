@@ -29,7 +29,7 @@
     <string name="Settings">設置</string>
     <string name="About">關於</string>
     <string name="module_repo">倉庫</string>
-    <string name="module_repo_summary">模組倉庫（Beta）</string>
+    <string name="module_repo_summary">模組倉庫 (Beta)</string>
     <string name="about_view_source_code"><![CDATA[在 %1$s 查看源碼<br/>加入我們的 %2$s 頻道]]></string>
     <string name="about_translators">翻譯者：%s</string>
     <string name="translators"><![CDATA[<a href="https://github.com/LSPosed/LSPosed">LSPosed</a>]]></string>
@@ -46,7 +46,7 @@
     <string name="system_prop_incorrect_summary">系統屬性異常</string>
     <string name="system_prop_incorrect"><![CDATA[<b>警告:</b>系統屬性異常。<br/>一些必須的系統屬性被刪除或更改。<br/>模組可能會隨機失效。]]></string>
     <string name="need_update">需要更新</string>
-    <string name="please_update_summary">請安裝最新版本的LSPosed</string>
+    <string name="please_update_summary">請安裝最新版本的 LSPosed</string>
     <string name="lsposed_not_active">LSPosed 未安裝或未啟動</string>
     <string name="info_api_version">API 版本</string>
     <string name="info_framework_version">框架版本</string>
@@ -66,8 +66,8 @@
     <string name="scroll_bottom">滾動到底部</string>
     <string name="logs_cannot_read">無法讀取日誌: \n</string>
     <string name="menuReload">重新載入</string>
-    <string name="logs_clear_failed_2">Failed to clear the log</string>
-    <string name="verbose_log_not_avaliable">Verbose log is not available, if you just enabled it without reboot, try again after reboot.</string>
+    <string name="logs_clear_failed_2">無法清除日誌</string>
+    <string name="verbose_log_not_avaliable">詳細日誌不可用，如果你只是啟用它而沒有重啟，重啟後再試。</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Xposed 模組尚未啟動</string>
     <string name="module_is_not_activated_yet_detailed">%s 已安裝, 但尚未啟動</string>
