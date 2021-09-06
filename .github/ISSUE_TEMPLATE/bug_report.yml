@@ -33,11 +33,13 @@ body:
   - type: textarea
     attributes:
       label: Xposed Module List
+      render: shell
     validations:
       required: true
   - type: textarea
     attributes:
       label: Magisk Module List
+      render: shell
     validations:
       required: true
   - type: input
