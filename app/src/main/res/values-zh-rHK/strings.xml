@@ -42,6 +42,11 @@
     <string name="selinux_policy_not_loaded_summary">SEPolicy is not loaded properly</string>
     <string name="selinux_policy_not_loaded"><![CDATA[<b>WARNING:</b> SEPolicy is not loaded properly, modules that hook System Framework will not work.<br>Please report this to <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> developer.]]></string>
     <string name="system_inject_fail_summary">系統框架注入失敗</string>
+    <string name="system_inject_fail"><![CDATA[<b>警告:</b> 系統框架注入失敗。<br/>這是罕見情況。可能由於<b>Magisk</b>本身或者低質量Magisk模塊導致。<br/>請嘗試禁用除了Riru和LSPosed之外的模塊或者提交詳細日誌給開發者。]]></string>
+    <string name="system_prop_incorrect_summary">系統屬性異常</string>
+    <string name="system_prop_incorrect"><![CDATA[<b>警告:</b>系統屬性異常。<br/>一些必須的系統屬性被刪除或更改。<br/>模塊可能會隨機失效。]]></string>
+    <string name="need_update">需要更新</string>
+    <string name="please_update_summary">請安裝最新版本的LSPosed</string>
     <string name="lsposed_not_active">LSPosed 未安裝或未啟動</string>
     <string name="info_api_version">API version</string>
     <string name="info_framework_version">Framework version</string>
@@ -53,6 +58,7 @@
     <string name="menuSaveToSd">保存</string>
     <string name="nav_item_logs_lsp">詳細日誌</string>
     <string name="nav_item_logs_module">模組日誌</string>
+    <string name="logs_save_failed2">保存失敗:\n%s</string>
     <string name="menuClearLog">立即清理日誌</string>
     <string name="logs_cleared">日誌清理成功</string>
     <string name="scroll_top">滾動到頂部</string>
@@ -67,6 +73,8 @@
     <string name="module_is_not_activated_yet_detailed">%s 已安裝, 但尚未啟動</string>
     <string name="xposed_module_updated_notification_title">Xposed 模組已更新</string>
     <string name="xposed_module_updated_notification_content">%s 已更新</string>
+    <string name="xposed_module_updated_notification_title_system">Xposed模塊已更新，需要重啟系統。</string>
+    <string name="xposed_module_updated_notification_content_system">%s 已更新，由於作用域中包含系統框架，需要重啟系統。</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(未提供介紹)</string>
     <string name="module_no_ui">該模組未提供使用者介面</string>
@@ -80,6 +88,7 @@
     <string name="module_uninstall_message">Do you want to uninstall this module?</string>
     <string name="module_uninstalled">Uninstalled %1$s</string>
     <string name="module_uninstall_failed">Uninstall unsuccessful</string>
+    <string name="add_module_to_user">安裝模塊到用戶</string>
     <!-- AppListActivity -->
     <string name="compile_speed">重新優化</string>
     <string name="compile_speed_msg">優化中…</string>
