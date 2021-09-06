@@ -1,6 +1,7 @@
 name: Bug report
 description: Report errors or unexpected behavior.
 labels: [bug]
+title: "[Bug] "
 body:
   - type: markdown
     attributes:
@@ -72,5 +73,5 @@ body:
     attributes:
       label: Logs
       placeholder: Upload logs here
-      validations:
+    validations:
       required: true
