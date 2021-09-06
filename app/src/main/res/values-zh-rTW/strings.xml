@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ This file is part of LSPosed.
   ~
@@ -17,13 +18,11 @@
   ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
-
 <resources>
     <!-- MainActivity -->
     <string name="info">資訊</string>
     <string name="Modules">模組</string>
     <plurals name="modules_enabled_count">
-
         <item quantity="other">%d 個模組已啟用</item>
     </plurals>
     <string name="Logs">日誌</string>
@@ -34,7 +33,6 @@
     <string name="about_view_source_code"><![CDATA[在 %1$s 檢視原始碼<br/>加入我們的 %2$s 頻道]]></string>
     <string name="about_translators">翻譯者：%s</string>
     <string name="translators"><![CDATA[<a href="https://github.com/tony8077616">孟武.尼德霍格.龍</a>、<a href="https://github.com/david082321">david082321</a>]]></string>
-
     <string name="install">安裝</string>
     <string name="install_summary">點選安裝 LSPosed</string>
     <string name="not_installed">未安裝</string>
@@ -42,7 +40,7 @@
     <string name="activated">已啟用</string>
     <string name="partial_activated">部分啟用</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy 未被正確讀取</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[<b>警告：</b>SEPolicy 沒有被正確讀取，掛鉤系統框架的模組將無法運作。<br>請回報這類問題給<a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>開發者]]></string>
+    <string name="selinux_policy_not_loaded"><![CDATA[<b>警告：</b>SEPolicy 沒有被正確讀取，掛鉤系統框架的模組將無法運作。<br/>請回報這類問題給<a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>開發者]]></string>
     <string name="system_inject_fail_summary">系統框架注入失敗</string>
     <string name="system_inject_fail"><![CDATA[<b>警告：</b>系統注入失敗。<br/>這是極罕見的情況，可能是由 <b>Magisk</b> 或低品質 Magisk 模組導致。<br/>請嘗試禁用除 Riru 和 LSPosed 以外的 Magisk 模組，或向開發者提供完整日誌。]]></string>
     <string name="system_prop_incorrect_summary">系統屬性異常</string>
@@ -56,10 +54,9 @@
     <string name="info_system_version">系統版本</string>
     <string name="info_device">裝置版本</string>
     <string name="info_system_abi">系統架構</string>
-
     <!-- LogsActivity -->
     <string name="menuSaveToSd">儲存</string>
-    <string name="nav_item_logs_lsp">詳細日誌</string>
+    <string name="nav_item_logs_lsp">LSPosed 日誌</string>
     <string name="nav_item_logs_module">模組日誌</string>
     <string name="logs_save_failed2">儲存失敗：\n%s</string>
     <string name="menuClearLog">立即清理日誌</string>
@@ -71,7 +68,6 @@
     <string name="menuReload">重新載入</string>
     <string name="logs_clear_failed_2">日誌清理失敗</string>
     <string name="verbose_log_not_avaliable">詳細日誌不可用，如果您只是啟用了它而沒有重新啟動，請在重新啟動後再試一次。</string>
-
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Xposed 模組尚未啟用</string>
     <string name="module_is_not_activated_yet_detailed">%s 已安裝，但尚未啟用</string>
@@ -79,7 +75,6 @@
     <string name="xposed_module_updated_notification_content">%s 已更新</string>
     <string name="xposed_module_updated_notification_title_system">Xposed 模組已更新，需要重新啟動。</string>
     <string name="xposed_module_updated_notification_content_system">%s 已更新，由於作用域包含系統框架，需要重新啟動以套用修改。</string>
-
     <!-- ModulesActivity -->
     <string name="module_empty_description">（未提供介紹）</string>
     <string name="module_no_ui">該模組未提供使用者介面</string>
@@ -98,7 +93,6 @@
     <string name="module_install_failed">安裝模組失敗</string>
     <string name="install_to_user">安裝到使用者 %s</string>
     <string name="install_to_user_message">要安裝 %1$s 到使用者 %2$s 嗎？建議手動安裝或多開，透過 LSPosed 強制安裝可能會出現問題。</string>
-
     <!-- AppListActivity -->
     <string name="compile_speed">重新最佳化</string>
     <string name="compile_speed_msg">最佳化中……</string>
@@ -122,7 +116,7 @@
     <string name="use_recommended">推薦程式</string>
     <string name="no_scope_selected_has_recommended">未選擇任何程式。選擇推薦的程式？</string>
     <string name="use_recommended_message">選擇推薦的程式？</string>
-    <string name="requested_by_module">推薦的程式</string>
+    <string name="requested_by_module">推薦程式</string>
     <string name="update_available">可用更新：%1$s</string>
     <string name="module_disabled_no_selection">由於未選擇任何程式，模組 %s 已被停用。</string>
     <string name="android_framework">系統框架</string>
@@ -135,12 +129,10 @@
     <string name="reboot_required">需要重新啟動手機才能套用此修改</string>
     <string name="reboot">重新啟動</string>
     <string name="menu_hide">隱藏</string>
-
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">在其他應用程式中檢視</string>
     <string name="module_app_info">程式資訊</string>
     <string name="list_empty">¯\\\\_(ツ)_\/¯\n空空如也</string>
-
     <!-- SettingsActivity -->
     <string name="settings_group_framework">框架</string>
     <string name="settings_enable_resources">啟用資源鉤子</string>
@@ -164,7 +156,6 @@
     <string name="settings_show_hidden_icon_apps_enabled">強制應用程式在啟動器中顯示圖示</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">在 Android 10 之後，應用（特別是 Xposed 模組）不被允許隱藏啟動器圖示。關閉本選項以停用此功能。</string>
     <string name="settings_group_system">系統</string>
-
     <!-- Module Repo -->
     <string name="module_readme">自述檔案</string>
     <string name="module_releases">版本</string>
@@ -178,7 +169,6 @@
     <string name="module_release_load_more">顯示更早期的版本</string>
     <string name="module_release_no_more">沒有更早期的版本</string>
     <string name="repo_load_failed">模組倉庫載入失敗：%s</string>
-
     <!-- CrashReportActivity -->
     <string name="app_destroyed">此應用程式可能已毀損，請從官方來源下載該應用程式的最新版本。</string>
     <string name="outdated_core">LSPosed 應用程式的版本高於框架。請更新 LSPosed 框架。</string>
