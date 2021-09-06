@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ This file is part of LSPosed.
   ~
@@ -17,15 +18,11 @@
   ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
-
 <resources>
     <!-- MainActivity -->
     <string name="info">信息</string>
-    <string name="install">安裝</string>
-    <string name="install_summary">點按安裝 LSPosed</string>
     <string name="Modules">模組</string>
     <plurals name="modules_enabled_count">
-
         <item quantity="other">%d modules enabled</item>
     </plurals>
     <string name="Logs">日誌</string>
@@ -35,19 +32,22 @@
     <string name="module_repo_summary">模組倉庫（Beta）</string>
     <string name="about_view_source_code"><![CDATA[在 %1$s 查看源碼<br/>加入我們的 %2$s 頻道]]></string>
     <string name="about_translators">Translators: %s</string>
-
-    <string name="activated">Activated</string>
+    <string name="translators"><![CDATA[<a href="https://github.com/LSPosed/LSPosed">LSPosed</a>]]></string>
+    <string name="install">安裝</string>
+    <string name="install_summary">點按安裝 LSPosed</string>
     <string name="not_installed">未安裝</string>
+    <string name="not_install_summary">LSPosed is not Installed</string>
+    <string name="activated">Activated</string>
     <string name="partial_activated">Partially activated</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy is not loaded properly</string>
     <string name="selinux_policy_not_loaded"><![CDATA[<b>WARNING:</b> SEPolicy is not loaded properly, modules that hook System Framework will not work.<br>Please report this to <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> developer.]]></string>
+    <string name="lsposed_not_active">LSPosed 未安裝或未啟動</string>
     <string name="info_api_version">API version</string>
     <string name="info_framework_version">Framework version</string>
     <string name="info_manager_version">Manager version</string>
     <string name="info_system_version">System version</string>
     <string name="info_device">Device</string>
     <string name="info_system_abi">System ABI</string>
-
     <!-- LogsActivity -->
     <string name="menuSaveToSd">保存</string>
     <string name="nav_item_logs_lsp">詳細日誌</string>
@@ -60,16 +60,15 @@
     <string name="logs_cannot_read">無法讀取日誌: \n</string>
     <string name="menuReload">重新載入</string>
     <string name="logs_clear_failed_2">Failed to clear the log</string>
-
+    <string name="verbose_log_not_avaliable">Verbose log is not available, if you just enabled it without reboot, try again after reboot.</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Xposed 模組尚未啟動</string>
     <string name="module_is_not_activated_yet_detailed">%s 已安裝, 但尚未啟動</string>
+    <string name="xposed_module_updated_notification_title">Xposed 模組已更新</string>
     <string name="xposed_module_updated_notification_content">%s 已更新</string>
-
     <!-- ModulesActivity -->
     <string name="module_empty_description">(未提供介紹)</string>
     <string name="module_no_ui">該模組未提供使用者介面</string>
-    <string name="xposed_module_updated_notification_title">Xposed 模組已更新</string>
     <string name="warning_xposed_min_version">該模組需要更新版本的 Xposed(%d), 因此無法被啟動</string>
     <string name="no_min_version_specified">該模組未指定所需的 Xposed 版本</string>
     <string name="warning_min_version_too_low">該模組針對 Xposed %1$d 版本構建 , 由於不相容 %2$d 版本中的變更, 現已被停用</string>
@@ -80,7 +79,6 @@
     <string name="module_uninstall_message">Do you want to uninstall this module?</string>
     <string name="module_uninstalled">Uninstalled %1$s</string>
     <string name="module_uninstall_failed">Uninstall unsuccessful</string>
-
     <!-- AppListActivity -->
     <string name="compile_speed">重新優化</string>
     <string name="compile_speed_msg">優化中…</string>
@@ -115,11 +113,9 @@
     <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
     <string name="reboot_required">Reboot is required for this change to apply</string>
     <string name="reboot">Reboot</string>
-
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">在其他應用中查看</string>
     <string name="module_app_info">應用資訊</string>
-
     <!-- SettingsActivity -->
     <string name="settings_group_framework">框架</string>
     <string name="settings_enable_resources">啟用資源鉤子</string>
@@ -139,7 +135,6 @@
     <string name="theme_color_summary">應用程式中最常見的顏色</string>
     <string name="settings_show_hidden_icon_apps_enabled">（Android 10+）限制應用隱藏其啟動器圖標</string>
     <string name="settings_group_system">系統</string>
-
     <!-- Module Repo -->
     <string name="module_readme">讀我檔案</string>
     <string name="module_releases">版本</string>
@@ -153,12 +148,8 @@
     <string name="module_release_load_more">顯示更舊的版本</string>
     <string name="module_release_no_more">沒有更舊的版本</string>
     <string name="repo_load_failed">Failed to load module repo: %s</string>
-
+    <!-- CrashReportActivity -->
     <string name="app_destroyed">此應用程式已被損壞，請確保您從官方來源下載該應用程式。</string>
     <string name="outdated_manager">LSPosed Manager 和 LSPosed Core 的版本不一致。請重新安裝對應的版本。</string>
-    <string name="lsposed_not_active">LSPosed 未安裝或未啟動</string>
-    <string name="verbose_log_not_avaliable">Verbose log is not available, if you just enabled it without reboot, try again after reboot.</string>
-    <string name="not_install_summary">LSPosed is not Installed</string>
-    <string name="translators"><![CDATA[<a href="https://github.com/LSPosed/LSPosed">LSPosed</a>]]></string>
     <string name="copy_toast_msg">Copied</string>
 </resources>
