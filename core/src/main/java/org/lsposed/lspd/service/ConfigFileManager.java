@@ -40,7 +40,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipFile;
 
-public class ConfigFileManager {
+class ConfigFileManager {
     static final Path basePath = Paths.get("/data/adb/lspd");
     static final File managerApkPath = basePath.resolve("manager.apk").toFile();
     private static final Path lockPath = basePath.resolve("lock");
@@ -62,9 +62,6 @@ public class ConfigFileManager {
         } catch (IOException e) {
             Log.e(TAG, Log.getStackTraceString(e));
         }
-    }
-
-    private ConfigFileManager() {
     }
 
     static void deleteFolderIfExists(Path target) throws IOException {
@@ -172,7 +169,7 @@ public class ConfigFileManager {
     }
 
     @Nullable
-    public static PreLoadedApk loadModule(String path) {
+    static PreLoadedApk loadModule(String path) {
         if (path == null) return null;
         var file = new PreLoadedApk();
         var preLoadedDexes = new ArrayList<SharedMemory>();
