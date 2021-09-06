@@ -80,7 +80,7 @@
     <string name="module_no_ui">該模組未提供使用者介面</string>
     <string name="warning_xposed_min_version">該模組需要更新版本的 Xposed(%d), 因此無法被啟動</string>
     <string name="no_min_version_specified">該模組未指定所需的 Xposed 版本</string>
-    <string name="warning_min_version_too_low">該模組針對 Xposed %1$d 版本構建 , 由於不相容 %2$d 版本中的變更, 現已被停用</string>
+    <string name="warning_min_version_too_low">該模組針對 Xposed %1$d 版本構建, 由於不相容 %2$d 版本中的變更, 現已被停用</string>
     <string name="warning_installed_on_external_storage">此模組因被安裝在 SD 卡中而導致無法載入, 請將其移動到內部存儲</string>
     <string name="module_uninstall">卸載</string>
     <string name="module_settings">模組設置</string>
@@ -98,7 +98,7 @@
     <string name="compile_speed_msg">優化中…</string>
     <string name="compile_done">優化完成</string>
     <string name="app_launch">運行</string>
-    <string name="compile_failed">優化失敗或返回值為空</string>
+    <string name="compile_failed">優化失敗：返回值為空</string>
     <string name="compile_failed_with_info">優化失敗: </string>
     <string name="sort_by_name">應用名稱</string>
     <string name="sort_by_package_name">包體名稱</string>
@@ -126,7 +126,7 @@
     <string name="force_stop">強制停止</string>
     <string name="force_stop_dlg_title">真的要強制停止嗎？</string>
     <string name="force_stop_dlg_text">如果你強制停止應用，可能會導致異常。</string>
-    <string name="reboot_required">變更需要重啟後生效</string>
+    <string name="reboot_required">變更需要重啟生效</string>
     <string name="reboot">重啟</string>
     <string name="menu_hide">隱藏</string>
     <!-- ModulesActivity and AppListActivity -->
@@ -135,7 +135,7 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\n空空如也</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">框架</string>
-    <string name="settings_enable_resources">啟用資源鉤子</string>
+    <string name="settings_enable_resources">啟用資源鈎子</string>
     <string name="settings_enable_resources_summary"><b>警告: </b> 資源鈎子為實驗性的特性</string>
     <string name="pref_title_disable_verbose_log">禁用詳細日誌</string>
     <string name="pure_black_dark_theme">使用純黑深色主題</string>
@@ -153,7 +153,7 @@
     <string name="theme_color">主題顏色</string>
     <string name="theme_color_summary">應用程式中最常見的顏色</string>
     <string name="theme_color_system_accent">系統強調色</string>
-    <string name="settings_show_hidden_icon_apps_enabled">（Android 10+）限制應用隱藏其啟動器圖標</string>
+    <string name="settings_show_hidden_icon_apps_enabled">強制應用顯示其啟動器圖標</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">在Android 10之後，應用不再允許隱藏桌面圖標。關閉該選項以禁用該系統功能。</string>
     <string name="settings_group_system">系統</string>
     <!-- Module Repo -->
@@ -170,10 +170,10 @@
     <string name="module_release_no_more">沒有更舊的版本</string>
     <string name="repo_load_failed">模組倉庫加載失敗: %s</string>
     <!-- CrashReportActivity -->
-    <string name="app_destroyed">此應用程式已被損壞，請確保您從官方來源下載該應用程式。</string>
-    <string name="outdated_core">LSPosed管理器版本高於框架，請更新LSPosed框架。</string>
-    <string name="outdated_manager">LSPosed 管理器 和 LSPosed 核心的版本不一致。請重新安裝對應的版本。</string>
-    <string name="manager_crashed">管理器已崩潰。</string>
+    <string name="app_destroyed">此應用程式可能被損壞，請確保您從官方來源下載該應用程式的最新版本。</string>
+    <string name="outdated_core">LSPosed 管理器版本高於框架，請更新 LSPosed 框架。</string>
+    <string name="outdated_manager">LSPosed 管理器和 LSPosed 核心的版本不一致。請重新安裝對應的版本。</string>
+    <string name="manager_crashed">管理器已崩潰</string>
     <string name="copy_crash_info">複製崩潰訊息</string>
     <string name="copy_toast_msg">已複製</string>
 </resources>
