@@ -12,8 +12,8 @@ body:
       required: true
   - type: textarea
     attributes:
-      label: Describe the solution you'd like/描述你想要地解决方案
-      placeholder: A clear and concise description of what you want to happen./请清晰准确描述新特性地预期行为
+      label: Describe the solution you'd like/描述你想要的解决方案
+      placeholder: A clear and concise description of what you want to happen./请清晰准确描述新特性的预期行为
     validations:
       required: true
   - type: textarea
