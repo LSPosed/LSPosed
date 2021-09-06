@@ -20,6 +20,18 @@
   -->
 
 <resources>
-    <color name="system">@android:color/system_accent1_200</color>
-    <color name="system_background">@android:color/system_neutral1_800</color>
+    <color name="color_primary_md3">@color/color_primary_md3_dark</color>
+
+    <color name="color_background_md3">@color/color_background_md3_dark</color>
+
+    <color name="color_surface_md3">@color/color_surface_md3_dark</color>
+
+    <color name="color_background_floating_md3">@color/color_background_floating_md3_dark</color>
+
+    <color name="primary_text_md3">@color/primary_text_md3_dark</color>
+    <color name="primary_text_inverse_md3">@color/primary_text_md3_light</color>
+    <color name="secondary_text_md3">@color/secondary_text_md3_dark</color>
+    <color name="secondary_text_inverse_md3">@color/secondary_text_md3_light</color>
+    <color name="tertiary_text_md3">@color/tertiary_text_md3_dark</color>
+    <color name="tertiary_text_inverse_md3">@color/tertiary_text_md3_light</color>
 </resources>
