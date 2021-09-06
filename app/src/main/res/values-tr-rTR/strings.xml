@@ -128,7 +128,7 @@
     <string name="force_stop_dlg_title">Zorla durdurulsun mu?</string>
     <string name="force_stop_dlg_text">Bir uygulamayı durdurmaya zorlarsanız, hatalı davranabilir.</string>
     <string name="reboot_required">Bu değişikliğin geçerli olması için yeniden başlatma gerekiyor</string>
-    <string name="reboot">yeniden başlat</string>
+    <string name="reboot">Yeniden başlat</string>
     <string name="menu_hide">Gizle</string>
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">Diğer uygulamada görüntüle</string>
@@ -143,14 +143,14 @@
     <string name="pure_black_dark_theme_summary">Koyu tema etkinse saf siyah temayı kullanın</string>
     <string name="settings_group_theme">Tema</string>
     <string name="settings_backup_and_restore">Yedekle</string>
-    <string name="settings_backup_and_restore_summery">Modül ayarları ve lsposed ayarları yedekleyin ve geri yükleyin.</string>
+    <string name="settings_backup_and_restore_summery">Modül ayarları ve LSPosed ayarları yedekleyin ve geri yükleyin.</string>
     <string name="settings_backup">Yedek</string>
     <string name="settings_backup_failed2">Yedekleme başarısız oldu:\n%s</string>
     <string name="settings_restore">Geri yükle</string>
     <string name="settings_restore_failed2">Geri yüklenemedi:\n%s</string>
     <string name="group_network">Ağ</string>
     <string name="dns_over_http">HTTPS üzerinden DNS</string>
-    <string name="dns_over_http_summary">Bazı ülkelerde DNS zehirlenmesi için geçici çözümdür. </string>
+    <string name="dns_over_http_summary">Bazı ülkelerde DNS zehirlenmesi için geçici çözümdür</string>
     <string name="theme_color">Tema rengi</string>
     <string name="theme_color_summary">Uygulamada en sık görünen reni seçin</string>
     <string name="theme_color_system_accent">Sistem vurgu rengi</string>
@@ -158,12 +158,12 @@
     <string name="settings_show_hidden_icon_apps_enabled_summary">Android 10\'dan sonra, uygulamaların başlatıcı simgelerini gizlenmesine izin verilmez. Bu sistem özelliğini devre dışı bırakmak için düğmeyi kapatın.</string>
     <string name="settings_group_system">Sistem</string>
     <!-- Module Repo -->
-    <string name="module_readme">beni oku</string>
+    <string name="module_readme">Beni oku</string>
     <string name="module_releases">Sürümler</string>
     <string name="module_information">Bilgi</string>
     <string name="module_information_homepage">Ana Sayfa</string>
     <string name="module_information_source_url">Kaynak kodu</string>
-    <string name="module_information_collaborators">ortak çalışanlar</string>
+    <string name="module_information_collaborators">Ortak çalışanlar</string>
     <string name="module_release_view_assets">Dosyalar</string>
     <string name="menu_open_in_browser">Tarayıcıda aç</string>
     <string name="refresh">Yenile</string>
@@ -176,5 +176,5 @@
     <string name="outdated_manager">LSPosed çerçevesi, uygulamadan daha yenidir. Lütfen uygulamayı /data/adb/lspd/manager.apk adresinden manuel olarak güncelleyin.</string>
     <string name="manager_crashed">Yönetici çöktü</string>
     <string name="copy_crash_info">Çökme bilgilerini kopyala</string>
-    <string name="copy_toast_msg">kopyalandı</string>
+    <string name="copy_toast_msg">Kopyalandı</string>
 </resources>
