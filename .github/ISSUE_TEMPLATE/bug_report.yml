@@ -1,6 +1,7 @@
-name: Bug report
-description: Report errors or unexpected behavior.
+name: Bug report/反馈 Bug
+description: Report errors or unexpected behavior./反馈错误或异常行为。
 labels: [bug]
+title: "[Bug] "
 body:
   - type: markdown
     attributes:
@@ -8,9 +9,13 @@ body:
         Thanks for reporting issues of LSPosed!
 
         To make it easier for us to help you please enter detailed information below.
+        
+        感谢给 LSPosed 汇报问题！
+        为了使我们更好地帮助你，请提供以下信息。
+        为了防止重复汇报，标题请务必使用英文。
   - type: textarea
     attributes:
-      label: Steps to reproduce
+      label: Steps to reproduce/复现步骤
       placeholder: |
         1. 
         2. 
@@ -19,57 +24,60 @@ body:
       required: true
   - type: textarea
     attributes:
-      label: Expected behaviour
-      placeholder: Tell us what should happen
+      label: Expected behaviour/预期行为
+      placeholder: Tell us what should happen/正常情况下应该发生什么
     validations:
       required: true
   - type: textarea
     attributes:
-      label: Actual behaviour
-      placeholder: Tell us what happens instead
+      label: Actual behaviour/实际行为
+      placeholder: Tell us what happens instead/实际上发生了什么
     validations:
       required: true
   - type: textarea
     attributes:
-      label: Xposed Module List
+      label: Xposed Module List/Xposed 模块列表
+      render: shell
     validations:
       required: true
   - type: textarea
     attributes:
-      label: Magisk Module List
+      label: Magisk Module List/Magisk 模块列表
+      render: shell
     validations:
       required: true
   - type: input
     attributes:
-      label: LSPosed version
-      description:  Don't use 'latest', specify actual version, that's a reason to close your issue.
+      label: LSPosed version/LSPosed 版本
+      description:  Don't use 'latest'. Specify actual version with 4 digits, otherwise your issue will be closed./不要填用“最新版”。给出四位版本号，不然 issue 会被关闭。
     validations:
       required: true
   - type: input
     attributes:
-      label: Android version
+      label: Android version/安卓版本
     validations:
       required: true
   - type: input
     attributes:
-      label: Magisk version
+      label: Magisk version/Magisk 版本
     validations:
       required: true
   - type: input
     attributes:
-      label: Riru version
+      label: Riru version/Riru 版本
     validations:
       required: true
   - type: checkboxes
     id: latest
     attributes:
-      label: CI Version
-      description: By submitting this issue, you must use latest CI version of LSPosed
+      label: CI Version/CI 版本
+      description: By submitting this issue, you must use latest CI version of LSPosed/请确保你已经使用最新 CI 版本
       options:
-        - label: I am using latest CI version of LSPosed
+        - label: I am using latest CI version of LSPosed/我正在使用最新 CI 版本
           required: true
   - type: textarea
     attributes:
-      label: Logs
-      placeholder: Insert log.txt here (if necessary)
-      render: shell
+      label: Logs/日志
+      placeholder: Upload logs by clicking the bar on the bottom/点击文本框底栏上传日志文件
+    validations:
+      required: true
