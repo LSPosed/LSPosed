@@ -601,7 +601,11 @@ public class ConfigManager {
         // insert or update in two step since insert or replace will change the autoincrement mid
         int count = (int) db.insertWithOnConflict("modules", null, values, SQLiteDatabase.CONFLICT_IGNORE);
         if (count < 0) {
-            count = db.updateWithOnConflict("modules", values, "module_pkg_name=?", new String[]{packageName}, SQLiteDatabase.CONFLICT_IGNORE);
+            var cached = cachedModule.getOrDefault(packageName, null);
+            if (cached == null || cached.apkPath == null || !cached.apkPath.equals(apkPath))
+                count = db.updateWithOnConflict("modules", values, "module_pkg_name=?", new String[]{packageName}, SQLiteDatabase.CONFLICT_IGNORE);
+            else
+                count = 0;
         }
         if (count > 0) {
             // Called by oneway binder
