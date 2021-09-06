@@ -18,6 +18,7 @@
   ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
+
 <resources>
     <!-- MainActivity -->
     <string name="info">Bilgi</string>
@@ -34,7 +35,11 @@
     <string name="about_view_source_code"><![CDATA[%1$s adresindeki kaynak kodunu görüntüle<br/>%2$s kanalımıza katılın]]></string>
     <string name="about_translators">Çevirmenler: %s</string>
     <string name="translators"><![CDATA[<a href="https://t.me/BdrcnAYYDIN">Bedircan AYAYDIN</a>]]></string>
+
+    <string name="install">Yükle</string>
+    <string name="install_summary">LSPosed\'i yüklemek için dokunun</string>
     <string name="not_installed">Yüklenmedi</string>
+    <string name="not_install_summary">LSPosed Kurulu değil</string>
     <string name="activated">Aktif edildi</string>
     <string name="partial_activated">Kısmen etkinleştirildi</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy düzgün yüklenmemiş</string>
@@ -52,8 +57,12 @@
     <string name="info_system_version">Sistem sürümü</string>
     <string name="info_device">Cihaz</string>
     <string name="info_system_abi">Sistem ABI\'si</string>
+
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Kaydetme</string>
+    <string name="nav_item_logs_lsp">LSPosed Günlüğü</string>
+    <string name="nav_item_logs_module">Modül Günlükleri</string>
+    <string name="logs_save_failed2">kaydedilemedi:\n%s</string>
     <string name="menuClearLog">Günlüğü şimdi temizle</string>
     <string name="logs_cleared">Günlük başarıyla temizlendi.</string>
     <string name="scroll_top">Yukarı kaydır</string>
@@ -63,11 +72,15 @@
     <string name="menuReload">Tekrar yükle</string>
     <string name="logs_clear_failed_2">Günlük temizlenemedi</string>
     <string name="verbose_log_not_avaliable">Ayrıntılı günlük mevcut değil, yeniden başlatmadan etkinleştirdiyseniz, yeniden başlattıktan sonra tekrar deneyin.</string>
+
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Xposed modülü henüz etkinleştirilmedi</string>
     <string name="module_is_not_activated_yet_detailed">%s kuruldu, ancak henüz etkinleştirilmedi</string>
     <string name="xposed_module_updated_notification_title">Xposed modül güncellemesi</string>
     <string name="xposed_module_updated_notification_content">%s güncellendi, lütfen kapsamındaki uygulamaları durdurmaya ve yeniden başlatmaya zorlayın</string>
+    <string name="xposed_module_updated_notification_title_system">Xposed modülü güncellendi, sistemin yeniden başlatılması gerekiyor</string>
+    <string name="xposed_module_updated_notification_content_system">%s Güncelleme kapsamı Sistem Çerçevesi içerdiğinden , değişiklikleri uygulamak için yeniden başlatma gereklidir</string>
+
     <!-- ModulesActivity -->
     <string name="module_empty_description">(açıklama yapılmadı)</string>
     <string name="module_no_ui">Bu modül bir kullanıcı arayüzü sağlamaz</string>
@@ -82,9 +95,11 @@
     <string name="module_uninstalled">Kaldırıldı %1$s</string>
     <string name="module_uninstall_failed">Kaldırma başarısız</string>
     <string name="add_module_to_user">Kullanıcıya modül ekle</string>
+    <string name="module_installed">kullanıcıya %1$s eklendi %2$s</string>
     <string name="module_install_failed">Modül eklenemedi</string>
     <string name="install_to_user">kullanıcıya yükle %s</string>
     <string name="install_to_user_message">%2$s kullanıcısına %1$s yüklemek ister misiniz? Elle kurulum yapılması tavsiye edilir, LSPosed ile kurulumu zorlamak sorunlara neden olabilir.</string>
+
     <!-- AppListActivity -->
     <string name="compile_speed">Yeniden optimize et</string>
     <string name="compile_speed_msg">optimize ediliyor…</string>
@@ -96,6 +111,7 @@
     <string name="sort_by_package_name">Paket ismi</string>
     <string name="sort_by_install_time">Yükleme zamanı</string>
     <string name="sort_by_update_time">Güncelleme zamanı</string>
+    <string name="sort_reverse">Ters</string>
     <string name="menu_show_system_apps">Sistem uygulamaları</string>
     <string name="menu_sort">sıralama</string>
     <string name="enable_module">Modülü etkinleştirin</string>
@@ -103,6 +119,7 @@
     <string name="menu_show_games">Oyunlar</string>
     <string name="menu_show_modules">Modüller</string>
     <string name="failed_to_save_scope_list">Kapsam listesi kaydedilemedi</string>
+    <string name="app_description">%1$s\nVersion %2$s</string>
     <string name="use_recommended">Önerilen</string>
     <string name="no_scope_selected_has_recommended">Herhangi bir uygulama seçmediniz. Önerilen uygulamalar seçilsin mi?</string>
     <string name="use_recommended_message">Önerilen uygulamalar seçilsin mi?</string>
@@ -112,38 +129,43 @@
     <string name="android_framework">Sistem Çerçevesi</string>
     <string name="menu_backup_and_restore">Yedekleme</string>
     <string name="menu_backup">Yedekleme</string>
-    <string name="menu_restore">Onar</string>
+    <string name="menu_restore">Geri yükle</string>
     <string name="force_stop">Durmaya zorla</string>
     <string name="force_stop_dlg_title">Zorla durdurulsun mu?</string>
     <string name="force_stop_dlg_text">Bir uygulamayı durdurmaya zorlarsanız, hatalı davranabilir.</string>
     <string name="reboot_required">Bu değişikliğin geçerli olması için yeniden başlatma gerekiyor</string>
     <string name="reboot">yeniden başlat</string>
     <string name="menu_hide">Gizle</string>
+
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">Diğer uygulamada görüntüle</string>
     <string name="module_app_info">Uygulama bilgisi</string>
-    <string name="list_empty">¯\\\\_(ツ)_\/¯\Burada hiçbir şey</string>
+    <string name="list_empty">¯\\\\_(ツ)_\/¯\ Modül bulunamadı</string>
+
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Çerçeve</string>
     <string name="settings_enable_resources">Kaynak kancalarını etkinleştir</string>
-    <string name="settings_enable_resources_summary"><b>WARNING:</b> Kaynak kancaları deneyseldir</string>
+    <string name="settings_enable_resources_summary"><b>UYARI:</b> Kaynak kancaları deneyseldir</string>
     <string name="pref_title_disable_verbose_log">Ayrıntılı günlükleri devre dışı bırak</string>
     <string name="pure_black_dark_theme">Siyah koyu tema</string>
     <string name="pure_black_dark_theme_summary">Koyu tema etkinse saf siyah temayı kullanın</string>
     <string name="settings_group_theme">Tema</string>
-    <string name="settings_backup_and_restore">Yedekle ve yeniden yükle</string>
-    <string name="settings_backup_and_restore_summery">Modül listesini ve kapsam listelerini yedekleyin veya geri yükleyin.</string>
-    <string name="settings_backup">Yedekleme</string>
-    <string name="settings_restore">Onar</string>
+    <string name="settings_backup_and_restore">Yedekle</string>
+    <string name="settings_backup_and_restore_summery">Modül ayarları ve lsposed ayarları yedekleyin ve geri yükleyin.</string>
+    <string name="settings_backup">Yedek</string>
+    <string name="settings_backup_failed2">Yedekleme başarısız oldu:\n%s</string>
+    <string name="settings_restore">Geri yükle</string>
+    <string name="settings_restore_failed2">Geri yüklenemedi:\n%s</string>
     <string name="group_network">Ağ</string>
     <string name="dns_over_http">HTTPS üzerinden DNS</string>
     <string name="dns_over_http_summary">Bazı ülkelerde DNS zehirlenmesi için geçici çözümdür. </string>
     <string name="theme_color">Tema rengi</string>
-    <string name="theme_color_summary">Uygulamada en sık görünen renk</string>
+    <string name="theme_color_summary">Uygulamada en sık görünen reni seçin</string>
     <string name="theme_color_system_accent">Sistem vurgu rengi</string>
     <string name="settings_show_hidden_icon_apps_enabled">Uygulamaları başlatıcı simgelerini göstermeye zorla</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">Android 10\'dan sonra, uygulamaların başlatıcı simgelerini gizlenmesine izin verilmez. Bu sistem özelliğini devre dışı bırakmak için düğmeyi kapatın.</string>
     <string name="settings_group_system">Sistem</string>
+
     <!-- Module Repo -->
     <string name="module_readme">beni oku</string>
     <string name="module_releases">Sürümler</string>
@@ -151,14 +173,18 @@
     <string name="module_information_homepage">Ana Sayfa</string>
     <string name="module_information_source_url">Kaynak kodu</string>
     <string name="module_information_collaborators">ortak çalışanlar</string>
-    <string name="module_release_view_assets">Varlıklar</string>
+    <string name="module_release_view_assets">Dosyalar</string>
     <string name="menu_open_in_browser">Tarayıcıda aç</string>
     <string name="refresh">Yenile</string>
     <string name="module_release_load_more">Eski sürümleri göster</string>
     <string name="module_release_no_more">Daha fazla sürüm yok</string>
     <string name="repo_load_failed">Modül deposu yüklenemedi: %s</string>
+
     <!-- CrashReportActivity -->
     <string name="app_destroyed">Bu uygulama bozuk olabilir, lütfen bu uygulamanın en son sürümünü resmi kaynaktan indirin.</string>
+    <string name="outdated_core">LSPosed uygulaması çerçeveden daha yenidir. Lütfen LSPosed çerçevesini güncelleyin.</string>
     <string name="outdated_manager">LSPosed çerçevesi, uygulamadan daha yenidir. Lütfen uygulamayı /data/adb/lspd/manager.apk adresinden manuel olarak güncelleyin.</string>
+    <string name="manager_crashed">Yönetici çöktü</string>
+    <string name="copy_crash_info">Çökme bilgilerini kopyala</string>
     <string name="copy_toast_msg">kopyalandı</string>
 </resources>
