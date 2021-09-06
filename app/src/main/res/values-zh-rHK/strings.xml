@@ -20,10 +20,10 @@
   -->
 <resources>
     <!-- MainActivity -->
-    <string name="info">信息</string>
+    <string name="info">訊息</string>
     <string name="Modules">模組</string>
     <plurals name="modules_enabled_count">
-        <item quantity="other">%d modules enabled</item>
+        <item quantity="other">%d 個模組已啟用</item>
     </plurals>
     <string name="Logs">日誌</string>
     <string name="Settings">設置</string>
@@ -31,15 +31,15 @@
     <string name="module_repo">倉庫</string>
     <string name="module_repo_summary">模組倉庫（Beta）</string>
     <string name="about_view_source_code"><![CDATA[在 %1$s 查看源碼<br/>加入我們的 %2$s 頻道]]></string>
-    <string name="about_translators">Translators: %s</string>
+    <string name="about_translators">翻譯者：%s</string>
     <string name="translators"><![CDATA[<a href="https://github.com/LSPosed/LSPosed">LSPosed</a>]]></string>
     <string name="install">安裝</string>
     <string name="install_summary">點按安裝 LSPosed</string>
     <string name="not_installed">未安裝</string>
-    <string name="not_install_summary">LSPosed is not Installed</string>
-    <string name="activated">Activated</string>
-    <string name="partial_activated">Partially activated</string>
-    <string name="selinux_policy_not_loaded_summary">SEPolicy is not loaded properly</string>
+    <string name="not_install_summary">LSPosed 未安裝</string>
+    <string name="activated">已啟動</string>
+    <string name="partial_activated">部分啟動</string>
+    <string name="selinux_policy_not_loaded_summary">SEPolicy 未正常加載</string>
     <string name="selinux_policy_not_loaded"><![CDATA[<b>WARNING:</b> SEPolicy is not loaded properly, modules that hook System Framework will not work.<br>Please report this to <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> developer.]]></string>
     <string name="system_inject_fail_summary">系統框架注入失敗</string>
     <string name="system_inject_fail"><![CDATA[<b>警告:</b> 系統框架注入失敗。<br/>這是罕見情況。可能由於<b>Magisk</b>本身或者低質量Magisk模組導致。<br/>請嘗試禁用除了Riru和LSPosed之外的模組或者提交詳細日誌給開發者。]]></string>
