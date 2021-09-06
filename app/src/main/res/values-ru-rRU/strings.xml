@@ -47,7 +47,7 @@
     <string name="system_inject_fail_summary">Ошибка внедрения системного фреймворка</string>
     <string name="system_inject_fail"><![CDATA[<b>ВНИМАНИЕ:</b> Ошибка внедрения системного фреймворка.<br/>Это редкость и может быть вызвано <b>Magisk</b> или несовместимыми модулями Magisk.<br/>Пожалуйста, попрорбуйте отключить модули Magisk кроме Riru и LSPosed или пришлите полные логи разработчику]]></string>
     <string name="system_prop_incorrect_summary">Не правильные системные настройки</string>
-    <string name="system_prop_incorrect"><![CDATA[<b>ВНИМАНИЕ:</b> Не правильные системные настройки.<br/>Некоторые системные настройки нужные для работы удалены или изменены.<br/>Модули могут не работать должным образом.]]></string>
+    <string name="system_prop_incorrect"><![CDATA[<b>ВНИМАНИЕ:</b> Не правильные системные настройки.<br/>Некоторые системные настройки нужные для работы удалены или изменены.<br/>Модули могут не работать должным образом]]></string>
     <string name="need_update">Требуется обновление</string>
     <string name="please_update_summary">Установите последнюю версию LSPosed!</string>
     <string name="lsposed_not_active">LSPosed не установлен или не активирован!</string>
@@ -59,6 +59,9 @@
     <string name="info_system_abi">Разрядность системы ABI</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Сохранить</string>
+    <string name="nav_item_logs_lsp">Логи LSPosed</string>
+    <string name="nav_item_logs_module">Логи модулей</string>
+    <string name="logs_save_failed2">Ошибка сохранения:\n%s</string>
     <string name="menuClearLog">Очистить логи</string>
     <string name="logs_cleared">Логи успешно очищены</string>
     <string name="scroll_top">Прокрутить вверх</string>
@@ -73,6 +76,8 @@
     <string name="module_is_not_activated_yet_detailed">Модуль %s установлен но не включен</string>
     <string name="xposed_module_updated_notification_title">Модуль обновлен</string>
     <string name="xposed_module_updated_notification_content">%s обновлен, остановите и запустите приложения выбранные для модуля</string>
+    <string name="xposed_module_updated_notification_title_system">Модуль обновлен, требуется перезагрузка</string>
+    <string name="xposed_module_updated_notification_content_system">%s обновлен, так как выбран системный фреймворк для модуля, требуется перезагрузка для применения изменений</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(описание отсутствует)</string>
     <string name="module_no_ui">Этот модуль не содержит пользовательского интерфейса</string>
@@ -102,6 +107,7 @@
     <string name="sort_by_package_name">По названию пакета</string>
     <string name="sort_by_install_time">По времени установки</string>
     <string name="sort_by_update_time">По времени обновления</string>
+    <string name="sort_reverse">Обратная сортировка</string>
     <string name="menu_show_system_apps">Системные</string>
     <string name="menu_sort">Сортировать</string>
     <string name="enable_module">Включить модуль</string>
@@ -141,7 +147,9 @@
     <string name="settings_backup_and_restore">Резервное копирование и восстановление</string>
     <string name="settings_backup_and_restore_summery">Список модулей и включенных приложений</string>
     <string name="settings_backup">Создать</string>
+    <string name="settings_backup_failed2">Не удалось сделать резервную копию:\n%s</string>
     <string name="settings_restore">Восстановить</string>
+    <string name="settings_restore_failed2">Не удалось восстановить:\n%s</string>
     <string name="group_network">Сеть</string>
     <string name="dns_over_http">DNS через HTTPS</string>
     <string name="dns_over_http_summary">Протокол для выполнения разрешения DNS по протоколу HTTPS. Целью этого метода является повышение конфиденциальности и безопасности пользователей путем предотвращения перехвата и манипулирования данными DNS с помощью атак типа «Атака посредника»</string>
@@ -166,6 +174,9 @@
     <string name="repo_load_failed">Не удалось загрузить репозиторий модуля: %s</string>
     <!-- CrashReportActivity -->
     <string name="app_destroyed">Это приложение повреждено. Убедитесь, что загрузили его из официального источника</string>
+    <string name="outdated_core">Приложение LSPosed новее, чем фреймворк LSPosed. Обновите фреймворк LSPosed</string>
     <string name="outdated_manager">Фреймворк LSPosed новее, чем приложение LSPosed. Обновите приложение вручную из /data/adb/lspd/manager.apk</string>
+    <string name="manager_crashed">Сбой приложения</string>
+    <string name="copy_crash_info">Скопировать информацию о сбое</string>
     <string name="copy_toast_msg">Скопировано</string>
 </resources>
