@@ -25,8 +25,8 @@
     <plurals name="modules_enabled_count">
         <item quantity="one">Включен %d модуль</item>
         <item quantity="few">Включены %d модуля</item>
-        <item quantity="many">Включены %d модулей</item>
-        <item quantity="other">Включены %d модулей</item>
+        <item quantity="many">Включено %d модулей</item>
+        <item quantity="other">Включено %d модулей</item>
     </plurals>
     <string name="Logs">Логи</string>
     <string name="Settings">Настройки</string>
