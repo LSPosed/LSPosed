@@ -172,8 +172,8 @@
     <!-- CrashReportActivity -->
     <string name="app_destroyed">此應用程式已被損壞，請確保您從官方來源下載該應用程式。</string>
     <string name="outdated_core">LSPosed管理器版本搞於框架，請更新LSPosed框架。</string>
-    <string name="outdated_manager">LSPosed Manager 和 LSPosed Core 的版本不一致。請重新安裝對應的版本。</string>
+    <string name="outdated_manager">LSPosed 管理器 和 LSPosed 核心的版本不一致。請重新安裝對應的版本。</string>
     <string name="manager_crashed">管理器已崩潰。</string>
     <string name="copy_crash_info">複製崩潰訊息</string>
-    <string name="copy_toast_msg">Copied</string>
+    <string name="copy_toast_msg">已複製</string>
 </resources>
