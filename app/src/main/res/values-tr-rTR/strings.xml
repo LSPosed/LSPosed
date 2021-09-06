@@ -43,11 +43,11 @@
     <string name="selinux_policy_not_loaded_summary">SEPolicy düzgün yüklenmemiş</string>
     <string name="selinux_policy_not_loaded"><![CDATA[<b>UYARI:</b> SEPolicy düzgün yüklenmemiş, System Framework\'u bağlayan modüller çalışmayacaktır.<br/>Lütfen bunu rapor edin <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> developer.]]></string>
     <string name="system_inject_fail_summary">Sistem Çerçevesi enjeksiyonu başarısız oldu</string>
-    <string name="system_inject_fail"><![CDATA[<b>UYARI:</b> Sistem Çerçevesi enjekte başarısız oldu.<br/>Bu nadirdir ve neden olabilir <b>Magisk</b> Bazı düşük kaliteli magisk modülleri <br/>Lütfen Riru ve Lsposed dışındaki Magisk modüllerini devre dışı bırakmayı deneyin veya geliştiricilere tam günlüğü gönderin.]]></string>
+    <string name="system_inject_fail"><![CDATA[<b>UYARI:</b> Sistem Çerçevesi enjekte başarısız oldu.<br/>Bu nadirdir ve neden olabilir <b>Magisk</b> Bazı düşük kaliteli Magisk modülleri <br/>Lütfen Riru ve LSPosed dışındaki Magisk modüllerini devre dışı bırakmayı deneyin veya geliştiricilere tam günlüğü gönderin.]]></string>
     <string name="system_prop_incorrect_summary">Sistem desteği yanlış</string>
     <string name="system_prop_incorrect"><![CDATA[<b>UYARI:</b> Sistem desteği yanlış.<br/>Bazı gerekli sistem özellikleri silindi veya değiştirildi.<br/>Modüller zaman geçersiz olabilir.]]></string>
-    <string name="need_update">güncelleme gerekiyor</string>
-    <string name="please_update_summary">Lütfen Lsposed\'in en son sürümünü yükleyin</string>
+    <string name="need_update">Güncelleme gerekiyor</string>
+    <string name="please_update_summary">Lütfen LSPosed\'in en son sürümünü yükleyin</string>
     <string name="lsposed_not_active">Lsposed şu anda yüklü veya etkin değil.</string>
     <string name="info_api_version">API sürümü</string>
     <string name="info_framework_version">Çerçeve sürümü</string>
