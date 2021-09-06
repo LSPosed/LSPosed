@@ -1,10 +1,8 @@
 package org.lsposed.lspd.service;
 
 import static org.lsposed.lspd.service.ServiceManager.TAG;
-import static org.lsposed.lspd.service.ServiceManager.toGlobalNamespace;
 
 import android.os.ParcelFileDescriptor;
-import android.os.SELinux;
 import android.os.SharedMemory;
 import android.system.ErrnoException;
 import android.system.OsConstants;
@@ -40,7 +38,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipFile;
 
-class ConfigFileManager {
+public class ConfigFileManager {
     static final Path basePath = Paths.get("/data/adb/lspd");
     static final File managerApkPath = basePath.resolve("manager.apk").toFile();
     private static final Path lockPath = basePath.resolve("lock");
@@ -53,16 +51,6 @@ class ConfigFileManager {
     @SuppressWarnings("FieldCanBeLocal")
     private static FileLocker locker = null;
 
-    static {
-        try {
-            Files.createDirectories(basePath);
-            SELinux.setFileContext(basePath.toString(), "u:object_r:system_file:s0");
-            Files.createDirectories(configDirPath);
-            Files.createDirectories(logDirPath);
-        } catch (IOException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
-        }
-    }
 
     static void deleteFolderIfExists(Path target) throws IOException {
         if (Files.notExists(target)) return;
@@ -169,13 +157,13 @@ class ConfigFileManager {
     }
 
     @Nullable
-    static PreLoadedApk loadModule(String path) {
+    public static PreLoadedApk loadModule(String path) {
         if (path == null) return null;
         var file = new PreLoadedApk();
         var preLoadedDexes = new ArrayList<SharedMemory>();
         var moduleClassNames = new ArrayList<String>(1);
         var moduleLibraryNames = new ArrayList<String>(1);
-        try (var apkFile = new ZipFile(toGlobalNamespace(path))) {
+        try (var apkFile = new ZipFile(path)) {
             readDexes(apkFile, preLoadedDexes);
             readName(apkFile, "assets/xposed_init", moduleClassNames);
             readName(apkFile, "assets/native_init", moduleLibraryNames);
