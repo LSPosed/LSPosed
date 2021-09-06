@@ -132,6 +132,7 @@
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">在其他應用中查看</string>
     <string name="module_app_info">應用資訊</string>
+    <string name="list_empty">¯\\\\_(ツ)_\/¯\n空空如也</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">框架</string>
     <string name="settings_enable_resources">啟用資源鉤子</string>
@@ -143,13 +144,17 @@
     <string name="settings_backup_and_restore">備份與恢復</string>
     <string name="settings_backup_and_restore_summery">備份或恢復模組清單與作用域清單</string>
     <string name="settings_backup">備份</string>
+    <string name="settings_backup_failed2">備份失敗：\n%s</string>
     <string name="settings_restore">恢復</string>
+    <string name="settings_restore_failed2">恢復失敗：\n%s</string>
     <string name="group_network">網路</string>
     <string name="dns_over_http">安全 DNS（DoH）</string>
     <string name="dns_over_http_summary">解決某些地區的 DNS 污染問題</string>
     <string name="theme_color">主題顏色</string>
     <string name="theme_color_summary">應用程式中最常見的顏色</string>
+    <string name="theme_color_system_accent">系統強調色</string>
     <string name="settings_show_hidden_icon_apps_enabled">（Android 10+）限制應用隱藏其啟動器圖標</string>
+    <string name="settings_show_hidden_icon_apps_enabled_summary">在Android 10之後，應用不再允許隱藏桌面圖標。關閉該開關以禁用該系統功能。</string>
     <string name="settings_group_system">系統</string>
     <!-- Module Repo -->
     <string name="module_readme">讀我檔案</string>
@@ -166,6 +171,9 @@
     <string name="repo_load_failed">Failed to load module repo: %s</string>
     <!-- CrashReportActivity -->
     <string name="app_destroyed">此應用程式已被損壞，請確保您從官方來源下載該應用程式。</string>
+    <string name="outdated_core">LSPosed管理器版本搞於框架，請更新LSPosed框架。</string>
     <string name="outdated_manager">LSPosed Manager 和 LSPosed Core 的版本不一致。請重新安裝對應的版本。</string>
+    <string name="manager_crashed">管理器已崩潰。</string>
+    <string name="copy_crash_info">複製崩潰訊息</string>
     <string name="copy_toast_msg">Copied</string>
 </resources>
