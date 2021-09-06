@@ -1,30 +1,24 @@
 ---
-name: Feature request
-description: Suggest an idea.
+name: Feature request/新特性请求
+description: Suggest an idea./提出建议
 labels: [enhancement]
 title: "[Feature Request] "
 body:
   - type: textarea
     attributes:
-      label: Is your feature request related to a problem?
-      placeholder: A clear and concise description of what the problem is.
+      label: Is your feature request related to a problem?/你的请求是否与某个问题相关？
+      placeholder: A clear and concise description of what the problem is./请清晰准确表述该问题。
     validations:
       required: true
   - type: textarea
     attributes:
-      label: Describe the solution you'd like
-      placeholder: A clear and concise description of what you want to happen.
+      label: Describe the solution you'd like/描述你想要地解决方案
+      placeholder: A clear and concise description of what you want to happen./请清晰准确描述新特性地预期行为
     validations:
       required: true
   - type: textarea
     attributes:
-      label: Describe alternatives you've considered
-      placeholder: A clear and concise description of any alternative solutions or features you've considered.
-    validations:
-      required: true
-  - type: textarea
-    attributes:
-      label: Additional context
-      placeholder: Add any other context or screenshots about the feature request here.
+      label: Additional context/其他信息
+      placeholder: Add any other context or screenshots about the feature request here./其他关于新特性的信息或者截图
     validations:
       required: false
