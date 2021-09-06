@@ -1,0 +1,75 @@
+name: Bug report
+description: Report errors or unexpected behavior.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting issues of LSPosed!
+
+        To make it easier for us to help you please enter detailed information below.
+  - type: textarea
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. 
+        2. 
+        3. 
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Expected behaviour
+      placeholder: Tell us what should happen
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Actual behaviour
+      placeholder: Tell us what happens instead
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Xposed Module List
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Magisk Module List
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: LSPosed version
+      description:  Don't use 'latest', specify actual version, that's a reason to close your issue.
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Android version
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Magisk version
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Riru version
+    validations:
+      required: true
+  - type: checkboxes
+    id: latest
+    attributes:
+      label: CI Version
+      description: By submitting this issue, you must use latest CI version of LSPosed
+      options:
+        - label: I am using latest CI version of LSPosed
+          required: true
+  - type: textarea
+    attributes:
+      label: Logs
+      placeholder: Insert log.txt here (if necessary)
+      render: shell
