@@ -20,19 +20,15 @@
 <resources>
 
     <style name="ThemeOverlay.system">
-        <item name="colorPrimary">@color/system</item>
-        <item name="colorBackgroundFloating">@color/system_background</item>
-        <item name="android:colorBackground">@color/system_background</item>
-        <item name="android:windowBackground">@color/system_background</item>
-        <item name="dialogTheme">@style/ThemeOverlay.Material.Dialog.SystemAccent</item>
-        <item name="alertDialogTheme">@style/ThemeOverlay.Material.Dialog.Alert.SystemAccent</item>
-    </style>
-
-    <style name="ThemeOverlay.Material.Dialog.SystemAccent" parent="ThemeOverlay.Material.Dialog">
-        <item name="android:colorBackground">?colorBackgroundFloating</item>
-    </style>
-
-    <style name="ThemeOverlay.Material.Dialog.Alert.SystemAccent" parent="ThemeOverlay.Material.Dialog.Alert">
-        <item name="android:colorBackground">?colorBackgroundFloating</item>
+        <item name="colorPrimary">@color/color_primary_md3</item>
+        <item name="colorSurface">@color/color_surface_md3</item>
+        <item name="colorBackgroundFloating">@color/color_background_floating_md3</item>
+        <item name="android:colorBackground">@color/color_background_md3</item>
+        <item name="android:textColorPrimary">@color/primary_text_md3</item>
+        <item name="android:textColorPrimaryInverse">@color/primary_text_inverse_md3</item>
+        <item name="android:textColorSecondary">@color/secondary_text_md3</item>
+        <item name="android:textColorSecondaryInverse">@color/secondary_text_inverse_md3</item>
+        <item name="android:textColorTertiary">@color/tertiary_text_md3</item>
+        <item name="android:textColorTertiaryInverse">@color/tertiary_text_inverse_md3</item>
     </style>
 </resources>

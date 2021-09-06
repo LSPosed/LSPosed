@@ -98,6 +98,4 @@
     <style name="ThemeOverlay.material_blue_grey">
         <item name="colorPrimary">@color/material_blue_grey</item>
     </style>
-
-    <style name="ThemeOverlay.system" />
 </resources>
