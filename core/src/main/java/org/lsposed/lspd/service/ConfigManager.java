@@ -604,6 +604,8 @@ public class ConfigManager {
             var cached = cachedModule.getOrDefault(packageName, null);
             if (cached == null || cached.apkPath == null || !cached.apkPath.equals(apkPath))
                 count = db.updateWithOnConflict("modules", values, "module_pkg_name=?", new String[]{packageName}, SQLiteDatabase.CONFLICT_IGNORE);
+            else
+                count = 0;
         }
         if (count > 0) {
             // Called by oneway binder
