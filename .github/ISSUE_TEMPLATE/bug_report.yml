@@ -60,20 +60,6 @@ body:
       label: Riru version
     validations:
       required: true
-
-  - type: dropdown
-    attributes:
-      label: Installation source
-      multiple: false
-      options:
-        - Magisk 
-        - Microsoft Store
-        - Mac App Store
-        - Flatpak
-        - Snap
-        - Other (unofficial) source
-    validations:
-      required: true
   - type: checkboxes
     id: latest
     attributes:
