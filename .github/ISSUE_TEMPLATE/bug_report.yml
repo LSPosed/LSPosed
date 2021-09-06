@@ -71,5 +71,6 @@ body:
   - type: textarea
     attributes:
       label: Logs
-      placeholder: Insert log.txt here (if necessary)
-      render: shell
+      placeholder: Upload logs here
+      validations:
+      required: true
