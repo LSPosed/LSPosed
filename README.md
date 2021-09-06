@@ -52,6 +52,10 @@ We use our own module repository. We welcome developers to submit modules to our
 
 Notice: These community group don't accept any bug report, please use [Get help](#get-help) to report.
 
+## Translation Contribute
+
+You can contribute translation [here](https://lsposed.crowdin.com/lsposed).
+
 ## Credits 
 
 - [YAHFA](https://github.com/rk700/YAHFA): the core ART hooking framework
