@@ -29,11 +29,15 @@
     <string name="Logs">Log</string>
     <string name="Settings">Impostazioni</string>
     <string name="About">Informazioni</string>
+    <string name="module_repo">Repository</string>
     <string name="module_repo_summary">Repository dei moduli (Beta)</string>
     <string name="about_view_source_code"><![CDATA[Visualizza il codice sorgente su %1$s<br/>Unisciti al nostro canale %2$s]]></string>
     <string name="about_translators">Traduttori: %s</string>
     <string name="translators"><![CDATA[<a href="https://twitter.com/alex193a">alex193a</a>, <a href="https://github.com/Fs00">Fs00</a>]]></string>
+    <string name="install">Installa</string>
+    <string name="install_summary">Clicca per installare LSPosed</string>
     <string name="not_installed">Non installato</string>
+    <string name="not_install_summary">LSPosed non è installato</string>
     <string name="activated">Attivo</string>
     <string name="partial_activated">Parzialmente attivo</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy non è caricato correttamente</string>
@@ -53,6 +57,9 @@
     <string name="info_system_abi">ABI del sistema</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Salva</string>
+    <string name="nav_item_logs_lsp">Log LSPosed</string>
+    <string name="nav_item_logs_module">Log dei moduli</string>
+    <string name="logs_save_failed2">Salvataggio non riuscito:\n%s</string>
     <string name="menuClearLog">Cancella il log ora</string>
     <string name="logs_cleared">Log cancellato correttamente.</string>
     <string name="scroll_top">Scorri in alto</string>
@@ -67,6 +74,7 @@
     <string name="module_is_not_activated_yet_detailed">%s è stato installato, ma non è stato ancora attivato</string>
     <string name="xposed_module_updated_notification_title">Modulo Xposed aggiornato</string>
     <string name="xposed_module_updated_notification_content">%s è stato aggiornato</string>
+    <string name="xposed_module_updated_notification_title_system">Modulo Xposed aggiornato, necessario il riavvio di sistema</string>
     <string name="xposed_module_updated_notification_content_system">%s è stato aggiornato, poiché l\'ambito contiene il System Framework, il riavvio è richiesto per applicare le modifiche</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(nessuna descrizione fornita)</string>
@@ -97,6 +105,7 @@
     <string name="sort_by_package_name">Ordina per nome del pacchetto</string>
     <string name="sort_by_install_time">Ordina per data di installazione</string>
     <string name="sort_by_update_time">Ordina per data di aggiornamento</string>
+    <string name="sort_reverse">Inverso</string>
     <string name="menu_show_system_apps">Applicazioni di sistema</string>
     <string name="menu_sort">Ordina…</string>
     <string name="enable_module">Abilita modulo</string>
@@ -126,6 +135,7 @@
     <string name="module_app_info">Informazioni app</string>
     <string name="list_empty">¯\\\\_(ツ)_\\/¯\nNon c\'è nulla qui</string>
     <!-- SettingsActivity -->
+    <string name="settings_group_framework">Framework</string>
     <string name="settings_enable_resources">Abilita gli hook delle risorse</string>
     <string name="settings_enable_resources_summary"><b>ATTENZIONE:</b> gli hook delle risorse sono una funzionalità sperimentale</string>
     <string name="pref_title_disable_verbose_log">Disabilita il log verboso</string>
@@ -134,6 +144,8 @@
     <string name="settings_group_theme">Tema</string>
     <string name="settings_backup_and_restore">Backup e ripristino</string>
     <string name="settings_backup_and_restore_summery">Backup o ripristino dell\'elenco dei moduli e degli elenchi degli ambiti.</string>
+    <string name="settings_backup">Backup</string>
+    <string name="settings_backup_failed2">Salvataggio non riuscito:\n%s</string>
     <string name="settings_restore">Ripristina</string>
     <string name="settings_restore_failed2">Ripristino fallito:\n%s</string>
     <string name="group_network">Rete</string>
@@ -147,7 +159,7 @@
     <string name="settings_group_system">Sistema</string>
     <!-- Module Repo -->
     <string name="module_readme">Leggimi</string>
-    <string name="module_releases">Versioni</string>
+    <string name="module_releases">Rilasci</string>
     <string name="module_information">Informazioni</string>
     <string name="module_information_homepage">Pagina Iniziale</string>
     <string name="module_information_source_url">Codice sorgente</string>
