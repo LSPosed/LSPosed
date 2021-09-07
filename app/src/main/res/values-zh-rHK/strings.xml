@@ -138,7 +138,7 @@
     <string name="settings_enable_resources">啟用資源鈎子</string>
     <string name="settings_enable_resources_summary"><b>警告: </b> 資源鈎子為實驗性的特性</string>
     <string name="pref_title_disable_verbose_log">禁用詳細日誌</string>
-    <string name="pure_black_dark_theme">使用純黑深色主題</string>
+    <string name="pure_black_dark_theme">黑色主題</string>
     <string name="pure_black_dark_theme_summary">如果深色模式已啟用使用純黑色背景</string>
     <string name="settings_group_theme">主題</string>
     <string name="settings_backup_and_restore">備份與恢復</string>
@@ -172,8 +172,8 @@
     <!-- CrashReportActivity -->
     <string name="app_destroyed">此應用程式可能被損壞，請確保您從官方來源下載該應用程式的最新版本。</string>
     <string name="outdated_core">LSPosed 管理器版本高於框架，請更新 LSPosed 框架。</string>
-    <string name="outdated_manager">LSPosed 管理器和 LSPosed 核心的版本不一致。請重新安裝對應的版本。</string>
-    <string name="manager_crashed">管理器已崩潰</string>
+    <string name="outdated_manager">LSPosed 管理器和 LSPosed 核心的版本不一致。請手動從 /data/adb/lspd/manager.apk 更新管理器。</string>
+    <string name="manager_crashed">應用程式出現未知錯誤</string>
     <string name="copy_crash_info">複製崩潰訊息</string>
     <string name="copy_toast_msg">已複製</string>
 </resources>
