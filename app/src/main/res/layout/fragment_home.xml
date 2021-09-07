@@ -83,7 +83,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingHorizontal="16dp"
-                        android:paddingVertical="16dp">
+                        android:paddingVertical="24dp">
 
                         <ImageView
                             android:id="@+id/status_icon"
@@ -111,7 +111,7 @@
                             android:layout_below="@id/status_title"
                             android:layout_alignStart="@id/status_title"
                             android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:textColor="?android:attr/textColorPrimaryInverse" />
+                            android:textColor="?android:attr/textColorSecondaryInverse" />
                     </RelativeLayout>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -124,8 +124,7 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingHorizontal="16dp"
-                        android:paddingVertical="12dp">
+                        android:padding="16dp">
 
                         <ImageView
                             android:id="@+id/modules_icon"
@@ -164,8 +163,7 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingHorizontal="16dp"
-                        android:paddingVertical="12dp">
+                        android:padding="16dp">
 
                         <ImageView
                             android:id="@+id/download_icon"

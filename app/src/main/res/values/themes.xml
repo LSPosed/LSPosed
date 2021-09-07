@@ -130,7 +130,7 @@
 
     <style name="HomeItem">
         <item name="android:layout_marginHorizontal">16dp</item>
-        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginTop">8dp</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
         <item name="cardCornerRadius">8dp</item>
@@ -138,6 +138,7 @@
     </style>
 
     <style name="HomeItem.Primary">
+        <item name="android:layout_marginTop">16dp</item>
         <item name="cardElevation">@dimen/home_primary_elevation</item>
     </style>
 
@@ -155,8 +156,7 @@
         <item name="android:gravity">center_vertical</item>
         <item name="android:background">@drawable/item_background_round_nopadding</item>
         <item name="android:orientation">horizontal</item>
-        <item name="android:paddingHorizontal">16dp</item>
-        <item name="android:paddingVertical">12dp</item>
+        <item name="android:padding">16dp</item>
     </style>
 
 </resources>
