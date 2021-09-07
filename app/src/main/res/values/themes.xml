@@ -17,7 +17,7 @@
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Base.AppTheme.Light" parent="Theme.Material.Light.LightStatusBar">
         <item name="android:statusBarColor">?android:colorBackground</item>
@@ -126,6 +126,37 @@
         <item name="android:textAlignment">viewStart</item>
         <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Body2</item>
         <item name="android:paddingBottom">24dp</item>
+    </style>
+
+    <style name="HomeItem">
+        <item name="android:layout_marginHorizontal">16dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="cardCornerRadius">8dp</item>
+        <item name="cardPreventCornerOverlap">false</item>
+    </style>
+
+    <style name="HomeItem.Primary">
+        <item name="cardElevation">@dimen/home_primary_elevation</item>
+    </style>
+
+    <style name="HomeItem.Secondary">
+        <item name="cardElevation">@dimen/home_secondary_elevation</item>
+        <item name="android:outlineAmbientShadowColor" tools:targetApi="p">
+            @color/home_secondary_outline_ambient_shadow_color
+        </item>
+        <item name="android:outlineSpotShadowColor" tools:targetApi="p">
+            @color/home_secondary_outline_spot_shadow_color
+        </item>
+    </style>
+
+    <style name="HomeItem.Tertiary">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:background">@drawable/item_background_round_nopadding</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:paddingHorizontal">16dp</item>
+        <item name="android:paddingVertical">12dp</item>
     </style>
 
 </resources>

@@ -51,6 +51,7 @@ import org.lsposed.manager.util.chrome.LinkTransformationMethod;
 import java.util.Locale;
 
 import rikka.core.res.ResourcesKt;
+import rikka.widget.borderview.BorderView;
 
 public class HomeFragment extends BaseFragment {
 
@@ -69,10 +70,12 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        FragmentMainBinding mainBinding = FragmentMainBinding.inflate(inflater, container, false);
-        snackbar = mainBinding.snackbar;
-        binding = FragmentHomeBinding.bind(mainBinding.snackbar);
-        return mainBinding.getRoot();
+        binding = FragmentHomeBinding.inflate(inflater, container, false);
+
+        setupToolbar(binding.toolbar, R.string.app_name);
+        binding.toolbar.setNavigationIcon(null);
+        binding.nestedScrollView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setRaised(!top));
+        return binding.getRoot();
     }
 
     @Override
@@ -109,9 +112,6 @@ public class HomeFragment extends BaseFragment {
                     .setView(binding.getRoot())
                     .show();
         });
-        Glide.with(binding.appIcon)
-                .load(wrap(activity.getApplicationInfo(), getResources().getConfiguration().hashCode()))
-                .into(binding.appIcon);
         int cardBackgroundColor;
         if (isBinderAlive) {
             if (!ConfigManager.isSepolicyLoaded()) {
@@ -151,7 +151,7 @@ public class HomeFragment extends BaseFragment {
                 binding.download.setVisibility(View.GONE);
             }
             binding.statusIcon.setImageResource(R.drawable.ic_error);
-            Snackbar.make(snackbar, R.string.lsposed_not_active, Snackbar.LENGTH_INDEFINITE).show();
+            Snackbar.make(binding.snackbar, R.string.lsposed_not_active, Snackbar.LENGTH_INDEFINITE).show();
         }
         binding.status.setCardBackgroundColor(cardBackgroundColor);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -172,7 +172,7 @@ public class HomeFragment extends BaseFragment {
         @Override
         public void onClick(View v) {
             if (requireInstalled && !ConfigManager.isBinderAlive()) {
-                Snackbar.make(snackbar, R.string.lsposed_not_active, Snackbar.LENGTH_LONG).show();
+                Snackbar.make(binding.snackbar, R.string.lsposed_not_active, Snackbar.LENGTH_LONG).show();
             } else {
                 getNavController().navigate(fragment);
             }
