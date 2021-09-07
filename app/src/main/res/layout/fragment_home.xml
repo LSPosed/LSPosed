@@ -18,23 +18,53 @@
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/snackbar"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:consumeSystemWindowsInsets="start|end"
+    app:edgeToEdge="true"
+    app:fitsSystemWindowsInsets="start|end">
+
+    <rikka.material.widget.AppBarLayout
+        android:id="@+id/app_bar"
+        style="?appBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            app:logo="@drawable/ic_launcher"
+            app:contentInsetStart="24dp"
+            app:titleMarginStart="48dp"
+            app:subtitleTextAppearance="@android:style/TextAppearance.Material.Widget.Toolbar.Subtitle"
+            app:titleTextAppearance="@android:style/TextAppearance.Material.Widget.Toolbar.Title"
+            app:popupTheme="?actionBarPopupTheme" />
+
+    </rikka.material.widget.AppBarLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:clipChildren="false"
+        android:paddingTop="?actionBarSize"
         app:fitsSystemWindowsInsets="top|bottom"
         tools:ignore="MissingPrefix">
 
-        <androidx.core.widget.NestedScrollView
+        <rikka.widget.borderview.BorderNestedScrollView
             android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="none">
+            app:borderTopVisibility="whenTop"
+            app:borderTopDrawable="@null"
+            app:borderBottomVisibility="never">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -43,61 +73,22 @@
                 android:orientation="vertical"
                 tools:context=".ui.activity.MainActivity">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="72dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="10dp"
-                    android:clipChildren="false"
-                    android:clipToPadding="false">
-
-                    <ImageView
-                        android:id="@+id/app_icon"
-                        android:layout_width="42dp"
-                        android:layout_height="42dp"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="16dp"
-                        android:contentDescription="@string/app_name" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="10dp"
-                        android:layout_toEndOf="@id/app_icon"
-                        android:contentDescription="@string/app_name"
-                        android:text="@string/app_name"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                        android:textSize="20sp"
-                        tools:ignore="RelativeOverlap" />
-                </RelativeLayout>
-
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/status"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="16dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:foreground="?attr/selectableItemBackground"
-                    app:cardBackgroundColor="#4CAF50"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="4dp"
-                    app:cardPreventCornerOverlap="false">
+                    style="@style/HomeItem.Primary">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingStart="18dp"
-                        android:paddingTop="20dp"
-                        android:paddingEnd="18dp"
-                        android:paddingBottom="20dp">
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="16dp">
 
                         <ImageView
                             android:id="@+id/status_icon"
-                            android:layout_width="28dp"
-                            android:layout_height="28dp"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
                             android:layout_centerVertical="true"
                             app:srcCompat="@drawable/ic_check_circle"
                             app:tint="?android:attr/textColorPrimaryInverse" />
@@ -106,9 +97,11 @@
                             android:id="@+id/status_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="25dp"
+                            android:layout_marginStart="24dp"
                             android:layout_toEndOf="@id/status_icon"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:fontFamily="sans-serif-medium"
+                            android:textSize="16sp"
+                            android:textAppearance="?android:attr/textAppearanceListItem"
                             android:textColor="?android:attr/textColorPrimaryInverse" />
 
                         <TextView
@@ -117,8 +110,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@id/status_title"
                             android:layout_alignStart="@id/status_title"
-                            android:layout_marginTop="5dp"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
                             android:textColor="?android:attr/textColorPrimaryInverse" />
                     </RelativeLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -127,29 +119,18 @@
                     android:id="@+id/modules"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginTop="10dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:outlineAmbientShadowColor="#3A000000"
-                    android:outlineSpotShadowColor="#3A000000"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="4dp"
-                    app:cardPreventCornerOverlap="false">
+                    style="@style/HomeItem.Secondary">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingStart="18dp"
-                        android:paddingTop="16dp"
-                        android:paddingEnd="18dp"
-                        android:paddingBottom="16dp">
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="12dp">
 
                         <ImageView
                             android:id="@+id/modules_icon"
-                            android:layout_width="28dp"
-                            android:layout_height="28dp"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
                             android:layout_centerVertical="true"
                             android:contentDescription="@string/Modules"
                             app:srcCompat="@drawable/ic_extension" />
@@ -158,10 +139,11 @@
                             android:id="@+id/modules_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="25dp"
+                            android:layout_marginStart="24dp"
                             android:layout_toEndOf="@id/modules_icon"
                             android:text="@string/Modules"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                            android:textSize="16sp"
+                            android:textAppearance="?android:attr/textAppearanceListItem" />
 
                         <TextView
                             android:id="@+id/modules_summary"
@@ -169,9 +151,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@id/modules_title"
                             android:layout_alignStart="@id/modules_title"
-                            android:layout_marginTop="2dp"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                            android:textColor="@android:color/darker_gray" />
+                            android:textAppearance="?android:attr/textAppearanceSmall" />
                     </RelativeLayout>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -179,29 +159,18 @@
                     android:id="@+id/download"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginTop="10dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:outlineAmbientShadowColor="#3A000000"
-                    android:outlineSpotShadowColor="#3A000000"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="4dp"
-                    app:cardPreventCornerOverlap="false">
+                    style="@style/HomeItem.Secondary">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingStart="18dp"
-                        android:paddingTop="16dp"
-                        android:paddingEnd="18dp"
-                        android:paddingBottom="16dp">
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="12dp">
 
                         <ImageView
                             android:id="@+id/download_icon"
-                            android:layout_width="28dp"
-                            android:layout_height="28dp"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
                             android:layout_centerVertical="true"
                             android:contentDescription="@string/module_repo"
                             app:srcCompat="@drawable/ic_get_app" />
@@ -210,10 +179,11 @@
                             android:id="@+id/download_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="25dp"
+                            android:layout_marginStart="24dp"
                             android:layout_toEndOf="@id/download_icon"
                             android:text="@string/module_repo"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                            android:textSize="16sp"
+                            android:textAppearance="?android:attr/textAppearanceListItem" />
 
                         <TextView
                             android:id="@+id/download_summary"
@@ -221,10 +191,8 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@id/download_title"
                             android:layout_alignStart="@id/download_title"
-                            android:layout_marginTop="2dp"
                             android:text="@string/module_repo_summary"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                            android:textColor="@android:color/darker_gray" />
+                            android:textAppearance="?android:attr/textAppearanceSmall" />
                     </RelativeLayout>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -232,84 +200,65 @@
                     android:id="@+id/logs"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/item_background_round_nopadding"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:orientation="horizontal"
-                    android:padding="18dp">
+                    style="@style/HomeItem.Tertiary">
 
                     <ImageView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:contentDescription="@string/Logs"
                         app:srcCompat="@drawable/ic_assignment" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="25dp"
+                        android:layout_marginStart="24dp"
                         android:text="@string/Logs"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                        android:textSize="16sp"
+                        android:textAppearance="?android:attr/textAppearanceListItem" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/settings"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/item_background_round_nopadding"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:orientation="horizontal"
-                    android:padding="18dp">
+                    style="@style/HomeItem.Tertiary">
 
                     <ImageView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:contentDescription="@string/Settings"
                         app:srcCompat="@drawable/ic_settings" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="25dp"
+                        android:layout_marginStart="24dp"
                         android:text="@string/Settings"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                        android:textAppearance="?android:attr/textAppearanceListItem" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/about"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/item_background_round_nopadding"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:orientation="horizontal"
-                    android:padding="18dp">
+                    style="@style/HomeItem.Tertiary">
 
                     <ImageView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:contentDescription="@string/About"
                         app:srcCompat="@drawable/ic_info" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="25dp"
+                        android:layout_marginStart="24dp"
                         android:text="@string/About"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                        android:textSize="16sp"
+                        android:textAppearance="?android:attr/textAppearanceListItem" />
                 </LinearLayout>
 
             </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
+        </rikka.widget.borderview.BorderNestedScrollView>
     </FrameLayout>
-</merge>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

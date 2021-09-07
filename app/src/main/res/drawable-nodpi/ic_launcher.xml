@@ -14,18 +14,23 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
   ~
-  ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 
-<resources>
-    <color name="color_primary_light">@color/google_blue_600</color>
-    <color name="color_primary_dark">@color/google_blue_300</color>
-    <color name="color_primary">@color/color_primary_light</color>
-
-    <color name="ic_launcher_foreground">@android:color/white</color>
-    <color name="ic_launcher_background">@color/material_pink_200</color>
-
-    <color name="home_secondary_outline_ambient_shadow_color">@color/material_grey_500</color>
-    <color name="home_secondary_outline_spot_shadow_color">@color/material_grey_300</color>
-</resources>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@color/ic_launcher_background" />
+            <size
+                android:width="32dp"
+                android:height="32dp" />
+        </shape>
+    </item>
+    <item
+        android:width="32dp"
+        android:height="32dp">
+        <inset
+            android:inset="-8dp"
+            android:drawable="@drawable/ic_launcher_foreground" />
+    </item>
+</layer-list>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -14,18 +14,10 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
   ~
-  ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 
 <resources>
-    <color name="color_primary_light">@color/google_blue_600</color>
-    <color name="color_primary_dark">@color/google_blue_300</color>
-    <color name="color_primary">@color/color_primary_light</color>
-
-    <color name="ic_launcher_foreground">@android:color/white</color>
-    <color name="ic_launcher_background">@color/material_pink_200</color>
-
-    <color name="home_secondary_outline_ambient_shadow_color">@color/material_grey_500</color>
-    <color name="home_secondary_outline_spot_shadow_color">@color/material_grey_300</color>
+    <dimen name="home_primary_elevation">12dp</dimen>
+    <dimen name="home_secondary_elevation">8dp</dimen>
 </resources>
