@@ -67,6 +67,7 @@
     <string name="module_is_not_activated_yet_detailed">%s è stato installato, ma non è stato ancora attivato</string>
     <string name="xposed_module_updated_notification_title">Modulo Xposed aggiornato</string>
     <string name="xposed_module_updated_notification_content">%s è stato aggiornato</string>
+    <string name="xposed_module_updated_notification_content_system">%s è stato aggiornato, poiché l\'ambito contiene il System Framework, il riavvio è richiesto per applicare le modifiche</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(nessuna descrizione fornita)</string>
     <string name="module_no_ui">Questo modulo non fornisce un\'interfaccia utente</string>
@@ -111,6 +112,8 @@
     <string name="update_available">Aggiornamento disponibile: %1$s</string>
     <string name="module_disabled_no_selection">Il modulo %s è stato disabilitato poiché nessuna app è stata selezionata.</string>
     <string name="android_framework">Framework di sistema</string>
+    <string name="menu_backup_and_restore">Backup</string>
+    <string name="menu_backup">Backup</string>
     <string name="menu_restore">Ripristina</string>
     <string name="force_stop">Interrompi forzatamente</string>
     <string name="force_stop_dlg_title">Interrompere forzatamente?</string>
@@ -132,7 +135,9 @@
     <string name="settings_backup_and_restore">Backup e ripristino</string>
     <string name="settings_backup_and_restore_summery">Backup o ripristino dell\'elenco dei moduli e degli elenchi degli ambiti.</string>
     <string name="settings_restore">Ripristina</string>
+    <string name="settings_restore_failed2">Ripristino fallito:\n%s</string>
     <string name="group_network">Rete</string>
+    <string name="dns_over_http">DNS su HTTPS</string>
     <string name="dns_over_http_summary">Soluzione alternativa all\'avvelenamento della cache DNS in alcune nazioni</string>
     <string name="theme_color">Colore del tema</string>
     <string name="theme_color_summary">Colore che appare più frequentemente nell\'app</string>
@@ -144,6 +149,7 @@
     <string name="module_readme">Leggimi</string>
     <string name="module_releases">Versioni</string>
     <string name="module_information">Informazioni</string>
+    <string name="module_information_homepage">Pagina Iniziale</string>
     <string name="module_information_source_url">Codice sorgente</string>
     <string name="module_information_collaborators">Collaboratori</string>
     <string name="module_release_view_assets">Risorse</string>
@@ -154,6 +160,9 @@
     <string name="repo_load_failed">Impossibile caricare il repository dei moduli: %s</string>
     <!-- CrashReportActivity -->
     <string name="app_destroyed">Questa applicazione è stata distrutta, assicurati di scaricarla dalla fonte ufficiale.</string>
+    <string name="outdated_core">L\'app LSPosed è più recente del framework. Si prega di aggiornare il framework LSPosed.</string>
     <string name="outdated_manager">Le versioni di LSPosed Manager e LSPosed Core non sono coerenti. Reinstalla la versione corrispondente.</string>
+    <string name="manager_crashed">Manager andato in errore</string>
+    <string name="copy_crash_info">Copia info crash</string>
     <string name="copy_toast_msg">Copiato</string>
 </resources>
