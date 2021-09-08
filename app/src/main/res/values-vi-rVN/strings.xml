@@ -28,6 +28,7 @@
     <string name="Logs">Nhật ký</string>
     <string name="Settings">Cài đặt</string>
     <string name="About">Về chúng tôi</string>
+    <string name="report_issue">Báo cáo lỗi</string>
     <string name="module_repo">Kho</string>
     <string name="module_repo_summary">Kho mô-đun (Dùng thử)</string>
     <string name="about_view_source_code"><![CDATA[Xem mã nguồn tại %1$s<br/>Tham gia %2$s nhóm của chúng tôi]]></string>
@@ -40,8 +41,11 @@
     <string name="activated">Đã kích hoạt</string>
     <string name="partial_activated">Một phần được kích hoạt</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy không được nạp 1 cách hoàn thiện</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Những mô-đun mà can thiệp vào System Framework sẽ không làm việc.<br/>Hãy báo cáo lỗi này nhà phát triển của <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>.]]></string>
     <string name="system_inject_fail_summary">Nhúng vào System Framework thất bại</string>
+    <string name="system_inject_fail"><![CDATA[Trường hợp này khá hiếm khi xảy ra và có thể lý do bởi <b>Magisk</b> hoặc 1 số mô-đun Magisk kém chất lượng.<br/>Hãy thử disable vô hiệu hóa những mô-đun Magisk đó, thử chạy riêng Riru và LSPosed mà thôi hoặc thông báo log tới những nhà phát triển.]]></string>
     <string name="system_prop_incorrect_summary">System prop không đúng</string>
+    <string name="system_prop_incorrect"><![CDATA[Một số thuộc tính hệ thống cần thiết đã bị xóa hoặc sửa đổi.<br/> Đôi khi, các mô-đun có thể mất hiệu lực.]]></string>
     <string name="need_update">Cần được cập nhật</string>
     <string name="please_update_summary">Xin cài đặt phiên bản mới nhất của LSPosed</string>
     <string name="lsposed_not_active">LSPosed hiện tại không được cài đặt hoặc được kích hoạt.</string>
@@ -71,8 +75,58 @@
     <string name="xposed_module_updated_notification_title">Mô-đun Xposed đã được cập nhật</string>
     <string name="xposed_module_updated_notification_content">%s đã được cập nhật, xin hãy buộc dừng và khởi động lại ứng dụng liên quan</string>
     <string name="xposed_module_updated_notification_title_system">Mô-đun Xposed đã được cập nhật, yêu cầu khởi động lại hệ thống</string>
+    <string name="xposed_module_updated_notification_content_system">%s đã được cập nhật, phạm vi hoạt động đã bao gồm System Framework, thì khởi động lại thiết bị là bắt buộc</string>
     <!-- ModulesActivity -->
+    <string name="module_empty_description">(chưa có mô tả)</string>
+    <string name="module_no_ui">Mô-đun này không cung cấp giao diện người dùng</string>
+    <string name="warning_xposed_min_version">Mô-đun này yêu cầu phiên bản Xposed (%d) và đó là lý do chưa được kích hoạt</string>
+    <string name="no_min_version_specified">Mô-đun này không chỉ định phiên bản Xposed cần thiết để khởi chạy.</string>
+    <string name="warning_min_version_too_low">Mô-đun này được tạo bởi phiên bản Xposed %1$d, nhưng vì lý do không tương thích với phiên bản %2$d, nên đã bị vô hiệu hóa</string>
+    <string name="warning_installed_on_external_storage">Mô-đun này không được nạp vì nó được cài đặt trên thẻ nhớ SD, xin hay chuyển nó vào bộ nhớ trong</string>
+    <string name="module_uninstall">Gỡ cài đặt</string>
+    <string name="module_settings">Thiết lập Mô-đun</string>
+    <string name="view_in_repo">Xem ở trên Kho</string>
+    <string name="module_uninstall_message">Bạn có muốn gỡ mô-đun này?</string>
+    <string name="module_uninstalled">Đã gỡ cài đặt %1$s</string>
+    <string name="module_uninstall_failed">Gỡ cài đặt thành công</string>
+    <string name="add_module_to_user">Thêm mô-đun tới người dùng</string>
+    <string name="module_installed">Đã thêm %1$s tới người dùng %2$s</string>
+    <string name="module_install_failed">Thêm mô-đun thất bại</string>
+    <string name="install_to_user">Cài đặt tới người dùng %s</string>
+    <string name="install_to_user_message">Muốn cài %1$s tới người dùng %2$s? Khuyến cáo bạn nên cài đặt thủ công, buộc cài đặt qua LSPosed có thể xảy ra vấn đề không mong muốn.</string>
     <!-- AppListActivity -->
+    <string name="compile_speed">Tối ưu lại</string>
+    <string name="compile_speed_msg">Đang tối ưu…</string>
+    <string name="compile_done">Tối ưu hoàn tất</string>
+    <string name="app_launch">Khởi chạy</string>
+    <string name="compile_failed">Tối ưu thất bại: trả về giá trị trống</string>
+    <string name="compile_failed_with_info">Tôi ưu thất bại: </string>
+    <string name="sort_by_name">Tên ứng dụng</string>
+    <string name="sort_by_package_name">Tên gói ứng dụng</string>
+    <string name="sort_by_install_time">Thời gian cài đặt</string>
+    <string name="sort_by_update_time">Thời gian cập nhật</string>
+    <string name="sort_reverse">Đảo ngược</string>
+    <string name="menu_show_system_apps">Ứng dụng hệ thống</string>
+    <string name="menu_sort">Sắp xếp</string>
+    <string name="enable_module">Kích hoạt mô-đun</string>
+    <string name="no_scope_selected">Bạn đã không lựa chọn bất kỳ ứng dụng nào. Tiếp tục chứ?</string>
+    <string name="menu_show_games">Ứng dụng trò chơi</string>
+    <string name="menu_show_modules">Ứng dụng mô-đun</string>
+    <string name="failed_to_save_scope_list">Lưu danh sách phạm vi thất bại</string>
+    <string name="app_description">%1$s\nPhiên bản %2$s</string>
+    <string name="use_recommended">Khuyến cáo</string>
+    <string name="no_scope_selected_has_recommended">Bạn đã không lựa chọn bất kỳ ứng dụng nào. Lựa chọn những ứng dụng được khuyến cáo?</string>
+    <string name="use_recommended_message">Lựa chọn những ứng dụng được khuyến cáo?</string>
+    <string name="requested_by_module">Đã được khuyến cáo</string>
+    <string name="update_available">Cập nhật khả dụng: %1$s</string>
+    <string name="module_disabled_no_selection">Mô-đun %s đã được vô hiệu do không có ứng dụng phạm vi được lựa chọn.</string>
+    <string name="android_framework">Framework Hệ thống</string>
+    <string name="menu_backup_and_restore">Sao lưu</string>
+    <string name="menu_backup">Sao lưu</string>
+    <string name="menu_restore">Phục hồi</string>
+    <string name="force_stop">Buộc dừng</string>
+    <string name="force_stop_dlg_title">Buộc dừng?</string>
+    <string name="force_stop_dlg_text">Nếu bạn buộc dừng ứng dụng, nó có thể gặp lỗi hoặc sai sót.</string>
     <string name="reboot_required">Khởi động lại hệ thống là bắt buộc cho thay đổi này</string>
     <string name="reboot">Khởi động lại</string>
     <string name="menu_hide">Ẩn</string>
@@ -120,4 +174,7 @@
     <string name="app_destroyed">Ứng dụng này có thể bị phá hủy, vui lòng tải xuống phiên bản mới nhất của ứng dụng này từ nguồn chính thức.</string>
     <string name="outdated_core">Ứng dụng LSPosed đang mới hơn framework. Xin hãy cập nhật LSPosed framework.</string>
     <string name="outdated_manager">LSPosed framework đang mới hơn phiên bản ứng dụng quản lý. Xin hãy cập nhật ứng dụng tại /data/adb/lspd/manager.apk thủ công.</string>
+    <string name="manager_crashed">Quản lý hỏng hóc</string>
+    <string name="copy_crash_info">Sao chép thông tin hỏng hóc</string>
+    <string name="copy_toast_msg">Đã sao chép</string>
 </resources>
