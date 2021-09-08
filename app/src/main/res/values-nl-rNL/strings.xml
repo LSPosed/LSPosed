@@ -21,6 +21,7 @@
 <resources>
     <!-- MainActivity -->
     <string name="info">Informatie</string>
+    <string name="Modules">Modules</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d module ingeschakeld</item>
         <item quantity="other">%d modules ingeschakeld</item>
@@ -28,16 +29,26 @@
     <string name="Logs">Logboeken</string>
     <string name="Settings">Instellingen</string>
     <string name="About">Over</string>
+    <string name="report_issue">Probleem melden</string>
     <string name="module_repo">Opslagplaats</string>
     <string name="module_repo_summary">Module opslagplaats (Beta)</string>
     <string name="about_view_source_code"><![CDATA[Bekijk de broncode op %1$s<br/>Sluit je aan bij onze %2$s kanaal]]></string>
     <string name="about_translators">Vertaler: %1$s</string>
     <string name="translators"><![CDATA[<a href="https://github.com/Pandemic-XDA">Pandemic-XDA</a>]]></string>
+    <string name="install">Installeren</string>
+    <string name="install_summary">Tik om LSPosed te installeren</string>
     <string name="not_installed">Niet geïnstalleerd</string>
+    <string name="not_install_summary">LSPosed is niet geinstalleerd</string>
     <string name="activated">Geactiveerd</string>
     <string name="partial_activated">Gedeeltelijk geactiveerd</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy is niet correct geladen</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Modules die System Framework vasthaken werken niet.<br/>Meld dit aan de <br/>Meld dit aan de <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> ontwikkelaar.]]></string>
     <string name="system_inject_fail_summary">Systeem Framework injectie is mislukt</string>
+    <string name="system_inject_fail"><![CDATA[Dit is zeldzaam en kan worden veroorzaakt door <b>Magisk</b> of enkele Magisk modules van lage kwaliteit.<br/>Probeer Magisk-modules anders dan Riru en Verlies uit te schakelen of verstuur het volledige logboek naar ontwikkelaars.]]></string>
+    <string name="system_prop_incorrect_summary">Systeem prop incorrect</string>
+    <string name="system_prop_incorrect"><![CDATA[Enkele noodzakelijke systeemeigenschappen verwijderd of gewijzigd.<br/>Modules kunnen af en toe ongeldig worden.]]></string>
+    <string name="need_update">Bijwerken is nodig</string>
+    <string name="please_update_summary">Installeer de laatste versie van LSPosed</string>
     <string name="lsposed_not_active">LSPosed is momenteel niet geïnstalleerd of actief.</string>
     <string name="info_api_version">API versie</string>
     <string name="info_framework_version">Framework versie</string>
@@ -47,6 +58,9 @@
     <string name="info_system_abi">Systeem ABI</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Opslaan</string>
+    <string name="nav_item_logs_lsp">LSPosed logboeken</string>
+    <string name="nav_item_logs_module">Modules Logbestanden</string>
+    <string name="logs_save_failed2">Opslaan mislukt:\n%s</string>
     <string name="menuClearLog">Wis het logboek nu</string>
     <string name="logs_cleared">Log succesvol gewist.</string>
     <string name="scroll_top">Scroll naar boven</string>
@@ -61,6 +75,7 @@
     <string name="module_is_not_activated_yet_detailed">%1$s is geïnstalleerd, maar is nog niet geactiveerd</string>
     <string name="xposed_module_updated_notification_title">LSPosed module bijgewerkt</string>
     <string name="xposed_module_updated_notification_content">%1$s is geupdate</string>
+    <string name="xposed_module_updated_notification_title_system">Xposed-module bijgewerkt, systeem opnieuw opstarten vereist</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(geen beschrijving gegeven)</string>
     <string name="module_no_ui">Deze module biedt geen gebruikersinterface</string>
