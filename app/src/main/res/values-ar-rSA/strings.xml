@@ -20,6 +20,13 @@
   -->
 <resources>
     <!-- MainActivity -->
+    <string name="info">المعلومات</string>
+    <string name="Modules">الإضافات</string>
+    <string name="Logs">السجلات</string>
+    <string name="Settings">الإعدادات</string>
+    <string name="About">حول</string>
+    <string name="report_issue">الإبلاغ عن مشكلة</string>
+    <string name="module_repo">المستودع</string>
     <!-- LogsActivity -->
     <!-- Notification -->
     <!-- ModulesActivity -->
