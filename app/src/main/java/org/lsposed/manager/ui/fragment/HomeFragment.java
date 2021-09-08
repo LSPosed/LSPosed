@@ -19,10 +19,13 @@
 
 package org.lsposed.manager.ui.fragment;
 
+import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -37,9 +40,9 @@ import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.DialogAboutBinding;
 import org.lsposed.manager.databinding.FragmentHomeBinding;
-import org.lsposed.manager.ui.activity.base.BaseActivity;
 import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
 import org.lsposed.manager.ui.dialog.InfoDialogBuilder;
+import org.lsposed.manager.ui.dialog.WarningDialogBuilder;
 import org.lsposed.manager.util.ModuleUtil;
 import org.lsposed.manager.util.NavUtil;
 import org.lsposed.manager.util.chrome.LinkTransformationMethod;
@@ -56,22 +59,18 @@ public class HomeFragment extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
 
-        setupToolbar(binding.toolbar, R.string.app_name);
+        setupToolbar(binding.toolbar, getString(R.string.app_name), R.menu.menu_home);
         binding.toolbar.setNavigationIcon(null);
         binding.nestedScrollView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setRaised(!top));
-        return binding.getRoot();
-    }
 
-    @Override
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        BaseActivity activity = (BaseActivity) requireActivity();
-        boolean isBinderAlive = ConfigManager.isBinderAlive();
-        boolean needUpdate = App.needUpdate();
+        Activity activity = requireActivity();
         binding.status.setOnClickListener(v -> {
-            if (isBinderAlive && !needUpdate) {
-                new InfoDialogBuilder(activity).setTitle(R.string.info).show();
+            if (ConfigManager.isBinderAlive() && !App.needUpdate()) {
+                if (!ConfigManager.isSepolicyLoaded() || !ConfigManager.systemServerRequested() || !ConfigManager.dex2oatFlagsLoaded()) {
+                    new WarningDialogBuilder(activity).show();
+                } else {
+                    new InfoDialogBuilder(activity).setTitle(R.string.info).show();
+                }
             } else {
                 NavUtil.startURL(activity, getString(R.string.about_source));
             }
@@ -80,51 +79,74 @@ public class HomeFragment extends BaseFragment {
         binding.download.setOnClickListener(new StartFragmentListener(R.id.action_repo_fragment, false));
         binding.logs.setOnClickListener(new StartFragmentListener(R.id.action_logs_fragment, true));
         binding.settings.setOnClickListener(new StartFragmentListener(R.id.action_settings_fragment, false));
-        binding.about.setOnClickListener(v -> {
+        binding.issue.setOnClickListener(view -> NavUtil.startURL(activity, "https://github.com/LSPosed/LSPosed/issues"));
+
+        updateStates(requireActivity(), ConfigManager.isBinderAlive(), App.needUpdate());
+        return binding.getRoot();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId == R.id.menu_refresh) {
+            updateStates(requireActivity(), ConfigManager.isBinderAlive(), App.needUpdate());
+        } else if (itemId == R.id.menu_info) {
+            new InfoDialogBuilder(requireActivity()).setTitle(R.string.info).show();
+        } else if (itemId == R.id.menu_about) {
+            Activity activity = requireActivity();
             DialogAboutBinding binding = DialogAboutBinding.inflate(LayoutInflater.from(requireActivity()), null, false);
-            binding.sourceCode.setMovementMethod(LinkMovementMethod.getInstance());
-            binding.sourceCode.setTransformationMethod(new LinkTransformationMethod(activity));
-            binding.sourceCode.setText(HtmlCompat.fromHtml(getString(
+            binding.designAboutTitle.setText(R.string.app_name);
+            binding.designAboutInfo.setMovementMethod(LinkMovementMethod.getInstance());
+            binding.designAboutInfo.setTransformationMethod(new LinkTransformationMethod(activity));
+            SpannableStringBuilder sb = new SpannableStringBuilder(HtmlCompat.fromHtml(getString(
                     R.string.about_view_source_code,
                     "<b><a href=\"https://github.com/LSPosed/LSPosed\">GitHub</a></b>",
                     "<b><a href=\"https://t.me/LSPosed\">Telegram</a></b>"), HtmlCompat.FROM_HTML_MODE_LEGACY));
-            binding.translators.setMovementMethod(LinkMovementMethod.getInstance());
-            binding.translators.setTransformationMethod(new LinkTransformationMethod(activity));
-            binding.translators.setText(HtmlCompat.fromHtml(getString(R.string.about_translators, getString(R.string.translators)), HtmlCompat.FROM_HTML_MODE_LEGACY));
-            binding.version.setText(String.format(Locale.US, "LSPosed %s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
+            sb.append("\n\n");
+            sb.append(HtmlCompat.fromHtml(getString(R.string.about_translators, getString(R.string.translators)), HtmlCompat.FROM_HTML_MODE_LEGACY));
+            binding.designAboutInfo.setText(sb);
+            binding.designAboutVersion.setText(String.format(Locale.US, "%s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
             new BlurBehindDialogBuilder(activity)
                     .setView(binding.getRoot())
                     .show();
-        });
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void updateStates(Activity activity, boolean binderAlive, boolean needUpdate) {
         int cardBackgroundColor;
-        if (isBinderAlive) {
-            if (!ConfigManager.isSepolicyLoaded()) {
-                binding.statusTitle.setText(R.string.partial_activated);
-                cardBackgroundColor = ResourceUtils.resolveColor(activity.getTheme(), rikka.material.R.attr.colorWarning);
-                binding.statusIcon.setImageResource(R.drawable.ic_warning);
-                binding.statusSummary.setText(R.string.selinux_policy_not_loaded_summary);
-            } else if (!ConfigManager.systemServerRequested()) {
-                binding.statusTitle.setText(R.string.partial_activated);
-                cardBackgroundColor = ResourceUtils.resolveColor(activity.getTheme(), rikka.material.R.attr.colorWarning);
-                binding.statusIcon.setImageResource(R.drawable.ic_warning);
-                binding.statusSummary.setText(R.string.system_inject_fail_summary);
-            } else if (!ConfigManager.dex2oatFlagsLoaded()) {
-                binding.statusTitle.setText(R.string.partial_activated);
-                cardBackgroundColor = ResourceUtils.resolveColor(activity.getTheme(), rikka.material.R.attr.colorWarning);
-                binding.statusIcon.setImageResource(R.drawable.ic_warning);
-                binding.statusSummary.setText(R.string.system_prop_incorrect_summary);
-            } else if (needUpdate) {
+        if (binderAlive) {
+            StringBuilder sb = new StringBuilder(String.format(Locale.US, "%s (%d)",
+                    ConfigManager.getXposedVersionName(), ConfigManager.getXposedVersionCode()));
+            if (needUpdate) {
+                cardBackgroundColor = ResourceUtils.resolveColor(activity.getTheme(), R.attr.colorInstall);
                 binding.statusTitle.setText(R.string.need_update);
+                binding.statusIcon.setImageResource(R.drawable.ic_round_update_24);
+                sb.append("\n\n");
+                sb.append(getString(R.string.please_update_summary));
+            } else if (!ConfigManager.isSepolicyLoaded() || !ConfigManager.systemServerRequested() || !ConfigManager.dex2oatFlagsLoaded()) {
                 cardBackgroundColor = ResourceUtils.resolveColor(activity.getTheme(), rikka.material.R.attr.colorWarning);
-                binding.statusIcon.setImageResource(R.drawable.ic_warning);
-                binding.statusSummary.setText(R.string.please_update_summary);
+                binding.statusTitle.setText(R.string.partial_activated);
+                binding.statusIcon.setImageResource(R.drawable.ic_round_warning_24);
+                sb.append("\n");
+                if (!ConfigManager.isSepolicyLoaded()) {
+                    sb.append("\n");
+                    sb.append(getString(R.string.selinux_policy_not_loaded_summary));
+                }
+                if (!ConfigManager.systemServerRequested()) {
+                    sb.append("\n");
+                    sb.append(getString(R.string.system_inject_fail_summary));
+                }
+                if (!ConfigManager.dex2oatFlagsLoaded()) {
+                    sb.append("\n");
+                    sb.append(getString(R.string.system_prop_incorrect_summary));
+                }
             } else {
-                binding.statusTitle.setText(R.string.activated);
                 cardBackgroundColor = ResourceUtils.resolveColor(activity.getTheme(), R.attr.colorNormal);
-                binding.statusIcon.setImageResource(R.drawable.ic_check_circle);
-                binding.statusSummary.setText(String.format(Locale.ROOT, "%s (%d)",
-                        ConfigManager.getXposedVersionName(), ConfigManager.getXposedVersionCode()));
+                binding.statusTitle.setText(R.string.activated);
+                binding.statusIcon.setImageResource(R.drawable.ic_round_check_circle_24);
             }
+            binding.statusSummary.setText(sb.toString());
         } else {
             cardBackgroundColor = ResourceUtils.resolveColor(activity.getTheme(), R.attr.colorInstall);
             boolean isMagiskInstalled = ConfigManager.isMagiskInstalled();
@@ -134,7 +156,7 @@ public class HomeFragment extends BaseFragment {
                 binding.status.setOnClickListener(null);
                 binding.download.setVisibility(View.GONE);
             }
-            binding.statusIcon.setImageResource(R.drawable.ic_error);
+            binding.statusIcon.setImageResource(R.drawable.ic_round_error_outline_24);
             Snackbar.make(binding.snackbar, R.string.lsposed_not_active, Snackbar.LENGTH_INDEFINITE).show();
         }
         binding.status.setCardBackgroundColor(cardBackgroundColor);

@@ -38,7 +38,7 @@
     <string name="activated">Activado</string>
     <string name="partial_activated">Parcialmente activado</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy no está cargado correctamente</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[<b>WARNING:</b> SEPolicy no está cargado correctamente. Los módulos de hooks del framework del sistema no funcionarán.<br>Por favor, reporta esto al desarrollador <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>.]]></string>
+    <string name="selinux_policy_not_loaded"><![CDATA[SEPolicy no está cargado correctamente. Los módulos de hooks del framework del sistema no funcionarán.<br>Por favor, reporta esto al desarrollador <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>.]]></string>
     <string name="lsposed_not_active">LSPosed no está instalado o activado actualmente.</string>
     <string name="info_api_version">Versión de la API</string>
     <string name="info_framework_version">Versión del framework</string>

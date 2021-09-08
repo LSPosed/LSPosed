@@ -37,11 +37,11 @@
     <string name="activated">有効化済</string>
     <string name="partial_activated">部分的に有効化済</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy が正しく読み込まれていません</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[<b>警告:</b> SEPolicy が正しく読み込まれておらず、システムフレームワークをフックするためのモジュールが動作しません。<br/>本障害について<a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> 開発者に報告して下さい。]]></string>
+    <string name="selinux_policy_not_loaded"><![CDATA[SEPolicy が正しく読み込まれておらず、システムフレームワークをフックするためのモジュールが動作しません。<br/>本障害について<a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> 開発者に報告して下さい。]]></string>
     <string name="system_inject_fail_summary">システムフレームワークへのパッチに失敗しました</string>
-    <string name="system_inject_fail"><![CDATA[<b>警告:</b> システムフレームワークへのパッチに失敗しました。<br/>本現象はごく稀に発生し、<b>Magisk</b> もしくは低品質な Magisk モジュールが起因で発生します。<br/>Riru, LSPosed 以外の Magiskモジュールの一時無効化の試行 または 開発者へフルログを提出して下さい。]]></string>
+    <string name="system_inject_fail"><![CDATA[システムフレームワークへのパッチに失敗しました。<br/>本現象はごく稀に発生し、<b>Magisk</b> もしくは低品質な Magisk モジュールが起因で発生します。<br/>Riru, LSPosed 以外の Magiskモジュールの一時無効化の試行 または 開発者へフルログを提出して下さい。]]></string>
     <string name="system_prop_incorrect_summary">誤ったシステム設定</string>
-    <string name="system_prop_incorrect"><![CDATA[<b>警告:</b> システム設定に誤りがあります。<br/>幾つかの必須システム設定が削除もしくは変更されています。<br/>モジュールが無効化される場合があります。]]></string>
+    <string name="system_prop_incorrect"><![CDATA[システム設定に誤りがあります。<br/>幾つかの必須システム設定が削除もしくは変更されています。<br/>モジュールが無効化される場合があります。]]></string>
     <string name="need_update">アップデート要</string>
     <string name="please_update_summary">最新バージョンの LSPosed をインストールして下さい</string>
     <string name="lsposed_not_active">LSPosed が未インストールもしくは有効化されていません。</string>

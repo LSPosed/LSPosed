@@ -17,20 +17,17 @@
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 
-<!-- Adding the same root's ID for view binding as other layout configurations -->
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:consumeSystemWindowsInsets="start|end"
-    app:edgeToEdge="true"
-    app:fitsSystemWindowsInsets="start|end">
+<rikka.widget.borderview.BorderNestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/snackbar"
+    <LinearLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="?dialogPreferredPadding"
+        android:paddingTop="?dialogPreferredPadding">
 
-        <include layout="@layout/fragment_home" />
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</rikka.widget.borderview.BorderNestedScrollView>

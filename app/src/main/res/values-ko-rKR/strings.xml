@@ -36,9 +36,9 @@
     <string name="activated">활성화됨</string>
     <string name="partial_activated">부분적으로 활성화됨</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy가 제대로 로드되지 않았습니다.</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[<b>주의:</b> SEPolicy가 제대로 로드되지 않아 시스템 프레임워크를 후크하는 모듈이 작동하지 않습니다.<br><a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> 개발자에게 보고하십시오.]]></string>
+    <string name="selinux_policy_not_loaded"><![CDATA[SEPolicy가 제대로 로드되지 않아 시스템 프레임워크를 후크하는 모듈이 작동하지 않습니다.<br><a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> 개발자에게 보고하십시오.]]></string>
     <string name="system_inject_fail_summary">System Framework 주입 실패</string>
-    <string name="system_inject_fail"><![CDATA[<b>주의:</b> System Framework 주입 실패.<br/>이는 드물게 발생하며, Magisk 또는 일부 저품질 <b>Magisk</b> 모듈 때문일 수 있습니다.<br/>Riru 및 LSPosed 이외의 Magisk 모듈을 비활성화하거나 전체 로그를 개발자에게 제출하십시오.]]></string>
+    <string name="system_inject_fail"><![CDATA[System Framework 주입 실패.<br/>이는 드물게 발생하며, Magisk 또는 일부 저품질 <b>Magisk</b> 모듈 때문일 수 있습니다.<br/>Riru 및 LSPosed 이외의 Magisk 모듈을 비활성화하거나 전체 로그를 개발자에게 제출하십시오.]]></string>
     <string name="lsposed_not_active">LSPosed가 현재 설치되어 있지 않거나 활성화되어 있지 않습니다.</string>
     <string name="info_api_version">API 버전</string>
     <string name="info_framework_version">Framework 버전</string>

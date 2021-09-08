@@ -39,7 +39,7 @@
     <string name="selinux_policy_not_loaded_summary">SEPolicy is niet correct geladen</string>
     <string name="selinux_policy_not_loaded"><![CDATA[&lt;b&gt;WAARSCHUWING:&lt;\/b&gt; SEPolicy is niet correct geladen, modules die System Framework haken zullen niet werken.]]></string>
     <string name="system_inject_fail_summary">Systeem Framework injectie is mislukt</string>
-    <string name="system_inject_fail"><![CDATA[<b>WAARSCHUWING:</b> Systeem Framework injectie mislukt.<br/>Dit is zeldzaam en kan worden veroorzaakt door <b>Magisk</b> of sommige Magisk-modules van lage kwaliteit.<br/>Probeer andere Magisk-modules dan Riru en LSPosed uit te schakelen of stuur een volledig logboek naar de ontwikkelaars.]]></string>
+    <string name="system_inject_fail"><![CDATA[Systeem Framework injectie mislukt.<br/>Dit is zeldzaam en kan worden veroorzaakt door <b>Magisk</b> of sommige Magisk-modules van lage kwaliteit.<br/>Probeer andere Magisk-modules dan Riru en LSPosed uit te schakelen of stuur een volledig logboek naar de ontwikkelaars.]]></string>
     <string name="lsposed_not_active">LSPosed is momenteel niet geïnstalleerd of actief.</string>
     <string name="info_api_version">API versie</string>
     <string name="info_framework_version">Framework versie</string>

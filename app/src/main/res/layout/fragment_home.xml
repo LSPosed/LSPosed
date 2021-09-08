@@ -90,7 +90,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_centerVertical="true"
-                            app:srcCompat="@drawable/ic_check_circle"
+                            app:srcCompat="@drawable/ic_round_check_circle_24"
                             app:tint="?android:attr/textColorPrimaryInverse" />
 
                         <TextView
@@ -204,7 +204,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:contentDescription="@string/Logs"
-                        app:srcCompat="@drawable/ic_assignment" />
+                        app:srcCompat="@drawable/ic_round_assignment_24" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -225,7 +225,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:contentDescription="@string/Settings"
-                        app:srcCompat="@drawable/ic_settings" />
+                        app:srcCompat="@drawable/ic_round_settings_24" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -236,7 +236,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/about"
+                    android:id="@+id/issue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/HomeItem.Tertiary">
@@ -244,14 +244,14 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:contentDescription="@string/About"
-                        app:srcCompat="@drawable/ic_info" />
+                        android:contentDescription="@string/report_issue"
+                        app:srcCompat="@drawable/ic_round_bug_report_24" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="24dp"
-                        android:text="@string/About"
+                        android:text="@string/report_issue"
                         android:textSize="16sp"
                         android:textAppearance="?android:attr/textAppearanceListItem" />
                 </LinearLayout>
