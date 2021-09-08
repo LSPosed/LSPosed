@@ -36,7 +36,7 @@ namespace lspd {
 
         void onModuleLoaded() {
             LOGI("onModuleLoaded: welcome to LSPosed!");
-            LOGI("onModuleLoaded: version %s (%d)", versionName, versionCode);
+            LOGI("onModuleLoaded: version v%s (%d)", versionName, versionCode);
             if constexpr (isDebug) {
                 Context::GetInstance()->PreLoadDex("/system/" + kDexPath);
             } else {
