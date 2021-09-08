@@ -22,6 +22,12 @@
     <!-- MainActivity -->
     <string name="info">Informacje</string>
     <string name="Modules">Moduły</string>
+    <plurals name="modules_enabled_count">
+        <item quantity="one">%d moduł aktywowany</item>
+        <item quantity="few">Włączono %d moduły/ów</item>
+        <item quantity="many">Włączono %d moduły/ów</item>
+        <item quantity="other">Włączono %d moduły/ów</item>
+    </plurals>
     <string name="Logs">Logi</string>
     <string name="Settings">Ustawienia</string>
     <string name="About">O aplikacji</string>
@@ -112,6 +118,20 @@
     <string name="failed_to_save_scope_list">Nie udało się zapisać listy zakresu</string>
     <string name="app_description">%1$s\nWersja %2$s</string>
     <string name="use_recommended">Rekomendowane</string>
+    <string name="no_scope_selected_has_recommended">Nie wybrałeś żadnej aplikacji. Wybrać rekomendowane aplikacje?</string>
+    <string name="use_recommended_message">Wybrać rekomendowane aplikacje?</string>
+    <string name="requested_by_module">Rekomendowane</string>
+    <string name="update_available">Dostępna aktualizacja: %1$s</string>
+    <string name="module_disabled_no_selection">Moduł %s został wyłączony, ponieważ nie wybrano żadnej aplikacji.</string>
+    <string name="android_framework">System Framework</string>
+    <string name="menu_backup_and_restore">Kopia zapasowa</string>
+    <string name="menu_backup">Kopia zapasowa</string>
+    <string name="menu_restore">Przywróć</string>
+    <string name="force_stop">Wymuś zatrzymanie</string>
+    <string name="force_stop_dlg_title">Wymusić zatrzymanie?</string>
+    <string name="force_stop_dlg_text">Jeśli wymusisz zatrzymanie aplikacji, może ona zadziałać nieprawidłowo.</string>
+    <string name="reboot_required">Restart jest wymagany aby ta zmiana została zastosowana</string>
+    <string name="reboot">Restart</string>
     <string name="menu_hide">Ukryj</string>
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">Wyświetl w innej aplikacji</string>
