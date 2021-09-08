@@ -34,7 +34,7 @@
     <string name="module_repo_summary">Module opslagplaats (Beta)</string>
     <string name="about_view_source_code"><![CDATA[Bekijk de broncode op %1$s<br/>Sluit je aan bij onze %2$s kanaal]]></string>
     <string name="about_translators">Vertaler: %1$s</string>
-    <string name="translators"><![CDATA[<a href="https://github.com/Pandemic-XDA">Pandemic-XDA</a>]]></string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself."><![CDATA[<a href="https://github.com/Pandemic-XDA">Pandemic-XDA</a>]]></string>
     <string name="install">Installeren</string>
     <string name="install_summary">Tik om LSPosed te installeren</string>
     <string name="not_installed">Niet geïnstalleerd</string>
