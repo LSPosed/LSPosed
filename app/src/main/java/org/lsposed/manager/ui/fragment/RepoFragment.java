@@ -30,6 +30,7 @@ import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -58,19 +59,25 @@ import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.repo.model.OnlineModule;
 import org.lsposed.manager.util.ModuleUtil;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.FutureTask;
 import java.util.stream.Collectors;
 
-import rikka.core.res.ResourcesKt;
 import rikka.core.util.LabelComparator;
+import rikka.core.util.ResourceUtils;
 import rikka.recyclerview.RecyclerViewKt;
 
 public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
+    public static final FutureTask<String> HTML_TEMPLATE = new FutureTask<>(() -> readWebviewHTML("template.html"));
+    public static final FutureTask<String> HTML_TEMPLATE_DARK = new FutureTask<>(() -> readWebviewHTML("template_dark.html"));
     protected FragmentRepoBinding binding;
     protected SearchView searchView;
     private SearchView.OnQueryTextListener mSearchListener;
@@ -79,6 +86,21 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
 
     private final RepoLoader repoLoader = RepoLoader.getInstance();
     private RepoAdapter adapter;
+
+    private static String readWebviewHTML(String name) {
+        try {
+            var input = App.getInstance().getAssets().open("webview/" + name);
+            var result = new ByteArrayOutputStream(1024);
+            var buffer = new byte[1024];
+            for (int length; (length = input.read(buffer)) != -1; ) {
+                result.write(buffer, 0, length);
+            }
+            return result.toString(StandardCharsets.UTF_8.name());
+        } catch (IOException e) {
+            Log.e(App.TAG, "read webview HTML", e);
+            return "<html><body>@body@</body></html>";
+        }
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -144,6 +166,11 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
         if (preLoadWebview) {
             mHandler.postDelayed(() -> {
                 new WebView(requireContext());
+                if (ResourceUtils.isNightMode(getResources().getConfiguration())) {
+                    HTML_TEMPLATE_DARK.run();
+                } else {
+                    HTML_TEMPLATE.run();
+                }
             }, 500);
             preLoadWebview = false;
         }
@@ -213,7 +240,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
                     sb.append("\n");
                     String recommended = getString(R.string.update_available, ver.second);
                     sb.append(recommended);
-                    final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ResourcesKt.resolveColor(requireActivity().getTheme(), androidx.appcompat.R.attr.colorAccent));
+                    final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ResourceUtils.resolveColor(requireActivity().getTheme(), androidx.appcompat.R.attr.colorAccent));
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                         final TypefaceSpan typefaceSpan = new TypefaceSpan(Typeface.create("sans-serif-medium", Typeface.NORMAL));
                         sb.setSpan(typefaceSpan, sb.length() - recommended.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);

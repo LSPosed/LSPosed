@@ -89,7 +89,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import rikka.core.res.ResourcesKt;
+import rikka.core.util.ResourceUtils;
 import rikka.insets.WindowInsetsHelperKt;
 import rikka.recyclerview.RecyclerViewKt;
 import rikka.widget.borderview.BorderRecyclerView;
@@ -346,7 +346,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             int position = arguments.getInt("position");
             ItemRepoRecyclerviewBinding binding = ItemRepoRecyclerviewBinding.inflate(getLayoutInflater(), container, false);
             if (fragment.adapters.size() == 1) {
-                WindowInsetsHelperKt.setInitialPadding(binding.recyclerView, 0, ResourcesKt.resolveDimensionPixelOffset(requireActivity().getTheme(), androidx.appcompat.R.attr.actionBarSize, 0), 0, 0);
+                WindowInsetsHelperKt.setInitialPadding(binding.recyclerView, 0, ResourceUtils.resolveDimensionPixelOffset(requireActivity().getTheme(), androidx.appcompat.R.attr.actionBarSize, 0), 0, 0);
             }
             binding.recyclerView.setTag(position);
             binding.recyclerView.setAdapter(fragment.adapters.get(position));
@@ -487,7 +487,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                     sb.append("\n");
                     String recommended = getString(R.string.update_available, ver.second);
                     sb.append(recommended);
-                    final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ResourcesKt.resolveColor(requireActivity().getTheme(), androidx.appcompat.R.attr.colorAccent));
+                    final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ResourceUtils.resolveColor(requireActivity().getTheme(), androidx.appcompat.R.attr.colorAccent));
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                         final TypefaceSpan typefaceSpan = new TypefaceSpan(Typeface.create("sans-serif-medium", Typeface.NORMAL));
                         sb.setSpan(typefaceSpan, sb.length() - recommended.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);

@@ -119,7 +119,7 @@ androidComponents.onVariants { v ->
         if (v is ApplicationVariantImpl) v
         else (v as AnalyticsEnabledApplicationVariant).delegate as ApplicationVariantImpl
     variant.outputs.forEach {
-        it.outputFileName.set("LSPosedManager-${verName}-${verCode}-${variant.name}.apk")
+        it.outputFileName.set("LSPosedManager-v${verName}-${verCode}-${variant.name}.apk")
     }
 }
 
@@ -162,7 +162,7 @@ tasks.whenTaskAdded {
 dependencies {
     val glideVersion = "4.12.0"
     val okhttpVersion = "4.9.1"
-    val navVersion = "2.4.0-alpha07"
+    val navVersion = "2.4.0-alpha08"
     annotationProcessor("com.github.bumptech.glide:compiler:$glideVersion")
     implementation("androidx.activity:activity:1.3.1")
     implementation("androidx.browser:browser:1.3.0")
@@ -172,10 +172,10 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment:$navVersion")
     implementation("androidx.navigation:navigation-ui:$navVersion")
     implementation("androidx.recyclerview:recyclerview:1.2.1")
-    implementation("androidx.slidingpanelayout:slidingpanelayout:1.2.0-alpha04")
+    implementation("androidx.slidingpanelayout:slidingpanelayout:1.2.0-beta01")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("com.github.bumptech.glide:glide:$glideVersion")
-    implementation("com.google.android.material:material:1.5.0-alpha02")
+    implementation("com.google.android.material:material:1.5.0-alpha03")
     implementation("com.google.code.gson:gson:2.8.8")
     implementation("com.takisoft.preferencex:preferencex:1.1.0")
     implementation("com.takisoft.preferencex:preferencex-colorpicker:1.1.0")

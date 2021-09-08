@@ -29,7 +29,6 @@ import android.system.Os;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.StringRes;
 import androidx.preference.PreferenceManager;
 
 import com.google.gson.JsonParser;
