@@ -33,7 +33,7 @@
     <string name="module_repo_summary">Repository dei moduli (Beta)</string>
     <string name="about_view_source_code"><![CDATA[Visualizza il codice sorgente su %1$s<br/>Unisciti al nostro canale %2$s]]></string>
     <string name="about_translators">Traduttori: %s</string>
-    <string name="translators"><![CDATA[<a href="https://twitter.com/alex193a">alex193a</a>, <a href="https://github.com/Fs00">Fs00</a>]]></string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself."><![CDATA[<a href="https://twitter.com/alex193a">alex193a</a>, <a href="https://github.com/Fs00">Fs00</a>]]></string>
     <string name="install">Installa</string>
     <string name="install_summary">Clicca per installare LSPosed</string>
     <string name="not_installed">Non installato</string>
