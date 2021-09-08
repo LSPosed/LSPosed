@@ -21,7 +21,7 @@
 <resources>
     <!-- MainActivity -->
     <string name="info">المعلومات</string>
-    <string name="Modules">الإضافات</string>
+    <string name="Modules">الوحدات</string>
     <string name="Logs">السجلات</string>
     <string name="Settings">الإعدادات</string>
     <string name="About">حول</string>
