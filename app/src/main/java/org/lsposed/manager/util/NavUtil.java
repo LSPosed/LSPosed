@@ -26,7 +26,6 @@ import android.net.Uri;
 import androidx.browser.customtabs.CustomTabColorSchemeParams;
 import androidx.browser.customtabs.CustomTabsIntent;
 
-import rikka.core.res.ResourcesKt;
 import rikka.core.util.ResourceUtils;
 
 public final class NavUtil {
@@ -35,8 +34,8 @@ public final class NavUtil {
         CustomTabsIntent.Builder customTabsIntent = new CustomTabsIntent.Builder();
         customTabsIntent.setShowTitle(true);
         CustomTabColorSchemeParams params = new CustomTabColorSchemeParams.Builder()
-                .setToolbarColor(ResourcesKt.resolveColor(activity.getTheme(), android.R.attr.colorBackground))
-                .setNavigationBarColor(ResourcesKt.resolveColor(activity.getTheme(), android.R.attr.navigationBarColor))
+                .setToolbarColor(ResourceUtils.resolveColor(activity.getTheme(), android.R.attr.colorBackground))
+                .setNavigationBarColor(ResourceUtils.resolveColor(activity.getTheme(), android.R.attr.navigationBarColor))
                 .setNavigationBarDividerColor(0)
                 .build();
         customTabsIntent.setDefaultColorSchemeParams(params);

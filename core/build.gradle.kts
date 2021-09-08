@@ -126,7 +126,7 @@ androidComponents.onVariants { v ->
         else (v as AnalyticsEnabledApplicationVariant).delegate as ApplicationVariantImpl
     val variantCapped = variant.name.capitalize()
     val variantLowered = variant.name.toLowerCase()
-    val zipFileName = "$moduleName-$verName-$verCode-$variantLowered.zip"
+    val zipFileName = "$moduleName-v$verName-$verCode-$variantLowered.zip"
     val magiskDir = "$buildDir/magisk/$variantLowered"
 
     afterEvaluate {
@@ -172,7 +172,7 @@ androidComponents.onVariants { v ->
             include("module.prop")
             expand(
                 "moduleId" to moduleId,
-                "versionName" to verName,
+                "versionName" to "v$verName",
                 "versionCode" to verCode,
                 "authorList" to authors,
                 "minRiruVersionName" to moduleMinRiruVersionName
