@@ -223,23 +223,21 @@ ElfImg::getSymbOffset(std::string_view name, uint32_t gnu_hash, uint32_t elf_has
 bool ElfImg::findModuleBase() {
     char buff[256];
     off_t load_addr;
-    int found = 0;
+    bool found = false;
     FILE *maps = fopen("/proc/self/maps", "r");
 
 
     while (fgets(buff, sizeof(buff), maps)) {
-        if ((buff[0] == '/' && (strstr(buff, "r-xp") || strstr(buff, "r--p"))) && strstr(buff, elf.data())) {
-            found = 1;
+        if ((strstr(buff, "r-xp") || strstr(buff, "r--p")) && strstr(buff, elf.data())) {
             LOGD("found: %s", buff);
             std::string_view b = buff;
-            if (auto begin = b.find_last_of(' '); begin != std::string_view::npos) {
-                elf = b.substr(begin + 1);
+            if (auto begin = b.find_last_of(' '); begin != std::string_view::npos && b[++begin] == '/') {
+                found = true;
+                elf = b.substr(begin);
                 if (elf.back() == '\n') elf.pop_back();
-            } else {
-                return false;
+                LOGD("update path: %s", elf.data());
+                break;
             }
-            LOGD("update path: %s", elf.data());
-            break;
         }
     }
 
