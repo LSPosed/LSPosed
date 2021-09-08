@@ -130,7 +130,7 @@
 
     <style name="HomeItem">
         <item name="android:layout_marginHorizontal">16dp</item>
-        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
         <item name="cardCornerRadius">8dp</item>

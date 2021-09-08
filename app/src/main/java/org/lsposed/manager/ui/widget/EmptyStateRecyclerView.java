@@ -32,7 +32,7 @@ import androidx.annotation.Nullable;
 
 import org.lsposed.manager.R;
 
-import rikka.core.res.ResourcesKt;
+import rikka.core.util.ResourceUtils;
 import rikka.widget.borderview.BorderRecyclerView;
 
 public class EmptyStateRecyclerView extends BorderRecyclerView {
@@ -68,7 +68,7 @@ public class EmptyStateRecyclerView extends BorderRecyclerView {
         super(context, attrs, defStyle);
         DisplayMetrics dm = context.getResources().getDisplayMetrics();
 
-        paint.setColor(ResourcesKt.resolveColor(context.getTheme(), android.R.attr.textColorSecondary));
+        paint.setColor(ResourceUtils.resolveColor(context.getTheme(), android.R.attr.textColorSecondary));
         paint.setTextSize(16f * dm.scaledDensity);
 
         emptyText = context.getString(R.string.list_empty);

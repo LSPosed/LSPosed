@@ -19,7 +19,6 @@
 
 package org.lsposed.manager.ui.fragment;
 
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Spannable;
@@ -67,41 +66,22 @@ import org.lsposed.manager.ui.widget.LinkifyTextView;
 import org.lsposed.manager.util.NavUtil;
 import org.lsposed.manager.util.chrome.CustomTabsURLSpan;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.stream.IntStream;
 
+import rikka.core.util.ResourceUtils;
 import rikka.recyclerview.RecyclerViewKt;
 import rikka.widget.borderview.BorderNestedScrollView;
 import rikka.widget.borderview.BorderRecyclerView;
 import rikka.widget.borderview.BorderView;
 
 public class RepoItemFragment extends BaseFragment implements RepoLoader.Listener {
-    private static final String HTML_TEMPLATE = readWebviewHTML("template.html");
-    private static final String HTML_TEMPLATE_DARK = readWebviewHTML("template_dark.html");
     FragmentPagerBinding binding;
     private OnlineModule module;
     private ReleaseAdapter releaseAdapter;
-
-    private static String readWebviewHTML(String name) {
-
-        try {
-            var input = App.getInstance().getAssets().open("webview/" + name);
-            var result = new ByteArrayOutputStream(1024);
-            var buffer = new byte[1024];
-            for (int length; (length = input.read(buffer)) != -1; ) {
-                result.write(buffer, 0, length);
-            }
-            return result.toString(StandardCharsets.UTF_8.name());
-        } catch (IOException e) {
-            Log.e(App.TAG, "read webview HTML", e);
-            return "<html><body>@body@</body></html>";
-        }
-    }
 
     @Nullable
     @Override
@@ -170,11 +150,10 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
             setting.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
             setting.setTextZoom(80);
             String body;
-            int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-            if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
-                body = HTML_TEMPLATE_DARK.replace("@body@", text);
+            if (ResourceUtils.isNightMode(getResources().getConfiguration())) {
+                body = RepoFragment.HTML_TEMPLATE_DARK.get().replace("@body@", text);
             } else {
-                body = HTML_TEMPLATE.replace("@body@", text);
+                body = RepoFragment.HTML_TEMPLATE.get().replace("@body@", text);
             }
             view.setWebViewClient(new WebViewClient() {
                 @Override

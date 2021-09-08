@@ -19,8 +19,6 @@
 
 package org.lsposed.manager.ui.fragment;
 
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
@@ -31,7 +29,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.core.text.HtmlCompat;
 
-import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.lsposed.manager.App;
@@ -40,7 +37,6 @@ import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.DialogAboutBinding;
 import org.lsposed.manager.databinding.FragmentHomeBinding;
-import org.lsposed.manager.databinding.FragmentMainBinding;
 import org.lsposed.manager.ui.activity.base.BaseActivity;
 import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
 import org.lsposed.manager.ui.dialog.InfoDialogBuilder;
@@ -50,23 +46,11 @@ import org.lsposed.manager.util.chrome.LinkTransformationMethod;
 
 import java.util.Locale;
 
-import rikka.core.res.ResourcesKt;
-import rikka.widget.borderview.BorderView;
+import rikka.core.util.ResourceUtils;
 
 public class HomeFragment extends BaseFragment {
 
     private FragmentHomeBinding binding;
-    private View snackbar;
-
-    private static PackageInfo wrap(ApplicationInfo applicationInfo, int longVersionCode) {
-        PackageInfo packageInfo = new PackageInfo();
-        packageInfo.applicationInfo = applicationInfo;
-        packageInfo.versionCode = longVersionCode;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            packageInfo.setLongVersionCode(longVersionCode);
-        }
-        return packageInfo;
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -116,33 +100,33 @@ public class HomeFragment extends BaseFragment {
         if (isBinderAlive) {
             if (!ConfigManager.isSepolicyLoaded()) {
                 binding.statusTitle.setText(R.string.partial_activated);
-                cardBackgroundColor = ResourcesKt.resolveColor(activity.getTheme(), rikka.material.R.attr.colorWarning);
+                cardBackgroundColor = ResourceUtils.resolveColor(activity.getTheme(), rikka.material.R.attr.colorWarning);
                 binding.statusIcon.setImageResource(R.drawable.ic_warning);
                 binding.statusSummary.setText(R.string.selinux_policy_not_loaded_summary);
             } else if (!ConfigManager.systemServerRequested()) {
                 binding.statusTitle.setText(R.string.partial_activated);
-                cardBackgroundColor = ResourcesKt.resolveColor(activity.getTheme(), rikka.material.R.attr.colorWarning);
+                cardBackgroundColor = ResourceUtils.resolveColor(activity.getTheme(), rikka.material.R.attr.colorWarning);
                 binding.statusIcon.setImageResource(R.drawable.ic_warning);
                 binding.statusSummary.setText(R.string.system_inject_fail_summary);
             } else if (!ConfigManager.dex2oatFlagsLoaded()) {
                 binding.statusTitle.setText(R.string.partial_activated);
-                cardBackgroundColor = ResourcesKt.resolveColor(activity.getTheme(), rikka.material.R.attr.colorWarning);
+                cardBackgroundColor = ResourceUtils.resolveColor(activity.getTheme(), rikka.material.R.attr.colorWarning);
                 binding.statusIcon.setImageResource(R.drawable.ic_warning);
                 binding.statusSummary.setText(R.string.system_prop_incorrect_summary);
             } else if (needUpdate) {
                 binding.statusTitle.setText(R.string.need_update);
-                cardBackgroundColor = ResourcesKt.resolveColor(activity.getTheme(), rikka.material.R.attr.colorWarning);
+                cardBackgroundColor = ResourceUtils.resolveColor(activity.getTheme(), rikka.material.R.attr.colorWarning);
                 binding.statusIcon.setImageResource(R.drawable.ic_warning);
                 binding.statusSummary.setText(R.string.please_update_summary);
             } else {
                 binding.statusTitle.setText(R.string.activated);
-                cardBackgroundColor = ResourcesKt.resolveColor(activity.getTheme(), R.attr.colorNormal);
+                cardBackgroundColor = ResourceUtils.resolveColor(activity.getTheme(), R.attr.colorNormal);
                 binding.statusIcon.setImageResource(R.drawable.ic_check_circle);
                 binding.statusSummary.setText(String.format(Locale.ROOT, "%s (%d)",
                         ConfigManager.getXposedVersionName(), ConfigManager.getXposedVersionCode()));
             }
         } else {
-            cardBackgroundColor = ResourcesKt.resolveColor(activity.getTheme(), R.attr.colorInstall);
+            cardBackgroundColor = ResourceUtils.resolveColor(activity.getTheme(), R.attr.colorInstall);
             boolean isMagiskInstalled = ConfigManager.isMagiskInstalled();
             binding.statusTitle.setText(isMagiskInstalled ? R.string.install : R.string.not_installed);
             binding.statusSummary.setText(isMagiskInstalled ? R.string.install_summary : R.string.not_install_summary);
