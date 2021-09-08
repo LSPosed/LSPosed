@@ -41,11 +41,8 @@
     <string name="activated">Attivo</string>
     <string name="partial_activated">Parzialmente attivo</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy non è caricato correttamente</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[<b>WARNING:</b> SEPolicy non è caricato correttamente, i moduli che effettuano l\'hook del framework di sistema non funzioneranno.<br>Segnala il problema allo sviluppatore di <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>.]]></string>
     <string name="system_inject_fail_summary">Injection del framework di sistema fallita</string>
-    <string name="system_inject_fail"><![CDATA[<b>ATTENZIONE:</b> L\'injection del framework di sistema è fallita.<br/>Questo problema si verifica raramente e può essere causato da <b>Magisk</b> o da alcuni moduli Magisk di scarsa qualità.<br/>Prova a disabilitare i moduli Magisk tranne Riru e LSPosed o invia il log completo agli sviluppatori.]]></string>
     <string name="system_prop_incorrect_summary">Proprietà di sistema errate</string>
-    <string name="system_prop_incorrect"><![CDATA[<b>ATTENZIONE:</b> Proprietà di sistema errate.<br/>Alcune proprietà di sistema necessarie sono state cancellate o modificate.<br/>In alcuni casi i moduli potrebbero risultare non validi.]]></string>
     <string name="need_update">Aggiornamento richiesto</string>
     <string name="please_update_summary">Installa la versione più recente di LSPosed</string>
     <string name="lsposed_not_active">LSPosed non è attualmente installato o attivo.</string>
