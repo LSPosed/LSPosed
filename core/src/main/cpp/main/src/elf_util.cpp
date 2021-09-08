@@ -228,7 +228,7 @@ bool ElfImg::findModuleBase() {
 
 
     while (fgets(buff, sizeof(buff), maps)) {
-        if ((strstr(buff, "r-xp") || strstr(buff, "r--p")) && strstr(buff, elf.data())) {
+        if ((buff[0] == '/' && (strstr(buff, "r-xp") || strstr(buff, "r--p"))) && strstr(buff, elf.data())) {
             found = 1;
             LOGD("found: %s", buff);
             std::string_view b = buff;
