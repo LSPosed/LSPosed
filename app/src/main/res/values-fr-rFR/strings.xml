@@ -38,9 +38,9 @@
     <string name="selinux_policy_not_loaded_summary">SEPolicy n\’est pas chargé correctement</string>
     <string name="selinux_policy_not_loaded"><![CDATA[&lt;b&gt;AVERTISSEMENT:&lt;\/b&gt; SEPolicy n\’est pas chargé correctement, les modules qui modifient le sous-système ne fonctionneront pas.]]></string>
     <string name="system_inject_fail_summary">Échec de l\’injection du sous système</string>
-    <string name="system_inject_fail"><![CDATA[<b>AVERTISSEMENT:</b> Échec de l\’injection du sous système.<br/>Ceci est rare et peut être causé par <b>Magisk</b> ou certains modules Magisk de basse qualité.<br/>Éssayez de désactiver les modules Magisk autres que Riru et LSPosed ou envoyez le journal complet aux développeurs.]]></string>
+    <string name="system_inject_fail"><![CDATA[Échec de l\’injection du sous système.<br/>Ceci est rare et peut être causé par <b>Magisk</b> ou certains modules Magisk de basse qualité.<br/>Éssayez de désactiver les modules Magisk autres que Riru et LSPosed ou envoyez le journal complet aux développeurs.]]></string>
     <string name="system_prop_incorrect_summary">Propriétés système incorrectes</string>
-    <string name="system_prop_incorrect"><![CDATA[<b>AVERTISSEMENT:</b> Propriétés système incorrectes.<br/>Certaines propriétés nécessaires au système ont été supprimées ou modifiées.<br/>Les modules peuvent s\'invalider occasionnellement.]]></string>
+    <string name="system_prop_incorrect"><![CDATA[Propriétés système incorrectes.<br/>Certaines propriétés nécessaires au système ont été supprimées ou modifiées.<br/>Les modules peuvent s\'invalider occasionnellement.]]></string>
     <string name="need_update">Mise à jour nécessaire</string>
     <string name="please_update_summary">Merci d\’installer la dernière version de LSPosed</string>
     <string name="lsposed_not_active">LSPosed n\’est actuellement pas installé ou activé.</string>

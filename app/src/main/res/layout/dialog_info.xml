@@ -104,12 +104,5 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/note"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-            android:visibility="gone" />
-
     </LinearLayout>
 </rikka.widget.borderview.BorderNestedScrollView>

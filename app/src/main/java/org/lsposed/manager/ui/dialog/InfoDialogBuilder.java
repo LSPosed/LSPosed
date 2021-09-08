@@ -22,10 +22,8 @@ package org.lsposed.manager.ui.dialog;
 import android.content.Context;
 import android.os.Build;
 import android.view.LayoutInflater;
-import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.core.text.HtmlCompat;
 
 import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
@@ -40,10 +38,16 @@ public class InfoDialogBuilder extends BlurBehindDialogBuilder {
 
     public InfoDialogBuilder(@NonNull Context context) {
         super(context);
+        setTitle(R.string.info);
         DialogInfoBinding binding = DialogInfoBinding.inflate(LayoutInflater.from(context), null, false);
 
-        binding.apiVersion.setText(String.valueOf(ConfigManager.getXposedApiVersion()));
-        binding.frameworkVersion.setText(String.format(Locale.US, "%s (%s)", ConfigManager.getXposedVersionName(), ConfigManager.getXposedVersionCode()));
+        if (ConfigManager.isBinderAlive()) {
+            binding.apiVersion.setText(String.valueOf(ConfigManager.getXposedApiVersion()));
+            binding.frameworkVersion.setText(String.format(Locale.US, "%s (%s)", ConfigManager.getXposedVersionName(), ConfigManager.getXposedVersionCode()));
+        } else {
+            binding.apiVersion.setText(R.string.not_installed);
+            binding.frameworkVersion.setText(R.string.not_installed);
+        }
         binding.managerVersion.setText(String.format(Locale.US, "%s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
 
         if (Build.VERSION.PREVIEW_SDK_INT != 0) {
@@ -54,17 +58,6 @@ public class InfoDialogBuilder extends BlurBehindDialogBuilder {
 
         binding.device.setText(getDevice());
         binding.systemAbi.setText(Build.SUPPORTED_ABIS[0]);
-
-        if (!ConfigManager.isSepolicyLoaded()) {
-            binding.note.setVisibility(View.VISIBLE);
-            binding.note.setText(HtmlCompat.fromHtml(context.getString(R.string.selinux_policy_not_loaded), HtmlCompat.FROM_HTML_MODE_LEGACY));
-        } else if (!ConfigManager.systemServerRequested()) {
-            binding.note.setVisibility(View.VISIBLE);
-            binding.note.setText(HtmlCompat.fromHtml(context.getString(R.string.system_inject_fail), HtmlCompat.FROM_HTML_MODE_LEGACY));
-        } else if (!ConfigManager.dex2oatFlagsLoaded()) {
-            binding.note.setVisibility(View.VISIBLE);
-            binding.note.setText(HtmlCompat.fromHtml(context.getString(R.string.system_prop_incorrect), HtmlCompat.FROM_HTML_MODE_LEGACY));
-        }
 
         setView(binding.getRoot());
 

@@ -40,11 +40,11 @@
     <string name="activated">Активирован</string>
     <string name="partial_activated">Частично активирован</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy не загружен должным образом</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[<b>ВНИМАНИЕ:</b> SEPolicy не загружается должным образом, модули которым нужен системный фреймворк, не будут работать.<br/>Пожалуйста, сообщите об этом сюда <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> разработчик.]]></string>
+    <string name="selinux_policy_not_loaded"><![CDATA[SEPolicy не загружается должным образом, модули которым нужен системный фреймворк, не будут работать.<br/>Пожалуйста, сообщите об этом сюда <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> разработчик.]]></string>
     <string name="system_inject_fail_summary">Ошибка внедрения системного фреймворка</string>
-    <string name="system_inject_fail"><![CDATA[<b>ВНИМАНИЕ:</b> Ошибка внедрения системного фреймворка.<br/>Это редкость и может быть вызвано <b>Magisk</b> или несовместимыми модулями Magisk.<br/>Пожалуйста, попрорбуйте отключить модули Magisk кроме Riru и LSPosed или пришлите полные логи разработчику.]]></string>
+    <string name="system_inject_fail"><![CDATA[Ошибка внедрения системного фреймворка.<br/>Это редкость и может быть вызвано <b>Magisk</b> или несовместимыми модулями Magisk.<br/>Пожалуйста, попрорбуйте отключить модули Magisk кроме Riru и LSPosed или пришлите полные логи разработчику.]]></string>
     <string name="system_prop_incorrect_summary">Не правильные системные настройки</string>
-    <string name="system_prop_incorrect"><![CDATA[<b>ВНИМАНИЕ:</b> Не правильные системные настройки.<br/>Некоторые системные настройки нужные для работы удалены или изменены.<br/>Модули могут не работать должным образом.]]></string>
+    <string name="system_prop_incorrect"><![CDATA[Не правильные системные настройки.<br/>Некоторые системные настройки нужные для работы удалены или изменены.<br/>Модули могут не работать должным образом.]]></string>
     <string name="need_update">Требуется обновление</string>
     <string name="please_update_summary">Установите последнюю версию LSPosed!</string>
     <string name="lsposed_not_active">LSPosed не установлен или не активирован!</string>

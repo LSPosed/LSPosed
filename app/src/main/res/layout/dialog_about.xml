@@ -17,38 +17,46 @@
   ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingHorizontal="?android:dialogPreferredPadding"
-    android:paddingVertical="?android:dialogPreferredPadding">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp">
 
-    <TextView
-        android:id="@+id/version"
+    <ImageView
+        android:id="@+id/design_about_icon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:srcCompat="@drawable/ic_launcher" />
+
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
-        tools:text="@tools:sample/lorem" />
+        android:layout_marginStart="16dp">
 
-    <TextView
-        android:id="@+id/source_code"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:textColor="?android:textColorSecondary"
-        android:textSize="14sp"
-        tools:text="@string/about_view_source_code" />
+        <TextView
+            android:id="@+id/design_about_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textAppearance="@android:style/TextAppearance.Material.Body1" />
 
-    <TextView
-        android:id="@+id/translators"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:textColor="?android:textColorSecondary"
-        android:textSize="14sp"
-        tools:text="@string/about_translators" />
+        <TextView
+            android:id="@+id/design_about_version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/design_about_info"
+            android:layout_marginTop="24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="?android:textColorSecondary" />
+
+    </LinearLayout>
 
 </LinearLayout>
