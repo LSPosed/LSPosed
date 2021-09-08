@@ -40,11 +40,8 @@
     <string name="activated">已啟動</string>
     <string name="partial_activated">部分啟動</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy 未正常加載</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[<b>警告：</b> SEPolicy 未正常加載，注入系統的模組將不會工作。<br/>請反饋給 <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> 開發者。]]></string>
     <string name="system_inject_fail_summary">系統框架注入失敗</string>
-    <string name="system_inject_fail"><![CDATA[<b>警告:</b> 系統框架注入失敗。<br/>這是極罕見的情況。可能由於<b>Magisk</b>本身或者低質量Magisk模組導致。<br/>請嘗試禁用除了Riru和LSPosed之外的模組或者提交詳細日誌給開發者。]]></string>
     <string name="system_prop_incorrect_summary">系統屬性異常</string>
-    <string name="system_prop_incorrect"><![CDATA[<b>警告:</b>系統屬性異常。<br/>一些必須的系統屬性被刪除或更改。<br/>模組可能會隨機失效。]]></string>
     <string name="need_update">需要更新</string>
     <string name="please_update_summary">請安裝最新版本的 LSPosed</string>
     <string name="lsposed_not_active">LSPosed 未安裝或未啟動</string>
