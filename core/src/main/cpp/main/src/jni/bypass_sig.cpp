@@ -21,6 +21,7 @@ namespace lspd {
             int, __openat,
             (int fd, const char *pathname, int flag, int mode), {
                 if (pathname == apkPath) {
+                    LOGD("redirect openat");
                     return backup(fd, redirectPath.c_str(), flag, mode);
                 }
                 return backup(fd, pathname, flag, mode);
