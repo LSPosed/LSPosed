@@ -85,7 +85,7 @@
     <string name="warning_installed_on_external_storage">Bu modül yüklenemiyor çünkü SD kartta yüklü, lütfen dahili depolama birimine taşıyın veya SD kart erişimine izin verin</string>
     <string name="module_uninstall">Kaldır</string>
     <string name="module_settings">Modül ayarları</string>
-    <string name="view_in_repo">Repoda görüntüle</string>
+    <string name="view_in_repo">Repo\'da görüntüle</string>
     <string name="module_uninstall_message">Bu modülü kaldırmak istiyor musunuz?</string>
     <string name="module_uninstalled">Kaldırıldı %1$s</string>
     <string name="module_uninstall_failed">Kaldırma başarısız</string>
