@@ -20,6 +20,30 @@
   -->
 <resources>
     <!-- MainActivity -->
+    <string name="info">Thông tin</string>
+    <string name="Modules">Mô-đun</string>
+    <plurals name="modules_enabled_count">
+        <item quantity="other">%d mô-đun đã được kích hoạt</item>
+    </plurals>
+    <string name="Logs">Nhật ký</string>
+    <string name="Settings">Cài đặt</string>
+    <string name="About">Về chúng tôi</string>
+    <string name="module_repo">Kho</string>
+    <string name="module_repo_summary">Kho mô-đun (Dùng thử)</string>
+    <string name="about_view_source_code"><![CDATA[Xem mã nguồn tại %1$s<br/>Tham gia %2$s nhóm của chúng tôi]]></string>
+    <string name="about_translators">Những người dịch: %s</string>
+    <string name="translators"><![CDATA[<a href="https://github.com/LSPosed/LSPosed">LSPosed</a>]]></string>
+    <string name="install">Cài đặt</string>
+    <string name="install_summary">Chạm để cài đặt LSPosed</string>
+    <string name="not_installed">Chưa được cài đặt</string>
+    <string name="not_install_summary">LSPosed chưa được cài đặt</string>
+    <string name="activated">Đã kích hoạt</string>
+    <string name="partial_activated">Một phần được kích hoạt</string>
+    <string name="selinux_policy_not_loaded_summary">SEPolicy không được nạp 1 cách hoàn thiện</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[<b>CẢNH BÁO:</b> SEPolicy không được tải hoàn thiện, những mô-đun mà hook vào System Framework sẽ không hoạt động.<br/>Hãy báo cáo lại tại nhà phát triển của <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>.]]></string>
+    <string name="system_inject_fail_summary">Nhúng vào System Framework thất bại</string>
+    <string name="system_inject_fail"><![CDATA[<b>CẢNH BÁO:</b>Nhúng vào System Framework thất bại.<br/>Trường hợp này khá hiếm khi xảy ra và có thể lý do bởi <b>Magisk</b> hoặc 1 số mô-đun Magisk kém chất lượng.<br/>Hãy thử disable vô hiệu hóa những mô-đun Magisk đó, thử chạy riêng Riru và LSPosed mà thôi hoặc thông báo log tới những nhà phát triển.]]></string>
+    <string name="system_prop_incorrect_summary">System prop không đúng</string>
     <!-- LogsActivity -->
     <!-- Notification -->
     <!-- ModulesActivity -->
