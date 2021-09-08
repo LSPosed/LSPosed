@@ -20,6 +20,34 @@
   -->
 <resources>
     <!-- MainActivity -->
+    <string name="info">Informasi</string>
+    <string name="Modules">Modul</string>
+    <plurals name="modules_enabled_count">
+        <item quantity="other">%d modul diaktifkan</item>
+    </plurals>
+    <string name="Logs">Log</string>
+    <string name="Settings">Pengaturan</string>
+    <string name="About">Tentang</string>
+    <string name="report_issue">Laporkan masalah</string>
+    <string name="module_repo">Gudang</string>
+    <string name="module_repo_summary">Gudang Modul (Beta)</string>
+    <string name="about_view_source_code"><![CDATA[Lihat kode sumber di %1$s<br/>Bergabunglah dengan kami %2$s saluran]]></string>
+    <string name="about_translators">Penerjemah: %s</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself."><![CDATA[<a href="https://github.com/LSPosed/LSPosed">@AMMLR</a>]]></string>
+    <string name="install">Pasang</string>
+    <string name="install_summary">Ketuk untuk menginstal LSPosed</string>
+    <string name="not_installed">Tidak terpasang</string>
+    <string name="not_install_summary">LSPosed tidak terpasang</string>
+    <string name="activated">Diaktifkan</string>
+    <string name="partial_activated">Diaktifkan sebagian</string>
+    <string name="selinux_policy_not_loaded_summary">SEPolicy tidak dimuat dengan benar</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Modul yang mengaitkan Kerangka Sistem tidak berfungsi.<br/>Tolong laporkan ini ke<a href="https://github.com/topjohnwu/Magisk/issues"><b>Pengembang</b></a> Magisk.]]></string>
+    <string name="system_inject_fail_summary">Injeksi Kerangka Sistem gagal</string>
+    <string name="system_inject_fail"><![CDATA[Ini jarang terjadi dan mungkin disebabkan oleh <b>Magisk</b> atau beberapa modul Magisk berkualitas rendah.<br/>Coba nonaktifkan modul Magisk selain Riru dan LSPosed atau kirimkan log lengkap ke pengembang.]]></string>
+    <string name="system_prop_incorrect_summary">Prop sistem salah</string>
+    <string name="system_prop_incorrect"><![CDATA[Beberapa properti sistem yang diperlukan dihapus atau diubah.<br/>Modul terkadang tidak valid.]]></string>
+    <string name="need_update">Butuh pembaruan</string>
+    <string name="please_update_summary">Silakan pasang LSPosed versi terbaru</string>
     <!-- LogsActivity -->
     <!-- Notification -->
     <!-- ModulesActivity -->
