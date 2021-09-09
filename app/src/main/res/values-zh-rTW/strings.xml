@@ -28,11 +28,12 @@
     <string name="Logs">日誌</string>
     <string name="Settings">設定</string>
     <string name="About">關於</string>
+    <string name="report_issue">回報問題</string>
     <string name="module_repo">倉庫</string>
     <string name="module_repo_summary">模組倉庫（Beta）</string>
     <string name="about_view_source_code"><![CDATA[在 %1$s 檢視原始碼<br/>加入我們的 %2$s 頻道]]></string>
     <string name="about_translators">翻譯者：%s</string>
-    <string name="translators"><![CDATA[<a href="https://github.com/tony8077616">孟武.尼德霍格.龍</a>、<a href="https://github.com/david082321">david082321</a>]]></string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself."><![CDATA[<a href="https://github.com/tony8077616">孟武.尼德霍格.龍</a>、<a href="https://github.com/david082321">david082321</a>]]></string>
     <string name="install">安裝</string>
     <string name="install_summary">點選安裝 LSPosed</string>
     <string name="not_installed">未安裝</string>
@@ -72,7 +73,7 @@
     <string name="module_is_not_activated_yet">Xposed 模組尚未啟用</string>
     <string name="module_is_not_activated_yet_detailed">%s 已安裝，但尚未啟用</string>
     <string name="xposed_module_updated_notification_title">Xposed 模組已更新</string>
-    <string name="xposed_module_updated_notification_content">%s 已更新</string>
+    <string name="xposed_module_updated_notification_content">%s 已更新，請強制停止並重新打開其作用域內的程式</string>
     <string name="xposed_module_updated_notification_title_system">Xposed 模組已更新，需要重新啟動。</string>
     <string name="xposed_module_updated_notification_content_system">%s 已更新，由於作用域包含系統框架，需要重新啟動以套用修改。</string>
     <!-- ModulesActivity -->
@@ -125,7 +126,7 @@
     <string name="menu_restore">還原</string>
     <string name="force_stop">強制停止</string>
     <string name="force_stop_dlg_title">強制停止？</string>
-    <string name="force_stop_dlg_text">如果您強行停止應用程式，可能導致行為異常。</string>
+    <string name="force_stop_dlg_text">如果您強制停止應用程式，可能導致行為異常。</string>
     <string name="reboot_required">需要重新啟動手機才能套用此修改</string>
     <string name="reboot">重新啟動</string>
     <string name="menu_hide">隱藏</string>

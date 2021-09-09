@@ -32,7 +32,7 @@
     <string name="module_repo_summary">モジュール リポジトリ (Beta)</string>
     <string name="about_view_source_code"><![CDATA[%1$s でソースコードを閲覧<br/>%2$s チャンネルに参加]]></string>
     <string name="about_translators">翻訳者: %s</string>
-    <string name="translators"><![CDATA[<a href="https://github.com/yoshi818">yoshi818</a>]]></string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself."><![CDATA[<a href="https://github.com/yoshi818">yoshi818</a>]]></string>
     <string name="not_installed">未インストール</string>
     <string name="activated">有効化済</string>
     <string name="partial_activated">部分的に有効化済</string>

@@ -29,12 +29,16 @@
     <string name="Logs">Registros</string>
     <string name="Settings">Configuración</string>
     <string name="About">Acerca de</string>
+    <string name="report_issue">Reportar problema</string>
     <string name="module_repo">Repositorio</string>
     <string name="module_repo_summary">Repositorio de módulos (Beta)</string>
     <string name="about_view_source_code"><![CDATA[Ve el código fuente en %1$s<br/>Únete a nuestro %2$s canal]]></string>
     <string name="about_translators">Traductores: %s</string>
-    <string name="translators"><![CDATA[<a href="https://github.com/JoseDeFreitas">José De Freitas</a>]]></string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself."><![CDATA[<a href="https://github.com/JoseDeFreitas">José De Freitas</a>]]></string>
+    <string name="install">Instalar</string>
+    <string name="install_summary">Pulsa para instalar LSPosed</string>
     <string name="not_installed">No instalado</string>
+    <string name="not_install_summary">LSPosed no está instalado</string>
     <string name="activated">Activado</string>
     <string name="partial_activated">Parcialmente activado</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy no está cargado correctamente</string>

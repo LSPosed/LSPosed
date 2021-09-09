@@ -25,18 +25,22 @@
     <plurals name="modules_enabled_count">
         <item quantity="one">Включен %d модуль</item>
         <item quantity="few">Включены %d модуля</item>
-        <item quantity="many">Включены %d модулей</item>
-        <item quantity="other">Включены %d модулей</item>
+        <item quantity="many">Включено %d модулей</item>
+        <item quantity="other">Включено %d модулей</item>
     </plurals>
     <string name="Logs">Логи</string>
     <string name="Settings">Настройки</string>
     <string name="About">О приложении</string>
+    <string name="report_issue">Сообщить об ошибке</string>
     <string name="module_repo">Репозиторий</string>
     <string name="module_repo_summary">Репозиторий модулей (Бета)</string>
     <string name="about_view_source_code"><![CDATA[Просмотреть исходный код на %1$s<br/>Присоединяйтесь к нашему %2$s каналу]]></string>
-    <string name="about_translators">Переводчик: %s</string>
-    <string name="translators"><![CDATA[<a href="https://github.com/Alexey71">Alexey</a>]]></string>
+    <string name="about_translators">Перевел на русский язык: %s</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself."><![CDATA[<a href="https://4pda.to/forum/index.php?showuser=2220650">Alеxеy</a>]]></string>
+    <string name="install">Установить</string>
+    <string name="install_summary">Нажмите, чтобы установить LSPosed</string>
     <string name="not_installed">Не установлен</string>
+    <string name="not_install_summary">LSPosed не установлен!</string>
     <string name="activated">Активирован</string>
     <string name="partial_activated">Частично активирован</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy не загружен должным образом</string>
@@ -56,6 +60,9 @@
     <string name="info_system_abi">Разрядность системы ABI</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Сохранить</string>
+    <string name="nav_item_logs_lsp">Логи LSPosed</string>
+    <string name="nav_item_logs_module">Логи модулей</string>
+    <string name="logs_save_failed2">Ошибка сохранения:\n%s</string>
     <string name="menuClearLog">Очистить логи</string>
     <string name="logs_cleared">Логи успешно очищены</string>
     <string name="scroll_top">Прокрутить вверх</string>
@@ -70,6 +77,8 @@
     <string name="module_is_not_activated_yet_detailed">Модуль %s установлен но не включен</string>
     <string name="xposed_module_updated_notification_title">Модуль обновлен</string>
     <string name="xposed_module_updated_notification_content">%s обновлен, остановите и запустите приложения выбранные для модуля</string>
+    <string name="xposed_module_updated_notification_title_system">Модуль обновлен, требуется перезагрузка</string>
+    <string name="xposed_module_updated_notification_content_system">%s обновлен, так как выбран системный фреймворк для модуля, требуется перезагрузка для применения изменений</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(описание отсутствует)</string>
     <string name="module_no_ui">Этот модуль не содержит пользовательского интерфейса</string>
@@ -99,6 +108,7 @@
     <string name="sort_by_package_name">По названию пакета</string>
     <string name="sort_by_install_time">По времени установки</string>
     <string name="sort_by_update_time">По времени обновления</string>
+    <string name="sort_reverse">Обратная сортировка</string>
     <string name="menu_show_system_apps">Системные</string>
     <string name="menu_sort">Сортировать</string>
     <string name="enable_module">Включить модуль</string>
@@ -138,7 +148,9 @@
     <string name="settings_backup_and_restore">Резервное копирование и восстановление</string>
     <string name="settings_backup_and_restore_summery">Список модулей и включенных приложений</string>
     <string name="settings_backup">Создать</string>
+    <string name="settings_backup_failed2">Не удалось сделать резервную копию:\n%s</string>
     <string name="settings_restore">Восстановить</string>
+    <string name="settings_restore_failed2">Не удалось восстановить:\n%s</string>
     <string name="group_network">Сеть</string>
     <string name="dns_over_http">DNS через HTTPS</string>
     <string name="dns_over_http_summary">Протокол для выполнения разрешения DNS по протоколу HTTPS. Целью этого метода является повышение конфиденциальности и безопасности пользователей путем предотвращения перехвата и манипулирования данными DNS с помощью атак типа «Атака посредника»</string>
@@ -163,6 +175,9 @@
     <string name="repo_load_failed">Не удалось загрузить репозиторий модуля: %s</string>
     <!-- CrashReportActivity -->
     <string name="app_destroyed">Это приложение повреждено. Убедитесь, что загрузили его из официального источника</string>
+    <string name="outdated_core">Приложение LSPosed новее, чем фреймворк LSPosed. Обновите фреймворк LSPosed</string>
     <string name="outdated_manager">Фреймворк LSPosed новее, чем приложение LSPosed. Обновите приложение вручную из /data/adb/lspd/manager.apk</string>
+    <string name="manager_crashed">Сбой приложения</string>
+    <string name="copy_crash_info">Скопировать информацию о сбое</string>
     <string name="copy_toast_msg">Скопировано</string>
 </resources>
