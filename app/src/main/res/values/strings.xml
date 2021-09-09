@@ -34,7 +34,7 @@
     <string name="module_repo_summary">Module repository (Beta)</string>
     <string name="about_view_source_code"><![CDATA[View source code at %1$s<br/>Join our %2$s channel]]></string>
     <string name="about_translators">Translators: %s</string>
-    <string name="translators"><![CDATA[<a href="https://github.com/LSPosed/LSPosed">LSPosed</a>]]></string>
+    <string name="translators" />
 
     <string name="install">Install</string>
     <string name="install_summary">Tap to install LSPosed</string>
@@ -166,6 +166,10 @@
     <string name="settings_show_hidden_icon_apps_enabled_summary">After Android 10, apps are not allowed to hide their launcher icons. Turn off the toggle to disable this system feature.</string>
     <string name="settings_group_system">System</string>
     <string name="settings_language">Language</string>
+    <string name="settings_translation_contributors">Translation contributors</string>
+    <string name="settings_translation">Participate in translation</string>
+    <string name="settings_translation_summary">Help us translate %s into your language</string>
+    <string name="settings_translation_summary_percentage">" (%s are translated)"</string>
 
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>

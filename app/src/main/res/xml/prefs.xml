@@ -40,6 +40,15 @@
             android:summary="%s"
             android:key="language"
             android:title="@string/settings_language" />
+
+        <Preference
+            android:key="translation_contributors"
+            android:title="@string/settings_translation_contributors"
+            app:enableCopying="true" />
+
+        <Preference
+            android:key="translation"
+            android:title="@string/settings_translation" />
     </com.takisoft.preferencex.PreferenceCategory>
 
     <com.takisoft.preferencex.PreferenceCategory android:title="@string/settings_group_theme">

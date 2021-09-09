@@ -22,7 +22,6 @@ package org.lsposed.manager.ui.fragment;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -98,13 +97,10 @@ public class HomeFragment extends BaseFragment {
             binding.designAboutTitle.setText(R.string.app_name);
             binding.designAboutInfo.setMovementMethod(LinkMovementMethod.getInstance());
             binding.designAboutInfo.setTransformationMethod(new LinkTransformationMethod(activity));
-            SpannableStringBuilder sb = new SpannableStringBuilder(HtmlCompat.fromHtml(getString(
+            binding.designAboutInfo.setText(HtmlCompat.fromHtml(getString(
                     R.string.about_view_source_code,
                     "<b><a href=\"https://github.com/LSPosed/LSPosed\">GitHub</a></b>",
                     "<b><a href=\"https://t.me/LSPosed\">Telegram</a></b>"), HtmlCompat.FROM_HTML_MODE_LEGACY));
-            sb.append("\n\n");
-            sb.append(HtmlCompat.fromHtml(getString(R.string.about_translators, getString(R.string.translators)), HtmlCompat.FROM_HTML_MODE_LEGACY));
-            binding.designAboutInfo.setText(sb);
             binding.designAboutVersion.setText(String.format(Locale.US, "%s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
             new BlurBehindDialogBuilder(activity)
                     .setView(binding.getRoot())
