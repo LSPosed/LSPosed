@@ -165,6 +165,7 @@
     <string name="settings_show_hidden_icon_apps_enabled">Force apps to show launcher icons</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">After Android 10, apps are not allowed to hide their launcher icons. Turn off the toggle to disable this system feature.</string>
     <string name="settings_group_system">System</string>
+    <string name="settings_language">Language</string>
 
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>

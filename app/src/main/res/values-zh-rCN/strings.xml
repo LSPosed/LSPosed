@@ -30,6 +30,7 @@
     <string name="Logs">日志</string>
     <string name="Settings">设置</string>
     <string name="About">关于</string>
+    <string name="report_issue">报告问题</string>
     <string name="module_repo">仓库</string>
     <string name="module_repo_summary">模块仓库（Beta）</string>
     <string name="about_view_source_code"><![CDATA[在 %1$s 查看源码<br/>加入我们的 %2$s 频道]]></string>
@@ -165,6 +166,7 @@
     <string name="settings_show_hidden_icon_apps_enabled">强制应用在启动器中显示图标</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">在 Android 10 之后，应用不被允许隐藏启动器图标。关闭本选项可禁用此系统功能。</string>
     <string name="settings_group_system">系统</string>
+    <string name="settings_language">语言</string>
 
     <!-- Module Repo -->
     <string name="module_readme">自述文件</string>
