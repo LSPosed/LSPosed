@@ -139,7 +139,8 @@ public class BridgeService {
             bridgeService.linkToDeath(bridgeRecipient, 0);
         } catch (Throwable e) {
             Log.w(TAG, "linkToDeath " + Log.getStackTraceString(e));
-            sendToBridge(binder, false);
+            var snapshot = bridgeService;
+            sendToBridge(binder, snapshot == null || !snapshot.isBinderAlive());
             return;
         }
 
@@ -158,6 +159,9 @@ public class BridgeService {
                 reply.readException();
             } catch (Throwable e) {
                 Log.e(TAG, "send binder " + Log.getStackTraceString(e));
+                var snapshot = bridgeService;
+                sendToBridge(binder, snapshot == null || !snapshot.isBinderAlive());
+                return;
             } finally {
                 data.recycle();
                 reply.recycle();
