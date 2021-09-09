@@ -98,6 +98,7 @@ public interface IActivityManager extends IInterface {
     void setActivityController(IActivityController watcher, boolean imAMonkey);
 
     abstract class Stub extends Binder implements IActivityManager {
+        public static int TRANSACTION_setActivityController;
 
         public static IActivityManager asInterface(IBinder obj) {
             throw new UnsupportedOperationException();
