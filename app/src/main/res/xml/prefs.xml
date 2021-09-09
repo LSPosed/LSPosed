@@ -30,6 +30,18 @@
             android:title="@string/dns_over_http" />
     </com.takisoft.preferencex.PreferenceCategory>
 
+    <com.takisoft.preferencex.PreferenceCategory android:title="@string/settings_language">
+
+        <rikka.preference.SimpleMenuPreference
+            android:defaultValue="SYSTEM"
+            android:entries="@array/language"
+            android:entryValues="@array/language_value"
+            android:icon="@drawable/ic_baseline_translate_24"
+            android:summary="%s"
+            android:key="language"
+            android:title="@string/settings_language" />
+    </com.takisoft.preferencex.PreferenceCategory>
+
     <com.takisoft.preferencex.PreferenceCategory android:title="@string/settings_group_theme">
         <SwitchPreference
             android:defaultValue="true"
