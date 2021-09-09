@@ -104,6 +104,11 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        if (ResourceUtils.isNightMode(getResources().getConfiguration())) {
+            runAsync(HTML_TEMPLATE_DARK);
+        } else {
+            runAsync(HTML_TEMPLATE);
+        }
         mSearchListener = new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -166,11 +171,6 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
         if (preLoadWebview) {
             mHandler.postDelayed(() -> {
                 new WebView(requireContext());
-                if (ResourceUtils.isNightMode(getResources().getConfiguration())) {
-                    HTML_TEMPLATE_DARK.run();
-                } else {
-                    HTML_TEMPLATE.run();
-                }
             }, 500);
             preLoadWebview = false;
         }

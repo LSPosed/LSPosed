@@ -48,6 +48,7 @@ import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.FragmentSettingsBinding;
 import org.lsposed.manager.ui.activity.MainActivity;
 import org.lsposed.manager.util.BackupUtils;
+import org.lsposed.manager.util.NavUtil;
 import org.lsposed.manager.util.theme.ThemeUtil;
 
 import java.time.LocalDateTime;
@@ -267,6 +268,25 @@ public class SettingsFragment extends BaseFragment {
                 } else {
                     var locale = Locale.forLanguageTag(tag);
                     language.setSummary(!TextUtils.isEmpty(locale.getScript()) ? locale.getDisplayScript(userLocale) : locale.getDisplayName(userLocale));
+                }
+            }
+
+            Preference translation = findPreference("translation");
+            if (translation != null) {
+                translation.setOnPreferenceClickListener(preference -> {
+                    NavUtil.startURL(requireActivity(), "https://lsposed.crowdin.com/lsposed");
+                    return true;
+                });
+                translation.setSummary(getString(R.string.settings_translation_summary, getString(R.string.app_name)));
+            }
+
+            Preference translation_contributors = findPreference("translation_contributors");
+            if (translation_contributors != null) {
+                var translators = HtmlCompat.fromHtml(getString(R.string.translators), HtmlCompat.FROM_HTML_MODE_LEGACY);
+                if (TextUtils.isEmpty(translators)) {
+                    translation_contributors.setVisible(false);
+                } else {
+                    translation_contributors.setSummary(translators);
                 }
             }
         }
