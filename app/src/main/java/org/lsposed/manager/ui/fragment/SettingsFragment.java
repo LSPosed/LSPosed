@@ -23,6 +23,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.core.text.HtmlCompat;
 import androidx.preference.Preference;
 import androidx.preference.SwitchPreference;
 import androidx.recyclerview.widget.RecyclerView;
@@ -49,10 +51,13 @@ import org.lsposed.manager.util.BackupUtils;
 import org.lsposed.manager.util.theme.ThemeUtil;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Locale;
 
 import rikka.core.util.ResourceUtils;
 import rikka.material.app.DayNightDelegate;
+import rikka.material.app.LocaleDelegate;
+import rikka.preference.SimpleMenuPreference;
 import rikka.recyclerview.RecyclerViewKt;
 import rikka.widget.borderview.BorderRecyclerView;
 
@@ -229,6 +234,40 @@ public class SettingsFragment extends BaseFragment {
                     }
                     return true;
                 });
+            }
+
+            SimpleMenuPreference language = findPreference("language");
+            if (language != null) {
+                language.setOnPreferenceChangeListener((preference, newValue) -> {
+                    var locale = "SYSTEM".equals(newValue) ? LocaleDelegate.getSystemLocale() : Locale.forLanguageTag((String) newValue);
+                    LocaleDelegate.setDefaultLocale(locale);
+                    MainActivity activity = (MainActivity) getActivity();
+                    if (activity != null) {
+                        activity.restart();
+                    }
+                    return true;
+                });
+                var tag = language.getValue();
+                var userLocale = App.getLocale();
+                var entries = new ArrayList<CharSequence>();
+                for (int i = 0; i < language.getEntries().length; i++) {
+                    if (i > 0) {
+                        var locale = Locale.forLanguageTag(language.getEntries()[i].toString());
+                        entries.add(HtmlCompat.fromHtml(String.format("%s - %s",
+                                !TextUtils.isEmpty(locale.getScript()) ? locale.getDisplayScript(locale) : locale.getDisplayName(locale),
+                                !TextUtils.isEmpty(locale.getScript()) ? locale.getDisplayScript(userLocale) : locale.getDisplayName(userLocale)
+                        ), HtmlCompat.FROM_HTML_MODE_LEGACY));
+                    } else {
+                        entries.add(language.getEntries()[i]);
+                    }
+                }
+                language.setEntries(entries.toArray(new CharSequence[0]));
+                if (TextUtils.isEmpty(tag) || "SYSTEM".equals(tag)) {
+                    language.setSummary(getString(rikka.material.R.string.follow_system));
+                } else {
+                    var locale = Locale.forLanguageTag(tag);
+                    language.setSummary(!TextUtils.isEmpty(locale.getScript()) ? locale.getDisplayScript(userLocale) : locale.getDisplayName(userLocale));
+                }
             }
         }
 
