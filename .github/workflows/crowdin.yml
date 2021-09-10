@@ -21,6 +21,7 @@ jobs:
         download_translations: false
         upload_sources: true
         config: 'crowdin.yml'
+        crowdin_branch_name: master
       env:
         CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
         CROWDIN_API_TOKEN: ${{ secrets.CROWDIN_API_TOKEN }}
