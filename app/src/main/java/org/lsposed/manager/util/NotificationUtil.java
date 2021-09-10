@@ -31,9 +31,12 @@ import androidx.core.app.NotificationCompat;
 import org.lsposed.manager.R;
 import org.lsposed.manager.ui.activity.MainActivity;
 
+import java.util.UUID;
+
 public final class NotificationUtil {
 
-    public static final int NOTIFICATION_MODULE_NOT_ACTIVATED_YET = 0;
+    public static final String NOTIFICATION_UUID = UUID.randomUUID().toString();
+    private static final int NOTIFICATION_MODULE_NOT_ACTIVATED_YET = 0;
     private static final int NOTIFICATION_MODULES_UPDATED = 1;
     private static final int PENDING_INTENT_OPEN_APP_LIST = 0;
     private static final String NOTIFICATION_MODULES_CHANNEL = "modules_channel_2";
@@ -63,6 +66,7 @@ public final class NotificationUtil {
                 R.string.module_is_not_activated_yet_detailed, moduleName);
 
         Intent intent = new Intent(context, MainActivity.class)
+                .putExtra("uuid", NOTIFICATION_UUID)
                 .putExtra("modulePackageName", modulePackageName)
                 .putExtra("moduleUserId", moduleUserId)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
