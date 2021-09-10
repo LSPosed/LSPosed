@@ -150,12 +150,12 @@ public class AppListFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        scopeAdapter.refresh();
+        if (scopeAdapter != null) scopeAdapter.refresh();
     }
 
     @Override
     public void onDestroy() {
-        scopeAdapter.onDestroy();
+        if (scopeAdapter != null) scopeAdapter.onDestroy();
 
         super.onDestroy();
     }
