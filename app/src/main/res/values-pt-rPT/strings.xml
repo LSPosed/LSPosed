@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -29,7 +30,6 @@
     <string name="module_repo_summary">Repositorio de módulos (Beta)</string>
     <string name="about_view_source_code"><![CDATA[Ver código fonte em %1$s<br/>Entre no nosso canal %2$s]]></string>
     <string name="about_translators">Tradutores: %s</string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself."><![CDATA[<a href="https://github.com/LSPosed/LSPosed">LSPosed</a>]]></string>
     <string name="install">Instalar</string>
     <string name="install_summary">Toque para instalar LSPosed</string>
     <string name="not_installed">Não instalado</string>
