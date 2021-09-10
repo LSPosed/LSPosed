@@ -40,6 +40,7 @@ import androidx.preference.SwitchPreference;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.takisoft.preferencex.PreferenceCategory;
 import com.takisoft.preferencex.PreferenceFragmentCompat;
 
 import org.lsposed.manager.App;
@@ -212,6 +213,7 @@ public class SettingsFragment extends BaseFragment {
             }
 
             SwitchPreference prefShowHiddenIcons = findPreference("show_hidden_icon_apps_enabled");
+            PreferenceCategory prefGroupSystem = findPreference("settings_group_system");
             if (prefShowHiddenIcons != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 if (ConfigManager.isBinderAlive()) {
                     prefShowHiddenIcons.setEnabled(true);
@@ -220,6 +222,12 @@ public class SettingsFragment extends BaseFragment {
                 }
                 prefShowHiddenIcons.setChecked(Settings.Global.getInt(
                         requireActivity().getContentResolver(), "show_hidden_icon_apps_enabled", 1) != 0);
+            } else {
+                if (prefShowHiddenIcons != null && prefGroupSystem != null) {
+                    prefShowHiddenIcons.setVisible(false);
+                    prefGroupSystem.setVisible(false);
+                }
+
             }
 
             SwitchPreference prefFollowSystemAccent = findPreference("follow_system_accent");
