@@ -32,7 +32,9 @@
     <string name="module_repo_summary">モジュール リポジトリ (Beta)</string>
     <string name="about_view_source_code"><![CDATA[%1$s でソースコードを閲覧<br/>%2$s チャンネルに参加]]></string>
     <string name="about_translators">翻訳者: %s</string>
+    <string name="install">インストール</string>
     <string name="not_installed">未インストール</string>
+    <string name="not_install_summary">LSPosedはインストールされていません</string>
     <string name="activated">有効化済</string>
     <string name="partial_activated">部分的に有効化済</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy が正しく読み込まれていません</string>
@@ -52,6 +54,8 @@
     <string name="info_system_abi">システム ABI</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">保存</string>
+    <string name="nav_item_logs_lsp">LSPosed ログ</string>
+    <string name="nav_item_logs_module">モジュールログ</string>
     <string name="menuClearLog">直ちにログを消去</string>
     <string name="logs_cleared">ログの消去に成功しました。</string>
     <string name="scroll_top">ログの先頭行にスクロール</string>
@@ -95,6 +99,7 @@
     <string name="sort_by_package_name">パッケージ名でソート</string>
     <string name="sort_by_install_time">インストール日時でソート</string>
     <string name="sort_by_update_time">更新日時でソート</string>
+    <string name="sort_reverse">逆順</string>
     <string name="menu_show_system_apps">システムアプリ</string>
     <string name="menu_sort">ソート中…</string>
     <string name="enable_module">モジュールの有効化</string>
@@ -144,7 +149,10 @@
     <string name="settings_show_hidden_icon_apps_enabled_summary">Android 10 以降ではアプリ(特に Xposed モジュール)ではランチャーアイコンを隠すことが出来ません。本機能を無効にするには、トグルをオフにして下さい。</string>
     <string name="settings_group_system">システム</string>
     <string name="settings_language">言語</string>
+    <string name="settings_translation_contributors">翻訳貢献者</string>
+    <string name="settings_translation">翻訳に参加する</string>
     <!-- Module Repo -->
+    <string name="module_readme">読み取り</string>
     <string name="module_releases">リリース</string>
     <string name="module_information">情報</string>
     <string name="module_information_homepage">ホームページ</string>
@@ -159,5 +167,6 @@
     <!-- CrashReportActivity -->
     <string name="app_destroyed">本アプリケーションの内部で壊れています。公式ソースからダウンロードされたものであるかを確認して下さい。</string>
     <string name="outdated_manager">LSPosed Manager と LSPosed Core のバージョンが一致していません。対応バージョンを再インストールして下さい。</string>
+    <string name="copy_crash_info">クラッシュ情報をコピーする</string>
     <string name="copy_toast_msg">複写済</string>
 </resources>
