@@ -33,15 +33,14 @@
     <string name="module_repo_summary">Gudang Modul (Beta)</string>
     <string name="about_view_source_code"><![CDATA[Lihat kode sumber di %1$s<br/>Bergabunglah dengan kami %2$s saluran]]></string>
     <string name="about_translators">Penerjemah: %s</string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself."><![CDATA[<a href="https://github.com/LSPosed/LSPosed">@AMMLR</a>]]></string>
     <string name="install">Pasang</string>
-    <string name="install_summary">Ketuk untuk menginstal LSPosed</string>
+    <string name="install_summary">Ketuk untuk memasang LSPosed</string>
     <string name="not_installed">Tidak terpasang</string>
     <string name="not_install_summary">LSPosed tidak terpasang</string>
     <string name="activated">Diaktifkan</string>
     <string name="partial_activated">Diaktifkan sebagian</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy tidak dimuat dengan benar</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[Modul yang mengaitkan Kerangka Sistem tidak berfungsi.<br/>Tolong laporkan ini ke<a href="https://github.com/topjohnwu/Magisk/issues"><b>Pengembang</b></a> Magisk.]]></string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Modul yang mengaitkan Kerangka Sistem tidak berfungsi.<br/>Tolong laporkan ini ke<a href="https://github.com/topjohnwu/Magisk/issues"><b>Pengembang Magisk</b></a>.]]></string>
     <string name="system_inject_fail_summary">Injeksi Kerangka Sistem gagal</string>
     <string name="system_inject_fail"><![CDATA[Ini jarang terjadi dan mungkin disebabkan oleh <b>Magisk</b> atau beberapa modul Magisk berkualitas rendah.<br/>Coba nonaktifkan modul Magisk selain Riru dan LSPosed atau kirimkan log lengkap ke pengembang.]]></string>
     <string name="system_prop_incorrect_summary">Prop sistem salah</string>
@@ -133,7 +132,7 @@
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">Lihat di aplikasi lain</string>
     <string name="module_app_info">Informasi aplikasi</string>
-    <string name="list_empty">\\\\_(ツ)_\/¯\nTidak ada apa-apa di sini</string>
+    <string name="list_empty">\"\\\\_(ツ)_\/¯\nTidak ada apa-apa di sini</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Kerangka</string>
     <string name="settings_enable_resources">Aktifkan kait sumber daya</string>
@@ -157,6 +156,11 @@
     <string name="settings_show_hidden_icon_apps_enabled">Paksa aplikasi untuk menampilkan ikon peluncur</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">Setelah Android 10, aplikasi tidak diizinkan menyembunyikan ikon peluncurnya. Matikan untuk menonaktifkan fitur sistem ini.</string>
     <string name="settings_group_system">Sistem</string>
+    <string name="settings_language">Bahasa</string>
+    <string name="settings_translation_contributors">Kontributor Terjemahan</string>
+    <string name="settings_translation">Berpartisipasi dalam terjemahan</string>
+    <string name="settings_translation_summary">Bantu kami terjemahkan %s kedalam bahasamu</string>
+    <string name="settings_translation_summary_percentage">" (%s diterjemahkan)"</string>
     <!-- Module Repo -->
     <string name="module_readme">Baca aku</string>
     <string name="module_releases">Rilis</string>
