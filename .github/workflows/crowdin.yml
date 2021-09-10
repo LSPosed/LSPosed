@@ -23,4 +23,4 @@ jobs:
         config: 'crowdin.yml'
       env:
         CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
-        CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_API_TOKEN }}
+        CROWDIN_API_TOKEN: ${{ secrets.CROWDIN_API_TOKEN }}
