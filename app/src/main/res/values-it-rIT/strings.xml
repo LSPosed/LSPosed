@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -33,7 +34,6 @@
     <string name="module_repo_summary">Repository dei moduli (Beta)</string>
     <string name="about_view_source_code"><![CDATA[Visualizza il codice sorgente su %1$s<br/>Unisciti al nostro canale %2$s]]></string>
     <string name="about_translators">Traduttori: %s</string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself."><![CDATA[<a href="https://twitter.com/alex193a">alex193a</a>, <a href="https://github.com/Fs00">Fs00</a>, <a href="https://github.com/xDonatello">xDonatello</a>]]></string>
     <string name="install">Installa</string>
     <string name="install_summary">Tocca per installare LSPosed</string>
     <string name="not_installed">Non installato</string>
@@ -157,9 +157,14 @@
     <string name="settings_show_hidden_icon_apps_enabled">Costringi le app a mostrare le icone nel launcher</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">A partire da Android 10, le app non possono più nascondere le loro icone nel launcher. Disabilita l\'opzione per disattivare questa funzionalità.</string>
     <string name="settings_group_system">Sistema</string>
+    <string name="settings_language">Lingua</string>
+    <string name="settings_translation_contributors">Contributori alla traduzione</string>
+    <string name="settings_translation">Partecipa alla traduzione</string>
+    <string name="settings_translation_summary">Aiutaci a tradurre %s nella tua lingua</string>
+    <string name="settings_translation_summary_percentage">" (%s sono tradotti)"</string>
     <!-- Module Repo -->
     <string name="module_readme">Leggimi</string>
-    <string name="module_releases">Release</string>
+    <string name="module_releases">Rilasci</string>
     <string name="module_information">Informazioni</string>
     <string name="module_information_homepage">Pagina iniziale</string>
     <string name="module_information_source_url">Codice sorgente</string>
@@ -168,7 +173,7 @@
     <string name="menu_open_in_browser">Apri nel browser</string>
     <string name="refresh">Ricarica</string>
     <string name="module_release_load_more">Mostra le versioni precedenti</string>
-    <string name="module_release_no_more">Non ci sono altre release</string>
+    <string name="module_release_no_more">Non ci sono altre versioni</string>
     <string name="repo_load_failed">Impossibile caricare il repository dei moduli: %s</string>
     <!-- CrashReportActivity -->
     <string name="app_destroyed">Quest\'app è stata distrutta, scarica l\'ultima versione dalla fonte ufficiale.</string>
