@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -32,7 +33,6 @@
     <string name="module_repo_summary">模組倉庫（Beta）</string>
     <string name="about_view_source_code"><![CDATA[在 %1$s 檢視原始碼<br/>加入我們的 %2$s 頻道]]></string>
     <string name="about_translators">翻譯者：%s</string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself."><![CDATA[<a href="https://github.com/tony8077616">孟武.尼德霍格.龍</a>、<a href="https://github.com/david082321">david082321</a>]]></string>
     <string name="install">安裝</string>
     <string name="install_summary">點選安裝 LSPosed</string>
     <string name="not_installed">未安裝</string>
@@ -156,6 +156,11 @@
     <string name="settings_show_hidden_icon_apps_enabled">強制應用程式在啟動器中顯示圖示</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">在 Android 10 之後，應用（特別是 Xposed 模組）不被允許隱藏啟動器圖示。關閉本選項以停用此功能。</string>
     <string name="settings_group_system">系統</string>
+    <string name="settings_language">語言</string>
+    <string name="settings_translation_contributors">譯者</string>
+    <string name="settings_translation">參與翻譯</string>
+    <string name="settings_translation_summary">幫助我們翻譯 %s 到您的語言</string>
+    <string name="settings_translation_summary_percentage">"（%s 已翻譯）"</string>
     <!-- Module Repo -->
     <string name="module_readme">自述檔案</string>
     <string name="module_releases">版本</string>

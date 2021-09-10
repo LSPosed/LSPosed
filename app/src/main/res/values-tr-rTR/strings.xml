@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -32,7 +33,6 @@
     <string name="module_repo_summary">Modül reposu (Beta)</string>
     <string name="about_view_source_code"><![CDATA[%1$s adresindeki kaynak kodunu görüntüle<br/>%2$s kanalımıza katılın]]></string>
     <string name="about_translators">Çevirmenler: %s</string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself."><![CDATA[<a href="https://t.me/BdrcnAYYDIN">Bedircan AYAYDIN</a>]]></string>
     <string name="install">Yükle</string>
     <string name="install_summary">LSPosed\'i yüklemek için dokunun</string>
     <string name="not_installed">Yüklenmedi</string>

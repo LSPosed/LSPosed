@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -32,7 +33,6 @@
     <string name="module_repo_summary">模組倉庫（Beta）</string>
     <string name="about_view_source_code"><![CDATA[在 %1$s 查看源碼<br/>加入我們的 %2$s 頻道]]></string>
     <string name="about_translators">翻譯者：%s</string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself."><![CDATA[<a href="https://github.com/LSPosed/LSPosed">LSPosed</a>]]></string>
     <string name="install">安裝</string>
     <string name="install_summary">點按安裝 LSPosed</string>
     <string name="not_installed">未安裝</string>
@@ -40,7 +40,7 @@
     <string name="activated">已啟動</string>
     <string name="partial_activated">部分啟動</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy 未正常加載</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[SEPolicy is not loaded properly, modules that hook System Framework will not work.<br>Please report this to <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> developer.]]></string>
+    <string name="selinux_policy_not_loaded"><![CDATA[注入系統的模組將不會工作。<br/>請回報給 <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> 開發者。]]></string>
     <string name="system_inject_fail_summary">系統框架注入失敗</string>
     <string name="system_inject_fail"><![CDATA[這是極罕見的問題，可能由於 <b>Magisk</b> 本身或者一些低質量的 Magisk 模組導致。<br/>請嘗試禁用除了 Riru 和 LSPosed 之外的模組然後重啟或者提交完整日誌給開發者。]]></string>
     <string name="system_prop_incorrect_summary">系統屬性異常</string>
@@ -156,6 +156,11 @@
     <string name="settings_show_hidden_icon_apps_enabled">強制應用顯示其啟動器圖標</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">在Android 10之後，應用不再允許隱藏桌面圖標。關閉該選項以禁用該系統功能。</string>
     <string name="settings_group_system">系統</string>
+    <string name="settings_language">語言</string>
+    <string name="settings_translation_contributors">翻譯貢獻者</string>
+    <string name="settings_translation">參與翻譯</string>
+    <string name="settings_translation_summary">幫助我們翻譯 %s 到您的語言</string>
+    <string name="settings_translation_summary_percentage">"（%s 已翻譯）"</string>
     <!-- Module Repo -->
     <string name="module_readme">讀我檔案</string>
     <string name="module_releases">版本</string>

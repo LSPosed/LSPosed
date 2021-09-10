@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -35,7 +36,6 @@
     <string name="module_repo_summary">Repozytorium modułów (beta)</string>
     <string name="about_view_source_code"><![CDATA[Zobacz kod źródłowy na %1$s<br/>Dołącz do naszego kanału %2$s]]></string>
     <string name="about_translators">Tłumacze: %s</string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself."><![CDATA[<a href="https://github.com/LSPosed/LSPosed">LSPosed</a>]]></string>
     <string name="install">Instaluj</string>
     <string name="install_summary">Dotknij, aby zainstalować LSPosed</string>
     <string name="not_installed">Nie zainstalowano</string>
@@ -159,6 +159,7 @@
     <string name="settings_show_hidden_icon_apps_enabled">Wymuś aplikacjom pokazywanie ikon launchera</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">Po Android 10 aplikacje nie mogą ukrywać swoich ikon launchera. Wyłącz przełącznik, aby zablokować tę funkcję systemową.</string>
     <string name="settings_group_system">System</string>
+    <string name="settings_language">Język</string>
     <!-- Module Repo -->
     <string name="module_readme">Przeczytaj</string>
     <string name="module_releases">Wersje</string>

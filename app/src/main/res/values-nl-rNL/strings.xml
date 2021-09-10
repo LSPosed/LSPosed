@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -33,7 +34,6 @@
     <string name="module_repo_summary">Module opslagplaats (Beta)</string>
     <string name="about_view_source_code"><![CDATA[Bekijk de broncode op %1$s<br/>Sluit je aan bij onze %2$s kanaal]]></string>
     <string name="about_translators">Vertaler: %1$s</string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself."><![CDATA[<a href="https://github.com/Pandemic-XDA">Pandemic-XDA</a>]]></string>
     <string name="install">Installeren</string>
     <string name="install_summary">Tik om LSPosed te installeren</string>
     <string name="not_installed">Niet geïnstalleerd</string>
@@ -157,6 +157,11 @@
     <string name="settings_show_hidden_icon_apps_enabled">Forceer apps om launcher-pictogrammen weer te geven</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">Na Android 10 mogen apps (vooral Xposed-modules) hun opstartpictogrammen niet verbergen. Schakel de schakelaar uit om deze functie uit te schakelen.</string>
     <string name="settings_group_system">Systeem</string>
+    <string name="settings_language">Taal</string>
+    <string name="settings_translation_contributors">Bijdragers van vertalingen</string>
+    <string name="settings_translation">Deelnemen aan vertaling</string>
+    <string name="settings_translation_summary">Help ons %s te vertalen in uw taal</string>
+    <string name="settings_translation_summary_percentage">" (%s zijn vertaald)"</string>
     <!-- Module Repo -->
     <string name="module_readme">Leesmij</string>
     <string name="module_releases">Publicaties</string>
