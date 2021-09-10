@@ -39,6 +39,7 @@ import org.lsposed.manager.NavGraphDirections;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.ActivityMainBinding;
 import org.lsposed.manager.ui.activity.base.BaseActivity;
+import org.lsposed.manager.util.NotificationUtil;
 
 public class MainActivity extends BaseActivity {
     private static final String KEY_PREFIX = MainActivity.class.getName() + '.';
@@ -98,24 +99,30 @@ public class MainActivity extends BaseActivity {
         }
         if (intent.getAction() != null && intent.getAction().equals("android.intent.action.APPLICATION_PREFERENCES")) {
             navController.navigate(R.id.action_settings_fragment);
-        } else if (intent.hasExtra("modulePackageName") && ConfigManager.isBinderAlive()) {
-            navController.navigate(NavGraphDirections.actionAppListFragment(intent.getStringExtra("modulePackageName"), intent.getIntExtra("moduleUserId", -1)));
-        } else if (!TextUtils.isEmpty(intent.getDataString())) {
-            switch (intent.getDataString()) {
-                case "modules":
-                    if (!ConfigManager.isBinderAlive()) break;
-                    navController.navigate(R.id.action_modules_fragment);
-                    break;
-                case "logs":
-                    if (!ConfigManager.isBinderAlive()) break;
-                    navController.navigate(R.id.action_logs_fragment);
-                    break;
-                case "repo":
-                    if (!ConfigManager.isBinderAlive() && !ConfigManager.isMagiskInstalled()) break;
-                    navController.navigate(R.id.action_repo_fragment);
-                    break;
+        } else if (ConfigManager.isBinderAlive()) {
+            if (NotificationUtil.NOTIFICATION_UUID.equals(intent.getStringExtra("uuid"))) {
+                navController.navigate(
+                        NavGraphDirections.actionAppListFragment(
+                                intent.getStringExtra("modulePackageName"),
+                                intent.getIntExtra("moduleUserId", -1))
+                );
+            } else if (!TextUtils.isEmpty(intent.getDataString())) {
+                switch (intent.getDataString()) {
+                    case "modules":
+                        navController.navigate(R.id.action_modules_fragment);
+                        break;
+                    case "logs":
+                        navController.navigate(R.id.action_logs_fragment);
+                        break;
+                    case "repo":
+                        if (ConfigManager.isMagiskInstalled()) {
+                            navController.navigate(R.id.action_repo_fragment);
+                        }
+                        break;
+                }
             }
         }
+
     }
 
     @Override
