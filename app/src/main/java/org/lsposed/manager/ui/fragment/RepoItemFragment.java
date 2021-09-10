@@ -151,9 +151,9 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
             setting.setTextZoom(80);
             String body;
             if (ResourceUtils.isNightMode(getResources().getConfiguration())) {
-                body = RepoFragment.HTML_TEMPLATE_DARK.get().replace("@body@", text);
+                body = App.HTML_TEMPLATE_DARK.get().replace("@body@", text);
             } else {
-                body = RepoFragment.HTML_TEMPLATE.get().replace("@body@", text);
+                body = App.HTML_TEMPLATE.get().replace("@body@", text);
             }
             view.setWebViewClient(new WebViewClient() {
                 @Override

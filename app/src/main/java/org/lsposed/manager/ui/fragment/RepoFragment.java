@@ -30,7 +30,6 @@ import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -59,16 +58,12 @@ import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.repo.model.OnlineModule;
 import org.lsposed.manager.util.ModuleUtil;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.FutureTask;
 import java.util.stream.Collectors;
 
 import rikka.core.util.LabelComparator;
@@ -76,8 +71,6 @@ import rikka.core.util.ResourceUtils;
 import rikka.recyclerview.RecyclerViewKt;
 
 public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
-    public static final FutureTask<String> HTML_TEMPLATE = new FutureTask<>(() -> readWebviewHTML("template.html"));
-    public static final FutureTask<String> HTML_TEMPLATE_DARK = new FutureTask<>(() -> readWebviewHTML("template_dark.html"));
     protected FragmentRepoBinding binding;
     protected SearchView searchView;
     private SearchView.OnQueryTextListener mSearchListener;
@@ -87,28 +80,8 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
     private final RepoLoader repoLoader = RepoLoader.getInstance();
     private RepoAdapter adapter;
 
-    private static String readWebviewHTML(String name) {
-        try {
-            var input = App.getInstance().getAssets().open("webview/" + name);
-            var result = new ByteArrayOutputStream(1024);
-            var buffer = new byte[1024];
-            for (int length; (length = input.read(buffer)) != -1; ) {
-                result.write(buffer, 0, length);
-            }
-            return result.toString(StandardCharsets.UTF_8.name());
-        } catch (IOException e) {
-            Log.e(App.TAG, "read webview HTML", e);
-            return "<html><body>@body@</body></html>";
-        }
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        if (ResourceUtils.isNightMode(getResources().getConfiguration())) {
-            runAsync(HTML_TEMPLATE_DARK);
-        } else {
-            runAsync(HTML_TEMPLATE);
-        }
         mSearchListener = new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -169,9 +142,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
         super.onResume();
         adapter.initData();
         if (preLoadWebview) {
-            mHandler.postDelayed(() -> {
-                new WebView(requireContext());
-            }, 500);
+            mHandler.postDelayed(() -> new WebView(requireContext()), 500);
             preLoadWebview = false;
         }
     }
