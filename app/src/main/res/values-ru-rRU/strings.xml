@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -35,7 +36,6 @@
     <string name="module_repo_summary">Репозиторий модулей (Бета)</string>
     <string name="about_view_source_code"><![CDATA[Просмотреть исходный код на %1$s<br/>Присоединяйтесь к нашему %2$s каналу]]></string>
     <string name="about_translators">Перевел на русский язык: %s</string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself."><![CDATA[<a href="https://4pda.to/forum/index.php?showuser=2220650">Alеxеy</a>]]></string>
     <string name="install">Установить</string>
     <string name="install_summary">Нажмите, чтобы установить LSPosed</string>
     <string name="not_installed">Не установлен</string>
@@ -159,6 +159,11 @@
     <string name="settings_show_hidden_icon_apps_enabled">Принудительно показывать иконку модуля</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">После Android 10, модули не могут скрывать иконку в лаунчер. Выключите переключатель, чтобы отключить эту системную функцию</string>
     <string name="settings_group_system">Система</string>
+    <string name="settings_language">Язык приложения</string>
+    <string name="settings_translation_contributors">Автор перевода</string>
+    <string name="settings_translation">Принять участие в переводе</string>
+    <string name="settings_translation_summary">Помогите нам перевести %s на ваш язык</string>
+    <string name="settings_translation_summary_percentage">" (%s переведено)"</string>
     <!-- Module Repo -->
     <string name="module_readme">Описание</string>
     <string name="module_releases">Версии</string>
