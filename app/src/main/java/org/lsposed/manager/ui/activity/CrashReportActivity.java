@@ -25,16 +25,16 @@ import android.content.ClipboardManager;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.ActivityCrashReportBinding;
+import org.lsposed.manager.util.NavUtil;
 
 import java.time.LocalDateTime;
 
@@ -46,14 +46,22 @@ public class CrashReportActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityCrashReportBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        binding.copyLogs.setOnClickListener(v -> {
+        binding.sendLogs.setOnClickListener(view -> {
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, getAllErrorDetailsFromIntent(getIntent()));
+            sendIntent.setType("text/plain");
+            startActivity(Intent.createChooser(sendIntent, null));
+        });
+        binding.reportIssue.setOnClickListener(view -> {
             var clipboard = getSystemService(ClipboardManager.class);
             //Are there any devices without clipboard...?
             if (clipboard != null) {
                 ClipData clip = ClipData.newPlainText("LSPManagerCrashInfo", getAllErrorDetailsFromIntent(getIntent()));
                 clipboard.setPrimaryClip(clip);
-                Snackbar.make(binding.snackbar, R.string.copy_toast_msg, Snackbar.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.crash_info_copied, Toast.LENGTH_LONG).show();
             }
+            NavUtil.startURL(this, "https://github.com/LSPosed/LSPosed/issues");
         });
 
     }

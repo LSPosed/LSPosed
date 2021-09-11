@@ -20,7 +20,6 @@
 
 package org.lsposed.manager.ui.activity.base;
 
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
@@ -31,7 +30,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
-import org.lsposed.manager.App;
 import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
@@ -42,12 +40,6 @@ import rikka.core.util.ResourceUtils;
 import rikka.material.app.MaterialActivity;
 
 public class BaseActivity extends MaterialActivity {
-
-    protected static SharedPreferences preferences;
-
-    static {
-        preferences = App.getPreferences();
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
