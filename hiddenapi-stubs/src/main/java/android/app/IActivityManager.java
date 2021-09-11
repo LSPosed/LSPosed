@@ -95,7 +95,7 @@ public interface IActivityManager extends IInterface {
 
     UserInfo getCurrentUser() throws RemoteException;
 
-    void setActivityController(IActivityController watcher, boolean imAMonkey);
+    void setActivityController(IActivityController watcher, boolean imAMonkey) throws RemoteException;
 
     abstract class Stub extends Binder implements IActivityManager {
         public static int TRANSACTION_setActivityController;

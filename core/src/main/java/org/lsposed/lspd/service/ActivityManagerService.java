@@ -21,6 +21,7 @@ package org.lsposed.lspd.service;
 
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 
+import android.app.IActivityController;
 import android.app.IActivityManager;
 import android.app.IApplicationThread;
 import android.app.IServiceConnection;
@@ -60,10 +61,42 @@ public class ActivityManagerService {
             if (binder == null) return null;
             try {
                 binder.linkToDeath(deathRecipient, 0);
+                am = IActivityManager.Stub.asInterface(binder);
+                am.setActivityController(new IActivityController.Stub() {
+                    @Override
+                    public boolean activityStarting(Intent intent, String pkg) {
+                        Log.e(TAG, "starting " + pkg + "'s activity " + intent);
+                        return true;
+                    }
+
+                    @Override
+                    public boolean activityResuming(String pkg) {
+                        return true;
+                    }
+
+                    @Override
+                    public boolean appCrashed(String processName, int pid, String shortMsg, String longMsg, long timeMillis, String stackTrace) {
+                        return true;
+                    }
+
+                    @Override
+                    public int appEarlyNotResponding(String processName, int pid, String annotation) {
+                        return 0;
+                    }
+
+                    @Override
+                    public int appNotResponding(String processName, int pid, String processStats) {
+                        return 0;
+                    }
+
+                    @Override
+                    public int systemNotResponding(String msg) {
+                        return 0;
+                    }
+                }, false);
             } catch (RemoteException e) {
                 Log.e(TAG, Log.getStackTraceString(e));
             }
-            am = IActivityManager.Stub.asInterface(binder);
         }
         return am;
     }

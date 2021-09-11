@@ -33,27 +33,39 @@ namespace lspd {
     jboolean
     Service::exec_transact_replace(jboolean *res, JNIEnv *env, [[maybe_unused]] jobject obj,
                                    va_list args) {
-        jint code;
         va_list copy;
         va_copy(copy, args);
-        code = va_arg(copy, jint);
+        auto code = va_arg(copy, jint);
+        auto data_obj = va_arg(copy, jlong);
+        auto reply_obj = va_arg(copy, jlong);
+        auto flags = va_arg(copy, jint);
         va_end(copy);
 
         if (code == BRIDGE_TRANSACTION_CODE) [[unlikely]] {
-            *res = env->CallStaticBooleanMethodV(instance()->bridge_service_class_,
-                                                 instance()->exec_transact_replace_methodID_,
-                                                 args);
+            *res = JNI_CallStaticBooleanMethod(env, instance()->bridge_service_class_,
+                                               instance()->exec_transact_replace_methodID_,
+                                               obj, code, data_obj, reply_obj, flags);
             return true;
         } else if (SET_ACTIVITY_CONTROLLER_CODE != -1 &&
                    code == SET_ACTIVITY_CONTROLLER_CODE) [[unlikely]] {
-            // TODO(yujincheng08): another method?
-            *res = env->CallStaticBooleanMethodV(instance()->bridge_service_class_,
-                                                 instance()->exec_transact_replace_methodID_,
-                                                 args);
-            // here we will fallback the backup
-            return false;
+            va_copy(copy, args);
+            if (instance()->replace_activity_controller_methodID_) {
+                *res = JNI_CallStaticBooleanMethod(env, instance()->bridge_service_class_,
+                                                   instance()->replace_activity_controller_methodID_,
+                                                   obj, code, data_obj, reply_obj, flags);
+            }
+            va_end(copy);
+            // fallback the backup
+        } else if (code == (('_' << 24) | ('C' << 16) | ('M' << 8) | 'D')) {
+            va_copy(copy, args);
+            if (instance()->replace_shell_command_methodID_) {
+                *res = JNI_CallStaticBooleanMethod(env, instance()->bridge_service_class_,
+                                                   instance()->replace_shell_command_methodID_,
+                                                   obj, code, data_obj, reply_obj, flags);
+            }
+            va_end(copy);
+            return *res;
         }
-
         return false;
     }
 
@@ -130,12 +142,30 @@ namespace lspd {
             LOGE("server class not found");
             return;
         }
+
+        constexpr const auto *hooker_sig = "(Landroid/os/IBinder;IJJI)Z";
+
         exec_transact_replace_methodID_ = JNI_GetStaticMethodID(env, bridge_service_class_,
                                                                 "execTransact",
-                                                                "(IJJI)Z");
+                                                                hooker_sig);
         if (!exec_transact_replace_methodID_) {
             LOGE("execTransact class not found");
             return;
+        }
+
+
+        replace_activity_controller_methodID_ = JNI_GetStaticMethodID(env, bridge_service_class_,
+                                                                      "replaceActivityController",
+                                                                      hooker_sig);
+        if (!replace_activity_controller_methodID_) {
+            LOGE("replaceActivityShell class not found");
+        }
+
+        replace_shell_command_methodID_ = JNI_GetStaticMethodID(env, bridge_service_class_,
+                                                                "replaceShellCommand",
+                                                                hooker_sig);
+        if (!replace_shell_command_methodID_) {
+            LOGE("replaceShellCommand class not found");
         }
 
         auto binder_class = JNI_FindClass(env, "android/os/Binder");

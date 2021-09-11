@@ -24,8 +24,11 @@ import static hidden.HiddenApiBridge.Binder_allowBlocking;
 import static hidden.HiddenApiBridge.Context_getActivityToken;
 
 import android.app.ActivityThread;
+import android.app.IActivityController;
+import android.app.IActivityManager;
 import android.app.IApplicationThread;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
@@ -33,13 +36,19 @@ import android.os.Looper;
 import android.os.Parcel;
 import android.os.Process;
 import android.os.RemoteException;
+import android.os.ResultReceiver;
 import android.os.ServiceManager;
+import android.os.ShellCallback;
+import android.os.ShellCommand;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.io.InputStream;
+import java.io.PrintWriter;
 import java.lang.reflect.Field;
+import java.lang.reflect.Proxy;
 import java.util.Map;
 
 public class BridgeService {
@@ -264,7 +273,167 @@ public class BridgeService {
         return false;
     }
 
-    public static boolean execTransact(int code, long dataObj, long replyObj, int flags) {
+    private static IActivityController replaceActivityController(IActivityController controller) {
+        Log.e(TAG, "android.app.IActivityManager.setActivityController is called");
+        return new IActivityController.Stub() {
+            @Override
+            public boolean activityStarting(Intent intent, String pkg) {
+                Log.d(TAG, "activity from " + pkg + " with " + intent + " is starting");
+                return controller == null || controller.activityStarting(intent, pkg);
+            }
+
+            @Override
+            public boolean activityResuming(String pkg) {
+                return controller == null || controller.activityResuming(pkg);
+            }
+
+            @Override
+            public boolean appCrashed(String processName, int pid, String shortMsg, String longMsg, long timeMillis, String stackTrace) {
+                return controller == null || controller.appCrashed(processName, pid, shortMsg, longMsg, timeMillis, stackTrace);
+            }
+
+            @Override
+            public int appEarlyNotResponding(String processName, int pid, String annotation) {
+                return controller == null ? 0 : controller.appNotResponding(processName, pid, annotation);
+            }
+
+            @Override
+            public int appNotResponding(String processName, int pid, String processStats) {
+                return controller == null ? 0 : controller.appNotResponding(processName, pid, processStats);
+            }
+
+            @Override
+            public int systemNotResponding(String msg) {
+                return controller == null ? 0 : controller.systemNotResponding(msg);
+            }
+
+            @Override
+            public IBinder asBinder() {
+                return this;
+            }
+        };
+    }
+
+    public static boolean replaceShellCommand(IBinder obj, int code, long dataObj, long replyObj, int flags) {
+        try {
+            String descriptor = obj.getInterfaceDescriptor();
+            if (descriptor == null || (!descriptor.equals("android.app.IActivityManager") &&
+                    !descriptor.equals("com.sonymobile.hookservice.HookActivityService"))) {
+                return false;
+            }
+        } catch (Throwable e) {
+            Log.e(TAG, "replace shell command", e);
+            return false;
+        }
+        Parcel data = ParcelUtils.fromNativePointer(dataObj);
+        Parcel reply = ParcelUtils.fromNativePointer(replyObj);
+
+        if (data == null || reply == null) {
+            Log.w(TAG, "Got transaction with null data or reply");
+            return false;
+        }
+
+        try {
+            var in = data.readFileDescriptor();
+            var out = data.readFileDescriptor();
+            var err = data.readFileDescriptor();
+            String[] args = data.createStringArray();
+            var originController = Class.forName("com.android.server.am.ActivityManagerShellCommand$MyActivityController", false, obj.getClass().getClassLoader());
+            var ctor = originController.getDeclaredConstructor(IActivityManager.class, PrintWriter.class, InputStream.class,
+                    String.class, boolean.class);
+            ctor.setAccessible(true);
+            var runner = originController.getDeclaredMethod("run");
+            runner.setAccessible(true);
+            ShellCallback shellCallback = ShellCallback.CREATOR.createFromParcel(data);
+            ResultReceiver resultReceiver = ResultReceiver.CREATOR.createFromParcel(data);
+
+            if (args.length > 0 && serviceBinder != null && serviceBinder.isBinderAlive() && "monitor".equals(args[0])) {
+                new ShellCommand() {
+                    @Override
+                    public int onCommand(String cmd) {
+                        final PrintWriter pw = getOutPrintWriter();
+                        String opt;
+                        String gdbPort = null;
+                        boolean monkey = false;
+                        while ((opt = getNextOption()) != null) {
+                            if (opt.equals("--gdb")) {
+                                gdbPort = getNextArgRequired();
+                            } else if (opt.equals("-m")) {
+                                monkey = true;
+                            } else {
+                                getErrPrintWriter().println("Error: Unknown option: " + opt);
+                                return -1;
+                            }
+                        }
+
+                        try {
+                            var ctrl = ctor.newInstance(
+                                    Proxy.newProxyInstance(BridgeService.class.getClassLoader(),
+                                            obj.getClass().getSuperclass().getInterfaces(),
+                                            (proxy, method, args1) -> {
+                                                if (method.getName().equals("setActivityController")) {
+                                                    try {
+                                                        args1[0] = replaceActivityController((IActivityController) args1[0]);
+                                                    } catch (Throwable e) {
+                                                        Log.e(TAG, "replace activity controller", e);
+                                                    }
+                                                }
+                                                return method.invoke(obj, args1);
+                                            }), pw,
+                                    getRawInputStream(), gdbPort, monkey);
+                            runner.invoke(ctrl);
+                        } catch (Throwable e) {
+                            Log.e(TAG, "run monitor", e);
+                        }
+                        return 0;
+                    }
+
+                    @Override
+                    public void onHelp() {
+
+                    }
+                }.exec((Binder) obj, in.getFileDescriptor(), out.getFileDescriptor(), err.getFileDescriptor(), args, shellCallback, resultReceiver);
+                return true;
+            }
+        } catch (Throwable e) {
+            Log.e(TAG, "replace shell command", e);
+        } finally {
+            data.setDataPosition(0);
+        }
+
+        return false;
+    }
+
+    public static boolean replaceActivityController(IBinder obj, int code, long dataObj, long replyObj, int flags) {
+        Parcel data = ParcelUtils.fromNativePointer(dataObj);
+        Parcel reply = ParcelUtils.fromNativePointer(replyObj);
+
+        if (data == null || reply == null) {
+            Log.w(TAG, "Got transaction with null data or reply");
+            return false;
+        }
+        try {
+            String descriptor = ParcelUtils.readInterfaceDescriptor(data);
+            if (!descriptor.equals("android.app.IActivityManager") &&
+                    !descriptor.equals("com.sonymobile.hookservice.HookActivityService")) {
+                return false;
+            }
+            var position = data.dataPosition();
+            var controller = replaceActivityController(IActivityController.Stub.asInterface(data.readStrongBinder()));
+            var b = data.readInt();
+            data.setDataSize(position);
+            data.setDataPosition(position);
+            data.writeStrongInterface(controller);
+            data.writeInt(b);
+        } catch (Throwable e) {
+            Log.e(TAG, "replace activity controller", e);
+        } finally {
+            data.setDataPosition(0);
+        }
+        return false;
+    }
+
+    public static boolean execTransact(IBinder obj, int code, long dataObj, long replyObj, int flags) {
         if (code != TRANSACTION_CODE) return false;
 
         Parcel data = ParcelUtils.fromNativePointer(dataObj);

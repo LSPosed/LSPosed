@@ -73,6 +73,8 @@ namespace lspd {
 
         jclass bridge_service_class_ = nullptr;
         jmethodID exec_transact_replace_methodID_ = nullptr;
+        jmethodID replace_activity_controller_methodID_ = nullptr;
+        jmethodID replace_shell_command_methodID_ = nullptr;
 
         jclass binder_class_ = nullptr;
         jmethodID binder_ctor_ = nullptr;

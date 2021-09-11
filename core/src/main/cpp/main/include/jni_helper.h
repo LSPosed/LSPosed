@@ -298,6 +298,12 @@ inline auto JNI_CallStaticIntMethod(JNIEnv *env, const Class &clazz, Args &&...a
     return JNI_SafeInvoke(env, &JNIEnv::CallStaticIntMethod, clazz, std::forward<Args>(args)...);
 }
 
+template<ScopeOrClass Class, typename ...Args>
+[[maybe_unused]]
+inline auto JNI_CallStaticBooleanMethod(JNIEnv *env, const Class &clazz, Args &&...args) {
+    return JNI_SafeInvoke(env, &JNIEnv::CallStaticBooleanMethod, clazz, std::forward<Args>(args)...);
+}
+
 template<ScopeOrRaw<jarray> Array>
 [[maybe_unused]]
 inline auto JNI_GetArrayLength(JNIEnv *env, const Array &array) {

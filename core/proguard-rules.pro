@@ -12,7 +12,7 @@
     public static void onPostFixupStaticTrampolines(java.lang.Class);
 }
 -keepclasseswithmembers class org.lsposed.lspd.service.BridgeService {
-    public static boolean execTransact(int, long, long, int);
+    public static boolean *(android.os.IBinder, int, long, long, int);
     public static android.os.IBinder getApplicationServiceForSystemServer(android.os.IBinder, android.os.IBinder);
 }
 -keepclasseswithmembers class org.lsposed.lspd.service.LogcatService {
