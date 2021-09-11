@@ -168,21 +168,25 @@ public class ActivityManagerService {
         return am.getCurrentUser();
     }
 
-    // return true to cancel duplicate launch
-    synchronized static boolean preStartManager(String pkgName, Intent intent) throws RemoteException {
-        if (pendingManager) return false;
-        if (ActivityController.MANAGER_INJECTED_PKG_NAME.equals(pkgName)) {
-            forceStopPackage(ActivityController.MANAGER_INJECTED_PKG_NAME, -1);
-            // TODO(yujincheng08): check intent
+    // return 0 to skip non-manager
+    // return 1 to indicate a manager
+    // return 2 to cancel duplicate launch
+    synchronized static int preStartManager(String pkgName, Intent intent) throws RemoteException {
+        if (pendingManager) return 2;
+        Log.e(TAG, "checking " + intent);
+        if (ActivityController.MANAGER_INJECTED_PKG_NAME.equals(pkgName) &&
+                intent.getCategories().contains("org.lsposed.manager.LAUNCH_MANAGER")) {
             pendingManager = true;
             Log.e(TAG, "pre start manager");
+            return 1;
         }
-        return true;
+        return 0;
     }
 
     // return true to inject manager
     synchronized static boolean shouldStartManager(int pid, int uid, String processName) {
-        if (uid != 1000 || !ActivityController.MANAGER_INJECTED_PKG_NAME.equals(processName) || !pendingManager) return false;
+        if (uid != 1000 || !ActivityController.MANAGER_INJECTED_PKG_NAME.equals(processName) || !pendingManager)
+            return false;
         pendingManager = false;
         managerPid = pid;
         Log.d(TAG, "starting injected manager: pid = " + pid + " uid = " + uid + " processName = " + processName);

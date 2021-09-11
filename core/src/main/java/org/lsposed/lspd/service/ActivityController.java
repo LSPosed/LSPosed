@@ -7,12 +7,15 @@ import android.app.IActivityController;
 import android.app.IActivityManager;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Parcel;
 import android.os.ResultReceiver;
 import android.os.ShellCallback;
 import android.os.ShellCommand;
 import android.util.Log;
+import android.widget.TableRow;
 
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -29,9 +32,12 @@ public class ActivityController extends IActivityController.Stub {
     private boolean inited = false;
 
     private IActivityController controller = null;
+    private IActivityManager am = null;
+    private static final Handler handler = new Handler(Looper.getMainLooper());
 
     ActivityController(IBinder am) {
         try {
+            this.am = (IActivityManager) am;
             @SuppressLint("PrivateApi") var myActivityControllerClass = Class.forName("com.android.server.am.ActivityManagerShellCommand$MyActivityController", false, am.getClass().getClassLoader());
             myActivityControllerConstructor = myActivityControllerClass.getDeclaredConstructor(IActivityManager.class, PrintWriter.class, InputStream.class,
                     String.class, boolean.class);
@@ -140,11 +146,27 @@ public class ActivityController extends IActivityController.Stub {
 
     @Override
     public boolean activityStarting(Intent intent, String pkg) {
-        Log.d(TAG, "activity from " + pkg + " with " + intent + " is starting");
+        Log.d(TAG, "activity from " + pkg + " with " + intent + " with extras " + intent.getExtras() + " is starting");
         var snapshot = BridgeService.getService();
         if (snapshot != null && MANAGER_INJECTED_PKG_NAME.equals(pkg)) {
             try {
-                return snapshot.preStartManager(pkg, intent);
+                switch (snapshot.preStartManager(pkg, intent)) {
+                    case 0:
+                        return true;
+                    case 1: {
+                        handler.post(() -> {
+                            try {
+                                Log.e(TAG, "force stopping for " + intent);
+                                am.forceStopPackage(MANAGER_INJECTED_PKG_NAME, -1);
+                            } catch (Throwable e) {
+                                Log.e(TAG, "force stopping", e);
+                            }
+                        });
+                        return true;
+                    }
+                    case 2:
+                        return false;
+                }
             } catch (Throwable e) {
                 Log.e(TAG, "request manager", e);
             }
@@ -174,7 +196,7 @@ public class ActivityController extends IActivityController.Stub {
 
     @Override
     public int systemNotResponding(String msg) {
-        return controller == null ? 0 : controller.systemNotResponding(msg);
+        return controller == null ? -1 : controller.systemNotResponding(msg);
     }
 
     @Override

@@ -245,7 +245,7 @@ public class LSPosedService extends ILSPosedService.Stub {
     }
 
     @Override
-    public boolean preStartManager(String pkgName, Intent intent) throws RemoteException {
+    public int preStartManager(String pkgName, Intent intent) throws RemoteException {
         Log.d(TAG, "checking manager intent");
         return ActivityManagerService.preStartManager(pkgName, intent);
     }
