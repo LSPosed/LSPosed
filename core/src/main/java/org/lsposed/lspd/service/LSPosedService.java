@@ -48,12 +48,13 @@ public class LSPosedService extends ILSPosedService.Stub {
             Log.w(TAG, "Someone else got my binder!?");
             return null;
         }
-        if (ConfigManager.getInstance().shouldSkipProcess(new ConfigManager.ProcessScope(processName, uid))) {
-            Log.d(TAG, "Skipped " + processName + "/" + uid);
-            return null;
-        }
         if (ServiceManager.getApplicationService().hasRegister(uid, pid)) {
             Log.d(TAG, "Skipped duplicated request for uid " + uid + " pid " + pid);
+            return null;
+        }
+        if (!ActivityManagerService.shouldStartManager(pid, uid, processName) &&
+                ConfigManager.getInstance().shouldSkipProcess(new ConfigManager.ProcessScope(processName, uid))) {
+            Log.d(TAG, "Skipped " + processName + "/" + uid);
             return null;
         }
         Log.d(TAG, "returned service");
@@ -241,5 +242,11 @@ public class LSPosedService extends ILSPosedService.Stub {
         ActivityManagerService.onSystemServerContext(IApplicationThread.Stub.asInterface(activityThread), activityToken);
         registerBootReceiver();
         registerPackageReceiver();
+    }
+
+    @Override
+    public boolean preStartManager(String pkgName, Intent intent) throws RemoteException {
+        Log.d(TAG, "checking manager intent");
+        return ActivityManagerService.preStartManager(pkgName, intent);
     }
 }

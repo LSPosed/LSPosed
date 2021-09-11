@@ -43,6 +43,9 @@ public class ActivityManagerService {
     private static IApplicationThread thread = null;
     private static IBinder token = null;
 
+    private static boolean pendingManager = false;
+    private static int managerPid = -1;
+
     private static final IBinder.DeathRecipient deathRecipient = new IBinder.DeathRecipient() {
         @Override
         public void binderDied() {
@@ -52,6 +55,7 @@ public class ActivityManagerService {
             am = null;
             thread = null;
             token = null;
+            pendingManager = false;
         }
     };
 
@@ -62,38 +66,7 @@ public class ActivityManagerService {
             try {
                 binder.linkToDeath(deathRecipient, 0);
                 am = IActivityManager.Stub.asInterface(binder);
-                am.setActivityController(new IActivityController.Stub() {
-                    @Override
-                    public boolean activityStarting(Intent intent, String pkg) {
-                        Log.e(TAG, "starting " + pkg + "'s activity " + intent);
-                        return true;
-                    }
-
-                    @Override
-                    public boolean activityResuming(String pkg) {
-                        return true;
-                    }
-
-                    @Override
-                    public boolean appCrashed(String processName, int pid, String shortMsg, String longMsg, long timeMillis, String stackTrace) {
-                        return true;
-                    }
-
-                    @Override
-                    public int appEarlyNotResponding(String processName, int pid, String annotation) {
-                        return 0;
-                    }
-
-                    @Override
-                    public int appNotResponding(String processName, int pid, String processStats) {
-                        return 0;
-                    }
-
-                    @Override
-                    public int systemNotResponding(String msg) {
-                        return 0;
-                    }
-                }, false);
+                am.setActivityController(null, false);
             } catch (RemoteException e) {
                 Log.e(TAG, Log.getStackTraceString(e));
             }
@@ -193,5 +166,35 @@ public class ActivityManagerService {
         IActivityManager am = getActivityManager();
         if (am == null) return null;
         return am.getCurrentUser();
+    }
+
+    // return true to cancel duplicate launch
+    synchronized static boolean preStartManager(String pkgName, Intent intent) throws RemoteException {
+        if (pendingManager) return false;
+        if (ActivityController.MANAGER_INJECTED_PKG_NAME.equals(pkgName)) {
+            forceStopPackage(ActivityController.MANAGER_INJECTED_PKG_NAME, -1);
+            // TODO(yujincheng08): check intent
+            pendingManager = true;
+            Log.e(TAG, "pre start manager");
+        }
+        return true;
+    }
+
+    // return true to inject manager
+    synchronized static boolean shouldStartManager(int pid, int uid, String processName) {
+        if (uid != 1000 || !ActivityController.MANAGER_INJECTED_PKG_NAME.equals(processName) || !pendingManager) return false;
+        pendingManager = false;
+        managerPid = pid;
+        Log.d(TAG, "starting injected manager: pid = " + pid + " uid = " + uid + " processName = " + processName);
+        return true;
+    }
+
+    // return true to send manager binder
+    synchronized static boolean postStartManager(int pid, int uid) {
+        if (pid == managerPid && uid == 1000) {
+            managerPid = 0;
+            return true;
+        }
+        return false;
     }
 }

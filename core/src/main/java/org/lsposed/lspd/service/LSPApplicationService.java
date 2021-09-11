@@ -105,9 +105,10 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
     @Override
     public boolean requestManagerBinder(String packageName, String path, List<IBinder> binder) throws RemoteException {
         ensureRegistered();
-        if (ConfigManager.getInstance().isManager(getCallingUid()) &&
-                ConfigManager.getInstance().isManager(packageName) &&
-                InstallerVerifier.verifyInstallerSignature(path)) {
+        if (ActivityManagerService.postStartManager(getCallingPid(), getCallingUid()) ||
+                (ConfigManager.getInstance().isManager(getCallingUid()) &&
+                        ConfigManager.getInstance().isManager(packageName) &&
+                        InstallerVerifier.verifyInstallerSignature(path))) {
             var service = ServiceManager.getManagerService();
             if (Utils.isMIUI) {
                 service.new ManagerGuard(handles.get(getCallingPid()));

@@ -41,9 +41,7 @@ import org.lsposed.lspd.ILSPManagerService;
 import org.lsposed.lspd.models.Application;
 import org.lsposed.lspd.models.UserInfo;
 
-import java.io.File;
 import java.io.FileDescriptor;
-import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
