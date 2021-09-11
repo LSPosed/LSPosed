@@ -190,6 +190,7 @@
     <string name="outdated_core">LSPosed app is newer than framework. Please update LSPosed framework.</string>
     <string name="outdated_manager">LSPosed framework is newer than app. Please update the app from /data/adb/lspd/manager.apk manually.</string>
     <string name="manager_crashed">Manager crashed</string>
-    <string name="copy_crash_info">Copy crash info</string>
-    <string name="copy_toast_msg">Copied</string>
+    <string name="manager_crashed_info">report this to </string>
+    <string name="send_crash_info">Send crash info</string>
+    <string name="crash_info_copied">Crash info copied to clipboard</string>
 </resources>
