@@ -34,30 +34,30 @@
 
     <string-array name="language" translatable="false">
         <item>@string/follow_system</item>
-        <item>af-ZA</item>
-        <item>ar-SA</item>
-        <item>ca-ES</item>
-        <item>cs-CZ</item>
-        <item>da-DK</item>
-        <item>el-GR</item>
-        <item>es-ES</item>
-        <item>fi-FI</item>
-        <item>fr-FR</item>
-        <item>hu-HU</item>
-        <item>it-IT</item>
-        <item>iw-IL</item>
-        <item>ja-JP</item>
-        <item>ko-KR</item>
-        <item>nl-NL</item>
-        <item>no-NO</item>
-        <item>pl-PL</item>
+        <item>af</item>
+        <item>ar</item>
+        <item>ca</item>
+        <item>cs</item>
+        <item>da</item>
+        <item>el</item>
+        <item>es</item>
+        <item>fi</item>
+        <item>fr</item>
+        <item>hu</item>
+        <item>it</item>
+        <item>iw</item>
+        <item>ja</item>
+        <item>ko</item>
+        <item>nl</item>
+        <item>no</item>
+        <item>pl</item>
         <item>pt-BR</item>
         <item>pt-PT</item>
-        <item>ro-RO</item>
-        <item>ru-RU</item>
-        <item>tr-TR</item>
-        <item>uk-UA</item>
-        <item>vi-VN</item>
+        <item>ro</item>
+        <item>ru</item>
+        <item>tr</item>
+        <item>uk</item>
+        <item>vi</item>
         <item>zh-CN</item>
         <item>zh-HK</item>
         <item>zh-TW</item>
@@ -65,30 +65,30 @@
 
     <string-array name="language_value" translatable="false">
         <item>SYSTEM</item>
-        <item>af-ZA</item>
-        <item>ar-SA</item>
-        <item>ca-ES</item>
-        <item>cs-CZ</item>
-        <item>da-DK</item>
-        <item>el-GR</item>
-        <item>es-ES</item>
-        <item>fi-FI</item>
-        <item>fr-FR</item>
-        <item>hu-HU</item>
-        <item>it-IT</item>
-        <item>iw-IL</item>
-        <item>ja-JP</item>
-        <item>ko-KR</item>
-        <item>nl-NL</item>
-        <item>no-NO</item>
-        <item>pl-PL</item>
+        <item>af</item>
+        <item>ar</item>
+        <item>ca</item>
+        <item>cs</item>
+        <item>da</item>
+        <item>el</item>
+        <item>es</item>
+        <item>fi</item>
+        <item>fr</item>
+        <item>hu</item>
+        <item>it</item>
+        <item>iw</item>
+        <item>ja</item>
+        <item>ko</item>
+        <item>nl</item>
+        <item>no</item>
+        <item>pl</item>
         <item>pt-BR</item>
         <item>pt-PT</item>
-        <item>ro-RO</item>
-        <item>ru-RU</item>
-        <item>tr-TR</item>
-        <item>uk-UA</item>
-        <item>vi-VN</item>
+        <item>ro</item>
+        <item>ru</item>
+        <item>tr</item>
+        <item>uk</item>
+        <item>vi</item>
         <item>zh-CN</item>
         <item>zh-HK</item>
         <item>zh-TW</item>
