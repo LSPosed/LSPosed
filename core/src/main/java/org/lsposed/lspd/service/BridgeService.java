@@ -19,21 +19,34 @@
 
 package org.lsposed.lspd.service;
 
+import static android.content.Intent.ACTION_MAIN;
+import static android.content.Intent.ACTION_USER_PRESENT;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 import static hidden.HiddenApiBridge.Binder_allowBlocking;
 import static hidden.HiddenApiBridge.Context_getActivityToken;
 
 import android.app.ActivityThread;
+import android.app.IActivityManager;
 import android.app.IApplicationThread;
+import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
+import android.graphics.drawable.Icon;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.IUserManager;
 import android.os.Looper;
 import android.os.Parcel;
 import android.os.Process;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.os.UserManager;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -42,10 +55,13 @@ import androidx.annotation.Nullable;
 import java.lang.reflect.Field;
 import java.util.Map;
 
+import hidden.HiddenApiBridge;
+
 public class BridgeService {
     private static final int TRANSACTION_CODE = ('_' << 24) | ('L' << 16) | ('S' << 8) | 'P';
     private static final String DESCRIPTOR = "LSPosed";
     private static final String SERVICE_NAME = "activity";
+    private static final String SHORTCUT_ID = "org.lsposed.manager.shortcut";
 
     enum ACTION {
         ACTION_UNKNOWN,
@@ -203,10 +219,53 @@ public class BridgeService {
         }
         try {
             IApplicationThread at = ActivityThread.currentActivityThread().getApplicationThread();
-            Context ct = ActivityThread.currentActivityThread().getSystemContext();
-            service.dispatchSystemServerContext(at.asBinder(), Context_getActivityToken(ct));
+            Context ctx = ActivityThread.currentActivityThread().getSystemContext();
+            service.dispatchSystemServerContext(at.asBinder(), Context_getActivityToken(ctx));
         } catch (Throwable e) {
             Log.e(TAG, "dispatch context: ", e);
+        }
+        try {
+            Context ctx = ActivityThread.currentActivityThread().getSystemContext();
+            HiddenApiBridge.Context_registerReceiverAsUser(ctx, new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    new Thread(() -> {
+                        try {
+                            var ium = IUserManager.Stub.asInterface(ServiceManager.getService("user"));
+                            for (var i = 0; i < 5; ++i) {
+                                if (!ium.isUserUnlockingOrUnlocked(0)) {
+                                    break;
+                                }
+                                Log.d(TAG, "user is not fully unlocked, wait for 1s...");
+                            }
+                            var scm = context.getSystemService(ShortcutManager.class);
+                            if (!scm.isRequestPinShortcutSupported()) return;
+                            for (var shortcutInfo : scm.getPinnedShortcuts()) {
+                                if (SHORTCUT_ID.equals(shortcutInfo.getId())) {
+                                    Log.d(TAG, "shortcut exists");
+                                    return;
+                                }
+                            }
+
+                            var shortcutIntent = new Intent();
+                            shortcutIntent.setComponent(ComponentName.unflattenFromString("com.android.settings/.homepage.SettingsHomepageActivity"));
+                            shortcutIntent.setAction(ACTION_MAIN);
+                            shortcutIntent.addCategory("org.lsposed.manager.LAUNCH_MANAGER");
+                            var shortcut = new ShortcutInfo.Builder(context, SHORTCUT_ID)
+                                    .setShortLabel("LSPosed")
+                                    .setLongLabel("Open LSPosed Manager")
+                                    .setIntent(shortcutIntent)
+                                    .build();
+
+                            scm.requestPinShortcut(shortcut, null);
+                        } catch (Throwable e) {
+                            Log.e(TAG, "add shortcut", e);
+                        }
+                    }).start();
+                }
+            }, HiddenApiBridge.UserHandle(0), new IntentFilter(ACTION_USER_PRESENT), null, new Handler(Looper.getMainLooper()));
+        } catch (Throwable e) {
+            Log.e(TAG, "register broadcast", e);
         }
         Log.i(TAG, "binder received");
     }
