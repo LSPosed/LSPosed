@@ -120,7 +120,7 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
             }
             return false;
         }
-        return ConfigManager.getInstance().shouldBlock(packageName);
+        return ConfigManager.getInstance().isManager(packageName);
     }
 
     @Override

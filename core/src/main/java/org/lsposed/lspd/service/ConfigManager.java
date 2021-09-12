@@ -536,10 +536,7 @@ public class ConfigManager {
 
     // This is called when a new process created, use the cached result
     public boolean shouldSkipProcess(ProcessScope scope) {
-        return !cachedScope.containsKey(scope);
-//        && !isManager(scope.uid) &&
-//                // TODO(yujincheng08): it's passing processName as packageName
-//                !shouldBlock(scope.processName);
+        return !cachedScope.containsKey(scope) && !isManager(scope.uid);
     }
 
     public boolean isUidHooked(int uid) {
@@ -836,10 +833,6 @@ public class ConfigManager {
 
     public boolean isManager(int uid) {
         return uid == managerUid;
-    }
-
-    public boolean shouldBlock(String packageName) {
-        return packageName.equals("io.github.lsposed.manager") || isManager(packageName);
     }
 
     public String getPrefsPath(String fileName, int uid) {
