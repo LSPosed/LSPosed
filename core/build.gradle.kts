@@ -58,7 +58,7 @@ dependencies {
     implementation("dev.rikka.ndk:riru:26.0.0")
     implementation("dev.rikka.ndk.thirdparty:cxx:1.1.0")
     implementation("io.github.vvb2060.ndk:dobby:1.2")
-    implementation("com.android.tools.build:apksig:7.0.1")
+    implementation("com.android.tools.build:apksig:7.0.2")
     implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("de.upb.cs.swt:axml:2.1.1")
     compileOnly("androidx.annotation:annotation:1.2.0")
@@ -191,7 +191,7 @@ androidComponents.onVariants { v ->
             filter<ReplaceTokens>("tokens" to tokens)
             filter<FixCrLfFilter>("eol" to FixCrLfFilter.CrLf.newInstance("lf"))
         }
-        from("${project(":app").buildDir}/outputs/apk/${variantLowered}") {
+        from("${project(":app").buildDir}/${if (rootProject.extra.properties["android.injected.invoked.from.ide"] == "true") "intermediates" else "outputs"}/apk/${variantLowered}") {
             include("*.apk")
             rename(".*\\.apk", "manager.apk")
         }
