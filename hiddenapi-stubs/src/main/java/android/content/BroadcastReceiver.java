@@ -1,4 +1,5 @@
 package android.content;
 
-public class BroadcastReceiver {
+public abstract class BroadcastReceiver {
+    public abstract void onReceive(Context context, Intent intent);
 }

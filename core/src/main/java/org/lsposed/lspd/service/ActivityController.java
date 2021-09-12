@@ -15,7 +15,6 @@ import android.os.ResultReceiver;
 import android.os.ShellCallback;
 import android.os.ShellCommand;
 import android.util.Log;
-import android.widget.TableRow;
 
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -23,7 +22,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.concurrent.CountDownLatch;
 
 public class ActivityController extends IActivityController.Stub {
     public static final String MANAGER_INJECTED_PKG_NAME = "com.android.settings";

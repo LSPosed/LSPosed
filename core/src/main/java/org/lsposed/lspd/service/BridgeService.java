@@ -232,10 +232,7 @@ public class BridgeService {
                     new Thread(() -> {
                         try {
                             var um = context.getSystemService(UserManager.class);
-                            for (var i = 0; i < 5; ++i) {
-                                if (!um.isUserUnlocked(HiddenApiBridge.UserHandle(0))) {
-                                    break;
-                                }
+                            while (!um.isUserUnlocked(HiddenApiBridge.UserHandle(0))) {
                                 Log.d(TAG, "user is not fully unlocked, wait for 1s...");
                                 Thread.sleep(1000);
                             }
