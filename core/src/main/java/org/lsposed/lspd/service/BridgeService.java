@@ -231,12 +231,13 @@ public class BridgeService {
                 public void onReceive(Context context, Intent intent) {
                     new Thread(() -> {
                         try {
-                            var ium = IUserManager.Stub.asInterface(ServiceManager.getService("user"));
+                            var um = context.getSystemService(UserManager.class);
                             for (var i = 0; i < 5; ++i) {
-                                if (!ium.isUserUnlockingOrUnlocked(0)) {
+                                if (!um.isUserUnlocked(HiddenApiBridge.UserHandle(0))) {
                                     break;
                                 }
                                 Log.d(TAG, "user is not fully unlocked, wait for 1s...");
+                                Thread.sleep(1000);
                             }
                             var scm = context.getSystemService(ShortcutManager.class);
                             if (!scm.isRequestPinShortcutSupported()) return;
