@@ -20,22 +20,45 @@
 
 package org.lsposed.lspd.hooker;
 
+import static org.lsposed.lspd.config.ApplicationServiceClient.serviceClient;
+
+import android.app.Activity;
 import android.app.ActivityThread;
+import android.app.Instrumentation;
 import android.app.LoadedApk;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.CompatibilityInfo;
 import android.content.res.XResources;
+import android.os.IBinder;
 
+import org.lsposed.lspd.service.ActivityController;
+import org.lsposed.lspd.service.BridgeService;
+import org.lsposed.lspd.service.PackageService;
 import org.lsposed.lspd.util.Hookers;
 import org.lsposed.lspd.util.Utils;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XC_MethodReplacement;
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.XposedInit;
 
 // normal process initialization (for new Activity, Service, BroadcastReceiver etc.)
 public class HandleBindAppHooker extends XC_MethodHook {
     String appDataDir;
+
+    PackageInfo managerPkgInfo = null;
 
     public HandleBindAppHooker(String appDataDir) {
         this.appDataDir = appDataDir;
@@ -51,6 +74,31 @@ public class HandleBindAppHooker extends XC_MethodHook {
             // save app process name here for later use
             String appProcessName = (String) XposedHelpers.getObjectField(bindData, "processName");
             String reportedPackageName = appInfo.packageName.equals("android") ? "system" : appInfo.packageName;
+
+            IBinder managerBinder = null;
+
+            if (reportedPackageName.equals(ActivityController.MANAGER_INJECTED_PKG_NAME)) {
+                List<IBinder> binder = new ArrayList<>(1);
+                var managerFd = serviceClient.requestInjectedManagerBinder(binder);
+                if (binder.size() > 0 && binder.get(0) != null && managerFd != null) {
+                    Context ctx = ActivityThread.currentActivityThread().getSystemContext();
+                    var sourceDir = "/proc/self/fd/" + managerFd.detachFd();
+                    managerPkgInfo = ctx.getPackageManager().getPackageArchiveInfo(sourceDir, PackageManager.GET_ACTIVITIES);
+                    managerBinder = binder.get(0);
+                    var newAppInfo = managerPkgInfo.applicationInfo;
+                    newAppInfo.sourceDir = sourceDir;
+                    newAppInfo.nativeLibraryDir = appInfo.nativeLibraryDir;
+                    newAppInfo.packageName = reportedPackageName;
+                    newAppInfo.dataDir = appInfo.dataDir;
+                    newAppInfo.uid = appInfo.uid;
+                    XposedHelpers.setObjectField(bindData, "appInfo", newAppInfo);
+                    XposedHelpers.setObjectField(bindData, "providers", new ArrayList<>());
+                    Utils.logE("injected manager");
+                } else {
+                    Utils.logE("failed to inject manager");
+                }
+            }
+
             // Note: packageName="android" -> system_server process, ams pms etc;
             //       packageName="system"  -> android pkg, system dialogues.
             Utils.logD("processName=" + appProcessName +
@@ -69,12 +117,39 @@ public class HandleBindAppHooker extends XC_MethodHook {
             String processName = (String) XposedHelpers.getObjectField(bindData, "processName");
 
             LoadedApkGetCLHooker hook = new LoadedApkGetCLHooker(loadedApk, reportedPackageName,
-                    processName, true);
+                    processName, true, managerBinder);
             hook.setUnhook(XposedHelpers.findAndHookMethod(
                     LoadedApk.class, "getClassLoader", hook));
 
         } catch (Throwable t) {
             Hookers.logE("error when hooking bindApp", t);
+        }
+    }
+
+    @Override
+    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+        if (managerPkgInfo == null) return;
+        try {
+            var hooker = new XC_MethodHook() {
+                @Override
+                protected void beforeHookedMethod(MethodHookParam param) {
+                    for (var i = 0; i < param.args.length; ++i) {
+                        if (param.args[i] instanceof ActivityInfo) {
+                            for (var activity : managerPkgInfo.activities) {
+                                if ("org.lsposed.manager.ui.activity.MainActivity".equals(activity.name)) {
+                                    param.args[i] = activity;
+                                }
+                            }
+                        }
+                        if (param.args[i] instanceof Intent) {
+                            ((Intent) param.args[i]).setComponent(ComponentName.unflattenFromString("org.lsposed.manager/.ui.activity.MainActivity"));
+                        }
+                    }
+                }
+            };
+            XposedBridge.hookAllConstructors(ActivityThread.ActivityClientRecord.class, hooker);
+        } catch (Throwable e) {
+            Hookers.logE("hook instrument", e);
         }
     }
 }

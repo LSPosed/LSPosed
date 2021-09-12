@@ -536,9 +536,10 @@ public class ConfigManager {
 
     // This is called when a new process created, use the cached result
     public boolean shouldSkipProcess(ProcessScope scope) {
-        return !cachedScope.containsKey(scope) &&
-                !isManager(scope.uid) &&
-                !shouldBlock(scope.processName);
+        return !cachedScope.containsKey(scope);
+//        && !isManager(scope.uid) &&
+//                // TODO(yujincheng08): it's passing processName as packageName
+//                !shouldBlock(scope.processName);
     }
 
     public boolean isUidHooked(int uid) {
@@ -791,6 +792,15 @@ public class ConfigManager {
 
     public boolean verboseLog() {
         return verboseLog;
+    }
+
+    public ParcelFileDescriptor getManagerApk() {
+        try {
+            return ConfigFileManager.getManagerApk();
+        } catch (Throwable e) {
+            Log.e(TAG, "failed to open manager apk", e);
+            return null;
+        }
     }
 
     public ParcelFileDescriptor getModulesLog() {

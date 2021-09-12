@@ -23,12 +23,15 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.concurrent.CountDownLatch;
 
 public class ActivityController extends IActivityController.Stub {
-    static final String MANAGER_INJECTED_PKG_NAME = "com.android.settings";
+    public static final String MANAGER_INJECTED_PKG_NAME = "com.android.settings";
 
     private Constructor<?> myActivityControllerConstructor = null;
     private Method myActivityControllerRunner = null;
+    private Method forceStopPackageLocked = null;
+    private Method finishForceStopPackageLocked = null;
     private boolean inited = false;
 
     private IActivityController controller = null;
@@ -44,6 +47,10 @@ public class ActivityController extends IActivityController.Stub {
             myActivityControllerConstructor.setAccessible(true);
             myActivityControllerRunner = myActivityControllerClass.getDeclaredMethod("run");
             myActivityControllerRunner.setAccessible(true);
+            forceStopPackageLocked = am.getClass().getDeclaredMethod("forceStopPackageLocked", String.class, int.class, String.class);
+            forceStopPackageLocked.setAccessible(true);
+            finishForceStopPackageLocked = am.getClass().getDeclaredMethod("finishForceStopPackageLocked", String.class, int.class);
+            finishForceStopPackageLocked.setAccessible(true);
             inited = true;
         } catch (Throwable e) {
             Log.e(TAG, "Failed to init ActivityController", e);
@@ -139,7 +146,7 @@ public class ActivityController extends IActivityController.Stub {
     }
 
     private IActivityController replaceActivityController(IActivityController controller) {
-        Log.e(TAG, "android.app.IActivityManager.setActivityController is called");
+        Log.d(TAG, "android.app.IActivityManager.setActivityController is called");
         this.controller = controller;
         return this;
     }
@@ -152,19 +159,18 @@ public class ActivityController extends IActivityController.Stub {
             try {
                 switch (snapshot.preStartManager(pkg, intent)) {
                     case 0:
+                        Log.d(TAG, "not relative, skipping");
                         return true;
                     case 1: {
-                        handler.post(() -> {
-                            try {
-                                Log.e(TAG, "force stopping for " + intent);
-                                am.forceStopPackage(MANAGER_INJECTED_PKG_NAME, -1);
-                            } catch (Throwable e) {
-                                Log.e(TAG, "force stopping", e);
-                            }
-                        });
+                        Log.d(TAG, "relative, force stopping");
+                        Log.e(TAG, "force stopping for " + intent);
+                        forceStopPackageLocked.invoke(am, MANAGER_INJECTED_PKG_NAME, 1000, "LPosed manager");
+                        finishForceStopPackageLocked.invoke(am, MANAGER_INJECTED_PKG_NAME, 1000);
+                        Log.e(TAG, "done stopping for " + intent);
                         return true;
                     }
                     case 2:
+                        Log.d(TAG, "duplicated, cancelling");
                         return false;
                 }
             } catch (Throwable e) {

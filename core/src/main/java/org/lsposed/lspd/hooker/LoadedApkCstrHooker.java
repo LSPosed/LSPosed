@@ -75,7 +75,7 @@ public class LoadedApkCstrHooker extends XC_MethodHook {
             }
 
             LoadedApkGetCLHooker hook = new LoadedApkGetCLHooker(loadedApk, packageName,
-                    AndroidAppHelper.currentProcessName(), false);
+                    AndroidAppHelper.currentProcessName(), false, null);
             hook.setUnhook(XposedHelpers.findAndHookMethod(
                     LoadedApk.class, "getClassLoader", hook));
 

@@ -17,6 +17,7 @@ import org.lsposed.lspd.util.Utils;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.channels.Channels;
@@ -62,6 +63,11 @@ class ConfigFileManager {
         } catch (IOException e) {
             Log.e(TAG, Log.getStackTraceString(e));
         }
+    }
+
+    static ParcelFileDescriptor getManagerApk() throws FileNotFoundException {
+        SELinux.setFileContext(managerApkPath.getAbsolutePath(), "u:object_r:system_file:s0");
+        return ParcelFileDescriptor.open(managerApkPath.getAbsoluteFile(), ParcelFileDescriptor.MODE_READ_ONLY);
     }
 
     static void deleteFolderIfExists(Path target) throws IOException {

@@ -21,8 +21,10 @@ package org.lsposed.lspd.service;
 
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 
+import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.util.Log;
 import android.util.Pair;
@@ -102,21 +104,33 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
         } else return null;
     }
 
+    public void obtainManagerBinder(List<IBinder> binder) {
+        var service = ServiceManager.getManagerService();
+        if (Utils.isMIUI) {
+            service.new ManagerGuard(handles.get(getCallingPid()));
+        }
+        binder.add(service);
+    }
+
     @Override
     public boolean requestManagerBinder(String packageName, String path, List<IBinder> binder) throws RemoteException {
         ensureRegistered();
-        if (ActivityManagerService.postStartManager(getCallingPid(), getCallingUid()) ||
-                (ConfigManager.getInstance().isManager(getCallingUid()) &&
-                        ConfigManager.getInstance().isManager(packageName) &&
-                        InstallerVerifier.verifyInstallerSignature(path))) {
-            var service = ServiceManager.getManagerService();
-            if (Utils.isMIUI) {
-                service.new ManagerGuard(handles.get(getCallingPid()));
-            }
-            binder.add(service);
+        if (ConfigManager.getInstance().isManager(getCallingUid()) &&
+                ConfigManager.getInstance().isManager(packageName) &&
+                InstallerVerifier.verifyInstallerSignature(path)) {
+            obtainManagerBinder(binder);
             return false;
         }
         return ConfigManager.getInstance().shouldBlock(packageName);
+    }
+
+    @Override
+    public ParcelFileDescriptor requestInjectedManagerBinder(List<IBinder> binder) throws RemoteException {
+        ensureRegistered();
+        if (ActivityManagerService.postStartManager(getCallingPid(), getCallingUid())) {
+            obtainManagerBinder(binder);
+        }
+        return ConfigManager.getInstance().getManagerApk();
     }
 
     public boolean hasRegister(int uid, int pid) {

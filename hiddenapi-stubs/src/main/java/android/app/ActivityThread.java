@@ -44,4 +44,7 @@ public final class ActivityThread {
 			return null;
 		}
 	}
+	public static final class ActivityClientRecord {
+
+	}
 }

@@ -48,13 +48,15 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
     private final String processName;
     private final boolean isFirstApplication;
     private Unhook unhook;
+    private IBinder managerBinder;
 
     public LoadedApkGetCLHooker(LoadedApk loadedApk, String packageName, String processName,
-                                boolean isFirstApplication) {
+                                boolean isFirstApplication, IBinder managerBinder) {
         this.loadedApk = loadedApk;
         this.packageName = packageName;
         this.processName = processName;
         this.isFirstApplication = isFirstApplication;
+        this.managerBinder = managerBinder;
     }
 
     @Override
@@ -93,11 +95,14 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
 
             var binder = new ArrayList<IBinder>(1);
             var blocked = false;
-            var info = loadedApk.getApplicationInfo();
-            if (info != null) {
-                var packageName = info.packageName;
-                var path = info.sourceDir;
-                blocked = serviceClient.requestManagerBinder(packageName, path, binder);
+            if (managerBinder != null) binder.add(managerBinder);
+            else {
+                var info = loadedApk.getApplicationInfo();
+                if (info != null) {
+                    var packageName = info.packageName;
+                    var path = info.sourceDir;
+                    blocked = serviceClient.requestManagerBinder(packageName, path, binder);
+                }
             }
             if (binder.size() != 0 && binder.get(0) != null) {
                 var ret = InstallerVerifier.sendBinderToManager(lpparam.classLoader, binder.get(0));

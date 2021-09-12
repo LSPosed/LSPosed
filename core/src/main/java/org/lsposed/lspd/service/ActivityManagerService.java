@@ -171,16 +171,21 @@ public class ActivityManagerService {
     // return 0 to skip non-manager
     // return 1 to indicate a manager
     // return 2 to cancel duplicate launch
-    synchronized static int preStartManager(String pkgName, Intent intent) throws RemoteException {
-        if (pendingManager) return 2;
-        Log.e(TAG, "checking " + intent);
-        if (ActivityController.MANAGER_INJECTED_PKG_NAME.equals(pkgName) &&
-                intent.getCategories().contains("org.lsposed.manager.LAUNCH_MANAGER")) {
-            pendingManager = true;
-            Log.e(TAG, "pre start manager");
-            return 1;
+    // TODO(yujincheng08): force stop when launching normal app
+    synchronized static int preStartManager(String pkgName, Intent intent) {
+        try {
+            Log.e(TAG, "checking " + intent);
+            if (ActivityController.MANAGER_INJECTED_PKG_NAME.equals(pkgName) &&
+                    intent.getCategories() != null &&
+                    intent.getCategories().contains("org.lsposed.manager.LAUNCH_MANAGER")) {
+                pendingManager = true;
+                Log.e(TAG, "pre start manager");
+                return 1;
+            } else if (pendingManager) return 2;
+            return 0;
+        } finally {
+            Log.e(TAG, "return from pre start manager");
         }
-        return 0;
     }
 
     // return true to inject manager
