@@ -9,8 +9,6 @@
 #include "logging.h"
 #include "symbol_cache.h"
 
-[[gnu::weak]] extern "C" int __openat(int, const char *, int, int);
-
 namespace lspd {
 
     std::string apkPath;
@@ -28,7 +26,7 @@ namespace lspd {
             });
 
     LSP_DEF_NATIVE_METHOD(void, SigBypass, enableOpenatHook, jstring origApkPath, jstring cacheApkPath) {
-        auto r = HookSymNoHandle(reinterpret_cast<void *>(&::__openat), __openat);
+        auto r = HookSymNoHandle(sym___openat, __openat);
         if (!r) {
             LOGE("Hook __openat fail");
             return;

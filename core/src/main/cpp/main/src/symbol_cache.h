@@ -33,6 +33,7 @@ namespace SandHook {
 namespace lspd {
     extern bool sym_initialized;
     extern std::unique_ptr<const SandHook::ElfImg> art_img;
+    extern void *sym___openat;
     extern void *sym_do_dlopen;
     extern void *sym_openInMemoryDexFilesNative;
     extern void *sym_createCookieWithArray;

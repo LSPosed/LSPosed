@@ -32,6 +32,7 @@
 
 namespace lspd {
     bool sym_initialized = false;
+    void *sym___openat = nullptr;
     void *sym_do_dlopen = nullptr;
     void *sym_openInMemoryDexFilesNative = nullptr;
     void *sym_createCookieWithArray = nullptr;
@@ -67,6 +68,7 @@ namespace lspd {
     void InitSymbolCache() {
         LOGD("InitSymbolCache");
         sym_initialized = FindLibArt();
+        sym___openat = SandHook::ElfImg("libc.so").getSymbAddress<void *>("__openat");
         sym_do_dlopen = SandHook::ElfImg("/linker").getSymbAddress<void *>(
                 "__dl__Z9do_dlopenPKciPK17android_dlextinfoPKv");
         if (!sym_initialized) [[unlikely]] {

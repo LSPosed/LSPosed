@@ -82,8 +82,6 @@ public class Main {
         XposedInit.startsSystemServer = isSystem;
         PrebuiltMethodsDeopter.deoptBootMethods(); // do it once for secondary zygote
         installBootstrapHooks(isSystem, appDataDir);
-        Utils.logI("Loading modules for " + niceName + "/" + Process.myUid());
-        XposedInit.loadModules();
     }
 
     public static void forkAndSpecializePost(String appDataDir, String niceName, IBinder binder) {
