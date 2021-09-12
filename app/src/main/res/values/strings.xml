@@ -34,7 +34,7 @@
     <string name="module_repo_summary">Module repository (Beta)</string>
     <string name="about_view_source_code"><![CDATA[View source code at %1$s<br/>Join our %2$s channel]]></string>
     <string name="about_translators">Translators: %s</string>
-    <string name="translators" />
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself."><![CDATA[<a href="https://github.com/LSPosed/LSPosed">LSPosed Devs</a>]]></string>
 
     <string name="install">Install</string>
     <string name="install_summary">Tap to install LSPosed</string>
