@@ -108,7 +108,6 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     // that is to say, to make the parasitic success,
     // we should make sure no extra launch after parasitic
     // launch is queued and before the process is started
-    // TODO(yujincheng08): this should be reset when am died
     private boolean pendingManager = false;
     private int managerPid = -1;
 
@@ -189,6 +188,12 @@ public class LSPManagerService extends ILSPManagerService.Stub {
         var snapshotPid = managerPid;
         var snapshotGuard = guardSnapshot();
         return (pid == snapshotPid && uid == 1000) || (snapshotGuard != null && snapshotGuard.pid == pid && snapshotGuard.uid == uid);
+    }
+
+    void onSystemServerDied() {
+        pendingManager = false;
+        managerPid = 0;
+        guard = null;
     }
 
     @Override

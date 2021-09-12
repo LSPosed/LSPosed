@@ -123,6 +123,7 @@ public class ServiceManager {
             public void onSystemServerDied() {
                 Log.w(TAG, "system server died");
                 systemServerService.putBinderForSystemServer();
+                managerService.onSystemServerDied();
             }
         });
 
