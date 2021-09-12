@@ -21,7 +21,6 @@ package org.lsposed.lspd.service;
 
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 
-import android.app.IActivityController;
 import android.app.IActivityManager;
 import android.app.IApplicationThread;
 import android.app.IServiceConnection;
@@ -43,9 +42,6 @@ public class ActivityManagerService {
     private static IApplicationThread thread = null;
     private static IBinder token = null;
 
-    private static boolean pendingManager = false;
-    private static int managerPid = -1;
-
     private static final IBinder.DeathRecipient deathRecipient = new IBinder.DeathRecipient() {
         @Override
         public void binderDied() {
@@ -55,7 +51,6 @@ public class ActivityManagerService {
             am = null;
             thread = null;
             token = null;
-            pendingManager = false;
         }
     };
 
@@ -168,42 +163,4 @@ public class ActivityManagerService {
         return am.getCurrentUser();
     }
 
-    // return 0 to skip non-manager
-    // return 1 to indicate a manager
-    // return 2 to cancel duplicate launch
-    // TODO(yujincheng08): force stop when launching normal app
-    synchronized static int preStartManager(String pkgName, Intent intent) {
-        try {
-            Log.e(TAG, "checking " + intent);
-            if (ActivityController.MANAGER_INJECTED_PKG_NAME.equals(pkgName) &&
-                    intent.getCategories() != null &&
-                    intent.getCategories().contains("org.lsposed.manager.LAUNCH_MANAGER")) {
-                pendingManager = true;
-                Log.e(TAG, "pre start manager");
-                return 1;
-            } else if (pendingManager) return 2;
-            return 0;
-        } finally {
-            Log.e(TAG, "return from pre start manager");
-        }
-    }
-
-    // return true to inject manager
-    synchronized static boolean shouldStartManager(int pid, int uid, String processName) {
-        if (uid != 1000 || !ActivityController.MANAGER_INJECTED_PKG_NAME.equals(processName) || !pendingManager)
-            return false;
-        pendingManager = false;
-        managerPid = pid;
-        Log.d(TAG, "starting injected manager: pid = " + pid + " uid = " + uid + " processName = " + processName);
-        return true;
-    }
-
-    // return true to send manager binder
-    synchronized static boolean postStartManager(int pid, int uid) {
-        if (pid == managerPid && uid == 1000) {
-            managerPid = 0;
-            return true;
-        }
-        return false;
-    }
 }

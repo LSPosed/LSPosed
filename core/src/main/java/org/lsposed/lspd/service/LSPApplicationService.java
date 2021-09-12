@@ -21,7 +21,6 @@ package org.lsposed.lspd.service;
 
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 
-import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
@@ -31,8 +30,8 @@ import android.util.Pair;
 
 import org.lsposed.lspd.models.Module;
 import org.lsposed.lspd.util.InstallerVerifier;
-import org.lsposed.lspd.util.Utils;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -76,11 +75,14 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
     @Override
     public List<Module> getModulesList(String processName) throws RemoteException {
         ensureRegistered();
-        int callingUid = getCallingUid();
-        if (callingUid == 1000 && processName.equals("android")) {
+        int pid = getCallingPid();
+        int uid = getCallingUid();
+        if (uid == 1000 && processName.equals("android")) {
             return ConfigManager.getInstance().getModulesForSystemServer();
         }
-        return ConfigManager.getInstance().getModulesForProcess(processName, callingUid);
+        if (ServiceManager.getManagerService().isRunningManager(pid, uid))
+            return Collections.emptyList();
+        return ConfigManager.getInstance().getModulesForProcess(processName, uid);
     }
 
     @Override
@@ -104,21 +106,18 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
         } else return null;
     }
 
-    public void obtainManagerBinder(List<IBinder> binder) {
-        var service = ServiceManager.getManagerService();
-        if (Utils.isMIUI) {
-            service.new ManagerGuard(handles.get(getCallingPid()));
-        }
-        binder.add(service);
-    }
-
     @Override
     public boolean requestManagerBinder(String packageName, String path, List<IBinder> binder) throws RemoteException {
         ensureRegistered();
-        if (ConfigManager.getInstance().isManager(getCallingUid()) &&
+        var pid = getCallingPid();
+        var uid = getCallingUid();
+        if (ConfigManager.getInstance().isManager(uid) &&
                 ConfigManager.getInstance().isManager(packageName) &&
                 InstallerVerifier.verifyInstallerSignature(path)) {
-            obtainManagerBinder(binder);
+            var heartbeat = handles.getOrDefault(pid, null);
+            if (heartbeat != null) {
+                binder.add(ServiceManager.getManagerService().obtainManagerBinder(heartbeat, pid, uid));
+            }
             return false;
         }
         return ConfigManager.getInstance().shouldBlock(packageName);
@@ -127,8 +126,14 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
     @Override
     public ParcelFileDescriptor requestInjectedManagerBinder(List<IBinder> binder) throws RemoteException {
         ensureRegistered();
-        if (ActivityManagerService.postStartManager(getCallingPid(), getCallingUid())) {
-            obtainManagerBinder(binder);
+        var pid = getCallingPid();
+        var uid = getCallingUid();
+        if (ServiceManager.getManagerService().postStartManager(pid, uid)) {
+            var heartbeat = handles.get(pid);
+            if (heartbeat != null) {
+                binder.add(ServiceManager.getManagerService().obtainManagerBinder(heartbeat, pid, uid));
+            }
+
         }
         return ConfigManager.getInstance().getManagerApk();
     }

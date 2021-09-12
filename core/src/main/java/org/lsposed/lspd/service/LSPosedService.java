@@ -52,7 +52,7 @@ public class LSPosedService extends ILSPosedService.Stub {
             Log.d(TAG, "Skipped duplicated request for uid " + uid + " pid " + pid);
             return null;
         }
-        if (!ActivityManagerService.shouldStartManager(pid, uid, processName) &&
+        if (!ServiceManager.getManagerService().shouldStartManager(pid, uid, processName) &&
                 ConfigManager.getInstance().shouldSkipProcess(new ConfigManager.ProcessScope(processName, uid))) {
             Log.d(TAG, "Skipped " + processName + "/" + uid);
             return null;
@@ -245,8 +245,8 @@ public class LSPosedService extends ILSPosedService.Stub {
     }
 
     @Override
-    public int preStartManager(String pkgName, Intent intent) throws RemoteException {
+    public int preStartManager(String pkgName, Intent intent) {
         Log.d(TAG, "checking manager intent");
-        return ActivityManagerService.preStartManager(pkgName, intent);
+        return ServiceManager.getManagerService().preStartManager(pkgName, intent);
     }
 }

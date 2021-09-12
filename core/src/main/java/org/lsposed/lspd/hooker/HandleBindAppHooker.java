@@ -173,8 +173,7 @@ public class HandleBindAppHooker extends XC_MethodHook {
                     try {
                         var webViewDelegateConstructor = WebViewDelegate.class.getDeclaredConstructor();
                         webViewDelegateConstructor.setAccessible(true);
-                        sProviderInstance = (WebViewFactoryProvider)
-                                staticFactory.invoke(null, webViewDelegateConstructor.newInstance());
+                        sProviderInstance = staticFactory.invoke(null, webViewDelegateConstructor.newInstance());
                         XposedHelpers.setStaticObjectField(WebViewFactory.class, "sProviderInstance", sProviderInstance);
                         Hookers.logD("Loaded provider: " + sProviderInstance);
                         return sProviderInstance;
