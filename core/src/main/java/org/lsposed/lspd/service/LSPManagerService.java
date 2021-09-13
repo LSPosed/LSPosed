@@ -124,12 +124,12 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     // return 2 to cancel duplicate launch
     synchronized int preStartManager(String pkgName, Intent intent) {
         Log.e(TAG, "checking " + intent);
-        if (ActivityController.MANAGER_INJECTED_PKG_NAME.equals(pkgName)) {
+        if (BuildConfig.MANAGER_INJECTED_PKG_NAME.equals(pkgName)) {
             if (intent.getCategories() != null &&
                     intent.getCategories().contains("org.lsposed.manager.LAUNCH_MANAGER")) {
                 // a new launch for the manager
                 var snapshot = guardSnapshot();
-                if (snapshot != null && snapshot.isAlive() && snapshot.uid == 1000) {
+                if (snapshot != null && snapshot.isAlive() && snapshot.uid == BuildConfig.MANAGER_INJECTED_UID) {
                     // there's one running parasitic manager, resume it
                     return 0;
                 } else {
@@ -145,7 +145,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
             } else {
                 // this is a normal launch and no pending parasitic manager
                 var snapshot = guardSnapshot();
-                if (snapshot != null && snapshot.uid == 1000) {
+                if (snapshot != null && snapshot.uid == BuildConfig.MANAGER_INJECTED_UID) {
                     // there is running parasitic manager, kill them before normal launch
                     return 1;
                 } else {
@@ -159,7 +159,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     // return true to inject manager
     synchronized boolean shouldStartManager(int pid, int uid, String processName) {
-        if (uid != 1000 || !ActivityController.MANAGER_INJECTED_PKG_NAME.equals(processName) || !pendingManager)
+        if (uid != BuildConfig.MANAGER_INJECTED_UID || !BuildConfig.MANAGER_INJECTED_PKG_NAME.equals(processName) || !pendingManager)
             return false;
         // pending parasitic manager launch it processes
         // now we have its pid so we allow it to be killed
@@ -172,7 +172,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     // return true to send manager binder
     synchronized boolean postStartManager(int pid, int uid) {
-        return pid == managerPid && uid == 1000;
+        return pid == managerPid && uid == BuildConfig.MANAGER_INJECTED_UID;
     }
 
     public @NonNull
@@ -187,7 +187,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     public boolean isRunningManager(int pid, int uid) {
         var snapshotPid = managerPid;
         var snapshotGuard = guardSnapshot();
-        return (pid == snapshotPid && uid == 1000) || (snapshotGuard != null && snapshotGuard.pid == pid && snapshotGuard.uid == uid);
+        return (pid == snapshotPid && uid == BuildConfig.MANAGER_INJECTED_UID) || (snapshotGuard != null && snapshotGuard.pid == pid && snapshotGuard.uid == uid);
     }
 
     void onSystemServerDied() {

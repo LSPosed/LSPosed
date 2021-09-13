@@ -18,6 +18,8 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import org.lsposed.lspd.BuildConfig;
+
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
@@ -26,8 +28,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 public class ActivityController extends IActivityController.Stub {
-    public static final String MANAGER_INJECTED_PKG_NAME = "com.android.settings";
-
     private static Constructor<?> myActivityControllerConstructor = null;
     private static Method myActivityControllerRunner = null;
     private static boolean inited = false;
@@ -160,7 +160,7 @@ public class ActivityController extends IActivityController.Stub {
     public boolean activityStarting(Intent intent, String pkg) {
         Log.d(TAG, "activity from " + pkg + " with " + intent + " with extras " + intent.getExtras() + " is starting");
         var snapshot = BridgeService.getService();
-        if (snapshot != null && MANAGER_INJECTED_PKG_NAME.equals(pkg)) {
+        if (snapshot != null && BuildConfig.MANAGER_INJECTED_PKG_NAME.equals(pkg)) {
             try {
                 switch (snapshot.preStartManager(pkg, intent)) {
                     case 0:

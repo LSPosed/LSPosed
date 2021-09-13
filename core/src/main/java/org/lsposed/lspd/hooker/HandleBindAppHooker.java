@@ -41,6 +41,7 @@ import android.webkit.WebViewDelegate;
 import android.webkit.WebViewFactory;
 import android.webkit.WebViewFactoryProvider;
 
+import org.lsposed.lspd.BuildConfig;
 import org.lsposed.lspd.service.ActivityController;
 import org.lsposed.lspd.service.BridgeService;
 import org.lsposed.lspd.service.PackageService;
@@ -83,7 +84,7 @@ public class HandleBindAppHooker extends XC_MethodHook {
 
             IBinder managerBinder = null;
 
-            if (reportedPackageName.equals(ActivityController.MANAGER_INJECTED_PKG_NAME)) {
+            if (reportedPackageName.equals(BuildConfig.MANAGER_INJECTED_PKG_NAME)) {
                 List<IBinder> binder = new ArrayList<>(1);
                 var managerFd = serviceClient.requestInjectedManagerBinder(binder);
                 if (binder.size() > 0 && binder.get(0) != null && managerFd != null) {

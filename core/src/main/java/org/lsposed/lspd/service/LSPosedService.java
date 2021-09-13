@@ -19,7 +19,6 @@
 
 package org.lsposed.lspd.service;
 
-import static android.content.pm.ShortcutManager.FLAG_MATCH_DYNAMIC;
 import static android.content.pm.ShortcutManager.FLAG_MATCH_PINNED;
 import static org.lsposed.lspd.service.PackageService.PER_USER_RANGE;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
@@ -41,12 +40,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.system.Os;
 import android.util.Log;
 
-import java.util.Arrays;
+import org.lsposed.lspd.BuildConfig;
 
-import hidden.HiddenApiBridge;
+import java.util.Arrays;
 
 public class LSPosedService extends ILSPosedService.Stub {
     private static final int AID_NOBODY = 9999;
@@ -213,7 +211,7 @@ public class LSPosedService extends ILSPosedService.Stub {
                 }
             }
 
-            var shortcutIntent = PackageService.getLaunchIntentForPackage(ActivityController.MANAGER_INJECTED_PKG_NAME);
+            var shortcutIntent = PackageService.getLaunchIntentForPackage(BuildConfig.MANAGER_INJECTED_PKG_NAME);
             shortcutIntent.addCategory("org.lsposed.manager.LAUNCH_MANAGER");
             var shortcut = new ShortcutInfo.Builder(new ContextWrapper(null) {
                 @Override
@@ -312,7 +310,7 @@ public class LSPosedService extends ILSPosedService.Stub {
     }
 
     @Override
-    public void dispatchSystemServerContext(IBinder activityThread, IBinder activityToken) throws RemoteException {
+    public void dispatchSystemServerContext(IBinder activityThread, IBinder activityToken) {
         Log.d(TAG, "received system context");
         ActivityManagerService.onSystemServerContext(IApplicationThread.Stub.asInterface(activityThread), activityToken);
         registerBootReceiver();

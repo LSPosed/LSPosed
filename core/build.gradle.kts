@@ -93,7 +93,9 @@ android {
         }
 
         buildConfigField("int", "API_CODE", "$apiCode")
-        buildConfigField("String", "DEFAULT_MANAGER_PACKAGE_NAME", "\"$defaultManagerPackageName\"")
+        buildConfigField("String", "DEFAULT_MANAGER_PACKAGE_NAME", """"$defaultManagerPackageName"""")
+        buildConfigField("String", "MANAGER_INJECTED_PKG_NAME", """"com.android.settings"""")
+        buildConfigField("int", "MANAGER_INJECTED_UID", """1000""")
     }
 
     lint {
