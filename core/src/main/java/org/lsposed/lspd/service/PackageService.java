@@ -281,6 +281,30 @@ public class PackageService {
         return new ParceledListSlice<>(pm.queryIntentActivities(intent, resolvedType, flags, userId).getList());
     }
 
+    public static Intent getLaunchIntentForPackage(String packageName) throws RemoteException {
+        Intent intentToResolve = new Intent(Intent.ACTION_MAIN);
+        intentToResolve.addCategory(Intent.CATEGORY_INFO);
+        intentToResolve.setPackage(packageName);
+        ParceledListSlice<ResolveInfo> ris = queryIntentActivities(intentToResolve, intentToResolve.getType(), 0, 0);
+
+        // Otherwise, try to find a main launcher activity.
+        if (ris == null || ris.getList().size() <= 0) {
+            // reuse the intent instance
+            intentToResolve.removeCategory(Intent.CATEGORY_INFO);
+            intentToResolve.addCategory(Intent.CATEGORY_LAUNCHER);
+            intentToResolve.setPackage(packageName);
+            ris = queryIntentActivities(intentToResolve, intentToResolve.getType(), 0, 0);
+        }
+        if (ris == null || ris.getList().size() <= 0) {
+            return null;
+        }
+        Intent intent = new Intent(intentToResolve);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setClassName(ris.getList().get(0).activityInfo.packageName,
+                ris.getList().get(0).activityInfo.name);
+        return intent;
+    }
+
     @SuppressWarnings("JavaReflectionMemberAccess")
     public static synchronized boolean installManagerIfAbsent(String packageName, File apkFile) {
         IPackageManager pm = getPackageManager();

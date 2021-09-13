@@ -19,19 +19,13 @@
 
 package org.lsposed.lspd.service;
 
-import static android.content.Intent.ACTION_USER_PRESENT;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 import static hidden.HiddenApiBridge.Binder_allowBlocking;
 import static hidden.HiddenApiBridge.Context_getActivityToken;
 
 import android.app.ActivityThread;
 import android.app.IApplicationThread;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.ShortcutInfo;
-import android.content.pm.ShortcutManager;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
@@ -40,7 +34,6 @@ import android.os.Parcel;
 import android.os.Process;
 import android.os.RemoteException;
 import android.os.ServiceManager;
-import android.os.UserManager;
 import android.system.ErrnoException;
 import android.system.Os;
 import android.util.Log;
@@ -50,8 +43,6 @@ import androidx.annotation.Nullable;
 
 import java.lang.reflect.Field;
 import java.util.Map;
-
-import hidden.HiddenApiBridge;
 
 public class BridgeService {
     private static final int TRANSACTION_CODE = ('_' << 24) | ('L' << 16) | ('S' << 8) | 'P';
@@ -234,45 +225,6 @@ public class BridgeService {
             service.dispatchSystemServerContext(at.asBinder(), Context_getActivityToken(ctx));
         } catch (Throwable e) {
             Log.e(TAG, "dispatch context: ", e);
-        }
-        try {
-            Context ctx = ActivityThread.currentActivityThread().getSystemContext();
-            HiddenApiBridge.Context_registerReceiverAsUser(ctx, new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    new Thread(() -> {
-                        try {
-                            var um = context.getSystemService(UserManager.class);
-                            while (!um.isUserUnlocked(HiddenApiBridge.UserHandle(0))) {
-                                Log.d(TAG, "user is not fully unlocked, wait for 1s...");
-                                Thread.sleep(1000);
-                            }
-                            var scm = context.getSystemService(ShortcutManager.class);
-                            if (!scm.isRequestPinShortcutSupported()) return;
-                            for (var shortcutInfo : scm.getPinnedShortcuts()) {
-                                if (SHORTCUT_ID.equals(shortcutInfo.getId())) {
-                                    Log.d(TAG, "shortcut exists");
-                                    return;
-                                }
-                            }
-
-                            var shortcutIntent = context.getPackageManager().getLaunchIntentForPackage(ActivityController.MANAGER_INJECTED_PKG_NAME);
-                            shortcutIntent.addCategory("org.lsposed.manager.LAUNCH_MANAGER");
-                            var shortcut = new ShortcutInfo.Builder(context, SHORTCUT_ID)
-                                    .setShortLabel("LSPosed")
-                                    .setLongLabel("LSPosed")
-                                    .setIntent(shortcutIntent)
-                                    .build();
-
-                            scm.requestPinShortcut(shortcut, null);
-                        } catch (Throwable e) {
-                            Log.e(TAG, "add shortcut", e);
-                        }
-                    }).start();
-                }
-            }, HiddenApiBridge.UserHandle(0), new IntentFilter(ACTION_USER_PRESENT), null, new Handler(Looper.getMainLooper()));
-        } catch (Throwable e) {
-            Log.e(TAG, "register broadcast", e);
         }
         Log.i(TAG, "binder received");
     }

@@ -19,28 +19,39 @@
 
 package org.lsposed.lspd.service;
 
+import static android.content.pm.ShortcutManager.FLAG_MATCH_DYNAMIC;
+import static android.content.pm.ShortcutManager.FLAG_MATCH_PINNED;
 import static org.lsposed.lspd.service.PackageService.PER_USER_RANGE;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 
 import android.app.IApplicationThread;
 import android.content.ComponentName;
+import android.content.ContextWrapper;
 import android.content.IIntentReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.IShortcutService;
+import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
+import android.content.pm.ShortcutInfo;
 import android.net.Uri;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.system.Os;
 import android.util.Log;
 
 import java.util.Arrays;
 
+import hidden.HiddenApiBridge;
+
 public class LSPosedService extends ILSPosedService.Stub {
     private static final int AID_NOBODY = 9999;
     private static final int USER_NULL = -10000;
+    private static final String SHORTCUT_ID = "org.lsposed.manager.shortcut";
 
     @Override
     public ILSPApplicationService requestApplicationService(int uid, int pid, String processName, IBinder heartBeat) {
@@ -183,6 +194,48 @@ public class LSPosedService extends ILSPosedService.Stub {
         ConfigManager.getInstance().ensureManager();
     }
 
+    synchronized public void dispatchUserUnlocked(Intent intent) {
+        try {
+            var iss = IShortcutService.Stub.asInterface(android.os.ServiceManager.getService("shortcut"));
+            while (!UserService.isUserUnlocked(0)) {
+                Log.e(TAG, "user is not yet unlocked, waiting for 1s...");
+                Thread.sleep(1000);
+            }
+
+            if (!iss.isRequestPinItemSupported(0, LauncherApps.PinItemRequest.REQUEST_TYPE_SHORTCUT)) {
+                Log.d(TAG, "pinned shortcut not supported, skipping");
+                return;
+            }
+            for (var shortcutInfo : Build.VERSION.SDK_INT >= Build.VERSION_CODES.R ? iss.getShortcuts("android", FLAG_MATCH_PINNED, 0).getList() : iss.getPinnedShortcuts("android", 0).getList()) {
+                if (SHORTCUT_ID.equals(shortcutInfo.getId())) {
+                    Log.d(TAG, "shortcut exists, skipping");
+                    return;
+                }
+            }
+
+            var shortcutIntent = PackageService.getLaunchIntentForPackage(ActivityController.MANAGER_INJECTED_PKG_NAME);
+            shortcutIntent.addCategory("org.lsposed.manager.LAUNCH_MANAGER");
+            var shortcut = new ShortcutInfo.Builder(new ContextWrapper(null) {
+                @Override
+                public String getPackageName() {
+                    return "android";
+                }
+
+                public int getUserId() {
+                    return 0;
+                }
+            }, SHORTCUT_ID)
+                    .setShortLabel("LSPosed")
+                    .setLongLabel("LSPosed")
+                    .setIntent(shortcutIntent)
+                    .build();
+            iss.requestPinShortcut("android", shortcut, null, 0);
+            Log.e(TAG, "done shortcut");
+        } catch (Throwable e) {
+            Log.e(TAG, "add shortcut", e);
+        }
+    }
+
     private void registerPackageReceiver() {
         try {
             IntentFilter packageFilter = new IntentFilter();
@@ -236,12 +289,35 @@ public class LSPosedService extends ILSPosedService.Stub {
         Log.d(TAG, "registered boot receiver");
     }
 
+    private void registerUnlockReceiver() {
+        try {
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(Intent.ACTION_USER_UNLOCKED);
+
+            ActivityManagerService.registerReceiver("android", null, new IIntentReceiver.Stub() {
+                @Override
+                public void performReceive(Intent intent, int resultCode, String data, Bundle extras, boolean ordered, boolean sticky, int sendingUser) {
+                    new Thread(() -> dispatchUserUnlocked(intent)).start();
+                    try {
+                        ActivityManagerService.finishReceiver(this, resultCode, data, extras, false, intent.getFlags());
+                    } catch (Throwable e) {
+                        Log.e(TAG, "finish receiver", e);
+                    }
+                }
+            }, intentFilter, null, 0, 0);
+        } catch (Throwable e) {
+            Log.e(TAG, "register unlock receiver", e);
+        }
+        Log.d(TAG, "registered unlock receiver");
+    }
+
     @Override
     public void dispatchSystemServerContext(IBinder activityThread, IBinder activityToken) throws RemoteException {
         Log.d(TAG, "received system context");
         ActivityManagerService.onSystemServerContext(IApplicationThread.Stub.asInterface(activityThread), activityToken);
         registerBootReceiver();
         registerPackageReceiver();
+        registerUnlockReceiver();
     }
 
     @Override
