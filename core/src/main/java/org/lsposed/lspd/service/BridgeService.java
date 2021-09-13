@@ -19,28 +19,22 @@
 
 package org.lsposed.lspd.service;
 
-import static android.content.Intent.ACTION_MAIN;
 import static android.content.Intent.ACTION_USER_PRESENT;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 import static hidden.HiddenApiBridge.Binder_allowBlocking;
 import static hidden.HiddenApiBridge.Context_getActivityToken;
 
 import android.app.ActivityThread;
-import android.app.IActivityManager;
 import android.app.IApplicationThread;
-import android.app.Service;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
-import android.graphics.drawable.Icon;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.IUserManager;
 import android.os.Looper;
 import android.os.Parcel;
 import android.os.Process;
@@ -245,13 +239,11 @@ public class BridgeService {
                                 }
                             }
 
-                            var shortcutIntent = new Intent();
-                            shortcutIntent.setComponent(ComponentName.unflattenFromString("com.android.settings/.homepage.SettingsHomepageActivity"));
-                            shortcutIntent.setAction(ACTION_MAIN);
+                            var shortcutIntent = context.getPackageManager().getLaunchIntentForPackage(ActivityController.MANAGER_INJECTED_PKG_NAME);
                             shortcutIntent.addCategory("org.lsposed.manager.LAUNCH_MANAGER");
                             var shortcut = new ShortcutInfo.Builder(context, SHORTCUT_ID)
                                     .setShortLabel("LSPosed")
-                                    .setLongLabel("Open LSPosed Manager")
+                                    .setLongLabel("LSPosed")
                                     .setIntent(shortcutIntent)
                                     .build();
 
@@ -336,7 +328,7 @@ public class BridgeService {
                     !descriptor.equals("com.sonymobile.hookservice.HookActivityService"))) {
                 return false;
             }
-            return new ActivityController(obj).replaceShellCommand(obj, data);
+            return ActivityController.replaceShellCommand(obj, data);
         } catch (Throwable e) {
             Log.e(TAG, "replace shell command", e);
             return false;
@@ -346,7 +338,7 @@ public class BridgeService {
     }
 
     @SuppressWarnings("unused")
-    public static boolean replaceActivityController(IBinder obj, int code, long dataObj, long replyObj, int flags) {
+    public static boolean replaceActivityController(int code, long dataObj, long replyObj, int flags) {
         Parcel data = ParcelUtils.fromNativePointer(dataObj);
         Parcel reply = ParcelUtils.fromNativePointer(replyObj);
 
@@ -361,7 +353,7 @@ public class BridgeService {
                     !descriptor.equals("com.sonymobile.hookservice.HookActivityService")) {
                 return false;
             }
-            return new ActivityController(obj).replaceActivityController(data);
+            return ActivityController.replaceActivityController(data);
         } finally {
             data.setDataPosition(0);
         }

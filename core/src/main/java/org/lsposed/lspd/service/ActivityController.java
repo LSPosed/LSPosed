@@ -3,18 +3,20 @@ package org.lsposed.lspd.service;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityThread;
 import android.app.IActivityController;
 import android.app.IActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
 import android.os.Parcel;
 import android.os.ResultReceiver;
 import android.os.ShellCallback;
 import android.os.ShellCommand;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -26,36 +28,41 @@ import java.lang.reflect.Proxy;
 public class ActivityController extends IActivityController.Stub {
     public static final String MANAGER_INJECTED_PKG_NAME = "com.android.settings";
 
-    private Constructor<?> myActivityControllerConstructor = null;
-    private Method myActivityControllerRunner = null;
-    private Method forceStopPackageLocked = null;
-    private Method finishForceStopPackageLocked = null;
-    private boolean inited = false;
+    private static Constructor<?> myActivityControllerConstructor = null;
+    private static Method myActivityControllerRunner = null;
+    private static boolean inited = false;
 
-    private IActivityController controller = null;
-    private IActivityManager am = null;
-    private static final Handler handler = new Handler(Looper.getMainLooper());
+    private static IActivityController controller = null;
 
-    ActivityController(IBinder am) {
+    static private ActivityController instance;
+
+    static {
         try {
-            this.am = (IActivityManager) am;
-            @SuppressLint("PrivateApi") var myActivityControllerClass = Class.forName("com.android.server.am.ActivityManagerShellCommand$MyActivityController", false, am.getClass().getClassLoader());
+            Context ctx = ActivityThread.currentActivityThread().getSystemContext();
+            var systemClassLoader = ctx.getClassLoader();
+            @SuppressLint("PrivateApi") var myActivityControllerClass = Class.forName("com.android.server.am.ActivityManagerShellCommand$MyActivityController", false, systemClassLoader);
             myActivityControllerConstructor = myActivityControllerClass.getDeclaredConstructor(IActivityManager.class, PrintWriter.class, InputStream.class,
                     String.class, boolean.class);
             myActivityControllerConstructor.setAccessible(true);
             myActivityControllerRunner = myActivityControllerClass.getDeclaredMethod("run");
             myActivityControllerRunner.setAccessible(true);
-            forceStopPackageLocked = am.getClass().getDeclaredMethod("forceStopPackageLocked", String.class, int.class, String.class);
-            forceStopPackageLocked.setAccessible(true);
-            finishForceStopPackageLocked = am.getClass().getDeclaredMethod("finishForceStopPackageLocked", String.class, int.class);
-            finishForceStopPackageLocked.setAccessible(true);
             inited = true;
         } catch (Throwable e) {
             Log.e(TAG, "Failed to init ActivityController", e);
         }
     }
 
-    boolean replaceShellCommand(IBinder am, Parcel data) {
+    private ActivityController() {
+        instance = this;
+    }
+
+    static private @NonNull
+    ActivityController getInstance() {
+        if (instance == null) new ActivityController();
+        return instance;
+    }
+
+    static boolean replaceShellCommand(IBinder am, Parcel data) {
         if (!inited) return false;
         try {
             var in = data.readFileDescriptor();
@@ -102,7 +109,7 @@ public class ActivityController extends IActivityController.Stub {
         return false;
     }
 
-    boolean replaceActivityController(Parcel data) {
+    static boolean replaceActivityController(Parcel data) {
         if (!inited) return false;
         try {
             var position = data.dataPosition();
@@ -120,7 +127,7 @@ public class ActivityController extends IActivityController.Stub {
         return false;
     }
 
-    private int replaceMyControllerActivity(IBinder am, PrintWriter pw, InputStream stream, String gdbPort, boolean monkey) {
+    static private int replaceMyControllerActivity(IBinder am, PrintWriter pw, InputStream stream, String gdbPort, boolean monkey) {
         try {
             InvocationHandler handler = (proxy, method, args1) -> {
                 if (method.getName().equals("setActivityController")) {
@@ -133,7 +140,7 @@ public class ActivityController extends IActivityController.Stub {
                 return method.invoke(am, args1);
             };
             var amProxy = Proxy.newProxyInstance(BridgeService.class.getClassLoader(),
-                    am.getClass().getSuperclass().getInterfaces(), handler);
+                    new Class[]{myActivityControllerConstructor.getParameterTypes()[0]}, handler);
             var ctrl = myActivityControllerConstructor.newInstance(amProxy, pw, stream, gdbPort, monkey);
             myActivityControllerRunner.invoke(ctrl);
             return 0;
@@ -143,10 +150,10 @@ public class ActivityController extends IActivityController.Stub {
         }
     }
 
-    private IActivityController replaceActivityController(IActivityController controller) {
+    static private IActivityController replaceActivityController(IActivityController controller) {
         Log.d(TAG, "android.app.IActivityManager.setActivityController is called");
-        this.controller = controller;
-        return this;
+        ActivityController.controller = controller;
+        return getInstance();
     }
 
     @Override
@@ -161,9 +168,7 @@ public class ActivityController extends IActivityController.Stub {
                         return true;
                     case 1: {
                         Log.d(TAG, "relative, force stopping");
-                        Log.e(TAG, "force stopping for " + intent);
-                        forceStopPackageLocked.invoke(am, MANAGER_INJECTED_PKG_NAME, 1000, "LPosed manager");
-                        finishForceStopPackageLocked.invoke(am, MANAGER_INJECTED_PKG_NAME, 1000);
+                        // TODO(yujincheng08): kill from lspd
                         Log.e(TAG, "done stopping for " + intent);
                         return true;
                     }
