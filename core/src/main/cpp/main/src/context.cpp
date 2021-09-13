@@ -79,21 +79,32 @@ namespace lspd {
     }
 
     void Context::LoadDex(JNIEnv *env) {
-        auto classloader = JNI_FindClass(env, "java/lang/ClassLoader");
-        auto getsyscl_mid = JNI_GetStaticMethodID(
-                env, classloader, "getSystemClassLoader", "()Ljava/lang/ClassLoader;");
-        auto sys_classloader = JNI_CallStaticObjectMethod(env, classloader, getsyscl_mid);
-        if (!sys_classloader) [[unlikely]] {
-            LOGE("getSystemClassLoader failed!!!");
+        auto class_activity_thread = JNI_FindClass(env, "android/app/ActivityThread");
+        auto class_activity_thread_app_bind_data = JNI_FindClass(env, "android/app/ActivityThread$AppBindData");
+        auto class_loaded_apk = JNI_FindClass(env, "android/app/LoadedApk");
+
+        auto mid_current_activity_thread = JNI_GetStaticMethodID(env, class_activity_thread, "currentActivityThread",
+                                                                 "()Landroid/app/ActivityThread;");
+        auto mid_get_classloader = JNI_GetMethodID(env, class_loaded_apk, "getClassLoader", "()Ljava/lang/ClassLoader;");
+        auto fid_m_bound_application = JNI_GetFieldID(env, class_activity_thread, "mBoundApplication",
+                                                      "Landroid/app/ActivityThread$AppBindData;");
+        auto fid_info = JNI_GetFieldID(env, class_activity_thread_app_bind_data, "info", "Landroid/app/LoadedApk;");
+
+        auto activity_thread = JNI_CallStaticObjectMethod(env, class_activity_thread, mid_current_activity_thread);
+        auto m_bound_application = JNI_GetObjectField(env, activity_thread, fid_m_bound_application);
+        auto info = JNI_GetObjectField(env, m_bound_application, fid_info);
+        auto stub_classloader = JNI_CallObjectMethod(env, info, mid_get_classloader);
+
+        if (!stub_classloader) [[unlikely]] {
+            LOGE("getStubClassLoader failed!!!");
             return;
         }
         auto in_memory_classloader = JNI_FindClass(env, "dalvik/system/InMemoryDexClassLoader");
-        auto initMid = JNI_GetMethodID(env, in_memory_classloader, "<init>",
-                                       "(Ljava/nio/ByteBuffer;Ljava/lang/ClassLoader;)V");
+        auto mid_init = JNI_GetMethodID(env, in_memory_classloader, "<init>",
+                                        "(Ljava/nio/ByteBuffer;Ljava/lang/ClassLoader;)V");
         auto byte_buffer_class = JNI_FindClass(env, "java/nio/ByteBuffer");
         auto dex_buffer = env->NewDirectByteBuffer(dex.data(), dex.size());
-        if (auto my_cl = JNI_NewObject(env, in_memory_classloader, initMid,
-                                       dex_buffer, sys_classloader)) {
+        if (auto my_cl = JNI_NewObject(env, in_memory_classloader, mid_init, dex_buffer, stub_classloader)) {
             inject_class_loader_ = JNI_NewGlobalRef(env, my_cl);
         } else {
             LOGE("InMemoryDexClassLoader creation failed!!!");
@@ -129,7 +140,7 @@ namespace lspd {
         InitSymbolCache();
         InstallInlineHooks();
 
-        auto stub = env->FindClass("org/lsposed/lspatch/appstub/LSPApplicationStub");
+        auto stub = env->FindClass("org/lsposed/lspatch/appstub/LSPAppComponentFactoryStub");
         auto dex_field = env->GetStaticFieldID(stub, "dex", "[B");
 
         auto array = (jbyteArray) env->GetStaticObjectField(stub, dex_field);

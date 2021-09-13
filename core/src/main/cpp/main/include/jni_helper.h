@@ -222,10 +222,10 @@ JNI_GetFieldID(JNIEnv *env, const Class &clazz, std::string_view name, std::stri
     return JNI_SafeInvoke(env, &JNIEnv::GetFieldID, clazz, name, sig);
 }
 
-template<ScopeOrClass Class>
+template<ScopeOrObject Object>
 [[maybe_unused]]
-inline auto JNI_GetObjectField(JNIEnv *env, const Class &clazz, jfieldID fieldId) {
-    return JNI_SafeInvoke(env, &JNIEnv::GetObjectField, clazz, fieldId);
+inline auto JNI_GetObjectField(JNIEnv *env, const Object &obj, jfieldID fieldId) {
+    return JNI_SafeInvoke(env, &JNIEnv::GetObjectField, obj, fieldId);
 }
 
 template<ScopeOrClass Class>
