@@ -244,15 +244,6 @@ public class ConfigManager {
         }
     }
 
-    public void ensureManager() {
-        if (!PackageService.isAlive()) return;
-        new Thread(() -> {
-            if (PackageService.installManagerIfAbsent(manager, ConfigFileManager.managerApkPath)) {
-                updateManager();
-            }
-        }).start();
-    }
-
     static ConfigManager getInstance() {
         if (instance == null)
             instance = new ConfigManager();

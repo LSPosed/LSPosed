@@ -48,7 +48,6 @@ import android.util.Log;
 import org.lsposed.lspd.BuildConfig;
 import org.lsposed.manager.R;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -194,10 +193,6 @@ public class LSPosedService extends ILSPosedService.Stub {
     }
 
 
-    synchronized public void dispatchBootCompleted(Intent intent) {
-        ConfigManager.getInstance().ensureManager();
-    }
-
     synchronized public void dispatchUserUnlocked(Intent intent) {
         try {
             var iss = IShortcutService.Stub.asInterface(android.os.ServiceManager.getService("shortcut"));
@@ -292,28 +287,6 @@ public class LSPosedService extends ILSPosedService.Stub {
         Log.d(TAG, "registered package receiver");
     }
 
-    private void registerBootReceiver() {
-        try {
-            IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(Intent.ACTION_LOCKED_BOOT_COMPLETED);
-
-            ActivityManagerService.registerReceiver("android", null, new IIntentReceiver.Stub() {
-                @Override
-                public void performReceive(Intent intent, int resultCode, String data, Bundle extras, boolean ordered, boolean sticky, int sendingUser) {
-                    new Thread(() -> dispatchBootCompleted(intent)).start();
-                    try {
-                        ActivityManagerService.finishReceiver(this, resultCode, data, extras, false, intent.getFlags());
-                    } catch (Throwable e) {
-                        Log.e(TAG, "finish receiver", e);
-                    }
-                }
-            }, intentFilter, null, 0, 0);
-        } catch (Throwable e) {
-            Log.e(TAG, "register boot receiver", e);
-        }
-        Log.d(TAG, "registered boot receiver");
-    }
-
     private void registerUnlockReceiver() {
         try {
             IntentFilter intentFilter = new IntentFilter();
@@ -340,7 +313,6 @@ public class LSPosedService extends ILSPosedService.Stub {
     public void dispatchSystemServerContext(IBinder activityThread, IBinder activityToken) {
         Log.d(TAG, "received system context");
         ActivityManagerService.onSystemServerContext(IApplicationThread.Stub.asInterface(activityThread), activityToken);
-        registerBootReceiver();
         registerPackageReceiver();
         registerUnlockReceiver();
     }
