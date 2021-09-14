@@ -145,7 +145,7 @@ androidComponents.onVariants { v ->
     val magiskDir = "$buildDir/magisk/$variantLowered"
 
     task("generateApp${variantCapped}RFile", Jar::class) {
-        dependsOn(":app:assemble${variantCapped}")
+        dependsOn(":app:process${variantCapped}Resources")
         doLast {
             val rFile = JarFile(
                 File(
