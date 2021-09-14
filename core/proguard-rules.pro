@@ -18,6 +18,10 @@
 -keepclasseswithmembers class org.lsposed.lspd.service.LogcatService {
     private int refreshFd(boolean);
 }
+
+-keepclassmembers class ** implements android.content.ContextWrapper {
+    public int getUserId();
+}
 -assumenosideeffects class android.util.Log {
     public static *** v(...);
     public static *** d(...);
