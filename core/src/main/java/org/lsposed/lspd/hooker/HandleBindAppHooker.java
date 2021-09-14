@@ -101,8 +101,7 @@ public class HandleBindAppHooker extends XC_MethodHook {
                     appInfo = newAppInfo;
 
                     hookForManager(managerPkgInfo, managerService);
-                    Utils.logE("source dir" + sourceDir);
-                    Utils.logE("injected manager");
+                    Utils.logD("injected manager");
                 } else {
                     Utils.logE("failed to inject manager");
                 }
