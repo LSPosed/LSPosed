@@ -283,7 +283,7 @@ public class SettingsFragment extends BaseFragment {
             Preference translation_contributors = findPreference("translation_contributors");
             if (translation_contributors != null) {
                 var translators = HtmlCompat.fromHtml(getString(R.string.translators), HtmlCompat.FROM_HTML_MODE_LEGACY);
-                if (translators.equals("null")) {
+                if (translators.toString().equals("null")) {
                     translation_contributors.setVisible(false);
                 } else {
                     translation_contributors.setSummary(translators);
