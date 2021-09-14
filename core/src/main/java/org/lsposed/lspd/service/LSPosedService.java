@@ -34,15 +34,18 @@ import android.content.pm.IShortcutService;
 import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
 import android.content.pm.ShortcutInfo;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.RemoteException;
 import android.util.Log;
 
 import org.lsposed.lspd.BuildConfig;
+import org.lsposed.manager.R;
 
 import java.util.Arrays;
 
@@ -212,7 +215,24 @@ public class LSPosedService extends ILSPosedService.Stub {
             }
 
             var shortcutIntent = PackageService.getLaunchIntentForPackage(BuildConfig.MANAGER_INJECTED_PKG_NAME);
+            if (shortcutIntent == null) {
+                var pkgInfo = PackageService.getPackageInfo(BuildConfig.MANAGER_INJECTED_PKG_NAME, PackageManager.GET_ACTIVITIES, 0);
+                if (pkgInfo.activities != null && pkgInfo.activities.length > 0) {
+                    for (var activityInfo : pkgInfo.activities) {
+                        if (activityInfo.processName.equals(activityInfo.packageName)) {
+                            shortcutIntent = new Intent();
+                            shortcutIntent.setComponent(new ComponentName(activityInfo.packageName, activityInfo.name));
+                            shortcutIntent.setAction(Intent.ACTION_MAIN);
+                            break;
+                        }
+                    }
+                }
+            }
             shortcutIntent.addCategory("org.lsposed.manager.LAUNCH_MANAGER");
+            var icon = ConfigFileManager.getResources().getDrawable(R.drawable.ic_launcher, ConfigFileManager.getResources().newTheme());
+            var bitmap = Bitmap.createBitmap(icon.getIntrinsicWidth(), icon.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+            icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
+            icon.draw(new Canvas(bitmap));
             var shortcut = new ShortcutInfo.Builder(new ContextWrapper(null) {
                 @Override
                 public String getPackageName() {
@@ -226,6 +246,7 @@ public class LSPosedService extends ILSPosedService.Stub {
                     .setShortLabel("LSPosed")
                     .setLongLabel("LSPosed")
                     .setIntent(shortcutIntent)
+                    .setIcon(Icon.createWithBitmap(bitmap))
                     .build();
             iss.requestPinShortcut("android", shortcut, null, 0);
             Log.e(TAG, "done shortcut");

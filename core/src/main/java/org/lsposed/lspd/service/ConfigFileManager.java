@@ -84,7 +84,6 @@ class ConfigFileManager {
         res = tmpRes;
     }
 
-    // TODO(yujincheng08): we don't know resources' id, need R.java
     static Resources getResources() {
         return res;
     }

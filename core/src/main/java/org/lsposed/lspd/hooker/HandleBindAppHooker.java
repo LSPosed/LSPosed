@@ -22,9 +22,7 @@ package org.lsposed.lspd.hooker;
 
 import static org.lsposed.lspd.config.ApplicationServiceClient.serviceClient;
 
-import android.app.Activity;
 import android.app.ActivityThread;
-import android.app.Instrumentation;
 import android.app.LoadedApk;
 import android.content.ComponentName;
 import android.content.Context;
@@ -43,16 +41,11 @@ import android.webkit.WebViewFactory;
 import android.webkit.WebViewFactoryProvider;
 
 import org.lsposed.lspd.BuildConfig;
-import org.lsposed.lspd.service.ActivityController;
-import org.lsposed.lspd.service.BridgeService;
-import org.lsposed.lspd.service.PackageService;
 import org.lsposed.lspd.util.Hookers;
 import org.lsposed.lspd.util.Utils;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import de.robv.android.xposed.XC_MethodHook;

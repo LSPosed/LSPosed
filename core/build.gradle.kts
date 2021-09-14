@@ -26,6 +26,9 @@ import org.apache.tools.ant.filters.FixCrLfFilter
 import org.apache.tools.ant.filters.ReplaceTokens
 import java.io.PrintStream
 import java.security.MessageDigest
+import java.util.jar.JarFile
+import java.util.zip.ZipOutputStream
+import java.io.FileOutputStream
 
 plugins {
     id("com.android.application")
@@ -65,6 +68,12 @@ dependencies {
     compileOnly(project(":hiddenapi-stubs"))
     implementation(project(":hiddenapi-bridge"))
     implementation(project(":manager-service"))
+    debugImplementation(files(File(project.buildDir, "tmp/debugR.jar")) {
+        builtBy("generateAppDebugRFile")
+    })
+    releaseImplementation(files(File(project.buildDir, "tmp/releaseR.jar")) {
+        builtBy("generateAppReleaseRFile")
+    })
 }
 
 android {
@@ -93,7 +102,11 @@ android {
         }
 
         buildConfigField("int", "API_CODE", "$apiCode")
-        buildConfigField("String", "DEFAULT_MANAGER_PACKAGE_NAME", """"$defaultManagerPackageName"""")
+        buildConfigField(
+            "String",
+            "DEFAULT_MANAGER_PACKAGE_NAME",
+            """"$defaultManagerPackageName""""
+        )
         buildConfigField("String", "MANAGER_INJECTED_PKG_NAME", """"com.android.shell"""")
         buildConfigField("int", "MANAGER_INJECTED_UID", """2000""")
     }
@@ -130,6 +143,27 @@ androidComponents.onVariants { v ->
     val variantLowered = variant.name.toLowerCase()
     val zipFileName = "$moduleName-v$verName-$verCode-$variantLowered.zip"
     val magiskDir = "$buildDir/magisk/$variantLowered"
+
+    task("generateApp${variantCapped}RFile", Jar::class) {
+        dependsOn(":app:generate${variantCapped}RFile")
+        doLast {
+            val rFile = JarFile(
+                File(
+                    project(":app").buildDir,
+                    "intermediates/compile_and_runtime_not_namespaced_r_class_jar/${variantLowered}/R.jar"
+                )
+            )
+            ZipOutputStream(FileOutputStream(File(project.buildDir, "tmp/${variantLowered}R.jar"))).use {
+                for (entry in rFile.entries()) {
+                    if (entry.name.startsWith("org/lsposed/manager")) {
+                        it.putNextEntry(entry)
+                        rFile.getInputStream(entry).transferTo(it)
+                        it.closeEntry()
+                    }
+                }
+            }
+        }
+    }
 
     afterEvaluate {
         val app = rootProject.project(":app").extensions.getByName<BaseExtension>("android")
