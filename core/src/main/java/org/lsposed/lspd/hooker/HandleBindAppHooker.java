@@ -36,6 +36,7 @@ import android.content.pm.PackageManager;
 import android.content.res.CompatibilityInfo;
 import android.content.res.XResources;
 import android.os.IBinder;
+import android.os.Process;
 import android.util.AndroidRuntimeException;
 import android.webkit.WebViewDelegate;
 import android.webkit.WebViewFactory;
@@ -77,7 +78,7 @@ public class HandleBindAppHooker extends XC_MethodHook {
             Hookers.logD("ActivityThread#handleBindApplication() starts");
             ActivityThread activityThread = (ActivityThread) param.thisObject;
             Object bindData = param.args[0];
-            final ApplicationInfo appInfo = (ApplicationInfo) XposedHelpers.getObjectField(bindData, "appInfo");
+            ApplicationInfo appInfo = (ApplicationInfo) XposedHelpers.getObjectField(bindData, "appInfo");
             // save app process name here for later use
             String appProcessName = (String) XposedHelpers.getObjectField(bindData, "processName");
             String reportedPackageName = appInfo.packageName.equals("android") ? "system" : appInfo.packageName;
@@ -94,12 +95,15 @@ public class HandleBindAppHooker extends XC_MethodHook {
                     managerBinder = binder.get(0);
                     var newAppInfo = managerPkgInfo.applicationInfo;
                     newAppInfo.sourceDir = sourceDir;
+                    newAppInfo.publicSourceDir = sourceDir;
                     newAppInfo.nativeLibraryDir = appInfo.nativeLibraryDir;
                     newAppInfo.packageName = reportedPackageName;
                     newAppInfo.dataDir = appInfo.dataDir;
                     newAppInfo.uid = appInfo.uid;
                     XposedHelpers.setObjectField(bindData, "appInfo", newAppInfo);
                     XposedHelpers.setObjectField(bindData, "providers", new ArrayList<>());
+                    appInfo = newAppInfo;
+                    Utils.logE("source dir" + sourceDir);
                     Utils.logE("injected manager");
                 } else {
                     Utils.logE("failed to inject manager");
@@ -156,35 +160,37 @@ public class HandleBindAppHooker extends XC_MethodHook {
             };
             XposedBridge.hookAllConstructors(ActivityThread.ActivityClientRecord.class, hooker);
 
-            XposedHelpers.findAndHookMethod(WebViewFactory.class, "getProvider", new XC_MethodReplacement() {
-                @Override
-                protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
-                    var sProviderInstance = XposedHelpers.getStaticObjectField(WebViewFactory.class, "sProviderInstance");
-                    if (sProviderInstance != null) return sProviderInstance;
-                    //noinspection unchecked
-                    var providerClass = (Class<WebViewFactoryProvider>) XposedHelpers.callStaticMethod(WebViewFactory.class, "getProviderClass");
-                    Method staticFactory = null;
-                    try {
-                        staticFactory = providerClass.getMethod(
-                                CHROMIUM_WEBVIEW_FACTORY_METHOD, WebViewDelegate.class);
-                    } catch (Exception e) {
-                        Hookers.logE("error instantiating provider with static factory method", e);
-                    }
+            if (Process.myUid() == 1000) {
+                XposedHelpers.findAndHookMethod(WebViewFactory.class, "getProvider", new XC_MethodReplacement() {
+                    @Override
+                    protected Object replaceHookedMethod(MethodHookParam param) {
+                        var sProviderInstance = XposedHelpers.getStaticObjectField(WebViewFactory.class, "sProviderInstance");
+                        if (sProviderInstance != null) return sProviderInstance;
+                        //noinspection unchecked
+                        var providerClass = (Class<WebViewFactoryProvider>) XposedHelpers.callStaticMethod(WebViewFactory.class, "getProviderClass");
+                        Method staticFactory = null;
+                        try {
+                            staticFactory = providerClass.getMethod(
+                                    CHROMIUM_WEBVIEW_FACTORY_METHOD, WebViewDelegate.class);
+                        } catch (Exception e) {
+                            Hookers.logE("error instantiating provider with static factory method", e);
+                        }
 
-                    try {
-                        var webViewDelegateConstructor = WebViewDelegate.class.getDeclaredConstructor();
-                        webViewDelegateConstructor.setAccessible(true);
-                        sProviderInstance = staticFactory.invoke(null, webViewDelegateConstructor.newInstance());
-                        XposedHelpers.setStaticObjectField(WebViewFactory.class, "sProviderInstance", sProviderInstance);
-                        Hookers.logD("Loaded provider: " + sProviderInstance);
-                        return sProviderInstance;
-                    } catch (Exception e) {
-                        Hookers.logE("error instantiating provider", e);
-                        throw new AndroidRuntimeException(e);
+                        try {
+                            var webViewDelegateConstructor = WebViewDelegate.class.getDeclaredConstructor();
+                            webViewDelegateConstructor.setAccessible(true);
+                            sProviderInstance = staticFactory.invoke(null, webViewDelegateConstructor.newInstance());
+                            XposedHelpers.setStaticObjectField(WebViewFactory.class, "sProviderInstance", sProviderInstance);
+                            Hookers.logD("Loaded provider: " + sProviderInstance);
+                            return sProviderInstance;
+                        } catch (Exception e) {
+                            Hookers.logE("error instantiating provider", e);
+                            throw new AndroidRuntimeException(e);
+                        }
                     }
-                }
-            });
+                });
 
+            }
         } catch (Throwable e) {
             Hookers.logE("hook instrument", e);
         }
