@@ -36,12 +36,14 @@ import android.content.res.CompatibilityInfo;
 import android.content.res.XResources;
 import android.os.IBinder;
 import android.os.Process;
+import android.os.RemoteException;
 import android.util.AndroidRuntimeException;
 import android.webkit.WebViewDelegate;
 import android.webkit.WebViewFactory;
 import android.webkit.WebViewFactoryProvider;
 
 import org.lsposed.lspd.BuildConfig;
+import org.lsposed.lspd.ILSPManagerService;
 import org.lsposed.lspd.util.Hookers;
 import org.lsposed.lspd.util.Utils;
 
@@ -60,7 +62,6 @@ public class HandleBindAppHooker extends XC_MethodHook {
     private static final String CHROMIUM_WEBVIEW_FACTORY_METHOD = "create";
 
     String appDataDir;
-    PackageInfo managerPkgInfo = null;
 
     public HandleBindAppHooker(String appDataDir) {
         this.appDataDir = appDataDir;
@@ -83,9 +84,10 @@ public class HandleBindAppHooker extends XC_MethodHook {
                 List<IBinder> binder = new ArrayList<>(1);
                 var managerFd = serviceClient.requestInjectedManagerBinder(binder);
                 if (binder.size() > 0 && binder.get(0) != null && managerFd != null) {
+                    var managerService = ILSPManagerService.Stub.asInterface(binder.get(0));
                     Context ctx = ActivityThread.currentActivityThread().getSystemContext();
                     var sourceDir = "/proc/self/fd/" + managerFd.detachFd();
-                    managerPkgInfo = ctx.getPackageManager().getPackageArchiveInfo(sourceDir, PackageManager.GET_ACTIVITIES);
+                    var managerPkgInfo = ctx.getPackageManager().getPackageArchiveInfo(sourceDir, PackageManager.GET_ACTIVITIES);
                     managerBinder = binder.get(0);
                     var newAppInfo = managerPkgInfo.applicationInfo;
                     newAppInfo.sourceDir = sourceDir;
@@ -97,6 +99,8 @@ public class HandleBindAppHooker extends XC_MethodHook {
                     XposedHelpers.setObjectField(bindData, "appInfo", newAppInfo);
                     XposedHelpers.setObjectField(bindData, "providers", new ArrayList<>());
                     appInfo = newAppInfo;
+
+                    hookForManager(managerPkgInfo, managerService);
                     Utils.logE("source dir" + sourceDir);
                     Utils.logE("injected manager");
                 } else {
@@ -131,9 +135,7 @@ public class HandleBindAppHooker extends XC_MethodHook {
         }
     }
 
-    @Override
-    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-        if (managerPkgInfo == null) return;
+    private void hookForManager(PackageInfo managerPkgInfo, ILSPManagerService managerService) {
         try {
             var hooker = new XC_MethodHook() {
                 @Override
@@ -147,7 +149,18 @@ public class HandleBindAppHooker extends XC_MethodHook {
                             }
                         }
                         if (param.args[i] instanceof Intent) {
-                            ((Intent) param.args[i]).setComponent(ComponentName.unflattenFromString("org.lsposed.manager/.ui.activity.MainActivity"));
+                            var intent = (Intent) param.args[i];
+                            if (intent.getCategories() == null || !intent.getCategories().contains("org.lsposed.manager.LAUNCH_MANAGER")) {
+                                Hookers.logD("Launching the original app, restarting");
+                                try {
+                                    managerService.restartFor(intent);
+                                } catch (RemoteException e) {
+                                    Hookers.logE("restart failed", e);
+                                } finally {
+                                    Process.killProcess(Process.myPid());
+                                }
+                            }
+                            intent.setComponent(ComponentName.unflattenFromString("org.lsposed.manager/.ui.activity.MainActivity"));
                         }
                     }
                 }
@@ -198,7 +211,7 @@ public class HandleBindAppHooker extends XC_MethodHook {
 
             }
         } catch (Throwable e) {
-            Hookers.logE("hook instrument", e);
+            Hookers.logE("hook for injected manager", e);
         }
     }
 }

@@ -49,6 +49,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import de.robv.android.xposed.XposedBridge;
 import io.github.xposed.xposedservice.utils.ParceledListSlice;
@@ -56,6 +57,8 @@ import io.github.xposed.xposedservice.utils.ParceledListSlice;
 public class LSPManagerService extends ILSPManagerService.Stub {
     private static final String PROP_NAME = "dalvik.vm.dex2oat-flags";
     private static final String PROP_VALUE = "--inline-max-code-units=0";
+    // this maybe useful when obtaining the manager binder
+    private static final String RANDOM_UUID = UUID.randomUUID().toString();
 
     public class ManagerGuard implements IBinder.DeathRecipient {
         private final @NonNull
@@ -119,42 +122,77 @@ public class LSPManagerService extends ILSPManagerService.Stub {
         return snapshot != null && snapshot.isAlive() ? snapshot : null;
     }
 
-    // return 0 to skip non-relative launch
-    // return 1 to indicate a new launch that should kill old processes
-    // return 2 to cancel duplicate launch
-    synchronized int preStartManager(String pkgName, Intent intent) {
-        Log.e(TAG, "checking " + intent);
+    // To start injected manager, we should take care about conflict
+    // with the target app since we won't inject into it
+    // if we are not going to display manager.
+    // Thus, when someone launching manager, we should no matter
+    // stop any process of the target app
+    // Ideally we should call force stop package here,
+    // however it's not feasible because it will cause deadlock
+    // Thus we will cancel the launch of the activity
+    // and manually start activity with force stopping
+    // However, the intent we got here is not complete since
+    // there's no extras. We cannot do the same thing
+    // where starting the target app while the manager is
+    // still running.
+    // We instead let the manager to restart the activity.
+    synchronized boolean preStartManager(String pkgName, Intent intent) {
+        // first, check if it's our target app, if not continue the start
         if (BuildConfig.MANAGER_INJECTED_PKG_NAME.equals(pkgName)) {
+            Log.d(TAG, "starting target app of parasitic manager");
+            // check if it's launching our manager
             if (intent.getCategories() != null &&
                     intent.getCategories().contains("org.lsposed.manager.LAUNCH_MANAGER")) {
+                Log.d(TAG, "requesting launch of manager");
                 // a new launch for the manager
+                // check if there's one running
+                // or it's run by ourselves after force stopping
                 var snapshot = guardSnapshot();
-                if (snapshot != null && snapshot.isAlive() && snapshot.uid == BuildConfig.MANAGER_INJECTED_UID) {
-                    // there's one running parasitic manager, resume it
-                    return 0;
+                if (intent.getCategories().contains(RANDOM_UUID) ||
+                        (snapshot != null && snapshot.isAlive() && snapshot.uid == BuildConfig.MANAGER_INJECTED_UID)) {
+                    Log.d(TAG, "manager is still running or is on its way");
+                    // there's one running parasitic manager
+                    // or it's run by ourself after killing, resume it
+                    return true;
                 } else {
-                    // new parasitic manager launch, kill old processes
+                    // new parasitic manager launch, set the flag and kill
+                    // old processes
+                    // we do it by cancelling the launch (return false)
+                    // and start activity in a new thread
                     pendingManager = true;
-                    Log.e(TAG, "pre start manager");
-                    return 1;
+                    new Thread(() -> stopAndStartActivity(pkgName, intent, true)).start();
+                    Log.d(TAG, "requested to launch manager");
+                    return false;
                 }
             } else if (pendingManager) {
                 // there's still parasitic manager, cancel a normal launch until
                 // the parasitic manager is launch
-                return 2;
-            } else {
-                // this is a normal launch and no pending parasitic manager
-                var snapshot = guardSnapshot();
-                if (snapshot != null && snapshot.uid == BuildConfig.MANAGER_INJECTED_UID) {
-                    // there is running parasitic manager, kill them before normal launch
-                    return 1;
-                } else {
-                    // well no parasitic manager is running, normally launch
-                    return 0;
-                }
+                Log.d(TAG, "previous request is not yet done");
+                return false;
             }
+            // this is a normal launch of the target app
+            // send it to the manager and let it to restart the package
+            // if the manager is running
+            // or normally restart without injecting
+            Log.d(TAG, "launching the target app normally");
+            return true;
         }
-        return 0;
+        return true;
+    }
+
+    synchronized void stopAndStartActivity(String packageName, Intent intent, boolean addUUID) {
+        try {
+            ActivityManagerService.forceStopPackage(packageName, 0);
+            Log.d(TAG, "stopped old package");
+            if (addUUID) {
+                intent = (Intent) intent.clone();
+                intent.addCategory(RANDOM_UUID);
+            }
+            ActivityManagerService.startActivityAsUserWithFeature("android", null, intent, intent.getType(), null, null, 0, 0, null, null, 0);
+            Log.d(TAG, "relaunching");
+        } catch (RemoteException e) {
+            Log.e(TAG, "stop and start activity", e);
+        }
     }
 
     // return true to inject manager
@@ -389,5 +427,11 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     @Override
     public Map<String, ParcelFileDescriptor> getLogs() {
         return ConfigFileManager.getLogs();
+    }
+
+    @Override
+    public void restartFor(Intent intent) throws RemoteException {
+        forceStopPackage(BuildConfig.MANAGER_INJECTED_PKG_NAME, 0);
+        stopAndStartActivity(BuildConfig.MANAGER_INJECTED_PKG_NAME, intent, false);
     }
 }

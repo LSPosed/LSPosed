@@ -162,20 +162,7 @@ public class ActivityController extends IActivityController.Stub {
         var snapshot = BridgeService.getService();
         if (snapshot != null && BuildConfig.MANAGER_INJECTED_PKG_NAME.equals(pkg)) {
             try {
-                switch (snapshot.preStartManager(pkg, intent)) {
-                    case 0:
-                        Log.d(TAG, "not relative, skipping");
-                        return true;
-                    case 1: {
-                        Log.d(TAG, "relative, force stopping");
-                        // TODO(yujincheng08): kill from lspd
-                        Log.e(TAG, "done stopping for " + intent);
-                        return true;
-                    }
-                    case 2:
-                        Log.d(TAG, "duplicated, cancelling");
-                        return false;
-                }
+                return snapshot.preStartManager(pkg, intent);
             } catch (Throwable e) {
                 Log.e(TAG, "request manager", e);
             }
