@@ -24,6 +24,7 @@ import static org.lsposed.lspd.config.ApplicationServiceClient.serviceClient;
 
 import android.app.ActivityThread;
 import android.app.LoadedApk;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -152,6 +153,18 @@ public class HandleBindAppHooker extends XC_MethodHook {
                 }
             };
             XposedBridge.hookAllConstructors(ActivityThread.ActivityClientRecord.class, hooker);
+
+            XposedBridge.hookAllMethods(ActivityThread.class, "handleReceiver", new XC_MethodReplacement() {
+                @Override
+                protected Object replaceHookedMethod(MethodHookParam param) {
+                    for (var arg : param.args) {
+                        if (arg instanceof BroadcastReceiver.PendingResult) {
+                            ((BroadcastReceiver.PendingResult) arg).finish();
+                        }
+                    }
+                    return null;
+                }
+            });
 
             if (Process.myUid() == 1000) {
                 XposedHelpers.findAndHookMethod(WebViewFactory.class, "getProvider", new XC_MethodReplacement() {
