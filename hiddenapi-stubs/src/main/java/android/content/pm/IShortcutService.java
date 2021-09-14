@@ -13,6 +13,8 @@ public interface IShortcutService extends IInterface {
     boolean requestPinShortcut(String packageName, ShortcutInfo shortcut,
                                IntentSender resultIntent, int userId) throws RemoteException;
 
+    boolean updateShortcuts(String packageName, ParceledListSlice<ShortcutInfo> shortcuts, int userId) throws RemoteException;
+
     abstract class Stub extends Binder implements IShortcutService {
 
         public static IShortcutService asInterface(IBinder obj) {

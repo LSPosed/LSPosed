@@ -33,6 +33,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.IShortcutService;
 import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
+import android.content.pm.ParceledListSlice;
 import android.content.pm.ShortcutInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -47,7 +48,9 @@ import android.util.Log;
 import org.lsposed.lspd.BuildConfig;
 import org.lsposed.manager.R;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class LSPosedService extends ILSPosedService.Stub {
     private static final int AID_NOBODY = 9999;
@@ -199,7 +202,7 @@ public class LSPosedService extends ILSPosedService.Stub {
         try {
             var iss = IShortcutService.Stub.asInterface(android.os.ServiceManager.getService("shortcut"));
             while (!UserService.isUserUnlocked(0)) {
-                Log.e(TAG, "user is not yet unlocked, waiting for 1s...");
+                Log.d(TAG, "user is not yet unlocked, waiting for 1s...");
                 Thread.sleep(1000);
             }
 
@@ -207,13 +210,6 @@ public class LSPosedService extends ILSPosedService.Stub {
                 Log.d(TAG, "pinned shortcut not supported, skipping");
                 return;
             }
-            for (var shortcutInfo : Build.VERSION.SDK_INT >= Build.VERSION_CODES.R ? iss.getShortcuts("android", FLAG_MATCH_PINNED, 0).getList() : iss.getPinnedShortcuts("android", 0).getList()) {
-                if (SHORTCUT_ID.equals(shortcutInfo.getId())) {
-                    Log.d(TAG, "shortcut exists, skipping");
-                    return;
-                }
-            }
-
             var shortcutIntent = PackageService.getLaunchIntentForPackage(BuildConfig.MANAGER_INJECTED_PKG_NAME);
             if (shortcutIntent == null) {
                 var pkgInfo = PackageService.getPackageInfo(BuildConfig.MANAGER_INJECTED_PKG_NAME, PackageManager.GET_ACTIVITIES, 0);
@@ -248,8 +244,18 @@ public class LSPosedService extends ILSPosedService.Stub {
                     .setIntent(shortcutIntent)
                     .setIcon(Icon.createWithBitmap(bitmap))
                     .build();
+
+            for (var shortcutInfo : Build.VERSION.SDK_INT >= Build.VERSION_CODES.R ? iss.getShortcuts("android", FLAG_MATCH_PINNED, 0).getList() : iss.getPinnedShortcuts("android", 0).getList()) {
+                if (SHORTCUT_ID.equals(shortcutInfo.getId())) {
+                    Log.d(TAG, "shortcut exists, updating");
+                    iss.updateShortcuts("android", new ParceledListSlice<>(Collections.singletonList(shortcut)), 0);
+                    return;
+                }
+            }
+
             iss.requestPinShortcut("android", shortcut, null, 0);
-            Log.e(TAG, "done shortcut");
+
+            Log.d(TAG, "done add shortcut");
         } catch (Throwable e) {
             Log.e(TAG, "add shortcut", e);
         }
