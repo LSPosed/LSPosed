@@ -133,19 +133,19 @@ public class MainActivity extends BaseActivity {
     }
 
     public void restart() {
-        try {
-            if (BuildCompat.isAtLeastS()) {
-                recreate();
-            } else {
+        if (BuildCompat.isAtLeastS()) {
+            recreate();
+        } else {
+            try {
                 Bundle savedInstanceState = new Bundle();
                 onSaveInstanceState(savedInstanceState);
                 finish();
                 startActivity(newIntent(savedInstanceState, this));
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 restarting = true;
+            } catch (Throwable e) {
+                recreate();
             }
-        } catch (Throwable e) {
-            recreate();
         }
     }
 

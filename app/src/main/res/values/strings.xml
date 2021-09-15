@@ -56,7 +56,6 @@
     <string name="info_system_version">System version</string>
     <string name="info_device">Device</string>
     <string name="info_system_abi">System ABI</string>
-    <string name="require_restart_app">Please restart the app to take effect.</string>
 
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Save</string>
