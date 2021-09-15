@@ -145,7 +145,7 @@ public class MainActivity extends BaseActivity {
                 restarting = true;
             }
         } catch (Throwable e) {
-            Toast.makeText(this, R.string.require_restart_app, Toast.LENGTH_LONG).show();
+            recreate();
         }
     }
 
