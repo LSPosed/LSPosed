@@ -19,28 +19,25 @@
 
 package org.lsposed.lspd.service;
 
-import static android.content.pm.ShortcutManager.FLAG_MATCH_PINNED;
 import static org.lsposed.lspd.service.PackageService.PER_USER_RANGE;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 
 import android.app.IApplicationThread;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.IIntentReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.IShortcutService;
-import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
-import android.content.pm.ParceledListSlice;
 import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Binder;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -195,13 +192,25 @@ public class LSPosedService extends ILSPosedService.Stub {
 
     synchronized public void dispatchUserUnlocked(Intent intent) {
         try {
-            var iss = IShortcutService.Stub.asInterface(android.os.ServiceManager.getService("shortcut"));
+            var fakeContext = new ContextWrapper(null) {
+                @Override
+                public String getPackageName() {
+                    return "android";
+                }
+
+                public int getUserId() {
+                    return 0;
+                }
+            };
+            var smCtor = ShortcutManager.class.getDeclaredConstructor(Context.class);
+            smCtor.setAccessible(true);
+            var sm = smCtor.newInstance(fakeContext);
             while (!UserService.isUserUnlocked(0)) {
                 Log.d(TAG, "user is not yet unlocked, waiting for 1s...");
                 Thread.sleep(1000);
             }
 
-            if (!iss.isRequestPinItemSupported(0, LauncherApps.PinItemRequest.REQUEST_TYPE_SHORTCUT)) {
+            if (!sm.isRequestPinShortcutSupported()) {
                 Log.d(TAG, "pinned shortcut not supported, skipping");
                 return;
             }
@@ -225,31 +234,22 @@ public class LSPosedService extends ILSPosedService.Stub {
             var bitmap = Bitmap.createBitmap(icon.getIntrinsicWidth(), icon.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
             icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
             icon.draw(new Canvas(bitmap));
-            var shortcut = new ShortcutInfo.Builder(new ContextWrapper(null) {
-                @Override
-                public String getPackageName() {
-                    return "android";
-                }
-
-                public int getUserId() {
-                    return 0;
-                }
-            }, SHORTCUT_ID)
+            var shortcut = new ShortcutInfo.Builder(fakeContext, SHORTCUT_ID)
                     .setShortLabel("LSPosed")
                     .setLongLabel("LSPosed")
                     .setIntent(shortcutIntent)
                     .setIcon(Icon.createWithBitmap(bitmap))
                     .build();
 
-            for (var shortcutInfo : Build.VERSION.SDK_INT >= Build.VERSION_CODES.R ? iss.getShortcuts("android", FLAG_MATCH_PINNED, 0).getList() : iss.getPinnedShortcuts("android", 0).getList()) {
+            for (var shortcutInfo : sm.getPinnedShortcuts()) {
                 if (SHORTCUT_ID.equals(shortcutInfo.getId())) {
                     Log.d(TAG, "shortcut exists, updating");
-                    iss.updateShortcuts("android", new ParceledListSlice<>(Collections.singletonList(shortcut)), 0);
+                    sm.updateShortcuts(Collections.singletonList(shortcut));
                     return;
                 }
             }
 
-            iss.requestPinShortcut("android", shortcut, null, 0);
+            sm.requestPinShortcut(shortcut, null);
 
             Log.d(TAG, "done add shortcut");
         } catch (Throwable e) {
