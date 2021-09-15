@@ -30,6 +30,7 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
+import hidden.HiddenApiBridge;
 
 public class ParasiticManagerHooker {
     private static final String CHROMIUM_WEBVIEW_FACTORY_METHOD = "create";
@@ -49,6 +50,7 @@ public class ParasiticManagerHooker {
             newAppInfo.packageName = appInfo.packageName;
             newAppInfo.dataDir = appInfo.dataDir;
             newAppInfo.deviceProtectedDataDir = appInfo.deviceProtectedDataDir;
+            HiddenApiBridge.ApplicationInfo_credentialProtectedDataDir(newAppInfo, HiddenApiBridge.ApplicationInfo_credentialProtectedDataDir(appInfo));
             newAppInfo.uid = appInfo.uid;
         }
         return managerPkgInfo;

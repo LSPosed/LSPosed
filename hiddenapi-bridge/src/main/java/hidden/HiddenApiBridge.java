@@ -23,6 +23,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInstaller;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
@@ -76,5 +77,13 @@ public class HiddenApiBridge {
 
     public static UserHandle UserHandle(int h){
         return new UserHandle(h);
+    }
+
+    public static String ApplicationInfo_credentialProtectedDataDir(ApplicationInfo applicationInfo) {
+        return applicationInfo.credentialProtectedDataDir;
+    }
+
+    public static void ApplicationInfo_credentialProtectedDataDir(ApplicationInfo applicationInfo, String dir) {
+        applicationInfo.credentialProtectedDataDir = dir;
     }
 }
