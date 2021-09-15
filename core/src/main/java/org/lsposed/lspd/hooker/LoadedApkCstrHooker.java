@@ -57,6 +57,11 @@ public class LoadedApkCstrHooker extends XC_MethodHook {
                 return;
             }
 
+            if (XposedInit.loadedPackagesInProcess.isEmpty()) {
+                Hookers.logD("First LoadedApk should be called by handleBindApplication, skip: " + mAppDir);
+                return;
+            }
+
             if (!XposedInit.loadedPackagesInProcess.add(packageName)) {
                 Hookers.logD("LoadedApk#<init> has been loaded before, skip: " + mAppDir);
                 return;
