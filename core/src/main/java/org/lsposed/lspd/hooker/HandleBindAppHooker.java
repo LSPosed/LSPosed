@@ -95,6 +95,7 @@ public class HandleBindAppHooker extends XC_MethodHook {
                     newAppInfo.nativeLibraryDir = appInfo.nativeLibraryDir;
                     newAppInfo.packageName = reportedPackageName;
                     newAppInfo.dataDir = appInfo.dataDir;
+                    newAppInfo.deviceProtectedDataDir = appInfo.deviceProtectedDataDir;
                     newAppInfo.uid = appInfo.uid;
                     XposedHelpers.setObjectField(bindData, "appInfo", newAppInfo);
                     XposedHelpers.setObjectField(bindData, "providers", new ArrayList<>());
