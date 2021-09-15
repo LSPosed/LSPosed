@@ -27,6 +27,7 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.os.BuildCompat;
@@ -132,15 +133,19 @@ public class MainActivity extends BaseActivity {
     }
 
     public void restart() {
-        if (BuildCompat.isAtLeastS()) {
-            recreate();
-        } else {
-            Bundle savedInstanceState = new Bundle();
-            onSaveInstanceState(savedInstanceState);
-            finish();
-            startActivity(newIntent(savedInstanceState, this));
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-            restarting = true;
+        try {
+            if (BuildCompat.isAtLeastS()) {
+                recreate();
+            } else {
+                Bundle savedInstanceState = new Bundle();
+                onSaveInstanceState(savedInstanceState);
+                finish();
+                startActivity(newIntent(savedInstanceState, this));
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                restarting = true;
+            }
+        } catch (Throwable e) {
+            Toast.makeText(this, R.string.require_restart_app, Toast.LENGTH_LONG).show();
         }
     }
 
