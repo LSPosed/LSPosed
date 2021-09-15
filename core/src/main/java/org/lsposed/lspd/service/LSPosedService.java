@@ -219,6 +219,7 @@ public class LSPosedService extends ILSPosedService.Stub {
                     }
                 }
             }
+            if (shortcutIntent.getCategories() != null) shortcutIntent.getCategories().clear();
             shortcutIntent.addCategory("org.lsposed.manager.LAUNCH_MANAGER");
             var icon = ConfigFileManager.getResources().getDrawable(R.drawable.ic_launcher, ConfigFileManager.getResources().newTheme());
             var bitmap = Bitmap.createBitmap(icon.getIntrinsicWidth(), icon.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);

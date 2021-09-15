@@ -135,6 +135,20 @@ public class HandleBindAppHooker extends XC_MethodHook {
         }
     }
 
+    private static void checkIntent(ILSPManagerService managerService, Intent intent) {
+        if (managerService == null) return;
+        if (intent.getCategories() == null || !intent.getCategories().contains("org.lsposed.manager.LAUNCH_MANAGER")) {
+            Hookers.logD("Launching the original app, restarting");
+            try {
+                managerService.restartFor(intent);
+            } catch (RemoteException e) {
+                Hookers.logE("restart failed", e);
+            } finally {
+                Process.killProcess(Process.myPid());
+            }
+        }
+    }
+
     private void hookForManager(PackageInfo managerPkgInfo, ILSPManagerService managerService) {
         try {
             var hooker = new XC_MethodHook() {
@@ -150,16 +164,7 @@ public class HandleBindAppHooker extends XC_MethodHook {
                         }
                         if (param.args[i] instanceof Intent) {
                             var intent = (Intent) param.args[i];
-                            if (intent.getCategories() == null || !intent.getCategories().contains("org.lsposed.manager.LAUNCH_MANAGER")) {
-                                Hookers.logD("Launching the original app, restarting");
-                                try {
-                                    managerService.restartFor(intent);
-                                } catch (RemoteException e) {
-                                    Hookers.logE("restart failed", e);
-                                } finally {
-                                    Process.killProcess(Process.myPid());
-                                }
-                            }
+                            checkIntent(managerService, intent);
                             intent.setComponent(ComponentName.unflattenFromString("org.lsposed.manager/.ui.activity.MainActivity"));
                         }
                     }
@@ -176,6 +181,16 @@ public class HandleBindAppHooker extends XC_MethodHook {
                         }
                     }
                     return null;
+                }
+            });
+
+            XposedHelpers.findAndHookMethod(ActivityThread.class, "deliverNewIntents", ActivityThread.ActivityClientRecord.class, List.class, new XC_MethodHook() {
+                @Override
+                protected void beforeHookedMethod(MethodHookParam param) {
+                    if (param.args[1] == null) return;
+                    for (var intent : (List<Intent>) param.args[1]) {
+                        checkIntent(managerService, intent);
+                    }
                 }
             });
 
