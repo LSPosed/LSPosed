@@ -51,8 +51,9 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
@@ -359,5 +360,5 @@ public final class XposedInit {
         return initModule(mcl, apk, file.moduleClassNames);
     }
 
-    public final static HashSet<String> loadedPackagesInProcess = new HashSet<>(1);
+    public final static Set<String> loadedPackagesInProcess = ConcurrentHashMap.newKeySet(1);
 }
