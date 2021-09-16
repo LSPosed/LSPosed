@@ -19,14 +19,20 @@
 
 package hidden;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInstaller;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.content.res.ResourcesImpl;
 import android.os.Binder;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.UserHandle;
 
 import java.io.File;
 
@@ -57,5 +63,27 @@ public class HiddenApiBridge {
 
     public static File Environment_getDataProfilesDePackageDirectory(int userId, String packageName) {
         return Environment.getDataProfilesDePackageDirectory(userId, packageName);
+    }
+
+    public static Intent Context_registerReceiverAsUser(Context ctx, BroadcastReceiver receiver, UserHandle user,
+                                                        IntentFilter filter, String broadcastPermission, Handler scheduler) {
+
+        return ctx.registerReceiverAsUser(receiver, user, filter, broadcastPermission, scheduler);
+    }
+
+    public static UserHandle UserHandle_ALL(){
+        return UserHandle.ALL;
+    }
+
+    public static UserHandle UserHandle(int h){
+        return new UserHandle(h);
+    }
+
+    public static String ApplicationInfo_credentialProtectedDataDir(ApplicationInfo applicationInfo) {
+        return applicationInfo.credentialProtectedDataDir;
+    }
+
+    public static void ApplicationInfo_credentialProtectedDataDir(ApplicationInfo applicationInfo, String dir) {
+        applicationInfo.credentialProtectedDataDir = dir;
     }
 }

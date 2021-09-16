@@ -22,75 +22,397 @@ package org.lsposed.lspd.service;
 import static android.content.Context.BIND_AUTO_CREATE;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 
+import android.app.INotificationManager;
 import android.app.IServiceConnection;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
 import android.content.pm.VersionedPackage;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Icon;
+import android.net.Uri;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.os.ResultReceiver;
+import android.os.SELinux;
 import android.os.SystemProperties;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import org.lsposed.lspd.BuildConfig;
 import org.lsposed.lspd.ILSPManagerService;
 import org.lsposed.lspd.models.Application;
 import org.lsposed.lspd.models.UserInfo;
+import org.lsposed.lspd.util.FakeContext;
+import org.lsposed.lspd.util.Utils;
 
+import java.io.File;
 import java.io.FileDescriptor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import de.robv.android.xposed.XposedBridge;
+import hidden.HiddenApiBridge;
 import io.github.xposed.xposedservice.utils.ParceledListSlice;
 
 public class LSPManagerService extends ILSPManagerService.Stub {
-
-    public Object guard = null;
-
     private static final String PROP_NAME = "dalvik.vm.dex2oat-flags";
     private static final String PROP_VALUE = "--inline-max-code-units=0";
+    // this maybe useful when obtaining the manager binder
+    private static final String RANDOM_UUID = UUID.randomUUID().toString();
+    private static final String SHORTCUT_ID = "org.lsposed.manager.shortcut";
+    public static final int NOTIFICATION_ID = 114514;
+    public static final String CHANNEL_ID = "lsposed";
+    public static final String CHANNEL_NAME = "LSPosed Manager";
+    public static final int CHANNEL_IMP = NotificationManager.IMPORTANCE_HIGH;
+
+    private static Icon managerIcon = null;
+    private static Icon notificationIcon = null;
+    private static Intent managerIntent = null;
 
     public class ManagerGuard implements IBinder.DeathRecipient {
-        private final IBinder binder;
+        private final @NonNull
+        IBinder binder;
+        private final int pid;
+        private final int uid;
         private final IServiceConnection connection = new IServiceConnection.Stub() {
             @Override
             public void connected(ComponentName name, IBinder service, boolean dead) {
             }
         };
 
-        public ManagerGuard(IBinder binder) {
+        public ManagerGuard(@NonNull IBinder binder, int pid, int uid) {
             guard = this;
+            this.pid = pid;
+            this.uid = uid;
             this.binder = binder;
             try {
                 this.binder.linkToDeath(this, 0);
-                var intent = new Intent();
-                intent.setComponent(ComponentName.unflattenFromString("com.miui.securitycore/com.miui.xspace.service.XSpaceService"));
-                ActivityManagerService.bindService(intent, intent.getType(), connection, BIND_AUTO_CREATE, "android", 0);
+                if (Utils.isMIUI) {
+                    var intent = new Intent();
+                    intent.setComponent(ComponentName.unflattenFromString("com.miui.securitycore/com.miui.xspace.service.XSpaceService"));
+                    ActivityManagerService.bindService(intent, intent.getType(), connection, BIND_AUTO_CREATE, "android", 0);
+                }
             } catch (Throwable e) {
                 Log.e(TAG, "manager guard", e);
+                guard = null;
             }
         }
 
         @Override
         public void binderDied() {
             try {
-                if (binder != null) binder.unlinkToDeath(this, 0);
+                binder.unlinkToDeath(this, 0);
                 ActivityManagerService.unbindService(connection);
             } catch (Throwable e) {
                 Log.e(TAG, "manager guard", e);
             }
             guard = null;
         }
+
+        boolean isAlive() {
+            return binder.isBinderAlive();
+        }
     }
 
+    public ManagerGuard guard = null;
+
+    // guard to determine the manager or the injected app
+    // that is to say, to make the parasitic success,
+    // we should make sure no extra launch after parasitic
+    // launch is queued and before the process is started
+    private boolean pendingManager = false;
+    private int managerPid = -1;
+
     LSPManagerService() {
+    }
+
+    private static Icon getIcon(int res) {
+        var icon = ConfigFileManager.getResources().getDrawable(res, ConfigFileManager.getResources().newTheme());
+        var bitmap = Bitmap.createBitmap(icon.getIntrinsicWidth(), icon.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
+        icon.draw(new Canvas(bitmap));
+        return Icon.createWithBitmap(bitmap);
+    }
+
+    private static Icon getManagerIcon() {
+        if (managerIcon == null) {
+            managerIcon = getIcon(org.lsposed.manager.R.drawable.ic_launcher);
+        }
+        return managerIcon;
+    }
+
+    private static Icon getNotificationIcon() {
+        if (notificationIcon == null) {
+            notificationIcon = getIcon(org.lsposed.manager.R.drawable.ic_extension);
+        }
+        return notificationIcon;
+    }
+
+    private static Intent getManagerIntent() {
+        try {
+            if (managerIntent == null) {
+                var intent = PackageService.getLaunchIntentForPackage(BuildConfig.MANAGER_INJECTED_PKG_NAME);
+                if (intent == null) {
+                    var pkgInfo = PackageService.getPackageInfo(BuildConfig.MANAGER_INJECTED_PKG_NAME, PackageManager.GET_ACTIVITIES, 0);
+                    if (pkgInfo.activities != null && pkgInfo.activities.length > 0) {
+                        for (var activityInfo : pkgInfo.activities) {
+                            if (activityInfo.processName.equals(activityInfo.packageName)) {
+                                intent = new Intent();
+                                intent.setComponent(new ComponentName(activityInfo.packageName, activityInfo.name));
+                                intent.setAction(Intent.ACTION_MAIN);
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (intent.getCategories() != null) intent.getCategories().clear();
+                intent.addCategory("org.lsposed.manager.LAUNCH_MANAGER");
+                managerIntent = (Intent) intent.clone();
+            }
+        } catch (Throwable e) {
+            Log.e(TAG, "get Intent", e);
+        }
+        return managerIntent;
+
+    }
+
+    public static PendingIntent getNotificationIntent(String modulePackageName, int moduleUserId) {
+        try {
+            var intent = (Intent) getManagerIntent().clone();
+            intent.setData(Uri.parse("module://" + modulePackageName + ":" + moduleUserId));
+            return PendingIntent.getActivity(new FakeContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        } catch (Throwable e) {
+            Log.e(TAG, "get notification intent", e);
+            return null;
+        }
+    }
+
+    public static void showNotification(String modulePackageName,
+                                        int moduleUserId,
+                                        boolean enabled,
+                                        boolean systemModule) {
+        try {
+            var context = new FakeContext();
+            String title = context.getString(enabled ? systemModule ?
+                    org.lsposed.manager.R.string.xposed_module_updated_notification_title_system :
+                    org.lsposed.manager.R.string.xposed_module_updated_notification_title :
+                    org.lsposed.manager.R.string.module_is_not_activated_yet);
+            String content = context.getString(enabled ? systemModule ?
+                    org.lsposed.manager.R.string.xposed_module_updated_notification_content_system :
+                    org.lsposed.manager.R.string.xposed_module_updated_notification_content :
+                    org.lsposed.manager.R.string.module_is_not_activated_yet_detailed, modulePackageName);
+
+            var notification = new Notification.Builder(context, CHANNEL_ID)
+                    .setContentTitle(title)
+                    .setContentText(content)
+                    .setSmallIcon(getNotificationIcon())
+                    .setColor(context.getResources().getColor(org.lsposed.manager.R.color.color_primary))
+                    .setContentIntent(getNotificationIntent(modulePackageName, moduleUserId))
+                    .setAutoCancel(true)
+                    .build();
+            notification.extras.putString("android.substName", "LSPosed");
+            var im = INotificationManager.Stub.asInterface(android.os.ServiceManager.getService("notification"));
+            final NotificationChannel channel =
+                    new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, CHANNEL_IMP);
+            im.createNotificationChannels("android",
+                    new android.content.pm.ParceledListSlice<>(Collections.singletonList(channel)));
+            im.enqueueNotificationWithTag("android", "android", "114514", NOTIFICATION_ID, notification, 0);
+        } catch (Throwable e) {
+            Log.e(TAG, "posted notification", e);
+        }
+    }
+
+    public static void createOrUpdateShortcut() {
+        try {
+            var smCtor = ShortcutManager.class.getDeclaredConstructor(Context.class);
+            smCtor.setAccessible(true);
+            var context = new FakeContext();
+            var sm = smCtor.newInstance(context);
+            if (!sm.isRequestPinShortcutSupported()) {
+                Log.d(TAG, "pinned shortcut not supported, skipping");
+                return;
+            }
+            var shortcut = new ShortcutInfo.Builder(context, SHORTCUT_ID)
+                    .setShortLabel("LSPosed")
+                    .setLongLabel("LSPosed")
+                    .setIntent(getManagerIntent())
+                    .setIcon(getManagerIcon())
+                    .build();
+
+            for (var shortcutInfo : sm.getPinnedShortcuts()) {
+                if (SHORTCUT_ID.equals(shortcutInfo.getId())) {
+                    Log.d(TAG, "shortcut exists, updating");
+                    sm.updateShortcuts(Collections.singletonList(shortcut));
+                    return;
+                }
+            }
+
+            sm.requestPinShortcut(shortcut, null);
+            Log.d(TAG, "done add shortcut");
+        } catch (Throwable e) {
+            Log.e(TAG, "add shortcut", e);
+        }
+    }
+
+    public ManagerGuard guardSnapshot() {
+        var snapshot = guard;
+        return snapshot != null && snapshot.isAlive() ? snapshot : null;
+    }
+
+    private void ensureWebViewPermission(File f) {
+        if (!f.exists()) return;
+        SELinux.setFileContext(f.getAbsolutePath(), "u:object_r:privapp_data_file:s0");
+        if (f.isDirectory()) {
+            for (var g : f.listFiles()) {
+                ensureWebViewPermission(g);
+            }
+        }
+    }
+
+    private void ensureWebViewPermission() {
+        try {
+            var pkgInfo = PackageService.getPackageInfo(BuildConfig.MANAGER_INJECTED_PKG_NAME, 0, 0);
+            var cacheDir = new File(HiddenApiBridge.ApplicationInfo_credentialProtectedDataDir(pkgInfo.applicationInfo) + "/cache");
+            var webviewDir = new File(cacheDir, "WebView");
+            var httpCacheDir = new File(cacheDir, "http_cache");
+            ensureWebViewPermission(webviewDir);
+            ensureWebViewPermission(httpCacheDir);
+        } catch (Throwable e) {
+            Log.w(TAG, "cannot ensure webview dir", e);
+        }
+    }
+
+    // To start injected manager, we should take care about conflict
+    // with the target app since we won't inject into it
+    // if we are not going to display manager.
+    // Thus, when someone launching manager, we should no matter
+    // stop any process of the target app
+    // Ideally we should call force stop package here,
+    // however it's not feasible because it will cause deadlock
+    // Thus we will cancel the launch of the activity
+    // and manually start activity with force stopping
+    // However, the intent we got here is not complete since
+    // there's no extras. We cannot do the same thing
+    // where starting the target app while the manager is
+    // still running.
+    // We instead let the manager to restart the activity.
+    synchronized boolean preStartManager(String pkgName, Intent intent) {
+        // first, check if it's our target app, if not continue the start
+        if (BuildConfig.MANAGER_INJECTED_PKG_NAME.equals(pkgName)) {
+            Log.d(TAG, "starting target app of parasitic manager");
+            // check if it's launching our manager
+            if (intent.getCategories() != null &&
+                    intent.getCategories().contains("org.lsposed.manager.LAUNCH_MANAGER")) {
+                Log.d(TAG, "requesting launch of manager");
+                // a new launch for the manager
+                // check if there's one running
+                // or it's run by ourselves after force stopping
+                var snapshot = guardSnapshot();
+                if (intent.getCategories().contains(RANDOM_UUID) ||
+                        (snapshot != null && snapshot.isAlive() && snapshot.uid == BuildConfig.MANAGER_INJECTED_UID)) {
+                    Log.d(TAG, "manager is still running or is on its way");
+                    // there's one running parasitic manager
+                    // or it's run by ourself after killing, resume it
+                    return true;
+                } else {
+                    // new parasitic manager launch, set the flag and kill
+                    // old processes
+                    // we do it by cancelling the launch (return false)
+                    // and start activity in a new thread
+                    pendingManager = true;
+                    new Thread(() -> {
+                        ensureWebViewPermission();
+                        stopAndStartActivity(pkgName, intent, true);
+                    }).start();
+                    Log.d(TAG, "requested to launch manager");
+                    return false;
+                }
+            } else if (pendingManager) {
+                // there's still parasitic manager, cancel a normal launch until
+                // the parasitic manager is launch
+                Log.d(TAG, "previous request is not yet done");
+                return false;
+            }
+            // this is a normal launch of the target app
+            // send it to the manager and let it to restart the package
+            // if the manager is running
+            // or normally restart without injecting
+            Log.d(TAG, "launching the target app normally");
+            return true;
+        }
+        return true;
+    }
+
+    synchronized void stopAndStartActivity(String packageName, Intent intent, boolean addUUID) {
+        try {
+            ActivityManagerService.forceStopPackage(packageName, 0);
+            Log.d(TAG, "stopped old package");
+            if (addUUID) {
+                intent = (Intent) intent.clone();
+                intent.addCategory(RANDOM_UUID);
+            }
+            ActivityManagerService.startActivityAsUserWithFeature("android", null, intent, intent.getType(), null, null, 0, 0, null, null, 0);
+            Log.d(TAG, "relaunching");
+        } catch (RemoteException e) {
+            Log.e(TAG, "stop and start activity", e);
+        }
+    }
+
+    // return true to inject manager
+    synchronized boolean shouldStartManager(int pid, int uid, String processName) {
+        if (uid != BuildConfig.MANAGER_INJECTED_UID || !BuildConfig.MANAGER_INJECTED_PKG_NAME.equals(processName) || !pendingManager)
+            return false;
+        // pending parasitic manager launch it processes
+        // now we have its pid so we allow it to be killed
+        // and thus reset the pending flag and mark its pid
+        pendingManager = false;
+        managerPid = pid;
+        Log.d(TAG, "starting injected manager: pid = " + pid + " uid = " + uid + " processName = " + processName);
+        return true;
+    }
+
+    // return true to send manager binder
+    synchronized boolean postStartManager(int pid, int uid) {
+        return pid == managerPid && uid == BuildConfig.MANAGER_INJECTED_UID;
+    }
+
+    public @NonNull
+    IBinder obtainManagerBinder(@NonNull IBinder heartbeat, int pid, int uid) {
+        new ManagerGuard(heartbeat, pid, uid);
+        if (postStartManager(pid, uid)) {
+            managerPid = 0;
+        }
+        return this;
+    }
+
+    public boolean isRunningManager(int pid, int uid) {
+        var snapshotPid = managerPid;
+        var snapshotGuard = guardSnapshot();
+        return (pid == snapshotPid && uid == BuildConfig.MANAGER_INJECTED_UID) || (snapshotGuard != null && snapshotGuard.pid == pid && snapshotGuard.uid == uid);
+    }
+
+    void onSystemServerDied() {
+        pendingManager = false;
+        managerPid = 0;
+        guard = null;
     }
 
     @Override
@@ -286,5 +608,11 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     @Override
     public Map<String, ParcelFileDescriptor> getLogs() {
         return ConfigFileManager.getLogs();
+    }
+
+    @Override
+    public void restartFor(Intent intent) throws RemoteException {
+        forceStopPackage(BuildConfig.MANAGER_INJECTED_PKG_NAME, 0);
+        stopAndStartActivity(BuildConfig.MANAGER_INJECTED_PKG_NAME, intent, false);
     }
 }

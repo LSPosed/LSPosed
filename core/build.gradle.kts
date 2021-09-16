@@ -26,6 +26,9 @@ import org.apache.tools.ant.filters.FixCrLfFilter
 import org.apache.tools.ant.filters.ReplaceTokens
 import java.io.PrintStream
 import java.security.MessageDigest
+import java.util.jar.JarFile
+import java.util.zip.ZipOutputStream
+import java.io.FileOutputStream
 
 plugins {
     id("com.android.application")
@@ -58,13 +61,19 @@ dependencies {
     implementation("dev.rikka.ndk:riru:26.0.0")
     implementation("dev.rikka.ndk.thirdparty:cxx:1.1.0")
     implementation("io.github.vvb2060.ndk:dobby:1.2")
-    implementation("com.android.tools.build:apksig:7.0.1")
+    implementation("com.android.tools.build:apksig:7.0.2")
     implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("de.upb.cs.swt:axml:2.1.1")
     compileOnly("androidx.annotation:annotation:1.2.0")
     compileOnly(project(":hiddenapi-stubs"))
     implementation(project(":hiddenapi-bridge"))
     implementation(project(":manager-service"))
+    debugImplementation(files(File(project.buildDir, "tmp/debugR.jar")) {
+        builtBy("generateAppDebugRFile")
+    })
+    releaseImplementation(files(File(project.buildDir, "tmp/releaseR.jar")) {
+        builtBy("generateAppReleaseRFile")
+    })
 }
 
 android {
@@ -93,7 +102,13 @@ android {
         }
 
         buildConfigField("int", "API_CODE", "$apiCode")
-        buildConfigField("String", "DEFAULT_MANAGER_PACKAGE_NAME", "\"$defaultManagerPackageName\"")
+        buildConfigField(
+            "String",
+            "DEFAULT_MANAGER_PACKAGE_NAME",
+            """"$defaultManagerPackageName""""
+        )
+        buildConfigField("String", "MANAGER_INJECTED_PKG_NAME", """"com.android.settings"""")
+        buildConfigField("int", "MANAGER_INJECTED_UID", """1000""")
     }
 
     lint {
@@ -128,6 +143,27 @@ androidComponents.onVariants { v ->
     val variantLowered = variant.name.toLowerCase()
     val zipFileName = "$moduleName-v$verName-$verCode-$variantLowered.zip"
     val magiskDir = "$buildDir/magisk/$variantLowered"
+
+    task("generateApp${variantCapped}RFile", Jar::class) {
+        dependsOn(":app:process${variantCapped}Resources")
+        doLast {
+            val rFile = JarFile(
+                File(
+                    project(":app").buildDir,
+                    "intermediates/compile_and_runtime_not_namespaced_r_class_jar/${variantLowered}/R.jar"
+                )
+            )
+            ZipOutputStream(FileOutputStream(File(project.buildDir, "tmp/${variantLowered}R.jar"))).use {
+                for (entry in rFile.entries()) {
+                    if (entry.name.startsWith("org/lsposed/manager")) {
+                        it.putNextEntry(entry)
+                        rFile.getInputStream(entry).transferTo(it)
+                        it.closeEntry()
+                    }
+                }
+            }
+        }
+    }
 
     afterEvaluate {
         val app = rootProject.project(":app").extensions.getByName<BaseExtension>("android")
@@ -191,7 +227,7 @@ androidComponents.onVariants { v ->
             filter<ReplaceTokens>("tokens" to tokens)
             filter<FixCrLfFilter>("eol" to FixCrLfFilter.CrLf.newInstance("lf"))
         }
-        from("${project(":app").buildDir}/outputs/apk/${variantLowered}") {
+        from("${project(":app").buildDir}/${if (rootProject.extra.properties["android.injected.invoked.from.ide"] == "true") "intermediates" else "outputs"}/apk/${variantLowered}") {
             include("*.apk")
             rename(".*\\.apk", "manager.apk")
         }

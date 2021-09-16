@@ -60,10 +60,11 @@ public class ActivityManagerService {
             if (binder == null) return null;
             try {
                 binder.linkToDeath(deathRecipient, 0);
+                am = IActivityManager.Stub.asInterface(binder);
+                am.setActivityController(null, false);
             } catch (RemoteException e) {
                 Log.e(TAG, Log.getStackTraceString(e));
             }
-            am = IActivityManager.Stub.asInterface(binder);
         }
         return am;
     }
@@ -161,4 +162,5 @@ public class ActivityManagerService {
         if (am == null) return null;
         return am.getCurrentUser();
     }
+
 }

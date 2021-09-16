@@ -29,7 +29,6 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.ComponentInfo;
-import android.content.pm.IPackageInstaller;
 import android.content.pm.IPackageManager;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageInstaller;
@@ -47,14 +46,8 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
-import org.lsposed.lspd.BuildConfig;
 import org.lsposed.lspd.models.Application;
-import org.lsposed.lspd.util.InstallerVerifier;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -66,7 +59,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
-import hidden.HiddenApiBridge;
 import io.github.xposed.xposedservice.utils.ParceledListSlice;
 
 public class PackageService {
@@ -151,12 +143,6 @@ public class PackageService {
             });
         }
         return new ParceledListSlice<>(res);
-    }
-
-    public static void grantRuntimePermission(String packageName, String permissionName, int userId) throws RemoteException {
-        IPackageManager pm = getPackageManager();
-        if (pm == null) return;
-        pm.grantRuntimePermission(packageName, permissionName, userId);
     }
 
     private static Set<String> fetchProcesses(PackageInfo pkgInfo) {
@@ -281,79 +267,27 @@ public class PackageService {
         return new ParceledListSlice<>(pm.queryIntentActivities(intent, resolvedType, flags, userId).getList());
     }
 
-    @SuppressWarnings("JavaReflectionMemberAccess")
-    public static synchronized boolean installManagerIfAbsent(String packageName, File apkFile) {
-        IPackageManager pm = getPackageManager();
-        if (pm == null) return false;
+    public static Intent getLaunchIntentForPackage(String packageName) throws RemoteException {
+        Intent intentToResolve = new Intent(Intent.ACTION_MAIN);
+        intentToResolve.addCategory(Intent.CATEGORY_INFO);
+        intentToResolve.setPackage(packageName);
+        ParceledListSlice<ResolveInfo> ris = queryIntentActivities(intentToResolve, intentToResolve.getType(), 0, 0);
 
-        try {
-            // Uninstall manager when needed
-            PackageInfo pkgInfo = pm.getPackageInfo(packageName, 0, 0);
-            if (pkgInfo != null && pkgInfo.versionName != null && pkgInfo.applicationInfo != null) {
-                boolean versionMatch = pkgInfo.versionName.equals(BuildConfig.VERSION_NAME);
-                boolean signatureMatch = InstallerVerifier.verifyInstallerSignature(pkgInfo.applicationInfo.sourceDir);
-                if (versionMatch && signatureMatch && pkgInfo.versionCode >= BuildConfig.VERSION_CODE)
-                    return false;
-                if (!signatureMatch || !versionMatch && pkgInfo.versionCode > BuildConfig.VERSION_CODE)
-                    uninstallPackage(new VersionedPackage(pkgInfo.packageName, pkgInfo.versionCode), -1);
-            }
-
-            if (!InstallerVerifier.verifyInstallerSignature(apkFile.getPath())) {
-                Log.w(TAG, apkFile + " verify signature false! skip install.");
-                return false;
-            }
-
-            // Install manager
-            IPackageInstaller installerService = pm.getPackageInstaller();
-            PackageInstaller installer = null;
-            // S Preview
-            if (Build.VERSION.SDK_INT > 30 || Build.VERSION.SDK_INT == 30 && Build.VERSION.PREVIEW_SDK_INT != 0) {
-                try {
-                    Constructor<PackageInstaller> installerConstructor = PackageInstaller.class.getConstructor(IPackageInstaller.class, String.class, String.class, int.class);
-                    installerConstructor.setAccessible(true);
-                    installer = installerConstructor.newInstance(installerService, null, null, 0);
-                } catch (Throwable ignored) {
-                }
-            }
-            if (installer == null) {
-                Constructor<PackageInstaller> installerConstructor = PackageInstaller.class.getConstructor(IPackageInstaller.class, String.class, int.class);
-                installerConstructor.setAccessible(true);
-                installer = installerConstructor.newInstance(installerService, null, 0);
-            }
-            PackageInstaller.SessionParams params = new PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL);
-            int installFlags = HiddenApiBridge.PackageInstaller_SessionParams_installFlags(params);
-            installFlags |= 0x00000002/*PackageManager.INSTALL_REPLACE_EXISTING*/;
-            HiddenApiBridge.PackageInstaller_SessionParams_installFlags(params, installFlags);
-
-            int sessionId = installer.createSession(params);
-            try (PackageInstaller.Session session = installer.openSession(sessionId)) {
-                try (InputStream is = new FileInputStream(apkFile); OutputStream os = session.openWrite(apkFile.getName(), 0, -1)) {
-                    byte[] buf = new byte[8192];
-                    int len;
-                    while ((len = is.read(buf)) > 0) {
-                        os.write(buf, 0, len);
-                        os.flush();
-                        session.fsync(os);
-                    }
-                }
-                session.commit(new IntentSenderAdaptor() {
-                    @Override
-                    public void send(Intent result) {
-                        int status = result.getIntExtra(PackageInstaller.EXTRA_STATUS, PackageInstaller.STATUS_FAILURE);
-                        String message = result.getStringExtra(PackageInstaller.EXTRA_STATUS_MESSAGE);
-                        if (status != PackageInstaller.STATUS_SUCCESS) {
-                            Log.w(TAG, "installation failed: " + status + " " + message);
-                        } else {
-                            Log.i(TAG, "installed manager successfully");
-                        }
-                    }
-                }.getIntentSender());
-            }
-            return true;
-        } catch (Throwable e) {
-            Log.e(TAG, e.getMessage(), e);
-            return false;
+        // Otherwise, try to find a main launcher activity.
+        if (ris == null || ris.getList().size() <= 0) {
+            // reuse the intent instance
+            intentToResolve.removeCategory(Intent.CATEGORY_INFO);
+            intentToResolve.addCategory(Intent.CATEGORY_LAUNCHER);
+            intentToResolve.setPackage(packageName);
+            ris = queryIntentActivities(intentToResolve, intentToResolve.getType(), 0, 0);
         }
+        if (ris == null || ris.getList().size() <= 0) {
+            return null;
+        }
+        Intent intent = new Intent(intentToResolve);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setClassName(ris.getList().get(0).activityInfo.packageName,
+                ris.getList().get(0).activityInfo.name);
+        return intent;
     }
-
 }

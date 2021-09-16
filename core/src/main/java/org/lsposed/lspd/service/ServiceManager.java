@@ -104,6 +104,8 @@ public class ServiceManager {
         waitSystemService(Context.USER_SERVICE);
         waitSystemService(Context.APP_OPS_SERVICE);
 
+        ConfigFileManager.reloadLocale();
+
         BridgeService.send(mainService, new BridgeService.Listener() {
             @Override
             public void onSystemServerRestarted() {
@@ -123,6 +125,7 @@ public class ServiceManager {
             public void onSystemServerDied() {
                 Log.w(TAG, "system server died");
                 systemServerService.putBinderForSystemServer();
+                managerService.onSystemServerDied();
             }
         });
 

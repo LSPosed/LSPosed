@@ -71,7 +71,7 @@ public class LSPSystemServerService extends ILSPSystemServerService.Stub impleme
     }
 
     @Override
-    public ILSPApplicationService requestApplicationService(int uid, int pid, String processName, IBinder heartBeat) throws RemoteException {
+    public ILSPApplicationService requestApplicationService(int uid, int pid, String processName, IBinder heartBeat) {
         requested = true;
         if (ConfigManager.getInstance().shouldSkipSystemServer() || uid != 1000 || heartBeat == null || !"android".equals(processName))
             return null;

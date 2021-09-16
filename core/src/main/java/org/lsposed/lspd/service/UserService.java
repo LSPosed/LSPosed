@@ -82,4 +82,10 @@ public class UserService {
         if (userInfo == null) return userId;
         else return userInfo.id;
     }
+
+    public static boolean isUserUnlocked(int userId) throws RemoteException {
+        IUserManager um = getUserManager();
+        if (um == null) return false;
+        return um.isUserUnlocked(userId);
+    }
 }
