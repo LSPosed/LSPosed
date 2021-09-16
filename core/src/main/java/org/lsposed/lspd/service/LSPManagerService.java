@@ -33,6 +33,7 @@ import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.os.ResultReceiver;
+import android.os.SELinux;
 import android.os.SystemProperties;
 import android.util.Log;
 
@@ -44,6 +45,7 @@ import org.lsposed.lspd.models.Application;
 import org.lsposed.lspd.models.UserInfo;
 import org.lsposed.lspd.util.Utils;
 
+import java.io.File;
 import java.io.FileDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
@@ -52,6 +54,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import de.robv.android.xposed.XposedBridge;
+import hidden.HiddenApiBridge;
 import io.github.xposed.xposedservice.utils.ParceledListSlice;
 
 public class LSPManagerService extends ILSPManagerService.Stub {
@@ -122,6 +125,29 @@ public class LSPManagerService extends ILSPManagerService.Stub {
         return snapshot != null && snapshot.isAlive() ? snapshot : null;
     }
 
+    private void ensureWebViewPermission(File f) {
+        if (!f.exists()) return;
+        SELinux.setFileContext(f.getAbsolutePath(), "u:object_r:privapp_data_file:s0");
+        if (f.isDirectory()) {
+            for (var g : f.listFiles()) {
+                ensureWebViewPermission(g);
+            }
+        }
+    }
+
+    private void ensureWebViewPermission() {
+        try {
+            var pkgInfo = PackageService.getPackageInfo(BuildConfig.MANAGER_INJECTED_PKG_NAME, 0, 0);
+            var cacheDir = new File(HiddenApiBridge.ApplicationInfo_credentialProtectedDataDir(pkgInfo.applicationInfo) + "/cache");
+            var webviewDir = new File(cacheDir, "WebView");
+            var httpCacheDir = new File(cacheDir, "http_cache");
+            ensureWebViewPermission(webviewDir);
+            ensureWebViewPermission(httpCacheDir);
+        } catch (Throwable e) {
+            Log.w(TAG, "cannot ensure webview dir", e);
+        }
+    }
+
     // To start injected manager, we should take care about conflict
     // with the target app since we won't inject into it
     // if we are not going to display manager.
@@ -160,7 +186,10 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                     // we do it by cancelling the launch (return false)
                     // and start activity in a new thread
                     pendingManager = true;
-                    new Thread(() -> stopAndStartActivity(pkgName, intent, true)).start();
+                    new Thread(() -> {
+                        ensureWebViewPermission();
+                        stopAndStartActivity(pkgName, intent, true);
+                    }).start();
                     Log.d(TAG, "requested to launch manager");
                     return false;
                 }
