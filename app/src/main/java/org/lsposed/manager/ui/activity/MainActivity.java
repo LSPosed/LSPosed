@@ -119,6 +119,14 @@ public class MainActivity extends BaseActivity {
                             navController.navigate(R.id.action_repo_fragment);
                         }
                         break;
+                    default:
+                        if (intent.getData().getScheme().equals("module")) {
+                            navController.navigate(
+                                    NavGraphDirections.actionAppListFragment(
+                                            intent.getData().getHost(),
+                                            intent.getData().getPort())
+                            );
+                        }
                 }
             }
         }

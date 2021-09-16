@@ -22,13 +22,25 @@ package org.lsposed.lspd.service;
 import static android.content.Context.BIND_AUTO_CREATE;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 
+import android.app.INotificationManager;
 import android.app.IServiceConnection;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
 import android.content.pm.VersionedPackage;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Icon;
+import android.net.Uri;
 import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
@@ -43,11 +55,13 @@ import org.lsposed.lspd.BuildConfig;
 import org.lsposed.lspd.ILSPManagerService;
 import org.lsposed.lspd.models.Application;
 import org.lsposed.lspd.models.UserInfo;
+import org.lsposed.lspd.util.FakeContext;
 import org.lsposed.lspd.util.Utils;
 
 import java.io.File;
 import java.io.FileDescriptor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +76,15 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     private static final String PROP_VALUE = "--inline-max-code-units=0";
     // this maybe useful when obtaining the manager binder
     private static final String RANDOM_UUID = UUID.randomUUID().toString();
+    private static final String SHORTCUT_ID = "org.lsposed.manager.shortcut";
+    public static final int NOTIFICATION_ID = 114514;
+    public static final String CHANNEL_ID = "lsposed";
+    public static final String CHANNEL_NAME = "LSPosed Manager";
+    public static final int CHANNEL_IMP = NotificationManager.IMPORTANCE_HIGH;
+
+    private static Icon managerIcon = null;
+    private static Icon notificationIcon = null;
+    private static Intent managerIntent = null;
 
     public class ManagerGuard implements IBinder.DeathRecipient {
         private final @NonNull
@@ -118,6 +141,133 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     private int managerPid = -1;
 
     LSPManagerService() {
+    }
+
+    private static Icon getIcon(int res) {
+        var icon = ConfigFileManager.getResources().getDrawable(res, ConfigFileManager.getResources().newTheme());
+        var bitmap = Bitmap.createBitmap(icon.getIntrinsicWidth(), icon.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
+        icon.draw(new Canvas(bitmap));
+        return Icon.createWithBitmap(bitmap);
+    }
+
+    private static Icon getManagerIcon() {
+        if (managerIcon == null) {
+            managerIcon = getIcon(org.lsposed.manager.R.drawable.ic_launcher);
+        }
+        return managerIcon;
+    }
+
+    private static Icon getNotificationIcon() {
+        if (notificationIcon == null) {
+            notificationIcon = getIcon(org.lsposed.manager.R.drawable.ic_extension);
+        }
+        return notificationIcon;
+    }
+
+    private static Intent getManagerIntent() {
+        try {
+            if (managerIntent == null) {
+                var intent = PackageService.getLaunchIntentForPackage(BuildConfig.MANAGER_INJECTED_PKG_NAME);
+                if (intent == null) {
+                    var pkgInfo = PackageService.getPackageInfo(BuildConfig.MANAGER_INJECTED_PKG_NAME, PackageManager.GET_ACTIVITIES, 0);
+                    if (pkgInfo.activities != null && pkgInfo.activities.length > 0) {
+                        for (var activityInfo : pkgInfo.activities) {
+                            if (activityInfo.processName.equals(activityInfo.packageName)) {
+                                intent = new Intent();
+                                intent.setComponent(new ComponentName(activityInfo.packageName, activityInfo.name));
+                                intent.setAction(Intent.ACTION_MAIN);
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (intent.getCategories() != null) intent.getCategories().clear();
+                intent.addCategory("org.lsposed.manager.LAUNCH_MANAGER");
+                managerIntent = (Intent) intent.clone();
+            }
+        } catch (Throwable e) {
+            Log.e(TAG, "get Intent", e);
+        }
+        return managerIntent;
+
+    }
+
+    public static PendingIntent getNotificationIntent(String modulePackageName, int moduleUserId) {
+        try {
+            var intent = (Intent) getManagerIntent().clone();
+            intent.setData(Uri.parse("module://" + modulePackageName + ":" + moduleUserId));
+            return PendingIntent.getActivity(new FakeContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        } catch (Throwable e) {
+            Log.e(TAG, "get notification intent", e);
+            return null;
+        }
+    }
+
+    public static void showNotification(String modulePackageName,
+                                        int moduleUserId,
+                                        boolean enabled,
+                                        boolean systemModule) {
+        try {
+            var context = new FakeContext();
+            String title = context.getString(enabled ? systemModule ?
+                    org.lsposed.manager.R.string.xposed_module_updated_notification_title_system :
+                    org.lsposed.manager.R.string.xposed_module_updated_notification_title :
+                    org.lsposed.manager.R.string.module_is_not_activated_yet);
+            String content = context.getString(enabled ? systemModule ?
+                    org.lsposed.manager.R.string.xposed_module_updated_notification_content_system :
+                    org.lsposed.manager.R.string.xposed_module_updated_notification_content :
+                    org.lsposed.manager.R.string.module_is_not_activated_yet_detailed, modulePackageName);
+
+            var notification = new Notification.Builder(context, CHANNEL_ID)
+                    .setContentTitle(title)
+                    .setContentText(content)
+                    .setSmallIcon(getNotificationIcon())
+                    .setLargeIcon(getManagerIcon())
+                    .setColor(context.getResources().getColor(org.lsposed.manager.R.color.color_primary))
+                    .setContentIntent(getNotificationIntent(modulePackageName, moduleUserId))
+                    .build();
+            var im = INotificationManager.Stub.asInterface(android.os.ServiceManager.getService("notification"));
+            final NotificationChannel channel =
+                    new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, CHANNEL_IMP);
+            im.createNotificationChannels("android",
+                    new android.content.pm.ParceledListSlice<>(Collections.singletonList(channel)));
+            im.enqueueNotificationWithTag("android", "android", "114514", NOTIFICATION_ID, notification, 0);
+        } catch (Throwable e) {
+            Log.e(TAG, "posted notification", e);
+        }
+    }
+
+    public static void createOrUpdateShortcut() {
+        try {
+            var smCtor = ShortcutManager.class.getDeclaredConstructor(Context.class);
+            smCtor.setAccessible(true);
+            var context = new FakeContext();
+            var sm = smCtor.newInstance(context);
+            if (!sm.isRequestPinShortcutSupported()) {
+                Log.d(TAG, "pinned shortcut not supported, skipping");
+                return;
+            }
+            var shortcut = new ShortcutInfo.Builder(context, SHORTCUT_ID)
+                    .setShortLabel("LSPosed")
+                    .setLongLabel("LSPosed")
+                    .setIntent(getManagerIntent())
+                    .setIcon(getManagerIcon())
+                    .build();
+
+            for (var shortcutInfo : sm.getPinnedShortcuts()) {
+                if (SHORTCUT_ID.equals(shortcutInfo.getId())) {
+                    Log.d(TAG, "shortcut exists, updating");
+                    sm.updateShortcuts(Collections.singletonList(shortcut));
+                    return;
+                }
+            }
+
+            sm.requestPinShortcut(shortcut, null);
+            Log.d(TAG, "done add shortcut");
+        } catch (Throwable e) {
+            Log.e(TAG, "add shortcut", e);
+        }
     }
 
     public ManagerGuard guardSnapshot() {

@@ -51,8 +51,6 @@
         <activity
             android:name=".ui.activity.CrashReportActivity"
             android:process=":error" />
-
-        <receiver android:name=".receivers.ServiceReceiver" />
     </application>
 
 </manifest>

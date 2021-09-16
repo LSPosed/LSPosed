@@ -47,7 +47,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.zip.ZipFile;
 
-class ConfigFileManager {
+public class ConfigFileManager {
     static final Path basePath = Paths.get("/data/adb/lspd");
     static final File managerApkPath = basePath.resolve("manager.apk").toFile();
     private static final Path lockPath = basePath.resolve("lock");
@@ -84,7 +84,7 @@ class ConfigFileManager {
         res = tmpRes;
     }
 
-    static Resources getResources() {
+    public static Resources getResources() {
         return res;
     }
 

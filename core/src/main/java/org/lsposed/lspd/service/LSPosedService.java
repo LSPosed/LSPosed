@@ -23,35 +23,23 @@ import static org.lsposed.lspd.service.PackageService.PER_USER_RANGE;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 
 import android.app.IApplicationThread;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.IIntentReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.ShortcutInfo;
-import android.content.pm.ShortcutManager;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
-import org.lsposed.lspd.BuildConfig;
-import org.lsposed.manager.R;
-
 import java.util.Arrays;
-import java.util.Collections;
 
 public class LSPosedService extends ILSPosedService.Stub {
     private static final int AID_NOBODY = 9999;
     private static final int USER_NULL = -10000;
-    private static final String SHORTCUT_ID = "org.lsposed.manager.shortcut";
+
 
     @Override
     public ILSPApplicationService requestApplicationService(int uid, int pid, String processName, IBinder heartBeat) {
@@ -155,28 +143,7 @@ public class LSPosedService extends ILSPosedService.Stub {
             boolean enabled = Arrays.asList(enabledModules).contains(moduleName);
             boolean removed = intent.getAction().equals(Intent.ACTION_PACKAGE_FULLY_REMOVED) ||
                     intent.getAction().equals(Intent.ACTION_UID_REMOVED);
-            var action = enabled || removed ? "org.lsposed.action.MODULE_UPDATED" :
-                    "org.lsposed.action.MODULE_NOT_ACTIVATAED";
-            Intent broadcastIntent = new Intent(action);
-            broadcastIntent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-            broadcastIntent.addFlags(0x01000000);
-            broadcastIntent.addFlags(0x00400000);
-            broadcastIntent.setData(intent.getData());
-            broadcastIntent.putExtras(intent.getExtras());
-            broadcastIntent.putExtra(Intent.EXTRA_USER, userId);
-            broadcastIntent.putExtra("systemModule", systemModule);
-            var manager = ConfigManager.getInstance().getManagerPackageName();
-            var component = ComponentName.createRelative(manager, ".receivers.ServiceReceiver");
-            broadcastIntent.setComponent(component);
-
-            try {
-                ActivityManagerService.broadcastIntentWithFeature(null, broadcastIntent,
-                        null, null, 0, null, null,
-                        null, -1, null, true, false,
-                        0);
-            } catch (Throwable t) {
-                Log.e(TAG, "Broadcast to manager failed: ", t);
-            }
+            LSPManagerService.showNotification(moduleName, userId, enabled || removed, systemModule);
         }
 
         if (moduleName != null && ConfigManager.getInstance().isManager(moduleName) && userId == 0) {
@@ -192,68 +159,13 @@ public class LSPosedService extends ILSPosedService.Stub {
 
     synchronized public void dispatchUserUnlocked(Intent intent) {
         try {
-            var fakeContext = new ContextWrapper(null) {
-                @Override
-                public String getPackageName() {
-                    return "android";
-                }
-
-                public int getUserId() {
-                    return 0;
-                }
-            };
-            var smCtor = ShortcutManager.class.getDeclaredConstructor(Context.class);
-            smCtor.setAccessible(true);
-            var sm = smCtor.newInstance(fakeContext);
             while (!UserService.isUserUnlocked(0)) {
                 Log.d(TAG, "user is not yet unlocked, waiting for 1s...");
                 Thread.sleep(1000);
             }
-
-            if (!sm.isRequestPinShortcutSupported()) {
-                Log.d(TAG, "pinned shortcut not supported, skipping");
-                return;
-            }
-            var shortcutIntent = PackageService.getLaunchIntentForPackage(BuildConfig.MANAGER_INJECTED_PKG_NAME);
-            if (shortcutIntent == null) {
-                var pkgInfo = PackageService.getPackageInfo(BuildConfig.MANAGER_INJECTED_PKG_NAME, PackageManager.GET_ACTIVITIES, 0);
-                if (pkgInfo.activities != null && pkgInfo.activities.length > 0) {
-                    for (var activityInfo : pkgInfo.activities) {
-                        if (activityInfo.processName.equals(activityInfo.packageName)) {
-                            shortcutIntent = new Intent();
-                            shortcutIntent.setComponent(new ComponentName(activityInfo.packageName, activityInfo.name));
-                            shortcutIntent.setAction(Intent.ACTION_MAIN);
-                            break;
-                        }
-                    }
-                }
-            }
-            if (shortcutIntent.getCategories() != null) shortcutIntent.getCategories().clear();
-            shortcutIntent.addCategory("org.lsposed.manager.LAUNCH_MANAGER");
-            var icon = ConfigFileManager.getResources().getDrawable(R.drawable.ic_launcher, ConfigFileManager.getResources().newTheme());
-            var bitmap = Bitmap.createBitmap(icon.getIntrinsicWidth(), icon.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-            icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
-            icon.draw(new Canvas(bitmap));
-            var shortcut = new ShortcutInfo.Builder(fakeContext, SHORTCUT_ID)
-                    .setShortLabel("LSPosed")
-                    .setLongLabel("LSPosed")
-                    .setIntent(shortcutIntent)
-                    .setIcon(Icon.createWithBitmap(bitmap))
-                    .build();
-
-            for (var shortcutInfo : sm.getPinnedShortcuts()) {
-                if (SHORTCUT_ID.equals(shortcutInfo.getId())) {
-                    Log.d(TAG, "shortcut exists, updating");
-                    sm.updateShortcuts(Collections.singletonList(shortcut));
-                    return;
-                }
-            }
-
-            sm.requestPinShortcut(shortcut, null);
-
-            Log.d(TAG, "done add shortcut");
+            LSPManagerService.createOrUpdateShortcut();
         } catch (Throwable e) {
-            Log.e(TAG, "add shortcut", e);
+            Log.e(TAG, "dispatch user unlocked", e);
         }
     }
 
