@@ -138,8 +138,8 @@ public class MainActivity extends BaseActivity {
             try {
                 Bundle savedInstanceState = new Bundle();
                 onSaveInstanceState(savedInstanceState);
-                finish();
                 startActivity(newIntent(savedInstanceState, this));
+                finish();
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 restarting = true;
             } catch (Throwable e) {
