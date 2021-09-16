@@ -20,6 +20,7 @@ import android.webkit.WebViewDelegate;
 import android.webkit.WebViewFactory;
 import android.webkit.WebViewFactoryProvider;
 
+import org.lsposed.lspd.BuildConfig;
 import org.lsposed.lspd.ILSPManagerService;
 
 import java.lang.reflect.Method;
@@ -73,7 +74,7 @@ public class ParasiticManagerHooker {
                     if (param.args[i] instanceof Intent) {
                         var intent = (Intent) param.args[i];
                         checkIntent(managerService, intent);
-                        intent.setComponent(ComponentName.unflattenFromString("org.lsposed.manager/.ui.activity.MainActivity"));
+                        intent.setComponent(new ComponentName(BuildConfig.MANAGER_INJECTED_PKG_NAME, "org.lsposed.manager.ui.activity.MainActivity"));
                     }
                 }
             }
