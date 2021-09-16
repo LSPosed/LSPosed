@@ -48,7 +48,7 @@ public class ParasiticManagerHooker {
             newAppInfo.publicSourceDir = sourceDir;
             newAppInfo.nativeLibraryDir = appInfo.nativeLibraryDir;
             newAppInfo.packageName = appInfo.packageName;
-            newAppInfo.dataDir = appInfo.dataDir;
+            newAppInfo.dataDir = HiddenApiBridge.ApplicationInfo_credentialProtectedDataDir(appInfo);
             newAppInfo.deviceProtectedDataDir = appInfo.deviceProtectedDataDir;
             HiddenApiBridge.ApplicationInfo_credentialProtectedDataDir(newAppInfo, HiddenApiBridge.ApplicationInfo_credentialProtectedDataDir(appInfo));
             newAppInfo.uid = appInfo.uid;
