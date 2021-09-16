@@ -41,6 +41,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
@@ -223,10 +224,11 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                     .setContentTitle(title)
                     .setContentText(content)
                     .setSmallIcon(getNotificationIcon())
-                    .setLargeIcon(getManagerIcon())
                     .setColor(context.getResources().getColor(org.lsposed.manager.R.color.color_primary))
                     .setContentIntent(getNotificationIntent(modulePackageName, moduleUserId))
+                    .setAutoCancel(true)
                     .build();
+            notification.extras.putString("android.substName", "LSPosed");
             var im = INotificationManager.Stub.asInterface(android.os.ServiceManager.getService("notification"));
             final NotificationChannel channel =
                     new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, CHANNEL_IMP);

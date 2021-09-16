@@ -39,7 +39,6 @@ import org.lsposed.manager.NavGraphDirections;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.ActivityMainBinding;
 import org.lsposed.manager.ui.activity.base.BaseActivity;
-import org.lsposed.manager.util.NotificationUtil;
 
 public class MainActivity extends BaseActivity {
     private static final String KEY_PREFIX = MainActivity.class.getName() + '.';
@@ -100,13 +99,7 @@ public class MainActivity extends BaseActivity {
         if (intent.getAction() != null && intent.getAction().equals("android.intent.action.APPLICATION_PREFERENCES")) {
             navController.navigate(R.id.action_settings_fragment);
         } else if (ConfigManager.isBinderAlive()) {
-            if (NotificationUtil.NOTIFICATION_UUID.equals(intent.getStringExtra("uuid"))) {
-                navController.navigate(
-                        NavGraphDirections.actionAppListFragment(
-                                intent.getStringExtra("modulePackageName"),
-                                intent.getIntExtra("moduleUserId", -1))
-                );
-            } else if (!TextUtils.isEmpty(intent.getDataString())) {
+            if (!TextUtils.isEmpty(intent.getDataString())) {
                 switch (intent.getDataString()) {
                     case "modules":
                         navController.navigate(R.id.action_modules_fragment);
@@ -120,11 +113,12 @@ public class MainActivity extends BaseActivity {
                         }
                         break;
                     default:
-                        if (intent.getData().getScheme().equals("module")) {
+                        var data = intent.getData();
+                        if (data.getScheme().equals("module")) {
                             navController.navigate(
                                     NavGraphDirections.actionAppListFragment(
-                                            intent.getData().getHost(),
-                                            intent.getData().getPort())
+                                            data.getHost(),
+                                            data.getPort())
                             );
                         }
                 }
