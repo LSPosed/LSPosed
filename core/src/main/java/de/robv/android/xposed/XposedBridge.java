@@ -147,6 +147,12 @@ public final class XposedBridge {
         Log.e(TAG, logStr);
     }
 
+    /**
+     * Deoptimize a method to avoid callee being inlined.
+     *
+     * @param deoptMethod The method to deoptmize. Generally it should be a caller of a method
+     *                    that is inlined.
+     */
     public static void deoptMethod(Member deoptMethod) {
         if (!(deoptMethod instanceof Executable)) {
             throw new IllegalArgumentException("Only methods and constructors can be deopted: " + deoptMethod.toString());
