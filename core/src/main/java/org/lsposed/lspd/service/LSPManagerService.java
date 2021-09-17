@@ -154,7 +154,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     private static Icon getManagerIcon() {
         if (managerIcon == null) {
-            managerIcon = getIcon(org.lsposed.manager.R.drawable.ic_launcher);
+            managerIcon = getIcon(org.lsposed.manager.R.mipmap.ic_launcher);
         }
         return managerIcon;
     }
