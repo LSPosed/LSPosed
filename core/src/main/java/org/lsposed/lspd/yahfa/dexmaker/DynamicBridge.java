@@ -33,17 +33,19 @@ import de.robv.android.xposed.XposedBridge;
 
 public final class DynamicBridge {
     private static final ConcurrentHashMap<Executable, LspHooker> hookedInfo = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<Executable, Object> lockers = new ConcurrentHashMap<>();
 
     public static void hookMethod(Executable hookMethod, XposedBridge.AdditionalHookInfo additionalHookInfo) {
         Utils.logD("hooking " + hookMethod);
 
-        hookedInfo.compute(hookMethod, (method, hooker) -> {
+        synchronized (lockers.computeIfAbsent(hookMethod, (m) -> new Object())) {
+            var hooker = hookedInfo.getOrDefault(hookMethod, null);
             if (hooker == null) {
                 Utils.logD("start to generate class for: " + hookMethod);
                 try {
                     final HookerDexMaker dexMaker = new HookerDexMaker();
                     dexMaker.start(hookMethod, additionalHookInfo);
-                    hooker = dexMaker.getHooker();
+                    hookedInfo.put(hookMethod, dexMaker.getHooker());
                 } catch (Throwable e) {
                     Utils.logE("error occur when generating dex.", e);
                 }
@@ -51,9 +53,7 @@ public final class DynamicBridge {
                 for (var callback : additionalHookInfo.callbacks.getSnapshot())
                     hooker.additionalInfo.callbacks.add((XC_MethodHook) callback);
             }
-            return hooker;
-        });
-
+        }
     }
 
     public static Object invokeOriginalMethod(Member method, Object thisObject, Object[] args)
