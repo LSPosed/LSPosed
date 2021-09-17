@@ -36,6 +36,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Proxy;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -145,6 +146,23 @@ public final class XposedBridge {
     public synchronized static void log(Throwable t) {
         String logStr = Log.getStackTraceString(t);
         Log.e(TAG, logStr);
+    }
+
+    /**
+     * Deoptimize a method to avoid callee being inlined.
+     *
+     * @param deoptimizedMethod The method to deoptmize. Generally it should be a caller of a method
+     *                    that is inlined.
+     */
+    public static void deoptimizeMethod(Member deoptimizedMethod) {
+        if (!(deoptimizedMethod instanceof Executable)) {
+            throw new IllegalArgumentException("Only methods and constructors can be deoptimized: " + deoptimizedMethod.toString());
+        } else if (Modifier.isAbstract(deoptimizedMethod.getModifiers())) {
+            throw new IllegalArgumentException("Cannot deoptimize abstract methods: " + deoptimizedMethod);
+        } else if (Proxy.isProxyClass(deoptimizedMethod.getDeclaringClass())) {
+            throw new IllegalArgumentException("Cannot deoptimize methods from proxy class: " + deoptimizedMethod);
+        }
+        YahfaHooker.deoptMethodNative((Executable) deoptimizedMethod);
     }
 
     /**
