@@ -3,9 +3,12 @@ package org.lsposed.lspd.service;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 import static org.lsposed.lspd.service.ServiceManager.toGlobalNamespace;
 
+import android.content.res.AssetManager;
+import android.content.res.Resources;
 import android.os.ParcelFileDescriptor;
 import android.os.SELinux;
 import android.os.SharedMemory;
+import android.os.SystemProperties;
 import android.system.ErrnoException;
 import android.system.OsConstants;
 import android.util.Log;
@@ -14,11 +17,14 @@ import androidx.annotation.Nullable;
 
 import org.lsposed.lspd.models.PreLoadedApk;
 import org.lsposed.lspd.util.Utils;
+import org.w3c.dom.ls.LSResourceResolver;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Method;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
@@ -37,10 +43,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.zip.ZipFile;
 
-class ConfigFileManager {
+public class ConfigFileManager {
     static final Path basePath = Paths.get("/data/adb/lspd");
     static final File managerApkPath = basePath.resolve("manager.apk").toFile();
     private static final Path lockPath = basePath.resolve("lock");
@@ -53,6 +60,8 @@ class ConfigFileManager {
     @SuppressWarnings("FieldCanBeLocal")
     private static FileLocker locker = null;
 
+    private static final Resources res;
+
     static {
         try {
             Files.createDirectories(basePath);
@@ -62,6 +71,71 @@ class ConfigFileManager {
         } catch (IOException e) {
             Log.e(TAG, Log.getStackTraceString(e));
         }
+        Resources tmpRes;
+        try {
+            AssetManager am = AssetManager.class.newInstance();
+            Method addAssetPath = AssetManager.class.getDeclaredMethod("addAssetPath", String.class);
+            addAssetPath.setAccessible(true);
+            addAssetPath.invoke(am, managerApkPath.getAbsolutePath());
+            tmpRes = new Resources(am, null, null);
+        } catch (Throwable e) {
+            tmpRes = null;
+        }
+        res = tmpRes;
+    }
+
+    public static Resources getResources() {
+        return res;
+    }
+
+    // from AndroidRuntime.cpp
+    private static String readLocale() {
+        String locale = SystemProperties.get("persist.sys.locale", "");
+        if (!locale.isEmpty()) {
+            return locale;
+        }
+
+        String language = SystemProperties.get("persist.sys.language", "");
+        if (!language.isEmpty()) {
+            String country = SystemProperties.get("persist.sys.country", "");
+            String variant = SystemProperties.get("persist.sys.localevar", "");
+
+            String out = language;
+            if (!country.isEmpty()) {
+                out = out + "-" + country;
+            }
+
+            if (!variant.isEmpty()) {
+                out = out + "-" + variant;
+            }
+
+            return out;
+        }
+
+        String productLocale = SystemProperties.get("ro.product.locale", "");
+        if (!productLocale.isEmpty()) {
+            return productLocale;
+        }
+
+        // If persist.sys.locale and ro.product.locale are missing,
+        // construct a locale value from the individual locale components.
+        String productLanguage = SystemProperties.get("ro.product.locale.language", "en");
+        String productRegion = SystemProperties.get("ro.product.locale.region", "US");
+
+        return productLanguage + "-" + productRegion;
+    }
+
+    static void reloadLocale() {
+        Locale locale = Locale.forLanguageTag(readLocale());
+        Locale.setDefault(locale);
+        var conf = res.getConfiguration();
+        conf.setLocale(Locale.forLanguageTag(readLocale()));
+        res.updateConfiguration(conf, res.getDisplayMetrics());
+    }
+
+    static ParcelFileDescriptor getManagerApk() throws FileNotFoundException {
+        SELinux.setFileContext(managerApkPath.getAbsolutePath(), "u:object_r:system_file:s0");
+        return ParcelFileDescriptor.open(managerApkPath.getAbsoluteFile(), ParcelFileDescriptor.MODE_READ_ONLY);
     }
 
     static void deleteFolderIfExists(Path target) throws IOException {

@@ -23,7 +23,6 @@ import static org.lsposed.lspd.service.PackageService.PER_USER_RANGE;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 
 import android.app.IApplicationThread;
-import android.content.ComponentName;
 import android.content.IIntentReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -33,7 +32,6 @@ import android.net.Uri;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.RemoteException;
 import android.util.Log;
 
 import java.util.Arrays;
@@ -42,18 +40,20 @@ public class LSPosedService extends ILSPosedService.Stub {
     private static final int AID_NOBODY = 9999;
     private static final int USER_NULL = -10000;
 
+
     @Override
     public ILSPApplicationService requestApplicationService(int uid, int pid, String processName, IBinder heartBeat) {
         if (Binder.getCallingUid() != 1000) {
             Log.w(TAG, "Someone else got my binder!?");
             return null;
         }
-        if (ConfigManager.getInstance().shouldSkipProcess(new ConfigManager.ProcessScope(processName, uid))) {
-            Log.d(TAG, "Skipped " + processName + "/" + uid);
-            return null;
-        }
         if (ServiceManager.getApplicationService().hasRegister(uid, pid)) {
             Log.d(TAG, "Skipped duplicated request for uid " + uid + " pid " + pid);
+            return null;
+        }
+        if (!ServiceManager.getManagerService().shouldStartManager(pid, uid, processName) &&
+                ConfigManager.getInstance().shouldSkipProcess(new ConfigManager.ProcessScope(processName, uid))) {
+            Log.d(TAG, "Skipped " + processName + "/" + uid);
             return null;
         }
         Log.d(TAG, "returned service");
@@ -143,28 +143,7 @@ public class LSPosedService extends ILSPosedService.Stub {
             boolean enabled = Arrays.asList(enabledModules).contains(moduleName);
             boolean removed = intent.getAction().equals(Intent.ACTION_PACKAGE_FULLY_REMOVED) ||
                     intent.getAction().equals(Intent.ACTION_UID_REMOVED);
-            var action = enabled || removed ? "org.lsposed.action.MODULE_UPDATED" :
-                    "org.lsposed.action.MODULE_NOT_ACTIVATAED";
-            Intent broadcastIntent = new Intent(action);
-            broadcastIntent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-            broadcastIntent.addFlags(0x01000000);
-            broadcastIntent.addFlags(0x00400000);
-            broadcastIntent.setData(intent.getData());
-            broadcastIntent.putExtras(intent.getExtras());
-            broadcastIntent.putExtra(Intent.EXTRA_USER, userId);
-            broadcastIntent.putExtra("systemModule", systemModule);
-            var manager = ConfigManager.getInstance().getManagerPackageName();
-            var component = ComponentName.createRelative(manager, ".receivers.ServiceReceiver");
-            broadcastIntent.setComponent(component);
-
-            try {
-                ActivityManagerService.broadcastIntentWithFeature(null, broadcastIntent,
-                        null, null, 0, null, null,
-                        null, -1, null, true, false,
-                        0);
-            } catch (Throwable t) {
-                Log.e(TAG, "Broadcast to manager failed: ", t);
-            }
+            LSPManagerService.showNotification(moduleName, userId, enabled || removed, systemModule);
         }
 
         if (moduleName != null && ConfigManager.getInstance().isManager(moduleName) && userId == 0) {
@@ -178,8 +157,16 @@ public class LSPosedService extends ILSPosedService.Stub {
     }
 
 
-    synchronized public void dispatchBootCompleted(Intent intent) {
-        ConfigManager.getInstance().ensureManager();
+    synchronized public void dispatchUserUnlocked(Intent intent) {
+        try {
+            while (!UserService.isUserUnlocked(0)) {
+                Log.d(TAG, "user is not yet unlocked, waiting for 1s...");
+                Thread.sleep(1000);
+            }
+            LSPManagerService.createOrUpdateShortcut();
+        } catch (Throwable e) {
+            Log.e(TAG, "dispatch user unlocked", e);
+        }
     }
 
     private void registerPackageReceiver() {
@@ -213,15 +200,15 @@ public class LSPosedService extends ILSPosedService.Stub {
         Log.d(TAG, "registered package receiver");
     }
 
-    private void registerBootReceiver() {
+    private void registerUnlockReceiver() {
         try {
             IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(Intent.ACTION_LOCKED_BOOT_COMPLETED);
+            intentFilter.addAction(Intent.ACTION_USER_UNLOCKED);
 
             ActivityManagerService.registerReceiver("android", null, new IIntentReceiver.Stub() {
                 @Override
                 public void performReceive(Intent intent, int resultCode, String data, Bundle extras, boolean ordered, boolean sticky, int sendingUser) {
-                    new Thread(() -> dispatchBootCompleted(intent)).start();
+                    new Thread(() -> dispatchUserUnlocked(intent)).start();
                     try {
                         ActivityManagerService.finishReceiver(this, resultCode, data, extras, false, intent.getFlags());
                     } catch (Throwable e) {
@@ -230,16 +217,22 @@ public class LSPosedService extends ILSPosedService.Stub {
                 }
             }, intentFilter, null, 0, 0);
         } catch (Throwable e) {
-            Log.e(TAG, "register boot receiver", e);
+            Log.e(TAG, "register unlock receiver", e);
         }
-        Log.d(TAG, "registered boot receiver");
+        Log.d(TAG, "registered unlock receiver");
     }
 
     @Override
-    public void dispatchSystemServerContext(IBinder activityThread, IBinder activityToken) throws RemoteException {
+    public void dispatchSystemServerContext(IBinder activityThread, IBinder activityToken) {
         Log.d(TAG, "received system context");
         ActivityManagerService.onSystemServerContext(IApplicationThread.Stub.asInterface(activityThread), activityToken);
-        registerBootReceiver();
         registerPackageReceiver();
+        registerUnlockReceiver();
+    }
+
+    @Override
+    public boolean preStartManager(String pkgName, Intent intent) {
+        Log.d(TAG, "checking manager intent");
+        return ServiceManager.getManagerService().preStartManager(pkgName, intent);
     }
 }

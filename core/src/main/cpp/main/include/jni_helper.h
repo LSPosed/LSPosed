@@ -268,6 +268,12 @@ inline auto JNI_GetStaticObjectField(JNIEnv *env, const Class &clazz, jfieldID f
 
 template<ScopeOrClass Class>
 [[maybe_unused]]
+inline auto JNI_GetStaticIntField(JNIEnv *env, const Class &clazz, jfieldID fieldId) {
+    return JNI_SafeInvoke(env, &JNIEnv::GetStaticIntField, clazz, fieldId);
+}
+
+template<ScopeOrClass Class>
+[[maybe_unused]]
 inline auto
 JNI_GetStaticMethodID(JNIEnv *env, const Class &clazz, std::string_view name,
                       std::string_view sig) {
@@ -290,6 +296,12 @@ template<ScopeOrClass Class, typename ...Args>
 [[maybe_unused]]
 inline auto JNI_CallStaticIntMethod(JNIEnv *env, const Class &clazz, Args &&...args) {
     return JNI_SafeInvoke(env, &JNIEnv::CallStaticIntMethod, clazz, std::forward<Args>(args)...);
+}
+
+template<ScopeOrClass Class, typename ...Args>
+[[maybe_unused]]
+inline auto JNI_CallStaticBooleanMethod(JNIEnv *env, const Class &clazz, Args &&...args) {
+    return JNI_SafeInvoke(env, &JNIEnv::CallStaticBooleanMethod, clazz, std::forward<Args>(args)...);
 }
 
 template<ScopeOrRaw<jarray> Array>

@@ -36,6 +36,7 @@ namespace lspd {
         constexpr static auto BRIDGE_SERVICE_NAME = "activity"sv;
         constexpr static auto SYSTEM_SERVER_BRIDGE_SERVICE_NAME = "serial"sv;
         constexpr static jint BRIDGE_ACTION_GET_BINDER = 2;
+        inline static jint SET_ACTIVITY_CONTROLLER_CODE = -1;
 
     public:
         inline static Service* instance() {
@@ -72,6 +73,8 @@ namespace lspd {
 
         jclass bridge_service_class_ = nullptr;
         jmethodID exec_transact_replace_methodID_ = nullptr;
+        jmethodID replace_activity_controller_methodID_ = nullptr;
+        jmethodID replace_shell_command_methodID_ = nullptr;
 
         jclass binder_class_ = nullptr;
         jmethodID binder_ctor_ = nullptr;

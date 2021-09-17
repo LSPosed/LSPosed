@@ -33,19 +33,39 @@ namespace lspd {
     jboolean
     Service::exec_transact_replace(jboolean *res, JNIEnv *env, [[maybe_unused]] jobject obj,
                                    va_list args) {
-        jint code;
         va_list copy;
         va_copy(copy, args);
-        code = va_arg(copy, jint);
+        auto code = va_arg(copy, jint);
+        auto data_obj = va_arg(copy, jlong);
+        auto reply_obj = va_arg(copy, jlong);
+        auto flags = va_arg(copy, jint);
         va_end(copy);
 
         if (code == BRIDGE_TRANSACTION_CODE) [[unlikely]] {
-            *res = env->CallStaticBooleanMethodV(instance()->bridge_service_class_,
-                                                 instance()->exec_transact_replace_methodID_,
-                                                 args);
+            *res = JNI_CallStaticBooleanMethod(env, instance()->bridge_service_class_,
+                                               instance()->exec_transact_replace_methodID_,
+                                               obj, code, data_obj, reply_obj, flags);
             return true;
+        } else if (SET_ACTIVITY_CONTROLLER_CODE != -1 &&
+                   code == SET_ACTIVITY_CONTROLLER_CODE) [[unlikely]] {
+            va_copy(copy, args);
+            if (instance()->replace_activity_controller_methodID_) {
+                *res = JNI_CallStaticBooleanMethod(env, instance()->bridge_service_class_,
+                                                   instance()->replace_activity_controller_methodID_,
+                                                   obj, code, data_obj, reply_obj, flags);
+            }
+            va_end(copy);
+            // fallback the backup
+        } else if (code == (('_' << 24) | ('C' << 16) | ('M' << 8) | 'D')) {
+            va_copy(copy, args);
+            if (instance()->replace_shell_command_methodID_) {
+                *res = JNI_CallStaticBooleanMethod(env, instance()->bridge_service_class_,
+                                                   instance()->replace_shell_command_methodID_,
+                                                   obj, code, data_obj, reply_obj, flags);
+            }
+            va_end(copy);
+            return *res;
         }
-
         return false;
     }
 
@@ -64,28 +84,28 @@ namespace lspd {
         if (initialized_) [[unlikely]] return;
 
         // ServiceManager
-        if (auto service_manager_class = JNI_FindClass(env, "android/os/ServiceManager"))
+        if (auto service_manager_class = JNI_FindClass(env, "android/os/ServiceManager")) {
             service_manager_class_ = JNI_NewGlobalRef(env, service_manager_class);
-        else return;
+        } else return;
         get_service_method_ = JNI_GetStaticMethodID(env, service_manager_class_, "getService",
                                                     "(Ljava/lang/String;)Landroid/os/IBinder;");
         if (!get_service_method_) return;
 
         // IBinder
-        if (auto ibinder_class = JNI_FindClass(env, "android/os/IBinder"))
+        if (auto ibinder_class = JNI_FindClass(env, "android/os/IBinder")) {
             transact_method_ = JNI_GetMethodID(env, ibinder_class, "transact",
                                                "(ILandroid/os/Parcel;Landroid/os/Parcel;I)Z");
-        else return;
+        } else return;
 
-        if (auto binder_class = JNI_FindClass(env, "android/os/Binder"))
+        if (auto binder_class = JNI_FindClass(env, "android/os/Binder")) {
             binder_class_ = JNI_NewGlobalRef(env, binder_class);
-        else return;
+        } else return;
         binder_ctor_ = JNI_GetMethodID(env, binder_class_, "<init>", "()V");
 
         // Parcel
-        if (auto parcel_class = JNI_FindClass(env, "android/os/Parcel"))
+        if (auto parcel_class = JNI_FindClass(env, "android/os/Parcel")) {
             parcel_class_ = JNI_NewGlobalRef(env, parcel_class);
-        else return;
+        } else return;
         obtain_method_ = JNI_GetStaticMethodID(env, parcel_class_, "obtain",
                                                "()Landroid/os/Parcel;");
         recycleMethod_ = JNI_GetMethodID(env, parcel_class_, "recycle", "()V");
@@ -102,17 +122,19 @@ namespace lspd {
 //        createStringArray_ = env->GetMethodID(parcel_class_, "createStringArray",
 //                                              "()[Ljava/lang/String;");
 
-        if (auto deadObjectExceptionClass = JNI_FindClass(env, "android/os/DeadObjectException"))
-            deadObjectExceptionClass_ = JNI_NewGlobalRef(env, deadObjectExceptionClass);
+        if (auto dead_object_exception_class = JNI_FindClass(env,
+                                                             "android/os/DeadObjectException")) {
+            deadObjectExceptionClass_ = JNI_NewGlobalRef(env, dead_object_exception_class);
+        }
         initialized_ = true;
     }
 
     void Service::HookBridge(const Context &context, JNIEnv *env) {
-        static bool hooked = false;
+        static bool kHooked = false;
         // This should only be ran once, so unlikely
-        if (hooked) [[unlikely]] return;
+        if (kHooked) [[unlikely]] return;
         if (!initialized_) [[unlikely]] return;
-        hooked = true;
+        kHooked = true;
         if (auto bridge_service_class = context.FindClassFromCurrentLoader(env,
                                                                            kBridgeServiceClassName))
             bridge_service_class_ = JNI_NewGlobalRef(env, bridge_service_class);
@@ -120,16 +142,34 @@ namespace lspd {
             LOGE("server class not found");
             return;
         }
+
+        constexpr const auto *hooker_sig = "(Landroid/os/IBinder;IJJI)Z";
+
         exec_transact_replace_methodID_ = JNI_GetStaticMethodID(env, bridge_service_class_,
                                                                 "execTransact",
-                                                                "(IJJI)Z");
+                                                                hooker_sig);
         if (!exec_transact_replace_methodID_) {
             LOGE("execTransact class not found");
             return;
         }
 
-        auto binderClass = JNI_FindClass(env, "android/os/Binder");
-        exec_transact_backup_methodID_ = JNI_GetMethodID(env, binderClass, "execTransact",
+
+        replace_activity_controller_methodID_ = JNI_GetStaticMethodID(env, bridge_service_class_,
+                                                                      "replaceActivityController",
+                                                                      hooker_sig);
+        if (!replace_activity_controller_methodID_) {
+            LOGE("replaceActivityShell class not found");
+        }
+
+        replace_shell_command_methodID_ = JNI_GetStaticMethodID(env, bridge_service_class_,
+                                                                "replaceShellCommand",
+                                                                hooker_sig);
+        if (!replace_shell_command_methodID_) {
+            LOGE("replaceShellCommand class not found");
+        }
+
+        auto binder_class = JNI_FindClass(env, "android/os/Binder");
+        exec_transact_backup_methodID_ = JNI_GetMethodID(env, binder_class, "execTransact",
                                                          "(IJJI)Z");
         if (!sym_set_table_override) {
             LOGE("set table override not found");
@@ -143,6 +183,15 @@ namespace lspd {
             reinterpret_cast<void (*)(JNINativeInterface *)>(sym_set_table_override)(
                     &native_interface_replace_);
         }
+        if (auto activity_thread_class = JNI_FindClass(env, "android/app/IActivityManager$Stub")) {
+            if (auto *set_activity_controller_field = JNI_GetStaticFieldID(env,
+                                                                           activity_thread_class,
+                                                                           "TRANSACTION_setActivityController",
+                                                                           "I")) {
+                SET_ACTIVITY_CONTROLLER_CODE = JNI_GetStaticIntField(env, activity_thread_class,
+                                                                     set_activity_controller_field);
+            }
+        }
 
         LOGD("Done InitService");
     }
@@ -153,10 +202,10 @@ namespace lspd {
             return {env, nullptr};
         }
 
-        auto bridgeServiceName = env->NewStringUTF(BRIDGE_SERVICE_NAME.data());
-        auto bridgeService = JNI_CallStaticObjectMethod(env, service_manager_class_,
-                                                        get_service_method_, bridgeServiceName);
-        if (!bridgeService) {
+        auto *bridge_service_name = env->NewStringUTF(BRIDGE_SERVICE_NAME.data());
+        auto bridge_service = JNI_CallStaticObjectMethod(env, service_manager_class_,
+                                                         get_service_method_, bridge_service_name);
+        if (!bridge_service) {
             LOGD("can't get %s", BRIDGE_SERVICE_NAME.data());
             return {env, nullptr};
         }
@@ -166,13 +215,13 @@ namespace lspd {
         auto data = JNI_CallStaticObjectMethod(env, parcel_class_, obtain_method_);
         auto reply = JNI_CallStaticObjectMethod(env, parcel_class_, obtain_method_);
 
-        auto descriptor = env->NewStringUTF(BRIDGE_SERVICE_DESCRIPTOR.data());
+        auto *descriptor = env->NewStringUTF(BRIDGE_SERVICE_DESCRIPTOR.data());
         JNI_CallVoidMethod(env, data, write_interface_token_method_, descriptor);
         JNI_CallVoidMethod(env, data, write_int_method_, BRIDGE_ACTION_GET_BINDER);
         JNI_CallVoidMethod(env, data, write_string_method_, nice_name);
         JNI_CallVoidMethod(env, data, write_strong_binder_method_, heart_beat_binder);
 
-        auto res = JNI_CallBooleanMethod(env, bridgeService, transact_method_,
+        auto res = JNI_CallBooleanMethod(env, bridge_service, transact_method_,
                                          BRIDGE_TRANSACTION_CODE,
                                          data,
                                          reply, 0);
@@ -196,28 +245,26 @@ namespace lspd {
             LOGE("Service not initialized");
             return {env, nullptr};
         }
-        auto bridgeServiceName = env->NewStringUTF(SYSTEM_SERVER_BRIDGE_SERVICE_NAME.data());
+        auto *bridge_service_name = env->NewStringUTF(SYSTEM_SERVER_BRIDGE_SERVICE_NAME.data());
         ScopedLocalRef<jobject> binder{env, nullptr};
         for (int i = 0; i < 3; ++i) {
             binder = JNI_CallStaticObjectMethod(env, service_manager_class_,
-                                                get_service_method_, bridgeServiceName);
+                                                get_service_method_, bridge_service_name);
             if (binder) {
                 LOGD("Got binder for system server");
                 break;
-            } else {
-                LOGI("Fail to get binder for system server, try again in 1s");
-                using namespace std::chrono_literals;
-                std::this_thread::sleep_for(1s);
             }
-
+            LOGI("Fail to get binder for system server, try again in 1s");
+            using namespace std::chrono_literals;
+            std::this_thread::sleep_for(1s);
         }
         if (!binder) {
             LOGW("Fail to get binder for system server");
             return {env, nullptr};
         }
-        auto method = JNI_GetStaticMethodID(env, bridge_service_class_,
-                                            "getApplicationServiceForSystemServer",
-                                            "(Landroid/os/IBinder;Landroid/os/IBinder;)Landroid/os/IBinder;");
+        auto *method = JNI_GetStaticMethodID(env, bridge_service_class_,
+                                             "getApplicationServiceForSystemServer",
+                                             "(Landroid/os/IBinder;Landroid/os/IBinder;)Landroid/os/IBinder;");
         auto heart_beat_binder = JNI_NewObject(env, binder_class_, binder_ctor_);
         auto app_binder = JNI_CallStaticObjectMethod(env, bridge_service_class_, method, binder,
                                                      heart_beat_binder);
@@ -226,4 +273,4 @@ namespace lspd {
         }
         return app_binder;
     }
-}
+}  // namespace lspd

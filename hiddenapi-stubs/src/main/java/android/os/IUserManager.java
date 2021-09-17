@@ -19,6 +19,8 @@ public interface IUserManager extends IInterface {
 
     UserInfo getProfileParent(int userId) throws RemoteException;
 
+    boolean isUserUnlockingOrUnlocked(int userId) throws RemoteException;
+
     abstract class Stub extends Binder implements IUserManager {
 
         public static IUserManager asInterface(IBinder obj) {

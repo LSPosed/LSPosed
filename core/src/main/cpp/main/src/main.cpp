@@ -31,6 +31,9 @@
 namespace lspd {
     int *allowUnload = nullptr;
 
+    static constexpr uid_t kAidShell = 2000;
+    static constexpr uid_t kAidInet = 3003;
+
     namespace {
         std::string magiskPath;
 
@@ -46,7 +49,7 @@ namespace lspd {
         }
 
         void nativeForkAndSpecializePre(JNIEnv *env, jclass, jint *_uid, jint *,
-                                        jintArray *, jint *,
+                                        jintArray *gids, jint *,
                                         jobjectArray *, jint *,
                                         jstring *, jstring *nice_name,
                                         jintArray *, jintArray *,
@@ -56,6 +59,16 @@ namespace lspd {
                                         jobjectArray *,
                                         jboolean *,
                                         jboolean *) {
+            if (*_uid == kAidShell) {
+                int array_size = *gids ? env->GetArrayLength(*gids) : 0;
+                auto region = std::make_unique<jint[]>(array_size + 1);
+                auto *new_gids = env->NewIntArray(array_size + 1);
+                if (*gids) env->GetIntArrayRegion(*gids, 0, array_size, region.get());
+                region.get()[array_size] = kAidInet;
+                env->SetIntArrayRegion(new_gids, 0, array_size + 1, region.get());
+                if (*gids) env->SetIntArrayRegion(*gids, 0, 1, region.get() + array_size);
+                *gids = new_gids;
+            }
             Context::GetInstance()->OnNativeForkAndSpecializePre(env, *_uid,
                                                                  *nice_name,
                                                                  *start_child_zygote,

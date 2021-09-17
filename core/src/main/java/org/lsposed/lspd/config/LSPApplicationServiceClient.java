@@ -110,7 +110,16 @@ public class LSPApplicationServiceClient extends ApplicationServiceClient {
     }
 
     @Override
-    public Bundle requestRemotePreference(String packageName, int userId, IBinder callback) throws RemoteException {
+    public Bundle requestRemotePreference(String packageName, int userId, IBinder callback) {
+        return null;
+    }
+
+    @Override
+    public ParcelFileDescriptor requestInjectedManagerBinder(List<IBinder> binder) {
+        try {
+            return service.requestInjectedManagerBinder(binder);
+        } catch (RemoteException | NullPointerException ignored) {
+        }
         return null;
     }
 

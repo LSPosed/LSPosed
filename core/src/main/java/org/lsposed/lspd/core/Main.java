@@ -20,8 +20,6 @@
 
 package org.lsposed.lspd.core;
 
-import static org.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
-
 import android.app.ActivityThread;
 import android.app.LoadedApk;
 import android.content.pm.ApplicationInfo;
@@ -30,6 +28,7 @@ import android.os.Environment;
 import android.os.IBinder;
 import android.os.Process;
 
+import org.lsposed.lspd.BuildConfig;
 import org.lsposed.lspd.config.LSPApplicationServiceClient;
 import org.lsposed.lspd.deopt.PrebuiltMethodsDeopter;
 import org.lsposed.lspd.hooker.CrashDumpHooker;
@@ -37,6 +36,7 @@ import org.lsposed.lspd.hooker.HandleBindAppHooker;
 import org.lsposed.lspd.hooker.LoadedApkCstrHooker;
 import org.lsposed.lspd.hooker.SystemMainHooker;
 import org.lsposed.lspd.service.ServiceManager;
+import org.lsposed.lspd.util.ParasiticManagerHooker;
 import org.lsposed.lspd.util.Utils;
 import org.lsposed.lspd.yahfa.hooker.YahfaHooker;
 
@@ -81,6 +81,10 @@ public class Main {
         XposedBridge.initXResources();
         XposedInit.startsSystemServer = isSystem;
         PrebuiltMethodsDeopter.deoptBootMethods(); // do it once for secondary zygote
+        if (niceName.equals(BuildConfig.MANAGER_INJECTED_PKG_NAME) && ParasiticManagerHooker.start()) {
+            Utils.logI("Loaded manager, skipping next steps");
+            return;
+        }
         installBootstrapHooks(isSystem, appDataDir);
         Utils.logI("Loading modules for " + niceName + "/" + Process.myUid());
         XposedInit.loadModules();
