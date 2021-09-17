@@ -37,7 +37,7 @@ public final class DynamicBridge {
         Utils.logD("hooking " + hookMethod);
 
         if (hookedInfo.containsKey(hookMethod)) {
-            Utils.logW("already hook method:" + hookMethod);
+            Utils.logW("already hook method:" + hookMethod, new IllegalStateException());
             return;
         }
 
