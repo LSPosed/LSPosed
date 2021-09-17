@@ -147,6 +147,13 @@ public final class XposedBridge {
         Log.e(TAG, logStr);
     }
 
+    public static void deoptMethod(Member deoptMethod) {
+        if (!(deoptMethod instanceof Executable)) {
+            throw new IllegalArgumentException("Only methods and constructors can be deopted: " + deoptMethod.toString());
+        }
+        YahfaHooker.deoptMethodNative((Executable) deoptMethod);
+    }
+
     /**
      * Hook any method (or constructor) with the specified callback. See below for some wrappers
      * that make it easier to find a method/constructor in one step.
