@@ -26,7 +26,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 public class LspHooker {
-    private final XposedBridge.AdditionalHookInfo additionalInfo;
+    public final XposedBridge.AdditionalHookInfo additionalInfo;
     private final Executable method;
     private final Method backup;
 
