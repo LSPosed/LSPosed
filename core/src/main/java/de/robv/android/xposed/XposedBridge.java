@@ -151,18 +151,18 @@ public final class XposedBridge {
     /**
      * Deoptimize a method to avoid callee being inlined.
      *
-     * @param deoptMethod The method to deoptmize. Generally it should be a caller of a method
+     * @param deoptimizedMethod The method to deoptmize. Generally it should be a caller of a method
      *                    that is inlined.
      */
-    public static void deOptimizeMethod(Member deOptimizedMethod) {
-        if (!(deOptimizedMethod instanceof Executable)) {
-            throw new IllegalArgumentException("Only methods and constructors can be deoptimized: " + deOptimizedMethod.toString());
-        } else if (Modifier.isAbstract(deOptimizedMethod.getModifiers())) {
-            throw new IllegalArgumentException("Cannot deoptimize abstract methods: " + deOptimizedMethod);
-        } else if (Proxy.isProxyClass(deOptimizedMethod.getDeclaringClass())) {
-            throw new IllegalArgumentException("Cannot deoptimize methods from proxy class: " + deOptimizedMethod);
+    public static void deoptimizeMethod(Member deoptimizedMethod) {
+        if (!(deoptimizedMethod instanceof Executable)) {
+            throw new IllegalArgumentException("Only methods and constructors can be deoptimized: " + deoptimizedMethod.toString());
+        } else if (Modifier.isAbstract(deoptimizedMethod.getModifiers())) {
+            throw new IllegalArgumentException("Cannot deoptimize abstract methods: " + deoptimizedMethod);
+        } else if (Proxy.isProxyClass(deoptimizedMethod.getDeclaringClass())) {
+            throw new IllegalArgumentException("Cannot deoptimize methods from proxy class: " + deoptimizedMethod);
         }
-        YahfaHooker.deoptMethodNative((Executable) deOptimizedMethod);
+        YahfaHooker.deoptMethodNative((Executable) deoptimizedMethod);
     }
 
     /**
