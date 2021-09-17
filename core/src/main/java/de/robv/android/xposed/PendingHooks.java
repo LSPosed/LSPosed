@@ -22,8 +22,6 @@ package de.robv.android.xposed;
 
 import static org.lsposed.lspd.nativebridge.PendingHooks.recordPendingMethodNative;
 
-import androidx.annotation.GuardedBy;
-
 import org.lsposed.lspd.yahfa.hooker.YahfaHooker;
 
 import java.lang.reflect.Executable;
