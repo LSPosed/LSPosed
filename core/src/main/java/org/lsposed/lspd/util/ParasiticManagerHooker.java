@@ -130,7 +130,7 @@ public class ParasiticManagerHooker {
             }
         });
 
-        if (Process.myUid() == 1000) {
+        if (Process.myUid() == BuildConfig.MANAGER_INJECTED_UID) {
             XposedHelpers.findAndHookMethod(WebViewFactory.class, "getProvider", new XC_MethodReplacement() {
                 @Override
                 protected Object replaceHookedMethod(MethodHookParam param) {
