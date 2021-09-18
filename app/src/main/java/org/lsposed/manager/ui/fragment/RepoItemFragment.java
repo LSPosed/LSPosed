@@ -179,10 +179,14 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
                                     .build());
                     try {
                         Response reply = call.execute();
-                        var contentTypes = reply.header("content-type", "text/html;charset=utf-8").split(";\\s*");
+                        var contentTypes = reply.header("content-type", "image/*;charset=utf-8").split(";\\s*");
+                        var mimeType = contentTypes.length > 0 ? contentTypes[0] : "image/*";
+                        var charset = contentTypes.length > 1 ? contentTypes[1].split("=\\s*")[1] : "utf-8";
+                        Log.e(App.TAG, "type " + mimeType);
+                        Log.e(App.TAG, "charset " + charset);
                         return new WebResourceResponse(
-                                contentTypes[0],
-                                contentTypes[1].split("=\\s*")[1],
+                                mimeType,
+                                charset,
                                 reply.body().byteStream()
                         );
                     } catch (Throwable e) {
