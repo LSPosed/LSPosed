@@ -87,7 +87,6 @@ public class ParasiticManagerHooker {
                 Object bindData = param.args[0];
                 ApplicationInfo appInfo = (ApplicationInfo) XposedHelpers.getObjectField(bindData, "appInfo");
                 XposedHelpers.setObjectField(bindData, "appInfo", getManagerPkgInfo(appInfo).applicationInfo);
-                XposedHelpers.setObjectField(bindData, "providers", new ArrayList<>());
             }
         };
         XposedHelpers.findAndHookMethod(ActivityThread.class,
