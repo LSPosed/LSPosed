@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -31,7 +32,7 @@
     <string name="module_repo">リポジトリ</string>
     <string name="module_repo_summary">モジュール リポジトリ (Beta)</string>
     <string name="about_view_source_code"><![CDATA[%1$s でソースコードを閲覧<br/>%2$s チャンネルに参加]]></string>
-    <string name="about_translators">翻訳者: %s</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">yoshi818</string>
     <string name="install">インストール</string>
     <string name="install_summary">タップして LSPosed をインストールする</string>
     <string name="not_installed">未インストール</string>
@@ -178,6 +179,4 @@
     <string name="outdated_core">LSPosedアプリはフレームワークより新しいです。LSPosedフレームワークを更新してください。</string>
     <string name="outdated_manager">LSPosed Manager と LSPosed Core のバージョンが一致していません。対応バージョンを再インストールして下さい。</string>
     <string name="manager_crashed">マネージャーがクラッシュしました</string>
-    <string name="copy_crash_info">クラッシュ情報をコピーする</string>
-    <string name="copy_toast_msg">複写済</string>
 </resources>
