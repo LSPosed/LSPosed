@@ -183,18 +183,12 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
                                     .method(request.getMethod(), null)
                                     .headers(Headers.of(request.getRequestHeaders()))
                                     .build());
-                    var headers = new ArrayMap<String, String>();
                     try {
                         Response reply = call.execute();
-                        for (var i = 0; i < reply.headers().size(); ++i) {
-                            headers.put(reply.headers().name(i), reply.headers().value(i));
-                        }
+                        var contentTypes = reply.header("content-type", "text/html;charset=utf-8").split(";\\s*");
                         return new WebResourceResponse(
-                                reply.header("content-type", "text/html"),
-                                reply.header("content-encoding", "utf-8"),
-                                reply.code(),
-                                reply.message(),
-                                headers,
+                                contentTypes[0],
+                                contentTypes[1].split("=\\s*")[1],
                                 reply.body().byteStream()
                         );
                     } catch (Throwable e) {
