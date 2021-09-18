@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -32,7 +33,7 @@
     <string name="module_repo">Dépôt</string>
     <string name="module_repo_summary">Dépôts des modules (Béta)</string>
     <string name="about_view_source_code"><![CDATA[Voir le code source sur %1$s<br/>Rejoindre notre canal %2$s]]></string>
-    <string name="about_translators">Traducteur: %s</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">https://github.com/xerta555</string>
     <string name="install">Installer</string>
     <string name="install_summary">Appuyer pour installer LSPosed</string>
     <string name="not_installed">Non installé</string>
@@ -156,6 +157,11 @@
     <string name="settings_show_hidden_icon_apps_enabled">Forcer les applications à afficher les icônes dans le lanceur</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">Après Android 10, les applications (notamment les modules Xposed) ne sont pas autorisées à masquer leurs icônes des lanceurs. Désactiver le commutateur pour désactiver cette fonctionnalité.</string>
     <string name="settings_group_system">Système</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_translation_contributors">Contributeurs de traduction</string>
+    <string name="settings_translation">Participer à la traduction</string>
+    <string name="settings_translation_summary">Aidez nous à traduire %s dans votre langue</string>
+    <string name="settings_translation_summary_percentage">" (%s sont traduites)"</string>
     <!-- Module Repo -->
     <string name="module_readme">Lisez moi</string>
     <string name="module_releases">Versions</string>
@@ -174,6 +180,7 @@
     <string name="outdated_core">L\'application LSPosed est plus réçente que le sous système. Merci de mettre à jour le sous système LSPosed.</string>
     <string name="outdated_manager">Version du Gestionnaire LSPosed et du noyau LSPosed ne sont pas cohérents. Merci de réinstaller la version correspondante.</string>
     <string name="manager_crashed">Plantage du Gestionnaire</string>
-    <string name="copy_crash_info">Copier les infos de plantage</string>
-    <string name="copy_toast_msg">Copié</string>
+    <string name="manager_crashed_info">rapporter ceci à </string>
+    <string name="send_crash_info">Envoyer les infos de plantage</string>
+    <string name="crash_info_copied">Infos de plantage copiées dans le presse papier</string>
 </resources>
