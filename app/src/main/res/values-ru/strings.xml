@@ -31,11 +31,11 @@
     <string name="Logs">Логи</string>
     <string name="Settings">Настройки</string>
     <string name="About">О приложении</string>
-    <string name="report_issue">Сообщить об ошибке</string>
+    <string name="report_issue">Сообщить о проблеме</string>
     <string name="module_repo">Репозиторий</string>
     <string name="module_repo_summary">Репозиторий модулей (Бета)</string>
     <string name="about_view_source_code"><![CDATA[Просмотреть исходный код на %1$s<br/>Присоединяйтесь к нашему %2$s каналу]]></string>
-    <string name="about_translators">Перевел на русский язык: %s</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Alеxеy</string>
     <string name="install">Установить</string>
     <string name="install_summary">Нажмите, чтобы установить LSPosed</string>
     <string name="not_installed">Не установлен</string>
@@ -181,7 +181,8 @@
     <string name="app_destroyed">Это приложение повреждено. Убедитесь, что загрузили его из официального источника</string>
     <string name="outdated_core">Приложение LSPosed новее, чем фреймворк LSPosed. Обновите фреймворк LSPosed</string>
     <string name="outdated_manager">Фреймворк LSPosed новее, чем приложение LSPosed. Обновите приложение вручную из /data/adb/lspd/manager.apk</string>
-    <string name="manager_crashed">Сбой приложения</string>
-    <string name="copy_crash_info">Скопировать информацию о сбое</string>
-    <string name="copy_toast_msg">Скопировано</string>
+    <string name="manager_crashed">Сбой приложения LSPosed</string>
+    <string name="manager_crashed_info">сообщить об этом </string>
+    <string name="send_crash_info">Отправить информацию о сбое</string>
+    <string name="crash_info_copied">Информация о сбое скопирована в буфер обмена</string>
 </resources>
