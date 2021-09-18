@@ -12,6 +12,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ProviderInfo;
 import android.os.IBinder;
 import android.os.Process;
 import android.os.RemoteException;
@@ -117,6 +118,34 @@ public class ParasiticManagerHooker {
                     }
                 }
                 return null;
+            }
+        });
+        XposedBridge.hookAllMethods(ActivityThread.class, "installProvider", new XC_MethodHook() {
+            private Context originalContext = null;
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                Hookers.logD("before install provider");
+                Context ctx = null;
+                ProviderInfo info = null;
+                int ctxIdx = -1;
+                for (var i = 0; i < param.args.length; ++i) {
+                    var arg = param.args[i];
+                    if (arg instanceof Context) {
+                        ctx = (Context) arg;
+                        ctxIdx = i;
+                    } else if (arg instanceof ProviderInfo) info = (ProviderInfo) arg;
+                }
+                if (ctx != null && info != null) {
+                    if (originalContext == null) {
+                        info.applicationInfo.packageName = BuildConfig.MANAGER_INJECTED_PKG_NAME + ".origin";
+                        var originalPkgInfo = ActivityThread.currentActivityThread().getPackageInfoNoCheck(info.applicationInfo, HiddenApiBridge.Resources_getCompatibilityInfo(ctx.getResources()));
+                        XposedHelpers.setObjectField(originalPkgInfo, "mPackageName", BuildConfig.MANAGER_INJECTED_PKG_NAME);
+                        originalContext = (Context) XposedHelpers.callStaticMethod(XposedHelpers.findClass("android.app.ContextImpl", null), "createAppContext", ActivityThread.currentActivityThread(), originalPkgInfo);
+                    }
+                    param.args[ctxIdx] = originalContext;
+                } else {
+                    Hookers.logE("Failed to reload provider", new RuntimeException());
+                }
             }
         });
 
