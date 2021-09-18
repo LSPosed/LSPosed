@@ -16,6 +16,7 @@
  *
  * Copyright (C) 2021 LSPosed Contributors
  */
+
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.internal.storage.file.FileRepository
 
