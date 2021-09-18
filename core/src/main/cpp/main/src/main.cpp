@@ -92,16 +92,28 @@ namespace lspd {
         }
 
         /* method added in Android Q */
-        void specializeAppProcessPre(JNIEnv *env, jclass, jint *uid, jint *,
-                                     jintArray *, jint *, jobjectArray *,
-                                     jint *, jstring *, jstring *nice_name,
+        void specializeAppProcessPre(JNIEnv *env, jclass, jint *_uid, jint *,
+                                     jintArray *gids, jint *,
+                                     jobjectArray *, jint *,
+                                     jstring *, jstring *nice_name,
                                      jboolean *start_child_zygote, jstring *,
                                      jstring *app_data_dir, jboolean *,
                                      jobjectArray *,
                                      jobjectArray *,
                                      jboolean *,
                                      jboolean *) {
-            Context::GetInstance()->OnNativeForkAndSpecializePre(env, *uid, *nice_name,
+            if (*_uid == kAidShell) {
+                int array_size = *gids ? env->GetArrayLength(*gids) : 0;
+                auto region = std::make_unique<jint[]>(array_size + 1);
+                auto *new_gids = env->NewIntArray(array_size + 1);
+                if (*gids) env->GetIntArrayRegion(*gids, 0, array_size, region.get());
+                region.get()[array_size] = kAidInet;
+                env->SetIntArrayRegion(new_gids, 0, array_size + 1, region.get());
+                if (*gids) env->SetIntArrayRegion(*gids, 0, 1, region.get() + array_size);
+                *gids = new_gids;
+            }
+            Context::GetInstance()->OnNativeForkAndSpecializePre(env, *_uid,
+                                                                 *nice_name,
                                                                  *start_child_zygote,
                                                                  *app_data_dir);
         }
