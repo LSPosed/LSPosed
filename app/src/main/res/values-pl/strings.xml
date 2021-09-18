@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -34,7 +35,6 @@
     <string name="module_repo">Repozytorium</string>
     <string name="module_repo_summary">Repozytorium modułów (beta)</string>
     <string name="about_view_source_code"><![CDATA[Zobacz kod źródłowy na %1$s<br/>Dołącz do naszego kanału %2$s]]></string>
-    <string name="about_translators">Tłumacze: %s</string>
     <string name="install">Instaluj</string>
     <string name="install_summary">Dotknij, aby zainstalować LSPosed</string>
     <string name="not_installed">Nie zainstalowano</string>
@@ -177,6 +177,4 @@
     <string name="outdated_core">Aplikacja LSPosed jest nowsza niż framework. Proszę zaktualizować framework LSPosed.</string>
     <string name="outdated_manager">Framework LSPosed jest nowszy niż aplikacja. Proszę zaktualizuj aplikację ręcznie z /data/adb/lspd/manager.apk.</string>
     <string name="manager_crashed">Menedżer uległ awarii</string>
-    <string name="copy_crash_info">Skopiuj informacje o awarii</string>
-    <string name="copy_toast_msg">Skopiowano</string>
 </resources>

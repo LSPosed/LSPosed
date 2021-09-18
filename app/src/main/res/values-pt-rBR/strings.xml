@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -32,7 +33,7 @@
     <string name="module_repo">Repositório</string>
     <string name="module_repo_summary">Repositório de Módulos (Beta)</string>
     <string name="about_view_source_code"><![CDATA[Veja o código fonte no %1$s<br/>Entre em nosso canal no %2$s]]></string>
-    <string name="about_translators">Tradutor: %s</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Dan, Hitalo, Luiz Renato</string>
     <string name="install">Instalar</string>
     <string name="install_summary">Toque para instalar LSPosed</string>
     <string name="not_installed">Não instalado</string>
@@ -50,7 +51,7 @@
     <string name="lsposed_not_active">O módulo do LSPosed não está instalado ou está desativado.</string>
     <string name="info_api_version">Versão da API</string>
     <string name="info_framework_version">Versão do Framework</string>
-    <string name="info_manager_version">Versão do App</string>
+    <string name="info_manager_version">Versão do Aplicativo</string>
     <string name="info_system_version">Versão do Sistema</string>
     <string name="info_device">Aparelho</string>
     <string name="info_system_abi">Sistema ABI</string>
@@ -61,9 +62,9 @@
     <string name="logs_save_failed2">Falha ao salvar:\n%s</string>
     <string name="menuClearLog">Limpar registro</string>
     <string name="logs_cleared">Registro limpo com sucesso.</string>
-    <string name="scroll_top">Mover para início</string>
+    <string name="scroll_top">Rolar para o início</string>
     <string name="loading">Carregando…</string>
-    <string name="scroll_bottom">Mover para fim</string>
+    <string name="scroll_bottom">Rolar para o final</string>
     <string name="logs_cannot_read">Não foi possível ler o registro: \n</string>
     <string name="menuReload">Recarregar</string>
     <string name="logs_clear_failed_2">Falha ao limpar o registro</string>
@@ -90,7 +91,7 @@
     <string name="module_uninstall_failed">Falha ao desinstalar</string>
     <string name="add_module_to_user">Adicionar módulo ao usuário</string>
     <string name="module_installed">Adicionado %1$s ao usuário %2$s</string>
-    <string name="module_install_failed">Falha ao adicinar módulo</string>
+    <string name="module_install_failed">Falha ao adicionar módulo</string>
     <string name="install_to_user">Instalar ao usuário %s</string>
     <string name="install_to_user_message">Deseja instalar %1$s ao usuário %2$s? Recomenda-se instalar manualmente, forçar a instalação via LSPosed pode causar problemas.</string>
     <!-- AppListActivity -->
@@ -100,32 +101,32 @@
     <string name="app_launch">Abrir</string>
     <string name="compile_failed">A otimização falhou: não houve nenhum retorno.</string>
     <string name="compile_failed_with_info">Falha na otimização: </string>
-    <string name="sort_by_name">Nome do app</string>
+    <string name="sort_by_name">Nome do Aplicativo</string>
     <string name="sort_by_package_name">Nome do pacote</string>
     <string name="sort_by_install_time">Data de instalação</string>
     <string name="sort_by_update_time">Data de atualização</string>
     <string name="sort_reverse">Inverter</string>
-    <string name="menu_show_system_apps">Apps do Sistema</string>
+    <string name="menu_show_system_apps">Aplicativos do Sistema</string>
     <string name="menu_sort">Ordenar</string>
     <string name="enable_module">Ativar módulo</string>
-    <string name="no_scope_selected">Você não selecionou nenhum app. Quer continuar?</string>
+    <string name="no_scope_selected">Você não selecionou nenhum aplicativo. Deseja continuar?</string>
     <string name="menu_show_games">Jogos</string>
     <string name="menu_show_modules">Módulos</string>
     <string name="failed_to_save_scope_list">Falha ao salvar lista de escopos</string>
     <string name="app_description">%1$s\nVersão %2$s</string>
     <string name="use_recommended">Recomendados</string>
-    <string name="no_scope_selected_has_recommended">Você não selecionou nenhum app. Quer selecionar os apps recomendados?</string>
-    <string name="use_recommended_message">Selecionar os apps recomendados?</string>
+    <string name="no_scope_selected_has_recommended">Você não selecionou nenhum aplicativo. Deseja selecionar os aplicativos recomendados?</string>
+    <string name="use_recommended_message">Selecionar os aplicativos recomendados?</string>
     <string name="requested_by_module">Recomendados</string>
     <string name="update_available">Atualização disponível: %1$s</string>
-    <string name="module_disabled_no_selection">O módulo %s foi desativado porque nenhum app foi selecionado.</string>
+    <string name="module_disabled_no_selection">O módulo %s foi desativado porque nenhum aplicativo foi selecionado.</string>
     <string name="android_framework">Framework do Sistema</string>
     <string name="menu_backup_and_restore">Fazer backup</string>
     <string name="menu_backup">Fazer backup</string>
     <string name="menu_restore">Restaurar backup</string>
     <string name="force_stop">Forçar parada</string>
     <string name="force_stop_dlg_title">Forçar parada?</string>
-    <string name="force_stop_dlg_text">Se forçar a parada de um app, ele pode apresentar mau funcionamento.</string>
+    <string name="force_stop_dlg_text">Se forçar a parada de um aplicativo, ele pode apresentar falhas.</string>
     <string name="reboot_required">Necessário reiniciar para aplicar alteração</string>
     <string name="reboot">Reiniciar</string>
     <string name="menu_hide">Esconder</string>
@@ -156,6 +157,11 @@
     <string name="settings_show_hidden_icon_apps_enabled">Forçar apps à exibirem ícones do lançador</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">Após o Android 10, alguns aplicativos não estão autorizados à ocultarem seus ícones do lançador. Desative esta opção para desligar este recurso do sistema.</string>
     <string name="settings_group_system">Sistema</string>
+    <string name="settings_language">Idioma</string>
+    <string name="settings_translation_contributors">Contribuidores de tradução</string>
+    <string name="settings_translation">Participar da tradução</string>
+    <string name="settings_translation_summary">Ajude-nos a traduzir %s para o seu idioma</string>
+    <string name="settings_translation_summary_percentage">" (%s estão traduzidas)"</string>
     <!-- Module Repo -->
     <string name="module_readme">Leia-me</string>
     <string name="module_releases">Lançamentos</string>
@@ -174,6 +180,7 @@
     <string name="outdated_core">App do LSPosed é mais novo que framework. Atualize a Framework do Lsposed.</string>
     <string name="outdated_manager">O framework do LSPosed é mais recente que o app. Por favor, atualize o app manualmente em /data/adb/lspd/manager.apk.</string>
     <string name="manager_crashed">Gerenciador travou</string>
-    <string name="copy_crash_info">Copiar informações do erro</string>
-    <string name="copy_toast_msg">Copiado</string>
+    <string name="manager_crashed_info">reportar isto para </string>
+    <string name="send_crash_info">Enviar informações do erro</string>
+    <string name="crash_info_copied">Informações de erro copiadas para a área de transferência</string>
 </resources>

@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -31,7 +32,7 @@
     <string name="module_repo">仓库</string>
     <string name="module_repo_summary">模块仓库（Beta）</string>
     <string name="about_view_source_code"><![CDATA[在 %1$s 查看源码<br/>加入我们的 %2$s 频道]]></string>
-    <string name="about_translators">译者：%s</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">null</string>
     <string name="install">安装</string>
     <string name="install_summary">点按安装 LSPosed</string>
     <string name="not_installed">未安装</string>
@@ -178,6 +179,7 @@
     <string name="outdated_core">LSPosed 应用的版本高于框架。请更新 LSPosed 框架。</string>
     <string name="outdated_manager">LSPosed 框架的版本高于应用。请从 /data/adb/lspd/manager.apk 更新 LSPosed 应用。</string>
     <string name="manager_crashed">应用出现未知错误</string>
-    <string name="copy_crash_info">复制错误信息</string>
-    <string name="copy_toast_msg">已复制</string>
+    <string name="manager_crashed_info">反馈该问题到 </string>
+    <string name="send_crash_info">发送崩溃信息</string>
+    <string name="crash_info_copied">已将崩溃信息复制到剪贴板</string>
 </resources>

@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -32,7 +33,7 @@
     <string name="module_repo">Opslagplaats</string>
     <string name="module_repo_summary">Module opslagplaats (Beta)</string>
     <string name="about_view_source_code"><![CDATA[Bekijk de broncode op %1$s<br/>Sluit je aan bij onze %2$s kanaal]]></string>
-    <string name="about_translators">Vertaler: %1$s</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Pandemic-XDA</string>
     <string name="install">Installeren</string>
     <string name="install_summary">Tik om LSPosed te installeren</string>
     <string name="not_installed">Niet geïnstalleerd</string>
@@ -179,6 +180,7 @@
     <string name="outdated_core">LSPosed app is nieuwer dan framework. Update LSPosed framework.</string>
     <string name="outdated_manager">De versie van LSPosed Manager en LSPosed Core zijn niet consistent. Installeer de corresponderende versie opnieuw.</string>
     <string name="manager_crashed">Manager gecrasht</string>
-    <string name="copy_crash_info">Kopieer crash informatie</string>
-    <string name="copy_toast_msg">Gekopieerd</string>
+    <string name="manager_crashed_info">meld dit aan </string>
+    <string name="send_crash_info">Stuur crash informatie</string>
+    <string name="crash_info_copied">Crash informatie naar klembord gekopieerd</string>
 </resources>

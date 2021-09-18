@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -32,7 +33,7 @@
     <string name="module_repo">Repositorio</string>
     <string name="module_repo_summary">Repositorio de módulos (Beta)</string>
     <string name="about_view_source_code"><![CDATA[Ve el código fuente en %1$s<br/>Únete a nuestro %2$s canal]]></string>
-    <string name="about_translators">Traductores: %s</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">José De Freitas</string>
     <string name="install">Instalar</string>
     <string name="install_summary">Pulsa para instalar LSPosed</string>
     <string name="not_installed">No instalado</string>
@@ -153,5 +154,4 @@
     <!-- CrashReportActivity -->
     <string name="app_destroyed">Esta aplicación se ha destruido. Por favor, asegúrate de descargarla del sitio oficial.</string>
     <string name="outdated_manager">Las versiones de LSPosed Manager y LSPosed Core no son consistentes. Por favor, reinstala la versión correspondiente.</string>
-    <string name="copy_toast_msg">Copiado</string>
 </resources>
