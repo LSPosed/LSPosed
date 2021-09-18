@@ -4,11 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches: [ master ]
-    paths-ignore:
-    - '.github/workflows/manager.yml'
   pull_request:
-    paths-ignore:
-    - '.github/workflows/manager.yml'
 
 jobs:
   build:
