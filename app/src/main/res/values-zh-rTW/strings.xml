@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -31,7 +32,7 @@
     <string name="module_repo">倉庫</string>
     <string name="module_repo_summary">模組倉庫（Beta）</string>
     <string name="about_view_source_code"><![CDATA[在 %1$s 檢視原始碼<br/>加入我們的 %2$s 頻道]]></string>
-    <string name="about_translators">翻譯者：%s</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">孟武.尼德霍格.龍、david082321</string>
     <string name="install">安裝</string>
     <string name="install_summary">點選安裝 LSPosed</string>
     <string name="not_installed">未安裝</string>
@@ -41,9 +42,9 @@
     <string name="selinux_policy_not_loaded_summary">SEPolicy 未被正確讀取</string>
     <string name="selinux_policy_not_loaded"><![CDATA[SEPolicy 沒有被正確讀取，掛鉤系統框架的模組將無法運作。<br/>請回報這類問題給<a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>開發者]]></string>
     <string name="system_inject_fail_summary">系統框架注入失敗</string>
-    <string name="system_inject_fail"><![CDATA[或低品質 Magisk 模組導致。<br/>請嘗試禁用除 Riru 和 LSPosed 以外的 Magisk 模組，或向開發者提供完整日誌。]]></string>
+    <string name="system_inject_fail"><![CDATA[這是極罕見的情況，可能是由 <b>Magisk</b> 或低品質 Magisk 模組導致。<br/>請嘗試停用除 Riru 和 LSPosed 外的 Magisk 模組，或向開發者提供完整日誌。]]></string>
     <string name="system_prop_incorrect_summary">系統屬性異常</string>
-    <string name="system_prop_incorrect"><![CDATA[系統屬性異常。<br/>一些必須的系統屬性被刪除或被修改。<br/>模組可能會隨機失效。]]></string>
+    <string name="system_prop_incorrect"><![CDATA[一些必須的系統屬性被刪除或被修改。<br/>模組可能會隨機失效。]]></string>
     <string name="need_update">需要更新</string>
     <string name="please_update_summary">請安裝新版 LSPosed</string>
     <string name="lsposed_not_active">LSPosed 未正確安裝或啟用。</string>
@@ -178,6 +179,7 @@
     <string name="outdated_core">LSPosed 應用程式的版本高於框架。請更新 LSPosed 框架。</string>
     <string name="outdated_manager">LSPosed 框架的版本高於應用程式。請從 /data/adb/lspd/manager.apk 更新 LSPosed 應用程式。</string>
     <string name="manager_crashed">應用程式出現未知錯誤</string>
-    <string name="copy_crash_info">複製錯誤訊息</string>
-    <string name="copy_toast_msg">已複製</string>
+    <string name="manager_crashed_info">回報給 </string>
+    <string name="send_crash_info">傳送錯誤日誌</string>
+    <string name="crash_info_copied">錯誤日誌已複製到剪貼簿</string>
 </resources>
