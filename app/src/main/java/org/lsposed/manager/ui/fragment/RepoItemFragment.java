@@ -31,6 +31,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -72,6 +73,9 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.stream.IntStream;
 
+import okhttp3.Headers;
+import okhttp3.Request;
+import okhttp3.Response;
 import rikka.core.util.ResourceUtils;
 import rikka.recyclerview.RecyclerViewKt;
 import rikka.widget.borderview.BorderNestedScrollView;
@@ -160,6 +164,34 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
                 public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                     NavUtil.startURL(requireActivity(), request.getUrl());
                     return true;
+                }
+
+                @Nullable
+                @Override
+                public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+                    if (!request.getUrl().getScheme().startsWith("http")) return null;
+                    var client = App.getOkHttpClient();
+                    var call = client.newCall(
+                            new Request.Builder()
+                                    .url(request.getUrl().toString())
+                                    .method(request.getMethod(), null)
+                                    .headers(Headers.of(request.getRequestHeaders()))
+                                    .build());
+                    try {
+                        Response reply = call.execute();
+                        var contentTypes = reply.header("content-type", "image/*;charset=utf-8").split(";\\s*");
+                        var mimeType = contentTypes.length > 0 ? contentTypes[0] : "image/*";
+                        var charset = contentTypes.length > 1 ? contentTypes[1].split("=\\s*")[1] : "utf-8";
+                        Log.e(App.TAG, "type " + mimeType);
+                        Log.e(App.TAG, "charset " + charset);
+                        return new WebResourceResponse(
+                                mimeType,
+                                charset,
+                                reply.body().byteStream()
+                        );
+                    } catch (Throwable e) {
+                        return null;
+                    }
                 }
             });
             view.loadDataWithBaseURL("https://github.com", body, "text/html",
