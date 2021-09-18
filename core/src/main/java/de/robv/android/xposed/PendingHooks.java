@@ -26,35 +26,26 @@ import org.lsposed.lspd.yahfa.hooker.YahfaHooker;
 
 import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class PendingHooks {
-
-    // GuardedBy("PendingHooks.class")
     private static final ConcurrentHashMap<Class<?>, ConcurrentHashMap<Executable, XposedBridge.AdditionalHookInfo>>
             sPendingHooks = new ConcurrentHashMap<>();
 
-    public synchronized static void hookPendingMethod(Class<?> clazz) {
-        if (sPendingHooks.containsKey(clazz)) {
-            for (Map.Entry<Executable, XposedBridge.AdditionalHookInfo> hook : sPendingHooks.get(clazz).entrySet()) {
+    public static void hookPendingMethod(Class<?> clazz) {
+        var record = sPendingHooks.remove(clazz);
+        if (record != null) {
+            for (var hook : record.entrySet()) {
                 YahfaHooker.hookMethod(hook.getKey(), hook.getValue());
             }
-            sPendingHooks.remove(clazz);
         }
     }
 
-    public synchronized static void recordPendingMethod(Method hookMethod,
-                                                        XposedBridge.AdditionalHookInfo additionalInfo) {
-        ConcurrentHashMap<Executable, XposedBridge.AdditionalHookInfo> pending =
-                sPendingHooks.computeIfAbsent(hookMethod.getDeclaringClass(), aClass -> new ConcurrentHashMap<>());
+    public static void recordPendingMethod(Method hookMethod,
+                                           XposedBridge.AdditionalHookInfo additionalInfo) {
+        var pending = sPendingHooks.computeIfAbsent(hookMethod.getDeclaringClass(), aClass -> new ConcurrentHashMap<>());
 
         pending.put(hookMethod, additionalInfo);
         recordPendingMethodNative(hookMethod, hookMethod.getDeclaringClass());
     }
-
-    public synchronized void cleanUp() {
-        sPendingHooks.clear();
-    }
-
 }

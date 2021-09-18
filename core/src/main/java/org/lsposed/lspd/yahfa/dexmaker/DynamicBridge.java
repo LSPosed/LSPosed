@@ -28,32 +28,40 @@ import java.lang.reflect.Member;
 import java.util.concurrent.ConcurrentHashMap;
 
 import de.robv.android.xposed.LspHooker;
+import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 
 public final class DynamicBridge {
     private static final ConcurrentHashMap<Executable, LspHooker> hookedInfo = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<Executable, Object> lockers = new ConcurrentHashMap<>();
 
-    public static synchronized void hookMethod(Executable hookMethod, XposedBridge.AdditionalHookInfo additionalHookInfo) {
+    public static void hookMethod(Executable hookMethod, XposedBridge.AdditionalHookInfo additionalHookInfo) {
         Utils.logD("hooking " + hookMethod);
 
-        if (hookedInfo.containsKey(hookMethod)) {
-            Utils.logW("already hook method:" + hookMethod, new IllegalStateException());
-            return;
-        }
-
-        Utils.logD("start to generate class for: " + hookMethod);
-        try {
-            final HookerDexMaker dexMaker = new HookerDexMaker();
-            dexMaker.start(hookMethod, additionalHookInfo);
-            hookedInfo.put(hookMethod, dexMaker.getHooker());
-        } catch (Throwable e) {
-            Utils.logE("error occur when generating dex.", e);
+        synchronized (lockers.computeIfAbsent(hookMethod, (m) -> new Object())) {
+            var hooker = hookedInfo.getOrDefault(hookMethod, null);
+            if (hooker == null) {
+                Utils.logD("start to generate class for: " + hookMethod);
+                try {
+                    final HookerDexMaker dexMaker = new HookerDexMaker();
+                    dexMaker.start(hookMethod, additionalHookInfo);
+                    hookedInfo.put(hookMethod, dexMaker.getHooker());
+                } catch (Throwable e) {
+                    Utils.logE("error occur when generating dex.", e);
+                }
+            } else {
+                for (var callback : additionalHookInfo.callbacks.getSnapshot())
+                    hooker.additionalInfo.callbacks.add((XC_MethodHook) callback);
+            }
         }
     }
 
     public static Object invokeOriginalMethod(Member method, Object thisObject, Object[] args)
             throws InvocationTargetException, IllegalAccessException {
-        LspHooker hooker = hookedInfo.get(method);
+        if (!(method instanceof Executable)) {
+            throw new IllegalArgumentException("Only methods or constructors can be invoked.");
+        }
+        LspHooker hooker = hookedInfo.getOrDefault(method, null);
         if (hooker == null) {
             throw new IllegalStateException("method not hooked, cannot call original method.");
         }
