@@ -67,6 +67,7 @@ import org.lsposed.manager.ui.widget.LinkifyTextView;
 import org.lsposed.manager.util.NavUtil;
 import org.lsposed.manager.util.chrome.CustomTabsURLSpan;
 
+import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -182,15 +183,13 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
                         var contentTypes = reply.header("content-type", "image/*;charset=utf-8").split(";\\s*");
                         var mimeType = contentTypes.length > 0 ? contentTypes[0] : "image/*";
                         var charset = contentTypes.length > 1 ? contentTypes[1].split("=\\s*")[1] : "utf-8";
-                        Log.e(App.TAG, "type " + mimeType);
-                        Log.e(App.TAG, "charset " + charset);
                         return new WebResourceResponse(
                                 mimeType,
                                 charset,
                                 reply.body().byteStream()
                         );
                     } catch (Throwable e) {
-                        return null;
+                        return new WebResourceResponse("text/html", "utf-8", new ByteArrayInputStream(Log.getStackTraceString(e).getBytes(StandardCharsets.UTF_8)));
                     }
                 }
             });
