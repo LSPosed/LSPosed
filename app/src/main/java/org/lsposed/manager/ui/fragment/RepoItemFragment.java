@@ -25,12 +25,14 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ClickableSpan;
+import android.util.ArrayMap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -66,12 +68,20 @@ import org.lsposed.manager.ui.widget.LinkifyTextView;
 import org.lsposed.manager.util.NavUtil;
 import org.lsposed.manager.util.chrome.CustomTabsURLSpan;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import okhttp3.Headers;
+import okhttp3.Request;
+import okhttp3.Response;
 import rikka.core.util.ResourceUtils;
 import rikka.recyclerview.RecyclerViewKt;
 import rikka.widget.borderview.BorderNestedScrollView;
@@ -160,6 +170,36 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
                 public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                     NavUtil.startURL(requireActivity(), request.getUrl());
                     return true;
+                }
+
+                @Nullable
+                @Override
+                public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+                    if (!request.getUrl().getScheme().startsWith("http")) return null;
+                    var client = App.getOkHttpClient();
+                    var call = client.newCall(
+                            new Request.Builder()
+                                    .url(request.getUrl().toString())
+                                    .method(request.getMethod(), null)
+                                    .headers(Headers.of(request.getRequestHeaders()))
+                                    .build());
+                    var headers = new ArrayMap<String, String>();
+                    try {
+                        Response reply = call.execute();
+                        for (var i = 0; i < reply.headers().size(); ++i) {
+                            headers.put(reply.headers().name(i), reply.headers().value(i));
+                        }
+                        return new WebResourceResponse(
+                                reply.header("content-type", "text/html"),
+                                reply.header("content-encoding", "utf-8"),
+                                reply.code(),
+                                reply.message(),
+                                headers,
+                                reply.body().byteStream()
+                        );
+                    } catch (Throwable e) {
+                        return null;
+                    }
                 }
             });
             view.loadDataWithBaseURL("https://github.com", body, "text/html",
