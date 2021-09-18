@@ -108,7 +108,7 @@ android {
             """"$defaultManagerPackageName""""
         )
         buildConfigField("String", "MANAGER_INJECTED_PKG_NAME", """"com.android.bluetooth"""")
-        buildConfigField("int", "MANAGER_INJECTED_UID", """100""")
+        buildConfigField("int", "MANAGER_INJECTED_UID", """1002""")
     }
 
     lint {
