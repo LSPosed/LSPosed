@@ -596,7 +596,9 @@ public class ConfigManager {
             else
                 count = 0;
         }
-        if (count > 0) {
+        // force update is because cache is already update to date
+        // skip caching again
+        if (!force && count > 0) {
             // Called by oneway binder
             updateCaches(true);
             return true;
