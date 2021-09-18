@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -32,11 +33,11 @@
     <string name="Logs">السجلات</string>
     <string name="Settings">الإعدادات</string>
     <string name="About">حول</string>
-    <string name="report_issue">الإبلاغ عن مشكلة</string>
-    <string name="module_repo">المستودع</string>
-    <string name="module_repo_summary">مستودع الوحدات (تجريبي)</string>
+    <string name="report_issue">الإبلاغ عن المشكلة</string>
+    <string name="module_repo">المُستودع</string>
+    <string name="module_repo_summary">مستودع الوحدة (تجريبي)</string>
     <string name="about_view_source_code"><![CDATA[عرض كود المصدر في %1$s<br/>انضم إلى قناتنا %2$s]]></string>
-    <string name="about_translators">المترجمين: %s</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Mahmoud Abd El-Hamed</string>
     <string name="install">تثبيت</string>
     <string name="install_summary">انقر لتثبيت LSPosed</string>
     <string name="not_installed">لم يتم تثبيته</string>
@@ -183,6 +184,7 @@
     <string name="outdated_core">تطبيق LSPosed أحدث من الإطار. الرجاء تحديث إطار LSPosd.</string>
     <string name="outdated_manager">إطار LSPosed أحدث من التطبيق. الرجاء تحديث التطبيق من /data/adb/lspd/manager.apk يدويا.</string>
     <string name="manager_crashed">تعطل المدير</string>
-    <string name="copy_crash_info">نسخ معلومات الأعطال</string>
-    <string name="copy_toast_msg">منسوخة</string>
+    <string name="manager_crashed_info">أبلغ بهذا إلى </string>
+    <string name="send_crash_info">إرسال معلومات الأعطال</string>
+    <string name="crash_info_copied">تم نسخ معلومات الأعطال إلى الحافظة</string>
 </resources>
