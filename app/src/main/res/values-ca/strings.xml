@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -31,7 +32,6 @@
     <string name="module_repo">Repositori</string>
     <string name="module_repo_summary">Repositori de mòduls (Beta)</string>
     <string name="about_view_source_code"><![CDATA[Veure codi font a %1$s<br/>Uneix-te al nostre %2$s canal]]></string>
-    <string name="about_translators">Traductors: %s</string>
     <string name="install">Instalar</string>
     <string name="install_summary">Toca per instal·lar LSPosed</string>
     <string name="not_installed">No instalat</string>
