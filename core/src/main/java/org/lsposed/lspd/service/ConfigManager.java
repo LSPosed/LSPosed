@@ -416,7 +416,7 @@ public class ConfigManager {
             }
             if (PackageService.isAlive()) {
                 obsoleteModules.forEach(this::removeModuleWithoutCache);
-                obsoletePaths.forEach(this::updateModuleApkPath);
+                obsoletePaths.forEach((packageName, path) -> updateModuleApkPath(packageName, path, true));
             } else {
                 Log.w(TAG, "pm is dead while caching. invalidating...");
                 clearCache();
@@ -424,8 +424,8 @@ public class ConfigManager {
             }
         }
         Log.d(TAG, "cached modules");
-        for (String module : cachedModule.keySet()) {
-            Log.d(TAG, module);
+        for (var module : cachedModule.entrySet()) {
+            Log.d(TAG, module.getKey() + " " + module.getValue().apkPath);
         }
         cacheScopes();
     }
@@ -577,7 +577,7 @@ public class ConfigManager {
         return apkPath.orElse(null);
     }
 
-    public boolean updateModuleApkPath(String packageName, String apkPath) {
+    public boolean updateModuleApkPath(String packageName, String apkPath, boolean force) {
         if (apkPath == null) return false;
         if (db.inTransaction()) {
             Log.w(TAG, "update module apk path should not be called inside transaction");
@@ -591,7 +591,7 @@ public class ConfigManager {
         int count = (int) db.insertWithOnConflict("modules", null, values, SQLiteDatabase.CONFLICT_IGNORE);
         if (count < 0) {
             var cached = cachedModule.getOrDefault(packageName, null);
-            if (cached == null || cached.apkPath == null || !cached.apkPath.equals(apkPath))
+            if (force || cached == null || cached.apkPath == null || !cached.apkPath.equals(apkPath))
                 count = db.updateWithOnConflict("modules", values, "module_pkg_name=?", new String[]{packageName}, SQLiteDatabase.CONFLICT_IGNORE);
             else
                 count = 0;
@@ -731,7 +731,7 @@ public class ConfigManager {
     }
 
     public boolean enableModule(String packageName, ApplicationInfo info) {
-        if (!updateModuleApkPath(packageName, getModuleApkPath(info))) return false;
+        if (!updateModuleApkPath(packageName, getModuleApkPath(info), false)) return false;
         int mid = getModuleId(packageName);
         if (mid == -1) return false;
         try {
@@ -882,10 +882,6 @@ public class ConfigManager {
         if (packageName == null) return;
         var path = Paths.get(getPrefsPath(packageName, uid));
         ConfigFileManager.deleteFolderIfExists(path);
-    }
-
-    public String getManagerPackageName() {
-        return manager;
     }
 
     public boolean isSepolicyLoaded() {
