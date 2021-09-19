@@ -103,7 +103,7 @@ namespace yahfa {
             }
 
             if (clearData) 
-                writeAddr((char *) targetMethod + OFFSET_data_in_ArtMethod, nullptr);
+                writeAddr((char *) backupMethod + OFFSET_data_in_ArtMethod, nullptr);
 
             LOGI("hook and backup done");
             return 0;
@@ -189,7 +189,7 @@ namespace yahfa {
         return ret;
     }
 
-    jboolean backupAndHookNative(JNIEnv *env, [[maybe_unused]] jclass clazz,
+    jboolean backupAndHookNative(JNIEnv *env, jclass,
                                  jobject target, jobject hook,
                                  jobject backup, jboolean clearData) {
 
