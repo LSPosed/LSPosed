@@ -56,15 +56,6 @@ namespace lspd {
             }
             va_end(copy);
             // fallback the backup
-        } else if (code == (('_' << 24) | ('C' << 16) | ('M' << 8) | 'D')) {
-            va_copy(copy, args);
-            if (instance()->replace_shell_command_methodID_) {
-                *res = JNI_CallStaticBooleanMethod(env, instance()->bridge_service_class_,
-                                                   instance()->replace_shell_command_methodID_,
-                                                   obj, code, data_obj, reply_obj, flags);
-            }
-            va_end(copy);
-            return *res;
         }
         return false;
     }
