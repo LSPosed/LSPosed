@@ -17,7 +17,7 @@ namespace yahfa {
 
     jboolean backupAndHookNative(JNIEnv *env, jclass clazz,
                                  jobject target, jobject hook,
-                                 jobject backup);
+                                 jobject backup, jboolean clearData);
 
     void *getArtMethod(JNIEnv *env, jobject jmethod);
 
