@@ -322,9 +322,8 @@ public class SettingsFragment extends BaseFragment {
                 }
                 Locale locale = Locale.forLanguageTag(loc);
                 conf.setLocale(locale);
-                var sLang = locale.getLanguage();
-                if(!lstLang.contains(sLang) && !reference.equals(ctx.createConfigurationContext(conf).getString(id))) {
-                    lstLang.add(sLang);
+                if(!lstLang.contains(loc) && !reference.equals(ctx.createConfigurationContext(conf).getString(id))) {
+                    lstLang.add(loc);
                 }
             }
             conf.setLocale(originalLocale);
