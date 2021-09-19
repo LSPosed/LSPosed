@@ -3,6 +3,8 @@ package org.lsposed.lspd.service;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 import static org.lsposed.lspd.service.ServiceManager.toGlobalNamespace;
 
+import android.app.ActivityThread;
+import android.content.Context;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.os.ParcelFileDescriptor;
@@ -15,9 +17,10 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import org.lsposed.lspd.BuildConfig;
 import org.lsposed.lspd.models.PreLoadedApk;
+import org.lsposed.lspd.util.InstallerVerifier;
 import org.lsposed.lspd.util.Utils;
-import org.w3c.dom.ls.LSResourceResolver;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -49,7 +52,7 @@ import java.util.zip.ZipFile;
 
 public class ConfigFileManager {
     static final Path basePath = Paths.get("/data/adb/lspd");
-    static final File managerApkPath = basePath.resolve("manager.apk").toFile();
+    private static final Path managerApkPath = basePath.resolve("manager.apk");
     private static final Path lockPath = basePath.resolve("lock");
     private static final Path configDirPath = basePath.resolve("config");
     static final File dbPath = configDirPath.resolve("modules_config.db").toFile();
@@ -76,7 +79,7 @@ public class ConfigFileManager {
             AssetManager am = AssetManager.class.newInstance();
             Method addAssetPath = AssetManager.class.getDeclaredMethod("addAssetPath", String.class);
             addAssetPath.setAccessible(true);
-            addAssetPath.invoke(am, managerApkPath.getAbsolutePath());
+            addAssetPath.invoke(am, managerApkPath.toString());
             tmpRes = new Resources(am, null, null);
         } catch (Throwable e) {
             tmpRes = null;
@@ -134,8 +137,14 @@ public class ConfigFileManager {
     }
 
     static ParcelFileDescriptor getManagerApk() throws FileNotFoundException {
-        SELinux.setFileContext(managerApkPath.getAbsolutePath(), "u:object_r:system_file:s0");
-        return ParcelFileDescriptor.open(managerApkPath.getAbsoluteFile(), ParcelFileDescriptor.MODE_READ_ONLY);
+        if (!InstallerVerifier.verifyInstallerSignature(managerApkPath.toString())) return null;
+        Context ctx = ActivityThread.currentActivityThread().getSystemContext();
+        var info = ctx.getPackageManager().getPackageArchiveInfo(managerApkPath.toString(), 0);
+        if (info.versionCode != BuildConfig.VERSION_CODE) return null;
+        if (!BuildConfig.VERSION_NAME.equals(info.versionName)) return null;
+
+        SELinux.setFileContext(managerApkPath.toString(), "u:object_r:system_file:s0");
+        return ParcelFileDescriptor.open(managerApkPath.toFile(), ParcelFileDescriptor.MODE_READ_ONLY);
     }
 
     static void deleteFolderIfExists(Path target) throws IOException {
