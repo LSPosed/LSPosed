@@ -62,8 +62,8 @@ public class ConfigFileManager {
             DateTimeFormatter.ISO_LOCAL_DATE_TIME.withZone(Utils.getZoneId());
     @SuppressWarnings("FieldCanBeLocal")
     private static FileLocker locker = null;
-
-    private static final Resources res;
+    private static Resources res = null;
+    private static ParcelFileDescriptor fd = null;
 
     static {
         try {
@@ -74,20 +74,10 @@ public class ConfigFileManager {
         } catch (IOException e) {
             Log.e(TAG, Log.getStackTraceString(e));
         }
-        Resources tmpRes;
-        try {
-            AssetManager am = AssetManager.class.newInstance();
-            Method addAssetPath = AssetManager.class.getDeclaredMethod("addAssetPath", String.class);
-            addAssetPath.setAccessible(true);
-            addAssetPath.invoke(am, managerApkPath.toString());
-            tmpRes = new Resources(am, null, null);
-        } catch (Throwable e) {
-            tmpRes = null;
-        }
-        res = tmpRes;
     }
 
     public static Resources getResources() {
+        loadLocale();
         return res;
     }
 
@@ -128,15 +118,33 @@ public class ConfigFileManager {
         return productLanguage + "-" + productRegion;
     }
 
+    private static void loadLocale() {
+        if (fd != null) return;
+        try {
+            AssetManager am = AssetManager.class.newInstance();
+            //noinspection JavaReflectionMemberAccess DiscouragedPrivateApi
+            Method addAssetPath = AssetManager.class.getDeclaredMethod("addAssetPath", String.class);
+            addAssetPath.setAccessible(true);
+            addAssetPath.invoke(am, managerApkPath.toString());
+            //noinspection deprecation
+            res = new Resources(am, null, null);
+        } catch (Throwable e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+        }
+    }
+
     static void reloadLocale() {
+        loadLocale();
         Locale locale = Locale.forLanguageTag(readLocale());
         Locale.setDefault(locale);
         var conf = res.getConfiguration();
         conf.setLocale(Locale.forLanguageTag(readLocale()));
+        //noinspection deprecation
         res.updateConfiguration(conf, res.getDisplayMetrics());
     }
 
     static ParcelFileDescriptor getManagerApk() throws FileNotFoundException {
+        if (fd != null) return fd;
         if (!InstallerVerifier.verifyInstallerSignature(managerApkPath.toString())) return null;
         Context ctx = ActivityThread.currentActivityThread().getSystemContext();
         var info = ctx.getPackageManager().getPackageArchiveInfo(managerApkPath.toString(), 0);
@@ -144,7 +152,8 @@ public class ConfigFileManager {
         if (!BuildConfig.VERSION_NAME.equals(info.versionName)) return null;
 
         SELinux.setFileContext(managerApkPath.toString(), "u:object_r:system_file:s0");
-        return ParcelFileDescriptor.open(managerApkPath.toFile(), ParcelFileDescriptor.MODE_READ_ONLY);
+        fd = ParcelFileDescriptor.open(managerApkPath.toFile(), ParcelFileDescriptor.MODE_READ_ONLY);
+        return fd;
     }
 
     static void deleteFolderIfExists(Path target) throws IOException {
