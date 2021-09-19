@@ -55,7 +55,7 @@ namespace lspd {
                                                    obj, code, data_obj, reply_obj, flags);
             }
             va_end(copy);
-            // fallback the backup
+            return *res;
         }
         return false;
     }
