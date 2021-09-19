@@ -99,6 +99,9 @@ public class ActivityController extends IActivityController.Stub {
 
                     }
                 }.exec((Binder) am, in.getFileDescriptor(), out.getFileDescriptor(), err.getFileDescriptor(), args, shellCallback, resultReceiver);
+                if (in != null) in.detachFd();
+                if (out != null) out.detachFd();
+                if (err != null) err.detachFd();
                 return true;
             }
         } catch (Throwable e) {
