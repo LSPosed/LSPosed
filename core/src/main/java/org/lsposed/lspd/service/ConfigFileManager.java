@@ -143,7 +143,7 @@ public class ConfigFileManager {
         res.updateConfiguration(conf, res.getDisplayMetrics());
     }
 
-    static ParcelFileDescriptor getManagerApk() throws FileNotFoundException {
+    static ParcelFileDescriptor getManagerApk() throws FileNotFoundException, IOException {
         if (fd != null) return fd.dup();
         if (!InstallerVerifier.verifyInstallerSignature(managerApkPath.toString())) return null;
         Context ctx = ActivityThread.currentActivityThread().getSystemContext();
