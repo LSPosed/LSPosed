@@ -144,7 +144,7 @@ public class ConfigFileManager {
     }
 
     static ParcelFileDescriptor getManagerApk() throws FileNotFoundException {
-        if (fd != null) return fd;
+        if (fd != null) return fd.dup();
         if (!InstallerVerifier.verifyInstallerSignature(managerApkPath.toString())) return null;
         Context ctx = ActivityThread.currentActivityThread().getSystemContext();
         var info = ctx.getPackageManager().getPackageArchiveInfo(managerApkPath.toString(), 0);
@@ -153,7 +153,7 @@ public class ConfigFileManager {
 
         SELinux.setFileContext(managerApkPath.toString(), "u:object_r:system_file:s0");
         fd = ParcelFileDescriptor.open(managerApkPath.toFile(), ParcelFileDescriptor.MODE_READ_ONLY);
-        return fd;
+        return fd.dup();
     }
 
     static void deleteFolderIfExists(Path target) throws IOException {
