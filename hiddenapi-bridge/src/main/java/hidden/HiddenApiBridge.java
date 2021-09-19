@@ -26,6 +26,7 @@ import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInstaller;
 import android.content.res.AssetManager;
+import android.content.res.CompatibilityInfo;
 import android.content.res.Resources;
 import android.content.res.ResourcesImpl;
 import android.os.Binder;
@@ -85,5 +86,9 @@ public class HiddenApiBridge {
 
     public static void ApplicationInfo_credentialProtectedDataDir(ApplicationInfo applicationInfo, String dir) {
         applicationInfo.credentialProtectedDataDir = dir;
+    }
+
+    public static CompatibilityInfo Resources_getCompatibilityInfo(Resources res) {
+        return res.getCompatibilityInfo();
     }
 }
