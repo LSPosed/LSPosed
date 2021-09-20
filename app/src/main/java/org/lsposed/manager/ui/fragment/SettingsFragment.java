@@ -20,6 +20,7 @@
 package org.lsposed.manager.ui.fragment;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -137,6 +138,8 @@ public class SettingsFragment extends BaseFragment {
 
         @Override
         public void onCreatePreferencesFix(Bundle savedInstanceState, String rootKey) {
+            final String SYSTEM = "SYSTEM";
+
             addPreferencesFromResource(R.xml.prefs);
 
             boolean installed = ConfigManager.isBinderAlive();
@@ -240,7 +243,7 @@ public class SettingsFragment extends BaseFragment {
             SimpleMenuPreference language = findPreference("language");
             if (language != null) {
                 language.setOnPreferenceChangeListener((preference, newValue) -> {
-                    var locale = "SYSTEM".equals(newValue) ? LocaleDelegate.getSystemLocale() : Locale.forLanguageTag((String) newValue);
+                    var locale = SYSTEM.equals(newValue) ? LocaleDelegate.getSystemLocale() : Locale.forLanguageTag((String) newValue);
                     LocaleDelegate.setDefaultLocale(locale);
                     MainActivity activity = (MainActivity) getActivity();
                     if (activity != null) {
@@ -251,19 +254,19 @@ public class SettingsFragment extends BaseFragment {
                 var tag = language.getValue();
                 var userLocale = App.getLocale();
                 var entries = new ArrayList<CharSequence>();
-                for (int i = 0; i < language.getEntries().length; i++) {
-                    if (i > 0) {
-                        var locale = Locale.forLanguageTag(language.getEntries()[i].toString());
-                        entries.add(HtmlCompat.fromHtml(String.format("%s - %s",
-                                !TextUtils.isEmpty(locale.getScript()) ? locale.getDisplayScript(locale) : locale.getDisplayName(locale),
-                                !TextUtils.isEmpty(locale.getScript()) ? locale.getDisplayScript(userLocale) : locale.getDisplayName(userLocale)
-                        ), HtmlCompat.FROM_HTML_MODE_LEGACY));
-                    } else {
-                        entries.add(language.getEntries()[i]);
-                    }
+                entries.add(language.getEntries()[0]);
+                var lstLang = getAppLanguages(getContext(), R.string.Settings);
+                for (var lang : lstLang) {
+                    var locale = Locale.forLanguageTag(lang);
+                    entries.add(HtmlCompat.fromHtml(String.format("%s - %s",
+                            !TextUtils.isEmpty(locale.getScript()) ? locale.getDisplayScript(locale) : locale.getDisplayName(locale),
+                            !TextUtils.isEmpty(locale.getScript()) ? locale.getDisplayScript(userLocale) : locale.getDisplayName(userLocale)
+                    ), HtmlCompat.FROM_HTML_MODE_LEGACY));
                 }
                 language.setEntries(entries.toArray(new CharSequence[0]));
-                if (TextUtils.isEmpty(tag) || "SYSTEM".equals(tag)) {
+                lstLang.add(0, SYSTEM);
+                language.setEntryValues(lstLang.toArray(new CharSequence[0]));
+                if (TextUtils.isEmpty(tag) || SYSTEM.equals(tag)) {
                     language.setSummary(getString(rikka.material.R.string.follow_system));
                 } else {
                     var locale = Locale.forLanguageTag(tag);
@@ -302,6 +305,29 @@ public class SettingsFragment extends BaseFragment {
                 }
             });
             return recyclerView;
+        }
+
+        private ArrayList<String> getAppLanguages(Context ctx, int id) {
+            Configuration conf = ctx.getResources().getConfiguration();
+            Locale originalLocale = conf.getLocales().get(0);
+            conf.setLocale(Locale.ENGLISH);
+            final String reference = ctx.createConfigurationContext(conf).getString(id);
+
+            var lstLang = new ArrayList<String>();
+            lstLang.add(Locale.ENGLISH.getLanguage());
+
+            for (String loc : ctx.getAssets().getLocales()) {
+                if (loc.isEmpty()) {
+                    continue;
+                }
+                Locale locale = Locale.forLanguageTag(loc);
+                conf.setLocale(locale);
+                if (!lstLang.contains(loc) && !reference.equals(ctx.createConfigurationContext(conf).getString(id))) {
+                    lstLang.add(loc);
+                }
+            }
+            conf.setLocale(originalLocale);
+            return lstLang;
         }
     }
 
