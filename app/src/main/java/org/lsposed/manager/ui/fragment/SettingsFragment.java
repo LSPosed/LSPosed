@@ -256,7 +256,7 @@ public class SettingsFragment extends BaseFragment {
                 var entries = new ArrayList<CharSequence>();
                 entries.add(language.getEntries()[0]);
                 var lstLang = getAppLanguages(getContext(), R.string.Settings);
-                for(var lang : lstLang) {
+                for (var lang : lstLang) {
                     var locale = Locale.forLanguageTag(lang);
                     entries.add(HtmlCompat.fromHtml(String.format("%s - %s",
                             !TextUtils.isEmpty(locale.getScript()) ? locale.getDisplayScript(locale) : locale.getDisplayName(locale),
@@ -316,13 +316,13 @@ public class SettingsFragment extends BaseFragment {
             var lstLang = new ArrayList<String>();
             lstLang.add(Locale.ENGLISH.getLanguage());
 
-            for(String loc : ctx.getAssets().getLocales()) {
-                if(loc.isEmpty()) {
+            for (String loc : ctx.getAssets().getLocales()) {
+                if (loc.isEmpty()) {
                     continue;
                 }
                 Locale locale = Locale.forLanguageTag(loc);
                 conf.setLocale(locale);
-                if(!lstLang.contains(loc) && !reference.equals(ctx.createConfigurationContext(conf).getString(id))) {
+                if (!lstLang.contains(loc) && !reference.equals(ctx.createConfigurationContext(conf).getString(id))) {
                     lstLang.add(loc);
                 }
             }
