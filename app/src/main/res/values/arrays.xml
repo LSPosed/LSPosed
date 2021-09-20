@@ -34,65 +34,6 @@
 
     <string-array name="language" translatable="false">
         <item>@string/follow_system</item>
-        <item>af</item>
-        <item>ar</item>
-        <item>ca</item>
-        <item>cs</item>
-        <item>da</item>
-        <item>el</item>
-        <item>en</item>
-        <item>es</item>
-        <item>fi</item>
-        <item>fr</item>
-        <item>hu</item>
-        <item>it</item>
-        <item>iw</item>
-        <item>ja</item>
-        <item>ko</item>
-        <item>nl</item>
-        <item>no</item>
-        <item>pl</item>
-        <item>pt-BR</item>
-        <item>pt-PT</item>
-        <item>ro</item>
-        <item>ru</item>
-        <item>tr</item>
-        <item>uk</item>
-        <item>vi</item>
-        <item>zh-CN</item>
-        <item>zh-HK</item>
-        <item>zh-TW</item>
     </string-array>
 
-    <string-array name="language_value" translatable="false">
-        <item>SYSTEM</item>
-        <item>af</item>
-        <item>ar</item>
-        <item>ca</item>
-        <item>cs</item>
-        <item>da</item>
-        <item>el</item>
-        <item>en</item>
-        <item>es</item>
-        <item>fi</item>
-        <item>fr</item>
-        <item>hu</item>
-        <item>it</item>
-        <item>iw</item>
-        <item>ja</item>
-        <item>ko</item>
-        <item>nl</item>
-        <item>no</item>
-        <item>pl</item>
-        <item>pt-BR</item>
-        <item>pt-PT</item>
-        <item>ro</item>
-        <item>ru</item>
-        <item>tr</item>
-        <item>uk</item>
-        <item>vi</item>
-        <item>zh-CN</item>
-        <item>zh-HK</item>
-        <item>zh-TW</item>
-    </string-array>
 </resources>
