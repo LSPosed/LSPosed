@@ -119,7 +119,7 @@ public class ConfigFileManager {
     }
 
     private static void loadLocale() {
-        if (fd != null) return;
+        if (res != null) return;
         try {
             AssetManager am = AssetManager.class.newInstance();
             //noinspection JavaReflectionMemberAccess DiscouragedPrivateApi
