@@ -43,6 +43,9 @@ val moduleMinRiruApiVersion = 25
 val moduleMinRiruVersionName = "25.0.1"
 val moduleMaxRiruApiVersion = 25
 
+val injectedPackageName = "com.android.shell"
+val injectedPackageUid = 2000
+
 val defaultManagerPackageName: String by rootProject.extra
 val apiCode: Int by rootProject.extra
 
@@ -97,6 +100,7 @@ android {
             ndkBuild {
                 arguments += "RIRU_MODULE_API_VERSION=$moduleMaxRiruApiVersion"
                 arguments += "MODULE_NAME=$riruModuleId"
+                arguments += "INJECTED_AID=$injectedPackageUid"
                 arguments += "-j${Runtime.getRuntime().availableProcessors()}"
             }
         }
@@ -107,8 +111,8 @@ android {
             "DEFAULT_MANAGER_PACKAGE_NAME",
             """"$defaultManagerPackageName""""
         )
-        buildConfigField("String", "MANAGER_INJECTED_PKG_NAME", """"com.android.shell"""")
-        buildConfigField("int", "MANAGER_INJECTED_UID", """2000""")
+        buildConfigField("String", "MANAGER_INJECTED_PKG_NAME", """"$injectedPackageName"""")
+        buildConfigField("int", "MANAGER_INJECTED_UID", """$injectedPackageUid""")
     }
 
     lint {
