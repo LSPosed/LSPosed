@@ -25,6 +25,7 @@ import android.app.IActivityManager;
 import android.app.IApplicationThread;
 import android.app.IServiceConnection;
 import android.app.ProfilerInfo;
+import android.content.IContentProvider;
 import android.content.IIntentReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -161,6 +162,16 @@ public class ActivityManagerService {
         IActivityManager am = getActivityManager();
         if (am == null) return null;
         return am.getCurrentUser();
+    }
+
+    public static IContentProvider getContentProvider(String auth, int userId) throws RemoteException {
+        IActivityManager am = getActivityManager();
+        if (am == null) return null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            return am.getContentProviderExternal(auth, userId, token, null).provider;
+        } else {
+            return am.getContentProviderExternal(auth, userId, token).provider;
+        }
     }
 
 }

@@ -95,7 +95,9 @@ public class ParasiticManagerHooker {
                 "android.app.ActivityThread$AppBindData",
                 managerApkHooker);
 
-        XposedBridge.hookAllConstructors(ActivityThread.ActivityClientRecord.class, activityHooker);
+
+        var activityClientRecordClass = XposedHelpers.findClass("android.app.ActivityThread$ActivityClientRecord", ActivityThread.class.getClassLoader());
+        XposedBridge.hookAllConstructors(activityClientRecordClass, activityHooker);
 
         var unhooks = new XC_MethodHook.Unhook[]{null};
         unhooks[0] = XposedHelpers.findAndHookMethod(
@@ -124,6 +126,7 @@ public class ParasiticManagerHooker {
         });
         XposedBridge.hookAllMethods(ActivityThread.class, "installProvider", new XC_MethodHook() {
             private Context originalContext = null;
+
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                 Hookers.logD("before install provider");
@@ -152,7 +155,7 @@ public class ParasiticManagerHooker {
             }
         });
 
-        XposedHelpers.findAndHookMethod(ActivityThread.class, "deliverNewIntents", ActivityThread.ActivityClientRecord.class, List.class, new XC_MethodHook() {
+        XposedHelpers.findAndHookMethod(ActivityThread.class, "deliverNewIntents", activityClientRecordClass, List.class, new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) {
                 if (param.args[1] == null) return;
