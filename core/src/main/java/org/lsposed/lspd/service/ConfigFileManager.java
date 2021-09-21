@@ -3,8 +3,6 @@ package org.lsposed.lspd.service;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 import static org.lsposed.lspd.service.ServiceManager.toGlobalNamespace;
 
-import android.app.ActivityThread;
-import android.content.Context;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.os.ParcelFileDescriptor;
@@ -17,14 +15,12 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import org.lsposed.lspd.BuildConfig;
 import org.lsposed.lspd.models.PreLoadedApk;
 import org.lsposed.lspd.util.InstallerVerifier;
 import org.lsposed.lspd.util.Utils;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
@@ -143,13 +139,9 @@ public class ConfigFileManager {
         res.updateConfiguration(conf, res.getDisplayMetrics());
     }
 
-    static ParcelFileDescriptor getManagerApk() throws FileNotFoundException, IOException {
+    static ParcelFileDescriptor getManagerApk() throws IOException {
         if (fd != null) return fd.dup();
         if (!InstallerVerifier.verifyInstallerSignature(managerApkPath.toString())) return null;
-        Context ctx = ActivityThread.currentActivityThread().getSystemContext();
-        var info = ctx.getPackageManager().getPackageArchiveInfo(managerApkPath.toString(), 0);
-        if (info.versionCode != BuildConfig.VERSION_CODE) return null;
-        if (!BuildConfig.VERSION_NAME.equals(info.versionName)) return null;
 
         SELinux.setFileContext(managerApkPath.toString(), "u:object_r:system_file:s0");
         fd = ParcelFileDescriptor.open(managerApkPath.toFile(), ParcelFileDescriptor.MODE_READ_ONLY);
