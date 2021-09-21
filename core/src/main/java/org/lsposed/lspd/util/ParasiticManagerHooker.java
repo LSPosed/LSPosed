@@ -162,7 +162,9 @@ public class ParasiticManagerHooker {
             }
         });
 
-        if (Process.myUid() == BuildConfig.MANAGER_INJECTED_UID) {
+        if (Process.myUid() == Process.ROOT_UID || Process.myUid() == Process.SYSTEM_UID
+                || Process.myUid() == Process.PHONE_UID || Process.myUid() == Process.NFC_UID
+                || Process.myUid() == Process.BLUETOOTH_UID) {
             XposedHelpers.findAndHookMethod(WebViewFactory.class, "getProvider", new XC_MethodReplacement() {
                 @Override
                 protected Object replaceHookedMethod(MethodHookParam param) {
