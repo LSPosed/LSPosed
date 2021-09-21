@@ -31,7 +31,7 @@
 namespace lspd {
     int *allowUnload = nullptr;
 
-    static constexpr uid_t kAidShell = 2000;
+    static constexpr uid_t kAidInjected = INJECTED_AID;
     static constexpr uid_t kAidInet = 3003;
 
     namespace {
@@ -59,7 +59,7 @@ namespace lspd {
                                         jobjectArray *,
                                         jboolean *,
                                         jboolean *) {
-            if (*_uid == kAidShell) {
+            if (*_uid == kAidInjected) {
                 int array_size = *gids ? env->GetArrayLength(*gids) : 0;
                 auto region = std::make_unique<jint[]>(array_size + 1);
                 auto *new_gids = env->NewIntArray(array_size + 1);
@@ -102,7 +102,7 @@ namespace lspd {
                                      jobjectArray *,
                                      jboolean *,
                                      jboolean *) {
-            if (*_uid == kAidShell) {
+            if (*_uid == kAidInjected) {
                 int array_size = *gids ? env->GetArrayLength(*gids) : 0;
                 auto region = std::make_unique<jint[]>(array_size + 1);
                 auto *new_gids = env->NewIntArray(array_size + 1);
