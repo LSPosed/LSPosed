@@ -9,6 +9,7 @@
 
 int SDKVersion;
 size_t OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod;
+size_t OFFSET_data_in_ArtMethod;
 
 namespace yahfa {
     namespace {
@@ -57,7 +58,7 @@ namespace yahfa {
             }
         }
 
-        int doBackupAndHook(void *targetMethod, void *hookMethod, void *backupMethod) {
+        int doBackupAndHook(void *targetMethod, void *hookMethod, void *backupMethod, bool clearData) {
             LOGI("target method is at %p, hook method is at %p, backup method is at %p",
                  targetMethod, hookMethod, backupMethod);
 
@@ -101,6 +102,9 @@ namespace yahfa {
                 setAccessFlags(targetMethod, access_flags);
             }
 
+            if (clearData) 
+                writeAddr((char *) backupMethod + OFFSET_data_in_ArtMethod, nullptr);
+
             LOGI("hook and backup done");
             return 0;
         }
@@ -136,6 +140,7 @@ namespace yahfa {
                 LOGE("not compatible with SDK %d", sdkVersion);
                 break;
         }
+        OFFSET_data_in_ArtMethod = OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod - pointer_size;
 
         setupTrampoline();
     }
@@ -184,13 +189,14 @@ namespace yahfa {
         return ret;
     }
 
-    jboolean backupAndHookNative(JNIEnv *env, [[maybe_unused]] jclass clazz,
+    jboolean backupAndHookNative(JNIEnv *env, jclass,
                                  jobject target, jobject hook,
-                                 jobject backup) {
+                                 jobject backup, jboolean clearData) {
 
         if (!doBackupAndHook(getArtMethod(env, target),
                              getArtMethod(env, hook),
-                             getArtMethod(env, backup)
+                             getArtMethod(env, backup),
+                             clearData == JNI_TRUE
         )) {
             env->NewGlobalRef(hook); // keep a global ref so that the hook method would not be GCed
             if (backup) env->NewGlobalRef(backup);
