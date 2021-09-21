@@ -81,7 +81,8 @@ public class Main {
         XposedBridge.initXResources();
         XposedInit.startsSystemServer = isSystem;
         PrebuiltMethodsDeopter.deoptBootMethods(); // do it once for secondary zygote
-        if (niceName.equals(BuildConfig.MANAGER_INJECTED_PKG_NAME) && ParasiticManagerHooker.start()) {
+        if ((niceName.equals(BuildConfig.MANAGER_INJECTED_PKG_NAME) || niceName.equals(BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME))
+                && ParasiticManagerHooker.start()) {
             Utils.logI("Loaded manager, skipping next steps");
             return;
         }

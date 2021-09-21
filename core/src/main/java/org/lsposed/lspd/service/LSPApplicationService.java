@@ -107,28 +107,12 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
     }
 
     @Override
-    public boolean requestManagerBinder(String packageName, String path, List<IBinder> binder) throws RemoteException {
-        ensureRegistered();
-        var pid = getCallingPid();
-        var uid = getCallingUid();
-        if (ConfigManager.getInstance().isManager(uid) &&
-                ConfigManager.getInstance().isManager(packageName) &&
-                InstallerVerifier.verifyInstallerSignature(path)) {
-            var heartbeat = handles.getOrDefault(pid, null);
-            if (heartbeat != null) {
-                binder.add(ServiceManager.getManagerService().obtainManagerBinder(heartbeat, pid, uid));
-            }
-            return false;
-        }
-        return ConfigManager.getInstance().isManager(packageName);
-    }
-
-    @Override
     public ParcelFileDescriptor requestInjectedManagerBinder(List<IBinder> binder) throws RemoteException {
         ensureRegistered();
         var pid = getCallingPid();
         var uid = getCallingUid();
-        if (ServiceManager.getManagerService().postStartManager(pid, uid)) {
+        if (ServiceManager.getManagerService().postStartManager(pid, uid) ||
+                ConfigManager.getInstance().isManager(uid)) {
             var heartbeat = handles.get(pid);
             if (heartbeat != null) {
                 binder.add(ServiceManager.getManagerService().obtainManagerBinder(heartbeat, pid, uid));

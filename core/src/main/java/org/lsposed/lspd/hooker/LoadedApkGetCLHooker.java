@@ -91,24 +91,7 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
                 hookNewXSP(lpparam);
             }
 
-            var binder = new ArrayList<IBinder>(1);
-            var blocked = false;
-            var info = loadedApk.getApplicationInfo();
-            if (info != null) {
-                var packageName = info.packageName;
-                var path = info.sourceDir;
-                blocked = serviceClient.requestManagerBinder(packageName, path, binder);
-            }
-            if (binder.size() != 0 && binder.get(0) != null) {
-                var ret = InstallerVerifier.sendBinderToManager(lpparam.classLoader, binder.get(0));
-                if (!ret) InstallerVerifier.hookBadManager(classLoader);
-                Utils.logI("manager trusted, ret=" + ret);
-            } else if (blocked) {
-                InstallerVerifier.hookBadManager(classLoader);
-                Utils.logI("manager blocked, packageName=" + packageName);
-            } else {
-                XC_LoadPackage.callAll(lpparam);
-            }
+            XC_LoadPackage.callAll(lpparam);
 
         } catch (Throwable t) {
             Hookers.logE("error when hooking LoadedApk#getClassLoader", t);

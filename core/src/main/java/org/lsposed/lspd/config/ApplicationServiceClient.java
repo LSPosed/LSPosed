@@ -16,9 +16,6 @@ abstract public class ApplicationServiceClient implements ILSPApplicationService
     abstract public IBinder requestModuleBinder(String name);
 
     @Override
-    abstract public boolean requestManagerBinder(String packageName, String path, List<IBinder> binder);
-
-    @Override
     abstract public boolean isResourcesHookEnabled();
 
     @Override
