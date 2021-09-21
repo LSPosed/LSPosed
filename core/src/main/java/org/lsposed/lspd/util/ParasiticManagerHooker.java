@@ -109,6 +109,8 @@ public class ParasiticManagerHooker {
                     }
                 });
 
+        if (Process.myUid() != BuildConfig.MANAGER_INJECTED_UID) return;
+
         XposedBridge.hookAllMethods(ActivityThread.class, "handleReceiver", new XC_MethodReplacement() {
             @Override
             protected Object replaceHookedMethod(MethodHookParam param) {
@@ -194,6 +196,7 @@ public class ParasiticManagerHooker {
 
     private static void checkIntent(ILSPManagerService managerService, Intent intent) {
         if (managerService == null) return;
+        if (Process.myUid() != BuildConfig.MANAGER_INJECTED_UID) return;
         if (intent.getCategories() == null || !intent.getCategories().contains("org.lsposed.manager.LAUNCH_MANAGER")) {
             Hookers.logD("Launching the original app, restarting");
             try {

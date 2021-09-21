@@ -70,15 +70,6 @@ public class LSPApplicationServiceClient extends ApplicationServiceClient {
     }
 
     @Override
-    public boolean requestManagerBinder(String packageName, String path, List<IBinder> binder) {
-        try {
-            return service.requestManagerBinder(packageName, path, binder);
-        } catch (RemoteException | NullPointerException ignored) {
-        }
-        return false;
-    }
-
-    @Override
     public boolean isResourcesHookEnabled() {
         try {
             return service.isResourcesHookEnabled();
