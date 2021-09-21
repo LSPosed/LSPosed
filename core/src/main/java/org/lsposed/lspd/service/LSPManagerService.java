@@ -598,13 +598,13 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     @Override
     public void setHiddenIcon(boolean hide) {
-        var settings = new ServiceShellCommand("settings");
-        var enable = hide ? "0" : "1";
-        var args = new String[]{"put", "global", "show_hidden_icon_apps_enabled", enable};
+        Bundle args = new Bundle();
+        args.putString("value", hide ? "0" : "1");
+        args.putString("_user", "0");
         try {
-            settings.shellCommand(FileDescriptor.in, FileDescriptor.out, FileDescriptor.err,
-                    args, new ResultReceiver(null));
-        } catch (RemoteException e) {
+            ActivityManagerService.getContentProvider("settings", 0)
+                    .call("android", null, "settings", "PUT_global", "show_hidden_icon_apps_enabled", args);
+        } catch (RemoteException | NullPointerException e) {
             Log.w(TAG, "setHiddenIcon: ", e);
         }
     }
