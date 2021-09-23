@@ -224,6 +224,9 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                     org.lsposed.manager.R.string.xposed_module_updated_notification_content :
                     org.lsposed.manager.R.string.module_is_not_activated_yet_detailed, modulePackageName);
 
+            var style = new Notification.BigTextStyle();
+            style.bigText(content);
+
             var notification = new Notification.Builder(context, CHANNEL_ID)
                     .setContentTitle(title)
                     .setContentText(content)
@@ -231,6 +234,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                     .setColor(context.getResources().getColor(org.lsposed.manager.R.color.color_primary))
                     .setContentIntent(getNotificationIntent(modulePackageName, moduleUserId))
                     .setAutoCancel(true)
+                    .setStyle(style)
                     .build();
             notification.extras.putString("android.substName", "LSPosed");
             var im = INotificationManager.Stub.asInterface(android.os.ServiceManager.getService("notification"));
@@ -240,7 +244,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                     new android.content.pm.ParceledListSlice<>(Collections.singletonList(channel)));
             im.enqueueNotificationWithTag("android", "android", "114514", NOTIFICATION_ID, notification, 0);
         } catch (Throwable e) {
-            Log.e(TAG, "posted notification", e);
+            Log.e(TAG, "post notification", e);
         }
     }
 
