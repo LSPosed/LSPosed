@@ -31,17 +31,21 @@ import rikka.core.util.ResourceUtils;
 public final class NavUtil {
 
     public static void startURL(Activity activity, Uri uri) {
-        CustomTabsIntent.Builder customTabsIntent = new CustomTabsIntent.Builder();
-        customTabsIntent.setShowTitle(true);
-        CustomTabColorSchemeParams params = new CustomTabColorSchemeParams.Builder()
+        try {
+            CustomTabsIntent.Builder customTabsIntent = new CustomTabsIntent.Builder();
+            customTabsIntent.setShowTitle(true);
+            CustomTabColorSchemeParams params = new CustomTabColorSchemeParams.Builder()
                 .setToolbarColor(ResourceUtils.resolveColor(activity.getTheme(), android.R.attr.colorBackground))
                 .setNavigationBarColor(ResourceUtils.resolveColor(activity.getTheme(), android.R.attr.navigationBarColor))
                 .setNavigationBarDividerColor(0)
                 .build();
-        customTabsIntent.setDefaultColorSchemeParams(params);
-        boolean night = ResourceUtils.isNightMode(activity.getResources().getConfiguration());
-        customTabsIntent.setColorScheme(night ? CustomTabsIntent.COLOR_SCHEME_DARK : CustomTabsIntent.COLOR_SCHEME_LIGHT);
-        customTabsIntent.build().launchUrl(activity, uri);
+            customTabsIntent.setDefaultColorSchemeParams(params);
+            boolean night = ResourceUtils.isNightMode(activity.getResources().getConfiguration());
+            customTabsIntent.setColorScheme(night ? CustomTabsIntent.COLOR_SCHEME_DARK : CustomTabsIntent.COLOR_SCHEME_LIGHT);
+            customTabsIntent.build().launchUrl(activity, uri);
+        } catch (ActivityNotFoundException e) {
+            // code
+        }
     }
 
     public static void startURL(Activity activity, String url) {
