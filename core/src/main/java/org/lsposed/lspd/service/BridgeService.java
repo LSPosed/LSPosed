@@ -297,7 +297,7 @@ public class BridgeService {
                     !descriptor.equals("com.sonymobile.hookservice.HookActivityService"))) {
                 return false;
             }
-            return ActivityController.replaceShellCommand(obj, data);
+            return ActivityController.replaceShellCommand(obj, data, reply);
         } catch (Throwable e) {
             Log.e(TAG, "replace shell command", e);
             return false;

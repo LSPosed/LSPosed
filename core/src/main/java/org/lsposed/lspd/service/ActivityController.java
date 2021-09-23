@@ -68,7 +68,7 @@ public class ActivityController extends IActivityController.Stub {
         return instance;
     }
 
-    static boolean replaceShellCommand(IBinder am, Parcel data) {
+    static boolean replaceShellCommand(IBinder am, Parcel data, Parcel reply) {
         if (!inited) return false;
         try {
             data.setDataPosition(fdSize * 3);
@@ -76,42 +76,45 @@ public class ActivityController extends IActivityController.Stub {
 
             if (args.length > 0 && "monitor".equals(args[0])) {
                 data.setDataPosition(0);
-                var in = data.readFileDescriptor();
-                var out = data.readFileDescriptor();
-                var err = data.readFileDescriptor();
-                data.createStringArray();
-                ShellCallback shellCallback = ShellCallback.CREATOR.createFromParcel(data);
-                ResultReceiver resultReceiver = ResultReceiver.CREATOR.createFromParcel(data);
-                new ShellCommand() {
-                    @Override
-                    public int onCommand(String cmd) {
-                        final PrintWriter pw = getOutPrintWriter();
-                        String opt;
-                        String gdbPort = null;
-                        boolean monkey = false;
-                        while ((opt = getNextOption()) != null) {
-                            if (opt.equals("--gdb")) {
-                                gdbPort = getNextArgRequired();
-                            } else if (opt.equals("-m")) {
-                                monkey = true;
-                            } else {
-                                getErrPrintWriter().println("Error: Unknown option: " + opt);
-                                return -1;
+                try (var in = data.readFileDescriptor();
+                     var out = data.readFileDescriptor();
+                     var err = data.readFileDescriptor()) {
+                    data.createStringArray();
+                    ShellCallback shellCallback = ShellCallback.CREATOR.createFromParcel(data);
+                    ResultReceiver resultReceiver = ResultReceiver.CREATOR.createFromParcel(data);
+                    new ShellCommand() {
+                        @Override
+                        public int onCommand(String cmd) {
+                            final PrintWriter pw = getOutPrintWriter();
+                            String opt;
+                            String gdbPort = null;
+                            boolean monkey = false;
+                            while ((opt = getNextOption()) != null) {
+                                if (opt.equals("--gdb")) {
+                                    gdbPort = getNextArgRequired();
+                                } else if (opt.equals("-m")) {
+                                    monkey = true;
+                                } else {
+                                    getErrPrintWriter().println("Error: Unknown option: " + opt);
+                                    return -1;
+                                }
                             }
+
+                            return replaceMyControllerActivity(am, pw, getRawInputStream(), gdbPort, monkey);
                         }
 
-                        return replaceMyControllerActivity(am, pw, getRawInputStream(), gdbPort, monkey);
-                    }
+                        @Override
+                        public void onHelp() {
 
-                    @Override
-                    public void onHelp() {
-
-                    }
-                }.exec((Binder) am, in.getFileDescriptor(), out.getFileDescriptor(), err.getFileDescriptor(), args, shellCallback, resultReceiver);
+                        }
+                    }.exec((Binder) am, in.getFileDescriptor(), out.getFileDescriptor(), err.getFileDescriptor(), args, shellCallback, resultReceiver);
+                } catch (Throwable e) {
+                    Log.e(TAG, "replace shell command", e);
+                } finally {
+                    if (reply != null) reply.writeNoException();
+                }
                 return true;
             }
-        } catch (Throwable e) {
-            Log.e(TAG, "replace shell command", e);
         } finally {
             data.setDataPosition(0);
         }
