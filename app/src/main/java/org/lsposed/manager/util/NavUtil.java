@@ -20,7 +20,7 @@
 
 package org.lsposed.manager.util;
 
-import static org.lsposed.manager.App.TAG
+import static org.lsposed.manager.App.TAG;
 
 import android.app.Activity;
 import android.net.Uri;
