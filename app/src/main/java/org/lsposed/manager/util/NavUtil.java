@@ -22,6 +22,7 @@ package org.lsposed.manager.util;
 
 import android.app.Activity;
 import android.net.Uri;
+import android.content.ActivityNotFoundException;
 
 import androidx.browser.customtabs.CustomTabColorSchemeParams;
 import androidx.browser.customtabs.CustomTabsIntent;
