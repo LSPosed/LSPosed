@@ -78,7 +78,7 @@ public class ActivityController extends IActivityController.Stub {
                 data.setDataPosition(0);
                 try (var in = data.readFileDescriptor();
                      var out = data.readFileDescriptor();
-                     var err = data.readFileDescriptor();) {
+                     var err = data.readFileDescriptor()) {
                     data.createStringArray();
                     ShellCallback shellCallback = ShellCallback.CREATOR.createFromParcel(data);
                     ResultReceiver resultReceiver = ResultReceiver.CREATOR.createFromParcel(data);
