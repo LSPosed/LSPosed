@@ -21,7 +21,9 @@
 package org.lsposed.manager.util;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.net.Uri;
+import android.widget.Toast;
 
 import androidx.browser.customtabs.CustomTabColorSchemeParams;
 import androidx.browser.customtabs.CustomTabsIntent;
@@ -41,7 +43,11 @@ public final class NavUtil {
         customTabsIntent.setDefaultColorSchemeParams(params);
         boolean night = ResourceUtils.isNightMode(activity.getResources().getConfiguration());
         customTabsIntent.setColorScheme(night ? CustomTabsIntent.COLOR_SCHEME_DARK : CustomTabsIntent.COLOR_SCHEME_LIGHT);
-        customTabsIntent.build().launchUrl(activity, uri);
+        try {
+            customTabsIntent.build().launchUrl(activity, uri);
+        } catch (ActivityNotFoundException ignored) {
+            Toast.makeText(activity, uri.toString(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     public static void startURL(Activity activity, String url) {
