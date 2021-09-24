@@ -24,6 +24,10 @@
 
 namespace lspd {
 
+    bool isHooked(void* art_method);
+
+    void recordHooked(void* art_method);
+
     void RegisterYahfa(JNIEnv *);
 
 } // namespace lspd

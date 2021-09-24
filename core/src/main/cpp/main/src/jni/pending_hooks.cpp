@@ -35,9 +35,6 @@ namespace lspd {
 
         std::unordered_set<const void *> pending_methods_;
         std::shared_mutex pending_methods_lock_;
-
-        std::unordered_set<const void *> hooked_methods_;
-        std::shared_mutex hooked_methods_lock_;
     }
 
     bool IsClassPending(void *clazz) {
@@ -93,15 +90,4 @@ namespace lspd {
     void RegisterPendingHooks(JNIEnv *env) {
         REGISTER_LSP_NATIVE_METHODS(PendingHooks);
     }
-
-    bool isHooked(void *art_method) {
-        std::shared_lock lk(hooked_methods_lock_);
-        return hooked_methods_.contains(art_method);
-    }
-
-    void recordHooked(void *art_method) {
-        std::unique_lock lk(hooked_methods_lock_);
-        hooked_methods_.insert(art_method);
-    }
-
-}
+}  // namespace lspd
