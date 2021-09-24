@@ -25,7 +25,7 @@ import java.lang.reflect.Method;
 
 public class Yahfa {
 
-    public static native boolean backupAndHookNative(Executable target, Method hook, Method backup, boolean clearData);
+    public static native boolean backupAndHookNative(Executable target, Method hook, Method backup);
 
     // JNI.ToReflectedMethod() could return either Method or Constructor
     public static native Executable findMethodNative(Class<?> targetClass, String methodName, String methodSig);
