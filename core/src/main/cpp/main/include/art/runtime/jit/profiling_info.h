@@ -52,9 +52,9 @@ namespace art {
                     [[fallthrough]];
                 case __ANDROID_API_S__:
                     if constexpr(lspd::is64) {
-                        OFFSET_art_method = 64;
+                        OFFSET_art_method = 8;
                     } else {
-                        OFFSET_art_method = 32;
+                        OFFSET_art_method = 4;
                     }
                     break;
             }
