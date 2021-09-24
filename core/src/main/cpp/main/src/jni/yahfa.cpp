@@ -42,12 +42,12 @@ namespace lspd {
     }
 
     LSP_DEF_NATIVE_METHOD(jboolean, Yahfa, backupAndHookNative, jobject target,
-                          jobject hook, jobject backup, jboolean clearData) {
+                          jobject hook, jobject backup) {
         art::gc::ScopedGCCriticalSection section(art::Thread::Current().Get(),
                                                  art::gc::kGcCauseDebugger,
                                                  art::gc::kCollectorTypeDebugger);
         art::thread_list::ScopedSuspendAll suspend("Yahfa Hook", false);
-        return yahfa::backupAndHookNative(env, clazz, target, hook, backup, clearData);
+        return yahfa::backupAndHookNative(env, clazz, target, hook, backup);
     }
 
     LSP_DEF_NATIVE_METHOD(void, Yahfa, recordHooked, jobject member) {
@@ -172,7 +172,7 @@ namespace lspd {
             LSP_NATIVE_METHOD(Yahfa, findMethodNative,
                               "(Ljava/lang/Class;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/reflect/Executable;"),
             LSP_NATIVE_METHOD(Yahfa, backupAndHookNative,
-                              "(Ljava/lang/reflect/Executable;Ljava/lang/reflect/Method;Ljava/lang/reflect/Method;Z)Z"),
+                              "(Ljava/lang/reflect/Executable;Ljava/lang/reflect/Method;Ljava/lang/reflect/Method;)Z"),
             LSP_NATIVE_METHOD(Yahfa, recordHooked, "(Ljava/lang/reflect/Executable;)V"),
             LSP_NATIVE_METHOD(Yahfa, isHooked, "(Ljava/lang/reflect/Executable;)Z"),
             LSP_NATIVE_METHOD(Yahfa, buildHooker,

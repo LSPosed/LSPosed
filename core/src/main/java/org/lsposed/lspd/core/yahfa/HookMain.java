@@ -27,7 +27,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -52,11 +51,7 @@ public class HookMain {
             // backup is just a placeholder and the constraint could be less strict
             checkCompatibleMethods(target, backup, "Backup");
         }
-        // Since Android 7.0, the data_ member is used to save a profiling info which used for optimizing
-        // This may cause some crashes, clear the member to avoid it
-        // Note that this cannot be applied to native and proxy methods as their data_ member has been used for other purposes
-        boolean clearData = !(Modifier.isNative(target.getModifiers()) || Proxy.isProxyClass(target.getDeclaringClass()));
-        if(!Yahfa.backupAndHookNative(target, hook, backup, clearData)) {
+        if(!Yahfa.backupAndHookNative(target, hook, backup)){
             throw new RuntimeException("Failed to hook " + target + " with " + hook);
         } else {
             Yahfa.recordHooked(target);
