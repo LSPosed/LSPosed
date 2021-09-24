@@ -58,7 +58,8 @@ namespace art {
                     }
                     break;
             }
-            lspd::HookSyms(handle, AddInvokeInfo);
+            if (OFFSET_art_method != size_t(-1))
+                lspd::HookSyms(handle, AddInvokeInfo);
         }
     }
 }
