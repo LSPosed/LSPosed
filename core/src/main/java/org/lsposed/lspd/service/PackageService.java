@@ -237,7 +237,7 @@ public class PackageService {
         CountDownLatch latch = new CountDownLatch(1);
         final boolean[] result = {false};
         var flag = userId == -1 ? 0x00000002 : 0; //PackageManager.DELETE_ALL_USERS = 0x00000002; UserHandle ALL = new UserHandle(-1);
-        pm.getPackageInstaller().uninstall(versionedPackage, null, flag, new IntentSenderAdaptor() {
+        pm.getPackageInstaller().uninstall(versionedPackage, "android", flag, new IntentSenderAdaptor() {
             @Override
             public void send(Intent intent) {
                 int status = intent.getIntExtra(PackageInstaller.EXTRA_STATUS, PackageInstaller.STATUS_FAILURE);
