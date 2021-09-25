@@ -27,17 +27,22 @@
     </plurals>
     <string name="Logs">로그</string>
     <string name="Settings">설정</string>
+    <string name="report_issue">문제 보고</string>
     <string name="module_repo">저장소</string>
     <string name="module_repo_summary">모듈 저장소 (Beta)</string>
     <string name="about_view_source_code"><![CDATA[%1$s에서 소스 코드 보기<br/>%2$s 채널에 가입하십시오.]]></string>
     <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">green1052</string>
+    <string name="install">설치</string>
+    <string name="install_summary">LSPosed를 설치하려면 누르십시오.</string>
     <string name="not_installed">설치되지 않음</string>
+    <string name="not_install_summary">LSPosed가 설치되지 않았습니다.</string>
     <string name="activated">활성화됨</string>
     <string name="partial_activated">부분적으로 활성화됨</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy가 제대로 로드되지 않았습니다.</string>
     <string name="selinux_policy_not_loaded"><![CDATA[SEPolicy가 제대로 로드되지 않아 시스템 프레임워크를 후크하는 모듈이 작동하지 않습니다.<br><a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> 개발자에게 보고하십시오.]]></string>
     <string name="system_inject_fail_summary">System Framework 주입 실패</string>
     <string name="system_inject_fail"><![CDATA[System Framework 주입 실패.<br/>이는 드물게 발생하며, Magisk 또는 일부 저품질 <b>Magisk</b> 모듈 때문일 수 있습니다.<br/>Riru 및 LSPosed 이외의 Magisk 모듈을 비활성화하거나 전체 로그를 개발자에게 제출하십시오.]]></string>
+    <string name="system_prop_incorrect_summary">잘못된 System prop</string>
     <string name="lsposed_not_active">LSPosed가 현재 설치되어 있지 않거나 활성화되어 있지 않습니다.</string>
     <string name="info_api_version">API 버전</string>
     <string name="info_framework_version">Framework 버전</string>
@@ -46,6 +51,8 @@
     <string name="info_device">장치</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">저장</string>
+    <string name="nav_item_logs_lsp">LSPosed 로그</string>
+    <string name="nav_item_logs_module">모듈 로그</string>
     <string name="menuClearLog">로그 지우기</string>
     <string name="logs_cleared">로그를 성공적으로 지웠습니다.</string>
     <string name="scroll_top">맨 위로 스크롤</string>
@@ -89,6 +96,7 @@
     <string name="sort_by_package_name">패키지 이름별로 정렬</string>
     <string name="sort_by_install_time">설치 시간별로 정렬</string>
     <string name="sort_by_update_time">업데이트 시간별로 정렬</string>
+    <string name="sort_reverse">역순</string>
     <string name="menu_show_system_apps">시스템 앱</string>
     <string name="menu_sort">정렬…</string>
     <string name="enable_module">모듈 활성화</string>
@@ -101,6 +109,7 @@
     <string name="no_scope_selected_has_recommended">앱을 선택하지 않았습니다. 권장 앱을 선택하시겠습니까?</string>
     <string name="use_recommended_message">권장 앱을 선택하시겠습니까?</string>
     <string name="requested_by_module">권장된</string>
+    <string name="update_available">업데이트 가능: %1$s</string>
     <string name="module_disabled_no_selection">앱을 선택하지 않았기 때문에 %s 모듈이 비활성화되었습니다.</string>
     <string name="menu_backup_and_restore">백업…</string>
     <string name="menu_backup">백업</string>
@@ -111,6 +120,7 @@
     <string name="reboot_required">이 변경 내용을 적용하려면 재부팅해야 합니다.</string>
     <string name="reboot">재부팅</string>
     <!-- ModulesActivity and AppListActivity -->
+    <string name="modules_other_app">다른 앱으로 보기</string>
     <string name="module_app_info">앱 정보</string>
     <string name="list_empty">¯\\\\_(ツ)_\/¯\n아무것도 없음</string>
     <!-- SettingsActivity -->
@@ -123,14 +133,18 @@
     <string name="settings_backup_and_restore">백업 및 복원</string>
     <string name="settings_backup_and_restore_summery">모듈 목록 및 범위 목록을 백업 또는 복원합니다.</string>
     <string name="settings_backup">백업</string>
+    <string name="settings_backup_failed2">백업 실패:\n%s</string>
     <string name="settings_restore">복원</string>
+    <string name="settings_restore_failed2">복원 실패:\n%s</string>
     <string name="group_network">네트워크</string>
+    <string name="dns_over_http">DNS over HTTPS</string>
     <string name="dns_over_http_summary">일부 국가의 DNS 포이즈닝 문제를 해결합니다</string>
     <string name="theme_color">테마 색</string>
     <string name="theme_color_summary">앱에서 가장 자주 나타나는 색</string>
     <string name="theme_color_system_accent">System 강조 색</string>
     <string name="settings_show_hidden_icon_apps_enabled">앱에서 시작 프로그램 아이콘 표시</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">Android 10 이후 앱(특히 Xposed 모듈)은 시작 프로그램 아이콘을 숨길 수 없습니다. 이 기능을 비활성화하려면 토글을 끄십시오.</string>
+    <string name="settings_language">언어</string>
     <!-- Module Repo -->
     <string name="module_information">정보</string>
     <string name="module_information_homepage">홈페이지</string>
@@ -143,4 +157,6 @@
     <!-- CrashReportActivity -->
     <string name="app_destroyed">이 응용 프로그램이 삭제되었습니다. 공식 소스에서 다운로드했는지 확인하십시오.</string>
     <string name="outdated_manager">LSPosed Manager 및 LSPosed Core 버전이 일치하지 않습니다. 해당 버전을 다시 설치하십시오.</string>
+    <string name="send_crash_info">충돌 정보 전송</string>
+    <string name="crash_info_copied">충돌 정보가 클립보드에 복사되었습니다.</string>
 </resources>

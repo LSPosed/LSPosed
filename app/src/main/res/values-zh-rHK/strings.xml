@@ -32,6 +32,7 @@
     <string name="module_repo">倉庫</string>
     <string name="module_repo_summary">模組倉庫（Beta）</string>
     <string name="about_view_source_code"><![CDATA[在 %1$s 查看源碼<br/>加入我們的 %2$s 頻道]]></string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">null</string>
     <string name="install">安裝</string>
     <string name="install_summary">點按安裝 LSPosed</string>
     <string name="not_installed">未安裝</string>
