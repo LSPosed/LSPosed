@@ -11,12 +11,7 @@
 using namespace std::string_view_literals;
 
 constexpr size_t kMaxLogSize = 4 * 1024 * 1024;
-
-#ifndef NDEBUG
-    constexpr size_t kLogBufferSize = 1 * 1024 * 1024;
-#else
-    constexpr size_t kLogBufferSize = 256 * 1024;
-#endif
+constexpr size_t kLogBufferSize = 256 * 1024;
 
 constexpr std::array<char, ANDROID_LOG_SILENT + 1> kLogChar = {
         /*ANDROID_LOG_UNKNOWN*/'?',
@@ -49,6 +44,10 @@ public:
 
 private:
     inline void RefreshFd(bool is_verbose);
+
+    inline void Log(std::string_view str);
+
+    void OnCrash();
 
     void ProcessBuffer(struct log_msg *buf);
 
@@ -115,6 +114,30 @@ void Logcat::RefreshFd(bool is_verbose) {
     }
 }
 
+inline void Logcat::Log(std::string_view str) {
+    if (verbose_) fprintf(verbose_file_.get(), "%.*s", static_cast<int>(str.size()), str.data());
+    fprintf(modules_file_.get(), "%.*s", static_cast<int>(str.size()), str.data());
+}
+
+void Logcat::OnCrash() {
+    constexpr size_t max_restart_logd_wait = 1U << 10;
+    static size_t kLogdCrashCount = 0;
+    static size_t kLogdRestartWait = 1 << 3;
+    if (++kLogdCrashCount >= kLogdRestartWait) {
+        Log("\nLogd crashed too many times, trying manually start...\n");
+        __system_property_set("ctl.restart", "logd");
+        if (kLogdRestartWait < max_restart_logd_wait) {
+            kLogdRestartWait <<= 1;
+        } else {
+            kLogdCrashCount = 0;
+        }
+    } else {
+        Log("\nLogd maybe crashed, retrying in 1s...\n");
+    }
+
+    sleep(1);
+}
+
 void Logcat::ProcessBuffer(struct log_msg *buf) {
     AndroidLogEntry entry;
     if (android_log_processLogBuffer(&buf->entry, &entry) < 0) return;
@@ -150,12 +173,9 @@ void Logcat::ProcessBuffer(struct log_msg *buf) {
 
 void Logcat::Run() {
     constexpr size_t tail_after_crash = 10U;
-    constexpr size_t max_restart_logd_wait = 1U << 10;
     size_t tail = 0;
     RefreshFd(true);
     RefreshFd(false);
-    size_t logd_crash_count = 0;
-    size_t logd_restart_wait = 1 << 3;
     while (true) {
         std::unique_ptr<logger_list, decltype(&android_logger_list_free)> logger_list{
                 android_logger_list_alloc(0, tail, 0), &android_logger_list_free};
@@ -164,7 +184,10 @@ void Logcat::Run() {
         for (log_id id:{LOG_ID_MAIN, LOG_ID_CRASH}) {
             auto *logger = android_logger_open(logger_list.get(), id);
             if (logger == nullptr) continue;
-            android_logger_set_log_size(logger, kLogBufferSize);
+            if (auto size = android_logger_get_log_size(logger);
+                    size >= 0 && static_cast<size_t>(size) < kLogBufferSize) {
+                android_logger_set_log_size(logger, kLogBufferSize);
+            }
         }
 
         struct log_msg msg{};
@@ -180,23 +203,8 @@ void Logcat::Run() {
             if (verbose_print_count_ >= kMaxLogSize) [[unlikely]] RefreshFd(true);
             if (modules_print_count_ >= kMaxLogSize) [[unlikely]] RefreshFd(false);
         }
-        logd_crash_count++;
-        if (logd_crash_count >= logd_restart_wait) {
-            fprintf(verbose_file_.get(),
-                    "\nLogd crashed too many times, trying manually start...\n");
-            fprintf(modules_file_.get(),
-                    "\nLogd crashed too many times, trying manually start...\n");
-            __system_property_set("ctl.restart", "logd");
-            if (logd_restart_wait < max_restart_logd_wait) {
-                logd_restart_wait <<= 1;
-            } else {
-                logd_crash_count = 0;
-            }
-        }
 
-        fprintf(verbose_file_.get(), "\nLogd maybe crashed, retrying in 1s...\n");
-        fprintf(modules_file_.get(), "\nLogd maybe crashed, retrying in 1s...\n");
-        sleep(1);
+        OnCrash();
     }
 }
 
