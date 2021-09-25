@@ -189,6 +189,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                 }
                 if (intent.getCategories() != null) intent.getCategories().clear();
                 intent.addCategory("org.lsposed.manager.LAUNCH_MANAGER");
+                intent.setPackage(BuildConfig.MANAGER_INJECTED_PKG_NAME);
                 managerIntent = (Intent) intent.clone();
             }
         } catch (Throwable e) {
@@ -252,16 +253,19 @@ public class LSPManagerService extends ILSPManagerService.Stub {
         try {
             var smCtor = ShortcutManager.class.getDeclaredConstructor(Context.class);
             smCtor.setAccessible(true);
-            var context = new FakeContext();
+            var context = new FakeContext("com.android.settings");
             var sm = smCtor.newInstance(context);
             if (!sm.isRequestPinShortcutSupported()) {
                 Log.d(TAG, "pinned shortcut not supported, skipping");
                 return;
             }
+            var intent = getManagerIntent();
             var shortcut = new ShortcutInfo.Builder(context, SHORTCUT_ID)
                     .setShortLabel("LSPosed")
                     .setLongLabel("LSPosed")
-                    .setIntent(getManagerIntent())
+                    .setIntent(intent)
+                    .setActivity(new ComponentName("com.android.settings", "android.__dummy__"))
+                    .setCategories(intent.getCategories())
                     .setIcon(getManagerIcon())
                     .build();
 

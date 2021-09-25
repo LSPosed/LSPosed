@@ -19,14 +19,19 @@ import hidden.HiddenApiBridge;
 public class FakeContext extends ContextWrapper {
     static ApplicationInfo systemApplicationInfo = null;
     static Resources.Theme theme = null;
-
+    private String packageName = "android";
     public FakeContext() {
         super(null);
     }
 
+    public FakeContext(String packageName) {
+        super(null);
+        this.packageName = packageName;
+    }
+
     @Override
     public String getPackageName() {
-        return "android";
+        return packageName;
     }
 
     @Override
