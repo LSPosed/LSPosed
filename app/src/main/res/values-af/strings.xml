@@ -20,6 +20,12 @@
   -->
 <resources>
     <!-- MainActivity -->
+    <string name="info">Info</string>
+    <string name="Modules">Modules</string>
+    <plurals name="modules_enabled_count">
+        <item quantity="one">%d module enabled</item>
+        <item quantity="other">%d modules enabled</item>
+    </plurals>
     <!-- LogsActivity -->
     <!-- Notification -->
     <!-- ModulesActivity -->
