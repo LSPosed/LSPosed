@@ -31,6 +31,7 @@ import java.lang.reflect.Method;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XC_MethodReplacement;
@@ -89,7 +90,6 @@ public class ParasiticManagerHooker {
                 "android.app.ActivityThread$AppBindData",
                 managerApkHooker);
 
-
         var unhooks = new XC_MethodHook.Unhook[]{null};
         unhooks[0] = XposedHelpers.findAndHookMethod(
                 LoadedApk.class, "getClassLoader", new XC_MethodHook() {
@@ -101,8 +101,6 @@ public class ParasiticManagerHooker {
                         }
                     }
                 });
-
-        if (Process.myUid() != BuildConfig.MANAGER_INJECTED_UID) return;
 
         var activityHooker = new XC_MethodHook() {
             @Override
@@ -131,6 +129,8 @@ public class ParasiticManagerHooker {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O_MR1) {
             XposedBridge.hookAllMethods(XposedHelpers.findClass("android.app.ActivityThread$ApplicationThread", ActivityThread.class.getClassLoader()), "scheduleLaunchActivity", activityHooker);
         }
+
+        if (Process.myUid() != BuildConfig.MANAGER_INJECTED_UID) return;
 
         XposedBridge.hookAllMethods(ActivityThread.class, "handleReceiver", new XC_MethodReplacement() {
             @Override
