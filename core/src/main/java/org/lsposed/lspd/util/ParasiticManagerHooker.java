@@ -2,7 +2,9 @@ package org.lsposed.lspd.util;
 
 import static org.lsposed.lspd.config.ApplicationServiceClient.serviceClient;
 
+import android.app.ActivityManager;
 import android.app.ActivityThread;
+import android.app.AndroidAppHelper;
 import android.app.LoadedApk;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -119,6 +121,9 @@ public class ParasiticManagerHooker {
                         checkIntent(managerService, intent);
                         intent.setComponent(new ComponentName(BuildConfig.MANAGER_INJECTED_PKG_NAME, "org.lsposed.manager.ui.activity.MainActivity"));
                     }
+                }
+                for (var task : AndroidAppHelper.currentApplication().getSystemService(ActivityManager.class).getAppTasks()) {
+                    task.setExcludeFromRecents(false);
                 }
             }
         };
