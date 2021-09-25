@@ -75,7 +75,7 @@ public class ConfigFileManager {
     }
 
     public static Resources getResources() {
-        loadLocale();
+        loadRes();
         return res;
     }
 
@@ -116,7 +116,7 @@ public class ConfigFileManager {
         return productLanguage + "-" + productRegion;
     }
 
-    private static void loadLocale() {
+    private static void loadRes() {
         if (res != null) return;
         try {
             am = AssetManager.class.newInstance();
@@ -132,14 +132,16 @@ public class ConfigFileManager {
         }
     }
 
-    static void reloadLocale() {
-        loadLocale();
-        Locale locale = Locale.forLanguageTag(readLocale());
-        Locale.setDefault(locale);
-        var conf = res.getConfiguration();
-        conf.setLocale(Locale.forLanguageTag(readLocale()));
-        //noinspection deprecation
-        res.updateConfiguration(conf, res.getDisplayMetrics());
+    static void reloadConfiguration() {
+        loadRes();
+        try {
+            var conf = ActivityManagerService.getConfiguration();
+            if (conf != null)
+                //noinspection deprecation
+                res.updateConfiguration(conf, res.getDisplayMetrics());
+        } catch (Throwable e) {
+            Log.e(TAG, "reload configuration", e);
+        }
     }
 
     static ParcelFileDescriptor getManagerApk() throws IOException {
