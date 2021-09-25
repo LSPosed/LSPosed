@@ -83,8 +83,6 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     public static final String CHANNEL_NAME = "LSPosed Manager";
     public static final int CHANNEL_IMP = NotificationManager.IMPORTANCE_HIGH;
 
-    private static Icon managerIcon = null;
-    private static Icon notificationIcon = null;
     private static Intent managerIntent = null;
 
     public class ManagerGuard implements IBinder.DeathRecipient {
@@ -153,21 +151,15 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     }
 
     private static Icon getManagerIcon() {
-        if (managerIcon == null) {
-            try {
-                managerIcon = getIcon(org.lsposed.manager.R.mipmap.ic_launcher);
-            } catch (Throwable e) {
-                managerIcon = getIcon(org.lsposed.manager.R.drawable.ic_launcher);
-            }
+        try {
+            return getIcon(org.lsposed.manager.R.mipmap.ic_launcher);
+        } catch (Throwable e) {
+            return getIcon(org.lsposed.manager.R.drawable.ic_launcher);
         }
-        return managerIcon;
     }
 
     private static Icon getNotificationIcon() {
-        if (notificationIcon == null) {
-            notificationIcon = getIcon(org.lsposed.manager.R.drawable.ic_extension);
-        }
-        return notificationIcon;
+        return getIcon(org.lsposed.manager.R.drawable.ic_extension);
     }
 
     private static Intent getManagerIntent() {
@@ -251,6 +243,10 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     public static void createOrUpdateShortcut() {
         try {
+            while (!UserService.isUserUnlocked(0)) {
+                Log.d(TAG, "user is not yet unlocked, waiting for 1s...");
+                Thread.sleep(1000);
+            }
             var smCtor = ShortcutManager.class.getDeclaredConstructor(Context.class);
             smCtor.setAccessible(true);
             var context = new FakeContext("com.android.settings");

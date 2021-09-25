@@ -32,6 +32,7 @@ import android.net.Uri;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 import java.util.Arrays;
@@ -159,13 +160,18 @@ public class LSPosedService extends ILSPosedService.Stub {
 
     synchronized public void dispatchUserUnlocked(Intent intent) {
         try {
-            while (!UserService.isUserUnlocked(0)) {
-                Log.d(TAG, "user is not yet unlocked, waiting for 1s...");
-                Thread.sleep(1000);
-            }
             LSPManagerService.createOrUpdateShortcut();
         } catch (Throwable e) {
             Log.e(TAG, "dispatch user unlocked", e);
+        }
+    }
+
+    synchronized public void dispatchConfigurationChanged(Intent intent) {
+        try {
+            ConfigFileManager.reloadConfiguration();
+            LSPManagerService.createOrUpdateShortcut();
+        } catch (Throwable e) {
+            Log.e(TAG, "dispatch configuration changed", e);
         }
     }
 
@@ -222,12 +228,35 @@ public class LSPosedService extends ILSPosedService.Stub {
         Log.d(TAG, "registered unlock receiver");
     }
 
+    private void registerConfigurationReceiver() {
+        try {
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(Intent.ACTION_CONFIGURATION_CHANGED);
+
+            ActivityManagerService.registerReceiver("android", null, new IIntentReceiver.Stub() {
+                @Override
+                public void performReceive(Intent intent, int resultCode, String data, Bundle extras, boolean ordered, boolean sticky, int sendingUser) {
+                    new Thread(() -> dispatchConfigurationChanged(intent)).start();
+                    try {
+                        ActivityManagerService.finishReceiver(this, resultCode, data, extras, false, intent.getFlags());
+                    } catch (Throwable e) {
+                        Log.e(TAG, "finish receiver", e);
+                    }
+                }
+            }, intentFilter, null, 0, 0);
+        } catch (Throwable e) {
+            Log.e(TAG, "register configuration receiver", e);
+        }
+        Log.d(TAG, "registered configuration receiver");
+    }
+
     @Override
     public void dispatchSystemServerContext(IBinder activityThread, IBinder activityToken) {
         Log.d(TAG, "received system context");
         ActivityManagerService.onSystemServerContext(IApplicationThread.Stub.asInterface(activityThread), activityToken);
         registerPackageReceiver();
         registerUnlockReceiver();
+        registerConfigurationReceiver();
     }
 
     @Override
