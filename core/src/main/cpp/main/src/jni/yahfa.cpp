@@ -27,9 +27,26 @@
 #include "art/runtime/thread.h"
 #include "art/runtime/gc/scoped_gc_critical_section.h"
 #include <dex_builder.h>
+#include <shared_mutex>
+#include <unordered_set>
 
 
 namespace lspd {
+    namespace {
+        std::unordered_set<const void *> hooked_methods_;
+        std::shared_mutex hooked_methods_lock_;
+    }
+
+    bool isHooked(void *art_method) {
+        std::shared_lock lk(hooked_methods_lock_);
+        return hooked_methods_.contains(art_method);
+    }
+
+    void recordHooked(void *art_method) {
+        std::unique_lock lk(hooked_methods_lock_);
+        hooked_methods_.insert(art_method);
+    }
+
     using namespace startop::dex;
     LSP_DEF_NATIVE_METHOD(void, Yahfa, init, jint sdkVersion) {
         yahfa::init(env, clazz, sdkVersion);

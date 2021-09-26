@@ -28,6 +28,7 @@
 #include "jni_env_ext.h"
 #include "context.h"
 #include "jni/pending_hooks.h"
+#include "jni/yahfa.h"
 #include "utils.h"
 #include "HookMain.h"
 
