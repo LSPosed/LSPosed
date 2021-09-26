@@ -70,8 +70,8 @@ android {
 
     lint {
         disable += "MissingTranslation"
-        abortOnError = true
-        checkReleaseBuilds = false
+        isAbortOnError = true
+        isCheckReleaseBuilds = false
     }
 
     packagingOptions {
