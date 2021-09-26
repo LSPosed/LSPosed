@@ -65,6 +65,8 @@ private:
     size_t verbose_file_part_ = 0;
     size_t verbose_print_count_ = 0;
 
+    pid_t my_pid_ = getpid();
+
     bool verbose_ = true;
 };
 
@@ -151,12 +153,12 @@ void Logcat::ProcessBuffer(struct log_msg *buf) {
         shortcut = true;
     }
     if (verbose_ && (shortcut || buf->id() == log_id::LOG_ID_CRASH ||
-                     tag == "Magisk"sv ||
+                     entry.pid == my_pid_ || tag == "Magisk"sv ||
                      tag.starts_with("Riru"sv) ||
                      tag.starts_with("LSPosed"sv))) [[unlikely]] {
         verbose_print_count_ += PrintLogLine(entry, verbose_file_.get());
     }
-    if (entry.pid == getpid() && tag == "LSPosedLogcat"sv) [[unlikely]] {
+    if (entry.pid == my_pid_ && tag == "LSPosedLogcat"sv) [[unlikely]] {
         std::string_view msg(entry.message, entry.messageLen);
         if (msg == "!!start_verbose!!"sv) {
             verbose_ = true;
