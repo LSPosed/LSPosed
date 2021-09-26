@@ -104,7 +104,7 @@ public class ServiceManager {
         waitSystemService(Context.USER_SERVICE);
         waitSystemService(Context.APP_OPS_SERVICE);
 
-        ConfigFileManager.reloadLocale();
+        ConfigFileManager.reloadConfiguration();
 
         BridgeService.send(mainService, new BridgeService.Listener() {
             @Override

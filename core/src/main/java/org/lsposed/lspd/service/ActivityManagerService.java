@@ -30,6 +30,7 @@ import android.content.IIntentReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.UserInfo;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -162,6 +163,12 @@ public class ActivityManagerService {
         IActivityManager am = getActivityManager();
         if (am == null) return null;
         return am.getCurrentUser();
+    }
+
+    public static Configuration getConfiguration() throws RemoteException {
+        IActivityManager am = getActivityManager();
+        if (am == null) return null;
+        return am.getConfiguration();
     }
 
     public static IContentProvider getContentProvider(String auth, int userId) throws RemoteException {
