@@ -116,8 +116,8 @@ android {
     }
 
     lint {
-        abortOnError = true
-        checkReleaseBuilds = false
+        isAbortOnError = true
+        isCheckReleaseBuilds = false
     }
 
     buildTypes {
