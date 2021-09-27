@@ -251,6 +251,11 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                     null, null, 0, null, null,
                     null, -1, null, true, false,
                     0);
+            intent.setPackage(BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME);
+            ActivityManagerService.broadcastIntentWithFeature(null, intent,
+                    null, null, 0, null, null,
+                    null, -1, null, true, false,
+                    0);
         } catch (Throwable t) {
             Log.e(TAG, "Broadcast to manager failed: ", t);
         }
