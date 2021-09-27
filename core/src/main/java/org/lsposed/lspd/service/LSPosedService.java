@@ -32,7 +32,6 @@ import android.net.Uri;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.util.DisplayMetrics;
 import android.util.Log;
 
 import java.util.Arrays;
@@ -144,7 +143,10 @@ public class LSPosedService extends ILSPosedService.Stub {
             boolean enabled = Arrays.asList(enabledModules).contains(moduleName);
             boolean removed = intent.getAction().equals(Intent.ACTION_PACKAGE_FULLY_REMOVED) ||
                     intent.getAction().equals(Intent.ACTION_UID_REMOVED);
-            LSPManagerService.showNotification(moduleName, userId, enabled || removed, systemModule);
+            if (!removed) {
+                LSPManagerService.showNotification(moduleName, userId, enabled, systemModule);
+            }
+            LSPManagerService.broadcastIntent(moduleName, userId);
         }
 
         if (moduleName != null && ConfigManager.getInstance().isManager(moduleName) && userId == 0) {
