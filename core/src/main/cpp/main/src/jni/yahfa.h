@@ -21,12 +21,14 @@
 #pragma once
 
 #include "jni.h"
+#include <utility>
+#include <vector>
 
 namespace lspd {
 
     bool isHooked(void* art_method);
 
-    void recordHooked(void* art_method);
+    std::vector<std::pair<void*, void*>> getJitMovements();
 
     void RegisterYahfa(JNIEnv *);
 

@@ -51,10 +51,8 @@ public class HookMain {
             // backup is just a placeholder and the constraint could be less strict
             checkCompatibleMethods(target, backup, "Backup");
         }
-        if(!Yahfa.backupAndHookNative(target, hook, backup)){
+        if (!Yahfa.backupAndHookNative(target, hook, backup)) {
             throw new RuntimeException("Failed to hook " + target + " with " + hook);
-        } else {
-            Yahfa.recordHooked(target);
         }
     }
 

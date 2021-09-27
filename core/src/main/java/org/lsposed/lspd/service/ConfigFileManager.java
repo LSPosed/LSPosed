@@ -58,8 +58,6 @@ public class ConfigFileManager {
             DateTimeFormatter.ISO_LOCAL_DATE_TIME.withZone(Utils.getZoneId());
     @SuppressWarnings("FieldCanBeLocal")
     private static FileLocker locker = null;
-    @SuppressWarnings("FieldCanBeLocal")
-    private static AssetManager am = null;
     private static Resources res = null;
     private static ParcelFileDescriptor fd = null;
 
@@ -119,7 +117,7 @@ public class ConfigFileManager {
     private static void loadRes() {
         if (res != null) return;
         try {
-            am = AssetManager.class.newInstance();
+            var am = AssetManager.class.newInstance();
             //noinspection JavaReflectionMemberAccess DiscouragedPrivateApi
             Method addAssetPath = AssetManager.class.getDeclaredMethod("addAssetPath", String.class);
             addAssetPath.setAccessible(true);

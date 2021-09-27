@@ -32,8 +32,6 @@ public class Yahfa {
 
     public static native void init(int sdkVersion);
 
-    public static native void recordHooked(Executable member);
-
     public static native boolean isHooked(Executable member);
 
     public static native Class<?> buildHooker(ClassLoader appClassLoader, char returnType, char[] params, String methodName);
