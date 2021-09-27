@@ -45,7 +45,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
-import android.os.ResultReceiver;
 import android.os.SELinux;
 import android.os.SystemProperties;
 import android.util.Log;
@@ -60,7 +59,6 @@ import org.lsposed.lspd.util.FakeContext;
 import org.lsposed.lspd.util.Utils;
 
 import java.io.File;
-import java.io.FileDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -238,6 +236,28 @@ public class LSPManagerService extends ILSPManagerService.Stub {
             im.enqueueNotificationWithTag("android", "android", "114514", NOTIFICATION_ID, notification, 0);
         } catch (Throwable e) {
             Log.e(TAG, "post notification", e);
+        }
+    }
+
+    public static void broadcastIntent(String modulePackageName, int moduleUserId) {
+        Intent intent = new Intent(Intent.ACTION_PACKAGE_CHANGED);
+        intent.addFlags(0x01000000); //Intent.FLAG_RECEIVER_INCLUDE_BACKGROUND
+        intent.addFlags(0x00400000); //Intent.FLAG_RECEIVER_FROM_SHELL
+        intent.putExtra("android.intent.extra.PACKAGES", modulePackageName);
+        intent.putExtra(Intent.EXTRA_USER, moduleUserId);
+        intent.setPackage(BuildConfig.MANAGER_INJECTED_PKG_NAME);
+        try {
+            ActivityManagerService.broadcastIntentWithFeature(null, intent,
+                    null, null, 0, null, null,
+                    null, -1, null, true, false,
+                    0);
+            intent.setPackage(BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME);
+            ActivityManagerService.broadcastIntentWithFeature(null, intent,
+                    null, null, 0, null, null,
+                    null, -1, null, true, false,
+                    0);
+        } catch (Throwable t) {
+            Log.e(TAG, "Broadcast to manager failed: ", t);
         }
     }
 
