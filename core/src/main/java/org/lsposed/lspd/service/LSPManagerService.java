@@ -263,6 +263,10 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     public static void createOrUpdateShortcut() {
         try {
+            if (ConfigManager.getInstance().isManagerInstalled()) {
+                Log.d(TAG, "Manager has installed, skip adding shortcut");
+                return;
+            }
             while (!UserService.isUserUnlocked(0)) {
                 Log.d(TAG, "user is not yet unlocked, waiting for 1s...");
                 Thread.sleep(1000);
