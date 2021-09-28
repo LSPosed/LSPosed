@@ -73,7 +73,7 @@ namespace lspd {
     }
 
     LSP_DEF_NATIVE_METHOD(jboolean, Yahfa, backupAndHookNative, jobject target,
-                          jobject hook, jobject backup) {
+                          jobject hook, jobject backup, jboolean is_proxy) {
         art::gc::ScopedGCCriticalSection section(art::Thread::Current().Get(),
                                                  art::gc::kGcCauseDebugger,
                                                  art::gc::kCollectorTypeDebugger);
@@ -82,7 +82,7 @@ namespace lspd {
             auto *target_method = yahfa::getArtMethod(env, target);
             auto *backup_method = yahfa::getArtMethod(env, backup);
             recordHooked(target_method);
-            recordJitMovement(target_method, backup_method);
+            if (!is_proxy) [[likely]] recordJitMovement(target_method, backup_method);
             return JNI_TRUE;
         } else {
             return JNI_FALSE;
@@ -207,7 +207,7 @@ namespace lspd {
             LSP_NATIVE_METHOD(Yahfa, findMethodNative,
                               "(Ljava/lang/Class;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/reflect/Executable;"),
             LSP_NATIVE_METHOD(Yahfa, backupAndHookNative,
-                              "(Ljava/lang/reflect/Executable;Ljava/lang/reflect/Method;Ljava/lang/reflect/Method;)Z"),
+                              "(Ljava/lang/reflect/Executable;Ljava/lang/reflect/Method;Ljava/lang/reflect/Method;Z)Z"),
             LSP_NATIVE_METHOD(Yahfa, isHooked, "(Ljava/lang/reflect/Executable;)Z"),
             LSP_NATIVE_METHOD(Yahfa, buildHooker,
                               "(Ljava/lang/ClassLoader;C[CLjava/lang/String;)Ljava/lang/Class;"),
