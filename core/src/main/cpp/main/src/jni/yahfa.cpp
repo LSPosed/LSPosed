@@ -80,7 +80,7 @@ namespace lspd {
         art::thread_list::ScopedSuspendAll suspend("Yahfa Hook", false);
         if (yahfa::backupAndHookNative(env, clazz, target, hook, backup)) {
             auto *target_method = yahfa::getArtMethod(env, target);
-            auto *backup_method = yahfa::getArtMethod(env, target);
+            auto *backup_method = yahfa::getArtMethod(env, backup);
             recordHooked(target_method);
             recordJitMovement(target_method, backup_method);
             return JNI_TRUE;
