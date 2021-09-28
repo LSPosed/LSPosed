@@ -85,7 +85,6 @@ public class ConfigManager {
     private boolean verboseLog = true;
     private String miscPath = null;
 
-    private final String manager = BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME;
     private int managerUid = -1;
 
     private final Handler cacheHandler;
@@ -234,11 +233,11 @@ public class ConfigManager {
     public synchronized void updateManager() {
         if (!PackageService.isAlive()) return;
         try {
-            PackageInfo info = PackageService.getPackageInfo(manager, 0, 0);
+            PackageInfo info = PackageService.getPackageInfo(BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME, 0, 0);
             if (info != null) {
                 managerUid = info.applicationInfo.uid;
             } else {
-                Log.w(TAG, "manager is not installed");
+                Log.i(TAG, "manager is not installed");
             }
         } catch (RemoteException ignored) {
         }
@@ -820,12 +819,12 @@ public class ConfigManager {
         return true;
     }
 
-    public boolean isManager(String packageName) {
-        return packageName.equals(manager);
-    }
-
     public boolean isManager(int uid) {
         return uid == managerUid;
+    }
+
+    public boolean isManagerInstalled() {
+        return managerUid != -1;
     }
 
     public String getPrefsPath(String fileName, int uid) {

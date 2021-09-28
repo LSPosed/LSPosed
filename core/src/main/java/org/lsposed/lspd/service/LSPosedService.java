@@ -34,6 +34,8 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
+import org.lsposed.lspd.BuildConfig;
+
 import java.util.Arrays;
 
 public class LSPosedService extends ILSPosedService.Stub {
@@ -149,7 +151,7 @@ public class LSPosedService extends ILSPosedService.Stub {
             LSPManagerService.broadcastIntent(moduleName, userId);
         }
 
-        if (moduleName != null && ConfigManager.getInstance().isManager(moduleName) && userId == 0) {
+        if (BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME.equals(moduleName) && userId == 0) {
             Log.d(TAG, "Manager updated");
             try {
                 ConfigManager.getInstance().updateManager();
