@@ -159,6 +159,7 @@ public class ParasiticManagerHooker {
                     } else if (arg instanceof ProviderInfo) info = (ProviderInfo) arg;
                 }
                 if (ctx != null && info != null) {
+                    if (!info.applicationInfo.packageName.equals(BuildConfig.MANAGER_INJECTED_PKG_NAME)) return;
                     if (originalContext == null) {
                         info.applicationInfo.packageName = BuildConfig.MANAGER_INJECTED_PKG_NAME + ".origin";
                         var originalPkgInfo = ActivityThread.currentActivityThread().getPackageInfoNoCheck(info.applicationInfo, HiddenApiBridge.Resources_getCompatibilityInfo(ctx.getResources()));
