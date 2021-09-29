@@ -231,7 +231,7 @@ androidComponents.onVariants { v ->
             filter<ReplaceTokens>("tokens" to tokens)
             filter<FixCrLfFilter>("eol" to FixCrLfFilter.CrLf.newInstance("lf"))
         }
-        from("${project(":app").buildDir}/${if (rootProject.extra.properties["android.injected.invoked.from.ide"] == "true") "intermediates" else "outputs"}/apk/${variantLowered}") {
+        from("${project(":app").buildDir}/outputs/apk/${variantLowered}") {
             include("*.apk")
             rename(".*\\.apk", "manager.apk")
         }

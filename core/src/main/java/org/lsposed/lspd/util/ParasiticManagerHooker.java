@@ -117,7 +117,7 @@ public class ParasiticManagerHooker {
                     if (param.args[i] instanceof Intent) {
                         var intent = (Intent) param.args[i];
                         checkIntent(managerService, intent);
-                        intent.setComponent(new ComponentName(BuildConfig.MANAGER_INJECTED_PKG_NAME, "org.lsposed.manager.ui.activity.MainActivity"));
+                        intent.setComponent(new ComponentName(intent.getComponent().getPackageName(), "org.lsposed.manager.ui.activity.MainActivity"));
                     }
                 }
             }

@@ -237,6 +237,7 @@ public class ConfigManager {
             if (info != null) {
                 managerUid = info.applicationInfo.uid;
             } else {
+                managerUid = -1;
                 Log.i(TAG, "manager is not installed");
             }
         } catch (RemoteException ignored) {
