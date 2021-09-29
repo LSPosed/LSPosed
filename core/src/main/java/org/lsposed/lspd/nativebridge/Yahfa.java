@@ -25,14 +25,12 @@ import java.lang.reflect.Method;
 
 public class Yahfa {
 
-    public static native boolean backupAndHookNative(Executable target, Method hook, Method backup);
+    public static native boolean backupAndHookNative(Executable target, Method hook, Method backup, boolean isProxy);
 
     // JNI.ToReflectedMethod() could return either Method or Constructor
     public static native Executable findMethodNative(Class<?> targetClass, String methodName, String methodSig);
 
     public static native void init(int sdkVersion);
-
-    public static native void recordHooked(Executable member);
 
     public static native boolean isHooked(Executable member);
 

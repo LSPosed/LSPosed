@@ -27,6 +27,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -51,10 +52,8 @@ public class HookMain {
             // backup is just a placeholder and the constraint could be less strict
             checkCompatibleMethods(target, backup, "Backup");
         }
-        if(!Yahfa.backupAndHookNative(target, hook, backup)){
+        if (!Yahfa.backupAndHookNative(target, hook, backup, Proxy.isProxyClass(target.getDeclaringClass()))) {
             throw new RuntimeException("Failed to hook " + target + " with " + hook);
-        } else {
-            Yahfa.recordHooked(target);
         }
     }
 
