@@ -70,6 +70,7 @@ extract "$ZIPFILE" 'service.sh'         "$MODPATH"
 extract "$ZIPFILE" 'uninstall.sh'       "$MODPATH"
 extract "$ZIPFILE" 'framework/lspd.dex' "$MODPATH"
 extract "$ZIPFILE" 'lspd'               "$MODPATH"
+rm -f /data/adb/lspd/manager.apk
 extract "$ZIPFILE" 'manager.apk'        '/data/adb/lspd'
 
 mkdir "$MODPATH/riru"
