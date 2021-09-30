@@ -39,6 +39,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import io.github.xposed.xposedservice.utils.ParceledListSlice;
 
@@ -263,7 +264,7 @@ public class ConfigManager {
     }
 
     public static boolean isMagiskInstalled() {
-        return Arrays.stream(System.getenv("PATH").split(File.pathSeparator))
+        return Arrays.stream(Objects.requireNonNull(System.getenv("PATH")).split(File.pathSeparator))
                 .anyMatch(str -> new File(str, "magisk").exists());
     }
 

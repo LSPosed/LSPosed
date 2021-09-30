@@ -72,6 +72,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 import okhttp3.Headers;
@@ -180,13 +181,13 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
                                     .build());
                     try {
                         Response reply = call.execute();
-                        var contentTypes = reply.header("content-type", "image/*;charset=utf-8").split(";\\s*");
+                        var contentTypes = Objects.requireNonNull(reply.header("content-type", "image/*;charset=utf-8")).split(";\\s*");
                         var mimeType = contentTypes.length > 0 ? contentTypes[0] : "image/*";
                         var charset = contentTypes.length > 1 ? contentTypes[1].split("=\\s*")[1] : "utf-8";
                         return new WebResourceResponse(
                                 mimeType,
                                 charset,
-                                reply.body().byteStream()
+                                Objects.requireNonNull(reply.body()).byteStream()
                         );
                     } catch (Throwable e) {
                         return new WebResourceResponse("text/html", "utf-8", new ByteArrayInputStream(Log.getStackTraceString(e).getBytes(StandardCharsets.UTF_8)));

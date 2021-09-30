@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.jar.JarFile;
 
 import pxb.android.axml.AxmlReader;
@@ -43,7 +44,7 @@ public class MetaDataReader {
         try(JarFile zip = new JarFile(apk)) {
             InputStream is = zip.getInputStream(zip.getEntry("AndroidManifest.xml"));
             byte[] bytes =  getBytesFromInputStream(is);
-            AxmlReader reader = new AxmlReader(bytes);
+            AxmlReader reader = new AxmlReader(Objects.requireNonNull(bytes));
             reader.accept(new AxmlVisitor() {
                 @Override
                 public NodeVisitor child(String ns, String name) {

@@ -57,7 +57,7 @@ public class LinkifyTextView extends androidx.appcompat.widget.AppCompatTextView
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
-        // Let the parent or grandparent of TextView to handles click aciton.
+        // Let the parent or grandparent of TextView to handles click action.
         // Otherwise click effect like ripple will not work, and if touch area
         // do not contain a url, the TextView will still get MotionEvent.
         // onTouchEven must be called with MotionEvent.ACTION_DOWN for each touch
