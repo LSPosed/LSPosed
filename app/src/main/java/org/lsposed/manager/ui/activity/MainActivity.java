@@ -75,8 +75,8 @@ public class MainActivity extends BaseActivity {
             handleIntent(getIntent());
         }
 
-        if (!App.getPreferences().getBoolean("never_show_shortcut", false)) {
-            runOnUiThread(() -> new BlurBehindDialogBuilder(this)
+        if (!App.isParasitic() && !App.getPreferences().getBoolean("never_show_shortcut", false)) {
+            new BlurBehindDialogBuilder(this)
                     .setTitle(R.string.parasitic_recommend)
                     .setMessage(R.string.parasitic_recommend_summary)
                     .setNegativeButton(R.string.never_show, (dialog, which) -> App.getPreferences().edit().putBoolean("never_show_shortcut", true).apply())
@@ -88,7 +88,7 @@ public class MainActivity extends BaseActivity {
                         }
                     })
                     .setPositiveButton(android.R.string.ok, null)
-                    .show());
+                    .show();
         }
     }
 
