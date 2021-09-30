@@ -166,7 +166,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                 var intent = PackageService.getLaunchIntentForPackage(BuildConfig.MANAGER_INJECTED_PKG_NAME);
                 if (intent == null) {
                     var pkgInfo = PackageService.getPackageInfo(BuildConfig.MANAGER_INJECTED_PKG_NAME, PackageManager.GET_ACTIVITIES, 0);
-                    if (pkgInfo.activities != null && pkgInfo.activities.length > 0) {
+                    if (pkgInfo != null && pkgInfo.activities != null && pkgInfo.activities.length > 0) {
                         for (var activityInfo : pkgInfo.activities) {
                             if (activityInfo.processName.equals(activityInfo.packageName)) {
                                 intent = new Intent();
@@ -177,6 +177,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                         }
                     }
                 }
+                //noinspection ConstantConditions
                 if (intent.getCategories() != null) intent.getCategories().clear();
                 intent.addCategory("org.lsposed.manager.LAUNCH_MANAGER");
                 intent.setPackage(BuildConfig.MANAGER_INJECTED_PKG_NAME);
@@ -261,9 +262,9 @@ public class LSPManagerService extends ILSPManagerService.Stub {
         }
     }
 
-    public static void createOrUpdateShortcut() {
+    public static void createOrUpdateShortcut(boolean force) {
         try {
-            if (ConfigManager.getInstance().isManagerInstalled()) {
+            if (!force && ConfigManager.getInstance().isManagerInstalled()) {
                 Log.d(TAG, "Manager has installed, skip adding shortcut");
                 return;
             }
@@ -646,5 +647,10 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     public void restartFor(Intent intent) throws RemoteException {
         forceStopPackage(BuildConfig.MANAGER_INJECTED_PKG_NAME, 0);
         stopAndStartActivity(BuildConfig.MANAGER_INJECTED_PKG_NAME, intent, false);
+    }
+
+    @Override
+    public void createShortcut() {
+        createOrUpdateShortcut(true);
     }
 }

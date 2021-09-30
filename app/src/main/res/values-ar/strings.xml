@@ -180,7 +180,6 @@
     <string name="module_release_no_more">لا مزيد من الإصدار</string>
     <string name="repo_load_failed">فشل تحميل مستودع الوحدة: %s</string>
     <!-- CrashReportActivity -->
-    <string name="app_destroyed">قد يتم تدمير هذا التطبيق، يرجى تحميل أحدث إصدار من هذا التطبيق من المصدر الرسمي.</string>
     <string name="outdated_core">تطبيق LSPosed أحدث من الإطار. الرجاء تحديث إطار LSPosd.</string>
     <string name="outdated_manager">إطار LSPosed أحدث من التطبيق. الرجاء تحديث التطبيق من /data/adb/lspd/manager.apk يدويا.</string>
     <string name="manager_crashed">تعطل المدير</string>

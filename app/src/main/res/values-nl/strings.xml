@@ -176,7 +176,6 @@
     <string name="module_release_no_more">Geen release meer</string>
     <string name="repo_load_failed">Kan moduleopslagplaats niet laden: %1$s</string>
     <!-- CrashReportActivity -->
-    <string name="app_destroyed">Deze applicatie is vernietigd, zorg ervoor dat u deze downloadt vanaf de officiële bron.</string>
     <string name="outdated_core">LSPosed app is nieuwer dan framework. Update LSPosed framework.</string>
     <string name="outdated_manager">De versie van LSPosed Manager en LSPosed Core zijn niet consistent. Installeer de corresponderende versie opnieuw.</string>
     <string name="manager_crashed">Manager gecrasht</string>

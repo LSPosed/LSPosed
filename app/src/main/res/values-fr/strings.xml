@@ -176,7 +176,6 @@
     <string name="module_release_no_more">Pas d\’autres versions</string>
     <string name="repo_load_failed">Échec de chargement du dépôt des modules: %s</string>
     <!-- CrashReportActivity -->
-    <string name="app_destroyed">Cette application à été détruite, merci de vous assurer que vous l\’avez bien téléchargé depuis la source officielle.</string>
     <string name="outdated_core">L\'application LSPosed est plus réçente que le sous système. Merci de mettre à jour le sous système LSPosed.</string>
     <string name="outdated_manager">Version du Gestionnaire LSPosed et du noyau LSPosed ne sont pas cohérents. Merci de réinstaller la version correspondante.</string>
     <string name="manager_crashed">Plantage du Gestionnaire</string>
