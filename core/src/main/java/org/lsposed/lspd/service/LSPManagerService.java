@@ -64,7 +64,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
 import de.robv.android.xposed.XposedBridge;
@@ -167,7 +166,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                 var intent = PackageService.getLaunchIntentForPackage(BuildConfig.MANAGER_INJECTED_PKG_NAME);
                 if (intent == null) {
                     var pkgInfo = PackageService.getPackageInfo(BuildConfig.MANAGER_INJECTED_PKG_NAME, PackageManager.GET_ACTIVITIES, 0);
-                    if (Objects.requireNonNull(pkgInfo).activities != null && pkgInfo.activities.length > 0) {
+                    if (pkgInfo != null && pkgInfo.activities != null && pkgInfo.activities.length > 0) {
                         for (var activityInfo : pkgInfo.activities) {
                             if (activityInfo.processName.equals(activityInfo.packageName)) {
                                 intent = new Intent();
@@ -178,10 +177,12 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                         }
                     }
                 }
-                if (Objects.requireNonNull(intent).getCategories() != null) intent.getCategories().clear();
-                intent.addCategory("org.lsposed.manager.LAUNCH_MANAGER");
-                intent.setPackage(BuildConfig.MANAGER_INJECTED_PKG_NAME);
-                managerIntent = (Intent) intent.clone();
+                if (intent != null && intent.getCategories() != null) {
+                    intent.getCategories().clear();
+                    intent.addCategory("org.lsposed.manager.LAUNCH_MANAGER");
+                    intent.setPackage(BuildConfig.MANAGER_INJECTED_PKG_NAME);
+                    managerIntent = (Intent) intent.clone();
+                }
             }
         } catch (Throwable e) {
             Log.e(TAG, "get Intent", e);
@@ -323,7 +324,10 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     private void ensureWebViewPermission() {
         try {
             var pkgInfo = PackageService.getPackageInfo(BuildConfig.MANAGER_INJECTED_PKG_NAME, 0, 0);
-            var cacheDir = new File(HiddenApiBridge.ApplicationInfo_credentialProtectedDataDir(Objects.requireNonNull(pkgInfo).applicationInfo) + "/cache");
+            File cacheDir = null;
+            if (pkgInfo != null) {
+                cacheDir = new File(HiddenApiBridge.ApplicationInfo_credentialProtectedDataDir(pkgInfo.applicationInfo) + "/cache");
+            }
             var webviewDir = new File(cacheDir, "WebView");
             var httpCacheDir = new File(cacheDir, "http_cache");
             ensureWebViewPermission(webviewDir);
@@ -631,8 +635,10 @@ public class LSPManagerService extends ILSPManagerService.Stub {
         args.putString("value", hide ? "0" : "1");
         args.putString("_user", "0");
         try {
-            Objects.requireNonNull(ActivityManagerService.getContentProvider("settings", 0))
-                    .call("android", null, "settings", "PUT_global", "show_hidden_icon_apps_enabled", args);
+            var contentProvider = ActivityManagerService.getContentProvider("settings", 0);
+            if (contentProvider != null) {
+                contentProvider.call("android", null, "settings", "PUT_global", "show_hidden_icon_apps_enabled", args);
+            }
         } catch (RemoteException | NullPointerException e) {
             Log.w(TAG, "setHiddenIcon: ", e);
         }

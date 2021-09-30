@@ -31,7 +31,6 @@ import java.lang.reflect.Method;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XC_MethodReplacement;
@@ -204,7 +203,9 @@ public class ParasiticManagerHooker {
                     try {
                         var webViewDelegateConstructor = WebViewDelegate.class.getDeclaredConstructor();
                         webViewDelegateConstructor.setAccessible(true);
-                        sProviderInstance = Objects.requireNonNull(staticFactory).invoke(null, webViewDelegateConstructor.newInstance());
+                        if (staticFactory != null) {
+                            sProviderInstance = staticFactory.invoke(null, webViewDelegateConstructor.newInstance());
+                        }
                         XposedHelpers.setStaticObjectField(WebViewFactory.class, "sProviderInstance", sProviderInstance);
                         Hookers.logD("Loaded provider: " + sProviderInstance);
                         return sProviderInstance;
