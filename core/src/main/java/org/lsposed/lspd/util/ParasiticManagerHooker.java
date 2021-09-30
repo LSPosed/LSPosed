@@ -203,7 +203,9 @@ public class ParasiticManagerHooker {
                     try {
                         var webViewDelegateConstructor = WebViewDelegate.class.getDeclaredConstructor();
                         webViewDelegateConstructor.setAccessible(true);
-                        sProviderInstance = staticFactory.invoke(null, webViewDelegateConstructor.newInstance());
+                        if (staticFactory != null) {
+                            sProviderInstance = staticFactory.invoke(null, webViewDelegateConstructor.newInstance());
+                        }
                         XposedHelpers.setStaticObjectField(WebViewFactory.class, "sProviderInstance", sProviderInstance);
                         Hookers.logD("Loaded provider: " + sProviderInstance);
                         return sProviderInstance;
