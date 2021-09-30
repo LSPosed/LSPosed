@@ -255,7 +255,7 @@ public class SettingsFragment extends BaseFragment {
                 var userLocale = App.getLocale();
                 var entries = new ArrayList<CharSequence>();
                 entries.add(language.getEntries()[0]);
-                var lstLang = getAppLanguages(getContext(), R.string.Settings);
+                var lstLang = getAppLanguages(requireContext(), R.string.Settings);
                 for (var lang : lstLang) {
                     var locale = Locale.forLanguageTag(lang);
                     entries.add(HtmlCompat.fromHtml(String.format("%s - %s",

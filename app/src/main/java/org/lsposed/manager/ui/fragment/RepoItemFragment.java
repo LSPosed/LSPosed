@@ -180,13 +180,19 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
                                     .build());
                     try {
                         Response reply = call.execute();
-                        var contentTypes = reply.header("content-type", "image/*;charset=utf-8").split(";\\s*");
+                        var header = reply.header("content-type", "image/*;charset=utf-8");
+                        String[] contentTypes = new String[0];
+                        if (header != null) {
+                            contentTypes = header.split(";\\s*");
+                        }
                         var mimeType = contentTypes.length > 0 ? contentTypes[0] : "image/*";
                         var charset = contentTypes.length > 1 ? contentTypes[1].split("=\\s*")[1] : "utf-8";
+                        var body = reply.body();
+                        if (body == null) return null;
                         return new WebResourceResponse(
                                 mimeType,
                                 charset,
-                                reply.body().byteStream()
+                                body.byteStream()
                         );
                     } catch (Throwable e) {
                         return new WebResourceResponse("text/html", "utf-8", new ByteArrayInputStream(Log.getStackTraceString(e).getBytes(StandardCharsets.UTF_8)));

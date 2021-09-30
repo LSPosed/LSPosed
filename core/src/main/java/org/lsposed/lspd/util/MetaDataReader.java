@@ -40,17 +40,22 @@ public class MetaDataReader {
     }
 
     private MetaDataReader(File apk) throws IOException {
-        try(JarFile zip = new JarFile(apk)) {
+        try (JarFile zip = new JarFile(apk)) {
             InputStream is = zip.getInputStream(zip.getEntry("AndroidManifest.xml"));
-            byte[] bytes =  getBytesFromInputStream(is);
-            AxmlReader reader = new AxmlReader(bytes);
-            reader.accept(new AxmlVisitor() {
-                @Override
-                public NodeVisitor child(String ns, String name) {
-                    NodeVisitor child = super.child(ns, name);
-                    return new ManifestTagVisitor(child);
-                }
-            });
+            byte[] bytes = getBytesFromInputStream(is);
+            AxmlReader reader = null;
+            if (bytes != null) {
+                reader = new AxmlReader(bytes);
+            }
+            if (reader != null) {
+                reader.accept(new AxmlVisitor() {
+                    @Override
+                    public NodeVisitor child(String ns, String name) {
+                        NodeVisitor child = super.child(ns, name);
+                        return new ManifestTagVisitor(child);
+                    }
+                });
+            }
         }
     }
 
@@ -61,8 +66,7 @@ public class MetaDataReader {
             while ((n = inputStream.read(b)) != -1) {
                 bos.write(b, 0, n);
             }
-            byte[] data = bos.toByteArray();
-            return data;
+            return bos.toByteArray();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -91,7 +95,7 @@ public class MetaDataReader {
             @Override
             public NodeVisitor child(String ns, String name) {
                 NodeVisitor child = super.child(ns, name);
-                if("meta-data".equals(name)) {
+                if ("meta-data".equals(name)) {
                     return new MetaDataVisitor(child);
                 }
                 return child;
@@ -102,6 +106,7 @@ public class MetaDataReader {
     private class MetaDataVisitor extends NodeVisitor {
         public String name = null;
         public Object value = null;
+
         public MetaDataVisitor(NodeVisitor child) {
             super(child);
         }
@@ -109,9 +114,9 @@ public class MetaDataReader {
         @Override
         public void attr(String ns, String name, int resourceId, int type, Object obj) {
             if (type == 3 && "name".equals(name)) {
-                this.name = (String)obj;
+                this.name = (String) obj;
             }
-            if ("value".equals(name) ) {
+            if ("value".equals(name)) {
                 value = obj;
             }
             super.attr(ns, name, resourceId, type, obj);
@@ -119,7 +124,7 @@ public class MetaDataReader {
 
         @Override
         public void end() {
-            if(name != null && value != null) {
+            if (name != null && value != null) {
                 metaData.put(name, value);
             }
             super.end();
