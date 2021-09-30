@@ -57,6 +57,11 @@
     <string name="info_system_version">Версия Android</string>
     <string name="info_device">Устройство</string>
     <string name="info_system_abi">Разрядность системы ABI</string>
+    <string name="parasitic_recommend">Рекомендуем паразитный менеджер</string>
+    <string name="parasitic_recommend_summary">LSPosed теперь поддерживает паразитизацию системы, чтобы избежать обнаружения. Вы можете безопасно удалить менеджер после успешного создания ярлыка менеджера паразита. В любом случае вы можете установить менеджер обратно из /data/adb/lspd/manager.apk</string>
+    <string name="create_shortcut">Создать ярлык</string>
+    <string name="never_show">Больше не показывать</string>
+    <string name="failed_to_create_shortcut">Не удалось создать ярлык: %1$s</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Сохранить</string>
     <string name="nav_item_logs_lsp">Логи LSPosed</string>

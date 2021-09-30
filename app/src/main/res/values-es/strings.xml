@@ -152,6 +152,5 @@
     <string name="module_release_no_more">No hay más versiones</string>
     <string name="repo_load_failed">Fallo al cargar el módulo de repositorio: %s</string>
     <!-- CrashReportActivity -->
-    <string name="app_destroyed">Esta aplicación se ha destruido. Por favor, asegúrate de descargarla del sitio oficial.</string>
     <string name="outdated_manager">Las versiones de LSPosed Manager y LSPosed Core no son consistentes. Por favor, reinstala la versión correspondiente.</string>
 </resources>

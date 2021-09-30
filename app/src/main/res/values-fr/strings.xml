@@ -55,6 +55,9 @@
     <string name="info_system_version">Version du système</string>
     <string name="info_device">Périphérique</string>
     <string name="info_system_abi">Architecture du système</string>
+    <string name="create_shortcut">Créer raccourci</string>
+    <string name="never_show">Ne jamais afficher</string>
+    <string name="failed_to_create_shortcut">Échec de la création du raccourci: %1$s</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Sauvegarder</string>
     <string name="nav_item_logs_lsp">Journaux LSPosed</string>

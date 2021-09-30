@@ -59,6 +59,11 @@
     <string name="info_system_version">إصدار النظام</string>
     <string name="info_device">الجهاز</string>
     <string name="info_system_abi">نظام ABI</string>
+    <string name="parasitic_recommend">مدير طفيلي موصى به</string>
+    <string name="parasitic_recommend_summary">يدعم LSPosed الآن تطهير النظام لتجنب الكشف. يمكنك إلغاء تثبيت المدير بأمان بعد إنشاء اختصار للمدير الطفيلي بنجاح. في كل الأحوال، يمكنك تثبيت المدير مرة أخرى من /data/adb/lspd/manager.apk.</string>
+    <string name="create_shortcut">إنشاء إختصار</string>
+    <string name="never_show">لا تظهر أبداً</string>
+    <string name="failed_to_create_shortcut">فشل إنشاء اختصار: %1$s</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">حفظ</string>
     <string name="nav_item_logs_lsp">سجلات LSPosed</string>
