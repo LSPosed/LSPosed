@@ -175,7 +175,6 @@
     <string name="module_release_no_more">Không có phiên bản nào</string>
     <string name="repo_load_failed">Tải kho lưu trữ mô-đun thất bại: %s</string>
     <!-- CrashReportActivity -->
-    <string name="app_destroyed">Ứng dụng này có thể đã bị phá hủy, vui lòng tải xuống phiên bản mới nhất của ứng dụng này từ nguồn chính thức.</string>
     <string name="outdated_core">Ứng dụng LSPosed đang mới hơn framework. Xin hãy cập nhật LSPosed framework.</string>
     <string name="outdated_manager">LSPosed framework đang mới hơn phiên bản ứng dụng quản lý. Xin hãy cập nhật ứng dụng tại /data/adb/lspd/manager.apk thủ công.</string>
     <string name="manager_crashed">Quản lý hỏng hóc</string>

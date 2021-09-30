@@ -177,7 +177,6 @@
     <string name="module_release_no_more">Більше релізів немає</string>
     <string name="repo_load_failed">Не вдалося завантажити модуль репозиторія: %s</string>
     <!-- CrashReportActivity -->
-    <string name="app_destroyed">Ця програма припинила роботу, будь ласка, переконайтесь, що завантажили її з офіційного джерела.</string>
     <string name="outdated_core">Програма LSPosed новіша, ніж фреймворк. Будь ласка, оновіть фреймворк LSPosed.</string>
     <string name="outdated_manager">Версія LSPosed Manager і LSPosed Core не узгоджуються. Будь ласка, встановіть відповідну версію.</string>
     <string name="manager_crashed">Менеджер зазнав збою</string>

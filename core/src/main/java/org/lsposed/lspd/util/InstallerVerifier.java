@@ -56,27 +56,6 @@ public class InstallerVerifier {
         }
     }
 
-    public static void hookBadManager(final ClassLoader classLoader) {
-        var str = "This app may be destroyed, please download the latest version of this app from the official source.";
-        try {
-            Class<?> ConstantsClass = XposedHelpers.findClass("org.lsposed.manager.Constants", classLoader);
-            XposedHelpers.findAndHookMethod(android.app.Activity.class, "onCreate", Bundle.class, new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) {
-                    try {
-                        XposedHelpers.callStaticMethod(ConstantsClass, "showErrorToast", 0);
-                    } catch (Throwable t) {
-                        Utils.logW("showErrorToast: ", t);
-                        Toast.makeText((Context) param.thisObject, str, Toast.LENGTH_LONG).show();
-                    }
-                    new Handler(Looper.getMainLooper()).postDelayed(() -> System.exit(0), 1000);
-                }
-            });
-        } catch (Throwable t) {
-            Utils.logW("hookBadManager: ", t);
-        }
-    }
-
     public static boolean sendBinderToManager(final ClassLoader classLoader, IBinder binder) {
         Utils.logI("Found LSPosed Manager");
         try {

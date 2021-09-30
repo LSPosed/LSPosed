@@ -56,6 +56,11 @@
     <string name="info_system_version">System version</string>
     <string name="info_device">Device</string>
     <string name="info_system_abi">System ABI</string>
+    <string name="parasitic_recommend">Parasitic Manager Recommended</string>
+    <string name="parasitic_recommend_summary">LSPosed now supports system parasitization to avoid detection. You can safely uninstall the manager after successfully creating a shortcut of the parasitic manager. In any case you can install the manager back from /data/adb/lspd/manager.apk.</string>
+    <string name="create_shortcut">Create shortcut</string>
+    <string name="never_show">Never show</string>
+    <string name="failed_to_create_shortcut">Failed to create shortcut: %1$s</string>
 
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Save</string>
@@ -185,7 +190,6 @@
     <string name="repo_load_failed">Failed to load module repo: %s</string>
 
     <!-- CrashReportActivity -->
-    <string name="app_destroyed">This app may be destroyed, please download the latest version of this app from the official source.</string>
     <string name="outdated_core">LSPosed app is newer than framework. Please update LSPosed framework.</string>
     <string name="outdated_manager">LSPosed framework is newer than app. Please update the app from /data/adb/lspd/manager.apk manually.</string>
     <string name="manager_crashed">Manager crashed</string>

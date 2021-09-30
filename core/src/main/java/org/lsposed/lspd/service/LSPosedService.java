@@ -136,6 +136,8 @@ public class LSPosedService extends ILSPosedService.Stub {
                 break;
             }
         }
+        boolean removed = intent.getAction().equals(Intent.ACTION_PACKAGE_FULLY_REMOVED) ||
+                intent.getAction().equals(Intent.ACTION_UID_REMOVED);
         if (isXposedModule) {
             Log.d(TAG, "module " + moduleName + " changed, dispatching to manager");
             var enabledModules = ConfigManager.getInstance().enabledModules();
@@ -143,8 +145,6 @@ public class LSPosedService extends ILSPosedService.Stub {
             boolean systemModule = scope != null &&
                     scope.parallelStream().anyMatch(app -> app.packageName.equals("android"));
             boolean enabled = Arrays.asList(enabledModules).contains(moduleName);
-            boolean removed = intent.getAction().equals(Intent.ACTION_PACKAGE_FULLY_REMOVED) ||
-                    intent.getAction().equals(Intent.ACTION_UID_REMOVED);
             if (!removed) {
                 LSPManagerService.showNotification(moduleName, userId, enabled, systemModule);
             }
@@ -154,17 +154,17 @@ public class LSPosedService extends ILSPosedService.Stub {
         if (BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME.equals(moduleName) && userId == 0) {
             Log.d(TAG, "Manager updated");
             try {
-                ConfigManager.getInstance().updateManager();
+                ConfigManager.getInstance().updateManager(removed);
+                LSPManagerService.createOrUpdateShortcut(false);
             } catch (Throwable e) {
                 Log.e(TAG, Log.getStackTraceString(e));
             }
         }
     }
 
-
     synchronized public void dispatchUserUnlocked(Intent intent) {
         try {
-            LSPManagerService.createOrUpdateShortcut();
+            LSPManagerService.createOrUpdateShortcut(false);
         } catch (Throwable e) {
             Log.e(TAG, "dispatch user unlocked", e);
         }
@@ -173,7 +173,7 @@ public class LSPosedService extends ILSPosedService.Stub {
     synchronized public void dispatchConfigurationChanged(Intent intent) {
         try {
             ConfigFileManager.reloadConfiguration();
-            LSPManagerService.createOrUpdateShortcut();
+            LSPManagerService.createOrUpdateShortcut(false);
         } catch (Throwable e) {
             Log.e(TAG, "dispatch configuration changed", e);
         }

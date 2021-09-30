@@ -38,6 +38,7 @@ import androidx.preference.PreferenceManager;
 import com.google.gson.JsonParser;
 
 import org.lsposed.hiddenapibypass.HiddenApiBypass;
+import org.lsposed.manager.receivers.LSPManagerServiceHolder;
 import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.ui.activity.CrashReportActivity;
 import org.lsposed.manager.util.DoHDNS;
@@ -112,6 +113,10 @@ public class App extends Application {
         return instance.executorService;
     }
 
+    public static boolean isParasitic() {
+        return !Process.isApplicationUid(Process.myUid());
+    }
+
     private void setCrashReport() {
         Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
 
@@ -140,7 +145,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        if (!BuildConfig.DEBUG && Process.isApplicationUid(Process.myUid())) {
+        if (!BuildConfig.DEBUG && !isParasitic()) {
             setCrashReport();
         }
 

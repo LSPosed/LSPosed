@@ -175,7 +175,6 @@
     <string name="module_release_no_more">Tidak ada rilis</string>
     <string name="repo_load_failed">Gagal memuat repo modul: %s</string>
     <!-- CrashReportActivity -->
-    <string name="app_destroyed">Aplikasi ini berbahaya, silakan unduh versi terbaru aplikasi ini dari sumber resmi.</string>
     <string name="outdated_core">Aplikasi LSPosed lebih baru dari kerangka kerja. Harap perbarui kerangka kerja LSPosed.</string>
     <string name="outdated_manager">Kerangka kerja LSPosed lebih baru dari aplikasi. Harap perbarui aplikasi dari /data/adb/lspd/manager.apk secara manual.</string>
     <string name="manager_crashed">Manajer rusak</string>

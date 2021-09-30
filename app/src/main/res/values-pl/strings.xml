@@ -178,7 +178,6 @@
     <string name="module_release_no_more">Nie ma więcej wersji</string>
     <string name="repo_load_failed">Nie udało się załadować repozytorium modułu: %s</string>
     <!-- CrashReportActivity -->
-    <string name="app_destroyed">Ta aplikacja może zostać zniszczona, pobierz najnowszą wersję tej aplikacji z oficjalnego źródła.</string>
     <string name="outdated_core">Aplikacja LSPosed jest nowsza niż framework. Proszę zaktualizować framework LSPosed.</string>
     <string name="outdated_manager">Framework LSPosed jest nowszy niż aplikacja. Proszę zaktualizuj aplikację ręcznie z /data/adb/lspd/manager.apk.</string>
     <string name="manager_crashed">Menedżer uległ awarii</string>

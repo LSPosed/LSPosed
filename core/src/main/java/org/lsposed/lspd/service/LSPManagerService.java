@@ -263,9 +263,9 @@ public class LSPManagerService extends ILSPManagerService.Stub {
         }
     }
 
-    public static void createOrUpdateShortcut() {
+    public static void createOrUpdateShortcut(boolean force) {
         try {
-            if (ConfigManager.getInstance().isManagerInstalled()) {
+            if (!force && ConfigManager.getInstance().isManagerInstalled()) {
                 Log.d(TAG, "Manager has installed, skip adding shortcut");
                 return;
             }
@@ -653,5 +653,10 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     public void restartFor(Intent intent) throws RemoteException {
         forceStopPackage(BuildConfig.MANAGER_INJECTED_PKG_NAME, 0);
         stopAndStartActivity(BuildConfig.MANAGER_INJECTED_PKG_NAME, intent, false);
+    }
+
+    @Override
+    public void createShortcut() {
+        createOrUpdateShortcut(true);
     }
 }

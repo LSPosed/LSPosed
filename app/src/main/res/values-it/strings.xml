@@ -176,7 +176,6 @@
     <string name="module_release_no_more">Non ci sono altre versioni</string>
     <string name="repo_load_failed">Impossibile caricare il repository dei moduli: %s</string>
     <!-- CrashReportActivity -->
-    <string name="app_destroyed">Quest\'app potrebbe essere corrotta, scarica l\'ultima versione dalla fonte ufficiale.</string>
     <string name="outdated_core">L\'app di LSPosed è più recente del framework. Aggiorna il framework di LSPosed.</string>
     <string name="outdated_manager">Il framework di LSPosed è più recente dell\'app. Aggiorna l\'app da /data/adb/lspd/manager.apk manualmente.</string>
     <string name="manager_crashed">Manager andato in crash</string>

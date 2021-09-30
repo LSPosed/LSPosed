@@ -116,10 +116,7 @@
     <string name="module_release_no_more">Não há mais versões</string>
     <string name="repo_load_failed">Falha ao carregar o repositório de módulos: %s</string>
     <!-- CrashReportActivity -->
-    <string name="app_destroyed">Este app pode estar corrompido, por favor, baixe a versão mais recente deste app pela fonte oficial.</string>
     <string name="outdated_core">App do LSPosed é mais novo que framework. Atualize a Framework do LSPosed.</string>
     <string name="outdated_manager">Framework do LSPosed é mais novo que o app. Atualize manualmente o aplicativo em /data/adb/lspd/manager.apk.</string>
     <string name="manager_crashed">Gerenciador travou</string>
-    <string name="copy_crash_info">Copiar informações do erro</string>
-    <string name="copy_toast_msg">Copiado</string>
 </resources>

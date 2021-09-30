@@ -175,7 +175,6 @@
     <string name="module_release_no_more">沒有更早期的版本</string>
     <string name="repo_load_failed">模組倉庫載入失敗：%s</string>
     <!-- CrashReportActivity -->
-    <string name="app_destroyed">此應用程式可能已毀損，請從官方來源下載該應用程式的最新版本。</string>
     <string name="outdated_core">LSPosed 應用程式的版本高於框架。請更新 LSPosed 框架。</string>
     <string name="outdated_manager">LSPosed 框架的版本高於應用程式。請從 /data/adb/lspd/manager.apk 更新 LSPosed 應用程式。</string>
     <string name="manager_crashed">應用程式出現未知錯誤</string>

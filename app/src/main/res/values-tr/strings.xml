@@ -170,7 +170,6 @@
     <string name="module_release_no_more">Daha fazla sürüm yok</string>
     <string name="repo_load_failed">Modül deposu yüklenemedi: %s</string>
     <!-- CrashReportActivity -->
-    <string name="app_destroyed">Bu uygulama bozuk olabilir, lütfen bu uygulamanın en son sürümünü resmi kaynaktan indirin.</string>
     <string name="outdated_core">LSPosed uygulaması çerçeveden daha yenidir. Lütfen LSPosed çerçevesini güncelleyin.</string>
     <string name="outdated_manager">LSPosed çerçevesi, uygulamadan daha yenidir. Lütfen uygulamayı /data/adb/lspd/manager.apk adresinden manuel olarak güncelleyin.</string>
     <string name="manager_crashed">Yönetici çöktü</string>

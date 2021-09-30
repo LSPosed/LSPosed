@@ -178,7 +178,6 @@
     <string name="module_release_no_more">Больше нет других версий</string>
     <string name="repo_load_failed">Не удалось загрузить репозиторий модуля: %s</string>
     <!-- CrashReportActivity -->
-    <string name="app_destroyed">Это приложение повреждено. Убедитесь, что загрузили его из официального источника</string>
     <string name="outdated_core">Приложение LSPosed новее, чем фреймворк LSPosed. Обновите фреймворк LSPosed</string>
     <string name="outdated_manager">Фреймворк LSPosed новее, чем приложение LSPosed. Обновите приложение вручную из /data/adb/lspd/manager.apk</string>
     <string name="manager_crashed">Сбой приложения LSPosed</string>

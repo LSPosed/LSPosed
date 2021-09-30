@@ -227,10 +227,14 @@ public class ConfigManager {
             Log.e(TAG, Log.getStackTraceString(e));
         }
 
-        updateManager();
+        updateManager(false);
     }
 
-    public synchronized void updateManager() {
+    public synchronized void updateManager(boolean uninstalled) {
+        if (uninstalled){
+            managerUid = -1;
+            return;
+        }
         if (!PackageService.isAlive()) return;
         try {
             PackageInfo info = PackageService.getPackageInfo(BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME, 0, 0);
@@ -256,7 +260,7 @@ public class ConfigManager {
                 Log.d(TAG, "pm is ready, updating cache");
                 // must ensure cache is valid for later usage
                 instance.updateCaches(true);
-                instance.updateManager();
+                instance.updateManager(false);
             }
         }
         return instance;

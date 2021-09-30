@@ -26,11 +26,6 @@ import android.widget.Toast;
 import org.lsposed.manager.receivers.LSPManagerServiceHolder;
 
 public class Constants {
-
-    public static void showErrorToast(int type) {
-        Toast.makeText(App.getInstance(), R.string.app_destroyed, Toast.LENGTH_LONG).show();
-    }
-
     public static boolean setBinder(IBinder binder) {
         LSPManagerServiceHolder.init(binder);
         return LSPManagerServiceHolder.getService().asBinder().isBinderAlive();
