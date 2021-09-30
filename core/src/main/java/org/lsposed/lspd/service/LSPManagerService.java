@@ -177,8 +177,8 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                         }
                     }
                 }
-                if (intent != null && intent.getCategories() != null) {
-                    intent.getCategories().clear();
+                if (intent != null) {
+                    if (intent.getCategories() != null) intent.getCategories().clear();
                     intent.addCategory("org.lsposed.manager.LAUNCH_MANAGER");
                     intent.setPackage(BuildConfig.MANAGER_INJECTED_PKG_NAME);
                     managerIntent = (Intent) intent.clone();
