@@ -80,14 +80,8 @@ public class BaseActivity extends MaterialActivity {
         window.getDecorView().post(() -> {
             if (window.getDecorView().getRootWindowInsets().getSystemWindowInsetBottom() >= Resources.getSystem().getDisplayMetrics().density * 40) {
                 window.setNavigationBarColor(ResourceUtils.resolveColor(getTheme(), android.R.attr.navigationBarColor) & 0x00ffffff | -0x20000000);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    window.setNavigationBarContrastEnforced(false);
-                }
             } else {
                 window.setNavigationBarColor(Color.TRANSPARENT);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    window.setNavigationBarContrastEnforced(true);
-                }
             }
         });
 
