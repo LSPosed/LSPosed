@@ -42,11 +42,14 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.os.SELinux;
 import android.os.SystemProperties;
+import android.system.ErrnoException;
+import android.system.Os;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -56,6 +59,7 @@ import org.lsposed.lspd.ILSPManagerService;
 import org.lsposed.lspd.models.Application;
 import org.lsposed.lspd.models.UserInfo;
 import org.lsposed.lspd.util.FakeContext;
+import android.os.Handler;
 import org.lsposed.lspd.util.Utils;
 
 import java.io.File;
@@ -81,7 +85,14 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     public static final String CHANNEL_NAME = "LSPosed Manager";
     public static final int CHANNEL_IMP = NotificationManager.IMPORTANCE_HIGH;
 
+    private static final HandlerThread worker = new HandlerThread("manager worker");
+    private static final Handler workerHandler = new Handler(worker.getLooper());
+
     private static Intent managerIntent = null;
+
+    static {
+        worker.start();
+    }
 
     public class ManagerGuard implements IBinder.DeathRecipient {
         private final @NonNull
@@ -263,7 +274,12 @@ public class LSPManagerService extends ILSPManagerService.Stub {
         }
     }
 
+
     public static void createOrUpdateShortcut(boolean force) {
+        workerHandler.post(()->createOrUpdateShortcutInternal(force));
+    }
+
+    private synchronized static void createOrUpdateShortcutInternal(boolean force) {
         try {
             if (!force && ConfigManager.getInstance().isManagerInstalled()) {
                 Log.d(TAG, "Manager has installed, skip adding shortcut");
@@ -314,6 +330,11 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     private void ensureWebViewPermission(File f) {
         if (!f.exists()) return;
         SELinux.setFileContext(f.getAbsolutePath(), "u:object_r:privapp_data_file:s0");
+        try {
+            Os.chown(f.getAbsolutePath(), BuildConfig.MANAGER_INJECTED_UID, BuildConfig.MANAGER_INJECTED_UID);
+        } catch (ErrnoException e) {
+            Log.e(TAG, "chown of webview", e);
+        }
         if (f.isDirectory()) {
             for (var g : f.listFiles()) {
                 ensureWebViewPermission(g);
@@ -329,7 +350,9 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                 cacheDir = new File(HiddenApiBridge.ApplicationInfo_credentialProtectedDataDir(pkgInfo.applicationInfo) + "/cache");
             }
             var webviewDir = new File(cacheDir, "WebView");
+            webviewDir.mkdirs();
             var httpCacheDir = new File(cacheDir, "http_cache");
+            httpCacheDir.mkdirs();
             ensureWebViewPermission(webviewDir);
             ensureWebViewPermission(httpCacheDir);
         } catch (Throwable e) {
