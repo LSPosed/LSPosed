@@ -86,12 +86,13 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     public static final int CHANNEL_IMP = NotificationManager.IMPORTANCE_HIGH;
 
     private static final HandlerThread worker = new HandlerThread("manager worker");
-    private static final Handler workerHandler = new Handler(worker.getLooper());
+    private static final Handler workerHandler;
 
     private static Intent managerIntent = null;
 
     static {
         worker.start();
+        workerHandler = new Handler(worker.getLooper());
     }
 
     public class ManagerGuard implements IBinder.DeathRecipient {
