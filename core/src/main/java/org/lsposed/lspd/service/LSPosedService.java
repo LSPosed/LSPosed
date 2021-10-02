@@ -94,10 +94,8 @@ public class LSPosedService extends ILSPosedService.Stub {
         boolean isXposedModule = applicationInfo != null &&
                 applicationInfo.metaData != null &&
                 applicationInfo.metaData.containsKey("xposedminversion");
-
-        Log.d(TAG, "Package changed: uid=" + uid + " userId=" + userId + " action=" + intent.getAction() + " isXposedModule=" + isXposedModule);
-
-        switch (intent.getAction()) {
+        var intentAction = intent.getAction();
+        switch (intentAction) {
             case Intent.ACTION_PACKAGE_FULLY_REMOVED: {
                 // for module, remove module
                 // because we only care about when the apk is gone
@@ -136,8 +134,11 @@ public class LSPosedService extends ILSPosedService.Stub {
                 break;
             }
         }
-        boolean removed = intent.getAction().equals(Intent.ACTION_PACKAGE_FULLY_REMOVED) ||
-                intent.getAction().equals(Intent.ACTION_UID_REMOVED);
+        boolean removed = intentAction.equals(Intent.ACTION_PACKAGE_FULLY_REMOVED) ||
+                intentAction.equals(Intent.ACTION_UID_REMOVED);
+
+        Log.d(TAG, "Package changed: uid=" + uid + " userId=" + userId + " action=" + intent.getAction() + " isXposedModule=" + isXposedModule);
+
         if (isXposedModule) {
             Log.d(TAG, "module " + moduleName + " changed, dispatching to manager");
             var enabledModules = ConfigManager.getInstance().enabledModules();
@@ -148,7 +149,7 @@ public class LSPosedService extends ILSPosedService.Stub {
             if (!removed) {
                 LSPManagerService.showNotification(moduleName, userId, enabled, systemModule);
             }
-            LSPManagerService.broadcastIntent(moduleName, userId);
+            LSPManagerService.broadcastIntent(moduleName, userId, intentAction.equals(Intent.ACTION_PACKAGE_FULLY_REMOVED));
         }
 
         if (BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME.equals(moduleName) && userId == 0) {

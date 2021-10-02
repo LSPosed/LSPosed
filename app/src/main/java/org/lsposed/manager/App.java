@@ -38,7 +38,6 @@ import androidx.preference.PreferenceManager;
 import com.google.gson.JsonParser;
 
 import org.lsposed.hiddenapibypass.HiddenApiBypass;
-import org.lsposed.manager.receivers.LSPManagerServiceHolder;
 import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.ui.activity.CrashReportActivity;
 import org.lsposed.manager.util.DoHDNS;
@@ -168,8 +167,9 @@ public class App extends Application {
             public void onReceive(Context context, Intent intent) {
                 int userId = intent.getIntExtra(Intent.EXTRA_USER, 0);
                 String packageName = intent.getStringExtra("android.intent.extra.PACKAGES");
+                boolean packageFullyRemoved = intent.getBooleanExtra(Intent.ACTION_PACKAGE_FULLY_REMOVED, false);
                 if (packageName != null) {
-                    ModuleUtil.getInstance().reloadSingleModule(packageName, userId);
+                    ModuleUtil.getInstance().reloadSingleModule(packageName, userId, packageFullyRemoved);
                 }
             }
         }, new IntentFilter(Intent.ACTION_PACKAGE_CHANGED));
