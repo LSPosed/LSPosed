@@ -154,7 +154,7 @@ public class MainActivity extends BaseActivity {
     }
 
     public void restart() {
-        if (BuildCompat.isAtLeastS()) {
+        if (BuildCompat.isAtLeastS() || App.isParasitic()) {
             recreate();
         } else {
             try {

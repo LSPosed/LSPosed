@@ -44,6 +44,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.takisoft.preferencex.PreferenceFragmentCompat;
 
 import org.lsposed.manager.App;
+import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.FragmentSettingsBinding;
@@ -145,7 +146,7 @@ public class SettingsFragment extends BaseFragment {
             boolean installed = ConfigManager.isBinderAlive();
             SwitchPreference prefVerboseLogs = findPreference("disable_verbose_log");
             if (prefVerboseLogs != null) {
-                prefVerboseLogs.setEnabled(installed);
+                prefVerboseLogs.setEnabled(!BuildConfig.DEBUG && installed);
                 prefVerboseLogs.setChecked(!installed || !ConfigManager.isVerboseLogEnabled());
                 prefVerboseLogs.setOnPreferenceChangeListener((preference, newValue) ->
                         ConfigManager.setVerboseLogEnabled(!(boolean) newValue));

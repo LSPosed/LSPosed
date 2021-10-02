@@ -231,7 +231,7 @@ public class ConfigManager {
     }
 
     public synchronized void updateManager(boolean uninstalled) {
-        if (uninstalled){
+        if (uninstalled) {
             managerUid = -1;
             return;
         }
@@ -770,6 +770,7 @@ public class ConfigManager {
     }
 
     public void setVerboseLog(boolean on) {
+        if (BuildConfig.DEBUG) return;
         var logcatService = ServiceManager.getLogcatService();
         if (on) {
             logcatService.startVerbose();
@@ -785,7 +786,7 @@ public class ConfigManager {
     }
 
     public boolean verboseLog() {
-        return verboseLog;
+        return BuildConfig.DEBUG || verboseLog;
     }
 
     public ParcelFileDescriptor getManagerApk() {
