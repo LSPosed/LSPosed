@@ -670,6 +670,9 @@ public class ConfigManager {
     public boolean removeModule(String packageName) {
         if (removeModuleWithoutCache(packageName)) {
             // called by oneway binder
+            // Called only when the application is completely uninstalled
+            // If it's a module we need to return as soon as possible to broadcast to the manager
+            // for updating the module status
             updateCaches(false);
             return true;
         }

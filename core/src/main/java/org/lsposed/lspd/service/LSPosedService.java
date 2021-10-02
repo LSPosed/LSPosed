@@ -86,7 +86,7 @@ public class LSPosedService extends ILSPosedService.Stub {
         ApplicationInfo applicationInfo = null;
         if (moduleName != null) {
             try {
-                applicationInfo = PackageService.getApplicationInfo(moduleName, PackageManager.GET_META_DATA | PackageService.MATCH_ALL_FLAGS, 0);
+                applicationInfo = PackageService.getApplicationInfo(moduleName, PackageManager.GET_META_DATA | PackageService.MATCH_ALL_FLAGS, userId);
             } catch (Throwable ignored) {
             }
         }
