@@ -670,7 +670,7 @@ public class ConfigManager {
     public boolean removeModule(String packageName) {
         if (removeModuleWithoutCache(packageName)) {
             // called by oneway binder
-            updateCaches(true);
+            updateCaches(false);
             return true;
         }
         return false;
