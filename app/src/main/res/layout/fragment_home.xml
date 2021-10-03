@@ -74,7 +74,7 @@
                     android:id="@+id/status"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/HomeItem.Primary">
+                    style="@style/HomeCard.Primary">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -88,7 +88,7 @@
                             android:layout_height="24dp"
                             android:layout_centerVertical="true"
                             app:srcCompat="@drawable/ic_round_check_circle_24"
-                            app:tint="?android:attr/textColorPrimaryInverse" />
+                            app:tint="@color/primary_card_primary_text" />
 
                         <TextView
                             android:id="@+id/status_title"
@@ -99,7 +99,7 @@
                             android:fontFamily="sans-serif-medium"
                             android:textSize="16sp"
                             android:textAppearance="?android:attr/textAppearanceListItem"
-                            android:textColor="?android:attr/textColorPrimaryInverse" />
+                            android:textColor="@color/primary_card_primary_text" />
 
                         <TextView
                             android:id="@+id/status_summary"
@@ -108,7 +108,7 @@
                             android:layout_below="@id/status_title"
                             android:layout_alignStart="@id/status_title"
                             android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:textColor="?android:attr/textColorSecondaryInverse" />
+                            android:textColor="@color/primary_card_secondary_text" />
                     </RelativeLayout>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -116,7 +116,7 @@
                     android:id="@+id/modules"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/HomeItem.Secondary">
+                    style="@style/HomeCard.Secondary">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -155,7 +155,7 @@
                     android:id="@+id/download"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/HomeItem.Secondary">
+                    style="@style/HomeCard.Secondary">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -191,67 +191,91 @@
                     </RelativeLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <LinearLayout
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/logs"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/HomeItem.Tertiary">
+                    style="@style/HomeCard.Tertiary">
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:contentDescription="@string/Logs"
-                        app:srcCompat="@drawable/ic_round_assignment_24" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="24dp"
-                        android:text="@string/Logs"
-                        android:textSize="16sp"
-                        android:textAppearance="?android:attr/textAppearanceListItem" />
-                </LinearLayout>
+                        android:padding="16dp"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center_vertical">
 
-                <LinearLayout
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:contentDescription="@string/Logs"
+                            app:srcCompat="@drawable/ic_round_assignment_24" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="24dp"
+                            android:text="@string/Logs"
+                            android:textSize="16sp"
+                            android:textAppearance="?android:attr/textAppearanceListItem" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/settings"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/HomeItem.Tertiary">
+                    style="@style/HomeCard.Tertiary">
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:contentDescription="@string/Settings"
-                        app:srcCompat="@drawable/ic_round_settings_24" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="24dp"
-                        android:text="@string/Settings"
-                        android:textAppearance="?android:attr/textAppearanceListItem" />
-                </LinearLayout>
+                        android:padding="16dp"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center_vertical">
 
-                <LinearLayout
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:contentDescription="@string/Settings"
+                            app:srcCompat="@drawable/ic_round_settings_24" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="24dp"
+                            android:text="@string/Settings"
+                            android:textAppearance="?android:attr/textAppearanceListItem" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/issue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/HomeItem.Tertiary">
+                    style="@style/HomeCard.Tertiary">
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:contentDescription="@string/report_issue"
-                        app:srcCompat="@drawable/ic_round_bug_report_24" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="24dp"
-                        android:text="@string/report_issue"
-                        android:textSize="16sp"
-                        android:textAppearance="?android:attr/textAppearanceListItem" />
-                </LinearLayout>
+                        android:padding="16dp"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:contentDescription="@string/report_issue"
+                            app:srcCompat="@drawable/ic_round_bug_report_24" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="24dp"
+                            android:text="@string/report_issue"
+                            android:textSize="16sp"
+                            android:textAppearance="?android:attr/textAppearanceListItem" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
             </LinearLayout>
         </rikka.widget.borderview.BorderNestedScrollView>
