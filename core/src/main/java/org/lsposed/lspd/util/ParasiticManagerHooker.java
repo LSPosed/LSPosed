@@ -142,6 +142,7 @@ public class ParasiticManagerHooker {
                 return null;
             }
         });
+
         XposedBridge.hookAllMethods(ActivityThread.class, "installProvider", new XC_MethodHook() {
             private Context originalContext = null;
 
@@ -184,38 +185,36 @@ public class ParasiticManagerHooker {
             }
         });
 
-        if (Process.myUid() == BuildConfig.MANAGER_INJECTED_UID) {
-            XposedHelpers.findAndHookMethod(WebViewFactory.class, "getProvider", new XC_MethodReplacement() {
-                @Override
-                protected Object replaceHookedMethod(MethodHookParam param) {
-                    var sProviderInstance = XposedHelpers.getStaticObjectField(WebViewFactory.class, "sProviderInstance");
-                    if (sProviderInstance != null) return sProviderInstance;
-                    //noinspection unchecked
-                    var providerClass = (Class<WebViewFactoryProvider>) XposedHelpers.callStaticMethod(WebViewFactory.class, "getProviderClass");
-                    Method staticFactory = null;
-                    try {
-                        staticFactory = providerClass.getMethod(
-                                CHROMIUM_WEBVIEW_FACTORY_METHOD, WebViewDelegate.class);
-                    } catch (Exception e) {
-                        Hookers.logE("error instantiating provider with static factory method", e);
-                    }
-
-                    try {
-                        var webViewDelegateConstructor = WebViewDelegate.class.getDeclaredConstructor();
-                        webViewDelegateConstructor.setAccessible(true);
-                        if (staticFactory != null) {
-                            sProviderInstance = staticFactory.invoke(null, webViewDelegateConstructor.newInstance());
-                        }
-                        XposedHelpers.setStaticObjectField(WebViewFactory.class, "sProviderInstance", sProviderInstance);
-                        Hookers.logD("Loaded provider: " + sProviderInstance);
-                        return sProviderInstance;
-                    } catch (Exception e) {
-                        Hookers.logE("error instantiating provider", e);
-                        throw new AndroidRuntimeException(e);
-                    }
+        XposedHelpers.findAndHookMethod(WebViewFactory.class, "getProvider", new XC_MethodReplacement() {
+            @Override
+            protected Object replaceHookedMethod(MethodHookParam param) {
+                var sProviderInstance = XposedHelpers.getStaticObjectField(WebViewFactory.class, "sProviderInstance");
+                if (sProviderInstance != null) return sProviderInstance;
+                //noinspection unchecked
+                var providerClass = (Class<WebViewFactoryProvider>) XposedHelpers.callStaticMethod(WebViewFactory.class, "getProviderClass");
+                Method staticFactory = null;
+                try {
+                    staticFactory = providerClass.getMethod(
+                            CHROMIUM_WEBVIEW_FACTORY_METHOD, WebViewDelegate.class);
+                } catch (Exception e) {
+                    Hookers.logE("error instantiating provider with static factory method", e);
                 }
-            });
-        }
+
+                try {
+                    var webViewDelegateConstructor = WebViewDelegate.class.getDeclaredConstructor();
+                    webViewDelegateConstructor.setAccessible(true);
+                    if (staticFactory != null) {
+                        sProviderInstance = staticFactory.invoke(null, webViewDelegateConstructor.newInstance());
+                    }
+                    XposedHelpers.setStaticObjectField(WebViewFactory.class, "sProviderInstance", sProviderInstance);
+                    Hookers.logD("Loaded provider: " + sProviderInstance);
+                    return sProviderInstance;
+                } catch (Exception e) {
+                    Hookers.logE("error instantiating provider", e);
+                    throw new AndroidRuntimeException(e);
+                }
+            }
+        });
     }
 
     private static void checkIntent(ILSPManagerService managerService, Intent intent) {
