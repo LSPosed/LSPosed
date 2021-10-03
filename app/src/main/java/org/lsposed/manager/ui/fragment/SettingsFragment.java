@@ -40,6 +40,7 @@ import androidx.preference.Preference;
 import androidx.preference.SwitchPreference;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.color.DynamicColors;
 import com.google.android.material.snackbar.Snackbar;
 import com.takisoft.preferencex.PreferenceFragmentCompat;
 
@@ -228,7 +229,7 @@ public class SettingsFragment extends BaseFragment {
             }
 
             SwitchPreference prefFollowSystemAccent = findPreference("follow_system_accent");
-            if (prefFollowSystemAccent != null && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S || Build.VERSION.SDK_INT == Build.VERSION_CODES.R && Build.VERSION.PREVIEW_SDK_INT != 0)) {
+            if (prefFollowSystemAccent != null && DynamicColors.isDynamicColorAvailable()) {
                 if (primary_color != null) {
                     primary_color.setVisible(!prefFollowSystemAccent.isChecked());
                 }
