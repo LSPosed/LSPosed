@@ -105,6 +105,11 @@ public class LSPosedService extends ILSPosedService.Stub {
                 break;
             }
             case Intent.ACTION_PACKAGE_ADDED:
+                // When installing a new Xposed module, we update the apk path to prepare for the
+                // first activation of a module with a recommended scope or for a user to uninstall
+                // a module that has not been activated before.
+                if (isXposedModule)
+                    configManager.updateModuleApkPath(moduleName,configManager.getModuleApkPath(applicationInfo), false);
             case Intent.ACTION_PACKAGE_CHANGED: {
                 // make sure that the change is for the complete package, not only a
                 // component
