@@ -25,4 +25,7 @@
 
     <color name="home_secondary_outline_ambient_shadow_color">@color/material_grey_700</color>
     <color name="home_secondary_outline_spot_shadow_color">@color/material_grey_600</color>
+
+    <color name="primary_card_primary_text">@color/abc_primary_text_material_light</color>
+    <color name="primary_card_secondary_text">@color/abc_secondary_text_material_light</color>
 </resources>

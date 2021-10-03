@@ -77,21 +77,20 @@
         <item name="android:paddingBottom">24dp</item>
     </style>
 
-    <style name="HomeItem">
+    <style name="HomeCard" parent="Widget.Material3.CardView.Elevated">
         <item name="android:layout_marginHorizontal">16dp</item>
         <item name="android:layout_marginBottom">8dp</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
-        <item name="cardCornerRadius">8dp</item>
         <item name="cardPreventCornerOverlap">false</item>
     </style>
 
-    <style name="HomeItem.Primary" parent="Widget.Material3.CardView.Elevated">
+    <style name="HomeCard.Primary">
         <item name="android:layout_marginTop">16dp</item>
         <item name="cardElevation">@dimen/home_primary_elevation</item>
     </style>
 
-    <style name="HomeItem.Secondary" parent="Widget.Material3.CardView.Elevated">
+    <style name="HomeCard.Secondary">
         <item name="cardElevation">@dimen/home_secondary_elevation</item>
         <item name="android:outlineAmbientShadowColor" tools:targetApi="p">
             @color/home_secondary_outline_ambient_shadow_color
@@ -101,11 +100,10 @@
         </item>
     </style>
 
-    <style name="HomeItem.Tertiary">
-        <item name="android:gravity">center_vertical</item>
-        <item name="android:background">@drawable/item_background_round_nopadding</item>
-        <item name="android:orientation">horizontal</item>
-        <item name="android:padding">16dp</item>
+    <style name="HomeCard.Tertiary">
+        <item name="android:stateListAnimator">@null</item>
+        <item name="cardBackgroundColor">@android:color/transparent</item>
+        <item name="cardElevation">0dp</item>
     </style>
 
     <style name="Widget.App.Button.OutlinedButton.IconOnly" parent="Widget.Material3.Button.OutlinedButton">
