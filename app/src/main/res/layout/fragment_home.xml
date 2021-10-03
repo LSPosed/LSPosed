@@ -88,7 +88,7 @@
                             android:layout_height="24dp"
                             android:layout_centerVertical="true"
                             app:srcCompat="@drawable/ic_round_check_circle_24"
-                            app:tint="@color/primary_card_primary_text" />
+                            app:tint="@color/primary_text_material_inverse" />
 
                         <TextView
                             android:id="@+id/status_title"
@@ -99,7 +99,7 @@
                             android:fontFamily="sans-serif-medium"
                             android:textSize="16sp"
                             android:textAppearance="?android:attr/textAppearanceListItem"
-                            android:textColor="@color/primary_card_primary_text" />
+                            android:textColor="@color/primary_text_material_inverse" />
 
                         <TextView
                             android:id="@+id/status_summary"
@@ -108,7 +108,7 @@
                             android:layout_below="@id/status_title"
                             android:layout_alignStart="@id/status_title"
                             android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:textColor="@color/primary_card_secondary_text" />
+                            android:textColor="@color/secondary_text_material_inverse" />
                     </RelativeLayout>
                 </com.google.android.material.card.MaterialCardView>
 
