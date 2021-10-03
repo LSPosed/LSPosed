@@ -175,7 +175,7 @@ dependencies {
     implementation("androidx.slidingpanelayout:slidingpanelayout:1.2.0-beta01")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("com.github.bumptech.glide:glide:$glideVersion")
-    implementation("com.google.android.material:material:1.5.0-alpha03")
+    implementation("com.google.android.material:material:1.5.0-alpha04")
     implementation("com.google.code.gson:gson:2.8.8")
     implementation("com.takisoft.preferencex:preferencex:1.1.0")
     implementation("com.takisoft.preferencex:preferencex-colorpicker:1.1.0")
