@@ -75,7 +75,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/description"
             app:layout_constraintTop_toBottomOf="@id/description"
-            style="@style/Widget.MaterialComponents.Button" />
+            style="@style/Widget.MaterialComponents.Button.Icon" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/open_in_browser"

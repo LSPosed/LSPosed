@@ -40,6 +40,7 @@ import androidx.preference.Preference;
 import androidx.preference.SwitchPreference;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.color.DynamicColors;
 import com.google.android.material.snackbar.Snackbar;
 import com.takisoft.preferencex.PreferenceFragmentCompat;
 
@@ -72,6 +73,7 @@ public class SettingsFragment extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
         binding.getRoot().bringChildToFront(binding.appBar);
+        binding.appBar.setLiftable(true);
         setupToolbar(binding.toolbar, R.string.Settings);
         if (savedInstanceState == null) {
             getChildFragmentManager().beginTransaction()
@@ -227,7 +229,7 @@ public class SettingsFragment extends BaseFragment {
             }
 
             SwitchPreference prefFollowSystemAccent = findPreference("follow_system_accent");
-            if (prefFollowSystemAccent != null && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S || Build.VERSION.SDK_INT == Build.VERSION_CODES.R && Build.VERSION.PREVIEW_SDK_INT != 0)) {
+            if (prefFollowSystemAccent != null && DynamicColors.isDynamicColorAvailable()) {
                 if (primary_color != null) {
                     primary_color.setVisible(!prefFollowSystemAccent.isChecked());
                 }
@@ -302,7 +304,7 @@ public class SettingsFragment extends BaseFragment {
             recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> {
                 SettingsFragment fragment = (SettingsFragment) getParentFragment();
                 if (fragment != null) {
-                    fragment.binding.appBar.setRaised(!top);
+                    fragment.binding.appBar.setLifted(!top);
                 }
             });
             return recyclerView;

@@ -50,7 +50,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
@@ -63,6 +62,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -138,6 +138,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
         binding.getRoot().bringChildToFront(binding.appBar);
         setupToolbar(binding.toolbar, R.string.Modules, R.menu.menu_modules);
+        binding.appBar.setLiftable(true);
         binding.viewPager.setAdapter(new PagerAdapter(this));
         binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -145,7 +146,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 BorderRecyclerView recyclerView = binding.viewPager.findViewWithTag(position);
 
                 if (recyclerView != null) {
-                    binding.appBar.setRaised(!recyclerView.getBorderViewDelegate().isShowingTopBorder());
+                    binding.appBar.setLifted(!recyclerView.getBorderViewDelegate().isShowingTopBorder());
                 }
 
                 if (position > 0) {
@@ -204,7 +205,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             var rv = DialogRecyclerviewBinding.inflate(getLayoutInflater()).getRoot();
             rv.setAdapter(pickAdaptor);
             rv.setLayoutManager(new LinearLayoutManager(requireActivity()));
-            var dialog = new AlertDialog.Builder(requireActivity())
+            var dialog = new MaterialAlertDialogBuilder(requireActivity())
                     .setTitle(getString(R.string.install_to_user, user.name))
                     .setView(rv)
                     .setNegativeButton(android.R.string.cancel, null)
@@ -252,7 +253,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     }
 
     private void installModuleToUser(ModuleUtil.InstalledModule module, UserInfo user) {
-        new AlertDialog.Builder(requireActivity())
+        new MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(getString(R.string.install_to_user, user.name))
                 .setMessage(getString(R.string.install_to_user_message, module.getAppName(), user.name))
                 .setPositiveButton(android.R.string.ok, (dialog, which) ->
@@ -301,7 +302,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             ConfigManager.startActivityAsUserWithFeature(new Intent(ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", selectedModule.packageName, null)), selectedModule.userId);
             return true;
         } else if (itemId == R.id.menu_uninstall) {
-            new AlertDialog.Builder(requireActivity())
+            new MaterialAlertDialogBuilder(requireActivity())
                     .setTitle(selectedModule.getAppName())
                     .setMessage(R.string.module_uninstall_message)
                     .setPositiveButton(android.R.string.ok, (dialog, which) ->
@@ -347,12 +348,16 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             ItemRepoRecyclerviewBinding binding = ItemRepoRecyclerviewBinding.inflate(getLayoutInflater(), container, false);
             if (fragment.adapters.size() == 1) {
                 WindowInsetsHelperKt.setInitialPadding(binding.recyclerView, 0, ResourceUtils.resolveDimensionPixelOffset(requireActivity().getTheme(), androidx.appcompat.R.attr.actionBarSize, 0), 0, 0);
+            } else {
+                int height = ResourceUtils.resolveDimensionPixelOffset(requireActivity().getTheme(), androidx.appcompat.R.attr.actionBarSize, 0)
+                        + getResources().getDimensionPixelOffset(R.dimen.tab_layout_height);
+                WindowInsetsHelperKt.setInitialPadding(binding.recyclerView, 0, height, 0, 0);
             }
             binding.recyclerView.setTag(position);
             binding.recyclerView.setAdapter(fragment.adapters.get(position));
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireActivity());
             binding.recyclerView.setLayoutManager(layoutManager);
-            binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> fragment.binding.appBar.setRaised(!top));
+            binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> fragment.binding.appBar.setLifted(!top));
             binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {

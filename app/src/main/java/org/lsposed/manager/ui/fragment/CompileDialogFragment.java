@@ -31,10 +31,10 @@ import android.view.LayoutInflater;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.lsposed.manager.App;
@@ -76,7 +76,7 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
 
         FragmentCompileDialogBinding binding = FragmentCompileDialogBinding.inflate(LayoutInflater.from(requireActivity()), null, false);
         final PackageManager pm = requireContext().getPackageManager();
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity())
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireActivity())
                 .setIcon(appInfo.loadIcon(pm))
                 .setTitle(appInfo.loadLabel(pm))
                 .setView(binding.getRoot());

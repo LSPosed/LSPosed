@@ -54,7 +54,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
@@ -62,6 +61,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.lsposed.lspd.models.Application;
@@ -226,7 +226,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         int itemId = item.getItemId();
         if (itemId == R.id.use_recommended) {
             if (!checkedList.isEmpty()) {
-                new AlertDialog.Builder(activity)
+                new MaterialAlertDialogBuilder(activity)
                         .setMessage(R.string.use_recommended_message)
                         .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                             checkRecommended();
@@ -295,7 +295,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             if (info.packageName.equals("android")) {
                 ConfigManager.reboot(false);
             } else {
-                new AlertDialog.Builder(activity)
+                new MaterialAlertDialogBuilder(activity)
                         .setTitle(R.string.force_stop_dlg_title)
                         .setMessage(R.string.force_stop_dlg_text)
                         .setPositiveButton(android.R.string.ok, (dialog, which) -> ConfigManager.forceStopPackage(info.packageName, info.uid / 100000))
@@ -618,7 +618,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     public void onBackPressed() {
         fragment.searchView.clearFocus();
         if (!refreshing && fragment.binding.masterSwitch.isChecked() && checkedList.isEmpty()) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(activity);
             builder.setMessage(!recommendedList.isEmpty() ? R.string.no_scope_selected_has_recommended : R.string.no_scope_selected);
             if (!recommendedList.isEmpty()) {
                 builder.setPositiveButton(android.R.string.ok, (dialog, which) -> {

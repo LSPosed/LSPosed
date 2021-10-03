@@ -31,6 +31,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.core.text.HtmlCompat;
 
+import com.google.android.material.color.MaterialColors;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.lsposed.manager.App;
@@ -60,7 +61,8 @@ public class HomeFragment extends BaseFragment {
 
         setupToolbar(binding.toolbar, getString(R.string.app_name), R.menu.menu_home);
         binding.toolbar.setNavigationIcon(null);
-        binding.nestedScrollView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setRaised(!top));
+        binding.appBar.setLiftable(true);
+        binding.nestedScrollView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setLifted(!top));
 
         Activity activity = requireActivity();
         binding.status.setOnClickListener(v -> {
@@ -155,10 +157,10 @@ public class HomeFragment extends BaseFragment {
             binding.statusIcon.setImageResource(R.drawable.ic_round_error_outline_24);
             Snackbar.make(binding.snackbar, R.string.lsposed_not_active, Snackbar.LENGTH_INDEFINITE).show();
         }
-        binding.status.setCardBackgroundColor(cardBackgroundColor);
+        binding.status.setCardBackgroundColor(MaterialColors.harmonizeWithPrimary(activity, cardBackgroundColor));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            binding.status.setOutlineSpotShadowColor(cardBackgroundColor);
-            binding.status.setOutlineAmbientShadowColor(cardBackgroundColor);
+            binding.status.setOutlineSpotShadowColor(MaterialColors.harmonizeWithPrimary(activity, cardBackgroundColor));
+            binding.status.setOutlineAmbientShadowColor(MaterialColors.harmonizeWithPrimary(activity, cardBackgroundColor));
         }
     }
 
