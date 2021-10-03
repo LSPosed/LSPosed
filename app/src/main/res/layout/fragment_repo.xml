@@ -27,23 +27,20 @@
     app:edgeToEdge="true"
     app:fitsSystemWindowsInsets="start|end">
 
-    <rikka.material.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
-        style="?appBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true">
 
-        <androidx.appcompat.widget.Toolbar
+        <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
-            app:subtitleTextAppearance="@android:style/TextAppearance.Material.Widget.Toolbar.Subtitle"
-            app:titleTextAppearance="@android:style/TextAppearance.Material.Widget.Toolbar.Title"
-            app:popupTheme="?actionBarPopupTheme" />
+            android:elevation="0dp" />
 
-    </rikka.material.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/progress"

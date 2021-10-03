@@ -138,6 +138,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
         binding.getRoot().bringChildToFront(binding.appBar);
         setupToolbar(binding.toolbar, R.string.Modules, R.menu.menu_modules);
+        binding.appBar.setLiftable(true);
         binding.viewPager.setAdapter(new PagerAdapter(this));
         binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -145,7 +146,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 BorderRecyclerView recyclerView = binding.viewPager.findViewWithTag(position);
 
                 if (recyclerView != null) {
-                    binding.appBar.setRaised(!recyclerView.getBorderViewDelegate().isShowingTopBorder());
+                    binding.appBar.setLifted(!recyclerView.getBorderViewDelegate().isShowingTopBorder());
                 }
 
                 if (position > 0) {
@@ -356,7 +357,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             binding.recyclerView.setAdapter(fragment.adapters.get(position));
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireActivity());
             binding.recyclerView.setLayoutManager(layoutManager);
-            binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> fragment.binding.appBar.setRaised(!top));
+            binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> fragment.binding.appBar.setLifted(!top));
             binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {

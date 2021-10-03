@@ -61,7 +61,8 @@ public class HomeFragment extends BaseFragment {
 
         setupToolbar(binding.toolbar, getString(R.string.app_name), R.menu.menu_home);
         binding.toolbar.setNavigationIcon(null);
-        binding.nestedScrollView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setRaised(!top));
+        binding.appBar.setLiftable(true);
+        binding.nestedScrollView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setLifted(!top));
 
         Activity activity = requireActivity();
         binding.status.setOnClickListener(v -> {

@@ -98,6 +98,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
         String moduleName = module.getDescription();
         binding.getRoot().bringChildToFront(binding.appBar);
         setupToolbar(binding.toolbar, moduleName, R.menu.menu_repo_item);
+        binding.appBar.setLiftable(true);
         binding.toolbar.setSubtitle(modulePackageName);
         binding.viewPager.setAdapter(new PagerAdapter());
         binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
@@ -106,7 +107,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
                 BorderView borderView = binding.viewPager.findViewWithTag(position);
 
                 if (borderView != null) {
-                    binding.appBar.setRaised(!borderView.getBorderViewDelegate().isShowingTopBorder());
+                    binding.appBar.setLifted(!borderView.getBorderViewDelegate().isShowingTopBorder());
                 }
             }
         });
@@ -442,7 +443,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
         public void onBindViewHolder(@NonNull PagerAdapter.ViewHolder holder, int position) {
             switch (position) {
                 case 0:
-                    holder.scrollView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setRaised(!top));
+                    holder.scrollView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setLifted(!top));
                     holder.scrollView.setTag(position);
                     if (module != null)
                         renderGithubMarkdown(holder.webView, module.getReadmeHTML());
@@ -459,7 +460,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
                     WindowInsetsHelperKt.setInitialPadding(holder.recyclerView, 0, height, 0, 0);
                     holder.recyclerView.setTag(position);
                     holder.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
-                    holder.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setRaised(!top));
+                    holder.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setLifted(!top));
                     var insets = requireActivity().getWindow().getDecorView().getRootWindowInsets();
                     if (insets != null)
                         holder.recyclerView.onApplyWindowInsets(insets);

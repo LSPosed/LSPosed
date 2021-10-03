@@ -66,7 +66,8 @@ public class AppListFragment extends BaseFragment {
         if (module == null) {
             return binding.getRoot();
         }
-        binding.appBar.setRaised(true);
+        binding.appBar.setLiftable(true);
+        binding.appBar.setLifted(true);
         String title;
         if (module.userId != 0) {
             title = String.format(Locale.US, "%s (%d)", module.getAppName(), module.userId);

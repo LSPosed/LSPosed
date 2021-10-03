@@ -72,6 +72,7 @@ public class SettingsFragment extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
         binding.getRoot().bringChildToFront(binding.appBar);
+        binding.appBar.setLiftable(true);
         setupToolbar(binding.toolbar, R.string.Settings);
         if (savedInstanceState == null) {
             getChildFragmentManager().beginTransaction()
@@ -302,7 +303,7 @@ public class SettingsFragment extends BaseFragment {
             recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> {
                 SettingsFragment fragment = (SettingsFragment) getParentFragment();
                 if (fragment != null) {
-                    fragment.binding.appBar.setRaised(!top);
+                    fragment.binding.appBar.setLifted(!top);
                 }
             });
             return recyclerView;
