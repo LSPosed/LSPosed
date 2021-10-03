@@ -518,7 +518,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     }
 
     @Override
-    public boolean setModuleScope(String packageName, ParceledListSlice<Application> scope) {
+    public boolean setModuleScope(String packageName, ParceledListSlice<Application> scope) throws RemoteException {
         return ConfigManager.getInstance().setModuleScope(packageName, scope.getList());
     }
 
