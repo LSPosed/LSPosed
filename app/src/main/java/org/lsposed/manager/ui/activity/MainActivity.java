@@ -27,7 +27,6 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.os.BuildCompat;
@@ -40,9 +39,7 @@ import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.NavGraphDirections;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.ActivityMainBinding;
-import org.lsposed.manager.receivers.LSPManagerServiceHolder;
 import org.lsposed.manager.ui.activity.base.BaseActivity;
-import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
 
 public class MainActivity extends BaseActivity {
     private static final String KEY_PREFIX = MainActivity.class.getName() + '.';
@@ -73,22 +70,6 @@ public class MainActivity extends BaseActivity {
 
         if (savedInstanceState == null) {
             handleIntent(getIntent());
-        }
-
-        if (!App.isParasitic() && !App.getPreferences().getBoolean("never_show_shortcut", false)) {
-            new BlurBehindDialogBuilder(this)
-                    .setTitle(R.string.parasitic_recommend)
-                    .setMessage(R.string.parasitic_recommend_summary)
-                    .setNegativeButton(R.string.never_show, (dialog, which) -> App.getPreferences().edit().putBoolean("never_show_shortcut", true).apply())
-                    .setNeutralButton(R.string.create_shortcut, (dialog, which) -> {
-                        try {
-                            LSPManagerServiceHolder.getService().createShortcut();
-                        } catch (Throwable e) {
-                            Toast.makeText(this, getString(R.string.failed_to_create_shortcut, e.getMessage()), Toast.LENGTH_LONG).show();
-                        }
-                    })
-                    .setPositiveButton(android.R.string.ok, null)
-                    .show();
         }
     }
 

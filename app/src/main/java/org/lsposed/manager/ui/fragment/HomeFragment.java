@@ -29,6 +29,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.text.HtmlCompat;
 
 import com.google.android.material.color.MaterialColors;
@@ -40,6 +41,7 @@ import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.DialogAboutBinding;
 import org.lsposed.manager.databinding.FragmentHomeBinding;
+import org.lsposed.manager.receivers.LSPManagerServiceHolder;
 import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
 import org.lsposed.manager.ui.dialog.InfoDialogBuilder;
 import org.lsposed.manager.ui.dialog.WarningDialogBuilder;
@@ -54,6 +56,29 @@ import rikka.core.util.ResourceUtils;
 public class HomeFragment extends BaseFragment {
 
     private FragmentHomeBinding binding;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (!App.isParasitic() && !App.getPreferences().getBoolean("never_show_shortcut", false)) {
+            new BlurBehindDialogBuilder(requireActivity())
+                    .setTitle(R.string.parasitic_recommend)
+                    .setMessage(R.string.parasitic_recommend_summary)
+                    .setNegativeButton(R.string.never_show, (dialog, which) -> App.getPreferences().edit().putBoolean("never_show_shortcut", true).apply())
+                    .setNeutralButton(R.string.create_shortcut, (dialog, which) -> {
+                        try {
+                            LSPManagerServiceHolder.getService().createShortcut();
+                        } catch (Throwable e) {
+                            if (binding != null) {
+                                Snackbar.make(binding.snackbar, getString(R.string.failed_to_create_shortcut, e.getMessage()), Snackbar.LENGTH_LONG).show();
+                            }
+                        }
+                    })
+                    .setPositiveButton(android.R.string.ok, null)
+                    .show();
+        }
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -157,10 +182,11 @@ public class HomeFragment extends BaseFragment {
             binding.statusIcon.setImageResource(R.drawable.ic_round_error_outline_24);
             Snackbar.make(binding.snackbar, R.string.lsposed_not_active, Snackbar.LENGTH_INDEFINITE).show();
         }
-        binding.status.setCardBackgroundColor(MaterialColors.harmonizeWithPrimary(activity, cardBackgroundColor));
+        cardBackgroundColor = MaterialColors.harmonizeWithPrimary(activity, cardBackgroundColor);
+        binding.status.setCardBackgroundColor(cardBackgroundColor);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            binding.status.setOutlineSpotShadowColor(MaterialColors.harmonizeWithPrimary(activity, cardBackgroundColor));
-            binding.status.setOutlineAmbientShadowColor(MaterialColors.harmonizeWithPrimary(activity, cardBackgroundColor));
+            binding.status.setOutlineSpotShadowColor(cardBackgroundColor);
+            binding.status.setOutlineAmbientShadowColor(cardBackgroundColor);
         }
     }
 
