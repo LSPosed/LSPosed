@@ -23,7 +23,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipToPadding="false"
-    android:paddingTop="104dp"
     android:fadeScrollbars="true"
     android:scrollbarStyle="insideOverlay"
     android:scrollbars="vertical"

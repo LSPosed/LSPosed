@@ -87,7 +87,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/view_assets"
             app:layout_constraintTop_toBottomOf="@id/description"
-            style="@style/Widget.App.Button.OutlinedButton.IconOnly" />
+            style="@style/Widget.Material3.Button.OutlinedButton.Icon" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

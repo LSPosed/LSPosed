@@ -347,6 +347,10 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             ItemRepoRecyclerviewBinding binding = ItemRepoRecyclerviewBinding.inflate(getLayoutInflater(), container, false);
             if (fragment.adapters.size() == 1) {
                 WindowInsetsHelperKt.setInitialPadding(binding.recyclerView, 0, ResourceUtils.resolveDimensionPixelOffset(requireActivity().getTheme(), androidx.appcompat.R.attr.actionBarSize, 0), 0, 0);
+            } else {
+                int height = ResourceUtils.resolveDimensionPixelOffset(requireActivity().getTheme(), androidx.appcompat.R.attr.actionBarSize, 0)
+                        + getResources().getDimensionPixelOffset(R.dimen.tab_layout_height);
+                WindowInsetsHelperKt.setInitialPadding(binding.recyclerView, 0,  height, 0, 0);
             }
             binding.recyclerView.setTag(position);
             binding.recyclerView.setAdapter(fragment.adapters.get(position));

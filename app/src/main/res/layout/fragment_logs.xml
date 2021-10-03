@@ -81,7 +81,6 @@
             android:layout_height="match_parent"
             android:clipToPadding="false"
             android:fadeScrollbars="true"
-            android:paddingTop="104dp"
             android:scrollbarStyle="insideOverlay"
             android:scrollbars="vertical"
             app:borderTopVisibility="whenTop"

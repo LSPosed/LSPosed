@@ -78,6 +78,7 @@ import okhttp3.Headers;
 import okhttp3.Request;
 import okhttp3.Response;
 import rikka.core.util.ResourceUtils;
+import rikka.insets.WindowInsetsHelperKt;
 import rikka.recyclerview.RecyclerViewKt;
 import rikka.widget.borderview.BorderNestedScrollView;
 import rikka.widget.borderview.BorderRecyclerView;
@@ -453,6 +454,9 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
                     } else {
                         holder.recyclerView.setAdapter(new InformationAdapter(module));
                     }
+                    int height = ResourceUtils.resolveDimensionPixelOffset(requireActivity().getTheme(), androidx.appcompat.R.attr.actionBarSize, 0)
+                            + getResources().getDimensionPixelOffset(R.dimen.tab_layout_height);
+                    WindowInsetsHelperKt.setInitialPadding(holder.recyclerView, 0,  height, 0, 0);
                     holder.recyclerView.setTag(position);
                     holder.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
                     holder.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setRaised(!top));
