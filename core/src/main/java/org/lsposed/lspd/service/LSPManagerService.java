@@ -42,6 +42,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
@@ -59,7 +60,6 @@ import org.lsposed.lspd.ILSPManagerService;
 import org.lsposed.lspd.models.Application;
 import org.lsposed.lspd.models.UserInfo;
 import org.lsposed.lspd.util.FakeContext;
-import android.os.Handler;
 import org.lsposed.lspd.util.Utils;
 
 import java.io.File;
@@ -253,12 +253,13 @@ public class LSPManagerService extends ILSPManagerService.Stub {
         }
     }
 
-    public static void broadcastIntent(String modulePackageName, int moduleUserId) {
+    public static void broadcastIntent(String modulePackageName, int moduleUserId, boolean packageFullyRemoved) {
         Intent intent = new Intent(Intent.ACTION_PACKAGE_CHANGED);
         intent.addFlags(0x01000000); //Intent.FLAG_RECEIVER_INCLUDE_BACKGROUND
         intent.addFlags(0x00400000); //Intent.FLAG_RECEIVER_FROM_SHELL
         intent.putExtra("android.intent.extra.PACKAGES", modulePackageName);
         intent.putExtra(Intent.EXTRA_USER, moduleUserId);
+        intent.putExtra(Intent.ACTION_PACKAGE_FULLY_REMOVED, packageFullyRemoved);
         intent.setPackage(BuildConfig.MANAGER_INJECTED_PKG_NAME);
         try {
             ActivityManagerService.broadcastIntentWithFeature(null, intent,
@@ -277,7 +278,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
 
     public static void createOrUpdateShortcut(boolean force) {
-        workerHandler.post(()->createOrUpdateShortcutInternal(force));
+        workerHandler.post(() -> createOrUpdateShortcutInternal(force));
     }
 
     private synchronized static void createOrUpdateShortcutInternal(boolean force) {

@@ -79,9 +79,9 @@ public class LSPosedService extends ILSPosedService.Stub {
         if (uid == AID_NOBODY || uid <= 0) return;
         int userId = intent.getIntExtra("android.intent.extra.user_handle", USER_NULL);
         if (userId == USER_NULL) userId = uid % PER_USER_RANGE;
-
+        var configManager = ConfigManager.getInstance();
         Uri uri = intent.getData();
-        String moduleName = (uri != null) ? uri.getSchemeSpecificPart() : ConfigManager.getInstance().getModule(uid);
+        String moduleName = (uri != null) ? uri.getSchemeSpecificPart() : configManager.getModule(uid);
 
         ApplicationInfo applicationInfo = null;
         if (moduleName != null) {
@@ -94,15 +94,13 @@ public class LSPosedService extends ILSPosedService.Stub {
         boolean isXposedModule = applicationInfo != null &&
                 applicationInfo.metaData != null &&
                 applicationInfo.metaData.containsKey("xposedminversion");
-
-        Log.d(TAG, "Package changed: uid=" + uid + " userId=" + userId + " action=" + intent.getAction() + " isXposedModule=" + isXposedModule);
-
-        switch (intent.getAction()) {
+        var intentAction = intent.getAction();
+        switch (intentAction) {
             case Intent.ACTION_PACKAGE_FULLY_REMOVED: {
                 // for module, remove module
                 // because we only care about when the apk is gone
                 if (moduleName != null)
-                    if (ConfigManager.getInstance().removeModule(moduleName))
+                    if (configManager.removeModule(moduleName))
                         isXposedModule = true;
                 break;
             }
@@ -116,10 +114,10 @@ public class LSPosedService extends ILSPosedService.Stub {
                 }
                 // when package is changed, we may need to update cache (module cache or process cache)
                 if (isXposedModule) {
-                    ConfigManager.getInstance().updateCache();
-                } else if (ConfigManager.getInstance().isUidHooked(uid)) {
+                    configManager.updateCache();
+                } else if (configManager.isUidHooked(uid)) {
                     // it will automatically remove obsolete app from database
-                    ConfigManager.getInstance().updateAppCache();
+                    configManager.updateAppCache();
                 }
                 break;
             }
@@ -128,33 +126,36 @@ public class LSPosedService extends ILSPosedService.Stub {
                 // (apk may still be there because of multi-user)
                 if (isXposedModule) {
                     // it will automatically remove obsolete scope from database
-                    ConfigManager.getInstance().updateCache();
-                } else if (ConfigManager.getInstance().isUidHooked(uid)) {
+                    configManager.updateCache();
+                } else if (configManager.isUidHooked(uid)) {
                     // it will automatically remove obsolete app from database
-                    ConfigManager.getInstance().updateAppCache();
+                    configManager.updateAppCache();
                 }
                 break;
             }
         }
-        boolean removed = intent.getAction().equals(Intent.ACTION_PACKAGE_FULLY_REMOVED) ||
-                intent.getAction().equals(Intent.ACTION_UID_REMOVED);
+        boolean removed = intentAction.equals(Intent.ACTION_PACKAGE_FULLY_REMOVED) ||
+                intentAction.equals(Intent.ACTION_UID_REMOVED);
+
+        Log.d(TAG, "Package changed: uid=" + uid + " userId=" + userId + " action=" + intent.getAction() + " isXposedModule=" + isXposedModule);
+
         if (isXposedModule) {
             Log.d(TAG, "module " + moduleName + " changed, dispatching to manager");
-            var enabledModules = ConfigManager.getInstance().enabledModules();
-            var scope = ConfigManager.getInstance().getModuleScope(moduleName);
+            var enabledModules = configManager.enabledModules();
+            var scope = configManager.getModuleScope(moduleName);
             boolean systemModule = scope != null &&
                     scope.parallelStream().anyMatch(app -> app.packageName.equals("android"));
             boolean enabled = Arrays.asList(enabledModules).contains(moduleName);
             if (!removed) {
                 LSPManagerService.showNotification(moduleName, userId, enabled, systemModule);
             }
-            LSPManagerService.broadcastIntent(moduleName, userId);
+            LSPManagerService.broadcastIntent(moduleName, userId, intentAction.equals(Intent.ACTION_PACKAGE_FULLY_REMOVED));
         }
 
         if (BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME.equals(moduleName) && userId == 0) {
             Log.d(TAG, "Manager updated");
             try {
-                ConfigManager.getInstance().updateManager(removed);
+                configManager.updateManager(removed);
                 LSPManagerService.createOrUpdateShortcut(false);
             } catch (Throwable e) {
                 Log.e(TAG, Log.getStackTraceString(e));
