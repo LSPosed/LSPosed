@@ -39,7 +39,7 @@ public class BlurBehindDialogBuilder extends MaterialAlertDialogBuilder {
     private static final boolean supportBlur = getSystemProperty("ro.surface_flinger.supports_background_blur", false) && !getSystemProperty("persist.sys.sf.disable_blurs", false);
 
     public BlurBehindDialogBuilder(@NonNull Context context) {
-        super(context);
+        super(context, com.google.android.material.R.style.ThemeOverlay_Material3_MaterialAlertDialog_Centered);
     }
 
     @NonNull

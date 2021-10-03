@@ -59,6 +59,7 @@ public class ThemeColorPreferenceDialogFragmentCompat extends PreferenceDialogFr
     private int[] colors;
     @AttrRes
     private static final int DEF_STYLE_ATTR = com.google.android.material.R.attr.alertDialogStyle;
+    @SuppressLint("PrivateResource")
     @StyleRes
     private static final int DEF_STYLE_RES = com.google.android.material.R.style.MaterialAlertDialog_MaterialComponents;
     @AttrRes
@@ -94,6 +95,7 @@ public class ThemeColorPreferenceDialogFragmentCompat extends PreferenceDialogFr
         for (int i = 0; i < themeColors.length; i++) {
             colors[i] = activity.getColor(themeColors[i].getResourceId());
         }
+
         Context context = createMaterialAlertDialogThemedContext(activity);
 
         ColorPickerDialog.Params params = new ColorPickerDialog.Params.Builder(context)
@@ -115,25 +117,22 @@ public class ThemeColorPreferenceDialogFragmentCompat extends PreferenceDialogFr
         materialShapeDrawable.initializeElevationOverlay(context);
         materialShapeDrawable.setFillColor(ColorStateList.valueOf(surfaceColor));
 
-        // dialogCornerRadius first appeared in Android Pie
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             TypedValue dialogCornerRadiusValue = new TypedValue();
             theme.resolveAttribute(android.R.attr.dialogCornerRadius, dialogCornerRadiusValue, true);
             float dialogCornerRadius =
-                    dialogCornerRadiusValue.getDimension(getContext().getResources().getDisplayMetrics());
+                    dialogCornerRadiusValue.getDimension(activity.getResources().getDisplayMetrics());
             if (dialogCornerRadiusValue.type == TypedValue.TYPE_DIMENSION && dialogCornerRadius >= 0) {
                 materialShapeDrawable.setCornerSize(dialogCornerRadius);
             }
         }
+
         ColorPickerDialog dialog = new ColorPickerDialog(context, this, params);
         dialog.setTitle(pref.getDialogTitle());
+
         Window window = dialog.getWindow();
-        /* {@link Window#getDecorView()} should be called before any changes are made to the Window
-         * as it locks in attributes and affects layout. */
         View decorView = window.getDecorView();
-        if (materialShapeDrawable instanceof MaterialShapeDrawable) {
-            ((MaterialShapeDrawable) materialShapeDrawable).setElevation(ViewCompat.getElevation(decorView));
-        }
+        materialShapeDrawable.setElevation(ViewCompat.getElevation(decorView));
 
         Drawable insetDrawable = MaterialDialogs.insetDrawable(materialShapeDrawable, backgroundInsets);
         window.setBackgroundDrawable(insetDrawable);

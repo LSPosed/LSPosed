@@ -174,10 +174,11 @@ public class HomeFragment extends BaseFragment {
             binding.statusIcon.setImageResource(R.drawable.ic_round_error_outline_24);
             Snackbar.make(binding.snackbar, R.string.lsposed_not_active, Snackbar.LENGTH_INDEFINITE).show();
         }
-        binding.status.setCardBackgroundColor(MaterialColors.harmonizeWithPrimary(activity, cardBackgroundColor));
+        cardBackgroundColor = MaterialColors.harmonizeWithPrimary(activity, cardBackgroundColor);
+        binding.status.setCardBackgroundColor(cardBackgroundColor);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            binding.status.setOutlineSpotShadowColor(MaterialColors.harmonizeWithPrimary(activity, cardBackgroundColor));
-            binding.status.setOutlineAmbientShadowColor(MaterialColors.harmonizeWithPrimary(activity, cardBackgroundColor));
+            binding.status.setOutlineSpotShadowColor(cardBackgroundColor);
+            binding.status.setOutlineAmbientShadowColor(cardBackgroundColor);
         }
     }
 

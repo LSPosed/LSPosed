@@ -43,7 +43,7 @@
         <item name="useMaterialThemeColors">true</item>
     </style>
 
-    <style name="ThemeOverlay.Material.Dialog.ColorPicker" parent="@style/ThemeOverlay.Material3.Dialog" />
+    <style name="ThemeOverlay.Material.Dialog.ColorPicker" parent="@style/ThemeOverlay.Material3.MaterialAlertDialog.Centered" tools:override="true" />
 
     <style name="PreferenceSummaryTextStyle" tools:override="true">
         <item name="android:fontFamily">sans-serif</item>
@@ -62,7 +62,7 @@
     </style>
 
     <!-- Base themes -->
-    <style name="Base.Light" parent="Theme.Material3.Light">
+    <style name="Base.Light" parent="Theme.Material3.Light" tools:override="true">
         <item name="android:statusBarColor">?android:colorBackground</item>
         <item name="android:ambientShadowAlpha">@dimen/ambient_shadow_alpha</item>
         <item name="android:spotShadowAlpha">@dimen/spot_shadow_alpha</item>
@@ -85,7 +85,7 @@
         <item name="switchBarBackgroundDisabled">@color/switchbar_background_light</item>
     </style>
 
-    <style name="Base" parent="Theme.Material3.Dark">
+    <style name="Base" parent="Theme.Material3.Dark" tools:override="true">
         <item name="android:statusBarColor">?android:colorBackground</item>
         <item name="android:ambientShadowAlpha">@dimen/ambient_shadow_alpha</item>
         <item name="android:spotShadowAlpha">@dimen/spot_shadow_alpha</item>
@@ -106,5 +106,9 @@
         <item name="switchBarTheme">@style/ThemeOverlay.SwitchBar</item>
         <item name="switchBarBackgroundNormal">@color/switchbar_background_dark</item>
         <item name="switchBarBackgroundDisabled">@color/switchbar_background_dark</item>
+    </style>
+
+    <style name="ThemeOverlay.SwitchBar" parent="android:Widget" tools:override="true">
+        <item name="android:colorControlActivated">@color/primary_text_material_inverse</item>
     </style>
 </resources>
