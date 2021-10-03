@@ -86,12 +86,12 @@
         <item name="cardPreventCornerOverlap">false</item>
     </style>
 
-    <style name="HomeItem.Primary">
+    <style name="HomeItem.Primary" parent="Widget.Material3.CardView.Elevated">
         <item name="android:layout_marginTop">16dp</item>
         <item name="cardElevation">@dimen/home_primary_elevation</item>
     </style>
 
-    <style name="HomeItem.Secondary">
+    <style name="HomeItem.Secondary" parent="Widget.Material3.CardView.Elevated">
         <item name="cardElevation">@dimen/home_secondary_elevation</item>
         <item name="android:outlineAmbientShadowColor" tools:targetApi="p">
             @color/home_secondary_outline_ambient_shadow_color
