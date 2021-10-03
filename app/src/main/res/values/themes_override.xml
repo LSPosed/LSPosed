@@ -210,16 +210,12 @@
 
     <style name="ThemeOverlay.Material.Dialog" parent="ThemeOverlay.Material3.Dialog">
         <item name="android:windowAnimationStyle">@style/Animation.Material.Dialog</item>
-        <item name="android:windowElevation">@dimen/rd_material_dialog_default_elevation</item>
-        <item name="android:backgroundDimAmount">@dimen/rd_material_dialog_default_dim_amount</item>
     </style>
 
     <style name="ThemeOverlay.Material.Dialog.Alert" parent="ThemeOverlay.Material3.Dialog.Alert">
         <item name="android:windowAnimationStyle">@style/Animation.Material.Dialog</item>
-        <item name="android:windowElevation">@dimen/rd_material_dialog_default_elevation</item>
-        <item name="android:backgroundDimAmount">@dimen/rd_material_dialog_default_dim_amount</item>
 
-        <item name="alertDialogStyle">@style/AlertDialog.Material</item>
+        <item name="alertDialogStyle">@style/MaterialAlertDialog.Material3</item>
         <item name="android:checkedTextViewStyle">@style/Widget.Material3.CheckedTextView</item>
         <item name="buttonBarButtonStyle">@style/Widget.Material3.Button.TextButton.Dialog</item>
         <item name="buttonBarPositiveButtonStyle">@style/Widget.Material3.Button.TextButton.Dialog</item>
