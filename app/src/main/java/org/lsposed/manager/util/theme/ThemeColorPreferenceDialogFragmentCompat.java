@@ -19,22 +19,68 @@
 
 package org.lsposed.manager.util.theme;
 
+import static com.google.android.material.theme.overlay.MaterialThemeOverlay.wrap;
+
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.ColorStateList;
+import android.content.res.Resources;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.TypedValue;
+import android.view.View;
+import android.view.Window;
 
+import androidx.annotation.AttrRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.StyleRes;
+import androidx.appcompat.view.ContextThemeWrapper;
+import androidx.core.view.ViewCompat;
 import androidx.preference.PreferenceDialogFragmentCompat;
 
+import com.google.android.material.color.MaterialColors;
+import com.google.android.material.dialog.InsetDialogOnTouchListener;
+import com.google.android.material.dialog.MaterialDialogs;
+import com.google.android.material.resources.MaterialAttributes;
+import com.google.android.material.shape.MaterialShapeDrawable;
 import com.takisoft.colorpicker.ColorPickerDialog;
 import com.takisoft.colorpicker.OnColorSelectedListener;
 
+@SuppressLint("RestrictedApi")
 public class ThemeColorPreferenceDialogFragmentCompat extends PreferenceDialogFragmentCompat implements OnColorSelectedListener {
 
     private int pickedColor;
     ThemeUtil.CustomThemeColors[] themeColors;
     private int[] colors;
+    @AttrRes
+    private static final int DEF_STYLE_ATTR = com.google.android.material.R.attr.alertDialogStyle;
+    @StyleRes
+    private static final int DEF_STYLE_RES = com.google.android.material.R.style.MaterialAlertDialog_MaterialComponents;
+    @AttrRes
+    private static final int MATERIAL_ALERT_DIALOG_THEME_OVERLAY = com.google.android.material.R.attr.materialAlertDialogTheme;
+
+    private static int getMaterialAlertDialogThemeOverlay(@NonNull Context context) {
+        TypedValue materialAlertDialogThemeOverlay =
+                MaterialAttributes.resolve(context, MATERIAL_ALERT_DIALOG_THEME_OVERLAY);
+        if (materialAlertDialogThemeOverlay == null) {
+            return 0;
+        }
+        return materialAlertDialogThemeOverlay.data;
+    }
+
+    private static Context createMaterialAlertDialogThemedContext(@NonNull Context context) {
+        int themeOverlayId = getMaterialAlertDialogThemeOverlay(context);
+        Context themedContext = wrap(context, null, DEF_STYLE_ATTR, DEF_STYLE_RES);
+        if (themeOverlayId == 0) {
+            return themedContext;
+        }
+        return new ContextThemeWrapper(themedContext, themeOverlayId);
+    }
 
     @NonNull
     @Override
@@ -48,8 +94,9 @@ public class ThemeColorPreferenceDialogFragmentCompat extends PreferenceDialogFr
         for (int i = 0; i < themeColors.length; i++) {
             colors[i] = activity.getColor(themeColors[i].getResourceId());
         }
+        Context context = createMaterialAlertDialogThemedContext(activity);
 
-        ColorPickerDialog.Params params = new ColorPickerDialog.Params.Builder(activity)
+        ColorPickerDialog.Params params = new ColorPickerDialog.Params.Builder(context)
                 .setSelectedColor(selectedColor)
                 .setColors(colors)
                 .setSize(ColorPickerDialog.SIZE_SMALL)
@@ -57,8 +104,40 @@ public class ThemeColorPreferenceDialogFragmentCompat extends PreferenceDialogFr
                 .setColumns(0)
                 .build();
 
-        ColorPickerDialog dialog = new ColorPickerDialog(activity, this, params);
+        Resources.Theme theme = context.getTheme();
+
+        Rect backgroundInsets = MaterialDialogs.getDialogBackgroundInsets(context, DEF_STYLE_ATTR, DEF_STYLE_RES);
+
+        int surfaceColor =
+                MaterialColors.getColor(context, com.google.android.material.R.attr.colorSurface, getClass().getCanonicalName());
+        MaterialShapeDrawable materialShapeDrawable =
+                new MaterialShapeDrawable(context, null, DEF_STYLE_ATTR, DEF_STYLE_RES);
+        materialShapeDrawable.initializeElevationOverlay(context);
+        materialShapeDrawable.setFillColor(ColorStateList.valueOf(surfaceColor));
+
+        // dialogCornerRadius first appeared in Android Pie
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            TypedValue dialogCornerRadiusValue = new TypedValue();
+            theme.resolveAttribute(android.R.attr.dialogCornerRadius, dialogCornerRadiusValue, true);
+            float dialogCornerRadius =
+                    dialogCornerRadiusValue.getDimension(getContext().getResources().getDisplayMetrics());
+            if (dialogCornerRadiusValue.type == TypedValue.TYPE_DIMENSION && dialogCornerRadius >= 0) {
+                materialShapeDrawable.setCornerSize(dialogCornerRadius);
+            }
+        }
+        ColorPickerDialog dialog = new ColorPickerDialog(context, this, params);
         dialog.setTitle(pref.getDialogTitle());
+        Window window = dialog.getWindow();
+        /* {@link Window#getDecorView()} should be called before any changes are made to the Window
+         * as it locks in attributes and affects layout. */
+        View decorView = window.getDecorView();
+        if (materialShapeDrawable instanceof MaterialShapeDrawable) {
+            ((MaterialShapeDrawable) materialShapeDrawable).setElevation(ViewCompat.getElevation(decorView));
+        }
+
+        Drawable insetDrawable = MaterialDialogs.insetDrawable(materialShapeDrawable, backgroundInsets);
+        window.setBackgroundDrawable(insetDrawable);
+        decorView.setOnTouchListener(new InsetDialogOnTouchListener(dialog, backgroundInsets));
 
         return dialog;
     }
