@@ -39,12 +39,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
@@ -375,7 +375,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
                     holder.viewAssets.setOnClickListener(v -> {
                         ArrayList<String> names = new ArrayList<>();
                         assets.forEach(releaseAsset -> names.add(releaseAsset.getName()));
-                        new AlertDialog.Builder(requireActivity())
+                        new MaterialAlertDialogBuilder(requireActivity())
                                 .setItems(names.toArray(new String[0]), (dialog, which) -> NavUtil.startURL(requireActivity(), assets.get(which).getDownloadUrl()))
                                 .show();
                     });
@@ -456,7 +456,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
                     }
                     int height = ResourceUtils.resolveDimensionPixelOffset(requireActivity().getTheme(), androidx.appcompat.R.attr.actionBarSize, 0)
                             + getResources().getDimensionPixelOffset(R.dimen.tab_layout_height);
-                    WindowInsetsHelperKt.setInitialPadding(holder.recyclerView, 0,  height, 0, 0);
+                    WindowInsetsHelperKt.setInitialPadding(holder.recyclerView, 0, height, 0, 0);
                     holder.recyclerView.setTag(position);
                     holder.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
                     holder.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setRaised(!top));

@@ -45,6 +45,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
@@ -110,7 +111,7 @@ public class LogsFragment extends BaseFragment {
         binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setRaised(!top));
         int height = ResourceUtils.resolveDimensionPixelOffset(requireActivity().getTheme(), androidx.appcompat.R.attr.actionBarSize, 0)
                 + getResources().getDimensionPixelOffset(R.dimen.tab_layout_height);
-        WindowInsetsHelperKt.setInitialPadding(binding.recyclerView, 0,  height, 0, 0);
+        WindowInsetsHelperKt.setInitialPadding(binding.recyclerView, 0, height, 0, 0);
 
         binding.slidingTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -186,7 +187,7 @@ public class LogsFragment extends BaseFragment {
             new LogsReader().execute(parcelFileDescriptor.getFileDescriptor());
         } else {
             binding.slidingTabs.selectTab(binding.slidingTabs.getTabAt(0));
-            new AlertDialog.Builder(requireActivity())
+            new MaterialAlertDialogBuilder(requireActivity())
                     .setMessage(R.string.verbose_log_not_avaliable)
                     .setPositiveButton(android.R.string.ok, null)
                     .show();
@@ -254,7 +255,7 @@ public class LogsFragment extends BaseFragment {
 
         @Override
         protected void onPreExecute() {
-            mProgressDialog = new AlertDialog.Builder(requireActivity()).create();
+            mProgressDialog = new MaterialAlertDialogBuilder(requireActivity()).create();
             mProgressDialog.setMessage(getString(R.string.loading));
             mProgressDialog.setCancelable(false);
             handler.postDelayed(mRunnable, 300);

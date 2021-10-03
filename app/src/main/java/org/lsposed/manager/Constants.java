@@ -21,7 +21,6 @@
 package org.lsposed.manager;
 
 import android.os.IBinder;
-import android.widget.Toast;
 
 import org.lsposed.manager.receivers.LSPManagerServiceHolder;
 

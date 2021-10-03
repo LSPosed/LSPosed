@@ -30,10 +30,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.os.BuildCompat;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import java.lang.reflect.Method;
 
 @SuppressWarnings({"JavaReflectionMemberAccess", "ConstantConditions"})
-public class BlurBehindDialogBuilder extends AlertDialog.Builder {
+public class BlurBehindDialogBuilder extends MaterialAlertDialogBuilder {
     private static final boolean supportBlur = getSystemProperty("ro.surface_flinger.supports_background_blur", false) && !getSystemProperty("persist.sys.sf.disable_blurs", false);
 
     public BlurBehindDialogBuilder(@NonNull Context context) {
