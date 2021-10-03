@@ -108,6 +108,12 @@ public final class ModuleUtil {
     }
 
     public InstalledModule reloadSingleModule(String packageName, int userId) {
+        return reloadSingleModule(packageName, userId, false);
+    }
+
+    public InstalledModule reloadSingleModule(String packageName, int userId, boolean packageFullyRemoved) {
+        if (packageFullyRemoved && isModuleEnabled(packageName))
+            enabledModules.remove(packageName);
         PackageInfo pkg;
 
         try {
@@ -115,7 +121,6 @@ public final class ModuleUtil {
         } catch (NameNotFoundException e) {
             InstalledModule old = installedModules.remove(Pair.create(packageName, userId));
             if (old != null) {
-                enabledModules.remove(packageName);
                 for (ModuleListener listener : listeners) {
                     listener.onSingleInstalledModuleReloaded();
                 }
