@@ -40,6 +40,7 @@ import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.DialogAboutBinding;
 import org.lsposed.manager.databinding.FragmentHomeBinding;
+import org.lsposed.manager.receivers.LSPManagerServiceHolder;
 import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
 import org.lsposed.manager.ui.dialog.InfoDialogBuilder;
 import org.lsposed.manager.ui.dialog.WarningDialogBuilder;
@@ -81,6 +82,22 @@ public class HomeFragment extends BaseFragment {
         binding.logs.setOnClickListener(new StartFragmentListener(R.id.action_logs_fragment, true));
         binding.settings.setOnClickListener(new StartFragmentListener(R.id.action_settings_fragment, false));
         binding.issue.setOnClickListener(view -> NavUtil.startURL(activity, "https://github.com/LSPosed/LSPosed/issues"));
+
+        if (!App.isParasitic() && !App.getPreferences().getBoolean("never_show_shortcut", false)) {
+            new BlurBehindDialogBuilder(activity)
+                    .setTitle(R.string.parasitic_recommend)
+                    .setMessage(R.string.parasitic_recommend_summary)
+                    .setNegativeButton(R.string.never_show, (dialog, which) -> App.getPreferences().edit().putBoolean("never_show_shortcut", true).apply())
+                    .setNeutralButton(R.string.create_shortcut, (dialog, which) -> {
+                        try {
+                            LSPManagerServiceHolder.getService().createShortcut();
+                        } catch (Throwable e) {
+                            Snackbar.make(binding.snackbar, getString(R.string.failed_to_create_shortcut, e.getMessage()), Snackbar.LENGTH_LONG).show();
+                        }
+                    })
+                    .setPositiveButton(android.R.string.ok, null)
+                    .show();
+        }
 
         updateStates(requireActivity(), ConfigManager.isBinderAlive(), App.needUpdate());
         return binding.getRoot();
