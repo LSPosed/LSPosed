@@ -9,6 +9,7 @@ import android.app.IActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Parcel;
 import android.os.ResultReceiver;
@@ -205,6 +206,11 @@ public class ActivityController extends IActivityController.Stub {
     @Override
     public int systemNotResponding(String msg) {
         return controller == null ? -1 : controller.systemNotResponding(msg);
+    }
+
+    @Override
+    public boolean moveTaskToFront(String pkg, int task, int flags, Bundle options) {
+        return controller == null || controller.moveTaskToFront(pkg, task, flags, options);
     }
 
     @Override
