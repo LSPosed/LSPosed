@@ -217,6 +217,7 @@ public class ParasiticManagerHooker {
 
     private static void checkIntent(ILSPManagerService managerService, Intent intent) {
         if (managerService == null) return;
+        if (Process.myUid() != BuildConfig.MANAGER_INJECTED_UID) return;
         if (intent.getCategories() == null || !intent.getCategories().contains("org.lsposed.manager.LAUNCH_MANAGER")) {
             Hookers.logD("Launching the original app, restarting");
             try {
