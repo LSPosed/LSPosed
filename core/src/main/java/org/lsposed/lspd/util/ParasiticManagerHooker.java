@@ -129,8 +129,6 @@ public class ParasiticManagerHooker {
             XposedBridge.hookAllMethods(XposedHelpers.findClass("android.app.ActivityThread$ApplicationThread", ActivityThread.class.getClassLoader()), "scheduleLaunchActivity", activityHooker);
         }
 
-        if (Process.myUid() != BuildConfig.MANAGER_INJECTED_UID) return;
-
         XposedBridge.hookAllMethods(ActivityThread.class, "handleReceiver", new XC_MethodReplacement() {
             @Override
             protected Object replaceHookedMethod(MethodHookParam param) {
@@ -147,7 +145,7 @@ public class ParasiticManagerHooker {
             private Context originalContext = null;
 
             @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+            protected void beforeHookedMethod(MethodHookParam param) {
                 Hookers.logD("before install provider");
                 Context ctx = null;
                 ProviderInfo info = null;
@@ -160,13 +158,13 @@ public class ParasiticManagerHooker {
                     } else if (arg instanceof ProviderInfo) info = (ProviderInfo) arg;
                 }
                 if (ctx != null && info != null) {
-                    if (!info.applicationInfo.packageName.equals(BuildConfig.MANAGER_INJECTED_PKG_NAME)) return;
                     if (originalContext == null) {
-                        info.applicationInfo.packageName = BuildConfig.MANAGER_INJECTED_PKG_NAME + ".origin";
+                        var isDefaultManager = info.applicationInfo.packageName.equals(BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME);
+                        info.applicationInfo.packageName = isDefaultManager ? BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME + ".origin" : BuildConfig.MANAGER_INJECTED_PKG_NAME + ".origin";
                         var originalPkgInfo = ActivityThread.currentActivityThread().getPackageInfoNoCheck(info.applicationInfo, HiddenApiBridge.Resources_getCompatibilityInfo(ctx.getResources()));
-                        XposedHelpers.setObjectField(originalPkgInfo, "mPackageName", BuildConfig.MANAGER_INJECTED_PKG_NAME);
+                        XposedHelpers.setObjectField(originalPkgInfo, "mPackageName", isDefaultManager ? BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME : BuildConfig.MANAGER_INJECTED_PKG_NAME);
                         originalContext = (Context) XposedHelpers.callStaticMethod(XposedHelpers.findClass("android.app.ContextImpl", null), "createAppContext", ActivityThread.currentActivityThread(), originalPkgInfo);
-                        info.applicationInfo.packageName = BuildConfig.MANAGER_INJECTED_PKG_NAME;
+                        info.applicationInfo.packageName = isDefaultManager ? BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME : BuildConfig.MANAGER_INJECTED_PKG_NAME;
                     }
                     param.args[ctxIdx] = originalContext;
                 } else {
