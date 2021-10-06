@@ -78,7 +78,9 @@ public class BaseActivity extends MaterialActivity {
         window.setStatusBarColor(Color.TRANSPARENT);
 
         window.getDecorView().post(() -> {
-            if (window.getDecorView().getRootWindowInsets().getSystemWindowInsetBottom() >= Resources.getSystem().getDisplayMetrics().density * 40) {
+            var rootWindowInsets = window.getDecorView().getRootWindowInsets();
+            if (rootWindowInsets != null &&
+                    rootWindowInsets.getSystemWindowInsetBottom() >= Resources.getSystem().getDisplayMetrics().density * 40) {
                 window.setNavigationBarColor(ResourceUtils.resolveColor(getTheme(), android.R.attr.navigationBarColor) & 0x00ffffff | -0x20000000);
             } else {
                 window.setNavigationBarColor(Color.TRANSPARENT);
