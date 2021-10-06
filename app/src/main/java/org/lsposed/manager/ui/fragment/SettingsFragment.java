@@ -34,7 +34,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import androidx.core.text.HtmlCompat;
 import androidx.preference.Preference;
 import androidx.preference.SwitchPreference;
@@ -332,9 +331,5 @@ public class SettingsFragment extends BaseFragment {
             conf.setLocale(originalLocale);
             return lstLang;
         }
-    }
-
-    public void makeSnackBar(@StringRes int text, @Snackbar.Duration int duration) {
-        Snackbar.make(binding.snackbar, text, duration).show();
     }
 }
