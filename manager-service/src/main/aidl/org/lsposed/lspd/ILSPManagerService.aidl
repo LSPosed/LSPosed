@@ -67,4 +67,6 @@ interface ILSPManagerService {
     void restartFor(in Intent intent) = 35;
 
     void createShortcut() = 36;
+
+    List<String> getDenyListPackages() = 37;
 }

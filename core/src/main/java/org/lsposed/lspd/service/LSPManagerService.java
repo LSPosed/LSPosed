@@ -684,4 +684,9 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     public void createShortcut() {
         createOrUpdateShortcut(true);
     }
+
+    @Override
+    public List<String> getDenyListPackages() {
+        return ConfigManager.getDenyListPackages();
+    }
 }
