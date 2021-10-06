@@ -49,11 +49,11 @@ namespace lspd {
             return FindClassFromLoader(env, GetCurrentClassLoader(), className);
         };
 
-        void OnNativeForkAndSpecializePre(JNIEnv *env, jint uid, jstring nice_name, jboolean is_child_zygote, jstring app_data_dir);
+        void OnNativeForkAndSpecializePre(JNIEnv *env, jint uid, jintArray& gids, jstring nice_name, jboolean is_child_zygote, jstring app_data_dir);
 
-        void OnNativeForkAndSpecializePost(JNIEnv *env);
+        void OnNativeForkAndSpecializePost(JNIEnv *env, jstring nice_name, jstring app_data_dir);
 
-        void OnNativeForkSystemServerPost(JNIEnv *env, jint res);
+        void OnNativeForkSystemServerPost(JNIEnv *env);
 
         void OnNativeForkSystemServerPre(JNIEnv *env);
 
@@ -63,8 +63,6 @@ namespace lspd {
         inline static std::unique_ptr<Context> instance_ = std::make_unique<Context>();
         jobject inject_class_loader_ = nullptr;
         jclass entry_class_ = nullptr;
-        jstring app_data_dir_ = nullptr;
-        jstring nice_name_ = nullptr;
         JavaVM *vm_ = nullptr;
         jclass class_linker_class_ = nullptr;
         jmethodID post_fixup_static_mid_ = nullptr;

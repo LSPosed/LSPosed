@@ -99,7 +99,7 @@ android {
         externalNativeBuild {
             ndkBuild {
                 arguments += "RIRU_MODULE_API_VERSION=$moduleMaxRiruApiVersion"
-                arguments += "MODULE_NAME=$riruModuleId"
+                arguments += "MODULE_NAME=$moduleId"
                 arguments += "INJECTED_AID=$injectedPackageUid"
                 arguments += "-j${Runtime.getRuntime().availableProcessors()}"
             }
