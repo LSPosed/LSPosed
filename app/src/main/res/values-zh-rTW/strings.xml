@@ -18,7 +18,7 @@
   ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">資訊</string>
     <string name="Modules">模組</string>
@@ -54,6 +54,11 @@
     <string name="info_system_version">系統版本</string>
     <string name="info_device">裝置版本</string>
     <string name="info_system_abi">系統架構</string>
+    <string name="parasitic_recommend">推薦使用寄生管理器</string>
+    <string name="parasitic_recommend_summary">LSPosed 現在支援寄生系統以避免檢測。您可以在成功建立寄生管理器圖示後從系統設置中移除管理器。 在任何情況下，您都可以從 /data/adb/lspd/manager.apk 安裝管理器。</string>
+    <string name="create_shortcut">建立捷徑</string>
+    <string name="never_show">不再顯示</string>
+    <string name="failed_to_create_shortcut">建立捷徑失敗：%1$s</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">儲存</string>
     <string name="nav_item_logs_lsp">LSPosed 日誌</string>
@@ -178,4 +183,5 @@
     <string name="manager_crashed_info">回報給 </string>
     <string name="send_crash_info">傳送錯誤日誌</string>
     <string name="crash_info_copied">錯誤日誌已複製到剪貼簿</string>
+    <!-- Colors -->
 </resources>
