@@ -162,6 +162,11 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         if (checkedList.contains(app)) {
             return false;
         }
+        if (preferences.getBoolean("filter_denylist", true)) {
+            if (denyList.contains(info.packageName)) {
+                return true;
+            }
+        }
         if (preferences.getBoolean("filter_modules", true)) {
             if (info.applicationInfo.metaData != null && info.applicationInfo.metaData.containsKey("xposedminversion")) {
                 return true;
@@ -249,6 +254,9 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         } else if (itemId == R.id.item_filter_modules) {
             item.setChecked(!item.isChecked());
             preferences.edit().putBoolean("filter_modules", item.isChecked()).apply();
+        } else if (itemId == R.id.item_filter_denylist) {
+            item.setChecked(!item.isChecked());
+            preferences.edit().putBoolean("filter_denylist", item.isChecked()).apply();
         } else if (itemId == R.id.menu_launch) {
             Intent launchIntent = AppHelper.getSettingsIntent(module.packageName, module.userId);
             if (launchIntent != null) {
@@ -321,6 +329,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         menu.findItem(R.id.item_filter_system).setChecked(preferences.getBoolean("filter_system_apps", true));
         menu.findItem(R.id.item_filter_games).setChecked(preferences.getBoolean("filter_games", true));
         menu.findItem(R.id.item_filter_modules).setChecked(preferences.getBoolean("filter_modules", true));
+        menu.findItem(R.id.item_filter_denylist).setChecked(preferences.getBoolean("filter_denylist", true));
         switch (preferences.getInt("list_sort", 0)) {
             case 7:
                 menu.findItem(R.id.item_sort_by_update_time).setChecked(true);
