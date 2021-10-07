@@ -61,27 +61,27 @@
     </string-array>
 
     <string-array name="color_texts" translatable="false">
-        <item>Pixel blue</item>
-        <item>Sakura</item>
-        <item>Red</item>
-        <item>Pink</item>
-        <item>Purple</item>
-        <item>Deep purple</item>
-        <item>Indigo</item>
-        <item>Blue</item>
-        <item>Light blue</item>
-        <item>Cyan</item>
-        <item>Teal</item>
-        <item>Green</item>
-        <item>Light green</item>
-        <item>Lime</item>
-        <item>Yellow</item>
-        <item>Amber</item>
-        <item>Orange</item>
-        <item>Deep orange</item>
-        <item>Brown</item>
-        <item>Grey</item>
-        <item>Blue grey</item>
+        <item>@string/color_pixel_blue</item>
+        <item>@string/color_sakura</item>
+        <item>@string/color_red</item>
+        <item>@string/color_pink</item>
+        <item>@string/color_purple</item>
+        <item>@string/color_deep_purple</item>
+        <item>@string/color_indigo</item>
+        <item>@string/color_blue</item>
+        <item>@string/color_light_blue</item>
+        <item>@string/color_cyan</item>
+        <item>@string/color_teal</item>
+        <item>@string/color_green</item>
+        <item>@string/color_light_green</item>
+        <item>@string/color_lime</item>
+        <item>@string/color_yellow</item>
+        <item>@string/color_amber</item>
+        <item>@string/color_orange</item>
+        <item>@string/color_deep_orange</item>
+        <item>@string/color_brown</item>
+        <item>@string/color_grey</item>
+        <item>@string/color_blue_grey</item>
     </string-array>
 
 </resources>
