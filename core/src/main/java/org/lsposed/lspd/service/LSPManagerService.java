@@ -87,7 +87,6 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     private static final HandlerThread worker = new HandlerThread("manager worker");
     private static final Handler workerHandler;
-    private static final ConfigManager configManager = ConfigManager.getInstance();
     private static Intent managerIntent = null;
 
     static {
@@ -315,14 +314,14 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                     return;
                 }
             }
-            if (!force && configManager.isManagerInstalled()) {
+            if (!force && ConfigManager.getInstance().isManagerInstalled()) {
                 Log.d(TAG, "Manager has installed, skip adding shortcut");
                 return;
             }
             // Only existing shortcuts are updated when system settings
             // are changed and no new shortcuts are requested
             if (!force && isSystemConfigurationChanged) return;
-            if (force || configManager.isAddShortcut())
+            if (force || ConfigManager.getInstance().isAddShortcut())
                 sm.requestPinShortcut(shortcut, null);
             Log.d(TAG, "done add shortcut");
         } catch (Throwable e) {
@@ -510,14 +509,14 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     @Override
     public String[] enabledModules() {
-        return configManager.enabledModules();
+        return ConfigManager.getInstance().enabledModules();
     }
 
     @Override
     public boolean enableModule(String packageName) throws RemoteException {
         PackageInfo pkgInfo = PackageService.getPackageInfo(packageName, PackageService.MATCH_ALL_FLAGS, 0);
         if (pkgInfo != null && pkgInfo.applicationInfo != null) {
-            return configManager.enableModule(packageName, pkgInfo.applicationInfo);
+            return ConfigManager.getInstance().enableModule(packageName, pkgInfo.applicationInfo);
         } else {
             return false;
         }
@@ -525,65 +524,65 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     @Override
     public boolean setModuleScope(String packageName, ParceledListSlice<Application> scope) {
-        return configManager.setModuleScope(packageName, scope.getList());
+        return ConfigManager.getInstance().setModuleScope(packageName, scope.getList());
     }
 
     @Override
     public ParceledListSlice<Application> getModuleScope(String packageName) {
-        List<Application> list = configManager.getModuleScope(packageName);
+        List<Application> list = ConfigManager.getInstance().getModuleScope(packageName);
         if (list == null) return null;
         else return new ParceledListSlice<>(list);
     }
 
     @Override
     public boolean disableModule(String packageName) {
-        return configManager.disableModule(packageName);
+        return ConfigManager.getInstance().disableModule(packageName);
     }
 
     @Override
     public boolean isResourceHook() {
-        return configManager.resourceHook();
+        return ConfigManager.getInstance().resourceHook();
     }
 
     @Override
     public void setResourceHook(boolean enabled) {
-        configManager.setResourceHook(enabled);
+        ConfigManager.getInstance().setResourceHook(enabled);
     }
 
     @Override
     public boolean isAddShortcut() {
-        return configManager.isAddShortcut();
+        return ConfigManager.getInstance().isAddShortcut();
     }
 
     @Override
     public void setAddShortcut(boolean enabled) {
-        configManager.setAddShortcut(enabled);
+        ConfigManager.getInstance().setAddShortcut(enabled);
         if (enabled) createOrUpdateShortcut(true);
     }
 
     @Override
     public boolean isVerboseLog() {
-        return configManager.verboseLog();
+        return ConfigManager.getInstance().verboseLog();
     }
 
     @Override
     public void setVerboseLog(boolean enabled) {
-        configManager.setVerboseLog(enabled);
+        ConfigManager.getInstance().setVerboseLog(enabled);
     }
 
     @Override
     public ParcelFileDescriptor getVerboseLog() {
-        return configManager.getVerboseLog();
+        return ConfigManager.getInstance().getVerboseLog();
     }
 
     @Override
     public ParcelFileDescriptor getModulesLog() {
-        return configManager.getModulesLog();
+        return ConfigManager.getInstance().getModulesLog();
     }
 
     @Override
     public boolean clearLogs(boolean verbose) {
-        return configManager.clearLogs(verbose);
+        return ConfigManager.getInstance().clearLogs(verbose);
     }
 
     @Override
@@ -616,7 +615,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     @Override
     public boolean isSepolicyLoaded() {
-        return configManager.isSepolicyLoaded();
+        return ConfigManager.getInstance().isSepolicyLoaded();
     }
 
     @Override
