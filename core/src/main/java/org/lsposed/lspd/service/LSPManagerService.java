@@ -276,12 +276,15 @@ public class LSPManagerService extends ILSPManagerService.Stub {
         }
     }
 
-
     public static void createOrUpdateShortcut(boolean force) {
-        workerHandler.post(() -> createOrUpdateShortcutInternal(force));
+        workerHandler.post(() -> createOrUpdateShortcutInternal(force, false));
     }
 
-    private synchronized static void createOrUpdateShortcutInternal(boolean force) {
+    public static void createOrUpdateShortcut(boolean force, boolean isConfigurationChanged) {
+        workerHandler.post(() -> createOrUpdateShortcutInternal(force, isConfigurationChanged));
+    }
+
+    private synchronized static void createOrUpdateShortcutInternal(boolean force, boolean isConfigurationChanged) {
         try {
             if (!force && ConfigManager.getInstance().isManagerInstalled()) {
                 Log.d(TAG, "Manager has installed, skip adding shortcut");
@@ -317,7 +320,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                 }
             }
 
-            sm.requestPinShortcut(shortcut, null);
+            if (!isConfigurationChanged) sm.requestPinShortcut(shortcut, null);
             Log.d(TAG, "done add shortcut");
         } catch (Throwable e) {
             Log.e(TAG, "add shortcut", e);
@@ -545,6 +548,16 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     }
 
     @Override
+    public boolean isAddShortcut() {
+        return ConfigManager.getInstance().isAddShortcut();
+    }
+
+    @Override
+    public void setAddShortcut(boolean enabled) {
+        ConfigManager.getInstance().setAddShortcut(enabled);
+    }
+
+    @Override
     public boolean isVerboseLog() {
         return ConfigManager.getInstance().verboseLog();
     }
@@ -682,6 +695,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     @Override
     public void createShortcut() {
-        createOrUpdateShortcut(true);
+        createOrUpdateShortcut(false, true);
+        setAddShortcut(true);
     }
 }

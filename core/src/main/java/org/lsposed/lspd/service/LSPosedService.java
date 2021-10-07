@@ -180,7 +180,7 @@ public class LSPosedService extends ILSPosedService.Stub {
     synchronized public void dispatchConfigurationChanged(Intent intent) {
         try {
             ConfigFileManager.reloadConfiguration();
-            LSPManagerService.createOrUpdateShortcut(false);
+            LSPManagerService.createOrUpdateShortcut(false, true);
         } catch (Throwable e) {
             Log.e(TAG, "dispatch configuration changed", e);
         }
@@ -266,8 +266,10 @@ public class LSPosedService extends ILSPosedService.Stub {
         Log.d(TAG, "received system context");
         ActivityManagerService.onSystemServerContext(IApplicationThread.Stub.asInterface(activityThread), activityToken);
         registerPackageReceiver();
-        registerUnlockReceiver();
-        registerConfigurationReceiver();
+        if (!configManager.isAddShortcut()) {
+            registerUnlockReceiver();
+            registerConfigurationReceiver();
+        }
     }
 
     @Override
