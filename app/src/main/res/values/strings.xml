@@ -195,7 +195,7 @@
     <string name="send_crash_info">Send crash info</string>
     <string name="crash_info_copied">Crash info copied to clipboard</string>
 
-    <!--    Colors -->
+    <!-- Colors -->
     <string name="color_pixel_blue">Pixel blue</string>
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Red</string>
