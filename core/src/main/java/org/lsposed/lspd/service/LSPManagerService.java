@@ -558,6 +558,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     @Override
     public void setAddShortcut(boolean enabled) {
         configManager.setAddShortcut(enabled);
+        if (enabled) createOrUpdateShortcut(true);
     }
 
     @Override
