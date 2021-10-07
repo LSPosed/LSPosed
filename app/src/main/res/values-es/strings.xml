@@ -133,8 +133,6 @@
     <string name="dns_over_http">DNS sobre HTTPS</string>
     <string name="dns_over_http_summary">Solución alternativa al ataque de DNS en algunos países</string>
     <string name="theme_color">Color del tema</string>
-    <string name="theme_color_summary">El color que aparece de manera más frecuente en la aplicación</string>
-    <string name="theme_color_system_accent">Color de acentuación del sistema</string>
     <string name="settings_show_hidden_icon_apps_enabled">Forzar a las aplicaciones a mostrar los íconos del ejecutable</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">En versiones posteriores a Android 10 no se permite a las aplicaciones (especialmente los módulos de Xposed) a ocultar el logo de su ejecutable. Desactiva la opción para desactivar esta característica.</string>
     <string name="settings_group_system">Sistema</string>

@@ -152,8 +152,6 @@
     <string name="dns_over_http">DNS از طریق HTTPS</string>
     <string name="dns_over_http_summary">راه حل مسدودیت با DNS در برخی کشورها</string>
     <string name="theme_color">رنگ تم</string>
-    <string name="theme_color_summary">رنگی که بیشتر در برنامه ظاهر می شود</string>
-    <string name="theme_color_system_accent">رنگ لهجه سیستم</string>
     <string name="settings_show_hidden_icon_apps_enabled">برنامه ها را مجبور به نمایش نمادهای راه انداز کنید</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">پس از Android 10 ، برنامه ها مجاز نیستند نمادهای راه انداز خود را مخفی کنند. برای غیرفعال کردن این ویژگی سیستم ، خاموش کنید.</string>
     <string name="settings_group_system">سیستم</string>
@@ -161,7 +159,6 @@
     <string name="settings_translation_contributors">مترجم همکار</string>
     <string name="settings_translation">کمک در ترجمه</string>
     <string name="settings_translation_summary">به ما کمک کنید %s به زبان شما ترجمه کنیم</string>
-    <string name="settings_translation_summary_percentage">" (%s ترجمه شده)"</string>
     <!-- Module Repo -->
     <string name="module_readme">منو بخون</string>
     <string name="module_releases">انتشار‌ها</string>

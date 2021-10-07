@@ -151,8 +151,6 @@
     <string name="dns_over_http">DNS qua HTTPS</string>
     <string name="dns_over_http_summary">Giải pháp khắc phục tình trạng giả mạo DNS ở một số quốc gia</string>
     <string name="theme_color">Màu chủ đề</string>
-    <string name="theme_color_summary">Màu xuất hiện thường xuyên nhất trong ứng dụng</string>
-    <string name="theme_color_system_accent">Màu nhấn hệ thống</string>
     <string name="settings_show_hidden_icon_apps_enabled">Buộc các ứng dụng hiển thị biểu tượng trên launcher</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">Sau Android 10, các ứng dụng không được phép ẩn biểu tượng trên launcher. Tắt lựa chọn này để vô hiệu tính năng này của hệ thống.</string>
     <string name="settings_group_system">Hệ thống</string>
@@ -160,7 +158,6 @@
     <string name="settings_translation_contributors">Cộng tác viên phiên dịch</string>
     <string name="settings_translation">Tham gia phiên dịch</string>
     <string name="settings_translation_summary">Giúp chúng tôi dịch %s về ngôn ngữ của bạn</string>
-    <string name="settings_translation_summary_percentage">" (%s đã được dịch)"</string>
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
     <string name="module_releases">Bản phát hành</string>

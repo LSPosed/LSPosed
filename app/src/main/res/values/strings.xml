@@ -18,7 +18,7 @@
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">Info</string>
     <string name="Modules">Modules</string>
@@ -164,8 +164,7 @@
     <string name="dns_over_http">DNS over HTTPS</string>
     <string name="dns_over_http_summary">Workaround DNS poisoning in some nations</string>
     <string name="theme_color">Theme color</string>
-    <string name="theme_color_summary">Color that appears most frequently in the app</string>
-    <string name="theme_color_system_accent">System accent color</string>
+    <string name="theme_color_system">System theme color</string>
     <string name="settings_show_hidden_icon_apps_enabled">Force apps to show launcher icons</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">After Android 10, apps are not allowed to hide their launcher icons. Turn off the toggle to disable this system feature.</string>
     <string name="settings_group_system">System</string>
@@ -173,7 +172,6 @@
     <string name="settings_translation_contributors">Translation contributors</string>
     <string name="settings_translation">Participate in translation</string>
     <string name="settings_translation_summary">Help us translate %s into your language</string>
-    <string name="settings_translation_summary_percentage">" (%s are translated)"</string>
 
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>

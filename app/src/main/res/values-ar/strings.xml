@@ -161,8 +161,6 @@
     <string name="dns_over_http">DNS عبر HTTPS</string>
     <string name="dns_over_http_summary">حل بديل لتسمم DNS في بعض الدول</string>
     <string name="theme_color">لون الموضوع</string>
-    <string name="theme_color_summary">اللون الذي يظهر بشكل متكرر في التطبيق</string>
-    <string name="theme_color_system_accent">لون لكنة النظام</string>
     <string name="settings_show_hidden_icon_apps_enabled">إجبار التطبيقات على إظهار أيقونات المشغل</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">بعد أندرويد 10، لا يسمح للتطبيقات بإخفاء أيقونات المشغل. قم بإيقاف تشغيل التبديل لتعطيل ميزة النظام هذه.</string>
     <string name="settings_group_system">نظام</string>
@@ -170,7 +168,6 @@
     <string name="settings_translation_contributors">المساهمون بالترجمة</string>
     <string name="settings_translation">المشاركة في الترجمة</string>
     <string name="settings_translation_summary">ساعدنا على ترجمة %s إلى لغتك</string>
-    <string name="settings_translation_summary_percentage">" (%s مترجم)"</string>
     <!-- Module Repo -->
     <string name="module_readme">إقرأني</string>
     <string name="module_releases">إصدارات</string>
