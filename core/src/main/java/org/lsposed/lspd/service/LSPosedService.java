@@ -266,10 +266,8 @@ public class LSPosedService extends ILSPosedService.Stub {
         Log.d(TAG, "received system context");
         ActivityManagerService.onSystemServerContext(IApplicationThread.Stub.asInterface(activityThread), activityToken);
         registerPackageReceiver();
-        if (!configManager.isAddShortcut()) {
-            registerUnlockReceiver();
-            registerConfigurationReceiver();
-        }
+        registerUnlockReceiver();
+        registerConfigurationReceiver();
     }
 
     @Override

@@ -87,7 +87,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     private static final HandlerThread worker = new HandlerThread("manager worker");
     private static final Handler workerHandler;
-
+    private static final ConfigManager configManager = ConfigManager.getInstance();
     private static Intent managerIntent = null;
 
     static {
@@ -280,16 +280,12 @@ public class LSPManagerService extends ILSPManagerService.Stub {
         workerHandler.post(() -> createOrUpdateShortcutInternal(force, false));
     }
 
-    public static void createOrUpdateShortcut(boolean force, boolean isConfigurationChanged) {
-        workerHandler.post(() -> createOrUpdateShortcutInternal(force, isConfigurationChanged));
+    public static void createOrUpdateShortcut(boolean force, boolean isSystemConfigurationChanged) {
+        workerHandler.post(() -> createOrUpdateShortcutInternal(force, isSystemConfigurationChanged));
     }
 
-    private synchronized static void createOrUpdateShortcutInternal(boolean force, boolean isConfigurationChanged) {
+    private synchronized static void createOrUpdateShortcutInternal(boolean force, boolean isSystemConfigurationChanged) {
         try {
-            if (!force && ConfigManager.getInstance().isManagerInstalled()) {
-                Log.d(TAG, "Manager has installed, skip adding shortcut");
-                return;
-            }
             while (!UserService.isUserUnlocked(0)) {
                 Log.d(TAG, "user is not yet unlocked, waiting for 1s...");
                 Thread.sleep(1000);
@@ -319,8 +315,15 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                     return;
                 }
             }
-
-            if (!isConfigurationChanged) sm.requestPinShortcut(shortcut, null);
+            if (!force && configManager.isManagerInstalled()) {
+                Log.d(TAG, "Manager has installed, skip adding shortcut");
+                return;
+            }
+            // Only existing shortcuts are updated when system settings
+            // are changed and no new shortcuts are requested
+            if (!isSystemConfigurationChanged) return;
+            if (force || configManager.isAddShortcut())
+                sm.requestPinShortcut(shortcut, null);
             Log.d(TAG, "done add shortcut");
         } catch (Throwable e) {
             Log.e(TAG, "add shortcut", e);
@@ -507,14 +510,14 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     @Override
     public String[] enabledModules() {
-        return ConfigManager.getInstance().enabledModules();
+        return configManager.enabledModules();
     }
 
     @Override
     public boolean enableModule(String packageName) throws RemoteException {
         PackageInfo pkgInfo = PackageService.getPackageInfo(packageName, PackageService.MATCH_ALL_FLAGS, 0);
         if (pkgInfo != null && pkgInfo.applicationInfo != null) {
-            return ConfigManager.getInstance().enableModule(packageName, pkgInfo.applicationInfo);
+            return configManager.enableModule(packageName, pkgInfo.applicationInfo);
         } else {
             return false;
         }
@@ -522,64 +525,64 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     @Override
     public boolean setModuleScope(String packageName, ParceledListSlice<Application> scope) {
-        return ConfigManager.getInstance().setModuleScope(packageName, scope.getList());
+        return configManager.setModuleScope(packageName, scope.getList());
     }
 
     @Override
     public ParceledListSlice<Application> getModuleScope(String packageName) {
-        List<Application> list = ConfigManager.getInstance().getModuleScope(packageName);
+        List<Application> list = configManager.getModuleScope(packageName);
         if (list == null) return null;
         else return new ParceledListSlice<>(list);
     }
 
     @Override
     public boolean disableModule(String packageName) {
-        return ConfigManager.getInstance().disableModule(packageName);
+        return configManager.disableModule(packageName);
     }
 
     @Override
     public boolean isResourceHook() {
-        return ConfigManager.getInstance().resourceHook();
+        return configManager.resourceHook();
     }
 
     @Override
     public void setResourceHook(boolean enabled) {
-        ConfigManager.getInstance().setResourceHook(enabled);
+        configManager.setResourceHook(enabled);
     }
 
     @Override
     public boolean isAddShortcut() {
-        return ConfigManager.getInstance().isAddShortcut();
+        return configManager.isAddShortcut();
     }
 
     @Override
     public void setAddShortcut(boolean enabled) {
-        ConfigManager.getInstance().setAddShortcut(enabled);
+        configManager.setAddShortcut(enabled);
     }
 
     @Override
     public boolean isVerboseLog() {
-        return ConfigManager.getInstance().verboseLog();
+        return configManager.verboseLog();
     }
 
     @Override
     public void setVerboseLog(boolean enabled) {
-        ConfigManager.getInstance().setVerboseLog(enabled);
+        configManager.setVerboseLog(enabled);
     }
 
     @Override
     public ParcelFileDescriptor getVerboseLog() {
-        return ConfigManager.getInstance().getVerboseLog();
+        return configManager.getVerboseLog();
     }
 
     @Override
     public ParcelFileDescriptor getModulesLog() {
-        return ConfigManager.getInstance().getModulesLog();
+        return configManager.getModulesLog();
     }
 
     @Override
     public boolean clearLogs(boolean verbose) {
-        return ConfigManager.getInstance().clearLogs(verbose);
+        return configManager.clearLogs(verbose);
     }
 
     @Override
@@ -612,7 +615,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     @Override
     public boolean isSepolicyLoaded() {
-        return ConfigManager.getInstance().isSepolicyLoaded();
+        return configManager.isSepolicyLoaded();
     }
 
     @Override
