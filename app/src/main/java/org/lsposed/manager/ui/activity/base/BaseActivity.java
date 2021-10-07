@@ -28,13 +28,14 @@ import android.view.Window;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.material.color.DynamicColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.util.NavUtil;
-import org.lsposed.manager.util.theme.ThemeUtil;
+import org.lsposed.manager.util.ThemeUtil;
 
 import rikka.core.util.ResourceUtils;
 import rikka.material.app.MaterialActivity;
@@ -44,6 +45,9 @@ public class BaseActivity extends MaterialActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (ThemeUtil.isSystemAccent()) {
+            DynamicColors.applyIfAvailable(this);
+        }
         // make sure the versions are consistent
         if (BuildConfig.DEBUG) return;
         if (!ConfigManager.isBinderAlive()) return;
@@ -63,7 +67,9 @@ public class BaseActivity extends MaterialActivity {
     @Override
     public void onApplyUserThemeResource(@NonNull Resources.Theme theme, boolean isDecorView) {
         theme.applyStyle(ThemeUtil.getNightThemeStyleRes(this), true);
-        theme.applyStyle(ThemeUtil.getColorThemeStyleRes(), true);
+        if (!ThemeUtil.isSystemAccent()) {
+            theme.applyStyle(ThemeUtil.getColorThemeStyleRes(), true);
+        }
     }
 
     @Override

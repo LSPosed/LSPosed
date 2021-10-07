@@ -322,4 +322,14 @@ public class ConfigManager {
             return new HashMap<>();
         }
     }
+
+    public static List<String> getDenyListPackages() {
+        List<String> list = new ArrayList<>();
+        try {
+            list.addAll(LSPManagerServiceHolder.getService().getDenyListPackages());
+        } catch (RemoteException e) {
+            Log.e(App.TAG, Log.getStackTraceString(e));
+        }
+        return list;
+    }
 }

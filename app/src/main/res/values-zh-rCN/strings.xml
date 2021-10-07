@@ -156,8 +156,7 @@
     <string name="dns_over_http">安全 DNS（DoH）</string>
     <string name="dns_over_http_summary">解决某些地区的 DNS 污染问题</string>
     <string name="theme_color">主题颜色</string>
-    <string name="theme_color_summary">应用中最常见的颜色</string>
-    <string name="theme_color_system_accent">系统强调色</string>
+    <string name="theme_color_system">系统主题色</string>
     <string name="settings_show_hidden_icon_apps_enabled">强制应用在启动器中显示图标</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">在 Android 10 之后，应用不被允许隐藏启动器图标。关闭本选项可禁用此系统功能。</string>
     <string name="settings_group_system">系统</string>
@@ -165,7 +164,6 @@
     <string name="settings_translation_contributors">翻译贡献者</string>
     <string name="settings_translation">参与翻译</string>
     <string name="settings_translation_summary">帮助我们把 %s 翻译到你的语言</string>
-    <string name="settings_translation_summary_percentage">"（%s 已被翻译）"</string>
     <!-- Module Repo -->
     <string name="module_readme">自述文件</string>
     <string name="module_releases">版本</string>
