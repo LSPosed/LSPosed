@@ -32,8 +32,7 @@
     <string name="module_repo">Kho</string>
     <string name="module_repo_summary">Kho mô-đun (Beta)</string>
     <string name="about_view_source_code"><![CDATA[Xem mã nguồn tại %1$s<br/>Tham gia %2$s nhóm của chúng tôi]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">tuyennn
-ThePrimalPea</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Tuyen Nguyen(tuyennn)</string>
     <string name="install">Cài đặt</string>
     <string name="install_summary">Chạm để cài đặt LSPosed</string>
     <string name="not_installed">Chưa được cài đặt</string>
