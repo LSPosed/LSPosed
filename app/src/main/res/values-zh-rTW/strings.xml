@@ -156,6 +156,7 @@
     <string name="dns_over_http">安全 DNS（DoH）</string>
     <string name="dns_over_http_summary">解決某些地區的 DNS 汙染問題</string>
     <string name="theme_color">主題強調色</string>
+    <string name="theme_color_system">系統主題顏色</string>
     <string name="settings_show_hidden_icon_apps_enabled">強制應用程式在啟動器中顯示圖示</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">在 Android 10 之後，應用（特別是 Xposed 模組）不被允許隱藏啟動器圖示。關閉本選項以停用此功能。</string>
     <string name="settings_group_system">系統</string>
@@ -184,4 +185,25 @@
     <string name="send_crash_info">傳送錯誤日誌</string>
     <string name="crash_info_copied">錯誤日誌已複製到剪貼簿</string>
     <!-- Colors -->
+    <string name="color_pixel_blue">Pixel 藍</string>
+    <string name="color_sakura">櫻花</string>
+    <string name="color_red">紅色</string>
+    <string name="color_pink">粉色</string>
+    <string name="color_purple">紫色</string>
+    <string name="color_deep_purple">深紫</string>
+    <string name="color_indigo">靛青</string>
+    <string name="color_blue">藍色</string>
+    <string name="color_light_blue">淺藍</string>
+    <string name="color_cyan">青色</string>
+    <string name="color_teal">青綠</string>
+    <string name="color_green">綠色</string>
+    <string name="color_light_green">淺綠</string>
+    <string name="color_lime">石灰</string>
+    <string name="color_yellow">黃色</string>
+    <string name="color_amber">琥珀</string>
+    <string name="color_orange">橙色</string>
+    <string name="color_deep_orange">深橙</string>
+    <string name="color_brown">棕色</string>
+    <string name="color_grey">灰色</string>
+    <string name="color_blue_grey">灰藍</string>
 </resources>
