@@ -18,7 +18,7 @@
   ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">Informação</string>
     <string name="Modules">Módulos</string>
@@ -55,9 +55,11 @@
     <string name="info_system_version">Versão do Sistema</string>
     <string name="info_device">Aparelho</string>
     <string name="info_system_abi">Sistema ABI</string>
-    <string name="create_shortcut">Создать ярлык</string>
-    <string name="never_show">Больше не показывать</string>
-    <string name="failed_to_create_shortcut">Не удалось создать ярлык: %1$s</string>
+    <string name="parasitic_recommend">Gerenciador Parasita Recomendado</string>
+    <string name="parasitic_recommend_summary">LSPosed agora suporta a parasitização do sistema para evitar a detecção. Você pode desinstalar o gerenciador em segurança depois de criar com sucesso um atalho do gerenciador parasita. Em qualquer caso, você pode instalar o gerenciador a partir de /data/adb/lspd/manager.apk.</string>
+    <string name="create_shortcut">Criar atalho</string>
+    <string name="never_show">Não mostrar novamente</string>
+    <string name="failed_to_create_shortcut">Falha ao criar atalho: %1$s</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Salvar</string>
     <string name="nav_item_logs_lsp">Registros do LSPosed</string>
@@ -182,4 +184,5 @@
     <string name="manager_crashed_info">reportar isto para </string>
     <string name="send_crash_info">Enviar informações do erro</string>
     <string name="crash_info_copied">Informações de erro copiadas para a área de transferência</string>
+    <!-- Colors -->
 </resources>
