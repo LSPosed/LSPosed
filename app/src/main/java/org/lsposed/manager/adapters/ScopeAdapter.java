@@ -105,6 +105,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     private final HashSet<ApplicationWithEquals> checkedList = new HashSet<>();
     private final ConcurrentLinkedQueue<AppInfo> searchList = new ConcurrentLinkedQueue<>();
     private final List<AppInfo> showList = new ArrayList<>();
+    private final List<String> denyList = new ArrayList<>();
 
     private final SwitchBar.OnCheckedChangeListener switchBarOnCheckedChangeListener = new SwitchBar.OnCheckedChangeListener() {
         @Override
@@ -465,6 +466,8 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             List<PackageInfo> appList = AppHelper.getAppList(force);
             checkedList.clear();
             recommendedList.clear();
+            denyList.clear();
+            denyList.addAll(AppHelper.getDenyList(force));
             var tmpList = new ArrayList<AppInfo>();
             checkedList.addAll(ConfigManager.getModuleScope(module.packageName));
             HashSet<ApplicationWithEquals> installedList = new HashSet<>();
@@ -542,6 +545,9 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         } else if (appInfo.packageName.equals("android")) {
             Snackbar.make(fragment.binding.snackbar, R.string.reboot_required, Snackbar.LENGTH_SHORT)
                     .setAction(R.string.reboot, v -> ConfigManager.reboot(false))
+                    .show();
+        } else if (denyList.contains(appInfo.packageName)) {
+            Snackbar.make(fragment.binding.snackbar, activity.getString(R.string.deny_list, appInfo.label), Snackbar.LENGTH_SHORT)
                     .show();
         }
     }

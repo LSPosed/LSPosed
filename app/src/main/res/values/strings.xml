@@ -140,6 +140,7 @@
     <string name="reboot_required">Reboot is required for this change to apply</string>
     <string name="reboot">Reboot</string>
     <string name="menu_hide">Hide</string>
+    <string name="deny_list">%s is on denylist, it may not task effect.</string>
 
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">View in other app</string>
