@@ -152,8 +152,6 @@
     <string name="dns_over_http">DNS via HTTPS</string>
     <string name="dns_over_http_summary">Problemumgehung für DNS-Vergiftungen in einigen Ländern</string>
     <string name="theme_color">Themenfarbe</string>
-    <string name="theme_color_summary">Farbe, die am häufigsten in der App angezeigt wird</string>
-    <string name="theme_color_system_accent">System Akzentfarbe</string>
     <string name="settings_show_hidden_icon_apps_enabled">Apps erzwingen Launcher-Symbole anzuzeigen</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">Ab Android 10 dürfen Apps ihre Launcher-Symbole nicht ausblenden. Schalten Sie den Schalter aus, um diese System-Funktion zu deaktivieren.</string>
     <string name="settings_group_system">System</string>
@@ -161,7 +159,6 @@
     <string name="settings_translation_contributors">Übersetzer</string>
     <string name="settings_translation">An der Übersetzung beteiligen</string>
     <string name="settings_translation_summary">Helfen Sie uns, %s in Ihre Sprache zu übersetzen</string>
-    <string name="settings_translation_summary_percentage">" (%s sind übersetzt)"</string>
     <!-- Module Repo -->
     <string name="module_readme">Liesmich</string>
     <string name="module_releases">Veröffentlichungen</string>

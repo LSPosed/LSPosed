@@ -36,4 +36,52 @@
         <item>@string/follow_system</item>
     </string-array>
 
+    <string-array name="color_values" translatable="false">
+        <item>COLOR_PRIMARY</item>
+        <item>SAKURA</item>
+        <item>MATERIAL_RED</item>
+        <item>MATERIAL_PINK</item>
+        <item>MATERIAL_PURPLE</item>
+        <item>MATERIAL_DEEP_PURPLE</item>
+        <item>MATERIAL_INDIGO</item>
+        <item>MATERIAL_BLUE</item>
+        <item>MATERIAL_LIGHT_BLUE</item>
+        <item>MATERIAL_CYAN</item>
+        <item>MATERIAL_TEAL</item>
+        <item>MATERIAL_GREEN</item>
+        <item>MATERIAL_LIGHT_GREEN</item>
+        <item>MATERIAL_LIME</item>
+        <item>MATERIAL_YELLOW</item>
+        <item>MATERIAL_AMBER</item>
+        <item>MATERIAL_ORANGE</item>
+        <item>MATERIAL_DEEP_ORANGE</item>
+        <item>MATERIAL_BROWN</item>
+        <item>MATERIAL_GREY</item>
+        <item>MATERIAL_BLUE_GREY</item>
+    </string-array>
+
+    <string-array name="color_texts" translatable="false">
+        <item>Pixel blue</item>
+        <item>Sakura</item>
+        <item>Red</item>
+        <item>Pink</item>
+        <item>Purple</item>
+        <item>Deep purple</item>
+        <item>Indigo</item>
+        <item>Blue</item>
+        <item>Light blue</item>
+        <item>Cyan</item>
+        <item>Teal</item>
+        <item>Green</item>
+        <item>Light green</item>
+        <item>Lime</item>
+        <item>Yellow</item>
+        <item>Amber</item>
+        <item>Orange</item>
+        <item>Deep orange</item>
+        <item>Brown</item>
+        <item>Grey</item>
+        <item>Blue grey</item>
+    </string-array>
+
 </resources>

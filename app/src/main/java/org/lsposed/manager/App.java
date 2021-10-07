@@ -35,7 +35,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
-import com.google.android.material.color.DynamicColors;
 import com.google.gson.JsonParser;
 
 import org.lsposed.hiddenapibypass.HiddenApiBypass;
@@ -43,7 +42,7 @@ import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.ui.activity.CrashReportActivity;
 import org.lsposed.manager.util.DoHDNS;
 import org.lsposed.manager.util.ModuleUtil;
-import org.lsposed.manager.util.theme.ThemeUtil;
+import org.lsposed.manager.util.ThemeUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -171,9 +170,6 @@ public class App extends Application {
         DayNightDelegate.setApplicationContext(this);
         DayNightDelegate.setDefaultNightMode(ThemeUtil.getDarkTheme());
         LocaleDelegate.setDefaultLocale(getLocale());
-        if (ThemeUtil.isSystemAccent()) {
-            DynamicColors.applyToActivitiesIfAvailable(this);
-        }
 
         registerReceiver(new BroadcastReceiver() {
             @Override

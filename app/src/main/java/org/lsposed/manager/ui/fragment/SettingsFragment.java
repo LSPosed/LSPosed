@@ -51,7 +51,7 @@ import org.lsposed.manager.databinding.FragmentSettingsBinding;
 import org.lsposed.manager.ui.activity.MainActivity;
 import org.lsposed.manager.util.BackupUtils;
 import org.lsposed.manager.util.NavUtil;
-import org.lsposed.manager.util.theme.ThemeUtil;
+import org.lsposed.manager.util.ThemeUtil;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

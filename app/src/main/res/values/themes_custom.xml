@@ -98,4 +98,8 @@
     <style name="ThemeOverlay.material_blue_grey">
         <item name="colorPrimary">@color/material_blue_grey</item>
     </style>
+
+    <style name="ThemeOverlay.sakura">
+        <item name="colorPrimary">@color/sakura</item>
+    </style>
 </resources>

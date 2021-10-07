@@ -53,14 +53,15 @@
         <SwitchPreference
             android:defaultValue="true"
             android:key="follow_system_accent"
-            android:title="@string/theme_color_system_accent"
+            android:title="@string/theme_color_system"
             app:isPreferenceVisible="false" />
-        <org.lsposed.manager.util.theme.ThemeColorPreference
-            android:defaultValue=""
-            android:dialogTitle="@string/theme_color"
+        <rikka.preference.SimpleMenuPreference
+            android:defaultValue="COLOR_PRIMARY"
+            android:entries="@array/color_texts"
+            android:entryValues="@array/color_values"
             android:icon="@drawable/ic_outline_palette_24"
             android:key="theme_color"
-            android:summary="@string/theme_color_summary"
+            android:summary="%s"
             android:title="@string/theme_color" />
         <rikka.preference.SimpleMenuPreference
             android:defaultValue="MODE_NIGHT_FOLLOW_SYSTEM"

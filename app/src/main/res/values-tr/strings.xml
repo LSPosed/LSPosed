@@ -151,8 +151,6 @@
     <string name="dns_over_http">HTTPS üzerinden DNS</string>
     <string name="dns_over_http_summary">Bazı ülkelerde DNS zehirlenmesi için geçici çözümdür</string>
     <string name="theme_color">Tema rengi</string>
-    <string name="theme_color_summary">Uygulamada en sık görünen reni seçin</string>
-    <string name="theme_color_system_accent">Sistem vurgu rengi</string>
     <string name="settings_show_hidden_icon_apps_enabled">Uygulamaları başlatıcı simgelerini göstermeye zorla</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">Android 10\'dan sonra, uygulamaların başlatıcı simgelerini gizlenmesine izin verilmez. Bu sistem özelliğini devre dışı bırakmak için düğmeyi kapatın.</string>
     <string name="settings_group_system">Sistem</string>

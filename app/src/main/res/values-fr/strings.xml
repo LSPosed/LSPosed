@@ -155,8 +155,6 @@
     <string name="dns_over_http">DNS sur HTTPS</string>
     <string name="dns_over_http_summary">Contourner la censure DNS dans certains pays</string>
     <string name="theme_color">Couleure du thème</string>
-    <string name="theme_color_summary">Couleure apparaissant fréquemment dans l\’application</string>
-    <string name="theme_color_system_accent">Couleure d\’accentuation du système</string>
     <string name="settings_show_hidden_icon_apps_enabled">Forcer les applications à afficher les icônes dans le lanceur</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">Après Android 10, les applications (notamment les modules Xposed) ne sont pas autorisées à masquer leurs icônes des lanceurs. Désactiver le commutateur pour désactiver cette fonctionnalité.</string>
     <string name="settings_group_system">Système</string>
@@ -164,7 +162,6 @@
     <string name="settings_translation_contributors">Contributeurs de traduction</string>
     <string name="settings_translation">Participer à la traduction</string>
     <string name="settings_translation_summary">Aidez nous à traduire %s dans votre langue</string>
-    <string name="settings_translation_summary_percentage">" (%s sont traduites)"</string>
     <!-- Module Repo -->
     <string name="module_readme">Lisez moi</string>
     <string name="module_releases">Versions</string>

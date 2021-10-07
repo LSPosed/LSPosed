@@ -113,7 +113,6 @@
     <string name="group_network">רשת</string>
     <string name="dns_over_http">DNS על פני HTTPS</string>
     <string name="theme_color">צבע ערכת נושא</string>
-    <string name="theme_color_summary">הצבע שמופיע הכי הרבה באפליקציה</string>
     <!-- Module Repo -->
     <string name="module_readme">קרא אותי</string>
     <string name="module_releases">גרסאות</string>

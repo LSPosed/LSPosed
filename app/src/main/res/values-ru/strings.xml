@@ -159,8 +159,6 @@
     <string name="dns_over_http">DNS через HTTPS</string>
     <string name="dns_over_http_summary">Протокол для выполнения разрешения DNS по протоколу HTTPS. Целью этого метода является повышение конфиденциальности и безопасности пользователей путем предотвращения перехвата и манипулирования данными DNS с помощью атак типа «Атака посредника»</string>
     <string name="theme_color">Акцент темы</string>
-    <string name="theme_color_summary">Цвет, который чаще всего появляется в приложении</string>
-    <string name="theme_color_system_accent">Системный цвет акцента</string>
     <string name="settings_show_hidden_icon_apps_enabled">Принудительно показывать иконку модуля</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">После Android 10, модули не могут скрывать иконку в лаунчер. Выключите переключатель, чтобы отключить эту системную функцию</string>
     <string name="settings_group_system">Система</string>
@@ -168,7 +166,6 @@
     <string name="settings_translation_contributors">Автор перевода</string>
     <string name="settings_translation">Принять участие в переводе</string>
     <string name="settings_translation_summary">Помогите нам перевести %s на ваш язык</string>
-    <string name="settings_translation_summary_percentage">" (%s переведено)"</string>
     <!-- Module Repo -->
     <string name="module_readme">Описание</string>
     <string name="module_releases">Версии</string>

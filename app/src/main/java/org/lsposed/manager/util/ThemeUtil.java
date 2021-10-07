@@ -17,12 +17,11 @@
  * Copyright (C) 2021 LSPosed Contributors
  */
 
-package org.lsposed.manager.util.theme;
+package org.lsposed.manager.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import androidx.annotation.ColorRes;
 import androidx.annotation.StyleRes;
 
 import com.google.android.material.color.DynamicColors;
@@ -47,6 +46,7 @@ public class ThemeUtil {
     static {
         preferences = App.getPreferences();
         colorThemeMap.put("COLOR_PRIMARY", R.style.ThemeOverlay_color_primary);
+        colorThemeMap.put("SAKURA", R.style.ThemeOverlay_sakura);
         colorThemeMap.put("MATERIAL_RED", R.style.ThemeOverlay_material_red);
         colorThemeMap.put("MATERIAL_PINK", R.style.ThemeOverlay_material_pink);
         colorThemeMap.put("MATERIAL_PURPLE", R.style.ThemeOverlay_material_purple);
@@ -76,7 +76,7 @@ public class ThemeUtil {
     }
 
     public static boolean isSystemAccent() {
-        return preferences.getBoolean("follow_system_accent", true);
+        return DynamicColors.isDynamicColorAvailable() && preferences.getBoolean("follow_system_accent", true);
     }
 
     public static String getNightTheme(Context context) {
@@ -99,17 +99,10 @@ public class ThemeUtil {
     }
 
     public static String getColorTheme() {
-        if (DynamicColors.isDynamicColorAvailable() && isSystemAccent()) {
-            return "system";
+        if (isSystemAccent()) {
+            return "SYSTEM";
         }
-        String primaryColorEntryName = "COLOR_PRIMARY";
-        String colorPrimary = preferences.getString("theme_color", "COLOR_PRIMARY");
-        for (CustomThemeColors color : CustomThemeColors.values()) {
-            if (color.toString().equals(colorPrimary)) {
-                primaryColorEntryName = color.toString();
-            }
-        }
-        return primaryColorEntryName;
+        return preferences.getString("theme_color", "COLOR_PRIMARY");
     }
 
     @StyleRes
@@ -119,40 +112,6 @@ public class ThemeUtil {
             return R.style.ThemeOverlay_color_primary;
         }
         return theme;
-    }
-
-    public enum CustomThemeColors {
-        COLOR_PRIMARY(R.color.color_primary),
-        MATERIAL_RED(R.color.material_red),
-        MATERIAL_PINK(R.color.material_pink),
-        MATERIAL_PURPLE(R.color.material_purple),
-        MATERIAL_DEEP_PURPLE(R.color.material_deep_purple),
-        MATERIAL_INDIGO(R.color.material_indigo),
-        MATERIAL_BLUE(R.color.material_blue),
-        MATERIAL_LIGHT_BLUE(R.color.material_light_blue),
-        MATERIAL_CYAN(R.color.material_cyan),
-        MATERIAL_TEAL(R.color.material_teal),
-        MATERIAL_GREEN(R.color.material_green),
-        MATERIAL_LIGHT_GREEN(R.color.material_light_green),
-        MATERIAL_LIME(R.color.material_lime),
-        MATERIAL_YELLOW(R.color.material_yellow),
-        MATERIAL_AMBER(R.color.material_amber),
-        MATERIAL_ORANGE(R.color.material_orange),
-        MATERIAL_DEEP_ORANGE(R.color.material_deep_orange),
-        MATERIAL_BROWN(R.color.material_brown),
-        MATERIAL_GREY(R.color.material_grey),
-        MATERIAL_BLUE_GREY(R.color.material_blue_grey);
-
-        @ColorRes
-        int resourceId;
-
-        CustomThemeColors(@ColorRes int resourceId) {
-            this.resourceId = resourceId;
-        }
-
-        public int getResourceId() {
-            return resourceId;
-        }
     }
 
     public static int getDarkTheme(String mode) {
