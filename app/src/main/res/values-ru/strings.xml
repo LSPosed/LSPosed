@@ -197,4 +197,12 @@
     <string name="color_indigo">Индиго</string>
     <string name="color_blue">Синий</string>
     <string name="color_light_blue">Голубой</string>
+    <string name="color_cyan">Бирюзово-голубой</string>
+    <string name="color_teal">Сине-зеленый</string>
+    <string name="color_green">Зеленый</string>
+    <string name="color_light_green">Светло-зеленый</string>
+    <string name="color_lime">Желто-зеленый</string>
+    <string name="color_yellow">Желтый</string>
+    <string name="color_amber">Янтарный</string>
+    <string name="color_orange">Оранжевый</string>
 </resources>
