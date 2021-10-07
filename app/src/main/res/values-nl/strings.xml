@@ -157,6 +157,7 @@
     <string name="dns_over_http">DNS via HTTPS</string>
     <string name="dns_over_http_summary">Tijdelijke oplossing voor DNS-vergiftiging in sommige landen</string>
     <string name="theme_color">Thema kleur</string>
+    <string name="theme_color_system">Systeem thema kleur</string>
     <string name="settings_show_hidden_icon_apps_enabled">Forceer apps om launcher-pictogrammen weer te geven</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">Na Android 10 mogen apps (vooral Xposed-modules) hun opstartpictogrammen niet verbergen. Schakel de schakelaar uit om deze functie uit te schakelen.</string>
     <string name="settings_group_system">Systeem</string>
@@ -185,4 +186,25 @@
     <string name="send_crash_info">Stuur crash informatie</string>
     <string name="crash_info_copied">Crash informatie naar klembord gekopieerd</string>
     <!-- Colors -->
+    <string name="color_pixel_blue">Pixel blauw</string>
+    <string name="color_sakura">Sakura</string>
+    <string name="color_red">Rood</string>
+    <string name="color_pink">Roze</string>
+    <string name="color_purple">Paars</string>
+    <string name="color_deep_purple">Donker paars</string>
+    <string name="color_indigo">Indigo</string>
+    <string name="color_blue">Blauw</string>
+    <string name="color_light_blue">Licht blauw</string>
+    <string name="color_cyan">Turquoise</string>
+    <string name="color_teal">Groenblauw</string>
+    <string name="color_green">Groen</string>
+    <string name="color_light_green">Licht groen</string>
+    <string name="color_lime">Limoen</string>
+    <string name="color_yellow">Geel</string>
+    <string name="color_amber">Amber</string>
+    <string name="color_orange">Oranje</string>
+    <string name="color_deep_orange">Diep oranje</string>
+    <string name="color_brown">Bruin</string>
+    <string name="color_grey">Grijs</string>
+    <string name="color_blue_grey">Blauw grijs</string>
 </resources>
