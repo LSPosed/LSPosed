@@ -186,24 +186,24 @@
     <string name="crash_info_copied">已将崩溃信息复制到剪贴板</string>
     <!-- Colors -->
     <string name="color_pixel_blue">Pixel 蓝</string>
-    <string name="color_sakura">樱花粉</string>
+    <string name="color_sakura">樱花</string>
     <string name="color_red">红色</string>
     <string name="color_pink">粉色</string>
     <string name="color_purple">紫色</string>
-    <string name="color_deep_purple">深紫色</string>
-    <string name="color_indigo">靛蓝色</string>
+    <string name="color_deep_purple">深紫</string>
+    <string name="color_indigo">靛青</string>
     <string name="color_blue">蓝色</string>
-    <string name="color_light_blue">浅蓝色</string>
+    <string name="color_light_blue">浅蓝</string>
     <string name="color_cyan">青色</string>
-    <string name="color_teal">深青色</string>
+    <string name="color_teal">青绿</string>
     <string name="color_green">绿色</string>
-    <string name="color_light_green">浅绿色</string>
-    <string name="color_lime">石灰色</string>
+    <string name="color_light_green">浅绿</string>
+    <string name="color_lime">石灰</string>
     <string name="color_yellow">黄色</string>
-    <string name="color_amber">琥珀色</string>
+    <string name="color_amber">琥珀</string>
     <string name="color_orange">橙色</string>
-    <string name="color_deep_orange">深橙色</string>
+    <string name="color_deep_orange">深橙</string>
     <string name="color_brown">棕色</string>
     <string name="color_grey">灰色</string>
-    <string name="color_blue_grey">灰蓝色</string>
+    <string name="color_blue_grey">灰蓝</string>
 </resources>
