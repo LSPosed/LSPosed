@@ -213,8 +213,10 @@ public class ConfigManager {
         verboseLog = bool == null || (boolean) bool;
 
         bool = config.get("enable_auto_add_shortcut");
-        if (bool == null)
+        if (bool == null) {
             updateModulePrefs("lspd", 0, "config", "enable_auto_add_shortcut", true);
+            bool = true;
+        }
         autoAddShortcut = (boolean) bool;
 
         // Don't migrate to ConfigFileManager, as XSharedPreferences will be restored soon
