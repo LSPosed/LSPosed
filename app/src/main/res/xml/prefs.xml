@@ -98,6 +98,7 @@
             android:defaultValue="false"
             android:key="enable_auto_add_shortcut"
             android:persistent="false"
+            android:summary="@string/settings_enable_auto_add_shortcut_summary"
             android:title="@string/pref_title_enable_auto_add_shortcut" />
     </com.takisoft.preferencex.PreferenceCategory>
 

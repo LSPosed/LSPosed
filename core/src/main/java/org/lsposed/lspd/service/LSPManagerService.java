@@ -695,7 +695,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     @Override
     public void createShortcut() {
-        createOrUpdateShortcut(false, true);
+        createOrUpdateShortcut(true);
         setAddShortcut(true);
     }
 }
