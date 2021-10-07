@@ -163,6 +163,7 @@ public class SettingsFragment extends BaseFragment {
             SwitchPreference prefEnableShortcut = findPreference("enable_auto_add_shortcut");
             if (prefEnableShortcut != null) {
                 prefEnableShortcut.setEnabled(!App.isParasitic());
+                prefEnableShortcut.setVisible(!App.isParasitic());
                 prefEnableShortcut.setChecked(installed && ConfigManager.isAddShortcut());
                 prefEnableShortcut.setOnPreferenceChangeListener((preference, newValue) -> ConfigManager.setAddShortcut((boolean) newValue));
             }
