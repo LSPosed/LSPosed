@@ -1,4 +1,4 @@
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -16,12 +16,17 @@
   ~
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
-<resources>
-
-    <style name="ThemeOverlay" />
-
-    <style name="ThemeOverlay.Black">
-        <item name="colorSurface">@android:color/black</item>
-        <item name="android:colorBackground">@android:color/black</item>
-    </style>
-</resources>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <solid android:color="?attr/colorSurface"/>
+            <corners android:radius="?popupBackgroundRadius" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <solid android:color="@color/m3_popupmenu_overlay_color"/>
+            <corners android:radius="?popupBackgroundRadius" />
+        </shape>
+    </item>
+</layer-list>

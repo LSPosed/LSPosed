@@ -178,7 +178,6 @@ dependencies {
     implementation("com.google.android.material:material:1.5.0-alpha04")
     implementation("com.google.code.gson:gson:2.8.8")
     implementation("com.takisoft.preferencex:preferencex:1.1.0")
-    implementation("com.takisoft.preferencex:preferencex-colorpicker:1.1.0")
     implementation("com.squareup.okhttp3:okhttp:$okhttpVersion")
     implementation("com.squareup.okhttp3:okhttp-dnsoverhttps:$okhttpVersion")
     implementation("com.squareup.okhttp3:logging-interceptor:$okhttpVersion")
