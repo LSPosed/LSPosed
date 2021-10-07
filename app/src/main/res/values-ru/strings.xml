@@ -188,12 +188,12 @@
     <string name="send_crash_info">Отправить информацию о сбое</string>
     <string name="crash_info_copied">Информация о сбое скопирована в буфер обмена</string>
     <!-- Colors -->
-    <string name="color_pixel_blue">Pixel синий</string>
+    <string name="color_pixel_blue">Небесно-голубой</string>
     <string name="color_sakura">Сакура</string>
     <string name="color_red">Красный</string>
     <string name="color_pink">Розовый</string>
     <string name="color_purple">Фиолетовый</string>
-    <string name="color_deep_purple">Темно-фиолетовый</string>
+    <string name="color_deep_purple">Насыщенный фиолетовый</string>
     <string name="color_indigo">Индиго</string>
     <string name="color_blue">Синий</string>
     <string name="color_light_blue">Голубой</string>
@@ -205,4 +205,8 @@
     <string name="color_yellow">Желтый</string>
     <string name="color_amber">Янтарный</string>
     <string name="color_orange">Оранжевый</string>
+    <string name="color_deep_orange">Насыщенный оранжевый</string>
+    <string name="color_brown">Коричневый</string>
+    <string name="color_grey">Серый</string>
+    <string name="color_blue_grey">Серо-голубой</string>
 </resources>
