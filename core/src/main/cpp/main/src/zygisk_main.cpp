@@ -214,7 +214,7 @@ namespace lspd {
     void companion_entry(int client) {
         using namespace std::string_literals;
         static std::string path = "/data/adb/modules/" quote(MODULE_NAME) "/"s + kDexPath;
-        int fd = open(path.data(), O_RDONLY | O_CLOEXEC);
+        static int fd = open(path.data(), O_RDONLY | O_CLOEXEC);
         if (fd > 0) {
             write_int(client, 0);
             send_fd(client, fd);
