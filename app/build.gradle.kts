@@ -166,7 +166,7 @@ dependencies {
     annotationProcessor("com.github.bumptech.glide:compiler:$glideVersion")
     implementation("androidx.activity:activity:1.3.1")
     implementation("androidx.browser:browser:1.3.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.1")
     implementation("androidx.core:core:1.6.0")
     implementation("androidx.fragment:fragment:1.3.6")
     implementation("androidx.navigation:navigation-fragment:$navVersion")
