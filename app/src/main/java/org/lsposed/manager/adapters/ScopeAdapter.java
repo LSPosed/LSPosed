@@ -162,7 +162,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         if (checkedList.contains(app)) {
             return false;
         }
-        if (preferences.getBoolean("filter_denylist", true)) {
+        if (preferences.getBoolean("filter_denylist", false)) {
             if (denyList.contains(info.packageName)) {
                 return true;
             }
@@ -329,7 +329,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         menu.findItem(R.id.item_filter_system).setChecked(preferences.getBoolean("filter_system_apps", true));
         menu.findItem(R.id.item_filter_games).setChecked(preferences.getBoolean("filter_games", true));
         menu.findItem(R.id.item_filter_modules).setChecked(preferences.getBoolean("filter_modules", true));
-        menu.findItem(R.id.item_filter_denylist).setChecked(preferences.getBoolean("filter_denylist", true));
+        menu.findItem(R.id.item_filter_denylist).setChecked(preferences.getBoolean("filter_denylist", false));
         switch (preferences.getInt("list_sort", 0)) {
             case 7:
                 menu.findItem(R.id.item_sort_by_update_time).setChecked(true);
