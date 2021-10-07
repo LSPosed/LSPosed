@@ -18,21 +18,21 @@
   ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">Info</string>
     <string name="Modules">Module</string>
     <plurals name="modules_enabled_count">
-        <item quantity="one">%d Modul aktiviert</item>
+        <item quantity="one">%d Module aktiviert</item>
         <item quantity="other">%d Module aktiviert</item>
     </plurals>
     <string name="Logs">Protokolle</string>
     <string name="Settings">Einstellungen</string>
     <string name="About">Mehr Erfahren</string>
     <string name="report_issue">Fehler melden</string>
-    <string name="module_repo">Module Repo</string>
-    <string name="module_repo_summary">Modul-Repository (Beta)</string>
-    <string name="about_view_source_code"><![CDATA[Den Quellcode finden Sie unter %1$s<br/>Begleiten Sie uns %2$s-Kanal]]></string>
+    <string name="module_repo">Modularchiv</string>
+    <string name="module_repo_summary">Modul-Archiv (Beta)</string>
+    <string name="about_view_source_code"><![CDATA[Den Quellcode finden Sie unter %1$s<br/>Folge unserem %2$s-Kanal]]></string>
     <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">leer</string>
     <string name="install">Installieren</string>
     <string name="install_summary">Tippen um LSPosed zu installieren</string>
@@ -43,7 +43,7 @@
     <string name="selinux_policy_not_loaded_summary">SEPolicy wird nicht korrekt geladen</string>
     <string name="selinux_policy_not_loaded"><![CDATA[Module, welche sich in das System Framework einklinken, funktionieren nicht.<br/>Bitte melden Sie dies an den <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> Entwickler.]]></string>
     <string name="system_inject_fail_summary">System-Framework-Injektion fehlgeschlagen</string>
-    <string name="system_inject_fail"><![CDATA[Dies ist selten und kann durch <b>Magisk</b> oder einige minderwertige Magisk Module verursacht werden.<br/>Bitte versuchen Sie, andere Magisk-Module, außer Riru und LSPosed, zu deaktivieren oder einen vollständigen Log an Entwickler zu senden.]]></string>
+    <string name="system_inject_fail"><![CDATA[Dies ist selten und kann durch <b>Magisk</b> oder einige minderwertige Magisk Module verursacht werden.<br/>Bitte deaktiveren Sie alle Magisk-Module bis auf Riru und LSPosed oder sende Sie eine vollständige Fehlermeldung an die Entwickler.]]></string>
     <string name="system_prop_incorrect_summary">System-Prop falsch</string>
     <string name="system_prop_incorrect"><![CDATA[Einige notwendige Systemeigenschaften wurden gelöscht oder geändert.<br/>Module können gelegentlich außer Kraft gesetzt werden.]]></string>
     <string name="need_update">Aktualisierung erforderlich</string>
@@ -55,10 +55,14 @@
     <string name="info_system_version">System Version</string>
     <string name="info_device">Gerät</string>
     <string name="info_system_abi">System ABI</string>
+    <string name="parasitic_recommend">Parasitärer Manager empfohlen</string>
+    <string name="create_shortcut">Verknüpfung erstellen</string>
+    <string name="never_show">Niemals anzeigen</string>
+    <string name="failed_to_create_shortcut">Fehler beim Erstellen der Verknüpfung: %1$s</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">speichern</string>
     <string name="nav_item_logs_lsp">LSPosed Logs</string>
-    <string name="nav_item_logs_module">Modul-Logs</string>
+    <string name="nav_item_logs_module">Modul-Protokolle</string>
     <string name="logs_save_failed2">Speichern fehlgeschlagen:\n%s</string>
     <string name="menuClearLog">Protokoll jetzt löschen</string>
     <string name="logs_cleared">Protokoll erfolgreich gelöscht.</string>
@@ -179,4 +183,5 @@
     <string name="manager_crashed_info">melde dies an </string>
     <string name="send_crash_info">Absturzinfo senden</string>
     <string name="crash_info_copied">Absturzinfo in die Zwischenablage kopiert</string>
+    <!-- Colors -->
 </resources>
