@@ -184,4 +184,7 @@
     <string name="send_crash_info">Absturzinfo senden</string>
     <string name="crash_info_copied">Absturzinfo in die Zwischenablage kopiert</string>
     <!-- Colors -->
+    <string name="color_pixel_blue">Pixelblau</string>
+    <string name="color_sakura">Sakura</string>
+    <string name="color_red">Rot</string>
 </resources>
