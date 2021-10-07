@@ -314,15 +314,15 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                     return;
                 }
             }
-            if (!force && ConfigManager.getInstance().isManagerInstalled()) {
+            var configManager = ConfigManager.getInstance();
+            if (!force && configManager.isManagerInstalled()) {
                 Log.d(TAG, "Manager has installed, skip adding shortcut");
                 return;
             }
             // Only existing shortcuts are updated when system settings
             // are changed and no new shortcuts are requested
             if (!force && isSystemConfigurationChanged) return;
-            if (force || ConfigManager.getInstance().isAddShortcut())
-                sm.requestPinShortcut(shortcut, null);
+            if (configManager.isAddShortcut()) sm.requestPinShortcut(shortcut, null);
             Log.d(TAG, "done add shortcut");
         } catch (Throwable e) {
             Log.e(TAG, "add shortcut", e);
