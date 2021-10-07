@@ -152,8 +152,6 @@
     <string name="dns_over_http">DNS su HTTPS</string>
     <string name="dns_over_http_summary">Soluzione alternativa all\'avvelenamento della cache DNS in alcune nazioni</string>
     <string name="theme_color">Colore del tema</string>
-    <string name="theme_color_summary">Colore che appare più frequentemente nell\'app</string>
-    <string name="theme_color_system_accent">Colore primario del sistema</string>
     <string name="settings_show_hidden_icon_apps_enabled">Costringi le app a mostrare le icone nel launcher</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">A partire da Android 10, le app non possono più nascondere le loro icone nel launcher. Disabilita l\'opzione per disattivare questa funzionalità.</string>
     <string name="settings_group_system">Sistema</string>
@@ -161,7 +159,6 @@
     <string name="settings_translation_contributors">Contributori alla traduzione</string>
     <string name="settings_translation">Partecipa alla traduzione</string>
     <string name="settings_translation_summary">Aiutaci a tradurre %s nella tua lingua</string>
-    <string name="settings_translation_summary_percentage">" (%s sono tradotti)"</string>
     <!-- Module Repo -->
     <string name="module_readme">Leggimi</string>
     <string name="module_releases">Versioni</string>

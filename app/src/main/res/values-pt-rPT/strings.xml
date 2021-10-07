@@ -28,7 +28,6 @@
     <string name="module_repo">Repositório</string>
     <string name="module_repo_summary">Repositorio de módulos (Beta)</string>
     <string name="about_view_source_code"><![CDATA[Ver código fonte em %1$s<br/>Entre no nosso canal %2$s]]></string>
-    <string name="about_translators">Tradutores: %s</string>
     <string name="install">Instalar</string>
     <string name="install_summary">Toque para instalar LSPosed</string>
     <string name="not_installed">Não instalado</string>
@@ -97,8 +96,6 @@
     <string name="dns_over_http">DNS sobre HTTPS</string>
     <string name="dns_over_http_summary">Burla envenenamento de DNS em algumas nações</string>
     <string name="theme_color">Cor do tema</string>
-    <string name="theme_color_summary">Cor que aparece com mais frequência no app</string>
-    <string name="theme_color_system_accent">Cor de destaque do sistema</string>
     <string name="settings_show_hidden_icon_apps_enabled">Forçar aplicativos a mostrar ícones no launcher</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">Depois do Android 10, os apps não têm permissão para ocultar seus ícones de lançador. Desative a opção para desativar este recurso de sistema.</string>
     <string name="settings_group_system">Sistema</string>

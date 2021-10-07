@@ -156,8 +156,6 @@
     <string name="dns_over_http">DNS over HTTPS</string>
     <string name="dns_over_http_summary">Mengatasi peracunan DNS di beberapa negara</string>
     <string name="theme_color">Warna tema</string>
-    <string name="theme_color_summary">Warna yang paling sering muncul di aplikasi</string>
-    <string name="theme_color_system_accent">Warna aksen sistem</string>
     <string name="settings_show_hidden_icon_apps_enabled">Paksa aplikasi untuk menampilkan ikon peluncur</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">Setelah Android 10, aplikasi tidak diizinkan menyembunyikan ikon peluncurnya. Matikan untuk menonaktifkan fitur sistem ini.</string>
     <string name="settings_group_system">Sistem</string>
@@ -165,7 +163,6 @@
     <string name="settings_translation_contributors">Kontributor terjemahan</string>
     <string name="settings_translation">Berpartisipasi dalam terjemahan</string>
     <string name="settings_translation_summary">Bantu kami menerjemahkan %s kedalam bahasamu</string>
-    <string name="settings_translation_summary_percentage">" (%s diterjemahkan)"</string>
     <!-- Module Repo -->
     <string name="module_readme">Baca aku</string>
     <string name="module_releases">Rilis</string>

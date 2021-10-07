@@ -140,8 +140,6 @@
     <string name="dns_over_http">DNS over HTTPS</string>
     <string name="dns_over_http_summary">일부 국가의 DNS 포이즈닝 문제를 해결합니다</string>
     <string name="theme_color">테마 색</string>
-    <string name="theme_color_summary">앱에서 가장 자주 나타나는 색</string>
-    <string name="theme_color_system_accent">System 강조 색</string>
     <string name="settings_show_hidden_icon_apps_enabled">앱에서 시작 프로그램 아이콘 표시</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">Android 10 이후 앱(특히 Xposed 모듈)은 시작 프로그램 아이콘을 숨길 수 없습니다. 이 기능을 비활성화하려면 토글을 끄십시오.</string>
     <string name="settings_language">언어</string>

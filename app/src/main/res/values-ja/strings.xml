@@ -151,8 +151,6 @@
     <string name="dns_over_http">HTTPS 経由の DNS</string>
     <string name="dns_over_http_summary">一部の国向けの DNSポイズニング 回避策</string>
     <string name="theme_color">テーマカラー</string>
-    <string name="theme_color_summary">本アプリで最も表示される色</string>
-    <string name="theme_color_system_accent">システムアクセントカラー</string>
     <string name="settings_show_hidden_icon_apps_enabled">ランチャーアイコンを強制的に表示</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">Android 10 以降ではアプリ(特に Xposed モジュール)ではランチャーアイコンを隠すことが出来ません。本機能を無効にするには、トグルをオフにして下さい。</string>
     <string name="settings_group_system">システム</string>
@@ -160,7 +158,6 @@
     <string name="settings_translation_contributors">翻訳貢献者</string>
     <string name="settings_translation">翻訳に参加する</string>
     <string name="settings_translation_summary">%s をあなたの言語に翻訳するのを手伝ってください</string>
-    <string name="settings_translation_summary_percentage">" (%s は翻訳済み)"</string>
     <!-- Module Repo -->
     <string name="module_readme">読み取り</string>
     <string name="module_releases">リリース</string>

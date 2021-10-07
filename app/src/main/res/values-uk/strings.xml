@@ -153,8 +153,6 @@
     <string name="dns_over_http">DNS поверх HTTPS</string>
     <string name="dns_over_http_summary">Вирішення проблем із погіршенням DNS у деяких країнах</string>
     <string name="theme_color">Колір теми</string>
-    <string name="theme_color_summary">Колір, який з’являється найбільш часто у додатку</string>
-    <string name="theme_color_system_accent">Колір акцентів системи</string>
     <string name="settings_show_hidden_icon_apps_enabled">Примусово показувати значки запуску</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">Після Android 10 програмам не дозволяється приховати свої лаунчери. Вимкніть перемикач, щоб вимкнути цю систему функцію.</string>
     <string name="settings_group_system">Система</string>
@@ -162,7 +160,6 @@
     <string name="settings_translation_contributors">Автори перекладу</string>
     <string name="settings_translation">Брати участь в перекладі</string>
     <string name="settings_translation_summary">Допоможіть нам перекласти %s на вашу мову</string>
-    <string name="settings_translation_summary_percentage">" (%s перекладено)"</string>
     <!-- Module Repo -->
     <string name="module_readme">Опис</string>
     <string name="module_releases">Релізи</string>
