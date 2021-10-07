@@ -141,6 +141,7 @@
     <string name="reboot">Reboot</string>
     <string name="menu_hide">Hide</string>
     <string name="deny_list">%s is on denylist, it may not task effect.</string>
+    <string name="deny_list_info">On denylist</string>
 
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">View in other app</string>

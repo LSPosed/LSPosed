@@ -356,7 +356,8 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         AppInfo appInfo = showList.get(position);
-        holder.root.setAlpha(denyList.contains(appInfo.packageName) || enabled ? 1.0f : .5f);
+        boolean deny = denyList.contains(appInfo.packageName);
+        holder.root.setAlpha(deny || enabled ? 1.0f : .5f);
         boolean android = appInfo.packageName.equals("android");
         CharSequence appName;
         int userId = appInfo.applicationInfo.uid / 100000;
@@ -383,7 +384,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         SpannableStringBuilder sb = new SpannableStringBuilder(android ? "" : activity.getString(R.string.app_description, appInfo.packageName, appInfo.packageInfo.versionName));
         holder.appDescription.setVisibility(View.VISIBLE);
         if (!recommendedList.isEmpty() && recommendedList.contains(appInfo.application)) {
-            if (!android) sb.append("\n");
+            if (sb.length() != 0) sb.append("\n");
             String recommended = activity.getString(R.string.requested_by_module);
             sb.append(recommended);
             final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ResourceUtils.resolveColor(activity.getTheme(), androidx.appcompat.R.attr.colorAccent));
@@ -397,6 +398,20 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             sb.setSpan(foregroundColorSpan, sb.length() - recommended.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         } else if (android) {
             holder.appDescription.setVisibility(View.GONE);
+        }
+        if (deny) {
+            if (sb.length() != 0) sb.append("\n");
+            String denylist = activity.getString(R.string.deny_list_info);
+            sb.append(denylist);
+            final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ResourceUtils.resolveColor(activity.getTheme(), rikka.material.R.attr.colorWarning));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                final TypefaceSpan typefaceSpan = new TypefaceSpan(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+                sb.setSpan(typefaceSpan, sb.length() - denylist.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            } else {
+                final StyleSpan styleSpan = new StyleSpan(Typeface.BOLD);
+                sb.setSpan(styleSpan, sb.length() - denylist.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            }
+            sb.setSpan(foregroundColorSpan, sb.length() - denylist.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         }
         holder.appDescription.setText(sb);
 
