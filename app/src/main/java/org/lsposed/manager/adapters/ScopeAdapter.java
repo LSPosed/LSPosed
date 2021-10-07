@@ -355,8 +355,8 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.root.setAlpha(enabled ? 1.0f : .5f);
         AppInfo appInfo = showList.get(position);
+        holder.root.setAlpha(denyList.contains(appInfo.packageName) || enabled ? 1.0f : .5f);
         boolean android = appInfo.packageName.equals("android");
         CharSequence appName;
         int userId = appInfo.applicationInfo.uid / 100000;
