@@ -279,11 +279,11 @@ public class LSPManagerService extends ILSPManagerService.Stub {
         workerHandler.post(() -> createOrUpdateShortcutInternal(force, false));
     }
 
-    public static void createOrUpdateShortcut(boolean force, boolean isSystemConfigurationChanged) {
-        workerHandler.post(() -> createOrUpdateShortcutInternal(force, isSystemConfigurationChanged));
+    public static void createOrUpdateShortcut(boolean force, boolean shouldCreate) {
+        workerHandler.post(() -> createOrUpdateShortcutInternal(force, shouldCreate));
     }
 
-    private synchronized static void createOrUpdateShortcutInternal(boolean force, boolean isSystemConfigurationChanged) {
+    private synchronized static void createOrUpdateShortcutInternal(boolean force, boolean shouldCreate) {
         try {
             while (!UserService.isUserUnlocked(0)) {
                 Log.d(TAG, "user is not yet unlocked, waiting for 1s...");
@@ -321,7 +321,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
             }
             // Only existing shortcuts are updated when system settings
             // are changed and no new shortcuts are requested
-            if (!force && isSystemConfigurationChanged) return;
+            if (!force && shouldCreate) return;
             if (configManager.isAddShortcut()) {
                 sm.requestPinShortcut(shortcut, null);
                 Log.d(TAG, "done add shortcut");
