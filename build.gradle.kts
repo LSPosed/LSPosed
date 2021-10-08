@@ -24,10 +24,12 @@ buildscript {
         google()
         mavenCentral()
     }
+    val navVersion by extra("2.4.0-alpha10")
+    val agpVersion by extra("7.0.2")
     dependencies {
-        classpath("com.android.tools.build:gradle:7.0.2")
+        classpath("com.android.tools.build:gradle:$agpVersion")
         classpath("org.eclipse.jgit:org.eclipse.jgit:5.12.0.202106070339-r")
-        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.4.0-alpha10")
+        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:$navVersion")
     }
 }
 
@@ -36,6 +38,7 @@ val refId = repo.refDatabase.exactRef("refs/remotes/origin/master").objectId!!
 val commitCount = Git(repo).log().add(refId).call().count()
 
 val defaultManagerPackageName by extra("org.lsposed.manager")
+val apiCode by extra(93)
 val verCode by extra(commitCount + 4200)
 val verName by extra("1.6.0")
 val androidTargetSdkVersion by extra(31)
@@ -45,7 +48,6 @@ val androidCompileSdkVersion by extra(31)
 val androidCompileNdkVersion by extra("23.0.7599858")
 val androidSourceCompatibility by extra(JavaVersion.VERSION_11)
 val androidTargetCompatibility by extra(JavaVersion.VERSION_11)
-val apiCode by extra(93)
 
 tasks.register("Delete", Delete::class) {
     delete(rootProject.buildDir)
