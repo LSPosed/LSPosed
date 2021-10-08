@@ -186,6 +186,21 @@ public class LSPosedService extends ILSPosedService.Stub {
         }
     }
 
+    synchronized public void dispatchSecretCodeReceive() {
+        Intent intent = LSPManagerService.getManagerIntent();
+        try {
+            var userInfo = ActivityManagerService.getCurrentUser();
+            if (userInfo != null) {
+                var userId = userInfo.id;
+                if (userId == 0)
+                    ActivityManagerService.startActivityAsUserWithFeature("android", null,
+                            intent, intent.getType(), null, null, 0, 0, null, null, userId);
+            }
+        } catch (Throwable e) {
+            Log.e(TAG, "dispatch secret code received", e);
+        }
+    }
+
     private void registerPackageReceiver() {
         try {
             IntentFilter packageFilter = new IntentFilter();
@@ -261,6 +276,30 @@ public class LSPosedService extends ILSPosedService.Stub {
         Log.d(TAG, "registered configuration receiver");
     }
 
+    private void registerSecretCodeReceiver() {
+        try {
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction("android.provider.Telephony.SECRET_CODE");
+            intentFilter.addDataAuthority("5776733", null);
+            intentFilter.addDataScheme("android_secret_code");
+
+            ActivityManagerService.registerReceiver("android", null, new IIntentReceiver.Stub() {
+                @Override
+                public void performReceive(Intent intent, int resultCode, String data, Bundle extras, boolean ordered, boolean sticky, int sendingUser) {
+                    new Thread(() -> dispatchSecretCodeReceive()).start();
+                    try {
+                        ActivityManagerService.finishReceiver(this, resultCode, data, extras, false, intent.getFlags());
+                    } catch (Throwable e) {
+                        Log.e(TAG, "finish receiver", e);
+                    }
+                }
+            }, intentFilter, null, 0, 0);
+        } catch (Throwable e) {
+            Log.e(TAG, "register secret code receiver", e);
+        }
+        Log.d(TAG, "registered secret code receiver");
+    }
+
     @Override
     public void dispatchSystemServerContext(IBinder activityThread, IBinder activityToken) {
         Log.d(TAG, "received system context");
@@ -268,6 +307,7 @@ public class LSPosedService extends ILSPosedService.Stub {
         registerPackageReceiver();
         registerUnlockReceiver();
         registerConfigurationReceiver();
+        registerSecretCodeReceiver();
     }
 
     @Override

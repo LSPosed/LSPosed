@@ -171,7 +171,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
         return getIcon(org.lsposed.manager.R.drawable.ic_extension);
     }
 
-    private static Intent getManagerIntent() {
+    static Intent getManagerIntent() {
         try {
             if (managerIntent == null) {
                 var intent = PackageService.getLaunchIntentForPackage(BuildConfig.MANAGER_INJECTED_PKG_NAME);
