@@ -43,6 +43,7 @@ import org.lsposed.manager.databinding.DialogAboutBinding;
 import org.lsposed.manager.databinding.FragmentHomeBinding;
 import org.lsposed.manager.receivers.LSPManagerServiceHolder;
 import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
+import org.lsposed.manager.ui.dialog.FlashDialogBuilder;
 import org.lsposed.manager.ui.dialog.InfoDialogBuilder;
 import org.lsposed.manager.ui.dialog.WarningDialogBuilder;
 import org.lsposed.manager.util.ModuleUtil;
@@ -96,8 +97,10 @@ public class HomeFragment extends BaseFragment {
                 if (!ConfigManager.isSepolicyLoaded() || !ConfigManager.systemServerRequested() || !ConfigManager.dex2oatFlagsLoaded()) {
                     new WarningDialogBuilder(activity).show();
                 } else {
-                    new InfoDialogBuilder(activity).setTitle(R.string.info).show();
+                    new InfoDialogBuilder(activity).show();
                 }
+            } else if (App.canUpdate()) {
+                new FlashDialogBuilder(activity).show();
             } else {
                 NavUtil.startURL(activity, getString(R.string.about_source));
             }
@@ -129,7 +132,7 @@ public class HomeFragment extends BaseFragment {
                     R.string.about_view_source_code,
                     "<b><a href=\"https://github.com/LSPosed/LSPosed\">GitHub</a></b>",
                     "<b><a href=\"https://t.me/LSPosed\">Telegram</a></b>"), HtmlCompat.FROM_HTML_MODE_LEGACY));
-            binding.designAboutVersion.setText(String.format(Locale.US, "%s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
+            binding.designAboutVersion.setText(String.format(Locale.ROOT, "%s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
             new BlurBehindDialogBuilder(activity)
                     .setView(binding.getRoot())
                     .show();
@@ -140,7 +143,7 @@ public class HomeFragment extends BaseFragment {
     private void updateStates(Activity activity, boolean binderAlive, boolean needUpdate) {
         int cardBackgroundColor;
         if (binderAlive) {
-            StringBuilder sb = new StringBuilder(String.format(Locale.US, "%s (%d)",
+            StringBuilder sb = new StringBuilder(String.format(Locale.ROOT, "%s (%d)",
                     ConfigManager.getXposedVersionName(), ConfigManager.getXposedVersionCode()));
             if (needUpdate) {
                 cardBackgroundColor = ResourceUtils.resolveColor(activity.getTheme(), R.attr.colorInstall);

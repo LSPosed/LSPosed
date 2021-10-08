@@ -33,6 +33,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
 
 import com.google.gson.JsonParser;
@@ -64,6 +65,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
+import okio.Okio;
 import rikka.material.app.DayNightDelegate;
 import rikka.material.app.LocaleDelegate;
 
@@ -228,7 +230,8 @@ public class App extends Application {
                 if (body == null) return;
                 try {
                     var info = JsonParser.parseReader(body.charStream()).getAsJsonObject();
-                    var name = info.getAsJsonArray("assets").get(0).getAsJsonObject().get("name").getAsString();
+                    var assets = info.getAsJsonArray("assets").get(0).getAsJsonObject();
+                    var name = assets.get("name").getAsString();
                     var code = Integer.parseInt(name.split("-", 4)[2]);
                     var now = Instant.now().getEpochSecond();
                     pref.edit()
@@ -236,6 +239,16 @@ public class App extends Application {
                             .putLong("latest_check", now)
                             .putBoolean("checked", true)
                             .apply();
+                    var updatedAt = Instant.parse(assets.get("updated_at").getAsString());
+                    var downloadUrl = assets.get("browser_download_url").getAsString();
+                    var nowZipTime = pref.getLong("zip_time", BuildConfig.BUILD_TIME);
+                    if (updatedAt.isAfter(Instant.ofEpochSecond(nowZipTime))) {
+                        var zip = downloadNewZipSync(downloadUrl, name);
+                        var size = assets.get("size").getAsLong();
+                        if (zip != null && zip.length() == size) {
+                            pref.edit().putLong("zip_time", updatedAt.getEpochSecond()).apply();
+                        }
+                    }
                 } catch (Throwable t) {
                     Log.e(App.TAG, t.getMessage(), t);
                 }
@@ -265,6 +278,30 @@ public class App extends Application {
             return code > BuildConfig.VERSION_CODE;
         }
         return buildTime.atOffset(ZoneOffset.UTC).plusDays(30).toInstant().isBefore(now);
+    }
+
+    @Nullable
+    private static File downloadNewZipSync(String url, String name) {
+        var request = new Request.Builder().url(url).build();
+        var zip = new File(getInstance().getCacheDir(), name + ".zip");
+        try (Response response = getOkHttpClient().newCall(request).execute()) {
+            var body = response.body();
+            if (!response.isSuccessful() || body == null) return null;
+            try (var source = body.source();
+                 var sink = Okio.buffer(Okio.sink(zip))) {
+                sink.writeAll(source);
+            }
+        } catch (IOException e) {
+            Log.e(App.TAG, "downloadNewZipSync: " + e.getMessage());
+            return null;
+        }
+        return zip;
+    }
+
+    public static boolean canUpdate() {
+        var pref = getPreferences();
+        var zipTime = pref.getLong("zip_time", BuildConfig.BUILD_TIME);
+        return zipTime > BuildConfig.BUILD_TIME;
     }
 
     public static Locale getLocale() {
