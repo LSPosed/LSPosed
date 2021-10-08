@@ -186,4 +186,25 @@
     <string name="send_crash_info">Invia informazioni sul crash</string>
     <string name="crash_info_copied">Informazioni sul crash copiate negli appunti</string>
     <!-- Colors -->
+    <string name="color_pixel_blue">Blu pixel</string>
+    <string name="color_sakura">Sakura</string>
+    <string name="color_red">Rosso</string>
+    <string name="color_pink">Rosa</string>
+    <string name="color_purple">Viola</string>
+    <string name="color_deep_purple">Viola scuro</string>
+    <string name="color_indigo">Indaco</string>
+    <string name="color_blue">Blu</string>
+    <string name="color_light_blue">Azzurro</string>
+    <string name="color_cyan">Ciano</string>
+    <string name="color_teal">Verde acqua</string>
+    <string name="color_green">Verde</string>
+    <string name="color_light_green">Verde chiaro</string>
+    <string name="color_lime">Lime</string>
+    <string name="color_yellow">Giallo</string>
+    <string name="color_amber">Ambra</string>
+    <string name="color_orange">Arancione</string>
+    <string name="color_deep_orange">Arancione scuro</string>
+    <string name="color_brown">Marrone</string>
+    <string name="color_grey">Grigio</string>
+    <string name="color_blue_grey">Blu grigio</string>
 </resources>
