@@ -322,8 +322,10 @@ public class LSPManagerService extends ILSPManagerService.Stub {
             // Only existing shortcuts are updated when system settings
             // are changed and no new shortcuts are requested
             if (!force && isSystemConfigurationChanged) return;
-            if (configManager.isAddShortcut()) sm.requestPinShortcut(shortcut, null);
-            Log.d(TAG, "done add shortcut");
+            if (configManager.isAddShortcut()) {
+                sm.requestPinShortcut(shortcut, null);
+                Log.d(TAG, "done add shortcut");
+            }
         } catch (Throwable e) {
             Log.e(TAG, "add shortcut", e);
         }
