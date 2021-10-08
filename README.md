@@ -28,10 +28,6 @@ For stable release, please go to [Github Release page](https://github.com/LSPose
 For canary build, please check [Github Actions](https://github.com/LSPosed/LSPosed/actions)
 Note: debug build is only available on Github Actions.
 
-## Useful Links
-
-- [List of Xposed Modules For Android Pie Working With LSPosed](https://forum.xda-developers.com/xposed/list-xposed-modules-android-pie-ed-t3892768) (thanks to Uraniam9 @ xda-developers)
-
 ## Get Help
 
 - GitHub issues: [Issues](https://github.com/LSPosed/LSPosed/issues/)
