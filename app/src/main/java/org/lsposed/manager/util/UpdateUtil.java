@@ -92,7 +92,7 @@ public class UpdateUtil {
     @Nullable
     private static File downloadNewZipSync(String url, String name) {
         var request = new Request.Builder().url(url).build();
-        var zip = new File(App.getInstance().getCacheDir(), name + ".zip");
+        var zip = new File(App.getInstance().getCacheDir(), name);
         try (Response response = App.getOkHttpClient().newCall(request).execute()) {
             var body = response.body();
             if (!response.isSuccessful() || body == null) return null;
