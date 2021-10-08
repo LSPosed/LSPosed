@@ -162,7 +162,7 @@ tasks.whenTaskAdded {
 dependencies {
     val glideVersion = "4.12.0"
     val okhttpVersion = "4.9.1"
-    val navVersion = "2.4.0-alpha08"
+    val navVersion: String by rootProject.extra
     annotationProcessor("com.github.bumptech.glide:compiler:$glideVersion")
     implementation("androidx.activity:activity:1.3.1")
     implementation("androidx.browser:browser:1.3.0")
@@ -196,8 +196,8 @@ dependencies {
 }
 
 configurations.all {
-    resolutionStrategy {
-        exclude(group = "org.jetbrains", module = "annotations")
-        exclude(group = "androidx.appcompat", module = "appcompat")
-    }
+    exclude("org.jetbrains", "annotations")
+    exclude("androidx.appcompat", "appcompat")
+    exclude("org.jetbrains.kotlin", "kotlin-stdlib-jdk7")
+    exclude("org.jetbrains.kotlin", "kotlin-stdlib-jdk8")
 }
