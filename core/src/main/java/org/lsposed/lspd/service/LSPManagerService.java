@@ -276,7 +276,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     }
 
     public static void createOrUpdateShortcut(boolean force) {
-        workerHandler.post(() -> createOrUpdateShortcutInternal(force, false));
+        workerHandler.post(() -> createOrUpdateShortcutInternal(force, true));
     }
 
     public static void createOrUpdateShortcut(boolean force, boolean shouldCreate) {
@@ -321,7 +321,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
             }
             // Only existing shortcuts are updated when system settings
             // are changed and no new shortcuts are requested
-            if (!force && shouldCreate) return;
+            if (!force && !shouldCreate) return;
             if (configManager.isAddShortcut()) {
                 sm.requestPinShortcut(shortcut, null);
                 Log.d(TAG, "done add shortcut");
