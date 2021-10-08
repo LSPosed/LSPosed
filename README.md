@@ -20,7 +20,7 @@ Android 8.1 ~ 12
 3. [Download](#download) and install LSPosed in Magisk app.
 4. Reboot.
 5. Follow the prompts to add LSPosed shortcut to launcher.
-5. Have fun! :)
+6. Have fun! :)
 
 ## Download
 
