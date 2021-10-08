@@ -67,4 +67,8 @@ interface ILSPManagerService {
     void restartFor(in Intent intent) = 35;
 
     void createShortcut() = 36;
+
+    boolean isAddShortcut() = 37;
+
+    void setAddShortcut(boolean enabled) = 38;
 }
