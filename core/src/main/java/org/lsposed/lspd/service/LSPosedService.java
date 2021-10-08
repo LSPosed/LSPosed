@@ -189,7 +189,13 @@ public class LSPosedService extends ILSPosedService.Stub {
     synchronized public void dispatchSecretCodeReceive() {
         Intent intent = LSPManagerService.getManagerIntent();
         try {
-            preStartManager(BuildConfig.MANAGER_INJECTED_PKG_NAME, intent);
+            var userInfo = ActivityManagerService.getCurrentUser();
+            if (userInfo != null) {
+                var userId = userInfo.id;
+                if (userId == 0)
+                    ActivityManagerService.startActivityAsUserWithFeature("android", null,
+                            intent, intent.getType(), null, null, 0, 0, null, null, userId);
+            }
         } catch (Throwable e) {
             Log.e(TAG, "dispatch secret code received", e);
         }
