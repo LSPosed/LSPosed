@@ -157,6 +157,7 @@
     <string name="dns_over_http">DNS sur HTTPS</string>
     <string name="dns_over_http_summary">Contourner la censure DNS dans certains pays</string>
     <string name="theme_color">Couleure du thème</string>
+    <string name="theme_color_system">Couleure d\'accentuation du système</string>
     <string name="settings_show_hidden_icon_apps_enabled">Forcer les applications à afficher les icônes dans le lanceur</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">Après Android 10, les applications (notamment les modules Xposed) ne sont pas autorisées à masquer leurs icônes des lanceurs. Désactiver le commutateur pour désactiver cette fonctionnalité.</string>
     <string name="settings_group_system">Système</string>
@@ -185,4 +186,25 @@
     <string name="send_crash_info">Envoyer les infos de plantage</string>
     <string name="crash_info_copied">Infos de plantage copiées dans le presse papier</string>
     <!-- Colors -->
+    <string name="color_pixel_blue">Bleu Pixel</string>
+    <string name="color_sakura">Sakura</string>
+    <string name="color_red">Rouge</string>
+    <string name="color_pink">Rose</string>
+    <string name="color_purple">Violet</string>
+    <string name="color_deep_purple">Violet foncé</string>
+    <string name="color_indigo">Indigo</string>
+    <string name="color_blue">Bleu</string>
+    <string name="color_light_blue">Bleu clair</string>
+    <string name="color_cyan">Cyan</string>
+    <string name="color_teal">Turquoise</string>
+    <string name="color_green">Vert</string>
+    <string name="color_light_green">Vert clair</string>
+    <string name="color_lime">Vert citron</string>
+    <string name="color_yellow">Jaune</string>
+    <string name="color_amber">Ambre</string>
+    <string name="color_orange">Orange</string>
+    <string name="color_deep_orange">Orange foncé</string>
+    <string name="color_brown">Marron</string>
+    <string name="color_grey">Gris</string>
+    <string name="color_blue_grey">Bleu grisatre</string>
 </resources>
