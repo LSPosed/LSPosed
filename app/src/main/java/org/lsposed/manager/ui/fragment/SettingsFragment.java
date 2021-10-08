@@ -160,6 +160,14 @@ public class SettingsFragment extends BaseFragment {
                 prefEnableResources.setOnPreferenceChangeListener((preference, newValue) -> ConfigManager.setResourceHookEnabled((boolean) newValue));
             }
 
+            SwitchPreference prefEnableShortcut = findPreference("enable_auto_add_shortcut");
+            if (prefEnableShortcut != null) {
+                prefEnableShortcut.setEnabled(installed);
+                prefEnableShortcut.setVisible(!App.isParasitic());
+                prefEnableShortcut.setChecked(installed && ConfigManager.isAddShortcut());
+                prefEnableShortcut.setOnPreferenceChangeListener((preference, newValue) -> ConfigManager.setAddShortcut((boolean) newValue));
+            }
+
             Preference backup = findPreference("backup");
             if (backup != null) {
                 backup.setEnabled(installed);

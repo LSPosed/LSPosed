@@ -87,7 +87,6 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     private static final HandlerThread worker = new HandlerThread("manager worker");
     private static final Handler workerHandler;
-
     private static Intent managerIntent = null;
 
     static {
@@ -276,17 +275,16 @@ public class LSPManagerService extends ILSPManagerService.Stub {
         }
     }
 
-
     public static void createOrUpdateShortcut(boolean force) {
-        workerHandler.post(() -> createOrUpdateShortcutInternal(force));
+        workerHandler.post(() -> createOrUpdateShortcutInternal(force, true));
     }
 
-    private synchronized static void createOrUpdateShortcutInternal(boolean force) {
+    public static void createOrUpdateShortcut(boolean force, boolean shouldCreate) {
+        workerHandler.post(() -> createOrUpdateShortcutInternal(force, shouldCreate));
+    }
+
+    private synchronized static void createOrUpdateShortcutInternal(boolean force, boolean shouldCreate) {
         try {
-            if (!force && ConfigManager.getInstance().isManagerInstalled()) {
-                Log.d(TAG, "Manager has installed, skip adding shortcut");
-                return;
-            }
             while (!UserService.isUserUnlocked(0)) {
                 Log.d(TAG, "user is not yet unlocked, waiting for 1s...");
                 Thread.sleep(1000);
@@ -316,9 +314,18 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                     return;
                 }
             }
-
-            sm.requestPinShortcut(shortcut, null);
-            Log.d(TAG, "done add shortcut");
+            var configManager = ConfigManager.getInstance();
+            if (!force && configManager.isManagerInstalled()) {
+                Log.d(TAG, "Manager has installed, skip adding shortcut");
+                return;
+            }
+            // Only existing shortcuts are updated when system settings
+            // are changed and no new shortcuts are requested
+            if (!force && !shouldCreate) return;
+            if (configManager.isAddShortcut()) {
+                sm.requestPinShortcut(shortcut, null);
+                Log.d(TAG, "done add shortcut");
+            }
         } catch (Throwable e) {
             Log.e(TAG, "add shortcut", e);
         }
@@ -545,6 +552,17 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     }
 
     @Override
+    public boolean isAddShortcut() {
+        return ConfigManager.getInstance().isAddShortcut();
+    }
+
+    @Override
+    public void setAddShortcut(boolean enabled) {
+        ConfigManager.getInstance().setAddShortcut(enabled);
+        if (enabled) createOrUpdateShortcut(true);
+    }
+
+    @Override
     public boolean isVerboseLog() {
         return ConfigManager.getInstance().verboseLog();
     }
@@ -683,5 +701,6 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     @Override
     public void createShortcut() {
         createOrUpdateShortcut(true);
+        setAddShortcut(true);
     }
 }

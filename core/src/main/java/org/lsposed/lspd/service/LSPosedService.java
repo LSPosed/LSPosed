@@ -180,7 +180,7 @@ public class LSPosedService extends ILSPosedService.Stub {
     synchronized public void dispatchConfigurationChanged(Intent intent) {
         try {
             ConfigFileManager.reloadConfiguration();
-            LSPManagerService.createOrUpdateShortcut(false);
+            LSPManagerService.createOrUpdateShortcut(false, false);
         } catch (Throwable e) {
             Log.e(TAG, "dispatch configuration changed", e);
         }
