@@ -724,13 +724,12 @@ public class LSPManagerService extends ILSPManagerService.Stub {
         var processBuilder = new ProcessBuilder("magisk", "--install-module", zipPath);
         var fd = new File("/proc/self/fd/" + outputStream.getFd());
         processBuilder.redirectOutput(ProcessBuilder.Redirect.appendTo(fd));
-        try (outputStream) {
+        try (outputStream; var fdw = new FileOutputStream(fd, true)) {
             var proc = processBuilder.start();
-            var fdw = new FileOutputStream(fd, true);
-            if (proc.waitFor(30, TimeUnit.SECONDS)) {
+            if (proc.waitFor(10, TimeUnit.SECONDS)) {
                 var exit = proc.exitValue();
                 if (exit == 0) {
-                    fdw.write("- Done, reboot after 5s\n".getBytes());
+                    fdw.write("- Reboot after 5s\n".getBytes());
                     Thread.sleep(5000);
                     reboot(false);
                 } else {
