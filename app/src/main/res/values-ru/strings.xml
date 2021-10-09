@@ -42,8 +42,8 @@
     <string name="not_install_summary">LSPosed не установлен!</string>
     <string name="activated">Активирован</string>
     <string name="partial_activated">Частично активирован</string>
-    <string name="selinux_policy_not_loaded_summary">SEPolicy не загружен должным образом</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[SEPolicy не загружается должным образом, модули которым нужен системный фреймворк, не будут работать.<br/>Пожалуйста, сообщите об этом сюда <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> разработчик.]]></string>
+    <string name="selinux_policy_not_loaded_summary">SEPolicy не правильно загружен</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Модули которым нужен системный фреймворк, не будут работать.<br/>Пожалуйста, сообщите об этом разработчику <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>]]></string>
     <string name="system_inject_fail_summary">Ошибка внедрения системного фреймворка</string>
     <string name="system_inject_fail"><![CDATA[Ошибка внедрения системного фреймворка.<br/>Это редкость и может быть вызвано <b>Magisk</b> или несовместимыми модулями Magisk.<br/>Пожалуйста, попрорбуйте отключить модули Magisk кроме Riru и LSPosed или пришлите полные логи разработчику.]]></string>
     <string name="system_prop_incorrect_summary">Не правильные системные настройки</string>
@@ -167,6 +167,8 @@
     <string name="settings_translation_contributors">Автор перевода</string>
     <string name="settings_translation">Принять участие в переводе</string>
     <string name="settings_translation_summary">Помогите нам перевести %s на ваш язык</string>
+    <string name="pref_title_enable_auto_add_shortcut">Автоматическое добавление ярлыка</string>
+    <string name="settings_enable_auto_add_shortcut_summary">Новый ярлык не будет добавляться, если выключить этот переключатель</string>
     <!-- Module Repo -->
     <string name="module_readme">Описание</string>
     <string name="module_releases">Версии</string>
