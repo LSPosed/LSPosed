@@ -18,7 +18,7 @@
   ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">Информация</string>
     <string name="Modules">Мои модули</string>
@@ -42,8 +42,8 @@
     <string name="not_install_summary">LSPosed не установлен!</string>
     <string name="activated">Активирован</string>
     <string name="partial_activated">Частично активирован</string>
-    <string name="selinux_policy_not_loaded_summary">SEPolicy не загружен должным образом</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[SEPolicy не загружается должным образом, модули которым нужен системный фреймворк, не будут работать.<br/>Пожалуйста, сообщите об этом сюда <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> разработчик.]]></string>
+    <string name="selinux_policy_not_loaded_summary">SEPolicy не правильно загружен</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Модули которым нужен системный фреймворк, не будут работать.<br/>Пожалуйста, сообщите об этом разработчику <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>]]></string>
     <string name="system_inject_fail_summary">Ошибка внедрения системного фреймворка</string>
     <string name="system_inject_fail"><![CDATA[Ошибка внедрения системного фреймворка.<br/>Это редкость и может быть вызвано <b>Magisk</b> или несовместимыми модулями Magisk.<br/>Пожалуйста, попрорбуйте отключить модули Magisk кроме Riru и LSPosed или пришлите полные логи разработчику.]]></string>
     <string name="system_prop_incorrect_summary">Не правильные системные настройки</string>
@@ -57,8 +57,8 @@
     <string name="info_system_version">Версия Android</string>
     <string name="info_device">Устройство</string>
     <string name="info_system_abi">Разрядность системы ABI</string>
-    <string name="parasitic_recommend">Рекомендуем паразитный менеджер</string>
-    <string name="parasitic_recommend_summary">LSPosed теперь поддерживает паразитизацию системы, чтобы избежать обнаружения. Вы можете безопасно удалить менеджер после успешного создания ярлыка менеджера паразита. В любом случае вы можете установить менеджер обратно из /data/adb/lspd/manager.apk</string>
+    <string name="parasitic_recommend">Рекомендуем скрыть LSPosed</string>
+    <string name="parasitic_recommend_summary">Теперь LSPosed может скрыть себя от различных обнаружений в системе. Для этого создайте ярлык и безопасно удалите само приложение LSPosed. В любой момент можно вернуть приложение установив его из /data/adb/lspd/manager.apk</string>
     <string name="create_shortcut">Создать ярлык</string>
     <string name="never_show">Больше не показывать</string>
     <string name="failed_to_create_shortcut">Не удалось создать ярлык: %1$s</string>
@@ -80,9 +80,9 @@
     <string name="module_is_not_activated_yet">Модуль установлен</string>
     <string name="module_is_not_activated_yet_detailed">Модуль %s установлен но не включен</string>
     <string name="xposed_module_updated_notification_title">Модуль обновлен</string>
-    <string name="xposed_module_updated_notification_content">%s обновлен, остановите и запустите приложения выбранные для модуля</string>
+    <string name="xposed_module_updated_notification_content">Модуль %s обновлен, остановите и запустите приложения выбранные для модуля</string>
     <string name="xposed_module_updated_notification_title_system">Модуль обновлен, требуется перезагрузка</string>
-    <string name="xposed_module_updated_notification_content_system">%s обновлен, так как выбран системный фреймворк для модуля, требуется перезагрузка для применения изменений</string>
+    <string name="xposed_module_updated_notification_content_system">Модуль %s обновлен, так как выбран системный фреймворк для модуля, требуется перезагрузка для применения изменений</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(описание отсутствует)</string>
     <string name="module_no_ui">Этот модуль не содержит пользовательского интерфейса</string>
@@ -159,6 +159,7 @@
     <string name="dns_over_http">DNS через HTTPS</string>
     <string name="dns_over_http_summary">Протокол для выполнения разрешения DNS по протоколу HTTPS. Целью этого метода является повышение конфиденциальности и безопасности пользователей путем предотвращения перехвата и манипулирования данными DNS с помощью атак типа «Атака посредника»</string>
     <string name="theme_color">Акцент темы</string>
+    <string name="theme_color_system">Системный цвет акцента</string>
     <string name="settings_show_hidden_icon_apps_enabled">Принудительно показывать иконку модуля</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">После Android 10, модули не могут скрывать иконку в лаунчер. Выключите переключатель, чтобы отключить эту системную функцию</string>
     <string name="settings_group_system">Система</string>
@@ -166,6 +167,8 @@
     <string name="settings_translation_contributors">Автор перевода</string>
     <string name="settings_translation">Принять участие в переводе</string>
     <string name="settings_translation_summary">Помогите нам перевести %s на ваш язык</string>
+    <string name="pref_title_enable_auto_add_shortcut">Автоматическое добавление ярлыка</string>
+    <string name="settings_enable_auto_add_shortcut_summary">Новый ярлык не будет добавляться, если выключить этот переключатель</string>
     <!-- Module Repo -->
     <string name="module_readme">Описание</string>
     <string name="module_releases">Версии</string>
@@ -186,4 +189,26 @@
     <string name="manager_crashed_info">сообщить об этом </string>
     <string name="send_crash_info">Отправить информацию о сбое</string>
     <string name="crash_info_copied">Информация о сбое скопирована в буфер обмена</string>
+    <!-- Colors -->
+    <string name="color_pixel_blue">Небесно-голубой</string>
+    <string name="color_sakura">Сакура</string>
+    <string name="color_red">Красный</string>
+    <string name="color_pink">Розовый</string>
+    <string name="color_purple">Фиолетовый</string>
+    <string name="color_deep_purple">Насыщенный фиолетовый</string>
+    <string name="color_indigo">Индиго</string>
+    <string name="color_blue">Синий</string>
+    <string name="color_light_blue">Голубой</string>
+    <string name="color_cyan">Бирюзово-голубой</string>
+    <string name="color_teal">Сине-зеленый</string>
+    <string name="color_green">Зеленый</string>
+    <string name="color_light_green">Светло-зеленый</string>
+    <string name="color_lime">Желто-зеленый</string>
+    <string name="color_yellow">Желтый</string>
+    <string name="color_amber">Янтарный</string>
+    <string name="color_orange">Оранжевый</string>
+    <string name="color_deep_orange">Насыщенный оранжевый</string>
+    <string name="color_brown">Коричневый</string>
+    <string name="color_grey">Серый</string>
+    <string name="color_blue_grey">Серо-голубой</string>
 </resources>

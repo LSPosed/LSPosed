@@ -18,7 +18,7 @@
   ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">Informazioni</string>
     <string name="Modules">Moduli</string>
@@ -55,6 +55,11 @@
     <string name="info_system_version">Versione del sistema</string>
     <string name="info_device">Dispositivo</string>
     <string name="info_system_abi">ABI del sistema</string>
+    <string name="parasitic_recommend">Parasitic Manager consigliato</string>
+    <string name="parasitic_recommend_summary">LSPosed ora supporta la parassitizzazione del sistema per evitare il rilevamento. Puoi disinstallare in modo sicuro il manager dopo aver creato con successo una scorciatoia del manager parassitario. In ogni caso è possibile installare il manager da /data/adb/lspd/manager.apk.</string>
+    <string name="create_shortcut">Crea scorciatoia</string>
+    <string name="never_show">Non mostrare mai</string>
+    <string name="failed_to_create_shortcut">Creazione della scorciatoia non riuscita: %1$s</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Salva</string>
     <string name="nav_item_logs_lsp">Log di LSPosed</string>
@@ -152,6 +157,7 @@
     <string name="dns_over_http">DNS su HTTPS</string>
     <string name="dns_over_http_summary">Soluzione alternativa all\'avvelenamento della cache DNS in alcune nazioni</string>
     <string name="theme_color">Colore del tema</string>
+    <string name="theme_color_system">Colore del tema del sistema</string>
     <string name="settings_show_hidden_icon_apps_enabled">Costringi le app a mostrare le icone nel launcher</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">A partire da Android 10, le app non possono più nascondere le loro icone nel launcher. Disabilita l\'opzione per disattivare questa funzionalità.</string>
     <string name="settings_group_system">Sistema</string>
@@ -159,6 +165,8 @@
     <string name="settings_translation_contributors">Contributori alla traduzione</string>
     <string name="settings_translation">Partecipa alla traduzione</string>
     <string name="settings_translation_summary">Aiutaci a tradurre %s nella tua lingua</string>
+    <string name="pref_title_enable_auto_add_shortcut">Aggiungi automaticamente una scorciatoia</string>
+    <string name="settings_enable_auto_add_shortcut_summary">Nessuna nuova scorciatoia verrà aggiunta quando disabilitata nel manager non parassitario</string>
     <!-- Module Repo -->
     <string name="module_readme">Leggimi</string>
     <string name="module_releases">Versioni</string>
@@ -179,4 +187,26 @@
     <string name="manager_crashed_info">segnalalo a </string>
     <string name="send_crash_info">Invia informazioni sul crash</string>
     <string name="crash_info_copied">Informazioni sul crash copiate negli appunti</string>
+    <!-- Colors -->
+    <string name="color_pixel_blue">Blu pixel</string>
+    <string name="color_sakura">Sakura</string>
+    <string name="color_red">Rosso</string>
+    <string name="color_pink">Rosa</string>
+    <string name="color_purple">Viola</string>
+    <string name="color_deep_purple">Viola scuro</string>
+    <string name="color_indigo">Indaco</string>
+    <string name="color_blue">Blu</string>
+    <string name="color_light_blue">Azzurro</string>
+    <string name="color_cyan">Ciano</string>
+    <string name="color_teal">Verde acqua</string>
+    <string name="color_green">Verde</string>
+    <string name="color_light_green">Verde chiaro</string>
+    <string name="color_lime">Lime</string>
+    <string name="color_yellow">Giallo</string>
+    <string name="color_amber">Ambra</string>
+    <string name="color_orange">Arancione</string>
+    <string name="color_deep_orange">Arancione scuro</string>
+    <string name="color_brown">Marrone</string>
+    <string name="color_grey">Grigio</string>
+    <string name="color_blue_grey">Blu grigio</string>
 </resources>

@@ -18,7 +18,7 @@
   ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">정보</string>
     <string name="Modules">모듈</string>
@@ -156,4 +156,5 @@
     <string name="outdated_manager">LSPosed Manager 및 LSPosed Core 버전이 일치하지 않습니다. 해당 버전을 다시 설치하십시오.</string>
     <string name="send_crash_info">충돌 정보 전송</string>
     <string name="crash_info_copied">충돌 정보가 클립보드에 복사되었습니다.</string>
+    <!-- Colors -->
 </resources>

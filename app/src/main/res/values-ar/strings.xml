@@ -18,7 +18,7 @@
   ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">المعلومات</string>
     <string name="Modules">الوحدات</string>
@@ -55,7 +55,7 @@
     <string name="lsposed_not_active">LSPosed غير مثبت أو نشط حاليا.</string>
     <string name="info_api_version">إصدار API</string>
     <string name="info_framework_version">إصدار الإطار</string>
-    <string name="info_manager_version">إصدار المدير</string>
+    <string name="info_manager_version">نسخه منیجر</string>
     <string name="info_system_version">إصدار النظام</string>
     <string name="info_device">الجهاز</string>
     <string name="info_system_abi">نظام ABI</string>
@@ -161,6 +161,7 @@
     <string name="dns_over_http">DNS عبر HTTPS</string>
     <string name="dns_over_http_summary">حل بديل لتسمم DNS في بعض الدول</string>
     <string name="theme_color">لون الموضوع</string>
+    <string name="theme_color_system">لون سمة النظام</string>
     <string name="settings_show_hidden_icon_apps_enabled">إجبار التطبيقات على إظهار أيقونات المشغل</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">بعد أندرويد 10، لا يسمح للتطبيقات بإخفاء أيقونات المشغل. قم بإيقاف تشغيل التبديل لتعطيل ميزة النظام هذه.</string>
     <string name="settings_group_system">نظام</string>
@@ -188,4 +189,26 @@
     <string name="manager_crashed_info">أبلغ بهذا إلى </string>
     <string name="send_crash_info">إرسال معلومات الأعطال</string>
     <string name="crash_info_copied">تم نسخ معلومات الأعطال إلى الحافظة</string>
+    <!-- Colors -->
+    <string name="color_pixel_blue">أزرق بكسل</string>
+    <string name="color_sakura">ساكورا</string>
+    <string name="color_red">أحمر</string>
+    <string name="color_pink">وردي</string>
+    <string name="color_purple">بنفسجي</string>
+    <string name="color_deep_purple">بنفسجي عميق</string>
+    <string name="color_indigo">نيلي</string>
+    <string name="color_blue">أزرق</string>
+    <string name="color_light_blue">أزرق فاتح</string>
+    <string name="color_cyan">سماوي</string>
+    <string name="color_teal">تركواز</string>
+    <string name="color_green">أخضر</string>
+    <string name="color_light_green">أخضر فاتح</string>
+    <string name="color_lime">ليموني</string>
+    <string name="color_yellow">أصفر</string>
+    <string name="color_amber">كهرمان</string>
+    <string name="color_orange">برتقالي</string>
+    <string name="color_deep_orange">برتقالي عميق</string>
+    <string name="color_brown">بني</string>
+    <string name="color_grey">رمادي</string>
+    <string name="color_blue_grey">أزرق رمادي</string>
 </resources>

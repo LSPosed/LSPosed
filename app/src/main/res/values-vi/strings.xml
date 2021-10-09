@@ -18,7 +18,7 @@
   ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">Thông tin</string>
     <string name="Modules">Mô-đun</string>
@@ -30,9 +30,9 @@
     <string name="About">Về chúng tôi</string>
     <string name="report_issue">Báo cáo lỗi</string>
     <string name="module_repo">Kho</string>
-    <string name="module_repo_summary">Kho mô-đun (Dùng thử)</string>
+    <string name="module_repo_summary">Kho mô-đun (Beta)</string>
     <string name="about_view_source_code"><![CDATA[Xem mã nguồn tại %1$s<br/>Tham gia %2$s nhóm của chúng tôi]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">tuyennn</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Tuyen Nguyen(tuyennn)</string>
     <string name="install">Cài đặt</string>
     <string name="install_summary">Chạm để cài đặt LSPosed</string>
     <string name="not_installed">Chưa được cài đặt</string>
@@ -42,18 +42,23 @@
     <string name="selinux_policy_not_loaded_summary">SEPolicy không được nạp 1 cách hoàn thiện</string>
     <string name="selinux_policy_not_loaded"><![CDATA[Những mô-đun mà can thiệp vào System Framework sẽ không làm việc.<br/>Hãy báo cáo lỗi này nhà phát triển của <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>.]]></string>
     <string name="system_inject_fail_summary">Nhúng vào System Framework thất bại</string>
-    <string name="system_inject_fail"><![CDATA[Trường hợp này khá hiếm khi xảy ra và có thể lý do bởi <b>Magisk</b> hoặc 1 số mô-đun Magisk kém chất lượng.<br/>Hãy thử vô hiệu hóa những mô-đun Magisk đó, thử chạy riêng Riru và LSPosed mà thôi hoặc thông báo log tới những nhà phát triển.]]></string>
+    <string name="system_inject_fail"><![CDATA[Trường hợp này khá hiếm khi xảy ra và có thể lý do bởi <b>Magisk</b> hoặc 1 số mô-đun Magisk kém chất lượng.<br/>Hãy thử vô hiệu hóa những mô-đun Magisk đó, thử chạy riêng Riru và LSPosed mà thôi hoặc thông báo nhật ký tới những nhà phát triển.]]></string>
     <string name="system_prop_incorrect_summary">System prop không đúng</string>
     <string name="system_prop_incorrect"><![CDATA[Một số thuộc tính hệ thống cần thiết đã bị xóa hoặc sửa đổi.<br/> Đôi khi, các mô-đun có thể mất hiệu lực.]]></string>
     <string name="need_update">Cần được cập nhật</string>
-    <string name="please_update_summary">Xin cài đặt phiên bản mới nhất của LSPosed</string>
+    <string name="please_update_summary">Vui lòng cài đặt phiên bản mới nhất của LSPosed</string>
     <string name="lsposed_not_active">LSPosed hiện tại không được cài đặt hoặc được kích hoạt.</string>
     <string name="info_api_version">Phiên bản API</string>
     <string name="info_framework_version">Phiên bản Framework</string>
-    <string name="info_manager_version">Phiên bản phần mềm quản lý</string>
+    <string name="info_manager_version">Phiên bản trình quản lý</string>
     <string name="info_system_version">Phiên bản hệ thống</string>
     <string name="info_device">Thiết bị</string>
     <string name="info_system_abi">Hệ thống ABI</string>
+    <string name="parasitic_recommend">Quản lý cộng sinh khuyến nghị</string>
+    <string name="parasitic_recommend_summary">LSPosed giờ đã hỗ trợ hệ thống sống cộng sinh để tránh bị phát hiện. Bạn có thể thoải mái gỡ bỏ ứng dụng quản lý nếu đã có lối tắt của ứng dụng quản lý cộng sinh. Trong bất cứ điều gì ngoài mong muốn bạn vẫn có thể cài đặt lại nó ở đường dẫn /data/adb/lspd/manager.apk.</string>
+    <string name="create_shortcut">Tạo lối tắt</string>
+    <string name="never_show">Không hiện nữa</string>
+    <string name="failed_to_create_shortcut">Tạo lối tắt thất bại: %1$s</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Lưu lại</string>
     <string name="nav_item_logs_lsp">Nhật ký LSPosed</string>
@@ -67,7 +72,7 @@
     <string name="logs_cannot_read">Không thể đọc nhật ký: \n</string>
     <string name="menuReload">Tải lại</string>
     <string name="logs_clear_failed_2">Thất bại khi làm sạch nhật ký</string>
-    <string name="verbose_log_not_avaliable">Nhật ký Verbose không khả dụng, nếu bạn vừa kích hoạt nó mà chưa khởi động lại, thử khởi động lại trước đã.</string>
+    <string name="verbose_log_not_avaliable">Nhật ký chi tiết không khả dụng, nếu bạn vừa kích hoạt nó mà chưa khởi động lại, thử khởi động lại trước đã.</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Mô-đun Xposed chưa được kích hoạt</string>
     <string name="module_is_not_activated_yet_detailed">%s đã được cài đặt, nhưng chưa được kích hoạt</string>
@@ -81,7 +86,7 @@
     <string name="warning_xposed_min_version">Mô-đun này yêu cầu phiên bản Xposed (%d) và đó là lý do chưa được kích hoạt</string>
     <string name="no_min_version_specified">Mô-đun này không chỉ định phiên bản Xposed cần thiết để khởi chạy.</string>
     <string name="warning_min_version_too_low">Mô-đun này được tạo bởi phiên bản Xposed %1$d, nhưng vì lý do không tương thích với phiên bản %2$d, nên đã bị vô hiệu hóa</string>
-    <string name="warning_installed_on_external_storage">Mô-đun này không được nạp vì nó được cài đặt trên thẻ nhớ SD, xin hay chuyển nó vào bộ nhớ trong</string>
+    <string name="warning_installed_on_external_storage">Mô-đun này không được nạp vì nó được cài đặt trên thẻ nhớ SD, vui lòng chuyển nó vào bộ nhớ trong</string>
     <string name="module_uninstall">Gỡ cài đặt</string>
     <string name="module_settings">Thiết lập Mô-đun</string>
     <string name="view_in_repo">Xem ở trên Kho</string>
@@ -132,12 +137,12 @@
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">Xem trong ứng dụng khác</string>
     <string name="module_app_info">Thông tin ứng dụng</string>
-    <string name="list_empty">¯\\\\_(ツ)_\/¯\nKhông có gì ở đây</string>
+    <string name="list_empty">¯\\\\_(ツ)_\/¯\nKhông có gì ở đây cả</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
-    <string name="settings_enable_resources">Kích hoạt can thiệp vào resource</string>
-    <string name="settings_enable_resources_summary"><b>CẢNH BÁO:</b> Can thiệp vào Resource chỉ là thử nghiệm</string>
-    <string name="pref_title_disable_verbose_log">Vô hiệu nhật ký verbose</string>
+    <string name="settings_enable_resources">Kích hoạt can thiệp vào tài nguyên</string>
+    <string name="settings_enable_resources_summary"><b>CẢNH BÁO:</b> Can thiệp vào tài nguyên chỉ là thử nghiệm</string>
+    <string name="pref_title_disable_verbose_log">Vô hiệu nhật ký chi tiết</string>
     <string name="pure_black_dark_theme">Chủ đề Đen - Tối</string>
     <string name="pure_black_dark_theme_summary">Sử dụng chủ đề đen nếu chủ đề tối được bật</string>
     <string name="settings_group_theme">Chủ đề</string>
@@ -151,13 +156,16 @@
     <string name="dns_over_http">DNS qua HTTPS</string>
     <string name="dns_over_http_summary">Giải pháp khắc phục tình trạng giả mạo DNS ở một số quốc gia</string>
     <string name="theme_color">Màu chủ đề</string>
-    <string name="settings_show_hidden_icon_apps_enabled">Buộc các ứng dụng hiển thị biểu tượng trên launcher</string>
-    <string name="settings_show_hidden_icon_apps_enabled_summary">Sau Android 10, các ứng dụng không được phép ẩn biểu tượng trên launcher. Tắt lựa chọn này để vô hiệu tính năng này của hệ thống.</string>
+    <string name="theme_color_system">Màu chủ đề hệ thống</string>
+    <string name="settings_show_hidden_icon_apps_enabled">Buộc các ứng dụng hiển thị biểu tượng trên trình khởi chạy</string>
+    <string name="settings_show_hidden_icon_apps_enabled_summary">Sau Android 10, các ứng dụng không được phép ẩn biểu tượng trên trình khởi chạy. Tắt lựa chọn này để vô hiệu tính năng này của hệ thống.</string>
     <string name="settings_group_system">Hệ thống</string>
     <string name="settings_language">Ngôn ngữ</string>
     <string name="settings_translation_contributors">Cộng tác viên phiên dịch</string>
     <string name="settings_translation">Tham gia phiên dịch</string>
     <string name="settings_translation_summary">Giúp chúng tôi dịch %s về ngôn ngữ của bạn</string>
+    <string name="pref_title_enable_auto_add_shortcut">Tự động thêm lối tắt</string>
+    <string name="settings_enable_auto_add_shortcut_summary">Sẽ không có lối tắt được thêm khi vô hiệu trong trình quản lý không ký sinh</string>
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
     <string name="module_releases">Bản phát hành</string>
@@ -174,8 +182,30 @@
     <!-- CrashReportActivity -->
     <string name="outdated_core">Ứng dụng LSPosed đang mới hơn framework. Xin hãy cập nhật LSPosed framework.</string>
     <string name="outdated_manager">LSPosed framework đang mới hơn phiên bản ứng dụng quản lý. Xin hãy cập nhật ứng dụng tại /data/adb/lspd/manager.apk thủ công.</string>
-    <string name="manager_crashed">Quản lý hỏng hóc</string>
+    <string name="manager_crashed">Trình quản lí gặp sự cố</string>
     <string name="manager_crashed_info">báo cáo điều này cho </string>
     <string name="send_crash_info">Gửi thông tin sự cố</string>
-    <string name="crash_info_copied">Đã sao chép thông tin sự cố vào clipboard</string>
+    <string name="crash_info_copied">Đã sao chép thông tin sự cố vào bộ nhớ tạm</string>
+    <!-- Colors -->
+    <string name="color_pixel_blue">Xanh Pixel</string>
+    <string name="color_sakura">Hoa anh đào</string>
+    <string name="color_red">Đỏ</string>
+    <string name="color_pink">Hồng</string>
+    <string name="color_purple">Tím</string>
+    <string name="color_deep_purple">Tím đậm</string>
+    <string name="color_indigo">Xanh đậm</string>
+    <string name="color_blue">Xanh</string>
+    <string name="color_light_blue">Xanh sáng</string>
+    <string name="color_cyan">Lục lam</string>
+    <string name="color_teal">Mòng két</string>
+    <string name="color_green">Xanh lá</string>
+    <string name="color_light_green">Xanh lá sáng</string>
+    <string name="color_lime">Xanh chanh</string>
+    <string name="color_yellow">Vàng</string>
+    <string name="color_amber">Hổ phách</string>
+    <string name="color_orange">Cam</string>
+    <string name="color_deep_orange">Cam sâu</string>
+    <string name="color_brown">Nâu</string>
+    <string name="color_grey">Xám</string>
+    <string name="color_blue_grey">Xanh xám</string>
 </resources>

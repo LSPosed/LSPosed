@@ -18,7 +18,7 @@
   ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">اطلاعات</string>
     <string name="Modules">ماژول‌ها</string>
@@ -179,4 +179,5 @@
     <string name="manager_crashed_info">این را گزارش کنید </string>
     <string name="send_crash_info">ارسال اطلاعات هنگ</string>
     <string name="crash_info_copied">اطلاعات هنگ در کلیپ بورد کپی شد</string>
+    <!-- Colors -->
 </resources>
