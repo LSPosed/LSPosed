@@ -16,20 +16,17 @@ Android 8.1 ~ 12
 ## Install
 
 1. Install Magisk v23+
-1. Install [Riru](https://github.com/RikkaApps/Riru/releases) v25+ from Magisk repo.
-1. [Download](#download) and install LSPosed in Magisk Manager
-1. Reboot.
-1. Have fun! :)
+2. Install [Riru](https://github.com/RikkaApps/Riru/releases) v25+ from Magisk repo.
+3. [Download](#download) and install LSPosed in Magisk app.
+4. Reboot.
+5. Follow the prompts to add LSPosed shortcut to launcher.
+6. Have fun! :)
 
 ## Download
 
 For stable release, please go to [Github Release page](https://github.com/LSPosed/LSPosed/releases)
 For canary build, please check [Github Actions](https://github.com/LSPosed/LSPosed/actions)
-Note: debug build is only available on Github Actions. 
-
-## Useful Links
-
-- [List of Xposed Modules For Android Pie Working With LSPosed](https://forum.xda-developers.com/xposed/list-xposed-modules-android-pie-ed-t3892768) (thanks to Uraniam9 @ xda-developers)
+Note: debug build is only available on Github Actions.
 
 ## Get Help
 
@@ -48,7 +45,7 @@ We use our own module repository. We welcome developers to submit modules to our
 
 ## Community Discussion
 
-- Telegram: [@LSPosed](http://t.me/LSPosed)
+- Telegram: [@LSPosed](https://t.me/s/LSPosed)
 
 Notice: These community group don't accept any bug report, please use [Get help](#get-help) to report.
 

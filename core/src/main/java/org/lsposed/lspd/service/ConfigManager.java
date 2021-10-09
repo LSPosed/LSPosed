@@ -83,6 +83,7 @@ public class ConfigManager {
 
     private boolean resourceHook = false;
     private boolean verboseLog = true;
+    private boolean autoAddShortcut = true;
     private String miscPath = null;
 
     private int managerUid = -1;
@@ -210,6 +211,13 @@ public class ConfigManager {
 
         bool = config.get("enable_verbose_log");
         verboseLog = bool == null || (boolean) bool;
+
+        bool = config.get("enable_auto_add_shortcut");
+        if (bool == null) {
+            updateModulePrefs("lspd", 0, "config", "enable_auto_add_shortcut", true);
+            bool = true;
+        }
+        autoAddShortcut = (boolean) bool;
 
         // Don't migrate to ConfigFileManager, as XSharedPreferences will be restored soon
         String string = (String) config.get("misc_path");
@@ -789,6 +797,15 @@ public class ConfigManager {
         }
         updateModulePrefs("lspd", 0, "config", "enable_verbose_log", on);
         verboseLog = on;
+    }
+
+    public boolean isAddShortcut() {
+        return autoAddShortcut;
+    }
+
+    public void setAddShortcut(boolean on) {
+        updateModulePrefs("lspd", 0, "config", "enable_auto_add_shortcut", on);
+        this.autoAddShortcut = on;
     }
 
     public boolean resourceHook() {
