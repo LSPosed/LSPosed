@@ -18,7 +18,7 @@
   ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">資訊</string>
     <string name="Modules">模組</string>
@@ -54,6 +54,11 @@
     <string name="info_system_version">系統版本</string>
     <string name="info_device">裝置版本</string>
     <string name="info_system_abi">系統架構</string>
+    <string name="parasitic_recommend">推薦使用寄生管理器</string>
+    <string name="parasitic_recommend_summary">LSPosed 現在支援寄生系統以避免檢測。您可以在成功建立寄生管理器圖示後從系統設置中移除管理器。 在任何情況下，您都可以從 /data/adb/lspd/manager.apk 安裝管理器。</string>
+    <string name="create_shortcut">建立捷徑</string>
+    <string name="never_show">不再顯示</string>
+    <string name="failed_to_create_shortcut">建立捷徑失敗：%1$s</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">儲存</string>
     <string name="nav_item_logs_lsp">LSPosed 日誌</string>
@@ -151,6 +156,7 @@
     <string name="dns_over_http">安全 DNS（DoH）</string>
     <string name="dns_over_http_summary">解決某些地區的 DNS 汙染問題</string>
     <string name="theme_color">主題強調色</string>
+    <string name="theme_color_system">系統主題顏色</string>
     <string name="settings_show_hidden_icon_apps_enabled">強制應用程式在啟動器中顯示圖示</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">在 Android 10 之後，應用（特別是 Xposed 模組）不被允許隱藏啟動器圖示。關閉本選項以停用此功能。</string>
     <string name="settings_group_system">系統</string>
@@ -158,6 +164,8 @@
     <string name="settings_translation_contributors">譯者</string>
     <string name="settings_translation">參與翻譯</string>
     <string name="settings_translation_summary">幫助我們翻譯 %s 到您的語言</string>
+    <string name="pref_title_enable_auto_add_shortcut">自動新增捷徑</string>
+    <string name="settings_enable_auto_add_shortcut_summary">在非寄生的管理器中停用後將不會新增捷徑</string>
     <!-- Module Repo -->
     <string name="module_readme">自述檔案</string>
     <string name="module_releases">版本</string>
@@ -178,4 +186,26 @@
     <string name="manager_crashed_info">回報給 </string>
     <string name="send_crash_info">傳送錯誤日誌</string>
     <string name="crash_info_copied">錯誤日誌已複製到剪貼簿</string>
+    <!-- Colors -->
+    <string name="color_pixel_blue">Pixel 藍</string>
+    <string name="color_sakura">櫻花</string>
+    <string name="color_red">紅色</string>
+    <string name="color_pink">粉色</string>
+    <string name="color_purple">紫色</string>
+    <string name="color_deep_purple">深紫</string>
+    <string name="color_indigo">靛青</string>
+    <string name="color_blue">藍色</string>
+    <string name="color_light_blue">淺藍</string>
+    <string name="color_cyan">青色</string>
+    <string name="color_teal">青綠</string>
+    <string name="color_green">綠色</string>
+    <string name="color_light_green">淺綠</string>
+    <string name="color_lime">石灰</string>
+    <string name="color_yellow">黃色</string>
+    <string name="color_amber">琥珀</string>
+    <string name="color_orange">橙色</string>
+    <string name="color_deep_orange">深橙</string>
+    <string name="color_brown">棕色</string>
+    <string name="color_grey">灰色</string>
+    <string name="color_blue_grey">灰藍</string>
 </resources>

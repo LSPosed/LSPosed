@@ -18,7 +18,7 @@
   ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">Info</string>
     <string name="Modules">Modules</string>
@@ -34,4 +34,5 @@
     <!-- SettingsActivity -->
     <!-- Module Repo -->
     <!-- CrashReportActivity -->
+    <!-- Colors -->
 </resources>

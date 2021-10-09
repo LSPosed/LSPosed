@@ -24,11 +24,11 @@ import com.android.ide.common.signing.KeystoreHelper
 import org.apache.commons.codec.binary.Hex
 import org.apache.tools.ant.filters.FixCrLfFilter
 import org.apache.tools.ant.filters.ReplaceTokens
+import java.io.FileOutputStream
 import java.io.PrintStream
 import java.security.MessageDigest
 import java.util.jar.JarFile
 import java.util.zip.ZipOutputStream
-import java.io.FileOutputStream
 
 plugins {
     id("com.android.application")
@@ -46,8 +46,12 @@ val moduleMaxRiruApiVersion = 25
 val injectedPackageName = "com.android.shell"
 val injectedPackageUid = 2000
 
+val agpVersion: String by rootProject.extra
+
 val defaultManagerPackageName: String by rootProject.extra
 val apiCode: Int by rootProject.extra
+val verCode: Int by rootProject.extra
+val verName: String by rootProject.extra
 
 val androidTargetSdkVersion: Int by rootProject.extra
 val androidMinSdkVersion: Int by rootProject.extra
@@ -57,14 +61,11 @@ val androidCompileNdkVersion: String by rootProject.extra
 val androidSourceCompatibility: JavaVersion by rootProject.extra
 val androidTargetCompatibility: JavaVersion by rootProject.extra
 
-val verCode: Int by rootProject.extra
-val verName: String by rootProject.extra
-
 dependencies {
     implementation("dev.rikka.ndk:riru:26.0.0")
     implementation("dev.rikka.ndk.thirdparty:cxx:1.1.0")
     implementation("io.github.vvb2060.ndk:dobby:1.2")
-    implementation("com.android.tools.build:apksig:7.0.2")
+    implementation("com.android.tools.build:apksig:$agpVersion")
     implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("de.upb.cs.swt:axml:2.1.1")
     compileOnly("androidx.annotation:annotation:1.2.0")

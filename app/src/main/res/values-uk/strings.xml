@@ -18,7 +18,7 @@
   ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">Інформація</string>
     <string name="Modules">Модулі</string>
@@ -180,4 +180,5 @@
     <string name="manager_crashed_info">надіслати це на </string>
     <string name="send_crash_info">Надіслати інформацію про помилку</string>
     <string name="crash_info_copied">Інформація про помилку скопійована до буферу обміну</string>
+    <!-- Colors -->
 </resources>

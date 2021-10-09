@@ -68,5 +68,9 @@ interface ILSPManagerService {
 
     void createShortcut() = 36;
 
-    List<String> getDenyListPackages() = 37;
+    boolean isAddShortcut() = 37;
+
+    void setAddShortcut(boolean enabled) = 38;
+    
+    List<String> getDenyListPackages() = 39;
 }

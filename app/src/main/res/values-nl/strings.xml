@@ -18,7 +18,7 @@
   ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">Info</string>
     <string name="Modules">Modules</string>
@@ -55,6 +55,11 @@
     <string name="info_system_version">Systeem versie</string>
     <string name="info_device">Apparaat</string>
     <string name="info_system_abi">Systeem ABI</string>
+    <string name="parasitic_recommend">Parasitaire manager aanbevolen</string>
+    <string name="parasitic_recommend_summary">LSPosed ondersteunt nu parasitisering van het systeem om detectie te voorkomen. U kunt de manager veilig deïnstalleren na het maken van een snelkoppeling van de parastische manager. In elk geval kunt u de manager installeren vanuit /data/adb/lspd/manager.apk.</string>
+    <string name="create_shortcut">Snelkoppeling maken</string>
+    <string name="never_show">Nooit tonen</string>
+    <string name="failed_to_create_shortcut">Snelkoppeling maken mislukt: %1$s</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Opslaan</string>
     <string name="nav_item_logs_lsp">LSPosed logboeken</string>
@@ -152,6 +157,7 @@
     <string name="dns_over_http">DNS via HTTPS</string>
     <string name="dns_over_http_summary">Tijdelijke oplossing voor DNS-vergiftiging in sommige landen</string>
     <string name="theme_color">Thema kleur</string>
+    <string name="theme_color_system">Systeem thema kleur</string>
     <string name="settings_show_hidden_icon_apps_enabled">Forceer apps om launcher-pictogrammen weer te geven</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">Na Android 10 mogen apps (vooral Xposed-modules) hun opstartpictogrammen niet verbergen. Schakel de schakelaar uit om deze functie uit te schakelen.</string>
     <string name="settings_group_system">Systeem</string>
@@ -159,6 +165,8 @@
     <string name="settings_translation_contributors">Bijdragers van vertalingen</string>
     <string name="settings_translation">Deelnemen aan vertaling</string>
     <string name="settings_translation_summary">Help ons %s te vertalen in uw taal</string>
+    <string name="pref_title_enable_auto_add_shortcut">Snelkoppeling automatisch toevoegen</string>
+    <string name="settings_enable_auto_add_shortcut_summary">Er zullen geen nieuwe snelkoppelingen worden toegevoegd wanneer uitgeschakeld in de niet-parasitaire manager</string>
     <!-- Module Repo -->
     <string name="module_readme">Leesmij</string>
     <string name="module_releases">Publicaties</string>
@@ -179,4 +187,26 @@
     <string name="manager_crashed_info">meld dit aan </string>
     <string name="send_crash_info">Stuur crash informatie</string>
     <string name="crash_info_copied">Crash informatie naar klembord gekopieerd</string>
+    <!-- Colors -->
+    <string name="color_pixel_blue">Pixel blauw</string>
+    <string name="color_sakura">Sakura</string>
+    <string name="color_red">Rood</string>
+    <string name="color_pink">Roze</string>
+    <string name="color_purple">Paars</string>
+    <string name="color_deep_purple">Donker paars</string>
+    <string name="color_indigo">Indigo</string>
+    <string name="color_blue">Blauw</string>
+    <string name="color_light_blue">Licht blauw</string>
+    <string name="color_cyan">Turquoise</string>
+    <string name="color_teal">Groenblauw</string>
+    <string name="color_green">Groen</string>
+    <string name="color_light_green">Licht groen</string>
+    <string name="color_lime">Limoen</string>
+    <string name="color_yellow">Geel</string>
+    <string name="color_amber">Amber</string>
+    <string name="color_orange">Oranje</string>
+    <string name="color_deep_orange">Diep oranje</string>
+    <string name="color_brown">Bruin</string>
+    <string name="color_grey">Grijs</string>
+    <string name="color_blue_grey">Blauw grijs</string>
 </resources>

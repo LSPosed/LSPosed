@@ -156,6 +156,25 @@ public class ConfigManager {
         }
     }
 
+    public static boolean isAddShortcut() {
+        try {
+            return LSPManagerServiceHolder.getService().isAddShortcut();
+        } catch (RemoteException e) {
+            Log.e(App.TAG, Log.getStackTraceString(e));
+            return false;
+        }
+    }
+
+    public static boolean setAddShortcut(boolean enabled) {
+        try {
+            LSPManagerServiceHolder.getService().setAddShortcut(enabled);
+            return true;
+        } catch (RemoteException e) {
+            Log.e(App.TAG, Log.getStackTraceString(e));
+            return false;
+        }
+    }
+
     public static boolean isVerboseLogEnabled() {
         try {
             return LSPManagerServiceHolder.getService().isVerboseLog();
