@@ -21,6 +21,7 @@ package org.lsposed.manager.ui.fragment;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.content.res.Resources.NotFoundException;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -321,10 +322,16 @@ public class SettingsFragment extends BaseFragment {
             Configuration conf = ctx.getResources().getConfiguration();
             Locale originalLocale = conf.getLocales().get(0);
             conf.setLocale(Locale.ENGLISH);
-            final String reference = ctx.createConfigurationContext(conf).getString(id);
 
             var lstLang = new ArrayList<String>();
             lstLang.add(Locale.ENGLISH.getLanguage());
+
+            final String reference;
+            try {
+                reference = ctx.createConfigurationContext(conf).getString(id);
+            } catch(NotFoundException nfe) {
+                return lstLang; // return only english
+            }
 
             for (String loc : ctx.getAssets().getLocales()) {
                 if (loc.isEmpty()) {
