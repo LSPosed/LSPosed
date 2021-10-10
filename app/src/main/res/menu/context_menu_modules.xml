@@ -33,6 +33,9 @@
         android:id="@+id/menu_app_info"
         android:title="@string/module_app_info" />
     <item
+        android:id="@+id/menu_compile_speed"
+        android:title="@string/compile_speed" />
+    <item
         android:id="@+id/menu_uninstall"
         android:title="@string/module_uninstall" />
 
