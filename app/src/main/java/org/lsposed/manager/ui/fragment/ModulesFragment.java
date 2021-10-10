@@ -323,10 +323,11 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         } else if (itemId == R.id.menu_repo) {
             getNavController().navigate(ModulesFragmentDirections.actionModulesFragmentToRepoItemFragment(selectedModule.packageName, selectedModule.getAppName()));
             return true;
+        } else if (itemId == R.id.menu_compile_speed) {
+            CompileDialogFragment.speed(getChildFragmentManager(), selectedModule.pkg.applicationInfo);
         }
         return super.onContextItemSelected(item);
     }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
