@@ -28,6 +28,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -50,26 +51,20 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
 
     private static final String[] COMPILE_RESET_COMMAND = new String[]{"cmd", "package", "compile", "-f", "-m", "speed", ""};
 
-    private static final String KEY_APP_INFO = "app_info";
     private ApplicationInfo appInfo;
+    private View snackBar;
 
-    public static void speed(FragmentManager fragmentManager, ApplicationInfo info) {
-        Bundle arguments = new Bundle();
-        arguments.putParcelable(KEY_APP_INFO, info);
+    public static void speed(FragmentManager fragmentManager, ApplicationInfo info, View snackBar) {
         CompileDialogFragment fragment = new CompileDialogFragment();
-        fragment.setArguments(arguments);
         fragment.setCancelable(false);
+        fragment.appInfo = info;
+        fragment.snackBar = snackBar;
         fragment.show(fragmentManager, "compile_dialog");
     }
 
     @Override
     @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Bundle arguments = getArguments();
-        if (arguments == null) {
-            throw new IllegalStateException("arguments should not be null.");
-        }
-        appInfo = arguments.getParcelable(KEY_APP_INFO);
         if (appInfo == null) {
             throw new IllegalStateException("appInfo should not be null.");
         }
@@ -87,15 +82,9 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        Bundle arguments = getArguments();
-        if (arguments != null) {
-            appInfo = arguments.getParcelable(KEY_APP_INFO);
-            String[] command = COMPILE_RESET_COMMAND;
-            command[6] = appInfo.packageName;
-            new CompileTask(this).executeOnExecutor(App.getExecutorService(), command);
-        } else {
-            dismissAllowingStateLoss();
-        }
+        String[] command = COMPILE_RESET_COMMAND;
+        command[6] = appInfo.packageName;
+        new CompileTask(this).executeOnExecutor(App.getExecutorService(), command);
     }
 
     private static class CompileTask extends AsyncTask<String, Void, String> {
@@ -154,9 +143,9 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
             CompileDialogFragment fragment = outerRef.get();
             if (fragment != null) {
                 fragment.dismissAllowingStateLoss();
-                AppListFragment appListFragment = (AppListFragment) fragment.getParentFragment();
-                if (appListFragment != null && appListFragment.binding != null && appListFragment.isResumed()) {
-                    Snackbar.make(appListFragment.binding.snackbar, text, Snackbar.LENGTH_LONG).show();
+                var parent = fragment.getParentFragment();
+                if (fragment.snackBar != null && parent != null && parent.isResumed()) {
+                    Snackbar.make(fragment.snackBar, text, Snackbar.LENGTH_LONG).show();
                     return;
                 }
             }
