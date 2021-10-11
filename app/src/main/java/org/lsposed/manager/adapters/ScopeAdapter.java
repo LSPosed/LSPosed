@@ -283,7 +283,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                 ConfigManager.startActivityAsUserWithFeature(launchIntent, module.userId);
             }
         } else if (itemId == R.id.menu_compile_speed) {
-            CompileDialogFragment.speed(fragment.getChildFragmentManager(), info);
+            CompileDialogFragment.speed(fragment.getChildFragmentManager(), info, fragment.binding.snackbar);
         } else if (itemId == R.id.menu_other_app) {
             var intent = new Intent(Intent.ACTION_SHOW_APP_INFO);
             intent.putExtra(Intent.EXTRA_PACKAGE_NAME, module.packageName);
