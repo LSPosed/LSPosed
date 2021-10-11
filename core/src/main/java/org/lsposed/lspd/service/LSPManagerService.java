@@ -28,6 +28,7 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.AttributionSource;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -41,6 +42,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -680,9 +682,17 @@ public class LSPManagerService extends ILSPManagerService.Stub {
         try {
             var contentProvider = ActivityManagerService.getContentProvider("settings", 0);
             if (contentProvider != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    try {
+                        contentProvider.call(new AttributionSource.Builder(1000).setPackageName("android").build(),
+                                "settings", "PUT_global", "show_hidden_icon_apps_enabled", args);
+                        return;
+                    } catch (NoSuchMethodError ignored) {
+                    }
+                }
                 contentProvider.call("android", null, "settings", "PUT_global", "show_hidden_icon_apps_enabled", args);
             }
-        } catch (RemoteException | NullPointerException e) {
+        } catch (Throwable e) {
             Log.w(TAG, "setHiddenIcon: ", e);
         }
     }
