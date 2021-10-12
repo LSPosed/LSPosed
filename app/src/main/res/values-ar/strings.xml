@@ -64,6 +64,8 @@
     <string name="create_shortcut">إنشاء إختصار</string>
     <string name="never_show">لا تظهر أبداً</string>
     <string name="failed_to_create_shortcut">فشل إنشاء اختصار: %1$s</string>
+    <string name="update_lsposed">تحديث LSPosed</string>
+    <string name="update_lsposed_msg">هل تريد تثبيت إصدار جديد من LSPosed؟ سيتم إعادة تشغيل الجهاز بعد الانتهاء</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">حفظ</string>
     <string name="nav_item_logs_lsp">سجلات LSPosed</string>
@@ -169,6 +171,8 @@
     <string name="settings_translation_contributors">المساهمون بالترجمة</string>
     <string name="settings_translation">المشاركة في الترجمة</string>
     <string name="settings_translation_summary">ساعدنا على ترجمة %s إلى لغتك</string>
+    <string name="pref_title_enable_auto_add_shortcut">إضافة اختصار تلقائياً</string>
+    <string name="settings_enable_auto_add_shortcut_summary">لن تضاف اختصارات جديدة عند تعطيلها في المدير غير الطفيلي</string>
     <!-- Module Repo -->
     <string name="module_readme">إقرأني</string>
     <string name="module_releases">إصدارات</string>

@@ -60,6 +60,8 @@
     <string name="create_shortcut">Crea scorciatoia</string>
     <string name="never_show">Non mostrare mai</string>
     <string name="failed_to_create_shortcut">Creazione della scorciatoia non riuscita: %1$s</string>
+    <string name="update_lsposed">Aggiorna LSPosed</string>
+    <string name="update_lsposed_msg">Vuoi installare una nuova versione di LSPosed? Il dispositivo si riavvierà dopo il completamento</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Salva</string>
     <string name="nav_item_logs_lsp">Log di LSPosed</string>

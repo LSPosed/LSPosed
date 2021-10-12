@@ -59,6 +59,8 @@
     <string name="create_shortcut">建立捷徑</string>
     <string name="never_show">不再顯示</string>
     <string name="failed_to_create_shortcut">建立捷徑失敗：%1$s</string>
+    <string name="update_lsposed">更新 LSPosed</string>
+    <string name="update_lsposed_msg">確定安裝新版本 LSPosed？完成後裝置將會重新開機</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">儲存</string>
     <string name="nav_item_logs_lsp">LSPosed 日誌</string>
