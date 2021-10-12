@@ -189,6 +189,7 @@ namespace lspd {
                                                jstring app_data_dir) {
         Service::instance()->InitService(env);
         const auto app_id = uid % PER_USER_RANGE;
+        app_data_dir_ = app_data_dir;
         nice_name_ = nice_name;
         JUTFString process_name(env, nice_name);
         skip_ = !sym_initialized;
