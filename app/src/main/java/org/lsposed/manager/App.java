@@ -35,14 +35,13 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
-import com.google.gson.JsonParser;
-
 import org.lsposed.hiddenapibypass.HiddenApiBypass;
 import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.ui.activity.CrashReportActivity;
 import org.lsposed.manager.util.DoHDNS;
 import org.lsposed.manager.util.ModuleUtil;
 import org.lsposed.manager.util.ThemeUtil;
+import org.lsposed.manager.util.UpdateUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -50,19 +49,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
-import java.time.Instant;
-import java.time.ZoneOffset;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 
 import okhttp3.Cache;
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import rikka.material.app.DayNightDelegate;
 import rikka.material.app.LocaleDelegate;
@@ -183,7 +176,7 @@ public class App extends Application {
             }
         }, new IntentFilter(Intent.ACTION_PACKAGE_CHANGED));
 
-        loadRemoteVersion();
+        UpdateUtil.loadRemoteVersion();
         RepoLoader.getInstance().loadRemoteData();
 
         executorService.submit(HTML_TEMPLATE);
@@ -213,58 +206,6 @@ public class App extends Application {
             okHttpCache = new Cache(new File(App.getInstance().getCacheDir(), "http_cache"), 50L * 1024L * 1024L);
         }
         return okHttpCache;
-    }
-
-    private void loadRemoteVersion() {
-        var request = new Request.Builder()
-                .url("https://api.github.com/repos/LSPosed/LSPosed/releases/latest")
-                .addHeader("Accept", "application/vnd.github.v3+json")
-                .build();
-        var callback = new Callback() {
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) {
-                if (!response.isSuccessful()) return;
-                var body = response.body();
-                if (body == null) return;
-                try {
-                    var info = JsonParser.parseReader(body.charStream()).getAsJsonObject();
-                    var name = info.getAsJsonArray("assets").get(0).getAsJsonObject().get("name").getAsString();
-                    var code = Integer.parseInt(name.split("-", 4)[2]);
-                    var now = Instant.now().getEpochSecond();
-                    pref.edit()
-                            .putInt("latest_version", code)
-                            .putLong("latest_check", now)
-                            .putBoolean("checked", true)
-                            .apply();
-                } catch (Throwable t) {
-                    Log.e(App.TAG, t.getMessage(), t);
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                Log.e(App.TAG, "loadRemoteVersion: " + e.getMessage());
-                if (pref.getBoolean("checked", false)) return;
-                pref.edit().putBoolean("checked", true).apply();
-            }
-        };
-        getOkHttpClient().newCall(request).enqueue(callback);
-    }
-
-    public static boolean needUpdate() {
-        var pref = getPreferences();
-        if (!pref.getBoolean("checked", false)) return false;
-        var now = Instant.now();
-        var buildTime = Instant.ofEpochSecond(BuildConfig.BUILD_TIME);
-        var check = pref.getLong("latest_check", 0);
-        if (check > 0) {
-            var checkTime = Instant.ofEpochSecond(check);
-            if (checkTime.atOffset(ZoneOffset.UTC).plusDays(30).toInstant().isBefore(now))
-                return true;
-            var code = pref.getInt("latest_version", 0);
-            return code > BuildConfig.VERSION_CODE;
-        }
-        return buildTime.atOffset(ZoneOffset.UTC).plusDays(30).toInstant().isBefore(now);
     }
 
     public static Locale getLocale() {

@@ -22,12 +22,14 @@ package org.lsposed.lspd.service;
 import static android.content.Context.BIND_AUTO_CREATE;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 
+import android.annotation.SuppressLint;
 import android.app.INotificationManager;
 import android.app.IServiceConnection;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.AttributionSource;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -41,6 +43,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -63,12 +66,15 @@ import org.lsposed.lspd.util.FakeContext;
 import org.lsposed.lspd.util.Utils;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import de.robv.android.xposed.XposedBridge;
 import hidden.HiddenApiBridge;
@@ -252,6 +258,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
         }
     }
 
+    @SuppressLint("WrongConstant")
     public static void broadcastIntent(String modulePackageName, int moduleUserId, boolean packageFullyRemoved) {
         Intent intent = new Intent(Intent.ACTION_PACKAGE_CHANGED);
         intent.addFlags(0x01000000); //Intent.FLAG_RECEIVER_INCLUDE_BACKGROUND
@@ -680,9 +687,17 @@ public class LSPManagerService extends ILSPManagerService.Stub {
         try {
             var contentProvider = ActivityManagerService.getContentProvider("settings", 0);
             if (contentProvider != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    try {
+                        contentProvider.call(new AttributionSource.Builder(1000).setPackageName("android").build(),
+                                "settings", "PUT_global", "show_hidden_icon_apps_enabled", args);
+                        return;
+                    } catch (NoSuchMethodError ignored) {
+                    }
+                }
                 contentProvider.call("android", null, "settings", "PUT_global", "show_hidden_icon_apps_enabled", args);
             }
-        } catch (RemoteException | NullPointerException e) {
+        } catch (Throwable e) {
             Log.w(TAG, "setHiddenIcon: ", e);
         }
     }
@@ -707,5 +722,31 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     @Override
     public List<String> getDenyListPackages() {
         return ConfigManager.getDenyListPackages();
+    }
+
+    @Override
+    public void flashZip(String zipPath, ParcelFileDescriptor outputStream) {
+        var processBuilder = new ProcessBuilder("magisk", "--install-module", zipPath);
+        var fd = new File("/proc/self/fd/" + outputStream.getFd());
+        processBuilder.redirectOutput(ProcessBuilder.Redirect.appendTo(fd));
+        try (outputStream; var fdw = new FileOutputStream(fd, true)) {
+            var proc = processBuilder.start();
+            if (proc.waitFor(10, TimeUnit.SECONDS)) {
+                var exit = proc.exitValue();
+                if (exit == 0) {
+                    fdw.write("- Reboot after 5s\n".getBytes());
+                    Thread.sleep(5000);
+                    reboot(false);
+                } else {
+                    var s = "! Flash failed, exit with " + exit + "\n";
+                    fdw.write(s.getBytes());
+                }
+            } else {
+                proc.destroy();
+                fdw.write("! Timeout, abort\n".getBytes());
+            }
+        } catch (IOException | InterruptedException e) {
+            Log.e(TAG, "flashZip: ", e);
+        }
     }
 }

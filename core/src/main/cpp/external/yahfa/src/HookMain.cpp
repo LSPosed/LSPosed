@@ -114,6 +114,8 @@ namespace yahfa {
         env->DeleteLocalRef(classExecutable);
         LOGI("init to SDK %d", sdkVersion);
         switch (sdkVersion) {
+            default:
+                LOGE("not compatible with SDK %d", sdkVersion);
             case __ANDROID_API_S__:
                 OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod =
                         roundUpToPtrSize(4 * 3 + 2 * 2) + pointer_size;
@@ -131,9 +133,6 @@ namespace yahfa {
                 OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod =
                         roundUpToPtrSize(4 * 4 + 2 * 2) + pointer_size * 2;
                 ArtMethodSize = roundUpToPtrSize(4 * 4 + 2 * 2) + pointer_size * 3;
-                break;
-            default:
-                LOGE("not compatible with SDK %d", sdkVersion);
                 break;
         }
 

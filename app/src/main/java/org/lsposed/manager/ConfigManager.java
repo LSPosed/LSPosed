@@ -351,4 +351,12 @@ public class ConfigManager {
         }
         return list;
     }
+
+    public static void flashZip(String zipPath, ParcelFileDescriptor outputStream) {
+        try {
+            LSPManagerServiceHolder.getService().flashZip(zipPath, outputStream);
+        } catch (RemoteException e) {
+            Log.e(App.TAG, Log.getStackTraceString(e));
+        }
+    }
 }

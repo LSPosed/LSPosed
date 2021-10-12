@@ -22,5 +22,6 @@ plugins {
 }
 
 dependencies {
+    compileOnly("androidx.annotation:annotation:1.2.0")
     compileOnly(project(":hiddenapi-stubs"))
 }

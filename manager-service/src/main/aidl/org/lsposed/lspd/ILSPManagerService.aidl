@@ -71,6 +71,8 @@ interface ILSPManagerService {
     boolean isAddShortcut() = 37;
 
     void setAddShortcut(boolean enabled) = 38;
-    
-    List<String> getDenyListPackages() = 39;
+
+    oneway void flashZip(String zipPath, in ParcelFileDescriptor outputStream) = 39;
+
+    List<String> getDenyListPackages() = 40;
 }

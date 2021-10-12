@@ -35,7 +35,11 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.UserHandle;
 
+import androidx.annotation.RequiresApi;
+
 import java.io.File;
+
+import dalvik.system.VMRuntime;
 
 public class HiddenApiBridge {
     public static int AssetManager_addAssetPath(AssetManager am, String path) {
@@ -90,5 +94,10 @@ public class HiddenApiBridge {
 
     public static CompatibilityInfo Resources_getCompatibilityInfo(Resources res) {
         return res.getCompatibilityInfo();
+    }
+
+    @RequiresApi(29)
+    public static void VMRuntime_setProcessDataDirectory(String dataDir) {
+        VMRuntime.setProcessDataDirectory(dataDir);
     }
 }
