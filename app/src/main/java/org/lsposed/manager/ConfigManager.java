@@ -341,4 +341,12 @@ public class ConfigManager {
             return new HashMap<>();
         }
     }
+
+    public static void flashZip(String zipPath, ParcelFileDescriptor outputStream) {
+        try {
+            LSPManagerServiceHolder.getService().flashZip(zipPath, outputStream);
+        } catch (RemoteException e) {
+            Log.e(App.TAG, Log.getStackTraceString(e));
+        }
+    }
 }

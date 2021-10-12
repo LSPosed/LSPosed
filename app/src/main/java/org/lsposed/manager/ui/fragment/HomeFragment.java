@@ -43,10 +43,12 @@ import org.lsposed.manager.databinding.DialogAboutBinding;
 import org.lsposed.manager.databinding.FragmentHomeBinding;
 import org.lsposed.manager.receivers.LSPManagerServiceHolder;
 import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
+import org.lsposed.manager.ui.dialog.FlashDialogBuilder;
 import org.lsposed.manager.ui.dialog.InfoDialogBuilder;
 import org.lsposed.manager.ui.dialog.WarningDialogBuilder;
 import org.lsposed.manager.util.ModuleUtil;
 import org.lsposed.manager.util.NavUtil;
+import org.lsposed.manager.util.UpdateUtil;
 import org.lsposed.manager.util.chrome.LinkTransformationMethod;
 
 import java.util.Locale;
@@ -92,13 +94,20 @@ public class HomeFragment extends BaseFragment {
 
         Activity activity = requireActivity();
         binding.status.setOnClickListener(v -> {
-            if (ConfigManager.isBinderAlive() && !App.needUpdate()) {
+            if (ConfigManager.isBinderAlive() && !UpdateUtil.needUpdate()) {
                 if (!ConfigManager.isSepolicyLoaded() || !ConfigManager.systemServerRequested() || !ConfigManager.dex2oatFlagsLoaded()) {
                     new WarningDialogBuilder(activity).show();
                 } else {
-                    new InfoDialogBuilder(activity).setTitle(R.string.info).show();
+                    new InfoDialogBuilder(activity).show();
                 }
             } else {
+                if (UpdateUtil.canUpdate()) {
+                    var zip = App.getPreferences().getString("zip_file", null);
+                    if (zip != null) {
+                        new FlashDialogBuilder(activity, zip).show();
+                        return;
+                    }
+                }
                 NavUtil.startURL(activity, getString(R.string.about_source));
             }
         });
@@ -108,7 +117,7 @@ public class HomeFragment extends BaseFragment {
         binding.settings.setOnClickListener(new StartFragmentListener(R.id.action_settings_fragment, false));
         binding.issue.setOnClickListener(view -> NavUtil.startURL(activity, "https://github.com/LSPosed/LSPosed/issues"));
 
-        updateStates(requireActivity(), ConfigManager.isBinderAlive(), App.needUpdate());
+        updateStates(requireActivity(), ConfigManager.isBinderAlive(), UpdateUtil.needUpdate());
         return binding.getRoot();
     }
 
@@ -116,7 +125,7 @@ public class HomeFragment extends BaseFragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.menu_refresh) {
-            updateStates(requireActivity(), ConfigManager.isBinderAlive(), App.needUpdate());
+            updateStates(requireActivity(), ConfigManager.isBinderAlive(), UpdateUtil.needUpdate());
         } else if (itemId == R.id.menu_info) {
             new InfoDialogBuilder(requireActivity()).setTitle(R.string.info).show();
         } else if (itemId == R.id.menu_about) {
@@ -129,7 +138,7 @@ public class HomeFragment extends BaseFragment {
                     R.string.about_view_source_code,
                     "<b><a href=\"https://github.com/LSPosed/LSPosed\">GitHub</a></b>",
                     "<b><a href=\"https://t.me/LSPosed\">Telegram</a></b>"), HtmlCompat.FROM_HTML_MODE_LEGACY));
-            binding.designAboutVersion.setText(String.format(Locale.US, "%s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
+            binding.designAboutVersion.setText(String.format(Locale.ROOT, "%s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
             new BlurBehindDialogBuilder(activity)
                     .setView(binding.getRoot())
                     .show();
@@ -140,7 +149,7 @@ public class HomeFragment extends BaseFragment {
     private void updateStates(Activity activity, boolean binderAlive, boolean needUpdate) {
         int cardBackgroundColor;
         if (binderAlive) {
-            StringBuilder sb = new StringBuilder(String.format(Locale.US, "%s (%d)",
+            StringBuilder sb = new StringBuilder(String.format(Locale.ROOT, "%s (%d)",
                     ConfigManager.getXposedVersionName(), ConfigManager.getXposedVersionCode()));
             if (needUpdate) {
                 cardBackgroundColor = ResourceUtils.resolveColor(activity.getTheme(), R.attr.colorInstall);

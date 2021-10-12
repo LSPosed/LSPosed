@@ -43,17 +43,17 @@ public class InfoDialogBuilder extends BlurBehindDialogBuilder {
 
         if (ConfigManager.isBinderAlive()) {
             binding.apiVersion.setText(String.valueOf(ConfigManager.getXposedApiVersion()));
-            binding.frameworkVersion.setText(String.format(Locale.US, "%s (%s)", ConfigManager.getXposedVersionName(), ConfigManager.getXposedVersionCode()));
+            binding.frameworkVersion.setText(String.format(Locale.ROOT, "%s (%s)", ConfigManager.getXposedVersionName(), ConfigManager.getXposedVersionCode()));
         } else {
             binding.apiVersion.setText(R.string.not_installed);
             binding.frameworkVersion.setText(R.string.not_installed);
         }
-        binding.managerVersion.setText(String.format(Locale.US, "%s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
+        binding.managerVersion.setText(String.format(Locale.ROOT, "%s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
 
         if (Build.VERSION.PREVIEW_SDK_INT != 0) {
-            binding.systemVersion.setText(String.format(Locale.US, "%1$s Preview (API %2$d)", Build.VERSION.CODENAME, Build.VERSION.SDK_INT));
+            binding.systemVersion.setText(String.format(Locale.ROOT, "%1$s Preview (API %2$d)", Build.VERSION.CODENAME, Build.VERSION.SDK_INT));
         } else {
-            binding.systemVersion.setText(String.format(Locale.US, "%1$s (API %2$d)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT));
+            binding.systemVersion.setText(String.format(Locale.ROOT, "%1$s (API %2$d)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT));
         }
 
         binding.device.setText(getDevice());
