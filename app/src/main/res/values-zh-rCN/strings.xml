@@ -60,7 +60,7 @@
     <string name="never_show">不再显示</string>
     <string name="failed_to_create_shortcut">创建快捷方式失败：%1$s</string>
     <string name="update_lsposed">更新 LSPosed</string>
-    <string name="update_lsposed_msg">是否安装新版 LSPosed？完成后设备将自动重启</string>
+    <string name="update_lsposed_msg">确认安装新版本 LSPosed？完成后设备将会重启</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">保存</string>
     <string name="nav_item_logs_lsp">LSPosed 日志</string>

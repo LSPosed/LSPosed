@@ -59,6 +59,8 @@
     <string name="create_shortcut">Tạo lối tắt</string>
     <string name="never_show">Không hiện nữa</string>
     <string name="failed_to_create_shortcut">Tạo lối tắt thất bại: %1$s</string>
+    <string name="update_lsposed">Cập nhật LSPosed</string>
+    <string name="update_lsposed_msg">Cài đặt phiên bản mới của LSPosed, thiết bị sẽ khởi động lại sau khi hoàn tất</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Lưu lại</string>
     <string name="nav_item_logs_lsp">Nhật ký LSPosed</string>
