@@ -42,7 +42,7 @@
     <string name="not_install_summary">LSPosed не установлен!</string>
     <string name="activated">Активирован</string>
     <string name="partial_activated">Частично активирован</string>
-    <string name="selinux_policy_not_loaded_summary">SEPolicy не правильно загружен</string>
+    <string name="selinux_policy_not_loaded_summary">SEPolicy загружен не правильно</string>
     <string name="selinux_policy_not_loaded"><![CDATA[Модули которым нужен системный фреймворк, не будут работать.<br/>Пожалуйста, сообщите об этом разработчику <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>]]></string>
     <string name="system_inject_fail_summary">Ошибка внедрения системного фреймворка</string>
     <string name="system_inject_fail"><![CDATA[Ошибка внедрения системного фреймворка.<br/>Это редкость и может быть вызвано <b>Magisk</b> или несовместимыми модулями Magisk.<br/>Пожалуйста, попрорбуйте отключить модули Magisk кроме Riru и LSPosed или пришлите полные логи разработчику.]]></string>
@@ -62,6 +62,8 @@
     <string name="create_shortcut">Создать ярлык</string>
     <string name="never_show">Больше не показывать</string>
     <string name="failed_to_create_shortcut">Не удалось создать ярлык: %1$s</string>
+    <string name="update_lsposed">Обновление LSPosed</string>
+    <string name="update_lsposed_msg">Хотите установить новую версию LSPosed? После завершения устройство перезагрузится</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Сохранить</string>
     <string name="nav_item_logs_lsp">Логи LSPosed</string>
