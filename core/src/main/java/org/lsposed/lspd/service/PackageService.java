@@ -41,6 +41,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.os.SystemProperties;
 import android.util.Log;
 import android.util.Pair;
 
@@ -289,5 +290,13 @@ public class PackageService {
         intent.setClassName(ris.getList().get(0).activityInfo.packageName,
                 ris.getList().get(0).activityInfo.name);
         return intent;
+    }
+
+    public static boolean performDexOptMode(String packageName) throws RemoteException {
+        IPackageManager pm = getPackageManager();
+        if (pm == null) return false;
+        return pm.performDexOptMode(packageName,
+                SystemProperties.getBoolean("dalvik.vm.usejitprofiles", false),
+                "speed", true, true, null);
     }
 }

@@ -26,7 +26,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
@@ -41,16 +40,12 @@ import com.google.android.material.snackbar.Snackbar;
 import org.lsposed.manager.App;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.FragmentCompileDialogBinding;
+import org.lsposed.manager.receivers.LSPManagerServiceHolder;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
 
 @SuppressWarnings("deprecation")
 public class CompileDialogFragment extends AppCompatDialogFragment {
-
-    private static final String[] COMPILE_RESET_COMMAND = new String[]{"cmd", "package", "compile", "-f", "-m", "speed", ""};
-
     private ApplicationInfo appInfo;
     private View snackBar;
 
@@ -82,12 +77,10 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        String[] command = COMPILE_RESET_COMMAND;
-        command[6] = appInfo.packageName;
-        new CompileTask(this).executeOnExecutor(App.getExecutorService(), command);
+        new CompileTask(this).executeOnExecutor(App.getExecutorService(), appInfo.packageName);
     }
 
-    private static class CompileTask extends AsyncTask<String, Void, String> {
+    private static class CompileTask extends AsyncTask<String, Void, Throwable> {
 
         WeakReference<CompileDialogFragment> outerRef;
 
@@ -96,47 +89,28 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
         }
 
         @Override
-        protected String doInBackground(String... commands) {
+        protected Throwable doInBackground(String... commands) {
             try {
-                Process process = Runtime.getRuntime().exec(commands);
-                BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-                BufferedReader inputReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                int read;
-                char[] buffer = new char[4096];
-                StringBuilder err = new StringBuilder();
-                while ((read = errorReader.read(buffer)) > 0) {
-                    err.append(buffer, 0, read);
-                }
-                StringBuilder input = new StringBuilder();
-                while ((read = inputReader.read(buffer)) > 0) {
-                    input.append(buffer, 0, read);
-                }
-                errorReader.close();
-                inputReader.close();
-                process.waitFor();
-                String result = "";
-                if (process.exitValue() != 0) {
-                    result = "Error ";
-                }
-                if (TextUtils.isEmpty(err)) {
-                    return result + input;
+                if (LSPManagerServiceHolder.getService().performDexOptMode(commands[0])) {
+                    return null;
                 } else {
-                    return result + err;
+                    return new UnknownError();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-                return "Error " + e.getCause();
+            } catch (Throwable e) {
+                return e;
             }
         }
 
         @Override
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(Throwable result) {
             Context context = App.getInstance();
             String text;
-            if (result.length() == 0) {
-                text = context.getString(R.string.compile_failed);
-            } else if (result.length() >= 5 && "Error".equals(result.substring(0, 5))) {
-                text = context.getString(R.string.compile_failed_with_info) + " " + result.substring(6);
+            if (result != null) {
+                if (result instanceof UnknownError) {
+                    text = context.getString(R.string.compile_failed);
+                } else {
+                    text = context.getString(R.string.compile_failed_with_info) + result.toString();
+                }
             } else {
                 text = context.getString(R.string.compile_done);
             }
