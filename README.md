@@ -16,11 +16,16 @@ Android 8.1 ~ 12
 ## Install
 
 1. Install Magisk v23+
-2. Install [Riru](https://github.com/RikkaApps/Riru/releases) v25+ from Magisk repo.
-3. [Download](#download) and install LSPosed in Magisk app.
-4. Reboot.
-5. Follow the prompts to add LSPosed shortcut to launcher.
-6. Have fun! :)
+2. Install [Riru](https://github.com/RikkaApps/Riru/releases) v25+ from Magisk repo
+3. [Download](#download) and install LSPosed in Magisk app
+4. Reboot
+5. Follow the prompts to add LSPosed shortcut to launcher
+    - Some launchers won't show the prompt but silently add the shortcut
+    - If the shortcut cannot be added, you can install the manager manually by `/data/adb/lspd/manager.apk`
+    - If you accidentally delete the shortcut, reboot your device or install the manager manually to add the shortcut again
+    - If you don't need the shortcut, install the manager manually and you can disable future shortcut adding in the settings
+    - In any case, you can dial `*#*#5776733#*#*` (aka LSPosed) to launch the manager if you have a dialer
+6. Have fun :)
 
 ## Download
 
