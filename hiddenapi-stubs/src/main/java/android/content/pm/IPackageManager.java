@@ -66,6 +66,10 @@ public interface IPackageManager extends IInterface {
     ParceledListSlice<ResolveInfo> queryIntentActivities(Intent intent,
                                             String resolvedType, int flags, int userId) throws RemoteException;
 
+    boolean performDexOptMode(String packageName, boolean checkProfiles,
+                              String targetCompilerFilter, boolean force, boolean bootComplete, String splitName)
+            throws RemoteException;
+
     abstract class Stub extends Binder implements IPackageManager {
 
         public static IPackageManager asInterface(IBinder obj) {
