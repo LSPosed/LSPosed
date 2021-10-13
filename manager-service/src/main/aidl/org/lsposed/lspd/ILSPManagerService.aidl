@@ -73,4 +73,6 @@ interface ILSPManagerService {
     void setAddShortcut(boolean enabled) = 38;
 
     oneway void flashZip(String zipPath, in ParcelFileDescriptor outputStream) = 39;
+
+    boolean performDexOptMode(String packageName) = 40;
 }

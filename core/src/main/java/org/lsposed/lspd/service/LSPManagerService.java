@@ -744,4 +744,9 @@ public class LSPManagerService extends ILSPManagerService.Stub {
             Log.e(TAG, "flashZip: ", e);
         }
     }
+
+    @Override
+    public boolean performDexOptMode(String packageName) throws RemoteException {
+        return PackageService.performDexOptMode(packageName);
+    }
 }
