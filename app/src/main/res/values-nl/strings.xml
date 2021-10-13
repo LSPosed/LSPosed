@@ -60,6 +60,8 @@
     <string name="create_shortcut">Snelkoppeling maken</string>
     <string name="never_show">Nooit tonen</string>
     <string name="failed_to_create_shortcut">Snelkoppeling maken mislukt: %1$s</string>
+    <string name="update_lsposed">Update LSPosed</string>
+    <string name="update_lsposed_msg">Wil je een nieuwe versie van LSPosed installeren? Het apparaat zal opnieuw opstarten na voltooiing</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Opslaan</string>
     <string name="nav_item_logs_lsp">LSPosed logboeken</string>
