@@ -203,7 +203,6 @@ public class ConfigManager {
     }
 
     private synchronized void updateConfig() {
-        ConfigFileManager.migrateOldConfig(this);
         Map<String, Object> config = getModulePrefs("lspd", 0, "config");
 
         Object bool = config.get("enable_resources");

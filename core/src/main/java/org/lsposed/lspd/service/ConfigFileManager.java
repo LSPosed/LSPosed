@@ -8,7 +8,6 @@ import android.content.res.Resources;
 import android.os.ParcelFileDescriptor;
 import android.os.SELinux;
 import android.os.SharedMemory;
-import android.os.SystemProperties;
 import android.system.ErrnoException;
 import android.system.OsConstants;
 import android.util.Log;
@@ -42,7 +41,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.zip.ZipFile;
 
@@ -75,43 +73,6 @@ public class ConfigFileManager {
     public static Resources getResources() {
         loadRes();
         return res;
-    }
-
-    // from AndroidRuntime.cpp
-    private static String readLocale() {
-        String locale = SystemProperties.get("persist.sys.locale", "");
-        if (!locale.isEmpty()) {
-            return locale;
-        }
-
-        String language = SystemProperties.get("persist.sys.language", "");
-        if (!language.isEmpty()) {
-            String country = SystemProperties.get("persist.sys.country", "");
-            String variant = SystemProperties.get("persist.sys.localevar", "");
-
-            String out = language;
-            if (!country.isEmpty()) {
-                out = out + "-" + country;
-            }
-
-            if (!variant.isEmpty()) {
-                out = out + "-" + variant;
-            }
-
-            return out;
-        }
-
-        String productLocale = SystemProperties.get("ro.product.locale", "");
-        if (!productLocale.isEmpty()) {
-            return productLocale;
-        }
-
-        // If persist.sys.locale and ro.product.locale are missing,
-        // construct a locale value from the individual locale components.
-        String productLanguage = SystemProperties.get("ro.product.locale.language", "en");
-        String productRegion = SystemProperties.get("ro.product.locale.region", "US");
-
-        return productLanguage + "-" + productRegion;
     }
 
     private static void loadRes() {
@@ -276,41 +237,6 @@ public class ConfigFileManager {
         file.moduleClassNames = moduleClassNames;
         file.moduleLibraryNames = moduleLibraryNames;
         return file;
-    }
-
-    private static String readText(Path file) throws IOException {
-        return new String(Files.readAllBytes(file)).trim();
-    }
-
-    // TODO: Remove after next release
-    static void migrateOldConfig(ConfigManager configManager) {
-        var miscPath = basePath.resolve("misc_path");
-        var enableResources = configDirPath.resolve("enable_resources");
-        var manager = configDirPath.resolve("manager");
-        var verboseLog = configDirPath.resolve("verbose_log");
-
-        if (Files.exists(miscPath)) {
-            try {
-                var s = "/data/misc/" + readText(miscPath);
-                configManager.updateModulePrefs("lspd", 0, "config", "misc_path", s);
-                Files.delete(miscPath);
-            } catch (IOException ignored) {
-            }
-        }
-        if (Files.exists(enableResources)) {
-            try {
-                var s = readText(enableResources);
-                var i = Integer.parseInt(s);
-                configManager.updateModulePrefs("lspd", 0, "config", "enable_resources", i == 1);
-                Files.delete(enableResources);
-            } catch (IOException ignored) {
-            }
-        }
-        try {
-            Files.deleteIfExists(manager);
-            Files.deleteIfExists(verboseLog);
-        } catch (IOException ignored) {
-        }
     }
 
     static boolean tryLock() {
