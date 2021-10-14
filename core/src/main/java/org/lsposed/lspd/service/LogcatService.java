@@ -32,6 +32,7 @@ public class LogcatService implements Runnable {
     @Override
     public void run() {
         Log.i(TAG, "start running");
+        // Meizu devices set this prop and prevent debug logs from being recorded
         if (BuildConfig.DEBUG && SystemProperties.getInt("persist.sys.log_reject_level", 0) > 0) {
             SystemProperties.set("persist.sys.log_reject_level", "0");
         }
