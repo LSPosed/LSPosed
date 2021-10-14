@@ -63,7 +63,7 @@ public class HomeFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!App.isParasitic() && !App.getPreferences().getBoolean("never_show_shortcut", false) && !App.isParasiticShown()) {
+        if (!App.isParasitic() && !App.getPreferences().getBoolean("never_show_shortcut", false) && !App.isParasiticShown() && ConfigManager.isBinderAlive()) {
             App.setParasiticShown(true);
             new BlurBehindDialogBuilder(requireActivity())
                     .setTitle(R.string.parasitic_recommend)
