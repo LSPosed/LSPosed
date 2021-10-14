@@ -102,10 +102,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentRepoBinding.inflate(getLayoutInflater(), container, false);
-        binding.getRoot().bringChildToFront(binding.appBar);
         setupToolbar(binding.toolbar, R.string.module_repo, R.menu.menu_repo);
-        binding.appBar.setLiftable(true);
-        binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setLifted(!top));
         adapter = new RepoAdapter();
         adapter.setHasStableIds(true);
         binding.recyclerView.setAdapter(adapter);
