@@ -111,7 +111,7 @@ public class App extends Application {
     }
 
     public static boolean isParasiticShown() {
-        return parasiticShown;
+        return parasiticShown && ConfigManager.isBinderAlive();
     }
 
     public static void setParasiticShown(boolean parasiticShown) {
