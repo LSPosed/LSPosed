@@ -106,13 +106,7 @@ public class LogsFragment extends BaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentLogsBinding.inflate(inflater, container, false);
-        binding.getRoot().bringChildToFront(binding.appBar);
         setupToolbar(binding.toolbar, R.string.Logs, R.menu.menu_logs);
-        binding.appBar.setLiftable(true);
-        binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setLifted(!top));
-        int height = ResourceUtils.resolveDimensionPixelOffset(requireActivity().getTheme(), androidx.appcompat.R.attr.actionBarSize, 0)
-                + getResources().getDimensionPixelOffset(R.dimen.tab_layout_height);
-        WindowInsetsHelperKt.setInitialPadding(binding.recyclerView, 0, height, 0, 0);
 
         binding.slidingTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -273,11 +267,9 @@ public class LogsFragment extends BaseFragment {
                 while ((line = reader.readLine()) != null) {
                     logs.add(line);
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 logs.add(requireActivity().getResources().getString(R.string.logs_cannot_read));
-                if (e.getMessage() != null) {
-                    logs.addAll(Arrays.asList(e.getMessage().split("\n")));
-                }
+                logs.addAll(Arrays.asList(Log.getStackTraceString(e).split("\n")));
             }
 
             return logs;
