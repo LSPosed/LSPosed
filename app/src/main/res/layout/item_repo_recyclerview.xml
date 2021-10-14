@@ -29,4 +29,4 @@
     app:borderTopVisibility="whenTop"
     app:borderTopDrawable="@null"
     app:borderBottomVisibility="never"
-    app:fitsSystemWindowsInsets="top|bottom" />
+    app:fitsSystemWindowsInsets="bottom" />
