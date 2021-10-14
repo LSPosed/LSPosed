@@ -72,8 +72,6 @@ public class SettingsFragment extends BaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
-        binding.getRoot().bringChildToFront(binding.appBar);
-        binding.appBar.setLiftable(true);
         setupToolbar(binding.toolbar, R.string.Settings);
         if (savedInstanceState == null) {
             getChildFragmentManager().beginTransaction()
@@ -309,12 +307,6 @@ public class SettingsFragment extends BaseFragment {
         public RecyclerView onCreateRecyclerView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
             BorderRecyclerView recyclerView = (BorderRecyclerView) super.onCreateRecyclerView(inflater, parent, savedInstanceState);
             RecyclerViewKt.fixEdgeEffect(recyclerView, false, true);
-            recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> {
-                SettingsFragment fragment = (SettingsFragment) getParentFragment();
-                if (fragment != null) {
-                    fragment.binding.appBar.setLifted(!top);
-                }
-            });
             return recyclerView;
         }
 
@@ -329,7 +321,7 @@ public class SettingsFragment extends BaseFragment {
             final String reference;
             try {
                 reference = ctx.createConfigurationContext(conf).getString(id);
-            } catch(NotFoundException nfe) {
+            } catch (NotFoundException nfe) {
                 return lstLang; // return only english
             }
 
