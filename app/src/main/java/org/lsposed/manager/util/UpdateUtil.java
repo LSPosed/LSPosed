@@ -9,6 +9,7 @@ import com.google.gson.JsonParser;
 
 import org.lsposed.manager.App;
 import org.lsposed.manager.BuildConfig;
+import org.lsposed.manager.ConfigManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -108,6 +109,7 @@ public class UpdateUtil {
     }
 
     public static boolean canUpdate() {
+        if (!ConfigManager.isBinderAlive()) return false;
         var pref = App.getPreferences();
         var zipTime = pref.getLong("zip_time", BuildConfig.BUILD_TIME);
         return zipTime > BuildConfig.BUILD_TIME;
