@@ -19,4 +19,8 @@ public class SystemProperties {
     public static boolean getBoolean(@NonNull String key, boolean def) {
         throw new UnsupportedOperationException("Stub");
     }
+
+    public static int getInt(@NonNull String key, int def) {
+        throw new UnsupportedOperationException("Stub");
+    }
 }

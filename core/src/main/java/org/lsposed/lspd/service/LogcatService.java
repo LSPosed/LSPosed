@@ -2,7 +2,10 @@ package org.lsposed.lspd.service;
 
 import android.annotation.SuppressLint;
 import android.os.ParcelFileDescriptor;
+import android.os.SystemProperties;
 import android.util.Log;
+
+import org.lsposed.lspd.BuildConfig;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,6 +32,9 @@ public class LogcatService implements Runnable {
     @Override
     public void run() {
         Log.i(TAG, "start running");
+        if (BuildConfig.DEBUG && SystemProperties.getInt("persist.sys.log_reject_level", 0) > 0) {
+            SystemProperties.set("persist.sys.log_reject_level", "0");
+        }
         runLogcat();
         Log.i(TAG, "stopped");
     }
