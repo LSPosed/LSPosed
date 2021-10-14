@@ -167,7 +167,6 @@ public class ParasiticManagerHooker {
                         originalContext = (Context) XposedHelpers.callStaticMethod(XposedHelpers.findClass("android.app.ContextImpl", null), "createAppContext", ActivityThread.currentActivityThread(), originalPkgInfo);
                         info.applicationInfo.packageName = packageName;
                     }
-                    Hookers.logD("origin context " + originalContext + " pkg name: " + packageName);
                     param.args[ctxIdx] = originalContext;
                 } else {
                     Hookers.logE("Failed to reload provider", new RuntimeException());
