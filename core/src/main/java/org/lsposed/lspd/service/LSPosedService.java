@@ -41,7 +41,6 @@ import java.util.Arrays;
 public class LSPosedService extends ILSPosedService.Stub {
     private static final int AID_NOBODY = 9999;
     private static final int USER_NULL = -10000;
-    private static final ConfigManager configManager = ConfigManager.getInstance();
 
     @Override
     public ILSPApplicationService requestApplicationService(int uid, int pid, String processName, IBinder heartBeat) {
@@ -54,7 +53,7 @@ public class LSPosedService extends ILSPosedService.Stub {
             return null;
         }
         if (!ServiceManager.getManagerService().shouldStartManager(pid, uid, processName) &&
-                configManager.shouldSkipProcess(new ConfigManager.ProcessScope(processName, uid))) {
+                ConfigManager.getInstance().shouldSkipProcess(new ConfigManager.ProcessScope(processName, uid))) {
             Log.d(TAG, "Skipped " + processName + "/" + uid);
             return null;
         }
@@ -80,7 +79,7 @@ public class LSPosedService extends ILSPosedService.Stub {
         int userId = intent.getIntExtra("android.intent.extra.user_handle", USER_NULL);
         if (userId == USER_NULL) userId = uid % PER_USER_RANGE;
         Uri uri = intent.getData();
-        String moduleName = (uri != null) ? uri.getSchemeSpecificPart() : configManager.getModule(uid);
+        String moduleName = (uri != null) ? uri.getSchemeSpecificPart() : ConfigManager.getInstance().getModule(uid);
 
         ApplicationInfo applicationInfo = null;
         if (moduleName != null) {
@@ -99,7 +98,7 @@ public class LSPosedService extends ILSPosedService.Stub {
                 // for module, remove module
                 // because we only care about when the apk is gone
                 if (moduleName != null)
-                    if (configManager.removeModule(moduleName)) {
+                    if (ConfigManager.getInstance().removeModule(moduleName)) {
                         broadcastOrShowNotification(moduleName, userId, intentAction);
                         isXposedModule = true;
                     }
@@ -118,12 +117,12 @@ public class LSPosedService extends ILSPosedService.Stub {
                     // When installing a new Xposed module, we update the apk path to prepare for
                     // the first activation of a module with a recommended scope or for a user to
                     // uninstall a module that has not been activated before.
-                    configManager.updateModuleApkPath(moduleName, configManager.getModuleApkPath(applicationInfo), true);
+                    ConfigManager.getInstance().updateModuleApkPath(moduleName, ConfigManager.getInstance().getModuleApkPath(applicationInfo), true);
                     // when package is changed, we may need to update cache (module cache or process cache)
-                    configManager.updateCache();
-                } else if (configManager.isUidHooked(uid)) {
+                    ConfigManager.getInstance().updateCache();
+                } else if (ConfigManager.getInstance().isUidHooked(uid)) {
                     // it will automatically remove obsolete app from database
-                    configManager.updateAppCache();
+                    ConfigManager.getInstance().updateAppCache();
                 }
                 break;
             }
@@ -133,10 +132,10 @@ public class LSPosedService extends ILSPosedService.Stub {
                 if (isXposedModule) {
                     broadcastOrShowNotification(moduleName, userId, intentAction);
                     // it will automatically remove obsolete scope from database
-                    configManager.updateCache();
-                } else if (configManager.isUidHooked(uid)) {
+                    ConfigManager.getInstance().updateCache();
+                } else if (ConfigManager.getInstance().isUidHooked(uid)) {
                     // it will automatically remove obsolete app from database
-                    configManager.updateAppCache();
+                    ConfigManager.getInstance().updateAppCache();
                 }
                 break;
             }
@@ -149,7 +148,7 @@ public class LSPosedService extends ILSPosedService.Stub {
         if (BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME.equals(moduleName) && userId == 0) {
             Log.d(TAG, "Manager updated");
             try {
-                configManager.updateManager(removed);
+                ConfigManager.getInstance().updateManager(removed);
                 LSPManagerService.createOrUpdateShortcut(false);
             } catch (Throwable e) {
                 Log.e(TAG, Log.getStackTraceString(e));
@@ -160,8 +159,8 @@ public class LSPosedService extends ILSPosedService.Stub {
     private void broadcastOrShowNotification(String moduleName, int userId, String intentAction) {
         Log.d(TAG, "module " + moduleName + " changed, dispatching to manager");
         LSPManagerService.broadcastIntent(moduleName, userId, intentAction.equals(Intent.ACTION_PACKAGE_FULLY_REMOVED));
-        var enabledModules = configManager.enabledModules();
-        var scope = configManager.getModuleScope(moduleName);
+        var enabledModules = ConfigManager.getInstance().enabledModules();
+        var scope = ConfigManager.getInstance().getModuleScope(moduleName);
         boolean systemModule = scope != null &&
                 scope.parallelStream().anyMatch(app -> app.packageName.equals("android"));
         boolean enabled = Arrays.asList(enabledModules).contains(moduleName);
