@@ -102,9 +102,11 @@ public class HomeFragment extends BaseFragment {
                 }
             } else {
                 if (UpdateUtil.canUpdate()) {
-                    var zip = App.getPreferences().getString("zip_file", null);
+                    var pref = App.getPreferences();
+                    var zip = pref.getString("zip_file", null);
+                    var notes = pref.getString("release_notes", "");
                     if (zip != null) {
-                        new FlashDialogBuilder(activity, zip).show();
+                        new FlashDialogBuilder(activity, zip, notes).show();
                         return;
                     }
                 }
