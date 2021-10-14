@@ -41,9 +41,11 @@ public class UpdateUtil {
                     var name = assets.get("name").getAsString();
                     var code = Integer.parseInt(name.split("-", 4)[2]);
                     var now = Instant.now().getEpochSecond();
+                    var releaseNotes = info.get("body").getAsString();
                     pref.edit()
                             .putInt("latest_version", code)
                             .putLong("latest_check", now)
+                            .putString("release_notes", releaseNotes)
                             .putBoolean("checked", true)
                             .apply();
                     var updatedAt = Instant.parse(assets.get("updated_at").getAsString());
