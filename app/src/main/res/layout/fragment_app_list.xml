@@ -39,24 +39,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
-            android:elevation="0dp" />
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingTop="?actionBarSize"
-        app:fitsSystemWindowsInsets="top"
-        tools:ignore="MissingPrefix">
+            android:elevation="0dp"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:layout_scrollEffect="compress" />
 
         <rikka.widget.switchbar.SwitchBar
             android:id="@+id/master_switch"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             app:switchOnText="@string/enable_module"
-            app:switchOffText="@string/enable_module" />
+            app:switchOffText="@string/enable_module"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:layout_scrollEffect="compress" />
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/progress"
@@ -64,6 +58,15 @@
             android:layout_height="wrap_content"
             android:indeterminate="true"
             app:hideAnimationBehavior="outward" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:ignore="MissingPrefix">
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
