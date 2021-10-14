@@ -33,36 +33,45 @@
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
+        <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="?attr/actionBarSize"
-            android:elevation="0dp" />
+            android:layout_height="?attr/collapsingToolbarLayoutMediumSize"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:elevation="0dp"
+                app:layout_collapseMode="pin" />
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.google.android.material.progressindicator.LinearProgressIndicator
-        android:id="@+id/progress"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:indeterminate="true"
-        android:visibility="gone"
-        app:hideAnimationBehavior="outward"
-        android:layout_marginTop="?actionBarSize"
-        app:layout_fitsSystemWindowsInsets="top" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <org.lsposed.manager.ui.widget.EmptyStateRecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingTop="?actionBarSize"
-        android:fadeScrollbars="true"
-        android:scrollbarStyle="insideOverlay"
-        android:scrollbars="vertical"
-        app:borderTopVisibility="whenTop"
-        app:borderTopDrawable="@null"
-        app:borderBottomVisibility="never"
-        app:fitsSystemWindowsInsets="top|bottom" />
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="gone"
+            app:hideAnimationBehavior="outward" />
+
+        <org.lsposed.manager.ui.widget.EmptyStateRecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:fadeScrollbars="true"
+            android:scrollbarStyle="insideOverlay"
+            android:scrollbars="vertical"
+            app:borderTopVisibility="whenTop"
+            app:borderTopDrawable="@null"
+            app:borderBottomVisibility="never"
+            app:fitsSystemWindowsInsets="bottom" />
+    </FrameLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

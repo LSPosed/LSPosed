@@ -26,7 +26,7 @@
     android:layout_height="match_parent"
     android:clipToPadding="false"
     android:fadeScrollbars="true"
-    android:scrollbarStyle="outsideOverlay"
+    android:scrollbarStyle="insideOverlay"
     android:scrollbars="vertical"
     app:borderBottomVisibility="never"
     app:borderTopDrawable="@null"
