@@ -115,16 +115,7 @@ public final class XposedInit {
             createResourceMethods.add("getOrCreateResources");
         }
 
-        //noinspection TrivialFunctionalExpressionUsage
-        final Class<?> classActivityRes = ((Callable<Class<?>>) () -> {
-            try {
-                return XposedHelpers.findClass("android.app.ResourcesManager$ActivityResource", classGTLR.getClassLoader());
-            } catch (Throwable ignored) {
-                return null;
-            }
-        }).call();
-
-
+        final Class<?> classActivityRes = XposedHelpers.findClassIfExists("android.app.ResourcesManager$ActivityResource", classGTLR.getClassLoader());
         var hooker = new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) {
