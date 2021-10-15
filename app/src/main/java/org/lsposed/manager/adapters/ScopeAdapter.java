@@ -380,10 +380,11 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                     }
                 });
         SpannableStringBuilder sb = new SpannableStringBuilder(android ? "" : activity.getString(R.string.app_description, appInfo.packageName, appInfo.packageInfo.versionName));
-        holder.appDescription.setVisibility(View.VISIBLE);
-        holder.appDescription.setText(sb);
         if (android) holder.appDescription.setVisibility(View.GONE);
-        sb = new SpannableStringBuilder();
+        else {
+            holder.appDescription.setText(sb);
+            sb = new SpannableStringBuilder();
+        }
         if (!recommendedList.isEmpty() && recommendedList.contains(appInfo.application)) {
             String recommended = activity.getString(R.string.requested_by_module);
             sb.append(recommended);
