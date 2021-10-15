@@ -488,7 +488,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                     sb.setSpan(foregroundColorSpan, sb.length() - recommended.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
                 }
             }
-if (sb.isEmpty()){holder.hint.setVisibility(View.GONE);}else{
+if (sb.length() == 0){holder.hint.setVisibility(View.GONE);}else{
 holder.hint.setVisibility(View.VISIBLE);
             holder.hint.setText(sb);}
 
