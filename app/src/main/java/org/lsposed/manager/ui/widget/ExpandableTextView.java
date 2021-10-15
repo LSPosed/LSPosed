@@ -26,7 +26,6 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.TextView;
 
@@ -36,7 +35,6 @@ public class ExpandableTextView extends TextView {
     private final TimeInterpolator expandInterpolator;
     private final TimeInterpolator collapseInterpolator;
     private static final int DEFAULT_ANIM_DURATION = 200;
-    private static final int DEFAULT_MAX_LINES = 5;
     private final int maxLines;
     private final long animationDuration;
     private boolean animating;
@@ -56,18 +54,11 @@ public class ExpandableTextView extends TextView {
 
         var attributes = context.obtainStyledAttributes(attrs, R.styleable.ExpandableTextView, defStyle, 0);
         animationDuration = attributes.getInt(R.styleable.ExpandableTextView_animation_duration, DEFAULT_ANIM_DURATION);
-        maxLines = attributes.getInt(R.styleable.ExpandableTextView_maxLines, DEFAULT_MAX_LINES);
         attributes.recycle();
-
-        getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                if (getLineCount() > maxLines) {
-                    expanded = true;
-                    collapse(true);
-                    setOnClickListener(v -> toggle());
-                }
-                getViewTreeObserver().removeOnGlobalLayoutListener(this);
+        maxLines = getMaxLines();
+        getViewTreeObserver().addOnDrawListener(() -> {
+            if (getLineCount() > maxLines) {
+                setOnClickListener(v -> toggle());
             }
         });
 
@@ -87,7 +78,7 @@ public class ExpandableTextView extends TextView {
 
     private void toggle() {
         if (expanded) {
-            collapse(false);
+            collapse();
         } else {
             expand();
         }
@@ -135,7 +126,7 @@ public class ExpandableTextView extends TextView {
         }
     }
 
-    private void collapse(Boolean animationOff) {
+    private void collapse() {
         if (expanded && !animating && maxLines >= 0) {
             // measure expanded height
             var expandedHeight = getMeasuredHeight();
@@ -163,7 +154,7 @@ public class ExpandableTextView extends TextView {
                 }
             });
             valueAnimator.setInterpolator(collapseInterpolator);
-            valueAnimator.setDuration(animationOff ? 0 : animationDuration).start();
+            valueAnimator.setDuration(animationDuration).start();
         }
     }
 }

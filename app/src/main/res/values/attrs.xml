@@ -23,6 +23,5 @@
     <attr name="colorInstall" format="color" />
     <declare-styleable name="ExpandableTextView">
         <attr name="animation_duration" format="integer" />
-        <attr name="maxLines" format="integer" />
     </declare-styleable>
 </resources>
