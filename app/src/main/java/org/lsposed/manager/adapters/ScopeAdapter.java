@@ -382,6 +382,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         SpannableStringBuilder sb = new SpannableStringBuilder(android ? "" : activity.getString(R.string.app_description, appInfo.packageName, appInfo.packageInfo.versionName));
         if (android) holder.appDescription.setVisibility(View.GONE);
         else {
+            holder.appDescription.setVisibility(View.VISIBLE);
             holder.appDescription.setText(sb);
             sb = new SpannableStringBuilder();
         }
@@ -397,8 +398,11 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                 sb.setSpan(styleSpan, sb.length() - recommended.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
             }
             sb.setSpan(foregroundColorSpan, sb.length() - recommended.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            holder.hint.setText(sb);
+            holder.hint.setVisibility(View.VISIBLE);
+        } else {
+            holder.hint.setVisibility(View.GONE);
         }
-        holder.hint.setText(sb);;
 
         holder.itemView.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
             activity.getMenuInflater().inflate(R.menu.menu_app_item, menu);
