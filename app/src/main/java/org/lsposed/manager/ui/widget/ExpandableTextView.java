@@ -118,6 +118,8 @@ public class ExpandableTextView extends TextView {
 
                 if (links.length == 0) {
                     return false;
+                } else {
+                    return super.onTouchEvent(event);
                 }
             }
         }
