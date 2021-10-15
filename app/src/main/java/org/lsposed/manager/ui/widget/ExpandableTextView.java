@@ -25,6 +25,7 @@ import android.text.Layout;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.transition.TransitionManager;
 import android.util.AttributeSet;
@@ -68,6 +69,7 @@ public class ExpandableTextView extends TextView {
         collapse.setSpan(span, 0, collapse.length(), 0);
         expand = new SpannableString(context.getString(R.string.expand));
         expand.setSpan(span, 0, expand.length(), 0);
+        setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     @Override
@@ -109,20 +111,14 @@ public class ExpandableTextView extends TextView {
             int line = layout.getLineForVertical((int) event.getY());
             int offset = layout.getOffsetForHorizontal(line, event.getX());
 
-            if (getText() != null && getText() instanceof Spanned) {
+            if (getText() instanceof Spanned) {
                 Spanned spanned = (Spanned) getText();
 
                 ClickableSpan[] links = spanned.getSpans(offset, offset, ClickableSpan.class);
 
-                if (links.length > 0) {
-
-                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                        return true;
-                    } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                        links[0].onClick(this);
-                    } else {
-                        return super.onTouchEvent(event);
-                    }
+                if (links.length == 0) {
+                    super.onTouchEvent(event);
+                    return false;
                 }
             }
         }
