@@ -381,8 +381,10 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                 });
         SpannableStringBuilder sb = new SpannableStringBuilder(android ? "" : activity.getString(R.string.app_description, appInfo.packageName, appInfo.packageInfo.versionName));
         holder.appDescription.setVisibility(View.VISIBLE);
+        holder.appDescription.setText(sb);
+        if (android) holder.appDescription.setVisibility(View.GONE);
+        sb = new SpannableStringBuilder();
         if (!recommendedList.isEmpty() && recommendedList.contains(appInfo.application)) {
-            if (!android) sb.append("\n");
             String recommended = activity.getString(R.string.requested_by_module);
             sb.append(recommended);
             final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ResourceUtils.resolveColor(activity.getTheme(), androidx.appcompat.R.attr.colorAccent));
@@ -394,10 +396,8 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                 sb.setSpan(styleSpan, sb.length() - recommended.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
             }
             sb.setSpan(foregroundColorSpan, sb.length() - recommended.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-        } else if (android) {
-            holder.appDescription.setVisibility(View.GONE);
         }
-        holder.appDescription.setText(sb);
+        holder.hint.setText(sb);;
 
         holder.itemView.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
             activity.getMenuInflater().inflate(R.menu.menu_app_item, menu);
@@ -551,6 +551,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         ImageView appIcon;
         TextView appName;
         TextView appDescription;
+        TextView hint;
         MaterialCheckBox checkbox;
 
         ViewHolder(ItemModuleBinding binding) {
@@ -560,6 +561,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             appName = binding.appName;
             appDescription = binding.description;
             checkbox = binding.checkbox;
+            hint = binding.hint;
             checkbox.setVisibility(View.VISIBLE);
         }
     }

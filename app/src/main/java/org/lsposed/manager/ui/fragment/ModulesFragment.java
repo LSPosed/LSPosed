@@ -444,6 +444,9 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             } else {
                 sb.append(getString(R.string.module_empty_description));
             }
+            holder.appDescription.setText(sb);
+
+            sb = new SpannableStringBuilder();
 
             int installXposedVersion = ConfigManager.getXposedApiVersion();
             String warningText = null;
@@ -457,7 +460,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 warningText = getString(R.string.warning_installed_on_external_storage);
             }
             if (warningText != null) {
-                sb.append("\n");
                 sb.append(warningText);
                 final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ContextCompat.getColor(requireActivity(), rikka.material.R.color.material_red_500));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -472,7 +474,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             if (repoLoader.isRepoLoaded()) {
                 var ver = repoLoader.getModuleLatestVersion(item.packageName);
                 if (ver != null && ver.first > item.versionCode) {
-                    sb.append("\n");
+                    if (warningText != null) sb.append("\n");
                     String recommended = getString(R.string.update_available, ver.second);
                     sb.append(recommended);
                     final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ResourceUtils.resolveColor(requireActivity().getTheme(), androidx.appcompat.R.attr.colorAccent));
@@ -486,7 +488,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                     sb.setSpan(foregroundColorSpan, sb.length() - recommended.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
                 }
             }
-            holder.appDescription.setText(sb);
+            holder.hint.setText(sb);
 
             if (!isPick) {
                 holder.root.setAlpha(moduleUtil.isModuleEnabled(item.packageName) ? 1.0f : .5f);
@@ -605,6 +607,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             TextView appName;
             TextView appDescription;
             TextView appVersion;
+            TextView hint;
             MaterialCheckBox checkBox;
 
             ViewHolder(ItemModuleBinding binding) {
@@ -614,6 +617,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 appName = binding.appName;
                 appDescription = binding.description;
                 appVersion = binding.versionName;
+                hint = binding.hint;
                 checkBox = binding.checkbox;
             }
         }
