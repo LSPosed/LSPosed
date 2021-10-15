@@ -117,13 +117,14 @@ public class ExpandableTextView extends TextView {
                 ClickableSpan[] links = spanned.getSpans(offset, offset, ClickableSpan.class);
 
                 if (links.length == 0) {
-                    super.onTouchEvent(event);
                     return false;
+                } else {
+                    return super.onTouchEvent(event);
                 }
             }
         }
 
-        return super.onTouchEvent(event);
+        return false;
     }
 
 }
