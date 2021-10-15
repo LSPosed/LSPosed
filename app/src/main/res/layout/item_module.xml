@@ -35,6 +35,7 @@
         android:id="@+id/item_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
         tools:ignore="RtlSymmetry">
 
         <ImageView
@@ -61,11 +62,12 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@tools:sample/first_names" />
 
-        <TextView
+        <org.lsposed.manager.ui.widget.ExpandableTextView
             android:id="@+id/description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:maxLines="5"
             android:textAppearance="?android:attr/textAppearanceListItemSecondary"
             android:textColor="?android:attr/textColorSecondary"
             app:layout_constraintBottom_toBottomOf="@id/hint"
@@ -114,8 +116,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:focusable="false"
             android:clickable="false"
+            android:focusable="false"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
