@@ -19,27 +19,26 @@
 
 package org.lsposed.manager.ui.widget;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.TimeInterpolator;
-import android.animation.ValueAnimator;
 import android.content.Context;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.util.AttributeSet;
-import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.View;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import org.lsposed.manager.R;
 
 public class ExpandableTextView extends TextView {
-    private final TimeInterpolator expandInterpolator;
-    private final TimeInterpolator collapseInterpolator;
-    private static final int DEFAULT_ANIM_DURATION = 200;
+    private CharSequence text = null;
+    private int nextLines = 0;
     private final int maxLines;
-    private final long animationDuration;
-    private boolean animating;
-    private boolean expanded;
-    private int collapsedHeight;
+    private final SpannableString collapse;
+    private final SpannableString expand;
+    private final SpannableStringBuilder sb = new SpannableStringBuilder();
 
     public ExpandableTextView(Context context) {
         this(context, null);
@@ -51,110 +50,49 @@ public class ExpandableTextView extends TextView {
 
     public ExpandableTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-
-        var attributes = context.obtainStyledAttributes(attrs, R.styleable.ExpandableTextView, defStyle, 0);
-        animationDuration = attributes.getInt(R.styleable.ExpandableTextView_animation_duration, DEFAULT_ANIM_DURATION);
-        attributes.recycle();
         maxLines = getMaxLines();
-        getViewTreeObserver().addOnDrawListener(() -> {
-            if (getLineCount() > maxLines) {
-                setOnClickListener(v -> toggle());
+        collapse = new SpannableString(context.getString(R.string.collapse));
+        ClickableSpan span = new ClickableSpan() {
+            @Override
+            public void onClick(@NonNull View widget) {
+                setMaxLines(nextLines);
+                ExpandableTextView.super.setText(text);
             }
-        });
-
-        expandInterpolator = new AccelerateDecelerateInterpolator();
-        collapseInterpolator = new AccelerateDecelerateInterpolator();
+        };
+        collapse.setSpan(span, 0, collapse.length(), 0);
+        expand = new SpannableString(context.getString(R.string.expand));
+        expand.setSpan(span, 0, expand.length(), 0);
+        setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        // if this TextView is collapsed and maxLines = 0,
-        // than make its height equals to zero
-        if (this.maxLines == 0 && !this.expanded && !this.animating) {
-            heightMeasureSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.EXACTLY);
-        }
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    public void setText(CharSequence text, BufferType type) {
+        this.text = text;
+        super.setText(text, type);
     }
 
-    private void toggle() {
-        if (expanded) {
-            collapse();
-        } else {
-            expand();
+    @Override
+    public boolean onPreDraw() {
+        var lineCount = getLayout().getLineCount();
+        if (lineCount > maxLines) {
+            SpannableString s;
+            int end;
+            if (maxLines == getMaxLines()) {
+                nextLines = lineCount + 1;
+                end = getLayout().getLineStart(getMaxLines() - 1);
+                s = expand;
+            } else {
+                nextLines = maxLines;
+                end = text.length();
+                s = collapse;
+            }
+            sb.clearSpans();
+            sb.clear();
+            sb.append(text, 0, end - 1);
+            sb.append("\n");
+            sb.append(s);
+            super.setText(sb, BufferType.NORMAL);
         }
-    }
-
-    private void expand() {
-        if (!expanded && !animating && maxLines >= 0) {
-            // measure collapsed height
-            measure(MeasureSpec.makeMeasureSpec(this.getMeasuredWidth(), MeasureSpec.EXACTLY),
-                    MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
-            collapsedHeight = getMeasuredHeight();
-            animating = true;
-
-            // set maxLines to MAX Integer, so we can calculate the expanded height
-            setMaxLines(Integer.MAX_VALUE);
-
-            // measure expanded height
-            measure(MeasureSpec.makeMeasureSpec(this.getMeasuredWidth(), MeasureSpec.EXACTLY),
-                    MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
-            var expandedHeight = getMeasuredHeight();
-
-            // animate from collapsed height to expanded height
-            var valueAnimator = ValueAnimator.ofInt(this.collapsedHeight, expandedHeight);
-            valueAnimator.addUpdateListener(animation -> setHeight((int) animation.getAnimatedValue()));
-
-            // wait for the animation to end
-            valueAnimator.addListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    // reset min & max height (previously set with setHeight() method)
-                    setMaxHeight(Integer.MAX_VALUE);
-                    setMinHeight(0);
-
-                    // if fully expanded, set height to WRAP_CONTENT, because when rotating the device
-                    // the height calculated with this ValueAnimator isn't correct anymore
-                    var layoutParams = getLayoutParams();
-                    layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                    setLayoutParams(layoutParams);
-                    expanded = true;
-                    animating = false;
-                }
-            });
-            valueAnimator.setInterpolator(expandInterpolator);
-            valueAnimator.setDuration(animationDuration).start();
-        }
-    }
-
-    private void collapse() {
-        if (expanded && !animating && maxLines >= 0) {
-            // measure expanded height
-            var expandedHeight = getMeasuredHeight();
-            animating = true;
-
-            // animate from expanded height to collapsed height
-            var valueAnimator = ValueAnimator.ofInt(expandedHeight, collapsedHeight);
-            valueAnimator.addUpdateListener(animation -> setHeight((int) animation.getAnimatedValue()));
-
-            // wait for the animation to end
-            valueAnimator.addListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(final Animator animation) {
-                    expanded = false;
-                    animating = false;
-
-                    // set maxLines back to original value
-                    setMaxLines(maxLines);
-
-                    // if fully collapsed, set height back to WRAP_CONTENT, because when rotating the device
-                    // the height previously calculated with this ValueAnimator isn't correct anymore
-                    var layoutParams = getLayoutParams();
-                    layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                    setLayoutParams(layoutParams);
-                }
-            });
-            valueAnimator.setInterpolator(collapseInterpolator);
-            valueAnimator.setDuration(animationDuration).start();
-        }
+        return super.onPreDraw();
     }
 }

@@ -221,4 +221,6 @@
     <string name="color_brown">Brown</string>
     <string name="color_grey">Grey</string>
     <string name="color_blue_grey">Blue grey</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
 </resources>
