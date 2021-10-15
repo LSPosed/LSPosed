@@ -24,8 +24,10 @@ import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.transition.TransitionManager;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -55,6 +57,7 @@ public class ExpandableTextView extends TextView {
         ClickableSpan span = new ClickableSpan() {
             @Override
             public void onClick(@NonNull View widget) {
+                TransitionManager.beginDelayedTransition((ViewGroup) getParent());
                 setMaxLines(nextLines);
                 ExpandableTextView.super.setText(text);
             }
