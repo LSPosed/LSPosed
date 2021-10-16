@@ -62,7 +62,7 @@
     <string name="never_show">Never show</string>
     <string name="failed_to_create_shortcut">Failed to create shortcut: %1$s</string>
     <string name="update_lsposed">Update LSPosed</string>
-    <string name="update_lsposed_msg">Confirm to update LSPosed?This device will reboot after update completion</string>
+    <string name="update_lsposed_msg">Confirm to update LSPosed? This device will reboot after update completion</string>
 
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Save</string>
