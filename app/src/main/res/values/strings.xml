@@ -56,7 +56,7 @@
     <string name="info_system_version">System version</string>
     <string name="info_device">Device</string>
     <string name="info_system_abi">System ABI</string>
-    <string name="parasitic_recommend">Parasitic Manager Recommended</string>
+    <string name="parasitic_recommend">Parasitic Manager is Recommended</string>
     <string name="parasitic_recommend_summary">LSPosed is currently support system parasitization to avoid detection. You can uninstall the manager after parasitic manager shortcut created successfully. You can reinstall the manager from /data/adb/lspd/manager.apk anytime.</string>
     <string name="create_shortcut">Create shortcut</string>
     <string name="never_show">Never show again</string>
@@ -69,8 +69,8 @@
     <string name="nav_item_logs_lsp">LSPosed Logs</string>
     <string name="nav_item_logs_module">Modules Logs</string>
     <string name="logs_save_failed2">Failed to save:\n%s</string>
-    <string name="menuClearLog">Clear log now</string>
-    <string name="logs_cleared">Log cleared success.</string>
+    <string name="menuClearLog">Clear log</string>
+    <string name="logs_cleared">Log cleared success</string>
     <string name="scroll_top">Scroll to top</string>
     <string name="loading">Loading…</string>
     <string name="scroll_bottom">Scroll to bottom</string>
@@ -81,7 +81,7 @@
 
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Xposed module is not activated yet</string>
-    <string name="module_is_not_activated_yet_detailed">%s has been installed, but is not activated yet</string>
+    <string name="module_is_not_activated_yet_detailed">%s has been installed, but it is not activated yet</string>
     <string name="xposed_module_updated_notification_title">Xposed module updated</string>
     <string name="xposed_module_updated_notification_content">%s has been updated, please force stop and restart apps in its scope</string>
     <string name="xposed_module_updated_notification_title_system">Xposed module updated, system reboot required</string>
@@ -90,9 +90,9 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(no description provided)</string>
     <string name="module_no_ui">This module does not provide a user interface</string>
-    <string name="warning_xposed_min_version">This module requires a newer Xposed version (%d), so it cannot be activated</string>
-    <string name="no_min_version_specified">This module does not specify the required Xposed version.</string>
-    <string name="warning_min_version_too_low">This module was created for Xposed version %1$d, due to incompatible changes in version %2$d, it has been disabled</string>
+    <string name="warning_xposed_min_version">This module requires newer Xposed version (%d), activate failed</string>
+    <string name="no_min_version_specified">This module does not specify the minimum Xposed version.</string>
+    <string name="warning_min_version_too_low">This module was designed for Xposed version %1$d, due to incompatible changes in version %2$d, it has been disabled</string>
     <string name="warning_installed_on_external_storage">This module cannot be loaded because it installed in SD card, please move it to internal storage</string>
     <string name="module_uninstall">Uninstall</string>
     <string name="module_settings">Module settings</string>
