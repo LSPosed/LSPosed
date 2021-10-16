@@ -119,7 +119,7 @@
     <string name="sort_by_update_time">Update time</string>
     <string name="sort_reverse">Reverse</string>
     <string name="menu_show_system_apps">System apps</string>
-    <string name="menu_sort">Sorting</string>
+    <string name="menu_sort">Sort By</string>
     <string name="enable_module">Enable module</string>
     <string name="no_scope_selected">You did not select any app. Continue?</string>
     <string name="menu_show_games">Games</string>
