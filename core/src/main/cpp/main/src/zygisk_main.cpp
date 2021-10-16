@@ -172,8 +172,7 @@ namespace lspd {
 
         void onLoad(zygisk::Api *api, JNIEnv *env) override {
             env_ = env;
-            LOGI("onModuleLoaded: welcome to LSPosed!");
-            LOGI("onModuleLoaded: version v%s (%d)", versionName, versionCode);
+            Context::GetInstance()->Init();
             auto companion = api->connectCompanion();
             if (companion == -1) {
                 LOGE("Failed to connect to companion");
@@ -211,11 +210,19 @@ namespace lspd {
     };
 
 #define quote(s) #s
-    void companion_entry(int client) {
+
+    bool InitCompanion() {
+        LOGD("onModuleLoaded: welcome to LSPosed!");
+        LOGD("onModuleLoaded: version v%s (%d)", versionName, versionCode);
+        return true;
+    }
+
+    void CompanionEntry(int client) {
         using namespace std::string_literals;
+        static bool inited = InitCompanion();
         static std::string path = "/data/adb/modules/" quote(MODULE_NAME) "/"s + kDexPath;
         static int fd = open(path.data(), O_RDONLY | O_CLOEXEC);
-        if (fd > 0) {
+        if (inited && fd > 0) {
             write_int(client, 0);
             send_fd(client, fd);
         } else write_int(client, -1);
@@ -225,4 +232,4 @@ namespace lspd {
 
 REGISTER_ZYGISK_MODULE(lspd::ZygiskModule);
 
-REGISTER_ZYGISK_COMPANION(lspd::companion_entry);
+REGISTER_ZYGISK_COMPANION(lspd::CompanionEntry);

@@ -1,6 +1,8 @@
 // All content of this file is released to the public domain.
 
-// This file is the public API for Zygisk modules, and should always be updated in sync with:
+// This file is the public API for Zygisk modules.
+// DO NOT use this file for developing Zygisk modules as it might contain WIP changes.
+// Always use the following header for development as those are finalized APIs:
 // https://github.com/topjohnwu/zygisk-module-sample/blob/master/module/jni/zygisk.hpp
 
 #pragma once
@@ -153,7 +155,7 @@ namespace zygisk {
         //
         // The unmounting does not happen immediately after the function is called. It is actually
         // done during app process specialization.
-        void forceDenylistUnmount();
+        void forceDenyListUnmount();
 
         // Hook JNI native methods for a class
         //
@@ -161,7 +163,7 @@ namespace zygisk {
         // The original function pointer will be saved in each JNINativeMethod's fnPtr.
         // If no matching class, method name, or signature is found, that specific JNINativeMethod.fnPtr
         // will be set to nullptr.
-        void hookJniNativeMethods(const char *className, JNINativeMethod *methods, int numMethods);
+        void hookJniNativeMethods(JNIEnv *env, const char *className, JNINativeMethod *methods, int numMethods);
 
         // For ELFs loaded in memory matching `regex`, replace function `symbol` with `newFunc`.
         // If `oldFunc` is not nullptr, the original function pointer will be saved to `oldFunc`.
@@ -177,9 +179,7 @@ namespace zygisk {
 
     private:
         internal::api_table *impl;
-
-        template<typename T>
-        friend void internal::entry_impl(internal::api_table *, JNIEnv *);
+        template <class T> friend void internal::entry_impl(internal::api_table *, JNIEnv *);
     };
 
 // Register a class as a Zygisk module
@@ -213,14 +213,12 @@ void zygisk_companion_entry(int client) { func(client); }
             long api_version;
             ModuleBase *_this;
 
-            void (*onLoad)(ModuleBase *, Api *, JNIEnv *);
             void (*preAppSpecialize)(ModuleBase *, AppSpecializeArgs *);
             void (*postAppSpecialize)(ModuleBase *, const AppSpecializeArgs *);
             void (*preServerSpecialize)(ModuleBase *, ServerSpecializeArgs *);
             void (*postServerSpecialize)(ModuleBase *, const ServerSpecializeArgs *);
 
             module_abi(ModuleBase *module) : api_version(ZYGISK_API_VERSION), _this(module) {
-                onLoad = [](auto self, auto api, auto env) { self->onLoad(api, env); };
                 preAppSpecialize = [](auto self, auto args) { self->preAppSpecialize(args); };
                 postAppSpecialize = [](auto self, auto args) { self->postAppSpecialize(args); };
                 preServerSpecialize = [](auto self, auto args) { self->preServerSpecialize(args); };
@@ -234,19 +232,19 @@ void zygisk_companion_entry(int client) { func(client); }
             bool (*registerModule)(api_table *, module_abi *);
 
             // Utility functions
-            void (*hookJniNativeMethods)(const char *, JNINativeMethod *, int);
+            void (*hookJniNativeMethods)(JNIEnv *, const char *, JNINativeMethod *, int);
             void (*pltHookRegister)(const char *, const char *, void *, void **);
             void (*pltHookExclude)(const char *, const char *);
             bool (*pltHookCommit)();
 
             // Zygisk functions
             int  (*connectCompanion)(void * /* _this */);
-            void (*forceDenylistUnmount)(void * /* _this */);
+            void (*forceDenyListUnmount)(void * /* _this */);
         };
 
         template <class T>
         void entry_impl(api_table *table, JNIEnv *env) {
-            ModuleBase* module = new T();
+            ModuleBase *module = new T();
             if (!table->registerModule(table, new module_abi(module)))
                 return;
             auto api = new Api();
@@ -259,11 +257,11 @@ void zygisk_companion_entry(int client) { func(client); }
     int Api::connectCompanion() {
         return impl->connectCompanion(impl->_this);
     }
-    void Api::forceDenylistUnmount() {
-        impl->forceDenylistUnmount(impl->_this);
+    void Api::forceDenyListUnmount() {
+        impl->forceDenyListUnmount(impl->_this);
     }
-    void Api::hookJniNativeMethods(const char *className, JNINativeMethod *methods, int numMethods) {
-        impl->hookJniNativeMethods(className, methods, numMethods);
+    void Api::hookJniNativeMethods(JNIEnv *env, const char *className, JNINativeMethod *methods, int numMethods) {
+        impl->hookJniNativeMethods(env, className, methods, numMethods);
     }
     void Api::pltHookRegister(const char *regex, const char *symbol, void *newFunc, void **oldFunc) {
         impl->pltHookRegister(regex, symbol, newFunc, oldFunc);

@@ -26,7 +26,6 @@
 #include "config.h"
 #include "context.h"
 #include <riru.h>
-#include "symbol_cache.h"
 
 namespace lspd {
     int *allowUnload = nullptr;
@@ -39,12 +38,12 @@ namespace lspd {
         void onModuleLoaded() {
             LOGI("onModuleLoaded: welcome to LSPosed!");
             LOGI("onModuleLoaded: version v%s (%d)", versionName, versionCode);
+            Context::GetInstance()->Init();
             if constexpr (isDebug) {
                 Context::GetInstance()->PreLoadDex("/system/" + kDexPath);
             } else {
                 Context::GetInstance()->PreLoadDex(magiskPath + '/' + kDexPath);
             }
-            InitSymbolCache();
         }
 
         void nativeForkAndSpecializePre(JNIEnv *env, jclass, jint *_uid, jint *,

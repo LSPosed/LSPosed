@@ -105,6 +105,10 @@ namespace lspd {
         env->GetJavaVM(&vm_);
     }
 
+    void Context::Init() {
+        InitSymbolCache();
+    }
+
     void Context::Init(JNIEnv *env) {
         if (auto class_linker_class = FindClassFromCurrentLoader(env, kClassLinkerClassName)) {
             class_linker_class_ = JNI_NewGlobalRef(env, class_linker_class);
