@@ -37,12 +37,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.text.HtmlCompat;
 import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.color.DynamicColors;
 import com.google.android.material.snackbar.Snackbar;
-import com.takisoft.preferencex.PreferenceFragmentCompat;
 
 import org.lsposed.manager.App;
 import org.lsposed.manager.BuildConfig;
@@ -138,7 +138,7 @@ public class SettingsFragment extends BaseFragment {
         }
 
         @Override
-        public void onCreatePreferencesFix(Bundle savedInstanceState, String rootKey) {
+        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             final String SYSTEM = "SYSTEM";
 
             addPreferencesFromResource(R.xml.prefs);
