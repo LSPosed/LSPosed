@@ -164,7 +164,7 @@
     <string name="settings_restore_failed2">Failed to restore:\n%s</string>
     <string name="group_network">Network</string>
     <string name="dns_over_http">DNS over HTTPS</string>
-    <string name="dns_over_http_summary">Slove DNS cache pollution</string>
+    <string name="dns_over_http_summary">Solve DNS cache pollution</string>
     <string name="theme_color">Theme color</string>
     <string name="theme_color_system">System theme color</string>
     <string name="settings_show_hidden_icon_apps_enabled">Force show launcher icon</string>
