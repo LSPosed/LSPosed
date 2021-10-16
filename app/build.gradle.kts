@@ -187,7 +187,7 @@ dependencies {
     implementation("dev.rikka.rikkax.material:material:1.6.6")
     implementation("dev.rikka.rikkax.preference:simplemenu-preference:1.0.3")
     implementation("dev.rikka.rikkax.recyclerview:recyclerview-ktx:1.2.2")
-    implementation("dev.rikka.rikkax.widget:borderview:1.0.1")
+    implementation("dev.rikka.rikkax.widget:borderview:1.1.0")
     implementation("dev.rikka.rikkax.widget:switchbar:1.0.2")
     implementation("dev.rikka.rikkax.layoutinflater:layoutinflater:1.1.0")
     implementation("me.zhanghai.android.appiconloader:appiconloader:1.3.1")
