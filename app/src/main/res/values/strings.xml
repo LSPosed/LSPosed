@@ -33,7 +33,7 @@
     <string name="module_repo">Repository</string>
     <string name="module_repo_summary">Module repository (Beta)</string>
     <string name="about_view_source_code"><![CDATA[View source code at %1$s<br/>Join our %2$s channel]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">null</string>
+    <string name="translators" comment="Dear translators, please add your home page here with following format. There can be more than one translator. So feel free to append yourself.">null</string>
 
     <string name="install">Install</string>
     <string name="install_summary">Tap to install LSPosed</string>
@@ -57,12 +57,12 @@
     <string name="info_device">Device</string>
     <string name="info_system_abi">System ABI</string>
     <string name="parasitic_recommend">Parasitic Manager Recommended</string>
-    <string name="parasitic_recommend_summary">LSPosed now supports system parasitization to avoid detection. You can safely uninstall the manager after successfully creating a shortcut of the parasitic manager. In any case you can install the manager back from /data/adb/lspd/manager.apk.</string>
+    <string name="parasitic_recommend_summary">LSPosed is currently support system parasitization to avoid detection. You can uninstall the manager after parasitic manager shortcut created successfully. You can reinstall the manager from /data/adb/lspd/manager.apk anytime.</string>
     <string name="create_shortcut">Create shortcut</string>
-    <string name="never_show">Never show</string>
+    <string name="never_show">Never show again</string>
     <string name="failed_to_create_shortcut">Failed to create shortcut: %1$s</string>
     <string name="update_lsposed">Update LSPosed</string>
-    <string name="update_lsposed_msg">Confirm to update LSPosed? This device will reboot after update completion</string>
+    <string name="update_lsposed_msg">Confirm to update LSPosed? This device will reboot after update completion.</string>
 
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Save</string>
@@ -70,14 +70,14 @@
     <string name="nav_item_logs_module">Modules Logs</string>
     <string name="logs_save_failed2">Failed to save:\n%s</string>
     <string name="menuClearLog">Clear log now</string>
-    <string name="logs_cleared">Log successfully cleared.</string>
+    <string name="logs_cleared">Log cleared success.</string>
     <string name="scroll_top">Scroll to top</string>
     <string name="loading">Loading…</string>
     <string name="scroll_bottom">Scroll to bottom</string>
     <string name="logs_cannot_read">Cannot read log: \n</string>
-    <string name="menuReload">Reload</string>
-    <string name="logs_clear_failed_2">Failed to clear the log</string>
-    <string name="verbose_log_not_avaliable">Verbose log is not available, if you just enabled it without reboot, try again after reboot.</string>
+    <string name="menuReload">Reload Menu</string>
+    <string name="logs_clear_failed_2">Failed to clear log</string>
+    <string name="verbose_log_not_avaliable">Verbose log is not available, if you have not reboot after enable, try again after reboot.</string>
 
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Xposed module is not activated yet</string>
@@ -90,21 +90,21 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(no description provided)</string>
     <string name="module_no_ui">This module does not provide a user interface</string>
-    <string name="warning_xposed_min_version">This module requires a newer Xposed version (%d) and thus cannot be activated</string>
-    <string name="no_min_version_specified">This module does not specify the Xposed version it needs.</string>
-    <string name="warning_min_version_too_low">This module was created for Xposed version %1$d, but due to incompatible changes in version %2$d, it has been disabled</string>
-    <string name="warning_installed_on_external_storage">This module cannot be loaded because it\'s installed on the SD card, please move it to internal storage</string>
+    <string name="warning_xposed_min_version">This module requires a newer Xposed version (%d), so it cannot be activated</string>
+    <string name="no_min_version_specified">This module does not specify the required Xposed version.</string>
+    <string name="warning_min_version_too_low">This module was created for Xposed version %1$d, due to incompatible changes in version %2$d, it has been disabled</string>
+    <string name="warning_installed_on_external_storage">This module cannot be loaded because it installed in SD card, please move it to internal storage</string>
     <string name="module_uninstall">Uninstall</string>
     <string name="module_settings">Module settings</string>
     <string name="view_in_repo">View in Repo</string>
-    <string name="module_uninstall_message">Do you want to uninstall this module?</string>
+    <string name="module_uninstall_message">Confirm to uninstall this module?</string>
     <string name="module_uninstalled">Uninstalled %1$s</string>
-    <string name="module_uninstall_failed">Uninstall unsuccessful</string>
+    <string name="module_uninstall_failed">Uninstall failed</string>
     <string name="add_module_to_user">Add module to user</string>
     <string name="module_installed">Added %1$s to user %2$s</string>
     <string name="module_install_failed">Adding module failed</string>
     <string name="install_to_user">Install to user %s</string>
-    <string name="install_to_user_message">Want to install %1$s to user %2$s? It is recommended to install manually, forcing installation via LSPosed may cause problems.</string>
+    <string name="install_to_user_message">Confirm install %1$s to user %2$s? It is recommended install manually, forcing install via LSPosed may cause unknown problems.</string>
 
     <!-- AppListActivity -->
     <string name="compile_speed">Re-optimize</string>
@@ -119,7 +119,7 @@
     <string name="sort_by_update_time">Update time</string>
     <string name="sort_reverse">Reverse</string>
     <string name="menu_show_system_apps">System apps</string>
-    <string name="menu_sort">Sorting</string>
+    <string name="menu_sort">Sort By</string>
     <string name="enable_module">Enable module</string>
     <string name="no_scope_selected">You did not select any app. Continue?</string>
     <string name="menu_show_games">Games</string>
@@ -138,8 +138,8 @@
     <string name="menu_restore">Restore</string>
     <string name="force_stop">Force stop</string>
     <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
-    <string name="reboot_required">Reboot is required for this change to apply</string>
+    <string name="force_stop_dlg_text">Force stop app may cause issues.</string>
+    <string name="reboot_required">Reboot is required for apply changes</string>
     <string name="reboot">Reboot</string>
     <string name="menu_hide">Hide</string>
 
@@ -164,18 +164,18 @@
     <string name="settings_restore_failed2">Failed to restore:\n%s</string>
     <string name="group_network">Network</string>
     <string name="dns_over_http">DNS over HTTPS</string>
-    <string name="dns_over_http_summary">Workaround DNS poisoning in some nations</string>
+    <string name="dns_over_http_summary">Solve DNS cache pollution</string>
     <string name="theme_color">Theme color</string>
     <string name="theme_color_system">System theme color</string>
-    <string name="settings_show_hidden_icon_apps_enabled">Force apps to show launcher icons</string>
-    <string name="settings_show_hidden_icon_apps_enabled_summary">After Android 10, apps are not allowed to hide their launcher icons. Turn off the toggle to disable this system feature.</string>
+    <string name="settings_show_hidden_icon_apps_enabled">Force show launcher icon</string>
+    <string name="settings_show_hidden_icon_apps_enabled_summary">After Android 10, apps are not allowed to hide launcher icons. Turn off the toggle to disable this feature.</string>
     <string name="settings_group_system">System</string>
     <string name="settings_language">Language</string>
     <string name="settings_translation_contributors">Translation contributors</string>
     <string name="settings_translation">Participate in translation</string>
     <string name="settings_translation_summary">Help us translate %s into your language</string>
-    <string name="pref_title_enable_auto_add_shortcut">Automatically add a shortcut</string>
-    <string name="settings_enable_auto_add_shortcut_summary">No new shortcuts will be added when disabled in the non-parasitic manager</string>
+    <string name="pref_title_enable_auto_add_shortcut">Automatically shortcut</string>
+    <string name="settings_enable_auto_add_shortcut_summary">No more shortcuts will create when disabled in non-parasitic manager</string>
 
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
