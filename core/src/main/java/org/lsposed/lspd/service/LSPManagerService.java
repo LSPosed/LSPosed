@@ -720,6 +720,11 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     }
 
     @Override
+    public List<String> getDenyListPackages() {
+        return ConfigManager.getDenyListPackages();
+    }
+
+    @Override
     public void flashZip(String zipPath, ParcelFileDescriptor outputStream) {
         var processBuilder = new ProcessBuilder("magisk", "--install-module", zipPath);
         var fd = new File("/proc/self/fd/" + outputStream.getFd());

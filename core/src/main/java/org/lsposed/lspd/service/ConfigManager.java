@@ -459,6 +459,8 @@ public class ConfigManager {
             final var obsoleteModules = new HashSet<Application>();
             final var moduleAvailability = new HashMap<Pair<String, Integer>, Boolean>();
             final var cachedProcessScope = new HashMap<Pair<String, Integer>, List<ProcessScope>>();
+
+            final var denylist = new HashSet<>(getDenyListPackages());
             while (cursor.moveToNext()) {
                 Application app = new Application();
                 app.packageName = cursor.getString(appPkgNameIdx);
@@ -488,6 +490,8 @@ public class ConfigManager {
                 try {
                     List<ProcessScope> processesScope = cachedProcessScope.computeIfAbsent(new Pair<>(app.packageName, app.userId), (k) -> {
                         try {
+                            if (denylist.contains(app.packageName))
+                                Log.w(TAG, app.packageName + " is on denylist. It may not take effect.");
                             return getAssociatedProcesses(app);
                         } catch (RemoteException e) {
                             return Collections.emptyList();
@@ -919,5 +923,24 @@ public class ConfigManager {
 
     public boolean isSepolicyLoaded() {
         return sepolicyLoaded;
+    }
+
+    public static List<String> getDenyListPackages() {
+        List<String> result = new ArrayList<>();
+        try {
+            final SQLiteDatabase magiskDb =
+                    SQLiteDatabase.openDatabase(ConfigFileManager.magiskDbPath, new SQLiteDatabase.OpenParams.Builder().addOpenFlags(SQLiteDatabase.OPEN_READONLY).build());
+            try (Cursor cursor = magiskDb.query(true, "denylist", new String[]{"package_name"}, null, null, null, null, null, null, null)) {
+                if (cursor == null) return result;
+                int packageNameIdx = cursor.getColumnIndex("package_name");
+                while (cursor.moveToNext()) {
+                    result.add(cursor.getString(packageNameIdx));
+                }
+                return result;
+            }
+        } catch (Throwable e) {
+            Log.e(TAG, "get denylist", e);
+        }
+        return result;
     }
 }

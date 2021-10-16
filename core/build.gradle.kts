@@ -36,7 +36,7 @@ plugins {
 }
 
 val moduleName = "LSPosed"
-val moduleId = "riru_lsposed"
+val moduleBaseId = "lsposed"
 val authors = "LSPosed Developers"
 
 val riruModuleId = "lsposed"
@@ -62,29 +62,12 @@ val androidCompileNdkVersion: String by rootProject.extra
 val androidSourceCompatibility: JavaVersion by rootProject.extra
 val androidTargetCompatibility: JavaVersion by rootProject.extra
 
-dependencies {
-    implementation("dev.rikka.ndk:riru:26.0.0")
-    implementation("dev.rikka.ndk.thirdparty:cxx:1.1.0")
-    implementation("io.github.vvb2060.ndk:dobby:1.2")
-    implementation("com.android.tools.build:apksig:$agpVersion")
-    implementation("org.apache.commons:commons-lang3:3.12.0")
-    implementation("de.upb.cs.swt:axml:2.1.1")
-    compileOnly("androidx.annotation:annotation:1.2.0")
-    compileOnly(project(":hiddenapi-stubs"))
-    implementation(project(":hiddenapi-bridge"))
-    implementation(project(":manager-service"))
-    debugImplementation(files(File(project.buildDir, "tmp/debugR.jar")) {
-        builtBy("generateAppDebugRFile")
-    })
-    releaseImplementation(files(File(project.buildDir, "tmp/releaseR.jar")) {
-        builtBy("generateAppReleaseRFile")
-    })
-}
-
 android {
     compileSdk = androidCompileSdkVersion
     ndkVersion = androidCompileNdkVersion
     buildToolsVersion = androidBuildToolsVersion
+
+    flavorDimensions += "api"
 
     buildFeatures {
         prefab = true
@@ -100,9 +83,9 @@ android {
 
         externalNativeBuild {
             ndkBuild {
-                arguments += "RIRU_MODULE_API_VERSION=$moduleMaxRiruApiVersion"
-                arguments += "MODULE_NAME=$riruModuleId"
                 arguments += "INJECTED_AID=$injectedPackageUid"
+                arguments += "VERSION_CODE=$verCode"
+                arguments += "VERSION_NAME=$verName"
                 arguments += "-j${Runtime.getRuntime().availableProcessors()}"
             }
         }
@@ -139,6 +122,59 @@ android {
         sourceCompatibility(androidSourceCompatibility)
     }
 
+    productFlavors {
+        all {
+            externalNativeBuild {
+                ndkBuild {
+                    arguments += "MODULE_NAME=${name.toLowerCase()}_$moduleBaseId"
+                    arguments += "API=${name.toLowerCase()}"
+                }
+            }
+        }
+
+        create("Riru") {
+            dimension = "api"
+            externalNativeBuild {
+                ndkBuild {
+                    arguments += "API_VERSION=$moduleMaxRiruApiVersion"
+                }
+            }
+        }
+
+        create("Zygisk") {
+            dimension = "api"
+            externalNativeBuild {
+                ndkBuild {
+                    arguments += "API_VERSION=1"
+                }
+            }
+        }
+    }
+
+}
+
+
+dependencies {
+    // keep this dep since it affects ccache
+    implementation("dev.rikka.ndk:riru:26.0.0")
+    implementation("dev.rikka.ndk.thirdparty:cxx:1.1.0")
+    implementation("io.github.vvb2060.ndk:dobby:1.2")
+    implementation("com.android.tools.build:apksig:$agpVersion")
+    implementation("org.apache.commons:commons-lang3:3.12.0")
+    implementation("de.upb.cs.swt:axml:2.1.1")
+    compileOnly("androidx.annotation:annotation:1.2.0")
+    compileOnly(project(":hiddenapi-stubs"))
+    implementation(project(":hiddenapi-bridge"))
+    implementation(project(":manager-service"))
+    android.applicationVariants.all {
+        "${name}Implementation"(files(File(project.buildDir, "tmp/${name}R.jar")) {
+            builtBy("generateApp${name}RFile")
+        })
+    }
+}
+
+val zipAll = task("zipAll", Task::class) {
+
 }
 
 androidComponents.onVariants { v ->
@@ -147,19 +183,23 @@ androidComponents.onVariants { v ->
         else (v as AnalyticsEnabledApplicationVariant).delegate as ApplicationVariantImpl
     val variantCapped = variant.name.capitalize()
     val variantLowered = variant.name.toLowerCase()
-    val zipFileName = "$moduleName-v$verName-$verCode-$variantLowered.zip"
+    val buildTypeCapped = variant.buildType!!.capitalize()
+    val buildTypeLowered = variant.buildType!!.toLowerCase()
+    val flavorCapped = variant.flavorName!!.capitalize()
+    val flavorLowered = variant.flavorName!!.toLowerCase()
+
     val magiskDir = "$buildDir/magisk/$variantLowered"
 
     task("generateApp${variantCapped}RFile", Jar::class) {
-        dependsOn(":app:process${variantCapped}Resources")
+        dependsOn(":app:process${buildTypeCapped}Resources")
         doLast {
             val rFile = JarFile(
                 File(
                     project(":app").buildDir,
-                    "intermediates/compile_and_runtime_not_namespaced_r_class_jar/${variantLowered}/R.jar"
+                    "intermediates/compile_and_runtime_not_namespaced_r_class_jar/${buildTypeLowered}/R.jar"
                 )
             )
-            ZipOutputStream(FileOutputStream(File(project.buildDir, "tmp/${variantLowered}R.jar"))).use {
+            ZipOutputStream(FileOutputStream(File(project.buildDir, "tmp/${variantCapped}R.jar"))).use {
                 for (entry in rFile.entries()) {
                     if (entry.name.startsWith("org/lsposed/manager")) {
                         it.putNextEntry(entry)
@@ -176,10 +216,10 @@ androidComponents.onVariants { v ->
         val outSrcDir = file("$buildDir/generated/source/signInfo/${variantLowered}")
         val outSrc = file("$outSrcDir/org/lsposed/lspd/util/SignInfo.java")
         val signInfoTask = tasks.register("generate${variantCapped}SignInfo") {
-            dependsOn(":app:validateSigning${variantCapped}")
+            dependsOn(":app:validateSigning${buildTypeCapped}")
             outputs.file(outSrc)
             doLast {
-                val sign = app.buildTypes.named(variantLowered).get().signingConfig
+                val sign = app.buildTypes.named(buildTypeLowered).get().signingConfig
                 outSrc.parentFile.mkdirs()
                 val certificateInfo = KeystoreHelper.getCertificateInfo(
                     sign?.storeType,
@@ -202,13 +242,16 @@ androidComponents.onVariants { v ->
         variant.variantData.registerJavaGeneratingTask(signInfoTask, arrayListOf(outSrcDir))
     }
 
+    val moduleId = "${flavorLowered}_$moduleBaseId"
+    val zipFileName = "$moduleName-${flavorLowered}-v$verName-$verCode-$buildTypeLowered.zip"
+
     val prepareMagiskFilesTask = task("prepareMagiskFiles$variantCapped", Sync::class) {
         dependsOn("assemble$variantCapped")
-        dependsOn(":app:assemble$variantCapped")
+        dependsOn(":app:assemble$buildTypeCapped")
         into(magiskDir)
         from("${rootProject.projectDir}/README.md")
         from("$projectDir/magisk_module") {
-            exclude("riru.sh", "module.prop")
+            exclude("riru.sh", "module.prop", "customize.sh")
         }
         from("$projectDir/magisk_module") {
             include("module.prop")
@@ -217,32 +260,45 @@ androidComponents.onVariants { v ->
                 "versionName" to "v$verName",
                 "versionCode" to verCode,
                 "authorList" to authors,
-                "minRiruVersionName" to moduleMinRiruVersionName
+                "requirement" to when (flavorLowered) {
+                    "riru" -> "Requires Riru $moduleMinRiruVersionName or above installed"
+                    "zygisk" -> "Requires Magisk 24.0+ and Zygisk enabled"
+                    else -> "No further requirements"
+                },
+                "api" to flavorCapped
             )
             filter<FixCrLfFilter>("eol" to FixCrLfFilter.CrLf.newInstance("lf"))
         }
-        from("${projectDir}/magisk_module") {
-            include("riru.sh")
-            val tokens = mapOf(
-                "RIRU_MODULE_LIB_NAME" to "lspd",
-                "RIRU_MODULE_API_VERSION" to moduleMaxRiruApiVersion.toString(),
-                "RIRU_MODULE_MIN_API_VERSION" to moduleMinRiruApiVersion.toString(),
-                "RIRU_MODULE_MIN_RIRU_VERSION_NAME" to moduleMinRiruVersionName,
-                "RIRU_MODULE_DEBUG" to if (variantLowered == "debug") "true" else "false",
-            )
+        from("$projectDir/magisk_module") {
+            include("customize.sh")
+            val tokens = mapOf("FLAVOR" to flavorLowered)
             filter<ReplaceTokens>("tokens" to tokens)
             filter<FixCrLfFilter>("eol" to FixCrLfFilter.CrLf.newInstance("lf"))
         }
-        from("${project(":app").buildDir}/outputs/apk/${variantLowered}") {
+        if (flavorLowered == "riru") {
+            from("${projectDir}/magisk_module") {
+                include("riru.sh")
+                val tokens = mapOf(
+                    "RIRU_MODULE_LIB_NAME" to "lspd",
+                    "RIRU_MODULE_API_VERSION" to moduleMaxRiruApiVersion.toString(),
+                    "RIRU_MODULE_MIN_API_VERSION" to moduleMinRiruApiVersion.toString(),
+                    "RIRU_MODULE_MIN_RIRU_VERSION_NAME" to moduleMinRiruVersionName,
+                    "RIRU_MODULE_DEBUG" to if (buildTypeLowered == "debug") "true" else "false",
+                )
+                filter<ReplaceTokens>("tokens" to tokens)
+                filter<FixCrLfFilter>("eol" to FixCrLfFilter.CrLf.newInstance("lf"))
+            }
+        }
+        from("${project(":app").buildDir}/outputs/apk/${buildTypeLowered}") {
             include("*.apk")
             rename(".*\\.apk", "manager.apk")
         }
         into("lib") {
-            from("${buildDir}/intermediates/stripped_native_libs/$variantLowered/out/lib")
+            from("${buildDir}/intermediates/stripped_native_libs/$variantCapped/out/lib")
         }
-        val dexOutPath = if (variantLowered == "release")
-            "$buildDir/intermediates/dex/$variantLowered/minify${variantCapped}WithR8" else
-            "$buildDir/intermediates/dex/$variantLowered/mergeDex$variantCapped"
+        val dexOutPath = if (buildTypeLowered == "release")
+            "$buildDir/intermediates/dex/$variantCapped/minify${variantCapped}WithR8" else
+            "$buildDir/intermediates/dex/$variantCapped/mergeDex$variantCapped"
         into("framework") {
             from(dexOutPath)
             rename("classes.dex", "lspd.dex")
@@ -265,6 +321,8 @@ androidComponents.onVariants { v ->
         destinationDirectory.set(file("$projectDir/release"))
         from(magiskDir)
     }
+
+    zipAll.dependsOn(zipTask)
 
     val adb: String = androidComponents.sdkComponents.adb.get().asFile.absolutePath
     val pushTask = task("push${variantCapped}", Exec::class) {
@@ -313,7 +371,7 @@ val reRunLspd = task("reRunLspd", Exec::class) {
     dependsOn(pushLspd)
     dependsOn(pushLspdNative)
     dependsOn(killLspd)
-    commandLine(adb, "shell", "su", "-c", "sh /data/adb/modules/riru_lsposed/service.sh&")
+    commandLine(adb, "shell", "su", "-c", "sh /data/adb/modules/*_lsposed/service.sh&")
     isIgnoreExitValue = true
 }
 val tmpApk = "/data/local/tmp/lsp.apk"
@@ -335,13 +393,3 @@ task("reRunApp", Exec::class) {
     isIgnoreExitValue = true
     finalizedBy(reRunLspd)
 }
-
-val generateVersion = task("generateVersion", Copy::class) {
-    inputs.property("VERSION_CODE", verCode)
-    inputs.property("VERSION_NAME", verName)
-    from("${projectDir}/src/main/cpp/main/template")
-    include("config.cpp")
-    expand("VERSION_CODE" to verCode, "VERSION_NAME" to verName)
-    into("${projectDir}/src/main/cpp/main/src")
-}
-tasks.getByName("preBuild").dependsOn(generateVersion)

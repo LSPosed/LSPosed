@@ -58,6 +58,12 @@
                 android:checkable="true"
                 android:checked="true"
                 android:title="@string/menu_show_system_apps" />
+
+            <item
+                android:id="@+id/item_filter_denylist"
+                android:checkable="true"
+                android:checked="true"
+                android:title="@string/menu_show_denylist" />
         </menu>
     </item>
 

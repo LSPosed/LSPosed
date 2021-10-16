@@ -71,27 +71,40 @@ jobs:
         echo 'org.gradle.vfs.watch=true' >> gradle.properties
         echo 'org.gradle.jvmargs=-Xmx2048m' >> gradle.properties
         echo 'android.native.buildOutput=verbose' >> gradle.properties
-        ./gradlew zipRelease zipDebug
+        ./gradlew zipAll
         ccache -s
     - name: Prepare artifact
       if: success()
       id: prepareArtifact
       run: |
-        releaseName=`ls core/release/LSPosed-v*-release.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=releaseName::$releaseName"
-        debugName=`ls core/release/LSPosed-v*-debug.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=debugName::$debugName"
-        unzip core/release/LSPosed-v*-release.zip -d LSPosed-release
-        unzip core/release/LSPosed-v*-debug.zip -d LSPosed-debug
-    - name: Upload release
+        riruReleaseName=`ls core/release/LSPosed-riru-v*-release.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=riruReleaseName::$riruReleaseName"
+        riruDebugName=`ls core/release/LSPosed-riru-v*-debug.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=riruDebugName::$riruDebugName"
+        zygiskReleaseName=`ls core/release/LSPosed-zygisk-v*-release.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=zygiskReleaseName::$zygiskReleaseName"
+        zygiskDebugName=`ls core/release/LSPosed-zygisk-v*-debug.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=zygiskDebugName::$zygiskDebugName"
+        unzip core/release/LSPosed-riru-v*-release.zip -d LSPosed-riru-release
+        unzip core/release/LSPosed-riru-v*-debug.zip -d LSPosed-riru-debug
+        unzip core/release/LSPosed-zygisk-v*-release.zip -d LSPosed-zygisk-release
+        unzip core/release/LSPosed-zygisk-v*-debug.zip -d LSPosed-zygisk-debug
+    - name: Upload riru release
       uses: actions/upload-artifact@v2
       with:
-        name: ${{ steps.prepareArtifact.outputs.releaseName }}
-        path: './LSPosed-release/*'
-    - name: Upload debug
-#      if: ${{ github.event_name == 'pull_request' && success() }}
+        name: ${{ steps.prepareArtifact.outputs.riruReleaseName }}
+        path: './LSPosed-riru-release/*'
+    - name: Upload riru debug
       uses: actions/upload-artifact@v2
       with:
-        name: ${{ steps.prepareArtifact.outputs.debugName }}
-        path: './LSPosed-debug/*'
+        name: ${{ steps.prepareArtifact.outputs.riruDebugName }}
+        path: './LSPosed-riru-debug/*'
+    - name: Upload zygisk release
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ steps.prepareArtifact.outputs.zygiskReleaseName }}
+        path: './LSPosed-zygisk-release/*'
+    - name: Upload zygisk debug
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ steps.prepareArtifact.outputs.zygiskDebugName }}
+        path: './LSPosed-zygisk-debug/*'
     - name: Upload mappings
       uses: actions/upload-artifact@v2
       with:
@@ -108,7 +121,9 @@ jobs:
         COMMIT_URL: ${{ github.event.head_commit.url }}
       run: |
         OUTPUT="core/release/"
-        export release=$(find $OUTPUT -name "LSPosed-v*-release.zip")
-        export debug=$(find $OUTPUT -name "LSPosed-v*-debug.zip")
+        export riruRelease=$(find $OUTPUT -name "LSPosed-riru-v*-release.zip")
+        export riruDebug=$(find $OUTPUT -name "LSPosed-riru-v*-debug.zip")
+        export zygiskRelease=$(find $OUTPUT -name "LSPosed-zygisk-v*-release.zip")
+        export zygiskDebug=$(find $OUTPUT -name "LSPosed-zygisk-v*-debug.zip")
         ESCAPED=`python3 -c 'import json,os,urllib.parse; msg = json.dumps(os.environ["COMMIT_MESSAGE"]); print(urllib.parse.quote(msg if len(msg) <= 1024 else json.dumps(os.environ["COMMIT_URL"])))'`
-        curl -v "https://api.telegram.org/bot${BOT_TOKEN}/sendMediaGroup?chat_id=${CHANNEL_ID}&media=%5B%7B%22type%22:%22document%22,%20%22media%22:%22attach://release%22%7D,%7B%22type%22:%22document%22,%20%22media%22:%22attach://debug%22,%22caption%22:${ESCAPED}%7D%5D"  -F release="@$release" -F debug="@$debug"
+        curl -v "https://api.telegram.org/bot${BOT_TOKEN}/sendMediaGroup?chat_id=${CHANNEL_ID}&media=%5B%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FzygiskRelease%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FriruRelease%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FzygiskDebug%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FriruDebug%22%2C%22caption%22:${ESCAPED}%7D%5D"  -F riruRelease="@$riruRelease" -F riruDebug="@$riruDebug"

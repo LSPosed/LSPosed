@@ -25,59 +25,51 @@
 #include "logging.h"
 #include "config.h"
 #include "context.h"
+
+#define RIRU_MODULE
 #include <riru.h>
-#include "symbol_cache.h"
 
 namespace lspd {
     int *allowUnload = nullptr;
-
-    static constexpr uid_t kAidInjected = INJECTED_AID;
-    static constexpr uid_t kAidInet = 3003;
-
     namespace {
         std::string magiskPath;
+
+        jstring nice_name = nullptr;
+        jstring app_data_dir = nullptr;
 
         void onModuleLoaded() {
             LOGI("onModuleLoaded: welcome to LSPosed!");
             LOGI("onModuleLoaded: version v%s (%d)", versionName, versionCode);
+            Context::GetInstance()->Init();
             if constexpr (isDebug) {
                 Context::GetInstance()->PreLoadDex("/system/" + kDexPath);
             } else {
                 Context::GetInstance()->PreLoadDex(magiskPath + '/' + kDexPath);
             }
-            InitSymbolCache();
         }
 
         void nativeForkAndSpecializePre(JNIEnv *env, jclass, jint *_uid, jint *,
                                         jintArray *gids, jint *,
                                         jobjectArray *, jint *,
-                                        jstring *, jstring *nice_name,
+                                        jstring *, jstring *_nice_name,
                                         jintArray *, jintArray *,
                                         jboolean *start_child_zygote, jstring *,
-                                        jstring *app_data_dir, jboolean *,
+                                        jstring *_app_data_dir, jboolean *,
                                         jobjectArray *,
                                         jobjectArray *,
                                         jboolean *,
                                         jboolean *) {
-            if (*_uid == kAidInjected) {
-                int array_size = *gids ? env->GetArrayLength(*gids) : 0;
-                auto region = std::make_unique<jint[]>(array_size + 1);
-                auto *new_gids = env->NewIntArray(array_size + 1);
-                if (*gids) env->GetIntArrayRegion(*gids, 0, array_size, region.get());
-                region.get()[array_size] = kAidInet;
-                env->SetIntArrayRegion(new_gids, 0, array_size + 1, region.get());
-                if (*gids) env->SetIntArrayRegion(*gids, 0, 1, region.get() + array_size);
-                *gids = new_gids;
-            }
-            Context::GetInstance()->OnNativeForkAndSpecializePre(env, *_uid,
-                                                                 *nice_name,
+            nice_name = *_nice_name;
+            app_data_dir = *_app_data_dir;
+            Context::GetInstance()->OnNativeForkAndSpecializePre(env, *_uid, *gids,
+                                                                 nice_name,
                                                                  *start_child_zygote,
-                                                                 *app_data_dir);
+                                                                 app_data_dir);
         }
 
         void nativeForkAndSpecializePost(JNIEnv *env, jclass, jint res) {
             if (res == 0)
-                Context::GetInstance()->OnNativeForkAndSpecializePost(env);
+                Context::GetInstance()->OnNativeForkAndSpecializePost(env, nice_name, app_data_dir);
         }
 
         void nativeForkSystemServerPre(JNIEnv *env, jclass, uid_t *, gid_t *,
@@ -88,43 +80,36 @@ namespace lspd {
         }
 
         void nativeForkSystemServerPost(JNIEnv *env, jclass, jint res) {
-            Context::GetInstance()->OnNativeForkSystemServerPost(env, res);
+            if (res == 0)
+                Context::GetInstance()->OnNativeForkSystemServerPost(env);
         }
 
         /* method added in Android Q */
         void specializeAppProcessPre(JNIEnv *env, jclass, jint *_uid, jint *,
                                      jintArray *gids, jint *,
                                      jobjectArray *, jint *,
-                                     jstring *, jstring *nice_name,
+                                     jstring *, jstring *_nice_name,
                                      jboolean *start_child_zygote, jstring *,
-                                     jstring *app_data_dir, jboolean *,
+                                     jstring *_app_data_dir, jboolean *,
                                      jobjectArray *,
                                      jobjectArray *,
                                      jboolean *,
                                      jboolean *) {
-            if (*_uid == kAidInjected) {
-                int array_size = *gids ? env->GetArrayLength(*gids) : 0;
-                auto region = std::make_unique<jint[]>(array_size + 1);
-                auto *new_gids = env->NewIntArray(array_size + 1);
-                if (*gids) env->GetIntArrayRegion(*gids, 0, array_size, region.get());
-                region.get()[array_size] = kAidInet;
-                env->SetIntArrayRegion(new_gids, 0, array_size + 1, region.get());
-                if (*gids) env->SetIntArrayRegion(*gids, 0, 1, region.get() + array_size);
-                *gids = new_gids;
-            }
-            Context::GetInstance()->OnNativeForkAndSpecializePre(env, *_uid,
-                                                                 *nice_name,
+            nice_name = *_nice_name;
+            app_data_dir = *_app_data_dir;
+            Context::GetInstance()->OnNativeForkAndSpecializePre(env, *_uid, *gids,
+                                                                 nice_name,
                                                                  *start_child_zygote,
-                                                                 *app_data_dir);
+                                                                 app_data_dir);
         }
 
         void specializeAppProcessPost(JNIEnv *env, jclass) {
-            Context::GetInstance()->OnNativeForkAndSpecializePost(env);
+            Context::GetInstance()->OnNativeForkAndSpecializePost(env, nice_name, app_data_dir);
         }
     }
 
     RiruVersionedModuleInfo module{
-            .moduleApiVersion = RIRU_MODULE_API_VERSION,
+            .moduleApiVersion = apiVersion,
             .moduleInfo = RiruModuleInfo{
                     .supportHide = !isDebug,
                     .version = versionCode,
@@ -140,14 +125,11 @@ namespace lspd {
     };
 }
 
-#define quote(s) #s
-#define str(s) quote(s)
-
 RIRU_EXPORT RiruVersionedModuleInfo *init(Riru *riru) {
     LOGD("using riru %d", riru->riruApiVersion);
     LOGD("module path: %s", riru->magiskModulePath);
     lspd::magiskPath = riru->magiskModulePath;
-    if (!lspd::isDebug && lspd::magiskPath.find(str(MODULE_NAME)) == std::string::npos) {
+    if (!lspd::isDebug && lspd::magiskPath.find(lspd::moduleName) == std::string::npos) {
         LOGE("who am i");
         return nullptr;
     }

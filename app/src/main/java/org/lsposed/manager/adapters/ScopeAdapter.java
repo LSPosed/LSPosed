@@ -105,6 +105,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     private final HashSet<ApplicationWithEquals> checkedList = new HashSet<>();
     private final ConcurrentLinkedQueue<AppInfo> searchList = new ConcurrentLinkedQueue<>();
     private final List<AppInfo> showList = new ArrayList<>();
+    private final List<String> denyList = new ArrayList<>();
 
     private final SwitchBar.OnCheckedChangeListener switchBarOnCheckedChangeListener = new SwitchBar.OnCheckedChangeListener() {
         @Override
@@ -160,6 +161,11 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         }
         if (checkedList.contains(app)) {
             return false;
+        }
+        if (preferences.getBoolean("filter_denylist", false)) {
+            if (denyList.contains(info.packageName)) {
+                return true;
+            }
         }
         if (preferences.getBoolean("filter_modules", true)) {
             if (info.applicationInfo.metaData != null && info.applicationInfo.metaData.containsKey("xposedminversion")) {
@@ -248,6 +254,9 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         } else if (itemId == R.id.item_filter_modules) {
             item.setChecked(!item.isChecked());
             preferences.edit().putBoolean("filter_modules", item.isChecked()).apply();
+        } else if (itemId == R.id.item_filter_denylist) {
+            item.setChecked(!item.isChecked());
+            preferences.edit().putBoolean("filter_denylist", item.isChecked()).apply();
         } else if (itemId == R.id.menu_launch) {
             Intent launchIntent = AppHelper.getSettingsIntent(module.packageName, module.userId);
             if (launchIntent != null) {
@@ -320,6 +329,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         menu.findItem(R.id.item_filter_system).setChecked(preferences.getBoolean("filter_system_apps", true));
         menu.findItem(R.id.item_filter_games).setChecked(preferences.getBoolean("filter_games", true));
         menu.findItem(R.id.item_filter_modules).setChecked(preferences.getBoolean("filter_modules", true));
+        menu.findItem(R.id.item_filter_denylist).setChecked(preferences.getBoolean("filter_denylist", false));
         switch (preferences.getInt("list_sort", 0)) {
             case 7:
                 menu.findItem(R.id.item_sort_by_update_time).setChecked(true);
@@ -354,8 +364,9 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.root.setAlpha(enabled ? 1.0f : .5f);
         AppInfo appInfo = showList.get(position);
+        boolean deny = denyList.contains(appInfo.packageName);
+        holder.root.setAlpha(!deny && enabled ? 1.0f : .5f);
         boolean android = appInfo.packageName.equals("android");
         CharSequence appName;
         int userId = appInfo.applicationInfo.uid / 100000;
@@ -403,6 +414,21 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         } else {
             holder.hint.setVisibility(View.GONE);
         }
+        if (deny) {
+            if (sb.length() != 0) sb.append("\n");
+            String denylist = activity.getString(R.string.deny_list_info);
+            sb.append(denylist);
+            final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ResourceUtils.resolveColor(activity.getTheme(), rikka.material.R.attr.colorWarning));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                final TypefaceSpan typefaceSpan = new TypefaceSpan(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+                sb.setSpan(typefaceSpan, sb.length() - denylist.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            } else {
+                final StyleSpan styleSpan = new StyleSpan(Typeface.BOLD);
+                sb.setSpan(styleSpan, sb.length() - denylist.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            }
+            sb.setSpan(foregroundColorSpan, sb.length() - denylist.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        }
+        holder.hint.setText(sb);
 
         holder.itemView.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
             activity.getMenuInflater().inflate(R.menu.menu_app_item, menu);
@@ -470,6 +496,8 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             List<PackageInfo> appList = AppHelper.getAppList(force);
             checkedList.clear();
             recommendedList.clear();
+            denyList.clear();
+            denyList.addAll(AppHelper.getDenyList(force));
             var tmpList = new ArrayList<AppInfo>();
             checkedList.addAll(ConfigManager.getModuleScope(module.packageName));
             HashSet<ApplicationWithEquals> installedList = new HashSet<>();
@@ -547,6 +575,9 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         } else if (appInfo.packageName.equals("android")) {
             Snackbar.make(fragment.binding.snackbar, R.string.reboot_required, Snackbar.LENGTH_SHORT)
                     .setAction(R.string.reboot, v -> ConfigManager.reboot(false))
+                    .show();
+        } else if (denyList.contains(appInfo.packageName)) {
+            Snackbar.make(fragment.binding.snackbar, activity.getString(R.string.deny_list, appInfo.label), Snackbar.LENGTH_SHORT)
                     .show();
         }
     }
