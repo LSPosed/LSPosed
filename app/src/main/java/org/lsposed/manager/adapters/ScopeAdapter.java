@@ -366,7 +366,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         AppInfo appInfo = showList.get(position);
         boolean deny = denyList.contains(appInfo.packageName);
-        holder.root.setAlpha(deny || enabled ? 1.0f : .5f);
+        holder.root.setAlpha(!deny && enabled ? 1.0f : .5f);
         boolean android = appInfo.packageName.equals("android");
         CharSequence appName;
         int userId = appInfo.applicationInfo.uid / 100000;
@@ -428,7 +428,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             }
             sb.setSpan(foregroundColorSpan, sb.length() - denylist.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         }
-        holder.appDescription.setText(sb);
+        holder.hint.setText(sb);
 
         holder.itemView.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
             activity.getMenuInflater().inflate(R.menu.menu_app_item, menu);
