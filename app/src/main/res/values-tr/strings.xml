@@ -29,6 +29,7 @@
     <string name="Logs">Günlükler</string>
     <string name="Settings">Ayarlar</string>
     <string name="About">Hakkında</string>
+    <string name="report_issue">Hatayı raporla</string>
     <string name="module_repo">Repo</string>
     <string name="module_repo_summary">Modül reposu (Beta)</string>
     <string name="about_view_source_code"><![CDATA[%1$s adresindeki kaynak kodunu görüntüle<br/>%2$s kanalımıza katılın]]></string>
@@ -54,6 +55,13 @@
     <string name="info_system_version">Sistem sürümü</string>
     <string name="info_device">Cihaz</string>
     <string name="info_system_abi">Sistem ABI\'si</string>
+    <string name="parasitic_recommend">Parazit Yönetici Önerilir</string>
+    <string name="parasitic_recommend_summary">LSPosed şu an sisteme parazit olarak yerleşip denetlemeleri önlemeyi destekliyor. Parazit yönetici kısayolunu ana ekrana ekledikten sonra güvenle bu yöneticiyi kaldırabilirsiniz. Eğer eski yöneticiyi geri isterseniz /data/adb/lspd/manager.apk konumunda bulabilirsiniz.</string>
+    <string name="create_shortcut">Kısayol oluştur</string>
+    <string name="never_show">Asla gösterme</string>
+    <string name="failed_to_create_shortcut">Kısayol oluştururken bir hata oluştu: %1$s</string>
+    <string name="update_lsposed">LSPosed\'ı güncelle</string>
+    <string name="update_lsposed_msg">LSPosed\'ın yeni sürümünü kurmak ister misiniz? Tamamlandıktan sonra cihaz yeniden başlatılacak</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Kaydetme</string>
     <string name="nav_item_logs_lsp">LSPosed Günlüğü</string>
@@ -151,9 +159,16 @@
     <string name="dns_over_http">HTTPS üzerinden DNS</string>
     <string name="dns_over_http_summary">Bazı ülkelerde DNS zehirlenmesi için geçici çözümdür</string>
     <string name="theme_color">Tema rengi</string>
+    <string name="theme_color_system">Sistem tema rengi</string>
     <string name="settings_show_hidden_icon_apps_enabled">Uygulamaları başlatıcı simgelerini göstermeye zorla</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">Android 10\'dan sonra, uygulamaların başlatıcı simgelerini gizlenmesine izin verilmez. Bu sistem özelliğini devre dışı bırakmak için düğmeyi kapatın.</string>
     <string name="settings_group_system">Sistem</string>
+    <string name="settings_language">Dil</string>
+    <string name="settings_translation_contributors">Çeviri katılımcıları</string>
+    <string name="settings_translation">Çeviriye katılın</string>
+    <string name="settings_translation_summary">%s yazılımını çevirmemize yardım edin</string>
+    <string name="pref_title_enable_auto_add_shortcut">Otomatik olarak bir kısayol ekle</string>
+    <string name="settings_enable_auto_add_shortcut_summary">Parazit olmayan yöneticilerde devre dışı bırakılınca yeni kısayol eklenmez</string>
     <!-- Module Repo -->
     <string name="module_readme">Beni oku</string>
     <string name="module_releases">Sürümler</string>
@@ -171,5 +186,29 @@
     <string name="outdated_core">LSPosed uygulaması çerçeveden daha yenidir. Lütfen LSPosed çerçevesini güncelleyin.</string>
     <string name="outdated_manager">LSPosed çerçevesi, uygulamadan daha yenidir. Lütfen uygulamayı /data/adb/lspd/manager.apk adresinden manuel olarak güncelleyin.</string>
     <string name="manager_crashed">Yönetici çöktü</string>
+    <string name="manager_crashed_info">bunu şuraya rapor et: </string>
+    <string name="send_crash_info">Çökme bilgisi gönder</string>
+    <string name="crash_info_copied">Çökme bilgisi panoya kopyalandı</string>
     <!-- Colors -->
+    <string name="color_pixel_blue">Pixel mavisi</string>
+    <string name="color_sakura">Kiraz çiçeği</string>
+    <string name="color_red">Kırmızı</string>
+    <string name="color_pink">Pembe</string>
+    <string name="color_purple">Mor</string>
+    <string name="color_deep_purple">Koyu mor</string>
+    <string name="color_indigo">Çivit</string>
+    <string name="color_blue">Mavi</string>
+    <string name="color_light_blue">Açık mavi</string>
+    <string name="color_cyan">Cam göbeği</string>
+    <string name="color_teal">Turkuaz</string>
+    <string name="color_green">Yeşil</string>
+    <string name="color_light_green">Açık yeşil</string>
+    <string name="color_lime">Limon</string>
+    <string name="color_yellow">Sarı</string>
+    <string name="color_amber">Kehribar</string>
+    <string name="color_orange">Turuncu</string>
+    <string name="color_deep_orange">Koyu turuncu</string>
+    <string name="color_brown">Kahverengi</string>
+    <string name="color_grey">Gri</string>
+    <string name="color_blue_grey">Mavi gri</string>
 </resources>
