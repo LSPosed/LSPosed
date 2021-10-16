@@ -210,4 +210,6 @@
     <string name="color_brown">Nâu</string>
     <string name="color_grey">Xám</string>
     <string name="color_blue_grey">Xanh xám</string>
+    <string name="expand">mở</string>
+    <string name="collapse">đóng</string>
 </resources>
