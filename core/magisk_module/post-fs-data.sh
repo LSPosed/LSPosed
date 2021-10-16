@@ -20,7 +20,5 @@
 
 MODDIR=${0%/*}
 
-setenforce 0
-
 rm -f "/data/local/tmp/lspd.dex"
 unshare -m sh -c "$MODDIR/lspd &"
