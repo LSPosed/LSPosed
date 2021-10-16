@@ -26,6 +26,7 @@
 #include "config.h"
 
 namespace lspd {
+    int *allowUnload = nullptr;
 
     namespace {
         ssize_t xsendmsg(int sockfd, const struct msghdr *msg, int flags) {
@@ -173,7 +174,10 @@ namespace lspd {
         void onLoad(zygisk::Api *api, JNIEnv *env) override {
             env_ = env;
             Context::GetInstance()->Init();
-            Context::GetInstance()->PreLoadDex("/data/adb/modules/riru_lsposed/framework/lspd.dex");
+
+            using namespace std::string_literals;
+            Context::GetInstance()->PreLoadDex("/data/adb/modules/"s + moduleName + "/framework/lspd.dex");
+
 //            auto companion = api->connectCompanion();
 //            if (companion == -1) {
 //                LOGE("Failed to connect to companion");
@@ -221,7 +225,7 @@ namespace lspd {
     void CompanionEntry(int client) {
         using namespace std::string_literals;
         static bool inited = InitCompanion();
-        static std::string path = "/data/adb/modules/" quote(MODULE_NAME) "/"s + kDexPath;
+        static std::string path = "/data/adb/modules/"s + lspd::moduleName + "/" + kDexPath;
         static int fd = open(path.data(), O_RDONLY | O_CLOEXEC);
         if (inited && fd > 0) {
             write_int(client, 0);

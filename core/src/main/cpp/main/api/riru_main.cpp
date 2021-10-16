@@ -25,6 +25,8 @@
 #include "logging.h"
 #include "config.h"
 #include "context.h"
+
+#define RIRU_MODULE
 #include <riru.h>
 
 namespace lspd {
@@ -107,7 +109,7 @@ namespace lspd {
     }
 
     RiruVersionedModuleInfo module{
-            .moduleApiVersion = RIRU_MODULE_API_VERSION,
+            .moduleApiVersion = apiVersion,
             .moduleInfo = RiruModuleInfo{
                     .supportHide = !isDebug,
                     .version = versionCode,
@@ -123,14 +125,11 @@ namespace lspd {
     };
 }
 
-#define quote(s) #s
-#define str(s) quote(s)
-
 RIRU_EXPORT RiruVersionedModuleInfo *init(Riru *riru) {
     LOGD("using riru %d", riru->riruApiVersion);
     LOGD("module path: %s", riru->magiskModulePath);
     lspd::magiskPath = riru->magiskModulePath;
-    if (!lspd::isDebug && lspd::magiskPath.find(str(MODULE_NAME)) == std::string::npos) {
+    if (!lspd::isDebug && lspd::magiskPath.find(lspd::moduleName) == std::string::npos) {
         LOGE("who am i");
         return nullptr;
     }
