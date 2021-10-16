@@ -45,11 +45,13 @@ namespace lspd {
 
         void CallOnPostFixupStaticTrampolines(void *class_ptr);
 
-        inline ScopedLocalRef<jclass> FindClassFromCurrentLoader(JNIEnv *env, std::string_view className) const {
+        inline ScopedLocalRef<jclass>
+        FindClassFromCurrentLoader(JNIEnv *env, std::string_view className) const {
             return FindClassFromLoader(env, GetCurrentClassLoader(), className);
         };
 
-        void OnNativeForkAndSpecializePre(JNIEnv *env, jint uid, jintArray& gids, jstring nice_name, jboolean is_child_zygote, jstring app_data_dir);
+        void OnNativeForkAndSpecializePre(JNIEnv *env, jint uid, jintArray &gids, jstring nice_name,
+                                          jboolean is_child_zygote, jstring app_data_dir);
 
         void OnNativeForkAndSpecializePost(JNIEnv *env, jstring nice_name, jstring app_data_dir);
 
@@ -69,7 +71,44 @@ namespace lspd {
         jclass class_linker_class_ = nullptr;
         jmethodID post_fixup_static_mid_ = nullptr;
         bool skip_ = false;
-        std::vector<std::byte> dex{};
+
+        struct PreloadedDex {
+
+            PreloadedDex() : addr_(nullptr), size_(0) {}
+
+            PreloadedDex(const PreloadedDex &) = delete;
+
+            PreloadedDex &operator=(const PreloadedDex &) = delete;
+
+            PreloadedDex &operator=(PreloadedDex &&other) {
+                addr_ = other.addr_;
+                size_ = other.size_;
+                other.addr_ = nullptr;
+                other.size_ = 0;
+                return *this;
+            }
+
+            PreloadedDex(PreloadedDex &&other) : addr_(other.addr_), size_(other.size_) {
+                other.addr_ = nullptr;
+                other.size_ = 0;
+            };
+
+            operator bool() const { return addr_ && size_; }
+
+            auto size() const { return size_; }
+
+            auto data() const { return addr_; }
+
+            PreloadedDex(FILE *f);
+
+            ~PreloadedDex();
+
+        private:
+            void *addr_;
+            std::size_t size_;
+        };
+
+        PreloadedDex dex_{};
 
         Context() {}
 
@@ -78,11 +117,13 @@ namespace lspd {
         void Init(JNIEnv *env);
 
         static ScopedLocalRef<jclass> FindClassFromLoader(JNIEnv *env, jobject class_loader,
-                                          std::string_view class_name);
+                                                          std::string_view class_name);
+
         static void setAllowUnload(bool unload);
 
         template<typename ...Args>
-        void FindAndCall(JNIEnv *env, std::string_view method_name, std::string_view method_sig, Args&&... args) const;
+        void FindAndCall(JNIEnv *env, std::string_view method_name, std::string_view method_sig,
+                         Args &&... args) const;
 
         friend std::unique_ptr<Context> std::make_unique<Context>();
     };
