@@ -90,7 +90,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import rikka.core.util.ResourceUtils;
-import rikka.insets.WindowInsetsHelperKt;
 import rikka.recyclerview.RecyclerViewKt;
 import rikka.widget.borderview.BorderRecyclerView;
 
@@ -136,18 +135,12 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentPagerBinding.inflate(inflater, container, false);
 
-        binding.getRoot().bringChildToFront(binding.appBar);
         setupToolbar(binding.toolbar, R.string.Modules, R.menu.menu_modules);
-        binding.appBar.setLiftable(true);
         binding.viewPager.setAdapter(new PagerAdapter(this));
         binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 BorderRecyclerView recyclerView = binding.viewPager.findViewWithTag(position);
-
-                if (recyclerView != null) {
-                    binding.appBar.setLifted(!recyclerView.getBorderViewDelegate().isShowingTopBorder());
-                }
 
                 if (position > 0) {
                     binding.fab.show();
@@ -328,6 +321,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         }
         return super.onContextItemSelected(item);
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -347,18 +341,9 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             }
             int position = arguments.getInt("position");
             ItemRepoRecyclerviewBinding binding = ItemRepoRecyclerviewBinding.inflate(getLayoutInflater(), container, false);
-            if (fragment.adapters.size() == 1) {
-                WindowInsetsHelperKt.setInitialPadding(binding.recyclerView, 0, ResourceUtils.resolveDimensionPixelOffset(requireActivity().getTheme(), androidx.appcompat.R.attr.actionBarSize, 0), 0, 0);
-            } else {
-                int height = ResourceUtils.resolveDimensionPixelOffset(requireActivity().getTheme(), androidx.appcompat.R.attr.actionBarSize, 0)
-                        + getResources().getDimensionPixelOffset(R.dimen.tab_layout_height);
-                WindowInsetsHelperKt.setInitialPadding(binding.recyclerView, 0, height, 0, 0);
-            }
-            binding.recyclerView.setTag(position);
             binding.recyclerView.setAdapter(fragment.adapters.get(position));
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireActivity());
             binding.recyclerView.setLayoutManager(layoutManager);
-            binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> fragment.binding.appBar.setLifted(!top));
             binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -369,9 +354,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                     }
                 }
             });
-            var insets = requireActivity().getWindow().getDecorView().getRootWindowInsets();
-            if (insets != null)
-                binding.recyclerView.onApplyWindowInsets(insets);
             RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
             return binding.getRoot();
         }
@@ -462,6 +444,9 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             } else {
                 sb.append(getString(R.string.module_empty_description));
             }
+            holder.appDescription.setText(sb);
+
+            sb = new SpannableStringBuilder();
 
             int installXposedVersion = ConfigManager.getXposedApiVersion();
             String warningText = null;
@@ -475,7 +460,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 warningText = getString(R.string.warning_installed_on_external_storage);
             }
             if (warningText != null) {
-                sb.append("\n");
                 sb.append(warningText);
                 final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ContextCompat.getColor(requireActivity(), rikka.material.R.color.material_red_500));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -490,7 +474,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             if (repoLoader.isRepoLoaded()) {
                 var ver = repoLoader.getModuleLatestVersion(item.packageName);
                 if (ver != null && ver.first > item.versionCode) {
-                    sb.append("\n");
+                    if (warningText != null) sb.append("\n");
                     String recommended = getString(R.string.update_available, ver.second);
                     sb.append(recommended);
                     final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ResourceUtils.resolveColor(requireActivity().getTheme(), androidx.appcompat.R.attr.colorAccent));
@@ -504,7 +488,12 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                     sb.setSpan(foregroundColorSpan, sb.length() - recommended.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
                 }
             }
-            holder.appDescription.setText(sb);
+            if (sb.length() == 0) {
+                holder.hint.setVisibility(View.GONE);
+            } else {
+                holder.hint.setVisibility(View.VISIBLE);
+                holder.hint.setText(sb);
+            }
 
             if (!isPick) {
                 holder.root.setAlpha(moduleUtil.isModuleEnabled(item.packageName) ? 1.0f : .5f);
@@ -623,6 +612,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             TextView appName;
             TextView appDescription;
             TextView appVersion;
+            TextView hint;
             MaterialCheckBox checkBox;
 
             ViewHolder(ItemModuleBinding binding) {
@@ -632,6 +622,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 appName = binding.appName;
                 appDescription = binding.description;
                 appVersion = binding.versionName;
+                hint = binding.hint;
                 checkBox = binding.checkbox;
             }
         }

@@ -211,4 +211,6 @@
     <string name="color_brown">Bruin</string>
     <string name="color_grey">Grijs</string>
     <string name="color_blue_grey">Blauw grijs</string>
+    <string name="expand">uitbreiden</string>
+    <string name="collapse">samenvouwen</string>
 </resources>

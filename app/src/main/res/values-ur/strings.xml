@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ This file is part of LSPosed.
   ~
@@ -17,16 +18,15 @@
   ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
-<org.lsposed.manager.ui.widget.EmptyStateRecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/recyclerView"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clipToPadding="false"
-    android:fadeScrollbars="true"
-    android:scrollbarStyle="insideOverlay"
-    android:scrollbars="vertical"
-    app:borderTopVisibility="whenTop"
-    app:borderTopDrawable="@null"
-    app:borderBottomVisibility="never"
-    app:fitsSystemWindowsInsets="bottom" />
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
+    <!-- MainActivity -->
+    <!-- LogsActivity -->
+    <!-- Notification -->
+    <!-- ModulesActivity -->
+    <!-- AppListActivity -->
+    <!-- ModulesActivity and AppListActivity -->
+    <!-- SettingsActivity -->
+    <!-- Module Repo -->
+    <!-- CrashReportActivity -->
+    <!-- Colors -->
+</resources>

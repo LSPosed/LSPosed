@@ -9,6 +9,7 @@ import com.google.gson.JsonParser;
 
 import org.lsposed.manager.App;
 import org.lsposed.manager.BuildConfig;
+import org.lsposed.manager.ConfigManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,9 +41,11 @@ public class UpdateUtil {
                     var name = assets.get("name").getAsString();
                     var code = Integer.parseInt(name.split("-", 4)[2]);
                     var now = Instant.now().getEpochSecond();
+                    var releaseNotes = info.get("body").getAsString();
                     pref.edit()
                             .putInt("latest_version", code)
                             .putLong("latest_check", now)
+                            .putString("release_notes", releaseNotes)
                             .putBoolean("checked", true)
                             .apply();
                     var updatedAt = Instant.parse(assets.get("updated_at").getAsString());
@@ -108,6 +111,7 @@ public class UpdateUtil {
     }
 
     public static boolean canUpdate() {
+        if (!ConfigManager.isBinderAlive()) return false;
         var pref = App.getPreferences();
         var zipTime = pref.getLong("zip_time", BuildConfig.BUILD_TIME);
         return zipTime > BuildConfig.BUILD_TIME;

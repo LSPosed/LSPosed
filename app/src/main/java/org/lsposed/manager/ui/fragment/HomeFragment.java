@@ -63,7 +63,7 @@ public class HomeFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!App.isParasitic() && !App.getPreferences().getBoolean("never_show_shortcut", false) && !App.isParasiticShown()) {
+        if (!App.isParasitic() && !App.getPreferences().getBoolean("never_show_shortcut", false) && !App.isParasiticShown() && ConfigManager.isBinderAlive()) {
             App.setParasiticShown(true);
             new BlurBehindDialogBuilder(requireActivity())
                     .setTitle(R.string.parasitic_recommend)
@@ -102,9 +102,11 @@ public class HomeFragment extends BaseFragment {
                 }
             } else {
                 if (UpdateUtil.canUpdate()) {
-                    var zip = App.getPreferences().getString("zip_file", null);
+                    var pref = App.getPreferences();
+                    var zip = pref.getString("zip_file", null);
+                    var notes = pref.getString("release_notes", "");
                     if (zip != null) {
-                        new FlashDialogBuilder(activity, zip).show();
+                        new FlashDialogBuilder(activity, zip, notes).show();
                         return;
                     }
                 }

@@ -41,7 +41,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -78,11 +77,9 @@ import okhttp3.Headers;
 import okhttp3.Request;
 import okhttp3.Response;
 import rikka.core.util.ResourceUtils;
-import rikka.insets.WindowInsetsHelperKt;
 import rikka.recyclerview.RecyclerViewKt;
 import rikka.widget.borderview.BorderNestedScrollView;
 import rikka.widget.borderview.BorderRecyclerView;
-import rikka.widget.borderview.BorderView;
 
 public class RepoItemFragment extends BaseFragment implements RepoLoader.Listener {
     FragmentPagerBinding binding;
@@ -96,21 +93,9 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
         if (module == null) return binding.getRoot();
         String modulePackageName = module.getName();
         String moduleName = module.getDescription();
-        binding.getRoot().bringChildToFront(binding.appBar);
         setupToolbar(binding.toolbar, moduleName, R.menu.menu_repo_item);
-        binding.appBar.setLiftable(true);
         binding.toolbar.setSubtitle(modulePackageName);
         binding.viewPager.setAdapter(new PagerAdapter());
-        binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                BorderView borderView = binding.viewPager.findViewWithTag(position);
-
-                if (borderView != null) {
-                    binding.appBar.setLifted(!borderView.getBorderViewDelegate().isShowingTopBorder());
-                }
-            }
-        });
         int[] titles = new int[]{R.string.module_readme, R.string.module_releases, R.string.module_information};
         new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> tab.setText(titles[position])).attach();
 
@@ -443,8 +428,6 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
         public void onBindViewHolder(@NonNull PagerAdapter.ViewHolder holder, int position) {
             switch (position) {
                 case 0:
-                    holder.scrollView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setLifted(!top));
-                    holder.scrollView.setTag(position);
                     if (module != null)
                         renderGithubMarkdown(holder.webView, module.getReadmeHTML());
                     break;
@@ -455,15 +438,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
                     } else {
                         holder.recyclerView.setAdapter(new InformationAdapter(module));
                     }
-                    int height = ResourceUtils.resolveDimensionPixelOffset(requireActivity().getTheme(), androidx.appcompat.R.attr.actionBarSize, 0)
-                            + getResources().getDimensionPixelOffset(R.dimen.tab_layout_height);
-                    WindowInsetsHelperKt.setInitialPadding(holder.recyclerView, 0, height, 0, 0);
-                    holder.recyclerView.setTag(position);
                     holder.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
-                    holder.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setLifted(!top));
-                    var insets = requireActivity().getWindow().getDecorView().getRootWindowInsets();
-                    if (insets != null)
-                        holder.recyclerView.onApplyWindowInsets(insets);
                     RecyclerViewKt.fixEdgeEffect(holder.recyclerView, false, true);
                     break;
             }

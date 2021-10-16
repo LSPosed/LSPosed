@@ -158,13 +158,14 @@ public class ParasiticManagerHooker {
                     } else if (arg instanceof ProviderInfo) info = (ProviderInfo) arg;
                 }
                 if (ctx != null && info != null) {
+                    var packageName = getManagerPkgInfo(null).applicationInfo.packageName;
+                    if (!info.applicationInfo.packageName.equals(packageName)) return;
                     if (originalContext == null) {
-                        var isDefaultManager = info.applicationInfo.packageName.equals(BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME);
-                        info.applicationInfo.packageName = isDefaultManager ? BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME + ".origin" : BuildConfig.MANAGER_INJECTED_PKG_NAME + ".origin";
+                        info.applicationInfo.packageName = packageName + ".origin";
                         var originalPkgInfo = ActivityThread.currentActivityThread().getPackageInfoNoCheck(info.applicationInfo, HiddenApiBridge.Resources_getCompatibilityInfo(ctx.getResources()));
-                        XposedHelpers.setObjectField(originalPkgInfo, "mPackageName", isDefaultManager ? BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME : BuildConfig.MANAGER_INJECTED_PKG_NAME);
+                        XposedHelpers.setObjectField(originalPkgInfo, "mPackageName", packageName);
                         originalContext = (Context) XposedHelpers.callStaticMethod(XposedHelpers.findClass("android.app.ContextImpl", null), "createAppContext", ActivityThread.currentActivityThread(), originalPkgInfo);
-                        info.applicationInfo.packageName = isDefaultManager ? BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME : BuildConfig.MANAGER_INJECTED_PKG_NAME;
+                        info.applicationInfo.packageName = packageName;
                     }
                     param.args[ctxIdx] = originalContext;
                 } else {

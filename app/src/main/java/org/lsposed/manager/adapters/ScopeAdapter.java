@@ -391,9 +391,13 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                     }
                 });
         SpannableStringBuilder sb = new SpannableStringBuilder(android ? "" : activity.getString(R.string.app_description, appInfo.packageName, appInfo.packageInfo.versionName));
-        holder.appDescription.setVisibility(View.VISIBLE);
+        if (android) holder.appDescription.setVisibility(View.GONE);
+        else {
+            holder.appDescription.setVisibility(View.VISIBLE);
+            holder.appDescription.setText(sb);
+            sb = new SpannableStringBuilder();
+        }
         if (!recommendedList.isEmpty() && recommendedList.contains(appInfo.application)) {
-            if (sb.length() != 0) sb.append("\n");
             String recommended = activity.getString(R.string.requested_by_module);
             sb.append(recommended);
             final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ResourceUtils.resolveColor(activity.getTheme(), androidx.appcompat.R.attr.colorAccent));
@@ -405,8 +409,10 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                 sb.setSpan(styleSpan, sb.length() - recommended.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
             }
             sb.setSpan(foregroundColorSpan, sb.length() - recommended.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-        } else if (android) {
-            holder.appDescription.setVisibility(View.GONE);
+            holder.hint.setText(sb);
+            holder.hint.setVisibility(View.VISIBLE);
+        } else {
+            holder.hint.setVisibility(View.GONE);
         }
         if (deny) {
             if (sb.length() != 0) sb.append("\n");
@@ -581,6 +587,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         ImageView appIcon;
         TextView appName;
         TextView appDescription;
+        TextView hint;
         MaterialCheckBox checkbox;
 
         ViewHolder(ItemModuleBinding binding) {
@@ -590,6 +597,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             appName = binding.appName;
             appDescription = binding.description;
             checkbox = binding.checkbox;
+            hint = binding.hint;
             checkbox.setVisibility(View.VISIBLE);
         }
     }

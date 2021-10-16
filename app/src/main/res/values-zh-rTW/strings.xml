@@ -210,4 +210,6 @@
     <string name="color_brown">棕色</string>
     <string name="color_grey">灰色</string>
     <string name="color_blue_grey">灰藍</string>
+    <string name="expand">展開</string>
+    <string name="collapse">收起</string>
 </resources>

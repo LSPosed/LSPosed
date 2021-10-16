@@ -25,7 +25,7 @@ buildscript {
         mavenCentral()
     }
     val navVersion by extra("2.4.0-alpha10")
-    val agpVersion by extra("7.0.2")
+    val agpVersion by extra("7.0.3")
     dependencies {
         classpath("com.android.tools.build:gradle:$agpVersion")
         classpath("org.eclipse.jgit:org.eclipse.jgit:5.12.0.202106070339-r")
@@ -40,7 +40,7 @@ val commitCount = Git(repo).log().add(refId).call().count()
 val defaultManagerPackageName by extra("org.lsposed.manager")
 val apiCode by extra(93)
 val verCode by extra(commitCount + 4200)
-val verName by extra("1.6.0")
+val verName by extra("1.6.2")
 val androidTargetSdkVersion by extra(31)
 val androidMinSdkVersion by extra(27)
 val androidBuildToolsVersion by extra("31.0.0")

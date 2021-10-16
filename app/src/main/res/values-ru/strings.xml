@@ -42,12 +42,12 @@
     <string name="not_install_summary">LSPosed не установлен!</string>
     <string name="activated">Активирован</string>
     <string name="partial_activated">Частично активирован</string>
-    <string name="selinux_policy_not_loaded_summary">SEPolicy загружен не правильно</string>
+    <string name="selinux_policy_not_loaded_summary">SEPolicy неправильно загружен</string>
     <string name="selinux_policy_not_loaded"><![CDATA[Модули которым нужен системный фреймворк, не будут работать.<br/>Пожалуйста, сообщите об этом разработчику <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>]]></string>
     <string name="system_inject_fail_summary">Ошибка внедрения системного фреймворка</string>
     <string name="system_inject_fail"><![CDATA[Ошибка внедрения системного фреймворка.<br/>Это редкость и может быть вызвано <b>Magisk</b> или несовместимыми модулями Magisk.<br/>Пожалуйста, попрорбуйте отключить модули Magisk кроме Riru и LSPosed или пришлите полные логи разработчику.]]></string>
-    <string name="system_prop_incorrect_summary">Не правильные системные настройки</string>
-    <string name="system_prop_incorrect"><![CDATA[Не правильные системные настройки.<br/>Некоторые системные настройки нужные для работы удалены или изменены.<br/>Модули могут не работать должным образом.]]></string>
+    <string name="system_prop_incorrect_summary">Неправильные системные настройки</string>
+    <string name="system_prop_incorrect"><![CDATA[Неправильные системные настройки.<br/>Некоторые системные настройки нужные для работы удалены или изменены.<br/>Модули могут не работать должным образом]]></string>
     <string name="need_update">Требуется обновление</string>
     <string name="please_update_summary">Установите последнюю версию LSPosed!</string>
     <string name="lsposed_not_active">LSPosed не установлен или не активирован!</string>
@@ -213,4 +213,6 @@
     <string name="color_brown">Коричневый</string>
     <string name="color_grey">Серый</string>
     <string name="color_blue_grey">Серо-голубой</string>
+    <string name="expand">развернуть</string>
+    <string name="collapse">свернуть</string>
 </resources>

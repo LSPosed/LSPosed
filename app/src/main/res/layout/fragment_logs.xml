@@ -33,36 +33,33 @@
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true">
 
-        <LinearLayout
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            android:elevation="0dp"
+            app:layout_scrollFlags="scroll|enterAlways|snap"
+            app:layout_scrollEffect="compress" />
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/sliding_tabs"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/tab_layout_height"
+            android:background="@android:color/transparent"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:tabIndicatorAnimationMode="elastic">
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minHeight="?attr/actionBarSize"
-                android:elevation="0dp" />
+                android:text="@string/nav_item_logs_module" />
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/sliding_tabs"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/tab_layout_height"
-                android:background="@android:color/transparent"
-                app:tabIndicatorAnimationMode="elastic">
-
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/nav_item_logs_module" />
-
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/nav_item_logs_lsp" />
-            </com.google.android.material.tabs.TabLayout>
-        </LinearLayout>
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nav_item_logs_lsp" />
+        </com.google.android.material.tabs.TabLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
     <HorizontalScrollView
@@ -70,7 +67,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        android:scrollbars="none">
+        android:scrollbars="none"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <org.lsposed.manager.ui.widget.EmptyStateRecyclerView
             android:id="@+id/recyclerView"
@@ -83,6 +81,6 @@
             app:borderTopVisibility="whenTop"
             app:borderTopDrawable="@null"
             app:borderBottomVisibility="never"
-            app:fitsSystemWindowsInsets="top|bottom" />
+            app:fitsSystemWindowsInsets="bottom" />
     </HorizontalScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

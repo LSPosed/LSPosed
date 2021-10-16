@@ -33,13 +33,14 @@ public class FlashDialogBuilder extends BlurBehindDialogBuilder {
     private final TextView textView;
     private final BorderNestedScrollView rootView;
 
-    public FlashDialogBuilder(@NonNull Context context, @NonNull String zipPath) {
+    public FlashDialogBuilder(@NonNull Context context, String zipPath, String notes) {
         super(context);
         this.zipPath = zipPath;
         setTitle(R.string.update_lsposed);
 
         textView = new MaterialTextView(context);
-        textView.setText(R.string.update_lsposed_msg);
+        var text = notes + "\n\n\n" + context.getString(R.string.update_lsposed_msg) + "\n\n";
+        textView.setText(text);
         textView.setMovementMethod(LinkMovementMethod.getInstance());
 
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -57,7 +58,15 @@ public class FlashDialogBuilder extends BlurBehindDialogBuilder {
     public AlertDialog show() {
         var dialog = super.show();
         var button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-        button.setOnClickListener((v) -> setFlashView(v, dialog));
+        button.setEnabled(false);
+        rootView.setOnScrollChangeListener((View.OnScrollChangeListener)
+                (v, scrollX, scrollY, oldScrollX, oldScrollY) -> button.setEnabled(
+                        v.getScrollY() + v.getHeight() - v.getPaddingTop() - v.getPaddingBottom()
+                                == rootView.getChildAt(0).getHeight()));
+        button.setOnClickListener((v) -> {
+            rootView.setOnScrollChangeListener((View.OnScrollChangeListener) null);
+            setFlashView(v, dialog);
+        });
         return dialog;
     }
 
