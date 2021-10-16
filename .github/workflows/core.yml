@@ -71,7 +71,7 @@ jobs:
         echo 'org.gradle.vfs.watch=true' >> gradle.properties
         echo 'org.gradle.jvmargs=-Xmx2048m' >> gradle.properties
         echo 'android.native.buildOutput=verbose' >> gradle.properties
-        ./gradlew zipRiruRelease zipRiruDebug zipZygiskRelease zipZygiskRelease
+        ./gradlew zipAll
         ccache -s
     - name: Prepare artifact
       if: success()

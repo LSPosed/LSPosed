@@ -173,6 +173,10 @@ dependencies {
     }
 }
 
+val zipAll = task("zipAll", Task::class) {
+
+}
+
 androidComponents.onVariants { v ->
     val variant: ApplicationVariantImpl =
         if (v is ApplicationVariantImpl) v
@@ -317,6 +321,8 @@ androidComponents.onVariants { v ->
         destinationDirectory.set(file("$projectDir/release"))
         from(magiskDir)
     }
+
+    zipAll.dependsOn(zipTask)
 
     val adb: String = androidComponents.sdkComponents.adb.get().asFile.absolutePath
     val pushTask = task("push${variantCapped}", Exec::class) {
