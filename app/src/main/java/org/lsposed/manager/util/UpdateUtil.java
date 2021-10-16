@@ -110,9 +110,11 @@ public class UpdateUtil {
         return zip;
     }
 
-    public static boolean canUpdate() {
+    public static boolean canInstall() {
         if (!ConfigManager.isBinderAlive()) return false;
         var pref = App.getPreferences();
+        var zip = pref.getString("zip_file", null);
+        if (zip == null || !new File(zip).isFile()) return false;
         var zipTime = pref.getLong("zip_time", BuildConfig.BUILD_TIME);
         return zipTime > BuildConfig.BUILD_TIME;
     }
