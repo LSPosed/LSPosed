@@ -101,7 +101,10 @@ public class HomeFragment extends BaseFragment {
                     new InfoDialogBuilder(activity).show();
                 }
             } else {
-
+                if (UpdateUtil.canInstall()) {
+                    new FlashDialogBuilder(activity).show();
+                    return;
+                }
                 NavUtil.startURL(activity, getString(R.string.about_source));
             }
         });
