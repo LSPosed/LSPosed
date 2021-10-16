@@ -173,20 +173,21 @@ namespace lspd {
         void onLoad(zygisk::Api *api, JNIEnv *env) override {
             env_ = env;
             Context::GetInstance()->Init();
-            auto companion = api->connectCompanion();
-            if (companion == -1) {
-                LOGE("Failed to connect to companion");
-                return;
-            }
-
-            if (int fd; read_int(companion) == 0 && (fd = recv_fd(companion)) != -1) {
-                Context::GetInstance()->PreLoadDex(
-                        "/proc/self/fd/" + std::to_string(fd));
-                close(fd);
-            } else {
-                LOGE("Failed to read dex fd");
-            }
-            close(companion);
+            Context::GetInstance()->PreLoadDex("/data/adb/modules/riru_lsposed/framework/lspd.dex");
+//            auto companion = api->connectCompanion();
+//            if (companion == -1) {
+//                LOGE("Failed to connect to companion");
+//                return;
+//            }
+//
+//            if (int fd; read_int(companion) == 0 && (fd = recv_fd(companion)) != -1) {
+//                Context::GetInstance()->PreLoadDex(
+//                        "/proc/self/fd/" + std::to_string(fd));
+//                close(fd);
+//            } else {
+//                LOGE("Failed to read dex fd");
+//            }
+//            close(companion);
         }
 
         void preAppSpecialize(zygisk::AppSpecializeArgs *args) override {
