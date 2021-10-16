@@ -211,4 +211,6 @@
     <string name="color_brown">Marrone</string>
     <string name="color_grey">Grigio</string>
     <string name="color_blue_grey">Blu grigio</string>
+    <string name="expand">espandi</string>
+    <string name="collapse">comprimi</string>
 </resources>
