@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -61,24 +60,12 @@ public class FlashDialogBuilder extends BlurBehindDialogBuilder {
     public AlertDialog show() {
         var dialog = super.show();
         var button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-        rootView.addOnLayoutChangeListener((v, l, t, r, b, ol, ot, or, ob) ->
-                setButtonEnabled(button));
-        rootView.setOnScrollChangeListener((View.OnScrollChangeListener)
-                (v, scrollX, scrollY, oldScrollX, oldScrollY) -> setButtonEnabled(button));
+        rootView.setBorderVisibilityChangedListener((t, ot, b, ob) -> button.setEnabled(!b));
         button.setOnClickListener((v) -> {
-            rootView.setOnScrollChangeListener((View.OnScrollChangeListener) null);
+            rootView.setBorderVisibilityChangedListener(null);
             setFlashView(v, dialog);
         });
         return dialog;
-    }
-
-    private void setButtonEnabled(Button button) {
-        var child = rootView.getChildAt(0);
-        var lp = (FrameLayout.LayoutParams) child.getLayoutParams();
-        int childSize = child.getHeight() + lp.topMargin + lp.bottomMargin;
-        int parent = rootView.getHeight() - rootView.getPaddingTop() - rootView.getPaddingBottom();
-        int scrollRange = Math.max(0, childSize - parent);
-        button.setEnabled(rootView.getScrollY() == scrollRange);
     }
 
     private void setFlashView(View view, AlertDialog dialog) {
