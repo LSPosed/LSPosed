@@ -60,6 +60,8 @@
     <string name="create_shortcut">Créer raccourci</string>
     <string name="never_show">Ne jamais afficher</string>
     <string name="failed_to_create_shortcut">Échec de la création du raccourci: %1$s</string>
+    <string name="update_lsposed">Mettre à jour LSPosed</string>
+    <string name="update_lsposed_msg">Vous souhaitez installer une nouvelle version de LSPosed? Ce périphérique redémarrera après avoir terminé</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Sauvegarder</string>
     <string name="nav_item_logs_lsp">Journaux LSPosed</string>
@@ -209,4 +211,6 @@
     <string name="color_brown">Marron</string>
     <string name="color_grey">Gris</string>
     <string name="color_blue_grey">Bleu grisatre</string>
+    <string name="expand">agrandir</string>
+    <string name="collapse">réduire</string>
 </resources>
