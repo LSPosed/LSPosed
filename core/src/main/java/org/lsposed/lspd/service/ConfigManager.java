@@ -491,7 +491,7 @@ public class ConfigManager {
                     List<ProcessScope> processesScope = cachedProcessScope.computeIfAbsent(new Pair<>(app.packageName, app.userId), (k) -> {
                         try {
                             if (denylist.contains(app.packageName))
-                                Log.w(TAG, app.packageName + " is on denylist, it may not task effect.");
+                                Log.w(TAG, app.packageName + " is on denylist, it may not take effect.");
                             return getAssociatedProcesses(app);
                         } catch (RemoteException e) {
                             return Collections.emptyList();
