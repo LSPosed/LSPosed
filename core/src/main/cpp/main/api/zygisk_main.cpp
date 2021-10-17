@@ -182,7 +182,8 @@ namespace lspd {
                 return;
             }
 
-            if (int fd = -1, size = 0; (size = read_int(companion)) > 0 && (fd = recv_fd(companion)) != -1) {
+            if (int fd = -1, size = 0; (size = read_int(companion)) > 0 &&
+                                       (fd = recv_fd(companion)) != -1) {
                 Context::GetInstance()->PreLoadDex(fd, size);
                 close(fd);
             } else {
@@ -227,11 +228,10 @@ namespace lspd {
         auto fsize = lseek(fd, 0, SEEK_END);
         lseek(fd, 0, SEEK_SET);
         auto *cutils = dlopen("/system/lib" LP_SELECT("", "64") "/libcutils.so", 0);
-        ashmem_create_region = reinterpret_cast<decltype(ashmem_create_region)>(dlsym(cutils,
-                                                                                      "ashmem_create_region"));
-        ashmem_set_prot_region = reinterpret_cast<decltype(ashmem_set_prot_region)>(dlsym(cutils,
-                                                                                          "ashmem_set_prot_region"));
-        LOGD("ash set %p", ashmem_set_prot_region);
+        ashmem_create_region = cutils ? jreinterpret_cast<decltype(ashmem_create_region)>(
+                dlsym(cutils, "ashmem_create_region")) : nullptr;
+        ashmem_set_prot_region = cutils ? reinterpret_cast<decltype(ashmem_set_prot_region)>(
+                dlsym(cutils, "ashmem_set_prot_region")) : nullptr;
         int tmp_fd = -1;
         if (void *addr = nullptr;
                 ashmem_create_region && ashmem_set_prot_region &&
