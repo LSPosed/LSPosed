@@ -1,4 +1,1 @@
 allow system_server system_server process execmem
-
-# Used to load dex and should be removed after companion is ready
-allow zygote adb_data_file dir search
