@@ -90,7 +90,6 @@ public class App extends Application {
     private static App instance = null;
     private static OkHttpClient okHttpClient;
     private static Cache okHttpCache;
-    private static boolean parasiticShown = false;
     private SharedPreferences pref;
     private ExecutorService executorService;
 
@@ -108,14 +107,6 @@ public class App extends Application {
 
     public static boolean isParasitic() {
         return !Process.isApplicationUid(Process.myUid());
-    }
-
-    public static boolean isParasiticShown() {
-        return parasiticShown;
-    }
-
-    public static void setParasiticShown(boolean parasiticShown) {
-        App.parasiticShown = parasiticShown;
     }
 
     private void setCrashReport() {

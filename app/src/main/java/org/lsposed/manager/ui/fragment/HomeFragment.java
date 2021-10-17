@@ -35,16 +35,15 @@ import androidx.core.text.HtmlCompat;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.snackbar.Snackbar;
 
-import org.lsposed.manager.App;
 import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.DialogAboutBinding;
 import org.lsposed.manager.databinding.FragmentHomeBinding;
-import org.lsposed.manager.receivers.LSPManagerServiceHolder;
 import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
 import org.lsposed.manager.ui.dialog.FlashDialogBuilder;
 import org.lsposed.manager.ui.dialog.InfoDialogBuilder;
+import org.lsposed.manager.ui.dialog.ShortcutDialogBuilder;
 import org.lsposed.manager.ui.dialog.WarningDialogBuilder;
 import org.lsposed.manager.util.ModuleUtil;
 import org.lsposed.manager.util.NavUtil;
@@ -62,25 +61,7 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (!App.isParasitic() && !App.getPreferences().getBoolean("never_show_shortcut", false) && !App.isParasiticShown() && ConfigManager.isBinderAlive()) {
-            App.setParasiticShown(true);
-            new BlurBehindDialogBuilder(requireActivity())
-                    .setTitle(R.string.parasitic_recommend)
-                    .setMessage(R.string.parasitic_recommend_summary)
-                    .setNegativeButton(R.string.never_show, (dialog, which) -> App.getPreferences().edit().putBoolean("never_show_shortcut", true).apply())
-                    .setNeutralButton(R.string.create_shortcut, (dialog, which) -> {
-                        try {
-                            LSPManagerServiceHolder.getService().createShortcut();
-                        } catch (Throwable e) {
-                            if (binding != null) {
-                                Snackbar.make(binding.snackbar, getString(R.string.failed_to_create_shortcut, e.getMessage()), Snackbar.LENGTH_LONG).show();
-                            }
-                        }
-                    })
-                    .setPositiveButton(android.R.string.ok, null)
-                    .show();
-        }
+        ShortcutDialogBuilder.showIfNeed(requireContext());
     }
 
     @Override
