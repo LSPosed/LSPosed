@@ -1,5 +1,4 @@
 -keep class org.lsposed.manager.Constants {
-    public static void showErrorToast(int);
     public static boolean setBinder(android.os.IBinder);
 }
 -assumenosideeffects class kotlin.jvm.internal.Intrinsics {
@@ -9,12 +8,6 @@
 -assumenosideeffects class android.util.Log {
     public static *** v(...);
     public static *** d(...);
-}
-
-#TODO(vvb2060): Remove it after Slidingpanelayout 1.2.0 stable.
--keepclassmembers class androidx.window.SidecarCompat** {
-    void onDeviceStateChanged(...);
-    void onWindowLayoutChanged(...);
 }
 
 -keepclasseswithmembers,allowobfuscation class * {
