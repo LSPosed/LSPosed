@@ -1,6 +1,6 @@
 package org.lsposed.manager.ui.dialog;
 
-import android.app.Activity;
+import android.content.Context;
 import android.os.RemoteException;
 
 import androidx.annotation.NonNull;
@@ -13,8 +13,8 @@ import org.lsposed.manager.receivers.LSPManagerServiceHolder;
 public class ShortcutDialogBuilder extends BlurBehindDialogBuilder {
     private static boolean shown = false;
 
-    private ShortcutDialogBuilder(@NonNull Activity activity) {
-        super(activity);
+    private ShortcutDialogBuilder(@NonNull Context context) {
+        super(context);
         setTitle(R.string.parasitic_recommend);
         setMessage(R.string.parasitic_recommend_summary);
         setNegativeButton(R.string.never_show, (dialog, which) ->
@@ -28,11 +28,11 @@ public class ShortcutDialogBuilder extends BlurBehindDialogBuilder {
         setPositiveButton(android.R.string.ok, null);
     }
 
-    public static void showIfNeed(@NonNull Activity activity) {
+    public static void showIfNeed(@NonNull Context context) {
         if (App.isParasitic() || !ConfigManager.isBinderAlive()) return;
         if (App.getPreferences().getBoolean("never_show_shortcut", false)) return;
         if (shown) return;
         shown = true;
-        new ShortcutDialogBuilder(activity).show();
+        new ShortcutDialogBuilder(context).show();
     }
 }
