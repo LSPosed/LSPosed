@@ -167,8 +167,8 @@
     <string name="dns_over_http_summary">Solve DNS cache pollution</string>
     <string name="theme_color">Theme color</string>
     <string name="theme_color_system">System theme color</string>
-    <string name="settings_show_hidden_icon_apps_enabled">Force show launcher icon</string>
-    <string name="settings_show_hidden_icon_apps_enabled_summary">After Android 10, apps are not allowed to hide launcher icons. Switch off to disable this feature.</string>
+    <string name="settings_show_hidden_icon_apps_enabled">Force apps to show launcher icons/string>
+    <string name="settings_show_hidden_icon_apps_enabled_summary">After Android 10, apps are not allowed to hide their launcher icons. Turn off the toggle to disable this system feature.</string>
     <string name="settings_group_system">System</string>
     <string name="settings_language">Language</string>
     <string name="settings_translation_contributors">Translation contributors</string>
