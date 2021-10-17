@@ -71,8 +71,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import rikka.core.os.FileUtils;
-import rikka.core.util.ResourceUtils;
-import rikka.insets.WindowInsetsHelperKt;
 import rikka.recyclerview.RecyclerViewKt;
 
 @SuppressLint("NotifyDataSetChanged")
@@ -180,12 +178,6 @@ public class LogsFragment extends BaseFragment {
         ParcelFileDescriptor parcelFileDescriptor = ConfigManager.getLog(verbose);
         if (parcelFileDescriptor != null) {
             new LogsReader().execute(parcelFileDescriptor.getFileDescriptor());
-        } else {
-            binding.slidingTabs.selectTab(binding.slidingTabs.getTabAt(0));
-            new MaterialAlertDialogBuilder(requireActivity())
-                    .setMessage(R.string.verbose_log_not_avaliable)
-                    .setPositiveButton(android.R.string.ok, null)
-                    .show();
         }
     }
 

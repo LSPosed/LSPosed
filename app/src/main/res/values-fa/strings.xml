@@ -68,7 +68,6 @@
     <string name="logs_cannot_read">نمیتوان سیاهه را خواند: \n</string>
     <string name="menuReload">بارگذاری مجدد</string>
     <string name="logs_clear_failed_2">ناموفق در پاک کردن سیاهه</string>
-    <string name="verbose_log_not_avaliable">گزارش دقیق در دسترس نیست ، اگر فقط بدون راه اندازی مجدد آن را فعال کرده اید ، پس از راه اندازی مجدد دوباره امتحان کنید.</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">ماژول Xposed در حال حاضر فعال نشده</string>
     <string name="module_is_not_activated_yet_detailed">%s نصب شده ، اما فعال نشده</string>

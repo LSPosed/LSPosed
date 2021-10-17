@@ -75,7 +75,6 @@
     <string name="logs_cannot_read">Protokoll kann nicht gelesen werden: \n</string>
     <string name="menuReload">Erneut laden</string>
     <string name="logs_clear_failed_2">Fehler beim Löschen des Protokolls</string>
-    <string name="verbose_log_not_avaliable">Ausführliches Protokoll ist nicht verfügbar, wenn Sie es nur ohne Neustart aktiviert haben, versuchen Sie es nach dem Neustart erneut.</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Das LSPosed-Modul wurde noch nicht aktiviert</string>
     <string name="module_is_not_activated_yet_detailed">%s installiert, aber noch nicht aktiviert</string>

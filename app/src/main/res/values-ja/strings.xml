@@ -67,7 +67,6 @@
     <string name="logs_cannot_read">ログの読み込みに失敗: \n</string>
     <string name="menuReload">再読込</string>
     <string name="logs_clear_failed_2">ログの消去に失敗</string>
-    <string name="verbose_log_not_avaliable">詳細ログが存在しません。ログ出力有効化に再起動を行っていない場合、再起動して下さい。</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Xposed モジュールが有効化されていません</string>
     <string name="module_is_not_activated_yet_detailed">%s がインストール済みですが、有効化されていません</string>

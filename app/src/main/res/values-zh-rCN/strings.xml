@@ -74,7 +74,6 @@
     <string name="logs_cannot_read">无法读取日志: \n</string>
     <string name="menuReload">重新加载</string>
     <string name="logs_clear_failed_2">日志清理失败</string>
-    <string name="verbose_log_not_avaliable">详细日志不可用，如果您只是启用了它而没有重新启动，请在重新启动后再试一次。</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Xposed 模块尚未激活</string>
     <string name="module_is_not_activated_yet_detailed">%s 已安装, 但尚未激活</string>

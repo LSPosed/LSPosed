@@ -69,7 +69,6 @@
     <string name="logs_cannot_read">Не вдається прочитати журнал: \n</string>
     <string name="menuReload">Перезавантажити</string>
     <string name="logs_clear_failed_2">Не вдалося очистити журнал</string>
-    <string name="verbose_log_not_avaliable">Детальний журнал не доступний, якщо ви тільки що увімкнули його без перезавантаження, спробуйте ще раз після перезавантаження.</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Модуль LSPosed ще не активований</string>
     <string name="module_is_not_activated_yet_detailed">%s було встановлено, але ще не активовано</string>

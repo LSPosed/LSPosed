@@ -56,7 +56,7 @@
     <string name="info_system_version">System version</string>
     <string name="info_device">Device</string>
     <string name="info_system_abi">System ABI</string>
-    <string name="parasitic_recommend">Parasitic Manager Recommended</string>
+    <string name="parasitic_recommend">Parasitic Manager is Recommended</string>
     <string name="parasitic_recommend_summary">LSPosed is currently support system parasitization to avoid detection. You can uninstall the manager after parasitic manager shortcut created successfully. You can reinstall the manager from /data/adb/lspd/manager.apk anytime.</string>
     <string name="create_shortcut">Create shortcut</string>
     <string name="never_show">Never show again</string>
@@ -69,19 +69,18 @@
     <string name="nav_item_logs_lsp">LSPosed Logs</string>
     <string name="nav_item_logs_module">Modules Logs</string>
     <string name="logs_save_failed2">Failed to save:\n%s</string>
-    <string name="menuClearLog">Clear log now</string>
-    <string name="logs_cleared">Log cleared success.</string>
+    <string name="menuClearLog">Clear log</string>
+    <string name="logs_cleared">Log cleared success</string>
     <string name="scroll_top">Scroll to top</string>
     <string name="loading">Loading…</string>
     <string name="scroll_bottom">Scroll to bottom</string>
     <string name="logs_cannot_read">Cannot read log: \n</string>
     <string name="menuReload">Reload Menu</string>
-    <string name="logs_clear_failed_2">Failed to clear log</string>
-    <string name="verbose_log_not_avaliable">Verbose log is not available, if you have not reboot after enable, try again after reboot.</string>
+    <string name="logs_clear_failed_2">Clear log Failed</string>
 
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Xposed module is not activated yet</string>
-    <string name="module_is_not_activated_yet_detailed">%s has been installed, but is not activated yet</string>
+    <string name="module_is_not_activated_yet_detailed">%s has been installed, but it is not activated yet</string>
     <string name="xposed_module_updated_notification_title">Xposed module updated</string>
     <string name="xposed_module_updated_notification_content">%s has been updated, please force stop and restart apps in its scope</string>
     <string name="xposed_module_updated_notification_title_system">Xposed module updated, system reboot required</string>
@@ -90,21 +89,21 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(no description provided)</string>
     <string name="module_no_ui">This module does not provide a user interface</string>
-    <string name="warning_xposed_min_version">This module requires a newer Xposed version (%d), so it cannot be activated</string>
-    <string name="no_min_version_specified">This module does not specify the required Xposed version.</string>
-    <string name="warning_min_version_too_low">This module was created for Xposed version %1$d, due to incompatible changes in version %2$d, it has been disabled</string>
+    <string name="warning_xposed_min_version">This module requires newer Xposed version (%d), activate failed</string>
+    <string name="no_min_version_specified">This module does not specify the minimum Xposed version.</string>
+    <string name="warning_min_version_too_low">This module was designed for Xposed version %1$d, due to incompatible changes in version %2$d, it has been disabled</string>
     <string name="warning_installed_on_external_storage">This module cannot be loaded because it installed in SD card, please move it to internal storage</string>
     <string name="module_uninstall">Uninstall</string>
     <string name="module_settings">Module settings</string>
     <string name="view_in_repo">View in Repo</string>
-    <string name="module_uninstall_message">Confirm to uninstall this module?</string>
+    <string name="module_uninstall_message">Confirm uninstall this module?</string>
     <string name="module_uninstalled">Uninstalled %1$s</string>
     <string name="module_uninstall_failed">Uninstall failed</string>
     <string name="add_module_to_user">Add module to user</string>
     <string name="module_installed">Added %1$s to user %2$s</string>
     <string name="module_install_failed">Adding module failed</string>
     <string name="install_to_user">Install to user %s</string>
-    <string name="install_to_user_message">Confirm install %1$s to user %2$s? It is recommended install manually, forcing install via LSPosed may cause unknown problems.</string>
+    <string name="install_to_user_message">Confirm install %1$s to user %2$s? It is recommended install manually, forcing install via LSPosed may cause unknown issues.</string>
 
     <!-- AppListActivity -->
     <string name="compile_speed">Re-optimize</string>
@@ -121,26 +120,26 @@
     <string name="menu_show_system_apps">System apps</string>
     <string name="menu_sort">Sort By</string>
     <string name="enable_module">Enable module</string>
-    <string name="no_scope_selected">You did not select any app. Continue?</string>
+    <string name="no_scope_selected">Not select any app. Continue?</string>
     <string name="menu_show_games">Games</string>
     <string name="menu_show_modules">Modules</string>
     <string name="menu_show_denylist">Denylist</string>
     <string name="failed_to_save_scope_list">Failed save scope list</string>
     <string name="app_description">%1$s\nVersion %2$s</string>
     <string name="use_recommended">Recommended</string>
-    <string name="no_scope_selected_has_recommended">You did not select any app. Select recommended apps?</string>
+    <string name="no_scope_selected_has_recommended">Not select any app. Select recommended?</string>
     <string name="use_recommended_message">Select recommended apps?</string>
     <string name="requested_by_module">Recommended</string>
     <string name="update_available">Update available: %1$s</string>
     <string name="module_disabled_no_selection">Module %s has been disabled since no app selected.</string>
     <string name="android_framework">System Framework</string>
-    <string name="menu_backup_and_restore">Backup</string>
+    <string name="menu_backup_and_restore">Backup and restore</string>
     <string name="menu_backup">Backup</string>
     <string name="menu_restore">Restore</string>
     <string name="force_stop">Force stop</string>
-    <string name="force_stop_dlg_title">Force stop?</string>
+    <string name="force_stop_dlg_title">Confirm force stop?</string>
     <string name="force_stop_dlg_text">Force stop app may cause issues.</string>
-    <string name="reboot_required">Reboot is required for apply changes</string>
+    <string name="reboot_required">Reboot to apply changes</string>
     <string name="reboot">Reboot</string>
     <string name="menu_hide">Hide</string>
     <string name="deny_list">%s is on denylist. It may not take effect.</string>
@@ -157,10 +156,10 @@
     <string name="settings_enable_resources_summary"><b>WARNING:</b> Resource hooks are experimental</string>
     <string name="pref_title_disable_verbose_log">Disable verbose logs</string>
     <string name="pure_black_dark_theme">Black dark theme</string>
-    <string name="pure_black_dark_theme_summary">Use the pure black theme if dark theme is enabled</string>
+    <string name="pure_black_dark_theme_summary">Use the pure black theme when dark theme is enabled</string>
     <string name="settings_group_theme">Theme</string>
     <string name="settings_backup_and_restore">Backup and restore</string>
-    <string name="settings_backup_and_restore_summery">Backup or restore module list and scope lists.</string>
+    <string name="settings_backup_and_restore_summery">Backup or restore module list and scope list.</string>
     <string name="settings_backup">Backup</string>
     <string name="settings_backup_failed2">Failed to backup:\n%s</string>
     <string name="settings_restore">Restore</string>
@@ -176,8 +175,8 @@
     <string name="settings_language">Language</string>
     <string name="settings_translation_contributors">Translation contributors</string>
     <string name="settings_translation">Participate in translation</string>
-    <string name="settings_translation_summary">Help us translate %s into your language</string>
-    <string name="pref_title_enable_auto_add_shortcut">Automatically shortcut</string>
+    <string name="settings_translation_summary">Help us translate %s to your language</string>
+    <string name="pref_title_enable_auto_add_shortcut">Automatically create shortcut</string>
     <string name="settings_enable_auto_add_shortcut_summary">No more shortcuts will create when disabled in non-parasitic manager</string>
 
     <!-- Module Repo -->
@@ -198,7 +197,7 @@
     <string name="outdated_core">LSPosed app is newer than framework. Please update LSPosed framework.</string>
     <string name="outdated_manager">LSPosed framework is newer than app. Please update the app from /data/adb/lspd/manager.apk manually.</string>
     <string name="manager_crashed">Manager crashed</string>
-    <string name="manager_crashed_info">report this to </string>
+    <string name="manager_crashed_info">report to </string>
     <string name="send_crash_info">Send crash info</string>
     <string name="crash_info_copied">Crash info copied to clipboard</string>
 
