@@ -122,6 +122,16 @@ android {
         sourceCompatibility(androidSourceCompatibility)
     }
 
+    buildTypes {
+        all {
+            externalNativeBuild {
+                ndkBuild {
+                    arguments += "NDK_OUT=${File(buildDir, ".cxx/$name").absolutePath}"
+                }
+            }
+        }
+    }
+
     productFlavors {
         all {
             externalNativeBuild {

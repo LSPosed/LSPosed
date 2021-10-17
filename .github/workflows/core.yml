@@ -20,11 +20,13 @@ jobs:
     - name: Write key
       if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
       run: |
-        echo androidStorePassword='${{ secrets.KEY_STORE_PASSWORD }}' >> gradle.properties
-        echo androidKeyAlias='${{ secrets.ALIAS }}' >> gradle.properties
-        echo androidKeyPassword='${{ secrets.KEY_PASSWORD }}' >> gradle.properties
-        echo androidStoreFile='key.jks' >> gradle.properties
-        echo ${{ secrets.KEY_STORE }} | base64 --decode > key.jks
+        if [ ! -z "${{ secrets.KEY_STORE }}" ]; then
+          echo androidStorePassword='${{ secrets.KEY_STORE_PASSWORD }}' >> gradle.properties
+          echo androidKeyAlias='${{ secrets.ALIAS }}' >> gradle.properties
+          echo androidKeyPassword='${{ secrets.KEY_PASSWORD }}' >> gradle.properties
+          echo androidStoreFile='key.jks' >> gradle.properties
+          echo ${{ secrets.KEY_STORE }} | base64 --decode > key.jks
+        fi
     - name: set up JDK 11
       uses: actions/setup-java@v1
       with:
@@ -120,10 +122,12 @@ jobs:
         COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
         COMMIT_URL: ${{ github.event.head_commit.url }}
       run: |
-        OUTPUT="core/release/"
-        export riruRelease=$(find $OUTPUT -name "LSPosed-riru-v*-release.zip")
-        export riruDebug=$(find $OUTPUT -name "LSPosed-riru-v*-debug.zip")
-        export zygiskRelease=$(find $OUTPUT -name "LSPosed-zygisk-v*-release.zip")
-        export zygiskDebug=$(find $OUTPUT -name "LSPosed-zygisk-v*-debug.zip")
-        ESCAPED=`python3 -c 'import json,os,urllib.parse; msg = json.dumps(os.environ["COMMIT_MESSAGE"]); print(urllib.parse.quote(msg if len(msg) <= 1024 else json.dumps(os.environ["COMMIT_URL"])))'`
-        curl -v "https://api.telegram.org/bot${BOT_TOKEN}/sendMediaGroup?chat_id=${CHANNEL_ID}&media=%5B%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FzygiskRelease%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FriruRelease%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FzygiskDebug%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FriruDebug%22%2C%22caption%22:${ESCAPED}%7D%5D" -F riruRelease="@$riruRelease" -F riruDebug="@$riruDebug" -F zygiskRelease="@$zygiskRelease" -F zygiskDebug="@$zygiskDebug"
+        if [ ! -z "${{ secrets.BOT_TOKEN }}" ]; then
+          OUTPUT="core/release/"
+          export riruRelease=$(find $OUTPUT -name "LSPosed-riru-v*-release.zip")
+          export riruDebug=$(find $OUTPUT -name "LSPosed-riru-v*-debug.zip")
+          export zygiskRelease=$(find $OUTPUT -name "LSPosed-zygisk-v*-release.zip")
+          export zygiskDebug=$(find $OUTPUT -name "LSPosed-zygisk-v*-debug.zip")
+          ESCAPED=`python3 -c 'import json,os,urllib.parse; msg = json.dumps(os.environ["COMMIT_MESSAGE"]); print(urllib.parse.quote(msg if len(msg) <= 1024 else json.dumps(os.environ["COMMIT_URL"])))'`
+          curl -v "https://api.telegram.org/bot${BOT_TOKEN}/sendMediaGroup?chat_id=${CHANNEL_ID}&media=%5B%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FzygiskRelease%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FriruRelease%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FzygiskDebug%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FriruDebug%22%2C%22caption%22:${ESCAPED}%7D%5D" -F riruRelease="@$riruRelease" -F riruDebug="@$riruDebug" -F zygiskRelease="@$zygiskRelease" -F zygiskDebug="@$zygiskDebug"
+        fi
