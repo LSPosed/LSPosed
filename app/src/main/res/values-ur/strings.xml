@@ -20,10 +20,52 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
+    <string name="info">معلومات</string>
+    <string name="Modules">ماڈیولز</string>
+    <string name="Logs">نوشتہ جات</string>
+    <string name="Settings">ترتیبات</string>
+    <string name="About">معلومات</string>
+    <string name="report_issue">رپورٹ ایشو۔</string>
+    <string name="module_repo">مخزن۔</string>
+    <string name="module_repo_summary">ماڈیول ذخیرہ (بیٹا)</string>
+    <string name="about_view_source_code"><![CDATA[ماخذ کوڈ دیکھیں %1$s<br/> ہمارے ساتھ شامل ہوں%2$s چینل۔]]></string>
+    <string name="install">انسٹال</string>
+    <string name="install_summary">کلک تو انسٹال LSposed</string>
+    <string name="not_installed">یہ انسٹال نہیں ہے۔</string>
+    <string name="not_install_summary">LSposed انسٹال نہیں ہے۔</string>
+    <string name="activated">یہ چالو ہے۔</string>
+    <string name="partial_activated">جزوی طور پر فعال</string>
+    <string name="selinux_policy_not_loaded_summary">SePolicy ٹھیک سے آن نہیں ہے</string>
+    <string name="system_inject_fail_summary">سسٹم فریم ورک انجکشن ناکام۔</string>
+    <string name="system_prop_incorrect_summary">سسٹم پروپ غلط ہے۔</string>
+    <string name="need_update">اپ ڈیٹ درکار ہے۔</string>
+    <string name="please_update_summary">براہ کرم LSPosed کا تازہ ترین ورژن انسٹال کریں۔</string>
+    <string name="lsposed_not_active">LSPosed فی الحال انسٹال یا فعال نہیں ہے.</string>
+    <string name="info_api_version">API ورژن۔</string>
+    <string name="info_framework_version">فریم ورک ورژن۔</string>
+    <string name="info_manager_version">مینجر ورژن۔</string>
+    <string name="info_system_version">سسٹم ورژن۔</string>
+    <string name="info_device">ڈیوائس۔</string>
+    <string name="info_system_abi">ABI سسٹم۔</string>
+    <string name="create_shortcut">شارٹ کٹ بنانا</string>
+    <string name="failed_to_create_shortcut">شارٹ کٹ بنانے میں ناکام: %1$s</string>
+    <string name="update_lsposed">LSPosed کو اپ ڈیٹ کریں۔</string>
     <!-- LogsActivity -->
+    <string name="menuSaveToSd">محفوظ کریں</string>
+    <string name="nav_item_logs_lsp">LSP بند نوشتہ جات۔</string>
+    <string name="nav_item_logs_module">ماڈیولز نوشتہ جات</string>
+    <string name="logs_save_failed2">محفوظ کرنے میں ناکام:\n%s</string>
+    <string name="scroll_top">اوپر سکرول کریں۔</string>
+    <string name="loading">لوڈ ہو رہا ہے…</string>
+    <string name="scroll_bottom">نیچے سکرول کریں۔</string>
+    <string name="logs_cannot_read">لاگ نہیں پڑھ سکتا: \n</string>
     <!-- Notification -->
     <!-- ModulesActivity -->
     <!-- AppListActivity -->
+    <string name="use_recommended_message">تجویز کردہ ایپس کو منتخب کریں?</string>
+    <string name="requested_by_module">سفارش کریں۔</string>
+    <string name="update_available">اپ ڈیٹ دستیاب ہے: %1$s</string>
+    <string name="module_disabled_no_selection">ماڈیول%s کو غیر فعال کر دیا گیا ہے کیونکہ کوئی ایپ منتخب نہیں کی گئی ہے.</string>
     <!-- ModulesActivity and AppListActivity -->
     <!-- SettingsActivity -->
     <!-- Module Repo -->
