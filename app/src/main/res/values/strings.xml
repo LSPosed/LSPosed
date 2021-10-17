@@ -175,7 +175,7 @@
     <string name="settings_language">Language</string>
     <string name="settings_translation_contributors">Translation contributors</string>
     <string name="settings_translation">Participate in translation</string>
-    <string name="settings_translation_summary">Press to help us translate %s to your language</string>
+    <string name="settings_translation_summary">Help us translate %s to your language</string>
     <string name="pref_title_enable_auto_add_shortcut">Automatically create shortcut</string>
     <string name="settings_enable_auto_add_shortcut_summary">No more shortcuts will create when disabled in non-parasitic manager</string>
 
