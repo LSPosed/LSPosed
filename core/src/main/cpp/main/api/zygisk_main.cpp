@@ -228,7 +228,7 @@ namespace lspd {
         auto fsize = lseek(fd, 0, SEEK_END);
         lseek(fd, 0, SEEK_SET);
         auto *cutils = dlopen("/system/lib" LP_SELECT("", "64") "/libcutils.so", 0);
-        ashmem_create_region = cutils ? jreinterpret_cast<decltype(ashmem_create_region)>(
+        ashmem_create_region = cutils ? reinterpret_cast<decltype(ashmem_create_region)>(
                 dlsym(cutils, "ashmem_create_region")) : nullptr;
         ashmem_set_prot_region = cutils ? reinterpret_cast<decltype(ashmem_set_prot_region)>(
                 dlsym(cutils, "ashmem_set_prot_region")) : nullptr;
