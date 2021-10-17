@@ -18,7 +18,10 @@
  */
 
 #include <sys/socket.h>
+#include <sys/sendfile.h>
 #include <fcntl.h>
+#include <unistd.h>
+#include <linux/unistd.h>
 
 #include "jni/zygisk.h"
 #include "logging.h"
@@ -211,18 +214,32 @@ namespace lspd {
         }
     };
 
-    bool InitCompanion() {
-        LOGD("onModuleLoaded: welcome to LSPosed!");
-        LOGD("onModuleLoaded: version v%s (%d)", versionName, versionCode);
-        return true;
+    int InitCompanion() {
+        LOGI("onModuleLoaded: welcome to LSPosed!");
+        LOGI("onModuleLoaded: version v%s (%d)", versionName, versionCode);
+        std::string path = "/data/adb/modules/"s + lspd::moduleName + "/" + kDexPath;
+        int fd = open(path.data(), O_RDONLY | O_CLOEXEC);
+        if (fd < 0) {
+            LOGE("Failed to load dex: %s", path.data());
+            return -1;
+        }
+        int mem_fd = syscall(__NR_memfd_create, "lsp.dex", MFD_CLOEXEC);
+        if (auto fsize = lseek(fd, 0, SEEK_END);
+                mem_fd > 0 && lseek(fd, 0, SEEK_SET) == 0 && ftruncate(mem_fd, fsize) == 0 &&
+                sendfile(mem_fd, fd, nullptr, fsize) >= 0) {
+            LOGD("using memfd");
+            close(fd);
+            return mem_fd;
+        }
+        LOGD("using raw fd");
+        close(mem_fd);
+        return fd;
     }
 
     void CompanionEntry(int client) {
         using namespace std::string_literals;
-        static bool inited = InitCompanion();
-        static std::string path = "/data/adb/modules/"s + lspd::moduleName + "/" + kDexPath;
-        static int fd = open(path.data(), O_RDONLY | O_CLOEXEC);
-        if (inited && fd > 0) {
+        static int fd = InitCompanion();
+        if (fd > 0) {
             write_int(client, 0);
             send_fd(client, fd);
         } else write_int(client, -1);
