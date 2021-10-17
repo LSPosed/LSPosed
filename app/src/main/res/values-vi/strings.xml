@@ -74,7 +74,6 @@
     <string name="logs_cannot_read">Không thể đọc nhật ký: \n</string>
     <string name="menuReload">Tải lại</string>
     <string name="logs_clear_failed_2">Thất bại khi làm sạch nhật ký</string>
-    <string name="verbose_log_not_avaliable">Nhật ký chi tiết không khả dụng, nếu bạn vừa kích hoạt nó mà chưa khởi động lại, thử khởi động lại trước đã.</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Mô-đun Xposed chưa được kích hoạt</string>
     <string name="module_is_not_activated_yet_detailed">%s đã được cài đặt, nhưng chưa được kích hoạt</string>

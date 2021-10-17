@@ -77,7 +77,6 @@
     <string name="logs_cannot_read">Невозможно прочитать логи: \n</string>
     <string name="menuReload">Обновить</string>
     <string name="logs_clear_failed_2">Не удалось очистить логи</string>
-    <string name="verbose_log_not_avaliable">Подробные логи не доступны. Если вы только что включили их, для применения требуется перезагрузка</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Модуль установлен</string>
     <string name="module_is_not_activated_yet_detailed">Модуль %s установлен но не включен</string>

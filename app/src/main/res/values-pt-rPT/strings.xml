@@ -62,7 +62,6 @@
     <string name="logs_cannot_read">Impossível ler registro: \n</string>
     <string name="menuReload">Recarregar</string>
     <string name="logs_clear_failed_2">Não foi possível limpar o registro</string>
-    <string name="verbose_log_not_avaliable">Log detalhado não está disponível, se você apenas habilitou sem reinicializar, tente novamente após a reinicialização.</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">O módulo Xposed ainda não foi ativado</string>
     <string name="module_is_not_activated_yet_detailed">O %s foi instalado, mas ainda não está ativado</string>

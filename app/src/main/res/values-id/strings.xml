@@ -72,7 +72,6 @@
     <string name="logs_cannot_read">Tidak dapat membaca log: \n</string>
     <string name="menuReload">Muat ulang</string>
     <string name="logs_clear_failed_2">Gagal menghapus log</string>
-    <string name="verbose_log_not_avaliable">Log lengkap tidak tersedia, jika Anda baru saja mengaktifkannya tanpa reboot, coba lagi setelah reboot.</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Modul Xposed belum diaktifkan</string>
     <string name="module_is_not_activated_yet_detailed">%s telah terpasang, tetapi belum diaktifkan</string>
