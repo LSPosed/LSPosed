@@ -19,11 +19,10 @@ LOCAL_LDLIBS           := -llog
 include $(BUILD_SHARED_LIBRARY)
 
 $(LOCAL_PATH)/api/config.cpp : FORCE
-	$(file > $@,#include "config.h")
-	$(file >> $@,namespace lspd {)
-	$(file >> $@,const int versionCode = ${VERSION_CODE};)
-	$(file >> $@,const int apiVersion = ${API_VERSION};)
-	$(file >> $@,const char* const versionName = "${VERSION_NAME}";)
-	$(file >> $@,const char* const moduleName = "${MODULE_NAME}";)
+	$(file > $@,namespace lspd {)
+	$(file >> $@,extern const int versionCode = ${VERSION_CODE};)
+	$(file >> $@,extern const int apiVersion = ${API_VERSION};)
+	$(file >> $@,extern const char* const versionName = "${VERSION_NAME}";)
+	$(file >> $@,extern const char* const moduleName = "${MODULE_NAME}";)
 	$(file >> $@,})
 FORCE: ;
