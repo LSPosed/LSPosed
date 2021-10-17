@@ -33,7 +33,7 @@
     <string name="module_repo">مخزن</string>
     <string name="module_repo_summary">مخزن ماژول (بتا)</string>
     <string name="about_view_source_code"><![CDATA[سورس کد موجود در %1$s<br/> جوین شوید در %2$s چنل ما]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">rezamqds</string>
+    <string name="translators" comment="Dear translators, please add your home page here with following format. There can be more than one translator. So feel free to append yourself.">rezamqds</string>
     <string name="install">نصب</string>
     <string name="install_summary">برای نصب LSPosed ضربه بزنید</string>
     <string name="not_installed">نصب نشد</string>
@@ -60,17 +60,12 @@
     <string name="nav_item_logs_lsp">سیاهه LSPosed</string>
     <string name="nav_item_logs_module">سیاهه ماژول</string>
     <string name="logs_save_failed2">ذخیره ناموفق:\n%s</string>
-    <string name="menuClearLog">پاک کردن سیاهه</string>
-    <string name="logs_cleared">سیاهه با موفقیت حذف شد.</string>
     <string name="scroll_top">بالا بروید</string>
     <string name="loading">لودینگ…</string>
     <string name="scroll_bottom">پایین بیایید</string>
     <string name="logs_cannot_read">نمیتوان سیاهه را خواند: \n</string>
-    <string name="menuReload">بارگذاری مجدد</string>
-    <string name="logs_clear_failed_2">ناموفق در پاک کردن سیاهه</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">ماژول Xposed در حال حاضر فعال نشده</string>
-    <string name="module_is_not_activated_yet_detailed">%s نصب شده ، اما فعال نشده</string>
     <string name="xposed_module_updated_notification_title">ماژول Xposed بروزرسانی شد</string>
     <string name="xposed_module_updated_notification_content">%s بروز شد، لطفا توقف اجباری و ریستارت کنید اپ های این محدوده را</string>
     <string name="xposed_module_updated_notification_title_system">ماژول Xposed بروز شد، راه‌اندازی سیستم نیاز است</string>
@@ -78,21 +73,14 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(هیچ توضیحی ارائه نشده است)</string>
     <string name="module_no_ui">این ماژول رابط کاربری ارائه نمی دهد</string>
-    <string name="warning_xposed_min_version">این ماژول به نسخه جدیدتر Xposed (%d) نیاز دارد و بنابراین نمی توان آن را فعال کرد</string>
-    <string name="no_min_version_specified">این ماژول نسخه Xposed مورد نیاز خود را مشخص نمی کند.</string>
-    <string name="warning_min_version_too_low">این ماژول برای نسخه %1$d Xposed ایجاد شده است ، اما به دلیل تغییرات ناسازگار در نسخه %2$d، غیرفعال شده است</string>
-    <string name="warning_installed_on_external_storage">این ماژول بارگیری نمی شود زیرا روی کارت SD نصب شده است ، لطفاً آن را به حافظه داخلی منتقل کنید</string>
     <string name="module_uninstall">حذف</string>
     <string name="module_settings">تنظیمات ماژول</string>
     <string name="view_in_repo">مشاهده در Repo</string>
-    <string name="module_uninstall_message">میخواهید این ماژول را حذف کنید؟</string>
     <string name="module_uninstalled">حذف شد%1$s</string>
-    <string name="module_uninstall_failed">حذف ناموفق</string>
     <string name="add_module_to_user">اضافه کردن ماژول به کاربر</string>
     <string name="module_installed">اضافه شد %1$s به کاربر %2$s</string>
     <string name="module_install_failed">اضافه کردن ماژول ناموفق بود</string>
     <string name="install_to_user">نصب به کاربر %s</string>
-    <string name="install_to_user_message">میخواهید نصب کنید %1$s به کابر %2$s ؟ این نیازمند نصب دستیه ها، نصب اجباری بوسیله LSPOSED ممکنه مشکل ایجاد کنه.</string>
     <!-- AppListActivity -->
     <string name="compile_speed">بهینه‌سازی مجدد</string>
     <string name="compile_speed_msg">بهینه سازی…</string>
@@ -106,27 +94,20 @@
     <string name="sort_by_update_time">زمان بروزرسانی</string>
     <string name="sort_reverse">بازگردان</string>
     <string name="menu_show_system_apps">برنامه های سیستم</string>
-    <string name="menu_sort">مرتب سازی</string>
     <string name="enable_module">فعال کردن ماژول</string>
-    <string name="no_scope_selected">شما هیچ برنامه ای را انتخاب نکردید. ادامه می‌دهید؟</string>
     <string name="menu_show_games">بازی ها</string>
     <string name="menu_show_modules">ماژول ها</string>
     <string name="failed_to_save_scope_list">ناموفق در ذخیره لیست محدوده</string>
     <string name="app_description">%1$s\n نسخه %2$s</string>
     <string name="use_recommended">نیازمنده</string>
-    <string name="no_scope_selected_has_recommended">شما هیچ برنامه ای را انتخاب نکردید. انتخاب برنامه های نیازمند؟</string>
     <string name="use_recommended_message">انتخاب برنامه های نیازمند؟</string>
     <string name="requested_by_module">نیازمنده</string>
     <string name="update_available">بروزرسانی دردسترس: %1$s</string>
     <string name="module_disabled_no_selection">ماژول %s غیرفعال شده چون برنامه ای انتخاب نشده.</string>
     <string name="android_framework">فریمورک سیستم</string>
-    <string name="menu_backup_and_restore">پشتیبان‌گیری</string>
     <string name="menu_backup">پشتیبان‌گیری</string>
     <string name="menu_restore">بازگردانی</string>
     <string name="force_stop">توقف اجباری</string>
-    <string name="force_stop_dlg_title">توقف اجباری؟</string>
-    <string name="force_stop_dlg_text">اگر برنامه ای را به اجبار متوقف کنید ، ممکن است عملکرد نادرستی داشته باشد.</string>
-    <string name="reboot_required">برای اعمال این تغییر ، راه اندازی مجدد مورد نیاز است</string>
     <string name="reboot">راه‌اندازی مجدد</string>
     <string name="menu_hide">پنهان کردن</string>
     <!-- ModulesActivity and AppListActivity -->
@@ -139,25 +120,19 @@
     <string name="settings_enable_resources_summary"><b>هشدار:</b> قلاب منابع آزمایشی است</string>
     <string name="pref_title_disable_verbose_log">غیرفعال کردن سیاهه دقیق</string>
     <string name="pure_black_dark_theme">تم مشکی تیره</string>
-    <string name="pure_black_dark_theme_summary">استفاده از مشکی خالص در صورت فعال بودن تم سیاه</string>
     <string name="settings_group_theme">تم</string>
     <string name="settings_backup_and_restore">پشتیبان گیری و بازگردانی</string>
-    <string name="settings_backup_and_restore_summery">پشتیبان گیری یا بازیابی لیست ماژول ها و لیست های محدوده.</string>
     <string name="settings_backup">پشتیبان گیری</string>
     <string name="settings_backup_failed2">ناموفق در بکاپ:\n%s</string>
     <string name="settings_restore">بازگردانی</string>
     <string name="settings_restore_failed2">ناموفق در بازگرداندن:\n%s</string>
     <string name="group_network">شبکه</string>
     <string name="dns_over_http">DNS از طریق HTTPS</string>
-    <string name="dns_over_http_summary">راه حل مسدودیت با DNS در برخی کشورها</string>
     <string name="theme_color">رنگ تم</string>
-    <string name="settings_show_hidden_icon_apps_enabled">برنامه ها را مجبور به نمایش نمادهای راه انداز کنید</string>
-    <string name="settings_show_hidden_icon_apps_enabled_summary">پس از Android 10 ، برنامه ها مجاز نیستند نمادهای راه انداز خود را مخفی کنند. برای غیرفعال کردن این ویژگی سیستم ، خاموش کنید.</string>
     <string name="settings_group_system">سیستم</string>
     <string name="settings_language">زبان</string>
     <string name="settings_translation_contributors">مترجم همکار</string>
     <string name="settings_translation">کمک در ترجمه</string>
-    <string name="settings_translation_summary">به ما کمک کنید %s به زبان شما ترجمه کنیم</string>
     <!-- Module Repo -->
     <string name="module_readme">منو بخون</string>
     <string name="module_releases">انتشار‌ها</string>
@@ -175,7 +150,6 @@
     <string name="outdated_core">برنامه LSPosed جدیدتر از فریمورک است. لطفاً چارچوب LSPosed را به روز کنید.</string>
     <string name="outdated_manager">چارچوب LSPosed جدیدتر از برنامه است. لطفاً برنامه را از /data/adb/lspd/manager.apk به صورت دستی به روز کنید.</string>
     <string name="manager_crashed">منیجر هنگ کرده</string>
-    <string name="manager_crashed_info">این را گزارش کنید </string>
     <string name="send_crash_info">ارسال اطلاعات هنگ</string>
     <string name="crash_info_copied">اطلاعات هنگ در کلیپ بورد کپی شد</string>
     <!-- Colors -->
