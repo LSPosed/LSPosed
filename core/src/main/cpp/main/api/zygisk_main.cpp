@@ -175,11 +175,6 @@ namespace lspd {
             env_ = env;
             Context::GetInstance()->Init();
 
-            // === workaround without companion ===
-            using namespace std::string_literals;
-            Context::GetInstance()->PreLoadDex("/data/adb/modules/"s + moduleName + "/framework/lspd.dex");
-            // === end workaround ===
-
             auto companion = api->connectCompanion();
             if (companion == -1) {
                 LOGE("Failed to connect to companion");
@@ -215,8 +210,6 @@ namespace lspd {
             Context::GetInstance()->OnNativeForkSystemServerPost(env_);
         }
     };
-
-#define quote(s) #s
 
     bool InitCompanion() {
         LOGD("onModuleLoaded: welcome to LSPosed!");

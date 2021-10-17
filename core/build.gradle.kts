@@ -261,7 +261,7 @@ androidComponents.onVariants { v ->
         into(magiskDir)
         from("${rootProject.projectDir}/README.md")
         from("$projectDir/magisk_module") {
-            exclude("riru.sh", "module.prop", "customize.sh")
+            exclude("riru.sh", "module.prop", "customize.sh", "sepolicy.rule")
         }
         from("$projectDir/magisk_module") {
             include("module.prop")
@@ -287,7 +287,7 @@ androidComponents.onVariants { v ->
         }
         if (flavorLowered == "riru") {
             from("${projectDir}/magisk_module") {
-                include("riru.sh")
+                include("riru.sh", "sepolicy.rule")
                 val tokens = mapOf(
                     "RIRU_MODULE_LIB_NAME" to "lspd",
                     "RIRU_MODULE_API_VERSION" to moduleMaxRiruApiVersion.toString(),
