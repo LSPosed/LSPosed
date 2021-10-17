@@ -101,17 +101,19 @@ public class HomeFragment extends BaseFragment {
                     new InfoDialogBuilder(activity).show();
                 }
             } else {
-                if (UpdateUtil.canUpdate()) {
-                    var pref = App.getPreferences();
-                    var zip = pref.getString("zip_file", null);
-                    var notes = pref.getString("release_notes", "");
-                    if (zip != null) {
-                        new FlashDialogBuilder(activity, zip, notes).show();
-                        return;
-                    }
+                if (UpdateUtil.canInstall()) {
+                    new FlashDialogBuilder(activity).show();
+                    return;
                 }
                 NavUtil.startURL(activity, getString(R.string.about_source));
             }
+        });
+        binding.status.setOnLongClickListener(v -> {
+            if (UpdateUtil.canInstall()) {
+                new FlashDialogBuilder(activity).show();
+                return true;
+            }
+            return false;
         });
         binding.modules.setOnClickListener(new StartFragmentListener(R.id.action_modules_fragment, true));
         binding.download.setOnClickListener(new StartFragmentListener(R.id.action_repo_fragment, false));

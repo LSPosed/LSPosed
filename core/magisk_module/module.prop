@@ -1,6 +1,6 @@
 id=${moduleId}
-name=Riru - LSPosed
+name=${api} - LSPosed
 version=${versionName} (${versionCode})
 versionCode=${versionCode}
 author=${authorList}
-description=Another enhanced implementation of Xposed Framework. Supports Android 8.1 ~ 12. Requires Riru ${minRiruVersionName} or above installed.
+description=Another enhanced implementation of Xposed Framework. Supports Android 8.1 ~ 12. ${requirement}.

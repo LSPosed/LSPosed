@@ -41,6 +41,9 @@ namespace lspd {
     constexpr int SHARED_RELRO_UID = 1037;
     constexpr int PER_USER_RANGE = 100000;
 
+    static constexpr uid_t kAidInjected = INJECTED_AID;
+    static constexpr uid_t kAidInet = 3003;
+
     void Context::CallOnPostFixupStaticTrampolines(void *class_ptr) {
         if (!class_ptr || !class_linker_class_ || !post_fixup_static_mid_) [[unlikely]] {
             return;
@@ -55,24 +58,33 @@ namespace lspd {
         }
     }
 
-    void Context::PreLoadDex(std::string_view dex_path) {
-        if (!dex.empty()) [[unlikely]] return;
+    Context::PreloadedDex::PreloadedDex(FILE *f) {
+        fseek(f, 0, SEEK_END);
+        auto size = ftell(f);
+        rewind(f);
+        if (auto addr = mmap(nullptr, size, PROT_READ, MAP_SHARED, fileno(f), 0); addr) {
+            addr_ = addr;
+            size_ = size;
+        } else {
+            LOGE("Read dex failed");
+        }
+    }
 
-        FILE *f = fopen(dex_path.data(), "rb");
-        if (!f) {
+    Context::PreloadedDex::~PreloadedDex() {
+        if (*this) munmap(addr_, size_);
+    }
+
+    void Context::PreLoadDex(std::string_view dex_path) {
+        if (dex_) [[unlikely]] return;
+
+        std::unique_ptr<FILE, decltype(&fclose)> f{fopen(dex_path.data(), "rb"), &fclose};
+
+        if (!f || !(dex_ = PreloadedDex(f.get()))) {
             LOGE("Fail to open dex from %s", dex_path.data());
             return;
         }
-        fseek(f, 0, SEEK_END);
-        dex.resize(ftell(f));
-        rewind(f);
-        if (dex.size() != fread(dex.data(), sizeof(decltype(dex)::value_type), dex.size(), f)) {
-            LOGE("Read dex failed");
-            dex.resize(0);
-        }
-        fclose(f);
 
-        LOGI("Loaded %s with size %zu", dex_path.data(), dex.size());
+        LOGI("Loaded %s with size %zu", dex_path.data(), dex_.size());
     }
 
     void Context::LoadDex(JNIEnv *env) {
@@ -88,6 +100,7 @@ namespace lspd {
         auto initMid = JNI_GetMethodID(env, in_memory_classloader, "<init>",
                                        "(Ljava/nio/ByteBuffer;Ljava/lang/ClassLoader;)V");
         auto byte_buffer_class = JNI_FindClass(env, "java/nio/ByteBuffer");
+        auto dex = std::move(dex_);
         auto dex_buffer = env->NewDirectByteBuffer(dex.data(), dex.size());
         if (auto my_cl = JNI_NewObject(env, in_memory_classloader, initMid,
                                        dex_buffer, sys_classloader)) {
@@ -102,6 +115,10 @@ namespace lspd {
         env->GetJavaVM(&vm_);
     }
 
+    void Context::Init() {
+        InitSymbolCache();
+    }
+
     void Context::Init(JNIEnv *env) {
         if (auto class_linker_class = FindClassFromCurrentLoader(env, kClassLinkerClassName)) {
             class_linker_class_ = JNI_NewGlobalRef(env, class_linker_class);
@@ -110,7 +127,8 @@ namespace lspd {
                                                        "onPostFixupStaticTrampolines",
                                                        "(Ljava/lang/Class;)V");
 
-        if (auto entry_class = FindClassFromLoader(env, GetCurrentClassLoader(), kEntryClassName)) {
+        if (auto entry_class = FindClassFromLoader(env, GetCurrentClassLoader(),
+                                                   kEntryClassName)) {
             entry_class_ = JNI_NewGlobalRef(env, entry_class);
         }
 
@@ -122,13 +140,16 @@ namespace lspd {
     }
 
     ScopedLocalRef<jclass>
-    Context::FindClassFromLoader(JNIEnv *env, jobject class_loader, std::string_view class_name) {
+    Context::FindClassFromLoader(JNIEnv *env, jobject class_loader,
+                                 std::string_view class_name) {
         if (class_loader == nullptr) return {env, nullptr};
-        static auto clz = JNI_NewGlobalRef(env, JNI_FindClass(env, "dalvik/system/DexClassLoader"));
+        static auto clz = JNI_NewGlobalRef(env,
+                                           JNI_FindClass(env, "dalvik/system/DexClassLoader"));
         static jmethodID mid = JNI_GetMethodID(env, clz, "loadClass",
                                                "(Ljava/lang/String;)Ljava/lang/Class;");
         if (!mid) {
-            mid = JNI_GetMethodID(env, clz, "findClass", "(Ljava/lang/String;)Ljava/lang/Class;");
+            mid = JNI_GetMethodID(env, clz, "findClass",
+                                  "(Ljava/lang/String;)Ljava/lang/Class;");
         }
         if (mid) [[likely]] {
             auto target = JNI_CallObjectMethod(env, class_loader, mid,
@@ -167,8 +188,7 @@ namespace lspd {
     }
 
     void
-    Context::OnNativeForkSystemServerPost(JNIEnv *env, jint res) {
-        if (res != 0) return;
+    Context::OnNativeForkSystemServerPost(JNIEnv *env) {
         if (!skip_) {
             LoadDex(env);
             Service::instance()->HookBridge(*this, env);
@@ -184,13 +204,22 @@ namespace lspd {
 
     void Context::OnNativeForkAndSpecializePre(JNIEnv *env,
                                                jint uid,
+                                               jintArray &gids,
                                                jstring nice_name,
                                                jboolean is_child_zygote,
                                                jstring app_data_dir) {
+        if (uid == kAidInjected) {
+            int array_size = gids ? env->GetArrayLength(gids) : 0;
+            auto region = std::make_unique<jint[]>(array_size + 1);
+            auto *new_gids = env->NewIntArray(array_size + 1);
+            if (gids) env->GetIntArrayRegion(gids, 0, array_size, region.get());
+            region.get()[array_size] = kAidInet;
+            env->SetIntArrayRegion(new_gids, 0, array_size + 1, region.get());
+            if (gids) env->SetIntArrayRegion(gids, 0, 1, region.get() + array_size);
+            gids = new_gids;
+        }
         Service::instance()->InitService(env);
         const auto app_id = uid % PER_USER_RANGE;
-        app_data_dir_ = app_data_dir;
-        nice_name_ = nice_name;
         JUTFString process_name(env, nice_name);
         skip_ = !sym_initialized;
         if (!skip_ && !app_data_dir) {
@@ -213,10 +242,11 @@ namespace lspd {
     }
 
     void
-    Context::OnNativeForkAndSpecializePost(JNIEnv *env) {
-        const JUTFString process_name(env, nice_name_);
+    Context::OnNativeForkAndSpecializePost(JNIEnv *env, jstring nice_name,
+                                           jstring app_data_dir) {
+        const JUTFString process_name(env, nice_name);
         auto binder = skip_ ? ScopedLocalRef<jobject>{env, nullptr}
-                            : Service::instance()->RequestBinder(env, nice_name_);
+                            : Service::instance()->RequestBinder(env, nice_name);
         if (binder) {
             InstallInlineHooks();
             LoadDex(env);
@@ -224,7 +254,7 @@ namespace lspd {
             LOGD("Done prepare");
             FindAndCall(env, "forkAndSpecializePost",
                         "(Ljava/lang/String;Ljava/lang/String;Landroid/os/IBinder;)V",
-                        app_data_dir_, nice_name_,
+                        app_data_dir, nice_name,
                         binder);
             LOGD("injected xposed into %s", process_name.get());
             setAllowUnload(false);

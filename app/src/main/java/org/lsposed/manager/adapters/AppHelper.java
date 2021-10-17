@@ -39,6 +39,7 @@ public class AppHelper {
 
     public static final String SETTINGS_CATEGORY = "de.robv.android.xposed.category.MODULE_SETTINGS";
     public static final int FLAG_SHOW_FOR_ALL_USERS = 0x0400;
+    private static List<String> denyList;
     private static List<PackageInfo> appList;
 
     public static Intent getSettingsIntent(String packageName, int userId) {
@@ -136,5 +137,12 @@ public class AppHelper {
             appList = ConfigManager.getInstalledPackagesFromAllUsers(PackageManager.GET_META_DATA | PackageManager.MATCH_UNINSTALLED_PACKAGES, true);
         }
         return appList;
+    }
+
+    public static List<String> getDenyList(boolean force) {
+        if (denyList == null || force) {
+            denyList = ConfigManager.getDenyListPackages();
+        }
+        return denyList;
     }
 }

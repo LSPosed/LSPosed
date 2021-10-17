@@ -71,5 +71,7 @@ namespace lspd {
     }
 
     extern const int versionCode;
+    extern const int apiVersion;
     extern const char* const versionName;
+    extern const char* const moduleName;
 }
