@@ -35,7 +35,7 @@
     <string name="module_repo">Репозиторий</string>
     <string name="module_repo_summary">Репозиторий модулей (Бета)</string>
     <string name="about_view_source_code"><![CDATA[Просмотреть исходный код на %1$s<br/>Присоединяйтесь к нашему %2$s каналу]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Alеxеy</string>
+    <string name="translators" comment="Dear translators, please add your home page here with following format. There can be more than one translator. So feel free to append yourself.">Alеxеy - https://4pda.to/forum/index.php?showuser=2220650</string>
     <string name="install">Установить</string>
     <string name="install_summary">Нажмите, чтобы установить LSPosed</string>
     <string name="not_installed">Не установлен</string>
@@ -45,7 +45,7 @@
     <string name="selinux_policy_not_loaded_summary">SEPolicy неправильно загружен</string>
     <string name="selinux_policy_not_loaded"><![CDATA[Модули которым нужен системный фреймворк, не будут работать.<br/>Пожалуйста, сообщите об этом разработчику <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>]]></string>
     <string name="system_inject_fail_summary">Ошибка внедрения системного фреймворка</string>
-    <string name="system_inject_fail"><![CDATA[Ошибка внедрения системного фреймворка.<br/>Это редкость и может быть вызвано <b>Magisk</b> или несовместимыми модулями Magisk.<br/>Пожалуйста, попрорбуйте отключить модули Magisk кроме Riru и LSPosed или пришлите полные логи разработчику.]]></string>
+    <string name="system_inject_fail"><![CDATA[Это редкость и может быть вызвано <b>Magisk</b> или несовместимыми модулями Magisk.<br/>Пожалуйста, попробуйте отключить модули Magisk кроме Riru и LSPosed или пришлите полные логи разработчику]]></string>
     <string name="system_prop_incorrect_summary">Неправильные системные настройки</string>
     <string name="system_prop_incorrect"><![CDATA[Неправильные системные настройки.<br/>Некоторые системные настройки нужные для работы удалены или изменены.<br/>Модули могут не работать должным образом]]></string>
     <string name="need_update">Требуется обновление</string>
@@ -57,13 +57,13 @@
     <string name="info_system_version">Версия Android</string>
     <string name="info_device">Устройство</string>
     <string name="info_system_abi">Разрядность системы ABI</string>
-    <string name="parasitic_recommend">Рекомендуем скрыть LSPosed</string>
-    <string name="parasitic_recommend_summary">Теперь LSPosed может скрыть себя от различных обнаружений в системе. Для этого создайте ярлык и безопасно удалите само приложение LSPosed. В любой момент можно вернуть приложение установив его из /data/adb/lspd/manager.apk</string>
+    <string name="parasitic_recommend">Рекомендуется скрыть приложение LSPosed</string>
+    <string name="parasitic_recommend_summary">Рекомендуется скрыть приложение LSPosed от различных обнаружений в системе. Для этого создайте ярлык и безопасно удалите само приложение LSPosed. В любой момент можно вернуть приложение установив его из /data/adb/lspd/manager.apk</string>
     <string name="create_shortcut">Создать ярлык</string>
     <string name="never_show">Больше не показывать</string>
     <string name="failed_to_create_shortcut">Не удалось создать ярлык: %1$s</string>
     <string name="update_lsposed">Обновление LSPosed</string>
-    <string name="update_lsposed_msg">Хотите установить новую версию LSPosed? После завершения устройство перезагрузится</string>
+    <string name="update_lsposed_msg">Вы точно хотите обновить LSPosed? Устройство перезагрузится после завершения обновления</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Сохранить</string>
     <string name="nav_item_logs_lsp">Логи LSPosed</string>
@@ -115,12 +115,13 @@
     <string name="sort_by_install_time">По времени установки</string>
     <string name="sort_by_update_time">По времени обновления</string>
     <string name="sort_reverse">Обратная сортировка</string>
-    <string name="menu_show_system_apps">Системные</string>
+    <string name="menu_show_system_apps">Системные приложения</string>
     <string name="menu_sort">Сортировать</string>
     <string name="enable_module">Включить модуль</string>
     <string name="no_scope_selected">Вы не выбрали ни одного приложения. Продолжить?</string>
     <string name="menu_show_games">Игры</string>
     <string name="menu_show_modules">Мои модули</string>
+    <string name="menu_show_denylist">Запрещенный список</string>
     <string name="failed_to_save_scope_list">Не удалось сохранить список включенных приложений для модуля</string>
     <string name="app_description">%1$s\nВерсия: %2$s</string>
     <string name="use_recommended">Рекомендуемые</string>
@@ -138,7 +139,9 @@
     <string name="force_stop_dlg_text">Принудительная остановка приложения выгружает его из запущенных</string>
     <string name="reboot_required">Для применения требуется перезагрузка</string>
     <string name="reboot">Перезагрузить</string>
-    <string name="menu_hide">Скрыть приложения</string>
+    <string name="menu_hide">Скрывать</string>
+    <string name="deny_list">%s находится в запрещенном списке и может не работать</string>
+    <string name="deny_list_info">В запрещенном списке</string>
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">Магазин приложений</string>
     <string name="module_app_info">О приложении</string>
@@ -159,7 +162,7 @@
     <string name="settings_restore_failed2">Не удалось восстановить:\n%s</string>
     <string name="group_network">Сеть</string>
     <string name="dns_over_http">DNS через HTTPS</string>
-    <string name="dns_over_http_summary">Протокол для выполнения разрешения DNS по протоколу HTTPS. Целью этого метода является повышение конфиденциальности и безопасности пользователей путем предотвращения перехвата и манипулирования данными DNS с помощью атак типа «Атака посредника»</string>
+    <string name="dns_over_http_summary">Шифрование DNS-трафика помогающее усилить конфиденциальность пользователя в сети</string>
     <string name="theme_color">Акцент темы</string>
     <string name="theme_color_system">Системный цвет акцента</string>
     <string name="settings_show_hidden_icon_apps_enabled">Принудительно показывать иконку модуля</string>
@@ -169,8 +172,8 @@
     <string name="settings_translation_contributors">Автор перевода</string>
     <string name="settings_translation">Принять участие в переводе</string>
     <string name="settings_translation_summary">Помогите нам перевести %s на ваш язык</string>
-    <string name="pref_title_enable_auto_add_shortcut">Автоматическое добавление ярлыка</string>
-    <string name="settings_enable_auto_add_shortcut_summary">Новый ярлык не будет добавляться, если выключить этот переключатель</string>
+    <string name="pref_title_enable_auto_add_shortcut">Создание ярлыка</string>
+    <string name="settings_enable_auto_add_shortcut_summary">Новый ярлык не будет создаваться автоматически, если выключить этот переключатель</string>
     <!-- Module Repo -->
     <string name="module_readme">Описание</string>
     <string name="module_releases">Версии</string>
