@@ -927,9 +927,8 @@ public class ConfigManager {
 
     public static List<String> getDenyListPackages() {
         List<String> result = new ArrayList<>();
-        try {
-            final SQLiteDatabase magiskDb =
-                    SQLiteDatabase.openDatabase(ConfigFileManager.magiskDbPath, new SQLiteDatabase.OpenParams.Builder().addOpenFlags(SQLiteDatabase.OPEN_READONLY).build());
+        try (final SQLiteDatabase magiskDb =
+                     SQLiteDatabase.openDatabase(ConfigFileManager.magiskDbPath, new SQLiteDatabase.OpenParams.Builder().addOpenFlags(SQLiteDatabase.OPEN_READONLY).build())) {
             try (Cursor cursor = magiskDb.query(true, "denylist", new String[]{"package_name"}, null, null, null, null, null, null, null)) {
                 if (cursor == null) return result;
                 int packageNameIdx = cursor.getColumnIndex("package_name");
