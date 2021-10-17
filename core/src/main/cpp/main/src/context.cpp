@@ -89,7 +89,7 @@ namespace lspd {
             rewind(f.get());
             PreLoadDex(fileno(f.get()), size);
         }
-        LOGI("Loaded %s with size %zu", dex_path.data(), dex_.size());
+        LOGD("Loaded %s with size %zu", dex_path.data(), dex_.size());
     }
 
     void Context::LoadDex(JNIEnv *env) {

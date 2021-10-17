@@ -110,7 +110,7 @@ namespace lspd {
             std::size_t size_;
         };
 
-        struct PreloadedDex dex_{};
+        PreloadedDex dex_{};
 
         Context() {}
 
