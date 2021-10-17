@@ -182,8 +182,7 @@ namespace lspd {
                 return;
             }
 
-            int size = 0;
-            if (int fd; (size = read_int(companion)) > 0 && (fd = recv_fd(companion)) != -1) {
+            if (int fd = -1, size = 0; (size = read_int(companion)) > 0 && (fd = recv_fd(companion)) != -1) {
                 Context::GetInstance()->PreLoadDex(fd, size);
                 close(fd);
             } else {
