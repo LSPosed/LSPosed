@@ -80,7 +80,6 @@ ui_print "- Extracting module files"
 
 extract "$ZIPFILE" 'module.prop'        "$MODPATH"
 extract "$ZIPFILE" 'system.prop'        "$MODPATH"
-extract "$ZIPFILE" 'sepolicy.rule'      "$MODPATH"
 extract "$ZIPFILE" 'post-fs-data.sh'    "$MODPATH"
 extract "$ZIPFILE" 'service.sh'         "$MODPATH"
 extract "$ZIPFILE" 'uninstall.sh'       "$MODPATH"
@@ -110,6 +109,7 @@ if [ "$FLAVOR" == "zygisk" ]; then
   extract "$ZIPFILE" "lib/x86/liblspd.so" "$MODPATH/zygisk" true
   mv "$MODPATH/zygisk/liblspd.so" "$MODPATH/zygisk/x86.so"
 elif [ "$FLAVOR" == "riru" ]; then
+  extract "$ZIPFILE" 'sepolicy.rule'      "$MODPATH"
   mkdir "$MODPATH/riru"
   mkdir "$MODPATH/riru/lib"
   mkdir "$MODPATH/riru/lib64"
