@@ -56,14 +56,10 @@
     <string name="nav_item_logs_module">Registros de Módulos</string>
     <string name="logs_save_failed2">Falha ao salvar:\n%s</string>
     <string name="menuClearLog">Limpar registro agora</string>
-    <string name="logs_cleared">Registro limpo com sucesso.</string>
     <string name="scroll_top">Rolar para o topo</string>
     <string name="loading">Carregando…</string>
     <string name="scroll_bottom">Rolar para baixo</string>
     <string name="logs_cannot_read">Impossível ler registro: \n</string>
-    <string name="menuReload">Recarregar</string>
-    <string name="logs_clear_failed_2">Não foi possível limpar o registro</string>
-    <string name="verbose_log_not_avaliable">Log detalhado não está disponível, se você apenas habilitou sem reinicializar, tente novamente após a reinicialização.</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">O módulo Xposed ainda não foi ativado</string>
     <string name="module_is_not_activated_yet_detailed">O %s foi instalado, mas ainda não está ativado</string>
@@ -71,8 +67,6 @@
     <string name="xposed_module_updated_notification_content">%s foi atualizado, por favor, force a parada e reinicie os aplicativos em seu escopo</string>
     <!-- ModulesActivity -->
     <!-- AppListActivity -->
-    <string name="force_stop_dlg_text">Se você forçar a parada de um app, ele pode apresentar mau funcionamento.</string>
-    <string name="reboot_required">É necessário reiniciar para aplicar esta alteração</string>
     <string name="reboot">Reiniciar</string>
     <string name="menu_hide">Esconder</string>
     <!-- ModulesActivity and AppListActivity -->
@@ -95,10 +89,7 @@
     <string name="settings_restore_failed2">Falha ao restaurar:\n%s</string>
     <string name="group_network">Rede</string>
     <string name="dns_over_http">DNS sobre HTTPS</string>
-    <string name="dns_over_http_summary">Burla envenenamento de DNS em algumas nações</string>
     <string name="theme_color">Cor do tema</string>
-    <string name="settings_show_hidden_icon_apps_enabled">Forçar aplicativos a mostrar ícones no launcher</string>
-    <string name="settings_show_hidden_icon_apps_enabled_summary">Depois do Android 10, os apps não têm permissão para ocultar seus ícones de lançador. Desative a opção para desativar este recurso de sistema.</string>
     <string name="settings_group_system">Sistema</string>
     <!-- Module Repo -->
     <string name="module_readme">Leia-me</string>
