@@ -19,6 +19,7 @@
 
 #include <sys/socket.h>
 #include <fcntl.h>
+#include <dlfcn.h>
 
 #include "jni/zygisk.h"
 #include "logging.h"
@@ -181,9 +182,9 @@ namespace lspd {
                 return;
             }
 
-            if (int fd; read_int(companion) == 0 && (fd = recv_fd(companion)) != -1) {
-                Context::GetInstance()->PreLoadDex(
-                        "/proc/self/fd/" + std::to_string(fd));
+            if (int fd = -1, size = 0; (size = read_int(companion)) > 0 &&
+                                       (fd = recv_fd(companion)) != -1) {
+                Context::GetInstance()->PreLoadDex(fd, size);
                 close(fd);
             } else {
                 LOGE("Failed to read dex fd");
@@ -211,19 +212,49 @@ namespace lspd {
         }
     };
 
-    bool InitCompanion() {
-        LOGD("onModuleLoaded: welcome to LSPosed!");
-        LOGD("onModuleLoaded: version v%s (%d)", versionName, versionCode);
-        return true;
+    std::tuple<int, std::size_t> InitCompanion() {
+        LOGI("onModuleLoaded: welcome to LSPosed!");
+        LOGI("onModuleLoaded: version v%s (%d)", versionName, versionCode);
+
+        int (*ashmem_create_region)(const char *name, std::size_t size) = nullptr;
+        int (*ashmem_set_prot_region)(int fd, int prot) = nullptr;
+
+        std::string path = "/data/adb/modules/"s + lspd::moduleName + "/" + kDexPath;
+        int fd = open(path.data(), O_RDONLY | O_CLOEXEC);
+        if (fd < 0) {
+            LOGE("Failed to load dex: %s", path.data());
+            return {-1, 0};
+        }
+        auto fsize = lseek(fd, 0, SEEK_END);
+        lseek(fd, 0, SEEK_SET);
+        auto *cutils = dlopen("/system/lib" LP_SELECT("", "64") "/libcutils.so", 0);
+        ashmem_create_region = cutils ? reinterpret_cast<decltype(ashmem_create_region)>(
+                dlsym(cutils, "ashmem_create_region")) : nullptr;
+        ashmem_set_prot_region = cutils ? reinterpret_cast<decltype(ashmem_set_prot_region)>(
+                dlsym(cutils, "ashmem_set_prot_region")) : nullptr;
+        int tmp_fd = -1;
+        if (void *addr = nullptr;
+                ashmem_create_region && ashmem_set_prot_region &&
+                (tmp_fd = ashmem_create_region("lspd.dex", fsize)) > 0 &&
+                (addr = mmap(nullptr, fsize, PROT_WRITE, MAP_SHARED, tmp_fd, 0)) &&
+                read(fd, addr, fsize) > 0 && munmap(addr, fsize) == 0) {
+            LOGD("using memfd");
+            ashmem_set_prot_region(tmp_fd, PROT_READ);
+            std::swap(fd, tmp_fd);
+        } else {
+            LOGD("using raw fd");
+        }
+
+        close(tmp_fd);
+        dlclose(cutils);
+        return {fd, fsize};
     }
 
     void CompanionEntry(int client) {
         using namespace std::string_literals;
-        static bool inited = InitCompanion();
-        static std::string path = "/data/adb/modules/"s + lspd::moduleName + "/" + kDexPath;
-        static int fd = open(path.data(), O_RDONLY | O_CLOEXEC);
-        if (inited && fd > 0) {
-            write_int(client, 0);
+        static auto[fd, size] = InitCompanion();
+        if (fd > 0 && size > 0) {
+            write_int(client, size);
             send_fd(client, fd);
         } else write_int(client, -1);
         close(client);

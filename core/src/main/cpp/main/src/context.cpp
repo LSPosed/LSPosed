@@ -58,11 +58,8 @@ namespace lspd {
         }
     }
 
-    Context::PreloadedDex::PreloadedDex(FILE *f) {
-        fseek(f, 0, SEEK_END);
-        auto size = ftell(f);
-        rewind(f);
-        if (auto addr = mmap(nullptr, size, PROT_READ, MAP_SHARED, fileno(f), 0); addr) {
+    Context::PreloadedDex::PreloadedDex(int fd, std::size_t size) {
+        if (auto addr = mmap(nullptr, size, PROT_READ, MAP_SHARED, fd, 0); addr) {
             addr_ = addr;
             size_ = size;
         } else {
@@ -74,17 +71,25 @@ namespace lspd {
         if (*this) munmap(addr_, size_);
     }
 
+    void Context::PreLoadDex(int fd, std::size_t size) {
+        dex_ = PreloadedDex{fd, size};
+    }
+
     void Context::PreLoadDex(std::string_view dex_path) {
         if (dex_) [[unlikely]] return;
 
         std::unique_ptr<FILE, decltype(&fclose)> f{fopen(dex_path.data(), "rb"), &fclose};
 
-        if (!f || !(dex_ = PreloadedDex(f.get()))) {
+        if (!f) {
             LOGE("Fail to open dex from %s", dex_path.data());
             return;
+        } else {
+            fseek(f.get(), 0, SEEK_END);
+            auto size = ftell(f.get());
+            rewind(f.get());
+            PreLoadDex(fileno(f.get()), size);
         }
-
-        LOGI("Loaded %s with size %zu", dex_path.data(), dex_.size());
+        LOGD("Loaded %s with size %zu", dex_path.data(), dex_.size());
     }
 
     void Context::LoadDex(JNIEnv *env) {
@@ -272,4 +277,4 @@ namespace lspd {
             *allowUnload = unload ? 1 : 0;
         }
     }
-}
+}  // namespace lspd

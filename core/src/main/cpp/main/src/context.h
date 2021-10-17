@@ -61,6 +61,8 @@ namespace lspd {
 
         void PreLoadDex(std::string_view dex_paths);
 
+        void PreLoadDex(int fd, std::size_t size);
+
         void Init();
 
     private:
@@ -80,6 +82,8 @@ namespace lspd {
 
             PreloadedDex &operator=(const PreloadedDex &) = delete;
 
+            PreloadedDex(int fd, std::size_t size);
+
             PreloadedDex &operator=(PreloadedDex &&other) {
                 addr_ = other.addr_;
                 size_ = other.size_;
@@ -98,8 +102,6 @@ namespace lspd {
             auto size() const { return size_; }
 
             auto data() const { return addr_; }
-
-            PreloadedDex(FILE *f);
 
             ~PreloadedDex();
 
