@@ -18,9 +18,7 @@
  */
 
 #include <sys/socket.h>
-#include <sys/sendfile.h>
 #include <fcntl.h>
-#include <unistd.h>
 #include <dlfcn.h>
 
 #include "jni/zygisk.h"
