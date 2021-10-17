@@ -33,7 +33,7 @@
     <string name="module_repo">Repositório</string>
     <string name="module_repo_summary">Repositório de Módulos (Beta)</string>
     <string name="about_view_source_code"><![CDATA[Veja o código fonte no %1$s<br/>Entre em nosso canal no %2$s]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Dan, Hitalo, Luiz Renato</string>
+    <string name="translators" comment="Dear translators, please add your home page here with following format. There can be more than one translator. So feel free to append yourself.">Dan, Hitalo, Luiz Renato</string>
     <string name="install">Instalar</string>
     <string name="install_summary">Toque para instalar LSPosed</string>
     <string name="not_installed">Não instalado</string>
@@ -56,9 +56,7 @@
     <string name="info_device">Aparelho</string>
     <string name="info_system_abi">Sistema ABI</string>
     <string name="parasitic_recommend">Gerenciador Parasita Recomendado</string>
-    <string name="parasitic_recommend_summary">LSPosed agora suporta a parasitização do sistema para evitar a detecção. Você pode desinstalar o gerenciador em segurança depois de criar com sucesso um atalho do gerenciador parasita. Em qualquer caso, você pode instalar o gerenciador a partir de /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Criar atalho</string>
-    <string name="never_show">Não mostrar novamente</string>
     <string name="failed_to_create_shortcut">Falha ao criar atalho: %1$s</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Salvar</string>
@@ -66,14 +64,10 @@
     <string name="nav_item_logs_module">Registros de Módulos</string>
     <string name="logs_save_failed2">Falha ao salvar:\n%s</string>
     <string name="menuClearLog">Limpar registro</string>
-    <string name="logs_cleared">Registro limpo com sucesso.</string>
     <string name="scroll_top">Rolar para o início</string>
     <string name="loading">Carregando…</string>
     <string name="scroll_bottom">Rolar para o final</string>
     <string name="logs_cannot_read">Não foi possível ler o registro: \n</string>
-    <string name="menuReload">Recarregar</string>
-    <string name="logs_clear_failed_2">Falha ao limpar o registro</string>
-    <string name="verbose_log_not_avaliable">O registro detalhado não está disponível, se você apenas ativou sem reiniciar, tente novamente após reiniciar.</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">O módulo do Xposed ainda não está ativo</string>
     <string name="module_is_not_activated_yet_detailed">%s foi instalado, mas ainda não está ativo</string>
@@ -84,21 +78,14 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(nenhuma descrição fornecida)</string>
     <string name="module_no_ui">Este módulo não fornece uma interface do usuário</string>
-    <string name="warning_xposed_min_version">Este módulo exige uma versão mais recente do Xposed (%d) e, por isso, não pode ser ativado</string>
-    <string name="no_min_version_specified">Este módulo não cita qual a versão necessária para o Xposed.</string>
-    <string name="warning_min_version_too_low">Este módulo foi criado para a versão %1$d do Xposed, mas devido mudanças incompatíveis na versão %2$d, ele foi desativado</string>
-    <string name="warning_installed_on_external_storage">Este módulo não pode ser carregado porque está instalado no cartão de memória. Por favor, mova para o armazenamento interno</string>
     <string name="module_uninstall">Desinstalar</string>
     <string name="module_settings">Configurações do módulo</string>
     <string name="view_in_repo">Ver no Repositório</string>
-    <string name="module_uninstall_message">Você quer desinstalar este módulo?</string>
     <string name="module_uninstalled">Desinstalado %1$s</string>
-    <string name="module_uninstall_failed">Falha ao desinstalar</string>
     <string name="add_module_to_user">Adicionar módulo ao usuário</string>
     <string name="module_installed">Adicionado %1$s ao usuário %2$s</string>
     <string name="module_install_failed">Falha ao adicionar módulo</string>
     <string name="install_to_user">Instalar ao usuário %s</string>
-    <string name="install_to_user_message">Deseja instalar %1$s ao usuário %2$s? Recomenda-se instalar manualmente, forçar a instalação via LSPosed pode causar problemas.</string>
     <!-- AppListActivity -->
     <string name="compile_speed">Re-otimizar</string>
     <string name="compile_speed_msg">Otimizando…</string>
@@ -112,7 +99,6 @@
     <string name="sort_by_update_time">Data de atualização</string>
     <string name="sort_reverse">Inverter</string>
     <string name="menu_show_system_apps">Aplicativos do Sistema</string>
-    <string name="menu_sort">Ordenar</string>
     <string name="enable_module">Ativar módulo</string>
     <string name="no_scope_selected">Você não selecionou nenhum aplicativo. Deseja continuar?</string>
     <string name="menu_show_games">Jogos</string>
@@ -131,8 +117,6 @@
     <string name="menu_restore">Restaurar backup</string>
     <string name="force_stop">Forçar parada</string>
     <string name="force_stop_dlg_title">Forçar parada?</string>
-    <string name="force_stop_dlg_text">Se forçar a parada de um aplicativo, ele pode apresentar falhas.</string>
-    <string name="reboot_required">Necessário reiniciar para aplicar alteração</string>
     <string name="reboot">Reiniciar</string>
     <string name="menu_hide">Esconder</string>
     <!-- ModulesActivity and AppListActivity -->
@@ -155,10 +139,7 @@
     <string name="settings_restore_failed2">Falha ao restaurar:\n%s</string>
     <string name="group_network">Rede</string>
     <string name="dns_over_http">DNS sobre HTTPS</string>
-    <string name="dns_over_http_summary">Solução alternativa para envenenamento de DNS em alguns países</string>
     <string name="theme_color">Cor do tema</string>
-    <string name="settings_show_hidden_icon_apps_enabled">Forçar apps à exibirem ícones do lançador</string>
-    <string name="settings_show_hidden_icon_apps_enabled_summary">Após o Android 10, alguns aplicativos não estão autorizados à ocultarem seus ícones do lançador. Desative esta opção para desligar este recurso do sistema.</string>
     <string name="settings_group_system">Sistema</string>
     <string name="settings_language">Idioma</string>
     <string name="settings_translation_contributors">Contribuidores de tradução</string>
