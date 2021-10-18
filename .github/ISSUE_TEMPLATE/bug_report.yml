@@ -73,7 +73,7 @@ body:
       label: Version requirement/版本要求
       description: To submit this issue, you must use latest debug CI version of LSPosed and enable verbose log/请确保你已经使用最新 CI 调试版本且启用详细日志
       options:
-        - label: I am using latest CI version of LSPosed and enable verbose log/我正在使用最新 CI 调试版本且启用详细日志
+        - label: I am using latest debug CI version of LSPosed and enable verbose log/我正在使用最新 CI 调试版本且启用详细日志
           required: true
   - type: textarea
     attributes:
