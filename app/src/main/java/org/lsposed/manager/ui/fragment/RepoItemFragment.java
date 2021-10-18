@@ -19,6 +19,7 @@
 
 package org.lsposed.manager.ui.fragment;
 
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Spannable;
@@ -71,6 +72,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Locale;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import okhttp3.Headers;
@@ -319,13 +322,28 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
 
     private class ReleaseAdapter extends RecyclerView.Adapter<ReleaseAdapter.ViewHolder> {
         private List<Release> items;
+        private final Resources resources = App.getInstance().getResources();
 
         public ReleaseAdapter() {
             loadItems();
         }
 
         public void loadItems() {
-            this.items = module.getReleases();
+            var channels = resources.getStringArray(R.array.update_channel_values);
+            var channel = App.getPreferences().getString("update_channel", channels[0]);
+            var releases = module.getReleases();
+            if (channel.equals(channels[0])) {
+                this.items = releases.parallelStream().filter(t -> {
+                    if (t.getIsPrerelease()) return false;
+                    var name = t.getName().toLowerCase(Locale.ROOT);
+                    return !name.startsWith("snapshot") && !name.startsWith("nightly");
+                }).collect(Collectors.toList());
+            } else if (channel.equals(channels[1])) {
+                this.items = releases.parallelStream().filter(t -> {
+                    var name = t.getName().toLowerCase(Locale.ROOT);
+                    return !name.startsWith("snapshot") && !name.startsWith("nightly");
+                }).collect(Collectors.toList());
+            } else this.items = releases;
             notifyDataSetChanged();
         }
 

@@ -179,6 +179,11 @@
     <string name="settings_translation_summary">Help us translate %s into your language</string>
     <string name="pref_title_enable_auto_add_shortcut">Automatically add a shortcut</string>
     <string name="settings_enable_auto_add_shortcut_summary">No new shortcuts will be added when disabled in the non-parasitic manager</string>
+    <string name="settings_group_repo">@string/module_repo</string>
+    <string name="settings_update_channel">Update channel</string>
+    <string name="update_channel_stable">Stable</string>
+    <string name="update_channel_bate">Beta</string>
+    <string name="update_channel_nightly">Nightly build</string>
 
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>

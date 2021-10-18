@@ -170,6 +170,11 @@
     <string name="settings_translation_summary">帮助我们把 %s 翻译到你的语言</string>
     <string name="pref_title_enable_auto_add_shortcut">自动添加快捷方式</string>
     <string name="settings_enable_auto_add_shortcut_summary">在非寄生管理器中禁用该选项将不会新建快捷方式</string>
+    <string name="settings_group_repo">@string/module_repo</string>
+    <string name="settings_update_channel">更新通道</string>
+    <string name="update_channel_stable">稳定版</string>
+    <string name="update_channel_bate">测试版</string>
+    <string name="update_channel_nightly">每夜构建</string>
     <!-- Module Repo -->
     <string name="module_readme">自述文件</string>
     <string name="module_releases">版本</string>
