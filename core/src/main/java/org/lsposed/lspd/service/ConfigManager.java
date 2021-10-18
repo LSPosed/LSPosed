@@ -98,6 +98,8 @@ public class ConfigManager {
 
     private boolean sepolicyLoaded = true;
 
+    private String api = "(???)";
+
     static class ProcessScope {
         final String processName;
         final int uid;
@@ -941,5 +943,13 @@ public class ConfigManager {
             Log.e(TAG, "get denylist", e);
         }
         return result;
+    }
+
+    public void setApi(String api) {
+        this.api = api;
+    }
+
+    public String getApi() {
+        return api;
     }
 }
