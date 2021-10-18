@@ -359,12 +359,12 @@ val killLspd = task("killLspd", Exec::class) {
     isIgnoreExitValue = true
 }
 val pushLspd = task("pushLspd", Exec::class) {
-    dependsOn("mergeDexDebug")
-    workingDir("$buildDir/intermediates/dex/debug/mergeDexDebug")
+    dependsOn("mergeDexRiruDebug")
+    workingDir("$buildDir/intermediates/dex/RiruDebug/mergeDexRiruDebug")
     commandLine(adb, "push", "classes.dex", "/data/local/tmp/lspd.dex")
 }
 val pushLspdNative = task("pushLspdNative", Exec::class) {
-    dependsOn("mergeDebugNativeLibs")
+    dependsOn("mergeRiruDebugNativeLibs")
     doFirst {
         val abi: String = ByteArrayOutputStream().use { outputStream ->
             exec {
@@ -373,7 +373,7 @@ val pushLspdNative = task("pushLspdNative", Exec::class) {
             }
             outputStream.toString().trim()
         }
-        workingDir("$buildDir/intermediates/merged_native_libs/debug/out/lib/$abi")
+        workingDir("$buildDir/intermediates/merged_native_libs/RiruDebug/out/lib/$abi")
     }
     commandLine(adb, "push", "libdaemon.so", "/data/local/tmp/libdaemon.so")
 }
