@@ -300,8 +300,9 @@ public class LSPosedService extends ILSPosedService.Stub {
     }
 
     @Override
-    public void dispatchSystemServerContext(IBinder activityThread, IBinder activityToken) {
+    public void dispatchSystemServerContext(IBinder activityThread, IBinder activityToken, String api) {
         Log.d(TAG, "received system context");
+        ConfigManager.getInstance().setApi(api);
         ActivityManagerService.onSystemServerContext(IApplicationThread.Stub.asInterface(activityThread), activityToken);
         registerPackageReceiver();
         registerUnlockReceiver();

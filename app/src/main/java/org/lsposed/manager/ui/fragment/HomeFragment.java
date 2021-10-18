@@ -134,8 +134,8 @@ public class HomeFragment extends BaseFragment {
     private void updateStates(Activity activity, boolean binderAlive, boolean needUpdate) {
         int cardBackgroundColor;
         if (binderAlive) {
-            StringBuilder sb = new StringBuilder(String.format(Locale.ROOT, "%s (%d)",
-                    ConfigManager.getXposedVersionName(), ConfigManager.getXposedVersionCode()));
+            StringBuilder sb = new StringBuilder(String.format(Locale.ROOT, "%s (%d) - %s",
+                    ConfigManager.getXposedVersionName(), ConfigManager.getXposedVersionCode(), ConfigManager.getApi()));
             if (needUpdate) {
                 cardBackgroundColor = ResourceUtils.resolveColor(activity.getTheme(), R.attr.colorInstall);
                 binding.statusTitle.setText(R.string.need_update);
