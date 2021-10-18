@@ -102,6 +102,16 @@
             android:title="@string/pref_title_enable_auto_add_shortcut" />
     </androidx.preference.PreferenceCategory>
 
+    <androidx.preference.PreferenceCategory android:title="@string/settings_group_repo">
+        <rikka.preference.SimpleMenuPreference
+            android:defaultValue="CHANNEL_STABLE"
+            android:entries="@array/update_channel_texts"
+            android:entryValues="@array/update_channel_values"
+            android:key="update_channel"
+            android:summary="%s"
+            android:title="@string/settings_update_channel" />
+    </androidx.preference.PreferenceCategory>
+
     <androidx.preference.PreferenceCategory
         android:icon="@drawable/ic_baseline_settings_backup_restore_24"
         android:summary="@string/settings_backup_and_restore_summery"
