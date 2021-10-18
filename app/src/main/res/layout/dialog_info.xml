@@ -46,6 +46,19 @@
             style="@style/DeviceInfoDialogLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@string/info_api" />
+
+        <TextView
+            style="@style/DeviceInfoDialogValue"
+            android:id="@+id/api"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/not_installed" />
+
+        <TextView
+            style="@style/DeviceInfoDialogLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="@string/info_framework_version" />
 
         <TextView
