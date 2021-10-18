@@ -226,4 +226,5 @@
     <string name="color_blue_grey">Blue grey</string>
     <string name="expand">expand</string>
     <string name="collapse">collapse</string>
+    <string name="info_api">API</string>
 </resources>
