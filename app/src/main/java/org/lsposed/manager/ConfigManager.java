@@ -342,6 +342,15 @@ public class ConfigManager {
         }
     }
 
+    public static String getApi() {
+        try {
+            return LSPManagerServiceHolder.getService().getApi();
+        } catch (RemoteException e) {
+            Log.e(App.TAG, Log.getStackTraceString(e));
+            return e.toString();
+        }
+    }
+
     public static List<String> getDenyListPackages() {
         List<String> list = new ArrayList<>();
         try {

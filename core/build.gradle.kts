@@ -140,6 +140,7 @@ android {
                     arguments += "API=${name.toLowerCase()}"
                 }
             }
+            buildConfigField("String", "API", """"$name"""")
         }
 
         create("Riru") {

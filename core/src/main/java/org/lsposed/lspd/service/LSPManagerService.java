@@ -512,6 +512,11 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     }
 
     @Override
+    public String getApi() {
+        return ConfigManager.getInstance().getApi();
+    }
+
+    @Override
     public ParceledListSlice<PackageInfo> getInstalledPackagesFromAllUsers(int flags, boolean filterNoProcess) throws RemoteException {
         return PackageService.getInstalledPackagesFromAllUsers(flags, filterNoProcess);
     }

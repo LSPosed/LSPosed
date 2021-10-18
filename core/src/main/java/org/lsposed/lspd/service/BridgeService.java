@@ -41,6 +41,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.lsposed.lspd.BuildConfig;
+
 import java.lang.reflect.Field;
 import java.util.Map;
 
@@ -222,7 +224,7 @@ public class BridgeService {
         try {
             IApplicationThread at = ActivityThread.currentActivityThread().getApplicationThread();
             Context ctx = ActivityThread.currentActivityThread().getSystemContext();
-            service.dispatchSystemServerContext(at.asBinder(), Context_getActivityToken(ctx));
+            service.dispatchSystemServerContext(at.asBinder(), Context_getActivityToken(ctx), BuildConfig.API);
         } catch (Throwable e) {
             Log.e(TAG, "dispatch context: ", e);
         }
