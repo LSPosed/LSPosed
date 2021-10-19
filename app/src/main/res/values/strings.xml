@@ -77,7 +77,6 @@
     <string name="logs_cannot_read">Cannot read log: \n</string>
     <string name="menuReload">Reload</string>
     <string name="logs_clear_failed_2">Failed to clear the log</string>
-    <string name="verbose_log_not_avaliable">Verbose log is not available, if you just enabled it without reboot, try again after reboot.</string>
 
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Xposed module is not activated yet</string>
@@ -179,7 +178,6 @@
     <string name="settings_translation_summary">Help us translate %s into your language</string>
     <string name="pref_title_enable_auto_add_shortcut">Automatically add a shortcut</string>
     <string name="settings_enable_auto_add_shortcut_summary">No new shortcuts will be added when disabled in the non-parasitic manager</string>
-    <string name="settings_group_repo">@string/module_repo</string>
     <string name="settings_update_channel">Update channel</string>
     <string name="update_channel_stable">Stable</string>
     <string name="update_channel_bate">Beta</string>
@@ -231,5 +229,4 @@
     <string name="color_blue_grey">Blue grey</string>
     <string name="expand">expand</string>
     <string name="collapse">collapse</string>
-    <string name="info_api">API</string>
 </resources>
