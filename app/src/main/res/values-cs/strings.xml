@@ -20,6 +20,14 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
+    <string name="info">Informace</string>
+    <string name="Modules">Moduly</string>
+    <string name="Logs">Protokoly</string>
+    <string name="Settings">Nastavení</string>
+    <string name="About">O aplikaci</string>
+    <string name="report_issue">Nahlásit problém</string>
+    <string name="module_repo">Repozitář</string>
+    <string name="module_repo_summary">Repozitář modulů (Beta)</string>
     <!-- LogsActivity -->
     <!-- Notification -->
     <!-- ModulesActivity -->
