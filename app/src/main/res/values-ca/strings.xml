@@ -46,6 +46,7 @@
     <!-- Notification -->
     <!-- ModulesActivity -->
     <!-- AppListActivity -->
+    <string name="menu_show_modules">Mòduls</string>
     <!-- ModulesActivity and AppListActivity -->
     <!-- SettingsActivity -->
     <!-- Module Repo -->
