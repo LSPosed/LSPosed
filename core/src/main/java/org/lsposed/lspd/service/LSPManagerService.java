@@ -513,7 +513,8 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     @Override
     public String getApi() {
-        return ConfigManager.getInstance().getApi();
+        ConfigManager.getInstance();
+        return ConfigManager.getApi();
     }
 
     @Override

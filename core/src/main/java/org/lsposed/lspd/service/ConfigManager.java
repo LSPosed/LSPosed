@@ -98,7 +98,7 @@ public class ConfigManager {
 
     private boolean sepolicyLoaded = true;
 
-    private String api = "(???)";
+    private static String api = "(???)";
 
     static class ProcessScope {
         final String processName;
@@ -947,10 +947,10 @@ public class ConfigManager {
     }
 
     public void setApi(String api) {
-        this.api = api;
+        ConfigManager.api = api;
     }
 
-    public String getApi() {
+    public static String getApi() {
         return api;
     }
 }
