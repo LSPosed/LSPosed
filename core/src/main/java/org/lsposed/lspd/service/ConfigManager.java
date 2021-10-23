@@ -927,7 +927,7 @@ public class ConfigManager {
         return sepolicyLoaded;
     }
 
-    public static List<String> getDenyListPackages() {
+    public List<String> getDenyListPackages() {
         List<String> result = new ArrayList<>();
         try (final SQLiteDatabase magiskDb =
                      SQLiteDatabase.openDatabase(ConfigFileManager.magiskDbPath, new SQLiteDatabase.OpenParams.Builder().addOpenFlags(SQLiteDatabase.OPEN_READONLY).build())) {

@@ -726,7 +726,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     @Override
     public List<String> getDenyListPackages() {
-        return ConfigManager.getDenyListPackages();
+        return ConfigManager.getInstance().getDenyListPackages();
     }
 
     @Override
