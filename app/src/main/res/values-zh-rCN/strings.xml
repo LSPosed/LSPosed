@@ -218,4 +218,5 @@
     <string name="color_blue_grey">灰蓝</string>
     <string name="expand">展开</string>
     <string name="collapse">收起</string>
+    <string name="info_api">注入接口</string>
 </resources>
