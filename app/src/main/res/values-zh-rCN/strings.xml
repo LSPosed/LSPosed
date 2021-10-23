@@ -48,6 +48,7 @@
     <string name="need_update">需要更新</string>
     <string name="please_update_summary">请安装新版 LSPosed</string>
     <string name="lsposed_not_active">LSPosed 未安装或未激活</string>
+    <string name="info_api">注入接口</string>
     <string name="info_api_version">API 版本</string>
     <string name="info_framework_version">框架版本</string>
     <string name="info_manager_version">管理器版本</string>
@@ -99,6 +100,8 @@
     <string name="module_install_failed">安装失败</string>
     <string name="install_to_user">安装到用户 %s</string>
     <string name="install_to_user_message">确认安装 %1$s 到用户 %2$s? 推荐手动用系统自带方法安装，强制通过 LSPosed 安装可能会导致未知异常。</string>
+    <string name="expand">展开</string>
+    <string name="collapse">收起</string>
     <!-- AppListActivity -->
     <string name="compile_speed">重新优化</string>
     <string name="compile_speed_msg">优化中…</string>
@@ -216,6 +219,4 @@
     <string name="color_brown">棕色</string>
     <string name="color_grey">灰色</string>
     <string name="color_blue_grey">灰蓝</string>
-    <string name="expand">展开</string>
-    <string name="collapse">收起</string>
 </resources>

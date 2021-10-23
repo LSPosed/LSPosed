@@ -56,6 +56,7 @@
     <string name="info_system_version">System version</string>
     <string name="info_device">Device</string>
     <string name="info_system_abi">System ABI</string>
+    <string name="info_api">Injection Interface</string>
     <string name="parasitic_recommend">Parasitic Manager Recommended</string>
     <string name="parasitic_recommend_summary">LSPosed now supports system parasitization to avoid detection. You can safely uninstall the manager after successfully creating a shortcut of the parasitic manager. In any case you can install the manager back from /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Create shortcut</string>
@@ -104,6 +105,8 @@
     <string name="module_install_failed">Adding module failed</string>
     <string name="install_to_user">Install to user %s</string>
     <string name="install_to_user_message">Want to install %1$s to user %2$s? It is recommended to install manually, forcing installation via LSPosed may cause problems.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
 
     <!-- AppListActivity -->
     <string name="compile_speed">Re-optimize</string>
@@ -227,6 +230,4 @@
     <string name="color_brown">Brown</string>
     <string name="color_grey">Grey</string>
     <string name="color_blue_grey">Blue grey</string>
-    <string name="expand">expand</string>
-    <string name="collapse">collapse</string>
 </resources>
