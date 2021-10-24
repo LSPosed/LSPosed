@@ -326,12 +326,10 @@ namespace lspd {
         }
 
         void preServerSpecialize(zygisk::ServerSpecializeArgs *args) override {
-            LOGD("pre fork system server");
             Context::GetInstance()->OnNativeForkSystemServerPre(env_);
         }
 
         void postServerSpecialize(const zygisk::ServerSpecializeArgs *args) override {
-            LOGD("post fork system server");
             Context::GetInstance()->OnNativeForkSystemServerPost(env_);
         }
     };
@@ -343,9 +341,8 @@ namespace lspd {
         std::string path = "/data/adb/modules/"s + lspd::moduleName + "/" + kDexPath;
         int dex_fd = open(path.data(), O_RDONLY | O_CLOEXEC);
         if (dex_fd < 0) {
-            LOGE("Failed to load dex: %s", path.data());
-            return {{},
-                    {}};
+            PLOGE("Failed to load dex: %s", path.data());
+            return {{}, {}};
         }
         size_t dex_size = lseek(dex_fd, 0, SEEK_END);
         lseek(dex_fd, 0, SEEK_SET);
@@ -354,10 +351,9 @@ namespace lspd {
         SharedMem symbol{"symbol", sizeof(lspd::SymbolCache)};
 
         if (!dex.ok() || !symbol.ok()) {
-            LOGE("Failed to allocate shared mem");
+            PLOGE("Failed to allocate shared mem");
             close(dex_fd);
-            return {{},
-                    {}};
+            return {{}, {}};
         }
 
         if (auto dex_map = dex.map(PROT_WRITE, MAP_SHARED, 0); !dex_map ||
@@ -365,8 +361,7 @@ namespace lspd {
                                                                     dex_map.size()) < 0) {
             PLOGE("Failed to read dex %p", dex_map.get());
             close(dex_fd);
-            return {{},
-                    {}};
+            return {{}, {}};
         }
 
         dex.SetProt(PROT_READ);
