@@ -27,8 +27,6 @@
 #include "config.h"
 
 namespace lspd {
-    int *allowUnload = nullptr;
-
     namespace {
         ssize_t xsendmsg(int sockfd, const struct msghdr *msg, int flags) {
             int sent = sendmsg(sockfd, msg, flags);
@@ -167,13 +165,19 @@ namespace lspd {
             if (fd < 0) return;
             xwrite(fd, &val, sizeof(val));
         }
+
+        int allow_unload = 0;
     }
+
+    int *allowUnload = &allow_unload;
 
     class ZygiskModule : public zygisk::ModuleBase {
         JNIEnv *env_;
+        zygisk::Api *api_;
 
         void onLoad(zygisk::Api *api, JNIEnv *env) override {
             env_ = env;
+            api_ = api;
             Context::GetInstance()->Init();
 
             auto companion = api->connectCompanion();
@@ -201,6 +205,7 @@ namespace lspd {
         void postAppSpecialize(const zygisk::AppSpecializeArgs *args) override {
             Context::GetInstance()->OnNativeForkAndSpecializePost(env_, args->nice_name,
                                                                   args->app_data_dir);
+            if (*allowUnload) api_->setOption(zygisk::DLCLOSE_MODULE_LIBRARY);
         }
 
         void preServerSpecialize(zygisk::ServerSpecializeArgs *args) override {
