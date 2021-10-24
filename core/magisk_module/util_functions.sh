@@ -20,9 +20,21 @@
 
 check_magisk_version() {
   ui_print "- Magisk version: $MAGISK_VER_CODE"
-  if [ "$MAGISK_VER_CODE" -lt 23000 ]; then
+  if [ "$FLAVOR" == "riru" ]; then
+    if [ "$MAGISK_VER_CODE" -lt 23000 ]; then
+      ui_print "*********************************************************"
+      ui_print "! Please install Magisk v23+"
+      abort    "*********************************************************"
+    fi
+  elif [ "$FLAVOR" == "zygisk" ]; then
+    if [ "$MAGISK_VER_CODE" -lt 23010 ]; then
+      ui_print "*********************************************************"
+      ui_print "! Please install Magisk Lastest Canary (23010+)"
+      abort    "*********************************************************"
+    fi
+  else
     ui_print "*********************************************************"
-    ui_print "! Please install Magisk v23+"
+    ui_print "! Unsupported flavor $FLAVOR"
     abort    "*********************************************************"
   fi
 }

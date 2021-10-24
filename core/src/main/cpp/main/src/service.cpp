@@ -171,7 +171,7 @@ namespace lspd {
         auto binder_class = JNI_FindClass(env, "android/os/Binder");
         exec_transact_backup_methodID_ = JNI_GetMethodID(env, binder_class, "execTransact",
                                                          "(IJJI)Z");
-        if (!sym_set_table_override) {
+        if (!symbol_cache->setTableOverride) {
             LOGE("set table override not found");
         }
         memcpy(&native_interface_replace_, env->functions, sizeof(JNINativeInterface));
@@ -179,8 +179,8 @@ namespace lspd {
         call_boolean_method_va_backup_ = env->functions->CallBooleanMethodV;
         native_interface_replace_.CallBooleanMethodV = &call_boolean_method_va_replace;
 
-        if (sym_set_table_override != nullptr) {
-            reinterpret_cast<void (*)(JNINativeInterface *)>(sym_set_table_override)(
+        if (symbol_cache->setTableOverride != nullptr) {
+            reinterpret_cast<void (*)(JNINativeInterface *)>(symbol_cache->setTableOverride)(
                     &native_interface_replace_);
         }
         if (auto activity_thread_class = JNI_FindClass(env, "android/app/IActivityManager$Stub")) {

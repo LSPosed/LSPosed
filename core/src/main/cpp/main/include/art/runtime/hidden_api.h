@@ -121,14 +121,14 @@ namespace art {
             if (api_level < __ANDROID_API_P__) {
                 return;
             }
-            DexFile_setTrustedSym = reinterpret_cast<decltype(DexFile_setTrustedSym)>(lspd::sym_setTrusted);
-            lspd::HookSymNoHandle(lspd::sym_openDexFileNative, DexFile_openDexFileNative);
-            lspd::HookSymNoHandle(lspd::sym_openInMemoryDexFilesNative,
+            DexFile_setTrustedSym = reinterpret_cast<decltype(DexFile_setTrustedSym)>(lspd::symbol_cache->setTrusted);
+            lspd::HookSymNoHandle(lspd::symbol_cache->openDexFileNative, DexFile_openDexFileNative);
+            lspd::HookSymNoHandle(lspd::symbol_cache->openInMemoryDexFilesNative,
                                   DexFile_openInMemoryDexFilesNative);
             if (api_level == __ANDROID_API_P__) {
-                lspd::HookSymNoHandle(lspd::sym_createCookieWithArray,
+                lspd::HookSymNoHandle(lspd::symbol_cache->createCookieWithArray,
                                       DexFile_createCookieWithArray);
-                lspd::HookSymNoHandle(lspd::sym_createCookieWithDirectBuffer,
+                lspd::HookSymNoHandle(lspd::symbol_cache->createCookieWithDirectBuffer,
                                       DexFile_createCookieWithDirectBuffer);
             }
         };

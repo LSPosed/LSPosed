@@ -25,6 +25,7 @@
 #include "logging.h"
 #include "context.h"
 #include "config.h"
+#include "symbol_cache.h"
 
 namespace lspd {
     namespace {
@@ -171,6 +172,107 @@ namespace lspd {
 
     int *allowUnload = &allow_unload;
 
+    class SharedMem {
+        inline static void *cutils = nullptr;
+
+        inline static int (*ashmem_create_region)(const char *name, std::size_t size) = nullptr;
+
+        inline static int (*ashmem_set_prot_region)(int fd, int prot) = nullptr;
+
+        inline static bool init = false;
+
+        static void Init() {
+            if (init) return;
+            cutils = dlopen("/system/lib" LP_SELECT("", "64") "/libcutils.so", 0);
+            ashmem_create_region = cutils ? reinterpret_cast<decltype(ashmem_create_region)>(
+                    dlsym(cutils, "ashmem_create_region")) : nullptr;
+            ashmem_set_prot_region = cutils ? reinterpret_cast<decltype(ashmem_set_prot_region)>(
+                    dlsym(cutils, "ashmem_set_prot_region")) : nullptr;
+            init = true;
+        }
+
+        int fd_ = -1;
+        std::size_t size_ = 0;
+
+        class MappedMem {
+            void *addr_ = nullptr;
+            std::size_t size_ = 0;
+
+            friend class SharedMem;
+
+            MappedMem(int fd, std::size_t size, int prot, int flags, off_t offset) : addr_(
+                    mmap(nullptr, size, prot, flags, fd, offset)), size_(size) {
+                if (addr_ == MAP_FAILED) {
+                    PLOGE("failed to mmap");
+                    addr_ = nullptr;
+                    size_ = 0;
+                }
+            }
+
+            MappedMem(const MappedMem &) = delete;
+
+            MappedMem &operator=(const MappedMem &other) = delete;
+
+        public:
+            MappedMem(MappedMem &&other) : addr_(other.addr_), size_(other.size_) {
+                other.addr_ = nullptr;
+                other.size_ = 0;
+            }
+
+            MappedMem &operator=(MappedMem &&other) {
+                new(this)MappedMem(std::move(other));
+                return *this;
+            }
+
+            constexpr operator bool() { return addr_; }
+
+            ~MappedMem() {
+                if (addr_) {
+                    munmap(addr_, size_);
+                }
+            }
+
+            constexpr auto size() const { return size_; }
+
+            constexpr auto get() const { return addr_; }
+        };
+
+    public:
+        MappedMem map(int prot, int flags, off_t offset) {
+            return {fd_, size_, prot, flags, offset};
+        }
+
+        constexpr bool ok() const { return fd_ > 0 && size_ > 0; }
+
+        SharedMem(std::string_view name, std::size_t size) {
+            Init();
+            if (ashmem_create_region && (fd_ = ashmem_create_region(name.data(), size)) > 0) {
+                size_ = size;
+                LOGD("using memfd");
+            } else {
+                LOGD("using tmp file");
+                auto *tmp = tmpfile();
+                if (tmp) {
+                    fd_ = fileno(tmp);
+                    ftruncate(fd_, size);
+                    size_ = size;
+                }
+            }
+        }
+
+        void SetProt(int prot) {
+            ashmem_set_prot_region(fd_, prot);
+        }
+
+        SharedMem() : fd_(-1), size_(0) {
+            Init();
+        }
+
+        constexpr auto get() const { return fd_; }
+
+        constexpr auto size() const { return size_; }
+    };
+
     class ZygiskModule : public zygisk::ModuleBase {
         JNIEnv *env_;
         zygisk::Api *api_;
@@ -192,6 +294,21 @@ namespace lspd {
                 close(fd);
             } else {
                 LOGE("Failed to read dex fd");
+            }
+            if (int fd = -1, size = 0; (size = read_int(companion)) > 0 &&
+                                       (fd = recv_fd(companion)) != -1) {
+                if (auto addr = mmap(nullptr, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+                        addr && addr != MAP_FAILED) {
+                    InitSymbolCache(reinterpret_cast<SymbolCache *>(addr));
+                    msync(addr, size, MS_SYNC);
+                    munmap(addr, size);
+                } else {
+                    InitSymbolCache(nullptr);
+                }
+                close(fd);
+            } else {
+                LOGE("Failed to read symbol fd");
+                InitSymbolCache(nullptr);
             }
             close(companion);
         }
@@ -217,50 +334,59 @@ namespace lspd {
         }
     };
 
-    std::tuple<int, std::size_t> InitCompanion() {
+    std::tuple<SharedMem, SharedMem> InitCompanion() {
         LOGI("onModuleLoaded: welcome to LSPosed!");
         LOGI("onModuleLoaded: version v%s (%d)", versionName, versionCode);
 
-        int (*ashmem_create_region)(const char *name, std::size_t size) = nullptr;
-        int (*ashmem_set_prot_region)(int fd, int prot) = nullptr;
-
         std::string path = "/data/adb/modules/"s + lspd::moduleName + "/" + kDexPath;
-        int fd = open(path.data(), O_RDONLY | O_CLOEXEC);
-        if (fd < 0) {
-            LOGE("Failed to load dex: %s", path.data());
-            return {-1, 0};
+        int dex_fd = open(path.data(), O_RDONLY | O_CLOEXEC);
+        if (dex_fd < 0) {
+            PLOGE("Failed to load dex: %s", path.data());
+            return {{}, {}};
         }
-        auto fsize = lseek(fd, 0, SEEK_END);
-        lseek(fd, 0, SEEK_SET);
-        auto *cutils = dlopen("/system/lib" LP_SELECT("", "64") "/libcutils.so", 0);
-        ashmem_create_region = cutils ? reinterpret_cast<decltype(ashmem_create_region)>(
-                dlsym(cutils, "ashmem_create_region")) : nullptr;
-        ashmem_set_prot_region = cutils ? reinterpret_cast<decltype(ashmem_set_prot_region)>(
-                dlsym(cutils, "ashmem_set_prot_region")) : nullptr;
-        int tmp_fd = -1;
-        if (void *addr = nullptr;
-                ashmem_create_region && ashmem_set_prot_region &&
-                (tmp_fd = ashmem_create_region("lspd.dex", fsize)) > 0 &&
-                (addr = mmap(nullptr, fsize, PROT_WRITE, MAP_SHARED, tmp_fd, 0)) &&
-                read(fd, addr, fsize) > 0 && munmap(addr, fsize) == 0) {
-            LOGD("using memfd");
-            ashmem_set_prot_region(tmp_fd, PROT_READ);
-            std::swap(fd, tmp_fd);
-        } else {
-            LOGD("using raw fd");
+        size_t dex_size = lseek(dex_fd, 0, SEEK_END);
+        lseek(dex_fd, 0, SEEK_SET);
+
+        SharedMem dex{"lspd.dex", dex_size};
+        SharedMem symbol{"symbol", sizeof(lspd::SymbolCache)};
+
+        if (!dex.ok() || !symbol.ok()) {
+            PLOGE("Failed to allocate shared mem");
+            close(dex_fd);
+            return {{}, {}};
         }
 
-        close(tmp_fd);
-        dlclose(cutils);
-        return {fd, fsize};
+        if (auto dex_map = dex.map(PROT_WRITE, MAP_SHARED, 0); !dex_map ||
+                                                               read(dex_fd, dex_map.get(),
+                                                                    dex_map.size()) < 0) {
+            PLOGE("Failed to read dex %p", dex_map.get());
+            close(dex_fd);
+            return {{}, {}};
+        }
+
+        dex.SetProt(PROT_READ);
+
+        if (auto symbol_map = symbol.map(PROT_WRITE, MAP_SHARED, 0); symbol_map) {
+            memcpy(symbol_map.get(), lspd::symbol_cache.get(), symbol_map.size());
+        }
+
+        close(dex_fd);
+        return {std::move(dex), std::move(symbol)};
     }
 
     void CompanionEntry(int client) {
         using namespace std::string_literals;
-        static auto[fd, size] = InitCompanion();
-        if (fd > 0 && size > 0) {
-            write_int(client, size);
-            send_fd(client, fd);
+        static auto[dex, symbol] = InitCompanion();
+        LOGD("Got dex with fd=%d size=%d; Got cache with fd=%d size=%d", dex.get(),
+             (int) dex.size(),
+             symbol.get(), (int) symbol.size());
+        if (dex.ok()) {
+            write_int(client, dex.size());
+            send_fd(client, dex.get());
+        } else write_int(client, -1);
+        if (symbol.ok()) {
+            write_int(client, symbol.size());
+            send_fd(client, symbol.get());
         } else write_int(client, -1);
         close(client);
     }

@@ -47,7 +47,7 @@ namespace lspd {
             return;
         }
         LOGD("Start to install inline hooks");
-        const auto &handle_libart = *art_img;
+        const auto &handle_libart = *GetArt();
         if (!handle_libart.isValid()) {
             LOGE("Failed to fetch libart.so");
         }
@@ -62,7 +62,7 @@ namespace lspd {
         art::thread_list::ScopedSuspendAll::Setup(handle_libart);
         art::gc::ScopedGCCriticalSection::Setup(handle_libart);
         art::jit::jit_code_cache::Setup(handle_libart);
-        art_img.reset();
+        GetArt().reset();
         LOGD("Inline hooks installed");
     }
 }  // namespace lspd
