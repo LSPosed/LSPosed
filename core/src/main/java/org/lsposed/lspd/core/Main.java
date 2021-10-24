@@ -24,7 +24,6 @@ import android.app.ActivityThread;
 import android.app.LoadedApk;
 import android.content.pm.ApplicationInfo;
 import android.content.res.CompatibilityInfo;
-import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
 import android.os.Process;
@@ -46,8 +45,6 @@ import java.io.File;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.XposedInit;
-import hidden.HiddenApiBridge;
-import pxb.android.axml.Util;
 
 public class Main {
     public static void startBootstrapHook(boolean isSystem, String appDataDir) {
@@ -88,10 +85,6 @@ public class Main {
                 && ParasiticManagerHooker.start()) {
             Utils.logI("Loaded manager, skipping next steps");
             return;
-        }
-        Utils.logD("appDataDir: " + appDataDir);
-        if (!isSystem && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            HiddenApiBridge.VMRuntime_setProcessDataDirectory(appDataDir);
         }
         installBootstrapHooks(isSystem, appDataDir);
         Utils.logI("Loading modules for " + niceName + "/" + Process.myUid());
