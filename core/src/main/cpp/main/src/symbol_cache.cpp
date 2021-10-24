@@ -31,48 +31,60 @@
 #include <logging.h>
 
 namespace lspd {
-    bool sym_initialized = false;
-    void *sym_do_dlopen = nullptr;
-    void *sym_openInMemoryDexFilesNative = nullptr;
-    void *sym_createCookieWithArray = nullptr;
-    void *sym_createCookieWithDirectBuffer = nullptr;
-    void *sym_openDexFileNative = nullptr;
-    void *sym_setTrusted = nullptr;
-    void *sym_set_table_override = nullptr;
-    std::unique_ptr<const SandHook::ElfImg> art_img = nullptr;
+    std::unique_ptr<SymbolCache> symbol_cache = std::make_unique<SymbolCache>();
+
+    std::unique_ptr<const SandHook::ElfImg> &GetArt() {
+        static std::unique_ptr<const SandHook::ElfImg> kArtImg = nullptr;
+        if (!kArtImg) {
+            kArtImg = std::make_unique<SandHook::ElfImg>(kLibArtName);
+        }
+        return kArtImg;
+    }
+
 
     bool FindLibArt() {
-        art_img = std::make_unique<SandHook::ElfImg>(kLibArtName);
-        if (!art_img->isValid()) return false;
+        auto &art = GetArt();
+        if (!art->isValid()) return false;
         auto api_level = GetAndroidApiLevel();
-        return (sym_set_table_override = art_img->getSymbAddress<void *>(
+        return (symbol_cache->setTableOverride = art->getSymbAddress<void *>(
                 "_ZN3art9JNIEnvExt16SetTableOverrideEPK18JNINativeInterface")) != nullptr
                && (api_level < __ANDROID_API_P__ || (
-                (sym_openDexFileNative = art_img->getSymbAddress<void *>(
+                (symbol_cache->openDexFileNative = art->getSymbAddress<void *>(
                         "_ZN3artL25DexFile_openDexFileNativeEP7_JNIEnvP7_jclassP8_jstringS5_iP8_jobjectP13_jobjectArray")) &&
                 (
-                        (sym_openInMemoryDexFilesNative = art_img->getSymbAddress<void *>(
+                        (symbol_cache->openInMemoryDexFilesNative = art->getSymbAddress<void *>(
                                 "_ZN3artL34DexFile_openInMemoryDexFilesNativeEP7_JNIEnvP7_jclassP13_jobjectArrayS5_P10_jintArrayS7_P8_jobjectS5_")) ||
                         (
-                                (sym_createCookieWithArray = art_img->getSymbAddress<void *>(
+                                (symbol_cache->createCookieWithArray = art->getSymbAddress<void *>(
                                         "_ZN3artL29DexFile_createCookieWithArrayEP7_JNIEnvP7_jclassP11_jbyteArrayii")) &&
-                                (sym_createCookieWithDirectBuffer = art_img->getSymbAddress<void *>(
+                                (symbol_cache->createCookieWithDirectBuffer = art->getSymbAddress<void *>(
                                         "_ZN3artL36DexFile_createCookieWithDirectBufferEP7_JNIEnvP7_jclassP8_jobjectii"))
                         )
                 ) &&
-                (sym_setTrusted = art_img->getSymbAddress<void *>(
+                (symbol_cache->setTrusted = art->getSymbAddress<void *>(
                         "_ZN3artL18DexFile_setTrustedEP7_JNIEnvP7_jclassP8_jobject"))));
     }
 
-    void InitSymbolCache() {
+    void InitSymbolCache(SymbolCache *other) {
         LOGD("InitSymbolCache");
-        sym_initialized = FindLibArt();
-        sym_do_dlopen = SandHook::ElfImg("/linker").getSymbAddress<void *>(
+        if (other && other->initialized.test(std::memory_order_acquire)) {
+            LOGD("Already initialized");
+            *symbol_cache = *other;
+            symbol_cache->initialized.test_and_set(std::memory_order_relaxed);
+            return;
+        }
+        auto ok = FindLibArt();
+        symbol_cache->do_dlopen = SandHook::ElfImg("/linker").getSymbAddress<void *>(
                 "__dl__Z9do_dlopenPKciPK17android_dlextinfoPKv");
-        if (!sym_initialized) [[unlikely]] {
-            sym_initialized = false;
-            art_img.reset();
+        if (!ok) [[unlikely]] {
+            GetArt().reset();
             LOGE("Init symbol cache failed");
+        } else {
+            symbol_cache->initialized.test_and_set(std::memory_order_relaxed);
+            if (other) {
+                *other = *symbol_cache;
+                other->initialized.test_and_set(std::memory_order_acq_rel);
+            }
         }
     }
 }  // namespace lspd

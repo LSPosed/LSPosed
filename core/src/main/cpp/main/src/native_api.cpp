@@ -122,9 +122,9 @@ namespace lspd {
             });
 
     bool InstallNativeAPI() {
-        LOGD("InstallNativeAPI: %p", sym_do_dlopen);
-        if (sym_do_dlopen) [[likely]] {
-            HookSymNoHandle(sym_do_dlopen, do_dlopen);
+        LOGD("InstallNativeAPI: %p", symbol_cache->do_dlopen);
+        if (symbol_cache->do_dlopen) [[likely]] {
+            HookSymNoHandle(symbol_cache->do_dlopen, do_dlopen);
             return true;
         }
         return false;

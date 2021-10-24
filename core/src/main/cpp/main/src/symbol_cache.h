@@ -26,22 +26,44 @@
 #define LSPOSED_SYMBOL_CACHE_H
 
 #include <memory>
+
 namespace SandHook {
     class ElfImg;
 }
 
 namespace lspd {
-    extern bool sym_initialized;
-    extern std::unique_ptr<const SandHook::ElfImg> art_img;
-    extern void *sym_do_dlopen;
-    extern void *sym_openInMemoryDexFilesNative;
-    extern void *sym_createCookieWithArray;
-    extern void *sym_createCookieWithDirectBuffer;
-    extern void *sym_openDexFileNative;
-    extern void *sym_setTrusted;
-    extern void *sym_set_table_override;
+    struct SymbolCache {
+        std::atomic_flag initialized{};
+        void *do_dlopen;
+        void *openInMemoryDexFilesNative;
+        void *createCookieWithArray;
+        void *createCookieWithDirectBuffer;
+        void *openDexFileNative;
+        void *setTrusted;
+        void *setTableOverride;
 
-    void InitSymbolCache();
+        SymbolCache() = default;
+
+        SymbolCache(const SymbolCache &other) :
+                do_dlopen(other.do_dlopen),
+                openInMemoryDexFilesNative(other.openInMemoryDexFilesNative),
+                createCookieWithArray(other.createCookieWithArray),
+                createCookieWithDirectBuffer(other.createCookieWithDirectBuffer),
+                openDexFileNative(other.openDexFileNative),
+                setTrusted(other.setTrusted),
+                setTableOverride(other.setTableOverride) {}
+
+        SymbolCache &operator=(const SymbolCache &other) {
+            new(this)SymbolCache(other);
+            return *this;
+        }
+    };
+
+    extern std::unique_ptr<SymbolCache> symbol_cache;
+
+    void InitSymbolCache(SymbolCache *other);
+
+    std::unique_ptr<const SandHook::ElfImg> &GetArt();
 }
 
 #endif //LSPOSED_SYMBOL_CACHE_H

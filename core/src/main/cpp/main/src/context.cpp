@@ -121,7 +121,6 @@ namespace lspd {
     }
 
     void Context::Init() {
-        InitSymbolCache();
     }
 
     void Context::Init(JNIEnv *env) {
@@ -188,7 +187,10 @@ namespace lspd {
     void
     Context::OnNativeForkSystemServerPre(JNIEnv *env) {
         Service::instance()->InitService(env);
-        skip_ = !sym_initialized;
+        skip_ = !symbol_cache->initialized.test(std::memory_order_acquire);
+        if (skip_) [[unlikely]] {
+            LOGW("skip system server due to symbol cache");
+        }
         setAllowUnload(skip_);
     }
 
@@ -203,6 +205,9 @@ namespace lspd {
                 Init(env);
                 FindAndCall(env, "forkSystemServerPost", "(Landroid/os/IBinder;)V", binder);
             } else skip_ = true;
+        }
+        if (skip_) [[unlikely]] {
+            LOGW("skipped system server");
         }
         setAllowUnload(skip_);
     }
@@ -226,7 +231,7 @@ namespace lspd {
         Service::instance()->InitService(env);
         const auto app_id = uid % PER_USER_RANGE;
         JUTFString process_name(env, nice_name);
-        skip_ = !sym_initialized;
+        skip_ = !symbol_cache->initialized.test(std::memory_order_acquire);
         if (!skip_ && !app_data_dir) {
             LOGD("skip injecting into %s because it has no data dir", process_name.get());
             skip_ = true;
@@ -266,7 +271,7 @@ namespace lspd {
         } else {
             auto context = Context::ReleaseInstance();
             auto service = Service::ReleaseInstance();
-            art_img.reset();
+            GetArt().reset();
             LOGD("skipped %s", process_name.get());
             setAllowUnload(true);
         }
