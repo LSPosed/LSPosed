@@ -25,6 +25,7 @@
 #include "logging.h"
 #include "config.h"
 #include "context.h"
+#include "symbol_cache.h"
 
 #define RIRU_MODULE
 #include <riru.h>
@@ -40,7 +41,7 @@ namespace lspd {
         void onModuleLoaded() {
             LOGI("onModuleLoaded: welcome to LSPosed!");
             LOGI("onModuleLoaded: version v%s (%d)", versionName, versionCode);
-            lspd::InitSymbolCache(nullptr);
+            InitSymbolCache(nullptr);
             Context::GetInstance()->Init();
             if constexpr (isDebug) {
                 Context::GetInstance()->PreLoadDex("/system/" + kDexPath);
