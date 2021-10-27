@@ -19,7 +19,7 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <androidx.preference.PreferenceCategory android:title="@string/group_network">
+    <PreferenceCategory android:title="@string/group_network">
 
         <SwitchPreference
             android:defaultValue="false"
@@ -27,9 +27,9 @@
             android:key="doh"
             android:summary="@string/dns_over_http_summary"
             android:title="@string/dns_over_http" />
-    </androidx.preference.PreferenceCategory>
+    </PreferenceCategory>
 
-    <androidx.preference.PreferenceCategory android:title="@string/settings_language">
+    <PreferenceCategory android:title="@string/settings_language">
 
         <rikka.preference.SimpleMenuPreference
             android:defaultValue="SYSTEM"
@@ -47,9 +47,9 @@
         <Preference
             android:key="translation"
             android:title="@string/settings_translation" />
-    </androidx.preference.PreferenceCategory>
+    </PreferenceCategory>
 
-    <androidx.preference.PreferenceCategory android:title="@string/settings_group_theme">
+    <PreferenceCategory android:title="@string/settings_group_theme">
         <SwitchPreference
             android:defaultValue="true"
             android:key="follow_system_accent"
@@ -75,9 +75,9 @@
             android:key="black_dark_theme"
             android:summary="@string/pure_black_dark_theme_summary"
             android:title="@string/pure_black_dark_theme" />
-    </androidx.preference.PreferenceCategory>
+    </PreferenceCategory>
 
-    <androidx.preference.PreferenceCategory android:title="@string/settings_group_framework">
+    <PreferenceCategory android:title="@string/settings_group_framework">
 
         <SwitchPreference
             android:defaultValue="false"
@@ -99,9 +99,9 @@
             android:persistent="false"
             android:summary="@string/settings_enable_auto_add_shortcut_summary"
             android:title="@string/pref_title_enable_auto_add_shortcut" />
-    </androidx.preference.PreferenceCategory>
+    </PreferenceCategory>
 
-    <androidx.preference.PreferenceCategory android:title="@string/settings_group_repo">
+    <PreferenceCategory android:title="@string/settings_group_repo">
         <rikka.preference.SimpleMenuPreference
             android:defaultValue="CHANNEL_STABLE"
             android:entries="@array/update_channel_texts"
@@ -109,9 +109,9 @@
             android:key="update_channel"
             android:summary="%s"
             android:title="@string/settings_update_channel" />
-    </androidx.preference.PreferenceCategory>
+    </PreferenceCategory>
 
-    <androidx.preference.PreferenceCategory
+    <PreferenceCategory
         android:icon="@drawable/ic_baseline_settings_backup_restore_24"
         android:summary="@string/settings_backup_and_restore_summery"
         android:title="@string/settings_backup_and_restore">
@@ -121,9 +121,9 @@
         <Preference
             android:key="restore"
             android:title="@string/settings_restore" />
-    </androidx.preference.PreferenceCategory>
+    </PreferenceCategory>
 
-    <androidx.preference.PreferenceCategory
+    <PreferenceCategory
         android:key="settings_group_system"
         android:title="@string/settings_group_system">
         <SwitchPreference
@@ -133,5 +133,5 @@
             android:persistent="false"
             android:summary="@string/settings_show_hidden_icon_apps_enabled_summary"
             android:title="@string/settings_show_hidden_icon_apps_enabled" />
-    </androidx.preference.PreferenceCategory>
+    </PreferenceCategory>
 </PreferenceScreen>

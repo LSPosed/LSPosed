@@ -75,6 +75,7 @@
     <string name="logs_cannot_read">无法读取日志: \n</string>
     <string name="menuReload">重新加载</string>
     <string name="logs_clear_failed_2">日志清除失败</string>
+    <string name="menu_enable_word_wrap">自动换行</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Xposed 模块尚未激活</string>
     <string name="module_is_not_activated_yet_detailed">%s 已安装, 但尚未激活</string>
