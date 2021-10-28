@@ -5,7 +5,6 @@
 #include <array>
 #include <cinttypes>
 #include "logcat.h"
-#include <string_view>
 #include <sys/system_properties.h>
 
 using namespace std::string_view_literals;
@@ -88,14 +87,16 @@ size_t Logcat::PrintLogLine(const AndroidLogEntry &entry, FILE *out) {
     }
     localtime_r(&now, &tm);
     strftime(time_buff.data(), time_buff.size(), "%Y-%m-%dT%H:%M:%S", &tm);
-    // implicitly convert to size_t and intentionally trigger overflow when failed
-    // to generate a new fd
-    return fprintf(out, "[ %s.%03ld %8d:%6d:%6d %c/%-15.*s ] %.*s\n",
-                   time_buff.data(),
-                   nsec / MS_PER_NSEC,
-                   entry.uid, entry.pid, entry.tid,
-                   kLogChar[entry.priority], static_cast<int>(entry.tagLen),
-                   entry.tag, static_cast<int>(message_len), message);
+    int len = fprintf(out, "[ %s.%03ld %8d:%6d:%6d %c/%-15.*s ] %.*s\n",
+                      time_buff.data(),
+                      nsec / MS_PER_NSEC,
+                      entry.uid, entry.pid, entry.tid,
+                      kLogChar[entry.priority], static_cast<int>(entry.tagLen),
+                      entry.tag, static_cast<int>(message_len), message);
+    fflush(out);
+    // trigger overflow when failed to generate a new fd
+    if (len <= 0) len = kMaxLogSize;
+    return static_cast<size_t>(len);
 }
 
 void Logcat::RefreshFd(bool is_verbose) {
@@ -104,15 +105,19 @@ void Logcat::RefreshFd(bool is_verbose) {
     if (is_verbose) {
         verbose_print_count_ = 0;
         fprintf(verbose_file_.get(), end, verbose_file_part_);
+        fflush(verbose_file_.get());
         verbose_file_ = UniqueFile(env_->CallIntMethod(thiz_, refresh_fd_method_, JNI_TRUE), "a");
         verbose_file_part_++;
         fprintf(verbose_file_.get(), start, verbose_file_part_);
+        fflush(verbose_file_.get());
     } else {
         modules_print_count_ = 0;
         fprintf(modules_file_.get(), end, modules_file_part_);
+        fflush(modules_file_.get());
         modules_file_ = UniqueFile(env_->CallIntMethod(thiz_, refresh_fd_method_, JNI_FALSE), "a");
         modules_file_part_++;
         fprintf(modules_file_.get(), start, modules_file_part_);
+        fflush(modules_file_.get());
     }
 }
 
@@ -198,9 +203,6 @@ void Logcat::Run() {
             if (android_logger_list_read(logger_list.get(), &msg) <= 0) [[unlikely]] break;
 
             ProcessBuffer(&msg);
-
-            fflush(verbose_file_.get());
-            fflush(modules_file_.get());
 
             if (verbose_print_count_ >= kMaxLogSize) [[unlikely]] RefreshFd(true);
             if (modules_print_count_ >= kMaxLogSize) [[unlikely]] RefreshFd(false);
