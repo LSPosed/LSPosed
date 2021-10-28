@@ -11,7 +11,7 @@ A Riru module trying to provide an ART hooking framework which delivers consiste
 
 ## Supported Versions
 
-Android 8.1 ~ 12
+Android 8.1 ~ 12, 12L DP1
 
 ## Install
 
