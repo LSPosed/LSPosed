@@ -46,30 +46,34 @@ public class ParasiticManagerHooker {
 
     private synchronized static PackageInfo getManagerPkgInfo(ApplicationInfo appInfo) {
         if (managerPkgInfo == null) {
-            Context ctx = ActivityThread.currentActivityThread().getSystemContext();
-            var sourceDir = "/proc/self/fd/" + managerFd;
-            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
-                var dstDir = appInfo.dataDir + "/cache/lsposed.apk";
-                try (var inStream = new FileInputStream(sourceDir); var outStream = new FileOutputStream(dstDir)) {
-                    FileChannel inChannel = inStream.getChannel();
-                    FileChannel outChannel = outStream.getChannel();
-                    inChannel.transferTo(0, inChannel.size(), outChannel);
-                    sourceDir = dstDir;
-                } catch (Throwable e) {
-                    Hookers.logE("copy apk", e);
+            try {
+                Context ctx = ActivityThread.currentActivityThread().getSystemContext();
+                var sourceDir = "/proc/self/fd/" + managerFd;
+                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+                    var dstDir = appInfo.dataDir + "/cache/lsposed.apk";
+                    try (var inStream = new FileInputStream(sourceDir); var outStream = new FileOutputStream(dstDir)) {
+                        FileChannel inChannel = inStream.getChannel();
+                        FileChannel outChannel = outStream.getChannel();
+                        inChannel.transferTo(0, inChannel.size(), outChannel);
+                        sourceDir = dstDir;
+                    } catch (Throwable e) {
+                        Hookers.logE("copy apk", e);
+                    }
                 }
+                managerPkgInfo = ctx.getPackageManager().getPackageArchiveInfo(sourceDir, PackageManager.GET_ACTIVITIES);
+                var newAppInfo = managerPkgInfo.applicationInfo;
+                newAppInfo.sourceDir = sourceDir;
+                newAppInfo.publicSourceDir = sourceDir;
+                newAppInfo.nativeLibraryDir = appInfo.nativeLibraryDir;
+                newAppInfo.packageName = appInfo.packageName;
+                newAppInfo.dataDir = HiddenApiBridge.ApplicationInfo_credentialProtectedDataDir(appInfo);
+                newAppInfo.deviceProtectedDataDir = appInfo.deviceProtectedDataDir;
+                newAppInfo.processName = appInfo.processName;
+                HiddenApiBridge.ApplicationInfo_credentialProtectedDataDir(newAppInfo, HiddenApiBridge.ApplicationInfo_credentialProtectedDataDir(appInfo));
+                newAppInfo.uid = appInfo.uid;
+            } catch (Throwable e) {
+                Utils.logE("get manager pkginfo", e);
             }
-            managerPkgInfo = ctx.getPackageManager().getPackageArchiveInfo(sourceDir, PackageManager.GET_ACTIVITIES);
-            var newAppInfo = managerPkgInfo.applicationInfo;
-            newAppInfo.sourceDir = sourceDir;
-            newAppInfo.publicSourceDir = sourceDir;
-            newAppInfo.nativeLibraryDir = appInfo.nativeLibraryDir;
-            newAppInfo.packageName = appInfo.packageName;
-            newAppInfo.dataDir = HiddenApiBridge.ApplicationInfo_credentialProtectedDataDir(appInfo);
-            newAppInfo.deviceProtectedDataDir = appInfo.deviceProtectedDataDir;
-            newAppInfo.processName = appInfo.processName;
-            HiddenApiBridge.ApplicationInfo_credentialProtectedDataDir(newAppInfo, HiddenApiBridge.ApplicationInfo_credentialProtectedDataDir(appInfo));
-            newAppInfo.uid = appInfo.uid;
         }
         return managerPkgInfo;
     }
@@ -94,7 +98,8 @@ public class ParasiticManagerHooker {
                 LoadedApk.class, "getClassLoader", new XC_MethodHook() {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) {
-                        if (XposedHelpers.getObjectField(param.thisObject, "mApplicationInfo") == getManagerPkgInfo(null).applicationInfo) {
+                        var pkgInfo = getManagerPkgInfo(null);
+                        if (pkgInfo != null && XposedHelpers.getObjectField(param.thisObject, "mApplicationInfo") == pkgInfo.applicationInfo) {
                             InstallerVerifier.sendBinderToManager((ClassLoader) param.getResult(), managerService.asBinder());
                             unhooks[0].unhook();
                         }
@@ -107,6 +112,7 @@ public class ParasiticManagerHooker {
                 for (var i = 0; i < param.args.length; ++i) {
                     if (param.args[i] instanceof ActivityInfo) {
                         var pkgInfo = getManagerPkgInfo(((ActivityInfo) param.args[i]).applicationInfo);
+                        if (pkgInfo == null) return;
                         for (var activity : pkgInfo.activities) {
                             if ("org.lsposed.manager.ui.activity.MainActivity".equals(activity.name)) {
                                 activity.applicationInfo = pkgInfo.applicationInfo;
@@ -157,8 +163,9 @@ public class ParasiticManagerHooker {
                         ctxIdx = i;
                     } else if (arg instanceof ProviderInfo) info = (ProviderInfo) arg;
                 }
-                if (ctx != null && info != null) {
-                    var packageName = getManagerPkgInfo(null).applicationInfo.packageName;
+                var pkgInfo = getManagerPkgInfo(null);
+                if (ctx != null && info != null && pkgInfo != null) {
+                    var packageName = pkgInfo.applicationInfo.packageName;
                     if (!info.applicationInfo.packageName.equals(packageName)) return;
                     if (originalContext == null) {
                         info.applicationInfo.packageName = packageName + ".origin";
