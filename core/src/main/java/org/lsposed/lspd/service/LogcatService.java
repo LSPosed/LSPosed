@@ -9,6 +9,10 @@ import org.lsposed.lspd.BuildConfig;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class LogcatService implements Runnable {
     private static final String TAG = "LSPosedLogcat";
@@ -16,8 +20,8 @@ public class LogcatService implements Runnable {
             ParcelFileDescriptor.MODE_CREATE |
             ParcelFileDescriptor.MODE_TRUNCATE |
             ParcelFileDescriptor.MODE_APPEND;
-    private File modulesLog = null;
-    private File verboseLog = null;
+    private Path modulesLog = null;
+    private Path verboseLog = null;
     private Thread thread = null;
 
     @SuppressLint("UnsafeDynamicallyLoadedCode")
@@ -43,18 +47,44 @@ public class LogcatService implements Runnable {
     @SuppressWarnings("unused")
     private int refreshFd(boolean isVerboseLog) {
         try {
-            File log = isVerboseLog ? ConfigFileManager.getNewVerboseLogPath() : ConfigFileManager.getNewModulesLogPath();
-            Log.i(TAG, "New " + (isVerboseLog ? "verbose" : "modules") + " log file: " + log);
+            File log;
+            if (isVerboseLog) {
+                checkFdFile(verboseLog);
+                log = ConfigFileManager.getNewVerboseLogPath();
+            } else {
+                checkFdFile(modulesLog);
+                log = ConfigFileManager.getNewModulesLogPath();
+            }
+            Log.i(TAG, "New log file: " + log);
             int fd = ParcelFileDescriptor.open(log, mode).detachFd();
-            var fdFile = new File("/proc/self/fd/" + fd);
+            var fdFile = Paths.get("/proc/self/fd", String.valueOf(fd));
             if (isVerboseLog) verboseLog = fdFile;
             else modulesLog = fdFile;
             return fd;
         } catch (IOException e) {
             if (isVerboseLog) verboseLog = null;
             else modulesLog = null;
-            Log.w(TAG, "someone chattr +i ?", e);
+            Log.w(TAG, "refreshFd", e);
             return -1;
+        }
+    }
+
+    private static void checkFdFile(Path fdFile) {
+        if (fdFile == null) return;
+        try {
+            var file = Files.readSymbolicLink(fdFile);
+            if (!Files.exists(file)) {
+                var parent = file.getParent();
+                if (!Files.isDirectory(parent, LinkOption.NOFOLLOW_LINKS)) {
+                    Files.deleteIfExists(parent);
+                }
+                Files.createDirectories(parent);
+                var name = file.getFileName().toString();
+                var originName = name.substring(0, name.lastIndexOf(' '));
+                Files.copy(fdFile, parent.resolve(originName));
+            }
+        } catch (IOException e) {
+            Log.w(TAG, "checkFd " + fdFile, e);
         }
     }
 
@@ -91,10 +121,23 @@ public class LogcatService implements Runnable {
     }
 
     public File getVerboseLog() {
-        return verboseLog;
+        return verboseLog.toFile();
     }
 
     public File getModulesLog() {
-        return modulesLog;
+        return modulesLog.toFile();
+    }
+
+    public void checkLogFile() {
+        try {
+            modulesLog.toRealPath();
+        } catch (IOException e) {
+            refresh(false);
+        }
+        try {
+            verboseLog.toRealPath();
+        } catch (IOException e) {
+            refresh(true);
+        }
     }
 }

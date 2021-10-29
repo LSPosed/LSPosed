@@ -28,6 +28,7 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -65,10 +66,17 @@ public class ConfigFileManager {
             Files.createDirectories(basePath);
             SELinux.setFileContext(basePath.toString(), "u:object_r:system_file:s0");
             Files.createDirectories(configDirPath);
-            Files.createDirectories(logDirPath);
+            createLogDirPath();
         } catch (IOException e) {
             Log.e(TAG, Log.getStackTraceString(e));
         }
+    }
+
+    private static void createLogDirPath() throws IOException {
+        if (!Files.isDirectory(logDirPath, LinkOption.NOFOLLOW_LINKS)) {
+            Files.deleteIfExists(logDirPath);
+        }
+        Files.createDirectories(logDirPath);
     }
 
     public static Resources getResources() {
@@ -153,12 +161,12 @@ public class ConfigFileManager {
     }
 
     static File getNewVerboseLogPath() throws IOException {
-        Files.createDirectories(logDirPath);
+        createLogDirPath();
         return logDirPath.resolve(getNewLogFileName("verbose")).toFile();
     }
 
     static File getNewModulesLogPath() throws IOException {
-        Files.createDirectories(logDirPath);
+        createLogDirPath();
         return logDirPath.resolve(getNewLogFileName("modules")).toFile();
     }
 

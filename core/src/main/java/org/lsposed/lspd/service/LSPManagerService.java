@@ -591,6 +591,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     @Override
     public ParcelFileDescriptor getModulesLog() {
+        workerHandler.post(() -> ServiceManager.getLogcatService().checkLogFile());
         return ConfigManager.getInstance().getModulesLog();
     }
 
