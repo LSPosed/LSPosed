@@ -24,7 +24,7 @@ buildscript {
         google()
         mavenCentral()
     }
-    val navVersion by extra("2.4.0-alpha10")
+    val navVersion by extra("2.4.0-beta01")
     val agpVersion by extra("7.0.3")
     dependencies {
         classpath("com.android.tools.build:gradle:$agpVersion")

@@ -163,10 +163,10 @@ dependencies {
     val glideVersion = "4.12.0"
     val navVersion: String by rootProject.extra
     annotationProcessor("com.github.bumptech.glide:compiler:$glideVersion")
-    implementation("androidx.activity:activity:1.3.1")
+    implementation("androidx.activity:activity:1.4.0")
     implementation("androidx.browser:browser:1.3.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.1")
-    implementation("androidx.core:core:1.6.0")
+    implementation("androidx.core:core:1.7.0")
     implementation("androidx.fragment:fragment:1.3.6")
     implementation("androidx.navigation:navigation-fragment:$navVersion")
     implementation("androidx.navigation:navigation-ui:$navVersion")
@@ -175,8 +175,8 @@ dependencies {
     implementation("androidx.slidingpanelayout:slidingpanelayout:1.2.0-beta01")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("com.github.bumptech.glide:glide:$glideVersion")
-    implementation("com.google.android.material:material:1.5.0-alpha04")
-    implementation("com.google.code.gson:gson:2.8.8")
+    implementation("com.google.android.material:material:1.5.0-alpha05")
+    implementation("com.google.code.gson:gson:2.8.9")
     implementation(platform("com.squareup.okhttp3:okhttp-bom:4.9.2"))
     implementation("com.squareup.okhttp3:okhttp")
     implementation("com.squareup.okhttp3:okhttp-dnsoverhttps")
