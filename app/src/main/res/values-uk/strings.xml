@@ -139,8 +139,6 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nТут нічого немає</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Фреймворк</string>
-    <string name="settings_enable_resources">Увімкнути хуки ресурсів</string>
-    <string name="settings_enable_resources_summary"><b>УВАГА:</b> Хуки ресурсів є експериментальним</string>
     <string name="pref_title_disable_verbose_log">Вимкнути детальні журнали</string>
     <string name="pure_black_dark_theme">Чорна темна тема</string>
     <string name="pure_black_dark_theme_summary">Використовувати чисту чорну тему, якщо темна тема включена</string>

@@ -148,8 +148,6 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\n空空如也</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">框架</string>
-    <string name="settings_enable_resources">启用资源钩子</string>
-    <string name="settings_enable_resources_summary"><b>警告: </b> 资源钩子为实验性的特性</string>
     <string name="pref_title_disable_verbose_log">禁用详细日志</string>
     <string name="pure_black_dark_theme">黑色主题</string>
     <string name="pure_black_dark_theme_summary">当深色主题启用时使用纯黑色主题</string>

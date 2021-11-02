@@ -21,6 +21,7 @@
 package de.robv.android.xposed;
 
 import static org.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
+import static org.lsposed.lspd.deopt.PrebuiltMethodsDeopter.deoptResourceMethods;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedBridge.sInitPackageResourcesCallbacks;
 import static de.robv.android.xposed.XposedBridge.sInitZygoteCallbacks;
@@ -53,7 +54,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -68,11 +68,14 @@ public final class XposedInit {
     public static boolean startsSystemServer = false;
 
     public static volatile boolean disableResources = false;
+    public static AtomicBoolean resourceInit = new AtomicBoolean(false);
 
     public static void hookResources() throws Throwable {
-        if (!serviceClient.isResourcesHookEnabled() || disableResources) {
+        if (disableResources || !resourceInit.compareAndSet(false, true)) {
             return;
         }
+
+        deoptResourceMethods();
 
         if (!ResourcesHook.initXResourcesNative()) {
             Log.e(TAG, "Cannot hook resources");
@@ -308,9 +311,6 @@ public final class XposedInit {
                 if (!IXposedMod.class.isAssignableFrom(moduleClass)) {
                     Log.e(TAG, "    This class doesn't implement any sub-interface of IXposedMod, skipping it");
                     continue;
-                } else if (disableResources && IXposedHookInitPackageResources.class.isAssignableFrom(moduleClass)) {
-                    Log.e(TAG, "    This class requires resource-related hooks (which are disabled), skipping it.");
-                    continue;
                 }
 
                 final Object moduleInstance = moduleClass.newInstance();
@@ -333,6 +333,7 @@ public final class XposedInit {
                 }
 
                 if (moduleInstance instanceof IXposedHookInitPackageResources) {
+                    hookResources();
                     XposedBridge.hookInitPackageResources(new IXposedHookInitPackageResources.Wrapper(
                             (IXposedHookInitPackageResources) moduleInstance, apk));
                     count++;

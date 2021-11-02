@@ -156,8 +156,6 @@
 
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
-    <string name="settings_enable_resources">Enable resource hooks</string>
-    <string name="settings_enable_resources_summary"><b>WARNING:</b> Resource hooks are experimental</string>
     <string name="pref_title_disable_verbose_log">Disable verbose logs</string>
     <string name="pure_black_dark_theme">Black dark theme</string>
     <string name="pure_black_dark_theme_summary">Use the pure black theme if dark theme is enabled</string>

@@ -145,8 +145,6 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nIl n\’y a rien ici</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Sous-système</string>
-    <string name="settings_enable_resources">Activer les crochets de ressources</string>
-    <string name="settings_enable_resources_summary"><b>AVERTISSEMENT:</b> Les crochets de ressources sont expérimentaux</string>
     <string name="pref_title_disable_verbose_log">Désactiver les journaux détaillés</string>
     <string name="pure_black_dark_theme">Thème noir et sombre</string>
     <string name="pure_black_dark_theme_summary">Utiliser le thème noir pûre si le thème noir est activé</string>

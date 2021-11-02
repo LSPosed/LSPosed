@@ -69,7 +69,6 @@ public class Main {
         // Initialize the Xposed framework
         try {
             startBootstrapHook(isSystem, appDataDir);
-            XposedInit.hookResources();
         } catch (Throwable t) {
             Utils.logE("error during Xposed initialization", t);
         }

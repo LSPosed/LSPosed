@@ -144,8 +144,6 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nKhông có gì ở đây cả</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
-    <string name="settings_enable_resources">Kích hoạt can thiệp vào tài nguyên</string>
-    <string name="settings_enable_resources_summary"><b>CẢNH BÁO:</b> Can thiệp vào tài nguyên chỉ là thử nghiệm</string>
     <string name="pref_title_disable_verbose_log">Vô hiệu hoá nhật ký chi tiết</string>
     <string name="pure_black_dark_theme">Chủ đề Đen - Tối</string>
     <string name="pure_black_dark_theme_summary">Sử dụng chủ đề đen nếu chủ đề tối được bật</string>
