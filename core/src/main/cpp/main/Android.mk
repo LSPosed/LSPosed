@@ -15,7 +15,7 @@ else ifeq ($(API), zygisk)
 LOCAL_SRC_FILES        += api/zygisk_main.cpp
 endif
 LOCAL_CFLAGS           += -DINJECTED_AID=${INJECTED_AID}
-LOCAL_LDLIBS           := -llog
+LOCAL_LDLIBS           := -llog -landroid
 include $(BUILD_SHARED_LIBRARY)
 
 $(LOCAL_PATH)/api/config.cpp : FORCE
