@@ -70,15 +70,6 @@ public class LSPApplicationServiceClient extends ApplicationServiceClient {
     }
 
     @Override
-    public boolean isResourcesHookEnabled() {
-        try {
-            return service.isResourcesHookEnabled();
-        } catch (RemoteException | NullPointerException ignored) {
-        }
-        return false;
-    }
-
-    @Override
     public List<Module> getModulesList(String processName) {
         try {
             return service.getModulesList(processName);

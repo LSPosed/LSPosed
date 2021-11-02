@@ -20,10 +20,6 @@ interface ILSPManagerService {
 
     ParceledListSlice<Application> getModuleScope(String packageName) = 7;
 
-    boolean isResourceHook() = 9;
-
-    void setResourceHook(boolean enabled) = 10;
-
     boolean isVerboseLog() = 11;
 
     void setVerboseLog(boolean enabled) = 12;

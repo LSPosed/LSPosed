@@ -124,8 +124,6 @@
     <string name="module_app_info">앱 정보</string>
     <string name="list_empty">¯\\\\_(ツ)_\/¯\n아무것도 없음</string>
     <!-- SettingsActivity -->
-    <string name="settings_enable_resources">리소스 후크 사용</string>
-    <string name="settings_enable_resources_summary"><b>경고:</b> 리소스 후크가 실험적입니다. </string>
     <string name="pref_title_disable_verbose_log">상세 로그 사용 안 함</string>
     <string name="pure_black_dark_theme">블랙 다크 테마</string>
     <string name="pure_black_dark_theme_summary">다크 테마가 활성화된 경우 순수 검은색 테마를 사용합니다.</string>

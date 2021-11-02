@@ -60,8 +60,11 @@ public class PrebuiltMethodsDeopter {
     public static void deoptBootMethods() {
         // todo check if has been done before
         deoptMethods(KEY_BOOT_IMAGE, null);
-        if (Utils.isMIUI && serviceClient.isResourcesHookEnabled()) {
-            //deopt these only for MIUI with resources hook enabled
+    }
+
+    public static void deoptResourceMethods() {
+        if (Utils.isMIUI) {
+            //deopt these only for MIUI
             deoptMethods(KEY_BOOT_IMAGE_MIUI_RES, null);
         }
     }

@@ -67,12 +67,6 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
     }
 
     @Override
-    public boolean isResourcesHookEnabled() throws RemoteException {
-        ensureRegistered();
-        return ConfigManager.getInstance().resourceHook();
-    }
-
-    @Override
     public List<Module> getModulesList(String processName) throws RemoteException {
         ensureRegistered();
         int pid = getCallingPid();

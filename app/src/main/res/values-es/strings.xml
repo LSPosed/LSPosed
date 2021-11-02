@@ -141,8 +141,6 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nNo hay nada por aquí</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
-    <string name="settings_enable_resources">Activar hooks de recursos</string>
-    <string name="settings_enable_resources_summary"><b>ADVERTENCIA:</b> los hooks de recursos son experimentales</string>
     <string name="pref_title_disable_verbose_log">Desactivar registros detallados</string>
     <string name="pure_black_dark_theme">Tema negro oscuro</string>
     <string name="pure_black_dark_theme_summary">Usar el tema negro puro si el tema oscuro está activado</string>

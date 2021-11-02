@@ -135,8 +135,6 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nهیچی اینجا نیس</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">فریمورک</string>
-    <string name="settings_enable_resources">قلاب منابع (ریسورس هوک) را فعال کنید</string>
-    <string name="settings_enable_resources_summary"><b>هشدار:</b> قلاب منابع آزمایشی است</string>
     <string name="pref_title_disable_verbose_log">غیرفعال کردن سیاهه دقیق</string>
     <string name="pure_black_dark_theme">تم مشکی تیره</string>
     <string name="pure_black_dark_theme_summary">استفاده از مشکی خالص در صورت فعال بودن تم سیاه</string>

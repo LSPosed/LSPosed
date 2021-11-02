@@ -152,13 +152,6 @@ public class SettingsFragment extends BaseFragment {
                         ConfigManager.setVerboseLogEnabled(!(boolean) newValue));
             }
 
-            SwitchPreference prefEnableResources = findPreference("enable_resources");
-            if (prefEnableResources != null) {
-                prefEnableResources.setEnabled(installed);
-                prefEnableResources.setChecked(installed && ConfigManager.isResourceHookEnabled());
-                prefEnableResources.setOnPreferenceChangeListener((preference, newValue) -> ConfigManager.setResourceHookEnabled((boolean) newValue));
-            }
-
             SwitchPreference prefEnableShortcut = findPreference("enable_auto_add_shortcut");
             if (prefEnableShortcut != null) {
                 prefEnableShortcut.setEnabled(installed);

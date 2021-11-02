@@ -134,8 +134,6 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nリストは空です</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">フレームワーク</string>
-    <string name="settings_enable_resources">リソースフックを有効化</string>
-    <string name="settings_enable_resources_summary"><b>警告:</b> リソースフックは実験的機能です</string>
     <string name="pref_title_disable_verbose_log">詳細ログの無効化</string>
     <string name="pure_black_dark_theme">ブラックダークテーマ</string>
     <string name="pure_black_dark_theme_summary">ダークテーマ有効時にピュアブラックのテーマを使用</string>

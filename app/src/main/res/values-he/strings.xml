@@ -100,7 +100,6 @@
     <!-- ModulesActivity and AppListActivity -->
     <string name="module_app_info">מידע על האפליקציה</string>
     <!-- SettingsActivity -->
-    <string name="settings_enable_resources_summary"><b>אזהרה:</b> Resource hooks are experimental</string>
     <string name="pref_title_disable_verbose_log">בטל verbose logs</string>
     <string name="pure_black_dark_theme">ערכת נושא שחור כהה</string>
     <string name="settings_group_theme">ערכת נושא</string>

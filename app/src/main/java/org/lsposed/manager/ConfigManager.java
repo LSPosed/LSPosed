@@ -137,25 +137,6 @@ public class ConfigManager {
         return list;
     }
 
-    public static boolean isResourceHookEnabled() {
-        try {
-            return LSPManagerServiceHolder.getService().isResourceHook();
-        } catch (RemoteException e) {
-            Log.e(App.TAG, Log.getStackTraceString(e));
-            return false;
-        }
-    }
-
-    public static boolean setResourceHookEnabled(boolean enabled) {
-        try {
-            LSPManagerServiceHolder.getService().setResourceHook(enabled);
-            return true;
-        } catch (RemoteException e) {
-            Log.e(App.TAG, Log.getStackTraceString(e));
-            return false;
-        }
-    }
-
     public static boolean isAddShortcut() {
         try {
             return LSPManagerServiceHolder.getService().isAddShortcut();

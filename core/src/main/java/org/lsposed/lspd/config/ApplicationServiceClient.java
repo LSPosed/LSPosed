@@ -1,7 +1,6 @@
 package org.lsposed.lspd.config;
 
 import android.os.IBinder;
-import android.os.ParcelFileDescriptor;
 
 import org.lsposed.lspd.models.Module;
 import org.lsposed.lspd.service.ILSPApplicationService;
@@ -14,9 +13,6 @@ abstract public class ApplicationServiceClient implements ILSPApplicationService
 
     @Override
     abstract public IBinder requestModuleBinder(String name);
-
-    @Override
-    abstract public boolean isResourcesHookEnabled();
 
     @Override
     abstract public List<Module> getModulesList(String processName);

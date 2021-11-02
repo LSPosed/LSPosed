@@ -78,15 +78,6 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/settings_group_framework">
-
-        <SwitchPreference
-            android:defaultValue="false"
-            android:icon="@drawable/ic_outline_science_24"
-            android:key="enable_resources"
-            android:persistent="false"
-            android:summary="@string/settings_enable_resources_summary"
-            android:title="@string/settings_enable_resources" />
-
         <SwitchPreference
             android:defaultValue="false"
             android:key="disable_verbose_log"
