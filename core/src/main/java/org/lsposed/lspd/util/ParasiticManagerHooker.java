@@ -45,7 +45,7 @@ public class ParasiticManagerHooker {
     private static int managerFd = -1;
 
     private synchronized static PackageInfo getManagerPkgInfo(ApplicationInfo appInfo) {
-        if (managerPkgInfo == null) {
+        if (managerPkgInfo == null && appInfo != null) {
             try {
                 Context ctx = ActivityThread.currentActivityThread().getSystemContext();
                 var sourceDir = "/proc/self/fd/" + managerFd;
