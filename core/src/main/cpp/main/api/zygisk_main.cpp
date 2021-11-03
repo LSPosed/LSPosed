@@ -19,8 +19,7 @@
 
 #include <sys/socket.h>
 #include <fcntl.h>
-#include <android/sharedmem.h>
-#include <android/sharedmem_jni.h>
+#include <dlfcn.h>
 
 #include "jni/zygisk.h"
 #include "logging.h"
@@ -174,6 +173,24 @@ namespace lspd {
     int *allowUnload = &allow_unload;
 
     class SharedMem {
+        inline static void *cutils = nullptr;
+
+        inline static int (*ashmem_create_region)(const char *name, std::size_t size) = nullptr;
+
+        inline static int (*ashmem_set_prot_region)(int fd, int prot) = nullptr;
+
+        inline static bool init = false;
+
+        static void Init() {
+            if (init) return;
+            cutils = dlopen("/system/lib" LP_SELECT("", "64") "/libcutils.so", 0);
+            ashmem_create_region = cutils ? reinterpret_cast<decltype(ashmem_create_region)>(
+                    dlsym(cutils, "ashmem_create_region")) : nullptr;
+            ashmem_set_prot_region = cutils ? reinterpret_cast<decltype(ashmem_set_prot_region)>(
+                    dlsym(cutils, "ashmem_set_prot_region")) : nullptr;
+            init = true;
+        }
+
         int fd_ = -1;
         std::size_t size_ = 0;
 
@@ -228,7 +245,8 @@ namespace lspd {
         constexpr bool ok() const { return fd_ > 0 && size_ > 0; }
 
         SharedMem(std::string_view name, std::size_t size) {
-            if ((fd_ = ASharedMemory_create(name.data(), size)) > 0) {
+            Init();
+            if (ashmem_create_region && (fd_ = ashmem_create_region(name.data(), size)) > 0) {
                 size_ = size;
                 LOGD("using memfd");
             } else {
@@ -243,10 +261,12 @@ namespace lspd {
         }
 
         void SetProt(int prot) {
-            ASharedMemory_setProt(fd_, prot);
+            ashmem_set_prot_region(fd_, prot);
         }
 
-        SharedMem() : fd_(-1), size_(0) {}
+        SharedMem() : fd_(-1), size_(0) {
+            Init();
+        }
 
         constexpr auto get() const { return fd_; }
 
