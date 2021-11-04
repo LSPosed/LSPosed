@@ -6,6 +6,8 @@
 #include <cinttypes>
 #include "logcat.h"
 #include <sys/system_properties.h>
+#include <fcntl.h>
+#include <sys/stat.h>
 
 using namespace std::string_view_literals;
 
@@ -52,6 +54,8 @@ private:
 
     static size_t PrintLogLine(const AndroidLogEntry &entry, FILE *out);
 
+    static void reLinkFd(int fd);
+
     JNIEnv *env_;
     jobject thiz_;
     jmethodID refresh_fd_method_;
@@ -87,6 +91,7 @@ size_t Logcat::PrintLogLine(const AndroidLogEntry &entry, FILE *out) {
     }
     localtime_r(&now, &tm);
     strftime(time_buff.data(), time_buff.size(), "%Y-%m-%dT%H:%M:%S", &tm);
+    reLinkFd(fileno(out));
     int len = fprintf(out, "[ %s.%03ld %8d:%6d:%6d %c/%-15.*s ] %.*s\n",
                       time_buff.data(),
                       nsec / MS_PER_NSEC,
@@ -209,6 +214,16 @@ void Logcat::Run() {
         }
 
         OnCrash();
+    }
+}
+
+void Logcat::reLinkFd(int fd) {
+    std::string path(PATH_MAX, '\0');
+    readlinkat(fd, "", path.data(), path.length());
+    if (access(path.c_str(), F_OK)) {
+        auto real_path = path.substr(0, path.find_last_of(' '));
+        mkdir(real_path.substr(0, real_path.find_last_of('/')).c_str(), 0777);
+        linkat(fd, "", AT_FDCWD, real_path.c_str(), AT_EMPTY_PATH);
     }
 }
 
