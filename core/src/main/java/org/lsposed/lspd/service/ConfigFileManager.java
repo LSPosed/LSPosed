@@ -157,7 +157,7 @@ public class ConfigFileManager {
     }
 
     private static String getNewLogFileName(String prefix) {
-        return prefix + "_" + formatter.format(Instant.now()) + ".txt";
+        return prefix + "_" + formatter.format(Instant.now()) + ".log";
     }
 
     static File getNewVerboseLogPath() throws IOException {
