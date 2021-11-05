@@ -260,18 +260,6 @@ public class LogsFragment extends BaseFragment {
         } catch (IOException e) {
             Log.w(TAG, name, e);
         }
-
-        var db = ConfigManager.dumpDB();
-        name = "db_" + now + ".db";
-        if (db != null) {
-            try {
-                os.putNextEntry(new ZipEntry(name));
-                FileUtils.copy(new FileInputStream(db.getFileDescriptor()), os);
-                os.closeEntry();
-            } catch (IOException e) {
-                Log.w(TAG, name, e);
-            }
-        }
     }
 
     @SuppressWarnings("deprecation")

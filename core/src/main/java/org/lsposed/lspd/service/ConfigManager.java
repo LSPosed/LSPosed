@@ -951,13 +951,4 @@ public class ConfigManager {
         Log.d(TAG, "dumpConfigs:\n" + configs);
         return configs;
     }
-
-    public ParcelFileDescriptor dumpDB() {
-        try {
-            return ParcelFileDescriptor.open(ConfigFileManager.dbPath, ParcelFileDescriptor.MODE_READ_ONLY);
-        } catch (IOException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
-            return null;
-        }
-    }
 }

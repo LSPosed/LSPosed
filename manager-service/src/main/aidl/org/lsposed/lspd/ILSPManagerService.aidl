@@ -77,6 +77,4 @@ interface ILSPManagerService {
     List<String> getDenyListPackages() = 41;
 
     String dumpConfigs() = 42;
-
-    ParcelFileDescriptor dumpDB() = 43;
 }

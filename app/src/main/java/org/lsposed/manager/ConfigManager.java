@@ -359,13 +359,4 @@ public class ConfigManager {
         }
         return configs;
     }
-
-    public static ParcelFileDescriptor dumpDB() {
-        try {
-            return LSPManagerServiceHolder.getService().dumpDB();
-        } catch (RemoteException e) {
-            Log.e(App.TAG, Log.getStackTraceString(e));
-            return null;
-        }
-    }
 }

@@ -747,9 +747,4 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     public String dumpConfigs() {
         return ConfigManager.getInstance().dumpConfigs();
     }
-
-    @Override
-    public ParcelFileDescriptor dumpDB() {
-        return ConfigManager.getInstance().dumpDB();
-    }
 }
