@@ -742,4 +742,14 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     public boolean performDexOptMode(String packageName) throws RemoteException {
         return PackageService.performDexOptMode(packageName);
     }
+
+    @Override
+    public String dumpConfigs() {
+        return ConfigManager.getInstance().dumpConfigs();
+    }
+
+    @Override
+    public ParcelFileDescriptor dumpDB() {
+        return ConfigManager.getInstance().dumpDB();
+    }
 }

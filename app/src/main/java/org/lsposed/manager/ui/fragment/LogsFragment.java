@@ -58,6 +58,7 @@ import org.lsposed.manager.databinding.FragmentLogsBinding;
 import org.lsposed.manager.databinding.ItemLogBinding;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -66,8 +67,10 @@ import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -222,22 +225,52 @@ public class LogsFragment extends BaseFragment {
             }
         });
 
-        try (var is = Runtime.getRuntime().exec("getprop").getInputStream()) {
-            os.putNextEntry(new ZipEntry("system_props.log"));
-            FileUtils.copy(is, os);
+        try (var is = new ProcessBuilder("getprop").start().getInputStream()) {
+            var props = new Properties();
+            props.load(is);
+            Enumeration<?> e = props.propertyNames();
+            while (e.hasMoreElements()) {
+                String key = (String) e.nextElement();
+                if (key.contains("imei") || key.contains("meid"))
+                    props.remove(key);
+            }
+            os.putNextEntry(new ZipEntry("system_props.xml"));
+            props.storeToXML(os, "Android System Props");
             os.closeEntry();
         } catch (IOException e) {
-            Log.w(TAG, "system_props.log", e);
+            Log.w(TAG, "system_props.xml", e);
         }
 
         var now = LocalDateTime.now();
         var name = "app_" + now.toString() + ".log";
-        try (var is = Runtime.getRuntime().exec("logcat -d").getInputStream()) {
+        try (var is = new ProcessBuilder("logcat", "-d").start().getInputStream()) {
             os.putNextEntry(new ZipEntry(name));
             FileUtils.copy(is, os);
             os.closeEntry();
         } catch (IOException e) {
             Log.w(TAG, name, e);
+        }
+
+        name = "configs_" + now + ".log";
+        try {
+            var in = new ByteArrayInputStream(ConfigManager.dumpConfigs().getBytes());
+            os.putNextEntry(new ZipEntry(name));
+            FileUtils.copy(in, os);
+            os.closeEntry();
+        } catch (IOException e) {
+            Log.w(TAG, name, e);
+        }
+
+        var db = ConfigManager.dumpDB();
+        name = "db_" + now + ".db";
+        if (db != null) {
+            try {
+                os.putNextEntry(new ZipEntry(name));
+                FileUtils.copy(new FileInputStream(db.getFileDescriptor()), os);
+                os.closeEntry();
+            } catch (IOException e) {
+                Log.w(TAG, name, e);
+            }
         }
     }
 

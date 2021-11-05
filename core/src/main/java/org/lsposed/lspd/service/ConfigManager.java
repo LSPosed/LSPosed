@@ -940,4 +940,24 @@ public class ConfigManager {
     public String getApi() {
         return api;
     }
+
+    public String dumpConfigs() {
+        var configs = "==== LSPosed Configs ====\n" +
+                "Auto add shortcut=" + isAddShortcut() +
+                ", enabled verbose Log=" + verboseLog() +
+                ", manager installed=" + isManagerInstalled() +
+                ", Sepolicy Loaded=" + isSepolicyLoaded() + "\n" +
+                "misc path=" + miscPath + "\n";
+        Log.d(TAG, "dumpConfigs:\n" + configs);
+        return configs;
+    }
+
+    public ParcelFileDescriptor dumpDB() {
+        try {
+            return ParcelFileDescriptor.open(ConfigFileManager.dbPath, ParcelFileDescriptor.MODE_READ_ONLY);
+        } catch (IOException e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+            return null;
+        }
+    }
 }

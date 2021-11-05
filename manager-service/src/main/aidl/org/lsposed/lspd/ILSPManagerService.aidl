@@ -75,4 +75,8 @@ interface ILSPManagerService {
     boolean performDexOptMode(String packageName) = 40;
 
     List<String> getDenyListPackages() = 41;
+
+    String dumpConfigs() = 42;
+
+    ParcelFileDescriptor dumpDB() = 43;
 }
