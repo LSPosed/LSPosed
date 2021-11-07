@@ -30,7 +30,6 @@
     <string name="About">Sobre</string>
     <string name="report_issue">Reportar problema</string>
     <string name="module_repo">Repositori</string>
-    <string name="module_repo_summary">Repositori de mòduls (Beta)</string>
     <string name="about_view_source_code"><![CDATA[Veure codi font a %1$s<br/>Uneix-te al nostre %2$s canal]]></string>
     <string name="install">Instalar</string>
     <string name="install_summary">Toca per instal·lar LSPosed</string>

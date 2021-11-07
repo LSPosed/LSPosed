@@ -31,7 +31,6 @@
     <string name="About">درباره</string>
     <string name="report_issue">گزارش مشکل</string>
     <string name="module_repo">مخزن</string>
-    <string name="module_repo_summary">مخزن ماژول (بتا)</string>
     <string name="about_view_source_code"><![CDATA[سورس کد موجود در %1$s<br/> جوین شوید در %2$s چنل ما]]></string>
     <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">rezamqds</string>
     <string name="install">نصب</string>
