@@ -23,7 +23,7 @@
     <string name="info">Інформація</string>
     <string name="Modules">Модулі</string>
     <plurals name="modules_enabled_count">
-        <item quantity="one">%d модулів увімкнено</item>
+        <item quantity="one">%d модуль увімкнено</item>
         <item quantity="few">%d модулів увімкнено</item>
         <item quantity="many">%d модулів увімкнено</item>
         <item quantity="other">%d модулів увімкнено</item>
@@ -42,7 +42,7 @@
     <string name="activated">Активовано</string>
     <string name="partial_activated">Частково активований</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy завантажено неправильно</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[Модулі, яким необхідний систематичний фреймворк, не працюватимуть.<br/>Повідомте про це розобнику <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>.]]></string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Модулі, яким необхідний систематичний фреймворк, не працюватимуть.<br/>Повідомте про це розробнику <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>.]]></string>
     <string name="system_inject_fail_summary">Помилка ін\'єкції системного фреймворку</string>
     <string name="system_inject_fail"><![CDATA[Це рідкість і може бути викликано <b>Magisk</b> або деякими неякісними модулями Magisk.<br/>Спробуйте вимкнути всі модулі Magisk, крім Riru та LSPosed, або надішліть повний журнал розробникам.]]></string>
     <string name="system_prop_incorrect_summary">Неправильні системні налаштування</string>
@@ -58,7 +58,10 @@
     <string name="info_system_abi">Система ABI</string>
     <string name="parasitic_recommend_summary">LSPosed тепер підтримує системну паразитізацію, щоб уникнути виявлення. Ви можете безпечно видалити менеджера після успішного створення ярлика менеджера паразитів. У будь-якому випадку ви можете встановити менеджер назад з /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Створити ярлик</string>
+    <string name="never_show">Не показувати</string>
     <string name="failed_to_create_shortcut">Не вдалося створити ярлик: %1$s</string>
+    <string name="update_lsposed">Оновити LSPosed</string>
+    <string name="update_lsposed_msg">Підтверджуєте оновлення LSPosed? Цей пристрій перезавантажиться після закінчення оновлення</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Зберегти</string>
     <string name="nav_item_logs_lsp">Журнали LSPosed</string>
@@ -97,6 +100,8 @@
     <string name="module_install_failed">Не вдалося додати модуль</string>
     <string name="install_to_user">Встановити на користувача %s</string>
     <string name="install_to_user_message">Бажаєте встановити %1$s користувачем %2$s? Рекомендується встановлювати вручну, примусово за допомогою LSPosed може спричинити проблеми.</string>
+    <string name="expand">розгорнути</string>
+    <string name="collapse">згорнути</string>
     <!-- AppListActivity -->
     <string name="compile_speed">Повторна оптимізація</string>
     <string name="compile_speed_msg">Оптимізація…</string>
@@ -161,6 +166,7 @@
     <string name="settings_translation_contributors">Автори перекладу</string>
     <string name="settings_translation">Брати участь в перекладі</string>
     <string name="settings_translation_summary">Допоможіть нам перекласти %s на вашу мову</string>
+    <string name="settings_update_channel">Канал оновлень</string>
     <string name="update_channel_nightly">Нічна збірка</string>
     <!-- Module Repo -->
     <string name="module_readme">Опис</string>
@@ -183,6 +189,4 @@
     <string name="send_crash_info">Надіслати інформацію про помилку</string>
     <string name="crash_info_copied">Інформація про помилку скопійована до буферу обміну</string>
     <!-- Colors -->
-    <string name="expand">розгорнути</string>
-    <string name="collapse">згорнути</string>
 </resources>
