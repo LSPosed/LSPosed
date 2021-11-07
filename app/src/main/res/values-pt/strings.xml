@@ -79,6 +79,7 @@
     <string name="warning_installed_on_external_storage">Este módulo não pôde ser carregado porque está instalado no cartão SD, por favor, mova-o para o armazenamento interno</string>
     <string name="module_uninstalled">%1$s desinstalado</string>
     <string name="module_install_failed">Falha ao adicionar módulo</string>
+    <string name="expand">expandir</string>
     <!-- AppListActivity -->
     <string name="compile_speed_msg">Otimizando…</string>
     <string name="sort_by_install_time">Tempo de instalação</string>
@@ -147,5 +148,4 @@
     <string name="color_orange">Laranja</string>
     <string name="color_deep_orange">Laranja escuro</string>
     <string name="color_blue_grey">Azul acizentado</string>
-    <string name="expand">expandir</string>
 </resources>
