@@ -51,6 +51,7 @@ import org.lsposed.manager.util.NavUtil;
 import org.lsposed.manager.util.UpdateUtil;
 import org.lsposed.manager.util.chrome.LinkTransformationMethod;
 
+import java.util.HashSet;
 import java.util.Locale;
 
 import rikka.core.util.ResourceUtils;
@@ -196,10 +197,14 @@ public class HomeFragment extends BaseFragment implements RepoLoader.Listener {
     @Override
     public void repoLoaded() {
         final int[] count = new int[]{0};
+        HashSet<String> processedModules = new HashSet<>();
         ModuleUtil.getInstance().getModules().forEach((k, v) -> {
-                    var ver = repoLoader.getModuleLatestVersion(k.first);
-                    if (ver != null && ver.upgradable(v.versionCode, v.versionName)) {
-                        ++count[0];
+                    if (!processedModules.contains(k.first)) {
+                        var ver = repoLoader.getModuleLatestVersion(k.first);
+                        if (ver != null && ver.upgradable(v.versionCode, v.versionName)) {
+                            ++count[0];
+                        }
+                        processedModules.add(k.first);
                     }
                 }
         );
