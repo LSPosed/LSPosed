@@ -33,7 +33,6 @@
     <string name="About">O aplikaci</string>
     <string name="report_issue">Nahlásit problém</string>
     <string name="module_repo">Repozitář</string>
-    <string name="module_repo_summary">Repozitář modulů (Beta)</string>
     <string name="about_view_source_code"><![CDATA[Zobrazit zdrojový kód na %1$s<br/>Připojte se k našemu kanálu %2$s]]></string>
     <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">https://www.instagram.com/kasi33/</string>
     <string name="install">Instalovat</string>
