@@ -31,7 +31,7 @@
     <string name="report_issue">报告问题</string>
     <string name="module_repo">仓库</string>
     <string name="module_repo_summary">模块仓库（Beta）</string>
-    <string name="about_view_source_code"><![CDATA[在 %1$s 查看源码<br/>加入我们的 %2$s 频道]]></string>
+    <string name="about_view_source_code"><![CDATA[在 %1$s 查看源码<br/>加入我们的 Telegram %2$s 频道<br/>加入我们的 QQ 频道：用手机 QQ 内置浏览器打开 http://t.cn/A6x2pfNh]]></string>
     <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">null</string>
     <string name="install">安装</string>
     <string name="install_summary">点按安装 LSPosed</string>
@@ -48,13 +48,13 @@
     <string name="need_update">需要更新</string>
     <string name="please_update_summary">请安装新版 LSPosed</string>
     <string name="lsposed_not_active">LSPosed 未安装或未激活</string>
-    <string name="info_api">注入接口</string>
     <string name="info_api_version">API 版本</string>
     <string name="info_framework_version">框架版本</string>
     <string name="info_manager_version">管理器版本</string>
     <string name="info_system_version">系统版本</string>
     <string name="info_device">设备</string>
     <string name="info_system_abi">系统架构</string>
+    <string name="info_api">注入接口</string>
     <string name="parasitic_recommend">推荐使用寄生管理器</string>
     <string name="parasitic_recommend_summary">LSPosed 现在支持寄生系统以避免检测。您可以在成功创建寄生管理器图标后在系统设置中卸载管理器。 在任何情况下，您都可以从 /data/adb/lspd/manager.apk 安装管理器。</string>
     <string name="create_shortcut">创建快捷方式</string>
@@ -72,7 +72,7 @@
     <string name="scroll_top">滚动到顶部</string>
     <string name="loading">加载中…</string>
     <string name="scroll_bottom">滚动到底部</string>
-    <string name="logs_cannot_read">无法读取日志: \n</string>
+    <string name="logs_cannot_read">无法读取日志：\n</string>
     <string name="menuReload">重新加载</string>
     <string name="logs_clear_failed_2">日志清除失败</string>
     <string name="menu_enable_word_wrap">自动换行</string>
@@ -84,12 +84,12 @@
     <string name="xposed_module_updated_notification_title_system">Xposed 模块已更新，需要重新启动</string>
     <string name="xposed_module_updated_notification_content_system">%s 已更新，由于作用域包含系统框架，需要重启设备以应用更改</string>
     <!-- ModulesActivity -->
-    <string name="module_empty_description">(未提供介绍)</string>
+    <string name="module_empty_description">（未提供介绍）</string>
     <string name="module_no_ui">该模块未提供用户界面</string>
-    <string name="warning_xposed_min_version">此模块需要更新的 Xposed 版本(%d)，因此无法激活</string>
+    <string name="warning_xposed_min_version">此模块需要更新的 Xposed 版本（%d），因此无法激活</string>
     <string name="no_min_version_specified">该模块未指定所需的 Xposed 版本</string>
     <string name="warning_min_version_too_low">该模块针对 Xposed %1$d 版本构建，由于不兼容 %2$d 版本中的变更，现已被停用</string>
-    <string name="warning_installed_on_external_storage">此模块因被安装在 SD 卡中而导致无法加载, 请将其移动到内部存储</string>
+    <string name="warning_installed_on_external_storage">此模块因被安装在 SD 卡中而导致无法加载，请将其移动到内部存储</string>
     <string name="module_uninstall">卸载</string>
     <string name="module_settings">模块设置</string>
     <string name="view_in_repo">在仓库中查看</string>
@@ -100,7 +100,7 @@
     <string name="module_installed">已安装 %1$s 到用户 %2$s</string>
     <string name="module_install_failed">安装失败</string>
     <string name="install_to_user">安装到用户 %s</string>
-    <string name="install_to_user_message">确认安装 %1$s 到用户 %2$s? 推荐手动用系统自带方法安装，强制通过 LSPosed 安装可能会导致未知异常。</string>
+    <string name="install_to_user_message">确认安装 %1$s 到用户 %2$s？推荐手动用系统自带方法安装，强制通过 LSPosed 安装可能会导致未知异常。</string>
     <string name="expand">展开</string>
     <string name="collapse">收起</string>
     <!-- AppListActivity -->
@@ -126,7 +126,7 @@
     <string name="app_description">%1$s\n版本：%2$s</string>
     <string name="use_recommended">推荐应用</string>
     <string name="no_scope_selected_has_recommended">未选择任何应用。选择推荐的应用？</string>
-    <string name="use_recommended_message">选择推荐的应用?</string>
+    <string name="use_recommended_message">选择推荐的应用？</string>
     <string name="requested_by_module">推荐的应用</string>
     <string name="update_available">可用更新：%1$s</string>
     <string name="module_disabled_no_selection">由于未选择任何应用，模块 %s 已被禁用。</string>

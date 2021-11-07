@@ -57,6 +57,7 @@
     <string name="info_system_version">Wersja systemu</string>
     <string name="info_device">Urządzenie</string>
     <string name="info_system_abi">System ABI</string>
+    <string name="info_api">Interfejs injekcji</string>
     <string name="create_shortcut">Utwórz skrót</string>
     <string name="never_show">Nigdy nie pokazuje</string>
     <string name="failed_to_create_shortcut">Nie udało się utworzyć skrótu: %1$s</string>
@@ -100,6 +101,8 @@
     <string name="module_install_failed">Dodawanie modułu nie powiodło się</string>
     <string name="install_to_user">Zainstaluj dla użytkownika %s</string>
     <string name="install_to_user_message">Chcesz zainstalować %1$s dla użytkownika %2$s? Zalecana jest ręczna instalacja, wymuszanie instalacji przez LSPosed może powodować problemy.</string>
+    <string name="expand">rozwiń</string>
+    <string name="collapse">zwiń</string>
     <!-- AppListActivity -->
     <string name="compile_speed">Ponownie zoptymalizuj</string>
     <string name="compile_speed_msg">Optymalizowanie…</string>
@@ -118,6 +121,7 @@
     <string name="no_scope_selected">Nie wybrałeś żadnej aplikacji. Kontynuować?</string>
     <string name="menu_show_games">Gry</string>
     <string name="menu_show_modules">Moduły</string>
+    <string name="menu_show_denylist">Zabroniona lista</string>
     <string name="failed_to_save_scope_list">Nie udało się zapisać listy zakresu</string>
     <string name="app_description">%1$s\nWersja %2$s</string>
     <string name="use_recommended">Rekomendowane</string>

@@ -37,7 +37,8 @@
     <string name="module_repo">المُستودع</string>
     <string name="module_repo_summary">مستودع الوحدة (تجريبي)</string>
     <string name="about_view_source_code"><![CDATA[عرض كود المصدر في %1$s<br/>انضم إلى قناتنا %2$s]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Mahmoud Abd El-Hamed (7TM)</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Mahmoud Abd El-Hamed (7TM)
+Ali Samir</string>
     <string name="install">تـثبيت</string>
     <string name="install_summary">انـقر لتثبيت LSPosed</string>
     <string name="not_installed">غير  مثبت</string>
@@ -59,6 +60,7 @@
     <string name="info_system_version">اصدار النظام</string>
     <string name="info_device">الجـهاز</string>
     <string name="info_system_abi">نظام ABI</string>
+    <string name="info_api">واجهة الحقن</string>
     <string name="parasitic_recommend">مدير طفيلي موصي به</string>
     <string name="parasitic_recommend_summary">يدعم LSPosed الآن تطهير النظام لتجنب الكشف. يمكنك إلغاء تثبيت المدير بأمان بعد إنشاء اختصار للمدير الطفيلي. على أي حال يمكنك تثبيت المدير مرة أخرى من /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">إنشاء إختصار</string>
@@ -79,6 +81,7 @@
     <string name="logs_cannot_read">تعذر قراءة السجل: \n</string>
     <string name="menuReload">إعادة التحميل</string>
     <string name="logs_clear_failed_2">فشل مسح السجل</string>
+    <string name="menu_enable_word_wrap">التفاف النص</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">وحدة Xposed لم يتم تفعيلها بعد</string>
     <string name="module_is_not_activated_yet_detailed">%s تم تثبيته، ولكن لم يتم تفعيله بعد</string>
@@ -104,6 +107,8 @@
     <string name="module_install_failed">فشل إضافة الوحدة</string>
     <string name="install_to_user">تثبيت للمستخدم %s</string>
     <string name="install_to_user_message">هل ترغب في تثبيت %1$s للمستخدم %2$s؟ ينصح بالتثبيت يدوياً، قد يسبب إجبار التثبيت عبر LSPosed مشاكل.</string>
+    <string name="expand">توسّع</string>
+    <string name="collapse">انهيار</string>
     <!-- AppListActivity -->
     <string name="compile_speed">إعادة تحسين</string>
     <string name="compile_speed_msg">تحسين…</string>
@@ -219,6 +224,4 @@
     <string name="color_brown">بني</string>
     <string name="color_grey">رمادي</string>
     <string name="color_blue_grey">أزرق رمادي</string>
-    <string name="expand">توسّع</string>
-    <string name="collapse">انهيار</string>
 </resources>

@@ -55,6 +55,7 @@
     <string name="info_system_version">Versione del sistema</string>
     <string name="info_device">Dispositivo</string>
     <string name="info_system_abi">ABI del sistema</string>
+    <string name="info_api">Interfaccia di iniezione</string>
     <string name="parasitic_recommend">Manager parassitario consigliato</string>
     <string name="parasitic_recommend_summary">LSPosed ora supporta la parassitizzazione del sistema per evitare il rilevamento. Puoi disinstallare in modo sicuro il manager dopo aver creato con successo una scorciatoia del manager parassitario. In ogni caso è possibile installare il manager da /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Crea scorciatoia</string>
@@ -75,6 +76,7 @@
     <string name="logs_cannot_read">Impossibile leggere il log: \n</string>
     <string name="menuReload">Ricarica</string>
     <string name="logs_clear_failed_2">Impossibile cancellare il log</string>
+    <string name="menu_enable_word_wrap">A capo automatico</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Il modulo Xposed non è ancora attivo</string>
     <string name="module_is_not_activated_yet_detailed">%s è stato installato, ma non è ancora attivo</string>
@@ -100,6 +102,8 @@
     <string name="module_install_failed">Aggiunta del modulo fallita</string>
     <string name="install_to_user">Installa per l\'utente %s</string>
     <string name="install_to_user_message">Vuoi installare %1$s per l\'utente %2$s? Si consiglia di farlo manualmente, forzare l\'installazione da LSPosed potrebbe causare problemi.</string>
+    <string name="expand">espandi</string>
+    <string name="collapse">comprimi</string>
     <!-- AppListActivity -->
     <string name="compile_speed">Ottimizza di nuovo</string>
     <string name="compile_speed_msg">Ottimizzazione in corso…</string>
@@ -215,6 +219,4 @@
     <string name="color_brown">Marrone</string>
     <string name="color_grey">Grigio</string>
     <string name="color_blue_grey">Blu grigio</string>
-    <string name="expand">espandi</string>
-    <string name="collapse">comprimi</string>
 </resources>
