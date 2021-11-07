@@ -31,6 +31,12 @@
     <string name="About">Informazioni</string>
     <string name="report_issue">Segnala un problema</string>
     <string name="module_repo">Repository</string>
+    <string name="module_repo_loading">Caricamento in corso…</string>
+    <string name="module_repo_up_to_date">Tutti i moduli sono aggiornati</string>
+    <plurals name="module_repo_upgradable">
+        <item quantity="one">%d modulo aggiornabile</item>
+        <item quantity="other">%d moduli aggiornabili</item>
+    </plurals>
     <string name="about_view_source_code"><![CDATA[Visualizza il codice sorgente su %1$s<br/>Unisciti al nostro canale %2$s]]></string>
     <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">alex193a, Fs00, xDonatello</string>
     <string name="install">Installa</string>
