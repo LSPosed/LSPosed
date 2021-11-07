@@ -349,14 +349,4 @@ public class ConfigManager {
             Log.e(App.TAG, Log.getStackTraceString(e));
         }
     }
-
-    public static String dumpConfigs() {
-        String configs = null;
-        try {
-            configs = LSPManagerServiceHolder.getService().dumpConfigs();
-        } catch (RemoteException e) {
-            Log.e(App.TAG, Log.getStackTraceString(e));
-        }
-        return configs;
-    }
 }
