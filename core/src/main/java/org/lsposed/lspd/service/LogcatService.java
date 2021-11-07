@@ -109,7 +109,7 @@ public class LogcatService implements Runnable {
         getprop();
     }
 
-    public static class Getprop implements Runnable {
+    public static class GetProp implements Runnable {
         private volatile InputStream is;
 
         @Override
@@ -129,8 +129,8 @@ public class LogcatService implements Runnable {
 
     public void getprop() {
         try {
-            Getprop get = new Getprop();
-            Thread thread = new Thread(get);
+            var get = new GetProp();
+            var thread = new Thread(get);
             thread.start();
             thread.join();
             var is = get.getValue();
