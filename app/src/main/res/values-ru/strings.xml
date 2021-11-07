@@ -57,13 +57,14 @@
     <string name="info_system_version">Версия Android</string>
     <string name="info_device">Устройство</string>
     <string name="info_system_abi">Разрядность системы ABI</string>
+    <string name="info_api">Интерфейс внедрения</string>
     <string name="parasitic_recommend">Скрытие приложения LSPosed</string>
     <string name="parasitic_recommend_summary">Рекомендуется скрыть приложение LSPosed от различных обнаружений в системе. Для этого создайте ярлык и безопасно удалите само приложение LSPosed. В любой момент можно вернуть приложение установив его из /data/adb/lspd/manager.apk</string>
     <string name="create_shortcut">Создать ярлык</string>
     <string name="never_show">Больше не показывать</string>
     <string name="failed_to_create_shortcut">Не удалось создать ярлык: %1$s</string>
     <string name="update_lsposed">Обновление LSPosed</string>
-    <string name="update_lsposed_msg">Вы точно хотите обновить LSPosed? Устройство перезагрузится после завершения обновления</string>
+    <string name="update_lsposed_msg">Вы точно хотите обновить LSPosed?\nУстройство перезагрузится после завершения обновления</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Сохранить</string>
     <string name="nav_item_logs_lsp">Логи LSPosed</string>
@@ -77,6 +78,7 @@
     <string name="logs_cannot_read">Невозможно прочитать логи: \n</string>
     <string name="menuReload">Обновить</string>
     <string name="logs_clear_failed_2">Не удалось очистить логи</string>
+    <string name="menu_enable_word_wrap">Переносить текст</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Модуль установлен</string>
     <string name="module_is_not_activated_yet_detailed">Модуль %s установлен но не включен</string>
@@ -102,6 +104,8 @@
     <string name="module_install_failed">Добавление модуля не удалось</string>
     <string name="install_to_user">Установить пользователю %s</string>
     <string name="install_to_user_message">Хотите установить %1$s пользователю %2$s? Рекомендуется устанавливать вручную, принудительная установка через LSPosed может вызвать проблемы</string>
+    <string name="expand">развернуть</string>
+    <string name="collapse">свернуть</string>
     <!-- AppListActivity -->
     <string name="compile_speed">Повторная оптимизация</string>
     <string name="compile_speed_msg">Оптимизация…</string>
@@ -217,6 +221,4 @@
     <string name="color_brown">Коричневый</string>
     <string name="color_grey">Серый</string>
     <string name="color_blue_grey">Серо-голубой</string>
-    <string name="expand">развернуть</string>
-    <string name="collapse">свернуть</string>
 </resources>
