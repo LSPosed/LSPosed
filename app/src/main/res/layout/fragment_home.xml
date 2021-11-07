@@ -186,7 +186,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@id/download_title"
                             android:layout_alignStart="@id/download_title"
-                            android:text="@string/module_repo_summary"
+                            android:text="@string/module_repo_loading"
                             android:textAppearance="?android:attr/textAppearanceSmall" />
                     </RelativeLayout>
                 </com.google.android.material.card.MaterialCardView>

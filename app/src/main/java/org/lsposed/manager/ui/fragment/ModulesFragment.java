@@ -473,9 +473,9 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             }
             if (repoLoader.isRepoLoaded()) {
                 var ver = repoLoader.getModuleLatestVersion(item.packageName);
-                if (ver != null && ver.first > item.versionCode) {
+                if (ver != null && ver.upgradable(item.versionCode, item.versionName)) {
                     if (warningText != null) sb.append("\n");
-                    String recommended = getString(R.string.update_available, ver.second);
+                    String recommended = getString(R.string.update_available, ver.versionName);
                     sb.append(recommended);
                     final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ResourceUtils.resolveColor(requireActivity().getTheme(), androidx.appcompat.R.attr.colorAccent));
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
