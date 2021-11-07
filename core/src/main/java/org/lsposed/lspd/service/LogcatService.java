@@ -3,16 +3,20 @@ package org.lsposed.lspd.service;
 import android.annotation.SuppressLint;
 import android.os.ParcelFileDescriptor;
 import android.os.SystemProperties;
+import android.system.ErrnoException;
+import android.system.Os;
 import android.util.Log;
 
 import org.lsposed.lspd.BuildConfig;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 public class LogcatService implements Runnable {
     private static final String TAG = "LSPosedLogcat";
@@ -102,6 +106,39 @@ public class LogcatService implements Runnable {
             start();
         });
         thread.start();
+        getprop();
+    }
+
+    private static class GetProp implements Runnable {
+        private volatile InputStream is;
+
+        @Override
+        public void run() {
+            try {
+                Os.setuid(9999); // AID_NOBODY
+                is = new ProcessBuilder("getprop").start().getInputStream();
+            } catch (ErrnoException | IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        public InputStream getValue() {
+            return is;
+        }
+    }
+
+    private void getprop() {
+        try {
+            var get = new GetProp();
+            var thread = new Thread(get);
+            thread.start();
+            thread.join();
+            var is = get.getValue();
+            var propsLogPath = ConfigFileManager.getpropsLogPath();
+            Files.copy(is, propsLogPath.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException | InterruptedException e) {
+            Log.e(TAG, "getprop: " + e);
+        }
     }
 
     public void startVerbose() {
