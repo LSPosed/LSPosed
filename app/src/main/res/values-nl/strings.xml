@@ -55,6 +55,7 @@
     <string name="info_system_version">Systeem versie</string>
     <string name="info_device">Apparaat</string>
     <string name="info_system_abi">Systeem ABI</string>
+    <string name="info_api">Injectie interface</string>
     <string name="parasitic_recommend">Parasitaire manager aanbevolen</string>
     <string name="parasitic_recommend_summary">LSPosed ondersteunt nu parasitisering van het systeem om detectie te voorkomen. U kunt de manager veilig deïnstalleren na het maken van een snelkoppeling van de parastische manager. In elk geval kunt u de manager installeren vanuit /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Snelkoppeling maken</string>
@@ -75,6 +76,7 @@
     <string name="logs_cannot_read">Kan logboek niet lezen: \n</string>
     <string name="menuReload">Herlaad</string>
     <string name="logs_clear_failed_2">Het logboek kan niet worden gewist</string>
+    <string name="menu_enable_word_wrap">Woord Omslag</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">LSPosed module is nog niet geactiveerd</string>
     <string name="module_is_not_activated_yet_detailed">%1$s is geïnstalleerd, maar is nog niet geactiveerd</string>
@@ -100,6 +102,8 @@
     <string name="module_install_failed">Het toevoegen van de module is mislukt</string>
     <string name="install_to_user">Installeer naar gebruiker %s</string>
     <string name="install_to_user_message">Wil je installeren %1$s naar gebruiker %2$s? Het wordt aanbevolen om handmatig te installeren, het forceren van installatie via LSPosed kan problemen veroorzaken.</string>
+    <string name="expand">uitbreiden</string>
+    <string name="collapse">samenvouwen</string>
     <!-- AppListActivity -->
     <string name="compile_speed">Opnieuw optimaliseren</string>
     <string name="compile_speed_msg">Optimaliseren…</string>
@@ -215,6 +219,4 @@
     <string name="color_brown">Bruin</string>
     <string name="color_grey">Grijs</string>
     <string name="color_blue_grey">Blauw grijs</string>
-    <string name="expand">uitbreiden</string>
-    <string name="collapse">samenvouwen</string>
 </resources>
