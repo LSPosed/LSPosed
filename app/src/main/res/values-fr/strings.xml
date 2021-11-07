@@ -55,6 +55,7 @@
     <string name="info_system_version">Version du système</string>
     <string name="info_device">Périphérique</string>
     <string name="info_system_abi">Architecture du système</string>
+    <string name="info_api">Interface Injection</string>
     <string name="parasitic_recommend">Gestionnaire Parasitaire Recommandé</string>
     <string name="parasitic_recommend_summary">LSPosed supporte maintenant la parasitation du système afin d\'éviter la détection. Vous pouvez désinstaller le gestionnaire en toute sécurité et avec succès après avoir créer un raccourcis du gestionnaire parasitaire. Dans n\'importe quel cas vous pouvez installer à nouveau le gestionnaire depuis /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Créer raccourci</string>
@@ -75,6 +76,7 @@
     <string name="logs_cannot_read">Lecture du journal impossible: \n</string>
     <string name="menuReload">Recharger</string>
     <string name="logs_clear_failed_2">Échec d\'effacement du journal</string>
+    <string name="menu_enable_word_wrap">Retour à la ligne</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Le module LSPosed n\’est pas encore actif</string>
     <string name="module_is_not_activated_yet_detailed">%s à été installé, mais n\'est pas encore actif</string>
@@ -100,6 +102,8 @@
     <string name="module_install_failed">Échec de l\’ajout du module</string>
     <string name="install_to_user">Installation dans utilisateur %s</string>
     <string name="install_to_user_message">Vous voulez installer %1$s dans l\'utilisateur %2$s? Il est recommandé de l\'installer manuellement, forcer l\'installation via LSPosed pourrait causer des problèmes.</string>
+    <string name="expand">agrandir</string>
+    <string name="collapse">réduire</string>
     <!-- AppListActivity -->
     <string name="compile_speed">Ré-optimiser</string>
     <string name="compile_speed_msg">Optimisation…</string>
@@ -215,6 +219,4 @@
     <string name="color_brown">Marron</string>
     <string name="color_grey">Gris</string>
     <string name="color_blue_grey">Bleu grisatre</string>
-    <string name="expand">agrandir</string>
-    <string name="collapse">réduire</string>
 </resources>
