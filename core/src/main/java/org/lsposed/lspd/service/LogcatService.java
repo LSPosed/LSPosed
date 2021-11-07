@@ -118,7 +118,7 @@ public class LogcatService implements Runnable {
                 Os.setuid(9999); // AID_NOBODY
                 is = new ProcessBuilder("getprop").start().getInputStream();
             } catch (ErrnoException | IOException e) {
-                e.printStackTrace();
+                Log.e(TAG, "GetProp: " + e);
             }
         }
 
