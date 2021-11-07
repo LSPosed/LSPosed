@@ -76,6 +76,7 @@ Gerät wird nach dem Update neu gestartet</string>
     <string name="logs_cannot_read">Protokoll kann nicht gelesen werden: \n</string>
     <string name="menuReload">Erneut laden</string>
     <string name="logs_clear_failed_2">Fehler beim Löschen des Protokolls</string>
+    <string name="menu_enable_word_wrap">Wortumbruch</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Das LSPosed-Modul wurde noch nicht aktiviert</string>
     <string name="module_is_not_activated_yet_detailed">%s wurde installiert, aber noch nicht aktiviert</string>
@@ -101,6 +102,8 @@ Gerät wird nach dem Update neu gestartet</string>
     <string name="module_install_failed">Hinzufügen des Moduls fehlgeschlagen</string>
     <string name="install_to_user">Installieren in Benutzer %s</string>
     <string name="install_to_user_message">Möchten Sie %1$s zum Benutzer %2$sinstallieren? Es wird empfohlen manuell zu installieren, das Erzwingen der Installation über LSPosed kann Probleme verursachen.</string>
+    <string name="expand">ausklappen</string>
+    <string name="collapse">einklappen</string>
     <!-- AppListActivity -->
     <string name="compile_speed">Erneut optimieren</string>
     <string name="compile_speed_msg">Optimieren...</string>
@@ -216,6 +219,4 @@ Gerät wird nach dem Update neu gestartet</string>
     <string name="color_brown">Braun</string>
     <string name="color_grey">Grau</string>
     <string name="color_blue_grey">Blaugrau</string>
-    <string name="expand">ausklappen</string>
-    <string name="collapse">einklappen</string>
 </resources>
