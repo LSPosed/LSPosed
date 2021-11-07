@@ -675,15 +675,18 @@ public class LSPManagerService extends ILSPManagerService.Stub {
         try {
             var contentProvider = ActivityManagerService.getContentProvider("settings", 0);
             if (contentProvider != null) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    try {
+                try {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                         contentProvider.call(new AttributionSource.Builder(1000).setPackageName("android").build(),
                                 "settings", "PUT_global", "show_hidden_icon_apps_enabled", args);
-                        return;
-                    } catch (NoSuchMethodError ignored) {
+                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                        contentProvider.call("android", null, "settings", "PUT_global", "show_hidden_icon_apps_enabled", args);
+                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        contentProvider.call("android", "settings", "PUT_global", "show_hidden_icon_apps_enabled", args);
                     }
+                } catch (NoSuchMethodError e) {
+                    Log.w(TAG, "setHiddenIcon: ", e);
                 }
-                contentProvider.call("android", null, "settings", "PUT_global", "show_hidden_icon_apps_enabled", args);
             }
         } catch (Throwable e) {
             Log.w(TAG, "setHiddenIcon: ", e);
