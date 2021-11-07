@@ -205,9 +205,9 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
             ModuleUtil.InstalledModule installedModule = ModuleUtil.getInstance().getModule(module.getName());
             if (installedModule != null) {
                 var ver = repoLoader.getModuleLatestVersion(installedModule.packageName);
-                if (ver != null && ver.first > installedModule.versionCode) {
+                if (ver != null && ver.upgradable(installedModule.versionCode, installedModule.versionName)) {
                     sb.append("\n");
-                    String recommended = getString(R.string.update_available, ver.second);
+                    String recommended = getString(R.string.update_available, ver.versionName);
                     sb.append(recommended);
                     final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ResourceUtils.resolveColor(requireActivity().getTheme(), androidx.appcompat.R.attr.colorAccent));
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
