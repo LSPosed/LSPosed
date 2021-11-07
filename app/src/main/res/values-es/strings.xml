@@ -31,7 +31,6 @@
     <string name="About">Acerca de</string>
     <string name="report_issue">Reportar problema</string>
     <string name="module_repo">Repositorio</string>
-    <string name="module_repo_summary">Repositorio de módulos (Beta)</string>
     <string name="about_view_source_code"><![CDATA[Ve el código fuente en %1$s<br/>Únete a nuestro %2$s canal]]></string>
     <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">squaredDot</string>
     <string name="install">Instalar</string>
