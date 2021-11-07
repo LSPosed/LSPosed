@@ -54,6 +54,7 @@
     <string name="info_system_version">系統版本</string>
     <string name="info_device">設備</string>
     <string name="info_system_abi">系統應用二進制介面</string>
+    <string name="info_api">注入介面</string>
     <string name="parasitic_recommend">推薦使用寄生管理器</string>
     <string name="parasitic_recommend_summary">LSPosed 現在支援寄生到系統以避免檢測。
 在成功建立寄生管理器的捷徑後你可以安全地移除管理器。
@@ -76,6 +77,7 @@
     <string name="logs_cannot_read">無法讀取紀錄檔: \n</string>
     <string name="menuReload">重新載入</string>
     <string name="logs_clear_failed_2">清除記錄檔失敗</string>
+    <string name="menu_enable_word_wrap">自動換行</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Xposed 模組尚未啟動</string>
     <string name="module_is_not_activated_yet_detailed">%s 已安裝, 但尚未啟動</string>
@@ -101,6 +103,8 @@
     <string name="module_install_failed">模組安裝失敗</string>
     <string name="install_to_user">安裝到用戶 %s</string>
     <string name="install_to_user_message">確認安裝 %1$s 到用戶 %2$s？推薦手動安裝，強制使用LSPosed安裝可能會導致異常。</string>
+    <string name="expand">展開</string>
+    <string name="collapse">收起</string>
     <!-- AppListActivity -->
     <string name="compile_speed">重新最佳化</string>
     <string name="compile_speed_msg">最佳化中…</string>
@@ -216,6 +220,4 @@
     <string name="color_brown">啡色</string>
     <string name="color_grey">灰色</string>
     <string name="color_blue_grey">藍灰色</string>
-    <string name="expand">展開</string>
-    <string name="collapse">收起</string>
 </resources>
