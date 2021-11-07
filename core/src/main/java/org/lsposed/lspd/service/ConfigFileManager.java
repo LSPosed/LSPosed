@@ -47,7 +47,7 @@ import java.util.zip.ZipFile;
 
 public class ConfigFileManager {
     static final Path basePath = Paths.get("/data/adb/lspd");
-    private static final Path managerApkPath = basePath.resolve("manager.apk");
+    static final Path managerApkPath = basePath.resolve("manager.apk");
     private static final Path lockPath = basePath.resolve("lock");
     private static final Path configDirPath = basePath.resolve("config");
     static final File dbPath = configDirPath.resolve("modules_config.db").toFile();
