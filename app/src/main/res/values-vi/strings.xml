@@ -27,12 +27,12 @@
     </plurals>
     <string name="Logs">Nhật ký</string>
     <string name="Settings">Cài đặt</string>
-    <string name="About">Về</string>
+    <string name="About">Về chúng tôi</string>
     <string name="report_issue">Báo cáo sự cố</string>
     <string name="module_repo">Kho</string>
     <string name="module_repo_summary">Kho mô-đun (Beta)</string>
     <string name="about_view_source_code"><![CDATA[Xem mã nguồn tại %1$s<br/>Tham gia %2$s nhóm của chúng tôi]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">The Primal Pea, Tuyen Nguyen (tuyennn)</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Tuyen Nguyen (tuyennn)</string>
     <string name="install">Cài đặt</string>
     <string name="install_summary">Chạm để cài đặt LSPosed</string>
     <string name="not_installed">Chưa được cài đặt</string>
@@ -54,6 +54,7 @@
     <string name="info_system_version">Phiên bản hệ thống</string>
     <string name="info_device">Thiết bị</string>
     <string name="info_system_abi">Hệ thống ABI</string>
+    <string name="info_api">Giao diện nhúng</string>
     <string name="parasitic_recommend">Quản lý ký sinh khuyến nghị</string>
     <string name="parasitic_recommend_summary">LSPosed giờ đã hỗ trợ hệ thống ký sinh để tránh bị phát hiện. Bạn có thể thoải mái gỡ bỏ trình quản lý nếu đã có lối tắt của trình quản lý ký sinh. Trong bất cứ điều gì ngoài mong muốn bạn vẫn có thể cài đặt lại nó ở đường dẫn /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Tạo lối tắt</string>
@@ -74,6 +75,7 @@
     <string name="logs_cannot_read">Không thể đọc nhật ký: \n</string>
     <string name="menuReload">Tải lại</string>
     <string name="logs_clear_failed_2">Thất bại khi xoá nhật ký</string>
+    <string name="menu_enable_word_wrap">Xuống dòng tự động</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Mô-đun Xposed chưa được kích hoạt</string>
     <string name="module_is_not_activated_yet_detailed">%s đã được cài đặt, nhưng chưa được kích hoạt</string>
@@ -99,6 +101,8 @@
     <string name="module_install_failed">Thêm mô-đun thất bại</string>
     <string name="install_to_user">Cài đặt tới người dùng %s</string>
     <string name="install_to_user_message">Muốn cài %1$s tới người dùng %2$s? Khuyến cáo bạn nên cài đặt thủ công, buộc cài đặt qua LSPosed có thể xảy ra vấn đề không mong muốn.</string>
+    <string name="expand">mở</string>
+    <string name="collapse">đóng</string>
     <!-- AppListActivity -->
     <string name="compile_speed">Tối ưu lại</string>
     <string name="compile_speed_msg">Đang tối ưu…</string>
@@ -214,6 +218,4 @@
     <string name="color_brown">Nâu</string>
     <string name="color_grey">Xám</string>
     <string name="color_blue_grey">Xanh xám</string>
-    <string name="expand">mở</string>
-    <string name="collapse">đóng</string>
 </resources>
