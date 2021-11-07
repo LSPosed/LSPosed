@@ -170,6 +170,11 @@ public class ConfigFileManager {
         return logDirPath.resolve(getNewLogFileName("modules")).toFile();
     }
 
+    static File getpropsLogPath() throws IOException {
+        createLogDirPath();
+        return logDirPath.resolve("props.log").toFile();
+    }
+
     static Map<String, ParcelFileDescriptor> getLogs() {
         var map = new LinkedHashMap<String, ParcelFileDescriptor>();
         try {
