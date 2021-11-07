@@ -106,9 +106,7 @@ public class LogcatService implements Runnable {
             start();
         });
         thread.start();
-        Log.d(TAG, "LogcatService uid=" + Os.getuid());
         getprop();
-        Log.d(TAG, "LogcatService uid=" + Os.getuid());
     }
 
     public static class Getprop implements Runnable {
@@ -118,7 +116,6 @@ public class LogcatService implements Runnable {
         public void run() {
             try {
                 Os.setuid(9999); // AID_NOBODY
-                Log.d(TAG, "getprop uid=" + Os.getuid());
                 is = new ProcessBuilder("getprop").start().getInputStream();
             } catch (ErrnoException | IOException e) {
                 e.printStackTrace();
@@ -131,7 +128,6 @@ public class LogcatService implements Runnable {
     }
 
     public void getprop() {
-        Log.d(TAG, "getprop uid=" + Os.getuid());
         try {
             Getprop get = new Getprop();
             Thread thread = new Thread(get);
@@ -143,7 +139,6 @@ public class LogcatService implements Runnable {
         } catch (IOException | InterruptedException e) {
             Log.e(TAG, "getprop: " + e);
         }
-        Log.d(TAG, "getprop uid=" + Os.getuid());
     }
 
     public void startVerbose() {
