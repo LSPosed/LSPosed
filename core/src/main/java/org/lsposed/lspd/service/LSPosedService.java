@@ -191,9 +191,11 @@ public class LSPosedService extends ILSPosedService.Stub {
             var userInfo = ActivityManagerService.getCurrentUser();
             if (userInfo != null) {
                 var userId = userInfo.id;
-                if (userId == 0)
+                if (userId == 0) {
                     ActivityManagerService.startActivityAsUserWithFeature("android", null,
                             intent, intent.getType(), null, null, 0, 0, null, null, userId);
+                    LSPManagerService.createOrUpdateShortcut(false);
+                }
             }
         } catch (Throwable e) {
             Log.e(TAG, "dispatch secret code received", e);
