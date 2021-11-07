@@ -36,8 +36,8 @@
     <string name="module_repo_loading">Загрузка…</string>
     <string name="module_repo_up_to_date">Все модули обновлены</string>
     <plurals name="module_repo_upgradable">
-        <item quantity="one">Доступно обновленение %d модуля</item>
-        <item quantity="few">Обновлено %d модуля</item>
+        <item quantity="one">Найдено обновление %d модуля</item>
+        <item quantity="few">Доступно обновление %d модулей</item>
         <item quantity="many">Обновлены %d модулей</item>
         <item quantity="other">Обновлено %d модулей</item>
     </plurals>
