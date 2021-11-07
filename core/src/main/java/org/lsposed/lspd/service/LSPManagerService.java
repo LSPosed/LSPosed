@@ -232,6 +232,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
             var notification = new Notification.Builder(context, CHANNEL_ID)
                     .setContentTitle(title)
                     .setContentText(content)
+                    .setSmallIcon(android.R.drawable.ic_dialog_info)
                     .setColor(context.getResources().getColor(org.lsposed.manager.R.color.color_primary))
                     .setContentIntent(getNotificationIntent(modulePackageName, moduleUserId))
                     .setAutoCancel(true)
