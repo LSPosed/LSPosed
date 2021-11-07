@@ -31,7 +31,6 @@
     <string name="About">Mehr Erfahren</string>
     <string name="report_issue">Fehler melden</string>
     <string name="module_repo">Modularchiv</string>
-    <string name="module_repo_summary">Modul-Archiv (Beta)</string>
     <string name="about_view_source_code"><![CDATA[Den Quellcode finden Sie unter %1$s<br/>Folgen Sie unserem %2$s-Kanal]]></string>
     <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">mshinni80</string>
     <string name="install">Installieren</string>

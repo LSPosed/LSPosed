@@ -30,7 +30,11 @@
     <string name="About">关于</string>
     <string name="report_issue">报告问题</string>
     <string name="module_repo">仓库</string>
-    <string name="module_repo_summary">模块仓库（Beta）</string>
+    <string name="module_repo_loading">加载中…</string>
+    <string name="module_repo_up_to_date">所有模块均已最新</string>
+    <plurals name="module_repo_upgradable">
+        <item quantity="other">%d 个模块可更新</item>
+    </plurals>
     <string name="about_view_source_code"><![CDATA[在 %1$s 查看源码<br/>加入我们的 Telegram %2$s 频道<br/>加入我们的 QQ 频道：用手机 QQ 内置浏览器打开 http://t.cn/A6x2pfNh]]></string>
     <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">null</string>
     <string name="install">安装</string>

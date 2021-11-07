@@ -21,7 +21,6 @@
 package org.lsposed.manager.repo;
 
 import android.util.Log;
-import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
@@ -52,7 +51,21 @@ import okhttp3.ResponseBody;
 public class RepoLoader {
     private static RepoLoader instance = null;
     private Map<String, OnlineModule> onlineModules = new HashMap<>();
-    private final Map<String, Pair<Integer, String>> latestVersion = new ConcurrentHashMap<>();
+
+    public static class ModuleVersion {
+        public String versionName;
+        public long versionCode;
+        private ModuleVersion(long versionCode, String versionName) {
+            this.versionName = versionName;
+            this.versionCode = versionCode;
+        }
+        public boolean upgradable(long versionCode, String versionName) {
+            return this.versionCode > versionCode || (this.versionCode == versionCode && !versionName.equals(this.versionName));
+        }
+
+    }
+
+    private final Map<String, ModuleVersion> latestVersion = new ConcurrentHashMap<>();
     private final Path repoFile = Paths.get(App.getInstance().getFilesDir().getAbsolutePath(), "repo.json");
     private final List<Listener> listeners = new CopyOnWriteArrayList<>();
     private boolean isLoading = false;
@@ -116,16 +129,16 @@ public class RepoLoader {
                                 if (release == null || release.isEmpty()) continue;
                                 var splits = release.split("-", 2);
                                 if (splits.length < 2) continue;
-                                int verCode;
+                                long verCode;
                                 String verName;
                                 try {
-                                    verCode = Integer.parseInt(splits[0]);
+                                    verCode = Long.parseLong(splits[0]);
                                     verName = splits[1];
                                 } catch (NumberFormatException ignored) {
                                     continue;
                                 }
                                 String pkgName = module.getName();
-                                latestVersion.put(pkgName, new Pair<>(verCode, verName));
+                                latestVersion.put(pkgName, new ModuleVersion(verCode, verName));
                             }
 
                             onlineModules = modules;
@@ -151,7 +164,7 @@ public class RepoLoader {
         });
     }
 
-    public Pair<Integer, String> getModuleLatestVersion(String packageName) {
+    public ModuleVersion getModuleLatestVersion(String packageName) {
         return latestVersion.get(packageName);
     }
 

@@ -40,6 +40,7 @@ import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.DialogAboutBinding;
 import org.lsposed.manager.databinding.FragmentHomeBinding;
+import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
 import org.lsposed.manager.ui.dialog.FlashDialogBuilder;
 import org.lsposed.manager.ui.dialog.InfoDialogBuilder;
@@ -50,13 +51,16 @@ import org.lsposed.manager.util.NavUtil;
 import org.lsposed.manager.util.UpdateUtil;
 import org.lsposed.manager.util.chrome.LinkTransformationMethod;
 
+import java.util.HashSet;
 import java.util.Locale;
 
 import rikka.core.util.ResourceUtils;
 
-public class HomeFragment extends BaseFragment {
+public class HomeFragment extends BaseFragment implements RepoLoader.Listener {
 
     private FragmentHomeBinding binding;
+
+    private static final RepoLoader repoLoader = RepoLoader.getInstance();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -103,6 +107,11 @@ public class HomeFragment extends BaseFragment {
         binding.issue.setOnClickListener(view -> NavUtil.startURL(activity, "https://github.com/LSPosed/LSPosed/issues"));
 
         updateStates(requireActivity(), ConfigManager.isBinderAlive(), UpdateUtil.needUpdate());
+
+        repoLoader.addListener(this);
+        if (repoLoader.isRepoLoaded()) {
+            repoLoaded();
+        }
         return binding.getRoot();
     }
 
@@ -185,6 +194,34 @@ public class HomeFragment extends BaseFragment {
         }
     }
 
+    @Override
+    public void repoLoaded() {
+        final int[] count = new int[]{0};
+        HashSet<String> processedModules = new HashSet<>();
+        ModuleUtil.getInstance().getModules().forEach((k, v) -> {
+                    if (!processedModules.contains(k.first)) {
+                        var ver = repoLoader.getModuleLatestVersion(k.first);
+                        if (ver != null && ver.upgradable(v.versionCode, v.versionName)) {
+                            ++count[0];
+                        }
+                        processedModules.add(k.first);
+                    }
+                }
+        );
+        runOnUiThread(() -> {
+            if (count[0] > 0) {
+                binding.downloadSummary.setText(getResources().getQuantityString(R.plurals.module_repo_upgradable, count[0], count[0]));
+            } else {
+                onThrowable(null);
+            }
+        });
+    }
+
+    @Override
+    public void onThrowable(Throwable t) {
+        runOnUiThread(() -> binding.downloadSummary.setText(getResources().getString(R.string.module_repo_up_to_date)));
+    }
+
     private class StartFragmentListener implements View.OnClickListener {
         boolean requireInstalled;
         int fragment;
@@ -219,7 +256,7 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
+        repoLoader.removeListener(this);
         binding = null;
     }
 }

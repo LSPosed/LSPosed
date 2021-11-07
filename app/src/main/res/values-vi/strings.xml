@@ -30,7 +30,11 @@
     <string name="About">Về chúng tôi</string>
     <string name="report_issue">Báo cáo sự cố</string>
     <string name="module_repo">Kho</string>
-    <string name="module_repo_summary">Kho mô-đun (Beta)</string>
+    <string name="module_repo_loading">Đang tải…</string>
+    <string name="module_repo_up_to_date">Tất cả các mô-đun đã được cập nhật</string>
+    <plurals name="module_repo_upgradable">
+        <item quantity="other">%d mô-đun có bản cập nhật</item>
+    </plurals>
     <string name="about_view_source_code"><![CDATA[Xem mã nguồn tại %1$s<br/>Tham gia %2$s nhóm của chúng tôi]]></string>
     <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Tuyen Nguyen (tuyennn)</string>
     <string name="install">Cài đặt</string>

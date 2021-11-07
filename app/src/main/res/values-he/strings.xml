@@ -26,7 +26,6 @@
     <string name="Settings">הגדרות</string>
     <string name="About">אודות</string>
     <string name="module_repo">רפוסיטורי</string>
-    <string name="module_repo_summary">רפוסיטורי מודולים (אלפא)</string>
     <string name="not_installed">לא מותקן</string>
     <string name="activated">הופעל</string>
     <string name="partial_activated">הופעל חלקית</string>

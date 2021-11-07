@@ -30,7 +30,6 @@
     <string name="About">本アプリについて</string>
     <string name="report_issue">問題を報告</string>
     <string name="module_repo">リポジトリ</string>
-    <string name="module_repo_summary">モジュール リポジトリ (Beta)</string>
     <string name="about_view_source_code"><![CDATA[%1$s でソースコードを閲覧<br/>%2$s チャンネルに参加]]></string>
     <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">yoshi818</string>
     <string name="install">インストール</string>
