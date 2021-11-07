@@ -31,6 +31,8 @@
     <string name="About">À propos</string>
     <string name="report_issue">Signaler un problème</string>
     <string name="module_repo">Dépôt</string>
+    <string name="module_repo_loading">Chargement…</string>
+    <string name="module_repo_up_to_date">Tous les modules sont à jour</string>
     <string name="about_view_source_code"><![CDATA[Voir le code source sur %1$s<br/>Rejoindre notre canal %2$s]]></string>
     <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">https://github.com/xerta555</string>
     <string name="install">Installer</string>
