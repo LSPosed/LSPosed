@@ -31,6 +31,12 @@
     <string name="About">Over</string>
     <string name="report_issue">Probleem melden</string>
     <string name="module_repo">Opslagplaats</string>
+    <string name="module_repo_loading">Laden…</string>
+    <string name="module_repo_up_to_date">Alle modules zijn up-to-date</string>
+    <plurals name="module_repo_upgradable">
+        <item quantity="one">%d module te upgraden</item>
+        <item quantity="other">%d modules te upgraden</item>
+    </plurals>
     <string name="about_view_source_code"><![CDATA[Bekijk de broncode op %1$s<br/>Sluit je aan bij onze %2$s kanaal]]></string>
     <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Pandemic-XDA</string>
     <string name="install">Installeren</string>

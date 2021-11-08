@@ -30,6 +30,11 @@
     <string name="About">關於</string>
     <string name="report_issue">回報問題</string>
     <string name="module_repo">倉庫</string>
+    <string name="module_repo_loading">正在載入…</string>
+    <string name="module_repo_up_to_date">所有模組為最新版本</string>
+    <plurals name="module_repo_upgradable">
+        <item quantity="other">%d 個模組可更新</item>
+    </plurals>
     <string name="about_view_source_code"><![CDATA[在 %1$s 檢視原始碼<br/>加入我們的 %2$s 頻道]]></string>
     <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">孟武. 尼德霍格. 龍、david082321、beigua87</string>
     <string name="install">安裝</string>

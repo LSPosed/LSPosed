@@ -35,7 +35,7 @@
     <plurals name="module_repo_upgradable">
         <item quantity="other">%d 个模块可更新</item>
     </plurals>
-    <string name="about_view_source_code"><![CDATA[在 %1$s 查看源码<br/>加入我们的 Telegram %2$s 频道<br/>加入我们的 QQ 频道：用手机 QQ 内置浏览器打开 http://t.cn/A6x2pfNh]]></string>
+    <string name="about_view_source_code"><![CDATA[在 %1$s 查看源码<br/>加入我们的 %2$s 频道<br/>加入我们的 <b><a href="mqqapi://forward/url?src_type=web&style=default&plg_auth=1&version=1&url_prefix=aHR0cHM6Ly9xdW4ucXEuY29tL3F1bnByby9wYXNzY2hlY2svc2hhcmU/X3d2PTMmX3d3dj0xMjgmcGFzc0NvZGU9MTE0NTE0JnNlbmRlclVpbj0xMDAwMCZndWlsZElkPTg1NzU1NzIxNjM2MTI1NzM5Jmd1aWxkTmFtZT1MU1Bvc2VkJnNvdXJjZVR5cGU9MSZxcUdyb3VwVWluPTAmc2hhcmVUeXBlPTE=">QQ 频道</a></b>]]></string>
     <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">null</string>
     <string name="install">安装</string>
     <string name="install_summary">点按安装 LSPosed</string>
