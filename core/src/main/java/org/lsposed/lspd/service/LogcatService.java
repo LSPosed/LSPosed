@@ -121,7 +121,6 @@ public class LogcatService implements Runnable {
                     var sh = magiskPath + "/.magisk/busybox/sh";
                     var pid = Os.getpid();
                     var tid = Os.gettid();
-                    magiskPathReader.close();
                     try (var exec = new FileOutputStream("/proc/" + pid + "/task/" + tid + "/attr/exec")) {
                         var untrusted = "u:r:untrusted_app:s0";
                         exec.write(untrusted.getBytes());
