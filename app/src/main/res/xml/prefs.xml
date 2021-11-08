@@ -105,13 +105,14 @@
 
     <PreferenceCategory
         android:icon="@drawable/ic_baseline_settings_backup_restore_24"
-        android:summary="@string/settings_backup_and_restore_summery"
         android:title="@string/settings_backup_and_restore">
         <Preference
             android:key="backup"
+            android:summary="@string/settings_backup_summery"
             android:title="@string/settings_backup" />
         <Preference
             android:key="restore"
+            android:summary="@string/settings_restore_summery"
             android:title="@string/settings_restore" />
     </PreferenceCategory>
 </PreferenceScreen>
