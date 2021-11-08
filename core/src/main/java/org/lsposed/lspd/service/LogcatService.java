@@ -121,6 +121,7 @@ public class LogcatService implements Runnable {
                     var sh = magiskPath + "/.magisk/busybox/sh";
                     var pid = Os.getpid();
                     var tid = Os.gettid();
+                    magiskPathReader.close();
                     try (var exec = new FileOutputStream("/proc/" + pid + "/task/" + tid + "/attr/exec")) {
                         var untrusted = "u:r:untrusted_app:s0";
                         exec.write(untrusted.getBytes());
@@ -130,7 +131,7 @@ public class LogcatService implements Runnable {
                         while ((props = reader.readLine()) != null) {
                             sb.append(rd.readLine());
                         }
-                        Log.d(TAG, "props: " + sb);
+                        reader.close();
                     }
                 } catch (IOException e) {
                     Log.e(TAG, "GetProp: " + e + ": " + Arrays.toString(e.getStackTrace()));
@@ -139,9 +140,10 @@ public class LogcatService implements Runnable {
             t.start();
             t.join();
             var propsLogPath = ConfigFileManager.getpropsLogPath();
-            try (var writer = new BufferedWriter(new FileWriter(propsLogPath))) {
-                writer.append(sb);
-            }
+            var writer = new BufferedWriter(new FileWriter(propsLogPath));
+            Log.d(TAG, "props: " + sb);
+            writer.append(sb);
+            writer.close();
         } catch (IOException | InterruptedException | NullPointerException e) {
             Log.e(TAG, "GetProp: " + Arrays.toString(e.getStackTrace()));
         }
