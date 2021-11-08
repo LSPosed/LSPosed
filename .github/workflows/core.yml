@@ -79,14 +79,14 @@ jobs:
       if: success()
       id: prepareArtifact
       run: |
-        riruReleaseName=`ls core/release/LSPosed-riru-v*-release.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=riruReleaseName::$riruReleaseName"
-        riruDebugName=`ls core/release/LSPosed-riru-v*-debug.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=riruDebugName::$riruDebugName"
-        zygiskReleaseName=`ls core/release/LSPosed-zygisk-v*-release.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=zygiskReleaseName::$zygiskReleaseName"
-        zygiskDebugName=`ls core/release/LSPosed-zygisk-v*-debug.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=zygiskDebugName::$zygiskDebugName"
-        unzip core/release/LSPosed-riru-v*-release.zip -d LSPosed-riru-release
-        unzip core/release/LSPosed-riru-v*-debug.zip -d LSPosed-riru-debug
-        unzip core/release/LSPosed-zygisk-v*-release.zip -d LSPosed-zygisk-release
-        unzip core/release/LSPosed-zygisk-v*-debug.zip -d LSPosed-zygisk-debug
+        riruReleaseName=`ls core/release/LSPosed-v*-riru-release.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=riruReleaseName::$riruReleaseName"
+        riruDebugName=`ls core/release/LSPosed-v*-riru-debug.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=riruDebugName::$riruDebugName"
+        zygiskReleaseName=`ls core/release/LSPosed-v*-zygisk-release.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=zygiskReleaseName::$zygiskReleaseName"
+        zygiskDebugName=`ls core/release/LSPosed-v*-zygisk-debug.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=zygiskDebugName::$zygiskDebugName"
+        unzip core/release/LSPosed-v*-riru-release.zip -d LSPosed-riru-release
+        unzip core/release/LSPosed-v*-riru-debug.zip -d LSPosed-riru-debug
+        unzip core/release/LSPosed-v*-zygisk-release.zip -d LSPosed-zygisk-release
+        unzip core/release/LSPosed-v*-zygisk-debug.zip -d LSPosed-zygisk-debug
     - name: Upload riru release
       uses: actions/upload-artifact@v2
       with:
