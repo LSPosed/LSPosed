@@ -254,7 +254,7 @@ androidComponents.onVariants { v ->
     }
 
     val moduleId = "${flavorLowered}_$moduleBaseId"
-    val zipFileName = "$moduleName-${flavorLowered}-v$verName-$verCode-$buildTypeLowered.zip"
+    val zipFileName = "$moduleName-v$verName-$verCode-${flavorLowered}-$buildTypeLowered.zip"
 
     val prepareMagiskFilesTask = task("prepareMagiskFiles$variantCapped", Sync::class) {
         dependsOn("assemble$variantCapped")
