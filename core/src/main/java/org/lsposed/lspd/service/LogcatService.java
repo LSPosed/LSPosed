@@ -125,8 +125,8 @@ public class LogcatService implements Runnable {
                         var untrusted = "u:r:untrusted_app:s0";
                         exec.write(untrusted.getBytes());
                     }
-                    try (var is = new ProcessBuilder(sh, "-c", "getprop").start().getInputStream()) {
-                        sb.append(new BufferedReader(new InputStreamReader(is)).readLine());
+                    try (var rd = new BufferedReader(new InputStreamReader(new ProcessBuilder(sh, "-c", "getprop").start().getInputStream()))) {
+                        sb.append(rd.readLine());
                     }
                 } catch (IOException e) {
                     Log.e(TAG, "GetProp: " + e + ": " + Arrays.toString(e.getStackTrace()));
