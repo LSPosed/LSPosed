@@ -135,8 +135,9 @@ public class LogcatService implements Runnable {
             t.start();
             t.join();
             var propsLogPath = ConfigFileManager.getpropsLogPath();
-            var writer = new BufferedWriter(new FileWriter(propsLogPath));
-            writer.append(sb);
+            try (var writer = new BufferedWriter(new FileWriter(propsLogPath))) {
+                writer.append(sb);
+            }
         } catch (IOException | InterruptedException | NullPointerException e) {
             Log.e(TAG, "GetProp: " + Arrays.toString(e.getStackTrace()));
         }
