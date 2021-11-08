@@ -79,14 +79,14 @@ jobs:
       if: success()
       id: prepareArtifact
       run: |
-        riruReleaseName=`ls core/release/LSPosed-riru-v*-release.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=riruReleaseName::$riruReleaseName"
-        riruDebugName=`ls core/release/LSPosed-riru-v*-debug.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=riruDebugName::$riruDebugName"
-        zygiskReleaseName=`ls core/release/LSPosed-zygisk-v*-release.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=zygiskReleaseName::$zygiskReleaseName"
-        zygiskDebugName=`ls core/release/LSPosed-zygisk-v*-debug.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=zygiskDebugName::$zygiskDebugName"
-        unzip core/release/LSPosed-riru-v*-release.zip -d LSPosed-riru-release
-        unzip core/release/LSPosed-riru-v*-debug.zip -d LSPosed-riru-debug
-        unzip core/release/LSPosed-zygisk-v*-release.zip -d LSPosed-zygisk-release
-        unzip core/release/LSPosed-zygisk-v*-debug.zip -d LSPosed-zygisk-debug
+        riruReleaseName=`ls core/release/LSPosed-v*-riru-release.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=riruReleaseName::$riruReleaseName"
+        riruDebugName=`ls core/release/LSPosed-v*-riru-debug.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=riruDebugName::$riruDebugName"
+        zygiskReleaseName=`ls core/release/LSPosed-v*-zygisk-release.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=zygiskReleaseName::$zygiskReleaseName"
+        zygiskDebugName=`ls core/release/LSPosed-v*-zygisk-debug.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=zygiskDebugName::$zygiskDebugName"
+        unzip core/release/LSPosed-v*-riru-release.zip -d LSPosed-riru-release
+        unzip core/release/LSPosed-v*-riru-debug.zip -d LSPosed-riru-debug
+        unzip core/release/LSPosed-v*-zygisk-release.zip -d LSPosed-zygisk-release
+        unzip core/release/LSPosed-v*-zygisk-debug.zip -d LSPosed-zygisk-debug
     - name: Upload riru release
       uses: actions/upload-artifact@v2
       with:
@@ -124,10 +124,10 @@ jobs:
       run: |
         if [ ! -z "${{ secrets.BOT_TOKEN }}" ]; then
           OUTPUT="core/release/"
-          export riruRelease=$(find $OUTPUT -name "LSPosed-riru-v*-release.zip")
-          export riruDebug=$(find $OUTPUT -name "LSPosed-riru-v*-debug.zip")
-          export zygiskRelease=$(find $OUTPUT -name "LSPosed-zygisk-v*-release.zip")
-          export zygiskDebug=$(find $OUTPUT -name "LSPosed-zygisk-v*-debug.zip")
+          export riruRelease=$(find $OUTPUT -name "LSPosed-v*-riru-release.zip")
+          export riruDebug=$(find $OUTPUT -name "LSPosed-v*-riru-debug.zip")
+          export zygiskRelease=$(find $OUTPUT -name "LSPosed-v*-zygisk-release.zip")
+          export zygiskDebug=$(find $OUTPUT -name "LSPosed-v*-zygisk-debug.zip")
           ESCAPED=`python3 -c 'import json,os,urllib.parse; msg = json.dumps(os.environ["COMMIT_MESSAGE"]); print(urllib.parse.quote(msg if len(msg) <= 1024 else json.dumps(os.environ["COMMIT_URL"])))'`
-          curl -v "https://api.telegram.org/bot${BOT_TOKEN}/sendMediaGroup?chat_id=${CHANNEL_ID}&media=%5B%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FzygiskRelease%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FriruRelease%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FzygiskDebug%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FriruDebug%22%2C%22caption%22:${ESCAPED}%7D%5D" -F riruRelease="@$riruRelease" -F riruDebug="@$riruDebug" -F zygiskRelease="@$zygiskRelease" -F zygiskDebug="@$zygiskDebug"
+          curl -v "https://api.telegram.org/bot${BOT_TOKEN}/sendMediaGroup?chat_id=${CHANNEL_ID}&media=%5B%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FriruRelease%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FzygiskRelease%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FriruDebug%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FzygiskDebug%22%2C%22caption%22:${ESCAPED}%7D%5D" -F riruRelease="@$riruRelease" -F riruDebug="@$riruDebug" -F zygiskRelease="@$zygiskRelease" -F zygiskDebug="@$zygiskDebug"
         fi
