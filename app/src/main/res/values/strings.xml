@@ -166,7 +166,8 @@
     <string name="pure_black_dark_theme_summary">Use the pure black theme if dark theme is enabled</string>
     <string name="settings_group_theme">Theme</string>
     <string name="settings_backup_and_restore">Backup and restore</string>
-    <string name="settings_backup_and_restore_summery">Backup or restore module list and scope lists.</string>
+    <string name="settings_backup_summery">Backup module list and scope lists.</string>
+    <string name="settings_restore_summery">Restore module list and scope lists.</string>
     <string name="settings_backup">Backup</string>
     <string name="settings_backup_failed2">Failed to backup:\n%s</string>
     <string name="settings_restore">Restore</string>
