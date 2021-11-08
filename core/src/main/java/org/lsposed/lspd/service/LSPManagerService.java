@@ -161,7 +161,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
         try (var zip = new ZipFile(ConfigFileManager.managerApkPath.toString())) {
             var entry = zip.getEntry("assets/ic_launcher-playstore.png");
             try (var is = zip.getInputStream(entry)) {
-                return Icon.createWithBitmap(BitmapFactory.decodeStream(is));
+                return Icon.createWithAdaptiveBitmap(BitmapFactory.decodeStream(is));
             }
         } catch (Throwable e) {
             Log.e(TAG, "load icon", e);
