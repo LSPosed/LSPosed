@@ -127,11 +127,9 @@ public class LogcatService implements Runnable {
                         exec.write(untrusted.getBytes());
                     }
                     try (var rd = new BufferedReader(new InputStreamReader(new ProcessBuilder(sh, "-c", "getprop").start().getInputStream()))) {
-                        String props;
-                        while ((props = reader.readLine()) != null) {
+                        while (rd.readLine() != null) {
                             sb.append(rd.readLine());
                         }
-                        reader.close();
                     }
                 } catch (IOException e) {
                     Log.e(TAG, "GetProp: " + e + ": " + Arrays.toString(e.getStackTrace()));
