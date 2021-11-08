@@ -115,27 +115,25 @@ public class LogcatService implements Runnable {
     private void getprop() {
         try {
             var sb = new StringBuilder();
-            var t2 = new Thread(() -> {
+            var t = new Thread(() -> {
                 try (var magiskPathReader = new BufferedReader(new InputStreamReader(new ProcessBuilder("magisk", "--path").start().getInputStream()))) {
                     var magiskPath = magiskPathReader.readLine();
                     var sh = magiskPath + "/.magisk/busybox/sh";
                     var pid = Os.getpid();
                     var tid = Os.gettid();
-                    var exec = new FileOutputStream("/proc/" + pid + "/task/" + tid + "/attr/exec");
-                    var untrusted = "u:r:untrusted_app:s0";
-                    exec.write(untrusted.getBytes());
-                    exec.close();
+                    try (var exec = new FileOutputStream("/proc/" + pid + "/task/" + tid + "/attr/exec")) {
+                        var untrusted = "u:r:untrusted_app:s0";
+                        exec.write(untrusted.getBytes());
+                    }
                     try (var is = new ProcessBuilder(sh, "-c", "getprop").start().getInputStream()) {
                         sb.append(new BufferedReader(new InputStreamReader(is)).readLine());
                     }
                 } catch (IOException e) {
                     Log.e(TAG, "GetProp: " + e + ": " + Arrays.toString(e.getStackTrace()));
                 }
-
-                System.out.println("currentThreadId=" + Thread.currentThread().getId());
             });
-            t2.start();
-            t2.join();
+            t.start();
+            t.join();
             var propsLogPath = ConfigFileManager.getpropsLogPath();
             var writer = new BufferedWriter(new FileWriter(propsLogPath));
             writer.append(sb);
