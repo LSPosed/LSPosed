@@ -160,7 +160,6 @@ Ali Samir</string>
     <string name="pure_black_dark_theme_summary">استخدام السمة السوداء الخالصة إذا تم تمكين السمة المظلمة</string>
     <string name="settings_group_theme">السمة</string>
     <string name="settings_backup_and_restore">النسخ الاحتياطي والاستعادة</string>
-    <string name="settings_backup_and_restore_summery">النسخ الاحتياطي أو استعادة قائمة الوحدات وقوائم النطاق.</string>
     <string name="settings_backup">نسخ احتياطي</string>
     <string name="settings_backup_failed2">فشل في النسخ الاحتياطي:\n%s</string>
     <string name="settings_restore">إستعادة</string>
