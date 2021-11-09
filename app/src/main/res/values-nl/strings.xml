@@ -159,7 +159,6 @@
     <string name="pure_black_dark_theme_summary">Gebruik het pure zwarte thema als het donkere thema is ingeschakeld</string>
     <string name="settings_group_theme">Thema</string>
     <string name="settings_backup_and_restore">Backup en herstellen</string>
-    <string name="settings_backup_and_restore_summery">Backup of herstel de modulelijst en scooplijsten.</string>
     <string name="settings_backup">Backup</string>
     <string name="settings_backup_failed2">Opslaan mislukt:\n%s</string>
     <string name="settings_restore">Herstellen</string>
