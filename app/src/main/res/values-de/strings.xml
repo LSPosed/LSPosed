@@ -153,7 +153,6 @@ Gerät wird nach dem Update neu gestartet</string>
     <string name="pure_black_dark_theme_summary">Das schwarze Thema verwenden, wenn dunkles Thema aktiviert ist</string>
     <string name="settings_group_theme">Thema</string>
     <string name="settings_backup_and_restore">Sichern und Wiederherstellen</string>
-    <string name="settings_backup_and_restore_summery">Modul- und Bereichslisten sichern oder wiederherstellen.</string>
     <string name="settings_backup">Back-up</string>
     <string name="settings_backup_failed2">Sicherung fehlgeschlagen:\n%s</string>
     <string name="settings_restore">Wiederherstellen</string>
