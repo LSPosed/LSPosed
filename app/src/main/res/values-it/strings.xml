@@ -159,7 +159,6 @@
     <string name="pure_black_dark_theme_summary">Usa il tema nero puro quando è abilitato il tema scuro</string>
     <string name="settings_group_theme">Tema</string>
     <string name="settings_backup_and_restore">Backup e ripristino</string>
-    <string name="settings_backup_and_restore_summery">Backup o ripristino dell\'elenco dei moduli e degli ambiti.</string>
     <string name="settings_backup">Backup</string>
     <string name="settings_backup_failed2">Salvataggio non riuscito:\n%s</string>
     <string name="settings_restore">Ripristina</string>
