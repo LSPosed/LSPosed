@@ -157,7 +157,8 @@
     <string name="pure_black_dark_theme_summary">Sử dụng chủ đề đen nếu chủ đề tối được bật</string>
     <string name="settings_group_theme">Chủ đề</string>
     <string name="settings_backup_and_restore">Sao lưu và khôi phục</string>
-    <string name="settings_backup_and_restore_summery">Sao lưu hoặc khôi phục danh sách mô-đun và danh sách phạm vi ứng dụng.</string>
+    <string name="settings_backup_summery">Sao lưu danh sách mô-đun và phạm vi ứng dụng.</string>
+    <string name="settings_restore_summery">Khôi phục danh sách mô-đun và phạm vi ứng dụng.</string>
     <string name="settings_backup">Sao lưu</string>
     <string name="settings_backup_failed2">Sao lưu thất bại:\n%s</string>
     <string name="settings_restore">Phục hồi</string>

@@ -155,7 +155,8 @@
     <string name="pure_black_dark_theme_summary">Utiliser le thème noir pûre si le thème noir est activé</string>
     <string name="settings_group_theme">Thème</string>
     <string name="settings_backup_and_restore">Sauvegarder et restaurer</string>
-    <string name="settings_backup_and_restore_summery">Sauvegarder ou restaurer la liste de modules et leurs champs d\'applications.</string>
+    <string name="settings_backup_summery">Sauvegarder la liste des modules ainsi que leurs champs d\'applications.</string>
+    <string name="settings_restore_summery">Restaurer la liste des modules ainsi que leurs champs d\'applications.</string>
     <string name="settings_backup">Sauvegarder</string>
     <string name="settings_backup_failed2">Échec de la sauvegarde:\n%s</string>
     <string name="settings_restore">Restaurer</string>

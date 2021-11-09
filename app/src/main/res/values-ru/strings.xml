@@ -132,7 +132,7 @@
     <string name="menu_show_games">Игры</string>
     <string name="menu_show_modules">Мои модули</string>
     <string name="menu_show_denylist">Запрещенный список</string>
-    <string name="failed_to_save_scope_list">Не удалось сохранить список включенных приложений для модуля</string>
+    <string name="failed_to_save_scope_list">Не удалось сохранить список выбранных приложений для модуля</string>
     <string name="app_description">%1$s\nВерсия: %2$s</string>
     <string name="use_recommended">Рекомендуемые</string>
     <string name="no_scope_selected_has_recommended">Вы не выбрали ни одного приложения. Выбрать рекомендуемые приложения?</string>
@@ -163,7 +163,8 @@
     <string name="pure_black_dark_theme_summary">Использовать черную тему, когда включена темная тема</string>
     <string name="settings_group_theme">Тема</string>
     <string name="settings_backup_and_restore">Резервное копирование и восстановление</string>
-    <string name="settings_backup_and_restore_summery">Список модулей и включенных приложений</string>
+    <string name="settings_backup_summery">Сохранить список модулей и выбранных приложений для модулей</string>
+    <string name="settings_restore_summery">Восстановить список модулей и выбранных приложений для модулей</string>
     <string name="settings_backup">Создать</string>
     <string name="settings_backup_failed2">Не удалось сделать резервную копию:\n%s</string>
     <string name="settings_restore">Восстановить</string>
