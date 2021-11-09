@@ -150,7 +150,6 @@
     <string name="pure_black_dark_theme_summary">Użyj czarnego motywu, jeśli ciemny motyw jest włączony</string>
     <string name="settings_group_theme">Motyw</string>
     <string name="settings_backup_and_restore">Kopia zapasowa i przywracanie</string>
-    <string name="settings_backup_and_restore_summery">Kopia zapasowa lub przywracanie listy modułów i list zakresu.</string>
     <string name="settings_backup">Kopia zapasowa</string>
     <string name="settings_backup_failed2">Nie udało się utworzyć kopii zapasowej:\n%s</string>
     <string name="settings_restore">Przywróć</string>
