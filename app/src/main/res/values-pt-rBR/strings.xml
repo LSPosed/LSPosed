@@ -31,6 +31,12 @@
     <string name="About">Sobre</string>
     <string name="report_issue">Reportar problema</string>
     <string name="module_repo">Repositório</string>
+    <string name="module_repo_loading">Carregando…</string>
+    <string name="module_repo_up_to_date">Todos os módulos atualizados</string>
+    <plurals name="module_repo_upgradable">
+        <item quantity="one">%d módulo atualizável</item>
+        <item quantity="other">%d módulos atualizáveis</item>
+    </plurals>
     <string name="about_view_source_code"><![CDATA[Veja o código fonte no %1$s<br/>Entre em nosso canal no %2$s]]></string>
     <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Dan, Hitalo, Luiz Renato</string>
     <string name="install">Instalar</string>
@@ -153,7 +159,8 @@
     <string name="pure_black_dark_theme_summary">Use o tema preto puro se o tema noturno estiver ativo</string>
     <string name="settings_group_theme">Tema</string>
     <string name="settings_backup_and_restore">Backup e restauração</string>
-    <string name="settings_backup_and_restore_summery">Fazer backup ou restauração da lista de módulos e da lista de escopos.</string>
+    <string name="settings_backup_summery">Backup da lista de módulos e escopo.</string>
+    <string name="settings_restore_summery">Restaurar lista de módulos e escopo.</string>
     <string name="settings_backup">Fazer backup</string>
     <string name="settings_backup_failed2">Falha ao fazer backup de:\n%s</string>
     <string name="settings_restore">Restaurar backup</string>

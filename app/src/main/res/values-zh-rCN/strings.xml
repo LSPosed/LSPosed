@@ -157,7 +157,8 @@
     <string name="pure_black_dark_theme_summary">当深色主题启用时使用纯黑色主题</string>
     <string name="settings_group_theme">主题</string>
     <string name="settings_backup_and_restore">备份与恢复</string>
-    <string name="settings_backup_and_restore_summery">备份或恢复模块列表与作用域列表</string>
+    <string name="settings_backup_summery">备份模块列表与作用域列表</string>
+    <string name="settings_restore_summery">恢复模块列表与作用域列表</string>
     <string name="settings_backup">备份</string>
     <string name="settings_backup_failed2">备份失败：\n%s</string>
     <string name="settings_restore">恢复</string>

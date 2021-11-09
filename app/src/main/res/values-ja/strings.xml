@@ -138,7 +138,8 @@
     <string name="pure_black_dark_theme_summary">ダークテーマ有効時にピュアブラックのテーマを使用</string>
     <string name="settings_group_theme">テーマ</string>
     <string name="settings_backup_and_restore">バックアップと復元</string>
-    <string name="settings_backup_and_restore_summery">モジュールリストのバックアップ/復元とリストへのアクセス</string>
+    <string name="settings_backup_summery">モジュールリストのバックアップとリストへのアクセス</string>
+    <string name="settings_restore_summery">モジュールリストの復元とリストへのアクセス</string>
     <string name="settings_backup">バックアップ</string>
     <string name="settings_backup_failed2">バックアップに失敗しました:\n%s</string>
     <string name="settings_restore">レストア</string>

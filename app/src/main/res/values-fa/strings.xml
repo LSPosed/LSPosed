@@ -139,7 +139,6 @@
     <string name="pure_black_dark_theme_summary">استفاده از مشکی خالص در صورت فعال بودن تم سیاه</string>
     <string name="settings_group_theme">تم</string>
     <string name="settings_backup_and_restore">پشتیبان گیری و بازگردانی</string>
-    <string name="settings_backup_and_restore_summery">پشتیبان گیری یا بازیابی لیست ماژول ها و لیست های محدوده.</string>
     <string name="settings_backup">پشتیبان گیری</string>
     <string name="settings_backup_failed2">ناموفق در بکاپ:\n%s</string>
     <string name="settings_restore">بازگردانی</string>

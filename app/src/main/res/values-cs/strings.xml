@@ -163,7 +163,8 @@
     <string name="pure_black_dark_theme_summary">Použít čistý černý motiv, pokud je tmavý motiv povolen</string>
     <string name="settings_group_theme">Vzhled</string>
     <string name="settings_backup_and_restore">Zálohování a obnovení</string>
-    <string name="settings_backup_and_restore_summery">Zálohovat nebo obnovit seznam modulů a seznam rozsahu.</string>
+    <string name="settings_backup_summery">Zálohovat seznam modulů a seznam rozsahu.</string>
+    <string name="settings_restore_summery">Obnovit seznam modulů a seznam rozsahu.</string>
     <string name="settings_backup">Zálohování</string>
     <string name="settings_backup_failed2">Zálohování se nezdařilo:\n%s</string>
     <string name="settings_restore">Obnovení</string>
