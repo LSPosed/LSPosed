@@ -31,6 +31,12 @@
     <string name="About">Hakkında</string>
     <string name="report_issue">Hata raporla</string>
     <string name="module_repo">Repo</string>
+    <string name="module_repo_loading">Yükleniyor…</string>
+    <string name="module_repo_up_to_date">Bütün modüller güncel</string>
+    <plurals name="module_repo_upgradable">
+        <item quantity="one">%d modül güncellenebilir</item>
+        <item quantity="other">%d modül güncellenebilir</item>
+    </plurals>
     <string name="about_view_source_code"><![CDATA[%1$s adresindeki kaynak kodunu görüntüle<br/>%2$s kanalımıza katılın]]></string>
     <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Bedircan AYAYDIN, Furkan KARCIOĞLU</string>
     <string name="install">Yükle</string>
@@ -153,6 +159,8 @@
     <string name="pure_black_dark_theme_summary">Koyu tema etkinse saf siyah temayı kullanın</string>
     <string name="settings_group_theme">Tema</string>
     <string name="settings_backup_and_restore">Yedekle</string>
+    <string name="settings_backup_summery">Modül ve kapsam listelerini yedekle.</string>
+    <string name="settings_restore_summery">Modül ve kapsam listelerini geri yükle.</string>
     <string name="settings_backup">Yedek</string>
     <string name="settings_backup_failed2">Yedekleme başarısız oldu:\n%s</string>
     <string name="settings_restore">Geri yükle</string>
@@ -189,8 +197,6 @@
     <string name="module_release_no_more">Daha fazla sürüm yok</string>
     <string name="repo_load_failed">Modül deposu yüklenemedi: %s</string>
     <!-- CrashReportActivity -->
-    <string name="outdated_core">LSPosed uygulaması çerçeveden daha yenidir. Lütfen LSPosed çerçevesini güncelleyin.</string>
-    <string name="outdated_manager">LSPosed çerçevesi, uygulamadan daha yenidir. Lütfen uygulamayı /data/adb/lspd/manager.apk adresinden manuel olarak güncelleyin.</string>
     <string name="manager_crashed">Yönetici çöktü</string>
     <string name="manager_crashed_info">bunu şuraya rapor et </string>
     <string name="send_crash_info">Çökme bilgisi gönder</string>
