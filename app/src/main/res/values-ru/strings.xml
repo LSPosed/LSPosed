@@ -201,8 +201,7 @@
     <string name="module_release_no_more">Больше нет других версий</string>
     <string name="repo_load_failed">Не удалось загрузить репозиторий модуля: %s</string>
     <!-- CrashReportActivity -->
-    <string name="outdated_core">Приложение LSPosed новее, чем фреймворк LSPosed. Обновите фреймворк LSPosed</string>
-    <string name="outdated_manager">Фреймворк LSPosed новее, чем приложение LSPosed. Обновите приложение вручную из /data/adb/lspd/manager.apk</string>
+    <string name="version_mismatch">Версия LSPosed фреймворк (%1$d) не соответствует версии приложения (%2$d). Пожалуйста, переустановите LSPosed</string>
     <string name="manager_crashed">Сбой приложения LSPosed</string>
     <string name="manager_crashed_info">сообщить об этом </string>
     <string name="send_crash_info">Отправить информацию о сбое</string>
