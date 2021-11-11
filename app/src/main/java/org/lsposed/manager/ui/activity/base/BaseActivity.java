@@ -34,8 +34,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
+import org.lsposed.manager.ui.dialog.FlashDialogBuilder;
 import org.lsposed.manager.util.NavUtil;
 import org.lsposed.manager.util.ThemeUtil;
+import org.lsposed.manager.util.UpdateUtil;
 
 import rikka.core.util.ResourceUtils;
 import rikka.material.app.MaterialActivity;
@@ -51,14 +53,17 @@ public class BaseActivity extends MaterialActivity {
         // make sure the versions are consistent
         if (BuildConfig.DEBUG) return;
         if (!ConfigManager.isBinderAlive()) return;
-        var version = ConfigManager.getXposedVersionName();
-        if (BuildConfig.VERSION_NAME.equals(version)) return;
+        var version = ConfigManager.getXposedVersionCode();
+        if (BuildConfig.VERSION_CODE == version) return;
         new MaterialAlertDialogBuilder(this)
-                .setMessage(BuildConfig.VERSION_NAME.compareTo(version) > 0 ?
-                        R.string.outdated_core : R.string.outdated_manager)
+                .setMessage(getString(R.string.version_mismatch, version, BuildConfig.VERSION_CODE))
                 .setPositiveButton(android.R.string.ok, (dialog, id) -> {
-                    NavUtil.startURL(this, getString(R.string.about_source));
-                    finish();
+                    if (UpdateUtil.canInstall()) {
+                        new FlashDialogBuilder(this, (d, i) -> finish()).show();
+                    } else {
+                        NavUtil.startURL(this, getString(R.string.about_source));
+                        finish();
+                    }
                 })
                 .setCancelable(false)
                 .show();

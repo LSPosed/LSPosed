@@ -87,7 +87,7 @@ public class HomeFragment extends BaseFragment implements RepoLoader.Listener {
                 }
             } else {
                 if (UpdateUtil.canInstall()) {
-                    new FlashDialogBuilder(activity).show();
+                    new FlashDialogBuilder(activity, null).show();
                     return;
                 }
                 NavUtil.startURL(activity, getString(R.string.about_source));
@@ -95,7 +95,7 @@ public class HomeFragment extends BaseFragment implements RepoLoader.Listener {
         });
         binding.status.setOnLongClickListener(v -> {
             if (UpdateUtil.canInstall()) {
-                new FlashDialogBuilder(activity).show();
+                new FlashDialogBuilder(activity, null).show();
                 return true;
             }
             return false;

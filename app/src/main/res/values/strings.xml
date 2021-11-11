@@ -206,8 +206,7 @@
     <string name="repo_load_failed">Failed to load module repo: %s</string>
 
     <!-- CrashReportActivity -->
-    <string name="outdated_core">LSPosed app is newer than framework. Please update LSPosed framework.</string>
-    <string name="outdated_manager">LSPosed framework is newer than app. Please update the app from /data/adb/lspd/manager.apk manually.</string>
+    <string name="version_mismatch">The version of the LSPosed framework (%1$d) does not match manager (%2$d). Please reinstall LSPosed.</string>
     <string name="manager_crashed">Manager crashed</string>
     <string name="manager_crashed_info">report this to </string>
     <string name="send_crash_info">Send crash info</string>
