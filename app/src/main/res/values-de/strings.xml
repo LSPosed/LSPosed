@@ -189,8 +189,6 @@ Gerät wird nach dem Update neu gestartet</string>
     <string name="module_release_no_more">Keine Veröffentlichung mehr</string>
     <string name="repo_load_failed">Fehler beim Laden der Modulrepo: %s</string>
     <!-- CrashReportActivity -->
-    <string name="outdated_core">Die LSPosed-App ist neuer als das Framework. Bitte aktualisieren Sie das LSPosed-Framework.</string>
-    <string name="outdated_manager">Die Version von LSPosed Manager und LSPosed Core stimmen nicht überein. Installieren Sie die entsprechende Version neu.</string>
     <string name="manager_crashed">Manager abgestürzt</string>
     <string name="manager_crashed_info">melde dies an </string>
     <string name="send_crash_info">Absturzinfo senden</string>

@@ -160,6 +160,8 @@ Ali Samir</string>
     <string name="pure_black_dark_theme_summary">استخدام السمة السوداء الخالصة إذا تم تمكين السمة المظلمة</string>
     <string name="settings_group_theme">السمة</string>
     <string name="settings_backup_and_restore">النسخ الاحتياطي والاستعادة</string>
+    <string name="settings_backup_summery">نسخ احتياطي لقائمة الوحدات وقوائم النطاق.</string>
+    <string name="settings_restore_summery">إستعادة قائمة الوحدات وقوائم النطاق.</string>
     <string name="settings_backup">نسخ احتياطي</string>
     <string name="settings_backup_failed2">فشل في النسخ الاحتياطي:\n%s</string>
     <string name="settings_restore">إستعادة</string>
@@ -196,8 +198,7 @@ Ali Samir</string>
     <string name="module_release_no_more">لا مزيد من الإصدار</string>
     <string name="repo_load_failed">فشل تحميل مستودع الوحدة: %s</string>
     <!-- CrashReportActivity -->
-    <string name="outdated_core">تطبيق LSPosed أحدث من الإطار. الرجاء تحديث إطار LSPosd.</string>
-    <string name="outdated_manager">إطار LSPosed أحدث من التطبيق. الرجاء تحديث التطبيق من /data/adb/lspd/manager.apk يدويا.</string>
+    <string name="version_mismatch">إصدار إطار LSPosed (%1$d) لا يتطابق مع مدير (%2$d). يرجى إعادة تثبيت LSPosed.</string>
     <string name="manager_crashed">تعطل المدير</string>
     <string name="manager_crashed_info">أبلغ عن هذا إلى </string>
     <string name="send_crash_info">إرسال معلومات الأعطال</string>

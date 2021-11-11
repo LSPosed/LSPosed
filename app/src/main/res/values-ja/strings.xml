@@ -170,8 +170,6 @@
     <string name="module_release_no_more">これ以上のリリースはありません</string>
     <string name="repo_load_failed">モジュールリポジトリの読み込みに失敗: %s</string>
     <!-- CrashReportActivity -->
-    <string name="outdated_core">LSPosedアプリはフレームワークより新しいです。LSPosedフレームワークを更新してください。</string>
-    <string name="outdated_manager">LSPosed Manager と LSPosed Core のバージョンが一致していません。対応バージョンを再インストールして下さい。</string>
     <string name="manager_crashed">マネージャーがクラッシュしました</string>
     <string name="send_crash_info">クラッシュ情報をコピーする</string>
     <!-- Colors -->

@@ -197,8 +197,7 @@
     <string name="module_release_no_more">Geen release meer</string>
     <string name="repo_load_failed">Kan moduleopslagplaats niet laden: %1$s</string>
     <!-- CrashReportActivity -->
-    <string name="outdated_core">LSPosed app is nieuwer dan framework. Update LSPosed framework.</string>
-    <string name="outdated_manager">De versie van LSPosed Manager en LSPosed Core zijn niet consistent. Installeer de corresponderende versie opnieuw.</string>
+    <string name="version_mismatch">De versie van het LSPosed framework (%1$d) komt niet overeen met manager (%2$d). Herinstalleer LSPosed.</string>
     <string name="manager_crashed">Manager gecrasht</string>
     <string name="manager_crashed_info">meld dit aan </string>
     <string name="send_crash_info">Stuur crash informatie</string>

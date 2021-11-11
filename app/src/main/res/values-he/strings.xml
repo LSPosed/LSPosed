@@ -122,6 +122,5 @@
     <string name="module_release_no_more">אין עוד גרסאות</string>
     <string name="repo_load_failed">נשכל לטעון מודול: %s</string>
     <!-- CrashReportActivity -->
-    <string name="outdated_manager">הגרסה של LSPosed Manager ו- LSPosed Core לא תואמות. אנא התקן מחדש גרסאות תואמות.</string>
     <!-- Colors -->
 </resources>
