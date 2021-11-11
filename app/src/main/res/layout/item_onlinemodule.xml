@@ -33,28 +33,30 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/item_root"
-        android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         tools:ignore="RtlSymmetry">
 
         <TextView
             android:id="@+id/app_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:maxLines="1"
             android:textAppearance="?android:attr/textAppearanceListItem"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@id/description"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/description"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="@tools:sample/lorem" />
 
-        <TextView
+        <org.lsposed.manager.ui.widget.ExpandableTextView
             android:id="@+id/description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:maxLines="6"
             android:textAppearance="?android:attr/textAppearanceSmall"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
