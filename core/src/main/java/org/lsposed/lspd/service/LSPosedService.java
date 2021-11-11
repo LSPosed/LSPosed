@@ -301,6 +301,35 @@ public class LSPosedService extends ILSPosedService.Stub {
         Log.d(TAG, "registered secret code receiver");
     }
 
+    private void registerBootCompleteReceiver() {
+        try {
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(Intent.ACTION_LOCKED_BOOT_COMPLETED);
+
+            ActivityManagerService.registerReceiver("android", null, new IIntentReceiver.Stub() {
+                @Override
+                public void performReceive(Intent intent, int resultCode, String data, Bundle extras, boolean ordered, boolean sticky, int sendingUser) {
+                    new Thread(() -> {
+                        try {
+                            var am = ActivityManagerService.getActivityManager();
+                            if (am != null) am.setActivityController(null, false);
+                        } catch (Throwable e) {
+                            Log.e(TAG, "setActivityController", e);
+                        }
+                    }).start();
+                    try {
+                        ActivityManagerService.finishReceiver(this, resultCode, data, extras, false, intent.getFlags());
+                    } catch (Throwable e) {
+                        Log.e(TAG, "finish receiver", e);
+                    }
+                }
+            }, intentFilter, null, 0, 0);
+        } catch (Throwable e) {
+            Log.e(TAG, "register boot receiver", e);
+        }
+        Log.d(TAG, "registered boot receiver");
+    }
+
     @Override
     public void dispatchSystemServerContext(IBinder activityThread, IBinder activityToken, String api) {
         Log.d(TAG, "received system context");
@@ -310,6 +339,7 @@ public class LSPosedService extends ILSPosedService.Stub {
         registerUnlockReceiver();
         registerConfigurationReceiver();
         registerSecretCodeReceiver();
+        registerBootCompleteReceiver();
     }
 
     @Override
