@@ -195,8 +195,7 @@
     <string name="module_release_no_more">没有更旧的版本</string>
     <string name="repo_load_failed">模块仓库加载失败：%s</string>
     <!-- CrashReportActivity -->
-    <string name="outdated_core">LSPosed 应用的版本高于框架。请更新 LSPosed 框架。</string>
-    <string name="outdated_manager">LSPosed 框架的版本高于应用。请从 /data/adb/lspd/manager.apk 更新 LSPosed 应用。</string>
+    <string name="version_mismatch">LSPosed 框架的版本(%1$d)与管理器(%2$d)不同。请重装 LSPosed。</string>
     <string name="manager_crashed">应用出现未知错误</string>
     <string name="manager_crashed_info">反馈该问题到 </string>
     <string name="send_crash_info">发送崩溃信息</string>

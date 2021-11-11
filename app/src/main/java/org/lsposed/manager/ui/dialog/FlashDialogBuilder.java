@@ -3,6 +3,7 @@ package org.lsposed.manager.ui.dialog;
 import static org.lsposed.manager.App.TAG;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.os.ParcelFileDescriptor;
 import android.text.method.LinkMovementMethod;
@@ -33,7 +34,7 @@ public class FlashDialogBuilder extends BlurBehindDialogBuilder {
     private final TextView textView;
     private final BorderNestedScrollView rootView;
 
-    public FlashDialogBuilder(@NonNull Context context) {
+    public FlashDialogBuilder(@NonNull Context context, DialogInterface.OnClickListener cancel) {
         super(context);
         var pref = App.getPreferences();
         var notes = pref.getString("release_notes", "");
@@ -51,7 +52,7 @@ public class FlashDialogBuilder extends BlurBehindDialogBuilder {
         rootView = binding.getRoot();
         setView(rootView);
 
-        setNegativeButton(android.R.string.cancel, null);
+        setNegativeButton(android.R.string.cancel, cancel);
         setPositiveButton(R.string.install, null);
         setCancelable(false);
     }

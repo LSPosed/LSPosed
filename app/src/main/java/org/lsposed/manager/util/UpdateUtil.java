@@ -73,7 +73,7 @@ public class UpdateUtil {
                 .apply();
         var updatedAt = Instant.parse(assets.get("updated_at").getAsString());
         var downloadUrl = assets.get("browser_download_url").getAsString();
-        var nowZipTime = pref.getLong("zip_time", BuildConfig.BUILD_TIME);
+        var nowZipTime = pref.getLong("zip_time", 0);
         if (updatedAt.isAfter(Instant.ofEpochSecond(nowZipTime))) {
             var zip = downloadNewZipSync(downloadUrl, name);
             var size = assets.get("size").getAsLong();
@@ -124,8 +124,6 @@ public class UpdateUtil {
         if (!ConfigManager.isBinderAlive()) return false;
         var pref = App.getPreferences();
         var zip = pref.getString("zip_file", null);
-        if (zip == null || !new File(zip).isFile()) return false;
-        var zipTime = pref.getLong("zip_time", BuildConfig.BUILD_TIME);
-        return zipTime > BuildConfig.BUILD_TIME;
+        return zip != null && new File(zip).isFile();
     }
 }
