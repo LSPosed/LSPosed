@@ -130,8 +130,6 @@
     <string name="module_release_no_more">Não há mais versões</string>
     <string name="repo_load_failed">Falha ao carregar o repositório de módulos: %s</string>
     <!-- CrashReportActivity -->
-    <string name="outdated_core">App do LSPosed é mais novo que framework. Atualize a Framework do LSPosed.</string>
-    <string name="outdated_manager">Framework do LSPosed é mais novo que o app. Atualize manualmente o aplicativo em /data/adb/lspd/manager.apk.</string>
     <string name="manager_crashed">Gerenciador travou</string>
     <!-- Colors -->
     <string name="color_pixel_blue">Pixel azul</string>
