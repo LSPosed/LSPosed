@@ -197,8 +197,6 @@
     <string name="module_release_no_more">沒有更舊的版本</string>
     <string name="repo_load_failed">模組倉庫加載失敗: %s</string>
     <!-- CrashReportActivity -->
-    <string name="outdated_core">LSPosed 管理器版本高於框架，請更新 LSPosed 框架。</string>
-    <string name="outdated_manager">LSPosed 管理器和 LSPosed 核心的版本不一致。請手動從 /data/adb/lspd/manager.apk 更新管理器。</string>
     <string name="manager_crashed">應用程式已崩潰</string>
     <string name="manager_crashed_info">回報問題到 </string>
     <string name="send_crash_info">發送崩潰訊息</string>
