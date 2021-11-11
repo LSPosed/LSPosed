@@ -169,8 +169,6 @@
     <string name="module_release_no_more">انتشار جدیدی نیست</string>
     <string name="repo_load_failed">ناموفق در بارگذاری ماژول: %s</string>
     <!-- CrashReportActivity -->
-    <string name="outdated_core">برنامه LSPosed جدیدتر از فریمورک است. لطفاً چارچوب LSPosed را به روز کنید.</string>
-    <string name="outdated_manager">چارچوب LSPosed جدیدتر از برنامه است. لطفاً برنامه را از /data/adb/lspd/manager.apk به صورت دستی به روز کنید.</string>
     <string name="manager_crashed">منیجر هنگ کرده</string>
     <string name="manager_crashed_info">این را گزارش کنید </string>
     <string name="send_crash_info">ارسال اطلاعات هنگ</string>
