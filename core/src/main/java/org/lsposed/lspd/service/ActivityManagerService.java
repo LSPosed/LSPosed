@@ -63,7 +63,8 @@ public class ActivityManagerService {
             try {
                 binder.linkToDeath(deathRecipient, 0);
                 am = IActivityManager.Stub.asInterface(binder);
-                am.setActivityController(null, false);
+                // For oddo Android 9 we cannot set activity controller here...
+                // am.setActivityController(null, false);
             } catch (RemoteException e) {
                 Log.e(TAG, Log.getStackTraceString(e));
             }
