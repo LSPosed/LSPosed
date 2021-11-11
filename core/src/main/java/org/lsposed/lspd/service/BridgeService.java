@@ -295,8 +295,8 @@ public class BridgeService {
 
         try {
             String descriptor = obj.getInterfaceDescriptor();
-            if (descriptor == null || (!descriptor.equals("android.app.IActivityManager") &&
-                    !descriptor.equals("com.sonymobile.hookservice.HookActivityService"))) {
+            if (!"android.app.IActivityManager".equals(descriptor) &&
+                    !"com.sonymobile.hookservice.HookActivityService".equals(descriptor)) {
                 return false;
             }
             return ActivityController.replaceShellCommand(obj, data, reply);
@@ -320,8 +320,8 @@ public class BridgeService {
 
         try {
             String descriptor = ParcelUtils.readInterfaceDescriptor(data);
-            if (!descriptor.equals("android.app.IActivityManager") &&
-                    !descriptor.equals("com.sonymobile.hookservice.HookActivityService")) {
+            if (!"android.app.IActivityManager".equals(descriptor) &&
+                    !"com.sonymobile.hookservice.HookActivityService".equals(descriptor)) {
                 return false;
             }
             return ActivityController.replaceActivityController(data);
