@@ -84,10 +84,10 @@ public class LogcatService implements Runnable {
             var parent = file.getParent();
             if (!Files.isDirectory(parent, LinkOption.NOFOLLOW_LINKS)) {
                 if (ConfigFileManager.chattr0(parent)) {
-                    Files.deleteIfExists(parent);
                     var pfd = ParcelFileDescriptor.adoptFd(fd);
                     var stat = Os.fstat(pfd.getFileDescriptor());
                     pfd.detachFd();
+                    Files.deleteIfExists(parent);
                     if (stat.st_nlink == 0) {
                         Files.createDirectories(parent);
                     }
