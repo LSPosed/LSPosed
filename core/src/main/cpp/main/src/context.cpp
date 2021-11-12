@@ -35,11 +35,6 @@
 #include <fcntl.h>
 
 static_assert(FS_IOC_SETFLAGS == LP_SELECT(0x40046602, 0x40086602));
-#if defined(__arm__) || defined(__aarch64__)
-static_assert(O_DIRECTORY == 0x4000);
-#else
-static_assert(O_DIRECTORY == 0x10000);
-#endif
 
 namespace lspd {
     extern int *allowUnload;

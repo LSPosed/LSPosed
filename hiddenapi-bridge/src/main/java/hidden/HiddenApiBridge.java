@@ -113,8 +113,4 @@ public class HiddenApiBridge {
     public static boolean VMRuntime_is64Bit() {
         return VMRuntime.getRuntime().is64Bit();
     }
-
-    public static String VMRuntime_vmInstructionSet() {
-        return VMRuntime.getRuntime().vmInstructionSet();
-    }
 }
