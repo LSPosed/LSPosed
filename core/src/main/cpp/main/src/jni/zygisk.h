@@ -1,9 +1,5 @@
-// All content of this file is released to the public domain.
-
-// This file is the public API for Zygisk modules.
-// DO NOT use this file for developing Zygisk modules as it might contain WIP changes.
-// Always use the following header for development as those are finalized APIs:
-// https://github.com/topjohnwu/zygisk-module-sample/blob/master/module/jni/zygisk.hpp
+// This is the public API for Zygisk modules.
+// DO NOT MODIFY ANY CODE IN THIS HEADER.
 
 #pragma once
 
@@ -12,14 +8,20 @@
 #define ZYGISK_API_VERSION 1
 
 /*
+
 Define a class and inherit zygisk::ModuleBase to implement the functionality of your module.
 Use the macro REGISTER_ZYGISK_MODULE(className) to register that class to Zygisk.
+
 Please note that modules will only be loaded after zygote has forked the child process.
 THIS MEANS ALL OF YOUR CODE RUNS IN THE APP/SYSTEM SERVER PROCESS, NOT THE ZYGOTE DAEMON!
+
 Example code:
+
 static jint (*orig_logger_entry_max)(JNIEnv *env);
 static jint my_logger_entry_max(JNIEnv *env) { return orig_logger_entry_max(env); }
+
 static void example_handler(int socket) { ... }
+
 class ExampleModule : public zygisk::ModuleBase {
 public:
     void onLoad(zygisk::Api *api, JNIEnv *env) override {
@@ -37,8 +39,11 @@ private:
     zygisk::Api *api;
     JNIEnv *env;
 };
+
 REGISTER_ZYGISK_MODULE(ExampleModule)
+
 REGISTER_ZYGISK_COMPANION(example_handler)
+
 */
 
 namespace zygisk {
@@ -143,6 +148,8 @@ namespace zygisk {
         DLCLOSE_MODULE_LIBRARY = 1,
     };
 
+// All API functions will stop working after post[XXX]Specialize as Zygisk will be unloaded
+// from the specialized process afterwards.
     struct Api {
 
         // Connect to a root companion process and get a Unix domain socket for IPC.
@@ -264,23 +271,23 @@ void zygisk_companion_entry(int client) { func(client); }
 
     } // namespace internal
 
-    int Api::connectCompanion() {
-        return impl->connectCompanion(impl->_this);
+    inline int Api::connectCompanion() {
+        return impl->connectCompanion ? impl->connectCompanion(impl->_this) : -1;
     }
-    void Api::setOption(Option opt) {
-        impl->setOption(impl->_this, opt);
+    inline void Api::setOption(Option opt) {
+        if (impl->setOption) impl->setOption(impl->_this, opt);
     }
-    void Api::hookJniNativeMethods(JNIEnv *env, const char *className, JNINativeMethod *methods, int numMethods) {
-        impl->hookJniNativeMethods(env, className, methods, numMethods);
+    inline void Api::hookJniNativeMethods(JNIEnv *env, const char *className, JNINativeMethod *methods, int numMethods) {
+        if (impl->hookJniNativeMethods) impl->hookJniNativeMethods(env, className, methods, numMethods);
     }
-    void Api::pltHookRegister(const char *regex, const char *symbol, void *newFunc, void **oldFunc) {
-        impl->pltHookRegister(regex, symbol, newFunc, oldFunc);
+    inline void Api::pltHookRegister(const char *regex, const char *symbol, void *newFunc, void **oldFunc) {
+        if (impl->pltHookRegister) impl->pltHookRegister(regex, symbol, newFunc, oldFunc);
     }
-    void Api::pltHookExclude(const char *regex, const char *symbol) {
-        impl->pltHookExclude(regex, symbol);
+    inline void Api::pltHookExclude(const char *regex, const char *symbol) {
+        if (impl->pltHookExclude) impl->pltHookExclude(regex, symbol);
     }
-    bool Api::pltHookCommit() {
-        return impl->pltHookCommit();
+    inline bool Api::pltHookCommit() {
+        return impl->pltHookCommit != nullptr && impl->pltHookCommit();
     }
 
 } // namespace zygisk
