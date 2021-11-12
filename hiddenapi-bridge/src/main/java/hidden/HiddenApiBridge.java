@@ -43,6 +43,8 @@ import android.util.MutableInt;
 import java.io.File;
 import java.io.FileDescriptor;
 
+import dalvik.system.VMRuntime;
+
 public class HiddenApiBridge {
     public static int AssetManager_addAssetPath(AssetManager am, String path) {
         return am.addAssetPath(path);
@@ -106,5 +108,9 @@ public class HiddenApiBridge {
         } else {
             return Os.ioctlInt(fd, cmd);
         }
+    }
+
+    public static boolean VMRuntime_is64Bit() {
+        return VMRuntime.getRuntime().is64Bit();
     }
 }
