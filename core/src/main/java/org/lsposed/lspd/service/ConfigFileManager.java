@@ -154,7 +154,7 @@ public class ConfigFileManager {
             Os.close(dir);
             return true;
         } catch (Throwable e) {
-            Log.d(TAG, "chattrRemoveI" + e);
+            Log.d(TAG, "chattr 0", e);
             return false;
         }
     }
