@@ -89,7 +89,8 @@ public class LogcatService implements Runnable {
                 var file = Files.readSymbolicLink(fdToPath(fd));
                 var parent = file.getParent();
                 try {
-                    var dir = Os.open(parent.toString(), OsConstants.O_RDONLY | 0x4000 /* O_DIRECTORY */, 0);
+                    var dir = Os.open(parent.toString(), OsConstants.O_RDONLY |
+                            (HiddenApiBridge.VMRuntime_vmInstructionSet().contains("arm") ? 0x4000 : 0x10000) /* O_DIRECTORY */, 0);
                     HiddenApiBridge.Os_ioctlInt(dir, HiddenApiBridge.VMRuntime_is64Bit() ? 0x40086602 : 0x40046602, 0);
                     Os.close(dir);
                 } catch (ErrnoException ignored) {
