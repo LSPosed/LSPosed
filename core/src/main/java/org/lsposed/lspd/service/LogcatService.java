@@ -20,7 +20,6 @@ import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 
 public class LogcatService implements Runnable {
     private static final String TAG = "LSPosedLogcat";
@@ -139,7 +138,7 @@ public class LogcatService implements Runnable {
                         }
                     }
                 } catch (IOException e) {
-                    Log.e(TAG, "GetProp: " + e + ": " + Arrays.toString(e.getStackTrace()));
+                    Log.e(TAG, "GetProp: ", e);
                 }
             });
             t.start();
@@ -149,7 +148,7 @@ public class LogcatService implements Runnable {
                 writer.append(sb);
             }
         } catch (IOException | InterruptedException | NullPointerException e) {
-            Log.e(TAG, "GetProp: " + Arrays.toString(e.getStackTrace()));
+            Log.e(TAG, "GetProp: ", e);
         }
     }
 
