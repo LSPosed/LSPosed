@@ -198,31 +198,38 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
             holder.appName.setText(module.getDescription());
 
             SpannableStringBuilder sb = new SpannableStringBuilder(module.getName());
-            ModuleUtil.InstalledModule installedModule = ModuleUtil.getInstance().getModule(module.getName());
-            if (installedModule != null) {
-                var ver = repoLoader.getModuleLatestVersion(installedModule.packageName);
-                if (ver != null && ver.upgradable(installedModule.versionCode, installedModule.versionName)) {
-                    sb.append("\n");
-                    String recommended = getString(R.string.update_available, ver.versionName);
-                    sb.append(recommended);
-                    final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ResourceUtils.resolveColor(requireActivity().getTheme(), androidx.appcompat.R.attr.colorAccent));
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                        final TypefaceSpan typefaceSpan = new TypefaceSpan(Typeface.create("sans-serif-medium", Typeface.NORMAL));
-                        sb.setSpan(typefaceSpan, sb.length() - recommended.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                    } else {
-                        final StyleSpan styleSpan = new StyleSpan(Typeface.BOLD);
-                        sb.setSpan(styleSpan, sb.length() - recommended.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                    }
-                    sb.setSpan(foregroundColorSpan, sb.length() - recommended.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                }
-            }
+
             String summary = module.getSummary();
             if (summary != null) {
                 sb.append("\n");
                 sb.append(summary);
             }
-
+            holder.appDescription.setVisibility(View.VISIBLE);
             holder.appDescription.setText(sb);
+            sb = new SpannableStringBuilder();
+            ModuleUtil.InstalledModule installedModule = ModuleUtil.getInstance().getModule(module.getName());
+            if (installedModule != null) {
+                var ver = repoLoader.getModuleLatestVersion(installedModule.packageName);
+                if (ver != null && ver.upgradable(installedModule.versionCode, installedModule.versionName)) {
+                    String hint = getString(R.string.update_available, ver.versionName);
+                    sb.append(hint);
+                    final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ResourceUtils.resolveColor(requireActivity().getTheme(), androidx.appcompat.R.attr.colorAccent));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        final TypefaceSpan typefaceSpan = new TypefaceSpan(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+                        sb.setSpan(typefaceSpan, sb.length() - hint.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                    } else {
+                        final StyleSpan styleSpan = new StyleSpan(Typeface.BOLD);
+                        sb.setSpan(styleSpan, sb.length() - hint.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                    }
+                    sb.setSpan(foregroundColorSpan, sb.length() - hint.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                }
+            }
+            if (sb.length() > 0) {
+                holder.hint.setVisibility(View.VISIBLE);
+                holder.hint.setText(sb);
+            } else {
+                holder.hint.setVisibility(View.GONE);
+            }
 
             holder.itemView.setOnClickListener(v -> {
                 searchView.clearFocus();
@@ -273,12 +280,14 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
             ConstraintLayout root;
             TextView appName;
             TextView appDescription;
+            TextView hint;
 
             ViewHolder(ItemOnlinemoduleBinding binding) {
                 super(binding.getRoot());
                 root = binding.itemRoot;
                 appName = binding.appName;
                 appDescription = binding.description;
+                hint = binding.hint;
             }
         }
 
