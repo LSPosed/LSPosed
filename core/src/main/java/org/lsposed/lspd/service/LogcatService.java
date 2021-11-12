@@ -86,7 +86,7 @@ public class LogcatService implements Runnable {
                 var file = Files.readSymbolicLink(fdToPath(fd));
                 var parent = file.getParent();
                 if (!Files.isDirectory(parent, LinkOption.NOFOLLOW_LINKS)) {
-                    if (ConfigFileManager.chattrRemoveI(file))
+                    if (ConfigFileManager.chattr0(parent))
                         Files.deleteIfExists(parent);
                 }
                 Files.createDirectories(parent);

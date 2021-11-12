@@ -147,13 +147,13 @@ public class ConfigFileManager {
         });
     }
 
-    public static boolean chattrRemoveI(Path path) {
+    public static boolean chattr0(Path path) {
         try {
             var dir = Os.open(String.valueOf(path), OsConstants.O_RDONLY, 0);
             HiddenApiBridge.Os_ioctlInt(dir, HiddenApiBridge.VMRuntime_is64Bit() ? 0x40086602 : 0x40046602, 0);
             Os.close(dir);
             return true;
-        } catch (ErrnoException e) {
+        } catch (Throwable e) {
             Log.d(TAG, "chattrRemoveI" + e);
             return false;
         }
@@ -162,7 +162,7 @@ public class ConfigFileManager {
     static void moveLogDir() {
         try {
             if (Files.exists(logDirPath)) {
-                if (chattrRemoveI(logDirPath)) {
+                if (chattr0(logDirPath)) {
                     deleteFolderIfExists(oldLogDirPath);
                     Files.move(logDirPath, oldLogDirPath);
                 }
