@@ -50,7 +50,6 @@ public class BridgeService {
     private static final int TRANSACTION_CODE = ('_' << 24) | ('L' << 16) | ('S' << 8) | 'P';
     private static final String DESCRIPTOR = "LSPosed";
     private static final String SERVICE_NAME = "activity";
-    private static final String SHORTCUT_ID = "org.lsposed.manager.shortcut";
 
     enum ACTION {
         ACTION_UNKNOWN,
