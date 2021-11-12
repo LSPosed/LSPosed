@@ -754,7 +754,7 @@ public final class XposedHelpers {
      * @hide
      */
     public static int getFirstParameterIndexByType(Member method, Class<?> type) {
-        Class<?>[] classes = (method instanceof Method) ?
+        Class<?>[] classes = method instanceof Method ?
                 ((Method) method).getParameterTypes() : ((Constructor) method).getParameterTypes();
         for (int i = 0; i < classes.length; i++) {
             if (classes[i] == type) {
@@ -771,7 +771,7 @@ public final class XposedHelpers {
      * @hide
      */
     public static int getParameterIndexByType(Member method, Class<?> type) {
-        Class<?>[] classes = (method instanceof Method) ?
+        Class<?>[] classes = method instanceof Method ?
                 ((Method) method).getParameterTypes() : ((Constructor) method).getParameterTypes();
         int idx = -1;
         for (int i = 0; i < classes.length; i++) {

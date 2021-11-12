@@ -10,8 +10,8 @@ public abstract class Handler extends java.net.URLStreamHandler {
     private static int indexOfBangSlash(String spec) {
         int indexOfBang = spec.length();
         while ((indexOfBang = spec.lastIndexOf('!', indexOfBang)) != -1) {
-            if ((indexOfBang != (spec.length() - 1)) &&
-                    (spec.charAt(indexOfBang + 1) == '/')) {
+            if (indexOfBang != spec.length() - 1 &&
+                    spec.charAt(indexOfBang + 1) == '/') {
                 return indexOfBang + 1;
             } else {
                 indexOfBang--;
@@ -179,7 +179,7 @@ public abstract class Handler extends java.net.URLStreamHandler {
             }
             ctxFile = ctxFile.substring(0, bangSlash);
         }
-        if (!ctxFile.endsWith("/") && (!spec.startsWith("/"))) {
+        if (!ctxFile.endsWith("/") && !spec.startsWith("/")) {
             // chop up the last component
             int lastSlash = ctxFile.lastIndexOf('/');
             if (lastSlash == -1) {
@@ -187,6 +187,6 @@ public abstract class Handler extends java.net.URLStreamHandler {
             }
             ctxFile = ctxFile.substring(0, lastSlash + 1);
         }
-        return (ctxFile + spec);
+        return ctxFile + spec;
     }
 }

@@ -305,7 +305,7 @@ public class LogsFragment extends BaseFragment {
             TextView view = holder.textView;
             view.setText(logs.get(position));
             view.measure(0, 0);
-            int desiredWidth = (preferences.getBoolean("enable_word_wrap", false)) ? binding.getRoot().getWidth() : view.getMeasuredWidth();
+            int desiredWidth = preferences.getBoolean("enable_word_wrap", false) ? binding.getRoot().getWidth() : view.getMeasuredWidth();
             ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
             layoutParams.width = desiredWidth;
             if (binding.recyclerView.getWidth() < desiredWidth) {

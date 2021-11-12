@@ -54,7 +54,7 @@ public class BaseFragment extends Fragment {
     }
 
     public void setupToolbar(Toolbar toolbar, String title, int menu, View.OnClickListener navigationOnClickListener) {
-        toolbar.setNavigationOnClickListener(navigationOnClickListener == null ? (v -> navigateUp()) : navigationOnClickListener);
+        toolbar.setNavigationOnClickListener(navigationOnClickListener == null ? v -> navigateUp() : navigationOnClickListener);
         toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
         toolbar.setTitle(title);
         if (menu != -1) {
