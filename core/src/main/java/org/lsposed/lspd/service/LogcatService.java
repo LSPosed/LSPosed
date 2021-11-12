@@ -3,7 +3,9 @@ package org.lsposed.lspd.service;
 import android.annotation.SuppressLint;
 import android.os.ParcelFileDescriptor;
 import android.os.SystemProperties;
+import android.system.ErrnoException;
 import android.system.Os;
+import android.system.OsConstants;
 import android.util.Log;
 
 import org.lsposed.lspd.BuildConfig;
@@ -21,14 +23,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
+import hidden.HiddenApiBridge;
+
 public class LogcatService implements Runnable {
     private static final String TAG = "LSPosedLogcat";
     private static final int mode = ParcelFileDescriptor.MODE_WRITE_ONLY |
             ParcelFileDescriptor.MODE_CREATE |
             ParcelFileDescriptor.MODE_TRUNCATE |
             ParcelFileDescriptor.MODE_APPEND;
-    private Path modulesLog = null;
-    private Path verboseLog = null;
+    private int modulesFd = -1;
+    private int verboseFd = -1;
     private Thread thread = null;
 
     @SuppressLint("UnsafeDynamicallyLoadedCode")
@@ -56,42 +60,50 @@ public class LogcatService implements Runnable {
         try {
             File log;
             if (isVerboseLog) {
-                checkFdFile(verboseLog);
+                checkFd(verboseFd);
                 log = ConfigFileManager.getNewVerboseLogPath();
             } else {
-                checkFdFile(modulesLog);
+                checkFd(modulesFd);
                 log = ConfigFileManager.getNewModulesLogPath();
             }
             Log.i(TAG, "New log file: " + log);
             int fd = ParcelFileDescriptor.open(log, mode).detachFd();
-            var fdFile = Paths.get("/proc/self/fd", String.valueOf(fd));
-            if (isVerboseLog) verboseLog = fdFile;
-            else modulesLog = fdFile;
+            if (isVerboseLog) verboseFd = fd;
+            else modulesFd = fd;
             return fd;
         } catch (IOException e) {
-            if (isVerboseLog) verboseLog = null;
-            else modulesLog = null;
+            if (isVerboseLog) verboseFd = -1;
+            else modulesFd = -1;
             Log.w(TAG, "refreshFd", e);
             return -1;
         }
     }
 
-    private static void checkFdFile(Path fdFile) {
-        if (fdFile == null) return;
+    private static void checkFd(int fd) {
+        if (fd == -1) return;
         try {
-            var file = Files.readSymbolicLink(fdFile);
-            if (!Files.exists(file)) {
+            var pfd = ParcelFileDescriptor.adoptFd(fd);
+            var stat = Os.fstat(pfd.getFileDescriptor());
+            pfd.detachFd();
+            if (stat.st_nlink == 0) {
+                var file = Files.readSymbolicLink(fdToPath(fd));
                 var parent = file.getParent();
+                try {
+                    var dir = Os.open(parent.toString(), OsConstants.O_RDONLY | 0x4000 /* O_DIRECTORY */, 0))
+                    HiddenApiBridge.Os_ioctlInt(dir, 0x40046602, 0);
+                    Os.close(dir);
+                } catch (ErrnoException ignored) {
+                }
                 if (!Files.isDirectory(parent, LinkOption.NOFOLLOW_LINKS)) {
                     Files.deleteIfExists(parent);
                 }
                 Files.createDirectories(parent);
                 var name = file.getFileName().toString();
                 var originName = name.substring(0, name.lastIndexOf(' '));
-                Files.copy(fdFile, parent.resolve(originName));
+                Files.copy(file, parent.resolve(originName));
             }
-        } catch (IOException e) {
-            Log.w(TAG, "checkFd " + fdFile, e);
+        } catch (IOException | ErrnoException e) {
+            Log.w(TAG, "checkFd " + fd, e);
         }
     }
 
@@ -163,24 +175,25 @@ public class LogcatService implements Runnable {
         }
     }
 
+    static private Path fdToPath(int fd) {
+        if (fd == -1) return null;
+        else return Paths.get("/proc/self/fd", String.valueOf(fd));
+    }
+
     public File getVerboseLog() {
-        return verboseLog.toFile();
+        var path = fdToPath(verboseFd);
+        return path == null ? null : path.toFile();
     }
 
     public File getModulesLog() {
-        return modulesLog.toFile();
+        var path = fdToPath(modulesFd);
+        return path == null ? null : path.toFile();
     }
 
     public void checkLogFile() {
-        try {
-            modulesLog.toRealPath();
-        } catch (IOException e) {
+        if (modulesFd == -1)
             refresh(false);
-        }
-        try {
-            verboseLog.toRealPath();
-        } catch (IOException e) {
+        if (verboseFd == -1)
             refresh(true);
-        }
     }
 }
