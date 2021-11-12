@@ -483,7 +483,7 @@ public class ConfigManager {
                 })) continue;
 
                 // system server always loads database
-                if (app.packageName.equals("android")) continue;
+                if ("android".equals(app.packageName)) continue;
 
                 try {
                     List<ProcessScope> processesScope = cachedProcessScope.computeIfAbsent(new Pair<>(app.packageName, app.userId), (k) -> {
@@ -652,7 +652,7 @@ public class ConfigManager {
             db.beginTransaction();
             db.delete("scope", "mid = ?", new String[]{String.valueOf(mid)});
             for (Application app : scopes) {
-                if (app.packageName.equals("android") && app.userId != 0) continue;
+                if ("android".equals(app.packageName) && app.userId != 0) continue;
                 ContentValues values = new ContentValues();
                 values.put("mid", mid);
                 values.put("app_pkg_name", app.packageName);
@@ -917,7 +917,7 @@ public class ConfigManager {
 
     public List<String> getDenyListPackages() {
         List<String> result = new ArrayList<>();
-        if (!getApi().equals("Zygisk")) return result;
+        if (!"Zygisk".equals(getApi())) return result;
         try (final SQLiteDatabase magiskDb =
                      SQLiteDatabase.openDatabase(ConfigFileManager.magiskDbPath, new SQLiteDatabase.OpenParams.Builder().addOpenFlags(SQLiteDatabase.OPEN_READONLY).build())) {
             try (Cursor cursor = magiskDb.query(true, "denylist", new String[]{"package_name"}, null, null, null, null, null, null, null)) {

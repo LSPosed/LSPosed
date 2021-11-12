@@ -22,7 +22,7 @@ public abstract class Handler extends java.net.URLStreamHandler {
 
     @Override
     protected boolean sameFile(URL u1, URL u2) {
-        if (!u1.getProtocol().equals("jar") || !u2.getProtocol().equals("jar"))
+        if (!"jar".equals(u1.getProtocol()) || !"jar".equals(u2.getProtocol()))
             return false;
 
         String file1 = u1.getFile();
@@ -101,7 +101,7 @@ public abstract class Handler extends java.net.URLStreamHandler {
         // 3. anchor-only (i.e. url + #foo), which we already did (refOnly)
         boolean absoluteSpec = false;
         if (spec.length() >= 4) {
-            absoluteSpec = spec.substring(0, 4).equalsIgnoreCase("jar:");
+            absoluteSpec = "jar:".equalsIgnoreCase(spec.substring(0, 4));
         }
         spec = spec.substring(start, limit);
 

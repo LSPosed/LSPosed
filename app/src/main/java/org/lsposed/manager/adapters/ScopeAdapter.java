@@ -90,6 +90,7 @@ import rikka.widget.switchbar.SwitchBar;
 
 @SuppressLint("NotifyDataSetChanged")
 public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> implements Filterable {
+    private static final String ANDROID_PKG = "android";
 
     private final Activity activity;
     private final AppListFragment fragment;
@@ -156,7 +157,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     }
 
     private boolean shouldHideApp(PackageInfo info, ApplicationWithEquals app) {
-        if (info.packageName.equals("android")) {
+        if (ANDROID_PKG.equals(info.packageName)) {
             return false;
         }
         if (checkedList.contains(app)) {
@@ -190,9 +191,9 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
     private void sortApps(List<AppInfo> list) {
         Comparator<PackageInfo> comparator = AppHelper.getAppListComparator(preferences.getInt("list_sort", 0), pm);
         Comparator<AppInfo> frameworkComparator = (a, b) -> {
-            if (a.packageName.equals("android") == b.packageName.equals("android")) {
+            if (ANDROID_PKG.equals(a.packageName) == ANDROID_PKG.equals(b.packageName)) {
                 return comparator.compare(a.packageInfo, b.packageInfo);
-            } else if (a.packageName.equals("android")) {
+            } else if (ANDROID_PKG.equals(a.packageName)) {
                 return -1;
             } else {
                 return 1;
@@ -301,7 +302,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         } else if (itemId == R.id.menu_app_info) {
             ConfigManager.startActivityAsUserWithFeature(new Intent(ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", info.packageName, null)), module.userId);
         } else if (itemId == R.id.menu_force_stop) {
-            if (info.packageName.equals("android")) {
+            if (ANDROID_PKG.equals(info.packageName)) {
                 ConfigManager.reboot(false);
             } else {
                 new MaterialAlertDialogBuilder(activity)
@@ -367,7 +368,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         AppInfo appInfo = showList.get(position);
         boolean deny = denyList.contains(appInfo.packageName);
         holder.root.setAlpha(!deny && enabled ? 1.0f : .5f);
-        boolean android = appInfo.packageName.equals("android");
+        boolean android = ANDROID_PKG.equals(appInfo.packageName);
         CharSequence appName;
         int userId = appInfo.applicationInfo.uid / 100000;
         appName = android ? activity.getString(R.string.android_framework) : appInfo.label;
@@ -506,7 +507,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             for (PackageInfo info : appList) {
                 int userId = info.applicationInfo.uid / 100000;
                 String packageName = info.packageName;
-                if (packageName.equals("android") && userId != 0 ||
+                if (ANDROID_PKG.equals(packageName) && userId != 0 ||
                         packageName.equals(module.packageName) ||
                         packageName.equals(BuildConfig.APPLICATION_ID)) {
                     continue;
@@ -572,7 +573,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                 checkedList.remove(appInfo.application);
             }
             buttonView.setChecked(!isChecked);
-        } else if (appInfo.packageName.equals("android")) {
+        } else if (ANDROID_PKG.equals(appInfo.packageName)) {
             Snackbar.make(fragment.binding.snackbar, R.string.reboot_required, Snackbar.LENGTH_SHORT)
                     .setAction(R.string.reboot, v -> ConfigManager.reboot(false))
                     .show();

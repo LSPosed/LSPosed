@@ -50,7 +50,7 @@ public class HandleBindAppHooker extends XC_MethodHook {
             final ApplicationInfo appInfo = (ApplicationInfo) XposedHelpers.getObjectField(bindData, "appInfo");
             // save app process name here for later use
             String appProcessName = (String) XposedHelpers.getObjectField(bindData, "processName");
-            String reportedPackageName = appInfo.packageName.equals("android") ? "system" : appInfo.packageName;
+            String reportedPackageName = "android".equals(appInfo.packageName) ? "system" : appInfo.packageName;
 
             // Note: packageName="android" -> system_server process, ams pms etc;
             //       packageName="system"  -> android pkg, system dialogues.

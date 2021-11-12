@@ -91,9 +91,9 @@ public class ActivityController extends IActivityController.Stub {
                             String gdbPort = null;
                             boolean monkey = false;
                             while ((opt = getNextOption()) != null) {
-                                if (opt.equals("--gdb")) {
+                                if ("--gdb".equals(opt)) {
                                     gdbPort = getNextArgRequired();
-                                } else if (opt.equals("-m")) {
+                                } else if ("-m".equals(opt)) {
                                     monkey = true;
                                 } else {
                                     getErrPrintWriter().println("Error: Unknown option: " + opt);

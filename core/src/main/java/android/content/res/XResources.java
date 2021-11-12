@@ -1107,7 +1107,7 @@ public class XResources extends XResourcesSuperClass {
 				repResDefined = !(tmpValue.type == TypedValue.TYPE_INT_BOOLEAN && tmpValue.data == 0);
 			} catch (NotFoundException ignored) {}
 
-			if (!repResDefined && origResId == 0 && !entryType.equals("id")) {
+			if (!repResDefined && origResId == 0 && !"id".equals(entryType)) {
 				XposedBridge.log(entryType + "/" + entryName + " is neither defined in module nor in original resources");
 				return 0;
 			}
@@ -1117,7 +1117,7 @@ public class XResources extends XResourcesSuperClass {
 				origResId = getFakeResId(repRes, id);
 
 			// IDs will never be loaded, no need to set a replacement
-			if (repResDefined && !entryType.equals("id"))
+			if (repResDefined && !"id".equals(entryType))
 				origRes.setReplacement(origResId, new XResForwarder(repRes, id));
 
 			return origResId;

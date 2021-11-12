@@ -68,7 +68,7 @@ public class ServiceManager {
         if (!ConfigFileManager.tryLock()) System.exit(0);
 
         for (String arg : args) {
-            if (arg.equals("--from-service")) {
+            if ("--from-service".equals(arg)) {
                 Log.w(TAG, "LSPosed daemon is not started properly. Try for a late start...");
             }
         }

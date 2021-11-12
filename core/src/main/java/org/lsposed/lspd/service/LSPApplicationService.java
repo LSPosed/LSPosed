@@ -71,7 +71,7 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
         ensureRegistered();
         int pid = getCallingPid();
         int uid = getCallingUid();
-        if (uid == 1000 && processName.equals("android")) {
+        if (uid == 1000 && "android".equals(processName)) {
             return ConfigManager.getInstance().getModulesForSystemServer();
         }
         if (ServiceManager.getManagerService().isRunningManager(pid, uid))

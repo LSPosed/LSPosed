@@ -46,7 +46,7 @@ public class LoadedApkCstrHooker extends XC_MethodHook {
 
             XResources.setPackageNameForResDir(packageName, loadedApk.getResDir());
 
-            if (packageName.equals("android")) {
+            if ("android".equals(packageName)) {
                 Hookers.logD("LoadedApk#<init> is android, skip: " + mAppDir);
                 return;
             }

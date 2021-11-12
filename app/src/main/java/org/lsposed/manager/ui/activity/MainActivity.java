@@ -115,7 +115,7 @@ public class MainActivity extends BaseActivity {
                         break;
                     default:
                         var data = intent.getData();
-                        if (data.getScheme().equals("module")) {
+                        if ("module".equals(data.getScheme())) {
                             navController.navigate(
                                     NavGraphDirections.actionAppListFragment(
                                             data.getHost(),
