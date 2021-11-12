@@ -64,6 +64,7 @@ public class LogcatService implements Runnable {
                 log = ConfigFileManager.getNewModulesLogPath();
             }
             Log.i(TAG, "New log file: " + log);
+            ConfigFileManager.chattr0(log.toPath().getParent());
             int fd = ParcelFileDescriptor.open(log, mode).detachFd();
             if (isVerboseLog) verboseFd = fd;
             else modulesFd = fd;
@@ -79,20 +80,21 @@ public class LogcatService implements Runnable {
     private static void checkFd(int fd) {
         if (fd == -1) return;
         try {
-            var pfd = ParcelFileDescriptor.adoptFd(fd);
-            var stat = Os.fstat(pfd.getFileDescriptor());
-            pfd.detachFd();
-            if (stat.st_nlink == 0) {
-                var file = Files.readSymbolicLink(fdToPath(fd));
-                var parent = file.getParent();
-                if (!Files.isDirectory(parent, LinkOption.NOFOLLOW_LINKS)) {
-                    if (ConfigFileManager.chattr0(parent))
-                        Files.deleteIfExists(parent);
+            var file = Files.readSymbolicLink(fdToPath(fd));
+            var parent = file.getParent();
+            if (!Files.isDirectory(parent, LinkOption.NOFOLLOW_LINKS)) {
+                if (ConfigFileManager.chattr0(parent)) {
+                    Files.deleteIfExists(parent);
+                    var pfd = ParcelFileDescriptor.adoptFd(fd);
+                    var stat = Os.fstat(pfd.getFileDescriptor());
+                    pfd.detachFd();
+                    if (stat.st_nlink == 0) {
+                        Files.createDirectories(parent);
+                    }
+                    var name = file.getFileName().toString();
+                    var originName = name.substring(0, name.lastIndexOf(' '));
+                    Files.copy(file, parent.resolve(originName));
                 }
-                Files.createDirectories(parent);
-                var name = file.getFileName().toString();
-                var originName = name.substring(0, name.lastIndexOf(' '));
-                Files.copy(file, parent.resolve(originName));
             }
         } catch (IOException | ErrnoException e) {
             Log.w(TAG, "checkFd " + fd, e);
