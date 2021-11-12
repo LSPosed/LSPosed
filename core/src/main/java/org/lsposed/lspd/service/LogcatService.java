@@ -3,7 +3,6 @@ package org.lsposed.lspd.service;
 import android.annotation.SuppressLint;
 import android.os.ParcelFileDescriptor;
 import android.os.SystemProperties;
-import android.system.ErrnoException;
 import android.system.Os;
 import android.util.Log;
 
@@ -12,6 +11,7 @@ import org.lsposed.lspd.BuildConfig;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileDescriptor;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -79,23 +79,21 @@ public class LogcatService implements Runnable {
     private static void checkFd(int fd) {
         if (fd == -1) return;
         try {
-            var file = Files.readSymbolicLink(fdToPath(fd));
-            var parent = file.getParent();
-            if (!Files.isDirectory(parent, LinkOption.NOFOLLOW_LINKS)) {
-                if (ConfigFileManager.chattr0(parent)) {
-                    var pfd = ParcelFileDescriptor.adoptFd(fd);
-                    var stat = Os.fstat(pfd.getFileDescriptor());
-                    pfd.detachFd();
-                    Files.deleteIfExists(parent);
-                    if (stat.st_nlink == 0) {
-                        Files.createDirectories(parent);
-                    }
-                    var name = file.getFileName().toString();
-                    var originName = name.substring(0, name.lastIndexOf(' '));
-                    Files.copy(file, parent.resolve(originName));
+            var jfd = new FileDescriptor();
+            jfd.getClass().getDeclaredMethod("setInt$", int.class).invoke(jfd, fd);
+            var stat = Os.fstat(jfd);
+            if (stat.st_nlink == 0) {
+                var file = Files.readSymbolicLink(fdToPath(fd));
+                var parent = file.getParent();
+                if (!Files.isDirectory(parent, LinkOption.NOFOLLOW_LINKS)) {
+                    if (ConfigFileManager.chattr0(parent))
+                        Files.deleteIfExists(parent);
                 }
+                var name = file.getFileName().toString();
+                var originName = name.substring(0, name.lastIndexOf(' '));
+                Files.copy(file, parent.resolve(originName));
             }
-        } catch (IOException | ErrnoException e) {
+        } catch (Throwable e) {
             Log.w(TAG, "checkFd " + fd, e);
         }
     }
