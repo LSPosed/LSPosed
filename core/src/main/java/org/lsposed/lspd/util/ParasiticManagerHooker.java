@@ -243,7 +243,7 @@ public class ParasiticManagerHooker {
         try {
             List<IBinder> binder = new ArrayList<>(1);
             var managerParcelFd = serviceClient.requestInjectedManagerBinder(binder);
-            if (binder.size() > 0 && binder.get(0) != null && managerParcelFd != null) {
+            if (!binder.isEmpty() && binder.get(0) != null && managerParcelFd != null) {
                 managerFd = managerParcelFd.detachFd();
                 var managerService = ILSPManagerService.Stub.asInterface(binder.get(0));
                 hookForManager(managerService);

@@ -49,7 +49,7 @@ public class AppHelper {
 
         List<ResolveInfo> ris = ConfigManager.queryIntentActivitiesAsUser(intentToResolve, 0, userId);
 
-        if (ris.size() <= 0) {
+        if (ris.isEmpty()) {
             return getLaunchIntentForPackage(packageName, userId);
         }
 
@@ -67,14 +67,14 @@ public class AppHelper {
         intentToResolve.setPackage(packageName);
         List<ResolveInfo> ris = ConfigManager.queryIntentActivitiesAsUser(intentToResolve, 0, userId);
 
-        if (ris.size() <= 0) {
+        if (ris.isEmpty()) {
             intentToResolve.removeCategory(Intent.CATEGORY_INFO);
             intentToResolve.addCategory(Intent.CATEGORY_LAUNCHER);
             intentToResolve.setPackage(packageName);
             ris = ConfigManager.queryIntentActivitiesAsUser(intentToResolve, 0, userId);
         }
 
-        if (ris.size() <= 0) {
+        if (ris.isEmpty()) {
             return null;
         }
 
