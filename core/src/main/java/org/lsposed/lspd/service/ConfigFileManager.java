@@ -9,6 +9,7 @@ import android.os.ParcelFileDescriptor;
 import android.os.SELinux;
 import android.os.SharedMemory;
 import android.system.ErrnoException;
+import android.system.Os;
 import android.system.OsConstants;
 import android.util.Log;
 
@@ -44,6 +45,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipFile;
+
+import hidden.HiddenApiBridge;
 
 public class ConfigFileManager {
     static final Path basePath = Paths.get("/data/adb/lspd");
@@ -144,11 +147,25 @@ public class ConfigFileManager {
         });
     }
 
+    public static boolean chattrRemoveI(Path path) {
+        try {
+            var dir = Os.open(String.valueOf(path), OsConstants.O_RDONLY, 0);
+            HiddenApiBridge.Os_ioctlInt(dir, HiddenApiBridge.VMRuntime_is64Bit() ? 0x40086602 : 0x40046602, 0);
+            Os.close(dir);
+            return true;
+        } catch (ErrnoException e) {
+            Log.d(TAG, "chattrRemoveI" + e);
+            return false;
+        }
+    }
+
     static void moveLogDir() {
         try {
             if (Files.exists(logDirPath)) {
-                deleteFolderIfExists(oldLogDirPath);
-                Files.move(logDirPath, oldLogDirPath);
+                if (chattrRemoveI(logDirPath)) {
+                    deleteFolderIfExists(oldLogDirPath);
+                    Files.move(logDirPath, oldLogDirPath);
+                }
             }
             Files.createDirectories(logDirPath);
         } catch (IOException e) {

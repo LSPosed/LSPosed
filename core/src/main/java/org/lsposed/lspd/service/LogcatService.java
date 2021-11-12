@@ -5,7 +5,6 @@ import android.os.ParcelFileDescriptor;
 import android.os.SystemProperties;
 import android.system.ErrnoException;
 import android.system.Os;
-import android.system.OsConstants;
 import android.util.Log;
 
 import org.lsposed.lspd.BuildConfig;
@@ -22,8 +21,6 @@ import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
-
-import hidden.HiddenApiBridge;
 
 public class LogcatService implements Runnable {
     private static final String TAG = "LSPosedLogcat";
@@ -89,13 +86,8 @@ public class LogcatService implements Runnable {
                 var file = Files.readSymbolicLink(fdToPath(fd));
                 var parent = file.getParent();
                 if (!Files.isDirectory(parent, LinkOption.NOFOLLOW_LINKS)) {
-                    try {
-                        var dir = Os.open(parent.toString(), OsConstants.O_RDONLY, 0);
-                        HiddenApiBridge.Os_ioctlInt(dir, HiddenApiBridge.VMRuntime_is64Bit() ? 0x40086602 : 0x40046602, 0);
-                        Os.close(dir);
-                    } catch (ErrnoException ignored) {
-                    }
-                    Files.deleteIfExists(parent);
+                    if (ConfigFileManager.chattrRemoveI(file))
+                        Files.deleteIfExists(parent);
                 }
                 Files.createDirectories(parent);
                 var name = file.getFileName().toString();
