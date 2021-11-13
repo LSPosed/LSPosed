@@ -41,6 +41,7 @@ import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
+import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -76,15 +77,21 @@ import org.lsposed.manager.util.GlideApp;
 import org.lsposed.manager.util.ModuleUtil;
 
 import java.time.LocalDateTime;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.stream.Collectors;
 
+import kotlin.reflect.KParameter;
 import rikka.core.util.ResourceUtils;
 import rikka.widget.switchbar.SwitchBar;
 
@@ -187,7 +194,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
         return preferences.getBoolean("filter_system_apps", true) && (info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0;
     }
 
-    private void sortApps(List<AppInfo> list) {
+    private int sortApps(AppInfo x, AppInfo y) {
         Comparator<PackageInfo> comparator = AppHelper.getAppListComparator(preferences.getInt("list_sort", 0), pm);
         Comparator<AppInfo> frameworkComparator = (a, b) -> {
             if (a.packageName.equals("android") == b.packageName.equals("android")) {
@@ -209,17 +216,15 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                 return 1;
             }
         };
-        list.sort((a, b) -> {
-            boolean aChecked = checkedList.contains(a.application);
-            boolean bChecked = checkedList.contains(b.application);
+            boolean aChecked = checkedList.contains(x.application);
+            boolean bChecked = checkedList.contains(y.application);
             if (aChecked == bChecked) {
-                return recommendedComparator.compare(a, b);
+                return recommendedComparator.compare(x, y);
             } else if (aChecked) {
                 return -1;
             } else {
                 return 1;
             }
-        });
     }
 
     private void checkRecommended() {
@@ -498,18 +503,18 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             recommendedList.clear();
             denyList.clear();
             denyList.addAll(AppHelper.getDenyList(force));
-            var tmpList = new ArrayList<AppInfo>();
+            final var tmpList = new ArrayList<AppInfo>();
             checkedList.addAll(ConfigManager.getModuleScope(module.packageName));
             HashSet<ApplicationWithEquals> installedList = new HashSet<>();
             List<String> scopeList = module.getScopeList();
             boolean emptyCheckedList = checkedList.isEmpty();
-            for (PackageInfo info : appList) {
+            appList.parallelStream().forEach(info -> {
                 int userId = info.applicationInfo.uid / 100000;
                 String packageName = info.packageName;
                 if (packageName.equals("android") && userId != 0 ||
                         packageName.equals(module.packageName) ||
                         packageName.equals(BuildConfig.APPLICATION_ID)) {
-                    continue;
+                    return;
                 }
 
                 ApplicationWithEquals application = new ApplicationWithEquals(packageName, userId);
@@ -517,16 +522,20 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                 installedList.add(application);
 
                 if (userId != module.userId) {
-                    continue;
+                    return;
                 }
 
                 if (scopeList != null && scopeList.contains(packageName)) {
-                    recommendedList.add(application);
+                    synchronized (recommendedList) {
+                        recommendedList.add(application);
+                    }
                     if (emptyCheckedList) {
-                        checkedList.add(application);
+                        synchronized (checkedList) {
+                            checkedList.add(application);
+                        }
                     }
                 } else if (shouldHideApp(info, application)) {
-                    continue;
+                    return;
                 }
 
                 AppInfo appInfo = new AppInfo();
@@ -535,15 +544,16 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                 appInfo.application = application;
                 appInfo.packageName = info.packageName;
                 appInfo.applicationInfo = info.applicationInfo;
-                tmpList.add(appInfo);
-            }
+                synchronized (tmpList) {
+                    tmpList.add(appInfo);
+                }
+            });
             checkedList.retainAll(installedList);
             if (emptyCheckedList) {
                 ConfigManager.setModuleScope(module.packageName, checkedList);
             }
-            sortApps(tmpList);
             searchList.clear();
-            searchList.addAll(tmpList);
+            tmpList.parallelStream().sorted(this::sortApps).forEachOrdered(searchList::add);
             synchronized (dataReadyRunnable) {
                 synchronized (this) {
                     refreshing = false;

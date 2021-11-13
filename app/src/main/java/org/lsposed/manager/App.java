@@ -52,6 +52,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.FutureTask;
 
 import okhttp3.Cache;
@@ -91,7 +92,7 @@ public class App extends Application {
     private static OkHttpClient okHttpClient;
     private static Cache okHttpCache;
     private SharedPreferences pref;
-    private ExecutorService executorService;
+    private final ExecutorService executorService = ForkJoinPool.commonPool();
 
     public static App getInstance() {
         return instance;
@@ -142,8 +143,6 @@ public class App extends Application {
         }
 
         instance = this;
-
-        executorService = Executors.newCachedThreadPool();
 
         pref = PreferenceManager.getDefaultSharedPreferences(this);
         if ("CN".equals(Locale.getDefault().getCountry())) {
