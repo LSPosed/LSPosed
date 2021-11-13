@@ -574,8 +574,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         public void refresh(boolean force) {
             Looper.myQueue().addIdleHandler(() -> {
                 if (force) {
-                    var t = new Thread(moduleUtil::reloadInstalledModules);
-                    t.start();
+                    new Thread(moduleUtil::reloadInstalledModules).start();
                 }
                 runOnUiThread(reloadModules);
                 return false;
