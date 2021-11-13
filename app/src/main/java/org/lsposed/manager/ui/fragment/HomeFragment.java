@@ -62,6 +62,7 @@ public class HomeFragment extends BaseFragment implements RepoLoader.Listener {
     private FragmentHomeBinding binding;
 
     private static final RepoLoader repoLoader = RepoLoader.getInstance();
+    private static boolean isFirstLoad = true;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -246,13 +247,20 @@ public class HomeFragment extends BaseFragment implements RepoLoader.Listener {
     public void onResume() {
         super.onResume();
         if (ConfigManager.isBinderAlive()) {
-            Looper.myQueue().addIdleHandler(() -> {
-                var moduleCount = ModuleUtil.getInstance().getEnabledModulesCount();
-                runOnUiThread(() -> binding.modulesSummary.setText(getResources().getQuantityString(R.plurals.modules_enabled_count, moduleCount, moduleCount)));
-                return false;
-            });
-        } else
-            binding.modulesSummary.setText(getResources().getQuantityString(R.plurals.modules_enabled_count, 0, 0));
+            if (isFirstLoad) {
+                Looper.myQueue().addIdleHandler(() -> {
+                    setModulesSummary(ModuleUtil.getInstance().getEnabledModulesCount());
+                    return false;
+                });
+                isFirstLoad = false;
+            } else {
+                setModulesSummary(ModuleUtil.getInstance().getEnabledModulesCount());
+            }
+        } else setModulesSummary(0);
+    }
+
+    private void setModulesSummary(int moduleCount) {
+        runOnUiThread(() -> binding.modulesSummary.setText(getResources().getQuantityString(R.plurals.modules_enabled_count, moduleCount, moduleCount)));
     }
 
     @Override

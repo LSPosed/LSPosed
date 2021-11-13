@@ -103,6 +103,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     private SearchView.OnQueryTextListener searchListener;
     private final ArrayList<ModuleAdapter> adapters = new ArrayList<>();
     private final ArrayList<String> tabTitles = new ArrayList<>();
+    private static boolean isFirstLoad = true;
 
     private ModuleUtil.InstalledModule selectedModule;
 
@@ -568,16 +569,20 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         }
 
         public void refresh() {
-            refresh(false);
+            if (isFirstLoad) {
+                Looper.myQueue().addIdleHandler(() -> {
+                    refresh(false);
+                    return false;
+                });
+                isFirstLoad = false;
+            } else {
+                refresh(false);
+            }
         }
 
         public void refresh(boolean force) {
-            Looper.myQueue().addIdleHandler(() -> {
-                if (force)
-                    App.getExecutorService().submit(moduleUtil::reloadInstalledModules);
-                runOnUiThread(reloadModules);
-                return false;
-            });
+            if (force) App.getExecutorService().submit(moduleUtil::reloadInstalledModules);
+            runOnUiThread(reloadModules);
         }
 
         private final Runnable reloadModules = new Runnable() {
