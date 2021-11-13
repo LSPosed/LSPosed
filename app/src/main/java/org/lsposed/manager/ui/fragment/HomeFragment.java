@@ -22,6 +22,7 @@ package org.lsposed.manager.ui.fragment;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -245,10 +246,11 @@ public class HomeFragment extends BaseFragment implements RepoLoader.Listener {
     public void onResume() {
         super.onResume();
         if (ConfigManager.isBinderAlive()) {
-            new Thread(() -> {
+            Looper.myQueue().addIdleHandler(() -> {
                 var moduleCount = ModuleUtil.getInstance().getEnabledModulesCount();
                 runOnUiThread(() -> binding.modulesSummary.setText(getResources().getQuantityString(R.plurals.modules_enabled_count, moduleCount, moduleCount)));
-            }).start();
+                return false;
+            });
         } else
             binding.modulesSummary.setText(getResources().getQuantityString(R.plurals.modules_enabled_count, 0, 0));
     }
