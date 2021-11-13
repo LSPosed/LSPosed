@@ -228,8 +228,13 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     }
 
     @Override
-    public void onSingleInstalledModuleReloaded() {
-        adapters.forEach(adapter -> adapter.refresh(true));
+    public void onSingleInstalledModuleReloaded(ModuleUtil.InstalledModule module) {
+        adapters.forEach(ModuleAdapter::refresh);
+    }
+
+    @Override
+    public void onModulesReloaded() {
+        adapters.forEach(ModuleAdapter::refresh);
     }
 
     @Override
@@ -572,31 +577,29 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
         public void refresh(boolean force) {
             if (force) App.getExecutorService().submit(moduleUtil::reloadInstalledModules);
-            runOnUiThread(reloadModules);
+            App.getExecutorService().submit(reloadModules);
         }
 
-        private final Runnable reloadModules = new Runnable() {
-            public void run() {
-                var tmpList = moduleUtil.getModules().values().parallelStream()
-                        .filter(module -> user == null ? module.userId == 0 : module.userId == user.id)
-                        .filter(customFilter).collect(Collectors.toCollection(ArrayList::new));
-                Comparator<PackageInfo> cmp = AppHelper.getAppListComparator(0, pm);
-                tmpList.sort((a, b) -> {
-                    boolean aChecked = moduleUtil.isModuleEnabled(a.packageName);
-                    boolean bChecked = moduleUtil.isModuleEnabled(b.packageName);
-                    if (aChecked == bChecked) {
-                        return cmp.compare(a.pkg, b.pkg);
-                    } else if (aChecked) {
-                        return -1;
-                    } else {
-                        return 1;
-                    }
-                });
-                searchList.clear();
-                searchList.addAll(tmpList);
-                String queryStr = searchView != null ? searchView.getQuery().toString() : "";
-                runOnUiThread(() -> getFilter().filter(queryStr));
-            }
+        private final Runnable reloadModules = (Runnable) () -> {
+            Comparator<PackageInfo> cmp = AppHelper.getAppListComparator(0, pm);
+            var tmpList = moduleUtil.getModules().values().parallelStream()
+                    .filter(module -> getUser() == null ? module.userId == 0 : module.userId == getUser().id)
+                    .filter(customFilter)
+                    .sorted((a, b) -> {
+                        boolean aChecked = moduleUtil.isModuleEnabled(a.packageName);
+                        boolean bChecked = moduleUtil.isModuleEnabled(b.packageName);
+                        if (aChecked == bChecked) {
+                            return cmp.compare(a.pkg, b.pkg);
+                        } else if (aChecked) {
+                            return -1;
+                        } else {
+                            return 1;
+                        }
+                    }).collect(Collectors.toCollection(ArrayList::new));
+            searchList.clear();
+            searchList.addAll(tmpList);
+            String queryStr = searchView != null ? searchView.getQuery().toString() : "";
+            runOnUiThread(() -> getFilter().filter(queryStr));
         };
 
         @Override

@@ -225,7 +225,7 @@ public class HomeFragment extends BaseFragment implements RepoLoader.Listener, M
     }
 
     @Override
-    public void onSingleInstalledModuleReloaded() {
+    public void onModulesReloaded() {
         setModulesSummary(moduleUtil.getEnabledModulesCount());
     }
 
