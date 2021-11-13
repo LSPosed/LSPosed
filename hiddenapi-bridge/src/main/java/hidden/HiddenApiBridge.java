@@ -30,12 +30,20 @@ import android.content.res.CompatibilityInfo;
 import android.content.res.Resources;
 import android.content.res.ResourcesImpl;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.UserHandle;
+import android.system.ErrnoException;
+import android.system.Int32Ref;
+import android.system.Os;
+import android.util.MutableInt;
 
 import java.io.File;
+import java.io.FileDescriptor;
+
+import dalvik.system.VMRuntime;
 
 public class HiddenApiBridge {
     public static int AssetManager_addAssetPath(AssetManager am, String path) {
@@ -90,5 +98,19 @@ public class HiddenApiBridge {
 
     public static CompatibilityInfo Resources_getCompatibilityInfo(Resources res) {
         return res.getCompatibilityInfo();
+    }
+
+    public static int Os_ioctlInt(FileDescriptor fd, int cmd, int arg) throws ErrnoException {
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O_MR1) {
+            return Os.ioctlInt(fd, cmd, new MutableInt(arg));
+        } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+            return Os.ioctlInt(fd, cmd, new Int32Ref(arg));
+        } else {
+            return Os.ioctlInt(fd, cmd);
+        }
+    }
+
+    public static boolean VMRuntime_is64Bit() {
+        return VMRuntime.getRuntime().is64Bit();
     }
 }

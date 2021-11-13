@@ -31,6 +31,11 @@
 #include "service.h"
 #include "symbol_cache.h"
 
+#include <linux/fs.h>
+#include <fcntl.h>
+
+static_assert(FS_IOC_SETFLAGS == LP_SELECT(0x40046602, 0x40086602));
+
 namespace lspd {
     extern int *allowUnload;
 

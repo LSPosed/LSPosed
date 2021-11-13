@@ -11,6 +11,7 @@ import org.lsposed.lspd.BuildConfig;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileDescriptor;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -19,7 +20,6 @@ import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 
 public class LogcatService implements Runnable {
     private static final String TAG = "LSPosedLogcat";
@@ -27,8 +27,8 @@ public class LogcatService implements Runnable {
             ParcelFileDescriptor.MODE_CREATE |
             ParcelFileDescriptor.MODE_TRUNCATE |
             ParcelFileDescriptor.MODE_APPEND;
-    private Path modulesLog = null;
-    private Path verboseLog = null;
+    private int modulesFd = -1;
+    private int verboseFd = -1;
     private Thread thread = null;
 
     @SuppressLint("UnsafeDynamicallyLoadedCode")
@@ -56,42 +56,45 @@ public class LogcatService implements Runnable {
         try {
             File log;
             if (isVerboseLog) {
-                checkFdFile(verboseLog);
+                checkFd(verboseFd);
                 log = ConfigFileManager.getNewVerboseLogPath();
             } else {
-                checkFdFile(modulesLog);
+                checkFd(modulesFd);
                 log = ConfigFileManager.getNewModulesLogPath();
             }
             Log.i(TAG, "New log file: " + log);
+            ConfigFileManager.chattr0(log.toPath().getParent());
             int fd = ParcelFileDescriptor.open(log, mode).detachFd();
-            var fdFile = Paths.get("/proc/self/fd", String.valueOf(fd));
-            if (isVerboseLog) verboseLog = fdFile;
-            else modulesLog = fdFile;
+            if (isVerboseLog) verboseFd = fd;
+            else modulesFd = fd;
             return fd;
         } catch (IOException e) {
-            if (isVerboseLog) verboseLog = null;
-            else modulesLog = null;
+            if (isVerboseLog) verboseFd = -1;
+            else modulesFd = -1;
             Log.w(TAG, "refreshFd", e);
             return -1;
         }
     }
 
-    private static void checkFdFile(Path fdFile) {
-        if (fdFile == null) return;
+    private static void checkFd(int fd) {
+        if (fd == -1) return;
         try {
-            var file = Files.readSymbolicLink(fdFile);
-            if (!Files.exists(file)) {
+            var jfd = new FileDescriptor();
+            jfd.getClass().getDeclaredMethod("setInt$", int.class).invoke(jfd, fd);
+            var stat = Os.fstat(jfd);
+            if (stat.st_nlink == 0) {
+                var file = Files.readSymbolicLink(fdToPath(fd));
                 var parent = file.getParent();
                 if (!Files.isDirectory(parent, LinkOption.NOFOLLOW_LINKS)) {
-                    Files.deleteIfExists(parent);
+                    if (ConfigFileManager.chattr0(parent))
+                        Files.deleteIfExists(parent);
                 }
-                Files.createDirectories(parent);
                 var name = file.getFileName().toString();
                 var originName = name.substring(0, name.lastIndexOf(' '));
-                Files.copy(fdFile, parent.resolve(originName));
+                Files.copy(file, parent.resolve(originName));
             }
-        } catch (IOException e) {
-            Log.w(TAG, "checkFd " + fdFile, e);
+        } catch (Throwable e) {
+            Log.w(TAG, "checkFd " + fd, e);
         }
     }
 
@@ -133,7 +136,7 @@ public class LogcatService implements Runnable {
                         }
                     }
                 } catch (IOException e) {
-                    Log.e(TAG, "GetProp: " + e + ": " + Arrays.toString(e.getStackTrace()));
+                    Log.e(TAG, "GetProp: ", e);
                 }
             });
             t.start();
@@ -143,7 +146,7 @@ public class LogcatService implements Runnable {
                 writer.append(sb);
             }
         } catch (IOException | InterruptedException | NullPointerException e) {
-            Log.e(TAG, "GetProp: " + Arrays.toString(e.getStackTrace()));
+            Log.e(TAG, "GetProp: ", e);
         }
     }
 
@@ -163,24 +166,25 @@ public class LogcatService implements Runnable {
         }
     }
 
+    static private Path fdToPath(int fd) {
+        if (fd == -1) return null;
+        else return Paths.get("/proc/self/fd", String.valueOf(fd));
+    }
+
     public File getVerboseLog() {
-        return verboseLog.toFile();
+        var path = fdToPath(verboseFd);
+        return path == null ? null : path.toFile();
     }
 
     public File getModulesLog() {
-        return modulesLog.toFile();
+        var path = fdToPath(modulesFd);
+        return path == null ? null : path.toFile();
     }
 
     public void checkLogFile() {
-        try {
-            modulesLog.toRealPath();
-        } catch (IOException e) {
+        if (modulesFd == -1)
             refresh(false);
-        }
-        try {
-            verboseLog.toRealPath();
-        } catch (IOException e) {
+        if (verboseFd == -1)
             refresh(true);
-        }
     }
 }
