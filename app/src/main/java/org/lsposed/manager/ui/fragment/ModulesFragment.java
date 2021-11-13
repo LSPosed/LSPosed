@@ -577,13 +577,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 runOnUiThread(reloadModules);
             });
             t.start();
-            if (force) {
-                try {
-                    t.join();
-                } catch (InterruptedException e) {
-                    Log.e(App.TAG, "reloadModules: ", e);
-                }
-            }
         }
 
         private final Runnable reloadModules = new Runnable() {
