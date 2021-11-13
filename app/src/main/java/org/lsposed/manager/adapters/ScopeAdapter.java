@@ -498,7 +498,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
             denyList.addAll(AppHelper.getDenyList(force));
             final var tmpList = new ArrayList<AppInfo>();
             checkedList.addAll(ConfigManager.getModuleScope(module.packageName));
-            HashSet<ApplicationWithEquals> installedList = new HashSet<>();
+            final HashSet<ApplicationWithEquals> installedList = new HashSet<>();
             List<String> scopeList = module.getScopeList();
             boolean emptyCheckedList = checkedList.isEmpty();
             appList.parallelStream().forEach(info -> {
@@ -512,7 +512,9 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
 
                 ApplicationWithEquals application = new ApplicationWithEquals(packageName, userId);
 
-                installedList.add(application);
+                synchronized (installedList) {
+                    installedList.add(application);
+                }
 
                 if (userId != module.userId) {
                     return;
@@ -533,7 +535,7 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
 
                 AppInfo appInfo = new AppInfo();
                 appInfo.packageInfo = info;
-                appInfo.label = info.applicationInfo.loadLabel(pm);
+                appInfo.label = AppHelper.getAppLabel(info, pm);
                 appInfo.application = application;
                 appInfo.packageName = info.packageName;
                 appInfo.applicationInfo = info.applicationInfo;

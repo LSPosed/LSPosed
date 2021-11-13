@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.Looper;
 import android.os.Process;
 import android.system.Os;
 import android.text.TextUtils;
@@ -36,6 +37,7 @@ import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
 import org.lsposed.hiddenapibypass.HiddenApiBypass;
+import org.lsposed.manager.adapters.AppHelper;
 import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.ui.activity.CrashReportActivity;
 import org.lsposed.manager.util.DoHDNS;
@@ -84,6 +86,18 @@ public class App extends Application {
             // TODO: set specific class name
             HiddenApiBypass.addHiddenApiExemptions("");
         }
+        Looper.myQueue().addIdleHandler(() -> {
+            var list = AppHelper.getAppList(false);
+            if (App.getInstance() == null) return true;
+            var pm = App.getInstance().getPackageManager();
+            list.forEach(i -> AppHelper.getAppLabel(i, pm));
+            return false;
+        });
+
+        Looper.myQueue().addIdleHandler(() -> {
+            AppHelper.getDenyList(false);
+            return false;
+        });
     }
 
     public static final String TAG = "LSPosedManager";
