@@ -90,12 +90,16 @@ public class App extends Application {
             var list = AppHelper.getAppList(false);
             if (App.getInstance() == null) return true;
             var pm = App.getInstance().getPackageManager();
-            list.forEach(i -> AppHelper.getAppLabel(i, pm));
+            list.parallelStream().forEach(i -> AppHelper.getAppLabel(i, pm));
             return false;
         });
 
         Looper.myQueue().addIdleHandler(() -> {
             AppHelper.getDenyList(false);
+            return false;
+        });
+        Looper.myQueue().addIdleHandler(() -> {
+            ModuleUtil.getInstance();
             return false;
         });
     }
