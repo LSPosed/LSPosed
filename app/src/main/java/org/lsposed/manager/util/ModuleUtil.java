@@ -87,26 +87,25 @@ public final class ModuleUtil {
             }
             return;
         }
-        var t = new Thread(() -> {
-            Map<Pair<String, Integer>, InstalledModule> modules = new HashMap<>();
-            for (PackageInfo pkg : ConfigManager.getInstalledPackagesFromAllUsers(PackageManager.GET_META_DATA, false)) {
-                ApplicationInfo app = pkg.applicationInfo;
 
-                if (app.metaData != null && app.metaData.containsKey("xposedminversion")) {
-                    InstalledModule installed = new InstalledModule(pkg);
-                    modules.put(Pair.create(pkg.packageName, app.uid / 100000), installed);
-                }
+        Map<Pair<String, Integer>, InstalledModule> modules = new HashMap<>();
+        for (PackageInfo pkg : ConfigManager.getInstalledPackagesFromAllUsers(PackageManager.GET_META_DATA, false)) {
+            ApplicationInfo app = pkg.applicationInfo;
+
+            if (app.metaData != null && app.metaData.containsKey("xposedminversion")) {
+                InstalledModule installed = new InstalledModule(pkg);
+                modules.put(Pair.create(pkg.packageName, app.uid / 100000), installed);
             }
+        }
 
-            installedModules = modules;
+        installedModules = modules;
 
-            enabledModules = new HashSet<>(Arrays.asList(ConfigManager.getEnabledModules()));
-            synchronized (this) {
-                isReloading = false;
-                notify();
-            }
-        });
-        t.start();
+        enabledModules = new HashSet<>(Arrays.asList(ConfigManager.getEnabledModules()));
+        synchronized (this) {
+            isReloading = false;
+            notify();
+        }
+
     }
 
     public InstalledModule reloadSingleModule(String packageName, int userId) {

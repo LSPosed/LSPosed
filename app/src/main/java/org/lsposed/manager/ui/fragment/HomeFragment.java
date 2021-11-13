@@ -249,7 +249,7 @@ public class HomeFragment extends BaseFragment implements RepoLoader.Listener {
         if (ConfigManager.isBinderAlive()) {
             var t = new Thread(() -> {
                 try {
-                    var moduleCount = App.getModuleUtil().getEnabledModulesCount();
+                    var moduleCount = ModuleUtil.getInstance().getEnabledModulesCount();
                     runOnUiThread(() -> binding.modulesSummary.setText(getResources().getQuantityString(R.plurals.modules_enabled_count, moduleCount, moduleCount)));
                 } catch (InterruptedException e) {
                     Log.e(App.TAG, "getEnabledModulesCount: ", e);

@@ -92,7 +92,6 @@ public class App extends Application {
     private static Cache okHttpCache;
     private SharedPreferences pref;
     private ExecutorService executorService;
-    private static ModuleUtil moduleUtil;
 
     public static App getInstance() {
         return instance;
@@ -108,10 +107,6 @@ public class App extends Application {
 
     public static boolean isParasitic() {
         return !Process.isApplicationUid(Process.myUid());
-    }
-
-    public static ModuleUtil getModuleUtil() {
-        return moduleUtil;
     }
 
     private void setCrashReport() {
@@ -177,10 +172,6 @@ public class App extends Application {
 
         executorService.submit(HTML_TEMPLATE);
         executorService.submit(HTML_TEMPLATE_DARK);
-        var t = new Thread(() -> {
-            moduleUtil = ModuleUtil.getInstance();
-        });
-        t.start();
     }
 
     @NonNull
