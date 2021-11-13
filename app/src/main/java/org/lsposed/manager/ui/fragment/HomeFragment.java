@@ -256,7 +256,8 @@ public class HomeFragment extends BaseFragment implements RepoLoader.Listener {
                 }
             });
             t.start();
-        }
+        } else
+            binding.modulesSummary.setText(getResources().getQuantityString(R.plurals.modules_enabled_count, 0, 0));
     }
 
     @Override
