@@ -38,19 +38,19 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:elevation="0dp"
             android:minHeight="?attr/actionBarSize"
-            app:logo="@drawable/ic_launcher"
             app:contentInsetStart="24dp"
-            app:titleMarginStart="48dp"
-            android:elevation="0dp" />
+            app:logo="@drawable/ic_launcher"
+            app:titleMarginStart="48dp" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
         android:clipChildren="false"
+        android:clipToPadding="false"
         android:paddingTop="?actionBarSize"
         app:fitsSystemWindowsInsets="top|bottom"
         tools:ignore="MissingPrefix">
@@ -59,9 +59,9 @@
             android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:borderTopVisibility="whenTop"
+            app:borderBottomVisibility="never"
             app:borderTopDrawable="@null"
-            app:borderBottomVisibility="never">
+            app:borderTopVisibility="whenTop">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -72,9 +72,9 @@
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/status"
+                    style="@style/HomeCard.Primary"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/HomeCard.Primary">
+                    android:layout_height="wrap_content">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -97,9 +97,9 @@
                             android:layout_marginStart="24dp"
                             android:layout_toEndOf="@id/status_icon"
                             android:fontFamily="sans-serif-medium"
-                            android:textSize="16sp"
                             android:textAppearance="?android:attr/textAppearanceListItem"
-                            android:textColor="@color/primary_text_material_inverse" />
+                            android:textColor="@color/primary_text_material_inverse"
+                            android:textSize="16sp" />
 
                         <TextView
                             android:id="@+id/status_summary"
@@ -114,9 +114,9 @@
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/modules"
+                    style="@style/HomeCard.Secondary"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/HomeCard.Secondary">
+                    android:layout_height="wrap_content">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -138,8 +138,8 @@
                             android:layout_marginStart="24dp"
                             android:layout_toEndOf="@id/modules_icon"
                             android:text="@string/Modules"
-                            android:textSize="16sp"
-                            android:textAppearance="?android:attr/textAppearanceListItem" />
+                            android:textAppearance="?android:attr/textAppearanceListItem"
+                            android:textSize="16sp" />
 
                         <TextView
                             android:id="@+id/modules_summary"
@@ -147,15 +147,16 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@id/modules_title"
                             android:layout_alignStart="@id/modules_title"
+                            android:text="@string/module_repo_loading"
                             android:textAppearance="?android:attr/textAppearanceSmall" />
                     </RelativeLayout>
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/download"
+                    style="@style/HomeCard.Secondary"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/HomeCard.Secondary">
+                    android:layout_height="wrap_content">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -177,8 +178,8 @@
                             android:layout_marginStart="24dp"
                             android:layout_toEndOf="@id/download_icon"
                             android:text="@string/module_repo"
-                            android:textSize="16sp"
-                            android:textAppearance="?android:attr/textAppearanceListItem" />
+                            android:textAppearance="?android:attr/textAppearanceListItem"
+                            android:textSize="16sp" />
 
                         <TextView
                             android:id="@+id/download_summary"
@@ -193,16 +194,16 @@
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/logs"
+                    style="@style/HomeCard.Tertiary"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/HomeCard.Tertiary">
+                    android:layout_height="wrap_content">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="16dp"
+                        android:layout_gravity="center_vertical"
                         android:orientation="horizontal"
-                        android:layout_gravity="center_vertical">
+                        android:padding="16dp">
 
                         <ImageView
                             android:layout_width="24dp"
@@ -215,23 +216,23 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="24dp"
                             android:text="@string/Logs"
-                            android:textSize="16sp"
-                            android:textAppearance="?android:attr/textAppearanceListItem" />
+                            android:textAppearance="?android:attr/textAppearanceListItem"
+                            android:textSize="16sp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/settings"
+                    style="@style/HomeCard.Tertiary"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/HomeCard.Tertiary">
+                    android:layout_height="wrap_content">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="16dp"
+                        android:layout_gravity="center_vertical"
                         android:orientation="horizontal"
-                        android:layout_gravity="center_vertical">
+                        android:padding="16dp">
 
                         <ImageView
                             android:layout_width="24dp"
@@ -250,16 +251,16 @@
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/issue"
+                    style="@style/HomeCard.Tertiary"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/HomeCard.Tertiary">
+                    android:layout_height="wrap_content">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="16dp"
+                        android:layout_gravity="center_vertical"
                         android:orientation="horizontal"
-                        android:layout_gravity="center_vertical">
+                        android:padding="16dp">
 
                         <ImageView
                             android:layout_width="24dp"
@@ -272,8 +273,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="24dp"
                             android:text="@string/report_issue"
-                            android:textSize="16sp"
-                            android:textAppearance="?android:attr/textAppearanceListItem" />
+                            android:textAppearance="?android:attr/textAppearanceListItem"
+                            android:textSize="16sp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 

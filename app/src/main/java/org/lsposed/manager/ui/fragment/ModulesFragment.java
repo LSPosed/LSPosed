@@ -91,11 +91,10 @@ import java.util.stream.IntStream;
 
 import rikka.core.util.ResourceUtils;
 import rikka.recyclerview.RecyclerViewKt;
-import rikka.widget.borderview.BorderRecyclerView;
 
 public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleListener {
     private static final PackageManager pm = App.getInstance().getPackageManager();
-    private static final ModuleUtil moduleUtil = ModuleUtil.getInstance();
+    private static final ModuleUtil moduleUtil = HomeFragment.moduleUtil;
     private static final RepoLoader repoLoader = RepoLoader.getInstance();
 
     protected FragmentPagerBinding binding;
@@ -140,8 +139,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
-                BorderRecyclerView recyclerView = binding.viewPager.findViewWithTag(position);
-
                 if (position > 0) {
                     binding.fab.show();
                 } else {
@@ -169,6 +166,14 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 }).attach();
                 binding.viewPager.setUserInputEnabled(true);
                 binding.tabLayout.setVisibility(View.VISIBLE);
+                binding.tabLayout.addOnLayoutChangeListener((view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+                    ViewGroup vg = (ViewGroup) binding.tabLayout.getChildAt(0);
+                    int tabLayoutWidth = IntStream.range(0, binding.tabLayout.getTabCount()).map(i -> vg.getChildAt(i).getWidth()).sum();
+                    if (tabLayoutWidth <= binding.getRoot().getWidth()) {
+                        binding.tabLayout.setTabMode(TabLayout.MODE_FIXED);
+                        binding.tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+                    }
+                });
             } else {
                 var adapter = new ModuleAdapter(null);
                 adapter.setHasStableIds(true);
@@ -178,15 +183,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 binding.tabLayout.setVisibility(View.GONE);
             }
         }
-
-        binding.tabLayout.addOnLayoutChangeListener((view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
-            ViewGroup vg = (ViewGroup) binding.tabLayout.getChildAt(0);
-            int tabLayoutWidth = IntStream.range(0, binding.tabLayout.getTabCount()).map(i -> vg.getChildAt(i).getWidth()).sum();
-            if (tabLayoutWidth <= binding.getRoot().getWidth()) {
-                binding.tabLayout.setTabMode(TabLayout.MODE_FIXED);
-                binding.tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-            }
-        });
 
         binding.fab.setOnClickListener(v -> {
             var pickAdaptor = new ModuleAdapter(null, true);

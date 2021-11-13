@@ -23,6 +23,7 @@ import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,6 +36,7 @@ import androidx.core.text.HtmlCompat;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.snackbar.Snackbar;
 
+import org.lsposed.manager.App;
 import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
@@ -59,7 +61,7 @@ import rikka.core.util.ResourceUtils;
 public class HomeFragment extends BaseFragment implements RepoLoader.Listener {
 
     private FragmentHomeBinding binding;
-
+    static ModuleUtil moduleUtil = null;
     private static final RepoLoader repoLoader = RepoLoader.getInstance();
 
     @Override
@@ -244,13 +246,21 @@ public class HomeFragment extends BaseFragment implements RepoLoader.Listener {
     @Override
     public void onResume() {
         super.onResume();
-        int moduleCount;
         if (ConfigManager.isBinderAlive()) {
-            moduleCount = ModuleUtil.getInstance().getEnabledModulesCount();
-        } else {
-            moduleCount = 0;
+            var t = new Thread(() -> {
+                try {
+                    moduleUtil = ModuleUtil.getInstance();
+                    while (moduleUtil.isReloading()) {
+                        Thread.sleep(500);
+                    }
+                    var moduleCount = moduleUtil.getEnabledModulesCount();
+                    runOnUiThread(() -> binding.modulesSummary.setText(getResources().getQuantityString(R.plurals.modules_enabled_count, moduleCount, moduleCount)));
+                } catch (InterruptedException e) {
+                    Log.e(App.TAG, "getEnabledModulesCount: ", e);
+                }
+            });
+            t.start();
         }
-        binding.modulesSummary.setText(getResources().getQuantityString(R.plurals.modules_enabled_count, moduleCount, moduleCount));
     }
 
     @Override
