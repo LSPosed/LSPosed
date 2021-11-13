@@ -31,7 +31,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Looper;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
@@ -103,7 +102,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     private SearchView.OnQueryTextListener searchListener;
     private final ArrayList<ModuleAdapter> adapters = new ArrayList<>();
     private final ArrayList<String> tabTitles = new ArrayList<>();
-    private static boolean isFirstLoad = true;
 
     private ModuleUtil.InstalledModule selectedModule;
 
@@ -189,7 +187,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         binding.fab.setOnClickListener(v -> {
             var pickAdaptor = new ModuleAdapter(null, true);
             var position = binding.viewPager.getCurrentItem();
-            var snapshot = adapters.get(position).snapshot().stream().map(m -> m.packageName).collect(Collectors.toSet());
+            var snapshot = adapters.get(position).snapshot().parallelStream().map(m -> m.packageName).collect(Collectors.toSet());
             var user = adapters.get(position).getUser();
             pickAdaptor.setFilter(m -> !snapshot.contains(m.packageName));
             pickAdaptor.refresh();
@@ -569,15 +567,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         }
 
         public void refresh() {
-            if (isFirstLoad) {
-                Looper.myQueue().addIdleHandler(() -> {
-                    refresh(false);
-                    return false;
-                });
-                isFirstLoad = false;
-            } else {
-                refresh(false);
-            }
+            refresh(false);
         }
 
         public void refresh(boolean force) {
@@ -587,7 +577,9 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
         private final Runnable reloadModules = new Runnable() {
             public void run() {
-                var tmpList = moduleUtil.getModules().values().stream().filter(module -> user == null ? module.userId == 0 : module.userId == user.id).filter(customFilter).collect(Collectors.toCollection(ArrayList::new));
+                var tmpList = moduleUtil.getModules().values().parallelStream()
+                        .filter(module -> user == null ? module.userId == 0 : module.userId == user.id)
+                        .filter(customFilter).collect(Collectors.toCollection(ArrayList::new));
                 Comparator<PackageInfo> cmp = AppHelper.getAppListComparator(0, pm);
                 tmpList.sort((a, b) -> {
                     boolean aChecked = moduleUtil.isModuleEnabled(a.packageName);
