@@ -209,15 +209,15 @@ public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> 
                 return 1;
             }
         };
-            boolean aChecked = checkedList.contains(x.application);
-            boolean bChecked = checkedList.contains(y.application);
-            if (aChecked == bChecked) {
-                return recommendedComparator.compare(x, y);
-            } else if (aChecked) {
-                return -1;
-            } else {
-                return 1;
-            }
+        boolean aChecked = checkedList.contains(x.application);
+        boolean bChecked = checkedList.contains(y.application);
+        if (aChecked == bChecked) {
+            return recommendedComparator.compare(x, y);
+        } else if (aChecked) {
+            return -1;
+        } else {
+            return 1;
+        }
     }
 
     private void checkRecommended() {
