@@ -22,7 +22,6 @@ package org.lsposed.manager.ui.fragment;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Looper;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -57,12 +56,12 @@ import java.util.Locale;
 
 import rikka.core.util.ResourceUtils;
 
-public class HomeFragment extends BaseFragment implements RepoLoader.Listener {
+public class HomeFragment extends BaseFragment implements RepoLoader.Listener, ModuleUtil.ModuleListener {
 
     private FragmentHomeBinding binding;
 
     private static final RepoLoader repoLoader = RepoLoader.getInstance();
-    private static boolean isFirstLoad = true;
+    private static final ModuleUtil moduleUtil = ModuleUtil.getInstance();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -111,6 +110,7 @@ public class HomeFragment extends BaseFragment implements RepoLoader.Listener {
         updateStates(requireActivity(), ConfigManager.isBinderAlive(), UpdateUtil.needUpdate());
 
         repoLoader.addListener(this);
+        moduleUtil.addListener(this);
         if (repoLoader.isRepoLoaded()) {
             repoLoaded();
         }
@@ -200,7 +200,7 @@ public class HomeFragment extends BaseFragment implements RepoLoader.Listener {
     public void repoLoaded() {
         final int[] count = new int[]{0};
         HashSet<String> processedModules = new HashSet<>();
-        ModuleUtil.getInstance().getModules().forEach((k, v) -> {
+        moduleUtil.getModules().forEach((k, v) -> {
                     if (!processedModules.contains(k.first)) {
                         var ver = repoLoader.getModuleLatestVersion(k.first);
                         if (ver != null && ver.upgradable(v.versionCode, v.versionName)) {
@@ -222,6 +222,11 @@ public class HomeFragment extends BaseFragment implements RepoLoader.Listener {
     @Override
     public void onThrowable(Throwable t) {
         runOnUiThread(() -> binding.downloadSummary.setText(getResources().getString(R.string.module_repo_up_to_date)));
+    }
+
+    @Override
+    public void onSingleInstalledModuleReloaded() {
+        setModulesSummary(moduleUtil.getEnabledModulesCount());
     }
 
     private class StartFragmentListener implements View.OnClickListener {
@@ -247,15 +252,7 @@ public class HomeFragment extends BaseFragment implements RepoLoader.Listener {
     public void onResume() {
         super.onResume();
         if (ConfigManager.isBinderAlive()) {
-            if (isFirstLoad) {
-                Looper.myQueue().addIdleHandler(() -> {
-                    setModulesSummary(ModuleUtil.getInstance().getEnabledModulesCount());
-                    return false;
-                });
-                isFirstLoad = false;
-            } else {
-                setModulesSummary(ModuleUtil.getInstance().getEnabledModulesCount());
-            }
+            setModulesSummary(moduleUtil.getEnabledModulesCount());
         } else setModulesSummary(0);
     }
 
@@ -267,6 +264,7 @@ public class HomeFragment extends BaseFragment implements RepoLoader.Listener {
     public void onDestroyView() {
         super.onDestroyView();
         repoLoader.removeListener(this);
+        moduleUtil.removeListener(this);
         binding = null;
     }
 }

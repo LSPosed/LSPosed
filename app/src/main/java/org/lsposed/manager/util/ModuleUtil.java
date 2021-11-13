@@ -58,7 +58,7 @@ public final class ModuleUtil {
     public static synchronized ModuleUtil getInstance() {
         if (instance == null) {
             instance = new ModuleUtil();
-            instance.reloadInstalledModules();
+            App.getExecutorService().submit(()->instance.reloadInstalledModules());
         }
         return instance;
     }
