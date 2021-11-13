@@ -31,13 +31,13 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -572,11 +572,11 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         }
 
         public void refresh(boolean force) {
-            var t = new Thread(() -> {
+            Looper.myQueue().addIdleHandler(() -> {
                 if (force) moduleUtil.reloadInstalledModules();
                 runOnUiThread(reloadModules);
+                return false;
             });
-            t.start();
         }
 
         private final Runnable reloadModules = new Runnable() {
