@@ -61,7 +61,7 @@ import rikka.core.util.ResourceUtils;
 public class HomeFragment extends BaseFragment implements RepoLoader.Listener {
 
     private FragmentHomeBinding binding;
-    static ModuleUtil moduleUtil = null;
+
     private static final RepoLoader repoLoader = RepoLoader.getInstance();
 
     @Override
@@ -249,11 +249,7 @@ public class HomeFragment extends BaseFragment implements RepoLoader.Listener {
         if (ConfigManager.isBinderAlive()) {
             var t = new Thread(() -> {
                 try {
-                    moduleUtil = ModuleUtil.getInstance();
-                    while (moduleUtil.isReloading()) {
-                        Thread.sleep(500);
-                    }
-                    var moduleCount = moduleUtil.getEnabledModulesCount();
+                    var moduleCount = App.getModuleUtil().getEnabledModulesCount();
                     runOnUiThread(() -> binding.modulesSummary.setText(getResources().getQuantityString(R.plurals.modules_enabled_count, moduleCount, moduleCount)));
                 } catch (InterruptedException e) {
                     Log.e(App.TAG, "getEnabledModulesCount: ", e);

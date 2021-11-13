@@ -103,6 +103,7 @@ public final class ModuleUtil {
             enabledModules = new HashSet<>(Arrays.asList(ConfigManager.getEnabledModules()));
             synchronized (this) {
                 isReloading = false;
+                notify();
             }
         });
         t.start();
@@ -176,8 +177,13 @@ public final class ModuleUtil {
         return enabledModules.contains(packageName);
     }
 
-    public int getEnabledModulesCount() {
-        return enabledModules.size();
+    public int getEnabledModulesCount() throws InterruptedException {
+        synchronized (this) {
+            if (isReloading)
+                wait();
+            return enabledModules.size();
+        }
+
     }
 
     public boolean isReloading() {

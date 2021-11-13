@@ -94,7 +94,7 @@ import rikka.recyclerview.RecyclerViewKt;
 
 public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleListener {
     private static final PackageManager pm = App.getInstance().getPackageManager();
-    private static final ModuleUtil moduleUtil = HomeFragment.moduleUtil;
+    private static final ModuleUtil moduleUtil = App.getModuleUtil();
     private static final RepoLoader repoLoader = RepoLoader.getInstance();
 
     protected FragmentPagerBinding binding;
