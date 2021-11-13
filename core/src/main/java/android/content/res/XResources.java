@@ -57,6 +57,7 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XC_MethodHook.MethodHookParam;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedBridge.CopyOnWriteSortedSet;
+import de.robv.android.xposed.XposedInit;
 import de.robv.android.xposed.callbacks.XC_LayoutInflated;
 import de.robv.android.xposed.callbacks.XC_LayoutInflated.LayoutInflatedParam;
 import de.robv.android.xposed.callbacks.XCallback;
@@ -567,6 +568,13 @@ public class XResources extends XResourcesSuperClass {
 
 	private static void setReplacement(int id, Object replacement, XResources res) {
 		String resDir = (res != null) ? res.mResDir : null;
+		if (res == null) {
+			try {
+				XposedInit.hookResources();
+			} catch (Throwable throwable) {
+				throw new IllegalStateException("Failed to initialize resources hook");
+			}
+		}
 		if (id == 0)
 			throw new IllegalArgumentException("id 0 is not an allowed resource identifier");
 		else if (resDir == null && id >= 0x7f000000)
