@@ -188,11 +188,6 @@ public final class ModuleUtil {
             }
             return enabledModules.size();
         }
-
-    }
-
-    public boolean isReloading() {
-        return isReloading;
     }
 
     public void addListener(ModuleListener listener) {
@@ -308,7 +303,6 @@ public final class ModuleUtil {
         public PackageInfo getPackageInfo() {
             return pkg;
         }
-
 
         @NonNull
         @Override
