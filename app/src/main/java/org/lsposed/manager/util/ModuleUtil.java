@@ -25,6 +25,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
@@ -176,10 +177,15 @@ public final class ModuleUtil {
         return enabledModules.contains(packageName);
     }
 
-    public int getEnabledModulesCount() throws InterruptedException {
+    public int getEnabledModulesCount() {
         synchronized (this) {
-            if (isReloading)
-                wait();
+            if (isReloading) {
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    Log.e(App.TAG, "getEnabledModulesCount: ", e);
+                }
+            }
             return enabledModules.size();
         }
 
