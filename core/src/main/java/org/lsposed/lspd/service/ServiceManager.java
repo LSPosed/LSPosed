@@ -33,6 +33,9 @@ import org.lsposed.lspd.BuildConfig;
 
 import java.io.File;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import hidden.HiddenApiBridge;
 
@@ -46,6 +49,12 @@ public class ServiceManager {
     private static LSPManagerService managerService = null;
     private static LSPSystemServerService systemServerService = null;
     private static LogcatService logcatService = null;
+
+    private static final ExecutorService executorService = Executors.newCachedThreadPool();
+
+    public static ExecutorService getExecutorService() {
+        return executorService;
+    }
 
     private static void waitSystemService(String name) {
         while (android.os.ServiceManager.getService(name) == null) {

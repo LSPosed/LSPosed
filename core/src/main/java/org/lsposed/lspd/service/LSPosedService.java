@@ -21,6 +21,7 @@ package org.lsposed.lspd.service;
 
 import static org.lsposed.lspd.service.PackageService.PER_USER_RANGE;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
+import static org.lsposed.lspd.service.ServiceManager.getExecutorService;
 
 import android.app.IApplicationThread;
 import android.content.IIntentReceiver;
@@ -216,7 +217,7 @@ public class LSPosedService extends ILSPosedService.Stub {
             var receiver = new IIntentReceiver.Stub() {
                 @Override
                 public void performReceive(Intent intent, int resultCode, String data, Bundle extras, boolean ordered, boolean sticky, int sendingUser) {
-                    new Thread(() -> dispatchPackageChanged(intent)).start();
+                    getExecutorService().submit(() -> dispatchPackageChanged(intent));
                     try {
                         ActivityManagerService.finishReceiver(this, resultCode, data, extras, false, intent.getFlags());
                     } catch (Throwable e) {
@@ -241,7 +242,7 @@ public class LSPosedService extends ILSPosedService.Stub {
             ActivityManagerService.registerReceiver("android", null, new IIntentReceiver.Stub() {
                 @Override
                 public void performReceive(Intent intent, int resultCode, String data, Bundle extras, boolean ordered, boolean sticky, int sendingUser) {
-                    new Thread(() -> dispatchUserUnlocked(intent)).start();
+                    getExecutorService().submit(() -> dispatchUserUnlocked(intent));
                     try {
                         ActivityManagerService.finishReceiver(this, resultCode, data, extras, false, intent.getFlags());
                     } catch (Throwable e) {
@@ -263,7 +264,7 @@ public class LSPosedService extends ILSPosedService.Stub {
             ActivityManagerService.registerReceiver("android", null, new IIntentReceiver.Stub() {
                 @Override
                 public void performReceive(Intent intent, int resultCode, String data, Bundle extras, boolean ordered, boolean sticky, int sendingUser) {
-                    new Thread(() -> dispatchConfigurationChanged(intent)).start();
+                    getExecutorService().submit(() -> dispatchConfigurationChanged(intent));
                     try {
                         ActivityManagerService.finishReceiver(this, resultCode, data, extras, false, intent.getFlags());
                     } catch (Throwable e) {
@@ -287,7 +288,7 @@ public class LSPosedService extends ILSPosedService.Stub {
             ActivityManagerService.registerReceiver("android", null, new IIntentReceiver.Stub() {
                 @Override
                 public void performReceive(Intent intent, int resultCode, String data, Bundle extras, boolean ordered, boolean sticky, int sendingUser) {
-                    new Thread(() -> dispatchSecretCodeReceive()).start();
+                    getExecutorService().submit(() -> dispatchSecretCodeReceive());
                     try {
                         ActivityManagerService.finishReceiver(this, resultCode, data, extras, false, intent.getFlags());
                     } catch (Throwable e) {
@@ -309,14 +310,14 @@ public class LSPosedService extends ILSPosedService.Stub {
             ActivityManagerService.registerReceiver("android", null, new IIntentReceiver.Stub() {
                 @Override
                 public void performReceive(Intent intent, int resultCode, String data, Bundle extras, boolean ordered, boolean sticky, int sendingUser) {
-                    new Thread(() -> {
+                    getExecutorService().submit(() -> {
                         try {
                             var am = ActivityManagerService.getActivityManager();
                             if (am != null) am.setActivityController(null, false);
                         } catch (Throwable e) {
                             Log.e(TAG, "setActivityController", e);
                         }
-                    }).start();
+                    });
                     try {
                         ActivityManagerService.finishReceiver(this, resultCode, data, extras, false, intent.getFlags());
                     } catch (Throwable e) {
