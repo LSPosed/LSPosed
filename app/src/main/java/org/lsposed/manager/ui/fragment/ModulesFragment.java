@@ -37,6 +37,7 @@ import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -571,8 +572,18 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         }
 
         public void refresh(boolean force) {
-            if (force) moduleUtil.reloadInstalledModules();
-            runOnUiThread(reloadModules);
+            var t = new Thread(() -> {
+                if (force) moduleUtil.reloadInstalledModules();
+                runOnUiThread(reloadModules);
+            });
+            t.start();
+            if (force) {
+                try {
+                    t.join();
+                } catch (InterruptedException e) {
+                    Log.e(App.TAG, "reloadModules: ", e);
+                }
+            }
         }
 
         private final Runnable reloadModules = new Runnable() {
