@@ -25,7 +25,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
@@ -104,9 +103,7 @@ public final class ModuleUtil {
         enabledModules = new HashSet<>(Arrays.asList(ConfigManager.getEnabledModules()));
         synchronized (this) {
             isReloading = false;
-            notify();
         }
-
     }
 
     public InstalledModule reloadSingleModule(String packageName, int userId) {
@@ -178,16 +175,7 @@ public final class ModuleUtil {
     }
 
     public int getEnabledModulesCount() {
-        synchronized (this) {
-            if (isReloading) {
-                try {
-                    wait();
-                } catch (InterruptedException e) {
-                    Log.e(App.TAG, "getEnabledModulesCount: ", e);
-                }
-            }
-            return enabledModules.size();
-        }
+        return enabledModules.size();
     }
 
     public void addListener(ModuleListener listener) {
