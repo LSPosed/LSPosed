@@ -96,7 +96,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     private static final PackageManager pm = App.getInstance().getPackageManager();
     private static final ModuleUtil moduleUtil = ModuleUtil.getInstance();
     private static final RepoLoader repoLoader = RepoLoader.getInstance();
-    private static final List<UserInfo> users = ConfigManager.getUsers();
+
     protected FragmentPagerBinding binding;
     protected SearchView searchView;
     private SearchView.OnQueryTextListener searchListener;
@@ -121,26 +121,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 return false;
             }
         };
-
-        if (users != null) {
-            adapters.clear();
-            if (users.size() != 1) {
-                tabTitles.clear();
-                for (var user : users) {
-                    var adapter = new ModuleAdapter(user);
-                    adapter.setHasStableIds(true);
-                    adapter.setStateRestorationPolicy(PREVENT_WHEN_EMPTY);
-                    adapters.add(adapter);
-                    tabTitles.add(user.name);
-                }
-            } else {
-                var adapter = new ModuleAdapter(null);
-                adapter.setHasStableIds(true);
-                adapter.setStateRestorationPolicy(PREVENT_WHEN_EMPTY);
-                adapters.add(adapter);
-            }
-        }
-        adapters.forEach(ModuleAdapter::refresh);
     }
 
     @Override
@@ -153,6 +133,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentPagerBinding.inflate(inflater, container, false);
+
         setupToolbar(binding.toolbar, R.string.Modules, R.menu.menu_modules);
         binding.viewPager.setAdapter(new PagerAdapter(this));
         binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
@@ -166,8 +147,18 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             }
         });
 
+        var users = ConfigManager.getUsers();
         if (users != null) {
+            adapters.clear();
             if (users.size() != 1) {
+                tabTitles.clear();
+                for (var user : users) {
+                    var adapter = new ModuleAdapter(user);
+                    adapter.setHasStableIds(true);
+                    adapter.setStateRestorationPolicy(PREVENT_WHEN_EMPTY);
+                    adapters.add(adapter);
+                    tabTitles.add(user.name);
+                }
                 new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> {
                     if (position < tabTitles.size()) {
                         tab.setText(tabTitles.get(position));
@@ -184,10 +175,15 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                     }
                 });
             } else {
+                var adapter = new ModuleAdapter(null);
+                adapter.setHasStableIds(true);
+                adapter.setStateRestorationPolicy(PREVENT_WHEN_EMPTY);
+                adapters.add(adapter);
                 binding.viewPager.setUserInputEnabled(false);
                 binding.tabLayout.setVisibility(View.GONE);
             }
         }
+
         binding.fab.setOnClickListener(v -> {
             var pickAdaptor = new ModuleAdapter(null, true);
             var position = binding.viewPager.getCurrentItem();
@@ -222,6 +218,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     @Override
     public void onResume() {
         super.onResume();
+        adapters.forEach(ModuleAdapter::refresh);
     }
 
     @Override
