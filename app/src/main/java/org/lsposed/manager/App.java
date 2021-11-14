@@ -108,6 +108,11 @@ public class App extends Application {
             App.getExecutorService().submit((Runnable) ModuleUtil::getInstance);
             return false;
         });
+        Looper.myQueue().addIdleHandler(() -> {
+            if (App.getInstance() == null || App.getExecutorService() == null) return true;
+            App.getExecutorService().submit((Runnable) RepoLoader::getInstance);
+            return false;
+        });
     }
 
     public static final String TAG = "LSPosedManager";
