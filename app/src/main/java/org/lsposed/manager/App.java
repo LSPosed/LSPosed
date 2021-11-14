@@ -87,19 +87,25 @@ public class App extends Application {
             HiddenApiBypass.addHiddenApiExemptions("");
         }
         Looper.myQueue().addIdleHandler(() -> {
-            var list = AppHelper.getAppList(false);
-            if (App.getInstance() == null) return true;
-            var pm = App.getInstance().getPackageManager();
-            list.parallelStream().forEach(i -> AppHelper.getAppLabel(i, pm));
+            if (App.getInstance() == null || App.getExecutorService() == null) return true;
+            App.getExecutorService().submit(() -> {
+                var list = AppHelper.getAppList(false);
+                var pm = App.getInstance().getPackageManager();
+                list.parallelStream().forEach(i -> AppHelper.getAppLabel(i, pm));
+            });
             return false;
         });
 
         Looper.myQueue().addIdleHandler(() -> {
-            AppHelper.getDenyList(false);
+            if (App.getInstance() == null || App.getExecutorService() == null) return true;
+            App.getExecutorService().submit(() -> {
+                AppHelper.getDenyList(false);
+            });
             return false;
         });
         Looper.myQueue().addIdleHandler(() -> {
-            ModuleUtil.getInstance();
+            if (App.getInstance() == null || App.getExecutorService() == null) return true;
+            App.getExecutorService().submit((Runnable) ModuleUtil::getInstance);
             return false;
         });
     }
