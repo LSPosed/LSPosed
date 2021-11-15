@@ -37,6 +37,7 @@ import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -85,6 +86,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.Future;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -140,7 +142,10 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 adapters.add(adapter);
             }
         }
-        adapters.forEach(ModuleAdapter::refresh);
+        for (ModuleAdapter adapter : adapters) {
+            if (adapter.getUser().id != 0)
+                adapter.refresh();
+        }
     }
 
     @Override
@@ -155,8 +160,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         binding = FragmentPagerBinding.inflate(inflater, container, false);
         setupToolbar(binding.toolbar, R.string.Modules, R.menu.menu_modules);
         binding.viewPager.setAdapter(new PagerAdapter(this));
-        binding.progress.setVisibilityAfterHide(View.GONE);
-        binding.progress.show();
         binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -224,6 +227,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     @Override
     public void onResume() {
         super.onResume();
+        adapters.get(binding.viewPager.getCurrentItem()).getAdapter().refresh();
     }
 
     @Override
@@ -399,6 +403,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         private final boolean isPick;
         private boolean isLoaded;
         private View.OnClickListener onPickListener;
+        private Future<?> runReloadModules;
 
         private Predicate<ModuleUtil.InstalledModule> customFilter = m -> true;
 
@@ -413,6 +418,10 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
         public UserInfo getUser() {
             return user;
+        }
+
+        public ModuleAdapter getAdapter() {
+            return this;
         }
 
         @NonNull
@@ -582,11 +591,11 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
         public void refresh(boolean force) {
             if (force) runAsync(moduleUtil::reloadInstalledModules);
-            runAsync(reloadModules);
+            runReloadModules = runAsync(reloadModules);
         }
 
         private final Runnable reloadModules = (Runnable) () -> {
-            isLoaded = false;
+            Log.d(App.TAG, "reloadModules user " + getUser().id);
             Comparator<PackageInfo> cmp = AppHelper.getAppListComparator(0, pm);
             var tmpList = moduleUtil.getModules().values().parallelStream()
                     .filter(module -> getUser() == null ? module.userId == 0 : module.userId == getUser().id)
@@ -610,7 +619,13 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
         @Override
         public boolean isLoaded() {
-            return isLoaded;
+            if (isLoaded && runReloadModules.isDone()) {
+                binding.progress.hide();
+                return true;
+            } else {
+                binding.progress.show();
+                return false;
+            }
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
@@ -642,7 +657,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
-                isLoaded = false;
                 FilterResults filterResults = new FilterResults();
                 List<ModuleUtil.InstalledModule> filtered = new ArrayList<>();
                 if (constraint.toString().isEmpty()) {
@@ -670,7 +684,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 showList.addAll((List<ModuleUtil.InstalledModule>) results.values);
                 isLoaded = true;
                 notifyDataSetChanged();
-                binding.progress.hide();
             }
         }
     }
