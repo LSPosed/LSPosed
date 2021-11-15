@@ -37,7 +37,6 @@ import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -590,12 +589,12 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         }
 
         public void refresh(boolean force) {
+            binding.progress.show();
             if (force) runAsync(moduleUtil::reloadInstalledModules);
             runReloadModules = runAsync(reloadModules);
         }
 
         private final Runnable reloadModules = (Runnable) () -> {
-            Log.d(App.TAG, "reloadModules");
             Comparator<PackageInfo> cmp = AppHelper.getAppListComparator(0, pm);
             var tmpList = moduleUtil.getModules().values().parallelStream()
                     .filter(module -> getUser() == null ? module.userId == 0 : module.userId == getUser().id)
@@ -619,13 +618,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
         @Override
         public boolean isLoaded() {
-            if (isLoaded && runReloadModules.isDone()) {
-                binding.progress.hide();
-                return true;
-            } else {
-                binding.progress.show();
-                return false;
-            }
+            return isLoaded && runReloadModules.isDone();
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
@@ -684,6 +677,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 showList.addAll((List<ModuleUtil.InstalledModule>) results.values);
                 isLoaded = true;
                 notifyDataSetChanged();
+                binding.progress.hide();
             }
         }
     }
