@@ -136,6 +136,8 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
         setupToolbar(binding.toolbar, R.string.Modules, R.menu.menu_modules);
         binding.viewPager.setAdapter(new PagerAdapter(this));
+        binding.progress.setVisibilityAfterHide(View.GONE);
+        binding.progress.show();
         binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -576,11 +578,12 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         }
 
         public void refresh(boolean force) {
-            if (force) App.getExecutorService().submit(moduleUtil::reloadInstalledModules);
-            App.getExecutorService().submit(reloadModules);
+            if (force) runAsync(moduleUtil::reloadInstalledModules);
+            runAsync(reloadModules);
         }
 
         private final Runnable reloadModules = (Runnable) () -> {
+            isLoaded = false;
             Comparator<PackageInfo> cmp = AppHelper.getAppListComparator(0, pm);
             var tmpList = moduleUtil.getModules().values().parallelStream()
                     .filter(module -> getUser() == null ? module.userId == 0 : module.userId == getUser().id)
@@ -636,6 +639,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
+                isLoaded = false;
                 FilterResults filterResults = new FilterResults();
                 List<ModuleUtil.InstalledModule> filtered = new ArrayList<>();
                 if (constraint.toString().isEmpty()) {
@@ -663,6 +667,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 showList.addAll((List<ModuleUtil.InstalledModule>) results.values);
                 isLoaded = true;
                 notifyDataSetChanged();
+                binding.progress.hide();
             }
         }
     }
