@@ -143,7 +143,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             }
         }
         for (ModuleAdapter adapter : adapters) {
-            if (adapter.getUser().id != 0)
+            if (adapter.getUser() != null && adapter.getUser().id != 0)
                 adapter.refresh();
         }
     }
@@ -595,7 +595,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         }
 
         private final Runnable reloadModules = (Runnable) () -> {
-            Log.d(App.TAG, "reloadModules user " + getUser().id);
+            Log.d(App.TAG, "reloadModules");
             Comparator<PackageInfo> cmp = AppHelper.getAppListComparator(0, pm);
             var tmpList = moduleUtil.getModules().values().parallelStream()
                     .filter(module -> getUser() == null ? module.userId == 0 : module.userId == getUser().id)
