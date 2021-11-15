@@ -589,7 +589,8 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         }
 
         public void refresh(boolean force) {
-            binding.progress.show();
+            if (binding != null)
+                binding.progress.show();
             if (force) runAsync(moduleUtil::reloadInstalledModules);
             runReloadModules = runAsync(reloadModules);
         }
