@@ -137,7 +137,6 @@ jobs:
         if [ ! -z "${{ secrets.FILES_REPO }}" ]; then
           cd core/release
           umask 077
-          echo ${{ secrets.FILES_REPO_KEY }} | base64 --decode > deploy
           REPO=$(echo ${{ secrets.FILES_REPO }} | base64 -d)
           git init
           git add -A
@@ -145,6 +144,7 @@ jobs:
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "${{ github.sha }}"
           git tag "files-${{ github.sha }}"
+          echo ${{ secrets.FILES_REPO_KEY }} | base64 --decode > deploy
           GIT_SSH_COMMAND="ssh -i ${PWD}/deploy" git push git@github.com:${REPO}.git "files-${{ github.sha }}"
           for file in $(ls .); do echo "::notice::Download $file from https://cdn.jsdelivr.net/gh/${REPO}@files-${{ github.sha }}/$file"; done
         fi
