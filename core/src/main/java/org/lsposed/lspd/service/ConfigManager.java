@@ -328,16 +328,17 @@ public class ConfigManager {
                     });
                 case 1:
                     executeInTransaction(() -> {
-                        db.compileStatement("DROP INDEX IF EXISTS configs_idx;");
-                        db.compileStatement("ALTER TABLE scope RENAME TO old_scope").execute();
-                        db.compileStatement("ALTER TABLE configs RENAME TO old_configs").execute();
+                        db.compileStatement("DROP INDEX IF EXISTS configs_idx;").execute();
+                        db.compileStatement("DROP TABLE IF EXISTS config;").execute();
+                        db.compileStatement("ALTER TABLE scope RENAME TO old_scope;").execute();
+                        db.compileStatement("ALTER TABLE configs RENAME TO old_configs;").execute();
                         createConfigTable.execute();
                         createScopeTable.execute();
                         db.compileStatement("CREATE INDEX IF NOT EXISTS configs_idx ON configs (module_pkg_name, user_id);").execute();
                         db.compileStatement("INSERT INTO scope SELECT * FROM old_scope;").execute();
                         db.compileStatement("INSERT INTO configs SELECT * FROM old_configs;").execute();
-                        db.compileStatement("DROP TABLE old_scope").execute();
-                        db.compileStatement("DROP TABLE old_configs").execute();
+                        db.compileStatement("DROP TABLE old_scope;").execute();
+                        db.compileStatement("DROP TABLE old_configs;").execute();
                     });
                 default:
                     break;
