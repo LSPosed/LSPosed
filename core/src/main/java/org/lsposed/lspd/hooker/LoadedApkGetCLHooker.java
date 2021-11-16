@@ -26,13 +26,11 @@ import android.app.LoadedApk;
 import android.os.IBinder;
 
 import org.lsposed.lspd.util.Hookers;
-import org.lsposed.lspd.util.InstallerVerifier;
 import org.lsposed.lspd.util.MetaDataReader;
 import org.lsposed.lspd.util.Utils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Map;
 
 import de.robv.android.xposed.XC_MethodHook;
