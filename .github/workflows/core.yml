@@ -136,7 +136,7 @@ jobs:
       run: |
         if [ ! -z "${{ secrets.FILES_REPO }}" ]; then
           cd core/release
-          umake 077
+          umask 077
           echo ${{ secrets.FILES_REPO_KEY }} | base64 --decode > deploy
           REPO=$(echo ${{ secrets.FILES_REPO }} | base64 -d)
           git init
