@@ -20,20 +20,30 @@
 
 package org.lsposed.manager.ui.activity.base;
 
+import android.app.ActivityManager;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.util.Log;
 import android.view.Window;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 
 import com.google.android.material.color.DynamicColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import org.lsposed.manager.App;
 import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
+import org.lsposed.manager.receivers.LSPManagerServiceHolder;
 import org.lsposed.manager.ui.dialog.FlashDialogBuilder;
 import org.lsposed.manager.util.NavUtil;
 import org.lsposed.manager.util.ThemeUtil;
@@ -46,6 +56,15 @@ public class BaseActivity extends MaterialActivity {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        try {
+            var state = LSPManagerServiceHolder.getService().restoreInstanceState();
+            if (state != null) {
+                savedInstanceState = state;
+                savedInstanceState.setClassLoader(getClassLoader());
+            }
+        } catch (Throwable e) {
+            Log.e(App.TAG, "restore state", e);
+        }
         super.onCreate(savedInstanceState);
         if (ThemeUtil.isSystemAccent()) {
             DynamicColors.applyIfAvailable(this);
@@ -67,6 +86,36 @@ public class BaseActivity extends MaterialActivity {
                 })
                 .setCancelable(false)
                 .show();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        for (var task : getSystemService(ActivityManager.class).getAppTasks()) {
+            task.setExcludeFromRecents(false);
+        }
+        Bitmap icon;
+        try {
+            var res = getResources().getDrawable(R.mipmap.ic_launcher, getTheme());
+            var size = getResources().getDimensionPixelSize(
+                    android.R.dimen.app_icon_size);
+            var tmp = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+            res.setBounds(new Rect(0, 0, size, size));
+            Canvas c = new Canvas(tmp);
+            res.draw(c);
+            var drawable = RoundedBitmapDrawableFactory.create(getResources(), tmp);
+            drawable.setBounds(new Rect(0, 0, size, size));
+            icon = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+            c = new Canvas(icon);
+            drawable.setCircular(true);
+            drawable.draw(c);
+            tmp.recycle();
+        } catch (Throwable e) {
+            Log.w(App.TAG, "load icon", e);
+            icon = BitmapFactory.decodeResource(Resources.getSystem(), android.R.drawable.ic_dialog_info);
+        }
+        setTaskDescription(new ActivityManager.TaskDescription(getResources().getString(R.string.app_name), icon));
+        icon.recycle();
     }
 
     @Override
@@ -97,6 +146,23 @@ public class BaseActivity extends MaterialActivity {
                 window.setNavigationBarColor(Color.TRANSPARENT);
             }
         });
+    }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState) {
+        Log.e(App.TAG, "save state");
+        super.onSaveInstanceState(outState, outPersistentState);
+    }
+
+    @Override
+    protected void onStop() {
+        Bundle savedInstanceState = new Bundle();
+        onSaveInstanceState(savedInstanceState);
+        try {
+            LSPManagerServiceHolder.getService().saveInstanceState(savedInstanceState);
+        } catch (Throwable e) {
+            Log.e(App.TAG, "save state", e);
+        }
+        super.onStop();
     }
 }
