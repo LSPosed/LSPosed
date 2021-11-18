@@ -16,6 +16,7 @@ import android.content.pm.ProviderInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.PersistableBundle;
 import android.os.Process;
 import android.os.RemoteException;
 import android.util.AndroidRuntimeException;
@@ -47,7 +48,7 @@ public class ParasiticManagerHooker {
     private static PackageInfo managerPkgInfo = null;
     private static int managerFd = -1;
     private final static Map<String, Bundle> states = new ConcurrentHashMap<>();
-    private final static Map<String, Bundle> persistentStates = new ConcurrentHashMap<>();
+    private final static Map<String, PersistableBundle> persistentStates = new ConcurrentHashMap<>();
 
     private synchronized static PackageInfo getManagerPkgInfo(ApplicationInfo appInfo) {
         if (managerPkgInfo == null && appInfo != null) {
@@ -247,7 +248,7 @@ public class ParasiticManagerHooker {
                 try {
                     XposedHelpers.callMethod(param.thisObject, Build.VERSION.SDK_INT >= Build.VERSION_CODES.P ? "callActivityOnSaveInstanceState" : "callCallActivityOnSaveInstanceState", param.args[0]);
                     var state = (Bundle) XposedHelpers.getObjectField(param.args[0], "state");
-                    var persistentState = (Bundle) XposedHelpers.getObjectField(param.args[0], "persistentState");
+                    var persistentState = (PersistableBundle) XposedHelpers.getObjectField(param.args[0], "persistentState");
                     var aInfo = (ActivityInfo) XposedHelpers.getObjectField(param.args[0], "activityInfo");
                     states.compute(aInfo.name, (k, v) -> state);
                     persistentStates.compute(aInfo.name, (k, v) -> persistentState);
