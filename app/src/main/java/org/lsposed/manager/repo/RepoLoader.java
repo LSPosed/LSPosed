@@ -98,7 +98,7 @@ public class RepoLoader {
                 .build()).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                Log.e(App.TAG, call.request().url() + e.getMessage());
+                Log.e(App.TAG, call.request().url().toString(), e);
                 for (Listener listener : listeners) {
                     listener.onThrowable(e);
                 }
