@@ -65,6 +65,7 @@ import org.lsposed.manager.repo.model.Release;
 import org.lsposed.manager.repo.model.ReleaseAsset;
 import org.lsposed.manager.ui.widget.LinkifyTextView;
 import org.lsposed.manager.util.NavUtil;
+import org.lsposed.manager.util.SimpleStatefulAdaptor;
 import org.lsposed.manager.util.chrome.CustomTabsURLSpan;
 
 import java.io.ByteArrayInputStream;
@@ -234,7 +235,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
         binding = null;
     }
 
-    private class InformationAdapter extends RecyclerView.Adapter<InformationAdapter.ViewHolder> {
+    private class InformationAdapter extends SimpleStatefulAdaptor<InformationAdapter.ViewHolder> {
         private final OnlineModule module;
 
         private int rowCount = 0;
@@ -320,7 +321,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
         }
     }
 
-    private class ReleaseAdapter extends RecyclerView.Adapter<ReleaseAdapter.ViewHolder> {
+    private class ReleaseAdapter extends SimpleStatefulAdaptor<ReleaseAdapter.ViewHolder> {
         private List<Release> items;
         private final Resources resources = App.getInstance().getResources();
 
@@ -430,7 +431,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
         }
     }
 
-    private class PagerAdapter extends RecyclerView.Adapter<PagerAdapter.ViewHolder> {
+    private class PagerAdapter extends SimpleStatefulAdaptor<PagerAdapter.ViewHolder> {
 
         @NonNull
         @Override
@@ -457,7 +458,6 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
                     } else {
                         adapter = new InformationAdapter(module);
                     }
-                    adapter.setStateRestorationPolicy(StateRestorationPolicy.PREVENT_WHEN_EMPTY);
                     holder.recyclerView.setAdapter(adapter);
                     holder.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
                     RecyclerViewKt.fixEdgeEffect(holder.recyclerView, false, true);

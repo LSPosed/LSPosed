@@ -20,7 +20,6 @@
 package org.lsposed.manager.ui.fragment;
 
 import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
-import static androidx.recyclerview.widget.RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -158,7 +157,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 for (var user : users) {
                     var adapter = new ModuleAdapter(user);
                     adapter.setHasStableIds(true);
-                    adapter.setStateRestorationPolicy(PREVENT_WHEN_EMPTY);
                     adapters.add(adapter);
                     tabTitles.add(user.name);
                 }
@@ -172,7 +170,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             } else {
                 var adapter = new ModuleAdapter(null);
                 adapter.setHasStableIds(true);
-                adapter.setStateRestorationPolicy(PREVENT_WHEN_EMPTY);
                 adapters.add(adapter);
                 binding.viewPager.setUserInputEnabled(false);
                 binding.tabLayout.setVisibility(View.GONE);

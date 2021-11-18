@@ -56,6 +56,7 @@ import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.FragmentLogsBinding;
 import org.lsposed.manager.databinding.ItemLogBinding;
+import org.lsposed.manager.util.SimpleStatefulAdaptor;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -127,7 +128,6 @@ public class LogsFragment extends BaseFragment {
         });
 
         adapter = new LogsAdapter();
-        adapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
         RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
         binding.recyclerView.setAdapter(adapter);
         layoutManager = new LinearLayoutManager(requireActivity());
@@ -304,7 +304,7 @@ public class LogsFragment extends BaseFragment {
         super.onViewStateRestored(savedInstanceState);
     }
 
-    private class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.ViewHolder> {
+    private class LogsAdapter extends SimpleStatefulAdaptor<LogsAdapter.ViewHolder> {
         ArrayList<String> logs = new ArrayList<>();
 
         @NonNull

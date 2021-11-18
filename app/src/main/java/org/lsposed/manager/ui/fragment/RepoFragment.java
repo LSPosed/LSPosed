@@ -57,6 +57,7 @@ import org.lsposed.manager.databinding.ItemOnlinemoduleBinding;
 import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.repo.model.OnlineModule;
 import org.lsposed.manager.util.ModuleUtil;
+import org.lsposed.manager.util.SimpleStatefulAdaptor;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -104,7 +105,6 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
         binding = FragmentRepoBinding.inflate(getLayoutInflater(), container, false);
         setupToolbar(binding.toolbar, R.string.module_repo, R.menu.menu_repo);
         adapter = new RepoAdapter();
-        adapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
         adapter.setHasStableIds(true);
         binding.recyclerView.setAdapter(adapter);
         binding.recyclerView.setHasFixedSize(true);
@@ -179,7 +179,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
         return super.onOptionsItemSelected(item);
     }
 
-    private class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.ViewHolder> implements Filterable {
+    private class RepoAdapter extends SimpleStatefulAdaptor<RepoAdapter.ViewHolder> implements Filterable {
         private List<OnlineModule> fullList, showList;
         private final LabelComparator labelComparator = new LabelComparator();
 

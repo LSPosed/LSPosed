@@ -22,28 +22,20 @@ package org.lsposed.manager.ui.widget;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.os.Bundle;
-import android.os.Parcelable;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.SparseArray;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
 
 import org.lsposed.manager.R;
-
-import java.util.HashMap;
-import java.util.List;
+import org.lsposed.manager.util.SimpleStatefulAdaptor;
 
 import rikka.core.util.ResourceUtils;
-import rikka.widget.borderview.BorderRecyclerView;
 
-public class EmptyStateRecyclerView extends BorderRecyclerView {
+public class EmptyStateRecyclerView extends StatefulRecyclerView {
     private final TextPaint paint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
     private final String emptyText;
     private final AdapterDataObserver emptyObserver = new AdapterDataObserver() {
@@ -117,96 +109,7 @@ public class EmptyStateRecyclerView extends BorderRecyclerView {
     }
 
 
-    public abstract static class EmptyStateAdapter<T extends ViewHolder> extends BorderRecyclerView.Adapter<T> {
-        protected HashMap<Long, SparseArray<Parcelable>> states = new HashMap<>();
-        protected EmptyStateRecyclerView rv = null;
-
+    public abstract static class EmptyStateAdapter<T extends ViewHolder> extends SimpleStatefulAdaptor<T> {
         abstract public boolean isLoaded();
-
-        @Override
-        public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
-            if (!(recyclerView instanceof EmptyStateRecyclerView))
-                throw new IllegalArgumentException("Cannot attach to other rv");
-            rv = (EmptyStateRecyclerView) recyclerView;
-            super.onAttachedToRecyclerView(recyclerView);
-        }
-
-        private void saveStateOf(@NonNull ViewHolder holder) {
-            var state = new SparseArray<Parcelable>();
-            holder.itemView.saveHierarchyState(state);
-            states.put(holder.getItemId(), state);
-        }
-
-        @Override
-        public void onViewRecycled(@NonNull T holder) {
-            saveStateOf(holder);
-            super.onViewRecycled(holder);
-        }
-
-        @Override
-        public final void onBindViewHolder(@NonNull T holder, int position, @NonNull List<Object> payloads) {
-            var state = states.remove(holder.getItemId());
-            if (state != null) {
-                holder.itemView.restoreHierarchyState(state);
-            }
-            onBindViewHolder(holder, position);
-        }
-
-        public Parcelable onSaveInstanceState() {
-            for (int childCount = rv.getChildCount(), i = 0; i < childCount; ++i) {
-                saveStateOf(rv.getChildViewHolder(rv.getChildAt(i)));
-            }
-
-            var out = new Bundle();
-            for (var state : states.entrySet()) {
-                var item = new Bundle();
-                for (int i = 0; i < state.getValue().size(); ++i) {
-                    item.putParcelable(String.valueOf(state.getValue().keyAt(i)), state.getValue().valueAt(i));
-                }
-                out.putParcelable(String.valueOf(state.getKey()), item);
-            }
-            return out;
-        }
-
-        public void onRestoreInstanceState(Parcelable in) {
-            if (in instanceof Bundle) {
-                for (var stateKey : ((Bundle) in).keySet()) {
-                    var array = new SparseArray<Parcelable>();
-                    var state = ((Bundle) in).getParcelable(stateKey);
-                    if (state instanceof Bundle) {
-                        for (var itemKey : ((Bundle) state).keySet()) {
-                            var item = ((Bundle) state).getParcelable(itemKey);
-                            array.put(Integer.parseInt(itemKey), item);
-                        }
-                    }
-                    states.put(Long.parseLong(stateKey), array);
-                }
-            }
-        }
-    }
-
-    @Override
-    public Parcelable onSaveInstanceState() {
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("superState", super.onSaveInstanceState());
-        var adapter = getAdapter();
-        if (adapter instanceof EmptyStateAdapter) {
-            bundle.putParcelable("adaptor", ((EmptyStateAdapter<?>) adapter).onSaveInstanceState());
-        }
-        return bundle;
-    }
-
-    @Override
-    public void onRestoreInstanceState(Parcelable state) {
-        if (state instanceof Bundle) {
-            Bundle bundle = (Bundle) state;
-            super.onRestoreInstanceState(bundle.getParcelable("superState"));
-            var adapter = getAdapter();
-            if (adapter instanceof EmptyStateAdapter) {
-                ((EmptyStateAdapter<?>) adapter).onRestoreInstanceState(bundle.getParcelable("adaptor"));
-            }
-        } else {
-            super.onRestoreInstanceState(state);
-        }
     }
 }
