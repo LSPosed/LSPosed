@@ -28,7 +28,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.Window;
 
@@ -43,7 +42,6 @@ import org.lsposed.manager.App;
 import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
-import org.lsposed.manager.receivers.LSPManagerServiceHolder;
 import org.lsposed.manager.ui.dialog.FlashDialogBuilder;
 import org.lsposed.manager.util.NavUtil;
 import org.lsposed.manager.util.ThemeUtil;
@@ -56,15 +54,6 @@ public class BaseActivity extends MaterialActivity {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        try {
-            var state = LSPManagerServiceHolder.getService().restoreInstanceState();
-            if (state != null) {
-                savedInstanceState = state;
-                savedInstanceState.setClassLoader(getClassLoader());
-            }
-        } catch (Throwable e) {
-            Log.e(App.TAG, "restore state", e);
-        }
         super.onCreate(savedInstanceState);
         if (ThemeUtil.isSystemAccent()) {
             DynamicColors.applyIfAvailable(this);
@@ -146,23 +135,5 @@ public class BaseActivity extends MaterialActivity {
                 window.setNavigationBarColor(Color.TRANSPARENT);
             }
         });
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState) {
-        Log.e(App.TAG, "save state");
-        super.onSaveInstanceState(outState, outPersistentState);
-    }
-
-    @Override
-    protected void onStop() {
-        Bundle savedInstanceState = new Bundle();
-        onSaveInstanceState(savedInstanceState);
-        try {
-            LSPManagerServiceHolder.getService().saveInstanceState(savedInstanceState);
-        } catch (Throwable e) {
-            Log.e(App.TAG, "save state", e);
-        }
-        super.onStop();
     }
 }

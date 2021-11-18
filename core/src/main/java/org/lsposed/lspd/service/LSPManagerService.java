@@ -94,7 +94,6 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     private static final HandlerThread worker = new HandlerThread("manager worker");
     private static final Handler workerHandler;
     private static Intent managerIntent = null;
-    private static Bundle instanceState = null;
 
     static {
         worker.start();
@@ -714,16 +713,6 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     @Override
     public List<String> getDenyListPackages() {
         return ConfigManager.getInstance().getDenyListPackages();
-    }
-
-    @Override
-    public void saveInstanceState(Bundle state) {
-        instanceState = state;
-    }
-
-    @Override
-    public Bundle restoreInstanceState() throws RemoteException {
-        return instanceState;
     }
 
     @Override

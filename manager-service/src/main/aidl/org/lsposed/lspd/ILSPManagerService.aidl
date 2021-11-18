@@ -75,8 +75,4 @@ interface ILSPManagerService {
     boolean performDexOptMode(String packageName) = 40;
 
     List<String> getDenyListPackages() = 41;
-
-    oneway void saveInstanceState(in Bundle state) = 42;
-
-    Bundle restoreInstanceState() = 43;
 }

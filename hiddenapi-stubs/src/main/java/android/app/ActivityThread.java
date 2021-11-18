@@ -2,7 +2,9 @@ package android.app;
 
 import android.content.pm.ApplicationInfo;
 import android.content.res.CompatibilityInfo;
+import android.os.Bundle;
 import android.os.IBinder;
+import android.os.PersistableBundle;
 
 public final class ActivityThread {
 	public static ActivityThread currentActivityThread() {
@@ -45,6 +47,7 @@ public final class ActivityThread {
 		}
 	}
 	public static final class ActivityClientRecord {
-
+		Bundle state;
+		PersistableBundle persistentState;
 	}
 }
