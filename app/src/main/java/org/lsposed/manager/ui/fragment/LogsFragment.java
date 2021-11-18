@@ -127,6 +127,7 @@ public class LogsFragment extends BaseFragment {
         });
 
         adapter = new LogsAdapter();
+        adapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
         RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
         binding.recyclerView.setAdapter(adapter);
         layoutManager = new LinearLayoutManager(requireActivity());
@@ -285,6 +286,22 @@ public class LogsFragment extends BaseFragment {
     public void onDestroy() {
         handler.removeCallbacksAndMessages(null);
         super.onDestroy();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(LogsFragment.class.getName() + "." + "tab", binding.slidingTabs.getSelectedTabPosition());
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            var tabPosition = savedInstanceState.getInt(LogsFragment.class.getName() + "." + "tab", 0);
+            if (tabPosition < binding.slidingTabs.getTabCount())
+                binding.slidingTabs.selectTab(binding.slidingTabs.getTabAt(tabPosition));
+        }
+        super.onViewStateRestored(savedInstanceState);
     }
 
     private class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.ViewHolder> {

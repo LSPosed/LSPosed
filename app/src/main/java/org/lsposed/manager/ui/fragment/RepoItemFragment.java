@@ -451,11 +451,14 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
                     break;
                 case 1:
                 case 2:
+                    RecyclerView.Adapter adapter;
                     if (position == 1) {
-                        holder.recyclerView.setAdapter(releaseAdapter = new ReleaseAdapter());
+                        adapter = releaseAdapter = new ReleaseAdapter();
                     } else {
-                        holder.recyclerView.setAdapter(new InformationAdapter(module));
+                        adapter = new InformationAdapter(module);
                     }
+                    adapter.setStateRestorationPolicy(StateRestorationPolicy.PREVENT_WHEN_EMPTY);
+                    holder.recyclerView.setAdapter(adapter);
                     holder.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
                     RecyclerViewKt.fixEdgeEffect(holder.recyclerView, false, true);
                     break;

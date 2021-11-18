@@ -104,6 +104,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
         binding = FragmentRepoBinding.inflate(getLayoutInflater(), container, false);
         setupToolbar(binding.toolbar, R.string.module_repo, R.menu.menu_repo);
         adapter = new RepoAdapter();
+        adapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
         adapter.setHasStableIds(true);
         binding.recyclerView.setAdapter(adapter);
         binding.recyclerView.setHasFixedSize(true);
