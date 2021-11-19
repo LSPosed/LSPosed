@@ -25,4 +25,5 @@
     android:fontFamily="monospace"
     android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
     android:textColor="?attr/colorOnSurface"
-    android:textSize="10sp" />
+    android:textIsSelectable="true"
+    android:textSize="11sp" />
