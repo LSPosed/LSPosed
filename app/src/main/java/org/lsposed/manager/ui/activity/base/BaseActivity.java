@@ -20,17 +20,25 @@
 
 package org.lsposed.manager.ui.activity.base;
 
+import android.app.ActivityManager;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Window;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 
 import com.google.android.material.color.DynamicColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import org.lsposed.manager.App;
 import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
@@ -70,6 +78,36 @@ public class BaseActivity extends MaterialActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        for (var task : getSystemService(ActivityManager.class).getAppTasks()) {
+            task.setExcludeFromRecents(false);
+        }
+        Bitmap icon;
+        try {
+            var res = getResources().getDrawable(R.mipmap.ic_launcher, getTheme());
+            var size = getResources().getDimensionPixelSize(
+                    android.R.dimen.app_icon_size);
+            var tmp = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+            res.setBounds(new Rect(0, 0, size, size));
+            Canvas c = new Canvas(tmp);
+            res.draw(c);
+            var drawable = RoundedBitmapDrawableFactory.create(getResources(), tmp);
+            drawable.setBounds(new Rect(0, 0, size, size));
+            icon = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+            c = new Canvas(icon);
+            drawable.setCircular(true);
+            drawable.draw(c);
+            tmp.recycle();
+        } catch (Throwable e) {
+            Log.w(App.TAG, "load icon", e);
+            icon = BitmapFactory.decodeResource(Resources.getSystem(), android.R.drawable.ic_dialog_info);
+        }
+        setTaskDescription(new ActivityManager.TaskDescription(getResources().getString(R.string.app_name), icon));
+        icon.recycle();
+    }
+
+    @Override
     public void onApplyUserThemeResource(@NonNull Resources.Theme theme, boolean isDecorView) {
         theme.applyStyle(ThemeUtil.getNightThemeStyleRes(this), true);
         if (!ThemeUtil.isSystemAccent()) {
@@ -97,6 +135,5 @@ public class BaseActivity extends MaterialActivity {
                 window.setNavigationBarColor(Color.TRANSPARENT);
             }
         });
-
     }
 }

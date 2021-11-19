@@ -14,7 +14,9 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.IBinder;
+import android.os.PersistableBundle;
 import android.os.Process;
 import android.os.RemoteException;
 import android.util.AndroidRuntimeException;
@@ -31,6 +33,8 @@ import java.lang.reflect.Method;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XC_MethodReplacement;
@@ -43,6 +47,8 @@ public class ParasiticManagerHooker {
 
     private static PackageInfo managerPkgInfo = null;
     private static int managerFd = -1;
+    private final static Map<String, Bundle> states = new ConcurrentHashMap<>();
+    private final static Map<String, PersistableBundle> persistentStates = new ConcurrentHashMap<>();
 
     private synchronized static PackageInfo getManagerPkgInfo(ApplicationInfo appInfo) {
         if (managerPkgInfo == null && appInfo != null) {
@@ -111,7 +117,8 @@ public class ParasiticManagerHooker {
             protected void beforeHookedMethod(MethodHookParam param) {
                 for (var i = 0; i < param.args.length; ++i) {
                     if (param.args[i] instanceof ActivityInfo) {
-                        var pkgInfo = getManagerPkgInfo(((ActivityInfo) param.args[i]).applicationInfo);
+                        var aInfo = (ActivityInfo) param.args[i];
+                        var pkgInfo = getManagerPkgInfo(aInfo.applicationInfo);
                         if (pkgInfo == null) return;
                         for (var activity : pkgInfo.activities) {
                             if ("org.lsposed.manager.ui.activity.MainActivity".equals(activity.name)) {
@@ -126,6 +133,20 @@ public class ParasiticManagerHooker {
                         intent.setComponent(new ComponentName(intent.getComponent().getPackageName(), "org.lsposed.manager.ui.activity.MainActivity"));
                     }
                 }
+            }
+
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) {
+                var aInfo = (ActivityInfo) XposedHelpers.getObjectField(param.thisObject, "activityInfo");
+                Hookers.logD("loading state of " + aInfo.name);
+                states.computeIfPresent(aInfo.name, (k, v) -> {
+                    XposedHelpers.setObjectField(param.thisObject, "state", v);
+                    return v;
+                });
+                persistentStates.computeIfPresent(aInfo.name, (k, v) -> {
+                    XposedHelpers.setObjectField(param.thisObject, "persistentState", v);
+                    return v;
+                });
             }
         };
         var activityClientRecordClass = XposedHelpers.findClass("android.app.ActivityThread$ActivityClientRecord", ActivityThread.class.getClassLoader());
@@ -218,6 +239,22 @@ public class ParasiticManagerHooker {
                 } catch (Exception e) {
                     Hookers.logE("error instantiating provider", e);
                     throw new AndroidRuntimeException(e);
+                }
+            }
+        });
+        XposedBridge.hookAllMethods(ActivityThread.class, "performStopActivityInner", new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) {
+                try {
+                    XposedHelpers.callMethod(param.thisObject, Build.VERSION.SDK_INT >= Build.VERSION_CODES.P ? "callActivityOnSaveInstanceState" : "callCallActivityOnSaveInstanceState", param.args[0]);
+                    var state = (Bundle) XposedHelpers.getObjectField(param.args[0], "state");
+                    var persistentState = (PersistableBundle) XposedHelpers.getObjectField(param.args[0], "persistentState");
+                    var aInfo = (ActivityInfo) XposedHelpers.getObjectField(param.args[0], "activityInfo");
+                    states.compute(aInfo.name, (k, v) -> state);
+                    persistentStates.compute(aInfo.name, (k, v) -> persistentState);
+                    Hookers.logD("saving state of " + aInfo.name);
+                } catch (Throwable e) {
+                    Hookers.logE("save state", e);
                 }
             }
         });

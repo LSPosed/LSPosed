@@ -61,7 +61,7 @@
             android:visibility="gone"
             app:hideAnimationBehavior="outward" />
 
-        <org.lsposed.manager.ui.widget.EmptyStateRecyclerView
+        <org.lsposed.manager.ui.widget.StatefulRecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
