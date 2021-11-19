@@ -29,7 +29,6 @@ import android.util.Log;
 import android.util.Pair;
 
 import org.lsposed.lspd.models.Module;
-import org.lsposed.lspd.util.InstallerVerifier;
 
 import java.util.Collections;
 import java.util.List;

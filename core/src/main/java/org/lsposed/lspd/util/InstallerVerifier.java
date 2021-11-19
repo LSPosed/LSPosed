@@ -22,19 +22,13 @@ package org.lsposed.lspd.util;
 
 import static org.lsposed.lspd.util.SignInfo.CERTIFICATE;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
-import android.widget.Toast;
 
 import com.android.apksig.ApkVerifier;
 
 import java.io.File;
 import java.util.Arrays;
 
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 
 public class InstallerVerifier {

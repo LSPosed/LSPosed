@@ -394,8 +394,8 @@ val pushApk = task("pushApk", Exec::class) {
 val openApp = task("openApp", Exec::class) {
     commandLine(
         adb, "shell", "am start -a android.intent.action.MAIN " +
-                "-c org.lsposed.manager.LAUNCH_MANAGER  " +
-                "com.android.shell/.BugreportWarningActivity"
+        "-c org.lsposed.manager.LAUNCH_MANAGER  " +
+        "com.android.shell/.BugreportWarningActivity"
     )
 }
 task("reRunApp", Exec::class) {
