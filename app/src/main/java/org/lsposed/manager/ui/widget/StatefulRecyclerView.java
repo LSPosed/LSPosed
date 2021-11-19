@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.viewpager2.adapter.StatefulAdapter;
 
 import rikka.widget.borderview.BorderRecyclerView;
 
@@ -29,8 +30,8 @@ public class StatefulRecyclerView extends BorderRecyclerView {
         Bundle bundle = new Bundle();
         bundle.putParcelable("superState", super.onSaveInstanceState());
         var adapter = getAdapter();
-        if (adapter instanceof EmptyStateRecyclerView.EmptyStateAdapter) {
-            bundle.putParcelable("adaptor", ((EmptyStateRecyclerView.EmptyStateAdapter<?>) adapter).saveState());
+        if (adapter instanceof StatefulAdapter) {
+            bundle.putParcelable("adaptor", ((StatefulAdapter) adapter).saveState());
         }
         return bundle;
     }
@@ -41,8 +42,8 @@ public class StatefulRecyclerView extends BorderRecyclerView {
             Bundle bundle = (Bundle) state;
             super.onRestoreInstanceState(bundle.getParcelable("superState"));
             var adapter = getAdapter();
-            if (adapter instanceof EmptyStateRecyclerView.EmptyStateAdapter) {
-                ((EmptyStateRecyclerView.EmptyStateAdapter<?>) adapter).restoreState(bundle.getParcelable("adaptor"));
+            if (adapter instanceof StatefulAdapter) {
+                ((StatefulAdapter) adapter).restoreState(bundle.getParcelable("adaptor"));
             }
         } else {
             super.onRestoreInstanceState(state);
