@@ -325,6 +325,7 @@ public class ConfigManager {
                         values.put("apk_path", ConfigFileManager.managerApkPath.toString());
                         // dummy module for config
                         db.insertWithOnConflict("modules", null, values, SQLiteDatabase.CONFLICT_IGNORE);
+                        db.setVersion(1);
                     });
                 case 1:
                     executeInTransaction(() -> {
@@ -335,15 +336,15 @@ public class ConfigManager {
                         createConfigTable.execute();
                         createScopeTable.execute();
                         db.compileStatement("CREATE INDEX IF NOT EXISTS configs_idx ON configs (module_pkg_name, user_id);").execute();
-                        db.compileStatement("INSERT INTO scope SELECT * FROM old_scope;").execute();
-                        db.compileStatement("INSERT INTO configs SELECT * FROM old_configs;").execute();
+                        executeInTransaction(()->db.compileStatement("INSERT INTO scope SELECT * FROM old_scope;").execute());
+                        executeInTransaction(()->db.compileStatement("INSERT INTO configs SELECT * FROM old_configs;").execute());
                         db.compileStatement("DROP TABLE old_scope;").execute();
                         db.compileStatement("DROP TABLE old_configs;").execute();
+                        db.setVersion(2);
                     });
                 default:
                     break;
             }
-            db.setVersion(DB_VERSION);
         } catch (Throwable e) {
             Log.e(TAG, "init db", e);
         }
