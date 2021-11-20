@@ -74,6 +74,7 @@ import org.lsposed.manager.ui.fragment.AppListFragment;
 import org.lsposed.manager.ui.fragment.CompileDialogFragment;
 import org.lsposed.manager.util.GlideApp;
 import org.lsposed.manager.util.ModuleUtil;
+import org.lsposed.manager.util.SimpleStatefulAdaptor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -89,7 +90,7 @@ import rikka.core.util.ResourceUtils;
 import rikka.widget.switchbar.SwitchBar;
 
 @SuppressLint("NotifyDataSetChanged")
-public class ScopeAdapter extends RecyclerView.Adapter<ScopeAdapter.ViewHolder> implements Filterable {
+public class ScopeAdapter extends SimpleStatefulAdaptor<ScopeAdapter.ViewHolder> implements Filterable {
 
     private final Activity activity;
     private final AppListFragment fragment;

@@ -70,7 +70,7 @@
         android:scrollbars="none"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <org.lsposed.manager.ui.widget.EmptyStateRecyclerView
+        <org.lsposed.manager.ui.widget.StatefulRecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"

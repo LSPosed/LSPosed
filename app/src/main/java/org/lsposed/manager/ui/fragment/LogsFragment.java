@@ -56,9 +56,9 @@ import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.FragmentLogsBinding;
 import org.lsposed.manager.databinding.ItemLogBinding;
+import org.lsposed.manager.util.SimpleStatefulAdaptor;
 
 import java.io.BufferedReader;
-import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -189,10 +189,9 @@ public class LogsFragment extends BaseFragment {
     }
 
     private void reloadLogs() {
-        ParcelFileDescriptor parcelFileDescriptor = ConfigManager.getLog(verbose);
-        if (parcelFileDescriptor != null) {
-            new LogsReader().execute(parcelFileDescriptor.getFileDescriptor());
-        }
+        var parcelFileDescriptor = ConfigManager.getLog(verbose);
+        if (parcelFileDescriptor != null)
+            new LogsReader().execute(parcelFileDescriptor);
     }
 
     private void clear() {
@@ -235,11 +234,10 @@ public class LogsFragment extends BaseFragment {
 
     @SuppressWarnings("deprecation")
     @SuppressLint("StaticFieldLeak")
-    private class LogsReader extends AsyncTask<FileDescriptor, Integer, List<String>> {
+    private class LogsReader extends AsyncTask<ParcelFileDescriptor, Integer, List<String>> {
         private AlertDialog mProgressDialog;
-        private final Runnable mRunnable = new Runnable() {
-            @Override
-            public void run() {
+        private final Runnable mRunnable = () -> {
+            synchronized (LogsReader.this) {
                 if (!requireActivity().isFinishing()) {
                     mProgressDialog.show();
                 }
@@ -247,7 +245,7 @@ public class LogsFragment extends BaseFragment {
         };
 
         @Override
-        protected void onPreExecute() {
+        synchronized protected void onPreExecute() {
             mProgressDialog = new MaterialAlertDialogBuilder(requireActivity()).create();
             mProgressDialog.setMessage(getString(R.string.loading));
             mProgressDialog.setCancelable(false);
@@ -255,12 +253,12 @@ public class LogsFragment extends BaseFragment {
         }
 
         @Override
-        protected List<String> doInBackground(FileDescriptor... log) {
+        protected List<String> doInBackground(ParcelFileDescriptor... log) {
             Thread.currentThread().setPriority(Thread.NORM_PRIORITY + 2);
 
             List<String> logs = new ArrayList<>();
 
-            try (InputStream inputStream = new FileInputStream(log[0]); BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            try (var pfd = log[0]; InputStream inputStream = new FileInputStream(pfd.getFileDescriptor()); BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     logs.add(line);
@@ -274,7 +272,7 @@ public class LogsFragment extends BaseFragment {
         }
 
         @Override
-        protected void onPostExecute(List<String> logs) {
+        synchronized protected void onPostExecute(List<String> logs) {
             adapter.setLogs(logs);
 
             handler.removeCallbacks(mRunnable);
@@ -290,7 +288,23 @@ public class LogsFragment extends BaseFragment {
         super.onDestroy();
     }
 
-    private class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.ViewHolder> {
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(LogsFragment.class.getName() + "." + "tab", binding.slidingTabs.getSelectedTabPosition());
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            var tabPosition = savedInstanceState.getInt(LogsFragment.class.getName() + "." + "tab", 0);
+            if (tabPosition < binding.slidingTabs.getTabCount())
+                binding.slidingTabs.selectTab(binding.slidingTabs.getTabAt(tabPosition));
+        }
+        super.onViewStateRestored(savedInstanceState);
+    }
+
+    private class LogsAdapter extends SimpleStatefulAdaptor<LogsAdapter.ViewHolder> {
         ArrayList<String> logs = new ArrayList<>();
 
         @NonNull
@@ -305,7 +319,7 @@ public class LogsFragment extends BaseFragment {
             TextView view = holder.textView;
             view.setText(logs.get(position));
             view.measure(0, 0);
-            int desiredWidth = (preferences.getBoolean("enable_word_wrap", false)) ? binding.getRoot().getWidth() : view.getMeasuredWidth();
+            int desiredWidth = (preferences.getBoolean("enable_word_wrap", false)) ? layoutManager.getWidth() : view.getMeasuredWidth();
             ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
             layoutParams.width = desiredWidth;
             if (binding.recyclerView.getWidth() < desiredWidth) {
