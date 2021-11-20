@@ -171,22 +171,21 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             }
         }).attach();
 
-        if (users != null) {
-            if (users.size() != 1) {
-                binding.viewPager.setUserInputEnabled(true);
-                binding.tabLayout.setVisibility(View.VISIBLE);
-                binding.tabLayout.addOnLayoutChangeListener((view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
-                    ViewGroup vg = (ViewGroup) binding.tabLayout.getChildAt(0);
-                    int tabLayoutWidth = IntStream.range(0, binding.tabLayout.getTabCount()).map(i -> vg.getChildAt(i).getWidth()).sum();
-                    if (tabLayoutWidth <= binding.getRoot().getWidth()) {
-                        binding.tabLayout.setTabMode(TabLayout.MODE_FIXED);
-                        binding.tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-                    }
-                });
-            } else {
-                binding.viewPager.setUserInputEnabled(false);
-                binding.tabLayout.setVisibility(View.GONE);
-            }
+        if (users != null && users.size() != 1) {
+            binding.viewPager.setUserInputEnabled(true);
+            binding.tabLayout.setVisibility(View.VISIBLE);
+            binding.tabLayout.addOnLayoutChangeListener((view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+                ViewGroup vg = (ViewGroup) binding.tabLayout.getChildAt(0);
+                int tabLayoutWidth = IntStream.range(0, binding.tabLayout.getTabCount()).map(i -> vg.getChildAt(i).getWidth()).sum();
+                if (tabLayoutWidth <= binding.getRoot().getWidth()) {
+                    binding.tabLayout.setTabMode(TabLayout.MODE_FIXED);
+                    binding.tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+                }
+            });
+            binding.fab.show();
+        } else {
+            binding.viewPager.setUserInputEnabled(false);
+            binding.tabLayout.setVisibility(View.GONE);
         }
         binding.fab.setOnClickListener(v -> {
             var pickAdaptor = new ModuleAdapter(adapters.get(binding.viewPager.getCurrentItem()).getUser(), true);
@@ -353,16 +352,18 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             binding.recyclerView.setAdapter(fragment.adapters.get(position));
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireActivity());
             binding.recyclerView.setLayoutManager(layoutManager);
-            binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                        fragment.binding.fab.show();
-                    } else {
-                        fragment.binding.fab.hide();
+            if (users != null && users.size() != 1) {
+                binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                    @Override
+                    public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                        if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                            fragment.binding.fab.show();
+                        } else {
+                            fragment.binding.fab.hide();
+                        }
                     }
-                }
-            });
+                });
+            }
             RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
             return binding.getRoot();
         }
@@ -628,7 +629,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
         @SuppressLint("NotifyDataSetChanged")
         private void setLoaded(boolean loaded) {
-            runOnUiThread(()-> {
+            runOnUiThread(() -> {
                 isLoaded = loaded;
                 notifyDataSetChanged();
             });
