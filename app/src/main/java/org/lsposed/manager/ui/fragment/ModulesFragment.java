@@ -590,6 +590,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         private final Runnable reloadModules = () -> {
             synchronized (searchList) {
                 Comparator<PackageInfo> cmp = AppHelper.getAppListComparator(0, pm);
+                isLoaded = false;
                 searchList.clear();
                 moduleUtil.getModules().values().parallelStream()
                         .sorted((a, b) -> {
@@ -663,6 +664,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
+                isLoaded = false;
                 FilterResults filterResults = new FilterResults();
                 List<ModuleUtil.InstalledModule> filtered = new ArrayList<>();
                 if (constraint.toString().isEmpty()) {
