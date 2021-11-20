@@ -628,7 +628,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                     }
                 });
                 String queryStr = searchView != null ? searchView.getQuery().toString() : "";
-                isLoaded = true;
                 runOnUiThread(() -> getFilter().filter(queryStr));
             }
         };
@@ -683,6 +682,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 }
                 filterResults.values = filtered;
                 filterResults.count = filtered.size();
+                isLoaded = true;
                 return filterResults;
             }
 
