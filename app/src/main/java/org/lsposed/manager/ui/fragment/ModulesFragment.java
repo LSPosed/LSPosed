@@ -167,13 +167,14 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             }
         });
 
+        new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> {
+            if (position < adapters.size()) {
+                tab.setText(adapters.get(position).getUser().name);
+            }
+        }).attach();
+
         if (users != null) {
             if (users.size() != 1) {
-                new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> {
-                    if (position < adapters.size()) {
-                        tab.setText(adapters.get(position).getUser().name);
-                    }
-                }).attach();
                 binding.viewPager.setUserInputEnabled(true);
                 binding.tabLayout.setVisibility(View.VISIBLE);
                 binding.tabLayout.addOnLayoutChangeListener((view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
