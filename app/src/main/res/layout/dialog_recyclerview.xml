@@ -28,7 +28,7 @@
         android:layout_height="36dp"
         android:layout_gravity="center"
         android:indeterminate="true"
-        android:visibility="gone"
+        android:visibility="visible"
         app:hideAnimationBehavior="inward"
         app:showAnimationBehavior="outward" />
 
