@@ -20,8 +20,14 @@
 
 package de.robv.android.xposed;
 
+import static org.lsposed.lspd.config.ApplicationServiceClient.serviceClient;
+
+import android.os.RemoteException;
+
+import de.robv.android.xposed.services.AppDataFileService;
 import de.robv.android.xposed.services.BaseService;
-import de.robv.android.xposed.services.DirectAccessService;
+import io.github.xposed.xposedservice.IXposedService;
+import xposed.dummy.XposedServiceHelper;
 
 /**
  * A helper to work with (or without) SELinux, abstracting much of its big complexity.
@@ -36,8 +42,11 @@ public final class SELinuxHelper {
      * @return A boolean indicating whether SELinux is enabled.
      */
     public static boolean isSELinuxEnabled() {
-        // lsp: always enabled
-        return true;
+        try {
+            return serviceClient.isSELinuxEnabled();
+        } catch (RemoteException e) {
+            return true;
+        }
     }
 
     /**
@@ -46,8 +55,11 @@ public final class SELinuxHelper {
      * @return A boolean indicating whether SELinux is enforcing.
      */
     public static boolean isSELinuxEnforced() {
-        // lsp: always enforcing
-        return true;
+        try {
+            return serviceClient.isSELinuxEnforced();
+        } catch (RemoteException e) {
+            return true;
+        }
     }
 
     /**
@@ -56,7 +68,11 @@ public final class SELinuxHelper {
      * @return A String representing the security context of the current process.
      */
     public static String getContext() {
-        return null;
+        try {
+            return serviceClient.getSELinuxContext();
+        } catch (RemoteException e) {
+            return null;
+        }
     }
 
     /**
@@ -68,9 +84,6 @@ public final class SELinuxHelper {
      * @return An instance of the service.
      */
     public static BaseService getAppDataFileService() {
-        return sServiceAppDataFile;
+        return new AppDataFileService(IXposedService.Stub.asInterface(XposedServiceHelper.MODULE_SERVICE));
     }
-
-    private static final BaseService sServiceAppDataFile = new DirectAccessService(); // ed: initialized directly
-
 }

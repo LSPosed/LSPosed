@@ -106,6 +106,26 @@ public class LSPApplicationServiceClient extends ApplicationServiceClient {
     }
 
     @Override
+    public boolean isSELinuxEnabled() throws RemoteException {
+        return service.isSELinuxEnabled();
+    }
+
+    @Override
+    public boolean isSELinuxEnforced() throws RemoteException {
+        return service.isSELinuxEnabled();
+    }
+
+    @Override
+    public String getSELinuxContext() throws RemoteException {
+        return service.getSELinuxContext();
+    }
+
+    @Override
+    public IBinder getModuleService(String packageName) throws RemoteException {
+        return null;
+    }
+
+    @Override
     public IBinder asBinder() {
         return serviceBinder;
     }

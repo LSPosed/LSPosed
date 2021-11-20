@@ -12,4 +12,12 @@ interface ILSPApplicationService {
     Bundle requestRemotePreference(String packageName, int userId, IBinder callback);
 
     ParcelFileDescriptor requestInjectedManagerBinder(out List<IBinder> binder);
+
+    boolean isSELinuxEnabled();
+
+    boolean isSELinuxEnforced();
+
+    String getSELinuxContext();
+
+    IBinder getModuleService(String packageName);
 }

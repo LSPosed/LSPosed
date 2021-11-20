@@ -90,7 +90,7 @@ public final class XSharedPreferences implements SharedPreferences {
      * @param prefFileName The file name without ".xml".
      */
     public XSharedPreferences(String packageName, String prefFileName) {
-        mFile = new PrefFile(HiddenApiBridge.Environment_getDataUserDePackageDirectory("", UserHandle_myUserId(), packageName), "/shared_prefs/" + prefFileName + ".xml");
+        mFile = new PrefFile(HiddenApiBridge.Environment_getDataUserDePackageDirectory(null, UserHandle_myUserId(), packageName), "/shared_prefs/" + prefFileName + ".xml");
         mFilename = mFile.getAbsolutePath();
         startLoadFromDisk();
     }
