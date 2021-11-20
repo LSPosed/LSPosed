@@ -83,12 +83,10 @@ import org.lsposed.manager.util.ModuleUtil;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.Future;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
 import rikka.core.util.ResourceUtils;
@@ -102,8 +100,15 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     protected FragmentPagerBinding binding;
     protected SearchView searchView;
     private SearchView.OnQueryTextListener searchListener;
+
     private final ArrayList<ModuleAdapter> adapters = new ArrayList<>();
-    private final ArrayList<String> tabTitles = new ArrayList<>();
+
+    private final RecyclerView.AdapterDataObserver observer = new RecyclerView.AdapterDataObserver() {
+        @Override
+        public void onChanged() {
+            updateProgress();
+        }
+    };
 
     private ModuleUtil.InstalledModule selectedModule;
 
@@ -125,27 +130,20 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         };
 
         if (users != null) {
-            adapters.clear();
-            if (users.size() != 1) {
-                tabTitles.clear();
-                for (var user : users) {
-                    var adapter = new ModuleAdapter(user);
-                    adapter.setHasStableIds(true);
-                    adapter.setStateRestorationPolicy(PREVENT_WHEN_EMPTY);
-                    adapters.add(adapter);
-                    tabTitles.add(user.name);
-                }
-            } else {
-                var adapter = new ModuleAdapter(null);
+            for (var user : users) {
+                var adapter = new ModuleAdapter(user);
                 adapter.setHasStableIds(true);
                 adapter.setStateRestorationPolicy(PREVENT_WHEN_EMPTY);
                 adapters.add(adapter);
+                adapter.registerAdapterDataObserver(observer);
             }
         }
-        for (ModuleAdapter adapter : adapters) {
-            if (adapter.getUser() != null && adapter.getUser().id != 0)
-                adapter.refresh();
-        }
+        adapters.forEach(ModuleAdapter::refresh);
+    }
+
+    private void updateProgress() {
+        var position = binding.viewPager.getCurrentItem();
+        binding.progress.setVisibility(adapters.get(position).isLoaded ? View.INVISIBLE : View.VISIBLE);
     }
 
     @Override
@@ -163,19 +161,15 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
-                if (position > 0) {
-                    binding.fab.show();
-                } else {
-                    binding.fab.hide();
-                }
+                updateProgress();
             }
         });
 
         if (users != null) {
             if (users.size() != 1) {
                 new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> {
-                    if (position < tabTitles.size()) {
-                        tab.setText(tabTitles.get(position));
+                    if (position < adapters.size()) {
+                        tab.setText(adapters.get(position).getUser().name);
                     }
                 }).attach();
                 binding.viewPager.setUserInputEnabled(true);
@@ -194,11 +188,9 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             }
         }
         binding.fab.setOnClickListener(v -> {
-            var pickAdaptor = new ModuleAdapter(null, true);
+            var pickAdaptor = new ModuleAdapter(adapters.get(binding.viewPager.getCurrentItem()).getUser(), true);
             var position = binding.viewPager.getCurrentItem();
-            var snapshot = adapters.get(position).snapshot().parallelStream().map(m -> m.packageName).collect(Collectors.toSet());
             var user = adapters.get(position).getUser();
-            pickAdaptor.setFilter(m -> !snapshot.contains(m.packageName));
             pickAdaptor.refresh();
             var rv = DialogRecyclerviewBinding.inflate(getLayoutInflater()).getRoot();
             rv.setAdapter(pickAdaptor);
@@ -357,7 +349,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                    if (newState == RecyclerView.SCROLL_STATE_IDLE && position > 0) {
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                         fragment.binding.fab.show();
                     } else {
                         fragment.binding.fab.hide();
@@ -403,9 +395,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         private final boolean isPick;
         private boolean isLoaded;
         private View.OnClickListener onPickListener;
-        private final CopyOnWriteArrayList<Future<?>> runningTask = new CopyOnWriteArrayList<>();
-
-        private Predicate<ModuleUtil.InstalledModule> customFilter = m -> true;
 
         ModuleAdapter(UserInfo user) {
             this(user, false);
@@ -428,6 +417,10 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         @Override
         public ModuleAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             return new ModuleAdapter.ViewHolder(ItemModuleBinding.inflate(getLayoutInflater(), parent, false));
+        }
+
+        public boolean isPick() {
+            return isPick;
         }
 
         @Override
@@ -573,16 +566,8 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             return new ModuleAdapter.ApplicationFilter();
         }
 
-        public void setFilter(@NonNull Predicate<ModuleUtil.InstalledModule> filter) {
-            this.customFilter = filter;
-        }
-
         public void setOnPickListener(View.OnClickListener onPickListener) {
             this.onPickListener = onPickListener;
-        }
-
-        public List<ModuleUtil.InstalledModule> snapshot() {
-            return new ArrayList<>(searchList);
         }
 
         public void refresh() {
@@ -590,32 +575,50 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         }
 
         public void refresh(boolean force) {
-            if (binding != null)
-                binding.progress.show();
-            if (force) runningTask.add(runAsync(moduleUtil::reloadInstalledModules));
-            runningTask.add(runAsync(reloadModules));
+            if (force) runAsync(moduleUtil::reloadInstalledModules);
+            runAsync(reloadModules);
         }
 
         private final Runnable reloadModules = () -> {
-            Comparator<PackageInfo> cmp = AppHelper.getAppListComparator(0, pm);
-            var tmpList = moduleUtil.getModules().values().parallelStream()
-                    .filter(module -> getUser() == null ? module.userId == 0 : module.userId == getUser().id)
-                    .filter(customFilter)
-                    .sorted((a, b) -> {
-                        boolean aChecked = moduleUtil.isModuleEnabled(a.packageName);
-                        boolean bChecked = moduleUtil.isModuleEnabled(b.packageName);
-                        if (aChecked == bChecked) {
-                            return cmp.compare(a.pkg, b.pkg);
-                        } else if (aChecked) {
-                            return -1;
-                        } else {
-                            return 1;
+            synchronized (searchList) {
+                Comparator<PackageInfo> cmp = AppHelper.getAppListComparator(0, pm);
+                searchList.clear();
+                moduleUtil.getModules().values().parallelStream()
+                        .sorted((a, b) -> {
+                            boolean aChecked = moduleUtil.isModuleEnabled(a.packageName);
+                            boolean bChecked = moduleUtil.isModuleEnabled(b.packageName);
+                            if (aChecked == bChecked) {
+                                var c = cmp.compare(a.pkg, b.pkg);
+                                if (c == 0) {
+                                    if (a.userId == getUser().id) return -1;
+                                    if (b.userId == getUser().id) return 1;
+                                    else return Integer.compare(a.userId, b.userId);
+                                }
+                                return c;
+                            } else if (aChecked) {
+                                return -1;
+                            } else {
+                                return 1;
+                            }
+                        }).forEachOrdered(new Consumer<>() {
+                    private final HashSet<String> uniquer = new HashSet<>();
+
+                    @Override
+                    public void accept(ModuleUtil.InstalledModule module) {
+                        if (isPick()) {
+                            if (!uniquer.contains(module.packageName)) {
+                                uniquer.add(module.packageName);
+                                if (module.userId != getUser().id)
+                                    searchList.add(module);
+                            }
+                        } else if (module.userId == getUser().id) {
+                            searchList.add(module);
                         }
-                    }).collect(Collectors.toCollection(ArrayList::new));
-            searchList.clear();
-            searchList.addAll(tmpList);
-            String queryStr = searchView != null ? searchView.getQuery().toString() : "";
-            runOnUiThread(() -> getFilter().filter(queryStr));
+                    }
+                });
+                String queryStr = searchView != null ? searchView.getQuery().toString() : "";
+                runOnUiThread(() -> getFilter().filter(queryStr));
+            }
         };
 
         @Override
@@ -678,14 +681,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 //noinspection unchecked
                 showList.addAll((List<ModuleUtil.InstalledModule>) results.values);
                 isLoaded = true;
-                for (Future<?> run : runningTask) {
-                    if (!run.isDone()) {
-                        isLoaded = false;
-                    } else
-                        runningTask.remove(run);
-                }
                 notifyDataSetChanged();
-                if (binding != null && isLoaded) binding.progress.hide();
             }
         }
     }

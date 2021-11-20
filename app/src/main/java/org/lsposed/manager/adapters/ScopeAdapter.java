@@ -72,6 +72,7 @@ import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.ItemModuleBinding;
 import org.lsposed.manager.ui.fragment.AppListFragment;
 import org.lsposed.manager.ui.fragment.CompileDialogFragment;
+import org.lsposed.manager.ui.widget.EmptyStateRecyclerView;
 import org.lsposed.manager.util.GlideApp;
 import org.lsposed.manager.util.ModuleUtil;
 import org.lsposed.manager.util.SimpleStatefulAdaptor;
@@ -90,7 +91,7 @@ import rikka.core.util.ResourceUtils;
 import rikka.widget.switchbar.SwitchBar;
 
 @SuppressLint("NotifyDataSetChanged")
-public class ScopeAdapter extends SimpleStatefulAdaptor<ScopeAdapter.ViewHolder> implements Filterable {
+public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<ScopeAdapter.ViewHolder> implements Filterable {
 
     private final Activity activity;
     private final AppListFragment fragment;
@@ -586,6 +587,11 @@ public class ScopeAdapter extends SimpleStatefulAdaptor<ScopeAdapter.ViewHolder>
             Snackbar.make(fragment.binding.snackbar, activity.getString(R.string.deny_list, appInfo.label), Snackbar.LENGTH_SHORT)
                     .show();
         }
+    }
+
+    @Override
+    public boolean isLoaded() {
+        return !refreshing;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
