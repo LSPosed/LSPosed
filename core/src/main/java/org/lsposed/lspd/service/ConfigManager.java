@@ -335,8 +335,16 @@ public class ConfigManager {
                         createConfigTable.execute();
                         createScopeTable.execute();
                         db.compileStatement("CREATE INDEX IF NOT EXISTS configs_idx ON configs (module_pkg_name, user_id);").execute();
-                        executeInTransaction(()->db.compileStatement("INSERT INTO scope SELECT * FROM old_scope;").execute());
-                        executeInTransaction(()->db.compileStatement("INSERT INTO configs SELECT * FROM old_configs;").execute());
+                        try {
+                            executeInTransaction(() -> db.compileStatement("INSERT INTO scope SELECT * FROM old_scope;").execute());
+                        } catch (Throwable e) {
+                            Log.w(TAG, "migrate scope", e);
+                        }
+                        try {
+                            executeInTransaction(() -> db.compileStatement("INSERT INTO configs SELECT * FROM old_configs;").execute());
+                        } catch (Throwable e) {
+                            Log.w(TAG, "migrate config", e);
+                        }
                         db.compileStatement("DROP TABLE old_scope;").execute();
                         db.compileStatement("DROP TABLE old_configs;").execute();
                         db.setVersion(2);
@@ -344,9 +352,11 @@ public class ConfigManager {
                 default:
                     break;
             }
-        } catch (Throwable e) {
+        } catch (
+                Throwable e) {
             Log.e(TAG, "init db", e);
         }
+
     }
 
     private List<ProcessScope> getAssociatedProcesses(Application app) throws RemoteException {
@@ -798,7 +808,7 @@ public class ConfigManager {
     public boolean enableModule(String packageName, ApplicationInfo info) {
         if (packageName.equals("lspd") || !updateModuleApkPath(packageName, getModuleApkPath(info), false))
             return false;
-        boolean changed = executeInTransaction(()->{
+        boolean changed = executeInTransaction(() -> {
             ContentValues values = new ContentValues();
             values.put("enabled", 1);
             return db.update("modules", values, "module_pkg_name = ?", new String[]{packageName}) > 0;
