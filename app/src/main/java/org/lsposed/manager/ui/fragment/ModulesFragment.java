@@ -142,8 +142,10 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     }
 
     private void updateProgress() {
-        var position = binding.viewPager.getCurrentItem();
-        binding.progress.setVisibility(adapters.get(position).isLoaded ? View.INVISIBLE : View.VISIBLE);
+        if (binding != null) {
+            var position = binding.viewPager.getCurrentItem();
+            binding.progress.setVisibility(adapters.get(position).isLoaded ? View.GONE : View.VISIBLE);
+        }
     }
 
     @Override
@@ -191,13 +193,19 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             var pickAdaptor = new ModuleAdapter(adapters.get(binding.viewPager.getCurrentItem()).getUser(), true);
             var position = binding.viewPager.getCurrentItem();
             var user = adapters.get(position).getUser();
+            var binding = DialogRecyclerviewBinding.inflate(getLayoutInflater());
+            binding.list.setAdapter(pickAdaptor);
+            binding.list.setLayoutManager(new LinearLayoutManager(requireActivity()));
+            pickAdaptor.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+                @Override
+                public void onChanged() {
+                    if (pickAdaptor.isLoaded()) binding.progress.setVisibility(View.GONE);
+                }
+            });
             pickAdaptor.refresh();
-            var rv = DialogRecyclerviewBinding.inflate(getLayoutInflater()).getRoot();
-            rv.setAdapter(pickAdaptor);
-            rv.setLayoutManager(new LinearLayoutManager(requireActivity()));
             var dialog = new MaterialAlertDialogBuilder(requireActivity())
                     .setTitle(getString(R.string.install_to_user, user.name))
-                    .setView(rv)
+                    .setView(binding.getRoot())
                     .setNegativeButton(android.R.string.cancel, null)
                     .show();
             pickAdaptor.setOnPickListener(picked -> {

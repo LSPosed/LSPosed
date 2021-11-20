@@ -64,7 +64,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:indeterminate="true"
-            android:visibility="gone"
+            android:visibility="visible"
             app:hideAnimationBehavior="outward" />
 
         <androidx.viewpager2.widget.ViewPager2
