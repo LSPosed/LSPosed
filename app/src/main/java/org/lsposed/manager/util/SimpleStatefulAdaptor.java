@@ -33,6 +33,7 @@ public abstract class SimpleStatefulAdaptor<T extends RecyclerView.ViewHolder> e
         super.onViewRecycled(holder);
     }
 
+    @CallSuper
     @Override
     public final void onBindViewHolder(@NonNull T holder, int position, @NonNull List<Object> payloads) {
         var state = states.remove(holder.getItemId());

@@ -63,6 +63,7 @@ import org.lsposed.manager.repo.model.Collaborator;
 import org.lsposed.manager.repo.model.OnlineModule;
 import org.lsposed.manager.repo.model.Release;
 import org.lsposed.manager.repo.model.ReleaseAsset;
+import org.lsposed.manager.ui.widget.EmptyStateRecyclerView;
 import org.lsposed.manager.ui.widget.LinkifyTextView;
 import org.lsposed.manager.util.NavUtil;
 import org.lsposed.manager.util.SimpleStatefulAdaptor;
@@ -210,7 +211,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
     public void moduleReleasesLoaded(OnlineModule module) {
         this.module = module;
         if (releaseAdapter != null) {
-            runOnUiThread(() -> releaseAdapter.loadItems());
+            runAsync(releaseAdapter::loadItems);
             if (isResumed() && module.getReleases().size() == 1) {
                 Snackbar.make(binding.snackbar, R.string.module_release_no_more, Snackbar.LENGTH_SHORT).show();
             }
@@ -220,7 +221,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
     @Override
     public void onThrowable(Throwable t) {
         if (releaseAdapter != null) {
-            runOnUiThread(() -> releaseAdapter.loadItems());
+            runAsync(releaseAdapter::loadItems);
             if (isResumed()) {
                 Snackbar.make(binding.snackbar, getString(R.string.repo_load_failed, t.getLocalizedMessage()), Snackbar.LENGTH_SHORT).show();
             }
@@ -321,12 +322,12 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
         }
     }
 
-    private class ReleaseAdapter extends SimpleStatefulAdaptor<ReleaseAdapter.ViewHolder> {
-        private List<Release> items;
+    private class ReleaseAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<ReleaseAdapter.ViewHolder> {
+        private List<Release> items = new ArrayList<>();
         private final Resources resources = App.getInstance().getResources();
 
         public ReleaseAdapter() {
-            loadItems();
+            runAsync(this::loadItems);
         }
 
         public void loadItems() {
@@ -345,7 +346,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
                     return !name.startsWith("snapshot") && !name.startsWith("nightly");
                 }).collect(Collectors.toList());
             } else this.items = releases;
-            notifyDataSetChanged();
+            runOnUiThread(this::notifyDataSetChanged);
         }
 
         @NonNull
@@ -398,6 +399,11 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
         @Override
         public int getItemViewType(int position) {
             return !module.releasesLoaded && position == getItemCount() - 1 ? 1 : 0;
+        }
+
+        @Override
+        public boolean isLoaded() {
+            return module.releasesLoaded;
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {

@@ -20,6 +20,7 @@
 package org.lsposed.manager.ui.fragment;
 
 import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
+import static androidx.recyclerview.widget.RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -82,26 +83,31 @@ import org.lsposed.manager.util.ModuleUtil;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
 import rikka.core.util.ResourceUtils;
 import rikka.recyclerview.RecyclerViewKt;
-import rikka.widget.borderview.BorderRecyclerView;
 
 public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleListener {
     private static final PackageManager pm = App.getInstance().getPackageManager();
     private static final ModuleUtil moduleUtil = ModuleUtil.getInstance();
     private static final RepoLoader repoLoader = RepoLoader.getInstance();
-
+    private static final List<UserInfo> users = ConfigManager.getUsers();
     protected FragmentPagerBinding binding;
     protected SearchView searchView;
     private SearchView.OnQueryTextListener searchListener;
+
     private final ArrayList<ModuleAdapter> adapters = new ArrayList<>();
-    private final ArrayList<String> tabTitles = new ArrayList<>();
+
+    private final RecyclerView.AdapterDataObserver observer = new RecyclerView.AdapterDataObserver() {
+        @Override
+        public void onChanged() {
+            updateProgress();
+        }
+    };
 
     private ModuleUtil.InstalledModule selectedModule;
 
@@ -121,6 +127,23 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 return false;
             }
         };
+
+        if (users != null) {
+            for (var user : users) {
+                var adapter = new ModuleAdapter(user);
+                adapter.setHasStableIds(true);
+                adapter.setStateRestorationPolicy(PREVENT_WHEN_EMPTY);
+                adapters.add(adapter);
+                adapter.registerAdapterDataObserver(observer);
+            }
+        }
+    }
+
+    private void updateProgress() {
+        if (binding != null) {
+            var position = binding.viewPager.getCurrentItem();
+            binding.progress.setVisibility(adapters.get(position).isLoaded ? View.GONE : View.VISIBLE);
+        }
     }
 
     @Override
@@ -133,71 +156,54 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentPagerBinding.inflate(inflater, container, false);
-
         setupToolbar(binding.toolbar, R.string.Modules, R.menu.menu_modules);
         binding.viewPager.setAdapter(new PagerAdapter(this));
         binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
-                BorderRecyclerView recyclerView = binding.viewPager.findViewWithTag(position);
-
-                if (position > 0) {
-                    binding.fab.show();
-                } else {
-                    binding.fab.hide();
-                }
+                updateProgress();
             }
         });
 
-        var users = ConfigManager.getUsers();
-        if (users != null) {
-            adapters.clear();
-            if (users.size() != 1) {
-                tabTitles.clear();
-                for (var user : users) {
-                    var adapter = new ModuleAdapter(user);
-                    adapter.setHasStableIds(true);
-                    adapters.add(adapter);
-                    tabTitles.add(user.name);
-                }
-                new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> {
-                    if (position < tabTitles.size()) {
-                        tab.setText(tabTitles.get(position));
-                    }
-                }).attach();
-                binding.viewPager.setUserInputEnabled(true);
-                binding.tabLayout.setVisibility(View.VISIBLE);
-            } else {
-                var adapter = new ModuleAdapter(null);
-                adapter.setHasStableIds(true);
-                adapters.add(adapter);
-                binding.viewPager.setUserInputEnabled(false);
-                binding.tabLayout.setVisibility(View.GONE);
+        new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> {
+            if (position < adapters.size()) {
+                tab.setText(adapters.get(position).getUser().name);
             }
+        }).attach();
+
+        if (users != null && users.size() != 1) {
+            binding.viewPager.setUserInputEnabled(true);
+            binding.tabLayout.setVisibility(View.VISIBLE);
+            binding.tabLayout.addOnLayoutChangeListener((view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+                ViewGroup vg = (ViewGroup) binding.tabLayout.getChildAt(0);
+                int tabLayoutWidth = IntStream.range(0, binding.tabLayout.getTabCount()).map(i -> vg.getChildAt(i).getWidth()).sum();
+                if (tabLayoutWidth <= binding.getRoot().getWidth()) {
+                    binding.tabLayout.setTabMode(TabLayout.MODE_FIXED);
+                    binding.tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+                }
+            });
+            binding.fab.show();
+        } else {
+            binding.viewPager.setUserInputEnabled(false);
+            binding.tabLayout.setVisibility(View.GONE);
         }
-
-        binding.tabLayout.addOnLayoutChangeListener((view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
-            ViewGroup vg = (ViewGroup) binding.tabLayout.getChildAt(0);
-            int tabLayoutWidth = IntStream.range(0, binding.tabLayout.getTabCount()).map(i -> vg.getChildAt(i).getWidth()).sum();
-            if (tabLayoutWidth <= binding.getRoot().getWidth()) {
-                binding.tabLayout.setTabMode(TabLayout.MODE_FIXED);
-                binding.tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-            }
-        });
-
         binding.fab.setOnClickListener(v -> {
-            var pickAdaptor = new ModuleAdapter(null, true);
+            var pickAdaptor = new ModuleAdapter(adapters.get(binding.viewPager.getCurrentItem()).getUser(), true);
             var position = binding.viewPager.getCurrentItem();
-            var snapshot = adapters.get(position).snapshot().stream().map(m -> m.packageName).collect(Collectors.toSet());
             var user = adapters.get(position).getUser();
-            pickAdaptor.setFilter(m -> !snapshot.contains(m.packageName));
+            var binding = DialogRecyclerviewBinding.inflate(getLayoutInflater());
+            binding.list.setAdapter(pickAdaptor);
+            binding.list.setLayoutManager(new LinearLayoutManager(requireActivity()));
+            pickAdaptor.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+                @Override
+                public void onChanged() {
+                    binding.progress.setVisibility(pickAdaptor.isLoaded() ? View.GONE : View.VISIBLE);
+                }
+            });
             pickAdaptor.refresh();
-            var rv = DialogRecyclerviewBinding.inflate(getLayoutInflater()).getRoot();
-            rv.setAdapter(pickAdaptor);
-            rv.setLayoutManager(new LinearLayoutManager(requireActivity()));
             var dialog = new MaterialAlertDialogBuilder(requireActivity())
                     .setTitle(getString(R.string.install_to_user, user.name))
-                    .setView(rv)
+                    .setView(binding.getRoot())
                     .setNegativeButton(android.R.string.cancel, null)
                     .show();
             pickAdaptor.setOnPickListener(picked -> {
@@ -229,8 +235,13 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     }
 
     @Override
-    public void onSingleInstalledModuleReloaded() {
-        adapters.forEach(adapter -> adapter.refresh(true));
+    public void onSingleInstalledModuleReloaded(ModuleUtil.InstalledModule module) {
+        adapters.forEach(ModuleAdapter::refresh);
+    }
+
+    @Override
+    public void onModulesReloaded() {
+        adapters.forEach(ModuleAdapter::refresh);
     }
 
     @Override
@@ -341,16 +352,18 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             binding.recyclerView.setAdapter(fragment.adapters.get(position));
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireActivity());
             binding.recyclerView.setLayoutManager(layoutManager);
-            binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                    if (newState == RecyclerView.SCROLL_STATE_IDLE && position > 0) {
-                        fragment.binding.fab.show();
-                    } else {
-                        fragment.binding.fab.hide();
+            if (users != null && users.size() != 1) {
+                binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                    @Override
+                    public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                        if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                            fragment.binding.fab.show();
+                        } else {
+                            fragment.binding.fab.hide();
+                        }
                     }
-                }
-            });
+                });
+            }
             RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
             return binding.getRoot();
         }
@@ -384,14 +397,12 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     }
 
     private class ModuleAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<ModuleAdapter.ViewHolder> implements Filterable {
-        private final ConcurrentLinkedQueue<ModuleUtil.InstalledModule> searchList = new ConcurrentLinkedQueue<>();
-        private final List<ModuleUtil.InstalledModule> showList = new ArrayList<>();
+        private List<ModuleUtil.InstalledModule> searchList = new ArrayList<>();
+        private List<ModuleUtil.InstalledModule> showList = new ArrayList<>();
         private final UserInfo user;
         private final boolean isPick;
         private boolean isLoaded;
         private View.OnClickListener onPickListener;
-
-        private Predicate<ModuleUtil.InstalledModule> customFilter = m -> true;
 
         ModuleAdapter(UserInfo user) {
             this(user, false);
@@ -410,6 +421,10 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         @Override
         public ModuleAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             return new ModuleAdapter.ViewHolder(ItemModuleBinding.inflate(getLayoutInflater(), parent, false));
+        }
+
+        public boolean isPick() {
+            return isPick;
         }
 
         @Override
@@ -540,6 +555,12 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         }
 
         @Override
+        public void onViewRecycled(@NonNull ViewHolder holder) {
+            holder.itemView.setTag(null);
+            super.onViewRecycled(holder);
+        }
+
+        @Override
         public int getItemCount() {
             return showList.size();
         }
@@ -555,16 +576,8 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             return new ModuleAdapter.ApplicationFilter();
         }
 
-        public void setFilter(@NonNull Predicate<ModuleUtil.InstalledModule> filter) {
-            this.customFilter = filter;
-        }
-
         public void setOnPickListener(View.OnClickListener onPickListener) {
             this.onPickListener = onPickListener;
-        }
-
-        public List<ModuleUtil.InstalledModule> snapshot() {
-            return new ArrayList<>(searchList);
         }
 
         public void refresh() {
@@ -572,31 +585,61 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         }
 
         public void refresh(boolean force) {
-            if (force) moduleUtil.reloadInstalledModules();
-            runOnUiThread(reloadModules);
+            if (force) runAsync(moduleUtil::reloadInstalledModules);
+            runAsync(reloadModules);
         }
 
-        private final Runnable reloadModules = new Runnable() {
-            public void run() {
-                var tmpList = moduleUtil.getModules().values().stream().filter(module -> user == null ? module.userId == 0 : module.userId == user.id).filter(customFilter).collect(Collectors.toCollection(ArrayList::new));
-                Comparator<PackageInfo> cmp = AppHelper.getAppListComparator(0, pm);
-                tmpList.sort((a, b) -> {
-                    boolean aChecked = moduleUtil.isModuleEnabled(a.packageName);
-                    boolean bChecked = moduleUtil.isModuleEnabled(b.packageName);
-                    if (aChecked == bChecked) {
-                        return cmp.compare(a.pkg, b.pkg);
-                    } else if (aChecked) {
-                        return -1;
-                    } else {
-                        return 1;
+        private final Runnable reloadModules = () -> {
+            var modules = moduleUtil.getModules();
+            if (modules == null) return;
+            Comparator<PackageInfo> cmp = AppHelper.getAppListComparator(0, pm);
+            setLoaded(false);
+            var tmpList = new ArrayList<ModuleUtil.InstalledModule>();
+            modules.values().parallelStream()
+                    .sorted((a, b) -> {
+                        boolean aChecked = moduleUtil.isModuleEnabled(a.packageName);
+                        boolean bChecked = moduleUtil.isModuleEnabled(b.packageName);
+                        if (aChecked == bChecked) {
+                            var c = cmp.compare(a.pkg, b.pkg);
+                            if (c == 0) {
+                                if (a.userId == getUser().id) return -1;
+                                if (b.userId == getUser().id) return 1;
+                                else return Integer.compare(a.userId, b.userId);
+                            }
+                            return c;
+                        } else if (aChecked) {
+                            return -1;
+                        } else {
+                            return 1;
+                        }
+                    }).forEachOrdered(new Consumer<>() {
+                private final HashSet<String> uniquer = new HashSet<>();
+
+                @Override
+                public void accept(ModuleUtil.InstalledModule module) {
+                    if (isPick()) {
+                        if (!uniquer.contains(module.packageName)) {
+                            uniquer.add(module.packageName);
+                            if (module.userId != getUser().id)
+                                tmpList.add(module);
+                        }
+                    } else if (module.userId == getUser().id) {
+                        tmpList.add(module);
                     }
-                });
-                searchList.clear();
-                searchList.addAll(tmpList);
-                String queryStr = searchView != null ? searchView.getQuery().toString() : "";
-                runOnUiThread(() -> getFilter().filter(queryStr));
-            }
+                }
+            });
+            String queryStr = searchView != null ? searchView.getQuery().toString() : "";
+            searchList = tmpList;
+            runOnUiThread(() -> getFilter().filter(queryStr, count -> setLoaded(true)));
         };
+
+        @SuppressLint("NotifyDataSetChanged")
+        private void setLoaded(boolean loaded) {
+            runOnUiThread(() -> {
+                isLoaded = loaded;
+                notifyDataSetChanged();
+            });
+        }
 
         @Override
         public boolean isLoaded() {
@@ -651,14 +694,10 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 return filterResults;
             }
 
-            @SuppressLint("NotifyDataSetChanged")
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-                showList.clear();
                 //noinspection unchecked
-                showList.addAll((List<ModuleUtil.InstalledModule>) results.values);
-                isLoaded = true;
-                notifyDataSetChanged();
+                showList = (List<ModuleUtil.InstalledModule>) results.values;
             }
         }
     }

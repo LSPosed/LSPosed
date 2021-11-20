@@ -27,6 +27,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
 
 import org.lsposed.manager.App;
@@ -58,7 +59,7 @@ public final class ModuleUtil {
     public static synchronized ModuleUtil getInstance() {
         if (instance == null) {
             instance = new ModuleUtil();
-            instance.reloadInstalledModules();
+            App.getExecutorService().submit(instance::reloadInstalledModules);
         }
         return instance;
     }
@@ -101,9 +102,12 @@ public final class ModuleUtil {
         installedModules = modules;
 
         enabledModules = new HashSet<>(Arrays.asList(ConfigManager.getEnabledModules()));
-
         synchronized (this) {
             isReloading = false;
+        }
+
+        for (var listener: listeners) {
+            listener.onModulesReloaded();
         }
     }
 
@@ -122,7 +126,7 @@ public final class ModuleUtil {
             InstalledModule old = installedModules.remove(Pair.create(packageName, userId));
             if (old != null) {
                 for (ModuleListener listener : listeners) {
-                    listener.onSingleInstalledModuleReloaded();
+                    listener.onSingleInstalledModuleReloaded(old);
                 }
             }
             return null;
@@ -133,14 +137,14 @@ public final class ModuleUtil {
             InstalledModule module = new InstalledModule(pkg);
             installedModules.put(Pair.create(packageName, userId), module);
             for (ModuleListener listener : listeners) {
-                listener.onSingleInstalledModuleReloaded();
+                listener.onSingleInstalledModuleReloaded(module);
             }
             return module;
         } else {
             InstalledModule old = installedModules.remove(Pair.create(packageName, userId));
             if (old != null) {
                 for (ModuleListener listener : listeners) {
-                    listener.onSingleInstalledModuleReloaded();
+                    listener.onSingleInstalledModuleReloaded(old);
                 }
             }
             return null;
@@ -155,8 +159,9 @@ public final class ModuleUtil {
         return getModule(packageName, 0);
     }
 
-    public Map<Pair<String, Integer>, InstalledModule> getModules() {
-        return installedModules;
+    @Nullable
+    synchronized public Map<Pair<String, Integer>, InstalledModule> getModules() {
+        return isReloading ? null : installedModules;
     }
 
     public boolean setModuleEnabled(String packageName, boolean enabled) {
@@ -193,7 +198,13 @@ public final class ModuleUtil {
          * Called whenever one (previously or now) installed module has been
          * reloaded
          */
-        void onSingleInstalledModuleReloaded();
+        default void onSingleInstalledModuleReloaded(InstalledModule module) {
+
+        }
+
+        default void onModulesReloaded() {
+
+        }
     }
 
     public class InstalledModule {

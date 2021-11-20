@@ -173,7 +173,7 @@ dependencies {
     implementation("com.android.tools.build:apksig:$agpVersion")
     implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("de.upb.cs.swt:axml:2.1.1")
-    compileOnly("androidx.annotation:annotation:1.2.0")
+    compileOnly("androidx.annotation:annotation:1.3.0")
     compileOnly(project(":hiddenapi-stubs"))
     implementation(project(":hiddenapi-bridge"))
     implementation(project(":manager-service"))

@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.Looper;
 import android.os.Process;
 import android.system.Os;
 import android.text.TextUtils;
@@ -36,6 +37,7 @@ import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
 import org.lsposed.hiddenapibypass.HiddenApiBypass;
+import org.lsposed.manager.adapters.AppHelper;
 import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.ui.activity.CrashReportActivity;
 import org.lsposed.manager.util.DoHDNS;
@@ -84,6 +86,33 @@ public class App extends Application {
             // TODO: set specific class name
             HiddenApiBypass.addHiddenApiExemptions("");
         }
+        Looper.myQueue().addIdleHandler(() -> {
+            if (App.getInstance() == null || App.getExecutorService() == null) return true;
+            App.getExecutorService().submit(() -> {
+                var list = AppHelper.getAppList(false);
+                var pm = App.getInstance().getPackageManager();
+                list.parallelStream().forEach(i -> AppHelper.getAppLabel(i, pm));
+            });
+            return false;
+        });
+
+        Looper.myQueue().addIdleHandler(() -> {
+            if (App.getInstance() == null || App.getExecutorService() == null) return true;
+            App.getExecutorService().submit(() -> {
+                AppHelper.getDenyList(false);
+            });
+            return false;
+        });
+        Looper.myQueue().addIdleHandler(() -> {
+            if (App.getInstance() == null || App.getExecutorService() == null) return true;
+            App.getExecutorService().submit((Runnable) ModuleUtil::getInstance);
+            return false;
+        });
+        Looper.myQueue().addIdleHandler(() -> {
+            if (App.getInstance() == null || App.getExecutorService() == null) return true;
+            App.getExecutorService().submit((Runnable) RepoLoader::getInstance);
+            return false;
+        });
     }
 
     public static final String TAG = "LSPosedManager";
@@ -91,7 +120,7 @@ public class App extends Application {
     private static OkHttpClient okHttpClient;
     private static Cache okHttpCache;
     private SharedPreferences pref;
-    private ExecutorService executorService;
+    private final ExecutorService executorService = Executors.newCachedThreadPool();
 
     public static App getInstance() {
         return instance;
@@ -142,8 +171,6 @@ public class App extends Application {
         }
 
         instance = this;
-
-        executorService = Executors.newCachedThreadPool();
 
         pref = PreferenceManager.getDefaultSharedPreferences(this);
         if ("CN".equals(Locale.getDefault().getCountry())) {

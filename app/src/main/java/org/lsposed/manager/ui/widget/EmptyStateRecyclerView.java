@@ -38,23 +38,6 @@ import rikka.core.util.ResourceUtils;
 public class EmptyStateRecyclerView extends StatefulRecyclerView {
     private final TextPaint paint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
     private final String emptyText;
-    private final AdapterDataObserver emptyObserver = new AdapterDataObserver() {
-
-        @Override
-        public void onChanged() {
-            Adapter<?> adapter = getAdapter();
-            if (adapter != null) {
-                boolean newEmpty = adapter.getItemCount() == 0;
-                if (empty != newEmpty) {
-                    empty = newEmpty;
-                    invalidate();
-                }
-            }
-        }
-    };
-
-    private boolean empty = false;
-
 
     public EmptyStateRecyclerView(Context context) {
         this(context, null);
@@ -75,25 +58,10 @@ public class EmptyStateRecyclerView extends StatefulRecyclerView {
     }
 
     @Override
-    public void setAdapter(Adapter adapter) {
-        var oldAdapter = getAdapter();
-        if (oldAdapter != null) {
-            oldAdapter.unregisterAdapterDataObserver(emptyObserver);
-        }
-        super.setAdapter(adapter);
-        if (adapter != null) {
-            adapter.registerAdapterDataObserver(emptyObserver);
-            if (adapter instanceof EmptyStateAdapter && ((EmptyStateAdapter<?>) adapter).isLoaded()) {
-                emptyObserver.onChanged();
-            }
-        }
-    }
-
-    @Override
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
-
-        if (empty) {
+        var adapter = getAdapter();
+        if (adapter instanceof EmptyStateAdapter && ((EmptyStateAdapter<?>) adapter).isLoaded() && adapter.getItemCount() == 0) {
             final int width = getMeasuredWidth() - getPaddingLeft() - getPaddingRight();
             final int height = getMeasuredHeight() - getPaddingTop() - getPaddingBottom();
 
@@ -107,7 +75,6 @@ public class EmptyStateRecyclerView extends StatefulRecyclerView {
             canvas.restore();
         }
     }
-
 
     public abstract static class EmptyStateAdapter<T extends ViewHolder> extends SimpleStatefulAdaptor<T> {
         abstract public boolean isLoaded();

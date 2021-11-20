@@ -34,6 +34,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -78,6 +79,15 @@ public class AppListFragment extends BaseFragment {
 
         scopeAdapter = new ScopeAdapter(this, module);
         scopeAdapter.setHasStableIds(true);
+        scopeAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                if (binding != null && scopeAdapter != null) {
+                    binding.progress.setVisibility(scopeAdapter.isLoaded() ? View.GONE : View.VISIBLE);
+                    binding.swipeRefreshLayout.setRefreshing(!scopeAdapter.isLoaded());
+                }
+            }
+        });
         binding.recyclerView.setAdapter(scopeAdapter);
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));

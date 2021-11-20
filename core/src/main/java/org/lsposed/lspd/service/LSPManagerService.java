@@ -21,6 +21,7 @@ package org.lsposed.lspd.service;
 
 import static android.content.Context.BIND_AUTO_CREATE;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
+import static org.lsposed.lspd.service.ServiceManager.getExecutorService;
 
 import android.annotation.SuppressLint;
 import android.app.INotificationManager;
@@ -406,10 +407,10 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                     // we do it by cancelling the launch (return false)
                     // and start activity in a new thread
                     pendingManager = true;
-                    new Thread(() -> {
+                    getExecutorService().submit(() -> {
                         ensureWebViewPermission();
                         stopAndStartActivity(pkgName, intent, true);
-                    }).start();
+                    });
                     Log.d(TAG, "requested to launch manager");
                     return false;
                 }

@@ -16,12 +16,29 @@
   ~
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
-<org.lsposed.manager.ui.widget.EmptyStateRecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clipToPadding="false"
-    android:minHeight="?attr/listPreferredItemHeight"
-    android:fadeScrollbars="true"
-    android:scrollbarStyle="insideOverlay"
-    android:scrollbars="vertical" />
 
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progress"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:visibility="visible"
+        app:hideAnimationBehavior="inward"
+        app:showAnimationBehavior="outward" />
+
+    <org.lsposed.manager.ui.widget.EmptyStateRecyclerView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:fadeScrollbars="true"
+        android:minHeight="?attr/listPreferredItemHeight"
+        android:scrollbarStyle="insideOverlay"
+        android:scrollbars="vertical" />
+</FrameLayout>

@@ -56,11 +56,12 @@ import java.util.Locale;
 
 import rikka.core.util.ResourceUtils;
 
-public class HomeFragment extends BaseFragment implements RepoLoader.Listener {
+public class HomeFragment extends BaseFragment implements RepoLoader.Listener, ModuleUtil.ModuleListener {
 
     private FragmentHomeBinding binding;
 
     private static final RepoLoader repoLoader = RepoLoader.getInstance();
+    private static final ModuleUtil moduleUtil = ModuleUtil.getInstance();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -109,6 +110,7 @@ public class HomeFragment extends BaseFragment implements RepoLoader.Listener {
         updateStates(requireActivity(), ConfigManager.isBinderAlive(), UpdateUtil.needUpdate());
 
         repoLoader.addListener(this);
+        moduleUtil.addListener(this);
         if (repoLoader.isRepoLoaded()) {
             repoLoaded();
         }
@@ -198,7 +200,9 @@ public class HomeFragment extends BaseFragment implements RepoLoader.Listener {
     public void repoLoaded() {
         final int[] count = new int[]{0};
         HashSet<String> processedModules = new HashSet<>();
-        ModuleUtil.getInstance().getModules().forEach((k, v) -> {
+        var modules = moduleUtil.getModules();
+        if (modules == null) return;
+        modules.forEach((k, v) -> {
                     if (!processedModules.contains(k.first)) {
                         var ver = repoLoader.getModuleLatestVersion(k.first);
                         if (ver != null && ver.upgradable(v.versionCode, v.versionName)) {
@@ -220,6 +224,11 @@ public class HomeFragment extends BaseFragment implements RepoLoader.Listener {
     @Override
     public void onThrowable(Throwable t) {
         runOnUiThread(() -> binding.downloadSummary.setText(getResources().getString(R.string.module_repo_up_to_date)));
+    }
+
+    @Override
+    public void onModulesReloaded() {
+        setModulesSummary(moduleUtil.getEnabledModulesCount());
     }
 
     private class StartFragmentListener implements View.OnClickListener {
@@ -244,19 +253,20 @@ public class HomeFragment extends BaseFragment implements RepoLoader.Listener {
     @Override
     public void onResume() {
         super.onResume();
-        int moduleCount;
         if (ConfigManager.isBinderAlive()) {
-            moduleCount = ModuleUtil.getInstance().getEnabledModulesCount();
-        } else {
-            moduleCount = 0;
-        }
-        binding.modulesSummary.setText(getResources().getQuantityString(R.plurals.modules_enabled_count, moduleCount, moduleCount));
+            setModulesSummary(moduleUtil.getEnabledModulesCount());
+        } else setModulesSummary(0);
+    }
+
+    private void setModulesSummary(int moduleCount) {
+        runOnUiThread(() -> binding.modulesSummary.setText(getResources().getQuantityString(R.plurals.modules_enabled_count, moduleCount, moduleCount)));
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         repoLoader.removeListener(this);
+        moduleUtil.removeListener(this);
         binding = null;
     }
 }

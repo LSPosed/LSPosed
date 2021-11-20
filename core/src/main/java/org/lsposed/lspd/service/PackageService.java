@@ -59,6 +59,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
+import java.util.stream.Collectors;
 
 import io.github.xposed.xposedservice.utils.ParceledListSlice;
 
@@ -134,14 +135,15 @@ public class PackageService {
             res.addAll(pm.getInstalledPackages(flags, user.id).getList());
         }
         if (filterNoProcess) {
-            res.removeIf(packageInfo -> {
+            return new ParceledListSlice<>(res.parallelStream().filter(packageInfo -> {
                 try {
                     PackageInfo pkgInfo = getPackageInfoWithComponents(packageInfo.packageName, MATCH_ALL_FLAGS, packageInfo.applicationInfo.uid / PER_USER_RANGE);
-                    return fetchProcesses(pkgInfo).isEmpty();
+                    return !fetchProcesses(pkgInfo).isEmpty();
                 } catch (RemoteException e) {
-                    return false;
+                    Log.w(TAG, "filter failed", e);
+                    return true;
                 }
-            });
+            }).collect(Collectors.toList()));
         }
         return new ParceledListSlice<>(res);
     }

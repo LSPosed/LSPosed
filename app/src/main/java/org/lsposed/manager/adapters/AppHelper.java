@@ -26,14 +26,18 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.os.Looper;
 import android.view.MenuItem;
 
+import org.lsposed.lspd.models.Application;
+import org.lsposed.manager.App;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class AppHelper {
 
@@ -41,6 +45,7 @@ public class AppHelper {
     public static final int FLAG_SHOW_FOR_ALL_USERS = 0x0400;
     private static List<String> denyList;
     private static List<PackageInfo> appList;
+    private static final ConcurrentHashMap<PackageInfo, CharSequence> appLabel = new ConcurrentHashMap<>();
 
     public static Intent getSettingsIntent(String packageName, int userId) {
         Intent intentToResolve = new Intent(Intent.ACTION_MAIN);
@@ -132,17 +137,22 @@ public class AppHelper {
         }
     }
 
-    public static List<PackageInfo> getAppList(boolean force) {
+    synchronized public static List<PackageInfo> getAppList(boolean force) {
         if (appList == null || force) {
             appList = ConfigManager.getInstalledPackagesFromAllUsers(PackageManager.GET_META_DATA | PackageManager.MATCH_UNINSTALLED_PACKAGES, true);
         }
         return appList;
     }
 
-    public static List<String> getDenyList(boolean force) {
+    synchronized public static List<String> getDenyList(boolean force) {
         if (denyList == null || force) {
             denyList = ConfigManager.getDenyListPackages();
         }
         return denyList;
+    }
+
+    public static CharSequence getAppLabel(PackageInfo info, PackageManager pm) {
+        if (info == null || info.applicationInfo == null) return null;
+        return appLabel.computeIfAbsent(info, i->i.applicationInfo.loadLabel(pm));
     }
 }
