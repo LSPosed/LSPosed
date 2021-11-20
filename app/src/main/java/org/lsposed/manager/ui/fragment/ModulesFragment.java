@@ -628,6 +628,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                     }
                 });
                 String queryStr = searchView != null ? searchView.getQuery().toString() : "";
+                isLoaded = true;
                 runOnUiThread(() -> getFilter().filter(queryStr));
             }
         };
@@ -666,7 +667,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
-                isLoaded = false;
                 FilterResults filterResults = new FilterResults();
                 List<ModuleUtil.InstalledModule> filtered = new ArrayList<>();
                 if (constraint.toString().isEmpty()) {
@@ -692,7 +692,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 showList.clear();
                 //noinspection unchecked
                 showList.addAll((List<ModuleUtil.InstalledModule>) results.values);
-                isLoaded = true;
                 notifyDataSetChanged();
             }
         }
