@@ -20,7 +20,6 @@
 package org.lsposed.manager.ui.fragment;
 
 import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
-
 import static androidx.recyclerview.widget.RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY;
 
 import android.annotation.SuppressLint;
@@ -86,6 +85,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Future;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -403,7 +403,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         private final boolean isPick;
         private boolean isLoaded;
         private View.OnClickListener onPickListener;
-        private Future<?> runReloadModules;
+        private final CopyOnWriteArrayList<Future<?>> runningTask = new CopyOnWriteArrayList<>();
 
         private Predicate<ModuleUtil.InstalledModule> customFilter = m -> true;
 
@@ -592,8 +592,8 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         public void refresh(boolean force) {
             if (binding != null)
                 binding.progress.show();
-            if (force) runAsync(moduleUtil::reloadInstalledModules);
-            runReloadModules = runAsync(reloadModules);
+            if (force) runningTask.add(runAsync(moduleUtil::reloadInstalledModules));
+            runningTask.add(runAsync(reloadModules));
         }
 
         private final Runnable reloadModules = () -> {
@@ -620,7 +620,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
         @Override
         public boolean isLoaded() {
-            return isLoaded && runReloadModules.isDone();
+            return isLoaded;
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
@@ -678,8 +678,14 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 //noinspection unchecked
                 showList.addAll((List<ModuleUtil.InstalledModule>) results.values);
                 isLoaded = true;
+                for (Future<?> run : runningTask) {
+                    if (!run.isDone()) {
+                        isLoaded = false;
+                    } else
+                        runningTask.remove(run);
+                }
                 notifyDataSetChanged();
-                binding.progress.hide();
+                if (binding != null && isLoaded) binding.progress.hide();
             }
         }
     }
