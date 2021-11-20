@@ -173,7 +173,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
         if (users != null) {
             if (users.size() != 1) {
-                tabTitles.clear();
                 new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> {
                     if (position < tabTitles.size()) {
                         tab.setText(tabTitles.get(position));
