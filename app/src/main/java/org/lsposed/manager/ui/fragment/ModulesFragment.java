@@ -555,6 +555,12 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         }
 
         @Override
+        public void onViewRecycled(@NonNull ViewHolder holder) {
+            holder.itemView.setTag(null);
+            super.onViewRecycled(holder);
+        }
+
+        @Override
         public int getItemCount() {
             return showList.size();
         }
