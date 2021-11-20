@@ -589,11 +589,11 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
         private final Runnable reloadModules = () -> {
             synchronized (searchList) {
+                var modules = moduleUtil.getModules();
+                if (modules == null) return;
                 Comparator<PackageInfo> cmp = AppHelper.getAppListComparator(0, pm);
                 isLoaded = false;
                 searchList.clear();
-                var modules = moduleUtil.getModules();
-                if (modules == null) return;
                 modules.values().parallelStream()
                         .sorted((a, b) -> {
                             boolean aChecked = moduleUtil.isModuleEnabled(a.packageName);
