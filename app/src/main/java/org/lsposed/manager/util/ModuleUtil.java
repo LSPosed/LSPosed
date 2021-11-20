@@ -63,6 +63,10 @@ public final class ModuleUtil {
         return instance;
     }
 
+    public boolean isReloading() {
+        return isReloading;
+    }
+
     public static int extractIntPart(String str) {
         int result = 0, length = str.length();
         for (int offset = 0; offset < length; offset++) {

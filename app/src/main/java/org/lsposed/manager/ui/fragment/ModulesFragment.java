@@ -589,6 +589,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
         private final Runnable reloadModules = () -> {
             synchronized (searchList) {
+                if (moduleUtil.isReloading()) return;
                 Comparator<PackageInfo> cmp = AppHelper.getAppListComparator(0, pm);
                 isLoaded = false;
                 searchList.clear();
