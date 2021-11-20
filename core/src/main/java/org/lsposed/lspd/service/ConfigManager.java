@@ -79,7 +79,6 @@ import java.util.zip.ZipFile;
 public class ConfigManager {
     private static ConfigManager instance = null;
 
-    private static final int DB_VERSION = 2;
     private final SQLiteDatabase db =
             SQLiteDatabase.openOrCreateDatabase(ConfigFileManager.dbPath, null);
 
