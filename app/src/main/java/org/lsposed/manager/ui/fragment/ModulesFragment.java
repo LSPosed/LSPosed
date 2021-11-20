@@ -85,7 +85,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
@@ -138,7 +137,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 adapter.registerAdapterDataObserver(observer);
             }
         }
-        adapters.forEach(ModuleAdapter::refresh);
     }
 
     private void updateProgress() {
@@ -228,7 +226,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     @Override
     public void onResume() {
         super.onResume();
-        adapters.get(binding.viewPager.getCurrentItem()).getAdapter().refresh();
+        adapters.forEach(ModuleAdapter::refresh);
     }
 
     @Override
@@ -398,8 +396,8 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     }
 
     private class ModuleAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<ModuleAdapter.ViewHolder> implements Filterable {
-        private final ConcurrentLinkedQueue<ModuleUtil.InstalledModule> searchList = new ConcurrentLinkedQueue<>();
-        private final List<ModuleUtil.InstalledModule> showList = new ArrayList<>();
+        private List<ModuleUtil.InstalledModule> searchList = new ArrayList<>();
+        private List<ModuleUtil.InstalledModule> showList = new ArrayList<>();
         private final UserInfo user;
         private final boolean isPick;
         private boolean isLoaded;
@@ -416,10 +414,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
         public UserInfo getUser() {
             return user;
-        }
-
-        public ModuleAdapter getAdapter() {
-            return this;
         }
 
         @NonNull
@@ -589,49 +583,56 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         }
 
         private final Runnable reloadModules = () -> {
-            synchronized (searchList) {
-                var modules = moduleUtil.getModules();
-                if (modules == null) return;
-                Comparator<PackageInfo> cmp = AppHelper.getAppListComparator(0, pm);
-                isLoaded = false;
-                searchList.clear();
-                modules.values().parallelStream()
-                        .sorted((a, b) -> {
-                            boolean aChecked = moduleUtil.isModuleEnabled(a.packageName);
-                            boolean bChecked = moduleUtil.isModuleEnabled(b.packageName);
-                            if (aChecked == bChecked) {
-                                var c = cmp.compare(a.pkg, b.pkg);
-                                if (c == 0) {
-                                    if (a.userId == getUser().id) return -1;
-                                    if (b.userId == getUser().id) return 1;
-                                    else return Integer.compare(a.userId, b.userId);
-                                }
-                                return c;
-                            } else if (aChecked) {
-                                return -1;
-                            } else {
-                                return 1;
+            var modules = moduleUtil.getModules();
+            if (modules == null) return;
+            Comparator<PackageInfo> cmp = AppHelper.getAppListComparator(0, pm);
+            setLoaded(false);
+            var tmpList = new ArrayList<ModuleUtil.InstalledModule>();
+            modules.values().parallelStream()
+                    .sorted((a, b) -> {
+                        boolean aChecked = moduleUtil.isModuleEnabled(a.packageName);
+                        boolean bChecked = moduleUtil.isModuleEnabled(b.packageName);
+                        if (aChecked == bChecked) {
+                            var c = cmp.compare(a.pkg, b.pkg);
+                            if (c == 0) {
+                                if (a.userId == getUser().id) return -1;
+                                if (b.userId == getUser().id) return 1;
+                                else return Integer.compare(a.userId, b.userId);
                             }
-                        }).forEachOrdered(new Consumer<>() {
-                    private final HashSet<String> uniquer = new HashSet<>();
-
-                    @Override
-                    public void accept(ModuleUtil.InstalledModule module) {
-                        if (isPick()) {
-                            if (!uniquer.contains(module.packageName)) {
-                                uniquer.add(module.packageName);
-                                if (module.userId != getUser().id)
-                                    searchList.add(module);
-                            }
-                        } else if (module.userId == getUser().id) {
-                            searchList.add(module);
+                            return c;
+                        } else if (aChecked) {
+                            return -1;
+                        } else {
+                            return 1;
                         }
+                    }).forEachOrdered(new Consumer<>() {
+                private final HashSet<String> uniquer = new HashSet<>();
+
+                @Override
+                public void accept(ModuleUtil.InstalledModule module) {
+                    if (isPick()) {
+                        if (!uniquer.contains(module.packageName)) {
+                            uniquer.add(module.packageName);
+                            if (module.userId != getUser().id)
+                                tmpList.add(module);
+                        }
+                    } else if (module.userId == getUser().id) {
+                        tmpList.add(module);
                     }
-                });
-                String queryStr = searchView != null ? searchView.getQuery().toString() : "";
-                runOnUiThread(() -> getFilter().filter(queryStr));
-            }
+                }
+            });
+            String queryStr = searchView != null ? searchView.getQuery().toString() : "";
+            searchList = tmpList;
+            runOnUiThread(() -> getFilter().filter(queryStr, count -> setLoaded(true)));
         };
+
+        @SuppressLint("NotifyDataSetChanged")
+        private void setLoaded(boolean loaded) {
+            runOnUiThread(()-> {
+                isLoaded = loaded;
+                notifyDataSetChanged();
+            });
+        }
 
         @Override
         public boolean isLoaded() {
@@ -683,17 +684,13 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 }
                 filterResults.values = filtered;
                 filterResults.count = filtered.size();
-                isLoaded = true;
                 return filterResults;
             }
 
-            @SuppressLint("NotifyDataSetChanged")
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-                showList.clear();
                 //noinspection unchecked
-                showList.addAll((List<ModuleUtil.InstalledModule>) results.values);
-                notifyDataSetChanged();
+                showList = (List<ModuleUtil.InstalledModule>) results.values;
             }
         }
     }
