@@ -350,6 +350,12 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
     }
 
     @Override
+    public void onViewRecycled(@NonNull ViewHolder holder) {
+        holder.checkbox.setOnCheckedChangeListener(null);
+        super.onViewRecycled(holder);
+    }
+
+    @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         AppInfo appInfo = showList.get(position);
         boolean deny = denyList.contains(appInfo.packageName);
@@ -430,10 +436,10 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
             }
         });
 
-        holder.checkbox.setOnCheckedChangeListener(null);
         holder.checkbox.setChecked(checkedList.contains(appInfo.application));
 
         holder.checkbox.setOnCheckedChangeListener((v, isChecked) -> onCheckedChange(v, isChecked, appInfo));
+
         holder.itemView.setOnClickListener(v -> {
             if (enabled) holder.checkbox.toggle();
         });
