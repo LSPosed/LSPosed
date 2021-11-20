@@ -23,7 +23,6 @@ package org.lsposed.lspd.hooker;
 import static org.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
 
 import android.app.LoadedApk;
-import android.os.IBinder;
 
 import org.lsposed.lspd.util.Hookers;
 import org.lsposed.lspd.util.MetaDataReader;
@@ -37,6 +36,7 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
+import de.robv.android.xposed.XposedInit;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 public class LoadedApkGetCLHooker extends XC_MethodHook {
@@ -84,8 +84,7 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
             lpparam.appInfo = loadedApk.getApplicationInfo();
             lpparam.isFirstApplication = this.isFirstApplication;
 
-            IBinder moduleBinder = serviceClient.requestModuleBinder(lpparam.packageName);
-            if (moduleBinder != null) {
+            if (XposedInit.service != null) {
                 hookNewXSP(lpparam);
             }
 

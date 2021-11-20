@@ -156,9 +156,7 @@ public abstract class BaseService {
      * @return An {@link InputStream} to the file content.
      * @throws IOException In case an error occurred while reading the file.
      */
-    public InputStream getFileInputStream(String filename) throws IOException {
-        return new ByteArrayInputStream(readFile(filename));
-    }
+    public abstract InputStream getFileInputStream(String filename) throws IOException;
 
     /**
      * Get a stream to the file content, but only if it has changed since the last time.
@@ -172,12 +170,7 @@ public abstract class BaseService {
      * is unmodified ({@code previousSize} and {@code previousTime} are still valid).
      * @throws IOException In case an error occurred while reading the file.
      */
-    public FileResult getFileInputStream(String filename, long previousSize, long previousTime) throws IOException {
-        FileResult result = readFile(filename, previousSize, previousTime);
-        if (result.content == null)
-            return result;
-        return new FileResult(new ByteArrayInputStream(result.content), result.size, result.mtime);
-    }
+    public abstract FileResult getFileInputStream(String filename, long previousSize, long previousTime) throws IOException;
 
 
     // ----------------------------------------------------------------------------

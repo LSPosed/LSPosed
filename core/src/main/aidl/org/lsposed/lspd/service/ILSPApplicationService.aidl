@@ -3,8 +3,6 @@ package org.lsposed.lspd.service;
 import org.lsposed.lspd.models.Module;
 
 interface ILSPApplicationService {
-    IBinder requestModuleBinder(String name);
-
     List<Module> getModulesList(String processName);
 
     String getPrefsPath(String packageName);
@@ -18,6 +16,4 @@ interface ILSPApplicationService {
     boolean isSELinuxEnforced();
 
     String getSELinuxContext();
-
-    IBinder getModuleService(String packageName);
 }

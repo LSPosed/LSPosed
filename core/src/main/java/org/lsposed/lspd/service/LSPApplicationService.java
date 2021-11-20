@@ -21,10 +21,12 @@ package org.lsposed.lspd.service;
 
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 
+import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
+import android.os.SELinux;
 import android.util.Log;
 import android.util.Pair;
 
@@ -40,6 +42,7 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
     // <uid, pid>
     private final static Set<Pair<Integer, Integer>> cache = ConcurrentHashMap.newKeySet();
     private final static Map<Integer, IBinder> handles = new ConcurrentHashMap<>();
+    private final static Set<Integer> moduleListRecord = ConcurrentHashMap.newKeySet();
     private final static Set<IBinder.DeathRecipient> recipients = ConcurrentHashMap.newKeySet();
 
     public boolean registerHeartBeat(int uid, int pid, IBinder handle) {
@@ -52,6 +55,7 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
                     handles.remove(pid, handle);
                     handle.unlinkToDeath(this, 0);
                     recipients.remove(this);
+                    moduleListRecord.remove(pid);
                 }
             };
             recipients.add(recipient);
@@ -70,6 +74,8 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
         ensureRegistered();
         int pid = getCallingPid();
         int uid = getCallingUid();
+        if (moduleListRecord.contains(pid)) return null;
+        moduleListRecord.add(pid);
         if (uid == 1000 && processName.equals("android")) {
             return ConfigManager.getInstance().getModulesForSystemServer();
         }
@@ -91,15 +97,6 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
     }
 
     @Override
-    public IBinder requestModuleBinder(String name) throws RemoteException {
-        ensureRegistered();
-        if (ConfigManager.getInstance().isModule(getCallingUid(), name)) {
-            ConfigManager.getInstance().ensureModulePrefsPermission(getCallingUid(), name);
-            return ServiceManager.getModuleService(name);
-        } else return null;
-    }
-
-    @Override
     public ParcelFileDescriptor requestInjectedManagerBinder(List<IBinder> binder) throws RemoteException {
         ensureRegistered();
         var pid = getCallingPid();
@@ -113,6 +110,24 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
 
         }
         return ConfigManager.getInstance().getManagerApk();
+    }
+
+    @Override
+    public boolean isSELinuxEnabled() throws RemoteException {
+        ensureRegistered();
+        return SELinux.isSELinuxEnabled();
+    }
+
+    @Override
+    public boolean isSELinuxEnforced() throws RemoteException {
+        ensureRegistered();
+        return SELinux.isSELinuxEnforced();
+    }
+
+    @Override
+    public String getSELinuxContext() throws RemoteException {
+        ensureRegistered();
+        return SELinux.getPidContext(Binder.getCallingPid());
     }
 
     public boolean hasRegister(int uid, int pid) {

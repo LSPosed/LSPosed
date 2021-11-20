@@ -19,14 +19,21 @@
 
 package org.lsposed.lspd.service;
 
+import android.os.Binder;
 import android.os.IBinder;
+import android.os.ParcelFileDescriptor;
+import android.os.RemoteException;
 
 import de.robv.android.xposed.XposedBridge;
 import io.github.xposed.xposedservice.IXposedService;
 
 public class LSPModuleService extends IXposedService.Stub {
 
-    final private String name;
+    private final String name;
+
+    private boolean selfCalling() {
+        return ConfigManager.getInstance().isModule(Binder.getCallingUid(), name);
+    }
 
     public LSPModuleService(String name) {
         this.name = name;
@@ -40,5 +47,10 @@ public class LSPModuleService extends IXposedService.Stub {
     @Override
     public int getVersion() {
         return XposedBridge.getXposedVersion();
+    }
+
+    @Override
+    public ParcelFileDescriptor getModuleFile() {
+        return null;
     }
 }

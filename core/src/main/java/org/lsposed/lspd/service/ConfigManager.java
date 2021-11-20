@@ -159,6 +159,7 @@ public class ConfigManager {
 
     // packageName, Module
     private final Map<String, Module> cachedModule = new ConcurrentHashMap<>();
+//    private final Map<Integer, Module> cachedModuleAid = new ConcurrentHashMap<>();
 
     // packageName, userId, group, key, value
     private final Map<Pair<String, Integer>, Map<String, ConcurrentHashMap<String, Object>>> cachedConfig = new ConcurrentHashMap<>();
@@ -205,6 +206,7 @@ public class ConfigManager {
                     module.apkPath = path;
                     module.file = file;
                     module.appId = -1;
+                    module.moduleService = ServiceManager.getModuleService(packageName);
                     return module;
                 });
                 if (m != null) modules.add(m);
@@ -478,6 +480,8 @@ public class ConfigManager {
                 module.packageName = packageName;
                 module.file = file;
                 module.appId = pkgInfo.applicationInfo.uid;
+                module.moduleService = ServiceManager.getModuleService(packageName);
+                module.self = false;
                 cachedModule.put(packageName, module);
             }
             if (PackageService.isAlive()) {
@@ -490,7 +494,9 @@ public class ConfigManager {
             }
         }
         Log.d(TAG, "cached modules");
+//        cachedModuleAid.clear();
         for (var module : cachedModule.entrySet()) {
+//            cachedModuleAid.put(module.getValue().appId, module.getValue());
             Log.d(TAG, module.getKey() + " " + module.getValue().apkPath);
         }
         cacheScopes();
@@ -558,17 +564,25 @@ public class ConfigManager {
                     }
                     var module = cachedModule.get(modulePackageName);
                     for (ProcessScope processScope : processesScope) {
-                        cachedScope.computeIfAbsent(processScope,
-                                ignored -> new LinkedList<>()).add(module);
                         // Always allow the module to inject itself
-                        if (modulePackageName.equals(app.packageName)) {
+                        if (module != null && modulePackageName.equals(app.packageName)) {
                             var appId = processScope.uid % PER_USER_RANGE;
+                            var moduleSelf = new Module();
+                            moduleSelf.self = true;
+                            moduleSelf.moduleService = module.moduleService;
+                            moduleSelf.packageName = module.packageName;
+                            moduleSelf.apkPath = module.apkPath;
+                            moduleSelf.file = module.file;
+                            moduleSelf.appId = module.appId;
                             for (var user : UserService.getUsers()) {
                                 var moduleUid = user.id * PER_USER_RANGE + appId;
-                                var moduleSelf = new ProcessScope(processScope.processName, moduleUid);
-                                cachedScope.computeIfAbsent(moduleSelf,
-                                        ignored -> new LinkedList<>()).add(module);
+                                var moduleScope = new ProcessScope(processScope.processName, moduleUid);
+                                cachedScope.computeIfAbsent(moduleScope,
+                                        ignored -> new LinkedList<>()).add(moduleSelf);
                             }
+                        } else {
+                            cachedScope.computeIfAbsent(processScope,
+                                    ignored -> new LinkedList<>()).add(module);
                         }
                     }
                 } catch (RemoteException e) {

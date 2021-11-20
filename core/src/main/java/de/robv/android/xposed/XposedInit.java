@@ -62,6 +62,7 @@ import de.robv.android.xposed.callbacks.XC_InitZygote;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import de.robv.android.xposed.callbacks.XCallback;
 import hidden.HiddenApiBridge;
+import io.github.xposed.xposedservice.IXposedService;
 
 public final class XposedInit {
     private static final String TAG = XposedBridge.TAG;
@@ -69,6 +70,8 @@ public final class XposedInit {
 
     public static volatile boolean disableResources = false;
     public static AtomicBoolean resourceInit = new AtomicBoolean(false);
+
+    public static IXposedService service = null;
 
     public static void hookResources() throws Throwable {
         if (disableResources || !resourceInit.compareAndSet(false, true)) {
@@ -243,6 +246,9 @@ public final class XposedInit {
                 var apk = module.apkPath;
                 var name = module.packageName;
                 var file = module.file;
+                if (module.self) {
+                    service = IXposedService.Stub.asInterface(module.moduleService);
+                }
                 if (loadedModules.contains(apk)) {
                     newLoadedApk.add(apk);
                 } else {

@@ -61,15 +61,6 @@ public class LSPApplicationServiceClient extends ApplicationServiceClient {
     }
 
     @Override
-    public IBinder requestModuleBinder(String name) {
-        try {
-            return service.requestModuleBinder(name);
-        } catch (RemoteException | NullPointerException ignored) {
-        }
-        return null;
-    }
-
-    @Override
     public List<Module> getModulesList(String processName) {
         try {
             return service.getModulesList(processName);
@@ -118,11 +109,6 @@ public class LSPApplicationServiceClient extends ApplicationServiceClient {
     @Override
     public String getSELinuxContext() throws RemoteException {
         return service.getSELinuxContext();
-    }
-
-    @Override
-    public IBinder getModuleService(String packageName) throws RemoteException {
-        return null;
     }
 
     @Override

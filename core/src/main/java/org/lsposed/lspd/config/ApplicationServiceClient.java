@@ -12,9 +12,6 @@ abstract public class ApplicationServiceClient implements ILSPApplicationService
     public static ApplicationServiceClient serviceClient = null;
 
     @Override
-    abstract public IBinder requestModuleBinder(String name);
-
-    @Override
     abstract public List<Module> getModulesList(String processName);
 
     abstract public List<Module> getModulesList();

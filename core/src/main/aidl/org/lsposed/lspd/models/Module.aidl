@@ -6,4 +6,6 @@ parcelable Module {
     int appId;
     String apkPath;
     PreLoadedApk file;
+    IBinder moduleService;
+    boolean self;
 }
