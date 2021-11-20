@@ -39,6 +39,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import io.github.xposed.xposedservice.utils.ParceledListSlice;
 
@@ -103,7 +104,7 @@ public class ConfigManager {
         }
     }
 
-    public static boolean setModuleScope(String packageName, HashSet<ScopeAdapter.ApplicationWithEquals> applications) {
+    public static boolean setModuleScope(String packageName, Set<ScopeAdapter.ApplicationWithEquals> applications) {
         try {
             List<Application> list = new ArrayList<>();
             applications.forEach(application -> {

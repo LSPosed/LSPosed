@@ -197,7 +197,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             pickAdaptor.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
                 @Override
                 public void onChanged() {
-                    if (pickAdaptor.isLoaded()) binding.progress.setVisibility(View.GONE);
+                    updateProgress();
                 }
             });
             pickAdaptor.refresh();
