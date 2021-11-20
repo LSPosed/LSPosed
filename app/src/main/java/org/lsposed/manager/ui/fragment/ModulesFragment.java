@@ -21,6 +21,8 @@ package org.lsposed.manager.ui.fragment;
 
 import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
 
+import static androidx.recyclerview.widget.RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -172,12 +174,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         if (users != null) {
             if (users.size() != 1) {
                 tabTitles.clear();
-                for (var user : users) {
-                    var adapter = new ModuleAdapter(user);
-                    adapter.setHasStableIds(true);
-                    adapters.add(adapter);
-                    tabTitles.add(user.name);
-                }
                 new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> {
                     if (position < tabTitles.size()) {
                         tab.setText(tabTitles.get(position));
@@ -194,10 +190,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                     }
                 });
             } else {
-                var adapter = new ModuleAdapter(null);
-                adapter.setHasStableIds(true);
-                adapters.add(adapter);
-
                 binding.viewPager.setUserInputEnabled(false);
                 binding.tabLayout.setVisibility(View.GONE);
             }
@@ -605,7 +597,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             runReloadModules = runAsync(reloadModules);
         }
 
-        private final Runnable reloadModules = (Runnable) () -> {
+        private final Runnable reloadModules = () -> {
             Comparator<PackageInfo> cmp = AppHelper.getAppListComparator(0, pm);
             var tmpList = moduleUtil.getModules().values().parallelStream()
                     .filter(module -> getUser() == null ? module.userId == 0 : module.userId == getUser().id)
