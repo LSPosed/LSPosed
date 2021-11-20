@@ -12,6 +12,10 @@ public class UserHandle {
         throw new RuntimeException("STUB");
     }
 
+    public static int myUserId() {
+        throw new RuntimeException("STUB");
+    }
+
     public static final @NonNull
     UserHandle ALL = null;
 }

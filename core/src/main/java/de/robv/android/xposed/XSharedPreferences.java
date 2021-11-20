@@ -1,58 +1,32 @@
-/*
- * This file is part of LSPosed.
- *
- * LSPosed is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * LSPosed is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
- *
- * Copyright (C) 2020 EdXposed Contributors
- * Copyright (C) 2021 LSPosed Contributors
- */
-
 package de.robv.android.xposed;
 
-import static org.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
+import static hidden.HiddenApiBridge.UserHandle_myUserId;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Environment;
+import android.os.UserHandle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.android.internal.util.XmlUtils;
 
-import org.lsposed.lspd.BuildConfig;
-import org.lsposed.lspd.util.MetaDataReader;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.AccessDeniedException;
-import java.nio.file.ClosedWatchServiceException;
-import java.nio.file.Path;
-import java.nio.file.StandardWatchEventKinds;
-import java.nio.file.WatchEvent;
-import java.nio.file.WatchKey;
-import java.nio.file.WatchService;
-import java.security.MessageDigest;
-import java.util.Arrays;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 import de.robv.android.xposed.services.FileResult;
+import hidden.HiddenApiBridge;
 
 /**
  * This class is basically the same as SharedPreferencesImpl from AOSP, but
@@ -61,73 +35,30 @@ import de.robv.android.xposed.services.FileResult;
  */
 public final class XSharedPreferences implements SharedPreferences {
     private static final String TAG = "XSharedPreferences";
-    private static final HashMap<WatchKey, PrefsData> sWatcherKeyInstances = new HashMap<>();
-    private static final Object sContent = new Object();
-    private static Thread sWatcherDaemon = null;
-    private static WatchService sWatcher;
-
-    private final HashMap<OnSharedPreferenceChangeListener, Object> mListeners = new HashMap<>();
-    private final File mFile;
+    private final PrefFile mFile;
     private final String mFilename;
     private Map<String, Object> mMap;
     private boolean mLoaded = false;
     private long mLastModified;
     private long mFileSize;
-    private WatchKey mWatchKey;
 
-    private static void initWatcherDaemon() {
-        sWatcherDaemon = new Thread() {
-            @Override
-            public void run() {
-                if (BuildConfig.DEBUG) Log.d(TAG, "Watcher daemon thread started");
-                while (true) {
-                    WatchKey key;
-                    try {
-                        key = sWatcher.take();
-                    } catch (ClosedWatchServiceException ignored) {
-                        if (BuildConfig.DEBUG) Log.d(TAG, "Watcher daemon thread finished");
-                        sWatcher = null;
-                        return;
-                    } catch (InterruptedException ignored) {
-                        return;
-                    }
-                    for (WatchEvent<?> event : key.pollEvents()) {
-                        WatchEvent.Kind<?> kind = event.kind();
-                        if (kind == StandardWatchEventKinds.OVERFLOW) {
-                            continue;
-                        }
-                        Path dir = (Path) key.watchable();
-                        Path path = dir.resolve((Path) event.context());
-                        String pathStr = path.toString();
-                        if (BuildConfig.DEBUG)
-                            Log.v(TAG, "File " + path.toString() + " event: " + kind.name());
-                        // We react to both real and backup files due to rare race conditions
-                        if (pathStr.endsWith(".bak")) {
-                            if (kind != StandardWatchEventKinds.ENTRY_DELETE) {
-                                continue;
-                            }
-                        } else if (SELinuxHelper.getAppDataFileService().checkFileExists(pathStr + ".bak")) {
-                            continue;
-                        }
-                        PrefsData data = sWatcherKeyInstances.get(key);
-                        if (data != null && data.hasChanged()) {
-                            for (OnSharedPreferenceChangeListener l : data.mPrefs.mListeners.keySet()) {
-                                try {
-                                    l.onSharedPreferenceChanged(data.mPrefs, null);
-                                } catch (Throwable t) {
-                                    if (BuildConfig.DEBUG)
-                                        Log.e(TAG, "Fail in preference change listener", t);
-                                }
-                            }
-                        }
-                    }
-                    key.reset();
-                }
-            }
-        };
-        sWatcherDaemon.setName(TAG + "-Daemon");
-        sWatcherDaemon.setDaemon(true);
-        sWatcherDaemon.start();
+    private static class PrefFile extends File {
+
+        public PrefFile(@NonNull String pathname) {
+            super(pathname);
+        }
+
+        public PrefFile(@Nullable String parent, @NonNull String child) {
+            super(parent, child);
+        }
+
+        public PrefFile(@Nullable File parent, @NonNull String child) {
+            super(parent, child);
+        }
+
+        public PrefFile(@NonNull URI uri) {
+            super(uri);
+        }
     }
 
     /**
@@ -136,9 +67,9 @@ public final class XSharedPreferences implements SharedPreferences {
      * @param prefFile The file to read the preferences from.
      */
     public XSharedPreferences(File prefFile) {
-        mFile = prefFile;
-        mFilename = prefFile.getAbsolutePath();
-        init();
+        mFile = new PrefFile(prefFile.getAbsolutePath());
+        mFilename = mFile.getAbsolutePath();
+        startLoadFromDisk();
     }
 
     /**
@@ -159,114 +90,9 @@ public final class XSharedPreferences implements SharedPreferences {
      * @param prefFileName The file name without ".xml".
      */
     public XSharedPreferences(String packageName, String prefFileName) {
-        boolean newModule = false;
-        Set<String> modules = XposedInit.getLoadedModules();
-        for (String m : modules) {
-            if (m.contains("/" + packageName + "-")) {
-                boolean isModule = false;
-                int xposedminversion = -1;
-                boolean xposedsharedprefs = false;
-                try {
-                    Map<String, Object> metaData = MetaDataReader.getMetaData(new File(m));
-                    isModule = metaData.containsKey("xposedminversion");
-                    if (isModule) {
-                        Object minVersionRaw = metaData.get("xposedminversion");
-                        if (minVersionRaw instanceof Integer) {
-                            xposedminversion = (Integer) minVersionRaw;
-                        } else if (minVersionRaw instanceof String) {
-                            xposedminversion = MetaDataReader.extractIntPart((String) minVersionRaw);
-                        }
-                        xposedsharedprefs = metaData.containsKey("xposedsharedprefs");
-                    }
-                } catch (NumberFormatException | IOException e) {
-                    Log.w(TAG, "Apk parser fails: " + e);
-                }
-                newModule = isModule && (xposedminversion > 92 || xposedsharedprefs);
-            }
-        }
-        if (newModule) {
-            mFile = new File(serviceClient.getPrefsPath(packageName), prefFileName + ".xml");
-        } else {
-            mFile = new File(Environment.getDataDirectory(), "data/" + packageName + "/shared_prefs/" + prefFileName + ".xml");
-        }
+        mFile = new PrefFile(HiddenApiBridge.Environment_getDataUserDePackageDirectory("", UserHandle_myUserId(), packageName), "/shared_prefs/" + prefFileName + ".xml");
         mFilename = mFile.getAbsolutePath();
-        init();
-    }
-
-    private void tryRegisterWatcher() {
-        if (mWatchKey != null && mWatchKey.isValid()) {
-            return;
-        }
-
-        synchronized (sWatcherKeyInstances) {
-            Path path = mFile.toPath();
-            try {
-                if (sWatcher == null) {
-                    sWatcher = new File(serviceClient.getPrefsPath("")).toPath().getFileSystem().newWatchService();
-                    if (BuildConfig.DEBUG) Log.d(TAG, "Created WatchService instance");
-                }
-                mWatchKey = path.getParent().register(sWatcher, StandardWatchEventKinds.ENTRY_CREATE,
-                        StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_DELETE);
-                sWatcherKeyInstances.put(mWatchKey, new PrefsData(this));
-                if (sWatcherDaemon == null || !sWatcherDaemon.isAlive()) {
-                    initWatcherDaemon();
-                }
-                if (BuildConfig.DEBUG)
-                    Log.d(TAG, "tryRegisterWatcher: registered file watcher for " + path);
-            } catch (AccessDeniedException accDeniedEx) {
-                if (BuildConfig.DEBUG) Log.e(TAG, "tryRegisterWatcher: access denied to " + path);
-            } catch (Exception e) {
-                Log.e(TAG, "tryRegisterWatcher: failed to register file watcher", e);
-            }
-        }
-    }
-
-    private void tryUnregisterWatcher() {
-        synchronized (sWatcherKeyInstances) {
-            if (mWatchKey != null) {
-                sWatcherKeyInstances.remove(mWatchKey);
-                mWatchKey.cancel();
-                mWatchKey = null;
-            }
-            boolean atLeastOneValid = false;
-            for (WatchKey key : sWatcherKeyInstances.keySet()) {
-                atLeastOneValid |= key.isValid();
-            }
-            if (!atLeastOneValid) {
-                try {
-                    sWatcher.close();
-                } catch (Exception ignore) {
-                }
-            }
-        }
-    }
-
-    private void init() {
         startLoadFromDisk();
-    }
-
-    private static long tryGetFileSize(String filename) {
-        try {
-            return SELinuxHelper.getAppDataFileService().getFileSize(filename);
-        } catch (IOException ignored) {
-            return 0;
-        }
-    }
-
-    private static byte[] tryGetFileHash(String filename) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            try (InputStream is = SELinuxHelper.getAppDataFileService().getFileInputStream(filename)) {
-                byte[] buf = new byte[4096];
-                int read;
-                while ((read = is.read(buf)) != -1) {
-                    md.update(buf, 0, read);
-                }
-            }
-            return md.digest();
-        } catch (Exception ignored) {
-            return new byte[0];
-        }
     }
 
     /**
@@ -288,19 +114,7 @@ public final class XSharedPreferences implements SharedPreferences {
         if (!mFile.exists()) // Just in case - the file should never be created if it doesn't exist.
             return false;
 
-        if (!mFile.setReadable(true, false))
-            return false;
-
-        // Watcher service needs read access to parent directory (looks like execute is not enough)
-        if (mFile.getParentFile() != null) {
-            mFile.getParentFile().setReadable(true, false);
-        }
-
-        if (!mListeners.isEmpty()) {
-            tryRegisterWatcher();
-        }
-
-        return true;
+        return mFile.setReadable(true, false);
     }
 
     /**
@@ -344,11 +158,11 @@ public final class XSharedPreferences implements SharedPreferences {
                 map = mMap;
             }
         } catch (XmlPullParserException e) {
-            Log.w(TAG, "getSharedPreferences failed for: " + mFilename, e);
+            Log.w(TAG, "getSharedPreferences", e);
         } catch (FileNotFoundException ignored) {
             // SharedPreferencesImpl has a canRead() check, so it doesn't log anything in case the file doesn't exist
         } catch (IOException e) {
-            Log.w(TAG, "getSharedPreferences failed for: " + mFilename, e);
+            Log.w(TAG, "getSharedPreferences", e);
         } finally {
             if (result != null && result.stream != null) {
                 try {
@@ -377,9 +191,8 @@ public final class XSharedPreferences implements SharedPreferences {
      * <p><strong>Warning:</strong> With enforcing SELinux, this call might be quite expensive.
      */
     public synchronized void reload() {
-        if (hasFileChanged()) {
-            init();
-        }
+        if (hasFileChanged())
+            startLoadFromDisk();
     }
 
     /**
@@ -514,71 +327,21 @@ public final class XSharedPreferences implements SharedPreferences {
     }
 
     /**
-     * Registers a callback to be invoked when a change happens to a preference file.<br>
-     * Note that it is not possible to determine which preference changed exactly and thus
-     * preference key in callback invocation will always be null.
-     *
-     * @param listener The callback that will run.
-     * @see #unregisterOnSharedPreferenceChangeListener
+     * @deprecated Not supported by this implementation.
      */
+    @Deprecated
     @Override
     public void registerOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener) {
-        if (listener == null)
-            throw new IllegalArgumentException("listener cannot be null");
-
-        synchronized (this) {
-            if (mListeners.put(listener, sContent) == null) {
-                tryRegisterWatcher();
-            }
-        }
+        throw new UnsupportedOperationException("listeners are not supported in this implementation");
     }
 
     /**
-     * Unregisters a previous callback.
-     *
-     * @param listener The callback that should be unregistered.
-     * @see #registerOnSharedPreferenceChangeListener
+     * @deprecated Not supported by this implementation.
      */
+    @Deprecated
     @Override
     public void unregisterOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener) {
-        synchronized (this) {
-            if (mListeners.remove(listener) != null && mListeners.isEmpty()) {
-                tryUnregisterWatcher();
-            }
-        }
+        throw new UnsupportedOperationException("listeners are not supported in this implementation");
     }
 
-    private static class PrefsData {
-        public final XSharedPreferences mPrefs;
-        private long mSize;
-        private byte[] mHash;
-
-        public PrefsData(XSharedPreferences prefs) {
-            mPrefs = prefs;
-            mSize = tryGetFileSize(prefs.mFilename);
-            mHash = tryGetFileHash(prefs.mFilename);
-        }
-
-        public boolean hasChanged() {
-            long size = tryGetFileSize(mPrefs.mFilename);
-            if (size < 1) {
-                if (BuildConfig.DEBUG) Log.d(TAG, "Ignoring empty prefs file");
-                return false;
-            }
-            if (size != mSize) {
-                mSize = size;
-                mHash = tryGetFileHash(mPrefs.mFilename);
-                if (BuildConfig.DEBUG) Log.d(TAG, "Prefs file size changed");
-                return true;
-            }
-            byte[] hash = tryGetFileHash(mPrefs.mFilename);
-            if (!Arrays.equals(hash, mHash)) {
-                mHash = hash;
-                if (BuildConfig.DEBUG) Log.d(TAG, "Prefs file hash changed");
-                return true;
-            }
-            if (BuildConfig.DEBUG) Log.d(TAG, "Prefs file not changed");
-            return false;
-        }
-    }
 }

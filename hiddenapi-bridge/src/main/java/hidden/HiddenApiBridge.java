@@ -84,6 +84,10 @@ public class HiddenApiBridge {
         return UserHandle.ALL;
     }
 
+    public static int UserHandle_myUserId(){
+        return UserHandle.myUserId();
+    }
+
     public static UserHandle UserHandle(int h){
         return new UserHandle(h);
     }
@@ -112,5 +116,10 @@ public class HiddenApiBridge {
 
     public static boolean VMRuntime_is64Bit() {
         return VMRuntime.getRuntime().is64Bit();
+    }
+
+    public static File Environment_getDataUserDePackageDirectory(String volumeUuid, int userId,
+                                                                        String packageName) {
+        return Environment.getDataUserDePackageDirectory(volumeUuid, userId, packageName);
     }
 }
