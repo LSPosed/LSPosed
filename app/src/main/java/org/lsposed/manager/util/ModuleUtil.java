@@ -27,6 +27,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
 
 import org.lsposed.manager.App;
@@ -61,10 +62,6 @@ public final class ModuleUtil {
             App.getExecutorService().submit(instance::reloadInstalledModules);
         }
         return instance;
-    }
-
-    public boolean isReloading() {
-        return isReloading;
     }
 
     public static int extractIntPart(String str) {
@@ -162,8 +159,9 @@ public final class ModuleUtil {
         return getModule(packageName, 0);
     }
 
-    public Map<Pair<String, Integer>, InstalledModule> getModules() {
-        return installedModules;
+    @Nullable
+    synchronized public Map<Pair<String, Integer>, InstalledModule> getModules() {
+        return isReloading ? null : installedModules;
     }
 
     public boolean setModuleEnabled(String packageName, boolean enabled) {

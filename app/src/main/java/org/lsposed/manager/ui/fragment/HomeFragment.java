@@ -200,7 +200,9 @@ public class HomeFragment extends BaseFragment implements RepoLoader.Listener, M
     public void repoLoaded() {
         final int[] count = new int[]{0};
         HashSet<String> processedModules = new HashSet<>();
-        moduleUtil.getModules().forEach((k, v) -> {
+        var modules = moduleUtil.getModules();
+        if (modules == null) return;
+        modules.forEach((k, v) -> {
                     if (!processedModules.contains(k.first)) {
                         var ver = repoLoader.getModuleLatestVersion(k.first);
                         if (ver != null && ver.upgradable(v.versionCode, v.versionName)) {
