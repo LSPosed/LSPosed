@@ -335,16 +335,20 @@ public class ConfigManager {
                         createConfigTable.execute();
                         createScopeTable.execute();
                         db.compileStatement("CREATE INDEX IF NOT EXISTS configs_idx ON configs (module_pkg_name, user_id);").execute();
-                        try {
-                            executeInTransaction(() -> db.compileStatement("INSERT INTO scope SELECT * FROM old_scope;").execute());
-                        } catch (Throwable e) {
-                            Log.w(TAG, "migrate scope", e);
-                        }
-                        try {
-                            executeInTransaction(() -> db.compileStatement("INSERT INTO configs SELECT * FROM old_configs;").execute());
-                        } catch (Throwable e) {
-                            Log.w(TAG, "migrate config", e);
-                        }
+                        executeInTransaction(() -> {
+                            try {
+                                db.compileStatement("INSERT INTO scope SELECT * FROM old_scope;").execute();
+                            } catch (Throwable e) {
+                                Log.w(TAG, "migrate scope", e);
+                            }
+                        });
+                        executeInTransaction(() -> {
+                            try {
+                                executeInTransaction(() -> db.compileStatement("INSERT INTO configs SELECT * FROM old_configs;").execute());
+                            } catch (Throwable e) {
+                                Log.w(TAG, "migrate config", e);
+                            }
+                        });
                         db.compileStatement("DROP TABLE old_scope;").execute();
                         db.compileStatement("DROP TABLE old_configs;").execute();
                         db.setVersion(2);
