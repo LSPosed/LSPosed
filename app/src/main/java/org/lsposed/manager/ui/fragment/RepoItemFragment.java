@@ -361,7 +361,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
 
         @Override
         public void onBindViewHolder(@NonNull ReleaseAdapter.ViewHolder holder, int position) {
-            if (position == items.size()) {
+            if (holder.getItemViewType() == 1) {
                 holder.progress.setVisibility(View.GONE);
                 holder.title.setVisibility(View.VISIBLE);
                 holder.itemView.setOnClickListener(v -> {
