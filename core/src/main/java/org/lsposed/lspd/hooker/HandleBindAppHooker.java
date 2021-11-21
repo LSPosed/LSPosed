@@ -65,7 +65,9 @@ public class HandleBindAppHooker extends XC_MethodHook {
             XposedInit.loadedPackagesInProcess.add(reportedPackageName);
             LoadedApk loadedApk = activityThread.getPackageInfoNoCheck(appInfo, compatInfo);
 
-            XResources.setPackageNameForResDir(appInfo.packageName, loadedApk.getResDir());
+            if (!XposedInit.disableResources) {
+                XResources.setPackageNameForResDir(appInfo.packageName, loadedApk.getResDir());
+            }
 
             String processName = (String) XposedHelpers.getObjectField(bindData, "processName");
 
