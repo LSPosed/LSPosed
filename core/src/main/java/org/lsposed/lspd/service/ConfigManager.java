@@ -79,7 +79,6 @@ import java.util.zip.ZipFile;
 public class ConfigManager {
     private static ConfigManager instance = null;
 
-    private static final int DB_VERSION = 2;
     private final SQLiteDatabase db =
             SQLiteDatabase.openOrCreateDatabase(ConfigFileManager.dbPath, null);
 
@@ -325,6 +324,7 @@ public class ConfigManager {
                         values.put("apk_path", ConfigFileManager.managerApkPath.toString());
                         // dummy module for config
                         db.insertWithOnConflict("modules", null, values, SQLiteDatabase.CONFLICT_IGNORE);
+                        db.setVersion(1);
                     });
                 case 1:
                     executeInTransaction(() -> {
@@ -335,18 +335,32 @@ public class ConfigManager {
                         createConfigTable.execute();
                         createScopeTable.execute();
                         db.compileStatement("CREATE INDEX IF NOT EXISTS configs_idx ON configs (module_pkg_name, user_id);").execute();
-                        db.compileStatement("INSERT INTO scope SELECT * FROM old_scope;").execute();
-                        db.compileStatement("INSERT INTO configs SELECT * FROM old_configs;").execute();
+                        executeInTransaction(() -> {
+                            try {
+                                db.compileStatement("INSERT INTO scope SELECT * FROM old_scope;").execute();
+                            } catch (Throwable e) {
+                                Log.w(TAG, "migrate scope", e);
+                            }
+                        });
+                        executeInTransaction(() -> {
+                            try {
+                                executeInTransaction(() -> db.compileStatement("INSERT INTO configs SELECT * FROM old_configs;").execute());
+                            } catch (Throwable e) {
+                                Log.w(TAG, "migrate config", e);
+                            }
+                        });
                         db.compileStatement("DROP TABLE old_scope;").execute();
                         db.compileStatement("DROP TABLE old_configs;").execute();
+                        db.setVersion(2);
                     });
                 default:
                     break;
             }
-            db.setVersion(DB_VERSION);
-        } catch (Throwable e) {
+        } catch (
+                Throwable e) {
             Log.e(TAG, "init db", e);
         }
+
     }
 
     private List<ProcessScope> getAssociatedProcesses(Application app) throws RemoteException {
@@ -798,7 +812,7 @@ public class ConfigManager {
     public boolean enableModule(String packageName, ApplicationInfo info) {
         if (packageName.equals("lspd") || !updateModuleApkPath(packageName, getModuleApkPath(info), false))
             return false;
-        boolean changed = executeInTransaction(()->{
+        boolean changed = executeInTransaction(() -> {
             ContentValues values = new ContentValues();
             values.put("enabled", 1);
             return db.update("modules", values, "module_pkg_name = ?", new String[]{packageName}) > 0;
