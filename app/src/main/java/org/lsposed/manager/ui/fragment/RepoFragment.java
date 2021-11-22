@@ -112,6 +112,17 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
         RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
         binding.progress.setVisibilityAfterHide(View.GONE);
         repoLoader.addListener(this);
+
+        /*
+          CollapsingToolbarLayout consumes window insets, causing child views not
+          receiving window insets.
+          See https://github.com/material-components/material-components-android/issues/1310
+
+          Insets can be handled by RikkaX Insets, so we can manually set
+          OnApplyWindowInsetsListener to null.
+         */
+
+        binding.collapsingToolbarLayout.setOnApplyWindowInsetsListener(null);
         return binding.getRoot();
     }
 

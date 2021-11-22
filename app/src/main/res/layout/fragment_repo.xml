@@ -31,9 +31,11 @@
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="false"
+        app:fitsSystemWindowsInsets="top">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="?attr/collapsingToolbarLayoutMediumSize"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
@@ -69,9 +71,9 @@
             android:fadeScrollbars="true"
             android:scrollbarStyle="insideOverlay"
             android:scrollbars="vertical"
-            app:borderTopVisibility="whenTop"
-            app:borderTopDrawable="@null"
             app:borderBottomVisibility="never"
+            app:borderTopDrawable="@null"
+            app:borderTopVisibility="whenTop"
             app:fitsSystemWindowsInsets="bottom" />
     </FrameLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
