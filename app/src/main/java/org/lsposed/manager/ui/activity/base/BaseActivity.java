@@ -48,6 +48,8 @@ import rikka.material.app.MaterialActivity;
 
 public class BaseActivity extends MaterialActivity {
 
+    private static Bitmap icon = null;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,18 +81,18 @@ public class BaseActivity extends MaterialActivity {
         for (var task : getSystemService(ActivityManager.class).getAppTasks()) {
             task.setExcludeFromRecents(false);
         }
-        Bitmap icon;
-        var drawable = getApplicationInfo().loadIcon(getPackageManager());
-        if (drawable instanceof BitmapDrawable) {
-            icon = ((BitmapDrawable) drawable).getBitmap();
-        } else {
-            icon = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-            final Canvas canvas = new Canvas(icon);
-            drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-            drawable.draw(canvas);
+        if (icon == null) {
+            var drawable = getApplicationInfo().loadIcon(getPackageManager());
+            if (drawable instanceof BitmapDrawable) {
+                icon = ((BitmapDrawable) drawable).getBitmap();
+            } else {
+                icon = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+                final Canvas canvas = new Canvas(icon);
+                drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+                drawable.draw(canvas);
+            }
         }
         setTaskDescription(new ActivityManager.TaskDescription(getTitle().toString(), icon));
-        icon.recycle();
     }
 
     @Override
