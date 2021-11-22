@@ -68,9 +68,7 @@ public class MainActivity extends BaseActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        if (savedInstanceState == null) {
-            handleIntent(getIntent());
-        }
+        handleIntent(getIntent());
     }
 
     @Override
