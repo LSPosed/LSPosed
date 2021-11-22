@@ -31,26 +31,24 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
+        android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="?attr/actionBarSize"
             android:elevation="0dp"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:layout_scrollEffect="compress" />
+            android:minHeight="?attr/actionBarSize"
+            app:fitsSystemWindowsInsets="top"
+            app:layout_scrollFlags="scroll|enterAlways" />
 
         <rikka.widget.switchbar.SwitchBar
             android:id="@+id/master_switch"
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            app:switchOnText="@string/enable_module"
-            app:switchOffText="@string/enable_module"
+            android:layout_height="wrap_content"
             app:layout_scrollFlags="scroll|enterAlways"
-            app:layout_scrollEffect="compress" />
+            app:switchOffText="@string/enable_module"
+            app:switchOnText="@string/enable_module" />
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/progress"
@@ -69,9 +67,9 @@
         tools:ignore="MissingPrefix">
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/swipeRefreshLayout">
+            android:layout_height="match_parent">
 
             <org.lsposed.manager.ui.widget.EmptyStateRecyclerView
                 android:id="@+id/recyclerView"
@@ -81,9 +79,9 @@
                 android:fadeScrollbars="true"
                 android:scrollbarStyle="insideOverlay"
                 android:scrollbars="vertical"
-                app:borderTopVisibility="whenTop"
-                app:borderTopDrawable="@null"
                 app:borderBottomVisibility="never"
+                app:borderTopDrawable="@null"
+                app:borderTopVisibility="whenTop"
                 app:fitsSystemWindowsInsets="bottom" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </LinearLayout>

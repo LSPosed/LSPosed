@@ -30,17 +30,16 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
+        android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="?attr/actionBarSize"
             android:elevation="0dp"
-            app:layout_scrollFlags="scroll|enterAlways|snap"
-            app:layout_scrollEffect="compress" />
+            android:minHeight="?attr/actionBarSize"
+            app:fitsSystemWindowsInsets="top"
+            app:layout_scrollFlags="scroll|enterAlways" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/sliding_tabs"
@@ -78,9 +77,9 @@
             android:fadeScrollbars="true"
             android:scrollbarStyle="insideOverlay"
             android:scrollbars="vertical"
-            app:borderTopVisibility="whenTop"
-            app:borderTopDrawable="@null"
             app:borderBottomVisibility="never"
+            app:borderTopDrawable="@null"
+            app:borderTopVisibility="whenTop"
             app:fitsSystemWindowsInsets="bottom" />
     </HorizontalScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

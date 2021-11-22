@@ -31,8 +31,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
+        android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
@@ -40,6 +39,7 @@
             android:layout_height="wrap_content"
             android:elevation="0dp"
             android:minHeight="?attr/actionBarSize"
+            app:fitsSystemWindowsInsets="top"
             app:layout_scrollEffect="none"
             app:layout_scrollFlags="scroll|enterAlways" />
 
