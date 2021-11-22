@@ -23,23 +23,18 @@ package org.lsposed.manager.ui.activity.base;
 import android.app.ActivityManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Window;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 
 import com.google.android.material.color.DynamicColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import org.lsposed.manager.App;
 import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
@@ -84,7 +79,16 @@ public class BaseActivity extends MaterialActivity {
         for (var task : getSystemService(ActivityManager.class).getAppTasks()) {
             task.setExcludeFromRecents(false);
         }
-        Bitmap icon = ((BitmapDrawable) getApplicationInfo().loadIcon(getPackageManager())).getBitmap();
+        Bitmap icon;
+        var drawable = getApplicationInfo().loadIcon(getPackageManager());
+        if (drawable instanceof BitmapDrawable) {
+            icon = ((BitmapDrawable) drawable).getBitmap();
+        } else {
+            icon = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+            final Canvas canvas = new Canvas(icon);
+            drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+            drawable.draw(canvas);
+        }
         setTaskDescription(new ActivityManager.TaskDescription(getTitle().toString(), icon));
         icon.recycle();
     }
