@@ -143,11 +143,11 @@ public class RepoLoader {
 
                             onlineModules = modules;
                             Files.write(repoFile, bodyString.getBytes(StandardCharsets.UTF_8));
-                            for (Listener listener : listeners) {
-                                listener.repoLoaded();
-                            }
                             synchronized (this) {
                                 repoLoaded = true;
+                            }
+                            for (Listener listener : listeners) {
+                                listener.repoLoaded();
                             }
                         } catch (Throwable t) {
                             Log.e(App.TAG, Log.getStackTraceString(t));
