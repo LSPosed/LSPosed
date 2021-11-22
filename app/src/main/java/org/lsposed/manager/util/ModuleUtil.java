@@ -181,7 +181,7 @@ public final class ModuleUtil {
     }
 
     public int getEnabledModulesCount() {
-        return enabledModules.size();
+        return isReloading ? -1 : enabledModules.size();
     }
 
     public void addListener(ModuleListener listener) {

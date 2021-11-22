@@ -228,6 +228,7 @@ public class HomeFragment extends BaseFragment implements RepoLoader.Listener, M
 
     @Override
     public void onModulesReloaded() {
+        if (repoLoader.isRepoLoaded()) repoLoaded();
         setModulesSummary(moduleUtil.getEnabledModulesCount());
     }
 
@@ -259,7 +260,7 @@ public class HomeFragment extends BaseFragment implements RepoLoader.Listener, M
     }
 
     private void setModulesSummary(int moduleCount) {
-        runOnUiThread(() -> binding.modulesSummary.setText(getResources().getQuantityString(R.plurals.modules_enabled_count, moduleCount, moduleCount)));
+        runOnUiThread(() -> binding.modulesSummary.setText(moduleCount == - 1? getString(R.string.loading) : getResources().getQuantityString(R.plurals.modules_enabled_count, moduleCount, moduleCount)));
     }
 
     @Override
