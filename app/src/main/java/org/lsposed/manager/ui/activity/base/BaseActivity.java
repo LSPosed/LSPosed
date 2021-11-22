@@ -27,6 +27,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
@@ -83,27 +84,8 @@ public class BaseActivity extends MaterialActivity {
         for (var task : getSystemService(ActivityManager.class).getAppTasks()) {
             task.setExcludeFromRecents(false);
         }
-        Bitmap icon;
-        try {
-            var res = getResources().getDrawable(R.mipmap.ic_launcher, getTheme());
-            var size = getResources().getDimensionPixelSize(
-                    android.R.dimen.app_icon_size);
-            var tmp = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
-            res.setBounds(new Rect(0, 0, size, size));
-            Canvas c = new Canvas(tmp);
-            res.draw(c);
-            var drawable = RoundedBitmapDrawableFactory.create(getResources(), tmp);
-            drawable.setBounds(new Rect(0, 0, size, size));
-            icon = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
-            c = new Canvas(icon);
-            drawable.setCircular(true);
-            drawable.draw(c);
-            tmp.recycle();
-        } catch (Throwable e) {
-            Log.w(App.TAG, "load icon", e);
-            icon = BitmapFactory.decodeResource(Resources.getSystem(), android.R.drawable.ic_dialog_info);
-        }
-        setTaskDescription(new ActivityManager.TaskDescription(getResources().getString(R.string.app_name), icon));
+        Bitmap icon = ((BitmapDrawable) getApplicationInfo().loadIcon(getPackageManager())).getBitmap();
+        setTaskDescription(new ActivityManager.TaskDescription(getTitle().toString(), icon));
         icon.recycle();
     }
 
