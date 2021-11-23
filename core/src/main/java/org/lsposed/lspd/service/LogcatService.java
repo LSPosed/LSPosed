@@ -2,20 +2,14 @@ package org.lsposed.lspd.service;
 
 import android.annotation.SuppressLint;
 import android.os.ParcelFileDescriptor;
+import android.os.SELinux;
 import android.os.SystemProperties;
 import android.system.Os;
 import android.util.Log;
 
-import org.lsposed.lspd.BuildConfig;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileDescriptor;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
@@ -36,6 +30,29 @@ public class LogcatService implements Runnable {
         String libraryPath = System.getProperty("lsp.library.path");
         System.load(libraryPath + "/" + System.mapLibraryName("daemon"));
         ConfigFileManager.moveLogDir();
+
+        // Meizu devices set this prop and prevent debug logs from being recorded
+        if (SystemProperties.getInt("persist.sys.log_reject_level", 0) > 0) {
+            SystemProperties.set("persist.sys.log_reject_level", "0");
+        }
+
+        getprop();
+    }
+
+    private static void getprop() {
+        // multithreaded process can not change their context type,
+        // start a new process to set restricted context to filter privacy props
+        var cmd = "echo -n u:r:untrusted_app:s0 > /proc/thread-self/attr/current; getprop";
+        try {
+            SELinux.setFSCreateContext("u:object_r:app_data_file:s0");
+            new ProcessBuilder("sh", "-c", cmd)
+                    .redirectOutput(ConfigFileManager.getpropsLogPath())
+                    .start();
+        } catch (IOException e) {
+            Log.e(TAG, "getprop: ", e);
+        } finally {
+            SELinux.setFSCreateContext(null);
+        }
     }
 
     private native void runLogcat();
@@ -43,10 +60,6 @@ public class LogcatService implements Runnable {
     @Override
     public void run() {
         Log.i(TAG, "start running");
-        // Meizu devices set this prop and prevent debug logs from being recorded
-        if (BuildConfig.DEBUG && SystemProperties.getInt("persist.sys.log_reject_level", 0) > 0) {
-            SystemProperties.set("persist.sys.log_reject_level", "0");
-        }
         runLogcat();
         Log.i(TAG, "stopped");
     }
@@ -80,6 +93,7 @@ public class LogcatService implements Runnable {
         if (fd == -1) return;
         try {
             var jfd = new FileDescriptor();
+            //noinspection JavaReflectionMemberAccess DiscouragedPrivateApi
             jfd.getClass().getDeclaredMethod("setInt$", int.class).invoke(jfd, fd);
             var stat = Os.fstat(jfd);
             if (stat.st_nlink == 0) {
@@ -112,42 +126,6 @@ public class LogcatService implements Runnable {
             start();
         });
         thread.start();
-        getprop();
-    }
-
-    private void getprop() {
-        try {
-            var sb = new StringBuilder();
-            var t = new Thread(() -> {
-                try (var magiskPathReader = new BufferedReader(new InputStreamReader(new ProcessBuilder("magisk", "--path").start().getInputStream()))) {
-                    var magiskPath = magiskPathReader.readLine();
-                    var sh = magiskPath + "/.magisk/busybox/sh";
-                    var pid = Os.getpid();
-                    var tid = Os.gettid();
-                    try (var exec = new FileOutputStream("/proc/" + pid + "/task/" + tid + "/attr/exec")) {
-                        var untrusted = "u:r:untrusted_app:s0";
-                        exec.write(untrusted.getBytes());
-                    }
-                    try (var rd = new BufferedReader(new InputStreamReader(new ProcessBuilder(sh, "-c", "getprop").start().getInputStream()))) {
-                        String line;
-                        while ((line = rd.readLine()) != null) {
-                            sb.append(line);
-                            sb.append(System.lineSeparator());
-                        }
-                    }
-                } catch (IOException e) {
-                    Log.e(TAG, "GetProp: ", e);
-                }
-            });
-            t.start();
-            t.join();
-            var propsLogPath = ConfigFileManager.getpropsLogPath();
-            try (var writer = new BufferedWriter(new FileWriter(propsLogPath))) {
-                writer.append(sb);
-            }
-        } catch (IOException | InterruptedException | NullPointerException e) {
-            Log.e(TAG, "GetProp: ", e);
-        }
     }
 
     public void startVerbose() {
@@ -166,7 +144,7 @@ public class LogcatService implements Runnable {
         }
     }
 
-    static private Path fdToPath(int fd) {
+    private static Path fdToPath(int fd) {
         if (fd == -1) return null;
         else return Paths.get("/proc/self/fd", String.valueOf(fd));
     }
