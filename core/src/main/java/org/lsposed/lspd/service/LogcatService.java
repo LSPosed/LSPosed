@@ -7,11 +7,9 @@ import android.os.SystemProperties;
 import android.system.Os;
 import android.util.Log;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
@@ -42,21 +40,18 @@ public class LogcatService implements Runnable {
     }
 
     private static void getprop() {
+        // multithreaded process can not change their context type,
+        // start a new process to set restricted context to filter privacy props
         var cmd = "echo -n u:r:untrusted_app:s0 > /proc/thread-self/attr/current; getprop";
         try {
             SELinux.setFSCreateContext("u:object_r:app_data_file:s0");
-            var proc = new ProcessBuilder("sh", "-c", cmd)
+            new ProcessBuilder("sh", "-c", cmd)
                     .redirectOutput(ConfigFileManager.getpropsLogPath())
                     .start();
-            var reader = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
-            try (reader) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    Log.w(TAG, "getprop: " + line);
-                }
-            }
         } catch (IOException e) {
             Log.e(TAG, "getprop: ", e);
+        } finally {
+            SELinux.setFSCreateContext(null);
         }
     }
 
