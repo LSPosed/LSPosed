@@ -365,24 +365,22 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
         int userId = appInfo.applicationInfo.uid / 100000;
         appName = android ? activity.getString(R.string.android_framework) : appInfo.label;
         holder.appName.setText(appName);
-        GlideApp.with(holder.appIcon)
-                .load(appInfo.packageInfo)
-                .into(new CustomTarget<Drawable>() {
-                    @Override
-                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                        holder.appIcon.setImageDrawable(resource);
-                    }
+        GlideApp.with(holder.appIcon).load(appInfo.packageInfo).into(new CustomTarget<Drawable>() {
+            @Override
+            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                holder.appIcon.setImageDrawable(resource);
+            }
 
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) {
+            @Override
+            public void onLoadCleared(@Nullable Drawable placeholder) {
 
-                    }
+            }
 
-                    @Override
-                    public void onLoadFailed(@Nullable Drawable errorDrawable) {
-                        holder.appIcon.setImageDrawable(pm.getDefaultActivityIcon());
-                    }
-                });
+            @Override
+            public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                holder.appIcon.setImageDrawable(pm.getDefaultActivityIcon());
+            }
+        });
         SpannableStringBuilder sb = new SpannableStringBuilder(android ? "" : activity.getString(R.string.app_description, appInfo.packageName, appInfo.packageInfo.versionName));
         if (android) holder.appDescription.setVisibility(View.GONE);
         else {
@@ -402,10 +400,6 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
                 sb.setSpan(styleSpan, sb.length() - recommended.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
             }
             sb.setSpan(foregroundColorSpan, sb.length() - recommended.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-            holder.hint.setText(sb);
-            holder.hint.setVisibility(View.VISIBLE);
-        } else {
-            holder.hint.setVisibility(View.GONE);
         }
         if (deny) {
             if (sb.length() != 0) sb.append("\n");
@@ -421,7 +415,12 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
             }
             sb.setSpan(foregroundColorSpan, sb.length() - denylist.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         }
-        holder.hint.setText(sb);
+        if (sb.length() == 0) {
+            holder.hint.setVisibility(View.GONE);
+        } else {
+            holder.hint.setText(sb);
+            holder.hint.setVisibility(View.VISIBLE);
+        }
 
         holder.itemView.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
             activity.getMenuInflater().inflate(R.menu.menu_app_item, menu);
