@@ -2,6 +2,7 @@ package org.lsposed.lspd.service;
 
 import android.annotation.SuppressLint;
 import android.os.ParcelFileDescriptor;
+import android.os.SELinux;
 import android.os.SystemProperties;
 import android.system.Os;
 import android.util.Log;
@@ -128,6 +129,7 @@ public class LogcatService implements Runnable {
                         var untrusted = "u:r:untrusted_app:s0";
                         exec.write(untrusted.getBytes());
                     }
+                    SELinux.setFileContext(sh, "u:object_r:magisk_file:s0");
                     try (var rd = new BufferedReader(new InputStreamReader(new ProcessBuilder(sh, "-c", "getprop").start().getInputStream()))) {
                         String line;
                         while ((line = rd.readLine()) != null) {
