@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:elevation="0dp"
             android:minHeight="?attr/actionBarSize"
-            app:fitsSystemWindowsInsets="top"
+            app:layout_fitsSystemWindowsInsets="top"
             app:layout_scrollFlags="scroll|enterAlways" />
 
         <rikka.widget.switchbar.SwitchBar
