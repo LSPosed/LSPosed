@@ -175,7 +175,7 @@ dependencies {
     implementation("androidx.slidingpanelayout:slidingpanelayout:1.2.0-beta01")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("com.github.bumptech.glide:glide:$glideVersion")
-    implementation("com.google.android.material:material:1.5.0-alpha05")
+    implementation("com.google.android.material:material:1.5.0-beta01")
     implementation("com.google.code.gson:gson:2.8.9")
     implementation(platform("com.squareup.okhttp3:okhttp-bom:4.9.2"))
     implementation("com.squareup.okhttp3:okhttp")
