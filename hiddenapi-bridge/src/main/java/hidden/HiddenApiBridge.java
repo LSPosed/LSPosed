@@ -109,8 +109,4 @@ public class HiddenApiBridge {
             return Os.ioctlInt(fd, cmd);
         }
     }
-
-    public static boolean VMRuntime_is64Bit() {
-        return VMRuntime.getRuntime().is64Bit();
-    }
 }
