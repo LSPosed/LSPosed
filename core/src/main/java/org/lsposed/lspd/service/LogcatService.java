@@ -122,15 +122,15 @@ public class LogcatService implements Runnable {
             var t = new Thread(() -> {
                 try (var magiskPathReader = new BufferedReader(new InputStreamReader(new ProcessBuilder("magisk", "--path").start().getInputStream()))) {
                     var magiskPath = magiskPathReader.readLine();
-                    var sh = magiskPath + "/.magisk/busybox/sh";
+                    var bb = magiskPath + "/.magisk/busybox/busybox";
                     var pid = Os.getpid();
                     var tid = Os.gettid();
                     try (var exec = new FileOutputStream("/proc/" + pid + "/task/" + tid + "/attr/exec")) {
                         var untrusted = "u:r:untrusted_app:s0";
                         exec.write(untrusted.getBytes());
                     }
-                    SELinux.setFileContext(sh, "u:object_r:magisk_file:s0");
-                    try (var rd = new BufferedReader(new InputStreamReader(new ProcessBuilder(sh, "-c", "getprop").start().getInputStream()))) {
+                    SELinux.setFileContext(bb, "u:object_r:magisk_file:s0");
+                    try (var rd = new BufferedReader(new InputStreamReader(new ProcessBuilder(bb, "sh", "-c", "getprop").start().getInputStream()))) {
                         String line;
                         while ((line = rd.readLine()) != null) {
                             sb.append(line);
