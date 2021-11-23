@@ -107,6 +107,7 @@ public class LogsFragment extends BaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentLogsBinding.inflate(inflater, container, false);
+        binding.appBar.setLiftable(true);
         setupToolbar(binding.toolbar, R.string.Logs, R.menu.menu_logs);
 
         binding.slidingTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -127,9 +128,12 @@ public class LogsFragment extends BaseFragment {
             }
         });
 
+        binding.toolbar.setSubtitle(ConfigManager.isVerboseLogEnabled() ? R.string.enabled_verbose_log : R.string.disabled_verbose_log);
+
         adapter = new LogsAdapter();
         RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
         binding.recyclerView.setAdapter(adapter);
+        binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setLifted(!top));
         layoutManager = new LinearLayoutManager(requireActivity());
         binding.recyclerView.setLayoutManager(layoutManager);
         return binding.getRoot();

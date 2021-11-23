@@ -98,6 +98,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
         if (module == null) return binding.getRoot();
         String modulePackageName = module.getName();
         String moduleName = module.getDescription();
+        binding.appBar.setLiftable(true);
         setupToolbar(binding.toolbar, moduleName, R.menu.menu_repo_item);
         binding.toolbar.setSubtitle(modulePackageName);
         binding.viewPager.setAdapter(new PagerAdapter());
@@ -446,6 +447,36 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
                 return new PagerAdapter.ReadmeViewHolder(ItemRepoReadmeBinding.inflate(getLayoutInflater(), parent, false));
             } else {
                 return new PagerAdapter.RecyclerviewBinding(ItemRepoRecyclerviewBinding.inflate(getLayoutInflater(), parent, false));
+            }
+        }
+
+        @Override
+        public void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
+            super.onViewDetachedFromWindow(holder);
+            switch (holder.getItemViewType()) {
+                case 0:
+                    holder.scrollView.getBorderViewDelegate().setBorderVisibilityChangedListener(null);
+                    break;
+                case 1:
+                case 2:
+                    holder.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener(null);
+                    break;
+            }
+        }
+
+        @Override
+        public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
+            super.onViewAttachedToWindow(holder);
+            switch (holder.getItemViewType()) {
+                case 0:
+                    binding.appBar.setLifted(!holder.scrollView.getBorderViewDelegate().isShowingTopBorder());
+                    holder.scrollView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setLifted(!top));
+                    break;
+                case 1:
+                case 2:
+                    binding.appBar.setLifted(!holder.recyclerView.getBorderViewDelegate().isShowingTopBorder());
+                    holder.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setLifted(!top));
+                    break;
             }
         }
 

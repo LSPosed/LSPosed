@@ -64,6 +64,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -71,7 +72,7 @@ import rikka.core.util.LabelComparator;
 import rikka.core.util.ResourceUtils;
 import rikka.recyclerview.RecyclerViewKt;
 
-public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
+public class RepoFragment extends BaseFragment implements RepoLoader.Listener, ModuleUtil.ModuleListener {
     protected FragmentRepoBinding binding;
     protected SearchView searchView;
     private SearchView.OnQueryTextListener mSearchListener;
@@ -79,6 +80,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
     private boolean preLoadWebview = true;
 
     private final RepoLoader repoLoader = RepoLoader.getInstance();
+    private final ModuleUtil moduleUtil = ModuleUtil.getInstance();
     private RepoAdapter adapter;
 
     @Override
@@ -103,6 +105,8 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentRepoBinding.inflate(getLayoutInflater(), container, false);
+        binding.appBar.setLiftable(true);
+        binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setLifted(!top));
         setupToolbar(binding.toolbar, R.string.module_repo, R.menu.menu_repo);
         adapter = new RepoAdapter();
         adapter.setHasStableIds(true);
@@ -112,18 +116,35 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
         RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
         binding.progress.setVisibilityAfterHide(View.GONE);
         repoLoader.addListener(this);
+        moduleUtil.addListener(this);
+        updateRepoSummary();
 
-        /*
-          CollapsingToolbarLayout consumes window insets, causing child views not
-          receiving window insets.
-          See https://github.com/material-components/material-components-android/issues/1310
-
-          Insets can be handled by RikkaX Insets, so we can manually set
-          OnApplyWindowInsetsListener to null.
-         */
-
-        binding.collapsingToolbarLayout.setOnApplyWindowInsetsListener(null);
         return binding.getRoot();
+    }
+
+    private void updateRepoSummary() {
+        final int[] count = new int[]{0};
+        HashSet<String> processedModules = new HashSet<>();
+        var modules = moduleUtil.getModules();
+        if (modules != null) {
+            modules.forEach((k, v) -> {
+                        if (!processedModules.contains(k.first)) {
+                            var ver = repoLoader.getModuleLatestVersion(k.first);
+                            if (ver != null && ver.upgradable(v.versionCode, v.versionName)) {
+                                ++count[0];
+                            }
+                            processedModules.add(k.first);
+                        }
+                    }
+            );
+        }
+        runOnUiThread(() -> {
+            if (count[0] > 0) {
+                binding.toolbar.setSubtitle(getResources().getQuantityString(R.plurals.module_repo_upgradable, count[0], count[0]));
+            } else {
+                binding.toolbar.setSubtitle(getResources().getString(R.string.module_repo_up_to_date));
+            }
+        });
     }
 
     @Override
@@ -163,6 +184,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
             binding.progress.hide();
             adapter.setData(repoLoader.getOnlineModules());
         });
+        updateRepoSummary();
     }
 
     @Override
@@ -170,6 +192,12 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
         if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
             Snackbar.make(binding.snackbar, getString(R.string.repo_load_failed, t.getLocalizedMessage()), Snackbar.LENGTH_SHORT).show();
         }
+        updateRepoSummary();
+    }
+
+    @Override
+    public void onModulesReloaded() {
+        updateRepoSummary();
     }
 
     @Override
@@ -219,7 +247,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener {
             holder.appDescription.setVisibility(View.VISIBLE);
             holder.appDescription.setText(sb);
             sb = new SpannableStringBuilder();
-            ModuleUtil.InstalledModule installedModule = ModuleUtil.getInstance().getModule(module.getName());
+            ModuleUtil.InstalledModule installedModule = moduleUtil.getModule(module.getName());
             if (installedModule != null) {
                 var ver = repoLoader.getModuleLatestVersion(installedModule.packageName);
                 if (ver != null && ver.upgradable(installedModule.versionCode, installedModule.versionName)) {

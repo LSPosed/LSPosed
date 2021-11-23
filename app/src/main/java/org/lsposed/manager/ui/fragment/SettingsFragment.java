@@ -72,22 +72,19 @@ public class SettingsFragment extends BaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
+        binding.appBar.setLiftable(true);
         setupToolbar(binding.toolbar, R.string.Settings);
         if (savedInstanceState == null) {
             getChildFragmentManager().beginTransaction()
                     .add(R.id.container, new PreferenceFragment()).commitNow();
         }
-
-        /*
-          CollapsingToolbarLayout consumes window insets, causing child views not
-          receiving window insets.
-          See https://github.com/material-components/material-components-android/issues/1310
-
-          Insets can be handled by RikkaX Insets, so we can manually set
-          OnApplyWindowInsetsListener to null.
-         */
-
-        binding.collapsingToolbarLayout.setOnApplyWindowInsetsListener(null);
+        if (ConfigManager.isBinderAlive()) {
+            binding.toolbar.setSubtitle(String.format(Locale.ROOT, "%s (%d) - %s",
+                    ConfigManager.getXposedVersionName(), ConfigManager.getXposedVersionCode(), ConfigManager.getApi()));
+        } else {
+            binding.toolbar.setSubtitle(String.format(Locale.ROOT, "%s (%d) - %s",
+                    BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE, getString(R.string.not_installed)));
+        }
         return binding.getRoot();
     }
 
@@ -311,6 +308,7 @@ public class SettingsFragment extends BaseFragment {
         public RecyclerView onCreateRecyclerView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
             BorderRecyclerView recyclerView = (BorderRecyclerView) super.onCreateRecyclerView(inflater, parent, savedInstanceState);
             RecyclerViewKt.fixEdgeEffect(recyclerView, false, true);
+            recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> parentFragment.binding.appBar.setLifted(!top));
             return recyclerView;
         }
 

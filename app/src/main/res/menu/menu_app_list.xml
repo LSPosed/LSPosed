@@ -23,8 +23,8 @@
     <item
         android:id="@+id/menu_search"
         android:actionViewClass="androidx.appcompat.widget.SearchView"
-        android:showAsAction="ifRoom"
-        android:title="" />
+        android:icon="@drawable/ic_baseline_search_24"
+        android:showAsAction="ifRoom|collapseActionView" />
 
     <item
         android:id="@+id/menu_launch"

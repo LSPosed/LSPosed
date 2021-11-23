@@ -68,7 +68,6 @@ public class AppListFragment extends BaseFragment {
             return binding.getRoot();
         }
         binding.appBar.setLiftable(true);
-        binding.appBar.setLifted(true);
         String title;
         if (module.userId != 0) {
             title = String.format(Locale.ROOT, "%s (%d)", module.getAppName(), module.userId);
@@ -91,6 +90,7 @@ public class AppListFragment extends BaseFragment {
         binding.recyclerView.setAdapter(scopeAdapter);
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
+        binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setLifted(!top));
         RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
         binding.swipeRefreshLayout.setOnRefreshListener(() -> scopeAdapter.refresh());
 

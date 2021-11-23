@@ -84,6 +84,8 @@
     <string name="menuReload">Reload</string>
     <string name="logs_clear_failed_2">Failed to clear the log</string>
     <string name="menu_enable_word_wrap">Word Wrap</string>
+    <string name="enabled_verbose_log">Verbose log enabled</string>
+    <string name="disabled_verbose_log">Verbose log disabled</string>
 
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Xposed module is not activated yet</string>

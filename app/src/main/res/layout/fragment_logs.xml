@@ -34,11 +34,10 @@
         android:fitsSystemWindows="false"
         app:fitsSystemWindowsInsets="top">
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/collapsing_toolbar_layout"
-            style="?attr/collapsingToolbarLayoutMediumStyle"
+        <com.google.android.material.appbar.SubtitleCollapsingToolbarLayout
+            style="?attr/collapsingToolbarLayoutLargeStyle"
             android:layout_width="match_parent"
-            android:layout_height="?attr/collapsingToolbarLayoutMediumSize"
+            android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:titleCollapseMode="scale">
 
@@ -48,7 +47,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:elevation="0dp"
                 app:layout_collapseMode="pin" />
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
+        </com.google.android.material.appbar.SubtitleCollapsingToolbarLayout>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/sliding_tabs"
@@ -56,7 +55,6 @@
             android:layout_height="@dimen/tab_layout_height"
             android:layout_gravity="bottom"
             android:background="@android:color/transparent"
-            app:layout_scrollFlags="scroll|enterAlways"
             app:tabIndicatorAnimationMode="elastic">
 
             <com.google.android.material.tabs.TabItem
