@@ -6,6 +6,7 @@ import static org.lsposed.lspd.service.ServiceManager.toGlobalNamespace;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.os.ParcelFileDescriptor;
+import android.os.Process;
 import android.os.SELinux;
 import android.os.SharedMemory;
 import android.system.ErrnoException;
@@ -149,8 +150,8 @@ public class ConfigFileManager {
 
     public static boolean chattr0(Path path) {
         try {
-            var dir = Os.open(path.toAbsolutePath().toString(), OsConstants.O_RDONLY, 0);
-            HiddenApiBridge.Os_ioctlInt(dir, HiddenApiBridge.VMRuntime_is64Bit() ? 0x40086602 : 0x40046602, 0);
+            var dir = Os.open(path.toString(), OsConstants.O_RDONLY, 0);
+            HiddenApiBridge.Os_ioctlInt(dir, Process.is64Bit() ? 0x40086602 : 0x40046602, 0);
             Os.close(dir);
             return true;
         } catch (Throwable e) {
@@ -189,7 +190,7 @@ public class ConfigFileManager {
 
     static File getpropsLogPath() throws IOException {
         createLogDirPath();
-        return logDirPath.resolve("props.log").toFile();
+        return logDirPath.resolve("props.txt").toFile();
     }
 
     static Map<String, ParcelFileDescriptor> getLogs() {

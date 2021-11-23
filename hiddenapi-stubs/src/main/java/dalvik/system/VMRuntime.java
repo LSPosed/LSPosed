@@ -6,7 +6,8 @@ public class VMRuntime {
         throw new RuntimeException("Stub!");
     }
 
+    // Use `Process.is64Bit()` instead
     public native boolean is64Bit();
-    
+
     public native String vmInstructionSet();
 }
