@@ -24,8 +24,22 @@ import java.nio.file.Paths
 import java.time.Instant
 
 plugins {
+    id("org.gradle.idea")
     id("com.android.application")
     id("androidx.navigation.safeargs")
+}
+
+// workaround for AS. TODO: Remove when AS 7.1 stable release
+val dataBinding = file("${project.buildDir}/generated/data_binding_base_class_source_out/debug/out")
+sourceSets {
+    create("dataBinding") {
+        java.srcDir(dataBinding)
+    }
+}
+idea {
+    module {
+        generatedSourceDirs.add(dataBinding)
+    }
 }
 
 val androidTargetSdkVersion: Int by rootProject.extra
@@ -165,9 +179,9 @@ dependencies {
     annotationProcessor("com.github.bumptech.glide:compiler:$glideVersion")
     implementation("androidx.activity:activity:1.4.0")
     implementation("androidx.browser:browser:1.4.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.1")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.2")
     implementation("androidx.core:core:1.7.0")
-    implementation("androidx.fragment:fragment:1.4.0-rc01")
+    implementation("androidx.fragment:fragment:1.4.0")
     implementation("androidx.navigation:navigation-fragment:$navVersion")
     implementation("androidx.navigation:navigation-ui:$navVersion")
     implementation("androidx.preference:preference:1.1.1")
