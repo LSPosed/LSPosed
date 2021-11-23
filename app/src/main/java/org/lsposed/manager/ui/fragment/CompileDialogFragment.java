@@ -34,13 +34,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.fragment.app.FragmentManager;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.lsposed.manager.App;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.FragmentCompileDialogBinding;
 import org.lsposed.manager.receivers.LSPManagerServiceHolder;
+import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
 
 import java.lang.ref.WeakReference;
 
@@ -66,7 +66,7 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
 
         FragmentCompileDialogBinding binding = FragmentCompileDialogBinding.inflate(LayoutInflater.from(requireActivity()), null, false);
         final PackageManager pm = requireContext().getPackageManager();
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireActivity())
+        var builder = new BlurBehindDialogBuilder(requireActivity())
                 .setIcon(appInfo.loadIcon(pm))
                 .setTitle(appInfo.loadLabel(pm))
                 .setView(binding.getRoot());

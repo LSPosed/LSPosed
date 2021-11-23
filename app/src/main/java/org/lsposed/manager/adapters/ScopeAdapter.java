@@ -61,7 +61,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.checkbox.MaterialCheckBox;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.lsposed.lspd.models.Application;
@@ -70,6 +69,7 @@ import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.ItemModuleBinding;
+import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
 import org.lsposed.manager.ui.fragment.AppListFragment;
 import org.lsposed.manager.ui.fragment.CompileDialogFragment;
 import org.lsposed.manager.ui.widget.EmptyStateRecyclerView;
@@ -221,7 +221,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
         int itemId = item.getItemId();
         if (itemId == R.id.use_recommended) {
             if (!checkedList.isEmpty()) {
-                new MaterialAlertDialogBuilder(activity)
+                new BlurBehindDialogBuilder(activity)
                         .setMessage(R.string.use_recommended_message)
                         .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                             checkRecommended();
@@ -291,7 +291,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
             if (info.packageName.equals("android")) {
                 ConfigManager.reboot(false);
             } else {
-                new MaterialAlertDialogBuilder(activity)
+                new BlurBehindDialogBuilder(activity)
                         .setTitle(R.string.force_stop_dlg_title)
                         .setMessage(R.string.force_stop_dlg_text)
                         .setPositiveButton(android.R.string.ok, (dialog, which) -> ConfigManager.forceStopPackage(info.packageName, info.uid / 100000))
@@ -656,7 +656,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
     public void onBackPressed() {
         fragment.searchView.clearFocus();
         if (!refreshing && fragment.binding.masterSwitch.isChecked() && checkedList.isEmpty()) {
-            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(activity);
+            var builder = new BlurBehindDialogBuilder(activity);
             builder.setMessage(!recommendedList.isEmpty() ? R.string.no_scope_selected_has_recommended : R.string.no_scope_selected);
             if (!recommendedList.isEmpty()) {
                 builder.setPositiveButton(android.R.string.ok, (dialog, which) -> {

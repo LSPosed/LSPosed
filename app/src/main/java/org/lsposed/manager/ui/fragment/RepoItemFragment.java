@@ -44,7 +44,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
@@ -63,6 +62,7 @@ import org.lsposed.manager.repo.model.Collaborator;
 import org.lsposed.manager.repo.model.OnlineModule;
 import org.lsposed.manager.repo.model.Release;
 import org.lsposed.manager.repo.model.ReleaseAsset;
+import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
 import org.lsposed.manager.ui.widget.EmptyStateRecyclerView;
 import org.lsposed.manager.ui.widget.LinkifyTextView;
 import org.lsposed.manager.util.NavUtil;
@@ -381,7 +381,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
                     holder.viewAssets.setOnClickListener(v -> {
                         ArrayList<String> names = new ArrayList<>();
                         assets.forEach(releaseAsset -> names.add(releaseAsset.getName()));
-                        new MaterialAlertDialogBuilder(requireActivity())
+                        new BlurBehindDialogBuilder(requireActivity())
                                 .setItems(names.toArray(new String[0]), (dialog, which) -> NavUtil.startURL(requireActivity(), assets.get(which).getDownloadUrl()))
                                 .show();
                     });
