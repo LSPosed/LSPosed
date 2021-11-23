@@ -31,22 +31,32 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="false"
+        app:fitsSystemWindowsInsets="top">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar_layout"
+            style="?attr/collapsingToolbarLayoutMediumStyle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:elevation="0dp"
-            android:minHeight="?attr/actionBarSize"
-            app:layout_fitsSystemWindowsInsets="top"
-            app:layout_scrollEffect="none"
-            app:layout_scrollFlags="scroll|enterAlways" />
+            android:layout_height="?attr/collapsingToolbarLayoutMediumSize"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:titleCollapseMode="scale">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:elevation="0dp"
+                app:layout_collapseMode="pin" />
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_layout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/tab_layout_height"
+            android:layout_gravity="bottom"
             android:background="@android:color/transparent"
             app:layout_scrollFlags="scroll|enterAlways"
             app:tabGravity="center"
@@ -83,6 +93,8 @@
         android:contentDescription="@string/add_module_to_user"
         android:src="@drawable/ic_baseline_add_24"
         android:visibility="gone"
+        app:backgroundTint="?attr/colorPrimary"
+        app:tint="@color/primary_text_material_inverse"
         app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
         app:layout_fitsSystemWindowsInsets="bottom" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
