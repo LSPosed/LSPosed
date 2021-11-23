@@ -36,10 +36,11 @@
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar_layout"
-            style="?attr/collapsingToolbarLayoutMediumStyle"
+            style="?attr/collapsingToolbarLayoutLargeStyle"
             android:layout_width="match_parent"
-            android:layout_height="?attr/collapsingToolbarLayoutMediumSize"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+            android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            app:titleCollapseMode="fade">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"

@@ -47,7 +47,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
@@ -56,6 +55,7 @@ import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.FragmentLogsBinding;
 import org.lsposed.manager.databinding.ItemLogBinding;
+import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
 import org.lsposed.manager.util.SimpleStatefulAdaptor;
 
 import java.io.BufferedReader;
@@ -246,7 +246,7 @@ public class LogsFragment extends BaseFragment {
 
         @Override
         synchronized protected void onPreExecute() {
-            mProgressDialog = new MaterialAlertDialogBuilder(requireActivity()).create();
+            mProgressDialog = new BlurBehindDialogBuilder(requireActivity()).create();
             mProgressDialog.setMessage(getString(R.string.loading));
             mProgressDialog.setCancelable(false);
             handler.postDelayed(mRunnable, 300);

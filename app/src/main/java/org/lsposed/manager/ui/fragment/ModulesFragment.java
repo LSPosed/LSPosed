@@ -52,6 +52,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -61,8 +62,9 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.google.android.material.behavior.HideBottomViewOnScrollBehavior;
 import com.google.android.material.checkbox.MaterialCheckBox;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -77,6 +79,7 @@ import org.lsposed.manager.databinding.FragmentPagerBinding;
 import org.lsposed.manager.databinding.ItemModuleBinding;
 import org.lsposed.manager.databinding.ItemRepoRecyclerviewBinding;
 import org.lsposed.manager.repo.RepoLoader;
+import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
 import org.lsposed.manager.ui.widget.EmptyStateRecyclerView;
 import org.lsposed.manager.util.GlideApp;
 import org.lsposed.manager.util.ModuleUtil;
@@ -139,6 +142,18 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         }
     }
 
+    private void showFab() {
+        var layoutParams = binding.fab.getLayoutParams();
+        if (layoutParams instanceof CoordinatorLayout.LayoutParams) {
+            var coordinatorLayoutBehavior =
+                    ((CoordinatorLayout.LayoutParams) layoutParams).getBehavior();
+            if (coordinatorLayoutBehavior instanceof HideBottomViewOnScrollBehavior) {
+                //noinspection unchecked
+                ((HideBottomViewOnScrollBehavior<FloatingActionButton>) coordinatorLayoutBehavior).slideUp(binding.fab);
+            }
+        }
+    }
+
     private void updateProgress() {
         if (binding != null) {
             var position = binding.viewPager.getCurrentItem();
@@ -162,6 +177,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             @Override
             public void onPageSelected(int position) {
                 updateProgress();
+                showFab();
             }
         });
 
@@ -201,7 +217,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 }
             });
             pickAdaptor.refresh();
-            var dialog = new MaterialAlertDialogBuilder(requireActivity())
+            var dialog = new BlurBehindDialogBuilder(requireActivity())
                     .setTitle(getString(R.string.install_to_user, user.name))
                     .setView(binding.getRoot())
                     .setNegativeButton(android.R.string.cancel, null)
@@ -254,7 +270,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     }
 
     private void installModuleToUser(ModuleUtil.InstalledModule module, UserInfo user) {
-        new MaterialAlertDialogBuilder(requireActivity())
+        new BlurBehindDialogBuilder(requireActivity())
                 .setTitle(getString(R.string.install_to_user, user.name))
                 .setMessage(getString(R.string.install_to_user_message, module.getAppName(), user.name))
                 .setPositiveButton(android.R.string.ok, (dialog, which) ->
@@ -303,7 +319,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             ConfigManager.startActivityAsUserWithFeature(new Intent(ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", selectedModule.packageName, null)), selectedModule.userId);
             return true;
         } else if (itemId == R.id.menu_uninstall) {
-            new MaterialAlertDialogBuilder(requireActivity())
+            new BlurBehindDialogBuilder(requireActivity())
                     .setTitle(selectedModule.getAppName())
                     .setMessage(R.string.module_uninstall_message)
                     .setPositiveButton(android.R.string.ok, (dialog, which) ->

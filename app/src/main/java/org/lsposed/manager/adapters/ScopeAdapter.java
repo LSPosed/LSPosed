@@ -61,7 +61,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.checkbox.MaterialCheckBox;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.lsposed.lspd.models.Application;
@@ -70,6 +69,7 @@ import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.ItemModuleBinding;
+import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
 import org.lsposed.manager.ui.fragment.AppListFragment;
 import org.lsposed.manager.ui.fragment.CompileDialogFragment;
 import org.lsposed.manager.ui.widget.EmptyStateRecyclerView;
@@ -221,7 +221,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
         int itemId = item.getItemId();
         if (itemId == R.id.use_recommended) {
             if (!checkedList.isEmpty()) {
-                new MaterialAlertDialogBuilder(activity)
+                new BlurBehindDialogBuilder(activity)
                         .setMessage(R.string.use_recommended_message)
                         .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                             checkRecommended();
@@ -291,7 +291,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
             if (info.packageName.equals("android")) {
                 ConfigManager.reboot(false);
             } else {
-                new MaterialAlertDialogBuilder(activity)
+                new BlurBehindDialogBuilder(activity)
                         .setTitle(R.string.force_stop_dlg_title)
                         .setMessage(R.string.force_stop_dlg_text)
                         .setPositiveButton(android.R.string.ok, (dialog, which) -> ConfigManager.forceStopPackage(info.packageName, info.uid / 100000))
@@ -365,24 +365,22 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
         int userId = appInfo.applicationInfo.uid / 100000;
         appName = android ? activity.getString(R.string.android_framework) : appInfo.label;
         holder.appName.setText(appName);
-        GlideApp.with(holder.appIcon)
-                .load(appInfo.packageInfo)
-                .into(new CustomTarget<Drawable>() {
-                    @Override
-                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                        holder.appIcon.setImageDrawable(resource);
-                    }
+        GlideApp.with(holder.appIcon).load(appInfo.packageInfo).into(new CustomTarget<Drawable>() {
+            @Override
+            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                holder.appIcon.setImageDrawable(resource);
+            }
 
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) {
+            @Override
+            public void onLoadCleared(@Nullable Drawable placeholder) {
 
-                    }
+            }
 
-                    @Override
-                    public void onLoadFailed(@Nullable Drawable errorDrawable) {
-                        holder.appIcon.setImageDrawable(pm.getDefaultActivityIcon());
-                    }
-                });
+            @Override
+            public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                holder.appIcon.setImageDrawable(pm.getDefaultActivityIcon());
+            }
+        });
         SpannableStringBuilder sb = new SpannableStringBuilder(android ? "" : activity.getString(R.string.app_description, appInfo.packageName, appInfo.packageInfo.versionName));
         if (android) holder.appDescription.setVisibility(View.GONE);
         else {
@@ -402,10 +400,6 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
                 sb.setSpan(styleSpan, sb.length() - recommended.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
             }
             sb.setSpan(foregroundColorSpan, sb.length() - recommended.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-            holder.hint.setText(sb);
-            holder.hint.setVisibility(View.VISIBLE);
-        } else {
-            holder.hint.setVisibility(View.GONE);
         }
         if (deny) {
             if (sb.length() != 0) sb.append("\n");
@@ -421,7 +415,12 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
             }
             sb.setSpan(foregroundColorSpan, sb.length() - denylist.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         }
-        holder.hint.setText(sb);
+        if (sb.length() == 0) {
+            holder.hint.setVisibility(View.GONE);
+        } else {
+            holder.hint.setText(sb);
+            holder.hint.setVisibility(View.VISIBLE);
+        }
 
         holder.itemView.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
             activity.getMenuInflater().inflate(R.menu.menu_app_item, menu);
@@ -656,7 +655,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
     public void onBackPressed() {
         fragment.searchView.clearFocus();
         if (!refreshing && fragment.binding.masterSwitch.isChecked() && checkedList.isEmpty()) {
-            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(activity);
+            var builder = new BlurBehindDialogBuilder(activity);
             builder.setMessage(!recommendedList.isEmpty() ? R.string.no_scope_selected_has_recommended : R.string.no_scope_selected);
             if (!recommendedList.isEmpty()) {
                 builder.setPositiveButton(android.R.string.ok, (dialog, which) -> {
