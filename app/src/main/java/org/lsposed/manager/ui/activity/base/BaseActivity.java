@@ -33,11 +33,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.material.color.DynamicColors;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
+import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
 import org.lsposed.manager.ui.dialog.FlashDialogBuilder;
 import org.lsposed.manager.util.NavUtil;
 import org.lsposed.manager.util.ThemeUtil;
@@ -61,7 +61,7 @@ public class BaseActivity extends MaterialActivity {
         if (!ConfigManager.isBinderAlive()) return;
         var version = ConfigManager.getXposedVersionCode();
         if (BuildConfig.VERSION_CODE == version) return;
-        new MaterialAlertDialogBuilder(this)
+        new BlurBehindDialogBuilder(this)
                 .setMessage(getString(R.string.version_mismatch, version, BuildConfig.VERSION_CODE))
                 .setPositiveButton(android.R.string.ok, (dialog, id) -> {
                     if (UpdateUtil.canInstall()) {
