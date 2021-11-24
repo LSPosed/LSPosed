@@ -42,6 +42,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
@@ -83,8 +84,8 @@ import okhttp3.Request;
 import okhttp3.Response;
 import rikka.core.util.ResourceUtils;
 import rikka.recyclerview.RecyclerViewKt;
-import rikka.widget.borderview.BorderNestedScrollView;
 import rikka.widget.borderview.BorderRecyclerView;
+import rikka.widget.borderview.BorderView;
 
 public class RepoItemFragment extends BaseFragment implements RepoLoader.Listener {
     FragmentPagerBinding binding;
@@ -102,6 +103,17 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
         setupToolbar(binding.toolbar, moduleName, R.menu.menu_repo_item);
         binding.toolbar.setSubtitle(modulePackageName);
         binding.viewPager.setAdapter(new PagerAdapter());
+        binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                var view = binding.viewPager.findViewWithTag(position);
+                if (view instanceof BorderView) {
+                    var borderView = (BorderView) view;
+                    binding.appBar.setLifted(!borderView.getBorderViewDelegate().isShowingTopBorder());
+                    borderView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setLifted(!top));
+                }
+            }
+        });
         int[] titles = new int[]{R.string.module_readme, R.string.module_releases, R.string.module_information};
         new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> tab.setText(titles[position])).attach();
 
@@ -451,33 +463,15 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
         }
 
         @Override
-        public void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
-            super.onViewDetachedFromWindow(holder);
-            switch (holder.getItemViewType()) {
-                case 0:
-                    holder.scrollView.getBorderViewDelegate().setBorderVisibilityChangedListener(null);
-                    break;
-                case 1:
-                case 2:
-                    holder.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener(null);
-                    break;
-            }
+        public void onViewRecycled(@NonNull ViewHolder holder) {
+            ((View) holder.borderView).setTag(null);
+            super.onViewRecycled(holder);
         }
 
         @Override
-        public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
-            super.onViewAttachedToWindow(holder);
-            switch (holder.getItemViewType()) {
-                case 0:
-                    binding.appBar.setLifted(!holder.scrollView.getBorderViewDelegate().isShowingTopBorder());
-                    holder.scrollView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setLifted(!top));
-                    break;
-                case 1:
-                case 2:
-                    binding.appBar.setLifted(!holder.recyclerView.getBorderViewDelegate().isShowingTopBorder());
-                    holder.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setLifted(!top));
-                    break;
-            }
+        public void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
+            super.onViewDetachedFromWindow(holder);
+            holder.borderView.getBorderViewDelegate().setBorderVisibilityChangedListener(null);
         }
 
         @Override
@@ -489,7 +483,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
                     break;
                 case 1:
                 case 2:
-                    RecyclerView.Adapter adapter;
+                    RecyclerView.Adapter<?> adapter;
                     if (position == 1) {
                         adapter = releaseAdapter = new ReleaseAdapter();
                     } else {
@@ -500,6 +494,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
                     RecyclerViewKt.fixEdgeEffect(holder.recyclerView, false, true);
                     break;
             }
+            ((View) holder.borderView).setTag(position);
         }
 
         @Override
@@ -514,8 +509,8 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
 
         class ViewHolder extends RecyclerView.ViewHolder {
             WebView webView;
-            BorderNestedScrollView scrollView;
             BorderRecyclerView recyclerView;
+            BorderView borderView;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -526,14 +521,14 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
             public ReadmeViewHolder(ItemRepoReadmeBinding binding) {
                 super(binding.getRoot());
                 webView = binding.readme;
-                scrollView = binding.scrollView;
+                borderView = binding.scrollView;
             }
         }
 
         class RecyclerviewBinding extends PagerAdapter.ViewHolder {
             public RecyclerviewBinding(ItemRepoRecyclerviewBinding binding) {
                 super(binding.getRoot());
-                recyclerView = binding.recyclerView;
+                borderView = recyclerView = binding.recyclerView;
             }
         }
     }

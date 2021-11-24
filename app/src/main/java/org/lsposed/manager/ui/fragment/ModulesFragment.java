@@ -178,6 +178,12 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
+                var view = binding.viewPager.findViewWithTag(position);
+                if (view instanceof BorderRecyclerView) {
+                    var recyclerView = (BorderRecyclerView) view;
+                    binding.appBar.setLifted(!recyclerView.getBorderViewDelegate().isShowingTopBorder());
+                    recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setLifted(!top));
+                }
                 updateProgress();
                 showFab();
             }
@@ -366,6 +372,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
         class ViewHolder extends RecyclerView.ViewHolder {
             BorderRecyclerView recyclerView;
+
             public ViewHolder(ItemRepoRecyclerviewBinding binding) {
                 super(binding.getRoot());
                 recyclerView = binding.recyclerView;
@@ -373,10 +380,9 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         }
 
         @Override
-        public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
-            super.onViewAttachedToWindow(holder);
-            binding.appBar.setLifted(!holder.recyclerView.getBorderViewDelegate().isShowingTopBorder());
-            holder.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setLifted(!top));
+        public void onViewRecycled(@NonNull ViewHolder holder) {
+            holder.recyclerView.setTag(null);
+            super.onViewRecycled(holder);
         }
 
         @Override
@@ -398,7 +404,8 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-                    holder.recyclerView.setAdapter(adapters.get(position));
+            holder.recyclerView.setAdapter(adapters.get(position));
+            holder.recyclerView.setTag(position);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireActivity());
             holder.recyclerView.setLayoutManager(layoutManager);
             RecyclerViewKt.fixEdgeEffect(holder.recyclerView, false, true);
