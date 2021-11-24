@@ -45,7 +45,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
@@ -103,17 +102,6 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
         setupToolbar(binding.toolbar, moduleName, R.menu.menu_repo_item);
         binding.toolbar.setSubtitle(modulePackageName);
         binding.viewPager.setAdapter(new PagerAdapter(this));
-        binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                var f = getChildFragmentManager().findFragmentByTag("f" + position);
-                if (f instanceof BorderFragment) {
-                    var borderView = ((BorderFragment) f).borderView;
-                    binding.appBar.setLifted(!borderView.getBorderViewDelegate().isShowingTopBorder());
-                    borderView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setLifted(!top));
-                }
-            }
-        });
         int[] titles = new int[]{R.string.module_readme, R.string.module_releases, R.string.module_information};
         new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> tab.setText(titles[position])).attach();
 
@@ -501,6 +489,22 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
 
     public static class BorderFragment extends BaseFragment {
         BorderView borderView;
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            var parent = getParentFragment();
+            if (parent instanceof RepoItemFragment) {
+                borderView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> ((RepoItemFragment) parent).binding.appBar.setLifted(!top));
+                ((RepoItemFragment) parent).binding.appBar.setLifted(!borderView.getBorderViewDelegate().isShowingTopBorder());
+            }
+        }
+
+        @Override
+        public void onPause() {
+            super.onPause();
+            borderView.getBorderViewDelegate().setBorderVisibilityChangedListener(null);
+        }
     }
 
     public static class ReadmeFragment extends BorderFragment {

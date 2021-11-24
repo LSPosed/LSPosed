@@ -178,12 +178,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
-                var f = getChildFragmentManager().findFragmentByTag("f" + position);
-                if (f instanceof ModuleListFragment) {
-                    var recyclerView = ((ModuleListFragment) f).binding.recyclerView;
-                    binding.appBar.setLifted(!recyclerView.getBorderViewDelegate().isShowingTopBorder());
-                    recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setLifted(!top));
-                }
                 updateProgress();
                 showFab();
             }
@@ -389,6 +383,22 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             binding.recyclerView.setLayoutManager(layoutManager);
             RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
             return binding.getRoot();
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            var parent = getParentFragment();
+            if (parent instanceof ModulesFragment) {
+                binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> ((ModulesFragment) parent).binding.appBar.setLifted(!top));
+                ((ModulesFragment) parent).binding.appBar.setLifted(!binding.recyclerView.getBorderViewDelegate().isShowingTopBorder());
+            }
+        }
+
+        @Override
+        public void onPause() {
+            super.onPause();
+            binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener(null);
         }
     }
 
