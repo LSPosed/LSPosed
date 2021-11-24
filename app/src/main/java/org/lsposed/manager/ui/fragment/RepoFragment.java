@@ -148,6 +148,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener, M
             } else {
                 binding.toolbar.setSubtitle(getResources().getString(R.string.loading));
             }
+            binding.toolbarLayout.setSubtitle(binding.toolbar.getSubtitle());
         });
     }
 
