@@ -126,7 +126,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener, M
         final int[] count = new int[]{0};
         HashSet<String> processedModules = new HashSet<>();
         var modules = moduleUtil.getModules();
-        if (modules != null) {
+        if (modules != null && repoLoader.isRepoLoaded()) {
             modules.forEach((k, v) -> {
                         if (!processedModules.contains(k.first)) {
                             var ver = repoLoader.getModuleLatestVersion(k.first);
@@ -137,12 +137,16 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener, M
                         }
                     }
             );
+        } else {
+            count[0] = -1;
         }
         runOnUiThread(() -> {
             if (count[0] > 0) {
                 binding.toolbar.setSubtitle(getResources().getQuantityString(R.plurals.module_repo_upgradable, count[0], count[0]));
-            } else {
+            } else if (count[0] == 0){
                 binding.toolbar.setSubtitle(getResources().getString(R.string.module_repo_up_to_date));
+            } else {
+                binding.toolbar.setSubtitle(getResources().getString(R.string.loading));
             }
         });
     }
