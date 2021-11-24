@@ -115,6 +115,7 @@
             style="@style/DeviceInfoDialogValue"
             android:id="@+id/system_abi"
             android:layout_width="match_parent"
+            android:paddingBottom="0dp"
             android:layout_height="wrap_content" />
 
     </LinearLayout>
