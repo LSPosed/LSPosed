@@ -67,7 +67,6 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
         FragmentCompileDialogBinding binding = FragmentCompileDialogBinding.inflate(LayoutInflater.from(requireActivity()), null, false);
         final PackageManager pm = requireContext().getPackageManager();
         var builder = new BlurBehindDialogBuilder(requireActivity())
-                .setIcon(appInfo.loadIcon(pm))
                 .setTitle(appInfo.loadLabel(pm))
                 .setView(binding.getRoot());
 
