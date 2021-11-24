@@ -120,13 +120,13 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         searchListener = new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                adapters.forEach(adapter -> adapter.getFilter().filter(query));
+                adapters.get(binding.viewPager.getCurrentItem()).refresh();
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                adapters.forEach(adapter -> adapter.getFilter().filter(newText));
+                adapters.get(binding.viewPager.getCurrentItem()).refresh();
                 return false;
             }
         };
@@ -182,9 +182,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 if (f instanceof ModuleListFragment) {
                     var recyclerView = ((ModuleListFragment) f).binding.recyclerView;
                     binding.appBar.setLifted(!recyclerView.getBorderViewDelegate().isShowingTopBorder());
-                    recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> {
-                        binding.appBar.setLifted(!top);
-                    });
+                    recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setLifted(!top));
                 }
                 updateProgress();
                 showFab();
@@ -375,6 +373,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
     public static class ModuleListFragment extends Fragment {
         public ItemRepoRecyclerviewBinding binding;
+
         @Nullable
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
