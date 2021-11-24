@@ -57,6 +57,7 @@ public class BaseFragment extends Fragment {
         toolbar.setNavigationOnClickListener(navigationOnClickListener == null ? (v -> navigateUp()) : navigationOnClickListener);
         toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
         toolbar.setTitle(title);
+        toolbar.setTooltipText(title);
         if (menu != -1) {
             toolbar.inflateMenu(menu);
             toolbar.setOnMenuItemClickListener(this::onOptionsItemSelected);

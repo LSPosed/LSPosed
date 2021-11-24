@@ -54,8 +54,10 @@ import androidx.appcompat.widget.SearchView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.request.target.CustomTarget;
@@ -81,7 +83,6 @@ import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
 import org.lsposed.manager.ui.widget.EmptyStateRecyclerView;
 import org.lsposed.manager.util.GlideApp;
 import org.lsposed.manager.util.ModuleUtil;
-import org.lsposed.manager.util.SimpleStatefulAdaptor;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -92,7 +93,6 @@ import java.util.stream.IntStream;
 
 import rikka.core.util.ResourceUtils;
 import rikka.recyclerview.RecyclerViewKt;
-import rikka.widget.borderview.BorderRecyclerView;
 
 public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleListener {
     private static final PackageManager pm = App.getInstance().getPackageManager();
@@ -174,15 +174,17 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         binding = FragmentPagerBinding.inflate(inflater, container, false);
         binding.appBar.setLiftable(true);
         setupToolbar(binding.toolbar, R.string.Modules, R.menu.menu_modules);
-        binding.viewPager.setAdapter(new PagerAdapter());
+        binding.viewPager.setAdapter(new PagerAdapter(this));
         binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
-                var view = binding.viewPager.findViewWithTag(position);
-                if (view instanceof BorderRecyclerView) {
-                    var recyclerView = (BorderRecyclerView) view;
+                var f = getChildFragmentManager().findFragmentByTag("f" + position);
+                if (f instanceof ModuleListFragment) {
+                    var recyclerView = ((ModuleListFragment) f).binding.recyclerView;
                     binding.appBar.setLifted(!recyclerView.getBorderViewDelegate().isShowingTopBorder());
-                    recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setLifted(!top));
+                    recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> {
+                        binding.appBar.setLifted(!top);
+                    });
                 }
                 updateProgress();
                 showFab();
@@ -368,47 +370,45 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         binding = null;
     }
 
-    private class PagerAdapter extends SimpleStatefulAdaptor<PagerAdapter.ViewHolder> {
-
-        class ViewHolder extends RecyclerView.ViewHolder {
-            BorderRecyclerView recyclerView;
-
-            public ViewHolder(ItemRepoRecyclerviewBinding binding) {
-                super(binding.getRoot());
-                recyclerView = binding.recyclerView;
+    public static class ModuleListFragment extends Fragment {
+        public ItemRepoRecyclerviewBinding binding;
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            ModulesFragment fragment = (ModulesFragment) getParentFragment();
+            Bundle arguments = getArguments();
+            if (fragment == null || arguments == null) {
+                return null;
             }
+            int position = arguments.getInt("position");
+            binding = ItemRepoRecyclerviewBinding.inflate(getLayoutInflater(), container, false);
+            binding.recyclerView.setAdapter(fragment.adapters.get(position));
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireActivity());
+            binding.recyclerView.setLayoutManager(layoutManager);
+            RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
+            return binding.getRoot();
+        }
+    }
+
+    private class PagerAdapter extends FragmentStateAdapter {
+
+        public PagerAdapter(@NonNull Fragment fragment) {
+            super(fragment);
         }
 
+        @NonNull
         @Override
-        public void onViewRecycled(@NonNull ViewHolder holder) {
-            holder.recyclerView.setTag(null);
-            super.onViewRecycled(holder);
-        }
-
-        @Override
-        public void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
-            super.onViewDetachedFromWindow(holder);
-            holder.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener(null);
+        public Fragment createFragment(int position) {
+            Bundle bundle = new Bundle();
+            bundle.putInt("position", position);
+            Fragment fragment = new ModuleListFragment();
+            fragment.setArguments(bundle);
+            return fragment;
         }
 
         @Override
         public int getItemCount() {
             return adapters.size();
-        }
-
-        @NonNull
-        @Override
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new ViewHolder(ItemRepoRecyclerviewBinding.inflate(getLayoutInflater(), parent, false));
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            holder.recyclerView.setAdapter(adapters.get(position));
-            holder.recyclerView.setTag(position);
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireActivity());
-            holder.recyclerView.setLayoutManager(layoutManager);
-            RecyclerViewKt.fixEdgeEffect(holder.recyclerView, false, true);
         }
 
         @Override

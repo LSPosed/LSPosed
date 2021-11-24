@@ -37,16 +37,18 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -84,13 +86,11 @@ import okhttp3.Request;
 import okhttp3.Response;
 import rikka.core.util.ResourceUtils;
 import rikka.recyclerview.RecyclerViewKt;
-import rikka.widget.borderview.BorderRecyclerView;
 import rikka.widget.borderview.BorderView;
 
 public class RepoItemFragment extends BaseFragment implements RepoLoader.Listener {
     FragmentPagerBinding binding;
-    private OnlineModule module;
-    private ReleaseAdapter releaseAdapter;
+    OnlineModule module;
 
     @Nullable
     @Override
@@ -102,13 +102,13 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
         binding.appBar.setLiftable(true);
         setupToolbar(binding.toolbar, moduleName, R.menu.menu_repo_item);
         binding.toolbar.setSubtitle(modulePackageName);
-        binding.viewPager.setAdapter(new PagerAdapter());
+        binding.viewPager.setAdapter(new PagerAdapter(this));
         binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
-                var view = binding.viewPager.findViewWithTag(position);
-                if (view instanceof BorderView) {
-                    var borderView = (BorderView) view;
+                var f = getChildFragmentManager().findFragmentByTag("f" + position);
+                if (f instanceof BorderFragment) {
+                    var borderView = ((BorderFragment) f).borderView;
                     binding.appBar.setLifted(!borderView.getBorderViewDelegate().isShowingTopBorder());
                     borderView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setLifted(!top));
                 }
@@ -130,11 +130,6 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         RepoLoader.getInstance().addListener(this);
         super.onCreate(savedInstanceState);
@@ -145,7 +140,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
             getNavController().navigate(R.id.action_repo_item_fragment_to_repo_fragment);
     }
 
-    private void renderGithubMarkdown(WebView view, String text) {
+    private static void renderGithubMarkdown(Fragment fragment, WebView view, String text) {
         try {
             view.setBackgroundColor(Color.TRANSPARENT);
             var setting = view.getSettings();
@@ -160,7 +155,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
             setting.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
             setting.setTextZoom(80);
             String body;
-            if (ResourceUtils.isNightMode(getResources().getConfiguration())) {
+            if (ResourceUtils.isNightMode(fragment.getResources().getConfiguration())) {
                 body = App.HTML_TEMPLATE_DARK.get().replace("@body@", text);
             } else {
                 body = App.HTML_TEMPLATE.get().replace("@body@", text);
@@ -168,7 +163,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
             view.setWebViewClient(new WebViewClient() {
                 @Override
                 public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                    NavUtil.startURL(requireActivity(), request.getUrl());
+                    NavUtil.startURL(fragment.requireActivity(), request.getUrl());
                     return true;
                 }
 
@@ -221,27 +216,6 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
     }
 
     @Override
-    public void moduleReleasesLoaded(OnlineModule module) {
-        this.module = module;
-        if (releaseAdapter != null) {
-            runAsync(releaseAdapter::loadItems);
-            if (isResumed() && module.getReleases().size() == 1) {
-                Snackbar.make(binding.snackbar, R.string.module_release_no_more, Snackbar.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    @Override
-    public void onThrowable(Throwable t) {
-        if (releaseAdapter != null) {
-            runAsync(releaseAdapter::loadItems);
-            if (isResumed()) {
-                Snackbar.make(binding.snackbar, getString(R.string.repo_load_failed, t.getLocalizedMessage()), Snackbar.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
 
@@ -249,15 +223,18 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
         binding = null;
     }
 
-    private class InformationAdapter extends SimpleStatefulAdaptor<InformationAdapter.ViewHolder> {
-        private final OnlineModule module;
+    private static class InformationAdapter extends SimpleStatefulAdaptor<InformationAdapter.ViewHolder> {
 
         private int rowCount = 0;
         private int homepageRow = -1;
         private int collaboratorsRow = -1;
         private int sourceUrlRow = -1;
 
-        public InformationAdapter(OnlineModule module) {
+        private final Fragment fragment;
+        private final OnlineModule module;
+
+        public InformationAdapter(BaseFragment fragment, OnlineModule module) {
+            this.fragment = fragment;
             this.module = module;
             if (!TextUtils.isEmpty(module.getHomepageUrl())) {
                 homepageRow = rowCount++;
@@ -273,7 +250,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
         @NonNull
         @Override
         public InformationAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new InformationAdapter.ViewHolder(ItemRepoTitleDescriptionBinding.inflate(getLayoutInflater(), parent, false));
+            return new ViewHolder(ItemRepoTitleDescriptionBinding.inflate(fragment.getLayoutInflater(), parent, false));
         }
 
         @Override
@@ -290,7 +267,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
                     Collaborator collaborator = iterator.next();
                     String name = collaborator.getName() == null ? collaborator.getLogin() : collaborator.getName();
                     sb.append(name);
-                    CustomTabsURLSpan span = new CustomTabsURLSpan(requireActivity(), String.format("https://github.com/%s", collaborator.getLogin()));
+                    CustomTabsURLSpan span = new CustomTabsURLSpan(fragment.requireActivity(), String.format("https://github.com/%s", collaborator.getLogin()));
                     sb.setSpan(span, sb.length() - name.length(), sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     if (iterator.hasNext()) {
                         sb.append(", ");
@@ -303,7 +280,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
             }
             holder.itemView.setOnClickListener(v -> {
                 if (position == homepageRow) {
-                    NavUtil.startURL(requireActivity(), module.getHomepageUrl());
+                    NavUtil.startURL(fragment.requireActivity(), module.getHomepageUrl());
                 } else if (position == collaboratorsRow) {
                     ClickableSpan span = holder.description.getCurrentSpan();
                     holder.description.clearCurrentSpan();
@@ -312,10 +289,9 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
                         span.onClick(v);
                     }
                 } else if (position == sourceUrlRow) {
-                    NavUtil.startURL(requireActivity(), module.getSourceUrl());
+                    NavUtil.startURL(fragment.requireActivity(), module.getSourceUrl());
                 }
             });
-
         }
 
         @Override
@@ -323,7 +299,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
             return rowCount;
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder {
+        static class ViewHolder extends RecyclerView.ViewHolder {
             TextView title;
             LinkifyTextView description;
 
@@ -335,12 +311,45 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
         }
     }
 
-    private class ReleaseAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<ReleaseAdapter.ViewHolder> {
+    private static class ReleaseAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<ReleaseAdapter.ViewHolder> implements RepoLoader.Listener {
         private List<Release> items = new ArrayList<>();
         private final Resources resources = App.getInstance().getResources();
+        private final BaseFragment fragment;
+        private OnlineModule module;
 
-        public ReleaseAdapter() {
-            runAsync(this::loadItems);
+        public ReleaseAdapter(BaseFragment fragment, OnlineModule module) {
+            this.fragment = fragment;
+            this.module = module;
+            fragment.runAsync(this::loadItems);
+        }
+
+        @Override
+        public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+            super.onAttachedToRecyclerView(recyclerView);
+            RepoLoader.getInstance().addListener(this);
+        }
+
+        @Override
+        public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
+            super.onDetachedFromRecyclerView(recyclerView);
+            RepoLoader.getInstance().removeListener(this);
+        }
+
+        @Override
+        public void moduleReleasesLoaded(OnlineModule module) {
+            this.module = module;
+            fragment.runAsync(this::loadItems);
+            if (fragment.isResumed() && module.getReleases().size() == 1) {
+                Toast.makeText(fragment.requireActivity(), R.string.module_release_no_more, Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        public void onThrowable(Throwable t) {
+            fragment.runAsync(this::loadItems);
+            if (fragment.isResumed()) {
+                Toast.makeText(fragment.requireActivity(), fragment.requireActivity().getString(R.string.repo_load_failed, t.getLocalizedMessage()), Toast.LENGTH_SHORT).show();
+            }
         }
 
         public void loadItems() {
@@ -359,16 +368,16 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
                     return !name.startsWith("snapshot") && !name.startsWith("nightly");
                 }).collect(Collectors.toList());
             } else this.items = releases;
-            runOnUiThread(this::notifyDataSetChanged);
+            fragment.runOnUiThread(this::notifyDataSetChanged);
         }
 
         @NonNull
         @Override
         public ReleaseAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             if (viewType == 0) {
-                return new ReleaseAdapter.ReleaseViewHolder(ItemRepoReleaseBinding.inflate(getLayoutInflater(), parent, false));
+                return new ReleaseViewHolder(ItemRepoReleaseBinding.inflate(fragment.getLayoutInflater(), parent, false));
             } else {
-                return new ReleaseAdapter.LoadmoreViewHolder(ItemRepoLoadmoreBinding.inflate(getLayoutInflater(), parent, false));
+                return new LoadmoreViewHolder(ItemRepoLoadmoreBinding.inflate(fragment.getLayoutInflater(), parent, false));
             }
         }
 
@@ -387,15 +396,15 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
             } else {
                 Release release = items.get(position);
                 holder.title.setText(release.getName());
-                renderGithubMarkdown(holder.description, release.getDescriptionHTML());
-                holder.openInBrowser.setOnClickListener(v -> NavUtil.startURL(requireActivity(), release.getUrl()));
+                renderGithubMarkdown(fragment, holder.description, release.getDescriptionHTML());
+                holder.openInBrowser.setOnClickListener(v -> NavUtil.startURL(fragment.requireActivity(), release.getUrl()));
                 List<ReleaseAsset> assets = release.getReleaseAssets();
                 if (assets != null && !assets.isEmpty()) {
                     holder.viewAssets.setOnClickListener(v -> {
                         ArrayList<String> names = new ArrayList<>();
                         assets.forEach(releaseAsset -> names.add(releaseAsset.getName()));
-                        new BlurBehindDialogBuilder(requireActivity())
-                                .setItems(names.toArray(new String[0]), (dialog, which) -> NavUtil.startURL(requireActivity(), assets.get(which).getDownloadUrl()))
+                        new BlurBehindDialogBuilder(fragment.requireActivity())
+                                .setItems(names.toArray(new String[0]), (dialog, which) -> NavUtil.startURL(fragment.requireActivity(), assets.get(which).getDownloadUrl()))
                                 .show();
                     });
                 } else {
@@ -419,7 +428,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
             return module.releasesLoaded;
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder {
+        static class ViewHolder extends RecyclerView.ViewHolder {
             TextView title;
             WebView description;
             MaterialButton openInBrowser;
@@ -431,7 +440,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
             }
         }
 
-        class ReleaseViewHolder extends ReleaseAdapter.ViewHolder {
+        static class ReleaseViewHolder extends ReleaseAdapter.ViewHolder {
             public ReleaseViewHolder(ItemRepoReleaseBinding binding) {
                 super(binding.getRoot());
                 title = binding.title;
@@ -441,7 +450,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
             }
         }
 
-        class LoadmoreViewHolder extends ReleaseAdapter.ViewHolder {
+        static class LoadmoreViewHolder extends ReleaseAdapter.ViewHolder {
             public LoadmoreViewHolder(ItemRepoLoadmoreBinding binding) {
                 super(binding.getRoot());
                 title = binding.title;
@@ -450,51 +459,28 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
         }
     }
 
-    private class PagerAdapter extends SimpleStatefulAdaptor<PagerAdapter.ViewHolder> {
+    private class PagerAdapter extends FragmentStateAdapter {
+
+        public PagerAdapter(@NonNull Fragment fragment) {
+            super(fragment);
+        }
 
         @NonNull
         @Override
-        public PagerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            if (viewType == 0) {
-                return new PagerAdapter.ReadmeViewHolder(ItemRepoReadmeBinding.inflate(getLayoutInflater(), parent, false));
+        public Fragment createFragment(int position) {
+            Bundle bundle = new Bundle();
+            bundle.putInt("position", position);
+            bundle.putString("module", module.getName());
+            Fragment f;
+            if (position == 0) {
+                f = new ReadmeFragment();
+            } else if (position == 1) {
+                f = new RecyclerviewFragment();
             } else {
-                return new PagerAdapter.RecyclerviewBinding(ItemRepoRecyclerviewBinding.inflate(getLayoutInflater(), parent, false));
+                f = new RecyclerviewFragment();
             }
-        }
-
-        @Override
-        public void onViewRecycled(@NonNull ViewHolder holder) {
-            ((View) holder.borderView).setTag(null);
-            super.onViewRecycled(holder);
-        }
-
-        @Override
-        public void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
-            super.onViewDetachedFromWindow(holder);
-            holder.borderView.getBorderViewDelegate().setBorderVisibilityChangedListener(null);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull PagerAdapter.ViewHolder holder, int position) {
-            switch (position) {
-                case 0:
-                    if (module != null)
-                        renderGithubMarkdown(holder.webView, module.getReadmeHTML());
-                    break;
-                case 1:
-                case 2:
-                    RecyclerView.Adapter<?> adapter;
-                    if (position == 1) {
-                        adapter = releaseAdapter = new ReleaseAdapter();
-                    } else {
-                        adapter = new InformationAdapter(module);
-                    }
-                    holder.recyclerView.setAdapter(adapter);
-                    holder.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
-                    RecyclerViewKt.fixEdgeEffect(holder.recyclerView, false, true);
-                    break;
-            }
-            ((View) holder.borderView).setTag(position);
+            f.setArguments(bundle);
+            return f;
         }
 
         @Override
@@ -507,29 +493,63 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
             return position == 0 ? 0 : 1;
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder {
-            WebView webView;
-            BorderRecyclerView recyclerView;
-            BorderView borderView;
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+    }
 
-            public ViewHolder(@NonNull View itemView) {
-                super(itemView);
-            }
+    public static class BorderFragment extends BaseFragment {
+        BorderView borderView;
+    }
+
+    public static class ReadmeFragment extends BorderFragment {
+        ItemRepoReadmeBinding binding;
+        OnlineModule module;
+
+        public ReadmeFragment() {
         }
 
-        class ReadmeViewHolder extends PagerAdapter.ViewHolder {
-            public ReadmeViewHolder(ItemRepoReadmeBinding binding) {
-                super(binding.getRoot());
-                webView = binding.readme;
-                borderView = binding.scrollView;
-            }
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            var arguments = getArguments();
+            if (arguments != null)
+                module = RepoLoader.getInstance().getOnlineModule(arguments.getString("module", ""));
+            else module = null;
+            binding = ItemRepoReadmeBinding.inflate(getLayoutInflater(), container, false);
+            if (module != null)
+                renderGithubMarkdown(getParentFragment(), binding.readme, module.getReadmeHTML());
+            borderView = binding.scrollView;
+            return binding.getRoot();
         }
 
-        class RecyclerviewBinding extends PagerAdapter.ViewHolder {
-            public RecyclerviewBinding(ItemRepoRecyclerviewBinding binding) {
-                super(binding.getRoot());
-                borderView = recyclerView = binding.recyclerView;
+    }
+
+    public static class RecyclerviewFragment extends BorderFragment {
+        ItemRepoRecyclerviewBinding binding;
+        RecyclerView.Adapter<?> adapter;
+        OnlineModule module;
+
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            var arguments = getArguments();
+            if (arguments == null) {
+                return null;
             }
+            module = RepoLoader.getInstance().getOnlineModule(arguments.getString("module", null));
+            if (module == null) return null;
+            var position = arguments.getInt("position", 0);
+            if (position == 1)
+                adapter = new ReleaseAdapter(this, module);
+            else if (position == 2)
+                adapter = new InformationAdapter(this, module);
+            else return null;
+            binding = ItemRepoRecyclerviewBinding.inflate(getLayoutInflater(), container, false);
+            binding.recyclerView.setAdapter(adapter);
+            binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
+            RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
+            borderView = binding.recyclerView;
+            return binding.getRoot();
         }
     }
 }
