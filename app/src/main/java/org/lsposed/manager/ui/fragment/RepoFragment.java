@@ -63,7 +63,6 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -318,14 +317,15 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
         public void setData(Collection<OnlineModule> modules) {
             if (modules == null) return;
             setLoaded(false);
-            fullList = new ArrayList<>(modules);
-            fullList = fullList.stream().filter((onlineModule -> !onlineModule.isHide() && !onlineModule.getReleases().isEmpty())).collect(Collectors.toList());
             int sort = App.getPreferences().getInt("repo_sort", 0);
-            if (sort == 0) {
-                fullList.sort((o1, o2) -> labelComparator.compare(o1.getDescription(), o2.getDescription()));
-            } else if (sort == 1) {
-                fullList.sort(Collections.reverseOrder(Comparator.comparing(o -> Instant.parse(o.getReleases().get(0).getUpdatedAt()))));
-            }
+            fullList = modules.parallelStream().filter((onlineModule -> !onlineModule.isHide() && !onlineModule.getReleases().isEmpty()))
+                    .sorted((a, b) -> {
+                        if (sort == 0) {
+                            return labelComparator.compare(a.getDescription(), b.getDescription());
+                        } else {
+                            return Instant.parse(b.getReleases().get(0).getUpdatedAt()).compareTo(Instant.parse(a.getReleases().get(0).getUpdatedAt()));
+                        }
+                    }).collect(Collectors.toList());
             String queryStr = searchView != null ? searchView.getQuery().toString() : "";
             runOnUiThread(() -> getFilter().filter(queryStr));
         }
