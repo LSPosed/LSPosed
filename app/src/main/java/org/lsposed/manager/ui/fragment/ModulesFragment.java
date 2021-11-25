@@ -411,9 +411,11 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             super.onResume();
             var parent = getParentFragment();
             if (parent instanceof ModulesFragment) {
-                binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> ((ModulesFragment) parent).binding.appBar.setLifted(!top));
-                ((ModulesFragment) parent).binding.appBar.setLifted(!binding.recyclerView.getBorderViewDelegate().isShowingTopBorder());
-                ((ModulesFragment) parent).searchView.addOnAttachStateChangeListener(searchViewLocker);
+                var moduleFragment = (ModulesFragment)parent;
+                binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> moduleFragment.binding.appBar.setLifted(!top));
+                moduleFragment.binding.appBar.setLifted(!binding.recyclerView.getBorderViewDelegate().isShowingTopBorder());
+                moduleFragment.searchView.addOnAttachStateChangeListener(searchViewLocker);
+                binding.recyclerView.setNestedScrollingEnabled(moduleFragment.searchView.isIconified());
             }
         }
 
@@ -423,7 +425,9 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener(null);
             var parent = getParentFragment();
             if (parent instanceof ModulesFragment) {
-                ((ModulesFragment) parent).searchView.removeOnAttachStateChangeListener(searchViewLocker);
+                var moduleFragment = (ModulesFragment)parent;
+                moduleFragment.searchView.removeOnAttachStateChangeListener(searchViewLocker);
+                binding.recyclerView.setNestedScrollingEnabled(true);
             }
         }
     }
