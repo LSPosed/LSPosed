@@ -165,13 +165,6 @@ public class AppListFragment extends BaseFragment {
     }
 
     @Override
-    public void onDestroy() {
-        if (scopeAdapter != null) scopeAdapter.onDestroy();
-
-        super.onDestroy();
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
 

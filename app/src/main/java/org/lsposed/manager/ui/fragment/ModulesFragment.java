@@ -377,7 +377,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
     public static class ModuleListFragment extends Fragment {
         public ItemRepoRecyclerviewBinding binding;
-        private View.OnAttachStateChangeListener searchViewLocker = new View.OnAttachStateChangeListener() {
+        private final View.OnAttachStateChangeListener searchViewLocker = new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(View v) {
                 binding.recyclerView.setNestedScrollingEnabled(false);
@@ -411,7 +411,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             super.onResume();
             var parent = getParentFragment();
             if (parent instanceof ModulesFragment) {
-                var moduleFragment = (ModulesFragment)parent;
+                var moduleFragment = (ModulesFragment) parent;
                 binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> moduleFragment.binding.appBar.setLifted(!top));
                 moduleFragment.binding.appBar.setLifted(!binding.recyclerView.getBorderViewDelegate().isShowingTopBorder());
                 moduleFragment.searchView.addOnAttachStateChangeListener(searchViewLocker);
@@ -425,7 +425,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener(null);
             var parent = getParentFragment();
             if (parent instanceof ModulesFragment) {
-                var moduleFragment = (ModulesFragment)parent;
+                var moduleFragment = (ModulesFragment) parent;
                 moduleFragment.searchView.removeOnAttachStateChangeListener(searchViewLocker);
                 binding.recyclerView.setNestedScrollingEnabled(true);
             }
@@ -739,16 +739,12 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults filterResults = new FilterResults();
                 List<ModuleUtil.InstalledModule> filtered = new ArrayList<>();
-                if (constraint.toString().isEmpty()) {
-                    filtered.addAll(searchList);
-                } else {
-                    String filter = constraint.toString().toLowerCase();
-                    for (ModuleUtil.InstalledModule info : searchList) {
-                        if (lowercaseContains(info.getAppName(), filter) ||
-                                lowercaseContains(info.packageName, filter) ||
-                                lowercaseContains(info.getDescription(), filter)) {
-                            filtered.add(info);
-                        }
+                String filter = constraint.toString().toLowerCase();
+                for (ModuleUtil.InstalledModule info : searchList) {
+                    if (lowercaseContains(info.getAppName(), filter) ||
+                            lowercaseContains(info.packageName, filter) ||
+                            lowercaseContains(info.getDescription(), filter)) {
+                        filtered.add(info);
                     }
                 }
                 filterResults.values = filtered;

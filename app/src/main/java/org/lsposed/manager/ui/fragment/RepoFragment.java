@@ -143,7 +143,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener, M
         runOnUiThread(() -> {
             if (count[0] > 0) {
                 binding.toolbar.setSubtitle(getResources().getQuantityString(R.plurals.module_repo_upgradable, count[0], count[0]));
-            } else if (count[0] == 0){
+            } else if (count[0] == 0) {
                 binding.toolbar.setSubtitle(getResources().getString(R.string.module_repo_up_to_date));
             } else {
                 binding.toolbar.setSubtitle(getResources().getString(R.string.loading));
@@ -310,7 +310,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener, M
                 fullList.sort(Collections.reverseOrder(Comparator.comparing(o -> Instant.parse(o.getReleases().get(0).getUpdatedAt()))));
             }
             String queryStr = searchView != null ? searchView.getQuery().toString() : "";
-            requireActivity().runOnUiThread(() -> getFilter().filter(queryStr));
+            runOnUiThread(() -> getFilter().filter(queryStr));
         }
 
         public void initData() {
@@ -356,26 +356,26 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener, M
 
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
-                if (constraint.toString().isEmpty()) {
-                    showList = fullList;
-                } else {
-                    ArrayList<OnlineModule> filtered = new ArrayList<>();
-                    String filter = constraint.toString().toLowerCase();
-                    for (OnlineModule info : fullList) {
-                        if (lowercaseContains(info.getDescription(), filter) ||
-                                lowercaseContains(info.getName(), filter) ||
-                                lowercaseContains(info.getSummary(), filter)) {
-                            filtered.add(info);
-                        }
+                FilterResults filterResults = new FilterResults();
+                ArrayList<OnlineModule> filtered = new ArrayList<>();
+                String filter = constraint.toString().toLowerCase();
+                for (OnlineModule info : fullList) {
+                    if (lowercaseContains(info.getDescription(), filter) ||
+                            lowercaseContains(info.getName(), filter) ||
+                            lowercaseContains(info.getSummary(), filter)) {
+                        filtered.add(info);
                     }
-                    showList = filtered;
                 }
-                return null;
+                filterResults.values = filtered;
+                filterResults.count = filtered.size();
+                return filterResults;
             }
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-                notifyDataSetChanged();
+                //noinspection unchecked
+                showList = (List<OnlineModule>) results.values;
+                runOnUiThread(RepoAdapter.this::notifyDataSetChanged);
             }
         }
     }

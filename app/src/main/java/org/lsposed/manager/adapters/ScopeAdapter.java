@@ -96,8 +96,6 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
     private final AppListFragment fragment;
     private final PackageManager pm;
     private final SharedPreferences preferences;
-    private final HandlerThread handlerThread = new HandlerThread("appList");
-    private final Handler loadAppListHandler;
     private final ModuleUtil moduleUtil;
 
     private final ModuleUtil.InstalledModule module;
@@ -121,7 +119,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
     };
 
     private ApplicationInfo selectedInfo;
-    private boolean refreshing = false;
+    private boolean isLoaded = false;
     private boolean enabled = true;
 
     public ScopeAdapter(AppListFragment fragment, ModuleUtil.InstalledModule module) {
@@ -129,8 +127,6 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
         this.activity = fragment.requireActivity();
         this.module = module;
         moduleUtil = ModuleUtil.getInstance();
-        handlerThread.start();
-        loadAppListHandler = new Handler(handlerThread.getLooper());
         preferences = App.getPreferences();
         pm = activity.getPackageManager();
     }
@@ -217,15 +213,21 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
         });
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    private void setLoaded(boolean loaded) {
+        fragment.runOnUiThread(() -> {
+            isLoaded = loaded;
+            notifyDataSetChanged();
+        });
+    }
+
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.use_recommended) {
             if (!checkedList.isEmpty()) {
                 new BlurBehindDialogBuilder(activity)
                         .setMessage(R.string.use_recommended_message)
-                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                            checkRecommended();
-                        })
+                        .setPositiveButton(android.R.string.ok, (dialog, which) -> checkRecommended())
                         .setNegativeButton(android.R.string.cancel, null)
                         .show();
             } else {
@@ -465,26 +467,15 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
         return showList.size();
     }
 
-    public void onDestroy() {
-        loadAppListHandler.removeCallbacksAndMessages(null);
-        handlerThread.quit();
-    }
-
     public void refresh() {
-        synchronized (this) {
-            if (refreshing) {
-                return;
-            }
-            refreshing = true;
-        }
-        loadAppListHandler.removeCallbacksAndMessages(null);
+        setLoaded(false);
         boolean force = fragment.binding.swipeRefreshLayout.isRefreshing();
         if (!force) fragment.binding.progress.setIndeterminate(true);
         enabled = moduleUtil.isModuleEnabled(module.packageName);
         fragment.binding.masterSwitch.setOnCheckedChangeListener(null);
         fragment.binding.masterSwitch.setChecked(enabled);
         fragment.binding.masterSwitch.setOnCheckedChangeListener(switchBarOnCheckedChangeListener);
-        loadAppListHandler.post(() -> {
+        fragment.runAsync(() -> {
             List<PackageInfo> appList = AppHelper.getAppList(force);
             denyList = AppHelper.getDenyList(force);
             var tmpRecList = new HashSet<ApplicationWithEquals>();
@@ -545,10 +536,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
 
             String queryStr = fragment.searchView != null ? fragment.searchView.getQuery().toString() : "";
 
-            getFilter().filter(queryStr, count -> {
-                refreshing = false;
-                fragment.runOnUiThread((this::notifyDataSetChanged));
-            });
+            fragment.runOnUiThread(()->getFilter().filter(queryStr));
         });
     }
 
@@ -580,7 +568,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
 
     @Override
     public boolean isLoaded() {
-        return !refreshing;
+        return isLoaded;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -613,15 +601,11 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
         protected FilterResults performFiltering(CharSequence constraint) {
             FilterResults filterResults = new FilterResults();
             List<AppInfo> filtered = new ArrayList<>();
-            if (constraint.toString().isEmpty()) {
-                filtered.addAll(searchList);
-            } else {
-                String filter = constraint.toString().toLowerCase();
-                for (AppInfo info : searchList) {
-                    if (lowercaseContains(info.label.toString(), filter)
-                            || lowercaseContains(info.packageName, filter)) {
-                        filtered.add(info);
-                    }
+            String filter = constraint.toString().toLowerCase();
+            for (AppInfo info : searchList) {
+                if (lowercaseContains(info.label.toString(), filter)
+                        || lowercaseContains(info.packageName, filter)) {
+                    filtered.add(info);
                 }
             }
             filterResults.values = filtered;
@@ -633,6 +617,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
         protected void publishResults(CharSequence constraint, FilterResults results) {
             //noinspection unchecked
             showList = (List<AppInfo>) results.values;
+            setLoaded(true);
         }
     }
 
@@ -640,13 +625,13 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
         return new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                refresh();
+                getFilter().filter(query);
                 return true;
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
-                refresh();
+            public boolean onQueryTextChange(String query) {
+                getFilter().filter(query);
                 return true;
             }
         };
@@ -654,13 +639,11 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
 
     public void onBackPressed() {
         fragment.searchView.clearFocus();
-        if (!refreshing && fragment.binding.masterSwitch.isChecked() && checkedList.isEmpty()) {
+        if (isLoaded && fragment.binding.masterSwitch.isChecked() && checkedList.isEmpty()) {
             var builder = new BlurBehindDialogBuilder(activity);
             builder.setMessage(!recommendedList.isEmpty() ? R.string.no_scope_selected_has_recommended : R.string.no_scope_selected);
             if (!recommendedList.isEmpty()) {
-                builder.setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                    checkRecommended();
-                });
+                builder.setPositiveButton(android.R.string.ok, (dialog, which) -> checkRecommended());
             } else {
                 builder.setPositiveButton(android.R.string.cancel, null);
             }
