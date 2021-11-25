@@ -434,9 +434,9 @@ public final class SubtitleCollapsingTextHelper {
         expandedSubtitleFontCallback = new CancelableFontCallback(new CancelableFontCallback.ApplyFont() {
             @Override
             public void apply(Typeface font) {
-                setExpandedSubtitleTypeface(font);
+                if (font != null) setExpandedSubtitleTypeface(font);
             }
-        }, textAppearance.getFallbackFont());
+        }, null);
         textAppearance.getFontAsync(view.getContext(), expandedSubtitleFontCallback);
 
         recalculate();
