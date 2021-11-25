@@ -14,14 +14,34 @@
         app:borderTopDrawable="@null"
         app:borderTopVisibility="whenTop">
 
-        <HorizontalScrollView
-            android:id="@+id/horizontal_scroll_view"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="none">
+            android:layout_height="match_parent">
+
+            <HorizontalScrollView
+                android:id="@+id/horizontal_scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/body"
+                    style="@style/TextAppearance.AppCompat.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    android:fontFamily="monospace"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textIsSelectable="true"
+                    android:textSize="12sp"
+                    app:borderBottomVisibility="never"
+                    app:borderTopDrawable="@null"
+                    app:borderTopVisibility="whenTop"
+                    app:fitsSystemWindowsInsets="bottom" />
+            </HorizontalScrollView>
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/body"
+                android:id="@+id/wrap_body"
                 style="@style/TextAppearance.AppCompat.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -30,10 +50,11 @@
                 android:textColor="?attr/colorOnSurface"
                 android:textIsSelectable="true"
                 android:textSize="12sp"
+                android:visibility="gone"
                 app:borderBottomVisibility="never"
                 app:borderTopDrawable="@null"
                 app:borderTopVisibility="whenTop"
                 app:fitsSystemWindowsInsets="bottom" />
-        </HorizontalScrollView>
+        </FrameLayout>
     </rikka.widget.borderview.BorderNestedScrollView>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

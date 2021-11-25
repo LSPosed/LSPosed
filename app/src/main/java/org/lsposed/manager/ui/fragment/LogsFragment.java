@@ -25,6 +25,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,7 +100,6 @@ public class LogsFragment extends BaseFragment {
         binding.toolbar.setSubtitle(ConfigManager.isVerboseLogEnabled() ? R.string.enabled_verbose_log : R.string.disabled_verbose_log);
         adapter = new LogPageAdapter(this);
         binding.viewPager.setAdapter(adapter);
-        binding.viewPager.setUserInputEnabled(false);
         new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> tab.setText((int) adapter.getItemId(position))).attach();
 
         binding.tabLayout.addOnLayoutChangeListener((view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
@@ -120,15 +120,28 @@ public class LogsFragment extends BaseFragment {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.menu_save) {
+        var itemId = item.getItemId();
+        if (itemId == R.id.menu_save) {
             save();
             return true;
+        } else if (itemId == R.id.item_word_wrap) {
+            item.setChecked(!item.isChecked());
+            App.getPreferences().edit().putBoolean("enable_word_wrap", item.isChecked()).apply();
+            binding.viewPager.setUserInputEnabled(item.isChecked());
         }
         if (optionsItemSelectListener != null) {
             if (optionsItemSelectListener.onOptionsItemSelected(item))
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        var checked = App.getPreferences().getBoolean("enable_word_wrap", false);
+        menu.findItem(R.id.item_word_wrap).setChecked(checked);
+        binding.viewPager.setUserInputEnabled(checked);
     }
 
     @Override
@@ -214,6 +227,8 @@ public class LogsFragment extends BaseFragment {
                             logsFragment.showHint(R.string.logs_clear_failed_2, true);
                         }
                         return true;
+                    } else if (itemId == R.id.item_word_wrap) {
+                        refreshLog();
                     }
                     return false;
                 });
@@ -251,7 +266,16 @@ public class LogsFragment extends BaseFragment {
             runAsync(() -> {
                 var precomputedTextCompat = PrecomputedTextCompat.create(log, binding.body.getTextMetricsParamsCompat());
                 runOnUiThread(() -> {
+                    var wrap = App.getPreferences().getBoolean("enable_word_wrap", false);
+                    if (wrap) {
+                        binding.wrapBody.setVisibility(View.VISIBLE);
+                        binding.horizontalScrollView.setVisibility(View.GONE);
+                    } else {
+                        binding.wrapBody.setVisibility(View.GONE);
+                        binding.horizontalScrollView.setVisibility(View.VISIBLE);
+                    }
                     TextViewCompat.setPrecomputedText(binding.body, precomputedTextCompat);
+                    TextViewCompat.setPrecomputedText(binding.wrapBody, precomputedTextCompat);
                     binding.swipeRefreshLayout.setRefreshing(false);
                 });
             });
