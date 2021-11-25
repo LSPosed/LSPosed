@@ -353,6 +353,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 binding.swipeRefreshLayout.setRefreshing(!adapter.isLoaded());
             }
         };
+
         private final View.OnAttachStateChangeListener searchViewLocker = new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(View v) {
@@ -395,6 +396,12 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 moduleFragment.binding.appBar.setLifted(!binding.recyclerView.getBorderViewDelegate().isShowingTopBorder());
                 moduleFragment.searchView.addOnAttachStateChangeListener(searchViewLocker);
                 binding.recyclerView.setNestedScrollingEnabled(moduleFragment.searchView.isIconified());
+                View.OnClickListener l = v -> {
+                    binding.recyclerView.smoothScrollToPosition(0);
+                    moduleFragment.binding.appBar.setExpanded(true, true);
+                };
+                moduleFragment.binding.clickView.setOnClickListener(l);
+                moduleFragment.binding.toolbar.setOnClickListener(l);
             }
         }
 

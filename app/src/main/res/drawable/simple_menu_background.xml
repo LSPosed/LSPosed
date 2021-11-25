@@ -19,13 +19,13 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape>
-            <solid android:color="?attr/colorSurface"/>
+            <solid android:color="?attr/colorSurface" />
             <corners android:radius="?popupBackgroundRadius" />
         </shape>
     </item>
     <item>
         <shape>
-            <solid android:color="@color/m3_popupmenu_overlay_color"/>
+            <solid android:color="@color/m3_popupmenu_overlay_color" />
             <corners android:radius="?popupBackgroundRadius" />
         </shape>
     </item>

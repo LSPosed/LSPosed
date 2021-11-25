@@ -20,8 +20,12 @@
 package org.lsposed.manager.ui.fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.View;
 
+import androidx.annotation.CallSuper;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
@@ -50,6 +54,10 @@ public class BaseFragment extends Fragment {
     }
 
     public void setupToolbar(Toolbar toolbar, String title, int menu) {
+        var activity = requireActivity();
+        if (activity instanceof AppCompatActivity) {
+            ((AppCompatActivity) activity).setSupportActionBar(toolbar);
+        }
         setupToolbar(toolbar, title, menu, null);
     }
 

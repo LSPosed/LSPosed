@@ -74,6 +74,7 @@ public class SettingsFragment extends BaseFragment {
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
         binding.appBar.setLiftable(true);
         setupToolbar(binding.toolbar, R.string.Settings);
+        binding.toolbar.setOnClickListener(v-> binding.appBar.setExpanded(true, true));
         if (savedInstanceState == null) {
             getChildFragmentManager().beginTransaction()
                     .add(R.id.container, new PreferenceFragment()).commitNow();

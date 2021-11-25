@@ -113,6 +113,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
                 binding.tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
             }
         });
+        binding.toolbar.setOnClickListener(v-> binding.appBar.setExpanded(true, true));
 
         return binding.getRoot();
     }
