@@ -160,11 +160,12 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener, M
             @Override
             public void onViewAttachedToWindow(View arg0) {
                 binding.appBar.setExpanded(false, true);
+                binding.recyclerView.setNestedScrollingEnabled(false);
             }
 
             @Override
             public void onViewDetachedFromWindow(View v) {
-
+                binding.recyclerView.setNestedScrollingEnabled(true);
             }
         });
         int sort = App.getPreferences().getInt("repo_sort", 0);

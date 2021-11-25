@@ -195,11 +195,12 @@ public class AppListFragment extends BaseFragment {
             @Override
             public void onViewAttachedToWindow(View arg0) {
                 binding.appBar.setExpanded(false, true);
+                binding.recyclerView.setNestedScrollingEnabled(false);
             }
 
             @Override
             public void onViewDetachedFromWindow(View v) {
-
+                binding.recyclerView.setNestedScrollingEnabled(true);
             }
         });
         scopeAdapter.onPrepareOptionsMenu(menu);

@@ -246,7 +246,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
             @Override
             public void onViewDetachedFromWindow(View v) {
-
             }
         });
     }
@@ -378,6 +377,17 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
     public static class ModuleListFragment extends Fragment {
         public ItemRepoRecyclerviewBinding binding;
+        private View.OnAttachStateChangeListener searchViewLocker = new View.OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(View v) {
+                binding.recyclerView.setNestedScrollingEnabled(false);
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(View v) {
+                binding.recyclerView.setNestedScrollingEnabled(true);
+            }
+        };
 
         @Nullable
         @Override
@@ -403,6 +413,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             if (parent instanceof ModulesFragment) {
                 binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> ((ModulesFragment) parent).binding.appBar.setLifted(!top));
                 ((ModulesFragment) parent).binding.appBar.setLifted(!binding.recyclerView.getBorderViewDelegate().isShowingTopBorder());
+                ((ModulesFragment) parent).searchView.addOnAttachStateChangeListener(searchViewLocker);
             }
         }
 
@@ -410,6 +421,10 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         public void onPause() {
             super.onPause();
             binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener(null);
+            var parent = getParentFragment();
+            if (parent instanceof ModulesFragment) {
+                ((ModulesFragment) parent).searchView.removeOnAttachStateChangeListener(searchViewLocker);
+            }
         }
     }
 
