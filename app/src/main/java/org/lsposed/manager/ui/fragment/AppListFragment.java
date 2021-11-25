@@ -191,6 +191,17 @@ public class AppListFragment extends BaseFragment {
         super.onPrepareOptionsMenu(menu);
         searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
         searchView.setOnQueryTextListener(searchListener);
+        searchView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(View arg0) {
+                binding.appBar.setExpanded(false, true);
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(View v) {
+
+            }
+        });
         scopeAdapter.onPrepareOptionsMenu(menu);
     }
 
