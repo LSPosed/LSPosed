@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/swipe_refresh_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <rikka.widget.borderview.BorderNestedScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:borderBottomVisibility="never"
+        app:borderTopDrawable="@null"
+        app:borderTopVisibility="whenTop">
+
+        <HorizontalScrollView
+            android:id="@+id/horizontal_scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/body"
+                style="@style/TextAppearance.AppCompat.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:fontFamily="monospace"
+                android:textColor="?attr/colorOnSurface"
+                android:textIsSelectable="true"
+                android:textSize="12sp"
+                app:borderBottomVisibility="never"
+                app:borderTopDrawable="@null"
+                app:borderTopVisibility="whenTop"
+                app:fitsSystemWindowsInsets="bottom" />
+        </HorizontalScrollView>
+    </rikka.widget.borderview.BorderNestedScrollView>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

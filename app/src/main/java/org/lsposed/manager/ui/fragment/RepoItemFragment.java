@@ -37,6 +37,7 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -530,7 +531,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
                 var repoItemFragment = (RepoItemFragment) parent;
                 repoItemFragment.binding.toolbar.setOnClickListener(v -> {
                     repoItemFragment.binding.appBar.setExpanded(true, true);
-                    binding.scrollView.smoothScrollTo(binding.scrollView.getScrollX(), 0);
+                    binding.scrollView.fullScroll(ScrollView.FOCUS_UP);
                 });
             }
         }
