@@ -40,14 +40,15 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
             app:forceApplySystemWindowInsetTop="true"
-            app:titleCollapseMode="scale"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:titleCollapseMode="scale">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:elevation="0dp"
+                android:theme="@style/ThemeOverlay.MaterialComponents.ActionBar"
                 app:layout_collapseMode="pin" />
         </com.google.android.material.appbar.SubtitleCollapsingToolbarLayout>
 
