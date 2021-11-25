@@ -59,7 +59,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.checkbox.MaterialCheckBox;
-import com.google.android.material.snackbar.Snackbar;
 
 import org.lsposed.lspd.models.Application;
 import org.lsposed.manager.App;
@@ -536,7 +535,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
             tmpChkList.remove(appInfo.application);
         }
         if (!ConfigManager.setModuleScope(module.packageName, tmpChkList)) {
-            Snackbar.make(fragment.binding.snackbar, R.string.failed_to_save_scope_list, Snackbar.LENGTH_SHORT).show();
+            fragment.showHint(R.string.failed_to_save_scope_list, true);
             if (!isChecked) {
                 tmpChkList.add(appInfo.application);
             } else {
@@ -544,12 +543,9 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
             }
             buttonView.setChecked(!isChecked);
         } else if (appInfo.packageName.equals("android")) {
-            Snackbar.make(fragment.binding.snackbar, R.string.reboot_required, Snackbar.LENGTH_SHORT)
-                    .setAction(R.string.reboot, v -> ConfigManager.reboot(false))
-                    .show();
+            fragment.showHint(R.string.reboot_required, true, R.string.reboot, v -> ConfigManager.reboot(false));
         } else if (denyList.contains(appInfo.packageName)) {
-            Snackbar.make(fragment.binding.snackbar, activity.getString(R.string.deny_list, appInfo.label), Snackbar.LENGTH_SHORT)
-                    .show();
+            fragment.showHint(activity.getString(R.string.deny_list, appInfo.label), true);
         }
         checkedList = tmpChkList;
     }

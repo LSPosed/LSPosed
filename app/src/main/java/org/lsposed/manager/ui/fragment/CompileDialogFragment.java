@@ -35,8 +35,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.fragment.app.FragmentManager;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import org.lsposed.manager.App;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.FragmentCompileDialogBinding;
@@ -120,17 +118,8 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
             if (fragment != null) {
                 fragment.dismissAllowingStateLoss();
                 var parent = fragment.getParentFragment();
-                if (parent != null && parent.isResumed()) {
-                    View snackBar = null;
-                    if (parent instanceof ModulesFragment) {
-                        snackBar = ((ModulesFragment) parent).binding.snackbar;
-                    } else if (parent instanceof AppListFragment) {
-                        snackBar = ((AppListFragment) parent).binding.snackbar;
-                    }
-                    if (snackBar != null) {
-                        Snackbar.make(snackBar, text, Snackbar.LENGTH_LONG).show();
-                        return;
-                    }
+                if (parent instanceof BaseFragment) {
+                    ((BaseFragment) parent).showHint(text, true);
                 }
             }
             Toast.makeText(context, text, Toast.LENGTH_LONG).show();

@@ -39,7 +39,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -52,7 +51,6 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -225,22 +223,14 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
         this.module = module;
         runAsync(releaseAdapter::loadItems);
         if (module.getReleases().size() == 1) {
-            if (isResumed()) {
-                Snackbar.make(binding.snackbar, R.string.module_release_no_more, Snackbar.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(requireActivity(), R.string.module_release_no_more, Toast.LENGTH_SHORT).show();
-            }
+            showHint(R.string.module_release_no_more, true);
         }
     }
 
     @Override
     public void onThrowable(Throwable t) {
         runAsync(releaseAdapter::loadItems);
-        if (isResumed()) {
-            Snackbar.make(binding.snackbar, getString(R.string.repo_load_failed, t.getLocalizedMessage()), Snackbar.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(requireActivity(), getString(R.string.repo_load_failed, t.getLocalizedMessage()), Toast.LENGTH_SHORT).show();
-        }
+        showHint(getString(R.string.repo_load_failed, t.getLocalizedMessage()), true);
     }
 
     private class InformationAdapter extends SimpleStatefulAdaptor<InformationAdapter.ViewHolder> {

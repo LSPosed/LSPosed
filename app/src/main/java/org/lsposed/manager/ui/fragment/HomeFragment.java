@@ -161,7 +161,7 @@ public class HomeFragment extends BaseFragment implements RepoLoader.RepoListene
                 binding.download.setVisibility(View.GONE);
             }
             binding.statusIcon.setImageResource(R.drawable.ic_round_error_outline_24);
-            Snackbar.make(binding.snackbar, R.string.lsposed_not_active, Snackbar.LENGTH_INDEFINITE).show();
+            showHint(R.string.lsposed_not_active, false);
         }
         cardBackgroundColor = MaterialColors.harmonizeWithPrimary(activity, cardBackgroundColor);
         binding.status.setCardBackgroundColor(cardBackgroundColor);
@@ -242,7 +242,7 @@ public class HomeFragment extends BaseFragment implements RepoLoader.RepoListene
         @Override
         public void onClick(View v) {
             if (requireInstalled && !ConfigManager.isBinderAlive()) {
-                Snackbar.make(binding.snackbar, R.string.lsposed_not_active, Snackbar.LENGTH_LONG).show();
+                showHint(R.string.lsposed_not_active, false);
             } else {
                 getNavController().navigate(fragment);
             }

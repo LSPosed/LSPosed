@@ -29,7 +29,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -40,7 +39,6 @@ import androidx.core.widget.TextViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -87,11 +85,7 @@ public class LogsFragment extends BaseFragment {
                         os.finish();
                     } catch (IOException e) {
                         var text = context.getString(R.string.logs_save_failed2, e.getMessage());
-                        if (binding != null && isResumed()) {
-                            Snackbar.make(binding.snackbar, text, Snackbar.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(context, text, Toast.LENGTH_LONG).show();
-                        }
+                        showHint(text, false);
                     }
                 });
             });
@@ -214,10 +208,10 @@ public class LogsFragment extends BaseFragment {
                         binding.scrollView.fullScroll(ScrollView.FOCUS_DOWN);
                     } else if (itemId == R.id.menu_clear) {
                         if (ConfigManager.clearLogs(verbose)) {
-                            Snackbar.make(logsFragment.binding.snackbar, R.string.logs_cleared, Snackbar.LENGTH_SHORT).show();
+                            logsFragment.showHint(R.string.logs_cleared, true);
                             refreshLog();
                         } else {
-                            Snackbar.make(logsFragment.binding.snackbar, R.string.logs_clear_failed_2, Snackbar.LENGTH_SHORT).show();
+                            logsFragment.showHint(R.string.logs_clear_failed_2, true);
                         }
                         return true;
                     }

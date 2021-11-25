@@ -21,11 +21,15 @@ package org.lsposed.manager.ui.fragment;
 
 import android.app.Activity;
 import android.view.View;
+import android.widget.Toast;
 
+import androidx.annotation.StringRes;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import org.lsposed.manager.App;
 import org.lsposed.manager.R;
@@ -74,5 +78,30 @@ public class BaseFragment extends Fragment {
         if (activity != null && !activity.isFinishing()) {
             activity.runOnUiThread(runnable);
         }
+    }
+
+    public void showHint(@StringRes int res, boolean lengthShort, @StringRes int actionRes, View.OnClickListener action) {
+        showHint(getString(res), lengthShort, getString(actionRes), action);
+    }
+
+    public void showHint(@StringRes int res, boolean lengthShort) {
+        showHint(getString(res), lengthShort, null, null);
+    }
+
+    public void showHint(CharSequence str, boolean lengthShort) {
+        showHint(str, lengthShort, null, null);
+    }
+
+    public void showHint(CharSequence str, boolean lengthShort, CharSequence actionStr, View.OnClickListener action) {
+        if (isResumed()) {
+            var container = requireActivity().findViewById(R.id.container);
+            if (container != null) {
+                var snackbar = Snackbar.make(container, str, lengthShort ? Snackbar.LENGTH_SHORT : Snackbar.LENGTH_LONG);
+                if (actionStr != null && action != null) snackbar.setAction(actionStr, action);
+                snackbar.show();
+                return;
+            }
+        }
+        Toast.makeText(requireContext(), str, lengthShort ? Toast.LENGTH_SHORT : Toast.LENGTH_LONG).show();
     }
 }

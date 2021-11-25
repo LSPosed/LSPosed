@@ -26,7 +26,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -36,8 +35,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.snackbar.Snackbar;
 
 import org.lsposed.manager.App;
 import org.lsposed.manager.ConfigManager;
@@ -146,11 +143,7 @@ public class AppListFragment extends BaseFragment {
                             BackupUtils.backup(uri, modulePackageName);
                         } catch (Exception e) {
                             var text = App.getInstance().getString(R.string.settings_backup_failed2, e.getMessage());
-                            if (binding != null && isResumed()) {
-                                Snackbar.make(binding.snackbar, text, Snackbar.LENGTH_LONG).show();
-                            } else {
-                                Toast.makeText(App.getInstance(), text, Toast.LENGTH_LONG).show();
-                            }
+                            showHint(text, false);
                         }
                     });
                 });
@@ -162,11 +155,7 @@ public class AppListFragment extends BaseFragment {
                             BackupUtils.restore(uri, modulePackageName);
                         } catch (Exception e) {
                             var text = App.getInstance().getString(R.string.settings_restore_failed2, e.getMessage());
-                            if (binding != null && isResumed()) {
-                                Snackbar.make(binding.snackbar, text, Snackbar.LENGTH_LONG).show();
-                            } else {
-                                Toast.makeText(App.getInstance(), text, Toast.LENGTH_LONG).show();
-                            }
+                            showHint(text, false);
                         }
                     });
                 });

@@ -46,7 +46,6 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -65,7 +64,6 @@ import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.behavior.HideBottomViewOnScrollBehavior;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -253,11 +251,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                             String text = success ?
                                     getString(R.string.module_installed, module.getAppName(), user.name) :
                                     getString(R.string.module_install_failed);
-                            if (binding != null && isResumed()) {
-                                Snackbar.make(binding.snackbar, text, Snackbar.LENGTH_LONG).show();
-                            } else {
-                                Toast.makeText(App.getInstance(), text, Toast.LENGTH_LONG).show();
-                            }
+                            showHint(text, false);
                             if (success)
                                 moduleUtil.reloadSingleModule(module.packageName, user.id);
                         }))
@@ -298,11 +292,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                             runAsync(() -> {
                                 boolean success = ConfigManager.uninstallPackage(selectedModule.packageName, selectedModule.userId);
                                 String text = success ? getString(R.string.module_uninstalled, selectedModule.getAppName()) : getString(R.string.module_uninstall_failed);
-                                if (binding != null && isResumed()) {
-                                    Snackbar.make(binding.snackbar, text, Snackbar.LENGTH_LONG).show();
-                                } else {
-                                    Toast.makeText(App.getInstance(), text, Toast.LENGTH_LONG).show();
-                                }
+                                showHint(text, false);
                                 if (success)
                                     moduleUtil.reloadSingleModule(selectedModule.packageName, selectedModule.userId);
                             }))
