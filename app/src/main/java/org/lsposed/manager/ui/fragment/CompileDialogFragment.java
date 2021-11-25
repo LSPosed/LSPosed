@@ -48,30 +48,21 @@ import java.lang.ref.WeakReference;
 @SuppressWarnings("deprecation")
 public class CompileDialogFragment extends AppCompatDialogFragment {
     private ApplicationInfo appInfo;
-    private View snackBar;
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            var parcelable = savedInstanceState.getParcelable(CompileDialogFragment.class.getName() + ".appInfo");
-            if (parcelable instanceof ApplicationInfo) {
-                appInfo = (ApplicationInfo) parcelable;
-            }
-        }
-        super.onCreate(savedInstanceState);
-    }
-
-    public static void speed(FragmentManager fragmentManager, ApplicationInfo info, View snackBar) {
+    public static void speed(FragmentManager fragmentManager, ApplicationInfo info) {
         CompileDialogFragment fragment = new CompileDialogFragment();
         fragment.setCancelable(false);
-        fragment.appInfo = info;
-        fragment.snackBar = snackBar;
+        var bundle = new Bundle();
+        bundle.putParcelable("appInfo", info);
+        fragment.setArguments(bundle);
         fragment.show(fragmentManager, "compile_dialog");
     }
 
     @Override
     @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        var arguments = getArguments();
+        appInfo = arguments != null ? arguments.getParcelable("appInfo") : null;
         if (appInfo == null) {
             throw new IllegalStateException("appInfo should not be null.");
         }
@@ -129,18 +120,20 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
             if (fragment != null) {
                 fragment.dismissAllowingStateLoss();
                 var parent = fragment.getParentFragment();
-                if (fragment.snackBar != null && parent != null && parent.isResumed()) {
-                    Snackbar.make(fragment.snackBar, text, Snackbar.LENGTH_LONG).show();
-                    return;
+                if (parent != null && parent.isResumed()) {
+                    View snackBar = null;
+                    if (parent instanceof ModulesFragment) {
+                        snackBar = ((ModulesFragment) parent).binding.snackbar;
+                    } else if (parent instanceof AppListFragment) {
+                        snackBar = ((AppListFragment) parent).binding.snackbar;
+                    }
+                    if (snackBar != null) {
+                        Snackbar.make(snackBar, text, Snackbar.LENGTH_LONG).show();
+                        return;
+                    }
                 }
             }
             Toast.makeText(context, text, Toast.LENGTH_LONG).show();
         }
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable(CompileDialogFragment.class.getName() + ".appInfo", appInfo);
     }
 }
