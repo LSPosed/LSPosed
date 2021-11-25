@@ -392,7 +392,7 @@ public class SubtitleCollapsingToolbarLayout extends FrameLayout {
                 collapsingTextHelper.setCollapsedBounds(
                         tmpRect.left + (isRtl ? toolbar.getTitleMarginEnd() : toolbar.getTitleMarginStart()),
                         tmpRect.top + maxOffset + toolbar.getTitleMarginTop(),
-                        tmpRect.right + (isRtl ? toolbar.getTitleMarginStart() : toolbar.getTitleMarginEnd()),
+                        tmpRect.right - (isRtl ? toolbar.getTitleMarginStart() : toolbar.getTitleMarginEnd()),
                         tmpRect.bottom + maxOffset - toolbar.getTitleMarginBottom());
 
                 // Update the expanded bounds
