@@ -156,6 +156,7 @@ public class LogsFragment extends BaseFragment {
             }
             binding.recyclerView.smoothScrollToPosition(0);
         } else if (itemId == R.id.menu_scroll_down) {
+            binding.appBar.setExpanded(false, true);
             if (adapter.getItemCount() - layoutManager.findLastVisibleItemPosition() > 1000) {
                 binding.recyclerView.scrollToPosition(adapter.getItemCount() - 1);
             } else {
