@@ -56,7 +56,7 @@ import java.util.Locale;
 
 import rikka.core.util.ResourceUtils;
 
-public class HomeFragment extends BaseFragment implements RepoLoader.Listener, ModuleUtil.ModuleListener {
+public class HomeFragment extends BaseFragment implements RepoLoader.RepoListener, ModuleUtil.ModuleListener {
 
     private FragmentHomeBinding binding;
 
@@ -111,9 +111,7 @@ public class HomeFragment extends BaseFragment implements RepoLoader.Listener, M
 
         repoLoader.addListener(this);
         moduleUtil.addListener(this);
-        if (repoLoader.isRepoLoaded()) {
-            repoLoaded();
-        }
+        onModulesReloaded();
         return binding.getRoot();
     }
 
@@ -197,7 +195,7 @@ public class HomeFragment extends BaseFragment implements RepoLoader.Listener, M
     }
 
     @Override
-    public void repoLoaded() {
+    public void onRepoLoaded() {
         final int[] count = new int[]{0};
         HashSet<String> processedModules = new HashSet<>();
         var modules = moduleUtil.getModules();
@@ -228,7 +226,7 @@ public class HomeFragment extends BaseFragment implements RepoLoader.Listener, M
 
     @Override
     public void onModulesReloaded() {
-        if (repoLoader.isRepoLoaded()) repoLoaded();
+        onRepoLoaded();
         setModulesSummary(moduleUtil.getEnabledModulesCount());
     }
 
@@ -260,7 +258,7 @@ public class HomeFragment extends BaseFragment implements RepoLoader.Listener, M
     }
 
     private void setModulesSummary(int moduleCount) {
-        runOnUiThread(() -> binding.modulesSummary.setText(moduleCount == - 1? getString(R.string.loading) : getResources().getQuantityString(R.plurals.modules_enabled_count, moduleCount, moduleCount)));
+        runOnUiThread(() -> binding.modulesSummary.setText(moduleCount == -1 ? getString(R.string.loading) : getResources().getQuantityString(R.plurals.modules_enabled_count, moduleCount, moduleCount)));
     }
 
     @Override

@@ -87,7 +87,7 @@ import rikka.core.util.ResourceUtils;
 import rikka.recyclerview.RecyclerViewKt;
 import rikka.widget.borderview.BorderView;
 
-public class RepoItemFragment extends BaseFragment implements RepoLoader.Listener {
+public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoListener {
     FragmentPagerBinding binding;
     OnlineModule module;
 
@@ -299,7 +299,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
         }
     }
 
-    private static class ReleaseAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<ReleaseAdapter.ViewHolder> implements RepoLoader.Listener {
+    private static class ReleaseAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<ReleaseAdapter.ViewHolder> implements RepoLoader.RepoListener {
         private List<Release> items = new ArrayList<>();
         private final Resources resources = App.getInstance().getResources();
         private final BaseFragment fragment;
@@ -324,7 +324,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
         }
 
         @Override
-        public void moduleReleasesLoaded(OnlineModule module) {
+        public void onModuleReleasesLoaded(OnlineModule module) {
             this.module = module;
             fragment.runAsync(this::loadItems);
             if (fragment.isResumed() && module.getReleases().size() == 1) {
@@ -519,11 +519,11 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             var arguments = getArguments();
             if (arguments != null)
-                module = RepoLoader.getInstance().getOnlineModule(arguments.getString("module", ""));
+                module = RepoLoader.getInstance().getOnlineModule(arguments.getString("module", null));
             else module = null;
+            if (module == null) getNavController().navigate(R.id.action_repo_item_fragment_to_repo_fragment);
             binding = ItemRepoReadmeBinding.inflate(getLayoutInflater(), container, false);
-            if (module != null)
-                renderGithubMarkdown(getParentFragment(), binding.readme, module.getReadmeHTML());
+            renderGithubMarkdown(getParentFragment(), binding.readme, module.getReadmeHTML());
             borderView = binding.scrollView;
             return binding.getRoot();
         }
@@ -541,7 +541,10 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.Listene
                 return null;
             }
             module = RepoLoader.getInstance().getOnlineModule(arguments.getString("module", null));
-            if (module == null) return null;
+            if (module == null) {
+                getNavController().navigate(R.id.action_repo_item_fragment_to_repo_fragment);
+                return null;
+            }
             var position = arguments.getInt("position", 0);
             if (position == 1)
                 adapter = new ReleaseAdapter(this, module);

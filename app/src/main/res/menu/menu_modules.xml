@@ -26,10 +26,4 @@
         android:icon="@drawable/ic_baseline_search_24"
         android:showAsAction="ifRoom|collapseActionView" />
 
-    <item
-        android:id="@+id/menu_refresh"
-        android:icon="@drawable/ic_refresh"
-        android:showAsAction="ifRoom"
-        android:title="@string/refresh" />
-
 </menu>

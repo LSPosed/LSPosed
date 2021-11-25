@@ -75,9 +75,9 @@ import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.adapters.AppHelper;
 import org.lsposed.manager.databinding.DialogRecyclerviewBinding;
+import org.lsposed.manager.databinding.FragmentModuleListBinding;
 import org.lsposed.manager.databinding.FragmentPagerBinding;
 import org.lsposed.manager.databinding.ItemModuleBinding;
-import org.lsposed.manager.databinding.ItemRepoRecyclerviewBinding;
 import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
 import org.lsposed.manager.ui.widget.EmptyStateRecyclerView;
@@ -94,7 +94,7 @@ import java.util.stream.IntStream;
 import rikka.core.util.ResourceUtils;
 import rikka.recyclerview.RecyclerViewKt;
 
-public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleListener {
+public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleListener, RepoLoader.RepoListener {
     private static final PackageManager pm = App.getInstance().getPackageManager();
     private static final ModuleUtil moduleUtil = ModuleUtil.getInstance();
     private static final RepoLoader repoLoader = RepoLoader.getInstance();
@@ -104,13 +104,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     private SearchView.OnQueryTextListener searchListener;
 
     private final ArrayList<ModuleAdapter> adapters = new ArrayList<>();
-
-    private final RecyclerView.AdapterDataObserver observer = new RecyclerView.AdapterDataObserver() {
-        @Override
-        public void onChanged() {
-            updateProgress();
-        }
-    };
 
     private ModuleUtil.InstalledModule selectedModule;
 
@@ -137,7 +130,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 adapter.setHasStableIds(true);
                 adapter.setStateRestorationPolicy(PREVENT_WHEN_EMPTY);
                 adapters.add(adapter);
-                adapter.registerAdapterDataObserver(observer);
             }
         }
     }
@@ -154,20 +146,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         }
     }
 
-    private void updateProgress() {
-        if (binding != null) {
-            var position = binding.viewPager.getCurrentItem();
-            binding.progress.setVisibility(adapters.get(position).isLoaded ? View.GONE : View.VISIBLE);
-        }
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        moduleUtil.addListener(this);
-        updateModuleSummary();
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -178,7 +156,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
-                updateProgress();
                 showFab();
             }
         });
@@ -231,6 +208,10 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             });
         });
 
+        moduleUtil.addListener(this);
+        repoLoader.addListener(this);
+        updateModuleSummary();
+
         return binding.getRoot();
     }
 
@@ -257,13 +238,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        moduleUtil.removeListener(this);
-    }
-
-    @Override
-    public void onSingleInstalledModuleReloaded(ModuleUtil.InstalledModule module) {
+    public void onSingleModuleReloaded(ModuleUtil.InstalledModule module) {
         adapters.forEach(ModuleAdapter::refresh);
     }
 
@@ -273,21 +248,17 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         updateModuleSummary();
     }
 
+    @Override
+    public void onRepoLoaded() {
+        adapters.forEach(ModuleAdapter::refresh);
+    }
+
     private void updateModuleSummary() {
         var moduleCount = moduleUtil.getEnabledModulesCount();
         runOnUiThread(() -> {
             binding.toolbar.setSubtitle(moduleCount == -1 ? getString(R.string.loading) : getResources().getQuantityString(R.plurals.modules_enabled_count, moduleCount, moduleCount));
             binding.toolbarLayout.setSubtitle(binding.toolbar.getSubtitle());
         });
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int itemId = item.getItemId();
-        if (itemId == R.id.menu_refresh) {
-            adapters.forEach(adapter -> adapter.refresh(true));
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void installModuleToUser(ModuleUtil.InstalledModule module, UserInfo user) {
@@ -370,13 +341,20 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
         moduleUtil.removeListener(this);
+        repoLoader.removeListener(this);
         binding = null;
     }
 
     public static class ModuleListFragment extends Fragment {
-        public ItemRepoRecyclerviewBinding binding;
+        public FragmentModuleListBinding binding;
+        private ModuleAdapter adapter;
+        private final RecyclerView.AdapterDataObserver observer = new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                binding.swipeRefreshLayout.setRefreshing(!adapter.isLoaded());
+            }
+        };
         private final View.OnAttachStateChangeListener searchViewLocker = new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(View v) {
@@ -398,11 +376,14 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 return null;
             }
             int position = arguments.getInt("position");
-            binding = ItemRepoRecyclerviewBinding.inflate(getLayoutInflater(), container, false);
-            binding.recyclerView.setAdapter(fragment.adapters.get(position));
+            binding = FragmentModuleListBinding.inflate(getLayoutInflater(), container, false);
+            adapter = fragment.adapters.get(position);
+            binding.recyclerView.setAdapter(adapter);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireActivity());
             binding.recyclerView.setLayoutManager(layoutManager);
+            binding.swipeRefreshLayout.setOnRefreshListener(adapter::fullRefresh);
             RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
+            adapter.registerAdapterDataObserver(observer);
             return binding.getRoot();
         }
 
@@ -417,6 +398,12 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 moduleFragment.searchView.addOnAttachStateChangeListener(searchViewLocker);
                 binding.recyclerView.setNestedScrollingEnabled(moduleFragment.searchView.isIconified());
             }
+        }
+
+        @Override
+        public void onDestroyView() {
+            adapter.unregisterAdapterDataObserver(observer);
+            super.onDestroyView();
         }
 
         @Override
@@ -546,22 +533,20 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 }
                 sb.setSpan(foregroundColorSpan, sb.length() - warningText.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
             }
-            if (repoLoader.isRepoLoaded()) {
-                var ver = repoLoader.getModuleLatestVersion(item.packageName);
-                if (ver != null && ver.upgradable(item.versionCode, item.versionName)) {
-                    if (warningText != null) sb.append("\n");
-                    String recommended = getString(R.string.update_available, ver.versionName);
-                    sb.append(recommended);
-                    final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ResourceUtils.resolveColor(requireActivity().getTheme(), androidx.appcompat.R.attr.colorAccent));
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                        final TypefaceSpan typefaceSpan = new TypefaceSpan(Typeface.create("sans-serif-medium", Typeface.NORMAL));
-                        sb.setSpan(typefaceSpan, sb.length() - recommended.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                    } else {
-                        final StyleSpan styleSpan = new StyleSpan(Typeface.BOLD);
-                        sb.setSpan(styleSpan, sb.length() - recommended.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                    }
-                    sb.setSpan(foregroundColorSpan, sb.length() - recommended.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            var ver = repoLoader.getModuleLatestVersion(item.packageName);
+            if (ver != null && ver.upgradable(item.versionCode, item.versionName)) {
+                if (warningText != null) sb.append("\n");
+                String recommended = getString(R.string.update_available, ver.versionName);
+                sb.append(recommended);
+                final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ResourceUtils.resolveColor(requireActivity().getTheme(), androidx.appcompat.R.attr.colorAccent));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    final TypefaceSpan typefaceSpan = new TypefaceSpan(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+                    sb.setSpan(typefaceSpan, sb.length() - recommended.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                } else {
+                    final StyleSpan styleSpan = new StyleSpan(Typeface.BOLD);
+                    sb.setSpan(styleSpan, sb.length() - recommended.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
                 }
+                sb.setSpan(foregroundColorSpan, sb.length() - recommended.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
             }
             if (sb.length() == 0) {
                 holder.hint.setVisibility(View.GONE);
@@ -643,12 +628,15 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         }
 
         public void refresh() {
-            refresh(false);
+            runAsync(reloadModules);
         }
 
-        public void refresh(boolean force) {
-            if (force) runAsync(moduleUtil::reloadInstalledModules);
-            runAsync(reloadModules);
+        public void fullRefresh() {
+            runAsync(() -> {
+                setLoaded(false);
+                moduleUtil.reloadInstalledModules();
+                refresh();
+            });
         }
 
         private final Runnable reloadModules = () -> {
@@ -705,7 +693,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
         @Override
         public boolean isLoaded() {
-            return isLoaded;
+            return isLoaded && moduleUtil.isModulesLoaded();
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {

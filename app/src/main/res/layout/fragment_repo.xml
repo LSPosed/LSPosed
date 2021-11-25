@@ -59,25 +59,23 @@
         android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <com.google.android.material.progressindicator.LinearProgressIndicator
-            android:id="@+id/progress"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:visibility="gone"
-            app:hideAnimationBehavior="outward" />
+            android:layout_height="match_parent">
 
-        <org.lsposed.manager.ui.widget.StatefulRecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:fadeScrollbars="true"
-            android:scrollbarStyle="insideOverlay"
-            android:scrollbars="vertical"
-            app:borderBottomVisibility="never"
-            app:borderTopDrawable="@null"
-            app:borderTopVisibility="whenTop"
-            app:fitsSystemWindowsInsets="bottom" />
+            <org.lsposed.manager.ui.widget.EmptyStateRecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:fadeScrollbars="true"
+                android:scrollbarStyle="insideOverlay"
+                android:scrollbars="vertical"
+                app:borderBottomVisibility="never"
+                app:borderTopDrawable="@null"
+                app:borderTopVisibility="whenTop"
+                app:fitsSystemWindowsInsets="bottom" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </FrameLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

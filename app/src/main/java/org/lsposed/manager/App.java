@@ -195,7 +195,6 @@ public class App extends Application {
         }, new IntentFilter(Intent.ACTION_PACKAGE_CHANGED));
 
         UpdateUtil.loadRemoteVersion();
-        RepoLoader.getInstance().loadRemoteData();
 
         executorService.submit(HTML_TEMPLATE);
         executorService.submit(HTML_TEMPLATE_DARK);

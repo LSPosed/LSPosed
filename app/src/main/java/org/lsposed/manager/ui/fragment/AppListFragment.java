@@ -60,6 +60,15 @@ public class AppListFragment extends BaseFragment {
     public ActivityResultLauncher<String> backupLauncher;
     public ActivityResultLauncher<String[]> restoreLauncher;
 
+    private final RecyclerView.AdapterDataObserver observer = new RecyclerView.AdapterDataObserver() {
+        @Override
+        public void onChanged() {
+            if (binding != null && scopeAdapter != null) {
+                binding.swipeRefreshLayout.setRefreshing(!scopeAdapter.isLoaded());
+            }
+        }
+    };
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -78,21 +87,13 @@ public class AppListFragment extends BaseFragment {
 
         scopeAdapter = new ScopeAdapter(this, module);
         scopeAdapter.setHasStableIds(true);
-        scopeAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onChanged() {
-                if (binding != null && scopeAdapter != null) {
-                    binding.progress.setVisibility(scopeAdapter.isLoaded() ? View.GONE : View.VISIBLE);
-                    binding.swipeRefreshLayout.setRefreshing(!scopeAdapter.isLoaded());
-                }
-            }
-        });
+        scopeAdapter.registerAdapterDataObserver(observer);
         binding.recyclerView.setAdapter(scopeAdapter);
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
         binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setLifted(!top));
         RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
-        binding.swipeRefreshLayout.setOnRefreshListener(() -> scopeAdapter.refresh());
+        binding.swipeRefreshLayout.setOnRefreshListener(() -> scopeAdapter.refresh(true));
 
         searchListener = scopeAdapter.getSearchListener();
 
@@ -116,6 +117,8 @@ public class AppListFragment extends BaseFragment {
         int moduleUserId = args.getModuleUserId();
 
         module = ModuleUtil.getInstance().getModule(modulePackageName, moduleUserId);
+        if (module == null)
+            getNavController().navigate(R.id.action_app_list_fragment_to_modules_fragment);
 
         backupLauncher = registerForActivityResult(new ActivityResultContracts.CreateDocument(),
                 uri -> {
@@ -167,7 +170,7 @@ public class AppListFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
+        scopeAdapter.unregisterAdapterDataObserver(observer);
         binding = null;
     }
 

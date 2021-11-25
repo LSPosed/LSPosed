@@ -19,14 +19,14 @@
   -->
 <org.lsposed.manager.ui.widget.EmptyStateRecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/recyclerView"
+    android:id="@+id/recycler_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipToPadding="false"
     android:fadeScrollbars="true"
     android:scrollbarStyle="insideOverlay"
     android:scrollbars="vertical"
-    app:borderTopVisibility="whenTop"
-    app:borderTopDrawable="@null"
     app:borderBottomVisibility="never"
+    app:borderTopDrawable="@null"
+    app:borderTopVisibility="whenTop"
     app:fitsSystemWindowsInsets="bottom" />

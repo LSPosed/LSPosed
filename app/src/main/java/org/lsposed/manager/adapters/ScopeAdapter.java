@@ -33,8 +33,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
@@ -468,9 +466,11 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
     }
 
     public void refresh() {
+        refresh(false);
+    }
+
+    public void refresh(boolean force) {
         setLoaded(false);
-        boolean force = fragment.binding.swipeRefreshLayout.isRefreshing();
-        if (!force) fragment.binding.progress.setIndeterminate(true);
         enabled = moduleUtil.isModuleEnabled(module.packageName);
         fragment.binding.masterSwitch.setOnCheckedChangeListener(null);
         fragment.binding.masterSwitch.setChecked(enabled);

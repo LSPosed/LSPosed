@@ -56,8 +56,8 @@ import org.lsposed.manager.databinding.FragmentRepoBinding;
 import org.lsposed.manager.databinding.ItemOnlinemoduleBinding;
 import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.repo.model.OnlineModule;
+import org.lsposed.manager.ui.widget.EmptyStateRecyclerView;
 import org.lsposed.manager.util.ModuleUtil;
-import org.lsposed.manager.util.SimpleStatefulAdaptor;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -72,7 +72,7 @@ import rikka.core.util.LabelComparator;
 import rikka.core.util.ResourceUtils;
 import rikka.recyclerview.RecyclerViewKt;
 
-public class RepoFragment extends BaseFragment implements RepoLoader.Listener, ModuleUtil.ModuleListener {
+public class RepoFragment extends BaseFragment implements RepoLoader.RepoListener, ModuleUtil.ModuleListener {
     protected FragmentRepoBinding binding;
     protected SearchView searchView;
     private SearchView.OnQueryTextListener mSearchListener;
@@ -82,6 +82,12 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener, M
     private final RepoLoader repoLoader = RepoLoader.getInstance();
     private final ModuleUtil moduleUtil = ModuleUtil.getInstance();
     private RepoAdapter adapter;
+    private final RecyclerView.AdapterDataObserver observer = new RecyclerView.AdapterDataObserver() {
+        @Override
+        public void onChanged() {
+            binding.swipeRefreshLayout.setRefreshing(!adapter.isLoaded());
+        }
+    };
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -110,15 +116,15 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener, M
         setupToolbar(binding.toolbar, R.string.module_repo, R.menu.menu_repo);
         adapter = new RepoAdapter();
         adapter.setHasStableIds(true);
+        adapter.registerAdapterDataObserver(observer);
         binding.recyclerView.setAdapter(adapter);
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
         RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
-        binding.progress.setVisibilityAfterHide(View.GONE);
+        binding.swipeRefreshLayout.setOnRefreshListener(adapter::fullRefresh);
         repoLoader.addListener(this);
         moduleUtil.addListener(this);
         updateRepoSummary();
-
         return binding.getRoot();
     }
 
@@ -182,13 +188,15 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener, M
 
         mHandler.removeCallbacksAndMessages(null);
         repoLoader.removeListener(this);
+        moduleUtil.removeListener(this);
+        adapter.unregisterAdapterDataObserver(observer);
         binding = null;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        adapter.initData();
+        adapter.refresh();
         if (preLoadWebview) {
             mHandler.postDelayed(() -> new WebView(requireContext()), 500);
             preLoadWebview = false;
@@ -196,11 +204,8 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener, M
     }
 
     @Override
-    public void repoLoaded() {
-        runOnUiThread(() -> {
-            binding.progress.hide();
-            adapter.setData(repoLoader.getOnlineModules());
-        });
+    public void onRepoLoaded() {
+        adapter.refresh();
         updateRepoSummary();
     }
 
@@ -220,24 +225,22 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener, M
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
-        if (itemId == R.id.menu_refresh) {
-            binding.progress.show();
-            repoLoader.loadRemoteData();
-        } else if (itemId == R.id.item_sort_by_name) {
+        if (itemId == R.id.item_sort_by_name) {
             item.setChecked(true);
             App.getPreferences().edit().putInt("repo_sort", 0).apply();
-            adapter.setData(repoLoader.getOnlineModules());
+            adapter.refresh();
         } else if (itemId == R.id.item_sort_by_update_time) {
             item.setChecked(true);
             App.getPreferences().edit().putInt("repo_sort", 1).apply();
-            adapter.setData(repoLoader.getOnlineModules());
+            adapter.refresh();
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private class RepoAdapter extends SimpleStatefulAdaptor<RepoAdapter.ViewHolder> implements Filterable {
+    private class RepoAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<RepoAdapter.ViewHolder> implements Filterable, RepoLoader.RepoListener {
         private List<OnlineModule> fullList, showList;
         private final LabelComparator labelComparator = new LabelComparator();
+        private boolean isLoaded = false;
 
         RepoAdapter() {
             fullList = showList = Collections.emptyList();
@@ -300,7 +303,14 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener, M
             return showList.size();
         }
 
+        private void setLoaded(boolean isLoaded) {
+            this.isLoaded = isLoaded;
+            runOnUiThread(this::notifyDataSetChanged);
+        }
+
         public void setData(Collection<OnlineModule> modules) {
+            if (modules == null) return;
+            setLoaded(false);
             fullList = new ArrayList<>(modules);
             fullList = fullList.stream().filter((onlineModule -> !onlineModule.isHide() && !onlineModule.getReleases().isEmpty())).collect(Collectors.toList());
             int sort = App.getPreferences().getInt("repo_sort", 0);
@@ -313,14 +323,16 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener, M
             runOnUiThread(() -> getFilter().filter(queryStr));
         }
 
-        public void initData() {
-            Collection<OnlineModule> modules = repoLoader.getOnlineModules();
-            if (!repoLoader.isRepoLoaded()) {
-                binding.progress.show();
+        public void fullRefresh() {
+            runAsync(() -> {
+                setLoaded(false);
                 repoLoader.loadRemoteData();
-            } else {
-                adapter.setData(modules);
-            }
+                refresh();
+            });
+        }
+
+        public void refresh() {
+            runAsync(() -> adapter.setData(repoLoader.getOnlineModules()));
         }
 
         @Override
@@ -331,6 +343,11 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener, M
         @Override
         public Filter getFilter() {
             return new RepoAdapter.ModuleFilter();
+        }
+
+        @Override
+        public boolean isLoaded() {
+            return isLoaded && repoLoader.isRepoLoaded();
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
@@ -375,7 +392,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.Listener, M
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 //noinspection unchecked
                 showList = (List<OnlineModule>) results.values;
-                runOnUiThread(RepoAdapter.this::notifyDataSetChanged);
+                setLoaded(true);
             }
         }
     }
