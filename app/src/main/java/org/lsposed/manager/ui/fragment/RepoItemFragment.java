@@ -113,7 +113,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
                 binding.tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
             }
         });
-        binding.toolbar.setOnClickListener(v-> binding.appBar.setExpanded(true, true));
+        binding.toolbar.setOnClickListener(v -> binding.appBar.setExpanded(true, true));
 
         return binding.getRoot();
     }
@@ -496,8 +496,9 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
             super.onResume();
             var parent = getParentFragment();
             if (parent instanceof RepoItemFragment) {
-                borderView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> ((RepoItemFragment) parent).binding.appBar.setLifted(!top));
-                ((RepoItemFragment) parent).binding.appBar.setLifted(!borderView.getBorderViewDelegate().isShowingTopBorder());
+                var repoItemFragment = (RepoItemFragment) parent;
+                borderView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> repoItemFragment.binding.appBar.setLifted(!top));
+                repoItemFragment.binding.appBar.setLifted(!borderView.getBorderViewDelegate().isShowingTopBorder());
             }
         }
 
@@ -522,7 +523,8 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
             if (arguments != null)
                 module = RepoLoader.getInstance().getOnlineModule(arguments.getString("module", null));
             else module = null;
-            if (module == null) getNavController().navigate(R.id.action_repo_item_fragment_to_repo_fragment);
+            if (module == null)
+                getNavController().navigate(R.id.action_repo_item_fragment_to_repo_fragment);
             binding = ItemRepoReadmeBinding.inflate(getLayoutInflater(), container, false);
             renderGithubMarkdown(getParentFragment(), binding.readme, module.getReadmeHTML());
             borderView = binding.scrollView;
@@ -535,6 +537,19 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
         ItemRepoRecyclerviewBinding binding;
         RecyclerView.Adapter<?> adapter;
         OnlineModule module;
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            var parent = getParentFragment();
+            if (parent instanceof RepoItemFragment) {
+                var repoItemFragment = (RepoItemFragment) parent;
+                repoItemFragment.binding.toolbar.setOnClickListener(v -> {
+                    repoItemFragment.binding.appBar.setExpanded(true, true);
+                    binding.recyclerView.smoothScrollToPosition(0);
+                });
+            }
+        }
 
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             var arguments = getArguments();

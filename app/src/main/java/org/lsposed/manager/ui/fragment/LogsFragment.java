@@ -110,7 +110,14 @@ public class LogsFragment extends BaseFragment {
         binding.appBar.setLiftable(true);
         setupToolbar(binding.toolbar, R.string.Logs, R.menu.menu_logs);
 
-        binding.toolbar.setOnClickListener(v-> binding.appBar.setExpanded(true, true));
+        binding.toolbar.setOnClickListener(v -> {
+            if (layoutManager.findFirstVisibleItemPosition() > 1000) {
+                binding.recyclerView.scrollToPosition(0);
+            } else {
+                binding.recyclerView.smoothScrollToPosition(0);
+            }
+            binding.appBar.setExpanded(true, true);
+        });
 
         binding.slidingTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
