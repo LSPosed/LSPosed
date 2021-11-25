@@ -97,6 +97,7 @@ public class AppListFragment extends BaseFragment {
         binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setLifted(!top));
         RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
         binding.swipeRefreshLayout.setOnRefreshListener(() -> scopeAdapter.refresh(true));
+        binding.swipeRefreshLayout.setProgressViewEndTarget(true, binding.swipeRefreshLayout.getProgressViewEndOffset());
         Intent intent = AppHelper.getSettingsIntent(module.packageName, module.userId);
         if (intent == null) {
             binding.fab.setVisibility(View.GONE);

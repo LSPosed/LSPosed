@@ -381,6 +381,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireActivity());
             binding.recyclerView.setLayoutManager(layoutManager);
             binding.swipeRefreshLayout.setOnRefreshListener(adapter::fullRefresh);
+            binding.swipeRefreshLayout.setProgressViewEndTarget(true, binding.swipeRefreshLayout.getProgressViewEndOffset());
             RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
             adapter.registerAdapterDataObserver(observer);
             return binding.getRoot();

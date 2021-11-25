@@ -122,6 +122,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
         RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
         binding.swipeRefreshLayout.setOnRefreshListener(adapter::fullRefresh);
+        binding.swipeRefreshLayout.setProgressViewEndTarget(true, binding.swipeRefreshLayout.getProgressViewEndOffset());
         binding.toolbar.setOnClickListener(v -> {
             binding.recyclerView.smoothScrollToPosition(0);
             binding.appBar.setExpanded(true, true);
