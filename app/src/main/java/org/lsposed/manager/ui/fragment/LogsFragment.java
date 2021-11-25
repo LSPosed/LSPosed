@@ -192,6 +192,7 @@ public class LogsFragment extends BaseFragment {
             if (arguments == null) return null;
             verbose = arguments.getBoolean("verbose");
             binding.swipeRefreshLayout.setOnRefreshListener(this::refreshLog);
+            binding.swipeRefreshLayout.setProgressViewEndTarget(true, binding.swipeRefreshLayout.getProgressViewEndOffset());
             return binding.getRoot();
         }
 

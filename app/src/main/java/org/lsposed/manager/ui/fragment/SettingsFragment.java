@@ -107,7 +107,7 @@ public class SettingsFragment extends BaseFragment {
                         } catch (Exception e) {
                             var text = App.getInstance().getString(R.string.settings_backup_failed2, e.getMessage());
                             if (parentFragment != null && parentFragment.binding != null && isResumed()) {
-                                Snackbar.make(parentFragment.binding.snackbar, text, Snackbar.LENGTH_LONG).show();
+                                Snackbar.make(parentFragment.binding.container, text, Snackbar.LENGTH_LONG).show();
                             } else {
                                 Toast.makeText(App.getInstance(), text, Toast.LENGTH_LONG).show();
                             }
@@ -123,7 +123,7 @@ public class SettingsFragment extends BaseFragment {
                         } catch (Exception e) {
                             var text = App.getInstance().getString(R.string.settings_restore_failed2, e.getMessage());
                             if (parentFragment != null && parentFragment.binding != null && isResumed()) {
-                                Snackbar.make(parentFragment.binding.snackbar, text, Snackbar.LENGTH_LONG).show();
+                                Snackbar.make(parentFragment.binding.container, text, Snackbar.LENGTH_LONG).show();
                             } else {
                                 Toast.makeText(App.getInstance(), text, Toast.LENGTH_LONG).show();
                             }

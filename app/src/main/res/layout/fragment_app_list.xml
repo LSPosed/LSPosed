@@ -21,7 +21,6 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/snackbar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:consumeSystemWindowsInsets="start|end"
@@ -81,6 +80,7 @@
         app:tint="?attr/colorSurface" />
 
     <LinearLayout
+        android:id="@+id/snackbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
