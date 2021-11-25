@@ -28,7 +28,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.math.MathUtils;
-import androidx.core.util.ObjectsCompat;
 import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -49,8 +48,10 @@ public class SubtitleCollapsingToolbarLayout extends FrameLayout {
 
     private boolean refreshToolbar = true;
     private int toolbarId;
-    @Nullable private Toolbar toolbar;
-    @Nullable private View toolbarDirectChild;
+    @Nullable
+    private Toolbar toolbar;
+    @Nullable
+    private View toolbarDirectChild;
     private View dummyView;
 
     private int expandedMarginStart;
@@ -59,12 +60,15 @@ public class SubtitleCollapsingToolbarLayout extends FrameLayout {
     private int expandedMarginBottom;
 
     private final Rect tmpRect = new Rect();
-    @NonNull final SubtitleCollapsingTextHelper collapsingTextHelper;
+    @NonNull
+    final SubtitleCollapsingTextHelper collapsingTextHelper;
     private boolean collapsingTitleEnabled;
     private boolean drawCollapsingTitle;
 
-    @Nullable private Drawable contentScrim;
-    @Nullable Drawable statusBarScrim;
+    @Nullable
+    private Drawable contentScrim;
+    @Nullable
+    Drawable statusBarScrim;
     private int scrimAlpha;
     private boolean scrimsAreShown;
     private ValueAnimator scrimAnimator;
@@ -75,7 +79,8 @@ public class SubtitleCollapsingToolbarLayout extends FrameLayout {
 
     int currentOffset;
 
-    @Nullable WindowInsetsCompat lastInsets;
+    @Nullable
+    WindowInsetsCompat lastInsets;
 
     public SubtitleCollapsingToolbarLayout(@NonNull Context context) {
         this(context, null);

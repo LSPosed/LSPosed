@@ -19,6 +19,7 @@
 
 package org.lsposed.manager.ui.fragment;
 
+import android.app.Dialog;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -41,7 +42,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
@@ -221,7 +224,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
         this.module = module;
         runAsync(releaseAdapter::loadItems);
         if (module.getReleases().size() == 1) {
-            if (isResumed() ) {
+            if (isResumed()) {
                 Snackbar.make(binding.snackbar, R.string.module_release_no_more, Snackbar.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(requireActivity(), R.string.module_release_no_more, Toast.LENGTH_SHORT).show();
@@ -233,7 +236,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
     public void onThrowable(Throwable t) {
         runAsync(releaseAdapter::loadItems);
         if (isResumed()) {
-            Snackbar.make(binding.snackbar, getString(R.string.repo_load_failed, t.getLocalizedMessage()), Snackbar .LENGTH_SHORT).show();
+            Snackbar.make(binding.snackbar, getString(R.string.repo_load_failed, t.getLocalizedMessage()), Snackbar.LENGTH_SHORT).show();
         } else {
             Toast.makeText(requireActivity(), getString(R.string.repo_load_failed, t.getLocalizedMessage()), Toast.LENGTH_SHORT).show();
         }
@@ -322,6 +325,27 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
         }
     }
 
+    public static class DownloadDialog extends DialogFragment {
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+            var args = getArguments();
+            if (args == null) throw new IllegalArgumentException();
+            return new BlurBehindDialogBuilder(requireActivity())
+                    .setItems(args.getCharSequenceArray("names"), (dialog, which) -> NavUtil.startURL(requireActivity(), args.getStringArrayList("urls").get(which)))
+                    .create();
+        }
+
+        static void create(FragmentManager fm, String[] names, ArrayList<String> urls) {
+            var f = new DownloadDialog();
+            var bundle = new Bundle();
+            bundle.putStringArray("names", names);
+            bundle.putStringArrayList("urls", urls);
+            f.setArguments(bundle);
+            f.show(fm, "download");
+        }
+    }
+
     private class ReleaseAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<ReleaseAdapter.ViewHolder> {
         private List<Release> items = new ArrayList<>();
         private final Resources resources = App.getInstance().getResources();
@@ -381,9 +405,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
                     holder.viewAssets.setOnClickListener(v -> {
                         ArrayList<String> names = new ArrayList<>();
                         assets.forEach(releaseAsset -> names.add(releaseAsset.getName()));
-                        new BlurBehindDialogBuilder(requireActivity())
-                                .setItems(names.toArray(new String[0]), (dialog, which) -> NavUtil.startURL(requireActivity(), assets.get(which).getDownloadUrl()))
-                                .show();
+                        DownloadDialog.create(getChildFragmentManager(), names.toArray(new String[0]), assets.stream().map(ReleaseAsset::getDownloadUrl).collect(Collectors.toCollection(ArrayList::new)));
                     });
                 } else {
                     holder.viewAssets.setVisibility(View.GONE);

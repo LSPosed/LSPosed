@@ -20,6 +20,7 @@
 package org.lsposed.manager.ui.fragment;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
@@ -30,6 +31,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.text.HtmlCompat;
+import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.snackbar.Snackbar;
@@ -43,7 +45,7 @@ import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
 import org.lsposed.manager.ui.dialog.FlashDialogBuilder;
 import org.lsposed.manager.ui.dialog.InfoDialogBuilder;
-import org.lsposed.manager.ui.dialog.ShortcutDialogBuilder;
+import org.lsposed.manager.ui.dialog.ShortcutDialog;
 import org.lsposed.manager.ui.dialog.WarningDialogBuilder;
 import org.lsposed.manager.util.ModuleUtil;
 import org.lsposed.manager.util.NavUtil;
@@ -65,7 +67,7 @@ public class HomeFragment extends BaseFragment implements RepoLoader.RepoListene
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ShortcutDialogBuilder.showIfNeed(requireContext());
+        ShortcutDialog.showIfNeed(getChildFragmentManager());
     }
 
     @Override
@@ -82,9 +84,9 @@ public class HomeFragment extends BaseFragment implements RepoLoader.RepoListene
         binding.status.setOnClickListener(v -> {
             if (ConfigManager.isBinderAlive() && !UpdateUtil.needUpdate()) {
                 if (!ConfigManager.isSepolicyLoaded() || !ConfigManager.systemServerRequested() || !ConfigManager.dex2oatFlagsLoaded()) {
-                    new WarningDialogBuilder(activity).setNeutralButton(R.string.info, (dialog, which)-> new InfoDialogBuilder(activity).show()).show();
+                    new WarningDialogBuilder().show(getChildFragmentManager(), "warning");
                 } else {
-                    new InfoDialogBuilder(activity).show();
+                    new InfoDialogBuilder().show(getChildFragmentManager(), "info");
                 }
             } else {
                 if (UpdateUtil.canInstall()) {
@@ -170,20 +172,26 @@ public class HomeFragment extends BaseFragment implements RepoLoader.RepoListene
         binding.about.setOnClickListener(v -> showAbout());
     }
 
+    public static class AboutDialog extends DialogFragment {
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+            DialogAboutBinding binding = DialogAboutBinding.inflate(LayoutInflater.from(requireActivity()), null, false);
+            binding.designAboutTitle.setText(R.string.app_name);
+            binding.designAboutInfo.setMovementMethod(LinkMovementMethod.getInstance());
+            binding.designAboutInfo.setTransformationMethod(new LinkTransformationMethod(requireActivity()));
+            binding.designAboutInfo.setText(HtmlCompat.fromHtml(getString(
+                    R.string.about_view_source_code,
+                    "<b><a href=\"https://github.com/LSPosed/LSPosed\">GitHub</a></b>",
+                    "<b><a href=\"https://t.me/LSPosed\">Telegram</a></b>"), HtmlCompat.FROM_HTML_MODE_LEGACY));
+            binding.designAboutVersion.setText(String.format(Locale.ROOT, "%s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
+            return new BlurBehindDialogBuilder(requireContext())
+                    .setView(binding.getRoot()).create();
+        }
+    }
+
     private void showAbout() {
-        Activity activity = requireActivity();
-        DialogAboutBinding binding = DialogAboutBinding.inflate(LayoutInflater.from(requireActivity()), null, false);
-        binding.designAboutTitle.setText(R.string.app_name);
-        binding.designAboutInfo.setMovementMethod(LinkMovementMethod.getInstance());
-        binding.designAboutInfo.setTransformationMethod(new LinkTransformationMethod(activity));
-        binding.designAboutInfo.setText(HtmlCompat.fromHtml(getString(
-                R.string.about_view_source_code,
-                "<b><a href=\"https://github.com/LSPosed/LSPosed\">GitHub</a></b>",
-                "<b><a href=\"https://t.me/LSPosed\">Telegram</a></b>"), HtmlCompat.FROM_HTML_MODE_LEGACY));
-        binding.designAboutVersion.setText(String.format(Locale.ROOT, "%s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
-        new BlurBehindDialogBuilder(activity)
-                .setView(binding.getRoot())
-                .show();
+        new AboutDialog().show(getChildFragmentManager(), "about");
     }
 
     @Override

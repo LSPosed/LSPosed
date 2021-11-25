@@ -39,7 +39,8 @@ public final class SubtitleCollapsingTextHelper {
     private static final boolean USE_SCALING_TEXTURE = Build.VERSION.SDK_INT < 18;
 
     private static final boolean DEBUG_DRAW = false;
-    @NonNull private static final Paint DEBUG_DRAW_PAINT;
+    @NonNull
+    private static final Paint DEBUG_DRAW_PAINT;
 
     static {
         DEBUG_DRAW_PAINT = DEBUG_DRAW ? new Paint() : null;
@@ -54,9 +55,12 @@ public final class SubtitleCollapsingTextHelper {
     private boolean drawTitle;
     private float expandedFraction;
 
-    @NonNull private final Rect expandedBounds;
-    @NonNull private final Rect collapsedBounds;
-    @NonNull private final RectF currentBounds;
+    @NonNull
+    private final Rect expandedBounds;
+    @NonNull
+    private final Rect collapsedBounds;
+    @NonNull
+    private final RectF currentBounds;
     private int expandedTextGravity = Gravity.CENTER_VERTICAL;
     private int collapsedTextGravity = Gravity.CENTER_VERTICAL;
     private float expandedTitleTextSize, expandedSubtitleTextSize = 15;
@@ -76,12 +80,15 @@ public final class SubtitleCollapsingTextHelper {
     private CancelableFontCallback expandedTitleFontCallback, expandedSubtitleFontCallback;
     private CancelableFontCallback collapsedTitleFontCallback, collapsedSubtitleFontCallback;
 
-    @Nullable private CharSequence title, subtitle;
-    @Nullable private CharSequence titleToDraw, subtitleToDraw;
+    @Nullable
+    private CharSequence title, subtitle;
+    @Nullable
+    private CharSequence titleToDraw, subtitleToDraw;
     private boolean isRtl;
 
     private boolean useTexture;
-    @Nullable private Bitmap expandedTitleTexture, expandedSubtitleTexture;
+    @Nullable
+    private Bitmap expandedTitleTexture, expandedSubtitleTexture;
     private Paint titleTexturePaint, subtitleTexturePaint;
     private float titleTextureAscent, subtitleTextureAscent;
     private float titleTextureDescent, subtitleTextureDescent;
@@ -93,8 +100,10 @@ public final class SubtitleCollapsingTextHelper {
 
     private boolean boundsChanged;
 
-    @NonNull private final TextPaint titleTextPaint, subtitleTextPaint;
-    @NonNull private final TextPaint titleTmpPaint, subtitleTmpPaint;
+    @NonNull
+    private final TextPaint titleTextPaint, subtitleTextPaint;
+    @NonNull
+    private final TextPaint titleTmpPaint, subtitleTmpPaint;
 
     private TimeInterpolator positionInterpolator;
     private TimeInterpolator textSizeInterpolator;
