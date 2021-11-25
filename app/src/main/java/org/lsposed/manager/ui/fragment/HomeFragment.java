@@ -24,7 +24,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -73,8 +72,9 @@ public class HomeFragment extends BaseFragment implements RepoLoader.RepoListene
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
 
-        setupToolbar(binding.toolbar, getString(R.string.app_name), R.menu.menu_home);
+        setupToolbar(binding.toolbar, R.string.app_name);
         binding.toolbar.setNavigationIcon(null);
+        binding.toolbar.setOnClickListener(v -> showAbout());
         binding.appBar.setLiftable(true);
         binding.nestedScrollView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setLifted(!top));
 
@@ -82,7 +82,7 @@ public class HomeFragment extends BaseFragment implements RepoLoader.RepoListene
         binding.status.setOnClickListener(v -> {
             if (ConfigManager.isBinderAlive() && !UpdateUtil.needUpdate()) {
                 if (!ConfigManager.isSepolicyLoaded() || !ConfigManager.systemServerRequested() || !ConfigManager.dex2oatFlagsLoaded()) {
-                    new WarningDialogBuilder(activity).show();
+                    new WarningDialogBuilder(activity).setNeutralButton(R.string.info, (dialog, which)-> new InfoDialogBuilder(activity).show()).show();
                 } else {
                     new InfoDialogBuilder(activity).show();
                 }
@@ -113,31 +113,6 @@ public class HomeFragment extends BaseFragment implements RepoLoader.RepoListene
         moduleUtil.addListener(this);
         onModulesReloaded();
         return binding.getRoot();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int itemId = item.getItemId();
-        if (itemId == R.id.menu_refresh) {
-            updateStates(requireActivity(), ConfigManager.isBinderAlive(), UpdateUtil.needUpdate());
-        } else if (itemId == R.id.menu_info) {
-            new InfoDialogBuilder(requireActivity()).setTitle(R.string.info).show();
-        } else if (itemId == R.id.menu_about) {
-            Activity activity = requireActivity();
-            DialogAboutBinding binding = DialogAboutBinding.inflate(LayoutInflater.from(requireActivity()), null, false);
-            binding.designAboutTitle.setText(R.string.app_name);
-            binding.designAboutInfo.setMovementMethod(LinkMovementMethod.getInstance());
-            binding.designAboutInfo.setTransformationMethod(new LinkTransformationMethod(activity));
-            binding.designAboutInfo.setText(HtmlCompat.fromHtml(getString(
-                    R.string.about_view_source_code,
-                    "<b><a href=\"https://github.com/LSPosed/LSPosed\">GitHub</a></b>",
-                    "<b><a href=\"https://t.me/LSPosed\">Telegram</a></b>"), HtmlCompat.FROM_HTML_MODE_LEGACY));
-            binding.designAboutVersion.setText(String.format(Locale.ROOT, "%s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
-            new BlurBehindDialogBuilder(activity)
-                    .setView(binding.getRoot())
-                    .show();
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void updateStates(Activity activity, boolean binderAlive, boolean needUpdate) {
@@ -192,6 +167,23 @@ public class HomeFragment extends BaseFragment implements RepoLoader.RepoListene
             binding.status.setOutlineSpotShadowColor(cardBackgroundColor);
             binding.status.setOutlineAmbientShadowColor(cardBackgroundColor);
         }
+        binding.about.setOnClickListener(v -> showAbout());
+    }
+
+    private void showAbout() {
+        Activity activity = requireActivity();
+        DialogAboutBinding binding = DialogAboutBinding.inflate(LayoutInflater.from(requireActivity()), null, false);
+        binding.designAboutTitle.setText(R.string.app_name);
+        binding.designAboutInfo.setMovementMethod(LinkMovementMethod.getInstance());
+        binding.designAboutInfo.setTransformationMethod(new LinkTransformationMethod(activity));
+        binding.designAboutInfo.setText(HtmlCompat.fromHtml(getString(
+                R.string.about_view_source_code,
+                "<b><a href=\"https://github.com/LSPosed/LSPosed\">GitHub</a></b>",
+                "<b><a href=\"https://t.me/LSPosed\">Telegram</a></b>"), HtmlCompat.FROM_HTML_MODE_LEGACY));
+        binding.designAboutVersion.setText(String.format(Locale.ROOT, "%s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
+        new BlurBehindDialogBuilder(activity)
+                .setView(binding.getRoot())
+                .show();
     }
 
     @Override
