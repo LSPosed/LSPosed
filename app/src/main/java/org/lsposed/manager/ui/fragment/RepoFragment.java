@@ -124,8 +124,10 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
         binding.swipeRefreshLayout.setOnRefreshListener(adapter::fullRefresh);
         binding.swipeRefreshLayout.setProgressViewEndTarget(true, binding.swipeRefreshLayout.getProgressViewEndOffset());
         binding.toolbar.setOnClickListener(v -> {
-            binding.recyclerView.smoothScrollToPosition(0);
-            binding.appBar.setExpanded(true, true);
+            if (searchView.isIconified()) {
+                binding.recyclerView.smoothScrollToPosition(0);
+                binding.appBar.setExpanded(true, true);
+            }
         });
         repoLoader.addListener(this);
         moduleUtil.addListener(this);

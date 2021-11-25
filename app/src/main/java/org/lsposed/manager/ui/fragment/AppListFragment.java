@@ -112,8 +112,10 @@ public class AppListFragment extends BaseFragment {
         setupToolbar(binding.toolbar, title, R.menu.menu_app_list, view -> requireActivity().getOnBackPressedDispatcher().onBackPressed());
 
         binding.toolbar.setOnClickListener(v -> {
-            binding.recyclerView.smoothScrollToPosition(0);
-            binding.appBar.setExpanded(true, true);
+            if (searchView.isIconified()) {
+                binding.recyclerView.smoothScrollToPosition(0);
+                binding.appBar.setExpanded(true, true);
+            }
         });
 
         return binding.getRoot();
