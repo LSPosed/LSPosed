@@ -513,7 +513,17 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
         ItemRepoReadmeBinding binding;
         OnlineModule module;
 
-        public ReadmeFragment() {
+        @Override
+        public void onResume() {
+            super.onResume();
+            var parent = getParentFragment();
+            if (parent instanceof RepoItemFragment) {
+                var repoItemFragment = (RepoItemFragment) parent;
+                repoItemFragment.binding.toolbar.setOnClickListener(v -> {
+                    repoItemFragment.binding.appBar.setExpanded(true, true);
+                    binding.scrollView.smoothScrollTo(binding.scrollView.getScrollX(), 0);
+                });
+            }
         }
 
         @Nullable

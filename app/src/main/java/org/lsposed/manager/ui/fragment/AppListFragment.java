@@ -103,9 +103,7 @@ public class AppListFragment extends BaseFragment {
             binding.fab.setVisibility(View.GONE);
         } else {
             binding.fab.setVisibility(View.VISIBLE);
-            binding.fab.setOnClickListener((v) -> {
-                ConfigManager.startActivityAsUserWithFeature(intent, module.userId);
-            });
+            binding.fab.setOnClickListener(v -> ConfigManager.startActivityAsUserWithFeature(intent, module.userId));
         }
         searchListener = scopeAdapter.getSearchListener();
 
