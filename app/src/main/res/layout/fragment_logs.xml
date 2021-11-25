@@ -79,17 +79,26 @@
         android:scrollbars="none"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <org.lsposed.manager.ui.widget.StatefulRecyclerView
-            android:id="@+id/recyclerView"
+        <ScrollView
+            android:id="@+id/scrollView"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:fadeScrollbars="true"
-            android:scrollbarStyle="insideOverlay"
-            android:scrollbars="vertical"
-            app:borderBottomVisibility="never"
-            app:borderTopDrawable="@null"
-            app:borderTopVisibility="whenTop"
-            app:fitsSystemWindowsInsets="bottom" />
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            android:scrollbars="none">
+
+            <TextView
+                android:id="@+id/body"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:fontFamily="monospace"
+                android:textColor="?attr/colorOnSurface"
+                android:textIsSelectable="true"
+                android:textSize="12sp"
+                app:borderBottomVisibility="never"
+                app:borderTopDrawable="@null"
+                app:borderTopVisibility="whenTop"
+                app:fitsSystemWindowsInsets="bottom" />
+        </ScrollView>
     </HorizontalScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

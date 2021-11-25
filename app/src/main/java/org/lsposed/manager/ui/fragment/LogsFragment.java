@@ -21,10 +21,8 @@
 package org.lsposed.manager.ui.fragment;
 
 import static org.lsposed.manager.App.TAG;
-import static java.lang.Math.max;
 
 import android.annotation.SuppressLint;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -32,11 +30,10 @@ import android.os.Looper;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -44,60 +41,47 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
-import org.lsposed.manager.App;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.FragmentLogsBinding;
-import org.lsposed.manager.databinding.ItemLogBinding;
 import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
-import org.lsposed.manager.util.SimpleStatefulAdaptor;
 
-import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Locale;
 import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import rikka.core.os.FileUtils;
-import rikka.recyclerview.RecyclerViewKt;
 
-@SuppressLint("NotifyDataSetChanged")
 public class LogsFragment extends BaseFragment {
     private boolean verbose = false;
-    private LogsAdapter adapter;
     private final Handler handler = new Handler(Looper.getMainLooper());
     private FragmentLogsBinding binding;
-    private LinearLayoutManager layoutManager;
-    private final SharedPreferences preferences = App.getPreferences();
     private final ActivityResultLauncher<String> saveLogsLauncher = registerForActivityResult(
             new ActivityResultContracts.CreateDocument(),
             uri -> {
                 if (uri == null) return;
                 runAsync(() -> {
-                    try (var os = new ZipOutputStream(requireContext().getContentResolver().openOutputStream(uri))) {
+                    var context = requireContext();
+                    var contentResolver = context.getContentResolver();
+                    try (var os = new ZipOutputStream(contentResolver.openOutputStream(uri))) {
                         os.setLevel(Deflater.BEST_COMPRESSION);
                         zipLogs(os);
                         os.finish();
                     } catch (IOException e) {
-                        var text = App.getInstance().getString(R.string.logs_save_failed2, e.getMessage());
+                        var text = context.getString(R.string.logs_save_failed2, e.getMessage());
                         if (binding != null && isResumed()) {
                             Snackbar.make(binding.snackbar, text, Snackbar.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(App.getInstance(), text, Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, text, Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -127,11 +111,6 @@ public class LogsFragment extends BaseFragment {
             }
         });
 
-        adapter = new LogsAdapter();
-        RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
-        binding.recyclerView.setAdapter(adapter);
-        layoutManager = new LinearLayoutManager(requireActivity());
-        binding.recyclerView.setLayoutManager(layoutManager);
         return binding.getRoot();
     }
 
@@ -145,18 +124,9 @@ public class LogsFragment extends BaseFragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.menu_scroll_top) {
-            if (layoutManager.findFirstVisibleItemPosition() > 1000) {
-                binding.recyclerView.scrollToPosition(0);
-            } else {
-                binding.recyclerView.smoothScrollToPosition(0);
-            }
-            binding.recyclerView.smoothScrollToPosition(0);
+            binding.scrollView.fullScroll(ScrollView.FOCUS_UP);
         } else if (itemId == R.id.menu_scroll_down) {
-            if (adapter.getItemCount() - layoutManager.findLastVisibleItemPosition() > 1000) {
-                binding.recyclerView.scrollToPosition(adapter.getItemCount() - 1);
-            } else {
-                binding.recyclerView.smoothScrollToPosition(max(adapter.getItemCount() - 1, 0));
-            }
+            binding.scrollView.fullScroll(ScrollView.FOCUS_DOWN);
         } else if (itemId == R.id.menu_refresh) {
             reloadLogs();
             return true;
@@ -166,19 +136,8 @@ public class LogsFragment extends BaseFragment {
         } else if (itemId == R.id.menu_clear) {
             clear();
             return true;
-        } else if (itemId == R.id.item_word_wrap) {
-            item.setChecked(!item.isChecked());
-            preferences.edit().putBoolean("enable_word_wrap", item.isChecked()).apply();
-            reloadLogs();
-            return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onPrepareOptionsMenu(@NonNull Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        menu.findItem(R.id.item_word_wrap).setChecked(preferences.getBoolean("enable_word_wrap", false));
     }
 
     @Override
@@ -197,7 +156,7 @@ public class LogsFragment extends BaseFragment {
     private void clear() {
         if (ConfigManager.clearLogs(verbose)) {
             Snackbar.make(binding.snackbar, R.string.logs_cleared, Snackbar.LENGTH_SHORT).show();
-            adapter.clearLogs();
+            binding.body.setText("");
         } else {
             Snackbar.make(binding.snackbar, R.string.logs_clear_failed_2, Snackbar.LENGTH_SHORT).show();
         }
@@ -234,7 +193,7 @@ public class LogsFragment extends BaseFragment {
 
     @SuppressWarnings("deprecation")
     @SuppressLint("StaticFieldLeak")
-    private class LogsReader extends AsyncTask<ParcelFileDescriptor, Integer, List<String>> {
+    private class LogsReader extends AsyncTask<ParcelFileDescriptor, Integer, String> {
         private AlertDialog mProgressDialog;
         private final Runnable mRunnable = () -> {
             synchronized (LogsReader.this) {
@@ -253,27 +212,23 @@ public class LogsFragment extends BaseFragment {
         }
 
         @Override
-        protected List<String> doInBackground(ParcelFileDescriptor... log) {
+        protected String doInBackground(ParcelFileDescriptor... log) {
             Thread.currentThread().setPriority(Thread.NORM_PRIORITY + 2);
-
-            List<String> logs = new ArrayList<>();
-
-            try (var pfd = log[0]; InputStream inputStream = new FileInputStream(pfd.getFileDescriptor()); BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    logs.add(line);
-                }
-            } catch (Exception e) {
-                logs.add(requireActivity().getResources().getString(R.string.logs_cannot_read));
-                logs.addAll(Arrays.asList(Log.getStackTraceString(e).split("\n")));
+            try (var pfd = log[0];
+                 var inputStream = new FileInputStream(pfd.getFileDescriptor())) {
+                int size = Math.toIntExact(pfd.getStatSize()); // max 4MiB
+                var logs = new ByteArrayOutputStream(size);
+                FileUtils.copy(inputStream, logs);
+                return logs.toString();
+            } catch (IOException e) {
+                return requireActivity().getResources().getString(R.string.logs_cannot_read)
+                        + "\n" + Log.getStackTraceString(e);
             }
-
-            return logs;
         }
 
         @Override
-        synchronized protected void onPostExecute(List<String> logs) {
-            adapter.setLogs(logs);
+        synchronized protected void onPostExecute(String logs) {
+            binding.body.setText(logs);
 
             handler.removeCallbacks(mRunnable);
             if (mProgressDialog.isShowing()) {
@@ -302,54 +257,5 @@ public class LogsFragment extends BaseFragment {
                 binding.slidingTabs.selectTab(binding.slidingTabs.getTabAt(tabPosition));
         }
         super.onViewStateRestored(savedInstanceState);
-    }
-
-    private class LogsAdapter extends SimpleStatefulAdaptor<LogsAdapter.ViewHolder> {
-        ArrayList<String> logs = new ArrayList<>();
-
-        @NonNull
-        @Override
-        public LogsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            ItemLogBinding binding = ItemLogBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-            return new LogsAdapter.ViewHolder(binding);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull LogsAdapter.ViewHolder holder, int position) {
-            TextView view = holder.textView;
-            view.setText(logs.get(position));
-            view.measure(0, 0);
-            int desiredWidth = (preferences.getBoolean("enable_word_wrap", false)) ? layoutManager.getWidth() : view.getMeasuredWidth();
-            ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
-            layoutParams.width = desiredWidth;
-            if (binding.recyclerView.getWidth() < desiredWidth) {
-                binding.recyclerView.requestLayout();
-            }
-        }
-
-        void setLogs(List<String> logs) {
-            this.logs.clear();
-            this.logs.addAll(logs);
-            notifyDataSetChanged();
-        }
-
-        void clearLogs() {
-            notifyItemRangeRemoved(0, logs.size());
-            logs.clear();
-        }
-
-        @Override
-        public int getItemCount() {
-            return logs.size();
-        }
-
-        class ViewHolder extends RecyclerView.ViewHolder {
-            TextView textView;
-
-            ViewHolder(ItemLogBinding binding) {
-                super(binding.getRoot());
-                textView = binding.log;
-            }
-        }
     }
 }
