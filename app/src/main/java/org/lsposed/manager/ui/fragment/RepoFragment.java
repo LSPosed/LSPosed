@@ -244,7 +244,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
         return super.onOptionsItemSelected(item);
     }
 
-    private class RepoAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<RepoAdapter.ViewHolder> implements Filterable, RepoLoader.RepoListener {
+    private class RepoAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<RepoAdapter.ViewHolder> implements Filterable {
         private List<OnlineModule> fullList, showList;
         private final LabelComparator labelComparator = new LabelComparator();
         private boolean isLoaded = false;
