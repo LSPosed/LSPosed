@@ -29,12 +29,6 @@
         tools:ignore="AlwaysShowAction" />
 
     <item
-        android:id="@+id/menu_launch"
-        android:icon="@drawable/ic_settings"
-        android:showAsAction="ifRoom"
-        android:title="@string/module_settings" />
-
-    <item
         android:id="@+id/use_recommended"
         android:title="@string/use_recommended" />
 

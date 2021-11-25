@@ -19,6 +19,7 @@
 
 package org.lsposed.manager.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -39,7 +40,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.lsposed.manager.App;
+import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
+import org.lsposed.manager.adapters.AppHelper;
 import org.lsposed.manager.adapters.ScopeAdapter;
 import org.lsposed.manager.databinding.FragmentAppListBinding;
 import org.lsposed.manager.util.BackupUtils;
@@ -94,7 +97,15 @@ public class AppListFragment extends BaseFragment {
         binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setLifted(!top));
         RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
         binding.swipeRefreshLayout.setOnRefreshListener(() -> scopeAdapter.refresh(true));
-
+        Intent intent = AppHelper.getSettingsIntent(module.packageName, module.userId);
+        if (intent == null) {
+            binding.fab.setVisibility(View.GONE);
+        } else {
+            binding.fab.setVisibility(View.VISIBLE);
+            binding.fab.setOnClickListener((v) -> {
+                ConfigManager.startActivityAsUserWithFeature(intent, module.userId);
+            });
+        }
         searchListener = scopeAdapter.getSearchListener();
 
         setupToolbar(binding.toolbar, title, R.menu.menu_app_list, view -> requireActivity().getOnBackPressedDispatcher().onBackPressed());

@@ -297,8 +297,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             Intent intent = AppHelper.getSettingsIntent(packageName, selectedModule.userId);
             if (intent != null) {
                 ConfigManager.startActivityAsUserWithFeature(intent, selectedModule.userId);
-            } else {
-                Snackbar.make(binding.snackbar, R.string.module_no_ui, Snackbar.LENGTH_LONG).show();
             }
             return true;
         } else if (itemId == R.id.menu_other_app) {

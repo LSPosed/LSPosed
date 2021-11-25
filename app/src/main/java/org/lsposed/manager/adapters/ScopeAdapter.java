@@ -244,14 +244,6 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
         } else if (itemId == R.id.item_filter_denylist) {
             item.setChecked(!item.isChecked());
             preferences.edit().putBoolean("filter_denylist", item.isChecked()).apply();
-        } else if (itemId == R.id.menu_launch) {
-            Intent launchIntent = AppHelper.getSettingsIntent(module.packageName, module.userId);
-            if (launchIntent != null) {
-                ConfigManager.startActivityAsUserWithFeature(launchIntent, module.userId);
-            } else {
-                Snackbar.make(fragment.binding.snackbar, R.string.module_no_ui, Snackbar.LENGTH_LONG).show();
-            }
-            return true;
         } else if (itemId == R.id.backup) {
             LocalDateTime now = LocalDateTime.now();
             fragment.backupLauncher.launch(String.format(Locale.ROOT,
@@ -305,10 +297,6 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
     }
 
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
-        Intent intent = AppHelper.getSettingsIntent(module.packageName, module.userId);
-        if (intent == null) {
-            menu.removeItem(R.id.menu_launch);
-        }
         List<String> scopeList = module.getScopeList();
         if (scopeList == null || scopeList.isEmpty()) {
             menu.removeItem(R.id.use_recommended);
@@ -536,7 +524,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
 
             String queryStr = fragment.searchView != null ? fragment.searchView.getQuery().toString() : "";
 
-            fragment.runOnUiThread(()->getFilter().filter(queryStr));
+            fragment.runOnUiThread(() -> getFilter().filter(queryStr));
         });
     }
 
