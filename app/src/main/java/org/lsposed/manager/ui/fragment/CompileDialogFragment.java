@@ -31,6 +31,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -48,6 +49,17 @@ import java.lang.ref.WeakReference;
 public class CompileDialogFragment extends AppCompatDialogFragment {
     private ApplicationInfo appInfo;
     private View snackBar;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            var parcelable = savedInstanceState.getParcelable(CompileDialogFragment.class.getName() + ".appInfo");
+            if (parcelable instanceof ApplicationInfo) {
+                appInfo = (ApplicationInfo) parcelable;
+            }
+        }
+        super.onCreate(savedInstanceState);
+    }
 
     public static void speed(FragmentManager fragmentManager, ApplicationInfo info, View snackBar) {
         CompileDialogFragment fragment = new CompileDialogFragment();
@@ -74,8 +86,8 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
     }
 
     @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         new CompileTask(this).executeOnExecutor(App.getExecutorService(), appInfo.packageName);
     }
 
@@ -124,5 +136,11 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
             }
             Toast.makeText(context, text, Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(CompileDialogFragment.class.getName() + ".appInfo", appInfo);
     }
 }

@@ -68,6 +68,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.android.material.textview.MaterialTextView;
 
 import org.lsposed.lspd.models.UserInfo;
 import org.lsposed.manager.App;
@@ -75,6 +76,7 @@ import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.adapters.AppHelper;
 import org.lsposed.manager.databinding.DialogRecyclerviewBinding;
+import org.lsposed.manager.databinding.DialogTitleBinding;
 import org.lsposed.manager.databinding.FragmentModuleListBinding;
 import org.lsposed.manager.databinding.FragmentPagerBinding;
 import org.lsposed.manager.databinding.ItemModuleBinding;
@@ -192,15 +194,21 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             pickAdaptor.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
                 @Override
                 public void onChanged() {
-                    binding.progress.setVisibility(pickAdaptor.isLoaded() ? View.GONE : View.VISIBLE);
+                    binding.swipeRefreshLayout.setRefreshing(!pickAdaptor.isLoaded());
                 }
             });
+            binding.swipeRefreshLayout.setOnRefreshListener(pickAdaptor::fullRefresh);
             pickAdaptor.refresh();
+            var title = DialogTitleBinding.inflate(getLayoutInflater()).getRoot();
+            title.setText(getString(R.string.install_to_user, user.name));
             var dialog = new BlurBehindDialogBuilder(requireActivity())
-                    .setTitle(getString(R.string.install_to_user, user.name))
+                    .setCustomTitle(title)
                     .setView(binding.getRoot())
                     .setNegativeButton(android.R.string.cancel, null)
                     .show();
+            title.setOnClickListener(s -> {
+                binding.list.smoothScrollToPosition(0);
+            });
             pickAdaptor.setOnPickListener(picked -> {
                 var module = (ModuleUtil.InstalledModule) picked.getTag();
                 installModuleToUser(module, user);
