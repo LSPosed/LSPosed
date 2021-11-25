@@ -105,7 +105,7 @@ public class HomeFragment extends BaseFragment implements RepoLoader.RepoListene
         binding.download.setOnClickListener(new StartFragmentListener(R.id.action_repo_fragment, false));
         binding.logs.setOnClickListener(new StartFragmentListener(R.id.action_logs_fragment, true));
         binding.settings.setOnClickListener(new StartFragmentListener(R.id.action_settings_fragment, false));
-        binding.issue.setOnClickListener(view -> NavUtil.startURL(activity, "https://github.com/LSPosed/LSPosed/issues"));
+        binding.issue.setOnClickListener(view -> NavUtil.startURL(activity, "https://github.com/LSPosed/LSPosed/issues/new/choose"));
 
         updateStates(requireActivity(), ConfigManager.isBinderAlive(), UpdateUtil.needUpdate());
 

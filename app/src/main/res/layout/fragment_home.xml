@@ -265,14 +265,14 @@
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:contentDescription="@string/report_issue"
-                            app:srcCompat="@drawable/ic_round_bug_report_24" />
+                            android:contentDescription="@string/feedback_or_suggestion"
+                            app:srcCompat="@drawable/ic_baseline_chat_24" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="24dp"
-                            android:text="@string/report_issue"
+                            android:text="@string/feedback_or_suggestion"
                             android:textAppearance="?android:attr/textAppearanceListItem"
                             android:textSize="16sp" />
                     </LinearLayout>
