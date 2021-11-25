@@ -120,13 +120,13 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         searchListener = new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                adapters.get(binding.viewPager.getCurrentItem()).refresh();
+                adapters.forEach(adapter -> adapter.getFilter().filter(query));
                 return false;
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
-                adapters.get(binding.viewPager.getCurrentItem()).refresh();
+            public boolean onQueryTextChange(String query) {
+                adapters.forEach(adapter -> adapter.getFilter().filter(query));
                 return false;
             }
         };
@@ -662,7 +662,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             });
             String queryStr = searchView != null ? searchView.getQuery().toString() : "";
             searchList = tmpList;
-            runOnUiThread(() -> getFilter().filter(queryStr, count -> setLoaded(true)));
+            runOnUiThread(() -> getFilter().filter(queryStr));
         };
 
         @SuppressLint("NotifyDataSetChanged")
@@ -730,6 +730,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 //noinspection unchecked
                 showList = (List<ModuleUtil.InstalledModule>) results.values;
+                setLoaded(true);
             }
         }
     }
