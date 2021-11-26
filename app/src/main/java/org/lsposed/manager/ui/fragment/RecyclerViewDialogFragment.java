@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2020 EdXposed Contributors
  * Copyright (C) 2021 LSPosed Contributors
  */
 
@@ -38,8 +37,6 @@ import org.lsposed.manager.databinding.SwiperefreshRecyclerviewBinding;
 import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
 import org.lsposed.manager.util.ModuleUtil;
 
-import rikka.core.res.ResourcesKt;
-
 public class RecyclerViewDialogFragment extends AppCompatDialogFragment {
     @Override
     @NonNull
@@ -57,7 +54,6 @@ public class RecyclerViewDialogFragment extends AppCompatDialogFragment {
 
         binding.recyclerView.setAdapter(pickAdaptor);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
-        binding.getRoot().setPaddingRelative(0, ResourcesKt.resolveDimensionPixelSize(requireActivity().getTheme(), com.google.android.material.R.attr.dialogPreferredPadding, 0), 0, 0);
         pickAdaptor.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {
