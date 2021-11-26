@@ -261,10 +261,6 @@ public class LogsFragment extends BaseFragment {
             }
         }
 
-        protected LogAdaptor createAdaptor() {
-            return new LogAdaptor();
-        }
-
         @Nullable
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -272,7 +268,7 @@ public class LogsFragment extends BaseFragment {
             var arguments = getArguments();
             if (arguments == null) return null;
             verbose = arguments.getBoolean("verbose");
-            adaptor = createAdaptor();
+            adaptor = new LogAdaptor();
             binding.recyclerView.setAdapter(adaptor);
             layoutManager = new LinearLayoutManager(requireActivity());
             binding.recyclerView.setLayoutManager(layoutManager);
@@ -376,28 +372,12 @@ public class LogsFragment extends BaseFragment {
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             var root = super.onCreateView(inflater, container, savedInstanceState);
             binding.swipeRefreshLayout.removeView(binding.recyclerView);
+            binding.recyclerView.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
             HorizontalScrollView horizontalScrollView = new HorizontalScrollView(getContext());
             horizontalScrollView.setFillViewport(true);
             binding.swipeRefreshLayout.addView(horizontalScrollView);
             horizontalScrollView.addView(binding.recyclerView);
             return root;
-        }
-
-        @Override
-        protected LogAdaptor createAdaptor() {
-            return new LogAdaptor() {
-                @Override
-                public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-                    super.onBindViewHolder(holder, position);
-                    holder.item.measure(0, 0);
-                    int desiredWidth = holder.item.getMeasuredWidth();
-                    ViewGroup.LayoutParams layoutParams = holder.item.getLayoutParams();
-                    layoutParams.width = desiredWidth;
-                    if (binding.recyclerView.getWidth() < desiredWidth) {
-                        binding.recyclerView.requestLayout();
-                    }
-                }
-            };
         }
     }
 
