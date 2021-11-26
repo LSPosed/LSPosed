@@ -105,6 +105,7 @@ public class AppListFragment extends BaseFragment {
         searchListener = scopeAdapter.getSearchListener();
 
         setupToolbar(binding.toolbar, title, R.menu.menu_app_list, view -> requireActivity().getOnBackPressedDispatcher().onBackPressed());
+        binding.clickView.setTooltipText(title);
 
         binding.toolbar.setOnClickListener(v -> {
             if (searchView.isIconified()) {
