@@ -26,9 +26,11 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.HorizontalScrollView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -73,6 +75,7 @@ public class LogsFragment extends BaseFragment {
     private final Handler handler = new Handler(Looper.getMainLooper());
     private FragmentPagerBinding binding;
     private LogPageAdapter adapter;
+    private MenuItem wordWrap;
 
     interface OptionsItemSelectListener {
         boolean onOptionsItemSelected(@NonNull MenuItem item);
@@ -125,11 +128,18 @@ public class LogsFragment extends BaseFragment {
         this.optionsItemSelectListener = optionsItemSelectListener;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         var itemId = item.getItemId();
         if (itemId == R.id.menu_save) {
             save();
+            return true;
+        } else if (itemId == R.id.menu_word_wrap) {
+            item.setChecked(!item.isChecked());
+            App.getPreferences().edit().putBoolean("enable_word_wrap", item.isChecked()).apply();
+            binding.viewPager.setUserInputEnabled(item.isChecked());
+            adapter.refresh();
             return true;
         }
         if (optionsItemSelectListener != null) {
@@ -137,6 +147,14 @@ public class LogsFragment extends BaseFragment {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        wordWrap = menu.findItem(R.id.menu_word_wrap);
+        wordWrap.setChecked(App.getPreferences().getBoolean("enable_word_wrap", false));
+        binding.viewPager.setUserInputEnabled(wordWrap.isChecked());
     }
 
     @Override
@@ -182,9 +200,11 @@ public class LogsFragment extends BaseFragment {
     }
 
     public static class LogFragment extends BaseFragment {
-        private boolean verbose;
-        private SwiperefreshRecyclerviewBinding binding;
-        private LogAdaptor adaptor;
+        public static final int SCROLL_THRESHOLD = 500;
+        protected boolean verbose;
+        protected SwiperefreshRecyclerviewBinding binding;
+        protected LogAdaptor adaptor;
+        protected LinearLayoutManager layoutManager;
 
         class LogAdaptor extends EmptyStateRecyclerView.EmptyStateAdapter<LogAdaptor.ViewHolder> {
             private List<CharSequence> log = Collections.emptyList();
@@ -241,6 +261,10 @@ public class LogsFragment extends BaseFragment {
             }
         }
 
+        protected LogAdaptor createAdaptor() {
+            return new LogAdaptor();
+        }
+
         @Nullable
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -248,9 +272,9 @@ public class LogsFragment extends BaseFragment {
             var arguments = getArguments();
             if (arguments == null) return null;
             verbose = arguments.getBoolean("verbose");
-            adaptor = new LogAdaptor();
+            adaptor = createAdaptor();
             binding.recyclerView.setAdapter(adaptor);
-            LinearLayoutManager layoutManager = new LinearLayoutManager(requireActivity());
+            layoutManager = new LinearLayoutManager(requireActivity());
             binding.recyclerView.setLayoutManager(layoutManager);
             binding.swipeRefreshLayout.setProgressViewEndTarget(true, binding.swipeRefreshLayout.getProgressViewEndOffset());
             RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
@@ -265,6 +289,25 @@ public class LogsFragment extends BaseFragment {
             return binding.getRoot();
         }
 
+        public void scrollToTop(LogsFragment logsFragment) {
+            logsFragment.binding.appBar.setExpanded(true, true);
+            if (layoutManager.findFirstVisibleItemPosition() > SCROLL_THRESHOLD) {
+                binding.recyclerView.scrollToPosition(0);
+            } else {
+                binding.recyclerView.smoothScrollToPosition(0);
+            }
+        }
+
+        public void scrollToBottom(LogsFragment logsFragment) {
+            logsFragment.binding.appBar.setExpanded(false, true);
+            var end = Math.max(adaptor.getItemCount() - 1, 0);
+            if (adaptor.getItemCount() - layoutManager.findLastVisibleItemPosition() > SCROLL_THRESHOLD) {
+                binding.recyclerView.scrollToPosition(end);
+            } else {
+                binding.recyclerView.smoothScrollToPosition(end);
+            }
+        }
+
         @Override
         public void onResume() {
             super.onResume();
@@ -277,10 +320,9 @@ public class LogsFragment extends BaseFragment {
                 logsFragment.setOptionsItemSelectListener(item -> {
                     int itemId = item.getItemId();
                     if (itemId == R.id.menu_scroll_top) {
-                        binding.recyclerView.smoothScrollToPosition(0);
+                        scrollToTop(logsFragment);
                     } else if (itemId == R.id.menu_scroll_down) {
-                        logsFragment.binding.appBar.setExpanded(false, true);
-                        binding.recyclerView.smoothScrollToPosition(Math.max(adaptor.getItemCount() - 1, 0));
+                        scrollToBottom(logsFragment);
                     } else if (itemId == R.id.menu_clear) {
                         if (ConfigManager.clearLogs(verbose)) {
                             logsFragment.showHint(R.string.logs_cleared, true);
@@ -292,10 +334,10 @@ public class LogsFragment extends BaseFragment {
                     }
                     return false;
                 });
-                logsFragment.binding.toolbar.setOnClickListener(v -> {
-                    logsFragment.binding.appBar.setExpanded(true, true);
-                    binding.recyclerView.smoothScrollToPosition(0);
-                });
+
+                View.OnClickListener l = v -> scrollToTop(logsFragment);
+                logsFragment.binding.clickView.setOnClickListener(l);
+                logsFragment.binding.toolbar.setOnClickListener(l);
             }
         }
 
@@ -306,7 +348,39 @@ public class LogsFragment extends BaseFragment {
         }
     }
 
-    static class LogPageAdapter extends FragmentStateAdapter {
+    public static class UnwrapLogFragment extends LogFragment {
+
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            var root = super.onCreateView(inflater, container, savedInstanceState);
+            binding.swipeRefreshLayout.removeView(binding.recyclerView);
+            HorizontalScrollView horizontalScrollView = new HorizontalScrollView(getContext());
+            horizontalScrollView.setFillViewport(true);
+            binding.swipeRefreshLayout.addView(horizontalScrollView);
+            horizontalScrollView.addView(binding.recyclerView);
+            return root;
+        }
+
+        @Override
+        protected LogAdaptor createAdaptor() {
+            return new LogAdaptor() {
+                @Override
+                public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+                    super.onBindViewHolder(holder, position);
+                    holder.item.measure(0, 0);
+                    int desiredWidth = holder.item.getMeasuredWidth();
+                    ViewGroup.LayoutParams layoutParams = holder.item.getLayoutParams();
+                    layoutParams.width = desiredWidth;
+                    if (binding.recyclerView.getWidth() < desiredWidth) {
+                        binding.recyclerView.requestLayout();
+                    }
+                }
+            };
+        }
+    }
+
+    class LogPageAdapter extends FragmentStateAdapter {
 
         public LogPageAdapter(@NonNull Fragment fragment) {
             super(fragment);
@@ -317,7 +391,7 @@ public class LogsFragment extends BaseFragment {
         public Fragment createFragment(int position) {
             var bundle = new Bundle();
             bundle.putBoolean("verbose", verbose(position));
-            var f = new LogFragment();
+            var f = getItemViewType(position) == 0 ? new LogFragment() : new UnwrapLogFragment();
             f.setArguments(bundle);
             return f;
         }
@@ -339,6 +413,16 @@ public class LogsFragment extends BaseFragment {
 
         public boolean verbose(int position) {
             return position != 0;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            return wordWrap.isChecked() ? 0 : 1;
+        }
+
+        @SuppressLint("NotifyDataSetChanged")
+        public void refresh() {
+            notifyDataSetChanged();
         }
     }
 }
