@@ -308,10 +308,7 @@ public class LogsFragment extends BaseFragment {
             }
         }
 
-        @Override
-        public void onResume() {
-            super.onResume();
-            adaptor.refresh();
+        void attachListeners() {
             var parent = getParentFragment();
             if (parent instanceof LogsFragment) {
                 var logsFragment = (LogsFragment) parent;
@@ -341,10 +338,34 @@ public class LogsFragment extends BaseFragment {
             }
         }
 
+        void detachListeners() {
+            binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener(null);
+        }
+
+        @Override
+        public void onStart() {
+            super.onStart();
+            attachListeners();
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            adaptor.refresh();
+            attachListeners();
+        }
+
+
         @Override
         public void onPause() {
             super.onPause();
-            binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener(null);
+            detachListeners();
+        }
+
+        @Override
+        public void onStop() {
+            super.onStop();
+            detachListeners();
         }
     }
 

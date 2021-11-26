@@ -489,42 +489,55 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
         }
     }
 
-    public static class BorderFragment extends BaseFragment {
+    public static abstract class BorderFragment extends BaseFragment {
         BorderView borderView;
 
-        @Override
-        public void onResume() {
-            super.onResume();
+        void attachListeners() {
             var parent = getParentFragment();
             if (parent instanceof RepoItemFragment) {
                 var repoItemFragment = (RepoItemFragment) parent;
                 borderView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> repoItemFragment.binding.appBar.setLifted(!top));
                 repoItemFragment.binding.appBar.setLifted(!borderView.getBorderViewDelegate().isShowingTopBorder());
+                repoItemFragment.binding.toolbar.setOnClickListener(v -> {
+                    repoItemFragment.binding.appBar.setExpanded(true, true);
+                    scrollToTop();
+                });
             }
+        }
+
+        abstract void scrollToTop();
+
+        void detachListeners() {
+            borderView.getBorderViewDelegate().setBorderVisibilityChangedListener(null);
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            attachListeners();
+        }
+
+        @Override
+        public void onStart() {
+            super.onStart();
+            attachListeners();
+        }
+
+        @Override
+        public void onStop() {
+            super.onStop();
+            detachListeners();
         }
 
         @Override
         public void onPause() {
             super.onPause();
-            borderView.getBorderViewDelegate().setBorderVisibilityChangedListener(null);
+            detachListeners();
         }
     }
 
     public static class ReadmeFragment extends BorderFragment {
         ItemRepoReadmeBinding binding;
-
-        @Override
-        public void onResume() {
-            super.onResume();
-            var parent = getParentFragment();
-            if (parent instanceof RepoItemFragment) {
-                var repoItemFragment = (RepoItemFragment) parent;
-                repoItemFragment.binding.toolbar.setOnClickListener(v -> {
-                    repoItemFragment.binding.appBar.setExpanded(true, true);
-                    binding.scrollView.fullScroll(ScrollView.FOCUS_UP);
-                });
-            }
-        }
 
         @Nullable
         @Override
@@ -541,6 +554,10 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
             return binding.getRoot();
         }
 
+        @Override
+        void scrollToTop() {
+            binding.scrollView.fullScroll(ScrollView.FOCUS_UP);
+        }
     }
 
     public static class RecyclerviewFragment extends BorderFragment {
@@ -548,16 +565,8 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
         RecyclerView.Adapter<?> adapter;
 
         @Override
-        public void onResume() {
-            super.onResume();
-            var parent = getParentFragment();
-            if (parent instanceof RepoItemFragment) {
-                var repoItemFragment = (RepoItemFragment) parent;
-                repoItemFragment.binding.toolbar.setOnClickListener(v -> {
-                    repoItemFragment.binding.appBar.setExpanded(true, true);
-                    binding.recyclerView.smoothScrollToPosition(0);
-                });
-            }
+        void scrollToTop() {
+            binding.recyclerView.smoothScrollToPosition(0);
         }
 
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

@@ -358,9 +358,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             return binding.getRoot();
         }
 
-        @Override
-        public void onResume() {
-            super.onResume();
+        void attachListeners() {
             var parent = getParentFragment();
             if (parent instanceof ModulesFragment) {
                 var moduleFragment = (ModulesFragment) parent;
@@ -379,6 +377,28 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             }
         }
 
+        void detachListeners() {
+            binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener(null);
+            var parent = getParentFragment();
+            if (parent instanceof ModulesFragment) {
+                var moduleFragment = (ModulesFragment) parent;
+                moduleFragment.searchView.removeOnAttachStateChangeListener(searchViewLocker);
+                binding.recyclerView.setNestedScrollingEnabled(true);
+            }
+        }
+
+        @Override
+        public void onStart() {
+            super.onStart();
+            attachListeners();
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            attachListeners();
+        }
+
         @Override
         public void onDestroyView() {
             adapter.unregisterAdapterDataObserver(observer);
@@ -388,13 +408,13 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         @Override
         public void onPause() {
             super.onPause();
-            binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener(null);
-            var parent = getParentFragment();
-            if (parent instanceof ModulesFragment) {
-                var moduleFragment = (ModulesFragment) parent;
-                moduleFragment.searchView.removeOnAttachStateChangeListener(searchViewLocker);
-                binding.recyclerView.setNestedScrollingEnabled(true);
-            }
+            detachListeners();
+        }
+
+        @Override
+        public void onStop() {
+            super.onStop();
+            detachListeners();
         }
     }
 
