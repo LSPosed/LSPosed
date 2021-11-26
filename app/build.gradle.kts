@@ -187,7 +187,7 @@ dependencies {
     implementation("androidx.preference:preference:1.1.1")
     implementation("androidx.recyclerview:recyclerview:1.2.1")
     implementation("androidx.slidingpanelayout:slidingpanelayout:1.2.0-beta01")
-    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
     implementation("com.github.bumptech.glide:glide:$glideVersion")
     implementation("com.google.android.material:material:1.5.0-beta01")
     implementation("com.google.code.gson:gson:2.8.9")
