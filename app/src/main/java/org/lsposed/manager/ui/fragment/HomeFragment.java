@@ -74,7 +74,7 @@ public class HomeFragment extends BaseFragment implements RepoLoader.RepoListene
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
 
-        setupToolbar(binding.toolbar, R.string.app_name);
+        setupToolbar(binding.toolbar, null, R.string.app_name);
         binding.toolbar.setNavigationIcon(null);
         binding.toolbar.setOnClickListener(v -> showAbout());
         binding.appBar.setLiftable(true);

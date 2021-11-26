@@ -109,7 +109,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
         binding = FragmentRepoBinding.inflate(getLayoutInflater(), container, false);
         binding.appBar.setLiftable(true);
         binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setLifted(!top));
-        setupToolbar(binding.toolbar, R.string.module_repo, R.menu.menu_repo);
+        setupToolbar(binding.toolbar, binding.clickView, R.string.module_repo, R.menu.menu_repo);
         adapter = new RepoAdapter();
         adapter.setHasStableIds(true);
         adapter.registerAdapterDataObserver(observer);
@@ -119,12 +119,14 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
         RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
         binding.swipeRefreshLayout.setOnRefreshListener(adapter::fullRefresh);
         binding.swipeRefreshLayout.setProgressViewEndTarget(true, binding.swipeRefreshLayout.getProgressViewEndOffset());
-        binding.toolbar.setOnClickListener(v -> {
+        View.OnClickListener l = v -> {
             if (searchView.isIconified()) {
                 binding.recyclerView.smoothScrollToPosition(0);
                 binding.appBar.setExpanded(true, true);
             }
-        });
+        };
+        binding.toolbar.setOnClickListener(l);
+        binding.clickView.setOnClickListener(l);
         repoLoader.addListener(this);
         moduleUtil.addListener(this);
         updateRepoSummary();

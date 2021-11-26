@@ -45,23 +45,24 @@ public class BaseFragment extends Fragment {
         return NavHostFragment.findNavController(this);
     }
 
-    public void setupToolbar(Toolbar toolbar, int title) {
-        setupToolbar(toolbar, getString(title), -1);
+    public void setupToolbar(Toolbar toolbar, View tipsView, int title) {
+        setupToolbar(toolbar, tipsView, getString(title), -1);
     }
 
-    public void setupToolbar(Toolbar toolbar, int title, int menu) {
-        setupToolbar(toolbar, getString(title), menu, null);
+    public void setupToolbar(Toolbar toolbar, View tipsView, int title, int menu) {
+        setupToolbar(toolbar, tipsView, getString(title), menu, null);
     }
 
-    public void setupToolbar(Toolbar toolbar, String title, int menu) {
-        setupToolbar(toolbar, title, menu, null);
+    public void setupToolbar(Toolbar toolbar, View tipsView, String title, int menu) {
+        setupToolbar(toolbar, tipsView, title, menu, null);
     }
 
-    public void setupToolbar(Toolbar toolbar, String title, int menu, View.OnClickListener navigationOnClickListener) {
+    public void setupToolbar(Toolbar toolbar, View tipsView, String title, int menu, View.OnClickListener navigationOnClickListener) {
         toolbar.setNavigationOnClickListener(navigationOnClickListener == null ? (v -> navigateUp()) : navigationOnClickListener);
         toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
         toolbar.setTitle(title);
         toolbar.setTooltipText(title);
+        if (tipsView != null) tipsView.setTooltipText(title);
         if (menu != -1) {
             toolbar.inflateMenu(menu);
             toolbar.setOnMenuItemClickListener(this::onOptionsItemSelected);

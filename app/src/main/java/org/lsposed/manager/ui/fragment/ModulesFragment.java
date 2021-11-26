@@ -148,7 +148,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentPagerBinding.inflate(inflater, container, false);
         binding.appBar.setLiftable(true);
-        setupToolbar(binding.toolbar, R.string.Modules, R.menu.menu_modules);
+        setupToolbar(binding.toolbar, binding.clickView, R.string.Modules, R.menu.menu_modules);
         binding.viewPager.setAdapter(new PagerAdapter(this));
         binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override

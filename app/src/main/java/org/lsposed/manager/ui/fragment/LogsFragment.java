@@ -105,7 +105,7 @@ public class LogsFragment extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentPagerBinding.inflate(inflater, container, false);
         binding.appBar.setLiftable(true);
-        setupToolbar(binding.toolbar, R.string.Logs, R.menu.menu_logs);
+        setupToolbar(binding.toolbar, binding.clickView, R.string.Logs, R.menu.menu_logs);
         binding.toolbar.setSubtitle(ConfigManager.isVerboseLogEnabled() ? R.string.enabled_verbose_log : R.string.disabled_verbose_log);
         adapter = new LogPageAdapter(this);
         binding.viewPager.setAdapter(adapter);

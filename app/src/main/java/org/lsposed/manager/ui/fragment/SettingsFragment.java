@@ -71,7 +71,7 @@ public class SettingsFragment extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
         binding.appBar.setLiftable(true);
-        setupToolbar(binding.toolbar, R.string.Settings);
+        setupToolbar(binding.toolbar, binding.clickView, R.string.Settings);
         if (savedInstanceState == null) {
             getChildFragmentManager().beginTransaction()
                     .add(R.id.container, new PreferenceFragment()).commitNow();
@@ -302,10 +302,12 @@ public class SettingsFragment extends BaseFragment {
             var fragment = getParentFragment();
             if (fragment instanceof SettingsFragment) {
                 var settingsFragment = (SettingsFragment) fragment;
-                settingsFragment.binding.toolbar.setOnClickListener(v -> {
+                View.OnClickListener l = v -> {
                     settingsFragment.binding.appBar.setExpanded(true, true);
                     recyclerView.smoothScrollToPosition(0);
-                });
+                };
+                settingsFragment.binding.toolbar.setOnClickListener(l);
+                settingsFragment.binding.clickView.setOnClickListener(l);
             }
             return recyclerView;
         }

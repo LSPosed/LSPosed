@@ -104,7 +104,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
         String modulePackageName = module.getName();
         String moduleName = module.getDescription();
         binding.appBar.setLiftable(true);
-        setupToolbar(binding.toolbar, moduleName, R.menu.menu_repo_item);
+        setupToolbar(binding.toolbar, binding.clickView, moduleName, R.menu.menu_repo_item);
         binding.clickView.setTooltipText(moduleName);
         binding.toolbar.setSubtitle(modulePackageName);
         binding.viewPager.setAdapter(new PagerAdapter(this));
