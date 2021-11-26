@@ -72,7 +72,7 @@ import org.lsposed.manager.App;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.adapters.AppHelper;
-import org.lsposed.manager.databinding.FragmentModuleListBinding;
+import org.lsposed.manager.databinding.SwiperefreshRecyclerviewBinding;
 import org.lsposed.manager.databinding.FragmentPagerBinding;
 import org.lsposed.manager.databinding.ItemModuleBinding;
 import org.lsposed.manager.repo.RepoLoader;
@@ -317,7 +317,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     }
 
     public static class ModuleListFragment extends Fragment {
-        public FragmentModuleListBinding binding;
+        public SwiperefreshRecyclerviewBinding binding;
         private ModuleAdapter adapter;
         private final RecyclerView.AdapterDataObserver observer = new RecyclerView.AdapterDataObserver() {
             @Override
@@ -347,11 +347,10 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 return null;
             }
             int position = arguments.getInt("position");
-            binding = FragmentModuleListBinding.inflate(getLayoutInflater(), container, false);
+            binding = SwiperefreshRecyclerviewBinding.inflate(getLayoutInflater(), container, false);
             adapter = fragment.adapters.get(position);
             binding.recyclerView.setAdapter(adapter);
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireActivity());
-            binding.recyclerView.setLayoutManager(layoutManager);
+            binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
             binding.swipeRefreshLayout.setOnRefreshListener(adapter::fullRefresh);
             binding.swipeRefreshLayout.setProgressViewEndTarget(true, binding.swipeRefreshLayout.getProgressViewEndOffset());
             RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);

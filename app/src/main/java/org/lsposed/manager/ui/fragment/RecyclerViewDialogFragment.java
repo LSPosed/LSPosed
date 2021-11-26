@@ -33,10 +33,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.lsposed.lspd.models.UserInfo;
 import org.lsposed.manager.R;
-import org.lsposed.manager.databinding.DialogRecyclerviewBinding;
 import org.lsposed.manager.databinding.DialogTitleBinding;
+import org.lsposed.manager.databinding.SwiperefreshRecyclerviewBinding;
 import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
 import org.lsposed.manager.util.ModuleUtil;
+
+import rikka.core.res.ResourcesKt;
 
 public class RecyclerViewDialogFragment extends AppCompatDialogFragment {
     @Override
@@ -51,10 +53,11 @@ public class RecyclerViewDialogFragment extends AppCompatDialogFragment {
         var user = (UserInfo) arguments.getParcelable("userInfo");
 
         var pickAdaptor = modulesFragment.createPickModuleAdapter(user);
-        DialogRecyclerviewBinding binding = DialogRecyclerviewBinding.inflate(LayoutInflater.from(requireActivity()), null, false);
+        var binding = SwiperefreshRecyclerviewBinding.inflate(LayoutInflater.from(requireActivity()), null, false);
 
-        binding.list.setAdapter(pickAdaptor);
-        binding.list.setLayoutManager(new LinearLayoutManager(requireActivity()));
+        binding.recyclerView.setAdapter(pickAdaptor);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
+        binding.getRoot().setPaddingRelative(0, ResourcesKt.resolveDimensionPixelSize(requireActivity().getTheme(), com.google.android.material.R.attr.dialogPreferredPadding, 0), 0, 0);
         pickAdaptor.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {
@@ -70,7 +73,7 @@ public class RecyclerViewDialogFragment extends AppCompatDialogFragment {
                 .setView(binding.getRoot())
                 .setNegativeButton(android.R.string.cancel, null)
                 .create();
-        title.setOnClickListener(s -> binding.list.smoothScrollToPosition(0));
+        title.setOnClickListener(s -> binding.recyclerView.smoothScrollToPosition(0));
         pickAdaptor.setOnPickListener(picked -> {
             var module = (ModuleUtil.InstalledModule) picked.getTag();
             modulesFragment.installModuleToUser(module, user);

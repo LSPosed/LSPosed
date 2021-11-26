@@ -20,47 +20,54 @@
 
 package org.lsposed.manager.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ScrollView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.text.PrecomputedTextCompat;
-import androidx.core.widget.TextViewCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.android.material.textview.MaterialTextView;
 
 import org.lsposed.manager.App;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
-import org.lsposed.manager.databinding.FragmentItemLogBinding;
 import org.lsposed.manager.databinding.FragmentPagerBinding;
+import org.lsposed.manager.databinding.ItemLogTextviewBinding;
+import org.lsposed.manager.databinding.SwiperefreshRecyclerviewBinding;
+import org.lsposed.manager.ui.widget.EmptyStateRecyclerView;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import rikka.core.os.FileUtils;
+import rikka.recyclerview.RecyclerViewKt;
 
 public class LogsFragment extends BaseFragment {
     private final Handler handler = new Handler(Looper.getMainLooper());
@@ -124,24 +131,12 @@ public class LogsFragment extends BaseFragment {
         if (itemId == R.id.menu_save) {
             save();
             return true;
-        } else if (itemId == R.id.item_word_wrap) {
-            item.setChecked(!item.isChecked());
-            App.getPreferences().edit().putBoolean("enable_word_wrap", item.isChecked()).apply();
-            binding.viewPager.setUserInputEnabled(item.isChecked());
         }
         if (optionsItemSelectListener != null) {
             if (optionsItemSelectListener.onOptionsItemSelected(item))
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onPrepareOptionsMenu(@NonNull Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        var checked = App.getPreferences().getBoolean("enable_word_wrap", false);
-        menu.findItem(R.id.item_word_wrap).setChecked(checked);
-        binding.viewPager.setUserInputEnabled(checked);
     }
 
     @Override
@@ -188,53 +183,118 @@ public class LogsFragment extends BaseFragment {
 
     public static class LogFragment extends BaseFragment {
         private boolean verbose;
-        private FragmentItemLogBinding binding;
-        private String log = null;
+        private SwiperefreshRecyclerviewBinding binding;
+        private LogAdaptor adaptor;
+
+        class LogAdaptor extends EmptyStateRecyclerView.EmptyStateAdapter<LogAdaptor.ViewHolder> {
+            private List<CharSequence> log = Collections.emptyList();
+            private boolean isLoaded = false;
+
+            @NonNull
+            @Override
+            public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                return new ViewHolder(ItemLogTextviewBinding.inflate(getLayoutInflater(), parent, false));
+            }
+
+            @Override
+            public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+                holder.item.setText(log.get(position));
+            }
+
+            @Override
+            public int getItemCount() {
+                return log.size();
+            }
+
+            @SuppressLint("NotifyDataSetChanged")
+            void refresh() {
+                isLoaded = true;
+                runOnUiThread(this::notifyDataSetChanged);
+            }
+
+            void fullRefresh() {
+                runAsync(() -> {
+                    isLoaded = false;
+                    try (var parcelFileDescriptor = ConfigManager.getLog(verbose);
+                         var br = new BufferedReader(new InputStreamReader(new FileInputStream(parcelFileDescriptor != null ? parcelFileDescriptor.getFileDescriptor() : null)))) {
+                        log = br.lines().parallel().collect(Collectors.toList());
+                    } catch (Throwable e) {
+                        log = Arrays.asList(Log.getStackTraceString(e).split("\n"));
+                    } finally {
+                        refresh();
+                    }
+                });
+            }
+
+            @Override
+            public boolean isLoaded() {
+                return isLoaded;
+            }
+
+            class ViewHolder extends RecyclerView.ViewHolder {
+                final MaterialTextView item;
+
+                public ViewHolder(ItemLogTextviewBinding binding) {
+                    super(binding.getRoot());
+                    item = binding.logItem;
+                }
+            }
+        }
 
         @Nullable
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            binding = FragmentItemLogBinding.inflate(getLayoutInflater(), container, false);
+            binding = SwiperefreshRecyclerviewBinding.inflate(getLayoutInflater(), container, false);
             var arguments = getArguments();
             if (arguments == null) return null;
             verbose = arguments.getBoolean("verbose");
-            binding.swipeRefreshLayout.setOnRefreshListener(this::refreshLog);
+            adaptor = new LogAdaptor();
+            binding.recyclerView.setAdapter(adaptor);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(requireActivity());
+            binding.recyclerView.setLayoutManager(layoutManager);
             binding.swipeRefreshLayout.setProgressViewEndTarget(true, binding.swipeRefreshLayout.getProgressViewEndOffset());
+            RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
+            binding.swipeRefreshLayout.setOnRefreshListener(adaptor::fullRefresh);
+            adaptor.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+                @Override
+                public void onChanged() {
+                    binding.swipeRefreshLayout.setRefreshing(!adaptor.isLoaded());
+                }
+            });
+            adaptor.fullRefresh();
             return binding.getRoot();
         }
 
         @Override
         public void onResume() {
             super.onResume();
-            refreshLog();
+            adaptor.refresh();
             var parent = getParentFragment();
             if (parent instanceof LogsFragment) {
                 var logsFragment = (LogsFragment) parent;
-                logsFragment.binding.appBar.setLifted(!binding.scrollView.getBorderViewDelegate().isShowingTopBorder());
-                binding.scrollView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> logsFragment.binding.appBar.setLifted(!top));
+                logsFragment.binding.appBar.setLifted(!binding.recyclerView.getBorderViewDelegate().isShowingTopBorder());
+                binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> logsFragment.binding.appBar.setLifted(!top));
                 logsFragment.setOptionsItemSelectListener(item -> {
                     int itemId = item.getItemId();
                     if (itemId == R.id.menu_scroll_top) {
-                        binding.scrollView.fullScroll(ScrollView.FOCUS_UP);
+                        binding.recyclerView.smoothScrollToPosition(0);
                     } else if (itemId == R.id.menu_scroll_down) {
                         logsFragment.binding.appBar.setExpanded(false, true);
-                        binding.scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                        binding.recyclerView.smoothScrollToPosition(Math.max(adaptor.getItemCount() - 1, 0));
                     } else if (itemId == R.id.menu_clear) {
                         if (ConfigManager.clearLogs(verbose)) {
                             logsFragment.showHint(R.string.logs_cleared, true);
-                            refreshLog();
+                            adaptor.fullRefresh();
                         } else {
                             logsFragment.showHint(R.string.logs_clear_failed_2, true);
                         }
                         return true;
-                    } else if (itemId == R.id.item_word_wrap) {
-                        refreshLog();
                     }
                     return false;
                 });
                 logsFragment.binding.toolbar.setOnClickListener(v -> {
                     logsFragment.binding.appBar.setExpanded(true, true);
-                    binding.scrollView.fullScroll(ScrollView.FOCUS_UP);
+                    binding.recyclerView.smoothScrollToPosition(0);
                 });
             }
         }
@@ -242,43 +302,7 @@ public class LogsFragment extends BaseFragment {
         @Override
         public void onPause() {
             super.onPause();
-            binding.scrollView.getBorderViewDelegate().setBorderVisibilityChangedListener(null);
-        }
-
-        void refreshLog() {
-            runAsync(() -> {
-                try (var parcelFileDescriptor = ConfigManager.getLog(verbose);
-                     var bis = new BufferedInputStream(new FileInputStream(parcelFileDescriptor != null ? parcelFileDescriptor.getFileDescriptor() : null));
-                     ByteArrayOutputStream buf = new ByteArrayOutputStream()) {
-                    for (int result = bis.read(); result != -1; result = bis.read()) {
-                        buf.write((byte) result);
-                    }
-                    log = buf.toString();
-                } catch (Throwable e) {
-                    log = e.getLocalizedMessage();
-                } finally {
-                    runOnUiThread(this::finishLoad);
-                }
-            });
-        }
-
-        void finishLoad() {
-            runAsync(() -> {
-                var precomputedTextCompat = PrecomputedTextCompat.create(log, binding.body.getTextMetricsParamsCompat());
-                runOnUiThread(() -> {
-                    var wrap = App.getPreferences().getBoolean("enable_word_wrap", false);
-                    if (wrap) {
-                        binding.wrapBody.setVisibility(View.VISIBLE);
-                        binding.horizontalScrollView.setVisibility(View.GONE);
-                    } else {
-                        binding.wrapBody.setVisibility(View.GONE);
-                        binding.horizontalScrollView.setVisibility(View.VISIBLE);
-                    }
-                    TextViewCompat.setPrecomputedText(binding.body, precomputedTextCompat);
-                    TextViewCompat.setPrecomputedText(binding.wrapBody, precomputedTextCompat);
-                    binding.swipeRefreshLayout.setRefreshing(false);
-                });
-            });
+            binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener(null);
         }
     }
 
