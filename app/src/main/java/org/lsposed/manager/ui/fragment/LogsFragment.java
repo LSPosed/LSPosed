@@ -379,6 +379,7 @@ public class LogsFragment extends BaseFragment {
             horizontalScrollView.setFillViewport(true);
             binding.swipeRefreshLayout.addView(horizontalScrollView);
             horizontalScrollView.addView(binding.recyclerView);
+            binding.recyclerView.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
             return root;
         }
 
@@ -389,12 +390,6 @@ public class LogsFragment extends BaseFragment {
                 public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
                     super.onBindViewHolder(holder, position);
                     holder.item.measure(0, 0);
-                    int desiredWidth = holder.item.getMeasuredWidth();
-                    ViewGroup.LayoutParams layoutParams = holder.item.getLayoutParams();
-                    layoutParams.width = desiredWidth;
-                    if (binding.recyclerView.getWidth() < desiredWidth) {
-                        binding.recyclerView.requestLayout();
-                    }
                 }
             };
         }
@@ -440,9 +435,8 @@ public class LogsFragment extends BaseFragment {
             return wordWrap.isChecked() ? 0 : 1;
         }
 
-        @SuppressLint("NotifyDataSetChanged")
         public void refresh() {
-            notifyDataSetChanged();
+            runOnUiThread(this::notifyDataSetChanged);
         }
     }
 }

@@ -7,5 +7,4 @@
     android:clipToPadding="false"
     android:fontFamily="monospace"
     android:textColor="?attr/colorOnSurface"
-    android:textIsSelectable="true"
     android:textSize="12sp" />
