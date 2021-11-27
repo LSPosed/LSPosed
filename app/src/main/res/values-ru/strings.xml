@@ -85,6 +85,8 @@
     <string name="menuReload">Обновить</string>
     <string name="logs_clear_failed_2">Не удалось очистить логи</string>
     <string name="menu_enable_word_wrap">Переносить текст</string>
+    <string name="enabled_verbose_log">Подробные логи включены</string>
+    <string name="disabled_verbose_log">Подробные логи выключены</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Модуль установлен</string>
     <string name="module_is_not_activated_yet_detailed">Модуль %s установлен но не включен</string>
