@@ -15,7 +15,6 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
   ~
-  ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
@@ -55,7 +54,6 @@
     <string name="xposed_module_updated_notification_content">%s עודכן</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(לא ניתן תיאור)</string>
-    <string name="module_no_ui">מודול זה לא מציג ממשק משתמש</string>
     <string name="warning_xposed_min_version">מודול זה דורש גרסה חדשה יותר של LSPosed (%d) ולכן לא יכול להיות מופעל</string>
     <string name="no_min_version_specified">מודול זה לא מציין את גסרת ה- LSPosed שהוא צריך.</string>
     <string name="warning_min_version_too_low">מודול זה נוצר בשביל LSPosed גרסה %1$d, אך בשל שיניים לא תואמים בגרסה %2$d, הוא כובה</string>
