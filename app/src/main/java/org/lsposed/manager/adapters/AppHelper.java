@@ -26,11 +26,8 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.os.Looper;
 import android.view.MenuItem;
 
-import org.lsposed.lspd.models.Application;
-import org.lsposed.manager.App;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 
@@ -153,6 +150,6 @@ public class AppHelper {
 
     public static CharSequence getAppLabel(PackageInfo info, PackageManager pm) {
         if (info == null || info.applicationInfo == null) return null;
-        return appLabel.computeIfAbsent(info, i->i.applicationInfo.loadLabel(pm));
+        return appLabel.computeIfAbsent(info, i -> i.applicationInfo.loadLabel(pm));
     }
 }

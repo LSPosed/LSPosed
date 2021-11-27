@@ -20,17 +20,18 @@
 package org.lsposed.manager.ui.fragment;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.text.HtmlCompat;
+import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.snackbar.Snackbar;
@@ -44,7 +45,7 @@ import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
 import org.lsposed.manager.ui.dialog.FlashDialogBuilder;
 import org.lsposed.manager.ui.dialog.InfoDialogBuilder;
-import org.lsposed.manager.ui.dialog.ShortcutDialogBuilder;
+import org.lsposed.manager.ui.dialog.ShortcutDialog;
 import org.lsposed.manager.ui.dialog.WarningDialogBuilder;
 import org.lsposed.manager.util.ModuleUtil;
 import org.lsposed.manager.util.NavUtil;
@@ -56,7 +57,7 @@ import java.util.Locale;
 
 import rikka.core.util.ResourceUtils;
 
-public class HomeFragment extends BaseFragment implements RepoLoader.Listener, ModuleUtil.ModuleListener {
+public class HomeFragment extends BaseFragment implements RepoLoader.RepoListener, ModuleUtil.ModuleListener {
 
     private FragmentHomeBinding binding;
 
@@ -66,15 +67,16 @@ public class HomeFragment extends BaseFragment implements RepoLoader.Listener, M
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ShortcutDialogBuilder.showIfNeed(requireContext());
+        ShortcutDialog.showIfNeed(getChildFragmentManager());
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
 
-        setupToolbar(binding.toolbar, getString(R.string.app_name), R.menu.menu_home);
+        setupToolbar(binding.toolbar, null, R.string.app_name);
         binding.toolbar.setNavigationIcon(null);
+        binding.toolbar.setOnClickListener(v -> showAbout());
         binding.appBar.setLiftable(true);
         binding.nestedScrollView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setLifted(!top));
 
@@ -82,9 +84,9 @@ public class HomeFragment extends BaseFragment implements RepoLoader.Listener, M
         binding.status.setOnClickListener(v -> {
             if (ConfigManager.isBinderAlive() && !UpdateUtil.needUpdate()) {
                 if (!ConfigManager.isSepolicyLoaded() || !ConfigManager.systemServerRequested() || !ConfigManager.dex2oatFlagsLoaded()) {
-                    new WarningDialogBuilder(activity).show();
+                    new WarningDialogBuilder().show(getChildFragmentManager(), "warning");
                 } else {
-                    new InfoDialogBuilder(activity).show();
+                    new InfoDialogBuilder().show(getChildFragmentManager(), "info");
                 }
             } else {
                 if (UpdateUtil.canInstall()) {
@@ -105,41 +107,14 @@ public class HomeFragment extends BaseFragment implements RepoLoader.Listener, M
         binding.download.setOnClickListener(new StartFragmentListener(R.id.action_repo_fragment, false));
         binding.logs.setOnClickListener(new StartFragmentListener(R.id.action_logs_fragment, true));
         binding.settings.setOnClickListener(new StartFragmentListener(R.id.action_settings_fragment, false));
-        binding.issue.setOnClickListener(view -> NavUtil.startURL(activity, "https://github.com/LSPosed/LSPosed/issues"));
+        binding.issue.setOnClickListener(view -> NavUtil.startURL(activity, "https://github.com/LSPosed/LSPosed/issues/new/choose"));
 
         updateStates(requireActivity(), ConfigManager.isBinderAlive(), UpdateUtil.needUpdate());
 
         repoLoader.addListener(this);
         moduleUtil.addListener(this);
-        if (repoLoader.isRepoLoaded()) {
-            repoLoaded();
-        }
+        onModulesReloaded();
         return binding.getRoot();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int itemId = item.getItemId();
-        if (itemId == R.id.menu_refresh) {
-            updateStates(requireActivity(), ConfigManager.isBinderAlive(), UpdateUtil.needUpdate());
-        } else if (itemId == R.id.menu_info) {
-            new InfoDialogBuilder(requireActivity()).setTitle(R.string.info).show();
-        } else if (itemId == R.id.menu_about) {
-            Activity activity = requireActivity();
-            DialogAboutBinding binding = DialogAboutBinding.inflate(LayoutInflater.from(requireActivity()), null, false);
-            binding.designAboutTitle.setText(R.string.app_name);
-            binding.designAboutInfo.setMovementMethod(LinkMovementMethod.getInstance());
-            binding.designAboutInfo.setTransformationMethod(new LinkTransformationMethod(activity));
-            binding.designAboutInfo.setText(HtmlCompat.fromHtml(getString(
-                    R.string.about_view_source_code,
-                    "<b><a href=\"https://github.com/LSPosed/LSPosed\">GitHub</a></b>",
-                    "<b><a href=\"https://t.me/LSPosed\">Telegram</a></b>"), HtmlCompat.FROM_HTML_MODE_LEGACY));
-            binding.designAboutVersion.setText(String.format(Locale.ROOT, "%s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
-            new BlurBehindDialogBuilder(activity)
-                    .setView(binding.getRoot())
-                    .show();
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void updateStates(Activity activity, boolean binderAlive, boolean needUpdate) {
@@ -186,7 +161,7 @@ public class HomeFragment extends BaseFragment implements RepoLoader.Listener, M
                 binding.download.setVisibility(View.GONE);
             }
             binding.statusIcon.setImageResource(R.drawable.ic_round_error_outline_24);
-            Snackbar.make(binding.snackbar, R.string.lsposed_not_active, Snackbar.LENGTH_INDEFINITE).show();
+            showHint(R.string.lsposed_not_active, false);
         }
         cardBackgroundColor = MaterialColors.harmonizeWithPrimary(activity, cardBackgroundColor);
         binding.status.setCardBackgroundColor(cardBackgroundColor);
@@ -194,10 +169,33 @@ public class HomeFragment extends BaseFragment implements RepoLoader.Listener, M
             binding.status.setOutlineSpotShadowColor(cardBackgroundColor);
             binding.status.setOutlineAmbientShadowColor(cardBackgroundColor);
         }
+        binding.about.setOnClickListener(v -> showAbout());
+    }
+
+    public static class AboutDialog extends DialogFragment {
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+            DialogAboutBinding binding = DialogAboutBinding.inflate(LayoutInflater.from(requireActivity()), null, false);
+            binding.designAboutTitle.setText(R.string.app_name);
+            binding.designAboutInfo.setMovementMethod(LinkMovementMethod.getInstance());
+            binding.designAboutInfo.setTransformationMethod(new LinkTransformationMethod(requireActivity()));
+            binding.designAboutInfo.setText(HtmlCompat.fromHtml(getString(
+                    R.string.about_view_source_code,
+                    "<b><a href=\"https://github.com/LSPosed/LSPosed\">GitHub</a></b>",
+                    "<b><a href=\"https://t.me/LSPosed\">Telegram</a></b>"), HtmlCompat.FROM_HTML_MODE_LEGACY));
+            binding.designAboutVersion.setText(String.format(Locale.ROOT, "%s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
+            return new BlurBehindDialogBuilder(requireContext())
+                    .setView(binding.getRoot()).create();
+        }
+    }
+
+    private void showAbout() {
+        new AboutDialog().show(getChildFragmentManager(), "about");
     }
 
     @Override
-    public void repoLoaded() {
+    public void onRepoLoaded() {
         final int[] count = new int[]{0};
         HashSet<String> processedModules = new HashSet<>();
         var modules = moduleUtil.getModules();
@@ -228,7 +226,7 @@ public class HomeFragment extends BaseFragment implements RepoLoader.Listener, M
 
     @Override
     public void onModulesReloaded() {
-        if (repoLoader.isRepoLoaded()) repoLoaded();
+        onRepoLoaded();
         setModulesSummary(moduleUtil.getEnabledModulesCount());
     }
 
@@ -244,7 +242,7 @@ public class HomeFragment extends BaseFragment implements RepoLoader.Listener, M
         @Override
         public void onClick(View v) {
             if (requireInstalled && !ConfigManager.isBinderAlive()) {
-                Snackbar.make(binding.snackbar, R.string.lsposed_not_active, Snackbar.LENGTH_LONG).show();
+                showHint(R.string.lsposed_not_active, false);
             } else {
                 getNavController().navigate(fragment);
             }
@@ -260,7 +258,7 @@ public class HomeFragment extends BaseFragment implements RepoLoader.Listener, M
     }
 
     private void setModulesSummary(int moduleCount) {
-        runOnUiThread(() -> binding.modulesSummary.setText(moduleCount == - 1? getString(R.string.loading) : getResources().getQuantityString(R.plurals.modules_enabled_count, moduleCount, moduleCount)));
+        runOnUiThread(() -> binding.modulesSummary.setText(moduleCount == -1 ? getString(R.string.loading) : getResources().getQuantityString(R.plurals.modules_enabled_count, moduleCount, moduleCount)));
     }
 
     @Override

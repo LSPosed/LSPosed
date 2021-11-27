@@ -29,7 +29,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -42,7 +41,6 @@ import androidx.preference.SwitchPreference;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.color.DynamicColors;
-import com.google.android.material.snackbar.Snackbar;
 
 import org.lsposed.manager.App;
 import org.lsposed.manager.BuildConfig;
@@ -72,22 +70,19 @@ public class SettingsFragment extends BaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
-        setupToolbar(binding.toolbar, R.string.Settings);
+        binding.appBar.setLiftable(true);
+        setupToolbar(binding.toolbar, binding.clickView, R.string.Settings);
         if (savedInstanceState == null) {
             getChildFragmentManager().beginTransaction()
                     .add(R.id.container, new PreferenceFragment()).commitNow();
         }
-
-        /*
-          CollapsingToolbarLayout consumes window insets, causing child views not
-          receiving window insets.
-          See https://github.com/material-components/material-components-android/issues/1310
-
-          Insets can be handled by RikkaX Insets, so we can manually set
-          OnApplyWindowInsetsListener to null.
-         */
-
-        binding.collapsingToolbarLayout.setOnApplyWindowInsetsListener(null);
+        if (ConfigManager.isBinderAlive()) {
+            binding.toolbar.setSubtitle(String.format(Locale.ROOT, "%s (%d) - %s",
+                    ConfigManager.getXposedVersionName(), ConfigManager.getXposedVersionCode(), ConfigManager.getApi()));
+        } else {
+            binding.toolbar.setSubtitle(String.format(Locale.ROOT, "%s (%d) - %s",
+                    BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE, getString(R.string.not_installed)));
+        }
         return binding.getRoot();
     }
 
@@ -109,11 +104,7 @@ public class SettingsFragment extends BaseFragment {
                             BackupUtils.backup(uri);
                         } catch (Exception e) {
                             var text = App.getInstance().getString(R.string.settings_backup_failed2, e.getMessage());
-                            if (parentFragment != null && parentFragment.binding != null && isResumed()) {
-                                Snackbar.make(parentFragment.binding.snackbar, text, Snackbar.LENGTH_LONG).show();
-                            } else {
-                                Toast.makeText(App.getInstance(), text, Toast.LENGTH_LONG).show();
-                            }
+                            parentFragment.showHint(text, false);
                         }
                     });
                 });
@@ -125,11 +116,7 @@ public class SettingsFragment extends BaseFragment {
                             BackupUtils.restore(uri);
                         } catch (Exception e) {
                             var text = App.getInstance().getString(R.string.settings_restore_failed2, e.getMessage());
-                            if (parentFragment != null && parentFragment.binding != null && isResumed()) {
-                                Snackbar.make(parentFragment.binding.snackbar, text, Snackbar.LENGTH_LONG).show();
-                            } else {
-                                Toast.makeText(App.getInstance(), text, Toast.LENGTH_LONG).show();
-                            }
+                            parentFragment.showHint(text, false);
                         }
                     });
                 });
@@ -311,6 +298,17 @@ public class SettingsFragment extends BaseFragment {
         public RecyclerView onCreateRecyclerView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
             BorderRecyclerView recyclerView = (BorderRecyclerView) super.onCreateRecyclerView(inflater, parent, savedInstanceState);
             RecyclerViewKt.fixEdgeEffect(recyclerView, false, true);
+            recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> parentFragment.binding.appBar.setLifted(!top));
+            var fragment = getParentFragment();
+            if (fragment instanceof SettingsFragment) {
+                var settingsFragment = (SettingsFragment) fragment;
+                View.OnClickListener l = v -> {
+                    settingsFragment.binding.appBar.setExpanded(true, true);
+                    recyclerView.smoothScrollToPosition(0);
+                };
+                settingsFragment.binding.toolbar.setOnClickListener(l);
+                settingsFragment.binding.clickView.setOnClickListener(l);
+            }
             return recyclerView;
         }
 

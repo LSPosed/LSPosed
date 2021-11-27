@@ -14,20 +14,14 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
   ~
-  ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
-
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <item
-        android:id="@+id/menu_refresh"
-        android:title="@string/refresh" />
-    <item
-        android:id="@+id/menu_info"
-        android:title="@string/info" />
-    <item
-        android:id="@+id/menu_about"
-        android:title="@string/About" />
-
-</menu>
+<com.google.android.material.textview.MaterialTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/log_item"
+    style="@style/TextAppearance.AppCompat.Small"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:clipToPadding="false"
+    android:fontFamily="monospace"
+    android:textColor="?attr/colorOnSurface"
+    android:textSize="12sp" />

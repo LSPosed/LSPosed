@@ -23,6 +23,7 @@ package org.lsposed.manager.repo;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.gson.Gson;
 
@@ -37,10 +38,9 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -51,24 +51,25 @@ import okhttp3.ResponseBody;
 public class RepoLoader {
     private static RepoLoader instance = null;
     private Map<String, OnlineModule> onlineModules = new HashMap<>();
+    private Map<String, ModuleVersion> latestVersion = new ConcurrentHashMap<>();
 
     public static class ModuleVersion {
         public String versionName;
         public long versionCode;
+
         private ModuleVersion(long versionCode, String versionName) {
             this.versionName = versionName;
             this.versionCode = versionCode;
         }
+
         public boolean upgradable(long versionCode, String versionName) {
             return this.versionCode > versionCode || (this.versionCode == versionCode && !versionName.equals(this.versionName));
         }
 
     }
 
-    private final Map<String, ModuleVersion> latestVersion = new ConcurrentHashMap<>();
     private final Path repoFile = Paths.get(App.getInstance().getFilesDir().getAbsolutePath(), "repo.json");
-    private final List<Listener> listeners = new CopyOnWriteArrayList<>();
-    private boolean isLoading = false;
+    private final Set<RepoListener> listeners = ConcurrentHashMap.newKeySet();
     private boolean repoLoaded = false;
     private static final String originRepoUrl = "https://modules.lsposed.org/";
     private static final String backupRepoUrl = "https://cdn.jsdelivr.net/gh/Xposed-Modules-Repo/modules@gh-pages/";
@@ -81,91 +82,78 @@ public class RepoLoader {
     public static synchronized RepoLoader getInstance() {
         if (instance == null) {
             instance = new RepoLoader();
-            instance.loadRemoteData();
+            App.getExecutorService().submit(instance::loadRemoteData);
         }
         return instance;
     }
 
-    public void loadRemoteData() {
-        synchronized (this) {
-            if (isLoading) {
-                return;
-            }
-            isLoading = true;
-        }
-        App.getOkHttpClient().newCall(new Request.Builder()
-                .url(repoUrl + "modules.json")
-                .build()).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                Log.e(App.TAG, call.request().url().toString(), e);
-                for (Listener listener : listeners) {
-                    listener.onThrowable(e);
-                }
-                synchronized (this) {
-                    isLoading = false;
-                    if (!repoUrl.equals(backupRepoUrl)) {
-                        repoUrl = backupRepoUrl;
-                        loadRemoteData();
-                    }
-                }
-            }
+    synchronized public void loadRemoteData() {
+        repoLoaded = true;
+        try {
+            var response = App.getOkHttpClient().newCall(new Request.Builder()
+                    .url(repoUrl + "modules.json")
+                    .build()).execute();
 
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) {
-                if (response.isSuccessful()) {
-                    ResponseBody body = response.body();
-                    if (body != null) {
-                        try {
-                            String bodyString = body.string();
-                            Gson gson = new Gson();
-                            Map<String, OnlineModule> modules = new HashMap<>();
-                            OnlineModule[] repoModules = gson.fromJson(bodyString, OnlineModule[].class);
-                            Arrays.stream(repoModules).forEach(onlineModule -> modules.put(onlineModule.getName(), onlineModule));
+            if (response.isSuccessful()) {
+                ResponseBody body = response.body();
+                if (body != null) {
+                    try {
+                        String bodyString = body.string();
+                        Gson gson = new Gson();
+                        Map<String, OnlineModule> modules = new HashMap<>();
+                        OnlineModule[] repoModules = gson.fromJson(bodyString, OnlineModule[].class);
+                        Arrays.stream(repoModules).forEach(onlineModule -> modules.put(onlineModule.getName(), onlineModule));
 
-                            latestVersion.clear();
-                            for (var module : repoModules) {
-                                var release = module.getLatestRelease();
-                                if (release == null || release.isEmpty()) continue;
-                                var splits = release.split("-", 2);
-                                if (splits.length < 2) continue;
-                                long verCode;
-                                String verName;
-                                try {
-                                    verCode = Long.parseLong(splits[0]);
-                                    verName = splits[1];
-                                } catch (NumberFormatException ignored) {
-                                    continue;
-                                }
-                                String pkgName = module.getName();
-                                latestVersion.put(pkgName, new ModuleVersion(verCode, verName));
+                        Map<String, ModuleVersion> versions = new ConcurrentHashMap<>();
+                        for (var module : repoModules) {
+                            var release = module.getLatestRelease();
+                            if (release == null || release.isEmpty()) continue;
+                            var splits = release.split("-", 2);
+                            if (splits.length < 2) continue;
+                            long verCode;
+                            String verName;
+                            try {
+                                verCode = Long.parseLong(splits[0]);
+                                verName = splits[1];
+                            } catch (NumberFormatException ignored) {
+                                continue;
                             }
+                            String pkgName = module.getName();
+                            versions.put(pkgName, new ModuleVersion(verCode, verName));
+                        }
 
-                            onlineModules = modules;
-                            Files.write(repoFile, bodyString.getBytes(StandardCharsets.UTF_8));
-                            synchronized (this) {
-                                repoLoaded = true;
-                            }
-                            for (Listener listener : listeners) {
-                                listener.repoLoaded();
-                            }
-                        } catch (Throwable t) {
-                            Log.e(App.TAG, Log.getStackTraceString(t));
-                            for (Listener listener : listeners) {
-                                listener.onThrowable(t);
-                            }
+                        latestVersion = versions;
+                        onlineModules = modules;
+                        Files.write(repoFile, bodyString.getBytes(StandardCharsets.UTF_8));
+                        repoLoaded = true;
+                        for (RepoListener listener : listeners) {
+                            listener.onRepoLoaded();
+                        }
+                    } catch (Throwable t) {
+                        Log.e(App.TAG, Log.getStackTraceString(t));
+                        for (RepoListener listener : listeners) {
+                            listener.onThrowable(t);
                         }
                     }
                 }
-                synchronized (this) {
-                    isLoading = false;
-                }
             }
-        });
+        } catch (Throwable e) {
+            Log.e(App.TAG, "load remote data", e);
+            for (RepoListener listener : listeners) {
+                listener.onThrowable(e);
+            }
+            if (!repoUrl.equals(backupRepoUrl)) {
+                repoUrl = backupRepoUrl;
+                loadRemoteData();
+            }
+        } finally {
+            repoLoaded = true;
+        }
     }
 
+    @Nullable
     public ModuleVersion getModuleLatestVersion(String packageName) {
-        return latestVersion.get(packageName);
+        return repoLoaded ? latestVersion.getOrDefault(packageName, null) : null;
     }
 
     public void loadRemoteReleases(String packageName) {
@@ -179,7 +167,7 @@ public class RepoLoader {
                     repoUrl = backupRepoUrl;
                     loadRemoteReleases(packageName);
                 } else {
-                    for (Listener listener : listeners) {
+                    for (RepoListener listener : listeners) {
                         listener.onThrowable(e);
                     }
                 }
@@ -196,12 +184,12 @@ public class RepoLoader {
                             OnlineModule module = gson.fromJson(bodyString, OnlineModule.class);
                             module.releasesLoaded = true;
                             onlineModules.replace(packageName, module);
-                            for (Listener listener : listeners) {
-                                listener.moduleReleasesLoaded(module);
+                            for (RepoListener listener : listeners) {
+                                listener.onModuleReleasesLoaded(module);
                             }
                         } catch (Throwable t) {
                             Log.e(App.TAG, Log.getStackTraceString(t));
-                            for (Listener listener : listeners) {
+                            for (RepoListener listener : listeners) {
                                 listener.onThrowable(t);
                             }
                         }
@@ -211,28 +199,30 @@ public class RepoLoader {
         });
     }
 
-    public void addListener(Listener listener) {
+    public void addListener(RepoListener listener) {
         if (!listeners.contains(listener))
             listeners.add(listener);
     }
 
-    public void removeListener(Listener listener) {
+    public void removeListener(RepoListener listener) {
         listeners.remove(listener);
     }
 
+    @Nullable
     public OnlineModule getOnlineModule(String packageName) {
-        return packageName == null ? null : onlineModules.get(packageName);
+        return !repoLoaded || packageName == null ? null : onlineModules.get(packageName);
     }
 
+    @Nullable
     public Collection<OnlineModule> getOnlineModules() {
-        return onlineModules.values();
+        return repoLoaded ? onlineModules.values() : null;
     }
 
-    public interface Listener {
-        default void repoLoaded() {
+    public interface RepoListener {
+        default void onRepoLoaded() {
         }
 
-        default void moduleReleasesLoaded(OnlineModule module) {
+        default void onModuleReleasesLoaded(OnlineModule module) {
         }
 
         default void onThrowable(Throwable t) {

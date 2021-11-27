@@ -18,19 +18,15 @@
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <item
         android:id="@+id/menu_search"
         android:actionViewClass="androidx.appcompat.widget.SearchView"
-        android:showAsAction="ifRoom"
-        android:title="" />
-
-    <item
-        android:id="@+id/menu_launch"
-        android:icon="@drawable/ic_settings"
-        android:showAsAction="ifRoom"
-        android:title="@string/module_settings" />
+        android:icon="@drawable/ic_baseline_search_24"
+        android:showAsAction="always|collapseActionView"
+        tools:ignore="AlwaysShowAction" />
 
     <item
         android:id="@+id/use_recommended"

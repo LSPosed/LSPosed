@@ -17,29 +17,22 @@
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingTop="?attr/dialogPreferredPadding"
+    android:id="@+id/swipe_refresh_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/progress"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_gravity="center"
-        android:indeterminate="true"
-        android:visibility="visible"
-        app:hideAnimationBehavior="inward"
-        app:showAnimationBehavior="outward" />
-
     <org.lsposed.manager.ui.widget.EmptyStateRecyclerView
-        android:id="@+id/list"
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:fadeScrollbars="true"
-        android:minHeight="?attr/listPreferredItemHeight"
         android:scrollbarStyle="insideOverlay"
-        android:scrollbars="vertical" />
-</FrameLayout>
+        android:scrollbars="vertical"
+        app:borderBottomVisibility="never"
+        app:borderTopDrawable="@null"
+        app:borderTopVisibility="whenTop"
+        app:fitsSystemWindowsInsets="bottom" />
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

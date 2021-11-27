@@ -21,4 +21,65 @@
 <resources>
     <attr name="colorNormal" format="color" />
     <attr name="colorInstall" format="color" />
+
+
+    <declare-styleable name="SubtitleCollapsingToolbarLayout">
+        <!-- Specifies extra space on the start, top, end and bottom sides of the the expanded title text.
+             Margin values should be positive,
+             subtitle will also be affected. -->
+        <attr name="expandedTitleMargin" />
+        <!-- Specifies extra space on the start side of the the expanded title text. Margin values should be positive,
+             subtitle will also be affected. -->
+        <attr name="expandedTitleMarginStart" />
+        <!-- Specifies extra space on the top side of the the expanded title text. Margin values should be positive,
+             subtitle will also be affected. -->
+        <attr name="expandedTitleMarginTop" />
+        <!-- Specifies extra space on the end side of the the expanded title text. Margin values should be positive,
+             subtitle will also be affected. -->
+        <attr name="expandedTitleMarginEnd" />
+        <!-- Specifies extra space on the bottom side of the the expanded title text. Margin values should be positive,
+             subtitle will also be affected. -->
+        <attr name="expandedTitleMarginBottom" />
+
+        <!-- The text appearance of the CollapsingToolbarLayout's title when it is fully 'expanded' -->
+        <attr name="expandedTitleTextAppearance" />
+        <!-- The text appearance of the CollapsingToolbarLayout's subtitle when it is fully 'expanded' -->
+        <attr name="expandedSubtitleTextAppearance" format="reference" />
+        <!-- The text appearance of the CollapsingToolbarLayouts title when it is fully 'collapsed' -->
+        <attr name="collapsedTitleTextAppearance" />
+        <!-- The text appearance of the CollapsingToolbarLayouts subtitle when it is fully 'collapsed' -->
+        <attr name="collapsedSubtitleTextAppearance" format="reference" />
+
+        <!-- The drawable to use as a scrim on top of the CollapsingToolbarLayouts
+             content when it has been scrolled sufficiently off screen. -->
+        <attr name="contentScrim" />
+        <!-- The drawable to use as a scrim for the status bar content when the
+             CollapsingToolbarLayout has been scrolled sufficiently off screen.
+             Only works on Lollipop with the correct setup. -->
+        <attr name="statusBarScrim" />
+        <!-- The id of the primary Toolbar child that you wish to use for the purpose of collapsing.
+             This Toolbar descendant view does not need to be a direct child of the layout.
+             If you do not set this, the first direct Toolbar child found will be used. -->
+        <attr name="toolbarId" />
+        <!-- Specifies the amount of visible height in pixels used to define when to trigger a
+             scrim visibility change. -->
+        <attr name="scrimVisibleHeightTrigger" />
+        <!-- Specifies the duration used for scrim visibility animations. -->
+        <attr name="scrimAnimationDuration" />
+
+        <!-- Specifies how the title should be positioned when collapsed,
+             subtitle will also be affected. -->
+        <attr name="collapsedTitleGravity" />
+        <!-- Specifies how the title should be positioned when expanded,
+             subtitle will also be affected. -->
+        <attr name="expandedTitleGravity" />
+
+        <!-- Whether the CollapsingToolbarLayout should draw its own shrinking/growing title. -->
+        <attr name="titleEnabled" />
+        <!-- The title to show when titleEnabled is set to true. -->
+        <attr name="title" />
+        <!-- The subtitle to show when titleEnabled is set to true. -->
+        <attr name="subtitle" />
+    </declare-styleable>
+
 </resources>

@@ -26,12 +26,6 @@
         android:title="@string/menuSaveToSd" />
 
     <item
-        android:id="@+id/menu_refresh"
-        android:icon="@drawable/ic_refresh"
-        android:showAsAction="ifRoom"
-        android:title="@string/menuReload" />
-
-    <item
         android:id="@+id/menu_scroll_top"
         android:showAsAction="never"
         android:title="@string/scroll_top" />
@@ -46,4 +40,9 @@
         android:showAsAction="never"
         android:title="@string/menuClearLog" />
 
+    <item
+        android:id="@+id/menu_word_wrap"
+        android:checkable="true"
+        android:checked="false"
+        android:title="@string/menu_enable_word_wrap" />
 </menu>

@@ -21,7 +21,6 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/snackbar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:consumeSystemWindowsInsets="start|end"
@@ -116,7 +115,8 @@
                     android:id="@+id/modules"
                     style="@style/HomeCard.Secondary"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:tooltipText="@string/Modules">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -156,7 +156,8 @@
                     android:id="@+id/download"
                     style="@style/HomeCard.Secondary"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:tooltipText="@string/module_repo">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -196,7 +197,8 @@
                     android:id="@+id/logs"
                     style="@style/HomeCard.Tertiary"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:tooltipText="@string/Logs">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -225,7 +227,8 @@
                     android:id="@+id/settings"
                     style="@style/HomeCard.Tertiary"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:tooltipText="@string/Settings">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -253,7 +256,8 @@
                     android:id="@+id/issue"
                     style="@style/HomeCard.Tertiary"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:tooltipText="@string/feedback_or_suggestion">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -265,14 +269,44 @@
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:contentDescription="@string/report_issue"
-                            app:srcCompat="@drawable/ic_round_bug_report_24" />
+                            android:contentDescription="@string/feedback_or_suggestion"
+                            app:srcCompat="@drawable/ic_baseline_chat_24" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="24dp"
-                            android:text="@string/report_issue"
+                            android:text="@string/feedback_or_suggestion"
+                            android:textAppearance="?android:attr/textAppearanceListItem"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/about"
+                    style="@style/HomeCard.Tertiary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:tooltipText="@string/About">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:contentDescription="@string/About"
+                            app:srcCompat="@drawable/ic_baseline_info_24" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="24dp"
+                            android:text="@string/About"
                             android:textAppearance="?android:attr/textAppearanceListItem"
                             android:textSize="16sp" />
                     </LinearLayout>

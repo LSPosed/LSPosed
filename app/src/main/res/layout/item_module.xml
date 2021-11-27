@@ -39,8 +39,8 @@
 
         <ImageView
             android:id="@+id/app_icon"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="@dimen/app_icon_size"
+            android:layout_height="@dimen/app_icon_size"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -52,7 +52,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:singleLine="false"
+            android:ellipsize="marquee"
+            android:scrollbars="none"
             android:textAppearance="?android:attr/textAppearanceListItem"
             android:textIsSelectable="false"
             android:textSize="16sp"
@@ -67,6 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:maxLines="5"
+            android:scrollbars="none"
             android:textAppearance="?android:attr/textAppearanceListItemSecondary"
             android:textColor="?android:attr/textColorSecondary"
             app:layout_constraintBottom_toBottomOf="@id/hint"

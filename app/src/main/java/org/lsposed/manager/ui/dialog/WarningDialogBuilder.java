@@ -19,13 +19,15 @@
 
 package org.lsposed.manager.ui.dialog;
 
-import android.app.Activity;
-import android.content.Context;
+import android.app.Dialog;
+import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.text.HtmlCompat;
+import androidx.fragment.app.DialogFragment;
 
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
@@ -33,14 +35,15 @@ import org.lsposed.manager.databinding.DialogItemBinding;
 import org.lsposed.manager.databinding.DialogWarningBinding;
 import org.lsposed.manager.util.chrome.LinkTransformationMethod;
 
-public class WarningDialogBuilder extends BlurBehindDialogBuilder {
+public class WarningDialogBuilder extends DialogFragment {
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        var activity = requireActivity();
+        var builder = new BlurBehindDialogBuilder(activity).
+                setTitle(R.string.partial_activated);
 
-    public WarningDialogBuilder(@NonNull Context context) {
-        super(context);
-        Activity activity = (Activity) context;
-        setTitle(R.string.partial_activated);
-
-        LayoutInflater inflater = LayoutInflater.from(context);
+        LayoutInflater inflater = LayoutInflater.from(activity);
         DialogWarningBinding binding = DialogWarningBinding.inflate(inflater, null, false);
 
         if (!ConfigManager.isSepolicyLoaded()) {
@@ -65,7 +68,9 @@ public class WarningDialogBuilder extends BlurBehindDialogBuilder {
             item.value.setTransformationMethod(new LinkTransformationMethod(activity));
         }
 
-        setView(binding.getRoot());
-        setPositiveButton(android.R.string.ok, null);
+        builder.setView(binding.getRoot());
+        builder.setPositiveButton(android.R.string.ok, null);
+        builder.setNeutralButton(R.string.info, (dialog, which) -> new InfoDialogBuilder().show(getParentFragmentManager(), "info"));
+        return builder.create();
     }
 }

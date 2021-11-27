@@ -19,11 +19,14 @@
 
 package org.lsposed.manager.ui.dialog;
 
-import android.content.Context;
+import android.app.Dialog;
 import android.os.Build;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 
 import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
@@ -34,12 +37,14 @@ import java.util.Locale;
 
 import rikka.core.util.ClipboardUtils;
 
-public class InfoDialogBuilder extends BlurBehindDialogBuilder {
+public class InfoDialogBuilder extends DialogFragment {
 
-    public InfoDialogBuilder(@NonNull Context context) {
-        super(context);
-        setTitle(R.string.info);
-        DialogInfoBinding binding = DialogInfoBinding.inflate(LayoutInflater.from(context), null, false);
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        var activity = requireActivity();
+        var builder = new BlurBehindDialogBuilder(activity).setTitle(R.string.info);
+        DialogInfoBinding binding = DialogInfoBinding.inflate(LayoutInflater.from(activity), null, false);
 
         if (ConfigManager.isBinderAlive()) {
             binding.apiVersion.setText(String.valueOf(ConfigManager.getXposedApiVersion()));
@@ -61,37 +66,38 @@ public class InfoDialogBuilder extends BlurBehindDialogBuilder {
         binding.device.setText(getDevice());
         binding.systemAbi.setText(Build.SUPPORTED_ABIS[0]);
 
-        setView(binding.getRoot());
+        builder.setView(binding.getRoot());
 
-        setPositiveButton(android.R.string.ok, null);
-        String info = context.getString(R.string.info_api_version) +
+        builder.setPositiveButton(android.R.string.ok, null);
+        String info = activity.getString(R.string.info_api_version) +
                 "\n" +
                 binding.apiVersion.getText() +
                 "\n\n" +
-                context.getString(R.string.info_api) +
+                activity.getString(R.string.info_api) +
                 "\n" +
                 binding.api.getText() +
                 "\n\n" +
-                context.getString(R.string.info_framework_version) +
+                activity.getString(R.string.info_framework_version) +
                 "\n" +
                 binding.frameworkVersion.getText() +
                 "\n\n" +
-                context.getString(R.string.info_manager_version) +
+                activity.getString(R.string.info_manager_version) +
                 "\n" +
                 binding.managerVersion.getText() +
                 "\n\n" +
-                context.getString(R.string.info_system_version) +
+                activity.getString(R.string.info_system_version) +
                 "\n" +
                 binding.systemVersion.getText() +
                 "\n\n" +
-                context.getString(R.string.info_device) +
+                activity.getString(R.string.info_device) +
                 "\n" +
                 binding.device.getText() +
                 "\n\n" +
-                context.getString(R.string.info_system_abi) +
+                activity.getString(R.string.info_system_abi) +
                 "\n" +
                 binding.systemAbi.getText();
-        setNeutralButton(android.R.string.copy, (dialog, which) -> ClipboardUtils.put(context, info));
+        builder.setNeutralButton(android.R.string.copy, (dialog, which) -> ClipboardUtils.put(activity, info));
+        return builder.create();
     }
 
     private String getDevice() {
