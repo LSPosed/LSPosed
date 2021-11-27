@@ -15,7 +15,6 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
   ~
-  ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
@@ -95,7 +94,6 @@
     <string name="xposed_module_updated_notification_content_system">%s byl aktualizován, protože se provedly změny v souvislosti se Systémovým Frameworkem, a je vyžadován restart pro aplikaci změn</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(žádný popis)</string>
-    <string name="module_no_ui">Tento modul neposkytuje uživatelské rozhraní</string>
     <string name="warning_xposed_min_version">Tento modul vyžaduje novější Xposed verzi (%d) a proto nemůže být aktivován</string>
     <string name="no_min_version_specified">Tento modul nespecifikuje potřebnou Xposed verzi.</string>
     <string name="warning_min_version_too_low">Tento modul byl vytvořen pro Xposed verzi %1$d, a tak z důvodu nekompatibilních změn ve verzi %2$dbyl zakázán</string>
@@ -201,6 +199,7 @@
     <string name="module_release_no_more">Žádné další vydání</string>
     <string name="repo_load_failed">Nepodařilo se načíst repozitář modulu: %s</string>
     <!-- CrashReportActivity -->
+    <string name="version_mismatch">Verze LSPosed (%1$d) neodpovídá správci (%2$d). Prosím přeinstalujte LSPosed.</string>
     <string name="manager_crashed">Manažer selhal</string>
     <string name="manager_crashed_info">nahlásit to </string>
     <string name="send_crash_info">Odeslat informace o pádu</string>
