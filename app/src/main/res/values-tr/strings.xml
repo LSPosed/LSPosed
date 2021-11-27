@@ -15,7 +15,6 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
   ~
-  ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
@@ -91,7 +90,6 @@
     <string name="xposed_module_updated_notification_content_system">%s Güncelleme kapsamı Sistem Çerçevesi içerdiğinden, değişiklikleri uygulamak için yeniden başlatma gereklidir</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(açıklama yapılmadı)</string>
-    <string name="module_no_ui">Bu modül bir kullanıcı arayüzü sağlamaz</string>
     <string name="warning_xposed_min_version">Bu modül daha yeni bir Xposed sürümü gerektiriyor (%d) ve bu nedenle etkinleştirilemez</string>
     <string name="no_min_version_specified">Bu modül, ihtiyaç duyduğu Xposed sürümünü belirtmiyor.</string>
     <string name="warning_min_version_too_low">Bu modül Xposed sürümü için oluşturuldu %1$d, ancak sürümdeki uyumsuz değişiklikler nedeniyle %2$d, devre dışı bırakıldı</string>
@@ -197,6 +195,7 @@
     <string name="module_release_no_more">Daha fazla sürüm yok</string>
     <string name="repo_load_failed">Modül deposu yüklenemedi: %s</string>
     <!-- CrashReportActivity -->
+    <string name="version_mismatch">LSPosed çerçevesinin sürümü (%1$d) yöneticininkiyle eşleşmiyor (%2$d). Lütfen LSPosed\'ı tekrar kurun.</string>
     <string name="manager_crashed">Yönetici çöktü</string>
     <string name="manager_crashed_info">bunu şuraya rapor et </string>
     <string name="send_crash_info">Çökme bilgisi gönder</string>
