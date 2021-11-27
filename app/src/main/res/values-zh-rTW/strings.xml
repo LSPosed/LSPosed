@@ -15,7 +15,6 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
   ~
-  ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
@@ -88,8 +87,7 @@
     <string name="xposed_module_updated_notification_title_system">Xposed 模組已更新，需要重新啟動。</string>
     <string name="xposed_module_updated_notification_content_system">%s 已更新，由於作用域包含系統框架，需要重新啟動以套用修改。</string>
     <!-- ModulesActivity -->
-    <string name="module_empty_description">（未提供介紹）</string>
-    <string name="module_no_ui">該模組未提供使用者介面</string>
+    <string name="module_empty_description">(未提供介紹)</string>
     <string name="warning_xposed_min_version">該模組需要更新版本的 Xposed(%d)，因此無法被啟用</string>
     <string name="no_min_version_specified">該模組未指定需要的 Xposed 版本</string>
     <string name="warning_min_version_too_low">此模組適用於 %1$d 版本的 Xposed ，由於版本 %2$d 的變更不相容，因此已經停用此模組</string>
@@ -138,7 +136,7 @@
     <string name="menu_backup_and_restore">備份</string>
     <string name="menu_backup">備份</string>
     <string name="menu_restore">還原</string>
-    <string name="force_stop">確定要強制停止？</string>
+    <string name="force_stop">強制停止</string>
     <string name="force_stop_dlg_title">確定要強制停止？</string>
     <string name="force_stop_dlg_text">如果您強制停止應用程式，可能導致行為異常。</string>
     <string name="reboot_required">需要重新啟動以套用此變更</string>
@@ -195,6 +193,7 @@
     <string name="module_release_no_more">沒有更舊的版本</string>
     <string name="repo_load_failed">模組倉庫載入失敗：%s</string>
     <!-- CrashReportActivity -->
+    <string name="version_mismatch">LSPosed框架版本 (%1$d) 與管理器 (%2$d) 不匹配，請重新安裝LSPosed。</string>
     <string name="manager_crashed">應用程式出現未知錯誤</string>
     <string name="manager_crashed_info">回報給 </string>
     <string name="send_crash_info">傳送錯誤日誌</string>
