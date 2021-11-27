@@ -15,7 +15,6 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
   ~
-  ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
@@ -68,7 +67,6 @@
     <string name="xposed_module_updated_notification_content">%s이(가) 업데이트되었습니다.</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(설명 없음)</string>
-    <string name="module_no_ui">이 모듈은 사용자 인터페이스를 제공하지 않습니다.</string>
     <string name="warning_xposed_min_version">이 모듈에는 최신 LSPosed (%d) 버전이 필요하므로 활성화할 수 없습니다.</string>
     <string name="no_min_version_specified">이 모듈에서는 필요한 LSPosed 버전을 지정하지 않습니다.</string>
     <string name="warning_min_version_too_low">이 모듈은 LSPosed 버전 %1$d에 대해 생성되었지만 버전 %2$d에서 호환되지 않는 변경으로 인해 비활성화되었습니다.</string>
