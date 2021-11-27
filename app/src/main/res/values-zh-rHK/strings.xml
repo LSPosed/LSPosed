@@ -15,7 +15,6 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
   ~
-  ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
@@ -36,9 +35,9 @@
         <item quantity="other">%d 模組可更新</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[在 %1$s 查看源碼<br/>加入我們的 %2$s 頻道]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">darKnighT0v0</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">null</string>
     <string name="install">安裝</string>
-    <string name="install_summary">點擊按安裝 LSPosed</string>
+    <string name="install_summary">點擊安裝 LSPosed</string>
     <string name="not_installed">未安裝</string>
     <string name="not_install_summary">LSPosed 未安裝</string>
     <string name="activated">已啟動</string>
@@ -46,18 +45,18 @@
     <string name="selinux_policy_not_loaded_summary">SEPolicy 未正常加載</string>
     <string name="selinux_policy_not_loaded"><![CDATA[注入系統的模組將不會工作。<br/>請回報給 <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> 開發者。]]></string>
     <string name="system_inject_fail_summary">系統框架注入失敗</string>
-    <string name="system_inject_fail"><![CDATA[這是極罕見的問題，可能由於 <b>Magisk</b> 本身或者一些低質量的 Magisk 模組導致。<br/>請嘗試禁用除了 Riru 和 LSPosed 之外的模組然後重啟或者提交完整日誌給開發者。]]></string>
+    <string name="system_inject_fail"><![CDATA[此問題很罕見，可能是由於<b>Magisk</b>或某些低質量Magisk模組造成的。<br/>請嘗試禁用除Riru和LSPosed之外的Magisk模組，或向開發人員提交完整日誌。]]></string>
     <string name="system_prop_incorrect_summary">系統屬性異常</string>
-    <string name="system_prop_incorrect"><![CDATA[一些必須的系統屬性被刪除或更改。<br/>模組可能會隨機失效。]]></string>
+    <string name="system_prop_incorrect"><![CDATA[一些必要的系統内容被删除或修改。<br/>模組有時可能會失效。]]></string>
     <string name="need_update">需要更新</string>
     <string name="please_update_summary">請安裝最新版本的 LSPosed</string>
     <string name="lsposed_not_active">LSPosed 未安裝或未啟動</string>
-    <string name="info_api_version">應用程式介面版本</string>
+    <string name="info_api_version">API版本</string>
     <string name="info_framework_version">框架版本</string>
     <string name="info_manager_version">管理器版本</string>
     <string name="info_system_version">系統版本</string>
     <string name="info_device">設備</string>
-    <string name="info_system_abi">系統應用二進制介面</string>
+    <string name="info_system_abi">系統ABI</string>
     <string name="info_api">注入介面</string>
     <string name="parasitic_recommend">推薦使用寄生管理器</string>
     <string name="parasitic_recommend_summary">LSPosed 現在支援寄生到系統以避免檢測。
@@ -91,7 +90,6 @@
     <string name="xposed_module_updated_notification_content_system">%s 已更新，由於作用域中包含系統框架，需要重啟系統。</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(未提供描述)</string>
-    <string name="module_no_ui">此模組未提供使用者介面</string>
     <string name="warning_xposed_min_version">此模組要求更新版本 Xposed(%d), 啟動失敗</string>
     <string name="no_min_version_specified">此模組沒有指定最低Xposed版本</string>
     <string name="warning_min_version_too_low">此模組專為 Xposed %1$d 版本構建, 由於不相容 %2$d 版本中的變更, 已被停用</string>
@@ -197,6 +195,7 @@
     <string name="module_release_no_more">沒有更舊的版本</string>
     <string name="repo_load_failed">模組倉庫加載失敗: %s</string>
     <!-- CrashReportActivity -->
+    <string name="version_mismatch">LSPosed框架版本 (%1$d) 與管理器 (%2$d) 不匹配，請重新安裝LSPosed。</string>
     <string name="manager_crashed">應用程式已崩潰</string>
     <string name="manager_crashed_info">回報問題到 </string>
     <string name="send_crash_info">發送崩潰訊息</string>
