@@ -15,7 +15,6 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
   ~
-  ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
@@ -33,6 +32,10 @@
     <string name="module_repo">Dépôt</string>
     <string name="module_repo_loading">Chargement…</string>
     <string name="module_repo_up_to_date">Tous les modules sont à jour</string>
+    <plurals name="module_repo_upgradable">
+        <item quantity="one">%d module évolutif</item>
+        <item quantity="other">%d modules évolutifs</item>
+    </plurals>
     <string name="about_view_source_code"><![CDATA[Voir le code source sur %1$s<br/>Rejoindre notre canal %2$s]]></string>
     <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">https://github.com/xerta555</string>
     <string name="install">Installer</string>
@@ -78,6 +81,8 @@
     <string name="menuReload">Recharger</string>
     <string name="logs_clear_failed_2">Échec d\'effacement du journal</string>
     <string name="menu_enable_word_wrap">Retour à la ligne</string>
+    <string name="enabled_verbose_log">Journeaux détaillés activé</string>
+    <string name="disabled_verbose_log">Journeaux détaillés désactivé</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Le module LSPosed n\’est pas encore actif</string>
     <string name="module_is_not_activated_yet_detailed">%s à été installé, mais n\'est pas encore actif</string>
@@ -87,23 +92,22 @@
     <string name="xposed_module_updated_notification_content_system">%s à été mis à jour, étant donné que le champ d\'application est étendu au sous système, un redémarrage est nécessaire pour appliquer les changements</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(aucune description fournie)</string>
-    <string name="module_no_ui">Ce module ne fournit pas d\’interface utilisateur</string>
     <string name="warning_xposed_min_version">Ce module requière une nouvelle version d\'Xposed (%d) et n\'a donc pas pu être activé</string>
     <string name="no_min_version_specified">Ce module ne spécifie pas la version d\'Xposed nécessaire.</string>
     <string name="warning_min_version_too_low">Ce module à été créé pour la version Xposed %1$d, mais due à des changements incompatibles dans la version %2$d, il à été désactivé</string>
     <string name="warning_installed_on_external_storage">Ce module ne peut pas être chargé car il est installé sur la carte SD, merci de de déplacer sur le stockage interne</string>
-    <string name="module_uninstall">Désinstallation</string>
+    <string name="module_uninstall">Désinstaller</string>
     <string name="module_settings">Réglages du module</string>
-    <string name="view_in_repo">Voir dans le dépôt</string>
+    <string name="view_in_repo">Afficher dans le dépôt</string>
     <string name="module_uninstall_message">Voulez-vous déinstaller ce module?</string>
     <string name="module_uninstalled">Désinstallation de %1$s</string>
     <string name="module_uninstall_failed">Échec de la désinstallation</string>
     <string name="add_module_to_user">Ajouter le module à l\’utilisateur</string>
     <string name="module_installed">Ajout de %1$s à l’utilisateur %2$s</string>
     <string name="module_install_failed">Échec de l\’ajout du module</string>
-    <string name="install_to_user">Installation dans utilisateur %s</string>
+    <string name="install_to_user">Installer dans l\'utilisateur %s</string>
     <string name="install_to_user_message">Vous voulez installer %1$s dans l\'utilisateur %2$s? Il est recommandé de l\'installer manuellement, forcer l\'installation via LSPosed pourrait causer des problèmes.</string>
-    <string name="expand">agrandir</string>
+    <string name="expand">développer</string>
     <string name="collapse">réduire</string>
     <!-- AppListActivity -->
     <string name="compile_speed">Ré-optimiser</string>
@@ -145,7 +149,7 @@
     <string name="deny_list">%s est sur la liste de refus. Celà pourrait ne pas avoir d\'effet.</string>
     <string name="deny_list_info">Sur liste de refus</string>
     <!-- ModulesActivity and AppListActivity -->
-    <string name="modules_other_app">Voir dans une autre application</string>
+    <string name="modules_other_app">Afficher dans une autre application</string>
     <string name="module_app_info">Informations d\’application</string>
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nIl n\’y a rien ici</string>
     <!-- SettingsActivity -->
@@ -220,4 +224,5 @@
     <string name="color_brown">Marron</string>
     <string name="color_grey">Gris</string>
     <string name="color_blue_grey">Bleu grisatre</string>
+    <string name="feedback_or_suggestion">Réaction ou suggestion</string>
 </resources>
