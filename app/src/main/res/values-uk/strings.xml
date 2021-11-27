@@ -15,7 +15,6 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
   ~
-  ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
@@ -59,6 +58,7 @@
     <string name="info_device">Пристрій</string>
     <string name="info_system_abi">Система ABI</string>
     <string name="info_api">Встановлення інтерфейсу</string>
+    <string name="parasitic_recommend">Рекомендується Parasitic Manager</string>
     <string name="parasitic_recommend_summary">LSPosed тепер підтримує системну паразитізацію, щоб уникнути виявлення. Ви можете безпечно видалити менеджера після успішного створення ярлика менеджера паразитів. У будь-якому випадку ви можете встановити менеджер назад з /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Створити ярлик</string>
     <string name="never_show">Не показувати</string>
@@ -88,7 +88,6 @@
     <string name="xposed_module_updated_notification_content_system">%s було оновлено, оскільки область містить системний фреймворк, необхідне перезавантаження для застосування змін</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(опису не надано)</string>
-    <string name="module_no_ui">Цей модуль не надає інтерфейсу користувача</string>
     <string name="warning_xposed_min_version">Цей модуль вимагає новішої версії LSP (%d), тому його неможливо активувати</string>
     <string name="no_min_version_specified">У цьому модулі не вказано необхідну для нього версію Xposed.</string>
     <string name="warning_min_version_too_low">Цей модуль був створений для версії LSP %1$d, але через несумісні зміни у версії %2$d його було вимкнено</string>
@@ -175,6 +174,7 @@
     <string name="settings_translation">Брати участь в перекладі</string>
     <string name="settings_translation_summary">Допоможіть нам перекласти %s на вашу мову</string>
     <string name="pref_title_enable_auto_add_shortcut">Автоматично додавати ярлик</string>
+    <string name="settings_enable_auto_add_shortcut_summary">Не можна додавати нові ярлики при вимкненні в менеджері без паразитів</string>
     <string name="settings_update_channel">Канал оновлень</string>
     <string name="update_channel_stable">Стабільний</string>
     <string name="update_channel_bate">Бета-версія</string>
@@ -193,6 +193,7 @@
     <string name="module_release_no_more">Більше релізів немає</string>
     <string name="repo_load_failed">Не вдалося завантажити модуль репозиторія: %s</string>
     <!-- CrashReportActivity -->
+    <string name="version_mismatch">Версія LSPosed framework (%1$d) не відповідає менеджеру (%2$d). Будь-ласка, перевстановіть LSPosed.</string>
     <string name="manager_crashed">Менеджер зазнав збою</string>
     <string name="manager_crashed_info">надіслати це на </string>
     <string name="send_crash_info">Надіслати інформацію про помилку</string>
