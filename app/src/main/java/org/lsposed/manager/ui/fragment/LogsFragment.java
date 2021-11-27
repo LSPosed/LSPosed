@@ -418,12 +418,12 @@ public class LogsFragment extends BaseFragment {
 
         @Override
         public long getItemId(int position) {
-            return verbose(position) ? R.string.nav_item_logs_lsp : R.string.nav_item_logs_module;
+            return verbose(position) ? R.string.nav_item_logs_verbose : R.string.nav_item_logs_module;
         }
 
         @Override
         public boolean containsItem(long itemId) {
-            return itemId == R.string.nav_item_logs_lsp || itemId == R.string.nav_item_logs_module;
+            return itemId == R.string.nav_item_logs_verbose || itemId == R.string.nav_item_logs_module;
         }
 
         public boolean verbose(int position) {
