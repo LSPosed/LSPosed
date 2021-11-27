@@ -15,12 +15,11 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
   ~
-  ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">Info</string>
+    <string name="info">info</string>
     <string name="Modules">Modules</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d module ingeschakeld</item>
@@ -91,7 +90,6 @@
     <string name="xposed_module_updated_notification_content_system">%s is bijgewerkt, omdat het bereik een systeemkader bevat, moet je opnieuw opstarten om wijzigingen toe te passen</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(geen beschrijving gegeven)</string>
-    <string name="module_no_ui">Deze module biedt geen gebruikersinterface</string>
     <string name="warning_xposed_min_version">Deze module vereist een nieuwere versie van Lsposed (%d) en kan dus niet worden geactiveerd</string>
     <string name="no_min_version_specified">Deze module heeft geen vereiste versie voor Xposed opgegeven.</string>
     <string name="warning_min_version_too_low">Deze module is gemaakt voor de Lsposed-versie %1$d, maar vanwege onverenigbare wijzigingen in de versie %2$d, is het uitgeschakeld</string>

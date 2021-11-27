@@ -15,7 +15,6 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
   ~
-  ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
@@ -35,7 +34,7 @@
     <plurals name="module_repo_upgradable">
         <item quantity="other">%d 个模块可更新</item>
     </plurals>
-    <string name="about_view_source_code"><![CDATA[在 %1$s 查看源码<br/>加入我们的 %2$s 频道<br/>加入我们的 <b><a href="mqqapi://forward/url?src_type=web&style=default&plg_auth=1&version=1&url_prefix=aHR0cHM6Ly9xdW4ucXEuY29tL3Fxd2ViL3F1bnByby9zaGFyZT9fd3Y9MyZfd3d2PTEyOCZpbnZpdGVDb2RlPW1ydnM0JmJpej1rYQ==">QQ 频道</a></b>]]></string>
+    <string name="about_view_source_code"><![CDATA[在 %1$s 查看源码<br/>加入我们的 %2$s 频道<br/>加入我们的 <b><a href="mqqguild://guild/share?_wv=3&_wwv=128&inviteCode=mrvs4&from=246610&biz=ka">QQ 频道</a></b>]]></string>
     <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">null</string>
     <string name="install">安装</string>
     <string name="install_summary">点按安装 LSPosed</string>
@@ -80,6 +79,8 @@
     <string name="menuReload">重新加载</string>
     <string name="logs_clear_failed_2">日志清除失败</string>
     <string name="menu_enable_word_wrap">自动换行</string>
+    <string name="enabled_verbose_log">详细日志已启用</string>
+    <string name="disabled_verbose_log">详细日志已禁用</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Xposed 模块尚未激活</string>
     <string name="module_is_not_activated_yet_detailed">%s 已安装, 但尚未激活</string>
@@ -89,7 +90,6 @@
     <string name="xposed_module_updated_notification_content_system">%s 已更新，由于作用域包含系统框架，需要重启设备以应用更改</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">（未提供介绍）</string>
-    <string name="module_no_ui">该模块未提供用户界面</string>
     <string name="warning_xposed_min_version">此模块需要更新的 Xposed 版本（%d），因此无法激活</string>
     <string name="no_min_version_specified">该模块未指定所需的 Xposed 版本</string>
     <string name="warning_min_version_too_low">该模块针对 Xposed %1$d 版本构建，由于不兼容 %2$d 版本中的变更，现已被停用</string>
@@ -222,4 +222,5 @@
     <string name="color_brown">棕色</string>
     <string name="color_grey">灰色</string>
     <string name="color_blue_grey">灰蓝</string>
+    <string name="feedback_or_suggestion">反馈或建议</string>
 </resources>

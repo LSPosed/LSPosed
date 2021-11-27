@@ -15,7 +15,6 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
   ~
-  ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
@@ -85,7 +84,6 @@ Gerät wird nach dem Update neu gestartet</string>
     <string name="xposed_module_updated_notification_content_system">%s wurde aktualisiert, da der Geltungsbereich System-Framework enthält, ist ein Neustart erforderlich, damit die Änderungen übernommen werden</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(keine Beschreibung angegeben)</string>
-    <string name="module_no_ui">Dieses Modul bietet keine Benutzeroberfläche</string>
     <string name="warning_xposed_min_version">Dieses Modul erfordert eine neuere Version von LSPosed (%d) und kann nicht aktiviert werden</string>
     <string name="no_min_version_specified">Dieses Modul gibt nicht die benötigte LSPosed-Version an.</string>
     <string name="warning_min_version_too_low">Dieses Modul wurde für die LSPosed-Version %1$d erstellt, wurde jedoch aufgrund inkompatibler Änderungen in der Version %2$d deaktiviert</string>

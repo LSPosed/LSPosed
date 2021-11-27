@@ -15,7 +15,6 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
   ~
-  ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
@@ -33,6 +32,8 @@
     <string name="About">O aplikacji</string>
     <string name="report_issue">Zgłoś problem</string>
     <string name="module_repo">Repozytorium</string>
+    <string name="module_repo_loading">Ładowanie...</string>
+    <string name="module_repo_up_to_date">Wszystkie moduły są aktualne</string>
     <string name="about_view_source_code"><![CDATA[Zobacz kod źródłowy na %1$s<br/>Dołącz do naszego kanału %2$s]]></string>
     <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Adiker</string>
     <string name="install">Instaluj</string>
@@ -57,6 +58,8 @@
     <string name="info_device">Urządzenie</string>
     <string name="info_system_abi">System ABI</string>
     <string name="info_api">Interfejs injekcji</string>
+    <string name="parasitic_recommend">Rekomendowany menadżer Parasitic</string>
+    <string name="parasitic_recommend_summary">LSPosed wspiera teraz pasożyty systemowe, aby uniknąć wykrycia. Możesz odinstalować menadżer po pomyśłnym utworzeniu skrótu w parastic manager. W każdym wypadku możesz zainstalować menadżer spowrotem z pliku /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Utwórz skrót</string>
     <string name="never_show">Nigdy nie pokazuje</string>
     <string name="failed_to_create_shortcut">Nie udało się utworzyć skrótu: %1$s</string>
@@ -75,6 +78,7 @@
     <string name="logs_cannot_read">Nie można odczytać logu: \n</string>
     <string name="menuReload">Przeładuj</string>
     <string name="logs_clear_failed_2">Nie udało się wyczyścić logu</string>
+    <string name="menu_enable_word_wrap">Zawijanie wierszy</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Moduł Xposed nie jest jeszcze aktywowany</string>
     <string name="module_is_not_activated_yet_detailed">%s został zainstalowany, ale nie jest jeszcze aktywowany</string>
@@ -84,7 +88,6 @@
     <string name="xposed_module_updated_notification_content_system">%s został zaktualizowany, ponieważ zakres zawiera System Framework, wymagany restart aby zastosować zmiany</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(nie podano opisu)</string>
-    <string name="module_no_ui">Ten moduł nie zapewnia interfejsu użytkownika</string>
     <string name="warning_xposed_min_version">Ten moduł wymaga nowszej wersji Xposed (%d) i dlatego nie może być aktywowany</string>
     <string name="no_min_version_specified">Ten moduł nie określa wymaganej wersji Xposed.</string>
     <string name="warning_min_version_too_low">Ten moduł został utworzony dla Xposed w wersji %1$d, ale ze względu na niekompatybilne zmiany w wersji %2$d, został wyłączony</string>
@@ -139,6 +142,8 @@
     <string name="reboot_required">Restart jest wymagany aby ta zmiana została zastosowana</string>
     <string name="reboot">Restart</string>
     <string name="menu_hide">Ukryj</string>
+    <string name="deny_list">%s jest na mojej liście zablokowanych. Może nie odnieść skutku.</string>
+    <string name="deny_list_info">Na zablokowanej liście</string>
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">Wyświetl w innej aplikacji</string>
     <string name="module_app_info">Informacje o aplikacji</string>
@@ -167,6 +172,10 @@
     <string name="settings_translation">Weź udział w tłumaczeniu</string>
     <string name="settings_translation_summary">Pomóż nam przetłumaczyć %s na Twój język</string>
     <string name="pref_title_enable_auto_add_shortcut">Automatycznie dodaj skrót</string>
+    <string name="settings_update_channel">Zaktualizuj kanał</string>
+    <string name="update_channel_stable">Stabilny</string>
+    <string name="update_channel_bate">Beta</string>
+    <string name="update_channel_nightly">Wersja nightly</string>
     <!-- Module Repo -->
     <string name="module_readme">Przeczytaj</string>
     <string name="module_releases">Wersje</string>
@@ -181,11 +190,31 @@
     <string name="module_release_no_more">Nie ma więcej wersji</string>
     <string name="repo_load_failed">Nie udało się załadować repozytorium modułu: %s</string>
     <!-- CrashReportActivity -->
+    <string name="version_mismatch">Wersja LSPosed framework (%1$d) nie jest taka sama jak wersja menadżera (%2$d). Zainstaluj ponownie LSPosed.</string>
     <string name="manager_crashed">Menedżer uległ awarii</string>
     <string name="manager_crashed_info">zgłoś to do </string>
     <string name="send_crash_info">Wyślij informacje o awarii</string>
     <string name="crash_info_copied">Informacje o awarii skopiowane do schowka</string>
     <!-- Colors -->
+    <string name="color_pixel_blue">Pikselowy niebieski</string>
+    <string name="color_sakura">Sakura</string>
+    <string name="color_red">Czerwony</string>
+    <string name="color_pink">Różowy</string>
+    <string name="color_purple">Fioletowy</string>
+    <string name="color_deep_purple">Ciemny fioletowy</string>
+    <string name="color_indigo">Indigo</string>
+    <string name="color_blue">Niebieski</string>
     <string name="color_light_blue">Jasnoniebieski</string>
+    <string name="color_cyan">Cyjanowy</string>
+    <string name="color_teal">Turkusowy</string>
+    <string name="color_green">Zielony</string>
     <string name="color_light_green">Jasnozielony</string>
+    <string name="color_lime">Limonkowy</string>
+    <string name="color_yellow">Żółty</string>
+    <string name="color_amber">Bursztynowy</string>
+    <string name="color_orange">Pomarańczowy</string>
+    <string name="color_deep_orange">Ciemny pomarańczowy</string>
+    <string name="color_brown">Brązowy</string>
+    <string name="color_grey">Szary</string>
+    <string name="color_blue_grey">Niebiesko szary</string>
 </resources>

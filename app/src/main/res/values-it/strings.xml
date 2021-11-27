@@ -15,7 +15,6 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
   ~
-  ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
@@ -82,6 +81,8 @@
     <string name="menuReload">Ricarica</string>
     <string name="logs_clear_failed_2">Impossibile cancellare il log</string>
     <string name="menu_enable_word_wrap">A capo automatico</string>
+    <string name="enabled_verbose_log">Log verboso abilitato</string>
+    <string name="disabled_verbose_log">Log verboso disabilitato</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Il modulo Xposed non è ancora attivo</string>
     <string name="module_is_not_activated_yet_detailed">%s è stato installato, ma non è ancora attivo</string>
@@ -91,7 +92,6 @@
     <string name="xposed_module_updated_notification_content_system">%s è stato aggiornato. Poiché è abilitato per il framework di sistema, è necessario riavviare per applicare le modifiche</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(nessuna descrizione fornita)</string>
-    <string name="module_no_ui">Questo modulo non fornisce un\'interfaccia utente</string>
     <string name="warning_xposed_min_version">Questo modulo richiede una versione più recente di Xposed (%d) e quindi non può essere attivato</string>
     <string name="no_min_version_specified">Questo modulo non specifica la versione Xposed necessaria.</string>
     <string name="warning_min_version_too_low">Questo modulo è stato creato per la versione %1$d di Xposed ma, a causa di modifiche incompatibili nella versione %2$d, è stato disabilitato</string>
@@ -197,6 +197,7 @@
     <string name="module_release_no_more">Non ci sono altre versioni</string>
     <string name="repo_load_failed">Impossibile caricare il repository dei moduli: %s</string>
     <!-- CrashReportActivity -->
+    <string name="version_mismatch">La versione del framework LSPosed (%1$d) non corrisponde al manager (%2$d). Reinstalla LSPosed.</string>
     <string name="manager_crashed">Manager andato in crash</string>
     <string name="manager_crashed_info">segnalalo a </string>
     <string name="send_crash_info">Invia informazioni sul crash</string>
@@ -223,4 +224,5 @@
     <string name="color_brown">Marrone</string>
     <string name="color_grey">Grigio</string>
     <string name="color_blue_grey">Blu grigio</string>
+    <string name="feedback_or_suggestion">Feedback o suggerimenti</string>
 </resources>

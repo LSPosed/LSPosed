@@ -15,7 +15,6 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
   ~
-  ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
@@ -95,7 +94,6 @@
     <string name="xposed_module_updated_notification_content_system">Модуль %s обновлен, так как выбран системный фреймворк для модуля, требуется перезагрузка для применения изменений</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(описание отсутствует)</string>
-    <string name="module_no_ui">Этот модуль не содержит пользовательского интерфейса</string>
     <string name="warning_xposed_min_version">Этот модуль требует более новой версии LSPosed (%d) и не может быть включен</string>
     <string name="no_min_version_specified">Этот модуль не указал версию LSPosed, в которой он нуждается</string>
     <string name="warning_min_version_too_low">Этот модуль был создан для LSPosed версии %1$d, но из-за несовместимых изменений в версии %2$d, он был выключен</string>
@@ -131,7 +129,7 @@
     <string name="no_scope_selected">Вы не выбрали ни одного приложения. Продолжить?</string>
     <string name="menu_show_games">Игры</string>
     <string name="menu_show_modules">Мои модули</string>
-    <string name="menu_show_denylist">Запрещенный список</string>
+    <string name="menu_show_denylist">DenyList</string>
     <string name="failed_to_save_scope_list">Не удалось сохранить список выбранных приложений для модуля</string>
     <string name="app_description">%1$s\nВерсия: %2$s</string>
     <string name="use_recommended">Рекомендуемые</string>
@@ -150,8 +148,8 @@
     <string name="reboot_required">Для применения требуется перезагрузка</string>
     <string name="reboot">Перезагрузить</string>
     <string name="menu_hide">Скрывать</string>
-    <string name="deny_list">%s находится в запрещенном списке и может не работать</string>
-    <string name="deny_list_info">В запрещенном списке</string>
+    <string name="deny_list">%s находится в DenyList и может не работать</string>
+    <string name="deny_list_info">В DenyList</string>
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">Магазин приложений</string>
     <string name="module_app_info">О приложении</string>

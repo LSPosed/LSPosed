@@ -15,7 +15,6 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
   ~
-  ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
@@ -89,7 +88,6 @@
     <string name="xposed_module_updated_notification_content_system">%s đã được cập nhật, phạm vi hoạt động đã bao gồm System Framework, thì khởi động lại thiết bị là bắt buộc</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(chưa có mô tả)</string>
-    <string name="module_no_ui">Mô-đun này không cung cấp giao diện người dùng</string>
     <string name="warning_xposed_min_version">Mô-đun này yêu cầu một phiên bản Xposed mới hơn (%d) và đó là lý do không thể được kích hoạt</string>
     <string name="no_min_version_specified">Mô-đun này không chỉ định phiên bản Xposed cần thiết để khởi chạy.</string>
     <string name="warning_min_version_too_low">Mô-đun này được tạo bởi phiên bản Xposed %1$d, nhưng vì lý do không tương thích với phiên bản %2$d, nên nó đã bị vô hiệu hóa</string>

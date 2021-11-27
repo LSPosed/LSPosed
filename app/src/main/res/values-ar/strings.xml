@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -14,7 +15,6 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
   ~
-  ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
@@ -82,6 +82,8 @@ Ali Samir</string>
     <string name="menuReload">إعادة التحميل</string>
     <string name="logs_clear_failed_2">فشل مسح السجل</string>
     <string name="menu_enable_word_wrap">التفاف النص</string>
+    <string name="enabled_verbose_log">تم تفعيل السجل المطول</string>
+    <string name="disabled_verbose_log">تم تعطيل السجل المطول</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">وحدة Xposed لم يتم تفعيلها بعد</string>
     <string name="module_is_not_activated_yet_detailed">%s تم تثبيته، ولكن لم يتم تفعيله بعد</string>
@@ -91,7 +93,6 @@ Ali Samir</string>
     <string name="xposed_module_updated_notification_content_system">%s تم تحديثه، نظراً لأن النطاق يحتوي على إطار النظام، يتطلب إعادة التشغيل لتطبيق التغييرات</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(لم يتم تقديم وصف)</string>
-    <string name="module_no_ui">هذه الوحدة لا توفر واجهة مستخدم</string>
     <string name="warning_xposed_min_version">هذه الوحدة تتطلب إصدار Xposed الأحدث (%d) وبالتالي لا يمكن تفعيلها</string>
     <string name="no_min_version_specified">لا تحدد هذه الوحـدة إصدار Xposed الذي تحتاجه.</string>
     <string name="warning_min_version_too_low">تم إنشاء هذه الوحدة لإصدار Xposed %1$d ، ولكن بسبب التغييرات غير المتوافقة في الإصدار %2$d، فقد تم تعطيلها</string>
@@ -197,7 +198,7 @@ Ali Samir</string>
     <string name="module_release_no_more">لا مزيد من الإصدار</string>
     <string name="repo_load_failed">فشل تحميل مستودع الوحدة: %s</string>
     <!-- CrashReportActivity -->
-    <string name="version_mismatch">إصدار إطار LSPosed (%1$d) لا يتطابق مع مدير (%2$d). يرجى إعادة تثبيت LSPosed.</string>
+    <string name="version_mismatch">إصدار إطار LSPosed (%1$d) لا يتطابق مع المدير (%2$d). يرجى إعادة تثبيت LSPosed.</string>
     <string name="manager_crashed">تعطل المدير</string>
     <string name="manager_crashed_info">أبلغ عن هذا إلى </string>
     <string name="send_crash_info">إرسال معلومات الأعطال</string>
@@ -224,4 +225,5 @@ Ali Samir</string>
     <string name="color_brown">بني</string>
     <string name="color_grey">رمادي</string>
     <string name="color_blue_grey">أزرق رمادي</string>
+    <string name="feedback_or_suggestion">ملاحظات أو اقتراحات</string>
 </resources>
