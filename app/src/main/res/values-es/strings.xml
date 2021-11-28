@@ -61,7 +61,6 @@
     <string name="update_lsposed">Actualizar LSPosed</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Guardar</string>
-    <string name="nav_item_logs_lsp">Logs de LSPosed</string>
     <string name="nav_item_logs_module">Logs de los módulos</string>
     <string name="logs_save_failed2">No se pudo guardar:\n%s</string>
     <string name="menuClearLog">Limpiar los registros</string>
