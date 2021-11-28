@@ -49,7 +49,6 @@
     <string name="info_device">장치</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">저장</string>
-    <string name="nav_item_logs_lsp">LSPosed 로그</string>
     <string name="nav_item_logs_module">모듈 로그</string>
     <string name="logs_save_failed2">복원 실패:\n%s</string>
     <string name="menuClearLog">로그 지우기</string>

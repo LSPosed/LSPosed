@@ -69,7 +69,6 @@
     <string name="update_lsposed_msg">確認更新LSPosed? 此裝置會於更新完成後重啟</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">儲存</string>
-    <string name="nav_item_logs_lsp">詳細紀錄檔</string>
     <string name="nav_item_logs_module">模組紀錄檔</string>
     <string name="logs_save_failed2">儲存失敗:\n%s</string>
     <string name="menuClearLog">立即清理紀錄檔</string>

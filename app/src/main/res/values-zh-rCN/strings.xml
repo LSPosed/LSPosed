@@ -67,7 +67,7 @@
     <string name="update_lsposed_msg">确认更新 LSPosed? 此设备将会在完成更新后自动重启。</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">保存</string>
-    <string name="nav_item_logs_lsp">LSPosed 日志</string>
+    <string name="nav_item_logs_verbose">详细日志</string>
     <string name="nav_item_logs_module">模块日志</string>
     <string name="logs_save_failed2">保存失败：\n%s</string>
     <string name="menuClearLog">立即清除日志</string>

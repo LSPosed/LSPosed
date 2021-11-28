@@ -73,7 +73,7 @@
     <string name="update_lsposed_msg">Potvrdit aktualizaci LSPosed? Toto zařízení se restartuje po dokončení aktualizace</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Uložit</string>
-    <string name="nav_item_logs_lsp">LSPosed logy</string>
+    <string name="nav_item_logs_verbose">Podrobné protokoly</string>
     <string name="nav_item_logs_module">Protokoly modulů</string>
     <string name="logs_save_failed2">Nepodařilo se uložit:\n%s</string>
     <string name="menuClearLog">Vymazat log</string>
@@ -85,6 +85,8 @@
     <string name="menuReload">Znovu načíst</string>
     <string name="logs_clear_failed_2">Nepodařilo se vymazat protokol</string>
     <string name="menu_enable_word_wrap">Zalamování řádků</string>
+    <string name="enabled_verbose_log">Podrobný záznam povolen</string>
+    <string name="disabled_verbose_log">Podrobný záznam zakázán</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Xposed modul ještě není aktivován</string>
     <string name="module_is_not_activated_yet_detailed">%s byl nainstalován, ale ještě není aktivován</string>
@@ -226,4 +228,5 @@
     <string name="color_brown">Hnědá</string>
     <string name="color_grey">Šedá</string>
     <string name="color_blue_grey">Modro-šedivá</string>
+    <string name="feedback_or_suggestion">Zpětná vazba nebo návrh</string>
 </resources>

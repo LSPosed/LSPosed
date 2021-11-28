@@ -69,7 +69,7 @@
     <string name="update_lsposed_msg">Confermi di voler aggiornare LSPosed? Il dispositivo verrà riavviato dopo il completamento dell\'aggiornamento</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Salva</string>
-    <string name="nav_item_logs_lsp">Log di LSPosed</string>
+    <string name="nav_item_logs_verbose">Log verbosi</string>
     <string name="nav_item_logs_module">Log dei moduli</string>
     <string name="logs_save_failed2">Salvataggio non riuscito:\n%s</string>
     <string name="menuClearLog">Cancella il log ora</string>

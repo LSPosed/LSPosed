@@ -54,7 +54,6 @@
     <string name="info_system_abi">システム ABI</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">保存</string>
-    <string name="nav_item_logs_lsp">LSPosed ログ</string>
     <string name="nav_item_logs_module">モジュールログ</string>
     <string name="logs_save_failed2">保存に失敗しました:\n%s</string>
     <string name="menuClearLog">直ちにログを消去</string>

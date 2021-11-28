@@ -67,7 +67,6 @@
     <string name="update_lsposed_msg">Konfirmasi untuk pembaharuan LSPosed? Perangkat ini akan mulai ulang setelah pembaharuan selesai</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Simpan</string>
-    <string name="nav_item_logs_lsp">Log LSPosed</string>
     <string name="nav_item_logs_module">Log modul</string>
     <string name="logs_save_failed2">Gagal menyimpan:\n%s</string>
     <string name="menuClearLog">Hapus log sekarang</string>

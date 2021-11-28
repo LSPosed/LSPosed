@@ -61,7 +61,6 @@
     <string name="update_lsposed_msg">Επιβεβαίωση ενημέρωσης του LSPosed? Αυτή η συσκευή θα επανεκκινηθεί μετά την ολοκλήρωση της ενημέρωσης</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Αποθήκευση</string>
-    <string name="nav_item_logs_lsp">Καταγραφές LSPosed</string>
     <string name="nav_item_logs_module">Αρχείο Καταγραφής Πρόσθετων</string>
     <string name="logs_save_failed2">Αποτυχία αποθήκευσης:\n%s</string>
     <string name="menuClearLog">Καθαρισμός αρχείου καταγραφής τώρα</string>

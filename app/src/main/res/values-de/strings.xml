@@ -63,7 +63,6 @@
 Gerät wird nach dem Update neu gestartet</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">speichern</string>
-    <string name="nav_item_logs_lsp">LSPosed Logs</string>
     <string name="nav_item_logs_module">Modul-Protokolle</string>
     <string name="logs_save_failed2">Speichern fehlgeschlagen:\n%s</string>
     <string name="menuClearLog">Protokoll jetzt löschen</string>

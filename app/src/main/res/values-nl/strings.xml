@@ -69,7 +69,7 @@
     <string name="update_lsposed_msg">Bevestig bijwerken van LSPosed? Dit apparaat zal opnieuw opstarten nadat de update is voltooid</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Opslaan</string>
-    <string name="nav_item_logs_lsp">LSPosed logboeken</string>
+    <string name="nav_item_logs_verbose">Uitgebreide logs</string>
     <string name="nav_item_logs_module">Modules Logbestanden</string>
     <string name="logs_save_failed2">Opslaan mislukt:\n%s</string>
     <string name="menuClearLog">Wis het logboek nu</string>
@@ -81,6 +81,8 @@
     <string name="menuReload">Herlaad</string>
     <string name="logs_clear_failed_2">Het logboek kan niet worden gewist</string>
     <string name="menu_enable_word_wrap">Woord Omslag</string>
+    <string name="enabled_verbose_log">Uitgebreide logboek ingeschakeld</string>
+    <string name="disabled_verbose_log">Verbose logboek uitgeschakeld</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">LSPosed module is nog niet geactiveerd</string>
     <string name="module_is_not_activated_yet_detailed">%1$s is geïnstalleerd, maar is nog niet geactiveerd</string>
@@ -222,4 +224,5 @@
     <string name="color_brown">Bruin</string>
     <string name="color_grey">Grijs</string>
     <string name="color_blue_grey">Blauw grijs</string>
+    <string name="feedback_or_suggestion">Feedback en suggestie</string>
 </resources>

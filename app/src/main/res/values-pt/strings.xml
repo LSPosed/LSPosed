@@ -56,7 +56,6 @@
     <string name="failed_to_create_shortcut">Falha ao criar atalho: %1$s</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Salvar</string>
-    <string name="nav_item_logs_lsp">Registros do LSPosed</string>
     <string name="nav_item_logs_module">Registros de Módulos</string>
     <string name="logs_save_failed2">Falha ao salvar:\n%s</string>
     <string name="menuClearLog">Limpar registro agora</string>

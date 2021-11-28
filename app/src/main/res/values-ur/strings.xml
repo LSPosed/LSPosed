@@ -50,7 +50,6 @@
     <string name="update_lsposed">LSPosed کو اپ ڈیٹ کریں۔</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">محفوظ کریں</string>
-    <string name="nav_item_logs_lsp">LSP بند نوشتہ جات۔</string>
     <string name="nav_item_logs_module">ماڈیولز نوشتہ جات</string>
     <string name="logs_save_failed2">محفوظ کرنے میں ناکام:\n%s</string>
     <string name="scroll_top">اوپر سکرول کریں۔</string>
