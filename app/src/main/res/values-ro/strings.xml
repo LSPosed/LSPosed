@@ -71,7 +71,6 @@
     <string name="update_lsposed_msg">Confirmaţi actualizarea LSPosed? Acest dispozitiv va reporni după finalizarea actualizării</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Salveaza</string>
-    <string name="nav_item_logs_lsp">Jurnale LSPosed</string>
     <string name="nav_item_logs_module">Jurnale module</string>
     <string name="logs_save_failed2">Salvarea a eșuat:\n%s</string>
     <string name="menuClearLog">Curăță jurnalul acum</string>
