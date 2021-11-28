@@ -73,7 +73,7 @@
     <string name="update_lsposed_msg">Вы точно хотите обновить LSPosed?\nУстройство перезагрузится после завершения обновления</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Сохранить</string>
-    <string name="nav_item_logs_lsp">Логи LSPosed</string>
+    <string name="nav_item_logs_verbose">Подробные логи</string>
     <string name="nav_item_logs_module">Логи модулей</string>
     <string name="logs_save_failed2">Ошибка сохранения:\n%s</string>
     <string name="menuClearLog">Очистить логи</string>
@@ -228,4 +228,5 @@
     <string name="color_brown">Коричневый</string>
     <string name="color_grey">Серый</string>
     <string name="color_blue_grey">Серо-голубой</string>
+    <string name="feedback_or_suggestion">Обратная связь или предложение</string>
 </resources>
