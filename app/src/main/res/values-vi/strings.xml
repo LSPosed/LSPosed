@@ -67,7 +67,7 @@
     <string name="update_lsposed_msg">Xác nhận cập nhật LSPosed? Thiết bị sẽ khởi động lại sau khi cập nhật hoàn tất</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Lưu lại</string>
-    <string name="nav_item_logs_lsp">Nhật ký LSPosed</string>
+    <string name="nav_item_logs_verbose">Nhật ký Chi tiết</string>
     <string name="nav_item_logs_module">Nhật ký các Mô-đun</string>
     <string name="logs_save_failed2">Lưu lại thất bại:\n%s</string>
     <string name="menuClearLog">Xóa nhật ký</string>
@@ -79,6 +79,8 @@
     <string name="menuReload">Tải lại</string>
     <string name="logs_clear_failed_2">Thất bại khi xoá nhật ký</string>
     <string name="menu_enable_word_wrap">Xuống dòng tự động</string>
+    <string name="enabled_verbose_log">Nhật ký Verbose đã được kích hoạt</string>
+    <string name="disabled_verbose_log">Nhật ký Verbose đã được vô hiệu</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Mô-đun Xposed chưa được kích hoạt</string>
     <string name="module_is_not_activated_yet_detailed">%s đã được cài đặt, nhưng chưa được kích hoạt</string>
@@ -220,4 +222,5 @@
     <string name="color_brown">Nâu</string>
     <string name="color_grey">Xám</string>
     <string name="color_blue_grey">Xanh xám</string>
+    <string name="feedback_or_suggestion">Phản hồi hoặc gợi ý tính năng</string>
 </resources>
