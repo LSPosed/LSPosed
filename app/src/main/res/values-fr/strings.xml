@@ -69,7 +69,7 @@
     <string name="update_lsposed_msg">Vous confirmez la mise à jour LSPosed? Ce périphérique redémarrera après la mise à jour éffectuée</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Sauvegarder</string>
-    <string name="nav_item_logs_lsp">Journaux LSPosed</string>
+    <string name="nav_item_logs_verbose">Journeaux détaillés</string>
     <string name="nav_item_logs_module">Journaux des modules</string>
     <string name="logs_save_failed2">Échec de la sauvegarde:\n%s</string>
     <string name="menuClearLog">Éffacer le journal maintenant</string>
