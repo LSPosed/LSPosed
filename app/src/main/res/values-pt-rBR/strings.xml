@@ -69,7 +69,7 @@
     <string name="update_lsposed_msg">Confirmar a atualização do LSPosed? O dispositivo reiniciará após a conclusão da atualização</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Salvar</string>
-    <string name="nav_item_logs_lsp">Registros do LSPosed</string>
+    <string name="nav_item_logs_verbose">Registros detalhados</string>
     <string name="nav_item_logs_module">Registros de Módulos</string>
     <string name="logs_save_failed2">Falha ao salvar:\n%s</string>
     <string name="menuClearLog">Limpar registro</string>
@@ -81,6 +81,8 @@
     <string name="menuReload">Recarregar</string>
     <string name="logs_clear_failed_2">Falha ao limpar o registro</string>
     <string name="menu_enable_word_wrap">Quebra de Linha</string>
+    <string name="enabled_verbose_log">Registros detalhados ativado</string>
+    <string name="disabled_verbose_log">Registros detalhados desativado</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">O módulo do Xposed ainda não está ativo</string>
     <string name="module_is_not_activated_yet_detailed">%s foi instalado, mas ainda não está ativo</string>
@@ -125,7 +127,7 @@
     <string name="no_scope_selected">Você não selecionou nenhum aplicativo. Deseja continuar?</string>
     <string name="menu_show_games">Jogos</string>
     <string name="menu_show_modules">Módulos</string>
-    <string name="menu_show_denylist">Denylist</string>
+    <string name="menu_show_denylist">Lista de negação</string>
     <string name="failed_to_save_scope_list">Falha ao salvar lista de escopos</string>
     <string name="app_description">%1$s\nVersão %2$s</string>
     <string name="use_recommended">Recomendados</string>
@@ -174,7 +176,7 @@
     <string name="settings_language">Idioma</string>
     <string name="settings_translation_contributors">Contribuidores de tradução</string>
     <string name="settings_translation">Participar da tradução</string>
-    <string name="settings_translation_summary">Ajude-nos a traduzir %s para o seu idioma</string>
+    <string name="settings_translation_summary">Ajude-nos a traduzir o %s para o seu idioma</string>
     <string name="pref_title_enable_auto_add_shortcut">Adicionar automaticamente um atalho</string>
     <string name="settings_enable_auto_add_shortcut_summary">Nenhum novo atalho será adicionado quando desativado no gerenciador não parasita</string>
     <string name="settings_update_channel">Canal de atualizações</string>
@@ -195,6 +197,7 @@
     <string name="module_release_no_more">Não há mais versões</string>
     <string name="repo_load_failed">Falha ao carregar o repositório de módulos: %s</string>
     <!-- CrashReportActivity -->
+    <string name="version_mismatch">A versão do LSPosed framework (%1$d) não corresponde ao gerenciador (%2$d). Por favor, reinstale o LSPosed.</string>
     <string name="manager_crashed">Gerenciador travou</string>
     <string name="manager_crashed_info">reportar isto para </string>
     <string name="send_crash_info">Enviar informações do erro</string>
@@ -221,4 +224,5 @@
     <string name="color_brown">Marrom</string>
     <string name="color_grey">Cinza</string>
     <string name="color_blue_grey">Azul acizentado</string>
+    <string name="feedback_or_suggestion">Comentários ou sugestões</string>
 </resources>
