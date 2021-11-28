@@ -55,7 +55,6 @@
     <string name="info_system_abi">سیستم ABI</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">ذخیره</string>
-    <string name="nav_item_logs_lsp">سیاهه LSPosed</string>
     <string name="nav_item_logs_module">سیاهه ماژول</string>
     <string name="logs_save_failed2">ذخیره ناموفق:\n%s</string>
     <string name="menuClearLog">پاک کردن سیاهه</string>
