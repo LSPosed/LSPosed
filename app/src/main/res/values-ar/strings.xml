@@ -70,7 +70,7 @@ Ali Samir</string>
     <string name="update_lsposed_msg">تأكـيد تحديث LSPosed؟ سيتم إعـادة تشغيل هذا الجهاز بعد اكتمال التحديث</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">احفظ</string>
-    <string name="nav_item_logs_lsp">سجلات LSPosed</string>
+    <string name="nav_item_logs_verbose">سجلات مطولة</string>
     <string name="nav_item_logs_module">سجلات الوحـدات</string>
     <string name="logs_save_failed2">فشل الحفظ:\n%s</string>
     <string name="menuClearLog">مسح السجل الآن</string>
