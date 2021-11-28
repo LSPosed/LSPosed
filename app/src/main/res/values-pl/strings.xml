@@ -67,7 +67,7 @@
     <string name="update_lsposed_msg">Potwierdzić aktualizację LSPosed? To urządzenie uruchomi się ponownie po zakończeniu aktualizacji</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Zapisz</string>
-    <string name="nav_item_logs_lsp">Logi LSPosed</string>
+    <string name="nav_item_logs_verbose">Logi verbose</string>
     <string name="nav_item_logs_module">Logi modułów</string>
     <string name="logs_save_failed2">Nie udało się zapisać:\n%s</string>
     <string name="menuClearLog">Wyczyść log teraz</string>
@@ -79,6 +79,8 @@
     <string name="menuReload">Przeładuj</string>
     <string name="logs_clear_failed_2">Nie udało się wyczyścić logu</string>
     <string name="menu_enable_word_wrap">Zawijanie wierszy</string>
+    <string name="enabled_verbose_log">Logi verbose włączone</string>
+    <string name="disabled_verbose_log">Logi verbose wyłączone</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Moduł Xposed nie jest jeszcze aktywowany</string>
     <string name="module_is_not_activated_yet_detailed">%s został zainstalowany, ale nie jest jeszcze aktywowany</string>
@@ -217,4 +219,5 @@
     <string name="color_brown">Brązowy</string>
     <string name="color_grey">Szary</string>
     <string name="color_blue_grey">Niebiesko szary</string>
+    <string name="feedback_or_suggestion">Opinie lub sugestie</string>
 </resources>
