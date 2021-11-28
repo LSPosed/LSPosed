@@ -69,7 +69,6 @@
     <string name="update_lsposed_msg">LSPosed\'ı güncellemek istediğinize emin misiniz? Bu cihaz güncelleme tamamlandıktan sonra yeniden başlatılacak</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Kaydetme</string>
-    <string name="nav_item_logs_lsp">LSPosed Günlüğü</string>
     <string name="nav_item_logs_module">Modül Günlükleri</string>
     <string name="logs_save_failed2">Kaydedilemedi:\n%s</string>
     <string name="menuClearLog">Günlüğü şimdi temizle</string>
