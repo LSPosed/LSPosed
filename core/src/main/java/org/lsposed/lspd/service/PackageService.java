@@ -39,6 +39,7 @@ import android.content.pm.VersionedPackage;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Parcel;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemProperties;
@@ -132,7 +133,8 @@ public class PackageService {
         IPackageManager pm = getPackageManager();
         if (pm == null) return ParceledListSlice.emptyList();
         for (var user : UserService.getUsers()) {
-            res.addAll(pm.getInstalledPackages(flags, user.id).getList());
+            // in case duplicate pkginfo in one user
+            res.addAll(pm.getInstalledPackages(flags, user.id).getList().parallelStream().distinct().collect(Collectors.toList()));
         }
         if (filterNoProcess) {
             return new ParceledListSlice<>(res.parallelStream().filter(packageInfo -> {
