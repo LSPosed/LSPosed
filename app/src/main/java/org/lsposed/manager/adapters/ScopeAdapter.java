@@ -200,6 +200,10 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
     }
 
     private void checkRecommended() {
+        if (!fragment.binding.masterSwitch.isChecked()) {
+            fragment.showHint(R.string.module_is_not_activated_yet, false);
+            return;
+        }
         fragment.runAsync(() -> {
             var tmpChkList = new HashSet<>(checkedList);
             tmpChkList.removeIf(i -> i.userId == module.userId);
@@ -514,9 +518,6 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
                 }
             });
             tmpChkList.retainAll(installedList);
-            if (emptyCheckedList) {
-                ConfigManager.setModuleScope(module.packageName, tmpChkList);
-            }
             checkedList = tmpChkList;
             recommendedList = tmpRecList;
             searchList = tmpList.parallelStream().sorted(this::sortApps).collect(Collectors.toList());
