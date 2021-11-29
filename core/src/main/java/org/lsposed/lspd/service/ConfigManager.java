@@ -714,17 +714,7 @@ public class ConfigManager {
     public boolean setModuleScope(String packageName, List<Application> scopes) {
         if (scopes == null) return false;
         int mid = getModuleId(packageName);
-        if (mid == -1) {
-            try {
-                var info = PackageService.getPackageInfo(packageName, MATCH_ALL_FLAGS, 0);
-                if (info != null && updateModuleApkPath(packageName, getModuleApkPath(info.applicationInfo), false)) {
-                    mid = getModuleId(packageName);
-                    if (mid == -1) return false;
-                }
-            } catch (RemoteException e) {
-                Log.e(TAG, "setModuleScope: ", e);
-            }
-        }
+        if (mid == -1) return false;
         Application self = new Application();
         self.packageName = packageName;
         self.userId = 0;
