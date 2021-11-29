@@ -71,7 +71,9 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
                 .setTitle(appInfo.loadLabel(pm))
                 .setView(binding.getRoot());
 
-        return builder.create();
+        var alertDialog = builder.create();
+        onViewCreated(binding.getRoot(), savedInstanceState);
+        return alertDialog;
     }
 
     @Override
@@ -122,7 +124,6 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
                     ((BaseFragment) parent).showHint(text, true);
                 }
             }
-            Toast.makeText(context, text, Toast.LENGTH_LONG).show();
         }
     }
 }
