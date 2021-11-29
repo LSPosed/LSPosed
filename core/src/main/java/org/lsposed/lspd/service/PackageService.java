@@ -39,6 +39,7 @@ import android.content.pm.VersionedPackage;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Parcel;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemProperties;
@@ -139,6 +140,11 @@ public class PackageService {
                 if (!checkedPackages.contains(info.packageName)) {
                     checkedPackages.add(info.packageName);
                     res.add(info);
+                } else {
+                    var parcel = Parcel.obtain();
+                    info.writeToParcel(parcel, 0);
+                    Log.w(TAG, "duplicate package name: " + new String(parcel.marshall()));
+                    parcel.recycle();
                 }
             });
         }
