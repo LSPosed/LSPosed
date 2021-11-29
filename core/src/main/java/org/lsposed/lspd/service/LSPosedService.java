@@ -98,7 +98,7 @@ public class LSPosedService extends ILSPosedService.Stub {
             case Intent.ACTION_PACKAGE_FULLY_REMOVED: {
                 // for module, remove module
                 // because we only care about when the apk is gone
-                if (moduleName != null && intent.getBooleanExtra("android.intent.extra.EXTRA_REMOVED_FOR_ALL_USERS", false))
+                if (moduleName != null && intent.getBooleanExtra("android.intent.extra.REMOVED_FOR_ALL_USERS", false))
                     if (ConfigManager.getInstance().removeModule(moduleName)) {
                         isXposedModule = true;
                     }
@@ -160,7 +160,7 @@ public class LSPosedService extends ILSPosedService.Stub {
         Log.d(TAG, "module " + moduleName + " changed, dispatching to manager");
         LSPManagerService.broadcastIntent(moduleName, userId,
                 intent.getAction().equals(Intent.ACTION_PACKAGE_FULLY_REMOVED) &&
-                        intent.getBooleanExtra("android.intent.extra.EXTRA_REMOVED_FOR_ALL_USERS", false));
+                        intent.getBooleanExtra("android.intent.extra.REMOVED_FOR_ALL_USERS", false));
         var enabledModules = ConfigManager.getInstance().enabledModules();
         var scope = ConfigManager.getInstance().getModuleScope(moduleName);
         boolean systemModule = scope != null &&
