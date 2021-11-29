@@ -75,6 +75,7 @@ public class RecyclerViewDialogFragment extends AppCompatDialogFragment {
             modulesFragment.installModuleToUser(module, user);
             dialog.dismiss();
         });
+        onViewCreated(binding.getRoot(), savedInstanceState);
         return dialog;
     }
 
