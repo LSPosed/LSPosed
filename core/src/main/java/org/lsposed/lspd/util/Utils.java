@@ -34,6 +34,7 @@ public class Utils {
 
     public static final String LOG_TAG = "LSPosed";
     public static final boolean isMIUI = !TextUtils.isEmpty(SystemProperties.get("ro.miui.ui.version.name"));
+    public static final boolean isLENOVO = !TextUtils.isEmpty(SystemProperties.get("ro.lenovo.region"));
 
     public static void logD(Object msg) {
         if (BuildConfig.DEBUG)
