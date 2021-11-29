@@ -75,6 +75,7 @@ public class UserService {
             }
         }
         if (Utils.isLENOVO) {
+        // lenovo hides user 900~910, used by app clone
             var gotUsers = new boolean[10];
             for (var user : users) {
                 if (user.id - 900 >= 0) gotUsers[user.id - 900] = true;
