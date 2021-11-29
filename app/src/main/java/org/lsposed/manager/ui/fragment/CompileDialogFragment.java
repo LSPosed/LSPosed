@@ -27,11 +27,8 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -45,8 +42,6 @@ import java.lang.ref.WeakReference;
 
 @SuppressWarnings("deprecation")
 public class CompileDialogFragment extends AppCompatDialogFragment {
-    private ApplicationInfo appInfo;
-
     public static void speed(FragmentManager fragmentManager, ApplicationInfo info) {
         CompileDialogFragment fragment = new CompileDialogFragment();
         fragment.setCancelable(false);
@@ -60,7 +55,7 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
     @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         var arguments = getArguments();
-        appInfo = arguments != null ? arguments.getParcelable("appInfo") : null;
+        ApplicationInfo appInfo = arguments != null ? arguments.getParcelable("appInfo") : null;
         if (appInfo == null) {
             throw new IllegalStateException("appInfo should not be null.");
         }
@@ -72,14 +67,8 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
                 .setView(binding.getRoot());
 
         var alertDialog = builder.create();
-        onViewCreated(binding.getRoot(), savedInstanceState);
-        return alertDialog;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
         new CompileTask(this).executeOnExecutor(App.getExecutorService(), appInfo.packageName);
+        return alertDialog;
     }
 
     private static class CompileTask extends AsyncTask<String, Void, Throwable> {

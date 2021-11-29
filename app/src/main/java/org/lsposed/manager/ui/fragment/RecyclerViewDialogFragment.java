@@ -75,11 +75,12 @@ public class RecyclerViewDialogFragment extends AppCompatDialogFragment {
             modulesFragment.installModuleToUser(module, user);
             dialog.dismiss();
         });
+        onViewCreated(binding.getRoot(), savedInstanceState);
         return dialog;
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    // prevent from overriding
+    public final void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
     }
 }
