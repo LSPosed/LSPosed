@@ -236,8 +236,10 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     private void updateModuleSummary() {
         var moduleCount = moduleUtil.getEnabledModulesCount();
         runOnUiThread(() -> {
-            binding.toolbar.setSubtitle(moduleCount == -1 ? getString(R.string.loading) : getResources().getQuantityString(R.plurals.modules_enabled_count, moduleCount, moduleCount));
-            binding.toolbarLayout.setSubtitle(binding.toolbar.getSubtitle());
+            if (binding != null) {
+                binding.toolbar.setSubtitle(moduleCount == -1 ? getString(R.string.loading) : getResources().getQuantityString(R.plurals.modules_enabled_count, moduleCount, moduleCount));
+                binding.toolbarLayout.setSubtitle(binding.toolbar.getSubtitle());
+            }
         });
     }
 

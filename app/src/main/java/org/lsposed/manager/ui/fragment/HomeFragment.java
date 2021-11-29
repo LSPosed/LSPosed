@@ -34,7 +34,6 @@ import androidx.core.text.HtmlCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.color.MaterialColors;
-import com.google.android.material.snackbar.Snackbar;
 
 import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
@@ -211,7 +210,7 @@ public class HomeFragment extends BaseFragment implements RepoLoader.RepoListene
                 }
         );
         runOnUiThread(() -> {
-            if (count[0] > 0) {
+            if (count[0] > 0 && binding != null) {
                 binding.downloadSummary.setText(getResources().getQuantityString(R.plurals.module_repo_upgradable, count[0], count[0]));
             } else {
                 onThrowable(null);
@@ -221,7 +220,10 @@ public class HomeFragment extends BaseFragment implements RepoLoader.RepoListene
 
     @Override
     public void onThrowable(Throwable t) {
-        runOnUiThread(() -> binding.downloadSummary.setText(getResources().getString(R.string.module_repo_up_to_date)));
+        runOnUiThread(() -> {
+            if (binding != null)
+                binding.downloadSummary.setText(getResources().getString(R.string.module_repo_up_to_date));
+        });
     }
 
     @Override
@@ -258,7 +260,10 @@ public class HomeFragment extends BaseFragment implements RepoLoader.RepoListene
     }
 
     private void setModulesSummary(int moduleCount) {
-        runOnUiThread(() -> binding.modulesSummary.setText(moduleCount == -1 ? getString(R.string.loading) : getResources().getQuantityString(R.plurals.modules_enabled_count, moduleCount, moduleCount)));
+        runOnUiThread(() -> {
+            if (binding != null)
+                binding.modulesSummary.setText(moduleCount == -1 ? getString(R.string.loading) : getResources().getQuantityString(R.plurals.modules_enabled_count, moduleCount, moduleCount));
+        });
     }
 
     @Override

@@ -152,14 +152,16 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
             count[0] = -1;
         }
         runOnUiThread(() -> {
-            if (count[0] > 0) {
-                binding.toolbar.setSubtitle(getResources().getQuantityString(R.plurals.module_repo_upgradable, count[0], count[0]));
-            } else if (count[0] == 0) {
-                binding.toolbar.setSubtitle(getResources().getString(R.string.module_repo_up_to_date));
-            } else {
-                binding.toolbar.setSubtitle(getResources().getString(R.string.loading));
+            if (binding != null) {
+                if (count[0] > 0) {
+                    binding.toolbar.setSubtitle(getResources().getQuantityString(R.plurals.module_repo_upgradable, count[0], count[0]));
+                } else if (count[0] == 0) {
+                    binding.toolbar.setSubtitle(getResources().getString(R.string.module_repo_up_to_date));
+                } else {
+                    binding.toolbar.setSubtitle(getResources().getString(R.string.loading));
+                }
+                binding.toolbarLayout.setSubtitle(binding.toolbar.getSubtitle());
             }
-            binding.toolbarLayout.setSubtitle(binding.toolbar.getSubtitle());
         });
     }
 
