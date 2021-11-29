@@ -73,7 +73,6 @@ public class ExpandableTextView extends MaterialTextView {
 
             @Override
             public void updateDrawState(@NonNull TextPaint ds) {
-                super.updateDrawState(ds);
                 ds.setTypeface(Typeface.DEFAULT_BOLD);
             }
         };
