@@ -132,7 +132,14 @@ public class PackageService {
         IPackageManager pm = getPackageManager();
         if (pm == null) return ParceledListSlice.emptyList();
         for (var user : UserService.getUsers()) {
-            res.addAll(pm.getInstalledPackages(flags, user.id).getList());
+            // in case duplicate package name in one user
+            var checkedPackages = new HashSet<String>();
+            pm.getInstalledPackages(flags, user.id).getList().forEach(info -> {
+                if (!checkedPackages.contains(info.packageName)) {
+                    checkedPackages.add(info.packageName);
+                    res.add(info);
+                }
+            });
         }
         if (filterNoProcess) {
             return new ParceledListSlice<>(res.parallelStream().filter(packageInfo -> {

@@ -29,6 +29,8 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.util.Log;
 
+import org.lsposed.lspd.util.Utils;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -70,6 +72,18 @@ public class UserService {
                 users = um.getUsers(true);
             } catch (NoSuchMethodError e) {
                 users = um.getUsers(true, true, true);
+            }
+        }
+        if (Utils.isLENOVO) {
+            var gotUsers = new int[10];
+            for (var user : users) {
+                if (user.id - 900 >= 0) gotUsers[user.id - 900] = 1;
+            }
+            for (int i = 900; i <= 909 && gotUsers[i - 900] == 0; i++) {
+                var user = um.getUserInfo(i);
+                if (user != null) {
+                    users.add(user);
+                }
             }
         }
         return users;

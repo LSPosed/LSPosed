@@ -17,6 +17,8 @@ public interface IUserManager extends IInterface {
     List<UserInfo> getUsers(boolean excludePartial, boolean excludeDying, boolean excludePreCreated)
             throws RemoteException;
 
+    UserInfo getUserInfo(int userHandle);
+
     UserInfo getProfileParent(int userId) throws RemoteException;
 
     boolean isUserUnlockingOrUnlocked(int userId) throws RemoteException;
