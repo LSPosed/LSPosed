@@ -75,13 +75,13 @@ public class UserService {
             }
         }
         if (Utils.isLENOVO) {
-            var gotUsers = new int[10];
+            var gotUsers = new boolean[10];
             for (var user : users) {
-                if (user.id - 900 >= 0) gotUsers[user.id - 900] = 1;
+                if (user.id - 900 >= 0) gotUsers[user.id - 900] = true;
             }
-            for (int i = 900; i <= 909 && gotUsers[i - 900] == 0; i++) {
+            for (int i = 900; i <= 909; i++) {
                 var user = um.getUserInfo(i);
-                if (user != null) {
+                if (user != null && !gotUsers[i - 900]) {
                     users.add(user);
                 }
             }

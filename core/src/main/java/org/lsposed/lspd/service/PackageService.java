@@ -133,8 +133,9 @@ public class PackageService {
         if (pm == null) return ParceledListSlice.emptyList();
         for (var user : UserService.getUsers()) {
             // in case duplicate package name in one user
-            var checkedPackages = new HashSet<String>();
-            pm.getInstalledPackages(flags, user.id).getList().forEach(info -> {
+            var all = pm.getInstalledPackages(flags, user.id).getList();
+            var checkedPackages = new HashSet<String>(all.size());
+            all.forEach(info -> {
                 if (!checkedPackages.contains(info.packageName)) {
                     checkedPackages.add(info.packageName);
                     res.add(info);
