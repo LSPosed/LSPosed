@@ -714,17 +714,28 @@ public class ConfigManager {
     public boolean setModuleScope(String packageName, List<Application> scopes) {
         if (scopes == null) return false;
         int mid = getModuleId(packageName);
-        if (mid == -1) return false;
+        if (mid == -1) {
+            try {
+                var info = PackageService.getPackageInfo(packageName, MATCH_ALL_FLAGS, 0);
+                if (info != null && updateModuleApkPath(packageName, getModuleApkPath(info.applicationInfo), false)) {
+                    mid = getModuleId(packageName);
+                    if (mid == -1) return false;
+                }
+            } catch (RemoteException e) {
+                Log.e(TAG, "setModuleScope: ", e);
+            }
+        }
         Application self = new Application();
         self.packageName = packageName;
         self.userId = 0;
         scopes.add(self);
+        int finalMid = mid;
         executeInTransaction(() -> {
-            db.delete("scope", "mid = ?", new String[]{String.valueOf(mid)});
+            db.delete("scope", "mid = ?", new String[]{String.valueOf(finalMid)});
             for (Application app : scopes) {
                 if (app.packageName.equals("android") && app.userId != 0) continue;
                 ContentValues values = new ContentValues();
-                values.put("mid", mid);
+                values.put("mid", finalMid);
                 values.put("app_pkg_name", app.packageName);
                 values.put("user_id", app.userId);
                 db.insertWithOnConflict("scope", null, values, SQLiteDatabase.CONFLICT_IGNORE);
