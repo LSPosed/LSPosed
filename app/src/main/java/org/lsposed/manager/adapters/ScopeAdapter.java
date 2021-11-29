@@ -498,6 +498,11 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
                     synchronized (tmpRecList) {
                         tmpRecList.add(application);
                     }
+                    if (emptyCheckedList) {
+                        synchronized (tmpChkList) {
+                            tmpChkList.add(application);
+                        }
+                    }
                 } else if (shouldHideApp(info, application)) {
                     return;
                 }
