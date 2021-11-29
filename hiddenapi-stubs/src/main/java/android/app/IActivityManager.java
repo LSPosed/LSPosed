@@ -33,6 +33,13 @@ import android.os.RemoteException;
 import androidx.annotation.RequiresApi;
 
 public interface IActivityManager extends IInterface {
+    @RequiresApi(31)
+    int broadcastIntentWithFeature(IApplicationThread caller, String callingFeatureId,
+                                   Intent intent, String resolvedType, IIntentReceiver resultTo,
+                                   int resultCode, String resultData, Bundle resultExtras,
+                                   String[] requiredPermissions, String[] excludedPermissions, int appOp, Bundle bOptions,
+                                   boolean serialized, boolean sticky, int userId) throws RemoteException;
+
     @RequiresApi(30)
     int broadcastIntentWithFeature(IApplicationThread caller, String callingFeatureId,
                                    Intent intent, String resolvedType, IIntentReceiver resultTo, int resultCode,

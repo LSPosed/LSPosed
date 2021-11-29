@@ -719,12 +719,13 @@ public class ConfigManager {
         self.packageName = packageName;
         self.userId = 0;
         scopes.add(self);
+        int finalMid = mid;
         executeInTransaction(() -> {
-            db.delete("scope", "mid = ?", new String[]{String.valueOf(mid)});
+            db.delete("scope", "mid = ?", new String[]{String.valueOf(finalMid)});
             for (Application app : scopes) {
                 if (app.packageName.equals("android") && app.userId != 0) continue;
                 ContentValues values = new ContentValues();
-                values.put("mid", mid);
+                values.put("mid", finalMid);
                 values.put("app_pkg_name", app.packageName);
                 values.put("user_id", app.userId);
                 db.insertWithOnConflict("scope", null, values, SQLiteDatabase.CONFLICT_IGNORE);
