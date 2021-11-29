@@ -133,20 +133,8 @@ public class PackageService {
         IPackageManager pm = getPackageManager();
         if (pm == null) return ParceledListSlice.emptyList();
         for (var user : UserService.getUsers()) {
-            // in case duplicate package name in one user
-            var all = pm.getInstalledPackages(flags, user.id).getList();
-            var checkedPackages = new HashSet<String>(all.size());
-            all.forEach(info -> {
-                if (!checkedPackages.contains(info.packageName)) {
-                    checkedPackages.add(info.packageName);
-                    res.add(info);
-                } else {
-                    var parcel = Parcel.obtain();
-                    info.writeToParcel(parcel, 0);
-                    Log.w(TAG, "duplicate package name: " + new String(parcel.marshall()));
-                    parcel.recycle();
-                }
-            });
+            // in case duplicate pkginfo in one user
+            res.addAll(pm.getInstalledPackages(flags, user.id).getList().parallelStream().distinct().collect(Collectors.toList()));
         }
         if (filterNoProcess) {
             return new ParceledListSlice<>(res.parallelStream().filter(packageInfo -> {
