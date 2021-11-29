@@ -109,6 +109,8 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
             if (!moduleUtil.setModuleEnabled(module.packageName, isChecked)) {
                 return false;
             }
+            var tmpChkList = new HashSet<>(checkedList);
+            ConfigManager.setModuleScope(module.packageName, tmpChkList);
             enabled = isChecked;
             notifyDataSetChanged();
             return true;
