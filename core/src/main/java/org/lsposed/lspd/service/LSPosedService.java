@@ -78,6 +78,8 @@ public class LSPosedService extends ILSPosedService.Stub {
         int uid = intent.getIntExtra(Intent.EXTRA_UID, AID_NOBODY);
         if (uid == AID_NOBODY || uid <= 0) return;
         int userId = intent.getIntExtra("android.intent.extra.user_handle", USER_NULL);
+        var intentAction = intent.getAction();
+        var allUsers = intent.getBooleanExtra("android.intent.extra.REMOVED_FOR_ALL_USERS", false);
         if (userId == USER_NULL) userId = uid % PER_USER_RANGE;
         Uri uri = intent.getData();
         String moduleName = (uri != null) ? uri.getSchemeSpecificPart() : ConfigManager.getInstance().getModule(uid);
@@ -93,13 +95,14 @@ public class LSPosedService extends ILSPosedService.Stub {
         boolean isXposedModule = applicationInfo != null &&
                 applicationInfo.metaData != null &&
                 applicationInfo.metaData.containsKey("xposedminversion");
-        var intentAction = intent.getAction();
+
         switch (intentAction) {
             case Intent.ACTION_PACKAGE_FULLY_REMOVED: {
                 // for module, remove module
                 // because we only care about when the apk is gone
-                if (moduleName != null && intent.getBooleanExtra("android.intent.extra.REMOVED_FOR_ALL_USERS", false))
+                if (moduleName != null && allUsers)
                     if (ConfigManager.getInstance().removeModule(moduleName)) {
+                        broadcastOrShowNotification(moduleName, userId, intent);
                         isXposedModule = true;
                     }
                 break;
@@ -143,7 +146,7 @@ public class LSPosedService extends ILSPosedService.Stub {
         boolean removed = intentAction.equals(Intent.ACTION_PACKAGE_FULLY_REMOVED) ||
                 intentAction.equals(Intent.ACTION_UID_REMOVED);
 
-        Log.d(TAG, "Package changed: uid=" + uid + " userId=" + userId + " action=" + intent.getAction() + " isXposedModule=" + isXposedModule);
+        Log.d(TAG, "Package changed: uid=" + uid + " userId=" + userId + " action=" + intentAction + " isXposedModule=" + isXposedModule + " isAllUsers=" + allUsers);
 
         if (BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME.equals(moduleName) && userId == 0) {
             Log.d(TAG, "Manager updated");
@@ -158,15 +161,15 @@ public class LSPosedService extends ILSPosedService.Stub {
 
     private void broadcastOrShowNotification(String moduleName, int userId, Intent intent) {
         Log.d(TAG, "module " + moduleName + " changed, dispatching to manager");
-        LSPManagerService.broadcastIntent(moduleName, userId,
-                intent.getAction().equals(Intent.ACTION_PACKAGE_FULLY_REMOVED) &&
-                        intent.getBooleanExtra("android.intent.extra.REMOVED_FOR_ALL_USERS", false));
+        var internAction = intent.getAction();
+        var allUsers = intent.getBooleanExtra("android.intent.extra.REMOVED_FOR_ALL_USERS", false);
+        LSPManagerService.broadcastIntent(moduleName, userId, allUsers);
         var enabledModules = ConfigManager.getInstance().enabledModules();
         var scope = ConfigManager.getInstance().getModuleScope(moduleName);
         boolean systemModule = scope != null &&
                 scope.parallelStream().anyMatch(app -> app.packageName.equals("android"));
         boolean enabled = Arrays.asList(enabledModules).contains(moduleName);
-        if (!intent.getAction().equals(Intent.ACTION_UID_REMOVED))
+        if (!("Intent.ACTION_UID_REMOVED".equals(internAction) || "Intent.ACTION_PACKAGE_FULLY_REMOVED".equals(internAction) || allUsers))
             LSPManagerService.showNotification(moduleName, userId, enabled, systemModule);
     }
 
