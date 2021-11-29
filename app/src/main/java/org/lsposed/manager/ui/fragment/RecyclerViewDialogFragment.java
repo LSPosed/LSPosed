@@ -79,6 +79,7 @@ public class RecyclerViewDialogFragment extends AppCompatDialogFragment {
         return dialog;
     }
 
+    // prevent from overriding
     public final void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
     }
