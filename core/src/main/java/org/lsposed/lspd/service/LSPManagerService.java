@@ -521,16 +521,11 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     @Override
     public boolean enableModule(String packageName) throws RemoteException {
-        PackageInfo pkgInfo = PackageService.getPackageInfo(packageName, PackageService.MATCH_ALL_FLAGS, 0);
-        if (pkgInfo != null && pkgInfo.applicationInfo != null) {
-            return ConfigManager.getInstance().enableModule(packageName, pkgInfo.applicationInfo);
-        } else {
-            return false;
-        }
+        return ConfigManager.getInstance().enableModule(packageName);
     }
 
     @Override
-    public boolean setModuleScope(String packageName, ParceledListSlice<Application> scope) {
+    public boolean setModuleScope(String packageName, ParceledListSlice<Application> scope) throws RemoteException {
         return ConfigManager.getInstance().setModuleScope(packageName, scope.getList());
     }
 
