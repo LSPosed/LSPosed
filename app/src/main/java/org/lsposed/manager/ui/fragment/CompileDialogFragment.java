@@ -75,8 +75,7 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
         return alertDialog;
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public final void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         new CompileTask(this).executeOnExecutor(App.getExecutorService(), appInfo.packageName);
     }
