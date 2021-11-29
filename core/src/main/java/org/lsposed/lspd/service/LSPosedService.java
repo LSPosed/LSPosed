@@ -115,9 +115,9 @@ public class LSPosedService extends ILSPosedService.Stub {
                 }
                 if (isXposedModule) {
                     broadcastOrShowNotification(moduleName, userId, intentAction);
-                    // When installing a new Xposed module, we update the apk path to prepare for
-                    // the first activation of a module with a recommended scope or for a user to
-                    // uninstall a module that has not been activated before.
+                    // When installing a new Xposed module, we update the apk path to mark it as a
+                    // module to send a broadcast when modules that have not been activated are
+                    // uninstalled.
                     ConfigManager.getInstance().updateModuleApkPath(moduleName, ConfigManager.getInstance().getModuleApkPath(applicationInfo), true);
                     // when package is changed, we may need to update cache (module cache or process cache)
                     ConfigManager.getInstance().updateCache();

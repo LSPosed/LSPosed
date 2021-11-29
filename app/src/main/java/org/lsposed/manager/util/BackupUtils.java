@@ -96,7 +96,9 @@ public class BackupUtils {
                     }
                     ModuleUtil.InstalledModule module = ModuleUtil.getInstance().getModule(name);
                     if (module != null) {
-                        ModuleUtil.getInstance().setModuleEnabled(name, moduleObject.getBoolean("enable"));
+                        var enabled = moduleObject.getBoolean("enable");
+                        ModuleUtil.getInstance().setModuleEnabled(name, enabled);
+                        if (!enabled) continue;
                         JSONArray scopeArray = moduleObject.getJSONArray("scope");
                         HashSet<ScopeAdapter.ApplicationWithEquals> scope = new HashSet<>();
                         for (int j = 0; j < scopeArray.length(); j++) {
