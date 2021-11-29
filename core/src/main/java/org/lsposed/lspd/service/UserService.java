@@ -78,7 +78,7 @@ public class UserService {
             var gotUsers = new boolean[10];
             for (var user : users) {
                 var residual = user.id - 900;
-                if (residual >= 0 & residual < 10) gotUsers[residual] = true;
+                if (residual >= 0 && residual < 10) gotUsers[residual] = true;
             }
             for (int i = 900; i <= 909; i++) {
                 var user = um.getUserInfo(i);
