@@ -34,7 +34,9 @@ import com.google.android.material.snackbar.Snackbar;
 import org.lsposed.manager.App;
 import org.lsposed.manager.R;
 
+import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
 
 public class BaseFragment extends Fragment {
     public void navigateUp() {
@@ -70,14 +72,29 @@ public class BaseFragment extends Fragment {
         }
     }
 
-    public Future<?> runAsync(Runnable runnable) {
-        return App.getExecutorService().submit(runnable);
+    public void runAsync(Runnable runnable) {
+        App.getExecutorService().submit(runnable);
+    }
+
+    public <T> Future<T> runAsync(Callable<T> callable) {
+        return App.getExecutorService().submit(callable);
     }
 
     public void runOnUiThread(Runnable runnable) {
         Activity activity = getActivity();
         if (activity != null && !activity.isFinishing()) {
             activity.runOnUiThread(runnable);
+        }
+    }
+
+    public <T> Future<T> runOnUiThread(Callable<T> callable) {
+        Activity activity = getActivity();
+        if (activity != null && !activity.isFinishing()) {
+            var task = new FutureTask<>(callable);
+            activity.runOnUiThread(task);
+            return task;
+        } else {
+            return new FutureTask<>(() -> null);
         }
     }
 
@@ -105,4 +122,5 @@ public class BaseFragment extends Fragment {
         }
         Toast.makeText(requireContext(), str, lengthShort ? Toast.LENGTH_SHORT : Toast.LENGTH_LONG).show();
     }
+
 }
