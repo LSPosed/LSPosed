@@ -100,7 +100,6 @@ public class LSPosedService extends ILSPosedService.Stub {
                 // because we only care about when the apk is gone
                 if (moduleName != null && intent.getBooleanExtra("android.intent.extra.EXTRA_REMOVED_FOR_ALL_USERS", false))
                     if (ConfigManager.getInstance().removeModule(moduleName)) {
-                        broadcastOrShowNotification(moduleName, userId, intent);
                         isXposedModule = true;
                     }
                 break;
