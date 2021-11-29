@@ -102,10 +102,7 @@ public final class ModuleUtil {
 
         enabledModules = new HashSet<>(Arrays.asList(ConfigManager.getEnabledModules()));
         modulesLoaded = true;
-
-        for (var listener : listeners) {
-            listener.onModulesReloaded();
-        }
+        listeners.forEach(ModuleListener::onModulesReloaded);
     }
 
     public InstalledModule reloadSingleModule(String packageName, int userId) {
@@ -113,19 +110,17 @@ public final class ModuleUtil {
     }
 
     public InstalledModule reloadSingleModule(String packageName, int userId, boolean packageFullyRemoved) {
-        if (packageFullyRemoved && isModuleEnabled(packageName))
+        if (packageFullyRemoved && isModuleEnabled(packageName)) {
             enabledModules.remove(packageName);
+            listeners.forEach(ModuleListener::onModulesReloaded);
+        }
         PackageInfo pkg;
 
         try {
             pkg = ConfigManager.getPackageInfo(packageName, PackageManager.GET_META_DATA, userId);
         } catch (NameNotFoundException e) {
             InstalledModule old = installedModules.remove(Pair.create(packageName, userId));
-            if (old != null) {
-                for (ModuleListener listener : listeners) {
-                    listener.onSingleModuleReloaded(old);
-                }
-            }
+            if (old != null) listeners.forEach(i -> i.onSingleModuleReloaded(old));
             return null;
         }
 
@@ -133,17 +128,11 @@ public final class ModuleUtil {
         if (app.metaData != null && app.metaData.containsKey("xposedminversion")) {
             InstalledModule module = new InstalledModule(pkg);
             installedModules.put(Pair.create(packageName, userId), module);
-            for (ModuleListener listener : listeners) {
-                listener.onSingleModuleReloaded(module);
-            }
+            listeners.forEach(i -> i.onSingleModuleReloaded(module));
             return module;
         } else {
             InstalledModule old = installedModules.remove(Pair.create(packageName, userId));
-            if (old != null) {
-                for (ModuleListener listener : listeners) {
-                    listener.onSingleModuleReloaded(old);
-                }
-            }
+            if (old != null) listeners.forEach(i -> i.onSingleModuleReloaded(old));
             return null;
         }
     }
