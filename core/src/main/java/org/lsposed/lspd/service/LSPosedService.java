@@ -143,8 +143,8 @@ public class LSPosedService extends ILSPosedService.Stub {
                 break;
             }
         }
-        boolean removed = intentAction.equals(Intent.ACTION_PACKAGE_FULLY_REMOVED) ||
-                intentAction.equals(Intent.ACTION_UID_REMOVED);
+        boolean removed = Intent.ACTION_PACKAGE_FULLY_REMOVED.equals(intentAction) ||
+                Intent.ACTION_UID_REMOVED.equals(intentAction);
 
         Log.d(TAG, "Package changed: uid=" + uid + " userId=" + userId + " action=" + intentAction + " isXposedModule=" + isXposedModule + " isAllUsers=" + allUsers);
 
@@ -169,7 +169,7 @@ public class LSPosedService extends ILSPosedService.Stub {
         boolean systemModule = scope != null &&
                 scope.parallelStream().anyMatch(app -> app.packageName.equals("android"));
         boolean enabled = Arrays.asList(enabledModules).contains(moduleName);
-        if (!("Intent.ACTION_UID_REMOVED".equals(internAction) || "Intent.ACTION_PACKAGE_FULLY_REMOVED".equals(internAction) || allUsers))
+        if (!(Intent.ACTION_UID_REMOVED.equals(internAction) || Intent.ACTION_PACKAGE_FULLY_REMOVED.equals(internAction) || allUsers))
             LSPManagerService.showNotification(moduleName, userId, enabled, systemModule);
     }
 
