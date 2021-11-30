@@ -186,8 +186,6 @@ public class LSPosedService extends ILSPosedService.Stub {
         if (intent == null) return;
         int uid = intent.getIntExtra(EXTRA_USER_HANDLE, AID_NOBODY);
         if (uid == AID_NOBODY || uid <= 0) return;
-        var intentAction = intent.getAction();
-        Log.d(TAG, "dispatchUserInfoChanged: userId=" + uid + " action=" + intentAction);
         try {
             LSPManagerService.broadcastIntent(intent, BuildConfig.MANAGER_INJECTED_PKG_NAME);
         } catch (Throwable e) {

@@ -41,6 +41,7 @@ import org.lsposed.hiddenapibypass.HiddenApiBypass;
 import org.lsposed.manager.adapters.AppHelper;
 import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.ui.activity.CrashReportActivity;
+import org.lsposed.manager.ui.fragment.ModulesFragment;
 import org.lsposed.manager.util.DoHDNS;
 import org.lsposed.manager.util.ModuleUtil;
 import org.lsposed.manager.util.ThemeUtil;
@@ -208,11 +209,11 @@ public class App extends Application {
         registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.d(TAG, "onReceive Broadcast: " + intent);
-                int userId = intent.getIntExtra(EXTRA_USER_HANDLE, AID_NOBODY);
-                boolean userRemoved = intent.getBooleanExtra(ACTION_USER_REMOVED, false);
+                var action = intent.getAction();
+                var userId = intent.getIntExtra(EXTRA_USER_HANDLE, AID_NOBODY);
                 if (userId != 0)
-                    ModuleUtil.getInstance().reloadInstalledModules();
+                    if (ACTION_USER_ADDED.equals(action) || ACTION_USER_REMOVED.equals(action))
+                        ModulesFragment.reload();
             }
         }, userFilter);
 

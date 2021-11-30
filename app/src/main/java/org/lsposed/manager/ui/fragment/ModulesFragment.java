@@ -95,7 +95,8 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     private static final PackageManager pm = App.getInstance().getPackageManager();
     private static final ModuleUtil moduleUtil = ModuleUtil.getInstance();
     private static final RepoLoader repoLoader = RepoLoader.getInstance();
-    private static final List<UserInfo> users = ConfigManager.getUsers();
+    private static boolean canInit;
+    private static boolean shouldReload;
     protected FragmentPagerBinding binding;
     protected SearchView searchView;
     private SearchView.OnQueryTextListener searchListener;
@@ -120,15 +121,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 return false;
             }
         };
-
-        if (users != null) {
-            for (var user : users) {
-                var adapter = new ModuleAdapter(user);
-                adapter.setHasStableIds(true);
-                adapter.setStateRestorationPolicy(PREVENT_WHEN_EMPTY);
-                adapters.add(adapter);
-            }
-        }
     }
 
     private void showFab() {
@@ -156,13 +148,23 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 showFab();
             }
         });
+        canInit = true;
+        init();
 
-        new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> {
-            if (position < adapters.size()) {
-                tab.setText(adapters.get(position).getUser().name);
+        return binding.getRoot();
+    }
+
+    private void init() {
+        if (!canInit) return;
+        var users = ConfigManager.getUsers();
+        if (users != null) {
+            for (var user : users) {
+                var adapter = new ModuleAdapter(user);
+                adapter.setHasStableIds(true);
+                adapter.setStateRestorationPolicy(PREVENT_WHEN_EMPTY);
+                adapters.add(adapter);
             }
-        }).attach();
-
+        }
         if (users != null && users.size() != 1) {
             binding.viewPager.setUserInputEnabled(true);
             binding.tabLayout.setVisibility(View.VISIBLE);
@@ -175,24 +177,31 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 }
             });
             binding.fab.show();
+            binding.fab.setOnClickListener(v -> {
+                var bundle = new Bundle();
+                var user = adapters.get(binding.viewPager.getCurrentItem()).getUser();
+                bundle.putParcelable("userInfo", user);
+                var f = new RecyclerViewDialogFragment();
+                f.setArguments(bundle);
+                f.show(getChildFragmentManager(), "install_to_user" + user.id);
+            });
         } else {
             binding.viewPager.setUserInputEnabled(false);
             binding.tabLayout.setVisibility(View.GONE);
         }
-        binding.fab.setOnClickListener(v -> {
-            var bundle = new Bundle();
-            var user = adapters.get(binding.viewPager.getCurrentItem()).getUser();
-            bundle.putParcelable("userInfo", user);
-            var f = new RecyclerViewDialogFragment();
-            f.setArguments(bundle);
-            f.show(getChildFragmentManager(), "install_to_user" + user.id);
-        });
-
+        new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> {
+            if (position < adapters.size()) {
+                tab.setText(adapters.get(position).getUser().name);
+            }
+        }).attach();
         moduleUtil.addListener(this);
         repoLoader.addListener(this);
         updateModuleSummary();
+        shouldReload = false;
+    }
 
-        return binding.getRoot();
+    public static void reload() {
+        shouldReload = true;
     }
 
     @Override
@@ -214,7 +223,12 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     @Override
     public void onResume() {
         super.onResume();
-        adapters.forEach(ModuleAdapter::refresh);
+        if (shouldReload && canInit) {
+            adapters.clear();
+            init();
+        } else {
+            adapters.forEach(ModuleAdapter::refresh);
+        }
     }
 
     @Override
