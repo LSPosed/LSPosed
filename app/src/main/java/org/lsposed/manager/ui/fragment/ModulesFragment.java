@@ -95,7 +95,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     private static final PackageManager pm = App.getInstance().getPackageManager();
     private static final ModuleUtil moduleUtil = ModuleUtil.getInstance();
     private static final RepoLoader repoLoader = RepoLoader.getInstance();
-    private static boolean canInit;
+    private static boolean firstInit;
     private static boolean shouldReload;
     protected FragmentPagerBinding binding;
     protected SearchView searchView;
@@ -108,6 +108,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        firstInit = true;
         searchListener = new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -148,14 +149,12 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 showFab();
             }
         });
-        canInit = true;
         init();
 
         return binding.getRoot();
     }
 
     private void init() {
-        if (!canInit) return;
         var users = ConfigManager.getUsers();
         if (users != null) {
             for (var user : users) {
@@ -223,12 +222,13 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     @Override
     public void onResume() {
         super.onResume();
-        if (shouldReload && canInit) {
+        if (shouldReload && !firstInit) {
             adapters.clear();
             init();
         } else {
             adapters.forEach(ModuleAdapter::refresh);
         }
+        firstInit = false;
     }
 
     @Override

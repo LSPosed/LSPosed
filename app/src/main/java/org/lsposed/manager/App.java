@@ -215,7 +215,6 @@ public class App extends Application {
         registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.d(TAG, "onReceive Broadcast" + intent);
                 var action = intent.getAction();
                 var userId = intent.getIntExtra(EXTRA_USER_HANDLE, AID_NOBODY);
                 if (userId != 0)

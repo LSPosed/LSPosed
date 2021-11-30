@@ -163,23 +163,25 @@ public class LSPosedService extends ILSPosedService.Stub {
         }
     }
 
-    private void broadcastOrShowNotification(String moduleName, int userId, Intent intent, boolean isXposedModule) {
-        Log.d(TAG, "module " + moduleName + " changed, dispatching to manager");
+    private void broadcastOrShowNotification(String packageName, int userId, Intent intent, boolean isXposedModule) {
+        Log.d(TAG, "package " + packageName + " changed, dispatching to manager");
         var internAction = intent.getAction();
         var allUsers = intent.getBooleanExtra(EXTRA_REMOVED_FOR_ALL_USERS, false);
         Intent bIntent = new Intent(Intent.ACTION_PACKAGE_CHANGED);
-        bIntent.putExtra("android.intent.extra.PACKAGES", moduleName);
+        bIntent.putExtra("android.intent.extra.PACKAGES", packageName);
         bIntent.putExtra(Intent.EXTRA_USER, userId);
         bIntent.putExtra(EXTRA_REMOVED_FOR_ALL_USERS, allUsers);
         bIntent.putExtra("isXposedModule", isXposedModule);
         LSPManagerService.broadcastIntent(bIntent);
-        var enabledModules = ConfigManager.getInstance().enabledModules();
-        var scope = ConfigManager.getInstance().getModuleScope(moduleName);
-        boolean systemModule = scope != null &&
-                scope.parallelStream().anyMatch(app -> app.packageName.equals("android"));
-        boolean enabled = Arrays.asList(enabledModules).contains(moduleName);
-        if (!(Intent.ACTION_UID_REMOVED.equals(internAction) || Intent.ACTION_PACKAGE_FULLY_REMOVED.equals(internAction) || allUsers) && isXposedModule)
-            LSPManagerService.showNotification(moduleName, userId, enabled, systemModule);
+        if (isXposedModule) {
+            var enabledModules = ConfigManager.getInstance().enabledModules();
+            var scope = ConfigManager.getInstance().getModuleScope(packageName);
+            boolean systemModule = scope != null &&
+                    scope.parallelStream().anyMatch(app -> app.packageName.equals("android"));
+            boolean enabled = Arrays.asList(enabledModules).contains(packageName);
+            if (!(Intent.ACTION_UID_REMOVED.equals(internAction) || Intent.ACTION_PACKAGE_FULLY_REMOVED.equals(internAction) || allUsers))
+                LSPManagerService.showNotification(packageName, userId, enabled, systemModule);
+        }
     }
 
     synchronized public void dispatchUserChanged(Intent intent) {
