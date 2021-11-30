@@ -113,7 +113,6 @@
     <string name="no_scope_selected">No seleccionaste ninguna aplicación. ¿Quieres continuar?</string>
     <string name="menu_show_games">Juegos</string>
     <string name="menu_show_modules">Módulos</string>
-    <string name="failed_to_save_scope_list">Fallo al guardar la lista de scopes</string>
     <string name="app_description">%1$s\nVersión %2$s</string>
     <string name="use_recommended">Recomendado</string>
     <string name="no_scope_selected_has_recommended">No seleccionaste ninguna aplicación. ¿Quieres seleccionar las aplicaciones recomendadas?</string>
