@@ -99,6 +99,7 @@
     <string name="no_scope_selected">앱을 선택하지 않았습니다. 계속하시겠습니까?</string>
     <string name="menu_show_games">게임</string>
     <string name="menu_show_modules">모듈</string>
+    <string name="failed_to_save_scope_list">범위 목록 저장에 실패했습니다.</string>
     <string name="app_description">%1$s\n버전 %2$s</string>
     <string name="use_recommended">권장된</string>
     <string name="no_scope_selected_has_recommended">앱을 선택하지 않았습니다. 권장 앱을 선택하시겠습니까?</string>
