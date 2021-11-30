@@ -228,5 +228,5 @@
     <string name="color_brown">Коричневый</string>
     <string name="color_grey">Серый</string>
     <string name="color_blue_grey">Серо-голубой</string>
-    <string name="feedback_or_suggestion">Обратная связь или предложение</string>
+    <string name="feedback_or_suggestion">Обратная связь</string>
 </resources>
