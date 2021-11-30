@@ -34,7 +34,7 @@
     <plurals name="module_repo_upgradable">
         <item quantity="other">%d 个模块可更新</item>
     </plurals>
-    <string name="about_view_source_code"><![CDATA[在 %1$s 查看源码<br/>加入我们的 %2$s 频道<br/>加入我们的 <b><a href="mqqguild://guild/share?_wv=3&_wwv=128&inviteCode=mrvs4&from=246610&biz=ka">QQ 频道</a></b>]]></string>
+    <string name="about_view_source_code"><![CDATA[在 %1$s 查看源码<br/>加入我们的 %2$s 频道<br/>加入我们的 <b><a href="mqqguild://guild/share?inviteCode=Xz9dJ&from=246610">QQ 频道</a></b>]]></string>
     <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">null</string>
     <string name="install">安装</string>
     <string name="install_summary">点按安装 LSPosed</string>
