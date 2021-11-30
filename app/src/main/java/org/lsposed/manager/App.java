@@ -123,6 +123,7 @@ public class App extends Application {
     private static final String ACTION_USER_REMOVED = "android.intent.action.USER_REMOVED";
     private static final String ACTION_USER_INFO_CHANGED = "android.intent.action.USER_INFO_CHANGED";
     private static final String EXTRA_USER_HANDLE = "android.intent.extra.user_handle";
+    private static final String EXTRA_REMOVED_FOR_ALL_USERS = "android.intent.extra.REMOVED_FOR_ALL_USERS";
     private static App instance = null;
     private static OkHttpClient okHttpClient;
     private static Cache okHttpCache;
@@ -193,11 +194,16 @@ public class App extends Application {
         registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                int userId = intent.getIntExtra(Intent.EXTRA_USER, 0);
-                String packageName = intent.getStringExtra("android.intent.extra.PACKAGES");
-                boolean packageFullyRemoved = intent.getBooleanExtra(Intent.ACTION_PACKAGE_FULLY_REMOVED, false);
+                var userId = intent.getIntExtra(Intent.EXTRA_USER, 0);
+                var packageName = intent.getStringExtra("android.intent.extra.PACKAGES");
+                var packageRemovedForAllUsers = intent.getBooleanExtra(EXTRA_REMOVED_FOR_ALL_USERS, false);
+                var isXposedModule = intent.getBooleanExtra("isXposedModule", false);
                 if (packageName != null) {
-                    ModuleUtil.getInstance().reloadSingleModule(packageName, userId, packageFullyRemoved);
+                    if (isXposedModule)
+                        ModuleUtil.getInstance().reloadSingleModule(packageName, userId, packageRemovedForAllUsers);
+                    else
+                        //TODO
+                        ;
                 }
             }
         }, new IntentFilter(Intent.ACTION_PACKAGE_CHANGED));
@@ -209,6 +215,7 @@ public class App extends Application {
         registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+                Log.d(TAG, "onReceive Broadcast" + intent);
                 var action = intent.getAction();
                 var userId = intent.getIntExtra(EXTRA_USER_HANDLE, AID_NOBODY);
                 if (userId != 0)
