@@ -129,7 +129,7 @@ Ali Samir</string>
     <string name="menu_show_games">ألعاب</string>
     <string name="menu_show_modules">الوحدات</string>
     <string name="menu_show_denylist">قائمة الرفض</string>
-    <string name="failed_to_save_scope_list">فشل حفظ قائمة النطاق</string>
+    <string name="failed_to_save_scope_list">فشل في حفظ قائمة النطاق</string>
     <string name="app_description">%1$s\nإصدار %2$s</string>
     <string name="use_recommended">مُوصى به</string>
     <string name="no_scope_selected_has_recommended">لم تقم بتحديد أي تطبيق. تحديد التطبيقات الموصى بها؟</string>

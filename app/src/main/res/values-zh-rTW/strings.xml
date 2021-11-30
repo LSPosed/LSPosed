@@ -67,6 +67,7 @@
     <string name="update_lsposed_msg">確定要更新LSPosed嗎？更新完成後將會重啟裝置</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">儲存</string>
+    <string name="nav_item_logs_verbose">囉嗦日誌</string>
     <string name="nav_item_logs_module">模組日誌</string>
     <string name="logs_save_failed2">儲存失敗：\n%s</string>
     <string name="menuClearLog">立即清理日誌</string>

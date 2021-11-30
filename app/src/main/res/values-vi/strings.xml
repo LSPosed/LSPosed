@@ -35,7 +35,7 @@
         <item quantity="other">%d mô-đun có bản cập nhật</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[Xem mã nguồn tại %1$s<br/>Tham gia %2$s nhóm của chúng tôi]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Tuyen Nguyen (tuyennn)</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">The Primal Pea</string>
     <string name="install">Cài đặt</string>
     <string name="install_summary">Chạm để cài đặt LSPosed</string>
     <string name="not_installed">Chưa được cài đặt</string>
@@ -79,8 +79,8 @@
     <string name="menuReload">Tải lại</string>
     <string name="logs_clear_failed_2">Thất bại khi xoá nhật ký</string>
     <string name="menu_enable_word_wrap">Xuống dòng tự động</string>
-    <string name="enabled_verbose_log">Nhật ký Verbose đã được kích hoạt</string>
-    <string name="disabled_verbose_log">Nhật ký Verbose đã được vô hiệu</string>
+    <string name="enabled_verbose_log">Nhật ký chi tiết đã được kích hoạt</string>
+    <string name="disabled_verbose_log">Nhật ký chi tiết đã được vô hiệu hoá</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Mô-đun Xposed chưa được kích hoạt</string>
     <string name="module_is_not_activated_yet_detailed">%s đã được cài đặt, nhưng chưa được kích hoạt</string>
@@ -222,5 +222,5 @@
     <string name="color_brown">Nâu</string>
     <string name="color_grey">Xám</string>
     <string name="color_blue_grey">Xanh xám</string>
-    <string name="feedback_or_suggestion">Phản hồi hoặc gợi ý tính năng</string>
+    <string name="feedback_or_suggestion">Phản hồi hoặc góp ý</string>
 </resources>
