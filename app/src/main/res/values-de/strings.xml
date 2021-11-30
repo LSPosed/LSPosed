@@ -119,6 +119,7 @@ Gerät wird nach dem Update neu gestartet</string>
     <string name="menu_show_games">Spiele</string>
     <string name="menu_show_modules">Module</string>
     <string name="menu_show_denylist">Denylist</string>
+    <string name="failed_to_save_scope_list">Das Speichern der Bereichsliste ist fehlgeschlagen</string>
     <string name="app_description">%1$s\nAusführung: %2$s</string>
     <string name="use_recommended">Empfohlen</string>
     <string name="no_scope_selected_has_recommended">Sie haben keine App ausgewählt. Empfohlene Apps auswählen?</string>
