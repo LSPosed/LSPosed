@@ -780,7 +780,9 @@ public class ConfigManager {
 
     private boolean removeModuleScopeWithoutCache(Application module) {
         if (module.packageName.equals("lspd")) return false;
-        boolean res = executeInTransaction(() -> db.delete("scope", "mid = ? and user_id = ?", new String[]{module.packageName, String.valueOf(module.userId)}) > 0);
+        int mid = getModuleId(module.packageName);
+        if (mid == -1) return false;
+        boolean res = executeInTransaction(() -> db.delete("scope", "mid = ? and user_id = ?", new String[]{String.valueOf(mid), String.valueOf(module.userId)}) > 0);
         try {
             removeModulePrefs(module.userId, module.packageName);
         } catch (IOException e) {
