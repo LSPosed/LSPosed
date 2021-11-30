@@ -119,7 +119,6 @@
     <string name="no_scope_selected">Anda tidak memilih aplikasi apa pun. Lanjutkan?</string>
     <string name="menu_show_games">Permainan</string>
     <string name="menu_show_modules">Modul</string>
-    <string name="failed_to_save_scope_list">Gagal menyimpan daftar cakupan</string>
     <string name="app_description">%1$s\nVersi %2$s</string>
     <string name="use_recommended">Direkomendasikan</string>
     <string name="no_scope_selected_has_recommended">Anda tidak memilih aplikasi apa pun. Pilih aplikasi yang direkomendasikan?</string>
