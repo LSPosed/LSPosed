@@ -128,7 +128,7 @@
     <string name="menu_show_games">Jeux</string>
     <string name="menu_show_modules">Modules</string>
     <string name="menu_show_denylist">Liste de refus</string>
-    <string name="failed_to_save_scope_list">Échec de la sauvegarde de la liste des champs d\’application</string>
+    <string name="failed_to_save_scope_list">Échec de l\'enregistrement de la liste des périmètres d\'applications</string>
     <string name="app_description">%1$s\nVersion %2$s</string>
     <string name="use_recommended">Recommendé</string>
     <string name="no_scope_selected_has_recommended">Vous n\'avez sélectionné aucune application. Sélectionner les applications recommandées?</string>
