@@ -133,8 +133,8 @@ public class PackageService {
         IPackageManager pm = getPackageManager();
         if (pm == null) return ParceledListSlice.emptyList();
         for (var user : UserService.getUsers()) {
-            // in case duplicate pkginfo in one user
-            res.addAll(pm.getInstalledPackages(flags, user.id).getList().parallelStream().distinct().collect(Collectors.toList()));
+            // in case pkginfo of other users in primary user
+            res.addAll(pm.getInstalledPackages(flags, user.id).getList().parallelStream().filter(info -> info.applicationInfo != null && info.applicationInfo.uid / PER_USER_RANGE == user.id).collect(Collectors.toList()));
         }
         if (filterNoProcess) {
             return new ParceledListSlice<>(res.parallelStream().filter(packageInfo -> {
