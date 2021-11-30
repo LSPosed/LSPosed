@@ -39,7 +39,6 @@ import android.content.pm.VersionedPackage;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.Parcel;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemProperties;
@@ -68,8 +67,9 @@ public class PackageService {
 
     static final int INSTALL_FAILED_INTERNAL_ERROR = -110;
     static final int INSTALL_REASON_UNKNOWN = 0;
+    static final int MATCH_ANY_USER = 0x00400000; // PackageManager.MATCH_ANY_USER
 
-    static final int MATCH_ALL_FLAGS = PackageManager.MATCH_DISABLED_COMPONENTS | PackageManager.MATCH_DIRECT_BOOT_AWARE | PackageManager.MATCH_DIRECT_BOOT_UNAWARE | PackageManager.MATCH_UNINSTALLED_PACKAGES;
+    static final int MATCH_ALL_FLAGS = PackageManager.MATCH_DISABLED_COMPONENTS | PackageManager.MATCH_DIRECT_BOOT_AWARE | PackageManager.MATCH_DIRECT_BOOT_UNAWARE | PackageManager.MATCH_UNINSTALLED_PACKAGES | MATCH_ANY_USER;
     public static final int PER_USER_RANGE = 100000;
 
     private static IPackageManager pm = null;
