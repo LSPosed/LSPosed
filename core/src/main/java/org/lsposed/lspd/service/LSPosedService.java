@@ -42,6 +42,10 @@ import java.util.Arrays;
 public class LSPosedService extends ILSPosedService.Stub {
     private static final int AID_NOBODY = 9999;
     private static final int USER_NULL = -10000;
+    private static final String ACTION_USER_ADDED = "android.intent.action.USER_ADDED";
+    private static final String ACTION_USER_REMOVED = "android.intent.action.USER_REMOVED";
+    private static final String ACTION_USER_INFO_CHANGED = "android.intent.action.USER_INFO_CHANGED";
+    private static final String EXTRA_USER_HANDLE = "android.intent.extra.user_handle";
 
     @Override
     public ILSPApplicationService requestApplicationService(int uid, int pid, String processName, IBinder heartBeat) {
@@ -171,6 +175,19 @@ public class LSPosedService extends ILSPosedService.Stub {
         boolean enabled = Arrays.asList(enabledModules).contains(moduleName);
         if (!(Intent.ACTION_UID_REMOVED.equals(internAction) || Intent.ACTION_PACKAGE_FULLY_REMOVED.equals(internAction) || allUsers))
             LSPManagerService.showNotification(moduleName, userId, enabled, systemModule);
+    }
+
+    synchronized public void dispatchUserChanged(Intent intent) {
+        if (intent == null) return;
+        int uid = intent.getIntExtra(EXTRA_USER_HANDLE, AID_NOBODY);
+        if (uid == AID_NOBODY || uid <= 0) return;
+        var intentAction = intent.getAction();
+        Log.d(TAG, "dispatchUserInfoChanged: userId=" + uid + " action=" + intentAction);
+        try {
+            //TODO
+        } catch (Throwable e) {
+            Log.e(TAG, "dispatch user info changed", e);
+        }
     }
 
     synchronized public void dispatchUserUnlocked(Intent intent) {
@@ -335,6 +352,32 @@ public class LSPosedService extends ILSPosedService.Stub {
         Log.d(TAG, "registered boot receiver");
     }
 
+    private void registerUserChangeReceiver() {
+        try {
+            IntentFilter userFilter = new IntentFilter();
+            userFilter.addAction(ACTION_USER_ADDED);
+            userFilter.addAction(ACTION_USER_REMOVED);
+            userFilter.addAction(ACTION_USER_INFO_CHANGED);
+
+            var receiver = new IIntentReceiver.Stub() {
+                @Override
+                public void performReceive(Intent intent, int resultCode, String data, Bundle extras, boolean ordered, boolean sticky, int sendingUser) {
+                    getExecutorService().submit(() -> dispatchUserChanged(intent));
+                    try {
+                        ActivityManagerService.finishReceiver(this, resultCode, data, extras, false, intent.getFlags());
+                    } catch (Throwable e) {
+                        Log.e(TAG, "finish receiver", e);
+                    }
+                }
+            };
+
+            ActivityManagerService.registerReceiver("android", null, receiver, userFilter, null, -1, 0);
+        } catch (Throwable e) {
+            Log.e(TAG, "register user info change receiver", e);
+        }
+        Log.d(TAG, "registered user info change receiver");
+    }
+
     @Override
     public void dispatchSystemServerContext(IBinder activityThread, IBinder activityToken, String api) {
         Log.d(TAG, "received system context");
@@ -345,6 +388,7 @@ public class LSPosedService extends ILSPosedService.Stub {
         registerConfigurationReceiver();
         registerSecretCodeReceiver();
         registerBootCompleteReceiver();
+        registerUserChangeReceiver();
     }
 
     @Override
