@@ -46,6 +46,7 @@ public class LSPosedService extends ILSPosedService.Stub {
     private static final String ACTION_USER_REMOVED = "android.intent.action.USER_REMOVED";
     private static final String ACTION_USER_INFO_CHANGED = "android.intent.action.USER_INFO_CHANGED";
     private static final String EXTRA_USER_HANDLE = "android.intent.extra.user_handle";
+    private static final String EXTRA_REMOVED_FOR_ALL_USERS = "android.intent.extra.REMOVED_FOR_ALL_USERS";
 
     @Override
     public ILSPApplicationService requestApplicationService(int uid, int pid, String processName, IBinder heartBeat) {
@@ -83,7 +84,7 @@ public class LSPosedService extends ILSPosedService.Stub {
         if (uid == AID_NOBODY || uid <= 0) return;
         int userId = intent.getIntExtra("android.intent.extra.user_handle", USER_NULL);
         var intentAction = intent.getAction();
-        var allUsers = intent.getBooleanExtra("android.intent.extra.REMOVED_FOR_ALL_USERS", false);
+        var allUsers = intent.getBooleanExtra(EXTRA_REMOVED_FOR_ALL_USERS, false);
         if (userId == USER_NULL) userId = uid % PER_USER_RANGE;
         Uri uri = intent.getData();
         String moduleName = (uri != null) ? uri.getSchemeSpecificPart() : ConfigManager.getInstance().getModule(uid);
@@ -166,7 +167,7 @@ public class LSPosedService extends ILSPosedService.Stub {
     private void broadcastOrShowNotification(String moduleName, int userId, Intent intent) {
         Log.d(TAG, "module " + moduleName + " changed, dispatching to manager");
         var internAction = intent.getAction();
-        var allUsers = intent.getBooleanExtra("android.intent.extra.REMOVED_FOR_ALL_USERS", false);
+        var allUsers = intent.getBooleanExtra(EXTRA_REMOVED_FOR_ALL_USERS, false);
         LSPManagerService.broadcastIntent(moduleName, userId, allUsers);
         var enabledModules = ConfigManager.getInstance().enabledModules();
         var scope = ConfigManager.getInstance().getModuleScope(moduleName);
