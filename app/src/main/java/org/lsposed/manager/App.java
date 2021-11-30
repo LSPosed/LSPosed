@@ -20,6 +20,7 @@
 
 package org.lsposed.manager;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -116,6 +117,9 @@ public class App extends Application {
     }
 
     public static final String TAG = "LSPosedManager";
+    private static final String ACTION_USER_ADDED = "android.intent.action.USER_ADDED";
+    private static final String ACTION_USER_REMOVED = "android.intent.action.USER_REMOVED";
+    private static final String ACTION_USER_INFO_CHANGED = "android.intent.action.USER_INFO_CHANGED";
     private static App instance = null;
     private static OkHttpClient okHttpClient;
     private static Cache okHttpCache;
@@ -138,6 +142,7 @@ public class App extends Application {
         return !Process.isApplicationUid(Process.myUid());
     }
 
+    @SuppressLint("WrongConstant")
     private void setCrashReport() {
         Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
 
@@ -193,6 +198,20 @@ public class App extends Application {
                 }
             }
         }, new IntentFilter(Intent.ACTION_PACKAGE_CHANGED));
+
+        IntentFilter userFilter = new IntentFilter();
+        userFilter.addAction(ACTION_USER_ADDED);
+        userFilter.addAction(ACTION_USER_REMOVED);
+        userFilter.addAction(ACTION_USER_INFO_CHANGED);
+        registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                int userId = intent.getIntExtra(Intent.EXTRA_USER, 0);
+                boolean userRemoved = intent.getBooleanExtra(ACTION_USER_REMOVED, false);
+                if (userId != 0)
+                    ModuleUtil.getInstance().reloadInstalledModules();
+            }
+        }, userFilter);
 
         UpdateUtil.loadRemoteVersion();
 
