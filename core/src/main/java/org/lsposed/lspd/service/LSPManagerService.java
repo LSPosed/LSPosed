@@ -20,7 +20,6 @@
 package org.lsposed.lspd.service;
 
 import static android.content.Context.BIND_AUTO_CREATE;
-import static org.lsposed.lspd.service.LSPosedService.ACTION_USER_REMOVED;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 import static org.lsposed.lspd.service.ServiceManager.getExecutorService;
 
@@ -253,36 +252,10 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     }
 
     @SuppressLint("WrongConstant")
-    public static void broadcastIntent(String modulePackageName, int moduleUserId, boolean packageFullyRemoved) {
-        Intent intent = new Intent(Intent.ACTION_PACKAGE_CHANGED);
+    public static void broadcastIntent(Intent intent, String packageName) {
         intent.addFlags(0x01000000); //Intent.FLAG_RECEIVER_INCLUDE_BACKGROUND
         intent.addFlags(0x00400000); //Intent.FLAG_RECEIVER_FROM_SHELL
-        intent.putExtra("android.intent.extra.PACKAGES", modulePackageName);
-        intent.putExtra(Intent.EXTRA_USER, moduleUserId);
-        intent.putExtra(Intent.ACTION_PACKAGE_FULLY_REMOVED, packageFullyRemoved);
-        intent.setPackage(BuildConfig.MANAGER_INJECTED_PKG_NAME);
-        try {
-            ActivityManagerService.broadcastIntentWithFeature(null, intent,
-                    null, null, 0, null, null,
-                    null, -1, null, true, false,
-                    0);
-            intent.setPackage(BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME);
-            ActivityManagerService.broadcastIntentWithFeature(null, intent,
-                    null, null, 0, null, null,
-                    null, -1, null, true, false,
-                    0);
-        } catch (Throwable t) {
-            Log.e(TAG, "Broadcast to manager failed: ", t);
-        }
-    }
-
-    @SuppressLint("WrongConstant")
-    public static void broadcastIntent(Intent intent, int UserId, boolean userRemoved) {
-        intent.addFlags(0x01000000); //Intent.FLAG_RECEIVER_INCLUDE_BACKGROUND
-        intent.addFlags(0x00400000); //Intent.FLAG_RECEIVER_FROM_SHELL
-        intent.putExtra(Intent.EXTRA_USER, UserId);
-        intent.putExtra(ACTION_USER_REMOVED, userRemoved);
-        intent.setPackage(BuildConfig.MANAGER_INJECTED_PKG_NAME);
+        intent.setPackage(packageName);
         try {
             ActivityManagerService.broadcastIntentWithFeature(null, intent,
                     null, null, 0, null, null,

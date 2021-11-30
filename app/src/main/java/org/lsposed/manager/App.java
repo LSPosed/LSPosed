@@ -117,9 +117,11 @@ public class App extends Application {
     }
 
     public static final String TAG = "LSPosedManager";
+    private static final int AID_NOBODY = 9999;
     private static final String ACTION_USER_ADDED = "android.intent.action.USER_ADDED";
     private static final String ACTION_USER_REMOVED = "android.intent.action.USER_REMOVED";
     private static final String ACTION_USER_INFO_CHANGED = "android.intent.action.USER_INFO_CHANGED";
+    private static final String EXTRA_USER_HANDLE = "android.intent.extra.user_handle";
     private static App instance = null;
     private static OkHttpClient okHttpClient;
     private static Cache okHttpCache;
@@ -206,7 +208,8 @@ public class App extends Application {
         registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                int userId = intent.getIntExtra(Intent.EXTRA_USER, 0);
+                Log.d(TAG, "onReceive Broadcast: " + intent);
+                int userId = intent.getIntExtra(EXTRA_USER_HANDLE, AID_NOBODY);
                 boolean userRemoved = intent.getBooleanExtra(ACTION_USER_REMOVED, false);
                 if (userId != 0)
                     ModuleUtil.getInstance().reloadInstalledModules();

@@ -168,7 +168,11 @@ public class LSPosedService extends ILSPosedService.Stub {
         Log.d(TAG, "module " + moduleName + " changed, dispatching to manager");
         var internAction = intent.getAction();
         var allUsers = intent.getBooleanExtra(EXTRA_REMOVED_FOR_ALL_USERS, false);
-        LSPManagerService.broadcastIntent(moduleName, userId, allUsers);
+        Intent bIntent = new Intent(Intent.ACTION_PACKAGE_CHANGED);
+        bIntent.putExtra("android.intent.extra.PACKAGES", moduleName);
+        bIntent.putExtra(Intent.EXTRA_USER, userId);
+        bIntent.putExtra(Intent.ACTION_PACKAGE_FULLY_REMOVED, allUsers);
+        LSPManagerService.broadcastIntent(bIntent, BuildConfig.MANAGER_INJECTED_PKG_NAME);
         var enabledModules = ConfigManager.getInstance().enabledModules();
         var scope = ConfigManager.getInstance().getModuleScope(moduleName);
         boolean systemModule = scope != null &&
@@ -185,7 +189,7 @@ public class LSPosedService extends ILSPosedService.Stub {
         var intentAction = intent.getAction();
         Log.d(TAG, "dispatchUserInfoChanged: userId=" + uid + " action=" + intentAction);
         try {
-            LSPManagerService.broadcastIntent(intent, uid, ACTION_USER_REMOVED.equals(intentAction));
+            LSPManagerService.broadcastIntent(intent, BuildConfig.MANAGER_INJECTED_PKG_NAME);
         } catch (Throwable e) {
             Log.e(TAG, "dispatch user info changed", e);
         }
