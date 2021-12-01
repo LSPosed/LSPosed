@@ -117,11 +117,9 @@ public class App extends Application {
     }
 
     public static final String TAG = "LSPosedManager";
-    public static final int AID_NOBODY = 9999;
-    public static final String ACTION_USER_ADDED = "android.intent.action.USER_ADDED";
-    public static final String ACTION_USER_REMOVED = "android.intent.action.USER_REMOVED";
-    public static final String ACTION_USER_INFO_CHANGED = "android.intent.action.USER_INFO_CHANGED";
-    public static final String EXTRA_USER_HANDLE = "android.intent.extra.user_handle";
+    private static final String ACTION_USER_ADDED = "android.intent.action.USER_ADDED";
+    private static final String ACTION_USER_REMOVED = "android.intent.action.USER_REMOVED";
+    private static final String ACTION_USER_INFO_CHANGED = "android.intent.action.USER_INFO_CHANGED";
     private static final String EXTRA_REMOVED_FOR_ALL_USERS = "android.intent.extra.REMOVED_FOR_ALL_USERS";
     private static App instance = null;
     private static OkHttpClient okHttpClient;
@@ -190,9 +188,13 @@ public class App extends Application {
         DayNightDelegate.setDefaultNightMode(ThemeUtil.getDarkTheme());
         LocaleDelegate.setDefaultLocale(getLocale());
 
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Intent.ACTION_PACKAGE_CHANGED);
+        intentFilter.addAction(App.ACTION_USER_INFO_CHANGED);
         registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+                var action = intent.getAction();
                 var userId = intent.getIntExtra(Intent.EXTRA_USER, 0);
                 var packageName = intent.getStringExtra("android.intent.extra.PACKAGES");
                 var packageRemovedForAllUsers = intent.getBooleanExtra(EXTRA_REMOVED_FOR_ALL_USERS, false);
@@ -200,12 +202,14 @@ public class App extends Application {
                 if (packageName != null) {
                     if (isXposedModule)
                         ModuleUtil.getInstance().reloadSingleModule(packageName, userId, packageRemovedForAllUsers);
-                    else
-                        //TODO
-                        ;
+                    Log.d(TAG, "onReceive: " + intent);//App changed
                 }
+                if (userId != 0)
+                    if (App.ACTION_USER_ADDED.equals(action) || App.ACTION_USER_REMOVED.equals(action))
+                        //reload();
+                        Log.d(TAG, "onReceive: " + intent);
             }
-        }, new IntentFilter(Intent.ACTION_PACKAGE_CHANGED));
+        }, intentFilter);
 
         UpdateUtil.loadRemoteVersion();
 

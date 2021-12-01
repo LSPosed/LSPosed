@@ -188,8 +188,11 @@ public class LSPosedService extends ILSPosedService.Stub {
         if (intent == null) return;
         int uid = intent.getIntExtra(EXTRA_USER_HANDLE, AID_NOBODY);
         if (uid == AID_NOBODY || uid <= 0) return;
+        Intent bIntent = new Intent(Intent.ACTION_PACKAGE_CHANGED);
+        bIntent.setAction(intent.getAction());
+        bIntent.putExtra(Intent.EXTRA_USER, uid);
         try {
-            LSPManagerService.broadcastIntent(intent);
+            LSPManagerService.broadcastIntent(bIntent);
         } catch (Throwable e) {
             Log.e(TAG, "dispatch user info changed", e);
         }

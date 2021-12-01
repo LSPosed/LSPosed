@@ -23,10 +23,7 @@ import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
 import static androidx.recyclerview.widget.RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY;
 
 import android.annotation.SuppressLint;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
@@ -75,9 +72,9 @@ import org.lsposed.manager.App;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.adapters.AppHelper;
-import org.lsposed.manager.databinding.SwiperefreshRecyclerviewBinding;
 import org.lsposed.manager.databinding.FragmentPagerBinding;
 import org.lsposed.manager.databinding.ItemModuleBinding;
+import org.lsposed.manager.databinding.SwiperefreshRecyclerviewBinding;
 import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
 import org.lsposed.manager.ui.widget.EmptyStateRecyclerView;
@@ -102,7 +99,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     protected FragmentPagerBinding binding;
     protected SearchView searchView;
     private SearchView.OnQueryTextListener searchListener;
-    private BroadcastReceiver broadcastReceiver;
 
     final ArrayList<ModuleAdapter> adapters = new ArrayList<>();
 
@@ -124,21 +120,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 return false;
             }
         };
-        IntentFilter userFilter = new IntentFilter();
-        userFilter.addAction(App.ACTION_USER_ADDED);
-        userFilter.addAction(App.ACTION_USER_REMOVED);
-        userFilter.addAction(App.ACTION_USER_INFO_CHANGED);
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                var action = intent.getAction();
-                var userId = intent.getIntExtra(App.EXTRA_USER_HANDLE, App.AID_NOBODY);
-                if (userId != 0)
-                    if (App.ACTION_USER_ADDED.equals(action) || App.ACTION_USER_REMOVED.equals(action))
-                        reload();
-            }
-        };
-        requireActivity().registerReceiver(broadcastReceiver, userFilter);
     }
 
     private void showFab() {
@@ -339,7 +320,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         super.onDestroyView();
         moduleUtil.removeListener(this);
         repoLoader.removeListener(this);
-        requireActivity().unregisterReceiver(broadcastReceiver);
         binding = null;
     }
 
