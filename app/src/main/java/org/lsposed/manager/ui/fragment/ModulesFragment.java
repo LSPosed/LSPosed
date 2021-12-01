@@ -23,7 +23,10 @@ import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
 import static androidx.recyclerview.widget.RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
@@ -95,11 +98,11 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     private static final PackageManager pm = App.getInstance().getPackageManager();
     private static final ModuleUtil moduleUtil = ModuleUtil.getInstance();
     private static final RepoLoader repoLoader = RepoLoader.getInstance();
-    private static boolean firstInit;
-    private static boolean shouldReload;
+    private static boolean isReloading;
     protected FragmentPagerBinding binding;
     protected SearchView searchView;
     private SearchView.OnQueryTextListener searchListener;
+    private BroadcastReceiver broadcastReceiver;
 
     final ArrayList<ModuleAdapter> adapters = new ArrayList<>();
 
@@ -108,7 +111,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        firstInit = true;
         searchListener = new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -122,6 +124,21 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 return false;
             }
         };
+        IntentFilter userFilter = new IntentFilter();
+        userFilter.addAction(App.ACTION_USER_ADDED);
+        userFilter.addAction(App.ACTION_USER_REMOVED);
+        userFilter.addAction(App.ACTION_USER_INFO_CHANGED);
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                var action = intent.getAction();
+                var userId = intent.getIntExtra(App.EXTRA_USER_HANDLE, App.AID_NOBODY);
+                if (userId != 0)
+                    if (App.ACTION_USER_ADDED.equals(action) || App.ACTION_USER_REMOVED.equals(action))
+                        reload();
+            }
+        };
+        requireActivity().registerReceiver(broadcastReceiver, userFilter);
     }
 
     private void showFab() {
@@ -149,12 +166,14 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 showFab();
             }
         });
-        init();
+        reload();
 
         return binding.getRoot();
     }
 
-    private void init() {
+    private void reload() {
+        if (isReloading) return;
+        isReloading = true;
         var users = ConfigManager.getUsers();
         if (users != null) {
             for (var user : users) {
@@ -196,11 +215,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         moduleUtil.addListener(this);
         repoLoader.addListener(this);
         updateModuleSummary();
-        shouldReload = false;
-    }
-
-    public static void reload() {
-        shouldReload = true;
+        isReloading = false;
     }
 
     @Override
@@ -222,13 +237,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     @Override
     public void onResume() {
         super.onResume();
-        if (shouldReload && !firstInit) {
-            adapters.clear();
-            init();
-        } else {
-            adapters.forEach(ModuleAdapter::refresh);
-        }
-        firstInit = false;
+        adapters.forEach(ModuleAdapter::refresh);
     }
 
     @Override
@@ -275,6 +284,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 .show();
     }
 
+    @SuppressLint("WrongConstant")
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         if (selectedModule == null) {
@@ -329,6 +339,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         super.onDestroyView();
         moduleUtil.removeListener(this);
         repoLoader.removeListener(this);
+        requireActivity().unregisterReceiver(broadcastReceiver);
         binding = null;
     }
 

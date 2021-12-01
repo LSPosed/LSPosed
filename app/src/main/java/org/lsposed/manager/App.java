@@ -41,7 +41,6 @@ import org.lsposed.hiddenapibypass.HiddenApiBypass;
 import org.lsposed.manager.adapters.AppHelper;
 import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.ui.activity.CrashReportActivity;
-import org.lsposed.manager.ui.fragment.ModulesFragment;
 import org.lsposed.manager.util.DoHDNS;
 import org.lsposed.manager.util.ModuleUtil;
 import org.lsposed.manager.util.ThemeUtil;
@@ -118,11 +117,11 @@ public class App extends Application {
     }
 
     public static final String TAG = "LSPosedManager";
-    private static final int AID_NOBODY = 9999;
-    private static final String ACTION_USER_ADDED = "android.intent.action.USER_ADDED";
-    private static final String ACTION_USER_REMOVED = "android.intent.action.USER_REMOVED";
-    private static final String ACTION_USER_INFO_CHANGED = "android.intent.action.USER_INFO_CHANGED";
-    private static final String EXTRA_USER_HANDLE = "android.intent.extra.user_handle";
+    public static final int AID_NOBODY = 9999;
+    public static final String ACTION_USER_ADDED = "android.intent.action.USER_ADDED";
+    public static final String ACTION_USER_REMOVED = "android.intent.action.USER_REMOVED";
+    public static final String ACTION_USER_INFO_CHANGED = "android.intent.action.USER_INFO_CHANGED";
+    public static final String EXTRA_USER_HANDLE = "android.intent.extra.user_handle";
     private static final String EXTRA_REMOVED_FOR_ALL_USERS = "android.intent.extra.REMOVED_FOR_ALL_USERS";
     private static App instance = null;
     private static OkHttpClient okHttpClient;
@@ -207,21 +206,6 @@ public class App extends Application {
                 }
             }
         }, new IntentFilter(Intent.ACTION_PACKAGE_CHANGED));
-
-        IntentFilter userFilter = new IntentFilter();
-        userFilter.addAction(ACTION_USER_ADDED);
-        userFilter.addAction(ACTION_USER_REMOVED);
-        userFilter.addAction(ACTION_USER_INFO_CHANGED);
-        registerReceiver(new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                var action = intent.getAction();
-                var userId = intent.getIntExtra(EXTRA_USER_HANDLE, AID_NOBODY);
-                if (userId != 0)
-                    if (ACTION_USER_ADDED.equals(action) || ACTION_USER_REMOVED.equals(action))
-                        ModulesFragment.reload();
-            }
-        }, userFilter);
 
         UpdateUtil.loadRemoteVersion();
 
