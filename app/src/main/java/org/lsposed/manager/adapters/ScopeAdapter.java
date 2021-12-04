@@ -266,6 +266,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
         return true;
     }
 
+    @SuppressLint("WrongConstant")
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         ApplicationInfo info = selectedInfo;
         if (info == null) {

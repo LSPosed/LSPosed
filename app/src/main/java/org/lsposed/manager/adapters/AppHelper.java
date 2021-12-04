@@ -20,6 +20,7 @@
 
 package org.lsposed.manager.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
@@ -44,6 +45,7 @@ public class AppHelper {
     private static List<PackageInfo> appList;
     private static final ConcurrentHashMap<PackageInfo, CharSequence> appLabel = new ConcurrentHashMap<>();
 
+    @SuppressLint("WrongConstant")
     public static Intent getSettingsIntent(String packageName, int userId) {
         Intent intentToResolve = new Intent(Intent.ACTION_MAIN);
         intentToResolve.addCategory(SETTINGS_CATEGORY);
@@ -63,6 +65,7 @@ public class AppHelper {
         return intent;
     }
 
+    @SuppressLint("WrongConstant")
     public static Intent getLaunchIntentForPackage(String packageName, int userId) {
         Intent intentToResolve = new Intent(Intent.ACTION_MAIN);
         intentToResolve.addCategory(Intent.CATEGORY_INFO);

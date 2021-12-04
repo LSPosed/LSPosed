@@ -30,11 +30,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
 
+import org.lsposed.lspd.models.UserInfo;
 import org.lsposed.manager.App;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.repo.model.OnlineModule;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -50,6 +52,7 @@ public final class ModuleUtil {
     private final PackageManager pm;
     private final Set<ModuleListener> listeners = ConcurrentHashMap.newKeySet();
     private HashSet<String> enabledModules = new HashSet<>();
+    private List<UserInfo> users = new ArrayList<>();
     private Map<Pair<String, Integer>, InstalledModule> installedModules = new HashMap<>();
     private boolean modulesLoaded = false;
 
@@ -89,6 +92,7 @@ public final class ModuleUtil {
         }
 
         Map<Pair<String, Integer>, InstalledModule> modules = new HashMap<>();
+        var users = ConfigManager.getUsers();
         for (PackageInfo pkg : ConfigManager.getInstalledPackagesFromAllUsers(PackageManager.GET_META_DATA, false)) {
             ApplicationInfo app = pkg.applicationInfo;
 
@@ -100,9 +104,16 @@ public final class ModuleUtil {
 
         installedModules = modules;
 
+        this.users = users;
+
         enabledModules = new HashSet<>(Arrays.asList(ConfigManager.getEnabledModules()));
         modulesLoaded = true;
         listeners.forEach(ModuleListener::onModulesReloaded);
+    }
+
+    @Nullable
+    public List<UserInfo> getUsers() {
+        return modulesLoaded ? users : null;
     }
 
     public InstalledModule reloadSingleModule(String packageName, int userId) {

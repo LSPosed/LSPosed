@@ -21,6 +21,7 @@ package org.lsposed.lspd.service;
 
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 
+import android.annotation.SuppressLint;
 import android.app.IActivityManager;
 import android.app.IApplicationThread;
 import android.app.IServiceConnection;
@@ -101,17 +102,16 @@ public class ActivityManagerService {
         return am.startUserInBackground(userId);
     }
 
+    @SuppressLint("NewApi")
     public static Intent registerReceiver(String callerPackage,
                                           String callingFeatureId, IIntentReceiver receiver, IntentFilter filter,
                                           String requiredPermission, int userId, int flags) throws RemoteException {
         IActivityManager am = getActivityManager();
         if (am == null || thread == null) return null;
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S || (Build.VERSION.SDK_INT == Build.VERSION_CODES.R && Build.VERSION.PREVIEW_SDK_INT != 0))
-                return am.registerReceiverWithFeature(thread, callerPackage, callingFeatureId, "null", receiver, filter, requiredPermission, userId, flags);
-        } catch (Throwable ignored) {
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && Build.VERSION.PREVIEW_SDK_INT != 0))
+            return am.registerReceiverWithFeature(thread, callerPackage, callingFeatureId, "null", receiver, filter, requiredPermission, userId, flags);
+        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             return am.registerReceiverWithFeature(thread, callerPackage, callingFeatureId, receiver, filter, requiredPermission, userId, flags);
         } else {
             return am.registerReceiver(thread, callerPackage, receiver, filter, requiredPermission, userId, flags);
