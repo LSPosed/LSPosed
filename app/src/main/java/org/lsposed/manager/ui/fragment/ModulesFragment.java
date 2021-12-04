@@ -158,9 +158,19 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
         new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> {
             if (position < adapters.size()) {
-                tab.setText(adapters.get(position).getUser().name);
+                tab.setText(adapters.valueAt(position).getUser().name);
             }
         }).attach();
+
+        binding.tabLayout.addOnLayoutChangeListener((view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+            ViewGroup vg = (ViewGroup) binding.tabLayout.getChildAt(0);
+            int tabLayoutWidth = IntStream.range(0, binding.tabLayout.getTabCount()).map(i -> vg.getChildAt(i).getWidth()).sum();
+            if (tabLayoutWidth <= binding.getRoot().getWidth()) {
+                binding.tabLayout.setTabMode(TabLayout.MODE_FIXED);
+                binding.tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+            }
+        });
+
         binding.fab.setOnClickListener(v -> {
             var bundle = new Bundle();
             var user = adapters.get(binding.viewPager.getCurrentItem()).getUser();
@@ -212,14 +222,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         if (users.size() != 1) {
             binding.viewPager.setUserInputEnabled(true);
             binding.tabLayout.setVisibility(View.VISIBLE);
-            binding.tabLayout.addOnLayoutChangeListener((view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
-                ViewGroup vg = (ViewGroup) binding.tabLayout.getChildAt(0);
-                int tabLayoutWidth = IntStream.range(0, binding.tabLayout.getTabCount()).map(i -> vg.getChildAt(i).getWidth()).sum();
-                if (tabLayoutWidth <= binding.getRoot().getWidth()) {
-                    binding.tabLayout.setTabMode(TabLayout.MODE_FIXED);
-                    binding.tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-                }
-            });
             binding.fab.show();
         } else {
             binding.viewPager.setUserInputEnabled(false);
@@ -238,6 +240,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             }
         }
         adapters = tmp;
+        forEachAdaptor(ModuleAdapter::refresh);
         runOnUiThread(pagerAdapter::notifyDataSetChanged);
         updateModuleSummary();
     }
@@ -458,7 +461,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
         @Override
         public long getItemId(int position) {
-            return position;
+            return adapters.keyAt(position);
         }
     }
 
