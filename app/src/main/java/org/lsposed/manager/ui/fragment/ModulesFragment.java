@@ -463,6 +463,11 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         public long getItemId(int position) {
             return adapters.keyAt(position);
         }
+
+        @Override
+        public boolean containsItem(long itemId) {
+            return adapters.indexOfKey((int) itemId) >= 0;
+        }
     }
 
     ModuleAdapter createPickModuleAdapter(UserInfo userInfo) {
