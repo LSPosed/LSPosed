@@ -173,7 +173,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
         binding.fab.setOnClickListener(v -> {
             var bundle = new Bundle();
-            var user = adapters.get(binding.viewPager.getCurrentItem()).getUser();
+            var user = adapters.valueAt(binding.viewPager.getCurrentItem()).getUser();
             bundle.putParcelable("userInfo", user);
             var f = new RecyclerViewDialogFragment();
             f.setArguments(bundle);
