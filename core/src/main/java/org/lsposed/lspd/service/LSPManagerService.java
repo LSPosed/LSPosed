@@ -252,13 +252,11 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     }
 
     @SuppressLint("WrongConstant")
-    public static void broadcastIntent(String modulePackageName, int moduleUserId, boolean packageFullyRemoved) {
-        Intent intent = new Intent(Intent.ACTION_PACKAGE_CHANGED);
+    public static void broadcastIntent(Intent inIntent) {
+        var intent = new Intent("org.lsposed.manager.NOTIFICATION");
+        intent.putExtra(Intent.EXTRA_INTENT, inIntent);
         intent.addFlags(0x01000000); //Intent.FLAG_RECEIVER_INCLUDE_BACKGROUND
         intent.addFlags(0x00400000); //Intent.FLAG_RECEIVER_FROM_SHELL
-        intent.putExtra("android.intent.extra.PACKAGES", modulePackageName);
-        intent.putExtra(Intent.EXTRA_USER, moduleUserId);
-        intent.putExtra(Intent.ACTION_PACKAGE_FULLY_REMOVED, packageFullyRemoved);
         intent.setPackage(BuildConfig.MANAGER_INJECTED_PKG_NAME);
         try {
             ActivityManagerService.broadcastIntentWithFeature(null, intent,

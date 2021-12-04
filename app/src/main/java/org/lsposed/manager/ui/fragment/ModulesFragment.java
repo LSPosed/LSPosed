@@ -20,7 +20,6 @@
 package org.lsposed.manager.ui.fragment;
 
 import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
-import static androidx.recyclerview.widget.RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -37,6 +36,7 @@ import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -72,9 +72,9 @@ import org.lsposed.manager.App;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.adapters.AppHelper;
-import org.lsposed.manager.databinding.SwiperefreshRecyclerviewBinding;
 import org.lsposed.manager.databinding.FragmentPagerBinding;
 import org.lsposed.manager.databinding.ItemModuleBinding;
+import org.lsposed.manager.databinding.SwiperefreshRecyclerviewBinding;
 import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
 import org.lsposed.manager.ui.widget.EmptyStateRecyclerView;
@@ -95,12 +95,12 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     private static final PackageManager pm = App.getInstance().getPackageManager();
     private static final ModuleUtil moduleUtil = ModuleUtil.getInstance();
     private static final RepoLoader repoLoader = RepoLoader.getInstance();
-    private static final List<UserInfo> users = ConfigManager.getUsers();
     protected FragmentPagerBinding binding;
     protected SearchView searchView;
     private SearchView.OnQueryTextListener searchListener;
 
-    final ArrayList<ModuleAdapter> adapters = new ArrayList<>();
+    SparseArray<ModuleAdapter> adapters = new SparseArray<>();
+    PagerAdapter pagerAdapter = null;
 
     private ModuleUtil.InstalledModule selectedModule;
 
@@ -110,24 +110,22 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         searchListener = new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                adapters.forEach(adapter -> adapter.getFilter().filter(query));
+                forEachAdaptor(adapter -> adapter.getFilter().filter(query));
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String query) {
-                adapters.forEach(adapter -> adapter.getFilter().filter(query));
+                forEachAdaptor(adapter -> adapter.getFilter().filter(query));
                 return false;
             }
         };
+    }
 
-        if (users != null) {
-            for (var user : users) {
-                var adapter = new ModuleAdapter(user);
-                adapter.setHasStableIds(true);
-                adapter.setStateRestorationPolicy(PREVENT_WHEN_EMPTY);
-                adapters.add(adapter);
-            }
+    private void forEachAdaptor(Consumer<? super ModuleAdapter> action) {
+        var snapshot = adapters;
+        for (var i = 0; i < snapshot.size(); ++i) {
+            action.accept(snapshot.valueAt(i));
         }
     }
 
@@ -149,7 +147,8 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         binding = FragmentPagerBinding.inflate(inflater, container, false);
         binding.appBar.setLiftable(true);
         setupToolbar(binding.toolbar, binding.clickView, R.string.Modules, R.menu.menu_modules);
-        binding.viewPager.setAdapter(new PagerAdapter(this));
+        pagerAdapter = new PagerAdapter(this);
+        binding.viewPager.setAdapter(pagerAdapter);
         binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -159,29 +158,22 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
         new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> {
             if (position < adapters.size()) {
-                tab.setText(adapters.get(position).getUser().name);
+                tab.setText(adapters.valueAt(position).getUser().name);
             }
         }).attach();
 
-        if (users != null && users.size() != 1) {
-            binding.viewPager.setUserInputEnabled(true);
-            binding.tabLayout.setVisibility(View.VISIBLE);
-            binding.tabLayout.addOnLayoutChangeListener((view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
-                ViewGroup vg = (ViewGroup) binding.tabLayout.getChildAt(0);
-                int tabLayoutWidth = IntStream.range(0, binding.tabLayout.getTabCount()).map(i -> vg.getChildAt(i).getWidth()).sum();
-                if (tabLayoutWidth <= binding.getRoot().getWidth()) {
-                    binding.tabLayout.setTabMode(TabLayout.MODE_FIXED);
-                    binding.tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-                }
-            });
-            binding.fab.show();
-        } else {
-            binding.viewPager.setUserInputEnabled(false);
-            binding.tabLayout.setVisibility(View.GONE);
-        }
+        binding.tabLayout.addOnLayoutChangeListener((view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+            ViewGroup vg = (ViewGroup) binding.tabLayout.getChildAt(0);
+            int tabLayoutWidth = IntStream.range(0, binding.tabLayout.getTabCount()).map(i -> vg.getChildAt(i).getWidth()).sum();
+            if (tabLayoutWidth <= binding.getRoot().getWidth()) {
+                binding.tabLayout.setTabMode(TabLayout.MODE_FIXED);
+                binding.tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+            }
+        });
+
         binding.fab.setOnClickListener(v -> {
             var bundle = new Bundle();
-            var user = adapters.get(binding.viewPager.getCurrentItem()).getUser();
+            var user = adapters.valueAt(binding.viewPager.getCurrentItem()).getUser();
             bundle.putParcelable("userInfo", user);
             var f = new RecyclerViewDialogFragment();
             f.setArguments(bundle);
@@ -190,7 +182,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
         moduleUtil.addListener(this);
         repoLoader.addListener(this);
-        updateModuleSummary();
+        onModulesReloaded();
 
         return binding.getRoot();
     }
@@ -214,23 +206,48 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     @Override
     public void onResume() {
         super.onResume();
-        adapters.forEach(ModuleAdapter::refresh);
+        forEachAdaptor(ModuleAdapter::refresh);
     }
 
     @Override
     public void onSingleModuleReloaded(ModuleUtil.InstalledModule module) {
-        adapters.forEach(ModuleAdapter::refresh);
+        forEachAdaptor(ModuleAdapter::refresh);
     }
 
     @Override
     public void onModulesReloaded() {
-        adapters.forEach(ModuleAdapter::refresh);
+        var users = moduleUtil.getUsers();
+        if (users == null) return;
+
+        if (users.size() != 1) {
+            binding.viewPager.setUserInputEnabled(true);
+            binding.tabLayout.setVisibility(View.VISIBLE);
+            binding.fab.show();
+        } else {
+            binding.viewPager.setUserInputEnabled(false);
+            binding.tabLayout.setVisibility(View.GONE);
+        }
+
+        var tmp = new SparseArray<ModuleAdapter>(users.size());
+        var snapshot = adapters;
+        for (var user : users) {
+            if (snapshot.indexOfKey(user.id) >= 0) {
+                tmp.put(user.id, snapshot.get(user.id));
+            } else {
+                var adapter = new ModuleAdapter(user);
+                adapter.setHasStableIds(true);
+                tmp.put(user.id, adapter);
+            }
+        }
+        adapters = tmp;
+        forEachAdaptor(ModuleAdapter::refresh);
+        runOnUiThread(pagerAdapter::notifyDataSetChanged);
         updateModuleSummary();
     }
 
     @Override
     public void onRepoLoaded() {
-        adapters.forEach(ModuleAdapter::refresh);
+        forEachAdaptor(ModuleAdapter::refresh);
     }
 
     private void updateModuleSummary() {
@@ -261,6 +278,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 .show();
     }
 
+    @SuppressLint("WrongConstant")
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         if (selectedModule == null) {
@@ -348,9 +366,9 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             if (fragment == null || arguments == null) {
                 return null;
             }
-            int position = arguments.getInt("position");
+            int userId = arguments.getInt("user_id");
             binding = SwiperefreshRecyclerviewBinding.inflate(getLayoutInflater(), container, false);
-            adapter = fragment.adapters.get(position);
+            adapter = fragment.adapters.get(userId);
             binding.recyclerView.setAdapter(adapter);
             binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
             binding.swipeRefreshLayout.setOnRefreshListener(adapter::fullRefresh);
@@ -430,7 +448,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         @Override
         public Fragment createFragment(int position) {
             Bundle bundle = new Bundle();
-            bundle.putInt("position", position);
+            bundle.putInt("user_id", adapters.keyAt(position));
             Fragment fragment = new ModuleListFragment();
             fragment.setArguments(bundle);
             return fragment;
@@ -443,7 +461,12 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
         @Override
         public long getItemId(int position) {
-            return position;
+            return adapters.keyAt(position);
+        }
+
+        @Override
+        public boolean containsItem(long itemId) {
+            return adapters.indexOfKey((int) itemId) >= 0;
         }
     }
 
