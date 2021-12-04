@@ -214,6 +214,7 @@ public class App extends Application {
                     case ACTION_USER_ADDED:
                     case ACTION_USER_REMOVED:
                     case ACTION_USER_INFO_CHANGED: {
+                        App.getExecutorService().submit(() -> ModuleUtil.getInstance().reloadInstalledModules());
                     }
                 }
             }
