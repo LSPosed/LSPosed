@@ -189,25 +189,33 @@ public class App extends Application {
         LocaleDelegate.setDefaultLocale(getLocale());
 
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Intent.ACTION_PACKAGE_CHANGED);
-        intentFilter.addAction(App.ACTION_USER_INFO_CHANGED);
+        intentFilter.addAction("org.lsposed.manager.NOTIFICATION");
         registerReceiver(new BroadcastReceiver() {
             @Override
-            public void onReceive(Context context, Intent intent) {
-                var action = intent.getAction();
-                var userId = intent.getIntExtra(Intent.EXTRA_USER, 0);
-                var packageName = intent.getStringExtra("android.intent.extra.PACKAGES");
-                var packageRemovedForAllUsers = intent.getBooleanExtra(EXTRA_REMOVED_FOR_ALL_USERS, false);
-                var isXposedModule = intent.getBooleanExtra("isXposedModule", false);
-                if (packageName != null) {
-                    if (isXposedModule)
-                        ModuleUtil.getInstance().reloadSingleModule(packageName, userId, packageRemovedForAllUsers);
-                    Log.d(TAG, "onReceive: " + intent);//App changed
+            public void onReceive(Context context, Intent inIntent) {
+                var intent = (Intent) inIntent.getParcelableExtra(Intent.EXTRA_INTENT);
+                Log.d(TAG, "onReceive: " + intent);
+                switch (intent.getAction()) {
+                    case Intent.ACTION_PACKAGE_ADDED:
+                    case Intent.ACTION_PACKAGE_CHANGED:
+                    case Intent.ACTION_PACKAGE_FULLY_REMOVED:
+                    case Intent.ACTION_UID_REMOVED: {
+                        var userId = intent.getIntExtra(Intent.EXTRA_USER, 0);
+                        var packageName = intent.getStringExtra("android.intent.extra.PACKAGES");
+                        var packageRemovedForAllUsers = intent.getBooleanExtra(EXTRA_REMOVED_FOR_ALL_USERS, false);
+                        var isXposedModule = intent.getBooleanExtra("isXposedModule", false);
+                        if (packageName != null) {
+                            if (isXposedModule)
+                                ModuleUtil.getInstance().reloadSingleModule(packageName, userId, packageRemovedForAllUsers);
+                            else
+                                App.getExecutorService().submit(() -> AppHelper.getAppList(true));
+                        }
+                    }
+                    case ACTION_USER_ADDED:
+                    case ACTION_USER_REMOVED:
+                    case ACTION_USER_INFO_CHANGED: {
+                    }
                 }
-                if (userId != 0)
-                    if (App.ACTION_USER_ADDED.equals(action) || App.ACTION_USER_REMOVED.equals(action))
-                        //reload();
-                        Log.d(TAG, "onReceive: " + intent);
             }
         }, intentFilter);
 
