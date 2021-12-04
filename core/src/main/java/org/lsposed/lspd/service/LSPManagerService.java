@@ -85,7 +85,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     private static final String PROP_NAME = "dalvik.vm.dex2oat-flags";
     private static final String PROP_VALUE = "--inline-max-code-units=0";
     // this maybe useful when obtaining the manager binder
-    private static final String RANDOM_UUID = UUID.randomUUID().toString();
+    private static String RANDOM_UUID = null;
     private static final String SHORTCUT_ID = "org.lsposed.manager.shortcut";
     public static final int NOTIFICATION_ID = 114514;
     public static final String CHANNEL_ID = "lsposed";
@@ -393,7 +393,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                 // check if there's one running
                 // or it's run by ourselves after force stopping
                 var snapshot = guardSnapshot();
-                if (intent.getCategories().contains(RANDOM_UUID) ||
+                if ((RANDOM_UUID != null && intent.getCategories().contains(RANDOM_UUID)) ||
                         (snapshot != null && snapshot.isAlive() && snapshot.uid == BuildConfig.MANAGER_INJECTED_UID)) {
                     Log.d(TAG, "manager is still running or is on its way");
                     // there's one running parasitic manager
@@ -434,6 +434,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
             Log.d(TAG, "stopped old package");
             if (addUUID) {
                 intent = (Intent) intent.clone();
+                RANDOM_UUID = UUID.randomUUID().toString();
                 intent.addCategory(RANDOM_UUID);
             }
             ActivityManagerService.startActivityAsUserWithFeature("android", null, intent, intent.getType(), null, null, 0, 0, null, null, 0);
@@ -458,7 +459,11 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     // return true to send manager binder
     synchronized boolean postStartManager(int pid, int uid) {
-        return pid == managerPid && uid == BuildConfig.MANAGER_INJECTED_UID;
+        if (pid == managerPid && uid == BuildConfig.MANAGER_INJECTED_UID) {
+            RANDOM_UUID = null;
+            return true;
+        }
+        return false;
     }
 
     public @NonNull
