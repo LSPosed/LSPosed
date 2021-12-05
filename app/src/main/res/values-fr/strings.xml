@@ -33,7 +33,7 @@
     <string name="module_repo_loading">Chargement…</string>
     <string name="module_repo_up_to_date">Tous les modules sont à jour</string>
     <plurals name="module_repo_upgradable">
-        <item quantity="one">%d module évolutif</item>
+        <item quantity="one">%d modules évolutifs</item>
         <item quantity="other">%d modules évolutifs</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[Voir le code source sur %1$s<br/>Rejoindre notre canal %2$s]]></string>
