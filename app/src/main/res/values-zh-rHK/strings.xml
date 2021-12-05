@@ -35,7 +35,7 @@
         <item quantity="other">%d 模組可更新</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[在 %1$s 查看源碼<br/>加入我們的 %2$s 頻道]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">null</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">DarKnighT0v0</string>
     <string name="install">安裝</string>
     <string name="install_summary">點擊安裝 LSPosed</string>
     <string name="not_installed">未安裝</string>
@@ -69,6 +69,7 @@
     <string name="update_lsposed_msg">確認更新LSPosed? 此裝置會於更新完成後重啟</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">儲存</string>
+    <string name="nav_item_logs_verbose">詳細記錄檔</string>
     <string name="nav_item_logs_module">模組紀錄檔</string>
     <string name="logs_save_failed2">儲存失敗:\n%s</string>
     <string name="menuClearLog">立即清理紀錄檔</string>
@@ -80,6 +81,8 @@
     <string name="menuReload">重新載入</string>
     <string name="logs_clear_failed_2">清除記錄檔失敗</string>
     <string name="menu_enable_word_wrap">自動換行</string>
+    <string name="enabled_verbose_log">詳細記錄檔已啟用</string>
+    <string name="disabled_verbose_log">詳細記錄檔已禁用</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Xposed 模組尚未啟動</string>
     <string name="module_is_not_activated_yet_detailed">%s 已安裝, 但尚未啟動</string>
