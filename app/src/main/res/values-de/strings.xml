@@ -30,6 +30,12 @@
     <string name="About">Mehr Erfahren</string>
     <string name="report_issue">Fehler melden</string>
     <string name="module_repo">Modularchiv</string>
+    <string name="module_repo_loading">Wird geladen…</string>
+    <string name="module_repo_up_to_date">Alle Module sind auf dem neusten Stand</string>
+    <plurals name="module_repo_upgradable">
+        <item quantity="one">%d Modul Update verfügbar</item>
+        <item quantity="other">%d Module Update verfügbar</item>
+    </plurals>
     <string name="about_view_source_code"><![CDATA[Den Quellcode finden Sie unter %1$s<br/>Folgen Sie unserem %2$s-Kanal]]></string>
     <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">mshinni80</string>
     <string name="install">Installieren</string>
@@ -53,6 +59,7 @@
     <string name="info_system_version">System Version</string>
     <string name="info_device">Gerät</string>
     <string name="info_system_abi">System ABI</string>
+    <string name="info_api">Injektionsschnittstelle</string>
     <string name="parasitic_recommend">Parasitärer Manager empfohlen</string>
     <string name="parasitic_recommend_summary">LSPosed unterstützt nun eine Systemparasitierung, um die Erkennung zu vermeiden. Sie können den Manager sicher deinstallieren, nachdem Sie erfolgreich eine Verknüpfung des parasitären Managers erstellt haben. In jedem Fall können Sie den Manager von /data/adb/lspd/manager.apk wieder erneut installieren.</string>
     <string name="create_shortcut">Verknüpfung erstellen</string>
@@ -63,6 +70,7 @@
 Gerät wird nach dem Update neu gestartet</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">speichern</string>
+    <string name="nav_item_logs_verbose">Ausführliche Logs</string>
     <string name="nav_item_logs_module">Modul-Protokolle</string>
     <string name="logs_save_failed2">Speichern fehlgeschlagen:\n%s</string>
     <string name="menuClearLog">Protokoll jetzt löschen</string>
@@ -74,6 +82,8 @@ Gerät wird nach dem Update neu gestartet</string>
     <string name="menuReload">Erneut laden</string>
     <string name="logs_clear_failed_2">Fehler beim Löschen des Protokolls</string>
     <string name="menu_enable_word_wrap">Wortumbruch</string>
+    <string name="enabled_verbose_log">Ausführliches Log aktiviert</string>
+    <string name="disabled_verbose_log">Ausführliches Log deaktiviert</string>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Das LSPosed-Modul wurde noch nicht aktiviert</string>
     <string name="module_is_not_activated_yet_detailed">%s wurde installiert, aber noch nicht aktiviert</string>
@@ -150,6 +160,7 @@ Gerät wird nach dem Update neu gestartet</string>
     <string name="pure_black_dark_theme_summary">Das schwarze Thema verwenden, wenn dunkles Thema aktiviert ist</string>
     <string name="settings_group_theme">Thema</string>
     <string name="settings_backup_and_restore">Sichern und Wiederherstellen</string>
+    <string name="settings_backup_summery">Liste der Backup-Module und -Bereiche.</string>
     <string name="settings_backup">Back-up</string>
     <string name="settings_backup_failed2">Sicherung fehlgeschlagen:\n%s</string>
     <string name="settings_restore">Wiederherstellen</string>
