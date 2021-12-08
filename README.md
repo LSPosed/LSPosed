@@ -23,7 +23,7 @@ Android 8.1 ~ 12, 12L DP1
     - If the shortcut cannot be added, you can install the manager located at `/data/adb/lspd/manager.apk` manually
     - If you accidentally deleted the shortcut, reboot your device or install the manager manually to add the shortcut again
     - If you don't need a shortcut, install the manager manually and you can disable future shortcut being added in the settings
-    - In any case, you can dial `*#*#5776733#*#*` (aka LSPosed) to launch the manager with a dialer app
+    - In any case, you can dial `*#*#5776733#*#*` (aka LSPosed) to launch the manager if you have a dialer
 6. Have fun :)
 
 ## Download
