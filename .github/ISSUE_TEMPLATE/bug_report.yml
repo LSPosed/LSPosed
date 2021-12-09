@@ -78,6 +78,6 @@ body:
   - type: textarea
     attributes:
       label: Logs/日志
-      placeholder: Upload logs by clicking the bar on the bottom/点击文本框底栏上传日志文件
+      placeholder: Upload logs by clicking the bar on the bottom. If you are facing activation problem, please provide adb log (see https://t.me/hzrtools/12 for PC user and https://t.me/hzrtools/10 for non-PC user). Without log, the issue will be closed. /点击文本框底栏上传日志文件。如遇激活问题，请提供 adb 日志。（PC 用户请查阅 https://t.me/hzrtools/12；非 PC 用户请查阅 https://t.me/hzrtools/10）无日志 issue 会被关闭。
     validations:
       required: true
