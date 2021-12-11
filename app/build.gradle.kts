@@ -17,8 +17,6 @@
  * Copyright (C) 2021 LSPosed Contributors
  */
 
-import com.android.build.api.component.analytics.AnalyticsEnabledApplicationVariant
-import com.android.build.api.variant.impl.ApplicationVariantImpl
 import com.android.build.gradle.internal.dsl.BuildType
 import java.nio.file.Paths
 import java.time.Instant
@@ -127,16 +125,6 @@ android {
         }
     }
 }
-
-androidComponents.onVariants { v ->
-    val variant: ApplicationVariantImpl =
-        if (v is ApplicationVariantImpl) v
-        else (v as AnalyticsEnabledApplicationVariant).delegate as ApplicationVariantImpl
-    variant.outputs.forEach {
-        it.outputFileName.set("LSPosedManager-v${verName}-${verCode}-${variant.name}.apk")
-    }
-}
-
 
 val optimizeReleaseRes = task("optimizeReleaseRes").doLast {
     val aapt2 = File(

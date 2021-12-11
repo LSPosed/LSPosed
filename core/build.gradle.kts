@@ -17,8 +17,6 @@
  * Copyright (C) 2021 LSPosed Contributors
  */
 
-import com.android.build.api.component.analytics.AnalyticsEnabledApplicationVariant
-import com.android.build.api.variant.impl.ApplicationVariantImpl
 import com.android.build.gradle.BaseExtension
 import com.android.ide.common.signing.KeystoreHelper
 import org.apache.commons.codec.binary.Hex
@@ -28,6 +26,7 @@ import java.io.ByteArrayOutputStream
 import java.io.FileOutputStream
 import java.io.PrintStream
 import java.security.MessageDigest
+import java.util.*
 import java.util.jar.JarFile
 import java.util.zip.ZipOutputStream
 
@@ -188,16 +187,13 @@ val zipAll = task("zipAll", Task::class) {
 
 }
 
-androidComponents.onVariants { v ->
-    val variant: ApplicationVariantImpl =
-        if (v is ApplicationVariantImpl) v
-        else (v as AnalyticsEnabledApplicationVariant).delegate as ApplicationVariantImpl
-    val variantCapped = variant.name.capitalize()
-    val variantLowered = variant.name.toLowerCase()
-    val buildTypeCapped = variant.buildType!!.capitalize()
-    val buildTypeLowered = variant.buildType!!.toLowerCase()
-    val flavorCapped = variant.flavorName!!.capitalize()
-    val flavorLowered = variant.flavorName!!.toLowerCase()
+android.applicationVariants.forEach { variant ->
+    val variantCapped = variant.name.capitalize(Locale.ROOT)
+    val variantLowered = variant.name.toLowerCase(Locale.ROOT)
+    val buildTypeCapped = variant.buildType.name.capitalize(Locale.ROOT)
+    val buildTypeLowered = variant.buildType.name.toLowerCase(Locale.ROOT)
+    val flavorCapped = variant.flavorName!!.capitalize(Locale.ROOT)
+    val flavorLowered = variant.flavorName!!.toLowerCase(Locale.ROOT)
 
     val magiskDir = "$buildDir/magisk/$variantLowered"
 
@@ -250,7 +246,7 @@ androidComponents.onVariants { v ->
                 }
             }
         }
-        variant.variantData.registerJavaGeneratingTask(signInfoTask, arrayListOf(outSrcDir))
+        variant.registerJavaGeneratingTask(signInfoTask, arrayListOf(outSrcDir))
     }
 
     val moduleId = "${flavorLowered}_$moduleBaseId"
@@ -389,7 +385,7 @@ val tmpApk = "/data/local/tmp/lsp.apk"
 val pushApk = task("pushApk", Exec::class) {
     dependsOn(":app:assembleDebug")
     workingDir("${project(":app").buildDir}/outputs/apk/debug")
-    commandLine(adb, "push", "LSPosedManager-v$verName-$verCode-debug.apk", tmpApk)
+    commandLine(adb, "push", "app-debug.apk", tmpApk)
 }
 val openApp = task("openApp", Exec::class) {
     commandLine(
