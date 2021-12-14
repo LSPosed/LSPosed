@@ -55,6 +55,7 @@ import android.os.SystemProperties;
 import android.system.ErrnoException;
 import android.system.Os;
 import android.util.Log;
+import android.view.IWindowManager;
 
 import androidx.annotation.NonNull;
 
@@ -651,7 +652,14 @@ public class LSPManagerService extends ILSPManagerService.Stub {
             if (currentUser == null) return -1;
             var parent = UserService.getProfileParent(userId);
             if (parent < 0) return -1;
-            if (currentUser.id != parent && !ActivityManagerService.switchUser(parent)) return -1;
+            if (currentUser.id != parent) {
+                if (!ActivityManagerService.switchUser(parent)) return -1;
+                var window = android.os.ServiceManager.getService("window");
+                if (window != null) {
+                    var wm = IWindowManager.Stub.asInterface(window);
+                    wm.lockNow(null);
+                }
+            }
         }
         return ActivityManagerService.startActivityAsUserWithFeature("android", null, intent, intent.getType(), null, null, 0, 0, null, null, userId);
     }
