@@ -188,7 +188,6 @@ val zipAll = task("zipAll", Task::class) {
 }
 
 fun afterEval() = android.applicationVariants.forEach { variant ->
-    println(variant)
     val variantCapped = variant.name.capitalize(Locale.ROOT)
     val variantLowered = variant.name.toLowerCase(Locale.ROOT)
     val buildTypeCapped = variant.buildType.name.capitalize(Locale.ROOT)
