@@ -129,7 +129,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
         binding.clickView.setOnClickListener(l);
         repoLoader.addListener(this);
         moduleUtil.addListener(this);
-        updateRepoSummary();
+        onRepoLoaded();
         return binding.getRoot();
     }
 
