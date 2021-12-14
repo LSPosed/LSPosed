@@ -262,7 +262,7 @@ androidComponents.onVariants { v ->
         into(magiskDir)
         from("${rootProject.projectDir}/README.md")
         from("$projectDir/magisk_module") {
-            exclude("riru.sh", "module.prop", "customize.sh", "sepolicy.rule")
+            exclude("riru.sh", "module.prop", "customize.sh", "sepolicy.rule", "post-fs-data.sh")
         }
         from("$projectDir/magisk_module") {
             include("module.prop")
@@ -281,7 +281,7 @@ androidComponents.onVariants { v ->
             filter<FixCrLfFilter>("eol" to FixCrLfFilter.CrLf.newInstance("lf"))
         }
         from("$projectDir/magisk_module") {
-            include("customize.sh")
+            include("customize.sh", "post-fs-data.sh")
             val tokens = mapOf("FLAVOR" to flavorLowered)
             filter<ReplaceTokens>("tokens" to tokens)
             filter<FixCrLfFilter>("eol" to FixCrLfFilter.CrLf.newInstance("lf"))
