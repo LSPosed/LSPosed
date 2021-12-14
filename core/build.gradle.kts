@@ -186,7 +186,6 @@ dependencies {
 val zipAll = task("zipAll", Task::class) {
 
 }
-var x = fun() = 1
 
 fun afterEval() = android.applicationVariants.forEach { variant ->
     println(variant)
