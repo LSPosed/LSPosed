@@ -14,11 +14,16 @@
 # You should have received a copy of the GNU General Public License
 # along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
 #
-# Copyright (C) 2020 EdXposed Contributors
 # Copyright (C) 2021 LSPosed Contributors
 #
 
 MODDIR=${0%/*}
 
+FLAVOR=@FLAVOR@
+
+if ! [ "$ZYGISK_ENABLE" = "$([ $FLAVOR = "zygisk" ] && echo 1)" ]; then
+  log -t "LSPosed" "$FLAVOR does not match, skipping"
+  exit
+fi
 rm -f "/data/local/tmp/lspd.dex"
 unshare -m sh -c "$MODDIR/lspd &"
