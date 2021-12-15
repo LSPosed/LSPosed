@@ -120,7 +120,7 @@ public class BaseFragment extends Fragment {
                 return;
             }
         }
-        Toast.makeText(requireContext(), str, lengthShort ? Toast.LENGTH_SHORT : Toast.LENGTH_LONG).show();
+        runOnUiThread(() -> Toast.makeText(requireContext(), str, lengthShort ? Toast.LENGTH_SHORT : Toast.LENGTH_LONG).show());
     }
 
 }
