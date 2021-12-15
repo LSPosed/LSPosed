@@ -19,7 +19,8 @@
 
 package org.lsposed.manager.ui.fragment;
 
-import android.app.Activity;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Toast;
 
@@ -39,6 +40,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 
 public class BaseFragment extends Fragment {
+    private final Handler uiHandler = new Handler(Looper.getMainLooper());
+
     public void navigateUp() {
         getNavController().navigateUp();
     }
@@ -81,29 +84,21 @@ public class BaseFragment extends Fragment {
     }
 
     public void runOnUiThread(Runnable runnable) {
-        Activity activity = getActivity();
-        if (activity != null && !activity.isFinishing()) {
-            activity.runOnUiThread(runnable);
-        }
+        uiHandler.post(runnable);
     }
 
     public <T> Future<T> runOnUiThread(Callable<T> callable) {
-        Activity activity = getActivity();
-        if (activity != null && !activity.isFinishing()) {
-            var task = new FutureTask<>(callable);
-            activity.runOnUiThread(task);
-            return task;
-        } else {
-            return new FutureTask<>(() -> null);
-        }
+        var task = new FutureTask<>(callable);
+        runOnUiThread(task);
+        return task;
     }
 
     public void showHint(@StringRes int res, boolean lengthShort, @StringRes int actionRes, View.OnClickListener action) {
-        showHint(getString(res), lengthShort, getString(actionRes), action);
+        showHint(App.getInstance().getString(res), lengthShort, App.getInstance().getString(actionRes), action);
     }
 
     public void showHint(@StringRes int res, boolean lengthShort) {
-        showHint(getString(res), lengthShort, null, null);
+        showHint(App.getInstance().getString(res), lengthShort, null, null);
     }
 
     public void showHint(CharSequence str, boolean lengthShort) {
@@ -120,7 +115,7 @@ public class BaseFragment extends Fragment {
                 return;
             }
         }
-        Toast.makeText(requireContext(), str, lengthShort ? Toast.LENGTH_SHORT : Toast.LENGTH_LONG).show();
+        runOnUiThread(Toast.makeText(App.getInstance(), str, lengthShort ? Toast.LENGTH_SHORT : Toast.LENGTH_LONG)::show);
     }
 
 }
