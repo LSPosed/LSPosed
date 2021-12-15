@@ -40,7 +40,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 
 public class BaseFragment extends Fragment {
-    private Handler uiHandler = new Handler(Looper.getMainLooper());
+    private final Handler uiHandler = new Handler(Looper.getMainLooper());
 
     public void navigateUp() {
         getNavController().navigateUp();
