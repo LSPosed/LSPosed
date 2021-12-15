@@ -112,8 +112,8 @@ jobs:
       with:
         name: mappings
         path: |
-          core/build/outputs/mapping/release
-          app/build/outputs/mapping/release
+          core/build/outputs/mapping
+          app/build/outputs/mapping
     - name: Post to channel
       if: ${{ github.event_name != 'pull_request' && success() && github.ref == 'refs/heads/master' }}
       env:
