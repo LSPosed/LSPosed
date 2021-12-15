@@ -94,11 +94,11 @@ public class BaseFragment extends Fragment {
     }
 
     public void showHint(@StringRes int res, boolean lengthShort, @StringRes int actionRes, View.OnClickListener action) {
-        showHint(getString(res), lengthShort, getString(actionRes), action);
+        showHint(App.getInstance().getString(res), lengthShort, App.getInstance().getString(actionRes), action);
     }
 
     public void showHint(@StringRes int res, boolean lengthShort) {
-        showHint(getString(res), lengthShort, null, null);
+        showHint(App.getInstance().getString(res), lengthShort, null, null);
     }
 
     public void showHint(CharSequence str, boolean lengthShort) {
