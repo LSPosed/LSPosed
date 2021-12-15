@@ -19,7 +19,6 @@
 
 package org.lsposed.manager.ui.fragment;
 
-import android.app.Activity;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
@@ -41,6 +40,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 
 public class BaseFragment extends Fragment {
+    private Handler uiHandler = new Handler(Looper.getMainLooper());
+
     public void navigateUp() {
         getNavController().navigateUp();
     }
@@ -83,18 +84,13 @@ public class BaseFragment extends Fragment {
     }
 
     public void runOnUiThread(Runnable runnable) {
-        new Handler(Looper.getMainLooper()).post(runnable);
+        uiHandler.post(runnable);
     }
 
     public <T> Future<T> runOnUiThread(Callable<T> callable) {
-        Activity activity = getActivity();
-        if (activity != null && !activity.isFinishing()) {
-            var task = new FutureTask<>(callable);
-            activity.runOnUiThread(task);
-            return task;
-        } else {
-            return new FutureTask<>(() -> null);
-        }
+        var task = new FutureTask<>(callable);
+        runOnUiThread(task);
+        return task;
     }
 
     public void showHint(@StringRes int res, boolean lengthShort, @StringRes int actionRes, View.OnClickListener action) {
