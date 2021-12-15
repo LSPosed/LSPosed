@@ -20,6 +20,8 @@
 package org.lsposed.manager.ui.fragment;
 
 import android.app.Activity;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Toast;
 
@@ -81,10 +83,7 @@ public class BaseFragment extends Fragment {
     }
 
     public void runOnUiThread(Runnable runnable) {
-        Activity activity = getActivity();
-        if (activity != null && !activity.isFinishing()) {
-            activity.runOnUiThread(runnable);
-        }
+        new Handler(Looper.getMainLooper()).post(runnable);
     }
 
     public <T> Future<T> runOnUiThread(Callable<T> callable) {
