@@ -115,7 +115,7 @@ public class BaseFragment extends Fragment {
                 return;
             }
         }
-        runOnUiThread(() -> Toast.makeText(App.getInstance(), str, lengthShort ? Toast.LENGTH_SHORT : Toast.LENGTH_LONG).show());
+        runOnUiThread(Toast.makeText(App.getInstance(), str, lengthShort ? Toast.LENGTH_SHORT : Toast.LENGTH_LONG)::show);
     }
 
 }
