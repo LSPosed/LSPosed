@@ -12,36 +12,23 @@
 #include <sys/syscall.h>
 #include <atomic>
 #include <bit>
+#include <climits>
 
 #include "common.h"
 #include "trampoline.h"
 
 static_assert(std::endian::native == std::endian::little, "Unsupported architecture");
 
-struct Tuple {
-    size_t count;
-    uintptr_t addr;
-};
-
-#if defined(__i386__) || defined(__arm__)
-using AddrWithSize = __uint64_t;
-#elif defined(__x86_64__) || defined(__aarch64__)
-using AddrWithSize = __uint128_t;
-#else
-#error Unsupported architecture
-#endif
-
-static_assert(sizeof(AddrWithSize) == sizeof(Tuple), "Unsupported architecture");
 union Trampoline {
-    Tuple split;
-    AddrWithSize mixed;
+    uintptr_t mixed;
+    struct {
+        unsigned count : 12;
+        uintptr_t addr : sizeof(uintptr_t) * CHAR_BIT - 12;
+    };
 };
-static_assert(std::atomic<AddrWithSize>::is_always_lock_free, "Unsupported architecture");
 
-[[maybe_unused]] void AssertAddrWithSize() {
-    std::atomic <AddrWithSize> t;
-    t.fetch_add(1);
-}
+static_assert(sizeof(Trampoline) == sizeof(uintptr_t), "Unsupported architecture");
+static_assert(std::atomic_uintptr_t ::is_always_lock_free, "Unsupported architecture");
 
 // trampoline:
 // 1. set eax/r0/x0 to the hook ArtMethod addr
@@ -71,24 +58,23 @@ unsigned char trampoline[] = "\x00\x00\x9f\xe5\x20\xf0\x90\xe5\x78\x56\x34\x12";
 // 78 56 34 12 ; 0x1234567812345678 (addr of the hook method)
 unsigned char trampoline[] = "\x60\x00\x00\x58\x10\x00\x40\xf8\x00\x02\x1f\xd6\x78\x56\x34\x12\x78\x56\x34\x12";
 #endif
-static std::atomic <AddrWithSize> trampoline_pool{Trampoline{.split = {.count = 0, .addr = 0}}.mixed};
+static std::atomic_uintptr_t trampoline_pool{Trampoline{.count = 0, .addr = 0}.mixed};
 static std::atomic_flag trampoline_lock{false};
 static constexpr size_t trampolineSize = roundUpToPtrSize(sizeof(trampoline));
 static constexpr size_t pageSize = 4096;
 static constexpr size_t trampolineNumPerPage = pageSize / trampolineSize;
-static_assert(uint16_t(-1) > trampolineNumPerPage, "Unsupported Architecture");
 
 static inline void FlushCache(void *addr, size_t size) {
     __builtin___clear_cache((char *) addr, (char *) ((uintptr_t) addr + size));
 }
 
 void *genTrampoline(void *hookMethod) {
-    size_t count;
+    unsigned count;
     uintptr_t addr;
     while (true) {
         auto tl = Trampoline {.mixed = trampoline_pool.fetch_add(1, std::memory_order_release)};
-        count = tl.split.count;
-        addr = tl.split.addr;
+        count = tl.count;
+        addr = tl.addr;
         if (addr == 0 || count >= trampolineNumPerPage) {
             if (trampoline_lock.test_and_set(std::memory_order_acq_rel)) {
                 trampoline_lock.wait(true, std::memory_order_acquire);
@@ -104,8 +90,8 @@ void *genTrampoline(void *hookMethod) {
                     return nullptr;
                 }
                 count = 0;
-                tl.split.addr = addr;
-                tl.split.count = count + 1;
+                tl.addr = addr;
+                tl.count = count + 1;
                 trampoline_pool.store(tl.mixed, std::memory_order_release);
                 trampoline_lock.clear(std::memory_order_release);
                 trampoline_lock.notify_all();
