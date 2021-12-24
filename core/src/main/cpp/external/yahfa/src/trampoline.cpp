@@ -20,11 +20,8 @@
 static_assert(std::endian::native == std::endian::little, "Unsupported architecture");
 
 union Trampoline {
-    uintptr_t mixed;
-    struct {
-        unsigned count : 12;
-        uintptr_t addr : sizeof(uintptr_t) * CHAR_BIT - 12;
-    };
+    uintptr_t addr;
+    unsigned count : 12;
 };
 
 static_assert(sizeof(Trampoline) == sizeof(uintptr_t), "Unsupported architecture");
@@ -58,7 +55,7 @@ unsigned char trampoline[] = "\x00\x00\x9f\xe5\x20\xf0\x90\xe5\x78\x56\x34\x12";
 // 78 56 34 12 ; 0x1234567812345678 (addr of the hook method)
 unsigned char trampoline[] = "\x60\x00\x00\x58\x10\x00\x40\xf8\x00\x02\x1f\xd6\x78\x56\x34\x12\x78\x56\x34\x12";
 #endif
-static std::atomic_uintptr_t trampoline_pool{Trampoline{.count = 0, .addr = 0}.mixed};
+static std::atomic_uintptr_t trampoline_pool{0};
 static std::atomic_flag trampoline_lock{false};
 static constexpr size_t trampolineSize = roundUpToPtrSize(sizeof(trampoline));
 static constexpr size_t pageSize = 4096;
@@ -72,9 +69,9 @@ void *genTrampoline(void *hookMethod) {
     unsigned count;
     uintptr_t addr;
     while (true) {
-        auto tl = Trampoline {.mixed = trampoline_pool.fetch_add(1, std::memory_order_release)};
+        auto tl = Trampoline {.addr = trampoline_pool.fetch_add(1, std::memory_order_release)};
         count = tl.count;
-        addr = tl.addr;
+        addr = tl.addr & ~uintptr_t(0xfff);
         if (addr == 0 || count >= trampolineNumPerPage) {
             if (trampoline_lock.test_and_set(std::memory_order_acq_rel)) {
                 trampoline_lock.wait(true, std::memory_order_acquire);
@@ -92,11 +89,12 @@ void *genTrampoline(void *hookMethod) {
                 count = 0;
                 tl.addr = addr;
                 tl.count = count + 1;
-                trampoline_pool.store(tl.mixed, std::memory_order_release);
+                trampoline_pool.store(tl.addr, std::memory_order_release);
                 trampoline_lock.clear(std::memory_order_release);
                 trampoline_lock.notify_all();
             }
         }
+        LOGI("trampoline: count = %u, addr = %zx, target = %zx", count, addr, addr + count * trampolineSize);
         addr = addr + count * trampolineSize;
         break;
     }
