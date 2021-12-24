@@ -7,10 +7,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-extern int SDKVersion;
 extern size_t OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod;
-
-extern unsigned char trampoline[];
 
 void setupTrampoline();
 void *genTrampoline(void *hookMethod);

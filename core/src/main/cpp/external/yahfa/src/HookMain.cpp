@@ -2,6 +2,7 @@
 #include <cstring>
 #include <sys/mman.h>
 #include <cstdlib>
+#include <atomic>
 
 #include "common.h"
 #include "trampoline.h"
