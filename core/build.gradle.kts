@@ -183,7 +183,7 @@ dependencies {
     }
 }
 
-val zipAll = task("zipAll", Task::class) {
+val zipAll = task("zipAll") {
 
 }
 
@@ -197,7 +197,7 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
 
     val magiskDir = "$buildDir/magisk/$variantLowered"
 
-    task("generateApp${variantCapped}RFile", Jar::class) {
+    task<Jar>("generateApp${variantCapped}RFile") {
         dependsOn(":app:process${buildTypeCapped}Resources")
         doLast {
             val rFile = JarFile(
@@ -242,22 +242,20 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
                 sign?.keyAlias
             )
             PrintStream(outSrc).apply {
-                println("package org.lsposed.lspd.util;")
-                println("public final class SignInfo {")
-                print("public static final byte[] CERTIFICATE = {")
-                val bytes = certificateInfo.certificate.encoded
-                print(bytes.joinToString(",") { it.toString() })
-                println("};")
-                println("}")
+                print("""
+                    |package org.lsposed.lspd.util;
+                    |public final class SignInfo {
+                    |    public static final byte[] CERTIFICATE = {${certificateInfo.certificate.encoded.joinToString(",")}};
+                    |}""".trimMargin())
             }
         }
     }
-    variant.registerJavaGeneratingTask(signInfoTask, arrayListOf(outSrcDir))
+    variant.registerJavaGeneratingTask(signInfoTask, outSrcDir)
 
     val moduleId = "${flavorLowered}_$moduleBaseId"
     val zipFileName = "$moduleName-v$verName-$verCode-${flavorLowered}-$buildTypeLowered.zip"
 
-    val prepareMagiskFilesTask = task("prepareMagiskFiles$variantCapped", Sync::class) {
+    val prepareMagiskFilesTask = task<Sync>("prepareMagiskFiles$variantCapped") {
         dependsOn("assemble$variantCapped")
         dependsOn(":app:assemble$buildTypeCapped")
         into(magiskDir)
@@ -327,7 +325,7 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
         }
     }
 
-    val zipTask = task("zip${variantCapped}", Zip::class) {
+    val zipTask = task<Zip>("zip${variantCapped}") {
         dependsOn(prepareMagiskFilesTask)
         archiveFileName.set(zipFileName)
         destinationDirectory.set(file("$projectDir/release"))
@@ -337,19 +335,19 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
     zipAll.dependsOn(zipTask)
 
     val adb: String = androidComponents.sdkComponents.adb.get().asFile.absolutePath
-    val pushTask = task("push${variantCapped}", Exec::class) {
+    val pushTask = task<Exec>("push${variantCapped}") {
         dependsOn(zipTask)
         workingDir("${projectDir}/release")
         commandLine(adb, "push", zipFileName, "/data/local/tmp/")
     }
-    val flashTask = task("flash${variantCapped}", Exec::class) {
+    val flashTask = task<Exec>("flash${variantCapped}") {
         dependsOn(pushTask)
         commandLine(
             adb, "shell", "su", "-c",
             "magisk --install-module /data/local/tmp/${zipFileName}"
         )
     }
-    task("flashAndReboot${variantCapped}", Exec::class) {
+    task<Exec>("flashAndReboot${variantCapped}") {
         dependsOn(flashTask)
         commandLine(adb, "shell", "reboot")
     }
@@ -360,16 +358,16 @@ afterEvaluate {
 }
 
 val adb: String = androidComponents.sdkComponents.adb.get().asFile.absolutePath
-val killLspd = task("killLspd", Exec::class) {
+val killLspd = task<Exec>("killLspd") {
     commandLine(adb, "shell", "su", "-c", "killall", "lspd")
     isIgnoreExitValue = true
 }
-val pushLspd = task("pushLspd", Exec::class) {
+val pushLspd = task<Exec>("pushLspd") {
     dependsOn("mergeDexRiruDebug")
     workingDir("$buildDir/intermediates/dex/RiruDebug/mergeDexRiruDebug")
     commandLine(adb, "push", "classes.dex", "/data/local/tmp/lspd.dex")
 }
-val pushLspdNative = task("pushLspdNative", Exec::class) {
+val pushLspdNative = task<Exec>("pushLspdNative") {
     dependsOn("mergeRiruDebugNativeLibs")
     doFirst {
         val abi: String = ByteArrayOutputStream().use { outputStream ->
@@ -383,7 +381,7 @@ val pushLspdNative = task("pushLspdNative", Exec::class) {
     }
     commandLine(adb, "push", "libdaemon.so", "/data/local/tmp/libdaemon.so")
 }
-val reRunLspd = task("reRunLspd", Exec::class) {
+val reRunLspd = task<Exec>("reRunLspd") {
     dependsOn(pushLspd)
     dependsOn(pushLspdNative)
     dependsOn(killLspd)
@@ -391,19 +389,19 @@ val reRunLspd = task("reRunLspd", Exec::class) {
     isIgnoreExitValue = true
 }
 val tmpApk = "/data/local/tmp/lsp.apk"
-val pushApk = task("pushApk", Exec::class) {
+val pushApk = task<Exec>("pushApk") {
     dependsOn(":app:assembleDebug")
     workingDir("${project(":app").buildDir}/outputs/apk/debug")
     commandLine(adb, "push", "app-debug.apk", tmpApk)
 }
-val openApp = task("openApp", Exec::class) {
+val openApp = task<Exec>("openApp") {
     commandLine(
         adb, "shell", "am start -a android.intent.action.MAIN " +
                 "-c org.lsposed.manager.LAUNCH_MANAGER  " +
                 "com.android.shell/.BugreportWarningActivity"
     )
 }
-task("reRunApp", Exec::class) {
+task<Exec>("reRunApp") {
     dependsOn(pushApk)
     commandLine(adb, "shell", "su", "-c", "mv -f $tmpApk /data/adb/lspd/manager.apk")
     isIgnoreExitValue = true
