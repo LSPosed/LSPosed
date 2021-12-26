@@ -34,6 +34,7 @@ import android.content.AttributionSource;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.LauncherApps;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -307,10 +308,16 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                     .build();
 
             for (var shortcutInfo : sm.getPinnedShortcuts()) {
-                if (SHORTCUT_ID.equals(shortcutInfo.getId())) {
-                    Log.d(TAG, "shortcut exists, updating");
-                    sm.updateShortcuts(Collections.singletonList(shortcut));
-                    return;
+                if (SHORTCUT_ID.equals(shortcutInfo.getId()) && shortcutInfo.isPinned()) {
+                    var shortcutIntent = sm.createShortcutResultIntent(shortcutInfo);
+                    var request = LauncherApps.PinItemRequest.CREATOR.createFromParcel(shortcutIntent.getParcelableExtra(LauncherApps.EXTRA_PIN_ITEM_REQUEST));
+                    var requestInfo = request.getShortcutInfo();
+                    // https://cs.android.com/android/platform/superproject/+/android-8.1.0_r1:frameworks/base/services/core/java/com/android/server/pm/ShortcutRequestPinProcessor.java;drc=4ad6b57700bef4c484021f49e018117046562e6b;l=337
+                    if (requestInfo.isPinned()) {
+                        Log.d(TAG, "shortcut exists, updating");
+                        sm.updateShortcuts(Collections.singletonList(shortcut));
+                        return;
+                    }
                 }
             }
             var configManager = ConfigManager.getInstance();
