@@ -241,13 +241,15 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
                 sign?.keyPassword,
                 sign?.keyAlias
             )
-            PrintStream(outSrc).apply {
-                print("""
-                    |package org.lsposed.lspd.util;
-                    |public final class SignInfo {
-                    |    public static final byte[] CERTIFICATE = {${certificateInfo.certificate.encoded.joinToString(",")}};
-                    |}""".trimMargin())
-            }
+            PrintStream(outSrc).print(
+                """
+                |package org.lsposed.lspd.util;
+                |public final class SignInfo {
+                |    public static final byte[] CERTIFICATE = {${
+                    certificateInfo.certificate.encoded.joinToString(",")
+                }};
+                |}""".trimMargin()
+            )
         }
     }
     variant.registerJavaGeneratingTask(signInfoTask, outSrcDir)
@@ -256,8 +258,7 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
     val zipFileName = "$moduleName-v$verName-$verCode-${flavorLowered}-$buildTypeLowered.zip"
 
     val prepareMagiskFilesTask = task<Sync>("prepareMagiskFiles$variantCapped") {
-        dependsOn("assemble$variantCapped")
-        dependsOn(":app:assemble$buildTypeCapped")
+        dependsOn("assemble$variantCapped", ":app:assemble$buildTypeCapped")
         into(magiskDir)
         from("${rootProject.projectDir}/README.md")
         from("$projectDir/magisk_module") {
@@ -382,9 +383,7 @@ val pushLspdNative = task<Exec>("pushLspdNative") {
     commandLine(adb, "push", "libdaemon.so", "/data/local/tmp/libdaemon.so")
 }
 val reRunLspd = task<Exec>("reRunLspd") {
-    dependsOn(pushLspd)
-    dependsOn(pushLspdNative)
-    dependsOn(killLspd)
+    dependsOn(pushLspd, pushLspdNative, killLspd)
     commandLine(adb, "shell", "su", "-c", "sh /data/adb/modules/*_lsposed/service.sh&")
     isIgnoreExitValue = true
 }
@@ -396,9 +395,15 @@ val pushApk = task<Exec>("pushApk") {
 }
 val openApp = task<Exec>("openApp") {
     commandLine(
-        adb, "shell", "am start -a android.intent.action.MAIN " +
-                "-c org.lsposed.manager.LAUNCH_MANAGER  " +
-                "com.android.shell/.BugreportWarningActivity"
+        adb,
+        "shell",
+        "am",
+        "start",
+        "-a",
+        "android.intent.action.MAIN",
+        "-c",
+        "org.lsposed.manager.LAUNCH_MANAGER",
+        "com.android.shell/.BugreportWarningActivity"
     )
 }
 task<Exec>("reRunApp") {
