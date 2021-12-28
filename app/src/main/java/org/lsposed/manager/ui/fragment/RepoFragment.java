@@ -62,6 +62,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import rikka.core.util.LabelComparator;
@@ -187,6 +188,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
         } else if (sort == 1) {
             menu.findItem(R.id.item_sort_by_update_time).setChecked(true);
         }
+        menu.findItem(R.id.item_upgradable_first).setChecked(App.getPreferences().getBoolean("upgradable_first", true));
     }
 
     @Override
@@ -238,6 +240,10 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
             item.setChecked(true);
             App.getPreferences().edit().putInt("repo_sort", 1).apply();
             adapter.refresh();
+        } else if (itemId == R.id.item_upgradable_first) {
+            item.setChecked(!item.isChecked());
+            App.getPreferences().edit().putBoolean("upgradable_first", item.isChecked()).apply();
+            adapter.refresh();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -257,6 +263,16 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
             return new RepoAdapter.ViewHolder(ItemOnlinemoduleBinding.inflate(getLayoutInflater(), parent, false));
         }
 
+        RepoLoader.ModuleVersion getUpgradableVer(OnlineModule module) {
+            ModuleUtil.InstalledModule installedModule = moduleUtil.getModule(module.getName());
+            if (installedModule != null) {
+                var ver = repoLoader.getModuleLatestVersion(installedModule.packageName);
+                if (ver != null && ver.upgradable(installedModule.versionCode, installedModule.versionName))
+                    return ver;
+            }
+            return null;
+        }
+
         @Override
         public void onBindViewHolder(@NonNull RepoAdapter.ViewHolder holder, int position) {
             OnlineModule module = showList.get(position);
@@ -272,22 +288,19 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
             holder.appDescription.setVisibility(View.VISIBLE);
             holder.appDescription.setText(sb);
             sb = new SpannableStringBuilder();
-            ModuleUtil.InstalledModule installedModule = moduleUtil.getModule(module.getName());
-            if (installedModule != null) {
-                var ver = repoLoader.getModuleLatestVersion(installedModule.packageName);
-                if (ver != null && ver.upgradable(installedModule.versionCode, installedModule.versionName)) {
-                    String hint = getString(R.string.update_available, ver.versionName);
-                    sb.append(hint);
-                    final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ResourceUtils.resolveColor(requireActivity().getTheme(), androidx.appcompat.R.attr.colorAccent));
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                        final TypefaceSpan typefaceSpan = new TypefaceSpan(Typeface.create("sans-serif-medium", Typeface.NORMAL));
-                        sb.setSpan(typefaceSpan, sb.length() - hint.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                    } else {
-                        final StyleSpan styleSpan = new StyleSpan(Typeface.BOLD);
-                        sb.setSpan(styleSpan, sb.length() - hint.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                    }
-                    sb.setSpan(foregroundColorSpan, sb.length() - hint.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            var upgradableVer = getUpgradableVer(module);
+            if (upgradableVer != null) {
+                String hint = getString(R.string.update_available, upgradableVer.versionName);
+                sb.append(hint);
+                final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ResourceUtils.resolveColor(requireActivity().getTheme(), androidx.appcompat.R.attr.colorAccent));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    final TypefaceSpan typefaceSpan = new TypefaceSpan(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+                    sb.setSpan(typefaceSpan, sb.length() - hint.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                } else {
+                    final StyleSpan styleSpan = new StyleSpan(Typeface.BOLD);
+                    sb.setSpan(styleSpan, sb.length() - hint.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
                 }
+                sb.setSpan(foregroundColorSpan, sb.length() - hint.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
             }
             if (sb.length() > 0) {
                 holder.hint.setVisibility(View.VISIBLE);
@@ -317,8 +330,16 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
             if (modules == null) return;
             setLoaded(false);
             int sort = App.getPreferences().getInt("repo_sort", 0);
+            boolean upgradableFirst = App.getPreferences().getBoolean("upgradable_first", true);
+            ConcurrentHashMap<String, Boolean> upgradable = new ConcurrentHashMap<>();
             fullList = modules.parallelStream().filter((onlineModule -> !onlineModule.isHide() && !onlineModule.getReleases().isEmpty()))
                     .sorted((a, b) -> {
+                        if (upgradableFirst) {
+                            var aUpgrade = upgradable.computeIfAbsent(a.getName(), n -> getUpgradableVer(a) != null);
+                            var bUpgrade = upgradable.computeIfAbsent(b.getName(), n -> getUpgradableVer(b) != null);
+                            if (aUpgrade && !bUpgrade) return -1;
+                            else if (!aUpgrade && bUpgrade) return 1;
+                        }
                         if (sort == 0) {
                             return labelComparator.compare(a.getDescription(), b.getDescription());
                         } else {

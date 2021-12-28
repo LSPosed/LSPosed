@@ -235,4 +235,5 @@
     <string name="color_grey">Grey</string>
     <string name="color_blue_grey">Blue grey</string>
     <string name="feedback_or_suggestion">Feedback or suggestion</string>
+    <string name="sort_upgradable_first">Upgradable first</string>
 </resources>
