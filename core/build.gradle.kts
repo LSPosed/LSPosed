@@ -17,18 +17,12 @@
  * Copyright (C) 2021 LSPosed Contributors
  */
 
-import com.android.build.gradle.BaseExtension
-import com.android.ide.common.signing.KeystoreHelper
 import org.apache.commons.codec.binary.Hex
 import org.apache.tools.ant.filters.FixCrLfFilter
 import org.apache.tools.ant.filters.ReplaceTokens
 import java.io.ByteArrayOutputStream
-import java.io.FileOutputStream
-import java.io.PrintStream
 import java.security.MessageDigest
 import java.util.*
-import java.util.jar.JarFile
-import java.util.zip.ZipOutputStream
 
 plugins {
     id("com.android.application")
@@ -45,8 +39,6 @@ val moduleMaxRiruApiVersion = 25
 
 val injectedPackageName = "com.android.shell"
 val injectedPackageUid = 2000
-
-val agpVersion: String by rootProject.extra
 
 val defaultManagerPackageName: String by rootProject.extra
 val apiCode: Int by rootProject.extra
@@ -169,18 +161,13 @@ dependencies {
     implementation("dev.rikka.ndk:riru:26.0.0")
     implementation("dev.rikka.ndk.thirdparty:cxx:1.2.0")
     implementation("io.github.vvb2060.ndk:dobby:1.2")
-    implementation("com.android.tools.build:apksig:$agpVersion")
     implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("de.upb.cs.swt:axml:2.1.1")
     compileOnly("androidx.annotation:annotation:1.3.0")
     compileOnly(project(":hiddenapi-stubs"))
     implementation(project(":hiddenapi-bridge"))
     implementation(project(":manager-service"))
-    android.applicationVariants.all {
-        "${name}Implementation"(files(File(project.buildDir, "tmp/${name}R.jar")) {
-            builtBy("generateApp${name}RFile")
-        })
-    }
+    implementation(project(":daemon-service"))
 }
 
 val zipAll = task("zipAll") {
@@ -197,68 +184,15 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
 
     val magiskDir = "$buildDir/magisk/$variantLowered"
 
-    task<Jar>("generateApp${variantCapped}RFile") {
-        dependsOn(":app:process${buildTypeCapped}Resources")
-        doLast {
-            val rFile = JarFile(
-                File(
-                    project(":app").buildDir,
-                    "intermediates/compile_and_runtime_not_namespaced_r_class_jar/${buildTypeLowered}/R.jar"
-                )
-            )
-            ZipOutputStream(
-                FileOutputStream(
-                    File(
-                        project.buildDir,
-                        "tmp/${variantCapped}R.jar"
-                    )
-                )
-            ).use {
-                for (entry in rFile.entries()) {
-                    if (entry.name.startsWith("org/lsposed/manager")) {
-                        it.putNextEntry(entry)
-                        rFile.getInputStream(entry).transferTo(it)
-                        it.closeEntry()
-                    }
-                }
-            }
-        }
-    }
-
-    val app = rootProject.project(":app").extensions.getByName<BaseExtension>("android")
-    val outSrcDir = file("$buildDir/generated/source/signInfo/${variantLowered}")
-    val outSrc = file("$outSrcDir/org/lsposed/lspd/util/SignInfo.java")
-    val signInfoTask = tasks.register("generate${variantCapped}SignInfo") {
-        dependsOn(":app:validateSigning${buildTypeCapped}")
-        outputs.file(outSrc)
-        doLast {
-            val sign = app.buildTypes.named(buildTypeLowered).get().signingConfig
-            outSrc.parentFile.mkdirs()
-            val certificateInfo = KeystoreHelper.getCertificateInfo(
-                sign?.storeType,
-                sign?.storeFile,
-                sign?.storePassword,
-                sign?.keyPassword,
-                sign?.keyAlias
-            )
-            PrintStream(outSrc).print(
-                """
-                |package org.lsposed.lspd.util;
-                |public final class SignInfo {
-                |    public static final byte[] CERTIFICATE = {${
-                    certificateInfo.certificate.encoded.joinToString(",")
-                }};
-                |}""".trimMargin()
-            )
-        }
-    }
-    variant.registerJavaGeneratingTask(signInfoTask, outSrcDir)
-
     val moduleId = "${flavorLowered}_$moduleBaseId"
     val zipFileName = "$moduleName-v$verName-$verCode-${flavorLowered}-$buildTypeLowered.zip"
 
     val prepareMagiskFilesTask = task<Sync>("prepareMagiskFiles$variantCapped") {
-        dependsOn("assemble$variantCapped", ":app:assemble$buildTypeCapped")
+        dependsOn(
+            "assemble$variantCapped",
+            ":app:assemble$buildTypeCapped",
+            ":daemon:assemble$variantCapped"
+        )
         into(magiskDir)
         from("${rootProject.projectDir}/README.md")
         from("$projectDir/magisk_module") {
@@ -304,8 +238,13 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
             include("*.apk")
             rename(".*\\.apk", "manager.apk")
         }
+        from("${project(":daemon").buildDir}/outputs/apk/${flavorCapped}/${buildTypeLowered}") {
+            include("*.apk")
+            rename(".*\\.apk", "daemon.apk")
+        }
         into("lib") {
             from("${buildDir}/intermediates/stripped_native_libs/$variantCapped/out/lib")
+            from("${project(":daemon").buildDir}/intermediates/stripped_native_libs/$variantCapped/out/lib")
         }
         val dexOutPath = if (buildTypeLowered == "release")
             "$buildDir/intermediates/dex/$variantCapped/minify${variantCapped}WithR8" else
@@ -363,12 +302,12 @@ val killLspd = task<Exec>("killLspd") {
     commandLine(adb, "shell", "su", "-c", "killall", "lspd")
     isIgnoreExitValue = true
 }
-val pushLspd = task<Exec>("pushLspd") {
-    dependsOn("mergeDexRiruDebug")
-    workingDir("$buildDir/intermediates/dex/RiruDebug/mergeDexRiruDebug")
-    commandLine(adb, "push", "classes.dex", "/data/local/tmp/lspd.dex")
+val pushDaemon = task<Exec>("pushDaemon") {
+    dependsOn(":daemon:assembleRiruDebug")
+    workingDir("${project(":daemon").buildDir}/outputs/apk/Riru/debug")
+    commandLine(adb, "push", "daemon-Zygisk-debug.apk", "/data/local/tmp/daemon.apk")
 }
-val pushLspdNative = task<Exec>("pushLspdNative") {
+val pushDaemonNative = task<Exec>("pushDaemonNative") {
     dependsOn("mergeRiruDebugNativeLibs")
     doFirst {
         val abi: String = ByteArrayOutputStream().use { outputStream ->
@@ -378,12 +317,12 @@ val pushLspdNative = task<Exec>("pushLspdNative") {
             }
             outputStream.toString().trim()
         }
-        workingDir("$buildDir/intermediates/merged_native_libs/RiruDebug/out/lib/$abi")
+        workingDir("${project(":daemon").buildDir}/intermediates/merged_native_libs/RiruDebug/out/lib/$abi")
     }
     commandLine(adb, "push", "libdaemon.so", "/data/local/tmp/libdaemon.so")
 }
-val reRunLspd = task<Exec>("reRunLspd") {
-    dependsOn(pushLspd, pushLspdNative, killLspd)
+val reRunDaemon = task<Exec>("reRunDaemon") {
+    dependsOn(pushDaemon, pushDaemonNative, killLspd)
     commandLine(adb, "shell", "su", "-c", "sh /data/adb/modules/*_lsposed/service.sh&")
     isIgnoreExitValue = true
 }
@@ -410,5 +349,5 @@ task<Exec>("reRunApp") {
     dependsOn(pushApk)
     commandLine(adb, "shell", "su", "-c", "mv -f $tmpApk /data/adb/lspd/manager.apk")
     isIgnoreExitValue = true
-    finalizedBy(reRunLspd)
+    finalizedBy(reRunDaemon)
 }

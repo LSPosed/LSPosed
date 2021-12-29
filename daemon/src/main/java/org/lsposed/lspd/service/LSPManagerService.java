@@ -60,7 +60,7 @@ import android.view.IWindowManager;
 
 import androidx.annotation.NonNull;
 
-import org.lsposed.lspd.BuildConfig;
+import org.lsposed.daemon.BuildConfig;
 import org.lsposed.lspd.ILSPManagerService;
 import org.lsposed.lspd.models.Application;
 import org.lsposed.lspd.models.UserInfo;
@@ -79,7 +79,6 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipFile;
 
-import de.robv.android.xposed.XposedBridge;
 import hidden.HiddenApiBridge;
 import io.github.xposed.xposedservice.utils.ParceledListSlice;
 
@@ -502,7 +501,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     @Override
     public int getXposedApiVersion() {
-        return XposedBridge.getXposedVersion();
+        return BuildConfig.API_CODE;
     }
 
     @Override

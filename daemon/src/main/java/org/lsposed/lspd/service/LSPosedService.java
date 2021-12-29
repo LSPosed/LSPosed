@@ -35,7 +35,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
-import org.lsposed.lspd.BuildConfig;
+import org.lsposed.daemon.BuildConfig;
 
 import java.util.Arrays;
 

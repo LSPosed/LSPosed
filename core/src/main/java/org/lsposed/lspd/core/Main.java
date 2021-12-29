@@ -35,7 +35,6 @@ import org.lsposed.lspd.hooker.CrashDumpHooker;
 import org.lsposed.lspd.hooker.HandleBindAppHooker;
 import org.lsposed.lspd.hooker.LoadedApkCstrHooker;
 import org.lsposed.lspd.hooker.SystemMainHooker;
-import org.lsposed.lspd.service.ServiceManager;
 import org.lsposed.lspd.util.ParasiticManagerHooker;
 import org.lsposed.lspd.util.Utils;
 import org.lsposed.lspd.yahfa.hooker.YahfaHooker;
@@ -99,9 +98,5 @@ public class Main {
         LSPApplicationServiceClient.Init(binder, "android");
         forkPostCommon(true,
                 new File(Environment.getDataDirectory(), "android").toString(), "system_server");
-    }
-
-    public static void main(String[] args) {
-        ServiceManager.start(args);
     }
 }

@@ -1,6 +1,6 @@
 package org.lsposed.lspd.service;
 
-import static org.lsposed.lspd.service.ServiceManager.TAG;
+import static org.lsposed.lspd.service.BridgeService.TAG;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityThread;
