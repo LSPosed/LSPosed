@@ -37,8 +37,8 @@ val moduleMinRiruApiVersion = 25
 val moduleMinRiruVersionName = "25.0.1"
 val moduleMaxRiruApiVersion = 25
 
-val injectedPackageName = "com.android.shell"
-val injectedPackageUid = 2000
+val injectedPackageName: String by rootProject.extra
+val injectedPackageUid: Int by rootProject.extra
 
 val defaultManagerPackageName: String by rootProject.extra
 val apiCode: Int by rootProject.extra
@@ -191,7 +191,7 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
         dependsOn(
             "assemble$variantCapped",
             ":app:assemble$buildTypeCapped",
-            ":daemon:assemble$variantCapped"
+            ":daemon:assemble$buildTypeCapped"
         )
         into(magiskDir)
         from("${rootProject.projectDir}/README.md")
@@ -238,13 +238,13 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
             include("*.apk")
             rename(".*\\.apk", "manager.apk")
         }
-        from("${project(":daemon").buildDir}/outputs/apk/${flavorCapped}/${buildTypeLowered}") {
+        from("${project(":daemon").buildDir}/outputs/apk/${buildTypeLowered}") {
             include("*.apk")
             rename(".*\\.apk", "daemon.apk")
         }
         into("lib") {
             from("${buildDir}/intermediates/stripped_native_libs/$variantCapped/out/lib")
-            from("${project(":daemon").buildDir}/intermediates/stripped_native_libs/$variantCapped/out/lib")
+            from("${project(":daemon").buildDir}/intermediates/ndkBuild/$buildTypeLowered/obj/local")
         }
         val dexOutPath = if (buildTypeLowered == "release")
             "$buildDir/intermediates/dex/$variantCapped/minify${variantCapped}WithR8" else
@@ -304,7 +304,7 @@ val killLspd = task<Exec>("killLspd") {
 }
 val pushDaemon = task<Exec>("pushDaemon") {
     dependsOn(":daemon:assembleRiruDebug")
-    workingDir("${project(":daemon").buildDir}/outputs/apk/Riru/debug")
+    workingDir("${project(":daemon").buildDir}/outputs/apk/debug")
     commandLine(adb, "push", "daemon-Zygisk-debug.apk", "/data/local/tmp/daemon.apk")
 }
 val pushDaemonNative = task<Exec>("pushDaemonNative") {
@@ -317,7 +317,7 @@ val pushDaemonNative = task<Exec>("pushDaemonNative") {
             }
             outputStream.toString().trim()
         }
-        workingDir("${project(":daemon").buildDir}/intermediates/merged_native_libs/RiruDebug/out/lib/$abi")
+        workingDir("${project(":daemon").buildDir}/intermediates/ndkBuild/debug/obj/local/$abi")
     }
     commandLine(adb, "push", "libdaemon.so", "/data/local/tmp/libdaemon.so")
 }

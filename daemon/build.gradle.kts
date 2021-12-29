@@ -31,8 +31,8 @@ plugins {
 
 val daemonName = "LSPosed"
 
-val injectedPackageName = "com.android.shell"
-val injectedPackageUid = 2000
+val injectedPackageName: String by rootProject.extra
+val injectedPackageUid: Int by rootProject.extra
 
 val agpVersion: String by rootProject.extra
 
@@ -53,8 +53,6 @@ android {
     compileSdk = androidCompileSdkVersion
     ndkVersion = androidCompileNdkVersion
     buildToolsVersion = androidBuildToolsVersion
-
-    flavorDimensions += "api"
 
     buildFeatures {
         prefab = true
@@ -116,42 +114,29 @@ android {
             }
         }
     }
-
-    productFlavors {
-        all {
-            buildConfigField("String", "API", """"$name"""")
-        }
-
-        create("Riru") {
-            dimension = "api"
-        }
-
-        create("Zygisk") {
-            dimension = "api"
-        }
-    }
 }
 
 fun afterEval() = android.applicationVariants.forEach { variant ->
     val variantCapped = variant.name.capitalize(Locale.ROOT)
     val variantLowered = variant.name.toLowerCase(Locale.ROOT)
-    val buildTypeCapped = variant.buildType.name.capitalize(Locale.ROOT)
-    val buildTypeLowered = variant.buildType.name.toLowerCase(Locale.ROOT)
 
-    task<Jar>("generateApp${variantCapped}RFile") {
-        dependsOn(":app:process${buildTypeCapped}Resources")
+    tasks["merge${variantCapped}JniLibFolders"].enabled = false
+    tasks["merge${variantCapped}NativeLibs"].enabled = false
+
+    task<Jar>("generateApp${variantLowered}RFile") {
+        dependsOn(":app:process${variantCapped}Resources")
         doLast {
             val rFile = JarFile(
                 File(
                     project(":app").buildDir,
-                    "intermediates/compile_and_runtime_not_namespaced_r_class_jar/${buildTypeLowered}/R.jar"
+                    "intermediates/compile_and_runtime_not_namespaced_r_class_jar/${variantLowered}/R.jar"
                 )
             )
             ZipOutputStream(
                 FileOutputStream(
                     File(
                         project.buildDir,
-                        "tmp/${variantCapped}R.jar"
+                        "tmp/${variantLowered}R.jar"
                     )
                 )
             ).use {
@@ -170,10 +155,10 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
     val outSrcDir = file("$buildDir/generated/source/signInfo/${variantLowered}")
     val outSrc = file("$outSrcDir/org/lsposed/lspd/util/SignInfo.java")
     val signInfoTask = tasks.register("generate${variantCapped}SignInfo") {
-        dependsOn(":app:validateSigning${buildTypeCapped}")
+        dependsOn(":app:validateSigning${variantCapped}")
         outputs.file(outSrc)
         doLast {
-            val sign = app.buildTypes.named(buildTypeLowered).get().signingConfig
+            val sign = app.buildTypes.named(variantLowered).get().signingConfig
             outSrc.parentFile.mkdirs()
             val certificateInfo = KeystoreHelper.getCertificateInfo(
                 sign?.storeType,
