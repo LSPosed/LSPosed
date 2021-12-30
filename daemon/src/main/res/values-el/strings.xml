@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Notification -->
+    <string name="module_is_not_activated_yet">Το Xposed πρόσθετο δεν έχει ενεργοποιηθεί ακόμα</string>
+    <string name="module_is_not_activated_yet_detailed">%s έχει εγκατασταθεί, αλλά δεν έχει ενεργοποιηθεί ακόμα</string>
+    <string name="xposed_module_updated_notification_title">Το πρόσθετο Xposed ενημερώθηκε</string>
+    <string name="xposed_module_updated_notification_content">%s ενημερώθηκε, παρακαλώ κλείστε εξαναγκαστικά και επανεκκινήστε τις εφαρμογές στο πεδίο εφαρμογής της</string>
+    <string name="xposed_module_updated_notification_title_system">Το πρόσθετο Xposed ενημερώθηκε, απαιτείται επανεκκίνηση συστήματος</string>
+    <string name="xposed_module_updated_notification_content_system">%s έχει ενημερωθεί, δεδομένου ότι το πεδίο εφαρμογής περιέχει Πλαίσιο Συστήματος, απαιτείται επανεκκίνηση για να εφαρμοστούν οι αλλαγές</string>
+</resources>
