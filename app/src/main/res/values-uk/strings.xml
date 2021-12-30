@@ -78,13 +78,6 @@
     <string name="menuReload">Перезавантажити</string>
     <string name="logs_clear_failed_2">Не вдалося очистити журнал</string>
     <string name="menu_enable_word_wrap">Переніс слів</string>
-    <!-- Notification -->
-    <string name="module_is_not_activated_yet">Модуль LSPosed ще не активований</string>
-    <string name="module_is_not_activated_yet_detailed">%s було встановлено, але ще не активовано</string>
-    <string name="xposed_module_updated_notification_title">Модуль LSPosed оновлено</string>
-    <string name="xposed_module_updated_notification_content">%s було оновлено, будь ласка, примусово зупиніть і перезапустіть програму</string>
-    <string name="xposed_module_updated_notification_title_system">Модуль Xposed оновлено, необхідне перезавантаження системи</string>
-    <string name="xposed_module_updated_notification_content_system">%s було оновлено, оскільки область містить системний фреймворк, необхідне перезавантаження для застосування змін</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(опису не надано)</string>
     <string name="warning_xposed_min_version">Цей модуль вимагає новішої версії LSP (%d), тому його неможливо активувати</string>
@@ -128,6 +121,7 @@
     <string name="use_recommended">Рекомендовано</string>
     <string name="no_scope_selected_has_recommended">Ви не вибрали жодної програми. Вибрати рекомендовані програми?</string>
     <string name="use_recommended_message">Вибрати рекомендовані програми?</string>
+    <string name="module_is_not_activated_yet">Модуль LSPosed ще не активований</string>
     <string name="requested_by_module">Рекомендовано</string>
     <string name="update_available">Доступне оновлення: %1$s</string>
     <string name="module_disabled_no_selection">Модуль %s вимкнено, оскільки жодна програма не вибрана.</string>
