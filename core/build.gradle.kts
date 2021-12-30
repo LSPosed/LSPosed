@@ -303,12 +303,12 @@ val killLspd = task<Exec>("killLspd") {
     isIgnoreExitValue = true
 }
 val pushDaemon = task<Exec>("pushDaemon") {
-    dependsOn(":daemon:assembleRiruDebug")
+    dependsOn(":daemon:assembleDebug")
     workingDir("${project(":daemon").buildDir}/outputs/apk/debug")
-    commandLine(adb, "push", "daemon-Zygisk-debug.apk", "/data/local/tmp/daemon.apk")
+    commandLine(adb, "push", "daemon-debug.apk", "/data/local/tmp/daemon.apk")
 }
 val pushDaemonNative = task<Exec>("pushDaemonNative") {
-    dependsOn("mergeRiruDebugNativeLibs")
+    dependsOn(":daemon:assembleDebug")
     doFirst {
         val abi: String = ByteArrayOutputStream().use { outputStream ->
             exec {
@@ -323,7 +323,7 @@ val pushDaemonNative = task<Exec>("pushDaemonNative") {
 }
 val reRunDaemon = task<Exec>("reRunDaemon") {
     dependsOn(pushDaemon, pushDaemonNative, killLspd)
-    commandLine(adb, "shell", "su", "-c", "sh /data/adb/modules/*_lsposed/service.sh&")
+    commandLine(adb, "shell", "su", "-c", "sh `su -c magisk --path`/.magisk/modules/*_lsposed/service.sh&")
     isIgnoreExitValue = true
 }
 val tmpApk = "/data/local/tmp/lsp.apk"

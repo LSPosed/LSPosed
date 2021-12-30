@@ -61,6 +61,7 @@ import android.view.IWindowManager;
 import androidx.annotation.NonNull;
 
 import org.lsposed.daemon.BuildConfig;
+import org.lsposed.daemon.R;
 import org.lsposed.lspd.ILSPManagerService;
 import org.lsposed.lspd.models.Application;
 import org.lsposed.lspd.models.UserInfo;
@@ -220,13 +221,13 @@ public class LSPManagerService extends ILSPManagerService.Stub {
         try {
             var context = new FakeContext();
             String title = context.getString(enabled ? systemModule ?
-                    org.lsposed.manager.R.string.xposed_module_updated_notification_title_system :
-                    org.lsposed.manager.R.string.xposed_module_updated_notification_title :
-                    org.lsposed.manager.R.string.module_is_not_activated_yet);
+                    R.string.xposed_module_updated_notification_title_system :
+                    R.string.xposed_module_updated_notification_title :
+                    R.string.module_is_not_activated_yet);
             String content = context.getString(enabled ? systemModule ?
-                    org.lsposed.manager.R.string.xposed_module_updated_notification_content_system :
-                    org.lsposed.manager.R.string.xposed_module_updated_notification_content :
-                    org.lsposed.manager.R.string.module_is_not_activated_yet_detailed, modulePackageName);
+                    R.string.xposed_module_updated_notification_content_system :
+                    R.string.xposed_module_updated_notification_content :
+                    R.string.module_is_not_activated_yet_detailed, modulePackageName);
 
             var style = new Notification.BigTextStyle();
             style.bigText(content);
@@ -235,7 +236,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                     .setContentTitle(title)
                     .setContentText(content)
                     .setSmallIcon(android.R.drawable.ic_dialog_info)
-                    .setColor(context.getResources().getColor(org.lsposed.manager.R.color.color_primary))
+                    .setColor(context.getResources().getColor(R.color.color_primary))
                     .setContentIntent(getNotificationIntent(modulePackageName, moduleUserId))
                     .setAutoCancel(true)
                     .setStyle(style)
