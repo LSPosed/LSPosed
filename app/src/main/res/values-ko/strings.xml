@@ -28,6 +28,7 @@
     <string name="Settings">설정</string>
     <string name="report_issue">문제 보고</string>
     <string name="module_repo">저장소</string>
+    <string name="module_repo_loading">로딩 중…</string>
     <string name="about_view_source_code"><![CDATA[%1$s에서 소스 코드 보기<br/>%2$s 채널에 가입하십시오.]]></string>
     <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">green1052</string>
     <string name="install">설치</string>
@@ -59,11 +60,6 @@
     <string name="logs_cannot_read">로그를 읽지 못함: \n</string>
     <string name="menuReload">리로드</string>
     <string name="logs_clear_failed_2">로그를 지우지 못했습니다.</string>
-    <!-- Notification -->
-    <string name="module_is_not_activated_yet">LSPosed 모듈이 아직 활성화되지 않았습니다.</string>
-    <string name="module_is_not_activated_yet_detailed">%s이(가) 설치되었지만 아직 활성화되지 않았습니다.</string>
-    <string name="xposed_module_updated_notification_title">LSPosed 모듈 업데이트</string>
-    <string name="xposed_module_updated_notification_content">%s이(가) 업데이트되었습니다.</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(설명 없음)</string>
     <string name="warning_xposed_min_version">이 모듈에는 최신 LSPosed (%d) 버전이 필요하므로 활성화할 수 없습니다.</string>
@@ -104,6 +100,7 @@
     <string name="use_recommended">권장된</string>
     <string name="no_scope_selected_has_recommended">앱을 선택하지 않았습니다. 권장 앱을 선택하시겠습니까?</string>
     <string name="use_recommended_message">권장 앱을 선택하시겠습니까?</string>
+    <string name="module_is_not_activated_yet">LSPosed 모듈이 아직 활성화되지 않았습니다.</string>
     <string name="requested_by_module">권장된</string>
     <string name="update_available">업데이트 가능: %1$s</string>
     <string name="module_disabled_no_selection">앱을 선택하지 않았기 때문에 %s 모듈이 비활성화되었습니다.</string>
