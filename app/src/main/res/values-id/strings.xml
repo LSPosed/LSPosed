@@ -19,7 +19,7 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">Info</string>
+    <string name="info">Informasi</string>
     <string name="Modules">Modul</string>
     <plurals name="modules_enabled_count">
         <item quantity="other">%d modul diaktifkan</item>
@@ -30,12 +30,12 @@
     <string name="report_issue">Laporkan masalah</string>
     <string name="module_repo">Gudang</string>
     <string name="module_repo_loading">Memuat…</string>
-    <string name="module_repo_up_to_date">Semua modul sudah terkini</string>
+    <string name="module_repo_up_to_date">Semua modul sudah terbaru</string>
     <plurals name="module_repo_upgradable">
-        <item quantity="other">%d Modul dapat diperbarui</item>
+        <item quantity="other">%d modul dapat ditingkatkan</item>
     </plurals>
-    <string name="about_view_source_code"><![CDATA[Lihat kode sumber di %1$s<br/>Bergabunglah dengan kami %2$s saluran]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">AMMLR</string>
+    <string name="about_view_source_code"><![CDATA[Lihat kode sumber di %1$s<br/>Gabung dengan kami di saluran %2$s]]></string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">nol</string>
     <string name="install">Pasang</string>
     <string name="install_summary">Ketuk untuk memasang LSPosed</string>
     <string name="not_installed">Tidak terpasang</string>
@@ -50,14 +50,14 @@
     <string name="system_prop_incorrect"><![CDATA[Beberapa properti sistem yang diperlukan dihapus atau diubah.<br/>Modul terkadang tidak valid.]]></string>
     <string name="need_update">Butuh pembaruan</string>
     <string name="please_update_summary">Silakan pasang LSPosed versi terbaru</string>
-    <string name="lsposed_not_active">LSPosed saat ini tidak terpasang atau aktif.</string>
+    <string name="lsposed_not_active">LSPosed saat ini tidak terpasang atau tidak aktif.</string>
     <string name="info_api_version">Versi API</string>
-    <string name="info_framework_version">Versi kerangka kerja</string>
+    <string name="info_framework_version">Versi framework</string>
     <string name="info_manager_version">Versi manajer</string>
     <string name="info_system_version">Versi sistem</string>
     <string name="info_device">Perangkat</string>
     <string name="info_system_abi">Sistem ABI</string>
-    <string name="info_api">Tanamkan tatap muka</string>
+    <string name="info_api">Tatap muka injeksi</string>
     <string name="parasitic_recommend">Manajer Parasit Direkomendasikan</string>
     <string name="parasitic_recommend_summary">LSPosed sekarang mendukung parasitisasi sistem untuk menghindari deteksi. Anda dapat menghapus instalan manajer dengan aman setelah berhasil membuat pintasan manajer parasit. Bagaimanapun, Anda dapat menginstal kembali manajer dari /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Buat pintasan</string>
@@ -67,6 +67,7 @@
     <string name="update_lsposed_msg">Konfirmasi untuk pembaharuan LSPosed? Perangkat ini akan mulai ulang setelah pembaharuan selesai</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Simpan</string>
+    <string name="nav_item_logs_verbose">Log Verbose</string>
     <string name="nav_item_logs_module">Log modul</string>
     <string name="logs_save_failed2">Gagal menyimpan:\n%s</string>
     <string name="menuClearLog">Hapus log sekarang</string>
@@ -77,13 +78,9 @@
     <string name="logs_cannot_read">Tidak dapat membaca log: \n</string>
     <string name="menuReload">Muat ulang</string>
     <string name="logs_clear_failed_2">Gagal menghapus log</string>
-    <!-- Notification -->
-    <string name="module_is_not_activated_yet">Modul Xposed belum diaktifkan</string>
-    <string name="module_is_not_activated_yet_detailed">%s telah terpasang, tetapi belum diaktifkan</string>
-    <string name="xposed_module_updated_notification_title">Modul xposed diperbarui</string>
-    <string name="xposed_module_updated_notification_content">%s telah diperbarui, harap paksa berhenti dan mulai ulang aplikasi dalam cakupannya</string>
-    <string name="xposed_module_updated_notification_title_system">Modul Xposed diperbarui, sistem perlu reboot</string>
-    <string name="xposed_module_updated_notification_content_system">%s telah diperbarui, karena cakupannya berisi Kerangka Sistem, diperlukan reboot untuk menerapkan perubahan</string>
+    <string name="menu_enable_word_wrap">Bungkus Kata</string>
+    <string name="enabled_verbose_log">Log verbose diaktifkan</string>
+    <string name="disabled_verbose_log">Log verbose dinonaktifkan</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(tidak ada deskripsi yang diberikan)</string>
     <string name="warning_xposed_min_version">Modul ini membutuhkan versi Xposed yang lebih baru (%d) dan karenanya tidak dapat diaktifkan</string>
@@ -101,6 +98,8 @@
     <string name="module_install_failed">Gagal menambahkan modul</string>
     <string name="install_to_user">Pasang ke pengguna %s</string>
     <string name="install_to_user_message">Ingin memasang %1$s ke pengguna %2$s? Disarankan untuk menginstal secara manual, memaksa instalasi melalui LSPosed dapat menyebabkan masalah.</string>
+    <string name="expand">rentangkan</string>
+    <string name="collapse">sedikitkan</string>
     <!-- AppListActivity -->
     <string name="compile_speed">Mengoptimalkan ulang</string>
     <string name="compile_speed_msg">Mengoptimalkan…</string>
@@ -119,11 +118,13 @@
     <string name="no_scope_selected">Anda tidak memilih aplikasi apa pun. Lanjutkan?</string>
     <string name="menu_show_games">Permainan</string>
     <string name="menu_show_modules">Modul</string>
+    <string name="menu_show_denylist">Penyangkalan</string>
     <string name="failed_to_save_scope_list">Gagal menyimpan daftar cakupan</string>
     <string name="app_description">%1$s\nVersi %2$s</string>
     <string name="use_recommended">Direkomendasikan</string>
     <string name="no_scope_selected_has_recommended">Anda tidak memilih aplikasi apa pun. Pilih aplikasi yang direkomendasikan?</string>
     <string name="use_recommended_message">Pilih aplikasi yang direkomendasikan?</string>
+    <string name="module_is_not_activated_yet">Modul Xposed belum diaktifkan</string>
     <string name="requested_by_module">Direkomendasikan</string>
     <string name="update_available">Pembaruan tersedia: %1$s</string>
     <string name="module_disabled_no_selection">Modul %s telah dinonaktifkan karena tidak ada aplikasi yang dipilih.</string>
@@ -137,6 +138,8 @@
     <string name="reboot_required">Mulai ulang diperlukan agar perubahan ini dapat diterapkan</string>
     <string name="reboot">Mulai ulang</string>
     <string name="menu_hide">Sembunyikan</string>
+    <string name="deny_list">%s berada di daftar penyangkalan. Kemungkinan tidak akan menyebabkan apapun.</string>
+    <string name="deny_list_info">Berada di daftar penyangkalan</string>
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">Lihat di aplikasi lain</string>
     <string name="module_app_info">Informasi aplikasi</string>
@@ -167,9 +170,11 @@
     <string name="settings_translation">Berpartisipasi dalam terjemahan</string>
     <string name="settings_translation_summary">Bantu kami menerjemahkan %s kedalam bahasamu</string>
     <string name="pref_title_enable_auto_add_shortcut">Buat jalur pintas secara otomatis</string>
+    <string name="settings_enable_auto_add_shortcut_summary">Tidak ada pintasan baru yang akan ditambahkan saat dinonaktifkan di manajer non-parasit</string>
     <string name="settings_update_channel">Perbarui saluran</string>
     <string name="update_channel_stable">Stabil</string>
     <string name="update_channel_bate">Beta</string>
+    <string name="update_channel_nightly">Rilis harian</string>
     <!-- Module Repo -->
     <string name="module_readme">Baca aku</string>
     <string name="module_releases">Rilis</string>
@@ -184,6 +189,7 @@
     <string name="module_release_no_more">Tidak ada rilis</string>
     <string name="repo_load_failed">Gagal memuat repo modul: %s</string>
     <!-- CrashReportActivity -->
+    <string name="version_mismatch">Versi dari LSPosed framework (%1$d) tidak cocok dengan manajer (%2$d). Mohon untuk menginstal ulang LSPosed.</string>
     <string name="manager_crashed">Manajer rusak</string>
     <string name="manager_crashed_info">laporkan ini kepada </string>
     <string name="send_crash_info">Kirim info kerusakan</string>
@@ -198,14 +204,17 @@
     <string name="color_indigo">Biru gelap</string>
     <string name="color_blue">Biru</string>
     <string name="color_light_blue">Biru terang</string>
+    <string name="color_cyan">Cyan</string>
     <string name="color_teal">Hijau toska</string>
     <string name="color_green">Hijau</string>
     <string name="color_light_green">Hijau terang</string>
     <string name="color_lime">Hijau limau</string>
     <string name="color_yellow">Kuning</string>
+    <string name="color_amber">Amber</string>
     <string name="color_orange">Oranye</string>
     <string name="color_deep_orange">Oranye gelap</string>
     <string name="color_brown">Coklat</string>
     <string name="color_grey">Abu-abu</string>
     <string name="color_blue_grey">Abu-abu kebiruan</string>
+    <string name="feedback_or_suggestion">Umpan balik atau saran</string>
 </resources>
