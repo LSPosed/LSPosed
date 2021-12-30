@@ -84,13 +84,6 @@ Gerät wird nach dem Update neu gestartet</string>
     <string name="menu_enable_word_wrap">Wortumbruch</string>
     <string name="enabled_verbose_log">Ausführliches Log aktiviert</string>
     <string name="disabled_verbose_log">Ausführliches Log deaktiviert</string>
-    <!-- Notification -->
-    <string name="module_is_not_activated_yet">Das LSPosed-Modul wurde noch nicht aktiviert</string>
-    <string name="module_is_not_activated_yet_detailed">%s wurde installiert, aber noch nicht aktiviert</string>
-    <string name="xposed_module_updated_notification_title">Aktualisiertes LSPosed-Modul</string>
-    <string name="xposed_module_updated_notification_content">%s wurde aktualisiert</string>
-    <string name="xposed_module_updated_notification_title_system">Xposed-Modul aktualisiert, Systemneustart erforderlich</string>
-    <string name="xposed_module_updated_notification_content_system">%s wurde aktualisiert, da der Geltungsbereich System-Framework enthält, ist ein Neustart erforderlich, damit die Änderungen übernommen werden</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(keine Beschreibung angegeben)</string>
     <string name="warning_xposed_min_version">Dieses Modul erfordert eine neuere Version von LSPosed (%d) und kann nicht aktiviert werden</string>
@@ -134,6 +127,7 @@ Gerät wird nach dem Update neu gestartet</string>
     <string name="use_recommended">Empfohlen</string>
     <string name="no_scope_selected_has_recommended">Sie haben keine App ausgewählt. Empfohlene Apps auswählen?</string>
     <string name="use_recommended_message">Empfohlene Apps auswählen?</string>
+    <string name="module_is_not_activated_yet">Das LSPosed-Modul wurde noch nicht aktiviert</string>
     <string name="requested_by_module">Empfohlen</string>
     <string name="update_available">Aktualisierung verfügbar: %1$s</string>
     <string name="module_disabled_no_selection">Modul %s ist deaktiviert, da keine App ausgewählt ist.</string>
@@ -223,4 +217,6 @@ Gerät wird nach dem Update neu gestartet</string>
     <string name="color_brown">Braun</string>
     <string name="color_grey">Grau</string>
     <string name="color_blue_grey">Blaugrau</string>
+    <string name="feedback_or_suggestion">Feedback oder Vorschläge</string>
+    <string name="sort_upgradable_first">Zuerst aktualisierbar</string>
 </resources>

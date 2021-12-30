@@ -26,6 +26,7 @@
     <string name="About">معلومات</string>
     <string name="report_issue">رپورٹ ایشو۔</string>
     <string name="module_repo">مخزن۔</string>
+    <string name="module_repo_loading">لوڈ ہو رہا ہے…</string>
     <string name="about_view_source_code"><![CDATA[ماخذ کوڈ دیکھیں %1$s<br/> ہمارے ساتھ شامل ہوں%2$s چینل۔]]></string>
     <string name="install">انسٹال</string>
     <string name="install_summary">کلک تو انسٹال LSposed</string>
@@ -45,20 +46,27 @@
     <string name="info_system_version">سسٹم ورژن۔</string>
     <string name="info_device">ڈیوائس۔</string>
     <string name="info_system_abi">ABI سسٹم۔</string>
+    <string name="parasitic_recommend">پرجیوی مینیجر کی سفارش</string>
+    <string name="parasitic_recommend_summary">LSPosed اب سراغ لگانے سے بچنے کے لیے سسٹم پیراجیٹائزیشن کی حمایت کرتا ہے۔ پرجیوی مینیجر کا شارٹ کٹ کامیابی سے بنانے کے بعد آپ منیجر کو محفوظ طریقے سے انسٹال کر سکتے ہیں۔ کسی بھی صورت میں آپ آدمی کو انسٹال کر سکتے ہیں.</string>
     <string name="create_shortcut">شارٹ کٹ بنانا</string>
+    <string name="never_show">کبھی نہ دکھائیں۔</string>
     <string name="failed_to_create_shortcut">شارٹ کٹ بنانے میں ناکام: %1$s</string>
     <string name="update_lsposed">LSPosed کو اپ ڈیٹ کریں۔</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">محفوظ کریں</string>
     <string name="nav_item_logs_module">ماڈیولز نوشتہ جات</string>
     <string name="logs_save_failed2">محفوظ کرنے میں ناکام:\n%s</string>
+    <string name="menuClearLog">ابھی لاگ صاف کریں۔</string>
+    <string name="logs_cleared">لاگ کامیابی سے صاف ہو گیا.</string>
     <string name="scroll_top">اوپر سکرول کریں۔</string>
     <string name="loading">لوڈ ہو رہا ہے…</string>
     <string name="scroll_bottom">نیچے سکرول کریں۔</string>
     <string name="logs_cannot_read">لاگ نہیں پڑھ سکتا: \n</string>
-    <!-- Notification -->
+    <string name="menuReload">دوبارہ لوڈ کریں۔</string>
     <!-- ModulesActivity -->
     <!-- AppListActivity -->
+    <string name="menu_show_modules">ماڈیولز</string>
+    <string name="use_recommended">سفارش کریں۔</string>
     <string name="use_recommended_message">تجویز کردہ ایپس کو منتخب کریں?</string>
     <string name="requested_by_module">سفارش کریں۔</string>
     <string name="update_available">اپ ڈیٹ دستیاب ہے: %1$s</string>
@@ -66,6 +74,7 @@
     <!-- ModulesActivity and AppListActivity -->
     <!-- SettingsActivity -->
     <!-- Module Repo -->
+    <string name="module_information">معلومات</string>
     <!-- CrashReportActivity -->
     <!-- Colors -->
 </resources>

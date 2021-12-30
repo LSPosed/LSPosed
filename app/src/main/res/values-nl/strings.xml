@@ -83,13 +83,6 @@
     <string name="menu_enable_word_wrap">Woord Omslag</string>
     <string name="enabled_verbose_log">Uitgebreide logboek ingeschakeld</string>
     <string name="disabled_verbose_log">Verbose logboek uitgeschakeld</string>
-    <!-- Notification -->
-    <string name="module_is_not_activated_yet">LSPosed module is nog niet geactiveerd</string>
-    <string name="module_is_not_activated_yet_detailed">%1$s is geïnstalleerd, maar is nog niet geactiveerd</string>
-    <string name="xposed_module_updated_notification_title">LSPosed module bijgewerkt</string>
-    <string name="xposed_module_updated_notification_content">%1$s is geupdate</string>
-    <string name="xposed_module_updated_notification_title_system">Xposed-module bijgewerkt, systeem opnieuw opstarten vereist</string>
-    <string name="xposed_module_updated_notification_content_system">%s is bijgewerkt, omdat het bereik een systeemkader bevat, moet je opnieuw opstarten om wijzigingen toe te passen</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(geen beschrijving gegeven)</string>
     <string name="warning_xposed_min_version">Deze module vereist een nieuwere versie van Lsposed (%d) en kan dus niet worden geactiveerd</string>
@@ -133,6 +126,7 @@
     <string name="use_recommended">Aanbevolen</string>
     <string name="no_scope_selected_has_recommended">U heeft geen app geselecteerd. Aanbevolen apps selecteren?</string>
     <string name="use_recommended_message">Aanbevolen apps selecteren?</string>
+    <string name="module_is_not_activated_yet">LSPosed module is nog niet geactiveerd</string>
     <string name="requested_by_module">Aanbevolen</string>
     <string name="update_available">Update beschikbaar: %1$s</string>
     <string name="module_disabled_no_selection">Module %1$s is uitgeschakeld omdat er geen app is geselecteerd.</string>

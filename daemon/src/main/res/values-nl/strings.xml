@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Notification -->
+    <string name="module_is_not_activated_yet">LSPosed module is nog niet geactiveerd</string>
+    <string name="module_is_not_activated_yet_detailed">%1$s is geïnstalleerd, maar is nog niet geactiveerd</string>
+    <string name="xposed_module_updated_notification_title">LSPosed module bijgewerkt</string>
+    <string name="xposed_module_updated_notification_content">%1$s is geupdate</string>
+    <string name="xposed_module_updated_notification_title_system">Xposed-module bijgewerkt, systeem opnieuw opstarten vereist</string>
+    <string name="xposed_module_updated_notification_content_system">%s is bijgewerkt, omdat het bereik een systeemkader bevat, moet je opnieuw opstarten om wijzigingen toe te passen</string>
+</resources>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Notification -->
+    <string name="module_is_not_activated_yet">מודול LSPosed עדיין לא הופעל</string>
+    <string name="module_is_not_activated_yet_detailed">%s הותקן אך עדיין לא הופעל</string>
+    <string name="xposed_module_updated_notification_title">מודול LSPosed עודכן</string>
+    <string name="xposed_module_updated_notification_content">%s עודכן</string>
+</resources>

@@ -41,7 +41,6 @@
     <string name="system_inject_fail_summary">La injecció del marc del sistema ha fallat</string>
     <string name="system_inject_fail"><![CDATA[Això és poc comú i podria ser causat per <b>Magisk</b> o algún Mòdul de baixa qualitat<br/>Si us plau, prova a desactivar els demés mòduls de magisk excepte Riru i LSPosed o envia un informe complet als desarrolladors.]]></string>
     <!-- LogsActivity -->
-    <!-- Notification -->
     <!-- ModulesActivity -->
     <!-- AppListActivity -->
     <string name="menu_show_modules">Mòduls</string>

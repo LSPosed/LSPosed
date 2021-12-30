@@ -69,7 +69,7 @@
     <string name="update_lsposed_msg">Vous confirmez la mise à jour LSPosed? Ce périphérique redémarrera après la mise à jour éffectuée</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Sauvegarder</string>
-    <string name="nav_item_logs_verbose">Journeaux détaillés</string>
+    <string name="nav_item_logs_verbose">Journaux détaillés</string>
     <string name="nav_item_logs_module">Journaux des modules</string>
     <string name="logs_save_failed2">Échec de la sauvegarde:\n%s</string>
     <string name="menuClearLog">Éffacer le journal maintenant</string>
@@ -81,15 +81,8 @@
     <string name="menuReload">Recharger</string>
     <string name="logs_clear_failed_2">Échec d\'effacement du journal</string>
     <string name="menu_enable_word_wrap">Retour à la ligne</string>
-    <string name="enabled_verbose_log">Journeaux détaillés activé</string>
-    <string name="disabled_verbose_log">Journeaux détaillés désactivé</string>
-    <!-- Notification -->
-    <string name="module_is_not_activated_yet">Le module LSPosed n\’est pas encore actif</string>
-    <string name="module_is_not_activated_yet_detailed">%s à été installé, mais n\'est pas encore actif</string>
-    <string name="xposed_module_updated_notification_title">Module Xposed mis à jour</string>
-    <string name="xposed_module_updated_notification_content">%s à été mis à jour, merci de forcer l\’arrêt ou de redémarrer les applis dans leurs champs d\’application</string>
-    <string name="xposed_module_updated_notification_title_system">Module Xposed mis à jour, redémarrage du système requis</string>
-    <string name="xposed_module_updated_notification_content_system">%s à été mis à jour, étant donné que le champ d\'application est étendu au sous système, un redémarrage est nécessaire pour appliquer les changements</string>
+    <string name="enabled_verbose_log">Journaux détaillés activés</string>
+    <string name="disabled_verbose_log">Journaux détaillés désactivés</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(aucune description fournie)</string>
     <string name="warning_xposed_min_version">Ce module requière une nouvelle version d\'Xposed (%d) et n\'a donc pas pu être activé</string>
@@ -122,7 +115,7 @@
     <string name="sort_by_update_time">Trier par heure de mise à jour</string>
     <string name="sort_reverse">Inversé</string>
     <string name="menu_show_system_apps">Applications système</string>
-    <string name="menu_sort">Triage</string>
+    <string name="menu_sort">Trier</string>
     <string name="enable_module">Activer module</string>
     <string name="no_scope_selected">Vous n\'avez sélectionner aucune application. Continuer?</string>
     <string name="menu_show_games">Jeux</string>
@@ -133,6 +126,7 @@
     <string name="use_recommended">Recommendé</string>
     <string name="no_scope_selected_has_recommended">Vous n\'avez sélectionné aucune application. Sélectionner les applications recommandées?</string>
     <string name="use_recommended_message">Sélectionner les applications recommandées?</string>
+    <string name="module_is_not_activated_yet">Le module LSPosed n\’est pas encore actif</string>
     <string name="requested_by_module">Recommendé</string>
     <string name="update_available">Mise à jour disponible: %1$s</string>
     <string name="module_disabled_no_selection">Le module %s à été désactivé étant donné qu\’aucune application n\’ai été sélectionné.</string>
@@ -173,10 +167,10 @@
     <string name="settings_show_hidden_icon_apps_enabled">Forcer les applications à afficher leurs icônes dans le lanceur</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">Après Android 10, les applications ne sont pas autorisées à masquer leurs icones dans le lanceur. Désactiver ce commutateur pour désactiver cette fonctionnalité du système.</string>
     <string name="settings_group_system">Système</string>
-    <string name="settings_language">Language</string>
+    <string name="settings_language">Langage</string>
     <string name="settings_translation_contributors">Contributeurs de traduction</string>
     <string name="settings_translation">Participer à la traduction</string>
-    <string name="settings_translation_summary">Aidez nous à traduire %sdans votre language</string>
+    <string name="settings_translation_summary">Aidez-nous à traduire %s dans votre langue</string>
     <string name="pref_title_enable_auto_add_shortcut">Ajouter automatiquement un raccourcis</string>
     <string name="settings_enable_auto_add_shortcut_summary">Aucun nouveau raccourcis ne sera ajouté si désactivé dans le gestionnaire non-parasitaire</string>
     <string name="settings_update_channel">Canal de mise à jour</string>
@@ -225,4 +219,5 @@
     <string name="color_grey">Gris</string>
     <string name="color_blue_grey">Bleu grisatre</string>
     <string name="feedback_or_suggestion">Réaction ou suggestion</string>
+    <string name="sort_upgradable_first">Evolutif d\'abord</string>
 </resources>

@@ -32,10 +32,10 @@
     <string name="About">O aplikacji</string>
     <string name="report_issue">Zgłoś problem</string>
     <string name="module_repo">Repozytorium</string>
-    <string name="module_repo_loading">Ładowanie...</string>
+    <string name="module_repo_loading">Ładowanie…</string>
     <string name="module_repo_up_to_date">Wszystkie moduły są aktualne</string>
     <string name="about_view_source_code"><![CDATA[Zobacz kod źródłowy na %1$s<br/>Dołącz do naszego kanału %2$s]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Adiker</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">null (nic)</string>
     <string name="install">Instaluj</string>
     <string name="install_summary">Dotknij, aby zainstalować LSPosed</string>
     <string name="not_installed">Nie zainstalowano</string>
@@ -44,7 +44,7 @@
     <string name="partial_activated">Częściowo aktywowano</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy nie jest prawidłowo załadowany</string>
     <string name="selinux_policy_not_loaded"><![CDATA[Moduły, które podpinają System Framework nie zadziałają.<br/>Zgłoś to do<a href="https://github.com/topjohnwu/Magisk/issues"><b>programisty</b></a> Magisk.]]></string>
-    <string name="system_inject_fail_summary">Wstrzyknięcie System Framework nie powiodło się</string>
+    <string name="system_inject_fail_summary">Wstrzyknięcie Frameworku Systemowego nie powiodło się</string>
     <string name="system_inject_fail"><![CDATA[Jest to rzadkie i może być spowodowane przez <b>Magisk</b> lub niektóre moduły Magisk niskiej jakości.<br/>Spróbuj wyłączyć moduły Magisk inne niż Riru i LSPosed lub przesłać pełny log programistom.]]></string>
     <string name="system_prop_incorrect_summary">Nieprawidłowy system prop</string>
     <string name="system_prop_incorrect"><![CDATA[Niektóre niezbędne właściwości systemowe zostały usunięte lub zmienione.<br/>Moduły mogą czasami działać niepoprawnie.]]></string>
@@ -57,7 +57,7 @@
     <string name="info_system_version">Wersja systemu</string>
     <string name="info_device">Urządzenie</string>
     <string name="info_system_abi">System ABI</string>
-    <string name="info_api">Interfejs injekcji</string>
+    <string name="info_api">Interfejs wstrzykiwania</string>
     <string name="parasitic_recommend">Rekomendowany menadżer Parasitic</string>
     <string name="parasitic_recommend_summary">LSPosed wspiera teraz pasożyty systemowe, aby uniknąć wykrycia. Możesz odinstalować menadżer po pomyśłnym utworzeniu skrótu w parastic manager. W każdym wypadku możesz zainstalować menadżer spowrotem z pliku /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Utwórz skrót</string>
@@ -81,13 +81,6 @@
     <string name="menu_enable_word_wrap">Zawijanie wierszy</string>
     <string name="enabled_verbose_log">Logi verbose włączone</string>
     <string name="disabled_verbose_log">Logi verbose wyłączone</string>
-    <!-- Notification -->
-    <string name="module_is_not_activated_yet">Moduł Xposed nie jest jeszcze aktywowany</string>
-    <string name="module_is_not_activated_yet_detailed">%s został zainstalowany, ale nie jest jeszcze aktywowany</string>
-    <string name="xposed_module_updated_notification_title">Moduł Xposed zaktualizowany</string>
-    <string name="xposed_module_updated_notification_content">%s został zaktualizowany, wymuś zatrzymanie i ponownie uruchom aplikacje w jego zakresie</string>
-    <string name="xposed_module_updated_notification_title_system">Zaktualizowano moduł Xposed, wymagane ponowne uruchomienie systemu</string>
-    <string name="xposed_module_updated_notification_content_system">%s został zaktualizowany, ponieważ zakres zawiera System Framework, wymagany restart aby zastosować zmiany</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(nie podano opisu)</string>
     <string name="warning_xposed_min_version">Ten moduł wymaga nowszej wersji Xposed (%d) i dlatego nie może być aktywowany</string>
@@ -131,6 +124,7 @@
     <string name="use_recommended">Rekomendowane</string>
     <string name="no_scope_selected_has_recommended">Nie wybrałeś żadnej aplikacji. Wybrać rekomendowane aplikacje?</string>
     <string name="use_recommended_message">Wybrać rekomendowane aplikacje?</string>
+    <string name="module_is_not_activated_yet">Moduł Xposed nie jest jeszcze aktywowany</string>
     <string name="requested_by_module">Rekomendowane</string>
     <string name="update_available">Dostępna aktualizacja: %1$s</string>
     <string name="module_disabled_no_selection">Moduł %s został wyłączony, ponieważ nie wybrano żadnej aplikacji.</string>

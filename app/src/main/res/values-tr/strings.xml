@@ -80,13 +80,6 @@
     <string name="menuReload">Tekrar yükle</string>
     <string name="logs_clear_failed_2">Günlük temizlenemedi</string>
     <string name="menu_enable_word_wrap">Yeni Satıra Geç</string>
-    <!-- Notification -->
-    <string name="module_is_not_activated_yet">Xposed modülü henüz etkinleştirilmedi</string>
-    <string name="module_is_not_activated_yet_detailed">%s kuruldu, ancak henüz etkinleştirilmedi</string>
-    <string name="xposed_module_updated_notification_title">Xposed modül güncellemesi</string>
-    <string name="xposed_module_updated_notification_content">%s güncellendi, lütfen kapsamındaki uygulamaları durdurmaya ve yeniden başlatmaya zorlayın</string>
-    <string name="xposed_module_updated_notification_title_system">Xposed modülü güncellendi, sistemin yeniden başlatılması gerekiyor</string>
-    <string name="xposed_module_updated_notification_content_system">%s Güncelleme kapsamı Sistem Çerçevesi içerdiğinden, değişiklikleri uygulamak için yeniden başlatma gereklidir</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(açıklama yapılmadı)</string>
     <string name="warning_xposed_min_version">Bu modül daha yeni bir Xposed sürümü gerektiriyor (%d) ve bu nedenle etkinleştirilemez</string>
@@ -130,6 +123,7 @@
     <string name="use_recommended">Önerilen</string>
     <string name="no_scope_selected_has_recommended">Herhangi bir uygulama seçmediniz. Önerilen uygulamalar seçilsin mi?</string>
     <string name="use_recommended_message">Önerilen uygulamalar seçilsin mi?</string>
+    <string name="module_is_not_activated_yet">Xposed modülü henüz etkinleştirilmedi</string>
     <string name="requested_by_module">Önerilen</string>
     <string name="update_available">Güncelleme uygun: %1$s</string>
     <string name="module_disabled_no_selection">Hiçbir uygulama seçilmediği için %s modülü devre dışı bırakıldı.</string>

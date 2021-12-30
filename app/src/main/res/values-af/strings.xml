@@ -25,13 +25,24 @@
         <item quantity="one">%d module enabled</item>
         <item quantity="other">%d modules enabled</item>
     </plurals>
+    <string name="module_repo_up_to_date">%d modules enabled</string>
+    <plurals name="module_repo_upgradable">
+        <item quantity="one">%d module enabled</item>
+        <item quantity="other">%d modules enabled</item>
+    </plurals>
     <!-- LogsActivity -->
-    <!-- Notification -->
+    <string name="nav_item_logs_module">Modules</string>
+    <string name="enabled_verbose_log">%d module enabled</string>
     <!-- ModulesActivity -->
+    <string name="module_settings">Module enabled</string>
+    <string name="add_module_to_user">%d module enabled</string>
+    <string name="module_install_failed">%d module enabled</string>
     <!-- AppListActivity -->
+    <string name="menu_show_modules">Modules</string>
     <!-- ModulesActivity and AppListActivity -->
     <!-- SettingsActivity -->
     <!-- Module Repo -->
+    <string name="module_information">Info</string>
     <!-- CrashReportActivity -->
     <!-- Colors -->
 </resources>

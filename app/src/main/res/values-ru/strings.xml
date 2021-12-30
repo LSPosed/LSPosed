@@ -87,13 +87,6 @@
     <string name="menu_enable_word_wrap">Переносить текст</string>
     <string name="enabled_verbose_log">Подробные логи включены</string>
     <string name="disabled_verbose_log">Подробные логи выключены</string>
-    <!-- Notification -->
-    <string name="module_is_not_activated_yet">Модуль установлен</string>
-    <string name="module_is_not_activated_yet_detailed">Модуль %s установлен но не включен</string>
-    <string name="xposed_module_updated_notification_title">Модуль обновлен</string>
-    <string name="xposed_module_updated_notification_content">Модуль %s обновлен, остановите и запустите приложения выбранные для модуля</string>
-    <string name="xposed_module_updated_notification_title_system">Модуль обновлен, требуется перезагрузка</string>
-    <string name="xposed_module_updated_notification_content_system">Модуль %s обновлен, так как выбран системный фреймворк для модуля, требуется перезагрузка для применения изменений</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(описание отсутствует)</string>
     <string name="warning_xposed_min_version">Этот модуль требует более новой версии LSPosed (%d) и не может быть включен</string>
@@ -137,6 +130,7 @@
     <string name="use_recommended">Рекомендуемые</string>
     <string name="no_scope_selected_has_recommended">Вы не выбрали ни одного приложения. Выбрать рекомендуемые приложения?</string>
     <string name="use_recommended_message">Выбрать рекомендуемые приложения?</string>
+    <string name="module_is_not_activated_yet">Модуль установлен</string>
     <string name="requested_by_module">Рекомендуемые</string>
     <string name="update_available">Доступно обновление: %1$s</string>
     <string name="module_disabled_no_selection">Модуль %s выключен, так как ни одно приложение не выбрано</string>
@@ -229,4 +223,5 @@
     <string name="color_grey">Серый</string>
     <string name="color_blue_grey">Серо-голубой</string>
     <string name="feedback_or_suggestion">Обратная связь</string>
+    <string name="sort_upgradable_first">Сначала обновления моих модулей</string>
 </resources>
