@@ -26,12 +26,13 @@
         <item quantity="other">%d modules enabled</item>
     </plurals>
     <!-- LogsActivity -->
-    <!-- Notification -->
     <!-- ModulesActivity -->
     <!-- AppListActivity -->
+    <string name="menu_show_modules">Modules</string>
     <!-- ModulesActivity and AppListActivity -->
     <!-- SettingsActivity -->
     <!-- Module Repo -->
+    <string name="module_information">Info</string>
     <!-- CrashReportActivity -->
     <!-- Colors -->
 </resources>
