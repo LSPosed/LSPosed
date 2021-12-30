@@ -25,12 +25,18 @@
         <item quantity="one">%d ماژول فعال شده</item>
         <item quantity="other">%d ماژول فعال شده</item>
     </plurals>
-    <string name="Logs">سیاهه</string>
+    <string name="Logs">گزارشات</string>
     <string name="Settings">تنظیمات</string>
     <string name="About">درباره</string>
     <string name="report_issue">گزارش مشکل</string>
-    <string name="module_repo">مخزن</string>
-    <string name="about_view_source_code"><![CDATA[سورس کد موجود در %1$s<br/> جوین شوید در %2$s چنل ما]]></string>
+    <string name="module_repo">ماژول ها</string>
+    <string name="module_repo_loading">در حال بارگذاری…</string>
+    <string name="module_repo_up_to_date">تمامی ماژول ها به روز هستند</string>
+    <plurals name="module_repo_upgradable">
+        <item quantity="one">%d قابل بروز شدن هستند</item>
+        <item quantity="other">%d قابل بروز شدن هستند</item>
+    </plurals>
+    <string name="about_view_source_code"><![CDATA[کد منبع موجود در %1$s<br/> عضو شوید در %2$s کانال ما]]></string>
     <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">rezamqds</string>
     <string name="install">نصب</string>
     <string name="install_summary">برای نصب LSPosed ضربه بزنید</string>
@@ -53,9 +59,18 @@
     <string name="info_system_version">نسخه سیستم</string>
     <string name="info_device">دستگاه</string>
     <string name="info_system_abi">سیستم ABI</string>
+    <string name="info_api">رابط کاربری نصب</string>
+    <string name="parasitic_recommend">مدیر انگلی توصیه می شود</string>
+    <string name="parasitic_recommend_summary">LSPosed اکنون از انگلی شدن سیستم برای جلوگیری از شناسایی پشتیبانی می کند. پس از ایجاد موفقیت آمیز میانبر مدیر انگلی، می توانید با خیال راحت مدیر را حذف نصب کنید. در هر صورت می توانید مدیر را از /data/adb/lspd/manager.apk نصب کنید.</string>
+    <string name="create_shortcut">ایجاد میان‌بر</string>
+    <string name="never_show">هیچ وقت نشان نده</string>
+    <string name="failed_to_create_shortcut">ساخت میان‌بر ناموفق بود: %1$s</string>
+    <string name="update_lsposed">بروزرسانیLSPosed</string>
+    <string name="update_lsposed_msg">آیا بروزرسانیLSPosedرا تایید می کنید؟ دستگاه شما پس از نصب بروزرسانی به طور خودکار ریستارت خواهد شد</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">ذخیره</string>
-    <string name="nav_item_logs_module">سیاهه ماژول</string>
+    <string name="nav_item_logs_verbose">گزارشات پرمخاطب</string>
+    <string name="nav_item_logs_module">گزارشات ماژول</string>
     <string name="logs_save_failed2">ذخیره ناموفق:\n%s</string>
     <string name="menuClearLog">پاک کردن سیاهه</string>
     <string name="logs_cleared">سیاهه با موفقیت حذف شد.</string>
@@ -65,13 +80,9 @@
     <string name="logs_cannot_read">نمیتوان سیاهه را خواند: \n</string>
     <string name="menuReload">بارگذاری مجدد</string>
     <string name="logs_clear_failed_2">ناموفق در پاک کردن سیاهه</string>
-    <!-- Notification -->
-    <string name="module_is_not_activated_yet">ماژول Xposed در حال حاضر فعال نشده</string>
-    <string name="module_is_not_activated_yet_detailed">%s نصب شده ، اما فعال نشده</string>
-    <string name="xposed_module_updated_notification_title">ماژول Xposed بروزرسانی شد</string>
-    <string name="xposed_module_updated_notification_content">%s بروز شد، لطفا توقف اجباری و ریستارت کنید اپ های این محدوده را</string>
-    <string name="xposed_module_updated_notification_title_system">ماژول Xposed بروز شد، راه‌اندازی سیستم نیاز است</string>
-    <string name="xposed_module_updated_notification_content_system">%s بروز شد، از آنجا که محدوده شامل System Framework است ، برای اعمال تغییرات ، راه اندازی مجدد آن لازم است</string>
+    <string name="menu_enable_word_wrap">بسته بندی کلمات</string>
+    <string name="enabled_verbose_log">گزارش پر مخاطب فعال شد</string>
+    <string name="disabled_verbose_log">گزارش پر مخاطب غیر فعال شد</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(هیچ توضیحی ارائه نشده است)</string>
     <string name="warning_xposed_min_version">این ماژول به نسخه جدیدتر Xposed (%d) نیاز دارد و بنابراین نمی توان آن را فعال کرد</string>
@@ -89,6 +100,8 @@
     <string name="module_install_failed">اضافه کردن ماژول ناموفق بود</string>
     <string name="install_to_user">نصب به کاربر %s</string>
     <string name="install_to_user_message">میخواهید نصب کنید %1$s به کابر %2$s ؟ این نیازمند نصب دستیه ها، نصب اجباری بوسیله LSPOSED ممکنه مشکل ایجاد کنه.</string>
+    <string name="expand">گسترش</string>
+    <string name="collapse">فروپاشی</string>
     <!-- AppListActivity -->
     <string name="compile_speed">بهینه‌سازی مجدد</string>
     <string name="compile_speed_msg">بهینه سازی…</string>
@@ -107,11 +120,13 @@
     <string name="no_scope_selected">شما هیچ برنامه ای را انتخاب نکردید. ادامه می‌دهید؟</string>
     <string name="menu_show_games">بازی ها</string>
     <string name="menu_show_modules">ماژول ها</string>
+    <string name="menu_show_denylist">انکار کننده</string>
     <string name="failed_to_save_scope_list">ناموفق در ذخیره لیست محدوده</string>
     <string name="app_description">%1$s\n نسخه %2$s</string>
     <string name="use_recommended">نیازمنده</string>
     <string name="no_scope_selected_has_recommended">شما هیچ برنامه ای را انتخاب نکردید. انتخاب برنامه های نیازمند؟</string>
     <string name="use_recommended_message">انتخاب برنامه های نیازمند؟</string>
+    <string name="module_is_not_activated_yet">ماژول Xposed در حال حاضر فعال نشده</string>
     <string name="requested_by_module">نیازمنده</string>
     <string name="update_available">بروزرسانی دردسترس: %1$s</string>
     <string name="module_disabled_no_selection">ماژول %s غیرفعال شده چون برنامه ای انتخاب نشده.</string>
@@ -125,33 +140,43 @@
     <string name="reboot_required">برای اعمال این تغییر ، راه اندازی مجدد مورد نیاز است</string>
     <string name="reboot">راه‌اندازی مجدد</string>
     <string name="menu_hide">پنهان کردن</string>
+    <string name="deny_list">%s در فهرست انکار است. ممکن است اثری نداشته باشد.</string>
+    <string name="deny_list_info">در انکار کننده</string>
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">دیدن در برنامه دیگر</string>
     <string name="module_app_info">اطلاعات برنامه</string>
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nهیچی اینجا نیس</string>
     <!-- SettingsActivity -->
-    <string name="settings_group_framework">فریمورک</string>
-    <string name="pref_title_disable_verbose_log">غیرفعال کردن سیاهه دقیق</string>
+    <string name="settings_group_framework">چارچوب</string>
+    <string name="pref_title_disable_verbose_log">غیرفعال کردن گزارشات دقیق</string>
     <string name="pure_black_dark_theme">تم مشکی تیره</string>
     <string name="pure_black_dark_theme_summary">استفاده از مشکی خالص در صورت فعال بودن تم سیاه</string>
     <string name="settings_group_theme">تم</string>
     <string name="settings_backup_and_restore">پشتیبان گیری و بازگردانی</string>
+    <string name="settings_backup_summery">لیست ماژول های پشتیبان گیری و لیست های محدوده.</string>
+    <string name="settings_restore_summery">بازیابی لیست ماژول های پشتیبان گیری و لیست های محدوده.</string>
     <string name="settings_backup">پشتیبان گیری</string>
-    <string name="settings_backup_failed2">ناموفق در بکاپ:\n%s</string>
+    <string name="settings_backup_failed2">پشتیبان گیری ناموفق بود:\n%s</string>
     <string name="settings_restore">بازگردانی</string>
     <string name="settings_restore_failed2">ناموفق در بازگرداندن:\n%s</string>
-    <string name="group_network">شبکه</string>
-    <string name="dns_over_http">DNS از طریق HTTPS</string>
-    <string name="dns_over_http_summary">راه حل مسدودیت با DNS در برخی کشورها</string>
+    <string name="group_network">اتصال</string>
+    <string name="dns_over_http">رفع مسدودیت از طریق DNS</string>
+    <string name="dns_over_http_summary">رفع مسدودیت در برخی کشورها با اتصال DNS</string>
     <string name="theme_color">رنگ تم</string>
     <string name="theme_color_system">رنگ لهجه سیستم</string>
-    <string name="settings_show_hidden_icon_apps_enabled">برنامه ها را مجبور به نمایش نمادهای راه انداز کنید</string>
-    <string name="settings_show_hidden_icon_apps_enabled_summary">پس از Android 10 ، برنامه ها مجاز نیستند نمادهای راه انداز خود را مخفی کنند. برای غیرفعال کردن این ویژگی سیستم ، خاموش کنید.</string>
+    <string name="settings_show_hidden_icon_apps_enabled">برنامه ها را اجبار به نمایش آیکون هایشان کنید</string>
+    <string name="settings_show_hidden_icon_apps_enabled_summary">پس از اندروید ۱۰ ، برنامه ها مجاز نیستند آیکون های خود را مخفی کنند. برای غیرفعال کردن این ویژگی سیستمی، کلید را خاموش کنید.</string>
     <string name="settings_group_system">سیستم</string>
     <string name="settings_language">زبان</string>
     <string name="settings_translation_contributors">مترجم همکار</string>
     <string name="settings_translation">کمک در ترجمه</string>
     <string name="settings_translation_summary">به ما کمک کنید %s به زبان شما ترجمه کنیم</string>
+    <string name="pref_title_enable_auto_add_shortcut">به صورت خودکار یک میان‌بر اضافه کنید</string>
+    <string name="settings_enable_auto_add_shortcut_summary">در صورت غیرفعال شدن در مدیر غیر انگلی، میان بر جدیدی اضافه نخواهد شد</string>
+    <string name="settings_update_channel">بروزرسانی کانال</string>
+    <string name="update_channel_stable">پایدار</string>
+    <string name="update_channel_bate">آزمایشی</string>
+    <string name="update_channel_nightly">ساخت شبانه</string>
     <!-- Module Repo -->
     <string name="module_readme">منو بخون</string>
     <string name="module_releases">انتشار‌ها</string>
@@ -166,9 +191,33 @@
     <string name="module_release_no_more">انتشار جدیدی نیست</string>
     <string name="repo_load_failed">ناموفق در بارگذاری ماژول: %s</string>
     <!-- CrashReportActivity -->
+    <string name="version_mismatch">نسخه چارچوب LSPosed (%1$d) با مدیر (%2$d) مطابقت ندارد. لطفا LSPosed را دوباره نصب کنید.</string>
     <string name="manager_crashed">منیجر هنگ کرده</string>
     <string name="manager_crashed_info">این را گزارش کنید </string>
     <string name="send_crash_info">ارسال اطلاعات هنگ</string>
     <string name="crash_info_copied">اطلاعات هنگ در کلیپ بورد کپی شد</string>
     <!-- Colors -->
+    <string name="color_pixel_blue">پیکسل آبی</string>
+    <string name="color_sakura">ساکورا</string>
+    <string name="color_red">قرمز</string>
+    <string name="color_pink">صورتی</string>
+    <string name="color_purple">بنفش</string>
+    <string name="color_deep_purple">بنفش تیره</string>
+    <string name="color_indigo">نیلی</string>
+    <string name="color_blue">آبی</string>
+    <string name="color_light_blue">آبی روشن</string>
+    <string name="color_cyan">فیروزه ای</string>
+    <string name="color_teal">آبی</string>
+    <string name="color_green">سبز</string>
+    <string name="color_light_green">سبز روشن</string>
+    <string name="color_lime">آهک</string>
+    <string name="color_yellow">زرد</string>
+    <string name="color_amber">کهربا</string>
+    <string name="color_orange">نارنجی</string>
+    <string name="color_deep_orange">نارنجی تیره</string>
+    <string name="color_brown">قهوه ای</string>
+    <string name="color_grey">خاکستری</string>
+    <string name="color_blue_grey">خاکستری آبی</string>
+    <string name="feedback_or_suggestion">نظر یا پیشنهادی بدهید</string>
+    <string name="sort_upgradable_first">Upgradable first</string>
 </resources>
