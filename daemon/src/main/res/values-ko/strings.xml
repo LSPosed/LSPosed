@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Notification -->
+    <string name="module_is_not_activated_yet">LSPosed 모듈이 아직 활성화되지 않았습니다.</string>
+    <string name="module_is_not_activated_yet_detailed">%s이(가) 설치되었지만 아직 활성화되지 않았습니다.</string>
+    <string name="xposed_module_updated_notification_title">LSPosed 모듈 업데이트</string>
+    <string name="xposed_module_updated_notification_content">%s이(가) 업데이트되었습니다.</string>
+</resources>
