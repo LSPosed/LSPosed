@@ -37,8 +37,7 @@
     <string name="module_repo_loading">جارٍ التحميل…</string>
     <string name="module_repo_up_to_date">جميع الوحدات محدثة</string>
     <string name="about_view_source_code"><![CDATA[عرض كود المصدر في %1$s<br/>انضم إلى قناتنا %2$s]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Mahmoud Abd El-Hamed (7TM)
-Ali Samir</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Mahmoud Abd El-Hamed (7TM)</string>
     <string name="install">تـثبيت</string>
     <string name="install_summary">انـقر لتثبيت LSPosed</string>
     <string name="not_installed">غير  مثبت</string>
@@ -70,7 +69,7 @@ Ali Samir</string>
     <string name="update_lsposed_msg">تأكـيد تحديث LSPosed؟ سيتم إعـادة تشغيل هذا الجهاز بعد اكتمال التحديث</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">احفظ</string>
-    <string name="nav_item_logs_verbose">سجلات مطولة</string>
+    <string name="nav_item_logs_verbose">سجلات مفصّلة</string>
     <string name="nav_item_logs_module">سجلات الوحـدات</string>
     <string name="logs_save_failed2">فشل الحفظ:\n%s</string>
     <string name="menuClearLog">مسح السجل الآن</string>
@@ -82,15 +81,8 @@ Ali Samir</string>
     <string name="menuReload">إعادة التحميل</string>
     <string name="logs_clear_failed_2">فشل مسح السجل</string>
     <string name="menu_enable_word_wrap">التفاف النص</string>
-    <string name="enabled_verbose_log">تم تفعيل السجل المطول</string>
-    <string name="disabled_verbose_log">تم تعطيل السجل المطول</string>
-    <!-- Notification -->
-    <string name="module_is_not_activated_yet">وحدة Xposed لم يتم تفعيلها بعد</string>
-    <string name="module_is_not_activated_yet_detailed">%s تم تثبيته، ولكن لم يتم تفعيله بعد</string>
-    <string name="xposed_module_updated_notification_title">وحدة Xposed تم تحديثها</string>
-    <string name="xposed_module_updated_notification_content">%s تم تحديثه، يرجى فرض إيقاف وإعادة تشغيل التطبيقات في نطاقه</string>
-    <string name="xposed_module_updated_notification_title_system">تم تحديث وحدة Xposed، مطلوب إعادة تشغيل النظام</string>
-    <string name="xposed_module_updated_notification_content_system">%s تم تحديثه، نظراً لأن النطاق يحتوي على إطار النظام، يتطلب إعادة التشغيل لتطبيق التغييرات</string>
+    <string name="enabled_verbose_log">تم تفعيل السجل المفصّل</string>
+    <string name="disabled_verbose_log">تم تعطيل السجل المفصّل</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(لم يتم تقديم وصف)</string>
     <string name="warning_xposed_min_version">هذه الوحدة تتطلب إصدار Xposed الأحدث (%d) وبالتالي لا يمكن تفعيلها</string>
@@ -134,6 +126,7 @@ Ali Samir</string>
     <string name="use_recommended">مُوصى به</string>
     <string name="no_scope_selected_has_recommended">لم تقم بتحديد أي تطبيق. تحديد التطبيقات الموصى بها؟</string>
     <string name="use_recommended_message">تحديد التطبيقات الموصى بها؟</string>
+    <string name="module_is_not_activated_yet">وحدة Xposed لم يتم تفعيلها بعد</string>
     <string name="requested_by_module">مُوصى به</string>
     <string name="update_available">تحديث متاح: %1$s</string>
     <string name="module_disabled_no_selection">الوحدة %s تم تعطيلها لعدم تحديد أي تطبيق.</string>
@@ -226,4 +219,5 @@ Ali Samir</string>
     <string name="color_grey">رمادي</string>
     <string name="color_blue_grey">أزرق رمادي</string>
     <string name="feedback_or_suggestion">ملاحظات أو اقتراحات</string>
+    <string name="sort_upgradable_first">قابل للترقية أولاً</string>
 </resources>
