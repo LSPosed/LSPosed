@@ -83,13 +83,6 @@
     <string name="menu_enable_word_wrap">A capo automatico</string>
     <string name="enabled_verbose_log">Log verboso abilitato</string>
     <string name="disabled_verbose_log">Log verboso disabilitato</string>
-    <!-- Notification -->
-    <string name="module_is_not_activated_yet">Il modulo Xposed non è ancora attivo</string>
-    <string name="module_is_not_activated_yet_detailed">%s è stato installato, ma non è ancora attivo</string>
-    <string name="xposed_module_updated_notification_title">Modulo Xposed aggiornato</string>
-    <string name="xposed_module_updated_notification_content">%s è stato aggiornato, arresta e riavvia le applicazioni per le quali è abilitato</string>
-    <string name="xposed_module_updated_notification_title_system">Modulo Xposed aggiornato, è necessario il riavvio del sistema</string>
-    <string name="xposed_module_updated_notification_content_system">%s è stato aggiornato. Poiché è abilitato per il framework di sistema, è necessario riavviare per applicare le modifiche</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(nessuna descrizione fornita)</string>
     <string name="warning_xposed_min_version">Questo modulo richiede una versione più recente di Xposed (%d) e quindi non può essere attivato</string>
@@ -133,6 +126,7 @@
     <string name="use_recommended">Seleziona consigliate</string>
     <string name="no_scope_selected_has_recommended">Non hai selezionato nessuna app. Selezionare le app consigliate?</string>
     <string name="use_recommended_message">Vuoi selezionare le app consigliate?</string>
+    <string name="module_is_not_activated_yet">Il modulo Xposed non è ancora attivo</string>
     <string name="requested_by_module">Consigliata</string>
     <string name="update_available">Aggiornamento disponibile: %1$s</string>
     <string name="module_disabled_no_selection">Il modulo %s è stato disabilitato poiché nessuna app è stata selezionata.</string>
@@ -166,7 +160,7 @@
     <string name="settings_restore">Ripristina</string>
     <string name="settings_restore_failed2">Ripristino fallito:\n%s</string>
     <string name="group_network">Rete</string>
-    <string name="dns_over_http">DNS su HTTPS</string>
+    <string name="dns_over_http">DNS over HTTPS</string>
     <string name="dns_over_http_summary">Soluzione alternativa all\'avvelenamento della cache DNS in alcune nazioni</string>
     <string name="theme_color">Colore del tema</string>
     <string name="theme_color_system">Colore del tema del sistema</string>
@@ -225,4 +219,5 @@
     <string name="color_grey">Grigio</string>
     <string name="color_blue_grey">Blu grigio</string>
     <string name="feedback_or_suggestion">Feedback o suggerimenti</string>
+    <string name="sort_upgradable_first">Aggiornabili prima</string>
 </resources>
