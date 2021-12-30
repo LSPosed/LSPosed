@@ -8,10 +8,6 @@ if [ -r $tmpLspdApk ]; then
   java_options="-Djava.class.path=$tmpLspdApk"
   java_options="$java_options -Dlsp.library.path=/data/local/tmp"
   debug="true"
-elif [ -d "$dir/system" ]; then
-  java_options="-Djava.class.path=$dir/system/daemon.apk"
-  java_options="$java_options -Dlsp.library.path=$dir"
-  debug="true"
 else
   java_options="-Djava.class.path=$dir/daemon.apk"
   java_options="$java_options -Dlsp.library.path=$dir"
