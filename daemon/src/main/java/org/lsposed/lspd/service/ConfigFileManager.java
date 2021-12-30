@@ -51,6 +51,7 @@ import hidden.HiddenApiBridge;
 
 public class ConfigFileManager {
     static final Path basePath = Paths.get("/data/adb/lspd");
+    static final Path daemonApkPath = Paths.get(System.getProperty("java.class.path", null));
     static final Path managerApkPath = basePath.resolve("manager.apk");
     private static final Path lockPath = basePath.resolve("lock");
     private static final Path configDirPath = basePath.resolve("config");
@@ -96,7 +97,7 @@ public class ConfigFileManager {
             Method addAssetPath = AssetManager.class.getDeclaredMethod("addAssetPath", String.class);
             addAssetPath.setAccessible(true);
             //noinspection ConstantConditions
-            if ((int) addAssetPath.invoke(am, managerApkPath.toString()) > 0)
+            if ((int) addAssetPath.invoke(am, daemonApkPath.toString()) > 0)
                 //noinspection deprecation
                 res = new Resources(am, null, null);
         } catch (Throwable e) {

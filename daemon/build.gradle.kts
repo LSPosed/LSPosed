@@ -20,10 +20,7 @@
 import com.android.build.gradle.BaseExtension
 import com.android.ide.common.signing.KeystoreHelper
 import java.io.PrintStream
-import java.io.FileOutputStream
-import java.util.Locale
-import java.util.jar.JarFile
-import java.util.zip.ZipOutputStream
+import java.util.*
 
 plugins {
     id("com.android.application")
@@ -123,34 +120,6 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
     tasks["merge${variantCapped}JniLibFolders"].enabled = false
     tasks["merge${variantCapped}NativeLibs"].enabled = false
 
-    task<Jar>("generateApp${variantLowered}RFile") {
-        dependsOn(":app:process${variantCapped}Resources")
-        doLast {
-            val rFile = JarFile(
-                File(
-                    project(":app").buildDir,
-                    "intermediates/compile_and_runtime_not_namespaced_r_class_jar/${variantLowered}/R.jar"
-                )
-            )
-            ZipOutputStream(
-                FileOutputStream(
-                    File(
-                        project.buildDir,
-                        "tmp/${variantLowered}R.jar"
-                    )
-                )
-            ).use {
-                for (entry in rFile.entries()) {
-                    if (entry.name.startsWith("org/lsposed/manager")) {
-                        it.putNextEntry(entry)
-                        rFile.getInputStream(entry).transferTo(it)
-                        it.closeEntry()
-                    }
-                }
-            }
-        }
-    }
-
     val app = rootProject.project(":app").extensions.getByName<BaseExtension>("android")
     val outSrcDir = file("$buildDir/generated/source/signInfo/${variantLowered}")
     val outSrc = file("$outSrcDir/org/lsposed/lspd/util/SignInfo.java")
@@ -195,9 +164,4 @@ dependencies {
     implementation(project(":hiddenapi-bridge"))
     implementation(project(":daemon-service"))
     implementation(project(":manager-service"))
-    android.applicationVariants.all {
-        "${name}Implementation"(files(File(project.buildDir, "tmp/${name}R.jar")) {
-            builtBy("generateApp${name}RFile")
-        })
-    }
 }
