@@ -20,7 +20,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <!-- LogsActivity -->
-    <!-- Notification -->
     <!-- ModulesActivity -->
     <!-- AppListActivity -->
     <!-- ModulesActivity and AppListActivity -->
