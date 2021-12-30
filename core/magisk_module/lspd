@@ -1,19 +1,19 @@
 #!/system/bin/sh
 
 dir=${0%/*}
-tmpLspdDex="/data/local/tmp/lspd.dex"
+tmpLspdApk="/data/local/tmp/daemon.apk"
 debug="false"
 
-if [ -r $tmpLspdDex ]; then
-  java_options="-Djava.class.path=$tmpLspdDex"
+if [ -r $tmpLspdApk ]; then
+  java_options="-Djava.class.path=$tmpLspdApk"
   java_options="$java_options -Dlsp.library.path=/data/local/tmp"
   debug="true"
 elif [ -d "$dir/system" ]; then
-  java_options="-Djava.class.path=$dir/system/framework/lspd.dex"
+  java_options="-Djava.class.path=$dir/system/daemon.apk"
   java_options="$java_options -Dlsp.library.path=$dir"
   debug="true"
 else
-  java_options="-Djava.class.path=$dir/framework/lspd.dex"
+  java_options="-Djava.class.path=$dir/daemon.apk"
   java_options="$java_options -Dlsp.library.path=$dir"
 fi
 
@@ -29,4 +29,4 @@ if [ $debug = "true" ]; then
 fi
 
 # shellcheck disable=SC2086
-exec /system/bin/app_process $java_options /system/bin --nice-name=lspd org.lsposed.lspd.core.Main "$@" >/dev/null 2>&1
+exec /system/bin/app_process $java_options /system/bin --nice-name=lspd org.lsposed.lspd.Main "$@" >/dev/null 2>&1

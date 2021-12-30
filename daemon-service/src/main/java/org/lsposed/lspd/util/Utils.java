@@ -24,7 +24,7 @@ import android.os.SystemProperties;
 import android.text.TextUtils;
 import android.util.Log;
 
-import org.lsposed.lspd.BuildConfig;
+import org.lsposed.lspd.daemonservice.BuildConfig;
 
 import java.time.ZoneId;
 import java.time.ZoneOffset;

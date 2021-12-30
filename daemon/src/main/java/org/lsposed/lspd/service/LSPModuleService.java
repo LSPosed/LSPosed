@@ -21,7 +21,8 @@ package org.lsposed.lspd.service;
 
 import android.os.IBinder;
 
-import de.robv.android.xposed.XposedBridge;
+import org.lsposed.daemon.BuildConfig;
+
 import io.github.xposed.xposedservice.IXposedService;
 
 public class LSPModuleService extends IXposedService.Stub {
@@ -39,6 +40,6 @@ public class LSPModuleService extends IXposedService.Stub {
 
     @Override
     public int getVersion() {
-        return XposedBridge.getXposedVersion();
+        return BuildConfig.API_CODE;
     }
 }

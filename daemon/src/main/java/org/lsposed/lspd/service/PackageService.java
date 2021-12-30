@@ -266,7 +266,7 @@ public class PackageService {
         }
     }
 
-    public static ParceledListSlice<ResolveInfo> queryIntentActivities(android.content.Intent intent, java.lang.String resolvedType, int flags, int userId) throws RemoteException {
+    public static ParceledListSlice<ResolveInfo> queryIntentActivities(Intent intent, String resolvedType, int flags, int userId) throws RemoteException {
         IPackageManager pm = getPackageManager();
         if (pm == null) return null;
         return new ParceledListSlice<>(pm.queryIntentActivities(intent, resolvedType, flags, userId).getList());

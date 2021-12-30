@@ -29,11 +29,10 @@ import android.util.Log;
 
 import com.android.internal.os.BinderInternal;
 
-import org.lsposed.lspd.BuildConfig;
+import org.lsposed.daemon.BuildConfig;
 
 import java.io.File;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
