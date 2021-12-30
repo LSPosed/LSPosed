@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Notification -->
+    <string name="module_is_not_activated_yet">Модуль установлен</string>
+    <string name="module_is_not_activated_yet_detailed">Модуль %s установлен но не включен</string>
+    <string name="xposed_module_updated_notification_title">Модуль обновлен</string>
+    <string name="xposed_module_updated_notification_content">Модуль %s обновлен, остановите и запустите приложения выбранные для модуля</string>
+    <string name="xposed_module_updated_notification_title_system">Модуль обновлен, требуется перезагрузка</string>
+    <string name="xposed_module_updated_notification_content_system">Модуль %s обновлен, так как выбран системный фреймворк для модуля, требуется перезагрузка для применения изменений</string>
+</resources>
