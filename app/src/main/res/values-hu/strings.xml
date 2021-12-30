@@ -39,12 +39,13 @@
     <string name="partial_activated">Részben aktiválva</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy betöltése nem megfelelő</string>
     <!-- LogsActivity -->
-    <!-- Notification -->
     <!-- ModulesActivity -->
     <!-- AppListActivity -->
+    <string name="menu_show_modules">Modulok</string>
     <!-- ModulesActivity and AppListActivity -->
     <!-- SettingsActivity -->
     <!-- Module Repo -->
+    <string name="module_information">Információ</string>
     <!-- CrashReportActivity -->
     <!-- Colors -->
 </resources>
