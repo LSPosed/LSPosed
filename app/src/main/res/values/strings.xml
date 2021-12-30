@@ -86,14 +86,6 @@
     <string name="enabled_verbose_log">Verbose log enabled</string>
     <string name="disabled_verbose_log">Verbose log disabled</string>
 
-    <!-- Notification -->
-    <string name="module_is_not_activated_yet">Xposed module is not activated yet</string>
-    <string name="module_is_not_activated_yet_detailed">%s has been installed, but is not activated yet</string>
-    <string name="xposed_module_updated_notification_title">Xposed module updated</string>
-    <string name="xposed_module_updated_notification_content">%s has been updated, please force stop and restart apps in its scope</string>
-    <string name="xposed_module_updated_notification_title_system">Xposed module updated, system reboot required</string>
-    <string name="xposed_module_updated_notification_content_system">%s has been updated, since the scope contains System Framework, required reboot to apply changes</string>
-
     <!-- ModulesActivity -->
     <string name="module_empty_description">(no description provided)</string>
     <string name="warning_xposed_min_version">This module requires a newer Xposed version (%d) and thus cannot be activated</string>
@@ -138,6 +130,7 @@
     <string name="use_recommended">Recommended</string>
     <string name="no_scope_selected_has_recommended">You did not select any app. Select recommended apps?</string>
     <string name="use_recommended_message">Select recommended apps?</string>
+    <string name="module_is_not_activated_yet">Xposed module is not activated yet</string>
     <string name="requested_by_module">Recommended</string>
     <string name="update_available">Update available: %1$s</string>
     <string name="module_disabled_no_selection">Module %s has been disabled since no app selected.</string>

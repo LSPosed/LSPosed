@@ -6,6 +6,7 @@ on:
     branches: [ master ]
     paths:
       - app/src/main/res/values/strings.xml
+      - daemon/src/main/res/values/strings.xml
 
 jobs:
   synchronize-with-crowdin:
