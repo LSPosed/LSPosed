@@ -82,13 +82,6 @@
     <string name="menuReload">Reincarca</string>
     <string name="logs_clear_failed_2">Ștergerea jurnalului a eșuat</string>
     <string name="menu_enable_word_wrap">Înfășurarea cuvintelor</string>
-    <!-- Notification -->
-    <string name="module_is_not_activated_yet">Modulul Xposed nu este inca activat</string>
-    <string name="module_is_not_activated_yet_detailed">%s a fost instalat, dar inca nu este activat</string>
-    <string name="xposed_module_updated_notification_title">Modulul Xposed actualizat</string>
-    <string name="xposed_module_updated_notification_content">%s a fost actualizat, vă rugăm să forțați oprirea și repornirea aplicațiilor din domeniul său de aplicare</string>
-    <string name="xposed_module_updated_notification_title_system">Modulul Xposed a fost actualizat, este necesară repornirea sistemului</string>
-    <string name="xposed_module_updated_notification_content_system">%s a fost actualizat, deoarece domeniul de aplicare conține System Framework, necesară repornirea pentru a aplica modificările</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(nici o descriere furnizată)</string>
     <string name="warning_xposed_min_version">Acest modul necesită o versiune Xposed mai nouă (%d) și astfel nu poate fi activata</string>
@@ -132,6 +125,7 @@
     <string name="use_recommended">Recomandate</string>
     <string name="no_scope_selected_has_recommended">Nu ați selectat nicio aplicație. Selectați aplicațiile recomandate?</string>
     <string name="use_recommended_message">Selectaţi aplicaţiile recomandate?</string>
+    <string name="module_is_not_activated_yet">Modulul Xposed nu este inca activat</string>
     <string name="requested_by_module">Recomandate</string>
     <string name="update_available">Actualizare disponibilă: %1$s</string>
     <string name="module_disabled_no_selection">Modulul %s a fost dezactivat din moment ce nicio aplicație nu a fost selectată.</string>
