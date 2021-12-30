@@ -3,7 +3,6 @@
 -keepclasseswithmembers class org.lsposed.lspd.core.Main {
     public static void forkSystemServerPost(android.os.IBinder);
     public static void forkAndSpecializePost(java.lang.String, java.lang.String, android.os.IBinder);
-    public static void main(java.lang.String[]);
 }
 -keepclasseswithmembers,includedescriptorclasses class * {
     native <methods>;
@@ -14,9 +13,6 @@
 -keepclasseswithmembers class org.lsposed.lspd.service.BridgeService {
     public static boolean *(android.os.IBinder, int, long, long, int);
     public static android.os.IBinder getApplicationServiceForSystemServer(android.os.IBinder, android.os.IBinder);
-}
--keepclasseswithmembers class org.lsposed.lspd.service.LogcatService {
-    private int refreshFd(boolean);
 }
 
 -keepclassmembers class ** implements android.content.ContextWrapper {
