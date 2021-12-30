@@ -83,13 +83,6 @@
     <string name="menu_enable_word_wrap">自動換行</string>
     <string name="enabled_verbose_log">詳細記錄檔已啟用</string>
     <string name="disabled_verbose_log">詳細記錄檔已禁用</string>
-    <!-- Notification -->
-    <string name="module_is_not_activated_yet">Xposed 模組尚未啟動</string>
-    <string name="module_is_not_activated_yet_detailed">%s 已安裝, 但尚未啟動</string>
-    <string name="xposed_module_updated_notification_title">Xposed 模組已更新</string>
-    <string name="xposed_module_updated_notification_content">%s 已更新</string>
-    <string name="xposed_module_updated_notification_title_system">Xposed模組已更新，需要重啟系統。</string>
-    <string name="xposed_module_updated_notification_content_system">%s 已更新，由於作用域中包含系統框架，需要重啟系統。</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(未提供描述)</string>
     <string name="warning_xposed_min_version">此模組要求更新版本 Xposed(%d), 啟動失敗</string>
@@ -133,6 +126,7 @@
     <string name="use_recommended">推薦應用程式</string>
     <string name="no_scope_selected_has_recommended">未選擇任何應用程式。選擇推薦的？</string>
     <string name="use_recommended_message">選擇推薦的應用程式?</string>
+    <string name="module_is_not_activated_yet">Xposed 模組尚未啟動</string>
     <string name="requested_by_module">推薦應用程式</string>
     <string name="update_available">可用更新：%1$s</string>
     <string name="module_disabled_no_selection">由於未選擇任何應用程式，模組 %s 已被禁用。</string>
@@ -224,4 +218,5 @@
     <string name="color_brown">啡色</string>
     <string name="color_grey">灰色</string>
     <string name="color_blue_grey">藍灰色</string>
+    <string name="feedback_or_suggestion">反饋或建議</string>
 </resources>
