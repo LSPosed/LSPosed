@@ -15,10 +15,6 @@
     public static android.os.IBinder getApplicationServiceForSystemServer(android.os.IBinder, android.os.IBinder);
 }
 
--keepclassmembers class ** implements android.content.ContextWrapper {
-    public int getUserId();
-    public android.os.UserHandle getUser();
-}
 -assumenosideeffects class android.util.Log {
     public static *** v(...);
     public static *** d(...);
