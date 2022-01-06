@@ -162,7 +162,7 @@ dependencies {
     implementation("dev.rikka.ndk.thirdparty:cxx:1.2.0")
     implementation("io.github.vvb2060.ndk:dobby:1.2")
     implementation("org.apache.commons:commons-lang3:3.12.0")
-    implementation("de.upb.cs.swt:axml:2.1.1")
+    implementation("de.upb.cs.swt:axml:2.1.2")
     compileOnly("androidx.annotation:annotation:1.3.0")
     compileOnly(project(":hiddenapi-stubs"))
     implementation(project(":hiddenapi-bridge"))
