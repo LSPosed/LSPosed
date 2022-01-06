@@ -67,6 +67,7 @@
     <string name="update_lsposed_msg">Підтверджуєте оновлення LSPosed? Цей пристрій перезавантажиться після закінчення оновлення</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Зберегти</string>
+    <string name="nav_item_logs_verbose">Докладні логи</string>
     <string name="nav_item_logs_module">Журнали модулів</string>
     <string name="logs_save_failed2">Не вдалося зберегти:\n%s</string>
     <string name="menuClearLog">Очистити журнал зараз</string>

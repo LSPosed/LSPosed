@@ -65,7 +65,7 @@
     <string name="info_system_abi">Разрядность системы ABI</string>
     <string name="info_api">Способ внедрения</string>
     <string name="parasitic_recommend">Скрытие приложения LSPosed</string>
-    <string name="parasitic_recommend_summary">Рекомендуется скрыть приложение LSPosed от различных обнаружений в системе. Для этого создайте ярлык и безопасно удалите само приложение LSPosed. В любой момент можно вернуть приложение установив его из /data/adb/lspd/manager.apk</string>
+    <string name="parasitic_recommend_summary">Рекомендуется скрыть приложение LSPosed от различных обнаружений в системе. Для этого создайте ярлык и безопасно удалите само приложение LSPosed. В любой момент можно вернуть приложение установив его из \"/data/adb/lspd/manager.apk\"</string>
     <string name="create_shortcut">Создать ярлык</string>
     <string name="never_show">Больше не показывать</string>
     <string name="failed_to_create_shortcut">Не удалось создать ярлык: %1$s</string>
@@ -223,5 +223,5 @@
     <string name="color_grey">Серый</string>
     <string name="color_blue_grey">Серо-голубой</string>
     <string name="feedback_or_suggestion">Обратная связь</string>
-    <string name="sort_upgradable_first">Сначала обновления моих модулей</string>
+    <string name="sort_upgradable_first">Сначала обновляемые</string>
 </resources>

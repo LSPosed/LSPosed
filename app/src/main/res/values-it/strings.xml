@@ -28,7 +28,7 @@
     <string name="Logs">Log</string>
     <string name="Settings">Impostazioni</string>
     <string name="About">Informazioni</string>
-    <string name="report_issue">Segnala un problema</string>
+    <string name="report_issue">Segnala il problema</string>
     <string name="module_repo">Repository</string>
     <string name="module_repo_loading">Caricamento in corso…</string>
     <string name="module_repo_up_to_date">Tutti i moduli sono aggiornati</string>
@@ -45,17 +45,17 @@
     <string name="activated">Attivo</string>
     <string name="partial_activated">Parzialmente attivo</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy non è caricato correttamente</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[<b>WARNING:</b> SEPolicy non è caricato correttamente, i moduli che effettuano l\'hook del framework di sistema non funzioneranno.<br>Segnala il problema allo sviluppatore di <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>.]]></string>
+    <string name="selinux_policy_not_loaded"><![CDATA[SEPolicy non è caricato correttamente.<br/>I moduli che si agganciano al framework di sistema non funzioneranno.<br/>Segnala il problema allo sviluppatore di <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>.]]></string>
     <string name="system_inject_fail_summary">Injection del framework di sistema fallita</string>
-    <string name="system_inject_fail"><![CDATA[Questo problema si verifica raramente e può essere causato da <b>Magisk</b> o da alcuni moduli Magisk di scarsa qualità.<br/>Prova a disabilitare i moduli Magisk tranne Riru e LSPosed o invia il log completo agli sviluppatori.]]></string>
+    <string name="system_inject_fail"><![CDATA[L\'injection del framework di sistema è fallita.<br/>Questo problema si verifica raramente e può essere causato da <b>Magisk</b> o da alcuni moduli Magisk di scarsa qualità.<br/>Prova a disabilitare i moduli Magisk tranne Riru e LSPosed o invia il log completo agli sviluppatori.]]></string>
     <string name="system_prop_incorrect_summary">Proprietà di sistema errate</string>
-    <string name="system_prop_incorrect"><![CDATA[Alcune proprietà di sistema necessarie sono state cancellate o modificate.<br/>In alcuni casi i moduli potrebbero risultare non validi.]]></string>
+    <string name="system_prop_incorrect"><![CDATA[Alcune proprietà di sistema necessarie sono state eliminate o modificate.<br/>In alcuni casi i moduli potrebbero non funzionare.]]></string>
     <string name="need_update">Aggiornamento richiesto</string>
     <string name="please_update_summary">Installa la versione più recente di LSPosed</string>
     <string name="lsposed_not_active">LSPosed non è attualmente installato o attivo.</string>
     <string name="info_api_version">Versione API</string>
     <string name="info_framework_version">Versione del framework</string>
-    <string name="info_manager_version">Versione Manager</string>
+    <string name="info_manager_version">Versione del manager</string>
     <string name="info_system_version">Versione del sistema</string>
     <string name="info_device">Dispositivo</string>
     <string name="info_system_abi">ABI del sistema</string>
@@ -103,9 +103,9 @@
     <string name="expand">espandi</string>
     <string name="collapse">comprimi</string>
     <!-- AppListActivity -->
-    <string name="compile_speed">Ottimizza di nuovo</string>
+    <string name="compile_speed">Ri-ottimizza</string>
     <string name="compile_speed_msg">Ottimizzazione in corso…</string>
-    <string name="compile_done">Ottimizzazione completata.</string>
+    <string name="compile_done">Ottimizzazione completata</string>
     <string name="app_launch">Avvia</string>
     <string name="compile_failed">Ottimizzazione non riuscita: il valore restituito è vuoto</string>
     <string name="compile_failed_with_info">Ottimizzazione fallita: </string>
@@ -115,19 +115,19 @@
     <string name="sort_by_update_time">Data di aggiornamento</string>
     <string name="sort_reverse">Inverso</string>
     <string name="menu_show_system_apps">Applicazioni di sistema</string>
-    <string name="menu_sort">Ordina…</string>
+    <string name="menu_sort">Ordina</string>
     <string name="enable_module">Abilita modulo</string>
     <string name="no_scope_selected">Non hai selezionato nessuna app. Continuare?</string>
     <string name="menu_show_games">Giochi</string>
     <string name="menu_show_modules">Moduli</string>
     <string name="menu_show_denylist">Lista di blocco</string>
-    <string name="failed_to_save_scope_list">Impossibile salvare l\'elenco degli ambiti</string>
+    <string name="failed_to_save_scope_list">Impossibile salvare l\'elenco delle attivazioni</string>
     <string name="app_description">%1$s\nVersione %2$s</string>
     <string name="use_recommended">Seleziona consigliate</string>
     <string name="no_scope_selected_has_recommended">Non hai selezionato nessuna app. Selezionare le app consigliate?</string>
-    <string name="use_recommended_message">Vuoi selezionare le app consigliate?</string>
+    <string name="use_recommended_message">Selezionare le app consigliate?</string>
     <string name="module_is_not_activated_yet">Il modulo Xposed non è ancora attivo</string>
-    <string name="requested_by_module">Consigliata</string>
+    <string name="requested_by_module">Seleziona consigliate</string>
     <string name="update_available">Aggiornamento disponibile: %1$s</string>
     <string name="module_disabled_no_selection">Il modulo %s è stato disabilitato poiché nessuna app è stata selezionata.</string>
     <string name="android_framework">Framework di sistema</string>
@@ -139,7 +139,7 @@
     <string name="force_stop_dlg_text">Se forzi l\'interruzione di un\'app, potrebbe non funzionare correttamente.</string>
     <string name="reboot_required">È necessario riavviare per applicare questa modifica</string>
     <string name="reboot">Riavvia</string>
-    <string name="menu_hide">Nascondi…</string>
+    <string name="menu_hide">Nascondi</string>
     <string name="deny_list">%s è nella lista di blocco. Potrebbe non avere effetto.</string>
     <string name="deny_list_info">Nella lista di blocco</string>
     <!-- ModulesActivity and AppListActivity -->
@@ -153,8 +153,8 @@
     <string name="pure_black_dark_theme_summary">Usa il tema nero puro quando è abilitato il tema scuro</string>
     <string name="settings_group_theme">Tema</string>
     <string name="settings_backup_and_restore">Backup e ripristino</string>
-    <string name="settings_backup_summery">Backup dell\'elenco dei moduli e degli ambiti.</string>
-    <string name="settings_restore_summery">Ripristino dell\'elenco dei moduli e degli ambiti.</string>
+    <string name="settings_backup_summery">Backup dell\'elenco dei moduli e delle attivazioni.</string>
+    <string name="settings_restore_summery">Ripristino dell\'elenco dei moduli e delle attivazioni.</string>
     <string name="settings_backup">Backup</string>
     <string name="settings_backup_failed2">Salvataggio non riuscito:\n%s</string>
     <string name="settings_restore">Ripristina</string>
@@ -212,7 +212,7 @@
     <string name="color_light_green">Verde chiaro</string>
     <string name="color_lime">Lime</string>
     <string name="color_yellow">Giallo</string>
-    <string name="color_amber">Ambra</string>
+    <string name="color_amber">Ambrato</string>
     <string name="color_orange">Arancione</string>
     <string name="color_deep_orange">Arancione scuro</string>
     <string name="color_brown">Marrone</string>

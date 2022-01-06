@@ -31,7 +31,13 @@
     <string name="report_issue">Reportar problema</string>
     <string name="module_repo">Repositório</string>
     <string name="module_repo_loading">Carregando…</string>
+    <string name="module_repo_up_to_date">Todos os módulos atualizados</string>
+    <plurals name="module_repo_upgradable">
+        <item quantity="one">%d módulo atualizado</item>
+        <item quantity="other">%d módulos atualizados</item>
+    </plurals>
     <string name="about_view_source_code"><![CDATA[Ver código fonte em %1$s<br/>Entre no nosso canal %2$s]]></string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">nulo</string>
     <string name="install">Instalar</string>
     <string name="install_summary">Toque para instalar LSPosed</string>
     <string name="not_installed">Não instalado</string>
@@ -53,10 +59,16 @@
     <string name="info_system_version">Versão do Sistema</string>
     <string name="info_device">Dispositivo</string>
     <string name="info_system_abi">ABI do sistema</string>
+    <string name="info_api">Interface de Injeção</string>
+    <string name="parasitic_recommend">Recomendado um Gerenciador de Parasita</string>
     <string name="create_shortcut">Criar atalho</string>
+    <string name="never_show">Nunca exibir</string>
     <string name="failed_to_create_shortcut">Falha ao criar atalho: %1$s</string>
+    <string name="update_lsposed">Atualizar LSPosed</string>
+    <string name="update_lsposed_msg">Confirmar a atualização do LSPosed? Este dispositivo reiniciará após terminar a atualização</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Salvar</string>
+    <string name="nav_item_logs_verbose">Registros detalhados</string>
     <string name="nav_item_logs_module">Registros de Módulos</string>
     <string name="logs_save_failed2">Falha ao salvar:\n%s</string>
     <string name="menuClearLog">Limpar registro agora</string>
@@ -67,25 +79,68 @@
     <string name="logs_cannot_read">Impossível ler registro: \n</string>
     <string name="menuReload">Recarregar</string>
     <string name="logs_clear_failed_2">Não foi possível limpar o registro</string>
+    <string name="menu_enable_word_wrap">Quebra de Palavra</string>
+    <string name="enabled_verbose_log">Registro detalhado ativado</string>
+    <string name="disabled_verbose_log">Registro detalhado desativado</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(nenhuma descrição fornecida)</string>
+    <string name="warning_xposed_min_version">Esse módulo necessita de uma versão mais recente do Xposed (%d) e, portanto, não pode ser ativado</string>
+    <string name="no_min_version_specified">Este módulo não especifica a versão do Xposed de que precisa.</string>
+    <string name="warning_min_version_too_low">Este módulo foi feito para a versão %1$ddo do Xposed, mas devido as alterações incompatíveis na versão %2$d, foi desativado</string>
     <string name="warning_installed_on_external_storage">Este módulo não pôde ser carregado porque está instalado no cartão SD, por favor, mova-o para o armazenamento interno</string>
+    <string name="module_uninstall">Desinstalar</string>
+    <string name="module_settings">Configurações do módulo</string>
+    <string name="view_in_repo">Visualizar no repositório</string>
+    <string name="module_uninstall_message">Você deseja desinstalar este módulo?</string>
     <string name="module_uninstalled">%1$s desinstalado</string>
+    <string name="module_uninstall_failed">Falha na desinstalação</string>
+    <string name="add_module_to_user">Adicionar o módulo ao usuário</string>
+    <string name="module_installed">Foi adicionado %1$s ao usuário %2$s</string>
     <string name="module_install_failed">Falha ao adicionar módulo</string>
+    <string name="install_to_user">Instalar para o usuário %s</string>
+    <string name="install_to_user_message">Quer instalar o %1$s para o usuário %2$s? Recomenda-se instalar manualmente, forçando a instalação via LSPosed pode causar problemas.</string>
     <string name="expand">expandir</string>
+    <string name="collapse">colapso</string>
     <!-- AppListActivity -->
+    <string name="compile_speed">Re-otimizar</string>
     <string name="compile_speed_msg">Otimizando…</string>
+    <string name="compile_done">Otimização completa</string>
+    <string name="app_launch">Lançá-lo</string>
+    <string name="compile_failed">A otimização falhou: o valor de retorno está vazio</string>
+    <string name="compile_failed_with_info">A otimização falhou: </string>
+    <string name="sort_by_name">Nome do aplicativo</string>
+    <string name="sort_by_package_name">Nome do Pacote</string>
     <string name="sort_by_install_time">Tempo de instalação</string>
     <string name="sort_by_update_time">Tempo de atualização</string>
+    <string name="sort_reverse">Reverter</string>
+    <string name="menu_show_system_apps">Aplicativos do sistema</string>
+    <string name="menu_sort">Ordenar</string>
+    <string name="enable_module">Habilitar módulo</string>
+    <string name="no_scope_selected">Você não selecionou nenhum aplicativo. Deseja continuar?</string>
+    <string name="menu_show_games">Jogos</string>
     <string name="menu_show_modules">Módulos</string>
+    <string name="menu_show_denylist">Bloqueados</string>
+    <string name="failed_to_save_scope_list">Falha ao salvar a lista de escopo</string>
+    <string name="app_description">%1$s\nVersão %2$s</string>
+    <string name="use_recommended">Recomendado</string>
+    <string name="no_scope_selected_has_recommended">Você não selecionou nenhum app. Selecionar aplicativos recomendados?</string>
+    <string name="use_recommended_message">Selecionar apps recomendados?</string>
     <string name="module_is_not_activated_yet">O módulo Xposed ainda não foi ativado</string>
+    <string name="requested_by_module">Recomendado</string>
+    <string name="update_available">Atualização disponível: %1$s</string>
+    <string name="module_disabled_no_selection">O módulo %s foi desativado desde que nenhum app foi selecionado.</string>
+    <string name="android_framework">Estrutura do Sistema</string>
     <string name="menu_backup_and_restore">Backup</string>
     <string name="menu_backup">Backup</string>
     <string name="menu_restore">Restaurar</string>
+    <string name="force_stop">Forçar parada</string>
+    <string name="force_stop_dlg_title">Forçar parada?</string>
     <string name="force_stop_dlg_text">Se você forçar a parada de um app, ele pode apresentar mau funcionamento.</string>
     <string name="reboot_required">É necessário reiniciar para aplicar esta alteração</string>
     <string name="reboot">Reiniciar</string>
     <string name="menu_hide">Esconder</string>
+    <string name="deny_list">%s está na lista de Bloqueados. Ele pode não ter efeito.</string>
+    <string name="deny_list_info">Na lista de Bloqueados</string>
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">Ver em outro aplicativo</string>
     <string name="module_app_info">Informações do app</string>
@@ -97,6 +152,8 @@
     <string name="pure_black_dark_theme_summary">Usar o tema preto puro se o tema escuro estiver ativado</string>
     <string name="settings_group_theme">Tema</string>
     <string name="settings_backup_and_restore">Backup e restauração</string>
+    <string name="settings_backup_summery">Backup da lista de módulos e escopo.</string>
+    <string name="settings_restore_summery">Restaurar lista de modules e escopos.</string>
     <string name="settings_backup">Backup</string>
     <string name="settings_backup_failed2">Falha ao fazer backup:\n%s</string>
     <string name="settings_restore">Restaurar</string>
@@ -109,8 +166,15 @@
     <string name="settings_show_hidden_icon_apps_enabled">Forçar aplicativos a mostrar ícones no launcher</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">Depois do Android 10, os apps não têm permissão para ocultar seus ícones de lançador. Desative a opção para desativar este recurso de sistema.</string>
     <string name="settings_group_system">Sistema</string>
+    <string name="settings_language">Idioma</string>
+    <string name="settings_translation_contributors">Contribuidores de tradução</string>
+    <string name="settings_translation">Participe da tradução</string>
     <string name="settings_translation_summary">Ajude-nos a traduzir %s para o seu idioma</string>
+    <string name="pref_title_enable_auto_add_shortcut">Adicionar um atalho automaticamente</string>
+    <string name="settings_update_channel">Canal de atualização</string>
     <string name="update_channel_stable">Estável</string>
+    <string name="update_channel_bate">Beta</string>
+    <string name="update_channel_nightly">Nightly build</string>
     <!-- Module Repo -->
     <string name="module_readme">Leia-me</string>
     <string name="module_releases">Versões</string>
@@ -125,18 +189,32 @@
     <string name="module_release_no_more">Não há mais versões</string>
     <string name="repo_load_failed">Falha ao carregar o repositório de módulos: %s</string>
     <!-- CrashReportActivity -->
+    <string name="version_mismatch">A versão do framework LSPosed (%1$d) não corresponde ao gerente (%2$d). Por favor, reinstale o LSPosed.</string>
     <string name="manager_crashed">Gerenciador travou</string>
+    <string name="manager_crashed_info">reportar isto para </string>
+    <string name="send_crash_info">Enviar as informações de erro</string>
+    <string name="crash_info_copied">Informação do erro copiada para a área de transferência</string>
     <!-- Colors -->
     <string name="color_pixel_blue">Pixel azul</string>
     <string name="color_red">Vermelho</string>
+    <string name="color_pink">Rosa</string>
     <string name="color_purple">Roxo</string>
     <string name="color_deep_purple">Roxo escuro</string>
+    <string name="color_indigo">Anil</string>
+    <string name="color_blue">Azul</string>
     <string name="color_light_blue">Azul claro</string>
+    <string name="color_cyan">Ciano</string>
+    <string name="color_teal">Verde-azulado</string>
+    <string name="color_green">Verde</string>
     <string name="color_light_green">Verde claro</string>
     <string name="color_lime">Verde-limão</string>
     <string name="color_yellow">Amarelo</string>
     <string name="color_amber">Âmbar</string>
     <string name="color_orange">Laranja</string>
     <string name="color_deep_orange">Laranja escuro</string>
+    <string name="color_brown">Marrom</string>
+    <string name="color_grey">Cinza</string>
     <string name="color_blue_grey">Azul acizentado</string>
+    <string name="feedback_or_suggestion">Comentários ou sugestões</string>
+    <string name="sort_upgradable_first">Primeira atualização</string>
 </resources>
