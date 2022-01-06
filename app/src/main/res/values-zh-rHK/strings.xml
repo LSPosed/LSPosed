@@ -219,4 +219,5 @@
     <string name="color_grey">灰色</string>
     <string name="color_blue_grey">藍灰色</string>
     <string name="feedback_or_suggestion">反饋或建議</string>
+    <string name="sort_upgradable_first">可更新優先</string>
 </resources>
