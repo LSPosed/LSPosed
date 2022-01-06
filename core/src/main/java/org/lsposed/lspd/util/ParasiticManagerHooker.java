@@ -76,6 +76,10 @@ public class ParasiticManagerHooker {
                 newAppInfo.deviceProtectedDataDir = appInfo.deviceProtectedDataDir;
                 newAppInfo.processName = appInfo.processName;
                 HiddenApiBridge.ApplicationInfo_credentialProtectedDataDir(newAppInfo, HiddenApiBridge.ApplicationInfo_credentialProtectedDataDir(appInfo));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    HiddenApiBridge.ApplicationInfo_overlayPaths(newAppInfo, HiddenApiBridge.ApplicationInfo_overlayPaths(appInfo));
+                }
+                HiddenApiBridge.ApplicationInfo_resourceDirs(newAppInfo, HiddenApiBridge.ApplicationInfo_resourceDirs(appInfo));
                 newAppInfo.uid = appInfo.uid;
             } catch (Throwable e) {
                 Utils.logE("get manager pkginfo", e);

@@ -193,7 +193,7 @@ dependencies {
     implementation("dev.rikka.rikkax.widget:switchbar:1.0.2")
     implementation("dev.rikka.rikkax.layoutinflater:layoutinflater:1.1.0")
     implementation("me.zhanghai.android.appiconloader:appiconloader:1.3.1")
-    implementation("org.lsposed.hiddenapibypass:hiddenapibypass:3.0")
+    implementation("org.lsposed.hiddenapibypass:hiddenapibypass:4.2")
     implementation(project(":manager-service"))
 }
 

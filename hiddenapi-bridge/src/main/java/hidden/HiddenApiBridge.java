@@ -40,10 +40,10 @@ import android.system.Int32Ref;
 import android.system.Os;
 import android.util.MutableInt;
 
+import androidx.annotation.RequiresApi;
+
 import java.io.File;
 import java.io.FileDescriptor;
-
-import dalvik.system.VMRuntime;
 
 public class HiddenApiBridge {
     public static int AssetManager_addAssetPath(AssetManager am, String path) {
@@ -80,11 +80,11 @@ public class HiddenApiBridge {
         return ctx.registerReceiverAsUser(receiver, user, filter, broadcastPermission, scheduler);
     }
 
-    public static UserHandle UserHandle_ALL(){
+    public static UserHandle UserHandle_ALL() {
         return UserHandle.ALL;
     }
 
-    public static UserHandle UserHandle(int h){
+    public static UserHandle UserHandle(int h) {
         return new UserHandle(h);
     }
 
@@ -94,6 +94,24 @@ public class HiddenApiBridge {
 
     public static void ApplicationInfo_credentialProtectedDataDir(ApplicationInfo applicationInfo, String dir) {
         applicationInfo.credentialProtectedDataDir = dir;
+    }
+
+    public static String[] ApplicationInfo_resourceDirs(ApplicationInfo applicationInfo) {
+        return applicationInfo.resourceDirs;
+    }
+
+    public static void ApplicationInfo_resourceDirs(ApplicationInfo applicationInfo, String[] resourceDirs) {
+        applicationInfo.resourceDirs = resourceDirs;
+    }
+
+    @RequiresApi(31)
+    public static String[] ApplicationInfo_overlayPaths(ApplicationInfo applicationInfo) {
+        return applicationInfo.overlayPaths;
+    }
+
+    @RequiresApi(31)
+    public static void ApplicationInfo_overlayPaths(ApplicationInfo applicationInfo, String[] overlayPaths) {
+        applicationInfo.overlayPaths = overlayPaths;
     }
 
     public static CompatibilityInfo Resources_getCompatibilityInfo(Resources res) {
