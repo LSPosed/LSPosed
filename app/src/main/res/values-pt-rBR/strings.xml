@@ -219,4 +219,5 @@
     <string name="color_grey">Cinza</string>
     <string name="color_blue_grey">Azul acizentado</string>
     <string name="feedback_or_suggestion">Comentários ou sugestões</string>
+    <string name="sort_upgradable_first">Primeira atualização</string>
 </resources>
