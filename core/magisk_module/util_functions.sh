@@ -24,6 +24,8 @@ check_magisk_version() {
     if [ "$MAGISK_VER_CODE" -lt 23000 ]; then
       ui_print "*********************************************************"
       ui_print "! Please install Magisk v23+"
+      ui_print "! If you already have Magisk v23+ installed, "
+      ui_print "! Re-install Magisk from Magisk app"
       abort    "*********************************************************"
     fi
   elif [ "$FLAVOR" == "zygisk" ]; then
