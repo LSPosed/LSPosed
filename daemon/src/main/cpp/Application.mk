@@ -7,9 +7,9 @@ APP_LDFLAGS    := -Wl,--exclude-libs,ALL
 APP_STL        := none
 
 ifneq ($(NDK_DEBUG),1)
-APP_CFLAGS     += -Oz -flto
+APP_CFLAGS     += -Oz -flto=thin
 APP_CFLAGS     += -Wno-unused -Wno-unused-parameter -Werror
 APP_CFLAGS     += -fvisibility=hidden -fvisibility-inlines-hidden
 APP_CFLAGS     += -fno-unwind-tables -fno-asynchronous-unwind-tables
-APP_LDFLAGS    +=  -flto -Wl,--gc-sections -Wl,--strip-all
+APP_LDFLAGS    += -flto=thin -Wl,--thinlto-cache-policy,cache_size_bytes=10m -Wl,--thinlto-cache-dir=build/.lto-cache -Wl,--gc-sections -Wl,--strip-all
 endif
