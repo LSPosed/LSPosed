@@ -52,6 +52,12 @@
         <activity
             android:name=".ui.activity.CrashReportActivity"
             android:process=":error" />
+
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="remove" />
     </application>
 
 </manifest>
