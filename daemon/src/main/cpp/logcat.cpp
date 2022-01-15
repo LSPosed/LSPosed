@@ -17,7 +17,7 @@ constexpr size_t kMaxLogSize = 4 * 1024 * 1024;
 #ifdef NDEBUG
 constexpr size_t kLogBufferSize = 256 * 1024;
 #else
-constexpr size_t kLogBufferSize = 4 * 1024 * 1024;
+constexpr size_t kLogBufferSize = 1024 * 1024;
 #endif
 
 namespace {
@@ -270,11 +270,14 @@ void Logcat::EnsureLogWatchDog() {
                 SetIntProp(kLogdCrashSizeProp, kLogBufferSize);
                 SetStrProp(kLogdTagProp, "");
                 SetStrProp("ctl.start", "logd-reinit");
-                Log("Reset log settings\n");
             }
             const auto *pi = __system_property_find(kLogdTagProp.data());
             uint32_t serial;
-            if (!__system_property_wait(pi, 0, &serial, nullptr)) break;
+            __system_property_read_callback(pi, [](auto *c, auto, auto, auto s) {
+                *reinterpret_cast<uint32_t *>(c) = s;
+            }, &serial);
+            if (!__system_property_wait(pi, serial, &serial, nullptr)) break;
+            Log("Resetting log settings\n");
         }
     }).detach();
 }
