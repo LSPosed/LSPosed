@@ -163,7 +163,8 @@ public class HomeFragment extends BaseFragment implements RepoLoader.RepoListene
             showHint(R.string.lsposed_not_active, false);
         }
         cardBackgroundColor = MaterialColors.harmonizeWithPrimary(activity, cardBackgroundColor);
-        binding.status.setCardBackgroundColor(cardBackgroundColor);
+        //binding.status.setCardBackgroundColor(cardBackgroundColor);
+        binding.status.setBackground(activity.getDrawable(R.mipmap.trans_flag));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             binding.status.setOutlineSpotShadowColor(cardBackgroundColor);
             binding.status.setOutlineAmbientShadowColor(cardBackgroundColor);
