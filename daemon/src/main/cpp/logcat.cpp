@@ -273,7 +273,7 @@ void Logcat::EnsureLogWatchDog() {
                 *reinterpret_cast<uint32_t *>(c) = s;
             }, &serial);
             if (!__system_property_wait(pi, serial, &serial, nullptr)) break;
-            Log("Resetting log settings\n");
+            Log("\nResetting log settings\n");
         }
     }).detach();
 }
