@@ -272,7 +272,9 @@ void Logcat::EnsureLogWatchDog() {
                 SetStrProp("ctl.start", "logd-reinit");
                 Log("Reset log settings\n");
             }
-            std::this_thread::sleep_for(5s);
+            const auto *pi = __system_property_find(kLogdTagProp.data());
+            uint32_t serial;
+            if (!__system_property_wait(pi, 0, &serial, nullptr)) break;
         }
     }).detach();
 }
