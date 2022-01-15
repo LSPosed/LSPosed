@@ -37,7 +37,7 @@
         <item quantity="other">%d módulos atualizados</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[Ver código fonte em %1$s<br/>Entre no nosso canal %2$s]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">nulo</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself."><a href="https://github.com/PedriR19">PedriR19</a></string>
     <string name="install">Instalar</string>
     <string name="install_summary">Toque para instalar LSPosed</string>
     <string name="not_installed">Não instalado</string>
@@ -61,6 +61,7 @@
     <string name="info_system_abi">ABI do sistema</string>
     <string name="info_api">Interface de Injeção</string>
     <string name="parasitic_recommend">Recomendado um Gerenciador de Parasita</string>
+    <string name="parasitic_recommend_summary">LSPosed agora suporta a parasitização do sistema para evitar a detecção. Você pode desinstalar o gerenciador em segurança depois de criar com sucesso um atalho do gerenciador parasita. Em qualquer caso, você pode instalar o gerenciador a partir de /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Criar atalho</string>
     <string name="never_show">Nunca exibir</string>
     <string name="failed_to_create_shortcut">Falha ao criar atalho: %1$s</string>
@@ -171,6 +172,7 @@
     <string name="settings_translation">Participe da tradução</string>
     <string name="settings_translation_summary">Ajude-nos a traduzir %s para o seu idioma</string>
     <string name="pref_title_enable_auto_add_shortcut">Adicionar um atalho automaticamente</string>
+    <string name="settings_enable_auto_add_shortcut_summary">Nenhum novo atalho será adicionado quando desativado no gerenciador não parasita</string>
     <string name="settings_update_channel">Canal de atualização</string>
     <string name="update_channel_stable">Estável</string>
     <string name="update_channel_bate">Beta</string>
@@ -196,6 +198,7 @@
     <string name="crash_info_copied">Informação do erro copiada para a área de transferência</string>
     <!-- Colors -->
     <string name="color_pixel_blue">Pixel azul</string>
+    <string name="color_sakura">Sakura</string>
     <string name="color_red">Vermelho</string>
     <string name="color_pink">Rosa</string>
     <string name="color_purple">Roxo</string>
@@ -216,5 +219,4 @@
     <string name="color_grey">Cinza</string>
     <string name="color_blue_grey">Azul acizentado</string>
     <string name="feedback_or_suggestion">Comentários ou sugestões</string>
-    <string name="sort_upgradable_first">Primeira atualização</string>
 </resources>

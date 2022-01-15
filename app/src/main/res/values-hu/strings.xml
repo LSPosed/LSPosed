@@ -26,7 +26,7 @@
         <item quantity="other">%d modulok aktiválva</item>
     </plurals>
     <string name="Logs">Log fileok</string>
-    <string name="Settings">Beállítasok</string>
+    <string name="Settings">Beállítások</string>
     <string name="About">Névjegy</string>
     <string name="report_issue">Hiba bejelentés</string>
     <string name="module_repo">Modulok</string>
@@ -38,6 +38,10 @@
     <string name="activated">Aktiválva</string>
     <string name="partial_activated">Részben aktiválva</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy betöltése nem megfelelő</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[A System Framework-t érintő modulok lehetséges, hogy nem fognak működni. <br/>Kérlek jelentsd az esetet a <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> fejlesztőjének.]]></string>
+    <string name="system_inject_fail"><![CDATA[Ez sajnos gyakori probléma, amit lehet, hogy a
+<b>Magisk</b> vagy néhány Magisk modul okozott.<br/> Kérlek próbálj meg dekativálni néhány Magisk modult, vagy akár a Riru-t vagy az LSPosed-et vagy küldj el egy teljes napló filet a fejlesztőknek.]]></string>
+    <string name="system_prop_incorrect_summary">Hibás rendszer prop file</string>
     <!-- LogsActivity -->
     <!-- ModulesActivity -->
     <!-- AppListActivity -->

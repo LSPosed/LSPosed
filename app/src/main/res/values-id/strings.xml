@@ -217,4 +217,5 @@
     <string name="color_grey">Abu-abu</string>
     <string name="color_blue_grey">Abu-abu kebiruan</string>
     <string name="feedback_or_suggestion">Umpan balik atau saran</string>
+    <string name="sort_upgradable_first">Dapat diupgrade terlebih dahulu</string>
 </resources>
