@@ -14,11 +14,7 @@ using namespace std::string_view_literals;
 using namespace std::chrono_literals;
 
 constexpr size_t kMaxLogSize = 4 * 1024 * 1024;
-#ifdef NDEBUG
-constexpr size_t kLogBufferSize = 256 * 1024;
-#else
-constexpr size_t kLogBufferSize = 1024 * 1024;
-#endif
+constexpr size_t kLogBufferSize = 64 * 1024;
 
 namespace {
     constexpr std::array<char, ANDROID_LOG_SILENT + 1> kLogChar = {
@@ -265,9 +261,9 @@ void Logcat::EnsureLogWatchDog() {
                   (logd_main_size != kErr && logd_main_size >= kLogBufferSize &&
                    logd_crash_size != kErr &&
                    logd_crash_size >= kLogBufferSize))) {
-                SetIntProp(kLogdSizeProp, kLogBufferSize);
-                SetIntProp(kLogdMainSizeProp, kLogBufferSize);
-                SetIntProp(kLogdCrashSizeProp, kLogBufferSize);
+                SetIntProp(kLogdSizeProp, std::max(kLogBufferSize, logd_size));
+                SetIntProp(kLogdMainSizeProp, std::max(kLogBufferSize, logd_main_size));
+                SetIntProp(kLogdCrashSizeProp, std::max(kLogBufferSize, logd_crash_size));
                 SetStrProp(kLogdTagProp, "");
                 SetStrProp("ctl.start", "logd-reinit");
             }
