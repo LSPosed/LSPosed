@@ -5,4 +5,6 @@
     <string name="module_is_not_activated_yet_detailed">%s הותקן אך עדיין לא הופעל</string>
     <string name="xposed_module_updated_notification_title">מודול LSPosed עודכן</string>
     <string name="xposed_module_updated_notification_content">%s עודכן</string>
+    <string name="xposed_module_updated_notification_title_system">מודול Xposed עודכן, נדרש אתחול המערכת</string>
+    <string name="xposed_module_updated_notification_content_system">%s עודכן, מכיוון שההיקף מכיל System Framework, נדרש אתחול כדי להחיל שינויים</string>
 </resources>
