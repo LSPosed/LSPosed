@@ -268,12 +268,14 @@ void Logcat::EnsureLogWatchDog() {
                 SetStrProp("ctl.start", "logd-reinit");
             }
             const auto *pi = __system_property_find(kLogdTagProp.data());
-            uint32_t serial;
-            __system_property_read_callback(pi, [](auto *c, auto, auto, auto s) {
-                *reinterpret_cast<uint32_t *>(c) = s;
-            }, &serial);
+            uint32_t serial = 0;
+            if (pi != nullptr) {
+                __system_property_read_callback(pi, [](auto *c, auto, auto, auto s) {
+                    *reinterpret_cast<uint32_t *>(c) = s;
+                }, &serial);
+            }
             if (!__system_property_wait(pi, serial, &serial, nullptr)) break;
-            Log("\nResetting log settings\n");
+            if (pi != nullptr) Log("\nResetting log settings\n");
         }
     }).detach();
 }
